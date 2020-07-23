@@ -1,28 +1,27 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+
+import ClearWorkspace from './ClearWorkspace';
 
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
+
+import { faBars, faChevronLeft, faBuilding, faIdCard, faEnvelope, faCog, faChalkboardTeacher } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const styles = (theme) => ({
   drawerWidth: {
     // color: theme.palette.primary.main,
-    width: window.innerWidth < 600 ? '100%' : '220px',
+    width: window.innerWidth < 600 ? '100%' : '240px',
     borderRight: `1px solid ${theme.palette.primary.main}`
   },
   appBarColor: {
@@ -58,7 +57,7 @@ class Navbar extends Component {
               onClick={this.toggleDrawer}
               style={{margin: '0 10px'}}
             >
-              <MenuIcon />
+              <FontAwesomeIcon icon={faBars} />
             </IconButton>
             <Link to={"/"} style={{textDecoration: 'none', color: 'inherit'}}>
               <Typography variant="h6" noWrap>
@@ -81,23 +80,24 @@ class Navbar extends Component {
                 Menü
               </Typography>
               <div style={{float: 'right'}}>
-                <ChevronLeftIcon style={{verticalAlign: 'middle'}}/>
+                <FontAwesomeIcon icon={faChevronLeft} />
               </div>
             </div>
           </div>
           <List>
-            {[{text: 'Tutorials', icon: <InboxIcon />}, {text: 'Einstellungen', icon: <InboxIcon />}].map((item, index) => (
+            {[{text: 'Tutorials', icon: faChalkboardTeacher}, {text: 'Einstellungen', icon: faCog}].map((item, index) => (
               <ListItem button key={index} onClick={this.toggleDrawer}>
-                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemIcon><FontAwesomeIcon icon={item.icon}/></ListItemIcon>
                 <ListItemText primary={item.text} />
               </ListItem>
             ))}
+            <ClearWorkspace onClick={this.toggleDrawer}/>
           </List>
           <Divider classes={{root: this.props.classes.appBarColor}} style={{marginTop: 'auto'}}/>
           <List>
-            {[{text: 'Über uns', icon: <InboxIcon />},{text: 'Kontakt', icon: <MailIcon />}, {text: 'Impressum', icon: <InboxIcon />}].map((item, index) => (
+            {[{text: 'Über uns', icon: faBuilding},{text: 'Kontakt', icon: faEnvelope}, {text: 'Impressum', icon: faIdCard}].map((item, index) => (
               <ListItem button key={index} onClick={this.toggleDrawer}>
-                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemIcon><FontAwesomeIcon icon={item.icon}/></ListItemIcon>
                 <ListItemText primary={item.text} />
               </ListItem>
             ))}
