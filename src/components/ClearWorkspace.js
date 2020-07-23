@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { clearStats } from '../actions/workspaceActions';
+import { clearStats, workspaceChange } from '../actions/workspaceActions';
 
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -13,8 +13,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 class ClearWorkspace extends Component {
 
   clearWorkspace = () => {
-    this.props.newWorkspace.clear();
-    this.props.clearStats();
+    if(this.props.workspace){
+      this.props.workspace.clear();
+      this.props.workspace.options.maxBlocks = Infinity;
+      this.props.workspaceChange();
+      this.props.clearStats();
+    }
+    else {
+      alert()
+    }
   }
 
   render() {
@@ -28,12 +35,13 @@ class ClearWorkspace extends Component {
 }
 
 ClearWorkspace.propTypes = {
-  newWorkspace: PropTypes.object.isRequired,
-  clearStats: PropTypes.func.isRequired
+  workspace: PropTypes.object.isRequired,
+  clearStats: PropTypes.func.isRequired,
+  workspaceChange: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  newWorkspace: state.workspace.new
+  workspace: state.workspace.workspace
 });
 
-export default connect(mapStateToProps, { clearStats })(ClearWorkspace);
+export default connect(mapStateToProps, { clearStats, workspaceChange })(ClearWorkspace);

@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
 
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { onChangeWorkspace, initWorkspace } from '../actions/workspaceActions';
+
 import WorkspaceStats from './WorkspaceStats';
 import WorkspaceFunc from './WorkspaceFunc';
+import CodeViewer from './CodeViewer';
 
 import BlocklyComponent, { Block, Value, Field, Shadow, Category } from './Blockly';
 import * as Blockly from 'blockly/core';
@@ -11,25 +16,19 @@ import './Blockly/blocks/index';
 import './Blockly/generator/index';
 
 
-
 class Home extends React.Component {
   constructor(props) {
     super(props);
 
     this.simpleWorkspace = React.createRef();
-    this.state = { generatedCode: 'Click text' }
   }
 
   componentDidMount() {
-
     let workspace = Blockly.getMainWorkspace();
-    workspace.addChangeListener(this.generateCode);
-  }
-
-  generateCode = () => {
-    var code = Blockly.Arduino.workspaceToCode(this.workspace);
-    console.log(code);
-    this.setState({ generatedCode: code })
+    this.props.initWorkspace(workspace);
+    workspace.addChangeListener((event) => {
+      this.props.onChangeWorkspace(event);
+    });
   }
 
   render() {
@@ -37,13 +36,16 @@ class Home extends React.Component {
       <div>
         <WorkspaceStats />
         <BlocklyComponent ref={this.simpleWorkspace}
-          readOnly={false} trashcan={true} media={'media/'}
+          readOnly={false}
+          trashcan={true}
+          media={'media/'}
           move={{
             scrollbars: true,
             drag: true,
             wheel: true
           }}
-          initialXml={''}>
+          initialXml={''}
+        >
           <Category name="loops" >
             <Block type="controls_for" />
             <Block type="controls_repeat_ext" />
@@ -64,10 +66,28 @@ class Home extends React.Component {
             <Block type="logic_boolean"></Block>
           </Category>
         </BlocklyComponent>
-        <WorkspaceFunc generateCode={this.generateCode} />
+        <WorkspaceFunc />
       </div>
     );
   };
 }
 
-export default Home;
+WorkspaceStats.propTypes = {
+  workspace: PropTypes.object.isRequired,
+  create: PropTypes.number.isRequired,
+  change: PropTypes.number.isRequired,
+  delete: PropTypes.number.isRequired,
+  move: PropTypes.number.isRequired,
+  worskpaceChange: PropTypes.number.isRequired
+};
+
+const mapStateToProps = state => ({
+  workspace: state.workspace.workspace,
+  create: state.workspace.stats.create,
+  change: state.workspace.stats.change,
+  delete: state.workspace.stats.delete,
+  move: state.workspace.stats.move,
+  worskpaceChange: state.workspace.change
+});
+
+export default connect(null, { onChangeWorkspace, initWorkspace })(Home);

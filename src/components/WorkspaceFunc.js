@@ -18,11 +18,12 @@ class WorkspaceFunc extends Component {
     open: false
   }
 
-
+  getArduinoCode = () => {
+    this.setState({ title: 'Adurino Code', content: this.props.arduino, open: true });
+  }
 
   getXMLCode = () => {
-    var code = window.Ardublockly.generateXml();
-    this.setState({ title: 'XML Code', content: code, open: true });
+    this.setState({ title: 'XML Code', content: this.props.xml, open: true });
   }
 
   toggleDialog = () => {
@@ -43,14 +44,11 @@ class WorkspaceFunc extends Component {
             </Button>
           </DialogActions>
         </Dialog>
-        <Button style={{ marginRight: '10px' }} variant="contained" color="primary" onClick={() => this.props.generateCode()}>
+        <Button style={{ marginRight: '10px' }} variant="contained" color="primary" onClick={() => this.getArduinoCode()}>
           Get Adurino Code
         </Button>
         <Button style={{ marginRight: '10px' }} variant="contained" color="primary" onClick={() => this.getXMLCode()}>
           Get XML Code
-        </Button>
-        <Button variant="contained" color="primary" onClick={() => { var blocks = this.props.newWorkspace; console.log(blocks); }}>
-          Get workspace
         </Button>
         <MaxBlocks />
       </div>
@@ -59,11 +57,13 @@ class WorkspaceFunc extends Component {
 }
 
 WorkspaceFunc.propTypes = {
-  newWorkspace: PropTypes.object.isRequired
+  arduino: PropTypes.string.isRequired,
+  xml: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({
-  newWorkspace: state.workspace.new
+  arduino: state.workspace.code.arduino,
+  xml: state.workspace.code.xml
 });
 
 export default connect(mapStateToProps, null)(WorkspaceFunc);
