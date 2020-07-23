@@ -24,13 +24,14 @@ const styles = (theme) => ({
 class WorkspaceStats extends Component {
 
   render() {
-    const remainingBlocksInfinity = this.props.workspace ? this.props.workspace.remainingCapacity() !== Infinity : null;
+    const workspace = Blockly.getMainWorkspace();
+    const remainingBlocksInfinity = workspace ? workspace.remainingCapacity() !== Infinity : null;
     return (
       <div style={{marginBottom: '20px'}}>
         <Tooltip title="Anzahl aktueller Blöcke" style={{marginLeft: 0}} className={this.props.classes.stats}>
           <div>
             <FontAwesomeIcon icon={faPuzzlePiece} />
-            <Typography style={{display: 'inline'}}> {this.props.workspace ? this.props.workspace.getAllBlocks().length : 0}</Typography>
+            <Typography style={{display: 'inline'}}> {workspace ? workspace.getAllBlocks().length : 0}</Typography>
           </div>
         </Tooltip>
         <Tooltip title="Anzahl neuer Blöcke" className={this.props.classes.stats}>
@@ -63,7 +64,7 @@ class WorkspaceStats extends Component {
         </Tooltip>
         {remainingBlocksInfinity ?
           <Tooltip title="verbleibende Blöcke" className={this.props.classes.stats}>
-            <Typography style={{display: 'inline'}}>{this.props.workspace.remainingCapacity()} verbleibende Blöcke</Typography>
+            <Typography style={{display: 'inline'}}>{workspace.remainingCapacity()} verbleibende Blöcke</Typography>
           </Tooltip> : null}
       </div>
     );
@@ -71,7 +72,6 @@ class WorkspaceStats extends Component {
 }
 
 WorkspaceStats.propTypes = {
-  workspace: PropTypes.object.isRequired,
   create: PropTypes.number.isRequired,
   change: PropTypes.number.isRequired,
   delete: PropTypes.number.isRequired,
@@ -80,7 +80,6 @@ WorkspaceStats.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  workspace: state.workspace.workspace,
   create: state.workspace.stats.create,
   change: state.workspace.stats.change,
   delete: state.workspace.stats.delete,

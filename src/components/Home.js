@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { onChangeWorkspace, initWorkspace } from '../actions/workspaceActions';
+import { onChangeWorkspace } from '../actions/workspaceActions';
 
 import WorkspaceStats from './WorkspaceStats';
 import WorkspaceFunc from './WorkspaceFunc';
@@ -16,7 +15,7 @@ import './Blockly/blocks/index';
 import './Blockly/generator/index';
 
 
-class Home extends React.Component {
+class Home extends Component {
   constructor(props) {
     super(props);
 
@@ -24,8 +23,7 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
-    let workspace = Blockly.getMainWorkspace();
-    this.props.initWorkspace(workspace);
+    const workspace = Blockly.getMainWorkspace();
     workspace.addChangeListener((event) => {
       this.props.onChangeWorkspace(event);
     });
@@ -72,22 +70,9 @@ class Home extends React.Component {
   };
 }
 
-WorkspaceStats.propTypes = {
-  workspace: PropTypes.object.isRequired,
-  create: PropTypes.number.isRequired,
-  change: PropTypes.number.isRequired,
-  delete: PropTypes.number.isRequired,
-  move: PropTypes.number.isRequired,
-  worskpaceChange: PropTypes.number.isRequired
+Home.propTypes = {
+  onChangeWorkspace: PropTypes.func.isRequired
 };
 
-const mapStateToProps = state => ({
-  workspace: state.workspace.workspace,
-  create: state.workspace.stats.create,
-  change: state.workspace.stats.change,
-  delete: state.workspace.stats.delete,
-  move: state.workspace.stats.move,
-  worskpaceChange: state.workspace.change
-});
 
-export default connect(null, { onChangeWorkspace, initWorkspace })(Home);
+export default connect(null, { onChangeWorkspace })(Home);

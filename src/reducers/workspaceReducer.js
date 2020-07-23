@@ -1,4 +1,4 @@
-import { CHANGE_WORKSPACE, NEW_CODE, NEW_WORKSPACE, CREATE_BLOCK, MOVE_BLOCK, CHANGE_BLOCK, DELETE_BLOCK, CLEAR_STATS } from '../actions/types';
+import { CHANGE_WORKSPACE, NEW_CODE, CREATE_BLOCK, MOVE_BLOCK, CHANGE_BLOCK, DELETE_BLOCK, CLEAR_STATS } from '../actions/types';
 
 
 const initialState = {
@@ -6,7 +6,6 @@ const initialState = {
     arduino: '',
     xml: ''
   },
-  workspace: null,
   stats: {
     create: 0,
     change: 0,
@@ -27,11 +26,6 @@ export default function(state = initialState, action){
       return {
         ...state,
         change: state.change += 1
-      };
-    case NEW_WORKSPACE:
-      return {
-        ...state,
-        workspace: action.payload
       };
     case CREATE_BLOCK:
     case MOVE_BLOCK:

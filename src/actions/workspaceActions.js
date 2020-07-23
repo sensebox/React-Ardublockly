@@ -1,4 +1,4 @@
-import { NEW_CODE, CHANGE_WORKSPACE, NEW_WORKSPACE, CREATE_BLOCK, MOVE_BLOCK, CHANGE_BLOCK, DELETE_BLOCK, CLEAR_STATS } from './types';
+import { NEW_CODE, CHANGE_WORKSPACE, CREATE_BLOCK, MOVE_BLOCK, CHANGE_BLOCK, DELETE_BLOCK, CLEAR_STATS } from './types';
 
 import * as Blockly from 'blockly/core';
 
@@ -8,22 +8,12 @@ export const workspaceChange = () => (dispatch) => {
   })
 }
 
-export const initWorkspace = (workspace) => (dispatch) => {
-  dispatch({
-    type: NEW_WORKSPACE,
-    payload: workspace
-  });
-}
 
 export const onChangeWorkspace = (event) => (dispatch, getState) => {
-    const workspace = Blockly.getMainWorkspace();
-    dispatch({
-      type: NEW_WORKSPACE,
-      payload: workspace
-    });
     dispatch({
       type: CHANGE_WORKSPACE,
     })
+    const workspace = Blockly.getMainWorkspace();
     var code = getState().workspace.code;
     code.arduino = Blockly.Arduino.workspaceToCode(workspace);
     var xmlDom = Blockly.Xml.workspaceToDom(workspace);
@@ -76,13 +66,5 @@ export const clearStats = () => (dispatch) => {
   dispatch({
     type: CLEAR_STATS,
     payload: stats
-  });
-};
-
-
-export const setWorkspace = (workspace) => (dispatch, getState) => {
-  dispatch({
-    type: NEW_WORKSPACE,
-    payload: {new: workspace, old: getState().workspace.new}
   });
 };

@@ -43,4 +43,8 @@ class MaxBlocks extends Component {
   };
 }
 
+MaxBlocks.propTypes = {
+  workspaceChange: PropTypes.func.isRequired
+};
+
 export default connect(null, { workspaceChange })(MaxBlocks);
