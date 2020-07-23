@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -12,29 +12,26 @@ import Dialog from '@material-ui/core/Dialog';
 
 class WorkspaceFunc extends Component {
 
-  state={
+  state = {
     title: '',
     content: '',
     open: false
   }
 
-  getArdurinoCode = () => {
-    var code = window.Ardublockly.generateArduino();
-    this.setState({title: 'Ardurino Code', content: code, open: true});
-  }
+
 
   getXMLCode = () => {
     var code = window.Ardublockly.generateXml();
-    this.setState({title: 'XML Code', content: code, open: true});
+    this.setState({ title: 'XML Code', content: code, open: true });
   }
 
   toggleDialog = () => {
-    this.setState({open: !this.state});
+    this.setState({ open: !this.state });
   }
 
   render() {
     return (
-      <div style={{marginTop: '20px'}}>
+      <div style={{ marginTop: '20px' }}>
         <Dialog onClose={this.toggleDialog} open={this.state.open}>
           <DialogTitle>{this.state.title}</DialogTitle>
           <DialogContent dividers>
@@ -46,13 +43,13 @@ class WorkspaceFunc extends Component {
             </Button>
           </DialogActions>
         </Dialog>
-        <Button style={{marginRight: '10px'}} variant="contained" color="primary" onClick={()=>this.getArdurinoCode()}>
+        <Button style={{ marginRight: '10px' }} variant="contained" color="primary" onClick={() => this.props.generateCode()}>
           Get Adurino Code
         </Button>
-        <Button style={{marginRight: '10px'}} variant="contained" color="primary" onClick={()=>this.getXMLCode()}>
+        <Button style={{ marginRight: '10px' }} variant="contained" color="primary" onClick={() => this.getXMLCode()}>
           Get XML Code
         </Button>
-        <Button variant="contained" color="primary" onClick={()=>{var blocks = this.props.newWorkspace; console.log(blocks);}}>
+        <Button variant="contained" color="primary" onClick={() => { var blocks = this.props.newWorkspace; console.log(blocks); }}>
           Get workspace
         </Button>
         <MaxBlocks />
