@@ -27,7 +27,7 @@ function App() {
         <Router>
           <div className="wrapper">
             <Navbar />
-            <div style={{margin: '0 22px'}}>
+            <div style={{ margin: '0 22px' }}>
               <Routes />
             </div>
             <Footer />
