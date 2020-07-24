@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import * as Blockly from 'blockly/core';
+
 import WorkspaceStats from './WorkspaceStats';
 import WorkspaceFunc from './WorkspaceFunc';
 import BlocklyWindow from './Blockly/BlocklyWindow';
@@ -13,6 +15,15 @@ class Home extends Component {
 
   state = {
     codeOn: false
+  }
+
+  componentDidUpdate(){
+    /* Resize and reposition all of the workspace chrome (toolbox, trash,
+    scrollbars etc.) This should be called when something changes that requires
+    recalculating dimensions and positions of the trash, zoom, toolbox, etc.
+    (e.g. window resize). */
+    const workspace = Blockly.getMainWorkspace();
+    Blockly.svgResize(workspace);
   }
 
   onChange = () => {

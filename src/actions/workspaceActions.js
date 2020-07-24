@@ -22,7 +22,6 @@ export const onChangeWorkspace = (event) => (dispatch, getState) => {
       type: NEW_CODE,
       payload: code
     });
-    console.log(event.type);
     var stats = getState().workspace.stats;
     if (event.type === Blockly.Events.BLOCK_CREATE){
       stats.create += event.ids.length;

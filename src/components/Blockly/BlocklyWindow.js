@@ -20,6 +20,7 @@ class BlocklyWindow extends Component {
 
   componentDidMount() {
     const workspace = Blockly.getMainWorkspace();
+    this.props.onChangeWorkspace({});
     workspace.addChangeListener((event) => {
       this.props.onChangeWorkspace(event);
     });
