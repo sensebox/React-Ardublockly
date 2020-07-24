@@ -44,10 +44,10 @@ class WorkspaceFunc extends Component {
             </Button>
           </DialogActions>
         </Dialog>
-        <Button style={{ marginRight: '10px' }} variant="contained" color="primary" onClick={() => this.getArduinoCode()}>
+        <Button style={{ marginRight: '10px', color: 'white' }} variant="contained" color="primary" onClick={() => this.getArduinoCode()}>
           Get Adurino Code
         </Button>
-        <Button style={{ marginRight: '10px' }} variant="contained" color="primary" onClick={() => this.getXMLCode()}>
+        <Button style={{ marginRight: '10px', color: 'white' }} variant="contained" color="primary" onClick={() => this.getXMLCode()}>
           Get XML Code
         </Button>
         <MaxBlocks />

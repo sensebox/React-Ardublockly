@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 import ClearWorkspace from './ClearWorkspace';
+import senseboxLogo from './sensebox_logo.svg';
 
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -51,7 +52,7 @@ class Navbar extends Component {
           style={{height: '50px', marginBottom: '30px'}}
           classes={{root: this.props.classes.appBarColor}}
         >
-          <Toolbar style={{height: '50px', minHeight: '50px', padding: 0}}>
+          <Toolbar style={{height: '50px', minHeight: '50px', padding: 0, color: 'white'}}>
             <IconButton
               color="inherit"
               onClick={this.toggleDrawer}
@@ -63,6 +64,9 @@ class Navbar extends Component {
               <Typography variant="h6" noWrap>
                 senseBox Blockly
               </Typography>
+            </Link>
+            <Link to={"/"} style={{marginLeft: '10px'}}>
+              <img src={senseboxLogo} alt="senseBox-Logo" width="30"/>
             </Link>
           </Toolbar>
         </AppBar>

@@ -27,7 +27,7 @@ class WorkspaceStats extends Component {
     const workspace = Blockly.getMainWorkspace();
     const remainingBlocksInfinity = workspace ? workspace.remainingCapacity() !== Infinity : null;
     return (
-      <div style={{marginBottom: '20px'}}>
+      <div style={{marginBottom: '20px', color: 'white'}}>
         <Tooltip title="Anzahl aktueller Blöcke" style={{marginLeft: 0}} className={this.props.classes.stats}>
           <div>
             <FontAwesomeIcon icon={faPuzzlePiece} />

@@ -28,14 +28,13 @@ class MaxBlocks extends Component {
     return (
       <div style={{display: 'inline', marginLeft: '10px'}}>
         <TextField
-          style={{width: '50px'}}
+          style={{width: '50px', marginRight: '5px'}}
           name="max"
           type="number"
           onChange={this.onChange}
           value={this.state.max}
-          variant='outlined'
         />
-        <Button style={{marginRight: '10px'}} variant="contained" color="primary" onClick={this.setMaxBlocks}>
+        <Button style={{marginRight: '10px', color: 'white'}} variant="contained" color="primary" onClick={this.setMaxBlocks}>
           Maximale Blöcke
         </Button>
       </div>
