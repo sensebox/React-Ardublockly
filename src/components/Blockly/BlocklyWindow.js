@@ -1,31 +1,28 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { onChangeWorkspace } from '../../actions/workspaceActions';
 
-import BlocklyComponent, { Block, Value, Field, Shadow, Category } from './Blockly';
+import BlocklyComponent, { Block, Value, Field, Shadow, Category } from './';
 import * as Blockly from 'blockly/core';
-import * as De from './Blockly/msg/de'; // de locale files
+import * as De from './msg/de'; // de locale files
 //import * as En from './Blockly/msg/en'; // de locale files
-import './Blockly/blocks/index';
-import './Blockly/generator/index';
+import './blocks/index';
+import './generator/index';
 
 
-class BlocklyView extends Component {
+class BlocklyWindow extends Component {
+
   constructor(props) {
     super(props);
     this.simpleWorkspace = React.createRef();
-    this.state = {
-      generatedCode: 'Click text'
-    }
   }
 
   componentDidMount() {
-    let workspace = Blockly.getMainWorkspace();
-    workspace.addChangeListener(this.generateCode);
-  }
-
-  generateCode = () => {
-    var code = Blockly.Arduino.workspaceToCode(this.workspace);
-    console.log(code);
-    this.setState({ generatedCode: code })
+    const workspace = Blockly.getMainWorkspace();
+    workspace.addChangeListener((event) => {
+      this.props.onChangeWorkspace(event);
+    });
   }
 
   render() {
@@ -33,11 +30,25 @@ class BlocklyView extends Component {
       <BlocklyComponent ref={this.simpleWorkspace}
         readOnly={false}
         trashcan={true}
+        zoom={{ // https://developers.google.com/blockly/guides/configure/web/zoom
+          controls: true,
+          wheel: true,
+          startScale: 1.0,
+          maxScale: 3,
+          minScale: 0.3,
+          scaleSpeed: 1.2
+        }}
+        grid={{ // https://developers.google.com/blockly/guides/configure/web/grid
+          spacing: 20,
+          length: 1,
+          colour: '#4EAF47', // senseBox-green
+          snap: false
+        }}
         media={'media/'}
-        move={{
+        move={{ // https://developers.google.com/blockly/guides/configure/web/move
           scrollbars: true,
           drag: true,
-          wheel: true
+          wheel: false
         }}
         initialXml={''}
       >
@@ -65,4 +76,9 @@ class BlocklyView extends Component {
   };
 }
 
-export default BlocklyView;
+BlocklyWindow.propTypes = {
+  onChangeWorkspace: PropTypes.func.isRequired
+};
+
+
+export default connect(null, { onChangeWorkspace })(BlocklyWindow);

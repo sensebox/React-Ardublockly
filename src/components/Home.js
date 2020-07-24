@@ -1,92 +1,30 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { onChangeWorkspace } from '../actions/workspaceActions';
 
 import WorkspaceStats from './WorkspaceStats';
 import WorkspaceFunc from './WorkspaceFunc';
-import CodeViewer from './CodeViewer';
+import BlocklyWindow from './Blockly/BlocklyWindow';
 
-import BlocklyComponent, { Block, Value, Field, Shadow, Category } from './Blockly';
-import * as Blockly from 'blockly/core';
-import * as De from './Blockly/msg/de'; // de locale files
-//import * as En from './Blockly/msg/en'; // de locale files
-import './Blockly/blocks/index';
-import './Blockly/generator/index';
-
+import Grid from '@material-ui/core/Grid';
 
 class Home extends Component {
-  constructor(props) {
-    super(props);
 
-    this.simpleWorkspace = React.createRef();
-  }
-
-  componentDidMount() {
-    const workspace = Blockly.getMainWorkspace();
-    workspace.addChangeListener((event) => {
-      this.props.onChangeWorkspace(event);
-    });
-  }
 
   render() {
     return (
       <div>
         <WorkspaceStats />
-        <BlocklyComponent ref={this.simpleWorkspace}
-          readOnly={false}
-          trashcan={true}
-          zoom={{ // https://developers.google.com/blockly/guides/configure/web/zoom
-            controls: true,
-            wheel: true,
-            startScale: 1.0,
-            maxScale: 3,
-            minScale: 0.3,
-            scaleSpeed: 1.2
-          }}
-          grid={{ // https://developers.google.com/blockly/guides/configure/web/grid
-            spacing: 20,
-            length: 1,
-            colour: '#4EAF47',
-            snap: false
-          }}
-          media={'media/'}
-          move={{ // https://developers.google.com/blockly/guides/configure/web/move
-            scrollbars: true,
-            drag: true,
-            wheel: false
-          }}
-          initialXml={''}
-        >
-          <Category name="loops" >
-            <Block type="controls_for" />
-            <Block type="controls_repeat_ext" />
-            <Block type="controls_whileUntil" />
-          </Category>
-          <Category name="senseBox" colour="120" >
-            <Category name="Sensoren" colour="120" >
-              <Block type="sensebox_sensor_temp_hum"></Block>
-            </Category>
-            <Block type="sensebox_telegram" />
-          </Category>
-          <Category name="Logic" colour="#b063c5">
-            <Block type="control_if"></Block>
-            <Block type="controls_ifelse"></Block>
-            <Block type="logic_compare"></Block>
-            <Block type="logic_operation"></Block>
-            <Block type="logic_negate"></Block>
-            <Block type="logic_boolean"></Block>
-          </Category>
-        </BlocklyComponent>
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={6}>
+            <BlocklyWindow />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <div style={{height: '500px', border: '1px solid black'}}></div>
+          </Grid>
+        </Grid>
         <WorkspaceFunc />
       </div>
     );
   };
 }
 
-Home.propTypes = {
-  onChangeWorkspace: PropTypes.func.isRequired
-};
-
-
-export default connect(null, { onChangeWorkspace })(Home);
+export default Home;

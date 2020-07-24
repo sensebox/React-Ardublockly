@@ -1,4 +1,6 @@
 #blocklyDiv {
-  height: 60vH;
-  width: 50%;
+  height: 100%;
+  min-height: 500px;
+  width: 100%;
+  border: 1px solid #4EAF47;
 }
