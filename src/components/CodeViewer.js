@@ -7,7 +7,7 @@ class CodeViewer extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{height: '500px', border: '1px solid black'}}>
         {this.props.arduino}
         <p>{this.props.xml}</p>
       </div>
