@@ -36,7 +36,7 @@ class Home extends Component {
         <BlocklyComponent ref={this.simpleWorkspace}
           readOnly={false}
           trashcan={true}
-          zoom={{
+          zoom={{ // https://developers.google.com/blockly/guides/configure/web/zoom
             controls: true,
             wheel: true,
             startScale: 1.0,
@@ -44,8 +44,14 @@ class Home extends Component {
             minScale: 0.3,
             scaleSpeed: 1.2
           }}
+          grid={{ // https://developers.google.com/blockly/guides/configure/web/grid
+            spacing: 20,
+            length: 1,
+            colour: '#4EAF47',
+            snap: false
+          }}
           media={'media/'}
-          move={{
+          move={{ // https://developers.google.com/blockly/guides/configure/web/move
             scrollbars: true,
             drag: true,
             wheel: false
