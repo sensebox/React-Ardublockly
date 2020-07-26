@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { clearStats } from '../actions/workspaceActions';
+import { clearStats, workspaceChange } from '../actions/workspaceActions';
+
+import * as Blockly from 'blockly/core';
 
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -13,7 +15,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 class ClearWorkspace extends Component {
 
   clearWorkspace = () => {
-    this.props.newWorkspace.clear();
+    const workspace = Blockly.getMainWorkspace();
+    workspace.clear();
+    workspace.options.maxBlocks = Infinity;
+    this.props.workspaceChange();
     this.props.clearStats();
   }
 
@@ -28,12 +33,9 @@ class ClearWorkspace extends Component {
 }
 
 ClearWorkspace.propTypes = {
-  newWorkspace: PropTypes.object.isRequired,
-  clearStats: PropTypes.func.isRequired
+  clearStats: PropTypes.func.isRequired,
+  workspaceChange: PropTypes.func.isRequired
 };
 
-const mapStateToProps = state => ({
-  newWorkspace: state.workspace.new
-});
 
-export default connect(mapStateToProps, { clearStats })(ClearWorkspace);
+export default connect(null, { clearStats, workspaceChange })(ClearWorkspace);

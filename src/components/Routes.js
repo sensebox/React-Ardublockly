@@ -9,10 +9,12 @@ class Routes extends Component {
 
   render() {
     return (
-      <Switch>
-        <Route path="/" exact component={Home} />
-        <Route component={NotFound} />
-      </Switch>
+      <div style={{ margin: '0 22px' }}>
+        <Switch>
+          <Route path="/" exact component={Home} />
+          <Route component={NotFound} />
+        </Switch>
+      </div>
     );
   }
 }

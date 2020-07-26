@@ -5,6 +5,8 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './store';
 
+import './App.css';
+
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 import Navbar from './components/Navbar';
@@ -15,6 +17,9 @@ const theme = createMuiTheme({
   palette: {
     primary: {
       main: '#4EAF47',
+    },
+    secondary: {
+      main: '#DDDDDD'
     }
   }
 });
@@ -27,9 +32,7 @@ function App() {
         <Router>
           <div className="wrapper">
             <Navbar />
-            <div style={{ margin: '0 22px' }}>
-              <Routes />
-            </div>
+            <Routes />
             <Footer />
           </div>
         </Router>

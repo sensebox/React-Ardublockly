@@ -2,11 +2,13 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import * as Blockly from 'blockly/core';
+
 import { withStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 
-import { faPuzzlePiece, faTrash, faPlus, faPen } from "@fortawesome/free-solid-svg-icons";
+import { faPuzzlePiece, faTrash, faPlus, faPen, faArrowsAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const styles = (theme) => ({
@@ -22,13 +24,14 @@ const styles = (theme) => ({
 class WorkspaceStats extends Component {
 
   render() {
-    // var check = Object.keys(this.props.newWorkspace).length > 0 && this.props.create - this.props.delete !== this.props.newWorkspace.getAllBlocks().length ?  <h1>FEHLER!</h1> : null;
+    const workspace = Blockly.getMainWorkspace();
+    const remainingBlocksInfinity = workspace ? workspace.remainingCapacity() !== Infinity : null;
     return (
-      <div style={{marginBottom: '20px'}}>
+      <div style={{marginBottom: '20px', color: 'white'}}>
         <Tooltip title="Anzahl aktueller Blöcke" style={{marginLeft: 0}} className={this.props.classes.stats}>
           <div>
             <FontAwesomeIcon icon={faPuzzlePiece} />
-            <Typography style={{display: 'inline'}}> {Object.keys(this.props.newWorkspace).length > 0 ? this.props.newWorkspace.getAllBlocks().length : 0}</Typography>
+            <Typography style={{display: 'inline'}}> {workspace ? workspace.getAllBlocks().length : 0}</Typography>
           </div>
         </Tooltip>
         <Tooltip title="Anzahl neuer Blöcke" className={this.props.classes.stats}>
@@ -45,6 +48,13 @@ class WorkspaceStats extends Component {
             <Typography style={{display: 'inline'}}> {this.props.change}</Typography>
           </div>
         </Tooltip>
+        <Tooltip title="Anzahl bewegter Blöcke" className={this.props.classes.stats}>
+          <div>
+            <FontAwesomeIcon icon={faArrowsAlt} style={{marginRight: '5px'}}/>
+            <FontAwesomeIcon icon={faPuzzlePiece} />
+            <Typography style={{display: 'inline'}}> {this.props.move}</Typography>
+          </div>
+        </Tooltip>
         <Tooltip title="Anzahl gelöschter Blöcke" className={this.props.classes.stats}>
           <div>
             <FontAwesomeIcon icon={faTrash} style={{marginRight: '5px'}}/>
@@ -52,29 +62,29 @@ class WorkspaceStats extends Component {
             <Typography style={{display: 'inline'}}> {this.props.delete}</Typography>
           </div>
         </Tooltip>
-        {Object.keys(this.props.newWorkspace).length > 0 ? this.props.newWorkspace.remainingCapacity() !== Infinity ?
+        {remainingBlocksInfinity ?
           <Tooltip title="verbleibende Blöcke" className={this.props.classes.stats}>
-            <Typography style={{display: 'inline'}}>{this.props.delete} verbleibende Blöcke</Typography>
-          </Tooltip> : null : null}
+            <Typography style={{display: 'inline'}}>{workspace.remainingCapacity()} verbleibende Blöcke</Typography>
+          </Tooltip> : null}
       </div>
     );
   };
 }
 
 WorkspaceStats.propTypes = {
-  newWorkspace: PropTypes.object.isRequired,
   create: PropTypes.number.isRequired,
   change: PropTypes.number.isRequired,
   delete: PropTypes.number.isRequired,
-  test: PropTypes.number.isRequired
+  move: PropTypes.number.isRequired,
+  worskpaceChange: PropTypes.number.isRequired
 };
 
 const mapStateToProps = state => ({
-  newWorkspace: state.workspace.new,
   create: state.workspace.stats.create,
   change: state.workspace.stats.change,
   delete: state.workspace.stats.delete,
-  test: state.workspace.test
+  move: state.workspace.stats.move,
+  worskpaceChange: state.workspace.change
 });
 
 export default connect(mapStateToProps, null)(withStyles(styles, {withTheme: true})(WorkspaceStats));

@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { setWorkspace } from '../actions/workspaceActions';
+import { workspaceChange } from '../actions/workspaceActions';
+
+import * as Blockly from 'blockly/core';
 
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -16,20 +18,23 @@ class MaxBlocks extends Component {
     this.setState({ [e.target.name]: e.target.value});
   }
 
+  setMaxBlocks = () => {
+    const workspace = Blockly.getMainWorkspace();
+    workspace.options.maxBlocks = this.state.max;
+    this.props.workspaceChange();
+  }
+
   render() {
-    // var blockLeft = Object.keys(this.props.newWorkspace).length > 0 ? <p>{this.props.newWorkspace.remainingCapacity()} verbleibende Blöcke möglich</p> : null
-    // var error = this.state.error ? <div>{this.state.error}</div> : null;
     return (
       <div style={{display: 'inline', marginLeft: '10px'}}>
         <TextField
-          style={{width: '50px'}}
+          style={{width: '50px', marginRight: '5px'}}
           name="max"
           type="number"
           onChange={this.onChange}
           value={this.state.max}
-          variant='filled'
         />
-        <Button style={{marginRight: '10px'}} variant="contained" color="primary" onClick={() => {this.props.newWorkspace.options.maxBlocks = this.state.max; this.props.setWorkspace(this.props.newWorkspace)}}>
+        <Button style={{marginRight: '10px', color: 'white'}} variant="contained" color="primary" onClick={this.setMaxBlocks}>
           Maximale Blöcke
         </Button>
       </div>
@@ -38,12 +43,7 @@ class MaxBlocks extends Component {
 }
 
 MaxBlocks.propTypes = {
-  newWorkspace: PropTypes.object.isRequired,
-  setWorkspace: PropTypes.func.isRequired
+  workspaceChange: PropTypes.func.isRequired
 };
 
-const mapStateToProps = state => ({
-  newWorkspace: state.workspace.new
-});
-
-export default connect(mapStateToProps, { setWorkspace })(MaxBlocks);
+export default connect(null, { workspaceChange })(MaxBlocks);
