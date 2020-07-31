@@ -19,6 +19,120 @@ class Toolbox extends React.Component {
                         <Block type="sensebox_sensor_ultrasonic_ranger" />
                         <Block type="sensebox_sensor_sound" />
                     </Category >
+                    <Category name="WIFI" colour={getColour().sensebox}>
+                        <Block type="sensebox_wifi" />
+                        <Block type="sensebox_startap" />
+                    </Category>
+                    <Category name="Display" colour={getColour().sensebox}>
+                        <Block type="sensebox_display_beginDisplay" />
+                        <Block type="sensebox_display_show" />
+                        <Block type="sensebox_display_clearDisplay" />
+                        <Block type="sensebox_display_printDisplay">
+                            <Value name="SIZE">
+                                <Block type="math_number">
+                                    <Field name="NUM">1</Field>
+                                </Block>
+                            </Value>
+                            <Value name="X">
+                                <Block type="math_number">
+                                    <Field name="NUM">0</Field>
+                                </Block>
+                            </Value>
+                            <Value name="Y">
+                                <Block type="math_number">
+                                    <Field name="NUM">0</Field>
+                                </Block>
+                            </Value>
+                        </Block>
+                        <Block type="sensebox_display_plotDisplay">
+                            <Value name="Title">
+                                <Block type="text">
+                                </Block>
+                            </Value>
+                            <Value name="YLabel">
+                                <Block type="text">
+                                </Block>
+                            </Value>
+                            <Value name="XLabel">
+                                <Block type="text">
+                                </Block>
+                            </Value>
+                            <Value name="XRange1">
+                                <Block type="math_number">
+                                    <Field name="NUM">0</Field>
+                                </Block>
+                            </Value>
+                            <Value name="XRange2">
+                                <Block type="math_number">
+                                    <Field name="NUM">15</Field>
+                                </Block>
+                            </Value>
+                            <Value name="YRange1">
+                                <Block type="math_number">
+                                    <Field name="NUM">0</Field>
+                                </Block>
+                            </Value>
+                            <Value name="YRange2">
+                                <Block type="math_number">
+                                    <Field name="NUM">50</Field>
+                                </Block>
+                            </Value>
+                            <Value name="XTick">
+                                <Block type="math_number">
+                                    <Field name="NUM">5</Field>
+                                </Block>
+                            </Value>
+                            <Value name="YTick">
+                                <Block type="math_number">
+                                    <Field name="NUM">0</Field>
+                                </Block>
+                            </Value>
+                            <Value name="TimeFrame">
+                                <Block type="math_number">
+                                    <Field name="NUM">15</Field>
+                                </Block>
+                            </Value>
+                        </Block>
+                        <Block type="sensebox_display_fillCircle">
+                            <Value name="X">
+                                <Block type="math_number">
+                                    <Field name="NUM">0</Field>
+                                </Block>
+                            </Value>
+                            <Value name="Y">
+                                <Block type="math_number">
+                                    <Field name="NUM">0</Field>
+                                </Block>
+                            </Value>
+                            <Value name="Radius">
+                                <Block type="math_number">
+                                    <Field name="NUM">0</Field>
+                                </Block>
+                            </Value>
+                        </Block>
+                        <Block type="sensebox_display_drawRectangle">
+                            <Value name="X">
+                                <Block type="math_number">
+                                    <Field name="NUM">0</Field>
+                                </Block>
+                            </Value>
+                            <Value name="Y">
+                                <Block type="math_number">
+                                    <Field name="NUM">0</Field>
+                                </Block>
+                            </Value>
+                            <Value name="height">
+                                <Block type="math_number">
+                                    <Field name="NUM">0</Field>
+                                </Block>
+                            </Value>
+                            <Value name="width">
+                                <Block type="math_number">
+                                    <Field name="NUM">0</Field>
+                                </Block>
+                            </Value>
+                        </Block>
+                    </Category>
                     <Category name="Telegram" colour={getColour().sensebox}>
                         <Block type="sensebox_telegram" />
                         <Block type="sensebox_telegram_do" />

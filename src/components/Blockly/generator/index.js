@@ -3,6 +3,7 @@ import './loops';
 import './sensebox-sensors';
 import './sensebox-telegram';
 import './sensebox-osem';
+import './sensebox-web';
 import './logic';
 import './math';
 import './io';
