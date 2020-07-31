@@ -109,6 +109,9 @@ Blockly['Arduino'].init = function (workspace) {
     // creates a list of code for the loop to be runned once
     Blockly['Arduino'].loopCodeOnce_ = Object.create(null)
 
+    // creates a list of code for the loop to be runned once
+    Blockly['Arduino'].codeFunctions_ = Object.create(null)
+
     // creates a list of code variables  
     Blockly['Arduino'].variables_ = Object.create(null)
 
@@ -192,7 +195,8 @@ Blockly['Arduino'].init = function (workspace) {
  */
 Blockly['Arduino'].finish = function (code) {
     let libraryCode = '';
-    let variablesCode = ''
+    let variablesCode = '';
+    let codeFunctions = '';
     let functionsCode = '';
     let definitionsCode = '';
     let loopCodeOnce = '';
@@ -214,6 +218,10 @@ Blockly['Arduino'].finish = function (code) {
 
     for (const key in Blockly['Arduino'].loopCodeOnce_) {
         loopCodeOnce += Blockly['Arduino'].loopCodeOnce_[key] + '\n';
+    }
+
+    for (const key in Blockly['Arduino'].codeFunctions_) {
+        codeFunctions += Blockly['Arduino'].codeFunctions_[key] + '\n';
     }
 
     for (const key in Blockly['Arduino'].functionNames_) {
@@ -239,6 +247,8 @@ Blockly['Arduino'].finish = function (code) {
         variablesCode +
         '\n' +
         definitionsCode +
+        '\n' +
+        codeFunctions +
         '\n' +
         Blockly['Arduino'].variablesInitCode_ +
         '\n' +

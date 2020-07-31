@@ -142,6 +142,26 @@ class Toolbox extends React.Component {
                     <Category name="osem" colour={getColour().sensebox}>
                         <Block type="sensebox_osem_connection" />
                     </Category>
+                    <Category id="catSenseBoxOutput_LoRa" name="  LoRa" colour={getColour().sensebox}>
+                        <Category id="catSenseBoxOutput_LoRa_activation" name="  Activation" colour={getColour().sensebox}>
+                            <Block type="sensebox_lora_initialize_otaa" />
+                            <Block type="sensebox_lora_initialize_abp" />
+                        </Category>
+                        <Category id="catSenseBoxOutput_LoRa_loramessage" name="    Lora Message" colour={getColour().sensebox}>
+                            <Block type="sensebox_lora_message_send" />
+                            <Block type="sensebox_send_lora_sensor_value" />
+                        </Category>
+                        <Category id="catSenseBoxOutput_LoRa_cayenne" name="    Cayenne LPP" colour={getColour().sensebox}>
+                            <Block type="sensebox_lora_cayenne_send" />
+                            <Block type="sensebox_lora_cayenne_temperature" />
+                            <Block type="sensebox_lora_cayenne_humidity" />
+                            <Block type="sensebox_lora_cayenne_pressure" />
+                            <Block type="sensebox_lora_cayenne_luminosity" />
+                            <Block type="sensebox_lora_cayenne_sensor" />
+                            <Block type="sensebox_lora_cayenne_accelerometer" />
+                            <Block type="sensebox_lora_cayenne_gps" />
+                        </Category>
+                    </Category>
                 </Category>
                 <Category name="Logic" colour={getColour().logic}>
                     <Block type="controls_if" />

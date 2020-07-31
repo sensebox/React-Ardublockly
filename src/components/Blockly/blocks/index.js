@@ -6,6 +6,7 @@ import './sensebox-telegram';
 import './sensebox-osem';
 import './sensebox-web';
 import './sensebox-display';
+import './sensebox-lora';
 import './io';
 import './math';
 import './map';
