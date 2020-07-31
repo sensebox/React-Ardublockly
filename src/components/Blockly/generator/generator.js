@@ -81,6 +81,19 @@ Blockly['Arduino'].ORDER_ASSIGNMENT = 14; // = *= /= ~/= %= += -= <<= >>= &= ^= 
 Blockly['Arduino'].ORDER_COMMA = 18; // ,
 Blockly['Arduino'].ORDER_NONE = 99; // (...)
 
+
+
+
+/**
+ * 
+ * @param {} workspace 
+ * 
+ * Blockly Types
+ */
+
+
+
+
 /**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
@@ -89,8 +102,16 @@ Blockly['Arduino'].init = function (workspace) {
     // Create a dictionary of definitions to be printed before the code.
     Blockly['Arduino'].libraries_ = Object.create(null);
 
+    Blockly['Arduino'].definitions_ = Object.create(null);
+
     // creates a list of code to be setup before the setup block
     Blockly['Arduino'].setupCode_ = Object.create(null);
+
+    // creates a list of code for the loop to be runned once
+    Blockly['Arduino'].loopCodeOnce_ = Object.create(null)
+
+    // creates a list of code variables  
+    Blockly['Arduino'].variables_ = Object.create(null)
 
     // Create a dictionary mapping desired function names in definitions_
     // to actual function names (to avoid collisions with user functions).
@@ -172,39 +193,42 @@ Blockly['Arduino'].init = function (workspace) {
  */
 Blockly['Arduino'].finish = function (code) {
     let libraryCode = '';
+    let variablesCode = ''
     let functionsCode = '';
+    let definitionsCode = '';
+    let loopCodeOnce = '';
+    let setupCode = '';
+    let preSetupCode = '';
     let devVariables = '\n';
 
     for (const key in Blockly['Arduino'].libraries_) {
         libraryCode += Blockly['Arduino'].libraries_[key] + '\n';
     }
 
+    for (const key in Blockly['Arduino'].variables_) {
+        variablesCode += Blockly['Arduino'].variables_[key] + '\n';
+    }
+
+    for (const key in Blockly['Arduino'].definitions_) {
+        definitionsCode += Blockly['Arduino'].definitions_[key] + '\n';
+    }
+
+    for (const key in Blockly['Arduino'].loopCodeOnce_) {
+        loopCodeOnce += Blockly['Arduino'].loopCodeOnce_[key] + '\n';
+    }
+
     for (const key in Blockly['Arduino'].functionNames_) {
         functionsCode += Blockly['Arduino'].functionNames_[key] + '\n';
     }
 
-    if (!_.isEmpty(Blockly['Arduino'].setupCode_['bluetooth_setup'])) {
-        devVariables += 'String bluetoothMessageDEV = ""; \n';
-    }
 
-    if (!_.isEmpty(Blockly['Arduino'].setupCode_['serial_begin'])) {
-        devVariables += 'String serialMessageDEV = ""; \n';
-    }
-
-    if (!_.isEmpty(Blockly['Arduino'].functionNames_['double_to_string_debug'])) {
-        devVariables += 'boolean stopDebugging = false; \n';
-    }
-
-    let setupCode = '';
-
-    let preSetupCode = '';
 
     for (const key in Blockly['Arduino'].setupCode_) {
         preSetupCode += Blockly['Arduino'].setupCode_[key] || '';
     }
     setupCode = '\nvoid setup() { \n' + preSetupCode + '\n}\n';
 
-    let loopCode = '\nvoid loop() { \n' + code + '\n}\n';
+    let loopCode = '\nvoid loop() { \n' + loopCodeOnce + code + '\n}\n';
 
 
     // Convert the definitions dictionary into a list.
@@ -212,6 +236,10 @@ Blockly['Arduino'].finish = function (code) {
         devVariables +
         '\n' +
         libraryCode +
+        '\n' +
+        variablesCode +
+        '\n' +
+        definitionsCode +
         '\n' +
         Blockly['Arduino'].variablesInitCode_ +
         '\n' +
@@ -225,6 +253,7 @@ Blockly['Arduino'].finish = function (code) {
     // Clean up temporary data.
     delete Blockly['Arduino'].definitions_;
     delete Blockly['Arduino'].functionNames_;
+    delete Blockly['Arduino'].loopCodeOnce_;
     delete Blockly['Arduino'].variablesInitCode_;
     delete Blockly['Arduino'].libraries_;
     Blockly['Arduino'].variableDB_.reset();

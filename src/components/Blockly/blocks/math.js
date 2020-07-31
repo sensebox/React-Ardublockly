@@ -1,0 +1,2 @@
+
+import Blockly from 'blockly';

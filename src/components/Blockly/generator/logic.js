@@ -55,7 +55,7 @@ Blockly.Arduino['logic_operation'] = function (Block) {
     return [code, order];
 };
 
-Blockly.Arduino['control_if'] = function (Block) {
+Blockly.Arduino['controls_if'] = function (Block) {
     // If/elseif/else condition.
     let n = 0;
     let code = '',

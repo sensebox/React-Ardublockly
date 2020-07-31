@@ -13,6 +13,7 @@
 import { defineBlocksWithJsonArray } from 'blockly';
 import Blockly from 'blockly/core';
 import { selectedBoard } from '../helpers/board'
+import * as Types from '../helpers/types'
 
 
 Blockly.Blocks['io_digitalwrite'] = {
@@ -28,7 +29,7 @@ Blockly.Blocks['io_digitalwrite'] = {
             .appendField(new Blockly.FieldDropdown(
                 selectedBoard().digitalPins), 'PIN')
             .appendField(Blockly.Msg.ARD_WRITE_TO)
-        // .setCheck(Blockly.Types.BOOLEAN.checkList);
+            .setCheck(Types.BOOLEAN.checkList);
         this.setInputsInline(false);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
@@ -55,13 +56,13 @@ Blockly.Blocks['io_digitalread'] = {
         this.appendDummyInput()
             .appendField(Blockly.Msg.ARD_DIGITALREAD)
             .appendField(new Blockly.FieldDropdown(
-                Blockly.Arduino.Boards.selected.digitalPins), 'PIN');
-        this.setOutput(true, Blockly.Types.BOOLEAN.output);
+                selectedBoard().digitalPins), 'PIN');
+        this.setOutput(true, Types.BOOLEAN);
         this.setTooltip(Blockly.Msg.ARD_DIGITALREAD_TIP);
     },
     /** @return {!string} The type of return value for the block, an integer. */
     getBlockType: function () {
-        return Blockly.Types.BOOLEAN;
+        return Types.BOOLEAN;
     },
     /**
      * Updates the content of the the pin related fields.
@@ -84,9 +85,9 @@ Blockly.Blocks['io_builtin_led'] = {
         this.appendValueInput('STATE')
             .appendField(Blockly.Msg.ARD_BUILTIN_LED)
             .appendField(new Blockly.FieldDropdown(
-                Blockly.Arduino.Boards.selected.builtinLed), 'BUILT_IN_LED')
+                selectedBoard().builtinLed), 'BUILT_IN_LED')
             .appendField(Blockly.Msg.ARD_WRITE_TO)
-            .setCheck(Blockly.Types.BOOLEAN.checkList);
+            .setCheck(Types.BOOLEAN.compatibleTypes);
         this.setInputsInline(false);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
@@ -102,7 +103,7 @@ Blockly.Blocks['io_builtin_led'] = {
     },
     /** @return {!string} The type of input value for the block, an integer. */
     getBlockType: function () {
-        return Blockly.Types.BOOLEAN;
+        return Types.BOOLEAN;
     },
 };
 
@@ -117,9 +118,9 @@ Blockly.Blocks['io_analogwrite'] = {
         this.appendValueInput('NUM')
             .appendField(Blockly.Msg.ARD_ANALOGWRITE)
             .appendField(new Blockly.FieldDropdown(
-                Blockly.Arduino.Boards.selected.pwmPins), 'PIN')
+                selectedBoard().pwmPins), 'PIN')
             .appendField(Blockly.Msg.ARD_WRITE_TO)
-            .setCheck(Blockly.Types.NUMBER.output);
+            .setCheck(Types.NUMBER.compatibleTypes);
         this.setInputsInline(false);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
@@ -134,7 +135,7 @@ Blockly.Blocks['io_analogwrite'] = {
     },
     /** @return {!string} The type of input value for the block, an integer. */
     getBlockType: function () {
-        return Blockly.Types.NUMBER;
+        return Types.NUMBER;
     },
 };
 
@@ -149,13 +150,13 @@ Blockly.Blocks['io_analogread'] = {
         this.appendDummyInput()
             .appendField(Blockly.Msg.ARD_ANALOGREAD)
             .appendField(new Blockly.FieldDropdown(
-                Blockly.Arduino.Boards.selected.analogPins), 'PIN');
-        this.setOutput(true, Blockly.Types.NUMBER.output);
+                selectedBoard().analogPins), 'PIN');
+        this.setOutput(true, Types.NUMBER.typeId);
         this.setTooltip(Blockly.Msg.ARD_ANALOGREAD_TIP);
     },
     /** @return {!string} The type of return value for the block, an integer. */
     getBlockType: function () {
-        return Blockly.Types.NUMBER;
+        return Types.NUMBER.typeId;
     },
     /**
      * Updates the content of the the pin related fields.
@@ -178,12 +179,12 @@ Blockly.Blocks['io_highlow'] = {
             .appendField(
                 new Blockly.FieldDropdown([[Blockly.Msg.ARD_HIGH, 'HIGH'], [Blockly.Msg.ARD_LOW, 'LOW']]),
                 'STATE');
-        this.setOutput(true, Blockly.Types.BOOLEAN.output);
+        this.setOutput(true, Types.BOOLEAN.typeId);
         this.setTooltip(Blockly.Msg.ARD_HIGHLOW_TIP);
     },
     /** @return {!string} The type of return value for the block, an integer. */
     getBlockType: function () {
-        return Blockly.Types.BOOLEAN;
+        return Types.BOOLEAN;
     }
 };
 
@@ -199,14 +200,14 @@ Blockly.Blocks['io_pulsein'] = {
             "args0": [{
                 "type": "input_value",
                 "name": "PULSETYPE",
-                "check": Blockly.Types.BOOLEAN.check
+                "check": Types.BOOLEAN.compatibleTypes
             }, {
                 "type": "field_dropdown",
                 "name": "PULSEPIN",
-                "options": Blockly.Arduino.Boards.selected.digitalPins
+                "options": selectedBoard().digitalPins,
             }
             ],
-            "output": Blockly.Types.NUMBER.output,
+            "output": Types.NUMBER.typeId,
             "inputsInline": true,
             "colour": 250,
             "tooltip": Blockly.Msg.ARD_PULSE_TIP,
@@ -215,7 +216,7 @@ Blockly.Blocks['io_pulsein'] = {
     },
     /** @return {!string} The type of input value for the block, an integer. */
     getBlockType: function () {
-        return Blockly.Types.NUMBER;
+        return Types.NUMBER.typeId;
     }
 };
 
@@ -232,18 +233,18 @@ Blockly.Blocks['io_pulsetimeout'] = {
             "args0": [{
                 "type": "input_value",
                 "name": "PULSETYPE",
-                "check": Blockly.Types.BOOLEAN.check
+                "check": Types.BOOLEAN.compatibleTypes
             }, {
                 "type": "field_dropdown",
                 "name": "PULSEPIN",
-                "options": Blockly.Arduino.Boards.selected.digitalPins
+                "options": selectedBoard().digitalPins,
             }, {
                 "type": "input_value",
                 "name": "TIMEOUT",
-                "check": Blockly.Types.NUMBER.check
+                "check": Types.NUMBER.compatibleTypes
             }
             ],
-            "output": Blockly.Types.NUMBER.output,
+            "output": Types.NUMBER.typeId,
             "inputsInline": true,
             "colour": 250,
             "tooltip": Blockly.Msg.ARD_PULSETIMEOUT_TIP,
@@ -252,6 +253,6 @@ Blockly.Blocks['io_pulsetimeout'] = {
     },
     /** @return {!string} The type of input value for the block, an integer. */
     getBlockType: function () {
-        return Blockly.Types.NUMBER;
+        return Types.NUMBER.typeId;
     }
 };

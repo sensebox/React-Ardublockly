@@ -25,11 +25,12 @@ import React from 'react';
 import './BlocklyComponent.css';
 
 import Blockly from 'blockly/core';
-//import locale from 'blockly/msg/en';
+import locale from 'blockly/msg/en';
 import 'blockly/blocks';
 import Toolbox from './toolbox/Toolbox';
 
-//Blockly.setLocale(locale);
+
+Blockly.setLocale(locale);
 
 class BlocklyComponent extends React.Component {
     constructor(props) {

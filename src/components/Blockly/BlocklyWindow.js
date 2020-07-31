@@ -5,10 +5,11 @@ import { onChangeWorkspace } from '../../actions/workspaceActions';
 
 import BlocklyComponent, { Block, Value, Field, Shadow, Category } from './';
 import * as Blockly from 'blockly/core';
-import * as De from './msg/de'; // de locale files
-//import * as En from './Blockly/msg/en'; // de locale files
+//import * as De from './msg/de'; // de locale files
+import * as En from './msg/en'; // en locale files
 import './blocks/index';
 import './generator/index';
+
 
 
 class BlocklyWindow extends Component {
@@ -23,6 +24,7 @@ class BlocklyWindow extends Component {
     this.props.onChangeWorkspace({});
     workspace.addChangeListener((event) => {
       this.props.onChangeWorkspace(event);
+      Blockly.Events.disableOrphans(event);
     });
   }
 
@@ -31,10 +33,11 @@ class BlocklyWindow extends Component {
       <BlocklyComponent ref={this.simpleWorkspace}
         readOnly={false}
         trashcan={true}
+        renderer='zelos'
         zoom={{ // https://developers.google.com/blockly/guides/configure/web/zoom
           controls: true,
-          wheel: true,
-          startScale: 1.0,
+          wheel: false,
+          startScale: 0.8,
           maxScale: 3,
           minScale: 0.3,
           scaleSpeed: 1.2
@@ -51,28 +54,11 @@ class BlocklyWindow extends Component {
           drag: true,
           wheel: false
         }}
-        initialXml={''}
+        initialXml={`<xml xmlns="https://developers.google.com/blockly/xml">
+          <block type="arduino_functions" id="QWW|$jB8+*EL;}|#uA" x="27" y="16"></block></xml>`}
       >
-        <Category name="loops" >
-          <Block type="controls_for" />
-          <Block type="controls_repeat_ext" />
-          <Block type="controls_whileUntil" />
-        </Category>
-        <Category name="senseBox" colour="120" >
-          <Category name="Sensoren" colour="120" >
-            <Block type="sensebox_sensor_temp_hum"></Block>
-          </Category>
-          <Block type="sensebox_telegram" />
-        </Category>
-        <Category name="Logic" colour="#b063c5">
-          <Block type="control_if"></Block>
-          <Block type="controls_ifelse"></Block>
-          <Block type="logic_compare"></Block>
-          <Block type="logic_operation"></Block>
-          <Block type="logic_negate"></Block>
-          <Block type="logic_boolean"></Block>
-        </Category>
-      </BlocklyComponent>
+
+      </BlocklyComponent >
     );
   };
 }
