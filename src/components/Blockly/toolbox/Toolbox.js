@@ -240,7 +240,7 @@ class Toolbox extends React.Component {
                         </Value>
                     </Block>
                     <Block type="math_random_float"></Block>
-                    {/* <Block type="base_map"></Block> */}
+                    <Block type="base_map"></Block>
                 </Category>
                 <sep></sep>
                 <Category name="Input/Output" colour={getColour().io}>

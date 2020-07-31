@@ -8,6 +8,7 @@ import './sensebox-web';
 import './sensebox-display';
 import './io';
 import './math';
+import './map';
 import './procedures';
 import './time';
 
