@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { onChangeWorkspace } from '../../actions/workspaceActions';
-
+import * as De from './msg/de';
 import BlocklyComponent from './';
 import * as Blockly from 'blockly/core';
 import './blocks/index';
@@ -15,6 +15,7 @@ class BlocklyWindow extends Component {
   constructor(props) {
     super(props);
     this.simpleWorkspace = React.createRef();
+    Blockly.setLocale(De);
   }
 
   componentDidMount() {
