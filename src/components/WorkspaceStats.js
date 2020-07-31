@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -8,7 +8,6 @@ import { withStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import Chip from '@material-ui/core/Chip';
 import Avatar from '@material-ui/core/Avatar';
-import Typography from '@material-ui/core/Typography';
 
 import { faPuzzlePiece, faTrash, faPlus, faPen, faArrowsAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -29,55 +28,55 @@ class WorkspaceStats extends Component {
     const workspace = Blockly.getMainWorkspace();
     const remainingBlocksInfinity = workspace ? workspace.remainingCapacity() !== Infinity : null;
     return (
-      <div style={{marginBottom: '20px'}}>
+      <div style={{ marginBottom: '20px' }}>
         <Tooltip title="Anzahl aktueller Blöcke" >
-          <Chip 
-            style={{marginRight: '1rem'}}
-            color="primary" 
-            title="Anzahl aktueller Blöcke" 
-            avatar={<Avatar><FontAwesomeIcon icon={faPuzzlePiece} /></Avatar>} 
+          <Chip
+            style={{ marginRight: '1rem' }}
+            color="primary"
+            title="Anzahl aktueller Blöcke"
+            avatar={<Avatar><FontAwesomeIcon icon={faPuzzlePiece} /></Avatar>}
             label={workspace ? workspace.getAllBlocks().length : 0}>
           </Chip>
         </Tooltip>
         <Tooltip title="Anzahl aktueller Blöcke" >
-          <Chip 
-            style={{marginRight: '1rem'}}
-            color="primary" 
+          <Chip
+            style={{ marginRight: '1rem' }}
+            color="primary"
             title="Anzahl neuer Blöcke"
-            avatar={<Avatar><FontAwesomeIcon icon={faPlus} /></Avatar>} 
+            avatar={<Avatar><FontAwesomeIcon icon={faPlus} /></Avatar>}
             label={this.props.create}>
           </Chip>
         </Tooltip>
         <Tooltip title="Anzahl veränderter Blöcke" >
-          <Chip 
-            style={{marginRight: '1rem'}}
-            color="primary" 
+          <Chip
+            style={{ marginRight: '1rem' }}
+            color="primary"
             title="Anzahl neuer Blöcke"
-            avatar={<Avatar><FontAwesomeIcon icon={faPen} /></Avatar>} 
+            avatar={<Avatar><FontAwesomeIcon icon={faPen} /></Avatar>}
             label={this.props.change}>
           </Chip>
         </Tooltip>
         <Tooltip title="Anzahl bewegter Blöcke" >
-          <Chip 
-            style={{marginRight: '1rem'}}
-            color="primary" 
-            avatar={<Avatar><FontAwesomeIcon icon={faArrowsAlt} /></Avatar>} 
+          <Chip
+            style={{ marginRight: '1rem' }}
+            color="primary"
+            avatar={<Avatar><FontAwesomeIcon icon={faArrowsAlt} /></Avatar>}
             label={this.props.move}>
           </Chip>
         </Tooltip>
         <Tooltip title="Anzahl gelöschter Blöcke" >
-          <Chip 
-            style={{marginRight: '1rem'}}
-            color="primary" 
-            avatar={<Avatar><FontAwesomeIcon icon={faTrash} /></Avatar>} 
+          <Chip
+            style={{ marginRight: '1rem' }}
+            color="primary"
+            avatar={<Avatar><FontAwesomeIcon icon={faTrash} /></Avatar>}
             label={this.props.delete}>
           </Chip>
         </Tooltip>
         {remainingBlocksInfinity ?
           <Tooltip title="Verbleibende Blöcke" >
-            <Chip 
-              style={{marginRight: '1rem'}}
-              color="primary" 
+            <Chip
+              style={{ marginRight: '1rem' }}
+              color="primary"
               label={workspace.remainingCapacity()}>
             </Chip>
           </Tooltip> : null}
@@ -102,4 +101,4 @@ const mapStateToProps = state => ({
   worskpaceChange: state.workspace.change
 });
 
-export default connect(mapStateToProps, null)(withStyles(styles, {withTheme: true})(WorkspaceStats));
+export default connect(mapStateToProps, null)(withStyles(styles, { withTheme: true })(WorkspaceStats));
