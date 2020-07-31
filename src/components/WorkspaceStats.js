@@ -6,6 +6,8 @@ import * as Blockly from 'blockly/core';
 
 import { withStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
+import Chip from '@material-ui/core/Chip';
+import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 
 import { faPuzzlePiece, faTrash, faPlus, faPen, faArrowsAlt } from "@fortawesome/free-solid-svg-icons";
@@ -17,7 +19,7 @@ const styles = (theme) => ({
     display: 'inline',
     marginLeft: '50px',
     padding: '3px 10px',
-    borderRadius: '25%'
+    // borderRadius: '25%'
   }
 });
 
@@ -27,44 +29,57 @@ class WorkspaceStats extends Component {
     const workspace = Blockly.getMainWorkspace();
     const remainingBlocksInfinity = workspace ? workspace.remainingCapacity() !== Infinity : null;
     return (
-      <div style={{marginBottom: '20px', color: 'white'}}>
-        <Tooltip title="Anzahl aktueller Blöcke" style={{marginLeft: 0}} className={this.props.classes.stats}>
-          <div>
-            <FontAwesomeIcon icon={faPuzzlePiece} />
-            <Typography style={{display: 'inline'}}> {workspace ? workspace.getAllBlocks().length : 0}</Typography>
-          </div>
+      <div style={{marginBottom: '20px'}}>
+        <Tooltip title="Anzahl aktueller Blöcke" >
+          <Chip 
+            style={{marginRight: '1rem'}}
+            color="primary" 
+            title="Anzahl aktueller Blöcke" 
+            avatar={<Avatar><FontAwesomeIcon icon={faPuzzlePiece} /></Avatar>} 
+            label={workspace ? workspace.getAllBlocks().length : 0}>
+          </Chip>
         </Tooltip>
-        <Tooltip title="Anzahl neuer Blöcke" className={this.props.classes.stats}>
-          <div>
-            <FontAwesomeIcon icon={faPlus} style={{marginRight: '5px'}}/>
-            <FontAwesomeIcon icon={faPuzzlePiece} />
-            <Typography style={{display: 'inline'}}> {this.props.create}</Typography>
-          </div>
+        <Tooltip title="Anzahl aktueller Blöcke" >
+          <Chip 
+            style={{marginRight: '1rem'}}
+            color="primary" 
+            title="Anzahl neuer Blöcke"
+            avatar={<Avatar><FontAwesomeIcon icon={faPlus} /></Avatar>} 
+            label={this.props.create}>
+          </Chip>
         </Tooltip>
-        <Tooltip title="Anzahl veränderter Blöcke" className={this.props.classes.stats}>
-          <div>
-            <FontAwesomeIcon icon={faPen} style={{marginRight: '5px'}}/>
-            <FontAwesomeIcon icon={faPuzzlePiece} />
-            <Typography style={{display: 'inline'}}> {this.props.change}</Typography>
-          </div>
+        <Tooltip title="Anzahl veränderter Blöcke" >
+          <Chip 
+            style={{marginRight: '1rem'}}
+            color="primary" 
+            title="Anzahl neuer Blöcke"
+            avatar={<Avatar><FontAwesomeIcon icon={faPen} /></Avatar>} 
+            label={this.props.change}>
+          </Chip>
         </Tooltip>
-        <Tooltip title="Anzahl bewegter Blöcke" className={this.props.classes.stats}>
-          <div>
-            <FontAwesomeIcon icon={faArrowsAlt} style={{marginRight: '5px'}}/>
-            <FontAwesomeIcon icon={faPuzzlePiece} />
-            <Typography style={{display: 'inline'}}> {this.props.move}</Typography>
-          </div>
+        <Tooltip title="Anzahl bewegter Blöcke" >
+          <Chip 
+            style={{marginRight: '1rem'}}
+            color="primary" 
+            avatar={<Avatar><FontAwesomeIcon icon={faArrowsAlt} /></Avatar>} 
+            label={this.props.move}>
+          </Chip>
         </Tooltip>
-        <Tooltip title="Anzahl gelöschter Blöcke" className={this.props.classes.stats}>
-          <div>
-            <FontAwesomeIcon icon={faTrash} style={{marginRight: '5px'}}/>
-            <FontAwesomeIcon icon={faPuzzlePiece} />
-            <Typography style={{display: 'inline'}}> {this.props.delete}</Typography>
-          </div>
+        <Tooltip title="Anzahl gelöschter Blöcke" >
+          <Chip 
+            style={{marginRight: '1rem'}}
+            color="primary" 
+            avatar={<Avatar><FontAwesomeIcon icon={faTrash} /></Avatar>} 
+            label={this.props.delete}>
+          </Chip>
         </Tooltip>
         {remainingBlocksInfinity ?
-          <Tooltip title="verbleibende Blöcke" className={this.props.classes.stats}>
-            <Typography style={{display: 'inline'}}>{workspace.remainingCapacity()} verbleibende Blöcke</Typography>
+          <Tooltip title="Verbleibende Blöcke" >
+            <Chip 
+              style={{marginRight: '1rem'}}
+              color="primary" 
+              label={workspace.remainingCapacity()}>
+            </Chip>
           </Tooltip> : null}
       </div>
     );

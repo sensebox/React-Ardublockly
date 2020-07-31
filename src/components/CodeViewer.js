@@ -11,6 +11,8 @@ import { withStyles } from '@material-ui/core/styles';
 import MuiAccordion from '@material-ui/core/Accordion';
 import MuiAccordionSummary from '@material-ui/core/AccordionSummary';
 import MuiAccordionDetails from '@material-ui/core/AccordionDetails';
+import { Card } from '@material-ui/core';
+
 
 const Accordion = withStyles((theme) => ({
   root: {
@@ -73,7 +75,7 @@ class CodeViewer extends Component {
     var curlyBrackets = '{ }';
     var unequal = '<>';
     return (
-      <div style={{height: '500px'}}>
+      <Card style={{height: '500px'}}>
         <Accordion
           square={true}
           style={{margin: 0}}
@@ -110,7 +112,7 @@ class CodeViewer extends Component {
             </pre>
           </AccordionDetails>
         </Accordion>
-      </div>
+      </Card>
     );
   };
 }

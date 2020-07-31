@@ -29,6 +29,8 @@ import locale from 'blockly/msg/en';
 import 'blockly/blocks';
 import Toolbox from './toolbox/Toolbox';
 
+import { Card } from '@material-ui/core';
+
 
 Blockly.setLocale(locale);
 
@@ -66,7 +68,7 @@ class BlocklyComponent extends React.Component {
 
 
         return <React.Fragment>
-            <div ref={this.blocklyDiv} id="blocklyDiv" />
+            <Card ref={this.blocklyDiv} id="blocklyDiv" />
             <Toolbox toolbox={this.toolbox} />
         </React.Fragment>;
     }
