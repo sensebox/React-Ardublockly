@@ -3,10 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { onChangeWorkspace } from '../../actions/workspaceActions';
 
-import BlocklyComponent, { Block, Value, Field, Shadow, Category } from './';
+import BlocklyComponent from './';
 import * as Blockly from 'blockly/core';
-//import * as De from './msg/de'; // de locale files
-import * as En from './msg/en'; // en locale files
 import './blocks/index';
 import './generator/index';
 

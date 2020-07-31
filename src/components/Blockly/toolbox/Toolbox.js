@@ -1,12 +1,9 @@
-import React, { Component } from 'react';
-import BlocklyComponent, { Block, Value, Field, Shadow, Category } from '../';
+import React from 'react';
+import { Block, Value, Field, Shadow, Category } from '../';
 import { getColour } from '../helpers/colour'
 
 
 class Toolbox extends React.Component {
-    constructor(props) {
-        super(props);
-    }
 
     render() {
         return (

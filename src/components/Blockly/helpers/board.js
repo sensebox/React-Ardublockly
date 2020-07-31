@@ -33,7 +33,7 @@ const sensebox_mcu = {
     i2cPins: { Wire: [['SDA', '17'], ['SCL', '16']] },
     i2cSpeed: [['100kHz', '100000L'], ['400kHz', '400000L']],
     builtinLed: [['BUILTIN_1', '7'], ['BUILTIN_2', '8']],
-    interrupt: [['interrupt1', '1'], ['interrupt2', '2'], , ['interrupt3', '3'], ['interrupt4', '4'], ['interrupt5', '5'], ['interrupt6', '6']],
+    interrupt: [['interrupt1', '1'], ['interrupt2', '2'], ['interrupt3', '3'], ['interrupt4', '4'], ['interrupt5', '5'], ['interrupt6', '6']],
     analogPins: [['A1', 'A1'], ['A2', 'A2'], ['A3', 'A3'], ['A4', 'A4'], ['A5', 'A5'], ['A6', 'A6']],
     serial_baud_rate: 9600,
     parseKey: '_*_'

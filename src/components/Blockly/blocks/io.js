@@ -10,7 +10,6 @@
  *
  * TODO: maybe change this to a "PIN" BlocklyType
  */
-import { defineBlocksWithJsonArray } from 'blockly';
 import Blockly from 'blockly/core';
 import { selectedBoard } from '../helpers/board'
 import * as Types from '../helpers/types'

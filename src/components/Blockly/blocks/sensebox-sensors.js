@@ -111,7 +111,7 @@ Blockly.Blocks['sensebox_sensor_pressure'] = {
   init: function () {
     var dropdownOptions = [[Blockly.Msg.senseBox_pressure, "Pressure"], [Blockly.Msg.senseBox_temp, "Temperature"], [Blockly.Msg.senseBox_gps_alt, "Altitude"]];
     var dropdown = new Blockly.FieldDropdown(dropdownOptions, function (option) {
-      var input = (option == 'Pressure') || (option == 'Temperature') || (option == 'Altitude');
+      var input = (option === 'Pressure') || (option === 'Temperature') || (option === 'Altitude');
       this.sourceBlock_.updateShape_(input);
     });
     this.appendDummyInput()
@@ -132,7 +132,7 @@ Blockly.Blocks['sensebox_sensor_pressure'] = {
    */
 
   domToMutation: function (xmlElement) {
-    var input = (xmlElement.getAttribute('port'));
+    (xmlElement.getAttribute('port'));
 
   },
   /**
@@ -156,7 +156,7 @@ Blockly.Blocks['sensebox_sensor_pressure'] = {
   updateShape_: function () {
     var extraFieldExist = this.getFieldValue('referencePressure');
     var input = this.getFieldValue('NAME');
-    if (input == 'Altitude' && extraFieldExist == null) {
+    if (input === 'Altitude' && extraFieldExist === null) {
       this.appendDummyInput('extraField')
         .setAlign(Blockly.ALIGN_RIGHT)
         .appendField(Blockly.Msg.senseBox_pressure_referencePressure)
@@ -164,13 +164,13 @@ Blockly.Blocks['sensebox_sensor_pressure'] = {
         .appendField(Blockly.Msg.senseBox_pressure_referencePressure_dim);
     }
 
-    if ((input == 'Pressure' || input == 'Temperature') && extraFieldExist != null) {
+    if ((input === 'Pressure' || input === 'Temperature') && extraFieldExist !== null) {
       this.removeInput('extraField');
     }
   },
   getBlockType: function () {
     var input = this.getFieldValue('NAME');
-    if (input == 'Temperature') {
+    if (input === 'Temperature') {
       return Types.DECIMAL.typeId;
     } else {
       return Types.LARGE_NUMBER.typeId;
@@ -215,7 +215,7 @@ Blockly.Blocks['sensebox_sensor_ultrasonic_ranger'] = {
     var dropdownOptions = [[Blockly.Msg.senseBox_ultrasonic_port_A, 'A'],
     [Blockly.Msg.senseBox_ultrasonic_port_B, 'B'], [Blockly.Msg.senseBox_ultrasonic_port_C, 'C']];
     var dropdown = new Blockly.FieldDropdown(dropdownOptions, function (option) {
-      var input = (option == 'A') || (option == 'B') || (option == 'C');
+      var input = (option === 'A') || (option === 'B') || (option === 'C');
       this.sourceBlock_.updateShape_(input);
     });
 
@@ -241,7 +241,7 @@ Blockly.Blocks['sensebox_sensor_ultrasonic_ranger'] = {
    * @this Blockly.Block
    */
   domToMutation: function (xmlElement) {
-    var input = (xmlElement.getAttribute('port'));
+    (xmlElement.getAttribute('port'));
 
   },
   /**
@@ -276,6 +276,8 @@ Blockly.Blocks['sensebox_sensor_ultrasonic_ranger'] = {
       case 'C':
         this.setFieldValue('5', 'ultrasonic_trigger');
         this.setFieldValue('6', 'ultrasonic_echo');
+        break;
+      default:
         break;
     }
   },

@@ -1,5 +1,4 @@
 import * as Blockly from 'blockly/core';
-import { Block } from 'blockly';
 
 Blockly.Arduino['logic_boolean'] = function (Block) {
     // Boolean values true and false.

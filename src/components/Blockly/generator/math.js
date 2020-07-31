@@ -1,6 +1,5 @@
 
 import * as Blockly from 'blockly/core';
-import { Block } from 'blockly';
 
 /**
  * @license Licensed under the Apache License, Version 2.0 (the "License"):
@@ -23,9 +22,9 @@ import { Block } from 'blockly';
 Blockly.Arduino['math_number'] = function (block) {
     // Numeric value.
     var code = parseFloat(block.getFieldValue('NUM'));
-    if (code == Infinity) {
+    if (code === Infinity) {
         code = 'INFINITY';
-    } else if (code == -Infinity) {
+    } else if (code === -Infinity) {
         code = '-INFINITY';
     }
     return [code, Blockly.Arduino.ORDER_ATOMIC];
@@ -71,21 +70,21 @@ Blockly.Arduino['math_single'] = function (block) {
     var operator = block.getFieldValue('OP');
     var code;
     var arg;
-    if (operator == 'NEG') {
+    if (operator === 'NEG') {
         // Negation is a special case given its different operator precedents.
         arg = Blockly.Arduino.valueToCode(block, 'NUM',
             Blockly.Arduino.ORDER_UNARY_PREFIX) || '0';
-        if (arg[0] == '-') {
+        if (arg[0] === '-') {
             // --3 is not legal in C++ in this context.
             arg = ' ' + arg;
         }
         code = '-' + arg;
         return [code, Blockly.Arduino.ORDER_UNARY_PREFIX];
     }
-    if (operator == 'ABS' || operator.substring(0, 5) == 'ROUND') {
+    if (operator === 'ABS' || operator.substring(0, 5) === 'ROUND') {
         arg = Blockly.Arduino.valueToCode(block, 'NUM',
             Blockly.Arduino.ORDER_UNARY_POSTFIX) || '0';
-    } else if (operator == 'SIN' || operator == 'COS' || operator == 'TAN') {
+    } else if (operator === 'SIN' || operator === 'COS' || operator === 'TAN') {
         arg = Blockly.Arduino.valueToCode(block, 'NUM',
             Blockly.Arduino.ORDER_MULTIPLICATIVE) || '0';
     } else {
@@ -127,6 +126,8 @@ Blockly.Arduino['math_single'] = function (block) {
         case 'TAN':
             code = 'tan(' + arg + ' / 180 * Math.PI)';
             break;
+        default:
+            break;
     }
     if (code) {
         return [code, Blockly.Arduino.ORDER_UNARY_POSTFIX];
@@ -146,7 +147,7 @@ Blockly.Arduino['math_single'] = function (block) {
             code = 'atan(' + arg + ') / M_PI * 180';
             break;
         default:
-            throw 'Unknown math operator: ' + operator;
+            throw new Error('Unknown math operator: ' + operator);
     }
     return [code, Blockly.Arduino.ORDER_MULTIPLICATIVE];
 };
@@ -184,7 +185,7 @@ Blockly.Arduino['math_number_property'] = function (block) {
         Blockly.Arduino.ORDER_MULTIPLICATIVE) || '0';
     var dropdown_property = block.getFieldValue('PROPERTY');
     var code;
-    if (dropdown_property == 'PRIME') {
+    if (dropdown_property === 'PRIME') {
         var func = [
             'boolean ' + Blockly.Arduino.DEF_FUNC_NAME + '(int n) {',
             '  // https://en.wikipedia.org/wiki/Primality_test#Naive_methods',
@@ -231,6 +232,8 @@ Blockly.Arduino['math_number_property'] = function (block) {
             var divisor = Blockly.Arduino.valueToCode(block, 'DIVISOR',
                 Blockly.Arduino.ORDER_MULTIPLICATIVE) || '0';
             code = number_to_check + ' % ' + divisor + ' == 0';
+            break;
+        default:
             break;
     }
     return [code, Blockly.Arduino.ORDER_EQUALITY];

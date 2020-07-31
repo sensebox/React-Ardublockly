@@ -25,7 +25,6 @@
 // https://developers.google.com/blockly/guides/create-custom-blocks/generating-code
 
 import * as Blockly from 'blockly/core';
-import * as _ from 'lodash';
 
 /**
  * Arduino code generator.

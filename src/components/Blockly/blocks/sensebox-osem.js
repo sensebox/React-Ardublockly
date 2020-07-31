@@ -1,6 +1,5 @@
 import * as Blockly from 'blockly/core';
 import { getColour } from '../helpers/colour';
-import Block from 'blockly'
 
 
 Blockly.Blocks['sensebox_osem_connection'] = {
@@ -28,8 +27,7 @@ Blockly.Blocks['sensebox_osem_connection'] = {
         this.setNextStatement(true, null);
     },
     onchange: function (e) {
-        var block = this;
-        var blocks = block.getDescendants()
+
         //Blockly.Blocks.sensebox.getDescendants = blocks;
 
     },
@@ -54,7 +52,7 @@ Blockly.Blocks['sensebox_osem_connection'] = {
     updateShape_: function () {
         var extraFieldExist = this.getFieldValue('gps');
         var input = this.getFieldValue('type');
-        if ((input == 'Mobile') && extraFieldExist == null) {
+        if ((input === 'Mobile') && extraFieldExist === null) {
             this.appendValueInput('lat', 'Number')
                 .appendField(Blockly.Msg.senseBox_gps_lat, 'gps');
             this.appendValueInput('lng', 'Number')
@@ -65,7 +63,7 @@ Blockly.Blocks['sensebox_osem_connection'] = {
                 .appendField(Blockly.Msg.senseBox_gps_timeStamp);
         }
 
-        if (input == 'Stationary' && extraFieldExist != null) {
+        if (input === 'Stationary' && extraFieldExist !== null) {
             this.removeInput('lat');
             this.removeInput('lng');
             this.removeInput('altitude');
@@ -98,7 +96,7 @@ Blockly.Blocks['sensebox_send_to_osem'] = {
         // Is the block nested in a loop?
         var block = this;
         do {
-            if (this.LOOP_TYPES.indexOf(block.type) != -1) {
+            if (this.LOOP_TYPES.indexOf(block.type) !== -1) {
                 legal = true;
                 break;
             }

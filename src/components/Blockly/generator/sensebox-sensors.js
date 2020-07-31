@@ -1,6 +1,4 @@
 import Blockly from 'blockly';
-import { getColour } from '../helpers/colour';
-import { selectedBoard } from '../helpers/board';
 
 /**
  * HDC1080 Temperature and Humidity Sensor
@@ -23,16 +21,17 @@ Blockly.Arduino.sensebox_sensor_temp_hum = function () {
 
 Blockly.Arduino.sensebox_sensor_uv_light = function () {
     var dropdown_name = this.getFieldValue('NAME');
+    let code = '';
     Blockly.Arduino.libraries_['library_senseBoxMCU'] = '#include "SenseBoxMCU.h"';
     if (dropdown_name === 'UvIntensity') {
         Blockly.Arduino.definitions_['define_veml'] = 'VEML6070 veml;'
         Blockly.Arduino.setupCode_['sensebox_sensor_uv_light'] = 'veml.begin();'
-        var code = 'veml.get' + dropdown_name + '()';
+        code = 'veml.get' + dropdown_name + '()';
     }
     if (dropdown_name === 'Illuminance') {
         Blockly.Arduino.definitions_['define_tsl'] = 'TSL45315 tsl;'
         Blockly.Arduino.setupCode_['sensebox_sensor_illuminance'] = 'tsl.begin();'
-        var code = 'tsl.get' + dropdown_name + '()';
+        code = 'tsl.get' + dropdown_name + '()';
     }
     return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
@@ -76,15 +75,16 @@ Blockly.Arduino.sensebox_sensor_sds011 = function () {
 
 Blockly.Arduino.sensebox_sensor_pressure = function () {
     var dropdown_name = this.getFieldValue('NAME');
+    var code = '';
     var referencePressure = this.getFieldValue('referencePressure');
     Blockly.Arduino.libraries_['library_senseBoxMCU'] = '#include "SenseBoxMCU.h"';
     Blockly.Arduino.definitions_['define_pressure'] = 'BMP280 bmp_sensor;';
     Blockly.Arduino.setupCode_['sensebox_bmp_sensor'] = 'bmp_sensor.begin();';
-    if (dropdown_name === 'Pressure' || dropdown_name == 'Temperature') {
-        var code = 'bmp_sensor.get' + dropdown_name + '()';
+    if (dropdown_name === 'Pressure' || dropdown_name === 'Temperature') {
+        code = 'bmp_sensor.get' + dropdown_name + '()';
     }
     else if (dropdown_name === 'Altitude') {
-        var code = 'bmp_sensor.getAltitude(' + referencePressure + ')';
+        code = 'bmp_sensor.getAltitude(' + referencePressure + ')';
     }
     return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
@@ -98,6 +98,7 @@ Blockly.Arduino.sensebox_sensor_pressure = function () {
 
 Blockly.Arduino.sensebox_sensor_bme680_bsec = function () {
     var dropdown_name = this.getFieldValue('dropdown');
+    let code = '';
     Blockly.Arduino.libraries_['library_bsec'] = '#include "bsec.h"';
     Blockly.Arduino.definitions_['bsec_iaqSensor'] = 'Bsec iaqSensor;'
     Blockly.Arduino.variables_['bmeTemperatur'] = 'float bmeTemperatur;';
@@ -170,25 +171,27 @@ Blockly.Arduino.sensebox_sensor_bme680_bsec = function () {
     `;
     switch (dropdown_name) {
         case 'temperature':
-            var code = 'bmeTemperatur';
+            code = 'bmeTemperatur';
             break;
         case 'humidity':
-            var code = 'bmeHumidity';
+            code = 'bmeHumidity';
             break;
         case 'pressure':
-            var code = 'bmePressure'
+            code = 'bmePressure'
             break;
         case 'IAQ':
-            var code = 'bmeIAQ';
+            code = 'bmeIAQ';
             break;
         case 'IAQAccuracy':
-            var code = 'bmeIAQAccuracy';
+            code = 'bmeIAQAccuracy';
             break;
         case 'CO2':
-            var code = 'bmeCO2';
+            code = 'bmeCO2';
             break;
         case 'breathVocEquivalent':
-            var code = 'bmeBreathVocEquivalent';
+            code = 'bmeBreathVocEquivalent';
+            break;
+        default:
             break;
     }
     return [code, Blockly.Arduino.ORDER_ATOMIC];

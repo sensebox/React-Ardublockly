@@ -1,5 +1,4 @@
 import * as Blockly from 'blockly/core';
-import { Block } from 'blockly';
 
 /**
  * Function for 'set pin' (X) to a state (Y).

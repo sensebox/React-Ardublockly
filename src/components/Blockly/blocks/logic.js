@@ -1,4 +1,3 @@
-import { defineBlocksWithJsonArray } from 'blockly';
 import Blockly from 'blockly/core';
 
 

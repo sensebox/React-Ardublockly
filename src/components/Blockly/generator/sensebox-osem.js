@@ -1,6 +1,4 @@
-import Blockly, { Blocks } from 'blockly';
-import { getColour } from '../helpers/colour'
-import Block from 'blockly';
+import Blockly from 'blockly';
 
 
 /**
@@ -20,7 +18,7 @@ Blockly.Arduino.sensebox_osem_connection = function (Block) {
   var box_id = this.getFieldValue('BoxID');
   var host = this.getFieldValue('host');
   var branch = Blockly.Arduino.statementToCode(Block, 'DO');
-  var blocks = Blockly.Block.getDescendants;
+  //var blocks = Blockly.Block.getDescendants;
   var type = this.getFieldValue('type');
   var ssl = this.getFieldValue('SSL');
   var port = 0;
@@ -36,10 +34,10 @@ Blockly.Arduino.sensebox_osem_connection = function (Block) {
   Blockly.Arduino.definitions_['num_sensors'] = 'static const uint8_t NUM_SENSORS = ' + num_sensors + ';'
   Blockly.Arduino.definitions_['SenseBoxID'] = 'const char SENSEBOX_ID [] PROGMEM = "' + box_id + '";';
   Blockly.Arduino.definitions_['host'] = 'const char server [] PROGMEM =' + host + ';';
-  if (ssl == 'TRUE') {
+  if (ssl === 'TRUE') {
     Blockly.Arduino.definitions_['WiFiSSLClient'] = 'WiFiSSLClient client;';
     port = 443;
-  } else if (ssl == 'FALSE') {
+  } else if (ssl === 'FALSE') {
     Blockly.Arduino.definitions_['WiFiClient'] = 'WiFiClient client;';
     port = 80;
   }
@@ -170,7 +168,7 @@ Blockly.Arduino.sensebox_osem_connection = function (Block) {
       }
     }
   }`
-    var code = '';
+    code = '';
     code += branch;
     code += 'submitValues(' + lat + ',' + lng + ',' + altitude + ',' + timestamp + ');\n';
   }

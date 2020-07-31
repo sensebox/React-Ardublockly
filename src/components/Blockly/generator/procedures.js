@@ -1,5 +1,5 @@
 import * as Blockly from 'blockly/core';
-import { Block } from 'blockly';
+
 
 /**
  * Code generator to add code into the setup() and loop() functions.
@@ -13,7 +13,7 @@ Blockly.Arduino['arduino_functions'] = function (block) {
         var targetBlock = block.getInputTargetBlock(name);
         var code = Blockly.Arduino.blockToCode(targetBlock);
         if (typeof code != 'string') {
-            throw 'Expecting code from statement block "' + targetBlock.type + '".';
+            throw new Error('Expecting code from statement block "' + targetBlock.type + '".');
         }
         return code;
     }
