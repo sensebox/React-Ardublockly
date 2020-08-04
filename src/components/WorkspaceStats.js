@@ -33,16 +33,14 @@ class WorkspaceStats extends Component {
           <Chip
             style={{ marginRight: '1rem' }}
             color="primary"
-            title="Anzahl aktueller Blöcke"
             avatar={<Avatar><FontAwesomeIcon icon={faPuzzlePiece} /></Avatar>}
             label={workspace ? workspace.getAllBlocks().length : 0}>
           </Chip>
         </Tooltip>
-        <Tooltip title="Anzahl aktueller Blöcke" >
+        <Tooltip title="Anzahl neuer Blöcke" >
           <Chip
             style={{ marginRight: '1rem' }}
             color="primary"
-            title="Anzahl neuer Blöcke"
             avatar={<Avatar><FontAwesomeIcon icon={faPlus} /></Avatar>}
             label={this.props.create}>
           </Chip>
@@ -51,7 +49,6 @@ class WorkspaceStats extends Component {
           <Chip
             style={{ marginRight: '1rem' }}
             color="primary"
-            title="Anzahl neuer Blöcke"
             avatar={<Avatar><FontAwesomeIcon icon={faPen} /></Avatar>}
             label={this.props.change}>
           </Chip>
