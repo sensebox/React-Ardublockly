@@ -7,6 +7,7 @@ import BlocklyComponent from './';
 import * as Blockly from 'blockly/core';
 import './blocks/index';
 import './generator/index';
+import { initialXml } from './initialXml.js';
 
 
 
@@ -53,8 +54,7 @@ class BlocklyWindow extends Component {
           drag: true,
           wheel: false
         }}
-        initialXml={`<xml xmlns="https://developers.google.com/blockly/xml">
-          <block type="arduino_functions" id="QWW|$jB8+*EL;}|#uA" x="27" y="16"></block></xml>`}
+        initialXml={initialXml}
       >
 
       </BlocklyComponent >

@@ -87,7 +87,7 @@ WorkspaceStats.propTypes = {
   change: PropTypes.number.isRequired,
   delete: PropTypes.number.isRequired,
   move: PropTypes.number.isRequired,
-  worskpaceChange: PropTypes.number.isRequired
+  workspaceChange: PropTypes.number.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -95,7 +95,7 @@ const mapStateToProps = state => ({
   change: state.workspace.stats.change,
   delete: state.workspace.stats.delete,
   move: state.workspace.stats.move,
-  worskpaceChange: state.workspace.change
+  workspaceChange: state.workspace.change
 });
 
 export default connect(mapStateToProps, null)(withStyles(styles, { withTheme: true })(WorkspaceStats));

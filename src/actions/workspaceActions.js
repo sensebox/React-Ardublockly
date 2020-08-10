@@ -5,14 +5,10 @@ import * as Blockly from 'blockly/core';
 export const workspaceChange = () => (dispatch) => {
   dispatch({
     type: CHANGE_WORKSPACE
-  })
-}
+  });
+};
 
-
-export const onChangeWorkspace = (event) => (dispatch, getState) => {
-  dispatch({
-    type: CHANGE_WORKSPACE,
-  })
+export const onChangeCode = () => (dispatch, getState) => {
   const workspace = Blockly.getMainWorkspace();
   var code = getState().workspace.code;
   code.arduino = Blockly.Arduino.workspaceToCode(workspace);
@@ -22,6 +18,11 @@ export const onChangeWorkspace = (event) => (dispatch, getState) => {
     type: NEW_CODE,
     payload: code
   });
+};
+
+export const onChangeWorkspace = (event) => (dispatch, getState) => {
+  dispatch(workspaceChange());
+  dispatch(onChangeCode());
   var stats = getState().workspace.stats;
   if (event.type === Blockly.Events.BLOCK_CREATE) {
     stats.create += event.ids.length;
