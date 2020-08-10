@@ -1,5 +1,5 @@
 import * as Blockly from 'blockly/core';
-import { Block } from 'blockly';
+
 
 Blockly['Arduino']['controls_repeat_ext'] = function (Block) {
     // Repeat n times.
@@ -111,6 +111,8 @@ Blockly['Arduino']['controls_flow_statements'] = function (Block) {
             return 'break;\n';
         case 'CONTINUE':
             return 'continue;\n';
+        default:
+            break;
     }
     throw Error('Unknown flow statement.');
 };
