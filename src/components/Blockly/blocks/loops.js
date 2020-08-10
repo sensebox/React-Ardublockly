@@ -1,5 +1,6 @@
 
 import Blockly from 'blockly';
+import { getColour } from '../helpers/colour';
 
 Blockly.defineBlocksWithJsonArray([
     {
@@ -44,6 +45,7 @@ Blockly.defineBlocksWithJsonArray([
         inputsInline: false,
         previousStatement: null,
         nextStatement: null,
+        colour: getColour().loops,
         helpUrl: '%{BKY_CONTROLS_FOR_HELPURL}',
         extensions: ['contextMenu_newGetVariableBlock', 'controls_for_tooltip'],
     },

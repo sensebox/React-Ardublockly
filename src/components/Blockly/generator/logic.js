@@ -1,5 +1,4 @@
 import * as Blockly from 'blockly/core';
-import { Block } from 'blockly';
 
 Blockly.Arduino['logic_boolean'] = function (Block) {
     // Boolean values true and false.
@@ -55,7 +54,7 @@ Blockly.Arduino['logic_operation'] = function (Block) {
     return [code, order];
 };
 
-Blockly.Arduino['control_if'] = function (Block) {
+Blockly.Arduino['controls_if'] = function (Block) {
     // If/elseif/else condition.
     let n = 0;
     let code = '',

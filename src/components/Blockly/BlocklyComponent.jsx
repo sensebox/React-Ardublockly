@@ -25,10 +25,14 @@ import React from 'react';
 import './BlocklyComponent.css';
 
 import Blockly from 'blockly/core';
-//import locale from 'blockly/msg/en';
+import locale from 'blockly/msg/en';
 import 'blockly/blocks';
+import Toolbox from './toolbox/Toolbox';
 
-//Blockly.setLocale(locale);
+import { Card } from '@material-ui/core';
+
+
+Blockly.setLocale(locale);
 
 class BlocklyComponent extends React.Component {
     constructor(props) {
@@ -61,13 +65,11 @@ class BlocklyComponent extends React.Component {
     }
 
     render() {
-        const { children } = this.props;
+
 
         return <React.Fragment>
-            <div ref={this.blocklyDiv} id="blocklyDiv" />
-            <xml xmlns="https://developers.google.com/blockly/xml" is="blockly" style={{ display: 'none' }} ref={this.toolbox}>
-                {children}
-            </xml>
+            <Card ref={this.blocklyDiv} id="blocklyDiv" />
+            <Toolbox toolbox={this.toolbox} />
         </React.Fragment>;
     }
 }
