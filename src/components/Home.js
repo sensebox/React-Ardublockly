@@ -6,10 +6,36 @@ import WorkspaceStats from './WorkspaceStats';
 import WorkspaceFunc from './WorkspaceFunc';
 import BlocklyWindow from './Blockly/BlocklyWindow';
 import CodeViewer from './CodeViewer';
+import TrashcanButtons from './TrashcanButtons';
 
 import Grid from '@material-ui/core/Grid';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+import { withStyles } from '@material-ui/core/styles';
+
+import { faCode } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+const styles = (theme) => ({
+  codeOn: {
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.primary.contrastText,
+    '&:hover': {
+      backgroundColor: theme.palette.primary.contrastText,
+      color: theme.palette.primary.main,
+      border: `1px solid ${theme.palette.secondary.main}`
+    }
+  },
+  codeOff: {
+    backgroundColor: theme.palette.primary.contrastText,
+    color: theme.palette.primary.main,
+    border: `1px solid ${theme.palette.secondary.main}`,
+    '&:hover': {
+      backgroundColor: theme.palette.primary.main,
+      color: theme.palette.primary.contrastText,
+    }
+  }
+});
 
 
 class Home extends Component {
@@ -29,6 +55,11 @@ class Home extends Component {
 
   onChange = () => {
     this.setState({ codeOn: !this.state.codeOn });
+    const workspace = Blockly.getMainWorkspace();
+    // https://github.com/google/blockly/blob/master/core/blockly.js#L314
+    if (workspace.trashcan && workspace.trashcan.flyout) {
+      workspace.trashcan.flyout.hide(); // in case of resize, the trash flyout does not reposition
+    }
   }
 
   render() {
@@ -37,11 +68,16 @@ class Home extends Component {
         <WorkspaceStats />
         <Grid container spacing={2}>
           <Grid item xs={12} md={this.state.codeOn ? 6 : 12} style={{ position: 'relative' }}>
-            <FormControlLabel
-              style={{ margin: '5px 10px 0 0', position: 'absolute', top: 0, right: 0, zIndex: 1 }}
-              control={<Switch checked={this.state.codeOn} onChange={this.onChange} color='primary' />}
-              label="Code"
-            />
+            <Tooltip title={this.state.codeOn ? 'Code ausblenden' : 'Code anzeigen'} >
+              <IconButton
+                className={this.state.codeOn ? this.props.classes.codeOn : this.props.classes.codeOff}
+                style={{width: '40px', height: '40px', position: 'absolute', top: -12, right: 8, zIndex: 21 }}
+                onClick={() => this.onChange()}
+              >
+                <FontAwesomeIcon icon={faCode} size="xs"/>
+              </IconButton>
+            </Tooltip>
+            <TrashcanButtons />
             <BlocklyWindow />
           </Grid>
           {this.state.codeOn ?
@@ -56,4 +92,4 @@ class Home extends Component {
   };
 }
 
-export default Home;
+export default withStyles(styles, { withTheme: true })(Home);
