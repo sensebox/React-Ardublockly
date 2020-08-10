@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { clearStats, workspaceChange } from '../actions/workspaceActions';
+import { clearStats, onChangeCode } from '../actions/workspaceActions';
+import { initialXml } from './Blockly/initialXml.js';
 
 import * as Blockly from 'blockly/core';
 
@@ -16,9 +17,13 @@ class ClearWorkspace extends Component {
 
   clearWorkspace = () => {
     const workspace = Blockly.getMainWorkspace();
-    workspace.clear();
+    Blockly.Events.disable(); // https://groups.google.com/forum/#!topic/blockly/m7e3g0TC75Y
+    // if events are disabled, then the workspace will be cleared AND the blocks are not in the trashcan
+    const xmlDom = Blockly.Xml.textToDom(initialXml)
+    Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, workspace);
+    Blockly.Events.enable();
     workspace.options.maxBlocks = Infinity;
-    this.props.workspaceChange();
+    this.props.onChangeCode();
     this.props.clearStats();
   }
 
@@ -34,8 +39,8 @@ class ClearWorkspace extends Component {
 
 ClearWorkspace.propTypes = {
   clearStats: PropTypes.func.isRequired,
-  workspaceChange: PropTypes.func.isRequired
+  onChangeWorkspace: PropTypes.func.isRequired
 };
 
 
-export default connect(null, { clearStats, workspaceChange })(ClearWorkspace);
+export default connect(null, { clearStats, onChangeCode })(ClearWorkspace);

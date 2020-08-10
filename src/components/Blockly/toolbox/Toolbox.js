@@ -286,9 +286,12 @@ class Toolbox extends React.Component {
                         </Value>
                     </Block>
                 </Category>
+                {/* this block is the initial block of the workspace; not necessary
+                    to display, because it can only be used once anyway
                 <Category name="Procedures" colour={getColour().procedures}>
                     <Block type="arduino_functions" />
                 </Category>
+                */}
             </xml>
         );
     };
