@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import Breadcrumbs from '../Breadcrumbs';
+
 import tutorials from './tutorials.json';
 
 import { Link } from 'react-router-dom';
@@ -11,6 +13,8 @@ class TutorialHome extends Component {
   render() {
     return (
       <div>
+        <Breadcrumbs content={[{link: '/', title: 'Home'},{link: '/tutorial', title: 'Tutorial'}]}/>
+
         <h1>Tutorial-Übersicht</h1>
         <Grid container spacing={2}>
           {tutorials.map((tutorial, i) => (
