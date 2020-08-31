@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import ClearWorkspace from './ClearWorkspace';
 import senseboxLogo from './sensebox_logo.svg';
 
+import { withRouter } from 'react-router-dom';
+
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -68,6 +70,12 @@ class Navbar extends Component {
             <Link to={"/"} style={{marginLeft: '10px'}}>
               <img src={senseboxLogo} alt="senseBox-Logo" width="30"/>
             </Link>
+            {/^\/tutorial(\/.*$|$)/g.test(this.props.location.pathname) ?
+              <Link to={"/tutorial"} style={{textDecoration: 'none', color: 'inherit', marginLeft: '10px'}}>
+                <Typography variant="h6" noWrap>
+                  Tutorial
+                </Typography>
+              </Link> : null}
           </Toolbar>
         </AppBar>
         <Drawer
@@ -90,10 +98,12 @@ class Navbar extends Component {
           </div>
           <List>
             {[{text: 'Tutorials', icon: faChalkboardTeacher}, {text: 'Einstellungen', icon: faCog}].map((item, index) => (
-              <ListItem button key={index} onClick={this.toggleDrawer}>
-                <ListItemIcon><FontAwesomeIcon icon={item.icon}/></ListItemIcon>
-                <ListItemText primary={item.text} />
-              </ListItem>
+              <Link to={"/tutorial"} style={{textDecoration: 'none', color: 'inherit'}}>
+                <ListItem button key={index} onClick={this.toggleDrawer}>
+                  <ListItemIcon><FontAwesomeIcon icon={item.icon}/></ListItemIcon>
+                  <ListItemText primary={item.text} />
+                </ListItem>
+              </Link>
             ))}
             <ClearWorkspace onClick={this.toggleDrawer}/>
           </List>
@@ -112,4 +122,4 @@ class Navbar extends Component {
   }
 }
 
-export default withStyles(styles, {withTheme: true})(Navbar);
+export default withStyles(styles, {withTheme: true})(withRouter(Navbar));
