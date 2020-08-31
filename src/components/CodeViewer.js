@@ -75,7 +75,7 @@ class CodeViewer extends Component {
     var curlyBrackets = '{ }';
     var unequal = '<>';
     return (
-      <Card style={{height: '500px'}}>
+      <Card style={{height: '100%', maxHeight: '500px'}}>
         <Accordion
           square={true}
           style={{margin: 0}}
