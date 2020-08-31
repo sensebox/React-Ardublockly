@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 
 import Breadcrumbs from '../Breadcrumbs';
 import BlocklyWindow from '../Blockly/BlocklyWindow';
 import CodeViewer from '../CodeViewer';
+
+import tutorials from './tutorials.json';
 
 import { withStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
@@ -12,9 +14,14 @@ import Tab from '@material-ui/core/Tab';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 
-const styles = () => ({
-  gridHeight: {
-    height: 'inherit'
+const styles = (theme) => ({
+  stepper: {
+    backgroundColor: theme.palette.primary.main,
+    width: 'calc(100% - 40px)',
+    opacity: 0.6,
+    borderRadius: '25px',
+    padding: '0 20px',
+    margin: '20px 0'
   }
 });
 
@@ -33,7 +40,17 @@ class Tutorial extends Component {
       <div>
         <Breadcrumbs content={[{link: '/', title: 'Home'},{link: '/tutorial', title: 'Tutorial'}, {link: `/tutorial/${this.props.match.params.tutorialId}`, title: this.props.match.params.tutorialId}]}/>
 
-        <h1>Tutorial {this.props.match.params.tutorialId}</h1>
+        {/* Stepper */}
+        <div className={this.props.classes.stepper}>
+          {parseInt(this.props.match.params.tutorialId)-1 > 0 ?
+            <Link to={`/tutorial/${parseInt(this.props.match.params.tutorialId)-1}`} style={{display: 'inline', float: 'left', textDecoration: 'none', color: 'inherit'}}>{'<'}</Link>
+          : <div style={{color: '#DDDDDD', display: 'inline'}}>{'<'}</div>}
+          <h1 style={{display: 'inline'}}>Tutorial {this.props.match.params.tutorialId}</h1>
+          {parseInt(this.props.match.params.tutorialId)+1 <= tutorials.length ?
+            <Link to={`/tutorial/${parseInt(this.props.match.params.tutorialId)+1}`} style={{display: 'inline', float: 'right', textDecoration: 'none', color: 'inherit'}}>{'>'}</Link>
+          : <div style={{color: '#DDDDDD', display: 'inline', float: 'right'}}>{'>'}</div>}
+        </div>
+
         <Tabs
           value={this.state.value}
           indicatorColor="primary"
@@ -69,4 +86,4 @@ class Tutorial extends Component {
   };
 }
 
-export default withRouter(withStyles(styles)(Tutorial));
+export default withRouter(withStyles(styles, {withTheme: true})(Tutorial));
