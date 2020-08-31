@@ -98,8 +98,8 @@ class Navbar extends Component {
           </div>
           <List>
             {[{text: 'Tutorials', icon: faChalkboardTeacher}, {text: 'Einstellungen', icon: faCog}].map((item, index) => (
-              <Link to={"/tutorial"} style={{textDecoration: 'none', color: 'inherit'}}>
-                <ListItem button key={index} onClick={this.toggleDrawer}>
+              <Link to={"/tutorial"} key={index} style={{textDecoration: 'none', color: 'inherit'}}>
+                <ListItem button onClick={this.toggleDrawer}>
                   <ListItemIcon><FontAwesomeIcon icon={item.icon}/></ListItemIcon>
                   <ListItemText primary={item.text} />
                 </ListItem>

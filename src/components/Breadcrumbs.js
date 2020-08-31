@@ -11,7 +11,7 @@ class MyBreadcrumbs extends Component {
       this.props.content && this.props.content.length > 1 ?
         <Breadcrumbs separator="›">
           {this.props.content.splice(0, this.props.content.length-1).map((content, i) => (
-            <Link to={content.link} style={{textDecoration: 'none'}}>
+            <Link to={content.link} style={{textDecoration: 'none'}} key={i}>
               <Typography color="secondary">{content.title}</Typography>
             </Link>
           ))}

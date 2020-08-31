@@ -48,7 +48,7 @@ class BlocklyWindow extends Component {
           colour: '#4EAF47', // senseBox-green
           snap: false
         }}
-        media={'media/'}
+        media={'/media/'}
         move={{ // https://developers.google.com/blockly/guides/configure/web/move
           scrollbars: true,
           drag: true,
