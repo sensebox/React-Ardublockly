@@ -8,20 +8,31 @@ import CodeViewer from '../CodeViewer';
 
 import tutorials from './tutorials.json';
 
+import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
+import Button from '@material-ui/core/Button';
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
+
 
 const styles = (theme) => ({
   stepper: {
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: fade(theme.palette.primary.main, 0.6),
     width: 'calc(100% - 40px)',
-    opacity: 0.6,
+    // opacity: 0.6,
     borderRadius: '25px',
     padding: '0 20px',
-    margin: '20px 0'
+    margin: '20px 0',
+    display: 'flex',
+    justifyContent: 'space-between'
+  },
+  color: {
+    backgroundColor: 'transparent '
   }
 });
 
@@ -42,14 +53,28 @@ class Tutorial extends Component {
 
         {/* Stepper */}
         <div className={this.props.classes.stepper}>
-          {parseInt(this.props.match.params.tutorialId)-1 > 0 ?
-            <Link to={`/tutorial/${parseInt(this.props.match.params.tutorialId)-1}`} style={{display: 'inline', float: 'left', textDecoration: 'none', color: 'inherit'}}>{'<'}</Link>
-          : <div style={{color: '#DDDDDD', display: 'inline'}}>{'<'}</div>}
-          <h1 style={{display: 'inline'}}>Tutorial {this.props.match.params.tutorialId}</h1>
-          {parseInt(this.props.match.params.tutorialId)+1 <= tutorials.length ?
-            <Link to={`/tutorial/${parseInt(this.props.match.params.tutorialId)+1}`} style={{display: 'inline', float: 'right', textDecoration: 'none', color: 'inherit'}}>{'>'}</Link>
-          : <div style={{color: '#DDDDDD', display: 'inline', float: 'right'}}>{'>'}</div>}
+          <Button
+            disabled={parseInt(this.props.match.params.tutorialId)-1 === 0}
+            onClick={() => {this.props.history.push(`/tutorial/${parseInt(this.props.match.params.tutorialId)-1}`)}}
+          >
+            {'<'}
+          </Button>
+          <Stepper activeStep={this.props.match.params.tutorialId} orientation="horizontal"
+                   style={{padding: 0}} classes={{root: this.props.classes.color}}>
+            <Step expanded completed={false}>
+              <StepLabel icon={``}>
+                <h1 style={{margin: 0}}>Tutorial {this.props.match.params.tutorialId}</h1>
+              </StepLabel>
+            </Step>
+          </Stepper>
+          <Button
+            disabled={parseInt(this.props.match.params.tutorialId)+1 > tutorials.length}
+            onClick={() => {this.props.history.push(`/tutorial/${parseInt(this.props.match.params.tutorialId)+1}`)}}
+          >
+            {'>'}
+          </Button>
         </div>
+
 
         <Tabs
           value={this.state.value}
