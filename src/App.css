@@ -1,5 +1,5 @@
 .wrapper {
-  min-height: 100vh; /* will cover the 100% of viewport */
+  min-height: calc(100vh - 60px); /* will cover the 100% of viewport - height of footer (padding-bottom) */
   overflow: hidden;
   display: block;
   position: relative;

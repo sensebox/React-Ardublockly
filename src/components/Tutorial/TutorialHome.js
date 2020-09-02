@@ -20,7 +20,7 @@ class TutorialHome extends Component {
           {tutorials.map((tutorial, i) => (
             <Grid item xs={12} sm={6} md={4} xl={3} key={i}>
               <Link to={`/tutorial/${i+1}`} style={{textDecoration: 'none', color: 'inherit'}}>
-                <Paper style={{height: '150px', padding: '10px'}}>Tutorial {i+1}</Paper>
+                <Paper style={{height: '150px', padding: '10px'}}>{tutorials[i].title}</Paper>
               </Link>
             </Grid>
           ))}

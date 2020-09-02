@@ -1,1 +1,11 @@
-[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}]
+[
+  {
+    "title": "erste Schritte"
+  },
+  {
+    "title": "if-Bedingung"
+  },
+  {
+    "title": "for-Schleife"
+  }
+]

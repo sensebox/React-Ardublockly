@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 import Breadcrumbs from '../Breadcrumbs';
 import BlocklyWindow from '../Blockly/BlocklyWindow';
 import CodeViewer from '../CodeViewer';
+import NotFound from '../NotFound';
 
 import tutorials from './tutorials.json';
 
@@ -47,29 +48,33 @@ class Tutorial extends Component {
   }
 
   render() {
+    var tutorialId = Number(this.props.match.params.tutorialId);
     return (
+      !Number.isInteger(tutorialId) || tutorialId < 1 || tutorialId > tutorials.length ?
+      <NotFound button={{title: 'Zurück zur Tutorials-Übersicht', link: '/tutorial'}}/>
+        :
       <div>
-        <Breadcrumbs content={[{link: '/', title: 'Home'},{link: '/tutorial', title: 'Tutorial'}, {link: `/tutorial/${this.props.match.params.tutorialId}`, title: this.props.match.params.tutorialId}]}/>
+        <Breadcrumbs content={[{link: '/', title: 'Home'},{link: '/tutorial', title: 'Tutorial'}, {link: `/tutorial/${tutorialId}`, title: tutorials[tutorialId-1].title}]}/>
 
         {/* Stepper */}
         <div className={this.props.classes.stepper}>
           <Button
-            disabled={parseInt(this.props.match.params.tutorialId)-1 === 0}
-            onClick={() => {this.props.history.push(`/tutorial/${parseInt(this.props.match.params.tutorialId)-1}`)}}
+            disabled={tutorialId-1 === 0}
+            onClick={() => {this.props.history.push(`/tutorial/${tutorialId-1}`)}}
           >
             {'<'}
           </Button>
-          <Stepper activeStep={this.props.match.params.tutorialId} orientation="horizontal"
+          <Stepper activeStep={tutorialId} orientation="horizontal"
                    style={{padding: 0}} classes={{root: this.props.classes.color}}>
             <Step expanded completed={false}>
               <StepLabel icon={``}>
-                <h1 style={{margin: 0}}>Tutorial {this.props.match.params.tutorialId}</h1>
+                <h1 style={{margin: 0}}>{tutorials[tutorialId-1].title}</h1>
               </StepLabel>
             </Step>
           </Stepper>
           <Button
-            disabled={parseInt(this.props.match.params.tutorialId)+1 > tutorials.length}
-            onClick={() => {this.props.history.push(`/tutorial/${parseInt(this.props.match.params.tutorialId)+1}`)}}
+            disabled={tutorialId+1 > tutorials.length}
+            onClick={() => {this.props.history.push(`/tutorial/${tutorialId+1}`)}}
           >
             {'>'}
           </Button>
