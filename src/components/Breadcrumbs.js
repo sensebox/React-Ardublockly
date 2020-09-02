@@ -9,7 +9,7 @@ class MyBreadcrumbs extends Component {
   render() {
     return (
       this.props.content && this.props.content.length > 1 ?
-        <Breadcrumbs separator="›">
+        <Breadcrumbs separator="›" style={{marginBottom: '20px'}}>
           {this.props.content.splice(0, this.props.content.length-1).map((content, i) => (
             <Link to={content.link} style={{textDecoration: 'none'}} key={i}>
               <Typography color="secondary">{content.title}</Typography>

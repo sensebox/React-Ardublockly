@@ -7,10 +7,10 @@ const initialState = {
     xml: ''
   },
   stats: {
-    create: 0,
+    create: -1, // initialXML is created automatically, Block is not part of the statistics
     change: 0,
     delete: 0,
-    move: 0
+    move: -1 // initialXML is moved automatically, Block is not part of the statistics
   },
   change: 0
 };

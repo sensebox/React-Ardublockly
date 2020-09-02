@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { clearStats } from '../actions/workspaceActions';
 
 import * as Blockly from 'blockly/core';
 
@@ -53,6 +56,10 @@ class Home extends Component {
     Blockly.svgResize(workspace);
   }
 
+  componentWillUnmount(){
+    this.props.clearStats();
+  }
+
   onChange = () => {
     this.setState({ codeOn: !this.state.codeOn });
     const workspace = Blockly.getMainWorkspace();
@@ -92,4 +99,9 @@ class Home extends Component {
   };
 }
 
-export default withStyles(styles, { withTheme: true })(Home);
+Home.propTypes = {
+  clearStats: PropTypes.func.isRequired
+};
+
+
+export default connect(null, { clearStats })(withStyles(styles, { withTheme: true })(Home));
