@@ -9,6 +9,7 @@ import NotFound from '../NotFound';
 
 import tutorials from './tutorials.json';
 
+import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Grid from '@material-ui/core/Grid';
@@ -47,7 +48,7 @@ class Tutorial extends Component {
             <StepperVertical />
 
             {/* width of vertical stepper is 30px*/}
-            <Card style={{width: 'calc(100% - 30px)', padding: '10px'}}>
+            <Card style={{width: isWidthUp('sm', this.props.width) ? 'calc(100% - 30px)' : '100%', padding: '10px'}}>
               <Tabs
                 value={this.state.value}
                 indicatorColor="primary"
@@ -85,4 +86,4 @@ class Tutorial extends Component {
   };
 }
 
-export default Tutorial;
+export default withWidth()(Tutorial);
