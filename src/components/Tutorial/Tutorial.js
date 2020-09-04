@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import * as Blockly from 'blockly/core';
+
 import Breadcrumbs from '../Breadcrumbs';
 import StepperHorizontal from './StepperHorizontal';
 import StepperVertical from './StepperVertical';
@@ -8,6 +10,7 @@ import CodeViewer from '../CodeViewer';
 import NotFound from '../NotFound';
 
 import tutorials from './tutorials.json';
+import { initialXml } from '../Blockly/initialXml.js';
 
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -23,7 +26,14 @@ class Tutorial extends Component {
 
   componentDidUpdate(props, state){
     if(state.tutorialId !== Number(this.props.match.params.tutorialId)){
-      this.setState({tutorialId: Number(this.props.match.params.tutorialId)})
+      this.setState({tutorialId: Number(this.props.match.params.tutorialId)});
+      // clear workspace
+      const workspace = Blockly.getMainWorkspace();
+      Blockly.Events.disable(); // https://groups.google.com/forum/#!topic/blockly/m7e3g0TC75Y
+      // if events are disabled, then the workspace will be cleared AND the blocks are not in the trashcan
+      const xmlDom = Blockly.Xml.textToDom(initialXml)
+      Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, workspace);
+      Blockly.Events.enable();
     }
   }
 
