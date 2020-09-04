@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { withRouter } from 'react-router-dom';
 
-import tutorials from './tutorials.json';
+import { tutorials } from './tutorials';
 
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';

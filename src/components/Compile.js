@@ -62,7 +62,7 @@ class Compile extends Component {
     return (
       <div style={{display: 'inline'}}>
         <Button style={{ float: 'right', color: 'white' }} variant="contained" color="primary" onClick={() => this.compile()}>
-          Compile
+          Kompilieren
         </Button>
         <Backdrop className={this.props.classes.backdrop} open={this.state.progress}>
           <CircularProgress color="inherit" />
@@ -70,7 +70,7 @@ class Compile extends Component {
         <Dialog onClose={this.toggleDialog} open={this.state.open}>
           <DialogTitle>Fehler</DialogTitle>
           <DialogContent dividers>
-            Etwas ist beim Compilieren schief gelaufen. Versuche es nochmal.
+            Etwas ist beim Kompilieren schief gelaufen. Versuche es nochmal.
           </DialogContent>
           <DialogActions>
             <Button onClick={this.toggleDialog} color="primary">

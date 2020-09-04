@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import Breadcrumbs from '../Breadcrumbs';
 
-import tutorials from './tutorials.json';
+import { tutorials } from './tutorials';
 
 import { Link } from 'react-router-dom';
 
