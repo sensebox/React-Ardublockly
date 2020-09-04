@@ -43,8 +43,10 @@ export const tutorials = [
                   return {text: 'Die SSID-Angabe fehlt.', type: 'error'}
                 }
                 var password = wifiBlock.getFieldValue('Password')
-                if(password !== 'Passwort'){
-                  return {text: 'Password muss als Angabe "Passwort" haben.', type: 'error'}
+                if(password){
+                  if(password !== 'Passwort'){
+                    return {text: 'Password muss als Angabe "Passwort" haben.', type: 'error'}
+                  }
                 }
                 else{
                   return {text: 'Die Angabe des Passworts fehlt.', type: 'error'}
