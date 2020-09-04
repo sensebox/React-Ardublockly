@@ -4,7 +4,7 @@ import { withRouter, Link } from 'react-router-dom';
 
 import clsx from 'clsx';
 
-import tutorials from './tutorials.json';
+import { tutorials } from './tutorials';
 
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
@@ -123,7 +123,7 @@ class StepperVertical extends Component {
           >
             {'<'}
           </Button>
-          <div style={{display: 'flex', height: 'calc(100% - 25px - 25px)', width: 'max-content'}}>
+          <div style={{display: 'flex', height: 'max-content', width: 'max-content'}}>
             <div style={{position: 'relative'}}>
               <div
                 className={clsx(this.props.classes.progress, this.props.classes.progressForeground)}
