@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { tutorialCheck } from '../../actions/tutorialActions';
 
 import * as Blockly from 'blockly/core';
 
@@ -49,6 +52,7 @@ class SolutionCheck extends Component {
   check = () => {
     const workspace = Blockly.getMainWorkspace();
     var msg = tutorials[this.props.tutorial].test(workspace);
+    this.props.tutorialCheck(this.props.tutorial, msg.type);
     this.setState({ msg, open: true });
   }
 
@@ -95,4 +99,8 @@ class SolutionCheck extends Component {
   };
 }
 
-export default withRouter(withStyles(styles, {withTheme: true})(SolutionCheck));
+SolutionCheck.propTypes = {
+  tutorialCheck: PropTypes.func.isRequired
+};
+
+export default connect(null, { tutorialCheck })(withRouter(withStyles(styles, {withTheme: true})(SolutionCheck)));
