@@ -4,10 +4,11 @@ import Breadcrumbs from '../Breadcrumbs';
 import StepperHorizontal from './StepperHorizontal';
 import StepperVertical from './StepperVertical';
 import BlocklyWindow from '../Blockly/BlocklyWindow';
+import SolutionCheck from './SolutionCheck';
 import CodeViewer from '../CodeViewer';
 import NotFound from '../NotFound';
 
-import tutorials from './tutorials.json';
+import { tutorials } from './tutorials';
 
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
 import Tabs from '@material-ui/core/Tabs';
@@ -24,7 +25,7 @@ class Tutorial extends Component {
 
   componentDidUpdate(props, state){
     if(state.tutorialId !== Number(this.props.match.params.tutorialId)){
-      this.setState({tutorialId: Number(this.props.match.params.tutorialId)})
+      this.setState({ value: 'introduction', tutorialId: Number(this.props.match.params.tutorialId) });
     }
   }
 
@@ -65,7 +66,8 @@ class Tutorial extends Component {
                   'Hier könnte eine Anleitung stehen.': null }
                 {this.state.value === 'assessment' ?
                   <Grid container spacing={2}>
-                    <Grid item xs={12} md={6} lg={8}>
+                    <Grid item xs={12} md={6} lg={8} style={{ position: 'relative' }}>
+                      <SolutionCheck tutorial={tutorialId-1}/>
                       <BlocklyWindow />
                     </Grid>
                     <Grid item xs={12} md={6} lg={4}>
