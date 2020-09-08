@@ -100,7 +100,7 @@ class Tutorial extends Component {
 
 Tutorial.propTypes = {
   tutorialId: PropTypes.func.isRequired,
-  currentTutorialId: PropTypes.number.isRequired,
+  currentTutorialId: PropTypes.number,
   status: PropTypes.array.isRequired,
   change: PropTypes.number.isRequired
 };
