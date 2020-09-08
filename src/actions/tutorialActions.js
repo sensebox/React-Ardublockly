@@ -1,7 +1,5 @@
 import { TUTORIAL_SUCCESS, TUTORIAL_ERROR, TUTORIAL_CHANGE } from './types';
 
-import { tutorials } from '../components/Tutorial/tutorials';
-
 export const tutorialChange = () => (dispatch) => {
   dispatch({
     type: TUTORIAL_CHANGE
@@ -9,16 +7,11 @@ export const tutorialChange = () => (dispatch) => {
 };
 
 export const tutorialCheck = (id, status) => (dispatch, getState) => {
-  var tutorialsStatus = getState().tutorial.status ?
-                          getState().tutorial.status
-                        : new Array(tutorials.length).fill({});
-  tutorialsStatus[id].status = status;
-  console.log(tutorials);
+  var tutorialsStatus = getState().tutorial.status;
+  tutorialsStatus[id] = {...tutorialsStatus[id], status: status};
   dispatch({
     type: status === 'success' ? TUTORIAL_SUCCESS : TUTORIAL_ERROR,
     payload: tutorialsStatus
   });
   dispatch(tutorialChange());
-  // update locale storage - sync with redux store
-  window.localStorage.setItem('tutorial', JSON.stringify(tutorialsStatus));
 };
