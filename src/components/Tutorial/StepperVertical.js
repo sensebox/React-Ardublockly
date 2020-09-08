@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 
 import { withRouter, Link } from 'react-router-dom';
 
 import clsx from 'clsx';
 
-import { tutorials } from './tutorials';
+import tutorials from './tutorials.json';
 
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
@@ -22,43 +20,32 @@ const styles = (theme) => ({
     padding: 0,
     width: '30px',
   },
-  stepIcon: {
-    borderStyle: `solid`,
-    borderWith: '2px',
+  stepIconSmall: {
+    border: `2px solid ${theme.palette.primary.main}`,
     borderRadius: '50%',
     width: '12px',
     height: '12px',
     margin: '0 auto'
   },
   stepIconMedium: {
+    border: `2px solid ${theme.palette.primary.main}`,
+    borderRadius: '50%',
     width: '18px',
     height: '18px',
+    margin: '0 auto'
   },
   stepIconLarge: {
+    border: `2px solid ${theme.palette.primary.main}`,
+    borderRadius: '50%',
     width: '24px',
     height: '24px'
   },
   stepIconTransparent: {
-    borderColor: `transparent`,
+    border: `2px solid transparent`,
     cursor: 'default'
   },
-  stepIconSuccess: {
-    borderColor: theme.palette.primary.main,
-  },
-  stepIconError: {
-    borderColor: theme.palette.error.dark,
-  },
-  stepIconOther: {
-    borderColor: theme.palette.secondary.main,
-  },
-  stepIconActiveSuccess: {
+  stepIconActive: {
     backgroundColor: fade(theme.palette.primary.main, 0.6)
-  },
-  stepIconActiveError: {
-    backgroundColor: fade(theme.palette.error.dark, 0.6)
-  },
-  stepIconActiveOther: {
-    backgroundColor: fade(theme.palette.secondary.main, 0.6)
   },
   progress: {
     position: 'absolute',
@@ -89,7 +76,7 @@ class StepperVertical extends Component {
                                   tutorials.slice(Number(this.props.match.params.tutorialId)-3-1, Number(this.props.match.params.tutorialId)+3)
                                 : tutorials.slice(Number(this.props.match.params.tutorialId)-2-1,Number(this.props.match.params.tutorialId)+2),
     tutorialId: Number(this.props.match.params.tutorialId),
-    selectedVerticalTutorialId: Number(this.props.match.params.tutorialId)
+    verticalTutorialId: Number(this.props.match.params.tutorialId)
   }
 
   componentDidUpdate(props, state){
@@ -105,13 +92,13 @@ class StepperVertical extends Component {
                                       tutorials.slice(Number(this.props.match.params.tutorialId)-3-1, Number(this.props.match.params.tutorialId)+3)
                                     : tutorials.slice(Number(this.props.match.params.tutorialId)-2-1,Number(this.props.match.params.tutorialId)+2),
         tutorialId: Number(this.props.match.params.tutorialId),
-        selectedVerticalTutorialId: Number(this.props.match.params.tutorialId)
+        verticalTutorialId: Number(this.props.match.params.tutorialId)
       })
     }
   }
 
   verticalStepper = (step) => {
-    var newTutorialId = this.state.selectedVerticalTutorialId + step;
+    var newTutorialId = this.state.verticalTutorialId + step;
     var tutorialArray = Number(newTutorialId) === 1 ?
                           tutorials.slice(newTutorialId-1, newTutorialId+4)
                           : newTutorialId === 2 ?
@@ -121,31 +108,31 @@ class StepperVertical extends Component {
                                   : newTutorialId === tutorials.length-1 ?
                                         tutorials.slice(newTutorialId-3-1, newTutorialId+3)
                                       : tutorials.slice(newTutorialId-2-1, newTutorialId+2);
-    this.setState({ tutorialArray: tutorialArray, selectedVerticalTutorialId: newTutorialId });
+    this.setState({ tutorialArray: tutorialArray, verticalTutorialId: newTutorialId });
   }
 
   render() {
     var tutorialId = this.state.tutorialId;
-    var selectedVerticalTutorialId = this.state.selectedVerticalTutorialId;
+    var verticalTutorialId = this.state.verticalTutorialId;
     return (
       isWidthUp('sm', this.props.width) ?
         <div style={{marginRight: '10px'}}>
             <Button
               style={{minWidth: '30px', margin: 'auto', minHeight: '25px', padding: '0', writingMode: 'vertical-rl'}}
-              disabled={this.state.selectedVerticalTutorialId === 1}
+              disabled={this.state.verticalTutorialId === 1}
               onClick={() => {this.verticalStepper(-1)}}
             >
               {'<'}
             </Button>
-            <div style={{display: 'flex', height: 'max-content', width: 'max-content'}}>
+            <div style={{display: 'flex', height: 'calc(100% - 25px - 25px)', width: 'max-content'}}>
               <div style={{position: 'relative'}}>
                 <div
                   className={clsx(this.props.classes.progress, this.props.classes.progressForeground)}
-                  style={{ zIndex: 1, borderRadius: `${selectedVerticalTutorialId/tutorials.length === 1 ? '2px' : '2px 2px 0 0'}`, height: `${(selectedVerticalTutorialId/tutorials.length)*100}%`}}>
+                  style={{ zIndex: 1, borderRadius: `${verticalTutorialId/tutorials.length === 1 ? '2px' : '2px 2px 0 0'}`, height: `${(verticalTutorialId/tutorials.length)*100}%`}}>
                 </div>
                 <div
                   className={clsx(this.props.classes.progress, this.props.classes.progressBackground)}
-                  style={{borderRadius: `${selectedVerticalTutorialId/tutorials.length === 1 ? '2px' : '2px 2px 0 0'}`}}>
+                  style={{borderRadius: `${verticalTutorialId/tutorials.length === 1 ? '2px' : '2px 2px 0 0'}`}}>
                 </div>
               </div>
               <Stepper
@@ -155,28 +142,25 @@ class StepperVertical extends Component {
                 classes={{root: this.props.classes.verticalStepper}}
               >
                 {this.state.tutorialArray.map((tutorial, i) => {
-                  var index = this.state.tutorialArray.indexOf(tutorials[selectedVerticalTutorialId-1]);
-                  var verticalTutorialId = i === index ? selectedVerticalTutorialId : selectedVerticalTutorialId - index + i;
-                  var tutorialStatus = this.props.status[verticalTutorialId-1].status === 'success' ? 'Success' :
-                                        this.props.status[verticalTutorialId-1].status === 'error' ? 'Error' : 'Other';
+                  var index = this.state.tutorialArray.indexOf(tutorials[verticalTutorialId-1]);
                   return (
                     <Step key={i}>
                       <Tooltip title={Object.keys(tutorial).length > 0 ? tutorial.title : ''} placement='right' arrow >
-                        <Link to={`/tutorial/${verticalTutorialId}`}>
+                        <Link to={`/tutorial/${i === index ? verticalTutorialId : verticalTutorialId - index + i}`}>
                           <StepLabel
                             StepIconComponent={'div'}
                             classes={{
-                              root: tutorial === tutorials[selectedVerticalTutorialId-1] ?
+                              root: tutorial === tutorials[verticalTutorialId-1] ?
                                       tutorial === tutorials[tutorialId-1] ?
-                                         clsx(this.props.classes.stepIcon, this.props.classes.stepIconLarge, this.props.classes['stepIcon'+tutorialStatus], this.props.classes['stepIconActive'+tutorialStatus])
-                                      : clsx(this.props.classes.stepIcon, this.props.classes.stepIconLarge, this.props.classes['stepIcon'+tutorialStatus])
-                                    : tutorial === tutorials[verticalTutorialId-2] || tutorial === tutorials[selectedVerticalTutorialId] ?
+                                        clsx(this.props.classes.stepIconLarge, this.props.classes.stepIconActive)
+                                      : this.props.classes.stepIconLarge
+                                    : tutorial === tutorials[verticalTutorialId-2] || tutorial === tutorials[verticalTutorialId] ?
                                         tutorial === tutorials[tutorialId-1] ?
-                                          clsx(this.props.classes.stepIcon, this.props.classes.stepIconMedium, this.props.classes['stepIcon'+tutorialStatus], this.props.classes['stepIconActive'+tutorialStatus])
-                                        : clsx(this.props.classes.stepIcon, this.props.classes.stepIconMedium, this.props.classes['stepIcon'+tutorialStatus])
+                                          clsx(this.props.classes.stepIconMedium, this.props.classes.stepIconActive)
+                                        : this.props.classes.stepIconMedium
                                     : tutorial === tutorials[tutorialId-1] ?
-                                        clsx(this.props.classes.stepIcon, this.props.classes['stepIcon'+tutorialStatus], this.props.classes['stepIconActive'+tutorialStatus])
-                                      : clsx(this.props.classes.stepIcon, this.props.classes['stepIcon'+tutorialStatus])
+                                        clsx(this.props.classes.stepIconSmall, this.props.classes.stepIconActive)
+                                      : this.props.classes.stepIconSmall
                             }}
                           >
                           </StepLabel>
@@ -188,7 +172,7 @@ class StepperVertical extends Component {
             </div>
             <Button
               style={{minWidth: '30px', minHeight: '25px', padding: '0', writingMode: 'vertical-rl'}}
-              disabled={this.state.selectedVerticalTutorialId === tutorials.length}
+              disabled={this.state.verticalTutorialId === tutorials.length}
               onClick={() => {this.verticalStepper(1)}}
             >
               {'>'}
@@ -199,15 +183,4 @@ class StepperVertical extends Component {
   };
 }
 
-
-StepperVertical.propTypes = {
-  status: PropTypes.array.isRequired,
-  change: PropTypes.number.isRequired,
-};
-
-const mapStateToProps = state => ({
-  change: state.tutorial.change,
-  status: state.tutorial.status
-});
-
-export default connect(mapStateToProps, null)(withRouter(withStyles(styles, {withTheme: true})(withWidth()(StepperVertical))));
+export default withRouter(withStyles(styles, {withTheme: true})(withWidth()(StepperVertical)));

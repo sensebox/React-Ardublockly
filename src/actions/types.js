@@ -5,8 +5,3 @@ export const MOVE_BLOCK = 'MOVE_BLOCK';
 export const CHANGE_BLOCK = 'CHANGE_BLOCK';
 export const DELETE_BLOCK = 'DELETE_BLOCK';
 export const CLEAR_STATS = 'CLEAR_STATS';
-
-
-export const TUTORIAL_SUCCESS = 'TUTORIAL_SUCCESS';
-export const TUTORIAL_ERROR = 'TUTORIAL_ERROR';
-export const TUTORIAL_CHANGE = 'TUTORIAL_CHANGE';
