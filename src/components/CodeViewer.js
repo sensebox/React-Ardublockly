@@ -83,7 +83,6 @@ class CodeViewer extends Component {
   render() {
     var curlyBrackets = '{ }';
     var unequal = '<>';
-    console.log('render', this.myDiv);
     return (
       <Card style={{height: '100%', maxHeight: '500px'}} ref={this.myDiv}>
         <Accordion

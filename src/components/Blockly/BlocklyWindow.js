@@ -54,7 +54,7 @@ class BlocklyWindow extends Component {
           drag: true,
           wheel: false
         }}
-        initialXml={initialXml}
+        initialXml={this.props.initialXml ? this.props.initialXml : initialXml}
       >
 
       </BlocklyComponent >

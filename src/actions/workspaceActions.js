@@ -2,6 +2,8 @@ import { NEW_CODE, CHANGE_WORKSPACE, CREATE_BLOCK, MOVE_BLOCK, CHANGE_BLOCK, DEL
 
 import * as Blockly from 'blockly/core';
 
+import { storeTutorialXml } from './tutorialActions';
+
 export const workspaceChange = () => (dispatch) => {
   dispatch({
     type: CHANGE_WORKSPACE
@@ -18,11 +20,13 @@ export const onChangeCode = () => (dispatch, getState) => {
     type: NEW_CODE,
     payload: code
   });
+  return code;
 };
 
 export const onChangeWorkspace = (event) => (dispatch, getState) => {
   dispatch(workspaceChange());
-  dispatch(onChangeCode());
+  var code = dispatch(onChangeCode());
+  dispatch(storeTutorialXml(code.xml));
   var stats = getState().workspace.stats;
   if (event.type === Blockly.Events.BLOCK_CREATE) {
     stats.create += event.ids.length;

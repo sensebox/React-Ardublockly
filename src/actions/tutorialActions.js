@@ -6,8 +6,9 @@ export const tutorialChange = () => (dispatch) => {
   });
 };
 
-export const tutorialCheck = (id, status) => (dispatch, getState) => {
+export const tutorialCheck = (status) => (dispatch, getState) => {
   var tutorialsStatus = getState().tutorial.status;
+  var id = getState().tutorial.currentId;
   tutorialsStatus[id] = {...tutorialsStatus[id], status: status};
   dispatch({
     type: status === 'success' ? TUTORIAL_SUCCESS : TUTORIAL_ERROR,
@@ -16,13 +17,16 @@ export const tutorialCheck = (id, status) => (dispatch, getState) => {
   dispatch(tutorialChange());
 };
 
-export const storeTutorialXml = (id) => (dispatch, getState) => {
+export const storeTutorialXml = (code) => (dispatch, getState) => {
   var tutorialsStatus = getState().tutorial.status;
-  tutorialsStatus[id] = {...tutorialsStatus[id]};
-  dispatch({
-    type: TUTORIAL_XML,
-    payload: tutorialsStatus
-  });
+  var id = getState().tutorial.currentId;
+  if(id){
+    tutorialsStatus[id] = {...tutorialsStatus[id], xml: code};
+    dispatch({
+      type: TUTORIAL_XML,
+      payload: tutorialsStatus
+    });
+  }
 };
 
 export const tutorialId = (id) => (dispatch) => {
