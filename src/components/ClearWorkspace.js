@@ -39,7 +39,7 @@ class ClearWorkspace extends Component {
 
 ClearWorkspace.propTypes = {
   clearStats: PropTypes.func.isRequired,
-  onChangeWorkspace: PropTypes.func.isRequired
+  onChangeCode: PropTypes.func.isRequired
 };
 
 

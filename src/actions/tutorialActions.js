@@ -18,9 +18,9 @@ export const tutorialCheck = (status) => (dispatch, getState) => {
 };
 
 export const storeTutorialXml = (code) => (dispatch, getState) => {
-  var tutorialsStatus = getState().tutorial.status;
   var id = getState().tutorial.currentId;
-  if(id){
+  if(id !== null){
+    var tutorialsStatus = getState().tutorial.status;
     tutorialsStatus[id] = {...tutorialsStatus[id], xml: code};
     dispatch({
       type: TUTORIAL_XML,
