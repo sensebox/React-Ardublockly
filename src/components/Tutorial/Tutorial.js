@@ -36,6 +36,10 @@ class Tutorial extends Component {
     }
   }
 
+  componentWillUnmount(){
+    this.props.tutorialId(null);
+  }
+
   onChange = (e, value) => {
     this.setState({ value: value });
   }
@@ -74,7 +78,7 @@ class Tutorial extends Component {
                   <Grid container spacing={2}>
                     <Grid item xs={12} md={6} lg={8} style={{ position: 'relative' }}>
                       <SolutionCheck />
-                      <BlocklyWindow />
+                      <BlocklyWindow initialXml={this.props.status[currentTutorialId].xml ? this.props.status[currentTutorialId].xml : null}/>
                     </Grid>
                     <Grid item xs={12} md={6} lg={4}>
                       <Card style={{height: 'calc(50% - 30px)', padding: '10px', marginBottom: '10px'}}>
@@ -96,10 +100,14 @@ class Tutorial extends Component {
 
 Tutorial.propTypes = {
   tutorialId: PropTypes.func.isRequired,
-  currentTutorialId: PropTypes.number.isRequired
+  currentTutorialId: PropTypes.number.isRequired,
+  status: PropTypes.array.isRequired,
+  change: PropTypes.number.isRequired
 };
 
 const mapStateToProps = state => ({
+  change: state.tutorial.change,
+  status: state.tutorial.status,
   currentTutorialId: state.tutorial.currentId
 });
 

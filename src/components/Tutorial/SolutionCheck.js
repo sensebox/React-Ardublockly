@@ -50,7 +50,7 @@ class SolutionCheck extends Component {
   check = () => {
     const workspace = Blockly.getMainWorkspace();
     var msg = tutorials[this.props.currentTutorialId].test(workspace);
-    this.props.tutorialCheck(this.props.currentTutorialId, msg.type);
+    this.props.tutorialCheck(msg.type);
     this.setState({ msg, open: true });
   }
 

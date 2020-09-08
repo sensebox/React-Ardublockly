@@ -98,16 +98,16 @@ class StepperVertical extends Component {
   componentDidUpdate(props){
     if(props.currentTutorialId !== this.props.currentTutorialId){
       this.setState({
-        tutorialArray: props.currentTutorialId === 0 ?
-                        tutorials.slice(props.currentTutorialId, props.currentTutorialId+5)
-                        : props.currentTutorialId === 1 ?
-                            tutorials.slice(props.currentTutorialId-1, props.currentTutorialId+4)
-                            : props.currentTutorialId === tutorials.length-1 ?
-                                  tutorials.slice(props.currentTutorialId-4, props.currentTutorialId+5)
-                                : props.currentTutorialId === tutorials.length-2 ?
-                                      tutorials.slice(props.currentTutorialId-3, props.currentTutorialId+4)
-                                    : tutorials.slice(props.currentTutorialId-2, props.currentTutorialId+3),
-        selectedVerticalTutorialId: props.currentTutorialId
+        tutorialArray: this.props.currentTutorialId === 0 ?
+                        tutorials.slice(this.props.currentTutorialId, this.props.currentTutorialId+5)
+                        : this.props.currentTutorialId === 1 ?
+                            tutorials.slice(this.props.currentTutorialId-1, this.props.currentTutorialId+4)
+                            : this.props.currentTutorialId === tutorials.length-1 ?
+                                  tutorials.slice(this.props.currentTutorialId-4, this.props.currentTutorialId+5)
+                                : this.props.currentTutorialId === tutorials.length-2 ?
+                                      tutorials.slice(this.props.currentTutorialId-3, this.props.currentTutorialId+4)
+                                    : tutorials.slice(this.props.currentTutorialId-2, this.props.currentTutorialId+3),
+        selectedVerticalTutorialId: this.props.currentTutorialId
       });
     }
   }
