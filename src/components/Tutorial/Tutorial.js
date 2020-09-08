@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { tutorialId } from '../../actions/tutorialActions';
 
 import Breadcrumbs from '../Breadcrumbs';
 import StepperHorizontal from './StepperHorizontal';
@@ -19,29 +22,32 @@ import Card from '@material-ui/core/Card';
 class Tutorial extends Component {
 
   state={
-    value: 'introduction',
-    tutorialId: Number(this.props.match.params.tutorialId)
+    value: 'introduction'
+  }
+
+  componentDidMount(){
+    this.props.tutorialId(Number(this.props.match.params.tutorialId)-1);
   }
 
   componentDidUpdate(props, state){
-    if(state.tutorialId !== Number(this.props.match.params.tutorialId)){
-      this.setState({ value: 'introduction', tutorialId: Number(this.props.match.params.tutorialId) });
+    if(props.currentTutorialId+1 !== Number(this.props.match.params.tutorialId)){
+      this.props.tutorialId(Number(this.props.match.params.tutorialId)-1);
+      this.setState({ value: 'introduction' });
     }
   }
 
   onChange = (e, value) => {
-    console.log(value);
     this.setState({ value: value });
   }
 
   render() {
-    var tutorialId = this.state.tutorialId;
+    var currentTutorialId = this.props.currentTutorialId;
     return (
-      !Number.isInteger(tutorialId) || tutorialId < 1 || tutorialId > tutorials.length ?
+      !Number.isInteger(currentTutorialId) || currentTutorialId+1 < 1 || currentTutorialId+1 > tutorials.length ?
         <NotFound button={{title: 'Zurück zur Tutorials-Übersicht', link: '/tutorial'}}/>
       :
         <div>
-          <Breadcrumbs content={[{link: '/', title: 'Home'},{link: '/tutorial', title: 'Tutorial'}, {link: `/tutorial/${tutorialId}`, title: tutorials[tutorialId-1].title}]}/>
+          <Breadcrumbs content={[{link: '/', title: 'Home'},{link: '/tutorial', title: 'Tutorial'}, {link: `/tutorial/${currentTutorialId+1}`, title: tutorials[currentTutorialId].title}]}/>
 
           <StepperHorizontal />
 
@@ -67,7 +73,7 @@ class Tutorial extends Component {
                 {this.state.value === 'assessment' ?
                   <Grid container spacing={2}>
                     <Grid item xs={12} md={6} lg={8} style={{ position: 'relative' }}>
-                      <SolutionCheck tutorial={tutorialId-1}/>
+                      <SolutionCheck />
                       <BlocklyWindow />
                     </Grid>
                     <Grid item xs={12} md={6} lg={4}>
@@ -88,4 +94,13 @@ class Tutorial extends Component {
   };
 }
 
-export default withWidth()(Tutorial);
+Tutorial.propTypes = {
+  tutorialId: PropTypes.func.isRequired,
+  currentTutorialId: PropTypes.number.isRequired
+};
+
+const mapStateToProps = state => ({
+  currentTutorialId: state.tutorial.currentId
+});
+
+export default connect(mapStateToProps, { tutorialId })(withWidth()(Tutorial));

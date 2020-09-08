@@ -9,8 +9,6 @@ import Compile from '../Compile';
 
 import { tutorials } from './tutorials';
 
-import { withRouter } from 'react-router-dom';
-
 import { withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -51,56 +49,61 @@ class SolutionCheck extends Component {
 
   check = () => {
     const workspace = Blockly.getMainWorkspace();
-    var msg = tutorials[this.props.tutorial].test(workspace);
-    this.props.tutorialCheck(this.props.tutorial, msg.type);
+    var msg = tutorials[this.props.currentTutorialId].test(workspace);
+    this.props.tutorialCheck(this.props.currentTutorialId, msg.type);
     this.setState({ msg, open: true });
   }
 
   render() {
     return (
-      tutorials[this.props.tutorial].test ?
-      <div>
-        <Tooltip title='Lösung kontrollieren'>
-          <IconButton
-            className={this.props.classes.compile}
-            style={{width: '40px', height: '40px', position: 'absolute', top: 8, right: 8, zIndex: 21 }}
-            onClick={() => this.check()}
-          >
-            <FontAwesomeIcon icon={faPlay} size="xs"/>
-          </IconButton>
-        </Tooltip>
-        <Dialog fullWidth maxWidth={'sm'} onClose={this.toggleDialog} open={this.state.open} style={{zIndex: 9999999}}>
-          <DialogTitle>{this.state.msg.type === 'error' ? 'Fehler' : 'Erfolg'}</DialogTitle>
-          <DialogContent dividers>
-            {this.state.msg.text}
-            {this.state.msg.type === 'success' ?
-            <div style={{marginTop: '20px', display: 'flex'}}>
-              <Compile />
-              <Button
-                style={{marginLeft: '10px'}}
-                variant="contained"
-                color="primary"
-                onClick={() => {this.toggleDialog(); this.props.history.push(`/tutorial/${this.props.tutorial+2}`)}}
-              >
-                nächstes Tutorial
+      tutorials[this.props.currentTutorialId].test ?
+        <div>
+          <Tooltip title='Lösung kontrollieren'>
+            <IconButton
+              className={this.props.classes.compile}
+              style={{width: '40px', height: '40px', position: 'absolute', top: 8, right: 8, zIndex: 21 }}
+              onClick={() => this.check()}
+            >
+              <FontAwesomeIcon icon={faPlay} size="xs"/>
+            </IconButton>
+          </Tooltip>
+          <Dialog fullWidth maxWidth={'sm'} onClose={this.toggleDialog} open={this.state.open} style={{zIndex: 9999999}}>
+            <DialogTitle>{this.state.msg.type === 'error' ? 'Fehler' : 'Erfolg'}</DialogTitle>
+            <DialogContent dividers>
+              {this.state.msg.text}
+              {this.state.msg.type === 'success' ?
+              <div style={{marginTop: '20px', display: 'flex'}}>
+                <Compile />
+                <Button
+                  style={{marginLeft: '10px'}}
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {this.toggleDialog(); this.props.history.push(`/tutorial/${this.props.currentTutorialId+2}`)}}
+                >
+                  nächstes Tutorial
+                </Button>
+                </div>
+              : null}
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.toggleDialog} color="primary">
+                Schließen
               </Button>
-              </div>
-            : null}
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.toggleDialog} color="primary">
-              Schließen
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </div>
+            </DialogActions>
+          </Dialog>
+        </div>
       : null
     );
   };
 }
 
 SolutionCheck.propTypes = {
-  tutorialCheck: PropTypes.func.isRequired
+  tutorialCheck: PropTypes.func.isRequired,
+  currentTutorialId: PropTypes.number
 };
 
-export default connect(null, { tutorialCheck })(withRouter(withStyles(styles, {withTheme: true})(SolutionCheck)));
+const mapStateToProps = state => ({
+  currentTutorialId: state.tutorial.currentId
+});
+
+export default connect(mapStateToProps, { tutorialCheck })(withStyles(styles, {withTheme: true})(SolutionCheck));

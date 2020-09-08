@@ -49,39 +49,29 @@ const styles = (theme) => ({
 
 class StepperHorizontal extends Component {
 
-  state={
-    tutorialId: Number(this.props.match.params.tutorialId),
-  }
-
-  componentDidUpdate(props, state){
-    if(state.tutorialId !== Number(this.props.match.params.tutorialId)){
-      this.setState({tutorialId: Number(this.props.match.params.tutorialId)})
-    }
-  }
-
   render() {
-    var tutorialId = this.state.tutorialId;
-    var tutorialStatus = this.props.status[tutorialId-1].status === 'success' ? 'Success' :
-                          this.props.status[tutorialId-1].status === 'error' ? 'Error' : 'Other';
+    var tutorialId = this.props.currentTutorialId;
+    var tutorialStatus = this.props.status[tutorialId].status === 'success' ? 'Success' :
+                          this.props.status[tutorialId].status === 'error' ? 'Error' : 'Other';
     return (
       <div className={clsx(this.props.classes.stepper, this.props.classes['stepper'+tutorialStatus])}>
         <Button
-          disabled={tutorialId-1 === 0}
-          onClick={() => {this.props.history.push(`/tutorial/${tutorialId-1}`)}}
+          disabled={tutorialId === 0}
+          onClick={() => {this.props.history.push(`/tutorial/${tutorialId}`)}}
         >
           {'<'}
         </Button>
-        <Stepper activeStep={tutorialId} orientation="horizontal"
+        <Stepper activeStep={tutorialId+1} orientation="horizontal"
                  style={{padding: 0}} classes={{root: this.props.classes.color}}>
           <Step expanded completed={false}>
             <StepLabel icon={tutorialStatus !== 'Other' ? <div className={clsx(tutorialStatus === 'Error' ? this.props.classes.iconDivError: this.props.classes.iconDivSuccess)}><FontAwesomeIcon className={this.props.classes.icon} icon={tutorialStatus === 'Success' ? faCheck : faTimes}/></div> : ''}>
-              <h1 style={{margin: 0}}>{tutorials[tutorialId-1].title}</h1>
+              <h1 style={{margin: 0}}>{tutorials[tutorialId].title}</h1>
             </StepLabel>
           </Step>
         </Stepper>
         <Button
-          disabled={tutorialId+1 > tutorials.length}
-          onClick={() => {this.props.history.push(`/tutorial/${tutorialId+1}`)}}
+          disabled={tutorialId+2 > tutorials.length}
+          onClick={() => {this.props.history.push(`/tutorial/${tutorialId+2}`)}}
         >
           {'>'}
         </Button>
@@ -93,11 +83,13 @@ class StepperHorizontal extends Component {
 StepperHorizontal.propTypes = {
   status: PropTypes.array.isRequired,
   change: PropTypes.number.isRequired,
+  currentTutorialId: PropTypes.number.isRequired
 };
 
 const mapStateToProps = state => ({
   change: state.tutorial.change,
-  status: state.tutorial.status
+  status: state.tutorial.status,
+  currentTutorialId: state.tutorial.currentId
 });
 
 export default connect(mapStateToProps, null)(withRouter(withStyles(styles, {withTheme: true})(StepperHorizontal)));

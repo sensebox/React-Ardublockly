@@ -1,4 +1,4 @@
-import { TUTORIAL_SUCCESS, TUTORIAL_ERROR, TUTORIAL_CHANGE } from './types';
+import { TUTORIAL_SUCCESS, TUTORIAL_ERROR, TUTORIAL_CHANGE, TUTORIAL_XML, TUTORIAL_ID } from './types';
 
 export const tutorialChange = () => (dispatch) => {
   dispatch({
@@ -14,4 +14,20 @@ export const tutorialCheck = (id, status) => (dispatch, getState) => {
     payload: tutorialsStatus
   });
   dispatch(tutorialChange());
+};
+
+export const storeTutorialXml = (id) => (dispatch, getState) => {
+  var tutorialsStatus = getState().tutorial.status;
+  tutorialsStatus[id] = {...tutorialsStatus[id]};
+  dispatch({
+    type: TUTORIAL_XML,
+    payload: tutorialsStatus
+  });
+};
+
+export const tutorialId = (id) => (dispatch) => {
+  dispatch({
+    type: TUTORIAL_ID,
+    payload: id
+  });
 };
