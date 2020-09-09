@@ -68,7 +68,7 @@ class BlocklyComponent extends React.Component {
 
 
         return <React.Fragment>
-            <Card ref={this.blocklyDiv} id="blocklyDiv" />
+            <Card ref={this.blocklyDiv} id="blocklyDiv" style={this.props.style ? this.props.style : {}}/>
             <Toolbox toolbox={this.toolbox} />
         </React.Fragment>;
     }
