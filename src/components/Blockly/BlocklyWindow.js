@@ -28,31 +28,44 @@ class BlocklyWindow extends Component {
     });
   }
 
+  componentDidUpdate(props) {
+    if(props.initialXml !== this.props.initialXml){
+      // guarantees that the current xml-code (this.props.initialXml) is rendered
+      const workspace = Blockly.getMainWorkspace();
+      workspace.clear();
+      Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(this.props.initialXml), workspace);
+    }
+  }
+
   render() {
+    console.log(this.props.initialXml);
     return (
       <BlocklyComponent ref={this.simpleWorkspace}
-        readOnly={false}
-        trashcan={true}
+        style={this.props.blocklyCSS}
+        readOnly={this.props.readOnly !== undefined ? this.props.readOnly : false}
+        trashcan={this.props.trashcan !== undefined ? this.props.trashcan : true}
         renderer='zelos'
         zoom={{ // https://developers.google.com/blockly/guides/configure/web/zoom
-          controls: true,
+          controls: this.props.zoomControls !== undefined ? this.props.zoomControls : true,
           wheel: false,
           startScale: 0.8,
           maxScale: 3,
           minScale: 0.3,
           scaleSpeed: 1.2
         }}
-        grid={{ // https://developers.google.com/blockly/guides/configure/web/grid
-          spacing: 20,
-          length: 1,
-          colour: '#4EAF47', // senseBox-green
-          snap: false
+        grid={this.props.grid !== undefined && !this.props.grid ? {} :
+          { // https://developers.google.com/blockly/guides/configure/web/grid
+            spacing: 20,
+            length: 1,
+            colour: '#4EAF47', // senseBox-green
+            snap: false
         }}
         media={'/media/'}
-        move={{ // https://developers.google.com/blockly/guides/configure/web/move
-          scrollbars: true,
-          drag: true,
-          wheel: false
+        move={this.props.move !== undefined && !this.props.move ? {} :
+          { // https://developers.google.com/blockly/guides/configure/web/move
+            scrollbars: true,
+            drag: true,
+            wheel: false
         }}
         initialXml={this.props.initialXml ? this.props.initialXml : initialXml}
       >
