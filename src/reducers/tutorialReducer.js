@@ -1,4 +1,4 @@
-import { TUTORIAL_SUCCESS, TUTORIAL_ERROR, TUTORIAL_CHANGE, TUTORIAL_XML, TUTORIAL_ID } from '../actions/types';
+import { TUTORIAL_SUCCESS, TUTORIAL_ERROR, TUTORIAL_CHANGE, TUTORIAL_XML, TUTORIAL_ID, TUTORIAL_LEVEL } from '../actions/types';
 
 import { tutorials } from '../components/Tutorial/tutorials';
 
@@ -6,6 +6,7 @@ const initialState = {
   status: window.localStorage.getItem('tutorial') ?
             JSON.parse(window.localStorage.getItem('tutorial'))
           : new Array(tutorials.length).fill({}),
+  level: 'instruction',
   currentId: null,
   change: 0
 };
@@ -30,6 +31,11 @@ export default function(state = initialState, action){
       return {
         ...state,
         currentId: action.payload
+      }
+    case TUTORIAL_LEVEL:
+      return {
+        ...state,
+        level: action.payload
       }
     default:
       return state;

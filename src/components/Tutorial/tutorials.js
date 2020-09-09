@@ -4,6 +4,20 @@ export const tutorials = [
   },
   {
     "title": "WLAN",
+    "instruction":
+      {
+        "description": 'Hier könnte eine Anleitung stehen.',
+        "xml": `<xml xmlns="https://developers.google.com/blockly/xml">
+                  <block type="arduino_functions" id="QWW|$jB8+*EL;}|#uA" deletable="false" movable="false" editable="false" x="27" y="16">
+                    <statement name="LOOP_FUNC">
+                      <block type="sensebox_wifi" id="f{U%tp!7XbCJhaJbKS:,">
+                        <field name="SSID">SSID</field>
+                        <field name="Password">Password</field>
+                      </block>
+                    </statement>
+                  </block>
+                </xml>`
+      },
     "test": function(workspace){
               var wifi = workspace.getBlocksByType('sensebox_wifi'); // result is an array with Blocks as objects
               if(wifi.length > 0){
@@ -26,6 +40,20 @@ export const tutorials = [
   },
   {
     "title": "spezifisches WLAN",
+    "instruction":
+      {
+        "description": 'Hier könnte eine Anleitung stehen.',
+        "xml": `<xml xmlns="https://developers.google.com/blockly/xml">
+                  <block type="arduino_functions" id="QWW|$jB8+*EL;}|#uA" deletable="false" movable="false" editable="false" x="27" y="16">
+                    <statement name="LOOP_FUNC">
+                      <block type="sensebox_wifi" id="f{U%tp!7XbCJhaJbKS:,">
+                        <field name="SSID">bestimmte SSID</field>
+                        <field name="Password">bestimmtes Passwort</field>
+                      </block>
+                    </statement>
+                  </block>
+                </xml>`
+      },
     "test": function(workspace){
               var wifi = workspace.getBlocksByType('sensebox_wifi'); // result is an array with Blocks as objects
               if(wifi.length > 0){

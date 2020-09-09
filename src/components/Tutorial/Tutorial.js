@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { tutorialId } from '../../actions/tutorialActions';
+import { tutorialId, setTutorialLevel } from '../../actions/tutorialActions';
 
 import Breadcrumbs from '../Breadcrumbs';
 import StepperHorizontal from './StepperHorizontal';
 import StepperVertical from './StepperVertical';
+import Instruction from './Instruction';
 import BlocklyWindow from '../Blockly/BlocklyWindow';
 import SolutionCheck from './SolutionCheck';
 import CodeViewer from '../CodeViewer';
@@ -21,10 +22,6 @@ import Card from '@material-ui/core/Card';
 
 class Tutorial extends Component {
 
-  state={
-    value: 'introduction'
-  }
-
   componentDidMount(){
     this.props.tutorialId(Number(this.props.match.params.tutorialId)-1);
   }
@@ -32,7 +29,7 @@ class Tutorial extends Component {
   componentDidUpdate(props, state){
     if(props.currentTutorialId+1 !== Number(this.props.match.params.tutorialId)){
       this.props.tutorialId(Number(this.props.match.params.tutorialId)-1);
-      this.setState({ value: 'introduction' });
+      this.props.setTutorialLevel('instruction');
     }
   }
 
@@ -41,11 +38,12 @@ class Tutorial extends Component {
   }
 
   onChange = (e, value) => {
-    this.setState({ value: value });
+    this.props.setTutorialLevel(value);
   }
 
   render() {
     var currentTutorialId = this.props.currentTutorialId;
+    console.log(this.props);
     return (
       !Number.isInteger(currentTutorialId) || currentTutorialId+1 < 1 || currentTutorialId+1 > tutorials.length ?
         <NotFound button={{title: 'Zurück zur Tutorials-Übersicht', link: '/tutorial'}}/>
@@ -61,20 +59,20 @@ class Tutorial extends Component {
             {/* width of vertical stepper is 30px*/}
             <Card style={{width: isWidthUp('sm', this.props.width) ? 'calc(100% - 30px)' : '100%', padding: '10px'}}>
               <Tabs
-                value={this.state.value}
+                value={this.props.level}
                 indicatorColor="primary"
                 textColor="inherit"
                 variant='fullWidth'
                 onChange={this.onChange}
               >
-                <Tab label="Anleitung" value='introduction' disableRipple/>
+                <Tab label="Anleitung" value='instruction' disableRipple/>
                 <Tab label="Aufgabe" value='assessment' disableRipple/>
               </Tabs>
 
               <div style={{marginTop: '20px'}}>
-                {this.state.value === 'introduction' ?
-                  'Hier könnte eine Anleitung stehen.': null }
-                {this.state.value === 'assessment' ?
+                {this.props.level === 'instruction' ?
+                  <Instruction /> : null }
+                {this.props.level === 'assessment' ?
                   <Grid container spacing={2}>
                     <Grid item xs={12} md={6} lg={8} style={{ position: 'relative' }}>
                       <SolutionCheck />
@@ -100,15 +98,18 @@ class Tutorial extends Component {
 
 Tutorial.propTypes = {
   tutorialId: PropTypes.func.isRequired,
+  setTutorialLevel: PropTypes.func.isRequired,
   currentTutorialId: PropTypes.number,
   status: PropTypes.array.isRequired,
-  change: PropTypes.number.isRequired
+  change: PropTypes.number.isRequired,
+  level: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({
   change: state.tutorial.change,
   status: state.tutorial.status,
-  currentTutorialId: state.tutorial.currentId
+  currentTutorialId: state.tutorial.currentId,
+  level: state.tutorial.level
 });
 
-export default connect(mapStateToProps, { tutorialId })(withWidth()(Tutorial));
+export default connect(mapStateToProps, { tutorialId, setTutorialLevel })(withWidth()(Tutorial));
