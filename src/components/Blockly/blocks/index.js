@@ -7,6 +7,7 @@ import './sensebox-osem';
 import './sensebox-web';
 import './sensebox-display';
 import './sensebox-lora';
+import './sensebox-led';
 import './io';
 import './math';
 import './map';
