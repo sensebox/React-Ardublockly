@@ -43,7 +43,6 @@ class Tutorial extends Component {
 
   render() {
     var currentTutorialId = this.props.currentTutorialId;
-    console.log(this.props);
     return (
       !Number.isInteger(currentTutorialId) || currentTutorialId+1 < 1 || currentTutorialId+1 > tutorials.length ?
         <NotFound button={{title: 'Zurück zur Tutorials-Übersicht', link: '/tutorial'}}/>

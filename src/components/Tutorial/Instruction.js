@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import * as Blockly from 'blockly/core';
-
 import BlocklyWindow from '../Blockly/BlocklyWindow';
 
 import { tutorials } from './tutorials';
@@ -15,7 +13,6 @@ class Instruction extends Component {
 
   render() {
     var currentTutorialId = this.props.currentTutorialId;
-    console.log(currentTutorialId);
     return (
       tutorials[currentTutorialId].instruction ?
         <div>
