@@ -18,6 +18,23 @@ export const tutorials = [
                   </block>
                 </xml>`
       },
+    "solution": `<xml xmlns="https://developers.google.com/blockly/xml">
+                  <block type="arduino_functions" id="QWW|$jB8+*EL;}|#uA" deletable="false" x="37" y="20">
+                    <statement name="LOOP_FUNC">
+                      <block type="sensebox_telegram_do" id="K%yUabqRVQ{]9eX-8jZD">
+                        <statement name="telegram_do">
+                          <block type="controls_if" id="rA6:!p7,{y2MOuVpv[Pm">
+                            <value name="IF0">
+                              <block type="logic_boolean" id="=[Zh}O6_)fl?JD#2)2bL">
+                                <field name="BOOL">TRUE</field>
+                              </block>
+                            </value>
+                          </block>
+                        </statement>
+                      </block>
+                    </statement>
+                  </block>
+                </xml>`,
     "test": function(workspace){
               var wifi = workspace.getBlocksByType('sensebox_wifi'); // result is an array with Blocks as objects
               if(wifi.length > 0){

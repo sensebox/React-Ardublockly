@@ -8,6 +8,7 @@ import * as Blockly from 'blockly/core';
 import Compile from '../Compile';
 
 import { tutorials } from './tutorials';
+import { checkXml } from './compareXml';
 
 import { withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
@@ -49,7 +50,7 @@ class SolutionCheck extends Component {
 
   check = () => {
     const workspace = Blockly.getMainWorkspace();
-    var msg = tutorials[this.props.currentTutorialId].test(workspace);
+    var msg = checkXml(tutorials[this.props.currentTutorialId].solution, this.props.xml);
     this.props.tutorialCheck(msg.type);
     this.setState({ msg, open: true });
   }
@@ -97,13 +98,16 @@ class SolutionCheck extends Component {
   };
 }
 
+
 SolutionCheck.propTypes = {
   tutorialCheck: PropTypes.func.isRequired,
-  currentTutorialId: PropTypes.number
+  currentTutorialId: PropTypes.number,
+  xml: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({
-  currentTutorialId: state.tutorial.currentId
+  currentTutorialId: state.tutorial.currentId,
+  xml: state.workspace.code.xml
 });
 
 export default connect(mapStateToProps, { tutorialCheck })(withStyles(styles, {withTheme: true})(SolutionCheck));

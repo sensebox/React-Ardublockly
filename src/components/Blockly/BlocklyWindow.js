@@ -38,7 +38,6 @@ class BlocklyWindow extends Component {
   }
 
   render() {
-    console.log(this.props.initialXml);
     return (
       <BlocklyComponent ref={this.simpleWorkspace}
         style={this.props.blocklyCSS}
