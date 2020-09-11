@@ -18,7 +18,7 @@ class Assessment extends Component {
     return (
       <div style={{width: '100%'}}>
         <Typography variant='h4' style={{marginBottom: '5px'}}>{step.headline}</Typography>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} style={{marginBottom: '5px'}}>
           <Grid item xs={12} md={6} lg={8} style={{ position: 'relative' }}>
             <SolutionCheck />
             <BlocklyWindow initialXml={this.props.status[currentTutorialId].xml ? this.props.status[currentTutorialId].xml : null}/>

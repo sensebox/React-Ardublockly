@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { tutorialStep } from '../../actions/tutorialActions';
 
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 import clsx from 'clsx';
 
@@ -37,7 +37,7 @@ const styles = (theme) => ({
   connector: {
     height: '10px',
     borderLeft: `3px solid ${theme.palette.primary.main}`,
-    margin: '5px auto'
+    margin: 'auto'
   }
 });
 
@@ -70,7 +70,7 @@ class StepperVertical extends Component {
             return (
               <Step key={i}>
                 <Tooltip title={step.headline} placement='right' arrow >
-                  <Link onClick={() => {this.props.tutorialStep(i)}}>
+                  <div style={i === activeStep ? {padding: '5px 0'} : {padding: '5px 0', cursor: 'pointer'}} onClick={i === activeStep ? null : () => {this.props.tutorialStep(i)}}>
                     <StepLabel
                       StepIconComponent={'div'}
                       classes={{
@@ -84,7 +84,7 @@ class StepperVertical extends Component {
                       }}
                     >
                     </StepLabel>
-                  </Link>
+                  </div>
                 </Tooltip>
               </Step>
           )})}

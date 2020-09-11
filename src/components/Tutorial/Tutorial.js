@@ -47,17 +47,17 @@ class Tutorial extends Component {
 
         <div style={{display: 'flex'}}>
           <StepperVertical steps={steps}/>
-
-          <Card style={{padding: '10px'}}>
+                                  {/* calc(Card-padding: 10px + Button-height: 35px + Button-marginTop: 15px)*/}
+          <Card style={{padding: '10px 10px 60px 10px', display: 'block', position: 'relative', height: 'max-content'}}>
             {step ?
               step.type === 'instruction' ?
                 <Instruction step={step}/>
               : <Assessment step={step}/> // if step.type === 'assessment'
              : null}
 
-            <div style={{marginTop: '20px'}}>
-              <Button style={{marginRight: '10px'}} variant='contained' disabled={this.props.activeStep === 0} onClick={() => this.props.tutorialStep(this.props.activeStep-1)}>Zurück</Button>
-              <Button variant='contained' color='primary' disabled={this.props.activeStep === tutorial.steps.length-1} onClick={() => this.props.tutorialStep(this.props.activeStep+1)}>Weiter</Button>
+            <div style={{marginTop: '20px', position: 'absolute', bottom: '10px'}}>
+              <Button style={{marginRight: '10px', height: '35px'}} variant='contained' disabled={this.props.activeStep === 0} onClick={() => this.props.tutorialStep(this.props.activeStep-1)}>Zurück</Button>
+              <Button style={{height: '35px'}}variant='contained' color='primary' disabled={this.props.activeStep === tutorial.steps.length-1} onClick={() => this.props.tutorialStep(this.props.activeStep+1)}>Weiter</Button>
             </div>
           </Card>
         </div>
