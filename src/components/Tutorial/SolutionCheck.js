@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { tutorialCheck } from '../../actions/tutorialActions';
+import { tutorialCheck, tutorialStep } from '../../actions/tutorialActions';
+
+import { withRouter } from 'react-router-dom';
 
 import Compile from '../Compile';
 
@@ -55,6 +57,7 @@ class SolutionCheck extends Component {
   }
 
   render() {
+    const steps = tutorials.filter(tutorial => tutorial.id === this.props.currentTutorialId)[0].steps;
     return (
       <div>
         <Tooltip title='Lösung kontrollieren'>
@@ -71,16 +74,27 @@ class SolutionCheck extends Component {
           <DialogContent dividers>
             {this.state.msg.text}
             {this.state.msg.type === 'success' ?
-            <div style={{marginTop: '20px', display: 'flex'}}>
-              <Compile />
-              <Button
-                style={{marginLeft: '10px'}}
-                variant="contained"
-                color="primary"
-                onClick={() => {this.toggleDialog(); this.props.history.push(`/tutorial/${this.props.currentTutorialId+2}`)}}
-              >
-                nächstes Tutorial
-              </Button>
+              <div style={{marginTop: '20px', display: 'flex'}}>
+                <Compile />
+                {this.props.activeStep === steps.length-1 ?
+                  <Button
+                    style={{marginLeft: '10px'}}
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {this.toggleDialog(); this.props.history.push(`/tutorial/`)}}
+                  >
+                    Tutorials-Übersicht
+                  </Button>
+                :
+                  <Button
+                    style={{marginLeft: '10px'}}
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {this.toggleDialog(); this.props.tutorialStep(this.props.activeStep + 1)}}
+                  >
+                    nächster Schritt
+                  </Button>
+                }
               </div>
             : null}
           </DialogContent>
@@ -98,6 +112,7 @@ class SolutionCheck extends Component {
 
 SolutionCheck.propTypes = {
   tutorialCheck: PropTypes.func.isRequired,
+  tutorialStep: PropTypes.func.isRequired,
   currentTutorialId: PropTypes.number,
   activeStep: PropTypes.number.isRequired,
   xml: PropTypes.string.isRequired
@@ -109,4 +124,4 @@ const mapStateToProps = state => ({
   xml: state.workspace.code.xml
 });
 
-export default connect(mapStateToProps, { tutorialCheck })(withStyles(styles, {withTheme: true})(SolutionCheck));
+export default connect(mapStateToProps, { tutorialCheck, tutorialStep })(withStyles(styles, {withTheme: true})(withRouter(SolutionCheck)));
