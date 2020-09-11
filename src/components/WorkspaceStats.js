@@ -42,7 +42,7 @@ class WorkspaceStats extends Component {
             style={{ marginRight: '1rem' }}
             color="primary"
             avatar={<Avatar><FontAwesomeIcon icon={faPlus} /></Avatar>}
-            label={this.props.create > 0 ? this.props.create : 0}> // initialXML is created automatically, Block is not part of the statistics
+            label={this.props.create > 0 ? this.props.create : 0}> {/* initialXML is created automatically, Block is not part of the statistics */}
           </Chip>
         </Tooltip>
         <Tooltip title="Anzahl veränderter Blöcke" >
@@ -58,7 +58,7 @@ class WorkspaceStats extends Component {
             style={{ marginRight: '1rem' }}
             color="primary"
             avatar={<Avatar><FontAwesomeIcon icon={faArrowsAlt} /></Avatar>}
-            label={this.props.move > 0 ? this.props.move : 0}> // initialXML is moved automatically, Block is not part of the statistics
+            label={this.props.move > 0 ? this.props.move : 0}> {/* initialXML is moved automatically, Block is not part of the statistics */}
           </Chip>
         </Tooltip>
         <Tooltip title="Anzahl gelöschter Blöcke" >

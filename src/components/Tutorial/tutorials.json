@@ -4,38 +4,33 @@
         "title": "Erste Schritte",
         "steps": [
             {
-                "id": 1,
                 "type": "instruction",
                 "headline": "Erste Schritte",
-                "text1": "In diesem Tutorial lernst du die ersten Schritte mit der senseBox kennen. Du erstellst ein erstes Programm, baust einen ersten Schaltkreis auf und lernst, wie du das Programm auf die senseBox MCU überträgst",
+                "text1": "In diesem Tutorial lernst du die ersten Schritte mit der senseBox kennen. Du erstellst ein erstes Programm, baust einen ersten Schaltkreis auf und lernst, wie du das Programm auf die senseBox MCU überträgst.",
                 "hardware": ["senseboxmcu", "led", "breadboard", "jst-adapter", "resistor"],
                 "requirements": []
             },
             {
-                "id": 2,
                 "type": "instruction",
                 "headline": "Aufbau der Schaltung",
-                "text1": "Stecke die LED auf das Breadboard und verbinde diese mithile des Widerstandes und dem JST Kabel mit dem Port Digital/Analog 1"
+                "text1": "Stecke die LED auf das Breadboard und verbinde diese mithile des Widerstandes und dem JST Kabel mit dem Port Digital/Analog 1."
             },
             {
-                "id": 3,
                 "type": "instruction",
                 "headline": "Programmierung",
                 "text1": "Jedes Programm für die senseBox besteht aus zwei Funktionen. Die Setup () Funktion wird zu Begin einmalig ausgeführt und der Programmcode Schrittweise ausgeführt. Nachdem die Setup () Funktion durchlaufen worden ist wird der Programmcode aus der zweiten Funktion, der Endlosschleife, fortlaufend wiederholt.",
                 "xml": "<xml xmlns='https://developers.google.com/blockly/xml'><block type='arduino_functions' id='QWW|$jB8+*EL;}|#uA' deletable='false' x='27' y='16'></block></xml>"
             },
             {
-                "id": 4,
                 "type": "instruction",
                 "headline": "Leuchten der LED",
                 "text1": "Um nun die LED zum leuchten zu bringen wird folgender Block in die Endlosschleife eingefügt. Der Block bietet dir auszuwählen an welchen Pin die LED angeschlossen wurd und ob diese ein oder ausgeschaltet werden soll.",
                 "xml": "<xml xmlns='https://developers.google.com/blockly/xml'><block type='arduino_functions' id='QWW|$jB8+*EL;}|#uA' deletable='false' x='27' y='16'></block></xml>"
             },
             {
-                "id": 5,
                 "type": "task",
                 "headline": "Aufgabe 1",
-                "text1": "Verwenden den Block zum leuchten der LED und übertrage dein erstes Programm auf die senseBox MCU",
+                "text1": "Verwenden den Block zum leuchten der LED und übertrage dein erstes Programm auf die senseBox MCU.",
                 "xml": "<xml xmlns='https://developers.google.com/blockly/xml'><block type='arduino_functions' id='QWW|$jB8+*EL;}|#uA' deletable='false' x='27' y='16'></block></xml>"
             }
         ]

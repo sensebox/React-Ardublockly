@@ -6,7 +6,7 @@ import clsx from 'clsx';
 
 import Breadcrumbs from '../Breadcrumbs';
 
-import { tutorials } from './tutorials';
+import tutorials from './tutorials.json';
 
 import { Link } from 'react-router-dom';
 
@@ -59,9 +59,9 @@ class TutorialHome extends Component {
                                   this.props.status[i].status === 'error' ? 'Error' : 'Other';
             return (
               <Grid item xs={12} sm={6} md={4} xl={3} key={i} style={{}}>
-                <Link to={`/tutorial/${i+1}`} style={{textDecoration: 'none', color: 'inherit'}}>
+                <Link to={`/tutorial/${tutorial.id}`} style={{textDecoration: 'none', color: 'inherit'}}>
                   <Paper style={{height: '150px', padding: '10px', position:'relative', overflow: 'hidden'}}>
-                    {tutorials[i].title}
+                    {tutorial.title}
                     {tutorialStatus !== 'Other' ?
                       <div className={clsx(this.props.classes.outerDiv, tutorialStatus === 'Error' ? this.props.classes.outerDivError : null)}>
                         <div className={this.props.classes.innerDiv}>
@@ -72,7 +72,6 @@ class TutorialHome extends Component {
                     }
                   </Paper>
                 </Link>
-
               </Grid>
           )})}
         </Grid>

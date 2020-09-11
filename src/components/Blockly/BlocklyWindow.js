@@ -26,16 +26,18 @@ class BlocklyWindow extends Component {
       this.props.onChangeWorkspace(event);
       Blockly.Events.disableOrphans(event);
     });
+    Blockly.svgResize(workspace);
   }
 
-  componentDidUpdate(props) {
-    if(props.initialXml !== this.props.initialXml){
-      // guarantees that the current xml-code (this.props.initialXml) is rendered
-      const workspace = Blockly.getMainWorkspace();
-      workspace.clear();
-      Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(this.props.initialXml), workspace);
-    }
-  }
+  // componentDidUpdate(props) {
+  //   const workspace = Blockly.getMainWorkspace();
+  //   if(props.initialXml !== this.props.initialXml){
+  //     // guarantees that the current xml-code (this.props.initialXml) is rendered
+  //     workspace.clear();
+  //     Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(this.props.initialXml), workspace);
+  //   }
+  //   Blockly.svgResize(workspace);
+  // }
 
   render() {
     return (

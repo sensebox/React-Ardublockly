@@ -1,4 +1,4 @@
-import { TUTORIAL_SUCCESS, TUTORIAL_ERROR, TUTORIAL_CHANGE, TUTORIAL_XML, TUTORIAL_ID, TUTORIAL_LEVEL } from './types';
+import { TUTORIAL_SUCCESS, TUTORIAL_ERROR, TUTORIAL_CHANGE, TUTORIAL_XML, TUTORIAL_ID, TUTORIAL_STEP } from './types';
 
 export const tutorialChange = () => (dispatch) => {
   dispatch({
@@ -30,17 +30,17 @@ export const storeTutorialXml = (code) => (dispatch, getState) => {
   }
 };
 
-// level = "instruction" or "assessment"
-export const setTutorialLevel = (level) => (dispatch) => {
-  dispatch({
-    type: TUTORIAL_LEVEL,
-    payload: level
-  });
-}
 
 export const tutorialId = (id) => (dispatch) => {
   dispatch({
     type: TUTORIAL_ID,
     payload: id
+  });
+};
+
+export const tutorialStep = (step) => (dispatch) => {
+  dispatch({
+    type: TUTORIAL_STEP,
+    payload: step
   });
 };
