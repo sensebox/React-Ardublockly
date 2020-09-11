@@ -11,14 +11,18 @@ class Instruction extends Component {
 
   render() {
     var step = this.props.step;
+    var isHardware = step.hardware && step.hardware.length > 0;
+    var areRequirements = step.requirements && step.requirements.length > 0;
     return (
       <div>
         <Typography variant='h4' style={{marginBottom: '5px'}}>{step.headline}</Typography>
-        <Typography style={{marginBottom: '5px'}}>{step.text1}</Typography>
-        {step.hardware && step.hardware.length > 0 ? 'Hardware: todo' : null}
-        {step.requirements && step.requirements.length > 0 ? 'Voraussetzungen: todo' : null}
+        <Typography style={isHardware ? {} : {marginBottom: '5px'}}>{step.text1}</Typography>
+        {isHardware ?
+          <Typography style={areRequirements ? {} : {marginBottom: '5px'}}>Hardware: todo</Typography> : null}
+        {areRequirements > 0 ?
+          <Typography style={{marginBottom: '5px'}}>Voraussetzungen: todo</Typography> : null}
         {step.xml ?
-        <Grid container spacing={2}>
+        <Grid container spacing={2} style={{marginBottom: '5px'}}>
           <Grid item xs={12}>
             <BlocklyWindow
               trashcan={false}
