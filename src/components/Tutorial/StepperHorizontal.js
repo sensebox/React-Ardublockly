@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 
 import clsx from 'clsx';
 
-import { tutorials } from './tutorials';
+import tutorials from './tutorials.json';
 
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
@@ -56,22 +56,22 @@ class StepperHorizontal extends Component {
     return (
       <div className={clsx(this.props.classes.stepper, this.props.classes['stepper'+tutorialStatus])}>
         <Button
-          disabled={tutorialId === 0}
-          onClick={() => {this.props.history.push(`/tutorial/${tutorialId}`)}}
+          disabled={tutorialId === 1}
+          onClick={() => {this.props.history.push(`/tutorial/${tutorialId-1}`)}}
         >
           {'<'}
         </Button>
-        <Stepper activeStep={tutorialId+1} orientation="horizontal"
+        <Stepper activeStep={tutorialId} orientation="horizontal"
                  style={{padding: 0}} classes={{root: this.props.classes.color}}>
           <Step expanded completed={false}>
             <StepLabel icon={tutorialStatus !== 'Other' ? <div className={clsx(tutorialStatus === 'Error' ? this.props.classes.iconDivError: this.props.classes.iconDivSuccess)}><FontAwesomeIcon className={this.props.classes.icon} icon={tutorialStatus === 'Success' ? faCheck : faTimes}/></div> : ''}>
-              <h1 style={{margin: 0}}>{tutorials[tutorialId].title}</h1>
+              <h1 style={{margin: 0}}>{tutorials.filter(tutorial => tutorial.id === tutorialId)[0].title}</h1>
             </StepLabel>
           </Step>
         </Stepper>
         <Button
-          disabled={tutorialId+2 > tutorials.length}
-          onClick={() => {this.props.history.push(`/tutorial/${tutorialId+2}`)}}
+          disabled={tutorialId+1 > tutorials.length}
+          onClick={() => {this.props.history.push(`/tutorial/${tutorialId+1}`)}}
         >
           {'>'}
         </Button>
