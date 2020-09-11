@@ -1,13 +1,12 @@
 import { TUTORIAL_SUCCESS, TUTORIAL_ERROR, TUTORIAL_CHANGE, TUTORIAL_XML, TUTORIAL_ID, TUTORIAL_STEP } from '../actions/types';
 
-import { tutorials } from '../components/Tutorial/tutorials';
+import tutorials from '../components/Tutorial/tutorials.json';
 
 const initialState = {
-  status: window.localStorage.getItem('tutorial') ?
-            JSON.parse(window.localStorage.getItem('tutorial'))
-          : new Array(tutorials.length).fill({}),
-  level: 'instruction',
-  currentId: 0,
+  status: window.localStorage.getItem('status') ?
+            JSON.parse(window.localStorage.getItem('status'))
+          : tutorials.map(tutorial => {return {id: tutorial.id, tasks: new Array(tutorial.steps.filter(step => step.type === 'task').length).fill({}) };}),
+  currentId: null,
   activeStep: 0,
   change: 0
 };
@@ -18,7 +17,7 @@ export default function(state = initialState, action){
     case TUTORIAL_ERROR:
     case TUTORIAL_XML:
       // update locale storage - sync with redux store
-      window.localStorage.setItem('tutorial', JSON.stringify(action.payload));
+      window.localStorage.setItem('status', JSON.stringify(action.payload));
       return {
         ...state,
         status: action.payload

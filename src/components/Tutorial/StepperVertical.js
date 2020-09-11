@@ -7,6 +7,7 @@ import { withRouter } from 'react-router-dom';
 
 import clsx from 'clsx';
 
+import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -31,12 +32,24 @@ const styles = (theme) => ({
     width: '24px',
     height: '24px'
   },
-  stepIconActive: {
+  stepIconLargeSuccess: {
+    borderColor: theme.palette.primary.main,
+  },
+  stepIconLargeError: {
+    borderColor: theme.palette.error.dark,
+  },
+  stepIconActiveOther: {
     backgroundColor: theme.palette.secondary.main
+  },
+  stepIconActiveSuccess: {
+    backgroundColor: fade(theme.palette.primary.main, 0.6)
+  },
+  stepIconActiveError: {
+    backgroundColor: fade(theme.palette.error.dark, 0.6)
   },
   connector: {
     height: '10px',
-    borderLeft: `3px solid ${theme.palette.primary.main}`,
+    borderLeft: `2px solid black`,
     margin: 'auto'
   }
 });
@@ -56,6 +69,8 @@ class StepperVertical extends Component {
   render() {
     var steps = this.props.steps;
     var activeStep = this.props.activeStep;
+    var tasks = steps.filter(task => task.type === 'task');
+    var tutorialStatus = this.props.status.filter(status => status.id === this.props.currentTutorialId)[0];
     return (
       <div style={{marginRight: '10px'}}>
         <Stepper
@@ -65,8 +80,9 @@ class StepperVertical extends Component {
           classes={{root: this.props.classes.verticalStepper}}
         >
           {steps.map((step, i) => {
-            // var tutorialStatus = this.props.status[verticalTutorialId-1].status === 'success' ? 'Success' :
-                                  // this.props.status[verticalTutorialId-1].status === 'error' ? 'Error' : 'Other';
+            var tasksIndex = tasks.indexOf(step);
+            var taskType = tasksIndex > -1 ? tutorialStatus.tasks[tasksIndex].type : null;
+            var taskStatus = taskType === 'success' ? 'Success' : taskType === 'error' ? 'Error' : 'Other';
             return (
               <Step key={i}>
                 <Tooltip title={step.headline} placement='right' arrow >
@@ -76,10 +92,10 @@ class StepperVertical extends Component {
                       classes={{
                         root: step.type === 'task' ?
                                 i === activeStep ?
-                                  clsx(this.props.classes.stepIcon, this.props.classes.stepIconLarge, this.props.classes.stepIconActive)
-                                : clsx(this.props.classes.stepIcon, this.props.classes.stepIconLarge)
+                                  clsx(this.props.classes.stepIcon, this.props.classes.stepIconLarge, this.props.classes['stepIconLarge'+taskStatus], this.props.classes['stepIconActive'+taskStatus])
+                                : clsx(this.props.classes.stepIcon, this.props.classes.stepIconLarge, this.props.classes['stepIconLarge'+taskStatus])
                               : i === activeStep ?
-                                  clsx(this.props.classes.stepIcon, this.props.classes.stepIconActive)
+                                  clsx(this.props.classes.stepIcon, this.props.classes.stepIconActiveOther)
                                 : clsx(this.props.classes.stepIcon)
                       }}
                     >

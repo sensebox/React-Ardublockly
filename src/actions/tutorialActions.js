@@ -1,15 +1,25 @@
 import { TUTORIAL_SUCCESS, TUTORIAL_ERROR, TUTORIAL_CHANGE, TUTORIAL_XML, TUTORIAL_ID, TUTORIAL_STEP } from './types';
 
+import tutorials from '../components/Tutorial/tutorials.json';
+
 export const tutorialChange = () => (dispatch) => {
   dispatch({
     type: TUTORIAL_CHANGE
   });
 };
 
-export const tutorialCheck = (status) => (dispatch, getState) => {
+export const tutorialCheck = (status, step) => (dispatch, getState) => {
   var tutorialsStatus = getState().tutorial.status;
   var id = getState().tutorial.currentId;
-  tutorialsStatus[id] = {...tutorialsStatus[id], status: status};
+  var activeStep = getState().tutorial.activeStep;
+  var steps = tutorials.filter(tutorial => tutorial.id === id)[0].steps;
+  var tasks = steps.filter(step => step.type === 'task');
+  var tasksIndex = tasks.indexOf(steps[activeStep]);
+  var tutorialsStatusIndex = tutorialsStatus.findIndex(tutorialStatus => tutorialStatus.id === id);
+  tutorialsStatus[tutorialsStatusIndex].tasks[tasksIndex] = {
+    ...tutorialsStatus[tutorialsStatusIndex].tasks[tasksIndex],
+    type: status
+  };
   dispatch({
     type: status === 'success' ? TUTORIAL_SUCCESS : TUTORIAL_ERROR,
     payload: tutorialsStatus
@@ -19,14 +29,23 @@ export const tutorialCheck = (status) => (dispatch, getState) => {
 
 export const storeTutorialXml = (code) => (dispatch, getState) => {
   var id = getState().tutorial.currentId;
-  var level = getState().tutorial.level;
-  if(id !== null && level === 'assessment'){
-    var tutorialsStatus = getState().tutorial.status;
-    tutorialsStatus[id] = {...tutorialsStatus[id], xml: code};
-    dispatch({
-      type: TUTORIAL_XML,
-      payload: tutorialsStatus
-    });
+  if(id !== null){
+    var activeStep = getState().tutorial.activeStep;
+    var steps = tutorials.filter(tutorial => tutorial.id === id)[0].steps;
+    if(steps[activeStep].type === 'task'){
+      var tutorialsStatus = getState().tutorial.status;
+      var tasks = steps.filter(step => step.type === 'task');
+      var tasksIndex = tasks.indexOf(steps[activeStep]);
+      var tutorialsStatusIndex = tutorialsStatus.findIndex(tutorialStatus => tutorialStatus.id === id);
+      tutorialsStatus[tutorialsStatusIndex].tasks[tasksIndex] = {
+        ...tutorialsStatus[tutorialsStatusIndex].tasks[tasksIndex],
+        xml: code
+      };
+      dispatch({
+        type: TUTORIAL_XML,
+        payload: tutorialsStatus
+      });
+    }
   }
 };
 

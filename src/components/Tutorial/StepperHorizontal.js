@@ -21,6 +21,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const styles = (theme) => ({
   stepper: {
     width: 'calc(100% - 40px)',
+    height: '40px',
     borderRadius: '25px',
     padding: '0 20px',
     margin: '20px 0',
@@ -51,30 +52,44 @@ class StepperHorizontal extends Component {
 
   render() {
     var tutorialId = this.props.currentTutorialId;
-    var tutorialStatus = this.props.status[tutorialId].status === 'success' ? 'Success' :
-                          this.props.status[tutorialId].status === 'error' ? 'Error' : 'Other';
+    var steps = this.props.steps;
+    var tasks = steps.filter(task => task.type === 'task');
+    var status = this.props.status.filter(status => status.id === tutorialId)[0];
+    var error = status.tasks.filter(task => task.type === 'error').length > 0;
+    var success = status.tasks.filter(task => task.type === 'success').length / tasks.length;
+    var tutorialStatus = success === 1 ? 'Success' : error ? 'Error' : 'Other';
     return (
-      <div className={clsx(this.props.classes.stepper, this.props.classes['stepper'+tutorialStatus])}>
-        <Button
-          disabled={tutorialId === 1}
-          onClick={() => {this.props.history.push(`/tutorial/${tutorialId-1}`)}}
-        >
-          {'<'}
-        </Button>
-        <Stepper activeStep={tutorialId} orientation="horizontal"
-                 style={{padding: 0}} classes={{root: this.props.classes.color}}>
-          <Step expanded completed={false}>
-            <StepLabel icon={tutorialStatus !== 'Other' ? <div className={clsx(tutorialStatus === 'Error' ? this.props.classes.iconDivError: this.props.classes.iconDivSuccess)}><FontAwesomeIcon className={this.props.classes.icon} icon={tutorialStatus === 'Success' ? faCheck : faTimes}/></div> : ''}>
-              <h1 style={{margin: 0}}>{tutorials.filter(tutorial => tutorial.id === tutorialId)[0].title}</h1>
-            </StepLabel>
-          </Step>
-        </Stepper>
-        <Button
-          disabled={tutorialId+1 > tutorials.length}
-          onClick={() => {this.props.history.push(`/tutorial/${tutorialId+1}`)}}
-        >
-          {'>'}
-        </Button>
+      <div style={{position: 'relative'}}>
+        {error || success > 0 ?
+          <div style={{zIndex: -1, width: error ? 'calc(100% - 40px)' : `calc(${success*100}% - 40px)`, borderRadius: success === 1 || error ? '25px' : '25px 0 0 25px', position: 'absolute', margin: 0, left: 0}} className={clsx(this.props.classes.stepper, error ? this.props.classes.stepperError : this.props.classes.stepperSuccess)}>
+          </div>
+        : null}
+        {success < 1 && !error ?
+          <div style={{zIndex: -2, width: `calc(${(1-success)*100}% - 40px)`, borderRadius: success === 0 ? '25px' : '0px 25px 25px 0', position: 'absolute', margin: 0, right: 0}} className={clsx(this.props.classes.stepper, this.props.classes.stepperOther)}>
+          </div>
+        : null}
+        <div className={this.props.classes.stepper}>
+          <Button
+            disabled={tutorialId === 1}
+            onClick={() => {this.props.history.push(`/tutorial/${tutorialId-1}`)}}
+          >
+            {'<'}
+          </Button>
+          <Stepper activeStep={tutorialId} orientation="horizontal"
+                   style={{padding: 0}} classes={{root: this.props.classes.color}}>
+            <Step expanded completed={false}>
+              <StepLabel icon={tutorialStatus !== 'Other' ? <div className={tutorialStatus === 'Success' && success === 1 ? this.props.classes.iconDivSuccess : this.props.classes.iconDivError}><FontAwesomeIcon className={this.props.classes.icon} icon={tutorialStatus === 'Success' ? faCheck : faTimes}/></div> : ''}>
+                <h1 style={{margin: 0}}>{tutorials.filter(tutorial => tutorial.id === tutorialId)[0].title}</h1>
+              </StepLabel>
+            </Step>
+          </Stepper>
+          <Button
+            disabled={tutorialId+1 > tutorials.length}
+            onClick={() => {this.props.history.push(`/tutorial/${tutorialId+1}`)}}
+          >
+            {'>'}
+          </Button>
+        </div>
       </div>
     );
   };
