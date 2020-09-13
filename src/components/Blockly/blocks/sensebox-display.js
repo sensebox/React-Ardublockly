@@ -1,6 +1,8 @@
 import * as Blockly from 'blockly/core';
 import { getColour } from '../helpers/colour';
 import * as Types from '../helpers/types'
+import { FieldSlider } from '@blockly/field-slider';
+import { Field } from '..';
 
 
 Blockly.Blocks['sensebox_display_beginDisplay'] = {
@@ -35,12 +37,15 @@ Blockly.Blocks['sensebox_display_printDisplay'] = {
         this.appendDummyInput()
             .appendField(Blockly.Msg.senseBox_display_color)
             .appendField(new Blockly.FieldDropdown([[Blockly.Msg.senseBox_display_white, "WHITE,BLACK"], [Blockly.Msg.senseBox_display_black, "BLACK,WHITE"]]), "COLOR");
-        this.appendValueInput("SIZE", 'Number')
-            .appendField(Blockly.Msg.senseBox_display_setSize);
-        this.appendValueInput("X", 'Number')
-            .appendField(Blockly.Msg.senseBox_display_printDisplay_x);
-        this.appendValueInput("Y", 'Number')
-            .appendField(Blockly.Msg.senseBox_display_printDisplay_y);
+        this.appendDummyInput()
+            .appendField(Blockly.Msg.senseBox_display_setSize)
+            .appendField(new FieldSlider(1, 1, 4), "SIZE");
+        this.appendDummyInput()
+            .appendField(Blockly.Msg.senseBox_display_printDisplay_x)
+            .appendField(new FieldSlider(0, 0, 64), "X");
+        this.appendDummyInput()
+            .appendField(Blockly.Msg.senseBox_display_printDisplay_y)
+            .appendField(new FieldSlider(0, 0, 128), "Y");
         this.appendValueInput('printDisplay')
             .appendField(Blockly.Msg.senseBox_display_printDisplay_value)
             .setCheck(null);

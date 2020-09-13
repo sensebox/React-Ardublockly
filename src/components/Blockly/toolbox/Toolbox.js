@@ -1,6 +1,7 @@
 import React from 'react';
 import { Block, Value, Field, Shadow, Category } from '../';
 import { getColour } from '../helpers/colour'
+import '@blockly/block-plus-minus';
 
 
 class Toolbox extends React.Component {
@@ -22,6 +23,9 @@ class Toolbox extends React.Component {
                     <Category name="WIFI" colour={getColour().sensebox}>
                         <Block type="sensebox_wifi" />
                         <Block type="sensebox_startap" />
+                    </Category>
+                    <Category name="LED" colour={getColour().sensebox}>
+                        <Block type="sensebox_rgb_led" />
                     </Category>
                     <Category name="Display" colour={getColour().sensebox}>
                         <Block type="sensebox_display_beginDisplay" />
