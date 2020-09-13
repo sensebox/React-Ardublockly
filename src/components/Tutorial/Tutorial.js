@@ -48,7 +48,7 @@ class Tutorial extends Component {
         <div style={{display: 'flex'}}>
           <StepperVertical steps={steps}/>
                                   {/* calc(Card-padding: 10px + Button-height: 35px + Button-marginTop: 15px)*/}
-          <Card style={{padding: '10px 10px 60px 10px', display: 'block', position: 'relative', height: 'max-content'}}>
+          <Card style={{padding: '10px 10px 60px 10px', display: 'block', position: 'relative', height: 'max-content', width: '100%'}}>
             {step ?
               step.type === 'instruction' ?
                 <Instruction step={step}/>
