@@ -52,11 +52,10 @@ class StepperHorizontal extends Component {
 
   render() {
     var tutorialId = this.props.currentTutorialId;
-    var steps = this.props.steps;
-    var tasks = steps.filter(task => task.type === 'task');
     var status = this.props.status.filter(status => status.id === tutorialId)[0];
-    var error = status.tasks.filter(task => task.type === 'error').length > 0;
-    var success = status.tasks.filter(task => task.type === 'success').length / tasks.length;
+    var tasks = status.tasks;
+    var error = tasks.filter(task => task.type === 'error').length > 0;
+    var success = tasks.filter(task => task.type === 'success').length / tasks.length;
     var tutorialStatus = success === 1 ? 'Success' : error ? 'Error' : 'Other';
     return (
       <div style={{position: 'relative'}}>

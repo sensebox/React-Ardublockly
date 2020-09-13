@@ -69,7 +69,6 @@ class StepperVertical extends Component {
   render() {
     var steps = this.props.steps;
     var activeStep = this.props.activeStep;
-    var tasks = steps.filter(task => task.type === 'task');
     var tutorialStatus = this.props.status.filter(status => status.id === this.props.currentTutorialId)[0];
     return (
       <div style={{marginRight: '10px'}}>
@@ -80,7 +79,7 @@ class StepperVertical extends Component {
           classes={{root: this.props.classes.verticalStepper}}
         >
           {steps.map((step, i) => {
-            var tasksIndex = tasks.indexOf(step);
+            var tasksIndex = tutorialStatus.tasks.findIndex(task => task.id === step.id);
             var taskType = tasksIndex > -1 ? tutorialStatus.tasks[tasksIndex].type : null;
             var taskStatus = taskType === 'success' ? 'Success' : taskType === 'error' ? 'Error' : 'Other';
             return (

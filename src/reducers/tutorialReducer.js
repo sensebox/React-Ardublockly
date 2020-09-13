@@ -33,8 +33,6 @@ const initialStatus = () => {
     if(existingTutorialIds.length > 0){
       status = status.filter(status => existingTutorialIds.indexOf(status.id) > -1);
     }
-    console.log('tutorial', existingTutorialIds);
-    console.log('tutorial', status);
     return status;
   }
   // window.localStorage.getItem('status') does not exist

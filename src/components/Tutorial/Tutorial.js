@@ -43,7 +43,7 @@ class Tutorial extends Component {
       <div>
         <Breadcrumbs content={[{link: '/', title: 'Home'},{link: '/tutorial', title: 'Tutorial'}, {link: `/tutorial/${currentTutorialId}`, title: tutorial.title}]}/>
 
-        <StepperHorizontal steps={steps}/>
+        <StepperHorizontal />
 
         <div style={{display: 'flex'}}>
           <StepperVertical steps={steps}/>
@@ -52,7 +52,7 @@ class Tutorial extends Component {
             {step ?
               step.type === 'instruction' ?
                 <Instruction step={step}/>
-              : <Assessment steps={steps} step={step}/> // if step.type === 'assessment'
+              : <Assessment step={step}/> // if step.type === 'assessment'
              : null}
 
             <div style={{marginTop: '20px', position: 'absolute', bottom: '10px'}}>

@@ -52,7 +52,7 @@ class SolutionCheck extends Component {
     const tutorial = tutorials.filter(tutorial => tutorial.id === this.props.currentTutorialId)[0];
     const step = tutorial.steps[this.props.activeStep];
     var msg = checkXml(step.xml, this.props.xml);
-    this.props.tutorialCheck(msg.type);
+    this.props.tutorialCheck(msg.type, step);
     this.setState({ msg, open: true });
   }
 
