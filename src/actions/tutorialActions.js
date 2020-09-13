@@ -11,11 +11,8 @@ export const tutorialChange = () => (dispatch) => {
 export const tutorialCheck = (status, step) => (dispatch, getState) => {
   var tutorialsStatus = getState().tutorial.status;
   var id = getState().tutorial.currentId;
-  var activeStep = getState().tutorial.activeStep;
-  var steps = tutorials.filter(tutorial => tutorial.id === id)[0].steps;
-  var tasks = steps.filter(step => step.type === 'task');
-  var tasksIndex = tasks.indexOf(steps[activeStep]);
   var tutorialsStatusIndex = tutorialsStatus.findIndex(tutorialStatus => tutorialStatus.id === id);
+  var tasksIndex = tutorialsStatus[tutorialsStatusIndex].tasks.findIndex(task => task.id === step.id);
   tutorialsStatus[tutorialsStatusIndex].tasks[tasksIndex] = {
     ...tutorialsStatus[tutorialsStatusIndex].tasks[tasksIndex],
     type: status
@@ -34,9 +31,8 @@ export const storeTutorialXml = (code) => (dispatch, getState) => {
     var steps = tutorials.filter(tutorial => tutorial.id === id)[0].steps;
     if(steps[activeStep].type === 'task'){
       var tutorialsStatus = getState().tutorial.status;
-      var tasks = steps.filter(step => step.type === 'task');
-      var tasksIndex = tasks.indexOf(steps[activeStep]);
       var tutorialsStatusIndex = tutorialsStatus.findIndex(tutorialStatus => tutorialStatus.id === id);
+      var tasksIndex = tutorialsStatus[tutorialsStatusIndex].tasks.findIndex(task => task.id === steps[activeStep].id);
       tutorialsStatus[tutorialsStatusIndex].tasks[tasksIndex] = {
         ...tutorialsStatus[tutorialsStatusIndex].tasks[tasksIndex],
         xml: code

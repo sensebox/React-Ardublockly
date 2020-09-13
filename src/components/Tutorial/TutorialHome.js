@@ -65,7 +65,6 @@ class TutorialHome extends Component {
             var error = status.tasks.filter(task => task.type === 'error').length > 0;
             var success = status.tasks.filter(task => task.type === 'success').length/tasks.length
             var tutorialStatus = success === 1 ? 'Success' : error ? 'Error' : 'Other';
-            console.log(success);
             return (
               <Grid item xs={12} sm={6} md={4} xl={3} key={i} style={{}}>
                 <Link to={`/tutorial/${tutorial.id}`} style={{textDecoration: 'none', color: 'inherit'}}>

@@ -14,13 +14,11 @@ class Assessment extends Component {
 
   render() {
     var tutorialId = this.props.currentTutorialId;
-    var steps = this.props.steps;
     var currentTask = this.props.step;
-    var tasks = steps.filter(task => task.type === 'task');
-    var taskIndex = tasks.indexOf(currentTask);
     var status = this.props.status.filter(status => status.id === tutorialId)[0];
-    var statusTask = status.tasks[taskIndex]
-
+    var taskIndex = status.tasks.findIndex(task => task.id === currentTask.id);
+    var statusTask = status.tasks[taskIndex];
+    
     return (
       <div style={{width: '100%'}}>
         <Typography variant='h4' style={{marginBottom: '5px'}}>{currentTask.headline}</Typography>
