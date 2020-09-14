@@ -18,14 +18,14 @@ class Assessment extends Component {
     var status = this.props.status.filter(status => status.id === tutorialId)[0];
     var taskIndex = status.tasks.findIndex(task => task.id === currentTask.id);
     var statusTask = status.tasks[taskIndex];
-    
+
     return (
       <div style={{width: '100%'}}>
         <Typography variant='h4' style={{marginBottom: '5px'}}>{currentTask.headline}</Typography>
         <Grid container spacing={2} style={{marginBottom: '5px'}}>
           <Grid item xs={12} md={6} lg={8} style={{ position: 'relative' }}>
             <SolutionCheck />
-            <BlocklyWindow initialXml={statusTask.xml ? statusTask.xml : null}/>
+            <BlocklyWindow initialXml={statusTask ? statusTask.xml ? statusTask.xml : null : null}/>
           </Grid>
           <Grid item xs={12} md={6} lg={4}>
             <Card style={{height: 'calc(50% - 30px)', padding: '10px', marginBottom: '10px'}}>
