@@ -11,7 +11,7 @@ Blockly.Blocks['sensebox_led'] = {
         this.appendDummyInput()
             .appendField(Blockly.Msg.senseBox_led)
             .appendField("Pin:")
-            .appendField(new Blockly.FieldDropdown(selectedBoard().digitalPins), "PIN")
+            .appendField(new Blockly.FieldDropdown(selectedBoard().digitalPinsLED), "PIN")
             .appendField(Blockly.Msg.senseBox_basic_state)
             .appendField(new Blockly.FieldDropdown([[Blockly.Msg.senseBox_on, "HIGH"], [Blockly.Msg.senseBox_off, "LOW"]]), "STAT");
         this.setPreviousStatement(true, null);
