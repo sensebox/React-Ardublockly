@@ -5,8 +5,6 @@ import { connect } from 'react-redux';
 import Hardware from './Hardware';
 import BlocklyWindow from '../Blockly/BlocklyWindow';
 
-import { tutorials } from './tutorials';
-
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
