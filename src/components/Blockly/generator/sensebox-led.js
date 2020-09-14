@@ -3,7 +3,7 @@ import * as Blockly from 'blockly/core';
 Blockly.Arduino.sensebox_led = function () {
     var dropdown_pin = this.getFieldValue('PIN');
     var dropdown_stat = this.getFieldValue('STAT');
-    Blockly.Arduino.setups_['setup_green_led_' + dropdown_pin] = 'pinMode(' + dropdown_pin + ', OUTPUT);';
+    Blockly.Arduino.setupCode_['setup_led_' + dropdown_pin] = 'pinMode(' + dropdown_pin + ', OUTPUT);';
     var code = 'digitalWrite(' + dropdown_pin + ',' + dropdown_stat + ');\n'
     return code;
 };
