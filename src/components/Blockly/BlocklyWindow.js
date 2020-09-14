@@ -32,10 +32,12 @@ class BlocklyWindow extends Component {
 
   componentDidUpdate(props) {
     const workspace = Blockly.getMainWorkspace();
-    if(props.initialXml !== this.props.initialXml){
+    var initialXML = this.props.initialXml
+    if(props.initialXml !== initialXml){
       // guarantees that the current xml-code (this.props.initialXml) is rendered
       workspace.clear();
-      Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(this.props.initialXml), workspace);
+      if(!initialXML) initialXML = initialXml;
+      Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(initialXML), workspace) ;
     }
     Blockly.svgResize(workspace);
   }

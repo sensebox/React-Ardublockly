@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import Hardware from './Hardware';
+import Requirement from './Requirement';
 import BlocklyWindow from '../Blockly/BlocklyWindow';
 
 import Grid from '@material-ui/core/Grid';
@@ -21,7 +22,7 @@ class Instruction extends Component {
         {isHardware ?
           <Hardware picture={step.hardware}/> : null}
         {areRequirements > 0 ?
-          <Typography style={{marginBottom: '5px'}}>Voraussetzungen: todo</Typography> : null}
+          <Requirement tutorialIds={step.requirements}/> : null}
         {step.xml ?
         <Grid container spacing={2} style={{marginBottom: '5px'}}>
           <Grid item xs={12}>
