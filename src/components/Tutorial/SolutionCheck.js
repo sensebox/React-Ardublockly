@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { tutorialCheck } from '../../actions/tutorialActions';
+import { tutorialCheck, tutorialStep } from '../../actions/tutorialActions';
 
-import * as Blockly from 'blockly/core';
+import { withRouter } from 'react-router-dom';
 
 import Compile from '../Compile';
 
-import { tutorials } from './tutorials';
+import tutorials from './tutorials.json';
+import { checkXml } from './compareXml';
 
 import { withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
@@ -48,62 +49,79 @@ class SolutionCheck extends Component {
   }
 
   check = () => {
-    const workspace = Blockly.getMainWorkspace();
-    var msg = tutorials[this.props.currentTutorialId].test(workspace);
-    this.props.tutorialCheck(msg.type);
+    const tutorial = tutorials.filter(tutorial => tutorial.id === this.props.currentTutorialId)[0];
+    const step = tutorial.steps[this.props.activeStep];
+    var msg = checkXml(step.xml, this.props.xml);
+    this.props.tutorialCheck(msg.type, step);
     this.setState({ msg, open: true });
   }
 
   render() {
+    const steps = tutorials.filter(tutorial => tutorial.id === this.props.currentTutorialId)[0].steps;
     return (
-      tutorials[this.props.currentTutorialId].test ?
-        <div>
-          <Tooltip title='Lösung kontrollieren'>
-            <IconButton
-              className={this.props.classes.compile}
-              style={{width: '40px', height: '40px', position: 'absolute', top: 8, right: 8, zIndex: 21 }}
-              onClick={() => this.check()}
-            >
-              <FontAwesomeIcon icon={faPlay} size="xs"/>
-            </IconButton>
-          </Tooltip>
-          <Dialog fullWidth maxWidth={'sm'} onClose={this.toggleDialog} open={this.state.open} style={{zIndex: 9999999}}>
-            <DialogTitle>{this.state.msg.type === 'error' ? 'Fehler' : 'Erfolg'}</DialogTitle>
-            <DialogContent dividers>
-              {this.state.msg.text}
-              {this.state.msg.type === 'success' ?
+      <div>
+        <Tooltip title='Lösung kontrollieren'>
+          <IconButton
+            className={this.props.classes.compile}
+            style={{width: '40px', height: '40px', position: 'absolute', top: 8, right: 8, zIndex: 21 }}
+            onClick={() => this.check()}
+          >
+            <FontAwesomeIcon icon={faPlay} size="xs"/>
+          </IconButton>
+        </Tooltip>
+        <Dialog fullWidth maxWidth={'sm'} onClose={this.toggleDialog} open={this.state.open} style={{zIndex: 9999999}}>
+          <DialogTitle>{this.state.msg.type === 'error' ? 'Fehler' : 'Erfolg'}</DialogTitle>
+          <DialogContent dividers>
+            {this.state.msg.text}
+            {this.state.msg.type === 'success' ?
               <div style={{marginTop: '20px', display: 'flex'}}>
                 <Compile />
-                <Button
-                  style={{marginLeft: '10px'}}
-                  variant="contained"
-                  color="primary"
-                  onClick={() => {this.toggleDialog(); this.props.history.push(`/tutorial/${this.props.currentTutorialId+2}`)}}
-                >
-                  nächstes Tutorial
-                </Button>
-                </div>
-              : null}
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={this.toggleDialog} color="primary">
-                Schließen
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </div>
-      : null
+                {this.props.activeStep === steps.length-1 ?
+                  <Button
+                    style={{marginLeft: '10px'}}
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {this.toggleDialog(); this.props.history.push(`/tutorial/`)}}
+                  >
+                    Tutorials-Übersicht
+                  </Button>
+                :
+                  <Button
+                    style={{marginLeft: '10px'}}
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {this.toggleDialog(); this.props.tutorialStep(this.props.activeStep + 1)}}
+                  >
+                    nächster Schritt
+                  </Button>
+                }
+              </div>
+            : null}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.toggleDialog} color="primary">
+              Schließen
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
     );
   };
 }
 
+
 SolutionCheck.propTypes = {
   tutorialCheck: PropTypes.func.isRequired,
-  currentTutorialId: PropTypes.number
+  tutorialStep: PropTypes.func.isRequired,
+  currentTutorialId: PropTypes.number,
+  activeStep: PropTypes.number.isRequired,
+  xml: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({
-  currentTutorialId: state.tutorial.currentId
+  currentTutorialId: state.tutorial.currentId,
+  activeStep: state.tutorial.activeStep,
+  xml: state.workspace.code.xml
 });
 
-export default connect(mapStateToProps, { tutorialCheck })(withStyles(styles, {withTheme: true})(SolutionCheck));
+export default connect(mapStateToProps, { tutorialCheck, tutorialStep })(withStyles(styles, {withTheme: true})(withRouter(SolutionCheck)));

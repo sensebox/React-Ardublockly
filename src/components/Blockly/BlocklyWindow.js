@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { onChangeWorkspace } from '../../actions/workspaceActions';
+import { onChangeWorkspace, clearStats } from '../../actions/workspaceActions';
 import * as De from './msg/de';
 import BlocklyComponent from './';
 import * as Blockly from 'blockly/core';
@@ -22,23 +22,25 @@ class BlocklyWindow extends Component {
   componentDidMount() {
     const workspace = Blockly.getMainWorkspace();
     this.props.onChangeWorkspace({});
+    this.props.clearStats();
     workspace.addChangeListener((event) => {
       this.props.onChangeWorkspace(event);
       Blockly.Events.disableOrphans(event);
     });
+    Blockly.svgResize(workspace);
   }
 
   componentDidUpdate(props) {
+    const workspace = Blockly.getMainWorkspace();
     if(props.initialXml !== this.props.initialXml){
       // guarantees that the current xml-code (this.props.initialXml) is rendered
-      const workspace = Blockly.getMainWorkspace();
       workspace.clear();
       Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(this.props.initialXml), workspace);
     }
+    Blockly.svgResize(workspace);
   }
 
   render() {
-    console.log(this.props.initialXml);
     return (
       <BlocklyComponent ref={this.simpleWorkspace}
         style={this.props.blocklyCSS}
@@ -76,8 +78,9 @@ class BlocklyWindow extends Component {
 }
 
 BlocklyWindow.propTypes = {
-  onChangeWorkspace: PropTypes.func.isRequired
+  onChangeWorkspace: PropTypes.func.isRequired,
+  clearStats: PropTypes.func.isRequired
 };
 
 
-export default connect(null, { onChangeWorkspace })(BlocklyWindow);
+export default connect(null, { onChangeWorkspace, clearStats })(BlocklyWindow);
