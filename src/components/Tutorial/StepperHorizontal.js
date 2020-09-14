@@ -10,10 +10,9 @@ import tutorials from './tutorials.json';
 
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import Tooltip from '@material-ui/core/Tooltip';
 import Button from '@material-ui/core/Button';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
 
 import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -57,6 +56,7 @@ class StepperHorizontal extends Component {
     var error = tasks.filter(task => task.type === 'error').length > 0;
     var success = tasks.filter(task => task.type === 'success').length / tasks.length;
     var tutorialStatus = success === 1 ? 'Success' : error ? 'Error' : 'Other';
+    var title = tutorials.filter(tutorial => tutorial.id === tutorialId)[0].title;
     return (
       <div style={{position: 'relative'}}>
         {error || success > 0 ?
@@ -74,14 +74,12 @@ class StepperHorizontal extends Component {
           >
             {'<'}
           </Button>
-          <Stepper activeStep={tutorialId} orientation="horizontal"
-                   style={{padding: 0}} classes={{root: this.props.classes.color}}>
-            <Step expanded completed={false}>
-              <StepLabel icon={tutorialStatus !== 'Other' ? <div className={tutorialStatus === 'Success' && success === 1 ? this.props.classes.iconDivSuccess : this.props.classes.iconDivError}><FontAwesomeIcon className={this.props.classes.icon} icon={tutorialStatus === 'Success' ? faCheck : faTimes}/></div> : ''}>
-                <h1 style={{margin: 0}}>{tutorials.filter(tutorial => tutorial.id === tutorialId)[0].title}</h1>
-              </StepLabel>
-            </Step>
-          </Stepper>
+          <Tooltip style={{display: 'flex', width: 'calc(100% - 64px - 64px)', justifyContent: 'center'}} title={title} arrow>
+            <div>
+              {tutorialStatus !== 'Other' ? <div className={tutorialStatus === 'Success' && success === 1 ? this.props.classes.iconDivSuccess : this.props.classes.iconDivError} style={{margin: 'auto 10px auto 0'}}><FontAwesomeIcon className={this.props.classes.icon} icon={tutorialStatus === 'Success' ? faCheck : faTimes}/></div> : null}
+              <Typography variant='body2' style={{fontWeight: 'bold', fontSize: '1.75em', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'rgba(0, 0, 0, 0.54)'}}>{title}</Typography>
+            </div>
+          </Tooltip>
           <Button
             disabled={tutorialId+1 > tutorials.length}
             onClick={() => {this.props.history.push(`/tutorial/${tutorialId+1}`)}}

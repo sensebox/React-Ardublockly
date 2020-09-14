@@ -59,9 +59,8 @@ class TutorialHome extends Component {
         <h1>Tutorial-Übersicht</h1>
         <Grid container spacing={2}>
           {tutorials.map((tutorial, i) => {
-            var steps = tutorial.steps;
-            var tasks = steps.filter(task => task.type === 'task');
             var status = this.props.status.filter(status => status.id === tutorial.id)[0];
+            var tasks = status.tasks;
             var error = status.tasks.filter(task => task.type === 'error').length > 0;
             var success = status.tasks.filter(task => task.type === 'success').length/tasks.length
             var tutorialStatus = success === 1 ? 'Success' : error ? 'Error' : 'Other';

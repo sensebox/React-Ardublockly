@@ -15,7 +15,9 @@ class MyBreadcrumbs extends Component {
               <Typography color="secondary">{content.title}</Typography>
             </Link>
           ))}
-          <Typography color="textPrimary">{this.props.content.slice(-1)[0].title}</Typography>
+          <Typography color="textPrimary" style={{overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '300px'}}>
+            {this.props.content.slice(-1)[0].title}
+          </Typography>
         </Breadcrumbs>
       : null
     );
