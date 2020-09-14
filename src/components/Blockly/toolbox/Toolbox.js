@@ -26,6 +26,7 @@ class Toolbox extends React.Component {
                     </Category>
                     <Category name="LED" colour={getColour().sensebox}>
                         <Block type="sensebox_rgb_led" />
+                        <Block type="sensebox_led" />
                     </Category>
                     <Category name="Display" colour={getColour().sensebox}>
                         <Block type="sensebox_display_beginDisplay" />
