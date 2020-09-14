@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
-import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
+import withWidth, { isWidthDown } from '@material-ui/core/withWidth';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
@@ -54,7 +54,7 @@ class Hardware extends Component {
   };
 
   render() {
-    var cols = isWidthUp('sm', this.props.width) ? isWidthUp('md', this.props.width) ? isWidthUp('lg', this.props.width) ? 6 : 5 : 4 : 3;
+    var cols = isWidthDown('md', this.props.width) ? isWidthDown('sm', this.props.width) ? isWidthDown('xs', this.props.width) ? 2 : 3 : 4 : 6;
     return (
       <div style={{marginTop: '10px', marginBottom: '5px'}}>
         <Typography>Für die Umsetzung benötigst du folgende Hardware:</Typography>
