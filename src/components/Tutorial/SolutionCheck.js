@@ -63,7 +63,7 @@ class SolutionCheck extends Component {
         <Tooltip title='Lösung kontrollieren'>
           <IconButton
             className={this.props.classes.compile}
-            style={{width: '40px', height: '40px', position: 'absolute', top: 8, right: 8, zIndex: 21 }}
+            style={{width: '40px', height: '40px', marginRight: '5px'}}
             onClick={() => this.check()}
           >
             <FontAwesomeIcon icon={faPlay} size="xs"/>
