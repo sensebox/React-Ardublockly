@@ -10,6 +10,7 @@ import { saveAs } from 'file-saver';
 import { initialXml } from './Blockly/initialXml.js';
 
 import Compile from './Compile';
+import SolutionCheck from './Tutorial/SolutionCheck';
 
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -103,7 +104,7 @@ class WorkspaceFunc extends Component {
   render() {
     return (
       <div style={{width: 'max-content', display: 'flex'}}>
-        <Compile iconButton />
+        {this.props.solutionCheck ? <SolutionCheck /> : <Compile iconButton />}
         <Tooltip title='Blöcke speichern' arrow style={{marginRight: '5px'}}>
           <IconButton
             className={this.props.classes.button}
