@@ -10,11 +10,26 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Dialog from '@material-ui/core/Dialog';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+
+import { faPlay } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const styles = (theme) => ({
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
     color: '#fff',
+  },
+  button: {
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.primary.contrastText,
+    width: '40px',
+    height: '40px',
+    '&:hover': {
+      backgroundColor: theme.palette.primary.main,
+      color: theme.palette.primary.contrastText,
+    }
   }
 });
 
@@ -60,10 +75,21 @@ class Compile extends Component {
 
   render() {
     return (
-      <div style={{display: 'inline'}}>
-        <Button style={{ float: 'right', color: 'white' }} variant="contained" color="primary" onClick={() => this.compile()}>
-          Kompilieren
-        </Button>
+      <div style={{}}>
+        {this.props.iconButton ?
+          <Tooltip title='Blöcke kompilieren' arrow style={{marginRight: '5px'}}>
+            <IconButton
+              className={this.props.classes.button}
+              onClick={() => this.compile()}
+            >
+              <FontAwesomeIcon icon={faPlay} size="xs"/>
+            </IconButton>
+          </Tooltip>
+         :
+          <Button style={{ float: 'right', color: 'white' }} variant="contained" color="primary" onClick={() => this.compile()}>
+            Kompilieren
+          </Button>
+        }
         <Backdrop className={this.props.classes.backdrop} open={this.state.progress}>
           <CircularProgress color="inherit" />
         </Backdrop>
