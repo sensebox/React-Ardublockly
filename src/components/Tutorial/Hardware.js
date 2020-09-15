@@ -62,7 +62,7 @@ class Hardware extends Component {
             <GridList cellHeight={100} cols={cols} spacing={10}>
             {this.props.picture.map((picture,i) => (
               <GridListTile key={i}>
-                <img src={`/media/hardware/${picture}.png`} alt={picture} style={{cursor: 'pointer'}} onClick={() => this.handleClickOpen(picture, `/media/hardware/${picture}.png`)}/>
+                <img src={`/media/hardware/${picture}.png`} height={100} alt={picture} style={{cursor: 'pointer'}} onClick={() => this.handleClickOpen(picture, `/media/hardware/${picture}.png`)}/>
                 <GridListTileBar
                   classes={{root: this.props.classes.multiGridListTile}}
                   title={
