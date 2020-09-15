@@ -102,7 +102,7 @@ class WorkspaceFunc extends Component {
 
   render() {
     return (
-      <div style={{ marginBottom: '20px', width: 'max-content', display: 'flex'}}>
+      <div style={{width: 'max-content', display: 'flex'}}>
         <Compile iconButton />
         <Tooltip title='Blöcke speichern' arrow style={{marginRight: '5px'}}>
           <IconButton

@@ -72,8 +72,8 @@ class Home extends Component {
   render() {
     return (
       <div>
-        <div style={{float: 'left'}}><WorkspaceStats /></div>
-        <div style={{float: 'right'}}><WorkspaceFunc /></div>
+        <div style={{float: 'right', height: '40px', marginBottom: '20px'}}><WorkspaceFunc /></div>
+        <div style={{float: 'left', height: '40px', position: 'relative'}}><WorkspaceStats /></div>
         <Grid container spacing={2}>
           <Grid item xs={12} md={this.state.codeOn ? 6 : 12} style={{ position: 'relative' }}>
             <Tooltip title={this.state.codeOn ? 'Code ausblenden' : 'Code anzeigen'} >
