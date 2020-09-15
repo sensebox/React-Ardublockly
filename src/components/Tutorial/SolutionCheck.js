@@ -60,7 +60,7 @@ class SolutionCheck extends Component {
     const steps = tutorials.filter(tutorial => tutorial.id === this.props.currentTutorialId)[0].steps;
     return (
       <div>
-        <Tooltip title='Lösung kontrollieren'>
+        <Tooltip title='Lösung kontrollieren' arrow>
           <IconButton
             className={this.props.classes.compile}
             style={{width: '40px', height: '40px', marginRight: '5px'}}
