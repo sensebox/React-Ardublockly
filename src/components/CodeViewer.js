@@ -7,6 +7,7 @@ import "prismjs/themes/prism.css";
 import "prismjs/plugins/line-numbers/prism-line-numbers";
 import "prismjs/plugins/line-numbers/prism-line-numbers.css";
 
+import withWidth from '@material-ui/core/withWidth';
 import { withStyles } from '@material-ui/core/styles';
 import MuiAccordion from '@material-ui/core/Accordion';
 import MuiAccordionSummary from '@material-ui/core/AccordionSummary';
@@ -136,4 +137,4 @@ const mapStateToProps = state => ({
   xml: state.workspace.code.xml
 });
 
-export default connect(mapStateToProps, null)(CodeViewer);
+export default connect(mapStateToProps, null)(withWidth()(CodeViewer));
