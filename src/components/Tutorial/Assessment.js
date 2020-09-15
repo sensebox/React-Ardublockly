@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import BlocklyWindow from '../Blockly/BlocklyWindow';
 import SolutionCheck from './SolutionCheck';
 import CodeViewer from '../CodeViewer';
+import WorkspaceFunc from '../WorkspaceFunc';
 
 import withWidth, { isWidthDown } from '@material-ui/core/withWidth';
 import Grid from '@material-ui/core/Grid';
@@ -22,10 +23,10 @@ class Assessment extends Component {
 
     return (
       <div style={{width: '100%'}}>
-        <Typography variant='h4' style={{marginBottom: '5px'}}>{currentTask.headline}</Typography>
+        <Typography variant='h4' style={{float: 'left', marginBottom: '5px', height: '40px', display: 'table'}}>{currentTask.headline}</Typography>
+        <div style={{float: 'right', height: '40px'}}><WorkspaceFunc solutionCheck/></div>
         <Grid container spacing={2} style={{marginBottom: '5px'}}>
-          <Grid item xs={12} md={6} lg={8} style={{ position: 'relative' }}>
-            <SolutionCheck />
+          <Grid item xs={12} md={6} lg={8}>
             <BlocklyWindow initialXml={statusTask ? statusTask.xml ? statusTask.xml : null : null}/>
           </Grid>
           <Grid item xs={12} md={6} lg={4} style={isWidthDown('sm', this.props.width) ? {height: 'max-content'} : {}}>
