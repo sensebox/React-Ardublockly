@@ -72,7 +72,8 @@ class Home extends Component {
   render() {
     return (
       <div>
-        <WorkspaceStats />
+        <div style={{float: 'left'}}><WorkspaceStats /></div>
+        <div style={{float: 'right'}}><WorkspaceFunc /></div>
         <Grid container spacing={2}>
           <Grid item xs={12} md={this.state.codeOn ? 6 : 12} style={{ position: 'relative' }}>
             <Tooltip title={this.state.codeOn ? 'Code ausblenden' : 'Code anzeigen'} >
@@ -93,7 +94,6 @@ class Home extends Component {
             </Grid>
             : null}
         </Grid>
-        <WorkspaceFunc />
       </div>
     );
   };

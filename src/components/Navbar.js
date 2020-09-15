@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import ClearWorkspace from './ClearWorkspace';
 import senseboxLogo from './sensebox_logo.svg';
 
 import { withRouter } from 'react-router-dom';
@@ -105,7 +104,6 @@ class Navbar extends Component {
                 </ListItem>
               </Link>
             ))}
-            <ClearWorkspace onClick={this.toggleDrawer}/>
           </List>
           <Divider classes={{root: this.props.classes.appBarColor}} style={{marginTop: 'auto'}}/>
           <List>
