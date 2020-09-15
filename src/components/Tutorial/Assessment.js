@@ -6,6 +6,7 @@ import BlocklyWindow from '../Blockly/BlocklyWindow';
 import SolutionCheck from './SolutionCheck';
 import CodeViewer from '../CodeViewer';
 
+import withWidth, { isWidthDown } from '@material-ui/core/withWidth';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
@@ -27,12 +28,12 @@ class Assessment extends Component {
             <SolutionCheck />
             <BlocklyWindow initialXml={statusTask ? statusTask.xml ? statusTask.xml : null : null}/>
           </Grid>
-          <Grid item xs={12} md={6} lg={4}>
+          <Grid item xs={12} md={6} lg={4} style={isWidthDown('sm', this.props.width) ? {height: 'max-content'} : {}}>
             <Card style={{height: 'calc(50% - 30px)', padding: '10px', marginBottom: '10px'}}>
               <Typography variant='h5'>Arbeitsauftrag</Typography>
               <Typography>{currentTask.text1}</Typography>
             </Card>
-            <div style={{height: '50%'}}>
+            <div style={isWidthDown('sm', this.props.width) ? {height: '500px'} : {height: '50%'}}>
               <CodeViewer />
             </div>
           </Grid>
@@ -54,4 +55,4 @@ const mapStateToProps = state => ({
   currentTutorialId: state.tutorial.currentId
 });
 
-export default connect(mapStateToProps, null)(Assessment);
+export default connect(mapStateToProps, null)(withWidth()(Assessment));
