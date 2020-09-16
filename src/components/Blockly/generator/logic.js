@@ -139,13 +139,13 @@ Blockly.Arduino['switch_case'] = function (block) {
     var default_code = '';
     var DO = Blockly.Arduino.statementToCode(block, ('CASE' + n));
     for (n = 0; n <= block.caseCount_; n++) {
-        var DO = Blockly.Arduino.statementToCode(block, ('CASE' + n));
-        var branch = Blockly.Arduino.valueToCode(block, ('CASECONDITION' + n), Blockly.Arduino.ORDER_NONE) || '0';
+        DO = Blockly.Arduino.statementToCode(block, ('CASE' + n));
+        branch = Blockly.Arduino.valueToCode(block, ('CASECONDITION' + n), Blockly.Arduino.ORDER_NONE) || '0';
         cases += 'case ' + branch + ':\n';
         cases += DO + '\nbreak;\n';
     }
     if (block.defaultCount_) {
-        var branch = Blockly.Arduino.statementToCode(block, 'ONDEFAULT');
+        branch = Blockly.Arduino.statementToCode(block, 'ONDEFAULT');
         default_code = 'default: \n' + branch + '\n break;\n';
     }
     var code = 'switch (' + argument + ') {\n' + cases + default_code + '}';

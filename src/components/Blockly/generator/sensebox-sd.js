@@ -32,22 +32,23 @@ Blockly.Arduino.sensebox_sd_open_file = function (block) {
 };
 
 Blockly.Arduino.sensebox_sd_write_file = function (block) {
-    var res = filename.slice(0, 4);
     if (this.parentBlock_ != null) {
         var filename = this.getSurroundParent().getFieldValue('Filename');
     }
+    var res = filename.slice(0, 4);
     var text = Blockly.Arduino.valueToCode(this, 'DATA', Blockly.Arduino.ORDER_ATOMIC) || '"Keine Eingabe"';
     var linebreak = this.getFieldValue('linebreak');
-    if (linebreak == "TRUE") {
+    if (linebreak === "TRUE") {
         linebreak = "ln";
     } else {
         linebreak = "";
     }
-    if (text == "gps.getLongitude()" || text == "gps.getLatitude()") {
-        var code = 'dataFile' + res + '.print' + linebreak + '(' + text + ',5);\n'
+    var code = '';
+    if (text === "gps.getLongitude()" || text === "gps.getLatitude()") {
+        code = 'dataFile' + res + '.print' + linebreak + '(' + text + ',5);\n'
     }
     else {
-        var code = 'dataFile' + res + '.print' + linebreak + '(' + text + ');\n'
+        code = 'dataFile' + res + '.print' + linebreak + '(' + text + ');\n'
     }
     return code;
 };

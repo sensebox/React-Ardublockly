@@ -331,7 +331,7 @@ Blockly.Blocks['switch_case'] = {
                     }
                     break;
                 default:
-                    throw 'Unknown block type.';
+                    throw new Error('Unknown block type.');
             }
             caseBlock = caseBlock.nextConnection &&
                 caseBlock.nextConnection.targetBlock();
@@ -355,7 +355,7 @@ Blockly.Blocks['switch_case'] = {
                     caseBlock.satementConnection_ = defaultInput && defaultInput.connection.targetConnection;
                     break;
                 default:
-                    throw 'Unknown block type';
+                    throw new Error('Unknown block type');
             }
             caseBlock = caseBlock.nextConnection &&
                 caseBlock.nextConnection.targetBlock();
