@@ -20,6 +20,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import Dialog from '@material-ui/core/Dialog';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
+import TextField from '@material-ui/core/TextField';
 
 import { faSave, faUpload, faShare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -46,23 +47,34 @@ class WorkspaceFunc extends Component {
     this.state = {
       title: '',
       content: '',
-      open: false
+      open: false,
+      fileName: '',
+      file: false
     };
   }
 
   toggleDialog = () => {
-    this.setState({ open: !this.state });
+    this.setState({ open: !this.state, fileName: '', file: false });
   }
 
   saveXmlFile = (code) => {
-    // saveTextFileAs
-    var fileName = 'todo.xml'
+    this.toggleDialog();
+    var fileName = this.state.fileName;
+    if(fileName === '') fileName = 'unbekannt';
+    fileName = `${fileName}.xml`
     var blob = new Blob([code], { type: 'text/xml' });
     saveAs(blob, fileName);
   }
 
+  createFileName = () => {
+    this.setState({ file: true, open: true, title: 'Blöcke speichern', content: 'Bitte gib einen Namen für die Bennenung der XML-Datei ein und bestätige diesen mit einem Klick auf \'Eingabe\'.' });
+  }
+
+  setFileName = (e) => {
+    this.setState({ fileName: e.target.value });
+  }
+
   uploadXmlFile = (xmlFile) => {
-    console.log(xmlFile);
     if(xmlFile.type !== 'text/xml'){
       this.setState({ open: true, title: 'Unzulässiger Dateityp', content: 'Die übergebene Datei entsprach nicht dem geforderten Format. Es sind nur XML-Dateien zulässig.' });
     }
@@ -108,7 +120,7 @@ class WorkspaceFunc extends Component {
         <Tooltip title='Blöcke speichern' arrow style={{marginRight: '5px'}}>
           <IconButton
             className={this.props.classes.button}
-            onClick={() => this.saveXmlFile(this.props.xml)}
+            onClick={() => this.createFileName()}
           >
             <FontAwesomeIcon icon={faSave} size="xs"/>
           </IconButton>
@@ -143,6 +155,12 @@ class WorkspaceFunc extends Component {
           <DialogTitle>{this.state.title}</DialogTitle>
           <DialogContent dividers>
             {this.state.content}
+            {this.state.file ?
+              <div style={{marginTop: '10px'}}>
+                <TextField autoFocus placeholder='Dateiname' onChange={this.setFileName} style={{marginRight: '10px'}}/>
+                <Button disabled={this.state.fileName === ''} variant='contained' color='primary' onClick={() => this.saveXmlFile(this.props.xml)}>Eingabe</Button>
+              </div>
+            : null}
           </DialogContent>
           <DialogActions>
             <Button onClick={this.toggleDialog} color="primary">
