@@ -88,6 +88,9 @@ export const CHILD_BLOCK_MISSING = {
     compatibleTypes: []
 }
 
+
+export const VARIABLE_TYPES = ['Number', 'String', 'Boolean', 'Colour'];
+
 // /**
 //  * Some Types have circular dependencies on their compatibilities, so add them
 //  * after declaration.

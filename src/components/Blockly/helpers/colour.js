@@ -7,6 +7,9 @@ const colours = {
     io: 60,
     procedures: 290,
     time: 140,
+    text: 160,
+    variables: 330,
+    audio: 250,
 }
 
 

@@ -8,11 +8,14 @@ import './sensebox-web';
 import './sensebox-display';
 import './sensebox-lora';
 import './sensebox-led';
+import './sensebox-sd';
+import './text';
 import './io';
+import './audio';
 import './math';
 import './map';
 import './procedures';
 import './time';
-
+import './variables';
 
 import '../helpers/types'

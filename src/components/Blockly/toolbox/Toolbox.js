@@ -24,6 +24,11 @@ class Toolbox extends React.Component {
                         <Block type="sensebox_wifi" />
                         <Block type="sensebox_startap" />
                     </Category>
+                    <Category name="SD" colour={getColour().sensebox}>
+                        <Block type="sensebox_sd_create_file" />
+                        <Block type="sensebox_sd_open_file" />
+                        <Block type="sensebox_sd_write_file" />
+                    </Category>
                     <Category name="LED" colour={getColour().sensebox}>
                         <Block type="sensebox_rgb_led" />
                         <Block type="sensebox_led" />
@@ -175,6 +180,7 @@ class Toolbox extends React.Component {
                     <Block type="logic_operation" />
                     <Block type="logic_negate" />
                     <Block type="logic_boolean" />
+                    <Block type="switch_case" />
                 </Category>
                 <Category id="loops" name="Loops" colour={getColour().loops}>
                     <Block type="controls_repeat_ext">
@@ -203,6 +209,17 @@ class Toolbox extends React.Component {
                         </Value>
                     </Block>
                     <Block type="controls_flow_statements" />
+                </Category>
+                <Category id="text" name="Text" colour={getColour().text}>
+                    <Block type="text" />
+                    <Block type="text_join" />
+                    <Block type="text_append">
+                        <Value name="TEXT">
+                            <Block type="text" />
+                        </Value>
+                    </Block>
+                    <Block type="text_length" />
+                    <Block type="text_isEmpty" />
                 </Category>
                 <Category id="time" name="Time" colour={getColour().time}>
                     <Block type="time_delay">
@@ -267,6 +284,17 @@ class Toolbox extends React.Component {
                     <Block type="math_random_float"></Block>
                     <Block type="base_map"></Block>
                 </Category>
+                <Category id="audio" name="Audio" colour={getColour().audio}>
+                    <Block type="io_tone">
+                        <Value name="FREQUENCY">
+                            <Shadow type="math_number">
+                                <Field name="NUM">220</Field>
+                            </Shadow>
+                        </Value>
+                    </Block>
+                    <Block type="io_notone"></Block>
+                </Category>
+                <Category name="Variablen" colour={getColour().variables} custom="VARIABLE"></Category>`;
                 <sep></sep>
                 <Category name="Input/Output" colour={getColour().io}>
                     <Block type="io_digitalwrite"></Block>
