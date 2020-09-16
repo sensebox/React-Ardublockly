@@ -12,11 +12,14 @@ const parseXml = (xmlString) => {
 
 const compareNumberOfBlocks = (originalBlocks, userBlocks) => {
   if(originalBlocks.length !== userBlocks.length){
+    var blocks;
     if(originalBlocks.length > userBlocks.length){
-      return {text: 'Es wurden zu wenig Blöcke verwendet.', type: 'error'};
+      blocks = originalBlocks.length-userBlocks.length;
+      return {text: `Es wurde${blocks === 1 ? '' : 'n'} ${blocks} Bl${blocks === 1 ? 'ock' : 'öcke'} zu wenig verwendet.`, type: 'error'};
     }
     else {
-      return {text: 'Es wurden zu viele Blöcke verwendet.', type: 'error'};
+      blocks = userBlocks.length-originalBlocks.length;
+      return {text: `Es wurde${blocks === 1 ? '' : 'n'} ${blocks} Bl${blocks === 1 ? 'ock' : 'öcke'} zu viel verwendet.`, type: 'error'};
     }
   }
 };
@@ -74,5 +77,5 @@ const compareXml = (originalXml, userXml) => {
     if(parent){return parent;}
   }
 
-  return {text: 'Super. Alles richtig!', type: 'success'};
+  return {text: 'Super, alles richtig! Kompiliere nun die benutzen Blöcke, um eine BIN-Datei zu erhalten und damit das Programm auf die senseBox zu spielen und ausführen zu können.', type: 'success'};
 };
