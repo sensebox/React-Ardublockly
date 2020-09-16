@@ -2,7 +2,6 @@ import * as Blockly from 'blockly/core';
 import { getColour } from '../helpers/colour';
 import * as Types from '../helpers/types'
 import { FieldSlider } from '@blockly/field-slider';
-import { Field } from '..';
 
 
 Blockly.Blocks['sensebox_display_beginDisplay'] = {
