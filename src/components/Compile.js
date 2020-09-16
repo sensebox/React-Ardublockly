@@ -13,7 +13,7 @@ import Dialog from '@material-ui/core/Dialog';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 
-import { faPlay } from "@fortawesome/free-solid-svg-icons";
+import { faCogs } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const styles = (theme) => ({
@@ -82,12 +82,12 @@ class Compile extends Component {
               className={this.props.classes.button}
               onClick={() => this.compile()}
             >
-              <FontAwesomeIcon icon={faPlay} size="xs"/>
+              <FontAwesomeIcon icon={faCogs} size="xs"/>
             </IconButton>
           </Tooltip>
          :
           <Button style={{ float: 'right', color: 'white' }} variant="contained" color="primary" onClick={() => this.compile()}>
-            Kompilieren
+            <FontAwesomeIcon icon={faCogs} style={{marginRight: '5px'}}/> Kompilieren
           </Button>
         }
         <Backdrop className={this.props.classes.backdrop} open={this.state.progress}>
