@@ -54,7 +54,7 @@ class WorkspaceFunc extends Component {
   }
 
   toggleDialog = () => {
-    this.setState({ open: !this.state, fileName: '', file: false });
+    this.setState({ open: !this.state, fileName: '' });
   }
 
   saveXmlFile = (code) => {
@@ -76,7 +76,7 @@ class WorkspaceFunc extends Component {
 
   uploadXmlFile = (xmlFile) => {
     if(xmlFile.type !== 'text/xml'){
-      this.setState({ open: true, title: 'Unzulässiger Dateityp', content: 'Die übergebene Datei entsprach nicht dem geforderten Format. Es sind nur XML-Dateien zulässig.' });
+      this.setState({ open: true, file: false, title: 'Unzulässiger Dateityp', content: 'Die übergebene Datei entsprach nicht dem geforderten Format. Es sind nur XML-Dateien zulässig.' });
     }
     else {
       var reader = new FileReader();
@@ -92,10 +92,10 @@ class WorkspaceFunc extends Component {
           Blockly.Xml.domToWorkspace(xmlDom, workspace);
           if(workspace.getAllBlocks().length < 1){
             Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xmlBefore), workspace)
-            this.setState({ open: true, title: 'Keine Blöcke', content: 'Es wurden keine Blöcke detektiert. Bitte überprüfe den XML-Code und versuche es erneut.' });
+            this.setState({ open: true, file: false, title: 'Keine Blöcke', content: 'Es wurden keine Blöcke detektiert. Bitte überprüfe den XML-Code und versuche es erneut.' });
           }
         } catch(err){
-          this.setState({ open: true, title: 'Ungültige XML', content: 'Die XML-Datei konnte nicht in Blöcke zerlegt werden. Bitte überprüfe den XML-Code und versuche es erneut.' });
+          this.setState({ open: true, file: false, title: 'Ungültige XML', content: 'Die XML-Datei konnte nicht in Blöcke zerlegt werden. Bitte überprüfe den XML-Code und versuche es erneut.' });
         }
       };
     }
@@ -164,7 +164,7 @@ class WorkspaceFunc extends Component {
           </DialogContent>
           <DialogActions>
             <Button onClick={this.toggleDialog} color="primary">
-              Schließen
+              {this.state.file ? 'Abbrechen' : 'Schließen'}
             </Button>
           </DialogActions>
         </Dialog>
