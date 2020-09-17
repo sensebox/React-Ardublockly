@@ -1,4 +1,4 @@
-import { NEW_CODE, CHANGE_WORKSPACE, CREATE_BLOCK, MOVE_BLOCK, CHANGE_BLOCK, DELETE_BLOCK, CLEAR_STATS } from './types';
+import { NEW_CODE, CHANGE_WORKSPACE, CREATE_BLOCK, MOVE_BLOCK, CHANGE_BLOCK, DELETE_BLOCK, CLEAR_STATS, NAME } from './types';
 
 import * as Blockly from 'blockly/core';
 
@@ -72,3 +72,10 @@ export const clearStats = () => (dispatch) => {
     payload: stats
   });
 };
+
+export const workspaceName = (name) => (dispatch) => {
+  dispatch({
+    type: NAME,
+    payload: name
+  })
+}
