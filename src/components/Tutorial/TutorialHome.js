@@ -54,7 +54,7 @@ class TutorialHome extends Component {
   render() {
     return (
       <div>
-        <Breadcrumbs content={[{link: '/', title: 'Home'},{link: '/tutorial', title: 'Tutorial'}]}/>
+        <Breadcrumbs content={[{link: '/tutorial', title: 'Tutorial'}]}/>
 
         <h1>Tutorial-Übersicht</h1>
         <Grid container spacing={2}>

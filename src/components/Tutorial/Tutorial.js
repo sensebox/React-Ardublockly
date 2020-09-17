@@ -46,7 +46,7 @@ class Tutorial extends Component {
         <NotFound button={{title: 'Zurück zur Tutorials-Übersicht', link: '/tutorial'}}/>
       :
       <div>
-        <Breadcrumbs content={[{link: '/', title: 'Home'},{link: '/tutorial', title: 'Tutorial'}, {link: `/tutorial/${currentTutorialId}`, title: tutorial.title}]}/>
+        <Breadcrumbs content={[{link: '/tutorial', title: 'Tutorial'}, {link: `/tutorial/${currentTutorialId}`, title: tutorial.title}]}/>
 
         <StepperHorizontal />
 
