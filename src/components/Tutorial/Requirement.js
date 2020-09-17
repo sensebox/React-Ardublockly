@@ -24,15 +24,15 @@ const styles = theme => ({
     color: fade(theme.palette.secondary.main, 0.6)
   },
   outerDivError: {
-    stroke: fade(theme.palette.error.dark, 0.2),
-    color: fade(theme.palette.error.dark, 0.2)
+    stroke: fade(theme.palette.error.dark, 0.6),
+    color: fade(theme.palette.error.dark, 0.6)
   },
   outerDivSuccess: {
-    stroke: fade(theme.palette.primary.main, 0.2),
-    color: fade(theme.palette.primary.main, 0.2)
+    stroke: fade(theme.palette.primary.main, 0.6),
+    color: fade(theme.palette.primary.main, 0.6)
   },
   outerDivOther: {
-    stroke: fade(theme.palette.secondary.main, 0.2)
+    stroke: fade(theme.palette.secondary.main, 0.6)
   },
   innerDiv: {
     width: 'inherit',
