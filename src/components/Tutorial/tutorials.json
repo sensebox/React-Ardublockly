@@ -8,7 +8,13 @@
                 "type": "instruction",
                 "headline": "Erste Schritte",
                 "text1": "In diesem Tutorial lernst du die ersten Schritte mit der senseBox kennen. Du erstellst ein erstes Programm, baust einen ersten Schaltkreis auf und lernst, wie du das Programm auf die senseBox MCU überträgst.",
-                "hardware": ["senseboxmcu", "led", "breadboard", "jst-adapter", "resistor"],
+                "hardware": [
+                    "senseboxmcu",
+                    "led",
+                    "breadboard",
+                    "jst-adapter",
+                    "resistor"
+                ],
                 "requirements": []
             },
             {
@@ -49,8 +55,13 @@
                 "type": "instruction",
                 "headline": "Einführung",
                 "text1": "In diesem Tutorial lernst du wie man die senseBox mit dem Internet verbindest.",
-                "hardware": ["senseboxmcu", "wifi-bee"],
-                "requirements": [1]
+                "hardware": [
+                    "senseboxmcu",
+                    "wifi-bee"
+                ],
+                "requirements": [
+                    1
+                ]
             },
             {
                 "id": 2,

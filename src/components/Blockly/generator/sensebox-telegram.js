@@ -13,7 +13,7 @@ Blockly.Arduino.sensebox_telegram = function (Block) {
       
     UniversalTelegramBot bot(BOTtoken, client);`
 
-  let code = 'testcode';
+  let code = '';
   return code;
 };
 

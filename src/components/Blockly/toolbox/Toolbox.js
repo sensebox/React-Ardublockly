@@ -9,7 +9,6 @@ class Toolbox extends React.Component {
     render() {
         return (
             <xml xmlns="https://developers.google.com/blockly/xml" id="blockly" style={{ display: 'none' }} ref={this.props.toolbox}>
-                <Category name="senseBox" colour={getColour().sensebox}>
                     <Category name="Sensoren" colour={getColour().sensebox}>
                         <Block type="sensebox_sensor_temp_hum" />
                         <Block type="sensebox_sensor_uv_light" />
@@ -149,8 +148,9 @@ class Toolbox extends React.Component {
                         <Block type="sensebox_telegram_do_on_message" />
                         <Block type="sensebox_telegram_send" />
                     </Category>
-                    <Category name="osem" colour={getColour().sensebox}>
+                    <Category name="openSenseMap" colour={getColour().sensebox}>
                         <Block type="sensebox_osem_connection" />
+                        <Block type="sensebox_send_to_osem" />
                     </Category>
                     <Category id="catSenseBoxOutput_LoRa" name="  LoRa" colour={getColour().sensebox}>
                         <Category id="catSenseBoxOutput_LoRa_activation" name="  Activation" colour={getColour().sensebox}>
@@ -172,7 +172,6 @@ class Toolbox extends React.Component {
                             <Block type="sensebox_lora_cayenne_gps" />
                         </Category>
                     </Category>
-                </Category>
                 <Category name="Logic" colour={getColour().logic}>
                     <Block type="controls_if" />
                     <Block type="controls_ifelse" />
