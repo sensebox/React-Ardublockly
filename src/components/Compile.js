@@ -38,13 +38,24 @@ const styles = (theme) => ({
 
 class Compile extends Component {
 
-  state = {
-    progress: false,
-    open: false,
-    file: false,
-    title: '',
-    content: ''
+  constructor(props){
+    super(props);
+    this.state = {
+      progress: false,
+      open: false,
+      file: false,
+      title: '',
+      content: '',
+      name: props.name
+    };
   }
+
+  componentDidUpdate(props){
+    if(props.name !== this.props.name){
+      this.setState({name: this.props.name});
+    }
+  }
+
 
   compile = () => {
     this.setState({ progress: true });
@@ -71,9 +82,10 @@ class Compile extends Component {
   }
 
   download = () => {
-    this.toggleDialog();
     const id = this.state.id;
-    const filename = this.props.name;
+    const filename = this.state.name;
+    this.toggleDialog();
+    this.props.workspaceName(filename);
     window.open(`${process.env.REACT_APP_COMPILER_URL}/download?id=${id}&board=${process.env.REACT_APP_BOARD}&filename=${filename}`, '_self');
     this.setState({ progress: false });
   }
@@ -83,11 +95,16 @@ class Compile extends Component {
   }
 
   createFileName = () => {
-    this.setState({ file: true, open: true, title: 'Blöcke kompilieren', content: 'Bitte gib einen Namen für die Bennenung des zu kompilierenden Programms ein und bestätige diesen mit einem Klick auf \'Eingabe\'.' });
+    if(this.state.name){
+      this.download();
+    }
+    else{
+      this.setState({ file: true, open: true, title: 'Blöcke kompilieren', content: 'Bitte gib einen Namen für die Bennenung des zu kompilierenden Programms ein und bestätige diesen mit einem Klick auf \'Eingabe\'.' });
+    }
   }
 
   setFileName = (e) => {
-    this.props.workspaceName(e.target.value);
+    this.setState({name: e.target.value});
   }
 
   render() {
@@ -116,13 +133,13 @@ class Compile extends Component {
             {this.state.content}
             {this.state.file ?
               <div style={{marginTop: '10px'}}>
-                <TextField autoFocus placeholder='Dateiname' value={this.props.name} onChange={this.setFileName} style={{marginRight: '10px'}}/>
-                <Button disabled={!this.props.name} variant='contained' color='primary' onClick={() => this.download()}>Eingabe</Button>
+                <TextField autoFocus placeholder='Dateiname' value={this.state.name} onChange={this.setFileName} style={{marginRight: '10px'}}/>
+                <Button disabled={!this.state.name} variant='contained' color='primary' onClick={() => this.download()}>Eingabe</Button>
               </div>
             : null}
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.toggleDialog} color="primary">
+            <Button onClick={this.state.file ? () => {this.toggleDialog(); this.setState({name: this.props.name})} : this.toggleDialog} color="primary">
               {this.state.file ? 'Abbrechen' : 'Schließen'}
             </Button>
           </DialogActions>
