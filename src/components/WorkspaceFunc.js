@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { clearStats, onChangeCode } from '../actions/workspaceActions';
+import { clearStats, onChangeCode, workspaceName } from '../actions/workspaceActions';
 
 import * as Blockly from 'blockly/core';
 
@@ -12,6 +12,7 @@ import { initialXml } from './Blockly/initialXml.js';
 import Compile from './Compile';
 import SolutionCheck from './Tutorial/SolutionCheck';
 
+import withWidth, { isWidthDown } from '@material-ui/core/withWidth';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -21,8 +22,9 @@ import Dialog from '@material-ui/core/Dialog';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 
-import { faSave, faUpload, faShare } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faSave, faUpload, faShare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const styles = (theme) => ({
@@ -34,6 +36,15 @@ const styles = (theme) => ({
     '&:hover': {
       backgroundColor: theme.palette.primary.main,
       color: theme.palette.primary.contrastText,
+    }
+  },
+  workspaceName: {
+    backgroundColor: theme.palette.secondary.main,
+    borderRadius: '25px',
+    display: 'inline-flex',
+    cursor: 'pointer',
+    '&:hover': {
+      color: theme.palette.primary.main,
     }
   }
 });
@@ -48,30 +59,37 @@ class WorkspaceFunc extends Component {
       title: '',
       content: '',
       open: false,
-      fileName: '',
-      file: false
+      file: false,
+      saveXml: false,
+      name: props.name
     };
   }
 
   toggleDialog = () => {
-    this.setState({ open: !this.state, fileName: '' });
+    this.setState({ open: !this.state });
   }
 
-  saveXmlFile = (code) => {
+  saveXmlFile = () => {
+    var code = this.props.xml;
     this.toggleDialog();
-    var fileName = this.state.fileName;
-    if(fileName === '') fileName = 'unbekannt';
+    var fileName = this.state.name;
+    this.props.workspaceName(fileName);
     fileName = `${fileName}.xml`
     var blob = new Blob([code], { type: 'text/xml' });
     saveAs(blob, fileName);
   }
 
   createFileName = () => {
-    this.setState({ file: true, open: true, title: 'Blöcke speichern', content: 'Bitte gib einen Namen für die Bennenung der XML-Datei ein und bestätige diesen mit einem Klick auf \'Eingabe\'.' });
+    if(this.state.name){
+      this.saveXmlFile();
+    }
+    else{
+      this.setState({ file: true, saveXml: true, open: true, title: 'Blöcke speichern', content: 'Bitte gib einen Namen für die Bennenung der XML-Datei ein und bestätige diesen mit einem Klick auf \'Eingabe\'.' });
+    }
   }
 
   setFileName = (e) => {
-    this.setState({ fileName: e.target.value });
+    this.setState({name: e.target.value});
   }
 
   uploadXmlFile = (xmlFile) => {
@@ -116,6 +134,16 @@ class WorkspaceFunc extends Component {
   render() {
     return (
       <div style={{width: 'max-content', display: 'flex'}}>
+        {!this.props.solutionCheck ?
+          <Tooltip title={`Name des Projekts${this.props.name ? `: ${this.props.name}` : ''}`} arrow style={{marginRight: '5px'}}>
+          <div className={this.props.classes.workspaceName} onClick={() => {this.setState({file: true, open: true, saveXml: false, title: 'Projekt benennen', content: 'Bitte gib einen Namen für das Projekt ein und bestätige diesen mit einem Klick auf \'Eingabe\'.'})}}>
+            {this.props.name && !isWidthDown('xs', this.props.width) ? <Typography style={{margin: 'auto -3px auto 12px'}}>{this.props.name}</Typography> : null}
+            <div style={{width: '40px', display: 'flex'}}>
+              <FontAwesomeIcon icon={faPen} style={{height: '18px', width: '18px', margin: 'auto'}}/>
+            </div>
+          </div>
+          </Tooltip>
+        : null}
         {this.props.solutionCheck ? <SolutionCheck /> : <Compile iconButton />}
         <Tooltip title='Blöcke speichern' arrow style={{marginRight: '5px'}}>
           <IconButton
@@ -157,13 +185,13 @@ class WorkspaceFunc extends Component {
             {this.state.content}
             {this.state.file ?
               <div style={{marginTop: '10px'}}>
-                <TextField autoFocus placeholder='Dateiname' onChange={this.setFileName} style={{marginRight: '10px'}}/>
-                <Button disabled={this.state.fileName === ''} variant='contained' color='primary' onClick={() => this.saveXmlFile(this.props.xml)}>Eingabe</Button>
+                <TextField autoFocus placeholder={this.state.saveXml ?'Dateiname' : 'Projektname'} value={this.state.name} onChange={this.setFileName} style={{marginRight: '10px'}}/>
+                <Button disabled={!this.state.name} variant='contained' color='primary' onClick={() => {this.state.saveXml ? this.saveXmlFile() : this.props.workspaceName(this.state.name); this.toggleDialog();}}>Eingabe</Button>
               </div>
             : null}
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.toggleDialog} color="primary">
+            <Button onClick={this.state.file ? () => {this.toggleDialog(); this.setState({name: this.props.name})} : this.toggleDialog} color="primary">
               {this.state.file ? 'Abbrechen' : 'Schließen'}
             </Button>
           </DialogActions>
@@ -176,13 +204,16 @@ class WorkspaceFunc extends Component {
 WorkspaceFunc.propTypes = {
   arduino: PropTypes.string.isRequired,
   xml: PropTypes.string.isRequired,
+  name: PropTypes.string,
   clearStats: PropTypes.func.isRequired,
-  onChangeCode: PropTypes.func.isRequired
+  onChangeCode: PropTypes.func.isRequired,
+  workspaceName: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   arduino: state.workspace.code.arduino,
-  xml: state.workspace.code.xml
+  xml: state.workspace.code.xml,
+  name: state.workspace.name
 });
 
-export default connect(mapStateToProps, { clearStats, onChangeCode })(withStyles(styles, {withTheme: true})(WorkspaceFunc));
+export default connect(mapStateToProps, { clearStats, onChangeCode, workspaceName })(withStyles(styles, {withTheme: true})(withWidth()(WorkspaceFunc)));
