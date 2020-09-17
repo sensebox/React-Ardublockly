@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { clearStats } from '../actions/workspaceActions';
+import { clearStats, workspaceName } from '../actions/workspaceActions';
 
 import * as Blockly from 'blockly/core';
 
@@ -58,6 +58,7 @@ class Home extends Component {
 
   componentWillUnmount(){
     this.props.clearStats();
+    this.props.workspaceName(null);
   }
 
   onChange = () => {
@@ -100,8 +101,9 @@ class Home extends Component {
 }
 
 Home.propTypes = {
-  clearStats: PropTypes.func.isRequired
+  clearStats: PropTypes.func.isRequired,
+  workspaceName: PropTypes.func.isRequired
 };
 
 
-export default connect(null, { clearStats })(withStyles(styles, { withTheme: true })(Home));
+export default connect(null, { clearStats, workspaceName })(withStyles(styles, { withTheme: true })(Home));
