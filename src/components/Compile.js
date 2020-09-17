@@ -34,18 +34,18 @@ class Compile extends Component {
     this.setState({ progress: true });
     fetch(`${process.env.REACT_APP_COMPILER_URL}/compile`, {
       method: "POST",
-      headers: {'Content-Type': 'application/json'},
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data)
-      this.download(data.data.id)
-    })
-    .catch(err => {
-      console.log(err);
-      this.setState({ progress: false, open: true });
-    });
+      .then(response => response.json())
+      .then(data => {
+        console.log(data)
+        this.download(data.data.id)
+      })
+      .catch(err => {
+        console.log(err);
+        this.setState({ progress: false, open: true });
+      });
   }
 
   download = (id) => {
@@ -60,7 +60,7 @@ class Compile extends Component {
 
   render() {
     return (
-      <div style={{display: 'inline'}}>
+      <div style={{ display: 'inline' }}>
         <Button style={{ float: 'right', color: 'white' }} variant="contained" color="primary" onClick={() => this.compile()}>
           Kompilieren
         </Button>
@@ -91,4 +91,4 @@ const mapStateToProps = state => ({
   arduino: state.workspace.code.arduino
 });
 
-export default connect(mapStateToProps, null)(withStyles(styles, {withTheme: true})(Compile));
+export default connect(mapStateToProps, null)(withStyles(styles, { withTheme: true })(Compile));
