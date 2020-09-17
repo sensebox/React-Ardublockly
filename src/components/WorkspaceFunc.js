@@ -65,6 +65,12 @@ class WorkspaceFunc extends Component {
     };
   }
 
+  componentDidUpdate(props){
+    if(props.name !== this.props.name){
+      this.setState({name: this.props.name});
+    }
+  }
+
   toggleDialog = () => {
     this.setState({ open: !this.state });
   }
@@ -112,6 +118,12 @@ class WorkspaceFunc extends Component {
             Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xmlBefore), workspace)
             this.setState({ open: true, file: false, title: 'Keine Blöcke', content: 'Es wurden keine Blöcke detektiert. Bitte überprüfe den XML-Code und versuche es erneut.' });
           }
+          else {
+            if(!this.props.solutionCheck){
+              var extensionPosition = xmlFile.name.lastIndexOf('.');
+              this.props.workspaceName(xmlFile.name.substr(0, extensionPosition));
+            }
+          }
         } catch(err){
           this.setState({ open: true, file: false, title: 'Ungültige XML', content: 'Die XML-Datei konnte nicht in Blöcke zerlegt werden. Bitte überprüfe den XML-Code und versuche es erneut.' });
         }
@@ -129,6 +141,9 @@ class WorkspaceFunc extends Component {
     workspace.options.maxBlocks = Infinity;
     this.props.onChangeCode();
     this.props.clearStats();
+    if(!this.props.solutionCheck){
+      this.props.workspaceName(null);
+    }
   }
 
   render() {

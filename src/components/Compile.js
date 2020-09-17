@@ -120,7 +120,7 @@ class Compile extends Component {
             </IconButton>
           </Tooltip>
          :
-          <Button style={{ float: 'right', color: 'white' }} variant="contained" color="primary" onClick={() => this.createFileName()}>
+          <Button style={{ float: 'right', color: 'white' }} variant="contained" color="primary" onClick={() => this.compile()}>
             <FontAwesomeIcon icon={faCogs} style={{marginRight: '5px'}}/> Kompilieren
           </Button>
         }

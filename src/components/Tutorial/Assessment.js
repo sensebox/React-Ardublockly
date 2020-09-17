@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { workspaceName } from '../../actions/workspaceActions';
 
 import BlocklyWindow from '../Blockly/BlocklyWindow';
 import SolutionCheck from './SolutionCheck';
@@ -13,6 +14,18 @@ import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
 
 class Assessment extends Component {
+
+  componentDidMount(){
+    // alert(this.props.name);
+    this.props.workspaceName(this.props.name);
+  }
+
+  componentDidUpdate(props){
+    if(props.name !== this.props.name){
+      // alert(this.props.name);
+      this.props.workspaceName(this.props.name);
+    }
+  }
 
   render() {
     var tutorialId = this.props.currentTutorialId;
@@ -47,7 +60,8 @@ class Assessment extends Component {
 Assessment.propTypes = {
   currentTutorialId: PropTypes.number,
   status: PropTypes.array.isRequired,
-  change: PropTypes.number.isRequired
+  change: PropTypes.number.isRequired,
+  workspaceName: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -56,4 +70,4 @@ const mapStateToProps = state => ({
   currentTutorialId: state.tutorial.currentId
 });
 
-export default connect(mapStateToProps, null)(withWidth()(Assessment));
+export default connect(mapStateToProps, { workspaceName })(withWidth()(Assessment));
