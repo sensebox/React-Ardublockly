@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { workspaceName } from '../actions/workspaceActions';
 
+import { detectWhitespacesAndReturnReadableResult } from '../helpers/whitespace';
+
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Backdrop from '@material-ui/core/Backdrop';
@@ -83,9 +85,9 @@ class Compile extends Component {
 
   download = () => {
     const id = this.state.id;
-    const filename = this.state.name;
+    const filename = detectWhitespacesAndReturnReadableResult(this.state.name);
     this.toggleDialog();
-    this.props.workspaceName(filename);
+    this.props.workspaceName(this.state.name);
     window.open(`${process.env.REACT_APP_COMPILER_URL}/download?id=${id}&board=${process.env.REACT_APP_BOARD}&filename=${filename}`, '_self');
     this.setState({ progress: false });
   }
