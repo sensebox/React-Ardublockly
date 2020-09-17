@@ -7,6 +7,7 @@ import * as Blockly from 'blockly/core';
 
 import { saveAs } from 'file-saver';
 
+import { detectWhitespacesAndReturnReadableResult } from '../helpers/whitespace';
 import { initialXml } from './Blockly/initialXml.js';
 
 import Compile from './Compile';
@@ -78,8 +79,8 @@ class WorkspaceFunc extends Component {
   saveXmlFile = () => {
     var code = this.props.xml;
     this.toggleDialog();
-    var fileName = this.state.name;
-    this.props.workspaceName(fileName);
+    var fileName = detectWhitespacesAndReturnReadableResult(this.state.name);
+    this.props.workspaceName(this.state.name);
     fileName = `${fileName}.xml`
     var blob = new Blob([code], { type: 'text/xml' });
     saveAs(blob, fileName);

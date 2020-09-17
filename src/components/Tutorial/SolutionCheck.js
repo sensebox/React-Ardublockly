@@ -8,7 +8,7 @@ import { withRouter } from 'react-router-dom';
 import Compile from '../Compile';
 
 import tutorials from './tutorials.json';
-import { checkXml } from './compareXml';
+import { checkXml } from '../../helpers/compareXml';
 
 import { withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';

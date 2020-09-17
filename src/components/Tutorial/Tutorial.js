@@ -11,6 +11,8 @@ import Instruction from './Instruction';
 import Assessment from './Assessment';
 import NotFound from '../NotFound';
 
+import { detectWhitespacesAndReturnReadableResult } from '../../helpers/whitespace';
+
 import tutorials from './tutorials.json';
 
 import Card from '@material-ui/core/Card';
@@ -38,7 +40,7 @@ class Tutorial extends Component {
     var tutorial = tutorials.filter(tutorial => tutorial.id === currentTutorialId)[0];
     var steps = tutorial ? tutorial.steps : null;
     var step = steps ? steps[this.props.activeStep] : null;
-    var name = step ? `${tutorial.title.replace(/\s/g,'')}_${step.headline.replace(/\s/g,'')}` : null;
+    var name = step ? `${detectWhitespacesAndReturnReadableResult(tutorial.title)}_${detectWhitespacesAndReturnReadableResult(step.headline)}` : null;
     return (
       !Number.isInteger(currentTutorialId) || currentTutorialId < 1 || currentTutorialId > tutorials.length ?
         <NotFound button={{title: 'Zurück zur Tutorials-Übersicht', link: '/tutorial'}}/>
