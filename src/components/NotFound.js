@@ -11,7 +11,7 @@ class NotFound extends Component {
   render() {
     return (
       <div>
-        <Breadcrumbs content={[{link: '/', title: 'Home'}, {link: this.props.location.pathname, title: 'Error'}]}/>
+        <Breadcrumbs content={[{link: this.props.location.pathname, title: 'Error'}]}/>
         <Typography variant='h4' style={{marginBottom: '5px'}}>Die von Ihnen angeforderte Seite kann nicht gefunden werden.</Typography>
         <Typography variant='body1'>Die gesuchte Seite wurde möglicherweise entfernt, ihr Name wurde geändert oder sie ist vorübergehend nicht verfügbar.</Typography>
         {this.props.button ?

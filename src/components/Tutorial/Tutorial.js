@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { workspaceName } from '../../actions/workspaceActions';
 import { tutorialId, tutorialStep } from '../../actions/tutorialActions';
 
 import Breadcrumbs from '../Breadcrumbs';
@@ -9,6 +10,8 @@ import StepperVertical from './StepperVertical';
 import Instruction from './Instruction';
 import Assessment from './Assessment';
 import NotFound from '../NotFound';
+
+import { detectWhitespacesAndReturnReadableResult } from '../../helpers/whitespace';
 
 import tutorials from './tutorials.json';
 
@@ -29,6 +32,7 @@ class Tutorial extends Component {
 
   componentWillUnmount(){
     this.props.tutorialId(null);
+    this.props.workspaceName(null);
   }
 
   render() {
@@ -36,12 +40,13 @@ class Tutorial extends Component {
     var tutorial = tutorials.filter(tutorial => tutorial.id === currentTutorialId)[0];
     var steps = tutorial ? tutorial.steps : null;
     var step = steps ? steps[this.props.activeStep] : null;
+    var name = step ? `${detectWhitespacesAndReturnReadableResult(tutorial.title)}_${detectWhitespacesAndReturnReadableResult(step.headline)}` : null;
     return (
       !Number.isInteger(currentTutorialId) || currentTutorialId < 1 || currentTutorialId > tutorials.length ?
         <NotFound button={{title: 'Zurück zur Tutorials-Übersicht', link: '/tutorial'}}/>
       :
       <div>
-        <Breadcrumbs content={[{link: '/', title: 'Home'},{link: '/tutorial', title: 'Tutorial'}, {link: `/tutorial/${currentTutorialId}`, title: tutorial.title}]}/>
+        <Breadcrumbs content={[{link: '/tutorial', title: 'Tutorial'}, {link: `/tutorial/${currentTutorialId}`, title: tutorial.title}]}/>
 
         <StepperHorizontal />
 
@@ -52,7 +57,7 @@ class Tutorial extends Component {
             {step ?
               step.type === 'instruction' ?
                 <Instruction step={step}/>
-              : <Assessment step={step}/> // if step.type === 'assessment'
+              : <Assessment step={step} name={name}/> // if step.type === 'assessment'
              : null}
 
             <div style={{marginTop: '20px', position: 'absolute', bottom: '10px'}}>
@@ -69,6 +74,7 @@ class Tutorial extends Component {
 Tutorial.propTypes = {
   tutorialId: PropTypes.func.isRequired,
   tutorialStep: PropTypes.func.isRequired,
+  workspaceName: PropTypes.func.isRequired,
   currentTutorialId: PropTypes.number,
   status: PropTypes.array.isRequired,
   change: PropTypes.number.isRequired,
@@ -82,4 +88,4 @@ const mapStateToProps = state => ({
   activeStep: state.tutorial.activeStep
 });
 
-export default connect(mapStateToProps, { tutorialId, tutorialStep })(Tutorial);
+export default connect(mapStateToProps, { tutorialId, tutorialStep, workspaceName })(Tutorial);

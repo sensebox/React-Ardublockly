@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { clearStats } from '../actions/workspaceActions';
+import { clearStats, workspaceName } from '../actions/workspaceActions';
 
 import * as Blockly from 'blockly/core';
 
@@ -58,6 +58,7 @@ class Home extends Component {
 
   componentWillUnmount(){
     this.props.clearStats();
+    this.props.workspaceName(null);
   }
 
   onChange = () => {
@@ -72,7 +73,8 @@ class Home extends Component {
   render() {
     return (
       <div>
-        <WorkspaceStats />
+        <div style={{float: 'right', height: '40px', marginBottom: '20px'}}><WorkspaceFunc /></div>
+        <div style={{float: 'left', height: '40px', position: 'relative'}}><WorkspaceStats /></div>
         <Grid container spacing={2}>
           <Grid item xs={12} md={this.state.codeOn ? 6 : 12} style={{ position: 'relative' }}>
             <Tooltip title={this.state.codeOn ? 'Code ausblenden' : 'Code anzeigen'} >
@@ -93,15 +95,15 @@ class Home extends Component {
             </Grid>
             : null}
         </Grid>
-        <WorkspaceFunc />
       </div>
     );
   };
 }
 
 Home.propTypes = {
-  clearStats: PropTypes.func.isRequired
+  clearStats: PropTypes.func.isRequired,
+  workspaceName: PropTypes.func.isRequired
 };
 
 
-export default connect(null, { clearStats })(withStyles(styles, { withTheme: true })(Home));
+export default connect(null, { clearStats, workspaceName })(withStyles(styles, { withTheme: true })(Home));

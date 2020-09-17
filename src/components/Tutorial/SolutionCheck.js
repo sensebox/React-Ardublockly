@@ -8,7 +8,7 @@ import { withRouter } from 'react-router-dom';
 import Compile from '../Compile';
 
 import tutorials from './tutorials.json';
-import { checkXml } from './compareXml';
+import { checkXml } from '../../helpers/compareXml';
 
 import { withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
@@ -60,10 +60,10 @@ class SolutionCheck extends Component {
     const steps = tutorials.filter(tutorial => tutorial.id === this.props.currentTutorialId)[0].steps;
     return (
       <div>
-        <Tooltip title='Lösung kontrollieren'>
+        <Tooltip title='Lösung kontrollieren' arrow>
           <IconButton
             className={this.props.classes.compile}
-            style={{width: '40px', height: '40px', position: 'absolute', top: 8, right: 8, zIndex: 21 }}
+            style={{width: '40px', height: '40px', marginRight: '5px'}}
             onClick={() => this.check()}
           >
             <FontAwesomeIcon icon={faPlay} size="xs"/>
