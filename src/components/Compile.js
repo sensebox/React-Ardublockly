@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { workspaceName } from '../actions/workspaceActions';
 
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -12,6 +13,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import Dialog from '@material-ui/core/Dialog';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
+import TextField from '@material-ui/core/TextField';
 
 import { faCogs } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -38,15 +40,18 @@ class Compile extends Component {
 
   state = {
     progress: false,
-    open: false
+    open: false,
+    file: false,
+    title: '',
+    content: ''
   }
 
   compile = () => {
+    this.setState({ progress: true });
     const data = {
       "board": process.env.REACT_APP_BOARD,
       "sketch": this.props.arduino
     };
-    this.setState({ progress: true });
     fetch(`${process.env.REACT_APP_COMPILER_URL}/compile`, {
       method: "POST",
       headers: {'Content-Type': 'application/json'},
@@ -54,23 +59,35 @@ class Compile extends Component {
     })
     .then(response => response.json())
     .then(data => {
-      console.log(data)
-      this.download(data.data.id)
+      console.log(data);
+      this.setState({id: data.data.id}, () => {
+        this.createFileName();
+      });
     })
     .catch(err => {
       console.log(err);
-      this.setState({ progress: false, open: true });
+      this.setState({ progress: false, file: false, open: true, title: 'Fehler', content: 'Etwas ist beim Kompilieren schief gelaufen. Versuche es nochmal.' });
     });
   }
 
-  download = (id) => {
-    const filename = 'sketch'
+  download = () => {
+    this.toggleDialog();
+    const id = this.state.id;
+    const filename = this.props.name;
     window.open(`${process.env.REACT_APP_COMPILER_URL}/download?id=${id}&board=${process.env.REACT_APP_BOARD}&filename=${filename}`, '_self');
     this.setState({ progress: false });
   }
 
   toggleDialog = () => {
-    this.setState({ open: !this.state });
+    this.setState({ open: !this.state, progress: false });
+  }
+
+  createFileName = () => {
+    this.setState({ file: true, open: true, title: 'Blöcke kompilieren', content: 'Bitte gib einen Namen für die Bennenung des zu kompilierenden Programms ein und bestätige diesen mit einem Klick auf \'Eingabe\'.' });
+  }
+
+  setFileName = (e) => {
+    this.props.workspaceName(e.target.value);
   }
 
   render() {
@@ -86,7 +103,7 @@ class Compile extends Component {
             </IconButton>
           </Tooltip>
          :
-          <Button style={{ float: 'right', color: 'white' }} variant="contained" color="primary" onClick={() => this.compile()}>
+          <Button style={{ float: 'right', color: 'white' }} variant="contained" color="primary" onClick={() => this.createFileName()}>
             <FontAwesomeIcon icon={faCogs} style={{marginRight: '5px'}}/> Kompilieren
           </Button>
         }
@@ -94,13 +111,19 @@ class Compile extends Component {
           <CircularProgress color="inherit" />
         </Backdrop>
         <Dialog onClose={this.toggleDialog} open={this.state.open}>
-          <DialogTitle>Fehler</DialogTitle>
+          <DialogTitle>{this.state.title}</DialogTitle>
           <DialogContent dividers>
-            Etwas ist beim Kompilieren schief gelaufen. Versuche es nochmal.
+            {this.state.content}
+            {this.state.file ?
+              <div style={{marginTop: '10px'}}>
+                <TextField autoFocus placeholder='Dateiname' value={this.props.name} onChange={this.setFileName} style={{marginRight: '10px'}}/>
+                <Button disabled={!this.props.name} variant='contained' color='primary' onClick={() => this.download()}>Eingabe</Button>
+              </div>
+            : null}
           </DialogContent>
           <DialogActions>
             <Button onClick={this.toggleDialog} color="primary">
-              Schließen
+              {this.state.file ? 'Abbrechen' : 'Schließen'}
             </Button>
           </DialogActions>
         </Dialog>
@@ -110,11 +133,14 @@ class Compile extends Component {
 }
 
 Compile.propTypes = {
-  arduino: PropTypes.string.isRequired
+  arduino: PropTypes.string.isRequired,
+  name: PropTypes.string,
+  workspaceName: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  arduino: state.workspace.code.arduino
+  arduino: state.workspace.code.arduino,
+  name: state.workspace.name
 });
 
-export default connect(mapStateToProps, null)(withStyles(styles, {withTheme: true})(Compile));
+export default connect(mapStateToProps, { workspaceName })(withStyles(styles, {withTheme: true})(Compile));

@@ -1,4 +1,4 @@
-import { CHANGE_WORKSPACE, NEW_CODE, CREATE_BLOCK, MOVE_BLOCK, CHANGE_BLOCK, DELETE_BLOCK, CLEAR_STATS } from '../actions/types';
+import { CHANGE_WORKSPACE, NEW_CODE, CREATE_BLOCK, MOVE_BLOCK, CHANGE_BLOCK, DELETE_BLOCK, CLEAR_STATS, NAME } from '../actions/types';
 
 
 const initialState = {
@@ -12,7 +12,8 @@ const initialState = {
     delete: 0,
     move: -1 // initialXML is moved automatically, Block is not part of the statistics
   },
-  change: 0
+  change: 0,
+  name: null
 };
 
 export default function(state = initialState, action){
@@ -36,6 +37,11 @@ export default function(state = initialState, action){
         ...state,
         stats: action.payload
       };
+    case NAME:
+      return {
+        ...state,
+        name: action.payload
+      }
     default:
       return state;
   }
