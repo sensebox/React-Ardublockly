@@ -5,6 +5,7 @@
   "dependencies": {
     "@blockly/block-plus-minus": "^2.0.8",
     "@blockly/field-slider": "^2.0.7",
+    "@blockly/plugin-typed-variable-modal": "^3.1.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.30",
     "@fortawesome/free-solid-svg-icons": "^5.14.0",
     "@fortawesome/react-fontawesome": "^0.1.11",

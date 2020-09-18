@@ -3,8 +3,52 @@ import { Block, Value, Field, Shadow, Category } from '../';
 import { getColour } from '../helpers/colour'
 import '@blockly/block-plus-minus';
 
+import { TypedVariableModal } from '@blockly/plugin-typed-variable-modal';
+import * as Blockly from 'blockly/core';
+import BlocklyComponent from '../BlocklyComponent';
+
+
+
 
 class Toolbox extends React.Component {
+
+    componentDidMount() {
+        /**
+         
+         const workspace = this.props;
+         console.log()
+         
+         this.props.workspace.registerToolboxCategoryCallback('CREATE_TYPED_VARIABLE', this.createFlyout);
+         
+         const typedVarModal = new TypedVariableModal(workspace, 'callbackName', [["PENGUIN", "Penguin"], ["GIRAFFE", "Giraffe"]]);
+         typedVarModal.init();
+       */
+      console.log(this.props)
+    }
+
+    componentDidUpdate() {
+        console.log(this.props)
+        this.props.workspace.registerToolboxCategoryCallback('CREATE_TYPED_VARIABLE', this.createFlyout);
+         
+         const typedVarModal = new TypedVariableModal(this.props.workspace, 'callbackName', [['char', 'SHORT_NUMBER'], ['int', 'NUMBER'], ['long', 'DECIMAL'], ['String','TEXT'], ['char', 'CHARACTER'], ['boolean', 'BOOLEAN'], [ 'void' , 'NULL'], ['undefined', 'UNDEF']]);
+         typedVarModal.init();
+    }
+
+    createFlyout(workspace) {
+        let xmlList = [];
+        // Add your button and give it a callback name.
+        const button = document.createElement('button');
+        button.setAttribute('text', 'Create Typed Variable');
+        button.setAttribute('callbackKey', 'callbackName');
+    
+        xmlList.push(button);
+    
+        // This gets all the variables that the user creates and adds them to the
+        // flyout.
+        const blockList = Blockly.VariablesDynamic.flyoutCategoryBlocks(workspace);
+        xmlList = xmlList.concat(blockList);
+        return xmlList;
+    };
 
     render() {
         return (
@@ -293,7 +337,9 @@ class Toolbox extends React.Component {
                     </Block>
                     <Block type="io_notone"></Block>
                 </Category>
-                <Category name="Variablen" colour={getColour().variables} custom="VARIABLE"></Category>`;
+                <Category name="Colours" custom="CREATE_TYPED_VARIABLE"></Category>    
+                <Category name="Variablen" colour={getColour().variables} custom="CREATE_TYPED_VARIABLE">
+                </Category>`;
                 <sep></sep>
                 <Category name="Input/Output" colour={getColour().io}>
                     <Block type="io_digitalwrite"></Block>
