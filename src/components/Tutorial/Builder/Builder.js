@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 import Breadcrumbs from '../../Breadcrumbs';
 import Id from './Id';
-import Title from './Title';
+import Title from './Textfield';
+import Step from './Step';
 
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -16,31 +19,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 class Builder extends Component {
 
-  state = {
-    steps: [
-      {
-        headline: ''
-      },
-      {
-        headline: ''
-      }
-    ]
-  }
-
-  addStep = (index) => {
-    var step = {
-      headline: ''
-    };
-    var steps = this.state.steps;
-    steps.splice(index, 0, step);
-    this.setState({steps: steps});
-  }
-
-  removeStep = (index) => {
-    var steps = this.state.steps;
-    steps.splice(index, 1);
-    this.setState({steps: steps});
-  }
 
   render() {
     return (
@@ -50,32 +28,10 @@ class Builder extends Component {
         <h1>Tutorial-Builder</h1>
 
         <Id />
-        <Title />
+        <Title value={this.props.title} property={'title'} label={'Titel'}/>
 
-        {this.state.steps.map((step, i) =>
-          <div style={{borderRadius: '25px', background: 'lightgrey', padding: '10px', marginBottom: '20px'}}>
-            <Typography style={{marginBottom: '10px', marginLeft: '25px'}}>Schritt {i+1}</Typography>
-            <Title />
-            <div style={{display: 'flex'}}>
-              <Button
-                disabled={i === 0}
-                onClick={() => this.removeStep(i)}
-                variant='contained'
-                color='primary'
-                style={{borderRadius: '25px 0 0 25px', height: '40px', boxShadow: '0 0 transparent'}}
-              >
-                <FontAwesomeIcon icon={faMinus} />
-              </Button>
-              <Button
-                onClick={() => this.addStep(i)}
-                variant='contained'
-                color='primary'
-                style={{borderRadius: '0 25px 25px 0', height: '40px', boxShadow: '0 0 transparent'}}
-              >
-                <FontAwesomeIcon icon={faPlus} />
-              </Button>
-            </div>
-          </div>
+        {this.props.steps.map((step, i) =>
+          <Step step={step} index={i} />
 
         )}
 
@@ -92,4 +48,16 @@ class Builder extends Component {
   };
 }
 
-export default Builder;
+Builder.propTypes = {
+  title: PropTypes.string.isRequired,
+  steps: PropTypes.array.isRequired,
+  change: PropTypes.number.isRequired
+};
+
+const mapStateToProps = state => ({
+  title: state.builder.title,
+  steps: state.builder.steps,
+  change: state.builder.change
+});
+
+export default connect(mapStateToProps, null)(Builder);
