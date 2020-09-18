@@ -12,25 +12,10 @@ import BlocklyComponent from '../BlocklyComponent';
 
 class Toolbox extends React.Component {
 
-    componentDidMount() {
-        /**
-         
-         const workspace = this.props;
-         console.log()
-         
-         this.props.workspace.registerToolboxCategoryCallback('CREATE_TYPED_VARIABLE', this.createFlyout);
-         
-         const typedVarModal = new TypedVariableModal(workspace, 'callbackName', [["PENGUIN", "Penguin"], ["GIRAFFE", "Giraffe"]]);
-         typedVarModal.init();
-       */
-      console.log(this.props)
-    }
-
     componentDidUpdate() {
-        console.log(this.props)
         this.props.workspace.registerToolboxCategoryCallback('CREATE_TYPED_VARIABLE', this.createFlyout);
          
-         const typedVarModal = new TypedVariableModal(this.props.workspace, 'callbackName', [['char', 'SHORT_NUMBER'], ['int', 'NUMBER'], ['long', 'DECIMAL'], ['String','TEXT'], ['char', 'CHARACTER'], ['boolean', 'BOOLEAN'], [ 'void' , 'NULL'], ['undefined', 'UNDEF']]);
+         const typedVarModal = new TypedVariableModal(this.props.workspace, 'callbackName', [['SHORT_NUMBER', 'char'], ['NUMBER', 'int'], ['DECIMAL', 'long'], ['TEXT', 'String'], ['CHARACTER', 'char'], ['BOOLEAN', 'boolean'], ['NULL', 'void'], ['UNDEF', 'undefined']]);
          typedVarModal.init();
     }
 
@@ -337,9 +322,7 @@ class Toolbox extends React.Component {
                     </Block>
                     <Block type="io_notone"></Block>
                 </Category>
-                <Category name="Colours" custom="CREATE_TYPED_VARIABLE"></Category>    
-                <Category name="Variablen" colour={getColour().variables} custom="CREATE_TYPED_VARIABLE">
-                </Category>`;
+                <Category name="Variablen" colour={getColour().variables} custom="CREATE_TYPED_VARIABLE"></Category>;
                 <sep></sep>
                 <Category name="Input/Output" colour={getColour().io}>
                     <Block type="io_digitalwrite"></Block>
