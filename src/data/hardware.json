@@ -1,0 +1,128 @@
+[
+  {
+    "id": "bmp280",
+    "name": "",
+    "src": "bmp280.png",
+    "url": ""
+  },
+  {
+    "id": "breadboard",
+    "name": "",
+    "src": "breadboard.png",
+    "url": ""
+  },
+  {
+    "id": "button",
+    "name": "",
+    "src": "button.png",
+    "url": ""
+  },
+  {
+    "id": "hc04",
+    "name": "",
+    "src": "hc04.png",
+    "url": ""
+  },
+  {
+    "id": "hdc1080",
+    "name": "",
+    "src": "hdc1080.png",
+    "url": ""
+  },
+  {
+    "id": "jst-adapter",
+    "name": "",
+    "src": "jst-adapter.png",
+    "url": ""
+  },
+  {
+    "id": "jst-jst",
+    "name": "",
+    "src": "jst-jst.png",
+    "url": ""
+  },
+  {
+    "id": "jumperwire",
+    "name": "",
+    "src": "jumperwire.png",
+    "url": ""
+  },
+  {
+    "id": "ldr",
+    "name": "",
+    "src": "ldr.png",
+    "url": ""
+  },
+  {
+    "id": "led",
+    "name": "",
+    "src": "led.png",
+    "url": ""
+  },
+  {
+    "id": "microphone",
+    "name": "",
+    "src": "microphone.png",
+    "url": ""
+  },
+  {
+    "id": "oled",
+    "name": "",
+    "src": "oled.png",
+    "url": ""
+  },
+  {
+    "id": "piezo",
+    "name": "",
+    "src": "piezo.png",
+    "url": ""
+  },
+  {
+    "id": "resistor-10kohm",
+    "name": "",
+    "src": "resistor-10kohm.png",
+    "url": ""
+  },
+  {
+    "id": "resistor-470ohm",
+    "name": "",
+    "src": "resistor-470ohm.png",
+    "url": ""
+  },
+  {
+    "id": "rgb-led",
+    "name": "",
+    "src": "rgb-led.png",
+    "url": ""
+  },
+  {
+    "id": "sd-bee",
+    "name": "",
+    "src": "sd-bee.png",
+    "url": ""
+  },
+  {
+    "id": "senseboxmcu",
+    "name": "",
+    "src": "senseboxmcu.png",
+    "url": ""
+  },
+  {
+    "id": "usb-cable",
+    "name": "",
+    "src": "usb-cable.png",
+    "url": ""
+  },
+  {
+    "id": "veml6070",
+    "name": "",
+    "src": "veml6070.png",
+    "url": ""
+  },
+  {
+    "id": "wifi-bee",
+    "name": "",
+    "src": "wifi-bee.png",
+    "url": ""
+  }
+]
