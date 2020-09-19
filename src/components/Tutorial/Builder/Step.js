@@ -89,11 +89,11 @@ class Step extends Component {
             <Textfield value={this.props.step.text} property={'text'} label={this.props.step.type === 'task' ? 'Aufgabenstellung' : 'Instruktionen'} index={index} multiline error={this.props.error} errorText={`Gib Instruktionen für die ${this.props.step.type === 'task' ? 'Aufgabe' : 'Anleitung'} ein.`}/>
             {index === 0 ?
               <div>
-                <Requirements value={this.props.step.requirements} index={index}/>
-                <Hardware value={this.props.step.hardware} index={index} error={this.props.error}/>
+                <Requirements value={this.props.step.requirements ? this.props.step.requirements : []} index={index}/>
+                <Hardware value={this.props.step.hardware ? this.props.step.hardware : []} index={index} error={this.props.error}/>
               </div>
             : null}
-            <BlocklyExample value={this.props.step.xml} index={index} task={this.props.step.type === 'task'} />
+            <BlocklyExample value={this.props.step.xml} index={index} task={this.props.step.type === 'task'} error={this.props.error}/>
           </div>
         </div>
       </div>

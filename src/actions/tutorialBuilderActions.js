@@ -1,4 +1,4 @@
-import { BUILDER_CHANGE, BUILDER_ERROR, BUILDER_TITLE, BUILDER_ID, BUILDER_ADD_STEP, BUILDER_DELETE_STEP, BUILDER_CHANGE_STEP, BUILDER_CHANGE_ORDER, BUILDER_DELETE_PROPERTY } from './types';
+import { PROGRESS, BUILDER_CHANGE, BUILDER_ERROR, BUILDER_TITLE, BUILDER_ID, BUILDER_ADD_STEP, BUILDER_DELETE_STEP, BUILDER_CHANGE_STEP, BUILDER_CHANGE_ORDER, BUILDER_DELETE_PROPERTY } from './types';
 
 export const changeTutorialBuilder = () => (dispatch) => {
   dispatch({
@@ -10,6 +10,14 @@ export const tutorialTitle = (title) => (dispatch) => {
   dispatch({
     type: BUILDER_TITLE,
     payload: title
+  });
+  dispatch(changeTutorialBuilder());
+};
+
+export const tutorialSteps = (steps) => (dispatch) => {
+  dispatch({
+    type: BUILDER_ADD_STEP,
+    payload: steps
   });
   dispatch(changeTutorialBuilder());
 };
@@ -116,7 +124,6 @@ export const changeErrorStepIndex = (fromIndex, toIndex) => (dispatch, getState)
 
 export const setError = (index, property) => (dispatch, getState) => {
   var error = getState().builder.error;
-  console.log(index);
   if(index !== undefined){
     error.steps[index][property] = true;
   }
@@ -147,21 +154,21 @@ export const deleteError = (index, property) => (dispatch, getState) => {
 
 export const setSubmitError = () => (dispatch, getState) => {
   var builder = getState().builder;
-  if(builder.id === ''){
+  if(builder.id === undefined || builder.id === ''){
     dispatch(setError(undefined, 'id'));
   }
-  if(builder.title === ''){
+  if(builder.id === undefined || builder.title === ''){
     dispatch(setError(undefined, 'title'));
   }
   for(var i = 0; i < builder.steps.length; i++){
     builder.steps[i].id = i+1;
-    if(i === 0 && builder.steps[i].hardware.length < 1){
+    if(i === 0 && (builder.steps[i].hardware === undefined || builder.steps[i].hardware.length < 1)){
       dispatch(setError(i, 'hardware'));
     }
-    if(builder.steps[i].headline === ''){
+    if(builder.steps[i].headline === undefined || builder.steps[i].headline === ''){
       dispatch(setError(i, 'headline'));
     }
-    if(builder.steps[i].text === ''){
+    if(builder.steps[i].text === undefined || builder.steps[i].text === ''){
       dispatch(setError(i, 'text'));
     }
   }
@@ -180,3 +187,45 @@ export const checkError = () => (dispatch, getState) => {
   }
   return false;
 }
+
+export const progress = (inProgress) => (dispatch) => {
+  dispatch({
+    type: PROGRESS,
+    payload: inProgress
+  })
+};
+
+export const resetTutorial = () => (dispatch, getState) => {
+  dispatch(tutorialTitle(''));
+  dispatch(tutorialId(''));
+  var steps = [
+    {
+      id: 1,
+      type: 'instruction',
+      headline: '',
+      text: '',
+      hardware: [],
+      requirements: []
+    }
+  ];
+  dispatch(tutorialSteps(steps));
+  dispatch({
+    type: BUILDER_ERROR,
+    payload: {
+      steps: [{}]
+    }
+  });
+};
+
+export const readJSON = (json) => (dispatch, getState) => {
+  dispatch(resetTutorial());
+  dispatch({
+    type: BUILDER_ERROR,
+    payload: {steps: [{},{}]}
+  });
+  dispatch(tutorialTitle(json.title));
+  dispatch(tutorialId(json.id));
+  dispatch(tutorialSteps(json.steps));
+  dispatch(setSubmitError());
+  dispatch(progress(false));
+};
