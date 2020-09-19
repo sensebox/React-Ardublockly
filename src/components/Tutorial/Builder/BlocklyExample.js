@@ -79,8 +79,18 @@ class BlocklyExample extends Component {
     }
   }
 
+
   render() {
     moment.locale('de', localization);
+    var initialXml = this.props.value;
+    // check if value is valid xml;
+    try{
+      Blockly.Xml.textToDom(initialXml);
+    }
+    catch(err){
+      initialXml = null;
+      this.props.setError(this.props.index, 'xml');
+    }
     return (
       <div style={{marginBottom: '10px'}}>
         <FormControlLabel
@@ -100,34 +110,23 @@ class BlocklyExample extends Component {
           <FormHelperText style={{lineHeight: 'initial', marginBottom: '10px'}} className={this.props.classes.errorColor}>Reiche deine Blöcke ein, indem du auf den rot gefärbten Button klickst.</FormHelperText>
         : <FormHelperText style={{lineHeight: 'initial', marginBottom: '10px'}}>Die letzte Einreichung erfolgte um {this.state.input} Uhr.</FormHelperText>
         : null}
-        {this.state.checked ? () => {
-          var initialXml = this.props.value;
-          // check if value is valid xml;
-          try{
-            Blockly.Xml.textToDom(initialXml);
-          }
-          catch(err){
-            initialXml = null;
-            this.props.setError(this.props.index, 'xml');
-          }
-          return(
-            <div>
-              <Grid container className={!this.props.value ? this.props.classes.errorBorder : null}>
-                <Grid item xs={12}>
-                  <BlocklyWindow initialXml={initialXml}/>
-                </Grid>
+        {this.state.checked ?
+          <div>
+            <Grid container className={!this.props.value ? this.props.classes.errorBorder : null}>
+              <Grid item xs={12}>
+                <BlocklyWindow initialXml={initialXml}/>
               </Grid>
-              <Button
-                className={!this.props.value || this.props.error.steps[this.props.index].xml ? this.props.classes.errorButton : null }
-                style={{marginTop: '5px', height: '40px'}}
-                variant='contained'
-                color='primary'
-                onClick={() => {this.props.changeContent(this.props.index, 'xml', this.props.xml); this.setState({input: moment(Date.now()).format('LTS')})}}
-              >
-                {this.props.task ? 'Musterlösung einreichen' : 'Beispiel einreichen'}
-              </Button>
-            </div>
-          )}
+            </Grid>
+            <Button
+              className={!this.props.value || this.props.error.steps[this.props.index].xml ? this.props.classes.errorButton : null }
+              style={{marginTop: '5px', height: '40px'}}
+              variant='contained'
+              color='primary'
+              onClick={() => {this.props.changeContent(this.props.index, 'xml', this.props.xml); this.setState({input: moment(Date.now()).format('LTS')})}}
+            >
+              {this.props.task ? 'Musterlösung einreichen' : 'Beispiel einreichen'}
+            </Button>
+          </div>
         : null}
       </div>
     );
