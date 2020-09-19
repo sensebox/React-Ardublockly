@@ -1,21 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { checkError } from '../../../actions/tutorialBuilderActions';
 
 import Breadcrumbs from '../../Breadcrumbs';
 import Id from './Id';
 import Title from './Textfield';
 import Step from './Step';
 
-import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-
-import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 class Builder extends Component {
 
@@ -27,8 +20,8 @@ class Builder extends Component {
 
         <h1>Tutorial-Builder</h1>
 
-        <Id />
-        <Title value={this.props.title} property={'title'} label={'Titel'}/>
+        <Id error={this.props.error} value={this.props.id}/>
+        <Title value={this.props.title} property={'title'} label={'Titel'} error={this.props.error}/>
 
         {this.props.steps.map((step, i) =>
           <Step step={step} index={i} />
@@ -36,7 +29,7 @@ class Builder extends Component {
         )}
 
 
-        <Button variant='contained' color='primary' onClick={() => {alert('hi')}}>Submit</Button>
+        <Button variant='contained' color='primary' onClick={() => {var error = this.props.checkError(); alert(error);}}>Tutorial-Vorlage erstellen</Button>
 
 
       </div>
@@ -49,15 +42,19 @@ class Builder extends Component {
 }
 
 Builder.propTypes = {
+  checkError: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   steps: PropTypes.array.isRequired,
-  change: PropTypes.number.isRequired
+  change: PropTypes.number.isRequired,
+  error: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
   title: state.builder.title,
+  id: state.builder.id,
   steps: state.builder.steps,
-  change: state.builder.change
+  change: state.builder.change,
+  error: state.builder.error
 });
 
-export default connect(mapStateToProps, null)(Builder);
+export default connect(mapStateToProps, { checkError })(Builder);

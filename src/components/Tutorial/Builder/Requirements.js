@@ -9,6 +9,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 
 class Requirements extends Component {
@@ -29,7 +30,7 @@ class Requirements extends Component {
     return (
       <FormControl style={{marginBottom: '10px'}}>
         <FormLabel style={{color: 'black'}}>Voraussetzungen</FormLabel>
-        <FormLabel style={{marginTop: '5px'}}>Beachte, dass die Reihenfolge des Anhakens maßgebend ist.</FormLabel>
+        <FormHelperText style={{marginTop: '5px'}}>Beachte, dass die Reihenfolge des Anhakens maßgebend ist.</FormHelperText>
         <FormGroup>
           {tutorials.map((tutorial, i) =>
             <FormControlLabel

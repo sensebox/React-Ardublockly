@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { changeContent, deleteProperty } from '../../../actions/tutorialBuilderActions';
+import { changeContent, deleteProperty, setError, deleteError } from '../../../actions/tutorialBuilderActions';
 
 import moment from 'moment';
 import localization from 'moment/locale/de';
@@ -11,7 +11,7 @@ import BlocklyWindow from '../../Blockly/BlocklyWindow';
 import { withStyles } from '@material-ui/core/styles';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormLabel from '@material-ui/core/FormLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 
@@ -42,9 +42,29 @@ class BlocklyExample extends Component {
     };
   }
 
-  componentDidUpdate(props){
+  componentDidMount(){
+    if(this.props.task){
+      this.props.setError(this.props.index, 'xml');
+    }
+  }
+
+  componentDidUpdate(props, state){
     if(props.task !== this.props.task || props.value !== this.props.value){
-      this.setState({checked: this.props.task ? this.props.task : this.props.value ? true : false});
+      this.setState({checked: this.props.task ? this.props.task : this.props.value ? true : false},
+        () => this.isError()
+      );
+    }
+    if(state.checked !== this.state.checked){
+      this.isError();
+    }
+  }
+
+  isError = () => {
+    if(this.state.checked && !this.props.value){
+      this.props.setError(this.props.index, 'xml');
+    }
+    else {
+      this.props.deleteError(this.props.index, 'xml');
     }
   }
 
@@ -75,8 +95,8 @@ class BlocklyExample extends Component {
           }
         />
         {this.state.checked ? !this.props.value  ?
-          <FormLabel className={this.props.classes.errorColor}>Es ist noch keine Eingabe gemacht worden.</FormLabel>
-        : <FormLabel>Die letzte Einreichung erfolgte um {this.state.input} Uhr.</FormLabel>
+          <FormHelperText style={{lineHeight: 'initial', marginBottom: '10px'}} className={this.props.classes.errorColor}>Reiche deine Blöcke ein, indem du auf den rot gefärbten Button klickst.</FormHelperText>
+        : <FormHelperText style={{lineHeight: 'initial', marginBottom: '10px'}}>Die letzte Einreichung erfolgte um {this.state.input} Uhr.</FormHelperText>
         : null}
         {this.state.checked ?
           <div>
@@ -104,6 +124,8 @@ class BlocklyExample extends Component {
 BlocklyExample.propTypes = {
   changeContent: PropTypes.func.isRequired,
   deleteProperty: PropTypes.func.isRequired,
+  setError: PropTypes.func.isRequired,
+  deleteError: PropTypes.func.isRequired,
   xml: PropTypes.string.isRequired
 };
 
@@ -112,4 +134,4 @@ const mapStateToProps = state => ({
 });
 
 
-export default connect(mapStateToProps, { changeContent, deleteProperty })(withStyles(styles, {withTheme: true})(BlocklyExample));
+export default connect(mapStateToProps, { changeContent, deleteProperty, setError, deleteError })(withStyles(styles, {withTheme: true})(BlocklyExample));

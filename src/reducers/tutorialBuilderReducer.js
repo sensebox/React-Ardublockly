@@ -1,9 +1,9 @@
-import { BUILDER_CHANGE, BUILDER_TITLE, BUILDER_ID, BUILDER_ADD_STEP, BUILDER_DELETE_STEP, BUILDER_CHANGE_STEP,BUILDER_CHANGE_ORDER, BUILDER_DELETE_PROPERTY } from '../actions/types';
+import { BUILDER_CHANGE, BUILDER_ERROR, BUILDER_TITLE, BUILDER_ID, BUILDER_ADD_STEP, BUILDER_DELETE_STEP, BUILDER_CHANGE_STEP,BUILDER_CHANGE_ORDER, BUILDER_DELETE_PROPERTY } from '../actions/types';
 
 const initialState = {
   change: 0,
   title: '',
-  id: 0,
+  id: '',
   steps: [
     {
       id: 1,
@@ -13,7 +13,10 @@ const initialState = {
       hardware: [],
       requirements: []
     }
-  ]
+  ],
+  error: {
+    steps: [{}]
+  }
 };
 
 export default function(state = initialState, action){
@@ -42,6 +45,11 @@ export default function(state = initialState, action){
         ...state,
         steps: action.payload
       };
+    case BUILDER_ERROR:
+      return {
+        ...state,
+        error: action.payload
+      }
     default:
       return state;
   }

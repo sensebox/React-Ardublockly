@@ -13,9 +13,6 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
 
 import { faPlus, faAngleDoubleUp, faAngleDoubleDown, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -88,15 +85,15 @@ class Step extends Component {
           </div>
           <div style={{width: '100%', marginLeft: '54px'}}>
             <StepType value={this.props.step.type} index={index} />
-            <Textfield value={this.props.step.headline} property={'headline'} label={'Überschrift'} index={index}/>
-            <Textfield value={this.props.step.text} property={'text'} label={this.props.step.type === 'task' ? 'Aufgabenstellung' : 'Instruktionen'} index={index} multiline/>
+            <Textfield value={this.props.step.headline} property={'headline'} label={'Überschrift'} index={index} error={this.props.error} errorText={`Gib eine Überschrift für die ${this.props.step.type === 'task' ? 'Aufgabe' : 'Anleitung'} ein.`} />
+            <Textfield value={this.props.step.text} property={'text'} label={this.props.step.type === 'task' ? 'Aufgabenstellung' : 'Instruktionen'} index={index} multiline error={this.props.error} errorText={`Gib Instruktionen für die ${this.props.step.type === 'task' ? 'Aufgabe' : 'Anleitung'} ein.`}/>
             {index === 0 ?
               <div>
                 <Requirements value={this.props.step.requirements} index={index}/>
-                <Hardware value={this.props.step.hardware} index={index} />
+                <Hardware value={this.props.step.hardware} index={index} error={this.props.error}/>
               </div>
             : null}
-            <BlocklyExample value={this.props.step.xml} index={index} task={this.props.step.type === 'task'}/>
+            <BlocklyExample value={this.props.step.xml} index={index} task={this.props.step.type === 'task'} />
           </div>
         </div>
       </div>
@@ -109,12 +106,14 @@ Step.propTypes = {
   removeStep: PropTypes.func.isRequired,
   changeStepIndex: PropTypes.func.isRequired,
   steps: PropTypes.array.isRequired,
-  change: PropTypes.number.isRequired
+  change: PropTypes.number.isRequired,
+  error: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = state => ({
   steps: state.builder.steps,
-  change: state.builder.change
+  change: state.builder.change,
+  error: state.builder.error
 });
 
 export default connect(mapStateToProps, { addStep, removeStep, changeStepIndex })(withStyles(styles, {withTheme: true})(Step));
