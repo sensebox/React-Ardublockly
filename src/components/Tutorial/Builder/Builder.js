@@ -3,6 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { checkError } from '../../../actions/tutorialBuilderActions';
 
+import { saveAs } from 'file-saver';
+
+import { detectWhitespacesAndReturnReadableResult } from '../../../helpers/whitespace';
+
 import Breadcrumbs from '../../Breadcrumbs';
 import Id from './Id';
 import Title from './Textfield';
@@ -11,6 +15,22 @@ import Step from './Step';
 import Button from '@material-ui/core/Button';
 
 class Builder extends Component {
+
+  submit = () => {
+    var isError = this.props.checkError();
+    if(isError){
+      alert('Error');
+    }
+    else{
+      var tutorial = {
+        id: this.props.id,
+        title: this.props.title,
+        steps: this.props.steps
+      }
+      var blob = new Blob([JSON.stringify(tutorial)], { type: 'text/json' });
+      saveAs(blob, `${detectWhitespacesAndReturnReadableResult(tutorial.title)}.json`);
+    }
+  }
 
 
   render() {
@@ -29,7 +49,7 @@ class Builder extends Component {
         )}
 
 
-        <Button variant='contained' color='primary' onClick={() => {var error = this.props.checkError(); alert(error);}}>Tutorial-Vorlage erstellen</Button>
+        <Button variant='contained' color='primary' onClick={() => this.submit()}>Tutorial-Vorlage erstellen</Button>
 
 
       </div>

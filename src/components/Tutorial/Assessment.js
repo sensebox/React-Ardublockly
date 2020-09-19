@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { workspaceName } from '../../actions/workspaceActions';
 
 import BlocklyWindow from '../Blockly/BlocklyWindow';
-import SolutionCheck from './SolutionCheck';
 import CodeViewer from '../CodeViewer';
 import WorkspaceFunc from '../WorkspaceFunc';
 
@@ -45,7 +44,7 @@ class Assessment extends Component {
           <Grid item xs={12} md={6} lg={4} style={isWidthDown('sm', this.props.width) ? {height: 'max-content'} : {}}>
             <Card style={{height: 'calc(50% - 30px)', padding: '10px', marginBottom: '10px'}}>
               <Typography variant='h5'>Arbeitsauftrag</Typography>
-              <Typography>{currentTask.text1}</Typography>
+              <Typography>{currentTask.text}</Typography>
             </Card>
             <div style={isWidthDown('sm', this.props.width) ? {height: '500px'} : {height: '50%'}}>
               <CodeViewer />
