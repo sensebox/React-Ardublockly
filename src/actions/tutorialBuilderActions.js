@@ -1,5 +1,7 @@
 import { PROGRESS, BUILDER_CHANGE, BUILDER_ERROR, BUILDER_TITLE, BUILDER_ID, BUILDER_ADD_STEP, BUILDER_DELETE_STEP, BUILDER_CHANGE_STEP, BUILDER_CHANGE_ORDER, BUILDER_DELETE_PROPERTY } from './types';
 
+import data from '../data/hardware.json';
+
 export const changeTutorialBuilder = () => (dispatch) => {
   dispatch({
     type: BUILDER_CHANGE
@@ -162,8 +164,23 @@ export const setSubmitError = () => (dispatch, getState) => {
   }
   for(var i = 0; i < builder.steps.length; i++){
     builder.steps[i].id = i+1;
-    if(i === 0 && (builder.steps[i].hardware === undefined || builder.steps[i].hardware.length < 1)){
-      dispatch(setError(i, 'hardware'));
+    if(i === 0){
+      if(builder.steps[i].requirements && builder.steps[i].requirements.length > 0){
+        var requirements = builder.steps[i].requirements.filter(requirement => typeof(requirement)==='number');
+        if(requirements.length < builder.steps[i].requirements.length){
+          dispatch(changeContent(i, 'requirements', requirements));
+        }
+      }
+      if(builder.steps[i].hardware === undefined || builder.steps[i].hardware.length < 1){
+        dispatch(setError(i, 'hardware'));
+      }
+      else{
+        var hardwareIds = data.map(hardware => hardware.id);
+        var hardware = builder.steps[i].hardware.filter(hardware => hardwareIds.includes(hardware));
+        if(hardware.length < builder.steps[i].hardware.length){
+          dispatch(changeContent(i, 'hardware', hardware));
+        }
+      }
     }
     if(builder.steps[i].headline === undefined || builder.steps[i].headline === ''){
       dispatch(setError(i, 'headline'));

@@ -67,15 +67,12 @@ class Builder extends Component {
       reader.onloadend = () => {
         try {
           var result = JSON.parse(reader.result);
-          if(this.checkSteps(result.steps)){
-            alert('Hier');
-            this.props.readJSON(result);
+          if(!this.checkSteps(result.steps)){
+            result.steps = [{}];
           }
-          else{
-            this.props.progress(false);
-            alert('die JSON-Datei hat nicht die richtige Form');
-          }
+          this.props.readJSON(result);
         } catch(err){
+          console.log(err);
           this.props.progress(false);
           alert('ungültige JSON-Datei');
           this.setState({ open: true, file: false, title: 'Ungültige XML', content: 'Die XML-Datei konnte nicht in Blöcke zerlegt werden. Bitte überprüfe den XML-Code und versuche es erneut.' });
@@ -86,34 +83,8 @@ class Builder extends Component {
 
   checkSteps = (steps) => {
     if(!(steps && steps.length > 0)){
-      alert(1);
       return false;
     }
-    steps.map((step, i) => {
-      if(i === 0){
-        if(!(step.requirements &&
-             step.requirements.length > 0 &&
-             step.requirements.filter(requirement => typeof(requirement) === 'number').length === step.requirements.length)){
-          alert(3);
-          return false;
-        }
-        var hardwareIds = data.map(hardware => hardware.id);
-        if(!(step.hardware &&
-             step.hardware.length > 0 &&
-             step.hardware.filter(hardware => typeof(hardware) === 'string' && hardwareIds.includes(hardware)).length === step.hardware.length)){
-          alert(4);
-          return false;
-        }
-      }
-      if(!(step.headline && typeof(step.headline)==='string')){
-        alert(5);
-        return false;
-      }
-      if(!(step.text && typeof(step.text)==='string')){
-        alert(6);
-        return false;
-      }
-    });
     return true;
   }
 
