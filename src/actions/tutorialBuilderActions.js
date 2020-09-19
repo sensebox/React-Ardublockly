@@ -154,6 +154,7 @@ export const setSubmitError = () => (dispatch, getState) => {
     dispatch(setError(undefined, 'title'));
   }
   for(var i = 0; i < builder.steps.length; i++){
+    builder.steps[i].id = i+1;
     if(i === 0 && builder.steps[i].hardware.length < 1){
       dispatch(setError(i, 'hardware'));
     }
@@ -170,12 +171,12 @@ export const checkError = () => (dispatch, getState) => {
   dispatch(setSubmitError());
   var error = getState().builder.error;
   if(error.id || error.title){
-    return false;
+    return true;
   }
   for(var i = 0; i < error.steps.length; i++){
     if(Object.keys(error.steps[i]).length > 0){
-      return false
+      return true
     }
   }
-  return true;
+  return false;
 }
