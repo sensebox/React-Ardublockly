@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { tutorialId, setError, deleteError } from '../../../actions/tutorialBuilderActions';
 
+import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -9,29 +13,40 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-class Id extends Component {
-
-  state = {
-    id: 0,
-    error: false
+const styles = theme => ({
+  errorColor: {
+    color: theme.palette.error.dark
   }
+});
+
+class Id extends Component {
 
   handleChange = (e) => {
     var value = parseInt(e.target.value);
-    if(Number.isInteger(value)){
-      this.setState({id: value, error: false});
+    if(Number.isInteger(value) && value > 0){
+      this.props.tutorialId(value);
+      if(this.props.error.id){
+        this.props.deleteError(undefined, 'id');
+      }
     }
     else {
-      this.setState({id: e.target.value, error: true});
+      this.props.tutorialId(value);
+      this.props.setError(undefined,'id');
     }
   };
 
   handleCounter = (step) => {
-    if(!this.state.id){
-      this.setState({id: 0+step});
+    if(this.props.value+step < 1){
+      this.props.setError(undefined,'id');
+    }
+    else if(this.props.error.id){
+      this.props.deleteError(undefined, 'id');
+    }
+    if(!this.props.value){
+      this.props.tutorialId(0+step);
     }
     else {
-      this.setState({id: this.state.id+step});
+      this.props.tutorialId(this.props.value+step);
     }
   }
 
@@ -41,8 +56,8 @@ class Id extends Component {
         <InputLabel htmlFor="id">ID</InputLabel>
         <OutlinedInput
           style={{borderRadius: '25px', padding: '0 0 0 10px', width: '200px'}}
-          error={this.state.error}
-          value={this.state.id}
+          error={this.props.error.id}
+          value={this.props.value}
           name='id'
           label='ID'
           id='id'
@@ -53,6 +68,7 @@ class Id extends Component {
           endAdornment={
             <div style={{display: 'flex'}}>
               <Button
+                disabled={this.props.value === 1 || !this.props.value}
                 onClick={() => this.handleCounter(-1)}
                 variant='contained'
                 color='primary'
@@ -71,10 +87,20 @@ class Id extends Component {
             </div>
           }
         />
-        {this.state.error ? <FormHelperText style={{color: 'red'}}>Es muss eine positive ganzzahlige Zahl sein.</FormHelperText> : null}
+        {this.props.error.id ? <FormHelperText className={this.props.classes.errorColor}>Gib eine positive ganzzahlige Zahl ein.</FormHelperText> : null}
       </FormControl>
     );
   };
 }
 
-export default Id;
+Id.propTypes = {
+  tutorialId: PropTypes.func.isRequired,
+  setError: PropTypes.func.isRequired,
+  deleteError: PropTypes.func.isRequired
+};
+
+const mapStateToProps = state => ({
+  change: state.builder.change
+});
+
+export default connect(mapStateToProps, { tutorialId, setError, deleteError })(withStyles(styles, { withTheme: true })(Id));
