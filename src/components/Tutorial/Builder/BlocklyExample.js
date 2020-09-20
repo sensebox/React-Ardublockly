@@ -73,7 +73,6 @@ class BlocklyExample extends Component {
   onChange = (value) => {
     var oldValue = this.state.checked;
     this.setState({checked: value});
-    console.log(!value);
     if(oldValue !== value && !value){
       this.props.deleteProperty(this.props.index, 'xml');
     }
@@ -96,7 +95,7 @@ class BlocklyExample extends Component {
             }
           />
         : <FormLabel style={{color: 'black'}}>Musterlösung</FormLabel>}
-        {this.state.checked ? !this.props.value || this.props.error.steps[this.props.index].xml ?
+        {this.state.checked ? !this.props.value || !this.props.error.steps[this.props.index].xml ?
           <FormHelperText style={{lineHeight: 'initial', marginBottom: '10px'}} className={this.props.classes.errorColor}>Reiche deine Blöcke ein, indem du auf den rot gefärbten Button klickst.</FormHelperText>
         : <FormHelperText style={{lineHeight: 'initial', marginBottom: '10px'}}>Die letzte Einreichung erfolgte um {this.state.input} Uhr.</FormHelperText>
         : null}
@@ -110,15 +109,19 @@ class BlocklyExample extends Component {
             initialXml = null;
             this.props.setError(this.props.index, 'xml');
           }
+          console.log(!this.props.value);
+          console.log(this.props.value);
+          console.log(this.props.error.steps[this.props.index].xml);
+          console.log(!this.props.value || this.props.error.steps[this.props.index].xml);
           return (
             <div>
-              <Grid container className={!this.props.value ? this.props.classes.errorBorder : null}>
+              <Grid container className={!this.props.value || !this.props.error.steps[this.props.index].xml ? this.props.classes.errorBorder : null}>
                 <Grid item xs={12}>
                   <BlocklyWindow initialXml={initialXml}/>
                 </Grid>
               </Grid>
               <Button
-                className={!this.props.value || this.props.error.steps[this.props.index].xml ? this.props.classes.errorButton : null }
+                className={!this.props.value || !this.props.error.steps[this.props.index].xml ? this.props.classes.errorButton : null }
                 style={{marginTop: '5px', height: '40px'}}
                 variant='contained'
                 color='primary'
