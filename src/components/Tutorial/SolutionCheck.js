@@ -8,7 +8,7 @@ import { withRouter } from 'react-router-dom';
 import Compile from '../Compile';
 import Dialog from '../Dialog';
 
-import tutorials from './tutorials.json';
+import tutorials from '../../data/tutorials.json';
 import { checkXml } from '../../helpers/compareXml';
 
 import { withStyles } from '@material-ui/core/styles';
@@ -67,7 +67,7 @@ class SolutionCheck extends Component {
             <FontAwesomeIcon icon={faPlay} size="xs"/>
           </IconButton>
         </Tooltip>
-        
+
         <Dialog
           style={{zIndex: 9999999}}
           fullWidth
