@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { tutorialTitle, changeContent, setError, deleteError } from '../../../actions/tutorialBuilderActions';
+import { tutorialTitle, jsonString, changeContent, setError, deleteError } from '../../../actions/tutorialBuilderActions';
 
 import { withStyles } from '@material-ui/core/styles';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
@@ -24,6 +24,9 @@ class Textfield extends Component {
     var value = e.target.value;
     if(this.props.property === 'title'){
       this.props.tutorialTitle(value);
+    }
+    else if(this.props.property === 'json'){
+      this.props.jsonString(value);
     }
     else {
       this.props.changeContent(this.props.index, this.props.property, value);
@@ -55,7 +58,9 @@ class Textfield extends Component {
         {this.props.index !== undefined ?
           this.props.error.steps[this.props.index][this.props.property] ? <FormHelperText className={this.props.classes.errorColor}>{this.props.errorText}</FormHelperText>
         : null
-        : this.props.error[this.props.property] ? <FormHelperText className={this.props.classes.errorColor}>Gib einen Titel für das Tutorial ein.</FormHelperText>
+        : this.props.error[this.props.property] ?
+            this.props.property === 'title' ? <FormHelperText className={this.props.classes.errorColor}>Gib einen Titel für das Tutorial ein.</FormHelperText>
+                                            : <FormHelperText className={this.props.classes.errorColor}>Gib einen JSON-String ein und bestätige diesen mit einem Klick auf den entsprechenden Button</FormHelperText>
         : null}
       </FormControl>
     );
@@ -64,6 +69,7 @@ class Textfield extends Component {
 
 Textfield.propTypes = {
   tutorialTitle: PropTypes.func.isRequired,
+  jsonString: PropTypes.func.isRequired,
   changeContent: PropTypes.func.isRequired,
   error: PropTypes.object.isRequired,
   change: PropTypes.number.isRequired
@@ -74,4 +80,4 @@ const mapStateToProps = state => ({
   change: state.builder.change
 });
 
-export default connect(mapStateToProps, { tutorialTitle, changeContent, setError, deleteError })(withStyles(styles, { withTheme: true })(Textfield));
+export default connect(mapStateToProps, { tutorialTitle, jsonString, changeContent, setError, deleteError })(withStyles(styles, { withTheme: true })(Textfield));
