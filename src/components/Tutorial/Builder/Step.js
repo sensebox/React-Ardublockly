@@ -36,7 +36,7 @@ class Step extends Component {
     var index = this.props.index;
     var steps = this.props.steps;
     return (
-      <div style={{borderRadius: '25px', background: 'lightgrey', padding: '10px 14px 10px 10px', marginBottom: '20px'}}>
+      <div style={{borderRadius: '25px', border: '1px solid lightgrey', padding: '10px 14px 10px 10px', marginBottom: '20px'}}>
         <Typography variant='h6' style={{marginBottom: '10px', marginLeft: '4px'}}>Schritt {index+1}</Typography>
         <div style={{display: 'flex', position: 'relative'}}>
           <div style={{width: '40px', marginRight: '10px', position: 'absolute', left: '4px', bottom: '10px'}}>

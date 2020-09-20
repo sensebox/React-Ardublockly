@@ -82,10 +82,9 @@ class BlocklyExample extends Component {
   render() {
     moment.locale('de', localization);
     return (
-      <div style={{marginBottom: '10px'}}>
+      <div style={{marginBottom: '10px', padding: '18.5px 14px', borderRadius: '25px', border: '1px solid lightgrey', width: 'calc(100% - 28px)'}}>
         {!this.props.task ?
           <FormControlLabel
-            style={{margin: 0}}
             labelPlacement="end"
             label={"Blockly Beispiel"}
             control={
