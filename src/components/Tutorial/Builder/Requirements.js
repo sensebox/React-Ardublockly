@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { changeContent } from '../../../actions/tutorialBuilderActions';
 
-import tutorials from '../tutorials.json';
+import tutorials from '../../../data/tutorials.json';
 
 import FormGroup from '@material-ui/core/FormGroup';
 import Checkbox from '@material-ui/core/Checkbox';
