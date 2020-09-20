@@ -138,8 +138,9 @@ class Builder extends Component {
         )}
 
         {/*submit or reset*/}
-        <Button style={{marginRight: '10px'}} variant='contained' color='primary' onClick={() => this.submit()}>Tutorial-Vorlage erstellen</Button>
-        <Button variant='contained' onClick={() => this.reset()}>Zurücksetzen</Button>
+        <Divider variant='fullWidth' style={{margin: '30px 0 10px 0'}}/>
+        <Button style={{marginRight: '10px', marginTop: '10px'}} variant='contained' color='primary' onClick={() => this.submit()}>Tutorial-Vorlage erstellen</Button>
+        <Button style={{marginTop: '10px'}} variant='contained' onClick={() => this.reset()}>Zurücksetzen</Button>
 
         <Backdrop className={this.props.classes.backdrop} open={this.props.isProgress}>
           <CircularProgress color="inherit" />

@@ -28,7 +28,7 @@ class Requirements extends Component {
 
   render() {
     return (
-      <FormControl style={{marginBottom: '10px'}}>
+      <FormControl style={{marginBottom: '10px', padding: '18.5px 14px', borderRadius: '25px', border: '1px solid lightgrey', width: 'calc(100% - 28px)'}}>
         <FormLabel style={{color: 'black'}}>Voraussetzungen</FormLabel>
         <FormHelperText style={{marginTop: '5px'}}>Beachte, dass die Reihenfolge des Anhakens maßgebend ist.</FormHelperText>
         <FormGroup>

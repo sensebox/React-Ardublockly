@@ -12,6 +12,7 @@ import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import FormLabel from '@material-ui/core/FormLabel';
 
 const styles = theme => ({
   multiGridListTile: {
@@ -62,7 +63,8 @@ class Requirements extends Component {
   render() {
     var cols = isWidthDown('md', this.props.width) ? isWidthDown('sm', this.props.width) ? isWidthDown('xs', this.props.width) ? 2 : 3 : 4 : 6;
     return (
-      <div>
+      <div style={{marginBottom: '10px', padding: '18.5px 14px', borderRadius: '25px', border: '1px solid lightgrey', width: 'calc(100% - 28px)'}}>
+        <FormLabel style={{color: 'black'}}>Hardware</FormLabel>
         <FormHelperText style={this.props.error.steps[this.props.index].hardware ? {lineHeight: 'initial', marginTop: '5px'} : {marginTop: '5px', lineHeight: 'initial', marginBottom: '10px'}}>Beachte, dass die Reihenfolge des Auswählens maßgebend ist.</FormHelperText>
         {this.props.error.steps[this.props.index].hardware ? <FormHelperText className={this.props.classes.errorColor}>Wähle mindestens eine Hardware aus.</FormHelperText> : null}
         <GridList cellHeight={100} cols={cols} spacing={10}>
