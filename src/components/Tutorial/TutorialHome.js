@@ -6,7 +6,7 @@ import clsx from 'clsx';
 
 import Breadcrumbs from '../Breadcrumbs';
 
-import tutorials from './tutorials.json';
+import tutorials from '../../data/tutorials.json';
 
 import { Link } from 'react-router-dom';
 

@@ -18,7 +18,7 @@ class Instruction extends Component {
     return (
       <div>
         <Typography variant='h4' style={{marginBottom: '5px'}}>{step.headline}</Typography>
-        <Typography style={isHardware ? {} : {marginBottom: '5px'}}>{step.text1}</Typography>
+        <Typography style={isHardware ? {} : {marginBottom: '5px'}}>{step.text}</Typography>
         {isHardware ?
           <Hardware picture={step.hardware}/> : null}
         {areRequirements > 0 ?

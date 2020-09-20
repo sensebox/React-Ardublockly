@@ -5,14 +5,12 @@ import { workspaceName } from '../actions/workspaceActions';
 
 import { detectWhitespacesAndReturnReadableResult } from '../helpers/whitespace';
 
+import Dialog from './Dialog';
+
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
-import Dialog from '@material-ui/core/Dialog';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import TextField from '@material-ui/core/TextField';
@@ -129,22 +127,20 @@ class Compile extends Component {
         <Backdrop className={this.props.classes.backdrop} open={this.state.progress}>
           <CircularProgress color="inherit" />
         </Backdrop>
-        <Dialog onClose={this.toggleDialog} open={this.state.open}>
-          <DialogTitle>{this.state.title}</DialogTitle>
-          <DialogContent dividers>
-            {this.state.content}
-            {this.state.file ?
-              <div style={{marginTop: '10px'}}>
-                <TextField autoFocus placeholder='Dateiname' value={this.state.name} onChange={this.setFileName} style={{marginRight: '10px'}}/>
-                <Button disabled={!this.state.name} variant='contained' color='primary' onClick={() => this.download()}>Eingabe</Button>
-              </div>
-            : null}
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.state.file ? () => {this.toggleDialog(); this.setState({name: this.props.name})} : this.toggleDialog} color="primary">
-              {this.state.file ? 'Abbrechen' : 'Schließen'}
-            </Button>
-          </DialogActions>
+        <Dialog
+          open={this.state.open}
+          title={this.state.title}
+          content={this.state.content}
+          onClose={this.toggleDialog}
+          onClick={this.state.file ? () => {this.toggleDialog(); this.setState({name: this.props.name})} : this.toggleDialog}
+          button={this.state.file ? 'Abbrechen' : 'Schließen'}
+        >
+          {this.state.file ?
+            <div style={{marginTop: '10px'}}>
+              <TextField autoFocus placeholder='Dateiname' value={this.state.name} onChange={this.setFileName} style={{marginRight: '10px'}}/>
+              <Button disabled={!this.state.name} variant='contained' color='primary' onClick={() => this.download()}>Eingabe</Button>
+            </div>
+          : null}
         </Dialog>
       </div>
     );
