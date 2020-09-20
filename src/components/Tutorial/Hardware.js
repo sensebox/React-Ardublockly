@@ -1,18 +1,15 @@
 import React, { Component } from 'react';
 
+import Dialog from '../Dialog';
+
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
 import withWidth, { isWidthDown } from '@material-ui/core/withWidth';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import Button from '@material-ui/core/Button';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExpandAlt } from "@fortawesome/free-solid-svg-icons";
@@ -59,45 +56,41 @@ class Hardware extends Component {
       <div style={{marginTop: '10px', marginBottom: '5px'}}>
         <Typography>Für die Umsetzung benötigst du folgende Hardware:</Typography>
 
-            <GridList cellHeight={100} cols={cols} spacing={10}>
-            {this.props.picture.map((picture,i) => (
-              <GridListTile key={i}>
-                <div style={{margin: 'auto', width: 'max-content'}}>
-                  <img src={`/media/hardware/${picture}.png`} alt={picture} height={100} style={{cursor: 'pointer'}} onClick={() => this.handleClickOpen(picture, `/media/hardware/${picture}.png`)}/>
+        <GridList cellHeight={100} cols={cols} spacing={10}>
+        {this.props.picture.map((picture,i) => (
+          <GridListTile key={i}>
+            <div style={{margin: 'auto', width: 'max-content'}}>
+              <img src={`/media/hardware/${picture}.png`} alt={picture} height={100} style={{cursor: 'pointer'}} onClick={() => this.handleClickOpen(picture, `/media/hardware/${picture}.png`)}/>
+            </div>
+            <GridListTileBar
+              classes={{root: this.props.classes.multiGridListTile}}
+              title={
+                <div style={{overflow: 'hidden', textOverflow: 'ellipsis'}} className={this.props.classes.multiGridListTileTitle}>
+                  {picture}
                 </div>
-                <GridListTileBar
-                  classes={{root: this.props.classes.multiGridListTile}}
-                  title={
-                    <div style={{overflow: 'hidden', textOverflow: 'ellipsis'}} className={this.props.classes.multiGridListTileTitle}>
-                      {picture}
-                    </div>
-                  }
-                  actionIcon={
-                    <IconButton className={this.props.classes.expand} aria-label='Vollbild' onClick={() => this.handleClickOpen(picture, `/media/hardware/${picture}.png`)}>
-                      <FontAwesomeIcon icon={faExpandAlt} size="xs"/>
-                    </IconButton>
-                  }
-                />
-              </GridListTile>
-            ))}
-            </GridList>
+              }
+              actionIcon={
+                <IconButton className={this.props.classes.expand} aria-label='Vollbild' onClick={() => this.handleClickOpen(picture, `/media/hardware/${picture}.png`)}>
+                  <FontAwesomeIcon icon={faExpandAlt} size="xs"/>
+                </IconButton>
+              }
+            />
+          </GridListTile>
+        ))}
+        </GridList>
 
         <Dialog
           style={{zIndex: 1500}}
-          fullWidth={true}
           open={this.state.open}
+          title={`Hardware: ${this.state.title}`}
+          content={this.state.content}
           onClose={this.handleClose}
+          onClick={this.handleClose}
+          button={'Schließen'}
         >
-          <DialogTitle style={{padding: "10px 24px"}}>Hardware: {this.state.title}</DialogTitle>
-          <DialogContent style={{padding: "0px"}}>
-            <img src={this.state.url} width="100%" alt={this.state.title}/>
-          </DialogContent>
-          <DialogActions style={{padding: "10px 24px"}}>
-            <Button onClick={this.handleClose} color="primary">
-              Schließen
-            </Button>
-          </DialogActions>
+          <img src={this.state.url} width="100%" alt={this.state.title}/>
         </Dialog>
+
       </div>
     );
   };

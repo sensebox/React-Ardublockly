@@ -1,10 +1,17 @@
-import { PROGRESS, BUILDER_CHANGE, BUILDER_ERROR, BUILDER_TITLE, BUILDER_ID, BUILDER_ADD_STEP, BUILDER_DELETE_STEP, BUILDER_CHANGE_STEP, BUILDER_CHANGE_ORDER, BUILDER_DELETE_PROPERTY } from './types';
+import { PROGRESS, JSON_STRING, BUILDER_CHANGE, BUILDER_ERROR, BUILDER_TITLE, BUILDER_ID, BUILDER_ADD_STEP, BUILDER_DELETE_STEP, BUILDER_CHANGE_STEP, BUILDER_CHANGE_ORDER, BUILDER_DELETE_PROPERTY } from './types';
 
 import data from '../data/hardware.json';
 
 export const changeTutorialBuilder = () => (dispatch) => {
   dispatch({
     type: BUILDER_CHANGE
+  });
+};
+
+export const jsonString = (json) => (dispatch) => {
+  dispatch({
+    type: JSON_STRING,
+    payload: json
   });
 };
 
