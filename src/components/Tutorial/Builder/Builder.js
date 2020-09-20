@@ -130,8 +130,8 @@ class Builder extends Component {
         <Divider variant='fullWidth' style={{margin: '10px 0 30px 0'}}/>
 
         {/*Tutorial-Builder-Form*/}
-        <Id error={this.props.error} value={this.props.id}/>
-        <Textfield value={this.props.title} property={'title'} label={'Titel'} error={this.props.error}/>
+        <Id error={this.props.error.id} value={this.props.id}/>
+        <Textfield value={this.props.title} property={'title'} label={'Titel'} error={this.props.error.title}/>
 
         {this.props.steps.map((step, i) =>
           <Step step={step} index={i} />
@@ -165,7 +165,7 @@ class Builder extends Component {
           }
         >
           {this.state.string ?
-            <Textfield value={this.props.json} property={'json'} label={'JSON'} multiline error={this.props.error}/>
+            <Textfield value={this.props.json} property={'json'} label={'JSON'} multiline error={this.props.error.json}/>
           : null}
         </Dialog>
 

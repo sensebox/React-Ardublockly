@@ -25,7 +25,7 @@ class Id extends Component {
     var value = parseInt(e.target.value);
     if(Number.isInteger(value) && value > 0){
       this.props.tutorialId(value);
-      if(this.props.error.id){
+      if(this.props.error){
         this.props.deleteError(undefined, 'id');
       }
     }
@@ -39,7 +39,7 @@ class Id extends Component {
     if(this.props.value+step < 1){
       this.props.setError(undefined,'id');
     }
-    else if(this.props.error.id){
+    else if(this.props.error){
       this.props.deleteError(undefined, 'id');
     }
     if(!this.props.value){
@@ -57,7 +57,7 @@ class Id extends Component {
         <InputLabel htmlFor="id">ID</InputLabel>
         <OutlinedInput
           style={{borderRadius: '25px', padding: '0 0 0 10px', width: '200px'}}
-          error={this.props.error.id}
+          error={this.props.error}
           value={this.props.value}
           name='id'
           label='ID'
@@ -88,7 +88,7 @@ class Id extends Component {
             </div>
           }
         />
-        {this.props.error.id ? <FormHelperText className={this.props.classes.errorColor}>Gib eine positive ganzzahlige Zahl ein.</FormHelperText> : null}
+        {this.props.error ? <FormHelperText className={this.props.classes.errorColor}>Gib eine positive ganzzahlige Zahl ein.</FormHelperText> : null}
       </FormControl>
       <FormHelperText style={{marginLeft: '10px', marginTop: '5px', lineHeight: 'initial', marginBottom: '10px', width: '200px'}}>Beachte, dass die ID eindeutig sein muss. Sie muss sich also zu den anderen Tutorials unterscheiden.</FormHelperText>
       </div>

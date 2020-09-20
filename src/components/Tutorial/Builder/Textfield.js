@@ -20,6 +20,12 @@ const styles = theme => ({
 
 class Textfield extends Component {
 
+  componentDidMount(){
+    if(this.props.error){
+      this.props.deleteError(this.props.index, this.props.property);
+    }
+  }
+
   handleChange = (e) => {
     var value = e.target.value;
     if(this.props.property === 'title'){
@@ -46,7 +52,7 @@ class Textfield extends Component {
         <OutlinedInput
           style={{borderRadius: '25px'}}
           classes={{multiline: this.props.classes.multiline}}
-          error={this.props.index !== undefined ? this.props.error.steps[this.props.index][this.props.property] : this.props.error[this.props.property]}
+          error={this.props.error}
           value={this.props.value}
           label={this.props.label}
           id={this.props.property}
@@ -55,12 +61,10 @@ class Textfield extends Component {
           rowsMax={10}
           onChange={(e) => this.handleChange(e)}
         />
-        {this.props.index !== undefined ?
-          this.props.error.steps[this.props.index][this.props.property] ? <FormHelperText className={this.props.classes.errorColor}>{this.props.errorText}</FormHelperText>
-        : null
-        : this.props.error[this.props.property] ?
-            this.props.property === 'title' ? <FormHelperText className={this.props.classes.errorColor}>Gib einen Titel für das Tutorial ein.</FormHelperText>
-                                            : <FormHelperText className={this.props.classes.errorColor}>Gib einen JSON-String ein und bestätige diesen mit einem Klick auf den entsprechenden Button</FormHelperText>
+        {this.props.error ?
+          this.props.property === 'title' ? <FormHelperText className={this.props.classes.errorColor}>Gib einen Titel für das Tutorial ein.</FormHelperText>
+        : this.props.property === 'json' ? <FormHelperText className={this.props.classes.errorColor}>Gib einen JSON-String ein und bestätige diesen mit einem Klick auf den entsprechenden Button</FormHelperText>
+        : <FormHelperText className={this.props.classes.errorColor}>{this.props.errorText}</FormHelperText>
         : null}
       </FormControl>
     );
@@ -71,13 +75,6 @@ Textfield.propTypes = {
   tutorialTitle: PropTypes.func.isRequired,
   jsonString: PropTypes.func.isRequired,
   changeContent: PropTypes.func.isRequired,
-  error: PropTypes.object.isRequired,
-  change: PropTypes.number.isRequired
 };
 
-const mapStateToProps = state => ({
-  error: state.builder.error,
-  change: state.builder.change
-});
-
-export default connect(mapStateToProps, { tutorialTitle, jsonString, changeContent, setError, deleteError })(withStyles(styles, { withTheme: true })(Textfield));
+export default connect(null, { tutorialTitle, jsonString, changeContent, setError, deleteError })(withStyles(styles, { withTheme: true })(Textfield));
