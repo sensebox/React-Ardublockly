@@ -85,15 +85,15 @@ class Step extends Component {
           </div>
           <div style={{width: '100%', marginLeft: '54px'}}>
             <StepType value={this.props.step.type} index={index} />
-            <Textfield value={this.props.step.headline} property={'headline'} label={'Überschrift'} index={index} error={this.props.error} errorText={`Gib eine Überschrift für die ${this.props.step.type === 'task' ? 'Aufgabe' : 'Anleitung'} ein.`} />
-            <Textfield value={this.props.step.text} property={'text'} label={this.props.step.type === 'task' ? 'Aufgabenstellung' : 'Instruktionen'} index={index} multiline error={this.props.error} errorText={`Gib Instruktionen für die ${this.props.step.type === 'task' ? 'Aufgabe' : 'Anleitung'} ein.`}/>
+            <Textfield value={this.props.step.headline} property={'headline'} label={'Überschrift'} index={index} error={this.props.error.steps[index].headline} errorText={`Gib eine Überschrift für die ${this.props.step.type === 'task' ? 'Aufgabe' : 'Anleitung'} ein.`} />
+            <Textfield value={this.props.step.text} property={'text'} label={this.props.step.type === 'task' ? 'Aufgabenstellung' : 'Instruktionen'} index={index} multiline error={this.props.error.steps[index].text} errorText={`Gib Instruktionen für die ${this.props.step.type === 'task' ? 'Aufgabe' : 'Anleitung'} ein.`}/>
             {index === 0 ?
               <div>
                 <Requirements value={this.props.step.requirements ? this.props.step.requirements : []} index={index}/>
-                <Hardware value={this.props.step.hardware ? this.props.step.hardware : []} index={index} error={this.props.error}/>
+                <Hardware value={this.props.step.hardware ? this.props.step.hardware : []} index={index} error={this.props.error.steps[index].hardware}/>
               </div>
             : null}
-            <BlocklyExample value={this.props.step.xml} index={index} task={this.props.step.type === 'task'} error={this.props.error}/>
+            <BlocklyExample value={this.props.step.xml} index={index} task={this.props.step.type === 'task'} error={this.props.error.steps[index].xml ? true : false}/>
           </div>
         </div>
       </div>

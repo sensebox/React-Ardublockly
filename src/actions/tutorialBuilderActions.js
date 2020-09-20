@@ -245,7 +245,9 @@ export const readJSON = (json) => (dispatch, getState) => {
   dispatch(resetTutorial());
   dispatch({
     type: BUILDER_ERROR,
-    payload: {steps: [{},{}]}
+    payload: {
+      steps: new Array(json.steps.length).fill({})
+    }
   });
   dispatch(tutorialTitle(json.title));
   dispatch(tutorialId(json.id));

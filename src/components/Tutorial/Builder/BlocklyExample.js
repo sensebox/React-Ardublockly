@@ -45,9 +45,10 @@ class BlocklyExample extends Component {
   }
 
   componentDidMount(){
-    if(this.props.task){
-      this.props.setError(this.props.index, 'xml');
-    }
+    this.isError();
+    // if(this.props.task){
+    //   this.props.setError(this.props.index, 'xml');
+    // }
   }
 
   componentDidUpdate(props, state){
@@ -95,9 +96,9 @@ class BlocklyExample extends Component {
             }
           />
         : <FormLabel style={{color: 'black'}}>Musterlösung</FormLabel>}
-        {this.state.checked ? !this.props.value || !this.props.error.steps[this.props.index].xml ?
-          <FormHelperText style={{lineHeight: 'initial', marginBottom: '10px'}} className={this.props.classes.errorColor}>Reiche deine Blöcke ein, indem du auf den rot gefärbten Button klickst.</FormHelperText>
-        : <FormHelperText style={{lineHeight: 'initial', marginBottom: '10px'}}>Die letzte Einreichung erfolgte um {this.state.input} Uhr.</FormHelperText>
+        {this.state.checked ? !this.props.value || this.props.error ?
+          <FormHelperText style={{lineHeight: 'initial'}} className={this.props.classes.errorColor}>Reiche deine Blöcke ein, indem du auf den rot gefärbten Button klickst.</FormHelperText>
+        : this.state.input ? <FormHelperText style={{lineHeight: 'initial'}}>Die letzte Einreichung erfolgte um {this.state.input} Uhr.</FormHelperText> : null
         : null}
         {this.state.checked ? (() => {
           var initialXml = this.props.value;
@@ -109,19 +110,15 @@ class BlocklyExample extends Component {
             initialXml = null;
             this.props.setError(this.props.index, 'xml');
           }
-          console.log(!this.props.value);
-          console.log(this.props.value);
-          console.log(this.props.error.steps[this.props.index].xml);
-          console.log(!this.props.value || this.props.error.steps[this.props.index].xml);
           return (
-            <div>
-              <Grid container className={!this.props.value || !this.props.error.steps[this.props.index].xml ? this.props.classes.errorBorder : null}>
+            <div style={{marginTop: '10px'}}>
+              <Grid container className={!this.props.value || this.props.error ? this.props.classes.errorBorder : null}>
                 <Grid item xs={12}>
                   <BlocklyWindow initialXml={initialXml}/>
                 </Grid>
               </Grid>
               <Button
-                className={!this.props.value || !this.props.error.steps[this.props.index].xml ? this.props.classes.errorButton : null }
+                className={!this.props.value || this.props.error ? this.props.classes.errorButton : null }
                 style={{marginTop: '5px', height: '40px'}}
                 variant='contained'
                 color='primary'

@@ -52,7 +52,7 @@ class Requirements extends Component {
     }
     else {
       hardwareArray.push(hardware);
-      if(this.props.error.steps[this.props.index].hardware){
+      if(this.props.error){
         this.props.deleteError(this.props.index, 'hardware');
       }
     }
@@ -67,8 +67,8 @@ class Requirements extends Component {
     return (
       <div style={{marginBottom: '10px', padding: '18.5px 14px', borderRadius: '25px', border: '1px solid lightgrey', width: 'calc(100% - 28px)'}}>
         <FormLabel style={{color: 'black'}}>Hardware</FormLabel>
-        <FormHelperText style={this.props.error.steps[this.props.index].hardware ? {lineHeight: 'initial', marginTop: '5px'} : {marginTop: '5px', lineHeight: 'initial', marginBottom: '10px'}}>Beachte, dass die Reihenfolge des Auswählens maßgebend ist.</FormHelperText>
-        {this.props.error.steps[this.props.index].hardware ? <FormHelperText className={this.props.classes.errorColor}>Wähle mindestens eine Hardware aus.</FormHelperText> : null}
+        <FormHelperText style={this.props.error ? {lineHeight: 'initial', marginTop: '5px'} : {marginTop: '5px', lineHeight: 'initial', marginBottom: '10px'}}>Beachte, dass die Reihenfolge des Auswählens maßgebend ist.</FormHelperText>
+        {this.props.error ? <FormHelperText className={this.props.classes.errorColor}>Wähle mindestens eine Hardware aus.</FormHelperText> : null}
         <GridList cellHeight={100} cols={cols} spacing={10}>
         {hardware.map((picture,i) => (
           <GridListTile key={i} onClick={() => this.onChange(picture.id)} classes={{tile: this.props.value.filter(value => value === picture.id).length > 0 ? this.props.classes.active : this.props.classes.border}}>
