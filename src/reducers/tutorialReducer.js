@@ -1,6 +1,6 @@
 import { TUTORIAL_SUCCESS, TUTORIAL_ERROR, TUTORIAL_CHANGE, TUTORIAL_XML, TUTORIAL_ID, TUTORIAL_STEP } from '../actions/types';
 
-import tutorials from '../components/Tutorial/tutorials.json';
+import tutorials from '../data/tutorials.json';
 
 const initialStatus = () => {
   if(window.localStorage.getItem('status')){
