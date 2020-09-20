@@ -109,7 +109,7 @@ class Builder extends Component {
   render() {
     return (
       <div>
-        <Breadcrumbs content={[{link: '/', title: 'Home'},{link: '/tutorial', title: 'Tutorial'}, {link: '/tutorial/builder', title: 'Builder'}]}/>
+        <Breadcrumbs content={[{link: '/tutorial', title: 'Tutorial'}, {link: '/tutorial/builder', title: 'Builder'}]}/>
 
         <h1>Tutorial-Builder</h1>
 
