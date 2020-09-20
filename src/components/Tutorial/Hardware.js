@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 
 import Dialog from '../Dialog';
 
+import hardware from '../../data/hardware.json';
+
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
 import withWidth, { isWidthDown } from '@material-ui/core/withWidth';
+import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import GridList from '@material-ui/core/GridList';
@@ -38,16 +41,15 @@ class Hardware extends Component {
 
   state = {
     open: false,
-    title: '',
-    url: ''
+    hardwareInfo: {}
   };
 
-  handleClickOpen = (title, url) => {
-    this.setState({open: true, title, url});
+  handleClickOpen = (hardwareInfo) => {
+    this.setState({open: true, hardwareInfo});
   };
 
   handleClose = () => {
-    this.setState({open: false, title: '', url: ''});
+    this.setState({open: false, hardwareInfo: {}});
   };
 
   render() {
@@ -57,38 +59,43 @@ class Hardware extends Component {
         <Typography>Für die Umsetzung benötigst du folgende Hardware:</Typography>
 
         <GridList cellHeight={100} cols={cols} spacing={10}>
-        {this.props.picture.map((picture,i) => (
-          <GridListTile key={i}>
-            <div style={{margin: 'auto', width: 'max-content'}}>
-              <img src={`/media/hardware/${picture}.png`} alt={picture} height={100} style={{cursor: 'pointer'}} onClick={() => this.handleClickOpen(picture, `/media/hardware/${picture}.png`)}/>
-            </div>
-            <GridListTileBar
-              classes={{root: this.props.classes.multiGridListTile}}
-              title={
-                <div style={{overflow: 'hidden', textOverflow: 'ellipsis'}} className={this.props.classes.multiGridListTileTitle}>
-                  {picture}
-                </div>
-              }
-              actionIcon={
-                <IconButton className={this.props.classes.expand} aria-label='Vollbild' onClick={() => this.handleClickOpen(picture, `/media/hardware/${picture}.png`)}>
-                  <FontAwesomeIcon icon={faExpandAlt} size="xs"/>
-                </IconButton>
-              }
-            />
-          </GridListTile>
-        ))}
+        {this.props.picture.map((picture,i) => {
+          var hardwareInfo = hardware.filter(hardware => hardware.id === picture)[0];
+          return(
+            <GridListTile key={i}>
+              <div style={{margin: 'auto', width: 'max-content'}}>
+                <img src={`/media/hardware/${hardwareInfo.src}`} alt={hardwareInfo.name} height={100} style={{cursor: 'pointer'}} onClick={() => this.handleClickOpen(hardwareInfo)}/>
+              </div>
+              <GridListTileBar
+                classes={{root: this.props.classes.multiGridListTile}}
+                title={
+                  <div style={{overflow: 'hidden', textOverflow: 'ellipsis'}} className={this.props.classes.multiGridListTileTitle}>
+                    {hardwareInfo.name}
+                  </div>
+                }
+                actionIcon={
+                  <IconButton className={this.props.classes.expand} aria-label='Vollbild' onClick={() => this.handleClickOpen(hardwareInfo)}>
+                    <FontAwesomeIcon icon={faExpandAlt} size="xs"/>
+                  </IconButton>
+                }
+              />
+            </GridListTile>
+          )})}
         </GridList>
 
         <Dialog
           style={{zIndex: 1500}}
           open={this.state.open}
-          title={`Hardware: ${this.state.title}`}
+          title={`Hardware: ${this.state.hardwareInfo.name}`}
           content={this.state.content}
           onClose={this.handleClose}
           onClick={this.handleClose}
           button={'Schließen'}
         >
-          <img src={this.state.url} width="100%" alt={this.state.title}/>
+          <div>
+            <img src={`/media/hardware/${this.state.hardwareInfo.src}`} width="100%" alt={this.state.hardwareInfo.name}/>
+            Weitere Informationen unter: <Link href={this.state.hardwareInfo.url} color="primary">{this.state.hardwareInfo.url}</Link>
+          </div>
         </Dialog>
 
       </div>

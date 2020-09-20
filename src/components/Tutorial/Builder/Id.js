@@ -52,7 +52,8 @@ class Id extends Component {
 
   render() {
     return (
-      <FormControl variant="outlined" /*fullWidth*/ style={{marginBottom: '10px', width: '100%'}}>
+      <div style={{display: 'inline-flex'}}>
+      <FormControl variant="outlined" /*fullWidth*/ style={{marginBottom: '10px', width: 'max-content'}}>
         <InputLabel htmlFor="id">ID</InputLabel>
         <OutlinedInput
           style={{borderRadius: '25px', padding: '0 0 0 10px', width: '200px'}}
@@ -89,6 +90,8 @@ class Id extends Component {
         />
         {this.props.error.id ? <FormHelperText className={this.props.classes.errorColor}>Gib eine positive ganzzahlige Zahl ein.</FormHelperText> : null}
       </FormControl>
+      <FormHelperText style={{marginLeft: '10px', marginTop: '5px', lineHeight: 'initial', marginBottom: '10px', width: '200px'}}>Beachte, dass die ID eindeutig sein muss. Sie muss sich also zu den anderen Tutorials unterscheiden.</FormHelperText>
+      </div>
     );
   };
 }

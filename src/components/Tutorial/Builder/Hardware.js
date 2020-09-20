@@ -23,6 +23,7 @@ const styles = theme => ({
     color: theme.palette.text.primary
   },
   border: {
+    cursor: 'pointer',
     '&:hover': {
       width: 'calc(100% - 4px)',
       height: 'calc(100% - 4px)',
@@ -30,6 +31,7 @@ const styles = theme => ({
     }
   },
   active: {
+    cursor: 'pointer',
     width: 'calc(100% - 4px)',
     height: 'calc(100% - 4px)',
     border: `2px solid ${theme.palette.primary.main}`
@@ -71,13 +73,13 @@ class Requirements extends Component {
         {hardware.map((picture,i) => (
           <GridListTile key={i} onClick={() => this.onChange(picture.id)} classes={{tile: this.props.value.filter(value => value === picture.id).length > 0 ? this.props.classes.active : this.props.classes.border}}>
             <div style={{margin: 'auto', width: 'max-content'}}>
-              <img src={`/media/hardware/${picture.src}`} alt={picture.name} height={100} style={{cursor: 'pointer'}} />
+              <img src={`/media/hardware/${picture.src}`} alt={picture.name} height={100} />
             </div>
             <GridListTileBar
               classes={{root: this.props.classes.multiGridListTile}}
               title={
                 <div style={{overflow: 'hidden', textOverflow: 'ellipsis'}} className={this.props.classes.multiGridListTileTitle}>
-                  {picture.id}
+                  {picture.name}
                 </div>
               }
             />

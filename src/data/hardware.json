@@ -1,128 +1,128 @@
 [
   {
     "id": "bmp280",
-    "name": "",
+    "name": "Luftdruck und Temperatursensor",
     "src": "bmp280.png",
-    "url": ""
+    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
   },
   {
     "id": "breadboard",
-    "name": "",
+    "name": "Steckboard",
     "src": "breadboard.png",
-    "url": ""
+    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
   },
   {
     "id": "button",
-    "name": "",
+    "name": "Knopf",
     "src": "button.png",
-    "url": ""
+    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
   },
   {
     "id": "hc04",
-    "name": "",
+    "name": "Ultraschall-Distanzsensor",
     "src": "hc04.png",
-    "url": ""
+    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
   },
   {
     "id": "hdc1080",
-    "name": "",
+    "name": "Temperatur und Luftfeuchtigkeitssensor",
     "src": "hdc1080.png",
-    "url": ""
+    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
   },
   {
     "id": "jst-adapter",
-    "name": "",
+    "name": "JST-Adapterkabel",
     "src": "jst-adapter.png",
-    "url": ""
+    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
   },
   {
     "id": "jst-jst",
-    "name": "",
+    "name": "JST-JST Kabel",
     "src": "jst-jst.png",
-    "url": ""
+    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
   },
   {
     "id": "jumperwire",
-    "name": "",
+    "name": "Steckkabel",
     "src": "jumperwire.png",
-    "url": ""
+    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
   },
   {
     "id": "ldr",
-    "name": "",
+    "name": "LDR",
     "src": "ldr.png",
-    "url": ""
+    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
   },
   {
     "id": "led",
-    "name": "",
+    "name": "LEDs",
     "src": "led.png",
-    "url": ""
+    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
   },
   {
     "id": "microphone",
-    "name": "",
+    "name": "Mikrofon",
     "src": "microphone.png",
-    "url": ""
+    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
   },
   {
     "id": "oled",
-    "name": "",
+    "name": "OLED-Display",
     "src": "oled.png",
-    "url": ""
+    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
   },
   {
     "id": "piezo",
-    "name": "",
+    "name": "Piezo",
     "src": "piezo.png",
-    "url": ""
+    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
   },
   {
     "id": "resistor-10kohm",
-    "name": "",
+    "name": "10 kOhm Widerstand",
     "src": "resistor-10kohm.png",
-    "url": ""
+    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
   },
   {
     "id": "resistor-470ohm",
-    "name": "",
+    "name": "470 Ohm Widerstand",
     "src": "resistor-470ohm.png",
-    "url": ""
+    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
   },
   {
     "id": "rgb-led",
-    "name": "",
+    "name": "RGB-LED",
     "src": "rgb-led.png",
-    "url": ""
+    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
   },
   {
     "id": "sd-bee",
-    "name": "",
+    "name": "mSD-Bee",
     "src": "sd-bee.png",
-    "url": ""
+    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
   },
   {
     "id": "senseboxmcu",
-    "name": "",
+    "name": "senseBox MCU",
     "src": "senseboxmcu.png",
-    "url": ""
+    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
   },
   {
     "id": "usb-cable",
-    "name": "",
+    "name": "USB-Kabel",
     "src": "usb-cable.png",
-    "url": ""
+    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
   },
   {
     "id": "veml6070",
-    "name": "",
+    "name": "Helligkeit und UV-Sensor",
     "src": "veml6070.png",
-    "url": ""
+    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
   },
   {
     "id": "wifi-bee",
-    "name": "",
+    "name": "WiFi-Bee",
     "src": "wifi-bee.png",
-    "url": ""
+    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
   }
 ]
