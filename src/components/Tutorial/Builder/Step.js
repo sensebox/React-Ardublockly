@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addStep, removeStep, changeStepIndex } from '../../../actions/tutorialBuilderActions';
 
+import clsx from 'clsx';
+
 import Textfield from './Textfield';
 import StepType from './StepType';
 import BlocklyExample from './BlocklyExample';
@@ -26,6 +28,14 @@ const styles = (theme) => ({
     '&:hover': {
       backgroundColor: theme.palette.primary.main,
       color: theme.palette.primary.contrastText,
+    }
+  },
+  delete: {
+    backgroundColor: theme.palette.error.dark,
+    color: theme.palette.error.contrastText,
+    '&:hover': {
+      backgroundColor: theme.palette.error.dark,
+      color: theme.palette.error.contrastText,
     }
   }
 });
@@ -74,7 +84,7 @@ class Step extends Component {
                 <Tooltip title={`Schritt ${index+1} löschen`} arrow>
                   <IconButton
                     disabled={index === 0}
-                    className={this.props.classes.button}
+                    className={clsx(this.props.classes.button, this.props.classes.delete)}
                     onClick={() => this.props.removeStep(index)}
                   >
                     <FontAwesomeIcon icon={faTrash} size="xs"/>

@@ -220,6 +220,7 @@ export const progress = (inProgress) => (dispatch) => {
 };
 
 export const resetTutorial = () => (dispatch, getState) => {
+  dispatch(jsonString(''));
   dispatch(tutorialTitle(''));
   dispatch(tutorialId(''));
   var steps = [
