@@ -13,6 +13,7 @@ import { initialXml } from './Blockly/initialXml.js';
 import Compile from './Compile';
 import SolutionCheck from './Tutorial/SolutionCheck';
 import Dialog from './Dialog';
+import Snackbar from './Snackbar';
 
 import withWidth, { isWidthDown } from '@material-ui/core/withWidth';
 import { withStyles } from '@material-ui/core/styles';
@@ -59,7 +60,9 @@ class WorkspaceFunc extends Component {
       open: false,
       file: false,
       saveXml: false,
-      name: props.name
+      name: props.name,
+      snackbar: false,
+      message: ''
     };
   }
 
@@ -71,6 +74,10 @@ class WorkspaceFunc extends Component {
 
   toggleDialog = () => {
     this.setState({ open: !this.state });
+  }
+
+  toggleSnackbar = () => {
+    this.setState({ snackbar: !this.state, message: '' });
   }
 
   saveXmlFile = () => {
@@ -121,12 +128,19 @@ class WorkspaceFunc extends Component {
               var extensionPosition = xmlFile.name.lastIndexOf('.');
               this.props.workspaceName(xmlFile.name.substr(0, extensionPosition));
             }
+            this.setState({ snackbar: true, message: 'Das Projekt aus gegebener XML-Datei wurde erfolgreich eingefügt.' });
           }
         } catch(err){
           this.setState({ open: true, file: false, title: 'Ungültige XML', content: 'Die XML-Datei konnte nicht in Blöcke zerlegt werden. Bitte überprüfe den XML-Code und versuche es erneut.' });
         }
       };
     }
+  }
+
+  renameWorkspace = () => {
+    this.props.workspaceName(this.state.name);
+    this.toggleDialog();
+    this.setState({ snackbar: true, message: `Das Projekt wurde erfolgreich in '${this.state.name}' umbenannt.` });
   }
 
   resetWorkspace = () => {
@@ -142,6 +156,7 @@ class WorkspaceFunc extends Component {
     if(!this.props.solutionCheck){
       this.props.workspaceName(null);
     }
+    this.setState({ snackbar: true, message: 'Das Projekt wurde erfolgreich zurückgesetzt.' });
   }
 
   render() {
@@ -204,10 +219,17 @@ class WorkspaceFunc extends Component {
           {this.state.file ?
             <div style={{marginTop: '10px'}}>
               <TextField autoFocus placeholder={this.state.saveXml ?'Dateiname' : 'Projektname'} value={this.state.name} onChange={this.setFileName} style={{marginRight: '10px'}}/>
-              <Button disabled={!this.state.name} variant='contained' color='primary' onClick={() => {this.state.saveXml ? this.saveXmlFile() : this.props.workspaceName(this.state.name); this.toggleDialog();}}>Eingabe</Button>
+              <Button disabled={!this.state.name} variant='contained' color='primary' onClick={() => {this.state.saveXml ? this.saveXmlFile() : this.renameWorkspace()}}>Eingabe</Button>
             </div>
           : null}
         </Dialog>
+
+        <Snackbar
+          open={this.state.snackbar}
+          onClose={this.toggleSnackbar}
+          message={this.state.message}
+          type='success'
+        />
 
       </div>
     );
