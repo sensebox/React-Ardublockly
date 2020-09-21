@@ -16,6 +16,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const styles = theme => ({
   errorColor: {
     color: theme.palette.error.dark
+  },
+  errorColorShrink: {
+    color: `rgba(0, 0, 0, 0.54) !important`
+  },
+  errorBorder: {
+    borderColor: `${theme.palette.error.dark} !important`
   }
 });
 
@@ -53,10 +59,16 @@ class Id extends Component {
   render() {
     return (
       <div style={{display: 'inline-flex'}}>
-      <FormControl variant="outlined" /*fullWidth*/ style={{marginBottom: '10px', width: 'max-content'}}>
-        <InputLabel htmlFor="id">ID</InputLabel>
+      <FormControl variant="outlined" style={{marginBottom: '10px', width: '250px'}}>
+        <InputLabel
+          htmlFor="id"
+          classes={{shrink: this.props.error ? this.props.classes.errorColorShrink : null}}
+        >
+          ID
+        </InputLabel>
         <OutlinedInput
           style={{borderRadius: '25px', padding: '0 0 0 10px', width: '200px'}}
+          classes={{notchedOutline: this.props.error ? this.props.classes.errorBorder : null}}
           error={this.props.error}
           value={this.props.value}
           name='id'
@@ -90,7 +102,7 @@ class Id extends Component {
         />
         {this.props.error ? <FormHelperText className={this.props.classes.errorColor}>Gib eine positive ganzzahlige Zahl ein.</FormHelperText> : null}
       </FormControl>
-      <FormHelperText style={{marginLeft: '10px', marginTop: '5px', lineHeight: 'initial', marginBottom: '10px', width: '200px'}}>Beachte, dass die ID eindeutig sein muss. Sie muss sich also zu den anderen Tutorials unterscheiden.</FormHelperText>
+      <FormHelperText style={{marginLeft: '-40px', marginTop: '5px', lineHeight: 'initial', marginBottom: '10px', width: '200px'}}>Beachte, dass die ID eindeutig sein muss. Sie muss sich also zu den anderen Tutorials unterscheiden.</FormHelperText>
       </div>
     );
   };

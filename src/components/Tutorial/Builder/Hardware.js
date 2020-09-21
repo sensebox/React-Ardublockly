@@ -68,7 +68,7 @@ class Requirements extends Component {
       <div style={{marginBottom: '10px', padding: '18.5px 14px', borderRadius: '25px', border: '1px solid lightgrey', width: 'calc(100% - 28px)'}}>
         <FormLabel style={{color: 'black'}}>Hardware</FormLabel>
         <FormHelperText style={this.props.error ? {lineHeight: 'initial', marginTop: '5px'} : {marginTop: '5px', lineHeight: 'initial', marginBottom: '10px'}}>Beachte, dass die Reihenfolge des Auswählens maßgebend ist.</FormHelperText>
-        {this.props.error ? <FormHelperText className={this.props.classes.errorColor}>Wähle mindestens eine Hardware aus.</FormHelperText> : null}
+        {this.props.error ? <FormHelperText className={this.props.classes.errorColor}>Wähle mindestens eine Hardware-Komponente aus.</FormHelperText> : null}
         <GridList cellHeight={100} cols={cols} spacing={10}>
         {hardware.map((picture,i) => (
           <GridListTile key={i} onClick={() => this.onChange(picture.id)} classes={{tile: this.props.value.filter(value => value === picture.id).length > 0 ? this.props.classes.active : this.props.classes.border}}>
