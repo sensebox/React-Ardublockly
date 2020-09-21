@@ -12,6 +12,7 @@ import Id from './Id';
 import Textfield from './Textfield';
 import Step from './Step';
 import Dialog from '../../Dialog';
+import Snackbar from '../../Snackbar';
 
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -34,14 +35,21 @@ class Builder extends Component {
       open: false,
       title: '',
       content: '',
-      string: false
+      string: false,
+      snackbar: false,
+      message: ''
     };
     this.inputRef = React.createRef();
+  }
+
+  componentWillUnmount(){
+    this.reset();
   }
 
   submit = () => {
     var isError = this.props.checkError();
     if(isError){
+      this.setState({ snackbar: true, message: `Die Angaben für das Tutorial sind nicht vollständig.`, type: 'error'});
       window.scrollTo(0, 0);
     }
     else{
@@ -57,6 +65,7 @@ class Builder extends Component {
 
   reset = () => {
     this.props.resetTutorial();
+    this.setState({ snackbar: true, message: `Das Tutorial wurde erfolgreich zurückgesetzt.`, type: 'success'});
     window.scrollTo(0, 0);
   }
 
@@ -86,6 +95,7 @@ class Builder extends Component {
         result.steps = [{}];
       }
       this.props.readJSON(result);
+      this.setState({ snackbar: true, message: `${isFile ? 'Die übergebene JSON-Datei' : 'Der übergebene JSON-String'} wurde erfolgreich übernommen.`, type: 'success'});
     } catch(err){
       console.log(err);
       this.props.progress(false);
@@ -103,6 +113,10 @@ class Builder extends Component {
 
   toggle = () => {
     this.setState({ open: !this.state });
+  }
+
+  toggleSnackbar = () => {
+    this.setState({ snackbar: !this.state, message: '', type: null });
   }
 
 
@@ -168,6 +182,13 @@ class Builder extends Component {
             <Textfield value={this.props.json} property={'json'} label={'JSON'} multiline error={this.props.error.json}/>
           : null}
         </Dialog>
+
+        <Snackbar
+          open={this.state.snackbar}
+          onClose={this.toggleSnackbar}
+          message={this.state.message}
+          type={this.state.type}
+        />
 
       </div>
     );
