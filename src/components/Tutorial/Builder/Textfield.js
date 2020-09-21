@@ -14,7 +14,13 @@ const styles = theme => ({
     padding: '18.5px 14px 18.5px 24px'
   },
   errorColor: {
-    color: theme.palette.error.dark
+    color: `${theme.palette.error.dark} !important`
+  },
+  errorColorShrink: {
+    color: `rgba(0, 0, 0, 0.54) !important`
+  },
+  errorBorder: {
+    borderColor: `${theme.palette.error.dark} !important`
   }
 });
 
@@ -48,10 +54,15 @@ class Textfield extends Component {
   render() {
     return (
       <FormControl variant="outlined" fullWidth style={{marginBottom: '10px'}}>
-        <InputLabel htmlFor={this.props.property}>{this.props.label}</InputLabel>
+        <InputLabel
+          htmlFor={this.props.property}
+          classes={{shrink: this.props.error ? this.props.classes.errorColorShrink : null}}
+        >
+          {this.props.label}
+        </InputLabel>
         <OutlinedInput
           style={{borderRadius: '25px'}}
-          classes={{multiline: this.props.classes.multiline}}
+          classes={{multiline: this.props.classes.multiline, notchedOutline: this.props.error ? this.props.classes.errorBorder : null}}
           error={this.props.error}
           value={this.props.value}
           label={this.props.label}

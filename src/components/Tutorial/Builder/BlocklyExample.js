@@ -97,7 +97,7 @@ class BlocklyExample extends Component {
           />
         : <FormLabel style={{color: 'black'}}>Musterlösung</FormLabel>}
         {this.state.checked ? !this.props.value || this.props.error ?
-          <FormHelperText style={{lineHeight: 'initial'}} className={this.props.classes.errorColor}>Reiche deine Blöcke ein, indem du auf den rot gefärbten Button klickst.</FormHelperText>
+          <FormHelperText style={{lineHeight: 'initial'}} className={this.props.classes.errorColor}>{`Reiche deine Blöcke ein, indem du auf den '${this.props.task ? 'Musterlösung einreichen' : 'Beispiel einreichen'}'-Button klickst.`}</FormHelperText>
         : this.state.input ? <FormHelperText style={{lineHeight: 'initial'}}>Die letzte Einreichung erfolgte um {this.state.input} Uhr.</FormHelperText> : null
         : null}
         {this.state.checked ? (() => {
