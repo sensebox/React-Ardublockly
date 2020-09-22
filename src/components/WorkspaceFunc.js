@@ -62,6 +62,7 @@ class WorkspaceFunc extends Component {
       saveXml: false,
       name: props.name,
       snackbar: false,
+      key: '',
       message: ''
     };
   }
@@ -74,10 +75,6 @@ class WorkspaceFunc extends Component {
 
   toggleDialog = () => {
     this.setState({ open: !this.state });
-  }
-
-  toggleSnackbar = () => {
-    this.setState({ snackbar: !this.state, message: '' });
   }
 
   saveXmlFile = () => {
@@ -128,7 +125,7 @@ class WorkspaceFunc extends Component {
               var extensionPosition = xmlFile.name.lastIndexOf('.');
               this.props.workspaceName(xmlFile.name.substr(0, extensionPosition));
             }
-            this.setState({ snackbar: true, message: 'Das Projekt aus gegebener XML-Datei wurde erfolgreich eingefügt.' });
+            this.setState({ snackbar: true, key: Date.now(), message: 'Das Projekt aus gegebener XML-Datei wurde erfolgreich eingefügt.' });
           }
         } catch(err){
           this.setState({ open: true, file: false, title: 'Ungültige XML', content: 'Die XML-Datei konnte nicht in Blöcke zerlegt werden. Bitte überprüfe den XML-Code und versuche es erneut.' });
@@ -140,7 +137,7 @@ class WorkspaceFunc extends Component {
   renameWorkspace = () => {
     this.props.workspaceName(this.state.name);
     this.toggleDialog();
-    this.setState({ snackbar: true, message: `Das Projekt wurde erfolgreich in '${this.state.name}' umbenannt.` });
+    this.setState({ snackbar: true, key: Date.now(), message: `Das Projekt wurde erfolgreich in '${this.state.name}' umbenannt.` });
   }
 
   resetWorkspace = () => {
@@ -156,7 +153,7 @@ class WorkspaceFunc extends Component {
     if(!this.props.solutionCheck){
       this.props.workspaceName(null);
     }
-    this.setState({ snackbar: true, message: 'Das Projekt wurde erfolgreich zurückgesetzt.' });
+    this.setState({ snackbar: true, key: Date.now(), message: 'Das Projekt wurde erfolgreich zurückgesetzt.' });
   }
 
   render() {
@@ -226,9 +223,9 @@ class WorkspaceFunc extends Component {
 
         <Snackbar
           open={this.state.snackbar}
-          onClose={this.toggleSnackbar}
           message={this.state.message}
           type='success'
+          key={this.state.key}
         />
 
       </div>
