@@ -108,7 +108,7 @@ class BlocklyExample extends Component {
           }
           catch(err){
             initialXml = null;
-            this.props.setError(this.props.index, 'xml');
+            // this.props.setError(this.props.index, 'xml');
           }
           return (
             <div style={{marginTop: '10px'}}>

@@ -36,7 +36,7 @@ class Id extends Component {
       }
     }
     else {
-      this.props.tutorialId(value);
+      this.props.tutorialId(value.toString());
       this.props.setError(undefined,'id');
     }
   };
@@ -81,7 +81,7 @@ class Id extends Component {
           endAdornment={
             <div style={{display: 'flex'}}>
               <Button
-                disabled={this.props.value === 1 || !this.props.value}
+                disabled={this.props.value === 1 || !Number.isInteger(this.props.value)}
                 onClick={() => this.handleCounter(-1)}
                 variant='contained'
                 color='primary'

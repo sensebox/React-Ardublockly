@@ -145,7 +145,7 @@ class Builder extends Component {
         <Textfield value={this.props.title} property={'title'} label={'Titel'} error={this.props.error.title}/>
 
         {this.props.steps.map((step, i) =>
-          <Step step={step} index={i} />
+          <Step step={step} index={i} key={i}/>
         )}
 
         {/*submit or reset*/}
