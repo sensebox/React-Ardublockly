@@ -96,7 +96,7 @@ class Navbar extends Component {
             </div>
           </div>
           <List>
-            {[{text: 'Tutorials', icon: faChalkboardTeacher, link: "/tutorial"}, {text: 'Tutorial-Builder', icon: faFolderPlus, link: "/tutorial/builder"}, {text: 'Einstellungen', icon: faCog}].map((item, index) => (
+            {[{text: 'Tutorials', icon: faChalkboardTeacher, link: "/tutorial"}, {text: 'Tutorial-Builder', icon: faFolderPlus, link: "/tutorial/builder"}, {text: 'Einstellungen', icon: faCog, link: "/settings"}].map((item, index) => (
               <Link to={item.link} key={index} style={{textDecoration: 'none', color: 'inherit'}}>
                 <ListItem button onClick={this.toggleDrawer}>
                   <ListItemIcon><FontAwesomeIcon icon={item.icon}/></ListItemIcon>

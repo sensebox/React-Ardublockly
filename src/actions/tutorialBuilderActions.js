@@ -243,7 +243,6 @@ export const resetTutorial = () => (dispatch, getState) => {
 
 export const readJSON = (json) => (dispatch, getState) => {
   dispatch(resetTutorial());
-  console.log(json.steps.map(() => {return {};}));
   dispatch({
     type: BUILDER_ERROR,
     payload: {
