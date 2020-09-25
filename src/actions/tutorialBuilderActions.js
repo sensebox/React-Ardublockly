@@ -169,34 +169,36 @@ export const setSubmitError = () => (dispatch, getState) => {
   if(builder.id === undefined || builder.title === ''){
     dispatch(setError(undefined, 'title'));
   }
-  for(var i = 0; i < builder.steps.length; i++){
-    builder.steps[i].id = i+1;
+  builder.steps.map((step, i) => {
+    step.id = i+1;
     if(i === 0){
-      if(builder.steps[i].requirements && builder.steps[i].requirements.length > 0){
-        var requirements = builder.steps[i].requirements.filter(requirement => typeof(requirement)==='number');
-        if(requirements.length < builder.steps[i].requirements.length){
+      if(step.requirements && step.requirements.length > 0){
+        var requirements = step.requirements.filter(requirement => typeof(requirement)==='number');
+        if(requirements.length < step.requirements.length){
           dispatch(changeContent(i, 'requirements', requirements));
         }
       }
-      if(builder.steps[i].hardware === undefined || builder.steps[i].hardware.length < 1){
+      if(step.hardware === undefined || step.hardware.length < 1){
         dispatch(setError(i, 'hardware'));
       }
       else{
         var hardwareIds = data.map(hardware => hardware.id);
-        var hardware = builder.steps[i].hardware.filter(hardware => hardwareIds.includes(hardware));
-        if(hardware.length < builder.steps[i].hardware.length){
+        var hardware = step.hardware.filter(hardware => hardwareIds.includes(hardware));
+        if(hardware.length < step.hardware.length){
           dispatch(changeContent(i, 'hardware', hardware));
         }
       }
     }
-    if(builder.steps[i].headline === undefined || builder.steps[i].headline === ''){
+    if(step.headline === undefined || step.headline === ''){
       dispatch(setError(i, 'headline'));
     }
-    if(builder.steps[i].text === undefined || builder.steps[i].text === ''){
+    if(step.text === undefined || step.text === ''){
       dispatch(setError(i, 'text'));
     }
-  }
+    return null;
+  });
 };
+
 
 export const checkError = () => (dispatch, getState) => {
   dispatch(setSubmitError());
