@@ -48,7 +48,7 @@
                 "id": 1,
                 "type": "instruction",
                 "headline": "Einführung",
-                "text1": "In diesem Tutorial lernst du wie man die senseBox mit dem Internet verbindest.",
+                "text": "In diesem Tutorial lernst du wie man die senseBox mit dem Internet verbindest.",
                 "hardware": ["senseboxmcu", "wifi-bee"],
                 "requirements": [1]
             },
@@ -56,28 +56,28 @@
                 "id": 2,
                 "type": "instruction",
                 "headline": "Programmierung",
-                "text1": "Man benötigt folgenden Block:",
+                "text": "Man benötigt folgenden Block:",
                 "xml": "<xml xmlns='https://developers.google.com/blockly/xml'><block type='sensebox_wifi' id='-!X.Ay]z1ACt!f5+Vfr8'><field name='SSID'>SSID</field><field name='Password'>Password</field></block></xml>"
             },
             {
                 "id": 3,
                 "type": "instruction",
                 "headline": "Block richtig einbinden",
-                "text1": "",
+                "text": "",
                 "xml": "<xml xmlns='https://developers.google.com/blockly/xml'><block type='arduino_functions' id='QWW|$jB8+*EL;}|#uA' deletable='false' x='27' y='16'><statement name='SETUP_FUNC'><block type='sensebox_wifi' id='W}P2Y^g,muH@]|@anou}'><field name='SSID'>SSID</field><field name='Password'>Password</field></block></statement></block></xml>"
             },
             {
                 "id": 4,
                 "type": "task",
                 "headline": "Aufgabe 1",
-                "text1": "Stelle eine WLAN-Verbindung mit einem beliebigen Netzwerk her.",
+                "text": "Stelle eine WLAN-Verbindung mit einem beliebigen Netzwerk her.",
                 "xml": "<xml xmlns='https://developers.google.com/blockly/xml'><block type='arduino_functions' id='QWW|$jB8+*EL;}|#uA' deletable='false' x='27' y='16'><statement name='SETUP_FUNC'><block type='sensebox_wifi' id='W}P2Y^g,muH@]|@anou}'><field name='SSID'>SSID</field><field name='Password'>Password</field></block></statement></block></xml>"
             },
             {
                 "id": 5,
                 "type": "task",
                 "headline": "Aufgabe 2",
-                "text1": "Versuche das gleiche einfach nochmal. Übung macht den Meister! ;)",
+                "text": "Versuche das gleiche einfach nochmal. Übung macht den Meister! ;)",
                 "xml": "<xml xmlns='https://developers.google.com/blockly/xml'><block type='arduino_functions' id='QWW|$jB8+*EL;}|#uA' deletable='false' x='27' y='16'><statement name='SETUP_FUNC'><block type='sensebox_wifi' id='W}P2Y^g,muH@]|@anou}'><field name='SSID'>SSID</field><field name='Password'>Password</field></block></statement></block></xml>"
             }
         ]

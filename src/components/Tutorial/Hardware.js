@@ -94,7 +94,7 @@ class Hardware extends Component {
         >
           <div>
             <img src={`/media/hardware/${this.state.hardwareInfo.src}`} width="100%" alt={this.state.hardwareInfo.name}/>
-            Weitere Informationen unter: <Link href={this.state.hardwareInfo.url} color="primary">{this.state.hardwareInfo.url}</Link>
+            Weitere Informationen zur Hardware-Komponente findest du <Link href={this.state.hardwareInfo.url} color="primary">hier</Link>.
           </div>
         </Dialog>
 

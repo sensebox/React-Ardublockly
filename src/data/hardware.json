@@ -3,7 +3,7 @@
     "id": "bmp280",
     "name": "Luftdruck und Temperatursensor",
     "src": "bmp280.png",
-    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
+    "url": "https://sensebox.github.io/books-v2/edu/de/komponenten/sensoren/luftdruck-temperatur.html"
   },
   {
     "id": "breadboard",
@@ -27,7 +27,7 @@
     "id": "hdc1080",
     "name": "Temperatur und Luftfeuchtigkeitssensor",
     "src": "hdc1080.png",
-    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
+    "url": "https://sensebox.github.io/books-v2/edu/de/komponenten/sensoren/hdc1080.html"
   },
   {
     "id": "jst-adapter",
@@ -69,7 +69,7 @@
     "id": "oled",
     "name": "OLED-Display",
     "src": "oled.png",
-    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
+    "url": "https://sensebox.github.io/books-v2/edu/de/komponenten/zubehoer/led-display.html"
   },
   {
     "id": "piezo",
@@ -99,19 +99,19 @@
     "id": "sd-bee",
     "name": "mSD-Bee",
     "src": "sd-bee.png",
-    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
+    "url": "https://sensebox.github.io/books-v2/edu/de/komponenten/bees/sd.html"
   },
   {
     "id": "senseboxmcu",
     "name": "senseBox MCU",
     "src": "senseboxmcu.png",
-    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
+    "url": "https://sensebox.github.io/books-v2/edu/de/komponenten/sensebox-mcu.html"
   },
   {
     "id": "usb-cable",
     "name": "USB-Kabel",
     "src": "usb-cable.png",
-    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
+    "url": "https://sensebox.github.io/books-v2/edu/de/komponenten/zubehoer/netzteil-und-usb-kabel.html"
   },
   {
     "id": "veml6070",
@@ -123,6 +123,6 @@
     "id": "wifi-bee",
     "name": "WiFi-Bee",
     "src": "wifi-bee.png",
-    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
+    "url": "https://sensebox.github.io/books-v2/edu/de/komponenten/bees/wifi.html"
   }
 ]
