@@ -24,7 +24,7 @@ const initialStatus = () => {
         }
       }
       else{
-        status.push({id: tutorialsId, tasks: new Array(tutorial.steps.filter(step => step.type === 'task').length).fill({})});
+        status.push({id: tutorialsId, tasks: tutorial.steps.filter(step => step.type === 'task').map(task => {return {id: task.id};})});
       }
       return tutorialsId;
     });
