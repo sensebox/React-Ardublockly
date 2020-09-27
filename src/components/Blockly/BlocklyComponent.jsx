@@ -22,7 +22,6 @@
  */
 
 import React from 'react';
-import './BlocklyComponent.css';
 
 import Blockly from 'blockly/core';
 import locale from 'blockly/msg/en';

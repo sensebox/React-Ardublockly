@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { onChangeWorkspace, clearStats } from '../../actions/workspaceActions';
 import * as De from './msg/de';
-import BlocklyComponent from './';
+import BlocklyComponent from './BlocklyComponent';
+import BlocklySvg from './BlocklySvg';
 import * as Blockly from 'blockly/core';
 import './blocks/index';
 import './generator/index';
@@ -32,49 +33,52 @@ class BlocklyWindow extends Component {
 
   componentDidUpdate(props) {
     const workspace = Blockly.getMainWorkspace();
-    var initialXML = this.props.initialXml
-    if(props.initialXml !== initialXml){
+    var xml = this.props.initialXml
+    // if svg is true, then the update process is done in the BlocklySvg component
+    if(props.initialXml !== xml && !this.props.svg){
       // guarantees that the current xml-code (this.props.initialXml) is rendered
       workspace.clear();
-      if(!initialXML) initialXML = initialXml;
-      Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(initialXML), workspace) ;
+      if(!xml) xml = initialXml;
+      Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
     }
     Blockly.svgResize(workspace);
   }
 
   render() {
     return (
-      <BlocklyComponent ref={this.simpleWorkspace}
-        style={this.props.blocklyCSS}
-        readOnly={this.props.readOnly !== undefined ? this.props.readOnly : false}
-        trashcan={this.props.trashcan !== undefined ? this.props.trashcan : true}
-        renderer='zelos'
-        zoom={{ // https://developers.google.com/blockly/guides/configure/web/zoom
-          controls: this.props.zoomControls !== undefined ? this.props.zoomControls : true,
-          wheel: false,
-          startScale: 0.8,
-          maxScale: 3,
-          minScale: 0.3,
-          scaleSpeed: 1.2
-        }}
-        grid={this.props.grid !== undefined && !this.props.grid ? {} :
-          { // https://developers.google.com/blockly/guides/configure/web/grid
-            spacing: 20,
-            length: 1,
-            colour: '#4EAF47', // senseBox-green
-            snap: false
-        }}
-        media={'/media/blockly/'}
-        move={this.props.move !== undefined && !this.props.move ? {} :
-          { // https://developers.google.com/blockly/guides/configure/web/move
-            scrollbars: true,
-            drag: true,
-            wheel: false
-        }}
-        initialXml={this.props.initialXml ? this.props.initialXml : initialXml}
-      >
-
-      </BlocklyComponent >
+      <div>
+        <BlocklyComponent ref={this.simpleWorkspace}
+          style={this.props.svg ? {height: 0} : this.props.blocklyCSS}
+          readOnly={this.props.readOnly !== undefined ? this.props.readOnly : false}
+          trashcan={this.props.trashcan !== undefined ? this.props.trashcan : true}
+          renderer='zelos'
+          zoom={{ // https://developers.google.com/blockly/guides/configure/web/zoom
+            controls: this.props.zoomControls !== undefined ? this.props.zoomControls : true,
+            wheel: false,
+            startScale: 0.8,
+            maxScale: 3,
+            minScale: 0.3,
+            scaleSpeed: 1.2
+          }}
+          grid={this.props.grid !== undefined && !this.props.grid ? {} :
+            { // https://developers.google.com/blockly/guides/configure/web/grid
+              spacing: 20,
+              length: 1,
+              colour: '#4EAF47', // senseBox-green
+              snap: false
+          }}
+          media={'/media/blockly/'}
+          move={this.props.move !== undefined && !this.props.move ? {} :
+            { // https://developers.google.com/blockly/guides/configure/web/move
+              scrollbars: true,
+              drag: true,
+              wheel: false
+          }}
+          initialXml={this.props.initialXml ? this.props.initialXml : initialXml}
+        >
+        </BlocklyComponent >
+        {this.props.svg && this.props.initialXml ? <BlocklySvg initialXml={this.props.initialXml}/> : null}
+      </div>
     );
   };
 }

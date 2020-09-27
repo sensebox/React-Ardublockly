@@ -27,12 +27,7 @@ class Instruction extends Component {
         <Grid container spacing={2} style={{marginBottom: '5px'}}>
           <Grid item xs={12}>
             <BlocklyWindow
-              trashcan={false}
-              readOnly={true}
-              zoomControls={false}
-              grid={false}
-              move={false}
-              blocklyCSS={{minHeight: '300px'}}
+              svg
               initialXml={step.xml}
             />
           </Grid>

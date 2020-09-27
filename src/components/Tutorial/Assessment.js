@@ -39,7 +39,10 @@ class Assessment extends Component {
         <div style={{float: 'right', height: '40px'}}><WorkspaceFunc solutionCheck/></div>
         <Grid container spacing={2} style={{marginBottom: '5px'}}>
           <Grid item xs={12} md={6} lg={8}>
-            <BlocklyWindow initialXml={statusTask ? statusTask.xml ? statusTask.xml : null : null}/>
+            <BlocklyWindow
+              initialXml={statusTask ? statusTask.xml ? statusTask.xml : null : null}
+              blocklyCSS={{height: '500px'}}
+            />
           </Grid>
           <Grid item xs={12} md={6} lg={4} style={isWidthDown('sm', this.props.width) ? {height: 'max-content'} : {}}>
             <Card style={{height: 'calc(50% - 30px)', padding: '10px', marginBottom: '10px'}}>
