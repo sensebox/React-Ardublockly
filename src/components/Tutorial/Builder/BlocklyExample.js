@@ -114,7 +114,10 @@ class BlocklyExample extends Component {
             <div style={{marginTop: '10px'}}>
               <Grid container className={!this.props.value || this.props.error ? this.props.classes.errorBorder : null}>
                 <Grid item xs={12}>
-                  <BlocklyWindow initialXml={initialXml}/>
+                  <BlocklyWindow
+                    initialXml={initialXml}
+                    blocklyCSS={{height: '500px'}}
+                  />
                 </Grid>
               </Grid>
               <Button
