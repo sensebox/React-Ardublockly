@@ -28,6 +28,7 @@ class Instruction extends Component {
           <Grid item xs={12}>
             <BlocklyWindow
               svg
+              blockDisabled
               initialXml={step.xml}
             />
           </Grid>

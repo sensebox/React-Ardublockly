@@ -26,14 +26,18 @@ class BlocklyWindow extends Component {
     this.props.clearStats();
     workspace.addChangeListener((event) => {
       this.props.onChangeWorkspace(event);
-      Blockly.Events.disableOrphans(event);
+      // switch on that a block is displayed disabled or not depending on whether it is correctly connected
+      // for SVG display, a deactivated block in the display is undesirable
+      if(this.props.blockDisabled){
+        Blockly.Events.disableOrphans(event);
+      }
     });
     Blockly.svgResize(workspace);
   }
 
   componentDidUpdate(props) {
     const workspace = Blockly.getMainWorkspace();
-    var xml = this.props.initialXml
+    var xml = this.props.initialXml;
     // if svg is true, then the update process is done in the BlocklySvg component
     if(props.initialXml !== xml && !this.props.svg){
       // guarantees that the current xml-code (this.props.initialXml) is rendered

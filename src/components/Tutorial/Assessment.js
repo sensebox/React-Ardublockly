@@ -41,6 +41,7 @@ class Assessment extends Component {
           <Grid item xs={12} md={6} lg={8}>
             <BlocklyWindow
               initialXml={statusTask ? statusTask.xml ? statusTask.xml : null : null}
+              blockDisabled
               blocklyCSS={{height: '500px'}}
             />
           </Grid>
