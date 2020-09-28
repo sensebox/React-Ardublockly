@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { changeContent, deleteProperty } from '../../../actions/tutorialBuilderActions';
+import { changeContent, deleteProperty, deleteError } from '../../../actions/tutorialBuilderActions';
 
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
@@ -13,6 +13,9 @@ class StepType extends Component {
     this.props.changeContent(this.props.index, 'type', value);
     // delete property 'xml', so that all used blocks are reset
     this.props.deleteProperty(this.props.index, 'xml');
+    if(value === 'task'){
+      this.props.deleteError(undefined, 'type');
+    }
   }
 
   render() {
@@ -38,7 +41,8 @@ class StepType extends Component {
 
 StepType.propTypes = {
   changeContent: PropTypes.func.isRequired,
-  deleteProperty: PropTypes.func.isRequired
+  deleteProperty: PropTypes.func.isRequired,
+  deleteError: PropTypes.func.isRequired
 };
 
-export default connect(null, { changeContent, deleteProperty })(StepType);
+export default connect(null, { changeContent, deleteProperty, deleteError })(StepType);
