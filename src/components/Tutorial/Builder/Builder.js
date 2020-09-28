@@ -19,11 +19,15 @@ import Button from '@material-ui/core/Button';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Divider from '@material-ui/core/Divider';
+import FormHelperText from '@material-ui/core/FormHelperText';
 
 const styles = (theme) => ({
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
     color: '#fff',
+  },
+  errorColor: {
+    color: theme.palette.error.dark
   }
 });
 
@@ -138,9 +142,12 @@ class Builder extends Component {
           </label>
           <Button style={{marginRight: '10px', marginBottom: '10px'}} variant='contained' color='primary' onClick={() => this.uploadJsonString()}>String laden</Button>
         </div>
-        <Divider variant='fullWidth' style={{margin: '10px 0 30px 0'}}/>
+        <Divider variant='fullWidth' style={{margin: '10px 0 15px 0'}}/>
 
         {/*Tutorial-Builder-Form*/}
+        {this.props.error.type ?
+          <FormHelperText style={{lineHeight: 'initial'}} className={this.props.classes.errorColor}>{`Ein Tutorial muss mindestens jeweils eine Instruktion und eine Aufgabe enthalten.`}</FormHelperText>
+        : null}
         <Id error={this.props.error.id} value={this.props.id}/>
         <Textfield value={this.props.title} property={'title'} label={'Titel'} error={this.props.error.title}/>
 

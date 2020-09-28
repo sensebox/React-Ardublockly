@@ -169,7 +169,7 @@ export const setSubmitError = () => (dispatch, getState) => {
   if(builder.id === undefined || builder.title === ''){
     dispatch(setError(undefined, 'title'));
   }
-  builder.steps.map((step, i) => {
+  var type = builder.steps.map((step, i) => {
     step.id = i+1;
     if(i === 0){
       if(step.requirements && step.requirements.length > 0){
@@ -195,15 +195,18 @@ export const setSubmitError = () => (dispatch, getState) => {
     if(step.text === undefined || step.text === ''){
       dispatch(setError(i, 'text'));
     }
-    return null;
+    return step.type;
   });
+  if(!(type.filter(item => item === 'task').length > 0 && type.filter(item => item === 'instruction').length > 0)){
+      dispatch(setError(undefined, 'type'));
+  }
 };
 
 
 export const checkError = () => (dispatch, getState) => {
   dispatch(setSubmitError());
   var error = getState().builder.error;
-  if(error.id || error.title){
+  if(error.id || error.title || error.type){
     return true;
   }
   for(var i = 0; i < error.steps.length; i++){
