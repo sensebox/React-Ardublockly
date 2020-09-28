@@ -42,7 +42,7 @@ class Tutorial extends Component {
     var step = steps ? steps[this.props.activeStep] : null;
     var name = step ? `${detectWhitespacesAndReturnReadableResult(tutorial.title)}_${detectWhitespacesAndReturnReadableResult(step.headline)}` : null;
     return (
-      !Number.isInteger(currentTutorialId) || currentTutorialId < 1 || currentTutorialId > tutorials.length ?
+      !Number.isInteger(currentTutorialId) || currentTutorialId < 1 || !tutorial ?
         <NotFound button={{title: 'Zurück zur Tutorials-Übersicht', link: '/tutorial'}}/>
       :
       <div>

@@ -125,7 +125,7 @@ class WorkspaceFunc extends Component {
         this.state.file === 'xml' ? this.saveXmlFile() : this.getSvg()
       }
       else{
-        this.setState({ saveFile: true, file: filetype, open: true, title: this.state.file === 'xml' ? 'Blöcke speichern' : 'Screenshot erstellen', content: `Bitte gib einen Namen für die Bennenung der ${this.state.file === 'xml' ? 'XML' : 'SVG'}-Datei ein und bestätige diesen mit einem Klick auf \'Eingabe\'.` });
+        this.setState({ saveFile: true, file: filetype, open: true, title: this.state.file === 'xml' ? 'Blöcke speichern' : 'Screenshot erstellen', content: `Bitte gib einen Namen für die Bennenung der ${this.state.file === 'xml' ? 'XML' : 'SVG'}-Datei ein und bestätige diesen mit einem Klick auf 'Eingabe'.` });
       }
     });
   }

@@ -87,7 +87,7 @@ class Home extends Component {
               </IconButton>
             </Tooltip>
             <TrashcanButtons />
-            <BlocklyWindow blocklyCSS={{height: '500px'}}/>
+            <BlocklyWindow blocklyCSS={{height: '500px'}} blockDisabled/>
           </Grid>
           {this.state.codeOn ?
             <Grid item xs={12} md={6}>

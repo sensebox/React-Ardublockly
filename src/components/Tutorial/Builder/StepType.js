@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { changeContent } from '../../../actions/tutorialBuilderActions';
+import { changeContent, deleteProperty } from '../../../actions/tutorialBuilderActions';
 
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
@@ -9,9 +9,15 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 class StepType extends Component {
 
+  onChange = (value) => {
+    this.props.changeContent(this.props.index, 'type', value);
+    // delete property 'xml', so that all used blocks are reset
+    this.props.deleteProperty(this.props.index, 'xml');
+  }
+
   render() {
     return (
-      <RadioGroup row value={this.props.value === 'task' ? 'task' : 'instruction'} onChange={(e) => {this.props.changeContent(this.props.index, 'type', e.target.value)}}>
+      <RadioGroup row value={this.props.value === 'task' ? 'task' : 'instruction'} onChange={(e) => this.onChange(e.target.value)}>
         <FormControlLabel style={{color: 'black'}}
           value="instruction"
           control={<Radio color="primary" />}
@@ -31,7 +37,8 @@ class StepType extends Component {
 }
 
 StepType.propTypes = {
-  changeContent: PropTypes.func.isRequired
+  changeContent: PropTypes.func.isRequired,
+  deleteProperty: PropTypes.func.isRequired
 };
 
-export default connect(null, { changeContent })(StepType);
+export default connect(null, { changeContent, deleteProperty })(StepType);
