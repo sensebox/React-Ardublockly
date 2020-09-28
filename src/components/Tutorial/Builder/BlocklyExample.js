@@ -86,7 +86,7 @@ class BlocklyExample extends Component {
       }
       if(!this.props.task){
         // instruction can also display only one block, which does not necessarily
-        // have to be the initial block 
+        // have to be the initial block
         xml = xml.replace('deletable="false"', 'deletable="true"');
       }
       this.setState({xml: xml});
@@ -100,6 +100,7 @@ class BlocklyExample extends Component {
     var oldValue = this.state.checked;
     this.setState({checked: value});
     if(oldValue !== value && !value){
+      this.props.deleteError(this.props.index, 'xml');
       this.props.deleteProperty(this.props.index, 'xml');
     }
   }

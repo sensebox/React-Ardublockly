@@ -48,7 +48,7 @@ class Id extends Component {
     else if(this.props.error){
       this.props.deleteError(undefined, 'id');
     }
-    if(!this.props.value){
+    if(!this.props.value || !Number.isInteger(this.props.value)){
       this.props.tutorialId(0+step);
     }
     else {
