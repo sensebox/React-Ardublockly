@@ -86,7 +86,37 @@ Blockly.Arduino['controls_if'] = function (Block) {
     return code + '\n';
 };
 
-Blockly.Arduino['controls_ifelse'] = Blockly.Arduino['control_if'];
+Blockly.Arduino['controls_ifelse'] = function (Block) {
+    // If/elseif/else condition.
+    let n = 0;
+    let code = '',
+        branchCode,
+        conditionCode;
+    do {
+        conditionCode =
+            Blockly.Arduino.valueToCode(
+                Block,
+                'IF' + n,
+                Blockly.Arduino.ORDER_NONE
+            ) || 'false';
+        branchCode = Blockly.Arduino.statementToCode(Block, 'DO' + n);
+        code +=
+            (n > 0 ? ' else ' : '') +
+            'if (' +
+            conditionCode +
+            ') {\n' +
+            branchCode +
+            '}';
+
+        ++n;
+    } while (Block.getInput('IF' + n));
+
+    if (Block.getInput('ELSE')) {
+        branchCode = Blockly.Arduino.statementToCode(Block, 'ELSE');
+        code += ' else {\n' + branchCode + '}';
+    }
+    return code + '\n';
+}
 
 Blockly.Arduino['logic_negate'] = function (Block) {
     // Negation.
@@ -95,3 +125,30 @@ Blockly.Arduino['logic_negate'] = function (Block) {
     const code = '!' + argument0;
     return [code, order];
 };
+
+
+
+
+
+Blockly.Arduino['switch_case'] = function (block) {
+    var n = 0;
+    var argument = Blockly.Arduino.valueToCode(this, 'CONDITION',
+        Blockly.Arduino.ORDER_NONE) || '';
+    var branch = Blockly.Arduino.statementToCode(block, 'CASECONDITON0' + n);
+    var cases = '';
+    var default_code = '';
+    var DO = Blockly.Arduino.statementToCode(block, ('CASE' + n));
+    for (n = 0; n <= block.caseCount_; n++) {
+        DO = Blockly.Arduino.statementToCode(block, ('CASE' + n));
+        branch = Blockly.Arduino.valueToCode(block, ('CASECONDITION' + n), Blockly.Arduino.ORDER_NONE) || '0';
+        cases += 'case ' + branch + ':\n';
+        cases += DO + '\nbreak;\n';
+    }
+    if (block.defaultCount_) {
+        branch = Blockly.Arduino.statementToCode(block, 'ONDEFAULT');
+        default_code = 'default: \n' + branch + '\n break;\n';
+    }
+    var code = 'switch (' + argument + ') {\n' + cases + default_code + '}';
+    return code + '\n';
+};
+

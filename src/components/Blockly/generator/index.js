@@ -7,11 +7,15 @@ import './sensebox-web';
 import './sensebox-display';
 import './sensebox-lora';
 import './sensebox-led';
+import './sensebox-sd';
 import './logic';
+import './text';
 import './math';
 import './map';
 import './io';
+import './audio';
 import './procedures';
 import './time';
+import './variables';
 
 
