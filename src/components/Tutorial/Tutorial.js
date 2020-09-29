@@ -13,7 +13,7 @@ import NotFound from '../NotFound';
 
 import { detectWhitespacesAndReturnReadableResult } from '../../helpers/whitespace';
 
-import tutorials from './tutorials.json';
+import tutorials from '../../data/tutorials.json';
 
 import Card from '@material-ui/core/Card';
 import Button from '@material-ui/core/Button';
@@ -42,7 +42,7 @@ class Tutorial extends Component {
     var step = steps ? steps[this.props.activeStep] : null;
     var name = step ? `${detectWhitespacesAndReturnReadableResult(tutorial.title)}_${detectWhitespacesAndReturnReadableResult(step.headline)}` : null;
     return (
-      !Number.isInteger(currentTutorialId) || currentTutorialId < 1 || currentTutorialId > tutorials.length ?
+      !Number.isInteger(currentTutorialId) || currentTutorialId < 1 || !tutorial ?
         <NotFound button={{title: 'Zurück zur Tutorials-Übersicht', link: '/tutorial'}}/>
       :
       <div>

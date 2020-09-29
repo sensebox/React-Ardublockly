@@ -18,7 +18,7 @@ class Instruction extends Component {
     return (
       <div>
         <Typography variant='h4' style={{marginBottom: '5px'}}>{step.headline}</Typography>
-        <Typography style={isHardware ? {} : {marginBottom: '5px'}}>{step.text1}</Typography>
+        <Typography style={isHardware ? {} : {marginBottom: '5px'}}>{step.text}</Typography>
         {isHardware ?
           <Hardware picture={step.hardware}/> : null}
         {areRequirements > 0 ?
@@ -27,12 +27,8 @@ class Instruction extends Component {
         <Grid container spacing={2} style={{marginBottom: '5px'}}>
           <Grid item xs={12}>
             <BlocklyWindow
-              trashcan={false}
-              readOnly={true}
-              zoomControls={false}
-              grid={false}
-              move={false}
-              blocklyCSS={{minHeight: '300px'}}
+              svg
+              blockDisabled
               initialXml={step.xml}
             />
           </Grid>

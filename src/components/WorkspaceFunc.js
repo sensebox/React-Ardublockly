@@ -12,20 +12,18 @@ import { initialXml } from './Blockly/initialXml.js';
 
 import Compile from './Compile';
 import SolutionCheck from './Tutorial/SolutionCheck';
+import Dialog from './Dialog';
+import Snackbar from './Snackbar';
 
 import withWidth, { isWidthDown } from '@material-ui/core/withWidth';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
-import Dialog from '@material-ui/core/Dialog';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-import { faPen, faSave, faUpload, faShare } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faSave, faUpload, faCamera, faShare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const styles = (theme) => ({
@@ -61,8 +59,11 @@ class WorkspaceFunc extends Component {
       content: '',
       open: false,
       file: false,
-      saveXml: false,
-      name: props.name
+      saveFile: false,
+      name: props.name,
+      snackbar: false,
+      key: '',
+      message: ''
     };
   }
 
@@ -86,13 +87,47 @@ class WorkspaceFunc extends Component {
     saveAs(blob, fileName);
   }
 
-  createFileName = () => {
-    if(this.state.name){
-      this.saveXmlFile();
+  getSvg = () => {
+    const workspace = Blockly.getMainWorkspace();
+    var canvas = workspace.svgBlockCanvas_.cloneNode(true);
+
+    if (canvas.children[0] !== undefined) {
+      canvas.removeAttribute("transform");
+
+      // does not work in  react
+      // var cssContent = Blockly.Css.CONTENT.join('');
+      var cssContent = '';
+      for (var i = 0; i < document.getElementsByTagName('style').length; i++) {
+        if(/^blockly.*$/.test(document.getElementsByTagName('style')[i].id)){
+          cssContent += document.getElementsByTagName('style')[i].firstChild.data.replace(/\..* \./g, '.');
+        }
+      }
+
+      var css = '<defs><style type="text/css" xmlns="http://www.w3.org/1999/xhtml"><![CDATA[' + cssContent + ']]></style></defs>';
+
+      var bbox = document.getElementsByClassName("blocklyBlockCanvas")[0].getBBox();
+      var content = new XMLSerializer().serializeToString(canvas);
+
+      var xml = `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                  width="${bbox.width}" height="${bbox.height}" viewBox="${bbox.x} ${bbox.y} ${bbox.width} ${bbox.height}">
+                  ${css}">${content}</svg>`;
+      var fileName = detectWhitespacesAndReturnReadableResult(this.state.name);
+      this.props.workspaceName(this.state.name);
+      fileName = `${fileName}.svg`
+      var blob = new Blob([xml], { type: 'image/svg+xml;base64' });
+      saveAs(blob, fileName);
     }
-    else{
-      this.setState({ file: true, saveXml: true, open: true, title: 'Blöcke speichern', content: 'Bitte gib einen Namen für die Bennenung der XML-Datei ein und bestätige diesen mit einem Klick auf \'Eingabe\'.' });
-    }
+  }
+
+  createFileName = (filetype) => {
+    this.setState({file: filetype}, () => {
+      if(this.state.name){
+        this.state.file === 'xml' ? this.saveXmlFile() : this.getSvg()
+      }
+      else{
+        this.setState({ saveFile: true, file: filetype, open: true, title: this.state.file === 'xml' ? 'Blöcke speichern' : 'Screenshot erstellen', content: `Bitte gib einen Namen für die Bennenung der ${this.state.file === 'xml' ? 'XML' : 'SVG'}-Datei ein und bestätige diesen mit einem Klick auf 'Eingabe'.` });
+      }
+    });
   }
 
   setFileName = (e) => {
@@ -124,12 +159,19 @@ class WorkspaceFunc extends Component {
               var extensionPosition = xmlFile.name.lastIndexOf('.');
               this.props.workspaceName(xmlFile.name.substr(0, extensionPosition));
             }
+            this.setState({ snackbar: true, key: Date.now(), message: 'Das Projekt aus gegebener XML-Datei wurde erfolgreich eingefügt.' });
           }
         } catch(err){
           this.setState({ open: true, file: false, title: 'Ungültige XML', content: 'Die XML-Datei konnte nicht in Blöcke zerlegt werden. Bitte überprüfe den XML-Code und versuche es erneut.' });
         }
       };
     }
+  }
+
+  renameWorkspace = () => {
+    this.props.workspaceName(this.state.name);
+    this.toggleDialog();
+    this.setState({ snackbar: true, key: Date.now(), message: `Das Projekt wurde erfolgreich in '${this.state.name}' umbenannt.` });
   }
 
   resetWorkspace = () => {
@@ -145,6 +187,7 @@ class WorkspaceFunc extends Component {
     if(!this.props.solutionCheck){
       this.props.workspaceName(null);
     }
+    this.setState({ snackbar: true, key: Date.now(), message: 'Das Projekt wurde erfolgreich zurückgesetzt.' });
   }
 
   render() {
@@ -152,7 +195,7 @@ class WorkspaceFunc extends Component {
       <div style={{width: 'max-content', display: 'flex'}}>
         {!this.props.solutionCheck ?
           <Tooltip title={`Name des Projekts${this.props.name ? `: ${this.props.name}` : ''}`} arrow style={{marginRight: '5px'}}>
-          <div className={this.props.classes.workspaceName} onClick={() => {this.setState({file: true, open: true, saveXml: false, title: 'Projekt benennen', content: 'Bitte gib einen Namen für das Projekt ein und bestätige diesen mit einem Klick auf \'Eingabe\'.'})}}>
+          <div className={this.props.classes.workspaceName} onClick={() => {this.setState({file: true, open: true, saveFile: false, title: 'Projekt benennen', content: 'Bitte gib einen Namen für das Projekt ein und bestätige diesen mit einem Klick auf \'Eingabe\'.'})}}>
             {this.props.name && !isWidthDown('xs', this.props.width) ? <Typography style={{margin: 'auto -3px auto 12px'}}>{this.props.name}</Typography> : null}
             <div style={{width: '40px', display: 'flex'}}>
               <FontAwesomeIcon icon={faPen} style={{height: '18px', width: '18px', margin: 'auto'}}/>
@@ -164,7 +207,7 @@ class WorkspaceFunc extends Component {
         <Tooltip title='Blöcke speichern' arrow style={{marginRight: '5px'}}>
           <IconButton
             className={this.props.classes.button}
-            onClick={() => this.createFileName()}
+            onClick={() => {this.createFileName('xml');}}
           >
             <FontAwesomeIcon icon={faSave} size="xs"/>
           </IconButton>
@@ -187,6 +230,14 @@ class WorkspaceFunc extends Component {
             </Tooltip>
           </label>
         </div>
+        <Tooltip title='Screenshot erstellen' arrow style={{marginRight: '5px'}}>
+          <IconButton
+            className={this.props.classes.button}
+            onClick={() => {this.createFileName('svg');}}
+          >
+            <FontAwesomeIcon icon={faCamera} size="xs" />
+          </IconButton>
+        </Tooltip>
         <Tooltip title='Workspace zurücksetzen' arrow>
           <IconButton
             className={this.props.classes.button}
@@ -195,23 +246,30 @@ class WorkspaceFunc extends Component {
             <FontAwesomeIcon icon={faShare} size="xs" flip='horizontal'/>
           </IconButton>
         </Tooltip>
-        <Dialog onClose={this.toggleDialog} open={this.state.open}>
-          <DialogTitle>{this.state.title}</DialogTitle>
-          <DialogContent dividers>
-            {this.state.content}
-            {this.state.file ?
-              <div style={{marginTop: '10px'}}>
-                <TextField autoFocus placeholder={this.state.saveXml ?'Dateiname' : 'Projektname'} value={this.state.name} onChange={this.setFileName} style={{marginRight: '10px'}}/>
-                <Button disabled={!this.state.name} variant='contained' color='primary' onClick={() => {this.state.saveXml ? this.saveXmlFile() : this.props.workspaceName(this.state.name); this.toggleDialog();}}>Eingabe</Button>
-              </div>
-            : null}
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.state.file ? () => {this.toggleDialog(); this.setState({name: this.props.name})} : this.toggleDialog} color="primary">
-              {this.state.file ? 'Abbrechen' : 'Schließen'}
-            </Button>
-          </DialogActions>
+
+        <Dialog
+          open={this.state.open}
+          title={this.state.title}
+          content={this.state.content}
+          onClose={this.toggleDialog}
+          onClick={this.state.file ? () => {this.toggleDialog(); this.setState({name: this.props.name})} : this.toggleDialog}
+          button={this.state.file ? 'Abbrechen' : 'Schließen'}
+        >
+          {this.state.file ?
+            <div style={{marginTop: '10px'}}>
+              <TextField autoFocus placeholder={this.state.saveXml ?'Dateiname' : 'Projektname'} value={this.state.name} onChange={this.setFileName} style={{marginRight: '10px'}}/>
+              <Button disabled={!this.state.name} variant='contained' color='primary' onClick={() => {this.state.saveFile ? this.state.file === 'xml' ? this.saveXmlFile() : this.getSvg() : this.renameWorkspace(); this.toggleDialog();}}>Eingabe</Button>
+            </div>
+          : null}
         </Dialog>
+
+        <Snackbar
+          open={this.state.snackbar}
+          message={this.state.message}
+          type='success'
+          key={this.state.key}
+        />
+
       </div>
     );
   };
