@@ -2,6 +2,7 @@ import Blockly from 'blockly';
 import { getColour } from '../helpers/colour'
 import * as Types from '../helpers/types'
 import { selectedBoard } from '../helpers/board'
+import { colors } from '@material-ui/core';
 
 /**
  * HDC1080 Temperature and Humidity Sensor
@@ -16,7 +17,7 @@ Blockly.Blocks['sensebox_sensor_temp_hum'] = {
       .setAlign(Blockly.ALIGN_RIGHT)
       .appendField(Blockly.Msg.senseBox_value)
       .appendField(new Blockly.FieldDropdown([[Blockly.Msg.senseBox_temp, "Temperature"], [Blockly.Msg.senseBox_hum, "Humidity"]]), "NAME");
-    this.setOutput(true, Types.NUMBER.typeId);
+    this.setOutput(true, Types.DECIMAL.typeId);
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_temp_hum_tip);
     this.setHelpUrl('https://edu.books.sensebox.de/de/projekte/diy_umweltstation/temp_und_luftfeuchte.html');
@@ -124,6 +125,8 @@ Blockly.Blocks['sensebox_sensor_pressure'] = {
     this.setOutput(true, Types.NUMBER.typeId);
     this.setTooltip(Blockly.Msg.senseBox_pressure_tip);
     this.setHelpUrl('https://edu.books.sensebox.de/de/projekte/diy_umweltstation/luftdruck.html');
+    var input = this.getFieldValue('NAME');
+    console.log(input);
   },
   /**
    * Parse XML to restore the number of pins available.
@@ -231,7 +234,7 @@ Blockly.Blocks['sensebox_sensor_ultrasonic_ranger'] = {
       .appendField(Blockly.Msg.senseBox_ultrasonic_echo)
       .appendField(new Blockly.FieldDropdown(
         selectedBoard().digitalPins), 'ultrasonic_echo');
-    this.setOutput(true, Types.NUMBER.typeId);
+    this.setOutput(true, 'int');
     this.setTooltip(Blockly.Msg.senseBox_ultrasonic_tip);
     this.setHelpUrl('https://sensebox.de/books');
   },
@@ -283,7 +286,7 @@ Blockly.Blocks['sensebox_sensor_ultrasonic_ranger'] = {
   },
 
   getBlockType: function () {
-    return Blockly.Types.NUMBER;
+    return Blockly.Types.SHORT_NUMBER;
   }
 };
 

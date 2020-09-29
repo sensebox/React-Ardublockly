@@ -12,6 +12,7 @@
 /** Single character. */
 export const CHARACTER = {
     typeId: 'Character',
+    typeName: 'char',
     typeMsgName: 'ARD_TYPE_CHAR',
     compatibleTypes: []
 }
@@ -31,14 +32,15 @@ export const TEXT = {
 
 /** Short integer number. */
 export const SHORT_NUMBER = {
-    typeId: 'Short Number',
+    typeId: 'Short_Number',
+    typeName: 'int',
     typeMsgName: 'ARD_TYPE_SHORT',
-    compatibleTypes: []    // Circular dependencies, add after all declarations
+    compatibleTypes: ['int', 'float',]    // Circular dependencies, add after all declarations
 }
 
 /** Integer number. */
 export const NUMBER = {
-    typeId: 'Number',
+    typeId: 'int',
     typeMsgName: 'ARD_TYPE_NUMBER',
     compatibleTypes: ['Number']    // Circular dependencies, add after all declarations
 }
@@ -52,12 +54,12 @@ export const LARGE_NUMBER = {
 
 /** Decimal/floating point number. */
 export const DECIMAL = {
-    typeId: 'Decimal',
+    typeId: 'float',
     typeMsgName: 'ARD_TYPE_DECIMAL',
     compatibleTypes: [BOOLEAN.typeId,
-        NUMBER,
-        SHORT_NUMBER,
-        LARGE_NUMBER]
+    NUMBER.typeId,
+    SHORT_NUMBER.typeId,
+    LARGE_NUMBER.typeId]
 }
 
 /** Array/List of items. */
@@ -88,8 +90,23 @@ export const CHILD_BLOCK_MISSING = {
     compatibleTypes: []
 }
 
+const compatibleTypes = {
+    boolean: ['boolean'],
+    int: ['int'],
+    char: ['char'],
+    string: ['String'],
+    void: ['void'],
+    long: ['int', 'long'],
+    double: ['int', 'long', 'double'],
+    float: ['int', 'long', 'double', 'float']
 
-export const VARIABLE_TYPES = ['Number', 'String', 'Boolean', 'Colour'];
+}
+
+export const getCompatibleTypes = (type) => {
+    return compatibleTypes[type];
+};
+
+export const VARIABLE_TYPES = [['SHORT_NUMBER', 'char'], ['NUMBER', 'int'], ['DECIMAL', 'long'], ['TEXT', 'String'], ['CHARACTER', 'char'], ['BOOLEAN', 'boolean'], ['NULL', 'void'], ['UNDEF', 'undefined']];
 
 // /**
 //  * Some Types have circular dependencies on their compatibilities, so add them
