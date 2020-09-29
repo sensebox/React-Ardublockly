@@ -1,4 +1,4 @@
-import Blockly, { FieldVariable } from 'blockly/core';
+import Blockly from 'blockly/core';
 import { getColour } from '../helpers/colour';
 import { getCompatibleTypes } from '../helpers/types'
 
@@ -12,12 +12,14 @@ Blockly.Blocks['variables_set_dynamic'] = {
         this.setNextStatement(true, null);
         this.appendValueInput('VALUE')
             .appendField('set', 'set')
+            .appendField('', 'type')
             .appendField(new Blockly.FieldVariable('VAR'), 'VAR')
             .appendField('to');
     },
     onchange: function (e) {
         let variableID = this.getFieldValue('VAR');
         let variable = Blockly.getMainWorkspace().getVariableMap().getVariableById(variableID)
+        this.getField('type').setValue(variable.type);
         this.getInput('VALUE').setCheck(getCompatibleTypes(variable.type));
 
     }

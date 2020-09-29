@@ -11,7 +11,7 @@ Blockly.Blocks['io_tone'] = {
             .appendField(new Blockly.FieldDropdown(
                 selectedBoard().digitalPins), "TONEPIN");
         this.appendValueInput("FREQUENCY")
-            .setCheck(Types.NUMBER.checkList)
+            .setCheck(Types.getCompatibleTypes('int'))
             .appendField(Blockly.Msg.ARD_TONEFREQ);
         this.appendDummyInput()
             .appendField("Hz");
@@ -39,10 +39,6 @@ Blockly.Blocks['io_tone'] = {
         } else {
             this.setWarningText(null, 'io_tone');
         }
-    },
-    /** @return {!string} The type of input value for the block, an integer. */
-    getBlockType: function () {
-        return Blockly.Types.NUMBER;
     }
 };
 
