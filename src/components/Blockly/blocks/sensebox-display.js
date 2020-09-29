@@ -50,6 +50,8 @@ Blockly.Blocks['sensebox_display_printDisplay'] = {
             .setCheck(null);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
+        let variableName = this.getField('COLOR');
+        console.log(variableName.getValue());
         this.setTooltip(Blockly.Msg.senseBox_display_printDisplay_tip);
         this.setHelpUrl('https://sensebox.de/books');
     },

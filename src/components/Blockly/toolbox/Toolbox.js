@@ -14,9 +14,9 @@ class Toolbox extends React.Component {
 
     componentDidUpdate() {
         this.props.workspace.registerToolboxCategoryCallback('CREATE_TYPED_VARIABLE', this.createFlyout);
-         
-         const typedVarModal = new TypedVariableModal(this.props.workspace, 'callbackName', [['SHORT_NUMBER', 'char'], ['NUMBER', 'int'], ['DECIMAL', 'long'], ['TEXT', 'String'], ['CHARACTER', 'char'], ['BOOLEAN', 'boolean'], ['NULL', 'void'], ['UNDEF', 'undefined']]);
-         typedVarModal.init();
+
+        const typedVarModal = new TypedVariableModal(this.props.workspace, 'callbackName', [['SHORT_NUMBER', 'char'], ['NUMBER', 'int'], ['DECIMAL', 'float'], ['TEXT', 'String'], ['CHARACTER', 'char'], ['BOOLEAN', 'boolean'], ['NULL', 'void'], ['UNDEF', 'undefined']]);
+        typedVarModal.init();
     }
 
     createFlyout(workspace) {
@@ -25,9 +25,9 @@ class Toolbox extends React.Component {
         const button = document.createElement('button');
         button.setAttribute('text', 'Create Typed Variable');
         button.setAttribute('callbackKey', 'callbackName');
-    
+
         xmlList.push(button);
-    
+
         // This gets all the variables that the user creates and adds them to the
         // flyout.
         const blockList = Blockly.VariablesDynamic.flyoutCategoryBlocks(workspace);
@@ -38,169 +38,169 @@ class Toolbox extends React.Component {
     render() {
         return (
             <xml xmlns="https://developers.google.com/blockly/xml" id="blockly" style={{ display: 'none' }} ref={this.props.toolbox}>
-                    <Category name="Sensoren" colour={getColour().sensebox}>
-                        <Block type="sensebox_sensor_temp_hum" />
-                        <Block type="sensebox_sensor_uv_light" />
-                        <Block type="sensebox_sensor_bmx055_accelerometer" />
-                        <Block type="sensebox_sensor_sds011" />
-                        <Block type="sensebox_sensor_pressure" />
-                        <Block type="sensebox_sensor_bme680_bsec" />
-                        <Block type="sensebox_sensor_ultrasonic_ranger" />
-                        <Block type="sensebox_sensor_sound" />
-                    </Category >
-                    <Category name="WIFI" colour={getColour().sensebox}>
-                        <Block type="sensebox_wifi" />
-                        <Block type="sensebox_startap" />
+                <Category name="Sensoren" colour={getColour().sensebox}>
+                    <Block type="sensebox_sensor_temp_hum" />
+                    <Block type="sensebox_sensor_uv_light" />
+                    <Block type="sensebox_sensor_bmx055_accelerometer" />
+                    <Block type="sensebox_sensor_sds011" />
+                    <Block type="sensebox_sensor_pressure" />
+                    <Block type="sensebox_sensor_bme680_bsec" />
+                    <Block type="sensebox_sensor_ultrasonic_ranger" />
+                    <Block type="sensebox_sensor_sound" />
+                </Category >
+                <Category name="WIFI" colour={getColour().sensebox}>
+                    <Block type="sensebox_wifi" />
+                    <Block type="sensebox_startap" />
+                </Category>
+                <Category name="SD" colour={getColour().sensebox}>
+                    <Block type="sensebox_sd_create_file" />
+                    <Block type="sensebox_sd_open_file" />
+                    <Block type="sensebox_sd_write_file" />
+                </Category>
+                <Category name="LED" colour={getColour().sensebox}>
+                    <Block type="sensebox_rgb_led" />
+                    <Block type="sensebox_led" />
+                </Category>
+                <Category name="Display" colour={getColour().sensebox}>
+                    <Block type="sensebox_display_beginDisplay" />
+                    <Block type="sensebox_display_show" />
+                    <Block type="sensebox_display_clearDisplay" />
+                    <Block type="sensebox_display_printDisplay">
+                        <Value name="SIZE">
+                            <Block type="math_number">
+                                <Field name="NUM">1</Field>
+                            </Block>
+                        </Value>
+                        <Value name="X">
+                            <Block type="math_number">
+                                <Field name="NUM">0</Field>
+                            </Block>
+                        </Value>
+                        <Value name="Y">
+                            <Block type="math_number">
+                                <Field name="NUM">0</Field>
+                            </Block>
+                        </Value>
+                    </Block>
+                    <Block type="sensebox_display_plotDisplay">
+                        <Value name="Title">
+                            <Block type="text">
+                            </Block>
+                        </Value>
+                        <Value name="YLabel">
+                            <Block type="text">
+                            </Block>
+                        </Value>
+                        <Value name="XLabel">
+                            <Block type="text">
+                            </Block>
+                        </Value>
+                        <Value name="XRange1">
+                            <Block type="math_number">
+                                <Field name="NUM">0</Field>
+                            </Block>
+                        </Value>
+                        <Value name="XRange2">
+                            <Block type="math_number">
+                                <Field name="NUM">15</Field>
+                            </Block>
+                        </Value>
+                        <Value name="YRange1">
+                            <Block type="math_number">
+                                <Field name="NUM">0</Field>
+                            </Block>
+                        </Value>
+                        <Value name="YRange2">
+                            <Block type="math_number">
+                                <Field name="NUM">50</Field>
+                            </Block>
+                        </Value>
+                        <Value name="XTick">
+                            <Block type="math_number">
+                                <Field name="NUM">5</Field>
+                            </Block>
+                        </Value>
+                        <Value name="YTick">
+                            <Block type="math_number">
+                                <Field name="NUM">0</Field>
+                            </Block>
+                        </Value>
+                        <Value name="TimeFrame">
+                            <Block type="math_number">
+                                <Field name="NUM">15</Field>
+                            </Block>
+                        </Value>
+                    </Block>
+                    <Block type="sensebox_display_fillCircle">
+                        <Value name="X">
+                            <Block type="math_number">
+                                <Field name="NUM">0</Field>
+                            </Block>
+                        </Value>
+                        <Value name="Y">
+                            <Block type="math_number">
+                                <Field name="NUM">0</Field>
+                            </Block>
+                        </Value>
+                        <Value name="Radius">
+                            <Block type="math_number">
+                                <Field name="NUM">0</Field>
+                            </Block>
+                        </Value>
+                    </Block>
+                    <Block type="sensebox_display_drawRectangle">
+                        <Value name="X">
+                            <Block type="math_number">
+                                <Field name="NUM">0</Field>
+                            </Block>
+                        </Value>
+                        <Value name="Y">
+                            <Block type="math_number">
+                                <Field name="NUM">0</Field>
+                            </Block>
+                        </Value>
+                        <Value name="height">
+                            <Block type="math_number">
+                                <Field name="NUM">0</Field>
+                            </Block>
+                        </Value>
+                        <Value name="width">
+                            <Block type="math_number">
+                                <Field name="NUM">0</Field>
+                            </Block>
+                        </Value>
+                    </Block>
+                </Category>
+                <Category name="Telegram" colour={getColour().sensebox}>
+                    <Block type="sensebox_telegram" />
+                    <Block type="sensebox_telegram_do" />
+                    <Block type="sensebox_telegram_do_on_message" />
+                    <Block type="sensebox_telegram_send" />
+                </Category>
+                <Category name="openSenseMap" colour={getColour().sensebox}>
+                    <Block type="sensebox_osem_connection" />
+                    <Block type="sensebox_send_to_osem" />
+                </Category>
+                <Category id="catSenseBoxOutput_LoRa" name="  LoRa" colour={getColour().sensebox}>
+                    <Category id="catSenseBoxOutput_LoRa_activation" name="  Activation" colour={getColour().sensebox}>
+                        <Block type="sensebox_lora_initialize_otaa" />
+                        <Block type="sensebox_lora_initialize_abp" />
                     </Category>
-                    <Category name="SD" colour={getColour().sensebox}>
-                        <Block type="sensebox_sd_create_file" />
-                        <Block type="sensebox_sd_open_file" />
-                        <Block type="sensebox_sd_write_file" />
+                    <Category id="catSenseBoxOutput_LoRa_loramessage" name="    Lora Message" colour={getColour().sensebox}>
+                        <Block type="sensebox_lora_message_send" />
+                        <Block type="sensebox_send_lora_sensor_value" />
                     </Category>
-                    <Category name="LED" colour={getColour().sensebox}>
-                        <Block type="sensebox_rgb_led" />
-                        <Block type="sensebox_led" />
+                    <Category id="catSenseBoxOutput_LoRa_cayenne" name="    Cayenne LPP" colour={getColour().sensebox}>
+                        <Block type="sensebox_lora_cayenne_send" />
+                        <Block type="sensebox_lora_cayenne_temperature" />
+                        <Block type="sensebox_lora_cayenne_humidity" />
+                        <Block type="sensebox_lora_cayenne_pressure" />
+                        <Block type="sensebox_lora_cayenne_luminosity" />
+                        <Block type="sensebox_lora_cayenne_sensor" />
+                        <Block type="sensebox_lora_cayenne_accelerometer" />
+                        <Block type="sensebox_lora_cayenne_gps" />
                     </Category>
-                    <Category name="Display" colour={getColour().sensebox}>
-                        <Block type="sensebox_display_beginDisplay" />
-                        <Block type="sensebox_display_show" />
-                        <Block type="sensebox_display_clearDisplay" />
-                        <Block type="sensebox_display_printDisplay">
-                            <Value name="SIZE">
-                                <Block type="math_number">
-                                    <Field name="NUM">1</Field>
-                                </Block>
-                            </Value>
-                            <Value name="X">
-                                <Block type="math_number">
-                                    <Field name="NUM">0</Field>
-                                </Block>
-                            </Value>
-                            <Value name="Y">
-                                <Block type="math_number">
-                                    <Field name="NUM">0</Field>
-                                </Block>
-                            </Value>
-                        </Block>
-                        <Block type="sensebox_display_plotDisplay">
-                            <Value name="Title">
-                                <Block type="text">
-                                </Block>
-                            </Value>
-                            <Value name="YLabel">
-                                <Block type="text">
-                                </Block>
-                            </Value>
-                            <Value name="XLabel">
-                                <Block type="text">
-                                </Block>
-                            </Value>
-                            <Value name="XRange1">
-                                <Block type="math_number">
-                                    <Field name="NUM">0</Field>
-                                </Block>
-                            </Value>
-                            <Value name="XRange2">
-                                <Block type="math_number">
-                                    <Field name="NUM">15</Field>
-                                </Block>
-                            </Value>
-                            <Value name="YRange1">
-                                <Block type="math_number">
-                                    <Field name="NUM">0</Field>
-                                </Block>
-                            </Value>
-                            <Value name="YRange2">
-                                <Block type="math_number">
-                                    <Field name="NUM">50</Field>
-                                </Block>
-                            </Value>
-                            <Value name="XTick">
-                                <Block type="math_number">
-                                    <Field name="NUM">5</Field>
-                                </Block>
-                            </Value>
-                            <Value name="YTick">
-                                <Block type="math_number">
-                                    <Field name="NUM">0</Field>
-                                </Block>
-                            </Value>
-                            <Value name="TimeFrame">
-                                <Block type="math_number">
-                                    <Field name="NUM">15</Field>
-                                </Block>
-                            </Value>
-                        </Block>
-                        <Block type="sensebox_display_fillCircle">
-                            <Value name="X">
-                                <Block type="math_number">
-                                    <Field name="NUM">0</Field>
-                                </Block>
-                            </Value>
-                            <Value name="Y">
-                                <Block type="math_number">
-                                    <Field name="NUM">0</Field>
-                                </Block>
-                            </Value>
-                            <Value name="Radius">
-                                <Block type="math_number">
-                                    <Field name="NUM">0</Field>
-                                </Block>
-                            </Value>
-                        </Block>
-                        <Block type="sensebox_display_drawRectangle">
-                            <Value name="X">
-                                <Block type="math_number">
-                                    <Field name="NUM">0</Field>
-                                </Block>
-                            </Value>
-                            <Value name="Y">
-                                <Block type="math_number">
-                                    <Field name="NUM">0</Field>
-                                </Block>
-                            </Value>
-                            <Value name="height">
-                                <Block type="math_number">
-                                    <Field name="NUM">0</Field>
-                                </Block>
-                            </Value>
-                            <Value name="width">
-                                <Block type="math_number">
-                                    <Field name="NUM">0</Field>
-                                </Block>
-                            </Value>
-                        </Block>
-                    </Category>
-                    <Category name="Telegram" colour={getColour().sensebox}>
-                        <Block type="sensebox_telegram" />
-                        <Block type="sensebox_telegram_do" />
-                        <Block type="sensebox_telegram_do_on_message" />
-                        <Block type="sensebox_telegram_send" />
-                    </Category>
-                    <Category name="openSenseMap" colour={getColour().sensebox}>
-                        <Block type="sensebox_osem_connection" />
-                        <Block type="sensebox_send_to_osem" />
-                    </Category>
-                    <Category id="catSenseBoxOutput_LoRa" name="  LoRa" colour={getColour().sensebox}>
-                        <Category id="catSenseBoxOutput_LoRa_activation" name="  Activation" colour={getColour().sensebox}>
-                            <Block type="sensebox_lora_initialize_otaa" />
-                            <Block type="sensebox_lora_initialize_abp" />
-                        </Category>
-                        <Category id="catSenseBoxOutput_LoRa_loramessage" name="    Lora Message" colour={getColour().sensebox}>
-                            <Block type="sensebox_lora_message_send" />
-                            <Block type="sensebox_send_lora_sensor_value" />
-                        </Category>
-                        <Category id="catSenseBoxOutput_LoRa_cayenne" name="    Cayenne LPP" colour={getColour().sensebox}>
-                            <Block type="sensebox_lora_cayenne_send" />
-                            <Block type="sensebox_lora_cayenne_temperature" />
-                            <Block type="sensebox_lora_cayenne_humidity" />
-                            <Block type="sensebox_lora_cayenne_pressure" />
-                            <Block type="sensebox_lora_cayenne_luminosity" />
-                            <Block type="sensebox_lora_cayenne_sensor" />
-                            <Block type="sensebox_lora_cayenne_accelerometer" />
-                            <Block type="sensebox_lora_cayenne_gps" />
-                        </Category>
-                    </Category>
+                </Category>
                 <Category name="Logic" colour={getColour().logic}>
                     <Block type="controls_if" />
                     <Block type="controls_ifelse" />
