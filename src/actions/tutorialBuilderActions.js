@@ -170,6 +170,8 @@ export const setSubmitError = () => (dispatch, getState) => {
     dispatch(setError(undefined, 'title'));
   }
   var type = builder.steps.map((step, i) => {
+    // picture and xml are directly checked for errors in their components and
+    // therefore do not have to be checked again
     step.id = i+1;
     if(i === 0){
       if(step.requirements && step.requirements.length > 0){
@@ -255,9 +257,29 @@ export const readJSON = (json) => (dispatch, getState) => {
       steps: json.steps.map(() => {return {};})
     }
   });
+  // accept only valid attributes
+  var steps = json.steps.map((step, i) => {
+    var object = {
+      id: step.id,
+      type: step.type,
+      headline: step.headline,
+      text: step.text
+    };
+    if(i === 0){
+      object.hardware = step.hardware;
+      object.requirements = step.requirements;
+    }
+    if(step.xml){
+      object.xml = step.xml;
+    }
+    if(step.picture && step.type === 'instruction'){
+      object.picture = step.picture;
+    }
+    return object;
+  });
   dispatch(tutorialTitle(json.title));
   dispatch(tutorialId(json.id));
-  dispatch(tutorialSteps(json.steps));
+  dispatch(tutorialSteps(steps));
   dispatch(setSubmitError());
   dispatch(progress(false));
 };
