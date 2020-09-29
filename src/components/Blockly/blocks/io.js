@@ -56,7 +56,7 @@ Blockly.Blocks['io_digitalread'] = {
             .appendField(Blockly.Msg.ARD_DIGITALREAD)
             .appendField(new Blockly.FieldDropdown(
                 selectedBoard().digitalPins), 'PIN');
-        this.setOutput(true, Types.BOOLEAN);
+        this.setOutput(true, 'boolean');
         this.setTooltip(Blockly.Msg.ARD_DIGITALREAD_TIP);
     },
     /** @return {!string} The type of return value for the block, an integer. */

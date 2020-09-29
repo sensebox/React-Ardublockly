@@ -19,9 +19,9 @@ Blockly.Arduino['arduino_functions'] = function (block) {
     }
 
     var setupBranch = Blockly.Arduino.statementToCode(block, 'SETUP_FUNC');
-    //var setupCode = Blockly.Arduino.scrub_(block, setupBranch); No comment block
+    // //var setupCode = Blockly.Arduino.scrub_(block, setupBranch); No comment block
     if (setupBranch) {
-        Blockly.Arduino.setupCode_('userSetupCode', setupBranch, true);
+        Blockly.Arduino.setupCode_['mainsetup'] = setupBranch;
     }
 
     var loopBranch = statementToCodeNoTab(block, 'LOOP_FUNC');

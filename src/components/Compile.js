@@ -65,7 +65,7 @@ class Compile extends Component {
     };
     fetch(`${process.env.REACT_APP_COMPILER_URL}/compile`, {
       method: "POST",
-      headers: {'Content-Type': 'application/json'},
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     })
     .then(response => response.json())
@@ -157,5 +157,6 @@ const mapStateToProps = state => ({
   arduino: state.workspace.code.arduino,
   name: state.workspace.name
 });
+
 
 export default connect(mapStateToProps, { workspaceName })(withStyles(styles, {withTheme: true})(Compile));
