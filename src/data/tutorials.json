@@ -63,8 +63,8 @@
                 "id": 3,
                 "type": "instruction",
                 "headline": "Block richtig einbinden",
-                "text": "",
-                "xml": "<xml xmlns='https://developers.google.com/blockly/xml'><block type='arduino_functions' id='QWW|$jB8+*EL;}|#uA' deletable='false' x='27' y='16'><statement name='SETUP_FUNC'><block type='sensebox_wifi' id='W}P2Y^g,muH@]|@anou}'><field name='SSID'>SSID</field><field name='Password'>Password</field></block></statement></block></xml>"
+                "text": "Dies ist ein Test.",
+                "picture": "block_en.svg"
             },
             {
                 "id": 4,
