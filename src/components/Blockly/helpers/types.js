@@ -14,20 +14,18 @@ export const CHARACTER = {
     typeId: 'Character',
     typeName: 'char',
     typeMsgName: 'ARD_TYPE_CHAR',
-    compatibleTypes: []
 }
 
 export const BOOLEAN = {
     typeId: 'Boolean',
     typeMsgName: 'ARD_TYPE_BOOL',
-    compatibleTypes: ['Boolean']
 }
 
 /** Text string. */
 export const TEXT = {
     typeId: 'Text',
+    typeName: 'String',
     typeMsgName: 'ARD_TYPE_TEXT',
-    compatibleTypes: []
 }
 
 /** Short integer number. */
@@ -35,36 +33,33 @@ export const SHORT_NUMBER = {
     typeId: 'Short_Number',
     typeName: 'int',
     typeMsgName: 'ARD_TYPE_SHORT',
-    compatibleTypes: ['int', 'float',]    // Circular dependencies, add after all declarations
 }
 
 /** Integer number. */
 export const NUMBER = {
-    typeId: 'int',
+    typeId: 'Number',
+    typeName: 'int',
     typeMsgName: 'ARD_TYPE_NUMBER',
-    compatibleTypes: ['Number']    // Circular dependencies, add after all declarations
 }
 
 /** Large integer number. */
 export const LARGE_NUMBER = {
     typeId: 'Large Number',
+    typeName: 'long',
     typeMsgName: 'ARD_TYPE_LONG',
-    compatibleTypes: []    // Circular dependencies, add after all declarations
 }
 
 /** Decimal/floating point number. */
 export const DECIMAL = {
-    typeId: 'float',
+    typeId: 'Decimal',
+    typeName: 'float',
     typeMsgName: 'ARD_TYPE_DECIMAL',
-    compatibleTypes: [BOOLEAN.typeId,
-    NUMBER.typeId,
-    SHORT_NUMBER.typeId,
-    LARGE_NUMBER.typeId]
 }
 
 /** Array/List of items. */
 export const ARRAY = {
     typeId: 'Array',
+    typeName: 'array',
     typeMsgName: 'ARD_TYPE_ARRAY',
     compatibleTypes: []
 }
@@ -72,15 +67,15 @@ export const ARRAY = {
 /** Null indicate there is no type. */
 export const NULL = {
     typeId: 'Null',
+    typeName: 'void',
     typeMsgName: 'ARD_TYPE_NULL',
-    compatibleTypes: []
 }
 
 /** Type not defined, or not yet defined. */
 export const UNDEF = {
     typeId: 'Undefined',
+    typeName: 'undef',
     typeMsgName: 'ARD_TYPE_UNDEF',
-    compatibleTypes: []
 }
 
 /** Set when no child block (meant to define the variable type) is connected. */
