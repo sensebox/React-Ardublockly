@@ -6,18 +6,16 @@ import { tutorialCheck, tutorialStep } from '../../actions/tutorialActions';
 import { withRouter } from 'react-router-dom';
 
 import Compile from '../Compile';
+import Dialog from '../Dialog';
 
-import tutorials from './tutorials.json';
+import tutorials from '../../data/tutorials.json';
 import { checkXml } from '../../helpers/compareXml';
 
 import { withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Button from '@material-ui/core/Button';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
-import Dialog from '@material-ui/core/Dialog';
+
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -69,41 +67,44 @@ class SolutionCheck extends Component {
             <FontAwesomeIcon icon={faPlay} size="xs"/>
           </IconButton>
         </Tooltip>
-        <Dialog fullWidth maxWidth={'sm'} onClose={this.toggleDialog} open={this.state.open} style={{zIndex: 9999999}}>
-          <DialogTitle>{this.state.msg.type === 'error' ? 'Fehler' : 'Erfolg'}</DialogTitle>
-          <DialogContent dividers>
-            {this.state.msg.text}
-            {this.state.msg.type === 'success' ?
-              <div style={{marginTop: '20px', display: 'flex'}}>
-                <Compile />
-                {this.props.activeStep === steps.length-1 ?
-                  <Button
-                    style={{marginLeft: '10px'}}
-                    variant="contained"
-                    color="primary"
-                    onClick={() => {this.toggleDialog(); this.props.history.push(`/tutorial/`)}}
-                  >
-                    Tutorials-Übersicht
-                  </Button>
-                :
-                  <Button
-                    style={{marginLeft: '10px'}}
-                    variant="contained"
-                    color="primary"
-                    onClick={() => {this.toggleDialog(); this.props.tutorialStep(this.props.activeStep + 1)}}
-                  >
-                    nächster Schritt
-                  </Button>
-                }
-              </div>
-            : null}
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.toggleDialog} color="primary">
-              Schließen
-            </Button>
-          </DialogActions>
+
+        <Dialog
+          style={{zIndex: 9999999}}
+          fullWidth
+          maxWidth={'sm'}
+          open={this.state.open}
+          title={this.state.msg.type === 'error' ? 'Fehler' : 'Erfolg'}
+          content={this.state.msg.text}
+          onClose={this.toggleDialog}
+          onClick={this.toggleDialog}
+          button={'Schließen'}
+        >
+          {this.state.msg.type === 'success' ?
+            <div style={{marginTop: '20px', display: 'flex'}}>
+              <Compile />
+              {this.props.activeStep === steps.length-1 ?
+                <Button
+                  style={{marginLeft: '10px'}}
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {this.toggleDialog(); this.props.history.push(`/tutorial/`)}}
+                >
+                  Tutorials-Übersicht
+                </Button>
+              :
+                <Button
+                  style={{marginLeft: '10px'}}
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {this.toggleDialog(); this.props.tutorialStep(this.props.activeStep + 1)}}
+                >
+                  nächster Schritt
+                </Button>
+              }
+            </div>
+          : null}
         </Dialog>
+
       </div>
     );
   };

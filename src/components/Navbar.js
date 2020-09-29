@@ -17,7 +17,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 
-import { faBars, faChevronLeft, faBuilding, faIdCard, faEnvelope, faCog, faChalkboardTeacher } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faChevronLeft, faBuilding, faIdCard, faEnvelope, faCog, faChalkboardTeacher, faFolderPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const styles = (theme) => ({
@@ -96,8 +96,8 @@ class Navbar extends Component {
             </div>
           </div>
           <List>
-            {[{text: 'Tutorials', icon: faChalkboardTeacher}, {text: 'Einstellungen', icon: faCog}].map((item, index) => (
-              <Link to={"/tutorial"} key={index} style={{textDecoration: 'none', color: 'inherit'}}>
+            {[{text: 'Tutorials', icon: faChalkboardTeacher, link: "/tutorial"}, {text: 'Tutorial-Builder', icon: faFolderPlus, link: "/tutorial/builder"}, {text: 'Einstellungen', icon: faCog, link: "/settings"}].map((item, index) => (
+              <Link to={item.link} key={index} style={{textDecoration: 'none', color: 'inherit'}}>
                 <ListItem button onClick={this.toggleDrawer}>
                   <ListItemIcon><FontAwesomeIcon icon={item.icon}/></ListItemIcon>
                   <ListItemText primary={item.text} />

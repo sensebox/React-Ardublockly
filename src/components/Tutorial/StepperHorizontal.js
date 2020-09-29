@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 
 import clsx from 'clsx';
 
-import tutorials from './tutorials.json';
+import tutorials from '../../data/tutorials.json';
 
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
