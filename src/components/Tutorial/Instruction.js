@@ -23,6 +23,11 @@ class Instruction extends Component {
           <Hardware picture={step.hardware}/> : null}
         {areRequirements > 0 ?
           <Requirement tutorialIds={step.requirements}/> : null}
+        {step.picture ?
+          <div style={{display: 'flex', justifyContent: 'center', marginBottom: '5px'}}>
+            <img src={`/media/tutorial/${step.picture}`} alt='' style={{maxWidth: '100%'}}/>
+          </div>
+        : null}
         {step.xml ?
         <Grid container spacing={2} style={{marginBottom: '5px'}}>
           <Grid item xs={12}>
