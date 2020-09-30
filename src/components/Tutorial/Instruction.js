@@ -23,6 +23,17 @@ class Instruction extends Component {
           <Hardware picture={step.hardware}/> : null}
         {areRequirements > 0 ?
           <Requirement tutorialIds={step.requirements}/> : null}
+        {step.media ?
+          step.media.picture ?
+            <div style={{display: 'flex', justifyContent: 'center', marginBottom: '5px'}}>
+              <img src={`/media/tutorial/${step.media.picture}`} alt='' style={{maxWidth: '100%'}}/>
+            </div>
+          : step.media.youtube ?
+            <div style={{position: 'relative', paddingBottom: '56.25%', height: 0}}>
+              <iframe title={step.media.youtube} style={{position: 'absolute', top: '0', left: '0', width: '100%', height: '100%'}} src={`https://www.youtube.com/embed/${step.media.youtube}`} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+            </div>
+          : null
+        : null}
         {step.xml ?
         <Grid container spacing={2} style={{marginBottom: '5px'}}>
           <Grid item xs={12}>

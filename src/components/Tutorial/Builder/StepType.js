@@ -10,7 +10,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 class StepType extends Component {
 
   onChange = (value) => {
-    this.props.changeContent(this.props.index, 'type', value);
+    this.props.changeContent(value, this.props.index, 'type');
     // delete property 'xml', so that all used blocks are reset
     this.props.deleteProperty(this.props.index, 'xml');
     if(value === 'task'){

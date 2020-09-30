@@ -58,10 +58,17 @@ class Builder extends Component {
       window.scrollTo(0, 0);
     }
     else{
+      // export steps without attribute 'url'
+      var steps = this.props.steps.map(step => {
+        if(step.url){
+          delete step.url;
+        }
+        return step;
+      });
       var tutorial = {
         id: this.props.id,
         title: this.props.title,
-        steps: this.props.steps
+        steps: steps
       }
       var blob = new Blob([JSON.stringify(tutorial)], { type: 'text/json' });
       saveAs(blob, `${detectWhitespacesAndReturnReadableResult(tutorial.title)}.json`);
