@@ -23,7 +23,7 @@ class Requirements extends Component {
     else {
       requirements = requirements.filter(requirement => requirement !== value);
     }
-    this.props.changeContent(this.props.index, 'requirements', requirements);
+    this.props.changeContent(requirements, this.props.index, 'requirements');
   }
 
   render() {
