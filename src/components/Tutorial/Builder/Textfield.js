@@ -28,7 +28,9 @@ class Textfield extends Component {
 
   componentDidMount(){
     if(this.props.error){
-      this.props.deleteError(this.props.index, this.props.property);
+      if(this.props.property !== 'media'){
+        this.props.deleteError(this.props.index, this.props.property);
+      }
     }
   }
 
@@ -41,7 +43,7 @@ class Textfield extends Component {
       this.props.jsonString(value);
     }
     else {
-      this.props.changeContent(this.props.index, this.props.property, value);
+      this.props.changeContent(value, this.props.index, this.props.property, this.props.property2);
     }
     if(value.replace(/\s/g,'') === ''){
       this.props.setError(this.props.index, this.props.property);

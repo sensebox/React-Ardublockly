@@ -85,10 +85,18 @@ export const removeErrorStep = (index) => (dispatch, getState) => {
   });
 };
 
-export const changeContent = (index, property, content) => (dispatch, getState) => {
+export const changeContent = (content, index, property1, property2) => (dispatch, getState) => {
   var steps = getState().builder.steps;
   var step = steps[index];
-  step[property] = content;
+  if(property2){
+    if(step[property1] && step[property1][property2]){
+      step[property1][property2] = content;
+    } else {
+      step[property1] = {[property2]: content};
+    }
+  } else {
+    step[property1] = content;
+  }
   dispatch({
     type: BUILDER_CHANGE_STEP,
     payload: steps
@@ -96,10 +104,16 @@ export const changeContent = (index, property, content) => (dispatch, getState) 
   dispatch(changeTutorialBuilder());
 };
 
-export const deleteProperty = (index, property) => (dispatch, getState) => {
+export const deleteProperty = (index, property1, property2) => (dispatch, getState) => {
   var steps = getState().builder.steps;
   var step = steps[index];
-  delete step[property];
+  if(property2){
+    if(step[property1] && step[property1][property2]){
+      delete step[property1][property2];
+    }
+  } else {
+    delete step[property1];
+  }
   dispatch({
     type: BUILDER_DELETE_PROPERTY,
     payload: steps
@@ -170,14 +184,14 @@ export const setSubmitError = () => (dispatch, getState) => {
     dispatch(setError(undefined, 'title'));
   }
   var type = builder.steps.map((step, i) => {
-    // picture and xml are directly checked for errors in their components and
+    // media and xml are directly checked for errors in their components and
     // therefore do not have to be checked again
     step.id = i+1;
     if(i === 0){
       if(step.requirements && step.requirements.length > 0){
         var requirements = step.requirements.filter(requirement => typeof(requirement)==='number');
         if(requirements.length < step.requirements.length){
-          dispatch(changeContent(i, 'requirements', requirements));
+          dispatch(changeContent(requirements, i, 'requirements'));
         }
       }
       if(step.hardware === undefined || step.hardware.length < 1){
@@ -187,7 +201,7 @@ export const setSubmitError = () => (dispatch, getState) => {
         var hardwareIds = data.map(hardware => hardware.id);
         var hardware = step.hardware.filter(hardware => hardwareIds.includes(hardware));
         if(hardware.length < step.hardware.length){
-          dispatch(changeContent(i, 'hardware', hardware));
+          dispatch(changeContent(hardware, i, 'hardware'));
         }
       }
     }
@@ -272,8 +286,14 @@ export const readJSON = (json) => (dispatch, getState) => {
     if(step.xml){
       object.xml = step.xml;
     }
-    if(step.picture && step.type === 'instruction'){
-      object.picture = step.picture;
+    if(step.media && step.type === 'instruction'){
+      object.media = {};
+      if(step.media.picture){
+        object.media.picture = step.media.picture;
+      }
+      else if(step.media.youtube){
+        object.media.youtube = step.media.youtube;
+      }
     }
     return object;
   });
