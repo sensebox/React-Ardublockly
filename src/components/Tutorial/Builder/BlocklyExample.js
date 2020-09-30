@@ -107,7 +107,7 @@ class BlocklyExample extends Component {
 
   setXml = () => {
     var xml = this.props.xml;
-    this.props.changeContent(this.props.index, 'xml', xml);
+    this.props.changeContent(xml, this.props.index, 'xml');
     this.setState({input: moment(Date.now()).format('LTS')});
   }
 
