@@ -56,7 +56,7 @@ class Requirements extends Component {
         this.props.deleteError(this.props.index, 'hardware');
       }
     }
-    this.props.changeContent(this.props.index, 'hardware', hardwareArray);
+    this.props.changeContent(hardwareArray, this.props.index, 'hardware');
     if(hardwareArray.length === 0){
       this.props.setError(this.props.index, 'hardware');
     }

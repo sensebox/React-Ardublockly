@@ -10,7 +10,7 @@ import StepType from './StepType';
 import BlocklyExample from './BlocklyExample';
 import Requirements from './Requirements';
 import Hardware from './Hardware';
-import Picture from './Picture';
+import Media from './Media';
 
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -105,7 +105,7 @@ class Step extends Component {
               </div>
             : null}
             {this.props.step.type === 'instruction' ?
-              <Picture value={this.props.step.picture} url={this.props.step.url} index={index} error={this.props.error.steps[index].picture} />
+              <Media value={this.props.step.media} picture={this.props.step.media && this.props.step.media.picture} youtube={this.props.step.media && this.props.step.media.youtube} url={this.props.step.url} index={index} error={this.props.error.steps[index].media} />
             : null}
             <BlocklyExample value={this.props.step.xml} index={index} task={this.props.step.type === 'task'} error={this.props.error.steps[index].xml ? true : false}/>
           </div>

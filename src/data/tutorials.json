@@ -57,6 +57,9 @@
                 "type": "instruction",
                 "headline": "Programmierung",
                 "text": "Man benötigt folgenden Block:",
+                "media": {
+                  "picture": "block_en.svg"
+                },
                 "xml": "<xml xmlns='https://developers.google.com/blockly/xml'><block type='sensebox_wifi' id='-!X.Ay]z1ACt!f5+Vfr8'><field name='SSID'>SSID</field><field name='Password'>Password</field></block></xml>"
             },
             {
@@ -64,7 +67,9 @@
                 "type": "instruction",
                 "headline": "Block richtig einbinden",
                 "text": "Dies ist ein Test.",
-                "picture": "block_en.svg"
+                "media": {
+                  "youtube": "Q41MPMBCPto"
+                }
             },
             {
                 "id": 4,
