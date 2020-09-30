@@ -29,9 +29,12 @@ class Instruction extends Component {
               <img src={`/media/tutorial/${step.media.picture}`} alt='' style={{maxWidth: '100%'}}/>
             </div>
           : step.media.youtube ?
-            <div style={{position: 'relative', paddingBottom: '56.25%', height: 0}}>
-              <iframe title={step.media.youtube} style={{position: 'absolute', top: '0', left: '0', width: '100%', height: '100%'}} src={`https://www.youtube.com/embed/${step.media.youtube}`} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
-            </div>
+              /*16:9; width: 800px; height: width/16*9=450px*/
+              <div style={{maxWidth: '800px', margin: 'auto'}}>
+                <div style={{position: 'relative', height: 0, paddingBottom: 'calc(100% / 16 * 9)'}}>
+                  <iframe title={step.media.youtube} style={{position: 'absolute', top: '0', left: '0', width: '100%', maxWidth: '800px', height: '100%', maxHeight: '450px'}} src={`https://www.youtube.com/embed/${step.media.youtube}`} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+                </div>
+              </div>
           : null
         : null}
         {step.xml ?

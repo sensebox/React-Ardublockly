@@ -151,10 +151,11 @@ class Media extends Component {
               <div>
                 <Textfield value={this.props.value && this.props.value.youtube} property={'media'} property2={'youtube'} label={'Youtube-ID'} index={this.props.index} error={this.props.error} errorText={`Gib eine Youtube-ID ein.`}/>
                 {this.props.youtube && !this.props.error ?
-                  <div>
+                  /*16:9; width: 800px; height: width/16*9=450px*/
+                  <div style={{maxWidth: '800px'}}>
                     <FormHelperText style={{lineHeight: 'initial', margin: '0 25px 10px 25px'}}>{`Stelle sicher, dass das unten angezeigte Youtube-Video funktioniert, andernfalls überprüfe die Youtube-ID.`}</FormHelperText>
-                    <div style={{position: 'relative', paddingBottom: '56.25%', height: 0}}>
-                      <iframe title={this.props.youtube} style={{borderRadius: '25px', position: 'absolute', top: '0', left: '0', width: '100%', height: '100%'}} src={`https://www.youtube.com/embed/${this.props.youtube}`} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+                    <div style={{position: 'relative', height: 0, paddingBottom: 'calc(100% / 16 * 9)'}}>
+                      <iframe title={this.props.youtube} style={{borderRadius: '25px', position: 'absolute', top: '0', left: '0', width: '100%', maxWidth: '800px', height: '100%', maxHeight: '450px'}} src={`https://www.youtube.com/embed/${this.props.youtube}`} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
                     </div>
                   </div>
                 : null}
