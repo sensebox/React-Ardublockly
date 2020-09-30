@@ -134,7 +134,7 @@ class BlocklyExample extends Component {
         {this.state.checked && !this.props.task ?
           <FormHelperText style={{lineHeight: 'initial'}}>Anmerkung: Man kann den initialen Setup()- bzw. Endlosschleifen()-Block löschen. Zusätzlich ist es möglich u.a. nur einen beliebigen Block auszuwählen, ohne dass dieser als deaktiviert dargestellt wird.</FormHelperText>
         : null}
-        // ensure that the correct xml-file is displayed in the workspace
+        {/* ensure that the correct xml-file is displayed in the workspace */}
         {this.state.checked && this.state.xml? (() => {
           return(
             <div style={{marginTop: '10px'}}>
