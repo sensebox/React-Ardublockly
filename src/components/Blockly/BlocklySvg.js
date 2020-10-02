@@ -38,9 +38,13 @@ class BlocklySvg extends Component {
           cssContent += document.getElementsByTagName('style')[i].firstChild.data.replace(/\..* \./g, '.');
         }
       }
+      // ensure that fill-opacity is 1, because there cannot be a replacing
+      // https://github.com/google/blockly/pull/3431/files#diff-00254795773903d3c0430915a68c9521R328
+      cssContent += `.blocklyPath {
+        fill-opacity: 1;
+      } `;
 
       var css = '<defs><style type="text/css" xmlns="http://www.w3.org/1999/xhtml"><![CDATA[' + cssContent + ']]></style></defs>';
-
       var bbox = document.getElementsByClassName("blocklyBlockCanvas")[0].getBBox();
       var content = new XMLSerializer().serializeToString(canvas);
 
