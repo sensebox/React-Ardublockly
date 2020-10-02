@@ -55,11 +55,11 @@ class BlocklyWindow extends Component {
           style={this.props.svg ? { height: 0 } : this.props.blocklyCSS}
           readOnly={this.props.readOnly !== undefined ? this.props.readOnly : false}
           trashcan={this.props.trashcan !== undefined ? this.props.trashcan : true}
-          renderer='zelos'
+          renderer='geras'
           zoom={{ // https://developers.google.com/blockly/guides/configure/web/zoom
             controls: this.props.zoomControls !== undefined ? this.props.zoomControls : true,
             wheel: false,
-            startScale: 0.8,
+            startScale: 1,
             maxScale: 3,
             minScale: 0.3,
             scaleSpeed: 1.2
