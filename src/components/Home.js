@@ -56,7 +56,7 @@ class Home extends Component {
     Blockly.svgResize(workspace);
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     this.props.clearStats();
     this.props.workspaceName(null);
   }
@@ -73,21 +73,21 @@ class Home extends Component {
   render() {
     return (
       <div>
-        <div style={{float: 'right', height: '40px', marginBottom: '20px'}}><WorkspaceFunc /></div>
-        <div style={{float: 'left', height: '40px', position: 'relative'}}><WorkspaceStats /></div>
+        <div style={{ float: 'right', height: '40px', marginBottom: '20px' }}><WorkspaceFunc /></div>
+        <div style={{ float: 'left', height: '40px', position: 'relative' }}><WorkspaceStats /></div>
         <Grid container spacing={2}>
           <Grid item xs={12} md={this.state.codeOn ? 6 : 12} style={{ position: 'relative' }}>
             <Tooltip title={this.state.codeOn ? 'Code ausblenden' : 'Code anzeigen'} >
               <IconButton
                 className={this.state.codeOn ? this.props.classes.codeOn : this.props.classes.codeOff}
-                style={{width: '40px', height: '40px', position: 'absolute', top: -12, right: 8, zIndex: 21 }}
+                style={{ width: '40px', height: '40px', position: 'absolute', top: -12, right: 8, zIndex: 21 }}
                 onClick={() => this.onChange()}
               >
-                <FontAwesomeIcon icon={faCode} size="xs"/>
+                <FontAwesomeIcon icon={faCode} size="xs" />
               </IconButton>
             </Tooltip>
             <TrashcanButtons />
-            <BlocklyWindow blocklyCSS={{height: '500px'}} blockDisabled/>
+            <BlocklyWindow blocklyCSS={{ height: '80vH' }} blockDisabled />
           </Grid>
           {this.state.codeOn ?
             <Grid item xs={12} md={6}>

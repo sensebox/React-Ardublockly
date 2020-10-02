@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -56,7 +56,7 @@ const AccordionDetails = withStyles((theme) => ({
 
 class CodeViewer extends Component {
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       expanded: true,
@@ -67,12 +67,12 @@ class CodeViewer extends Component {
 
   componentDidMount() {
     Prism.highlightAll();
-    this.setState({componentHeight: this.myDiv.current.offsetHeight+'px'});
+    this.setState({ componentHeight: this.myDiv.current.offsetHeight + 'px' });
   }
 
   componentDidUpdate(props, state) {
-    if(this.myDiv.current && this.myDiv.current.offsetHeight+'px' !== this.state.componentHeight){
-      this.setState({componentHeight: this.myDiv.current.offsetHeight+'px'});
+    if (this.myDiv.current && this.myDiv.current.offsetHeight + 'px' !== this.state.componentHeight) {
+      this.setState({ componentHeight: this.myDiv.current.offsetHeight + 'px' });
     }
     Prism.highlightAll();
   }
@@ -85,19 +85,19 @@ class CodeViewer extends Component {
     var curlyBrackets = '{ }';
     var unequal = '<>';
     return (
-      <Card style={{height: '100%', maxHeight: '500px'}} ref={this.myDiv}>
+      <Card style={{ height: '100%', maxHeight: '80vH' }} ref={this.myDiv}>
         <Accordion
           square={true}
-          style={{margin: 0}}
+          style={{ margin: 0 }}
           expanded={this.state.expanded}
           onChange={this.onChange}
         >
           <AccordionSummary>
-            <b style={{fontSize: '20px', marginRight: '5px', width: '35px'}}>{curlyBrackets}</b>
-            <div style={{margin: 'auto 5px 2px 0px'}}>Arduino Quellcode</div>
+            <b style={{ fontSize: '20px', marginRight: '5px', width: '35px' }}>{curlyBrackets}</b>
+            <div style={{ margin: 'auto 5px 2px 0px' }}>Arduino Quellcode</div>
           </AccordionSummary>
-          <AccordionDetails style={{padding: 0, height: `calc(${this.state.componentHeight} - 50px - 50px)`, backgroundColor: 'white'}}>
-            <pre className="line-numbers" style={{paddingBottom: 0, width: '100%', overflow: 'auto', scrollbarWidth: 'thin', height: 'calc(100% - 30px)', margin: '15px 0', paddingTop: 0, whiteSpace: 'pre-wrap', backgroundColor: 'white'}}>
+          <AccordionDetails style={{ padding: 0, height: `calc(${this.state.componentHeight} - 50px - 50px)`, backgroundColor: 'white' }}>
+            <pre className="line-numbers" style={{ paddingBottom: 0, width: '100%', overflow: 'auto', scrollbarWidth: 'thin', height: 'calc(100% - 30px)', margin: '15px 0', paddingTop: 0, whiteSpace: 'pre-wrap', backgroundColor: 'white' }}>
               <code className="language-clike">
                 {this.props.arduino}
               </code>
@@ -106,16 +106,16 @@ class CodeViewer extends Component {
         </Accordion>
         <Accordion
           square={true}
-          style={{margin: 0}}
+          style={{ margin: 0 }}
           expanded={!this.state.expanded}
           onChange={this.onChange}
         >
           <AccordionSummary>
-            <b style={{fontSize: '20px', marginRight: '5px', width: '35px'}}>{unequal}</b>
-            <div style={{margin: 'auto 5px 2px 0px'}}>XML Blöcke</div>
+            <b style={{ fontSize: '20px', marginRight: '5px', width: '35px' }}>{unequal}</b>
+            <div style={{ margin: 'auto 5px 2px 0px' }}>XML Blöcke</div>
           </AccordionSummary>
-          <AccordionDetails style={{padding: 0, height: `calc(${this.state.componentHeight} - 50px - 50px)`, backgroundColor: 'white'}}>
-            <pre className="line-numbers" style={{paddingBottom: 0, width: '100%', overflow: 'auto', scrollbarWidth: 'thin', height: 'calc(100% - 30px)', margin: '15px 0', paddingTop: 0, whiteSpace: 'pre-wrap', backgroundColor: 'white'}}>
+          <AccordionDetails style={{ padding: 0, height: `calc(${this.state.componentHeight} - 50px - 50px)`, backgroundColor: 'white' }}>
+            <pre className="line-numbers" style={{ paddingBottom: 0, width: '100%', overflow: 'auto', scrollbarWidth: 'thin', height: 'calc(100% - 30px)', margin: '15px 0', paddingTop: 0, whiteSpace: 'pre-wrap', backgroundColor: 'white' }}>
               <code className="language-xml">
                 {`${this.props.xml}`}
               </code>

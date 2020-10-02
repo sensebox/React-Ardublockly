@@ -14,13 +14,13 @@ import Typography from '@material-ui/core/Typography';
 
 class Assessment extends Component {
 
-  componentDidMount(){
+  componentDidMount() {
     // alert(this.props.name);
     this.props.workspaceName(this.props.name);
   }
 
-  componentDidUpdate(props){
-    if(props.name !== this.props.name){
+  componentDidUpdate(props) {
+    if (props.name !== this.props.name) {
       // alert(this.props.name);
       this.props.workspaceName(this.props.name);
     }
@@ -34,23 +34,23 @@ class Assessment extends Component {
     var statusTask = status.tasks[taskIndex];
 
     return (
-      <div style={{width: '100%'}}>
-        <Typography variant='h4' style={{float: 'left', marginBottom: '5px', height: '40px', display: 'table'}}>{currentTask.headline}</Typography>
-        <div style={{float: 'right', height: '40px'}}><WorkspaceFunc solutionCheck/></div>
-        <Grid container spacing={2} style={{marginBottom: '5px'}}>
+      <div style={{ width: '100%' }}>
+        <Typography variant='h4' style={{ float: 'left', marginBottom: '5px', height: '40px', display: 'table' }}>{currentTask.headline}</Typography>
+        <div style={{ float: 'right', height: '40px' }}><WorkspaceFunc solutionCheck /></div>
+        <Grid container spacing={2} style={{ marginBottom: '5px' }}>
           <Grid item xs={12} md={6} lg={8}>
             <BlocklyWindow
               initialXml={statusTask ? statusTask.xml ? statusTask.xml : null : null}
               blockDisabled
-              blocklyCSS={{height: '500px'}}
+              blocklyCSS={{ height: '65vH' }}
             />
           </Grid>
-          <Grid item xs={12} md={6} lg={4} style={isWidthDown('sm', this.props.width) ? {height: 'max-content'} : {}}>
-            <Card style={{height: 'calc(50% - 30px)', padding: '10px', marginBottom: '10px'}}>
+          <Grid item xs={12} md={6} lg={4} style={isWidthDown('sm', this.props.width) ? { height: 'max-content' } : {}}>
+            <Card style={{ height: 'calc(50% - 30px)', padding: '10px', marginBottom: '10px' }}>
               <Typography variant='h5'>Arbeitsauftrag</Typography>
               <Typography>{currentTask.text}</Typography>
             </Card>
-            <div style={isWidthDown('sm', this.props.width) ? {height: '500px'} : {height: '50%'}}>
+            <div style={isWidthDown('sm', this.props.width) ? { height: '500px' } : { height: '50%' }}>
               <CodeViewer />
             </div>
           </Grid>
