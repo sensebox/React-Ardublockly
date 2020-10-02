@@ -280,5 +280,24 @@ Blockly.Blocks['sensebox_sensor_sound'] = {
 };
 
 
+/**
+ * Button
+ * 
+ * 
+ */
+
+Blockly.Blocks['sensebox_button'] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.senseBox_button)
+      .appendField(new Blockly.FieldDropdown([[Blockly.Msg.senseBox_button_isPressed, "isPressed"], [Blockly.Msg.senseBox_button_wasPressed, "wasPressed"], [Blockly.Msg.senseBox_button_switch, "Switch"]]), "FUNCTION")
+      .appendField("Pin:")
+      .appendField(new Blockly.FieldDropdown(selectedBoard().digitalPinsButton), "PIN");
+    this.setOutput(true, Types.BOOLEAN.typeName);
+    this.setColour(getColour().sensebox);
+    this.setTooltip(Blockly.Msg.senseBox_button_tip);
+    this.setHelpUrl('https://sensebox.de/books');
+  }
+};
 
 

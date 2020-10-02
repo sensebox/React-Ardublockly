@@ -47,6 +47,7 @@ class Toolbox extends React.Component {
                     <Block type="sensebox_sensor_bme680_bsec" />
                     <Block type="sensebox_sensor_ultrasonic_ranger" />
                     <Block type="sensebox_sensor_sound" />
+                    <Block type="sensebox_button" />
                 </Category >
                 <Category name="WIFI" colour={getColour().sensebox}>
                     <Block type="sensebox_wifi" />
