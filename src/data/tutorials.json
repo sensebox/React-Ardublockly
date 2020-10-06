@@ -1,90 +1,137 @@
 [
-    {
-      "id":1,
-      "title":"Erste Schritte",
-      "steps":[
-        {
-          "id":1,
-          "type":"instruction",
-          "headline":"Erste Schritte",
-          "text":"In diesem Tutorial lernst du die ersten Schritte mit der senseBox kennen. Du erstellst ein erstes Programm, baust einen ersten Schaltkreis auf und lernst, wie du das Programm auf die senseBox MCU überträgst.",
-          "hardware":["senseboxmcu","led","breadboard","jst-adapter","resistor-470ohm"],
-          "requirements":[]
-        },
-        {
-          "id":2,
-          "type":"instruction",
-          "headline":"Aufbau der Schaltung",
-          "text":"Stecke die LED auf das Breadboard und verbinde diese mithile des Widerstandes und dem JST Kabel mit dem Port Digital/Analog 1."
-        },
-        {
-          "id":3,
-          "type":"instruction",
-          "headline":"Programmierung",
-          "text":"Jedes Programm für die senseBox besteht aus zwei Funktionen. Die Setup () Funktion wird zu Begin einmalig ausgeführt und der Programmcode Schrittweise ausgeführt. Nachdem die Setup () Funktion durchlaufen worden ist wird der Programmcode aus der zweiten Funktion, der Endlosschleife, fortlaufend wiederholt.",
-          "xml":"<xml xmlns='https://developers.google.com/blockly/xml'><block type='arduino_functions' id='QWW|$jB8+*EL;}|#uA' deletable='false' x='27' y='16'></block></xml>"
-        },
-        {
-          "id":4,
-          "type":"instruction",
-          "headline":"Leuchten der LED",
-          "text":"Um nun die LED zum leuchten zu bringen wird folgender Block in die Endlosschleife eingefügt. Der Block bietet dir auszuwählen an welchen Pin die LED angeschlossen wurd und ob diese ein oder ausgeschaltet werden soll.",
-          "xml":"<xml xmlns='https://developers.google.com/blockly/xml'><block type='arduino_functions' id='QWW|$jB8+*EL;}|#uA' deletable='false' x='27' y='16'></block></xml>"
-        },
-        {
-          "id":5,
-          "type":"task",
-          "headline":"Aufgabe 1",
-          "text":"Verwenden den Block zum leuchten der LED und übertrage dein erstes Programm auf die senseBox MCU.",
-          "xml":"<xml xmlns='https://developers.google.com/blockly/xml'><block type='arduino_functions' id='QWW|$jB8+*EL;}|#uA' deletable='false' x='27' y='16'></block></xml>"
-        }
-      ]
-    },
-    {
+  {
+    "id": 1,
+    "title": "Erste Schritte",
+    "steps": [
+      {
+        "id": 1,
+        "type": "instruction",
+        "headline": "Erste Schritte",
+        "text": "In diesem Tutorial lernst du die ersten Schritte mit der senseBox kennen. Du erstellst ein erstes Programm, baust einen ersten Schaltkreis auf und lernst, wie du das Programm auf die senseBox MCU überträgst.",
+        "hardware": [
+          "senseboxmcu",
+          "led",
+          "breadboard",
+          "jst-adapter",
+          "resistor-470ohm"
+        ],
+        "requirements": []
+      },
+      {
         "id": 2,
-        "title": "WLAN einrichten",
-        "steps": [
-            {
-                "id": 1,
-                "type": "instruction",
-                "headline": "Einführung",
-                "text": "In diesem Tutorial lernst du wie man die senseBox mit dem Internet verbindest.",
-                "hardware": ["senseboxmcu", "wifi-bee"],
-                "requirements": [1]
-            },
-            {
-                "id": 2,
-                "type": "instruction",
-                "headline": "Programmierung",
-                "text": "Man benötigt folgenden Block:",
-                "media": {
-                  "picture": "block_en.svg"
-                },
-                "xml": "<xml xmlns='https://developers.google.com/blockly/xml'><block type='sensebox_wifi' id='-!X.Ay]z1ACt!f5+Vfr8'><field name='SSID'>SSID</field><field name='Password'>Password</field></block></xml>"
-            },
-            {
-                "id": 3,
-                "type": "instruction",
-                "headline": "Block richtig einbinden",
-                "text": "Dies ist ein Test.",
-                "media": {
-                  "youtube": "sf3RzXq6iVo"
-                }
-            },
-            {
-                "id": 4,
-                "type": "task",
-                "headline": "Aufgabe 1",
-                "text": "Stelle eine WLAN-Verbindung mit einem beliebigen Netzwerk her.",
-                "xml": "<xml xmlns='https://developers.google.com/blockly/xml'><block type='arduino_functions' id='QWW|$jB8+*EL;}|#uA' deletable='false' x='27' y='16'><statement name='SETUP_FUNC'><block type='sensebox_wifi' id='W}P2Y^g,muH@]|@anou}'><field name='SSID'>SSID</field><field name='Password'>Password</field></block></statement></block></xml>"
-            },
-            {
-                "id": 5,
-                "type": "task",
-                "headline": "Aufgabe 2",
-                "text": "Versuche das gleiche einfach nochmal. Übung macht den Meister! ;)",
-                "xml": "<xml xmlns='https://developers.google.com/blockly/xml'><block type='arduino_functions' id='QWW|$jB8+*EL;}|#uA' deletable='false' x='27' y='16'><statement name='SETUP_FUNC'><block type='sensebox_wifi' id='W}P2Y^g,muH@]|@anou}'><field name='SSID'>SSID</field><field name='Password'>Password</field></block></statement></block></xml>"
-            }
+        "type": "instruction",
+        "headline": "Aufbau der Schaltung",
+        "text": "Stecke die LED auf das Breadboard und verbinde diese mithile des Widerstandes und dem JST Kabel mit dem Port Digital/Analog 1."
+      },
+      {
+        "id": 3,
+        "type": "instruction",
+        "headline": "Programmierung",
+        "text": "Jedes Programm für die senseBox besteht aus zwei Funktionen. Die Setup () Funktion wird zu Begin einmalig ausgeführt und der Programmcode Schrittweise ausgeführt. Nachdem die Setup () Funktion durchlaufen worden ist wird der Programmcode aus der zweiten Funktion, der Endlosschleife, fortlaufend wiederholt.",
+        "xml": "<xml xmlns='https://developers.google.com/blockly/xml'><block type='arduino_functions' id='QWW|$jB8+*EL;}|#uA' deletable='false' x='27' y='16'></block></xml>"
+      },
+      {
+        "id": 4,
+        "type": "instruction",
+        "headline": "Leuchten der LED",
+        "text": "Um nun die LED zum leuchten zu bringen wird folgender Block in die Endlosschleife eingefügt. Der Block bietet dir auszuwählen an welchen Pin die LED angeschlossen wurd und ob diese ein oder ausgeschaltet werden soll.",
+        "xml": "<xml xmlns='https://developers.google.com/blockly/xml'><block type='arduino_functions' id='QWW|$jB8+*EL;}|#uA' deletable='false' x='27' y='16'></block></xml>"
+      },
+      {
+        "id": 5,
+        "type": "task",
+        "headline": "Aufgabe 1",
+        "text": "Verwenden den Block zum leuchten der LED und übertrage dein erstes Programm auf die senseBox MCU.",
+        "xml": "<xml xmlns='https://developers.google.com/blockly/xml'><block type='arduino_functions' id='QWW|$jB8+*EL;}|#uA' deletable='false' x='27' y='16'></block></xml>"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Schleifen",
+    "steps": [
+      {
+        "id": 1,
+        "type": "instruction",
+        "headline": "Schleifen",
+        "text": "In diesem Tutorial wird die Verwendung von Schleifen eingeführt. Eine Schleife (auch „Wiederholung“ oder englisch loop) ist eine Kontrollstruktur in Programmiersprachen. Sie wiederholt einen Anweisungs-Block – den sogenannten Schleifenrumpf oder Schleifenkörper –, solange die Schleifenbedingung als Laufbedingung gültig bleibt bzw. als Abbruchbedingung nicht eintritt. Schleifen, deren Schleifenbedingung immer zur Fortsetzung führt oder die keine Schleifenbedingung haben, sind Endlosschleifen. Die Endlosschleife hast du bereits im ersten Tutorial \"Erste Schritte\" kennengelernt",
+        "hardware": [
+          "breadboard",
+          "jst-adapter",
+          "senseboxmcu",
+          "led",
+          "resistor-470ohm"
+        ],
+        "requirements": [
+          1
         ]
-    }
+      },
+      {
+        "id": 2,
+        "type": "instruction",
+        "headline": "Verwendung von Schleifen",
+        "text": "Die Blöcke findest du in der Kategorie \"Schleifen\". Die einfachste Schleife, die du Verwenden kannst, ist der Block \"Wiederhole 10 mal\". Bei diesem Block kannst du die Blöcke, die eine bestimmte Zahl wiederholt werden soll einfach in den offenen Block abschnitt ziehen. ",
+        "xml": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <block type=\"controls_repeat_ext\" id=\"!|`dyF$`~*!l~D[TUc4N\" x=\"38\" y=\"32\">\n    <value name=\"TIMES\">\n      <block type=\"math_number\" id=\"ktgQ[7pD~M{sq;r^kLuz\">\n        <field name=\"NUM\">10</field>\n      </block>\n    </value>\n  </block>\n</xml>"
+      },
+      {
+        "id": 3,
+        "type": "task",
+        "headline": "Verwendung von Schleifen",
+        "text": "Lass die LED genau 5 mal in einem Abstand von 1000 Millisekunden blinken. Anschließend soll die LED ausgeschaltet werden. ",
+        "xml": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <block type=\"arduino_functions\" id=\"QWW|$jB8+*EL;}|#uA\" deletable=\"false\" x=\"18\" y=\"18\">\n    <statement name=\"SETUP_FUNC\">\n      <block type=\"controls_repeat_ext\" id=\"_d{J^FWUT8M?}o[/6Fpj\">\n        <value name=\"TIMES\">\n          <block type=\"math_number\" id=\"qao_;lzo~kE?25HM*kJ+\">\n            <field name=\"NUM\">5</field>\n          </block>\n        </value>\n        <statement name=\"DO\">\n          <block type=\"sensebox_led\" id=\"A)}4:wR_79zAHUBq5?1j\">\n            <field name=\"PIN\">1</field>\n            <field name=\"STAT\">HIGH</field>\n            <next>\n              <block type=\"time_delay\" id=\"Yfn;,|wxaRhium=T[-wM\">\n                <value name=\"DELAY_TIME_MILI\">\n                  <block type=\"math_number\" id=\"z=1f4hMm_Q~e-+Wvh,S|\">\n                    <field name=\"NUM\">1000</field>\n                  </block>\n                </value>\n                <next>\n                  <block type=\"sensebox_led\" id=\"nu2%x%_iigf]r$FJ7XEw\">\n                    <field name=\"PIN\">1</field>\n                    <field name=\"STAT\">LOW</field>\n                    <next>\n                      <block type=\"time_delay\" id=\"4@Y4E|ewWB)([vf/4Ttn\">\n                        <value name=\"DELAY_TIME_MILI\">\n                          <block type=\"math_number\" id=\"l,ZAG8;|Uv^:P5/FOjwD\">\n                            <field name=\"NUM\">1000</field>\n                          </block>\n                        </value>\n                      </block>\n                    </next>\n                  </block>\n                </next>\n              </block>\n            </next>\n          </block>\n        </statement>\n      </block>\n    </statement>\n  </block>\n</xml>"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "WLAN einrichten",
+    "steps": [
+      {
+        "id": 1,
+        "type": "instruction",
+        "headline": "Einführung",
+        "text": "In diesem Tutorial lernst du wie man die senseBox mit dem Internet verbindest.",
+        "hardware": [
+          "senseboxmcu",
+          "wifi-bee"
+        ],
+        "requirements": [
+          1
+        ]
+      },
+      {
+        "id": 2,
+        "type": "instruction",
+        "headline": "Programmierung",
+        "text": "Man benötigt folgenden Block:",
+        "media": {
+          "picture": "block_en.svg"
+        },
+        "xml": "<xml xmlns='https://developers.google.com/blockly/xml'><block type='sensebox_wifi' id='-!X.Ay]z1ACt!f5+Vfr8'><field name='SSID'>SSID</field><field name='Password'>Password</field></block></xml>"
+      },
+      {
+        "id": 3,
+        "type": "instruction",
+        "headline": "Block richtig einbinden",
+        "text": "Dies ist ein Test.",
+        "media": {
+          "youtube": "sf3RzXq6iVo"
+        }
+      },
+      {
+        "id": 4,
+        "type": "task",
+        "headline": "Aufgabe 1",
+        "text": "Stelle eine WLAN-Verbindung mit einem beliebigen Netzwerk her.",
+        "xml": "<xml xmlns='https://developers.google.com/blockly/xml'><block type='arduino_functions' id='QWW|$jB8+*EL;}|#uA' deletable='false' x='27' y='16'><statement name='SETUP_FUNC'><block type='sensebox_wifi' id='W}P2Y^g,muH@]|@anou}'><field name='SSID'>SSID</field><field name='Password'>Password</field></block></statement></block></xml>"
+      },
+      {
+        "id": 5,
+        "type": "task",
+        "headline": "Aufgabe 2",
+        "text": "Versuche das gleiche einfach nochmal. Übung macht den Meister! ;)",
+        "xml": "<xml xmlns='https://developers.google.com/blockly/xml'><block type='arduino_functions' id='QWW|$jB8+*EL;}|#uA' deletable='false' x='27' y='16'><statement name='SETUP_FUNC'><block type='sensebox_wifi' id='W}P2Y^g,muH@]|@anou}'><field name='SSID'>SSID</field><field name='Password'>Password</field></block></statement></block></xml>"
+      }
+    ]
+  }
 ]
