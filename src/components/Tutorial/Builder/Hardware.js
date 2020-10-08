@@ -5,7 +5,6 @@ import { changeContent, setError, deleteError } from '../../../actions/tutorialB
 
 import hardware from '../../../data/hardware.json';
 
-import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
 import withWidth, { isWidthDown } from '@material-ui/core/withWidth';
 import GridList from '@material-ui/core/GridList';
@@ -16,7 +15,8 @@ import FormLabel from '@material-ui/core/FormLabel';
 
 const styles = theme => ({
   multiGridListTile: {
-    background: fade(theme.palette.secondary.main, 0.5),
+    background: "#4EAF47",
+    opacity: 0.9,
     height: '30px'
   },
   multiGridListTileTitle: {
