@@ -18,6 +18,7 @@ export const CHARACTER = {
 
 export const BOOLEAN = {
     typeId: 'Boolean',
+    typeName: 'Boolean',
     typeMsgName: 'ARD_TYPE_BOOL',
 }
 
@@ -89,7 +90,7 @@ const compatibleTypes = {
     boolean: ['boolean'],
     int: ['int'],
     char: ['char'],
-    string: ['String'],
+    String: ['String'],
     void: ['void'],
     long: ['int', 'long'],
     double: ['int', 'long', 'double'],

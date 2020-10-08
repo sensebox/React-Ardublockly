@@ -6,7 +6,8 @@ import clsx from 'clsx';
 
 import Breadcrumbs from '../Breadcrumbs';
 
-import tutorials from '../../data/tutorials.json';
+import tutorials from '../../data/tutorials';
+// import tutorials from '../../data/tutorials.json';
 
 import { Link } from 'react-router-dom';
 
@@ -54,7 +55,7 @@ class TutorialHome extends Component {
   render() {
     return (
       <div>
-        <Breadcrumbs content={[{link: '/tutorial', title: 'Tutorial'}]}/>
+        <Breadcrumbs content={[{ link: '/tutorial', title: 'Tutorial' }]} />
 
         <h1>Tutorial-Übersicht</h1>
         <Grid container spacing={2}>
@@ -62,36 +63,37 @@ class TutorialHome extends Component {
             var status = this.props.status.filter(status => status.id === tutorial.id)[0];
             var tasks = status.tasks;
             var error = status.tasks.filter(task => task.type === 'error').length > 0;
-            var success = status.tasks.filter(task => task.type === 'success').length/tasks.length
+            var success = status.tasks.filter(task => task.type === 'success').length / tasks.length
             var tutorialStatus = success === 1 ? 'Success' : error ? 'Error' : 'Other';
             return (
               <Grid item xs={12} sm={6} md={4} xl={3} key={i} style={{}}>
-                <Link to={`/tutorial/${tutorial.id}`} style={{textDecoration: 'none', color: 'inherit'}}>
-                  <Paper style={{height: '150px', padding: '10px', position:'relative', overflow: 'hidden'}}>
+                <Link to={`/tutorial/${tutorial.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                  <Paper style={{ height: '150px', padding: '10px', position: 'relative', overflow: 'hidden' }}>
                     {tutorial.title}
-                    <div className={clsx(this.props.classes.outerDiv)} style={{width: '160px', height: '160px', border: 0}}>
-                      <svg style={{width: '100%', height: '100%'}}>
+                    <div className={clsx(this.props.classes.outerDiv)} style={{ width: '160px', height: '160px', border: 0 }}>
+                      <svg style={{ width: '100%', height: '100%' }}>
                         {error || success === 1 ?
-                          <circle className={error ? this.props.classes.outerDivError : this.props.classes.outerDivSuccess} style={{transform: 'rotate(-44deg)', transformOrigin: "50% 50%"}} r="75" cx="50%" cy="50%" fill="none" stroke-width="10"></circle>
-                        : <circle className={this.props.classes.outerDivOther} style={{transform: 'rotate(-44deg)', transformOrigin: "50% 50%"}} r="75" cx="50%" cy="50%" fill="none" stroke-width="10" stroke-dashoffset={`${(75*2*Math.PI)*(1-(50/100+success/2))}`} stroke-dasharray={`${(75*2*Math.PI)*(1-(50/100-success/2))} ${(75*2*Math.PI)*(1-(50/100+success/2))}`}></circle>}
+                          <circle className={error ? this.props.classes.outerDivError : this.props.classes.outerDivSuccess} style={{ transform: 'rotate(-44deg)', transformOrigin: "50% 50%" }} r="75" cx="50%" cy="50%" fill="none" stroke-width="10"></circle>
+                          : <circle className={this.props.classes.outerDivOther} style={{ transform: 'rotate(-44deg)', transformOrigin: "50% 50%" }} r="75" cx="50%" cy="50%" fill="none" stroke-width="10" stroke-dashoffset={`${(75 * 2 * Math.PI) * (1 - (50 / 100 + success / 2))}`} stroke-dasharray={`${(75 * 2 * Math.PI) * (1 - (50 / 100 - success / 2))} ${(75 * 2 * Math.PI) * (1 - (50 / 100 + success / 2))}`}></circle>}
                         {success < 1 && !error ?
-                          <circle className={this.props.classes.outerDivSuccess} style={{transform: 'rotate(-44deg)', transformOrigin: "50% 50%"}} r="75" cx="50%" cy="50%" fill="none" stroke-width="10" stroke-dashoffset={`${(75*2*Math.PI)*(1-(50/100+success/2))}`} stroke-dasharray={`${(75*2*Math.PI)}`}>
+                          <circle className={this.props.classes.outerDivSuccess} style={{ transform: 'rotate(-44deg)', transformOrigin: "50% 50%" }} r="75" cx="50%" cy="50%" fill="none" stroke-width="10" stroke-dashoffset={`${(75 * 2 * Math.PI) * (1 - (50 / 100 + success / 2))}`} stroke-dasharray={`${(75 * 2 * Math.PI)}`}>
                           </circle>
-                        : null}
+                          : null}
                       </svg>
                     </div>
                     <div className={clsx(this.props.classes.outerDiv, tutorialStatus === 'Error' ? this.props.classes.outerDivError : tutorialStatus === 'Success' ? this.props.classes.outerDivSuccess : null)}>
                       <div className={this.props.classes.innerDiv}>
                         {error || success === 1 ?
-                          <FontAwesomeIcon size='4x' icon={tutorialStatus === 'Success' ? faCheck : faTimes}/>
-                        : <Typography variant='h3' className={success > 0 ? this.props.classes.outerDivSuccess : {}}>{Math.round(success*100)}%</Typography>
+                          <FontAwesomeIcon size='4x' icon={tutorialStatus === 'Success' ? faCheck : faTimes} />
+                          : <Typography variant='h3' className={success > 0 ? this.props.classes.outerDivSuccess : {}}>{Math.round(success * 100)}%</Typography>
                         }
                       </div>
                     </div>
                   </Paper>
                 </Link>
               </Grid>
-          )})}
+            )
+          })}
         </Grid>
       </div>
     );
@@ -108,4 +110,4 @@ const mapStateToProps = state => ({
   status: state.tutorial.status
 });
 
-export default connect(mapStateToProps, null)(withStyles(styles, {withTheme: true})(TutorialHome));
+export default connect(mapStateToProps, null)(withStyles(styles, { withTheme: true })(TutorialHome));

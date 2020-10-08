@@ -1,6 +1,6 @@
 import { TUTORIAL_SUCCESS, TUTORIAL_ERROR, TUTORIAL_CHANGE, TUTORIAL_XML, TUTORIAL_ID, TUTORIAL_STEP } from './types';
 
-import tutorials from '../data/tutorials.json';
+import tutorials from '../data/tutorials';
 
 export const tutorialChange = () => (dispatch) => {
   dispatch({
@@ -26,10 +26,10 @@ export const tutorialCheck = (status, step) => (dispatch, getState) => {
 
 export const storeTutorialXml = (code) => (dispatch, getState) => {
   var id = getState().tutorial.currentId;
-  if(id !== null){
+  if (id !== null) {
     var activeStep = getState().tutorial.activeStep;
     var steps = tutorials.filter(tutorial => tutorial.id === id)[0].steps;
-    if(steps[activeStep].type === 'task'){
+    if (steps[activeStep].type === 'task') {
       var tutorialsStatus = getState().tutorial.status;
       var tutorialsStatusIndex = tutorialsStatus.findIndex(tutorialStatus => tutorialStatus.id === id);
       var tasksIndex = tutorialsStatus[tutorialsStatusIndex].tasks.findIndex(task => task.id === steps[activeStep].id);
