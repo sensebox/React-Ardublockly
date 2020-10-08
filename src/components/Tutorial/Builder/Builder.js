@@ -8,7 +8,6 @@ import { saveAs } from 'file-saver';
 import { detectWhitespacesAndReturnReadableResult } from '../../../helpers/whitespace';
 
 import Breadcrumbs from '../../Breadcrumbs';
-import Id from './Id';
 import Textfield from './Textfield';
 import Step from './Step';
 import Dialog from '../../Dialog';
