@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 
 import clsx from 'clsx';
 
-import tutorials from '../../data/tutorials.json';
+import tutorials from '../../data/tutorials';
 
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
@@ -58,31 +58,31 @@ class StepperHorizontal extends Component {
     var tutorialStatus = success === 1 ? 'Success' : error ? 'Error' : 'Other';
     var title = tutorials.filter(tutorial => tutorial.id === tutorialId)[0].title;
     return (
-      <div style={{position: 'relative'}}>
+      <div style={{ position: 'relative' }}>
         {error || success > 0 ?
-          <div style={{zIndex: -1, width: error ? 'calc(100% - 40px)' : `calc(${success*100}% - 40px)`, borderRadius: success === 1 || error ? '25px' : '25px 0 0 25px', position: 'absolute', margin: 0, left: 0}} className={clsx(this.props.classes.stepper, error ? this.props.classes.stepperError : this.props.classes.stepperSuccess)}>
+          <div style={{ zIndex: -1, width: error ? 'calc(100% - 40px)' : `calc(${success * 100}% - 40px)`, borderRadius: success === 1 || error ? '25px' : '25px 0 0 25px', position: 'absolute', margin: 0, left: 0 }} className={clsx(this.props.classes.stepper, error ? this.props.classes.stepperError : this.props.classes.stepperSuccess)}>
           </div>
-        : null}
+          : null}
         {success < 1 && !error ?
-          <div style={{zIndex: -2, width: `calc(${(1-success)*100}% - 40px)`, borderRadius: success === 0 ? '25px' : '0px 25px 25px 0', position: 'absolute', margin: 0, right: 0}} className={clsx(this.props.classes.stepper, this.props.classes.stepperOther)}>
+          <div style={{ zIndex: -2, width: `calc(${(1 - success) * 100}% - 40px)`, borderRadius: success === 0 ? '25px' : '0px 25px 25px 0', position: 'absolute', margin: 0, right: 0 }} className={clsx(this.props.classes.stepper, this.props.classes.stepperOther)}>
           </div>
-        : null}
+          : null}
         <div className={this.props.classes.stepper}>
           <Button
             disabled={tutorialId === 1}
-            onClick={() => {this.props.history.push(`/tutorial/${tutorialId-1}`)}}
+            onClick={() => { this.props.history.push(`/tutorial/${tutorialId - 1}`) }}
           >
             {'<'}
           </Button>
-          <Tooltip style={{display: 'flex', width: 'calc(100% - 64px - 64px)', justifyContent: 'center'}} title={title} arrow>
+          <Tooltip style={{ display: 'flex', width: 'calc(100% - 64px - 64px)', justifyContent: 'center' }} title={title} arrow>
             <div>
-              {tutorialStatus !== 'Other' ? <div className={tutorialStatus === 'Success' && success === 1 ? this.props.classes.iconDivSuccess : this.props.classes.iconDivError} style={{margin: 'auto 10px auto 0'}}><FontAwesomeIcon className={this.props.classes.icon} icon={tutorialStatus === 'Success' ? faCheck : faTimes}/></div> : null}
-              <Typography variant='body2' style={{fontWeight: 'bold', fontSize: '1.75em', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'rgba(0, 0, 0, 0.54)'}}>{title}</Typography>
+              {tutorialStatus !== 'Other' ? <div className={tutorialStatus === 'Success' && success === 1 ? this.props.classes.iconDivSuccess : this.props.classes.iconDivError} style={{ margin: 'auto 10px auto 0' }}><FontAwesomeIcon className={this.props.classes.icon} icon={tutorialStatus === 'Success' ? faCheck : faTimes} /></div> : null}
+              <Typography variant='body2' style={{ fontWeight: 'bold', fontSize: '1.75em', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'rgba(0, 0, 0, 0.54)' }}>{title}</Typography>
             </div>
           </Tooltip>
           <Button
-            disabled={tutorialId+1 > tutorials.length}
-            onClick={() => {this.props.history.push(`/tutorial/${tutorialId+1}`)}}
+            disabled={tutorialId + 1 > tutorials.length}
+            onClick={() => { this.props.history.push(`/tutorial/${tutorialId + 1}`) }}
           >
             {'>'}
           </Button>
@@ -104,4 +104,4 @@ const mapStateToProps = state => ({
   currentTutorialId: state.tutorial.currentId
 });
 
-export default connect(mapStateToProps, null)(withRouter(withStyles(styles, {withTheme: true})(StepperHorizontal)));
+export default connect(mapStateToProps, null)(withRouter(withStyles(styles, { withTheme: true })(StepperHorizontal)));

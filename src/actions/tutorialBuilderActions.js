@@ -42,7 +42,7 @@ export const tutorialId = (id) => (dispatch) => {
 export const addStep = (index) => (dispatch, getState) => {
   var steps = getState().builder.steps;
   var step = {
-    id: index+1,
+    id: index + 1,
     type: 'instruction',
     headline: '',
     text: ''
@@ -88,11 +88,11 @@ export const removeErrorStep = (index) => (dispatch, getState) => {
 export const changeContent = (content, index, property1, property2) => (dispatch, getState) => {
   var steps = getState().builder.steps;
   var step = steps[index];
-  if(property2){
-    if(step[property1] && step[property1][property2]){
+  if (property2) {
+    if (step[property1] && step[property1][property2]) {
       step[property1][property2] = content;
     } else {
-      step[property1] = {[property2]: content};
+      step[property1] = { [property2]: content };
     }
   } else {
     step[property1] = content;
@@ -107,8 +107,8 @@ export const changeContent = (content, index, property1, property2) => (dispatch
 export const deleteProperty = (index, property1, property2) => (dispatch, getState) => {
   var steps = getState().builder.steps;
   var step = steps[index];
-  if(property2){
-    if(step[property1] && step[property1][property2]){
+  if (property2) {
+    if (step[property1] && step[property1][property2]) {
       delete step[property1][property2];
     }
   } else {
@@ -147,7 +147,7 @@ export const changeErrorStepIndex = (fromIndex, toIndex) => (dispatch, getState)
 
 export const setError = (index, property) => (dispatch, getState) => {
   var error = getState().builder.error;
-  if(index !== undefined){
+  if (index !== undefined) {
     error.steps[index][property] = true;
   }
   else {
@@ -162,7 +162,7 @@ export const setError = (index, property) => (dispatch, getState) => {
 
 export const deleteError = (index, property) => (dispatch, getState) => {
   var error = getState().builder.error;
-  if(index !== undefined){
+  if (index !== undefined) {
     delete error.steps[index][property];
   }
   else {
@@ -177,44 +177,44 @@ export const deleteError = (index, property) => (dispatch, getState) => {
 
 export const setSubmitError = () => (dispatch, getState) => {
   var builder = getState().builder;
-  if(builder.id === undefined || builder.id === ''){
-    dispatch(setError(undefined, 'id'));
-  }
-  if(builder.id === undefined || builder.title === ''){
+  // if(builder.id === undefined || builder.id === ''){
+  //   dispatch(setError(undefined, 'id'));
+  // }
+  if (builder.id === undefined || builder.title === '') {
     dispatch(setError(undefined, 'title'));
   }
   var type = builder.steps.map((step, i) => {
     // media and xml are directly checked for errors in their components and
     // therefore do not have to be checked again
-    step.id = i+1;
-    if(i === 0){
-      if(step.requirements && step.requirements.length > 0){
-        var requirements = step.requirements.filter(requirement => typeof(requirement)==='number');
-        if(requirements.length < step.requirements.length){
+    step.id = i + 1;
+    if (i === 0) {
+      if (step.requirements && step.requirements.length > 0) {
+        var requirements = step.requirements.filter(requirement => typeof (requirement) === 'number');
+        if (requirements.length < step.requirements.length) {
           dispatch(changeContent(requirements, i, 'requirements'));
         }
       }
-      if(step.hardware === undefined || step.hardware.length < 1){
+      if (step.hardware === undefined || step.hardware.length < 1) {
         dispatch(setError(i, 'hardware'));
       }
-      else{
+      else {
         var hardwareIds = data.map(hardware => hardware.id);
         var hardware = step.hardware.filter(hardware => hardwareIds.includes(hardware));
-        if(hardware.length < step.hardware.length){
+        if (hardware.length < step.hardware.length) {
           dispatch(changeContent(hardware, i, 'hardware'));
         }
       }
     }
-    if(step.headline === undefined || step.headline === ''){
+    if (step.headline === undefined || step.headline === '') {
       dispatch(setError(i, 'headline'));
     }
-    if(step.text === undefined || step.text === ''){
+    if (step.text === undefined || step.text === '') {
       dispatch(setError(i, 'text'));
     }
     return step.type;
   });
-  if(!(type.filter(item => item === 'task').length > 0 && type.filter(item => item === 'instruction').length > 0)){
-      dispatch(setError(undefined, 'type'));
+  if (!(type.filter(item => item === 'task').length > 0 && type.filter(item => item === 'instruction').length > 0)) {
+    dispatch(setError(undefined, 'type'));
   }
 };
 
@@ -222,11 +222,11 @@ export const setSubmitError = () => (dispatch, getState) => {
 export const checkError = () => (dispatch, getState) => {
   dispatch(setSubmitError());
   var error = getState().builder.error;
-  if(error.id || error.title || error.type){
+  if (error.id || error.title || error.type) {
     return true;
   }
-  for(var i = 0; i < error.steps.length; i++){
-    if(Object.keys(error.steps[i]).length > 0){
+  for (var i = 0; i < error.steps.length; i++) {
+    if (Object.keys(error.steps[i]).length > 0) {
       return true
     }
   }
@@ -268,7 +268,7 @@ export const readJSON = (json) => (dispatch, getState) => {
   dispatch({
     type: BUILDER_ERROR,
     payload: {
-      steps: json.steps.map(() => {return {};})
+      steps: json.steps.map(() => { return {}; })
     }
   });
   // accept only valid attributes
@@ -279,19 +279,19 @@ export const readJSON = (json) => (dispatch, getState) => {
       headline: step.headline,
       text: step.text
     };
-    if(i === 0){
+    if (i === 0) {
       object.hardware = step.hardware;
       object.requirements = step.requirements;
     }
-    if(step.xml){
+    if (step.xml) {
       object.xml = step.xml;
     }
-    if(step.media && step.type === 'instruction'){
+    if (step.media && step.type === 'instruction') {
       object.media = {};
-      if(step.media.picture){
+      if (step.media.picture) {
         object.media.picture = step.media.picture;
       }
-      else if(step.media.youtube){
+      else if (step.media.youtube) {
         object.media.youtube = step.media.youtube;
       }
     }

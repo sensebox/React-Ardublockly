@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { changeContent } from '../../../actions/tutorialBuilderActions';
 
-import tutorials from '../../../data/tutorials.json';
+import tutorials from '../../../data/tutorials';
 
 import FormGroup from '@material-ui/core/FormGroup';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -17,7 +17,7 @@ class Requirements extends Component {
   onChange = (e) => {
     var requirements = this.props.value;
     var value = parseInt(e.target.value)
-    if(e.target.checked){
+    if (e.target.checked) {
       requirements.push(value);
     }
     else {
@@ -28,9 +28,9 @@ class Requirements extends Component {
 
   render() {
     return (
-      <FormControl style={{marginBottom: '10px', padding: '18.5px 14px', borderRadius: '25px', border: '1px solid lightgrey', width: 'calc(100% - 28px)'}}>
-        <FormLabel style={{color: 'black'}}>Voraussetzungen</FormLabel>
-        <FormHelperText style={{marginTop: '5px'}}>Beachte, dass die Reihenfolge des Anhakens maßgebend ist.</FormHelperText>
+      <FormControl style={{ marginBottom: '10px', padding: '18.5px 14px', borderRadius: '25px', border: '1px solid lightgrey', width: 'calc(100% - 28px)' }}>
+        <FormLabel style={{ color: 'black' }}>Voraussetzungen</FormLabel>
+        <FormHelperText style={{ marginTop: '5px' }}>Beachte, dass die Reihenfolge des Anhakens maßgebend ist.</FormHelperText>
         <FormGroup>
           {tutorials.map((tutorial, i) =>
             <FormControlLabel
