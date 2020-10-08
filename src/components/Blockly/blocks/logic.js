@@ -1,5 +1,7 @@
 import Blockly from 'blockly/core';
 import { getColour } from '../helpers/colour';
+import * as Types from '../helpers/types';
+import { getCompatibleTypes } from '../helpers/types';
 
 
 Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
@@ -229,6 +231,73 @@ Blockly.defineBlocksWithJsonArray([ // Mutator blocks. Do not extract.
         "tooltip": "%{BKY_CONTROLS_IF_ELSE_TOOLTIP}"
     }
 ]);
+
+Blockly.Blocks['logic_compare'] = {
+    /**
+     * Block for comparison operator.
+     * @this Blockly.Block
+     */
+    init: function () {
+        var OPERATORS = this.RTL ? [
+            ['=', 'EQ'],
+            ['\u2260', 'NEQ'],
+            ['>', 'LT'],
+            ['\u2265', 'LTE'],
+            ['<', 'GT'],
+            ['\u2264', 'GTE']
+        ] : [
+                ['=', 'EQ'],
+                ['\u2260', 'NEQ'],
+                ['<', 'LT'],
+                ['\u2264', 'LTE'],
+                ['>', 'GT'],
+                ['\u2265', 'GTE']
+            ];
+        this.setHelpUrl(Blockly.Msg.LOGIC_COMPARE_HELPURL);
+        this.setColour(getColour().logic);
+        this.setOutput(true, Types.BOOLEAN.typeName);
+        this.appendValueInput('A');
+        this.appendValueInput('B')
+            .appendField(new Blockly.FieldDropdown(OPERATORS), 'OP');
+        this.setInputsInline(true);
+        // Assign 'this' to a variable for use in the tooltip closure below.
+        var thisBlock = this;
+        this.setTooltip(function () {
+            var op = thisBlock.getFieldValue('OP');
+            var TOOLTIPS = {
+                'EQ': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ,
+                'NEQ': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_NEQ,
+                'LT': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LT,
+                'LTE': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LTE,
+                'GT': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT,
+                'GTE': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GTE
+            };
+            return TOOLTIPS[op];
+        });
+    },
+    /**
+     * Called whenever anything on the workspace changes.
+     * Prevent mismatched types from being compared.
+     * @param {!Blockly.Events.Abstract} e Change event.
+     * @this Blockly.Block
+     */
+    onchange: function (e) {
+        var blockA = this.getInputTargetBlock('A');
+        var blockB = this.getInputTargetBlock('B');
+        if (blockA === null && blockB === null) {
+            this.getInput('A').setCheck(null);
+            this.getInput('B').setCheck(null);
+        }
+        if (blockA !== null && blockB === null) {
+            this.getInput('A').setCheck(getCompatibleTypes(blockA.outputConnection.check_[0]));
+            this.getInput('B').setCheck(getCompatibleTypes(blockA.outputConnection.check_[0]));
+        }
+        if (blockB !== null && blockA === null) {
+            this.getInput('B').setCheck(getCompatibleTypes(blockB.outputConnection.check_[0]));
+            this.getInput('A').setCheck(getCompatibleTypes(blockB.outputConnection.check_[0]));
+        }
+    }
+};
 
 
 Blockly.Blocks['switch_case'] = {
