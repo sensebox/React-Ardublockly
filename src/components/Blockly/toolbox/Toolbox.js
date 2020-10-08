@@ -5,7 +5,6 @@ import '@blockly/block-plus-minus';
 
 import { TypedVariableModal } from '@blockly/plugin-typed-variable-modal';
 import * as Blockly from 'blockly/core';
-import BlocklyComponent from '../BlocklyComponent';
 
 
 
