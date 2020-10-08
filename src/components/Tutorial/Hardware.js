@@ -4,7 +4,6 @@ import Dialog from '../Dialog';
 
 import hardware from '../../data/hardware.json';
 
-import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
 import withWidth, { isWidthDown } from '@material-ui/core/withWidth';
 import Link from '@material-ui/core/Link';
