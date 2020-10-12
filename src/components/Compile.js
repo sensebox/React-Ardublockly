@@ -38,7 +38,7 @@ const styles = (theme) => ({
 
 class Compile extends Component {
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       progress: false,
@@ -50,9 +50,9 @@ class Compile extends Component {
     };
   }
 
-  componentDidUpdate(props){
-    if(props.name !== this.props.name){
-      this.setState({name: this.props.name});
+  componentDidUpdate(props) {
+    if (props.name !== this.props.name) {
+      this.setState({ name: this.props.name });
     }
   }
 
@@ -68,17 +68,17 @@ class Compile extends Component {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
-      this.setState({id: data.data.id}, () => {
-        this.createFileName();
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        this.setState({ id: data.data.id }, () => {
+          this.createFileName();
+        });
+      })
+      .catch(err => {
+        console.log(err);
+        this.setState({ progress: false, file: false, open: true, title: 'Fehler', content: 'Etwas ist beim Kompilieren schief gelaufen. Versuche es nochmal.' });
       });
-    })
-    .catch(err => {
-      console.log(err);
-      this.setState({ progress: false, file: false, open: true, title: 'Fehler', content: 'Etwas ist beim Kompilieren schief gelaufen. Versuche es nochmal.' });
-    });
   }
 
   download = () => {
@@ -95,33 +95,33 @@ class Compile extends Component {
   }
 
   createFileName = () => {
-    if(this.state.name){
+    if (this.state.name) {
       this.download();
     }
-    else{
+    else {
       this.setState({ file: true, open: true, title: 'Blöcke kompilieren', content: 'Bitte gib einen Namen für die Bennenung des zu kompilierenden Programms ein und bestätige diesen mit einem Klick auf \'Eingabe\'.' });
     }
   }
 
   setFileName = (e) => {
-    this.setState({name: e.target.value});
+    this.setState({ name: e.target.value });
   }
 
   render() {
     return (
       <div style={{}}>
         {this.props.iconButton ?
-          <Tooltip title='Blöcke kompilieren' arrow style={{marginRight: '5px'}}>
+          <Tooltip title='Blöcke kompilieren' arrow style={{ marginRight: '5px' }}>
             <IconButton
               className={this.props.classes.button}
               onClick={() => this.compile()}
             >
-              <FontAwesomeIcon icon={faCogs} size="xs"/>
+              <FontAwesomeIcon icon={faCogs} size="xs" />
             </IconButton>
           </Tooltip>
-         :
+          :
           <Button style={{ float: 'right', color: 'white' }} variant="contained" color="primary" onClick={() => this.compile()}>
-            <FontAwesomeIcon icon={faCogs} style={{marginRight: '5px'}}/> Kompilieren
+            <FontAwesomeIcon icon={faCogs} style={{ marginRight: '5px' }} /> Kompilieren
           </Button>
         }
         <Backdrop className={this.props.classes.backdrop} open={this.state.progress}>
@@ -132,15 +132,15 @@ class Compile extends Component {
           title={this.state.title}
           content={this.state.content}
           onClose={this.toggleDialog}
-          onClick={this.state.file ? () => {this.toggleDialog(); this.setState({name: this.props.name})} : this.toggleDialog}
+          onClick={this.state.file ? () => { this.toggleDialog(); this.setState({ name: this.props.name }) } : this.toggleDialog}
           button={this.state.file ? 'Abbrechen' : 'Schließen'}
         >
           {this.state.file ?
-            <div style={{marginTop: '10px'}}>
-              <TextField autoFocus placeholder='Dateiname' value={this.state.name} onChange={this.setFileName} style={{marginRight: '10px'}}/>
+            <div style={{ marginTop: '10px' }}>
+              <TextField autoFocus placeholder='Dateiname' value={this.state.name} onChange={this.setFileName} style={{ marginRight: '10px' }} />
               <Button disabled={!this.state.name} variant='contained' color='primary' onClick={() => this.download()}>Eingabe</Button>
             </div>
-          : null}
+            : null}
         </Dialog>
       </div>
     );
@@ -159,4 +159,4 @@ const mapStateToProps = state => ({
 });
 
 
-export default connect(mapStateToProps, { workspaceName })(withStyles(styles, {withTheme: true})(Compile));
+export default connect(mapStateToProps, { workspaceName })(withStyles(styles, { withTheme: true })(Compile));
