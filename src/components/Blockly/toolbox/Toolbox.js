@@ -5,7 +5,6 @@ import '@blockly/block-plus-minus';
 
 import { TypedVariableModal } from '@blockly/plugin-typed-variable-modal';
 import * as Blockly from 'blockly/core';
-import BlocklyComponent from '../BlocklyComponent';
 
 
 
@@ -45,6 +44,7 @@ class Toolbox extends React.Component {
                     <Block type="sensebox_sensor_sds011" />
                     <Block type="sensebox_sensor_pressure" />
                     <Block type="sensebox_sensor_bme680_bsec" />
+                    <Block type="sensebox_scd30" />
                     <Block type="sensebox_sensor_ultrasonic_ranger" />
                     <Block type="sensebox_sensor_sound" />
                     <Block type="sensebox_button" />

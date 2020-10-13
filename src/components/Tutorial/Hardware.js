@@ -4,7 +4,6 @@ import Dialog from '../Dialog';
 
 import hardware from '../../data/hardware.json';
 
-import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
 import withWidth, { isWidthDown } from '@material-ui/core/withWidth';
 import Link from '@material-ui/core/Link';
@@ -28,7 +27,8 @@ const styles = theme => ({
     color: theme.palette.text.primary
   },
   multiGridListTile: {
-    background: fade(theme.palette.secondary.main, 0.5),
+    background: "#4EAF47",
+    opacity: 0.9,
     height: '30px'
   },
   multiGridListTileTitle: {
@@ -45,46 +45,47 @@ class Hardware extends Component {
   };
 
   handleClickOpen = (hardwareInfo) => {
-    this.setState({open: true, hardwareInfo});
+    this.setState({ open: true, hardwareInfo });
   };
 
   handleClose = () => {
-    this.setState({open: false, hardwareInfo: {}});
+    this.setState({ open: false, hardwareInfo: {} });
   };
 
   render() {
     var cols = isWidthDown('md', this.props.width) ? isWidthDown('sm', this.props.width) ? isWidthDown('xs', this.props.width) ? 2 : 3 : 4 : 6;
     return (
-      <div style={{marginTop: '10px', marginBottom: '5px'}}>
+      <div style={{ marginTop: '10px', marginBottom: '5px' }}>
         <Typography>Für die Umsetzung benötigst du folgende Hardware:</Typography>
 
         <GridList cellHeight={100} cols={cols} spacing={10}>
-        {this.props.picture.map((picture,i) => {
-          var hardwareInfo = hardware.filter(hardware => hardware.id === picture)[0];
-          return(
-            <GridListTile key={i}>
-              <div style={{margin: 'auto', width: 'max-content'}}>
-                <img src={`/media/hardware/${hardwareInfo.src}`} alt={hardwareInfo.name} height={100} style={{cursor: 'pointer'}} onClick={() => this.handleClickOpen(hardwareInfo)}/>
-              </div>
-              <GridListTileBar
-                classes={{root: this.props.classes.multiGridListTile}}
-                title={
-                  <div style={{overflow: 'hidden', textOverflow: 'ellipsis'}} className={this.props.classes.multiGridListTileTitle}>
-                    {hardwareInfo.name}
-                  </div>
-                }
-                actionIcon={
-                  <IconButton className={this.props.classes.expand} aria-label='Vollbild' onClick={() => this.handleClickOpen(hardwareInfo)}>
-                    <FontAwesomeIcon icon={faExpandAlt} size="xs"/>
-                  </IconButton>
-                }
-              />
-            </GridListTile>
-          )})}
+          {this.props.picture.map((picture, i) => {
+            var hardwareInfo = hardware.filter(hardware => hardware.id === picture)[0];
+            return (
+              <GridListTile key={i}>
+                <div style={{ margin: 'auto', width: 'max-content' }}>
+                  <img src={`/media/hardware/${hardwareInfo.src}`} alt={hardwareInfo.name} height={100} style={{ cursor: 'pointer' }} onClick={() => this.handleClickOpen(hardwareInfo)} />
+                </div>
+                <GridListTileBar
+                  classes={{ root: this.props.classes.multiGridListTile }}
+                  title={
+                    <div style={{ overflow: 'hidden', textOverflow: 'ellipsis' }} className={this.props.classes.multiGridListTileTitle}>
+                      {hardwareInfo.name}
+                    </div>
+                  }
+                  actionIcon={
+                    <IconButton className={this.props.classes.expand} aria-label='Vollbild' onClick={() => this.handleClickOpen(hardwareInfo)}>
+                      <FontAwesomeIcon icon={faExpandAlt} size="xs" />
+                    </IconButton>
+                  }
+                />
+              </GridListTile>
+            )
+          })}
         </GridList>
 
         <Dialog
-          style={{zIndex: 1500}}
+          style={{ zIndex: 1500 }}
           open={this.state.open}
           title={`Hardware: ${this.state.hardwareInfo.name}`}
           content={this.state.content}
@@ -93,7 +94,7 @@ class Hardware extends Component {
           button={'Schließen'}
         >
           <div>
-            <img src={`/media/hardware/${this.state.hardwareInfo.src}`} width="100%" alt={this.state.hardwareInfo.name}/>
+            <img src={`/media/hardware/${this.state.hardwareInfo.src}`} width="100%" alt={this.state.hardwareInfo.name} />
             Weitere Informationen zur Hardware-Komponente findest du <Link href={this.state.hardwareInfo.url} color="primary">hier</Link>.
           </div>
         </Dialog>
