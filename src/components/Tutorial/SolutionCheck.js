@@ -8,7 +8,7 @@ import { withRouter } from 'react-router-dom';
 import Compile from '../Compile';
 import Dialog from '../Dialog';
 
-import tutorials from '../../data/tutorials.json';
+import tutorials from '../../data/tutorials';
 import { checkXml } from '../../helpers/compareXml';
 
 import { withStyles } from '@material-ui/core/styles';
@@ -32,16 +32,16 @@ const styles = (theme) => ({
 
 class SolutionCheck extends Component {
 
-  state={
+  state = {
     open: false,
     msg: ''
   }
 
   toggleDialog = () => {
-    if(this.state.open){
+    if (this.state.open) {
       this.setState({ open: false, msg: '' });
     }
-    else{
+    else {
       this.setState({ open: !this.state });
     }
   }
@@ -61,15 +61,15 @@ class SolutionCheck extends Component {
         <Tooltip title='Lösung kontrollieren' arrow>
           <IconButton
             className={this.props.classes.compile}
-            style={{width: '40px', height: '40px', marginRight: '5px'}}
+            style={{ width: '40px', height: '40px', marginRight: '5px' }}
             onClick={() => this.check()}
           >
-            <FontAwesomeIcon icon={faPlay} size="xs"/>
+            <FontAwesomeIcon icon={faPlay} size="xs" />
           </IconButton>
         </Tooltip>
 
         <Dialog
-          style={{zIndex: 9999999}}
+          style={{ zIndex: 9999999 }}
           fullWidth
           maxWidth={'sm'}
           open={this.state.open}
@@ -80,29 +80,29 @@ class SolutionCheck extends Component {
           button={'Schließen'}
         >
           {this.state.msg.type === 'success' ?
-            <div style={{marginTop: '20px', display: 'flex'}}>
+            <div style={{ marginTop: '20px', display: 'flex' }}>
               <Compile />
-              {this.props.activeStep === steps.length-1 ?
+              {this.props.activeStep === steps.length - 1 ?
                 <Button
-                  style={{marginLeft: '10px'}}
+                  style={{ marginLeft: '10px' }}
                   variant="contained"
                   color="primary"
-                  onClick={() => {this.toggleDialog(); this.props.history.push(`/tutorial/`)}}
+                  onClick={() => { this.toggleDialog(); this.props.history.push(`/tutorial/`) }}
                 >
                   Tutorials-Übersicht
                 </Button>
-              :
+                :
                 <Button
-                  style={{marginLeft: '10px'}}
+                  style={{ marginLeft: '10px' }}
                   variant="contained"
                   color="primary"
-                  onClick={() => {this.toggleDialog(); this.props.tutorialStep(this.props.activeStep + 1)}}
+                  onClick={() => { this.toggleDialog(); this.props.tutorialStep(this.props.activeStep + 1) }}
                 >
                   nächster Schritt
                 </Button>
               }
             </div>
-          : null}
+            : null}
         </Dialog>
 
       </div>
@@ -125,4 +125,4 @@ const mapStateToProps = state => ({
   xml: state.workspace.code.xml
 });
 
-export default connect(mapStateToProps, { tutorialCheck, tutorialStep })(withStyles(styles, {withTheme: true})(withRouter(SolutionCheck)));
+export default connect(mapStateToProps, { tutorialCheck, tutorialStep })(withStyles(styles, { withTheme: true })(withRouter(SolutionCheck)));

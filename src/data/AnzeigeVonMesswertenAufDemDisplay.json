@@ -1,0 +1,48 @@
+{
+    "id": 1602165579846,
+    "title": "Anzeige von Messwerten auf dem Display",
+    "steps": [
+        {
+            "id": 1,
+            "type": "instruction",
+            "headline": "Einführung",
+            "text": "Das OLED Display ermöglicht dir Messwerte und vieles weitere anzuzeigen. Das Display bestitzt 128 Pixel in der X-Richtung und 64 Pixel in der Y-Richtung. Der Ursprung des Koordinatensystems liegt beim Display oben links in der Ecke. In diesem kurzen Tutorial zeigen wir dir, wie du Messwerte auf dem Display anzeigt. ",
+            "hardware": [
+                "hdc1080",
+                "oled",
+                "senseboxmcu",
+                "jst-jst"
+            ],
+            "requirements": [
+                1602160534286
+            ]
+        },
+        {
+            "id": 2,
+            "type": "instruction",
+            "headline": "Anschluss des Displays",
+            "text": "Schließe das Display mit dem JST-JST Kabel an einen der 5 I2C Ports auf der senseBox MCU an. Verbinde auch den Sensor mit dem JST-JST Kabel mit einem weiteren I2C Port. "
+        },
+        {
+            "id": 3,
+            "type": "instruction",
+            "headline": "Display initialsieren",
+            "text": "Im ersten Schritt muss das Display initialisiert werden. Verwende dazu den Block \"Display initialisieren\" in der Setup () Funktion. ",
+            "xml": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <block type=\"arduino_functions\" id=\"QWW|$jB8+*EL;}|#uA\" deletable=\"false\" x=\"27\" y=\"16\">\n    <statement name=\"SETUP_FUNC\">\n      <block type=\"sensebox_display_beginDisplay\" id=\"d-~:P%TW,R%^_-f-1dxX\"></block>\n    </statement>\n    <statement name=\"LOOP_FUNC\">\n      <block type=\"sensebox_display_show\" id=\"(5%h|:|-`y]}+8v*hn]!\">\n        <statement name=\"SHOW\">\n          <block type=\"sensebox_display_printDisplay\" id=\"$C*;1csr5CgR*4j]-_Xw\">\n            <field name=\"COLOR\">WHITE,BLACK</field>\n            <field name=\"SIZE\">1</field>\n            <field name=\"X\">0</field>\n            <field name=\"Y\">0</field>\n            <value name=\"printDisplay\">\n              <block type=\"sensebox_sensor_temp_hum\" id=\"O=5dozQ`l)HW:K5,xg1e\">\n                <field name=\"NAME\">Temperature</field>\n              </block>\n            </value>\n          </block>\n        </statement>\n      </block>\n    </statement>\n  </block>\n</xml>"
+        },
+        {
+            "id": 4,
+            "type": "instruction",
+            "headline": "Anzeige auf dem Display",
+            "text": "Verwende im nächsten Schritt den Block \"Zeige auf dem Display\" in der Endlosschleife, um die Anzeige auf dem Display zu starten. Zusätzlich muss mit dem Block \"Schreibe Text/Zahl\" noch angegeben werden wo auf dem Display und was auf dem Display anzeigt werden soll. Über die X und Y-Koordinaten kannst du festlegen wo auf dem Display dein Text/deine Zahl anzeigt werden soll. Beachte: In Schriftgröße 1 werden 8 Pixel in der Höhe für eine Zahl benötigt (in Schriftgröße 2 - 16). In das offene Feld \"Wert\" kannst du einfach deinen Block für den Temperatur- und Luftfeuchtigkeitssensor ziehen. Am Ende der Endlosschleife sollte das Display immer wieder gelöscht werden, um zu verhindern, dass Sachen übereinander geschrieben werden.",
+            "xml": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <block type=\"arduino_functions\" id=\"QWW|$jB8+*EL;}|#uA\" x=\"27\" y=\"16\">\n    <statement name=\"SETUP_FUNC\">\n      <block type=\"sensebox_display_beginDisplay\" id=\"d-~:P%TW,R%^_-f-1dxX\"></block>\n    </statement>\n    <statement name=\"LOOP_FUNC\">\n      <block type=\"sensebox_display_show\" id=\"(5%h|:|-`y]}+8v*hn]!\">\n        <statement name=\"SHOW\">\n          <block type=\"sensebox_display_printDisplay\" id=\"$C*;1csr5CgR*4j]-_Xw\">\n            <field name=\"COLOR\">WHITE,BLACK</field>\n            <field name=\"SIZE\">1</field>\n            <field name=\"X\">0</field>\n            <field name=\"Y\">0</field>\n            <value name=\"printDisplay\">\n              <block type=\"sensebox_sensor_temp_hum\" id=\"O=5dozQ`l)HW:K5,xg1e\">\n                <field name=\"NAME\">Temperature</field>\n              </block>\n            </value>\n          </block>\n        </statement>\n        <next>\n          <block type=\"sensebox_display_clearDisplay\" id=\"]EY=d!LZThC)@QJeJvRi\"></block>\n        </next>\n      </block>\n    </statement>\n  </block>\n</xml>"
+        },
+        {
+            "id": 5,
+            "type": "task",
+            "headline": "Aufgabe 1: Anzeige der Temperatur auf dem Display",
+            "text": "Verwende die zuvor kennengelernten Blöcke, um die Messwerte des Temperatur- und Luftfeuchtigkeitssensor auf dem Display anzuzeigen. ",
+            "xml": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <block type=\"arduino_functions\" id=\"QWW|$jB8+*EL;}|#uA\" x=\"27\" y=\"16\">\n    <statement name=\"SETUP_FUNC\">\n      <block type=\"sensebox_display_beginDisplay\" id=\"d-~:P%TW,R%^_-f-1dxX\"></block>\n    </statement>\n    <statement name=\"LOOP_FUNC\">\n      <block type=\"sensebox_display_show\" id=\"(5%h|:|-`y]}+8v*hn]!\">\n        <statement name=\"SHOW\">\n          <block type=\"sensebox_display_printDisplay\" id=\"$C*;1csr5CgR*4j]-_Xw\">\n            <field name=\"COLOR\">WHITE,BLACK</field>\n            <field name=\"SIZE\">1</field>\n            <field name=\"X\">0</field>\n            <field name=\"Y\">0</field>\n            <value name=\"printDisplay\">\n              <block type=\"sensebox_sensor_temp_hum\" id=\"O=5dozQ`l)HW:K5,xg1e\">\n                <field name=\"NAME\">Temperature</field>\n              </block>\n            </value>\n          </block>\n        </statement>\n        <next>\n          <block type=\"sensebox_display_clearDisplay\" id=\"T;T6Q?W~]V+*(^cr21p_\"></block>\n        </next>\n      </block>\n    </statement>\n  </block>\n</xml>"
+        }
+    ]
+}
