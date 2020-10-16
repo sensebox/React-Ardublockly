@@ -10,6 +10,7 @@ import WorkspaceFunc from './WorkspaceFunc';
 import BlocklyWindow from './Blockly/BlocklyWindow';
 import CodeViewer from './CodeViewer';
 import TrashcanButtons from './TrashcanButtons';
+import { createNameId } from 'mnemonic-id';
 
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
@@ -18,7 +19,6 @@ import { withStyles } from '@material-ui/core/styles';
 
 import { faCode } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import gallery from './Gallery/gallery.json';
 
 const styles = (theme) => ({
   codeOn: {
@@ -46,11 +46,19 @@ class Home extends Component {
 
   state = {
     codeOn: false,
+    gallery: [],
+    share: [],
     projectToLoad: undefined
   }
 
   componentDidMount() {
-    this.setState({ projectToLoad: gallery.find(project => project.id == this.props.match.params.galleryId) })
+
+    this.props.workspaceName(createNameId());
+    fetch(process.env.BLOCKLY_API + this.props.location.pathname)
+      .then(res => res.json())
+      .then((data) => {
+        this.setState({ projectToLoad: data })
+      })
   }
 
 
@@ -85,6 +93,7 @@ class Home extends Component {
     if (this.state.projectToLoad) {
       console.log(this.state.projectToLoad.xml)
     }
+    console.log(this.props);
     return (
       <div>
         <div style={{ float: 'right', height: '40px', marginBottom: '20px' }}><WorkspaceFunc /></div>

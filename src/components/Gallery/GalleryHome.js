@@ -6,7 +6,7 @@ import clsx from 'clsx';
 
 import Breadcrumbs from '../Breadcrumbs';
 
-import gallery from './gallery.json';
+// import gallery from './gallery.json';
 // import tutorials from '../../data/tutorials.json';
 
 import { Link } from 'react-router-dom';
@@ -49,7 +49,23 @@ const styles = (theme) => ({
 });
 
 
+
+
 class GalleryHome extends Component {
+
+    state = {
+        gallery: []
+    }
+
+    componentDidMount() {
+        console.log(process.env.REACT_APP_BLOCKLY_API)
+        fetch(process.env.REACT_APP_BLOCKLY_API + this.props.location.pathname)
+            .then(res => res.json())
+            .then((data) => {
+                this.setState({ gallery: data })
+            })
+    }
+
 
     render() {
         return (
@@ -58,7 +74,7 @@ class GalleryHome extends Component {
 
                 <h1>Gallery</h1>
                 <Grid container spacing={2}>
-                    {gallery.map((gallery, i) => {
+                    {this.state.gallery.map((gallery, i) => {
                         return (
                             <Grid item xs={12} sm={6} md={4} xl={3} key={i} style={{}}>
                                 <Link to={`/gallery/${gallery.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
