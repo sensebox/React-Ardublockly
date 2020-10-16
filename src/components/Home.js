@@ -18,6 +18,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import { faCode } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import gallery from './Gallery/gallery.json';
 
 const styles = (theme) => ({
   codeOn: {
@@ -44,14 +45,21 @@ const styles = (theme) => ({
 class Home extends Component {
 
   state = {
-    codeOn: false
+    codeOn: false,
+    projectToLoad: undefined
   }
+
+  componentDidMount() {
+    this.setState({ projectToLoad: gallery.find(project => project.id == this.props.match.params.galleryId) })
+  }
+
 
   componentDidUpdate() {
     /* Resize and reposition all of the workspace chrome (toolbox, trash,
     scrollbars etc.) This should be called when something changes that requires
     recalculating dimensions and positions of the trash, zoom, toolbox, etc.
     (e.g. window resize). */
+
     const workspace = Blockly.getMainWorkspace();
     Blockly.svgResize(workspace);
   }
@@ -71,6 +79,12 @@ class Home extends Component {
   }
 
   render() {
+    // console.log(this.props.match.params.galleryId);
+    // console.log(gallery);
+    // console.log(gallery.filter(project => project.id == this.props.match.params.galleryId));
+    if (this.state.projectToLoad) {
+      console.log(this.state.projectToLoad.xml)
+    }
     return (
       <div>
         <div style={{ float: 'right', height: '40px', marginBottom: '20px' }}><WorkspaceFunc /></div>
@@ -87,7 +101,10 @@ class Home extends Component {
               </IconButton>
             </Tooltip>
             <TrashcanButtons />
-            <BlocklyWindow blocklyCSS={{ height: '80vH' }} blockDisabled />
+            {this.state.projectToLoad ?
+              < BlocklyWindow blocklyCSS={{ height: '80vH' }} initialXml={this.state.projectToLoad.xml} /> : < BlocklyWindow blocklyCSS={{ height: '80vH' }} />
+            }
+
           </Grid>
           {this.state.codeOn ?
             <Grid item xs={12} md={6}>
