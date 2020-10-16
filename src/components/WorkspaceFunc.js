@@ -12,7 +12,6 @@ import { initialXml } from './Blockly/initialXml.js';
 
 import Compile from './Compile';
 import SolutionCheck from './Tutorial/SolutionCheck';
-import Dialog from './Dialog';
 import Snackbar from './Snackbar';
 
 import withWidth, { isWidthDown } from '@material-ui/core/withWidth';
@@ -22,8 +21,19 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import { createId } from 'mnemonic-id';
 
-import { faPen, faSave, faUpload, faCamera, faShare } from "@fortawesome/free-solid-svg-icons";
+
+import Dialog from './Dialog';
+// import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
+
+
+import { faPen, faSave, faUpload, faCamera, faShare, faShareAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const styles = (theme) => ({
@@ -49,9 +59,10 @@ const styles = (theme) => ({
 });
 
 
+
 class WorkspaceFunc extends Component {
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.inputRef = React.createRef();
     this.state = {
@@ -60,21 +71,25 @@ class WorkspaceFunc extends Component {
       open: false,
       file: false,
       saveFile: false,
+      share: false,
       name: props.name,
       snackbar: false,
       key: '',
-      message: ''
+      message: '',
+      id: ''
     };
   }
 
-  componentDidUpdate(props){
-    if(props.name !== this.props.name){
-      this.setState({name: this.props.name});
+
+
+  componentDidUpdate(props) {
+    if (props.name !== this.props.name) {
+      this.setState({ name: this.props.name });
     }
   }
 
   toggleDialog = () => {
-    this.setState({ open: !this.state });
+    this.setState({ open: !this.state, share: false });
   }
 
   saveXmlFile = () => {
@@ -85,6 +100,41 @@ class WorkspaceFunc extends Component {
     fileName = `${fileName}.xml`
     var blob = new Blob([code], { type: 'text/xml' });
     saveAs(blob, fileName);
+  }
+
+  shareBlocks = () => {
+    let code = this.props.xml;
+    let requestOptions = '';
+    let id = '';
+    if (this.state.id !== '') {
+      requestOptions = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: this.state.id,
+          name: this.state.name,
+          xml: code
+        })
+      };
+      fetch(process.env.BLOCKLY_API + '/share' + this.state.id, requestOptions)
+        .then(response => response.json())
+        .then(data => this.setState({ share: true }));
+    }
+    else {
+      id = createId(10);
+      requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: id,
+          name: this.state.name,
+          xml: code
+        })
+      };
+      fetch(process.env.BLOCKLY_API + '/share', requestOptions)
+        .then(response => response.json())
+        .then(data => this.setState({ id: data.id, share: true }));
+    }
   }
 
   getSvg = () => {
@@ -98,7 +148,7 @@ class WorkspaceFunc extends Component {
       // var cssContent = Blockly.Css.CONTENT.join('');
       var cssContent = '';
       for (var i = 0; i < document.getElementsByTagName('style').length; i++) {
-        if(/^blockly.*$/.test(document.getElementsByTagName('style')[i].id)){
+        if (/^blockly.*$/.test(document.getElementsByTagName('style')[i].id)) {
           cssContent += document.getElementsByTagName('style')[i].firstChild.data.replace(/\..* \./g, '.');
         }
       }
@@ -125,22 +175,22 @@ class WorkspaceFunc extends Component {
   }
 
   createFileName = (filetype) => {
-    this.setState({file: filetype}, () => {
-      if(this.state.name){
+    this.setState({ file: filetype }, () => {
+      if (this.state.name) {
         this.state.file === 'xml' ? this.saveXmlFile() : this.getSvg()
       }
-      else{
+      else {
         this.setState({ saveFile: true, file: filetype, open: true, title: this.state.file === 'xml' ? 'Blöcke speichern' : 'Screenshot erstellen', content: `Bitte gib einen Namen für die Bennenung der ${this.state.file === 'xml' ? 'XML' : 'SVG'}-Datei ein und bestätige diesen mit einem Klick auf 'Eingabe'.` });
       }
     });
   }
 
   setFileName = (e) => {
-    this.setState({name: e.target.value});
+    this.setState({ name: e.target.value });
   }
 
   uploadXmlFile = (xmlFile) => {
-    if(xmlFile.type !== 'text/xml'){
+    if (xmlFile.type !== 'text/xml') {
       this.setState({ open: true, file: false, title: 'Unzulässiger Dateityp', content: 'Die übergebene Datei entsprach nicht dem geforderten Format. Es sind nur XML-Dateien zulässig.' });
     }
     else {
@@ -155,18 +205,18 @@ class WorkspaceFunc extends Component {
           workspace.clear();
           this.props.clearStats();
           Blockly.Xml.domToWorkspace(xmlDom, workspace);
-          if(workspace.getAllBlocks().length < 1){
+          if (workspace.getAllBlocks().length < 1) {
             Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xmlBefore), workspace)
             this.setState({ open: true, file: false, title: 'Keine Blöcke', content: 'Es wurden keine Blöcke detektiert. Bitte überprüfe den XML-Code und versuche es erneut.' });
           }
           else {
-            if(!this.props.solutionCheck){
+            if (!this.props.solutionCheck) {
               var extensionPosition = xmlFile.name.lastIndexOf('.');
               this.props.workspaceName(xmlFile.name.substr(0, extensionPosition));
             }
             this.setState({ snackbar: true, key: Date.now(), message: 'Das Projekt aus gegebener XML-Datei wurde erfolgreich eingefügt.' });
           }
-        } catch(err){
+        } catch (err) {
           this.setState({ open: true, file: false, title: 'Ungültige XML', content: 'Die XML-Datei konnte nicht in Blöcke zerlegt werden. Bitte überprüfe den XML-Code und versuche es erneut.' });
         }
       };
@@ -189,56 +239,60 @@ class WorkspaceFunc extends Component {
     workspace.options.maxBlocks = Infinity;
     this.props.onChangeCode();
     this.props.clearStats();
-    if(!this.props.solutionCheck){
+    if (!this.props.solutionCheck) {
       this.props.workspaceName(null);
     }
     this.setState({ snackbar: true, key: Date.now(), message: 'Das Projekt wurde erfolgreich zurückgesetzt.' });
   }
 
+
+
   render() {
     return (
-      <div style={{width: 'max-content', display: 'flex'}}>
+      <div style={{ width: 'max-content', display: 'flex' }}>
         {!this.props.solutionCheck ?
-          <Tooltip title={`Name des Projekts${this.props.name ? `: ${this.props.name}` : ''}`} arrow style={{marginRight: '5px'}}>
-          <div className={this.props.classes.workspaceName} onClick={() => {this.setState({file: true, open: true, saveFile: false, title: 'Projekt benennen', content: 'Bitte gib einen Namen für das Projekt ein und bestätige diesen mit einem Klick auf \'Eingabe\'.'})}}>
-            {this.props.name && !isWidthDown('xs', this.props.width) ? <Typography style={{margin: 'auto -3px auto 12px'}}>{this.props.name}</Typography> : null}
-            <div style={{width: '40px', display: 'flex'}}>
-              <FontAwesomeIcon icon={faPen} style={{height: '18px', width: '18px', margin: 'auto'}}/>
+          <Tooltip title={`Name des Projekts${this.props.name ? `: ${this.props.name}` : ''}`} arrow style={{ marginRight: '5px' }}>
+            <div className={this.props.classes.workspaceName} onClick={() => { this.setState({ file: true, open: true, saveFile: false, title: 'Projekt benennen', content: 'Bitte gib einen Namen für das Projekt ein und bestätige diesen mit einem Klick auf \'Eingabe\'.' }) }}>
+              {this.props.name && !isWidthDown('xs', this.props.width) ? <Typography style={{ margin: 'auto -3px auto 12px' }}>{this.props.name}</Typography> : null}
+              <div style={{ width: '40px', display: 'flex' }}>
+                <FontAwesomeIcon icon={faPen} style={{ height: '18px', width: '18px', margin: 'auto' }} />
+              </div>
             </div>
-          </div>
           </Tooltip>
-        : null}
+          : null}
         {this.props.solutionCheck ? <SolutionCheck /> : <Compile iconButton />}
-        <Tooltip title='Blöcke speichern' arrow style={{marginRight: '5px'}}>
+        <Tooltip title='Blöcke speichern' arrow style={{ marginRight: '5px' }}>
           <IconButton
             className={this.props.classes.button}
-            onClick={() => {this.createFileName('xml');}}
+            onClick={() => { this.createFileName('xml'); }}
           >
-            <FontAwesomeIcon icon={faSave} size="xs"/>
+            <FontAwesomeIcon icon={faSave} size="xs" />
           </IconButton>
         </Tooltip>
-        <div ref={this.inputRef} style={{width: 'max-content', height: '40px', marginRight: '5px'}}>
+        <div ref={this.inputRef} style={{ width: 'max-content', height: '40px', marginRight: '5px' }}>
           <input
-            style={{display: 'none'}}
+            style={{ display: 'none' }}
             accept="text/xml"
-            onChange={(e) => {this.uploadXmlFile(e.target.files[0])}}
+            onChange={(e) => { this.uploadXmlFile(e.target.files[0]) }}
             id="open-blocks"
             type="file"
           />
           <label htmlFor="open-blocks">
-            <Tooltip title='Blöcke öffnen' arrow style={{marginRight: '5px'}}>
-              <div className={this.props.classes.button} style={{borderRadius: '50%', cursor: 'pointer', display: 'table-cell',
-              verticalAlign: 'middle',
-              textAlign: 'center'}}>
-                <FontAwesomeIcon icon={faUpload} style={{width: '18px', height: '18px'}}/>
+            <Tooltip title='Blöcke öffnen' arrow style={{ marginRight: '5px' }}>
+              <div className={this.props.classes.button} style={{
+                borderRadius: '50%', cursor: 'pointer', display: 'table-cell',
+                verticalAlign: 'middle',
+                textAlign: 'center'
+              }}>
+                <FontAwesomeIcon icon={faUpload} style={{ width: '18px', height: '18px' }} />
               </div>
             </Tooltip>
           </label>
         </div>
-        <Tooltip title='Screenshot erstellen' arrow style={{marginRight: '5px'}}>
+        <Tooltip title='Screenshot erstellen' arrow style={{ marginRight: '5px' }}>
           <IconButton
             className={this.props.classes.button}
-            onClick={() => {this.createFileName('svg');}}
+            onClick={() => { this.createFileName('svg'); }}
           >
             <FontAwesomeIcon icon={faCamera} size="xs" />
           </IconButton>
@@ -248,24 +302,55 @@ class WorkspaceFunc extends Component {
             className={this.props.classes.button}
             onClick={() => this.resetWorkspace()}
           >
-            <FontAwesomeIcon icon={faShare} size="xs" flip='horizontal'/>
+            <FontAwesomeIcon icon={faShare} size="xs" flip='horizontal' />
           </IconButton>
         </Tooltip>
+        <Tooltip title='Blöcke teilen' arrow>
+          <IconButton
+            className={this.props.classes.button}
+            onClick={() => this.shareBlocks()}
+          >
+            <FontAwesomeIcon icon={faShareAlt} size="xs" flip='horizontal' />
+          </IconButton>
+        </Tooltip>
+
+        <Dialog open={this.state.share} onClose={this.toggleDialog} aria-labelledby="form-dialog-title">
+          <DialogTitle id="form-dialog-title">Dein Link wurde erstellt.</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Über den folgenden Link kannst du dein Programm teilen.
+          </DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              defaultValue={"http://localhost:3000/share/" + this.state.id}
+              label="url"
+              type="email"
+              fullWidth
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.toggleDialog} color="primary">
+              Cancel
+          </Button>
+          </DialogActions>
+        </Dialog>
 
         <Dialog
           open={this.state.open}
           title={this.state.title}
           content={this.state.content}
           onClose={this.toggleDialog}
-          onClick={this.state.file ? () => {this.toggleDialog(); this.setState({name: this.props.name})} : this.toggleDialog}
+          onClick={this.state.file ? () => { this.toggleDialog(); this.setState({ name: this.props.name }) } : this.toggleDialog}
           button={this.state.file ? 'Abbrechen' : 'Schließen'}
         >
           {this.state.file ?
-            <div style={{marginTop: '10px'}}>
-              <TextField autoFocus placeholder={this.state.saveXml ?'Dateiname' : 'Projektname'} value={this.state.name} onChange={this.setFileName} style={{marginRight: '10px'}}/>
-              <Button disabled={!this.state.name} variant='contained' color='primary' onClick={() => {this.state.saveFile ? this.state.file === 'xml' ? this.saveXmlFile() : this.getSvg() : this.renameWorkspace(); this.toggleDialog();}}>Eingabe</Button>
+            <div style={{ marginTop: '10px' }}>
+              <TextField autoFocus placeholder={this.state.saveXml ? 'Dateiname' : 'Projektname'} value={this.state.name} onChange={this.setFileName} style={{ marginRight: '10px' }} />
+              <Button disabled={!this.state.name} variant='contained' color='primary' onClick={() => { this.state.saveFile ? this.state.file === 'xml' ? this.saveXmlFile() : this.getSvg() : this.renameWorkspace(); this.toggleDialog(); }}>Eingabe</Button>
             </div>
-          : null}
+            : null}
         </Dialog>
 
         <Snackbar
@@ -295,4 +380,4 @@ const mapStateToProps = state => ({
   name: state.workspace.name
 });
 
-export default connect(mapStateToProps, { clearStats, onChangeCode, workspaceName })(withStyles(styles, {withTheme: true})(withWidth()(WorkspaceFunc)));
+export default connect(mapStateToProps, { clearStats, onChangeCode, workspaceName })(withStyles(styles, { withTheme: true })(withWidth()(WorkspaceFunc)));
