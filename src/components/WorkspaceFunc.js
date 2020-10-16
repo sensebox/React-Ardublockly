@@ -116,7 +116,7 @@ class WorkspaceFunc extends Component {
           xml: code
         })
       };
-      fetch(process.env.BLOCKLY_API + '/share' + this.state.id, requestOptions)
+      fetch(process.env.REACT_APP_BLOCKLY_API + '/share' + this.state.id, requestOptions)
         .then(response => response.json())
         .then(data => this.setState({ share: true }));
     }
@@ -131,7 +131,7 @@ class WorkspaceFunc extends Component {
           xml: code
         })
       };
-      fetch(process.env.BLOCKLY_API + '/share', requestOptions)
+      fetch(process.env.REACT_APP_BLOCKLY_API + '/share', requestOptions)
         .then(response => response.json())
         .then(data => this.setState({ id: data.id, share: true }));
     }
