@@ -19,7 +19,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
                 ]
             }
         ],
-        "output": "Boolean",
+        "output": Types.BOOLEAN.typeName,
         "style": "logic_blocks",
         "tooltip": "%{BKY_LOGIC_BOOLEAN_TOOLTIP}",
         "helpUrl": "%{BKY_LOGIC_BOOLEAN_HELPURL}"
