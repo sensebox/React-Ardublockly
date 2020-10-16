@@ -18,7 +18,7 @@ export const CHARACTER = {
 
 export const BOOLEAN = {
     typeId: 'Boolean',
-    typeName: 'Boolean',
+    typeName: 'boolean',
     typeMsgName: 'ARD_TYPE_BOOL',
 }
 
