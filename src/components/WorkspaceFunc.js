@@ -297,7 +297,7 @@ class WorkspaceFunc extends Component {
             <FontAwesomeIcon icon={faCamera} size="xs" />
           </IconButton>
         </Tooltip>
-        <Tooltip title='Workspace zurücksetzen' arrow>
+        <Tooltip title='Workspace zurücksetzen' arrow style={{ marginRight: '5px' }}>
           <IconButton
             className={this.props.classes.button}
             onClick={() => this.resetWorkspace()}
@@ -324,7 +324,7 @@ class WorkspaceFunc extends Component {
               autoFocus
               margin="dense"
               id="name"
-              defaultValue={"http://localhost:3000/share/" + this.state.id}
+              defaultValue={window.location + "share/" + this.state.id}
               label="url"
               type="email"
               fullWidth
