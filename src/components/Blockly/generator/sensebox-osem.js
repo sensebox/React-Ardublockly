@@ -18,17 +18,19 @@ Blockly.Arduino.sensebox_osem_connection = function (Block) {
   var box_id = this.getFieldValue('BoxID');
   var host = this.getFieldValue('host');
   var branch = Blockly.Arduino.statementToCode(Block, 'DO');
-  //var blocks = Blockly.Block.getDescendants;
+  var blocks = this.getDescendants();
   var type = this.getFieldValue('type');
   var ssl = this.getFieldValue('SSL');
   var port = 0;
   var count = 0;
-  // for (var i = 0; i < blocks.length; i++) {
-  //     if (blocks[i].type === 'sensebox_send_to_osem') {
-  //         count++;
+  if (blocks != undefined) {
+    for (var i = 0; i < blocks.length; i++) {
+      if (blocks[i].type === 'sensebox_send_to_osem') {
+        count++;
 
-  //     }
-  // }
+      }
+    }
+  }
   var num_sensors = count;
   Blockly.Arduino.libraries_['library_senseBoxMCU'] = '#include "SenseBoxMCU.h"';
   Blockly.Arduino.definitions_['num_sensors'] = 'static const uint8_t NUM_SENSORS = ' + num_sensors + ';'
