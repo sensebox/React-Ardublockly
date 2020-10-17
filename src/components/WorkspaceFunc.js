@@ -324,7 +324,7 @@ class WorkspaceFunc extends Component {
               autoFocus
               margin="dense"
               id="name"
-              defaultValue={window.location + "share/" + this.state.id}
+              defaultValue={window.location.origin + "/share/" + this.state.id}
               label="url"
               type="email"
               fullWidth
