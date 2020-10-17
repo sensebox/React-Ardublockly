@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { BrowserRouter as Router } from 'react-router-dom';
+import { createBrowserHistory } from "history";
 
 import { Provider } from 'react-redux';
 import store from './store';
@@ -25,12 +26,14 @@ const theme = createMuiTheme({
   }
 });
 
+const customHistory = createBrowserHistory();
+
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <Provider store={store}>
-        <Router>
+        <Router history={customHistory}>
           <div className="wrapper">
             <Navbar />
             <Routes />

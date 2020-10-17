@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { visitPage } from '../actions/generalActions';
 
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 
 import Home from './Home';
 import Tutorial from './Tutorial/Tutorial';
@@ -9,6 +12,10 @@ import Builder from './Tutorial/Builder/Builder';
 import NotFound from './NotFound';
 
 class Routes extends Component {
+
+  componentDidUpdate(){
+    this.props.visitPage();
+  }
 
   render() {
     return (
@@ -25,4 +32,8 @@ class Routes extends Component {
   }
 }
 
-export default Routes;
+Home.propTypes = {
+  visitPage: PropTypes.func.isRequired
+};
+
+export default connect(null, { visitPage })(withRouter(Routes));
