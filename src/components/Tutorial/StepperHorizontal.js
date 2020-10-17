@@ -51,6 +51,7 @@ class StepperHorizontal extends Component {
 
   render() {
     var tutorialId = this.props.currentTutorialId;
+    var tutorialIndex = this.props.currentTutorialIndex;
     var status = this.props.status.filter(status => status.id === tutorialId)[0];
     var tasks = status.tasks;
     var error = tasks.filter(task => task.type === 'error').length > 0;
@@ -69,8 +70,8 @@ class StepperHorizontal extends Component {
           : null}
         <div className={this.props.classes.stepper}>
           <Button
-            disabled={tutorialId === 1}
-            onClick={() => { this.props.history.push(`/tutorial/${tutorialId - 1}`) }}
+            disabled={tutorialIndex === 0}
+            onClick={() => { this.props.history.push(`/tutorial/${tutorials[tutorialIndex - 1].id}`) }}
           >
             {'<'}
           </Button>
@@ -81,8 +82,8 @@ class StepperHorizontal extends Component {
             </div>
           </Tooltip>
           <Button
-            disabled={tutorialId + 1 > tutorials.length}
-            onClick={() => { this.props.history.push(`/tutorial/${tutorialId + 1}`) }}
+            disabled={tutorialIndex + 1 === tutorials.length}
+            onClick={() => { this.props.history.push(`/tutorial/${tutorials[tutorialIndex + 1].id}`) }}
           >
             {'>'}
           </Button>
@@ -95,13 +96,15 @@ class StepperHorizontal extends Component {
 StepperHorizontal.propTypes = {
   status: PropTypes.array.isRequired,
   change: PropTypes.number.isRequired,
-  currentTutorialId: PropTypes.number.isRequired
+  currentTutorialId: PropTypes.number.isRequired,
+  currentTutorialIndex: PropTypes.number.isRequired
 };
 
 const mapStateToProps = state => ({
   change: state.tutorial.change,
   status: state.tutorial.status,
-  currentTutorialId: state.tutorial.currentId
+  currentTutorialId: state.tutorial.currentId,
+  currentTutorialIndex: state.tutorial.currentIndex
 });
 
 export default connect(mapStateToProps, null)(withRouter(withStyles(styles, { withTheme: true })(StepperHorizontal)));
