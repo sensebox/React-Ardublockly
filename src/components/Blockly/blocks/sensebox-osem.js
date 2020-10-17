@@ -142,26 +142,4 @@ Blockly.Blocks['sensebox_send_to_osem'] = {
     * Blockly.Blocks['controls_flow_statements'].LOOP_TYPES.push('custom_loop');
     */
     LOOP_TYPES: ['sensebox_osem_connection']
-    ,
-    // domToMutation: function (xmlElement) {
-    //     (xmlElement.getAttribute('Value'));
-
-    // },
-    // /**
-    //  * Create XML to represent number of pins selection.
-    //  * @return {!Element} XML storage element.
-    //  * @this Blockly.Block
-    //  */
-    // mutationToDom: function () {
-    //     var container = document.createElement('mutation');
-    //     var input = this.getFieldValue('NAME');
-    //     this.updateShape_(input);
-    //     container.setAttribute('NAME', input);
-    //     return container;
-    // },
-
-    // updateShape_: function () {
-
-
-    // },
 };
