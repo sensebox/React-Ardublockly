@@ -156,7 +156,13 @@ class WorkspaceFunc extends Component {
       // https://github.com/google/blockly/pull/3431/files#diff-00254795773903d3c0430915a68c9521R328
       cssContent += `.blocklyPath {
         fill-opacity: 1;
-      } `;
+      }
+      .blocklyPathDark {
+        display: flex;
+      }
+      .blocklyPathLight {
+        display: flex;
+      }  `;
 
       var css = '<defs><style type="text/css" xmlns="http://www.w3.org/1999/xhtml"><![CDATA[' + cssContent + ']]></style></defs>';
 

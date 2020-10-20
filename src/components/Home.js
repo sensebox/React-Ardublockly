@@ -11,6 +11,7 @@ import BlocklyWindow from './Blockly/BlocklyWindow';
 import CodeViewer from './CodeViewer';
 import TrashcanButtons from './TrashcanButtons';
 import { createNameId } from 'mnemonic-id';
+import HintTutorialExists from './Tutorial/HintTutorialExists';
 
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
@@ -121,6 +122,7 @@ class Home extends Component {
             </Grid>
             : null}
         </Grid>
+        <HintTutorialExists />
       </div>
     );
   };

@@ -15,7 +15,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 
 const styles = theme => ({
   multiGridListTile: {
-    background: "#4EAF47",
+    background: theme.palette.primary.main,
     opacity: 0.9,
     height: '30px'
   },
