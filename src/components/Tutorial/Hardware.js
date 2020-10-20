@@ -27,7 +27,7 @@ const styles = theme => ({
     color: theme.palette.text.primary
   },
   multiGridListTile: {
-    background: "#4EAF47",
+    background: theme.palette.primary.main,
     opacity: 0.9,
     height: '30px'
   },
@@ -95,7 +95,7 @@ class Hardware extends Component {
         >
           <div>
             <img src={`/media/hardware/${this.state.hardwareInfo.src}`} width="100%" alt={this.state.hardwareInfo.name} />
-            Weitere Informationen zur Hardware-Komponente findest du <Link href={this.state.hardwareInfo.url} color="primary">hier</Link>.
+            Weitere Informationen zur Hardware-Komponente findest du <Link rel="noreferrer" target="_blank" href={this.state.hardwareInfo.url} color="primary">hier</Link>.
           </div>
         </Dialog>
 

@@ -1,10 +1,9 @@
-
-
 let tutorials = [
-    require('./ErsteSchritte.json'),
-    require('./loops_01.json'),
-    require('./Wenn-DannBedingungen.json'),
-    require('./variablen_01.json'),
-    require('./AnzeigeVonMesswertenAufDemDisplay.json')
+    require('./tutorial/ErsteSchritte.json'),
+    require('./tutorial/Schleifen.json'),
+    require('./tutorial/Wenn-DannBedingungen.json'),
+    require('./tutorial/VerwendungVonVariablen.json'),
+    require('./tutorial/AnzeigeVonMesswertenAufDemDisplay.json')
 ]
+
 module.exports = tutorials;

@@ -7,7 +7,7 @@
   },
   {
     "id": "breadboard",
-    "name": "Steckboard",
+    "name": "Breadboard",
     "src": "breadboard.png",
     "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
   },

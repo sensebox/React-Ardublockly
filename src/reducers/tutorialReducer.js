@@ -41,6 +41,7 @@ const initialStatus = () => {
 const initialState = {
   status: initialStatus(),
   currentId: null,
+  currentIndex: null,
   activeStep: 0,
   change: 0
 };
@@ -64,7 +65,8 @@ export default function (state = initialState, action) {
     case TUTORIAL_ID:
       return {
         ...state,
-        currentId: action.payload
+        currentId: action.payload,
+        currentIndex: tutorials.findIndex(tutorial => tutorial.id === action.payload)
       }
     case TUTORIAL_STEP:
       return {
