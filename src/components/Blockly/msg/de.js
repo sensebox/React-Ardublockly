@@ -1,5 +1,9 @@
+// import * as Blockly from 'blockly/core';
 
-import * as Blockly from 'blockly/core';
+// https://developers.google.com/blockly/guides/configure/web/translations
+
+const Blockly = {};
+Blockly.Msg = {};
 
 Blockly.Msg.ADD_COMMENT = "Kommentar hinzufügen";
 Blockly.Msg.AUTH = "Bitte autorisiere diese App zum Aktivieren der Speicherung deiner Arbeit und zum Teilen.";
@@ -770,3 +774,4 @@ Blockly.Msg.senseBox_telegram_send = "Sende Nachricht"
 
 Blockly.Msg.senseBox_scd30 = "CO2 Sensor (Sensirion SCD30)";
 
+export const De = Blockly.Msg;
