@@ -57,6 +57,16 @@ const compareParentBlock = (originalBlock, userBlock, index) => {
       }
     }
   }
+  if(userBlock.attributes['disabled']){
+    // user-block is not connected
+    return {text: `Der Block mit dem Typen '${userBlock.attributes['type'].value}' hat keine Verbindung zu einem anderen Block.`, type: 'error'};
+  }
+  else if(originalBlock.parentNode.parentNode && originalBlock.parentNode.parentNode.attributes && originalBlock.parentNode.parentNode.attributes['type']){
+    var type = compareBlockType(originalBlock.parentNode.parentNode, userBlock.parentNode.parentNode, index);
+    if(type){
+      return {text: `Der Block an Position ${index+1} ist falsch eingeordnet. Tipp: Block an Position ${index+1} einem vorherigen Block unterordnen.`, type: 'error'};
+    }
+  }
 };
 
 const compareXml = (originalXml, userXml) => {
