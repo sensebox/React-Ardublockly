@@ -1,5 +1,9 @@
+// import * as Blockly from 'blockly/core';
 
-import * as Blockly from 'blockly/core';
+// https://developers.google.com/blockly/guides/configure/web/translations
+
+const Blockly = {};
+Blockly.Msg = {};
 
 Blockly.Msg.ADD_COMMENT = "Add Comment";
 Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";
@@ -751,3 +755,5 @@ Blockly.Msg.sensebox_soil_smt50 = "Soil Moisture and Temperature (SMT50)";
 Blockly.Msg.sensebox_web_readHTML_filename = "File:";
 
 Blockly.Msg.senseBox_scd30 = "CO2 Sensor (Sensirion SCD30)";
+
+export const En = Blockly.Msg;
