@@ -10,10 +10,13 @@ import Tutorial from './Tutorial/Tutorial';
 import TutorialHome from './Tutorial/TutorialHome';
 import Builder from './Tutorial/Builder/Builder';
 import NotFound from './NotFound';
+import GalleryHome from './Gallery/GalleryHome';
+import Settings from './Settings/Settings';
+
 
 class Routes extends Component {
 
-  componentDidUpdate(){
+  componentDidUpdate() {
     this.props.visitPage();
   }
 
@@ -23,7 +26,11 @@ class Routes extends Component {
         <Switch>
           <Route path="/" exact component={Home} />
           <Route path="/tutorial" exact component={TutorialHome} />
-          <Route path="/tutorial/builder" exact component={Builder}/>
+          <Route path="/settings" exact component={Settings} />
+          <Route path="/gallery" exact component={GalleryHome} />
+          <Route path="/gallery/:galleryId" exact component={Home} />
+          <Route path="/share/:shareId" exact component={Home} />
+          <Route path="/tutorial/builder" exact component={Builder} />
           <Route path="/tutorial/:tutorialId" exact component={Tutorial} />
           <Route component={NotFound} />
         </Switch>

@@ -45,32 +45,32 @@ class Navbar extends Component {
     this.setState({ open: !this.state.open });
   }
 
-  render(){
+  render() {
     return (
       <div>
         <AppBar
           position="relative"
-          style={{height: '50px', marginBottom: '30px'}}
-          classes={{root: this.props.classes.appBarColor}}
+          style={{ height: '50px', marginBottom: '30px' }}
+          classes={{ root: this.props.classes.appBarColor }}
         >
-          <Toolbar style={{height: '50px', minHeight: '50px', padding: 0, color: 'white'}}>
+          <Toolbar style={{ height: '50px', minHeight: '50px', padding: 0, color: 'white' }}>
             <IconButton
               color="inherit"
               onClick={this.toggleDrawer}
-              style={{margin: '0 10px'}}
+              style={{ margin: '0 10px' }}
             >
               <FontAwesomeIcon icon={faBars} />
             </IconButton>
-            <Link to={"/"} style={{textDecoration: 'none', color: 'inherit'}}>
+            <Link to={"/"} style={{ textDecoration: 'none', color: 'inherit' }}>
               <Typography variant="h6" noWrap>
                 senseBox Blockly
               </Typography>
             </Link>
-            <Link to={"/"} style={{marginLeft: '10px'}}>
-              <img src={senseboxLogo} alt="senseBox-Logo" width="30"/>
+            <Link to={"/"} style={{ marginLeft: '10px' }}>
+              <img src={senseboxLogo} alt="senseBox-Logo" width="30" />
             </Link>
             {/^\/tutorial(\/.*$|$)/g.test(this.props.location.pathname) ?
-              <Link to={"/tutorial"} style={{textDecoration: 'none', color: 'inherit', marginLeft: '10px'}}>
+              <Link to={"/tutorial"} style={{ textDecoration: 'none', color: 'inherit', marginLeft: '10px' }}>
                 <Typography variant="h6" noWrap>
                   Tutorial
                 </Typography>
@@ -82,34 +82,34 @@ class Navbar extends Component {
           anchor="left"
           onClose={this.toggleDrawer}
           open={this.state.open}
-          classes={{paper: this.props.classes.drawerWidth}}
-          ModalProps={{keepMounted: true}} // Better open performance on mobile.
+          classes={{ paper: this.props.classes.drawerWidth }}
+          ModalProps={{ keepMounted: true }} // Better open performance on mobile.
         >
-          <div style={{height: '50px', cursor: 'pointer', color: 'white', padding: '0 22px'}} className={this.props.classes.appBarColor} onClick={this.toggleDrawer}>
-            <div style={{display:' table-cell', verticalAlign: 'middle', height: 'inherit', width: '0.1%'}}>
-              <Typography variant="h6" style={{display:'inline'}}>
+          <div style={{ height: '50px', cursor: 'pointer', color: 'white', padding: '0 22px' }} className={this.props.classes.appBarColor} onClick={this.toggleDrawer}>
+            <div style={{ display: ' table-cell', verticalAlign: 'middle', height: 'inherit', width: '0.1%' }}>
+              <Typography variant="h6" style={{ display: 'inline' }}>
                 Menü
               </Typography>
-              <div style={{float: 'right'}}>
+              <div style={{ float: 'right' }}>
                 <FontAwesomeIcon icon={faChevronLeft} />
               </div>
             </div>
           </div>
           <List>
-            {[{text: 'Tutorials', icon: faChalkboardTeacher, link: "/tutorial"}, {text: 'Tutorial-Builder', icon: faFolderPlus, link: "/tutorial/builder"}, {text: 'Einstellungen', icon: faCog, link: "/settings"}].map((item, index) => (
-              <Link to={item.link} key={index} style={{textDecoration: 'none', color: 'inherit'}}>
+            {[{ text: 'Tutorials', icon: faChalkboardTeacher, link: "/tutorial" }, { text: 'Tutorial-Builder', icon: faFolderPlus, link: "/tutorial/builder" }, { text: 'Gallery', icon: faFolderPlus, link: "/gallery" }, { text: 'Einstellungen', icon: faCog, link: "/settings" }].map((item, index) => (
+              <Link to={item.link} key={index} style={{ textDecoration: 'none', color: 'inherit' }}>
                 <ListItem button onClick={this.toggleDrawer}>
-                  <ListItemIcon><FontAwesomeIcon icon={item.icon}/></ListItemIcon>
+                  <ListItemIcon><FontAwesomeIcon icon={item.icon} /></ListItemIcon>
                   <ListItemText primary={item.text} />
                 </ListItem>
               </Link>
             ))}
           </List>
-          <Divider classes={{root: this.props.classes.appBarColor}} style={{marginTop: 'auto'}}/>
+          <Divider classes={{ root: this.props.classes.appBarColor }} style={{ marginTop: 'auto' }} />
           <List>
-            {[{text: 'Über uns', icon: faBuilding},{text: 'Kontakt', icon: faEnvelope}, {text: 'Impressum', icon: faIdCard}].map((item, index) => (
+            {[{ text: 'Über uns', icon: faBuilding }, { text: 'Kontakt', icon: faEnvelope }, { text: 'Impressum', icon: faIdCard }].map((item, index) => (
               <ListItem button key={index} onClick={this.toggleDrawer}>
-                <ListItemIcon><FontAwesomeIcon icon={item.icon}/></ListItemIcon>
+                <ListItemIcon><FontAwesomeIcon icon={item.icon} /></ListItemIcon>
                 <ListItemText primary={item.text} />
               </ListItem>
             ))}
@@ -120,4 +120,4 @@ class Navbar extends Component {
   }
 }
 
-export default withStyles(styles, {withTheme: true})(withRouter(Navbar));
+export default withStyles(styles, { withTheme: true })(withRouter(Navbar));

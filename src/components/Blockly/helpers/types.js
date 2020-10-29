@@ -60,7 +60,7 @@ export const DECIMAL = {
 /** Array/List of items. */
 export const ARRAY = {
     typeId: 'Array',
-    typeName: 'array',
+    typeName: 'Array',
     typeMsgName: 'ARD_TYPE_ARRAY',
     compatibleTypes: []
 }
@@ -87,6 +87,7 @@ export const CHILD_BLOCK_MISSING = {
 }
 
 const compatibleTypes = {
+    Array: ['Array'],
     boolean: ['boolean'],
     int: ['int'],
     char: ['char'],
