@@ -10,6 +10,7 @@ import WorkspaceFunc from './WorkspaceFunc';
 import BlocklyWindow from './Blockly/BlocklyWindow';
 import CodeViewer from './CodeViewer';
 import TrashcanButtons from './TrashcanButtons';
+import { createNameId } from 'mnemonic-id';
 import HintTutorialExists from './Tutorial/HintTutorialExists';
 
 import Grid from '@material-ui/core/Grid';
@@ -45,14 +46,29 @@ const styles = (theme) => ({
 class Home extends Component {
 
   state = {
-    codeOn: false
+    codeOn: false,
+    gallery: [],
+    share: [],
+    projectToLoad: undefined
   }
+
+  componentDidMount() {
+
+    this.props.workspaceName(createNameId());
+    fetch(process.env.REACT_APP_BLOCKLY_API + this.props.location.pathname)
+      .then(res => res.json())
+      .then((data) => {
+        this.setState({ projectToLoad: data })
+      })
+  }
+
 
   componentDidUpdate() {
     /* Resize and reposition all of the workspace chrome (toolbox, trash,
     scrollbars etc.) This should be called when something changes that requires
     recalculating dimensions and positions of the trash, zoom, toolbox, etc.
     (e.g. window resize). */
+
     const workspace = Blockly.getMainWorkspace();
     Blockly.svgResize(workspace);
   }
@@ -72,6 +88,13 @@ class Home extends Component {
   }
 
   render() {
+    // console.log(this.props.match.params.galleryId);
+    // console.log(gallery);
+    // console.log(gallery.filter(project => project.id == this.props.match.params.galleryId));
+    if (this.state.projectToLoad) {
+      console.log(this.state.projectToLoad.xml)
+    }
+    console.log(this.props);
     return (
       <div>
         <div style={{ float: 'right', height: '40px', marginBottom: '20px' }}><WorkspaceFunc /></div>
@@ -88,7 +111,10 @@ class Home extends Component {
               </IconButton>
             </Tooltip>
             <TrashcanButtons />
-            <BlocklyWindow blocklyCSS={{ height: '80vH' }} blockDisabled />
+            {this.state.projectToLoad ?
+              < BlocklyWindow blocklyCSS={{ height: '80vH' }} initialXml={this.state.projectToLoad.xml} /> : < BlocklyWindow blocklyCSS={{ height: '80vH' }} />
+            }
+
           </Grid>
           {this.state.codeOn ?
             <Grid item xs={12} md={6}>

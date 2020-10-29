@@ -1,7 +1,3 @@
-// import * as Blockly from 'blockly/core';
-
-// https://developers.google.com/blockly/guides/configure/web/translations
-
 const Blockly = {};
 Blockly.Msg = {};
 
@@ -613,6 +609,11 @@ Blockly.Msg.senseBox_display_printDisplay_y = "y-coordinates";
 Blockly.Msg.senseBox_display_setSize = "set font size to";
 Blockly.Msg.senseBox_display_setSize_tip = "Change the font size. Set a Value between 1-10.";
 Blockly.Msg.senseBox_display_white = "White";
+Blockly.Msg.senseBox_display_fastPrint_dimension = "Unit";
+Blockly.Msg.senseBox_display_fastPrint_show = "Show Measurements";
+Blockly.Msg.senseBox_display_fastPrint_tip = "Show two measurements with title and dimension on the display";
+Blockly.Msg.senseBox_display_fastPrint_title = "Title";
+Blockly.Msg.senseBox_display_fastPrint_value = "Measurement";
 Blockly.Msg.senseBox_foto = "Light Dependent Resistor";
 Blockly.Msg.senseBox_foto_tip = "simple light depending resistor, gives values between 0 and 1023";
 Blockly.Msg.senseBox_gas = "Gas (VOC)";
@@ -676,6 +677,7 @@ Blockly.Msg.senseBox_osem_host = "opensensemap.org";
 Blockly.Msg.senseBox_osem_host_workshop = "workshop.opensensemap.org";
 Blockly.Msg.senseBox_osem_mobile = "Mobile";
 Blockly.Msg.senseBox_osem_stationary = "Stationary";
+Blockly.Msg.senseBox_osem_access_token = "API Key";
 Blockly.Msg.senseBox_output_filename = "filename";
 Blockly.Msg.senseBox_output_format = "format:";
 Blockly.Msg.senseBox_output_linebreak = "linebreak";
@@ -753,7 +755,13 @@ Blockly.Msg.sensebox_display_show_tip = "Print on Display";
 Blockly.Msg.sensebox_sd_filename = "data";
 Blockly.Msg.sensebox_soil_smt50 = "Soil Moisture and Temperature (SMT50)";
 Blockly.Msg.sensebox_web_readHTML_filename = "File:";
-
+//SCD30 CO2 Sensor
 Blockly.Msg.senseBox_scd30 = "CO2 Sensor (Sensirion SCD30)";
+
+//WS2818 RGB LED
+Blockly.Msg.senseBox_ws2818_rgb_led = "senseBox WS2812 - RGB LED";
+Blockly.Msg.senseBox_ws2818_rgb_led_brightness = "Helligkeit";
+Blockly.Msg.senseBox_ws2818_rgb_led_position = "Position";
+
 
 export const En = Blockly.Msg;

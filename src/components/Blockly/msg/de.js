@@ -1,7 +1,3 @@
-// import * as Blockly from 'blockly/core';
-
-// https://developers.google.com/blockly/guides/configure/web/translations
-
 const Blockly = {};
 Blockly.Msg = {};
 
@@ -610,6 +606,7 @@ Blockly.Msg.senseBox_osem_connection = "Verbinde mit openSenseMap";
 Blockly.Msg.senseBox_osem_exposure = "Typ";
 Blockly.Msg.senseBox_osem_stationary = "Stationär";
 Blockly.Msg.senseBox_osem_mobile = "Mobil";
+Blockly.Msg.senseBox_osem_access_token = "API Schlüssel";
 Blockly.Msg.senseBox_sds011 = "Feinstaubsensor";
 Blockly.Msg.senseBox_sds011_dimension = "in µg/m³ an";
 Blockly.Msg.senseBox_sds011_pm25 = "PM2.5";
@@ -650,7 +647,11 @@ Blockly.Msg.sensebox_display_fillCircle_radius = "Radius";
 Blockly.Msg.sensebox_display_drawRectangle = "Zeichne Rechteck";
 Blockly.Msg.sensebox_display_drawRectangle_width = "Breite";
 Blockly.Msg.sensebox_display_drawRectangle_height = "Höhe";
-Blockly.Msg.senseBox_display_filled = "Ausgefüllt"
+Blockly.Msg.senseBox_display_filled = "Ausgefüllt";
+Blockly.Msg.senseBox_display_fastPrint_show = "Zeige Messwerte";
+Blockly.Msg.senseBox_display_fastPrint_title = "Titel";
+Blockly.Msg.senseBox_display_fastPrint_value = "Messwert";
+Blockly.Msg.senseBox_display_fastPrint_dimension = "Einheit";
 // GPS
 Blockly.Msg.senseBox_gps_getValues = "GPS Modul";
 Blockly.Msg.senseBox_gps_getValues_tip = "ruft das GPS Signal ab";
@@ -771,7 +772,11 @@ Blockly.Msg.senseBox_telegram_do = "Telegram mache"
 Blockly.Msg.senseBox_telegram_do_on_message = "bei Nachricht"
 Blockly.Msg.senseBox_telegram_message = "Nachricht"
 Blockly.Msg.senseBox_telegram_send = "Sende Nachricht"
-
+//SCD30 CO2 Sensor
 Blockly.Msg.senseBox_scd30 = "CO2 Sensor (Sensirion SCD30)";
+//WS2818 RGB LED
+Blockly.Msg.senseBox_ws2818_rgb_led = "senseBox WS2812 - RGB LED";
+Blockly.Msg.senseBox_ws2818_rgb_led_position = "Position";
+Blockly.Msg.senseBox_ws2818_rgb_led_brightness = "Helligkeit";
 
 export const De = Blockly.Msg;
