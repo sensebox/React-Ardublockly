@@ -62,6 +62,33 @@ class Toolbox extends React.Component {
                 <Category name="LED" colour={getColour().sensebox}>
                     <Block type="sensebox_rgb_led" />
                     <Block type="sensebox_led" />
+                    <Block type="sensebox_ws2818_led">
+                        <Value name="POSITION">
+                            <Block type="math_number">
+                                <Field name="NUM">0</Field>
+                            </Block>
+                        </Value>
+                        <Value name="BRIGHTNESS">
+                            <Block type="math_number">
+                                <Field name="NUM">30</Field>
+                            </Block>
+                        </Value>
+                        <Value name="RED">
+                            <Block type="math_number">
+                                <Field name="NUM">0</Field>
+                            </Block>
+                        </Value>
+                        <Value name="GREEN">
+                            <Block type="math_number">
+                                <Field name="NUM">0</Field>
+                            </Block>
+                        </Value>
+                        <Value name="BLUE">
+                            <Block type="math_number">
+                                <Field name="NUM">0</Field>
+                            </Block>
+                        </Value>
+                    </Block>
                 </Category>
                 <Category name="Display" colour={getColour().sensebox}>
                     <Block type="sensebox_display_beginDisplay" />
