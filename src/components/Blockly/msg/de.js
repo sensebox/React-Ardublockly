@@ -779,5 +779,4 @@ Blockly.Msg.senseBox_ws2818_rgb_led = "senseBox WS2812 - RGB LED";
 Blockly.Msg.senseBox_ws2818_rgb_led_position = "Position";
 Blockly.Msg.senseBox_ws2818_rgb_led_brightness = "Helligkeit";
 
-
 export const De = Blockly.Msg;

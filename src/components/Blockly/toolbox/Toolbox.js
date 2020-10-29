@@ -233,7 +233,7 @@ class Toolbox extends React.Component {
                     <Block type="sensebox_send_to_osem" />
                 </Category>
                 <Category id="catSenseBoxOutput_LoRa" name="  LoRa" colour={getColour().sensebox}>
-                    <Category id="catSenseBoxOutput_LoRa_activation" name="  Activation" colour={getColour().sensebox}>
+                    <Category id="catSenseBoxOutput_LoRa_activation" name="    Aktiviereung" colour={getColour().sensebox}>
                         <Block type="sensebox_lora_initialize_otaa" />
                         <Block type="sensebox_lora_initialize_abp" />
                     </Category>
@@ -252,7 +252,7 @@ class Toolbox extends React.Component {
                         <Block type="sensebox_lora_cayenne_gps" />
                     </Category>
                 </Category>
-                <Category name="Logic" colour={getColour().logic}>
+                <Category name="Logik" colour={getColour().logic}>
                     <Block type="controls_if" />
                     <Block type="controls_ifelse" />
                     <Block type="logic_compare" />
@@ -261,7 +261,7 @@ class Toolbox extends React.Component {
                     <Block type="logic_boolean" />
                     <Block type="switch_case" />
                 </Category>
-                <Category id="loops" name="Loops" colour={getColour().loops}>
+                <Category id="loops" name="Schleifen" colour={getColour().loops}>
                     <Block type="controls_repeat_ext">
                         <Value name="TIMES">
                             <Block type="math_number">
@@ -300,7 +300,7 @@ class Toolbox extends React.Component {
                     <Block type="text_length" />
                     <Block type="text_isEmpty" />
                 </Category>
-                <Category id="time" name="Time" colour={getColour().time}>
+                <Category id="time" name="Zeit" colour={getColour().time}>
                     <Block type="time_delay">
                         <Value name="DELAY_TIME_MILI">
                             <Block type="math_number">
@@ -320,7 +320,7 @@ class Toolbox extends React.Component {
                     <Block type="infinite_loop"></Block>
                     <Block type="sensebox_interval_timer"></Block>
                 </Category>
-                <Category id="catMath" name="Math" colour={getColour().math}>
+                <Category id="catMath" name="Mathematik" colour={getColour().math}>
                     <Block type="math_number"></Block>
                     <Block type="math_arithmetic"></Block>
                     <Block type="math_single"></Block>
@@ -380,7 +380,7 @@ class Toolbox extends React.Component {
                     <Block type="lists_length" />
                 </Category>
                 <sep></sep>
-                <Category name="Input/Output" colour={getColour().io}>
+                <Category name="Eingang/Ausgang" colour={getColour().io}>
                     <Block type="io_digitalwrite"></Block>
                     <Block type="io_digitalread"></Block>
                     <Block type="io_builtin_led"></Block>
