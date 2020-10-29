@@ -24,22 +24,20 @@
 import React from 'react';
 
 import Blockly from 'blockly/core';
-import locale from 'blockly/msg/en';
 import 'blockly/blocks';
 import Toolbox from './toolbox/Toolbox';
 
 import { Card } from '@material-ui/core';
 
 
-Blockly.setLocale(locale);
 
 class BlocklyComponent extends React.Component {
-    
+
     constructor(props) {
         super(props);
         this.blocklyDiv = React.createRef();
         this.toolbox = React.createRef();
-        this.state = {workspace: undefined};
+        this.state = { workspace: undefined };
     }
 
     componentDidMount() {
@@ -51,7 +49,7 @@ class BlocklyComponent extends React.Component {
                 ...rest
             },
         );
-        this.setState({workspace: this.primaryWorkspace})
+        this.setState({ workspace: this.primaryWorkspace })
 
         if (initialXml) {
             Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(initialXml), this.primaryWorkspace);
@@ -68,7 +66,7 @@ class BlocklyComponent extends React.Component {
 
     render() {
         return <React.Fragment>
-            <Card ref={this.blocklyDiv} id="blocklyDiv" style={this.props.style ? this.props.style : {}}/>
+            <Card ref={this.blocklyDiv} id="blocklyDiv" style={this.props.style ? this.props.style : {}} />
             <Toolbox toolbox={this.toolbox} workspace={this.state.workspace} />
         </React.Fragment>;
     }

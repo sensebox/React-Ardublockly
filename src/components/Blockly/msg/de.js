@@ -1,5 +1,5 @@
-
-import * as Blockly from 'blockly/core';
+const Blockly = {};
+Blockly.Msg = {};
 
 Blockly.Msg.ADD_COMMENT = "Kommentar hinzufügen";
 Blockly.Msg.AUTH = "Bitte autorisiere diese App zum Aktivieren der Speicherung deiner Arbeit und zum Teilen.";
@@ -646,7 +646,11 @@ Blockly.Msg.sensebox_display_fillCircle_radius = "Radius";
 Blockly.Msg.sensebox_display_drawRectangle = "Zeichne Rechteck";
 Blockly.Msg.sensebox_display_drawRectangle_width = "Breite";
 Blockly.Msg.sensebox_display_drawRectangle_height = "Höhe";
-Blockly.Msg.senseBox_display_filled = "Ausgefüllt"
+Blockly.Msg.senseBox_display_filled = "Ausgefüllt";
+Blockly.Msg.senseBox_display_fastPrint_show = "Zeige Messwerte";
+Blockly.Msg.senseBox_display_fastPrint_title = "Titel";
+Blockly.Msg.senseBox_display_fastPrint_value = "Messwert";
+Blockly.Msg.senseBox_display_fastPrint_dimension = "Einheit";
 // GPS
 Blockly.Msg.senseBox_gps_getValues = "GPS Modul";
 Blockly.Msg.senseBox_gps_getValues_tip = "ruft das GPS Signal ab";
@@ -770,3 +774,6 @@ Blockly.Msg.senseBox_telegram_send = "Sende Nachricht"
 
 Blockly.Msg.senseBox_scd30 = "CO2 Sensor (Sensirion SCD30)";
 
+
+
+export const De = Blockly.Msg;

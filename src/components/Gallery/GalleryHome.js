@@ -81,14 +81,20 @@ class GalleryHome extends Component {
                                     <Paper style={{ height: '400px', padding: '2rem', position: 'relative', overflow: 'hidden' }}>
                                         <h3>{gallery.title}</h3>
                                         <Divider />
-                                        <BlocklyWindow
-                                            svg
-                                            readOnly
-                                            initialXml={gallery.xml}
-                                        />
+                                        <Grid container spacing={10} style={{ marginBottom: '5px' }}>
+                                            <Grid item xs={12}>
+                                                <BlocklyWindow
+                                                    trashcan={false}
+                                                    zoomControls={false}
+
+                                                    blockDisabled
+                                                    blocklyCSS={{ height: '18vH' }}
+                                                    initialXml={gallery.xml}
+                                                />
+                                            </Grid>
+                                        </Grid>
                                         <p>{gallery.text}</p>
                                         <Divider />
-                                        <p>{gallery.name}</p>
 
                                         <div className={clsx(this.props.classes.outerDiv)} style={{ width: '160px', height: '160px', border: 0 }}>
                                         </div>

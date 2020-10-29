@@ -2,7 +2,6 @@ import React from 'react';
 import { Block, Value, Field, Shadow, Category } from '../';
 import { getColour } from '../helpers/colour'
 import '@blockly/block-plus-minus';
-
 import { TypedVariableModal } from '@blockly/plugin-typed-variable-modal';
 import * as Blockly from 'blockly/core';
 
@@ -14,12 +13,14 @@ class Toolbox extends React.Component {
     componentDidUpdate() {
         this.props.workspace.registerToolboxCategoryCallback('CREATE_TYPED_VARIABLE', this.createFlyout);
 
-        const typedVarModal = new TypedVariableModal(this.props.workspace, 'callbackName', [['SHORT_NUMBER', 'char'], ['NUMBER', 'int'], ['DECIMAL', 'float'], ['TEXT', 'String'], ['CHARACTER', 'char'], ['BOOLEAN', 'boolean'], ['NULL', 'void'], ['UNDEF', 'undefined']]);
+        const typedVarModal = new TypedVariableModal(this.props.workspace, 'callbackName', [['SHORT_NUMBER', 'char'], ['NUMBER', 'int'], ['DECIMAL', 'float'], ['TEXT', 'String'], ['ARRAY', 'Array'], ['CHARACTER', 'char'], ['BOOLEAN', 'boolean'], ['NULL', 'void'], ['UNDEF', 'undefined']]);
         typedVarModal.init();
     }
 
     createFlyout(workspace) {
+
         let xmlList = [];
+
         // Add your button and give it a callback name.
         const button = document.createElement('button');
         button.setAttribute('text', 'Create Typed Variable');
@@ -83,6 +84,28 @@ class Toolbox extends React.Component {
                             </Block>
                         </Value>
                     </Block>
+                    <Block type="sensebox_display_fastPrint">
+                        <Value name="Title1">
+                            <Block type="text">
+                                <Field name="TEXT">Title</Field>
+                            </Block>
+                        </Value>
+                        <Value name="Dimension1">
+                            <Block type="text">
+                                <Field name="TEXT">Unit</Field>
+                            </Block>
+                        </Value>
+                        <Value name="Title2">
+                            <Block type="text">
+                                <Field name="TEXT">Title</Field>
+                            </Block>
+                        </Value>
+                        <Value name="Dimension2">
+                            <Block type="text">
+                                <Field name="TEXT">Unit</Field>
+                            </Block>
+                        </Value>
+                    </Block >
                     <Block type="sensebox_display_plotDisplay">
                         <Value name="Title">
                             <Block type="text">
@@ -323,7 +346,12 @@ class Toolbox extends React.Component {
                     </Block>
                     <Block type="io_notone"></Block>
                 </Category>
-                <Category name="Variablen" colour={getColour().variables} custom="CREATE_TYPED_VARIABLE"></Category>;
+                <Category name="Variablen" colour={getColour().variables} custom="CREATE_TYPED_VARIABLE"></Category>
+                <Category name="Arrays" colour={getColour().arrays} >
+                    <Block type="lists_create_empty" />
+                    <Block type="array_getIndex" />
+                    <Block type="lists_length" />
+                </Category>
                 <sep></sep>
                 <Category name="Input/Output" colour={getColour().io}>
                     <Block type="io_digitalwrite"></Block>
