@@ -677,6 +677,7 @@ Blockly.Msg.senseBox_osem_host = "opensensemap.org";
 Blockly.Msg.senseBox_osem_host_workshop = "workshop.opensensemap.org";
 Blockly.Msg.senseBox_osem_mobile = "Mobile";
 Blockly.Msg.senseBox_osem_stationary = "Stationary";
+Blockly.Msg.senseBox_osem_access_token = "API Key";
 Blockly.Msg.senseBox_output_filename = "filename";
 Blockly.Msg.senseBox_output_format = "format:";
 Blockly.Msg.senseBox_output_linebreak = "linebreak";
@@ -754,7 +755,13 @@ Blockly.Msg.sensebox_display_show_tip = "Print on Display";
 Blockly.Msg.sensebox_sd_filename = "data";
 Blockly.Msg.sensebox_soil_smt50 = "Soil Moisture and Temperature (SMT50)";
 Blockly.Msg.sensebox_web_readHTML_filename = "File:";
-
+//SCD30 CO2 Sensor
 Blockly.Msg.senseBox_scd30 = "CO2 Sensor (Sensirion SCD30)";
+
+//WS2818 RGB LED
+Blockly.Msg.senseBox_ws2818_rgb_led = "senseBox WS2812 - RGB LED";
+Blockly.Msg.senseBox_ws2818_rgb_led_brightness = "Helligkeit";
+Blockly.Msg.senseBox_ws2818_rgb_led_position = "Position";
+
 
 export const En = Blockly.Msg;
