@@ -31,6 +31,42 @@ Blockly.Arduino.sensebox_display_printDisplay = function () {
     return code;
 };
 
+
+Blockly.Arduino.sensebox_display_fastPrint = function () {
+    var title1 = Blockly.Arduino.valueToCode(this, 'Title1', Blockly.Arduino.ORDER_ATOMIC) || '0'
+    var value1 = Blockly.Arduino.valueToCode(this, 'Value1', Blockly.Arduino.ORDER_ATOMIC);
+    var dimension1 = Blockly.Arduino.valueToCode(this, 'Dimension1', Blockly.Arduino.ORDER_ATOMIC) || '0'
+    var title2 = Blockly.Arduino.valueToCode(this, 'Title2', Blockly.Arduino.ORDER_ATOMIC) || '0'
+    var value2 = Blockly.Arduino.valueToCode(this, 'Value2', Blockly.Arduino.ORDER_ATOMIC);
+    var dimension2 = Blockly.Arduino.valueToCode(this, 'Dimension2', Blockly.Arduino.ORDER_ATOMIC) || '0'
+    Blockly.Arduino.codeFunctions_['sensebox_fastPrint'] = `
+    void printOnDisplay(String title1, String measurement1, String unit1, String title2, String measurement2, String unit2) {
+     
+      display.setCursor(0, 0);
+      display.setTextSize(1);
+      display.setTextColor(WHITE, BLACK);
+      display.println(title1);
+      display.setCursor(0, 10);
+      display.setTextSize(2);
+      display.print(measurement1);
+      display.print(" ");
+      display.setTextSize(1);
+      display.println(unit1);
+      display.setCursor(0, 30);
+      display.setTextSize(1);
+      display.println(title2);
+      display.setCursor(0, 40);
+      display.setTextSize(2);
+      display.print(measurement2);
+      display.print(" ");
+      display.setTextSize(1);
+      display.println(unit2);
+    }
+    `
+    var code = ` printOnDisplay(${title1}, String(${value1}), ${dimension1}, ${title2}, String(${value2}), ${dimension2});\n`;
+    return code;
+};
+
 Blockly.Arduino.sensebox_display_show = function (block) {
     var show = Blockly.Arduino.statementToCode(block, 'SHOW');
     var code = '';

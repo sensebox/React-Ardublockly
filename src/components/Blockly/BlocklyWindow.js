@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { onChangeWorkspace, clearStats } from '../../actions/workspaceActions';
-import * as De from './msg/de';
+import { De } from './msg/de';
+import { En } from './msg/en';
 import BlocklyComponent from './BlocklyComponent';
 import BlocklySvg from './BlocklySvg';
 import * as Blockly from 'blockly/core';
@@ -17,10 +18,26 @@ class BlocklyWindow extends Component {
   constructor(props) {
     super(props);
     this.simpleWorkspace = React.createRef();
-    Blockly.setLocale(De);
+    var locale = window.localStorage.getItem('locale');
+    this.state = {
+      renderer: window.localStorage.getItem('renderer'),
+    };
+    if (locale === null) {
+      if (navigator.language === 'de-DE') {
+        locale = 'de';
+      } else {
+        locale = 'en';
+      }
+    }
+    if (locale === 'de') {
+      Blockly.setLocale(De);
+    } else if (locale === 'en') {
+      Blockly.setLocale(En);
+    }
   }
 
   componentDidMount() {
+
     const workspace = Blockly.getMainWorkspace();
     this.props.onChangeWorkspace({});
     this.props.clearStats();
@@ -55,7 +72,7 @@ class BlocklyWindow extends Component {
           style={this.props.svg ? { height: 0 } : this.props.blocklyCSS}
           readOnly={this.props.readOnly !== undefined ? this.props.readOnly : false}
           trashcan={this.props.trashcan !== undefined ? this.props.trashcan : true}
-          renderer='geras'
+          renderer={this.state.renderer}
           zoom={{ // https://developers.google.com/blockly/guides/configure/web/zoom
             controls: this.props.zoomControls !== undefined ? this.props.zoomControls : true,
             wheel: false,
