@@ -119,6 +119,33 @@ Blockly.Blocks['sensebox_send_lora_sensor_value'] = {
     LOOP_TYPES: ['sensebox_lora_message_send'],
 };
 
+Blockly.Blocks['sensebox_lora_ttn_mapper'] = {
+    init: function (block) {
+        this.setColour(getColour().sensebox);
+        this.appendDummyInput()
+            .appendField("TTN Mapper")
+        this.appendValueInput('Latitude')
+            .appendField('Latitude')
+            .setCheck(null);
+        this.appendValueInput('Longitude')
+            .appendField('Longitude')
+            .setCheck(null);
+        this.appendValueInput('Altitude')
+            .appendField('Altitude')
+            .setCheck(null);
+        this.appendValueInput('pDOP')
+            .appendField('pDOP')
+            .setCheck(null);
+        this.appendValueInput('Fix Type')
+            .appendField('Fix Type')
+            .setCheck(null);
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setTooltip(Blockly.Msg.senseBox_display_printDisplay_tip);
+        this.setHelpUrl('https://sensebox.de/books');
+    }
+};
+
 Blockly.Blocks['sensebox_lora_cayenne_send'] = {
     init: function () {
         this.setTooltip(Blockly.Msg.senseBox_LoRa_cayenne_tip);

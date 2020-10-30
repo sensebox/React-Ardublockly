@@ -321,3 +321,25 @@ Blockly.Blocks['sensebox_scd30'] = {
     this.setTooltip(Blockly.Msg.senseBox_bme_tip);
   }
 };
+
+
+/**
+ * GPS Module
+ * 
+ */
+
+
+Blockly.Blocks['sensebox_gps'] = {
+  init: function () {
+    var dropdownOptions = [["Latitude", "latitude"], ["Longitude", "longitude"], ["Altitude", "altitude"], ["pDOP", "pDOP"], ["Fix Type", "fixType"]];
+    this.appendDummyInput()
+      .appendField("GPS Modul");
+    this.appendDummyInput()
+      .setAlign(Blockly.ALIGN_RIGHT)
+      .appendField(Blockly.Msg.senseBox_value)
+      .appendField(new Blockly.FieldDropdown(dropdownOptions), "dropdown")
+    this.setOutput(true, Types.NUMBER.typeName);
+    this.setColour(getColour().sensebox);
+    this.setTooltip(Blockly.Msg.senseBox_bme_tip);
+  }
+};
