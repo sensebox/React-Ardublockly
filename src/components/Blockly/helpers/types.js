@@ -89,7 +89,7 @@ export const CHILD_BLOCK_MISSING = {
 const compatibleTypes = {
     Array: ['Array'],
     boolean: ['boolean'],
-    int: ['int'],
+    int: ['int', 'long', 'double', 'float'],
     char: ['char'],
     String: ['String'],
     void: ['void'],

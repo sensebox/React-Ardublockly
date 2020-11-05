@@ -88,19 +88,12 @@ class Home extends Component {
   }
 
   render() {
-    // console.log(this.props.match.params.galleryId);
-    // console.log(gallery);
-    // console.log(gallery.filter(project => project.id == this.props.match.params.galleryId));
-    if (this.state.projectToLoad) {
-      console.log(this.state.projectToLoad.xml)
-    }
-    console.log(this.props);
     return (
       <div>
         <div style={{ float: 'right', height: '40px', marginBottom: '20px' }}><WorkspaceFunc /></div>
         <div style={{ float: 'left', height: '40px', position: 'relative' }}><WorkspaceStats /></div>
         <Grid container spacing={2}>
-          <Grid item xs={12} md={this.state.codeOn ? 6 : 12} style={{ position: 'relative' }}>
+          <Grid item xs={12} md={this.state.codeOn ? 8 : 12} style={{ position: 'relative' }}>
             <Tooltip title={this.state.codeOn ? 'Code ausblenden' : 'Code anzeigen'} >
               <IconButton
                 className={this.state.codeOn ? this.props.classes.codeOn : this.props.classes.codeOff}
@@ -117,7 +110,7 @@ class Home extends Component {
 
           </Grid>
           {this.state.codeOn ?
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={4}>
               <CodeViewer />
             </Grid>
             : null}

@@ -103,13 +103,10 @@ Blockly.Blocks['sensebox_send_to_osem'] = {
             for (var i = 0; i < apiData.sensors.length; i++) {
                 options.push([apiData.sensors[i].title, apiData.sensors[i]._id]);
             }
-            console.log(options);
-
         }
         if (options.length > 1) {
 
             var dropdown = options.slice(1)
-            console.log(dropdown);
             return dropdown;
         } else
             return options;

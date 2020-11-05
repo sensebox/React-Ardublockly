@@ -27,10 +27,9 @@ const styles = (theme) => ({
 
 class HintTutorialExists extends Component {
 
-  constructor(props){
+  constructor(props) {
     var previousPageWasAnotherDomain = props.pageVisits === 0;
     var userDoNotWantToSeeNews = window.localStorage.getItem('news') ? true : false;
-    console.log(userDoNotWantToSeeNews);
     super(props);
     this.state = {
       open: userDoNotWantToSeeNews ? !userDoNotWantToSeeNews : previousPageWasAnotherDomain
@@ -42,7 +41,7 @@ class HintTutorialExists extends Component {
   }
 
   onChange = (e) => {
-    if(e.target.checked){
+    if (e.target.checked) {
       window.localStorage.setItem('news', e.target.checked);
     }
     else {
@@ -66,8 +65,8 @@ class HintTutorialExists extends Component {
         <div>
           Es gibt ab jetzt Tutorials zu verschiedenen Themen. Schau mal <Link to="/tutorial" className={this.props.classes.link}>hier</Link> vorbei.
           <FormControlLabel
-            style={{marginTop: '20px'}}
-            classes={{label: this.props.classes.label}}
+            style={{ marginTop: '20px' }}
+            classes={{ label: this.props.classes.label }}
             control={
               <Checkbox
                 size={'small'}
