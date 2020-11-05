@@ -774,6 +774,8 @@ Blockly.Msg.senseBox_telegram_message = "Nachricht"
 Blockly.Msg.senseBox_telegram_send = "Sende Nachricht"
 //SCD30 CO2 Sensor
 Blockly.Msg.senseBox_scd30 = "CO2 Sensor (Sensirion SCD30)";
+Blockly.Msg.senseBox_scd_tip = "Gibt den Wert des CO2 Sensors";
+Blockly.Msg.senseBox_scd_co2 = "CO2 in ppm";
 //WS2818 RGB LED
 Blockly.Msg.senseBox_ws2818_rgb_led = "senseBox WS2812 - RGB LED";
 Blockly.Msg.senseBox_ws2818_rgb_led_position = "Position";

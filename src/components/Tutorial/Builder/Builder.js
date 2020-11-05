@@ -51,7 +51,6 @@ class Builder extends Component {
   }
 
   submit = () => {
-    console.log(this.props.id)
     if (this.props.id === null) {
       var randomID = Date.now();
     } else {
@@ -115,7 +114,6 @@ class Builder extends Component {
       this.props.readJSON(result);
       this.setState({ snackbar: true, key: Date.now(), message: `${isFile ? 'Die übergebene JSON-Datei' : 'Der übergebene JSON-String'} wurde erfolgreich übernommen.`, type: 'success' });
     } catch (err) {
-      console.log(err);
       this.props.progress(false);
       this.props.jsonString('');
       this.setState({ open: true, string: false, title: 'Ungültiges JSON-Format', content: `${isFile ? 'Die übergebene Datei' : 'Der übergebene String'} enthält nicht valides JSON. Bitte überprüfe ${isFile ? 'die JSON-Datei' : 'den JSON-String'} und versuche es erneut.` });

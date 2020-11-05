@@ -379,6 +379,7 @@ class Toolbox extends React.Component {
                     <Block type="array_getIndex" />
                     <Block type="lists_length" />
                 </Category>
+                <Category name="Functions" custom="PROCEDURE"></Category>
                 <sep></sep>
                 <Category name="Eingang/Ausgang" colour={getColour().io}>
                     <Block type="io_digitalwrite"></Block>
