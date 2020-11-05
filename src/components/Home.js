@@ -49,7 +49,8 @@ class Home extends Component {
     codeOn: false,
     gallery: [],
     share: [],
-    projectToLoad: undefined
+    projectToLoad: undefined,
+    stats: window.localStorage.getItem('stats'),
   }
 
   componentDidMount() {
@@ -90,8 +91,11 @@ class Home extends Component {
   render() {
     return (
       <div>
+        {this.state.stats ?
+          <div style={{ float: 'left', height: '40px', position: 'relative' }}><WorkspaceStats /></div>
+          : null
+        }
         <div style={{ float: 'right', height: '40px', marginBottom: '20px' }}><WorkspaceFunc /></div>
-        <div style={{ float: 'left', height: '40px', position: 'relative' }}><WorkspaceStats /></div>
         <Grid container spacing={2}>
           <Grid item xs={12} md={this.state.codeOn ? 8 : 12} style={{ position: 'relative' }}>
             <Tooltip title={this.state.codeOn ? 'Code ausblenden' : 'Code anzeigen'} >

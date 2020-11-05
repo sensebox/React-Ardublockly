@@ -29,7 +29,7 @@ Blockly.Arduino['arduino_functions'] = function (block) {
     return loopBranch;
 };
 
-Blockly.Arduino['procedures_defreturn'] = function (block: Block | any) {
+Blockly.Arduino['procedures_defreturn'] = function (block) {
     // Define a procedure with a return value.
     const funcName = Blockly.Arduino.variableDB_.getName(
         block.getFieldValue('NAME'),

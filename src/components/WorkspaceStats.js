@@ -37,7 +37,7 @@ const styles = (theme) => ({
 
 class WorkspaceStats extends Component {
 
-  state={
+  state = {
     anchor: null
   }
 
@@ -53,69 +53,69 @@ class WorkspaceStats extends Component {
     const bigDisplay = !isWidthDown('sm', this.props.width);
     const workspace = Blockly.getMainWorkspace();
     const remainingBlocksInfinity = workspace ? workspace.remainingCapacity() !== Infinity : null;
-    const stats =  <div style={bigDisplay ? {display: 'flex'} : {display: 'inline'}}>
-                    <Tooltip title="Anzahl aktueller Blöcke" arrow>
-                      <Chip
-                        style={bigDisplay ? {marginRight: '1rem'} : {marginRight: '1rem', marginBottom: '5px'}}
-                        color="primary"
-                        avatar={<Avatar><FontAwesomeIcon icon={faPuzzlePiece} /></Avatar>}
-                        label={workspace ? workspace.getAllBlocks().length : 0}>
-                      </Chip>
-                    </Tooltip>
-                    <Tooltip title="Anzahl neuer Blöcke" arrow>
-                      <Chip
-                        style={bigDisplay ? {marginRight: '1rem'} : {marginRight: '1rem', marginBottom: '5px'}}
-                        color="primary"
-                        avatar={<Avatar><FontAwesomeIcon icon={faPlus} /></Avatar>}
-                        label={this.props.create > 0 ? this.props.create : 0}> {/* initialXML is created automatically, Block is not part of the statistics */}
-                      </Chip>
-                    </Tooltip>
-                    <Tooltip title="Anzahl veränderter Blöcke" arrow>
-                      <Chip
-                        style={bigDisplay ? {marginRight: '1rem'} : {marginRight: '1rem', marginBottom: '5px'}}
-                        color="primary"
-                        avatar={<Avatar><FontAwesomeIcon icon={faPen} /></Avatar>}
-                        label={this.props.change}>
-                      </Chip>
-                    </Tooltip>
-                    <Tooltip title="Anzahl bewegter Blöcke" arrow>
-                      <Chip
-                        style={bigDisplay ? {marginRight: '1rem'} : {marginRight: '1rem', marginBottom: '5px'}}
-                        color="primary"
-                        avatar={<Avatar><FontAwesomeIcon icon={faArrowsAlt} /></Avatar>}
-                        label={this.props.move > 0 ? this.props.move : 0}> {/* initialXML is moved automatically, Block is not part of the statistics */}
-                      </Chip>
-                    </Tooltip>
-                    <Tooltip title="Anzahl gelöschter Blöcke" arrow>
-                      <Chip
-                        style={remainingBlocksInfinity ? bigDisplay ? {marginRight: '1rem'} : {marginRight: '1rem', marginBottom: '5px'} : {}}
-                        color="primary"
-                        avatar={<Avatar><FontAwesomeIcon icon={faTrash} /></Avatar>}
-                        label={this.props.delete}>
-                      </Chip>
-                    </Tooltip>
-                    {remainingBlocksInfinity ?
-                      <Tooltip title="Verbleibende Blöcke" arrow>
-                        <Chip
-                          style={bigDisplay ? {marginRight: '1rem'} : {marginRight: '1rem', marginBottom: '5px'}}
-                          color="primary"
-                          label={workspace.remainingCapacity()}>
-                        </Chip>
-                      </Tooltip> : null}
-                    </div>
+    const stats = <div style={bigDisplay ? { display: 'flex' } : { display: 'inline' }}>
+      <Tooltip title="Anzahl aktueller Blöcke" arrow>
+        <Chip
+          style={bigDisplay ? { marginRight: '1rem' } : { marginRight: '1rem', marginBottom: '5px' }}
+          color="primary"
+          avatar={<Avatar><FontAwesomeIcon icon={faPuzzlePiece} /></Avatar>}
+          label={workspace ? workspace.getAllBlocks().length : 0}>
+        </Chip>
+      </Tooltip>
+      <Tooltip title="Anzahl neuer Blöcke" arrow>
+        <Chip
+          style={bigDisplay ? { marginRight: '1rem' } : { marginRight: '1rem', marginBottom: '5px' }}
+          color="primary"
+          avatar={<Avatar><FontAwesomeIcon icon={faPlus} /></Avatar>}
+          label={this.props.create > 0 ? this.props.create : 0}> {/* initialXML is created automatically, Block is not part of the statistics */}
+        </Chip>
+      </Tooltip>
+      <Tooltip title="Anzahl veränderter Blöcke" arrow>
+        <Chip
+          style={bigDisplay ? { marginRight: '1rem' } : { marginRight: '1rem', marginBottom: '5px' }}
+          color="primary"
+          avatar={<Avatar><FontAwesomeIcon icon={faPen} /></Avatar>}
+          label={this.props.change}>
+        </Chip>
+      </Tooltip>
+      <Tooltip title="Anzahl bewegter Blöcke" arrow>
+        <Chip
+          style={bigDisplay ? { marginRight: '1rem' } : { marginRight: '1rem', marginBottom: '5px' }}
+          color="primary"
+          avatar={<Avatar><FontAwesomeIcon icon={faArrowsAlt} /></Avatar>}
+          label={this.props.move > 0 ? this.props.move : 0}> {/* initialXML is moved automatically, Block is not part of the statistics */}
+        </Chip>
+      </Tooltip>
+      <Tooltip title="Anzahl gelöschter Blöcke" arrow>
+        <Chip
+          style={remainingBlocksInfinity ? bigDisplay ? { marginRight: '1rem' } : { marginRight: '1rem', marginBottom: '5px' } : {}}
+          color="primary"
+          avatar={<Avatar><FontAwesomeIcon icon={faTrash} /></Avatar>}
+          label={this.props.delete}>
+        </Chip>
+      </Tooltip>
+      {remainingBlocksInfinity ?
+        <Tooltip title="Verbleibende Blöcke" arrow>
+          <Chip
+            style={bigDisplay ? { marginRight: '1rem' } : { marginRight: '1rem', marginBottom: '5px' }}
+            color="primary"
+            label={workspace.remainingCapacity()}>
+          </Chip>
+        </Tooltip> : null}
+    </div>
     return (
       bigDisplay ?
-        <div style={{bottom: 0, position: 'absolute'}}>
+        <div style={{ bottom: 0, position: 'absolute' }}>
           {stats}
         </div>
-      :
+        :
         <div>
           <Tooltip title='Statistiken anzeigen' arrow>
             <IconButton
               className={this.props.classes.menu}
               onClick={(event) => this.handleClick(event)}
             >
-              <FontAwesomeIcon icon={faEllipsisH} size="xs"/>
+              <FontAwesomeIcon icon={faEllipsisH} size="xs" />
             </IconButton>
           </Tooltip>
           <Popover
@@ -131,10 +131,10 @@ class WorkspaceStats extends Component {
               horizontal: 'center',
             }}
             PaperProps={{
-              style: {margin: '5px'}
+              style: { margin: '5px' }
             }}
           >
-            <div style={{margin: '10px'}}>
+            <div style={{ margin: '10px' }}>
               {stats}
             </div>
           </Popover>
