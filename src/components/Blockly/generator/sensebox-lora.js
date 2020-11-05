@@ -121,7 +121,7 @@ Blockly.Arduino.sensebox_lora_initialize_otaa = function (block) {
       }
   }`;
     Blockly.Arduino.loraSetupCode_['initLora'] = 'initLora();\n';
-    Blockly.Arduino.setupCode_['serial.begin'] = 'Serial.begin(9600);\n';
+    Blockly.Arduino.setupCode_['serial.begin'] = 'Serial.begin(9600);\ndelay(1000);\n';
     var code = '';
     return code;
 };
@@ -201,6 +201,7 @@ Blockly.Arduino.sensebox_lora_ttn_mapper = function (block) {
     var altitude = Blockly.Arduino.valueToCode(this, 'Altitude', Blockly.Arduino.ORDER_ATOMIC)
     var pDOP = Blockly.Arduino.valueToCode(this, 'pDOP', Blockly.Arduino.ORDER_ATOMIC)
     var fixType = Blockly.Arduino.valueToCode(this, 'Fix Type', Blockly.Arduino.ORDER_ATOMIC)
+    var fixTypeLimit = this.getFieldValue('dropdown');
     Blockly.Arduino.functionNames_['functions_do_send'] = `
   void do_send(osjob_t* j){
       // Check if there is not a current TX/RX job running
@@ -209,7 +210,7 @@ Blockly.Arduino.sensebox_lora_ttn_mapper = function (block) {
       } else {
           
         int fixType = ${fixType};
-        if (fixType >= 3) { // we have a 3D fix
+        if (fixType >= ${fixTypeLimit}) { // we have a 3D fix
           int32_t latitude = ${latitude};       // in degrees * 10^-7
           int32_t longitude = ${longitude};     // in degrees * 10^-7
           int32_t altitude = ${altitude} / 100;      // in dm above mean sea level
@@ -426,7 +427,7 @@ Blockly.Arduino.sensebox_lora_initialize_abp = function (block) {
       }
   }`;
     Blockly.Arduino.loraSetupCode_['initLora'] = 'initLora();\n';
-    Blockly.Arduino.setupCode_['serial.begin'] = 'Serial.begin(9600);\n';
+    Blockly.Arduino.setupCode_['serial.begin'] = 'Serial.begin(9600);\ndelay(1000);\n';
     return '';
 }
 
