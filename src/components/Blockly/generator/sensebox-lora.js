@@ -120,9 +120,9 @@ Blockly.Arduino.sensebox_lora_initialize_otaa = function (block) {
               break;
       }
   }`;
-    Blockly.Arduino.setupCode_['initLora'] = 'initLora();';
-    Blockly.Arduino.setupCode_['serial.begin'] = 'Serial.begin(9600);';
-    var code = ''
+    Blockly.Arduino.loraSetupCode_['initLora'] = 'initLora();\n';
+    Blockly.Arduino.setupCode_['serial.begin'] = 'Serial.begin(9600);\n';
+    var code = '';
     return code;
 };
 
@@ -425,8 +425,8 @@ Blockly.Arduino.sensebox_lora_initialize_abp = function (block) {
               break;
       }
   }`;
-    Blockly.Arduino.setupCode_['initLora'] = 'initLora();';
-    Blockly.Arduino.setupCode_['serial.begin'] = 'Serial.begin(9600);';
+    Blockly.Arduino.loraSetupCode_['initLora'] = 'initLora();\n';
+    Blockly.Arduino.setupCode_['serial.begin'] = 'Serial.begin(9600);\n';
     return '';
 }
 

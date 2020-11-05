@@ -106,6 +106,9 @@ Blockly['Arduino'].init = function (workspace) {
     // creates a list of code to be setup before the setup block
     Blockly['Arduino'].setupCode_ = Object.create(null);
 
+    // creates a list of code to be setup before the setup block
+    Blockly['Arduino'].loraSetupCode_ = Object.create(null);
+
     // creates a list of code for the loop to be runned once
     Blockly['Arduino'].loopCodeOnce_ = Object.create(null)
 
@@ -202,6 +205,7 @@ Blockly['Arduino'].finish = function (code) {
     let loopCodeOnce = '';
     let setupCode = '';
     let preSetupCode = '';
+    let loraSetupCode = '';
     let devVariables = '\n';
 
     for (const key in Blockly['Arduino'].libraries_) {
@@ -233,7 +237,13 @@ Blockly['Arduino'].finish = function (code) {
     for (const key in Blockly['Arduino'].setupCode_) {
         preSetupCode += Blockly['Arduino'].setupCode_[key] || '';
     }
-    setupCode = '\nvoid setup() { \n' + preSetupCode + '\n}\n';
+
+    for (const key in Blockly['Arduino'].loraSetupCode_) {
+        loraSetupCode += Blockly['Arduino'].loraSetupCode_[key] || '';
+    }
+
+
+    setupCode = '\nvoid setup() { \n' + preSetupCode + '\n' + loraSetupCode + '\n}\n';
 
     let loopCode = '\nvoid loop() { \n' + loopCodeOnce + code + '\n}\n';
 
