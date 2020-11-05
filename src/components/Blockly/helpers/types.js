@@ -95,7 +95,8 @@ const compatibleTypes = {
     void: ['void'],
     long: ['int', 'long'],
     double: ['int', 'long', 'double'],
-    float: ['int', 'long', 'double', 'float']
+    float: ['int', 'long', 'double', 'float'],
+    null: ['null']
 
 }
 

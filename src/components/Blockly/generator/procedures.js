@@ -68,15 +68,19 @@ Blockly.Arduino['procedures_defreturn'] = function (block: Block | any) {
 };
 
 function translateType(type) {
+    console.log(type);
     switch (type) {
-        case 'Number':
-            return 'double';
+
+        case 'int':
+            return 'int';
         case 'String':
             return 'String';
-        case 'Boolean':
-            return 'boolean';
         case 'void':
             return 'void';
+        case 'boolean':
+            return 'boolean';
+        case 'float':
+            return 'float'
         default:
             throw new Error('Invalid Parameter Type');
     }
