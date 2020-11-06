@@ -130,13 +130,13 @@ Blockly.Blocks['sensebox_lora_ttn_mapper'] = {
             .appendField(new Blockly.FieldDropdown([["0", "0"], ["1", "1"], ["2", "2"], ["3", "3"]].reverse()), "dropdown");
         // reverse() because i want 3 be be at first and i'm to lazy to write the array again
         this.appendValueInput('Latitude')
-            .appendField('Latitude')
+            .appendField(Blockly.Msg.senseBox_gps_lat)
             .setCheck(null);
         this.appendValueInput('Longitude')
-            .appendField('Longitude')
+            .appendField(Blockly.Msg.senseBox_gps_lng)
             .setCheck(null);
         this.appendValueInput('Altitude')
-            .appendField('Altitude')
+            .appendField(Blockly.Msg.senseBox_gps_alt)
             .setCheck(null);
         this.appendValueInput('pDOP')
             .appendField('pDOP')
