@@ -246,17 +246,17 @@ class Toolbox extends React.Component {
                         <Block type="sensebox_lora_ttn_mapper">
                             <Value name="Latitude">
                                 <Block type="sensebox_gps">
-                                    <Field name="dropdown">Latitude</Field>
+                                    <Field name="dropdown">latitude</Field>
                                 </Block>
                             </Value>
                             <Value name="Longitude">
                                 <Block type="sensebox_gps">
-                                    <Field name="dropdown">Longitude</Field>
+                                    <Field name="dropdown">longitude</Field>
                                 </Block>
                             </Value>
                             <Value name="Altitude">
                                 <Block type="sensebox_gps">
-                                    <Field name="dropdown">Altitude</Field>
+                                    <Field name="dropdown">altitude</Field>
                                 </Block>
                             </Value>
                             <Value name="pDOP">
@@ -266,7 +266,7 @@ class Toolbox extends React.Component {
                             </Value>
                             <Value name="Fix Type">
                                 <Block type="sensebox_gps">
-                                    <Field name="dropdown">Fix Type</Field>
+                                    <Field name="dropdown">fixType</Field>
                                 </Block>
                             </Value>
                         </Block>
