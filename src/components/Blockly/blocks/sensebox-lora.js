@@ -119,6 +119,38 @@ Blockly.Blocks['sensebox_send_lora_sensor_value'] = {
     LOOP_TYPES: ['sensebox_lora_message_send'],
 };
 
+Blockly.Blocks['sensebox_lora_ttn_mapper'] = {
+    init: function (block) {
+        this.setColour(getColour().sensebox);
+        this.appendDummyInput()
+            .appendField("TTN Mapper");
+        this.appendDummyInput()
+            .setAlign(Blockly.ALIGN_RIGHT)
+            .appendField("Fix Type Limit")
+            .appendField(new Blockly.FieldDropdown([["0", "0"], ["1", "1"], ["2", "2"], ["3", "3"]].reverse()), "dropdown");
+        // reverse() because i want 3 be be at first and i'm to lazy to write the array again
+        this.appendValueInput('Latitude')
+            .appendField(Blockly.Msg.senseBox_gps_lat)
+            .setCheck(null);
+        this.appendValueInput('Longitude')
+            .appendField(Blockly.Msg.senseBox_gps_lng)
+            .setCheck(null);
+        this.appendValueInput('Altitude')
+            .appendField(Blockly.Msg.senseBox_gps_alt)
+            .setCheck(null);
+        this.appendValueInput('pDOP')
+            .appendField('pDOP')
+            .setCheck(null);
+        this.appendValueInput('Fix Type')
+            .appendField('Fix Type')
+            .setCheck(null);
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setTooltip(Blockly.Msg.senseBox_display_printDisplay_tip);
+
+    }
+};
+
 Blockly.Blocks['sensebox_lora_cayenne_send'] = {
     init: function () {
         this.setTooltip(Blockly.Msg.senseBox_LoRa_cayenne_tip);
