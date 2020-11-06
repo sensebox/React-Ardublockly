@@ -331,7 +331,7 @@ Blockly.Blocks['sensebox_scd30'] = {
 
 Blockly.Blocks['sensebox_gps'] = {
   init: function () {
-    var dropdownOptions = [["Latitude", "latitude"], ["Longitude", "longitude"], ["Altitude", "altitude"], ["pDOP", "pDOP"], ["Fix Type", "fixType"]];
+    var dropdownOptions = [[Blockly.Msg.senseBox_gps_lat, "latitude"], [Blockly.Msg.senseBox_gps_lng, "longitude"], [Blockly.Msg.senseBox_gps_alt, "altitude"], ["pDOP", "pDOP"], ["Fix Type", "fixType"]];
     this.appendDummyInput()
       .appendField("GPS Modul");
     this.appendDummyInput()
