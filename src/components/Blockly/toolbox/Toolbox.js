@@ -243,7 +243,33 @@ class Toolbox extends React.Component {
                         <Block type="sensebox_send_lora_sensor_value" />
                     </Category>
                     <Category id="catSenseBoxOutput_Map" name="    TTN Mapper" colour={getColour().sensebox}>
-                        <Block type="sensebox_lora_ttn_mapper" />
+                        <Block type="sensebox_lora_ttn_mapper">
+                            <Value name="Latitude">
+                                <Block type="sensebox_gps">
+                                    <Field name="dropdown">Latitude</Field>
+                                </Block>
+                            </Value>
+                            <Value name="Longitude">
+                                <Block type="sensebox_gps">
+                                    <Field name="dropdown">Longitude</Field>
+                                </Block>
+                            </Value>
+                            <Value name="Altitude">
+                                <Block type="sensebox_gps">
+                                    <Field name="dropdown">Altitude</Field>
+                                </Block>
+                            </Value>
+                            <Value name="pDOP">
+                                <Block type="sensebox_gps">
+                                    <Field name="dropdown">pDOP</Field>
+                                </Block>
+                            </Value>
+                            <Value name="Fix Type">
+                                <Block type="sensebox_gps">
+                                    <Field name="dropdown">Fix Type</Field>
+                                </Block>
+                            </Value>
+                        </Block>
                     </Category>
                     <Category id="catSenseBoxOutput_LoRa_cayenne" name="    Cayenne LPP" colour={getColour().sensebox}>
                         <Block type="sensebox_lora_cayenne_send" />
