@@ -123,12 +123,12 @@ Blockly.Blocks['sensebox_lora_ttn_mapper'] = {
     init: function (block) {
         this.setColour(getColour().sensebox);
         this.appendDummyInput()
+            .appendField("TTN Mapper");
+        this.appendDummyInput()
             .setAlign(Blockly.ALIGN_RIGHT)
             .appendField("Fix Type Limit")
-            .appendField(new Blockly.FieldDropdown([["0", "0"], ["1", "1"], ["2", "2"], ["3", "3"]].reverse()), "dropdown")
+            .appendField(new Blockly.FieldDropdown([["0", "0"], ["1", "1"], ["2", "2"], ["3", "3"]].reverse()), "dropdown");
         // reverse() because i want 3 be be at first and i'm to lazy to write the array again
-        this.appendDummyInput()
-            .appendField("TTN Mapper")
         this.appendValueInput('Latitude')
             .appendField('Latitude')
             .setCheck(null);
