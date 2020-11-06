@@ -126,7 +126,7 @@ Blockly.Blocks['sensebox_lora_ttn_mapper'] = {
             .setAlign(Blockly.ALIGN_RIGHT)
             .appendField("Fix Type Limit")
             .appendField(new Blockly.FieldDropdown([["0", "0"], ["1", "1"], ["2", "2"], ["3", "3"]].reverse()), "dropdown")
-            // reverse() because i want 3 be be at first and i'm to lazy to write the array again
+        // reverse() because i want 3 be be at first and i'm to lazy to write the array again
         this.appendDummyInput()
             .appendField("TTN Mapper")
         this.appendValueInput('Latitude')
@@ -147,7 +147,7 @@ Blockly.Blocks['sensebox_lora_ttn_mapper'] = {
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setTooltip(Blockly.Msg.senseBox_display_printDisplay_tip);
-        this.setHelpUrl('https://sensebox.de/books');
+
     }
 };
 
