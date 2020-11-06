@@ -46,6 +46,7 @@ class Toolbox extends React.Component {
                     <Block type="sensebox_sensor_pressure" />
                     <Block type="sensebox_sensor_bme680_bsec" />
                     <Block type="sensebox_scd30" />
+                    <Block type="sensebox_gps" />
                     <Block type="sensebox_sensor_ultrasonic_ranger" />
                     <Block type="sensebox_sensor_sound" />
                     <Block type="sensebox_button" />
@@ -240,6 +241,35 @@ class Toolbox extends React.Component {
                     <Category id="catSenseBoxOutput_LoRa_loramessage" name="    Lora Message" colour={getColour().sensebox}>
                         <Block type="sensebox_lora_message_send" />
                         <Block type="sensebox_send_lora_sensor_value" />
+                    </Category>
+                    <Category id="catSenseBoxOutput_Map" name="    TTN Mapper" colour={getColour().sensebox}>
+                        <Block type="sensebox_lora_ttn_mapper">
+                            <Value name="Latitude">
+                                <Block type="sensebox_gps">
+                                    <Field name="dropdown">latitude</Field>
+                                </Block>
+                            </Value>
+                            <Value name="Longitude">
+                                <Block type="sensebox_gps">
+                                    <Field name="dropdown">longitude</Field>
+                                </Block>
+                            </Value>
+                            <Value name="Altitude">
+                                <Block type="sensebox_gps">
+                                    <Field name="dropdown">altitude</Field>
+                                </Block>
+                            </Value>
+                            <Value name="pDOP">
+                                <Block type="sensebox_gps">
+                                    <Field name="dropdown">pDOP</Field>
+                                </Block>
+                            </Value>
+                            <Value name="Fix Type">
+                                <Block type="sensebox_gps">
+                                    <Field name="dropdown">fixType</Field>
+                                </Block>
+                            </Value>
+                        </Block>
                     </Category>
                     <Category id="catSenseBoxOutput_LoRa_cayenne" name="    Cayenne LPP" colour={getColour().sensebox}>
                         <Block type="sensebox_lora_cayenne_send" />

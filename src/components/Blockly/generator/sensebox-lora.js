@@ -120,9 +120,9 @@ Blockly.Arduino.sensebox_lora_initialize_otaa = function (block) {
               break;
       }
   }`;
-    Blockly.Arduino.setupCode_['initLora'] = 'initLora();';
-    Blockly.Arduino.setupCode_['serial.begin'] = 'Serial.begin(9600);';
-    var code = ''
+    Blockly.Arduino.loraSetupCode_['initLora'] = 'initLora();\n';
+    Blockly.Arduino.setupCode_['serial.begin'] = 'Serial.begin(9600);\ndelay(1000);\n';
+    var code = '';
     return code;
 };
 
@@ -188,6 +188,60 @@ Blockly.Arduino.sensebox_lora_cayenne_send = function (block) {
           // Prepare upstream data transmission at the next possible time.
           LMIC_setTxData2(1, lpp.getBuffer(), lpp.getSize(), 0);
           Serial.println(F("Packet queued"));
+      }
+      // Next TX is scheduled after TX_COMPLETE event.
+  }`;
+    Blockly.Arduino.loopCodeOnce_['os_runloop'] = 'os_runloop_once();'
+    return '';
+}
+
+Blockly.Arduino.sensebox_lora_ttn_mapper = function (block) {
+    var latitude = Blockly.Arduino.valueToCode(this, 'Latitude', Blockly.Arduino.ORDER_ATOMIC)
+    var longitude = Blockly.Arduino.valueToCode(this, 'Longitude', Blockly.Arduino.ORDER_ATOMIC)
+    var altitude = Blockly.Arduino.valueToCode(this, 'Altitude', Blockly.Arduino.ORDER_ATOMIC)
+    var pDOP = Blockly.Arduino.valueToCode(this, 'pDOP', Blockly.Arduino.ORDER_ATOMIC)
+    var fixType = Blockly.Arduino.valueToCode(this, 'Fix Type', Blockly.Arduino.ORDER_ATOMIC)
+    var fixTypeLimit = this.getFieldValue('dropdown');
+    Blockly.Arduino.functionNames_['functions_do_send'] = `
+  void do_send(osjob_t* j){
+      // Check if there is not a current TX/RX job running
+      if (LMIC.opmode & OP_TXRXPEND) {
+          Serial.println(F("OP_TXRXPEND, not sending"));
+      } else {
+          
+        int fixType = ${fixType};
+        if (fixType >= ${fixTypeLimit}) { // we have a 3D fix
+          int32_t latitude = ${latitude};       // in degrees * 10^-7
+          int32_t longitude = ${longitude};     // in degrees * 10^-7
+          int32_t altitude = ${altitude} / 100;      // in dm above mean sea level
+          uint16_t pDOP = ${pDOP};                 //  positional dillution of precision
+    
+          uint8_t data[12];
+    
+          data[0] = latitude;
+          data[1] = latitude >> 8;
+          data[2] = latitude >> 16;
+          data[3] = latitude >> 24;
+    
+          data[4] = longitude;
+          data[5] = longitude >> 8;
+          data[6] = longitude >> 16;
+          data[7] = longitude >> 24;
+    
+          data[8] = altitude;
+          data[9] = altitude >> 8;
+    
+          data[10] = pDOP;
+          data[11] = pDOP >> 8;
+    
+    
+          // Prepare upstream data transmission at the next possible time.
+          LMIC_setTxData2(1, data, sizeof(data), 0);
+          Serial.println(F("Packet queued"));
+        } else {
+          // wait for better fix type
+          os_setTimedCallback(&sendjob, os_getTime() + sec2osticks(TX_INTERVAL), do_send);
+        }
       }
       // Next TX is scheduled after TX_COMPLETE event.
   }`;
@@ -372,8 +426,8 @@ Blockly.Arduino.sensebox_lora_initialize_abp = function (block) {
               break;
       }
   }`;
-    Blockly.Arduino.setupCode_['initLora'] = 'initLora();';
-    Blockly.Arduino.setupCode_['serial.begin'] = 'Serial.begin(9600);';
+    Blockly.Arduino.loraSetupCode_['initLora'] = 'initLora();\n';
+    Blockly.Arduino.setupCode_['serial.begin'] = 'Serial.begin(9600);\ndelay(1000);\n';
     return '';
 }
 

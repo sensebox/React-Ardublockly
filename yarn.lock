@@ -1148,25 +1148,25 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@blockly/block-plus-minus@^2.0.8":
-  version "2.0.9"
-  resolved "https://registry.yarnpkg.com/@blockly/block-plus-minus/-/block-plus-minus-2.0.9.tgz#d012225057e83ed85d08a35085da21501b899413"
-  integrity sha512-mIeqj+KBtzIcmObe2G/06lhDpOrCT32JCBqE2u51BMb0ywAFh+lsC7kl4mANLclp/+zgxVqJWUD0Q4xdNU048g==
+"@blockly/block-plus-minus@^2.0.10":
+  version "2.0.15"
+  resolved "https://registry.yarnpkg.com/@blockly/block-plus-minus/-/block-plus-minus-2.0.15.tgz#5c51cbaea7a581e0a8fb0651e69c134afa60c655"
+  integrity sha512-9wLleGlMmEW4Gt94ynBxb6JzTFhznAEk8TlC7ZQlwEnpCv3tB+yZsq4iDlQd+tbqRTIRCbsVdQE1x/I1snio9g==
 
-"@blockly/field-slider@^2.0.7":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@blockly/field-slider/-/field-slider-2.1.0.tgz#433c77848166d16eb536becf672e3a20efd81cd6"
-  integrity sha512-LLi83oKCfdP39PYMltFpp221QTkLCSY3mFitBa0oyc+zZM6QKF8BU90eVKRb5m2ZIT52JCF/ywNV3mttHNh33Q==
+"@blockly/field-slider@^2.1.1":
+  version "2.1.6"
+  resolved "https://registry.yarnpkg.com/@blockly/field-slider/-/field-slider-2.1.6.tgz#64616b72509e6754b569b9d563420b53629a5a58"
+  integrity sha512-5HAqfpMWvvB0mzDYfMcChD+orrhwsrLMurdGeRLnA4NcyCjF3++PMvO/l9L/eqdjHkwNZ+cSiuwnjWLz5i1G/w==
 
 "@blockly/plugin-modal@^1.20200427.4":
   version "1.20200427.4"
   resolved "https://registry.yarnpkg.com/@blockly/plugin-modal/-/plugin-modal-1.20200427.4.tgz#220d6c0bf7ad89ee5de02b5be680aa622a686782"
   integrity sha512-eA9p+W3mtcWLJQZ23D0Le/Uw3JdxFxwJqTUYtAiRlVON4qnuDXrHQLlvxEiWctNXJZGUTh57zqbvO6ZxNRQPrA==
 
-"@blockly/plugin-typed-variable-modal@^3.1.0":
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/@blockly/plugin-typed-variable-modal/-/plugin-typed-variable-modal-3.1.0.tgz#3810bb2a4930a34c0668c4af2e35cd628035a1e9"
-  integrity sha512-1gamu/6bS/OTSwh2d0s3fI3QMVAXW0u0sSTbZcOdF8biDTfbGU/O36w0rOrtOb0OtHw8Euo9OkffEVomBIfkNg==
+"@blockly/plugin-typed-variable-modal@^3.1.1":
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/@blockly/plugin-typed-variable-modal/-/plugin-typed-variable-modal-3.1.5.tgz#1e143036d84b779e15ee3588d5d7fc3abbbfae4c"
+  integrity sha512-0VNRYQud4SoGATG2EEuDugvXWGwgyHWGi/K0QfJM0l0EDgP+dZ5mYsHGfFchxu1Woxr3KQiiBb4p85p05Aim2Q==
   dependencies:
     "@blockly/plugin-modal" "^1.20200427.4"
 
@@ -2635,10 +2635,10 @@ bindings@^1.5.0:
   dependencies:
     file-uri-to-path "1.0.0"
 
-blockly@^3.20200625.2:
-  version "3.20200625.2"
-  resolved "https://registry.yarnpkg.com/blockly/-/blockly-3.20200625.2.tgz#266b6c3078aad460afc7e831e6e8f7616073d314"
-  integrity sha512-+0aUynP4kAFjg+m9uSyctWB+KwT3/BDmqy4Fm7vwWq7cuMtgIsqqA8VGb6INVpFx9WZUXSZ5enFAco6CM85bpA==
+blockly@^3.20200924.0:
+  version "3.20200924.3"
+  resolved "https://registry.yarnpkg.com/blockly/-/blockly-3.20200924.3.tgz#c87122adfd15be62c9e9ef36eadfe87a21f7aa0c"
+  integrity sha512-jhWcAmJ2MG5LdTDLEFDVpy+wAgYqorVa67TOszmlekzkCok/hklNTtir4cDg+jbTvQzE0/MT+KGk0YYsU8LQhw==
   dependencies:
     jsdom "^15.2.1"
 
@@ -6532,6 +6532,11 @@ jest@24.9.0:
     import-local "^2.0.0"
     jest-cli "^24.9.0"
 
+js-cookie@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/js-cookie/-/js-cookie-2.2.1.tgz#69e106dc5d5806894562902aa5baec3744e9b2b8"
+  integrity sha512-HvdH2LzI/EAZcUwA8+0nKNtWHqS+ZmijLA30RwZA0bo7ToCckjK5MkGhjED9KoRcXO6BaGI3I9UIzSA1FKFPOQ==
+
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
@@ -7347,6 +7352,16 @@ mkdirp@^0.5.1, mkdirp@^0.5.3, mkdirp@^0.5.5, mkdirp@~0.5.1:
   integrity sha512-NKmAlESf6jMGym1++R0Ra7wvhV+wFW63FaSOFPwRahvea0gMUcGUhVeAg/0BC0wiv9ih5NYPB1Wn1UEI1/L+xQ==
   dependencies:
     minimist "^1.2.5"
+
+mnemonic-id@^3.2.7:
+  version "3.2.7"
+  resolved "https://registry.yarnpkg.com/mnemonic-id/-/mnemonic-id-3.2.7.tgz#f7d77d8b39e009ad068117cbafc458a6c6f8cddf"
+  integrity sha512-kysx9gAGbvrzuFYxKkcRjnsg/NK61ovJOV4F1cHTRl9T5leg+bo6WI0pWIvOFh1Z/yDL0cjA5R3EEGPPLDv/XA==
+
+moment@^2.28.0:
+  version "2.29.1"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
+  integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
 
 move-concurrently@^1.0.1:
   version "1.0.1"
@@ -9088,6 +9103,13 @@ react-app-polyfill@^1.0.6:
     raf "^3.4.1"
     regenerator-runtime "^0.13.3"
     whatwg-fetch "^3.0.0"
+
+react-cookie-consent@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/react-cookie-consent/-/react-cookie-consent-5.2.0.tgz#c2c62e4fd77ec96d18c8dbb772e4281f0c12e131"
+  integrity sha512-iRIDynmivejZgLICcpfGbQl94qLn6cjdEHZP0e+ibxzQ7t3zXzdDhsGDSYax8Qu6nGJnlv0bCBd8K0UJUQ5zwQ==
+  dependencies:
+    js-cookie "^2.2.1"
 
 react-dev-utils@^10.2.1:
   version "10.2.1"
@@ -10959,6 +10981,11 @@ uuid@^3.0.1, uuid@^3.3.2:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
+
+uuid@^8.3.1:
+  version "8.3.1"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.1.tgz#2ba2e6ca000da60fce5a196954ab241131e05a31"
+  integrity sha512-FOmRr+FmWEIG8uhZv6C2bTgEVXsHk08kE7mPlrBbEe+c3r9pjceVPgupIfNIhc4yx55H69OXANrUaSuu9eInKg==
 
 v8-compile-cache@^2.0.3:
   version "2.1.1"
