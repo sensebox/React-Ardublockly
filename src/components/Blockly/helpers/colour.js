@@ -11,7 +11,8 @@ const colours = {
     variables: 330,
     audio: 250,
     arrays: 33,
-    mqtt: 90
+    mqtt: 90,
+    webserver: 40
 }
 
 

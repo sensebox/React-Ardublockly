@@ -19,5 +19,6 @@ import './procedures';
 import './time';
 import './variables';
 import './lists';
+import './webserver';
 
 import '../helpers/types'
