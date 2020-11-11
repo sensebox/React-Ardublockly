@@ -22,12 +22,10 @@ Blockly.Blocks['sensebox_initialize_http_server'] = {
         this.setNextStatement(true, null);
     },
     onchange: function (e) {
-        var legal = false;
         // Is the block nested in a loop?
         var block = this;
         do {
-            if (this.LOOP_TYPES.indexOf(block.type) != -1) {
-                legal = true;
+            if (this.LOOP_TYPES.indexOf(block.type) !== -1) {
                 break;
             }
             block = block.getSurroundParent();
@@ -177,7 +175,6 @@ Blockly.Blocks['sensebox_general_html_tag'] = {
         this.setPreviousStatement(false);
         this.setNextStatement(false);
         this.setMutator(new Blockly.Mutator(['additional_child']));
-        var thisBlock = this;
         this.additionalChildCount_ = 0;
     },
     /**
@@ -232,7 +229,6 @@ Blockly.Blocks['sensebox_general_html_tag'] = {
         // Count number of inputs.
         this.additionalChildCount_ = 0;
         var statementConnections = [null];
-        var elseStatementConnection = null;
         while (clauseBlock) {
             switch (clauseBlock.type) {
                 case 'additional_child':
@@ -240,7 +236,7 @@ Blockly.Blocks['sensebox_general_html_tag'] = {
                     statementConnections.push(clauseBlock.statementConnection_);
                     break;
                 default:
-                    throw 'Unknown block type.';
+                    throw new Error("Unknown block type.");
             }
             clauseBlock = clauseBlock.nextConnection &&
                 clauseBlock.nextConnection.targetBlock();
@@ -268,7 +264,7 @@ Blockly.Blocks['sensebox_general_html_tag'] = {
                     i++;
                     break;
                 default:
-                    throw 'Unknown block type.';
+                    throw new Error('Unknown block type.');
             }
             clauseBlock = clauseBlock.nextConnection &&
                 clauseBlock.nextConnection.targetBlock();
@@ -287,7 +283,7 @@ Blockly.Blocks['sensebox_general_html_tag'] = {
             i++;
         }
         // Rebuild block.
-        for (var i = 1; i <= this.additionalChildCount_; i++) {
+        for (i = 1; i <= this.additionalChildCount_; i++) {
             this.appendValueInput('DO' + i, Blockly.Arduino.ORDER_NONE);
         }
     }
