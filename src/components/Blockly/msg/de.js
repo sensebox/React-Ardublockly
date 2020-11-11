@@ -272,6 +272,11 @@ Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL = "https://de.wikipedia.org/wiki/Pro
 Blockly.Msg.PROCEDURES_CALLNORETURN_TOOLTIP = "Rufe einen Funktionsblock ohne Rückgabewert auf.";
 Blockly.Msg.PROCEDURES_CALLRETURN_HELPURL = "https://de.wikipedia.org/wiki/Prozedur_%28Programmierung%29";
 Blockly.Msg.PROCEDURES_CALLRETURN_TOOLTIP = "Rufe einen Funktionsblock mit Rückgabewert auf.";
+Blockly.Msg.PROCEDURES_CALL = "Rufe";
+Blockly.Msg.PROCEDURES_CALL_END = "auf";
+Blockly.Msg.PROCEDURES_DEFNORETURN = "Erstelle Funktion";
+Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "mit Eingabeparameter:";
+Blockly.Msg.PROCEDURES_DEFRETURN_RETURN_TYPE = "Rückgabetype";
 Blockly.Msg.PROCEDURES_CALL_BEFORE_PARAMS = "mit:";
 Blockly.Msg.PROCEDURES_CREATE_DO = "Erzeuge \"Aufruf %1\"";
 Blockly.Msg.PROCEDURES_DEFNORETURN_COMMENT = "Beschreibe diese Funktion …";
@@ -774,6 +779,8 @@ Blockly.Msg.senseBox_telegram_message = "Nachricht"
 Blockly.Msg.senseBox_telegram_send = "Sende Nachricht"
 //SCD30 CO2 Sensor
 Blockly.Msg.senseBox_scd30 = "CO2 Sensor (Sensirion SCD30)";
+Blockly.Msg.senseBox_scd_tip = "Gibt den Wert des CO2 Sensors";
+Blockly.Msg.senseBox_scd_co2 = "CO2 in ppm";
 //WS2818 RGB LED
 Blockly.Msg.senseBox_ws2818_rgb_led = "senseBox WS2812 - RGB LED";
 Blockly.Msg.senseBox_ws2818_rgb_led_position = "Position";

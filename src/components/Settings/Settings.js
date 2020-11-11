@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import LanguageSelector from './LanguageSelector';
 import RenderSelector from './RenderSelector';
+import StatsSelector from './StatsSelector';
 
 
 class Settings extends Component {
@@ -14,6 +15,7 @@ class Settings extends Component {
                 <Typography variant='h4' style={{ marginBottom: '5px' }}>Einstellungen</Typography>
                 <LanguageSelector />
                 <RenderSelector />
+                <StatsSelector />
                 <Button
                     style={{ marginTop: '20px' }}
                     variant="contained"

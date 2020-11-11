@@ -58,7 +58,6 @@ class GalleryHome extends Component {
     }
 
     componentDidMount() {
-        console.log(process.env.REACT_APP_BLOCKLY_API)
         fetch(process.env.REACT_APP_BLOCKLY_API + this.props.location.pathname)
             .then(res => res.json())
             .then((data) => {

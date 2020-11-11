@@ -44,7 +44,7 @@ Blockly['Arduino'].addReservedWords(
     'setup,loop,if,else,for,switch,case,while,' +
     'do,break,continue,return,goto,define,include,' +
     'HIGH,LOW,INPUT,OUTPUT,INPUT_PULLUP,true,false,' +
-    'interger, constants,floating,point,void,bookean,char,' +
+    'interger, constants,floating,point,void,boolean,char,' +
     'unsigned,byte,int,word,long,float,double,string,String,array,' +
     'static, volatile,const,sizeof,pinMode,digitalWrite,digitalRead,' +
     'analogReference,analogRead,analogWrite,tone,noTone,shiftOut,shitIn,' +

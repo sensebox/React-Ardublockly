@@ -267,20 +267,24 @@ Blockly.Msg.NEW_VARIABLE = "New variable...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "New variable name:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";
 Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "allow statements";
-Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "with:";
+Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "with inputs:";
 Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL = "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29";
 Blockly.Msg.PROCEDURES_CALLNORETURN_TOOLTIP = "Run the user-defined function '%1'.";
 Blockly.Msg.PROCEDURES_CALLRETURN_HELPURL = "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29";
 Blockly.Msg.PROCEDURES_CALLRETURN_TOOLTIP = "Run the user-defined function '%1' and use its output.";
-Blockly.Msg.PROCEDURES_CALL_BEFORE_PARAMS = "with:";
+Blockly.Msg.PROCEDURES_CALL_BEFORE_PARAMS = "with Inputs:";
+Blockly.Msg.PROCEDURES_CALL = "Call";
+Blockly.Msg.PROCEDURES_CALL_END = '';
 Blockly.Msg.PROCEDURES_CREATE_DO = "Create '%1'";
 Blockly.Msg.PROCEDURES_DEFNORETURN_COMMENT = "Describe this function...";
+Blockly.Msg.PROCEDURES_DEFNORETURN = "Create Function";
 Blockly.Msg.PROCEDURES_DEFNORETURN_DO = "";
 Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL = "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29";
 Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE = "do something";
 Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE = "to";
 Blockly.Msg.PROCEDURES_DEFNORETURN_TOOLTIP = "Creates a function with no output.";
 Blockly.Msg.PROCEDURES_DEFRETURN_HELPURL = "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29";
+Blockly.Msg.PROCEDURES_DEFRETURN_RETURN_TYPE = "return Type";
 Blockly.Msg.PROCEDURES_DEFRETURN_RETURN = "return";
 Blockly.Msg.PROCEDURES_DEFRETURN_TOOLTIP = "Creates a function with an output.";
 Blockly.Msg.PROCEDURES_DEF_DUPLICATE_WARNING = "Warning: This function has duplicate parameters.";
@@ -757,6 +761,9 @@ Blockly.Msg.sensebox_soil_smt50 = "Soil Moisture and Temperature (SMT50)";
 Blockly.Msg.sensebox_web_readHTML_filename = "File:";
 //SCD30 CO2 Sensor
 Blockly.Msg.senseBox_scd30 = "CO2 Sensor (Sensirion SCD30)";
+Blockly.Msg.senseBox_scd_co2 = "CO2 in ppm";
+Blockly.Msg.senseBox_scd_tip = "Returns value of the CO2 Sensor";
+
 
 //WS2818 RGB LED
 Blockly.Msg.senseBox_ws2818_rgb_led = "senseBox WS2812 - RGB LED";
