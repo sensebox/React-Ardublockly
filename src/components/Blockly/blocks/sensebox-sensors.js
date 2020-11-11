@@ -309,7 +309,7 @@ Blockly.Blocks['sensebox_button'] = {
 
 Blockly.Blocks['sensebox_scd30'] = {
   init: function () {
-    var dropdownOptions = [[Blockly.Msg.senseBox_temp, "temperature"], [Blockly.Msg.senseBox_hum, "humidity"], [Blockly.Msg.senseBox_bme_co2, "CO2"]];
+    var dropdownOptions = [[Blockly.Msg.senseBox_scd_co2, "CO2"], [Blockly.Msg.senseBox_temp, "temperature"], [Blockly.Msg.senseBox_hum, "humidity"]];
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_scd30);
     this.appendDummyInput()
@@ -318,7 +318,15 @@ Blockly.Blocks['sensebox_scd30'] = {
       .appendField(new Blockly.FieldDropdown(dropdownOptions), "dropdown")
     this.setOutput(true, Types.NUMBER.typeName);
     this.setColour(getColour().sensebox);
-    this.setTooltip(Blockly.Msg.senseBox_bme_tip);
+    this.setTooltip(Blockly.Msg.senseBox_scd_tip);
+  },
+  onchange: function (e) {
+    var dropdown = this.getFieldValue('dropdown');
+    if (dropdown === 'temperature' || dropdown === 'humidity') {
+      this.setOutput(true, Types.DECIMAL.typeName);
+    } else if (dropdown === 'CO2') {
+      this.setOutput(true, Types.NUMBER.typeName);
+    }
   }
 };
 

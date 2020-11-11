@@ -15,13 +15,13 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function RenderSelector() {
+export default function StatsSelector() {
     const classes = useStyles();
-    const [renderer, setRenderer] = React.useState(window.localStorage.getItem('renderer'));
+    const [stats, setStats] = React.useState(window.localStorage.getItem('stats'));
 
     const handleChange = (event) => {
-        setRenderer(event.target.value);
-        window.localStorage.setItem('renderer', event.target.value);
+        setStats(event.target.value);
+        window.localStorage.setItem('stats', event.target.value);
     };
 
     return (
@@ -31,15 +31,14 @@ export default function RenderSelector() {
                 <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={renderer}
+                    value={stats}
                     onChange={handleChange}
-
                 >
-                    <MenuItem value={'geras'}>Geras</MenuItem>
-                    <MenuItem value={'zelos'}>Zelos</MenuItem>
+                    <MenuItem value={true}>On</MenuItem>
+                    <MenuItem value={false}>Off</MenuItem>
                 </Select>
             </FormControl>
-            <p>Der Renderer bestimmt das aussehen der Blöcke</p>
+            <p>Schaltet die Statistiken Oberhalb der Arbeitsfläche ein bzw. aus</p>
         </div>
     );
 }
