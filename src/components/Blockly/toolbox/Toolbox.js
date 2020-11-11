@@ -282,6 +282,11 @@ class Toolbox extends React.Component {
                         <Block type="sensebox_lora_cayenne_gps" />
                     </Category>
                 </Category>
+                <Category id="mqtt" name="MQTT" colour={getColour().mqtt}>
+                    <Block type="sensebox_mqtt_setup" />
+                    <Block type="sensebox_mqtt_publish" />
+                    {/* <Block type="sensebox_mqtt_subscribe" /> */}
+                </Category>
                 <Category name="Logik" colour={getColour().logic}>
                     <Block type="controls_if" />
                     <Block type="controls_ifelse" />
