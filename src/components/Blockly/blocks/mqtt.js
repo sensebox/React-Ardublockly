@@ -13,7 +13,8 @@ Blockly.Blocks["sensebox_mqtt_setup"] = {
         this.setHelpUrl('');
         this.setColour(getColour().mqtt);
         this.appendDummyInput()
-            .appendField(Blockly.Msg.senseBox_mqtt_init);
+            .appendField(Blockly.Msg.senseBox_mqtt_init)
+            .appendField(new Blockly.FieldDropdown([["Adafruit IO", 'adafruitio'], ["DIOTY", 'dioty'], ["Other Service", 'custom']]), "service");
         this.appendDummyInput()
             .setAlign(Blockly.ALIGN_LEFT)
             .appendField(Blockly.Msg.senseBox_mqtt_server)
@@ -28,10 +29,34 @@ Blockly.Blocks["sensebox_mqtt_setup"] = {
             .appendField(new Blockly.FieldTextInput("Username"), "username");
         this.appendDummyInput()
             .setAlign(Blockly.ALIGN_LEFT)
-            .appendField(Blockly.Msg.senseBox_mqtt_password)
+            .appendField(Blockly.Msg.senseBox_mqtt_password, "passwordmsg")
             .appendField(new Blockly.FieldTextInput("Password"), "password");
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
+    },
+    onchange: function (e) {
+        let service = this.getFieldValue('service');
+        switch (this.getFieldValue('service')) {
+            case 'adafruitio':
+                this.getField('server').setValue("io.adafruit.com");
+                this.getField('port').setValue("1883");
+                this.getField('passwordmsg').setValue("Adafruit IO Key");
+                break;
+            case 'dioty':
+                this.getField('server').setValue("mqtt.dioty.co");
+                this.getField('port').setValue("1883");
+                this.getField('passwordmsg').setValue(Blockly.Msg.senseBox_mqtt_password);
+                break;
+
+            case "custom":
+                this.getField('server').setValue("server");
+                this.getField('port').setValue("port");
+                this.getField('passwordmsg').setValue(Blockly.Msg.senseBox_mqtt_password);
+                break;
+            default:
+
+                break;
+        }
     }
 };
 
