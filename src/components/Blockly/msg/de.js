@@ -785,7 +785,7 @@ Blockly.Msg.senseBox_ws2818_rgb_led_brightness = "Helligkeit";
  * MQTT
  */
 
-Blockly.Msg.senseBox_mqtt_init = "Initialisiere MQTT Broker";
+Blockly.Msg.senseBox_mqtt_init = "Verbinde mit MQTT Broker";
 Blockly.Msg.senseBox_mqtt_server = "Server";
 Blockly.Msg.senseBox_mqtt_port = "Port";
 Blockly.Msg.senseBox_mqtt_username = "Benutzername";
