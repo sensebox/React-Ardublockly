@@ -1,6 +1,5 @@
 import * as Blockly from 'blockly/core';
 import { getColour } from '../helpers/colour';
-import * as Types from '../helpers/types'
 
 /**
  * MQTT Blocks
@@ -36,7 +35,7 @@ Blockly.Blocks["sensebox_mqtt_setup"] = {
     },
     onchange: function (e) {
         let service = this.getFieldValue('service');
-        switch (this.getFieldValue('service')) {
+        switch (service) {
             case 'adafruitio':
                 this.getField('server').setValue("io.adafruit.com");
                 this.getField('port').setValue("1883");
