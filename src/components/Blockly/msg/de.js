@@ -779,4 +779,18 @@ Blockly.Msg.senseBox_ws2818_rgb_led = "senseBox WS2812 - RGB LED";
 Blockly.Msg.senseBox_ws2818_rgb_led_position = "Position";
 Blockly.Msg.senseBox_ws2818_rgb_led_brightness = "Helligkeit";
 
+
+
+/***
+ * MQTT
+ */
+
+Blockly.Msg.senseBox_mqtt_init = "Verbinde mit MQTT Broker";
+Blockly.Msg.senseBox_mqtt_server = "Server";
+Blockly.Msg.senseBox_mqtt_port = "Port";
+Blockly.Msg.senseBox_mqtt_username = "Benutzername";
+Blockly.Msg.senseBox_mqtt_password = "Passwort";
+Blockly.Msg.sensebox_mqtt_subscribe = "Subscribe to Feed"
+Blockly.Msg.senseBox_mqtt_publish = "Sende an Feed";
+
 export const De = Blockly.Msg;

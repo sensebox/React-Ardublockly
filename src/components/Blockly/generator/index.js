@@ -8,6 +8,7 @@ import './sensebox-display';
 import './sensebox-lora';
 import './sensebox-led';
 import './sensebox-sd';
+import './mqtt';
 import './logic';
 import './text';
 import './math';
