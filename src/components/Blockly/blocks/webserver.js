@@ -291,7 +291,7 @@ Blockly.Blocks['sensebox_general_html_tag'] = {
 
 Blockly.Blocks['first_child'] = {
     init: function () {
-        this.setColour(Blockly.Blocks.logic.HUE);
+        this.setColour(getColour().webserver);
         this.appendDummyInput()
             .appendField("<Tag>");
         this.setNextStatement(true);
@@ -304,7 +304,7 @@ Blockly.Blocks['first_child'] = {
 
 Blockly.Blocks['additional_child'] = {
     init: function () {
-        this.setColour(Blockly.Blocks.logic.HUE);
+        this.setColour(getColour().webserver);
         this.appendDummyInput()
             .appendField("<Tag>");
         this.setPreviousStatement(true);
