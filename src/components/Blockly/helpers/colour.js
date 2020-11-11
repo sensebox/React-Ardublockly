@@ -10,7 +10,8 @@ const colours = {
     text: 160,
     variables: 330,
     audio: 250,
-    arrays: 33
+    arrays: 33,
+    mqtt: 90
 }
 
 
