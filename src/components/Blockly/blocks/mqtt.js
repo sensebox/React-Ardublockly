@@ -68,8 +68,8 @@ Blockly.Blocks["sensebox_mqtt_publish"] = {
             .appendField(Blockly.Msg.senseBox_mqtt_publish);
         this.appendValueInput('value')
             .setCheck(null)
-            .appendField('Feed')
-            .appendField(new Blockly.FieldTextInput('Feedname'), 'publishfeed');
+            .appendField('Feed/Topic')
+            .appendField(new Blockly.FieldTextInput('Name'), 'publishfeed');
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
     }

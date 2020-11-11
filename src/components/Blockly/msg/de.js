@@ -798,6 +798,6 @@ Blockly.Msg.senseBox_mqtt_port = "Port";
 Blockly.Msg.senseBox_mqtt_username = "Benutzername";
 Blockly.Msg.senseBox_mqtt_password = "Passwort";
 Blockly.Msg.sensebox_mqtt_subscribe = "Subscribe to Feed"
-Blockly.Msg.senseBox_mqtt_publish = "Sende an Feed";
+Blockly.Msg.senseBox_mqtt_publish = "Sende an Feed/Topic";
 
 export const De = Blockly.Msg;
