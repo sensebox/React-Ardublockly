@@ -282,6 +282,20 @@ class Toolbox extends React.Component {
                         <Block type="sensebox_lora_cayenne_gps" />
                     </Category>
                 </Category>
+                <Category id="webserver" name="Webserver" colour={getColour().webserver}>
+                    <Block type="sensebox_initialize_http_server"></Block>
+                    <Block type="sensebox_http_on_client_connect"></Block>
+                    <Block type="sensebox_ip_address"></Block>
+                    <Block type="sensebox_http_method"></Block>
+                    <Block type="sensebox_http_uri"></Block>
+                    <Block type="sensebox_http_protocol_version"></Block>
+                    <Block type="sensebox_http_user_agent"></Block>
+                    <Block type="sensebox_generate_http_succesful_response"></Block>
+                    <Block type="sensebox_generate_http_not_found_response"></Block>
+                    <Block type="sensebox_generate_html_doc"></Block>
+                    <Block type="sensebox_general_html_tag"></Block>
+                    <Block type="sensebox_web_readHTML"></Block>
+                </Category>
                 <Category id="mqtt" name="MQTT" colour={getColour().mqtt}>
                     <Block type="sensebox_mqtt_setup" />
                     <Block type="sensebox_mqtt_publish" />
