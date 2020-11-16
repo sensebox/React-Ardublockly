@@ -4,6 +4,7 @@ let tutorials = [
     require('./tutorial/Wenn-DannBedingungen.json'),
     require('./tutorial/VerwendungVonVariablen.json'),
     require('./tutorial/AnzeigeVonMesswertenAufDemDisplay.json'),
+    require('./tutorial/SendenVonMesswertenueberLoRa.json')
     require('./tutorial/MesswerteAnDieOpenSenseMapSenden.json')
 ]
 
