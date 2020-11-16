@@ -19,10 +19,10 @@ Blockly.Arduino.sensebox_display_clearDisplay = function () {
 };
 
 Blockly.Arduino.sensebox_display_printDisplay = function () {
-    var x = Blockly.Arduino.valueToCode(this, 'X', Blockly.Arduino.ORDER_ATOMIC) || '0'
-    var y = Blockly.Arduino.valueToCode(this, 'Y', Blockly.Arduino.ORDER_ATOMIC) || '0'
+    var x = this.getFieldValue('X');
+    var y = this.getFieldValue('Y');
     var printDisplay = Blockly.Arduino.valueToCode(this, 'printDisplay', Blockly.Arduino.ORDER_ATOMIC) || '"Keine Eingabe"';
-    var size = Blockly.Arduino.valueToCode(this, 'SIZE', Blockly.Arduino.ORDER_ATOMIC) || '1'
+    var size = this.getFieldValue('SIZE');
     var color = this.getFieldValue('COLOR');
     var code = 'display.setCursor(' + x + ',' + y + ');\n';
     code += 'display.setTextSize(' + size + ');\n';
