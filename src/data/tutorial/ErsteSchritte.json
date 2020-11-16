@@ -1,1 +1,59 @@
-{"id":1602160534286,"title":"Erste Schritte","steps":[{"id":1,"type":"instruction","headline":"Erste Schritte","text":"In diesem Tutorial lernst du die ersten Schritte mit der senseBox kennen. Du erstellst ein erstes Programm, baust einen ersten Schaltkreis auf und lernst, wie du das Programm auf die senseBox MCU überträgst.","hardware":["senseboxmcu","led","breadboard","jst-adapter","resistor-470ohm"],"requirements":[]},{"id":2,"type":"instruction","headline":"Aufbau der Schaltung","text":"Stecke die LED auf das Breadboard und verbinde diese mithile des Widerstandes und dem JST Kabel mit dem Port Digital/Analog 1."},{"id":3,"type":"instruction","headline":"Programmierung","text":"Jedes Programm für die senseBox besteht aus zwei Funktionen. Die Setup () Funktion wird zu Begin einmalig ausgeführt und der Programmcode Schrittweise ausgeführt. Nachdem die Setup () Funktion durchlaufen worden ist wird der Programmcode aus der zweiten Funktion, der Endlosschleife, fortlaufend wiederholt.","xml":"<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <block type=\"arduino_functions\" id=\"QWW|$jB8+*EL;}|#uA\" deletable=\"false\" x=\"27\" y=\"16\"></block>\n</xml>"},{"id":4,"type":"instruction","headline":"Leuchten der LED","text":"Um nun die LED zum leuchten zu bringen wird folgender Block in die Endlosschleife eingefügt. Der Block bietet dir auszuwählen an welchen Pin die LED angeschlossen wurd und ob diese ein oder ausgeschaltet werden soll.","xml":"<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <block type=\"sensebox_led\" id=\"S_GEYN/`Z]?{5:aKp6e^\" x=\"21\" y=\"27\">\n    <field name=\"PIN\">1</field>\n    <field name=\"STAT\">HIGH</field>\n  </block>\n</xml>"},{"id":5,"type":"task","headline":"Aufgabe 1","text":"Verwende den zuvor kennengelernten Block, um die LED zum leuchten zu bringen.","xml":"<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <block type=\"arduino_functions\" id=\"QWW|$jB8+*EL;}|#uA\" deletable=\"false\" x=\"27\" y=\"16\">\n    <statement name=\"LOOP_FUNC\">\n      <block type=\"sensebox_led\" id=\"S#27sNt/*c:[Zv+YyzD9\">\n        <field name=\"PIN\">1</field>\n        <field name=\"STAT\">HIGH</field>\n      </block>\n    </statement>\n  </block>\n</xml>"},{"id":6,"type":"instruction","headline":"Programmcode übertragen","text":"Super! Du hast dein erstes Programm erstellt und kompiliert. In nächsten Schritt muss das Programm auf deine senseBox MCU übertragen werden. Schließe diese mithilfe des USB Kabel an deinem Computer an und drücke 2 mal schnell hintereinander auf den roten Reset Button, um die senseBox MCU in den Lernmodus zu versetzten. Die senseBox MCU erscheint nun als USB-Gerät in deinem Dateiexplorer. Kopiere anschließend das Programm auf die senseBox MCU.","media":{"youtube":"jzlOJ7Zuqqw"}}]}
+{
+    "id": 1602160534286,
+    "title": "Erste Schritte",
+    "steps": [
+        {
+            "id": 1,
+            "type": "instruction",
+            "headline": "Erste Schritte",
+            "text": "In diesem Tutorial lernst du die ersten Schritte mit der senseBox kennen. Du erstellst ein erstes Programm, baust einen ersten Schaltkreis auf und lernst, wie du das Programm auf die senseBox MCU überträgst.",
+            "hardware": [
+                "senseboxmcu",
+                "led",
+                "breadboard",
+                "jst-adapter",
+                "resistor-470ohm"
+            ],
+            "requirements": []
+        },
+        {
+            "id": 2,
+            "type": "instruction",
+            "headline": "Aufbau der Schaltung",
+            "text": "Stecke die LED auf das Breadboard und verbinde diese mithilfe des Widerstandes und dem JST Kabel mit dem Port Digital/Analog 1.\n",
+            "media": {
+                "picture": "tutorial_01.png"
+            }
+        },
+        {
+            "id": 3,
+            "type": "instruction",
+            "headline": "Programmierung",
+            "text": "Jedes Programm für die senseBox besteht aus zwei Funktionen. Die Setup () Funktion wird zu Begin einmalig ausgeführt und der Programmcode Schrittweise ausgeführt. Nachdem die Setup () Funktion durchlaufen worden ist wird der Programmcode aus der zweiten Funktion, der Endlosschleife, fortlaufend wiederholt.",
+            "xml": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <block type=\"arduino_functions\" id=\"QWW|$jB8+*EL;}|#uA\" deletable=\"false\" x=\"27\" y=\"16\"></block>\n</xml>"
+        },
+        {
+            "id": 4,
+            "type": "instruction",
+            "headline": "Leuchten der LED",
+            "text": "Um nun die LED zum leuchten zu bringen wird folgender Block in die Endlosschleife eingefügt. Der Block bietet dir auszuwählen an welchen Pin die LED angeschlossen wurd und ob diese ein oder ausgeschaltet werden soll.",
+            "xml": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <block type=\"sensebox_led\" id=\"S_GEYN/`Z]?{5:aKp6e^\" x=\"21\" y=\"27\">\n    <field name=\"PIN\">1</field>\n    <field name=\"STAT\">HIGH</field>\n  </block>\n</xml>"
+        },
+        {
+            "id": 5,
+            "type": "task",
+            "headline": "Aufgabe 1",
+            "text": "Verwende den zuvor kennengelernten Block, um die LED zum leuchten zu bringen.",
+            "xml": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <block type=\"arduino_functions\" id=\"QWW|$jB8+*EL;}|#uA\" deletable=\"false\" x=\"27\" y=\"16\">\n    <statement name=\"LOOP_FUNC\">\n      <block type=\"sensebox_led\" id=\"S#27sNt/*c:[Zv+YyzD9\">\n        <field name=\"PIN\">1</field>\n        <field name=\"STAT\">HIGH</field>\n      </block>\n    </statement>\n  </block>\n</xml>"
+        },
+        {
+            "id": 6,
+            "type": "instruction",
+            "headline": "Programmcode übertragen",
+            "text": "Super! Du hast dein erstes Programm erstellt und kompiliert. In nächsten Schritt muss das Programm auf deine senseBox MCU übertragen werden. Schließe diese mithilfe des USB Kabel an deinem Computer an und drücke 2 mal schnell hintereinander auf den roten Reset Button, um die senseBox MCU in den Lernmodus zu versetzten. Die senseBox MCU erscheint nun als USB-Gerät in deinem Dateiexplorer. Kopiere anschließend das Programm auf die senseBox MCU.",
+            "media": {
+                "youtube": "jzlOJ7Zuqqw"
+            }
+        }
+    ]
+}
