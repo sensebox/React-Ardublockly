@@ -115,7 +115,7 @@ Blockly.Blocks['controls_if'] = {
                     elseStatementConnection = clauseBlock.statementConnection_;
                     break;
                 default:
-                    throw 'Unknown block type.';
+                    throw new Error('Unknown block type.');
             }
             clauseBlock = clauseBlock.nextConnection &&
                 clauseBlock.nextConnection.targetBlock();
@@ -153,7 +153,7 @@ Blockly.Blocks['controls_if'] = {
                         inputDo && inputDo.connection.targetConnection;
                     break;
                 default:
-                    throw 'Unknown block type.';
+                    throw new Error('Unknown block type.');
             }
             clauseBlock = clauseBlock.nextConnection &&
                 clauseBlock.nextConnection.targetBlock();
