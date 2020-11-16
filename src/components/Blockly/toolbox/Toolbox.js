@@ -234,7 +234,7 @@ class Toolbox extends React.Component {
                     <Block type="sensebox_send_to_osem" />
                 </Category>
                 <Category id="catSenseBoxOutput_LoRa" name="  LoRa" colour={getColour().sensebox}>
-                    <Category id="catSenseBoxOutput_LoRa_activation" name="    Aktiviereung" colour={getColour().sensebox}>
+                    <Category id="catSenseBoxOutput_LoRa_activation" name="    Aktivierung" colour={getColour().sensebox}>
                         <Block type="sensebox_lora_initialize_otaa" />
                         <Block type="sensebox_lora_initialize_abp" />
                     </Category>
