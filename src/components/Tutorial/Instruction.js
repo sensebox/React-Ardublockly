@@ -20,7 +20,7 @@ class Instruction extends Component {
     return (
       <div>
         <Typography variant='h4' style={{ marginBottom: '5px' }}>{step.headline}</Typography>
-        <Typography style={isHardware ? {} : { marginBottom: '5px' }}><ReactMarkdown>{step.text}</ReactMarkdown></Typography>
+        <Typography style={isHardware ? {} : { marginBottom: '5px' }}><ReactMarkdown allowDangerousHtml skipHtml={false}>{step.text}</ReactMarkdown></Typography>
         {isHardware ?
           <Hardware picture={step.hardware} /> : null}
         {areRequirements > 0 ?
@@ -28,7 +28,7 @@ class Instruction extends Component {
         {step.media ?
           step.media.picture ?
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '5px' }}>
-              <img src={`/media/tutorial/${step.media.picture}`} alt='' style={{ maxWidth: '100%' }} />
+              <img src={`/media/tutorial/${step.media.picture}`} alt='' style={{ maxHeight: '40vH', maxWidth: '100%' }} />
             </div>
             : step.media.youtube ?
               /*16:9; width: 800px; height: width/16*9=450px*/
