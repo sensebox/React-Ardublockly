@@ -1,0 +1,82 @@
+{
+    "id": 1605191033983,
+    "title": "Messwerte an die openSenseMap senden",
+    "steps": [
+        {
+            "id": 1,
+            "type": "instruction",
+            "headline": "Messwerte an die openSenseMap senden",
+            "text": "In diesem kurzen Tutorial lernt ihr wie Messwerte der senseBox an die [openSenseMap](https://opensensemap.org) gesendet werden können. Die openSenseMap ist das Datenportal für die senseBox und ermöglicht es euch, schnell und einfach eigene Messwerte zu speichern, zu analysieren und auszuwerten.",
+            "hardware": [
+                "hdc1080",
+                "senseboxmcu",
+                "wifi-bee",
+                "jst-jst"
+            ],
+            "requirements": [
+                1602160534286
+            ]
+        },
+        {
+            "id": 2,
+            "type": "instruction",
+            "headline": "Aufbau der Hardware",
+            "text": "Steckt das WiFi-Bee auf den Steckplatz XBEE1 und schließt den Temperatur- und Luftfeuchtigkeitssensor mit dem JST-JST Kabel an einen der fünf I2C Ports an. ",
+            "media": {
+                "picture": "WiFi-Bee.jpeg"
+            }
+        },
+        {
+            "id": 3,
+            "type": "instruction",
+            "headline": "Verbindung mit dem Wlan herstellen",
+            "text": "Im ersten Schritt muss eine Verbindung mit dem Wlan hergestellt werden. Verwende dazu folgenden Block im Setup und trage dein Netzwerkname und das Passwort ein.",
+            "xml": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <block type=\"arduino_functions\" id=\"QWW|$jB8+*EL;}|#uA\" x=\"27\" y=\"16\">\n    <statement name=\"SETUP_FUNC\">\n      <block type=\"sensebox_wifi\" id=\"A~*O2@X@}1TfhGb_KN36\">\n        <field name=\"SSID\">SSID</field>\n        <field name=\"Password\">Password</field>\n      </block>\n    </statement>\n  </block>\n</xml>"
+        },
+        {
+            "id": 4,
+            "type": "instruction",
+            "headline": "Registrieren auf der openSenseMap",
+            "text": "Gehe auf [opensensemap.org](https://opensensemap.org) und registriere eine neue senseBox mit dem Temperatur- und Luftfeuchtigkeitssensor. \n\nWie genau du deine senseBox registriert wird dir in folgendem Video ab Sekunde 38 erläutert.",
+            "media": {
+                "youtube": "Gz9RzoVp_NI"
+            }
+        },
+        {
+            "id": 5,
+            "type": "instruction",
+            "headline": "Registrieren auf der openSenseMap",
+            "text": "<iframe src=\"https://workshop.opensensemap.org\" title=\"openSenseMap\" width=\"80vW\" height=\"60vH\"></iframe>"
+        },
+        {
+            "id": 6,
+            "type": "instruction",
+            "headline": "Verbinden mit der openSenseMap",
+            "text": "Nach der Registrierung deiner senseBox auf der openSenseMap erhälst du eine senseBox ID und jeweils eine ID für jeden Sensorwert, den du übertragen möchtest. Im nächsten Schritt stellst du eine Verbindung mit der openSenseMap her und sendest die Messwerte. \n\nVerwende den Block \"Messintervall\" aus der Kategorie Zeit um in regelmäßigen Abständen einen Messwert zu übertragen. Der Block \"Verbinde mit openSenseMap\" stellt eine Verbindung mit der openSenseMap her. Trage dort deine senseBox ID und den API Schlüssel ein, den du nach der Registrierung erhalten hast.",
+            "xml": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <block type=\"arduino_functions\" id=\"QWW|$jB8+*EL;}|#uA\" x=\"27\" y=\"16\">\n    <statement name=\"SETUP_FUNC\">\n      <block type=\"sensebox_wifi\" id=\"hh2oxI#,_!%[6bXIS:{:\">\n        <field name=\"SSID\">SSID</field>\n        <field name=\"Password\">Password</field>\n      </block>\n    </statement>\n    <statement name=\"LOOP_FUNC\">\n      <block type=\"sensebox_interval_timer\" id=\"t9:|@yLFdDCfp]#$PJ7t\">\n        <field name=\"interval\">10000</field>\n        <statement name=\"DO\">\n          <block type=\"sensebox_osem_connection\" id=\"nYceK^douw=sKoU4=8_9\">\n            <mutation xmlns=\"http://www.w3.org/1999/xhtml\" type=\"Stationary\"></mutation>\n            <field name=\"host\">\"ingress.opensensemap.org\"</field>\n            <field name=\"SSL\">TRUE</field>\n            <field name=\"type\">Stationary</field>\n            <field name=\"BoxID\">senseBox ID</field>\n            <field name=\"access_token\">access_token</field>\n          </block>\n        </statement>\n      </block>\n    </statement>\n  </block>\n</xml>"
+        },
+        {
+            "id": 7,
+            "type": "instruction",
+            "headline": "Senden von Messwerten",
+            "text": "Verwende nun für jeden Messwert einen Block \"Sende Messwert an die openSenseMap\". Wenn du eine richtige senseBox ID eingetragen hast kannst du im Dropdown Menü das jeweilige Phänomen auswählen, welches du übertragen möchtest. Verbinde anschließend noch den entsprechenden Block für den Sensor oder die Variable, die du übertragen möchtest, um dein Programm zu vervollständigen. ",
+            "xml": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <block type=\"arduino_functions\" id=\"QWW|$jB8+*EL;}|#uA\" x=\"27\" y=\"16\">\n    <statement name=\"SETUP_FUNC\">\n      <block type=\"sensebox_wifi\" id=\"gV~69~Iuf*!nnsm@DoB.\">\n        <field name=\"SSID\">SSID</field>\n        <field name=\"Password\">Password</field>\n      </block>\n    </statement>\n    <statement name=\"LOOP_FUNC\">\n      <block type=\"sensebox_interval_timer\" id=\"HLG3G:N7i4CoWG?9_)On\">\n        <field name=\"interval\">10000</field>\n        <statement name=\"DO\">\n          <block type=\"sensebox_osem_connection\" id=\"Vys7VY`r0)$7p05NC6!7\">\n            <mutation xmlns=\"http://www.w3.org/1999/xhtml\" type=\"Stationary\"></mutation>\n            <field name=\"host\">\"ingress.opensensemap.org\"</field>\n            <field name=\"SSL\">TRUE</field>\n            <field name=\"type\">Stationary</field>\n            <field name=\"BoxID\"></field>\n            <field name=\"access_token\">access_token</field>\n            <statement name=\"DO\">\n              <block type=\"sensebox_send_to_osem\" id=\"rg=VOe|Wv1(x*Rn^:d-/\">\n                <field name=\"SensorID\">5f31034ea4a11c001bad7d45</field>\n                <value name=\"Value\">\n                  <block type=\"sensebox_sensor_temp_hum\" id=\"vDb(CT?_kdCdI/O*t0Cj\">\n                    <field name=\"NAME\">Temperature</field>\n                  </block>\n                </value>\n              </block>\n            </statement>\n          </block>\n        </statement>\n      </block>\n    </statement>\n  </block>\n</xml>"
+        },
+        {
+            "id": 8,
+            "type": "task",
+            "headline": "Messwerte an die openSenseMap senden",
+            "text": "Erstelle nun ein Programm, um die Messwerte für Temperatur- und Luftfeuchtigkeit an die openSenseMap zu übertragen. ",
+            "xml": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <block type=\"arduino_functions\" id=\"QWW|$jB8+*EL;}|#uA\" deletable=\"false\" x=\"27\" y=\"16\">\n    <statement name=\"SETUP_FUNC\">\n      <block type=\"sensebox_wifi\" id=\"r|P6yS+[u6?Unw8Nyw]i\">\n        <field name=\"SSID\">SSID</field>\n        <field name=\"Password\">Password</field>\n      </block>\n    </statement>\n    <statement name=\"LOOP_FUNC\">\n      <block type=\"sensebox_interval_timer\" id=\"8ccf6$uB.o,Y|v%ex]H_\">\n        <field name=\"interval\">10000</field>\n        <statement name=\"DO\">\n          <block type=\"sensebox_osem_connection\" id=\"/rUZp}E^#:-?}a_8X-BF\">\n            <mutation xmlns=\"http://www.w3.org/1999/xhtml\" type=\"Stationary\"></mutation>\n            <field name=\"host\">\"ingress.opensensemap.org\"</field>\n            <field name=\"SSL\">TRUE</field>\n            <field name=\"type\">Stationary</field>\n            <field name=\"BoxID\">5f31034ea4a11c001bad7d43</field>\n            <field name=\"access_token\">access_token</field>\n            <statement name=\"DO\">\n              <block type=\"sensebox_send_to_osem\" id=\"Z7N5aDn-czWBSxgysXxw\">\n                <field name=\"SensorID\">5f31034ea4a11c001bad7d45</field>\n                <value name=\"Value\">\n                  <block type=\"sensebox_sensor_temp_hum\" id=\"S{JRtYYWOt^;[F-Et4{F\">\n                    <field name=\"NAME\">Temperature</field>\n                  </block>\n                </value>\n                <next>\n                  <block type=\"sensebox_send_to_osem\" id=\"Is~x*=Ho.W/;vS~S~/qM\">\n                    <field name=\"SensorID\">5f31034ea4a11c001bad7d44</field>\n                    <value name=\"Value\">\n                      <block type=\"sensebox_sensor_temp_hum\" id=\"GJF2zfVd)p4=*RF=3U);\">\n                        <field name=\"NAME\">Humidity</field>\n                      </block>\n                    </value>\n                  </block>\n                </next>\n              </block>\n            </statement>\n          </block>\n        </statement>\n      </block>\n    </statement>\n  </block>\n</xml>"
+        },
+        {
+            "id": 9,
+            "type": "instruction",
+            "headline": "Programmcode übertragen",
+            "text": "In nächsten Schritt muss das Programm auf deine senseBox MCU übertragen werden. Schließe diese mithilfe des USB Kabel an deinem Computer an und drücke 2 mal schnell hintereinander auf den roten Reset Button, um die senseBox MCU in den Lernmodus zu versetzten. Die senseBox MCU erscheint nun als USB-Gerät in deinem Dateiexplorer. Kopiere anschließend das Programm auf die senseBox MCU.",
+            "media": {
+                "youtube": "jzlOJ7Zuqqw"
+            }
+        }
+    ]
+}
