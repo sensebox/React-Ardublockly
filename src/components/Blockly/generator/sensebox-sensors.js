@@ -272,13 +272,13 @@ Blockly.Arduino.sensebox_scd30 = function () {
   var code = '';
   switch (dropdown) {
     case 'temperature':
-      code = 'aireSensor.getTemperature()';
+      code = 'airSensor.getTemperature()';
       break;
     case 'humidity':
       code = 'airSensor.getHumiditiy()';
       break;
     case 'CO2':
-      code = 'aireSensor.getCO2()';
+      code = 'airSensor.getCO2()';
       break;
     default:
       code = ''
