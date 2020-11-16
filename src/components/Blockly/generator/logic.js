@@ -74,14 +74,14 @@ Blockly.Arduino['controls_if'] = function (Block) {
             conditionCode +
             ') {\n' +
             branchCode +
-            '}';
+            '}\n';
 
         ++n;
     } while (Block.getInput('IF' + n));
 
     if (Block.getInput('ELSE')) {
         branchCode = Blockly.Arduino.statementToCode(Block, 'ELSE');
-        code += ' else {\n' + branchCode + '}';
+        code += ' else {\n' + branchCode + '}\n';
     }
     return code + '\n';
 };
@@ -106,14 +106,14 @@ Blockly.Arduino['controls_ifelse'] = function (Block) {
             conditionCode +
             ') {\n' +
             branchCode +
-            '}';
+            '}\n';
 
         ++n;
     } while (Block.getInput('IF' + n));
 
     if (Block.getInput('ELSE')) {
         branchCode = Blockly.Arduino.statementToCode(Block, 'ELSE');
-        code += ' else {\n' + branchCode + '}';
+        code += ' else {\n' + branchCode + '}\n';
     }
     return code + '\n';
 }
