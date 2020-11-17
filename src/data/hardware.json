@@ -1,128 +1,158 @@
 [
   {
-    "id": "bmp280",
-    "name": "Luftdruck und Temperatursensor",
-    "src": "bmp280.png",
-    "url": "https://sensebox.github.io/books-v2/edu/de/komponenten/sensoren/luftdruck-temperatur.html"
+    "id": "senseboxmcu",
+    "name": "senseBox MCU",
+    "src": "senseboxmcu.png",
+    "url": "https://docs.sensebox.de/hardware/allgemein-sensebox-mcu/"
   },
   {
     "id": "breadboard",
     "name": "Breadboard",
     "src": "breadboard.png",
-    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
-  },
-  {
-    "id": "button",
-    "name": "Knopf",
-    "src": "button.png",
-    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
-  },
-  {
-    "id": "hc04",
-    "name": "Ultraschall-Distanzsensor",
-    "src": "hc04.png",
-    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
-  },
-  {
-    "id": "hdc1080",
-    "name": "Temperatur und Luftfeuchtigkeitssensor",
-    "src": "hdc1080.png",
-    "url": "https://sensebox.github.io/books-v2/edu/de/komponenten/sensoren/hdc1080.html"
-  },
-  {
-    "id": "jst-adapter",
-    "name": "JST-Adapterkabel",
-    "src": "jst-adapter.png",
-    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
-  },
-  {
-    "id": "jst-jst",
-    "name": "JST-JST Kabel",
-    "src": "jst-jst.png",
-    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
-  },
-  {
-    "id": "jumperwire",
-    "name": "Steckkabel",
-    "src": "jumperwire.png",
-    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
-  },
-  {
-    "id": "ldr",
-    "name": "LDR",
-    "src": "ldr.png",
-    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
-  },
-  {
-    "id": "led",
-    "name": "LEDs",
-    "src": "led.png",
-    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
-  },
-  {
-    "id": "microphone",
-    "name": "Mikrofon",
-    "src": "microphone.png",
-    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
-  },
-  {
-    "id": "oled",
-    "name": "OLED-Display",
-    "src": "oled.png",
-    "url": "https://sensebox.github.io/books-v2/edu/de/komponenten/zubehoer/led-display.html"
-  },
-  {
-    "id": "piezo",
-    "name": "Piezo",
-    "src": "piezo.png",
-    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
-  },
-  {
-    "id": "resistor-10kohm",
-    "name": "10 kOhm Widerstand",
-    "src": "resistor-10kohm.png",
-    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
-  },
-  {
-    "id": "resistor-470ohm",
-    "name": "470 Ohm Widerstand",
-    "src": "resistor-470ohm.png",
-    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
-  },
-  {
-    "id": "rgb-led",
-    "name": "RGB-LED",
-    "src": "rgb-led.png",
-    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
-  },
-  {
-    "id": "sd-bee",
-    "name": "mSD-Bee",
-    "src": "sd-bee.png",
-    "url": "https://sensebox.github.io/books-v2/edu/de/komponenten/bees/sd.html"
-  },
-  {
-    "id": "senseboxmcu",
-    "name": "senseBox MCU",
-    "src": "senseboxmcu.png",
-    "url": "https://sensebox.github.io/books-v2/edu/de/komponenten/sensebox-mcu.html"
+    "url": ""
   },
   {
     "id": "usb-cable",
     "name": "USB-Kabel",
     "src": "usb-cable.png",
-    "url": "https://sensebox.github.io/books-v2/edu/de/komponenten/zubehoer/netzteil-und-usb-kabel.html"
+    "url": ""
+  },
+  {
+    "id": "oled",
+    "name": "OLED-Display",
+    "src": "oled.png",
+    "url": "https://docs.sensebox.de/hardware/zubehoer-display/"
+  },
+  {
+    "id": "hdc1080",
+    "name": "Temperatur und Luftfeuchtigkeitssensor",
+    "src": "hdc1080.png",
+    "url": "https://docs.sensebox.de/hardware/sensoren-temperatur-luftfeuchte/"
+  },
+  {
+    "id": "bmp280",
+    "name": "Luftdruck und Temperatursensor",
+    "src": "bmp280.png",
+    "url": "https://docs.sensebox.de/hardware/sensoren-luftdruck-temperatur/"
   },
   {
     "id": "veml6070",
     "name": "Helligkeit und UV-Sensor",
     "src": "veml6070.png",
-    "url": "https://sensebox.github.io/books-v2/blockly/de/uebersicht/sensebox_components.html"
+    "url": "https://docs.sensebox.de/hardware/sensoren-helligkeit-uv/"
+  },
+  {
+    "id": "co2",
+    "name": "CO2-Sensor(SCD30)",
+    "src": "scd30.png",
+    "url": "https://docs.sensebox.de/hardware/sensoren-co2/"
+  },
+  {
+    "id": "bme680",
+    "name": "Umweltsensor (BME680)",
+    "src": "sensors-bme.png",
+    "url": "https://docs.sensebox.de/hardware/sensoren-umweltsensor/"
+  },
+  {
+    "id": "feinstaub",
+    "name": "Feinstaubsensor",
+    "src": "feinstaub.png",
+    "url": "https://docs.sensebox.de/hardware/sensoren-feinstaub/"
+  },
+  {
+    "id": "gps",
+    "name": "GPS-Modul",
+    "src": "sensors-gps.png",
+    "url": "https://docs.sensebox.de/hardware/sensoren-gps/"
+  },
+  {
+    "id": "sd-bee",
+    "name": "mSD-Bee",
+    "src": "sd-bee.png",
+    "url": "https://docs.sensebox.de/hardware/bee-sd/"
   },
   {
     "id": "wifi-bee",
     "name": "WiFi-Bee",
     "src": "wifi-bee.png",
-    "url": "https://sensebox.github.io/books-v2/edu/de/komponenten/bees/wifi.html"
+    "url": "https://docs.sensebox.de/hardware/bee-wifi/"
+  },
+  {
+    "id": "lora-bee",
+    "name": "LoRa-Bee",
+    "src": "lora-bee.png",
+    "url": "https://docs.sensebox.de/hardware/bee-lora/"
+  },
+  {
+    "id": "button",
+    "name": "Knopf",
+    "src": "button.png",
+    "url": "https://docs.sensebox.de/hardware/sensoren-distanz/"
+  },
+  {
+    "id": "hc04",
+    "name": "Ultraschall-Distanzsensor",
+    "src": "hc04.png",
+    "url": "https://docs.sensebox.de/hardware/sensoren-distanz/"
+  },
+  {
+    "id": "ldr",
+    "name": "LDR",
+    "src": "ldr.png",
+    "url": ""
+  },
+  {
+    "id": "led",
+    "name": "LEDs",
+    "src": "led.png",
+    "url": ""
+  },
+  {
+    "id": "microphone",
+    "name": "Mikrofon",
+    "src": "microphone.png",
+    "url": "https://docs.sensebox.de/hardware/sensoren-mikro/"
+  },
+  {
+    "id": "piezo",
+    "name": "Piezo",
+    "src": "piezo.png",
+    "url": ""
+  },
+  {
+    "id": "rgb-led",
+    "name": "RGB-LED",
+    "src": "rgb-led.png",
+    "url": ""
+  },
+  {
+    "id": "jst-adapter",
+    "name": "JST-Adapterkabel",
+    "src": "jst-adapter.png",
+    "url": ""
+  },
+  {
+    "id": "jst-jst",
+    "name": "JST-JST Kabel",
+    "src": "jst-jst.png",
+    "url": ""
+  },
+  {
+    "id": "jumperwire",
+    "name": "Steckkabel",
+    "src": "jumperwire.png",
+    "url": ""
+  },
+  {
+    "id": "resistor-10kohm",
+    "name": "10 kOhm Widerstand",
+    "src": "resistor-10kohm.png",
+    "url": ""
+  },
+  {
+    "id": "resistor-470ohm",
+    "name": "470 Ohm Widerstand",
+    "src": "resistor-470ohm.png",
+    "url": ""
   }
 ]

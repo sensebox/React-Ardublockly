@@ -27,7 +27,7 @@ export default function StatsSelector() {
     return (
         <div>
             <FormControl className={classes.formControl}>
-                <InputLabel id="demo-simple-select-label">Renderer</InputLabel>
+                <InputLabel id="demo-simple-select-label">Statistiken</InputLabel>
                 <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
