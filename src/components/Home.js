@@ -54,7 +54,7 @@ class Home extends Component {
   }
 
   componentDidMount() {
-
+    this.setState({ stats: window.localStorage.getItem('stats') })
     this.props.workspaceName(createNameId());
     fetch(process.env.REACT_APP_BLOCKLY_API + this.props.location.pathname)
       .then(res => res.json())
