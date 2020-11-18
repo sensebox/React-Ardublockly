@@ -1,0 +1,61 @@
+{
+    "id": 1605534471202,
+    "title": "Senden von Messwerten über LoRa",
+    "steps": [
+        {
+            "id": 1,
+            "type": "instruction",
+            "headline": "Übertragen von Messwerten über LoRa",
+            "text": "In diesem Tutorial lernst du ein Umweltphänomen deiner Umgebung mithilfe der senseBox zu messen, die Daten per LoRa zu übertragen und im The Things Network abzurufen (sowie an die openSenseMap weiterzuleiten). In diesem Beispiel wird der Temperatur- und Luftfeuchtigkeitssensor verwendet. Du kannst allerdings jeden anderen senseBox Sensor verwenden.",
+            "hardware": [
+                "senseboxmcu",
+                "usb-cable",
+                "oled",
+                "hdc1080",
+                "lora-bee"
+            ],
+            "requirements": [
+                1602160534286
+            ]
+        },
+        {
+            "id": 2,
+            "type": "instruction",
+            "headline": "Aufbau",
+            "text": "Schließe den Temperatur- und Luftfeuchtigkeitssensor mithilfe des JST-Kabels an einem der I2C/Wire-Anschlüsse an deine senseBox MCU an. Stecke das LoRa-Bee auf den XBEE-Steckplatz 1. "
+        },
+        {
+            "id": 3,
+            "type": "instruction",
+            "headline": "The Things Network",
+            "text": "Um die Vorteile von TTN nutzen zu können, registriere dich auf der Seite thethingsnetwork.org. Wähle anschließend im Dropdown-Menü „Console“ aus und füge eine neue Anwendung hinzu, indem du zuerst „Application“ und anschließend „Add Application“ auswählst. Hier gibst du ausschließlich eine individuelle Application ID an und bestätigst dann deine Eingabe. Hast du die Application hinzugefügt, wird dir darauf folgend eine Übersicht über die von dir gewählte Application ID und die Application EUIS geliefert.\n\n![image0](https://sensebox.de/images/projects/LoRaWAN-Cayenne/0.png)\nFüge nun zu deiner neuen Application noch einen Device hinzu. Gehe dafür unter der Rubrik „Devices“ auf „register device“. Gib deinem Device eine Device ID. Durch einen Klick auf die geschwungenen Pfeile (“generate”) bei der DeviceEUI erfolgt die Generierung der DeviceEUI automatisch.\n\n![image1](https://sensebox.de/images/projects/LoRaWAN-Cayenne/1.png)\nDurch einen Klick auf „Register“ speicherst du deine Eingabe und The Things Network liefert dir eine Übersicht mit der Application ID und der Device ID.\n\n![image1](https://sensebox.de/images/projects/LoRaWAN-Cayenne/.png)\nNun hast du bereits erfolgreich eine Application und einen Device hinzugefügt. Möchtest du die Daten nicht nur bei The Things Network, sondern auf einer anderen Plattform abrufen können, so kannst du über dieses Projekt hinaus eine Integration anlegen. Diese Möglichkeit wird dir in der Menüleiste unter ‘Integration’ geboten."
+        },
+        {
+            "id": 4,
+            "type": "instruction",
+            "headline": "Programmierung",
+            "text": "## Schritt 1: LoRa initialisieren\nZuletzt muss noch deine bereits aufgebaute senseBox in das bisherige System eingebunden werden. Dazu bietet sich am besten Blockly an, womit du die senseBox in wenigen Schritten programmieren kannst. Rufe die Seite blockly.sensebox.de auf und wähle die senseBox MCU aus. Damit du die TTN Infrastruktur nutzen kannst, muss diese zuerst im ‘Setup’ initialisiert werden. Nutze dazu den Block ‘Initialize Lora (OTAA)’, den du unter der Kategorie ‘Web/ Lora’ findest. Das Übertragungsintervall kannst du anpassen, aber denke daran, dass die übertragbare Datenmenge begrenzt ist.\n\nFüge deine TTN EUIs ein und achte dabei auf das richtige Format. Device EUI und Application EUI müssen im lsb-Format genutzt werden. Der AppKey im msb-Format. In der Übersicht bei The Things Network kannst du durch einen Klick auf die Pfeile die Veränderung zum richtigen Format vornehmen und anschließend die passenden Werte kopieren und in Blockly einfügen.",
+            "xml": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <block type=\"arduino_functions\" id=\"QWW|$jB8+*EL;}|#uA\" deletable=\"false\" x=\"27\" y=\"16\">\n    <statement name=\"SETUP_FUNC\">\n      <block type=\"sensebox_lora_initialize_otaa\" id=\"gv;wI~T]BYRj;ySm9+`E\">\n        <field name=\"DEVICEID\">DEVICE ID</field>\n        <field name=\"APPID\">APP ID</field>\n        <field name=\"APPKEY\">APP KEY</field>\n        <field name=\"INTERVAL\">5</field>\n      </block>\n    </statement>\n    <statement name=\"LOOP_FUNC\">\n      <block type=\"sensebox_lora_cayenne_send\" id=\"|:$*K5Ag5K8Is`^I8O[f\">\n        <statement name=\"DO\">\n          <block type=\"sensebox_lora_cayenne_temperature\" id=\"DSt/Mv^8).tQ^rs+R$7T\">\n            <field name=\"CHANNEL\">1</field>\n            <value name=\"Value\">\n              <block type=\"sensebox_sensor_temp_hum\" id=\"J~!79pJd7[%==wZnP~!/\">\n                <field name=\"NAME\">Temperature</field>\n              </block>\n            </value>\n          </block>\n        </statement>\n      </block>\n    </statement>\n  </block>\n</xml>"
+        },
+        {
+            "id": 5,
+            "type": "instruction",
+            "headline": "Schritt 2: Cayenne Nachricht",
+            "text": "Füge anschließend in der ‘Endlosschleife’ den Block ‘Sende als Cayenne Nachricht’ ein und wähle das Umweltphänomen und den passenden Sensor aus der Kategorie ‘Sensoren’ aus. Die Werte werden so automatisch decodiert. Möchtest du mehrere Umweltphänomene gleichzeitig erfassen, so solltest du darauf achten, dass für jedes Phänomen ein neuer Kanal verwendet wird.\n\n",
+            "xml": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <block type=\"arduino_functions\" id=\"QWW|$jB8+*EL;}|#uA\" x=\"27\" y=\"16\">\n    <statement name=\"SETUP_FUNC\">\n      <block type=\"sensebox_lora_initialize_otaa\" id=\"AyylQo]KIiVF=f-?@eiD\">\n        <field name=\"DEVICEID\">DEVICE ID</field>\n        <field name=\"APPID\">APP ID</field>\n        <field name=\"APPKEY\">APP KEY</field>\n        <field name=\"INTERVAL\">5</field>\n      </block>\n    </statement>\n    <statement name=\"LOOP_FUNC\">\n      <block type=\"sensebox_lora_cayenne_send\" id=\"%]m5rbT,j?|RxeRS,}^^\">\n        <statement name=\"DO\">\n          <block type=\"sensebox_lora_cayenne_temperature\" id=\"ZTt]4M=?*.(afi1zunDu\">\n            <field name=\"CHANNEL\">1</field>\n            <value name=\"Value\">\n              <block type=\"sensebox_sensor_temp_hum\" id=\"rjSZzg{W9/o|IXLyl-BB\">\n                <field name=\"NAME\">Temperature</field>\n              </block>\n            </value>\n          </block>\n        </statement>\n      </block>\n    </statement>\n  </block>\n</xml>"
+        },
+        {
+            "id": 6,
+            "type": "task",
+            "headline": "Übertrage die Messwerte über LoRa",
+            "text": "Übertrage die Messwerte des Temperatur- und Luftfeuchtigkeitssensor über LoRa an das TheThingsNetwork. Verwende dazu das Cayenne Payload und OTAA als Aktivierungsmethode.",
+            "xml": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <block type=\"arduino_functions\" id=\"QWW|$jB8+*EL;}|#uA\" deletable=\"false\" x=\"27\" y=\"16\">\n    <statement name=\"SETUP_FUNC\">\n      <block type=\"sensebox_lora_initialize_otaa\" id=\"gv;wI~T]BYRj;ySm9+`E\">\n        <field name=\"DEVICEID\">DEVICE ID</field>\n        <field name=\"APPID\">APP ID</field>\n        <field name=\"APPKEY\">APP KEY</field>\n        <field name=\"INTERVAL\">5</field>\n      </block>\n    </statement>\n    <statement name=\"LOOP_FUNC\">\n      <block type=\"sensebox_lora_cayenne_send\" id=\"|:$*K5Ag5K8Is`^I8O[f\">\n        <statement name=\"DO\">\n          <block type=\"sensebox_lora_cayenne_temperature\" id=\"DSt/Mv^8).tQ^rs+R$7T\">\n            <field name=\"CHANNEL\">1</field>\n            <value name=\"Value\">\n              <block type=\"sensebox_sensor_temp_hum\" id=\"J~!79pJd7[%==wZnP~!/\">\n                <field name=\"NAME\">Temperature</field>\n              </block>\n            </value>\n          </block>\n        </statement>\n      </block>\n    </statement>\n  </block>\n</xml>"
+        },
+        {
+            "id": 7,
+            "type": "instruction",
+            "headline": "Weiterleitung an die openSenseMap",
+            "text": "> Die Weiterleitung der Daten mit dem Cayenne-Payload ist auch an die openSenseMap möglich. Wie du die passenden Einstellungen dafür triffst, wird nun erläutert. Allerdings handelt es sich hierbei um eine BETA-Version, weshalb es zu kleinen Problemen kommen kann. Wählst du also eine andere oder keine Integration, so kannst du dieses Kapitel zur openSenseMap überspringen und mit dem nachfolgenden Kapitel ‚Cayenne LPP‘ weitermachen.\n\nDie Möglichkeit des Hinzufügen der openSenseMap als Integration wird dir in der Menüleiste unter „Integration“ geboten. Klicke auf „Add Integration“ und wähle anschließend den Button „HTTP Integration“ aus. Bestimme auch hier wieder eine individuelle ID und wähle anschließend „default key“ als Access Key aus, „POST“ als Method und füge https://ttn.opensensemap.org/v1.1 als URL ein, sodass die Daten an die openSenseMap weitergeleitet werden.\n\n![image3](https://sensebox.de/images/projects/LoRaWAN-Cayenne/3.png)\nDa die erhobenen Daten auf der openSenseMap als Endpunkt angezeigt werden sollen, muss hier zunächst einmal eine neue senseBox registriert werden. Melde dich dazu auf opensensemap.org an und füge eine neue senseBox hinzu. Wähle dabei das Modell senseBox:edu aus und klicke auf den passenden Sensor und das Umweltphänomen, dass du messen möchtest. Klicke anschließend auf „The Things Network“ und fülle die Felder aus. Verwende als Dekodierungs-Profil ‚Cayenne LPP (beta)‘ sowie die Application ID und die Device ID, die du zuvor benannt hast, denn nur so kann eine genaue Zuordnung zwischen der senseBox, der openSenseMap und The Things Network stattfinden. Bestätige anschließend deine Eingaben und schon hast du die Registrierung der neuen senseBox auf der openSenseMap abgeschlossen.\n\n![image4](https://sensebox.de/images/projects/LoRaWAN-Cayenne/4.png)\n## Cayenne LPP\nJetzt musst du nur noch vorgeben, wie die Daten decodiert werden sollen. Da wir uns in diesem Projekt für den Cayenne LPP entschieden haben, wähle dieses Format unter dem Menüpunkt „Payload Formats’“ aus. Damit hast du alle nötigen Einstellungen bei The Things Network getroffen.\n\n![image5](https://sensebox.de/images/projects/LoRaWAN-Cayenne/5.png)"
+        }
+    ]
+}
