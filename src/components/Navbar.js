@@ -16,6 +16,7 @@ import IconButton from '@material-ui/core/IconButton';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import Tooltip from '@material-ui/core/Tooltip';
 import Tour from 'reactour'
 import * as steps from './Tour';
 
@@ -93,14 +94,17 @@ class Navbar extends Component {
                   Tutorial
                 </Typography>
               </Link> : null}
-            <IconButton
-              color="inherit"
-              className={`openTour ${this.props.classes.button}`}
-              onClick={() => { this.openTour(); }}
-              style={{ margin: '0 30px 0 auto' }}
-            >
-              <FontAwesomeIcon icon={faQuestionCircle} size="s" />
-            </IconButton>
+
+            <Tooltip title='Hilfe starten' arrow>
+              <IconButton
+                color="inherit"
+                className={`openTour ${this.props.classes.button}`}
+                onClick={() => { this.openTour(); }}
+                style={{ margin: '0 30px 0 auto' }}
+              >
+                <FontAwesomeIcon icon={faQuestionCircle} size="s" />
+              </IconButton>
+            </Tooltip>
             <Tour
               steps={steps.steps}
               isOpen={this.state.isTourOpen}

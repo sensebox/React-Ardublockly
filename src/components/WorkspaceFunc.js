@@ -313,7 +313,7 @@ class WorkspaceFunc extends Component {
         </Tooltip>
         <Tooltip title='Blöcke teilen' arrow>
           <IconButton
-            className={this.props.classes.button}
+            className={`shareBlocks ${this.props.classes.button}`}
             onClick={() => this.shareBlocks()}
           >
             <FontAwesomeIcon icon={faShareAlt} size="xs" flip='horizontal' />
