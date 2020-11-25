@@ -269,7 +269,7 @@ class WorkspaceFunc extends Component {
         {this.props.solutionCheck ? <SolutionCheck /> : <Compile iconButton />}
         <Tooltip title='Blöcke speichern' arrow style={{ marginRight: '5px' }}>
           <IconButton
-            className={this.props.classes.button}
+            className={`saveBlocks ${this.props.classes.button}`}
             onClick={() => { this.createFileName('xml'); }}
           >
             <FontAwesomeIcon icon={faSave} size="xs" />
