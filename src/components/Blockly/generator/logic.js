@@ -127,9 +127,6 @@ Blockly.Arduino['logic_negate'] = function (Block) {
 };
 
 
-
-
-
 Blockly.Arduino['switch_case'] = function (block) {
     var n = 0;
     var argument = Blockly.Arduino.valueToCode(this, 'CONDITION',
