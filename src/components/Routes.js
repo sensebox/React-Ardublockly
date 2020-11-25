@@ -12,6 +12,8 @@ import Builder from './Tutorial/Builder/Builder';
 import NotFound from './NotFound';
 import GalleryHome from './Gallery/GalleryHome';
 import Settings from './Settings/Settings';
+import Impressum from './Impressum';
+import Privacy from './Privacy';
 
 
 class Routes extends Component {
@@ -29,6 +31,8 @@ class Routes extends Component {
           <Route path="/settings" exact component={Settings} />
           <Route path="/gallery" exact component={GalleryHome} />
           <Route path="/gallery/:galleryId" exact component={Home} />
+          <Route path="/impressum" exact component={Impressum} />
+          <Route path="/privacy" exact component={Privacy} />
           <Route path="/share/:shareId" exact component={Home} />
           <Route path="/tutorial/builder" exact component={Builder} />
           <Route path="/tutorial/:tutorialId" exact component={Tutorial} />

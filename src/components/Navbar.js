@@ -17,7 +17,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 
-import { faBars, faChevronLeft, faBuilding, faIdCard, faEnvelope, faCog, faChalkboardTeacher, faFolderPlus } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faChevronLeft, faBuilding, faIdCard, faEnvelope, faCog, faChalkboardTeacher, faFolderPlus, faTools, faLightbulb } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const styles = (theme) => ({
@@ -96,7 +96,7 @@ class Navbar extends Component {
             </div>
           </div>
           <List>
-            {[{ text: 'Tutorials', icon: faChalkboardTeacher, link: "/tutorial" }, { text: 'Tutorial-Builder', icon: faFolderPlus, link: "/tutorial/builder" }, { text: 'Gallery', icon: faFolderPlus, link: "/gallery" }, { text: 'Einstellungen', icon: faCog, link: "/settings" }].map((item, index) => (
+            {[{ text: 'Tutorials', icon: faChalkboardTeacher, link: "/tutorial" }, { text: 'Tutorial-Builder', icon: faTools, link: "/tutorial/builder" }, { text: 'Gallery', icon: faLightbulb, link: "/gallery" }, { text: 'Einstellungen', icon: faCog, link: "/settings" }].map((item, index) => (
               <Link to={item.link} key={index} style={{ textDecoration: 'none', color: 'inherit' }}>
                 <ListItem button onClick={this.toggleDrawer}>
                   <ListItemIcon><FontAwesomeIcon icon={item.icon} /></ListItemIcon>
@@ -106,14 +106,14 @@ class Navbar extends Component {
             ))}
           </List>
           <Divider classes={{ root: this.props.classes.appBarColor }} style={{ marginTop: 'auto' }} />
-          <List>
+          {/* <List>
             {[{ text: 'Über uns', icon: faBuilding }, { text: 'Kontakt', icon: faEnvelope }, { text: 'Impressum', icon: faIdCard }].map((item, index) => (
               <ListItem button key={index} onClick={this.toggleDrawer}>
                 <ListItemIcon><FontAwesomeIcon icon={item.icon} /></ListItemIcon>
                 <ListItemText primary={item.text} />
               </ListItem>
             ))}
-          </List>
+          </List> */}
         </Drawer>
       </div>
     );
