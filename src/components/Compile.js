@@ -113,7 +113,7 @@ class Compile extends Component {
         {this.props.iconButton ?
           <Tooltip title='Blöcke kompilieren' arrow style={{ marginRight: '5px' }}>
             <IconButton
-              className={this.props.classes.button}
+              className={`compileBlocks ${this.props.classes.button}`}
               onClick={() => this.compile()}
             >
               <FontAwesomeIcon icon={faCogs} size="xs" />
