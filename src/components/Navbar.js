@@ -16,6 +16,9 @@ import IconButton from '@material-ui/core/IconButton';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import Tooltip from '@material-ui/core/Tooltip';
+import Tour from 'reactour'
+import * as steps from './Tour';
 
 import { faBars, faChevronLeft, faCog, faChalkboardTeacher, faTools, faLightbulb } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -28,7 +31,12 @@ const styles = (theme) => ({
   },
   appBarColor: {
     backgroundColor: theme.palette.primary.main
+  },
+  tourButton: {
+    marginleft: 'auto',
+    marginright: '30px',
   }
+
 });
 
 
@@ -37,12 +45,22 @@ class Navbar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: false
+      open: false,
+      isTourOpen: false
     };
   }
 
   toggleDrawer = () => {
     this.setState({ open: !this.state.open });
+  }
+
+  openTour = () => {
+    this.setState({ isTourOpen: true });
+
+  }
+
+  closeTour = () => {
+    this.setState({ isTourOpen: false });
   }
 
   render() {
@@ -58,6 +76,7 @@ class Navbar extends Component {
               color="inherit"
               onClick={this.toggleDrawer}
               style={{ margin: '0 10px' }}
+              className="MenuButton"
             >
               <FontAwesomeIcon icon={faBars} />
             </IconButton>
@@ -75,7 +94,24 @@ class Navbar extends Component {
                   Tutorial
                 </Typography>
               </Link> : null}
+
+            <Tooltip title='Hilfe starten' arrow>
+              <IconButton
+                color="inherit"
+                className={`openTour ${this.props.classes.button}`}
+                onClick={() => { this.openTour(); }}
+                style={{ margin: '0 30px 0 auto' }}
+              >
+                <FontAwesomeIcon icon={faQuestionCircle} size="s" />
+              </IconButton>
+            </Tooltip>
+            <Tour
+              steps={steps.steps}
+              isOpen={this.state.isTourOpen}
+              onRequestClose={() => { this.closeTour(); }}
+            />
           </Toolbar>
+
         </AppBar>
         <Drawer
           variant="temporary"

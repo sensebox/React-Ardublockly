@@ -21,6 +21,8 @@ import { withStyles } from '@material-ui/core/styles';
 import { faCode } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+
+
 const styles = (theme) => ({
   codeOn: {
     backgroundColor: theme.palette.primary.main,
@@ -41,6 +43,10 @@ const styles = (theme) => ({
     }
   }
 });
+
+
+
+
 
 
 class Home extends Component {
@@ -88,14 +94,17 @@ class Home extends Component {
     }
   }
 
+
+
   render() {
+
     return (
       <div>
         {this.state.stats ?
-          <div style={{ float: 'left', height: '40px', position: 'relative' }}><WorkspaceStats /></div>
+          <div className='workspaceStats' style={{ float: 'left', height: '40px', position: 'relative' }}><WorkspaceStats /></div>
           : null
         }
-        <div style={{ float: 'right', height: '40px', marginBottom: '20px' }}><WorkspaceFunc /></div>
+        <div className='workspaceFunc' style={{ float: 'right', height: '40px', marginBottom: '20px' }}><WorkspaceFunc /></div>
         <Grid container spacing={2}>
           <Grid item xs={12} md={this.state.codeOn ? 8 : 12} style={{ position: 'relative' }}>
             <Tooltip title={this.state.codeOn ? Blockly.Msg.tooltip_hide_code : Blockly.Msg.tooltip_show_code} >
@@ -108,9 +117,10 @@ class Home extends Component {
               </IconButton>
             </Tooltip>
             <TrashcanButtons />
-            {this.state.projectToLoad ?
-              < BlocklyWindow blocklyCSS={{ height: '80vH' }} initialXml={this.state.projectToLoad.xml} /> : < BlocklyWindow blocklyCSS={{ height: '80vH' }} />
-            }
+            <div className='blocklyWindow'>
+              {this.state.projectToLoad ?
+                < BlocklyWindow blocklyCSS={{ height: '80vH' }} initialXml={this.state.projectToLoad.xml} /> : < BlocklyWindow blocklyCSS={{ height: '80vH' }} />
+              }</div>
 
           </Grid>
           {this.state.codeOn ?
