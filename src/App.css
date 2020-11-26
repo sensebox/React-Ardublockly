@@ -33,3 +33,7 @@
   blockquote p {
     display: inline;
   }
+
+.blocklyFlyoutButton {
+  fill: rgb(164, 91, 127);
+}

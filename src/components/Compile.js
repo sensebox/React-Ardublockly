@@ -6,7 +6,7 @@ import { workspaceName } from '../actions/workspaceActions';
 import { detectWhitespacesAndReturnReadableResult } from '../helpers/whitespace';
 
 import Dialog from './Dialog';
-
+import * as Blockly from 'blockly'
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Backdrop from '@material-ui/core/Backdrop';
@@ -111,7 +111,7 @@ class Compile extends Component {
     return (
       <div style={{}}>
         {this.props.iconButton ?
-          <Tooltip title='Blöcke kompilieren' arrow style={{ marginRight: '5px' }}>
+          <Tooltip title={Blockly.Msg.tooltip_compile_code} arrow style={{ marginRight: '5px' }}>
             <IconButton
               className={this.props.classes.button}
               onClick={() => this.compile()}
@@ -121,7 +121,7 @@ class Compile extends Component {
           </Tooltip>
           :
           <Button style={{ float: 'right', color: 'white' }} variant="contained" color="primary" onClick={() => this.compile()}>
-            <FontAwesomeIcon icon={faCogs} style={{ marginRight: '5px' }} /> Kompilieren
+            <FontAwesomeIcon icon={faCogs} style={{ marginRight: '5px' }} /> {Blockly.Msg.button_compile}
           </Button>
         }
         <Backdrop className={this.props.classes.backdrop} open={this.state.progress}>
@@ -133,12 +133,12 @@ class Compile extends Component {
           content={this.state.content}
           onClose={this.toggleDialog}
           onClick={this.state.file ? () => { this.toggleDialog(); this.setState({ name: this.props.name }) } : this.toggleDialog}
-          button={this.state.file ? 'Abbrechen' : 'Schließen'}
+          button={this.state.file ? Blockly.Msg.button_cancel : Blockly.Msg.button_close}
         >
           {this.state.file ?
             <div style={{ marginTop: '10px' }}>
               <TextField autoFocus placeholder='Dateiname' value={this.state.name} onChange={this.setFileName} style={{ marginRight: '10px' }} />
-              <Button disabled={!this.state.name} variant='contained' color='primary' onClick={() => this.download()}>Eingabe</Button>
+              <Button disabled={!this.state.name} variant='contained' color='primary' onClick={() => this.download()}>{Blockly.Msg.button_accept}</Button>
             </div>
             : null}
         </Dialog>

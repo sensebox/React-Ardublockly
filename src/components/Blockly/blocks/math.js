@@ -12,8 +12,8 @@ Blockly.Blocks['math_number'] = {
         this.setColour(getColour().math);
         this.appendDummyInput()
             .appendField(
-                new Blockly.FieldTextInput(
-                    '0', Blockly.FieldTextInput.numberValidator),
+                new Blockly.FieldNumber(
+                    '0'),
                 'NUM');
         this.setOutput(true, Types.NUMBER.typeName);
         // Assign 'this' to a variable for use in the tooltip closure below.

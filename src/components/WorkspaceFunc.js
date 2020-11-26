@@ -31,8 +31,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-
-
 import { faPen, faSave, faUpload, faCamera, faShare, faShareAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -257,8 +255,8 @@ class WorkspaceFunc extends Component {
     return (
       <div style={{ width: 'max-content', display: 'flex' }}>
         {!this.props.solutionCheck ?
-          <Tooltip title={`Name des Projekts${this.props.name ? `: ${this.props.name}` : ''}`} arrow style={{ marginRight: '5px' }}>
-            <div className={this.props.classes.workspaceName} onClick={() => { this.setState({ file: true, open: true, saveFile: false, title: 'Projekt benennen', content: 'Bitte gib einen Namen für das Projekt ein und bestätige diesen mit einem Klick auf \'Eingabe\'.' }) }}>
+          <Tooltip title={`${Blockly.Msg.tooltip_project_name}${this.props.name ? `: ${this.props.name}` : ''}`} arrow style={{ marginRight: '5px' }}>
+            <div className={this.props.classes.workspaceName} onClick={() => { this.setState({ file: true, open: true, saveFile: false, title: Blockly.Msg.renamedialog_headline, content: Blockly.Msg.renamedialog_text }) }}>
               {this.props.name && !isWidthDown('xs', this.props.width) ? <Typography style={{ margin: 'auto -3px auto 12px' }}>{this.props.name}</Typography> : null}
               <div style={{ width: '40px', display: 'flex' }}>
                 <FontAwesomeIcon icon={faPen} style={{ height: '18px', width: '18px', margin: 'auto' }} />
@@ -267,7 +265,7 @@ class WorkspaceFunc extends Component {
           </Tooltip>
           : null}
         {this.props.solutionCheck ? <SolutionCheck /> : <Compile iconButton />}
-        <Tooltip title='Blöcke speichern' arrow style={{ marginRight: '5px' }}>
+        <Tooltip title={Blockly.Msg.tooltip_save_blocks} arrow style={{ marginRight: '5px' }}>
           <IconButton
             className={this.props.classes.button}
             onClick={() => { this.createFileName('xml'); }}
@@ -284,7 +282,7 @@ class WorkspaceFunc extends Component {
             type="file"
           />
           <label htmlFor="open-blocks">
-            <Tooltip title='Blöcke öffnen' arrow style={{ marginRight: '5px' }}>
+            <Tooltip title={Blockly.Msg.tooltip_open_blocks} arrow style={{ marginRight: '5px' }}>
               <div className={this.props.classes.button} style={{
                 borderRadius: '50%', cursor: 'pointer', display: 'table-cell',
                 verticalAlign: 'middle',
@@ -295,7 +293,7 @@ class WorkspaceFunc extends Component {
             </Tooltip>
           </label>
         </div>
-        <Tooltip title='Screenshot erstellen' arrow style={{ marginRight: '5px' }}>
+        <Tooltip title={Blockly.Msg.tooltip_screenshot} arrow style={{ marginRight: '5px' }}>
           <IconButton
             className={this.props.classes.button}
             onClick={() => { this.createFileName('svg'); }}
@@ -303,7 +301,7 @@ class WorkspaceFunc extends Component {
             <FontAwesomeIcon icon={faCamera} size="xs" />
           </IconButton>
         </Tooltip>
-        <Tooltip title='Workspace zurücksetzen' arrow style={{ marginRight: '5px' }}>
+        <Tooltip title={Blockly.Msg.tooltip_clear_workspace} arrow style={{ marginRight: '5px' }}>
           <IconButton
             className={this.props.classes.button}
             onClick={() => this.resetWorkspace()}
@@ -311,7 +309,7 @@ class WorkspaceFunc extends Component {
             <FontAwesomeIcon icon={faShare} size="xs" flip='horizontal' />
           </IconButton>
         </Tooltip>
-        <Tooltip title='Blöcke teilen' arrow>
+        <Tooltip title={Blockly.Msg.tooltip_share_blocks} arrow>
           <IconButton
             className={this.props.classes.button}
             onClick={() => this.shareBlocks()}
@@ -321,11 +319,11 @@ class WorkspaceFunc extends Component {
         </Tooltip>
 
         <Dialog open={this.state.share} onClose={this.toggleDialog} aria-labelledby="form-dialog-title">
-          <DialogTitle id="form-dialog-title">Dein Link wurde erstellt.</DialogTitle>
+          <DialogTitle id="form-dialog-title">{Blockly.Msg.sharedialog_headline}</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Über den folgenden Link kannst du dein Programm teilen.
-          </DialogContentText>
+              {Blockly.Msg.sharedialog_text}
+            </DialogContentText>
             <TextField
               autoFocus
               margin="dense"
@@ -338,8 +336,8 @@ class WorkspaceFunc extends Component {
           </DialogContent>
           <DialogActions>
             <Button onClick={this.toggleDialog} color="primary">
-              Cancel
-          </Button>
+              {Blockly.Msg.button_cancel}
+            </Button>
           </DialogActions>
         </Dialog>
 
@@ -349,12 +347,12 @@ class WorkspaceFunc extends Component {
           content={this.state.content}
           onClose={this.toggleDialog}
           onClick={this.state.file ? () => { this.toggleDialog(); this.setState({ name: this.props.name }) } : this.toggleDialog}
-          button={this.state.file ? 'Abbrechen' : 'Schließen'}
+          button={this.state.file ? Blockly.Msg.button_cancel : Blockly.Msg.button_close}
         >
           {this.state.file ?
             <div style={{ marginTop: '10px' }}>
-              <TextField autoFocus placeholder={this.state.saveXml ? 'Dateiname' : 'Projektname'} value={this.state.name} onChange={this.setFileName} style={{ marginRight: '10px' }} />
-              <Button disabled={!this.state.name} variant='contained' color='primary' onClick={() => { this.state.saveFile ? this.state.file === 'xml' ? this.saveXmlFile() : this.getSvg() : this.renameWorkspace(); this.toggleDialog(); }}>Eingabe</Button>
+              <TextField autoFocus placeholder={this.state.saveXml ? Blockly.Msg.filename : Blockly.Msg.projectname} value={this.state.name} onChange={this.setFileName} style={{ marginRight: '10px' }} />
+              <Button disabled={!this.state.name} variant='contained' color='primary' onClick={() => { this.state.saveFile ? this.state.file === 'xml' ? this.saveXmlFile() : this.getSvg() : this.renameWorkspace(); this.toggleDialog(); }}>{Blockly.Msg.button_accept}</Button>
             </div>
             : null}
         </Dialog>

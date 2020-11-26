@@ -800,4 +800,81 @@ Blockly.Msg.senseBox_mqtt_password = "Passwort";
 Blockly.Msg.sensebox_mqtt_subscribe = "Subscribe to Feed"
 Blockly.Msg.senseBox_mqtt_publish = "Sende an Feed/Topic";
 
+
+/**
+ * Typed Variable Modal
+ * 
+ */
+
+
+Blockly.Msg.TYPED_VAR_MODAL_CONFIRM_BUTTON = "Ok";
+Blockly.Msg.TYPED_VAR_MODAL_VARIABLE_NAME_LABEL = "Variablen Name: ";
+Blockly.Msg.TYPED_VAR_MODAL_TYPES_LABEL = "Variable Typen";
+Blockly.Msg.TYPED_VAR_MODAL_CANCEL_BUTTON = "Abbrechen";
+Blockly.Msg.TYPED_VAR_MODAL_TITLE = "Erstelle Variable";
+Blockly.Msg.TYPED_VAR_MODAL_INVALID_NAME = "Der Name ist ungültig, bitte versuche einen anderen."
+
+
+
+/**
+ * Toolbox
+ */
+Blockly.Msg.toolbox_sensors = "Sensoren";
+Blockly.Msg.toolbox_logic = "Logik";
+Blockly.Msg.toolbox_loops = "Schleifen";
+Blockly.Msg.toolbox_math = "Mathematik";
+Blockly.Msg.toolbox_io = "Eingang/Ausgang";
+Blockly.Msg.toolbox_time = "Zeit";
+Blockly.Msg.toolbox_functions = "Funktionen";
+Blockly.Msg.toolbox_variables = "Variablen";
+
+/**
+ * Tooltips
+ * 
+ */
+
+Blockly.Msg.tooltip_compile_code = "Code kompilieren"
+Blockly.Msg.tooltip_save_blocks = "Blöcke speichern";
+Blockly.Msg.tooltip_open_blocks = "Blöcke öffnen";
+Blockly.Msg.tooltip_screenshot = "Screenshot erstellen";
+Blockly.Msg.tooltip_clear_workspace = "Workspace zurücksetzen";
+Blockly.Msg.tooltip_share_blocks = "Blöcke teilen";
+Blockly.Msg.tooltip_show_code = "Code anzeigen";
+Blockly.Msg.tooltip_hide_code = "Code ausblenden"
+
+Blockly.Msg.tooltip_project_name = "Name des Projektes"
+/**
+ * Share Dialog
+ */
+
+Blockly.Msg.sharedialog_headline = "Dein Link wurde erstellt.";
+Blockly.Msg.sharedialog_text = "Über den folgenden Link kannst du dein Programm teilen.";
+
+/**
+ * Project rename Dialog
+ */
+
+Blockly.Msg.renamedialog_headline = "Projekt benennen";
+Blockly.Msg.renamedialog_text = "Bitte gib einen Namen für das Projekt ein und bestätige diesen mit einem Klick auf 'Bestätigen'."
+
+
+/**
+ * Buttons
+ * 
+ */
+
+Blockly.Msg.button_cancel = "Abbrechen";
+Blockly.Msg.button_close = "Schließen";
+Blockly.Msg.button_accept = "Bestätigen";
+Blockly.Msg.button_compile = "Kompilieren";
+Blockly.Msg.button_create_variableCreate = "Erstelle Variable";
+
+
+/**
+ * 
+ */
+
+Blockly.Msg.filename = "Dateiname";
+Blockly.Msg.projectname = "Projektname";
+
 export const De = Blockly.Msg;

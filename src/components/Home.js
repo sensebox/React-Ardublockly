@@ -98,7 +98,7 @@ class Home extends Component {
         <div style={{ float: 'right', height: '40px', marginBottom: '20px' }}><WorkspaceFunc /></div>
         <Grid container spacing={2}>
           <Grid item xs={12} md={this.state.codeOn ? 8 : 12} style={{ position: 'relative' }}>
-            <Tooltip title={this.state.codeOn ? 'Code ausblenden' : 'Code anzeigen'} >
+            <Tooltip title={this.state.codeOn ? Blockly.Msg.tooltip_hide_code : Blockly.Msg.tooltip_show_code} >
               <IconButton
                 className={this.state.codeOn ? this.props.classes.codeOn : this.props.classes.codeOff}
                 style={{ width: '40px', height: '40px', position: 'absolute', top: -12, right: 8, zIndex: 21 }}
