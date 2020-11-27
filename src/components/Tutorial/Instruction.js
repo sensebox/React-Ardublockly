@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 
 import Hardware from './Hardware';
 import Requirement from './Requirement';
@@ -55,12 +53,5 @@ class Instruction extends Component {
   };
 }
 
-Instruction.propTypes = {
-  // currentTutorialId: PropTypes.number,
-};
 
-const mapStateToProps = state => ({
-  // currentTutorialId: state.tutorial.currentId
-});
-
-export default connect(mapStateToProps, null)(Instruction);
+export default Instruction;

@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { getTutorials, resetTutorial } from '../../actions/tutorialActions';
+import { clearMessages } from '../../actions/messageActions';
 
 import clsx from 'clsx';
 
 import Breadcrumbs from '../Breadcrumbs';
-
-import tutorials from '../../data/tutorials';
-// import tutorials from '../../data/tutorials.json';
 
 import { Link } from 'react-router-dom';
 
@@ -16,6 +15,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -52,14 +52,33 @@ const styles = (theme) => ({
 
 class TutorialHome extends Component {
 
+  componentDidMount() {
+    this.props.getTutorials();
+  }
+
+  componentDidUpdate(props, state) {
+    if(this.props.message.id === 'GET_TUTORIALS_FAIL'){
+      alert(this.props.message.msg);
+      this.props.clearMessages();
+    }
+  }
+
+  componentWillUnmount() {
+    this.props.resetTutorial();
+    if(this.props.message.msg){
+      this.props.clearMessages();
+    }
+  }
+
   render() {
     return (
+      this.props.isLoading ? <LinearProgress /> :
       <div>
         <Breadcrumbs content={[{ link: '/tutorial', title: 'Tutorial' }]} />
 
         <h1>Tutorial-Übersicht</h1>
         <Grid container spacing={2}>
-          {tutorials.map((tutorial, i) => {
+          {this.props.tutorials.map((tutorial, i) => {
             var status = this.props.status.filter(status => status.id === tutorial.id)[0];
             var tasks = status.tasks;
             var error = status.tasks.filter(task => task.type === 'error').length > 0;
@@ -101,13 +120,22 @@ class TutorialHome extends Component {
 }
 
 TutorialHome.propTypes = {
+  getTutorials: PropTypes.func.isRequired,
+  resetTutorial: PropTypes.func.isRequired,
+  clearMessages: PropTypes.func.isRequired,
   status: PropTypes.array.isRequired,
   change: PropTypes.number.isRequired,
+  tutorials: PropTypes.array.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  message: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
   change: state.tutorial.change,
-  status: state.tutorial.status
+  status: state.tutorial.status,
+  tutorials: state.tutorial.tutorials,
+  isLoading: state.tutorial.progress,
+  message: state.message
 });
 
-export default connect(mapStateToProps, null)(withStyles(styles, { withTheme: true })(TutorialHome));
+export default connect(mapStateToProps, { getTutorials, resetTutorial, clearMessages })(withStyles(styles, { withTheme: true })(TutorialHome));

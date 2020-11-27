@@ -14,7 +14,6 @@ import NotFound from '../NotFound';
 
 import { detectWhitespacesAndReturnReadableResult } from '../../helpers/whitespace';
 
-// import tutorials from '../../data/tutorials';
 
 import Card from '@material-ui/core/Card';
 import Button from '@material-ui/core/Button';
@@ -28,7 +27,7 @@ class Tutorial extends Component {
   }
 
   componentDidUpdate(props, state) {
-    if (props.tutorial.id && !props.isLoading && Number(props.tutorial.id) !== Number(this.props.match.params.tutorialId)) {
+    if (props.tutorial && props.tutorial.id && !props.isLoading && Number(props.tutorial.id) !== Number(this.props.match.params.tutorialId)) {
       this.props.getTutorial(this.props.match.params.tutorialId);
       // this.props.tutorialId(Number(this.props.match.params.tutorialId));
     }
@@ -47,10 +46,11 @@ class Tutorial extends Component {
   }
 
   render() {
+    console.log(this.props.tutorial);
     return (
       <div>
         {this.props.isLoading ? <LinearProgress /> :
-          Object.keys(this.props.tutorial).length === 0 ? <NotFound button={{ title: 'Zurück zur Tutorials-Übersicht', link: '/tutorial' }} />
+          !this.props.tutorial ? <NotFound button={{ title: 'Zurück zur Tutorials-Übersicht', link: '/tutorial' }} />
             : (() => {
                 var tutorial = this.props.tutorial;
                 var steps = this.props.tutorial.steps;
@@ -104,7 +104,7 @@ const mapStateToProps = state => ({
   change: state.tutorial.change,
   status: state.tutorial.status,
   activeStep: state.tutorial.activeStep,
-  tutorial: state.tutorial.tutorial,
+  tutorial: state.tutorial.tutorials[0],
   isLoading: state.tutorial.progress,
   message: state.message
 });

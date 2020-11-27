@@ -1,4 +1,4 @@
-import { TUTORIAL_PROGRESS, GET_TUTORIAL, TUTORIAL_SUCCESS, TUTORIAL_ERROR, TUTORIAL_CHANGE, TUTORIAL_XML, TUTORIAL_ID, TUTORIAL_STEP } from '../actions/types';
+import { TUTORIAL_PROGRESS, GET_TUTORIAL, GET_TUTORIALS, TUTORIAL_SUCCESS, TUTORIAL_ERROR, TUTORIAL_CHANGE, TUTORIAL_XML, TUTORIAL_ID, TUTORIAL_STEP } from '../actions/types';
 
 import tutorials from '../data/tutorials';
 
@@ -40,11 +40,10 @@ const initialStatus = () => {
 
 const initialState = {
   status: initialStatus(),
-  // currentId: null,
   currentIndex: null,
   activeStep: 0,
   change: 0,
-  tutorial: {},
+  tutorials: [],
   progress: false
 };
 
@@ -55,11 +54,16 @@ export default function (state = initialState, action) {
         ...state,
         progress: !state.progress
       }
+    case GET_TUTORIALS:
+      return {
+        ...state,
+        tutorials: action.payload
+      };
     case GET_TUTORIAL:
       return {
         ...state,
-        tutorial: action.payload
-      };
+        tutorials: [action.payload]
+      }
     case TUTORIAL_SUCCESS:
     case TUTORIAL_ERROR:
     case TUTORIAL_XML:
@@ -77,7 +81,6 @@ export default function (state = initialState, action) {
     case TUTORIAL_ID:
       return {
         ...state,
-        // currentId: action.payload,
         currentIndex: tutorials.findIndex(tutorial => tutorial.id === action.payload)
       }
     case TUTORIAL_STEP:

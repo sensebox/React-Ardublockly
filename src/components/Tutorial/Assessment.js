@@ -15,19 +15,17 @@ import Typography from '@material-ui/core/Typography';
 class Assessment extends Component {
 
   componentDidMount() {
-    // alert(this.props.name);
     this.props.workspaceName(this.props.name);
   }
 
   componentDidUpdate(props) {
     if (props.name !== this.props.name) {
-      // alert(this.props.name);
       this.props.workspaceName(this.props.name);
     }
   }
 
   render() {
-    var tutorialId = this.props.tutorial.id //currentTutorialId;
+    var tutorialId = this.props.tutorial.id;
     var currentTask = this.props.step;
     var status = this.props.status.filter(status => status.id === tutorialId)[0];
     var taskIndex = status.tasks.findIndex(task => task.id === currentTask.id);
@@ -61,7 +59,6 @@ class Assessment extends Component {
 }
 
 Assessment.propTypes = {
-  // currentTutorialId: PropTypes.number,
   status: PropTypes.array.isRequired,
   change: PropTypes.number.isRequired,
   workspaceName: PropTypes.func.isRequired,
@@ -71,8 +68,7 @@ Assessment.propTypes = {
 const mapStateToProps = state => ({
   change: state.tutorial.change,
   status: state.tutorial.status,
-  tutorial: state.tutorial.tutorial
-  // currentTutorialId: state.tutorial.currentId
+  tutorial: state.tutorial.tutorials[0]
 });
 
 export default connect(mapStateToProps, { workspaceName })(withWidth()(Assessment));

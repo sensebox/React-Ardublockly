@@ -50,7 +50,7 @@ const styles = (theme) => ({
 class StepperHorizontal extends Component {
 
   render() {
-    var tutorialId = this.props.tutorial.id //this.props.currentTutorialId;
+    var tutorialId = this.props.tutorial.id;
     var tutorialIndex = this.props.currentTutorialIndex;
     var status = this.props.status.filter(status => status.id === tutorialId)[0];
     var tasks = status.tasks;
@@ -96,7 +96,6 @@ class StepperHorizontal extends Component {
 StepperHorizontal.propTypes = {
   status: PropTypes.array.isRequired,
   change: PropTypes.number.isRequired,
-  // currentTutorialId: PropTypes.number.isRequired,
   currentTutorialIndex: PropTypes.number.isRequired,
   tutorial: PropTypes.object.isRequired
 };
@@ -104,9 +103,8 @@ StepperHorizontal.propTypes = {
 const mapStateToProps = state => ({
   change: state.tutorial.change,
   status: state.tutorial.status,
-  // currentTutorialId: state.tutorial.currentId,
   currentTutorialIndex: state.tutorial.currentIndex,
-  tutorial: state.tutorial.tutorial
+  tutorial: state.tutorial.tutorials[0]
 });
 
 export default connect(mapStateToProps, null)(withRouter(withStyles(styles, { withTheme: true })(StepperHorizontal)));

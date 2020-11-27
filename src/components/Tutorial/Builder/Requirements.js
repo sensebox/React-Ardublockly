@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { changeContent } from '../../../actions/tutorialBuilderActions';
-
-import tutorials from '../../../data/tutorials';
+import { getTutorials, resetTutorial } from '../../../actions/tutorialActions';
+import { clearMessages } from '../../../actions/messageActions';
 
 import FormGroup from '@material-ui/core/FormGroup';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -13,6 +13,24 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 
 class Requirements extends Component {
+
+  componentDidMount() {
+    this.props.getTutorials();
+  }
+
+  componentDidUpdate(props, state) {
+    if(this.props.message.id === 'GET_TUTORIALS_FAIL'){
+      alert(this.props.message.msg);
+      this.props.clearMessages();
+    }
+  }
+
+  componentWillUnmount() {
+    this.props.resetTutorial();
+    if(this.props.message.msg){
+      this.props.clearMessages();
+    }
+  }
 
   onChange = (e) => {
     var requirements = this.props.value;
@@ -32,7 +50,7 @@ class Requirements extends Component {
         <FormLabel style={{ color: 'black' }}>Voraussetzungen</FormLabel>
         <FormHelperText style={{ marginTop: '5px' }}>Beachte, dass die Reihenfolge des Anhakens maßgebend ist.</FormHelperText>
         <FormGroup>
-          {tutorials.map((tutorial, i) =>
+          {this.props.tutorials.map((tutorial, i) =>
             <FormControlLabel
               key={i}
               control={
@@ -54,11 +72,16 @@ class Requirements extends Component {
 }
 
 Requirements.propTypes = {
+  getTutorials: PropTypes.func.isRequired,
+  resetTutorial: PropTypes.func.isRequired,
+  clearMessages: PropTypes.func.isRequired,
   changeContent: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  change: state.builder.change
+  change: state.builder.change,
+  tutorials: state.tutorial.tutorials,
+  message: state.message
 });
 
-export default connect(mapStateToProps, { changeContent })(Requirements);
+export default connect(mapStateToProps, { changeContent, getTutorials, resetTutorial, clearMessages })(Requirements);

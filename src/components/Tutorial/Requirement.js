@@ -74,16 +74,16 @@ class Requirement extends Component {
             var success = status.tasks.filter(task => task.type === 'success').length / tasks.length
             var tutorialStatus = success === 1 ? 'Success' : error ? 'Error' : 'Other';
             return (
-              <Link to={`/tutorial/${tutorialId}`} className={this.props.classes.link}>
+              <Link to={`/tutorial/${tutorialId}`} className={this.props.classes.link} key={i}>
                 <Tooltip style={{ height: '50px', width: '50px', position: 'absolute', background: 'white', zIndex: 1, borderRadius: '25px' }} title={error ? `Mind. eine Aufgabe im Tutorial wurde nicht richtig gelöst.` : success === 1 ? `Das Tutorial wurde bereits erfolgreich abgeschlossen.` : `Das Tutorial ist zu ${success * 100}% abgeschlossen.`} arrow>
                   <div>
                     <div className={clsx(this.props.classes.outerDiv)} style={{ width: '50px', height: '50px', border: 0 }}>
                       <svg style={{ width: '100%', height: '100%' }}>
                         {error || success === 1 ?
-                          <circle className={error ? this.props.classes.outerDivError : this.props.classes.outerDivSuccess} r="22.5" cx="50%" cy="50%" fill="none" stroke-width="5"></circle>
-                          : <circle className={this.props.classes.outerDivOther} r="22.5" cx="50%" cy="50%" fill="none" stroke-width="5"></circle>}
+                          <circle className={error ? this.props.classes.outerDivError : this.props.classes.outerDivSuccess} r="22.5" cx="50%" cy="50%" fill="none" strokeWidth="5"></circle>
+                          : <circle className={this.props.classes.outerDivOther} r="22.5" cx="50%" cy="50%" fill="none" strokeWidth="5"></circle>}
                         {success < 1 && !error ?
-                          <circle className={this.props.classes.outerDivSuccess} style={{ transform: 'rotate(-90deg)', transformOrigin: "50% 50%" }} r="22.5" cx="50%" cy="50%" fill="none" stroke-width="5" stroke-dashoffset={`${(22.5 * 2 * Math.PI) * (1 - success)}`} stroke-dasharray={`${(22.5 * 2 * Math.PI)}`}>
+                          <circle className={this.props.classes.outerDivSuccess} style={{ transform: 'rotate(-90deg)', transformOrigin: "50% 50%" }} r="22.5" cx="50%" cy="50%" fill="none" strokeWidth="5" strokeDashoffset={`${(22.5 * 2 * Math.PI) * (1 - success)}`} strokeDasharray={`${(22.5 * 2 * Math.PI)}`}>
                           </circle>
                           : null}
                       </svg>

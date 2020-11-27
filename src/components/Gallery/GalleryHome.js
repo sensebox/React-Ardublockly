@@ -6,9 +6,6 @@ import clsx from 'clsx';
 
 import Breadcrumbs from '../Breadcrumbs';
 
-// import gallery from './gallery.json';
-// import tutorials from '../../data/tutorials.json';
-
 import { Link } from 'react-router-dom';
 
 import { fade } from '@material-ui/core/styles/colorManipulator';
