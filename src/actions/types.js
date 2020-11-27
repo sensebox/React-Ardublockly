@@ -7,7 +7,8 @@ export const DELETE_BLOCK = 'DELETE_BLOCK';
 export const CLEAR_STATS = 'CLEAR_STATS';
 export const NAME = 'NAME';
 
-
+export const TUTORIAL_PROGRESS = 'TUTORIAL_PROGRESS';
+export const GET_TUTORIAL = 'GET_TUTORIAL';
 export const TUTORIAL_SUCCESS = 'TUTORIAL_SUCCESS';
 export const TUTORIAL_ERROR = 'TUTORIAL_ERROR';
 export const TUTORIAL_CHANGE = 'TUTORIAL_CHANGE';
@@ -30,3 +31,8 @@ export const PROGRESS = 'PROGRESS';
 
 
 export const VISIT = 'VISIT';
+
+// messages
+export const GET_ERRORS = 'GET_ERRORS';
+export const GET_SUCCESS = 'GET_SUCCESS';
+export const CLEAR_MESSAGES = 'CLEAR_MESSAGES';
