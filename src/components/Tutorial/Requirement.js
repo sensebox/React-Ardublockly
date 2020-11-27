@@ -5,8 +5,6 @@ import { connect } from 'react-redux';
 import clsx from 'clsx';
 import { withRouter, Link } from 'react-router-dom';
 
-import tutorials from '../../data/tutorials';
-
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -67,7 +65,8 @@ class Requirement extends Component {
         <Typography>Bevor du mit diesem Tutorial fortfährst solltest du folgende Tutorials erfolgreich abgeschlossen haben:</Typography>
         <List component="div">
           {tutorialIds.map((tutorialId, i) => {
-            var title = tutorials.filter(tutorial => tutorial.id === tutorialId)[0].title;
+            // title must be provided together with ids
+            // var title = tutorials.filter(tutorial => tutorial.id === tutorialId)[0].title;
             var status = this.props.status.filter(status => status.id === tutorialId)[0];
             var tasks = status.tasks;
             var error = status.tasks.filter(task => task.type === 'error').length > 0;
@@ -99,7 +98,7 @@ class Requirement extends Component {
                   </div>
                 </Tooltip>
                 <div style={{ height: '50px', width: 'calc(100% - 25px)', transform: 'translate(25px)' }} className={this.props.classes.hoverLink}>
-                  <Typography style={{ margin: 0, position: 'absolute', top: '50%', transform: 'translate(45px, -50%)', maxHeight: '50px', overflow: 'hidden', maxWidth: 'calc(100% - 45px)'/*, textOverflow: 'ellipsis', whiteSpace: 'pre-line', overflowWrap: 'anywhere'*/ }}>{title}</Typography>
+                  <Typography style={{ margin: 0, position: 'absolute', top: '50%', transform: 'translate(45px, -50%)', maxHeight: '50px', overflow: 'hidden', maxWidth: 'calc(100% - 45px)'/*, textOverflow: 'ellipsis', whiteSpace: 'pre-line', overflowWrap: 'anywhere'*/ }}>{/*title*/}Name hinzufügen über Datenbankeintrag</Typography>
                 </div>
               </Link>
             )

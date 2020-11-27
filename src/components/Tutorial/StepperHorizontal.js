@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 
 import clsx from 'clsx';
 
-import tutorials from '../../data/tutorials';
+// import tutorials from '../../data/tutorials';
 
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
@@ -70,8 +70,8 @@ class StepperHorizontal extends Component {
           : null}
         <div className={this.props.classes.stepper}>
           <Button
-            disabled={tutorialIndex === 0}
-            onClick={() => { this.props.history.push(`/tutorial/${tutorials[tutorialIndex - 1].id}`) }}
+            disabled//={tutorialIndex === 0}
+            //onClick={() => { this.props.history.push(`/tutorial/${tutorials[tutorialIndex - 1].id}`) }}
           >
             {'<'}
           </Button>
@@ -82,8 +82,8 @@ class StepperHorizontal extends Component {
             </div>
           </Tooltip>
           <Button
-            disabled={tutorialIndex + 1 === tutorials.length}
-            onClick={() => { this.props.history.push(`/tutorial/${tutorials[tutorialIndex + 1].id}`) }}
+            disabled//={tutorialIndex + 1 === tutorials.length}
+            //onClick={() => { this.props.history.push(`/tutorial/${tutorials[tutorialIndex + 1].id}`) }}
           >
             {'>'}
           </Button>
