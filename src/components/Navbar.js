@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import senseboxLogo from './sensebox_logo.svg';
@@ -16,6 +18,7 @@ import IconButton from '@material-ui/core/IconButton';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 import { faBars, faChevronLeft, faBuilding, faIdCard, faEnvelope, faCog, faChalkboardTeacher, faFolderPlus, faTools, faLightbulb } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -50,7 +53,7 @@ class Navbar extends Component {
       <div>
         <AppBar
           position="relative"
-          style={{ height: '50px', marginBottom: '30px' }}
+          style={{ height: '50px', marginBottom: this.props.isLoading ? '0px' : '30px', boxShadow: this.props.isLoading ? 'none' : '0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12)' }}
           classes={{ root: this.props.classes.appBarColor }}
         >
           <Toolbar style={{ height: '50px', minHeight: '50px', padding: 0, color: 'white' }}>
@@ -115,9 +118,20 @@ class Navbar extends Component {
             ))}
           </List> */}
         </Drawer>
+        {this.props.isLoading ?
+          <LinearProgress style={{marginBottom: '30px', boxShadow: '0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12)'}}/>
+        : null}
       </div>
     );
   }
 }
 
-export default withStyles(styles, { withTheme: true })(withRouter(Navbar));
+Navbar.propTypes = {
+  isLoading: PropTypes.bool.isRequired
+};
+
+const mapStateToProps = state => ({
+  isLoading: state.tutorial.progress,
+});
+
+export default connect(mapStateToProps, null)(withStyles(styles, { withTheme: true })(withRouter(Navbar)));
