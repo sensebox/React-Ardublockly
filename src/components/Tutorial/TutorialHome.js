@@ -15,7 +15,6 @@ import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import LinearProgress from '@material-ui/core/LinearProgress';
 
 import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -72,7 +71,7 @@ class TutorialHome extends Component {
 
   render() {
     return (
-      this.props.isLoading ? <LinearProgress /> :
+      this.props.isLoading ? null :
       <div>
         <Breadcrumbs content={[{ link: '/tutorial', title: 'Tutorial' }]} />
 

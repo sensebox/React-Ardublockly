@@ -17,7 +17,6 @@ import { detectWhitespacesAndReturnReadableResult } from '../../helpers/whitespa
 
 import Card from '@material-ui/core/Card';
 import Button from '@material-ui/core/Button';
-import LinearProgress from '@material-ui/core/LinearProgress';
 
 class Tutorial extends Component {
 
@@ -49,7 +48,7 @@ class Tutorial extends Component {
     console.log(this.props.tutorial);
     return (
       <div>
-        {this.props.isLoading ? <LinearProgress /> :
+        {this.props.isLoading ? null :
           !this.props.tutorial ? <NotFound button={{ title: 'Zurück zur Tutorials-Übersicht', link: '/tutorial' }} />
             : (() => {
                 var tutorial = this.props.tutorial;
