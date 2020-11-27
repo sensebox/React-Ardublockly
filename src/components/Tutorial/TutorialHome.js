@@ -58,7 +58,6 @@ class TutorialHome extends Component {
   componentDidUpdate(props, state) {
     if(this.props.message.id === 'GET_TUTORIALS_FAIL'){
       alert(this.props.message.msg);
-      this.props.clearMessages();
     }
   }
 

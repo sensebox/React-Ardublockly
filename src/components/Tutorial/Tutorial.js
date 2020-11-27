@@ -22,17 +22,14 @@ class Tutorial extends Component {
 
   componentDidMount() {
     this.props.getTutorial(this.props.match.params.tutorialId);
-    // this.props.tutorialId(Number(this.props.match.params.tutorialId));
   }
 
   componentDidUpdate(props, state) {
-    if (props.tutorial && props.tutorial.id && !props.isLoading && Number(props.tutorial.id) !== Number(this.props.match.params.tutorialId)) {
+    if(this.props.tutorial && !this.props.isLoading && this.props.tutorial.id != this.props.match.params.tutorialId) {
       this.props.getTutorial(this.props.match.params.tutorialId);
-      // this.props.tutorialId(Number(this.props.match.params.tutorialId));
     }
     if(this.props.message.id === 'GET_TUTORIAL_FAIL'){
       alert(this.props.message.msg);
-      this.props.clearMessages();
     }
   }
 
@@ -45,11 +42,11 @@ class Tutorial extends Component {
   }
 
   render() {
-    console.log(this.props.tutorial);
     return (
       <div>
         {this.props.isLoading ? null :
-          !this.props.tutorial ? <NotFound button={{ title: 'Zurück zur Tutorials-Übersicht', link: '/tutorial' }} />
+          !this.props.tutorial ?
+            this.props.message.id === 'GET_TUTORIAL_FAIL' ? <NotFound button={{ title: 'Zurück zur Tutorials-Übersicht', link: '/tutorial' }} /> : null
             : (() => {
                 var tutorial = this.props.tutorial;
                 var steps = this.props.tutorial.steps;
