@@ -18,13 +18,14 @@ export const getTutorial = (id) => (dispatch, getState) => {
           type: GET_TUTORIAL,
           payload: tutorial
         });
+        dispatch(returnSuccess(res.data.message, res.status));
       });
     })
     .catch(err => {
-      dispatch({type: TUTORIAL_PROGRESS});
       if(err.response){
         dispatch(returnErrors(err.response.data.message, err.response.status, 'GET_TUTORIAL_FAIL'));
       }
+      dispatch({type: TUTORIAL_PROGRESS});
     });
 };
 
@@ -43,13 +44,14 @@ export const getTutorials = () => (dispatch, getState) => {
           payload: tutorials
         });
         dispatch({type: TUTORIAL_PROGRESS});
+        dispatch(returnSuccess(res.data.message, res.status));
       });
     })
     .catch(err => {
-      dispatch({type: TUTORIAL_PROGRESS});
       if(err.response){
         dispatch(returnErrors(err.response.data.message, err.response.status, 'GET_TUTORIALS_FAIL'));
       }
+      dispatch({type: TUTORIAL_PROGRESS});
     });
 };
 
