@@ -78,14 +78,14 @@ class TutorialHome extends Component {
         <h1>Tutorial-Übersicht</h1>
         <Grid container spacing={2}>
           {this.props.tutorials.map((tutorial, i) => {
-            var status = this.props.status.filter(status => status.id === tutorial.id)[0];
+            var status = this.props.status.filter(status => status._id === tutorial._id)[0];
             var tasks = status.tasks;
             var error = status.tasks.filter(task => task.type === 'error').length > 0;
             var success = status.tasks.filter(task => task.type === 'success').length / tasks.length
             var tutorialStatus = success === 1 ? 'Success' : error ? 'Error' : 'Other';
             return (
               <Grid item xs={12} sm={6} md={4} xl={3} key={i} style={{}}>
-                <Link to={`/tutorial/${tutorial.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                <Link to={`/tutorial/${tutorial._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                   <Paper style={{ height: '150px', padding: '10px', position: 'relative', overflow: 'hidden' }}>
                     {tutorial.title}
                     <div className={clsx(this.props.classes.outerDiv)} style={{ width: '160px', height: '160px', border: 0 }}>

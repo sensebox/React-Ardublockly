@@ -61,7 +61,7 @@ class StepperVertical extends Component {
   }
 
   componentDidUpdate(props){
-    if (props.tutorial.id !== Number(this.props.match.params.tutorialId)) {
+    if (props.tutorial._id !== this.props.match.params.tutorialId) {
       this.props.tutorialStep(0);
     }
   }
@@ -69,7 +69,7 @@ class StepperVertical extends Component {
   render() {
     var steps = this.props.steps;
     var activeStep = this.props.activeStep;
-    var tutorialStatus = this.props.status.filter(status => status.id === this.props.tutorial.id)[0];
+    var tutorialStatus = this.props.status.filter(status => status._id === this.props.tutorial._id)[0];
     return (
       <div style={{marginRight: '10px'}}>
         <Stepper
@@ -79,13 +79,13 @@ class StepperVertical extends Component {
           classes={{root: this.props.classes.verticalStepper}}
         >
           {steps.map((step, i) => {
-            var tasksIndex = tutorialStatus.tasks.findIndex(task => task.id === step.id);
+            var tasksIndex = tutorialStatus.tasks.findIndex(task => task._id === step._id);
             var taskType = tasksIndex > -1 ? tutorialStatus.tasks[tasksIndex].type : null;
             var taskStatus = taskType === 'success' ? 'Success' : taskType === 'error' ? 'Error' : 'Other';
             return (
               <Step key={i}>
                 <Tooltip title={step.headline} placement='right' arrow >
-                  <div style={i === activeStep ? {padding: '5px 0'} : {padding: '5px 0', cursor: 'pointer'}} onClick={i === activeStep ? null : () => {this.props.tutorialStep(i)}}>
+                  <div style={i === activeStep ? {padding: '5px 0'} : {padding: '5px 0', cursor: 'pointer'}} onClick={i === activeStep ? null : () => {console.log(i); this.props.tutorialStep(i)}}>
                     <StepLabel
                       StepIconComponent={'div'}
                       classes={{

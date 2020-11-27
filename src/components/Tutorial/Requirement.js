@@ -67,7 +67,7 @@ class Requirement extends Component {
           {tutorialIds.map((tutorialId, i) => {
             // title must be provided together with ids
             // var title = tutorials.filter(tutorial => tutorial.id === tutorialId)[0].title;
-            var status = this.props.status.filter(status => status.id === tutorialId)[0];
+            var status = this.props.status.filter(status => status._id === tutorialId)[0];
             var tasks = status.tasks;
             var error = status.tasks.filter(task => task.type === 'error').length > 0;
             var success = status.tasks.filter(task => task.type === 'success').length / tasks.length
