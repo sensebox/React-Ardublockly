@@ -26,7 +26,7 @@ class Tutorial extends Component {
   }
 
   componentDidUpdate(props, state) {
-    if (props.tutorial && props.tutorial.id && !props.isLoading && Number(props.tutorial.id) !== Number(this.props.match.params.tutorialId)) {
+    if(this.props.tutorial && !this.props.isLoading && this.props.tutorial._id != this.props.match.params.tutorialId) {
       this.props.getTutorial(this.props.match.params.tutorialId);
       // this.props.tutorialId(Number(this.props.match.params.tutorialId));
     }
@@ -45,7 +45,6 @@ class Tutorial extends Component {
   }
 
   render() {
-    console.log(this.props.tutorial);
     return (
       <div>
         {this.props.isLoading ? null :
@@ -57,7 +56,7 @@ class Tutorial extends Component {
                 var name = `${detectWhitespacesAndReturnReadableResult(tutorial.title)}_${detectWhitespacesAndReturnReadableResult(step.headline)}`;
                 return(
                   <div>
-                    <Breadcrumbs content={[{ link: '/tutorial', title: 'Tutorial' }, { link: `/tutorial/${this.props.tutorial.id}`, title: tutorial.title }]} />
+                    <Breadcrumbs content={[{ link: '/tutorial', title: 'Tutorial' }, { link: `/tutorial/${this.props.tutorial._id}`, title: tutorial.title }]} />
 
                     <StepperHorizontal />
 

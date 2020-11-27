@@ -50,9 +50,9 @@ const styles = (theme) => ({
 class StepperHorizontal extends Component {
 
   render() {
-    var tutorialId = this.props.tutorial.id;
+    var tutorialId = this.props.tutorial._id;
     var tutorialIndex = this.props.currentTutorialIndex;
-    var status = this.props.status.filter(status => status.id === tutorialId)[0];
+    var status = this.props.status.filter(status => status._id === tutorialId)[0];
     var tasks = status.tasks;
     var error = tasks.filter(task => task.type === 'error').length > 0;
     var success = tasks.filter(task => task.type === 'success').length / tasks.length;
