@@ -56,11 +56,11 @@ class Instruction extends Component {
 }
 
 Instruction.propTypes = {
-  currentTutorialId: PropTypes.number,
+  // currentTutorialId: PropTypes.number,
 };
 
 const mapStateToProps = state => ({
-  currentTutorialId: state.tutorial.currentId
+  // currentTutorialId: state.tutorial.currentId
 });
 
 export default connect(mapStateToProps, null)(Instruction);

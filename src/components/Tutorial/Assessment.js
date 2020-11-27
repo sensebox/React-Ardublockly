@@ -27,7 +27,7 @@ class Assessment extends Component {
   }
 
   render() {
-    var tutorialId = this.props.currentTutorialId;
+    var tutorialId = this.props.tutorial.id //currentTutorialId;
     var currentTask = this.props.step;
     var status = this.props.status.filter(status => status.id === tutorialId)[0];
     var taskIndex = status.tasks.findIndex(task => task.id === currentTask.id);
@@ -61,16 +61,18 @@ class Assessment extends Component {
 }
 
 Assessment.propTypes = {
-  currentTutorialId: PropTypes.number,
+  // currentTutorialId: PropTypes.number,
   status: PropTypes.array.isRequired,
   change: PropTypes.number.isRequired,
-  workspaceName: PropTypes.func.isRequired
+  workspaceName: PropTypes.func.isRequired,
+  tutorial: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
   change: state.tutorial.change,
   status: state.tutorial.status,
-  currentTutorialId: state.tutorial.currentId
+  tutorial: state.tutorial.tutorial
+  // currentTutorialId: state.tutorial.currentId
 });
 
 export default connect(mapStateToProps, { workspaceName })(withWidth()(Assessment));

@@ -50,14 +50,14 @@ const styles = (theme) => ({
 class StepperHorizontal extends Component {
 
   render() {
-    var tutorialId = this.props.currentTutorialId;
+    var tutorialId = this.props.tutorial.id //this.props.currentTutorialId;
     var tutorialIndex = this.props.currentTutorialIndex;
     var status = this.props.status.filter(status => status.id === tutorialId)[0];
     var tasks = status.tasks;
     var error = tasks.filter(task => task.type === 'error').length > 0;
     var success = tasks.filter(task => task.type === 'success').length / tasks.length;
     var tutorialStatus = success === 1 ? 'Success' : error ? 'Error' : 'Other';
-    var title = tutorials.filter(tutorial => tutorial.id === tutorialId)[0].title;
+    var title = this.props.tutorial.title;
     return (
       <div style={{ position: 'relative' }}>
         {error || success > 0 ?
@@ -96,15 +96,17 @@ class StepperHorizontal extends Component {
 StepperHorizontal.propTypes = {
   status: PropTypes.array.isRequired,
   change: PropTypes.number.isRequired,
-  currentTutorialId: PropTypes.number.isRequired,
-  currentTutorialIndex: PropTypes.number.isRequired
+  // currentTutorialId: PropTypes.number.isRequired,
+  currentTutorialIndex: PropTypes.number.isRequired,
+  tutorial: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
   change: state.tutorial.change,
   status: state.tutorial.status,
-  currentTutorialId: state.tutorial.currentId,
-  currentTutorialIndex: state.tutorial.currentIndex
+  // currentTutorialId: state.tutorial.currentId,
+  currentTutorialIndex: state.tutorial.currentIndex,
+  tutorial: state.tutorial.tutorial
 });
 
 export default connect(mapStateToProps, null)(withRouter(withStyles(styles, { withTheme: true })(StepperHorizontal)));
