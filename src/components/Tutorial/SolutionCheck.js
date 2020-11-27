@@ -8,7 +8,6 @@ import { withRouter } from 'react-router-dom';
 import Compile from '../Compile';
 import Dialog from '../Dialog';
 
-// import tutorials from '../../data/tutorials';
 import { checkXml } from '../../helpers/compareXml';
 
 import { withStyles } from '@material-ui/core/styles';
@@ -47,7 +46,7 @@ class SolutionCheck extends Component {
   }
 
   check = () => {
-    const tutorial = this.props.tutorial //tutorials.filter(tutorial => tutorial.id === this.props.currentTutorialId)[0];
+    const tutorial = this.props.tutorial;
     const step = tutorial.steps[this.props.activeStep];
     var msg = checkXml(step.xml, this.props.xml);
     this.props.tutorialCheck(msg.type, step);
@@ -55,7 +54,7 @@ class SolutionCheck extends Component {
   }
 
   render() {
-    const steps = this.props.tutorial.steps //tutorials.filter(tutorial => tutorial.id === this.props.currentTutorialId)[0].steps;
+    const steps = this.props.tutorial.steps;
     return (
       <div>
         <Tooltip title='Lösung kontrollieren' arrow>
@@ -114,17 +113,15 @@ class SolutionCheck extends Component {
 SolutionCheck.propTypes = {
   tutorialCheck: PropTypes.func.isRequired,
   tutorialStep: PropTypes.func.isRequired,
-  // currentTutorialId: PropTypes.number,
   activeStep: PropTypes.number.isRequired,
   xml: PropTypes.string.isRequired,
   tutorial: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  // currentTutorialId: state.tutorial.currentId,
   activeStep: state.tutorial.activeStep,
   xml: state.workspace.code.xml,
-  tutorial: state.tutorial.tutorial
+  tutorial: state.tutorial.tutorials[0]
 });
 
 export default connect(mapStateToProps, { tutorialCheck, tutorialStep })(withStyles(styles, { withTheme: true })(withRouter(SolutionCheck)));

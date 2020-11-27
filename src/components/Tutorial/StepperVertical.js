@@ -69,7 +69,7 @@ class StepperVertical extends Component {
   render() {
     var steps = this.props.steps;
     var activeStep = this.props.activeStep;
-    var tutorialStatus = this.props.status.filter(status => status.id === this.props.tutorial.id/*currentTutorialId*/)[0];
+    var tutorialStatus = this.props.status.filter(status => status.id === this.props.tutorial.id)[0];
     return (
       <div style={{marginRight: '10px'}}>
         <Stepper
@@ -113,7 +113,6 @@ class StepperVertical extends Component {
 StepperVertical.propTypes = {
   status: PropTypes.array.isRequired,
   change: PropTypes.number.isRequired,
-  // currentTutorialId: PropTypes.number.isRequired,
   activeStep: PropTypes.number.isRequired,
   tutorialStep: PropTypes.func.isRequired,
   tutorial: PropTypes.object.isRequired
@@ -122,9 +121,8 @@ StepperVertical.propTypes = {
 const mapStateToProps = state => ({
   change: state.tutorial.change,
   status: state.tutorial.status,
-  // currentTutorialId: state.tutorial.currentId,
   activeStep: state.tutorial.activeStep,
-  tutorial: state.tutorial.tutorial
+  tutorial: state.tutorial.tutorials[0]
 });
 
 export default connect(mapStateToProps, { tutorialStep })(withRouter(withStyles(styles, {withTheme: true})(StepperVertical)));
