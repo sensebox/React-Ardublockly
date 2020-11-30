@@ -34,7 +34,7 @@ class Requirements extends Component {
 
   onChange = (e) => {
     var requirements = this.props.value;
-    var value = parseInt(e.target.value)
+    var value = e.target.value;
     if (e.target.checked) {
       requirements.push(value);
     }
@@ -55,8 +55,8 @@ class Requirements extends Component {
               key={i}
               control={
                 <Checkbox
-                  value={tutorial.id}
-                  checked={this.props.value.filter(id => id === tutorial.id).length > 0}
+                  value={tutorial._id}
+                  checked={this.props.value.filter(id => id === tutorial._id).length > 0}
                   onChange={(e) => this.onChange(e)}
                   name="requirements"
                   color="primary"

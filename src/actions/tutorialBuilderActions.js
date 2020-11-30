@@ -189,7 +189,7 @@ export const setSubmitError = () => (dispatch, getState) => {
     step.id = i + 1;
     if (i === 0) {
       if (step.requirements && step.requirements.length > 0) {
-        var requirements = step.requirements.filter(requirement => typeof (requirement) === 'number');
+        var requirements = step.requirements.filter(requirement => /^[0-9a-fA-F]{24}$/.test(requirement));
         if (requirements.length < step.requirements.length) {
           dispatch(changeContent(requirements, i, 'requirements'));
         }

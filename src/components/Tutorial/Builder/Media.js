@@ -84,7 +84,7 @@ class Media extends Component {
       this.setState({ error: false });
       this.props.changeContent(URL.createObjectURL(pic), this.props.index, 'url');
     }
-    this.props.changeContent(pic.name, this.props.index, 'media', 'picture');
+    this.props.changeContent(pic, this.props.index, 'media', 'picture');
   }
 
   render() {

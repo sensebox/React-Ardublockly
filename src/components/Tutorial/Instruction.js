@@ -22,11 +22,11 @@ class Instruction extends Component {
         {isHardware ?
           <Hardware picture={step.hardware} /> : null}
         {areRequirements > 0 ?
-          <Requirement tutorialIds={step.requirements} /> : null}
+          <Requirement requirements={step.requirements} /> : null}
         {step.media ?
           step.media.picture ?
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '5px' }}>
-              <img src={`/media/tutorial/${step.media.picture}`} alt='' style={{ maxHeight: '40vH', maxWidth: '100%' }} />
+              <img src={`${process.env.REACT_APP_BLOCKLY_API}/media/${step.media.picture.path}`} alt='' style={{ maxHeight: '40vH', maxWidth: '100%' }} />
             </div>
             : step.media.youtube ?
               /*16:9; width: 800px; height: width/16*9=450px*/
