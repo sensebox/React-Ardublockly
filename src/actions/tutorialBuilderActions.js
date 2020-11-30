@@ -180,7 +180,7 @@ export const setSubmitError = () => (dispatch, getState) => {
   // if(builder.id === undefined || builder.id === ''){
   //   dispatch(setError(undefined, 'id'));
   // }
-  if (builder.id === undefined || builder.title === '') {
+  if (builder.title === '') {
     dispatch(setError(undefined, 'title'));
   }
   var type = builder.steps.map((step, i) => {
@@ -243,7 +243,7 @@ export const progress = (inProgress) => (dispatch) => {
 export const resetTutorial = () => (dispatch, getState) => {
   dispatch(jsonString(''));
   dispatch(tutorialTitle(''));
-  dispatch(tutorialId(''));
+  // dispatch(tutorialId(''));
   var steps = [
     {
       id: 1,
@@ -274,7 +274,7 @@ export const readJSON = (json) => (dispatch, getState) => {
   // accept only valid attributes
   var steps = json.steps.map((step, i) => {
     var object = {
-      id: step.id,
+      // id: step.id,
       type: step.type,
       headline: step.headline,
       text: step.text
@@ -298,7 +298,7 @@ export const readJSON = (json) => (dispatch, getState) => {
     return object;
   });
   dispatch(tutorialTitle(json.title));
-  dispatch(tutorialId(json.id));
+  // dispatch(tutorialId(json.id));
   dispatch(tutorialSteps(steps));
   dispatch(setSubmitError());
   dispatch(progress(false));
