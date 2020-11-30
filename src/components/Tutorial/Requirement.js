@@ -59,14 +59,14 @@ const styles = theme => ({
 class Requirement extends Component {
 
   render() {
-    var tutorialIds = this.props.tutorialIds;
+    var requirements = this.props.requirements;
+    var tutorialIds = requirements.map(requirement => requirement._id);
     return (
       <div style={{ marginTop: '20px', marginBottom: '5px' }}>
         <Typography>Bevor du mit diesem Tutorial fortfährst solltest du folgende Tutorials erfolgreich abgeschlossen haben:</Typography>
         <List component="div">
           {tutorialIds.map((tutorialId, i) => {
-            // title must be provided together with ids
-            // var title = tutorials.filter(tutorial => tutorial.id === tutorialId)[0].title;
+            var title = requirements[i].title
             var status = this.props.status.filter(status => status._id === tutorialId)[0];
             var tasks = status.tasks;
             var error = status.tasks.filter(task => task.type === 'error').length > 0;
@@ -98,7 +98,7 @@ class Requirement extends Component {
                   </div>
                 </Tooltip>
                 <div style={{ height: '50px', width: 'calc(100% - 25px)', transform: 'translate(25px)' }} className={this.props.classes.hoverLink}>
-                  <Typography style={{ margin: 0, position: 'absolute', top: '50%', transform: 'translate(45px, -50%)', maxHeight: '50px', overflow: 'hidden', maxWidth: 'calc(100% - 45px)'/*, textOverflow: 'ellipsis', whiteSpace: 'pre-line', overflowWrap: 'anywhere'*/ }}>{/*title*/}Name hinzufügen über Datenbankeintrag</Typography>
+                  <Typography style={{ margin: 0, position: 'absolute', top: '50%', transform: 'translate(45px, -50%)', maxHeight: '50px', overflow: 'hidden', maxWidth: 'calc(100% - 45px)', textOverflow: 'ellipsis', whiteSpace: 'pre-line', overflowWrap: 'anywhere' }}>{title}</Typography>
                 </div>
               </Link>
             )
@@ -112,12 +112,12 @@ class Requirement extends Component {
 
 Requirement.propTypes = {
   status: PropTypes.array.isRequired,
-  change: PropTypes.number.isRequired,
+  change: PropTypes.number.isRequired
 };
 
 const mapStateToProps = state => ({
   change: state.tutorial.change,
-  status: state.tutorial.status
+  status: state.tutorial.status,
 });
 
 export default connect(mapStateToProps, null)(withStyles(styles, { withTheme: true })(withRouter(Requirement)));

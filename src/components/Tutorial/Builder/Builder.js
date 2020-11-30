@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { checkError, readJSON, jsonString, progress, resetTutorial } from '../../../actions/tutorialBuilderActions';
 
-import { saveAs } from 'file-saver';
+import axios from 'axios';
 
+import { saveAs } from 'file-saver';
 import { detectWhitespacesAndReturnReadableResult } from '../../../helpers/whitespace';
 
 import Breadcrumbs from '../../Breadcrumbs';
@@ -51,12 +52,6 @@ class Builder extends Component {
   }
 
   submit = () => {
-    if (this.props.id === null) {
-      var randomID = Date.now();
-    } else {
-      randomID = this.props.id;
-    }
-
     var isError = this.props.checkError();
     if (isError) {
       this.setState({ snackbar: true, key: Date.now(), message: `Die Angaben für das Tutorial sind nicht vollständig.`, type: 'error' });
@@ -64,19 +59,46 @@ class Builder extends Component {
     }
     else {
       // export steps without attribute 'url'
-      var steps = this.props.steps.map(step => {
-        if (step.url) {
-          delete step.url;
+      var steps = this.props.steps;
+      var newTutorial = new FormData();
+      newTutorial.append('title', this.props.title);
+      steps.forEach((step, i) => {
+        newTutorial.append(`steps[${i}][type]`, step.type);
+        newTutorial.append(`steps[${i}][headline]`, step.headline);
+        newTutorial.append(`steps[${i}][text]`, step.text);
+        if(i === 0 && step.type === 'instruction'){
+          if(step.requirements){ // optional
+            step.requirements.forEach((requirement, j) => {
+              newTutorial.append(`steps[${i}][requirements][${j}]`, requirement);
+            });
+          }
+          step.hardware.forEach((hardware, j) => {
+            newTutorial.append(`steps[${i}][hardware][${j}]`, hardware);
+          });
         }
-        return step;
+        if(step.xml){ // optional
+          newTutorial.append(`steps[${i}][xml]`, step.xml);
+        }
+        if(step.media){ // optional
+          if(step.media.youtube){
+            newTutorial.append(`steps[${i}][media][youtube]`, step.media.youtube);
+          }
+          if(step.media.picture){
+            newTutorial.append(`steps[${i}][media][picture]`, step.media.picture);
+          }
+        }
       });
-      var tutorial = {
-        id: randomID,
-        title: this.props.title,
-        steps: steps
-      }
-      var blob = new Blob([JSON.stringify(tutorial)], { type: 'text/json' });
-      saveAs(blob, `${detectWhitespacesAndReturnReadableResult(tutorial.title)}.json`);
+      axios.post(`${process.env.REACT_APP_BLOCKLY_API}/tutorial/`, newTutorial)
+        .then(res => {
+          var tutorial = res.data.tutorial;
+          this.props.history.push(`/tutorial/${tutorial._id}`);
+        })
+        .catch(err => {
+          this.setState({ snackbar: true, key: Date.now(), message: `Fehler beim Erstellen des Tutorials. Versuche es noch einmal.`, type: 'error' });
+          window.scrollTo(0, 0);
+        });
+      // var blob = new Blob([JSON.stringify(tutorial)], { type: 'text/json' });
+      // saveAs(blob, `${detectWhitespacesAndReturnReadableResult(tutorial.title)}.json`);
     }
   }
 
