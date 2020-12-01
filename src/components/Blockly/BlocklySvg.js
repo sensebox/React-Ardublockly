@@ -53,7 +53,6 @@ class BlocklySvg extends Component {
       var css = '<defs><style type="text/css" xmlns="http://www.w3.org/1999/xhtml"><![CDATA[' + cssContent + ']]></style></defs>';
       var bbox = document.getElementsByClassName("blocklyBlockCanvas")[0].getBBox();
       var content = new XMLSerializer().serializeToString(canvas);
-
       var xml = `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                   width="${bbox.width}" height="${bbox.height}" viewBox="${bbox.x} ${bbox.y} ${bbox.width} ${bbox.height}">
                   ${css}">${content}</svg>`;
@@ -65,7 +64,7 @@ class BlocklySvg extends Component {
   render() {
     return (
       <div
-        style={{display: 'flex', justifyContent: 'center', transform: 'scale(0.8) translate(0, calc(100% * -0.2 / 2))'}}
+        style={{display: 'inline-flex', justifyContent: 'center', transform: 'scale(0.8) translate(0, calc(100% * -0.2 / 2))'}}
         dangerouslySetInnerHTML={{ __html: this.state.svg }}
       />
     );

@@ -39,7 +39,7 @@ class Instruction extends Component {
           : null}
         {step.xml ?
           <Grid container spacing={2} style={{ marginBottom: '5px' }}>
-            <Grid item xs={12}>
+            <Grid item xs={12} style={{display: 'flex', justifyContent: 'center'}}>
               <BlocklyWindow
                 svg
                 blockDisabled
