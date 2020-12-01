@@ -87,12 +87,22 @@ class Home extends Component {
       this.setState({progress: true});
       axios.get(`${process.env.REACT_APP_BLOCKLY_API}/${param}/${id}`)
         .then(res => {
-          this.props.workspaceName(res.data[param].name ? res.data[param].name : res.data[param].title);
-          this.setState({ projectToLoad: res.data[param], progress: false });
+          var data = param === 'share' ? 'content' : param;
+          if(res.data[data]){
+            this.props.workspaceName(res.data[data].name ? res.data[data].name : res.data[data].title);
+            this.setState({ projectToLoad: res.data[data], progress: false });
+          }
+          else {
+            this.props.workspaceName(createNameId());
+            this.setState({ progress: false });
+            this.props.history.push('/');
+          }
         })
         .catch(err => {
           // TODO:
           this.setState({ progress: false, snackbar: true, key: Date.now(), message: `Fehler beim Aufrufen des angeforderten Programms. Versuche es noch einmal.`, type: 'error' });
+          this.props.workspaceName(createNameId());
+          this.props.history.push('/');
           window.scrollTo(0, 0);
         });
       }

@@ -332,7 +332,7 @@ class WorkspaceFunc extends Component {
           : this.state.share ?
             <div style={{ marginTop: '10px' }}>
               <Typography>Über den folgenden Link kannst du dein Programm teilen:</Typography>
-              <Link to={`/share/${this.state.id}`} className={this.props.classes.link}>{`${window.location.origin}/share/${this.state.id}`}</Link>
+              <Link to={`/share/${this.state.id}`} onClick={() => this.toggleDialog()} className={this.props.classes.link}>{`${window.location.origin}/share/${this.state.id}`}</Link>
               <Tooltip title='Link kopieren' arrow style={{ marginRight: '5px' }}>
                 <IconButton
                   onClick={() => {
