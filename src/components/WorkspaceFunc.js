@@ -216,7 +216,7 @@ class WorkspaceFunc extends Component {
             this.setState({ open: true, file: false, title: 'Keine Blöcke', content: 'Es wurden keine Blöcke detektiert. Bitte überprüfe den XML-Code und versuche es erneut.' });
           }
           else {
-            if (!this.props.solutionCheck) {
+            if (!this.props.assessment) {
               var extensionPosition = xmlFile.name.lastIndexOf('.');
               this.props.workspaceName(xmlFile.name.substr(0, extensionPosition));
             }
@@ -245,7 +245,7 @@ class WorkspaceFunc extends Component {
     workspace.options.maxBlocks = Infinity;
     this.props.onChangeCode();
     this.props.clearStats();
-    if (!this.props.solutionCheck) {
+    if (!this.props.assessment) {
       this.props.workspaceName(null);
     }
     this.setState({ snackbar: true, key: Date.now(), message: 'Das Projekt wurde erfolgreich zurückgesetzt.' });
@@ -256,7 +256,7 @@ class WorkspaceFunc extends Component {
   render() {
     return (
       <div style={{ width: 'max-content', display: 'flex' }}>
-        {!this.props.solutionCheck ?
+        {!this.props.assessment ?
           <Tooltip title={`Name des Projekts${this.props.name ? `: ${this.props.name}` : ''}`} arrow style={{ marginRight: '5px' }}>
             <div className={this.props.classes.workspaceName} onClick={() => { this.setState({ file: true, open: true, saveFile: false, title: 'Projekt benennen', content: 'Bitte gib einen Namen für das Projekt ein und bestätige diesen mit einem Klick auf \'Eingabe\'.' }) }}>
               {this.props.name && !isWidthDown('xs', this.props.width) ? <Typography style={{ margin: 'auto -3px auto 12px' }}>{this.props.name}</Typography> : null}
@@ -266,7 +266,7 @@ class WorkspaceFunc extends Component {
             </div>
           </Tooltip>
           : null}
-        {this.props.solutionCheck ? <SolutionCheck /> : <Compile iconButton />}
+        {this.props.assessment ? <SolutionCheck /> : <Compile iconButton />}
         <Tooltip title='Blöcke speichern' arrow style={{ marginRight: '5px' }}>
           <IconButton
             className={this.props.classes.button}
@@ -275,34 +275,38 @@ class WorkspaceFunc extends Component {
             <FontAwesomeIcon icon={faSave} size="xs" />
           </IconButton>
         </Tooltip>
-        <div ref={this.inputRef} style={{ width: 'max-content', height: '40px', marginRight: '5px' }}>
-          <input
-            style={{ display: 'none' }}
-            accept="text/xml"
-            onChange={(e) => { this.uploadXmlFile(e.target.files[0]) }}
-            id="open-blocks"
-            type="file"
-          />
-          <label htmlFor="open-blocks">
-            <Tooltip title='Blöcke öffnen' arrow style={{ marginRight: '5px' }}>
-              <div className={this.props.classes.button} style={{
-                borderRadius: '50%', cursor: 'pointer', display: 'table-cell',
-                verticalAlign: 'middle',
-                textAlign: 'center'
-              }}>
-                <FontAwesomeIcon icon={faUpload} style={{ width: '18px', height: '18px' }} />
-              </div>
-            </Tooltip>
-          </label>
-        </div>
-        <Tooltip title='Screenshot erstellen' arrow style={{ marginRight: '5px' }}>
-          <IconButton
-            className={this.props.classes.button}
-            onClick={() => { this.createFileName('svg'); }}
-          >
-            <FontAwesomeIcon icon={faCamera} size="xs" />
-          </IconButton>
-        </Tooltip>
+        {!this.props.assessment?
+          <div ref={this.inputRef} style={{ width: 'max-content', height: '40px', marginRight: '5px' }}>
+            <input
+              style={{ display: 'none' }}
+              accept="text/xml"
+              onChange={(e) => { this.uploadXmlFile(e.target.files[0]) }}
+              id="open-blocks"
+              type="file"
+            />
+            <label htmlFor="open-blocks">
+              <Tooltip title='Blöcke öffnen' arrow style={{ marginRight: '5px' }}>
+                <div className={this.props.classes.button} style={{
+                  borderRadius: '50%', cursor: 'pointer', display: 'table-cell',
+                  verticalAlign: 'middle',
+                  textAlign: 'center'
+                }}>
+                  <FontAwesomeIcon icon={faUpload} style={{ width: '18px', height: '18px' }} />
+                </div>
+              </Tooltip>
+            </label>
+          </div>
+        : null}
+        {!this.props.assessment?
+          <Tooltip title='Screenshot erstellen' arrow style={{ marginRight: '5px' }}>
+            <IconButton
+              className={this.props.classes.button}
+              onClick={() => { this.createFileName('svg'); }}
+            >
+              <FontAwesomeIcon icon={faCamera} size="xs" />
+            </IconButton>
+          </Tooltip>
+        : null}
         <Tooltip title='Workspace zurücksetzen' arrow style={{ marginRight: '5px' }}>
           <IconButton
             className={this.props.classes.button}
@@ -311,14 +315,16 @@ class WorkspaceFunc extends Component {
             <FontAwesomeIcon icon={faShare} size="xs" flip='horizontal' />
           </IconButton>
         </Tooltip>
-        <Tooltip title='Blöcke teilen' arrow>
-          <IconButton
-            className={this.props.classes.button}
-            onClick={() => this.shareBlocks()}
-          >
-            <FontAwesomeIcon icon={faShareAlt} size="xs" flip='horizontal' />
-          </IconButton>
-        </Tooltip>
+        {!this.props.assessment?
+          <Tooltip title='Blöcke teilen' arrow>
+            <IconButton
+              className={this.props.classes.button}
+              onClick={() => this.shareBlocks()}
+            >
+              <FontAwesomeIcon icon={faShareAlt} size="xs" flip='horizontal' />
+            </IconButton>
+          </Tooltip>
+        :null}
 
         <Dialog open={this.state.share} onClose={this.toggleDialog} aria-labelledby="form-dialog-title">
           <DialogTitle id="form-dialog-title">Dein Link wurde erstellt.</DialogTitle>
