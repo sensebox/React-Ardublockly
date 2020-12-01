@@ -5,7 +5,9 @@ import { clearStats, onChangeCode, workspaceName } from '../actions/workspaceAct
 
 import * as Blockly from 'blockly/core';
 
+import axios from 'axios';
 import { saveAs } from 'file-saver';
+import { createId } from 'mnemonic-id';
 
 import { detectWhitespacesAndReturnReadableResult } from '../helpers/whitespace';
 import { initialXml } from './Blockly/initialXml.js';
@@ -14,6 +16,8 @@ import Compile from './Compile';
 import SolutionCheck from './Tutorial/SolutionCheck';
 import Snackbar from './Snackbar';
 
+import { Link } from 'react-router-dom';
+
 import withWidth, { isWidthDown } from '@material-ui/core/withWidth';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -21,7 +25,6 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import { createId } from 'mnemonic-id';
 
 
 import Dialog from './Dialog';
@@ -33,7 +36,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 
 
-import { faPen, faSave, faUpload, faCamera, faShare, faShareAlt } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faSave, faUpload, faCamera, faShare, faShareAlt, faCopy } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const styles = (theme) => ({
@@ -55,6 +58,14 @@ const styles = (theme) => ({
     '&:hover': {
       color: theme.palette.primary.main,
     }
+  },
+  link: {
+    color: theme.palette.primary.main,
+    textDecoration: 'none',
+    '&:hover': {
+      color: theme.palette.primary.main,
+      textDecoration: 'underline'
+    }
   }
 });
 
@@ -74,13 +85,12 @@ class WorkspaceFunc extends Component {
       share: false,
       name: props.name,
       snackbar: false,
+      type: '',
       key: '',
       message: '',
       id: ''
     };
   }
-
-
 
   componentDidUpdate(props) {
     if (props.name !== this.props.name) {
@@ -89,7 +99,7 @@ class WorkspaceFunc extends Component {
   }
 
   toggleDialog = () => {
-    this.setState({ open: !this.state, share: false });
+    this.setState({ open: !this.state, share: false, file: false, saveFile: false, title: '', content: '' });
   }
 
   saveXmlFile = () => {
@@ -103,38 +113,20 @@ class WorkspaceFunc extends Component {
   }
 
   shareBlocks = () => {
-    let code = this.props.xml;
-    let requestOptions = '';
-    let id = '';
-    if (this.state.id !== '') {
-      requestOptions = {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id: this.state.id,
-          name: this.state.name,
-          xml: code
-        })
-      };
-      fetch(process.env.REACT_APP_BLOCKLY_API + '/share' + this.state.id, requestOptions)
-        .then(response => response.json())
-        .then(data => this.setState({ share: true }));
-    }
-    else {
-      id = createId(10);
-      requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id: id,
-          name: this.state.name,
-          xml: code
-        })
-      };
-      fetch(process.env.REACT_APP_BLOCKLY_API + '/share', requestOptions)
-        .then(response => response.json())
-        .then(data => this.setState({ id: data.id, share: true }));
-    }
+    var body = {
+      _id: createId(10),
+      name: this.state.name,
+      xml: this.props.xml
+    };
+    axios.post(`${process.env.REACT_APP_BLOCKLY_API}/share`, body)
+      .then(res => {
+        var shareContent = res.data.content;
+        this.setState({ share: true, open: true, title: 'Programm teilen', id: shareContent._id });
+      })
+      .catch(err => {
+        this.setState({ snackbar: true, key: Date.now(), message: `Fehler beim Erstellen eines Links zum Teilen deines Programmes. Versuche es noch einmal.`, type: 'error' });
+        window.scrollTo(0, 0);
+      });
   }
 
   getSvg = () => {
@@ -220,7 +212,7 @@ class WorkspaceFunc extends Component {
               var extensionPosition = xmlFile.name.lastIndexOf('.');
               this.props.workspaceName(xmlFile.name.substr(0, extensionPosition));
             }
-            this.setState({ snackbar: true, key: Date.now(), message: 'Das Projekt aus gegebener XML-Datei wurde erfolgreich eingefügt.' });
+            this.setState({ snackbar: true, type: 'success', key: Date.now(), message: 'Das Projekt aus gegebener XML-Datei wurde erfolgreich eingefügt.' });
           }
         } catch (err) {
           this.setState({ open: true, file: false, title: 'Ungültige XML', content: 'Die XML-Datei konnte nicht in Blöcke zerlegt werden. Bitte überprüfe den XML-Code und versuche es erneut.' });
@@ -232,7 +224,7 @@ class WorkspaceFunc extends Component {
   renameWorkspace = () => {
     this.props.workspaceName(this.state.name);
     this.toggleDialog();
-    this.setState({ snackbar: true, key: Date.now(), message: `Das Projekt wurde erfolgreich in '${this.state.name}' umbenannt.` });
+    this.setState({ snackbar: true, type: 'success', key: Date.now(), message: `Das Projekt wurde erfolgreich in '${this.state.name}' umbenannt.` });
   }
 
   resetWorkspace = () => {
@@ -248,7 +240,7 @@ class WorkspaceFunc extends Component {
     if (!this.props.solutionCheck) {
       this.props.workspaceName(null);
     }
-    this.setState({ snackbar: true, key: Date.now(), message: 'Das Projekt wurde erfolgreich zurückgesetzt.' });
+    this.setState({ snackbar: true, type: 'success', key: Date.now(), message: 'Das Projekt wurde erfolgreich zurückgesetzt.' });
   }
 
 
@@ -320,29 +312,6 @@ class WorkspaceFunc extends Component {
           </IconButton>
         </Tooltip>
 
-        <Dialog open={this.state.share} onClose={this.toggleDialog} aria-labelledby="form-dialog-title">
-          <DialogTitle id="form-dialog-title">Dein Link wurde erstellt.</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Über den folgenden Link kannst du dein Programm teilen.
-          </DialogContentText>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              defaultValue={window.location.origin + "/share/" + this.state.id}
-              label="url"
-              type="email"
-              fullWidth
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.toggleDialog} color="primary">
-              Cancel
-          </Button>
-          </DialogActions>
-        </Dialog>
-
         <Dialog
           open={this.state.open}
           title={this.state.title}
@@ -356,13 +325,28 @@ class WorkspaceFunc extends Component {
               <TextField autoFocus placeholder={this.state.saveXml ? 'Dateiname' : 'Projektname'} value={this.state.name} onChange={this.setFileName} style={{ marginRight: '10px' }} />
               <Button disabled={!this.state.name} variant='contained' color='primary' onClick={() => { this.state.saveFile ? this.state.file === 'xml' ? this.saveXmlFile() : this.getSvg() : this.renameWorkspace(); this.toggleDialog(); }}>Eingabe</Button>
             </div>
-            : null}
+          : this.state.share ?
+            <div style={{ marginTop: '10px' }}>
+              <Typography>Über den folgenden Link kannst du dein Programm teilen:</Typography>
+              <Link to={`/share/${this.state.id}`} className={this.props.classes.link}>{`${window.location.origin}/share/${this.state.id}`}</Link>
+              <Tooltip title='Link kopieren' arrow style={{ marginRight: '5px' }}>
+                <IconButton
+                  onClick={() => {
+                    navigator.clipboard.writeText(`${window.location.origin}/share/${this.state.id}`);
+                    this.setState({ snackbar: true, key: Date.now(), message: 'Link erfolgreich in Zwischenablage gespeichert.', type: 'success' });
+                  }}
+                >
+                  <FontAwesomeIcon icon={faCopy} size="xs" />
+                </IconButton>
+              </Tooltip>
+            </div>
+          : null}
         </Dialog>
 
         <Snackbar
           open={this.state.snackbar}
           message={this.state.message}
-          type='success'
+          type={this.state.type}
           key={this.state.key}
         />
 

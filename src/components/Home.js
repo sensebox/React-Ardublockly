@@ -5,6 +5,8 @@ import { clearStats, workspaceName } from '../actions/workspaceActions';
 
 import * as Blockly from 'blockly/core';
 
+import axios from 'axios';
+
 import WorkspaceStats from './WorkspaceStats';
 import WorkspaceFunc from './WorkspaceFunc';
 import BlocklyWindow from './Blockly/BlocklyWindow';
@@ -17,6 +19,8 @@ import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import { withStyles } from '@material-ui/core/styles';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { faCode } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -50,17 +54,28 @@ class Home extends Component {
     gallery: [],
     share: [],
     projectToLoad: undefined,
+    progress: false,
     stats: window.localStorage.getItem('stats'),
   }
 
   componentDidMount() {
     this.setState({ stats: window.localStorage.getItem('stats') })
-    this.props.workspaceName(createNameId());
-    fetch(process.env.REACT_APP_BLOCKLY_API + this.props.location.pathname)
-      .then(res => res.json())
-      .then((data) => {
-        this.setState({ projectToLoad: data })
-      })
+    if(this.props.match.params.shareId || this.props.match.params.galleryId){
+      this.setState({progress: true});
+      axios.get(`${process.env.REACT_APP_BLOCKLY_API}${this.props.location.pathname}`)
+        .then(res => {
+          var shareContent = res.data.content;
+          this.props.workspaceName(res.data.content.name);
+          this.setState({ projectToLoad: res.data.content, progress: false });
+        })
+        .catch(err => {
+          this.setState({ progress: false, snackbar: true, key: Date.now(), message: `Fehler beim Erstellen eines Links zum Teilen deines Programmes. Versuche es noch einmal.`, type: 'error' });
+          window.scrollTo(0, 0);
+        });
+    }
+    else {
+      this.props.workspaceName(createNameId());
+    }
   }
 
 
@@ -91,35 +106,44 @@ class Home extends Component {
   render() {
     return (
       <div>
-        {this.state.stats ?
-          <div style={{ float: 'left', height: '40px', position: 'relative' }}><WorkspaceStats /></div>
-          : null
-        }
-        <div style={{ float: 'right', height: '40px', marginBottom: '20px' }}><WorkspaceFunc /></div>
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={this.state.codeOn ? 8 : 12} style={{ position: 'relative' }}>
-            <Tooltip title={this.state.codeOn ? 'Code ausblenden' : 'Code anzeigen'} >
-              <IconButton
-                className={this.state.codeOn ? this.props.classes.codeOn : this.props.classes.codeOff}
-                style={{ width: '40px', height: '40px', position: 'absolute', top: -12, right: 8, zIndex: 21 }}
-                onClick={() => this.onChange()}
-              >
-                <FontAwesomeIcon icon={faCode} size="xs" />
-              </IconButton>
-            </Tooltip>
-            <TrashcanButtons />
-            {this.state.projectToLoad ?
-              < BlocklyWindow blocklyCSS={{ height: '80vH' }} initialXml={this.state.projectToLoad.xml} /> : < BlocklyWindow blocklyCSS={{ height: '80vH' }} />
-            }
+        {this.state.progress ?
+          <Backdrop open invisible>
+            <CircularProgress color="primary" />
+          </Backdrop>
+         :
+          <div>
+          {this.state.stats ?
+            <div style={{ float: 'left', height: '40px', position: 'relative' }}><WorkspaceStats /></div>
+            : null
+          }
+          <div style={{ float: 'right', height: '40px', marginBottom: '20px' }}><WorkspaceFunc /></div>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={this.state.codeOn ? 8 : 12} style={{ position: 'relative' }}>
+              <Tooltip title={this.state.codeOn ? 'Code ausblenden' : 'Code anzeigen'} >
+                <IconButton
+                  className={this.state.codeOn ? this.props.classes.codeOn : this.props.classes.codeOff}
+                  style={{ width: '40px', height: '40px', position: 'absolute', top: -12, right: 8, zIndex: 21 }}
+                  onClick={() => this.onChange()}
+                >
+                  <FontAwesomeIcon icon={faCode} size="xs" />
+                </IconButton>
+              </Tooltip>
+              <TrashcanButtons />
+              {this.state.projectToLoad ?
+                < BlocklyWindow blocklyCSS={{ height: '80vH' }} initialXml={this.state.projectToLoad.xml} />
+              : < BlocklyWindow blocklyCSS={{ height: '80vH' }} />
+              }
 
-          </Grid>
-          {this.state.codeOn ?
-            <Grid item xs={12} md={4}>
-              <CodeViewer />
             </Grid>
-            : null}
-        </Grid>
-        <HintTutorialExists />
+            {this.state.codeOn ?
+              <Grid item xs={12} md={4}>
+                <CodeViewer />
+              </Grid>
+              : null}
+          </Grid>
+          <HintTutorialExists />
+        </div>
+      }
       </div>
     );
   };
