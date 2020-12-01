@@ -60,31 +60,17 @@ class Home extends Component {
 
   componentDidMount() {
     this.setState({ stats: window.localStorage.getItem('stats') })
-    if(this.props.match.params.shareId || this.props.match.params.galleryId){
-      this.setState({progress: true});
-      axios.get(`${process.env.REACT_APP_BLOCKLY_API}${this.props.location.pathname}`)
-        .then(res => {
-          var shareContent = res.data.content;
-          this.props.workspaceName(res.data.content.name);
-          this.setState({ projectToLoad: res.data.content, progress: false });
-        })
-        .catch(err => {
-          this.setState({ progress: false, snackbar: true, key: Date.now(), message: `Fehler beim Erstellen eines Links zum Teilen deines Programmes. Versuche es noch einmal.`, type: 'error' });
-          window.scrollTo(0, 0);
-        });
-    }
-    else {
-      this.props.workspaceName(createNameId());
-    }
+    this.getProject();
   }
 
-
-  componentDidUpdate() {
+  componentDidUpdate(props) {
+    if(props.location.path !== this.props.location.path){
+      this.getProject();
+    }
     /* Resize and reposition all of the workspace chrome (toolbox, trash,
     scrollbars etc.) This should be called when something changes that requires
     recalculating dimensions and positions of the trash, zoom, toolbox, etc.
     (e.g. window resize). */
-
     const workspace = Blockly.getMainWorkspace();
     Blockly.svgResize(workspace);
   }
@@ -92,6 +78,27 @@ class Home extends Component {
   componentWillUnmount() {
     this.props.clearStats();
     this.props.workspaceName(null);
+  }
+
+  getProject = () => {
+    if(this.props.match.params.shareId || this.props.match.params.galleryId){
+      var param = this.props.match.params.shareId ? 'share' : 'gallery';
+      var id = this.props.match.params[`${param}Id`];
+      this.setState({progress: true});
+      axios.get(`${process.env.REACT_APP_BLOCKLY_API}/${param}/${id}`)
+        .then(res => {
+          this.props.workspaceName(res.data[param].name ? res.data[param].name : res.data[param].title);
+          this.setState({ projectToLoad: res.data[param], progress: false });
+        })
+        .catch(err => {
+          // TODO:
+          this.setState({ progress: false, snackbar: true, key: Date.now(), message: `Fehler beim Aufrufen des angeforderten Programms. Versuche es noch einmal.`, type: 'error' });
+          window.scrollTo(0, 0);
+        });
+      }
+      else {
+        this.props.workspaceName(createNameId());
+      }
   }
 
   onChange = () => {

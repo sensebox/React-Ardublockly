@@ -7,7 +7,6 @@ import * as Blockly from 'blockly/core';
 
 import axios from 'axios';
 import { saveAs } from 'file-saver';
-import { createId } from 'mnemonic-id';
 
 import { detectWhitespacesAndReturnReadableResult } from '../helpers/whitespace';
 import { initialXml } from './Blockly/initialXml.js';
@@ -114,14 +113,13 @@ class WorkspaceFunc extends Component {
 
   shareBlocks = () => {
     var body = {
-      _id: createId(10),
       name: this.state.name,
       xml: this.props.xml
     };
     axios.post(`${process.env.REACT_APP_BLOCKLY_API}/share`, body)
       .then(res => {
         var shareContent = res.data.content;
-        this.setState({ share: true, open: true, title: 'Programm teilen', id: shareContent._id });
+        this.setState({ share: true, open: true, title: 'Programm teilen', id: shareContent.link });
       })
       .catch(err => {
         this.setState({ snackbar: true, key: Date.now(), message: `Fehler beim Erstellen eines Links zum Teilen deines Programmes. Versuche es noch einmal.`, type: 'error' });
@@ -299,7 +297,7 @@ class WorkspaceFunc extends Component {
             </IconButton>
           </Tooltip>
         : null}
-        <Tooltip title='Workspace zurücksetzen' arrow style={{ marginRight: '5px' }}>
+        <Tooltip title='Workspace zurücksetzen' arrow style={this.props.assessment ? null : { marginRight: '5px' }}>
           <IconButton
             className={this.props.classes.button}
             onClick={() => this.resetWorkspace()}
