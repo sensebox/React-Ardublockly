@@ -34,7 +34,7 @@ class Assessment extends Component {
     return (
       <div style={{ width: '100%' }}>
         <Typography variant='h4' style={{ float: 'left', marginBottom: '5px', height: '40px', display: 'table' }}>{currentTask.headline}</Typography>
-        <div style={{ float: 'right', height: '40px' }}><WorkspaceFunc solutionCheck /></div>
+        <div style={{ float: 'right', height: '40px' }}><WorkspaceFunc assessment /></div>
         <Grid container spacing={2} style={{ marginBottom: '5px' }}>
           <Grid item xs={12} md={6} lg={8}>
             <BlocklyWindow
