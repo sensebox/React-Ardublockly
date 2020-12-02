@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { clearStats, onChangeCode, workspaceName } from '../actions/workspaceActions';
+import { updateProject } from '../actions/projectActions';
 
 import * as Blockly from 'blockly/core';
 
@@ -86,6 +87,14 @@ class WorkspaceFunc extends Component {
   componentDidUpdate(props) {
     if (props.name !== this.props.name) {
       this.setState({ name: this.props.name });
+    }
+    if(this.props.message !== props.message){
+      if(this.props.message.id === 'PROJECT_UPDATE_SUCCESS'){
+        this.setState({ snackbar: true, key: Date.now(), message: `Das Projekt wurde erfolgreich aktualisiert.`, type: 'success' });
+      }
+      else if (this.props.message.id === 'PROJECT_UPDATE_FAIL'){
+        this.setState({ snackbar: true, key: Date.now(), message: `Fehler beim Aktualisieren des Projektes. Versuche es noch einmal.`, type: 'error' });
+      }
     }
   }
 
@@ -265,10 +274,10 @@ class WorkspaceFunc extends Component {
           </Tooltip>
           : null}
         {this.props.assessment ? <SolutionCheck /> : <Compile iconButton />}
-        <Tooltip title='Projekt speichern' arrow style={{ marginRight: '5px' }}>
+        <Tooltip title={this.props.projectType === 'project'? 'Projekt aktualisieren':'Projekt speichern'} arrow style={{ marginRight: '5px' }}>
           <IconButton
             className={this.props.classes.button}
-            onClick={() => this.saveProject()}
+            onClick={this.props.projectType === 'project' ? () => this.props.updateProject() : () => this.saveProject()}
           >
             <FontAwesomeIcon icon={faSave} size="xs" />
           </IconButton>
@@ -376,18 +385,23 @@ class WorkspaceFunc extends Component {
 }
 
 WorkspaceFunc.propTypes = {
+  clearStats: PropTypes.func.isRequired,
+  onChangeCode: PropTypes.func.isRequired,
+  workspaceName: PropTypes.func.isRequired,
+  updateProject: PropTypes.func.isRequired,
   arduino: PropTypes.string.isRequired,
   xml: PropTypes.string.isRequired,
   name: PropTypes.string,
-  clearStats: PropTypes.func.isRequired,
-  onChangeCode: PropTypes.func.isRequired,
-  workspaceName: PropTypes.func.isRequired
+  projectType: PropTypes.string.isRequired,
+  message: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
   arduino: state.workspace.code.arduino,
   xml: state.workspace.code.xml,
-  name: state.workspace.name
+  name: state.workspace.name,
+  projectType: state.project.type,
+  message: state.message
 });
 
-export default connect(mapStateToProps, { clearStats, onChangeCode, workspaceName })(withStyles(styles, { withTheme: true })(withWidth()(withRouter(WorkspaceFunc))));
+export default connect(mapStateToProps, { clearStats, onChangeCode, workspaceName, updateProject })(withStyles(styles, { withTheme: true })(withWidth()(withRouter(WorkspaceFunc))));
