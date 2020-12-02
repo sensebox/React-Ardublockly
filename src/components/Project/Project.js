@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { workspaceName } from '../../actions/workspaceActions';
 import { getProject, resetProject } from '../../actions/projectActions';
-import { clearMessages } from '../../actions/messageActions';
+import { clearMessages, returnErrors } from '../../actions/messageActions';
 
 import axios from 'axios';
 import { createNameId } from 'mnemonic-id';
@@ -18,6 +18,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 class Project extends Component {
 
   componentDidMount() {
+    this.props.resetProject();
     this.getProject();
   }
 
@@ -31,8 +32,13 @@ class Project extends Component {
     }
     if(this.props.message !== props.message){
       if(this.props.message.id === 'PROJECT_EMPTY' || this.props.message.id === 'GET_PROJECT_FAIL'){
-        this.props.workspaceName(createNameId());
-        this.props.history.push('/');
+        if(this.props.type!=='share'){
+          this.props.returnErrors('', 404, 'GET_PROJECT_FAIL');
+          this.props.history.push(`/${this.props.type}`);
+        } else {
+          this.props.history.push('/');
+          this.props.returnErrors('', 404, 'GET_SHARE_FAIL');
+        }
       }
       if(this.props.message.id === 'GET_PROJECT_SUCCESS'){
         this.props.workspaceName(this.props.project.title);
@@ -43,9 +49,6 @@ class Project extends Component {
   componentWillUnmount() {
     this.props.resetProject();
     this.props.workspaceName(null);
-    if(this.props.message.msg){
-      this.props.clearMessages();
-    }
   }
 
   getProject = () => {
@@ -77,6 +80,7 @@ Project.propTypes = {
   getProject: PropTypes.func.isRequired,
   resetProject: PropTypes.func.isRequired,
   clearMessages: PropTypes.func.isRequired,
+  returnErrors: PropTypes.func.isRequired,
   project: PropTypes.object.isRequired,
   type: PropTypes.string.isRequired,
   message: PropTypes.object.isRequired,
@@ -90,4 +94,4 @@ const mapStateToProps = state => ({
   message: state.message
 });
 
-export default connect(mapStateToProps, { workspaceName, getProject, resetProject, clearMessages })(Project);
+export default connect(mapStateToProps, { workspaceName, getProject, resetProject, clearMessages, returnErrors })(Project);

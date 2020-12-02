@@ -30,8 +30,8 @@ class Routes extends Component {
           <Route path="/" exact component={Home} />
           // Tutorials
           <Route path="/tutorial" exact component={TutorialHome} />
-          <Route path="/tutorial/:tutorialId" exact component={Tutorial} />
           <Route path="/tutorial/builder" exact component={Builder} />
+          <Route path="/tutorial/:tutorialId" exact component={Tutorial} />
           // Sharing
           <Route path="/share/:shareId" exact component={Project} />
           // Gallery-Projects

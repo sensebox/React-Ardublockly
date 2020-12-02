@@ -35,6 +35,12 @@ class Snackbar extends Component {
     }
   }
 
+  componentDidUpdate(){
+    if(!this.state.open){
+      clearTimeout(this.timeout);
+    }
+  }
+
   componentWillUnmount(){
     if(this.state.open){
       clearTimeout(this.timeout);
