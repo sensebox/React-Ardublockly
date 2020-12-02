@@ -10,7 +10,8 @@ import Tutorial from './Tutorial/Tutorial';
 import TutorialHome from './Tutorial/TutorialHome';
 import Builder from './Tutorial/Builder/Builder';
 import NotFound from './NotFound';
-import GalleryHome from './Gallery/GalleryHome';
+import ProjectHome from './Project/ProjectHome';
+import Project from './Project/Project';
 import Settings from './Settings/Settings';
 import Impressum from './Impressum';
 import Privacy from './Privacy';
@@ -27,15 +28,24 @@ class Routes extends Component {
       <div style={{ margin: '0 22px' }}>
         <Switch>
           <Route path="/" exact component={Home} />
+          // Tutorials
           <Route path="/tutorial" exact component={TutorialHome} />
+          <Route path="/tutorial/:tutorialId" exact component={Tutorial} />
+          <Route path="/tutorial/builder" exact component={Builder} />
+          // Sharing
+          <Route path="/share/:shareId" exact component={Project} />
+          // Gallery-Projects
+          <Route path="/gallery" exact component={ProjectHome} />
+          <Route path="/gallery/:galleryId" exact component={Project} />
+          // User-Projects
+          <Route path="/project" exact component={ProjectHome} />
+          <Route path="/project/:projectId" exact component={Project} />
+          // settings
           <Route path="/settings" exact component={Settings} />
-          <Route path="/gallery" exact component={GalleryHome} />
-          <Route path="/gallery/:galleryId" exact component={Home} />
+          // privacy
           <Route path="/impressum" exact component={Impressum} />
           <Route path="/privacy" exact component={Privacy} />
-          <Route path="/share/:shareId" exact component={Home} />
-          <Route path="/tutorial/builder" exact component={Builder} />
-          <Route path="/tutorial/:tutorialId" exact component={Tutorial} />
+          // Not Found
           <Route component={NotFound} />
         </Switch>
       </div>
