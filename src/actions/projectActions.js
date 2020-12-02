@@ -83,6 +83,27 @@ export const updateProject = () => (dispatch, getState) => {
     });
 }
 
+export const deleteProject = () => (dispatch, getState) => {
+  var project = getState().project;
+  var id = project.projects[0]._id;
+  var type = project.type;
+  axios.delete(`${process.env.REACT_APP_BLOCKLY_API}/${type}/${id}`)
+    .then(res => {
+      dispatch({type: GET_PROJECTS, payload: []});
+      if(type === 'project'){
+        dispatch(returnSuccess(res.data.message, res.status, 'PROJECT_DELETE_SUCCESS'));
+      } else {
+        dispatch(returnSuccess(res.data.message, res.status, 'GALLERY_DELETE_SUCCESS'));
+      }
+    })
+    .catch(err => {
+      if(err.response){
+        dispatch(returnErrors(err.response.data.message, err.response.status, 'PROJECT_DELETE_FAIL'));
+      }
+    });
+}
+
+
 export const resetProject = () => (dispatch) => {
   dispatch({
     type: GET_PROJECTS,

@@ -12,6 +12,7 @@ import BlocklyWindow from './Blockly/BlocklyWindow';
 import CodeViewer from './CodeViewer';
 import TrashcanButtons from './TrashcanButtons';
 import HintTutorialExists from './Tutorial/HintTutorialExists';
+import Snackbar from './Snackbar';
 
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
@@ -47,13 +48,20 @@ class Home extends Component {
 
   state = {
     codeOn: false,
-    stats: window.localStorage.getItem('stats')
+    stats: window.localStorage.getItem('stats'),
+    snackbar: false,
+    type: '',
+    key: '',
+    message: ''
   }
 
   componentDidMount() {
     this.setState({ stats: window.localStorage.getItem('stats') });
     if(!this.props.project){
       this.props.workspaceName(createNameId());
+    }
+    if(this.props.message && this.props.message.id === 'GET_SHARE_FAIL'){
+      this.setState({ snackbar: true, key: Date.now(), message: `Das angefragte geteilte Projekt konnte nicht gefunden werden.`, type: 'error' });
     }
   }
 
@@ -112,6 +120,12 @@ class Home extends Component {
           : null}
         </Grid>
         <HintTutorialExists />
+        <Snackbar
+          open={this.state.snackbar}
+          message={this.state.message}
+          type={this.state.type}
+          key={this.state.key}
+        />
       </div>
     );
   };
@@ -119,8 +133,13 @@ class Home extends Component {
 
 Home.propTypes = {
   clearStats: PropTypes.func.isRequired,
-  workspaceName: PropTypes.func.isRequired
+  workspaceName: PropTypes.func.isRequired,
+  message: PropTypes.object.isRequired
 };
 
+const mapStateToProps = state => ({
+  message: state.message
+});
 
-export default connect(null, { clearStats, workspaceName })(withStyles(styles, { withTheme: true })(Home));
+
+export default connect(mapStateToProps, { clearStats, workspaceName })(withStyles(styles, { withTheme: true })(Home));

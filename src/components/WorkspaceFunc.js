@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { clearStats, onChangeCode, workspaceName } from '../actions/workspaceActions';
-import { updateProject } from '../actions/projectActions';
+import { updateProject, deleteProject } from '../actions/projectActions';
 
 import * as Blockly from 'blockly/core';
 
@@ -28,7 +28,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-import { faPen, faSave, faUpload, faFileDownload, faCamera, faShare, faShareAlt, faCopy } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faSave, faUpload, faFileDownload, faTrashAlt, faCamera, faShare, faShareAlt, faCopy } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const styles = (theme) => ({
@@ -49,6 +49,16 @@ const styles = (theme) => ({
     cursor: 'pointer',
     '&:hover': {
       color: theme.palette.primary.main,
+    }
+  },
+  buttonTrash: {
+    backgroundColor: theme.palette.error.dark,
+    color: theme.palette.primary.contrastText,
+    width: '40px',
+    height: '40px',
+    '&:hover': {
+      backgroundColor: theme.palette.error.dark,
+      color: theme.palette.primary.contrastText,
     }
   },
   link: {
@@ -92,8 +102,14 @@ class WorkspaceFunc extends Component {
       if(this.props.message.id === 'PROJECT_UPDATE_SUCCESS'){
         this.setState({ snackbar: true, key: Date.now(), message: `Das Projekt wurde erfolgreich aktualisiert.`, type: 'success' });
       }
-      else if (this.props.message.id === 'PROJECT_UPDATE_FAIL'){
+      else if(this.props.message.id === 'PROJECT_DELETE_SUCCESS'){
+        this.props.history.push(`/${this.props.projectType}`);
+      }
+      else if(this.props.message.id === 'PROJECT_UPDATE_FAIL'){
         this.setState({ snackbar: true, key: Date.now(), message: `Fehler beim Aktualisieren des Projektes. Versuche es noch einmal.`, type: 'error' });
+      }
+      else if(this.props.message.id === 'PROJECT_DELETE_FAIL'){
+        this.setState({ snackbar: true, key: Date.now(), message: `Fehler beim Löschen des Projektes. Versuche es noch einmal.`, type: 'error' });
       }
     }
   }
@@ -239,7 +255,11 @@ class WorkspaceFunc extends Component {
   renameWorkspace = () => {
     this.props.workspaceName(this.state.name);
     this.toggleDialog();
-    this.setState({ snackbar: true, type: 'success', key: Date.now(), message: `Das Projekt wurde erfolgreich in '${this.state.name}' umbenannt.` });
+    if(this.props.projectType === 'project'){
+      this.props.updateProject();
+    } else {
+      this.setState({ snackbar: true, type: 'success', key: Date.now(), message: `Das Projekt wurde erfolgreich in '${this.state.name}' umbenannt.` });
+    }
   }
 
   resetWorkspace = () => {
@@ -264,9 +284,9 @@ class WorkspaceFunc extends Component {
     return (
       <div style={{ width: 'max-content', display: 'flex' }}>
         {!this.props.assessment ?
-          <Tooltip title={`Name des Projektes${this.props.name ? `: ${this.props.name}` : ''}`} arrow style={{ marginRight: '5px' }}>
+          <Tooltip title={`Titel des Projektes${this.props.name ? `: ${this.props.name}` : ''}`} arrow style={{ marginRight: '5px' }}>
             <div className={this.props.classes.workspaceName} onClick={() => { this.setState({ file: true, open: true, saveFile: false, title: 'Projekt benennen', content: 'Bitte gib einen Namen für das Projekt ein und bestätige diesen mit einem Klick auf \'Eingabe\'.' }) }}>
-              {this.props.name && !isWidthDown('xs', this.props.width) ? <Typography style={{ margin: 'auto -3px auto 12px' }}>{this.props.name}</Typography> : null}
+              {this.props.name && !isWidthDown(this.props.projectType === 'project' || this.props.projectType === 'gallery' ? 'xl':'xs', this.props.width) ? <Typography style={{ margin: 'auto -3px auto 12px' }}>{this.props.name}</Typography> : null}
               <div style={{ width: '40px', display: 'flex' }}>
                 <FontAwesomeIcon icon={faPen} style={{ height: '18px', width: '18px', margin: 'auto' }} />
               </div>
@@ -322,7 +342,17 @@ class WorkspaceFunc extends Component {
             </IconButton>
           </Tooltip>
         : null}
-        <Tooltip title='Workspace zurücksetzen' arrow style={this.props.assessment ? null : { marginRight: '5px' }}>
+        {!this.props.assessment?
+          <Tooltip title='Projekt teilen' arrow style={{marginRight: '5px'}}>
+            <IconButton
+              className={this.props.classes.button}
+              onClick={() => this.shareBlocks()}
+            >
+              <FontAwesomeIcon icon={faShareAlt} size="xs" />
+            </IconButton>
+          </Tooltip>
+        :null}
+        <Tooltip title='Workspace zurücksetzen' arrow style={this.props.projectType === 'project' || this.props.projectType === 'gallery' ? { marginRight: '5px' }:null}>
           <IconButton
             className={this.props.classes.button}
             onClick={() => this.resetWorkspace()}
@@ -330,13 +360,13 @@ class WorkspaceFunc extends Component {
             <FontAwesomeIcon icon={faShare} size="xs" flip='horizontal' />
           </IconButton>
         </Tooltip>
-        {!this.props.assessment?
-          <Tooltip title='Projekt teilen' arrow>
+        {!this.props.assessment && (this.props.projectType === 'project' || this.props.projectType === 'gallery') ?
+          <Tooltip title='Projekt löschen' arrow>
             <IconButton
-              className={this.props.classes.button}
-              onClick={() => this.shareBlocks()}
+              className={this.props.classes.buttonTrash}
+              onClick={() => this.props.deleteProject()}
             >
-              <FontAwesomeIcon icon={faShareAlt} size="xs" flip='horizontal' />
+              <FontAwesomeIcon icon={faTrashAlt} size="xs" />
             </IconButton>
           </Tooltip>
         :null}
@@ -351,7 +381,7 @@ class WorkspaceFunc extends Component {
         >
           {this.state.file ?
             <div style={{ marginTop: '10px' }}>
-              <TextField autoFocus placeholder={this.state.saveXml ? 'Dateiname' : 'Projektname'} value={this.state.name} onChange={this.setFileName} style={{ marginRight: '10px' }} />
+              <TextField autoFocus placeholder={this.state.saveXml ? 'Dateiname' : 'Projekttitel'} value={this.state.name} onChange={this.setFileName} style={{ marginRight: '10px' }} />
               <Button disabled={!this.state.name} variant='contained' color='primary' onClick={() => { this.state.saveFile ? this.state.file === 'xml' ? this.downloadXmlFile() : this.getSvg() : this.renameWorkspace(); this.toggleDialog(); }}>Eingabe</Button>
             </div>
           : this.state.share ?
@@ -389,6 +419,7 @@ WorkspaceFunc.propTypes = {
   onChangeCode: PropTypes.func.isRequired,
   workspaceName: PropTypes.func.isRequired,
   updateProject: PropTypes.func.isRequired,
+  deleteProject: PropTypes.func.isRequired,
   arduino: PropTypes.string.isRequired,
   xml: PropTypes.string.isRequired,
   name: PropTypes.string,
@@ -404,4 +435,4 @@ const mapStateToProps = state => ({
   message: state.message
 });
 
-export default connect(mapStateToProps, { clearStats, onChangeCode, workspaceName, updateProject })(withStyles(styles, { withTheme: true })(withWidth()(withRouter(WorkspaceFunc))));
+export default connect(mapStateToProps, { clearStats, onChangeCode, workspaceName, updateProject, deleteProject })(withStyles(styles, { withTheme: true })(withWidth()(withRouter(WorkspaceFunc))));
