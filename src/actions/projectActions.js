@@ -60,9 +60,33 @@ export const getProjects = (type) => (dispatch) => {
     });
 };
 
+export const updateProject = () => (dispatch, getState) => {
+  var workspace = getState().workspace;
+  var body = {
+    xml: workspace.code.xml,
+    title: workspace.name
+  }
+  var id = getState().project.projects[0]._id;
+  axios.put(`${process.env.REACT_APP_BLOCKLY_API}/project/${id}`, body)
+    .then(res => {
+      var project = res.data.project;
+      dispatch({
+        type: GET_PROJECT,
+        payload: project
+      });
+      dispatch(returnSuccess(res.data.message, res.status, 'PROJECT_UPDATE_SUCCESS'));
+    })
+    .catch(err => {
+      if(err.response){
+        dispatch(returnErrors(err.response.data.message, err.response.status, 'PROJECT_UPDATE_FAIL'));
+      }
+    });
+}
+
 export const resetProject = () => (dispatch) => {
   dispatch({
     type: GET_PROJECTS,
     payload: []
   });
+  dispatch(setType(''));
 };
