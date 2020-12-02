@@ -99,7 +99,7 @@ class Compile extends Component {
       this.download();
     }
     else {
-      this.setState({ file: true, open: true, title: 'Blöcke kompilieren', content: 'Bitte gib einen Namen für die Bennenung des zu kompilierenden Programms ein und bestätige diesen mit einem Klick auf \'Eingabe\'.' });
+      this.setState({ file: true, open: true, title: 'Projekt kompilieren', content: 'Bitte gib einen Namen für die Bennenung des zu kompilierenden Programms ein und bestätige diesen mit einem Klick auf \'Eingabe\'.' });
     }
   }
 
@@ -111,7 +111,7 @@ class Compile extends Component {
     return (
       <div style={{}}>
         {this.props.iconButton ?
-          <Tooltip title='Blöcke kompilieren' arrow style={{ marginRight: '5px' }}>
+          <Tooltip title='Projekt kompilieren' arrow style={{ marginRight: '5px' }}>
             <IconButton
               className={this.props.classes.button}
               onClick={() => this.compile()}

@@ -5,6 +5,7 @@ import { clearStats, onChangeCode, workspaceName } from '../actions/workspaceAct
 
 import * as Blockly from 'blockly/core';
 
+import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import { saveAs } from 'file-saver';
 
@@ -14,6 +15,7 @@ import { initialXml } from './Blockly/initialXml.js';
 import Compile from './Compile';
 import SolutionCheck from './Tutorial/SolutionCheck';
 import Snackbar from './Snackbar';
+import Dialog from './Dialog';
 
 import { Link } from 'react-router-dom';
 
@@ -25,17 +27,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-
-import Dialog from './Dialog';
-// import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-
-
-
-import { faPen, faSave, faUpload, faCamera, faShare, faShareAlt, faCopy } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faSave, faUpload, faFileDownload, faCamera, faShare, faShareAlt, faCopy } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const styles = (theme) => ({
@@ -101,7 +93,23 @@ class WorkspaceFunc extends Component {
     this.setState({ open: !this.state, share: false, file: false, saveFile: false, title: '', content: '' });
   }
 
-  saveXmlFile = () => {
+  saveProject = () => {
+    var body = {
+      xml: this.props.xml,
+      title: this.props.name
+    };
+    axios.post(`${process.env.REACT_APP_BLOCKLY_API}/project`, body)
+      .then(res => {
+        var project = res.data.project;
+        this.props.history.push(`/project/${project._id}`);
+      })
+      .catch(err => {
+        this.setState({ snackbar: true, key: Date.now(), message: `Fehler beim Speichern des Projektes. Versuche es noch einmal.`, type: 'error' });
+        window.scrollTo(0, 0);
+      });
+  }
+
+  downloadXmlFile = () => {
     var code = this.props.xml;
     this.toggleDialog();
     var fileName = detectWhitespacesAndReturnReadableResult(this.state.name);
@@ -173,10 +181,10 @@ class WorkspaceFunc extends Component {
   createFileName = (filetype) => {
     this.setState({ file: filetype }, () => {
       if (this.state.name) {
-        this.state.file === 'xml' ? this.saveXmlFile() : this.getSvg()
+        this.state.file === 'xml' ? this.downloadXmlFile() : this.getSvg()
       }
       else {
-        this.setState({ saveFile: true, file: filetype, open: true, title: this.state.file === 'xml' ? 'Blöcke speichern' : 'Screenshot erstellen', content: `Bitte gib einen Namen für die Bennenung der ${this.state.file === 'xml' ? 'XML' : 'SVG'}-Datei ein und bestätige diesen mit einem Klick auf 'Eingabe'.` });
+        this.setState({ saveFile: true, file: filetype, open: true, title: this.state.file === 'xml' ? 'Projekt herunterladen' : 'Screenshot erstellen', content: `Bitte gib einen Namen für die Bennenung der ${this.state.file === 'xml' ? 'XML' : 'SVG'}-Datei ein und bestätige diesen mit einem Klick auf 'Eingabe'.` });
       }
     });
   }
@@ -247,7 +255,7 @@ class WorkspaceFunc extends Component {
     return (
       <div style={{ width: 'max-content', display: 'flex' }}>
         {!this.props.assessment ?
-          <Tooltip title={`Name des Projekts${this.props.name ? `: ${this.props.name}` : ''}`} arrow style={{ marginRight: '5px' }}>
+          <Tooltip title={`Name des Projektes${this.props.name ? `: ${this.props.name}` : ''}`} arrow style={{ marginRight: '5px' }}>
             <div className={this.props.classes.workspaceName} onClick={() => { this.setState({ file: true, open: true, saveFile: false, title: 'Projekt benennen', content: 'Bitte gib einen Namen für das Projekt ein und bestätige diesen mit einem Klick auf \'Eingabe\'.' }) }}>
               {this.props.name && !isWidthDown('xs', this.props.width) ? <Typography style={{ margin: 'auto -3px auto 12px' }}>{this.props.name}</Typography> : null}
               <div style={{ width: '40px', display: 'flex' }}>
@@ -257,12 +265,20 @@ class WorkspaceFunc extends Component {
           </Tooltip>
           : null}
         {this.props.assessment ? <SolutionCheck /> : <Compile iconButton />}
-        <Tooltip title='Blöcke speichern' arrow style={{ marginRight: '5px' }}>
+        <Tooltip title='Projekt speichern' arrow style={{ marginRight: '5px' }}>
+          <IconButton
+            className={this.props.classes.button}
+            onClick={() => this.saveProject()}
+          >
+            <FontAwesomeIcon icon={faSave} size="xs" />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title='Projekt herunterladen' arrow style={{ marginRight: '5px' }}>
           <IconButton
             className={this.props.classes.button}
             onClick={() => { this.createFileName('xml'); }}
           >
-            <FontAwesomeIcon icon={faSave} size="xs" />
+            <FontAwesomeIcon icon={faFileDownload} size="xs" />
           </IconButton>
         </Tooltip>
         {!this.props.assessment?
@@ -275,7 +291,7 @@ class WorkspaceFunc extends Component {
               type="file"
             />
             <label htmlFor="open-blocks">
-              <Tooltip title='Blöcke öffnen' arrow style={{ marginRight: '5px' }}>
+              <Tooltip title='Projekt öffnen' arrow style={{ marginRight: '5px' }}>
                 <div className={this.props.classes.button} style={{
                   borderRadius: '50%', cursor: 'pointer', display: 'table-cell',
                   verticalAlign: 'middle',
@@ -306,7 +322,7 @@ class WorkspaceFunc extends Component {
           </IconButton>
         </Tooltip>
         {!this.props.assessment?
-          <Tooltip title='Blöcke teilen' arrow>
+          <Tooltip title='Projekt teilen' arrow>
             <IconButton
               className={this.props.classes.button}
               onClick={() => this.shareBlocks()}
@@ -327,7 +343,7 @@ class WorkspaceFunc extends Component {
           {this.state.file ?
             <div style={{ marginTop: '10px' }}>
               <TextField autoFocus placeholder={this.state.saveXml ? 'Dateiname' : 'Projektname'} value={this.state.name} onChange={this.setFileName} style={{ marginRight: '10px' }} />
-              <Button disabled={!this.state.name} variant='contained' color='primary' onClick={() => { this.state.saveFile ? this.state.file === 'xml' ? this.saveXmlFile() : this.getSvg() : this.renameWorkspace(); this.toggleDialog(); }}>Eingabe</Button>
+              <Button disabled={!this.state.name} variant='contained' color='primary' onClick={() => { this.state.saveFile ? this.state.file === 'xml' ? this.downloadXmlFile() : this.getSvg() : this.renameWorkspace(); this.toggleDialog(); }}>Eingabe</Button>
             </div>
           : this.state.share ?
             <div style={{ marginTop: '10px' }}>
@@ -374,4 +390,4 @@ const mapStateToProps = state => ({
   name: state.workspace.name
 });
 
-export default connect(mapStateToProps, { clearStats, onChangeCode, workspaceName })(withStyles(styles, { withTheme: true })(withWidth()(WorkspaceFunc)));
+export default connect(mapStateToProps, { clearStats, onChangeCode, workspaceName })(withStyles(styles, { withTheme: true })(withWidth()(withRouter(WorkspaceFunc))));
