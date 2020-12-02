@@ -40,8 +40,11 @@ class Project extends Component {
           this.props.returnErrors('', 404, 'GET_SHARE_FAIL');
         }
       }
-      if(this.props.message.id === 'GET_PROJECT_SUCCESS'){
+      else if(this.props.message.id === 'GET_PROJECT_SUCCESS'){
         this.props.workspaceName(this.props.project.title);
+      }
+      else if(this.props.message.id === 'PROJECT_DELETE_SUCCESS' || this.props.message.id === 'GALLERY_DELETE_SUCCESS'){
+        this.props.history.push(`/${this.props.type}`);
       }
     }
   }

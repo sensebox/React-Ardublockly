@@ -1,4 +1,4 @@
-import { PROJECT_PROGRESS, GET_PROJECT, GET_PROJECTS, PROJECT_TYPE } from './types';
+import { PROJECT_PROGRESS, GET_PROJECT, GET_PROJECTS, PROJECT_TYPE, PROJECT_DESCRIPTION } from './types';
 
 import axios from 'axios';
 import { workspaceName } from './workspaceActions';
@@ -8,6 +8,13 @@ export const setType = (type) => (dispatch) => {
   dispatch({
     type: PROJECT_TYPE,
     payload: type
+  });
+};
+
+export const setDescription = (description) => (dispatch) => {
+  dispatch({
+    type: PROJECT_DESCRIPTION,
+    payload: description
   });
 };
 
@@ -22,6 +29,10 @@ export const getProject = (type, id) => (dispatch) => {
         dispatch({
           type: GET_PROJECT,
           payload: project
+        });
+        dispatch({
+          type: PROJECT_DESCRIPTION,
+          payload: project.description
         });
         dispatch({type: PROJECT_PROGRESS});
         dispatch(returnSuccess(res.data.message, res.status, 'GET_PROJECT_SUCCESS'));
@@ -66,15 +77,24 @@ export const updateProject = () => (dispatch, getState) => {
     xml: workspace.code.xml,
     title: workspace.name
   }
-  var id = getState().project.projects[0]._id;
-  axios.put(`${process.env.REACT_APP_BLOCKLY_API}/project/${id}`, body)
+  var project = getState().project;
+  var id = project.projects[0]._id;
+  var type = project.type;
+  if(type==='gallery'){
+    body.description = project.description;
+  }
+  axios.put(`${process.env.REACT_APP_BLOCKLY_API}/${type}/${id}`, body)
     .then(res => {
-      var project = res.data.project;
+      var project = res.data[type];
       dispatch({
         type: GET_PROJECT,
         payload: project
       });
-      dispatch(returnSuccess(res.data.message, res.status, 'PROJECT_UPDATE_SUCCESS'));
+      if(type === 'project'){
+        dispatch(returnSuccess(res.data.message, res.status, 'PROJECT_UPDATE_SUCCESS'));
+      } else {
+        dispatch(returnSuccess(res.data.message, res.status, 'GALLERY_UPDATE_SUCCESS'));
+      }
     })
     .catch(err => {
       if(err.response){
@@ -110,4 +130,5 @@ export const resetProject = () => (dispatch) => {
     payload: []
   });
   dispatch(setType(''));
+  dispatch(setDescription(''));
 };

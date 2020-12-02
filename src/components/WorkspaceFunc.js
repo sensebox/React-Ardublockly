@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { clearStats, onChangeCode, workspaceName } from '../actions/workspaceActions';
-import { updateProject, deleteProject } from '../actions/projectActions';
+import { updateProject, deleteProject, setDescription } from '../actions/projectActions';
 
 import * as Blockly from 'blockly/core';
 
@@ -86,6 +86,7 @@ class WorkspaceFunc extends Component {
       saveFile: false,
       share: false,
       name: props.name,
+      description: props.description,
       snackbar: false,
       type: '',
       key: '',
@@ -101,6 +102,9 @@ class WorkspaceFunc extends Component {
     if(this.props.message !== props.message){
       if(this.props.message.id === 'PROJECT_UPDATE_SUCCESS'){
         this.setState({ snackbar: true, key: Date.now(), message: `Das Projekt wurde erfolgreich aktualisiert.`, type: 'success' });
+      }
+      if(this.props.message.id === 'GALLERY_UPDATE_SUCCESS'){
+        this.setState({ snackbar: true, key: Date.now(), message: `Das Galerie-Projekt wurde erfolgreich aktualisiert.`, type: 'success' });
       }
       else if(this.props.message.id === 'PROJECT_DELETE_SUCCESS'){
         this.props.history.push(`/${this.props.projectType}`);
@@ -218,6 +222,10 @@ class WorkspaceFunc extends Component {
     this.setState({ name: e.target.value });
   }
 
+  setDescription = (e) => {
+    this.setState({ description: e.target.value });
+  }
+
   uploadXmlFile = (xmlFile) => {
     if (xmlFile.type !== 'text/xml') {
       this.setState({ open: true, file: false, title: 'Unzulässiger Dateityp', content: 'Die übergebene Datei entsprach nicht dem geforderten Format. Es sind nur XML-Dateien zulässig.' });
@@ -255,7 +263,10 @@ class WorkspaceFunc extends Component {
   renameWorkspace = () => {
     this.props.workspaceName(this.state.name);
     this.toggleDialog();
-    if(this.props.projectType === 'project'){
+    if(this.props.projectType === 'project' || this.props.projectType === 'gallery'){
+      if(this.props.projectType === 'gallery'){
+        this.props.setDescription(this.state.description);
+      }
       this.props.updateProject();
     } else {
       this.setState({ snackbar: true, type: 'success', key: Date.now(), message: `Das Projekt wurde erfolgreich in '${this.state.name}' umbenannt.` });
@@ -285,7 +296,7 @@ class WorkspaceFunc extends Component {
       <div style={{ width: 'max-content', display: 'flex' }}>
         {!this.props.assessment ?
           <Tooltip title={`Titel des Projektes${this.props.name ? `: ${this.props.name}` : ''}`} arrow style={{ marginRight: '5px' }}>
-            <div className={this.props.classes.workspaceName} onClick={() => { this.setState({ file: true, open: true, saveFile: false, title: 'Projekt benennen', content: 'Bitte gib einen Namen für das Projekt ein und bestätige diesen mit einem Klick auf \'Eingabe\'.' }) }}>
+            <div className={this.props.classes.workspaceName} onClick={() => { this.setState({ file: true, open: true, saveFile: false, title: this.props.projectType === 'gallery' ? 'Projektdaten eintragen':'Projekt benennen', content: this.props.projectType === 'gallery' ? 'Bitte gib einen Titel und eine Beschreibung für das Galerie-Projekt ein und bestätige die Angaben mit einem Klick auf \'Eingabe\'.':'Bitte gib einen Namen für das Projekt ein und bestätige diesen mit einem Klick auf \'Eingabe\'.' }) }}>
               {this.props.name && !isWidthDown(this.props.projectType === 'project' || this.props.projectType === 'gallery' ? 'xl':'xs', this.props.width) ? <Typography style={{ margin: 'auto -3px auto 12px' }}>{this.props.name}</Typography> : null}
               <div style={{ width: '40px', display: 'flex' }}>
                 <FontAwesomeIcon icon={faPen} style={{ height: '18px', width: '18px', margin: 'auto' }} />
@@ -381,7 +392,12 @@ class WorkspaceFunc extends Component {
         >
           {this.state.file ?
             <div style={{ marginTop: '10px' }}>
-              <TextField autoFocus placeholder={this.state.saveXml ? 'Dateiname' : 'Projekttitel'} value={this.state.name} onChange={this.setFileName} style={{ marginRight: '10px' }} />
+              {this.props.projectType === 'gallery' ?
+                <div>
+                  <TextField autoFocus placeholder={this.state.saveXml ? 'Dateiname' : 'Projekttitel'} value={this.state.name} onChange={this.setFileName} style={{marginBottom: '10px'}}/>
+                  <TextField fullWidth placeholder={'Projektbeschreibung'} value={this.state.description} onChange={this.setDescription} style={{ marginBottom: '10px' }} />
+                </div>
+              : <TextField autoFocus placeholder={this.state.saveXml ? 'Dateiname' : 'Projekttitel'} value={this.state.name} onChange={this.setFileName} style={{ marginRight: '10px' }} />}
               <Button disabled={!this.state.name} variant='contained' color='primary' onClick={() => { this.state.saveFile ? this.state.file === 'xml' ? this.downloadXmlFile() : this.getSvg() : this.renameWorkspace(); this.toggleDialog(); }}>Eingabe</Button>
             </div>
           : this.state.share ?
@@ -420,9 +436,11 @@ WorkspaceFunc.propTypes = {
   workspaceName: PropTypes.func.isRequired,
   updateProject: PropTypes.func.isRequired,
   deleteProject: PropTypes.func.isRequired,
+  setDescription: PropTypes.func.isRequired,
   arduino: PropTypes.string.isRequired,
   xml: PropTypes.string.isRequired,
-  name: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
   projectType: PropTypes.string.isRequired,
   message: PropTypes.object.isRequired
 };
@@ -431,8 +449,9 @@ const mapStateToProps = state => ({
   arduino: state.workspace.code.arduino,
   xml: state.workspace.code.xml,
   name: state.workspace.name,
+  description: state.project.description,
   projectType: state.project.type,
   message: state.message
 });
 
-export default connect(mapStateToProps, { clearStats, onChangeCode, workspaceName, updateProject, deleteProject })(withStyles(styles, { withTheme: true })(withWidth()(withRouter(WorkspaceFunc))));
+export default connect(mapStateToProps, { clearStats, onChangeCode, workspaceName, updateProject, deleteProject, setDescription })(withStyles(styles, { withTheme: true })(withWidth()(withRouter(WorkspaceFunc))));
