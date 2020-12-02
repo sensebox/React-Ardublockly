@@ -11,12 +11,24 @@ import Breadcrumbs from '../Breadcrumbs';
 import BlocklyWindow from '../Blockly/BlocklyWindow';
 import Snackbar from '../Snackbar';
 
+import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
+
+const styles = (theme) => ({
+  link: {
+    color: theme.palette.primary.main,
+    textDecoration: 'none',
+    '&:hover': {
+      color: theme.palette.primary.main,
+      textDecoration: 'underline'
+    }
+  }
+});
 
 
 class ProjectHome extends Component {
@@ -68,26 +80,37 @@ class ProjectHome extends Component {
             <CircularProgress color="primary" />
           </Backdrop>
         :
-        <Grid container spacing={2}>
-          {this.props.projects.map((project, i) => {
-            return (
-              <Grid item xs={12} sm={6} md={4} xl={3} key={i}>
-                <Link to={`/${data === 'Projekte' ? 'project' : 'gallery'}/${project._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                  <Paper style={{ padding: '1rem', position: 'relative', overflow: 'hidden' }}>
-                    <h3 style={{marginTop: 0}}>{project.title}</h3>
-                    <Divider style={{marginTop: '1rem', marginBottom: '10px'}}/>
-                    <BlocklyWindow
-                      svg
-                      blockDisabled
-                      initialXml={project.xml}
-                    />
-                    <Typography variant='body2' style={{fontStyle: 'italic', margin: 0, marginTop: '-30px'}}>{project.description}</Typography>
-                  </Paper>
-                </Link>
+          <div>
+            {this.props.projects.length > 0 ?
+              <Grid container spacing={2}>
+                {this.props.projects.map((project, i) => {
+                  return (
+                    <Grid item xs={12} sm={6} md={4} xl={3} key={i}>
+                      <Link to={`/${data === 'Projekte' ? 'project' : 'gallery'}/${project._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                        <Paper style={{ padding: '1rem', position: 'relative', overflow: 'hidden' }}>
+                          <h3 style={{marginTop: 0}}>{project.title}</h3>
+                          <Divider style={{marginTop: '1rem', marginBottom: '10px'}}/>
+                          <BlocklyWindow
+                            svg
+                            blockDisabled
+                            initialXml={project.xml}
+                          />
+                          <Typography variant='body2' style={{fontStyle: 'italic', margin: 0, marginTop: '-30px'}}>{project.description}</Typography>
+                        </Paper>
+                      </Link>
+                    </Grid>
+                  )
+                })}
               </Grid>
-            )
-          })}
-        </Grid>}
+            : <div>
+                <Typography style={{marginBottom: '10px'}}>Es sind aktuell keine Projekte vorhanden.</Typography>
+                {this.props.match.path.replace('/','') === 'project' ?
+                  <Typography>Erstelle jetzt dein <Link to={'/'} className={this.props.classes.link}>eigenes Projekt</Link> oder lasse dich von Projektbeispielen in der <Link to={'/gallery'} className={this.props.classes.link}>Galerie</Link> inspirieren.</Typography>
+                : null}
+              </div>
+            }
+          </div>
+        }
         <Snackbar
           open={this.state.snackbar}
           message={this.state.message}
@@ -115,4 +138,4 @@ const mapStateToProps = state => ({
 });
 
 
-export default connect(mapStateToProps, { getProjects, resetProject, clearMessages })(ProjectHome);
+export default connect(mapStateToProps, { getProjects, resetProject, clearMessages })(withStyles(styles, { withTheme: true })(ProjectHome));
