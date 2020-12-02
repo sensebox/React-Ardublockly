@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { getProjects, resetProject } from '../../actions/projectActions';
 
 import axios from 'axios';
 import { Link } from 'react-router-dom';
@@ -14,31 +17,20 @@ import Typography from '@material-ui/core/Typography';
 
 class ProjectHome extends Component {
 
-  state = {
-    projects: []
-  }
-
   componentDidMount() {
-    this.getProjects();
+    this.props.getProjects(this.props.match.path.replace('/',''));
   }
 
   componentDidUpdate(props) {
     if(props.match.path !== this.props.match.path){
-      this.setState({projects: []});
-      this.getProjects();
+      this.props.getProjects(this.props.match.path.replace('/',''));
     }
   }
 
-  getProjects = () => {
-    var data = this.props.match.path === '/project' ? 'projects' : 'galleries';
-    axios.get(`${process.env.REACT_APP_BLOCKLY_API}${this.props.match.path}`)
-      .then(res => {
-        this.setState({ projects: res.data[data] });
-      })
-      .catch(err => {
-        // TODO:
-      });
+  componentWillUnmount() {
+    this.props.resetProject();
   }
+
 
   render() {
     var data = this.props.match.path === '/project' ? 'Projekte' : 'Galerie';
@@ -47,8 +39,9 @@ class ProjectHome extends Component {
         <Breadcrumbs content={[{ link: this.props.match.path, title: data }]} />
 
         <h1>{data}</h1>
+        {this.props.progress ? null :
         <Grid container spacing={2}>
-          {this.state.projects.map((project, i) => {
+          {this.props.projects.map((project, i) => {
             return (
               <Grid item xs={12} sm={6} md={4} xl={3} key={i}>
                 <Link to={`/${data === 'Projekte' ? 'project' : 'gallery'}/${project._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -66,10 +59,23 @@ class ProjectHome extends Component {
               </Grid>
             )
           })}
-        </Grid>
+        </Grid>}
       </div>
     );
   };
 }
 
-export default ProjectHome;
+ProjectHome.propTypes = {
+  getProjects: PropTypes.func.isRequired,
+  resetProject: PropTypes.func.isRequired,
+  projects: PropTypes.array.isRequired,
+  progress: PropTypes.bool.isRequired
+};
+
+const mapStateToProps = state => ({
+  projects: state.project.projects,
+  progress: state.project.progress
+});
+
+
+export default connect(mapStateToProps, { getProjects, resetProject })(ProjectHome);
