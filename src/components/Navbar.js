@@ -53,7 +53,7 @@ class Navbar extends Component {
       <div>
         <AppBar
           position="relative"
-          style={{ height: '50px', marginBottom: this.props.isLoading ? '0px' : '30px', boxShadow: this.props.isLoading ? 'none' : '0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12)' }}
+          style={{ height: '50px', marginBottom: this.props.tutorialIsLoading || this.props.projectIsLoading ? '0px' : '30px', boxShadow: this.props.tutorialIsLoading || this.props.projectIsLoading ? 'none' : '0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12)' }}
           classes={{ root: this.props.classes.appBarColor }}
         >
           <Toolbar style={{ height: '50px', minHeight: '50px', padding: 0, color: 'white' }}>
@@ -102,7 +102,7 @@ class Navbar extends Component {
             {[{ text: 'Tutorials', icon: faChalkboardTeacher, link: "/tutorial" },
               { text: 'Tutorial-Builder', icon: faTools, link: "/tutorial/builder" },
               { text: 'Galerie', icon: faLightbulb, link: "/gallery" },
-              { text: 'Projekte', icon: faLayerGroup, link: "/project" }, 
+              { text: 'Projekte', icon: faLayerGroup, link: "/project" },
               { text: 'Einstellungen', icon: faCog, link: "/settings" }].map((item, index) => (
               <Link to={item.link} key={index} style={{ textDecoration: 'none', color: 'inherit' }}>
                 <ListItem button onClick={this.toggleDrawer}>
@@ -122,7 +122,7 @@ class Navbar extends Component {
             ))}
           </List> */}
         </Drawer>
-        {this.props.isLoading ?
+        {this.props.tutorialIsLoading || this.props.projectIsLoading ?
           <LinearProgress style={{marginBottom: '30px', boxShadow: '0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12)'}}/>
         : null}
       </div>
@@ -131,11 +131,13 @@ class Navbar extends Component {
 }
 
 Navbar.propTypes = {
-  isLoading: PropTypes.bool.isRequired
+  tutorialIsLoading: PropTypes.bool.isRequired,
+  projectIsLoading: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
-  isLoading: state.tutorial.progress,
+  tutorialIsLoading: state.tutorial.progress,
+  projectIsLoading: state.project.progress
 });
 
 export default connect(mapStateToProps, null)(withStyles(styles, { withTheme: true })(withRouter(Navbar)));

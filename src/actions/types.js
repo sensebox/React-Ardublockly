@@ -37,3 +37,10 @@ export const VISIT = 'VISIT';
 export const GET_ERRORS = 'GET_ERRORS';
 export const GET_SUCCESS = 'GET_SUCCESS';
 export const CLEAR_MESSAGES = 'CLEAR_MESSAGES';
+
+
+// projects: share, gallery, project
+export const PROJECT_PROGRESS = 'PROJECT_PROGRESS';
+export const GET_PROJECT = 'GET_PROJECT';
+export const GET_PROJECTS = 'GET_PROJECTS';
+export const PROJECT_TYPE = 'PROJECT_TYPE';
