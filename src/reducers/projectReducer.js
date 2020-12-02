@@ -1,8 +1,9 @@
-import { PROJECT_PROGRESS, GET_PROJECT, GET_PROJECTS, PROJECT_TYPE } from '../actions/types';
+import { PROJECT_PROGRESS, GET_PROJECT, GET_PROJECTS, PROJECT_TYPE, PROJECT_DESCRIPTION } from '../actions/types';
 
 const initialState = {
   projects: [],
   type: '',
+  description: '',
   progress: false
 };
 
@@ -27,6 +28,11 @@ export default function (state = initialState, action) {
       return {
         ...state,
         type: action.payload
+      }
+    case PROJECT_DESCRIPTION:
+      return {
+        ...state,
+        description: action.payload
       }
     default:
       return state;
