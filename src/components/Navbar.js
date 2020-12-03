@@ -101,16 +101,21 @@ class Navbar extends Component {
           </div>
           <List>
             {[{ text: 'Tutorials', icon: faChalkboardTeacher, link: "/tutorial" },
-              { text: 'Tutorial-Builder', icon: faTools, link: "/tutorial/builder" },
+              { text: 'Tutorial-Builder', icon: faTools, link: "/tutorial/builder", restriction: this.props.user && this.props.user.blocklyRole !== 'user' && this.props.isAuthenticated},
               { text: 'Galerie', icon: faLightbulb, link: "/gallery" },
-              { text: 'Projekte', icon: faLayerGroup, link: "/project" }].map((item, index) => (
-              <Link to={item.link} key={index} style={{ textDecoration: 'none', color: 'inherit' }}>
-                <ListItem button onClick={this.toggleDrawer}>
-                  <ListItemIcon><FontAwesomeIcon icon={item.icon} /></ListItemIcon>
-                  <ListItemText primary={item.text} />
-                </ListItem>
-              </Link>
-            ))}
+              { text: 'Projekte', icon: faLayerGroup, link: "/project", restriction: this.props.isAuthenticated }].map((item, index) => {
+                if(item.restriction || Object.keys(item).filter(attribute => attribute === 'restriction').length === 0){
+                  return(
+                    <Link to={item.link} key={index} style={{ textDecoration: 'none', color: 'inherit' }}>
+                      <ListItem button onClick={this.toggleDrawer}>
+                        <ListItemIcon><FontAwesomeIcon icon={item.icon} /></ListItemIcon>
+                        <ListItemText primary={item.text} />
+                      </ListItem>
+                    </Link>
+                  );
+                }
+              }
+            )}
           </List>
           <Divider classes={{ root: this.props.classes.appBarColor }} style={{ marginTop: 'auto' }} />
           <List>
@@ -144,13 +149,15 @@ class Navbar extends Component {
 Navbar.propTypes = {
   tutorialIsLoading: PropTypes.bool.isRequired,
   projectIsLoading: PropTypes.bool.isRequired,
-  isAuthenticated: PropTypes.bool.isRequired
+  isAuthenticated: PropTypes.bool.isRequired,
+  user: PropTypes.object
 };
 
 const mapStateToProps = state => ({
   tutorialIsLoading: state.tutorial.progress,
   projectIsLoading: state.project.progress,
-  isAuthenticated: state.auth.isAuthenticated
+  isAuthenticated: state.auth.isAuthenticated,
+  userRole: state.auth.user
 });
 
 export default connect(mapStateToProps, { logout })(withStyles(styles, { withTheme: true })(withRouter(Navbar)));

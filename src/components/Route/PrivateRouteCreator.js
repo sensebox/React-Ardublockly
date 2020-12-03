@@ -12,13 +12,15 @@ class PrivateRoute extends Component {
       <Route
         {...this.props.exact}
         render={({ location }) =>
-          this.props.isAuthenticated ? (
+          this.props.isAuthenticated &&
+          this.props.user &&
+          this.props.user.blocklyRole !== 'user' ? (
             this.props.children
           ) : (()=>{
             return (
               <Redirect
                 to={{
-                  pathname: "/user/login",
+                  pathname: "/",
                   state: { from: location }
                 }}
               />
@@ -31,11 +33,13 @@ class PrivateRoute extends Component {
 }
 
 PrivateRoute.propTypes = {
-  isAuthenticated: PropTypes.bool.isRequired
+  isAuthenticated: PropTypes.bool.isRequired,
+  user: PropTypes.object
 };
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
+  isAuthenticated: state.auth.isAuthenticated,
+  userRole: state.auth.user
 });
 
 export default connect(mapStateToProps, null)(withRouter(PrivateRoute));

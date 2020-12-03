@@ -6,6 +6,9 @@ import { visitPage } from '../../actions/generalActions';
 import { Route, Switch, withRouter } from 'react-router-dom';
 
 import PrivateRoute from './PrivateRoute';
+import PrivateRouteCreator from './PrivateRouteCreator';
+import IsLoggedRoute from './IsLoggedRoute';
+
 import Home from '../Home';
 import Tutorial from '../Tutorial/Tutorial';
 import TutorialHome from '../Tutorial/TutorialHome';
@@ -32,9 +35,9 @@ class Routes extends Component {
           <Route path="/" exact component={Home} />
           // Tutorials
           <Route path="/tutorial" exact component={TutorialHome} />
-          <PrivateRoute path="/tutorial/builder" exact>
+          <PrivateRouteCreator path="/tutorial/builder" exact>
             <Builder/>
-          </PrivateRoute>
+          </PrivateRouteCreator>
           <Route path="/tutorial/:tutorialId" exact component={Tutorial} />
           // Sharing
           <Route path="/share/:shareId" exact component={Project} />
@@ -49,7 +52,9 @@ class Routes extends Component {
             <Project/>
           </PrivateRoute>
           // User
-          <Route path="/user/login" exact component={Login} />
+          <IsLoggedRoute path="/user/login" exact>
+            <Login />
+          </IsLoggedRoute>
           // settings
           <Route path="/settings" exact component={Settings} />
           // privacy
