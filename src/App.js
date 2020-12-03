@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import { BrowserRouter as Router } from 'react-router-dom';
 import { createBrowserHistory } from "history";
 
 import { Provider } from 'react-redux';
 import store from './store';
+import { loadUser } from './actions/authActions';
 
 import './App.css';
 
@@ -27,24 +28,29 @@ const theme = createMuiTheme({
   }
 });
 
-const customHistory = createBrowserHistory();
+class App extends Component {
 
+  componentDidMount(){
+    store.dispatch(loadUser());
+  }
 
-function App() {
-  return (
-    <ThemeProvider theme={theme}>
-      <Provider store={store}>
-        <Router history={customHistory}>
-          <div className="wrapper">
-            <Navbar />
-            <Routes />
-            <Cookies />
-            <Footer />
-          </div>
-        </Router>
-      </Provider>
-    </ThemeProvider>
-  );
+  render() {
+    const customHistory = createBrowserHistory();
+    return (
+      <ThemeProvider theme={theme}>
+        <Provider store={store}>
+          <Router history={customHistory}>
+            <div className="wrapper">
+              <Navbar />
+              <Routes />
+              <Cookies />
+              <Footer />
+            </div>
+          </Router>
+        </Provider>
+      </ThemeProvider>
+    );
+  }
 }
 
 export default App;

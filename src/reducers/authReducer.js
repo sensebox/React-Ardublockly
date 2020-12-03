@@ -30,7 +30,7 @@ export default function(state = initialState, action){
       console.log(action.payload);
       return {
         ...state,
-        user: action.payload.data.user,
+        user: action.payload.user,
         token: action.payload.token,
         refreshToken: action.payload.refreshToken,
         isAuthenticated: true,

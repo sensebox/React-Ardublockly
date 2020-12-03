@@ -4,36 +4,36 @@ import axios from 'axios';
 import { returnErrors, returnSuccess } from './messageActions'
 
 
-// // Check token & load user
-// export const loadUser = () => (dispatch) => {
-//   // user loading
-//   dispatch({
-//     type: USER_LOADING
-//   });
-//   const config = {
-//     success: res => {
-//       dispatch({
-//         type: USER_LOADED,
-//         payload: res.data.user
-//       });
-//     },
-//     error: err => {
-//       if(err.response){
-//         dispatch(returnErrors(err.response.data.message, err.response.status));
-//       }
-//       dispatch({
-//         type: AUTH_ERROR
-//       });
-//     }
-//   };
-//   axios.get('/api/v1/user/me', config, dispatch(authInterceptor()))
-//     .then(res => {
-//       res.config.success(res);
-//     })
-//     .catch(err => {
-//       err.config.error(err);
-//     });
-// };
+// Check token & load user
+export const loadUser = () => (dispatch) => {
+  // user loading
+  dispatch({
+    type: USER_LOADING
+  });
+  const config = {
+    success: res => {
+      dispatch({
+        type: USER_LOADED,
+        payload: res.data.user
+      });
+    },
+    error: err => {
+      if(err.response){
+        dispatch(returnErrors(err.response.data.message, err.response.status));
+      }
+      dispatch({
+        type: AUTH_ERROR
+      });
+    }
+  };
+  axios.get(`${process.env.REACT_APP_BLOCKLY_API}/user`, config, dispatch(authInterceptor()))
+    .then(res => {
+      res.config.success(res);
+    })
+    .catch(err => {
+      err.config.error(err);
+    });
+};
 
 
 var logoutTimerId;
@@ -49,7 +49,7 @@ export const login = ({ email, password }) => (dispatch) => {
   };
   // Request Body
   const body = JSON.stringify({ email, password });
-  axios.post('https://api.opensensemap.org/users/sign-in', body, config)
+  axios.post(`${process.env.REACT_APP_BLOCKLY_API}/user`, body, config)
   .then(res => {
     // Logout automatically if refreshToken "expired"
     const logoutTimer = () => setTimeout(
@@ -92,7 +92,7 @@ export const logout = () => (dispatch) => {
       clearTimeout(logoutTimerId);
     }
   };
-  axios.post('https://api.opensensemap.org/users/sign-out', {}, config, dispatch(authInterceptor()))
+  axios.post('https://api.opensensemap.org/users/sign-out', {}, config)
   .then(res => {
     res.config.success(res);
   })
@@ -140,7 +140,7 @@ export const authInterceptor = () => (dispatch, getState) => {
           originalRequest._retry = true;
           const refreshToken = getState().auth.refreshToken;
           // request to refresh the token, in request-body is the refreshToken
-          axios.post('/api/v1/user/token/refresh', {"refreshToken": refreshToken})
+          axios.post('https://api.opensensemap.org/users/refresh-auth', {"token": refreshToken})
                .then(res => {
                  if (res.status === 200) {
                    clearTimeout(logoutTimerId);
