@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { logout } from '../actions/authActions';
 
 import senseboxLogo from './sensebox_logo.svg';
 
@@ -20,7 +21,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
-import { faBars, faChevronLeft, faLayerGroup, faBuilding, faIdCard, faEnvelope, faCog, faChalkboardTeacher, faFolderPlus, faTools, faLightbulb } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faChevronLeft, faLayerGroup, faSignInAlt, faSignOutAlt, faCertificate, faUserCircle, faIdCard, faEnvelope, faCog, faChalkboardTeacher, faFolderPlus, faTools, faLightbulb } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const styles = (theme) => ({
@@ -102,8 +103,7 @@ class Navbar extends Component {
             {[{ text: 'Tutorials', icon: faChalkboardTeacher, link: "/tutorial" },
               { text: 'Tutorial-Builder', icon: faTools, link: "/tutorial/builder" },
               { text: 'Galerie', icon: faLightbulb, link: "/gallery" },
-              { text: 'Projekte', icon: faLayerGroup, link: "/project" },
-              { text: 'Einstellungen', icon: faCog, link: "/settings" }].map((item, index) => (
+              { text: 'Projekte', icon: faLayerGroup, link: "/project" }].map((item, index) => (
               <Link to={item.link} key={index} style={{ textDecoration: 'none', color: 'inherit' }}>
                 <ListItem button onClick={this.toggleDrawer}>
                   <ListItemIcon><FontAwesomeIcon icon={item.icon} /></ListItemIcon>
@@ -113,14 +113,25 @@ class Navbar extends Component {
             ))}
           </List>
           <Divider classes={{ root: this.props.classes.appBarColor }} style={{ marginTop: 'auto' }} />
-          {/* <List>
-            {[{ text: 'Über uns', icon: faBuilding }, { text: 'Kontakt', icon: faEnvelope }, { text: 'Impressum', icon: faIdCard }].map((item, index) => (
-              <ListItem button key={index} onClick={this.toggleDrawer}>
-                <ListItemIcon><FontAwesomeIcon icon={item.icon} /></ListItemIcon>
-                <ListItemText primary={item.text} />
-              </ListItem>
-            ))}
-          </List> */}
+          <List>
+            {[{ text: 'Anmelden', icon: faSignInAlt, link: '/user/login', restriction: !this.props.isAuthenticated },
+              { text: 'Konto', icon: faUserCircle, link: '/user', restriction: this.props.isAuthenticated },
+              { text: 'MyBadges', icon: faCertificate, link: '/user/badge', restriction: this.props.isAuthenticated },
+              { text: 'Abmelden', icon: faSignOutAlt, function: this.props.logout, restriction: this.props.isAuthenticated },
+              { text: 'Einstellungen', icon: faCog, link: "/settings" }].map((item, index) => {
+                if(item.restriction || Object.keys(item).filter(attribute => attribute === 'restriction').length === 0){
+                  return(
+                    <Link to={item.link} key={index} style={{ textDecoration: 'none', color: 'inherit' }}>
+                      <ListItem button onClick={item.function ? () => {item.function(); this.toggleDrawer();} : this.toggleDrawer}>
+                        <ListItemIcon><FontAwesomeIcon icon={item.icon} /></ListItemIcon>
+                        <ListItemText primary={item.text} />
+                      </ListItem>
+                    </Link>
+                  );
+                }
+              }
+            )}
+          </List>
         </Drawer>
         {this.props.tutorialIsLoading || this.props.projectIsLoading ?
           <LinearProgress style={{marginBottom: '30px', boxShadow: '0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12)'}}/>
@@ -132,12 +143,14 @@ class Navbar extends Component {
 
 Navbar.propTypes = {
   tutorialIsLoading: PropTypes.bool.isRequired,
-  projectIsLoading: PropTypes.bool.isRequired
+  projectIsLoading: PropTypes.bool.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
   tutorialIsLoading: state.tutorial.progress,
-  projectIsLoading: state.project.progress
+  projectIsLoading: state.project.progress,
+  isAuthenticated: state.auth.isAuthenticated
 });
 
-export default connect(mapStateToProps, null)(withStyles(styles, { withTheme: true })(withRouter(Navbar)));
+export default connect(mapStateToProps, { logout })(withStyles(styles, { withTheme: true })(withRouter(Navbar)));

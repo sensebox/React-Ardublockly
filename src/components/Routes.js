@@ -15,6 +15,7 @@ import Project from './Project/Project';
 import Settings from './Settings/Settings';
 import Impressum from './Impressum';
 import Privacy from './Privacy';
+import Login from './User/Login';
 
 
 class Routes extends Component {
@@ -40,6 +41,8 @@ class Routes extends Component {
           // User-Projects
           <Route path="/project" exact component={ProjectHome} />
           <Route path="/project/:projectId" exact component={Project} />
+          // User
+          <Route path="/user/login" exact component={Login} />
           // settings
           <Route path="/settings" exact component={Settings} />
           // privacy
