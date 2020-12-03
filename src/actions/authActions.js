@@ -57,11 +57,11 @@ export const login = ({ email, password }) => (dispatch) => {
       timeToLogout
     );
     logoutTimerId = logoutTimer();
-    dispatch(returnSuccess(res.data.message, res.status, 'LOGIN_SUCCESS'));
     dispatch({
       type: LOGIN_SUCCESS,
       payload: res.data
     });
+    dispatch(returnSuccess(res.data.message, res.status, 'LOGIN_SUCCESS'));
   })
   .catch(err => {
     console.log('hier');

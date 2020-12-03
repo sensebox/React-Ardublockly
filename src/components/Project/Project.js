@@ -6,6 +6,7 @@ import { getProject, resetProject } from '../../actions/projectActions';
 import { clearMessages, returnErrors } from '../../actions/messageActions';
 
 import axios from 'axios';
+import { withRouter } from 'react-router-dom';
 import { createNameId } from 'mnemonic-id';
 
 import Home from '../Home';
@@ -23,7 +24,8 @@ class Project extends Component {
   }
 
   componentDidUpdate(props) {
-    if(props.location.path !== this.props.location.path ||
+    console.log(this.props);
+    if(props.location.pathname !== this.props.location.pathname ||
        props.match.params[`${this.props.type}Id`] !== this.props.match.params[`${this.props.type}Id`]){
       if(this.props.message.msg){
         this.props.clearMessages();
@@ -55,8 +57,10 @@ class Project extends Component {
   }
 
   getProject = () => {
-    var param = this.props.match.params.shareId ? 'share' : this.props.match.params.galleryId ? 'gallery' : 'project';
-    var id = this.props.match.params[`${param}Id`];
+    var id = this.props.location.pathname.replace(/\/[a-z]{1,}\//,'');
+    var param = this.props.location.pathname.replace(`/${id}`,'').replace('/','');
+    console.log('param', param);
+    console.log(id);
     this.props.getProject(param, id);
   }
 
@@ -70,7 +74,7 @@ class Project extends Component {
       : this.props.project ?
         <div>
           {this.props.type !== 'share' ?
-            <Breadcrumbs content={[{ link: `/${this.props.type}`, title: data },{ link: this.props.location.path, title: this.props.project.title }]} />
+            <Breadcrumbs content={[{ link: `/${this.props.type}`, title: data },{ link: this.props.location.pathname, title: this.props.project.title }]} />
           : null}
           <Home project={this.props.project.xml}/>
         </div> : null
@@ -97,4 +101,4 @@ const mapStateToProps = state => ({
   message: state.message
 });
 
-export default connect(mapStateToProps, { workspaceName, getProject, resetProject, clearMessages, returnErrors })(Project);
+export default connect(mapStateToProps, { workspaceName, getProject, resetProject, clearMessages, returnErrors })(withRouter(Project));

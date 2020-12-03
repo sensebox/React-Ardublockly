@@ -5,7 +5,7 @@ import { getProjects, resetProject } from '../../actions/projectActions';
 import { clearMessages } from '../../actions/messageActions';
 
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
 import Breadcrumbs from '../Breadcrumbs';
 import BlocklyWindow from '../Blockly/BlocklyWindow';
@@ -41,7 +41,7 @@ class ProjectHome extends Component {
   }
 
   componentDidMount() {
-    var type = this.props.match.path.replace('/','');
+    var type = this.props.location.pathname.replace('/','');
     this.props.getProjects(type);
     if(this.props.message){
       if(this.props.message.id === 'PROJECT_DELETE_SUCCESS'){
@@ -57,9 +57,9 @@ class ProjectHome extends Component {
   }
 
   componentDidUpdate(props) {
-    if(props.match.path !== this.props.match.path){
+    if(props.location.pathname !== this.props.location.pathname){
       this.setState({snackbar: false});
-      this.props.getProjects(this.props.match.path.replace('/',''));
+      this.props.getProjects(this.props.location.pathname.replace('/',''));
     }
   }
 
@@ -69,10 +69,10 @@ class ProjectHome extends Component {
   }
 
   render() {
-    var data = this.props.match.path === '/project' ? 'Projekte' : 'Galerie';
+    var data = this.props.location.pathname === '/project' ? 'Projekte' : 'Galerie';
     return (
       <div>
-        <Breadcrumbs content={[{ link: this.props.match.path, title: data }]} />
+        <Breadcrumbs content={[{ link: this.props.location.pathname, title: data }]} />
 
         <h1>{data}</h1>
         {this.props.progress ?
@@ -104,7 +104,7 @@ class ProjectHome extends Component {
               </Grid>
             : <div>
                 <Typography style={{marginBottom: '10px'}}>Es sind aktuell keine Projekte vorhanden.</Typography>
-                {this.props.match.path.replace('/','') === 'project' ?
+                {this.props.location.pathname.replace('/','') === 'project' ?
                   <Typography>Erstelle jetzt dein <Link to={'/'} className={this.props.classes.link}>eigenes Projekt</Link> oder lasse dich von Projektbeispielen in der <Link to={'/gallery'} className={this.props.classes.link}>Galerie</Link> inspirieren.</Typography>
                 : null}
               </div>
@@ -138,4 +138,4 @@ const mapStateToProps = state => ({
 });
 
 
-export default connect(mapStateToProps, { getProjects, resetProject, clearMessages })(withStyles(styles, { withTheme: true })(ProjectHome));
+export default connect(mapStateToProps, { getProjects, resetProject, clearMessages })(withStyles(styles, { withTheme: true })(withRouter(ProjectHome)));
