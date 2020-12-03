@@ -1,21 +1,22 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { visitPage } from '../actions/generalActions';
+import { visitPage } from '../../actions/generalActions';
 
 import { Route, Switch, withRouter } from 'react-router-dom';
 
-import Home from './Home';
-import Tutorial from './Tutorial/Tutorial';
-import TutorialHome from './Tutorial/TutorialHome';
-import Builder from './Tutorial/Builder/Builder';
-import NotFound from './NotFound';
-import ProjectHome from './Project/ProjectHome';
-import Project from './Project/Project';
-import Settings from './Settings/Settings';
-import Impressum from './Impressum';
-import Privacy from './Privacy';
-import Login from './User/Login';
+import PrivateRoute from './PrivateRoute';
+import Home from '../Home';
+import Tutorial from '../Tutorial/Tutorial';
+import TutorialHome from '../Tutorial/TutorialHome';
+import Builder from '../Tutorial/Builder/Builder';
+import NotFound from '../NotFound';
+import ProjectHome from '../Project/ProjectHome';
+import Project from '../Project/Project';
+import Settings from '../Settings/Settings';
+import Impressum from '../Impressum';
+import Privacy from '../Privacy';
+import Login from '../User/Login';
 
 
 class Routes extends Component {
@@ -31,7 +32,9 @@ class Routes extends Component {
           <Route path="/" exact component={Home} />
           // Tutorials
           <Route path="/tutorial" exact component={TutorialHome} />
-          <Route path="/tutorial/builder" exact component={Builder} />
+          <PrivateRoute path="/tutorial/builder" exact>
+            <Builder/>
+          </PrivateRoute>
           <Route path="/tutorial/:tutorialId" exact component={Tutorial} />
           // Sharing
           <Route path="/share/:shareId" exact component={Project} />
@@ -39,8 +42,12 @@ class Routes extends Component {
           <Route path="/gallery" exact component={ProjectHome} />
           <Route path="/gallery/:galleryId" exact component={Project} />
           // User-Projects
-          <Route path="/project" exact component={ProjectHome} />
-          <Route path="/project/:projectId" exact component={Project} />
+          <PrivateRoute path="/project" exact>
+            <ProjectHome/>
+          </PrivateRoute>
+          <PrivateRoute path="/project/:projectId" exact>
+            <Project/>
+          </PrivateRoute>
           // User
           <Route path="/user/login" exact component={Login} />
           // settings

@@ -12,7 +12,7 @@ import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import Routes from './components/Routes';
+import Routes from './components/Route/Routes';
 import Cookies from './components/Cookies';
 
 const theme = createMuiTheme({

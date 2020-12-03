@@ -25,6 +25,7 @@ export class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      redirect: props.location.state ? props.location.state.from.pathname : null,
       email: '',
       password: '',
       snackbar: false,
@@ -36,10 +37,16 @@ export class Login extends Component {
   }
 
   componentDidUpdate(props){
+    console.log(this.state.redirect);
     const { message } = this.props;
     if (message !== props.message) {
       if(message.id === 'LOGIN_SUCCESS'){
-        this.props.history.goBack();
+        if(this.state.redirect){
+          this.props.history.push(this.state.redirect);
+        }
+        else{
+          this.props.history.goBack();
+        }
       }
       // Check for login error
       else if(message.id === 'LOGIN_FAIL'){
