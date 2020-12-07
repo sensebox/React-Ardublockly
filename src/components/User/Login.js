@@ -7,6 +7,7 @@ import { clearMessages } from '../../actions/messageActions'
 import { withRouter } from 'react-router-dom';
 
 import Snackbar from '../Snackbar';
+import Alert from '../Alert';
 import Breadcrumbs from '../Breadcrumbs';
 
 import Button from '@material-ui/core/Button';
@@ -89,6 +90,9 @@ export class Login extends Component {
 
         <div style={{maxWidth: '500px', marginLeft: 'auto', marginRight: 'auto'}}>
           <h1>Anmelden</h1>
+          <Alert>
+            Zur Anmeldung ist ein Konto auf <Link color='primary' rel="noreferrer" target="_blank" href={'https://opensensemap.org/'}>openSenseMap</Link> Voraussetzung.
+          </Alert>
           <Snackbar
             open={this.state.snackbar}
             message={this.state.message}
@@ -140,7 +144,7 @@ export class Login extends Component {
           </p>
           <Divider variant='fullWidth'/>
           <p style={{textAlign: 'center', paddingRight: "34px", paddingLeft: "34px"}}>
-            Du hast noch kein Konto? <Link rel="noreferrer" target="_blank" href={'https://opensensemap.org/'}>Registrieren</Link>
+            Du hast noch kein Konto? Registriere dich auf <Link rel="noreferrer" target="_blank" href={'https://opensensemap.org/'}>openSenseMap</Link>.
           </p>
         </div>
       </div>
