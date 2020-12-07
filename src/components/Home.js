@@ -95,7 +95,9 @@ class Home extends Component {
           <div style={{ float: 'left', height: '40px', position: 'relative' }}><WorkspaceStats /></div>
           : null
         }
-        <div style={{ float: 'right', height: '40px', marginBottom: '20px' }}><WorkspaceFunc /></div>
+        <div style={{ float: 'right', height: '40px', marginBottom: '20px' }}>
+          <WorkspaceFunc project={this.props.project} projectType={this.props.projectType}/>
+        </div>
         <Grid container spacing={2}>
           <Grid item xs={12} md={this.state.codeOn ? 8 : 12} style={{ position: 'relative' }}>
             <Tooltip title={this.state.codeOn ? 'Code ausblenden' : 'Code anzeigen'} >
@@ -109,7 +111,7 @@ class Home extends Component {
             </Tooltip>
             <TrashcanButtons />
             {this.props.project ?
-              < BlocklyWindow blocklyCSS={{ height: '80vH' }} initialXml={this.props.project} />
+              < BlocklyWindow blocklyCSS={{ height: '80vH' }} initialXml={this.props.project.xml} />
             : < BlocklyWindow blocklyCSS={{ height: '80vH' }} />
             }
           </Grid>

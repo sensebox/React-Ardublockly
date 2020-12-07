@@ -71,24 +71,25 @@ export const getProjects = (type) => (dispatch) => {
     });
 };
 
-export const updateProject = () => (dispatch, getState) => {
+export const updateProject = (type, id) => (dispatch, getState) => {
   var workspace = getState().workspace;
   var body = {
     xml: workspace.code.xml,
     title: workspace.name
   }
   var project = getState().project;
-  var id = project.projects[0]._id._id ? project.projects[0]._id._id : project.projects[0]._id;
-  var type = project.type;
   if(type==='gallery'){
     body.description = project.description;
   }
   axios.put(`${process.env.REACT_APP_BLOCKLY_API}/${type}/${id}`, body)
     .then(res => {
       var project = res.data[type];
+      var projects = getState().project.projects;
+      var index = projects.findIndex(res => res._id === project._id);
+      projects[index] = project;
       dispatch({
-        type: GET_PROJECT,
-        payload: project
+        type: GET_PROJECTS,
+        payload: projects
       });
       if(type === 'project'){
         dispatch(returnSuccess(res.data.message, res.status, 'PROJECT_UPDATE_SUCCESS'));
@@ -103,13 +104,17 @@ export const updateProject = () => (dispatch, getState) => {
     });
 }
 
-export const deleteProject = () => (dispatch, getState) => {
+export const deleteProject = (type, id) => (dispatch, getState) => {
   var project = getState().project;
-  var id = project.projects[0]._id._id ? project.projects[0]._id._id : project.projects[0]._id;
-  var type = project.type;
   axios.delete(`${process.env.REACT_APP_BLOCKLY_API}/${type}/${id}`)
     .then(res => {
-      dispatch({type: GET_PROJECTS, payload: []});
+      var projects = getState().project.projects;
+      var index = projects.findIndex(res => res._id === id || res._id._id === id);
+      projects.splice(index, 1)
+      dispatch({
+        type: GET_PROJECTS,
+        payload: projects
+      });
       if(type === 'project'){
         dispatch(returnSuccess(res.data.message, res.status, 'PROJECT_DELETE_SUCCESS'));
       } else {
@@ -121,7 +126,41 @@ export const deleteProject = () => (dispatch, getState) => {
         dispatch(returnErrors(err.response.data.message, err.response.status, 'PROJECT_DELETE_FAIL'));
       }
     });
-}
+};
+
+
+export const shareProject = (title, type, id) => (dispatch, getState) => {
+  var body = {
+    title: title
+  };
+  if(type === 'project'){
+    body.projectId = id;
+  } else {
+    body.xml = getState().workspace.code.xml;
+  }
+  axios.post(`${process.env.REACT_APP_BLOCKLY_API}/share`, body)
+    .then(res => {
+      var shareContent = res.data.content;
+      if(body.projectId){
+        var projects = getState().project.projects;
+        var index = projects.findIndex(res => res._id === id);
+        projects[index]._id = {
+          _id: shareContent._id,
+          expiresAt: shareContent.expiresAt
+        };
+        dispatch({
+          type: GET_PROJECTS,
+          payload: projects
+        });
+      }
+      dispatch(returnSuccess(res.data.message, shareContent._id, 'SHARE_SUCCESS'));
+    })
+    .catch(err => {
+      if(err.response){
+        dispatch(returnErrors(err.response.data.message, err.response.status, 'SHARE_FAIL'));
+      }
+    });
+};
 
 
 export const resetProject = () => (dispatch) => {

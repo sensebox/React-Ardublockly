@@ -157,7 +157,7 @@ const mapStateToProps = state => ({
   tutorialIsLoading: state.tutorial.progress,
   projectIsLoading: state.project.progress,
   isAuthenticated: state.auth.isAuthenticated,
-  userRole: state.auth.user
+  user: state.auth.user
 });
 
 export default connect(mapStateToProps, { logout })(withStyles(styles, { withTheme: true })(withRouter(Navbar)));

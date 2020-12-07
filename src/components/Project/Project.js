@@ -75,7 +75,7 @@ class Project extends Component {
           {this.props.type !== 'share' ?
             <Breadcrumbs content={[{ link: `/${this.props.type}`, title: data },{ link: this.props.location.pathname, title: this.props.project.title }]} />
           : null}
-          <Home project={this.props.project.xml}/>
+          <Home project={this.props.project} projectType={this.props.type}/>
         </div> : null
     );
   };
