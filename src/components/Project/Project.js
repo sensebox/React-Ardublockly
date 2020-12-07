@@ -24,7 +24,6 @@ class Project extends Component {
   }
 
   componentDidUpdate(props) {
-    console.log(this.props);
     if(props.location.pathname !== this.props.location.pathname ||
        props.match.params[`${this.props.type}Id`] !== this.props.match.params[`${this.props.type}Id`]){
       if(this.props.message.msg){
