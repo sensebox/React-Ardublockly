@@ -8,6 +8,7 @@ import * as Blockly from 'blockly/core';
 
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
+import moment from 'moment';
 import { saveAs } from 'file-saver';
 
 import { detectWhitespacesAndReturnReadableResult } from '../helpers/whitespace';
@@ -149,19 +150,29 @@ class WorkspaceFunc extends Component {
   }
 
   shareBlocks = () => {
-    var body = {
-      name: this.state.name,
-      xml: this.props.xml
-    };
-    axios.post(`${process.env.REACT_APP_BLOCKLY_API}/share`, body)
-      .then(res => {
-        var shareContent = res.data.content;
-        this.setState({ share: true, open: true, title: 'Programm teilen', id: shareContent.link });
-      })
-      .catch(err => {
-        this.setState({ snackbar: true, key: Date.now(), message: `Fehler beim Erstellen eines Links zum Teilen deines Programmes. Versuche es noch einmal.`, type: 'error' });
-        window.scrollTo(0, 0);
-      });
+    if(this.props.projectType === 'project' && this.props.project._id._id){
+      // project is already shared
+      this.setState({ share: true, open: true, title: 'Programm teilen', id: this.props.project._id._id });
+    }
+    else {
+      var body = {
+        title: this.state.name
+      };
+      if(this.props.projectType === 'project'){
+        body.projectId = this.props.project._id._id ? this.props.project._id._id : this.props.project._id
+      } else {
+        body.xml = this.props.xml;
+      }
+      axios.post(`${process.env.REACT_APP_BLOCKLY_API}/share`, body)
+        .then(res => {
+          var shareContent = res.data.content;
+          this.setState({ share: true, open: true, title: 'Programm teilen', id: shareContent._id });
+        })
+        .catch(err => {
+          this.setState({ snackbar: true, key: Date.now(), message: `Fehler beim Erstellen eines Links zum Teilen deines Programmes. Versuche es noch einmal.`, type: 'error' });
+          window.scrollTo(0, 0);
+        });
+    }
   }
 
   getSvg = () => {
@@ -414,6 +425,14 @@ class WorkspaceFunc extends Component {
                   <FontAwesomeIcon icon={faCopy} size="xs" />
                 </IconButton>
               </Tooltip>
+              {this.props.project && this.props.project._id._id ?
+                <Typography variant='body2' style={{marginTop: '20px'}}>{`Das Projekt wurde bereits geteilt. Der Link ist noch ${
+                  moment(this.props.project._id.expiresAt).diff(moment().utc(), 'days') === 0 ?
+                    moment(this.props.project._id.expiresAt).diff(moment().utc(), 'hours') === 0 ?
+                      `${moment(this.props.project._id.expiresAt).diff(moment().utc(), 'minutes')} Minuten`
+                    : `${moment(this.props.project._id.expiresAt).diff(moment().utc(), 'hours')} Stunden`
+                  : `${moment(this.props.project._id.expiresAt).diff(moment().utc(), 'days')} Tage`} gültig.`}</Typography>
+              : <Typography variant='body2' style={{marginTop: '20px'}}>{`Der Link ist nun ${process.env.REACT_APP_SHARE_LINK_EXPIRES} Tage gültig.`}</Typography>}
             </div>
           : null}
         </Dialog>
@@ -442,6 +461,7 @@ WorkspaceFunc.propTypes = {
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   projectType: PropTypes.string.isRequired,
+  project: PropTypes.object.isRequired,
   message: PropTypes.object.isRequired
 };
 
@@ -451,6 +471,7 @@ const mapStateToProps = state => ({
   name: state.workspace.name,
   description: state.project.description,
   projectType: state.project.type,
+  project: state.project.projects[0],
   message: state.message
 });
 

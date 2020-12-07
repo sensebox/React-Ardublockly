@@ -78,7 +78,7 @@ export const updateProject = () => (dispatch, getState) => {
     title: workspace.name
   }
   var project = getState().project;
-  var id = project.projects[0]._id;
+  var id = project.projects[0]._id._id ? project.projects[0]._id._id : project.projects[0]._id;
   var type = project.type;
   if(type==='gallery'){
     body.description = project.description;
@@ -105,7 +105,7 @@ export const updateProject = () => (dispatch, getState) => {
 
 export const deleteProject = () => (dispatch, getState) => {
   var project = getState().project;
-  var id = project.projects[0]._id;
+  var id = project.projects[0]._id._id ? project.projects[0]._id._id : project.projects[0]._id;
   var type = project.type;
   axios.delete(`${process.env.REACT_APP_BLOCKLY_API}/${type}/${id}`)
     .then(res => {
