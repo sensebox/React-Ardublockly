@@ -20,6 +20,7 @@ import Settings from '../Settings/Settings';
 import Impressum from '../Impressum';
 import Privacy from '../Privacy';
 import Login from '../User/Login';
+import Account from '../User/Account';
 
 
 class Routes extends Component {
@@ -33,34 +34,37 @@ class Routes extends Component {
       <div style={{ margin: '0 22px' }}>
         <Switch>
           <Route path="/" exact component={Home} />
-          // Tutorials
+          {/* Tutorials */}
           <Route path="/tutorial" exact component={TutorialHome} />
           <PrivateRouteCreator path="/tutorial/builder" exact>
             <Builder/>
           </PrivateRouteCreator>
           <Route path="/tutorial/:tutorialId" exact component={Tutorial} />
-          // Sharing
+          {/* Sharing */}
           <Route path="/share/:shareId" exact component={Project} />
-          // Gallery-Projects
+          {/* Gallery-Projects */}
           <Route path="/gallery" exact component={ProjectHome} />
           <Route path="/gallery/:galleryId" exact component={Project} />
-          // User-Projects
+          {/* User-Projects */}
           <PrivateRoute path="/project" exact>
             <ProjectHome/>
           </PrivateRoute>
           <PrivateRoute path="/project/:projectId" exact>
             <Project/>
           </PrivateRoute>
-          // User
+          {/* User */}
           <IsLoggedRoute path="/user/login" exact>
             <Login />
           </IsLoggedRoute>
-          // settings
+          <PrivateRoute path="/user" exact>
+            <Account/>
+          </PrivateRoute>
+          {/* settings */}
           <Route path="/settings" exact component={Settings} />
-          // privacy
+          {/* privacy */}
           <Route path="/impressum" exact component={Impressum} />
           <Route path="/privacy" exact component={Privacy} />
-          // Not Found
+          {/* Not Found */}
           <Route component={NotFound} />
         </Switch>
       </div>
