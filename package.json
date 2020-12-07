@@ -16,6 +16,7 @@
     "axios": "^0.21.0",
     "blockly": "^3.20200924.0",
     "file-saver": "^2.0.2",
+    "mnemonic-id": "^3.2.7",
     "moment": "^2.28.0",
     "prismjs": "^1.20.0",
     "react": "^16.13.1",
