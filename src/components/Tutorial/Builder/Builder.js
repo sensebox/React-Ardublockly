@@ -6,6 +6,7 @@ import { getTutorials, resetTutorial} from '../../../actions/tutorialActions';
 import { clearMessages } from '../../../actions/messageActions';
 
 import axios from 'axios';
+import { withRouter } from 'react-router-dom';
 
 import { saveAs } from 'file-saver';
 import { detectWhitespacesAndReturnReadableResult } from '../../../helpers/whitespace';
@@ -378,4 +379,4 @@ const mapStateToProps = state => ({
   message: state.message
 });
 
-export default connect(mapStateToProps, { checkError, readJSON, jsonString, progress, tutorialId, resetTutorialBuilder, getTutorials, resetTutorial, clearMessages })(withStyles(styles, { withTheme: true })(Builder));
+export default connect(mapStateToProps, { checkError, readJSON, jsonString, progress, tutorialId, resetTutorialBuilder, getTutorials, resetTutorial, clearMessages })(withStyles(styles, { withTheme: true })(withRouter(Builder)));

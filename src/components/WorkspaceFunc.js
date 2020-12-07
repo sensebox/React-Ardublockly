@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { clearStats, onChangeCode, workspaceName } from '../actions/workspaceActions';
-import { updateProject, deleteProject, setDescription } from '../actions/projectActions';
+import { updateProject, deleteProject, shareProject, setDescription } from '../actions/projectActions';
 
 import * as Blockly from 'blockly/core';
 
@@ -100,6 +100,9 @@ class WorkspaceFunc extends Component {
     if (props.name !== this.props.name) {
       this.setState({ name: this.props.name });
     }
+    if (props.description !== this.props.description) {
+      this.setState({ description: this.props.description });
+    }
     if(this.props.message !== props.message){
       if(this.props.message.id === 'PROJECT_UPDATE_SUCCESS'){
         this.setState({ snackbar: true, key: Date.now(), message: `Das Projekt wurde erfolgreich aktualisiert.`, type: 'success' });
@@ -115,6 +118,15 @@ class WorkspaceFunc extends Component {
       }
       else if(this.props.message.id === 'PROJECT_DELETE_FAIL'){
         this.setState({ snackbar: true, key: Date.now(), message: `Fehler beim Löschen des Projektes. Versuche es noch einmal.`, type: 'error' });
+      }
+      else if(this.props.message.id === 'SHARE_SUCCESS' && (!this.props.multiple ||
+              (this.props.message.status === this.props.project._id || this.props.message.status === this.props.project._id._id))){
+        this.setState({ share: true, open: true, title: 'Programm teilen', id: this.props.message.status });
+      }
+      else if(this.props.message.id === 'SHARE_FAIL' && (!this.props.multiple ||
+              (this.props.message.status === this.props.project._id || this.props.message.status === this.props.project._id._id))){
+        this.setState({ snackbar: true, key: Date.now(), message: `Fehler beim Erstellen eines Links zum Teilen deines Programmes. Versuche es noch einmal.`, type: 'error' });
+        window.scrollTo(0, 0);
       }
     }
   }
@@ -155,23 +167,7 @@ class WorkspaceFunc extends Component {
       this.setState({ share: true, open: true, title: 'Programm teilen', id: this.props.project._id._id });
     }
     else {
-      var body = {
-        title: this.state.name
-      };
-      if(this.props.projectType === 'project'){
-        body.projectId = this.props.project._id._id ? this.props.project._id._id : this.props.project._id
-      } else {
-        body.xml = this.props.xml;
-      }
-      axios.post(`${process.env.REACT_APP_BLOCKLY_API}/share`, body)
-        .then(res => {
-          var shareContent = res.data.content;
-          this.setState({ share: true, open: true, title: 'Programm teilen', id: shareContent._id });
-        })
-        .catch(err => {
-          this.setState({ snackbar: true, key: Date.now(), message: `Fehler beim Erstellen eines Links zum Teilen deines Programmes. Versuche es noch einmal.`, type: 'error' });
-          window.scrollTo(0, 0);
-        });
+      this.props.shareProject(this.state.name || this.props.project.title, this.props.projectType, this.props.project ? this.props.project._id._id ? this.props.project._id._id : this.props.project._id : undefined);
     }
   }
 
@@ -274,11 +270,12 @@ class WorkspaceFunc extends Component {
   renameWorkspace = () => {
     this.props.workspaceName(this.state.name);
     this.toggleDialog();
+    console.log(this.props.projectType);
     if(this.props.projectType === 'project' || this.props.projectType === 'gallery'){
       if(this.props.projectType === 'gallery'){
         this.props.setDescription(this.state.description);
       }
-      this.props.updateProject();
+      this.props.updateProject(this.props.projectType, this.props.project._id._id ? this.props.project._id._id : this.props.project._id);
     } else {
       this.setState({ snackbar: true, type: 'success', key: Date.now(), message: `Das Projekt wurde erfolgreich in '${this.state.name}' umbenannt.` });
     }
@@ -307,7 +304,7 @@ class WorkspaceFunc extends Component {
       <div style={{ width: 'max-content', display: 'flex' }}>
         {!this.props.assessment ?
           <Tooltip title={`Titel des Projektes${this.props.name ? `: ${this.props.name}` : ''}`} arrow style={{ marginRight: '5px' }}>
-            <div className={this.props.classes.workspaceName} onClick={() => { this.setState({ file: true, open: true, saveFile: false, title: this.props.projectType === 'gallery' ? 'Projektdaten eintragen':'Projekt benennen', content: this.props.projectType === 'gallery' ? 'Bitte gib einen Titel und eine Beschreibung für das Galerie-Projekt ein und bestätige die Angaben mit einem Klick auf \'Eingabe\'.':'Bitte gib einen Namen für das Projekt ein und bestätige diesen mit einem Klick auf \'Eingabe\'.' }) }}>
+            <div className={this.props.classes.workspaceName} onClick={() => {if(this.props.multiple){this.props.workspaceName(this.props.project.title);if(this.props.projectType === 'gallery'){this.props.setDescription(this.props.project.description);}} this.setState({ file: true, open: true, saveFile: false, title: this.props.projectType === 'gallery' ? 'Projektdaten eintragen':'Projekt benennen', content: this.props.projectType === 'gallery' ? 'Bitte gib einen Titel und eine Beschreibung für das Galerie-Projekt ein und bestätige die Angaben mit einem Klick auf \'Eingabe\'.':'Bitte gib einen Namen für das Projekt ein und bestätige diesen mit einem Klick auf \'Eingabe\'.' }) }}>
               {this.props.name && !isWidthDown(this.props.projectType === 'project' || this.props.projectType === 'gallery' ? 'xl':'xs', this.props.width) ? <Typography style={{ margin: 'auto -3px auto 12px' }}>{this.props.name}</Typography> : null}
               <div style={{ width: '40px', display: 'flex' }}>
                 <FontAwesomeIcon icon={faPen} style={{ height: '18px', width: '18px', margin: 'auto' }} />
@@ -315,24 +312,28 @@ class WorkspaceFunc extends Component {
             </div>
           </Tooltip>
           : null}
-        {this.props.assessment ? <SolutionCheck /> : <Compile iconButton />}
-        <Tooltip title={this.props.projectType === 'project'? 'Projekt aktualisieren':'Projekt speichern'} arrow style={{ marginRight: '5px' }}>
-          <IconButton
-            className={this.props.classes.button}
-            onClick={this.props.projectType === 'project' ? () => this.props.updateProject() : () => this.saveProject()}
-          >
-            <FontAwesomeIcon icon={faSave} size="xs" />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title='Projekt herunterladen' arrow style={{ marginRight: '5px' }}>
-          <IconButton
-            className={this.props.classes.button}
-            onClick={() => { this.createFileName('xml'); }}
-          >
-            <FontAwesomeIcon icon={faFileDownload} size="xs" />
-          </IconButton>
-        </Tooltip>
-        {!this.props.assessment?
+        {this.props.assessment ? <SolutionCheck /> : !this.props.multiple ? <Compile iconButton /> : null}
+        {this.props.user && !this.props.multiple?
+          <Tooltip title={this.props.projectType === 'project'? 'Projekt aktualisieren':'Projekt speichern'} arrow style={{ marginRight: '5px' }}>
+            <IconButton
+              className={this.props.classes.button}
+              onClick={this.props.projectType === 'project' ? () => this.props.updateProject(this.props.projectType, this.props.project._id._id ? this.props.project._id._id : this.props.project._id) : () => this.saveProject()}
+            >
+              <FontAwesomeIcon icon={faSave} size="xs" />
+            </IconButton>
+          </Tooltip>
+        : null}
+        {!this.props.multiple ?
+          <Tooltip title='Projekt herunterladen' arrow style={{ marginRight: '5px' }}>
+            <IconButton
+              className={this.props.classes.button}
+              onClick={() => { this.createFileName('xml'); }}
+            >
+              <FontAwesomeIcon icon={faFileDownload} size="xs" />
+            </IconButton>
+          </Tooltip>
+        : null}
+        {!this.props.assessment && !this.props.multiple?
           <div ref={this.inputRef} style={{ width: 'max-content', height: '40px', marginRight: '5px' }}>
             <input
               style={{ display: 'none' }}
@@ -354,7 +355,7 @@ class WorkspaceFunc extends Component {
             </label>
           </div>
         : null}
-        {!this.props.assessment?
+        {!this.props.assessment && !this.props.multiple?
           <Tooltip title='Screenshot erstellen' arrow style={{ marginRight: '5px' }}>
             <IconButton
               className={this.props.classes.button}
@@ -364,7 +365,7 @@ class WorkspaceFunc extends Component {
             </IconButton>
           </Tooltip>
         : null}
-        {!this.props.assessment?
+        {this.props.projectType !== 'gallery' && !this.props.assessment ?
           <Tooltip title='Projekt teilen' arrow style={{marginRight: '5px'}}>
             <IconButton
               className={this.props.classes.button}
@@ -374,19 +375,21 @@ class WorkspaceFunc extends Component {
             </IconButton>
           </Tooltip>
         :null}
-        <Tooltip title='Workspace zurücksetzen' arrow style={this.props.projectType === 'project' || this.props.projectType === 'gallery' ? { marginRight: '5px' }:null}>
-          <IconButton
-            className={this.props.classes.button}
-            onClick={() => this.resetWorkspace()}
-          >
-            <FontAwesomeIcon icon={faShare} size="xs" flip='horizontal' />
-          </IconButton>
-        </Tooltip>
+        {!this.props.multiple ?
+          <Tooltip title='Workspace zurücksetzen' arrow style={this.props.projectType === 'project' || this.props.projectType === 'gallery' ? { marginRight: '5px' }:null}>
+            <IconButton
+              className={this.props.classes.button}
+              onClick={() => this.resetWorkspace()}
+            >
+              <FontAwesomeIcon icon={faShare} size="xs" flip='horizontal' />
+            </IconButton>
+          </Tooltip>
+        : null}
         {!this.props.assessment && (this.props.projectType === 'project' || this.props.projectType === 'gallery') ?
           <Tooltip title='Projekt löschen' arrow>
             <IconButton
               className={this.props.classes.buttonTrash}
-              onClick={() => this.props.deleteProject()}
+              onClick={() => this.props.deleteProject(this.props.projectType, this.props.project._id._id ? this.props.project._id._id : this.props.project._id)}
             >
               <FontAwesomeIcon icon={faTrashAlt} size="xs" />
             </IconButton>
@@ -406,7 +409,7 @@ class WorkspaceFunc extends Component {
               {this.props.projectType === 'gallery' ?
                 <div>
                   <TextField autoFocus placeholder={this.state.saveXml ? 'Dateiname' : 'Projekttitel'} value={this.state.name} onChange={this.setFileName} style={{marginBottom: '10px'}}/>
-                  <TextField fullWidth placeholder={'Projektbeschreibung'} value={this.state.description} onChange={this.setDescription} style={{ marginBottom: '10px' }} />
+                  <TextField fullWidth multiline placeholder={'Projektbeschreibung'} value={this.state.description} onChange={this.setDescription} style={{ marginBottom: '10px' }} />
                 </div>
               : <TextField autoFocus placeholder={this.state.saveXml ? 'Dateiname' : 'Projekttitel'} value={this.state.name} onChange={this.setFileName} style={{ marginRight: '10px' }} />}
               <Button disabled={!this.state.name} variant='contained' color='primary' onClick={() => { this.state.saveFile ? this.state.file === 'xml' ? this.downloadXmlFile() : this.getSvg() : this.renameWorkspace(); this.toggleDialog(); }}>Eingabe</Button>
@@ -426,7 +429,7 @@ class WorkspaceFunc extends Component {
                 </IconButton>
               </Tooltip>
               {this.props.project && this.props.project._id._id ?
-                <Typography variant='body2' style={{marginTop: '20px'}}>{`Das Projekt wurde bereits geteilt. Der Link ist noch ${
+                <Typography variant='body2' style={{marginTop: '20px'}}>{`Das Projekt wurde bereits geteilt. Der Link ist noch mindestens ${
                   moment(this.props.project._id.expiresAt).diff(moment().utc(), 'days') === 0 ?
                     moment(this.props.project._id.expiresAt).diff(moment().utc(), 'hours') === 0 ?
                       `${moment(this.props.project._id.expiresAt).diff(moment().utc(), 'minutes')} Minuten`
@@ -454,15 +457,15 @@ WorkspaceFunc.propTypes = {
   onChangeCode: PropTypes.func.isRequired,
   workspaceName: PropTypes.func.isRequired,
   updateProject: PropTypes.func.isRequired,
+  shareProject: PropTypes.func.isRequired,
   deleteProject: PropTypes.func.isRequired,
   setDescription: PropTypes.func.isRequired,
   arduino: PropTypes.string.isRequired,
   xml: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
-  projectType: PropTypes.string.isRequired,
-  project: PropTypes.object.isRequired,
-  message: PropTypes.object.isRequired
+  message: PropTypes.object.isRequired,
+  user: PropTypes.object
 };
 
 const mapStateToProps = state => ({
@@ -470,9 +473,8 @@ const mapStateToProps = state => ({
   xml: state.workspace.code.xml,
   name: state.workspace.name,
   description: state.project.description,
-  projectType: state.project.type,
-  project: state.project.projects[0],
-  message: state.message
+  message: state.message,
+  user: state.auth.user
 });
 
-export default connect(mapStateToProps, { clearStats, onChangeCode, workspaceName, updateProject, deleteProject, setDescription })(withStyles(styles, { withTheme: true })(withWidth()(withRouter(WorkspaceFunc))));
+export default connect(mapStateToProps, { clearStats, onChangeCode, workspaceName, updateProject, shareProject, deleteProject, setDescription })(withStyles(styles, { withTheme: true })(withWidth()(withRouter(WorkspaceFunc))));
