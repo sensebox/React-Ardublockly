@@ -5,7 +5,7 @@ import store from '../../../store';
 
 var boxes = store.getState().auth.user ? store.getState().auth.user.boxes : null;
 store.subscribe(() => {
-  boxes = store.getState().auth.user ? store.getState().auth.user.boxes : null;
+    boxes = store.getState().auth.user ? store.getState().auth.user.boxes : null;
 });
 var selectedBox = '';
 
@@ -24,20 +24,20 @@ Blockly.Blocks['sensebox_osem_connection'] = {
             .setAlign(Blockly.ALIGN_LEFT)
             .appendField(Blockly.Msg.senseBox_osem_exposure)
             .appendField(new Blockly.FieldDropdown([[Blockly.Msg.senseBox_osem_stationary, 'Stationary'], [Blockly.Msg.senseBox_osem_mobile, 'Mobile']]), "type");
-        if(!boxes){
-          this.appendDummyInput()
-              .setAlign(Blockly.ALIGN_LEFT)
-              .appendField("senseBox ID")
-              .appendField(new Blockly.FieldTextInput("senseBox ID"), "BoxID");
+        if (!boxes) {
+            this.appendDummyInput()
+                .setAlign(Blockly.ALIGN_LEFT)
+                .appendField("senseBox ID")
+                .appendField(new Blockly.FieldTextInput("senseBox ID"), "BoxID");
         } else {
-          var dropdown = []
-          for (var i = 0; i < boxes.length; i++) {
-              dropdown.push([boxes[i].name, boxes[i]._id])
-          }
-          this.appendDummyInput()
-              .setAlign(Blockly.ALIGN_LEFT)
-              .appendField("senseBox ID")
-              .appendField(new Blockly.FieldDropdown(dropdown), 'BoxID');
+            var dropdown = []
+            for (var i = 0; i < boxes.length; i++) {
+                dropdown.push([boxes[i].name, boxes[i]._id])
+            }
+            this.appendDummyInput()
+                .setAlign(Blockly.ALIGN_LEFT)
+                .appendField("senseBox ID")
+                .appendField(new Blockly.FieldDropdown(dropdown), 'BoxID');
         }
         this.appendDummyInput()
             .setAlign(Blockly.ALIGN_LEFT)
@@ -51,6 +51,16 @@ Blockly.Blocks['sensebox_osem_connection'] = {
     },
     onchange: function (e) {
         selectedBox = this.getFieldValue('BoxID');
+        console.log(selectedBox)
+        if (selectedBox !== '' && boxes) {
+            var accessToken = boxes.find(element => element._id === selectedBox).access_token
+            if (accessToken !== undefined) {
+                this.getField('access_token').setValue(accessToken)
+            } else {
+                this.getField('access_token').setValue('access_token')
+            }
+        }
+
     },
     mutationToDom: function () {
         var container = document.createElement('mutation');
@@ -99,17 +109,17 @@ Blockly.Blocks['sensebox_send_to_osem'] = {
         this.setColour(getColour().sensebox);
         this.appendDummyInput()
             .appendField(Blockly.Msg.senseBox_send_to_osem);
-        if(boxes){
-          this.appendValueInput('Value')
-              .appendField('Phänomen')
-              .appendField(new Blockly.FieldDropdown(
-                  this.generateOptions), 'SensorID');
+        if (boxes) {
+            this.appendValueInput('Value')
+                .appendField('Phänomen')
+                .appendField(new Blockly.FieldDropdown(
+                    this.generateOptions), 'SensorID');
         } else {
-          this.appendValueInput('Value')
-               .setAlign(Blockly.ALIGN_LEFT)
-               .appendField('Phänomen')
-               .appendField(new Blockly.FieldTextInput(
-                   'sensorID'), 'SensorID')
+            this.appendValueInput('Value')
+                .setAlign(Blockly.ALIGN_LEFT)
+                .appendField('Phänomen')
+                .appendField(new Blockly.FieldTextInput(
+                    'sensorID'), 'SensorID')
         }
 
         this.setPreviousStatement(true, null);
@@ -119,15 +129,15 @@ Blockly.Blocks['sensebox_send_to_osem'] = {
     generateOptions: function () {
         var dropdown = [['', '']];
         var boxID = selectedBox;
-        if(boxID !== '' && boxes){
+        if (boxID !== '' && boxes) {
 
-          let box = boxes.find(el => el._id === boxID);
-          if (box !== undefined) {
-              for (var i = 0; i < box.sensors.length; i++) {
-                  dropdown.push([box.sensors[i].title, box.sensors[i]._id])
-              }
-              console.log(dropdown)
-          }
+            let box = boxes.find(el => el._id === boxID);
+            if (box !== undefined) {
+                for (var i = 0; i < box.sensors.length; i++) {
+                    dropdown.push([box.sensors[i].title, box.sensors[i]._id])
+                }
+                console.log(dropdown)
+            }
         }
         return dropdown
     },
