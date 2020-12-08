@@ -56,6 +56,28 @@ export const getTutorials = () => (dispatch, getState) => {
     });
 };
 
+export const deleteTutorial = (id) => (dispatch, getState) => {
+  var tutorial = getState().tutorial;
+  var id = getState().builder.id;
+  axios.delete(`${process.env.REACT_APP_BLOCKLY_API}/tutorial/${id}`)
+    .then(res => {
+      var tutorials = tutorial.tutorials;
+      var index = tutorials.findIndex(res => res._id === id);
+      tutorials.splice(index, 1)
+      dispatch({
+        type: GET_TUTORIALS,
+        payload: tutorials
+      });
+      dispatch(returnSuccess(res.data.message, res.status, 'TUTORIAL_DELETE_SUCCESS'));
+    })
+    .catch(err => {
+      if(err.response){
+        dispatch(returnErrors(err.response.data.message, err.response.status, 'TUTORIAL_DELETE_FAIL'));
+      }
+    });
+};
+
+
 export const resetTutorial = () => (dispatch) => {
   dispatch({
     type: GET_TUTORIALS,
