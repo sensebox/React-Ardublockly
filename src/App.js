@@ -24,13 +24,16 @@ const theme = createMuiTheme({
     },
     secondary: {
       main: '#DDDDDD'
+    },
+    button: {
+      compile: '#e27136'
     }
   }
 });
 
 class App extends Component {
 
-  componentDidMount(){
+  componentDidMount() {
     store.dispatch(loadUser());
   }
 
