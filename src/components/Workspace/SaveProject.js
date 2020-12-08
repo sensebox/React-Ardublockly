@@ -124,7 +124,7 @@ class SaveProject extends Component {
         <Tooltip title={this.state.projectType === 'project'? 'Projekt aktualisieren':'Projekt speichern'} arrow>
           <IconButton
             className={this.props.classes.button}
-            onClick={this.props.user.blocklyRole !== 'user' && (!this.props.project || this.props.user.email === this.props.project.creator) ? (e) => this.toggleMenu(e) : this.state.projectType === 'project' ? () => this.props.updateProject(this.state.projectType, this.props.project._id._id ? this.props.project._id._id : this.props.project._id) : () => {this.setState({projectType: 'project'}, () => this.saveProject())}}
+            onClick={this.props.user.blocklyRole !== 'user' && (!this.props.project || this.props.user.email === this.props.project.creator) ? (e) => this.toggleMenu(e) : this.state.projectType === 'project' ? () => this.props.updateProject(this.state.projectType, this.props.project._id) : () => {this.setState({projectType: 'project'}, () => this.saveProject())}}
           >
             <FontAwesomeIcon icon={faSave} size="xs" />
           </IconButton>
@@ -144,12 +144,12 @@ class SaveProject extends Component {
           onClose={this.toggleMenu}
         >
           <MenuItem
-            onClick={this.state.projectType === 'project' ? (e) => {this.toggleMenu(e); this.props.updateProject(this.state.projectType, this.props.project._id._id ? this.props.project._id._id : this.props.project._id)} : (e) => {this.toggleMenu(e); this.setState({projectType: 'project'}, () => this.saveProject())}}
+            onClick={this.state.projectType === 'project' ? (e) => {this.toggleMenu(e); this.props.updateProject(this.state.projectType, this.props.project._id)} : (e) => {this.toggleMenu(e); this.setState({projectType: 'project'}, () => this.saveProject())}}
           >
             {this.state.projectType === 'project' ? 'Projekt aktualisieren' : 'Projekt erstellen'}
           </MenuItem>
           <MenuItem
-            onClick={this.state.projectType === 'gallery' ? (e) => {this.toggleMenu(e); this.props.updateProject(this.state.projectType, this.props.project._id._id ? this.props.project._id._id : this.props.project._id)} : (e) => {this.toggleMenu(e); this.setState({ open: true, title: 'Projekbeschreibung ergänzen', content: 'Bitte gib eine Beschreibung für das Galerie-Projekt ein und bestätige deine Angabe mit einem Klick auf \'Eingabe\'.'});}}
+            onClick={this.state.projectType === 'gallery' ? (e) => {this.toggleMenu(e); this.props.updateProject(this.state.projectType, this.props.project._id)} : (e) => {this.toggleMenu(e); this.setState({ open: true, title: 'Projekbeschreibung ergänzen', content: 'Bitte gib eine Beschreibung für das Galerie-Projekt ein und bestätige deine Angabe mit einem Klick auf \'Eingabe\'.'});}}
           >
             {this.state.projectType === 'gallery' ? 'Galerie-Projekt aktualisieren' : 'Galerie-Projekt erstellen'}
           </MenuItem>

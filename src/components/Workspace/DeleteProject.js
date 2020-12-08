@@ -59,7 +59,7 @@ class DeleteProject extends Component {
         <Tooltip title='Projekt löschen' arrow>
           <IconButton
             className={this.props.classes.buttonTrash}
-            onClick={() => this.props.deleteProject(this.props.projectType, this.props.project._id._id ? this.props.project._id._id : this.props.project._id)}
+            onClick={() => this.props.deleteProject(this.props.projectType, this.props.project._id)}
           >
             <FontAwesomeIcon icon={faTrashAlt} size="xs" />
           </IconButton>
