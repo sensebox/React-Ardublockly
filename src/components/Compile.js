@@ -15,7 +15,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import TextField from '@material-ui/core/TextField';
 
-import { faCogs } from "@fortawesome/free-solid-svg-icons";
+import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const styles = (theme) => ({
@@ -24,7 +24,7 @@ const styles = (theme) => ({
     color: '#fff',
   },
   button: {
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: theme.palette.button.compile,
     color: theme.palette.primary.contrastText,
     width: '40px',
     height: '40px',
@@ -116,12 +116,12 @@ class Compile extends Component {
               className={this.props.classes.button}
               onClick={() => this.compile()}
             >
-              <FontAwesomeIcon icon={faCogs} size="xs" />
+              <FontAwesomeIcon icon={faClipboardCheck} size="l" />
             </IconButton>
           </Tooltip>
           :
           <Button style={{ float: 'right', color: 'white' }} variant="contained" color="primary" onClick={() => this.compile()}>
-            <FontAwesomeIcon icon={faCogs} style={{ marginRight: '5px' }} /> Kompilieren
+            <FontAwesomeIcon icon={faClipboardCheck} style={{ marginRight: '5px' }} /> Kompilieren
           </Button>
         }
         <Backdrop className={this.props.classes.backdrop} open={this.state.progress}>

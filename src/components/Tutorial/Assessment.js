@@ -11,7 +11,7 @@ import withWidth, { isWidthDown } from '@material-ui/core/withWidth';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
-
+import ReactMarkdown from 'react-markdown'
 class Assessment extends Component {
 
   componentDidMount() {
@@ -46,7 +46,7 @@ class Assessment extends Component {
           <Grid item xs={12} md={6} lg={4} style={isWidthDown('sm', this.props.width) ? { height: 'max-content' } : {}}>
             <Card style={{ height: 'calc(50% - 30px)', padding: '10px', marginBottom: '10px' }}>
               <Typography variant='h5'>Arbeitsauftrag</Typography>
-              <Typography>{currentTask.text}</Typography>
+              <Typography><ReactMarkdown allowDangerousHtml={true} skipHtml={false} >{currentTask.text}</ReactMarkdown></Typography>
             </Card>
             <div style={isWidthDown('sm', this.props.width) ? { height: '500px' } : { height: '50%' }}>
               <CodeViewer />
