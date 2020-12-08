@@ -79,7 +79,7 @@ class WorkspaceName extends Component {
       if(this.state.projectType === 'gallery'){
         this.saveGallery();
       } else {
-        this.props.updateProject(this.props.projectType, this.props.project._id._id ? this.props.project._id._id : this.props.project._id);
+        this.props.updateProject(this.props.projectType, this.props.project._id);
       }
     } else {
       this.setState({ snackbar: true, type: 'success', key: Date.now(), message: `Das Projekt wurde erfolgreich in '${this.state.name}' umbenannt.` });

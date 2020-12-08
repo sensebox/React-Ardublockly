@@ -113,7 +113,7 @@ export const deleteProject = (type, id) => (dispatch, getState) => {
   axios.delete(`${process.env.REACT_APP_BLOCKLY_API}/${type}/${id}`)
     .then(res => {
       var projects = getState().project.projects;
-      var index = projects.findIndex(res => res._id === id || res._id._id === id);
+      var index = projects.findIndex(res => res._id === id);
       projects.splice(index, 1)
       dispatch({
         type: GET_PROJECTS,
@@ -148,10 +148,7 @@ export const shareProject = (title, type, id) => (dispatch, getState) => {
       if(body.projectId){
         var projects = getState().project.projects;
         var index = projects.findIndex(res => res._id === id);
-        projects[index]._id = {
-          _id: shareContent._id,
-          expiresAt: shareContent.expiresAt
-        };
+        projects[index].shared = shareContent.expiresAt;
         dispatch({
           type: GET_PROJECTS,
           payload: projects

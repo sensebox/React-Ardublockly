@@ -96,7 +96,7 @@ class ProjectHome extends Component {
                   return (
                     <Grid item xs={12} sm={6} md={4} xl={3} key={i}>
                       <Paper style={{ padding: '1rem', position: 'relative', overflow: 'hidden' }}>
-                        <Link to={`/${data === 'Projekte' ? 'project' : 'gallery'}/${project._id._id ? project._id._id : project._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                        <Link to={`/${data === 'Projekte' ? 'project' : 'gallery'}/${project._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                           <h3 style={{marginTop: 0}}>{project.title}</h3>
                           <Divider style={{marginTop: '1rem', marginBottom: '10px'}}/>
                           <BlocklyWindow
