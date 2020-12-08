@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { workspaceName } from '../actions/workspaceActions';
+import { workspaceName } from '../../actions/workspaceActions';
 
-import { detectWhitespacesAndReturnReadableResult } from '../helpers/whitespace';
+import { detectWhitespacesAndReturnReadableResult } from '../../helpers/whitespace';
 
-import Dialog from './Dialog';
+import Dialog from '../Dialog';
 
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';

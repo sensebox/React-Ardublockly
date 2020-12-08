@@ -6,11 +6,11 @@ import { clearStats, workspaceName } from '../actions/workspaceActions';
 import * as Blockly from 'blockly/core';
 import { createNameId } from 'mnemonic-id';
 
-import WorkspaceStats from './WorkspaceStats';
-import WorkspaceFunc from './WorkspaceFunc';
+import WorkspaceStats from './Workspace/WorkspaceStats';
+import WorkspaceFunc from './Workspace/WorkspaceFunc';
 import BlocklyWindow from './Blockly/BlocklyWindow';
 import CodeViewer from './CodeViewer';
-import TrashcanButtons from './TrashcanButtons';
+import TrashcanButtons from './Workspace/TrashcanButtons';
 import HintTutorialExists from './Tutorial/HintTutorialExists';
 import Snackbar from './Snackbar';
 

@@ -10,7 +10,7 @@ import { Link, withRouter } from 'react-router-dom';
 import Breadcrumbs from '../Breadcrumbs';
 import BlocklyWindow from '../Blockly/BlocklyWindow';
 import Snackbar from '../Snackbar';
-import WorkspaceFunc from '../WorkspaceFunc';
+import WorkspaceFunc from '../Workspace/WorkspaceFunc';
 
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -104,7 +104,7 @@ class ProjectHome extends Component {
                             blockDisabled
                             initialXml={project.xml}
                           />
-                          <Typography variant='body2' style={{fontStyle: 'italic', margin: 0, marginTop: '-30px'}}>{project.description}</Typography>
+                          <Typography variant='body2' style={{fontStyle: 'italic', margin: 0, marginTop: '-10px'}}>{project.description}</Typography>
                         </Link>
                         {this.props.user && this.props.user.email === project.creator ?
                           <div>

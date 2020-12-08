@@ -5,7 +5,7 @@ import { workspaceName } from '../../actions/workspaceActions';
 
 import BlocklyWindow from '../Blockly/BlocklyWindow';
 import CodeViewer from '../CodeViewer';
-import WorkspaceFunc from '../WorkspaceFunc';
+import WorkspaceFunc from '../Workspace/WorkspaceFunc';
 
 import withWidth, { isWidthDown } from '@material-ui/core/withWidth';
 import Grid from '@material-ui/core/Grid';

@@ -76,7 +76,7 @@ export const updateProject = (type, id) => (dispatch, getState) => {
   var body = {
     xml: workspace.code.xml,
     title: workspace.name
-  }
+  };
   var project = getState().project;
   if(type==='gallery'){
     body.description = project.description;
@@ -99,10 +99,14 @@ export const updateProject = (type, id) => (dispatch, getState) => {
     })
     .catch(err => {
       if(err.response){
-        dispatch(returnErrors(err.response.data.message, err.response.status, 'PROJECT_UPDATE_FAIL'));
+        if(type === 'project'){
+          dispatch(returnErrors(err.response.data.message, err.response.status, 'PROJECT_UPDATE_FAIL'));
+        } else {
+          dispatch(returnErrors(err.response.data.message, err.response.status, 'GALLERY_UPDATE_FAIL'));
+        }
       }
     });
-}
+};
 
 export const deleteProject = (type, id) => (dispatch, getState) => {
   var project = getState().project;

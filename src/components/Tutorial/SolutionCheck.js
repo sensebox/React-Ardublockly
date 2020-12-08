@@ -5,7 +5,7 @@ import { tutorialCheck, tutorialStep } from '../../actions/tutorialActions';
 
 import { withRouter } from 'react-router-dom';
 
-import Compile from '../Compile';
+import Compile from '../Workspace/Compile';
 import Dialog from '../Dialog';
 
 import { checkXml } from '../../helpers/compareXml';
