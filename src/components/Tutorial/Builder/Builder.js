@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { checkError, readJSON, jsonString, progress, tutorialId, resetTutorial as resetTutorialBuilder} from '../../../actions/tutorialBuilderActions';
-import { getTutorials, resetTutorial} from '../../../actions/tutorialActions';
+import { getTutorials, resetTutorial, deleteTutorial } from '../../../actions/tutorialActions';
 import { clearMessages } from '../../../actions/messageActions';
 
 import axios from 'axios';
@@ -38,8 +38,17 @@ const styles = (theme) => ({
   },
   errorColor: {
     color: theme.palette.error.dark
+  },
+  errorButton: {
+    marginTop: '5px',
+    height: '40px',
+    backgroundColor: theme.palette.error.dark,
+    '&:hover':{
+      backgroundColor: theme.palette.error.dark
+    }
   }
 });
+
 
 class Builder extends Component {
 
@@ -63,9 +72,18 @@ class Builder extends Component {
   }
 
   componentDidUpdate(props, state) {
-    if(this.props.message.id === 'GET_TUTORIALS_FAIL'){
-      alert(this.props.message.msg);
-      this.props.clearMessages();
+    if(props.message !== this.props.message){
+      if(this.props.message.id === 'GET_TUTORIALS_FAIL'){
+        // alert(this.props.message.msg);
+        this.props.clearMessages();
+      }
+      else if(this.props.message.id === 'TUTORIAL_DELETE_SUCCESS'){
+        this.onChange('new');
+        this.setState({ snackbar: true, key: Date.now(), message: `Das Tutorial wurde erfolgreich gelöscht.`, type: 'success' });
+      }
+      else if(this.props.message.id === 'TUTORIAL_DELETE_FAIL'){
+        this.setState({ snackbar: true, key: Date.now(), message: `Fehler beim Löschen des Tutorials. Versuche es noch einmal.`, type: 'error' });
+      }
     }
   }
 
@@ -130,10 +148,12 @@ class Builder extends Component {
 
   onChangeId = (value) => {
     this.props.tutorialId(value);
-    this.props.progress(true);
-    var tutorial = this.props.tutorials.filter(tutorial => tutorial._id === value)[0];
-    this.props.readJSON(tutorial);
-    this.setState({ snackbar: true, key: Date.now(), message: `Das ausgewählte Tutorial "${tutorial.title}" wurde erfolgreich übernommen.`, type: 'success' });
+    if(this.state.tutorial === 'change'){
+      this.props.progress(true);
+      var tutorial = this.props.tutorials.filter(tutorial => tutorial._id === value)[0];
+      this.props.readJSON(tutorial);
+      this.setState({ snackbar: true, key: Date.now(), message: `Das ausgewählte Tutorial "${tutorial.title}" wurde erfolgreich übernommen.`, type: 'success' });
+    }
   }
 
   resetFull = () => {
@@ -222,6 +242,7 @@ class Builder extends Component {
   }
 
   render() {
+    var filteredTutorials = this.props.tutorials.filter(tutorial => tutorial.creator === this.props.user.email);
     return (
       <div>
         <Breadcrumbs content={[{ link: '/tutorial', title: 'Tutorial' }, { link: '/tutorial/builder', title: 'Builder' }]} />
@@ -235,13 +256,24 @@ class Builder extends Component {
             label="neues Tutorial erstellen"
             labelPlacement="end"
           />
-          <FormControlLabel style={{color: 'black'}}
-            disabled={this.props.index === 0}
-            value="change"
-            control={<Radio color="primary" />}
-            label="bestehendes Tutorial ändern"
-            labelPlacement="end"
-          />
+          {filteredTutorials.length > 0 ?
+          <div>
+            <FormControlLabel style={{color: 'black'}}
+              disabled={this.props.index === 0}
+              value="change"
+              control={<Radio color="primary" />}
+              label="bestehendes Tutorial ändern"
+              labelPlacement="end"
+            />
+            <FormControlLabel style={{color: 'black'}}
+              disabled={this.props.index === 0}
+              value="delete"
+              control={<Radio color="primary" />}
+              label="bestehendes Tutorial löschen"
+              labelPlacement="end"
+            />
+          </div>
+        : null}
         </RadioGroup>
 
         <Divider variant='fullWidth' style={{ margin: '10px 0 15px 0' }} />
@@ -266,11 +298,11 @@ class Builder extends Component {
             <Select
               color='primary'
               labelId="select-outlined-label"
-              defaultValue={this.props.id}
+              value={this.props.id}
               onChange={(e) => this.onChangeId(e.target.value)}
               label="Tutorial"
             >
-              {this.props.tutorials.map(tutorial =>
+              {filteredTutorials.map(tutorial =>
                 <MenuItem value={tutorial._id}>{tutorial.title}</MenuItem>
               )}
             </Select>
@@ -309,6 +341,14 @@ class Builder extends Component {
             <CircularProgress color="inherit" />
           </Backdrop>
         </div>
+        : null}
+
+        {this.state.tutorial === 'delete' && this.props.id !== '' ?
+          <Button
+            className={this.props.classes.errorButton}
+            variant='contained'
+            color='primary'
+            onClick={() => this.props.deleteTutorial()}>Tutorial löschen</Button>
         : null}
 
         <Dialog
@@ -355,6 +395,7 @@ Builder.propTypes = {
   readJSON: PropTypes.func.isRequired,
   jsonString: PropTypes.func.isRequired,
   progress: PropTypes.func.isRequired,
+  deleteTutorial: PropTypes.func.isRequired,
   resetTutorialBuilder: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   steps: PropTypes.array.isRequired,
@@ -364,7 +405,8 @@ Builder.propTypes = {
   id: PropTypes.string.isRequired,
   isProgress: PropTypes.bool.isRequired,
   tutorials: PropTypes.array.isRequired,
-  message: PropTypes.object.isRequired
+  message: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -376,7 +418,8 @@ const mapStateToProps = state => ({
   json: state.builder.json,
   isProgress: state.builder.progress,
   tutorials: state.tutorial.tutorials,
-  message: state.message
+  message: state.message,
+  user: state.auth.user,
 });
 
-export default connect(mapStateToProps, { checkError, readJSON, jsonString, progress, tutorialId, resetTutorialBuilder, getTutorials, resetTutorial, clearMessages })(withStyles(styles, { withTheme: true })(withRouter(Builder)));
+export default connect(mapStateToProps, { checkError, readJSON, jsonString, progress, tutorialId, resetTutorialBuilder, getTutorials, resetTutorial, clearMessages, deleteTutorial })(withStyles(styles, { withTheme: true })(withRouter(Builder)));
