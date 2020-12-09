@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { tutorialTitle, jsonString, changeContent, setError, deleteError } from '../../../actions/tutorialBuilderActions';
+import { tutorialTitle, tutorialBadge, jsonString, changeContent, setError, deleteError } from '../../../actions/tutorialBuilderActions';
 
 import { withStyles } from '@material-ui/core/styles';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
@@ -41,6 +41,9 @@ class Textfield extends Component {
     }
     else if(this.props.property === 'json'){
       this.props.jsonString(value);
+    }
+    else if(this.props.property === 'badge'){
+      this.props.tutorialBadge(value);
     }
     else {
       this.props.changeContent(value, this.props.index, this.props.property, this.props.property2);
@@ -86,8 +89,9 @@ class Textfield extends Component {
 
 Textfield.propTypes = {
   tutorialTitle: PropTypes.func.isRequired,
+  tutorialBadge: PropTypes.func.isRequired,
   jsonString: PropTypes.func.isRequired,
   changeContent: PropTypes.func.isRequired,
 };
 
-export default connect(null, { tutorialTitle, jsonString, changeContent, setError, deleteError })(withStyles(styles, { withTheme: true })(Textfield));
+export default connect(null, { tutorialTitle, tutorialBadge, jsonString, changeContent, setError, deleteError })(withStyles(styles, { withTheme: true })(Textfield));

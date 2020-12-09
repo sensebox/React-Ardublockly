@@ -1,10 +1,11 @@
-import { PROGRESS, JSON_STRING, BUILDER_CHANGE, BUILDER_ERROR, BUILDER_TITLE, BUILDER_ID, BUILDER_ADD_STEP, BUILDER_DELETE_STEP, BUILDER_CHANGE_STEP,BUILDER_CHANGE_ORDER, BUILDER_DELETE_PROPERTY } from '../actions/types';
+import { PROGRESS, JSON_STRING, BUILDER_CHANGE, BUILDER_ERROR, BUILDER_TITLE, BUILDER_BADGE, BUILDER_ID, BUILDER_ADD_STEP, BUILDER_DELETE_STEP, BUILDER_CHANGE_STEP,BUILDER_CHANGE_ORDER, BUILDER_DELETE_PROPERTY } from '../actions/types';
 
 const initialState = {
   change: 0,
   progress: false,
   json: '',
   title: '',
+  badge: '',
   id: '',
   steps: [
     {
@@ -32,6 +33,11 @@ export default function(state = initialState, action){
       return {
         ...state,
         title: action.payload
+      };
+    case BUILDER_BADGE:
+      return {
+        ...state,
+        badge: action.payload
       };
     case BUILDER_ID:
       return {

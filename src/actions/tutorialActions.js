@@ -56,6 +56,19 @@ export const getTutorials = () => (dispatch, getState) => {
     });
 };
 
+export const assigneBadge = (id) => (dispatch, getState) => {
+  axios.put(`${process.env.REACT_APP_BLOCKLY_API}/user/badge/${id}`)
+    .then(res => {
+      var badge = res.data.badge;
+      dispatch(returnSuccess(badge, res.status, 'ASSIGNE_BADGE_SUCCESS'));
+    })
+    .catch(err => {
+      if(err.response){
+        dispatch(returnErrors(err.response.data.message, err.response.status, 'ASSIGNE_BADGE_FAIL'));
+      }
+    });
+};
+
 export const deleteTutorial = (id) => (dispatch, getState) => {
   var tutorial = getState().tutorial;
   var id = getState().builder.id;
