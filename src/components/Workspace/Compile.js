@@ -23,11 +23,19 @@ const styles = (theme) => ({
     zIndex: theme.zIndex.drawer + 1,
     color: '#fff',
   },
-  button: {
+  iconButton: {
     backgroundColor: theme.palette.button.compile,
     color: theme.palette.primary.contrastText,
     width: '40px',
     height: '40px',
+    '&:hover': {
+      backgroundColor: theme.palette.button.compile,
+      color: theme.palette.primary.contrastText,
+    }
+  },
+  button: {
+    backgroundColor: theme.palette.button.compile,
+    color: theme.palette.primary.contrastText,
     '&:hover': {
       backgroundColor: theme.palette.button.compile,
       color: theme.palette.primary.contrastText,
@@ -113,14 +121,14 @@ class Compile extends Component {
         {this.props.iconButton ?
           <Tooltip title='Projekt kompilieren' arrow style={{ marginRight: '5px' }}>
             <IconButton
-              className={this.props.classes.button}
+              className={this.props.classes.iconButton}
               onClick={() => this.compile()}
             >
               <FontAwesomeIcon icon={faClipboardCheck} size="l" />
             </IconButton>
           </Tooltip>
           :
-          <Button style={{ float: 'right', color: 'white' }} variant="contained" color="primary" onClick={() => this.compile()}>
+          <Button style={{ float: 'right', color: 'white' }} variant="contained" className={this.props.classes.button} onClick={() => this.compile()}>
             <FontAwesomeIcon icon={faClipboardCheck} style={{ marginRight: '5px' }} /> Kompilieren
           </Button>
         }
