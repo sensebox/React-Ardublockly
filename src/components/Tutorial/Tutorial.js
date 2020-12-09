@@ -10,6 +10,7 @@ import StepperHorizontal from './StepperHorizontal';
 import StepperVertical from './StepperVertical';
 import Instruction from './Instruction';
 import Assessment from './Assessment';
+import Badge from './Badge';
 import NotFound from '../NotFound';
 
 import { detectWhitespacesAndReturnReadableResult } from '../../helpers/whitespace';
@@ -57,6 +58,7 @@ class Tutorial extends Component {
                     <Breadcrumbs content={[{ link: '/tutorial', title: 'Tutorial' }, { link: `/tutorial/${this.props.tutorial._id}`, title: tutorial.title }]} />
 
                     <StepperHorizontal />
+                    <Badge />
 
                     <div style={{ display: 'flex' }}>
                       <StepperVertical steps={steps} />

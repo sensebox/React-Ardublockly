@@ -1,4 +1,4 @@
-import { PROGRESS, JSON_STRING, BUILDER_CHANGE, BUILDER_ERROR, BUILDER_TITLE, BUILDER_ID, BUILDER_ADD_STEP, BUILDER_DELETE_STEP, BUILDER_CHANGE_STEP, BUILDER_CHANGE_ORDER, BUILDER_DELETE_PROPERTY } from './types';
+import { PROGRESS, JSON_STRING, BUILDER_CHANGE, BUILDER_ERROR, BUILDER_TITLE, BUILDER_ID, BUILDER_BADGE, BUILDER_ADD_STEP, BUILDER_DELETE_STEP, BUILDER_CHANGE_STEP, BUILDER_CHANGE_ORDER, BUILDER_DELETE_PROPERTY } from './types';
 
 import data from '../data/hardware.json';
 
@@ -35,6 +35,14 @@ export const tutorialId = (id) => (dispatch) => {
   dispatch({
     type: BUILDER_ID,
     payload: id
+  });
+  dispatch(changeTutorialBuilder());
+};
+
+export const tutorialBadge = (badge) => (dispatch) => {
+  dispatch({
+    type: BUILDER_BADGE,
+    payload: badge
   });
   dispatch(changeTutorialBuilder());
 };
@@ -243,7 +251,7 @@ export const progress = (inProgress) => (dispatch) => {
 export const resetTutorial = () => (dispatch, getState) => {
   dispatch(jsonString(''));
   dispatch(tutorialTitle(''));
-  // dispatch(tutorialId(''));
+  dispatch(tutorialBadge(''));
   var steps = [
     {
       id: 1,
@@ -298,7 +306,7 @@ export const readJSON = (json) => (dispatch, getState) => {
     return object;
   });
   dispatch(tutorialTitle(json.title));
-  // dispatch(tutorialId(json.id));
+  dispatch(tutorialBadge(json.badge));
   dispatch(tutorialSteps(steps));
   dispatch(setSubmitError());
   dispatch(progress(false));

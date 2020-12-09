@@ -181,6 +181,7 @@ class Builder extends Component {
       var steps = this.props.steps;
       var newTutorial = new FormData();
       newTutorial.append('title', this.props.title);
+      newTutorial.append('badge', this.props.badge);
       steps.forEach((step, i) => {
         newTutorial.append(`steps[${i}][type]`, step.type);
         newTutorial.append(`steps[${i}][headline]`, step.headline);
@@ -319,6 +320,7 @@ class Builder extends Component {
             : null}
           {/* <Id error={this.props.error.id} value={this.props.id} /> */}
           <Textfield value={this.props.title} property={'title'} label={'Titel'} error={this.props.error.title} />
+          <Textfield value={this.props.badge} property={'badge'} label={'Badge'} />
 
           {this.props.steps.map((step, i) =>
             <Step step={step} index={i} key={i} />
@@ -390,19 +392,21 @@ Builder.propTypes = {
   getTutorials: PropTypes.func.isRequired,
   resetTutorial: PropTypes.func.isRequired,
   clearMessages: PropTypes.func.isRequired,
-  checkError: PropTypes.func.isRequired,
   tutorialId: PropTypes.func.isRequired,
+  checkError: PropTypes.func.isRequired,
   readJSON: PropTypes.func.isRequired,
   jsonString: PropTypes.func.isRequired,
   progress: PropTypes.func.isRequired,
   deleteTutorial: PropTypes.func.isRequired,
   resetTutorialBuilder: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
+  badge: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   steps: PropTypes.array.isRequired,
   change: PropTypes.number.isRequired,
   error: PropTypes.object.isRequired,
   json: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
+  badge: PropTypes.string.isRequired,
   isProgress: PropTypes.bool.isRequired,
   tutorials: PropTypes.array.isRequired,
   message: PropTypes.object.isRequired,
@@ -411,6 +415,7 @@ Builder.propTypes = {
 
 const mapStateToProps = state => ({
   title: state.builder.title,
+  badge: state.builder.badge,
   id: state.builder.id,
   steps: state.builder.steps,
   change: state.builder.change,
