@@ -21,6 +21,7 @@ import Impressum from '../Impressum';
 import Privacy from '../Privacy';
 import Login from '../User/Login';
 import Account from '../User/Account';
+import MyBadges from '../User/MyBadges';
 
 
 class Routes extends Component {
@@ -57,7 +58,10 @@ class Routes extends Component {
             <Login />
           </IsLoggedRoute>
           <PrivateRoute path="/user" exact>
-            <Account/>
+            <Account />
+          </PrivateRoute>
+          <PrivateRoute path="/user/badge" exact>
+            <MyBadges />
           </PrivateRoute>
           {/* settings */}
           <Route path="/settings" exact component={Settings} />

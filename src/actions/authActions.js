@@ -1,4 +1,4 @@
-import { USER_LOADED, USER_LOADING, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_SUCCESS, LOGOUT_FAIL, REFRESH_TOKEN_SUCCESS } from '../actions/types';
+import { MYBADGES_CONNECT, MYBADGES_DISCONNECT, USER_LOADED, USER_LOADING, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_SUCCESS, LOGOUT_FAIL, REFRESH_TOKEN_SUCCESS } from '../actions/types';
 
 import axios from 'axios';
 import { returnErrors, returnSuccess } from './messageActions'
@@ -64,12 +64,59 @@ export const login = ({ email, password }) => (dispatch) => {
     dispatch(returnSuccess(res.data.message, res.status, 'LOGIN_SUCCESS'));
   })
   .catch(err => {
-    console.log('hier');
-    console.log(err);
     dispatch(returnErrors(err.response.data.message, err.response.status, 'LOGIN_FAIL'));
     dispatch({
       type: LOGIN_FAIL
     });
+  });
+};
+
+
+// Connect to MyBadges-Account
+export const connectMyBadges = ({ username, password }) => (dispatch, getState) => {
+  // Headers
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+  // Request Body
+  const body = JSON.stringify({ username, password });
+  axios.post(`${process.env.REACT_APP_BLOCKLY_API}/user/badge`, body, config)
+  .then(res => {
+    var user = getState().auth.user;
+    user.badge = res.data.account;
+    dispatch({
+      type: MYBADGES_CONNECT,
+      payload: user
+    });
+    dispatch(returnSuccess(res.data.message, res.status, 'MYBADGES_CONNECT_SUCCESS'));
+  })
+  .catch(err => {
+    dispatch(returnErrors(err.response.data.message, err.response.status, 'MYBADGES_CONNECT_FAIL'));
+  });
+};
+
+// Disconnect MyBadges-Account
+export const disconnectMyBadges = () => (dispatch, getState) => {
+  // Headers
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+  axios.put(`${process.env.REACT_APP_BLOCKLY_API}/user/badge`, config)
+  .then(res => {
+    var user = getState().auth.user;
+    user.badge = null;
+    dispatch({
+      type: MYBADGES_DISCONNECT,
+      payload: user
+    });
+    dispatch(returnSuccess(res.data.message, res.status, 'MYBADGES_DISCONNECT_SUCCESS'));
+  })
+  .catch(err => {
+    dispatch(returnErrors(err.response.data.message, err.response.status, 'MYBADGES_DISCONNECT_FAIL'));
   });
 };
 
