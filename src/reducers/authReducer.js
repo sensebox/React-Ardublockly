@@ -1,4 +1,4 @@
-import { USER_LOADED, USER_LOADING, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_SUCCESS, LOGOUT_FAIL, REFRESH_TOKEN_SUCCESS } from '../actions/types';
+import { MYBADGES_CONNECT, MYBADGES_DISCONNECT, USER_LOADED, USER_LOADING, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_SUCCESS, LOGOUT_FAIL, REFRESH_TOKEN_SUCCESS } from '../actions/types';
 
 
 const initialState = {
@@ -27,7 +27,6 @@ export default function(state = initialState, action){
     case REFRESH_TOKEN_SUCCESS:
       localStorage.setItem('token', action.payload.token);
       localStorage.setItem('refreshToken', action.payload.refreshToken);
-      console.log(action.payload);
       return {
         ...state,
         user: action.payload.user,
@@ -35,6 +34,12 @@ export default function(state = initialState, action){
         refreshToken: action.payload.refreshToken,
         isAuthenticated: true,
         progress: false
+      };
+    case MYBADGES_CONNECT:
+    case MYBADGES_DISCONNECT:
+      return {
+        ...state,
+        user: action.payload
       };
     case AUTH_ERROR:
     case LOGIN_FAIL:
