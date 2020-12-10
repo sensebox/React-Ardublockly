@@ -1,4 +1,4 @@
-import { TUTORIAL_PROGRESS, GET_TUTORIAL, GET_TUTORIALS, TUTORIAL_SUCCESS, TUTORIAL_ERROR, TUTORIAL_CHANGE, TUTORIAL_XML, TUTORIAL_ID, TUTORIAL_STEP } from './types';
+import { MYBADGES_DISCONNECT, TUTORIAL_PROGRESS, GET_TUTORIAL, GET_TUTORIALS, TUTORIAL_SUCCESS, TUTORIAL_ERROR, TUTORIAL_CHANGE, TUTORIAL_XML, TUTORIAL_ID, TUTORIAL_STEP } from './types';
 
 import axios from 'axios';
 import { returnErrors, returnSuccess } from './messageActions';
@@ -60,6 +60,12 @@ export const assigneBadge = (id) => (dispatch, getState) => {
   axios.put(`${process.env.REACT_APP_BLOCKLY_API}/user/badge/${id}`)
     .then(res => {
       var badge = res.data.badge;
+      var user = getState().auth.user;
+      user.badges.push(badge._id);
+      dispatch({
+        type: MYBADGES_DISCONNECT,
+        payload: user
+      });
       dispatch(returnSuccess(badge, res.status, 'ASSIGNE_BADGE_SUCCESS'));
     })
     .catch(err => {
@@ -122,6 +128,7 @@ export const tutorialCheck = (status, step) => (dispatch, getState) => {
     payload: tutorialsStatus
   });
   dispatch(tutorialChange());
+  dispatch(returnSuccess('','','TUTORIAL_CHECK_SUCCESS'));
 };
 
 export const storeTutorialXml = (code) => (dispatch, getState) => {

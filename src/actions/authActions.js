@@ -86,6 +86,7 @@ export const connectMyBadges = ({ username, password }) => (dispatch, getState) 
   .then(res => {
     var user = getState().auth.user;
     user.badge = res.data.account;
+    user.badges = res.data.badges;
     dispatch({
       type: MYBADGES_CONNECT,
       payload: user
@@ -109,6 +110,7 @@ export const disconnectMyBadges = () => (dispatch, getState) => {
   .then(res => {
     var user = getState().auth.user;
     user.badge = null;
+    user.badges = null;
     dispatch({
       type: MYBADGES_DISCONNECT,
       payload: user
