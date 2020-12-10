@@ -84,7 +84,7 @@ class Media extends Component {
       this.setState({ error: false });
       this.props.changeContent(URL.createObjectURL(pic), this.props.index, 'url');
     }
-    this.props.changeContent(pic.name, this.props.index, 'media', 'picture');
+    this.props.changeContent(pic, this.props.index, 'media', 'picture');
   }
 
   render() {
@@ -121,8 +121,7 @@ class Media extends Component {
               <div>
                 {!this.props.error ?
                   <div>
-                    <FormHelperText style={{lineHeight: 'initial', marginBottom: '10px'}}>{`Beachte, dass das Foto zusätzlich in den Ordner public/media/tutorial unter dem Namen '${this.props.picture}' abgespeichert werden muss.`}</FormHelperText>
-                    <img src={this.props.url ? this.props.url : `/media/tutorial/${this.props.picture}`} alt={this.props.url ? '' : `Das Bild '${this.props.picture}' konnte nicht im Ordner public/media/tutorial gefunden werden und kann daher nicht angezeigt werden.`} style={{maxHeight: '180px', maxWidth: '360px', marginBottom: '5px'}}/>
+                    <img src={this.props.url ? this.props.url : this.props.picture ? `${process.env.REACT_APP_BLOCKLY_API}/media/${this.props.picture.path}` : ''} alt={''} style={{maxHeight: '180px', maxWidth: '360px', marginBottom: '5px'}}/>
                   </div>
                 : <div
                     style={{height: '150px', maxWidth: '250px', marginBottom: '5px', justifyContent: "center", alignItems: "center", display:"flex", padding: '20px'}}

@@ -5,7 +5,7 @@ import { workspaceName } from '../../actions/workspaceActions';
 
 import BlocklyWindow from '../Blockly/BlocklyWindow';
 import CodeViewer from '../CodeViewer';
-import WorkspaceFunc from '../WorkspaceFunc';
+import WorkspaceFunc from '../Workspace/WorkspaceFunc';
 
 import withWidth, { isWidthDown } from '@material-ui/core/withWidth';
 import Grid from '@material-ui/core/Grid';
@@ -25,10 +25,10 @@ class Assessment extends Component {
   }
 
   render() {
-    var tutorialId = this.props.tutorial.id;
+    var tutorialId = this.props.tutorial._id;
     var currentTask = this.props.step;
-    var status = this.props.status.filter(status => status.id === tutorialId)[0];
-    var taskIndex = status.tasks.findIndex(task => task.id === currentTask.id);
+    var status = this.props.status.filter(status => status._id === tutorialId)[0];
+    var taskIndex = status.tasks.findIndex(task => task._id === currentTask._id);
     var statusTask = status.tasks[taskIndex];
 
     return (

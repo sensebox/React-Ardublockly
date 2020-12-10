@@ -5,7 +5,7 @@ import { tutorialCheck, tutorialStep } from '../../actions/tutorialActions';
 
 import { withRouter } from 'react-router-dom';
 
-import Compile from '../Compile';
+import Compile from '../Workspace/Compile';
 import Dialog from '../Dialog';
 
 import { checkXml } from '../../helpers/compareXml';
@@ -15,15 +15,15 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Button from '@material-ui/core/Button';
 
-import { faPlay } from "@fortawesome/free-solid-svg-icons";
+import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const styles = (theme) => ({
   compile: {
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: theme.palette.button.compile,
     color: theme.palette.primary.contrastText,
     '&:hover': {
-      backgroundColor: theme.palette.primary.main,
+      backgroundColor: theme.palette.button.compile,
       color: theme.palette.primary.contrastText,
     }
   }
@@ -63,7 +63,7 @@ class SolutionCheck extends Component {
             style={{ width: '40px', height: '40px', marginRight: '5px' }}
             onClick={() => this.check()}
           >
-            <FontAwesomeIcon icon={faPlay} size="xs" />
+            <FontAwesomeIcon icon={faClipboardCheck} size="l" />
           </IconButton>
         </Tooltip>
 

@@ -14,27 +14,9 @@ import FormControl from '@material-ui/core/FormControl';
 
 class Requirements extends Component {
 
-  componentDidMount() {
-    this.props.getTutorials();
-  }
-
-  componentDidUpdate(props, state) {
-    if(this.props.message.id === 'GET_TUTORIALS_FAIL'){
-      alert(this.props.message.msg);
-      this.props.clearMessages();
-    }
-  }
-
-  componentWillUnmount() {
-    this.props.resetTutorial();
-    if(this.props.message.msg){
-      this.props.clearMessages();
-    }
-  }
-
   onChange = (e) => {
     var requirements = this.props.value;
-    var value = parseInt(e.target.value)
+    var value = e.target.value;
     if (e.target.checked) {
       requirements.push(value);
     }
@@ -50,13 +32,13 @@ class Requirements extends Component {
         <FormLabel style={{ color: 'black' }}>Voraussetzungen</FormLabel>
         <FormHelperText style={{ marginTop: '5px' }}>Beachte, dass die Reihenfolge des Anhakens maßgebend ist.</FormHelperText>
         <FormGroup>
-          {this.props.tutorials.map((tutorial, i) =>
+          {this.props.tutorials.filter(tutorial => tutorial._id !== this.props.id).map((tutorial, i) =>
             <FormControlLabel
               key={i}
               control={
                 <Checkbox
-                  value={tutorial.id}
-                  checked={this.props.value.filter(id => id === tutorial.id).length > 0}
+                  value={tutorial._id}
+                  checked={this.props.value.filter(id => id === tutorial._id).length > 0}
                   onChange={(e) => this.onChange(e)}
                   name="requirements"
                   color="primary"
@@ -72,16 +54,15 @@ class Requirements extends Component {
 }
 
 Requirements.propTypes = {
-  getTutorials: PropTypes.func.isRequired,
-  resetTutorial: PropTypes.func.isRequired,
-  clearMessages: PropTypes.func.isRequired,
-  changeContent: PropTypes.func.isRequired
+  changeContent: PropTypes.func.isRequired,
+  id: PropTypes.string.isRequired,
+  tutorials: PropTypes.array.isRequired
 };
 
 const mapStateToProps = state => ({
   change: state.builder.change,
-  tutorials: state.tutorial.tutorials,
-  message: state.message
+  id: state.builder.id,
+  tutorials: state.tutorial.tutorials
 });
 
-export default connect(mapStateToProps, { changeContent, getTutorials, resetTutorial, clearMessages })(Requirements);
+export default connect(mapStateToProps, { changeContent })(Requirements);

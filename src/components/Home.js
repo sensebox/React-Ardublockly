@@ -4,14 +4,15 @@ import { connect } from 'react-redux';
 import { clearStats, workspaceName } from '../actions/workspaceActions';
 
 import * as Blockly from 'blockly/core';
+import { createNameId } from 'mnemonic-id';
 
-import WorkspaceStats from './WorkspaceStats';
-import WorkspaceFunc from './WorkspaceFunc';
+import WorkspaceStats from './Workspace/WorkspaceStats';
+import WorkspaceFunc from './Workspace/WorkspaceFunc';
 import BlocklyWindow from './Blockly/BlocklyWindow';
 import CodeViewer from './CodeViewer';
-import TrashcanButtons from './TrashcanButtons';
-import { createNameId } from 'mnemonic-id';
+import TrashcanButtons from './Workspace/TrashcanButtons';
 import HintTutorialExists from './Tutorial/HintTutorialExists';
+import Snackbar from './Snackbar';
 
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
@@ -47,29 +48,28 @@ class Home extends Component {
 
   state = {
     codeOn: false,
-    gallery: [],
-    share: [],
-    projectToLoad: undefined,
     stats: window.localStorage.getItem('stats'),
+    snackbar: false,
+    type: '',
+    key: '',
+    message: ''
   }
 
   componentDidMount() {
-    this.setState({ stats: window.localStorage.getItem('stats') })
-    this.props.workspaceName(createNameId());
-    fetch(process.env.REACT_APP_BLOCKLY_API + this.props.location.pathname)
-      .then(res => res.json())
-      .then((data) => {
-        this.setState({ projectToLoad: data })
-      })
+    this.setState({ stats: window.localStorage.getItem('stats') });
+    if(!this.props.project){
+      this.props.workspaceName(createNameId());
+    }
+    if(this.props.message && this.props.message.id === 'GET_SHARE_FAIL'){
+      this.setState({ snackbar: true, key: Date.now(), message: `Das angefragte geteilte Projekt konnte nicht gefunden werden.`, type: 'error' });
+    }
   }
 
-
-  componentDidUpdate() {
+  componentDidUpdate(props) {
     /* Resize and reposition all of the workspace chrome (toolbox, trash,
     scrollbars etc.) This should be called when something changes that requires
     recalculating dimensions and positions of the trash, zoom, toolbox, etc.
     (e.g. window resize). */
-
     const workspace = Blockly.getMainWorkspace();
     Blockly.svgResize(workspace);
   }
@@ -95,7 +95,9 @@ class Home extends Component {
           <div style={{ float: 'left', height: '40px', position: 'relative' }}><WorkspaceStats /></div>
           : null
         }
-        <div style={{ float: 'right', height: '40px', marginBottom: '20px' }}><WorkspaceFunc /></div>
+        <div style={{ float: 'right', height: '40px', marginBottom: '20px' }}>
+          <WorkspaceFunc project={this.props.project} projectType={this.props.projectType}/>
+        </div>
         <Grid container spacing={2}>
           <Grid item xs={12} md={this.state.codeOn ? 8 : 12} style={{ position: 'relative' }}>
             <Tooltip title={this.state.codeOn ? 'Code ausblenden' : 'Code anzeigen'} >
@@ -108,18 +110,24 @@ class Home extends Component {
               </IconButton>
             </Tooltip>
             <TrashcanButtons />
-            {this.state.projectToLoad ?
-              < BlocklyWindow blocklyCSS={{ height: '80vH' }} initialXml={this.state.projectToLoad.xml} /> : < BlocklyWindow blocklyCSS={{ height: '80vH' }} />
+            {this.props.project ?
+              < BlocklyWindow blocklyCSS={{ height: '80vH' }} initialXml={this.props.project.xml} />
+            : < BlocklyWindow blocklyCSS={{ height: '80vH' }} />
             }
-
           </Grid>
           {this.state.codeOn ?
             <Grid item xs={12} md={4}>
               <CodeViewer />
             </Grid>
-            : null}
+          : null}
         </Grid>
         <HintTutorialExists />
+        <Snackbar
+          open={this.state.snackbar}
+          message={this.state.message}
+          type={this.state.type}
+          key={this.state.key}
+        />
       </div>
     );
   };
@@ -127,8 +135,13 @@ class Home extends Component {
 
 Home.propTypes = {
   clearStats: PropTypes.func.isRequired,
-  workspaceName: PropTypes.func.isRequired
+  workspaceName: PropTypes.func.isRequired,
+  message: PropTypes.object.isRequired
 };
 
+const mapStateToProps = state => ({
+  message: state.message
+});
 
-export default connect(null, { clearStats, workspaceName })(withStyles(styles, { withTheme: true })(Home));
+
+export default connect(mapStateToProps, { clearStats, workspaceName })(withStyles(styles, { withTheme: true })(Home));
