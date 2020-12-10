@@ -1,3 +1,16 @@
+// authentication
+export const USER_LOADING = 'USER_LOADING';
+export const USER_LOADED = 'USER_LOADED';
+export const AUTH_ERROR = 'AUTH_ERROR';
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const LOGIN_FAIL = 'LOGIN_FAIL';
+export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
+export const LOGOUT_FAIL = 'LOGOUT_FAIL';
+export const REFRESH_TOKEN_FAIL = 'REFRESH_TOKEN_FAIL';
+export const REFRESH_TOKEN_SUCCESS = 'REFRESH_TOKEN_SUCCESS';
+export const MYBADGES_CONNECT = 'MYBADGES_CONNECT';
+export const MYBADGES_DISCONNECT = 'MYBADGES_DISCONNECT';
+
 export const NEW_CODE = 'NEW_CODE';
 export const CHANGE_WORKSPACE = 'CHANGE_WORKSPACE';
 export const CREATE_BLOCK = 'CREATE_BLOCK';
@@ -21,6 +34,7 @@ export const JSON_STRING = 'JSON_STRING';
 
 export const BUILDER_CHANGE = 'BUILDER_CHANGE';
 export const BUILDER_TITLE = 'BUILDER_TITLE';
+export const BUILDER_BADGE = 'BUILDER_BADGE';
 export const BUILDER_ID = 'BUILDER_ID';
 export const BUILDER_ADD_STEP = 'BUILDER_ADD_STEP';
 export const BUILDER_DELETE_STEP = 'BUILDER_DELETE_STEP';
@@ -37,3 +51,11 @@ export const VISIT = 'VISIT';
 export const GET_ERRORS = 'GET_ERRORS';
 export const GET_SUCCESS = 'GET_SUCCESS';
 export const CLEAR_MESSAGES = 'CLEAR_MESSAGES';
+
+
+// projects: share, gallery, project
+export const PROJECT_PROGRESS = 'PROJECT_PROGRESS';
+export const GET_PROJECT = 'GET_PROJECT';
+export const GET_PROJECTS = 'GET_PROJECTS';
+export const PROJECT_TYPE = 'PROJECT_TYPE';
+export const PROJECT_DESCRIPTION = 'PROJECT_DESCRIPTION';

@@ -32,6 +32,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "dev": "set \"REACT_APP_BLOCKLY_API=http://localhost:8080\" && npm start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

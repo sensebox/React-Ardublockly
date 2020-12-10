@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { workspaceName } from '../actions/workspaceActions';
+import { workspaceName } from '../../actions/workspaceActions';
 
-import { detectWhitespacesAndReturnReadableResult } from '../helpers/whitespace';
+import { detectWhitespacesAndReturnReadableResult } from '../../helpers/whitespace';
 
-import Dialog from './Dialog';
+import Dialog from '../Dialog';
 
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -15,7 +15,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import TextField from '@material-ui/core/TextField';
 
-import { faCogs } from "@fortawesome/free-solid-svg-icons";
+import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const styles = (theme) => ({
@@ -23,13 +23,21 @@ const styles = (theme) => ({
     zIndex: theme.zIndex.drawer + 1,
     color: '#fff',
   },
-  button: {
-    backgroundColor: theme.palette.primary.main,
+  iconButton: {
+    backgroundColor: theme.palette.button.compile,
     color: theme.palette.primary.contrastText,
     width: '40px',
     height: '40px',
     '&:hover': {
-      backgroundColor: theme.palette.primary.main,
+      backgroundColor: theme.palette.button.compile,
+      color: theme.palette.primary.contrastText,
+    }
+  },
+  button: {
+    backgroundColor: theme.palette.button.compile,
+    color: theme.palette.primary.contrastText,
+    '&:hover': {
+      backgroundColor: theme.palette.button.compile,
       color: theme.palette.primary.contrastText,
     }
   }
@@ -99,7 +107,7 @@ class Compile extends Component {
       this.download();
     }
     else {
-      this.setState({ file: true, open: true, title: 'Blöcke kompilieren', content: 'Bitte gib einen Namen für die Bennenung des zu kompilierenden Programms ein und bestätige diesen mit einem Klick auf \'Eingabe\'.' });
+      this.setState({ file: true, open: true, title: 'Projekt kompilieren', content: 'Bitte gib einen Namen für die Bennenung des zu kompilierenden Programms ein und bestätige diesen mit einem Klick auf \'Eingabe\'.' });
     }
   }
 
@@ -111,17 +119,17 @@ class Compile extends Component {
     return (
       <div style={{}}>
         {this.props.iconButton ?
-          <Tooltip title='Blöcke kompilieren' arrow style={{ marginRight: '5px' }}>
+          <Tooltip title='Projekt kompilieren' arrow style={{ marginRight: '5px' }}>
             <IconButton
-              className={this.props.classes.button}
+              className={this.props.classes.iconButton}
               onClick={() => this.compile()}
             >
-              <FontAwesomeIcon icon={faCogs} size="xs" />
+              <FontAwesomeIcon icon={faClipboardCheck} size="l" />
             </IconButton>
           </Tooltip>
           :
-          <Button style={{ float: 'right', color: 'white' }} variant="contained" color="primary" onClick={() => this.compile()}>
-            <FontAwesomeIcon icon={faCogs} style={{ marginRight: '5px' }} /> Kompilieren
+          <Button style={{ float: 'right', color: 'white' }} variant="contained" className={this.props.classes.button} onClick={() => this.compile()}>
+            <FontAwesomeIcon icon={faClipboardCheck} style={{ marginRight: '5px' }} /> Kompilieren
           </Button>
         }
         <Backdrop className={this.props.classes.backdrop} open={this.state.progress}>

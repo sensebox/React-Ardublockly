@@ -1,4 +1,4 @@
-import { PROGRESS, JSON_STRING, BUILDER_CHANGE, BUILDER_ERROR, BUILDER_TITLE, BUILDER_ID, BUILDER_ADD_STEP, BUILDER_DELETE_STEP, BUILDER_CHANGE_STEP, BUILDER_CHANGE_ORDER, BUILDER_DELETE_PROPERTY } from './types';
+import { PROGRESS, JSON_STRING, BUILDER_CHANGE, BUILDER_ERROR, BUILDER_TITLE, BUILDER_ID, BUILDER_BADGE, BUILDER_ADD_STEP, BUILDER_DELETE_STEP, BUILDER_CHANGE_STEP, BUILDER_CHANGE_ORDER, BUILDER_DELETE_PROPERTY } from './types';
 
 import data from '../data/hardware.json';
 
@@ -35,6 +35,14 @@ export const tutorialId = (id) => (dispatch) => {
   dispatch({
     type: BUILDER_ID,
     payload: id
+  });
+  dispatch(changeTutorialBuilder());
+};
+
+export const tutorialBadge = (badge) => (dispatch) => {
+  dispatch({
+    type: BUILDER_BADGE,
+    payload: badge
   });
   dispatch(changeTutorialBuilder());
 };
@@ -180,7 +188,7 @@ export const setSubmitError = () => (dispatch, getState) => {
   // if(builder.id === undefined || builder.id === ''){
   //   dispatch(setError(undefined, 'id'));
   // }
-  if (builder.id === undefined || builder.title === '') {
+  if (builder.title === '') {
     dispatch(setError(undefined, 'title'));
   }
   var type = builder.steps.map((step, i) => {
@@ -189,7 +197,7 @@ export const setSubmitError = () => (dispatch, getState) => {
     step.id = i + 1;
     if (i === 0) {
       if (step.requirements && step.requirements.length > 0) {
-        var requirements = step.requirements.filter(requirement => typeof (requirement) === 'number');
+        var requirements = step.requirements.filter(requirement => /^[0-9a-fA-F]{24}$/.test(requirement));
         if (requirements.length < step.requirements.length) {
           dispatch(changeContent(requirements, i, 'requirements'));
         }
@@ -243,7 +251,7 @@ export const progress = (inProgress) => (dispatch) => {
 export const resetTutorial = () => (dispatch, getState) => {
   dispatch(jsonString(''));
   dispatch(tutorialTitle(''));
-  dispatch(tutorialId(''));
+  dispatch(tutorialBadge(''));
   var steps = [
     {
       id: 1,
@@ -274,7 +282,7 @@ export const readJSON = (json) => (dispatch, getState) => {
   // accept only valid attributes
   var steps = json.steps.map((step, i) => {
     var object = {
-      id: step.id,
+      // id: step.id,
       type: step.type,
       headline: step.headline,
       text: step.text
@@ -298,7 +306,7 @@ export const readJSON = (json) => (dispatch, getState) => {
     return object;
   });
   dispatch(tutorialTitle(json.title));
-  dispatch(tutorialId(json.id));
+  dispatch(tutorialBadge(json.badge));
   dispatch(tutorialSteps(steps));
   dispatch(setSubmitError());
   dispatch(progress(false));

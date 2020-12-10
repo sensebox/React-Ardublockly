@@ -10,6 +10,7 @@ import StepperHorizontal from './StepperHorizontal';
 import StepperVertical from './StepperVertical';
 import Instruction from './Instruction';
 import Assessment from './Assessment';
+import Badge from './Badge';
 import NotFound from '../NotFound';
 
 import { detectWhitespacesAndReturnReadableResult } from '../../helpers/whitespace';
@@ -25,7 +26,7 @@ class Tutorial extends Component {
   }
 
   componentDidUpdate(props, state) {
-    if(this.props.tutorial && !this.props.isLoading && this.props.tutorial.id != this.props.match.params.tutorialId) {
+    if(this.props.tutorial && !this.props.isLoading && this.props.tutorial._id != this.props.match.params.tutorialId) {
       this.props.getTutorial(this.props.match.params.tutorialId);
     }
     if(this.props.message.id === 'GET_TUTORIAL_FAIL'){
@@ -54,9 +55,10 @@ class Tutorial extends Component {
                 var name = `${detectWhitespacesAndReturnReadableResult(tutorial.title)}_${detectWhitespacesAndReturnReadableResult(step.headline)}`;
                 return(
                   <div>
-                    <Breadcrumbs content={[{ link: '/tutorial', title: 'Tutorial' }, { link: `/tutorial/${this.props.tutorial.id}`, title: tutorial.title }]} />
+                    <Breadcrumbs content={[{ link: '/tutorial', title: 'Tutorial' }, { link: `/tutorial/${this.props.tutorial._id}`, title: tutorial.title }]} />
 
                     <StepperHorizontal />
+                    <Badge />
 
                     <div style={{ display: 'flex' }}>
                       <StepperVertical steps={steps} />
