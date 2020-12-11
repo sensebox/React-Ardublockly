@@ -254,7 +254,6 @@ export const resetTutorial = () => (dispatch, getState) => {
   dispatch(tutorialBadge(''));
   var steps = [
     {
-      id: 1,
       type: 'instruction',
       headline: '',
       text: '',
@@ -282,7 +281,7 @@ export const readJSON = (json) => (dispatch, getState) => {
   // accept only valid attributes
   var steps = json.steps.map((step, i) => {
     var object = {
-      // id: step.id,
+      _id: step._id,
       type: step.type,
       headline: step.headline,
       text: step.text

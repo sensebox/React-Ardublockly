@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { checkError, readJSON, jsonString, progress, tutorialId, resetTutorial as resetTutorialBuilder} from '../../../actions/tutorialBuilderActions';
-import { getTutorials, resetTutorial, deleteTutorial } from '../../../actions/tutorialActions';
+import { getTutorials, resetTutorial, deleteTutorial, tutorialProgress } from '../../../actions/tutorialActions';
 import { clearMessages } from '../../../actions/messageActions';
 
 import axios from 'axios';
@@ -68,10 +68,19 @@ class Builder extends Component {
   }
 
   componentDidMount() {
-    this.props.getTutorials();
+    this.props.tutorialProgress();
+    // retrieve tutorials only if a potential user is loaded - authentication
+    // is finished (success or failed)
+    if(!this.props.authProgress){
+      this.props.getTutorials();
+    }
   }
 
   componentDidUpdate(props, state) {
+    if(props.authProgress !== this.props.authProgress && !this.props.authProgress){
+      // authentication is completed
+      this.props.getTutorials();
+    }
     if(props.message !== this.props.message){
       if(this.props.message.id === 'GET_TUTORIALS_FAIL'){
         // alert(this.props.message.msg);
@@ -183,6 +192,9 @@ class Builder extends Component {
       newTutorial.append('title', this.props.title);
       newTutorial.append('badge', this.props.badge);
       steps.forEach((step, i) => {
+        if(step._id){
+          newTutorial.append(`steps[${i}][_id]`, step._id);
+        }
         newTutorial.append(`steps[${i}][type]`, step.type);
         newTutorial.append(`steps[${i}][headline]`, step.headline);
         newTutorial.append(`steps[${i}][text]`, step.text);
@@ -215,14 +227,22 @@ class Builder extends Component {
   submitNew = () => {
     var newTutorial = this.submit();
     if(newTutorial){
-      axios.post(`${process.env.REACT_APP_BLOCKLY_API}/tutorial/`, newTutorial)
-        .then(res => {
+      const config = {
+        success: res => {
           var tutorial = res.data.tutorial;
           this.props.history.push(`/tutorial/${tutorial._id}`);
-        })
-        .catch(err => {
+        },
+        error: err => {
           this.setState({ snackbar: true, key: Date.now(), message: `Fehler beim Erstellen des Tutorials. Versuche es noch einmal.`, type: 'error' });
           window.scrollTo(0, 0);
+        }
+      };
+      axios.post(`${process.env.REACT_APP_BLOCKLY_API}/tutorial/`, newTutorial, config)
+        .then(res => {
+          res.config.success(res);
+        })
+        .catch(err => {
+          err.config.error(err);
         });
     }
   }
@@ -230,14 +250,22 @@ class Builder extends Component {
   submitUpdate = () => {
     var updatedTutorial = this.submit();
     if(updatedTutorial){
-      axios.put(`${process.env.REACT_APP_BLOCKLY_API}/tutorial/${this.props.id}`, updatedTutorial)
-        .then(res => {
+      const config = {
+        success: res => {
           var tutorial = res.data.tutorial;
           this.props.history.push(`/tutorial/${tutorial._id}`);
-        })
-        .catch(err => {
+        },
+        error: err => {
           this.setState({ snackbar: true, key: Date.now(), message: `Fehler beim Ändern des Tutorials. Versuche es noch einmal.`, type: 'error' });
           window.scrollTo(0, 0);
+        }
+      };
+      axios.put(`${process.env.REACT_APP_BLOCKLY_API}/tutorial/${this.props.id}`, updatedTutorial, config)
+        .then(res => {
+          res.config.success(res);
+        })
+        .catch(err => {
+          err.config.error(err);
         });
     }
   }
@@ -399,6 +427,7 @@ Builder.propTypes = {
   progress: PropTypes.func.isRequired,
   deleteTutorial: PropTypes.func.isRequired,
   resetTutorialBuilder: PropTypes.func.isRequired,
+  tutorialProgress: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   badge: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
@@ -410,7 +439,8 @@ Builder.propTypes = {
   isProgress: PropTypes.bool.isRequired,
   tutorials: PropTypes.array.isRequired,
   message: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired
+  user: PropTypes.object.isRequired,
+  authProgress: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -425,6 +455,7 @@ const mapStateToProps = state => ({
   tutorials: state.tutorial.tutorials,
   message: state.message,
   user: state.auth.user,
+  authProgress: state.auth.progress
 });
 
-export default connect(mapStateToProps, { checkError, readJSON, jsonString, progress, tutorialId, resetTutorialBuilder, getTutorials, resetTutorial, clearMessages, deleteTutorial })(withStyles(styles, { withTheme: true })(withRouter(Builder)));
+export default connect(mapStateToProps, { checkError, readJSON, jsonString, progress, tutorialId, resetTutorialBuilder, getTutorials, resetTutorial, tutorialProgress, clearMessages, deleteTutorial })(withStyles(styles, { withTheme: true })(withRouter(Builder)));

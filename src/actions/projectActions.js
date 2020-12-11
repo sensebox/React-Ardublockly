@@ -21,8 +21,8 @@ export const setDescription = (description) => (dispatch) => {
 export const getProject = (type, id) => (dispatch) => {
   dispatch({type: PROJECT_PROGRESS});
   dispatch(setType(type));
-  axios.get(`${process.env.REACT_APP_BLOCKLY_API}/${type}/${id}`)
-    .then(res => {
+  const config = {
+    success: res => {
       var data = type === 'share' ? 'content' : type;
       var project = res.data[data];
       if(project){
@@ -41,19 +41,27 @@ export const getProject = (type, id) => (dispatch) => {
         dispatch({type: PROJECT_PROGRESS});
         dispatch(returnErrors(res.data.message, res.status, 'PROJECT_EMPTY'));
       }
-    })
-    .catch(err => {
+    },
+    error: err => {
       if(err.response){
         dispatch(returnErrors(err.response.data.message, err.response.status, 'GET_PROJECT_FAIL'));
       }
       dispatch({type: PROJECT_PROGRESS});
+    }
+  };
+  axios.get(`${process.env.REACT_APP_BLOCKLY_API}/${type}/${id}`, config)
+    .then(res => {
+      res.config.success(res);
+    })
+    .catch(err => {
+      err.config.error(err);
     });
 };
 
 export const getProjects = (type) => (dispatch) => {
   dispatch({type: PROJECT_PROGRESS});
-  axios.get(`${process.env.REACT_APP_BLOCKLY_API}/${type}`)
-    .then(res => {
+  const config = {
+    success: res => {
       var data = type === 'project' ? 'projects' : 'galleries';
       var projects = res.data[data];
       dispatch({
@@ -62,12 +70,20 @@ export const getProjects = (type) => (dispatch) => {
       });
       dispatch({type: PROJECT_PROGRESS});
       dispatch(returnSuccess(res.data.message, res.status));
-    })
-    .catch(err => {
+    },
+    error: err => {
       if(err.response){
         dispatch(returnErrors(err.response.data.message, err.response.status, 'GET_PROJECTS_FAIL'));
       }
       dispatch({type: PROJECT_PROGRESS});
+    }
+  };
+  axios.get(`${process.env.REACT_APP_BLOCKLY_API}/${type}`, config)
+    .then(res => {
+      res.config.success(res);
+    })
+    .catch(err => {
+      err.config.error(err);
     });
 };
 
@@ -81,8 +97,8 @@ export const updateProject = (type, id) => (dispatch, getState) => {
   if(type==='gallery'){
     body.description = project.description;
   }
-  axios.put(`${process.env.REACT_APP_BLOCKLY_API}/${type}/${id}`, body)
-    .then(res => {
+  const config = {
+    success: res => {
       var project = res.data[type];
       var projects = getState().project.projects;
       var index = projects.findIndex(res => res._id === project._id);
@@ -96,8 +112,8 @@ export const updateProject = (type, id) => (dispatch, getState) => {
       } else {
         dispatch(returnSuccess(res.data.message, res.status, 'GALLERY_UPDATE_SUCCESS'));
       }
-    })
-    .catch(err => {
+    },
+    error: err => {
       if(err.response){
         if(type === 'project'){
           dispatch(returnErrors(err.response.data.message, err.response.status, 'PROJECT_UPDATE_FAIL'));
@@ -105,13 +121,21 @@ export const updateProject = (type, id) => (dispatch, getState) => {
           dispatch(returnErrors(err.response.data.message, err.response.status, 'GALLERY_UPDATE_FAIL'));
         }
       }
+    }
+  };
+  axios.put(`${process.env.REACT_APP_BLOCKLY_API}/${type}/${id}`, body, config)
+    .then(res => {
+      res.config.success(res);
+    })
+    .catch(err => {
+      err.config.error(err);
     });
 };
 
 export const deleteProject = (type, id) => (dispatch, getState) => {
   var project = getState().project;
-  axios.delete(`${process.env.REACT_APP_BLOCKLY_API}/${type}/${id}`)
-    .then(res => {
+  const config = {
+    success: res => {
       var projects = getState().project.projects;
       var index = projects.findIndex(res => res._id === id);
       projects.splice(index, 1)
@@ -124,10 +148,18 @@ export const deleteProject = (type, id) => (dispatch, getState) => {
       } else {
         dispatch(returnSuccess(res.data.message, res.status, 'GALLERY_DELETE_SUCCESS'));
       }
+    },
+    error: err => {
+      dispatch(returnErrors(err.response.data.message, err.response.status, 'PROJECT_DELETE_FAIL'));
+    }
+  };
+  axios.delete(`${process.env.REACT_APP_BLOCKLY_API}/${type}/${id}`, config)
+    .then(res => {
+      res.config.success(res);
     })
     .catch(err => {
-      if(err.response){
-        dispatch(returnErrors(err.response.data.message, err.response.status, 'PROJECT_DELETE_FAIL'));
+      if(err.response && err.response.status !== 401){
+        err.config.error(err);
       }
     });
 };

@@ -94,13 +94,20 @@ export class MyBadges extends Component {
 
   getBadges = () => {
     this.setState({progress: true});
-    axios.get(`${process.env.REACT_APP_BLOCKLY_API}/user/badge`)
+    const config = {
+      success: res => {
+        this.setState({badges: res.data.badges, progress: false});
+      },
+      error: err => {
+        this.setState({progress: false});
+      }
+    };
+    axios.get(`${process.env.REACT_APP_BLOCKLY_API}/user/badge`, config)
     .then(res => {
-      this.setState({badges: res.data.badges, progress: false});
+      res.config.success(res);
     })
     .catch(err => {
-      this.setState({progress: false});
-      console.log(err);
+      err.config.error(err);
     });
   };
 

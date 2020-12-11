@@ -12,6 +12,7 @@ export const getTutorial = (id) => (dispatch, getState) => {
   axios.get(`${process.env.REACT_APP_BLOCKLY_API}/tutorial/${id}`)
     .then(res => {
       var tutorial = res.data.tutorial;
+      console.log('status', getState().tutorial.status);
       existingTutorial(tutorial, getState().tutorial.status).then(status => {
         console.log('progress',getState().auth.progress);
         console.log('status');
@@ -19,6 +20,7 @@ export const getTutorial = (id) => (dispatch, getState) => {
           type: TUTORIAL_SUCCESS,
           payload: status
         });
+        console.log('eins');
         dispatch(updateStatus(status));
         dispatch({
           type: GET_TUTORIAL,
@@ -46,6 +48,7 @@ export const getTutorials = () => (dispatch, getState) => {
           type: TUTORIAL_SUCCESS,
           payload: status
         });
+        console.log('zwei');
         dispatch(updateStatus(status));
         dispatch({
           type: GET_TUTORIALS,
@@ -64,8 +67,8 @@ export const getTutorials = () => (dispatch, getState) => {
 };
 
 export const assigneBadge = (id) => (dispatch, getState) => {
-  axios.put(`${process.env.REACT_APP_BLOCKLY_API}/user/badge/${id}`)
-    .then(res => {
+  const config = {
+    success: res => {
       var badge = res.data.badge;
       var user = getState().auth.user;
       user.badges.push(badge._id);
@@ -74,10 +77,18 @@ export const assigneBadge = (id) => (dispatch, getState) => {
         payload: user
       });
       dispatch(returnSuccess(badge, res.status, 'ASSIGNE_BADGE_SUCCESS'));
+    },
+    error: err => {
+      dispatch(returnErrors(err.response.data.message, err.response.status, 'ASSIGNE_BADGE_FAIL'));
+    }
+  };
+  axios.put(`${process.env.REACT_APP_BLOCKLY_API}/user/badge/${id}`, {}, config)
+    .then(res => {
+      res.config.success(res);
     })
     .catch(err => {
-      if(err.response){
-        dispatch(returnErrors(err.response.data.message, err.response.status, 'ASSIGNE_BADGE_FAIL'));
+      if(err.response && err.response.status !== 401){
+        err.config.error(err);
       }
     });
 };
@@ -103,8 +114,8 @@ export const updateStatus = (status) => (dispatch, getState) => {
 export const deleteTutorial = (id) => (dispatch, getState) => {
   var tutorial = getState().tutorial;
   var id = getState().builder.id;
-  axios.delete(`${process.env.REACT_APP_BLOCKLY_API}/tutorial/${id}`)
-    .then(res => {
+  const config = {
+    success: res => {
       var tutorials = tutorial.tutorials;
       var index = tutorials.findIndex(res => res._id === id);
       tutorials.splice(index, 1)
@@ -113,10 +124,18 @@ export const deleteTutorial = (id) => (dispatch, getState) => {
         payload: tutorials
       });
       dispatch(returnSuccess(res.data.message, res.status, 'TUTORIAL_DELETE_SUCCESS'));
+    },
+    error: err => {
+      dispatch(returnErrors(err.response.data.message, err.response.status, 'TUTORIAL_DELETE_FAIL'));
+    }
+  };
+  axios.delete(`${process.env.REACT_APP_BLOCKLY_API}/tutorial/${id}`, config)
+    .then(res => {
+      res.config.success(res);
     })
     .catch(err => {
-      if(err.response){
-        dispatch(returnErrors(err.response.data.message, err.response.status, 'TUTORIAL_DELETE_FAIL'));
+      if(err.response && err.response.status !== 401){
+        err.config.error(err);
       }
     });
 };
@@ -152,6 +171,7 @@ export const tutorialCheck = (status, step) => (dispatch, getState) => {
     type: status === 'success' ? TUTORIAL_SUCCESS : TUTORIAL_ERROR,
     payload: tutorialsStatus
   });
+  console.log('drei');
   dispatch(updateStatus(tutorialsStatus));
   dispatch(tutorialChange());
   dispatch(returnSuccess('','','TUTORIAL_CHECK_SUCCESS'));
@@ -208,6 +228,7 @@ const existingTutorials = (tutorials, status) => new Promise(function(resolve, r
 });
 
 const existingTutorial = (tutorial, status) => new Promise(function(resolve, reject){
+  console.log('st',status);
   var tutorialsId = tutorial._id;
   var statusIndex = status.findIndex(status => status._id === tutorialsId);
   if (statusIndex > -1) {

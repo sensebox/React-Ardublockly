@@ -44,7 +44,6 @@ export const loadUser = () => (dispatch) => {
       res.config.success(res);
     })
     .catch(err => {
-      console.log(err);
       err.config.error(err);
     });
 };
@@ -82,7 +81,6 @@ export const login = ({ email, password }) => (dispatch) => {
     dispatch(returnSuccess(res.data.message, res.status, 'LOGIN_SUCCESS'));
   })
   .catch(err => {
-    console.log(err);
     dispatch(returnErrors(err.response.data.message, err.response.status, 'LOGIN_FAIL'));
     dispatch({
       type: LOGIN_FAIL
@@ -101,51 +99,59 @@ export const login = ({ email, password }) => (dispatch) => {
 
 // Connect to MyBadges-Account
 export const connectMyBadges = ({ username, password }) => (dispatch, getState) => {
-  // Headers
   const config = {
-    headers: {
-      'Content-Type': 'application/json'
+    success: res => {
+      var user = getState().auth.user;
+      user.badge = res.data.account;
+      user.badges = res.data.badges;
+      dispatch({
+        type: MYBADGES_CONNECT,
+        payload: user
+      });
+      dispatch(returnSuccess(res.data.message, res.status, 'MYBADGES_CONNECT_SUCCESS'));
+    },
+    error: err => {
+      dispatch(returnErrors(err.response.data.message, err.response.status, 'MYBADGES_CONNECT_FAIL'));
     }
   };
   // Request Body
   const body = JSON.stringify({ username, password });
   axios.post(`${process.env.REACT_APP_BLOCKLY_API}/user/badge`, body, config)
   .then(res => {
-    var user = getState().auth.user;
-    user.badge = res.data.account;
-    user.badges = res.data.badges;
-    dispatch({
-      type: MYBADGES_CONNECT,
-      payload: user
-    });
-    dispatch(returnSuccess(res.data.message, res.status, 'MYBADGES_CONNECT_SUCCESS'));
+    res.config.success(res);
   })
   .catch(err => {
-    dispatch(returnErrors(err.response.data.message, err.response.status, 'MYBADGES_CONNECT_FAIL'));
+    if(err.response && err.response.status !== 401){
+      err.config.error(err);
+    }
   });
 };
 
 // Disconnect MyBadges-Account
 export const disconnectMyBadges = () => (dispatch, getState) => {
-  // Headers
   const config = {
-    headers: {
-      'Content-Type': 'application/json'
+    success: res => {
+      var user = getState().auth.user;
+      user.badge = null;
+      user.badges = null;
+      dispatch({
+        type: MYBADGES_DISCONNECT,
+        payload: user
+      });
+      dispatch(returnSuccess(res.data.message, res.status, 'MYBADGES_DISCONNECT_SUCCESS'));
+    },
+    error: err => {
+      dispatch(returnErrors(err.response.data.message, err.response.status, 'MYBADGES_DISCONNECT_FAIL'));
     }
   };
-  axios.put(`${process.env.REACT_APP_BLOCKLY_API}/user/badge`, config)
+  axios.put(`${process.env.REACT_APP_BLOCKLY_API}/user/badge`, {}, config)
   .then(res => {
-    var user = getState().auth.user;
-    user.badge = null;
-    user.badges = null;
-    dispatch({
-      type: MYBADGES_DISCONNECT,
-      payload: user
-    });
-    dispatch(returnSuccess(res.data.message, res.status, 'MYBADGES_DISCONNECT_SUCCESS'));
+    res.config.success(res);
   })
   .catch(err => {
-    dispatch(returnErrors(err.response.data.message, err.response.status, 'MYBADGES_DISCONNECT_FAIL'));
+    if(err.response && err.response.status !== 401){
+      err.config.error(err);
+    }
   });
 };
 
@@ -189,8 +195,7 @@ export const logout = () => (dispatch) => {
     res.config.success(res);
   })
   .catch(err => {
-    console.log(err);
-    if(err.response.status !== 401){
+    if(err.response && err.response.status !== 401){
       err.config.error(err);
     }
   });
