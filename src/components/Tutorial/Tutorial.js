@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { workspaceName } from '../../actions/workspaceActions';
 import { clearMessages } from '../../actions/messageActions';
-import { getTutorial, resetTutorial, tutorialStep } from '../../actions/tutorialActions';
+import { getTutorial, resetTutorial, tutorialStep,tutorialProgress } from '../../actions/tutorialActions';
 
 import Breadcrumbs from '../Breadcrumbs';
 import StepperHorizontal from './StepperHorizontal';
@@ -22,11 +22,20 @@ import Button from '@material-ui/core/Button';
 class Tutorial extends Component {
 
   componentDidMount() {
-    this.props.getTutorial(this.props.match.params.tutorialId);
+    this.props.tutorialProgress();
+    // retrieve tutorials only if a potential user is loaded - authentication
+    // is finished (success or failed)
+    if(!this.props.progress){
+      this.props.getTutorial(this.props.match.params.tutorialId);
+    }
   }
 
   componentDidUpdate(props, state) {
-    if(this.props.tutorial && !this.props.isLoading && this.props.tutorial._id != this.props.match.params.tutorialId) {
+    if(props.progress !== this.props.progress && !this.props.progress){
+      // authentication is completed
+      this.props.getTutorial(this.props.match.params.tutorialId);
+    }
+    else if(this.props.tutorial && !this.props.isLoading && this.props.tutorial._id != this.props.match.params.tutorialId) {
       this.props.getTutorial(this.props.match.params.tutorialId);
     }
     if(this.props.message.id === 'GET_TUTORIAL_FAIL'){
@@ -89,13 +98,15 @@ Tutorial.propTypes = {
   resetTutorial: PropTypes.func.isRequired,
   clearMessages: PropTypes.func.isRequired,
   tutorialStep: PropTypes.func.isRequired,
+  tutorialProgress: PropTypes.func.isRequired,
   workspaceName: PropTypes.func.isRequired,
   status: PropTypes.array.isRequired,
   change: PropTypes.number.isRequired,
   activeStep: PropTypes.number.isRequired,
   tutorial: PropTypes.object.isRequired,
   isLoading: PropTypes.bool.isRequired,
-  message: PropTypes.object.isRequired
+  message: PropTypes.object.isRequired,
+  progress: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -104,7 +115,8 @@ const mapStateToProps = state => ({
   activeStep: state.tutorial.activeStep,
   tutorial: state.tutorial.tutorials[0],
   isLoading: state.tutorial.progress,
-  message: state.message
+  message: state.message,
+  progress: state.auth.progress
 });
 
-export default connect(mapStateToProps, { getTutorial, resetTutorial, tutorialStep, clearMessages, workspaceName })(Tutorial);
+export default connect(mapStateToProps, { getTutorial, resetTutorial, tutorialStep, tutorialProgress, clearMessages, workspaceName })(Tutorial);

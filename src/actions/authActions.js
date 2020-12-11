@@ -1,4 +1,4 @@
-import { MYBADGES_CONNECT, MYBADGES_DISCONNECT, USER_LOADED, USER_LOADING, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_SUCCESS, LOGOUT_FAIL, REFRESH_TOKEN_SUCCESS } from '../actions/types';
+import { MYBADGES_CONNECT, MYBADGES_DISCONNECT, GET_STATUS, USER_LOADED, USER_LOADING, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_SUCCESS, LOGOUT_FAIL, REFRESH_TOKEN_SUCCESS } from '../actions/types';
 
 import axios from 'axios';
 import { returnErrors, returnSuccess } from './messageActions'
@@ -13,6 +13,10 @@ export const loadUser = () => (dispatch) => {
   const config = {
     success: res => {
       dispatch({
+        type: GET_STATUS,
+        payload: res.data.user.status
+      });
+      dispatch({
         type: USER_LOADED,
         payload: res.data.user
       });
@@ -21,6 +25,15 @@ export const loadUser = () => (dispatch) => {
       if(err.response){
         dispatch(returnErrors(err.response.data.message, err.response.status));
       }
+      console.log('auth failed');
+      var status = [];
+      if (window.localStorage.getItem('status')) {
+        status = JSON.parse(window.localStorage.getItem('status'));
+      }
+      dispatch({
+        type: GET_STATUS,
+        payload: status
+      });
       dispatch({
         type: AUTH_ERROR
       });
@@ -31,6 +44,7 @@ export const loadUser = () => (dispatch) => {
       res.config.success(res);
     })
     .catch(err => {
+      console.log(err);
       err.config.error(err);
     });
 };
@@ -61,12 +75,25 @@ export const login = ({ email, password }) => (dispatch) => {
       type: LOGIN_SUCCESS,
       payload: res.data
     });
+    dispatch({
+      type: GET_STATUS,
+      payload: res.data.user.status
+    });
     dispatch(returnSuccess(res.data.message, res.status, 'LOGIN_SUCCESS'));
   })
   .catch(err => {
+    console.log(err);
     dispatch(returnErrors(err.response.data.message, err.response.status, 'LOGIN_FAIL'));
     dispatch({
       type: LOGIN_FAIL
+    });
+    var status = [];
+    if (window.localStorage.getItem('status')) {
+      status = JSON.parse(window.localStorage.getItem('status'));
+    }
+    dispatch({
+      type: GET_STATUS,
+      payload: status
     });
   });
 };
@@ -130,6 +157,14 @@ export const logout = () => (dispatch) => {
       dispatch({
         type: LOGOUT_SUCCESS
       });
+      var status = [];
+      if (window.localStorage.getItem('status')) {
+        status = JSON.parse(window.localStorage.getItem('status'));
+      }
+      dispatch({
+        type: GET_STATUS,
+        payload: status
+      });
       dispatch(returnSuccess(res.data.message, res.status, 'LOGOUT_SUCCESS'));
       clearTimeout(logoutTimerId);
     },
@@ -137,6 +172,14 @@ export const logout = () => (dispatch) => {
       dispatch(returnErrors(err.response.data.message, err.response.status, 'LOGOUT_FAIL'));
       dispatch({
         type: LOGOUT_FAIL
+      });
+      var status = [];
+      if (window.localStorage.getItem('status')) {
+        status = JSON.parse(window.localStorage.getItem('status'));
+      }
+      dispatch({
+        type: GET_STATUS,
+        payload: status
       });
       clearTimeout(logoutTimerId);
     }
@@ -146,6 +189,7 @@ export const logout = () => (dispatch) => {
     res.config.success(res);
   })
   .catch(err => {
+    console.log(err);
     if(err.response.status !== 401){
       err.config.error(err);
     }
