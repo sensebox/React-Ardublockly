@@ -5,7 +5,7 @@ const initialState = {
   token: localStorage.getItem('token'),
   refreshToken: localStorage.getItem('refreshToken'),
   isAuthenticated: null,
-  progress: false,
+  progress: true,
   user: null
 };
 

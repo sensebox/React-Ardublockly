@@ -3,21 +3,28 @@ import { MYBADGES_DISCONNECT, TUTORIAL_PROGRESS, GET_TUTORIAL, GET_TUTORIALS, TU
 import axios from 'axios';
 import { returnErrors, returnSuccess } from './messageActions';
 
-export const getTutorial = (id) => (dispatch, getState) => {
+export const tutorialProgress = () => (dispatch) => {
   dispatch({type: TUTORIAL_PROGRESS});
+};
+
+
+export const getTutorial = (id) => (dispatch, getState) => {
   axios.get(`${process.env.REACT_APP_BLOCKLY_API}/tutorial/${id}`)
     .then(res => {
       var tutorial = res.data.tutorial;
       existingTutorial(tutorial, getState().tutorial.status).then(status => {
+        console.log('progress',getState().auth.progress);
+        console.log('status');
         dispatch({
           type: TUTORIAL_SUCCESS,
           payload: status
         });
-        dispatch({type: TUTORIAL_PROGRESS});
+        dispatch(updateStatus(status));
         dispatch({
           type: GET_TUTORIAL,
           payload: tutorial
         });
+        dispatch({type: TUTORIAL_PROGRESS});
         dispatch(returnSuccess(res.data.message, res.status));
       });
     })
@@ -30,7 +37,6 @@ export const getTutorial = (id) => (dispatch, getState) => {
 };
 
 export const getTutorials = () => (dispatch, getState) => {
-  dispatch({type: TUTORIAL_PROGRESS});
   axios.get(`${process.env.REACT_APP_BLOCKLY_API}/tutorial`)
     .then(res => {
       var tutorials = res.data.tutorials;
@@ -40,6 +46,7 @@ export const getTutorials = () => (dispatch, getState) => {
           type: TUTORIAL_SUCCESS,
           payload: status
         });
+        dispatch(updateStatus(status));
         dispatch({
           type: GET_TUTORIALS,
           payload: tutorials
@@ -73,6 +80,24 @@ export const assigneBadge = (id) => (dispatch, getState) => {
         dispatch(returnErrors(err.response.data.message, err.response.status, 'ASSIGNE_BADGE_FAIL'));
       }
     });
+};
+
+export const updateStatus = (status) => (dispatch, getState) => {
+  if(getState().auth.isAuthenticated){
+    // update user account in database - sync with redux store
+    axios.put(`${process.env.REACT_APP_BLOCKLY_API}/user/status`, {status: status})
+      .then(res => {
+        // dispatch(returnSuccess(badge, res.status, 'UPDATE_STATUS_SUCCESS'));
+      })
+      .catch(err => {
+        if(err.response){
+          // dispatch(returnErrors(err.response.data.message, err.response.status, 'UPDATE_STATUS_FAIL'));
+        }
+      });
+  } else {
+    // update locale storage - sync with redux store
+    window.localStorage.setItem('status', JSON.stringify(status));
+  }
 };
 
 export const deleteTutorial = (id) => (dispatch, getState) => {
@@ -127,6 +152,7 @@ export const tutorialCheck = (status, step) => (dispatch, getState) => {
     type: status === 'success' ? TUTORIAL_SUCCESS : TUTORIAL_ERROR,
     payload: tutorialsStatus
   });
+  dispatch(updateStatus(tutorialsStatus));
   dispatch(tutorialChange());
   dispatch(returnSuccess('','','TUTORIAL_CHECK_SUCCESS'));
 };
@@ -149,6 +175,7 @@ export const storeTutorialXml = (code) => (dispatch, getState) => {
         type: TUTORIAL_XML,
         payload: tutorialsStatus
       });
+      dispatch(updateStatus(tutorialsStatus));
     }
   }
 };

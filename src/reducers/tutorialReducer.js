@@ -1,18 +1,20 @@
-import { TUTORIAL_PROGRESS, GET_TUTORIAL, GET_TUTORIALS, TUTORIAL_SUCCESS, TUTORIAL_ERROR, TUTORIAL_CHANGE, TUTORIAL_XML, TUTORIAL_ID, TUTORIAL_STEP } from '../actions/types';
+import { TUTORIAL_PROGRESS, GET_TUTORIAL, GET_TUTORIALS, GET_STATUS, TUTORIAL_SUCCESS, TUTORIAL_ERROR, TUTORIAL_CHANGE, TUTORIAL_XML, TUTORIAL_ID, TUTORIAL_STEP } from '../actions/types';
 
 
-const initialStatus = () => {
-  if (window.localStorage.getItem('status')) {
-    var status = JSON.parse(window.localStorage.getItem('status'));
-    return status;
-  }
-  return [];
-  // // window.localStorage.getItem('status') does not exist
-  // return tutorials.map(tutorial => { return { id: tutorial.id, tasks: tutorial.steps.filter(step => step.type === 'task').map(task => { return { id: task.id }; }) }; });
-};
+//
+// const initialStatus = () => {
+//   if(store.getState().auth.user){
+//     return store.getState().auth.user.status || []
+//   }
+//   else if (window.localStorage.getItem('status')) {
+//     var status = JSON.parse(window.localStorage.getItem('status'));
+//     return status;
+//   }
+//   return [];
+// };
 
 const initialState = {
-  status: initialStatus(),
+  status: [],
   activeStep: 0,
   change: 0,
   tutorials: [],
@@ -39,8 +41,14 @@ export default function (state = initialState, action) {
     case TUTORIAL_SUCCESS:
     case TUTORIAL_ERROR:
     case TUTORIAL_XML:
-      // update locale storage - sync with redux store
-      window.localStorage.setItem('status', JSON.stringify(action.payload));
+      // update store - sync with redux store is implemented outside reducer
+      // in every dispatch action with the types 'TUTORIAL_SUCCESS','TUTORIAL_ERROR'
+      // and 'TUTORIAL_XML' the function 'updateStatus' is called
+      return {
+        ...state,
+        status: action.payload
+      };
+    case GET_STATUS:
       return {
         ...state,
         status: action.payload
