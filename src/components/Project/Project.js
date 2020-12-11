@@ -5,7 +5,6 @@ import { workspaceName } from '../../actions/workspaceActions';
 import { getProject, resetProject } from '../../actions/projectActions';
 import { clearMessages, returnErrors } from '../../actions/messageActions';
 
-import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import { createNameId } from 'mnemonic-id';
 

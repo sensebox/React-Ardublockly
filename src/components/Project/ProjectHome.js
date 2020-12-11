@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { getProjects, resetProject } from '../../actions/projectActions';
 import { clearMessages } from '../../actions/messageActions';
 
-import axios from 'axios';
 import { Link, withRouter } from 'react-router-dom';
 
 import Breadcrumbs from '../Breadcrumbs';

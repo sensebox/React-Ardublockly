@@ -95,14 +95,22 @@ class SaveProject extends Component {
     if(this.state.projectType === 'gallery'){
       body.description = this.state.description;
     }
-    axios.post(`${process.env.REACT_APP_BLOCKLY_API}/${this.state.projectType}`, body)
-      .then(res => {
+    const config = {
+      success: res => {
         var project = res.data[this.state.projectType];
         this.props.history.push(`/${this.state.projectType}/${project._id}`);
-      })
-      .catch(err => {
+      },
+      error: err => {
         this.setState({ snackbar: true, key: Date.now(), message: `Fehler beim Speichern des ${this.state.projectType === 'gallery' ? 'Galerie-':''}Projektes. Versuche es noch einmal.`, type: 'error' });
         window.scrollTo(0, 0);
+      }
+    };
+    axios.post(`${process.env.REACT_APP_BLOCKLY_API}/${this.state.projectType}`, body, config)
+      .then(res => {
+        res.config.success(res);
+      })
+      .catch(err => {
+        err.config.error(err);
       });
   }
 
