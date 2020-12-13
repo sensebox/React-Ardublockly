@@ -25,7 +25,6 @@ export const loadUser = () => (dispatch) => {
       if(err.response){
         dispatch(returnErrors(err.response.data.message, err.response.status));
       }
-      console.log('auth failed');
       var status = [];
       if (window.localStorage.getItem('status')) {
         status = JSON.parse(window.localStorage.getItem('status'));

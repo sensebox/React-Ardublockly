@@ -5,7 +5,6 @@ const initialState = {
   progress: false,
   json: '',
   title: '',
-  badge: '',
   id: '',
   steps: [
     {

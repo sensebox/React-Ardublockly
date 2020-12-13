@@ -12,6 +12,7 @@ import { saveAs } from 'file-saver';
 import { detectWhitespacesAndReturnReadableResult } from '../../../helpers/whitespace';
 
 import Breadcrumbs from '../../Breadcrumbs';
+import Badge from './Badge';
 import Textfield from './Textfield';
 import Step from './Step';
 import Dialog from '../../Dialog';
@@ -190,7 +191,9 @@ class Builder extends Component {
       var steps = this.props.steps;
       var newTutorial = new FormData();
       newTutorial.append('title', this.props.title);
-      newTutorial.append('badge', this.props.badge);
+      if(this.props.badge){
+        newTutorial.append('badge', this.props.badge);
+      }
       steps.forEach((step, i) => {
         if(step._id){
           newTutorial.append(`steps[${i}][_id]`, step._id);
@@ -348,7 +351,7 @@ class Builder extends Component {
             : null}
           {/* <Id error={this.props.error.id} value={this.props.id} /> */}
           <Textfield value={this.props.title} property={'title'} label={'Titel'} error={this.props.error.title} />
-          <Textfield value={this.props.badge} property={'badge'} label={'Badge'} />
+          <Badge error={this.props.error.badge}/>
 
           {this.props.steps.map((step, i) =>
             <Step step={step} index={i} key={i} />
@@ -435,7 +438,6 @@ Builder.propTypes = {
   change: PropTypes.number.isRequired,
   error: PropTypes.object.isRequired,
   json: PropTypes.string.isRequired,
-  badge: PropTypes.string.isRequired,
   isProgress: PropTypes.bool.isRequired,
   tutorials: PropTypes.array.isRequired,
   message: PropTypes.object.isRequired,
