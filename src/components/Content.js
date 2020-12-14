@@ -14,18 +14,18 @@ import Cookies from './Cookies';
 class Content extends Component {
 
   componentDidMount() {
-    if (this.props.language === 'de') {
+    if (this.props.language === 'de_DE') {
       Blockly.setLocale(De);
-    } else if (this.props.language === 'en') {
+    } else if (this.props.language === 'en_US') {
       Blockly.setLocale(En);
     }
   }
 
   componentDidUpdate(props){
     if(props.language !== this.props.language){
-      if (this.props.language === 'de') {
+      if (this.props.language === 'de_DE') {
         Blockly.setLocale(De);
-      } else if (this.props.language === 'en') {
+      } else if (this.props.language === 'en_US') {
         Blockly.setLocale(En);
       }
     }
