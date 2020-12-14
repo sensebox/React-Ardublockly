@@ -91,7 +91,7 @@ class Hardware extends Component {
           content={this.state.content}
           onClose={this.handleClose}
           onClick={this.handleClose}
-          button={'Schließen'}
+          button={Blockly.Msg.button_close}
         >
           <div>
             <img src={`/media/hardware/${this.state.hardwareInfo.src}`} width="100%" alt={this.state.hardwareInfo.name} />

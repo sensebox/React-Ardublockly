@@ -46,7 +46,7 @@ class HintTutorialExists extends Component {
       window.localStorage.setItem('news', e.target.checked);
     }
     else {
-      window.localStorage.deleteItem('news');
+      window.localStorage.removeItem('news');
     }
   }
 
@@ -57,30 +57,30 @@ class HintTutorialExists extends Component {
         fullWidth
         maxWidth={'sm'}
         open={this.state.open}
-        title={'Neuigkeiten'}
+        title={Blockly.Msg.messages_newblockly_head}
         content={''}
         onClose={this.toggleDialog}
         onClick={this.toggleDialog}
         button={Blockly.Msg.button_close}
       >
         <div>
-          Es gibt ab jetzt Tutorials zu verschiedenen Themen. Schau mal <Link to="/tutorial" className={this.props.classes.link}>hier</Link> vorbei.
-          <FormControlLabel
-            style={{ marginTop: '20px' }}
-            classes={{ label: this.props.classes.label }}
-            control={
-              <Checkbox
-                size={'small'}
-                value={true}
-                checked={this.state.checked}
-                onChange={(e) => this.onChange(e)}
-                name="dialog"
-                color="primary"
-              />
-            }
-            label={'Dialog nicht mehr anzeigen'}
-          />
+          {Blockly.Msg.messages_newblockly_text}<Link to="/tutorial" className={this.props.classes.link}>test</Link>
         </div>
+        <FormControlLabel
+          style={{ marginTop: '20px' }}
+          classes={{ label: this.props.classes.label }}
+          control={
+            <Checkbox
+              size={'small'}
+              value={true}
+              checked={this.state.checked}
+              onChange={(e) => this.onChange(e)}
+              name="dialog"
+              color="primary"
+            />
+          }
+          label={Blockly.Msg.labels_donotshowagain}
+        />
       </Dialog>
     );
   };

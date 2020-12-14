@@ -859,7 +859,7 @@ Blockly.Msg.tooltip_copy_link = "Link kopieren"
 Blockly.Msg.tooltip_trashcan_hide = 'gelöschte Blöcke ausblenden'
 Blockly.Msg.tooltip_trashcan_delete = 'Blöcke endgültig löschen'
 Blockly.Msg.tooltip_project_title = "Titel des Projektes"
-
+Blockly.Msg.tooltip_check_solution = "Lösung kontrollieren"
 
 /**
  * Messages
@@ -879,6 +879,10 @@ Blockly.Msg.messages_SHARE_FAIL = "Fehler beim Erstellen eines Links zum Teilen 
 Blockly.Msg.messages_copylink_success = 'Link erfolgreich in Zwischenablage gespeichert.'
 Blockly.Msg.messages_rename_success_01 = 'Das Projekt wurde erfolgreich in '
 Blockly.Msg.messages_rename_success_02 = 'umbenannt.'
+Blockly.Msg.messages_newblockly_head = "Willkommen zur neuen Version Blockly für die senseBox"
+Blockly.Msg.messages_newblockly_text = "Die neue Blockly Version befindet sich zurzeit in der Testphase. Alle Neuigkeiten findet ihr hier:"
+Blockly.Msg.messages_GET_TUTORIAL_FAIL = 'Zurück zur Tutorials-Übersicht'
+Blockly.Msg.messages_LOGIN_FAIL = 'Der Benutzername oder das Passwort ist nicht korrekt.'
 /**
  * Share Dialog
  */
@@ -912,6 +916,8 @@ Blockly.Msg.button_accept = "Bestätigen";
 Blockly.Msg.button_compile = "Kompilieren";
 Blockly.Msg.button_create_variableCreate = "Erstelle Variable";
 Blockly.Msg.button_back = "Zurück"
+Blockly.Msg.button_next = "nächster Schritt"
+Blockly.Msg.button_tutorial_overview = "Tutorial Übersicht"
 
 
 /**
@@ -945,12 +951,48 @@ Blockly.Msg.notfound_text = "Die gesuchte Seite wurde möglicherweise entfernt, 
 
 
 /**
+ * Labels
+ */
+
+Blockly.Msg.labels_donotshowagain = 'Dialog nicht mehr anzeigen'
+Blockly.Msg.labels_here = "hier"
+Blockly.Msg.labels_username = 'E-Mail oder Nutzername'
+
+/**
+ * Badges
+ */
+
+Blockly.Msg.badges_explaination = "Eine Übersicht über alle erhaltenen Badges im Kontext Blockly for senseBox findest du "
+Blockly.Msg.badges_ASSIGNE_BADGE_SUCCESS_01 = "Herzlichen Glückwunsch! Du hast den Badge "
+Blockly.Msg.badges_ASSIGNE_BADGE_SUCCESS_02 = " erhalten."
+/**
  * Tutorials
  */
 
 Blockly.Msg.tutorials_assessment_task = "Aufgabe"
 Blockly.Msg.tutorials_hardware_head = "Für die Umsetzung benötigst du folgende Hardware:"
 Blockly.Msg.tutorials_hardware_moreInformation = "Weitere Informationen zur Hardware-Komponente findest du"
-Blockly.Msg.tutorials_hardware_here = "hier"
+Blockly.Msg.tutorials_hardware_here = "hier";
+Blockly.Msg.tutorials_requirements = "Bevor du mit diesem Tutorial fortfährst solltest du folgende Tutorials erfolgreich abgeschlossen haben:"
 
+
+/**
+ * Tutorial Builder
+ */
+
+Blockly.Msg.builder_solution = "Lösung"
+Blockly.Msg.builder_solution_submit = "Lösung einreichen"
+Blockly.Msg.builder_example_submit = "Beispiel einreichen"
+Blockly.Msg.builder_comment = "Anmerkung: Man kann den initialen Setup()- bzw. Endlosschleifen()-Block löschen. Zusätzlich ist es möglich u.a. nur einen beliebigen Block auszuwählen, ohne dass dieser als deaktiviert dargestellt wird."
+Blockly.Msg.builder_hardware_order = "Beachte, dass die Reihenfolge des Auswählens maßgebend ist."
+Blockly.Msg.builder_hardware_helper = "Wähle mindestens eine Hardware-Komponente aus."
+Blockly.Msg.builder_requirements_head = "Voraussetzungen"
+Blockly.Msg.builder_requirements_order = "Beachte, dass die Reihenfolge des Anhakens maßgebend ist."
+
+/**
+ * Login
+ */
+
+
+Blockly.Msg.login_head = "Anmelden"
 export const De = Blockly.Msg;
