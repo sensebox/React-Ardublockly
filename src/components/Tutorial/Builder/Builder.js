@@ -8,8 +8,6 @@ import { clearMessages } from '../../../actions/messageActions';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 
-import { saveAs } from 'file-saver';
-import { detectWhitespacesAndReturnReadableResult } from '../../../helpers/whitespace';
 
 import Breadcrumbs from '../../Breadcrumbs';
 import Badge from './Badge';
@@ -44,7 +42,7 @@ const styles = (theme) => ({
     marginTop: '5px',
     height: '40px',
     backgroundColor: theme.palette.error.dark,
-    '&:hover':{
+    '&:hover': {
       backgroundColor: theme.palette.error.dark
     }
   }
@@ -87,11 +85,11 @@ class Builder extends Component {
         // alert(this.props.message.msg);
         this.props.clearMessages();
       }
-      else if(this.props.message.id === 'TUTORIAL_DELETE_SUCCESS'){
+      else if (this.props.message.id === 'TUTORIAL_DELETE_SUCCESS') {
         this.onChange('new');
         this.setState({ snackbar: true, key: Date.now(), message: `Das Tutorial wurde erfolgreich gelöscht.`, type: 'success' });
       }
-      else if(this.props.message.id === 'TUTORIAL_DELETE_FAIL'){
+      else if (this.props.message.id === 'TUTORIAL_DELETE_FAIL') {
         this.setState({ snackbar: true, key: Date.now(), message: `Fehler beim Löschen des Tutorials. Versuche es noch einmal.`, type: 'error' });
       }
     }
@@ -100,7 +98,7 @@ class Builder extends Component {
   componentWillUnmount() {
     this.resetFull();
     this.props.resetTutorial();
-    if(this.props.message.msg){
+    if (this.props.message.msg) {
       this.props.clearMessages();
     }
   }
@@ -153,12 +151,12 @@ class Builder extends Component {
   onChange = (value) => {
     this.props.resetTutorialBuilder();
     this.props.tutorialId('');
-    this.setState({tutorial: value});
+    this.setState({ tutorial: value });
   }
 
   onChangeId = (value) => {
     this.props.tutorialId(value);
-    if(this.state.tutorial === 'change'){
+    if (this.state.tutorial === 'change') {
       this.props.progress(true);
       var tutorial = this.props.tutorials.filter(tutorial => tutorial._id === value)[0];
       this.props.readJSON(tutorial);
@@ -201,8 +199,8 @@ class Builder extends Component {
         newTutorial.append(`steps[${i}][type]`, step.type);
         newTutorial.append(`steps[${i}][headline]`, step.headline);
         newTutorial.append(`steps[${i}][text]`, step.text);
-        if(i === 0 && step.type === 'instruction'){
-          if(step.requirements){ // optional
+        if (i === 0 && step.type === 'instruction') {
+          if (step.requirements) { // optional
             step.requirements.forEach((requirement, j) => {
               newTutorial.append(`steps[${i}][requirements][${j}]`, requirement);
             });
@@ -211,14 +209,14 @@ class Builder extends Component {
             newTutorial.append(`steps[${i}][hardware][${j}]`, hardware);
           });
         }
-        if(step.xml){ // optional
+        if (step.xml) { // optional
           newTutorial.append(`steps[${i}][xml]`, step.xml);
         }
-        if(step.media){ // optional
-          if(step.media.youtube){
+        if (step.media) { // optional
+          if (step.media.youtube) {
             newTutorial.append(`steps[${i}][media][youtube]`, step.media.youtube);
           }
-          if(step.media.picture){
+          if (step.media.picture) {
             newTutorial.append(`steps[${i}][media][picture]`, step.media.picture);
           }
         }
@@ -282,30 +280,30 @@ class Builder extends Component {
         <h1>Tutorial-Builder</h1>
 
         <RadioGroup row value={this.state.tutorial} onChange={(e) => this.onChange(e.target.value)}>
-          <FormControlLabel style={{color: 'black'}}
+          <FormControlLabel style={{ color: 'black' }}
             value="new"
             control={<Radio color="primary" />}
             label="neues Tutorial erstellen"
             labelPlacement="end"
           />
           {filteredTutorials.length > 0 ?
-          <div>
-            <FormControlLabel style={{color: 'black'}}
-              disabled={this.props.index === 0}
-              value="change"
-              control={<Radio color="primary" />}
-              label="bestehendes Tutorial ändern"
-              labelPlacement="end"
-            />
-            <FormControlLabel style={{color: 'black'}}
-              disabled={this.props.index === 0}
-              value="delete"
-              control={<Radio color="primary" />}
-              label="bestehendes Tutorial löschen"
-              labelPlacement="end"
-            />
-          </div>
-        : null}
+            <div>
+              <FormControlLabel style={{ color: 'black' }}
+                disabled={this.props.index === 0}
+                value="change"
+                control={<Radio color="primary" />}
+                label="bestehendes Tutorial ändern"
+                labelPlacement="end"
+              />
+              <FormControlLabel style={{ color: 'black' }}
+                disabled={this.props.index === 0}
+                value="delete"
+                control={<Radio color="primary" />}
+                label="bestehendes Tutorial löschen"
+                labelPlacement="end"
+              />
+            </div>
+            : null}
         </RadioGroup>
 
         <Divider variant='fullWidth' style={{ margin: '10px 0 15px 0' }} />
@@ -325,7 +323,7 @@ class Builder extends Component {
             </label>
             <Button style={{ marginRight: '10px', marginBottom: '10px' }} variant='contained' color='primary' onClick={() => this.uploadJsonString()}>String laden</Button>
           </div>
-        : <FormControl variant="outlined" style={{width: '100%'}}>
+          : <FormControl variant="outlined" style={{ width: '100%' }}>
             <InputLabel id="select-outlined-label">Tutorial</InputLabel>
             <Select
               color='primary'
@@ -357,24 +355,11 @@ class Builder extends Component {
             <Step step={step} index={i} key={i} />
           )}
 
-          {/*submit or reset*/}
-          <Divider variant='fullWidth' style={{ margin: '30px 0 10px 0' }} />
-          {this.state.tutorial === 'new' ?
-            <div>
-              <Button style={{ marginRight: '10px', marginTop: '10px' }} variant='contained' color='primary' onClick={() => this.submitNew()}>Tutorial erstellen</Button>
-              <Button style={{ marginTop: '10px' }} variant='contained' onClick={() => this.resetFull()}>Zurücksetzen</Button>
-            </div>
-          : <div>
-            <Button style={{ marginRight: '10px', marginTop: '10px' }} variant='contained' color='primary' onClick={() => this.submitUpdate()}>Tutorial ändern</Button>
-            <Button style={{ marginTop: '10px' }} variant='contained' onClick={() => this.resetTutorial()}>Zurücksetzen</Button>
+            <Backdrop className={this.props.classes.backdrop} open={this.props.isProgress}>
+              <CircularProgress color="inherit" />
+            </Backdrop>
           </div>
-          }
-
-          <Backdrop className={this.props.classes.backdrop} open={this.props.isProgress}>
-            <CircularProgress color="inherit" />
-          </Backdrop>
-        </div>
-        : null}
+          : null}
 
         {this.state.tutorial === 'delete' && this.props.id !== '' ?
           <Button
@@ -382,7 +367,7 @@ class Builder extends Component {
             variant='contained'
             color='primary'
             onClick={() => this.props.deleteTutorial()}>Tutorial löschen</Button>
-        : null}
+          : null}
 
         <Dialog
           open={this.state.open}

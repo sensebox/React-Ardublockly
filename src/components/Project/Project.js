@@ -6,7 +6,6 @@ import { getProject, resetProject } from '../../actions/projectActions';
 import { clearMessages, returnErrors } from '../../actions/messageActions';
 
 import { withRouter } from 'react-router-dom';
-import { createNameId } from 'mnemonic-id';
 
 import Home from '../Home';
 import Breadcrumbs from '../Breadcrumbs';
@@ -23,16 +22,16 @@ class Project extends Component {
   }
 
   componentDidUpdate(props) {
-    if(props.location.pathname !== this.props.location.pathname ||
-       props.match.params[`${this.props.type}Id`] !== this.props.match.params[`${this.props.type}Id`]){
-      if(this.props.message.msg){
+    if (props.location.pathname !== this.props.location.pathname ||
+      props.match.params[`${this.props.type}Id`] !== this.props.match.params[`${this.props.type}Id`]) {
+      if (this.props.message.msg) {
         this.props.clearMessages();
       }
       this.getProject();
     }
-    if(this.props.message !== props.message){
-      if(this.props.message.id === 'PROJECT_EMPTY' || this.props.message.id === 'GET_PROJECT_FAIL'){
-        if(this.props.type!=='share'){
+    if (this.props.message !== props.message) {
+      if (this.props.message.id === 'PROJECT_EMPTY' || this.props.message.id === 'GET_PROJECT_FAIL') {
+        if (this.props.type !== 'share') {
           this.props.returnErrors('', 404, 'GET_PROJECT_FAIL');
           this.props.history.push(`/${this.props.type}`);
         } else {
@@ -40,10 +39,10 @@ class Project extends Component {
           this.props.returnErrors('', 404, 'GET_SHARE_FAIL');
         }
       }
-      else if(this.props.message.id === 'GET_PROJECT_SUCCESS'){
+      else if (this.props.message.id === 'GET_PROJECT_SUCCESS') {
         this.props.workspaceName(this.props.project.title);
       }
-      else if(this.props.message.id === 'PROJECT_DELETE_SUCCESS' || this.props.message.id === 'GALLERY_DELETE_SUCCESS'){
+      else if (this.props.message.id === 'PROJECT_DELETE_SUCCESS' || this.props.message.id === 'GALLERY_DELETE_SUCCESS') {
         this.props.history.push(`/${this.props.type}`);
       }
     }
@@ -55,8 +54,8 @@ class Project extends Component {
   }
 
   getProject = () => {
-    var id = this.props.location.pathname.replace(/\/[a-z]{1,}\//,'');
-    var param = this.props.location.pathname.replace(`/${id}`,'').replace('/','');
+    var id = this.props.location.pathname.replace(/\/[a-z]{1,}\//, '');
+    var param = this.props.location.pathname.replace(`/${id}`, '').replace('/', '');
     console.log('param', param);
     console.log(id);
     this.props.getProject(param, id);
@@ -69,13 +68,13 @@ class Project extends Component {
         <Backdrop open invisible>
           <CircularProgress color="primary" />
         </Backdrop>
-      : this.props.project ?
-        <div>
-          {this.props.type !== 'share' ?
-            <Breadcrumbs content={[{ link: `/${this.props.type}`, title: data },{ link: this.props.location.pathname, title: this.props.project.title }]} />
-          : null}
-          <Home project={this.props.project} projectType={this.props.type}/>
-        </div> : null
+        : this.props.project ?
+          <div>
+            {this.props.type !== 'share' ?
+              <Breadcrumbs content={[{ link: `/${this.props.type}`, title: data }, { link: this.props.location.pathname, title: this.props.project.title }]} />
+              : null}
+            <Home project={this.props.project} projectType={this.props.type} />
+          </div> : null
     );
   };
 }

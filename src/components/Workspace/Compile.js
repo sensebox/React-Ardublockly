@@ -17,6 +17,7 @@ import TextField from '@material-ui/core/TextField';
 
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import * as Blockly from 'blockly/core';
 
 const styles = (theme) => ({
   backdrop: {
@@ -85,7 +86,7 @@ class Compile extends Component {
       })
       .catch(err => {
         console.log(err);
-        this.setState({ progress: false, file: false, open: true, title: 'Fehler', content: 'Etwas ist beim Kompilieren schief gelaufen. Versuche es nochmal.' });
+        this.setState({ progress: false, file: false, open: true, title: Blockly.Msg.compiledialog_headline, content: Blockly.Msg.compiledialog_text });
       });
   }
 
@@ -119,7 +120,7 @@ class Compile extends Component {
     return (
       <div style={{}}>
         {this.props.iconButton ?
-          <Tooltip title='Projekt kompilieren' arrow style={{ marginRight: '5px' }}>
+          <Tooltip title={Blockly.Msg.tooltip_compile_code} arrow style={{ marginRight: '5px' }}>
             <IconButton
               className={this.props.classes.iconButton}
               onClick={() => this.compile()}
@@ -141,7 +142,7 @@ class Compile extends Component {
           content={this.state.content}
           onClose={this.toggleDialog}
           onClick={this.state.file ? () => { this.toggleDialog(); this.setState({ name: this.props.name }) } : this.toggleDialog}
-          button={this.state.file ? 'Abbrechen' : 'Schließen'}
+          button={this.state.file ? Blockly.Msg.button_cancel : Blockly.Msg.button_close}
         >
           {this.state.file ?
             <div style={{ marginTop: '10px' }}>

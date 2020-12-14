@@ -11,10 +11,7 @@ import './App.css';
 
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import Routes from './components/Route/Routes';
-import Cookies from './components/Cookies';
+import Content from './components/Content';
 
 const theme = createMuiTheme({
   palette: {
@@ -43,12 +40,7 @@ class App extends Component {
       <ThemeProvider theme={theme}>
         <Provider store={store}>
           <Router history={customHistory}>
-            <div className="wrapper">
-              <Navbar />
-              <Routes />
-              <Cookies />
-              <Footer />
-            </div>
+            <Content />
           </Router>
         </Provider>
       </ThemeProvider>

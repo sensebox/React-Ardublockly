@@ -18,26 +18,14 @@ class BlocklyWindow extends Component {
   constructor(props) {
     super(props);
     this.simpleWorkspace = React.createRef();
-    var locale = window.localStorage.getItem('locale');
-    this.state = {
-      renderer: window.localStorage.getItem('renderer'),
-    };
-    if (locale === null) {
-      if (navigator.language === 'de-DE') {
-        locale = 'de';
-      } else {
-        locale = 'en';
-      }
-    }
-    if (locale === 'de') {
+    if (this.props.language === 'de_DE') {
       Blockly.setLocale(De);
-    } else if (locale === 'en') {
+    } else if (this.props.language === 'en_US') {
       Blockly.setLocale(En);
     }
   }
 
   componentDidMount() {
-
     const workspace = Blockly.getMainWorkspace();
     this.props.onChangeWorkspace({});
     this.props.clearStats();
@@ -72,7 +60,7 @@ class BlocklyWindow extends Component {
           style={this.props.svg ? { height: 0 } : this.props.blocklyCSS}
           readOnly={this.props.readOnly !== undefined ? this.props.readOnly : false}
           trashcan={this.props.trashcan !== undefined ? this.props.trashcan : true}
-          renderer={this.state.renderer}
+          renderer={this.props.renderer}
           zoom={{ // https://developers.google.com/blockly/guides/configure/web/zoom
             controls: this.props.zoomControls !== undefined ? this.props.zoomControls : true,
             wheel: false,
@@ -106,8 +94,14 @@ class BlocklyWindow extends Component {
 
 BlocklyWindow.propTypes = {
   onChangeWorkspace: PropTypes.func.isRequired,
-  clearStats: PropTypes.func.isRequired
+  clearStats: PropTypes.func.isRequired,
+  renderer: PropTypes.string.isRequired,
+  language: PropTypes.string.isRequired
 };
 
+const mapStateToProps = state => ({
+  renderer: state.general.renderer,
+  language: state.general.language
+});
 
-export default connect(null, { onChangeWorkspace, clearStats })(BlocklyWindow);
+export default connect(mapStateToProps, { onChangeWorkspace, clearStats })(BlocklyWindow);
