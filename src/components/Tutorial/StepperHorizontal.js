@@ -51,7 +51,6 @@ class StepperHorizontal extends Component {
 
   render() {
     var tutorialId = this.props.tutorial._id;
-    var tutorialIndex = this.props.currentTutorialIndex;
     var status = this.props.status.filter(status => status._id === tutorialId)[0];
     var tasks = status.tasks;
     var error = tasks.filter(task => task.type === 'error').length > 0;
@@ -71,7 +70,7 @@ class StepperHorizontal extends Component {
         <div className={this.props.classes.stepper}>
           <Button
             disabled//={tutorialIndex === 0}
-            //onClick={() => { this.props.history.push(`/tutorial/${tutorials[tutorialIndex - 1].id}`) }}
+          //onClick={() => { this.props.history.push(`/tutorial/${tutorials[tutorialIndex - 1].id}`) }}
           >
             {'<'}
           </Button>
@@ -83,7 +82,7 @@ class StepperHorizontal extends Component {
           </Tooltip>
           <Button
             disabled//={tutorialIndex + 1 === tutorials.length}
-            //onClick={() => { this.props.history.push(`/tutorial/${tutorials[tutorialIndex + 1].id}`) }}
+          //onClick={() => { this.props.history.push(`/tutorial/${tutorials[tutorialIndex + 1].id}`) }}
           >
             {'>'}
           </Button>

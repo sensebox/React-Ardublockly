@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { changeContent } from '../../../actions/tutorialBuilderActions';
-import { getTutorials, resetTutorial } from '../../../actions/tutorialActions';
-import { clearMessages } from '../../../actions/messageActions';
 
 import FormGroup from '@material-ui/core/FormGroup';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -11,7 +9,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
-
+import * as Blockly from 'blockly'
 class Requirements extends Component {
 
   onChange = (e) => {
@@ -29,8 +27,8 @@ class Requirements extends Component {
   render() {
     return (
       <FormControl style={{ marginBottom: '10px', padding: '18.5px 14px', borderRadius: '25px', border: '1px solid lightgrey', width: 'calc(100% - 28px)' }}>
-        <FormLabel style={{ color: 'black' }}>Voraussetzungen</FormLabel>
-        <FormHelperText style={{ marginTop: '5px' }}>Beachte, dass die Reihenfolge des Anhakens maßgebend ist.</FormHelperText>
+        <FormLabel style={{ color: 'black' }}>{Blockly.Msg.builder_requirements_head}</FormLabel>
+        <FormHelperText style={{ marginTop: '5px' }}>{Blockly.Msg.builder_requirements_order}</FormHelperText>
         <FormGroup>
           {this.props.tutorials.filter(tutorial => tutorial._id !== this.props.id).map((tutorial, i) =>
             <FormControlLabel

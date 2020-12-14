@@ -12,7 +12,7 @@ import Instruction from './Instruction';
 import Assessment from './Assessment';
 import Badge from './Badge';
 import NotFound from '../NotFound';
-
+import * as Blockly from 'blockly'
 import { detectWhitespacesAndReturnReadableResult } from '../../helpers/whitespace';
 
 
@@ -26,10 +26,10 @@ class Tutorial extends Component {
   }
 
   componentDidUpdate(props, state) {
-    if(this.props.tutorial && !this.props.isLoading && this.props.tutorial._id != this.props.match.params.tutorialId) {
+    if (this.props.tutorial && !this.props.isLoading && this.props.tutorial._id != this.props.match.params.tutorialId) {
       this.props.getTutorial(this.props.match.params.tutorialId);
     }
-    if(this.props.message.id === 'GET_TUTORIAL_FAIL'){
+    if (this.props.message.id === 'GET_TUTORIAL_FAIL') {
       alert(this.props.message.msg);
     }
   }
@@ -37,7 +37,7 @@ class Tutorial extends Component {
   componentWillUnmount() {
     this.props.resetTutorial();
     this.props.workspaceName(null);
-    if(this.props.message.msg){
+    if (this.props.message.msg) {
       this.props.clearMessages();
     }
   }
@@ -47,37 +47,38 @@ class Tutorial extends Component {
       <div>
         {this.props.isLoading ? null :
           !this.props.tutorial ?
-            this.props.message.id === 'GET_TUTORIAL_FAIL' ? <NotFound button={{ title: 'Zurück zur Tutorials-Übersicht', link: '/tutorial' }} /> : null
+            this.props.message.id === 'GET_TUTORIAL_FAIL' ? <NotFound button={{ title: Blockly.Msg.messages_GET_TUTORIAL_FAIL, link: '/tutorial' }} /> : null
             : (() => {
-                var tutorial = this.props.tutorial;
-                var steps = this.props.tutorial.steps;
-                var step = steps[this.props.activeStep];
-                var name = `${detectWhitespacesAndReturnReadableResult(tutorial.title)}_${detectWhitespacesAndReturnReadableResult(step.headline)}`;
-                return(
-                  <div>
-                    <Breadcrumbs content={[{ link: '/tutorial', title: 'Tutorial' }, { link: `/tutorial/${this.props.tutorial._id}`, title: tutorial.title }]} />
+              var tutorial = this.props.tutorial;
+              var steps = this.props.tutorial.steps;
+              var step = steps[this.props.activeStep];
+              var name = `${detectWhitespacesAndReturnReadableResult(tutorial.title)}_${detectWhitespacesAndReturnReadableResult(step.headline)}`;
+              return (
+                <div>
+                  <Breadcrumbs content={[{ link: '/tutorial', title: 'Tutorial' }, { link: `/tutorial/${this.props.tutorial._id}`, title: tutorial.title }]} />
 
-                    <StepperHorizontal />
-                    <Badge />
+                  <StepperHorizontal />
+                  <Badge />
 
-                    <div style={{ display: 'flex' }}>
-                      <StepperVertical steps={steps} />
-                      {/* calc(Card-padding: 10px + Button-height: 35px + Button-marginTop: 15px)*/}
-                      <Card style={{ padding: '10px 10px 60px 10px', display: 'block', position: 'relative', height: 'max-content', width: '100%' }}>
-                        {step ?
-                          step.type === 'instruction' ?
-                            <Instruction step={step} />
-                            : <Assessment step={step} name={name} /> // if step.type === 'assessment'
-                          : null}
+                  <div style={{ display: 'flex' }}>
+                    <StepperVertical steps={steps} />
+                    {/* calc(Card-padding: 10px + Button-height: 35px + Button-marginTop: 15px)*/}
+                    <Card style={{ padding: '10px 10px 60px 10px', display: 'block', position: 'relative', height: 'max-content', width: '100%' }}>
+                      {step ?
+                        step.type === 'instruction' ?
+                          <Instruction step={step} />
+                          : <Assessment step={step} name={name} /> // if step.type === 'assessment'
+                        : null}
 
-                        <div style={{ marginTop: '20px', position: 'absolute', bottom: '10px' }}>
-                          <Button style={{ marginRight: '10px', height: '35px' }} variant='contained' disabled={this.props.activeStep === 0} onClick={() => this.props.tutorialStep(this.props.activeStep - 1)}>Zurück</Button>
-                          <Button style={{ height: '35px' }} variant='contained' color='primary' disabled={this.props.activeStep === tutorial.steps.length - 1} onClick={() => this.props.tutorialStep(this.props.activeStep + 1)}>Weiter</Button>
-                        </div>
-                      </Card>
-                    </div>
+                      <div style={{ marginTop: '20px', position: 'absolute', bottom: '10px' }}>
+                        <Button style={{ marginRight: '10px', height: '35px' }} variant='contained' disabled={this.props.activeStep === 0} onClick={() => this.props.tutorialStep(this.props.activeStep - 1)}>Zurück</Button>
+                        <Button style={{ height: '35px' }} variant='contained' color='primary' disabled={this.props.activeStep === tutorial.steps.length - 1} onClick={() => this.props.tutorialStep(this.props.activeStep + 1)}>Weiter</Button>
+                      </div>
+                    </Card>
                   </div>
-              )})()
+                </div>
+              )
+            })()
         }
       </div>
     );
