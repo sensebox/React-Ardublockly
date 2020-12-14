@@ -4,7 +4,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-
+import * as Blockly from 'blockly/core'
 const useStyles = makeStyles((theme) => ({
     formControl: {
         margin: theme.spacing(1),
@@ -39,7 +39,7 @@ export default function RenderSelector() {
                     <MenuItem value={'zelos'}>Zelos</MenuItem>
                 </Select>
             </FormControl>
-            <p>Der Renderer bestimmt das aussehen der Blöcke</p>
+            <p>{Blockly.Msg.settings_renderer_text}</p>
         </div>
     );
 }

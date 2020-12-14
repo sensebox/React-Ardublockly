@@ -4,6 +4,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import * as Blockly from 'blockly/core';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -27,7 +28,7 @@ export default function LanguageSelector() {
     return (
         <div>
             <FormControl className={classes.formControl}>
-                <InputLabel id="demo-simple-select-label">Sprache</InputLabel>
+                <InputLabel id="demo-simple-select-label">{Blockly.Msg.settings_language}</InputLabel>
                 <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
@@ -35,7 +36,7 @@ export default function LanguageSelector() {
                     onChange={handleChange}
                 >
                     <MenuItem value={'de'}>Deutsch</MenuItem>
-                    <MenuItem value={'en'}>English</MenuItem>
+                    <MenuItem value={'en'}>Englisch</MenuItem>
                 </Select>
             </FormControl>
         </div>

@@ -13,6 +13,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import * as Blockly from 'blockly/core';
 
 const styles = (theme) => ({
   buttonTrash: {
@@ -43,12 +44,12 @@ class DeleteProject extends Component {
   }
 
   componentDidUpdate(props) {
-    if(this.props.message !== props.message){
-      if(this.props.message.id === 'PROJECT_DELETE_SUCCESS'){
+    if (this.props.message !== props.message) {
+      if (this.props.message.id === 'PROJECT_DELETE_SUCCESS') {
         this.props.history.push(`/${this.props.projectType}`);
       }
-      else if(this.props.message.id === 'PROJECT_DELETE_FAIL'){
-        this.setState({ snackbar: true, key: Date.now(), message: `Fehler beim Löschen des Projektes. Versuche es noch einmal.`, type: 'error' });
+      else if (this.props.message.id === 'PROJECT_DELETE_FAIL') {
+        this.setState({ snackbar: true, key: Date.now(), message: Blockly.Msg.messages_delete_project_failed, type: 'error' });
       }
     }
   }
@@ -56,7 +57,7 @@ class DeleteProject extends Component {
   render() {
     return (
       <div>
-        <Tooltip title='Projekt löschen' arrow>
+        <Tooltip title={Blockly.Msg.tooltip_delete_project} arrow>
           <IconButton
             className={this.props.classes.buttonTrash}
             onClick={() => this.props.deleteProject(this.props.projectType, this.props.project._id)}
