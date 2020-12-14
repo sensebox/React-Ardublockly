@@ -6,13 +6,13 @@ import Typography from '@material-ui/core/Typography';
 import LanguageSelector from './LanguageSelector';
 import RenderSelector from './RenderSelector';
 import StatsSelector from './StatsSelector';
-
+import * as Blockly from 'blockly'
 
 class Settings extends Component {
     render() {
         return (
             <div>
-                <Typography variant='h4' style={{ marginBottom: '5px' }}>Einstellungen</Typography>
+                <Typography variant='h4' style={{ marginBottom: '5px' }}>{Blockly.Msg.settings_head}</Typography>
                 <LanguageSelector />
                 <RenderSelector />
                 <StatsSelector />
@@ -22,8 +22,8 @@ class Settings extends Component {
                     color="primary"
                     onClick={() => { this.props.history.push('/') }}
                 >
-                    Zurück zur Startseite
-            </Button>
+                    {Blockly.Msg.button_back}
+                </Button>
             </div>
         );
     };

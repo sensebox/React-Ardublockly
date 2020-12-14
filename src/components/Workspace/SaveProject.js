@@ -14,12 +14,13 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
 import { faSave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import * as Blockly from 'blockly/core'
 
 const styles = (theme) => ({
   button: {
@@ -63,18 +64,18 @@ class SaveProject extends Component {
     if (props.description !== this.props.description) {
       this.setState({ description: this.props.description });
     }
-    if(this.props.message !== props.message){
-      if(this.props.message.id === 'PROJECT_UPDATE_SUCCESS'){
-        this.setState({ snackbar: true, key: Date.now(), message: `Das Projekt wurde erfolgreich aktualisiert.`, type: 'success' });
+    if (this.props.message !== props.message) {
+      if (this.props.message.id === 'PROJECT_UPDATE_SUCCESS') {
+        this.setState({ snackbar: true, key: Date.now(), message: Blockly.Msg.messages_PROJECT_UPDATE_SUCCESS, type: 'success' });
       }
-      else if(this.props.message.id === 'GALLERY_UPDATE_SUCCESS'){
-        this.setState({ snackbar: true, key: Date.now(), message: `Das Galerie-Projekt wurde erfolgreich aktualisiert.`, type: 'success' });
+      else if (this.props.message.id === 'GALLERY_UPDATE_SUCCESS') {
+        this.setState({ snackbar: true, key: Date.now(), message: Blockly.Msg.messages_GALLERY_UPDATE_SUCCESS, type: 'success' });
       }
-      else if(this.props.message.id === 'PROJECT_UPDATE_FAIL'){
-        this.setState({ snackbar: true, key: Date.now(), message: `Fehler beim Aktualisieren des Projektes. Versuche es noch einmal.`, type: 'error' });
+      else if (this.props.message.id === 'PROJECT_UPDATE_FAIL') {
+        this.setState({ snackbar: true, key: Date.now(), message: Blockly.Msg.messages_PROJECT_UPDATE_FAIL, type: 'error' });
       }
-      else if(this.props.message.id === 'GALLERY_UPDATE_FAIL'){
-        this.setState({ snackbar: true, key: Date.now(), message: `Fehler beim Aktualisieren des Galerie-Projektes. Versuche es noch einmal.`, type: 'error' });
+      else if (this.props.message.id === 'GALLERY_UPDATE_FAIL') {
+        this.setState({ snackbar: true, key: Date.now(), message: Blockly.Msg.messages_GALLERY_UPDATE_FAIL, type: 'error' });
       }
     }
   }
@@ -92,7 +93,7 @@ class SaveProject extends Component {
       xml: this.props.xml,
       title: this.props.name
     };
-    if(this.state.projectType === 'gallery'){
+    if (this.state.projectType === 'gallery') {
       body.description = this.state.description;
     }
     axios.post(`${process.env.REACT_APP_BLOCKLY_API}/${this.state.projectType}`, body)
@@ -101,7 +102,7 @@ class SaveProject extends Component {
         this.props.history.push(`/${this.state.projectType}/${project._id}`);
       })
       .catch(err => {
-        this.setState({ snackbar: true, key: Date.now(), message: `Fehler beim Speichern des ${this.state.projectType === 'gallery' ? 'Galerie-':''}Projektes. Versuche es noch einmal.`, type: 'error' });
+        this.setState({ snackbar: true, key: Date.now(), message: `${Blockly.Msg.messages_gallery_save_fail_1} ${this.state.projectType === 'gallery' ? 'Galerie-' : ''} ${Blockly.Msg.messages_gallery_save_fail_2}`, type: 'error' });
         window.scrollTo(0, 0);
       });
   }
@@ -112,7 +113,7 @@ class SaveProject extends Component {
 
   workspaceDescription = () => {
     this.props.setDescription(this.state.description);
-    this.setState({projectType: 'gallery'},
+    this.setState({ projectType: 'gallery' },
       () => this.saveProject()
     );
   }
@@ -121,10 +122,10 @@ class SaveProject extends Component {
     console.log(1, this.props);
     return (
       <div style={this.props.style}>
-        <Tooltip title={this.state.projectType === 'project'? 'Projekt aktualisieren':'Projekt speichern'} arrow>
+        <Tooltip title={this.state.projectType === 'project' ? Blockly.Msg.tooltip_update_project : Blockly.Msg.tooltip_save_project} arrow>
           <IconButton
             className={this.props.classes.button}
-            onClick={this.props.user.blocklyRole !== 'user' && (!this.props.project || this.props.user.email === this.props.project.creator) ? (e) => this.toggleMenu(e) : this.state.projectType === 'project' ? () => this.props.updateProject(this.state.projectType, this.props.project._id) : () => {this.setState({projectType: 'project'}, () => this.saveProject())}}
+            onClick={this.props.user.blocklyRole !== 'user' && (!this.props.project || this.props.user.email === this.props.project.creator) ? (e) => this.toggleMenu(e) : this.state.projectType === 'project' ? () => this.props.updateProject(this.state.projectType, this.props.project._id) : () => { this.setState({ projectType: 'project' }, () => this.saveProject()) }}
           >
             <FontAwesomeIcon icon={faSave} size="xs" />
           </IconButton>
@@ -144,12 +145,12 @@ class SaveProject extends Component {
           onClose={this.toggleMenu}
         >
           <MenuItem
-            onClick={this.state.projectType === 'project' ? (e) => {this.toggleMenu(e); this.props.updateProject(this.state.projectType, this.props.project._id)} : (e) => {this.toggleMenu(e); this.setState({projectType: 'project'}, () => this.saveProject())}}
+            onClick={this.state.projectType === 'project' ? (e) => { this.toggleMenu(e); this.props.updateProject(this.state.projectType, this.props.project._id) } : (e) => { this.toggleMenu(e); this.setState({ projectType: 'project' }, () => this.saveProject()) }}
           >
-            {this.state.projectType === 'project' ? 'Projekt aktualisieren' : 'Projekt erstellen'}
+            {this.state.projectType === 'project' ? Blockly.Msg.tooltip_update_project : Blockly.Msg.tooltip_create_project}
           </MenuItem>
           <MenuItem
-            onClick={this.state.projectType === 'gallery' ? (e) => {this.toggleMenu(e); this.props.updateProject(this.state.projectType, this.props.project._id)} : (e) => {this.toggleMenu(e); this.setState({ open: true, title: 'Projekbeschreibung ergänzen', content: 'Bitte gib eine Beschreibung für das Galerie-Projekt ein und bestätige deine Angabe mit einem Klick auf \'Eingabe\'.'});}}
+            onClick={this.state.projectType === 'gallery' ? (e) => { this.toggleMenu(e); this.props.updateProject(this.state.projectType, this.props.project._id) } : (e) => { this.toggleMenu(e); this.setState({ open: true, title: 'Projekbeschreibung ergänzen', content: 'Bitte gib eine Beschreibung für das Galerie-Projekt ein und bestätige deine Angabe mit einem Klick auf \'Eingabe\'.' }); }}
           >
             {this.state.projectType === 'gallery' ? 'Galerie-Projekt aktualisieren' : 'Galerie-Projekt erstellen'}
           </MenuItem>
@@ -165,13 +166,13 @@ class SaveProject extends Component {
           open={this.state.open}
           title={this.state.title}
           content={this.state.content}
-          onClose={() => {this.toggleDialog(); this.setState({ description: this.props.description });}}
-          onClick={() => {this.toggleDialog(); this.setState({ description: this.props.description });}}
+          onClose={() => { this.toggleDialog(); this.setState({ description: this.props.description }); }}
+          onClick={() => { this.toggleDialog(); this.setState({ description: this.props.description }); }}
           button={'Abbrechen'}
         >
           <div style={{ marginTop: '10px' }}>
             <TextField autoFocus fullWidth multiline placeholder={'Projektbeschreibung'} value={this.state.description} onChange={this.setDescription} style={{ marginBottom: '10px' }} />
-            <Button disabled={!this.state.description} variant='contained' color='primary' onClick={() => {this.workspaceDescription(); this.toggleDialog();}}>Eingabe</Button>
+            <Button disabled={!this.state.description} variant='contained' color='primary' onClick={() => { this.workspaceDescription(); this.toggleDialog(); }}>Eingabe</Button>
           </div>
         </Dialog>
       </div>

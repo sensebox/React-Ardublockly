@@ -97,7 +97,7 @@ class OpenProject extends Component {
             type="file"
           />
           <label htmlFor="open-blocks">
-            <Tooltip title='Projekt öffnen' arrow style={this.props.style}>
+            <Tooltip title={Blockly.Msg.tooltip_open_project} arrow style={this.props.style}>
               <div className={this.props.classes.button} style={{
                 borderRadius: '50%', cursor: 'pointer', display: 'table-cell',
                 verticalAlign: 'middle',
@@ -115,7 +115,7 @@ class OpenProject extends Component {
           content={this.state.content}
           onClose={this.toggleDialog}
           onClick={this.toggleDialog}
-          button={'Schließen'}
+          button={Blockly.Msg.button_close}
         />
         <Snackbar
           open={this.state.snackbar}
