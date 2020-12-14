@@ -8,7 +8,7 @@ export const visitPage = () => (dispatch) => {
 };
 
 export const setLanguage = (language) => (dispatch, getState) => {
-  if(!getState().auth.isAuthenticated){
+  if(!getState().auth.progress && !getState().auth.isAuthenticated){
     window.localStorage.setItem('locale', language);
   }
   dispatch({
