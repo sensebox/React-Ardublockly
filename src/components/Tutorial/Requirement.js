@@ -13,6 +13,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
+import * as Blockly from 'blockly'
 
 const styles = theme => ({
   outerDiv: {
@@ -63,7 +64,7 @@ class Requirement extends Component {
     var tutorialIds = requirements.map(requirement => requirement._id);
     return (
       <div style={{ marginTop: '20px', marginBottom: '5px' }}>
-        <Typography>Bevor du mit diesem Tutorial fortfährst solltest du folgende Tutorials erfolgreich abgeschlossen haben:</Typography>
+        <Typography>{Blockly.Msg.tutorials_requirements}</Typography>
         <List component="div">
           {tutorialIds.map((tutorialId, i) => {
             var title = requirements[i].title
