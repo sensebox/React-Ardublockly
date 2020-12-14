@@ -9,6 +9,7 @@ class PrivateRoute extends Component {
 
   render() {
     return (
+      !this.props.progress ?
       <Route
         {...this.props.exact}
         render={({ location }) =>
@@ -27,19 +28,21 @@ class PrivateRoute extends Component {
             )
           })()
         }
-      />
+      /> : null
     );
   }
 }
 
 PrivateRoute.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
-  user: PropTypes.object
+  user: PropTypes.object,
+  progress: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
-  user: state.auth.user
+  user: state.auth.user,
+  progress: state.auth.progress
 });
 
 export default connect(mapStateToProps, null)(withRouter(PrivateRoute));
