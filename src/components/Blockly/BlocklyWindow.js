@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { onChangeWorkspace, clearStats } from '../../actions/workspaceActions';
-import { De } from './msg/de';
-import { En } from './msg/en';
+
 import BlocklyComponent from './BlocklyComponent';
 import BlocklySvg from './BlocklySvg';
+
 import * as Blockly from 'blockly/core';
 import './blocks/index';
 import './generator/index';
-import { initialXml } from './initialXml.js';
 
+import { initialXml } from './initialXml.js';
 
 
 class BlocklyWindow extends Component {
@@ -18,11 +18,6 @@ class BlocklyWindow extends Component {
   constructor(props) {
     super(props);
     this.simpleWorkspace = React.createRef();
-    if (this.props.language === 'de_DE') {
-      Blockly.setLocale(De);
-    } else if (this.props.language === 'en_US') {
-      Blockly.setLocale(En);
-    }
   }
 
   componentDidMount() {
@@ -49,6 +44,15 @@ class BlocklyWindow extends Component {
       workspace.clear();
       if (!xml) xml = initialXml;
       Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
+    }
+    if(props.language !== this.props.language){
+      // change language
+      if (!xml) xml = initialXml;
+      var xmlDom = Blockly.Xml.textToDom(xml);
+      Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, workspace);
+      // var toolbox = workspace.getToolbox();
+      // console.log(toolbox);
+      // workspace.updateToolbox(toolbox.toolboxDef_);
     }
     Blockly.svgResize(workspace);
   }

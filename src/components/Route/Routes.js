@@ -5,6 +5,7 @@ import { visitPage } from '../../actions/generalActions';
 
 import { Route, Switch, withRouter } from 'react-router-dom';
 
+import PublicRoute from './PublicRoute';
 import PrivateRoute from './PrivateRoute';
 import PrivateRouteCreator from './PrivateRouteCreator';
 import IsLoggedRoute from './IsLoggedRoute';
@@ -34,18 +35,30 @@ class Routes extends Component {
     return (
       <div style={{ margin: '0 22px' }}>
         <Switch>
-          <Route path="/" exact component={Home} />
+          <PublicRoute path="/" exact>
+            <Home/>
+          </PublicRoute>
           {/* Tutorials */}
-          <Route path="/tutorial" exact component={TutorialHome} />
+          <PublicRoute path="/tutorial" exact>
+            <TutorialHome />
+          </PublicRoute>
           <PrivateRouteCreator path="/tutorial/builder" exact>
-            <Builder/>
+            <Builder />
           </PrivateRouteCreator>
-          <Route path="/tutorial/:tutorialId" exact component={Tutorial} />
+          <Route path="/tutorial/:tutorialId" exact>
+            <Tutorial />
+          </Route>
           {/* Sharing */}
-          <Route path="/share/:shareId" exact component={Project} />
+          <PublicRoute path="/share/:shareId" exact>
+            <Project />
+          </PublicRoute>
           {/* Gallery-Projects */}
-          <Route path="/gallery" exact component={ProjectHome} />
-          <Route path="/gallery/:galleryId" exact component={Project} />
+          <PublicRoute path="/gallery" exact>
+            <ProjectHome />
+          </PublicRoute>
+          <PublicRoute path="/gallery/:galleryId" exact>
+            <Project />
+          </PublicRoute>
           {/* User-Projects */}
           <PrivateRoute path="/project" exact>
             <ProjectHome/>
@@ -64,12 +77,20 @@ class Routes extends Component {
             <MyBadges />
           </PrivateRoute>
           {/* settings */}
-          <Route path="/settings" exact component={Settings} />
+          <PublicRoute path="/settings" exact>
+            <Settings />
+          </PublicRoute>
           {/* privacy */}
-          <Route path="/impressum" exact component={Impressum} />
-          <Route path="/privacy" exact component={Privacy} />
+          <PublicRoute path="/impressum" exact>
+            <Impressum />
+          </PublicRoute>
+          <PublicRoute path="/privacy" exact>
+            <Privacy />
+          </PublicRoute>
           {/* Not Found */}
-          <Route component={NotFound} />
+          <PublicRoute>
+            <NotFound />
+          </PublicRoute>
         </Switch>
       </div>
     );
