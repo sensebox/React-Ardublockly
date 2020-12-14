@@ -54,6 +54,9 @@ const timeToLogout = 14.9*60*1000; // nearly 15 minutes corresponding to the API
 
 // Login user
 export const login = ({ email, password }) => (dispatch) => {
+  dispatch({
+    type: USER_LOADING
+  });
   // Headers
   const config = {
     headers: {
@@ -70,11 +73,11 @@ export const login = ({ email, password }) => (dispatch) => {
       timeToLogout
     );
     logoutTimerId = logoutTimer();
+    dispatch(setLanguage(res.data.user.language));
     dispatch({
       type: LOGIN_SUCCESS,
       payload: res.data
     });
-    dispatch(setLanguage(res.data.user.language));
     dispatch({
       type: GET_STATUS,
       payload: res.data.user.status
