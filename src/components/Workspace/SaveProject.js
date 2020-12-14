@@ -100,10 +100,10 @@ class SaveProject extends Component {
       success: res => {
         var project = res.data[this.state.projectType];
         this.props.history.push(`/${this.state.projectType}/${project._id}`);
-      })
-      .catch(err => {
+      },
+      error: err => {
         this.setState({ snackbar: true, key: Date.now(), message: `${Blockly.Msg.messages_gallery_save_fail_1} ${this.state.projectType === 'gallery' ? 'Galerie-' : ''} ${Blockly.Msg.messages_gallery_save_fail_2}`, type: 'error' });
-        window.scrollTo(0, 0);
+        window.scrollTo(0, 0);        
       }
     };
     axios.post(`${process.env.REACT_APP_BLOCKLY_API}/${this.state.projectType}`, body, config)

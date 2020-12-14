@@ -16,11 +16,11 @@ export const loadUser = () => (dispatch) => {
         type: GET_STATUS,
         payload: res.data.user.status
       });
+      dispatch(setLanguage(res.data.user.language));
       dispatch({
         type: USER_LOADED,
         payload: res.data.user
       });
-      dispatch(setLanguage(res.data.user.language));
     },
     error: err => {
       if(err.response){
@@ -74,11 +74,11 @@ export const login = ({ email, password }) => (dispatch) => {
       type: LOGIN_SUCCESS,
       payload: res.data
     });
+    dispatch(setLanguage(res.data.user.language));
     dispatch({
       type: GET_STATUS,
       payload: res.data.user.status
     });
-    dispatch(setLanguage(res.data.user.language));
     dispatch(returnSuccess(res.data.message, res.status, 'LOGIN_SUCCESS'));
   })
   .catch(err => {
@@ -172,9 +172,12 @@ export const logout = () => (dispatch) => {
         type: GET_STATUS,
         payload: status
       });
-      var locale = 'de_DE';
+      var locale = 'en_US';
       if (window.localStorage.getItem('locale')) {
         locale = window.localStorage.getItem('locale');
+      }
+      else if (navigator.language === 'de-DE'){
+        locale = 'de_DE';
       }
       dispatch(setLanguage(locale));
       dispatch(returnSuccess(res.data.message, res.status, 'LOGOUT_SUCCESS'));

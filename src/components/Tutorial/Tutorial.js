@@ -5,6 +5,8 @@ import { workspaceName } from '../../actions/workspaceActions';
 import { clearMessages } from '../../actions/messageActions';
 import { getTutorial, resetTutorial, tutorialStep,tutorialProgress } from '../../actions/tutorialActions';
 
+import { withRouter } from 'react-router-dom';
+
 import Breadcrumbs from '../Breadcrumbs';
 import StepperHorizontal from './StepperHorizontal';
 import StepperVertical from './StepperVertical';
@@ -26,6 +28,7 @@ class Tutorial extends Component {
     // retrieve tutorial only if a potential user is loaded - authentication
     // is finished (success or failed)
     if(!this.props.progress){
+      console.log(this.props);
       this.props.getTutorial(this.props.match.params.tutorialId);
     }
   }
@@ -120,4 +123,4 @@ const mapStateToProps = state => ({
   progress: state.auth.progress
 });
 
-export default connect(mapStateToProps, { getTutorial, resetTutorial, tutorialStep, tutorialProgress, clearMessages, workspaceName })(Tutorial);
+export default connect(mapStateToProps, { getTutorial, resetTutorial, tutorialStep, tutorialProgress, clearMessages, workspaceName })(withRouter(Tutorial));
