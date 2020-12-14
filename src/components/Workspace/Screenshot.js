@@ -73,7 +73,7 @@ class Screenshot extends Component {
   render() {
     return (
       <div style={this.props.style}>
-        <Tooltip title='Screenshot erstellen' arrow>
+        <Tooltip title={Blockly.Msg.tooltip_screenshot} arrow>
           <IconButton
             className={this.props.classes.button}
             onClick={() => this.getSvg()}

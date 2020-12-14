@@ -47,6 +47,9 @@ export const PROGRESS = 'PROGRESS';
 
 
 export const VISIT = 'VISIT';
+export const LANGUAGE = 'LANGUAGE';
+export const RENDERER = 'RENDERER';
+export const STATISTICS = 'STATISTICS';
 
 // messages
 export const GET_ERRORS = 'GET_ERRORS';

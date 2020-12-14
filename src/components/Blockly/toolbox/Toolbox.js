@@ -38,7 +38,7 @@ class Toolbox extends React.Component {
     render() {
         return (
             <xml xmlns="https://developers.google.com/blockly/xml" id="blockly" style={{ display: 'none' }} ref={this.props.toolbox}>
-                <Category name="Sensoren" colour={getColour().sensebox}>
+                <Category name={Blockly.Msg.toolbox_sensors} colour={getColour().sensebox}>
                     <Block type="sensebox_sensor_temp_hum" />
                     <Block type="sensebox_sensor_uv_light" />
                     <Block type="sensebox_sensor_bmx055_accelerometer" />
@@ -301,7 +301,7 @@ class Toolbox extends React.Component {
                     <Block type="sensebox_mqtt_publish" />
                     {/* <Block type="sensebox_mqtt_subscribe" /> */}
                 </Category>
-                <Category name="Logik" colour={getColour().logic}>
+                <Category name={Blockly.Msg.toolbox_logic} colour={getColour().logic}>
                     <Block type="controls_if" />
                     <Block type="controls_ifelse" />
                     <Block type="logic_compare" />
@@ -310,7 +310,7 @@ class Toolbox extends React.Component {
                     <Block type="logic_boolean" />
                     <Block type="switch_case" />
                 </Category>
-                <Category id="loops" name="Schleifen" colour={getColour().loops}>
+                <Category id="loops" name={Blockly.Msg.toolbox_loops} colour={getColour().loops}>
                     <Block type="controls_repeat_ext">
                         <Value name="TIMES">
                             <Block type="math_number">
@@ -349,7 +349,7 @@ class Toolbox extends React.Component {
                     <Block type="text_length" />
                     <Block type="text_isEmpty" />
                 </Category>
-                <Category id="time" name="Zeit" colour={getColour().time}>
+                <Category id="time" name={Blockly.Msg.toolbox_time} colour={getColour().time}>
                     <Block type="time_delay">
                         <Value name="DELAY_TIME_MILI">
                             <Block type="math_number">
@@ -369,7 +369,7 @@ class Toolbox extends React.Component {
                     <Block type="infinite_loop"></Block>
                     <Block type="sensebox_interval_timer"></Block>
                 </Category>
-                <Category id="catMath" name="Mathematik" colour={getColour().math}>
+                <Category id="math" name={Blockly.Msg.toolbox_math} colour={getColour().math}>
                     <Block type="math_number"></Block>
                     <Block type="math_arithmetic"></Block>
                     <Block type="math_single"></Block>
@@ -422,15 +422,15 @@ class Toolbox extends React.Component {
                     </Block>
                     <Block type="io_notone"></Block>
                 </Category>
-                <Category name="Variablen" colour={getColour().variables} custom="CREATE_TYPED_VARIABLE"></Category>
+                <Category name={Blockly.Msg.toolbox_variables} colour={getColour().variables} custom="CREATE_TYPED_VARIABLE"></Category>
                 <Category name="Arrays" colour={getColour().arrays} >
                     <Block type="lists_create_empty" />
                     <Block type="array_getIndex" />
                     <Block type="lists_length" />
                 </Category>
-                <Category name="Functions" colour={getColour().procedures} custom="PROCEDURE"></Category>
+                <Category name={Blockly.Msg.toolbox_functions} colour={getColour().procedures} custom="PROCEDURE"></Category>
                 <sep></sep>
-                <Category name="Eingang/Ausgang" colour={getColour().io}>
+                <Category name={Blockly.Msg.toolbox_io} colour={getColour().io}>
                     <Block type="io_digitalwrite"></Block>
                     <Block type="io_digitalread"></Block>
                     <Block type="io_builtin_led"></Block>

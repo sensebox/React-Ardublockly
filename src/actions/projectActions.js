@@ -1,7 +1,6 @@
 import { PROJECT_PROGRESS, GET_PROJECT, GET_PROJECTS, PROJECT_TYPE, PROJECT_DESCRIPTION } from './types';
 
 import axios from 'axios';
-import { workspaceName } from './workspaceActions';
 import { returnErrors, returnSuccess } from './messageActions';
 
 export const setType = (type) => (dispatch) => {
@@ -19,13 +18,13 @@ export const setDescription = (description) => (dispatch) => {
 };
 
 export const getProject = (type, id) => (dispatch) => {
-  dispatch({type: PROJECT_PROGRESS});
+  dispatch({ type: PROJECT_PROGRESS });
   dispatch(setType(type));
   const config = {
     success: res => {
       var data = type === 'share' ? 'content' : type;
       var project = res.data[data];
-      if(project){
+      if (project) {
         dispatch({
           type: GET_PROJECT,
           payload: project
@@ -34,11 +33,11 @@ export const getProject = (type, id) => (dispatch) => {
           type: PROJECT_DESCRIPTION,
           payload: project.description
         });
-        dispatch({type: PROJECT_PROGRESS});
+        dispatch({ type: PROJECT_PROGRESS });
         dispatch(returnSuccess(res.data.message, res.status, 'GET_PROJECT_SUCCESS'));
       }
-      else{
-        dispatch({type: PROJECT_PROGRESS});
+      else {
+        dispatch({ type: PROJECT_PROGRESS });
         dispatch(returnErrors(res.data.message, res.status, 'PROJECT_EMPTY'));
       }
     },
@@ -68,7 +67,7 @@ export const getProjects = (type) => (dispatch) => {
         type: GET_PROJECTS,
         payload: projects
       });
-      dispatch({type: PROJECT_PROGRESS});
+      dispatch({ type: PROJECT_PROGRESS });
       dispatch(returnSuccess(res.data.message, res.status));
     },
     error: err => {
@@ -94,7 +93,7 @@ export const updateProject = (type, id) => (dispatch, getState) => {
     title: workspace.name
   };
   var project = getState().project;
-  if(type==='gallery'){
+  if (type === 'gallery') {
     body.description = project.description;
   }
   const config = {
@@ -107,7 +106,7 @@ export const updateProject = (type, id) => (dispatch, getState) => {
         type: GET_PROJECTS,
         payload: projects
       });
-      if(type === 'project'){
+      if (type === 'project') {
         dispatch(returnSuccess(res.data.message, res.status, 'PROJECT_UPDATE_SUCCESS'));
       } else {
         dispatch(returnSuccess(res.data.message, res.status, 'GALLERY_UPDATE_SUCCESS'));
@@ -143,7 +142,7 @@ export const deleteProject = (type, id) => (dispatch, getState) => {
         type: GET_PROJECTS,
         payload: projects
       });
-      if(type === 'project'){
+      if (type === 'project') {
         dispatch(returnSuccess(res.data.message, res.status, 'PROJECT_DELETE_SUCCESS'));
       } else {
         dispatch(returnSuccess(res.data.message, res.status, 'GALLERY_DELETE_SUCCESS'));
@@ -169,7 +168,7 @@ export const shareProject = (title, type, id) => (dispatch, getState) => {
   var body = {
     title: title
   };
-  if(type === 'project'){
+  if (type === 'project') {
     body.projectId = id;
   } else {
     body.xml = getState().workspace.code.xml;
@@ -177,7 +176,7 @@ export const shareProject = (title, type, id) => (dispatch, getState) => {
   axios.post(`${process.env.REACT_APP_BLOCKLY_API}/share`, body)
     .then(res => {
       var shareContent = res.data.content;
-      if(body.projectId){
+      if (body.projectId) {
         var projects = getState().project.projects;
         var index = projects.findIndex(res => res._id === id);
         projects[index].shared = shareContent.expiresAt;
@@ -189,7 +188,7 @@ export const shareProject = (title, type, id) => (dispatch, getState) => {
       dispatch(returnSuccess(res.data.message, shareContent._id, 'SHARE_SUCCESS'));
     })
     .catch(err => {
-      if(err.response){
+      if (err.response) {
         dispatch(returnErrors(err.response.data.message, err.response.status, 'SHARE_FAIL'));
       }
     });

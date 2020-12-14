@@ -18,6 +18,8 @@ import Button from '@material-ui/core/Button';
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import * as Blockly from 'blockly'
+
 const styles = (theme) => ({
   compile: {
     backgroundColor: theme.palette.button.compile,
@@ -57,7 +59,7 @@ class SolutionCheck extends Component {
     const steps = this.props.tutorial.steps;
     return (
       <div>
-        <Tooltip title='Lösung kontrollieren' arrow>
+        <Tooltip title={Blockly.Msg.tooltip_check_solution} arrow>
           <IconButton
             className={this.props.classes.compile}
             style={{ width: '40px', height: '40px', marginRight: '5px' }}
@@ -76,7 +78,7 @@ class SolutionCheck extends Component {
           content={this.state.msg.text}
           onClose={this.toggleDialog}
           onClick={this.toggleDialog}
-          button={'Schließen'}
+          button={Blockly.Msg.button_close}
         >
           {this.state.msg.type === 'success' ?
             <div style={{ marginTop: '20px', display: 'flex' }}>
@@ -88,7 +90,7 @@ class SolutionCheck extends Component {
                   color="primary"
                   onClick={() => { this.toggleDialog(); this.props.history.push(`/tutorial/`) }}
                 >
-                  Tutorials-Übersicht
+                  {Blockly.Msg.button_tutorial_overview}
                 </Button>
                 :
                 <Button
@@ -97,7 +99,7 @@ class SolutionCheck extends Component {
                   color="primary"
                   onClick={() => { this.toggleDialog(); this.props.tutorialStep(this.props.activeStep + 1) }}
                 >
-                  nächster Schritt
+                  {Blockly.Msg.button_next}
                 </Button>
               }
             </div>

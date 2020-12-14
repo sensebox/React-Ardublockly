@@ -782,4 +782,101 @@ Blockly.Msg.senseBox_mqtt_password = "Password";
 Blockly.Msg.sensebox_mqtt_subscribe = "Subscribe to Feed"
 Blockly.Msg.senseBox_mqtt_publish = "Publish to Feed/Topic";
 
+
+/**
+ * Add Translation for Blocks above
+ * ---------------------------------------------------------------
+ * Add Translation for the UI below
+ */
+
+
+/**
+ * Toolbox
+ */
+Blockly.Msg.toolbox_sensors = "Sensors";
+Blockly.Msg.toolbox_logic = "Logic";
+Blockly.Msg.toolbox_loops = "Loops";
+Blockly.Msg.toolbox_math = "Math";
+Blockly.Msg.toolbox_io = "Input/Output";
+Blockly.Msg.toolbox_time = "Time";
+Blockly.Msg.toolbox_functions = "Functions";
+Blockly.Msg.toolbox_variables = "Variables";
+
+
+/**
+ * Tooltips
+ *
+ */
+
+Blockly.Msg.tooltip_compile_code = "Compile Code"
+Blockly.Msg.tooltip_save_blocks = "Save Blocks";
+Blockly.Msg.tooltip_open_blocks = "Open Blocks";
+Blockly.Msg.tooltip_screenshot = "Download Screenshot";
+Blockly.Msg.tooltip_clear_workspace = "Reset Workspace";
+Blockly.Msg.tooltip_share_blocks = "Share Blocks";
+Blockly.Msg.tooltip_show_code = "Show Code";
+Blockly.Msg.tooltip_hide_code = "Hide Code"
+
+Blockly.Msg.tooltip_project_name = "Projectname"
+/**
+ * Share Dialog
+ */
+
+Blockly.Msg.sharedialog_headline = "Your Share-Link was created";
+Blockly.Msg.sharedialog_text = "Share your project with the following link";
+
+/**
+ * Project rename Dialog
+ */
+
+Blockly.Msg.renamedialog_headline = "Rename Project";
+Blockly.Msg.renamedialog_text = "Please enter a name for the project and confirm it by clicking on 'Confirm'."
+
+/**
+ * Compile Dialog
+ *
+ */
+
+Blockly.Msg.compiledialog_headline = "Error"
+Blockly.Msg.compiledialog_text = "While compiling an error occured. Please check your blocks and try again"
+
+
+
+/**
+ * Buttons
+ *
+ */
+
+Blockly.Msg.button_cancel = "Cancel";
+Blockly.Msg.button_close = "Close";
+Blockly.Msg.button_accept = "Confirm";
+Blockly.Msg.button_compile = "Compile";
+Blockly.Msg.button_create_variableCreate = "Create Variable";
+
+
+/**
+ *
+ */
+
+Blockly.Msg.filename = "Filename";
+Blockly.Msg.projectname = "Projectname";
+
+/**
+ * Settings
+ */
+Blockly.Msg.settings_head = "Settings"
+Blockly.Msg.settings_language = "Language"
+Blockly.Msg.settings_language_text = "Selection of the language applies to the entire application. A distinction can be made between German and English."
+Blockly.Msg.settings_language_de = "German"
+Blockly.Msg.settings_language_en = "English"
+Blockly.Msg.settings_renderer = "Renderer"
+Blockly.Msg.settings_renderer_text = "The selected renderer determines the appearance of the blocks. A distinction can be made between 'Geras' and 'Zelos', whereby 'Zelos' is particularly suitable for a touch application."
+Blockly.Msg.settings_statistics = "Statistics"
+Blockly.Msg.settings_statistics_text = "The display of statistics on the usage of the blocks above the workspace can be shown or hidden."
+Blockly.Msg.settings_statistics_on = "On"
+Blockly.Msg.settings_statistics_off = "Off"
+
+
+
+
 export const En = Blockly.Msg;

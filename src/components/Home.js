@@ -48,7 +48,6 @@ class Home extends Component {
 
   state = {
     codeOn: false,
-    stats: window.localStorage.getItem('stats'),
     snackbar: false,
     type: '',
     key: '',
@@ -91,7 +90,7 @@ class Home extends Component {
   render() {
     return (
       <div>
-        {this.state.stats ?
+        {this.props.statistics ?
           <div style={{ float: 'left', height: '40px', position: 'relative' }}><WorkspaceStats /></div>
           : null
         }
@@ -136,11 +135,13 @@ class Home extends Component {
 Home.propTypes = {
   clearStats: PropTypes.func.isRequired,
   workspaceName: PropTypes.func.isRequired,
-  message: PropTypes.object.isRequired
+  message: PropTypes.object.isRequired,
+  statistics: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
-  message: state.message
+  message: state.message,
+  statistics: state.general.statistics
 });
 
 

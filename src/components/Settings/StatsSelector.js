@@ -1,44 +1,56 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { setStatistics } from '../../actions/generalActions';
+
+import * as Blockly from 'blockly/core'
+
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import Typography from '@material-ui/core/Typography';
+import FormHelperText from '@material-ui/core/FormHelperText';
 
-const useStyles = makeStyles((theme) => ({
-    formControl: {
-        margin: theme.spacing(1),
-        minWidth: 400,
-    },
-    selectEmpty: {
-        marginTop: theme.spacing(2),
-    },
-}));
+class StatsSelector extends Component {
 
-export default function StatsSelector() {
-    const classes = useStyles();
-    const [stats, setStats] = React.useState(window.localStorage.getItem('stats'));
+  componentDidMount(){
+    // Ensure that Blockly.setLocale is adopted in the component.
+    // Otherwise, the text will not be displayed until the next update of the component.
+    this.forceUpdate();
+  }
 
-    const handleChange = (event) => {
-        setStats(event.target.value);
-        window.localStorage.setItem('stats', event.target.value);
-    };
-
+  render(){
     return (
-        <div>
-            <FormControl className={classes.formControl}>
-                <InputLabel id="demo-simple-select-label">Statistiken</InputLabel>
-                <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={stats}
-                    onChange={handleChange}
-                >
-                    <MenuItem value={true}>On</MenuItem>
-                    <MenuItem value={false}>Off</MenuItem>
-                </Select>
-            </FormControl>
-            <p>Schaltet die Statistiken Oberhalb der Arbeitsfläche ein bzw. aus</p>
-        </div>
+      <div>
+        <Typography style={{fontWeight: 'bold'}}>{Blockly.Msg.settings_statistics}</Typography>
+        <FormHelperText style={{color: 'black', lineHeight: 1.3, marginBottom: '8px'}}>{Blockly.Msg.settings_statistics_text}</FormHelperText>
+        <FormControl>
+          <InputLabel id="demo-simple-select-label">{Blockly.Msg.settings_statistics}</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={this.props.statistics}
+            onChange={(e) => this.props.setStatistics(e.target.value)}
+          >
+            <MenuItem value={true}>{Blockly.Msg.settings_statistics_on}</MenuItem>
+            <MenuItem value={false}>{Blockly.Msg.settings_statistics_off}</MenuItem>
+          </Select>
+        </FormControl>
+      </div>
     );
+  }
 }
+
+StatsSelector.propTypes = {
+  setStatistics: PropTypes.func.isRequired,
+  language: PropTypes.string.isRequired,
+  statistics: PropTypes.bool.isRequired
+};
+
+const mapStateToProps = state => ({
+  statistics: state.general.statistics,
+  language: state.general.language
+});
+
+export default connect(mapStateToProps, { setStatistics })(StatsSelector);

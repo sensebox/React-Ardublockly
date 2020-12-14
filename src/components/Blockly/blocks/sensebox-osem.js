@@ -138,6 +138,12 @@ Blockly.Blocks['sensebox_send_to_osem'] = {
                 }
                 console.log(dropdown)
             }
+            if (dropdown.length > 1) {
+                var options = dropdown.slice(1)
+                return options
+            } else {
+                return dropdown
+            }
         }
         return dropdown
     },

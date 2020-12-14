@@ -1,4 +1,4 @@
-import { MYBADGES_DISCONNECT, TUTORIAL_PROGRESS, GET_TUTORIAL, GET_TUTORIALS, TUTORIAL_SUCCESS, TUTORIAL_ERROR, TUTORIAL_CHANGE, TUTORIAL_XML, TUTORIAL_ID, TUTORIAL_STEP } from './types';
+import { MYBADGES_DISCONNECT, TUTORIAL_PROGRESS, GET_TUTORIAL, GET_TUTORIALS, TUTORIAL_SUCCESS, TUTORIAL_ERROR, TUTORIAL_CHANGE, TUTORIAL_XML, TUTORIAL_STEP } from './types';
 
 import axios from 'axios';
 import { returnErrors, returnSuccess } from './messageActions';
@@ -12,15 +12,11 @@ export const getTutorial = (id) => (dispatch, getState) => {
   axios.get(`${process.env.REACT_APP_BLOCKLY_API}/tutorial/${id}`)
     .then(res => {
       var tutorial = res.data.tutorial;
-      console.log('status', getState().tutorial.status);
       existingTutorial(tutorial, getState().tutorial.status).then(status => {
-        console.log('progress',getState().auth.progress);
-        console.log('status');
         dispatch({
           type: TUTORIAL_SUCCESS,
           payload: status
         });
-        console.log('eins');
         dispatch(updateStatus(status));
         dispatch({
           type: GET_TUTORIAL,
@@ -31,10 +27,10 @@ export const getTutorial = (id) => (dispatch, getState) => {
       });
     })
     .catch(err => {
-      if(err.response){
+      if (err.response) {
         dispatch(returnErrors(err.response.data.message, err.response.status, 'GET_TUTORIAL_FAIL'));
       }
-      dispatch({type: TUTORIAL_PROGRESS});
+      dispatch({ type: TUTORIAL_PROGRESS });
     });
 };
 
@@ -54,15 +50,15 @@ export const getTutorials = () => (dispatch, getState) => {
           type: GET_TUTORIALS,
           payload: tutorials
         });
-        dispatch({type: TUTORIAL_PROGRESS});
+        dispatch({ type: TUTORIAL_PROGRESS });
         dispatch(returnSuccess(res.data.message, res.status));
       });
     })
     .catch(err => {
-      if(err.response){
+      if (err.response) {
         dispatch(returnErrors(err.response.data.message, err.response.status, 'GET_TUTORIALS_FAIL'));
       }
-      dispatch({type: TUTORIAL_PROGRESS});
+      dispatch({ type: TUTORIAL_PROGRESS });
     });
 };
 
@@ -174,7 +170,7 @@ export const tutorialCheck = (status, step) => (dispatch, getState) => {
   console.log('drei');
   dispatch(updateStatus(tutorialsStatus));
   dispatch(tutorialChange());
-  dispatch(returnSuccess('','','TUTORIAL_CHECK_SUCCESS'));
+  dispatch(returnSuccess('', '', 'TUTORIAL_CHECK_SUCCESS'));
 };
 
 export const storeTutorialXml = (code) => (dispatch, getState) => {
@@ -208,9 +204,9 @@ export const tutorialStep = (step) => (dispatch) => {
 };
 
 
-const existingTutorials = (tutorials, status) => new Promise(function(resolve, reject){
+const existingTutorials = (tutorials, status) => new Promise(function (resolve, reject) {
   var newstatus;
-  new Promise(function(resolve, reject){
+  new Promise(function (resolve, reject) {
     var existingTutorialIds = tutorials.map((tutorial, i) => {
       existingTutorial(tutorial, status).then(status => {
         newstatus = status;
@@ -228,7 +224,6 @@ const existingTutorials = (tutorials, status) => new Promise(function(resolve, r
 });
 
 const existingTutorial = (tutorial, status) => new Promise(function(resolve, reject){
-  console.log('st',status);
   var tutorialsId = tutorial._id;
   var statusIndex = status.findIndex(status => status._id === tutorialsId);
   if (statusIndex > -1) {
