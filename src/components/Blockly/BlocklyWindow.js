@@ -18,16 +18,9 @@ class BlocklyWindow extends Component {
   constructor(props) {
     super(props);
     this.simpleWorkspace = React.createRef();
-    // if (locale === null) {
-    //   if (navigator.language === 'de-DE') {
-    //     locale = 'de';
-    //   } else {
-    //     locale = 'en';
-    //   }
-    // }
-    if (this.props.language === 'de') {
+    if (this.props.language === 'de_DE') {
       Blockly.setLocale(De);
-    } else if (this.props.language === 'en') {
+    } else if (this.props.language === 'en_US') {
       Blockly.setLocale(En);
     }
   }

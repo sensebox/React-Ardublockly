@@ -1,8 +1,8 @@
 import { MYBADGES_CONNECT, MYBADGES_DISCONNECT, USER_LOADED, USER_LOADING, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_SUCCESS, LOGOUT_FAIL, REFRESH_TOKEN_SUCCESS } from '../actions/types';
 
 import axios from 'axios';
-import { returnErrors, returnSuccess } from './messageActions'
-
+import { returnErrors, returnSuccess } from './messageActions';
+import { setLanguage } from './generalActions';
 
 // Check token & load user
 export const loadUser = () => (dispatch) => {
@@ -16,6 +16,7 @@ export const loadUser = () => (dispatch) => {
         type: USER_LOADED,
         payload: res.data.user
       });
+      dispatch(setLanguage(res.data.user.language));
     },
     error: err => {
       if(err.response){
@@ -61,6 +62,7 @@ export const login = ({ email, password }) => (dispatch) => {
       type: LOGIN_SUCCESS,
       payload: res.data
     });
+    dispatch(setLanguage(res.data.user.language));
     dispatch(returnSuccess(res.data.message, res.status, 'LOGIN_SUCCESS'));
   })
   .catch(err => {
@@ -130,6 +132,11 @@ export const logout = () => (dispatch) => {
       dispatch({
         type: LOGOUT_SUCCESS
       });
+      var locale = 'de_DE';
+      if (window.localStorage.getItem('locale')) {
+        locale = window.localStorage.getItem('locale');
+      }
+      dispatch(setLanguage(locale));
       dispatch(returnSuccess(res.data.message, res.status, 'LOGOUT_SUCCESS'));
       clearTimeout(logoutTimerId);
     },

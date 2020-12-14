@@ -7,7 +7,10 @@ export const visitPage = () => (dispatch) => {
   });
 };
 
-export const setLanguage = (language) => (dispatch) => {
+export const setLanguage = (language) => (dispatch, getState) => {
+  if(!getState().auth.isAuthenticated){
+    window.localStorage.setItem('locale', language);
+  }
   dispatch({
     type: LANGUAGE,
     payload: language

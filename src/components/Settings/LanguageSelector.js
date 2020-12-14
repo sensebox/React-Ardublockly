@@ -37,8 +37,8 @@ class LanguageSelector extends Component {
             value={this.props.language}
             onChange={this.handleChange}
           >
-            <MenuItem value={'de'}>{Blockly.Msg.settings_language_de}</MenuItem>
-            <MenuItem value={'en'}>{Blockly.Msg.settings_language_en}</MenuItem>
+            <MenuItem value={'de_DE'}>{Blockly.Msg.settings_language_de}</MenuItem>
+            <MenuItem value={'en_US'}>{Blockly.Msg.settings_language_en}</MenuItem>
           </Select>
         </FormControl>
       </div>
