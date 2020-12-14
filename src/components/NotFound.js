@@ -9,6 +9,13 @@ import Typography from '@material-ui/core/Typography';
 import * as Blockly from 'blockly'
 
 class NotFound extends Component {
+
+  componentDidMount(){
+    // Ensure that Blockly.setLocale is adopted in the component.
+    // Otherwise, the text will not be displayed until the next update of the component.
+    this.forceUpdate();
+  }
+
   render() {
     return (
       <div>

@@ -804,7 +804,7 @@ Blockly.Msg.senseBox_mqtt_publish = "Sende an Feed/Topic";
 
 /**
  * Typed Variable Modal
- * 
+ *
  */
 
 
@@ -835,7 +835,7 @@ Blockly.Msg.toolbox_variables = "Variablen";
 
 /**
  * Tooltips
- * 
+ *
  */
 
 Blockly.Msg.tooltip_compile_code = "Code kompilieren"
@@ -863,7 +863,7 @@ Blockly.Msg.tooltip_project_title = "Titel des Projektes"
 
 /**
  * Messages
- * 
+ *
  */
 
 Blockly.Msg.messages_delete_project_failed = "Fehler beim Löschen des Projektes. Versuche es noch einmal."
@@ -895,7 +895,7 @@ Blockly.Msg.renamedialog_text = "Bitte gib einen Namen für das Projekt ein und 
 
 /**
  * Compile Dialog
- * 
+ *
  */
 
 Blockly.Msg.compiledialog_headline = "Fehler"
@@ -903,7 +903,7 @@ Blockly.Msg.compiledialog_text = "Beim kompilieren ist ein Fehler aufgetreten. �
 
 /**
  * Buttons
- * 
+ *
  */
 
 Blockly.Msg.button_cancel = "Abbrechen";
@@ -915,7 +915,7 @@ Blockly.Msg.button_back = "Zurück"
 
 
 /**
- * 
+ *
  */
 
 Blockly.Msg.filename = "Dateiname";
@@ -926,9 +926,15 @@ Blockly.Msg.projectname = "Projektname";
  */
 Blockly.Msg.settings_head = "Einstellungen"
 Blockly.Msg.settings_language = "Sprache"
+Blockly.Msg.settings_language_text = "Auswahl der Sprache gilt für die gesamte Anwendung. Es kann zwischen Deutsch und Englisch unterschieden werden."
 Blockly.Msg.settings_language_de = "Deutsch"
 Blockly.Msg.settings_language_en = "Englisch"
-Blockly.Msg.settings_renderer_text = "Der Renderer bestimmt das aussehen der Blöcke"
+Blockly.Msg.settings_renderer = "Renderer"
+Blockly.Msg.settings_renderer_text = "Der eingestellte Renderer bestimmt das Aussehen der Blöcke. Es kann zwischen 'Geras' und 'Zelos' unterschieden werden, wobei 'Zelos' insbesondere für eine Touch-Anwendung geeignet ist."
+Blockly.Msg.settings_statistics = "Statistiken"
+Blockly.Msg.settings_statistics_text = "Die Anzeige von Statistiken zur Nutzung der Blöcke oberhalb der Arbeitsfläche kann ein- oder ausgeblendet werden."
+Blockly.Msg.settings_statistics_on = "An"
+Blockly.Msg.settings_statistics_off = "Aus"
 
 /**
  * 404

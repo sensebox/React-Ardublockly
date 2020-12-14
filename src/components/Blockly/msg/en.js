@@ -805,7 +805,7 @@ Blockly.Msg.toolbox_variables = "Variables";
 
 /**
  * Tooltips
- * 
+ *
  */
 
 Blockly.Msg.tooltip_compile_code = "Compile Code"
@@ -834,7 +834,7 @@ Blockly.Msg.renamedialog_text = "Please enter a name for the project and confirm
 
 /**
  * Compile Dialog
- * 
+ *
  */
 
 Blockly.Msg.compiledialog_headline = "Error"
@@ -844,7 +844,7 @@ Blockly.Msg.compiledialog_text = "While compiling an error occured. Please check
 
 /**
  * Buttons
- * 
+ *
  */
 
 Blockly.Msg.button_cancel = "Cancel";
@@ -855,12 +855,26 @@ Blockly.Msg.button_create_variableCreate = "Create Variable";
 
 
 /**
- * 
+ *
  */
 
 Blockly.Msg.filename = "Filename";
 Blockly.Msg.projectname = "Projectname";
 
+/**
+ * Settings
+ */
+Blockly.Msg.settings_head = "Settings"
+Blockly.Msg.settings_language = "Language"
+Blockly.Msg.settings_language_text = "Selection of the language applies to the entire application. A distinction can be made between German and English."
+Blockly.Msg.settings_language_de = "German"
+Blockly.Msg.settings_language_en = "English"
+Blockly.Msg.settings_renderer = "Renderer"
+Blockly.Msg.settings_renderer_text = "The selected renderer determines the appearance of the blocks. A distinction can be made between 'Geras' and 'Zelos', whereby 'Zelos' is particularly suitable for a touch application."
+Blockly.Msg.settings_statistics = "Statistics"
+Blockly.Msg.settings_statistics_text = "The display of statistics on the usage of the blocks above the workspace can be shown or hidden."
+Blockly.Msg.settings_statistics_on = "On"
+Blockly.Msg.settings_statistics_off = "Off"
 
 
 
