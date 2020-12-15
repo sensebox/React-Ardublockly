@@ -25,6 +25,7 @@ import * as steps from './Tour';
 import { faBars, faChevronLeft, faLayerGroup, faSignInAlt, faSignOutAlt, faCertificate, faUserCircle, faQuestionCircle, faCog, faChalkboardTeacher, faTools, faLightbulb } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Blockly from 'blockly'
+import Tooltip from '@material-ui/core/Tooltip';
 
 
 const styles = (theme) => ({
@@ -96,14 +97,17 @@ class Navbar extends Component {
                   Tutorial
                 </Typography>
               </Link> : null}
-            <IconButton
-              color="inherit"
-              className={`openTour ${this.props.classes.button}`}
-              onClick={() => { this.openTour(); }}
-              style={{ margin: '0 30px 0 auto' }}
-            >
-              <FontAwesomeIcon icon={faQuestionCircle} size="s" />
-            </IconButton>
+            {/^\/(\/.*$|$)/g.test(this.props.location.pathname) ?
+              <Tooltip title='Hilfe starten' arrow>
+                <IconButton
+                  color="inherit"
+                  className={`openTour ${this.props.classes.button}`}
+                  onClick={() => { this.openTour(); }}
+                  style={{ margin: '0 30px 0 auto' }}
+                >
+                  <FontAwesomeIcon icon={faQuestionCircle} size="s" />
+                </IconButton>
+              </Tooltip> : null}
             <Tour
               steps={steps.steps}
               isOpen={this.state.isTourOpen}
