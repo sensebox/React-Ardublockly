@@ -850,7 +850,7 @@ Blockly.Msg.messages_newblockly_head = 'Welcome to the new version Blockly for t
 Blockly.Msg.messages_newblockly_text = "The new Blockly version is currently in testing. You can find all the news here:"
 Blockly.Msg.messages_GET_TUTORIAL_FAIL = 'Back to tutorials overview'
 Blockly.Msg.messages_LOGIN_FAIL = 'The username or password is incorrect.'
-
+Blockly.Msg.messages_login_error = "Enter both a username and a password."
 /**
  * Share Dialog
  */
@@ -885,7 +885,7 @@ Blockly.Msg.button_create_variableCreate = "Create Variable";
 Blockly.Msg.button_back = "Back"
 Blockly.Msg.button_next = "Next step"
 Blockly.Msg.button_tutorial_overview = "Tutorial overview"
-
+Blockly.Msg.button_login = "Login"
 
 /**
  *
@@ -907,6 +907,7 @@ Blockly.Msg.notfound_text = "The page you are looking for may have been removed,
 Blockly.Msg.labels_donotshowagain = 'Do not show dialog again'
 Blockly.Msg.labels_here = 'here'
 Blockly.Msg.labels_username = 'Email or username'
+Blockly.Msg.labels_password = "Password"
 /**
  * Badges
  */
@@ -944,6 +945,11 @@ Blockly.Msg.builder_requirements_order = "Note that the order of ticking is auth
 
 
 Blockly.Msg.login_head = "Login"
+Blockly.Msg.login_osem_account_01 = "You need to have an "
+Blockly.Msg.login_osem_account_02 = "Account to login"
+Blockly.Msg.login_lostpassword = "Lost your password?"
+Blockly.Msg.login_createaccount = "If you don't have an openSenseMap account please register on "
+
 
 
 /**

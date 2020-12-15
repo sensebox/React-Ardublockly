@@ -918,7 +918,7 @@ Blockly.Msg.button_create_variableCreate = "Erstelle Variable";
 Blockly.Msg.button_back = "Zurück"
 Blockly.Msg.button_next = "nächster Schritt"
 Blockly.Msg.button_tutorial_overview = "Tutorial Übersicht"
-
+Blockly.Msg.button_login = "Anmelden"
 
 /**
  *
@@ -957,6 +957,7 @@ Blockly.Msg.notfound_text = "Die gesuchte Seite wurde möglicherweise entfernt, 
 Blockly.Msg.labels_donotshowagain = 'Dialog nicht mehr anzeigen'
 Blockly.Msg.labels_here = "hier"
 Blockly.Msg.labels_username = 'E-Mail oder Nutzername'
+Blockly.Msg.labels_password = "Passwort"
 
 /**
  * Badges
@@ -995,8 +996,10 @@ Blockly.Msg.builder_requirements_order = "Beachte, dass die Reihenfolge des Anha
 
 
 Blockly.Msg.login_head = "Anmelden"
-
-
+Blockly.Msg.login_osem_account_01 = "Du benötigst einen "
+Blockly.Msg.login_osem_account_02 = "Account um dich einzuloggen"
+Blockly.Msg.login_lostpassword = "Du hast dein Passwort vergessen?"
+Blockly.Msg.login_createaccount = "Falls du noch keinen Account hast erstellen einen auf "
 /**
  * Navbar
  */

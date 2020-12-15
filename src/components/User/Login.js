@@ -71,7 +71,7 @@ export class Login extends Component {
       };
       this.props.login(user);
     } else {
-      this.setState({ snackbar: true, key: Date.now(), message: 'Gib sowohl ein Benutzername als auch ein Passwort ein.', type: 'error' });
+      this.setState({ snackbar: true, key: Date.now(), message: Blockly.Msg.messages_login_error, type: 'error' });
     }
   };
 
@@ -86,12 +86,12 @@ export class Login extends Component {
   render() {
     return (
       <div>
-        <Breadcrumbs content={[{ link: '/user/login', title: 'Anmelden' }]} />
+        <Breadcrumbs content={[{ link: '/user/login', title: Blockly.Msg.button_login }]} />
 
         <div style={{ maxWidth: '500px', marginLeft: 'auto', marginRight: 'auto' }}>
           <h1>{Blockly.Msg.login_head}</h1>
           <Alert>
-            Zur Anmeldung ist ein Konto auf <Link color='primary' rel="noreferrer" target="_blank" href={'https://opensensemap.org/'}>openSenseMap</Link> Voraussetzung.
+            {Blockly.Msg.login_osem_account_01} <Link color='primary' rel="noreferrer" target="_blank" href={'https://opensensemap.org/'}>openSenseMap</Link> {Blockly.Msg.login_osem_account_02}.
           </Alert>
           <Snackbar
             open={this.state.snackbar}
@@ -112,7 +112,7 @@ export class Login extends Component {
           <TextField
             // variant='outlined'
             type={this.state.showPassword ? 'text' : 'password'}
-            label='Passwort'
+            label={Blockly.Msg.labesl_password}
             name='password'
             value={this.state.password}
             InputProps={{
@@ -136,15 +136,15 @@ export class Login extends Component {
             <Button color="primary" variant='contained' onClick={this.onSubmit} style={{ width: '100%' }}>
               {this.props.progress ?
                 <div style={{ height: '24.5px' }}><CircularProgress color="inherit" size={20} /></div>
-                : 'Anmelden'}
+                : Blockly.Msg.button_login}
             </Button>
           </p>
           <p style={{ textAlign: 'center', fontSize: '0.8rem' }}>
-            <Link rel="noreferrer" target="_blank" href={'https://opensensemap.org/'} color="primary">Passwort vergessen?</Link>
+            <Link rel="noreferrer" target="_blank" href={'https://opensensemap.org/'} color="primary">{Blockly.Msg.login_lostpassword}</Link>
           </p>
           <Divider variant='fullWidth' />
           <p style={{ textAlign: 'center', paddingRight: "34px", paddingLeft: "34px" }}>
-            Du hast noch kein Konto? Registriere dich auf <Link rel="noreferrer" target="_blank" href={'https://opensensemap.org/'}>openSenseMap</Link>.
+            {Blockly.Msg.login_createaccount}<Link rel="noreferrer" target="_blank" href={'https://opensensemap.org/'}>openSenseMap</Link>.
           </p>
         </div>
       </div>
