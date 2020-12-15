@@ -355,6 +355,23 @@ class Builder extends Component {
             <Step step={step} index={i} key={i} />
           )}
 
+          {/*submit or reset*/}
+          {this.state.tutorial !== 'delete' ?
+            <div>
+              <Divider variant='fullWidth' style={{ margin: '30px 0 10px 0' }} />
+              {this.state.tutorial === 'new' ?
+                <div>
+                  <Button style={{ marginRight: '10px', marginTop: '10px' }} variant='contained' color='primary' onClick={() => this.submitNew()}>Tutorial erstellen</Button>
+                  <Button style={{ marginTop: '10px' }} variant='contained' onClick={() => this.resetFull()}>Zurücksetzen</Button>
+                </div>
+              : <div>
+                  <Button style={{ marginRight: '10px', marginTop: '10px' }} variant='contained' color='primary' onClick={() => this.submitUpdate()}>Tutorial ändern</Button>
+                  <Button style={{ marginTop: '10px' }} variant='contained' onClick={() => this.resetTutorial()}>Zurücksetzen</Button>
+                </div>
+              }
+            </div>
+          : null}
+
             <Backdrop className={this.props.classes.backdrop} open={this.props.isProgress}>
               <CircularProgress color="inherit" />
             </Backdrop>
