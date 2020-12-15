@@ -880,7 +880,7 @@ Blockly.Msg.messages_copylink_success = 'Link erfolgreich in Zwischenablage gesp
 Blockly.Msg.messages_rename_success_01 = 'Das Projekt wurde erfolgreich in '
 Blockly.Msg.messages_rename_success_02 = 'umbenannt.'
 Blockly.Msg.messages_newblockly_head = "Willkommen zur neuen Version Blockly für die senseBox"
-Blockly.Msg.messages_newblockly_text = "Die neue Blockly Version befindet sich zurzeit in der Testphase. Alle Neuigkeiten findet ihr hier:"
+Blockly.Msg.messages_newblockly_text = "Die neue Blockly Version befindet sich zurzeit in der Testphase. Alle Neuigkeiten findet ihr hier: "
 Blockly.Msg.messages_GET_TUTORIAL_FAIL = 'Zurück zur Tutorials-Übersicht'
 Blockly.Msg.messages_LOGIN_FAIL = 'Der Benutzername oder das Passwort ist nicht korrekt.'
 /**
