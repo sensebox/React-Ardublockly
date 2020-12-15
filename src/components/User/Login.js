@@ -112,7 +112,7 @@ export class Login extends Component {
           <TextField
             // variant='outlined'
             type={this.state.showPassword ? 'text' : 'password'}
-            label={Blockly.Msg.labesl_password}
+            label={Blockly.Msg.labels_password}
             name='password'
             value={this.state.password}
             InputProps={{
