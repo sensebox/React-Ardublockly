@@ -128,7 +128,7 @@ class Navbar extends Component {
               </Tooltip>
             : null}
             <Tour
-              steps={isHome ? home : assessment}
+              steps={isHome ? home() : assessment()}
               isOpen={this.state.isTourOpen}
               onRequestClose={() => { this.closeTour(); }}
             />
