@@ -137,6 +137,7 @@ class Badge extends Component {
                 value={this.state.badgeName}
                 label={'Badge'}
                 id={'badge'}
+                disabled={this.props.badge}
                 onChange={(e) => this.onChange(e)}
                 onInput={(e) => this.onChangeBadge(e)}
                 fullWidth={true}
