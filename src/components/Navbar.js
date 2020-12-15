@@ -21,7 +21,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Tour from 'reactour'
-import * as steps from './Tour';
+import { home, assessment } from './Tour';
 import { faBars, faChevronLeft, faLayerGroup, faSignInAlt, faSignOutAlt, faCertificate, faUserCircle, faQuestionCircle, faCog, faChalkboardTeacher, faTools, faLightbulb } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Blockly from 'blockly'
@@ -68,6 +68,11 @@ class Navbar extends Component {
   }
 
   render() {
+    var isHome = /^\/(\/.*$|$)/g.test(this.props.location.pathname);
+    var isTutorial = /^\/tutorial(\/.*$|$)/g.test(this.props.location.pathname);
+    var isAssessment = /^\/tutorial\/.{1,}$/g.test(this.props.location.pathname) &&
+                       !this.props.tutorialIsLoading && this.props.tutorial &&
+                       this.props.tutorial.steps[this.props.activeStep].type === 'task';
     return (
       <div>
         <AppBar
@@ -91,13 +96,13 @@ class Navbar extends Component {
             <Link to={"/"} style={{ marginLeft: '10px' }}>
               <img src={senseboxLogo} alt="senseBox-Logo" width="30" />
             </Link>
-            {/^\/tutorial(\/.*$|$)/g.test(this.props.location.pathname) ?
+            {isTutorial ?
               <Link to={"/tutorial"} style={{ textDecoration: 'none', color: 'inherit', marginLeft: '10px' }}>
                 <Typography variant="h6" noWrap>
                   Tutorial
                 </Typography>
               </Link> : null}
-            {/^\/(\/.*$|$)/g.test(this.props.location.pathname) ?
+            {isHome ?
               <Tooltip title='Hilfe starten' arrow>
                 <IconButton
                   color="inherit"
@@ -105,11 +110,24 @@ class Navbar extends Component {
                   onClick={() => { this.openTour(); }}
                   style={{ margin: '0 30px 0 auto' }}
                 >
-                  <FontAwesomeIcon icon={faQuestionCircle} size="s" />
+                  <FontAwesomeIcon icon={faQuestionCircle} />
                 </IconButton>
-              </Tooltip> : null}
+              </Tooltip>
+            : null}
+            {isAssessment ?
+              <Tooltip title='Hilfe starten' arrow>
+                <IconButton
+                  color="inherit"
+                  className={`openTour ${this.props.classes.button}`}
+                  onClick={() => { this.openTour(); }}
+                  style={{ margin: '0 30px 0 auto' }}
+                >
+                  <FontAwesomeIcon icon={faQuestionCircle} size="3x" />
+                </IconButton>
+              </Tooltip>
+            : null}
             <Tour
-              steps={steps.steps}
+              steps={isHome ? home : assessment}
               isOpen={this.state.isTourOpen}
               onRequestClose={() => { this.closeTour(); }}
             />
@@ -184,14 +202,18 @@ Navbar.propTypes = {
   tutorialIsLoading: PropTypes.bool.isRequired,
   projectIsLoading: PropTypes.bool.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
-  user: PropTypes.object
+  user: PropTypes.object,
+  tutorial: PropTypes.object.isRequired,
+  activeStep: PropTypes.number.isRequired
 };
 
 const mapStateToProps = state => ({
   tutorialIsLoading: state.tutorial.progress,
   projectIsLoading: state.project.progress,
   isAuthenticated: state.auth.isAuthenticated,
-  user: state.auth.user
+  user: state.auth.user,
+  tutorial: state.tutorial.tutorials[0],
+  activeStep: state.tutorial.activeStep,
 });
 
 export default connect(mapStateToProps, { logout })(withStyles(styles, { withTheme: true })(withRouter(Navbar)));
