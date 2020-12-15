@@ -1016,5 +1016,12 @@ Blockly.Msg.navbar_account = "Konto"
 Blockly.Msg.navbar_logout = "Abmelden"
 Blockly.Msg.navbar_settings = "Einstellungen"
 
+/**
+ * Codeviewer
+ */
+
+Blockly.Msg.codeviewer_arduino = "Arduino Quellcode"
+Blockly.Msg.codeviewer_xml = "XML Blöcke"
+
 
 export const De = Blockly.Msg;
