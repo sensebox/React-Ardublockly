@@ -191,6 +191,9 @@ export const setSubmitError = () => (dispatch, getState) => {
   if (builder.title === '') {
     dispatch(setError(undefined, 'title'));
   }
+  if (builder.title === null) {
+    dispatch(setError(undefined, 'badge'));
+  }
   var type = builder.steps.map((step, i) => {
     // media and xml are directly checked for errors in their components and
     // therefore do not have to be checked again
@@ -230,7 +233,7 @@ export const setSubmitError = () => (dispatch, getState) => {
 export const checkError = () => (dispatch, getState) => {
   dispatch(setSubmitError());
   var error = getState().builder.error;
-  if (error.id || error.title || error.type) {
+  if (error.id || error.title || error.badge ||error.type) {
     return true;
   }
   for (var i = 0; i < error.steps.length; i++) {
@@ -251,10 +254,9 @@ export const progress = (inProgress) => (dispatch) => {
 export const resetTutorial = () => (dispatch, getState) => {
   dispatch(jsonString(''));
   dispatch(tutorialTitle(''));
-  dispatch(tutorialBadge(''));
+  dispatch(tutorialBadge(undefined));
   var steps = [
     {
-      id: 1,
       type: 'instruction',
       headline: '',
       text: '',
@@ -282,7 +284,7 @@ export const readJSON = (json) => (dispatch, getState) => {
   // accept only valid attributes
   var steps = json.steps.map((step, i) => {
     var object = {
-      // id: step.id,
+      _id: step._id,
       type: step.type,
       headline: step.headline,
       text: step.text

@@ -36,8 +36,8 @@ class TrashcanButtons extends Component {
   componentDidUpdate(previousProps, previousState) {
     const workspace = Blockly.getMainWorkspace();
     const contentsIsOpen = workspace.trashcan.contentsIsOpen();
-    if(previousState.closeTrashFlyout !== contentsIsOpen){
-      this.setState({ closeTrashFlyout:  contentsIsOpen });
+    if (previousState.closeTrashFlyout !== contentsIsOpen) {
+      this.setState({ closeTrashFlyout: contentsIsOpen });
     }
   }
 
@@ -59,26 +59,26 @@ class TrashcanButtons extends Component {
     return (
       this.state.closeTrashFlyout ?
         <div>
-          <Tooltip title='gelöschte Blöcke ausblenden'>
+          <Tooltip title={Blockly.Msg.tooltip_trashcan_hide}>
             <IconButton
               className={this.props.classes.closeTrash}
-              style={{width: '40px', height: '40px', position: 'absolute', bottom: 10, right: 10, zIndex: 21 }}
+              style={{ width: '40px', height: '40px', position: 'absolute', bottom: 10, right: 10, zIndex: 21 }}
               onClick={() => this.closeTrashcan()}
             >
-              <FontAwesomeIcon icon={faTimes} size="xs"/>
+              <FontAwesomeIcon icon={faTimes} size="xs" />
             </IconButton>
           </Tooltip>
-          <Tooltip title='Blöcke endgültig löschen'>
+          <Tooltip title={Blockly.Msg.tooltip_trashcan_delete}>
             <IconButton
               className={this.props.classes.deleteTrash}
-              style={{width: '40px', height: '40px', position: 'absolute', bottom: 10, right: 50, zIndex: 21 }}
+              style={{ width: '40px', height: '40px', position: 'absolute', bottom: 10, right: 50, zIndex: 21 }}
               onClick={() => this.clearTrashcan()}
             >
-              <FontAwesomeIcon icon={faTrash} size="xs"/>
+              <FontAwesomeIcon icon={faTrash} size="xs" />
             </IconButton>
           </Tooltip>
         </div>
-      : null
+        : null
     );
   };
 }

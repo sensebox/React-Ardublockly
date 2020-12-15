@@ -21,8 +21,10 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
-import { faBars, faChevronLeft, faLayerGroup, faSignInAlt, faSignOutAlt, faCertificate, faUserCircle, faIdCard, faEnvelope, faCog, faChalkboardTeacher, faFolderPlus, faTools, faLightbulb } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faChevronLeft, faLayerGroup, faSignInAlt, faSignOutAlt, faCertificate, faUserCircle, faCog, faChalkboardTeacher, faTools, faLightbulb } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import * as Blockly from 'blockly'
+
 
 const styles = (theme) => ({
   drawerWidth: {
@@ -92,7 +94,7 @@ class Navbar extends Component {
           <div style={{ height: '50px', cursor: 'pointer', color: 'white', padding: '0 22px' }} className={this.props.classes.appBarColor} onClick={this.toggleDrawer}>
             <div style={{ display: ' table-cell', verticalAlign: 'middle', height: 'inherit', width: '0.1%' }}>
               <Typography variant="h6" style={{ display: 'inline' }}>
-                Menü
+                {Blockly.Msg.navbar_menu}
               </Typography>
               <div style={{ float: 'right' }}>
                 <FontAwesomeIcon icon={faChevronLeft} />
@@ -100,47 +102,47 @@ class Navbar extends Component {
             </div>
           </div>
           <List>
-            {[{ text: 'Tutorials', icon: faChalkboardTeacher, link: "/tutorial" },
-              { text: 'Tutorial-Builder', icon: faTools, link: "/tutorial/builder", restriction: this.props.user && this.props.user.blocklyRole !== 'user' && this.props.isAuthenticated},
-              { text: 'Galerie', icon: faLightbulb, link: "/gallery" },
-              { text: 'Projekte', icon: faLayerGroup, link: "/project", restriction: this.props.isAuthenticated }].map((item, index) => {
-                if(item.restriction || Object.keys(item).filter(attribute => attribute === 'restriction').length === 0){
-                  return(
-                    <Link to={item.link} key={index} style={{ textDecoration: 'none', color: 'inherit' }}>
-                      <ListItem button onClick={this.toggleDrawer}>
-                        <ListItemIcon><FontAwesomeIcon icon={item.icon} /></ListItemIcon>
-                        <ListItemText primary={item.text} />
-                      </ListItem>
-                    </Link>
-                  );
-                }
+            {[{ text: Blockly.Msg.navbar_tutorials, icon: faChalkboardTeacher, link: "/tutorial" },
+            { text: Blockly.Msg.navbar_tutorialbuilder, icon: faTools, link: "/tutorial/builder", restriction: this.props.user && this.props.user.blocklyRole !== 'user' && this.props.isAuthenticated },
+            { text: Blockly.Msg.navbar_gallery, icon: faLightbulb, link: "/gallery" },
+            { text: Blockly.Msg.navbar_projects, icon: faLayerGroup, link: "/project", restriction: this.props.isAuthenticated }].map((item, index) => {
+              if (item.restriction || Object.keys(item).filter(attribute => attribute === 'restriction').length === 0) {
+                return (
+                  <Link to={item.link} key={index} style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <ListItem button onClick={this.toggleDrawer}>
+                      <ListItemIcon><FontAwesomeIcon icon={item.icon} /></ListItemIcon>
+                      <ListItemText primary={item.text} />
+                    </ListItem>
+                  </Link>
+                );
               }
+            }
             )}
           </List>
           <Divider classes={{ root: this.props.classes.appBarColor }} style={{ marginTop: 'auto' }} />
           <List>
-            {[{ text: 'Anmelden', icon: faSignInAlt, link: '/user/login', restriction: !this.props.isAuthenticated },
-              { text: 'Konto', icon: faUserCircle, link: '/user', restriction: this.props.isAuthenticated },
-              { text: 'MyBadges', icon: faCertificate, link: '/user/badge', restriction: this.props.isAuthenticated },
-              { text: 'Abmelden', icon: faSignOutAlt, function: this.props.logout, restriction: this.props.isAuthenticated },
-              { text: 'Einstellungen', icon: faCog, link: "/settings" }].map((item, index) => {
-                if(item.restriction || Object.keys(item).filter(attribute => attribute === 'restriction').length === 0){
-                  return(
-                    <Link to={item.link} key={index} style={{ textDecoration: 'none', color: 'inherit' }}>
-                      <ListItem button onClick={item.function ? () => {item.function(); this.toggleDrawer();} : this.toggleDrawer}>
-                        <ListItemIcon><FontAwesomeIcon icon={item.icon} /></ListItemIcon>
-                        <ListItemText primary={item.text} />
-                      </ListItem>
-                    </Link>
-                  );
-                }
+            {[{ text: Blockly.Msg.navbar_login, icon: faSignInAlt, link: '/user/login', restriction: !this.props.isAuthenticated },
+            { text: Blockly.Msg.navbar_account, icon: faUserCircle, link: '/user', restriction: this.props.isAuthenticated },
+            { text: Blockly.Msg.navbar_mybadges, icon: faCertificate, link: '/user/badge', restriction: this.props.isAuthenticated },
+            { text: Blockly.Msg.navbar_logout, icon: faSignOutAlt, function: this.props.logout, restriction: this.props.isAuthenticated },
+            { text: Blockly.Msg.navbar_settings, icon: faCog, link: "/settings" }].map((item, index) => {
+              if (item.restriction || Object.keys(item).filter(attribute => attribute === 'restriction').length === 0) {
+                return (
+                  <Link to={item.link} key={index} style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <ListItem button onClick={item.function ? () => { item.function(); this.toggleDrawer(); } : this.toggleDrawer}>
+                      <ListItemIcon><FontAwesomeIcon icon={item.icon} /></ListItemIcon>
+                      <ListItemText primary={item.text} />
+                    </ListItem>
+                  </Link>
+                );
               }
+            }
             )}
           </List>
         </Drawer>
         {this.props.tutorialIsLoading || this.props.projectIsLoading ?
-          <LinearProgress style={{marginBottom: '30px', boxShadow: '0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12)'}}/>
-        : null}
+          <LinearProgress style={{ marginBottom: '30px', boxShadow: '0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12)' }} />
+          : null}
       </div>
     );
   }

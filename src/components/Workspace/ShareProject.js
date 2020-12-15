@@ -19,6 +19,8 @@ import Typography from '@material-ui/core/Typography';
 import { faShareAlt, faCopy } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import * as Blockly from 'blockly/core';
+
 const styles = (theme) => ({
   button: {
     backgroundColor: theme.palette.primary.main,
@@ -59,18 +61,18 @@ class WorkspaceFunc extends Component {
   }
 
   componentDidUpdate(props) {
-    if(this.props.message !== props.message){
-      if(this.props.message.id === 'SHARE_SUCCESS' && (!this.props.multiple || this.props.message.status === this.props.project._id)){
-        this.setState({ share: true, open: true, title: 'Programm teilen', id: this.props.message.status });
+    if (this.props.message !== props.message) {
+      if (this.props.message.id === 'SHARE_SUCCESS' && (!this.props.multiple || this.props.message.status === this.props.project._id)) {
+        this.setState({ share: true, open: true, title: Blockly.Msg.messages_SHARE_SUCCESS, id: this.props.message.status });
       }
-      else if(this.props.message.id === 'SHARE_FAIL' && (!this.props.multiple || this.props.message.status === this.props.project._id)){
-        this.setState({ snackbar: true, key: Date.now(), message: `Fehler beim Erstellen eines Links zum Teilen deines Programmes. Versuche es noch einmal.`, type: 'error' });
+      else if (this.props.message.id === 'SHARE_FAIL' && (!this.props.multiple || this.props.message.status === this.props.project._id)) {
+        this.setState({ snackbar: true, key: Date.now(), message: Blockly.Msg.messages_SHARE_FAIL, type: 'error' });
         window.scrollTo(0, 0);
       }
     }
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     this.props.clearMessages();
   }
 
@@ -79,9 +81,9 @@ class WorkspaceFunc extends Component {
   }
 
   shareBlocks = () => {
-    if(this.props.projectType === 'project' && this.props.project.shared){
+    if (this.props.projectType === 'project' && this.props.project.shared) {
       // project is already shared
-      this.setState({ open: true, title: 'Programm teilen', id: this.props.project._id });
+      this.setState({ open: true, title: Blockly.Msg.messages_SHARE_SUCCESS, id: this.props.project._id });
     }
     else {
       this.props.shareProject(this.props.name || this.props.project.title, this.props.projectType, this.props.project ? this.props.project._id : undefined);
@@ -91,7 +93,7 @@ class WorkspaceFunc extends Component {
   render() {
     return (
       <div style={this.props.style}>
-        <Tooltip title='Projekt teilen' arrow>
+        <Tooltip title={Blockly.Msg.tooltip_share_project} arrow>
           <IconButton
             className={this.props.classes.button}
             onClick={() => this.shareBlocks()}
@@ -112,29 +114,28 @@ class WorkspaceFunc extends Component {
           content={this.state.content}
           onClose={this.toggleDialog}
           onClick={this.toggleDialog}
-          button={'Schließen'}
+          button={Blockly.Msg.button_close}
         >
           <div style={{ marginTop: '10px' }}>
             <Typography>Über den folgenden Link kannst du dein Programm teilen:</Typography>
             <Link to={`/share/${this.state.id}`} onClick={() => this.toggleDialog()} className={this.props.classes.link}>{`${window.location.origin}/share/${this.state.id}`}</Link>
-            <Tooltip title='Link kopieren' arrow style={{ marginRight: '5px' }}>
+            <Tooltip title={Blockly.Msg.tooltip_copy_link} arrow style={{ marginRight: '5px' }}>
               <IconButton
                 onClick={() => {
                   navigator.clipboard.writeText(`${window.location.origin}/share/${this.state.id}`);
-                  this.setState({ snackbar: true, key: Date.now(), message: 'Link erfolgreich in Zwischenablage gespeichert.', type: 'success' });
+                  this.setState({ snackbar: true, key: Date.now(), message: Blockly.Msg.messages_copylink_success, type: 'success' });
                 }}
               >
                 <FontAwesomeIcon icon={faCopy} size="xs" />
               </IconButton>
             </Tooltip>
             {this.props.project && this.props.project.shared && this.props.message.id !== 'SHARE_SUCCESS' ?
-              <Typography variant='body2' style={{marginTop: '20px'}}>{`Das Projekt wurde bereits geteilt. Der Link ist noch mindestens ${
-                moment(this.props.project.shared).diff(moment().utc(), 'days') === 0 ?
-                  moment(this.props.project.shared).diff(moment().utc(), 'hours') === 0 ?
-                    `${moment(this.props.project.shared).diff(moment().utc(), 'minutes')} Minuten`
+              <Typography variant='body2' style={{ marginTop: '20px' }}>{`Das Projekt wurde bereits geteilt. Der Link ist noch mindestens ${moment(this.props.project.shared).diff(moment().utc(), 'days') === 0 ?
+                moment(this.props.project.shared).diff(moment().utc(), 'hours') === 0 ?
+                  `${moment(this.props.project.shared).diff(moment().utc(), 'minutes')} Minuten`
                   : `${moment(this.props.project.shared).diff(moment().utc(), 'hours')} Stunden`
                 : `${moment(this.props.project.shared).diff(moment().utc(), 'days')} Tage`} gültig.`}</Typography>
-            : <Typography variant='body2' style={{marginTop: '20px'}}>{`Der Link ist nun ${process.env.REACT_APP_SHARE_LINK_EXPIRES} Tage gültig.`}</Typography>}
+              : <Typography variant='body2' style={{ marginTop: '20px' }}>{`Der Link ist nun ${process.env.REACT_APP_SHARE_LINK_EXPIRES} Tage gültig.`}</Typography>}
           </div>
         </Dialog>
       </div>

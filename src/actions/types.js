@@ -23,6 +23,7 @@ export const NAME = 'NAME';
 export const TUTORIAL_PROGRESS = 'TUTORIAL_PROGRESS';
 export const GET_TUTORIAL = 'GET_TUTORIAL';
 export const GET_TUTORIALS = 'GET_TUTORIALS';
+export const GET_STATUS = 'GET_STATUS';
 export const TUTORIAL_SUCCESS = 'TUTORIAL_SUCCESS';
 export const TUTORIAL_ERROR = 'TUTORIAL_ERROR';
 export const TUTORIAL_CHANGE = 'TUTORIAL_CHANGE';
@@ -46,6 +47,9 @@ export const PROGRESS = 'PROGRESS';
 
 
 export const VISIT = 'VISIT';
+export const LANGUAGE = 'LANGUAGE';
+export const RENDERER = 'RENDERER';
+export const STATISTICS = 'STATISTICS';
 
 // messages
 export const GET_ERRORS = 'GET_ERRORS';
