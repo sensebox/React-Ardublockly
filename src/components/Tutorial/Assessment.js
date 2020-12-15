@@ -33,7 +33,7 @@ class Assessment extends Component {
     var statusTask = status.tasks[taskIndex];
 
     return (
-      <div style={{ width: '100%' }}>
+      <div className="assessmentDiv" style={{ width: '100%' }}>
         <Typography variant='h4' style={{ float: 'left', marginBottom: '5px', height: '40px', display: 'table' }}>{currentTask.headline}</Typography>
         <div style={{ float: 'right', height: '40px' }}><WorkspaceFunc assessment /></div>
         <Grid container spacing={2} style={{ marginBottom: '5px' }}>

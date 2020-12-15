@@ -44,7 +44,7 @@ class DownloadProject extends Component {
       <div style={this.props.style}>
         <Tooltip title={Blockly.Msg.tooltip_download_project} arrow>
           <IconButton
-            className={this.props.classes.button}
+            className={`saveBlocks ${this.props.classes.button}`}
             onClick={() => this.downloadXmlFile()}
           >
             <FontAwesomeIcon icon={faFileDownload} size="xs" />

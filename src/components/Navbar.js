@@ -85,6 +85,7 @@ class Navbar extends Component {
               color="inherit"
               onClick={this.toggleDrawer}
               style={{ margin: '0 10px' }}
+              className="MenuButton"
             >
               <FontAwesomeIcon icon={faBars} />
             </IconButton>
@@ -122,7 +123,7 @@ class Navbar extends Component {
                   onClick={() => { this.openTour(); }}
                   style={{ margin: '0 30px 0 auto' }}
                 >
-                  <FontAwesomeIcon icon={faQuestionCircle} size="3x" />
+                  <FontAwesomeIcon icon={faQuestionCircle} />
                 </IconButton>
               </Tooltip>
             : null}
