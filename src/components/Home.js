@@ -94,7 +94,7 @@ class Home extends Component {
           <div style={{ float: 'left', height: '40px', position: 'relative' }}><WorkspaceStats /></div>
           : null
         }
-        <div style={{ float: 'right', height: '40px', marginBottom: '20px' }}>
+        <div className='workspaceFunc' style={{ float: 'right', height: '40px', marginBottom: '20px' }}>
           <WorkspaceFunc project={this.props.project} projectType={this.props.projectType}/>
         </div>
         <Grid container spacing={2}>
@@ -109,10 +109,12 @@ class Home extends Component {
               </IconButton>
             </Tooltip>
             <TrashcanButtons />
-            {this.props.project ?
-              < BlocklyWindow blocklyCSS={{ height: '80vH' }} initialXml={this.props.project.xml} />
-            : < BlocklyWindow blocklyCSS={{ height: '80vH' }} />
-            }
+            <div className='blocklyWindow'>
+              {this.props.project ?
+                < BlocklyWindow blocklyCSS={{ height: '80vH' }} initialXml={this.props.project.xml} />
+              : < BlocklyWindow blocklyCSS={{ height: '80vH' }} />
+              }
+            </div>
           </Grid>
           {this.state.codeOn ?
             <Grid item xs={12} md={4}>
