@@ -20,8 +20,9 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import LinearProgress from '@material-ui/core/LinearProgress';
-
-import { faBars, faChevronLeft, faLayerGroup, faSignInAlt, faSignOutAlt, faCertificate, faUserCircle, faCog, faChalkboardTeacher, faTools, faLightbulb } from "@fortawesome/free-solid-svg-icons";
+import Tour from 'reactour'
+import * as steps from './Tour';
+import { faBars, faChevronLeft, faLayerGroup, faSignInAlt, faSignOutAlt, faCertificate, faUserCircle, faQuestionCircle, faCog, faChalkboardTeacher, faTools, faLightbulb } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Blockly from 'blockly'
 
@@ -34,6 +35,10 @@ const styles = (theme) => ({
   },
   appBarColor: {
     backgroundColor: theme.palette.primary.main
+  },
+  tourButton: {
+    marginleft: 'auto',
+    marginright: '30px',
   }
 });
 
@@ -43,12 +48,22 @@ class Navbar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: false
+      open: false,
+      isTourOpen: false
     };
   }
 
   toggleDrawer = () => {
     this.setState({ open: !this.state.open });
+  }
+
+  openTour = () => {
+    this.setState({ isTourOpen: true });
+
+  }
+
+  closeTour = () => {
+    this.setState({ isTourOpen: false });
   }
 
   render() {
@@ -81,6 +96,19 @@ class Navbar extends Component {
                   Tutorial
                 </Typography>
               </Link> : null}
+            <IconButton
+              color="inherit"
+              className={`openTour ${this.props.classes.button}`}
+              onClick={() => { this.openTour(); }}
+              style={{ margin: '0 30px 0 auto' }}
+            >
+              <FontAwesomeIcon icon={faQuestionCircle} size="s" />
+            </IconButton>
+            <Tour
+              steps={steps.steps}
+              isOpen={this.state.isTourOpen}
+              onRequestClose={() => { this.closeTour(); }}
+            />
           </Toolbar>
         </AppBar>
         <Drawer
