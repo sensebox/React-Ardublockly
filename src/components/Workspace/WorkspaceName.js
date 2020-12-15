@@ -16,6 +16,7 @@ import Typography from '@material-ui/core/Typography';
 
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import * as Blockly from 'blockly/core'
 
 const styles = (theme) => ({
   workspaceName: {
@@ -72,31 +73,31 @@ class WorkspaceName extends Component {
   renameWorkspace = () => {
     this.props.workspaceName(this.state.name);
     this.toggleDialog();
-    if(this.props.projectType === 'project' || this.props.projectType === 'gallery' || this.state.projectType === 'gallery'){
-      if(this.props.projectType === 'gallery' || this.state.projectType === 'gallery'){
+    if (this.props.projectType === 'project' || this.props.projectType === 'gallery' || this.state.projectType === 'gallery') {
+      if (this.props.projectType === 'gallery' || this.state.projectType === 'gallery') {
         this.props.setDescription(this.state.description);
       }
-      if(this.state.projectType === 'gallery'){
+      if (this.state.projectType === 'gallery') {
         this.saveGallery();
       } else {
         this.props.updateProject(this.props.projectType, this.props.project._id);
       }
     } else {
-      this.setState({ snackbar: true, type: 'success', key: Date.now(), message: `Das Projekt wurde erfolgreich in '${this.state.name}' umbenannt.` });
+      this.setState({ snackbar: true, type: 'success', key: Date.now(), message: `${Blockly.Msg.messages_rename_success_01} ${this.state.name} ${Blockly.Msg.messages_rename_success_02}` });
     }
   }
 
   render() {
     return (
       <div style={this.props.style}>
-        <Tooltip title={`Titel des Projektes${this.props.name ? `: ${this.props.name}` : ''}`} arrow style={{height: '100%'}}>
+        <Tooltip title={`${Blockly.Msg.tooltip_project_title} ${this.props.name ? `: ${this.props.name}` : ''}`} arrow style={{ height: '100%' }}>
           <div
             className={this.props.classes.workspaceName}
-            onClick={() => {if(this.props.multiple){this.props.workspaceName(this.props.project.title);if(this.props.projectType === 'gallery'){this.props.setDescription(this.props.project.description);}} this.setState({ open: true, title: this.props.projectType === 'gallery' ? 'Projektdaten ändern': this.props.projectType === 'project' ? 'Projekt umbenennen' : 'Projekt benennen', content: this.props.projectType === 'gallery' ? 'Bitte gib einen Titel und eine Beschreibung für das Galerie-Projekt ein und bestätige die Angaben mit einem Klick auf \'Eingabe\'.':'Bitte gib einen Namen für das Projekt ein und bestätige diesen mit einem Klick auf \'Eingabe\'.' }) }}
+            onClick={() => { if (this.props.multiple) { this.props.workspaceName(this.props.project.title); if (this.props.projectType === 'gallery') { this.props.setDescription(this.props.project.description); } } this.setState({ open: true, title: this.props.projectType === 'gallery' ? 'Projektdaten ändern' : this.props.projectType === 'project' ? 'Projekt umbenennen' : 'Projekt benennen', content: this.props.projectType === 'gallery' ? 'Bitte gib einen Titel und eine Beschreibung für das Galerie-Projekt ein und bestätige die Angaben mit einem Klick auf \'Eingabe\'.' : 'Bitte gib einen Namen für das Projekt ein und bestätige diesen mit einem Klick auf \'Eingabe\'.' }) }}
           >
-            {this.props.name && !isWidthDown(this.props.projectType === 'project' || this.props.projectType === 'gallery' ? 'xl':'xs', this.props.width) ?
+            {this.props.name && !isWidthDown(this.props.projectType === 'project' || this.props.projectType === 'gallery' ? 'xl' : 'xs', this.props.width) ?
               <Typography style={{ margin: 'auto -3px auto 12px' }}>{this.props.name}</Typography>
-            : null}
+              : null}
             <div style={{ width: '40px', display: 'flex' }}>
               <FontAwesomeIcon icon={faPen} style={{ height: '18px', width: '18px', margin: 'auto' }} />
             </div>
@@ -113,17 +114,17 @@ class WorkspaceName extends Component {
           open={this.state.open}
           title={this.state.title}
           content={this.state.content}
-          onClose={() => {this.toggleDialog(); this.setState({ name: this.props.name, description: this.props.description });}}
-          onClick={() => {this.toggleDialog(); this.setState({ name: this.props.name, description: this.props.description });}}
+          onClose={() => { this.toggleDialog(); this.setState({ name: this.props.name, description: this.props.description }); }}
+          onClick={() => { this.toggleDialog(); this.setState({ name: this.props.name, description: this.props.description }); }}
           button={'Abbrechen'}
         >
           <div style={{ marginTop: '10px' }}>
             {this.props.projectType === 'gallery' || this.state.projectType === 'gallery' ?
               <div>
-                <TextField autoFocus placeholder={this.state.saveXml ? 'Dateiname' : 'Projekttitel'} value={this.state.name} onChange={this.setFileName} style={{marginBottom: '10px'}}/>
+                <TextField autoFocus placeholder={this.state.saveXml ? 'Dateiname' : 'Projekttitel'} value={this.state.name} onChange={this.setFileName} style={{ marginBottom: '10px' }} />
                 <TextField fullWidth multiline placeholder={'Projektbeschreibung'} value={this.state.description} onChange={this.setDescription} style={{ marginBottom: '10px' }} />
               </div>
-            : <TextField autoFocus placeholder={this.state.saveXml ? 'Dateiname' : 'Projekttitel'} value={this.state.name} onChange={this.setFileName} style={{ marginRight: '10px' }} />}
+              : <TextField autoFocus placeholder={this.state.saveXml ? 'Dateiname' : 'Projekttitel'} value={this.state.name} onChange={this.setFileName} style={{ marginRight: '10px' }} />}
             <Button disabled={!this.state.name} variant='contained' color='primary' onClick={() => { this.renameWorkspace(); this.toggleDialog(); }}>Eingabe</Button>
           </div>
         </Dialog>

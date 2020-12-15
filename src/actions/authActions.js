@@ -1,8 +1,8 @@
-import { MYBADGES_CONNECT, MYBADGES_DISCONNECT, USER_LOADED, USER_LOADING, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_SUCCESS, LOGOUT_FAIL, REFRESH_TOKEN_SUCCESS } from '../actions/types';
+import { MYBADGES_CONNECT, MYBADGES_DISCONNECT, GET_STATUS, USER_LOADED, USER_LOADING, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_SUCCESS, LOGOUT_FAIL, REFRESH_TOKEN_SUCCESS } from '../actions/types';
 
 import axios from 'axios';
-import { returnErrors, returnSuccess } from './messageActions'
-
+import { returnErrors, returnSuccess } from './messageActions';
+import { setLanguage } from './generalActions';
 
 // Check token & load user
 export const loadUser = () => (dispatch) => {
@@ -13,6 +13,11 @@ export const loadUser = () => (dispatch) => {
   const config = {
     success: res => {
       dispatch({
+        type: GET_STATUS,
+        payload: res.data.user.status
+      });
+      dispatch(setLanguage(res.data.user.language));
+      dispatch({
         type: USER_LOADED,
         payload: res.data.user
       });
@@ -21,6 +26,14 @@ export const loadUser = () => (dispatch) => {
       if(err.response){
         dispatch(returnErrors(err.response.data.message, err.response.status));
       }
+      var status = [];
+      if (window.localStorage.getItem('status')) {
+        status = JSON.parse(window.localStorage.getItem('status'));
+      }
+      dispatch({
+        type: GET_STATUS,
+        payload: status
+      });
       dispatch({
         type: AUTH_ERROR
       });
@@ -41,6 +54,9 @@ const timeToLogout = 14.9*60*1000; // nearly 15 minutes corresponding to the API
 
 // Login user
 export const login = ({ email, password }) => (dispatch) => {
+  dispatch({
+    type: USER_LOADING
+  });
   // Headers
   const config = {
     headers: {
@@ -57,9 +73,14 @@ export const login = ({ email, password }) => (dispatch) => {
       timeToLogout
     );
     logoutTimerId = logoutTimer();
+    dispatch(setLanguage(res.data.user.language));
     dispatch({
       type: LOGIN_SUCCESS,
       payload: res.data
+    });
+    dispatch({
+      type: GET_STATUS,
+      payload: res.data.user.status
     });
     dispatch(returnSuccess(res.data.message, res.status, 'LOGIN_SUCCESS'));
   })
@@ -68,57 +89,73 @@ export const login = ({ email, password }) => (dispatch) => {
     dispatch({
       type: LOGIN_FAIL
     });
+    var status = [];
+    if (window.localStorage.getItem('status')) {
+      status = JSON.parse(window.localStorage.getItem('status'));
+    }
+    dispatch({
+      type: GET_STATUS,
+      payload: status
+    });
   });
 };
 
 
 // Connect to MyBadges-Account
 export const connectMyBadges = ({ username, password }) => (dispatch, getState) => {
-  // Headers
   const config = {
-    headers: {
-      'Content-Type': 'application/json'
+    success: res => {
+      var user = getState().auth.user;
+      user.badge = res.data.account;
+      user.badges = res.data.badges;
+      dispatch({
+        type: MYBADGES_CONNECT,
+        payload: user
+      });
+      dispatch(returnSuccess(res.data.message, res.status, 'MYBADGES_CONNECT_SUCCESS'));
+    },
+    error: err => {
+      dispatch(returnErrors(err.response.data.message, err.response.status, 'MYBADGES_CONNECT_FAIL'));
     }
   };
   // Request Body
   const body = JSON.stringify({ username, password });
   axios.post(`${process.env.REACT_APP_BLOCKLY_API}/user/badge`, body, config)
   .then(res => {
-    var user = getState().auth.user;
-    user.badge = res.data.account;
-    user.badges = res.data.badges;
-    dispatch({
-      type: MYBADGES_CONNECT,
-      payload: user
-    });
-    dispatch(returnSuccess(res.data.message, res.status, 'MYBADGES_CONNECT_SUCCESS'));
+    res.config.success(res);
   })
   .catch(err => {
-    dispatch(returnErrors(err.response.data.message, err.response.status, 'MYBADGES_CONNECT_FAIL'));
+    if(err.response && err.response.status !== 401){
+      err.config.error(err);
+    }
   });
 };
 
 // Disconnect MyBadges-Account
 export const disconnectMyBadges = () => (dispatch, getState) => {
-  // Headers
   const config = {
-    headers: {
-      'Content-Type': 'application/json'
+    success: res => {
+      var user = getState().auth.user;
+      user.badge = null;
+      user.badges = null;
+      dispatch({
+        type: MYBADGES_DISCONNECT,
+        payload: user
+      });
+      dispatch(returnSuccess(res.data.message, res.status, 'MYBADGES_DISCONNECT_SUCCESS'));
+    },
+    error: err => {
+      dispatch(returnErrors(err.response.data.message, err.response.status, 'MYBADGES_DISCONNECT_FAIL'));
     }
   };
-  axios.put(`${process.env.REACT_APP_BLOCKLY_API}/user/badge`, config)
+  axios.put(`${process.env.REACT_APP_BLOCKLY_API}/user/badge`, {}, config)
   .then(res => {
-    var user = getState().auth.user;
-    user.badge = null;
-    user.badges = null;
-    dispatch({
-      type: MYBADGES_DISCONNECT,
-      payload: user
-    });
-    dispatch(returnSuccess(res.data.message, res.status, 'MYBADGES_DISCONNECT_SUCCESS'));
+    res.config.success(res);
   })
   .catch(err => {
-    dispatch(returnErrors(err.response.data.message, err.response.status, 'MYBADGES_DISCONNECT_FAIL'));
+    if(err.response && err.response.status !== 401){
+      err.config.error(err);
+    }
   });
 };
 
@@ -130,6 +167,22 @@ export const logout = () => (dispatch) => {
       dispatch({
         type: LOGOUT_SUCCESS
       });
+      var status = [];
+      if (window.localStorage.getItem('status')) {
+        status = JSON.parse(window.localStorage.getItem('status'));
+      }
+      dispatch({
+        type: GET_STATUS,
+        payload: status
+      });
+      var locale = 'en_US';
+      if (window.localStorage.getItem('locale')) {
+        locale = window.localStorage.getItem('locale');
+      }
+      else if (navigator.language === 'de-DE'){
+        locale = 'de_DE';
+      }
+      dispatch(setLanguage(locale));
       dispatch(returnSuccess(res.data.message, res.status, 'LOGOUT_SUCCESS'));
       clearTimeout(logoutTimerId);
     },
@@ -137,6 +190,14 @@ export const logout = () => (dispatch) => {
       dispatch(returnErrors(err.response.data.message, err.response.status, 'LOGOUT_FAIL'));
       dispatch({
         type: LOGOUT_FAIL
+      });
+      var status = [];
+      if (window.localStorage.getItem('status')) {
+        status = JSON.parse(window.localStorage.getItem('status'));
+      }
+      dispatch({
+        type: GET_STATUS,
+        payload: status
       });
       clearTimeout(logoutTimerId);
     }
@@ -146,7 +207,7 @@ export const logout = () => (dispatch) => {
     res.config.success(res);
   })
   .catch(err => {
-    if(err.response.status !== 401){
+    if(err.response && err.response.status !== 401){
       err.config.error(err);
     }
   });

@@ -29,7 +29,7 @@ const styles = (theme) => ({
     marginTop: '5px',
     height: '40px',
     backgroundColor: theme.palette.error.dark,
-    '&:hover':{
+    '&:hover': {
       backgroundColor: theme.palette.error.dark
     }
   }
@@ -37,16 +37,16 @@ const styles = (theme) => ({
 
 class BlocklyExample extends Component {
 
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state={
+    this.state = {
       checked: props.task ? props.task : props.value ? true : false,
       input: null,
       disabled: false
     };
   }
 
-  componentDidMount(){
+  componentDidMount() {
     moment.updateLocale('de', localization);
     this.isError();
     // if(this.props.task){
@@ -54,42 +54,42 @@ class BlocklyExample extends Component {
     // }
   }
 
-  componentDidUpdate(props, state){
-    if(props.task !== this.props.task || props.value !== this.props.value){
-      this.setState({checked: this.props.task ? this.props.task : this.props.value ? true : false},
+  componentDidUpdate(props, state) {
+    if (props.task !== this.props.task || props.value !== this.props.value) {
+      this.setState({ checked: this.props.task ? this.props.task : this.props.value ? true : false },
         () => this.isError()
       );
     }
-    if(state.checked !== this.state.checked && this.state.checked){
+    if (state.checked !== this.state.checked && this.state.checked) {
       this.isError();
     }
-    if(props.xml !== this.props.xml){
+    if (props.xml !== this.props.xml) {
       // check if there is at least one block, otherwise the workspace cannot be submitted
       var workspace = Blockly.getMainWorkspace();
       var areBlocks = workspace.getAllBlocks().length > 0;
-      this.setState({disabled: !areBlocks});
+      this.setState({ disabled: !areBlocks });
     }
   }
 
   isError = () => {
-    if(this.state.checked){
+    if (this.state.checked) {
       var xml = this.props.value;
       // check if value is valid xml;
-      try{
+      try {
         Blockly.Xml.textToDom(xml);
         this.props.deleteError(this.props.index, 'xml');
       }
-      catch(err){
+      catch (err) {
         xml = initialXml;
         // not valid xml, throw error in redux store
         this.props.setError(this.props.index, 'xml');
       }
-      if(!this.props.task){
+      if (!this.props.task) {
         // instruction can also display only one block, which does not necessarily
         // have to be the initial block
         xml = xml.replace('deletable="false"', 'deletable="true"');
       }
-      this.setState({xml: xml});
+      this.setState({ xml: xml });
     }
     else {
       this.props.deleteError(this.props.index, 'xml');
@@ -98,8 +98,8 @@ class BlocklyExample extends Component {
 
   onChange = (value) => {
     var oldValue = this.state.checked;
-    this.setState({checked: value});
-    if(oldValue !== value && !value){
+    this.setState({ checked: value });
+    if (oldValue !== value && !value) {
       this.props.deleteError(this.props.index, 'xml');
       this.props.deleteProperty(this.props.index, 'xml');
     }
@@ -108,12 +108,12 @@ class BlocklyExample extends Component {
   setXml = () => {
     var xml = this.props.xml;
     this.props.changeContent(xml, this.props.index, 'xml');
-    this.setState({input: moment(Date.now()).format('LTS')});
+    this.setState({ input: moment(Date.now()).format('LTS') });
   }
 
   render() {
     return (
-      <div style={{marginBottom: '10px', padding: '18.5px 14px', borderRadius: '25px', border: '1px solid lightgrey', width: 'calc(100% - 28px)'}}>
+      <div style={{ marginBottom: '10px', padding: '18.5px 14px', borderRadius: '25px', border: '1px solid lightgrey', width: 'calc(100% - 28px)' }}>
         {!this.props.task ?
           <FormControlLabel
             labelPlacement="end"
@@ -126,41 +126,42 @@ class BlocklyExample extends Component {
               />
             }
           />
-        : <FormLabel style={{color: 'black'}}>Musterlösung</FormLabel>}
+          : <FormLabel style={{ color: 'black' }}>{Blockly.Msg.builder_solution}</FormLabel>}
         {this.state.checked ? !this.props.value || this.props.error ?
-          <FormHelperText style={{lineHeight: 'initial'}} className={this.props.classes.errorColor}>{`Reiche deine Blöcke ein, indem du auf den '${this.props.task ? 'Musterlösung einreichen' : 'Beispiel einreichen'}'-Button klickst.`}</FormHelperText>
-        : this.state.input ? <FormHelperText style={{lineHeight: 'initial'}}>Die letzte Einreichung erfolgte um {this.state.input} Uhr.</FormHelperText> : null
-        : null}
+          <FormHelperText style={{ lineHeight: 'initial' }} className={this.props.classes.errorColor}>{`Reiche deine Blöcke ein, indem du auf den '${this.props.task ? Blockly.Msg.builder_solution_submit : Blockly.Msg.builder_example_submit}'-Button klickst.`}</FormHelperText>
+          : this.state.input ? <FormHelperText style={{ lineHeight: 'initial' }}>Die letzte Einreichung erfolgte um {this.state.input} Uhr.</FormHelperText> : null
+          : null}
         {this.state.checked && !this.props.task ?
-          <FormHelperText style={{lineHeight: 'initial'}}>Anmerkung: Man kann den initialen Setup()- bzw. Endlosschleifen()-Block löschen. Zusätzlich ist es möglich u.a. nur einen beliebigen Block auszuwählen, ohne dass dieser als deaktiviert dargestellt wird.</FormHelperText>
-        : null}
+          <FormHelperText style={{ lineHeight: 'initial' }}>{Blockly.Msg.builder_comment}</FormHelperText>
+          : null}
         {/* ensure that the correct xml-file is displayed in the workspace */}
-        {this.state.checked && this.state.xml? (() => {
-          return(
-            <div style={{marginTop: '10px'}}>
+        {this.state.checked && this.state.xml ? (() => {
+          return (
+            <div style={{ marginTop: '10px' }}>
               <Grid container className={!this.props.value || this.props.error ? this.props.classes.errorBorder : null}>
                 <Grid item xs={12}>
                   <BlocklyWindow
                     blockDisabled={this.props.task}
                     trashcan={false}
                     initialXml={this.state.xml}
-                    blocklyCSS={{height: '500px'}}
+                    blocklyCSS={{ height: '500px' }}
                   />
                 </Grid>
               </Grid>
               <Button
-                className={!this.props.value || this.props.error ? this.props.classes.errorButton : null }
-                style={{marginTop: '5px', height: '40px'}}
+                className={!this.props.value || this.props.error ? this.props.classes.errorButton : null}
+                style={{ marginTop: '5px', height: '40px' }}
                 variant='contained'
                 color='primary'
                 disabled={this.state.disabled}
                 onClick={() => this.setXml()}
               >
-                {this.props.task ? 'Musterlösung einreichen' : 'Beispiel einreichen'}
+                {this.props.task ? Blockly.Msg.builder_solution_submit : Blockly.Msg.builder_example_submit}
               </Button>
             </div>
-          )})()
-        : null}
+          )
+        })()
+          : null}
       </div>
     );
   };
@@ -179,4 +180,4 @@ const mapStateToProps = state => ({
 });
 
 
-export default connect(mapStateToProps, { changeContent, deleteProperty, setError, deleteError })(withStyles(styles, {withTheme: true})(BlocklyExample));
+export default connect(mapStateToProps, { changeContent, deleteProperty, setError, deleteError })(withStyles(styles, { withTheme: true })(BlocklyExample));

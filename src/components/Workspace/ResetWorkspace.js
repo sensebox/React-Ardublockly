@@ -58,7 +58,7 @@ class ResetWorkspace extends Component {
     if (!this.props.assessment) {
       this.props.workspaceName(createNameId());
     }
-    this.setState({ snackbar: true, type: 'success', key: Date.now(), message: 'Das Projekt wurde erfolgreich zurückgesetzt.' });
+    this.setState({ snackbar: true, type: 'success', key: Date.now(), message: Blockly.Msg.messages_reset_workspace_success });
   }
 
 
@@ -66,7 +66,7 @@ class ResetWorkspace extends Component {
   render() {
     return (
       <div style={this.props.style}>
-        <Tooltip title='Workspace zurücksetzen' arrow>
+        <Tooltip title={Blockly.Msg.tooltip_reset_workspace} arrow>
           <IconButton
             className={this.props.classes.button}
             onClick={() => this.resetWorkspace()}

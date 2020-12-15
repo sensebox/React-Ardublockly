@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getTutorials, resetTutorial } from '../../actions/tutorialActions';
+import { getTutorials, resetTutorial, tutorialProgress } from '../../actions/tutorialActions';
 import { clearMessages } from '../../actions/messageActions';
 
 import clsx from 'clsx';
@@ -52,10 +52,19 @@ const styles = (theme) => ({
 class TutorialHome extends Component {
 
   componentDidMount() {
-    this.props.getTutorials();
+    this.props.tutorialProgress();
+    // retrieve tutorials only if a potential user is loaded - authentication
+    // is finished (success or failed)
+    if(!this.props.progress){
+      this.props.getTutorials();
+    }
   }
 
   componentDidUpdate(props, state) {
+    if(props.progress !== this.props.progress && !this.props.progress){
+      // authentication is completed
+      this.props.getTutorials();
+    }
     if(this.props.message.id === 'GET_TUTORIALS_FAIL'){
       alert(this.props.message.msg);
     }
@@ -120,12 +129,14 @@ class TutorialHome extends Component {
 TutorialHome.propTypes = {
   getTutorials: PropTypes.func.isRequired,
   resetTutorial: PropTypes.func.isRequired,
+  tutorialProgress: PropTypes.func.isRequired,
   clearMessages: PropTypes.func.isRequired,
   status: PropTypes.array.isRequired,
   change: PropTypes.number.isRequired,
   tutorials: PropTypes.array.isRequired,
   isLoading: PropTypes.bool.isRequired,
-  message: PropTypes.object.isRequired
+  message: PropTypes.object.isRequired,
+  progress: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -133,7 +144,8 @@ const mapStateToProps = state => ({
   status: state.tutorial.status,
   tutorials: state.tutorial.tutorials,
   isLoading: state.tutorial.progress,
-  message: state.message
+  message: state.message,
+  progress: state.auth.progress
 });
 
-export default connect(mapStateToProps, { getTutorials, resetTutorial, clearMessages })(withStyles(styles, { withTheme: true })(TutorialHome));
+export default connect(mapStateToProps, { getTutorials, resetTutorial, clearMessages, tutorialProgress })(withStyles(styles, { withTheme: true })(TutorialHome));

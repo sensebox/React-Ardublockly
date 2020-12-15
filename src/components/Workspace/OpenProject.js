@@ -9,10 +9,7 @@ import Snackbar from '../Snackbar';
 import Dialog from '../Dialog';
 
 import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import Typography from '@material-ui/core/Typography';
 
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -97,7 +94,7 @@ class OpenProject extends Component {
             type="file"
           />
           <label htmlFor="open-blocks">
-            <Tooltip title='Projekt öffnen' arrow style={this.props.style}>
+            <Tooltip title={Blockly.Msg.tooltip_open_project} arrow style={this.props.style}>
               <div className={this.props.classes.button} style={{
                 borderRadius: '50%', cursor: 'pointer', display: 'table-cell',
                 verticalAlign: 'middle',
@@ -115,7 +112,7 @@ class OpenProject extends Component {
           content={this.state.content}
           onClose={this.toggleDialog}
           onClick={this.toggleDialog}
-          button={'Schließen'}
+          button={Blockly.Msg.button_close}
         />
         <Snackbar
           open={this.state.snackbar}

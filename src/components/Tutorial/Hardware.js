@@ -15,7 +15,7 @@ import GridListTileBar from '@material-ui/core/GridListTileBar';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExpandAlt } from "@fortawesome/free-solid-svg-icons";
-
+import * as Blockly from 'blockly'
 const styles = theme => ({
   expand: {
     '&:hover': {
@@ -56,7 +56,7 @@ class Hardware extends Component {
     var cols = isWidthDown('md', this.props.width) ? isWidthDown('sm', this.props.width) ? isWidthDown('xs', this.props.width) ? 2 : 3 : 4 : 6;
     return (
       <div style={{ marginTop: '10px', marginBottom: '5px' }}>
-        <Typography>Für die Umsetzung benötigst du folgende Hardware:</Typography>
+        <Typography>{Blockly.Msg.tutorials_hardware_head}</Typography>
 
         <GridList cellHeight={100} cols={cols} spacing={10}>
           {this.props.picture.map((picture, i) => {
@@ -91,11 +91,11 @@ class Hardware extends Component {
           content={this.state.content}
           onClose={this.handleClose}
           onClick={this.handleClose}
-          button={'Schließen'}
+          button={Blockly.Msg.button_close}
         >
           <div>
             <img src={`/media/hardware/${this.state.hardwareInfo.src}`} width="100%" alt={this.state.hardwareInfo.name} />
-            Weitere Informationen zur Hardware-Komponente findest du <Link rel="noreferrer" target="_blank" href={this.state.hardwareInfo.url} color="primary">hier</Link>.
+            {Blockly.Msg.tutorials_hardware_moreInformation} <Link rel="noreferrer" target="_blank" href={this.state.hardwareInfo.url} color="primary">{Blockly.Msg.tutorials_hardware_here}</Link>.
           </div>
         </Dialog>
 

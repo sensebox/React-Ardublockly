@@ -19,7 +19,7 @@ import Divider from '@material-ui/core/Divider';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Link from '@material-ui/core/Link';
-
+import * as Blockly from 'blockly'
 
 export class Login extends Component {
 
@@ -37,21 +37,21 @@ export class Login extends Component {
     };
   }
 
-  componentDidUpdate(props){
+  componentDidUpdate(props) {
     console.log(this.state.redirect);
     const { message } = this.props;
     if (message !== props.message) {
-      if(message.id === 'LOGIN_SUCCESS'){
-        if(this.state.redirect){
+      if (message.id === 'LOGIN_SUCCESS') {
+        if (this.state.redirect) {
           this.props.history.push(this.state.redirect);
         }
-        else{
+        else {
           this.props.history.goBack();
         }
       }
       // Check for login error
-      else if(message.id === 'LOGIN_FAIL'){
-        this.setState({ email: '', password: '', snackbar: true, key: Date.now(), message: 'Der Benutzername oder das Passwort ist nicht korrekt.', type: 'error' });
+      else if (message.id === 'LOGIN_FAIL') {
+        this.setState({ email: '', password: '', snackbar: true, key: Date.now(), message: Blockly.Msg.messages_LOGIN_FAIL, type: 'error' });
       }
     }
   }
@@ -62,8 +62,8 @@ export class Login extends Component {
 
   onSubmit = e => {
     e.preventDefault();
-    const {email, password} = this.state;
-    if(email !== '' && password !== ''){
+    const { email, password } = this.state;
+    if (email !== '' && password !== '') {
       // create user object
       const user = {
         email,
@@ -71,7 +71,7 @@ export class Login extends Component {
       };
       this.props.login(user);
     } else {
-      this.setState({ snackbar: true, key: Date.now(), message: 'Gib sowohl ein Benutzername als auch ein Passwort ein.', type: 'error' });
+      this.setState({ snackbar: true, key: Date.now(), message: Blockly.Msg.messages_login_error, type: 'error' });
     }
   };
 
@@ -83,15 +83,15 @@ export class Login extends Component {
     e.preventDefault();
   };
 
-  render(){
-    return(
+  render() {
+    return (
       <div>
-        <Breadcrumbs content={[{ link: '/user/login', title: 'Anmelden' }]} />
+        <Breadcrumbs content={[{ link: '/user/login', title: Blockly.Msg.button_login }]} />
 
-        <div style={{maxWidth: '500px', marginLeft: 'auto', marginRight: 'auto'}}>
-          <h1>Anmelden</h1>
+        <div style={{ maxWidth: '500px', marginLeft: 'auto', marginRight: 'auto' }}>
+          <h1>{Blockly.Msg.login_head}</h1>
           <Alert>
-            Zur Anmeldung ist ein Konto auf <Link color='primary' rel="noreferrer" target="_blank" href={'https://opensensemap.org/'}>openSenseMap</Link> Voraussetzung.
+            {Blockly.Msg.login_osem_account_01} <Link color='primary' rel="noreferrer" target="_blank" href={'https://opensensemap.org/'}>openSenseMap</Link> {Blockly.Msg.login_osem_account_02}.
           </Alert>
           <Snackbar
             open={this.state.snackbar}
@@ -100,10 +100,10 @@ export class Login extends Component {
             key={this.state.key}
           />
           <TextField
-            style={{marginBottom: '10px'}}
+            style={{ marginBottom: '10px' }}
             // variant='outlined'
             type='text'
-            label='E-Mail oder Nutzername'
+            label={Blockly.Msg.labels_username}
             name='email'
             value={this.state.email}
             onChange={this.onChange}
@@ -112,7 +112,7 @@ export class Login extends Component {
           <TextField
             // variant='outlined'
             type={this.state.showPassword ? 'text' : 'password'}
-            label='Passwort'
+            label={Blockly.Msg.labesl_password}
             name='password'
             value={this.state.password}
             InputProps={{
@@ -133,18 +133,18 @@ export class Login extends Component {
             fullWidth={true}
           />
           <p>
-            <Button color="primary" variant='contained' onClick={this.onSubmit} style={{width: '100%'}}>
+            <Button color="primary" variant='contained' onClick={this.onSubmit} style={{ width: '100%' }}>
               {this.props.progress ?
-                <div style={{height: '24.5px'}}><CircularProgress color="inherit" size={20}/></div>
-              : 'Anmelden'}
+                <div style={{ height: '24.5px' }}><CircularProgress color="inherit" size={20} /></div>
+                : Blockly.Msg.button_login}
             </Button>
           </p>
-          <p style={{textAlign: 'center', fontSize: '0.8rem'}}>
-            <Link rel="noreferrer" target="_blank" href={'https://opensensemap.org/'} color="primary">Passwort vergessen?</Link>
+          <p style={{ textAlign: 'center', fontSize: '0.8rem' }}>
+            <Link rel="noreferrer" target="_blank" href={'https://opensensemap.org/'} color="primary">{Blockly.Msg.login_lostpassword}</Link>
           </p>
-          <Divider variant='fullWidth'/>
-          <p style={{textAlign: 'center', paddingRight: "34px", paddingLeft: "34px"}}>
-            Du hast noch kein Konto? Registriere dich auf <Link rel="noreferrer" target="_blank" href={'https://opensensemap.org/'}>openSenseMap</Link>.
+          <Divider variant='fullWidth' />
+          <p style={{ textAlign: 'center', paddingRight: "34px", paddingLeft: "34px" }}>
+            {Blockly.Msg.login_createaccount}<Link rel="noreferrer" target="_blank" href={'https://opensensemap.org/'}>openSenseMap</Link>.
           </p>
         </div>
       </div>
@@ -156,7 +156,6 @@ Login.propTypes = {
   message: PropTypes.object.isRequired,
   login: PropTypes.func.isRequired,
   clearMessages: PropTypes.func.isRequired,
-  message: PropTypes.object.isRequired,
   progress: PropTypes.bool.isRequired
 };
 

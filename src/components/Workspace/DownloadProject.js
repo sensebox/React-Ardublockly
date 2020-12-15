@@ -12,6 +12,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import { faFileDownload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import * as Blockly from 'blockly/core';
+
 
 const styles = (theme) => ({
   button: {
@@ -40,7 +42,7 @@ class DownloadProject extends Component {
   render() {
     return (
       <div style={this.props.style}>
-        <Tooltip title='Projekt herunterladen' arrow>
+        <Tooltip title={Blockly.Msg.tooltip_download_project} arrow>
           <IconButton
             className={this.props.classes.button}
             onClick={() => this.downloadXmlFile()}
