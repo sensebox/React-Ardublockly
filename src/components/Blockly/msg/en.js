@@ -961,7 +961,20 @@ Blockly.Msg.settings_statistics_text = "The display of statistics on the usage o
 Blockly.Msg.settings_statistics_on = "On"
 Blockly.Msg.settings_statistics_off = "Off"
 
+/**
+ * Navbar
+ */
 
+Blockly.Msg.navbar_tutorials = "Tutorials"
+Blockly.Msg.navbar_tutorialbuilder = "Create tutorial"
+Blockly.Msg.navbar_gallery = "Gallery"
+Blockly.Msg.navbar_projects = "Projects"
 
+Blockly.Msg.navbar_menu = "Menu"
+Blockly.Msg.navbar_login = "Login"
+Blockly.Msg.navbar_mybadges = "myBadges"
+Blockly.Msg.navbar_account = "Account"
+Blockly.Msg.navbar_logout = "Logout"
+Blockly.Msg.navbar_settings = "Settings"
 
 export const En = Blockly.Msg;

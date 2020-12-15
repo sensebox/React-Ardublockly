@@ -997,4 +997,21 @@ Blockly.Msg.builder_requirements_order = "Beachte, dass die Reihenfolge des Anha
 Blockly.Msg.login_head = "Anmelden"
 
 
+/**
+ * Navbar
+ */
+
+Blockly.Msg.navbar_tutorials = "Tutorials"
+Blockly.Msg.navbar_tutorialbuilder = "Tutorial erstellen"
+Blockly.Msg.navbar_gallery = "Gallerie"
+Blockly.Msg.navbar_projects = "Projekte"
+
+Blockly.Msg.navbar_menu = "Menü"
+Blockly.Msg.navbar_login = "Einloggen"
+Blockly.Msg.navbar_mybadges = "myBadges"
+Blockly.Msg.navbar_account = "Konto"
+Blockly.Msg.navbar_logout = "Abmelden"
+Blockly.Msg.navbar_settings = "Einstellungen"
+
+
 export const De = Blockly.Msg;
