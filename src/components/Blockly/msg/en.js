@@ -782,13 +782,11 @@ Blockly.Msg.senseBox_mqtt_password = "Password";
 Blockly.Msg.sensebox_mqtt_subscribe = "Subscribe to Feed"
 Blockly.Msg.senseBox_mqtt_publish = "Publish to Feed/Topic";
 
-
 /**
  * Add Translation for Blocks above
  * ---------------------------------------------------------------
  * Add Translation for the UI below
  */
-
 
 /**
  * Toolbox
@@ -802,36 +800,70 @@ Blockly.Msg.toolbox_time = "Time";
 Blockly.Msg.toolbox_functions = "Functions";
 Blockly.Msg.toolbox_variables = "Variables";
 
-
 /**
  * Tooltips
  *
  */
 
-Blockly.Msg.tooltip_compile_code = "Compile Code"
-Blockly.Msg.tooltip_save_blocks = "Save Blocks";
-Blockly.Msg.tooltip_open_blocks = "Open Blocks";
-Blockly.Msg.tooltip_screenshot = "Download Screenshot";
-Blockly.Msg.tooltip_clear_workspace = "Reset Workspace";
-Blockly.Msg.tooltip_share_blocks = "Share Blocks";
-Blockly.Msg.tooltip_show_code = "Show Code";
-Blockly.Msg.tooltip_hide_code = "Hide Code"
+Blockly.Msg.tooltip_compile_code = "Compile code"
+Blockly.Msg.tooltip_save_blocks = "Save blocks";
+Blockly.Msg.tooltip_open_blocks = "Open blocks";
+Blockly.Msg.tooltip_screenshot = "Download screenshot";
+Blockly.Msg.tooltip_clear_workspace = "Reset workspace";
+Blockly.Msg.tooltip_share_blocks = "Share blocks";
+Blockly.Msg.tooltip_show_code = "Show code";
+Blockly.Msg.tooltip_hide_code = "Hide code "
+Blockly.Msg.tooltip_delete_project = "Delete project"
+Blockly.Msg.tooltip_project_name = "Project name"
+Blockly.Msg.tooltip_download_project = "Download project"
+Blockly.Msg.tooltip_open_project = "Open project"
+Blockly.Msg.tooltip_update_project = "Update project"
+Blockly.Msg.tooltip_save_project = "Save project"
+Blockly.Msg.tooltip_create_project = "Create project"
+Blockly.Msg.tooltip_share_project = "Share project"
+Blockly.Msg.tooltip_reset_workspace = "Reset workspace"
+Blockly.Msg.tooltip_copy_link = "Cooy link"
+Blockly.Msg.tooltip_trashcan_hide = "hide deleted blocks"
+Blockly.Msg.tooltip_trashcan_delete = "empty trashcan"
+Blockly.Msg.tooltip_project_title = "Project title"
+Blockly.Msg.tooltip_check_solution = "Check solution"
 
-Blockly.Msg.tooltip_project_name = "Projectname"
+/**
+ * Messages
+ *
+ */
+
+Blockly.Msg.messages_delete_project_failed = "Error deleting the project. Try again."
+Blockly.Msg.messages_reset_workspace_success = "The project has been successfully reset."
+Blockly.Msg.messages_PROJECT_UPDATE_SUCCESS = "The project was successfully updated."
+Blockly.Msg.messages_GALLERY_UPDATE_SUCCESS = "The gallery project was successfully updated."
+Blockly.Msg.messages_PROJECT_UPDATE_FAIL = "Error updating the project. Try again."
+Blockly.Msg.messages_GALLERY_UPDATE_FAIL = "Error updating the gallery project. Try again."
+Blockly.Msg.messages_gallery_save_fail_1 = "Error saving the "
+Blockly.Msg.messages_gallery_save_fail_2 = "Project. Try again."
+Blockly.Msg.messages_SHARE_SUCCESS = 'Share program'
+Blockly.Msg.messages_SHARE_FAIL = "Error creating a link to share your program. Try again."
+Blockly.Msg.messages_copylink_success = 'Link successfully saved to clipboard.'
+Blockly.Msg.messages_rename_success_01 = 'The project was successfully saved to '
+Blockly.Msg.messages_rename_success_02 = 'renamed.'
+Blockly.Msg.messages_newblockly_head = 'Welcome to the new version Blockly for the senseBox'
+Blockly.Msg.messages_newblockly_text = "The new Blockly version is currently in testing. You can find all the news here:"
+Blockly.Msg.messages_GET_TUTORIAL_FAIL = 'Back to tutorials overview'
+Blockly.Msg.messages_LOGIN_FAIL = 'The username or password is incorrect.'
+
 /**
  * Share Dialog
  */
 
-Blockly.Msg.sharedialog_headline = "Your Share-Link was created";
-Blockly.Msg.sharedialog_text = "Share your project with the following link";
+Blockly.Msg.sharedialog_headline = "Your link has been created.";
+Blockly.Msg.sharedialog_text = "You can share your program using the following link.";
 
 /**
  * Project rename Dialog
  */
 
-Blockly.Msg.renamedialog_headline = "Rename Project";
-Blockly.Msg.renamedialog_text = "Please enter a name for the project and confirm it by clicking on 'Confirm'."
-
+Blockly.Msg.renamedialog_headline = "Rename project";
+Blockly.Msg.renamedialog_text = "Please enter a name for the project and confirm it by clicking 'Confirm'."
 /**
  * Compile Dialog
  *
@@ -840,8 +872,6 @@ Blockly.Msg.renamedialog_text = "Please enter a name for the project and confirm
 Blockly.Msg.compiledialog_headline = "Error"
 Blockly.Msg.compiledialog_text = "While compiling an error occured. Please check your blocks and try again"
 
-
-
 /**
  * Buttons
  *
@@ -849,9 +879,12 @@ Blockly.Msg.compiledialog_text = "While compiling an error occured. Please check
 
 Blockly.Msg.button_cancel = "Cancel";
 Blockly.Msg.button_close = "Close";
-Blockly.Msg.button_accept = "Confirm";
+Blockly.Msg.button_accept = "Ok";
 Blockly.Msg.button_compile = "Compile";
 Blockly.Msg.button_create_variableCreate = "Create Variable";
+Blockly.Msg.button_back = "Back"
+Blockly.Msg.button_next = "Next step"
+Blockly.Msg.button_tutorial_overview = "Tutorial overview"
 
 
 /**
@@ -860,6 +893,58 @@ Blockly.Msg.button_create_variableCreate = "Create Variable";
 
 Blockly.Msg.filename = "Filename";
 Blockly.Msg.projectname = "Projectname";
+
+/**
+ * 404
+ */
+
+Blockly.Msg.notfound_head = "The page you requested cannot be found."
+Blockly.Msg.notfound_text = "The page you are looking for may have been removed, its name changed, or it may be temporarily unavailable."
+
+/**
+ * Labels
+ */
+Blockly.Msg.labels_donotshowagain = 'Do not show dialog again'
+Blockly.Msg.labels_here = 'here'
+Blockly.Msg.labels_username = 'Email or username'
+/**
+ * Badges
+ */
+
+Blockly.Msg.badges_explaination = "An overview of all badges received in the Blockly for senseBox context can be found "
+Blockly.Msg.badges_ASSIGNE_BADGE_SUCCESS_01 = "Congratulations! You have received the badge "
+Blockly.Msg.badges_ASSIGNE_BADGE_SUCCESS_02 = "."
+/**
+ * Tutorials
+ */
+
+Blockly.Msg.tutorials_assessment_task = "Task"
+Blockly.Msg.tutorials_hardware_head = "For the implementation you need the following hardware:"
+Blockly.Msg.tutorials_hardware_moreInformation = "You can find more information about the hardware component."
+Blockly.Msg.tutorials_hardware_here = "here";
+Blockly.Msg.tutorials_requirements = "Before continuing with this tutorial, you should have successfully completed the following tutorials:"
+
+
+/**
+ * Tutorial Builder
+ */
+
+Blockly.Msg.builder_solution = "Solution"
+Blockly.Msg.builder_solution_submit = "Submit Solution"
+Blockly.Msg.builder_example_submit = "Submit example"
+Blockly.Msg.builder_comment = "Note: You can delete the initial setup() or infinite loop() block. Additionally, it is possible to select only any block, among others, without displaying it as disabled."
+Blockly.Msg.builder_hardware_order = "Note that the order of selection is authoritative."
+Blockly.Msg.builder_hardware_helper = "Select at least one hardware component."
+Blockly.Msg.builder_requirements_head = "Requirements."
+Blockly.Msg.builder_requirements_order = "Note that the order of ticking is authoritative."
+
+/**
+ * Login
+ */
+
+
+Blockly.Msg.login_head = "Login"
+
 
 /**
  * Settings

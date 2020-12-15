@@ -995,4 +995,6 @@ Blockly.Msg.builder_requirements_order = "Beachte, dass die Reihenfolge des Anha
 
 
 Blockly.Msg.login_head = "Anmelden"
+
+
 export const De = Blockly.Msg;
