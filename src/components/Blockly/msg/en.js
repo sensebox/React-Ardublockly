@@ -983,4 +983,8 @@ Blockly.Msg.navbar_account = "Account"
 Blockly.Msg.navbar_logout = "Logout"
 Blockly.Msg.navbar_settings = "Settings"
 
+
+Blockly.Msg.codeviewer_arduino = "Arduino Source Code"
+Blockly.Msg.codeviewer_xml = "XML Blocks"
+
 export const En = Blockly.Msg;

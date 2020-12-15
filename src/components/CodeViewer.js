@@ -13,6 +13,7 @@ import MuiAccordion from '@material-ui/core/Accordion';
 import MuiAccordionSummary from '@material-ui/core/AccordionSummary';
 import MuiAccordionDetails from '@material-ui/core/AccordionDetails';
 import { Card } from '@material-ui/core';
+import * as Blockly from 'blockly'
 
 
 const Accordion = withStyles((theme) => ({
@@ -94,7 +95,7 @@ class CodeViewer extends Component {
         >
           <AccordionSummary>
             <b style={{ fontSize: '20px', marginRight: '5px', width: '35px' }}>{curlyBrackets}</b>
-            <div style={{ margin: 'auto 5px 2px 0px' }}>Arduino Quellcode</div>
+            <div style={{ margin: 'auto 5px 2px 0px' }}>{Blockly.Msg.codeviewer_arduino}</div>
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0, height: `calc(${this.state.componentHeight} - 50px - 50px)`, backgroundColor: 'white' }}>
             <pre className="line-numbers" style={{ paddingBottom: 0, width: '100%', overflow: 'auto', scrollbarWidth: 'thin', height: 'calc(100% - 30px)', margin: '15px 0', paddingTop: 0, whiteSpace: 'pre-wrap', backgroundColor: 'white' }}>
@@ -112,7 +113,7 @@ class CodeViewer extends Component {
         >
           <AccordionSummary>
             <b style={{ fontSize: '20px', marginRight: '5px', width: '35px' }}>{unequal}</b>
-            <div style={{ margin: 'auto 5px 2px 0px' }}>XML Blöcke</div>
+            <div style={{ margin: 'auto 5px 2px 0px' }}>{Blockly.Msg.codeviewer_xml}</div>
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0, height: `calc(${this.state.componentHeight} - 50px - 50px)`, backgroundColor: 'white' }}>
             <pre className="line-numbers" style={{ paddingBottom: 0, width: '100%', overflow: 'auto', scrollbarWidth: 'thin', height: 'calc(100% - 30px)', margin: '15px 0', paddingTop: 0, whiteSpace: 'pre-wrap', backgroundColor: 'white' }}>
