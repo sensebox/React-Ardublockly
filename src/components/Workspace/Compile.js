@@ -122,7 +122,7 @@ class Compile extends Component {
         {this.props.iconButton ?
           <Tooltip title={Blockly.Msg.tooltip_compile_code} arrow style={{ marginRight: '5px' }}>
             <IconButton
-              className={this.props.classes.iconButton}
+              className={`compileBlocks ${this.props.classes.iconButton}`}
               onClick={() => this.compile()}
             >
               <FontAwesomeIcon icon={faClipboardCheck} size="l" />
