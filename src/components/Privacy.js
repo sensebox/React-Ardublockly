@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-
+import Container from '@material-ui/core/Container';
 class Privay extends Component {
     render() {
         return (
-            <div style={{ margin: '0px 24px 0px 24px' }}>
-                <h1>Datenschutzerklärung</h1>
+            <Container fixed>
+                <div style={{ margin: '0px 24px 0px 24px' }}>
+                    <h1>Datenschutzerklärung</h1>
 
-                <h2>1. Datenschutz auf einen Blick</h2>
-                <h3>Allgemeine Hinweise</h3>
+                    <h2>1. Datenschutz auf einen Blick</h2>
+                    <h3>Allgemeine Hinweise</h3>
         Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie unsere Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können. Ausführliche Informationen zum Thema Datenschutz entnehmen Sie unserer unter diesem Text aufgeführten Datenschutzerklärung.
                 <h3>Datenerfassung auf unserer Website</h3>
 
-                <h4>Wer ist verantwortlich für die Datenerfassung auf dieser Website?</h4>
+                    <h4>Wer ist verantwortlich für die Datenerfassung auf dieser Website?</h4>
 
 Die Datenverarbeitung auf dieser Website erfolgt durch den Websitebetreiber. Dessen Kontaktdaten können Sie dem Impressum dieser Website entnehmen.
 
@@ -38,7 +39,7 @@ Sie können dieser Analyse widersprechen. Über die Widerspruchsmöglichkeiten w
 
 
                 <h2>2. Allgemeine Hinweise und Pflichtinformationen</h2>
-                <h3>Datenschutz</h3>
+                    <h3>Datenschutz</h3>
 Die Betreiber dieser Seiten nehmen den Schutz Ihrer persönlichen Daten sehr ernst.Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend der gesetzlichen Datenschutzvorschriften sowie dieser Datenschutzerklärung.
 
 Wenn Sie diese Website benutzen, werden verschiedene personenbezogene Daten erhoben.Personenbezogene Daten sind Daten, mit denen Sie persönlich identifiziert werden können.Die vorliegende Datenschutzerklärung erläutert, welche Daten wir erheben und wofür wir sie nutzen.Sie erläutert auch, wie und zu welchem Zweck das geschieht.
@@ -81,14 +82,14 @@ Gesetzlich vorgeschriebener Datenschutzbeauftragter
 Wir haben für unser Unternehmen einen Datenschutzbeauftragten bestellt.
 
                 <p>Institut für Geoinformatik</p>
-                <p>Heisenbergstraße 2</p>
-                <p>48149 Münster</p>
+                    <p>Heisenbergstraße 2</p>
+                    <p>48149 Münster</p>
 
-                <p>Telefon: +49(251) 83 - 33 083</p>
-                <p>E - Mail: info@sensebox.de</p>
+                    <p>Telefon: +49(251) 83 - 33 083</p>
+                    <p>E - Mail: info@sensebox.de</p>
 
-                <h2>4. Datenerfassung auf unserer Website</h2>
-                <h3>Cookies</h3>
+                    <h2>4. Datenerfassung auf unserer Website</h2>
+                    <h3>Cookies</h3>
 Die Internetseiten verwenden teilweise so genannte Cookies.Cookies richten auf Ihrem Rechner keinen Schaden an und enthalten keine Viren.Cookies dienen dazu, unser Angebot nutzerfreundlicher, effektiver und sicherer zu machen.Cookies sind kleine Textdateien, die auf Ihrem Rechner abgelegt werden und die Ihr Browser speichert.
 
 Die meisten der von uns verwendeten Cookies sind so genannte “Session - Cookies”.Sie werden nach Ende Ihres Besuchs automatisch gelöscht.Andere Cookies bleiben auf Ihrem Endgerät gespeichert bis Sie diese löschen.Diese Cookies ermöglichen es uns, Ihren Browser beim nächsten Besuch wiederzuerkennen.
@@ -101,14 +102,14 @@ Sie können Ihren Browser so einstellen, dass Sie über das Setzen von Cookies i
 Der Provider der Seiten erhebt und speichert automatisch Informationen in so genannten Server - Log - Dateien, die Ihr Browser automatisch an uns übermittelt.Dies sind:
                 <ul>
 
-                    <li>Browsertyp und Browserversion</li>
-                    <li>verwendetes Betriebssystem</li>
-                    <li>Referrer URL</li>
-                    <li>Hostname des zugreifenden Rechners</li>
-                    <li>Uhrzeit der Serveranfrage</li>
-                    <li>
-                        IP - Adresse</li>
-                </ul>
+                        <li>Browsertyp und Browserversion</li>
+                        <li>verwendetes Betriebssystem</li>
+                        <li>Referrer URL</li>
+                        <li>Hostname des zugreifenden Rechners</li>
+                        <li>Uhrzeit der Serveranfrage</li>
+                        <li>
+                            IP - Adresse</li>
+                    </ul>
 
 Eine Zusammenführung dieser Daten mit anderen Datenquellen wird nicht vorgenommen.
 
@@ -164,8 +165,8 @@ Wenn Sie mit der Speicherung und Nutzung Ihrer Daten nicht einverstanden sind, k
 
 
 
-                <h2>Plugins und Tools</h2>
-                <h3>YouTube</h3>
+                    <h2>Plugins und Tools</h2>
+                    <h3>YouTube</h3>
 Unsere Website nutzt Plugins der von Google betriebenen Seite YouTube.Betreiber der Seiten ist die YouTube, LLC, 901 Cherry Ave., San Bruno, CA 94066, USA.
 
 Wenn Sie eine unserer mit einem YouTube - Plugin ausgestatteten Seiten besuchen, wird eine Verbindung zu den Servern von YouTube hergestellt.Dabei wird dem YouTube - Server mitgeteilt, welche unserer Seiten Sie besucht haben.
@@ -177,6 +178,7 @@ Die Nutzung von YouTube erfolgt im Interesse einer ansprechenden Darstellung uns
 Weitere Informationen zum Umgang mit Nutzerdaten finden Sie in der Datenschutzerklärung von YouTube unter: https://www.google.de/intl/de/policies/privacy.
 
             </div>
+            </Container>
         );
     };
 }
