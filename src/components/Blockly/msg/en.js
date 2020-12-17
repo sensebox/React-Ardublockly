@@ -847,7 +847,7 @@ Blockly.Msg.messages_copylink_success = 'Link successfully saved to clipboard.'
 Blockly.Msg.messages_rename_success_01 = 'The project was successfully saved to '
 Blockly.Msg.messages_rename_success_02 = 'renamed.'
 Blockly.Msg.messages_newblockly_head = 'Welcome to the new version Blockly for the senseBox'
-Blockly.Msg.messages_newblockly_text = "The new Blockly version is currently in testing. You can find all the news here:"
+Blockly.Msg.messages_newblockly_text = "The new Blockly version is currently in testing. You can find all the news here: "
 Blockly.Msg.messages_GET_TUTORIAL_FAIL = 'Back to tutorials overview'
 Blockly.Msg.messages_LOGIN_FAIL = 'The username or password is incorrect.'
 Blockly.Msg.messages_login_error = "Enter both a username and a password."
@@ -992,7 +992,7 @@ Blockly.Msg.codeviewer_xml = "XML Blocks"
 /**
  * Home Tour
  */
-Blockly.Msg.hometour_wrapper = "Welcome to Blockly for the senseBox. In this tour I will show you all the important features of the interface"
+Blockly.Msg.hometour_wrapper = "Welcome to the new Learn- and Programmingapp for the senseBox. In this tour I will show you all the important features of the interface"
 Blockly.Msg.hometour_workspaceFunc = "Here you will find all the buttons to compile, save or share your program"
 Blockly.Msg.hometour_blocklyWindow = "This is your workspace. Here you can use the blocks to create your program code"
 Blockly.Msg.hometour_blocklyToolboxDiv = "The toolbox contains all the blocks. Connect them in the workspace and create your program code."
