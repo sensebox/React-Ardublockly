@@ -1,40 +1,57 @@
 import * as Blockly from 'blockly/core';
 
 export const home = () => {
-  return [
-      {
-          selector: '.workspaceFunc',
-          content: `${Blockly.Msg.settings_head}`
-      },
-      {
-          selector: '.workspaceFunc',
-          content: 'Hier findest du alle Buttons um dein Programm zu übertragen, zu speichern oder zu teilen',
-      },
-      {
-          selector: ".blocklyWindow",
-          content: 'Dies ist deine Arbeitsfläche.',
-      },
-      {
-          selector: ".blocklyToolboxDiv",
-          content: 'In der Toolbox befinden sich alle Blöcke. Verbinde diese in der Arbeitsfläche und erstelle dein Programmcode',
-      },
-      {
-          selector: ".saveBlocks",
-          content: 'Speichere deine Blöcke auf dem Computer.',
-      },
-      {
-          selector: ".MenuButton",
-          content: 'Im Menü findest du Tutorials und eine Gallery mit verschiedenen Beispiel Programmen.',
-      }
-  ];
+    return [
+        {
+            selector: ".wrapper",
+            content: `${Blockly.Msg.hometour_wrapper}`,
+        },
+        {
+            selector: ".blocklyWindow",
+            content: `${Blockly.Msg.hometour_blocklyWindow}`,
+        },
+        {
+            selector: ".blocklyToolboxDiv",
+            content: `${Blockly.Msg.hometour_blocklyToolboxDiv}`,
+        },
+        {
+            selector: '.workspaceFunc',
+            content: `${Blockly.Msg.hometour_workspaceFunc}`,
+        },
+        {
+            selector: ".compileBlocks",
+            content: `${Blockly.Msg.hometour_compileBlocks}`,
+        },
+        {
+            selector: ".shareBlocks",
+            content: `${Blockly.Msg.hometour_shareBlocks}`,
+        },
+        {
+            selector: ".showCode",
+            content: `${Blockly.Msg.hometour_showCode}`,
+        },
+        {
+            selector: ".MenuButton",
+            content: `${Blockly.Msg.hometour_menuButton}`,
+        }
+    ];
 };
 
 export const assessment = () => {
-  return [
-      // to be continued...
-      {
-          selector: '.assessmentDiv',
-          content: 'Hier kannst du eine Aufgabe lösen und kontrollieren.',
-      }
-  ];
+    return [
+        // to be continued...
+
+        {
+            selector: '.assessmentDiv',
+            content: `${Blockly.Msg.assessmenttour_assessmentDiv}`
+        },
+        {
+            selector: '.injectionDiv',
+            content: `${Blockly.Msg.assessmenttour_injectionDiv}`
+        },
+        {
+            selector: '.solutionCheck',
+            content: `${Blockly.Msg.assessmenttour_solutionCheck}`
+        }
+    ];
 };
