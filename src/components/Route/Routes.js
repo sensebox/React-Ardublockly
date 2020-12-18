@@ -23,7 +23,7 @@ import Privacy from '../Privacy';
 import Login from '../User/Login';
 import Account from '../User/Account';
 import MyBadges from '../User/MyBadges';
-
+import News from '../News'
 
 class Routes extends Component {
 
@@ -36,7 +36,7 @@ class Routes extends Component {
       <div style={{ margin: '0 22px' }}>
         <Switch>
           <PublicRoute path="/" exact>
-            <Home/>
+            <Home />
           </PublicRoute>
           {/* Tutorials */}
           <PublicRoute path="/tutorial" exact>
@@ -61,10 +61,10 @@ class Routes extends Component {
           </PublicRoute>
           {/* User-Projects */}
           <PrivateRoute path="/project" exact>
-            <ProjectHome/>
+            <ProjectHome />
           </PrivateRoute>
           <PrivateRoute path="/project/:projectId" exact>
-            <Project/>
+            <Project />
           </PrivateRoute>
           {/* User */}
           <IsLoggedRoute path="/user/login" exact>
@@ -87,10 +87,14 @@ class Routes extends Component {
           <PublicRoute path="/privacy" exact>
             <Privacy />
           </PublicRoute>
+          <PublicRoute path="/news" exact>
+            <News />
+          </PublicRoute>
           {/* Not Found */}
           <PublicRoute>
             <NotFound />
           </PublicRoute>
+
         </Switch>
       </div>
     );
