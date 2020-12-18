@@ -14,6 +14,8 @@ class Footer extends Component {
             <Typography style={{ margin: '0px 10px 0px 10px', display: 'initial', fontSize: '1rem' }}>|</Typography>
             <Link to={"/privacy"} style={{ textDecoration: 'none', color: 'inherit' }}>Privacy</Link>
             <Typography style={{ margin: '0px 10px 0px 10px', display: 'initial', fontSize: '1rem' }}>|</Typography>
+            <Link to={"/news"} style={{ textDecoration: 'none', color: 'inherit' }}>News</Link>
+            <Typography style={{ margin: '0px 10px 0px 10px', display: 'initial', fontSize: '1rem' }}>|</Typography>
             <a href="https://sensebox.de" style={{ textDecoration: 'none', color: 'inherit' }}>sensebox.de</a>
           </div>
         </div>

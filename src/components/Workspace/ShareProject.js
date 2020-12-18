@@ -95,7 +95,7 @@ class WorkspaceFunc extends Component {
       <div style={this.props.style}>
         <Tooltip title={Blockly.Msg.tooltip_share_project} arrow>
           <IconButton
-            className={this.props.classes.button}
+            className={`shareBlocks ${this.props.classes.button}`}
             onClick={() => this.shareBlocks()}
           >
             <FontAwesomeIcon icon={faShareAlt} size="xs" />

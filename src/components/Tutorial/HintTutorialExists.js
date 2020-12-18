@@ -64,7 +64,7 @@ class HintTutorialExists extends Component {
         button={Blockly.Msg.button_close}
       >
         <div>
-          {Blockly.Msg.messages_newblockly_text}<Link to="/tutorial" className={this.props.classes.link}>test</Link>
+          {Blockly.Msg.messages_newblockly_text}<Link to="/news" className={this.props.classes.link}>Blockly News</Link>
         </div>
         <FormControlLabel
           style={{ marginTop: '20px' }}

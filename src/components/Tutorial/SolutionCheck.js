@@ -61,7 +61,7 @@ class SolutionCheck extends Component {
       <div>
         <Tooltip title={Blockly.Msg.tooltip_check_solution} arrow>
           <IconButton
-            className={this.props.classes.compile}
+            className={`solutionCheck ${this.props.classes.compile}`}
             style={{ width: '40px', height: '40px', marginRight: '5px' }}
             onClick={() => this.check()}
           >
