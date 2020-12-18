@@ -287,7 +287,8 @@ Blockly.Blocks['math_change'] = {
                 {
                     "type": "field_variable",
                     "name": "VAR",
-                    "variable": Blockly.Msg.MATH_CHANGE_TITLE_ITEM
+                    "defaultType": Types.NUMBER.typeName,
+                    "variable": null
                 },
                 {
                     "type": "input_value",
