@@ -2,7 +2,7 @@
 import Blockly from 'blockly';
 import { getColour } from '../helpers/colour';
 import { getCompatibleTypes } from '../helpers/types'
-
+import * as Types from '../helpers/types';
 
 Blockly.Blocks['controls_whileUntil'] = {
     /**
@@ -47,6 +47,7 @@ Blockly.Blocks['controls_for'] = {
                 {
                     "type": "field_variable",
                     "name": "VAR",
+                    "defaultType": Types.NUMBER.typeName,
                     "variable": null
                 },
                 {
@@ -97,6 +98,7 @@ Blockly.Blocks['controls_forEach'] = {
                 {
                     "type": "field_variable",
                     "name": "VAR",
+                    "defaultType": Types.NUMBER.typeName,
                     "variable": null
                 },
                 {
