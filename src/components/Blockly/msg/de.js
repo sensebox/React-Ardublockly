@@ -1047,4 +1047,27 @@ Blockly.Msg.assessmenttour_assessmentDiv = "Los gehts! Löse die folgende Aufgab
 Blockly.Msg.assessmenttour_injectionDiv = "Erstelle hier deine Lösung. Du kannst alle Blöcke aus der Toolbox verwenden."
 
 
+/**
+ * Overlay
+ */
+
+Blockly.Msg.compile_overlay_head = "Dein Programm wird nun kompiliert und heruntergeladen"
+Blockly.Msg.compile_overlay_text = "Kopiere es anschließend auf deine senseBox MCU"
+
+
+/**
+ * FAQ
+ */
+
+Blockly.Msg.faq_q1_question = `Wie kann ich mein Programm auf die senseBox kopieren?`
+Blockly.Msg.faq_q1_answer = `Um Programme auf die senseBox zu kopieren wird diese mit dem Micro USB Kabel an den Computer angeschlossen. Mache anschließend auf der senseBox MCU einen Doppelklick auf den roten Reset Button. Die senseBox wird nun als Wechseldatenträger an deinem Computer erkannt und die zuvor erstellen Programm können per Drag & Drop kopiert werden. Nach jeder Änderung des Programmcodes muss das Programm neu kompiliert und übertragen werden
+#### Lernmodus der MCU aktivieren
+<iframe width="560" height="315" src="https://www.youtube.com/embed/jzlOJ7Zuqqw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+#### Kopieren von Programmen unter MacOS
+Das Kopieren der Programme unter MacOS funktioniert nicht über den Finder, es gibt es aber dennoch zwei verschiedene Möglichkeiten die Programme zu kopieren:
+- [senseBox Kopiertool](https://sensebox.de/docs/senseBox_Sketch_Uploader_DE.zip)
+- [muCommander](https://www.mucommander.com/)
+`
+
 export const De = Blockly.Msg;

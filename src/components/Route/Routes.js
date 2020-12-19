@@ -24,6 +24,7 @@ import Login from '../User/Login';
 import Account from '../User/Account';
 import MyBadges from '../User/MyBadges';
 import News from '../News'
+import Faq from '../Faq'
 
 class Routes extends Component {
 
@@ -89,6 +90,9 @@ class Routes extends Component {
           </PublicRoute>
           <PublicRoute path="/news" exact>
             <News />
+          </PublicRoute>
+          <PublicRoute path="/faq" exact>
+            <Faq />
           </PublicRoute>
           {/* Not Found */}
           <PublicRoute>

@@ -18,6 +18,7 @@ import TextField from '@material-ui/core/TextField';
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Blockly from 'blockly/core';
+import Copy from '../copy.svg';
 
 const styles = (theme) => ({
   backdrop: {
@@ -134,7 +135,13 @@ class Compile extends Component {
           </Button>
         }
         <Backdrop className={this.props.classes.backdrop} open={this.state.progress}>
-          <CircularProgress color="inherit" />
+          <div className='overlay'>
+            <img src={Copy} width="400"></img>
+            <h2>{Blockly.Msg.compile_overlay_head}</h2>
+            <p>{Blockly.Msg.compile_overlay_text}</p>
+            <p>Benötigst du mehr Hilfe? Dann schaue hier: <a href="/faq" target="_blank">test</a></p>
+            <CircularProgress color="inherit" />
+          </div>
         </Backdrop>
         <Dialog
           open={this.state.open}
