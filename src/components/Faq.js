@@ -64,6 +64,26 @@ class Faq extends Component {
                                 </ExpansionPanel>
                             )
                         })}
+                        {
+                            this.props.button ?
+                                <Button
+                                    style={{ marginTop: '20px' }}
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={() => { this.props.history.push(this.props.button.link) }}
+                                >
+                                    {this.props.button.title}
+                                </Button>
+                                :
+                                <Button
+                                    style={{ marginTop: '20px' }}
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={() => { this.props.history.push('/') }}
+                                >
+                                    {Blockly.Msg.button_back}
+                                </Button>
+                        }
                     </div>
                 </Container>
             </div >

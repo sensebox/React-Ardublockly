@@ -12,6 +12,10 @@ export const FaqQuestions = () => {
         question: `${Blockly.Msg.faq_q2_question}`,
         answer: `${Blockly.Msg.faq_q2_answer}`,
       },
+      {
+        question: `${Blockly.Msg.faq_q3_question}`,
+        answer: `${Blockly.Msg.faq_q3_answer}`,
+      },
 
     ])
 }
