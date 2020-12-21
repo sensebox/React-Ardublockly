@@ -10,9 +10,9 @@ Blockly.Arduino.sensebox_led = function () {
 
 Blockly.Arduino.sensebox_rgb_led = function () {
     var dropdown_pin = this.getFieldValue('PIN');
-    var red = this.getFieldValue('RED') || '0'
-    var green = this.getFieldValue('GREEN') || '0'
-    var blue = this.getFieldValue('BLUE') || '0'
+    var red = Blockly.Arduino.valueToCode(this, 'RED', Blockly.Arduino.ORDER_ATOMIC) || '0'
+    var green = Blockly.Arduino.valueToCode(this, 'GREEN', Blockly.Arduino.ORDER_ATOMIC) || '0'
+    var blue = Blockly.Arduino.valueToCode(this, 'BLUE', Blockly.Arduino.ORDER_ATOMIC) || '0'
     Blockly.Arduino.libraries_['define_rgb_led' + dropdown_pin] = '#include <Adafruit_NeoPixel.h>\n Adafruit_NeoPixel rgb_led_' + dropdown_pin + ' = Adafruit_NeoPixel(1,' + dropdown_pin + ',NEO_RGB + NEO_KHZ800);\n';
     Blockly.Arduino.setupCode_['setup_rgb_led' + dropdown_pin] = 'rgb_led_' + dropdown_pin + '.begin();';
 

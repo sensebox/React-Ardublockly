@@ -1,5 +1,4 @@
 import * as Blockly from 'blockly';
-import { FieldSlider } from '@blockly/field-slider';
 import { getColour } from '../helpers/colour'
 import { selectedBoard } from '../helpers/board'
 
@@ -27,15 +26,12 @@ Blockly.Blocks['sensebox_rgb_led'] = {
             .appendField(Blockly.Msg.senseBox_rgb_led)
             .appendField("Pin:")
             .appendField(new Blockly.FieldDropdown(selectedBoard().digitalPins), "PIN");
-        this.appendDummyInput()
-            .appendField(Blockly.Msg.COLOUR_RGB_RED)//Blockly.Msg.senseBox_basic_red
-            .appendField(new FieldSlider(255, 0, 255), "RED");
-        this.appendDummyInput()
-            .appendField(Blockly.Msg.COLOUR_RGB_GREEN)//Blockly.Msg.senseBox_basic_green
-            .appendField(new FieldSlider(255, 0, 255), "GREEN");
-        this.appendDummyInput()
-            .appendField(Blockly.Msg.COLOUR_RGB_BLUE)//Blockly.Msg.senseBox_basic_green
-            .appendField(new FieldSlider(255, 0, 255), "BLUE");
+        this.appendValueInput("RED", 'Number')
+            .appendField(Blockly.Msg.COLOUR_RGB_RED);//Blockly.Msg.senseBox_basic_red
+        this.appendValueInput("GREEN", 'Number')
+            .appendField(Blockly.Msg.COLOUR_RGB_GREEN);//Blockly.Msg.senseBox_basic_green
+        this.appendValueInput("BLUE", 'Number')
+            .appendField(Blockly.Msg.COLOUR_RGB_BLUE);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setTooltip(Blockly.Msg.senseBox_rgb_led_tip);
@@ -53,7 +49,7 @@ Blockly.Blocks['sensebox_ws2818_led'] = {
         this.setColour(getColour().sensebox);
         this.appendDummyInput()
             .appendField(Blockly.Msg.senseBox_ws2818_rgb_led)
-            .appendField("Pin:")
+            .appendField("Port:")
             .appendField(new Blockly.FieldDropdown(dropdownOptions), "Port")
         this.appendValueInput("BRIGHTNESS", "brightness")
             .appendField((Blockly.Msg.senseBox_ws2818_rgb_led_brightness));

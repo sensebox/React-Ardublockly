@@ -351,3 +351,79 @@ Blockly.Blocks['sensebox_gps'] = {
     this.setTooltip(Blockly.Msg.senseBox_bme_tip);
   }
 };
+
+/**
+ * Block for Truebner STM50
+ */
+
+Blockly.Blocks['sensebox_sensor_truebner_smt50'] = {
+  init: function () {
+    var dropdownOptions = [[Blockly.Msg.senseBox_ultrasonic_port_A, 'A'],
+    [Blockly.Msg.senseBox_ultrasonic_port_B, 'B'], [Blockly.Msg.senseBox_ultrasonic_port_C, 'C']];
+    this.setColour(getColour().sensebox);
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.sensebox_soil_smt50);
+    this.appendDummyInput()
+      .appendField("Port:")
+      .appendField(new Blockly.FieldDropdown(dropdownOptions), "Port")
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.senseBox_value)
+      .appendField(new Blockly.FieldDropdown([[Blockly.Msg.senseBox_temp, "temp"], [Blockly.Msg.senseBox_soil, "soil"]]), 'value')
+    this.setOutput(true, Types.NUMBER.typeName);
+  }
+};
+
+
+/**
+ * DS18B20 Watertemperature
+ *
+ */
+
+Blockly.Blocks['sensebox_sensor_watertemperature'] = {
+  init: function () {
+    var dropdownOptions = [[Blockly.Msg.senseBox_ultrasonic_port_A, 'A'],
+    [Blockly.Msg.senseBox_ultrasonic_port_B, 'B'], [Blockly.Msg.senseBox_ultrasonic_port_C, 'C']];
+    this.setColour(getColour().sensebox);
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.senseBox_watertemperature)
+      .appendField("Port:")
+      .appendField(new Blockly.FieldDropdown(dropdownOptions), "Port")
+    this.setOutput(true, Types.NUMBER.typeName);
+    this.setTooltip(Blockly.Msg.senseBox_watertemperature_tip);
+  }
+};
+
+/**
+ * Windspeed
+ * removed for now
+
+
+Blockly.Blocks['sensebox_windspeed'] = {
+  init: function () {
+    this.setColour(getColour().sensebox);
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.senseBox_windspeed)
+      .appendField("Pin:")
+      .appendField(new Blockly.FieldDropdown(selectedBoard().analogPins), "PIN")
+    this.setOutput(true, Types.DECIMAL.typeName);
+  }
+};
+ */
+
+/**
+ * DF Robot Soundsensor
+ */
+
+
+Blockly.Blocks['sensebox_soundsensor_dfrobot'] = {
+  init: function () {
+    var dropdownOptions = [[Blockly.Msg.senseBox_ultrasonic_port_A, 'A'],
+    [Blockly.Msg.senseBox_ultrasonic_port_B, 'B'], [Blockly.Msg.senseBox_ultrasonic_port_C, 'C']];
+    this.setColour(getColour().sensebox);
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.senseBox_soundsensor_dfrobot)
+      .appendField("Port:")
+      .appendField(new Blockly.FieldDropdown(dropdownOptions), "Port")
+    this.setOutput(true, Types.DECIMAL.typeName);
+  }
+};

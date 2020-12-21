@@ -782,6 +782,12 @@ Blockly.Msg.senseBox_mqtt_password = "Password";
 Blockly.Msg.sensebox_mqtt_subscribe = "Subscribe to Feed"
 Blockly.Msg.senseBox_mqtt_publish = "Publish to Feed/Topic";
 
+//Windspeed
+Blockly.Msg.senseBox_windspeed = "Windspeedsensor"
+
+//Soundsensor
+Blockly.Msg.senseBox_soundsensor_dfrobot = "Soundsensor (DF Robot)";
+
 /**
  * Add Translation for Blocks above
  * ---------------------------------------------------------------
