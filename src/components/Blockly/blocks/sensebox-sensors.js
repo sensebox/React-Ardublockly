@@ -392,3 +392,38 @@ Blockly.Blocks['sensebox_sensor_watertemperature'] = {
     this.setTooltip(Blockly.Msg.senseBox_watertemperature_tip);
   }
 };
+
+/**
+ * Windspeed
+ * removed for now
+
+
+Blockly.Blocks['sensebox_windspeed'] = {
+  init: function () {
+    this.setColour(getColour().sensebox);
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.senseBox_windspeed)
+      .appendField("Pin:")
+      .appendField(new Blockly.FieldDropdown(selectedBoard().analogPins), "PIN")
+    this.setOutput(true, Types.DECIMAL.typeName);
+  }
+};
+ */
+
+/**
+ * DF Robot Soundsensor
+ */
+
+
+Blockly.Blocks['sensebox_soundsensor_dfrobot'] = {
+  init: function () {
+    var dropdownOptions = [[Blockly.Msg.senseBox_ultrasonic_port_A, 'A'],
+    [Blockly.Msg.senseBox_ultrasonic_port_B, 'B'], [Blockly.Msg.senseBox_ultrasonic_port_C, 'C']];
+    this.setColour(getColour().sensebox);
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.senseBox_soundsensor_dfrobot)
+      .appendField("Port:")
+      .appendField(new Blockly.FieldDropdown(dropdownOptions), "Port")
+    this.setOutput(true, Types.DECIMAL.typeName);
+  }
+};

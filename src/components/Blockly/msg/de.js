@@ -760,6 +760,12 @@ Blockly.Msg.senseBox_LoRa_sensor_tip = "Sende eine Sensorwert mit einer bestimmt
 Blockly.Msg.senseBox_LoRa_init_abp_tip = "Initialisiere die LoRa übertragung. Kopiere die ID's im lsb Format";
 Blockly.Msg.senseBox_LoRa_init_otaa_tip = "Initialisiere die LoRa übertragung. Kopiere die ID's im lsb Format";
 
+//Windspeed
+Blockly.Msg.senseBox_windspeed = "Windgeschwindigkeitssensor";
+//Soundsensor
+Blockly.Msg.senseBox_soundsensor_dfrobot = "Soundsensor (DF Robot)";
+
+
 //BME680
 Blockly.Msg.senseBox_bme680 = "Umweltsensor (BME680)";
 Blockly.Msg.senseBox_bme_iaq = "Innenraumluftqualität (IAQ)";
