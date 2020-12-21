@@ -52,6 +52,8 @@ class Toolbox extends React.Component {
                     <Block type="sensebox_button" />
                     <Block type="sensebox_sensor_truebner_smt50" />
                     <Block type="sensebox_sensor_watertemperature" />
+                    {/* <Block type="sensebox_windspeed" /> */}
+                    <Block type="sensebox_soundsensor_dfrobot" />
                 </Category >
                 <Category name="WIFI" colour={getColour().sensebox}>
                     <Block type="sensebox_wifi" />
