@@ -351,3 +351,24 @@ Blockly.Blocks['sensebox_gps'] = {
     this.setTooltip(Blockly.Msg.senseBox_bme_tip);
   }
 };
+
+/**
+ * Block for Truebner STM50
+ */
+
+Blockly.Blocks['sensebox_sensor_truebner_smt50'] = {
+  init: function () {
+    var dropdownOptions = [[Blockly.Msg.senseBox_ultrasonic_port_A, 'A'],
+    [Blockly.Msg.senseBox_ultrasonic_port_B, 'B'], [Blockly.Msg.senseBox_ultrasonic_port_C, 'C']];
+    this.setColour(getColour().sensebox);
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.sensebox_soil_smt50);
+    this.appendDummyInput()
+      .appendField("Port:")
+      .appendField(new Blockly.FieldDropdown(dropdownOptions), "Port")
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.senseBox_value)
+      .appendField(new Blockly.FieldDropdown([[Blockly.Msg.senseBox_temp, "temp"], [Blockly.Msg.senseBox_soil, "soil"]]), 'value')
+    this.setOutput(true, Types.NUMBER.typeName);
+  }
+};
