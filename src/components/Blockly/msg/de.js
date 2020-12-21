@@ -1070,4 +1070,16 @@ Das Kopieren der Programme unter MacOS funktioniert nicht über den Finder, es g
 - [muCommander](https://www.mucommander.com/)
 `
 
+Blockly.Msg.faq_q2_question = `Mit welcher senseBox ist die Programmierumgebung kompatibel?`
+Blockly.Msg.faq_q2_answer = `
+Grundsätzlich kann die Programmierumgebung mit jeder senseBox mit senseBox MCU verwendet werden. 
+`
+
+
+Blockly.Msg.faq_q3_question = `Ich habe einen Fehler gefunden oder etwas funktioniert nicht. Wo kann ich diesen melden?`
+Blockly.Msg.faq_q3_answer = `
+Am besten legst du dazu ein Issue auf [Github](https://github.com/sensebox/React-Ardublockly/issues) an. Alternativ kannst du uns auch eine Email an info(at)sensebox.de senden
+`
+
+
 export const De = Blockly.Msg;

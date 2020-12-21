@@ -71,8 +71,8 @@ class Navbar extends Component {
     var isHome = /^\/(\/.*$|$)/g.test(this.props.location.pathname);
     var isTutorial = /^\/tutorial(\/.*$|$)/g.test(this.props.location.pathname);
     var isAssessment = /^\/tutorial\/.{1,}$/g.test(this.props.location.pathname) &&
-                       !this.props.tutorialIsLoading && this.props.tutorial &&
-                       this.props.tutorial.steps[this.props.activeStep].type === 'task';
+      !this.props.tutorialIsLoading && this.props.tutorial &&
+      this.props.tutorial.steps[this.props.activeStep].type === 'task';
     return (
       <div>
         <AppBar
@@ -114,7 +114,7 @@ class Navbar extends Component {
                   <FontAwesomeIcon icon={faQuestionCircle} />
                 </IconButton>
               </Tooltip>
-            : null}
+              : null}
             {isAssessment ?
               <Tooltip title='Hilfe starten' arrow>
                 <IconButton
@@ -126,7 +126,7 @@ class Navbar extends Component {
                   <FontAwesomeIcon icon={faQuestionCircle} />
                 </IconButton>
               </Tooltip>
-            : null}
+              : null}
             <Tour
               steps={isHome ? home() : assessment()}
               isOpen={this.state.isTourOpen}
@@ -176,6 +176,7 @@ class Navbar extends Component {
             { text: Blockly.Msg.navbar_account, icon: faUserCircle, link: '/user', restriction: this.props.isAuthenticated },
             { text: Blockly.Msg.navbar_mybadges, icon: faCertificate, link: '/user/badge', restriction: this.props.isAuthenticated },
             { text: Blockly.Msg.navbar_logout, icon: faSignOutAlt, function: this.props.logout, restriction: this.props.isAuthenticated },
+            { text: 'FAQ', icon: faQuestionCircle, link: "/faq" },
             { text: Blockly.Msg.navbar_settings, icon: faCog, link: "/settings" }].map((item, index) => {
               if (item.restriction || Object.keys(item).filter(attribute => attribute === 'restriction').length === 0) {
                 return (
