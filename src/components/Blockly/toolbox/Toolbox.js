@@ -65,7 +65,23 @@ class Toolbox extends React.Component {
                     <Block type="sensebox_sd_write_file" />
                 </Category>
                 <Category name="LED" colour={getColour().sensebox}>
-                    <Block type="sensebox_rgb_led" />
+                    <Block type="sensebox_rgb_led">
+                        <Value name="RED">
+                            <Block type="math_number">
+                                <Field name="NUM">0</Field>
+                            </Block>
+                        </Value>
+                        <Value name="GREEN">
+                            <Block type="math_number">
+                                <Field name="NUM">0</Field>
+                            </Block>
+                        </Value>
+                        <Value name="BLUE">
+                            <Block type="math_number">
+                                <Field name="NUM">0</Field>
+                            </Block>
+                        </Value>
+                    </Block>
                     <Block type="sensebox_led" />
                     <Block type="sensebox_ws2818_led">
                         <Value name="POSITION">
