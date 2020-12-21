@@ -372,3 +372,23 @@ Blockly.Blocks['sensebox_sensor_truebner_smt50'] = {
     this.setOutput(true, Types.NUMBER.typeName);
   }
 };
+
+
+/**
+ * DS18B20 Watertemperature
+ *
+ */
+
+Blockly.Blocks['sensebox_sensor_watertemperature'] = {
+  init: function () {
+    var dropdownOptions = [[Blockly.Msg.senseBox_ultrasonic_port_A, 'A'],
+    [Blockly.Msg.senseBox_ultrasonic_port_B, 'B'], [Blockly.Msg.senseBox_ultrasonic_port_C, 'C']];
+    this.setColour(getColour().sensebox);
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.senseBox_watertemperature)
+      .appendField("Port:")
+      .appendField(new Blockly.FieldDropdown(dropdownOptions), "Port")
+    this.setOutput(true, Types.NUMBER.typeName);
+    this.setTooltip(Blockly.Msg.senseBox_watertemperature_tip);
+  }
+};
