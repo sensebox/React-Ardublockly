@@ -139,7 +139,7 @@ class Compile extends Component {
             <img src={Copy} width="400"></img>
             <h2>{Blockly.Msg.compile_overlay_head}</h2>
             <p>{Blockly.Msg.compile_overlay_text}</p>
-            <p>Benötigst du mehr Hilfe? Dann schaue hier: <a href="/faq" target="_blank">test</a></p>
+            <p>{Blockly.Msg.compile_overlay_help}<a href="/faq" target="_blank">FAQ</a></p>
             <CircularProgress color="inherit" />
           </div>
         </Backdrop>
