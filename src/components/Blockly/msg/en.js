@@ -1016,7 +1016,7 @@ Blockly.Msg.assessmenttour_injectionDiv = "Create your solution here. You can us
 
 Blockly.Msg.compile_overlay_head = "Your program is now compiled and downloaded";
 Blockly.Msg.compile_overlay_text = "Then copy it to your senseBox MCU";
-
+Blockly.Msg.compile_overlay_help = "You need help? Have a look here: "
 /**
  * FAQ
  */
