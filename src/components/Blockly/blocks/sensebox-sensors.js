@@ -348,7 +348,7 @@ Blockly.Blocks['sensebox_gps'] = {
       .appendField(new Blockly.FieldDropdown(dropdownOptions), "dropdown")
     this.setOutput(true, Types.NUMBER.typeName);
     this.setColour(getColour().sensebox);
-    this.setTooltip(Blockly.Msg.senseBox_bme_tip);
+    this.setTooltip(Blockly.Msg.senseBox_gps_tooltip);
   }
 };
 
