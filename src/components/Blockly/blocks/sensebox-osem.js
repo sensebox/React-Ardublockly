@@ -50,6 +50,28 @@ Blockly.Blocks['sensebox_osem_connection'] = {
         this.setNextStatement(true, null);
     },
     onchange: function (e) {
+
+        var legal = false;
+        // Is the block nested in a loop?
+        var block = this;
+        do {
+            if (this.LOOP_TYPES.indexOf(block.type) !== -1) {
+                legal = true;
+                break;
+            }
+            block = block.getSurroundParent();
+        } while (block);
+        if (legal) {
+            this.setWarningText(null);
+        } else {
+            this.setWarningText(Blockly.Msg.CONTROLS_FLOW_STATEMENTS_WARNING);
+        }
+
+        /**
+        * List of block types that are loops and thus do not need warnings.
+        * To add a new loop type add this to your code:
+        * Blockly.Blocks['controls_flow_statements'].LOOP_TYPES.push('custom_loop');
+        */
         selectedBox = this.getFieldValue('BoxID');
         console.log(selectedBox)
         if (selectedBox !== '' && boxes) {
@@ -62,6 +84,7 @@ Blockly.Blocks['sensebox_osem_connection'] = {
         }
 
     },
+
     mutationToDom: function () {
         var container = document.createElement('mutation');
         var input = this.getFieldValue('type');
@@ -101,6 +124,7 @@ Blockly.Blocks['sensebox_osem_connection'] = {
             this.removeInput('timeStamp');
         }
     },
+    LOOP_TYPES: ['sensebox_interval_timer']
 };
 Blockly.Blocks['sensebox_send_to_osem'] = {
     init: function () {

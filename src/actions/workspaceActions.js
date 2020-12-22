@@ -16,6 +16,15 @@ export const onChangeCode = () => (dispatch, getState) => {
   code.arduino = Blockly.Arduino.workspaceToCode(workspace);
   var xmlDom = Blockly.Xml.workspaceToDom(workspace);
   code.xml = Blockly.Xml.domToPrettyText(xmlDom);
+  var selectedBlock = Blockly.selected
+  console.log(selectedBlock)
+  if (selectedBlock !== null) {
+    code.tooltip = selectedBlock.tooltip
+  } else if (selectedBlock === null) {
+    code.tooltip = "Wähle einen Block aus um dir die Hilfe anzeigen zu lassen"
+  }
+
+
   dispatch({
     type: NEW_CODE,
     payload: code

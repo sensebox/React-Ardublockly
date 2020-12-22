@@ -541,7 +541,7 @@ Blockly.Msg.senseBox_output_serialprint = "Auf Kommandozeile ausgeben";
 Blockly.Msg.senseBox_serial_tip = "Gibt Messwerte oder Daten auf dem Seriellen Monitor der Arduino IDE aus. Praktisch um ohne Display zu arbeiten";
 Blockly.Msg.senseBox_output_timestamp = "Zeitstempel";
 Blockly.Msg.senseBox_button = "Button";
-Blockly.Msg.senseBox_button_tip = "Liest den Zustand des Buttons";
+Blockly.Msg.senseBox_button_tooltip = "Liest den Zustand des Buttons";
 Blockly.Msg.senseBox_led = "LED an digitalen";
 Blockly.Msg.senseBox_led_tip = "Einfache LED. Beim Anschluss sollte immer ein Vorwiderstand verwendet werden";
 Blockly.Msg.senseBox_piezo = "Piezo an digital";
@@ -564,11 +564,19 @@ Blockly.Msg.senseBox_pressure_referencePressure = "Luftdruck auf NN";
 Blockly.Msg.senseBox_pressure_referencePressure_dim = "hPa";
 Blockly.Msg.senseBox_sound = "Mikrofon";
 Blockly.Msg.senseBox_sound_tip = "Gibt den Messwert des Mikrofons in Volt zurück";
+
+/**
+ * RGB-LED
+ */
 Blockly.Msg.senseBox_rgb_led = "RGB-LED"
 Blockly.Msg.senseBox_rgb_led_tip = "RGB-LED benötigt einen digitalen Pin und eine Stromkreis ";
+
+
 Blockly.Msg.senseBox_temp = "Temperatur in °C";
 Blockly.Msg.senseBox_temp_hum = "Temperatur-/Luftfeuchtigkeitssensor (HDC1080)";
-Blockly.Msg.senseBox_temp_hum_tip = "Sensor misst Temperatur und Luftfeuchtigkeit";
+Blockly.Msg.senseBox_temp_hum_tip = "Dieser Block gibt dir die Messwerte des Temperatur- und Luftfeuchtigkeitssensor zurück. Schließe den Sensor an einen der 5 I2C Anschlüsse an. Messwert wird mit 2 Nachkommastellen ausgegeben.";
+
+
 Blockly.Msg.senseBox_ultrasonic = "Ultraschall-Abstandssensor an Port";
 Blockly.Msg.senseBox_ultrasonic_port_A = "A";
 Blockly.Msg.senseBox_ultrasonic_port_B = "B";
@@ -619,13 +627,22 @@ Blockly.Msg.senseBox_sds011_pm10 = "PM10";
 Blockly.Msg.senseBox_sds011_tip = "Misst die Feinstaubbelastung";
 Blockly.Msg.senseBox_sds011_serial1 = "Serial1";
 Blockly.Msg.senseBox_sds011_serial2 = "Serial2";
-/*Display*/
+
+
+
+/**
+ * Display
+ */
+
 Blockly.Msg.senseBox_display_beginDisplay = "Display initialisieren";
-Blockly.Msg.senseBox_display_clearDisplay_tip = "Starten die Ausgabe auf dem Display";
+Blockly.Msg.senseBox_display_beginDisplay_tooltip = `Initialisiert das Display. Dieser Block muss im Setup() verwendet werden. 
+
+**Anschluss:** I2C
+`
+Blockly.Msg.senseBox_display_clearDisplay_tooltip = "Löscht die Anzeige auf dem Display. Sollte immer zu Begin oder am Ende der Endlosschleife aufgerufen werden.";
 Blockly.Msg.senseBox_display_clearDisplay = "Display löschen";
-Blockly.Msg.senseBox_display_clearDisplay_tip = "Löscht den Inhalt des Displays";
 Blockly.Msg.senseBox_display_printDisplay = "Schreibe Text/Zahl";
-Blockly.Msg.senseBox_display_printDisplay_tip = "zeigt Wert auf dem Display an.";
+Blockly.Msg.senseBox_display_printDisplay_tooltip = "Zeigt eine Zahl/Text auf dem Display an. Über die X- und Y-Koordinaten kann die Position auf dem Display bestimmt werden. Die Schriftgröße lässt sich in ganzzahligen Werten zwischen 1 und 4 einstellen. Das Display hat eine Auflösung von 128x64 Pixeln (X- und Y-Achse)";
 Blockly.Msg.senseBox_display_printDisplay_x = "x-Koordinate";
 Blockly.Msg.senseBox_display_printDisplay_y = "y-Koordinate";
 Blockly.Msg.senseBox_display_printDisplay_value = "Wert";
@@ -646,20 +663,26 @@ Blockly.Msg.senseBox_display_plotYRange1 = "Y-Wertebereich Anfang";
 Blockly.Msg.senseBox_display_plotYRange2 = "Y-Wertebereich Ende";
 Blockly.Msg.senseBox_display_plotXTick = "X-Linienabstand";
 Blockly.Msg.senseBox_display_plotYTick = "Y-Linienabstand";
+Blockly.Msg.senseBox_display_printDisplay_tooltip = "Mit diesem Block können automatisch Diagramme auf dem Display erstellt werden."
 Blockly.Msg.senseBox_display_plotTimeFrame = "Zeitabschnitt";
 Blockly.Msg.sensebox_display_fillCircle = "Zeichne Punkt";
 Blockly.Msg.sensebox_display_fillCircle_radius = "Radius";
+Blockly.Msg.senseBox_display_fillCircle_tooltip = "Mit diesem Block kann ein Punkt auf dem Display angezeigt werden. Über die Koordinaten kannst du den Punkt auf dem Display platzieren und mithilfe des Radius die Größe bestimmen."
 Blockly.Msg.sensebox_display_drawRectangle = "Zeichne Rechteck";
 Blockly.Msg.sensebox_display_drawRectangle_width = "Breite";
 Blockly.Msg.sensebox_display_drawRectangle_height = "Höhe";
+Blockly.Msg.senseBox_display_drawRectangle_tooltip = "Dieser Block zeichnet ein Rechteck auf das Display. Mit den X- und Y-Koordinaten wird die Position der oberen linken Ecke des Rechtecks auf dem Display bestimmt. Die Höhe und Breite wird in Pixeln angegeben und mit der Checkbox 'Ausgefüllt' kann ausgewählt werden ob das Rechteck ausgefüllt oder nur als Rahmen angezeigt wird."
 Blockly.Msg.senseBox_display_filled = "Ausgefüllt";
 Blockly.Msg.senseBox_display_fastPrint_show = "Zeige Messwerte";
 Blockly.Msg.senseBox_display_fastPrint_title = "Titel";
 Blockly.Msg.senseBox_display_fastPrint_value = "Messwert";
 Blockly.Msg.senseBox_display_fastPrint_dimension = "Einheit";
+Blockly.Msg.sensebox_display_fastPrint_tooltip = "Zeigt zwei Messwerte auf dem Display an. Wähle eine Überschrift für jeden Messwert und gib die Einheit an."
+//Tooltips
+
+
 // GPS
 Blockly.Msg.senseBox_gps_getValues = "GPS Modul";
-Blockly.Msg.senseBox_gps_getValues_tip = "ruft das GPS Signal ab";
 Blockly.Msg.senseBox_gps_lat = "Breitengrad";
 Blockly.Msg.senseBox_gps_lng = "Längengrad";
 Blockly.Msg.senseBox_gps_alt = "Höhe über NN in m";
@@ -667,6 +690,10 @@ Blockly.Msg.senseBox_gps_speed = "Geschwindigkeit in km/h";
 Blockly.Msg.senseBox_gps_date = "Datum";
 Blockly.Msg.senseBox_gps_time = "Uhrzeit";
 Blockly.Msg.senseBox_gps_timeStamp = "Zeitstempel (RFC 3339)";
+Blockly.Msg.senseBox_gps_tooltip = `Liest das GPS Modul aus und gibt dir die Standortinformationen. Längen- und Breitengrad werden als Kommazahl mit 6 Nachkommastellen ausgegeben. 
+**Anschluss: I2C**
+`
+
 // openSenseMap
 Blockly.Msg.senseBox_send_mobile_to_osem = "Sende Messwert und Standort an die openSenseMap";
 Blockly.Msg.senseBox_send_mobile_to_osem_tip = "Sende Messwert und Standort an die openSenseMap";
@@ -757,7 +784,8 @@ Blockly.Msg.senseBox_LoRa_cayenne_analog_tip = "Sendet einen Dezimalwert mit ein
 
 Blockly.Msg.senseBox_LoRa_message_tip = "Sende eine Nachricht über LoRa";
 Blockly.Msg.senseBox_LoRa_sensor_tip = "Sende eine Sensorwert mit einer bestimmten Anzahl an Bytes";
-Blockly.Msg.senseBox_LoRa_init_abp_tip = "Initialisiere die LoRa übertragung. Kopiere die ID's im lsb Format";
+Blockly.Msg.senseBox_LoRa_init_abp_tip = 'Initialisiere die LoRa übertragung. Kopiere die IDs im lsb Format [test](https://test.html)';
+
 Blockly.Msg.senseBox_LoRa_init_otaa_tip = "Initialisiere die LoRa übertragung. Kopiere die ID's im lsb Format";
 
 //Windspeed

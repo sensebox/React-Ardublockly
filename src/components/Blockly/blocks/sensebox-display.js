@@ -11,7 +11,7 @@ Blockly.Blocks['sensebox_display_beginDisplay'] = {
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setColour(getColour().sensebox);
-        this.setTooltip(Blockly.Msg.senseBox_display_beginDisplay_tip);
+        this.setTooltip(Blockly.Msg.senseBox_display_beginDisplay_tooltip);
         this.setHelpUrl('https://sensebox.de/books');
     }
 };
@@ -23,7 +23,7 @@ Blockly.Blocks['sensebox_display_clearDisplay'] = {
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setColour(getColour().sensebox);
-        this.setTooltip(Blockly.Msg.senseBox_display_clearDisplay_tip);
+        this.setTooltip(Blockly.Msg.senseBox_display_clearDisplay_tooltip);
         this.setHelpUrl('https://sensebox.de/books');
     }
 };
@@ -50,7 +50,7 @@ Blockly.Blocks['sensebox_display_printDisplay'] = {
             .setCheck(null);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
-        this.setTooltip(Blockly.Msg.senseBox_display_printDisplay_tip);
+        this.setTooltip(Blockly.Msg.senseBox_display_printDisplay_tooltip);
         this.setHelpUrl('https://sensebox.de/books');
     },
     /**
@@ -98,7 +98,7 @@ Blockly.Blocks['sensebox_display_fastPrint'] = {
             .appendField(Blockly.Msg.senseBox_display_fastPrint_dimension);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
-        this.setTooltip(Blockly.Msg.sensebox_display_fastPrint_tip);
+        this.setTooltip(Blockly.Msg.sensebox_display_fastPrint_tooltip);
         this.setHelpUrl('https://sensebox.de/books');
     },
     /**
@@ -159,7 +159,7 @@ Blockly.Blocks['sensebox_display_plotDisplay'] = {
             .setCheck(null);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
-        this.setTooltip(Blockly.Msg.senseBox_display_printDisplay_tip);
+        this.setTooltip(Blockly.Msg.senseBox_display_printDisplay_tooltip);
         this.setHelpUrl('https://sensebox.de/books');
     },
     /**
@@ -220,6 +220,7 @@ Blockly.Blocks['sensebox_display_fillCircle'] = {
             .appendField(Blockly.Msg.senseBox_display_filled)
             .appendField(new Blockly.FieldCheckbox("TRUE"), "FILL");
         this.setInputsInline(false);
+        this.setTooltip(Blockly.Msg.senseBox_display_fillCircle_tooltip)
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
     },
@@ -270,6 +271,7 @@ Blockly.Blocks['sensebox_display_drawRectangle'] = {
             .appendField(Blockly.Msg.senseBox_display_filled)
             .appendField(new Blockly.FieldCheckbox("TRUE"), "FILL");
         this.setInputsInline(false);
+        this.setTooltip(Blockly.Msg.senseBox_display_drawRectangle_tooltip)
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
     },

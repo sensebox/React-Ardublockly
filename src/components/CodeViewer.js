@@ -80,13 +80,14 @@ class CodeViewer extends Component {
 
   onChange = () => {
     this.setState({ expanded: !this.state.expanded });
+
   }
 
   render() {
     var curlyBrackets = '{ }';
     var unequal = '<>';
     return (
-      <Card style={{ height: '100%', maxHeight: '80vH' }} ref={this.myDiv}>
+      <Card style={{ height: '100%', maxHeight: '60vH' }} ref={this.myDiv}>
         <Accordion
           square={true}
           style={{ margin: 0 }}
@@ -130,12 +131,14 @@ class CodeViewer extends Component {
 
 CodeViewer.propTypes = {
   arduino: PropTypes.string.isRequired,
-  xml: PropTypes.string.isRequired
+  xml: PropTypes.string.isRequired,
+  tooltip: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({
   arduino: state.workspace.code.arduino,
-  xml: state.workspace.code.xml
+  xml: state.workspace.code.xml,
+  tooltip: state.workspace.code.tooltip
 });
 
 export default connect(mapStateToProps, null)(withWidth()(CodeViewer));

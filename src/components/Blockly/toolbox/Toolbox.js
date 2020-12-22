@@ -250,7 +250,11 @@ class Toolbox extends React.Component {
                     <Block type="sensebox_telegram_send" />
                 </Category>
                 <Category name="openSenseMap" colour={getColour().sensebox}>
-                    <Block type="sensebox_osem_connection" />
+                    <Block type="sensebox_interval_timer">
+                        <Value name="DO">
+                            <Block type="sensebox_osem_connection" />
+                        </Value>
+                    </Block>
                     <Block type="sensebox_send_to_osem" />
                 </Category>
                 <Category id="catSenseBoxOutput_LoRa" name="  LoRa" colour={getColour().sensebox}>

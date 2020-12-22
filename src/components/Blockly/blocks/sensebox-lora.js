@@ -13,7 +13,6 @@ Blockly.Blocks['sensebox_lora_initialize_otaa'] = {
         this.setColour(getColour().sensebox);
         this.appendDummyInput()
             .appendField("Initialize LoRa (OTAA)");
-
         this.appendDummyInput()
             .setAlign(Blockly.ALIGN_LEFT)
             .appendField(Blockly.Msg.senseBox_LoRa_device_id)
@@ -38,7 +37,7 @@ Blockly.Blocks['sensebox_lora_initialize_otaa'] = {
 Blockly.Blocks['sensebox_lora_initialize_abp'] = {
     init: function () {
         this.setTooltip(Blockly.Msg.senseBox_LoRa_init_abp_tip);
-        this.setHelpUrl('');
+        this.setHelpUrl('test');
         this.setColour(getColour().sensebox);
         this.appendDummyInput()
             .appendField("Initialize LoRa (ABP)");
