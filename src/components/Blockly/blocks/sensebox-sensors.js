@@ -18,7 +18,7 @@ Blockly.Blocks['sensebox_sensor_temp_hum'] = {
       .appendField(new Blockly.FieldDropdown([[Blockly.Msg.senseBox_temp, "Temperature"], [Blockly.Msg.senseBox_hum, "Humidity"]]), "NAME");
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);
-    this.setTooltip(Blockly.Msg.senseBox_temp_hum_tip);
+    this.setTooltip(Blockly.Msg.senseBox_temp_hum_tooltip);
     this.setHelpUrl('https://edu.books.sensebox.de/de/projekte/diy_umweltstation/temp_und_luftfeuchte.html');
   }
 };
@@ -39,7 +39,7 @@ Blockly.Blocks['sensebox_sensor_uv_light'] = {
       .appendField(new Blockly.FieldDropdown([[Blockly.Msg.senseBox_light, "Illuminance"], [Blockly.Msg.senseBox_uv, "UvIntensity"]]), "NAME");
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);
-    this.setTooltip(Blockly.Msg.senseBox_uv_light_tip);
+    this.setTooltip(Blockly.Msg.senseBox_uv_light_tooltip);
     this.setHelpUrl('https://edu.books.sensebox.de/de/projekte/diy_umweltstation/temp_und_luftfeuchte.html');
   }
 };
@@ -62,7 +62,7 @@ Blockly.Blocks['sensebox_sensor_bmx055_accelerometer'] = {
       .appendField(new Blockly.FieldDropdown([[Blockly.Msg.senseBox_bmx055_accelerometer_range_2g, "0x3"], [Blockly.Msg.senseBox_bmx055_accelerometer_range_4g, "0x5"], [Blockly.Msg.senseBox_bmx055_accelerometer_range_8g, "0x8"], [Blockly.Msg.senseBox_bmx055_accelerometer_range_16g, "0x0C"]]), "RANGE");
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);
-    this.setTooltip(Blockly.Msg.senseBox_bmx055_accelerometer_tip);
+    this.setTooltip(Blockly.Msg.senseBox_bmx055_accelerometer_tooltip);
     this.setHelpUrl('https://edu.books.sensebox.de/de/projekte/diy_umweltstation/temp_und_luftfeuchte.html');
   }
 };
@@ -84,7 +84,7 @@ Blockly.Blocks['sensebox_sensor_sds011'] = {
       .appendField(new Blockly.FieldDropdown([[Blockly.Msg.senseBox_sds011_serial1, "Serial1"], [Blockly.Msg.senseBox_sds011_serial2, "Serial2"]]), "SERIAL");
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);
-    this.setTooltip(Blockly.Msg.senseBox_sds011_tip);
+    this.setTooltip(Blockly.Msg.senseBox_sds011_tooltip);
     this.setHelpUrl('https://edu.books.sensebox.de/de/projekte/diy_umweltstation/temp_und_luftfeuchte.html');
   }
 };
@@ -209,7 +209,7 @@ Blockly.Blocks['sensebox_sensor_ultrasonic_ranger'] = {
       .appendField(new Blockly.FieldDropdown(
         selectedBoard().digitalPins), 'ultrasonic_echo');
     this.setOutput(true, Types.NUMBER.typeName);
-    this.setTooltip(Blockly.Msg.senseBox_ultrasonic_tip);
+    this.setTooltip(Blockly.Msg.senseBox_ultrasonic_tooltip);
     this.setHelpUrl('https://sensebox.de/books');
   },
   /**
@@ -295,7 +295,7 @@ Blockly.Blocks['sensebox_button'] = {
       .appendField(new Blockly.FieldDropdown(selectedBoard().digitalPinsButton), "PIN");
     this.setOutput(true, Types.BOOLEAN.typeName);
     this.setColour(getColour().sensebox);
-    this.setTooltip(Blockly.Msg.senseBox_button_tip);
+    this.setTooltip(Blockly.Msg.senseBox_button_tooltip);
     this.setHelpUrl('https://sensebox.de/books');
   }
 };

@@ -15,8 +15,8 @@ Blockly.Blocks['sensebox_sd_open_file'] = {
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setColour(getColour().sensebox);
-        this.setTooltip(Blockly.Msg.senseBox_output_safetosd_tip);
-        this.setHelpUrl('https://sensebox.de/books');
+        this.setTooltip(Blockly.Msg.senseBox_sd_open_file_tooltip);
+        this.setHelpUrl('https://docs.sensebox.de/hardware/bee-sd/');
     }
 };
 
@@ -32,8 +32,8 @@ Blockly.Blocks['sensebox_sd_create_file'] = {
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setColour(getColour().sensebox);
-        this.setTooltip(Blockly.Msg.senseBox_output_safetosd_tip);
-        this.setHelpUrl('https://sensebox.de/books');
+        this.setTooltip(Blockly.Msg.senseBox_sd_create_file_tooltip);
+        this.setHelpUrl('https://docs.sensebox.de/hardware/bee-sd/');
     }
 };
 
@@ -50,8 +50,8 @@ Blockly.Blocks['sensebox_sd_write_file'] = {
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setColour(getColour().sensebox);
-        this.setTooltip(Blockly.Msg.senseBox_output_safetosd_tip);
-        this.setHelpUrl('https://sensebox.de/books');
+        this.setTooltip(Blockly.Msg.senseBox_sd_write_file_tooltip);
+        this.setHelpUrl('https://docs.sensebox.de/hardware/bee-sd/');
     },
     /**
      * Called whenever anything on the workspace changes.

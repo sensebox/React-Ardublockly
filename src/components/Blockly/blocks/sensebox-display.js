@@ -12,7 +12,7 @@ Blockly.Blocks['sensebox_display_beginDisplay'] = {
         this.setNextStatement(true, null);
         this.setColour(getColour().sensebox);
         this.setTooltip(Blockly.Msg.senseBox_display_beginDisplay_tooltip);
-        this.setHelpUrl('https://sensebox.de/books');
+        this.setHelpUrl(Blockly.Msg.senseBox_display_helpurl);
     }
 };
 
@@ -24,7 +24,7 @@ Blockly.Blocks['sensebox_display_clearDisplay'] = {
         this.setNextStatement(true, null);
         this.setColour(getColour().sensebox);
         this.setTooltip(Blockly.Msg.senseBox_display_clearDisplay_tooltip);
-        this.setHelpUrl('https://sensebox.de/books');
+        this.setHelpUrl(Blockly.Msg.senseBox_display_helpurl);
     }
 };
 
@@ -51,7 +51,7 @@ Blockly.Blocks['sensebox_display_printDisplay'] = {
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setTooltip(Blockly.Msg.senseBox_display_printDisplay_tooltip);
-        this.setHelpUrl('https://sensebox.de/books');
+        this.setHelpUrl(Blockly.Msg.senseBox_display_helpurl);
     },
     /**
      * Called whenever anything on the workspace changes.
@@ -99,7 +99,7 @@ Blockly.Blocks['sensebox_display_fastPrint'] = {
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setTooltip(Blockly.Msg.sensebox_display_fastPrint_tooltip);
-        this.setHelpUrl('https://sensebox.de/books');
+        this.setHelpUrl(Blockly.Msg.senseBox_display_helpurl);
     },
     /**
    * Called whenever anything on the workspace changes.
@@ -160,7 +160,7 @@ Blockly.Blocks['sensebox_display_plotDisplay'] = {
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setTooltip(Blockly.Msg.senseBox_display_printDisplay_tooltip);
-        this.setHelpUrl('https://sensebox.de/books');
+        this.setHelpUrl(Blockly.Msg.senseBox_display_helpurl);
     },
     /**
      * Called whenever anything on the workspace changes.
@@ -221,6 +221,7 @@ Blockly.Blocks['sensebox_display_fillCircle'] = {
             .appendField(new Blockly.FieldCheckbox("TRUE"), "FILL");
         this.setInputsInline(false);
         this.setTooltip(Blockly.Msg.senseBox_display_fillCircle_tooltip)
+        this.setHelpUrl(Blockly.Msg.senseBox_display_helpurl)
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
     },
@@ -272,6 +273,7 @@ Blockly.Blocks['sensebox_display_drawRectangle'] = {
             .appendField(new Blockly.FieldCheckbox("TRUE"), "FILL");
         this.setInputsInline(false);
         this.setTooltip(Blockly.Msg.senseBox_display_drawRectangle_tooltip)
+        this.setHelpUrl(Blockly.Msg.senseBox_display_helpurl)
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
     },

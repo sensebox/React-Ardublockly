@@ -15,16 +15,16 @@ Blockly.Msg.COLOUR_BLEND_RATIO = "im Verhältnis";
 Blockly.Msg.COLOUR_BLEND_TITLE = "mische";
 Blockly.Msg.COLOUR_BLEND_TOOLTIP = "Vermische 2 Farben mit konfigurierbaren Farbverhältnis (0.0 - 1.0).";
 Blockly.Msg.COLOUR_PICKER_HELPURL = "https://de.wikipedia.org/wiki/Farbe";
-Blockly.Msg.COLOUR_PICKER_TOOLTIP = "Wähle eine Farbe aus der Palette.";
+Blockly.Msg.COLOUR_PICKER_TOOLTIP = "Wähle eine Farbe aus der Palette. Die Farbe wird automatisch in RGB-Werte konvertiert.";
 Blockly.Msg.COLOUR_RANDOM_HELPURL = "http://randomcolour.com";  // untranslated
 Blockly.Msg.COLOUR_RANDOM_TITLE = "zufällige Farbe";
-Blockly.Msg.COLOUR_RANDOM_TOOLTIP = "Wähle eine Farbe nach dem Zufallsprinzip.";
+Blockly.Msg.COLOUR_RANDOM_TOOLTIP = "Erstelle eine Farbe nach dem Zufallsprinzip.";
 Blockly.Msg.COLOUR_RGB_BLUE = "blau";
 Blockly.Msg.COLOUR_RGB_GREEN = "grün";
 Blockly.Msg.COLOUR_RGB_HELPURL = "https://de.wikipedia.org/wiki/RGB-Farbraum";
 Blockly.Msg.COLOUR_RGB_RED = "rot";
 Blockly.Msg.COLOUR_RGB_TITLE = "Farbe mit";
-Blockly.Msg.COLOUR_RGB_TOOLTIP = "Erstelle eine Farbe mit selbst definierten Rot-, Grün- und Blauwerten. Alle Werte müssen zwischen 0 und 100 liegen.";
+Blockly.Msg.COLOUR_RGB_TOOLTIP = "Erstelle eine Farbe mit selbst definierten Rot-, Grün- und Blauwerten. Alle Werte müssen zwischen 0 und 255 liegen. 0 ist hierbei die geringte Intensität der Farbe 255 die höchste.";
 Blockly.Msg.CONTROLS_FLOW_STATEMENTS_HELPURL = "https://de.wikipedia.org/wiki/Kontrollstruktur";
 Blockly.Msg.CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK = "Die Schleife abbrechen";
 Blockly.Msg.CONTROLS_FLOW_STATEMENTS_OPERATOR_CONTINUE = "mit der nächsten Iteration der Schleife fortfahren";
@@ -408,7 +408,7 @@ Blockly.Msg.ARD_DIGITALWRITE = "setzte digitalen Pin#";
 Blockly.Msg.ARD_DIGITALWRITE_TIP = "Schreibe digitalen Wert HIGH (1) oder LOW(0) an spezifischen Port";
 Blockly.Msg.ARD_FUN_RUN_LOOP = "Endlosschleife()";
 Blockly.Msg.ARD_FUN_RUN_SETUP = "Setup()";
-Blockly.Msg.ARD_FUN_RUN_TIP = "Definiert die setup() und loop() Funktionen";
+Blockly.Msg.ARD_FUN_RUN_TIP = "Definiert die setup() und loop() Funktionen. Die setup()-Funktion wird beim starten **einmal** ausgeführt. Anschließend wir die loop()-Funktion in einer **Endlosschleife** ausgeführt. Füge in die Setup()-Funktion Blöcke ein, um z.B. das Display zu initalisieren, eine Verbindung zum WiFi-Netzwerk herzustellen oder um die LoRa Verbindung zu initialsieren.";
 Blockly.Msg.ARD_HIGH = "HIGH";
 Blockly.Msg.ARD_HIGHLOW_TIP = "Setzt einen Status auf HIGH oder LOWSet a pin state logic High or Low.";
 Blockly.Msg.ARD_LOW = "LOW";
@@ -526,12 +526,21 @@ Blockly.Msg.senseBox_on = "Ein";
 Blockly.Msg.senseBox_sensor = "Sensoren"
 Blockly.Msg.senseBox_output_filename = "Daten";
 Blockly.Msg.senseBox_output_format = "Format:";
+
+/**
+ * SD-Block
+ */
 Blockly.Msg.senseBox_sd_create_file = "Erstelle Datei auf SD-Karte";
-Blockly.Msg.senseBox_sd_write_file = " Schreibe Daten auf SD-Karte";
+Blockly.Msg.senseBox_sd_write_file = "Schreibe Daten auf SD-Karte";
 Blockly.Msg.senseBox_sd_open_file = "Öffne eine Datei auf der SD-Karte";
+Blockly.Msg.senseBox_sd_create_file_tooltip = "Erstellt eine Datei auf der Karte. Stecke das SD-Bee auf den Steckplatz **XBEE2**. Die **maximale** Länge des Dateinamen sind **8 Zeichen**. Die Datei sollte zuerst im *Setup()* erstellt werden"
+Blockly.Msg.senseBox_sd_write_file_tooptip = "Schreibe Daten auf die SD-Karte. Beachte, dass die Datei zuerst geöffnet werden muss.";
+Blockly.Msg.senseBox_sd_open_file_tooltip = "Öffne die Datei auf der SD-Karte, um Dateien zu speichern. Am Ende der Schleife wird die Datei automatisch wieder geschlossen.";
 Blockly.Msg.sensebox_sd_filename = "Daten";
 Blockly.Msg.senseBox_SD_COMPONENT = "SD-Block";
 Blockly.Msg.senseBox_sd_decimals = "Dezimalen";
+
+
 Blockly.Msg.senseBox_output_linebreak = "Zeilenumbruch";
 Blockly.Msg.senseBox_output_networkid = "NetzwerkID";
 Blockly.Msg.senseBox_output_password = "Passwort";
@@ -540,8 +549,7 @@ Blockly.Msg.senseBox_output_safetosd_tip = "Speichert Messwerte auf SD Karte"
 Blockly.Msg.senseBox_output_serialprint = "Auf Kommandozeile ausgeben";
 Blockly.Msg.senseBox_serial_tip = "Gibt Messwerte oder Daten auf dem Seriellen Monitor der Arduino IDE aus. Praktisch um ohne Display zu arbeiten";
 Blockly.Msg.senseBox_output_timestamp = "Zeitstempel";
-Blockly.Msg.senseBox_button = "Button";
-Blockly.Msg.senseBox_button_tooltip = "Liest den Zustand des Buttons";
+
 Blockly.Msg.senseBox_led = "LED an digitalen";
 Blockly.Msg.senseBox_led_tip = "Einfache LED. Beim Anschluss sollte immer ein Vorwiderstand verwendet werden";
 Blockly.Msg.senseBox_piezo = "Piezo an digital";
@@ -572,21 +580,42 @@ Blockly.Msg.senseBox_rgb_led = "RGB-LED"
 Blockly.Msg.senseBox_rgb_led_tip = "RGB-LED benötigt einen digitalen Pin und eine Stromkreis ";
 
 
+/**
+ * Temperature and Humidity Sensor (HDC1080)
+ */
 Blockly.Msg.senseBox_temp = "Temperatur in °C";
 Blockly.Msg.senseBox_temp_hum = "Temperatur-/Luftfeuchtigkeitssensor (HDC1080)";
-Blockly.Msg.senseBox_temp_hum_tip = "Dieser Block gibt dir die Messwerte des Temperatur- und Luftfeuchtigkeitssensor zurück. Schließe den Sensor an einen der 5 I2C Anschlüsse an. Messwert wird mit 2 Nachkommastellen ausgegeben.";
+Blockly.Msg.senseBox_temp_hum_tooltip = "Dieser Block gibt dir die Messwerte des Temperatur- und Luftfeuchtigkeitssensor zurück. Schließe den Sensor an einen der 5 I2C Anschlüsse an. Messwert wird mit 2 Nachkommastellen ausgegeben.";
 
+/**
+ * Ultraschalldistanzsensor
+ */
 
 Blockly.Msg.senseBox_ultrasonic = "Ultraschall-Abstandssensor an Port";
+Blockly.Msg.senseBox_ultrasonic_trigger = "Trigger"
+Blockly.Msg.senseBox_ultrasonic_echo = "Echo"
 Blockly.Msg.senseBox_ultrasonic_port_A = "A";
 Blockly.Msg.senseBox_ultrasonic_port_B = "B";
 Blockly.Msg.senseBox_ultrasonic_port_C = "C";
-Blockly.Msg.senseBox_ultrasonic_tip = "Misst die Distanz mithilfe von Ultraschall in cm";
+Blockly.Msg.senseBox_ultrasonic_tooltip = `Misst die Distanz mithilfe von Ultraschall in cm. Schließe den Sensor an einen der drei Digital/Analog Ports an:
+
+- Trigger: Grünes Kabel
+- Echo: gelbes Kabel`;
+
+
+/**
+ * UV and Lightsensor
+ */
 Blockly.Msg.senseBox_value = "Messwert:";
 Blockly.Msg.senseBox_uv_light = "Helligkeit-/UV-Sensor";
-Blockly.Msg.senseBox_uv_light_tip = "Sensor misst UV-Licht oder die Helligkeit";
+Blockly.Msg.senseBox_uv_light_tooltip = "Sensor misst UV-Licht oder die Helligkeit. Die Helligkeit wird als **Ganzezahl** in Lux ausgegeben. Die UV-Intensität als **Kommazahl** in µW/cm².";
 Blockly.Msg.senseBox_uv = "UV-Intensität in µW/cm²";
 Blockly.Msg.senseBox_light = "Beleuchtungsstärke in Lux";
+
+/**
+ * BMX055
+ */
+
 Blockly.Msg.senseBox_bmx055_compass = "Lage Sensor";
 Blockly.Msg.senseBox_bmx055_accelerometer = "Beschleunigungssensor";
 Blockly.Msg.senseBox_bmx055_accelerometer_range = "Messbereich";
@@ -605,10 +634,21 @@ Blockly.Msg.senseBox_bmx055_compass_tip = "Lage Sensor";
 Blockly.Msg.senseBox_bmx055_gyroscope_tip = "Lage Sensor";
 Blockly.Msg.senseBox_bmx055_x = "X-Richtung";
 Blockly.Msg.senseBox_bmx055_y = "Y-Richtung";
+Blockly.Msg.senseBox_bmx055_accelerometer_tooltip = `Dieser Block gibt dir den Messwert des Beschleunigungssensors der direkt auf der senseBox MCU aufgelötet ist. Im Dropdown Menü kannst du die Richtung und den Messbereich auswählen.`
+
+
+/**
+ * WiFi
+ */
 Blockly.Msg.senseBox_wifi_connect = "Verbinde mit WLAN";
 Blockly.Msg.senseBox_wifi_ssid = "Netzwerkname";
-Blockly.Msg.senseBox_wifi_tip = "stellt eine WLAN verbindung her";
+Blockly.Msg.senseBox_wifi_tooltip = "Stellt eine Verbindung mit einem WLAN-Netzwerk her. Möchtest du dich mit einem ungesicheren Netzwerk (z.B. Freifunk) verbinden lösche das Feld Passwort. Das WiFi-Bee muss auf den Steckplatz **XBEE1** aufgesteckt werden.";
 Blockly.Msg.senseBox_wifi_startap = "Initialisiere WLAN Access Point";
+Blockly.Msg.senseBox_wifi_startap_tooltip = "Erstellt einen WiFi-Accesspoint zu dem du dich verbinden kannst. Beachte, dass immer nur 1 Gerät gleichzeitig verbunden werden kann.";
+Blockly.Msg.senseBox_wifi_helpurl = "https://docs.sensebox.de/blockly/blockly-web-wifi/"
+/**
+ * openSenseMap
+ */
 Blockly.Msg.senseBox_osem_connection_tip = "stellt eine WLAN verbindung her";
 Blockly.Msg.senseBox_send_to_osem_tip = "sende Messwert an";
 Blockly.Msg.senseBox_send_to_osem = "Sende Messwert an die openSenseMap";
@@ -620,11 +660,16 @@ Blockly.Msg.senseBox_osem_exposure = "Typ";
 Blockly.Msg.senseBox_osem_stationary = "Stationär";
 Blockly.Msg.senseBox_osem_mobile = "Mobil";
 Blockly.Msg.senseBox_osem_access_token = "API Schlüssel";
+
+/**
+ * Feinstaubsensor (SDS011) 
+ */
+
 Blockly.Msg.senseBox_sds011 = "Feinstaubsensor";
 Blockly.Msg.senseBox_sds011_dimension = "in µg/m³ an";
 Blockly.Msg.senseBox_sds011_pm25 = "PM2.5";
 Blockly.Msg.senseBox_sds011_pm10 = "PM10";
-Blockly.Msg.senseBox_sds011_tip = "Misst die Feinstaubbelastung";
+Blockly.Msg.senseBox_sds011_tooltip = "Dieser Block gibt dir den Messwert des Feinstaubsensor. Schließe den Feinstaubsensor an einen der 2 **Serial/UART** Anschlüssen an. Im Dropdown Menü zwischen PM2.5 und PM10 auswählen. Der Messwert wird dir als **Kommazahl** in µg/m3"
 Blockly.Msg.senseBox_sds011_serial1 = "Serial1";
 Blockly.Msg.senseBox_sds011_serial2 = "Serial2";
 
@@ -678,7 +723,7 @@ Blockly.Msg.senseBox_display_fastPrint_title = "Titel";
 Blockly.Msg.senseBox_display_fastPrint_value = "Messwert";
 Blockly.Msg.senseBox_display_fastPrint_dimension = "Einheit";
 Blockly.Msg.sensebox_display_fastPrint_tooltip = "Zeigt zwei Messwerte auf dem Display an. Wähle eine Überschrift für jeden Messwert und gib die Einheit an."
-//Tooltips
+Blockly.Msg.senseBox_display_helpurl = "https://docs.sensebox.de/blockly/blockly-display/"
 
 
 // GPS
@@ -694,24 +739,44 @@ Blockly.Msg.senseBox_gps_tooltip = `Liest das GPS Modul aus und gibt dir die Sta
 **Anschluss: I2C**
 `
 
-// openSenseMap
+
 Blockly.Msg.senseBox_send_mobile_to_osem = "Sende Messwert und Standort an die openSenseMap";
 Blockly.Msg.senseBox_send_mobile_to_osem_tip = "Sende Messwert und Standort an die openSenseMap";
+
+/**
+ * Interval Block
+ */
 Blockly.Msg.senseBox_interval_timer = "Messintervall";
 Blockly.Msg.senseBox_interval = "ms"
 Blockly.Msg.senseBox_interval_timer_tip = "Intervall";
 Blockly.Msg.senseBox_soil = "Bodenfeuchte";
 Blockly.Msg.senseBox_watertemperature = "Wassertemperatur"
-// Cases
+
+
+/**
+ * Cases
+ */
 Blockly.Msg.cases_do = "Führe aus";
 Blockly.Msg.cases_condition = "Fall (Variable) = ";
 Blockly.Msg.cases_switch = "Variable";
 Blockly.Msg.cases_add = "Fall";
-//Button
+
+/**
+ * Button
+ */
+Blockly.Msg.senseBox_button = "Button";
 Blockly.Msg.senseBox_button_isPressed = "ist gedrückt";
 Blockly.Msg.senseBox_button_switch = "als Schalter";
 Blockly.Msg.senseBox_button_wasPressed = "wurde gedrückt";
-//Webserver
+Blockly.Msg.senseBox_button_tooltip = `Dieser Block gibt dir den Status des angeschlossenen Buttons. Im Dropdown Menü können verschiedene Modi für den Button ausgewählt werden. Angesteuert können entweder der on Board Button oder ein Button, der an einen der 6 digitalen Pins angeschlossen ist. verschiedene Modi:
+- "ist gedrückt": Mit diesem Modus kannst du abfragen ob der Block gerade gedrückt wird. Du erhältst entweder den Wert TRUE oder FALSE.
+- "wurde gedrückt": Mit diesem Modus kannst du abfragen ob der Block gedrückt wurde. Erst wenn der Knopf gedrückt und wieder losgelassen wurde erhältst du TRUE zurück
+- "als Schalter": Wenn du diesen Block verwendest kannst du den Knopf wie ein Lichtschalter verwenden. Der Status wird gespeichert bis der Button erneut gedrückt wird`
+
+/**
+ * Webserver
+ */
+
 Blockly.Msg.senseBox_ip_address = "IP-Adresse";
 Blockly.Msg.senseBox_ip_address_tip = "Gibt die IP-Adresse als Zeichenkette zurück.";
 Blockly.Msg.senseBox_init_http_server_tip = "Initialisiert einen http-Server auf dem angegebenen Port";
@@ -748,7 +813,11 @@ Blockly.Msg.senseBox_bme680_tip = "Gibt Messwerte des BME680 zurück";
 Blockly.Msg.senseBox_bme680_warning = "Achtung. Gas (VOC) kann nicht gleichzeitig mit anderen Parametern gemessen werden"
 Blockly.Msg.senseBox_gas = "Gas (VOC)";
 Blockly.Msg.sensebox_soil_smt50 = "Bodenfeuchte/-temperatur (SMT50)";
-// LoRa
+
+/**
+ * LoRa Blöcke
+ */
+
 Blockly.Msg.senseBox_LoRa_connect = "Zu TTN senden";
 Blockly.Msg.senseBox_LoRa_device_id = "Device EUI (lsb)";
 Blockly.Msg.senseBox_LoRa_app_id = "Application EUI (lsb)";
@@ -788,38 +857,68 @@ Blockly.Msg.senseBox_LoRa_init_abp_tip = 'Initialisiere die LoRa übertragung. K
 
 Blockly.Msg.senseBox_LoRa_init_otaa_tip = "Initialisiere die LoRa übertragung. Kopiere die ID's im lsb Format";
 
-//Windspeed
+/**
+ * Windspeed
+ */
 Blockly.Msg.senseBox_windspeed = "Windgeschwindigkeitssensor";
-//Soundsensor
+Blockly.Msg.senseBox_windspeed_tooltip = ""
+
+/*
+* Soundsensor
+*/
 Blockly.Msg.senseBox_soundsensor_dfrobot = "Soundsensor (DF Robot)";
+Blockly.Msg.senseBox_soundsensor_dfrobot_tooltip = ""
 
-
-//BME680
+/*
+* BME680
+*/
 Blockly.Msg.senseBox_bme680 = "Umweltsensor (BME680)";
 Blockly.Msg.senseBox_bme_iaq = "Innenraumluftqualität (IAQ)";
 Blockly.Msg.senseBox_bme_iaq_accuracy = "Kalibrierungswert";
 Blockly.Msg.senseBox_bme_co2 = "CO2 Äquivalent";
 Blockly.Msg.senseBox_bme_breatheVocEquivalent = "Atemluft VOC Äquivalent";
-Blockly.Msg.senseBox_bme_tip = "Gibt Messwerte des BME680 zurück";
+Blockly.Msg.senseBox_bme_tooltip = "Gibt Messwerte des BME680 zurück";
 
-Blockly.Msg.senseBox_gas = "Gas (VOC)";
+
+/**
+ * Truebner SMT50
+ */
 Blockly.Msg.sensebox_soil_stm50 = "Bodenfeuchte/-temperatur (SMT50)";
-//Telegram
+/*
+* Telegram
+*/
 Blockly.Msg.senseBox_telegram_init = "Telegram Bot initialisieren"
 Blockly.Msg.senseBox_telegram_token = "Token"
 Blockly.Msg.senseBox_telegram_do = "Telegram mache"
+Blockly.Msg.senseBox_telegram_do_tooltip = "Füge in diese Schleife die Blöcke ein, die dein Telegram Bot ausführen soll. Beachte hierbei, dass du Aktionen bei einer bestimmten Nachricht ausführen lassen kannst oder auch selbst eine Nachricht versenden werden kann."
 Blockly.Msg.senseBox_telegram_do_on_message = "bei Nachricht"
 Blockly.Msg.senseBox_telegram_message = "Nachricht"
+Blockly.Msg.senseBox_telegram_message_tooltip = "Führe eine Aktion aus, wenn der Telegram eine *Nachricht* empfangen hat."
 Blockly.Msg.senseBox_telegram_send = "Sende Nachricht"
-//SCD30 CO2 Sensor
+Blockly.Msg.senseBox_telegram_send_tooltip = "Dein Telgram Bot sendet dir eine Nachricht auf dein Handy. Die Nachricht kann zum Beispiel ein Alarm oder auch ein Messwert sein"
+Blockly.Msg.senseBox_telegram_init_tooltip = "Initialisiere den Telegram Bot. Verwende diesen Block in der **Setup()-Schleife**. Den Token kannst du dir über den Telegram erstellen."
+Blockly.Msg.senseBox_telegram_helpurl = "https://sensebox.de/projects/de/2019-12-15-telegram-blockly"
+
+
+
+/*
+* SCD30 CO2 Senso
+*/
 Blockly.Msg.senseBox_scd30 = "CO2 Sensor (Sensirion SCD30)";
 Blockly.Msg.senseBox_scd_tip = "Gibt den Wert des CO2 Sensors";
 Blockly.Msg.senseBox_scd_co2 = "CO2 in ppm";
-//WS2818 RGB LED
-Blockly.Msg.senseBox_ws2818_rgb_led = "senseBox WS2812 - RGB LED";
+
+/**
+ * WS2818 RGB LED
+ */
+Blockly.Msg.senseBox_ws2818_rgb_led = "Setze RGB-LED an";
+Blockly.Msg.senseBox_ws2818_rgb_led_init = "RGB LED (WS2818) initialisieren";
 Blockly.Msg.senseBox_ws2818_rgb_led_position = "Position";
 Blockly.Msg.senseBox_ws2818_rgb_led_brightness = "Helligkeit";
-
+Blockly.Msg.senseBox_ws2818_rgb_led_tooltip = "Verändere mit diesem Block die Farbe deiner RGB-LED. Verbinde einen Block für die Farbe. Wenn mehrere RGB-LEDs miteinander verkettet werden kannst du über die Position bestimmen welche LED angesteuert wird. "
+Blockly.Msg.senseBox_ws2818_rgb_led_init_tooltip = "Schließe die RGB-LED an einen der drei **digital/analog Ports** an. Wenn mehrere RGB-LEDs miteinander verkettet werden kannst du über die Position bestimmen welche LED angesteuert wird. "
+Blockly.Msg.senseBox_ws2818_rgb_led_color = "Farbe"
+Blockly.Msg.senseBox_ws2818_rgb_led_number = "Anzahl"
 
 
 /***
@@ -837,6 +936,14 @@ Blockly.Msg.senseBox_mqtt_publish = "Sende an Feed/Topic";
 
 
 /**
+ * Add Translation for Blocks above
+ * ---------------------------------------------------------------
+ * Add Translation for the UI below
+ */
+
+
+
+/**
  * Typed Variable Modal
  *
  */
@@ -849,11 +956,6 @@ Blockly.Msg.TYPED_VAR_MODAL_CANCEL_BUTTON = "Abbrechen";
 Blockly.Msg.TYPED_VAR_MODAL_TITLE = "Erstelle Variable";
 Blockly.Msg.TYPED_VAR_MODAL_INVALID_NAME = "Der Name ist ungültig, bitte versuche einen anderen."
 
-/**
- * Add Translation for Blocks above
- * ---------------------------------------------------------------
- * Add Translation for the UI below
- */
 
 /**
  * Toolbox
@@ -1088,6 +1190,13 @@ Blockly.Msg.assessmenttour_injectionDiv = "Erstelle hier deine Lösung. Du kanns
 Blockly.Msg.compile_overlay_head = "Dein Programm wird nun kompiliert und heruntergeladen"
 Blockly.Msg.compile_overlay_text = "Kopiere es anschließend auf deine senseBox MCU"
 Blockly.Msg.compile_overlay_help = "Benötigst du mehr Hilfe? Dann schaue hier: "
+
+/**
+ * Tooltip Viewer
+ */
+
+Blockly.Msg.tooltip_viewer = "Hilfe"
+Blockly.Msg.tooltip_moreInformation = "Mehr Informationen findest du "
 
 /**
  * FAQ
