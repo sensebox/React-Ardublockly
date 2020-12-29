@@ -19,9 +19,11 @@ export const onChangeCode = () => (dispatch, getState) => {
   var selectedBlock = Blockly.selected
   console.log(selectedBlock)
   if (selectedBlock !== null) {
+    code.helpurl = selectedBlock.helpUrl
     code.tooltip = selectedBlock.tooltip
   } else if (selectedBlock === null) {
     code.tooltip = "Wähle einen Block aus um dir die Hilfe anzeigen zu lassen"
+    code.helpurl = ''
   }
 
 

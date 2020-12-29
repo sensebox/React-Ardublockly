@@ -3,7 +3,7 @@ import { getColour } from '../helpers/colour'
 
 Blockly.Blocks['sensebox_wifi'] = {
     init: function () {
-        this.setTooltip(Blockly.Msg.senseBox_wifi_tip);
+        this.setTooltip(Blockly.Msg.senseBox_wifi_tooltip);
         this.setHelpUrl('');
         this.setColour(getColour().sensebox);
         this.appendDummyInput()
@@ -16,6 +16,7 @@ Blockly.Blocks['sensebox_wifi'] = {
             .setAlign(Blockly.ALIGN_LEFT)
             .appendField(Blockly.Msg.senseBox_output_password)
             .appendField(new Blockly.FieldTextInput("Password"), "Password");
+        this.setHelpUrl(Blockly.Msg.senseBox_wifi_helpurl)
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
     },
@@ -43,7 +44,7 @@ Blockly.Blocks['sensebox_wifi'] = {
 
 Blockly.Blocks['sensebox_startap'] = {
     init: function () {
-        this.setTooltip(Blockly.Msg.senseBox_wifi_tip);
+        this.setTooltip(Blockly.Msg.senseBox_wifi_startap_tooltip);
         this.setHelpUrl('');
         this.setColour(getColour().sensebox);
         this.appendDummyInput()
@@ -52,6 +53,7 @@ Blockly.Blocks['sensebox_startap'] = {
             .setAlign(Blockly.ALIGN_LEFT)
             .appendField(Blockly.Msg.senseBox_wifi_ssid)
             .appendField(new Blockly.FieldTextInput("SSID"), "SSID");
+        this.setHelpUrl(Blockly.Msg.senseBox_wifi_helpurl)
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
     }
