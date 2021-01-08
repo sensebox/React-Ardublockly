@@ -19,7 +19,7 @@ Blockly.Blocks['sensebox_sensor_temp_hum'] = {
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_temp_hum_tooltip);
-    this.setHelpUrl('https://edu.books.sensebox.de/de/projekte/diy_umweltstation/temp_und_luftfeuchte.html');
+    this.setHelpUrl(Blockly.Msg.senseBox_temp_hum_helpurl);
   }
 };
 
@@ -27,6 +27,7 @@ Blockly.Blocks['sensebox_sensor_temp_hum'] = {
  * VEML6070 and TSL4513 
  * 
  */
+
 
 
 Blockly.Blocks['sensebox_sensor_uv_light'] = {
@@ -40,7 +41,7 @@ Blockly.Blocks['sensebox_sensor_uv_light'] = {
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_uv_light_tooltip);
-    this.setHelpUrl('https://edu.books.sensebox.de/de/projekte/diy_umweltstation/temp_und_luftfeuchte.html');
+    this.setHelpUrl(Blockly.Msg.senseBox_uv_light_helpurl);
   }
 };
 
@@ -63,7 +64,7 @@ Blockly.Blocks['sensebox_sensor_bmx055_accelerometer'] = {
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_bmx055_accelerometer_tooltip);
-    this.setHelpUrl('https://edu.books.sensebox.de/de/projekte/diy_umweltstation/temp_und_luftfeuchte.html');
+    this.setHelpUrl(Blockly.Msg.senseBox_bmx055_helpurl);
   }
 };
 
@@ -85,7 +86,7 @@ Blockly.Blocks['sensebox_sensor_sds011'] = {
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_sds011_tooltip);
-    this.setHelpUrl('https://edu.books.sensebox.de/de/projekte/diy_umweltstation/temp_und_luftfeuchte.html');
+    this.setHelpUrl(Blockly.Msg.senseBox_sds011_helpurl);
   }
 };
 
@@ -110,8 +111,8 @@ Blockly.Blocks['sensebox_sensor_pressure'] = {
       .appendField(dropdown, "NAME");
     this.setColour(getColour().sensebox);
     this.setOutput(true, Types.DECIMAL.typeName);
-    this.setTooltip(Blockly.Msg.senseBox_pressure_tip);
-    this.setHelpUrl('https://edu.books.sensebox.de/de/projekte/diy_umweltstation/luftdruck.html');
+    this.setTooltip(Blockly.Msg.senseBox_pressure_tooltip);
+    this.setHelpUrl(Blockly.Msg.senseBox_pressure_helpurl);
   },
   /**
    * Parse XML to restore the number of pins available.
@@ -175,7 +176,8 @@ Blockly.Blocks['sensebox_sensor_bme680_bsec'] = {
       .appendField(new Blockly.FieldDropdown(dropdownOptions), "dropdown")
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);
-    this.setTooltip(Blockly.Msg.senseBox_bme_tip);
+    this.setTooltip(Blockly.Msg.senseBox_bme_tooltip);
+    this.setHelpUrl(Blockly.Msg.senseBox_bme680_helpurl)
   }
 };
 
@@ -210,7 +212,7 @@ Blockly.Blocks['sensebox_sensor_ultrasonic_ranger'] = {
         selectedBoard().digitalPins), 'ultrasonic_echo');
     this.setOutput(true, Types.NUMBER.typeName);
     this.setTooltip(Blockly.Msg.senseBox_ultrasonic_tooltip);
-    this.setHelpUrl('https://sensebox.de/books');
+    this.setHelpUrl(Blockly.Msg.senseBox_ultrasonic_helpurl);
   },
   /**
    * Parse XML to restore the number of pins available.
@@ -274,8 +276,8 @@ Blockly.Blocks['sensebox_sensor_sound'] = {
       .appendField("Pin:")
       .appendField(new Blockly.FieldDropdown(selectedBoard().analogPins), "PIN")
     this.setOutput(true, Types.NUMBER.typeName);
-    this.setHelpUrl(Blockly.Msg.senseBox_sound_tip);
-    this.setTooltip('Dieser Sensor mist den Geräuschpegel.');
+    this.setHelpUrl(Blockly.Msg.senseBox_sound_helpurl);
+    this.setTooltip(Blockly.Msg.senseBox_sound_tooltip);
   }
 };
 
@@ -296,7 +298,6 @@ Blockly.Blocks['sensebox_button'] = {
     this.setOutput(true, Types.BOOLEAN.typeName);
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_button_tooltip);
-    this.setHelpUrl('https://sensebox.de/books');
   }
 };
 
@@ -318,7 +319,8 @@ Blockly.Blocks['sensebox_scd30'] = {
       .appendField(new Blockly.FieldDropdown(dropdownOptions), "dropdown")
     this.setOutput(true, Types.NUMBER.typeName);
     this.setColour(getColour().sensebox);
-    this.setTooltip(Blockly.Msg.senseBox_scd_tip);
+    this.setTooltip(Blockly.Msg.senseBox_scd_tooltip);
+    this.setHelpUrl(Blockly.Msg.senseBox_scd_helpurl);
   },
   onchange: function (e) {
     var dropdown = this.getFieldValue('dropdown');
@@ -362,7 +364,7 @@ Blockly.Blocks['sensebox_sensor_truebner_smt50'] = {
     [Blockly.Msg.senseBox_ultrasonic_port_B, 'B'], [Blockly.Msg.senseBox_ultrasonic_port_C, 'C']];
     this.setColour(getColour().sensebox);
     this.appendDummyInput()
-      .appendField(Blockly.Msg.sensebox_soil_smt50);
+      .appendField(Blockly.Msg.senseBox_smt50);
     this.appendDummyInput()
       .appendField("Port:")
       .appendField(new Blockly.FieldDropdown(dropdownOptions), "Port")
@@ -370,6 +372,8 @@ Blockly.Blocks['sensebox_sensor_truebner_smt50'] = {
       .appendField(Blockly.Msg.senseBox_value)
       .appendField(new Blockly.FieldDropdown([[Blockly.Msg.senseBox_temp, "temp"], [Blockly.Msg.senseBox_soil, "soil"]]), 'value')
     this.setOutput(true, Types.NUMBER.typeName);
+    this.setTooltip(Blockly.Msg.senseBox_smt50_tooltip);
+    this.setHelpUrl(Blockly.Msg.senseBox_smt50_helpurl);
   }
 };
 
@@ -425,5 +429,7 @@ Blockly.Blocks['sensebox_soundsensor_dfrobot'] = {
       .appendField("Port:")
       .appendField(new Blockly.FieldDropdown(dropdownOptions), "Port")
     this.setOutput(true, Types.DECIMAL.typeName);
+    this.setTooltip(Blockly.Msg.senseBox_soundsensor_dfrobot_tooltip);
+    this.setHelpUrl(Blockly.Msg.senseBox_soundsensor_dfrobot_helpurl)
   }
 };
