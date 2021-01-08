@@ -26,12 +26,16 @@ Blockly.Blocks['sensebox_rgb_led'] = {
             .appendField(Blockly.Msg.senseBox_rgb_led)
             .appendField("Pin:")
             .appendField(new Blockly.FieldDropdown(selectedBoard().digitalPins), "PIN");
-        this.appendValueInput("RED", 'Number')
-            .appendField(Blockly.Msg.COLOUR_RGB_RED);//Blockly.Msg.senseBox_basic_red
-        this.appendValueInput("GREEN", 'Number')
-            .appendField(Blockly.Msg.COLOUR_RGB_GREEN);//Blockly.Msg.senseBox_basic_green
-        this.appendValueInput("BLUE", 'Number')
-            .appendField(Blockly.Msg.COLOUR_RGB_BLUE);
+
+        this.appendValueInput("COLOR", 'Number')
+            .appendField(Blockly.Msg.senseBox_ws2818_rgb_led_color)
+            .setCheck("Colour");
+        // this.appendValueInput("RED", 'Number')
+        //     .appendField(Blockly.Msg.COLOUR_RGB_RED);//Blockly.Msg.senseBox_basic_red
+        // this.appendValueInput("GREEN", 'Number')
+        //     .appendField(Blockly.Msg.COLOUR_RGB_GREEN);//Blockly.Msg.senseBox_basic_green
+        // this.appendValueInput("BLUE", 'Number')
+        //     .appendField(Blockly.Msg.COLOUR_RGB_BLUE);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setTooltip(Blockly.Msg.senseBox_rgb_led_tip);

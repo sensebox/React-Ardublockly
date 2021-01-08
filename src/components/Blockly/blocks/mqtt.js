@@ -32,6 +32,7 @@ Blockly.Blocks["sensebox_mqtt_setup"] = {
             .appendField(new Blockly.FieldTextInput("Password"), "password");
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
+        this.setTooltip(Blockly.Msg.senseBox_mqtt_init_tooltip);
     },
     onchange: function (e) {
         let service = this.getFieldValue('service');
@@ -71,6 +72,7 @@ Blockly.Blocks["sensebox_mqtt_publish"] = {
             .appendField(new Blockly.FieldTextInput('Name'), 'publishfeed');
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
+        this.setTooltip(Blockly.Msg.senseBox_mqtt_publish_tooltip);
     }
 };
 
