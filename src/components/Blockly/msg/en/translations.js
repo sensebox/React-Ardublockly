@@ -160,14 +160,7 @@ Blockly.Msg.RENAME_VARIABLE_TITLE = "Rename all '%1' variables to:";
 
 Blockly.Msg.TODAY = "Today";
 Blockly.Msg.UNDO = "Undo";
-Blockly.Msg.VARIABLES_DEFAULT_NAME = "item";
-Blockly.Msg.VARIABLES_GET_CREATE_SET = "Create 'set %1'";
-Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";
-Blockly.Msg.VARIABLES_GET_TOOLTIP = "Returns the value of this variable.";
-Blockly.Msg.VARIABLES_SET = "set %1 to %2";
-Blockly.Msg.VARIABLES_SET_CREATE_GET = "Create 'get %1'";
-Blockly.Msg.VARIABLES_SET_HELPURL = "https://github.com/google/blockly/wiki/Variables#set";
-Blockly.Msg.VARIABLES_SET_TOOLTIP = "Sets this variable to be equal to the input.";
+
 Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
@@ -194,87 +187,21 @@ Blockly.Msg.senseBox_basic_blue = "Blue";
 Blockly.Msg.senseBox_basic_green = "Gree";
 Blockly.Msg.senseBox_basic_red = "Red";
 Blockly.Msg.senseBox_basic_state = "Status";
-Blockly.Msg.senseBox_bme680 = "Environmental sensor (BME680)";
-Blockly.Msg.senseBox_bme680_tip = "Returns values from the BME680";
-Blockly.Msg.senseBox_bme680_warning = "Warning. Gas (VOC) cannot be measured simultaneously with other parameters.";
-Blockly.Msg.senseBox_bme_breatheVocEquivalent = "Breathe VOC Equivalent";
-Blockly.Msg.senseBox_bme_co2 = "CO2 Equivalent";
-Blockly.Msg.senseBox_bme_iaq = "Indoor Air Quality (IAQ)";
-Blockly.Msg.senseBox_bme_iaq_accuracy = "Calibration Value";
-Blockly.Msg.senseBox_bme_tip = "Returns values from the BME680";
-Blockly.Msg.senseBox_bmx055_accelerometer = "Accelerometer";
-Blockly.Msg.senseBox_bmx055_accelerometer_direction = "Direction";
-Blockly.Msg.senseBox_bmx055_accelerometer_direction_total = "Total";
-Blockly.Msg.senseBox_bmx055_accelerometer_direction_x = "X-Axis";
-Blockly.Msg.senseBox_bmx055_accelerometer_direction_y = "Y-Axis";
-Blockly.Msg.senseBox_bmx055_accelerometer_direction_z = "Z-Axis";
-Blockly.Msg.senseBox_bmx055_accelerometer_range = "Range";
-Blockly.Msg.senseBox_bmx055_accelerometer_range_16g = "16g";
-Blockly.Msg.senseBox_bmx055_accelerometer_range_2g = "2g";
-Blockly.Msg.senseBox_bmx055_accelerometer_range_4g = "4g";
-Blockly.Msg.senseBox_bmx055_accelerometer_range_8g = "8g";
-Blockly.Msg.senseBox_bmx055_accelerometer_tip = "Measuring the acceleration";
-Blockly.Msg.senseBox_bmx055_compass = "Compass";
-Blockly.Msg.senseBox_bmx055_compass_tip = "Gives the ";
-Blockly.Msg.senseBox_bmx055_gyroscope = "Gyroscope";
-Blockly.Msg.senseBox_bmx055_gyroscope_tip = "Lage Sensor";
-Blockly.Msg.senseBox_bmx055_x = "X-Direction";
-Blockly.Msg.senseBox_bmx055_y = "Y-Direction";
-Blockly.Msg.senseBox_button = "Button";
-Blockly.Msg.senseBox_button_isPressed = "is Pressed";
-Blockly.Msg.senseBox_button_switch = "as Switch";
-Blockly.Msg.senseBox_button_tooltip = "Button";
-Blockly.Msg.senseBox_button_wasPressed = "was Pressed";
 
 Blockly.Msg.senseBox_foto = "Light Dependent Resistor";
 Blockly.Msg.senseBox_foto_tip = "simple light depending resistor, gives values between 0 and 1023";
 Blockly.Msg.senseBox_gas = "Gas (VOC)";
-Blockly.Msg.senseBox_gps_alt = "altitude";
-Blockly.Msg.senseBox_gps_begin = "initialize GPS";
-Blockly.Msg.senseBox_gps_begin_tip = "initialize GPS Sensor";
-Blockly.Msg.senseBox_gps_date = "date";
-Blockly.Msg.senseBox_gps_getValues = "GPS-Module";
-Blockly.Msg.senseBox_gps_getValues_tip = "gets the specific Value from the GPS Sensor";
-Blockly.Msg.senseBox_gps_lat = "latitude";
-Blockly.Msg.senseBox_gps_lng = "longitude";
-Blockly.Msg.senseBox_gps_speed = "speed";
-Blockly.Msg.senseBox_gps_time = "time";
-Blockly.Msg.senseBox_gps_timeStamp = "timestamp (RFC 3339)";
-Blockly.Msg.senseBox_html_body = "<body>";
-Blockly.Msg.senseBox_html_body_end = "</body>";
-Blockly.Msg.senseBox_html_document = "HTML";
-Blockly.Msg.senseBox_html_document_tip = "A block for generating a HTML document.";
-Blockly.Msg.senseBox_html_general_tag_tip = "A general HTML tag building block.";
-Blockly.Msg.senseBox_html_header = "<head>";
-Blockly.Msg.senseBox_html_header_end = "</head>";
-Blockly.Msg.senseBox_http_method = "Method";
-Blockly.Msg.senseBox_http_method_tip = "Method of the current HTTP request";
-Blockly.Msg.senseBox_http_not_found = "404 Not found";
-Blockly.Msg.senseBox_http_not_found_tip = "Send a predefined 404 HTTP response.";
-Blockly.Msg.senseBox_http_on_client_connect = "If client is connected:";
-Blockly.Msg.senseBox_http_on_client_connect_tip = "Checks if a client is connected and executes given statement in that case.";
-Blockly.Msg.senseBox_http_protocol_version = "HTTP Version";
-Blockly.Msg.senseBox_http_protocol_version_tip = "The HTTP Version of the current HTTP request";
-Blockly.Msg.senseBox_http_success = "Succesful";
-Blockly.Msg.senseBox_http_success_l2 = "HTTP reponse";
-Blockly.Msg.senseBox_http_success_tip = "Send a successful HTTP response with content.";
-Blockly.Msg.senseBox_http_uri = "URI";
-Blockly.Msg.senseBox_http_uri_tip = "URI of requested resource of the current HTTP request";
-Blockly.Msg.senseBox_http_user_agent = "User-Agent";
-Blockly.Msg.senseBox_http_user_agent_tip = "The User-Agent send along with the current HTTP request";
+
+
 Blockly.Msg.senseBox_hum = "humidity in %";
 Blockly.Msg.senseBox_hum_tip = "Measures humidity in %";
-Blockly.Msg.senseBox_init_http_server = "Initialize HTTP-Server";
-Blockly.Msg.senseBox_init_http_server_tip = "Initializes a http server on the specified port.";
 
 
-Blockly.Msg.senseBox_ip_address = "IP-Address";
-Blockly.Msg.senseBox_ip_address_tip = "Returns the IP address as a string.";
 Blockly.Msg.senseBox_ir = "infrared distance sensor";
 Blockly.Msg.senseBox_ir_tip = "infrared distance sensor can measure the distance between 10 and 80 cm";
 Blockly.Msg.senseBox_led = "LED connected to digital";
 Blockly.Msg.senseBox_led_tip = "simple LED. Don't forget the resistor";
-Blockly.Msg.senseBox_light = "Illuminance in Lux";
+
 Blockly.Msg.senseBox_lux = "lightsensor";
 Blockly.Msg.senseBox_lux_tip = "Light Sensor can measure the illuminance in lux";
 Blockly.Msg.senseBox_measurement = "Measurement";
@@ -301,73 +228,18 @@ Blockly.Msg.senseBox_poti_tip = "Potentiometer";
 Blockly.Msg.senseBox_rgb_led = "RGB-LED";
 Blockly.Msg.senseBox_rgb_led_tip = "RGB-LED";
 
-Blockly.Msg.senseBox_sds011 = "Fine Particular Sensor";
-Blockly.Msg.senseBox_sds011_dimension = "in µg/m³ at";
-Blockly.Msg.senseBox_sds011_pm10 = "PM10";
-Blockly.Msg.senseBox_sds011_pm25 = "PM2.5";
-Blockly.Msg.senseBox_sds011_serial1 = "Serial1";
-Blockly.Msg.senseBox_sds011_serial2 = "Serial2";
-Blockly.Msg.senseBox_sds011_tip = "Measuring the fine particular concentration";
+
+
+
 
 Blockly.Msg.senseBox_sensor = "Sensors";
 Blockly.Msg.senseBox_serial_tip = "prints the values to the serial monitor in the arduino IDE. Good way to have a fast and easy feedback for your programm";
 Blockly.Msg.senseBox_soil = "Soil Moisture";
-Blockly.Msg.senseBox_sound = "Microphone";
-Blockly.Msg.senseBox_sound_tip = "This block returns the measured value of the microphone in volts.";
-Blockly.Msg.senseBox_tag_first_mutator_tip = "Mandatory children to this block.";
-Blockly.Msg.senseBox_tag_optional_mutator_tip = "Add more children to the block.";
-
-Blockly.Msg.senseBox_temp = "Temperature in °C";
-Blockly.Msg.senseBox_temp_hum = "Temperature/Humidity Sensor (HDC1080)";
-Blockly.Msg.senseBox_temp_hum_tip = "Sensor measuring temperature and humidity";
-Blockly.Msg.senseBox_ultrasonic = "Ultrasonic distance sensor at Port";
-Blockly.Msg.senseBox_ultrasonic_echo = "Echo";
-Blockly.Msg.senseBox_ultrasonic_port_A = "A";
-Blockly.Msg.senseBox_ultrasonic_port_B = "B";
-Blockly.Msg.senseBox_ultrasonic_port_C = "C";
-Blockly.Msg.senseBox_ultrasonic_tip = "ultrasonic distance sensor";
-Blockly.Msg.senseBox_ultrasonic_trigger = "Trigger";
-Blockly.Msg.senseBox_uv = "UV-Light in µW/cm²";
-Blockly.Msg.senseBox_uv_light = "Light Visible + UV";
-Blockly.Msg.senseBox_uv_light_tip = "Sensor measuring the UV-light and the illuminance";
-Blockly.Msg.senseBox_value = "value:";
-Blockly.Msg.senseBox_watertemperature = "Water Temperature";
-
 
 
 
 
 Blockly.Msg.sensebox_soil_smt50 = "Soil Moisture and Temperature (SMT50)";
-Blockly.Msg.sensebox_web_readHTML_filename = "File:";
-//SCD30 CO2 Sensor
-Blockly.Msg.senseBox_scd30 = "CO2 Sensor (Sensirion SCD30)";
-Blockly.Msg.senseBox_scd_co2 = "CO2 in ppm";
-Blockly.Msg.senseBox_scd_tip = "Returns value of the CO2 Sensor";
-
-
-
-
-
-
-//Windspeed
-Blockly.Msg.senseBox_windspeed = "Windspeedsensor"
-
-//Soundsensor
-Blockly.Msg.senseBox_soundsensor_dfrobot = "Soundsensor (DF Robot)";
-
-/**
- * Add Translation for Blocks above
- * ---------------------------------------------------------------
- * Add Translation for the UI below
- */
-
-
-
-
-
-
-
-
 
 
 
