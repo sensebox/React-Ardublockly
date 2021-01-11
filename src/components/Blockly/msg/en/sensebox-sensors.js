@@ -21,67 +21,66 @@ Blockly.Msg.senseBox_pressure_helpurl = ""
 /**
  * Mikro
  */
-Blockly.Msg.senseBox_sound = "Mikrofon";
-Blockly.Msg.senseBox_sound_tip = "Schließe den Sensor über das Breadbord an einen der 3 **analog/digital** Ports an. Gibt den Messwert des Mikrofons in Volt zurück";
-Blockly.Msg.senseBox_sound_helpurl = "https://docs.sensebox.de/hardware/sensoren-mikro/"
+Blockly.Msg.senseBox_sound = "Microphone";
+Blockly.Msg.senseBox_sound_tip = "Connect the sensor to one of the 3 **analog/digital** ports via the breadbord. Returns the reading of the microphone in volt";
+Blockly.Msg.senseBox_sound_helpurl = "https://en.docs.sensebox.de/hardware/sensoren-mikro/"
 
 /**
  * Temperature and Humidity Sensor (HDC1080)
  */
-Blockly.Msg.senseBox_temp = "Temperatur in °C";
-Blockly.Msg.senseBox_temp_hum = "Temperatur-/Luftfeuchtigkeitssensor (HDC1080)";
-Blockly.Msg.senseBox_temp_hum_tooltip = "Dieser Block gibt dir die Messwerte des Temperatur- und Luftfeuchtigkeitssensor zurück. Schließe den Sensor an einen der 5 I2C Anschlüsse an. Messwert wird mit 2 Nachkommastellen ausgegeben.";
-Blockly.Msg.senseBox_temp_hum_helpurl = "https://docs.sensebox.de/hardware/sensoren-temperatur-luftfeuchte/"
+Blockly.Msg.senseBox_temp = "Temperature in °C";
+Blockly.Msg.senseBox_temp_hum = "Temperature/Humidity Sensor (HDC1080)";
+Blockly.Msg.senseBox_temp_hum_tooltip = "This block returns the temperature and humidity sensor readings. Connect the sensor to one of the 5 I2C ports. Measured value is output with 2 decimal places.";
+Blockly.Msg.senseBox_temp_hum_helpurl = "https://en.docs.sensebox.de/hardware/sensoren-temperatur-luftfeuchte/"
 
 /**
  * Ultraschalldistanzsensor
  */
 
-Blockly.Msg.senseBox_ultrasonic = "Ultraschall-Abstandssensor an Port";
+Blockly.Msg.senseBox_ultrasonic = "Ultrasonic distance sensor at Port";
 Blockly.Msg.senseBox_ultrasonic_trigger = "Trigger"
 Blockly.Msg.senseBox_ultrasonic_echo = "Echo"
 Blockly.Msg.senseBox_ultrasonic_port_A = "A";
 Blockly.Msg.senseBox_ultrasonic_port_B = "B";
 Blockly.Msg.senseBox_ultrasonic_port_C = "C";
-Blockly.Msg.senseBox_ultrasonic_tooltip = `Misst die Distanz mithilfe von Ultraschall in cm. Schließe den Sensor an einen der drei Digital/Analog Ports an:
-
-- Trigger: Grünes Kabel
-- Echo: gelbes Kabel`;
-Blockly.Msg.senseBox_ultrasonic_helpurl = "https://docs.sensebox.de/hardware/sensoren-distanz/"
+Blockly.Msg.senseBox_ultrasonic_tooltip = `Measures the distance using ultrasound in cm. Connect the sensor to one of the three digital/analog ports:
+- Trigger: Green Cable
+- Echo: Yellow Cable`;
+Blockly.Msg.senseBox_ultrasonic_helpurl = "https://en.docs.sensebox.de/hardware/sensoren-distanz/"
 
 /**
  * UV and Lightsensor
  */
-Blockly.Msg.senseBox_value = "Messwert:";
-Blockly.Msg.senseBox_uv_light = "Helligkeit-/UV-Sensor";
-Blockly.Msg.senseBox_uv_light_tooltip = "Sensor misst UV-Licht oder die Helligkeit. Die Helligkeit wird als **Ganzezahl** in Lux ausgegeben. Die UV-Intensität als **Kommazahl** in µW/cm².";
-Blockly.Msg.senseBox_uv = "UV-Intensität in µW/cm²";
-Blockly.Msg.senseBox_light = "Beleuchtungsstärke in Lux";
-Blockly.Msg.senseBox_uv_light_helpurl = "https://docs.sensebox.de/hardware/sensoren-helligkeit-uv/"
+Blockly.Msg.senseBox_uv = "UV-Light in µW/cm²";
+Blockly.Msg.senseBox_uv_light = "Light Visible + UV";
+Blockly.Msg.senseBox_value = "Value:";
+Blockly.Msg.senseBox_uv_light_tooltip = "Sensor measures UV light or brightness. Brightness is output as **integer** in lux. UV intensity as **decimal** in µW/cm².";
+Blockly.Msg.senseBox_light = "Illuminance in Lux";
+Blockly.Msg.senseBox_uv_light_helpurl = "https://en.docs.sensebox.de/hardware/sensoren-helligkeit-uv/"
 
 /**
  * BMX055
  */
 
 Blockly.Msg.senseBox_bmx055_compass = "Lage Sensor";
-Blockly.Msg.senseBox_bmx055_accelerometer = "Beschleunigungssensor";
-Blockly.Msg.senseBox_bmx055_accelerometer_range = "Messbereich";
+Blockly.Msg.senseBox_bmx055_accelerometer = "Accelerometer";
+Blockly.Msg.senseBox_bmx055_accelerometer_range = "Range";
 Blockly.Msg.senseBox_bmx055_accelerometer_range_2g = "2g";
 Blockly.Msg.senseBox_bmx055_accelerometer_range_4g = "4g";
 Blockly.Msg.senseBox_bmx055_accelerometer_range_8g = "8g";
 Blockly.Msg.senseBox_bmx055_accelerometer_range_16g = "16g";
-Blockly.Msg.senseBox_bmx055_accelerometer_direction = "Richtung";
-Blockly.Msg.senseBox_bmx055_accelerometer_direction_x = "X-Achse";
-Blockly.Msg.senseBox_bmx055_accelerometer_direction_y = "Y-Achse";
-Blockly.Msg.senseBox_bmx055_accelerometer_direction_z = "Z-Achse";
-Blockly.Msg.senseBox_bmx055_accelerometer_direction_total = "Gesamt";
-Blockly.Msg.senseBox_bmx055_gyroscope = "Lage Sensor";
-Blockly.Msg.senseBox_bmx055_accelerometer_tip = "Lage Sensor";
+Blockly.Msg.senseBox_bmx055_accelerometer_direction = "Direction";
+Blockly.Msg.senseBox_bmx055_accelerometer_direction_x = "X-Axis";
+Blockly.Msg.senseBox_bmx055_accelerometer_direction_y = "Y-Axis";
+Blockly.Msg.senseBox_bmx055_accelerometer_direction_z = "Z-Axis";
+Blockly.Msg.senseBox_bmx055_accelerometer_direction_total = "Total";
+Blockly.Msg.senseBox_bmx055_gyroscope = "Gyroscope";
+
 Blockly.Msg.senseBox_bmx055_compass_tip = "Lage Sensor";
 Blockly.Msg.senseBox_bmx055_gyroscope_tip = "Lage Sensor";
-Blockly.Msg.senseBox_bmx055_x = "X-Richtung";
-Blockly.Msg.senseBox_bmx055_y = "Y-Richtung";
-Blockly.Msg.senseBox_bmx055_accelerometer_tooltip = `Dieser Block gibt dir den Messwert des Beschleunigungssensors der direkt auf der senseBox MCU aufgelötet ist. Im Dropdown Menü kannst du die Richtung und den Messbereich auswählen.`
+Blockly.Msg.senseBox_bmx055_x = "X-Direction";
+Blockly.Msg.senseBox_bmx055_y = "Y-Direction";
+Blockly.Msg.senseBox_bmx055_accelerometer_tooltip = `This block gives you the measurement value of the accelerometer which is soldered directly on the senseBox MCU. In the dropdown menu you can select the direction and the measuring range.`;
 Blockly.Msg.senseBox_bmx055_helpurl = ""
 
 
@@ -90,51 +89,52 @@ Blockly.Msg.senseBox_bmx055_helpurl = ""
  * GPS
  */
 Blockly.Msg.senseBox_gps_getValues = "GPS Modul";
-Blockly.Msg.senseBox_gps_lat = "Breitengrad";
-Blockly.Msg.senseBox_gps_lng = "Längengrad";
-Blockly.Msg.senseBox_gps_alt = "Höhe über NN in m";
-Blockly.Msg.senseBox_gps_speed = "Geschwindigkeit in km/h";
-Blockly.Msg.senseBox_gps_date = "Datum";
-Blockly.Msg.senseBox_gps_time = "Uhrzeit";
-Blockly.Msg.senseBox_gps_timeStamp = "Zeitstempel (RFC 3339)";
-Blockly.Msg.senseBox_gps_tooltip = `Liest das GPS Modul aus und gibt dir die Standortinformationen. Längen- und Breitengrad werden als Kommazahl mit 6 Nachkommastellen ausgegeben. 
-**Anschluss: I2C**
+Blockly.Msg.senseBox_gps_lat = "latitude";
+Blockly.Msg.senseBox_gps_lng = "longitude";
+Blockly.Msg.senseBox_gps_alt = "altitude in m";
+Blockly.Msg.senseBox_gps_speed = "speed in km/h";
+Blockly.Msg.senseBox_gps_date = "date";
+Blockly.Msg.senseBox_gps_time = "time";
+Blockly.Msg.senseBox_gps_timeStamp = "Timestamp (RFC 3339)";
+Blockly.Msg.senseBox_gps_tooltip = `Reads the GPS module and gives you the location information. Longitude and latitude are output as a decimal number with 6 decimal places. 
+**Connection: I2C**
 
-**Beachte:** Das GPS Modul benöigt beim ersten Verwenden relativ lange (ca. 5-10 Minuten) bis es deinen Standort gefunden hat!
+**Note:** The GPS module needs a relatively long time (about 5-10 minutes) until it has found your location!
 `
-Blockly.Msg.senseBox_gps_helpurl = "https://docs.sensebox.de/hardware/sensoren-gps/"
+Blockly.Msg.senseBox_gps_helpurl = "https://en.docs.sensebox.de/hardware/sensoren-gps/"
 
 /**
  * Windspeed
  */
-Blockly.Msg.senseBox_windspeed = "Windgeschwindigkeitssensor";
+Blockly.Msg.senseBox_windspeed = "Windspeedsensor";
 Blockly.Msg.senseBox_windspeed_tooltip = ""
 
 /*
 * Soundsensor
 */
 Blockly.Msg.senseBox_soundsensor_dfrobot = "Soundsensor (DF Robot)";
-Blockly.Msg.senseBox_soundsensor_dfrobot_tooltip = "Schließe den Sensor an einen der 3 **digital/analog Ports** an. Der Sensor gibt dir den Messwert in dB mit einer Nachkommastelle"
-Blockly.Msg.senseBox_soundsensor_dfrobot_helpurl = "https://docs.sensebox.de/hardware/sensoren-lautstaerke/"
+Blockly.Msg.senseBox_soundsensor_dfrobot_tooltip = "Connect the sensor to one of the 3 **digital/analog ports**. The sensor will give you the reading in dB with one decimal."
+Blockly.Msg.senseBox_soundsensor_dfrobot_helpurl = "https://en.docs.sensebox.de/hardware/sensoren-lautstaerke/"
+
 /*
 * BME680
 */
 
-Blockly.Msg.senseBox_bme680 = "Umweltsensor (BME680)";
-Blockly.Msg.senseBox_bme_iaq = "Innenraumluftqualität (IAQ)";
-Blockly.Msg.senseBox_bme_iaq_accuracy = "Kalibrierungswert";
-Blockly.Msg.senseBox_bme_co2 = "CO2 Äquivalent";
-Blockly.Msg.senseBox_bme_breatheVocEquivalent = "Atemluft VOC Äquivalent";
-Blockly.Msg.senseBox_bme_tooltip = `Schließe den Umweltsensor an einen der 5 **I2C-Anschlüsse** an. **Beachte:** Der Sensor benöigt eine gewisse Zeit zum kalibrieren. 
-Den Status der Kalibrierung kann über den Kalibrierungswert abgelesen werden. Er ist entweder 0, 1, 2 oder 3 und sagt folgendes aus:
+Blockly.Msg.senseBox_bme680 = "Environmental sensor (BME680)";
+Blockly.Msg.senseBox_bme_iaq = "Indoor Air Quality (IAQ)";
+Blockly.Msg.senseBox_bme_iaq_accuracy = "Calibration Value";
+Blockly.Msg.senseBox_bme_co2 = "CO2 Equivalent";
+Blockly.Msg.senseBox_bme_breatheVocEquivalent = "Breathe VOC Equivalent";
+Blockly.Msg.senseBox_bme_tooltip = `Connect the environmental sensor to one of the 5 **I2C ports**. **Note:** The sensor needs some time to calibrate. 
+The status of the calibration can be read from the calibration value. It is either 0, 1, 2 or 3 and says the following:
 
-- IAQ Accuracy = 0 heißt Sensor wird stabilisiert (dauert ca. 25 Minuten) oder dass es eine Zeitüberschreitung gab,
-- IAQ Accuracy = 1 heißt Wert ist ungenau,
-- IAQ Accuracy = 2 heißt Sensor wird kalibriert,
-- IAQ Accuracy = 3 heißt Sensor erfolgreich kalibriert.
+- IAQ Accuracy = 0 means sensor is stabilized (takes about 25 minutes) or that there was a timeout,
+- IAQ Accuracy = 1 means value is inaccurate,
+- IAQ Accuracy = 2 means sensor is being calibrated,
+- IAQ Accuracy = 3 means sensor calibrated successfully.
 
-Die Messwerte für Temperatur, Luftfeuchtigkeit und Luftdruck können direkt verwendet werden.`;
-Blockly.Msg.senseBox_bme680_helpurl = "https://docs.sensebox.de/hardware/sensoren-umweltsensor/"
+The measured values for temperature, humidity and air pressure can be used directly;`
+Blockly.Msg.senseBox_bme680_helpurl = "https://en.docs.sensebox.de/hardware/sensoren-umweltsensor/"
 
 
 /**
@@ -148,36 +148,39 @@ Blockly.Msg.senseBox_smt50_tooltip = "Schließe den Bodenfeuchtigkeit- und Tempe
  * SCD30 CO2 Sensor
  */
 Blockly.Msg.senseBox_scd30 = "CO2 Sensor (Sensirion SCD30)";
-Blockly.Msg.senseBox_scd_tooltip = "Schließe den Sensor an einen der 5 **I2C-Anschlüsse** an. Der Sensor gibt dir den Messwert für die CO2-Konzentration in ppm. Der Temperaturmesswert kann aufgrund der Messung direkt am Sensor um einige Grad vom realen Wert abweichen.";
+Blockly.Msg.senseBox_scd_tooltip = "Connect the sensor to one of the 5 **I2C ports**. The sensor will give you the reading for the CO2 concentration in ppm. The temperature reading may differ from the real value by a few degrees due to the measurement directly at the sensor.";
 Blockly.Msg.senseBox_scd_co2 = "CO2 in ppm";
-Blockly.Msg.senseBox_scd_helpurl = "https://docs.sensebox.de/hardware/sensoren-co2/"
+Blockly.Msg.senseBox_scd_helpurl = "https://en.docs.sensebox.de/hardware/sensoren-co2/"
 
 /**
  * Feinstaubsensor (SDS011) 
  */
-
-Blockly.Msg.senseBox_sds011 = "Feinstaubsensor";
-Blockly.Msg.senseBox_sds011_dimension = "in µg/m³ an";
+Blockly.Msg.senseBox_sds011 = "Fine Particular Sensor";
+Blockly.Msg.senseBox_sds011_dimension = "in µg/m³ at";
 Blockly.Msg.senseBox_sds011_pm25 = "PM2.5";
 Blockly.Msg.senseBox_sds011_pm10 = "PM10";
-Blockly.Msg.senseBox_sds011_tooltip = "Dieser Block gibt dir den Messwert des Feinstaubsensor. Schließe den Feinstaubsensor an einen der 2 **Serial/UART** Anschlüssen an. Im Dropdown Menü zwischen PM2.5 und PM10 auswählen. Der Messwert wird dir als **Kommazahl** in µg/m3"
+Blockly.Msg.senseBox_sds011_tooltip = "This block gives you the reading of the fine dust sensor. Connect the fine dust sensor to one of the 2 **Serial/UART** ports. Select between PM2.5 and PM10 in the dropdown menu. The measured value will be displayed as **comma number** in µg/m3";
 Blockly.Msg.senseBox_sds011_serial1 = "Serial1";
 Blockly.Msg.senseBox_sds011_serial2 = "Serial2";
-Blockly.Msg.senseBox_sds011_helpurl = "https://docs.sensebox.de/hardware/sensoren-feinstaub/"
+Blockly.Msg.senseBox_sds011_helpurl = "https://en.docs.sensebox.de/hardware/sensoren-feinstaub/"
 
 
 /**
  * Button
  */
 Blockly.Msg.senseBox_button = "Button";
-Blockly.Msg.senseBox_button_isPressed = "ist gedrückt";
-Blockly.Msg.senseBox_button_switch = "als Schalter";
-Blockly.Msg.senseBox_button_wasPressed = "wurde gedrückt";
-Blockly.Msg.senseBox_button_tooltip = `Dieser Block gibt dir den Status des angeschlossenen Buttons. Im Dropdown Menü können verschiedene Modi für den Button ausgewählt werden. Angesteuert können entweder der on Board Button oder ein Button, der an einen der 6 digitalen Pins angeschlossen ist. verschiedene Modi:
-- "ist gedrückt": Mit diesem Modus kannst du abfragen ob der Block gerade gedrückt wird. Du erhältst entweder den Wert TRUE oder FALSE.
-- "wurde gedrückt": Mit diesem Modus kannst du abfragen ob der Block gedrückt wurde. Erst wenn der Knopf gedrückt und wieder losgelassen wurde erhältst du TRUE zurück
-- "als Schalter": Wenn du diesen Block verwendest kannst du den Knopf wie ein Lichtschalter verwenden. Der Status wird gespeichert bis der Button erneut gedrückt wird`
+Blockly.Msg.senseBox_button_isPressed = "is Pressed";
+Blockly.Msg.senseBox_button_switch = "as Switch";
+Blockly.Msg.senseBox_button_wasPressed = "was Pressed";
+Blockly.Msg.senseBox_button_tooltip = `This block gives you the status of the connected button. In the dropdown menu you can select different modes for the button. Either the on board button or a button connected to one of the 6 digital pins can be controlled. different modes:
+- "is pressed": With this mode you can check if the block is currently pressed. You get either the value TRUE or FALSE.
+- "was pressed": With this mode you can query if the block was pressed. Only if the button was pressed and released you will get TRUE.
+- "as switch": If you use this block you can use the button like a light switch. The status is saved until the button is pressed again.
+`
 Blockly.Msg.senseBox_button_helpurl = ""
 
 
-
+/**
+ * 
+ */
+Blockly.Msg.senseBox_watertemperature = "Water Temperature";
