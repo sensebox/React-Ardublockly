@@ -61,32 +61,20 @@ class Toolbox extends React.Component {
                 </Category>
                 <Category name="SD" colour={getColour().sensebox}>
                     <Block type="sensebox_sd_create_file" />
-                    <Block type="sensebox_sd_open_file" />
+                    <Block type="sensebox_sd_open_file">
+                        <Value name="SD">
+                            <Block type="sensebox_sd_write_file"></Block>
+                        </Value>
+                    </Block>
                     <Block type="sensebox_sd_write_file" />
                 </Category>
                 <Category name="LED" colour={getColour().sensebox}>
-                    <Block type="sensebox_rgb_led">
-                        <Value name="RED">
-                            <Block type="math_number">
-                                <Field name="NUM">0</Field>
-                            </Block>
-                        </Value>
-                        <Value name="GREEN">
-                            <Block type="math_number">
-                                <Field name="NUM">0</Field>
-                            </Block>
-                        </Value>
-                        <Value name="BLUE">
-                            <Block type="math_number">
-                                <Field name="NUM">0</Field>
-                            </Block>
-                        </Value>
-                    </Block>
+                    <Block type="sensebox_rgb_led"></Block>
                     <Block type="sensebox_led" />
-                    <Block type="sensebox_ws2818_led">
-                        <Value name="POSITION">
+                    <Block type="sensebox_ws2818_led_init">
+                        <Value name="NUMBER">
                             <Block type="math_number">
-                                <Field name="NUM">0</Field>
+                                <Field name="NUM">1</Field>
                             </Block>
                         </Value>
                         <Value name="BRIGHTNESS">
@@ -94,14 +82,30 @@ class Toolbox extends React.Component {
                                 <Field name="NUM">30</Field>
                             </Block>
                         </Value>
-                        <Value name="RED">
+                    </Block>
+                    <Block type="sensebox_ws2818_led">
+                        <Value name="POSITION">
                             <Block type="math_number">
                                 <Field name="NUM">0</Field>
                             </Block>
                         </Value>
-                        <Value name="GREEN">
+                        <Value name="COLOR">
                             <Block type="math_number">
                                 <Field name="NUM">0</Field>
+                            </Block>
+                        </Value>
+                    </Block>
+                    <Block type="colour_picker"></Block>
+                    <Block type="colour_random"></Block>
+                    <Block type="colour_rgb">
+                        <Value name="RED">
+                            <Block type="math_number">
+                                <Field name="NUM">100</Field>
+                            </Block>
+                        </Value>
+                        <Value name="GREEN">
+                            <Block type="math_number">
+                                <Field name="NUM">50</Field>
                             </Block>
                         </Value>
                         <Value name="BLUE">
@@ -250,7 +254,11 @@ class Toolbox extends React.Component {
                     <Block type="sensebox_telegram_send" />
                 </Category>
                 <Category name="openSenseMap" colour={getColour().sensebox}>
-                    <Block type="sensebox_osem_connection" />
+                    <Block type="sensebox_interval_timer">
+                        <Value name="DO">
+                            <Block type="sensebox_osem_connection" />
+                        </Value>
+                    </Block>
                     <Block type="sensebox_send_to_osem" />
                 </Category>
                 <Category id="catSenseBoxOutput_LoRa" name="  LoRa" colour={getColour().sensebox}>

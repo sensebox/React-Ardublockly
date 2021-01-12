@@ -50,6 +50,7 @@ class WorkspaceStats extends Component {
   };
 
   render() {
+
     const bigDisplay = !isWidthDown('sm', this.props.width);
     const workspace = Blockly.getMainWorkspace();
     const remainingBlocksInfinity = workspace ? workspace.remainingCapacity() !== Infinity : null;

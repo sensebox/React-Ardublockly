@@ -45,7 +45,7 @@ class BlocklyWindow extends Component {
       if (!xml) xml = initialXml;
       Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
     }
-    if(props.language !== this.props.language){
+    if (props.language !== this.props.language) {
       // change language
       if (!xml) xml = initialXml;
       var xmlDom = Blockly.Xml.textToDom(xml);
@@ -55,6 +55,7 @@ class BlocklyWindow extends Component {
       // workspace.updateToolbox(toolbox.toolboxDef_);
     }
     Blockly.svgResize(workspace);
+
   }
 
   render() {

@@ -483,6 +483,7 @@ Blockly.Blocks['switch_case'] = {
     init: function () {
         this.setColour(getColour().logic);
         this.setPreviousStatement(true);
+        this.setTooltip(Blockly.Msg.cases_tooltip);
         this.setNextStatement(true);
         this.appendValueInput('CONDITION')
             .appendField(Blockly.Msg.cases_switch);
@@ -491,7 +492,6 @@ Blockly.Blocks['switch_case'] = {
         this.appendStatementInput('CASE0')
             .appendField(Blockly.Msg.cases_do);
         this.setMutator(new Blockly.Mutator(['case_incaseof', 'case_default']));
-        this.setTooltip('Does something if the condition is true. If there isn\'t a matching case the default function will be executed.');
         this.caseCount_ = 0;
         this.defaultCount_ = 0;
     },

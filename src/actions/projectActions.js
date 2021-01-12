@@ -42,10 +42,10 @@ export const getProject = (type, id) => (dispatch) => {
       }
     },
     error: err => {
-      if(err.response){
+      if (err.response) {
         dispatch(returnErrors(err.response.data.message, err.response.status, 'GET_PROJECT_FAIL'));
       }
-      dispatch({type: PROJECT_PROGRESS});
+      dispatch({ type: PROJECT_PROGRESS });
     }
   };
   axios.get(`${process.env.REACT_APP_BLOCKLY_API}/${type}/${id}`, config)
@@ -58,7 +58,7 @@ export const getProject = (type, id) => (dispatch) => {
 };
 
 export const getProjects = (type) => (dispatch) => {
-  dispatch({type: PROJECT_PROGRESS});
+  dispatch({ type: PROJECT_PROGRESS });
   const config = {
     success: res => {
       var data = type === 'project' ? 'projects' : 'galleries';
@@ -71,10 +71,10 @@ export const getProjects = (type) => (dispatch) => {
       dispatch(returnSuccess(res.data.message, res.status));
     },
     error: err => {
-      if(err.response){
+      if (err.response) {
         dispatch(returnErrors(err.response.data.message, err.response.status, 'GET_PROJECTS_FAIL'));
       }
-      dispatch({type: PROJECT_PROGRESS});
+      dispatch({ type: PROJECT_PROGRESS });
     }
   };
   axios.get(`${process.env.REACT_APP_BLOCKLY_API}/${type}`, config)
@@ -113,8 +113,8 @@ export const updateProject = (type, id) => (dispatch, getState) => {
       }
     },
     error: err => {
-      if(err.response){
-        if(type === 'project'){
+      if (err.response) {
+        if (type === 'project') {
           dispatch(returnErrors(err.response.data.message, err.response.status, 'PROJECT_UPDATE_FAIL'));
         } else {
           dispatch(returnErrors(err.response.data.message, err.response.status, 'GALLERY_UPDATE_FAIL'));
@@ -132,7 +132,6 @@ export const updateProject = (type, id) => (dispatch, getState) => {
 };
 
 export const deleteProject = (type, id) => (dispatch, getState) => {
-  var project = getState().project;
   const config = {
     success: res => {
       var projects = getState().project.projects;
@@ -157,7 +156,7 @@ export const deleteProject = (type, id) => (dispatch, getState) => {
       res.config.success(res);
     })
     .catch(err => {
-      if(err.response && err.response.status !== 401){
+      if (err.response && err.response.status !== 401) {
         err.config.error(err);
       }
     });
