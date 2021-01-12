@@ -44,4 +44,4 @@ Blockly.Msg.cases_add = "Case";
 Blockly.Msg.cases_condition = "Case (Variable) = ";
 Blockly.Msg.cases_do = "Do";
 Blockly.Msg.cases_switch = "Variable";
-Blockly.Msg.cases_tooltip = "Does something if the condition is true. If there isn\'t a matching case the default function will be executed.'"
+Blockly.Msg.cases_tooltip = "Does something if the condition is true. If there isn't a matching case the default function will be executed.'"
