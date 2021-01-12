@@ -136,7 +136,7 @@ class Compile extends Component {
         }
         <Backdrop className={this.props.classes.backdrop} open={this.state.progress}>
           <div className='overlay'>
-            <img src={Copy} width="400"></img>
+            <img src={Copy} width="400" alt="copyimage"></img>
             <h2>{Blockly.Msg.compile_overlay_head}</h2>
             <p>{Blockly.Msg.compile_overlay_text}</p>
             <p>{Blockly.Msg.compile_overlay_help}<a href="/faq" target="_blank">FAQ</a></p>

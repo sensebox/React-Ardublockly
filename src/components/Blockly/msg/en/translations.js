@@ -1,0 +1,212 @@
+import Blockly from 'blockly'
+
+Blockly.Msg.ADD_COMMENT = "Add Comment";
+Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";
+Blockly.Msg.CHANGE_VALUE_TITLE = "Change value:";
+Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";
+Blockly.Msg.COLLAPSE_ALL = "Collapse Blocks";
+Blockly.Msg.COLLAPSE_BLOCK = "Collapse Block";
+Blockly.Msg.DELETE_ALL_BLOCKS = "Delete all %1 blocks?";
+Blockly.Msg.DELETE_BLOCK = "Delete Block";
+Blockly.Msg.DELETE_X_BLOCKS = "Delete %1 Blocks";
+Blockly.Msg.DISABLE_BLOCK = "Disable Block";
+Blockly.Msg.DUPLICATE_BLOCK = "Duplicate";
+Blockly.Msg.ENABLE_BLOCK = "Enable Block";
+Blockly.Msg.EXPAND_ALL = "Expand Blocks";
+Blockly.Msg.EXPAND_BLOCK = "Expand Block";
+Blockly.Msg.EXTERNAL_INPUTS = "External Inputs";
+Blockly.Msg.HELP = "Help";
+Blockly.Msg.INLINE_INPUTS = "Inline Inputs";
+Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL = "https://github.com/google/blockly/wiki/Lists#create-empty-list";
+Blockly.Msg.LISTS_CREATE_EMPTY_TITLE = "create empty list";
+Blockly.Msg.LISTS_CREATE_EMPTY_TOOLTIP = "Returns a list, of length 0, containing no data records";
+Blockly.Msg.LISTS_CREATE_WITH_CONTAINER_TITLE_ADD = "list";
+Blockly.Msg.LISTS_CREATE_WITH_CONTAINER_TOOLTIP = "Add, remove, or reorder sections to reconfigure this list block.";
+Blockly.Msg.LISTS_CREATE_WITH_HELPURL = "https://github.com/google/blockly/wiki/Lists#create-list-with";
+Blockly.Msg.LISTS_CREATE_WITH_INPUT_WITH = "create list with";
+Blockly.Msg.LISTS_CREATE_WITH_ITEM_TOOLTIP = "Add an item to the list.";
+Blockly.Msg.LISTS_CREATE_WITH_TOOLTIP = "Create a list with any number of items.";
+Blockly.Msg.LISTS_GET_INDEX_FIRST = "first";
+Blockly.Msg.LISTS_GET_INDEX_FROM_END = "# from end";
+Blockly.Msg.LISTS_GET_INDEX_FROM_START = "#";
+Blockly.Msg.LISTS_GET_INDEX_GET = "get";
+Blockly.Msg.LISTS_GET_INDEX_GET_REMOVE = "get and remove";
+Blockly.Msg.LISTS_GET_INDEX_LAST = "last";
+Blockly.Msg.LISTS_GET_INDEX_RANDOM = "random";
+Blockly.Msg.LISTS_GET_INDEX_REMOVE = "remove";
+Blockly.Msg.LISTS_GET_INDEX_TAIL = "";
+Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_FIRST = "Returns the first item in a list.";
+Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_FROM_END = "Returns the item at the specified position in a list. #1 is the last item.";
+Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_FROM_START = "Returns the item at the specified position in a list. #1 is the first item.";
+Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_LAST = "Returns the last item in a list.";
+Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_RANDOM = "Returns a random item in a list.";
+Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_REMOVE_FIRST = "Removes and returns the first item in a list.";
+Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_REMOVE_FROM_END = "Removes and returns the item at the specified position in a list. #1 is the last item.";
+Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_REMOVE_FROM_START = "Removes and returns the item at the specified position in a list. #1 is the first item.";
+Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_REMOVE_LAST = "Removes and returns the last item in a list.";
+Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_REMOVE_RANDOM = "Removes and returns a random item in a list.";
+Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_REMOVE_FIRST = "Removes the first item in a list.";
+Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_REMOVE_FROM_END = "Removes the item at the specified position in a list. #1 is the last item.";
+Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_REMOVE_FROM_START = "Removes the item at the specified position in a list. #1 is the first item.";
+Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_REMOVE_LAST = "Removes the last item in a list.";
+Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_REMOVE_RANDOM = "Removes a random item in a list.";
+Blockly.Msg.LISTS_GET_SUBLIST_END_FROM_END = "to # from end";
+Blockly.Msg.LISTS_GET_SUBLIST_END_FROM_START = "to #";
+Blockly.Msg.LISTS_GET_SUBLIST_END_LAST = "to last";
+Blockly.Msg.LISTS_GET_SUBLIST_HELPURL = "https://github.com/google/blockly/wiki/Lists#getting-a-sublist";
+Blockly.Msg.LISTS_GET_SUBLIST_START_FIRST = "get sub-list from first";
+Blockly.Msg.LISTS_GET_SUBLIST_START_FROM_END = "get sub-list from # from end";
+Blockly.Msg.LISTS_GET_SUBLIST_START_FROM_START = "get sub-list from #";
+Blockly.Msg.LISTS_GET_SUBLIST_TAIL = "";
+Blockly.Msg.LISTS_GET_SUBLIST_TOOLTIP = "Creates a copy of the specified portion of a list.";
+Blockly.Msg.LISTS_INDEX_OF_FIRST = "find first occurrence of item";
+Blockly.Msg.LISTS_INDEX_OF_HELPURL = "https://github.com/google/blockly/wiki/Lists#getting-items-from-a-list";
+Blockly.Msg.LISTS_INDEX_OF_LAST = "find last occurrence of item";
+Blockly.Msg.LISTS_INDEX_OF_TOOLTIP = "Returns the index of the first/last occurrence of the item in the list. Returns 0 if item is not found.";
+Blockly.Msg.LISTS_INLIST = "in list";
+Blockly.Msg.LISTS_ISEMPTY_HELPURL = "https://github.com/google/blockly/wiki/Lists#is-empty";
+Blockly.Msg.LISTS_ISEMPTY_TITLE = "%1 is empty";
+Blockly.Msg.LISTS_ISEMPTY_TOOLTIP = "Returns true if the list is empty.";
+Blockly.Msg.LISTS_LENGTH_HELPURL = "https://github.com/google/blockly/wiki/Lists#length-of";
+Blockly.Msg.LISTS_LENGTH_TITLE = "length of %1";
+Blockly.Msg.LISTS_LENGTH_TOOLTIP = "Returns the length of a list.";
+Blockly.Msg.LISTS_REPEAT_HELPURL = "https://github.com/google/blockly/wiki/Lists#create-list-with";
+Blockly.Msg.LISTS_REPEAT_TITLE = "create list with item %1 repeated %2 times";
+Blockly.Msg.LISTS_REPEAT_TOOLTIP = "Creates a list consisting of the given value repeated the specified number of times.";
+Blockly.Msg.LISTS_SET_INDEX_HELPURL = "https://github.com/google/blockly/wiki/Lists#in-list--set";
+Blockly.Msg.LISTS_SET_INDEX_INPUT_TO = "as";
+Blockly.Msg.LISTS_SET_INDEX_INSERT = "insert at";
+Blockly.Msg.LISTS_SET_INDEX_SET = "set";
+Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_INSERT_FIRST = "Inserts the item at the start of a list.";
+Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_INSERT_FROM_END = "Inserts the item at the specified position in a list. #1 is the last item.";
+Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_INSERT_FROM_START = "Inserts the item at the specified position in a list. #1 is the first item.";
+Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_INSERT_LAST = "Append the item to the end of a list.";
+Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_INSERT_RANDOM = "Inserts the item randomly in a list.";
+Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_SET_FIRST = "Sets the first item in a list.";
+Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_SET_FROM_END = "Sets the item at the specified position in a list. #1 is the last item.";
+Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_SET_FROM_START = "Sets the item at the specified position in a list. #1 is the first item.";
+Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_SET_LAST = "Sets the last item in a list.";
+Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_SET_RANDOM = "Sets a random item in a list.";
+Blockly.Msg.LISTS_SORT_HELPURL = "https://github.com/google/blockly/wiki/Lists#sorting-a-list";
+Blockly.Msg.LISTS_SORT_ORDER_ASCENDING = "ascending";
+Blockly.Msg.LISTS_SORT_ORDER_DESCENDING = "descending";
+Blockly.Msg.LISTS_SORT_TITLE = "sort %1 %2 %3";
+Blockly.Msg.LISTS_SORT_TOOLTIP = "Sort a copy of a list.";
+Blockly.Msg.LISTS_SORT_TYPE_IGNORECASE = "alphabetic, ignore case";
+Blockly.Msg.LISTS_SORT_TYPE_NUMERIC = "numeric";
+Blockly.Msg.LISTS_SORT_TYPE_TEXT = "alphabetic";
+Blockly.Msg.LISTS_SPLIT_HELPURL = "https://github.com/google/blockly/wiki/Lists#splitting-strings-and-joining-lists";
+Blockly.Msg.LISTS_SPLIT_LIST_FROM_TEXT = "make list from text";
+Blockly.Msg.LISTS_SPLIT_TEXT_FROM_LIST = "make text from list";
+Blockly.Msg.LISTS_SPLIT_TOOLTIP_JOIN = "Join a list of texts into one text, separated by a delimiter.";
+Blockly.Msg.LISTS_SPLIT_TOOLTIP_SPLIT = "Split text into a list of texts, breaking at each delimiter.";
+Blockly.Msg.LISTS_SPLIT_WITH_DELIMITER = "with delimiter";
+Blockly.Msg.ME = "Me";
+Blockly.Msg.NEW_VARIABLE = "New variable...";
+Blockly.Msg.NEW_VARIABLE_TITLE = "New variable name:";
+Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";
+Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "allow statements";
+Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "with inputs:";
+Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL = "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29";
+Blockly.Msg.PROCEDURES_CALLNORETURN_TOOLTIP = "Run the user-defined function '%1'.";
+Blockly.Msg.PROCEDURES_CALLRETURN_HELPURL = "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29";
+Blockly.Msg.PROCEDURES_CALLRETURN_TOOLTIP = "Run the user-defined function '%1' and use its output.";
+Blockly.Msg.PROCEDURES_CALL_BEFORE_PARAMS = "with Inputs:";
+Blockly.Msg.PROCEDURES_CALL = "Call";
+Blockly.Msg.PROCEDURES_CALL_END = '';
+Blockly.Msg.PROCEDURES_CREATE_DO = "Create '%1'";
+Blockly.Msg.PROCEDURES_DEFNORETURN_COMMENT = "Describe this function...";
+Blockly.Msg.PROCEDURES_DEFNORETURN = "Create Function";
+Blockly.Msg.PROCEDURES_DEFNORETURN_DO = "";
+Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL = "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29";
+Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE = "do something";
+Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE = "to";
+Blockly.Msg.PROCEDURES_DEFNORETURN_TOOLTIP = "Creates a function with no output.";
+Blockly.Msg.PROCEDURES_DEFRETURN_HELPURL = "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29";
+Blockly.Msg.PROCEDURES_DEFRETURN_RETURN_TYPE = "return Type";
+Blockly.Msg.PROCEDURES_DEFRETURN_RETURN = "return";
+Blockly.Msg.PROCEDURES_DEFRETURN_TOOLTIP = "Creates a function with an output.";
+Blockly.Msg.PROCEDURES_DEF_DUPLICATE_WARNING = "Warning: This function has duplicate parameters.";
+Blockly.Msg.PROCEDURES_HIGHLIGHT_DEF = "Highlight function definition";
+Blockly.Msg.PROCEDURES_IFRETURN_HELPURL = "http://c2.com/cgi/wiki?GuardClause";
+Blockly.Msg.PROCEDURES_IFRETURN_TOOLTIP = "If a value is true, then return a second value.";
+Blockly.Msg.PROCEDURES_IFRETURN_WARNING = "Warning: This block may be used only within a function definition.";
+Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "input name:";
+Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Add an input to the function.";
+Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "inputs";
+Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Add, remove, or reorder inputs to this function.";
+Blockly.Msg.REDO = "Redo";
+Blockly.Msg.REMOVE_COMMENT = "Remove Comment";
+Blockly.Msg.RENAME_VARIABLE = "Rename variable...";
+Blockly.Msg.RENAME_VARIABLE_TITLE = "Rename all '%1' variables to:";
+
+Blockly.Msg.TODAY = "Today";
+Blockly.Msg.UNDO = "Undo";
+
+Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
+Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
+Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
+Blockly.Msg.CONTROLS_IF_MSG_THEN = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
+Blockly.Msg.CONTROLS_IF_ELSE_TITLE_ELSE = Blockly.Msg.CONTROLS_IF_MSG_ELSE;
+Blockly.Msg.PROCEDURES_DEFRETURN_PROCEDURE = Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE;
+Blockly.Msg.LISTS_GET_SUBLIST_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
+Blockly.Msg.LISTS_GET_INDEX_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
+Blockly.Msg.MATH_CHANGE_TITLE_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
+Blockly.Msg.PROCEDURES_DEFRETURN_DO = Blockly.Msg.PROCEDURES_DEFNORETURN_DO;
+Blockly.Msg.CONTROLS_IF_ELSEIF_TITLE_ELSEIF = Blockly.Msg.CONTROLS_IF_MSG_ELSEIF;
+Blockly.Msg.LISTS_GET_INDEX_HELPURL = Blockly.Msg.LISTS_INDEX_OF_HELPURL;
+Blockly.Msg.CONTROLS_FOREACH_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
+Blockly.Msg.LISTS_SET_INDEX_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
+Blockly.Msg.CONTROLS_FOR_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
+Blockly.Msg.LISTS_CREATE_WITH_ITEM_TITLE = Blockly.Msg.VARIABLES_DEFAULT_NAME;
+Blockly.Msg.TEXT_APPEND_VARIABLE = Blockly.Msg.VARIABLES_DEFAULT_NAME;
+Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TITLE_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
+Blockly.Msg.LISTS_INDEX_OF_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
+Blockly.Msg.PROCEDURES_DEFRETURN_COMMENT = Blockly.Msg.PROCEDURES_DEFNORETURN_COMMENT;
+
+
+Blockly.Msg.senseBox_basic_blue = "Blue";
+Blockly.Msg.senseBox_basic_green = "Gree";
+Blockly.Msg.senseBox_basic_red = "Red";
+Blockly.Msg.senseBox_basic_state = "Status";
+
+Blockly.Msg.senseBox_foto = "Light Dependent Resistor";
+Blockly.Msg.senseBox_foto_tip = "simple light depending resistor, gives values between 0 and 1023";
+Blockly.Msg.senseBox_gas = "Gas (VOC)";
+
+
+
+
+Blockly.Msg.senseBox_ir = "infrared distance sensor";
+Blockly.Msg.senseBox_ir_tip = "infrared distance sensor can measure the distance between 10 and 80 cm";
+
+
+Blockly.Msg.senseBox_lux = "lightsensor";
+Blockly.Msg.senseBox_lux_tip = "Light Sensor can measure the illuminance in lux";
+Blockly.Msg.senseBox_measurement = "Measurement";
+Blockly.Msg.senseBox_measurements = "Measurements";
+Blockly.Msg.senseBox_off = "off";
+Blockly.Msg.senseBox_on = "on";
+
+Blockly.Msg.senseBox_output_filename = "filename";
+Blockly.Msg.senseBox_output_format = "format:";
+Blockly.Msg.senseBox_output_linebreak = "linebreak";
+Blockly.Msg.senseBox_output_networkid = "networkID";
+Blockly.Msg.senseBox_output_password = "Password";
+Blockly.Msg.senseBox_output_safetosd = "safe to sd";
+Blockly.Msg.senseBox_output_safetosd_tip = "Save Measurment to SD-Card";
+Blockly.Msg.senseBox_output_serialprint = "Print on Serial Monitor";
+Blockly.Msg.senseBox_output_timestamp = "timestamp";
+Blockly.Msg.senseBox_piezo_tip = "simple piezo to make sound";
+Blockly.Msg.senseBox_poti = "Potentiometer";
+Blockly.Msg.senseBox_poti_tip = "Potentiometer"
+
+Blockly.Msg.senseBox_sensor = "Sensors";
+Blockly.Msg.senseBox_serial_tip = "prints the values to the serial monitor in the arduino IDE. Good way to have a fast and easy feedback for your programm";
+Blockly.Msg.senseBox_soil = "Soil Moisture";
+
+
+
+
+

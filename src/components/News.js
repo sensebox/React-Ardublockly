@@ -12,15 +12,11 @@ import Container from '@material-ui/core/Container';
 
 const news = `
 
-# *17.12.2020* - Erstes Beta Release der neuen Lern- und Programmierumgebung für die senseBox 
+# *08.01.2021* - Erstes Release der neuen Lern- und Programmierumgebung für die senseBox 
 
- 
-In den letzten Wochen haben wir eine komplett neue Lern- und Programmierumgebung für die senseBox geschaffen. Die Basis bildet hierbei weiterhin Google Blockly und das Frontend wird über React realisiert. Fast alle Blöcke wurden bereits aus der alten Version in die neue Version migriert. 
-
+ In den letzten Wochen haben wir eine komplett neue Lern- und Programmierumgebung für die senseBox geschaffen. Die Basis bildet hierbei weiterhin Google Blockly und das Frontend wird über React realisiert. Fast alle Blöcke wurden bereits aus der alten Version in die neue Version migriert. 
 
 ![](https://radosgw.public.os.wwu.de/pad/uploads/upload_880bb55f28e0dbb0bb9c2160d8e50594.png)
-
-
 
 ## Blockly Core
 Nachdem die bisherige Version, die unter [blockly.sensebox.de](https://blockly.sensebox.de) weiterhin verfügbar ist, auf einen Google Blockly Core von 2016 aufbaut, wurde es Zeit ein großes Update durchzuführen. Durch den neuen Blockly Core lassen sich auch andere Renderer der Blöcke verwenden. In den Einstellungen kannst du zwischen den zwei Renderern Geras und Zelos auswählen. Geras ist der klassische Blockly Renderer während Zelos vor allem für Touchoberfläche optimiert worden ist.
@@ -99,6 +95,9 @@ In der Gallery finden sich Beispiele mit verschiedenen Programmen. Die Beispiele
 
 ![](https://radosgw.public.os.wwu.de/pad/uploads/upload_a8dba6720fe2fb39cadf129d9bb04a62.png)
 
+### Anzeigen von Hilfetexten
+
+Wenn ein Block angeklickt und markiert ist (gelbe Umrandung) wird im Hilfefenster eine kurze Erläuterung und eine Quelle für weitere Informationen angezeigt.
 
 ## Fehler
 
