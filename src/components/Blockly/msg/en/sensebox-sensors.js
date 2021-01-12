@@ -32,6 +32,9 @@ Blockly.Msg.senseBox_temp = "Temperature in °C";
 Blockly.Msg.senseBox_temp_hum = "Temperature/Humidity Sensor (HDC1080)";
 Blockly.Msg.senseBox_temp_hum_tooltip = "This block returns the temperature and humidity sensor readings. Connect the sensor to one of the 5 I2C ports. Measured value is output with 2 decimal places.";
 Blockly.Msg.senseBox_temp_hum_helpurl = "https://en.docs.sensebox.de/hardware/sensoren-temperatur-luftfeuchte/"
+Blockly.Msg.senseBox_hum = "humidity in %";
+Blockly.Msg.senseBox_hum_tip = "Measures humidity in %";
+
 
 /**
  * Ultraschalldistanzsensor
@@ -140,7 +143,7 @@ Blockly.Msg.senseBox_bme680_helpurl = "https://en.docs.sensebox.de/hardware/sens
 /**
  * Truebner SMT50
  */
-Blockly.Msg.senseBox_smt50 = "Bodenfeuchte/-temperatur (SMT50)";
+Blockly.Msg.senseBox_smt50 = "Soil Moisture and Temperature (SMT50)";
 Blockly.Msg.senseBox_smt50_helpurl = "https://docs.sensebox.de/hardware/sensoren-truebner/"
 Blockly.Msg.senseBox_smt50_tooltip = "Schließe den Bodenfeuchtigkeit- und Temperatursensor an einen der 3 digital/analog Ports an und wähle den Port im Block aus. Der Sensor gibt die Bodentemperatur in °C und die Bodenfeuchtigkeit in % aus."
 

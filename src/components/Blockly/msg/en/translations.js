@@ -7,23 +7,6 @@ Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";
 Blockly.Msg.CLEAN_UP = "Clean up Blocks";
 Blockly.Msg.COLLAPSE_ALL = "Collapse Blocks";
 Blockly.Msg.COLLAPSE_BLOCK = "Collapse Block";
-Blockly.Msg.COLOUR_BLEND_COLOUR1 = "colour 1";
-Blockly.Msg.COLOUR_BLEND_COLOUR2 = "colour 2";
-Blockly.Msg.COLOUR_BLEND_HELPURL = "http://meyerweb.com/eric/tools/color-blend/";
-Blockly.Msg.COLOUR_BLEND_RATIO = "ratio";
-Blockly.Msg.COLOUR_BLEND_TITLE = "blend";
-Blockly.Msg.COLOUR_BLEND_TOOLTIP = "Blends two colours together with a given ratio (0.0 - 1.0).";
-Blockly.Msg.COLOUR_PICKER_HELPURL = "https://en.wikipedia.org/wiki/Color";
-Blockly.Msg.COLOUR_PICKER_TOOLTIP = "Choose a colour from the palette.";
-Blockly.Msg.COLOUR_RANDOM_HELPURL = "http://randomcolour.com";
-Blockly.Msg.COLOUR_RANDOM_TITLE = "random colour";
-Blockly.Msg.COLOUR_RANDOM_TOOLTIP = "Choose a colour at random.";
-Blockly.Msg.COLOUR_RGB_BLUE = "blue";
-Blockly.Msg.COLOUR_RGB_GREEN = "green";
-Blockly.Msg.COLOUR_RGB_HELPURL = "http://www.december.com/html/spec/colorper.html";
-Blockly.Msg.COLOUR_RGB_RED = "red";
-Blockly.Msg.COLOUR_RGB_TITLE = "colour with";
-Blockly.Msg.COLOUR_RGB_TOOLTIP = "Create a colour with the specified amount of red, green, and blue. All values must be between 0 and 100.";
 Blockly.Msg.DELETE_ALL_BLOCKS = "Delete all %1 blocks?";
 Blockly.Msg.DELETE_BLOCK = "Delete Block";
 Blockly.Msg.DELETE_X_BLOCKS = "Delete %1 Blocks";
@@ -193,14 +176,11 @@ Blockly.Msg.senseBox_foto_tip = "simple light depending resistor, gives values b
 Blockly.Msg.senseBox_gas = "Gas (VOC)";
 
 
-Blockly.Msg.senseBox_hum = "humidity in %";
-Blockly.Msg.senseBox_hum_tip = "Measures humidity in %";
 
 
 Blockly.Msg.senseBox_ir = "infrared distance sensor";
 Blockly.Msg.senseBox_ir_tip = "infrared distance sensor can measure the distance between 10 and 80 cm";
-Blockly.Msg.senseBox_led = "LED connected to digital";
-Blockly.Msg.senseBox_led_tip = "simple LED. Don't forget the resistor";
+
 
 Blockly.Msg.senseBox_lux = "lightsensor";
 Blockly.Msg.senseBox_lux_tip = "Light Sensor can measure the illuminance in lux";
@@ -220,26 +200,12 @@ Blockly.Msg.senseBox_output_serialprint = "Print on Serial Monitor";
 Blockly.Msg.senseBox_output_timestamp = "timestamp";
 Blockly.Msg.senseBox_piezo_tip = "simple piezo to make sound";
 Blockly.Msg.senseBox_poti = "Potentiometer";
-Blockly.Msg.senseBox_poti_tip = "Potentiometer";
-
-
-
-
-Blockly.Msg.senseBox_rgb_led = "RGB-LED";
-Blockly.Msg.senseBox_rgb_led_tip = "RGB-LED";
-
-
-
-
+Blockly.Msg.senseBox_poti_tip = "Potentiometer"
 
 Blockly.Msg.senseBox_sensor = "Sensors";
 Blockly.Msg.senseBox_serial_tip = "prints the values to the serial monitor in the arduino IDE. Good way to have a fast and easy feedback for your programm";
 Blockly.Msg.senseBox_soil = "Soil Moisture";
 
-
-
-
-Blockly.Msg.sensebox_soil_smt50 = "Soil Moisture and Temperature (SMT50)";
 
 
 
