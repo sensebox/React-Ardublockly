@@ -1,24 +1,41 @@
-export const De = [
-    require('./de/audio'),
-    require('./de/faq'),
-    require('./de/io'),
-    require('./de/logic'),
-    require('./de/loops'),
-    require('./de/math'),
-    require('./de/mqtt'),
-    require('./de/sensebox-display'),
-    require('./de/sensebox-led'),
-    require('./de/sensebox-lora'),
-    require('./de/sensebox-osem'),
-    require('./de/sensebox-sd'),
-    require('./de/sensebox-sensors'),
-    require('./de/sensebox-web'),
-    require('./de/text'),
-    require('./de/time'),
-    require('./en/tours'),
-    require('./de/translations'),
-    require('./de/ui'),
-    require('./de/variables'),
-    require('./de/webserver')
+import { AUDIO } from './de/audio';
+import { FAQ } from './de/faq';
+import { IO } from './de/io';
+import { LOGIC } from './de/logic';
+import { LOOPS } from './de/loops';
+import { MATH } from './de/math';
+import { MQTT } from './de/mqtt';
+import { DISPLAY } from './de/sensebox-display';
+import { LED } from './de/sensebox-led';
+import { LORA } from './de/sensebox-lora';
+import { TELEGRAM } from './de/sensebox-telegram';
+import { WEB } from './de/sensebox-web';
+import { TEXT } from './de/text';
+import { TIME } from './de/time';
+import { TOURS } from './de/tours';
+import { TRANSLATIONS } from './de/translations';
+import { UI } from './de/ui';
+import { VARIABLES } from './de/variables';
+import { WEBSERVER } from './de/webserver';
 
-]
+export const De = {
+    ...AUDIO,
+    ...FAQ,
+    ...IO,
+    ...LOGIC,
+    ...LOOPS,
+    ...MATH,
+    ...MQTT,
+    ...DISPLAY,
+    ...LED,
+    ...LORA,
+    ...TELEGRAM,
+    ...WEB,
+    ...TEXT,
+    ...TIME,
+    ...TOURS,
+    ...TRANSLATIONS,
+    ...UI,
+    ...VARIABLES,
+    ...WEBSERVER
+}
