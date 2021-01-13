@@ -15,17 +15,21 @@ class Content extends Component {
 
   componentDidMount() {
     if (this.props.language === 'de_DE') {
+      console.log("change Language")
       Blockly.setLocale(De);
     } else if (this.props.language === 'en_US') {
       Blockly.setLocale(En);
     }
   }
 
-  componentDidUpdate(props){
-    if(props.language !== this.props.language){
+  componentDidUpdate(props) {
+    console.log(this.props.language)
+    if (props.language !== this.props.language) {
       if (this.props.language === 'de_DE') {
+        console.log("change Language")
         Blockly.setLocale(De);
       } else if (this.props.language === 'en_US') {
+        console.log("change Language")
         Blockly.setLocale(En);
       }
     }

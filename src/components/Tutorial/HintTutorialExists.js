@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-
-import { Link } from 'react-router-dom';
-
 import Dialog from '../Dialog';
 
 import { withStyles } from '@material-ui/core/styles';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import * as Blockly from 'blockly'
+import ReactMarkdown from 'react-markdown';
 
 const styles = (theme) => ({
   link: {
@@ -64,7 +62,7 @@ class HintTutorialExists extends Component {
         button={Blockly.Msg.button_close}
       >
         <div>
-          {Blockly.Msg.messages_newblockly_text}<Link to="/news" className={this.props.classes.link}>Blockly News</Link>
+          <ReactMarkdown linkTarget="_blank">{Blockly.Msg.messages_newblockly_text}</ReactMarkdown>
         </div>
         <FormControlLabel
           style={{ marginTop: '20px' }}
