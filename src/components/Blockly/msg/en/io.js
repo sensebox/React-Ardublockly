@@ -1,106 +1,107 @@
-import Blockly from 'blockly'
+export const IO = {
 
 
-Blockly.Msg.ARD_ANALOGREAD = "read analog pin#";
-Blockly.Msg.ARD_ANALOGREAD_TIP = "Return value between 0 and 1024";
-Blockly.Msg.ARD_ANALOGWRITE = "set analog pin#";
-Blockly.Msg.ARD_ANALOGWRITE_TIP = "Write analog value between 0 and 255 to a specific PWM Port";
-Blockly.Msg.ARD_BUILTIN_LED = "set built-in LED";
-Blockly.Msg.ARD_BUILTIN_LED_TIP = "Light on or off for the built-in LED of the Arduino";
-Blockly.Msg.ARD_COMPONENT_WARN1 = "A %1 configuration block with the same %2 name must be added to use this block!";
-Blockly.Msg.ARD_DEFINE = "Define";
-Blockly.Msg.ARD_DIGITALREAD = "read digital pin#";
-Blockly.Msg.ARD_DIGITALREAD_TIP = "Read digital value on a pin: HIGH or LOW";
-Blockly.Msg.ARD_DIGITALWRITE = "set digitial pin#";
-Blockly.Msg.ARD_DIGITALWRITE_TIP = "Write digital value HIGH or LOW to a specific Port";
-Blockly.Msg.ARD_FUN_RUN_LOOP = "Arduino loop forever:";
-Blockly.Msg.ARD_FUN_RUN_SETUP = "Arduino run first:";
-Blockly.Msg.ARD_FUN_RUN_TIP = "Defines the Arduino setup() and loop() functions.";
-Blockly.Msg.ARD_HIGH = "HIGH";
-Blockly.Msg.ARD_HIGHLOW_TIP = "Set a pin state logic High or Low.";
-Blockly.Msg.ARD_LOW = "LOW";
-Blockly.Msg.ARD_MAP = "Map Value";
-Blockly.Msg.ARD_MAP_FROMMAX = "from Max";
-Blockly.Msg.ARD_MAP_FROMMIN = "from Min";
-Blockly.Msg.ARD_MAP_TIP = "Re-maps a number from [0-1024] to another.";
-Blockly.Msg.ARD_MAP_TOMAX = "to Max";
-Blockly.Msg.ARD_MAP_TOMIN = "to Min";
-Blockly.Msg.ARD_MAP_VAL = "value to [0-";
-Blockly.Msg.ARD_NOTONE = "Turn off tone on pin #";
-Blockly.Msg.ARD_NOTONE_PIN = "No tone PIN#";
-Blockly.Msg.ARD_NOTONE_PIN_TIP = "Stop generating a tone on a pin";
-Blockly.Msg.ARD_NOTONE_TIP = "Turns the tone off on the selected pin";
-Blockly.Msg.ARD_PIN_WARN1 = "Pin %1 is needed for %2 as pin %3. Already used as %4.";
-Blockly.Msg.ARD_PULSETIMEOUT_TIP = "Measures the duration of a pulse on the selected pin, if it is within the time-out in microseconds.";
-Blockly.Msg.ARD_PULSE_READ = "measure %1 pulse on pin #%2";
-Blockly.Msg.ARD_PULSE_READ_TIMEOUT = "measure %1 pulse on pin #%2 (timeout after %3 μs)";
-Blockly.Msg.ARD_PULSE_TIP = "Measures the duration of a pulse on the selected pin.";
-Blockly.Msg.ARD_SERIAL_BPS = "bps";
-Blockly.Msg.ARD_SERIAL_PRINT = "print";
-Blockly.Msg.ARD_SERIAL_PRINT_NEWLINE = "add new line";
-Blockly.Msg.ARD_SERIAL_PRINT_TIP = "Prints data to the console/serial port as human-readable ASCII text.";
-Blockly.Msg.ARD_SERIAL_PRINT_WARN = "A setup block for %1 must be added to the workspace to use this block!";
-Blockly.Msg.ARD_SERIAL_SETUP = "Setup";
-Blockly.Msg.ARD_SERIAL_SETUP_TIP = "Selects the speed for a specific Serial peripheral";
-Blockly.Msg.ARD_SERIAL_SPEED = ":  speed to";
-Blockly.Msg.ARD_SERVO_READ = "read SERVO from PIN#";
-Blockly.Msg.ARD_SERVO_READ_TIP = "Read a Servo angle";
-Blockly.Msg.ARD_SERVO_WRITE = "set SERVO from Pin";
-Blockly.Msg.ARD_SERVO_WRITE_DEG_180 = "Degrees (0~180)";
-Blockly.Msg.ARD_SERVO_WRITE_TIP = "Set a Servo to an specified angle";
-Blockly.Msg.ARD_SERVO_WRITE_TO = "to";
-Blockly.Msg.ARD_SETTONE = "Set tone on pin #";
-Blockly.Msg.ARD_SPI_SETUP = "Setup";
-Blockly.Msg.ARD_SPI_SETUP_CONF = "configuration:";
-Blockly.Msg.ARD_SPI_SETUP_DIVIDE = "clock divide";
-Blockly.Msg.ARD_SPI_SETUP_LSBFIRST = "LSBFIRST";
-Blockly.Msg.ARD_SPI_SETUP_MODE = "SPI mode (idle - edge)";
-Blockly.Msg.ARD_SPI_SETUP_MODE0 = "0 (Low - Falling)";
-Blockly.Msg.ARD_SPI_SETUP_MODE1 = "1 (Low - Rising)";
-Blockly.Msg.ARD_SPI_SETUP_MODE2 = "2 (High - Falling)";
-Blockly.Msg.ARD_SPI_SETUP_MODE3 = "3 (High - Rising)";
-Blockly.Msg.ARD_SPI_SETUP_MSBFIRST = "MSBFIRST";
-Blockly.Msg.ARD_SPI_SETUP_SHIFT = "data shift";
-Blockly.Msg.ARD_SPI_SETUP_TIP = "Configures the SPI peripheral.";
-Blockly.Msg.ARD_SPI_TRANSRETURN_TIP = "Send a SPI message to an specified slave device and get data back.";
-Blockly.Msg.ARD_SPI_TRANS_NONE = "none";
-Blockly.Msg.ARD_SPI_TRANS_SLAVE = "to slave pin";
-Blockly.Msg.ARD_SPI_TRANS_TIP = "Send a SPI message to an specified slave device.";
-Blockly.Msg.ARD_SPI_TRANS_VAL = "transfer";
-Blockly.Msg.ARD_SPI_TRANS_WARN1 = "A setup block for %1 must be added to the workspace to use this block!";
-Blockly.Msg.ARD_SPI_TRANS_WARN2 = "Old pin value %1 is no longer available.";
-Blockly.Msg.ARD_STEPPER_COMPONENT = "stepper";
-Blockly.Msg.ARD_STEPPER_DEFAULT_NAME = "MyStepper";
-Blockly.Msg.ARD_STEPPER_FOUR_PINS = "4";
-Blockly.Msg.ARD_STEPPER_MOTOR = "stepper motor:";
-Blockly.Msg.ARD_STEPPER_NUMBER_OF_PINS = "Number of pins";
-Blockly.Msg.ARD_STEPPER_PIN1 = "pin1#";
-Blockly.Msg.ARD_STEPPER_PIN2 = "pin2#";
-Blockly.Msg.ARD_STEPPER_PIN3 = "pin3#";
-Blockly.Msg.ARD_STEPPER_PIN4 = "pin4#";
-Blockly.Msg.ARD_STEPPER_REVOLVS = "how many steps per revolution";
-Blockly.Msg.ARD_STEPPER_SETUP = "Setup stepper motor";
-Blockly.Msg.ARD_STEPPER_SETUP_TIP = "Configures a stepper motor pinout and other settings.";
-Blockly.Msg.ARD_STEPPER_SPEED = "set speed (rpm) to";
-Blockly.Msg.ARD_STEPPER_STEP = "move stepper";
-Blockly.Msg.ARD_STEPPER_STEPS = "steps";
-Blockly.Msg.ARD_STEPPER_STEP_TIP = "Turns the stepper motor a specific number of steps.";
-Blockly.Msg.ARD_STEPPER_TWO_PINS = "2";
-Blockly.Msg.ARD_TYPE_ARRAY = "Array";
-Blockly.Msg.ARD_TYPE_BOOL = "Boolean";
-Blockly.Msg.ARD_TYPE_CHAR = "Character";
-Blockly.Msg.ARD_TYPE_CHILDBLOCKMISSING = "ChildBlockMissing";
-Blockly.Msg.ARD_TYPE_DECIMAL = "Decimal";
-Blockly.Msg.ARD_TYPE_LONG = "Large Number";
-Blockly.Msg.ARD_TYPE_NULL = "Null";
-Blockly.Msg.ARD_TYPE_NUMBER = "Number";
-Blockly.Msg.ARD_TYPE_SHORT = "Short Number";
-Blockly.Msg.ARD_TYPE_TEXT = "Text";
-Blockly.Msg.ARD_TYPE_UNDEF = "Undefined";
-Blockly.Msg.ARD_VAR_AS = "as";
-Blockly.Msg.ARD_VAR_AS_TIP = "Sets a value to a specific type";
-Blockly.Msg.ARD_WRITE_TO = "to";
-Blockly.Msg.NEW_INSTANCE = "New instance...";
-Blockly.Msg.NEW_INSTANCE_TITLE = "New instance name:";
-Blockly.Msg.RENAME_INSTANCE = "Rename instance...";
-Blockly.Msg.RENAME_INSTANCE_TITLE = "Rename all '%1' instances to:";
+    ARD_ANALOGREAD: "read analog pin#",
+    ARD_ANALOGREAD_TIP: "Return value between 0 and 1024",
+    ARD_ANALOGWRITE: "set analog pin#",
+    ARD_ANALOGWRITE_TIP: "Write analog value between 0 and 255 to a specific PWM Port",
+    ARD_BUILTIN_LED: "set built-in LED",
+    ARD_BUILTIN_LED_TIP: "Light on or off for the built-in LED of the Arduino",
+    ARD_COMPONENT_WARN1: "A %1 configuration block with the same %2 name must be added to use this block!",
+    ARD_DEFINE: "Define",
+    ARD_DIGITALREAD: "read digital pin#",
+    ARD_DIGITALREAD_TIP: "Read digital value on a pin: HIGH or LOW",
+    ARD_DIGITALWRITE: "set digitial pin#",
+    ARD_DIGITALWRITE_TIP: "Write digital value HIGH or LOW to a specific Port",
+    ARD_FUN_RUN_LOOP: "Arduino loop forever:",
+    ARD_FUN_RUN_SETUP: "Arduino run first:",
+    ARD_FUN_RUN_TIP: "Defines the Arduino setup() and loop() functions.",
+    ARD_HIGH: "HIGH",
+    ARD_HIGHLOW_TIP: "Set a pin state logic High or Low.",
+    ARD_LOW: "LOW",
+    ARD_MAP: "Map Value",
+    ARD_MAP_FROMMAX: "from Max",
+    ARD_MAP_FROMMIN: "from Min",
+    ARD_MAP_TIP: "Re-maps a number from [0-1024] to another.",
+    ARD_MAP_TOMAX: "to Max",
+    ARD_MAP_TOMIN: "to Min",
+    ARD_MAP_VAL: "value to [0-",
+    ARD_NOTONE: "Turn off tone on pin #",
+    ARD_NOTONE_PIN: "No tone PIN#",
+    ARD_NOTONE_PIN_TIP: "Stop generating a tone on a pin",
+    ARD_NOTONE_TIP: "Turns the tone off on the selected pin",
+    ARD_PIN_WARN1: "Pin %1 is needed for %2 as pin %3. Already used as %4.",
+    ARD_PULSETIMEOUT_TIP: "Measures the duration of a pulse on the selected pin, if it is within the time-out in microseconds.",
+    ARD_PULSE_READ: "measure %1 pulse on pin #%2",
+    ARD_PULSE_READ_TIMEOUT: "measure %1 pulse on pin #%2 (timeout after %3 μs)",
+    ARD_PULSE_TIP: "Measures the duration of a pulse on the selected pin.",
+    ARD_SERIAL_BPS: "bps",
+    ARD_SERIAL_PRINT: "print",
+    ARD_SERIAL_PRINT_NEWLINE: "add new line",
+    ARD_SERIAL_PRINT_TIP: "Prints data to the console/serial port as human-readable ASCII text.",
+    ARD_SERIAL_PRINT_WARN: "A setup block for %1 must be added to the workspace to use this block!",
+    ARD_SERIAL_SETUP: "Setup",
+    ARD_SERIAL_SETUP_TIP: "Selects the speed for a specific Serial peripheral",
+    ARD_SERIAL_SPEED: ":  speed to",
+    ARD_SERVO_READ: "read SERVO from PIN#",
+    ARD_SERVO_READ_TIP: "Read a Servo angle",
+    ARD_SERVO_WRITE: "set SERVO from Pin",
+    ARD_SERVO_WRITE_DEG_180: "Degrees (0~180)",
+    ARD_SERVO_WRITE_TIP: "Set a Servo to an specified angle",
+    ARD_SERVO_WRITE_TO: "to",
+    ARD_SETTONE: "Set tone on pin #",
+    ARD_SPI_SETUP: "Setup",
+    ARD_SPI_SETUP_CONF: "configuration:",
+    ARD_SPI_SETUP_DIVIDE: "clock divide",
+    ARD_SPI_SETUP_LSBFIRST: "LSBFIRST",
+    ARD_SPI_SETUP_MODE: "SPI mode (idle - edge)",
+    ARD_SPI_SETUP_MODE0: "0 (Low - Falling)",
+    ARD_SPI_SETUP_MODE1: "1 (Low - Rising)",
+    ARD_SPI_SETUP_MODE2: "2 (High - Falling)",
+    ARD_SPI_SETUP_MODE3: "3 (High - Rising)",
+    ARD_SPI_SETUP_MSBFIRST: "MSBFIRST",
+    ARD_SPI_SETUP_SHIFT: "data shift",
+    ARD_SPI_SETUP_TIP: "Configures the SPI peripheral.",
+    ARD_SPI_TRANSRETURN_TIP: "Send a SPI message to an specified slave device and get data back.",
+    ARD_SPI_TRANS_NONE: "none",
+    ARD_SPI_TRANS_SLAVE: "to slave pin",
+    ARD_SPI_TRANS_TIP: "Send a SPI message to an specified slave device.",
+    ARD_SPI_TRANS_VAL: "transfer",
+    ARD_SPI_TRANS_WARN1: "A setup block for %1 must be added to the workspace to use this block!",
+    ARD_SPI_TRANS_WARN2: "Old pin value %1 is no longer available.",
+    ARD_STEPPER_COMPONENT: "stepper",
+    ARD_STEPPER_DEFAULT_NAME: "MyStepper",
+    ARD_STEPPER_FOUR_PINS: "4",
+    ARD_STEPPER_MOTOR: "stepper motor:",
+    ARD_STEPPER_NUMBER_OF_PINS: "Number of pins",
+    ARD_STEPPER_PIN1: "pin1#",
+    ARD_STEPPER_PIN2: "pin2#",
+    ARD_STEPPER_PIN3: "pin3#",
+    ARD_STEPPER_PIN4: "pin4#",
+    ARD_STEPPER_REVOLVS: "how many steps per revolution",
+    ARD_STEPPER_SETUP: "Setup stepper motor",
+    ARD_STEPPER_SETUP_TIP: "Configures a stepper motor pinout and other settings.",
+    ARD_STEPPER_SPEED: "set speed (rpm) to",
+    ARD_STEPPER_STEP: "move stepper",
+    ARD_STEPPER_STEPS: "steps",
+    ARD_STEPPER_STEP_TIP: "Turns the stepper motor a specific number of steps.",
+    ARD_STEPPER_TWO_PINS: "2",
+    ARD_TYPE_ARRAY: "Array",
+    ARD_TYPE_BOOL: "Boolean",
+    ARD_TYPE_CHAR: "Character",
+    ARD_TYPE_CHILDBLOCKMISSING: "ChildBlockMissing",
+    ARD_TYPE_DECIMAL: "Decimal",
+    ARD_TYPE_LONG: "Large Number",
+    ARD_TYPE_NULL: "Null",
+    ARD_TYPE_NUMBER: "Number",
+    ARD_TYPE_SHORT: "Short Number",
+    ARD_TYPE_TEXT: "Text",
+    ARD_TYPE_UNDEF: "Undefined",
+    ARD_VAR_AS: "as",
+    ARD_VAR_AS_TIP: "Sets a value to a specific type",
+    ARD_WRITE_TO: "to",
+    NEW_INSTANCE: "New instance...",
+    NEW_INSTANCE_TITLE: "New instance name:",
+    RENAME_INSTANCE: "Rename instance...",
+    RENAME_INSTANCE_TITLE: "Rename all '%1' instances to:",
+}
