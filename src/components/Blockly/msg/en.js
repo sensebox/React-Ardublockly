@@ -8,6 +8,9 @@ import { MQTT } from './en/mqtt';
 import { DISPLAY } from './en/sensebox-display';
 import { LED } from './en/sensebox-led';
 import { LORA } from './en/sensebox-lora';
+import { OSEM } from './en/sensebox-osem';
+import { SD } from './en/sensebox-sd';
+import { SENSORS } from './en/sensebox-sensors';
 import { TELEGRAM } from './en/sensebox-telegram';
 import { WEB } from './en/sensebox-web';
 import { TEXT } from './en/text';
@@ -29,6 +32,9 @@ export const En = {
     ...DISPLAY,
     ...LED,
     ...LORA,
+    ...OSEM,
+    ...SD,
+    ...SENSORS,
     ...TELEGRAM,
     ...WEB,
     ...TEXT,
