@@ -125,7 +125,6 @@ class Home extends Component {
             </Grid>
             : null}
         </Grid>
-
         <HintTutorialExists />
         <Snackbar
           open={this.state.snackbar}
