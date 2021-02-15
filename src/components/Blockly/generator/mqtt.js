@@ -38,7 +38,7 @@ Blockly.Arduino.sensebox_mqtt_publish = function (block) {
             Blockly.Arduino.definitions_['mqtt_' + feed_client + ''] = 'Adafruit_MQTT_Publish ' + feed_client + ' = Adafruit_MQTT_Publish(&mqtt, "/"USERNAME"/' + feedname + '");'
             break;
         case 'custom':
-            Blockly.Arduino.definitions_['mqtt_' + feed_client + ''] = 'Adafruit_MQTT_Publish ' + feed_client + ' = Adafruit_MQTT_Publish(&mqtt, ' + feedname + ');'
+            Blockly.Arduino.definitions_['mqtt_' + feed_client + ''] = 'Adafruit_MQTT_Publish ' + feed_client + ' = Adafruit_MQTT_Publish(&mqtt, "' + feedname + '");'
             break;
         default:
             break;
@@ -78,3 +78,4 @@ Blockly.Arduino.sensebox_mqtt_subscribe = function (block) {
     var code = '';
     return code;
 };
+
