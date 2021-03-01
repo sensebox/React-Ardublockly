@@ -20,7 +20,7 @@
     "file-saver": "^2.0.2",
     "mnemonic-id": "^3.2.7",
     "moment": "^2.28.0",
-    "prismjs": "^1.20.0",
+    "prismjs": "^1.23.0",
     "react": "^16.13.1",
     "react-cookie-consent": "^5.2.0",
     "react-dom": "^16.13.1",
