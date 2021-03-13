@@ -12,6 +12,7 @@ import Screenshot from './Screenshot';
 import ShareProject from './ShareProject';
 import ResetWorkspace from './ResetWorkspace';
 import DeleteProject from './DeleteProject';
+import CopyCode from './CopyCode';
 
 class WorkspaceFunc extends Component {
 
@@ -21,7 +22,7 @@ class WorkspaceFunc extends Component {
 
         {!this.props.assessment ?
           <WorkspaceName
-            style={{marginRight: '5px'}}
+            style={{ marginRight: '5px' }}
             multiple={this.props.multiple}
             project={this.props.project}
             projectType={this.props.projectType}
@@ -30,53 +31,59 @@ class WorkspaceFunc extends Component {
 
         {this.props.assessment ?
           <SolutionCheck />
-        : !this.props.multiple ?
+          : !this.props.multiple ?
             <Compile iconButton />
+            : null}
+
+        {!this.props.multiple ?
+          <CopyCode iconButton />
           : null}
 
-        {this.props.user && !this.props.multiple?
+
+        {this.props.user && !this.props.multiple ?
           <SaveProject
-            style={{marginRight: '5px'}}
+            style={{ marginRight: '5px' }}
             projectType={this.props.projectType}
             project={this.props.project}
           />
-        : null}
+          : null}
 
         {!this.props.multiple ?
-          <DownloadProject style={{marginRight: '5px'}} />
-        : null}
+          <DownloadProject style={{ marginRight: '5px' }} />
+          : null}
 
-        {!this.props.assessment && !this.props.multiple?
+
+        {!this.props.assessment && !this.props.multiple ?
           <OpenProject
-            style={{marginRight: '5px'}}
+            style={{ marginRight: '5px' }}
             assessment={this.props.assessment}
           />
-        : null}
+          : null}
 
-        {!this.props.assessment && !this.props.multiple?
-          <Screenshot style={{marginRight: '5px'}} />
-        : null}
+        {!this.props.assessment && !this.props.multiple ?
+          <Screenshot style={{ marginRight: '5px' }} />
+          : null}
 
         {this.props.projectType !== 'gallery' && !this.props.assessment ?
           <ShareProject
-            style={{marginRight: '5px'}}
+            style={{ marginRight: '5px' }}
             multiple={this.props.multiple}
             project={this.props.project}
             projectType={this.props.projectType}
           />
-        :null}
+          : null}
 
         {!this.props.multiple ?
-          <ResetWorkspace style={this.props.projectType === 'project' || this.props.projectType === 'gallery' ? { marginRight: '5px' }:null}
+          <ResetWorkspace style={this.props.projectType === 'project' || this.props.projectType === 'gallery' ? { marginRight: '5px' } : null}
           />
-        : null}
+          : null}
 
         {!this.props.assessment && (this.props.projectType === 'project' || this.props.projectType === 'gallery') && this.props.user && this.props.user.email === this.props.project.creator ?
           <DeleteProject
             project={this.props.project}
             projectType={this.props.projectType}
           />
-        :null}
+          : null}
 
       </div>
     );
