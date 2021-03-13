@@ -41,6 +41,7 @@ export const UI = {
     tooltip_trashcan_delete: "empty trashcan",
     tooltip_project_title: "Project title",
     tooltip_check_solution: "Check solution",
+    tooltip_copy_code: "Copy Code to clipboard",
 
     /**
      * Messages
@@ -65,6 +66,7 @@ export const UI = {
     messages_GET_TUTORIAL_FAIL: 'Back to tutorials overview',
     messages_LOGIN_FAIL: 'The username or password is incorrect.',
     messages_login_error: "Enter both a username and a password.",
+    messages_copy_code: "Copy code to clipboard succesfull",
     /**
      * Share Dialog
      */
