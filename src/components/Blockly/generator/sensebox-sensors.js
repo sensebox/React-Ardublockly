@@ -303,36 +303,36 @@ Blockly.Arduino.sensebox_scd30 = function () {
 
 Blockly.Arduino.sensebox_gps = function () {
   var dropdown = this.getFieldValue('dropdown');
-  Blockly.Arduino.libraries_['gps_library'] = '#include "SparkFun_Ublox_Arduino_Library.h"'
+  Blockly.Arduino.libraries_['gps_library'] = '#include <SparkFun_u-blox_GNSS_Arduino_Library.h>'
   Blockly.Arduino.libraries_['wire'] = '#include <Wire.h>'
   Blockly.Arduino.libraries_['library_senseBoxMCU'] = '#include "SenseBoxMCU.h"';
-  Blockly.Arduino.definitions_['GPS'] = 'SFE_UBLOX_GPS myGPS;';
+  Blockly.Arduino.definitions_['GPS'] = 'SFE_UBLOX_GNSS myGNSS;';
   Blockly.Arduino.setupCode_['init_gps'] = ` Wire.begin();
 
-  if (myGPS.begin() == false) //Connect to the Ublox module using Wire port
+  if (myGNSS.begin() == false) //Connect to the Ublox module using Wire port
   {
     Serial.println(F("Ublox GPS not detected at default I2C address. Please check wiring. Freezing."));
     while (1);
   }
 
-  myGPS.setI2COutput(COM_TYPE_UBX); //Set the I2C port to output UBX only (turn off NMEA noise)
-  myGPS.saveConfiguration(); //Save the current settings to flash and BBR`;
+  myGNSS.setI2COutput(COM_TYPE_UBX); //Set the I2C port to output UBX only (turn off NMEA noise)
+  myGNSS.saveConfiguration(); //Save the current settings to flash and BBR`;
   var code = '';
   switch (dropdown) {
     case 'latitude':
-      code = 'myGPS.getLatitude()';
+      code = 'myGNSS.getLatitude()';
       break;
     case 'longitude':
-      code = 'myGPS.getLongitude()';
+      code = 'myGNSS.getLongitude()';
       break;
     case 'altitude':
-      code = 'myGPS.getAltitudeMSL()';
+      code = 'myGNSS.getAltitudeMSL()';
       break;
     case 'pDOP':
-      code = 'myGPS.getPDOP()';
+      code = 'myGNSS.getPDOP()';
       break;
     case 'fixType':
-      code = 'myGPS.getFixType()';
+      code = 'myGNSS.getFixType()';
       break;
     default:
       code = ''
