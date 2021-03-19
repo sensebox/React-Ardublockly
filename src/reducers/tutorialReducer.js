@@ -1,4 +1,4 @@
-import { TUTORIAL_PROGRESS, GET_TUTORIAL, GET_TUTORIALS, GET_STATUS, TUTORIAL_SUCCESS, TUTORIAL_ERROR, TUTORIAL_CHANGE, TUTORIAL_XML, TUTORIAL_ID, TUTORIAL_STEP } from '../actions/types';
+import { TUTORIAL_PROGRESS, GET_TUTORIAL, GET_TUTORIALS, GET_STATUS, TUTORIAL_SUCCESS, TUTORIAL_ERROR, TUTORIAL_CHANGE, TUTORIAL_XML, TUTORIAL_STEP } from '../actions/types';
 
 
 //
@@ -21,7 +21,7 @@ const initialState = {
   progress: false
 };
 
-export default function (state = initialState, action) {
+export default function foo(state = initialState, action) {
   switch (action.type) {
     case TUTORIAL_PROGRESS:
       return {

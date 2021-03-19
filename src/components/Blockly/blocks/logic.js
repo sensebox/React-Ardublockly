@@ -136,11 +136,12 @@ Blockly.Blocks['controls_if'] = {
     saveConnections: function (containerBlock) {
         var clauseBlock = containerBlock.nextConnection.targetBlock();
         var i = 1;
+        var inputDo;
         while (clauseBlock) {
             switch (clauseBlock.type) {
                 case 'controls_if_elseif':
                     var inputIf = this.getInput('IF' + i);
-                    var inputDo = this.getInput('DO' + i);
+                    inputDo = this.getInput('DO' + i);
                     clauseBlock.valueConnection_ =
                         inputIf && inputIf.connection.targetConnection;
                     clauseBlock.statementConnection_ =
@@ -148,7 +149,7 @@ Blockly.Blocks['controls_if'] = {
                     i++;
                     break;
                 case 'controls_if_else':
-                    var inputDo = this.getInput('ELSE');
+                    inputDo = this.getInput('ELSE');
                     clauseBlock.statementConnection_ =
                         inputDo && inputDo.connection.targetConnection;
                     break;
@@ -169,11 +170,11 @@ Blockly.Blocks['controls_if'] = {
         if (this.getInput('ELSE')) {
             this.removeInput('ELSE');
         }
-        var i = 1;
-        while (this.getInput('IF' + i)) {
-            this.removeInput('IF' + i);
-            this.removeInput('DO' + i);
-            i++;
+        var j = 1;
+        while (this.getInput('IF' + j)) {
+            this.removeInput('IF' + j);
+            this.removeInput('DO' + j);
+            j++;
         }
         // Rebuild block.
         for (var i = 1; i <= this.elseifCount_; i++) {

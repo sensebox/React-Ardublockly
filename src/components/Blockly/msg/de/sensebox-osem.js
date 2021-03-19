@@ -8,7 +8,6 @@ export const OSEM = {
     senseBox_osem_connection: "Verbinde mit openSenseMap:",
     senseBox_osem_host: "opensensemap.org",
     senseBox_osem_host_workshop: "workshop.opensensemap.org",
-    senseBox_osem_connection: "Verbinde mit openSenseMap",
     senseBox_osem_exposure: "Typ",
     senseBox_osem_stationary: "Stationär",
     senseBox_osem_mobile: "Mobil",
