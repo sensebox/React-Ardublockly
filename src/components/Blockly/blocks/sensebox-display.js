@@ -112,7 +112,7 @@ Blockly.Blocks['sensebox_display_fastPrint'] = {
         // Is the block nested in a loop?
         var block = this;
         do {
-            if (this.LOOP_TYPES.indexOf(block.type) != -1) {
+            if (this.LOOP_TYPES.indexOf(block.type) !== -1) {
                 legal = true;
                 break;
             }

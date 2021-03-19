@@ -38,7 +38,7 @@ class Tutorial extends Component {
       // authentication is completed
       this.props.getTutorial(this.props.match.params.tutorialId);
     }
-    else if(this.props.tutorial && !this.props.isLoading && this.props.tutorial._id != this.props.match.params.tutorialId) {
+    else if(this.props.tutorial && !this.props.isLoading && this.props.tutorial._id !== this.props.match.params.tutorialId) {
       this.props.getTutorial(this.props.match.params.tutorialId);
     }
     if (this.props.message.id === 'GET_TUTORIAL_FAIL') {

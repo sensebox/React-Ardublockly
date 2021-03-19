@@ -40,7 +40,5 @@ export const LORA = {
     senseBox_LoRa_sensor_tip: "Sende einen Sensorwert mit einer bestimmten Anzahl an Bytes",
     senseBox_LoRa_init_abp_tooltip: "Initialisiere die LoRa übertragung. Die Aktivierung erfolgt über ABP. Registriere eine Application auf [thethingsnetwork](https://thethingsnetwork.com) und kopiere den **Network Session Key** und den **App Session Key** im **msb Format** und die **Device ID** im **hex Format**.",
     senseBox_LoRa_init_helpurl: "https://docs.sensebox.de/blockly/blockly-web-lora/",
-
     senseBox_LoRa_init_otaa_tooltip: "Initialisiere die LoRa übertragung. Die Aktivierung erfolgt über OTAA. Registriere eine Application auf [thethingsnetwork](https://thethingsnetwork.com) und kopiere die **DEVICE EUI** und die **Application EUI** im **lsb Format** den **App Key** im **msb Format**.",
-    senseBox_LoRa_init_helpurl: "https://docs.sensebox.de/blockly/blockly-web-lora/",
 }
