@@ -33,7 +33,6 @@ export const DISPLAY = {
     senseBox_display_plotYRange2: "Y-Wertebereich Ende",
     senseBox_display_plotXTick: "X-Linienabstand",
     senseBox_display_plotYTick: "Y-Linienabstand",
-    senseBox_display_printDisplay_tooltip: "Mit diesem Block können automatisch Diagramme auf dem Display erstellt werden.",
     senseBox_display_plotTimeFrame: "Zeitabschnitt",
     sensebox_display_fillCircle: "Zeichne Punkt",
     sensebox_display_fillCircle_radius: "Radius",
