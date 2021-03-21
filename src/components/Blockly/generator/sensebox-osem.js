@@ -24,7 +24,7 @@ Blockly.Arduino.sensebox_osem_connection = function (Block) {
   var ssl = this.getFieldValue('SSL');
   var port = 0;
   var count = 0;
-  if (blocks != undefined) {
+  if (blocks !== undefined) {
     for (var i = 0; i < blocks.length; i++) {
       if (blocks[i].type === 'sensebox_send_to_osem') {
         count++;

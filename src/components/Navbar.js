@@ -167,6 +167,11 @@ class Navbar extends Component {
                   </Link>
                 );
               }
+              else {
+                return(
+                  null
+                  )
+              }
             }
             )}
           </List>
@@ -188,7 +193,14 @@ class Navbar extends Component {
                   </Link>
                 );
               }
+              else {
+                return(
+                  null
+                  )
+              }
+              
             }
+            
             )}
           </List>
         </Drawer>

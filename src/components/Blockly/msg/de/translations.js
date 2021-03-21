@@ -108,7 +108,6 @@ export const TRANSLATIONS = {
     NEW_VARIABLE_TITLE: "Name der neuen Variable:",
     ORDINAL_NUMBER_SUFFIX: "",
     PROCEDURES_ALLOW_STATEMENTS: "Aussagen erlauben",
-    PROCEDURES_BEFORE_PARAMS: "mit:",
     PROCEDURES_CALLNORETURN_HELPURL: "https://de.wikipedia.org/wiki/Prozedur_%28Programmierung%29",
     PROCEDURES_CALLNORETURN_TOOLTIP: "Rufe einen Funktionsblock ohne Rückgabewert auf.",
     PROCEDURES_CALLRETURN_HELPURL: "https://de.wikipedia.org/wiki/Prozedur_%28Programmierung%29",
