@@ -21,17 +21,17 @@ class BlocklyWindow extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props);
     const workspace = Blockly.getMainWorkspace();
-
-    if (this.props.workspaceXML !== "") {
-      Blockly.Xml.clearWorkspaceAndLoadFromXml(
-        Blockly.Xml.textToDom(this.props.workspaceXML),
-        workspace
-      );
-    } else {
-      this.props.onChangeWorkspace({});
-      this.props.clearStats();
+    if (!this.props.initialXml) {
+      if (this.props.workspaceXML !== "") {
+        Blockly.Xml.clearWorkspaceAndLoadFromXml(
+          Blockly.Xml.textToDom(this.props.workspaceXML),
+          workspace
+        );
+      } else {
+        this.props.onChangeWorkspace({});
+        this.props.clearStats();
+      }
     }
     workspace.addChangeListener((event) => {
       this.props.onChangeWorkspace(event);
@@ -47,8 +47,6 @@ class BlocklyWindow extends Component {
   componentDidUpdate(props) {
     const workspace = Blockly.getMainWorkspace();
     var xml = this.props.initialXml;
-    console.log(xml)
-    console.log(this.props.xml)
     // if svg is true, then the update process is done in the BlocklySvg component
     if (props.initialXml !== xml && !this.props.svg) {
       // guarantees that the current xml-code (this.props.initialXml) is rendered
