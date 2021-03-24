@@ -16,6 +16,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import { faShare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Dialog from '../Dialog';
+import Button from '@material-ui/core/Button';
 
 const styles = (theme) => ({
   button: {
@@ -39,10 +41,19 @@ class ResetWorkspace extends Component {
     this.inputRef = React.createRef();
     this.state = {
       snackbar: false,
+      open: false,
       type: '',
       key: '',
       message: '',
     };
+  }
+
+  toggleDialog = () => {
+    this.setState({ open: !this.state});
+  }
+
+  openDialog = () => {
+    this.setState({open: true});
   }
 
   resetWorkspace = () => {
@@ -69,7 +80,7 @@ class ResetWorkspace extends Component {
         <Tooltip title={Blockly.Msg.tooltip_reset_workspace} arrow>
           <IconButton
             className={this.props.classes.button}
-            onClick={() => this.resetWorkspace()}
+            onClick={() => this.openDialog()}
           >
             <FontAwesomeIcon icon={faShare} size="xs" flip='horizontal' />
           </IconButton>
@@ -81,6 +92,17 @@ class ResetWorkspace extends Component {
           type={this.state.type}
           key={this.state.key}
         />
+         <Dialog
+          open={this.state.open}
+          title={Blockly.Msg.resetDialog_headline}
+          content={Blockly.Msg.resetDialog_text}
+          onClose={() => { this.toggleDialog(); }}
+          onClick={() => { this.toggleDialog(); }}
+          button={Blockly.Msg.button_cancel}
+        > <div style={{ marginTop: '10px' }}>
+       
+        <Button variant='contained' color='primary' onClick={() => { this.resetWorkspace(); this.toggleDialog(); }}>Zurücksetzen</Button>
+      </div></Dialog>
       </div>
     );
   };

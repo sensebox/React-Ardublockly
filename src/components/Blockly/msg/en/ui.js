@@ -67,6 +67,15 @@ export const UI = {
     messages_LOGIN_FAIL: 'The username or password is incorrect.',
     messages_login_error: "Enter both a username and a password.",
     messages_copy_code: "Copy code to clipboard succesfull",
+
+        
+    /**
+     * Reset Dialog
+     */
+    
+     resetDialog_headline: "Reset workspace?",
+     resetDialog_text: "Do you really want to reset the workspace? All blocks will be deleted!",
+
     /**
      * Share Dialog
      */

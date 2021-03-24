@@ -64,6 +64,14 @@ export const UI = {
     messages_GET_TUTORIAL_FAIL: 'Zurück zur Tutorials-Übersicht',
     messages_LOGIN_FAIL: 'Der Benutzername oder das Passwort ist nicht korrekt.',
     messages_copy_code: "Code wurde in die Zwischenablage kopiert",
+    
+    /**
+     * Reset Dialog
+     */
+    
+    resetDialog_headline: "Workspace zurücksetzen?",
+    resetDialog_text: "Möchtest du wirklich die Workspace zurücksetzen? Hierbei werden alle Blöcke gelöscht!",
+    
     /**
      * Share Dialog
      */
