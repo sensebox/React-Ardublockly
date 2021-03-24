@@ -80,7 +80,6 @@ class Compile extends Component {
     })
       .then(response => response.json())
       .then(data => {
-        console.log(data);
         this.setState({ id: data.data.id }, () => {
           this.createFileName();
         });

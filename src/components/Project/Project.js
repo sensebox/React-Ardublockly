@@ -56,8 +56,6 @@ class Project extends Component {
   getProject = () => {
     var id = this.props.location.pathname.replace(/\/[a-z]{1,}\//, '');
     var param = this.props.location.pathname.replace(`/${id}`, '').replace('/', '');
-    console.log('param', param);
-    console.log(id);
     this.props.getProject(param, id);
   }
 

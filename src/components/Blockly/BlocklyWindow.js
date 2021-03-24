@@ -61,7 +61,6 @@ class BlocklyWindow extends Component {
       var xmlDom = Blockly.Xml.textToDom(xml);
       Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, workspace);
       // var toolbox = workspace.getToolbox();
-      // console.log(toolbox);
       // workspace.updateToolbox(toolbox.toolboxDef_);
     }
     Blockly.svgResize(workspace);
