@@ -16,7 +16,7 @@ Blockly.Blocks['controls_whileUntil'] = {
         this.setHelpUrl(Blockly.Msg.CONTROLS_WHILEUNTIL_HELPURL);
         this.setColour(getColour().loops);
         this.appendValueInput('BOOL')
-            .setCheck(getCompatibleTypes(Boolean))
+            .setCheck(getCompatibleTypes('boolean'))
             .appendField(new Blockly.FieldDropdown(OPERATORS), 'MODE');
         this.appendStatementInput('DO')
             .appendField(Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO);
@@ -53,19 +53,19 @@ Blockly.Blocks['controls_for'] = {
                 {
                     "type": "input_value",
                     "name": "FROM",
-                    "check": getCompatibleTypes(Number),
+                    "check": getCompatibleTypes('int'),
                     "align": "RIGHT"
                 },
                 {
                     "type": "input_value",
                     "name": "TO",
-                    "check": getCompatibleTypes(Number),
+                    "check": getCompatibleTypes('int'),
                     "align": "RIGHT"
                 },
                 {
                     "type": "input_value",
                     "name": "BY",
-                    "check": getCompatibleTypes(Number),
+                    "check": getCompatibleTypes('int'),
                     "align": "RIGHT"
                 }
             ],
@@ -104,7 +104,7 @@ Blockly.Blocks['controls_forEach'] = {
                 {
                     "type": "input_value",
                     "name": "LIST",
-                    "check": getCompatibleTypes(Array)
+                    "check": getCompatibleTypes('Array')
                 }
             ],
             "previousStatement": null,
@@ -197,7 +197,7 @@ Blockly.Blocks['controls_repeat_ext'] = {
                 {
                     "type": "input_value",
                     "name": "TIMES",
-                    "check": getCompatibleTypes(Number),
+                    "check": getCompatibleTypes('int'),
                 }
             ],
             "previousStatement": null,
