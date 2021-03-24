@@ -68,7 +68,6 @@ Blockly.Arduino['procedures_defreturn'] = function (block) {
 };
 
 function translateType(type) {
-    console.log(type);
     switch (type) {
 
         case 'int':

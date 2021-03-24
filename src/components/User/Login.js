@@ -38,7 +38,6 @@ export class Login extends Component {
   }
 
   componentDidUpdate(props) {
-    console.log(this.state.redirect);
     const { message } = this.props;
     if (message !== props.message) {
       if (message.id === 'LOGIN_SUCCESS') {
