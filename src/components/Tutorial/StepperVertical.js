@@ -85,7 +85,7 @@ class StepperVertical extends Component {
             return (
               <Step key={i}>
                 <Tooltip title={step.headline} placement='right' arrow >
-                  <div style={i === activeStep ? {padding: '5px 0'} : {padding: '5px 0', cursor: 'pointer'}} onClick={i === activeStep ? null : () => {console.log(i); this.props.tutorialStep(i)}}>
+                  <div style={i === activeStep ? {padding: '5px 0'} : {padding: '5px 0', cursor: 'pointer'}} onClick={i === activeStep ? null : () => { this.props.tutorialStep(i)}}>
                     <StepLabel
                       StepIconComponent={'div'}
                       classes={{
