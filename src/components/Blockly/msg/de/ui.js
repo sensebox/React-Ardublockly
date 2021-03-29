@@ -10,6 +10,16 @@ export const UI = {
   toolbox_time: "Zeit",
   toolbox_functions: "Funktionen",
   toolbox_variables: "Variablen",
+  variable_NUMBER: "Zahl (int)",
+  variable_SHORT_NUMBER: "char",
+  variable_LONG: "große Zahl (long)",
+  variable_DECIMAL: "Kommazahl (float)",
+  variables_TEXT: "Text (string)",
+  variables_ARRAY: "Array (array)",
+  variables_CHARACTER: "char (char)",
+  variables_BOOLEAN: "Boolean (boolean)",
+  variables_NULL: "void (void)",
+  variables_UNDEF: "undefined",
 
   /**
    * Tooltips
