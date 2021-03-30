@@ -75,6 +75,20 @@ class Toolbox extends React.Component {
           <Block type="sensebox_sensor_watertemperature" />
           {/* <Block type="sensebox_windspeed" /> */}
           <Block type="sensebox_soundsensor_dfrobot" />
+          <Block type="sensebox_multiplexer_init">
+            <Value name="nrChannels">
+              <Block type="math_number">
+                <Field name="NUM">1</Field>
+              </Block>
+            </Value>
+          </Block>
+          <Block type="sensebox_multiplexer_changeChannel">
+            <Value name="Channel">
+              <Block type="math_number">
+                <Field name="NUM">1</Field>
+              </Block>
+            </Value>
+          </Block>
         </Category>
         <Category name="WIFI" colour={getColour().sensebox}>
           <Block type="sensebox_wifi" />
