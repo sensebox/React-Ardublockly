@@ -289,7 +289,7 @@ Blockly.Arduino.sensebox_scd30 = function () {
   Blockly.Arduino.libraries_["library_senseBoxMCU"] =
     '#include "SenseBoxMCU.h"';
   Blockly.Arduino.definitions_["SCD30"] = "SCD30 airSensor;";
-  Blockly.Arduino.variables_["scd30co2"] = "int scdco2;";
+  Blockly.Arduino.variables_["scd30co2"] = "float scdco2;";
   Blockly.Arduino.variables_["scd30temp"] = "float scdtemp;";
   Blockly.Arduino.variables_["scd30humi"] = "float scdhumi;";
   Blockly.Arduino.setupCode_["init_scd30"] = ` Wire.begin();
