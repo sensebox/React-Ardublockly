@@ -39,7 +39,9 @@ class Content extends Component {
     return (
       <div className="wrapper">
         <Navbar />
-        <Routes />
+        <div style={{ marginTop: this.props.tutorialIsLoading || this.props.projectIsLoading ? '50px' : '70px' }}>
+          <Routes />
+        </div>
         <Cookies />
         <Footer />
       </div>
