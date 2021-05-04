@@ -9,7 +9,7 @@ import BlocklySvg from "./BlocklySvg";
 import * as Blockly from "blockly/core";
 import "./blocks/index";
 import "./generator/index";
-
+import { ZoomToFitControl } from "@blockly/zoom-to-fit";
 import { initialXml } from "./initialXml.js";
 
 class BlocklyWindow extends Component {
@@ -41,6 +41,8 @@ class BlocklyWindow extends Component {
     });
 
     Blockly.svgResize(workspace);
+    const zoomToFit = new ZoomToFitControl(workspace);
+    zoomToFit.init();
   }
 
   componentDidUpdate(props) {

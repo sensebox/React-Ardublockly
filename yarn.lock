@@ -1149,6 +1149,11 @@
   dependencies:
     "@blockly/plugin-modal" "^1.20200427.4"
 
+"@blockly/zoom-to-fit@^1.0.5":
+  "integrity" "sha512-+dm8bpJB0AkrEMQPr7nEMYKiEA8Loh7V8ZVa0s25PkxGP9BLqt9NIxUCQjshInhCr11Dlctq7C7noqK+tTVS4w=="
+  "resolved" "https://registry.npmjs.org/@blockly/zoom-to-fit/-/zoom-to-fit-1.0.5.tgz"
+  "version" "1.0.5"
+
 "@cnakazawa/watch@^1.0.3":
   "integrity" "sha512-v9kIhKwjeZThiWrLmj0y17CWoyddASLj9O2yvbZkbvw/N3rWOYy9zkV66ursAoVr0mV15bL8g0c4QZUE6cdDoQ=="
   "resolved" "https://registry.npmjs.org/@cnakazawa/watch/-/watch-1.0.4.tgz"
@@ -3106,12 +3111,12 @@
   dependencies:
     "file-uri-to-path" "1.0.0"
 
-"blockly@^3.20200924.0":
-  "integrity" "sha512-mOZiXi908oNFAcVb8Q5LKJNRZ5jtBJtgNilddqTYMAXEdqSY/BhcnU2rgytWARDnu2iSQlI374kEafCNuUEWKQ=="
-  "resolved" "https://registry.npmjs.org/blockly/-/blockly-3.20200924.0.tgz"
-  "version" "3.20200924.0"
+"blockly@^5.20210325.1", "blockly@>=5.20210325.0":
+  "integrity" "sha512-qrilYPovJeDfxKDWm1YBUCPVNElh/iyC1szaHTIPZHj9C9YPpSzZOeFyyrPBbYRudzbo8kjBOWMtHnN1bLjkoQ=="
+  "resolved" "https://registry.npmjs.org/blockly/-/blockly-5.20210325.1.tgz"
+  "version" "5.20210325.1"
   dependencies:
-    "jsdom" "^15.2.1"
+    "jsdom" "15.2.1"
 
 "bluebird@^3.5.5":
   "integrity" "sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg=="
@@ -7382,38 +7387,6 @@
   "resolved" "https://registry.npmjs.org/jsbn/-/jsbn-0.1.1.tgz"
   "version" "0.1.1"
 
-"jsdom@^15.2.1":
-  "integrity" "sha512-fAl1W0/7T2G5vURSyxBzrJ1LSdQn6Tr5UX/xD4PXDx/PDgwygedfW6El/KIj3xJ7FU61TTYnc/l/B7P49Eqt6g=="
-  "resolved" "https://registry.npmjs.org/jsdom/-/jsdom-15.2.1.tgz"
-  "version" "15.2.1"
-  dependencies:
-    "abab" "^2.0.0"
-    "acorn" "^7.1.0"
-    "acorn-globals" "^4.3.2"
-    "array-equal" "^1.0.0"
-    "cssom" "^0.4.1"
-    "cssstyle" "^2.0.0"
-    "data-urls" "^1.1.0"
-    "domexception" "^1.0.1"
-    "escodegen" "^1.11.1"
-    "html-encoding-sniffer" "^1.0.2"
-    "nwsapi" "^2.2.0"
-    "parse5" "5.1.0"
-    "pn" "^1.1.0"
-    "request" "^2.88.0"
-    "request-promise-native" "^1.0.7"
-    "saxes" "^3.1.9"
-    "symbol-tree" "^3.2.2"
-    "tough-cookie" "^3.0.1"
-    "w3c-hr-time" "^1.0.1"
-    "w3c-xmlserializer" "^1.1.2"
-    "webidl-conversions" "^4.0.2"
-    "whatwg-encoding" "^1.0.5"
-    "whatwg-mimetype" "^2.3.0"
-    "whatwg-url" "^7.0.0"
-    "ws" "^7.0.0"
-    "xml-name-validator" "^3.0.0"
-
 "jsdom@^16.4.0":
   "integrity" "sha512-pF73EOsJgwZekbDHEY5VO/yKXUkab/DuvrQB/ANVizbr6UAHJsDdHXuotZYwkJSGQl1JM+ivXaqY+XBDDL4TiA=="
   "resolved" "https://registry.npmjs.org/jsdom/-/jsdom-16.5.1.tgz"
@@ -7444,6 +7417,38 @@
     "whatwg-mimetype" "^2.3.0"
     "whatwg-url" "^8.0.0"
     "ws" "^7.4.4"
+    "xml-name-validator" "^3.0.0"
+
+"jsdom@15.2.1":
+  "integrity" "sha512-fAl1W0/7T2G5vURSyxBzrJ1LSdQn6Tr5UX/xD4PXDx/PDgwygedfW6El/KIj3xJ7FU61TTYnc/l/B7P49Eqt6g=="
+  "resolved" "https://registry.npmjs.org/jsdom/-/jsdom-15.2.1.tgz"
+  "version" "15.2.1"
+  dependencies:
+    "abab" "^2.0.0"
+    "acorn" "^7.1.0"
+    "acorn-globals" "^4.3.2"
+    "array-equal" "^1.0.0"
+    "cssom" "^0.4.1"
+    "cssstyle" "^2.0.0"
+    "data-urls" "^1.1.0"
+    "domexception" "^1.0.1"
+    "escodegen" "^1.11.1"
+    "html-encoding-sniffer" "^1.0.2"
+    "nwsapi" "^2.2.0"
+    "parse5" "5.1.0"
+    "pn" "^1.1.0"
+    "request" "^2.88.0"
+    "request-promise-native" "^1.0.7"
+    "saxes" "^3.1.9"
+    "symbol-tree" "^3.2.2"
+    "tough-cookie" "^3.0.1"
+    "w3c-hr-time" "^1.0.1"
+    "w3c-xmlserializer" "^1.1.2"
+    "webidl-conversions" "^4.0.2"
+    "whatwg-encoding" "^1.0.5"
+    "whatwg-mimetype" "^2.3.0"
+    "whatwg-url" "^7.0.0"
+    "ws" "^7.0.0"
     "xml-name-validator" "^3.0.0"
 
 "jsesc@^2.5.1":
