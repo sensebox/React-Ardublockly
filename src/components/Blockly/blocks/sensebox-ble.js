@@ -1,7 +1,5 @@
 import * as Blockly from "blockly";
 import { getColour } from "../helpers/colour";
-import { selectedBoard } from "../helpers/board";
-import * as Types from "../helpers/types";
 
 Blockly.Blocks["sensebox_phyphox_init"] = {
   init: function () {
@@ -40,6 +38,113 @@ Blockly.Blocks["sensebox_phyphox_experiment"] = {
         new Blockly.FieldTextInput("Experiment Beschreibung"),
         "description"
       );
+    this.appendStatementInput("view").appendField(
+      Blockly.Msg.sensebox_phyphox_createView
+    );
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip(Blockly.Msg.senseBox_led_tooltip);
+  },
+};
+
+Blockly.Blocks["sensebox_phyphox_view"] = {
+  init: function () {
+    this.setColour(getColour().phyphox);
+    this.appendStatementInput("view").appendField(
+      Blockly.Msg.sensebox_phyphox_createView
+    );
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip(Blockly.Msg.senseBox_led_tooltip);
+  },
+};
+
+Blockly.Blocks["sensebox_phyphox_graph"] = {
+  init: function () {
+    this.setColour(getColour().phyphox);
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.sensebox_phyphox_createGraph)
+      .appendField(Blockly.Msg.sensebox_phyphox_graphLabel)
+      .appendField(new Blockly.FieldTextInput("Label"), "label");
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.sensebox_phyphox_unitx)
+      .appendField(new Blockly.FieldTextInput("Unit X"), "unitx");
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.sensebox_phyphox_unity)
+      .appendField(new Blockly.FieldTextInput("Unit Y"), "unity");
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.sensebox_phyphox_labelx)
+      .appendField(new Blockly.FieldTextInput("Label X"), "labelx");
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.sensebox_phyphox_labely)
+      .appendField(new Blockly.FieldTextInput("Label Y"), "labely");
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.sensebox_phyphox_graphStyle)
+      .appendField(
+        new Blockly.FieldDropdown([
+          ["dots", "dots"],
+          ["line", "line"],
+        ]),
+        "style"
+      );
+    this.appendValueInput("channel0").appendField(
+      Blockly.Msg.sensebox_phyphox_channel0
+    );
+    this.appendValueInput("channel1").appendField(
+      Blockly.Msg.sensebox_phyphox_channel1
+    );
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip(Blockly.Msg.senseBox_led_tooltip);
+  },
+};
+
+Blockly.Blocks["sensebox_phyphox_timestamp"] = {
+  init: function () {
+    this.setColour(getColour().phyphox);
+    this.appendDummyInput().appendField(Blockly.Msg.sensebox_phyphox_timestamp);
+    this.setOutput(true);
+    this.setTooltip(Blockly.Msg.senseBox_led_tooltip);
+  },
+};
+
+Blockly.Blocks["sensebox_phyphox_channel"] = {
+  init: function () {
+    this.setColour(getColour().phyphox);
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.sensebox_phyphox_channel)
+      .appendField(
+        new Blockly.FieldDropdown([
+          ["1", "1"],
+          ["2", "2"],
+          ["3", "3"],
+          ["4", "4"],
+          ["5", "5"],
+        ]),
+        "channel"
+      );
+
+    this.setOutput(true);
+    this.setTooltip(Blockly.Msg.senseBox_led_tooltip);
+  },
+};
+
+Blockly.Blocks["sensebox_phyphox_sendchannel"] = {
+  init: function () {
+    this.setColour(getColour().phyphox);
+    this.appendValueInput("value")
+      .appendField(Blockly.Msg.sensebox_phyphox_sendchannel)
+      .appendField(
+        new Blockly.FieldDropdown([
+          ["1", "1"],
+          ["2", "2"],
+          ["3", "3"],
+          ["4", "4"],
+          ["5", "5"],
+        ]),
+        "channel"
+      );
+
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setTooltip(Blockly.Msg.senseBox_led_tooltip);
@@ -49,10 +154,9 @@ Blockly.Blocks["sensebox_phyphox_experiment"] = {
 Blockly.Blocks["sensebox_phyphox_experiment_send"] = {
   init: function () {
     this.setColour(getColour().phyphox);
-    this.appendDummyInput().appendField(
+    this.appendStatementInput("sendValues").appendField(
       Blockly.Msg.sensebox_phyphox_writeValues
     );
-
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setTooltip(Blockly.Msg.senseBox_led_tooltip);
