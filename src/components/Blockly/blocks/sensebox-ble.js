@@ -17,12 +17,9 @@ Blockly.Blocks["sensebox_phyphox_init"] = {
 Blockly.Blocks["sensebox_phyphox_experiment"] = {
   init: function () {
     this.setColour(getColour().phyphox);
-    this.appendDummyInput()
-      .appendField(Blockly.Msg.sensebox_phyphox_createExperiment)
-      .appendField(
-        new Blockly.FieldTextInput("Experiment Name"),
-        "exeperimentname"
-      );
+    this.appendDummyInput().appendField(
+      Blockly.Msg.sensebox_phyphox_createExperiment
+    );
     this.appendDummyInput()
       .appendField(Blockly.Msg.sensebox_phyphox_experimentTitle)
       .appendField(new Blockly.FieldTextInput("Experiment Title"), "title");
