@@ -13,10 +13,7 @@ Blockly.Arduino.sensebox_phyphox_init = function () {
 };
 
 Blockly.Arduino.sensebox_phyphox_experiment = function () {
-  var experimentname = this.getFieldValue("exeperimentname").replace(
-    /\s+/g,
-    ""
-  );
+  var experimentname = "experiment";
   var title = this.getFieldValue("title").replace(/[^a-zA-Z0-9]/g, "");
   var description = this.getFieldValue("description");
   var branch = Blockly.Arduino.statementToCode(this, "view");
