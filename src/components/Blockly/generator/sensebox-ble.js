@@ -18,7 +18,6 @@ Blockly.Arduino.sensebox_phyphox_experiment = function () {
     ""
   );
   var title = this.getFieldValue("title").replace(/[^a-zA-Z0-9]/g, "");
-  var category = this.getFieldValue("category");
   var description = this.getFieldValue("description");
   var branch = Blockly.Arduino.statementToCode(this, "view");
   Blockly.Arduino.phyphoxSetupCode_[
@@ -28,8 +27,8 @@ Blockly.Arduino.sensebox_phyphox_experiment = function () {
     `setTitle_${title}`
   ] = `${experimentname}.setTitle("${title}");`;
   Blockly.Arduino.phyphoxSetupCode_[
-    `setCategory_${category}`
-  ] = `${experimentname}.setCategory("${category}");`;
+    `setCategory_senseBoxExperiments}`
+  ] = `${experimentname}.setCategory("senseBox Experimente");`;
   Blockly.Arduino.phyphoxSetupCode_[
     `setDescription_${description}`
   ] = `${experimentname}.setDescription("${description}");`;
@@ -57,11 +56,6 @@ Blockly.Arduino["sensebox_phyphox_channel"] = function () {
   var channel = parseFloat(this.getFieldValue("channel"));
   var code = channel;
   return [code, Blockly.Arduino.ORDER_ATOMIC];
-};
-
-Blockly.Arduino.sensebox_phyphox_view = function () {
-  //var code = `${branch}`;
-  //return code;
 };
 
 Blockly.Arduino.sensebox_phyphox_sendchannel = function (block) {
