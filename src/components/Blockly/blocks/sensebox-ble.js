@@ -10,7 +10,7 @@ Blockly.Blocks["sensebox_phyphox_init"] = {
 
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setTooltip(Blockly.Msg.senseBox_led_tooltip);
+    this.setTooltip(Blockly.Msg.sensebox_phyphox_init_tooltip);
   },
 };
 
@@ -27,15 +27,11 @@ Blockly.Blocks["sensebox_phyphox_experiment"] = {
       .appendField(Blockly.Msg.sensebox_phyphox_experimentTitle)
       .appendField(new Blockly.FieldTextInput("Experiment Title"), "title");
     this.appendDummyInput()
-      .appendField(Blockly.Msg.sensebox_phyphox_experimentCategory)
-      .appendField(
-        new Blockly.FieldTextInput("senseBox Experiments"),
-        "category"
-      );
-    this.appendDummyInput()
       .appendField(Blockly.Msg.sensebox_phyphox_experimentDescription)
       .appendField(
-        new Blockly.FieldTextInput("Experiment Beschreibung"),
+        new Blockly.FieldTextInput(
+          Blockly.Msg.sensebox_phyphox_experiment_description
+        ),
         "description"
       );
     this.appendStatementInput("view").appendField(
@@ -43,19 +39,7 @@ Blockly.Blocks["sensebox_phyphox_experiment"] = {
     );
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setTooltip(Blockly.Msg.senseBox_led_tooltip);
-  },
-};
-
-Blockly.Blocks["sensebox_phyphox_view"] = {
-  init: function () {
-    this.setColour(getColour().phyphox);
-    this.appendStatementInput("view").appendField(
-      Blockly.Msg.sensebox_phyphox_createView
-    );
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
-    this.setTooltip(Blockly.Msg.senseBox_led_tooltip);
+    this.setTooltip(Blockly.Msg.sensebox_phyphox_experiment_tooltip);
   },
 };
 
@@ -82,8 +66,8 @@ Blockly.Blocks["sensebox_phyphox_graph"] = {
       .appendField(Blockly.Msg.sensebox_phyphox_graphStyle)
       .appendField(
         new Blockly.FieldDropdown([
-          ["dots", "dots"],
-          ["line", "line"],
+          [Blockly.Msg.sensebox_phyphox_style_dots, "dots"],
+          [Blockly.Msg.sensebox_phyphox_style_line, "line"],
         ]),
         "style"
       );
@@ -95,7 +79,7 @@ Blockly.Blocks["sensebox_phyphox_graph"] = {
     );
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setTooltip(Blockly.Msg.senseBox_led_tooltip);
+    this.setTooltip(Blockly.Msg.sensebox_phyphox_graph_tooltip);
   },
 };
 
@@ -125,7 +109,7 @@ Blockly.Blocks["sensebox_phyphox_channel"] = {
       );
 
     this.setOutput(true);
-    this.setTooltip(Blockly.Msg.senseBox_led_tooltip);
+    this.setTooltip(Blockly.Msg.sensebox_phyphox_timestamp_tooltip);
   },
 };
 
@@ -147,7 +131,7 @@ Blockly.Blocks["sensebox_phyphox_sendchannel"] = {
 
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setTooltip(Blockly.Msg.senseBox_led_tooltip);
+    this.setTooltip(Blockly.Msg.sensebox_phyphox_sendchannel_tooltip);
   },
 };
 
@@ -159,6 +143,6 @@ Blockly.Blocks["sensebox_phyphox_experiment_send"] = {
     );
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setTooltip(Blockly.Msg.senseBox_led_tooltip);
+    this.setTooltip(Blockly.Msg.sensebox_phyphox_experiment_send_tooltip);
   },
 };
