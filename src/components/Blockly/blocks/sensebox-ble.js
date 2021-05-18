@@ -85,7 +85,7 @@ Blockly.Blocks["sensebox_phyphox_timestamp"] = {
     this.setColour(getColour().phyphox);
     this.appendDummyInput().appendField(Blockly.Msg.sensebox_phyphox_timestamp);
     this.setOutput(true);
-    this.setTooltip(Blockly.Msg.senseBox_led_tooltip);
+    this.setTooltip(Blockly.Msg.sensebox_phyphox_timestamp_tooltip);
   },
 };
 
@@ -106,7 +106,7 @@ Blockly.Blocks["sensebox_phyphox_channel"] = {
       );
 
     this.setOutput(true);
-    this.setTooltip(Blockly.Msg.sensebox_phyphox_timestamp_tooltip);
+    this.setTooltip(Blockly.Msg.sensebox_phyphox_channel_tooltip);
   },
 };
 
