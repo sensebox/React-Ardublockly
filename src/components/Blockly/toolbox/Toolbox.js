@@ -362,6 +362,30 @@ class Toolbox extends React.Component {
             <Block type="sensebox_lora_cayenne_gps" />
           </Category>
         </Category>
+        <Category id="phyphox" name="Phyphox" colour={getColour().phyphox}>
+          <Block type="sensebox_phyphox_init"></Block>
+          <Block type="sensebox_phyphox_experiment">
+            <Value name="view">
+              <Block type="sensebox_phyphox_graph">
+                <Value name="channel0">
+                  <Block type="sensebox_phyphox_timestamp"></Block>
+                </Value>
+                <Value name="channel1">
+                  <Block type="sensebox_phyphox_channel"></Block>
+                </Value>
+              </Block>
+            </Value>
+          </Block>
+          <Block type="sensebox_phyphox_experiment_send">
+            <Value name="sendValues">
+              <Block type="sensebox_phyphox_sendchannel"></Block>
+            </Value>
+          </Block>
+          <Block type="sensebox_phyphox_graph"></Block>
+          <Block type="sensebox_phyphox_timestamp"></Block>
+          <Block type="sensebox_phyphox_channel"></Block>
+          <Block type="sensebox_phyphox_sendchannel"></Block>
+        </Category>
         <Category
           id="webserver"
           name="Webserver"
