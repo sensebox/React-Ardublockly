@@ -2,7 +2,7 @@ import Blockly from "blockly";
 
 Blockly.Arduino.sensebox_rtc_init = function () {
   Blockly.Arduino.libraries_["RV8523"] = `#include <RV8523.h>`;
-
+  Blockly.Arduino.definitions_["RTC"] = `RV8523 rtc;`;
   var code = ``;
   return code;
 };
@@ -53,13 +53,12 @@ Blockly.Arduino.sensebox_rtc_ntp = function () {
 
 Blockly.Arduino.sensebox_rtc_get = function () {
   var dropdown = this.getFieldValue("dropdown");
-
   Blockly.Arduino.libraries_["RV8523"] = `#include <RV8523.h>`;
   Blockly.Arduino.setupCode_["rtc.start"] = `rtc.start();`;
   Blockly.Arduino.setupCode_[
     "rtc.batterySwitchOver"
   ] = `rtc.batterySwitchOver(1);`;
-  Blockly.Arduino.variables_[
+  Blockly.Arduino.loopCodeOnce_[
     "rtc_variables"
   ] = `uint8_t sec, min, hour, day, month;\nuint16_t year;`;
 
@@ -68,7 +67,7 @@ Blockly.Arduino.sensebox_rtc_get = function () {
   ] = `rtc.get(&sec, &min, &hour, &day, &month, &year);`;
 
   var code = `${dropdown}`;
-  return code;
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
 Blockly.Arduino.sensebox_rtc_get_timestamp = function () {
@@ -77,10 +76,10 @@ Blockly.Arduino.sensebox_rtc_get_timestamp = function () {
   Blockly.Arduino.setupCode_[
     "rtc.batterySwitchOver"
   ] = `rtc.batterySwitchOver(1);`;
-  Blockly.Arduino.variables_[
+  Blockly.Arduino.loopCodeOnce_[
     "rtc_variables"
   ] = `uint8_t sec, min, hour, day, month;\nuint16_t year;`;
-  Blockly.Arduino.variables_["rtc_timestamp"] = `String timestamp`;
+  Blockly.Arduino.variables_["rtc_timestamp"] = `char timestamp[20];`;
   Blockly.Arduino.loopCodeOnce_[
     "rtc_get"
   ] = `rtc.get(&sec, &min, &hour, &day, &month, &year);`;
@@ -90,5 +89,5 @@ Blockly.Arduino.sensebox_rtc_get_timestamp = function () {
   ] = `sprintf(timestamp, "20%02d-%02d-%02dT%02d:%02d:%02dZ", year, month, day, hour, min, sec);`;
 
   var code = `timestamp`;
-  return code;
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
