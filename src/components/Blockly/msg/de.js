@@ -1,4 +1,5 @@
 import { AUDIO } from "./de/audio";
+import { BLE } from "./de/sensebox-ble";
 import { FAQ } from "./de/faq";
 import { IO } from "./de/io";
 import { LOGIC } from "./de/logic";
@@ -24,6 +25,7 @@ import { WEBSERVER } from "./de/webserver";
 
 export const De = {
   ...AUDIO,
+  ...BLE,
   ...FAQ,
   ...IO,
   ...LOGIC,
