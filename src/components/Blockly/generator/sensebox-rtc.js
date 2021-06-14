@@ -3,6 +3,9 @@ import Blockly from "blockly";
 Blockly.Arduino.sensebox_rtc_init = function () {
   Blockly.Arduino.libraries_["RV8523"] = `#include <RV8523.h>`;
   Blockly.Arduino.definitions_["RTC"] = `RV8523 rtc;`;
+  Blockly.Arduino.libraries_["library_senseBoxMCU"] =
+    '#include "SenseBoxMCU.h"';
+  Blockly.Arduino.setupCode_["rtc.begin"] = `rtc.begin();`;
   var code = ``;
   return code;
 };
@@ -86,7 +89,7 @@ Blockly.Arduino.sensebox_rtc_get_timestamp = function () {
 
   Blockly.Arduino.loopCodeOnce_[
     ""
-  ] = `sprintf(timestamp, "20%02d-%02d-%02dT%02d:%02d:%02dZ", year, month, day, hour, min, sec);`;
+  ] = `sprintf(timestamp, "%02d-%02d-%02dT%02d:%02d:%02dZ", year, month, day, hour, min, sec);`;
 
   var code = `timestamp`;
   return [code, Blockly.Arduino.ORDER_ATOMIC];

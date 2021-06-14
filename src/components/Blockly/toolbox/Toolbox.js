@@ -502,7 +502,7 @@ class Toolbox extends React.Component {
               </Block>
             </Value>
           </Block>
-          <Block type="sensebox_rtc_set_ntp"></Block>
+          {/* <Block type="sensebox_rtc_set_ntp"></Block> */}
           <Block type="sensebox_rtc_get"></Block>
           <Block type="sensebox_rtc_get_timestamp"></Block>
         </Category>
