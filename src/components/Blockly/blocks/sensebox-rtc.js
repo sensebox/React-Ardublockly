@@ -1,6 +1,5 @@
 import * as Blockly from "blockly";
 import { getColour } from "../helpers/colour";
-import { selectedBoard } from "../helpers/board";
 import * as Types from "../helpers/types";
 
 Blockly.Blocks["sensebox_rtc_init"] = {
@@ -54,12 +53,12 @@ Blockly.Blocks["sensebox_rtc_get"] = {
       .appendField(Blockly.Msg.sensebox_rtc_get)
       .appendField(
         new Blockly.FieldDropdown([
-          ["hour", "hour"],
-          ["min", "minutes"],
-          ["sec", "seconds"],
-          ["day", "day"],
-          ["month", "month"],
-          ["year", "year"],
+          [Blockly.Msg.sensebox_rtc_hour, "hour"],
+          [Blockly.Msg.sensebox_rtc_minutes, "minutes"],
+          [Blockly.Msg.sensebox_rtc_second, "seconds"],
+          [Blockly.Msg.sensebox_rtc_day, "day"],
+          [Blockly.Msg.sensebox_rtc_month, "month"],
+          [Blockly.Msg.sensebox_rtc_year, "year"],
         ]),
         "dropdown"
       );
