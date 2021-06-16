@@ -238,6 +238,8 @@ Blockly["Arduino"].finish = function (code) {
     loraSetupCode += Blockly["Arduino"].loraSetupCode_[key] + "\n" || "";
   }
 
+  setupCode =
+    "\nvoid setup() { \n" + preSetupCode + "\n" + loraSetupCode + "\n}\n";
   for (const key in Blockly["Arduino"].phyphoxSetupCode_) {
     phyphoxSetupCode += Blockly["Arduino"].phyphoxSetupCode_[key] + "\n" || "";
   }
