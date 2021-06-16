@@ -10,6 +10,7 @@ import { DISPLAY } from "./de/sensebox-display";
 import { LED } from "./de/sensebox-led";
 import { LORA } from "./de/sensebox-lora";
 import { OSEM } from "./de/sensebox-osem";
+import { RTC } from "./de/sensebox-rtc";
 import { SD } from "./de/sensebox-sd";
 import { SENSORS } from "./de/sensebox-sensors";
 import { TELEGRAM } from "./de/sensebox-telegram";
@@ -35,6 +36,7 @@ export const De = {
   ...LED,
   ...LORA,
   ...OSEM,
+  ...RTC,
   ...SD,
   ...SENSORS,
   ...TELEGRAM,
