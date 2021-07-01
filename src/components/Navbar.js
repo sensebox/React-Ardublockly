@@ -76,8 +76,8 @@ class Navbar extends Component {
     return (
       <div>
         <AppBar
-          position="relative"
-          style={{ height: '50px', marginBottom: this.props.tutorialIsLoading || this.props.projectIsLoading ? '0px' : '30px', boxShadow: this.props.tutorialIsLoading || this.props.projectIsLoading ? 'none' : '0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12)' }}
+          position="fixed"
+          style={{ height: '50px', boxShadow: this.props.tutorialIsLoading || this.props.projectIsLoading ? 'none' : '0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12)', top: '0px' }}
           classes={{ root: this.props.classes.appBarColor }}
         >
           <Toolbar style={{ height: '50px', minHeight: '50px', padding: 0, color: 'white' }}>
