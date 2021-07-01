@@ -1022,6 +1022,11 @@
   dependencies:
     "@blockly/plugin-modal" "^1.20200427.4"
 
+"@blockly/zoom-to-fit@^1.0.5":
+  "integrity" "sha512-+dm8bpJB0AkrEMQPr7nEMYKiEA8Loh7V8ZVa0s25PkxGP9BLqt9NIxUCQjshInhCr11Dlctq7C7noqK+tTVS4w=="
+  "resolved" "https://registry.npmjs.org/@blockly/zoom-to-fit/-/zoom-to-fit-1.0.5.tgz"
+  "version" "1.0.5"
+
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
   resolved "https://registry.npmjs.org/@cnakazawa/watch/-/watch-1.0.4.tgz"

@@ -13,6 +13,7 @@ import { OSEM } from "./de/sensebox-osem";
 import { RTC } from "./de/sensebox-rtc";
 import { SD } from "./de/sensebox-sd";
 import { SENSORS } from "./de/sensebox-sensors";
+import { SENSEBOX } from "./de/sensebox";
 import { TELEGRAM } from "./de/sensebox-telegram";
 import { WEB } from "./de/sensebox-web";
 import { TEXT } from "./de/text";
@@ -39,6 +40,7 @@ export const De = {
   ...RTC,
   ...SD,
   ...SENSORS,
+  ...SENSEBOX,
   ...TELEGRAM,
   ...WEB,
   ...TEXT,

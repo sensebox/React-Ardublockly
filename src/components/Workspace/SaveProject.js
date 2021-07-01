@@ -127,7 +127,6 @@ class SaveProject extends Component {
   }
 
   render() {
-    console.log(1, this.props);
     return (
       <div style={this.props.style}>
         <Tooltip title={this.state.projectType === 'project' ? Blockly.Msg.tooltip_update_project : Blockly.Msg.tooltip_save_project} arrow>

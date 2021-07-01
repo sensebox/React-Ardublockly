@@ -7,6 +7,7 @@ import "./sensebox-web";
 import "./sensebox-display";
 import "./sensebox-lora";
 import "./sensebox-led";
+import "./sensebox";
 import "./sensebox-rtc";
 import "./sensebox-ble";
 import "./sensebox-sd";

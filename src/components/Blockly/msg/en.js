@@ -6,6 +6,7 @@ import { LOGIC } from "./en/logic";
 import { LOOPS } from "./en/loops";
 import { MATH } from "./en/math";
 import { MQTT } from "./en/mqtt";
+import { SENSEBOX } from "./en/sensebox";
 import { DISPLAY } from "./en/sensebox-display";
 import { LED } from "./en/sensebox-led";
 import { LORA } from "./en/sensebox-lora";
@@ -39,6 +40,7 @@ export const En = {
   ...RTC,
   ...SD,
   ...SENSORS,
+  ...SENSEBOX,
   ...TELEGRAM,
   ...WEB,
   ...TEXT,

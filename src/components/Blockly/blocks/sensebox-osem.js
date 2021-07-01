@@ -73,7 +73,6 @@ Blockly.Blocks['sensebox_osem_connection'] = {
         * Blockly.Blocks['controls_flow_statements'].LOOP_TYPES.push('custom_loop');
         */
         selectedBox = this.getFieldValue('BoxID');
-        console.log(selectedBox)
         if (selectedBox !== '' && boxes) {
             var accessToken = boxes.find(element => element._id === selectedBox).access_token
             if (accessToken !== undefined) {
@@ -160,7 +159,6 @@ Blockly.Blocks['sensebox_send_to_osem'] = {
                 for (var i = 0; i < box.sensors.length; i++) {
                     dropdown.push([box.sensors[i].title, box.sensors[i]._id])
                 }
-                console.log(dropdown)
             }
             if (dropdown.length > 1) {
                 var options = dropdown.slice(1)

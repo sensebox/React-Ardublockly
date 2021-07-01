@@ -38,13 +38,11 @@ export const getTutorials = () => (dispatch, getState) => {
   axios.get(`${process.env.REACT_APP_BLOCKLY_API}/tutorial`)
     .then(res => {
       var tutorials = res.data.tutorials;
-      console.log(tutorials);
       existingTutorials(tutorials, getState().tutorial.status).then(status => {
         dispatch({
           type: TUTORIAL_SUCCESS,
           payload: status
         });
-        console.log('zwei');
         dispatch(updateStatus(status));
         dispatch({
           type: GET_TUTORIALS,
@@ -167,7 +165,6 @@ export const tutorialCheck = (status, step) => (dispatch, getState) => {
     type: status === 'success' ? TUTORIAL_SUCCESS : TUTORIAL_ERROR,
     payload: tutorialsStatus
   });
-  console.log('drei');
   dispatch(updateStatus(tutorialsStatus));
   dispatch(tutorialChange());
   dispatch(returnSuccess('', '', 'TUTORIAL_CHECK_SUCCESS'));
