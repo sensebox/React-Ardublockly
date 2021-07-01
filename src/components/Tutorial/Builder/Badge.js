@@ -60,7 +60,6 @@ class Badge extends Component {
         this.setState({badges: res.data.badges, badgeName: this.props.badge ? res.data.badges.filter(badge => badge._id === this.props.badge)[0].name : '' });
       })
       .catch(err => {
-        console.log(err);
       });
   };
 

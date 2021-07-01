@@ -16,15 +16,16 @@ class Toolbox extends React.Component {
       this.props.workspace,
       "callbackName",
       [
-        ["SHORT_NUMBER", "char"],
-        ["NUMBER", "int"],
-        ["DECIMAL", "float"],
-        ["TEXT", "String"],
-        ["ARRAY", "Array"],
-        ["CHARACTER", "char"],
-        ["BOOLEAN", "boolean"],
-        ["NULL", "void"],
-        ["UNDEF", "undefined"],
+        [`${Blockly.Msg.variable_SHORT_NUMBER}`, "char"],
+        [`${Blockly.Msg.variable_NUMBER}`, "int"],
+        [`${Blockly.Msg.variable_LONG}`, "long"],
+        [`${Blockly.Msg.variable_DECIMAL}`, "float"],
+        [`${Blockly.Msg.variables_TEXT}`, "String"],
+        [`${Blockly.Msg.variables_ARRAY}`, "Array"],
+        [`${Blockly.Msg.variables_CHARACTER}`, "char"],
+        [`${Blockly.Msg.variables_BOOLEAN}`, "boolean"],
+        [`${Blockly.Msg.variables_NULL}`, "void"],
+        [`${Blockly.Msg.variables_UNDEF}`, "undefined"],
       ]
     );
     typedVarModal.init();
@@ -74,6 +75,20 @@ class Toolbox extends React.Component {
           <Block type="sensebox_sensor_watertemperature" />
           {/* <Block type="sensebox_windspeed" /> */}
           <Block type="sensebox_soundsensor_dfrobot" />
+          <Block type="sensebox_multiplexer_init">
+            <Value name="nrChannels">
+              <Block type="math_number">
+                <Field name="NUM">1</Field>
+              </Block>
+            </Value>
+          </Block>
+          <Block type="sensebox_multiplexer_changeChannel">
+            <Value name="Channel">
+              <Block type="math_number">
+                <Field name="NUM">1</Field>
+              </Block>
+            </Value>
+          </Block>
         </Category>
         <Category name="WIFI" colour={getColour().sensebox}>
           <Block type="sensebox_wifi" />

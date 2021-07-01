@@ -17,7 +17,6 @@ export const onChangeCode = () => (dispatch, getState) => {
   var xmlDom = Blockly.Xml.workspaceToDom(workspace);
   code.xml = Blockly.Xml.domToPrettyText(xmlDom);
   var selectedBlock = Blockly.selected
-  console.log(selectedBlock)
   if (selectedBlock !== null) {
     code.helpurl = selectedBlock.helpUrl
     code.tooltip = selectedBlock.tooltip
