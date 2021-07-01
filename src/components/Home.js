@@ -114,7 +114,7 @@ class Home extends Component {
             <div className='blocklyWindow'>
               {this.props.project ?
                 < BlocklyWindow blocklyCSS={{ height: '80vH' }} initialXml={this.props.project.xml} />
-                : < BlocklyWindow blocklyCSS={{ height: '80vH' }}/>
+                : < BlocklyWindow blocklyCSS={{ height: '80vH' }} />
               }
             </div>
           </Grid>
@@ -141,14 +141,12 @@ Home.propTypes = {
   clearStats: PropTypes.func.isRequired,
   workspaceName: PropTypes.func.isRequired,
   message: PropTypes.object.isRequired,
-  statistics: PropTypes.bool.isRequired,
-  
+  statistics: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
   message: state.message,
-  statistics: state.general.statistics,
-
+  statistics: state.general.statistics
 });
 
 
