@@ -20,17 +20,8 @@ class BlocklyWindow extends Component {
 
   componentDidMount() {
     const workspace = Blockly.getMainWorkspace();
-    if (!this.props.initialXml) {
-      if (this.props.workspaceXML !== "") {
-        Blockly.Xml.clearWorkspaceAndLoadFromXml(
-          Blockly.Xml.textToDom(this.props.workspaceXML),
-          workspace
-        );
-      } else {
-        this.props.onChangeWorkspace({});
-        this.props.clearStats();
-      }
-    }
+    this.props.onChangeWorkspace({});
+    this.props.clearStats();
     workspace.addChangeListener((event) => {
       this.props.onChangeWorkspace(event);
       // switch on that a block is displayed disabled or not depending on whether it is correctly connected
@@ -39,7 +30,6 @@ class BlocklyWindow extends Component {
         Blockly.Events.disableOrphans(event);
       }
     });
-
     Blockly.svgResize(workspace);
     const zoomToFit = new ZoomToFitControl(workspace);
     zoomToFit.init();
@@ -55,7 +45,6 @@ class BlocklyWindow extends Component {
       if (!xml) xml = initialXml;
       Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
     }
-
     if (props.language !== this.props.language) {
       // change language
       if (!xml) xml = initialXml;
@@ -130,14 +119,12 @@ BlocklyWindow.propTypes = {
   onChangeWorkspace: PropTypes.func.isRequired,
   clearStats: PropTypes.func.isRequired,
   renderer: PropTypes.string.isRequired,
-  language: PropTypes.string.isRequired,
-  workspaceXML: PropTypes.string.isRequired,
+  language: PropTypes.string.isRequired
 };
 
 const mapStateToProps = (state) => ({
   renderer: state.general.renderer,
-  language: state.general.language.Blockly,
-  workspaceXML: state.workspace.code.xml,
+  language: state.general.language
 });
 
 export default connect(mapStateToProps, { onChangeWorkspace, clearStats })(
