@@ -484,6 +484,42 @@ class Toolbox extends React.Component {
           <Block type="time_micros"></Block>
           <Block type="infinite_loop"></Block>
           <Block type="sensebox_interval_timer"></Block>
+          <Block type="sensebox_rtc_init"></Block>
+          <Block type="sensebox_rtc_set">
+            <Value name="second">
+              <Block type="math_number">
+                <Field name="NUM">00</Field>
+              </Block>
+            </Value>
+            <Value name="minutes">
+              <Block type="math_number">
+                <Field name="NUM">00</Field>
+              </Block>
+            </Value>
+            <Value name="hour">
+              <Block type="math_number">
+                <Field name="NUM">00</Field>
+              </Block>
+            </Value>
+            <Value name="day">
+              <Block type="math_number">
+                <Field name="NUM">01</Field>
+              </Block>
+            </Value>
+            <Value name="month">
+              <Block type="math_number">
+                <Field name="NUM">01</Field>
+              </Block>
+            </Value>
+            <Value name="year">
+              <Block type="math_number">
+                <Field name="NUM">1970</Field>
+              </Block>
+            </Value>
+          </Block>
+          {/* <Block type="sensebox_rtc_set_ntp"></Block> */}
+          <Block type="sensebox_rtc_get"></Block>
+          <Block type="sensebox_rtc_get_timestamp"></Block>
         </Category>
         <Category
           id="math"
