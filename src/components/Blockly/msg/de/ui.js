@@ -173,14 +173,6 @@ export const UI = {
   labels_password: "Passwort",
 
   /**
-   * Badges
-   */
-
-  badges_explaination:
-    "Eine Übersicht über alle erhaltenen Badges im Kontext Blockly for senseBox findest du ",
-  badges_ASSIGNE_BADGE_SUCCESS_01: "Herzlichen Glückwunsch! Du hast den Badge ",
-  badges_ASSIGNE_BADGE_SUCCESS_02: " erhalten.",
-  /**
    * Tutorials
    */
 
@@ -228,7 +220,6 @@ export const UI = {
 
   navbar_menu: "Menü",
   navbar_login: "Einloggen",
-  navbar_mybadges: "myBadges",
   navbar_account: "Konto",
   navbar_logout: "Abmelden",
   navbar_settings: "Einstellungen",
