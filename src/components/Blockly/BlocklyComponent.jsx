@@ -21,55 +21,74 @@
  * @author samelh@google.com (Sam El-Husseini)
  */
 
-import React from 'react';
+import React from "react";
 
-import Blockly from 'blockly/core';
-import 'blockly/blocks';
-import Toolbox from './toolbox/Toolbox';
+import Blockly from "blockly/core";
+import "blockly/blocks";
+import Toolbox from "./toolbox/Toolbox";
 
-import { Card } from '@material-ui/core';
-
-
+import { Card } from "@material-ui/core";
+import {
+  ScrollOptions,
+  ScrollBlockDragger,
+  ScrollMetricsManager,
+} from "@blockly/plugin-scroll-options";
 
 class BlocklyComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.blocklyDiv = React.createRef();
+    this.toolbox = React.createRef();
+    this.state = { workspace: undefined };
+  }
 
-    constructor(props) {
-        super(props);
-        this.blocklyDiv = React.createRef();
-        this.toolbox = React.createRef();
-        this.state = { workspace: undefined };
+  componentDidMount() {
+    const { initialXml, children, ...rest } = this.props;
+    this.primaryWorkspace = Blockly.inject(this.blocklyDiv.current, {
+      toolbox: this.toolbox.current,
+      plugins: {
+        // These are both required.
+        blockDragger: ScrollBlockDragger,
+        metricsManager: ScrollMetricsManager,
+      },
+      ...rest,
+    });
+    // Initialize plugin.
+
+    this.setState({ workspace: this.primaryWorkspace });
+    const plugin = new ScrollOptions(this.workspace);
+    plugin.init({ enableWheelScroll: true, enableEdgeScroll: true });
+    if (initialXml) {
+      Blockly.Xml.domToWorkspace(
+        Blockly.Xml.textToDom(initialXml),
+        this.primaryWorkspace
+      );
     }
+  }
 
-    componentDidMount() {
-        const { initialXml, children, ...rest } = this.props;
-        this.primaryWorkspace = Blockly.inject(
-            this.blocklyDiv.current,
-            {
-                toolbox: this.toolbox.current,
-                ...rest
-            },
-        );
-        this.setState({ workspace: this.primaryWorkspace })
+  get workspace() {
+    return this.primaryWorkspace;
+  }
 
-        if (initialXml) {
-            Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(initialXml), this.primaryWorkspace);
-        }
-    }
+  setXml(xml) {
+    Blockly.Xml.domToWorkspace(
+      Blockly.Xml.textToDom(xml),
+      this.primaryWorkspace
+    );
+  }
 
-    get workspace() {
-        return this.primaryWorkspace;
-    }
-
-    setXml(xml) {
-        Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), this.primaryWorkspace);
-    }
-
-    render() {
-        return <React.Fragment>
-            <Card ref={this.blocklyDiv} id="blocklyDiv" style={this.props.style ? this.props.style : {}} />
-            <Toolbox toolbox={this.toolbox} workspace={this.state.workspace} />
-        </React.Fragment>;
-    }
+  render() {
+    return (
+      <React.Fragment>
+        <Card
+          ref={this.blocklyDiv}
+          id="blocklyDiv"
+          style={this.props.style ? this.props.style : {}}
+        />
+        <Toolbox toolbox={this.toolbox} workspace={this.state.workspace} />
+      </React.Fragment>
+    );
+  }
 }
 
 export default BlocklyComponent;
