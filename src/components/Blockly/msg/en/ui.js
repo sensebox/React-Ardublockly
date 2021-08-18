@@ -165,15 +165,6 @@ export const UI = {
   labels_here: "here",
   labels_username: "Email or username",
   labels_password: "Password",
-  /**
-   * Badges
-   */
-
-  badges_explaination:
-    "An overview of all badges received in the Blockly for senseBox context can be found ",
-  badges_ASSIGNE_BADGE_SUCCESS_01:
-    "Congratulations! You have received the badge ",
-  badges_ASSIGNE_BADGE_SUCCESS_02: ".",
 
   /**
    * Tutorials
@@ -225,7 +216,6 @@ export const UI = {
 
   navbar_menu: "Menu",
   navbar_login: "Login",
-  navbar_mybadges: "myBadges",
   navbar_account: "Account",
   navbar_logout: "Logout",
   navbar_settings: "Settings",

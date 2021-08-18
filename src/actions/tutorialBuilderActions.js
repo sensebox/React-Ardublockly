@@ -1,24 +1,36 @@
-import { PROGRESS, JSON_STRING, BUILDER_CHANGE, BUILDER_ERROR, BUILDER_TITLE, BUILDER_ID, BUILDER_BADGE, BUILDER_ADD_STEP, BUILDER_DELETE_STEP, BUILDER_CHANGE_STEP, BUILDER_CHANGE_ORDER, BUILDER_DELETE_PROPERTY } from './types';
+import {
+  PROGRESS,
+  JSON_STRING,
+  BUILDER_CHANGE,
+  BUILDER_ERROR,
+  BUILDER_TITLE,
+  BUILDER_ID,
+  BUILDER_ADD_STEP,
+  BUILDER_DELETE_STEP,
+  BUILDER_CHANGE_STEP,
+  BUILDER_CHANGE_ORDER,
+  BUILDER_DELETE_PROPERTY,
+} from "./types";
 
-import data from '../data/hardware.json';
+import data from "../data/hardware.json";
 
 export const changeTutorialBuilder = () => (dispatch) => {
   dispatch({
-    type: BUILDER_CHANGE
+    type: BUILDER_CHANGE,
   });
 };
 
 export const jsonString = (json) => (dispatch) => {
   dispatch({
     type: JSON_STRING,
-    payload: json
+    payload: json,
   });
 };
 
 export const tutorialTitle = (title) => (dispatch) => {
   dispatch({
     type: BUILDER_TITLE,
-    payload: title
+    payload: title,
   });
   dispatch(changeTutorialBuilder());
 };
@@ -26,7 +38,7 @@ export const tutorialTitle = (title) => (dispatch) => {
 export const tutorialSteps = (steps) => (dispatch) => {
   dispatch({
     type: BUILDER_ADD_STEP,
-    payload: steps
+    payload: steps,
   });
   dispatch(changeTutorialBuilder());
 };
@@ -34,15 +46,7 @@ export const tutorialSteps = (steps) => (dispatch) => {
 export const tutorialId = (id) => (dispatch) => {
   dispatch({
     type: BUILDER_ID,
-    payload: id
-  });
-  dispatch(changeTutorialBuilder());
-};
-
-export const tutorialBadge = (badge) => (dispatch) => {
-  dispatch({
-    type: BUILDER_BADGE,
-    payload: badge
+    payload: id,
   });
   dispatch(changeTutorialBuilder());
 };
@@ -51,14 +55,14 @@ export const addStep = (index) => (dispatch, getState) => {
   var steps = getState().builder.steps;
   var step = {
     id: index + 1,
-    type: 'instruction',
-    headline: '',
-    text: ''
+    type: "instruction",
+    headline: "",
+    text: "",
   };
   steps.splice(index, 0, step);
   dispatch({
     type: BUILDER_ADD_STEP,
-    payload: steps
+    payload: steps,
   });
   dispatch(addErrorStep(index));
   dispatch(changeTutorialBuilder());
@@ -69,7 +73,7 @@ export const addErrorStep = (index) => (dispatch, getState) => {
   error.steps.splice(index, 0, {});
   dispatch({
     type: BUILDER_ERROR,
-    payload: error
+    payload: error,
   });
 };
 
@@ -78,7 +82,7 @@ export const removeStep = (index) => (dispatch, getState) => {
   steps.splice(index, 1);
   dispatch({
     type: BUILDER_DELETE_STEP,
-    payload: steps
+    payload: steps,
   });
   dispatch(removeErrorStep(index));
   dispatch(changeTutorialBuilder());
@@ -89,45 +93,47 @@ export const removeErrorStep = (index) => (dispatch, getState) => {
   error.steps.splice(index, 1);
   dispatch({
     type: BUILDER_ERROR,
-    payload: error
+    payload: error,
   });
 };
 
-export const changeContent = (content, index, property1, property2) => (dispatch, getState) => {
-  var steps = getState().builder.steps;
-  var step = steps[index];
-  if (property2) {
-    if (step[property1] && step[property1][property2]) {
-      step[property1][property2] = content;
+export const changeContent =
+  (content, index, property1, property2) => (dispatch, getState) => {
+    var steps = getState().builder.steps;
+    var step = steps[index];
+    if (property2) {
+      if (step[property1] && step[property1][property2]) {
+        step[property1][property2] = content;
+      } else {
+        step[property1] = { [property2]: content };
+      }
     } else {
-      step[property1] = { [property2]: content };
+      step[property1] = content;
     }
-  } else {
-    step[property1] = content;
-  }
-  dispatch({
-    type: BUILDER_CHANGE_STEP,
-    payload: steps
-  });
-  dispatch(changeTutorialBuilder());
-};
+    dispatch({
+      type: BUILDER_CHANGE_STEP,
+      payload: steps,
+    });
+    dispatch(changeTutorialBuilder());
+  };
 
-export const deleteProperty = (index, property1, property2) => (dispatch, getState) => {
-  var steps = getState().builder.steps;
-  var step = steps[index];
-  if (property2) {
-    if (step[property1] && step[property1][property2]) {
-      delete step[property1][property2];
+export const deleteProperty =
+  (index, property1, property2) => (dispatch, getState) => {
+    var steps = getState().builder.steps;
+    var step = steps[index];
+    if (property2) {
+      if (step[property1] && step[property1][property2]) {
+        delete step[property1][property2];
+      }
+    } else {
+      delete step[property1];
     }
-  } else {
-    delete step[property1];
-  }
-  dispatch({
-    type: BUILDER_DELETE_PROPERTY,
-    payload: steps
-  });
-  dispatch(changeTutorialBuilder());
-};
+    dispatch({
+      type: BUILDER_DELETE_PROPERTY,
+      payload: steps,
+    });
+    dispatch(changeTutorialBuilder());
+  };
 
 export const changeStepIndex = (fromIndex, toIndex) => (dispatch, getState) => {
   var steps = getState().builder.steps;
@@ -136,34 +142,34 @@ export const changeStepIndex = (fromIndex, toIndex) => (dispatch, getState) => {
   steps.splice(toIndex, 0, step);
   dispatch({
     type: BUILDER_CHANGE_ORDER,
-    payload: steps
+    payload: steps,
   });
   dispatch(changeErrorStepIndex(fromIndex, toIndex));
   dispatch(changeTutorialBuilder());
 };
 
-export const changeErrorStepIndex = (fromIndex, toIndex) => (dispatch, getState) => {
-  var error = getState().builder.error;
-  var errorStep = error.steps[fromIndex];
-  error.steps.splice(fromIndex, 1);
-  error.steps.splice(toIndex, 0, errorStep);
-  dispatch({
-    type: BUILDER_ERROR,
-    payload: error
-  });
-};
+export const changeErrorStepIndex =
+  (fromIndex, toIndex) => (dispatch, getState) => {
+    var error = getState().builder.error;
+    var errorStep = error.steps[fromIndex];
+    error.steps.splice(fromIndex, 1);
+    error.steps.splice(toIndex, 0, errorStep);
+    dispatch({
+      type: BUILDER_ERROR,
+      payload: error,
+    });
+  };
 
 export const setError = (index, property) => (dispatch, getState) => {
   var error = getState().builder.error;
   if (index !== undefined) {
     error.steps[index][property] = true;
-  }
-  else {
+  } else {
     error[property] = true;
   }
   dispatch({
     type: BUILDER_ERROR,
-    payload: error
+    payload: error,
   });
   dispatch(changeTutorialBuilder());
 };
@@ -172,13 +178,12 @@ export const deleteError = (index, property) => (dispatch, getState) => {
   var error = getState().builder.error;
   if (index !== undefined) {
     delete error.steps[index][property];
-  }
-  else {
+  } else {
     delete error[property];
   }
   dispatch({
     type: BUILDER_ERROR,
-    payload: error
+    payload: error,
   });
   dispatch(changeTutorialBuilder());
 };
@@ -188,11 +193,11 @@ export const setSubmitError = () => (dispatch, getState) => {
   // if(builder.id === undefined || builder.id === ''){
   //   dispatch(setError(undefined, 'id'));
   // }
-  if (builder.title === '') {
-    dispatch(setError(undefined, 'title'));
+  if (builder.title === "") {
+    dispatch(setError(undefined, "title"));
   }
   if (builder.title === null) {
-    dispatch(setError(undefined, 'badge'));
+    dispatch(setError(undefined, "title"));
   }
   var type = builder.steps.map((step, i) => {
     // media and xml are directly checked for errors in their components and
@@ -200,76 +205,82 @@ export const setSubmitError = () => (dispatch, getState) => {
     step.id = i + 1;
     if (i === 0) {
       if (step.requirements && step.requirements.length > 0) {
-        var requirements = step.requirements.filter(requirement => /^[0-9a-fA-F]{24}$/.test(requirement));
+        var requirements = step.requirements.filter((requirement) =>
+          /^[0-9a-fA-F]{24}$/.test(requirement)
+        );
         if (requirements.length < step.requirements.length) {
-          dispatch(changeContent(requirements, i, 'requirements'));
+          dispatch(changeContent(requirements, i, "requirements"));
         }
       }
       if (step.hardware === undefined || step.hardware.length < 1) {
-        dispatch(setError(i, 'hardware'));
-      }
-      else {
-        var hardwareIds = data.map(hardware => hardware.id);
-        var hardware = step.hardware.filter(hardware => hardwareIds.includes(hardware));
+        dispatch(setError(i, "hardware"));
+      } else {
+        var hardwareIds = data.map((hardware) => hardware.id);
+        var hardware = step.hardware.filter((hardware) =>
+          hardwareIds.includes(hardware)
+        );
         if (hardware.length < step.hardware.length) {
-          dispatch(changeContent(hardware, i, 'hardware'));
+          dispatch(changeContent(hardware, i, "hardware"));
         }
       }
     }
-    if (step.headline === undefined || step.headline === '') {
-      dispatch(setError(i, 'headline'));
+    if (step.headline === undefined || step.headline === "") {
+      dispatch(setError(i, "headline"));
     }
-    if (step.text === undefined || step.text === '') {
-      dispatch(setError(i, 'text'));
+    if (step.text === undefined || step.text === "") {
+      dispatch(setError(i, "text"));
     }
     return step.type;
   });
-  if (!(type.filter(item => item === 'task').length > 0 && type.filter(item => item === 'instruction').length > 0)) {
-    dispatch(setError(undefined, 'type'));
+  if (
+    !(
+      type.filter((item) => item === "task").length > 0 &&
+      type.filter((item) => item === "instruction").length > 0
+    )
+  ) {
+    dispatch(setError(undefined, "type"));
   }
 };
-
 
 export const checkError = () => (dispatch, getState) => {
   dispatch(setSubmitError());
   var error = getState().builder.error;
-  if (error.id || error.title || error.badge ||error.type) {
+  if (error.id || error.title || error.type) {
     return true;
   }
   for (var i = 0; i < error.steps.length; i++) {
     if (Object.keys(error.steps[i]).length > 0) {
-      return true
+      return true;
     }
   }
   return false;
-}
+};
 
 export const progress = (inProgress) => (dispatch) => {
   dispatch({
     type: PROGRESS,
-    payload: inProgress
-  })
+    payload: inProgress,
+  });
 };
 
 export const resetTutorial = () => (dispatch, getState) => {
-  dispatch(jsonString(''));
-  dispatch(tutorialTitle(''));
-  dispatch(tutorialBadge(undefined));
+  dispatch(jsonString(""));
+  dispatch(tutorialTitle(""));
   var steps = [
     {
-      type: 'instruction',
-      headline: '',
-      text: '',
+      type: "instruction",
+      headline: "",
+      text: "",
       hardware: [],
-      requirements: []
-    }
+      requirements: [],
+    },
   ];
   dispatch(tutorialSteps(steps));
   dispatch({
     type: BUILDER_ERROR,
     payload: {
-      steps: [{}]
-    }
+      steps: [{}],
+    },
   });
 };
 
@@ -278,8 +289,10 @@ export const readJSON = (json) => (dispatch, getState) => {
   dispatch({
     type: BUILDER_ERROR,
     payload: {
-      steps: json.steps.map(() => { return {}; })
-    }
+      steps: json.steps.map(() => {
+        return {};
+      }),
+    },
   });
   // accept only valid attributes
   var steps = json.steps.map((step, i) => {
@@ -287,7 +300,7 @@ export const readJSON = (json) => (dispatch, getState) => {
       _id: step._id,
       type: step.type,
       headline: step.headline,
-      text: step.text
+      text: step.text,
     };
     if (i === 0) {
       object.hardware = step.hardware;
@@ -296,19 +309,17 @@ export const readJSON = (json) => (dispatch, getState) => {
     if (step.xml) {
       object.xml = step.xml;
     }
-    if (step.media && step.type === 'instruction') {
+    if (step.media && step.type === "instruction") {
       object.media = {};
       if (step.media.picture) {
         object.media.picture = step.media.picture;
-      }
-      else if (step.media.youtube) {
+      } else if (step.media.youtube) {
         object.media.youtube = step.media.youtube;
       }
     }
     return object;
   });
   dispatch(tutorialTitle(json.title));
-  dispatch(tutorialBadge(json.badge));
   dispatch(tutorialSteps(steps));
   dispatch(setSubmitError());
   dispatch(progress(false));
