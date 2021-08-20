@@ -57,7 +57,7 @@ class BlocklyComponent extends React.Component {
 
     this.setState({ workspace: this.primaryWorkspace });
     const plugin = new ScrollOptions(this.workspace);
-    plugin.init({ enableWheelScroll: true, enableEdgeScroll: true });
+    plugin.init({ enableWheelScroll: true, enableEdgeScroll: false });
     if (initialXml) {
       Blockly.Xml.domToWorkspace(
         Blockly.Xml.textToDom(initialXml),
