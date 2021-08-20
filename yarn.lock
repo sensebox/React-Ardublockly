@@ -1142,17 +1142,22 @@
   "resolved" "https://registry.npmjs.org/@blockly/plugin-modal/-/plugin-modal-1.20200427.4.tgz"
   "version" "1.20200427.4"
 
-"@blockly/plugin-typed-variable-modal@^3.1.1":
-  "integrity" "sha512-+g/lQ3HrCcivBNOtgvQEvfZCPq9VeP1Zgs7J02zxAfw4f+s4aOQb+hChv7qAb5AnzEnMk0BoB5vKgQmaP6Wkuw=="
-  "resolved" "https://registry.npmjs.org/@blockly/plugin-typed-variable-modal/-/plugin-typed-variable-modal-3.1.1.tgz"
-  "version" "3.1.1"
+"@blockly/plugin-scroll-options@^1.0.2":
+  "integrity" "sha512-j0ehQlHv/0EWPw8UQEplGs4jCxfo45yp6ZzxYxReMirM0/j4EXXFvgXTZoruPgRYgMl+pCwya32Z6Dkv19sURA=="
+  "resolved" "https://registry.npmjs.org/@blockly/plugin-scroll-options/-/plugin-scroll-options-1.0.2.tgz"
+  "version" "1.0.2"
+
+"@blockly/plugin-typed-variable-modal@^3.1.26":
+  "integrity" "sha512-3aKdr/NkcyH93zt0etnmR+urZ3csHbhqyUBn9Q8r/w6GNm54S8s916B921YnGFUBtnWnUEzieMHRAt5KveSKug=="
+  "resolved" "https://registry.npmjs.org/@blockly/plugin-typed-variable-modal/-/plugin-typed-variable-modal-3.1.26.tgz"
+  "version" "3.1.26"
   dependencies:
     "@blockly/plugin-modal" "^1.20200427.4"
 
-"@blockly/zoom-to-fit@^1.0.5":
-  "integrity" "sha512-+dm8bpJB0AkrEMQPr7nEMYKiEA8Loh7V8ZVa0s25PkxGP9BLqt9NIxUCQjshInhCr11Dlctq7C7noqK+tTVS4w=="
-  "resolved" "https://registry.npmjs.org/@blockly/zoom-to-fit/-/zoom-to-fit-1.0.5.tgz"
-  "version" "1.0.5"
+"@blockly/zoom-to-fit@^2.0.7":
+  "integrity" "sha512-ZMY6k1V97B3IwBWcbxFlpKwKtfWg2vmJuLfmdIymrJQZtswRyY303F1JOl1G1+zsCKeyW/FVo/ysrSDZTIaRCQ=="
+  "resolved" "https://registry.npmjs.org/@blockly/zoom-to-fit/-/zoom-to-fit-2.0.7.tgz"
+  "version" "2.0.7"
 
 "@cnakazawa/watch@^1.0.3":
   "integrity" "sha512-v9kIhKwjeZThiWrLmj0y17CWoyddASLj9O2yvbZkbvw/N3rWOYy9zkV66ursAoVr0mV15bL8g0c4QZUE6cdDoQ=="
@@ -3129,10 +3134,10 @@
   dependencies:
     "file-uri-to-path" "1.0.0"
 
-"blockly@^5.20210325.1", "blockly@>=5.20210325.0":
-  "integrity" "sha512-qrilYPovJeDfxKDWm1YBUCPVNElh/iyC1szaHTIPZHj9C9YPpSzZOeFyyrPBbYRudzbo8kjBOWMtHnN1bLjkoQ=="
-  "resolved" "https://registry.npmjs.org/blockly/-/blockly-5.20210325.1.tgz"
-  "version" "5.20210325.1"
+"blockly@^6.20210701.0", "blockly@3.20200625.0 - 6":
+  "integrity" "sha512-cNrwFOAxXE5Pbs1FJAyLTlSRzpNW/C+0gPT2rGQDOJVVKcyF3vhFC1StgnxvQNsv//ueuksKWIXxDuSWh1VI4w=="
+  "resolved" "https://registry.npmjs.org/blockly/-/blockly-6.20210701.0.tgz"
+  "version" "6.20210701.0"
   dependencies:
     "jsdom" "15.2.1"
 
