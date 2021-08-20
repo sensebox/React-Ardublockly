@@ -100,7 +100,7 @@ class BlocklyWindow extends Component {
                   // https://developers.google.com/blockly/guides/configure/web/move
                   scrollbars: true,
                   drag: true,
-                  wheel: false,
+                  wheel: true,
                 }
           }
           initialXml={
@@ -119,12 +119,12 @@ BlocklyWindow.propTypes = {
   onChangeWorkspace: PropTypes.func.isRequired,
   clearStats: PropTypes.func.isRequired,
   renderer: PropTypes.string.isRequired,
-  language: PropTypes.string.isRequired
+  language: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   renderer: state.general.renderer,
-  language: state.general.language
+  language: state.general.language,
 });
 
 export default connect(mapStateToProps, { onChangeWorkspace, clearStats })(
