@@ -369,6 +369,9 @@ return tsBuffer;
       `;
       code = "getTimeStamp()";
       break;
+    case "speed":
+      code = "myGNSS.getGroundSpeed()";
+      break;
     default:
       code = "";
   }
