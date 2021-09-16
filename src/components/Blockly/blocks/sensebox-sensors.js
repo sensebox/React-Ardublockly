@@ -412,8 +412,9 @@ Blockly.Blocks["sensebox_gps"] = {
       [Blockly.Msg.senseBox_gps_lat, "latitude"],
       [Blockly.Msg.senseBox_gps_lng, "longitude"],
       [Blockly.Msg.senseBox_gps_alt, "altitude"],
+      [Blockly.Msg.senseBox_gps_timeStamp, "timestamp"],
+      [Blockly.Msg.senseBox_gps_speed, "speed"],
       ["pDOP", "pDOP"],
-      ["Timestamp", "timestamp"],
       ["Fix Type", "fixType"],
     ];
     this.appendDummyInput().appendField("GPS Modul");

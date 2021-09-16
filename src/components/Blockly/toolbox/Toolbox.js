@@ -102,6 +102,13 @@ class Toolbox extends React.Component {
             </Value>
           </Block>
           <Block type="sensebox_sd_write_file" />
+          <Block type="sensebox_sd_osem" />
+          <Block type="sensebox_sd_open_file">
+            <Value name="SD">
+              <Block type="sensebox_sd_osem"></Block>
+            </Value>
+          </Block>
+          <Block type="sensebox_sd_save_for_osem" />
         </Category>
         <Category name="LED" colour={getColour().sensebox}>
           <Block type="sensebox_rgb_led"></Block>
