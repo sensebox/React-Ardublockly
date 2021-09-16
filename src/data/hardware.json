@@ -84,6 +84,12 @@
     "url": "https://docs.sensebox.de/hardware/bee-lora/"
   },
   {
+    "id": "bluetooth-bee",
+    "name": "Bluetooth-Bee",
+    "src": "lora-bee.png",
+    "url": "https://docs.sensebox.de/hardware/bee-ble/"
+  },
+  {
     "id": "button",
     "name": "Knopf",
     "src": "button.png",
@@ -126,6 +132,18 @@
     "url": ""
   },
   {
+    "id": "ws2818-rgb-led",
+    "name": "RGB-LED",
+    "src": "ws2818.png",
+    "url": ""
+  },
+  {
+    "id": "ds1820b",
+    "name": "Wassertemperatur",
+    "src": "ws2818.png",
+    "url": ""
+  },
+  {
     "id": "jst-adapter",
     "name": "JST-Adapterkabel",
     "src": "jst-adapter.png",
@@ -133,6 +151,12 @@
   },
   {
     "id": "jst-jst",
+    "name": "JST-JST Kabel",
+    "src": "jst-jst.png",
+    "url": ""
+  },
+  {
+    "id": "jst-female",
     "name": "JST-JST Kabel",
     "src": "jst-jst.png",
     "url": ""
