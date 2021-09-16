@@ -61,6 +61,10 @@ Blockly.Arduino.sensebox_sd_write_file = function (block) {
 };
 
 Blockly.Arduino.sensebox_sd_osem = function () {
+  if (this.parentBlock_ != null) {
+    var filename = this.getSurroundParent().getFieldValue("Filename");
+  }
+  var res = filename.slice(0, 4);
   var type = this.getFieldValue("type");
   var blocks = this.getDescendants();
   var branch = Blockly.Arduino.statementToCode(this, "DO");
@@ -104,8 +108,7 @@ void writeMeasurementsToSdCard(char* timeStamp) {
     for (uint8_t i = 0; i < num_measurements; i++) {
 sprintf_P(buffer, PSTR("%s,%9.2f,%s"), measurements[i].sensorId, measurements[i].value, timeStamp);         
       // transmit buffer to client
-      dataFileData.print(buffer);
-      Serial.print(buffer);
+      dataFile${res}.println(buffer);
     }
     // reset num_measurements
     num_measurements = 0;
@@ -174,8 +177,7 @@ void writeMeasurementsToSdCard(char* timeStamp, uint32_t latitudes, uint32_t lon
             dtostrf(latitude, 1, 7, lat);
             sprintf_P(buffer, PSTR("%s,%9.2f,%s,%02s,%02s"),  measurements[i].sensorId, measurements[i].value, timeStamp, lng, lat);
             // transmit buffer to client
-            dataFileData.print(buffer);
-            Serial.print(buffer);
+            dataFile${res}.print(buffer);
             }
             // reset num_measurements
             num_measurements = 0;
