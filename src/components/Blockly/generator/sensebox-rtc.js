@@ -79,18 +79,16 @@ Blockly.Arduino.sensebox_rtc_get_timestamp = function () {
   Blockly.Arduino.setupCode_[
     "rtc.batterySwitchOver"
   ] = `rtc.batterySwitchOver(1);`;
-  Blockly.Arduino.loopCodeOnce_[
-    "rtc_variables"
-  ] = `uint8_t sec, min, hour, day, month;\nuint16_t year;`;
   Blockly.Arduino.variables_["rtc_timestamp"] = `char timestamp[20];`;
-  Blockly.Arduino.loopCodeOnce_[
-    "rtc_get"
-  ] = `rtc.get(&sec, &min, &hour, &day, &month, &year);`;
-
-  Blockly.Arduino.loopCodeOnce_[
-    ""
-  ] = `sprintf(timestamp, "%02d-%02d-%02dT%02d:%02d:%02dZ", year, month, day, hour, min, sec);`;
-
-  var code = `timestamp`;
+  Blockly.Arduino.codeFunctions_["getTimeStamp"] = `
+char* getTimeStamp() {
+uint8_t sec, min, hour, day, month;
+ uint16_t year;
+ rtc.get(&sec, &min, &hour, &day, &month, &year);
+ sprintf(timestamp, "%02d-%02d-%02dT%02d:%02d:%02dZ", year, month, day, hour, min, sec);
+ return timestamp;
+ }
+  `;
+  var code = `getTimeStamp()`;
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
