@@ -1,18 +1,38 @@
 import * as Blockly from "blockly/core";
 import { getColour } from "../helpers/colour";
 
+var checkFileName = function (filename) {
+  var length = filename.length;
+  if (length > 8) {
+    alert("dateiname sollte kleiner als 8 Zeichen sein");
+    return filename.slice(0, 8);
+  }
+  return filename;
+};
+
 Blockly.Blocks["sensebox_sd_open_file"] = {
   init: function () {
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_sd_open_file)
       .setAlign(Blockly.ALIGN_LEFT)
-      .appendField(new Blockly.FieldTextInput("Data.txt"), "Filename");
+      .appendField(
+        new Blockly.FieldTextInput("Data", checkFileName),
+        "Filename"
+      )
+      .appendField(".")
+      .appendField(
+        new Blockly.FieldDropdown([
+          ["txt", "txt"],
+          ["csv", "csv"],
+        ]),
+        "extension"
+      );
     this.appendStatementInput("SD").setCheck(null);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_sd_open_file_tooltip);
-    this.setHelpUrl("https://docs.sensebox.de/hardware/bee-sd/");
+    this.setHelpUrl(Blockly.Msg.sensebox_sd_helpurl);
   },
 };
 
@@ -22,12 +42,23 @@ Blockly.Blocks["sensebox_sd_create_file"] = {
       .appendField(Blockly.Msg.senseBox_sd_create_file)
       .setAlign(Blockly.ALIGN_LEFT)
       .appendField(Blockly.Msg.senseBox_output_filename)
-      .appendField(new Blockly.FieldTextInput("Data.txt"), "Filename");
+      .appendField(
+        new Blockly.FieldTextInput("Data", checkFileName),
+        "Filename"
+      )
+      .appendField(".")
+      .appendField(
+        new Blockly.FieldDropdown([
+          ["txt", "txt"],
+          ["csv", "csv"],
+        ]),
+        "extension"
+      );
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_sd_create_file_tooltip);
-    this.setHelpUrl("https://docs.sensebox.de/hardware/bee-sd/");
+    this.setHelpUrl(Blockly.Msg.sensebox_sd_helpurl);
   },
 };
 
@@ -44,7 +75,7 @@ Blockly.Blocks["sensebox_sd_write_file"] = {
     this.setNextStatement(true, null);
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_sd_write_file_tooltip);
-    this.setHelpUrl("https://docs.sensebox.de/hardware/bee-sd/");
+    this.setHelpUrl(Blockly.Msg.sensebox_sd_helpurl);
   },
   /**
    * Called whenever anything on the workspace changes.
@@ -74,12 +105,12 @@ Blockly.Blocks["sensebox_sd_write_file"] = {
 
 Blockly.Blocks["sensebox_sd_osem"] = {
   init: function () {
-    this.setTooltip(Blockly.Msg.senseBox_osem_connection_tip);
-    this.setHelpUrl("");
+    this.setTooltip(Blockly.Msg.sensebox_sd_osem_tip);
+    this.setHelpUrl(Blockly.Msg.sensebox_sd_helpurl);
     this.setColour(getColour().sensebox);
     this.appendDummyInput()
       .setAlign(Blockly.ALIGN_LEFT)
-      .appendField("Create CSV for openSenseMap");
+      .appendField(Blockly.Msg.sensebox_sd_osem);
     this.appendDummyInput()
       .setAlign(Blockly.ALIGN_LEFT)
       .appendField(Blockly.Msg.senseBox_osem_exposure)
@@ -94,7 +125,7 @@ Blockly.Blocks["sensebox_sd_osem"] = {
       Blockly.Msg.senseBox_gps_timeStamp
     );
     this.appendStatementInput("DO")
-      .appendField(Blockly.Msg.senseBox_sensor)
+      .appendField(Blockly.Msg.sensebox_sd_measurement)
       .setCheck(null);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -142,13 +173,13 @@ Blockly.Blocks["sensebox_sd_osem"] = {
 };
 Blockly.Blocks["sensebox_sd_save_for_osem"] = {
   init: function () {
-    this.setTooltip(Blockly.Msg.senseBox_send_to_osem_tip);
-    this.setHelpUrl("");
+    this.setTooltip(Blockly.Msg.sensebox_sd_save_for_osem_tip);
+    this.setHelpUrl(Blockly.Msg.sensebox_sd_helpurl);
     this.setColour(getColour().sensebox);
     this.appendDummyInput().appendField(Blockly.Msg.sensebox_sd_save_for_osem);
     this.appendValueInput("Value")
       .setAlign(Blockly.ALIGN_LEFT)
-      .appendField("Phänomen")
+      .appendField(Blockly.Msg.sensebox_sd_save_for_osem_id)
       .appendField(new Blockly.FieldTextInput("sensorID"), "SensorID");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
