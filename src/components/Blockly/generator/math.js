@@ -275,7 +275,7 @@ Blockly.Arduino["math_change"] = function (block) {
       "DELTA",
       Blockly.Arduino.ORDER_ADDITIVE
     ) || "0";
-  var varName = Blockly.Arduino.variableDB_.getName(
+  var varName = Blockly.Arduino.nameDB_.getName(
     block.getFieldValue("VAR"),
     Blockly.Variables.NAME_TYPE
   );
