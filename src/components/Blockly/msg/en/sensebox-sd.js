@@ -13,4 +13,11 @@ export const SD = {
     "Open the file on the SD card to save files. At the end of the loop, the file will be closed again automatically.",
   sensebox_sd_filename: "Data.csv",
   senseBox_sd_decimals: "decimals",
+  sensebox_sd_osem: "Create CSV-file for openSenseMap",
+  sensebox_sd_osem_tip: "Creates a CSV-file for openSenseMap upload",
+  sensebox_sd_save_for_osem: "Save measurement",
+  sensebox_sd_save_for_osem_tip:
+    "Adds a measurement witht the corresponding Sensor ID to the CSV-file",
+  sensebox_sd_save_for_osem_id: "Sensor ID:",
+  sensebox_sd_measurement: "measurements",
 };
