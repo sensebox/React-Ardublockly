@@ -104,7 +104,11 @@ class Toolbox extends React.Component {
           <Block type="sensebox_sd_write_file" />
           <Block type="sensebox_sd_open_file">
             <Value name="SD">
-              <Block type="sensebox_sd_osem"></Block>
+              <Block type="sensebox_sd_osem">
+                <Value name="DO">
+                  <Block type="sensebox_sd_save_for_osem"></Block>
+                </Value>
+              </Block>
             </Value>
           </Block>
           <Block type="sensebox_sd_osem" />
