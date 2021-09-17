@@ -726,7 +726,7 @@ Blockly.Msg.senseBox_output_safetosd_tip = "Speichert Messwerte auf SD Karte";
 Blockly.Msg.senseBox_output_serialprint = "Auf Kommandozeile ausgeben";
 Blockly.Msg.senseBox_serial_tip =
   "Gibt Messwerte oder Daten auf dem Seriellen Monitor der Arduino IDE aus. Praktisch um ohne Display zu arbeiten";
-Blockly.Msg.senseBox_output_timestamp = "Zeitstempel";
+Blockly.Msg.senseBox_output_timestamp = "Zeitstempel (RFC 3339)";
 
 Blockly.Msg.senseBox_led = "LED an digitalen";
 Blockly.Msg.senseBox_led_tip =

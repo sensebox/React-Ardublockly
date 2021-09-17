@@ -5,7 +5,7 @@ export const RTC = {
   sensebox_rtc_set: "Setze Uhrzeit/Datum der RTC",
   sensebox_rtc_set_tooltip:
     "Stellt die Uhrzeit der RTC ein. Beachte, dass du diesen Block im Setup ausführst.",
-  sensebox_rtc_get_timestamp: "Zeitstempel",
+  sensebox_rtc_get_timestamp: "Zeitstempel (RFC 3339)",
   sensebox_rtc_get_timestamp_tooltip:
     "Gibt dir einen in ISO 8601 formatierten Zeitstempel zurück. Bsp: 2021-12-24T18:21Z",
   sensebox_rtc_get: "Wert: ",
