@@ -2,7 +2,7 @@ import Blockly from "blockly";
 
 const setVariableFunction = function (defaultValue) {
   return function (block) {
-    const variableName = Blockly["Arduino"].variableDB_.getName(
+    const variableName = Blockly["Arduino"].nameDB_.getName(
       block.getFieldValue("VAR"),
       Blockly.Variables.NAME_TYPE
     );
@@ -48,7 +48,7 @@ const setVariableFunction = function (defaultValue) {
 };
 
 const getVariableFunction = function (block) {
-  const variableName = Blockly["Arduino"].variableDB_.getName(
+  const variableName = Blockly["Arduino"].nameDB_.getName(
     block.getFieldValue("VAR"),
     Blockly.Variables.NAME_TYPE
   );
