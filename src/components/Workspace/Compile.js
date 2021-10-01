@@ -21,6 +21,7 @@ import "prismjs/themes/prism.css";
 import "prismjs/plugins/line-numbers/prism-line-numbers";
 import "prismjs/plugins/line-numbers/prism-line-numbers.css";
 import MuiDrawer from "@material-ui/core/Drawer";
+import Dialog from "../Dialog";
 
 const styles = (theme) => ({
   backdrop: {
@@ -65,6 +66,8 @@ class Compile extends Component {
       content: "",
       name: props.name,
       error: "",
+      appLink: "",
+      appDialog: false,
     };
   }
 
@@ -126,21 +129,40 @@ class Compile extends Component {
   };
 
   toggleDialog = () => {
-    this.setState({ open: !this.state, progress: false });
+    this.setState({ open: !this.state, progress: false, appDialog: false });
   };
 
   createFileName = () => {
-    if (this.state.name) {
-      this.download();
-    } else {
+    if (this.props.platform === "iOS") {
       this.setState({
-        file: true,
-        open: true,
-        title: "Projekt kompilieren",
-        content:
-          "Bitte gib einen Namen für die Bennenung des zu kompilierenden Programms ein und bestätige diesen mit einem Klick auf 'Eingabe'.",
+        link: `blocklyconnect-app://${this.state.name}/${this.state.id}`,
       });
+      this.setState({ appDialog: true });
+    } else {
+      if (this.state.name) {
+        this.download();
+      } else {
+        this.setState({
+          file: true,
+          open: true,
+          title: "Projekt kompilieren",
+          content:
+            "Bitte gib einen Namen für die Bennenung des zu kompilierenden Programms ein und bestätige diesen mit einem Klick auf 'Eingabe'.",
+        });
+      }
     }
+
+    // if (this.state.name) {
+    //   this.download();
+    // } else {
+    //   this.setState({
+    //     file: true,
+    //     open: true,
+    //     title: "Projekt kompilieren",
+    //     content:
+    //       "Bitte gib einen Namen für die Bennenung des zu kompilierenden Programms ein und bestätige diesen mit einem Klick auf 'Eingabe'.",
+    //   });
+    // }
   };
 
   setFileName = (e) => {
@@ -240,6 +262,24 @@ class Compile extends Component {
             {`${this.state.error}`}{" "}
           </p>
         </Drawer>
+        <Dialog
+          style={{ zIndex: 9999999 }}
+          fullWidth
+          maxWidth={"sm"}
+          open={this.state.appDialog}
+          title=""
+          content={""}
+          onClose={this.toggleDialog}
+          onClick={this.toggleDialog}
+          button={Blockly.Msg.button_close}
+        >
+          <div>Du verwendest: {this.props.platform}</div>
+          <div>Lade die App hier herunter: </div>
+          <div>
+            Testlink: <a href={this.state.link}>Öffne App</a>
+          </div>
+        </Dialog>
+
         {/* <Dialog
           open={this.state.open}
           title={this.state.title}
@@ -272,11 +312,13 @@ Compile.propTypes = {
   arduino: PropTypes.string.isRequired,
   name: PropTypes.string,
   workspaceName: PropTypes.func.isRequired,
+  platform: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   arduino: state.workspace.code.arduino,
   name: state.workspace.name,
+  platform: state.general.platform,
 });
 
 export default connect(mapStateToProps, { workspaceName })(
