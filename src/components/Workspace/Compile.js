@@ -134,8 +134,9 @@ class Compile extends Component {
 
   createFileName = () => {
     if (this.props.platform === "iOS") {
+      const filename = detectWhitespacesAndReturnReadableResult(this.state.name);
       this.setState({
-        link: `blocklyconnect-app://${this.state.name}/${this.state.id}`,
+        link: `blocklyconnect-app://sketch/${filename}/${this.state.id}`,
       });
       this.setState({ appDialog: true });
     } else {
