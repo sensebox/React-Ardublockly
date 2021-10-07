@@ -45,17 +45,23 @@ const styles = (theme) => ({
 });
 
 class Home extends Component {
-  state = {
-    codeOn: true,
-    snackbar: false,
-    type: "",
-    key: "",
-    message: "",
-    open: true,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      codeOn: true,
+      snackbar: false,
+      type: "",
+      key: "",
+      message: "",
+      open: true,
+    };
+  }
 
   componentDidMount() {
     console.log(this.props.platform);
+    if (this.props.platform === true) {
+      this.setState({ codeOn: false });
+    }
     this.setState({ stats: window.localStorage.getItem("stats") });
     if (!this.props.project) {
       this.props.workspaceName(createNameId());
@@ -86,6 +92,14 @@ class Home extends Component {
 
   toggleDialog = () => {
     this.setState({ open: !this.state });
+  };
+
+  onChangeCheckbox = (e) => {
+    if (e.target.checked) {
+      window.localStorage.setItem("ota", e.target.checked);
+    } else {
+      window.localStorage.removeItem("ota");
+    }
   };
 
   onChange = () => {
@@ -175,12 +189,8 @@ class Home extends Component {
             onClick={this.toggleDialog}
             button={Blockly.Msg.button_close}
           >
-            <div>Du verwendest: {this.props.platform}</div>
+            <div>OTA Modus aktiviert.</div>
             <div>Lade die App hier herunter: </div>
-            <div>
-              Testlink:{" "}
-              <a href="blocklyconnect-app://sketch/123456">Öffne App</a>
-            </div>
           </Dialog>
         ) : null}
       </div>

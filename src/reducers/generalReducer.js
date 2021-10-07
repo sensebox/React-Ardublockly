@@ -16,7 +16,14 @@ const initialLanguage = () => {
   return "en_US";
 };
 
+const initialPlatform = () => {
+  return getPlatform();
+};
+
 const getPlatform = () => {
+  if (window.localStorage.getItem("platform")) {
+    return JSON.parse(window.localStorage.getItem("platform"));
+  }
   var userAgent = window.navigator.userAgent,
     platform = window.navigator.platform,
     macosPlatforms = ["Macintosh", "MacIntel", "MacPPC", "Mac68K"],
@@ -24,15 +31,15 @@ const getPlatform = () => {
     iosPlatforms = ["iPhone", "iPad", "iPod"],
     os = null;
   if (macosPlatforms.indexOf(platform) !== -1) {
-    os = "Mac OS";
+    os = false;
   } else if (iosPlatforms.indexOf(platform) !== -1) {
-    os = "iOS";
+    os = true;
   } else if (windowsPlatforms.indexOf(userAgent) !== -1) {
-    os = "Windows";
+    os = false;
   } else if (/Android/.test(userAgent)) {
-    os = "Android";
+    os = true;
   } else if (!os && /Linux/.test(platform)) {
-    os = "Linux";
+    os = false;
   }
   return os;
 };
@@ -56,7 +63,7 @@ const initialState = {
   language: initialLanguage(),
   renderer: initialRenderer(),
   statistics: initialStatistics(),
-  platform: getPlatform(),
+  platform: initialPlatform(),
 };
 
 export default function foo(state = initialState, action) {
@@ -72,6 +79,7 @@ export default function foo(state = initialState, action) {
         language: action.payload,
       };
     case PLATFORM:
+      window.localStorage.setItem("platform", action.payload);
       return {
         ...state,
         platform: action.payload,
