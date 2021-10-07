@@ -259,6 +259,8 @@ Blockly["Arduino"].finish = function (code) {
   code =
     devVariables +
     "\n" +
+    "#include <SenseBoxOTA.h>" +
+    "\n" +
     libraryCode +
     "\n" +
     variablesCode +
