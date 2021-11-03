@@ -26,6 +26,17 @@
 
 import * as Blockly from "blockly/core";
 
+import store from "../../../store";
+
+var ota = store.getState().general.platform
+  ? store.getState().general.platform
+  : null;
+store.subscribe(() => {
+  ota = store.getState().general.platform
+    ? store.getState().general.platform
+    : null;
+});
+
 /**
  * Arduino code generator.
  * @type !Blockly.Generator
@@ -254,28 +265,49 @@ Blockly["Arduino"].finish = function (code) {
     "\n}\n";
 
   let loopCode = "\nvoid loop() { \n" + loopCodeOnce + code + "\n}\n";
-
-  // Convert the definitions dictionary into a list.
-  code =
-    devVariables +
-    "\n" +
-    "#include <SenseBoxOTA.h>" +
-    "\n" +
-    libraryCode +
-    "\n" +
-    variablesCode +
-    "\n" +
-    definitionsCode +
-    "\n" +
-    codeFunctions +
-    "\n" +
-    Blockly["Arduino"].variablesInitCode_ +
-    "\n" +
-    functionsCode +
-    "\n" +
-    setupCode +
-    "\n" +
-    loopCode;
+  // only add OTA code if tablet mode is enabled
+  if (ota === true) {
+    code =
+      devVariables +
+      "\n" +
+      "#include <SenseBoxOTA.h>" +
+      "\n" +
+      libraryCode +
+      "\n" +
+      variablesCode +
+      "\n" +
+      definitionsCode +
+      "\n" +
+      codeFunctions +
+      "\n" +
+      Blockly["Arduino"].variablesInitCode_ +
+      "\n" +
+      functionsCode +
+      "\n" +
+      setupCode +
+      "\n" +
+      loopCode;
+  } else {
+    // Convert the definitions dictionary into a list.
+    code =
+      devVariables +
+      "\n" +
+      libraryCode +
+      "\n" +
+      variablesCode +
+      "\n" +
+      definitionsCode +
+      "\n" +
+      codeFunctions +
+      "\n" +
+      Blockly["Arduino"].variablesInitCode_ +
+      "\n" +
+      functionsCode +
+      "\n" +
+      setupCode +
+      "\n" +
+      loopCode;
+  }
 
   // Clean up temporary data.
   delete Blockly["Arduino"].definitions_;
