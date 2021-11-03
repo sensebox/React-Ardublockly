@@ -22,11 +22,16 @@ class OtaSelector extends Component {
   render() {
     return (
       <div>
-        <Typography style={{ fontWeight: "bold" }}>OTA</Typography>
+        <Typography style={{ fontWeight: "bold" }}>
+          {Blockly.Msg.settings_ota_head}
+        </Typography>
         <FormHelperText
           style={{ color: "black", lineHeight: 1.3, marginBottom: "8px" }}
         >
-          Aktiviere OTA Modus{" "}
+          {Blockly.Msg.settings_ota_text}
+          <a href="https://sensebox.de/app" target="_blank" rel="noreferrer">
+            https://sensebox.de/app
+          </a>
         </FormHelperText>
         <FormControl>
           <InputLabel id="demo-simple-select-label">
@@ -38,8 +43,8 @@ class OtaSelector extends Component {
             value={this.props.platform}
             onChange={(e) => this.props.setPlatform(e.target.value)}
           >
-            <MenuItem value={true}>true</MenuItem>
-            <MenuItem value={false}>false</MenuItem>
+            <MenuItem value={true}>{Blockly.Msg.settings_ota_on}</MenuItem>
+            <MenuItem value={false}>{Blockly.Msg.settings_ota_off}</MenuItem>
           </Select>
         </FormControl>
       </div>

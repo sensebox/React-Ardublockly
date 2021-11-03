@@ -84,6 +84,16 @@ export const UI = {
   messages_copy_code: "Code wurde in die Zwischenablage kopiert",
 
   /**
+   * Tablet Dialog
+   */
+
+  tabletDialog_headline: "Tablet Modus ist aktiviert!",
+  tabletDialog_text:
+    "Der Tablet Modus wurde aktiviert. Du kannst nun Programmcodes über die senseBox Connect App auf deine senseBox kopieren. Der Tablet Modus kann in den Einstellungen deaktiviert werden",
+  tabletDialog_more:
+    "Weitere Informationen und den Link zum Download der App findest du unter: ",
+
+  /**
    * Reset Dialog
    */
 
@@ -154,6 +164,11 @@ export const UI = {
     "Die Anzeige von Statistiken zur Nutzung der Blöcke oberhalb der Arbeitsfläche kann ein- oder ausgeblendet werden.",
   settings_statistics_on: "An",
   settings_statistics_off: "Aus",
+  settings_ota_head: "Tablet Modus",
+  settings_ota_text:
+    "Der Tablet Modus deaktiviert die Code anzeige und aktiviert die Möglichkeit den Programmcode über die senseBox Connect App zu übertragen. Weitere Informationen dazu findest du unter: ",
+  settings_ota_on: "Aktiviert",
+  settings_ota_off: "Deaktiviert",
 
   /**
    * 404

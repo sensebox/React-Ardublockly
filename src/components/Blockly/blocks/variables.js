@@ -44,7 +44,3 @@ Blockly.Blocks["variables_get_dynamic"] = {
     }
   },
 };
-
-/**
- * new comment
- */

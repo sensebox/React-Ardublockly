@@ -183,14 +183,23 @@ class Home extends Component {
             fullWidth
             maxWidth={"sm"}
             open={this.state.open}
-            title=""
+            title={Blockly.Msg.tabletDialog_headline}
             content={""}
             onClose={this.toggleDialog}
             onClick={this.toggleDialog}
             button={Blockly.Msg.button_close}
           >
-            <div>OTA Modus aktiviert.</div>
-            <div>Lade die App hier herunter: </div>
+            <div>{Blockly.Msg.tabletDialog_text}</div>
+            <div>
+              {Blockly.Msg.tabletDialog_more}{" "}
+              <a
+                href="https://sensebox.de/app"
+                target="_blank"
+                rel="noreferrer"
+              >
+                https://sensebox.de/app
+              </a>
+            </div>
           </Dialog>
         ) : null}
       </div>
