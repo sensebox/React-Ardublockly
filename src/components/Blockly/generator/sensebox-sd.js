@@ -173,7 +173,7 @@ void writeMeasurementsToSdCard(char* timeStamp, uint32_t latitudes, uint32_t lon
             dtostrf(latitude, 1, 7, lat);
             sprintf_P(buffer, PSTR("%s,%9.2f,%s,%02s,%02s"),  measurements[i].sensorId, measurements[i].value, timeStamp, lng, lat);
             // transmit buffer to client
-            ${filename}.print(buffer);
+            ${filename}.println(buffer);
             }
             // reset num_measurements
             num_measurements = 0;
