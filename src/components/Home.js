@@ -12,8 +12,6 @@ import BlocklyWindow from "./Blockly/BlocklyWindow";
 import CodeViewer from "./CodeViewer";
 import TrashcanButtons from "./Workspace/TrashcanButtons";
 import HintTutorialExists from "./Tutorial/HintTutorialExists";
-import Snackbar from "./Snackbar";
-
 
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
@@ -149,7 +147,7 @@ class Home extends Component {
                   this.state.codeOn
                     ? this.props.classes.codeOn
                     : this.props.classes.codeOff
-                }}
+                }`}
                 style={{
                   width: "40px",
                   height: "40px",
@@ -219,7 +217,6 @@ Home.propTypes = {
   message: PropTypes.object.isRequired,
   statistics: PropTypes.bool.isRequired,
   platform: PropTypes.object.isRequired,
-
 };
 
 const mapStateToProps = (state) => ({
