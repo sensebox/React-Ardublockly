@@ -1,0 +1,26 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: senseBox Learn- and Programming Environment
+message: Please cite this software using these metadata.
+type: software
+version: 1.0.0
+date-released: 2021-09-30
+url: "https://github.com/sensebox/React-Ardublockly"
+authors:
+  - given-names: Mario
+    family-names: Pesch
+    email: mario.pesch@uni-muenster.de
+    affiliation: >-
+      Institute for geoinformatics University of
+      Muenster
+  - given-names: Luc
+    family-names: Niski
+    affiliation: >-
+      Institute for geoinformatics University of
+      Muenster
+  - given-names: Felix
+    family-names: Erdmann
+    email: f.erdmann@reedu.de
+    affiliation: Reedu GmbH & Co. KG
