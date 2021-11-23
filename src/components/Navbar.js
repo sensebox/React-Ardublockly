@@ -139,7 +139,7 @@ class Navbar extends Component {
               </Link>
             ) : null}
             {isHome ? (
-              <Tooltip title="Hilfe starten" arrow>
+              <Tooltip title={Blockly.Msg.tooltip_start_tour} arrow>
                 <IconButton
                   color="inherit"
                   className={`openTour ${this.props.classes.button}`}
@@ -153,7 +153,7 @@ class Navbar extends Component {
               </Tooltip>
             ) : null}
             {isAssessment ? (
-              <Tooltip title="Hilfe starten" arrow>
+              <Tooltip title={Blockly.Msg.tooltip_start_tour} arrow>
                 <IconButton
                   color="inherit"
                   className={`openTour ${this.props.classes.button}`}

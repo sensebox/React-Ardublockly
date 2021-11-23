@@ -49,6 +49,14 @@ export const UI = {
   tooltip_project_title: "Project title",
   tooltip_check_solution: "Check solution",
   tooltip_copy_code: "Copy Code to clipboard",
+  tooltip_statistics_current: "Number of current blocks",
+  tooltip_statistics_new: "Number of new blocks",
+  tooltip_statistics_changed: "Number of changed blocks",
+  tooltip_statistics_moved: "Number of moved blocks",
+  tooltip_statistics_deleted: "Number of deleted blocks",
+  tooltip_statistics_remaining: "Remaining blocks",
+  tooltip_statistics_show: "Show statistics",
+  tooltip_start_tour: "start Tour",
 
   /**
    * Messages
@@ -169,7 +177,7 @@ export const UI = {
   /**
    * Tutorials
    */
-
+  tutorials_home_head: "Tutorials",
   tutorials_assessment_task: "Task",
   tutorials_hardware_head:
     "For the implementation you need the following hardware:",
@@ -182,7 +190,9 @@ export const UI = {
   /**
    * Tutorial Builder
    */
-
+  uilder_createNew: "create new Tutorial",
+  builder_changeExisting: "change existing Tutorial",
+  builder_deleteExisting: "remove existing Tutorial",
   builder_solution: "Solution",
   builder_solution_submit: "Submit Solution",
   builder_example_submit: "Submit example",
