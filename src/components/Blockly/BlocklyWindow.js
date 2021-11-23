@@ -11,6 +11,7 @@ import "./blocks/index";
 import "./generator/index";
 import { ZoomToFitControl } from "@blockly/zoom-to-fit";
 import { initialXml } from "./initialXml.js";
+import { getMaxInstances } from "./helpers/maxInstances";
 
 class BlocklyWindow extends Component {
   constructor(props) {
@@ -24,6 +25,7 @@ class BlocklyWindow extends Component {
     this.props.clearStats();
     workspace.addChangeListener((event) => {
       this.props.onChangeWorkspace(event);
+
       // switch on that a block is displayed disabled or not depending on whether it is correctly connected
       // for SVG display, a deactivated block in the display is undesirable
       if (this.props.blockDisabled) {
@@ -37,6 +39,7 @@ class BlocklyWindow extends Component {
 
   componentDidUpdate(props) {
     const workspace = Blockly.getMainWorkspace();
+
     var xml = this.props.initialXml;
     // if svg is true, then the update process is done in the BlocklySvg component
     if (props.initialXml !== xml && !this.props.svg) {
@@ -69,6 +72,7 @@ class BlocklyWindow extends Component {
             this.props.trashcan !== undefined ? this.props.trashcan : true
           }
           renderer={this.props.renderer}
+          maxInstances={getMaxInstances()}
           zoom={{
             // https://developers.google.com/blockly/guides/configure/web/zoom
             controls:

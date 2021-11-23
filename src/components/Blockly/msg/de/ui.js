@@ -49,7 +49,14 @@ export const UI = {
   tooltip_project_title: "Titel des Projektes",
   tooltip_check_solution: "Lösung kontrollieren",
   tooltip_copy_code: "Code in die Zwischenablage kopieren",
-
+  tooltip_statistics_current: "Anzahl aktueller Blöcke",
+  tooltip_statistics_new: "Anzahl neuer Blöcke",
+  tooltip_statistics_changed: "Anzahl veränderter Blöcke",
+  tooltip_statistics_moved: "Anzahl bewegter Blöcke",
+  tooltip_statistics_deleted: "Anzahl gelöschter Blöcke",
+  tooltip_statistics_remaining: "Verbleibende Blöcke",
+  tooltip_statistics_show: "Statistiken anzeigen",
+  tooltip_start_tour: "Tour starten",
   /**
    * Messages
    *
@@ -175,7 +182,7 @@ export const UI = {
   /**
    * Tutorials
    */
-
+  tutorials_home_head: "Tutorial-Übersicht",
   tutorials_assessment_task: "Aufgabe",
   tutorials_hardware_head: "Für die Umsetzung benötigst du folgende Hardware:",
   tutorials_hardware_moreInformation:
@@ -187,7 +194,9 @@ export const UI = {
   /**
    * Tutorial Builder
    */
-
+  builder_createNew: "neues Tutorial erstellen",
+  builder_changeExisting: "bestehendes Tutorial ändern",
+  builder_deleteExisting: "bestehendes Tutorial löschen",
   builder_solution: "Lösung",
   builder_solution_submit: "Lösung einreichen",
   builder_example_submit: "Beispiel einreichen",
@@ -215,7 +224,7 @@ export const UI = {
 
   navbar_tutorials: "Tutorials",
   navbar_tutorialbuilder: "Tutorial erstellen",
-  navbar_gallery: "Gallerie",
+  navbar_gallery: "Galerie",
   navbar_projects: "Projekte",
 
   navbar_menu: "Menü",
