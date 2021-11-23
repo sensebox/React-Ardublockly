@@ -14,6 +14,7 @@ import TrashcanButtons from "./Workspace/TrashcanButtons";
 import HintTutorialExists from "./Tutorial/HintTutorialExists";
 import Snackbar from "./Snackbar";
 
+
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -22,6 +23,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { faCode } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TooltipViewer from "./TooltipViewer";
+import Dialog from "./Dialog";
 
 const styles = (theme) => ({
   codeOn: {
@@ -45,15 +47,23 @@ const styles = (theme) => ({
 });
 
 class Home extends Component {
-  state = {
-    codeOn: true,
-    snackbar: false,
-    type: "",
-    key: "",
-    message: "",
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      codeOn: true,
+      snackbar: false,
+      type: "",
+      key: "",
+      message: "",
+      open: true,
+    };
+  }
 
   componentDidMount() {
+    console.log(this.props.platform);
+    if (this.props.platform === true) {
+      this.setState({ codeOn: false });
+    }
     this.setState({ stats: window.localStorage.getItem("stats") });
     if (!this.props.project) {
       this.props.workspaceName(createNameId());
@@ -81,6 +91,18 @@ class Home extends Component {
     this.props.clearStats();
     this.props.workspaceName(null);
   }
+
+  toggleDialog = () => {
+    this.setState({ open: !this.state });
+  };
+
+  onChangeCheckbox = (e) => {
+    if (e.target.checked) {
+      window.localStorage.setItem("ota", e.target.checked);
+    } else {
+      window.localStorage.removeItem("ota");
+    }
+  };
 
   onChange = () => {
     this.setState({ codeOn: !this.state.codeOn });
@@ -127,7 +149,7 @@ class Home extends Component {
                   this.state.codeOn
                     ? this.props.classes.codeOn
                     : this.props.classes.codeOff
-                }`}
+                }}
                 style={{
                   width: "40px",
                   height: "40px",
@@ -161,12 +183,31 @@ class Home extends Component {
           ) : null}
         </Grid>
         <HintTutorialExists />
-        <Snackbar
-          open={this.state.snackbar}
-          message={this.state.message}
-          type={this.state.type}
-          key={this.state.key}
-        />
+        {this.props.platform ? (
+          <Dialog
+            style={{ zIndex: 9999999 }}
+            fullWidth
+            maxWidth={"sm"}
+            open={this.state.open}
+            title={Blockly.Msg.tabletDialog_headline}
+            content={""}
+            onClose={this.toggleDialog}
+            onClick={this.toggleDialog}
+            button={Blockly.Msg.button_close}
+          >
+            <div>{Blockly.Msg.tabletDialog_text}</div>
+            <div>
+              {Blockly.Msg.tabletDialog_more}{" "}
+              <a
+                href="https://sensebox.de/app"
+                target="_blank"
+                rel="noreferrer"
+              >
+                https://sensebox.de/app
+              </a>
+            </div>
+          </Dialog>
+        ) : null}
       </div>
     );
   }
@@ -177,11 +218,14 @@ Home.propTypes = {
   workspaceName: PropTypes.func.isRequired,
   message: PropTypes.object.isRequired,
   statistics: PropTypes.bool.isRequired,
+  platform: PropTypes.object.isRequired,
+
 };
 
 const mapStateToProps = (state) => ({
   message: state.message,
   statistics: state.general.statistics,
+  platform: state.general.platform,
 });
 
 export default connect(mapStateToProps, { clearStats, workspaceName })(
