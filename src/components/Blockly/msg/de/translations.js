@@ -244,7 +244,7 @@ export const TRANSLATIONS = {
   senseBox_serial_tip:
     "Gibt Messwerte oder Daten auf dem Seriellen Monitor der Arduino IDE aus. Praktisch um ohne Display zu arbeiten",
   senseBox_output_timestamp: "Zeitstempel (RFC 3339)",
-  senseBox_led: "LED an digitalen",
+  senseBox_led: "LED an",
   senseBox_led_tip:
     "Einfache LED. Beim Anschluss sollte immer ein Vorwiderstand verwendet werden",
   senseBox_piezo: "Piezo an digital",

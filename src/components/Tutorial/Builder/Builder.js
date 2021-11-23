@@ -39,6 +39,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
+import * as Blockly from "blockly";
 
 const styles = (theme) => ({
   backdrop: {
@@ -392,7 +393,7 @@ class Builder extends Component {
             style={{ color: "black" }}
             value="new"
             control={<Radio color="primary" />}
-            label="neues Tutorial erstellen"
+            label={Blockly.Msg.builder_createNew}
             labelPlacement="end"
           />
           {filteredTutorials.length > 0 ? (
@@ -402,7 +403,7 @@ class Builder extends Component {
                 disabled={this.props.index === 0}
                 value="change"
                 control={<Radio color="primary" />}
-                label="bestehendes Tutorial ändern"
+                label={Blockly.Msg.builder_changeExisting}
                 labelPlacement="end"
               />
               <FormControlLabel
@@ -410,7 +411,7 @@ class Builder extends Component {
                 disabled={this.props.index === 0}
                 value="delete"
                 control={<Radio color="primary" />}
-                label="bestehendes Tutorial löschen"
+                label={Blockly.Msg.builder_deleteExisting}
                 labelPlacement="end"
               />
             </div>

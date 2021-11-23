@@ -124,57 +124,59 @@ export class Login extends Component {
             type={this.state.type}
             key={this.state.key}
           />
-          <TextField
-            style={{ marginBottom: "10px" }}
-            // variant='outlined'
-            type="text"
-            label={Blockly.Msg.labels_username}
-            name="email"
-            value={this.state.email}
-            onChange={this.onChange}
-            fullWidth={true}
-          />
-          <TextField
-            // variant='outlined'
-            type={this.state.showPassword ? "text" : "password"}
-            label={Blockly.Msg.labels_password}
-            name="password"
-            value={this.state.password}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={this.handleClickShowPassword}
-                    onMouseDown={this.handleMouseDownPassword}
-                    edge="end"
-                  >
-                    <FontAwesomeIcon
-                      size="xs"
-                      icon={this.state.showPassword ? faEyeSlash : faEye}
-                    />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            onChange={this.onChange}
-            fullWidth={true}
-          />
-          <p>
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={this.onSubmit}
-              style={{ width: "100%" }}
-            >
-              {this.props.progress ? (
-                <div style={{ height: "24.5px" }}>
-                  <CircularProgress color="inherit" size={20} />
-                </div>
-              ) : (
-                Blockly.Msg.button_login
-              )}
-            </Button>
-          </p>
+          <form onSubmit={this.onSubmit}>
+            <TextField
+              style={{ marginBottom: "10px" }}
+              // variant='outlined'
+              type="text"
+              label={Blockly.Msg.labels_username}
+              name="email"
+              value={this.state.email}
+              onChange={this.onChange}
+              fullWidth={true}
+            />
+            <TextField
+              // variant='outlined'
+              type={this.state.showPassword ? "text" : "password"}
+              label={Blockly.Msg.labels_password}
+              name="password"
+              value={this.state.password}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={this.handleClickShowPassword}
+                      onMouseDown={this.handleMouseDownPassword}
+                      edge="end"
+                    >
+                      <FontAwesomeIcon
+                        size="xs"
+                        icon={this.state.showPassword ? faEyeSlash : faEye}
+                      />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              onChange={this.onChange}
+              fullWidth={true}
+            />
+            <p>
+              <Button
+                color="primary"
+                variant="contained"
+                type="submit"
+                style={{ width: "100%" }}
+              >
+                {this.props.progress ? (
+                  <div style={{ height: "24.5px" }}>
+                    <CircularProgress color="inherit" size={20} />
+                  </div>
+                ) : (
+                  Blockly.Msg.button_login
+                )}
+              </Button>
+            </p>
+          </form>
           <p style={{ textAlign: "center", fontSize: "0.8rem" }}>
             <Link
               rel="noreferrer"
