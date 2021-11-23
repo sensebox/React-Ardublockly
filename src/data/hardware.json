@@ -86,7 +86,7 @@
   {
     "id": "bluetooth-bee",
     "name": "Bluetooth-Bee",
-    "src": "lora-bee.png",
+    "src": "ble-bee.png",
     "url": "https://docs.sensebox.de/hardware/bee-ble/"
   },
   {
