@@ -36,6 +36,8 @@ Blockly.Arduino.sensebox_osem_connection = function (Block) {
   var num_sensors = count;
   Blockly.Arduino.libraries_["library_senseBoxMCU"] =
     '#include "SenseBoxMCU.h"';
+  Blockly.Arduino.setupCode_["initBearSSL"] =
+    "ArduinoBearSSL.onGetTime(getTime);";
   Blockly.Arduino.definitions_["num_sensors"] =
     "static const uint8_t NUM_SENSORS = " + num_sensors + ";";
   Blockly.Arduino.definitions_["SenseBoxID"] =
@@ -43,7 +45,16 @@ Blockly.Arduino.sensebox_osem_connection = function (Block) {
   Blockly.Arduino.definitions_["host"] =
     "const char server [] PROGMEM =" + host + ";";
   if (ssl === "TRUE") {
-    Blockly.Arduino.definitions_["WiFiSSLClient"] = "WiFiSSLClient client;";
+    Blockly.Arduino.libraries_["library_bearSSL"] =
+      "#include <ArduinoBearSSL.h>";
+    Blockly.Arduino.libraries_["library_arduinoECC08"] =
+      "#include <ArduinoECCX08.h>";
+    Blockly.Arduino.definitions_["WiFiClient"] = "WiFiClient wifiClient;";
+    Blockly.Arduino.definitions_["BearSSLClient"] =
+      "BearSSLClient client(wifiClient);";
+    Blockly.Ardu.Arduino.functionNames_["getTime"] = `unsigned long getTime() {
+      return WiFi.getTime();
+    }`;
     port = 443;
   } else if (ssl === "FALSE") {
     Blockly.Arduino.definitions_["WiFiClient"] = "WiFiClient client;";
@@ -121,6 +132,7 @@ Blockly.Arduino.sensebox_osem_connection = function (Block) {
     }
   }
   }`;
+
     var code = "";
     code += branch;
     code += "submitValues();\n";
