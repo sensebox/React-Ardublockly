@@ -9,6 +9,7 @@ Blockly.Arduino.sensebox_sensor_temp_hum = function () {
   var dropdown_name = this.getFieldValue("NAME");
   Blockly.Arduino.libraries_["library_senseBoxMCU"] =
     '#include "SenseBoxMCU.h"';
+  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.definitions_["define_hdc"] = "HDC1080 hdc;";
   Blockly.Arduino.setupCode_["sensebox_sensor_temp_hum"] = "hdc.begin();";
   var code = "hdc.get" + dropdown_name + "()";
