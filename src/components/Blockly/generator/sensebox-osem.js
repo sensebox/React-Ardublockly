@@ -34,8 +34,7 @@ Blockly.Arduino.sensebox_osem_connection = function (Block) {
     }
   }
   var num_sensors = count;
-  Blockly.Arduino.libraries_["library_senseBoxMCU"] =
-    '#include "SenseBoxMCU.h"';
+  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.setupCode_["initBearSSL"] =
     "ArduinoBearSSL.onGetTime(getTime);";
   Blockly.Arduino.definitions_["num_sensors"] =
