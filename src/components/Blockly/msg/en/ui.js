@@ -49,6 +49,14 @@ export const UI = {
   tooltip_project_title: "Project title",
   tooltip_check_solution: "Check solution",
   tooltip_copy_code: "Copy Code to clipboard",
+  tooltip_statistics_current: "Number of current blocks",
+  tooltip_statistics_new: "Number of new blocks",
+  tooltip_statistics_changed: "Number of changed blocks",
+  tooltip_statistics_moved: "Number of moved blocks",
+  tooltip_statistics_deleted: "Number of deleted blocks",
+  tooltip_statistics_remaining: "Remaining blocks",
+  tooltip_statistics_show: "Show statistics",
+  tooltip_start_tour: "start Tour",
 
   /**
    * Messages
@@ -79,6 +87,15 @@ export const UI = {
   messages_LOGIN_FAIL: "The username or password is incorrect.",
   messages_login_error: "Enter both a username and a password.",
   messages_copy_code: "Copy code to clipboard succesfull",
+
+  /**
+   * Tablet Dialog
+   */
+  tabletDialog_headline: "Tablet mode is enabled!",
+  tabletDialog_text:
+    "Tablet mode has been activated. You can now copy program codes to your senseBox via the senseBox Connect app. Tablet mode can be deactivated in the settings",
+  tabletDialog_more:
+    "For more information and the link to download the app, please visit: ",
 
   /**
    * Reset Dialog
@@ -149,6 +166,11 @@ export const UI = {
     "The display of statistics on the usage of the blocks above the workspace can be shown or hidden.",
   settings_statistics_on: "On",
   settings_statistics_off: "Off",
+  settings_ota_head: "tablet mode",
+  settings_ota_text:
+    "Tablet mode disables the code display and enables the possibility to transfer the program code via the senseBox Connect app. You can find more information on: ",
+  settings_ota_on: "Activated",
+  settings_ota_off: "Deactivated",
 
   /**
    * 404
@@ -169,7 +191,7 @@ export const UI = {
   /**
    * Tutorials
    */
-
+  tutorials_home_head: "Tutorials",
   tutorials_assessment_task: "Task",
   tutorials_hardware_head:
     "For the implementation you need the following hardware:",
@@ -182,7 +204,9 @@ export const UI = {
   /**
    * Tutorial Builder
    */
-
+  uilder_createNew: "create new Tutorial",
+  builder_changeExisting: "change existing Tutorial",
+  builder_deleteExisting: "remove existing Tutorial",
   builder_solution: "Solution",
   builder_solution_submit: "Submit Solution",
   builder_example_submit: "Submit example",

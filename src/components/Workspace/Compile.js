@@ -21,6 +21,7 @@ import "prismjs/themes/prism.css";
 import "prismjs/plugins/line-numbers/prism-line-numbers";
 import "prismjs/plugins/line-numbers/prism-line-numbers.css";
 import MuiDrawer from "@material-ui/core/Drawer";
+import Dialog from "../Dialog";
 
 const styles = (theme) => ({
   backdrop: {
@@ -65,6 +66,8 @@ class Compile extends Component {
       content: "",
       name: props.name,
       error: "",
+      appLink: "",
+      appDialog: false,
     };
   }
 
@@ -126,21 +129,43 @@ class Compile extends Component {
   };
 
   toggleDialog = () => {
-    this.setState({ open: !this.state, progress: false });
+    this.setState({ open: !this.state, progress: false, appDialog: false });
   };
 
   createFileName = () => {
-    if (this.state.name) {
-      this.download();
-    } else {
+    if (this.props.platform === true) {
+      const filename = detectWhitespacesAndReturnReadableResult(
+        this.state.name
+      );
       this.setState({
-        file: true,
-        open: true,
-        title: "Projekt kompilieren",
-        content:
-          "Bitte gib einen Namen für die Bennenung des zu kompilierenden Programms ein und bestätige diesen mit einem Klick auf 'Eingabe'.",
+        link: `blocklyconnect-app://sketch/${filename}/${this.state.id}`,
       });
+      this.setState({ appDialog: true });
+    } else {
+      if (this.state.name) {
+        this.download();
+      } else {
+        this.setState({
+          file: true,
+          open: true,
+          title: "Projekt kompilieren",
+          content:
+            "Bitte gib einen Namen für die Bennenung des zu kompilierenden Programms ein und bestätige diesen mit einem Klick auf 'Eingabe'.",
+        });
+      }
     }
+
+    // if (this.state.name) {
+    //   this.download();
+    // } else {
+    //   this.setState({
+    //     file: true,
+    //     open: true,
+    //     title: "Projekt kompilieren",
+    //     content:
+    //       "Bitte gib einen Namen für die Bennenung des zu kompilierenden Programms ein und bestätige diesen mit einem Klick auf 'Eingabe'.",
+    //   });
+    // }
   };
 
   setFileName = (e) => {
@@ -188,23 +213,44 @@ class Compile extends Component {
             Kompilieren
           </Button>
         )}
-        <Backdrop
-          className={this.props.classes.backdrop}
-          open={this.state.progress}
-        >
-          <div className="overlay">
-            <img src={Copy} width="400" alt="copyimage"></img>
-            <h2>{Blockly.Msg.compile_overlay_head}</h2>
-            <p>{Blockly.Msg.compile_overlay_text}</p>
-            <p>
-              {Blockly.Msg.compile_overlay_help}
-              <a href="/faq" target="_blank">
-                FAQ
-              </a>
-            </p>
-            <CircularProgress color="inherit" />
-          </div>
-        </Backdrop>
+
+        {this.props.platform === false ? (
+          <Backdrop
+            className={this.props.classes.backdrop}
+            open={this.state.progress}
+          >
+            <div className="overlay">
+              <img src={Copy} width="400" alt="copyimage"></img>
+              <h2>{Blockly.Msg.compile_overlay_head}</h2>
+              <p>{Blockly.Msg.compile_overlay_text}</p>
+              <p>
+                {Blockly.Msg.compile_overlay_help}
+                <a href="/faq" target="_blank">
+                  FAQ
+                </a>
+              </p>
+              <CircularProgress color="inherit" />
+            </div>
+          </Backdrop>
+        ) : (
+          <Backdrop
+            className={this.props.classes.backdrop}
+            open={this.state.progress}
+          >
+            <div className="overlay">
+              {/* <img src={Copy} width="400" alt="copyimage"></img> */}
+              <h2>Dein Code wird kompiliert!</h2>
+              <p>übertrage ihn anschließend mithlfe der senseBoxConnect-App</p>
+              <p>
+                {Blockly.Msg.compile_overlay_help}
+                <a href="/faq" target="_blank">
+                  FAQ
+                </a>
+              </p>
+              <CircularProgress color="inherit" />
+            </div>
+          </Backdrop>
+        )}
         <Drawer
           anchor={"bottom"}
           open={this.state.open}
@@ -240,29 +286,35 @@ class Compile extends Component {
             {`${this.state.error}`}{" "}
           </p>
         </Drawer>
-        {/* <Dialog
-          open={this.state.open}
-          title={this.state.title}
-          content={this.state.content}
+        <Dialog
+          style={{ zIndex: 9999999 }}
+          fullWidth
+          maxWidth={"sm"}
+          open={this.state.appDialog}
+          title=""
+          content={""}
           onClose={this.toggleDialog}
-          onClick={this.state.file ? () => { this.toggleDialog(); this.setState({ name: this.props.name }) } : this.toggleDialog}
-          button={this.state.file ? Blockly.Msg.button_cancel : Blockly.Msg.button_close}
+          onClick={this.toggleDialog}
+          button={Blockly.Msg.button_close}
         >
-          {this.state.file ?
-            <div style={{ marginTop: '10px' }}>
-              <TextField autoFocus placeholder='Dateiname' value={this.state.name} onChange={this.setFileName} style={{ marginRight: '10px' }} />
-              <Button disabled={!this.state.name} variant='contained' color='primary' onClick={() => this.download()}>Eingabe</Button>
-            </div>
-            : 
-           
-        <pre className="line-numbers" style={{ paddingBottom: 0, width: '100%', overflow: 'auto', scrollbarWidth: 'thin', height: '100%', margin: '15px 0', paddingTop: 0, whiteSpace: 'pre-wrap', backgroundColor: 'white' }}><code className="language-json">
-                {`${this.state.error}`}
-              </code></pre>
-        </AccordionDetails>
-      </Accordion>
-      
-            }
-        </Dialog> */}
+          <div>
+            <p>Dein Code wurde erfolgreich kompiliert</p>
+            <a href={this.state.link}>
+              <Button
+                style={{ color: "white" }}
+                variant="contained"
+                className={this.props.classes.button}
+                onClick={() => this.toggleDialog()}
+              >
+                <FontAwesomeIcon
+                  icon={faClipboardCheck}
+                  style={{ marginRight: "5px" }}
+                />{" "}
+                Starte Übertragung
+              </Button>
+            </a>
+          </div>
+        </Dialog>
       </div>
     );
   }
@@ -272,11 +324,13 @@ Compile.propTypes = {
   arduino: PropTypes.string.isRequired,
   name: PropTypes.string,
   workspaceName: PropTypes.func.isRequired,
+  platform: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   arduino: state.workspace.code.arduino,
   name: state.workspace.name,
+  platform: state.general.platform,
 });
 
 export default connect(mapStateToProps, { workspaceName })(
