@@ -210,7 +210,7 @@ Blockly.Arduino.sensebox_osem_connection = function (Block) {
       lat +
       "/float(10000000)),(" +
       lng +
-      "/float(10000000),(" +
+      "/float(10000000)),(" +
       altitude +
       "/float(100))," +
       timestamp +
