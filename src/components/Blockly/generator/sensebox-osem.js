@@ -51,7 +51,7 @@ Blockly.Arduino.sensebox_osem_connection = function (Block) {
     Blockly.Arduino.definitions_["WiFiClient"] = "WiFiClient wifiClient;";
     Blockly.Arduino.definitions_["BearSSLClient"] =
       "BearSSLClient client(wifiClient);";
-    Blockly.Ardu.Arduino.functionNames_["getTime"] = `unsigned long getTime() {
+    Blockly.Arduino.functionNames_["getTime"] = `unsigned long getTime() {
       return WiFi.getTime();
     }`;
     port = 443;
