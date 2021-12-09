@@ -10,6 +10,7 @@ export const UI = {
   toolbox_time: "Zeit",
   toolbox_functions: "Funktionen",
   toolbox_variables: "Variablen",
+  toolbox_serial: "Seriell",
   variable_NUMBER: "Zahl (int)",
   variable_SHORT_NUMBER: "char",
   variable_LONG: "große Zahl (long)",

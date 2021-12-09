@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@blockly/block-plus-minus": "^2.0.10",
+    "@blockly/field-grid-dropdown": "^1.0.25",
     "@blockly/field-slider": "^2.1.1",
     "@blockly/plugin-scroll-options": "^1.0.2",
     "@blockly/plugin-typed-variable-modal": "^3.1.26",

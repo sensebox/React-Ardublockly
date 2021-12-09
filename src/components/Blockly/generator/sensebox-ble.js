@@ -2,8 +2,8 @@ import * as Blockly from "blockly/core";
 
 Blockly.Arduino.sensebox_phyphox_init = function () {
   var name = this.getFieldValue("devicename");
-  Blockly.Arduino.libraries_["phyphox_library"] = `#include <phyphoxBle.h>`;
   Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
+  Blockly.Arduino.libraries_["phyphox_library"] = `#include <phyphoxBle.h>`;
   Blockly.Arduino.phyphoxSetupCode_[
     "phyphox_start"
   ] = `PhyphoxBLE::start("${name}");`;
