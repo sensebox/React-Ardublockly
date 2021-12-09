@@ -2,6 +2,7 @@ import Blockly from "blockly";
 import { getColour } from "../helpers/colour";
 import * as Types from "../helpers/types";
 import { selectedBoard } from "../helpers/board";
+import { FieldGridDropdown } from "@blockly/field-grid-dropdown";
 
 /**
  * HDC1080 Temperature and Humidity Sensor
@@ -245,9 +246,7 @@ Blockly.Blocks["sensebox_sensor_ultrasonic_ranger"] = {
       [Blockly.Msg.senseBox_ultrasonic_port_B, "B"],
       [Blockly.Msg.senseBox_ultrasonic_port_C, "C"],
     ];
-    var dropdown = new Blockly.FieldDropdown(dropdownOptions, function (
-      option
-    ) {
+    var dropdown = new FieldGridDropdown(dropdownOptions, function (option) {
       var input = option === "A" || option === "B" || option === "C";
       this.sourceBlock_.updateShape_(input);
     });
@@ -268,6 +267,10 @@ Blockly.Blocks["sensebox_sensor_ultrasonic_ranger"] = {
         new Blockly.FieldDropdown(selectedBoard().digitalPins),
         "ultrasonic_echo"
       );
+    this.appendDummyInput("maxDistance")
+      .appendField(Blockly.Msg.senseBox_ultrasonic_maxDistance)
+      .appendField(new Blockly.FieldTextInput("250"), "maxDistance")
+      .appendField("cm");
     this.setOutput(true, Types.NUMBER.typeName);
     this.setTooltip(Blockly.Msg.senseBox_ultrasonic_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_ultrasonic_helpurl);
@@ -355,6 +358,7 @@ Blockly.Blocks["sensebox_button"] = {
           [Blockly.Msg.senseBox_button_isPressed, "isPressed"],
           [Blockly.Msg.senseBox_button_wasPressed, "wasPressed"],
           [Blockly.Msg.senseBox_button_switch, "Switch"],
+          [Blockly.Msg.senseBox_button_longPress, "longPress"],
         ]),
         "FUNCTION"
       )
@@ -366,6 +370,51 @@ Blockly.Blocks["sensebox_button"] = {
     this.setOutput(true, Types.BOOLEAN.typeName);
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_button_tooltip);
+  },
+  /**
+   * Parse XML to restore the number of pins available.
+   * @param {!Element} xmlElement XML storage element.
+   * @this Blockly.Block
+   */
+
+  domToMutation: function (xmlElement) {
+    xmlElement.getAttribute("port");
+  },
+  /**
+   * Create XML to represent number of pins selection.
+   * @return {!Element} XML storage element.
+   * @this Blockly.Block
+   */
+  mutationToDom: function () {
+    var container = document.createElement("mutation");
+    var input = this.getFieldValue("FUNCTION");
+    this.updateShape_(input);
+    container.setAttribute("FUNCTION", input);
+    return container;
+  },
+  /**
+   * Modify this block to have the correct number of pins available.
+   * @param {boolean}
+   * @private
+   * @this Blockly.Block
+   */
+  updateShape_: function () {
+    var extraFieldExist = this.getFieldValue("time");
+    var input = this.getFieldValue("FUNCTION");
+    if (input === "longPress" && extraFieldExist === null) {
+      this.appendDummyInput("extraField")
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField(Blockly.Msg.senseBox_pressure_referencePressure)
+        .appendField(new Blockly.FieldTextInput("1000"), "time")
+        .appendField("ms");
+    }
+
+    if (
+      (input === "isPressed" || input === "wasPressed" || input === "Switch") &&
+      extraFieldExist !== null
+    ) {
+      this.removeInput("extraField");
+    }
   },
 };
 

@@ -92,6 +92,9 @@ class Toolbox extends React.Component {
         </Category>
         <Category name="WIFI" colour={getColour().sensebox}>
           <Block type="sensebox_wifi" />
+          <Block type="sensebox_wifi_status" />
+          <Block type="sensebox_wifi_rssi" />
+          <Block type="sensebox_wifi_ip" />
           <Block type="sensebox_startap" />
         </Category>
         <Category name="SD" colour={getColour().sensebox}>
@@ -396,6 +399,10 @@ class Toolbox extends React.Component {
           <Block type="sensebox_phyphox_timestamp"></Block>
           <Block type="sensebox_phyphox_channel"></Block>
           <Block type="sensebox_phyphox_sendchannel"></Block>
+        </Category>
+        <Category name={Blockly.Msg.toolbox_serial} colour={getColour().serial}>
+          <Block type="init_serial_monitor"></Block>
+          <Block type="print_serial_monitor"></Block>
         </Category>
         <Category
           id="webserver"

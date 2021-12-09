@@ -19,6 +19,7 @@ import "./map";
 import "./io";
 import "./audio";
 import "./procedures";
+import "./serial";
 import "./time";
 import "./variables";
 import "./lists";
