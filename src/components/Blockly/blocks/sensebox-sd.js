@@ -129,48 +129,35 @@ Blockly.Blocks["sensebox_sd_osem"] = {
       .setCheck(null);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-  },
-  mutationToDom: function () {
-    var container = document.createElement("mutation");
-    var input = this.getFieldValue("type");
-    this.updateShape_(input);
-    container.setAttribute("type", input);
-    return container;
+    this.getField("type").setValidator(
+      function (val) {
+        this.updateShape_(val === "Mobile");
+      }.bind(this)
+    );
   },
 
-  domToMutation: function (xmlElement) {
-    var connections = xmlElement.getAttribute("connections");
-    this.updateShape_(connections);
-  },
-  /**
-   * Modify this block to have the correct number of pins available.
-   * @param {boolean}
-   * @private
-   * @this Blockly.Block
-   */
-  updateShape_: function () {
-    var extraFieldExist = this.getFieldValue("gps");
-    var input = this.getFieldValue("type");
-    if (input === "Mobile" && extraFieldExist === null) {
-      this.appendValueInput("lat", "Number").appendField(
-        Blockly.Msg.senseBox_gps_lat,
-        "gps"
-      );
-      this.appendValueInput("lng", "Number").appendField(
-        Blockly.Msg.senseBox_gps_lng
-      );
-      this.appendValueInput("altitude", "Number").appendField(
-        Blockly.Msg.senseBox_gps_alt
-      );
-    }
-
-    if (input === "Stationary" && extraFieldExist !== null) {
-      this.removeInput("lat");
-      this.removeInput("lng");
-      this.removeInput("altitude");
+  updateShape_(isMobile) {
+    if (isMobile) {
+      if (this.getInput("lat") == null) {
+        this.appendValueInput("lat", "Number").appendField(
+          Blockly.Msg.senseBox_gps_lat,
+          "gps"
+        );
+        this.appendValueInput("lng", "Number").appendField(
+          Blockly.Msg.senseBox_gps_lng
+        );
+        this.appendValueInput("altitude", "Number").appendField(
+          Blockly.Msg.senseBox_gps_alt
+        );
+      }
+    } else {
+      this.removeInput("lat", true);
+      this.removeInput("lng", true);
+      this.removeInput("altitude", true);
     }
   },
 };
+
 Blockly.Blocks["sensebox_sd_save_for_osem"] = {
   init: function () {
     this.setTooltip(Blockly.Msg.sensebox_sd_save_for_osem_tip);
