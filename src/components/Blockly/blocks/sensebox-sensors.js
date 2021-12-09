@@ -157,50 +157,23 @@ Blockly.Blocks["sensebox_sensor_pressure"] = {
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setTooltip(Blockly.Msg.senseBox_pressure_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_pressure_helpurl);
+    this.getField("NAME").setValidator(
+      function (val) {
+        this.updateShape_(val === "Altitude");
+      }.bind(this)
+    );
   },
-  /**
-   * Parse XML to restore the number of pins available.
-   * @param {!Element} xmlElement XML storage element.
-   * @this Blockly.Block
-   */
-
-  domToMutation: function (xmlElement) {
-    xmlElement.getAttribute("port");
-  },
-  /**
-   * Create XML to represent number of pins selection.
-   * @return {!Element} XML storage element.
-   * @this Blockly.Block
-   */
-  mutationToDom: function () {
-    var container = document.createElement("mutation");
-    var input = this.getFieldValue("NAME");
-    this.updateShape_(input);
-    container.setAttribute("NAME", input);
-    return container;
-  },
-  /**
-   * Modify this block to have the correct number of pins available.
-   * @param {boolean}
-   * @private
-   * @this Blockly.Block
-   */
-  updateShape_: function () {
-    var extraFieldExist = this.getFieldValue("referencePressure");
-    var input = this.getFieldValue("NAME");
-    if (input === "Altitude" && extraFieldExist === null) {
-      this.appendDummyInput("extraField")
-        .setAlign(Blockly.ALIGN_RIGHT)
-        .appendField(Blockly.Msg.senseBox_pressure_referencePressure)
-        .appendField(new Blockly.FieldTextInput("1013"), "referencePressure")
-        .appendField(Blockly.Msg.senseBox_pressure_referencePressure_dim);
-    }
-
-    if (
-      (input === "Pressure" || input === "Temperature") &&
-      extraFieldExist !== null
-    ) {
-      this.removeInput("extraField");
+  updateShape_(isAltitude) {
+    if (isAltitude) {
+      if (this.getInput("extraField") == null) {
+        this.appendDummyInput("extraField")
+          .setAlign(Blockly.ALIGN_RIGHT)
+          .appendField(Blockly.Msg.senseBox_pressure_referencePressure)
+          .appendField(new Blockly.FieldTextInput("1013"), "referencePressure")
+          .appendField(Blockly.Msg.senseBox_pressure_referencePressure_dim);
+      }
+    } else {
+      this.removeInput("extraField", true);
     }
   },
 };
@@ -370,50 +343,23 @@ Blockly.Blocks["sensebox_button"] = {
     this.setOutput(true, Types.BOOLEAN.typeName);
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_button_tooltip);
+    this.getField("FUNCTION").setValidator(
+      function (val) {
+        this.updateShape_(val === "longPress");
+      }.bind(this)
+    );
   },
-  /**
-   * Parse XML to restore the number of pins available.
-   * @param {!Element} xmlElement XML storage element.
-   * @this Blockly.Block
-   */
-
-  domToMutation: function (xmlElement) {
-    xmlElement.getAttribute("port");
-  },
-  /**
-   * Create XML to represent number of pins selection.
-   * @return {!Element} XML storage element.
-   * @this Blockly.Block
-   */
-  mutationToDom: function () {
-    var container = document.createElement("mutation");
-    var input = this.getFieldValue("FUNCTION");
-    this.updateShape_(input);
-    container.setAttribute("FUNCTION", input);
-    return container;
-  },
-  /**
-   * Modify this block to have the correct number of pins available.
-   * @param {boolean}
-   * @private
-   * @this Blockly.Block
-   */
-  updateShape_: function () {
-    var extraFieldExist = this.getFieldValue("time");
-    var input = this.getFieldValue("FUNCTION");
-    if (input === "longPress" && extraFieldExist === null) {
-      this.appendDummyInput("extraField")
-        .setAlign(Blockly.ALIGN_RIGHT)
-        .appendField(Blockly.Msg.senseBox_pressure_referencePressure)
-        .appendField(new Blockly.FieldTextInput("1000"), "time")
-        .appendField("ms");
-    }
-
-    if (
-      (input === "isPressed" || input === "wasPressed" || input === "Switch") &&
-      extraFieldExist !== null
-    ) {
-      this.removeInput("extraField");
+  updateShape_(isLongPress) {
+    if (isLongPress) {
+      if (this.getInput("extraField") == null) {
+        this.appendDummyInput("extraField")
+          .setAlign(Blockly.ALIGN_RIGHT)
+          .appendField(Blockly.Msg.senseBox_pressure_referencePressure)
+          .appendField(new Blockly.FieldTextInput("1000"), "time")
+          .appendField("ms");
+      }
+    } else {
+      this.removeInput("extraField", true);
     }
   },
 };
