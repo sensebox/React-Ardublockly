@@ -72,6 +72,7 @@ class BlocklyWindow extends Component {
             this.props.trashcan !== undefined ? this.props.trashcan : true
           }
           renderer={this.props.renderer}
+          sounds={this.props.sounds}
           maxInstances={getMaxInstances()}
           zoom={{
             // https://developers.google.com/blockly/guides/configure/web/zoom
@@ -123,11 +124,13 @@ BlocklyWindow.propTypes = {
   onChangeWorkspace: PropTypes.func.isRequired,
   clearStats: PropTypes.func.isRequired,
   renderer: PropTypes.string.isRequired,
+  sounds: PropTypes.string.isRequired,
   language: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   renderer: state.general.renderer,
+  sounds: state.general.sounds,
   language: state.general.language,
 });
 
