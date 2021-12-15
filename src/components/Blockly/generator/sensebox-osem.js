@@ -18,7 +18,6 @@ Blockly.Arduino.sensebox_send_to_osem = function (block) {
 
 Blockly.Arduino.sensebox_osem_connection = function (Block) {
   var box_id = this.getFieldValue("BoxID");
-  var host = this.getFieldValue("host");
   var branch = Blockly.Arduino.statementToCode(Block, "DO");
   var access_token = this.getFieldValue("access_token");
   var blocks = this.getDescendants();
@@ -42,7 +41,7 @@ Blockly.Arduino.sensebox_osem_connection = function (Block) {
   Blockly.Arduino.definitions_["SenseBoxID"] =
     'const char SENSEBOX_ID [] PROGMEM = "' + box_id + '";';
   Blockly.Arduino.definitions_["host"] =
-    "const char server [] PROGMEM =" + host + ";";
+    'const char server [] PROGMEM ="ingress.opensensemap.org";';
   if (ssl === "TRUE") {
     Blockly.Arduino.libraries_["library_bearSSL"] =
       "#include <ArduinoBearSSL.h>";

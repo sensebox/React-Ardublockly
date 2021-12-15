@@ -50,7 +50,7 @@ Blockly.Blocks["sensebox_wifi_status"] = {
   },
 };
 
-Blockly.Blocks["sensebox_wifi_ip"] = {
+Blockly.Blocks["sensebox_get_ip"] = {
   init: function () {
     this.setTooltip(Blockly.Msg.senseBox_wifi_ip_tooltip);
     this.setColour(getColour().sensebox);

@@ -18,16 +18,6 @@ Blockly.Blocks["sensebox_osem_connection"] = {
     this.setColour(getColour().sensebox);
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_osem_connection)
-      .appendField(
-        new Blockly.FieldDropdown([
-          [Blockly.Msg.senseBox_osem_host, '"ingress.opensensemap.org"'],
-          [
-            Blockly.Msg.senseBox_osem_host_workshop,
-            '"ingress.workshop.opensensemap.org"',
-          ],
-        ]),
-        "host"
-      )
       .appendField("SSL")
       .appendField(new Blockly.FieldCheckbox("TRUE"), "SSL");
     this.appendDummyInput()
