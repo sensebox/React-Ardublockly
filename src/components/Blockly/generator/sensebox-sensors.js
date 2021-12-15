@@ -26,9 +26,7 @@ Blockly.Arduino.sensebox_sensor_uv_light = function () {
   var dropdown_name = this.getFieldValue("NAME");
   let code = "";
   Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
-
-  Blockly.Arduino.libraries_["library_senseBoxMCU"] =
-    '#include "SenseBoxMCU.h"';
+  Blockly.Arduino.libraries_["library_ltr329"] = `#include <LTR329.h>`;
   if (dropdown_name === "UvIntensity") {
     Blockly.Arduino.libraries_["library_veml6070"] = "#include <VEML6070.h>";
     Blockly.Arduino.definitions_["define_veml"] = "VEML6070 veml;;";
@@ -67,11 +65,9 @@ Blockly.Arduino.sensebox_sensor_uv_light = function () {
     {
       Wire.begin();
       unsigned int u = 0;
-      DEBUG(F("Checking lightsensortype"));
       u = read_reg(0x29, 0x80 | 0x0A); //id register
       if ((u & 0xF0) == 0xA0)            // TSL45315
       {
-        DEBUG(F("TSL45315"));
         write_reg(0x29, 0x80 | 0x00, 0x03); //control: power on
         write_reg(0x29, 0x80 | 0x01, 0x02); //config: M=4 T=100ms
         delay(120);
@@ -79,7 +75,6 @@ Blockly.Arduino.sensebox_sensor_uv_light = function () {
       }
       else
       {
-        DEBUG(F("LTR329"));
         LTR.begin();
         LTR.setControl(gain, false, false);
         LTR.setMeasurementRate(integrationTime, measurementRate);
@@ -107,14 +102,11 @@ Blockly.Arduino.sensebox_sensor_uv_light = function () {
     for (int i = 0; i < 5; i++) {
       if (LTR.getData(data0, data1)) {
         if(LTR.getLux(gain, integrationTime, data0, data1, lux));
-        else DEBUG(F("LTR sensor saturated"));
         if(lux > 0) break;
         else delay(10);
       }
       else {
-        DEBUG2(F("LTR getData error "));
         byte error = LTR.getError();
-        Serial.println(error);
       }
     }
   }
@@ -131,8 +123,8 @@ Blockly.Arduino.sensebox_sensor_uv_light = function () {
     unsigned char measurementRate = 3;
     `;
     Blockly.Arduino.setupCode_["sensebox_sensor_illuminance"] =
-      "Lightsensor_begin()";
-    code = "Lightsensor_getIlluminance();";
+      "Lightsensor_begin();";
+    code = "Lightsensor_getIlluminance()";
   }
 
   return [code, Blockly.Arduino.ORDER_ATOMIC];
@@ -147,6 +139,7 @@ Blockly.Arduino.sensebox_sensor_bmx055_accelerometer = function () {
   var dropdown_value = this.getFieldValue("VALUE");
   var range = this.getFieldValue("RANGE");
   Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
+  Blockly.Arduino.libraries_["library_bmx055"] = `#include <BMX055.h>`;
   Blockly.Arduino.definitions_["define_bmx"] = "BMX055 bmx;";
   Blockly.Arduino.setupCode_["sensebox_sensor_bmx055"] =
     "bmx.beginAcc(" + range + ");";

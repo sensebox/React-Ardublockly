@@ -34,13 +34,13 @@ while (status != WL_CONNECTED) {
 };
 
 Blockly.Arduino.sensebox_wifi_status = function () {
-  var code = "WiFi.status();";
-  return code;
+  var code = "WiFi.status()";
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
 Blockly.Arduino.sensebox_wifi_rssi = function () {
   var code = "WiFi.RSSI();";
-  return code;
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
 Blockly.Arduino.sensebox_get_ip = function () {
