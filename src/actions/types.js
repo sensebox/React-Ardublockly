@@ -45,6 +45,7 @@ export const VISIT = "VISIT";
 export const LANGUAGE = "LANGUAGE";
 export const PLATFORM = "PLATFORM";
 export const RENDERER = "RENDERER";
+export const SOUNDS = "SOUNDS";
 export const STATISTICS = "STATISTICS";
 
 // messages
