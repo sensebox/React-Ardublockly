@@ -167,11 +167,14 @@ export const UI = {
     "The display of statistics on the usage of the blocks above the workspace can be shown or hidden.",
   settings_statistics_on: "On",
   settings_statistics_off: "Off",
-  settings_ota_head: "tablet mode",
+  settings_ota_head: "Tablet mode",
   settings_ota_text:
     "Tablet mode disables the code display and enables the possibility to transfer the program code via the senseBox Connect app. You can find more information on: ",
   settings_ota_on: "Activated",
   settings_ota_off: "Deactivated",
+  settings_sounds: "Sound",
+  settings_sounds_text:
+    "Enable or disable sounds when adding and deleting blocks. Disabled by default",
 
   /**
    * 404

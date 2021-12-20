@@ -1,4 +1,11 @@
-import { VISIT, LANGUAGE, RENDERER, STATISTICS, PLATFORM } from "./types";
+import {
+  VISIT,
+  LANGUAGE,
+  RENDERER,
+  SOUNDS,
+  STATISTICS,
+  PLATFORM,
+} from "./types";
 
 export const visitPage = () => (dispatch) => {
   dispatch({
@@ -27,6 +34,13 @@ export const setRenderer = (renderer) => (dispatch) => {
   dispatch({
     type: RENDERER,
     payload: renderer,
+  });
+};
+
+export const setSounds = (sounds) => (dispatch) => {
+  dispatch({
+    type: SOUNDS,
+    payload: sounds,
   });
 };
 
