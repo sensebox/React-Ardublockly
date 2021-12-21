@@ -6,8 +6,8 @@ Blockly.Arduino.sensebox_wifi = function (block) {
   var ssid = this.getFieldValue("SSID");
   Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_["library_WiFi"] = "#include <WiFi101.h>";
-  Blockly.Arduino.variables_["ssid"] = `char ssid[] = ${ssid};`;
-  Blockly.Arduino.variables_["pass"] = `char pass[] = ${pw};`;
+  Blockly.Arduino.variables_["ssid"] = `char ssid[] = "${ssid}";`;
+  Blockly.Arduino.variables_["pass"] = `char pass[] = "${pw}";`;
   Blockly.Arduino.variables_["wifi_Status"] = "int status = WL_IDLE_STATUS;";
   if (pw === "") {
     Blockly.Arduino.setupCode_["wifi_begin"] = `
@@ -53,6 +53,7 @@ Blockly.Arduino.sensebox_get_ip = function () {
 Blockly.Arduino.sensebox_startap = function (block) {
   var ssid = this.getFieldValue("SSID");
   Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
+  Blockly.Arduino.libraries_["library_WiFi"] = "#include <WiFi101.h>";
   Blockly.Arduino.setupCode_["wifi_startAP"] = `WiFi.beginAP(${ssid});`;
   var code = "";
   return code;
