@@ -94,7 +94,7 @@ class Toolbox extends React.Component {
           <Block type="sensebox_wifi" />
           <Block type="sensebox_wifi_status" />
           <Block type="sensebox_wifi_rssi" />
-          <Block type="sensebox_wifi_ip" />
+          <Block type="sensebox_get_ip" />
           <Block type="sensebox_startap" />
         </Category>
         <Category name="SD" colour={getColour().sensebox}>

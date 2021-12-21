@@ -9,10 +9,10 @@ export const SENSORS = {
    * BMP280
    */
   senseBox_pressure_sensor: "Airpressure/Temperature Sensor (BMP280)",
-  senseBox_pressure: "Airpressure in Pa",
-  senseBox_pressure_dimension: "Airpressure in Pa",
+  senseBox_pressure: "Airpressure in hPa",
+  senseBox_pressure_dimension: "Airpressure in hPa",
   senseBox_pressure_tip:
-    "Connect the sensor to one of the 5 **I2C ports**. The sensor gives you the measured value for the air pressure in Pa. To calculate the correct altitude above sea level the sensor needs a current reference value.",
+    "Connect the sensor to one of the 5 **I2C ports**. The sensor gives you the measured value for the air pressure in hPa. To calculate the correct altitude above sea level the sensor needs a current reference value.",
   senseBox_pressure_referencePressure: "Pressure at Sea Level",
   senseBox_pressure_referencePressure_dim: "hPa",
   senseBox_pressure_helpurl: "",

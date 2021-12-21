@@ -11,7 +11,7 @@ Blockly.Arduino.sensebox_sensor_temp_hum = function () {
   Blockly.Arduino.libraries_["library_adafruithdc1000"] =
     "#include <Adafruit_HDC1000.h>";
   Blockly.Arduino.definitions_["define_hdc"] =
-    "Adafruit_HDC1000 hdc = Adafruit_HDC1000();;";
+    "Adafruit_HDC1000 hdc = Adafruit_HDC1000();";
   Blockly.Arduino.setupCode_["sensebox_sensor_temp_hum"] = "hdc.begin();";
   var code = `hdc.read${dropdown_name}()`;
   return [code, Blockly.Arduino.ORDER_ATOMIC];
@@ -35,45 +35,42 @@ Blockly.Arduino.sensebox_sensor_uv_light = function () {
   }
   if (dropdown_name === "Illuminance") {
     Blockly.Arduino.codeFunctions_["read_reg"] = `
-    int read_reg(byte address, uint8_t reg)
-    {
-      int i = 0;
-      Wire.beginTransmission(address);
-      Wire.write(reg);
-      Wire.endTransmission();
-      Wire.requestFrom((uint8_t)address, (uint8_t)1);
-      delay(1);
-      if(Wire.available())
-        i = Wire.read();
-      return i;
-    }
+int read_reg(byte address, uint8_t reg)
+  {
+    int i = 0;
+    Wire.beginTransmission(address);
+    Wire.write(reg);
+    Wire.endTransmission();
+    Wire.requestFrom((uint8_t)address, (uint8_t)1);
+    delay(1);
+    if(Wire.available())
+      i = Wire.read();
+    return i;
+  }
     `;
     Blockly.Arduino.codeFunctions_["write_reg"] = `
-    void write_reg(byte address, uint8_t reg, uint8_t val)
-    {
-      Wire.beginTransmission(address);
-      Wire.write(reg);
-      Wire.write(val);
-      Wire.endTransmission();
-    }`;
+void write_reg(byte address, uint8_t reg, uint8_t val)
+  {
+    Wire.beginTransmission(address);
+    Wire.write(reg);
+    Wire.write(val);
+    Wire.endTransmission();
+  }`;
 
     Blockly.Arduino.codeFunctions_["Lightsensor_begin"] = `
-    
-   
-    
-    void Lightsensor_begin()
-    {
-      Wire.begin();
-      unsigned int u = 0;
-      u = read_reg(0x29, 0x80 | 0x0A); //id register
-      if ((u & 0xF0) == 0xA0)            // TSL45315
+void Lightsensor_begin()
+  {
+    Wire.begin();
+    unsigned int u = 0;
+    u = read_reg(0x29, 0x80 | 0x0A); //id register
+    if ((u & 0xF0) == 0xA0)            // TSL45315
       {
         write_reg(0x29, 0x80 | 0x00, 0x03); //control: power on
         write_reg(0x29, 0x80 | 0x01, 0x02); //config: M=4 T=100ms
         delay(120);
         lightsensortype = 0; //TSL45315
       }
-      else
+    else
       {
         LTR.begin();
         LTR.setControl(gain, false, false);
@@ -82,46 +79,45 @@ Blockly.Arduino.sensebox_sensor_uv_light = function () {
         delay(10); //Wait 10 ms (max) - wakeup time from standby
         lightsensortype = 1;                     //
       }
-    }
+  }
 `;
 
     Blockly.Arduino.codeFunctions_["Lightsensor_getIlluminance"] = `
-    unsigned int Lightsensor_getIlluminance()
-{
-  unsigned int lux = 0;
-  if (lightsensortype == 0) // TSL45315
+unsigned int Lightsensor_getIlluminance()
   {
-    unsigned int u = (read_reg(0x29, 0x80 | 0x04) << 0);  //data low
-    u |= (read_reg(0x29, 0x80 | 0x05) << 8); //data high
-    lux = u * 4; // calc lux with M=4 and T=100ms
-  }
-  else if (lightsensortype == 1) //LTR-329ALS-01
-  {
-    delay(100);
-    unsigned int data0, data1;
-    for (int i = 0; i < 5; i++) {
-      if (LTR.getData(data0, data1)) {
-        if(LTR.getLux(gain, integrationTime, data0, data1, lux));
-        if(lux > 0) break;
-        else delay(10);
-      }
-      else {
+    unsigned int lux = 0;
+    if (lightsensortype == 0) // TSL45315
+    {
+      unsigned int u = (read_reg(0x29, 0x80 | 0x04) << 0);  //data low
+      u |= (read_reg(0x29, 0x80 | 0x05) << 8); //data high
+      lux = u * 4; // calc lux with M=4 and T=100ms
+    }
+    else if (lightsensortype == 1) //LTR-329ALS-01
+    {
+      delay(100);
+      unsigned int data0, data1;
+      for (int i = 0; i < 5; i++) {
+        if (LTR.getData(data0, data1)) {
+          if(LTR.getLux(gain, integrationTime, data0, data1, lux));
+          if(lux > 0) break;
+          else delay(10);
+        }
+        else {
         byte error = LTR.getError();
       }
     }
   }
   return lux;
-}
+  }
     `;
-
     Blockly.Arduino.definitions_["define_lightsensor"] = `
-    bool lightsensortype = 0; //0 for tsl - 1 for ltr
-    //settings for LTR sensor
-    LTR329 LTR;
-    unsigned char gain = 1;
-    unsigned char integrationTime = 0;
-    unsigned char measurementRate = 3;
-    `;
+bool lightsensortype = 0; //0 for tsl - 1 for ltr
+//settings for LTR sensor
+LTR329 LTR;
+unsigned char gain = 1;
+unsigned char integrationTime = 0;
+unsigned char measurementRate = 3;
+`;
     Blockly.Arduino.setupCode_["sensebox_sensor_illuminance"] =
       "Lightsensor_begin();";
     code = "Lightsensor_getIlluminance()";
@@ -191,10 +187,18 @@ bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,
                   Adafruit_BMP280::FILTER_X16,      
                   Adafruit_BMP280::STANDBY_MS_500);
   `;
-  if (dropdown_name === "Pressure" || dropdown_name === "Temperature") {
-    code = "bmp.read" + dropdown_name + "()";
-  } else if (dropdown_name === "Altitude") {
-    code = "bmp.readAltitude(" + referencePressure + ")";
+  switch (dropdown_name) {
+    case "temperature":
+      code = "bmp.readTemperature()";
+      break;
+    case "pressure":
+      code = "bmp.readPressure()/100";
+      break;
+    case "altitude":
+      code = "bmp.readAltitude(" + referencePressure + ")";
+      break;
+    default:
+      code = "";
   }
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
