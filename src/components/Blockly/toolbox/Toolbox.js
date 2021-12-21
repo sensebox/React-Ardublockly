@@ -601,11 +601,11 @@ class Toolbox extends React.Component {
           colour={getColour().variables}
           custom="CREATE_TYPED_VARIABLE"
         ></Category>
-        <Category name="Arrays" colour={getColour().arrays}>
+        {/* <Category name="Arrays" colour={getColour().arrays}>
           <Block type="lists_create_empty" />
           <Block type="array_getIndex" />
           <Block type="lists_length" />
-        </Category>
+        </Category> */}
         <Category
           name={Blockly.Msg.toolbox_functions}
           colour={getColour().procedures}
