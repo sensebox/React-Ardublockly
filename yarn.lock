@@ -1127,37 +1127,37 @@
   "resolved" "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   "version" "0.2.3"
 
-"@blockly/block-plus-minus@^2.0.10":
-  "integrity" "sha512-YWEQd9xHAAn1aJgIuZsAdx2t9ZSjinaSEzbN1c43iU584TvaiPsGq5JcnLpoDIyGgJI90Nk+o4erWyQR+kqLyQ=="
-  "resolved" "https://registry.npmjs.org/@blockly/block-plus-minus/-/block-plus-minus-2.0.10.tgz"
-  "version" "2.0.10"
+"@blockly/block-plus-minus@^2.0.39":
+  "integrity" "sha512-kOMW+d8Ll6W01zG7ft5Mo7vQyFOGSuP5NUgxQArwT2mX9gqqL5ptKdPnxx5VINKe60pJ/TrqPsGmOMk7JjrRhQ=="
+  "resolved" "https://registry.npmjs.org/@blockly/block-plus-minus/-/block-plus-minus-2.0.39.tgz"
+  "version" "2.0.39"
 
-"@blockly/field-slider@^2.1.1":
-  "integrity" "sha512-VclXqKRs94iHl7yhFNCK+a1uyiHtPHgoAYXugr7hbZ6BZWGdI9tV1iMeiILz4pNlhy6llM+QvbJopjYA+4oCFQ=="
-  "resolved" "https://registry.npmjs.org/@blockly/field-slider/-/field-slider-2.1.1.tgz"
-  "version" "2.1.1"
+"@blockly/field-slider@^2.1.30":
+  "integrity" "sha512-1Dt/Y0va5gd6k2P94X+PuvqJb78Fi9MNcI2u8oJ0/QBUv1YkZA6ngDQYJSmeWXMg+T+tohNEVjX7d7PQsEkd0g=="
+  "resolved" "https://registry.npmjs.org/@blockly/field-slider/-/field-slider-2.1.30.tgz"
+  "version" "2.1.30"
 
 "@blockly/plugin-modal@^1.20200427.4":
   "integrity" "sha512-eA9p+W3mtcWLJQZ23D0Le/Uw3JdxFxwJqTUYtAiRlVON4qnuDXrHQLlvxEiWctNXJZGUTh57zqbvO6ZxNRQPrA=="
   "resolved" "https://registry.npmjs.org/@blockly/plugin-modal/-/plugin-modal-1.20200427.4.tgz"
   "version" "1.20200427.4"
 
-"@blockly/plugin-scroll-options@^1.0.2":
-  "integrity" "sha512-j0ehQlHv/0EWPw8UQEplGs4jCxfo45yp6ZzxYxReMirM0/j4EXXFvgXTZoruPgRYgMl+pCwya32Z6Dkv19sURA=="
-  "resolved" "https://registry.npmjs.org/@blockly/plugin-scroll-options/-/plugin-scroll-options-1.0.2.tgz"
-  "version" "1.0.2"
+"@blockly/plugin-scroll-options@^1.0.4":
+  "integrity" "sha512-Aex5zpSmWDvTBRGNJWwI12qYWhXG+u0bnb74LD917EdE94tsz4P2p7B/tby3NZdsE4DvNHjUG0dxCwxTbcitHg=="
+  "resolved" "https://registry.npmjs.org/@blockly/plugin-scroll-options/-/plugin-scroll-options-1.0.4.tgz"
+  "version" "1.0.4"
 
-"@blockly/plugin-typed-variable-modal@^3.1.26":
-  "integrity" "sha512-3aKdr/NkcyH93zt0etnmR+urZ3csHbhqyUBn9Q8r/w6GNm54S8s916B921YnGFUBtnWnUEzieMHRAt5KveSKug=="
-  "resolved" "https://registry.npmjs.org/@blockly/plugin-typed-variable-modal/-/plugin-typed-variable-modal-3.1.26.tgz"
-  "version" "3.1.26"
+"@blockly/plugin-typed-variable-modal@^3.1.29":
+  "integrity" "sha512-mTgkXAZUikzUfduQSIOGOooepJvfwElUBD28m+90WApGvUzw8eNB8ijE3myulnbz1QBBCgeFMu6g708WumtWhg=="
+  "resolved" "https://registry.npmjs.org/@blockly/plugin-typed-variable-modal/-/plugin-typed-variable-modal-3.1.29.tgz"
+  "version" "3.1.29"
   dependencies:
     "@blockly/plugin-modal" "^1.20200427.4"
 
-"@blockly/zoom-to-fit@^2.0.7":
-  "integrity" "sha512-ZMY6k1V97B3IwBWcbxFlpKwKtfWg2vmJuLfmdIymrJQZtswRyY303F1JOl1G1+zsCKeyW/FVo/ysrSDZTIaRCQ=="
-  "resolved" "https://registry.npmjs.org/@blockly/zoom-to-fit/-/zoom-to-fit-2.0.7.tgz"
-  "version" "2.0.7"
+"@blockly/zoom-to-fit@^2.0.9":
+  "integrity" "sha512-yfv7Y0QCcEkiZJKI7o4EzV1pqebk/gIyKugYUaszZh/4sRvtmyfIF7fGrqcuqRc+JQHJy07SI3yvdo7bJW/nQg=="
+  "resolved" "https://registry.npmjs.org/@blockly/zoom-to-fit/-/zoom-to-fit-2.0.9.tgz"
+  "version" "2.0.9"
 
 "@cnakazawa/watch@^1.0.3":
   "integrity" "sha512-v9kIhKwjeZThiWrLmj0y17CWoyddASLj9O2yvbZkbvw/N3rWOYy9zkV66ursAoVr0mV15bL8g0c4QZUE6cdDoQ=="
@@ -3134,10 +3134,10 @@
   dependencies:
     "file-uri-to-path" "1.0.0"
 
-"blockly@^6.20210701.0", "blockly@3.20200625.0 - 6":
-  "integrity" "sha512-cNrwFOAxXE5Pbs1FJAyLTlSRzpNW/C+0gPT2rGQDOJVVKcyF3vhFC1StgnxvQNsv//ueuksKWIXxDuSWh1VI4w=="
-  "resolved" "https://registry.npmjs.org/blockly/-/blockly-6.20210701.0.tgz"
-  "version" "6.20210701.0"
+"blockly@^6.20210701.0", "blockly@^7.20211209.0", "blockly@3.20200625.0 - 6", "blockly@3.20200924.1 - 6", "blockly@3.20202625.1 - 6":
+  "integrity" "sha512-6dti2yvn5tiSQZv45PtHCjdQ53dYjruG8xgCSULExsrIGAx/Yp+tD3glid7pk5DXdoFU3ck01wwEVPMoZ3JbGw=="
+  "resolved" "https://registry.npmjs.org/blockly/-/blockly-7.20211209.0.tgz"
+  "version" "7.20211209.0"
   dependencies:
     "jsdom" "15.2.1"
 
