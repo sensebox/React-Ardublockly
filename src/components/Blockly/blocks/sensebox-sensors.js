@@ -354,7 +354,7 @@ Blockly.Blocks["sensebox_button"] = {
       if (this.getInput("extraField") == null) {
         this.appendDummyInput("extraField")
           .setAlign(Blockly.ALIGN_RIGHT)
-          .appendField(Blockly.Msg.senseBox_pressure_referencePressure)
+          .appendField(Blockly.Msg.senseBox_button_longPress_time)
           .appendField(new Blockly.FieldTextInput("1000"), "time")
           .appendField("ms");
       }

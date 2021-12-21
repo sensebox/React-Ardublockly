@@ -53,7 +53,6 @@ Blockly.Arduino.sensebox_get_ip = function () {
 Blockly.Arduino.sensebox_startap = function (block) {
   var ssid = this.getFieldValue("SSID");
   Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
-  Blockly.Arduino.definitions_["define_network"] = "Bee* b = new Bee();";
   Blockly.Arduino.setupCode_["wifi_startAP"] = `WiFi.beginAP(${ssid});`;
   var code = "";
   return code;
