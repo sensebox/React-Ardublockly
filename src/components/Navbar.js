@@ -231,6 +231,11 @@ class Navbar extends Component {
                 link: "/gallery",
               },
               {
+                text: "CodeEditor",
+                icon: faLightbulb,
+                link: "/codeeditor",
+              },
+              {
                 text: Blockly.Msg.navbar_projects,
                 icon: faLayerGroup,
                 link: "/project",
