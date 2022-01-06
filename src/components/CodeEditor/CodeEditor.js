@@ -26,6 +26,8 @@ const CodeEditor = (props) => {
     sessionStorage.getItem("ArduinoCode")
       ? sessionStorage.getItem("ArduinoCode")
       : `
+#include <senseBoxIO.h> //needs to be always included
+
 void setup () {
          
 }
@@ -34,6 +36,7 @@ void loop() {
           
 }`
   );
+
   const compile = () => {
     setProgress(true);
     const data = {
@@ -97,12 +100,8 @@ void loop() {
     setOpen(false);
   };
 
-  const loadCode = () => {
-    editorRef.current.setValue("test");
-  };
-
-  const handleChange = () => {
-    setAutoSave(!autoSave);
+  const resetCode = () => {
+    editorRef.current.setValue(defaultValue);
   };
 
   const resetTimeout = (id, newID) => {
@@ -211,7 +210,7 @@ void loop() {
             style={{ padding: "1rem", margin: "1rem" }}
             variant="contained"
             color="primary"
-            onClick={() => loadCode()}
+            onClick={() => resetCode()}
           >
             Reset Editor
           </Button>
