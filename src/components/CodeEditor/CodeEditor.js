@@ -9,7 +9,7 @@ import { saveAs } from "file-saver";
 import Drawer from "@material-ui/core/Drawer";
 import Sidebar from "./Sidebar";
 import Dialog from "../Dialog";
-import Snackbar from "../Snackbar";
+import SaveIcon from './SaveIcon'
 
 const CodeEditor = (props) => {
   const [fileHandle, setFileHandle] = useState();
@@ -168,7 +168,11 @@ void loop() {
           </p>
         </Drawer>
         <Grid item lg={8}>
-          <h1>Code Editor</h1>
+          <div style={{display: "flex", alignItems: "center"}}>
+            <h1>Code Editor</h1>
+            <SaveIcon loading={autoSave} />
+          </div>
+
           <MonacoEditor
             height="80vh"
             onChange={(value) => {
@@ -215,12 +219,6 @@ void loop() {
           >
             Reset Editor
           </Button>
-          <Snackbar
-            open={autoSave}
-            message={"Automatisch gespeichert"}
-            type={"success"}
-            key={Date.now()}
-          />
           <Sidebar />
 
           <Dialog
