@@ -34,6 +34,7 @@ import {
   faChalkboardTeacher,
   faTools,
   faLightbulb,
+  faCode,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Blockly from "blockly";
@@ -232,7 +233,7 @@ class Navbar extends Component {
               },
               {
                 text: "CodeEditor",
-                icon: faLightbulb,
+                icon: faCode,
                 link: "/codeeditor",
               },
               {
