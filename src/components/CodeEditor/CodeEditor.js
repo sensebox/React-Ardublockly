@@ -9,6 +9,7 @@ import { saveAs } from "file-saver";
 import Drawer from "@material-ui/core/Drawer";
 import Sidebar from "./Sidebar";
 import Dialog from "../Dialog";
+import Snackbar from "../Snackbar";
 
 const CodeEditor = (props) => {
   const [fileHandle, setFileHandle] = useState();
@@ -18,7 +19,21 @@ const CodeEditor = (props) => {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState("");
   const editorRef = useRef(null);
-
+  const [autoSave, setAutoSave] = useState(false);
+  const [time, setTime] = useState(null);
+  const [value, setValue] = useState("");
+  const [defaultValue, setDefaultValue] = useState(
+    sessionStorage.getItem("ArduinoCode")
+      ? sessionStorage.getItem("ArduinoCode")
+      : `
+void setup () {
+         
+}
+          
+void loop() {
+          
+}`
+  );
   const compile = () => {
     setProgress(true);
     const data = {
@@ -86,6 +101,34 @@ const CodeEditor = (props) => {
     editorRef.current.setValue("test");
   };
 
+  const handleChange = () => {
+    setAutoSave(!autoSave);
+  };
+
+  const resetTimeout = (id, newID) => {
+    clearTimeout(id);
+    return newID;
+  };
+
+  const editValue = (value) => {
+    setTime(resetTimeout(time, setTimeout(saveValue, 400)));
+    setValue(value);
+  };
+
+  const saveValue = () => {
+    sessionStorage.setItem("ArduinoCode", value);
+    setAutoSave(true);
+    setTimeout(() => setAutoSave(false), 1000);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   return (
     <div>
       <Grid container spacing={2}>
@@ -128,15 +171,11 @@ const CodeEditor = (props) => {
           <h1>Code Editor</h1>
           <MonacoEditor
             height="80vh"
+            onChange={(value) => {
+              editValue(value);
+            }}
             defaultLanguage="cpp"
-            defaultValue={`
-void setup () {
-
-}
-
-void loop(){
-
-}`}
+            defaultValue={defaultValue}
             value={fileContent}
             onMount={(editor, monaco) => {
               editorRef.current = editor;
@@ -176,25 +215,25 @@ void loop(){
           >
             Reset Editor
           </Button>
+          <Snackbar
+            open={autoSave}
+            message={"Automatisch gespeichert"}
+            type={"success"}
+            key={Date.now()}
+          />
           <Sidebar />
+
           <Dialog
             style={{ zIndex: 9999999 }}
             fullWidth
             maxWidth={"sm"}
             open={progress}
-            title={Blockly.Msg.tabletDialog_headline}
+            title={"Code wird kompiliert"}
             content={""}
           >
-            <div>{Blockly.Msg.tabletDialog_text}</div>
             <div>
-              {Blockly.Msg.tabletDialog_more}{" "}
-              <a
-                href="https://sensebox.de/app"
-                target="_blank"
-                rel="noreferrer"
-              >
-                https://sensebox.de/app
-              </a>
+              Dein Code wird nun kompiliert und anschließend auf deinen Computer
+              heruntergeladen
             </div>
           </Dialog>
         </Grid>

@@ -6,9 +6,10 @@ import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Typography from "@material-ui/core/Typography";
 import { LibraryVersions } from "../../data/versions.js";
 import { ArduinoExamples } from "../../data/arduinoExamples.js";
-import Editor, { useMonaco } from "@monaco-editor/react";
+import { useMonaco } from "@monaco-editor/react";
 import { Button } from "@material-ui/core";
 import Dialog from "../Dialog";
+import SerialMonitor from "./SerialMonitor.js";
 
 const Sidebar = () => {
   const [alert, setAlert] = React.useState(false);
@@ -37,6 +38,23 @@ void loop(){
 
   return (
     <div>
+      {"serial" in navigator ? (
+        <Accordion>
+          <AccordionSummary
+            expandIcon={""}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <Typography>Serial Monitor</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Typography>
+              <SerialMonitor />
+            </Typography>
+          </AccordionDetails>
+        </Accordion>
+      ) : null}
+
       <Accordion>
         <AccordionSummary
           expandIcon={""}
@@ -70,8 +88,12 @@ void loop(){
         >
           <Typography>Installierte Libraries</Typography>
         </AccordionSummary>
-        <AccordionDetails>
-          <Typography>
+        <AccordionDetails
+          style={{ padding: 0, height: "60vH", backgroundColor: "white" }}
+        >
+          <Typography
+            style={{ overflow: "auto", width: "100%", padding: "1rem" }}
+          >
             <p>
               For Dokumentation take a look at the installed libraries and their
               source
