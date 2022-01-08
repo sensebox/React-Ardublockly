@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Blockly from "blockly";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
@@ -10,9 +10,19 @@ import { useMonaco } from "@monaco-editor/react";
 import { Button } from "@material-ui/core";
 import Dialog from "../Dialog";
 import SerialMonitor from "./SerialMonitor.js";
+import axios from "axios";
 
 const Sidebar = () => {
   const [alert, setAlert] = React.useState(false);
+  const [examples, setExamples] = React.useState([]);
+
+  useEffect(() => {
+    axios
+      .get("https://coelho.opensensemap.org/items/blocklysamples")
+      .then((res) => {
+        setExamples(res.data.data);
+      });
+  }, []);
 
   const monaco = useMonaco();
   const loadCode = (code) => {
@@ -65,7 +75,7 @@ void loop(){
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
-            {ArduinoExamples().map((object, i) => {
+            {examples.map((object, i) => {
               return (
                 <Button
                   style={{ padding: "1rem", margin: "1rem" }}
