@@ -9,7 +9,8 @@ import { saveAs } from "file-saver";
 import Drawer from "@material-ui/core/Drawer";
 import Sidebar from "./Sidebar";
 import Dialog from "../Dialog";
-import SaveIcon from './SaveIcon'
+import SaveIcon from "./SaveIcon";
+import store from "../../store";
 
 const CodeEditor = (props) => {
   const [fileHandle, setFileHandle] = useState();
@@ -22,6 +23,8 @@ const CodeEditor = (props) => {
   const [autoSave, setAutoSave] = useState(false);
   const [time, setTime] = useState(null);
   const [value, setValue] = useState("");
+  const [resetDialog, setResetDialog] = useState(false);
+  const [blocklyCode, setBlocklyCode] = useState("");
   const [defaultValue, setDefaultValue] = useState(
     sessionStorage.getItem("ArduinoCode")
       ? sessionStorage.getItem("ArduinoCode")
@@ -101,7 +104,18 @@ void loop() {
   };
 
   const resetCode = () => {
-    editorRef.current.setValue(defaultValue);
+    const resetCode = `
+#include <senseBoxIO.h> //needs to be always included
+    
+void setup () {
+             
+}
+              
+void loop() {
+              
+}`;
+
+    editorRef.current.setValue(resetCode);
   };
 
   const resetTimeout = (id, newID) => {
@@ -126,6 +140,11 @@ void loop() {
     }
 
     setOpen(false);
+  };
+
+  const getBlocklyCode = () => {
+    var code = store.getState().workspace.code.arduino;
+    editorRef.current.setValue(code);
   };
 
   return (
@@ -167,7 +186,7 @@ void loop() {
           </p>
         </Drawer>
         <Grid item lg={8}>
-          <div style={{display: "flex", alignItems: "center"}}>
+          <div style={{ display: "flex", alignItems: "center" }}>
             <h1>Code Editor</h1>
             <SaveIcon loading={autoSave} />
           </div>
@@ -214,12 +233,19 @@ void loop() {
             style={{ padding: "1rem", margin: "1rem" }}
             variant="contained"
             color="primary"
-            onClick={() => resetCode()}
+            onClick={() => setResetDialog(true)}
           >
             Reset Editor
           </Button>
+          <Button
+            style={{ padding: "1rem", margin: "1rem" }}
+            variant="contained"
+            color="primary"
+            onClick={() => getBlocklyCode()}
+          >
+            getBlocklyCode
+          </Button>
           <Sidebar />
-
           <Dialog
             style={{ zIndex: 9999999 }}
             fullWidth
@@ -231,6 +257,32 @@ void loop() {
             <div>
               Dein Code wird nun kompiliert und anschließend auf deinen Computer
               heruntergeladen
+            </div>
+          </Dialog>{" "}
+          <Dialog
+            open={resetDialog}
+            title={Blockly.Msg.resetDialog_headline}
+            content={Blockly.Msg.resetDialog_text}
+            onClose={() => {
+              setResetDialog(false);
+            }}
+            onClick={() => {
+              setResetDialog(false);
+            }}
+            button={Blockly.Msg.button_cancel}
+          >
+            {" "}
+            <div style={{ marginTop: "10px" }}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                  resetCode();
+                  setResetDialog(false);
+                }}
+              >
+                Zurücksetzen
+              </Button>
             </div>
           </Dialog>
         </Grid>
