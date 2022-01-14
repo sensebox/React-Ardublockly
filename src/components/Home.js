@@ -22,6 +22,7 @@ import { faCode } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TooltipViewer from "./TooltipViewer";
 import Dialog from "./Dialog";
+import AutoSave from "./Workspace/AutoSave";
 
 const styles = (theme) => ({
   codeOn: {
@@ -54,6 +55,7 @@ class Home extends Component {
       key: "",
       message: "",
       open: true,
+      initialXml: sessionStorage.getItem("autoSaveXML"),
     };
   }
 
@@ -114,11 +116,13 @@ class Home extends Component {
   render() {
     return (
       <div>
+        <AutoSave />
         {this.props.statistics ? (
           <div style={{ float: "left", height: "40px", position: "relative" }}>
             <WorkspaceStats />
           </div>
         ) : null}
+
         <div
           className="workspaceFunc"
           style={{ float: "right", height: "40px", marginBottom: "20px" }}
@@ -161,6 +165,7 @@ class Home extends Component {
                 <FontAwesomeIcon icon={faCode} size="xs" />
               </IconButton>
             </Tooltip>
+
             <TrashcanButtons />
             <div className="blocklyWindow">
               {this.props.project ? (
@@ -169,7 +174,10 @@ class Home extends Component {
                   initialXml={this.props.project.xml}
                 />
               ) : (
-                <BlocklyWindow blocklyCSS={{ height: "80vH" }} />
+                <BlocklyWindow
+                  blocklyCSS={{ height: "80vH" }}
+                  initialXml={this.state.initialXml}
+                />
               )}
             </div>
           </Grid>
