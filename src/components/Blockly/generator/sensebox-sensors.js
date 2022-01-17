@@ -188,13 +188,13 @@ bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,
                   Adafruit_BMP280::STANDBY_MS_500);
   `;
   switch (dropdown_name) {
-    case "temperature":
+    case "Temperature":
       code = "bmp.readTemperature()";
       break;
-    case "pressure":
+    case "Pressure":
       code = "bmp.readPressure()/100";
       break;
-    case "altitude":
+    case "Altitude":
       code = "bmp.readAltitude(" + referencePressure + ")";
       break;
     default:
