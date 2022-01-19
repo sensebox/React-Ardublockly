@@ -11,11 +11,18 @@ export const SENSORS = {
   senseBox_pressure_sensor: "Airpressure/Temperature Sensor (BMP280)",
   senseBox_pressure: "Airpressure in hPa",
   senseBox_pressure_dimension: "Airpressure in hPa",
-  senseBox_pressure_tip:
+  senseBox_pressure_tooltip:
     "Connect the sensor to one of the 5 **I2C ports**. The sensor gives you the measured value for the air pressure in hPa. To calculate the correct altitude above sea level the sensor needs a current reference value.",
   senseBox_pressure_referencePressure: "Pressure at Sea Level",
   senseBox_pressure_referencePressure_dim: "hPa",
   senseBox_pressure_helpurl: "",
+
+  /**
+   * DPS310
+   */
+  senseBox_sensor_dps310: "Airpressure/Temperature Sensor (DPS310)",
+  senseBox_sensor_dps310_tooltip:
+    "Connect the sensor to one of the 5 **I2C ports**. The sensor gives you the measured value for the air pressure in hPa. To calculate the correct altitude above sea level the sensor needs a current reference value.",
 
   /**
    * Mikro

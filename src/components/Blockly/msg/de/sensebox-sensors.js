@@ -11,11 +11,20 @@ export const SENSORS = {
   senseBox_pressure_sensor: "Luftdruck-/Temperatursensor (BMP280)",
   senseBox_pressure: "Luftdruck in hPa",
   senseBox_pressure_dimension: "Luftdruck in hPa",
-  senseBox_pressure_tip:
+  senseBox_pressure_tooltip:
     "Schließe den Sensor an einen der 5 **I2C-Anschlüsse** an. Der Sensor gibt dir den Messwert für den Luftdruck in hPa. Um die korrekte Höhe über NN zu berechnen benötigt der Sensor einen aktuellen Referenzwert.",
   senseBox_pressure_referencePressure: "Luftdruck auf NN",
   senseBox_pressure_referencePressure_dim: "hPa",
-  senseBox_pressure_helpurl: "",
+  senseBox_pressure_helpurl:
+    "https://docs.sensebox.de/hardware/sensoren-luftdruck-temperatur/",
+
+  /**
+   * DPS310
+   */
+  senseBox_sensor_dps310: "Luftdruck-/Temperatursensor (DPS310)",
+  senseBox_sensor_dps310_tooltip:
+    "Schließe den Sensor an einen der 5 **I2C-Anschlüsse** an. Der Sensor gibt dir den Messwert für den Luftdruck in hPa. Um die korrekte Höhe über NN zu berechnen benötigt der Sensor einen aktuellen Referenzwert.",
+  senseBox_sensor_dps310_helpurl: "",
 
   /**
    * Mikro
