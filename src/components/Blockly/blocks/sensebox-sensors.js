@@ -514,3 +514,54 @@ Blockly.Blocks["sensebox_soundsensor_dfrobot"] = {
     this.setHelpUrl(Blockly.Msg.senseBox_soundsensor_dfrobot_helpurl);
   },
 };
+
+/**
+ * Infineon DPS310 Pressure Sensor
+ *
+ */
+
+Blockly.Blocks["sensebox_sensor_dps310"] = {
+  init: function () {
+    var dropdownOptions = [
+      [Blockly.Msg.senseBox_pressure, "Pressure"],
+      [Blockly.Msg.senseBox_temp, "Temperature"],
+      [Blockly.Msg.senseBox_gps_alt, "Altitude"],
+    ];
+    var dropdown = new Blockly.FieldDropdown(dropdownOptions, function (
+      option
+    ) {
+      var input =
+        option === "Pressure" ||
+        option === "Temperature" ||
+        option === "Altitude";
+      this.sourceBlock_.updateShape_(input);
+    });
+    this.appendDummyInput().appendField(Blockly.Msg.senseBox_sensor_dps310);
+    this.appendDummyInput()
+      .setAlign(Blockly.ALIGN_RIGHT)
+      .appendField(Blockly.Msg.senseBox_value)
+      .appendField(dropdown, "NAME");
+    this.setColour(getColour().sensebox);
+    this.setOutput(true, Types.DECIMAL.typeName);
+    this.setTooltip(Blockly.Msg.senseBox_sensor_dps310_tooltip);
+    this.setHelpUrl(Blockly.Msg.senseBox_sensor_dps310_helpurl);
+    this.getField("NAME").setValidator(
+      function (val) {
+        this.updateShape_(val === "Altitude");
+      }.bind(this)
+    );
+  },
+  updateShape_(isAltitude) {
+    if (isAltitude) {
+      if (this.getInput("extraField") == null) {
+        this.appendDummyInput("extraField")
+          .setAlign(Blockly.ALIGN_RIGHT)
+          .appendField(Blockly.Msg.senseBox_pressure_referencePressure)
+          .appendField(new Blockly.FieldTextInput("1013"), "referencePressure")
+          .appendField(Blockly.Msg.senseBox_pressure_referencePressure_dim);
+      }
+    } else {
+      this.removeInput("extraField", true);
+    }
+  },
+};
