@@ -438,14 +438,15 @@ Blockly.Arduino.sensebox_sensor_watertemperature = function () {
   Blockly.Arduino.libraries_["library_oneWire"] = '#include "OneWire.h"';
   Blockly.Arduino.libraries_["library_oneDallasTemperature"] =
     '#include "DallasTemperature.h"';
-  Blockly.Arduino.definitions_["define_OneWire"] =
-    "#define ONE_WIRE_BUS " +
-    dropdown_pin +
-    "\nOneWire oneWire(ONE_WIRE_BUS);\nDallasTemperature sensors(&oneWire);";
-  Blockly.Arduino.setupCode_["sensebox_oneWireSetup"] = "sensors.begin();";
+  Blockly.Arduino.definitions_[
+    "define_OneWire" + dropdown_pin
+  ] = `#define ONE_WIRE_BUS_${dropdown_pin} ${dropdown_pin} \nOneWire oneWire_${dropdown_pin}(ONE_WIRE_BUS_${dropdown_pin});\nDallasTemperature sensor_${dropdown_pin}(&oneWire_${dropdown_pin});`;
+  Blockly.Arduino.setupCode_[
+    "sensebox_oneWireSetup" + dropdown_pin
+  ] = `sensor_${dropdown_pin}.begin();`;
   Blockly.Arduino.codeFunctions_["sensebox_requestTemp"] =
-    "float getWaterTemp(){\nsensors.requestTemperatures();\nsensors.getTempCByIndex(0);\n}";
-  var code = "getWaterTemp()";
+    "float getWaterTemp(DallasTemperature *sensor){\nsensor->requestTemperatures();\nsensor->getTempCByIndex(0);\n}";
+  var code = `getWaterTemp(&sensor_${dropdown_pin})`;
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
