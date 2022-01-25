@@ -61,17 +61,16 @@ Blockly.Blocks["sensebox_ethernet"] = {
     this.setHelpUrl("");
     this.setColour(getColour().sensebox);
     this.appendDummyInput()
-      .appendField("Connect with Ethernet")
-      .appendField("using")
+      .appendField(Blockly.Msg.senseBox_ethernet)
       .appendField(
         new Blockly.FieldDropdown([
-          ["dhcp", "Dhcp"],
-          ["manual configuration", "Manual"],
+          [Blockly.Msg.senseBox_ethernet_dhcp, "Dhcp"],
+          [Blockly.Msg.senseBox_ethernet_manuel_config, "Manual"],
         ]),
         "dhcp"
       );
     this.appendDummyInput()
-      .appendField("MAC-Address")
+      .appendField(Blockly.Msg.senseBox_ethernet_mac)
       .appendField(
         new Blockly.FieldTextInput("0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED"),
         "mac"
@@ -88,19 +87,18 @@ Blockly.Blocks["sensebox_ethernet"] = {
   },
 
   updateShape_(isManual) {
-    // console.log(isDhcp);
     if (isManual) {
       this.appendDummyInput("ip-field")
-        .appendField("Ip Adress")
+        .appendField(Blockly.Msg.senseBox_ethernet_ip)
         .appendField(new Blockly.FieldTextInput("192.168.1.100"), "ip");
       this.appendDummyInput("subnetmask-field")
-        .appendField("Subnetmask")
+        .appendField(Blockly.Msg.senseBox_ethernet_subnetmask)
         .appendField(new Blockly.FieldTextInput("255.255.255.0"), "subnetmask");
       this.appendDummyInput("gateway-field")
-        .appendField("Gateway")
+        .appendField(Blockly.Msg.senseBox_ethernet_gateway)
         .appendField(new Blockly.FieldTextInput("192.168.1.1"), "gateway");
       this.appendDummyInput("dns-field")
-        .appendField("DNS")
+        .appendField(Blockly.Msg.senseBox_ethernet_dns)
         .appendField(new Blockly.FieldTextInput("8.8.8.8"), "dns");
     } else {
       this.removeInput("ip-field", true);

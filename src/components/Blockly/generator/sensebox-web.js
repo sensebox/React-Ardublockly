@@ -47,8 +47,8 @@ Blockly.Arduino.sensebox_ethernet = function () {
     //Configure static IP setup (only needed if DHCP is disabled)
     IPAddress myIp(${ip.replaceAll(".", ", ")});
     IPAddress myDns(${dns.replaceAll(".", ",")});
-    IPAddress myGateway(${gateway.replaceAll(".", ",")}192, 168, 0, 177);
-    IPAddress mySubnet(${subnetmask.replaceAll(".", ",")}255, 255, 255, 0);
+    IPAddress myGateway(${gateway.replaceAll(".", ",")});
+    IPAddress mySubnet(${subnetmask.replaceAll(".", ",")});
     `;
     Blockly.Arduino.setupCode_["ethernet_setup"] = `
     Ethernet.init(23);
