@@ -21,6 +21,7 @@ import "./procedures";
 import "./time";
 import "./variables";
 import "./lists";
+import "./watchdog";
 import "./webserver";
 
 import "../helpers/types";
