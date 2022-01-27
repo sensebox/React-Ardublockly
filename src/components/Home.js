@@ -22,8 +22,7 @@ import { faCode } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TooltipViewer from "./TooltipViewer";
 import Dialog from "./Dialog";
-import AutoSave from "./Workspace/AutoSave";
-
+// import Autosave from "./Workspace/AutoSave";
 const styles = (theme) => ({
   codeOn: {
     backgroundColor: theme.palette.primary.main,
@@ -55,7 +54,7 @@ class Home extends Component {
       key: "",
       message: "",
       open: true,
-      initialXml: sessionStorage.getItem("autoSaveXML"),
+      initialXml: localStorage.getItem("autoSaveXML"),
     };
   }
 
@@ -116,7 +115,6 @@ class Home extends Component {
   render() {
     return (
       <div>
-        <AutoSave />
         {this.props.statistics ? (
           <div style={{ float: "left", height: "40px", position: "relative" }}>
             <WorkspaceStats />
@@ -127,6 +125,7 @@ class Home extends Component {
           className="workspaceFunc"
           style={{ float: "right", height: "40px", marginBottom: "20px" }}
         >
+          {/* <Autosave /> */}
           <WorkspaceFunc
             project={this.props.project}
             projectType={this.props.projectType}

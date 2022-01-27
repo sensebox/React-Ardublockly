@@ -26,8 +26,8 @@ const CodeEditor = (props) => {
   const [resetDialog, setResetDialog] = useState(false);
   const [blocklyCode, setBlocklyCode] = useState("");
   const [defaultValue, setDefaultValue] = useState(
-    sessionStorage.getItem("ArduinoCode")
-      ? sessionStorage.getItem("ArduinoCode")
+    localStorage.getItem("ArduinoCode")
+      ? localStorage.getItem("ArduinoCode")
       : `
 #include <senseBoxIO.h> //needs to be always included
 
@@ -129,7 +129,7 @@ void loop() {
   };
 
   const saveValue = () => {
-    sessionStorage.setItem("ArduinoCode", value);
+    localStorage.setItem("ArduinoCode", value);
     setAutoSave(true);
     setTimeout(() => setAutoSave(false), 1000);
   };
