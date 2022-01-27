@@ -13,7 +13,7 @@ import ShareProject from "./ShareProject";
 import ResetWorkspace from "./ResetWorkspace";
 import DeleteProject from "./DeleteProject";
 import CopyCode from "./CopyCode";
-
+import AutoSave from "./AutoSave";
 class WorkspaceFunc extends Component {
   componentDidUpdate() {
     console.log(this.props.autosave);
@@ -21,7 +21,10 @@ class WorkspaceFunc extends Component {
 
   render() {
     return (
-      <div style={{ width: "max-content", display: "flex" }}>
+      <div
+        style={{ width: "max-content", display: "flex", alignItems: "center" }}
+      >
+        {!this.props.assessment & !this.props.multiple ? <AutoSave /> : null}
         {!this.props.assessment ? (
           <WorkspaceName
             style={{ marginRight: "5px" }}

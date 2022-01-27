@@ -32,7 +32,7 @@ class AutoSave extends Component {
 
   saveValue = () => {
     this.setState({ ...this.state, saved: true });
-    sessionStorage.setItem("autoSaveXML", this.props.xml);
+    localStorage.setItem("autoSaveXML", this.props.xml);
     setTimeout(() => this.setState({ ...this.state, saved: false }), 1000);
   };
 
