@@ -12,6 +12,7 @@ import "./generator/index";
 import { ZoomToFitControl } from "@blockly/zoom-to-fit";
 import { initialXml } from "./initialXml.js";
 import { getMaxInstances } from "./helpers/maxInstances";
+import { Backpack } from "@blockly/workspace-backpack";
 
 class BlocklyWindow extends Component {
   constructor(props) {
@@ -35,6 +36,9 @@ class BlocklyWindow extends Component {
     Blockly.svgResize(workspace);
     const zoomToFit = new ZoomToFitControl(workspace);
     zoomToFit.init();
+    // Initialize plugin.
+    const backpack = new Backpack(workspace);
+    backpack.init();
   }
 
   componentDidUpdate(props) {
