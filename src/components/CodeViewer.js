@@ -2,11 +2,6 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import Prism from "prismjs";
-import "prismjs/themes/prism.css";
-import "prismjs/plugins/line-numbers/prism-line-numbers";
-import "prismjs/plugins/line-numbers/prism-line-numbers.css";
-
 import withWidth from "@material-ui/core/withWidth";
 import { withStyles } from "@material-ui/core/styles";
 import MuiAccordion from "@material-ui/core/Accordion";
@@ -14,6 +9,8 @@ import MuiAccordionSummary from "@material-ui/core/AccordionSummary";
 import MuiAccordionDetails from "@material-ui/core/AccordionDetails";
 import { Card } from "@material-ui/core";
 import * as Blockly from "blockly";
+import { default as MonacoEditor } from "@monaco-editor/react";
+
 
 const Accordion = withStyles((theme) => ({
   root: {
@@ -57,6 +54,8 @@ class CodeViewer extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      code: this.props.arduino,
+      changed: false,
       expanded: true,
       componentHeight: null,
     };
@@ -64,15 +63,36 @@ class CodeViewer extends Component {
   }
 
   componentDidMount() {
-    Prism.highlightAll();
     this.setState({ componentHeight: this.myDiv.current.offsetHeight + "px" });
   }
 
-  componentDidUpdate(props, state) {
-    // if (this.myDiv.current && this.myDiv.current.offsetHeight + 'px' !== this.state.componentHeight) {
-    //   this.setState({ componentHeight: this.myDiv.current.offsetHeight + 'px' });
+  componentDidUpdate(prevProps, prevState) {
+    // if (this.props.arduino !== prevProps.arduino) {
+    //   this.setState({ changed: true });
+
+    //   console.log(`code changed: ${this.state.changed}`);
+    //   if (this.state.changed && prevState.code !== this.props.arduino) {
+    //     this.setState({ code: this.props.arduino });
+    //     this.setState({ changed: false });
+    //   }
+
+    // if (this.state.code !== prevState.code && this.state.changed) {
+    //   this.setState({ changed: false });
     // }
-    Prism.highlightAll();
+
+    // if (this.props.arduino !== this.state.code) {
+    //   this.setState({ changed: true });
+    //   //this.setState({ code: this.props.arduino });
+    // }
+
+    if (
+      this.myDiv.current &&
+      this.myDiv.current.offsetHeight + "px" !== this.state.componentHeight
+    ) {
+      this.setState({
+        componentHeight: this.myDiv.current.offsetHeight + "px",
+      });
+    }
   }
 
   onChange = () => {
@@ -105,22 +125,18 @@ class CodeViewer extends Component {
               backgroundColor: "white",
             }}
           >
-            <pre
-              className="line-numbers"
-              style={{
-                paddingBottom: 0,
-                width: "100%",
-                overflow: "auto",
-                scrollbarWidth: "thin",
-                height: "calc(100% - 30px)",
-                margin: "15px 0",
-                paddingTop: 0,
-                whiteSpace: "pre-wrap",
-                backgroundColor: "white",
+            <MonacoEditor
+              height="80vh"
+              defaultLanguage="cpp"
+              value={this.props.arduino}
+              // modified={this.props.arduino}
+              // original={this.state.code}
+              options={{
+                readOnly: true,
+
+                fontSize: "12px",
               }}
-            >
-              <code className="language-clike">{this.props.arduino}</code>
-            </pre>
+            />
           </AccordionDetails>
         </Accordion>
         <Accordion
@@ -144,22 +160,12 @@ class CodeViewer extends Component {
               backgroundColor: "white",
             }}
           >
-            <pre
-              className="line-numbers"
-              style={{
-                paddingBottom: 0,
-                width: "100%",
-                overflow: "auto",
-                scrollbarWidth: "thin",
-                height: "calc(100% - 30px)",
-                margin: "15px 0",
-                paddingTop: 0,
-                whiteSpace: "pre-wrap",
-                backgroundColor: "white",
-              }}
-            >
-              <code className="language-xml">{`${this.props.xml}`}</code>
-            </pre>
+            <MonacoEditor
+              height="80vh"
+              defaultLanguage="xml"
+              value={this.props.xml}
+              readOnly={true}
+            />
           </AccordionDetails>
         </Accordion>
       </Card>
