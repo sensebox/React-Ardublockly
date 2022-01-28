@@ -1,51 +1,50 @@
 .wrapper {
-  min-height: calc(100vh - 60px); /* will cover the 100% of viewport - height of footer (padding-bottom) */
+  min-height: calc(
+    100vh - 60px
+  ); /* will cover the 100% of viewport - height of footer (padding-bottom) */
   overflow: hidden;
   display: block;
   position: relative;
   padding-bottom: 60px; /* height of your footer + 30px*/
 }
 
-
-.tutorial img{
+.tutorial img {
   display: flex;
   align-items: center;
-  max-height: 40vH;
+  max-height: 40vh;
   max-width: 100%;
   margin: auto;
-} 
-
-.news img{
-  display: flex;
-  align-items: center;
-  max-height: 40vH;
-  max-width: 100%;
-  margin: auto;
-} 
-
-.tutorial blockquote{
-    background: #f9f9f9;
-    border-left: 10px solid#4EAF47;
-    margin: 1.5em 10px;
-    padding: 0.5em 10px;
-    quotes: "\201C""\201D""\2018""\2019";
-  }
-  blockquote:before {
-    color:#4EAF47;
-    content: open-quote;
-    font-size: 4em;
-    line-height: 0.1em;
-    margin-right: 0.25em;
-    vertical-align: -0.4em;
-  }
-  blockquote p {
-    display: inline;
-  }
-
-.overlay {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
-  
+.news img {
+  display: flex;
+  align-items: center;
+  max-height: 40vh;
+  max-width: 100%;
+  margin: auto;
+}
+
+.tutorial blockquote {
+  background: #f9f9f9;
+  border-left: 10px solid#4EAF47;
+  margin: 1.5em 10px;
+  padding: 0.5em 10px;
+  quotes: "\201C""\201D""\2018""\2019";
+}
+blockquote:before {
+  color: #4eaf47;
+  content: open-quote;
+  font-size: 4em;
+  line-height: 0.1em;
+  margin-right: 0.25em;
+  vertical-align: -0.4em;
+}
+blockquote p {
+  display: inline;
+}
+
+.overlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
