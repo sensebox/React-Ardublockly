@@ -16,10 +16,7 @@ import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Blockly from "blockly/core";
 import Copy from "../copy.svg";
-import Prism from "prismjs";
-import "prismjs/themes/prism.css";
-import "prismjs/plugins/line-numbers/prism-line-numbers";
-import "prismjs/plugins/line-numbers/prism-line-numbers.css";
+
 import MuiDrawer from "@material-ui/core/Drawer";
 import Dialog from "../Dialog";
 
@@ -71,15 +68,12 @@ class Compile extends Component {
     };
   }
 
-  componentDidMount() {
-    Prism.highlightAll();
-  }
+  componentDidMount() {}
 
   componentDidUpdate(props) {
     if (props.name !== this.props.name) {
       this.setState({ name: this.props.name });
     }
-    Prism.highlightAll();
   }
 
   compile = () => {

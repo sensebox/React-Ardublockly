@@ -5,7 +5,6 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Typography from "@material-ui/core/Typography";
 import { LibraryVersions } from "../../data/versions.js";
-import { ArduinoExamples } from "../../data/arduinoExamples.js";
 import { useMonaco } from "@monaco-editor/react";
 import { Button } from "@material-ui/core";
 import Dialog from "../Dialog";
