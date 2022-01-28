@@ -2,19 +2,14 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import Prism from "prismjs";
-import "prismjs/themes/prism.css";
-import "prismjs/plugins/line-numbers/prism-line-numbers";
-import "prismjs/plugins/line-numbers/prism-line-numbers.css";
 import withWidth from "@material-ui/core/withWidth";
 import { withStyles } from "@material-ui/core/styles";
 import MuiAccordion from "@material-ui/core/Accordion";
 import MuiAccordionSummary from "@material-ui/core/AccordionSummary";
 import MuiAccordionDetails from "@material-ui/core/AccordionDetails";
-import { Card, Switch } from "@material-ui/core";
+import { Card } from "@material-ui/core";
 import * as Blockly from "blockly";
 import { default as MonacoEditor } from "@monaco-editor/react";
-import { DiffEditor as MonacoDiffEditor } from "@monaco-editor/react";
 
 const Accordion = withStyles((theme) => ({
   root: {
