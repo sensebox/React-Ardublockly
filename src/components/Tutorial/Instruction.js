@@ -15,9 +15,9 @@ class Instruction extends Component {
     var areRequirements = step.requirements && step.requirements.length > 0;
     return (
       <div>
-        <Typography variant="h4" style={{ marginBottom: "5px" }}>
+        {/* <Typography variant="h4" style={{ marginBottom: "5px" }}>
           {step.headline}
-        </Typography>
+        </Typography> */}
         <Typography style={isHardware ? {} : { marginBottom: "5px" }}>
           <ReactMarkdown
             className={"tutorial"}
