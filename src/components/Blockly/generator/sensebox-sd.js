@@ -162,15 +162,15 @@ void addMeasurement(const char *sensorId, float value) {
         }
     `;
     Blockly.Arduino.functionNames_["writeMeasurementsToSdCard"] = `
-void writeMeasurementsToSdCard(char* timeStamp, uint32_t latitudes, uint32_t longitudes) {
+void writeMeasurementsToSdCard(char* timeStamp, int32_t latitudes, int32_t longitudes) {
     // iterate throug the measurements array
         for (uint8_t i = 0; i < num_measurements; i++) {
             char lng[20];
             char lat[20];
             float longitude = longitudes / (float)10000000;
             float latitude = latitudes / (float)10000000;
-            dtostrf(longitude, 2, 7, lng);
-            dtostrf(latitude, 1, 7, lat);
+            dtostrf(longitude, 8, 7, lng);
+            dtostrf(latitude, 8, 7, lat);
             sprintf_P(buffer, PSTR("%s,%9.2f,%s,%02s,%02s"),  measurements[i].sensorId, measurements[i].value, timeStamp, lng, lat);
             // transmit buffer to client
             ${filename}.println(buffer);
