@@ -108,3 +108,14 @@ Blockly.Blocks["sensebox_ethernet"] = {
     }
   },
 };
+
+Blockly.Blocks["sensebox_ethernetIp"] = {
+  init: function () {
+    this.appendDummyInput().appendField(Blockly.Msg.senseBox_ethernet_ip);
+
+    this.setColour(getColour().sensebox);
+    this.setHelpUrl(Blockly.Msg.senseBox_ethernetIp_helpurl);
+    this.setTooltip(Blockly.Msg.senseBox_ethernet_ip_tooltip);
+    this.setOutput(true, null);
+  },
+};
