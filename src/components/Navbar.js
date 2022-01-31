@@ -359,9 +359,9 @@ class Navbar extends Component {
 Navbar.propTypes = {
   tutorialIsLoading: PropTypes.bool.isRequired,
   projectIsLoading: PropTypes.bool.isRequired,
-  isAuthenticated: PropTypes.bool.isRequired,
+  isAuthenticated: PropTypes.bool,
   user: PropTypes.object,
-  tutorial: PropTypes.object.isRequired,
+  tutorial: PropTypes.object,
   activeStep: PropTypes.number.isRequired,
 };
 

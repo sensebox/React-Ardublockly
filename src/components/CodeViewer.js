@@ -11,7 +11,6 @@ import { Card } from "@material-ui/core";
 import * as Blockly from "blockly";
 import { default as MonacoEditor } from "@monaco-editor/react";
 
-
 const Accordion = withStyles((theme) => ({
   root: {
     border: `1px solid ${theme.palette.secondary.main}`,
@@ -134,7 +133,7 @@ class CodeViewer extends Component {
               options={{
                 readOnly: true,
 
-                fontSize: "12px",
+                fontSize: "16px",
               }}
             />
           </AccordionDetails>

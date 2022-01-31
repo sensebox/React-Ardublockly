@@ -104,7 +104,7 @@ class Routes extends Component {
 }
 
 Home.propTypes = {
-  visitPage: PropTypes.func.isRequired,
+  visitPage: PropTypes.func,
 };
 
 export default connect(null, { visitPage })(withRouter(Routes));

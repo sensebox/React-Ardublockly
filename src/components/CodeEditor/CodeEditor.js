@@ -24,7 +24,6 @@ const CodeEditor = (props) => {
   const [time, setTime] = useState(null);
   const [value, setValue] = useState("");
   const [resetDialog, setResetDialog] = useState(false);
-  const [blocklyCode, setBlocklyCode] = useState("");
   const [defaultValue, setDefaultValue] = useState(
     localStorage.getItem("ArduinoCode")
       ? localStorage.getItem("ArduinoCode")
@@ -62,7 +61,6 @@ void loop() {
         setProgress(false);
         const result = data.data.id;
         setId(result);
-        console.log(result);
         const filename = "sketch";
         window.open(
           `${process.env.REACT_APP_COMPILER_URL}/download?id=${result}&board=${process.env.REACT_APP_BOARD}&filename=${filename}`,
@@ -132,14 +130,6 @@ void loop() {
     localStorage.setItem("ArduinoCode", value);
     setAutoSave(true);
     setTimeout(() => setAutoSave(false), 1000);
-  };
-
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpen(false);
   };
 
   const getBlocklyCode = () => {
