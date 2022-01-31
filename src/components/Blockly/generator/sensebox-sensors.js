@@ -332,7 +332,7 @@ Blockly.Arduino.sensebox_sensor_ultrasonic_ranger = function () {
   `;
   Blockly.Arduino.definitions_[
     "define_newPing" + port
-  ] = `NewPing sonar${port}(TRIGGER_PIN_${port}, ECHO_PIN_${port}, MAX_DISTANCE_${port})`;
+  ] = `NewPing sonar${port}(TRIGGER_PIN_${port}, ECHO_PIN_${port}, MAX_DISTANCE_${port});`;
   var code;
   code = `sonar${port}.ping_cm()`;
   return [code, Blockly.Arduino.ORDER_ATOMIC];
