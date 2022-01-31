@@ -59,7 +59,6 @@ Blockly.Arduino.sensebox_startap = function (block) {
   return code;
 };
 
-
 Blockly.Arduino.sensebox_ethernet = function () {
   var ip = this.getFieldValue("ip");
   var gateway = this.getFieldValue("gateway");
@@ -68,8 +67,7 @@ Blockly.Arduino.sensebox_ethernet = function () {
   var mac = this.getFieldValue("mac");
   var dhcp = this.getFieldValue("dhcp");
 
-  Blockly.Arduino.libraries_["library_senseBoxMCU"] =
-    '#include "SenseBoxMCU.h"';
+  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_["library_ethernet"] = "#include <Ethernet.h>";
 
   Blockly.Arduino.definitions_["ethernet_config"] = `
@@ -111,4 +109,3 @@ Blockly.Arduino.sensebox_ethernetIp = function () {
   var code = "Ethernet.localIP()";
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
-  
