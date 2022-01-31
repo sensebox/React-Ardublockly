@@ -13,13 +13,19 @@ var selectedBox = "";
 
 Blockly.Blocks["sensebox_osem_connection"] = {
   init: function () {
+    var ssl = "TRUE";
+    var workspace = Blockly.getMainWorkspace();
+    if (workspace.getBlocksByType("sensebox_ethernet").length > 0) {
+      ssl = "FALSE";
+      console.log("ethernet");
+    }
     this.setTooltip(Blockly.Msg.senseBox_osem_connection_tip);
     this.setHelpUrl("");
     this.setColour(getColour().sensebox);
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_osem_connection)
       .appendField("SSL")
-      .appendField(new Blockly.FieldCheckbox("TRUE"), "SSL");
+      .appendField(new Blockly.FieldCheckbox(ssl), "SSL");
     this.appendDummyInput()
       .setAlign(Blockly.ALIGN_LEFT)
       .appendField(Blockly.Msg.senseBox_osem_exposure)
@@ -94,7 +100,6 @@ Blockly.Blocks["sensebox_osem_connection"] = {
       }
     }
   },
-
   updateShape_(isMobile) {
     if (isMobile) {
       if (this.getInput("lat") == null) {
@@ -119,33 +124,6 @@ Blockly.Blocks["sensebox_osem_connection"] = {
       this.removeInput("timeStamp", true);
     }
   },
-
-  //   updateShape_: function () {
-  //     var extraFieldExist = this.getFieldValue("gps");
-  //     var input = this.getFieldValue("type");
-  //     if (input === "Mobile" && extraFieldExist === null) {
-  //       this.appendValueInput("lat", "Number").appendField(
-  //         Blockly.Msg.senseBox_gps_lat,
-  //         "gps"
-  //       );
-  //       this.appendValueInput("lng", "Number").appendField(
-  //         Blockly.Msg.senseBox_gps_lng
-  //       );
-  //       this.appendValueInput("altitude", "Number").appendField(
-  //         Blockly.Msg.senseBox_gps_alt
-  //       );
-  //       this.appendValueInput("timeStamp", "Number").appendField(
-  //         Blockly.Msg.senseBox_gps_timeStamp
-  //       );
-  //     }
-
-  //     if (input === "Stationary" && extraFieldExist !== null) {
-  //       this.removeInput("lat");
-  //       this.removeInput("lng");
-  //       this.removeInput("altitude");
-  //       this.removeInput("timeStamp");
-  //     }
-  //   },
   LOOP_TYPES: ["sensebox_interval_timer"],
 };
 Blockly.Blocks["sensebox_send_to_osem"] = {

@@ -98,6 +98,10 @@ class Toolbox extends React.Component {
           <Block type="sensebox_get_ip" />
           <Block type="sensebox_startap" />
         </Category>
+        <Category name="Ethernet" colour={getColour().sensebox}>
+          <Block type="sensebox_ethernet" />
+          <Block type="sensebox_ethernetIp" />
+        </Category>
         <Category name="SD" colour={getColour().sensebox}>
           <Block type="sensebox_sd_create_file" />
           <Block type="sensebox_sd_open_file">
@@ -613,28 +617,34 @@ class Toolbox extends React.Component {
           custom="PROCEDURE"
         ></Category>
         <sep></sep>
-        <Category name={Blockly.Msg.toolbox_io} colour={getColour().io}>
-          <Block type="io_digitalwrite"></Block>
-          <Block type="io_digitalread"></Block>
-          <Block type="io_builtin_led"></Block>
-          <Block type="io_analogwrite"></Block>
-          <Block type="io_analogread"></Block>
-          <Block type="io_highlow"></Block>
-          <Block type="io_pulsein">
-            <Value name="PULSETYPE">
-              <Shadow type="io_highlow"></Shadow>
-            </Value>
-          </Block>
-          <Block type="io_pulsetimeout">
-            <Value name="PULSETYPE">
-              <Shadow type="io_highlow"></Shadow>
-            </Value>
-            <Value name="TIMEOUT">
-              <Shadow type="math_number">
-                <Field name="NUM">100</Field>
-              </Shadow>
-            </Value>
-          </Block>
+        <Category name="Advanced" colour={getColour().io}>
+          <Category name={Blockly.Msg.toolbox_io} colour={getColour().io}>
+            <Block type="io_digitalwrite"></Block>
+            <Block type="io_digitalread"></Block>
+            <Block type="io_builtin_led"></Block>
+            <Block type="io_analogwrite"></Block>
+            <Block type="io_analogread"></Block>
+            <Block type="io_highlow"></Block>
+            <Block type="io_pulsein">
+              <Value name="PULSETYPE">
+                <Shadow type="io_highlow"></Shadow>
+              </Value>
+            </Block>
+            <Block type="io_pulsetimeout">
+              <Value name="PULSETYPE">
+                <Shadow type="io_highlow"></Shadow>
+              </Value>
+              <Value name="TIMEOUT">
+                <Shadow type="math_number">
+                  <Field name="NUM">100</Field>
+                </Shadow>
+              </Value>
+            </Block>
+          </Category>
+          <Category name="Watchdog" colour={getColour().io}>
+            <Block type="watchdog_enable"></Block>
+            <Block type="watchdog_reset"></Block>
+          </Category>
         </Category>
         {/* this block is the initial block of the workspace; not necessary
                     to display, because it can only be used once anyway
