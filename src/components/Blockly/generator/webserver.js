@@ -6,9 +6,8 @@ import Blockly from "blockly";
 
 Blockly.Arduino.sensebox_initialize_http_server = function (block) {
   var box_id = this.getFieldValue("Port");
-  Blockly.Arduino.libraries_["library_senseBoxMCU"] =
-    '#include "SenseBoxMCU.h"';
-  Blockly.Arduino.libraries_["library_http"] = "#include .h>";
+  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
+  Blockly.Arduino.libraries_["library_http"] = "#include <WebUtil.h>";
 
   Blockly.Arduino.codeFunctions_["define_wifi_server"] =
     "WiFiServer server(" + box_id + ");";
