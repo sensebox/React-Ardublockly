@@ -49,10 +49,10 @@ Blockly.Blocks["sensebox_display_printDisplay"] = {
       .appendField(new FieldSlider(1, 1, 4), "SIZE");
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_display_printDisplay_x)
-      .appendField(new FieldSlider(0, 0, 128), "X");
+      .appendField(new FieldSlider(0, 0, 127), "X");
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_display_printDisplay_y)
-      .appendField(new FieldSlider(0, 0, 64), "Y");
+      .appendField(new FieldSlider(0, 0, 63), "Y");
     this.appendValueInput("printDisplay")
       .appendField(Blockly.Msg.senseBox_display_printDisplay_value)
       .setCheck(null);

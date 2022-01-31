@@ -14,19 +14,22 @@ Blockly.Arduino.sensebox_rtc_set = function () {
     Blockly.Arduino.valueToCode(this, "second", Blockly.Arduino.ORDER_ATOMIC) ||
     "0";
   var minutes =
-    Blockly.Arduino.valueToCode(this, "second", Blockly.Arduino.ORDER_ATOMIC) ||
-    "0";
+    Blockly.Arduino.valueToCode(
+      this,
+      "minutes",
+      Blockly.Arduino.ORDER_ATOMIC
+    ) || "0";
   var hour =
-    Blockly.Arduino.valueToCode(this, "second", Blockly.Arduino.ORDER_ATOMIC) ||
+    Blockly.Arduino.valueToCode(this, "hour", Blockly.Arduino.ORDER_ATOMIC) ||
     "0";
   var day =
-    Blockly.Arduino.valueToCode(this, "second", Blockly.Arduino.ORDER_ATOMIC) ||
+    Blockly.Arduino.valueToCode(this, "day", Blockly.Arduino.ORDER_ATOMIC) ||
     "0";
   var month =
-    Blockly.Arduino.valueToCode(this, "second", Blockly.Arduino.ORDER_ATOMIC) ||
+    Blockly.Arduino.valueToCode(this, "month", Blockly.Arduino.ORDER_ATOMIC) ||
     "0";
   var year =
-    Blockly.Arduino.valueToCode(this, "second", Blockly.Arduino.ORDER_ATOMIC) ||
+    Blockly.Arduino.valueToCode(this, "year", Blockly.Arduino.ORDER_ATOMIC) ||
     "0";
   Blockly.Arduino.libraries_["RV8523"] = `#include <RV8523.h>`;
   Blockly.Arduino.setupCode_["rtc.start"] = `rtc.start();`;

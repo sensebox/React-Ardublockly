@@ -17,6 +17,16 @@ Blockly.Arduino.sensebox_send_to_osem = function (block) {
 };
 
 Blockly.Arduino.sensebox_osem_connection = function (Block) {
+  var workspace = Blockly.getMainWorkspace();
+  var wifi = false;
+  var ethernet = false;
+  if (workspace.getBlocksByType("sensebox_wifi").length > 0) {
+    wifi = true;
+    ethernet = false;
+  } else if (workspace.getBlocksByType("sensebox_ethernet").length > 0) {
+    ethernet = true;
+    wifi = false;
+  }
   var box_id = this.getFieldValue("BoxID");
   var branch = Blockly.Arduino.statementToCode(Block, "DO");
   var access_token = this.getFieldValue("access_token");
@@ -41,6 +51,23 @@ Blockly.Arduino.sensebox_osem_connection = function (Block) {
   Blockly.Arduino.definitions_["SenseBoxID"] =
     'const char SENSEBOX_ID [] PROGMEM = "' + box_id + '";';
   Blockly.Arduino.definitions_["host"] =
+    "const char server [] PROGMEM =" + host + ";";
+  if (wifi === true) {
+    if (ssl === "TRUE") {
+      Blockly.Arduino.definitions_["WiFiSSLClient"] = "WiFiSSLClient client;";
+      port = 443;
+    } else if (ssl === "FALSE") {
+      Blockly.Arduino.definitions_["WiFiClient"] = "WiFiClient client;";
+      port = 80;
+    }
+  } else if (ethernet === true) {
+    if (ssl === "TRUE") {
+      Blockly.Arduino.definitions_["WiFiSSLClient"] = "WiFiSSLClient client;";
+      port = 443;
+    } else if (ssl === "FALSE") {
+      Blockly.Arduino.definitions_["EthernetClient"] = "EthernetClient client;";
+      port = 80;
+    }
     'const char server [] PROGMEM ="ingress.opensensemap.org";';
   if (ssl === "TRUE") {
     Blockly.Arduino.libraries_["library_bearSSL"] =
@@ -220,7 +247,7 @@ Blockly.Arduino.sensebox_osem_connection = function (Block) {
       lat +
       "/float(10000000)),(" +
       lng +
-      "/float(10000000),(" +
+      "/float(10000000)),(" +
       altitude +
       "/float(100))," +
       timestamp +

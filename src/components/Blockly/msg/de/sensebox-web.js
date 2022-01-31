@@ -16,4 +16,14 @@ export const WEB = {
   senseBox_wifi_startap_tooltip:
     "Erstellt einen WiFi-Accesspoint zu dem du dich verbinden kannst. Beachte, dass immer nur 1 Gerät gleichzeitig verbunden werden kann.",
   senseBox_wifi_helpurl: "https://docs.sensebox.de/blockly/blockly-web-wifi/",
+  senseBox_ethernet: "Verbinde mit Ethernet",
+  senseBox_ethernet_dhcp: "DHCP",
+  senseBox_ethernet_manuel_config: "Manuelle Konfiguration",
+  senseBox_ethernet_ip: "IP-Adresse",
+  senseBox_ethernet_gateway: "Gateway",
+  senseBox_ethernet_subnetmask: "Subnetzmaske",
+  senseBox_ethernet_mac: "MAC-Adresse",
+  senseBox_ethernet_dns: "DNS-Server",
+  senseBox_ethernet_tooltip:
+    "Verbinde das LAN-Bee mit dem Steckplatz XBEE1. Die meisten Netzwerke verwenden DHCP und vergeben automatisch eine IP-Adresse. Solltest du eine Manuelle Konfiguration durchführen wollen wählen im Dropdown Menü **Manuelle Konfiguration** aus und gebe die entsprechenden Daten ein.",
 };
