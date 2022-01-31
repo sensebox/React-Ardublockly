@@ -405,10 +405,6 @@ class Toolbox extends React.Component {
           <Block type="sensebox_phyphox_channel"></Block>
           <Block type="sensebox_phyphox_sendchannel"></Block>
         </Category>
-        <Category name={Blockly.Msg.toolbox_serial} colour={getColour().serial}>
-          <Block type="init_serial_monitor"></Block>
-          <Block type="print_serial_monitor"></Block>
-        </Category>
         <Category
           id="webserver"
           name="Webserver"
@@ -617,7 +613,14 @@ class Toolbox extends React.Component {
           custom="PROCEDURE"
         ></Category>
         <sep></sep>
-        <Category name="Advanced" colour={getColour().io}>
+        <Category name={Blockly.Msg.toolbox_advanced} colour={getColour().io}>
+          <Category
+            name={Blockly.Msg.toolbox_serial}
+            colour={getColour().serial}
+          >
+            <Block type="init_serial_monitor"></Block>
+            <Block type="print_serial_monitor"></Block>
+          </Category>
           <Category name={Blockly.Msg.toolbox_io} colour={getColour().io}>
             <Block type="io_digitalwrite"></Block>
             <Block type="io_digitalread"></Block>
