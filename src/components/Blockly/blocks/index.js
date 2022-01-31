@@ -18,6 +18,7 @@ import "./audio";
 import "./math";
 import "./map";
 import "./procedures";
+import "./serial";
 import "./time";
 import "./variables";
 import "./lists";

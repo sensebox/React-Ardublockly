@@ -5,8 +5,7 @@ Blockly.Arduino.sensebox_lora_initialize_otaa = function (block) {
   var appID = this.getFieldValue("APPID");
   var appKey = this.getFieldValue("APPKEY");
   var interval = this.getFieldValue("INTERVAL");
-  Blockly.Arduino.libraries_["library_senseBoxMCU"] =
-    '#include "SenseBoxMCU.h"';
+  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_["library_spi"] = "#include <SPI.h>";
   Blockly.Arduino.libraries_["library_lmic"] = "#include <lmic.h>";
   Blockly.Arduino.libraries_["library_hal"] = "#include <hal/hal.h>";
@@ -278,8 +277,7 @@ Blockly.Arduino.sensebox_lora_initialize_abp = function (block) {
   var appskey = this.getFieldValue("APPSKEY");
   var devaddr = this.getFieldValue("DEVADDR");
   var interval = this.getFieldValue("INTERVAL");
-  Blockly.Arduino.libraries_["library_senseBoxMCU"] =
-    '#include "SenseBoxMCU.h"';
+  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_["library_spi"] = "#include <SPI.h>";
   Blockly.Arduino.libraries_["library_lmic"] = "#include <lmic.h>";
   Blockly.Arduino.libraries_["library_hal"] = "#include <hal/hal.h>";

@@ -2,6 +2,7 @@ import {
   VISIT,
   LANGUAGE,
   RENDERER,
+  SOUNDS,
   STATISTICS,
   PLATFORM,
 } from "../actions/types";
@@ -18,6 +19,14 @@ const initialLanguage = () => {
 
 const initialPlatform = () => {
   return getPlatform();
+};
+
+const initialSounds = () => {
+  if (window.localStorage.getItem("sounds")) {
+    return window.localStorage.getItem("sounds");
+  } else {
+    return "off";
+  }
 };
 
 const getPlatform = () => {
@@ -62,6 +71,7 @@ const initialState = {
   pageVisits: 0, // detect if previous URL was
   language: initialLanguage(),
   renderer: initialRenderer(),
+  sounds: initialSounds(),
   statistics: initialStatistics(),
   platform: initialPlatform(),
 };
@@ -89,6 +99,12 @@ export default function foo(state = initialState, action) {
       return {
         ...state,
         renderer: action.payload,
+      };
+    case SOUNDS:
+      window.localStorage.setItem("sounds", action.payload);
+      return {
+        ...state,
+        sounds: action.payload,
       };
     case STATISTICS:
       window.localStorage.setItem("statistics", action.payload);

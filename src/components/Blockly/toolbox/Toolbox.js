@@ -65,6 +65,7 @@ class Toolbox extends React.Component {
           <Block type="sensebox_sensor_bmx055_accelerometer" />
           <Block type="sensebox_sensor_sds011" />
           <Block type="sensebox_sensor_pressure" />
+          <Block type="sensebox_sensor_dps310" />
           <Block type="sensebox_sensor_bme680_bsec" />
           <Block type="sensebox_scd30" />
           <Block type="sensebox_gps" />
@@ -92,6 +93,9 @@ class Toolbox extends React.Component {
         </Category>
         <Category name="WIFI" colour={getColour().sensebox}>
           <Block type="sensebox_wifi" />
+          <Block type="sensebox_wifi_status" />
+          <Block type="sensebox_wifi_rssi" />
+          <Block type="sensebox_get_ip" />
           <Block type="sensebox_startap" />
         </Category>
         <Category name="Ethernet" colour={getColour().sensebox}>
@@ -401,6 +405,10 @@ class Toolbox extends React.Component {
           <Block type="sensebox_phyphox_channel"></Block>
           <Block type="sensebox_phyphox_sendchannel"></Block>
         </Category>
+        <Category name={Blockly.Msg.toolbox_serial} colour={getColour().serial}>
+          <Block type="init_serial_monitor"></Block>
+          <Block type="print_serial_monitor"></Block>
+        </Category>
         <Category
           id="webserver"
           name="Webserver"
@@ -598,11 +606,11 @@ class Toolbox extends React.Component {
           colour={getColour().variables}
           custom="CREATE_TYPED_VARIABLE"
         ></Category>
-        <Category name="Arrays" colour={getColour().arrays}>
+        {/* <Category name="Arrays" colour={getColour().arrays}>
           <Block type="lists_create_empty" />
           <Block type="array_getIndex" />
           <Block type="lists_length" />
-        </Category>
+        </Category> */}
         <Category
           name={Blockly.Msg.toolbox_functions}
           colour={getColour().procedures}
