@@ -1,5 +1,6 @@
 import Blockly from "blockly";
 import { getColour } from "../helpers/colour";
+import * as Types from "../helpers/types";
 
 Blockly.Blocks["sensebox_wifi"] = {
   init: function () {
@@ -117,5 +118,36 @@ Blockly.Blocks["sensebox_ethernetIp"] = {
     this.setHelpUrl(Blockly.Msg.senseBox_ethernetIp_helpurl);
     this.setTooltip(Blockly.Msg.senseBox_ethernet_ip_tooltip);
     this.setOutput(true, null);
+  }
+};
+
+Blockly.Blocks["sensebox_wifi_status"] = {
+  init: function () {
+    this.setTooltip(Blockly.Msg.senseBox_wifi_status_tooltip);
+    this.setColour(getColour().sensebox);
+    this.appendDummyInput().appendField(Blockly.Msg.senseBox_wifi_status);
+    this.setOutput(true, Types.BOOLEAN.typeName);
+    this.setHelpUrl(Blockly.Msg.senseBox_wifi_status_helpurl);
   },
 };
+
+Blockly.Blocks["sensebox_get_ip"] = {
+  init: function () {
+    this.setTooltip(Blockly.Msg.senseBox_wifi_ip_tooltip);
+    this.setColour(getColour().sensebox);
+    this.appendDummyInput().appendField(Blockly.Msg.senseBox_wifi_ip);
+    this.setOutput(true, Types.TEXT.typeName);
+    this.setHelpUrl(Blockly.Msg.senseBox_wifi_ip_helpurl);
+  },
+};
+
+Blockly.Blocks["sensebox_wifi_rssi"] = {
+  init: function () {
+    this.setTooltip(Blockly.Msg.senseBox_wifi_rssi_tooltip);
+    this.setColour(getColour().sensebox);
+    this.appendDummyInput().appendField(Blockly.Msg.senseBox_wifi_rssi);
+    this.setOutput(true, Types.NUMBER.typeName);
+    this.setHelpUrl(Blockly.Msg.senseBox_wifi_rssi_helpurl);
+  },
+};
+
