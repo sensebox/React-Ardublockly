@@ -25,19 +25,6 @@ const Sidebar = () => {
 
   const monaco = useMonaco();
   const loadCode = (code) => {
-    console.log(code);
-    console.log(monaco);
-    const defaultCode = `
-void setup () {
-    
-}
-    
-void loop(){
-    
-}`;
-    var currentCode = monaco.editor.getModels()[0].getValue();
-
-    setAlert(true);
     monaco.editor.getModels()[0].setValue(code);
   };
 
