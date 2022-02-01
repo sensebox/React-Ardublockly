@@ -39,13 +39,13 @@ Blockly.Arduino.sensebox_wifi_status = function () {
 };
 
 Blockly.Arduino.sensebox_wifi_rssi = function () {
-  var code = "WiFi.RSSI();";
+  var code = "WiFi.RSSI()";
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
 Blockly.Arduino.sensebox_get_ip = function () {
   Blockly.Arduino.definitions_["define_ipadress"] = "IPAddress ip;";
-  Blockly.Arduino.setupCode_["sensebox_get_ip"] = " ip = WiFi.localIP(ip);";
+  Blockly.Arduino.setupCode_["sensebox_get_ip"] = " ip = WiFi.localIP();";
   var code = "";
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
