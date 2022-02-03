@@ -26,14 +26,15 @@ Blockly.Arduino.sensebox_sensor_uv_light = function () {
   var dropdown_name = this.getFieldValue("NAME");
   let code = "";
   Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
-  Blockly.Arduino.libraries_["library_ltr329"] = `#include <LTR329.h>`;
+
   if (dropdown_name === "UvIntensity") {
     Blockly.Arduino.libraries_["library_veml6070"] = "#include <VEML6070.h>";
-    Blockly.Arduino.definitions_["define_veml"] = "VEML6070 veml;;";
+    Blockly.Arduino.definitions_["define_veml"] = "VEML6070 veml;";
     Blockly.Arduino.setupCode_["sensebox_sensor_uv_light"] = "veml.begin();";
-    code = "veml.get" + dropdown_name + "()";
+    code = "veml.getUV()";
   }
   if (dropdown_name === "Illuminance") {
+    Blockly.Arduino.libraries_["library_ltr329"] = `#include <LTR329.h>`;
     Blockly.Arduino.codeFunctions_["read_reg"] = `
 int read_reg(byte address, uint8_t reg)
   {
