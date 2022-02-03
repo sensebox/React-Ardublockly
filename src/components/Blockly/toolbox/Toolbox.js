@@ -298,12 +298,12 @@ class Toolbox extends React.Component {
             </Value>
           </Block>
         </Category>
-        <Category name="Telegram" colour={getColour().sensebox}>
+        {/* <Category name="Telegram" colour={getColour().sensebox}>
           <Block type="sensebox_telegram" />
           <Block type="sensebox_telegram_do" />
           <Block type="sensebox_telegram_do_on_message" />
           <Block type="sensebox_telegram_send" />
-        </Category>
+        </Category> */}
         <Category name="openSenseMap" colour={getColour().sensebox}>
           <Block type="sensebox_interval_timer">
             <Value name="DO">
