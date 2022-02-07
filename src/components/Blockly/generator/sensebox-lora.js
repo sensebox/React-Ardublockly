@@ -523,3 +523,12 @@ Blockly.Arduino.sensebox_lora_cayenne_gps = function (block) {
   var code = `lpp.addGPS(${channel}, ${lat}, ${lng}, ${alt});\n`;
   return code;
 };
+
+Blockly.Arduino.sensebox_lora_cayenne_concentration = function (block) {
+  var value =
+    Blockly.Arduino.valueToCode(this, "Value", Blockly.Arduino.ORDER_ATOMIC) ||
+    0;
+  var channel = this.getFieldValue("CHANNEL");
+  var code = `lpp.addConcentration(${channel}, ${value});\n`;
+  return code;
+};

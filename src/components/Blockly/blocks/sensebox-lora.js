@@ -158,7 +158,7 @@ Blockly.Blocks["sensebox_lora_ttn_mapper"] = {
     this.appendValueInput("Fix Type").appendField("Fix Type").setCheck(null);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setTooltip(Blockly.Msg.senseBox_display_printDisplay_tip);
+    this.setTooltip(Blockly.Msg.sensebox_lora_ttn_mapper_tip);
   },
 };
 
@@ -289,6 +289,24 @@ Blockly.Blocks["sensebox_lora_cayenne_gps"] = {
     );
     this.appendValueInput("ALT").appendField(
       Blockly.Msg.senseBox_LoRa_cayenne_alt
+    );
+    this.appendDummyInput()
+      .setAlign(Blockly.ALIGN_LEFT)
+      .appendField(Blockly.Msg.senseBox_LoRa_cayenne_channel)
+      .appendField(new Blockly.FieldTextInput("1"), "CHANNEL");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+  },
+  LOOP_TYPES: ["sensebox_lora_cayenne_send"],
+};
+
+Blockly.Blocks["sensebox_lora_cayenne_concentration"] = {
+  init: function () {
+    this.setTooltip(Blockly.Msg.senseBox_LoRa_cayenne_concentration_tip);
+    this.setHelpUrl("");
+    this.setColour(getColour().sensebox);
+    this.appendValueInput("Value").appendField(
+      Blockly.Msg.senseBox_LoRa_cayenne_concentration
     );
     this.appendDummyInput()
       .setAlign(Blockly.ALIGN_LEFT)

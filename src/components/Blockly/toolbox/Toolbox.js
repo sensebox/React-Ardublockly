@@ -376,6 +376,7 @@ class Toolbox extends React.Component {
             <Block type="sensebox_lora_cayenne_humidity" />
             <Block type="sensebox_lora_cayenne_pressure" />
             <Block type="sensebox_lora_cayenne_luminosity" />
+            <Block type="sensebox_lora_cayenne_concentration" />
             <Block type="sensebox_lora_cayenne_sensor" />
             <Block type="sensebox_lora_cayenne_accelerometer" />
             <Block type="sensebox_lora_cayenne_gps" />
