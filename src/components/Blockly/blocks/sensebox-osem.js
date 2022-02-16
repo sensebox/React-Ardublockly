@@ -14,11 +14,6 @@ var selectedBox = "";
 Blockly.Blocks["sensebox_osem_connection"] = {
   init: function () {
     var ssl = "TRUE";
-    var workspace = Blockly.getMainWorkspace();
-    if (workspace.getBlocksByType("sensebox_ethernet").length > 0) {
-      ssl = "FALSE";
-      console.log("ethernet");
-    }
     this.setTooltip(Blockly.Msg.senseBox_osem_connection_tip);
     this.setHelpUrl("");
     this.setColour(getColour().sensebox);
