@@ -68,7 +68,8 @@ Blockly.Arduino.sensebox_ethernet = function () {
   var dhcp = this.getFieldValue("dhcp");
 
   Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
-  Blockly.Arduino.libraries_["library_ethernet"] = "#include <Ethernet.h>";
+  Blockly.Arduino.libraries_["library_ethernet"] =
+    "#include <Ethernet.h> // http://librarymanager/All#Ethernet";
 
   Blockly.Arduino.definitions_["ethernet_config"] = `
 byte mac[] = { ${mac}};`;

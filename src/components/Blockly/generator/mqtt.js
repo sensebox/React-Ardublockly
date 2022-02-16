@@ -13,7 +13,7 @@ Blockly.Arduino.sensebox_mqtt_setup = function () {
   service = this.getFieldValue("service");
   Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_["library_adafruitmqtt"] =
-    '#include "Adafruit_MQTT.h"';
+    '#include "Adafruit_MQTT.h //http://librarymanager/All#Adafruit_MQTT_Library"';
   Blockly.Arduino.libraries_["library_adafruitmqttclient"] =
     '#include "Adafruit_MQTT_Client.h"';
   Blockly.Arduino.definitions_["mqtt_server"] =
