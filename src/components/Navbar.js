@@ -233,15 +233,15 @@ class Navbar extends Component {
                 link: "/gallery",
               },
               {
-                text: "CodeEditor",
-                icon: faCode,
-                link: "/codeeditor",
-              },
-              {
                 text: Blockly.Msg.navbar_projects,
                 icon: faLayerGroup,
                 link: "/project",
                 restriction: this.props.isAuthenticated,
+              },
+              {
+                text: "Code Editor",
+                icon: faCode,
+                link: "/codeeditor",
               },
             ].map((item, index) => {
               if (

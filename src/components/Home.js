@@ -54,17 +54,11 @@ class Home extends Component {
       key: "",
       message: "",
       open: true,
-      resumeWork: false,
       initialXml: localStorage.getItem("autoSaveXML"),
     };
   }
 
   componentDidMount() {
-    if (this.state.initialXml) {
-      this.setState({ resumeWork: true });
-    } else {
-      console.log("new work");
-    }
     if (this.props.platform === true) {
       this.setState({ codeOn: false });
     }
@@ -98,10 +92,6 @@ class Home extends Component {
 
   toggleDialog = () => {
     this.setState({ open: !this.state });
-  };
-
-  toogleResumeWork = () => {
-    this.setState({ resumeWork: !this.state.resumeWork });
   };
 
   onChangeCheckbox = (e) => {
@@ -197,25 +187,6 @@ class Home extends Component {
           ) : null}
         </Grid>
         <HintTutorialExists />
-        <Dialog
-          style={{ zIndex: 9999999 }}
-          fullWidth
-          maxWidth={"sm"}
-          open={this.state.resumeWork}
-          title={Blockly.Msg.tabletDialog_headline}
-          content={""}
-          onClose={this.toogleResumeWork}
-          onClick={this.toogleResumeWork}
-          button={Blockly.Msg.button_close}
-        >
-          <div>{Blockly.Msg.tabletDialog_text}</div>
-          <div>
-            {Blockly.Msg.tabletDialog_more}{" "}
-            <a href="https://sensebox.de/app" target="_blank" rel="noreferrer">
-              https://sensebox.de/app
-            </a>
-          </div>
-        </Dialog>
         {this.props.platform ? (
           <Dialog
             style={{ zIndex: 9999999 }}
