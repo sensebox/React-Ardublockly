@@ -4,7 +4,7 @@ Blockly.Arduino.watchdog_enable = function () {
   var time = this.getFieldValue("TIME");
 
   Blockly.Arduino.libraries_["Adafruit_sleepydog"] =
-    "#include <Adafruit_SleepyDog.h>";
+    "#include <Adafruit_SleepyDog.h> // http://librarymanager/All#Adafruit_SleepyDog_Library";
   Blockly.Arduino.setupCode_["watchdog_enable"] = `Watchdog.enable(${time});`;
   var code = "";
   return code;

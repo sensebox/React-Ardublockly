@@ -5,9 +5,9 @@ Blockly.Arduino.sensebox_display_beginDisplay = function () {
   Blockly.Arduino.libraries_["library_spi"] = "#include <SPI.h>";
   Blockly.Arduino.libraries_["library_wire"] = "#include <Wire.h>";
   Blockly.Arduino.libraries_["library_AdafruitGFX"] =
-    "#include <Adafruit_GFX.h>";
+    "#include <Adafruit_GFX.h> // http://librarymanager/All#Adafruit_GFX_Library";
   Blockly.Arduino.libraries_["library_AdafruitSSD1306"] =
-    "#include <Adafruit_SSD1306.h>";
+    "#include <Adafruit_SSD1306.h> // http://librarymanager/All#Adafruit_SSD1306";
   Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.definitions_[
     "define_display_size"
