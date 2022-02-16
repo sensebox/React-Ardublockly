@@ -47,4 +47,6 @@ export const LORA = {
 
   senseBox_LoRa_init_otaa_tooltip:
     "Initialize the LoRa transmission. The activation is done via OTAA. Register an application on [thethingsnetwork](https://thethingsnetwork.com) and copy the **DEVICE EUI** and the **Application EUI** in **lsb format** the **App Key** in **msb format**.",
+  sensebox_lora_ttn_mapper_tip:
+    "You can use a TTN Mapper to map LoRa network coverage in your area. The data is then displayed on [ttnmaper](https://ttnmapper.org). You can find the necessary decoder [here](https://gist.github.com/felixerdy/f959ac03df98c6947f1c7f35d537f23e#file-decoder-js).",
 };
