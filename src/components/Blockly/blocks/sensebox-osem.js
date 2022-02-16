@@ -22,6 +22,9 @@ Blockly.Blocks["sensebox_osem_connection"] = {
       .appendField("SSL")
       .appendField(new Blockly.FieldCheckbox(ssl), "SSL");
     this.appendDummyInput()
+      .appendField(Blockly.Msg.senseBox_osem_restart)
+      .appendField(new Blockly.FieldCheckbox("TRUE"), "RESTART");
+    this.appendDummyInput()
       .setAlign(Blockly.ALIGN_LEFT)
       .appendField(Blockly.Msg.senseBox_osem_exposure)
       .appendField(

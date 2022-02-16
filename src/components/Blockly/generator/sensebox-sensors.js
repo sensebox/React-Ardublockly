@@ -35,6 +35,7 @@ Blockly.Arduino.sensebox_sensor_uv_light = function () {
   }
   if (dropdown_name === "Illuminance") {
     Blockly.Arduino.libraries_["library_ltr329"] = `#include <LTR329.h>`;
+    Blockly.Arduino.libraries_["library_wire"] = "#include <Wire.h>";
     Blockly.Arduino.codeFunctions_["read_reg"] = `
 int read_reg(byte address, uint8_t reg)
   {

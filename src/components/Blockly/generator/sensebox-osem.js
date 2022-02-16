@@ -33,6 +33,7 @@ Blockly.Arduino.sensebox_osem_connection = function (Block) {
   var blocks = this.getDescendants();
   var type = this.getFieldValue("type");
   var ssl = this.getFieldValue("SSL");
+  var restart = this.getFieldValue("RESTART");
   var port = 0;
   var count = 0;
   if (blocks !== undefined) {
@@ -186,6 +187,12 @@ ${
     }
     delay(1000);
   }
+
+  ${
+    restart === "TRUE"
+      ? "if (connected == false) {\n  delay(5000);\n  noInterrupts();\n NVIC_SystemReset();\n while (1)\n ;\n }"
+      : ""
+  }
   }`;
 
     var code = "";
@@ -271,12 +278,20 @@ ${
             client.stop();
             break;
           }
+          delay(1000);
         }
     
         num_measurements = 0;
         break;
       }
     }
+
+    ${
+      restart === "TRUE"
+        ? "if (connected == false) {\n  delay(5000);\n  noInterrupts();\n NVIC_SystemReset();\n while (1)\n ;\n }"
+        : ""
+    }
+
   }`;
     code = "";
     code += branch;
