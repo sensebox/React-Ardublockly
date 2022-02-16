@@ -75,7 +75,25 @@ Blockly.Arduino.sensebox_osem_connection = function (Block) {
         "#include <ArduinoBearSSL.h>";
       Blockly.Arduino.libraries_["library_arduinoECC08"] =
         "#include <ArduinoECCX08.h>";
-      Blockly.Arduino.definitions_["WiFiSSLClient"] = "WiFiSSLClient client;";
+      Blockly.Arduino.libraries_["library_ethernetUdp"] =
+        "#include <EthernetUdp.h>";
+      Blockly.Arduino.libraries_["library_NTPClient"] =
+        "#include <NTPClient.h>";
+      Blockly.Arduino.definitions_["EthernetClient"] =
+        "EthernetClient eclient;";
+      Blockly.Arduino.definitions_["BearSSLClient"] =
+        "BearSSLClient client(eclient);";
+      Blockly.Arduino.definitions_["EthernetUDP"] = "EthernetUDP Udp;";
+      Blockly.Arduino.definitions_["NTPClient"] = "NTPClient timeClient(Udp);";
+      Blockly.Arduino.functionNames_["getTime"] = `
+unsigned long getTime() {
+  timeClient.update();
+  return timeClient.getEpochTime();
+}`;
+
+      Blockly.Arduino.setupCode_["timeClient_begin"] = "timeClient.begin();";
+      Blockly.Arduino.setupCode_["initBearSSL"] =
+        "ArduinoBearSSL.onGetTime(getTime);";
       port = 443;
     } else if (ssl === "FALSE") {
       Blockly.Arduino.definitions_["EthernetClient"] = "EthernetClient client;";
@@ -114,11 +132,16 @@ Blockly.Arduino.sensebox_osem_connection = function (Block) {
   }`;
     Blockly.Arduino.functionNames_["submitValues"] =
       `
-    void submitValues() {
+  void submitValues() {
+${
+  wifi === true
+    ? "if (WiFi.status() != WL_CONNECTED) {\nWiFi.disconnect();\ndelay(1000); // wait 1s\nWiFi.begin(ssid, pass);\ndelay(5000); // wait 5s\n}"
+    : ""
+}
   if (client.connected()) {
-    client.stop();
-    delay(10);
-  }
+      client.stop();
+      delay(1000);
+    }
   bool connected = false;
   char _server[strlen_P(server)];
   strcpy_P(_server, server);
@@ -148,9 +171,20 @@ Blockly.Arduino.sensebox_osem_connection = function (Block) {
           break;
         }
       }
+
+      while (client.available()) {
+        char c = client.read();
+        // if the server's disconnected, stop the client:
+        if (!client.connected()) {
+          client.stop();
+          break;
+        }
+      }
+
       num_measurements = 0;
       break;
     }
+    delay(1000);
   }
   }`;
 
@@ -227,6 +261,14 @@ Blockly.Arduino.sensebox_osem_connection = function (Block) {
           delay(10);
           timeout = timeout + 10;
           if (client.available()) {
+            break;
+          }
+        }
+        while (client.available()) {
+          char c = client.read();
+          // if the server's disconnected, stop the client:
+          if (!client.connected()) {
+            client.stop();
             break;
           }
         }
