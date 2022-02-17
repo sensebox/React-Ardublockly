@@ -11,6 +11,7 @@ const colours = {
   audio: 250,
   arrays: 33,
   mqtt: 90,
+  serial: 230,
   webserver: 40,
   phyphox: 25,
 };

@@ -27,7 +27,7 @@ export const BLE = {
   sensebox_phyphox_graphStyle: "Stil",
 
   sensebox_phyphox_init_tooltip:
-    "Initialisere das Bluetooth Bee. Stecke diese auf dem Steckplatz **XBEE1**. Gib dem Phphox Messgerät einen eindeutigen Namen, damit du dieses in der App wiederfindest",
+    "Initialisere das Bluetooth Bee. Stecke diese auf dem Steckplatz **XBEE1**. Gib dem Phyphox Messgerät einen eindeutigen Namen, damit du dieses in der App wiederfindest",
   sensebox_phyphox_experiment_tooltip:
     "Erstelle ein Experiment und vergib einen eindeutigen Namen und eine kurze Beschreibung. Füge bis zu 5 verschiedene Graphen in der Ansicht hinzu. ",
   sensebox_phyphox_graph_tooltip:
