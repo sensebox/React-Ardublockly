@@ -159,6 +159,7 @@ Blockly.Blocks["sensebox_lora_ttn_mapper"] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setTooltip(Blockly.Msg.sensebox_lora_ttn_mapper_tip);
+    this.setHelpUrl(Blockly.Msg.sensebox_lora_ttn_mapper_helpurl);
   },
 };
 
