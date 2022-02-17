@@ -28,7 +28,9 @@ export const BLE = {
   sensebox_phyphox_graphStyle: "style",
 
   sensebox_phyphox_init_tooltip:
-    "Initialise the Bluetooth Bee. Plug it into the **XBEE1** slot. Give the Phphox meter a unique name so you can find it in the app",
+    "Initialise the Bluetooth Bee. Plug it into the **XBEE1** slot. Give the Phyphox meter a unique name so you can find it in the app",
+  sensebox_phyphox_helpurl:
+    "https://sensebox.de/projects/de/2021-12-21-verbindung%20mit%20der%20phyphox%20app",
   sensebox_phyphox_experiment_tooltip:
     "Create an experiment and give it a unique name and a short description. Add up to 5 different graphs in the view. ",
   sensebox_phyphox_graph_tooltip:

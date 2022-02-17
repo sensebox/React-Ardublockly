@@ -5,10 +5,10 @@ Blockly.Arduino.sensebox_lora_initialize_otaa = function (block) {
   var appID = this.getFieldValue("APPID");
   var appKey = this.getFieldValue("APPKEY");
   var interval = this.getFieldValue("INTERVAL");
-  Blockly.Arduino.libraries_["library_senseBoxMCU"] =
-    '#include "SenseBoxMCU.h"';
+  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_["library_spi"] = "#include <SPI.h>";
-  Blockly.Arduino.libraries_["library_lmic"] = "#include <lmic.h>";
+  Blockly.Arduino.libraries_["library_lmic"] =
+    "#include <lmic.h> // http://librarymanager/All#IBM_LMIC_framework";
   Blockly.Arduino.libraries_["library_hal"] = "#include <hal/hal.h>";
   Blockly.Arduino.definitions_["define_LoRaVariablesOTAA"] = `
     static const u1_t PROGMEM APPEUI[8]= {${appID}};
@@ -177,7 +177,8 @@ Blockly.Arduino.sensebox_send_lora_sensor_value = function (block) {
 };
 
 Blockly.Arduino.sensebox_lora_cayenne_send = function (block) {
-  Blockly.Arduino.libraries_["library_cayene"] = "#include <CayenneLPP.h>";
+  Blockly.Arduino.libraries_["library_cayene"] =
+    "#include <CayenneLPP.h> // http://librarymanager/All#CayenneLPP";
   Blockly.Arduino.variables_["variable_cayenne"] = "CayenneLPP lpp(51);";
   var lora_sensor_values = Blockly.Arduino.statementToCode(block, "DO");
   Blockly.Arduino.functionNames_["functions_do_send"] = `
@@ -278,8 +279,7 @@ Blockly.Arduino.sensebox_lora_initialize_abp = function (block) {
   var appskey = this.getFieldValue("APPSKEY");
   var devaddr = this.getFieldValue("DEVADDR");
   var interval = this.getFieldValue("INTERVAL");
-  Blockly.Arduino.libraries_["library_senseBoxMCU"] =
-    '#include "SenseBoxMCU.h"';
+  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_["library_spi"] = "#include <SPI.h>";
   Blockly.Arduino.libraries_["library_lmic"] = "#include <lmic.h>";
   Blockly.Arduino.libraries_["library_hal"] = "#include <hal/hal.h>";
@@ -523,5 +523,14 @@ Blockly.Arduino.sensebox_lora_cayenne_gps = function (block) {
     Blockly.Arduino.valueToCode(this, "ALT", Blockly.Arduino.ORDER_ATOMIC) || 0;
   var channel = this.getFieldValue("CHANNEL");
   var code = `lpp.addGPS(${channel}, ${lat}, ${lng}, ${alt});\n`;
+  return code;
+};
+
+Blockly.Arduino.sensebox_lora_cayenne_concentration = function (block) {
+  var value =
+    Blockly.Arduino.valueToCode(this, "Value", Blockly.Arduino.ORDER_ATOMIC) ||
+    0;
+  var channel = this.getFieldValue("CHANNEL");
+  var code = `lpp.addConcentration(${channel}, ${value});\n`;
   return code;
 };

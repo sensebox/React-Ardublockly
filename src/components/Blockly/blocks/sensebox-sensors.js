@@ -2,6 +2,7 @@ import Blockly from "blockly";
 import { getColour } from "../helpers/colour";
 import * as Types from "../helpers/types";
 import { selectedBoard } from "../helpers/board";
+import { FieldGridDropdown } from "@blockly/field-grid-dropdown";
 
 /**
  * HDC1080 Temperature and Humidity Sensor
@@ -106,8 +107,8 @@ Blockly.Blocks["sensebox_sensor_sds011"] = {
       .appendField(Blockly.Msg.senseBox_value)
       .appendField(
         new Blockly.FieldDropdown([
-          [Blockly.Msg.senseBox_sds011_pm25, "Pm25"],
-          [Blockly.Msg.senseBox_sds011_pm10, "Pm10"],
+          [Blockly.Msg.senseBox_sds011_pm25, "pm25"],
+          [Blockly.Msg.senseBox_sds011_pm10, "pm10"],
         ]),
         "NAME"
       )
@@ -156,50 +157,23 @@ Blockly.Blocks["sensebox_sensor_pressure"] = {
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setTooltip(Blockly.Msg.senseBox_pressure_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_pressure_helpurl);
+    this.getField("NAME").setValidator(
+      function (val) {
+        this.updateShape_(val === "Altitude");
+      }.bind(this)
+    );
   },
-  /**
-   * Parse XML to restore the number of pins available.
-   * @param {!Element} xmlElement XML storage element.
-   * @this Blockly.Block
-   */
-
-  domToMutation: function (xmlElement) {
-    xmlElement.getAttribute("port");
-  },
-  /**
-   * Create XML to represent number of pins selection.
-   * @return {!Element} XML storage element.
-   * @this Blockly.Block
-   */
-  mutationToDom: function () {
-    var container = document.createElement("mutation");
-    var input = this.getFieldValue("NAME");
-    this.updateShape_(input);
-    container.setAttribute("NAME", input);
-    return container;
-  },
-  /**
-   * Modify this block to have the correct number of pins available.
-   * @param {boolean}
-   * @private
-   * @this Blockly.Block
-   */
-  updateShape_: function () {
-    var extraFieldExist = this.getFieldValue("referencePressure");
-    var input = this.getFieldValue("NAME");
-    if (input === "Altitude" && extraFieldExist === null) {
-      this.appendDummyInput("extraField")
-        .setAlign(Blockly.ALIGN_RIGHT)
-        .appendField(Blockly.Msg.senseBox_pressure_referencePressure)
-        .appendField(new Blockly.FieldTextInput("1013"), "referencePressure")
-        .appendField(Blockly.Msg.senseBox_pressure_referencePressure_dim);
-    }
-
-    if (
-      (input === "Pressure" || input === "Temperature") &&
-      extraFieldExist !== null
-    ) {
-      this.removeInput("extraField");
+  updateShape_(isAltitude) {
+    if (isAltitude) {
+      if (this.getInput("extraField") == null) {
+        this.appendDummyInput("extraField")
+          .setAlign(Blockly.ALIGN_RIGHT)
+          .appendField(Blockly.Msg.senseBox_pressure_referencePressure)
+          .appendField(new Blockly.FieldTextInput("1013"), "referencePressure")
+          .appendField(Blockly.Msg.senseBox_pressure_referencePressure_dim);
+      }
+    } else {
+      this.removeInput("extraField", true);
     }
   },
 };
@@ -245,9 +219,7 @@ Blockly.Blocks["sensebox_sensor_ultrasonic_ranger"] = {
       [Blockly.Msg.senseBox_ultrasonic_port_B, "B"],
       [Blockly.Msg.senseBox_ultrasonic_port_C, "C"],
     ];
-    var dropdown = new Blockly.FieldDropdown(dropdownOptions, function (
-      option
-    ) {
+    var dropdown = new FieldGridDropdown(dropdownOptions, function (option) {
       var input = option === "A" || option === "B" || option === "C";
       this.sourceBlock_.updateShape_(input);
     });
@@ -268,6 +240,10 @@ Blockly.Blocks["sensebox_sensor_ultrasonic_ranger"] = {
         new Blockly.FieldDropdown(selectedBoard().digitalPins),
         "ultrasonic_echo"
       );
+    this.appendDummyInput("maxDistance")
+      .appendField(Blockly.Msg.senseBox_ultrasonic_maxDistance)
+      .appendField(new Blockly.FieldTextInput("250"), "maxDistance")
+      .appendField("cm");
     this.setOutput(true, Types.NUMBER.typeName);
     this.setTooltip(Blockly.Msg.senseBox_ultrasonic_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_ultrasonic_helpurl);
@@ -355,6 +331,7 @@ Blockly.Blocks["sensebox_button"] = {
           [Blockly.Msg.senseBox_button_isPressed, "isPressed"],
           [Blockly.Msg.senseBox_button_wasPressed, "wasPressed"],
           [Blockly.Msg.senseBox_button_switch, "Switch"],
+          [Blockly.Msg.senseBox_button_longPress, "longPress"],
         ]),
         "FUNCTION"
       )
@@ -366,6 +343,24 @@ Blockly.Blocks["sensebox_button"] = {
     this.setOutput(true, Types.BOOLEAN.typeName);
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_button_tooltip);
+    this.getField("FUNCTION").setValidator(
+      function (val) {
+        this.updateShape_(val === "longPress");
+      }.bind(this)
+    );
+  },
+  updateShape_(isLongPress) {
+    if (isLongPress) {
+      if (this.getInput("extraField") == null) {
+        this.appendDummyInput("extraField")
+          .setAlign(Blockly.ALIGN_RIGHT)
+          .appendField(Blockly.Msg.senseBox_button_longPress_time)
+          .appendField(new Blockly.FieldTextInput("1000"), "time")
+          .appendField("ms");
+      }
+    } else {
+      this.removeInput("extraField", true);
+    }
   },
 };
 
@@ -517,5 +512,56 @@ Blockly.Blocks["sensebox_soundsensor_dfrobot"] = {
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setTooltip(Blockly.Msg.senseBox_soundsensor_dfrobot_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_soundsensor_dfrobot_helpurl);
+  },
+};
+
+/**
+ * Infineon DPS310 Pressure Sensor
+ *
+ */
+
+Blockly.Blocks["sensebox_sensor_dps310"] = {
+  init: function () {
+    var dropdownOptions = [
+      [Blockly.Msg.senseBox_pressure, "Pressure"],
+      [Blockly.Msg.senseBox_temp, "Temperature"],
+      [Blockly.Msg.senseBox_gps_alt, "Altitude"],
+    ];
+    var dropdown = new Blockly.FieldDropdown(dropdownOptions, function (
+      option
+    ) {
+      var input =
+        option === "Pressure" ||
+        option === "Temperature" ||
+        option === "Altitude";
+      this.sourceBlock_.updateShape_(input);
+    });
+    this.appendDummyInput().appendField(Blockly.Msg.senseBox_sensor_dps310);
+    this.appendDummyInput()
+      .setAlign(Blockly.ALIGN_RIGHT)
+      .appendField(Blockly.Msg.senseBox_value)
+      .appendField(dropdown, "NAME");
+    this.setColour(getColour().sensebox);
+    this.setOutput(true, Types.DECIMAL.typeName);
+    this.setTooltip(Blockly.Msg.senseBox_sensor_dps310_tooltip);
+    this.setHelpUrl(Blockly.Msg.senseBox_sensor_dps310_helpurl);
+    this.getField("NAME").setValidator(
+      function (val) {
+        this.updateShape_(val === "Altitude");
+      }.bind(this)
+    );
+  },
+  updateShape_(isAltitude) {
+    if (isAltitude) {
+      if (this.getInput("extraField") == null) {
+        this.appendDummyInput("extraField")
+          .setAlign(Blockly.ALIGN_RIGHT)
+          .appendField(Blockly.Msg.senseBox_pressure_referencePressure)
+          .appendField(new Blockly.FieldTextInput("1013"), "referencePressure")
+          .appendField(Blockly.Msg.senseBox_pressure_referencePressure_dim);
+      }
+    } else {
+      this.removeInput("extraField", true);
+    }
   },
 };
