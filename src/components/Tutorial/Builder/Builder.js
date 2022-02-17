@@ -41,6 +41,8 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import * as Blockly from "blockly";
 
+import MarkdownEditor from "./MarkdownEditor";
+
 const styles = (theme) => ({
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
