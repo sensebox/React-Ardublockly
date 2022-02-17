@@ -215,6 +215,7 @@ bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,
 Blockly.Arduino.sensebox_sensor_bme680_bsec = function () {
   var dropdown_name = this.getFieldValue("dropdown");
   let code = "";
+  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_["library_bsec"] =
     "#include <bsec.h> // http://librarymanager/All#BSEC_Software_Library";
   Blockly.Arduino.definitions_["bsec_iaqSensor"] = "Bsec iaqSensor;";
