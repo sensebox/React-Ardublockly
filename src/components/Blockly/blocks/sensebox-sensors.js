@@ -107,8 +107,8 @@ Blockly.Blocks["sensebox_sensor_sds011"] = {
       .appendField(Blockly.Msg.senseBox_value)
       .appendField(
         new Blockly.FieldDropdown([
-          [Blockly.Msg.senseBox_sds011_pm25, "Pm25"],
-          [Blockly.Msg.senseBox_sds011_pm10, "Pm10"],
+          [Blockly.Msg.senseBox_sds011_pm25, "pm25"],
+          [Blockly.Msg.senseBox_sds011_pm10, "pm10"],
         ]),
         "NAME"
       )
