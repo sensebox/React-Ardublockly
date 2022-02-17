@@ -10,6 +10,8 @@ export const UI = {
   toolbox_time: "Zeit",
   toolbox_functions: "Funktionen",
   toolbox_variables: "Variablen",
+  toolbox_serial: "Seriell",
+  toolbox_advanced: "Erweitert",
   variable_NUMBER: "Zahl (int)",
   variable_SHORT_NUMBER: "char",
   variable_LONG: "große Zahl (long)",
@@ -176,6 +178,9 @@ export const UI = {
     "Der Tablet Modus deaktiviert die Code anzeige und aktiviert die Möglichkeit den Programmcode über die senseBox Connect App zu übertragen. Weitere Informationen dazu findest du unter: ",
   settings_ota_on: "Aktiviert",
   settings_ota_off: "Deaktiviert",
+  settings_sounds: "Töne",
+  settings_sounds_text:
+    "Aktiviere oder Deaktiviere Töne beim hinzufügen und löschen von Blöcken. Standardmäßig deaktiviert",
 
   /**
    * 404

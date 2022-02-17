@@ -3,8 +3,7 @@ import Blockly from "blockly";
 Blockly.Arduino.sensebox_rtc_init = function () {
   Blockly.Arduino.libraries_["RV8523"] = `#include <RV8523.h>`;
   Blockly.Arduino.definitions_["RTC"] = `RV8523 rtc;`;
-  Blockly.Arduino.libraries_["library_senseBoxMCU"] =
-    '#include "SenseBoxMCU.h"';
+  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.setupCode_["rtc.begin"] = `rtc.begin();`;
   var code = ``;
   return code;
