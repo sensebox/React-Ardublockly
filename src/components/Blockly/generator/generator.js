@@ -62,9 +62,7 @@ Blockly["Arduino"].addReservedWords(
     "pulseIn,millis,micros,delay,delayMicroseconds,min,max,abs,constrain," +
     "map,pow,sqrt,sin,cos,tan,randomSeed,random,lowByte,highByte,bitRead," +
     "bitWrite,bitSet,bitClear,ultraSonicDistance,parseDouble,setNeoPixelColor," +
-    "bit,attachInterrupt,detachInterrupt,interrupts,noInterrupts",
-  "short",
-  "isBtnPressed"
+    "bit,attachInterrupt,detachInterrupt,interrupts,noInterrupts,short,isBtnPressed"
 );
 
 /**
