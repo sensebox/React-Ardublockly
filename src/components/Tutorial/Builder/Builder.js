@@ -41,8 +41,6 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import * as Blockly from "blockly";
 
-import MarkdownEditor from "./MarkdownEditor";
-
 const styles = (theme) => ({
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
@@ -284,21 +282,6 @@ class Builder extends Component {
         if (step.xml) {
           // optional
           newTutorial.append(`steps[${i}][xml]`, step.xml);
-        }
-        if (step.media) {
-          // optional
-          if (step.media.youtube) {
-            newTutorial.append(
-              `steps[${i}][media][youtube]`,
-              step.media.youtube
-            );
-          }
-          if (step.media.picture) {
-            newTutorial.append(
-              `steps[${i}][media][picture]`,
-              step.media.picture
-            );
-          }
         }
       });
       return newTutorial;
