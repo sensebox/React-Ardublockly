@@ -21,6 +21,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Tour from "reactour";
+import { Badge } from "@material-ui/core";
 import { home, assessment } from "./Tour";
 import {
   faBars,
@@ -34,6 +35,7 @@ import {
   faChalkboardTeacher,
   faTools,
   faLightbulb,
+  faCode,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Blockly from "blockly";
@@ -236,6 +238,11 @@ class Navbar extends Component {
                 link: "/project",
                 restriction: this.props.isAuthenticated,
               },
+              {
+                text: "Code Editor",
+                icon: faCode,
+                link: "/codeeditor",
+              },
             ].map((item, index) => {
               if (
                 item.restriction ||
@@ -253,7 +260,13 @@ class Navbar extends Component {
                       <ListItemIcon>
                         <FontAwesomeIcon icon={item.icon} />
                       </ListItemIcon>
-                      <ListItemText primary={item.text} />
+                      {item.text === "CodeEditor" ? (
+                        <Badge badgeContent={"Experimental"} color="primary">
+                          <ListItemText primary={item.text} />
+                        </Badge>
+                      ) : (
+                        <ListItemText primary={item.text} />
+                      )}
                     </ListItem>
                   </Link>
                 );
@@ -346,9 +359,9 @@ class Navbar extends Component {
 Navbar.propTypes = {
   tutorialIsLoading: PropTypes.bool.isRequired,
   projectIsLoading: PropTypes.bool.isRequired,
-  isAuthenticated: PropTypes.bool.isRequired,
+  isAuthenticated: PropTypes.bool,
   user: PropTypes.object,
-  tutorial: PropTypes.object.isRequired,
+  tutorial: PropTypes.object,
   activeStep: PropTypes.number.isRequired,
 };
 
