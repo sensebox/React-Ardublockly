@@ -283,21 +283,6 @@ class Builder extends Component {
           // optional
           newTutorial.append(`steps[${i}][xml]`, step.xml);
         }
-        if (step.media) {
-          // optional
-          if (step.media.youtube) {
-            newTutorial.append(
-              `steps[${i}][media][youtube]`,
-              step.media.youtube
-            );
-          }
-          if (step.media.picture) {
-            newTutorial.append(
-              `steps[${i}][media][picture]`,
-              step.media.picture
-            );
-          }
-        }
       });
       return newTutorial;
     }
