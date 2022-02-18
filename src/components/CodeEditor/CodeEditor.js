@@ -13,10 +13,10 @@ import SaveIcon from "./SaveIcon";
 import store from "../../store";
 
 const CodeEditor = (props) => {
-  const [fileHandle, setFileHandle] = useState();
+  //const [filehandle, setFileHandle] = useState();
   const [fileContent, setFileContent] = useState("");
   const [progress, setProgress] = useState(false);
-  const [id, setId] = useState("");
+  // const [id, setId] = useState("");
   const [open, setOpen] = useState(false);
   const [error, setError] = useState("");
   const editorRef = useRef(null);
@@ -24,20 +24,6 @@ const CodeEditor = (props) => {
   const [time, setTime] = useState(null);
   const [value, setValue] = useState("");
   const [resetDialog, setResetDialog] = useState(false);
-  const [defaultValue, setDefaultValue] = useState(
-    localStorage.getItem("ArduinoCode")
-      ? localStorage.getItem("ArduinoCode")
-      : `
-#include <senseBoxIO.h> //needs to be always included
-
-void setup () {
-         
-}
-          
-void loop() {
-          
-}`
-  );
 
   const compile = () => {
     setProgress(true);
@@ -60,7 +46,7 @@ void loop() {
         }
         setProgress(false);
         const result = data.data.id;
-        setId(result);
+        //setId(result);
         const filename = "sketch";
         window.open(
           `${process.env.REACT_APP_COMPILER_URL}/download?id=${result}&board=${process.env.REACT_APP_BOARD}&filename=${filename}`,
@@ -83,7 +69,7 @@ void loop() {
 
   const openIno = async () => {
     const [myFileHandle] = await window.showOpenFilePicker();
-    setFileHandle(myFileHandle);
+    //setFileHandle(myFileHandle);
 
     const file = await myFileHandle.getFile();
     const contents = await file.text();
@@ -187,7 +173,20 @@ void loop() {
               editValue(value);
             }}
             defaultLanguage="cpp"
-            defaultValue={defaultValue}
+            defaultValue={
+              localStorage.getItem("ArduinoCode")
+                ? localStorage.getItem("ArduinoCode")
+                : `
+      #include <senseBoxIO.h> //needs to be always included
+      
+      void setup () {
+               
+      }
+                
+      void loop() {
+                
+      }`
+            }
             value={fileContent}
             onMount={(editor, monaco) => {
               editorRef.current = editor;

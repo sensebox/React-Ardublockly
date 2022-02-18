@@ -9,11 +9,11 @@ import { loadUser } from "./actions/authActions";
 
 import "./App.css";
 
-import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import { ThemeProvider, createTheme } from "@material-ui/core/styles";
 
 import Content from "./components/Content";
 
-const theme = createMuiTheme({
+const theme = createTheme({
   palette: {
     primary: {
       main: "#4EAF47",
