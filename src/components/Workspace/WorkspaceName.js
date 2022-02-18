@@ -235,7 +235,7 @@ WorkspaceName.propTypes = {
   workspaceName: PropTypes.func.isRequired,
   setDescription: PropTypes.func.isRequired,
   updateProject: PropTypes.func.isRequired,
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   description: PropTypes.string.isRequired,
   message: PropTypes.object.isRequired,
 };
