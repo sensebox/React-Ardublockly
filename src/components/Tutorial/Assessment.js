@@ -14,6 +14,8 @@ import Typography from "@material-ui/core/Typography";
 import * as Blockly from "blockly";
 import { initialXml } from "../Blockly/initialXml";
 
+import ReactMarkdown from 'react-markdown'
+
 class Assessment extends Component {
   componentDidMount() {
     this.props.workspaceName(this.props.name);
@@ -81,7 +83,8 @@ class Assessment extends Component {
               <Typography variant="h5">
                 {Blockly.Msg.tutorials_assessment_task}
               </Typography>
-              <Typography>{currentTask.text}</Typography>
+              <Typography><ReactMarkdown>
+                {currentTask.text}</ReactMarkdown></Typography>
             </Card>
             <div
               style={
