@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import { workspaceName } from "../../actions/workspaceActions";
 
 import BlocklyWindow from "../Blockly/BlocklyWindow";
-import CodeViewer from "../CodeViewer";
 import WorkspaceFunc from "../Workspace/WorkspaceFunc";
 
 import withWidth, { isWidthDown } from "@material-ui/core/withWidth";
@@ -13,10 +12,46 @@ import Card from "@material-ui/core/Card";
 import Typography from "@material-ui/core/Typography";
 import * as Blockly from "blockly";
 import { initialXml } from "../Blockly/initialXml";
+import IconButton from "@material-ui/core/IconButton";
+import CodeViewer from "../CodeViewer";
+import TooltipViewer from "../TooltipViewer";
+import Tooltip from "@material-ui/core/Tooltip";
+import ReactMarkdown from "react-markdown";
+import { faCode } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { withStyles } from "@material-ui/core/styles";
+
+const styles = (theme) => ({
+  codeOn: {
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.primary.contrastText,
+    "&:hover": {
+      backgroundColor: theme.palette.primary.contrastText,
+      color: theme.palette.primary.main,
+      border: `1px solid ${theme.palette.secondary.main}`,
+    },
+  },
+  codeOff: {
+    backgroundColor: theme.palette.primary.contrastText,
+    color: theme.palette.primary.main,
+    border: `1px solid ${theme.palette.secondary.main}`,
+    "&:hover": {
+      backgroundColor: theme.palette.primary.main,
+      color: theme.palette.primary.contrastText,
+    },
+  },
+});
 
 import ReactMarkdown from 'react-markdown'
 
 class Assessment extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      codeOn: false,
+    };
+  }
+
   componentDidMount() {
     this.props.workspaceName(this.props.name);
   }
@@ -26,6 +61,10 @@ class Assessment extends Component {
       this.props.workspaceName(this.props.name);
     }
   }
+
+  onChange = () => {
+    this.setState({ codeOn: !this.state.codeOn });
+  };
 
   render() {
     var tutorialId = this.props.tutorial._id;
@@ -40,51 +79,41 @@ class Assessment extends Component {
 
     return (
       <div className="assessmentDiv" style={{ width: "100%" }}>
-        <Typography
-          variant="h4"
-          style={{
-            float: "left",
-            marginBottom: "5px",
-            height: "40px",
-            display: "table",
-          }}
-        >
-          {currentTask.headline}
-        </Typography>
         <div style={{ float: "right", height: "40px" }}>
           <WorkspaceFunc assessment />
         </div>
         <Grid container spacing={2} style={{ marginBottom: "5px" }}>
-          <Grid item xs={12} md={6} lg={8}>
-            <BlocklyWindow
-              initialXml={initialXml}
-              blockDisabled
-              blocklyCSS={{ height: "65vH" }}
-            />
-          </Grid>
           <Grid
             item
             xs={12}
             md={6}
-            lg={4}
-            style={
-              isWidthDown("sm", this.props.width)
-                ? { height: "max-content" }
-                : {}
-            }
+            lg={3}
+            style={{
+              position: "relative",
+              // isWidthDown("sm", this.props.width)
+              //   ? { height: "max-content" }
+              //   : {}
+            }}
           >
             <Card
               style={{
-                height: "calc(50% - 30px)",
+                height: "calc(45vH - 30px)",
                 padding: "10px",
                 marginBottom: "10px",
               }}
             >
-              <Typography variant="h5">
-                {Blockly.Msg.tutorials_assessment_task}
+              <Typography>
+                <ReactMarkdown>{currentTask.text}</ReactMarkdown>
               </Typography>
-              <Typography><ReactMarkdown>
-                {currentTask.text}</ReactMarkdown></Typography>
+ </Card>
+            <Card
+              style={{
+                height: "20vH",
+                padding: "10px",
+                marginBottom: "10px",
+              }}
+            >
+              <TooltipViewer />
             </Card>
             <div
               style={
@@ -92,10 +121,52 @@ class Assessment extends Component {
                   ? { height: "500px" }
                   : { height: "50%" }
               }
-            >
-              <CodeViewer />
-            </div>
+            ></div>
           </Grid>
+          <Grid
+            item
+            xs={12}
+            md={this.state.codeOn ? 6 : 6}
+            lg={this.state.codeOn ? 6 : 9}
+            style={{ position: "relative" }}
+          >
+            <Tooltip
+              title={
+                this.state.codeOn
+                  ? Blockly.Msg.tooltip_hide_code
+                  : Blockly.Msg.tooltip_show_code
+              }
+            >
+              <IconButton
+                className={`showCode ${
+                  this.state.codeOn
+                    ? this.props.classes.codeOn
+                    : this.props.classes.codeOff
+                }`}
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  position: "absolute",
+                  top: 6,
+                  right: 8,
+                  zIndex: 21,
+                }}
+                onClick={() => this.onChange()}
+              >
+                <FontAwesomeIcon icon={faCode} size="xs" />
+              </IconButton>
+            </Tooltip>
+            <BlocklyWindow
+              initialXml={initialXml}
+              blockDisabled
+              blocklyCSS={{ height: "65vH" }}
+            />
+          </Grid>
+          {this.state.codeOn ? (
+            <Grid item xs={12} md={4} lg={3}>
+              <CodeViewer />
+            </Grid>
+          ) : null}
         </Grid>
       </div>
     );
@@ -116,5 +187,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, { workspaceName })(
-  withWidth()(Assessment)
+  withWidth()(withStyles(styles, { withTheme: true })(Assessment))
 );
