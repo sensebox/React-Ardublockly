@@ -68,7 +68,6 @@ const MarkdownEditor = (props) => {
                 label={props.label}
                 property={props.property}
                 onImageUpload={uploadImage}
-                plugins={[]}
             />
         </FormControl>
     );
