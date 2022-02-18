@@ -42,8 +42,6 @@ const styles = (theme) => ({
   },
 });
 
-import ReactMarkdown from 'react-markdown'
-
 class Assessment extends Component {
   constructor(props) {
     super(props);
@@ -105,7 +103,7 @@ class Assessment extends Component {
               <Typography>
                 <ReactMarkdown>{currentTask.text}</ReactMarkdown>
               </Typography>
- </Card>
+            </Card>
             <Card
               style={{
                 height: "20vH",
