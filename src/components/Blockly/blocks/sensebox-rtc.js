@@ -62,7 +62,7 @@ Blockly.Blocks["sensebox_rtc_get"] = {
         ]),
         "dropdown"
       );
-    this.setOutput(true, Types.LARGE_NUMBER.typeId);
+    this.setOutput(true, Types.LARGE_NUMBER.typeName);
     this.setTooltip(Blockly.Msg.sensebox_rtc_get_tooltip);
   },
 };
