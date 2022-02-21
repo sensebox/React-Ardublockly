@@ -12,19 +12,19 @@ import hardware from "../../../data/hardware.json";
 import { withStyles } from "@material-ui/core/styles";
 import withWidth, { isWidthDown } from "@material-ui/core/withWidth";
 import ImageList from "@material-ui/core/ImageList";
-import ImageListTile from "@material-ui/core/ImageListItem";
-import ImageListTileBar from "@material-ui/core/ImageListItemBar";
+import ImageListItem from "@material-ui/core/ImageListItem";
+import ImageListItemBar from "@material-ui/core/ImageListItemBar";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import FormLabel from "@material-ui/core/FormLabel";
 import * as Blockly from "blockly";
 
 const styles = (theme) => ({
-  multiImageListTile: {
+  multiImageListItem: {
     background: theme.palette.primary.main,
     opacity: 0.9,
     height: "30px",
   },
-  multiImageListTileTitle: {
+  multiImageListItemTitle: {
     color: theme.palette.text.primary,
   },
   border: {
@@ -104,7 +104,7 @@ class Requirements extends Component {
         ) : null}
         <ImageList rowHeight={100} cols={cols} gap={10}>
           {hardware.map((picture, i) => (
-            <ImageListTile
+            <ImageListItem
               key={i}
               onClick={() => this.onChange(picture.id)}
               classes={{
@@ -122,18 +122,18 @@ class Requirements extends Component {
                   height={100}
                 />
               </div>
-              <ImageListTileBar
-                classes={{ root: this.props.classes.multiImageListTile }}
+              <ImageListItemBar
+                classes={{ root: this.props.classes.multiImageListItem }}
                 title={
                   <div
                     style={{ overflow: "hidden", textOverflow: "ellipsis" }}
-                    className={this.props.classes.multiImageListTileTitle}
+                    className={this.props.classes.multiImageListItemTitle}
                   >
                     {picture.name}
                   </div>
                 }
               />
-            </ImageListTile>
+            </ImageListItem>
           ))}
         </ImageList>
       </div>

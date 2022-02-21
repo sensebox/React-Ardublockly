@@ -10,8 +10,8 @@ import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import ImageList from "@material-ui/core/ImageList";
-import ImageListTile from "@material-ui/core/ImageList";
-import ImageListTileBar from "@material-ui/core/ImageListItemBar";
+import ImageListItem from "@material-ui/core/ImageListItem";
+import ImageListItemBar from "@material-ui/core/ImageListItemBar";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExpandAlt } from "@fortawesome/free-solid-svg-icons";
@@ -26,12 +26,12 @@ const styles = (theme) => ({
     },
     color: theme.palette.text.primary,
   },
-  multiImageListTile: {
+  multiImageListItem: {
     background: theme.palette.primary.main,
     opacity: 0.9,
     height: "30px",
   },
-  multiImageListTileTitle: {
+  multiImageListItemTitle: {
     color: theme.palette.text.primary,
   },
 });
@@ -62,13 +62,13 @@ class Hardware extends Component {
       <div style={{ marginTop: "10px", marginBottom: "5px" }}>
         <Typography>{Blockly.Msg.tutorials_hardware_head}</Typography>
 
-        <ImageList rowHeight={100} cols={cols} spacing={10}>
+        <ImageList rowHeight={100} cols={cols} gap={10}>
           {this.props.picture.map((picture, i) => {
             var hardwareInfo = hardware.filter(
               (hardware) => hardware.id === picture
             )[0];
             return (
-              <ImageListTile key={i}>
+              <ImageListItem key={i}>
                 <div style={{ margin: "auto", width: "max-content" }}>
                   <img
                     src={`/media/hardware/${hardwareInfo.src}`}
@@ -78,12 +78,12 @@ class Hardware extends Component {
                     onClick={() => this.handleClickOpen(hardwareInfo)}
                   />
                 </div>
-                <ImageListTileBar
-                  classes={{ root: this.props.classes.multiImageListTile }}
+                <ImageListItemBar
+                  classes={{ root: this.props.classes.multiImageListItem }}
                   title={
                     <div
                       style={{ overflow: "hidden", textOverflow: "ellipsis" }}
-                      className={this.props.classes.multiImageListTileTitle}
+                      className={this.props.classes.multiImageListItemTitle}
                     >
                       {hardwareInfo.name}
                     </div>
@@ -98,7 +98,7 @@ class Hardware extends Component {
                     </IconButton>
                   }
                 />
-              </ImageListTile>
+              </ImageListItem>
             );
           })}
         </ImageList>
