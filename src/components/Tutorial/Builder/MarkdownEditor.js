@@ -18,12 +18,12 @@ import axios from "axios";
 const mdParser = new MarkdownIt(/* Markdown-it options */);
 
 const MarkdownEditor = (props) => {
-  //const [value, setValue] = React.useState(props.value);
+  const [value, setValue] = React.useState(props.value);
 
   const mdEditor = React.useRef(null);
 
   function handleChange({ html, text }) {
-    //setValue(text);
+    setValue(text);
     var value = text;
     props.changeContent(value, props.index, props.property, props.property2);
     if (value.replace(/\s/g, "") === "") {
@@ -62,7 +62,7 @@ const MarkdownEditor = (props) => {
         style={{ height: "500px" }}
         renderHTML={(text) => mdParser.render(text)}
         onChange={handleChange}
-        //value={value}
+        value={value}
         id={props.property}
         label={props.label}
         property={props.property}

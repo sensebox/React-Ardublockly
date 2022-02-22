@@ -355,9 +355,13 @@ class Builder extends Component {
   };
 
   render() {
-    var filteredTutorials = this.props.tutorials.filter(
-      (tutorial) => tutorial.creator === this.props.user.email
-    );
+    if (this.props.user.role === "admin") {
+      var filteredTutorials = this.props.tutorials;
+    } else {
+      filteredTutorials = this.props.tutorials.filter(
+        (tutorial) => tutorial.creator === this.props.user.email
+      );
+    }
     return (
       <div>
         <Breadcrumbs
