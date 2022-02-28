@@ -228,6 +228,7 @@ export const UI = {
   builder_requirements_head: "Voraussetzungen",
   builder_requirements_order:
     "Beachte, dass die Reihenfolge des Anhakens maßgebend ist.",
+  builder_difficulty: "Schwierigkeitsgrad",
 
   /**
    * Login
