@@ -482,11 +482,11 @@ class Builder extends Component {
                   {tutorial.title}{" "}
                   {tutorial.review && tutorial.public === false ? (
                     <div>
-                      <FontAwesomeIcon mx={2} icon={faUserCheck} />
-                      <FontAwesomeIcon mx={2} icon={faEyeSlash} />
+                      <FontAwesomeIcon icon={faUserCheck} />
+                      <FontAwesomeIcon icon={faEyeSlash} />
                     </div>
                   ) : tutorial.public === false ? (
-                    <FontAwesomeIcon mx={2} icon={faEyeSlash} />
+                    <FontAwesomeIcon icon={faEyeSlash} />
                   ) : null}
                 </MenuItem>
                 /* ) : tutorial.public === false ? (

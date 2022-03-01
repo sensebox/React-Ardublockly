@@ -4,8 +4,7 @@ import { connect } from "react-redux";
 
 import clsx from "clsx";
 import { withRouter, Link } from "react-router-dom";
-
-import { fade } from "@material-ui/core/styles/colorManipulator";
+import { alpha } from "@material-ui/core/styles";
 import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import List from "@material-ui/core/List";
@@ -20,18 +19,18 @@ const styles = (theme) => ({
     width: "50px",
     height: "50px",
     position: "absolute",
-    color: fade(theme.palette.secondary.main, 0.6),
+    color: alpha(theme.palette.secondary.main, 0.6),
   },
   outerDivError: {
-    stroke: fade(theme.palette.error.dark, 0.6),
-    color: fade(theme.palette.error.dark, 0.6),
+    stroke: alpha(theme.palette.error.dark, 0.6),
+    color: alpha(theme.palette.error.dark, 0.6),
   },
   outerDivSuccess: {
-    stroke: fade(theme.palette.primary.main, 0.6),
-    color: fade(theme.palette.primary.main, 0.6),
+    stroke: alpha(theme.palette.primary.main, 0.6),
+    color: alpha(theme.palette.primary.main, 0.6),
   },
   outerDivOther: {
-    stroke: fade(theme.palette.secondary.main, 0.6),
+    stroke: alpha(theme.palette.secondary.main, 0.6),
   },
   innerDiv: {
     width: "inherit",
@@ -50,7 +49,7 @@ const styles = (theme) => ({
   },
   hoverLink: {
     "&:hover": {
-      background: fade(theme.palette.secondary.main, 0.5),
+      background: alpha(theme.palette.secondary.main, 0.5),
       borderRadius: "0 25px 25px 0 ",
     },
   },

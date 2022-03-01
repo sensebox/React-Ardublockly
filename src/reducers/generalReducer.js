@@ -25,7 +25,7 @@ const initialSounds = () => {
   if (window.localStorage.getItem("sounds")) {
     return window.localStorage.getItem("sounds");
   } else {
-    return "off";
+    return false;
   }
 };
 
