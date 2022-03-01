@@ -67,6 +67,7 @@ const Sidebar = () => {
                   style={{ padding: "1rem", margin: "1rem" }}
                   variant="contained"
                   color="primary"
+                  key={i}
                   onClick={() => loadCode(object.code)}
                 >
                   {object.name}
