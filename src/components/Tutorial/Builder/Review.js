@@ -53,14 +53,10 @@ class Review extends Component {
   render() {
     return (
       <FormControl component="fieldset">
-        <FormLabel component="legend">Tutorial veröffentlichen</FormLabel>
-        <p>
-          {" "}
-          Du kannst dein Tutorial direkt über den Link mit anderen Personen
-          teilen. Wenn du dein Tutorial für alle Nutzer:innen in der Überischt
-          veröffenltichen wollen kannst du es hier aktivieren. Ein Administrator
-          wird dein Tutorial ansehen und anschließend freischalten.
-        </p>
+        <FormLabel component="legend">
+          {Blockly.Msg.builder_review_head}
+        </FormLabel>
+        {Blockly.Msg.builder_review_text}
         <FormGroup aria-label="position" row>
           <FormControlLabel
             value="Tutorial veröffentlichen"

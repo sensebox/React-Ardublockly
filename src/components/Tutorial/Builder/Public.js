@@ -54,7 +54,9 @@ class Public extends Component {
   render() {
     return (
       <FormControl component="fieldset">
-        <FormLabel component="legend">Tutorial veröffentlichen</FormLabel>
+        <FormLabel component="legend">
+          {Blockly.Msg.builder_public_head}
+        </FormLabel>
         <FormGroup aria-label="position" row>
           <FormControlLabel
             value="Tutorial veröffentlichen"
@@ -67,7 +69,7 @@ class Public extends Component {
                 inputProps={{ "aria-label": "secondary checkbox" }}
               />
             }
-            label="Tutorial veröffentlichen"
+            label={Blockly.Msg.builder_public_label}
             labelPlacement="start"
           />
         </FormGroup>
