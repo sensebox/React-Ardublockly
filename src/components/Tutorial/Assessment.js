@@ -20,6 +20,8 @@ import ReactMarkdown from "react-markdown";
 import { faCode } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { withStyles } from "@material-ui/core/styles";
+import remarkGfm from "remark-gfm";
+import remarkGemoji from "remark-gemoji";
 
 const styles = (theme) => ({
   codeOn: {
@@ -101,7 +103,9 @@ class Assessment extends Component {
               }}
             >
               <Typography>
-                <ReactMarkdown>{currentTask.text}</ReactMarkdown>
+                <ReactMarkdown remarkPlugins={[remarkGfm, remarkGemoji]}>
+                  {currentTask.text}
+                </ReactMarkdown>
               </Typography>
             </Card>
             <Card
