@@ -17,8 +17,7 @@ import clsx from "clsx";
 import Breadcrumbs from "../Breadcrumbs";
 
 import { Link } from "react-router-dom";
-
-import { fade } from "@material-ui/core/styles/colorManipulator";
+import { alpha } from "@material-ui/core/styles";
 import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
@@ -46,18 +45,18 @@ const styles = (theme) => ({
     bottom: "-30px",
     width: "160px",
     height: "160px",
-    color: fade(theme.palette.secondary.main, 0.6),
+    color: alpha(theme.palette.secondary.main, 0.6),
   },
   outerDivError: {
-    stroke: fade(theme.palette.error.dark, 0.6),
-    color: fade(theme.palette.error.dark, 0.6),
+    stroke: alpha(theme.palette.error.dark, 0.6),
+    color: alpha(theme.palette.error.dark, 0.6),
   },
   outerDivSuccess: {
-    stroke: fade(theme.palette.primary.main, 0.6),
-    color: fade(theme.palette.primary.main, 0.6),
+    stroke: alpha(theme.palette.primary.main, 0.6),
+    color: alpha(theme.palette.primary.main, 0.6),
   },
   outerDivOther: {
-    stroke: fade(theme.palette.secondary.main, 0.6),
+    stroke: alpha(theme.palette.secondary.main, 0.6),
   },
   innerDiv: {
     width: "inherit",

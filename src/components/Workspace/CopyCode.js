@@ -69,7 +69,7 @@ class CopyCode extends Component {
               className={`copyCode ${this.props.classes.iconButton}`}
               onClick={() => this.copyCode()}
             >
-              <FontAwesomeIcon icon={faCopy} size="m" />
+              <FontAwesomeIcon icon={faCopy} size="xs" />
             </IconButton>
           </Tooltip>
         ) : (
