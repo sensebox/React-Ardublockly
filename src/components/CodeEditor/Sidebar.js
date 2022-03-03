@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import Blockly from "blockly";
+import { useSelector } from "react-redux";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
@@ -15,13 +16,7 @@ const Sidebar = () => {
   const [alert, setAlert] = React.useState(false);
   const [examples, setExamples] = React.useState([]);
 
-  useEffect(() => {
-    axios
-      .get("https://coelho.opensensemap.org/items/blocklysamples")
-      .then((res) => {
-        setExamples(res.data.data);
-      });
-  }, []);
+  const user = useSelector((state) => state.auth.user);
 
   const monaco = useMonaco();
   const loadCode = (code) => {
@@ -30,6 +25,14 @@ const Sidebar = () => {
 
   const toggleDialog = () => {
     setAlert(false);
+  };
+
+  const getOsemScript = (id) => {
+    axios
+      .get(`https://api.opensensemap.org/boxes/${id}/script/`)
+      .then((res) => {
+        loadCode(res.data);
+      });
   };
 
   return (
@@ -50,8 +53,7 @@ const Sidebar = () => {
           </AccordionDetails>
         </Accordion>
       ) : null}
-
-      <Accordion>
+      {/* <Accordion>
         <AccordionSummary
           expandIcon={""}
           aria-controls="panel1a-content"
@@ -76,7 +78,35 @@ const Sidebar = () => {
             })}
           </Typography>
         </AccordionDetails>
-      </Accordion>
+      </Accordion> */}
+      {user ? (
+        <Accordion>
+          <AccordionSummary
+            expandIcon={""}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <Typography>Deine openSenseMap Codes</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Typography>
+              {user.boxes.map((box, i) => {
+                return (
+                  <Button
+                    style={{ padding: "1rem", margin: "1rem" }}
+                    variant="contained"
+                    color="primary"
+                    key={i}
+                    onClick={() => getOsemScript(box._id)}
+                  >
+                    {box.name}
+                  </Button>
+                );
+              })}
+            </Typography>
+          </AccordionDetails>
+        </Accordion>
+      ) : null}
       <Accordion>
         <AccordionSummary
           expandIcon={""}
