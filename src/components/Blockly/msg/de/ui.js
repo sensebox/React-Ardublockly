@@ -85,9 +85,9 @@ export const UI = {
   messages_rename_success_01: "Das Projekt wurde erfolgreich in ",
   messages_rename_success_02: "umbenannt.",
   messages_newblockly_head:
-    "Willkommen zur neuen Version Blockly für die senseBox",
+    "Willkommen zur neuen senseBox Lern- und Programmierumgebung",
   messages_newblockly_text:
-    "Die neue Blockly-Version befindet sich derzeit in der Testphase. Wenn Sie einen Fehler finden, melden Sie diesen bitte in unserem [Forum](https://forum.sensebox.de/t/neue-blockly-version-beta-test-und-feedback/1176). Eine Übersicht über alle neuen Funktionen finden Sie [hier](/news)",
+    "Nach einer Testphase kann die neue senseBox Lern- und Programmierumgebung verwendet werden. Wenn Sie weiterhin Fehler finden, melden Sie diesen bitte in unserem [Forum](https://forum.sensebox.de/t/neue-blockly-version-beta-test-und-feedback/1176). Eine Übersicht über alle neuen Funktionen finden Sie [hier](/news)",
   messages_GET_TUTORIAL_FAIL: "Zurück zur Tutorials-Übersicht",
   messages_LOGIN_FAIL: "Der Benutzername oder das Passwort ist nicht korrekt.",
   messages_copy_code: "Code wurde in die Zwischenablage kopiert",
