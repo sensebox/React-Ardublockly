@@ -208,7 +208,7 @@ void loop() {
             color="primary"
             onClick={() => saveIno()}
           >
-            Save Code
+            {Blockly.Msg.codeeditor_save_code}
           </Button>
           <Button
             style={{ padding: "1rem", margin: "1rem" }}
@@ -216,7 +216,7 @@ void loop() {
             color="primary"
             onClick={() => openIno()}
           >
-            Open Code
+            {Blockly.Msg.codeeditor_open_code}
           </Button>
           <Button
             style={{ padding: "1rem", margin: "1rem" }}
@@ -224,7 +224,7 @@ void loop() {
             color="primary"
             onClick={() => setResetDialog(true)}
           >
-            Reset Editor
+            {Blockly.Msg.codeeditor_reset_code}
           </Button>
           <Button
             style={{ padding: "1rem", margin: "1rem" }}
@@ -232,7 +232,7 @@ void loop() {
             color="primary"
             onClick={() => getBlocklyCode()}
           >
-            getBlocklyCode
+            {Blockly.Msg.codeeditor_blockly_code}
           </Button>
           <Sidebar />
           <Dialog
@@ -243,10 +243,7 @@ void loop() {
             title={"Code wird kompiliert"}
             content={""}
           >
-            <div>
-              Dein Code wird nun kompiliert und anschließend auf deinen Computer
-              heruntergeladen
-            </div>
+            <div>{Blockly.Msg.codeeditor_compile_progress}</div>
           </Dialog>{" "}
           <Dialog
             open={resetDialog}

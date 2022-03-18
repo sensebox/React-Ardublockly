@@ -282,4 +282,17 @@ export const UI = {
   drawer_ideerror_head: "Hoppla da ist was schief gegangen.",
   drawer_ideerror_text:
     "Beim kompilieren ist ein Fehler aufgetreten, überprüfe deine Blöcke.",
+
+  /**
+   * Code Editor
+   *  */
+  codeeditor_libraries_head: "Installierte Arduino Libraries",
+  codeeditor_libraries_text:
+    "Für die Dokumentation sehen Sie sich die installierten Bibliotheken und deren Beispiele an",
+  codeeditor_save_code: "Code herunterladen",
+  codeeditor_open_code: "Code öffnen",
+  codeeditor_reset_code: "Code zurücksetzen",
+  codeeditor_blockly_code: "Lade Blockly Code",
+  codeeditor_compile_progress:
+    "Dein Code wird nun kompiliert und anschließend auf deinen Computer heruntergeladen",
 };
