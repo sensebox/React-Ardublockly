@@ -183,7 +183,7 @@ Blockly.Arduino.sensebox_sensor_pressure = function () {
     "adafruit_bmp280"
   ] = `#include <Adafruit_BMP280.h> // http://librarymanager/All#Adafruit_BMP280_Library`;
   Blockly.Arduino.definitions_["define_pressure"] = "Adafruit_BMP280 bmp;";
-  Blockly.Arduino.setupCode_["sensebox_bmp_sensor"] = "bmp.begin();";
+  Blockly.Arduino.setupCode_["sensebox_bmp_sensor"] = "bmp.begin(0x76);";
   Blockly.Arduino.setupCode_["bmp_setSampling"] = `
 bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,    
                   Adafruit_BMP280::SAMPLING_X2,  
