@@ -6,11 +6,11 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Typography from "@material-ui/core/Typography";
 import { LibraryVersions } from "../../data/versions.js";
-//import { useMonaco } from "@monaco-editor/react";
-//import { Button } from "@material-ui/core";
+import { useMonaco } from "@monaco-editor/react";
+import { Button } from "@material-ui/core";
 import Dialog from "../Dialog";
 import SerialMonitor from "./SerialMonitor.js";
-//import axios from "axios";
+import axios from "axios";
 
 const Sidebar = () => {
   const [alert, setAlert] = React.useState(false);
@@ -23,10 +23,10 @@ const Sidebar = () => {
   //       setExamples(res.data.data);
   //     });
   // }, []);
-  //const monaco = useMonaco();
-  // const loadCode = (code) => {
-  //   monaco.editor.getModels()[0].setValue(code);
-  // };
+  const monaco = useMonaco();
+  const loadCode = (code) => {
+    monaco.editor.getModels()[0].setValue(code);
+  };
 
   const toggleDialog = () => {
     setAlert(false);
