@@ -283,4 +283,17 @@ export const UI = {
    */
   drawer_ideerror_head: "Oops something went wrong",
   drawer_ideerror_text: "An error occurred while compiling, check your blocks",
+
+  /**
+   * Code Editor
+   * */
+  codeeditor_libraries_head: "Installed Arduino Libraries",
+  codeeditor_libraries_text:
+    "For documentation, view the installed libraries and their examples",
+  codeeditor_save_code: "Download code",
+  codeeditor_open_code: "Open code",
+  codeeditor_reset_code: "Reset code",
+  codeeditor_blockly_code: "Load blockly code",
+  codeeditor_compile_progress:
+    "Your code will now be compiled and then downloaded to your computer",
 };

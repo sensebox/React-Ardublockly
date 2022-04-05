@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Blockly from "blockly";
 import { useSelector } from "react-redux";
 import Accordion from "@material-ui/core/Accordion";
@@ -6,22 +6,27 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Typography from "@material-ui/core/Typography";
 import { LibraryVersions } from "../../data/versions.js";
-import { useMonaco } from "@monaco-editor/react";
-import { Button } from "@material-ui/core";
+//import { useMonaco } from "@monaco-editor/react";
+//import { Button } from "@material-ui/core";
 import Dialog from "../Dialog";
 import SerialMonitor from "./SerialMonitor.js";
-import axios from "axios";
+//import axios from "axios";
 
 const Sidebar = () => {
   const [alert, setAlert] = React.useState(false);
-  const [examples, setExamples] = React.useState([]);
-
+  //const [examples, setExamples] = React.useState([]);
   const user = useSelector((state) => state.auth.user);
-
-  const monaco = useMonaco();
-  const loadCode = (code) => {
-    monaco.editor.getModels()[0].setValue(code);
-  };
+  // useEffect(() => {
+  //   axios
+  //     .get("https://coelho.opensensemap.org/items/blocklysamples")
+  //     .then((res) => {
+  //       setExamples(res.data.data);
+  //     });
+  // }, []);
+  //const monaco = useMonaco();
+  // const loadCode = (code) => {
+  //   monaco.editor.getModels()[0].setValue(code);
+  // };
 
   const toggleDialog = () => {
     setAlert(false);
@@ -113,7 +118,7 @@ const Sidebar = () => {
           aria-controls="panel2a-content"
           id="panel2a-header"
         >
-          <Typography>Installierte Libraries</Typography>
+          <Typography>{Blockly.Msg.codeeditor_libraries_head}</Typography>
         </AccordionSummary>
         <AccordionDetails
           style={{ padding: 0, height: "60vH", backgroundColor: "white" }}
@@ -121,10 +126,7 @@ const Sidebar = () => {
           <Typography
             style={{ overflow: "auto", width: "100%", padding: "1rem" }}
           >
-            <p>
-              For Dokumentation take a look at the installed libraries and their
-              source
-            </p>
+            <p>{Blockly.Msg.codeeditor_libraries_text}</p>
             {LibraryVersions().map((object, i) => {
               return (
                 <p>

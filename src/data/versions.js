@@ -1,102 +1,151 @@
 export const LibraryVersions = () => {
   return [
     {
-      version: "1.4.2",
-      library: "sensebox/SenseBoxMCU-Lib",
-      link: "https://github.com/sensebox/SenseBoxMCU-Lib",
+      library: "SSD1306 Plot Library",
+      link: "https://github.com/sensebox/SSD1306-Plot-Library/",
     },
     {
-      version: "1.0.12",
-      library: "sparkfun/SparkFun_SCD30_Arduino_Library",
-    },
-    { version: "1.2.3", library: "adafruit/Adafruit-GFX-Library" },
-    {
-      version: "2.1.2",
-      library: "adafruit/Adafruit_BME280_Library",
+      library: "SDS011 Library",
+      link: "https://github.com/sensebox/SDS011-select-serial/",
     },
     {
-      version: "2.1.0",
-      library: "adafruit/Adafruit_BMP280_Library",
+      library: "RV8523 Arduino Library",
+      link: "https://github.com/sensebox/RV8523-RTC-Arduino-Library",
     },
     {
-      version: "1.1.1",
-      library: "adafruit/Adafruit_BME680",
+      library: "BMX055_Library",
+      link: "https://github.com/sensebox/BMX055-Arduino-Library/",
     },
     {
-      version: "2.0.1",
-      library: "adafruit/Adafruit_BMP3XX",
+      library: "LTR329",
+      link: "https://github.com/sensebox/LTR329-Lightsensor-Arduino-Library/",
     },
     {
-      version: "2.0.0",
-      library: "adafruit/Adafruit_HDC1000_Library",
+      library: "VEML6070",
+      link: "https://github.com/sensebox/VEML6070-UV-Arduino-Library/",
     },
     {
-      version: "1.7.1",
-      library: "adafruit/Adafruit_BusIO",
+      library: "senseBox Web Library",
+      link: "https://github.com/sensebox/sensebox-libweb/",
     },
     {
-      version: "1.0.6",
-      library: "adafruit/Adafruit_NeoPixel",
+      library: "Arduino WiFi101",
+      link: "https://github.com/arduino-libraries/WiFi101",
     },
     {
-      version: "1.1.2",
-      library: "adafruit/Adafruit_SSD1306",
+      library: "Ethernet",
+      link: "https://github.com/arduino-libraries/Ethernet",
     },
     {
-      version: "1.0.2",
-      library: "adafruit/Adafruit_Sensor",
+      library: "ArduinoJson",
+      link: "https://github.com/bblanchon/ArduinoJson",
     },
     {
-      version: "3.8.0",
-      library: "milesburton/Arduino-Temperature-Control-Library",
+      library: "Adafruit Sensor Library",
+      link: "https://github.com/adafruit/Adafruit_Sensor",
     },
     {
-      version: "1.5.0",
-      library: "arduino-libraries/ArduinoBearSSL",
+      library: "Adafruit HDC1000 Library",
+      link: "https://github.com/adafruit/Adafruit_HDC1000_Library",
     },
     {
-      version: "1.3.4",
-      library: "arduino-libraries/ArduinoECCX08",
+      library: "Adafruit BME280 Library",
+      link: "https://github.com/adafruit/Adafruit_BME280_Library",
     },
     {
-      version: "2.0.0",
-      library: "arduino-libraries/ArduinoECCX08", //todo
+      library: "Adafruit BMP280 Library",
+      link: "https://github.com/adafruit/Adafruit_BMP280_Library",
     },
     {
-      version: "0.7.1",
-      library: "cmaglie/FlashStorage",
+      library: "Adafruit BME680 Library",
+      link: "https://github.com/adafruit/Adafruit_BME680",
     },
     {
-      version: "1.5.1",
-      library: "matthijskooijman/arduino-lmic",
+      library: "Adafruit DPS310",
+      link: "https://github.com/adafruit/Adafruit_DPS310",
     },
     {
-      version: "3.0.1",
-      library: "thesolarnomad/lora-serialization ",
+      library: "Adafruit NeoPixel",
+      link: "https://github.com/adafruit/Adafruit_NeoPixel",
     },
     {
-      version: "todo",
-      library: "TSL45xxx",
+      library: "Adafruit SSD1306",
+      link: "https://github.com/adafruit/Adafruit_SSD1306",
     },
     {
-      version: "2.3.4",
-      library: "teensy/td_libs_OneWire.html",
+      library: "Adafruit GFX Library",
+      link: "https://github.com/adafruit/Adafruit-GFX-Library",
     },
     {
-      version: "1.0.0",
-      library: "watterott/Arduino-Libs/tree/master/RV8523",
+      library: "Adafruit MQTT Library",
+      link: "https://github.com/adafruit/Adafruit_MQTT_Library",
     },
     {
-      version: "1.0.0",
-      library: "sensebox/SDS011-select-serial ",
+      library: "Adafruit BusIO",
+      link: "https://github.com/adafruit/Adafruit_BusIO",
     },
     {
-      version: "1.0.0",
-      library: "Lucas-Steinmann/SSD1306-Plot-Library",
+      library: "Adafruit SleepyDog Library",
+      link: "https://github.com/adafruit/Adafruit_SleepyDog",
     },
     {
-      version: "1.0.0",
-      library: "senseBoxIO",
+      library: "DallasTemperature",
+      link: "https://github.com/milesburton/Arduino-Temperature-Control-Library",
+    },
+    {
+      library: "ArduinoBearSSL",
+      link: "https://github.com/arduino-libraries/ArduinoBearSSL",
+    },
+    {
+      library: "ArduinoECCX08",
+      link: "https://github.com/arduino-libraries/ArduinoECCX08",
+    },
+    {
+      library: "SparkFun SCD30 Arduino Library",
+      link: "https://github.com/sparkfun/SparkFun_SCD30_Arduino_Library",
+    },
+    {
+      library: "SparkFun u-blox GNSS Arduino Library",
+      link: "https://github.com/sparkfun/SparkFun_u-blox_GNSS_Arduino_Library",
+    },
+    {
+      library: "NewPing",
+      link: "https://bitbucket.org/teckel12/arduino-new-ping/wiki/Home",
+    },
+    {
+      library: "IBM LMIC framework",
+      link: "https://github.com/matthijskooijman/arduino-lmic",
+    },
+    {
+      library: "LoRa Serialization",
+      link: "https://github.com/thesolarnomad/lora-serialization",
+    },
+    {
+      library: "CayenneLPP",
+      link: "https://github.com/ElectronicCats/CayenneLPP",
+    },
+    { library: "OneWire", link: "https://github.com/PaulStoffregen/OneWire" },
+    {
+      library: "Nova Fitness Sds dust sensors library",
+      link: "https://github.com/lewapek/sds-dust-sensors-arduino-library",
+    },
+    { library: "JC_Button", link: "https://github.com/JChristensen/JC_Button" },
+    { library: "SD", link: "https://github.com/arduino-libraries/SD" },
+    {
+      library: "BSEC Software Library",
+      link: "https://github.com/BoschSensortec/BSEC-Arduino-library",
+    },
+    {
+      library: "TheThingsNetwork",
+      link: "https://github.com/TheThingsNetwork/arduino-device-lib",
+    },
+    {
+      library: "NTPClient",
+      link: "https://github.com/arduino-libraries/NTPClient",
+    },
+    {
+      library: "phyphox BLE",
+      link: "https://github.com/phyphox/phyphox-arduino",
     },
   ];
 };
