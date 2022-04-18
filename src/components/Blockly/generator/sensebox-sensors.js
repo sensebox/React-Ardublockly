@@ -408,8 +408,6 @@ Blockly.Arduino.sensebox_button = function () {
   var code = "";
   if (dropown_function === "isPressed") {
     code = "button_" + dropdown_pin + ".isPressed()";
-  } else if (dropown_function === "Switch") {
-    code = "button_" + dropdown_pin + ".getSwitch()";
   } else if (dropown_function === "wasPressed") {
     code = "button_" + dropdown_pin + ".wasPressed()";
   } else if (dropown_function === "longPress") {
