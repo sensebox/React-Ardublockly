@@ -46,7 +46,7 @@ Blockly.Arduino.sensebox_wifi_rssi = function () {
 Blockly.Arduino.sensebox_get_ip = function () {
   Blockly.Arduino.definitions_["define_ipadress"] = "IPAddress ip;";
   Blockly.Arduino.setupCode_["sensebox_get_ip"] = " ip = WiFi.localIP();";
-  var code = "";
+  var code = "ip";
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
