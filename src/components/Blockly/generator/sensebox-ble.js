@@ -90,7 +90,9 @@ Blockly.Arduino.sensebox_phyphox_graph = function () {
   code += `${label}.setUnitY("${unity}");\n`;
   code += `${label}.setLabelX("${labelx}");\n`;
   code += `${label}.setLabelY("${labely}");\n`;
-  code += `${label}.setStyle("${style}");\n`;
+  if (style === "dots"){
+    code += `${label}.setStyle("${style}");\n`;
+  }
   code += `${label}.setChannel(${channelX}, ${channelY});\n`;
   code += `firstView.addElement(${label});\n`;
   return code;
