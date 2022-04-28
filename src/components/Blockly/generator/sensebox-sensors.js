@@ -160,11 +160,11 @@ Blockly.Arduino.sensebox_sensor_sds011 = function () {
   Blockly.Arduino.definitions_["define_sds011"] =
     "SdsDustSensor sds(" + serial_name + ");";
   Blockly.Arduino.setupCode_["sds011_begin"] = "sds.begin();";
-  Blockly.Arduino.setupCode_["sds011_setActiveReporting"] =
-    "sds.setActiveReportingMode();";
+  Blockly.Arduino.setupCode_["sds011_setQueryReportingMode"] =
+    "sds.setQueryReportingMode();";
   Blockly.Arduino.loopCodeOnce_[
     "sds011_getData"
-  ] = `PmResult pm = sds.readPm();`;
+  ] = `PmResult pm = sds.queryPm();`;
   var code = `pm.${dropdown_name}`;
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
