@@ -128,7 +128,7 @@ BlocklyWindow.propTypes = {
   onChangeWorkspace: PropTypes.func.isRequired,
   clearStats: PropTypes.func.isRequired,
   renderer: PropTypes.string.isRequired,
-  sounds: PropTypes.string.isRequired,
+  sounds: PropTypes.bool.isRequired,
   language: PropTypes.string.isRequired,
 };
 

@@ -228,6 +228,12 @@ export const UI = {
   builder_requirements_head: "Voraussetzungen",
   builder_requirements_order:
     "Beachte, dass die Reihenfolge des Anhakens maßgebend ist.",
+  builder_difficulty: "Schwierigkeitsgrad",
+  builder_public_head: "Tutorial veröffentlichen",
+  builder_public_label: "Tutorial für alle Nutzer:innen veröffentlichen",
+  builder_review_head: "Tutorial veröffentlichen",
+  builder_review_text:
+    "Du kannst dein Tutorial direkt über den Link mit anderen Personen teilen. Wenn du dein Tutorial für alle Nutzer:innen in der Überischt veröffenltichen wollen kannst du es hier aktivieren. Ein Administrator wird dein Tutorial ansehen und anschließend freischalten.",
 
   /**
    * Login

@@ -43,6 +43,20 @@ blockquote p {
   display: inline;
 }
 
+.tutorial table,
+th,
+td {
+  border: 1px solid #ddd;
+}
+
+.tutorial th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #4eaf47;
+  color: white;
+}
+
 .overlay {
   display: flex;
   flex-direction: column;
