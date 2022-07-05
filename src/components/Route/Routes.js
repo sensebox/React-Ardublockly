@@ -25,7 +25,6 @@ import Account from "../User/Account";
 import News from "../News";
 import Faq from "../Faq";
 import CodeEditor from "../CodeEditor/CodeEditor";
-import Docs from "../Docs/Docs";
 
 class Routes extends Component {
   componentDidUpdate() {
@@ -51,9 +50,6 @@ class Routes extends Component {
           </Route>
           <Route path="/CodeEditor" exact>
             <CodeEditor />
-          </Route>
-          <Route path="/Docs" exact>
-            <Docs />
           </Route>
           {/* Sharing */}
           <PublicRoute path="/share/:shareId" exact>
