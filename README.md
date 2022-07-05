@@ -22,7 +22,4 @@ This project was created with [Create React App](https://github.com/facebook/cre
 Ensure that line 14 in [store.js](https://github.com/sensebox/React-Ardublockly/blob/master/src/store.js#L14) is commented out or otherwise you have installed [Redux DevTools Extension](http://extension.remotedev.io/).
 
 ## Demo
-A demo of the current status of the master branch can be accessed via [sensebox-ardublockly.netlify.app](https://sensebox-ardublockly.netlify.app/) :rocket:.
-* [Home](https://sensebox-ardublockly.netlify.app/)
-* [Tutorial Overview](https://sensebox-ardublockly.netlify.app/tutorial)
-* [Tutorial-Builder](https://sensebox-ardublockly.netlify.app/tutorial/builder)
+A demo of the current status of the master branch can be accessed via [https://blockly-react.netlify.app/](https://blockly-react.netlify.app/) :rocket:.

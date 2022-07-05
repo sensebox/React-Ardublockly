@@ -544,7 +544,7 @@ Blockly.Msg.PROCEDURES_DEFRETURN_COMMENT =
 
 // Ardublockly strings
 Blockly.Msg.ARD_ANALOGREAD = "read analog pin#";
-Blockly.Msg.ARD_ANALOGREAD_TIP = "Return value between 0 and 1024";
+Blockly.Msg.ARD_ANALOGREAD_TIP = "Return value between 0 and 1023";
 Blockly.Msg.ARD_ANALOGWRITE = "set analog pin#";
 Blockly.Msg.ARD_ANALOGWRITE_TIP =
   "Write analog value between 0 and 255 to a specific PWM Port";

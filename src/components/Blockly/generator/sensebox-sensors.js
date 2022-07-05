@@ -160,11 +160,11 @@ Blockly.Arduino.sensebox_sensor_sds011 = function () {
   Blockly.Arduino.definitions_["define_sds011"] =
     "SdsDustSensor sds(" + serial_name + ");";
   Blockly.Arduino.setupCode_["sds011_begin"] = "sds.begin();";
-  Blockly.Arduino.setupCode_["sds011_setActiveReporting"] =
-    "sds.setActiveReportingMode();";
+  Blockly.Arduino.setupCode_["sds011_setQueryReportingMode"] =
+    "sds.setQueryReportingMode();";
   Blockly.Arduino.loopCodeOnce_[
     "sds011_getData"
-  ] = `PmResult pm = sds.readPm();`;
+  ] = `PmResult pm = sds.queryPm();`;
   var code = `pm.${dropdown_name}`;
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
@@ -183,7 +183,7 @@ Blockly.Arduino.sensebox_sensor_pressure = function () {
     "adafruit_bmp280"
   ] = `#include <Adafruit_BMP280.h> // http://librarymanager/All#Adafruit_BMP280_Library`;
   Blockly.Arduino.definitions_["define_pressure"] = "Adafruit_BMP280 bmp;";
-  Blockly.Arduino.setupCode_["sensebox_bmp_sensor"] = "bmp.begin();";
+  Blockly.Arduino.setupCode_["sensebox_bmp_sensor"] = "bmp.begin(0x76);";
   Blockly.Arduino.setupCode_["bmp_setSampling"] = `
 bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,    
                   Adafruit_BMP280::SAMPLING_X2,  
@@ -408,8 +408,6 @@ Blockly.Arduino.sensebox_button = function () {
   var code = "";
   if (dropown_function === "isPressed") {
     code = "button_" + dropdown_pin + ".isPressed()";
-  } else if (dropown_function === "Switch") {
-    code = "button_" + dropdown_pin + ".getSwitch()";
   } else if (dropown_function === "wasPressed") {
     code = "button_" + dropdown_pin + ".wasPressed()";
   } else if (dropown_function === "longPress") {
