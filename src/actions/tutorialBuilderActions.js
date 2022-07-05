@@ -4,6 +4,9 @@ import {
   BUILDER_CHANGE,
   BUILDER_ERROR,
   BUILDER_TITLE,
+  BUILDER_PUBLIC,
+  BUILDER_DIFFICULTY,
+  BUILDER_REVIEW,
   BUILDER_ID,
   BUILDER_ADD_STEP,
   BUILDER_DELETE_STEP,
@@ -31,6 +34,30 @@ export const tutorialTitle = (title) => (dispatch) => {
   dispatch({
     type: BUILDER_TITLE,
     payload: title,
+  });
+  dispatch(changeTutorialBuilder());
+};
+
+export const tutorialPublic = (pub) => (dispatch) => {
+  dispatch({
+    type: BUILDER_PUBLIC,
+    payload: pub,
+  });
+  dispatch(changeTutorialBuilder());
+};
+
+export const tutorialDifficulty = (difficulty) => (dispatch) => {
+  dispatch({
+    type: BUILDER_DIFFICULTY,
+    payload: difficulty,
+  });
+  dispatch(changeTutorialBuilder());
+};
+
+export const tutorialReview = (review) => (dispatch) => {
+  dispatch({
+    type: BUILDER_REVIEW,
+    payload: review,
   });
   dispatch(changeTutorialBuilder());
 };
@@ -320,6 +347,7 @@ export const readJSON = (json) => (dispatch, getState) => {
     return object;
   });
   dispatch(tutorialTitle(json.title));
+  dispatch(tutorialDifficulty(json.difficulty));
   dispatch(tutorialSteps(steps));
   dispatch(setSubmitError());
   dispatch(progress(false));

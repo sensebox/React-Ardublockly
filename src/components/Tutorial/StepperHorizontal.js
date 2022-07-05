@@ -7,8 +7,8 @@ import { withRouter } from "react-router-dom";
 import clsx from "clsx";
 
 // import tutorials from '../../data/tutorials';
+import { alpha } from "@material-ui/core/styles";
 
-import { fade } from "@material-ui/core/styles/colorManipulator";
 import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -28,13 +28,13 @@ const styles = (theme) => ({
     justifyContent: "space-between",
   },
   stepperSuccess: {
-    backgroundColor: fade(theme.palette.primary.main, 0.6),
+    backgroundColor: alpha(theme.palette.primary.main, 0.6),
   },
   stepperError: {
-    backgroundColor: fade(theme.palette.error.dark, 0.6),
+    backgroundColor: alpha(theme.palette.error.dark, 0.6),
   },
   stepperOther: {
-    backgroundColor: fade(theme.palette.secondary.main, 0.6),
+    backgroundColor: alpha(theme.palette.secondary.main, 0.6),
   },
   color: {
     backgroundColor: "transparent ",

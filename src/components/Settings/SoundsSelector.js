@@ -52,7 +52,7 @@ class SoundsSelector extends Component {
 SoundsSelector.propTypes = {
   setSounds: PropTypes.func.isRequired,
   language: PropTypes.string.isRequired,
-  sounds: PropTypes.string.isRequired,
+  sounds: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
