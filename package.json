@@ -22,7 +22,7 @@
     "blockly": "^6.20210701.0",
     "file-saver": "^2.0.2",
     "mnemonic-id": "^3.2.7",
-    "moment": "^2.28.0",
+    "moment": "^2.29.4",
     "prismjs": "^1.27.0",
     "react": "^17.0.2",
     "react-cookie-consent": "^7.0.0",
