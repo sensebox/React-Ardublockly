@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import QRCode from "react-qr-code";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { shareProject } from '../../actions/projectActions';
@@ -78,6 +79,7 @@ class WorkspaceFunc extends Component {
 
   toggleDialog = () => {
     this.setState({ open: !this.state, title: '', content: '' });
+    console.log(this.state.id);
   }
 
   shareBlocks = () => {
@@ -129,13 +131,19 @@ class WorkspaceFunc extends Component {
                 <FontAwesomeIcon icon={faCopy} size="xs" />
               </IconButton>
             </Tooltip>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <QRCode value={`${window.location.origin}/share/${this.state.id}`} />
+            </div>
             {this.props.project && this.props.project.shared && this.props.message.id !== 'SHARE_SUCCESS' ?
               <Typography variant='body2' style={{ marginTop: '20px' }}>{`Das Projekt wurde bereits geteilt. Der Link ist noch mindestens ${moment(this.props.project.shared).diff(moment().utc(), 'days') === 0 ?
                 moment(this.props.project.shared).diff(moment().utc(), 'hours') === 0 ?
                   `${moment(this.props.project.shared).diff(moment().utc(), 'minutes')} Minuten`
                   : `${moment(this.props.project.shared).diff(moment().utc(), 'hours')} Stunden`
-                : `${moment(this.props.project.shared).diff(moment().utc(), 'days')} Tage`} gültig.`}</Typography>
-              : <Typography variant='body2' style={{ marginTop: '20px' }}>{`Der Link ist nun ${process.env.REACT_APP_SHARE_LINK_EXPIRES} Tage gültig.`}</Typography>}
+                : `${moment(this.props.project.shared).diff(moment().utc(), 'days')} Tage`} gültig.`}
+              </Typography>
+              : <Typography variant='body2' style={{ marginTop: '20px' }}>
+                  {`Der Link ist nun ${process.env.REACT_APP_SHARE_LINK_EXPIRES} Tage gültig.`}
+                </Typography>}
           </div>
         </Dialog>
       </div>
