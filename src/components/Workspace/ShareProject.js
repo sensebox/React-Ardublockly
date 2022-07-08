@@ -119,7 +119,7 @@ class WorkspaceFunc extends Component {
           button={Blockly.Msg.button_close}
         >
           <div style={{ marginTop: '10px' }}>
-            <Typography>Über den folgenden Link kannst du dein Programm teilen:</Typography>
+            <Typography>{Blockly.Msg.sharedialog_text}</Typography>
             <Link to={`/share/${this.state.id}`} onClick={() => this.toggleDialog()} className={this.props.classes.link}>{`${window.location.origin}/share/${this.state.id}`}</Link>
             <Tooltip title={Blockly.Msg.tooltip_copy_link} arrow style={{ marginRight: '5px' }}>
               <IconButton
@@ -142,7 +142,7 @@ class WorkspaceFunc extends Component {
                 : `${moment(this.props.project.shared).diff(moment().utc(), 'days')} Tage`} gültig.`}
               </Typography>
               : <Typography variant='body2' style={{ marginTop: '20px' }}>
-                  {`Der Link ist nun ${process.env.REACT_APP_SHARE_LINK_EXPIRES} Tage gültig.`}
+                  {Blockly.Msg.sharedialog_expiration}
                 </Typography>}
           </div>
         </Dialog>

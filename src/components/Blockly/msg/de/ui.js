@@ -116,6 +116,7 @@ export const UI = {
 
   sharedialog_headline: "Dein Link wurde erstellt.",
   sharedialog_text: "Über den folgenden Link kannst du dein Programm teilen.",
+  sharedialog_expiration: `Der Link is nun ${process.env.REACT_APP_SHARE_LINK_EXPIRES} Tage gültig`,
 
   /**
    * Project rename Dialog
