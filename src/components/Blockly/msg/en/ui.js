@@ -45,7 +45,7 @@ export const UI = {
   tooltip_create_project: "Create project",
   tooltip_share_project: "Share project",
   tooltip_reset_workspace: "Reset workspace",
-  tooltip_copy_link: "Cooy link",
+  tooltip_copy_link: "Copy link",
   tooltip_trashcan_hide: "hide deleted blocks",
   tooltip_trashcan_delete: "empty trashcan",
   tooltip_project_title: "Project title",
