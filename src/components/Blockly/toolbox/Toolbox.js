@@ -301,8 +301,11 @@ class Toolbox extends React.Component {
         <Category name="Motors" colour={getColour().sensebox}>
           <Block type="sensebox_motors_beginStepperMotor" />
           <Block type="sensebox_motors_moveStepperMotor" />
-          <Block type="sensebox_motors_beginStepperMotor" />
-          <Block type="sensebox_motors_beginStepperMotor" />
+          <Block type="sensebox_motors_beginServoMotor" />
+          <Block type="sensebox_motors_moveServoMotor" />
+          <Block type="sensebox_motors_I2CMotorBoard_begin" />
+          <Block type="sensebox_motors_I2CMotorBoard_moveDCMotor" />
+          <Block type="sensebox_motors_I2CMotorBoard_stopDCMotor" />
         </Category>
         {/* <Category name="Telegram" colour={getColour().sensebox}>
           <Block type="sensebox_telegram" />

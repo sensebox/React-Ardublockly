@@ -1,6 +1,5 @@
 import * as Blockly from "blockly/core";
 import { getColour } from "../helpers/colour";
-import * as Types from "../helpers/types";
 import { selectedBoard } from "../helpers/board";
 import { FieldSlider } from "@blockly/field-slider";
 
@@ -39,10 +38,9 @@ Blockly.Blocks["sensebox_motors_moveStepperMotor"] = {
     init: function () {
         this.appendDummyInput()
             .appendField(Blockly.Msg.sensebox_motors_moveStepperMotor);
-        this.appendDummyInput()
-            .appendField(Blockly.Msg.sensebox_motors_moveStepperMotor_step)
+        this.appendValueInput("steps", "Number")
             .setAlign(Blockly.ALIGN_RIGHT)
-            .appendField(new Blockly.FieldNumber(2048), "steps");
+            .appendField(Blockly.Msg.sensebox_motors_moveStepperMotor_step);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setColour(getColour().sensebox);
@@ -55,10 +53,91 @@ Blockly.Blocks["sensebox_motors_moveStepperMotor"] = {
  * Servo Motor
  * 
  */
+Blockly.Blocks["sensebox_motors_beginServoMotor"] = {
+    init: function () {
+        this.appendDummyInput()
+            .appendField(Blockly.Msg.sensebox_motors_beginServoMotor);
+        this.appendDummyInput()
+            .appendField(Blockly.Msg.sensebox_motors_beginServoMotor_pin)
+            .appendField(new Blockly.FieldDropdown(selectedBoard().digitalPins), "pin")
+            .setAlign(Blockly.ALIGN_RIGHT);
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(getColour().sensebox);
+        this.setTooltip(Blockly.Msg.sensebox_motors_beginServoMotor_tooltip);
+        this.setHelpUrl(Blockly.Msg.sensebox_motors_beginServoMotor_helpurl);
+    },
+};
+
+Blockly.Blocks["sensebox_motors_moveServoMotor"] = {
+    init: function () {
+        this.appendDummyInput()
+            .appendField(Blockly.Msg.sensebox_motors_moveServoMotor);
+        this.appendDummyInput()
+            .appendField(Blockly.Msg.sensebox_motors_moveServoMotor_pin)
+            .appendField(new Blockly.FieldDropdown(selectedBoard().digitalPins), "pin")
+            .setAlign(Blockly.ALIGN_RIGHT);
+        this.appendValueInput("degrees", "Number")
+            .appendField(Blockly.Msg.sensebox_motors_moveServoMotor_degrees)
+            .setAlign(Blockly.ALIGN_RIGHT);
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(getColour().sensebox);
+        this.setTooltip(Blockly.Msg.sensebox_motors_moveStepperMotor_tooltip);
+        this.setHelpUrl(Blockly.Msg.sensebox_motors_moveStepperMotor_helpurl);
+    },
+};
 
 
 /**
- * DC Motor
+ * I2C Motor Board
  * 
  */
+Blockly.Blocks["sensebox_motors_I2CMotorBoard_begin"] = {
+    init: function () {
+        this.appendDummyInput()
+            .appendField(Blockly.Msg.sensebox_motors_I2CMotorBoard_begin);
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(getColour().sensebox);
+        this.setTooltip(Blockly.Msg.sensebox_motors_I2CMotorBoard_begin_tooltip);
+        this.setHelpUrl(Blockly.Msg.sensebox_motors_I2CMotorBoard_begin_helpurl);
+    },
+};
 
+Blockly.Blocks["sensebox_motors_I2CMotorBoard_moveDCMotor"] = {
+    init: function () {
+        var dropdownOptions = [[Blockly.Msg.sensebox_motors_I2CMotorBoard_moveDCMotor_left, '1'],
+        [Blockly.Msg.sensebox_motors_I2CMotorBoard_moveDCMotor_right, '2']];
+
+        this.appendDummyInput()
+            .appendField(Blockly.Msg.sensebox_motors_I2CMotorBoard_moveDCMotor)
+            .appendField(new Blockly.FieldDropdown(dropdownOptions), "motor")
+            .appendField(Blockly.Msg.sensebox_motors_I2CMotorBoard_moveDCMotor_motor);
+        this.appendValueInput("speed", "Number")
+            .appendField(Blockly.Msg.sensebox_motors_I2CMotorBoard_moveDCMotor_speed)
+            .setAlign(Blockly.ALIGN_RIGHT);
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(getColour().sensebox);
+        this.setTooltip(Blockly.Msg.sensebox_motors_I2CMotorBoard_moveDCMotor_tooltip);
+        this.setHelpUrl(Blockly.Msg.sensebox_motors_I2CMotorBoard_moveDCMotor_helpurl);
+    },
+};
+
+Blockly.Blocks["sensebox_motors_I2CMotorBoard_stopDCMotor"] = {
+    init: function () {
+        var dropdownOptions = [[Blockly.Msg.sensebox_motors_I2CMotorBoard_stopDCMotor_left, '1'],
+        [Blockly.Msg.sensebox_motors_I2CMotorBoard_stopDCMotor_right, '2']];
+
+        this.appendDummyInput()
+            .appendField(Blockly.Msg.sensebox_motors_I2CMotorBoard_stopDCMotor)
+            .appendField(new Blockly.FieldDropdown(dropdownOptions), "motor")
+            .appendField(Blockly.Msg.sensebox_motors_I2CMotorBoard_stopDCMotor_motor)
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(getColour().sensebox);
+        this.setTooltip(Blockly.Msg.sensebox_motors_I2CMotorBoard_stopDCMotor_tooltip);
+        this.setHelpUrl(Blockly.Msg.sensebox_motors_I2CMotorBoard_stopDCMotor_helpurl);
+    },
+};
