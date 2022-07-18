@@ -8,12 +8,10 @@ import Typography from "@material-ui/core/Typography";
 import { LibraryVersions } from "../../data/versions.js";
 import { useMonaco } from "@monaco-editor/react";
 import { Button } from "@material-ui/core";
-import Dialog from "../Dialog";
 import SerialMonitor from "./SerialMonitor.js";
 import axios from "axios";
 
 const Sidebar = () => {
-  const [alert, setAlert] = React.useState(false);
   //const [examples, setExamples] = React.useState([]);
   const user = useSelector((state) => state.auth.user);
   // useEffect(() => {
@@ -26,10 +24,6 @@ const Sidebar = () => {
   const monaco = useMonaco();
   const loadCode = (code) => {
     monaco.editor.getModels()[0].setValue(code);
-  };
-
-  const toggleDialog = () => {
-    setAlert(false);
   };
 
   const getOsemScript = (id) => {
@@ -138,25 +132,6 @@ const Sidebar = () => {
             })}
           </Typography>
         </AccordionDetails>
-        <Dialog
-          style={{ zIndex: 9999999 }}
-          fullWidth
-          maxWidth={"sm"}
-          open={alert}
-          title={Blockly.Msg.tabletDialog_headline}
-          content={""}
-          onClose={() => toggleDialog()}
-          onClick={() => toggleDialog()}
-          button={Blockly.Msg.button_close}
-        >
-          <div>{Blockly.Msg.tabletDialog_text}</div>
-          <div>
-            {Blockly.Msg.tabletDialog_more}{" "}
-            <a href="https://sensebox.de/app" target="_blank" rel="noreferrer">
-              https://sensebox.de/app
-            </a>
-          </div>
-        </Dialog>
       </Accordion>
     </div>
   );

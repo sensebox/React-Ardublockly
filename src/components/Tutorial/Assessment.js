@@ -86,49 +86,7 @@ class Assessment extends Component {
           <Grid
             item
             xs={12}
-            md={6}
-            lg={3}
-            style={{
-              position: "relative",
-              // isWidthDown("sm", this.props.width)
-              //   ? { height: "max-content" }
-              //   : {}
-            }}
-          >
-            <Card
-              style={{
-                height: "calc(45vH - 30px)",
-                padding: "10px",
-                marginBottom: "10px",
-              }}
-            >
-              <Typography>
-                <ReactMarkdown remarkPlugins={[remarkGfm, remarkGemoji]}>
-                  {currentTask.text}
-                </ReactMarkdown>
-              </Typography>
-            </Card>
-            <Card
-              style={{
-                height: "20vH",
-                padding: "10px",
-                marginBottom: "10px",
-              }}
-            >
-              <TooltipViewer />
-            </Card>
-            <div
-              style={
-                isWidthDown("sm", this.props.width)
-                  ? { height: "500px" }
-                  : { height: "50%" }
-              }
-            ></div>
-          </Grid>
-          <Grid
-            item
-            xs={12}
-            md={this.state.codeOn ? 6 : 6}
+            md={this.state.codeOn ? 6 : 9}
             lg={this.state.codeOn ? 6 : 9}
             style={{ position: "relative" }}
           >
@@ -169,6 +127,48 @@ class Assessment extends Component {
               <CodeViewer />
             </Grid>
           ) : null}
+          <Grid
+            item
+            xs={12}
+            md={3}
+            lg={3}
+            style={{
+              position: "relative",
+              // isWidthDown("sm", this.props.width)
+              //   ? { height: "max-content" }
+              //   : {}
+            }}
+          >
+            <Card
+              style={{
+                height: "calc(44vH - 35px)",
+                padding: "10px",
+                marginBottom: "10px",
+              }}
+            >
+              <Typography>
+                <ReactMarkdown remarkPlugins={[remarkGfm, remarkGemoji]}>
+                  {currentTask.text}
+                </ReactMarkdown>
+              </Typography>
+            </Card>
+            {/* <Card
+              style={{
+                height: "20vH",
+                padding: "10px",
+                marginBottom: "10px",
+              }}
+            > */}
+            <TooltipViewer />
+            {/* </Card> */}
+            <div
+              style={
+                isWidthDown("sm", this.props.width)
+                  ? { height: "500px" }
+                  : { height: "50%" }
+              }
+            ></div>
+          </Grid>
         </Grid>
       </div>
     );
