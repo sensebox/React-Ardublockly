@@ -161,7 +161,7 @@ void loop() {
             {`${error}`}{" "}
           </p>
         </Drawer>
-        <Grid item lg={8}>
+        <Grid item lg={8} md={8}>
           <div style={{ display: "flex", alignItems: "center" }}>
             <h1>Code Editor</h1>
             <SaveIcon loading={autoSave} />
@@ -193,7 +193,7 @@ void loop() {
             }}
           />
         </Grid>
-        <Grid item lg={4}>
+        <Grid item lg={4} md={4}>
           <Button
             style={{ padding: "1rem", margin: "1rem" }}
             variant="contained"
