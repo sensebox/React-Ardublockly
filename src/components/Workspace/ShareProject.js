@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { shareProject } from "../../actions/projectActions";
 import { clearMessages } from "../../actions/messageActions";
+import QRCode from "react-qr-code";
+import axios from 'axios';
 
 import moment from "moment";
 
@@ -103,14 +105,49 @@ class WorkspaceFunc extends Component {
         title: Blockly.Msg.messages_SHARE_SUCCESS,
         id: this.props.project._id,
       });
+      this.createShortlink();
     } else {
       this.props.shareProject(
         this.props.name || this.props.project.title,
         this.props.projectType,
         this.props.project ? this.props.project._id : undefined
       );
+      this.createShortlink();
     }
   };
+
+  async createShortlink() {
+      // const requestOptions = {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ "slug": "fabscm", "url": "https://www.google.de" })
+      // };
+      // const response = await fetch('https://snsbx.de/api/shorty', requestOptions);
+      // const data = await response.json();
+      // console.log(data);
+
+      var data = JSON.stringify({
+        "slug": "testest",
+        "url": "https://www.google.de"
+      });
+
+      var config = {
+        method: 'post',
+        url: 'https://snsbx.de/api/shorty',
+        headers: { 
+          'Content-Type': 'application/json'
+        },
+        data : data
+      };
+
+      axios(config)
+      .then(function (response) {
+        console.log(JSON.stringify(response.data));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 
   render() {
     return (
@@ -168,6 +205,9 @@ class WorkspaceFunc extends Component {
                 <FontAwesomeIcon icon={faCopy} size="xs" />
               </IconButton>
             </Tooltip>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <QRCode value={`${window.location.origin}/share/${this.state.id}`} />
+            </div>
             {this.props.project &&
             this.props.project.shared &&
             this.props.message.id !== "SHARE_SUCCESS" ? (
