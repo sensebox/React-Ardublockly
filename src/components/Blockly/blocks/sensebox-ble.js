@@ -65,8 +65,8 @@ Blockly.Blocks["sensebox_phyphox_graph"] = {
       .appendField(Blockly.Msg.sensebox_phyphox_graphStyle)
       .appendField(
         new Blockly.FieldDropdown([
-          [Blockly.Msg.sensebox_phyphox_style_dots, "dots"],
           [Blockly.Msg.sensebox_phyphox_style_line, "line"],
+          [Blockly.Msg.sensebox_phyphox_style_dots, "dots"],
         ]),
         "style"
       );

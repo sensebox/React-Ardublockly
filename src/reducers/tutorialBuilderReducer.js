@@ -10,6 +10,9 @@ import {
   BUILDER_CHANGE_STEP,
   BUILDER_CHANGE_ORDER,
   BUILDER_DELETE_PROPERTY,
+  BUILDER_DIFFICULTY,
+  BUILDER_PUBLIC,
+  BUILDER_REVIEW,
 } from "../actions/types";
 
 const initialState = {
@@ -17,6 +20,9 @@ const initialState = {
   progress: false,
   json: "",
   title: "",
+  difficulty: 0,
+  public: false,
+  review: false,
   id: "",
   steps: [
     {
@@ -44,6 +50,21 @@ export default function foo(state = initialState, action) {
       return {
         ...state,
         title: action.payload,
+      };
+    case BUILDER_PUBLIC:
+      return {
+        ...state,
+        public: action.payload,
+      };
+    case BUILDER_DIFFICULTY:
+      return {
+        ...state,
+        difficulty: action.payload,
+      };
+    case BUILDER_REVIEW:
+      return {
+        ...state,
+        review: action.payload,
       };
     case BUILDER_ID:
       return {

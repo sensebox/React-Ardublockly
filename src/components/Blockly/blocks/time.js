@@ -59,7 +59,7 @@ Blockly.Blocks["time_millis"] = {
     this.setHelpUrl("http://arduino.cc/en/Reference/Millis");
     this.setColour(getColour().time);
     this.appendDummyInput().appendField(Blockly.Msg.ARD_TIME_MILLIS);
-    this.setOutput(true, Types.LARGE_NUMBER.typeId);
+    this.setOutput(true, Types.LARGE_NUMBER.typeName);
     this.setTooltip(Blockly.Msg.ARD_TIME_MILLIS_TIP);
   },
   /** @return {string} The type of return value for the block, an integer. */
@@ -77,7 +77,7 @@ Blockly.Blocks["time_micros"] = {
     this.setHelpUrl("http://arduino.cc/en/Reference/Micros");
     this.setColour(getColour().time);
     this.appendDummyInput().appendField(Blockly.Msg.ARD_TIME_MICROS);
-    this.setOutput(true, Types.LARGE_NUMBER.typeId);
+    this.setOutput(true, Types.LARGE_NUMBER.typeName);
     this.setTooltip(Blockly.Msg.ARD_TIME_MICROS_TIP);
   },
   /**

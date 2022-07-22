@@ -223,6 +223,12 @@ export const UI = {
   builder_requirements_head: "Requirements.",
   builder_requirements_order:
     "Note that the order of ticking is authoritative.",
+  builder_difficulty: "Difficulty level",
+  builder_public_head: "Publish tutorial",
+  builder_public_label: "Publish tutorial for all users",
+  builder_review_head: "Publish tutorial",
+  builder_review_text:
+    "You can share your tutorial with other people directly from the link. If you want to publish your tutorial for all users in the overview you can activate it here. An administrator will view your tutorial and then activate it.",
 
   /**
    * Login

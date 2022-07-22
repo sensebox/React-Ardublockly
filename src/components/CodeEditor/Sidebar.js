@@ -1,20 +1,19 @@
 import React from "react";
 import Blockly from "blockly";
+import { useSelector } from "react-redux";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Typography from "@material-ui/core/Typography";
 import { LibraryVersions } from "../../data/versions.js";
-//import { useMonaco } from "@monaco-editor/react";
-//import { Button } from "@material-ui/core";
-import Dialog from "../Dialog";
+import { useMonaco } from "@monaco-editor/react";
+import { Button } from "@material-ui/core";
 import SerialMonitor from "./SerialMonitor.js";
-//import axios from "axios";
+import axios from "axios";
 
 const Sidebar = () => {
-  const [alert, setAlert] = React.useState(false);
   //const [examples, setExamples] = React.useState([]);
-
+  const user = useSelector((state) => state.auth.user);
   // useEffect(() => {
   //   axios
   //     .get("https://coelho.opensensemap.org/items/blocklysamples")
@@ -22,14 +21,17 @@ const Sidebar = () => {
   //       setExamples(res.data.data);
   //     });
   // }, []);
+  const monaco = useMonaco();
+  const loadCode = (code) => {
+    monaco.editor.getModels()[0].setValue(code);
+  };
 
-  //const monaco = useMonaco();
-  // const loadCode = (code) => {
-  //   monaco.editor.getModels()[0].setValue(code);
-  // };
-
-  const toggleDialog = () => {
-    setAlert(false);
+  const getOsemScript = (id) => {
+    axios
+      .get(`https://api.opensensemap.org/boxes/${id}/script/`)
+      .then((res) => {
+        loadCode(res.data);
+      });
   };
 
   return (
@@ -50,7 +52,6 @@ const Sidebar = () => {
           </AccordionDetails>
         </Accordion>
       ) : null}
-
       {/* <Accordion>
         <AccordionSummary
           expandIcon={""}
@@ -67,6 +68,7 @@ const Sidebar = () => {
                   style={{ padding: "1rem", margin: "1rem" }}
                   variant="contained"
                   color="primary"
+                  key={i}
                   onClick={() => loadCode(object.code)}
                 >
                   {object.name}
@@ -76,6 +78,34 @@ const Sidebar = () => {
           </Typography>
         </AccordionDetails>
       </Accordion> */}
+      {user ? (
+        <Accordion>
+          <AccordionSummary
+            expandIcon={""}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <Typography>Deine openSenseMap Codes</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Typography>
+              {user.boxes.map((box, i) => {
+                return (
+                  <Button
+                    style={{ padding: "1rem", margin: "1rem" }}
+                    variant="contained"
+                    color="primary"
+                    key={i}
+                    onClick={() => getOsemScript(box._id)}
+                  >
+                    {box.name}
+                  </Button>
+                );
+              })}
+            </Typography>
+          </AccordionDetails>
+        </Accordion>
+      ) : null}
       <Accordion>
         <AccordionSummary
           expandIcon={""}
@@ -102,25 +132,6 @@ const Sidebar = () => {
             })}
           </Typography>
         </AccordionDetails>
-        <Dialog
-          style={{ zIndex: 9999999 }}
-          fullWidth
-          maxWidth={"sm"}
-          open={alert}
-          title={Blockly.Msg.tabletDialog_headline}
-          content={""}
-          onClose={() => toggleDialog()}
-          onClick={() => toggleDialog()}
-          button={Blockly.Msg.button_close}
-        >
-          <div>{Blockly.Msg.tabletDialog_text}</div>
-          <div>
-            {Blockly.Msg.tabletDialog_more}{" "}
-            <a href="https://sensebox.de/app" target="_blank" rel="noreferrer">
-              https://sensebox.de/app
-            </a>
-          </div>
-        </Dialog>
       </Accordion>
     </div>
   );

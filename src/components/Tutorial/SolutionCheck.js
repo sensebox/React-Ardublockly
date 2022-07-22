@@ -63,7 +63,7 @@ class SolutionCheck extends Component {
             style={{ width: "40px", height: "40px", marginRight: "5px" }}
             onClick={() => this.check()}
           >
-            <FontAwesomeIcon icon={faClipboardCheck} size="m" />
+            <FontAwesomeIcon icon={faClipboardCheck} size="xs" />
           </IconButton>
         </Tooltip>
 

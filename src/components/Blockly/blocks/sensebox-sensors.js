@@ -330,7 +330,6 @@ Blockly.Blocks["sensebox_button"] = {
         new Blockly.FieldDropdown([
           [Blockly.Msg.senseBox_button_isPressed, "isPressed"],
           [Blockly.Msg.senseBox_button_wasPressed, "wasPressed"],
-          [Blockly.Msg.senseBox_button_switch, "Switch"],
           [Blockly.Msg.senseBox_button_longPress, "longPress"],
         ]),
         "FUNCTION"
