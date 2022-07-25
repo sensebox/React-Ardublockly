@@ -57,6 +57,7 @@ class WorkspaceFunc extends Component {
       content: "",
       open: false,
       id: "",
+      shortLink: "",
     };
   }
 
@@ -67,6 +68,7 @@ class WorkspaceFunc extends Component {
         (!this.props.multiple ||
           this.props.message.status === this.props.project._id)
       ) {
+        this.createShortlink(this.props.message.status);
         this.setState({
           share: true,
           open: true,
@@ -105,48 +107,24 @@ class WorkspaceFunc extends Component {
         title: Blockly.Msg.messages_SHARE_SUCCESS,
         id: this.props.project._id,
       });
-      this.createShortlink();
     } else {
       this.props.shareProject(
         this.props.name || this.props.project.title,
         this.props.projectType,
         this.props.project ? this.props.project._id : undefined
       );
-      this.createShortlink();
     }
   };
 
-  async createShortlink() {
-      // const requestOptions = {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ "slug": "fabscm", "url": "https://www.google.de" })
-      // };
-      // const response = await fetch('https://snsbx.de/api/shorty', requestOptions);
-      // const data = await response.json();
-      // console.log(data);
-
-      var data = JSON.stringify({
-        "slug": "testest",
-        "url": "https://www.google.de"
-      });
-
-      var config = {
-        method: 'post',
-        url: 'https://snsbx.de/api/shorty',
-        headers: { 
-          'Content-Type': 'application/json'
-        },
-        data : data
-      };
-
-      axios(config)
-      .then(function (response) {
-        console.log(JSON.stringify(response.data));
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+  createShortlink(id) {
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ "slug": `blockly-${id}`, "url": `${window.location.origin}/share/${id}` })
+    };
+    fetch('https://www.snsbx.de/api/shorty', requestOptions)
+        .then(response => response.json())
+        .then(data => this.setState({ shortLink: data[0].link }));
   }
 
   render() {
@@ -180,10 +158,10 @@ class WorkspaceFunc extends Component {
               Über den folgenden Link kannst du dein Programm teilen:
             </Typography>
             <Link
-              to={`/share/${this.state.id}`}
+              to={this.state.shortLink}
               onClick={() => this.toggleDialog()}
               className={this.props.classes.link}
-            >{`${window.location.origin}/share/${this.state.id}`}</Link>
+            >{this.state.shortLink}</Link>
             <Tooltip
               title={Blockly.Msg.tooltip_copy_link}
               arrow
@@ -192,7 +170,7 @@ class WorkspaceFunc extends Component {
               <IconButton
                 onClick={() => {
                   navigator.clipboard.writeText(
-                    `${window.location.origin}/share/${this.state.id}`
+                    this.state.shortLink
                   );
                   this.setState({
                     snackbar: true,
@@ -206,7 +184,7 @@ class WorkspaceFunc extends Component {
               </IconButton>
             </Tooltip>
             <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <QRCode value={`${window.location.origin}/share/${this.state.id}`} />
+              <QRCode value={this.state.shortLink} />
             </div>
             {this.props.project &&
             this.props.project.shared &&
