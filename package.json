@@ -38,6 +38,8 @@
     "react-redux": "^7.2.4",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^5.0.0",
+    "react-share": "^4.4.0",
+    "react-spinners": "^0.13.3",
     "reactour": "^1.18.7",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",

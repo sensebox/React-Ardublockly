@@ -4,15 +4,16 @@ import { connect } from "react-redux";
 import { shareProject } from "../../actions/projectActions";
 import { clearMessages } from "../../actions/messageActions";
 import QRCode from "react-qr-code";
-import axios from 'axios';
+// import axios from 'axios';
 
 import moment from "moment";
 
 import Dialog from "../Dialog";
 import Snackbar from "../Snackbar";
 
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
+import GridLoader from "react-spinners/GridLoader";
 import { withStyles } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -58,6 +59,8 @@ class WorkspaceFunc extends Component {
       open: false,
       id: "",
       shortLink: "",
+      isFetching: false,
+      loading: false,
     };
   }
 
@@ -117,6 +120,7 @@ class WorkspaceFunc extends Component {
   };
 
   createShortlink(id) {
+    this.setState({ isFetching: true, loading: true })
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -124,7 +128,7 @@ class WorkspaceFunc extends Component {
     };
     fetch('https://www.snsbx.de/api/shorty', requestOptions)
         .then(response => response.json())
-        .then(data => this.setState({ shortLink: data[0].link }));
+        .then(data => this.setState({ shortLink: data[0].link, isFetching: false, loading: false }));
   }
 
   render() {
@@ -152,75 +156,88 @@ class WorkspaceFunc extends Component {
           onClose={this.toggleDialog}
           onClick={this.toggleDialog}
           button={Blockly.Msg.button_close}
-        >
-          <div style={{ marginTop: "10px" }}>
-            <Typography>
-              Über den folgenden Link kannst du dein Programm teilen:
-            </Typography>
-            <Link
-              to={this.state.shortLink}
-              onClick={() => this.toggleDialog()}
-              className={this.props.classes.link}
-            >{this.state.shortLink}</Link>
-            <Tooltip
-              title={Blockly.Msg.tooltip_copy_link}
-              arrow
-              style={{ marginRight: "5px" }}
-            >
-              <IconButton
-                onClick={() => {
-                  navigator.clipboard.writeText(
-                    this.state.shortLink
-                  );
-                  this.setState({
-                    snackbar: true,
-                    key: Date.now(),
-                    message: Blockly.Msg.messages_copylink_success,
-                    type: "success",
-                  });
-                }}
-              >
-                <FontAwesomeIcon icon={faCopy} size="xs" />
-              </IconButton>
-            </Tooltip>
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <QRCode value={this.state.shortLink} />
+        >            
+          { this.state.isFetching ? (
+            <div style={{ display: 'flex', justifyContent: 'center'}}>
+              <GridLoader color={"#4EAF47"} loading={this.state.loading} size={50} /> 
             </div>
-            {this.props.project &&
-            this.props.project.shared &&
-            this.props.message.id !== "SHARE_SUCCESS" ? (
-              <Typography
-                variant="body2"
-                style={{ marginTop: "20px" }}
-              >{`Das Projekt wurde bereits geteilt. Der Link ist noch mindestens ${
-                moment(this.props.project.shared).diff(
-                  moment().utc(),
-                  "days"
-                ) === 0
-                  ? moment(this.props.project.shared).diff(
-                      moment().utc(),
-                      "hours"
-                    ) === 0
-                    ? `${moment(this.props.project.shared).diff(
-                        moment().utc(),
-                        "minutes"
-                      )} Minuten`
-                    : `${moment(this.props.project.shared).diff(
-                        moment().utc(),
-                        "hours"
-                      )} Stunden`
-                  : `${moment(this.props.project.shared).diff(
-                      moment().utc(),
-                      "days"
-                    )} Tage`
-              } gültig.`}</Typography>
             ) : (
-              <Typography
-                variant="body2"
-                style={{ marginTop: "20px" }}
-              >{`Der Link ist nun ${process.env.REACT_APP_SHARE_LINK_EXPIRES} Tage gültig.`}</Typography>
-            )}
-          </div>
+              <div style={{ marginTop: "10px" }}>
+                <Typography>
+                  Über den folgenden Link kannst du dein Programm teilen:
+                </Typography>
+                <a
+                  href={this.state.shortLink}
+                  onClick={() => this.toggleDialog()}
+                  className={this.props.classes.link}
+                  target="_blank"
+                >{this.state.shortLink}</a>
+                <Tooltip
+                  title={Blockly.Msg.tooltip_copy_link}
+                  arrow
+                  style={{ marginRight: "5px" }}
+                >
+                  <IconButton
+                    onClick={() => {
+                      navigator.clipboard.writeText(
+                        this.state.shortLink
+                      );
+                      this.setState({
+                        snackbar: true,
+                        key: Date.now(),
+                        message: Blockly.Msg.messages_copylink_success,
+                        type: "success",
+                      });
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faCopy} size="xs" />
+                  </IconButton>
+                </Tooltip>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                  <QRCode value={this.state.shortLink} />
+                </div>
+                { this.props.project &&
+                  this.props.project.shared &&
+                  this.props.message.id !== "SHARE_SUCCESS" ? (
+                  <Typography
+                    variant="body2"
+                    style={{ marginTop: "20px" }}
+                  >
+                    {`Das Projekt wurde bereits geteilt. Der Link ist noch mindestens ${
+                      moment(this.props.project.shared).diff(
+                        moment().utc(),
+                        "days"
+                      ) === 0
+                      ? moment(this.props.project.shared).diff(
+                          moment().utc(),
+                          "hours"
+                        ) === 0
+                      ? `${moment(this.props.project.shared).diff(
+                          moment().utc(),
+                          "minutes"
+                        )} Minuten`
+                      : `${moment(this.props.project.shared).diff(
+                          moment().utc(),
+                          "hours"
+                        )} Stunden`
+                      : `${moment(this.props.project.shared).diff(
+                          moment().utc(),
+                          "days"
+                        )} Tage`
+                    } gültig.`}
+                  </Typography>
+                  ) : (
+                    <Typography
+                      variant="body2"
+                      style={{ marginTop: "20px" }}
+                    >
+                      {`Der Link ist nun ${process.env.REACT_APP_SHARE_LINK_EXPIRES} Tage gültig.`}
+                    </Typography>
+                  )
+                }
+              </div> 
+            )
+          }
         </Dialog>
       </div>
     );
