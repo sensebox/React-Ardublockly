@@ -14,6 +14,8 @@ import Snackbar from "../Snackbar";
 // import { Link } from "react-router-dom";
 
 import GridLoader from "react-spinners/GridLoader";
+import { EmailShareButton, FacebookShareButton, LinkedinShareButton, RedditShareButton, TelegramShareButton, TwitterShareButton, WhatsappShareButton} from "react-share";
+import { EmailIcon, FacebookIcon, LinkedinIcon, RedditIcon, TelegramIcon, TwitterIcon, WhatsappIcon} from "react-share";
 import { withStyles } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -134,7 +136,7 @@ class WorkspaceFunc extends Component {
   render() {
     return (
       <div style={this.props.style}>
-        <Tooltip title={Blockly.Msg.tooltip_share_project} arrow>
+        <Tooltip title={Blockly.Msg.tooltip_share_prschmersoject} arrow>
           <IconButton
             className={`shareBlocks ${this.props.classes.button}`}
             onClick={() => this.shareBlocks()}
@@ -195,6 +197,29 @@ class WorkspaceFunc extends Component {
                 </Tooltip>
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                   <QRCode value={this.state.shortLink} />
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'center', marginTop: "20px"}}>
+                  <FacebookShareButton url={this.state.shortLink} quote={"I created this sketch for my senseBox. Have a look!"} hashtag={"#senseBox"}>
+                    <FacebookIcon size={32} round />
+                  </FacebookShareButton>
+                  <TwitterShareButton url={this.state.shortLink} title={"I created this sketch for my senseBox. Have a look!"} hashtags={["senseBox", "Blockly", "citizenScience"]}>
+                    <TwitterIcon size={32} round />
+                  </TwitterShareButton>
+                  <WhatsappShareButton url={this.state.shortLink} title={"Look at my SenseBox sketch that I created with Blockly!"} separator={": "}>
+                    <WhatsappIcon size={32} round />
+                  </WhatsappShareButton>
+                  <TelegramShareButton url={this.state.shortLink} title={"Look at my SenseBox sketch that I created with Blockly!"}>
+                    <TelegramIcon size={32} round />
+                  </TelegramShareButton>
+                  <RedditShareButton url={this.state.shortLink} title={"I created this sketch for my senseBox. Have a look!"}>
+                    <RedditIcon size={32} round />
+                  </RedditShareButton>
+                  <LinkedinShareButton url={this.state.shortLink} title={"SenseBox sketch with Blockly"} summary={"I created this sketch for my senseBox. Have a look!"} source={"https://blockly-react.netlify.app"}>
+                    <LinkedinIcon size={32} round />
+                  </LinkedinShareButton>
+                  <EmailShareButton url={this.state.shortLink} subject={"SenseBox Blockly Sketch"} body={"I created this sketch for my senseBox. Have a look!"} separator={": "}>
+                    <EmailIcon size={32} round />
+                  </EmailShareButton>
                 </div>
                 { this.props.project &&
                   this.props.project.shared &&
