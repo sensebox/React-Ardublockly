@@ -299,13 +299,31 @@ class Toolbox extends React.Component {
           </Block>
         </Category>
         <Category name="Motors" colour={getColour().sensebox}>
-          <Block type="sensebox_motors_beginStepperMotor" />
-          <Block type="sensebox_motors_moveStepperMotor" />
           <Block type="sensebox_motors_beginServoMotor" />
-          <Block type="sensebox_motors_moveServoMotor" />
-          <Block type="sensebox_motors_I2CMotorBoard_begin" />
-          <Block type="sensebox_motors_I2CMotorBoard_moveDCMotor" />
+          <Block type="sensebox_motors_moveServoMotor">
+            <Value name="degrees">
+              <Block type="math_number">
+                <Field name="NUM">90</Field>
+              </Block>
+            </Value>
+          </Block>
+          {/* <Block type="sensebox_motors_I2CMotorBoard_begin" />
+          <Block type="sensebox_motors_I2CMotorBoard_moveDCMotor">
+            <Value name="speed">
+              <Block type="math_number">
+                <Field name="NUM">100</Field>
+              </Block>
+            </Value>
+          </Block>
           <Block type="sensebox_motors_I2CMotorBoard_stopDCMotor" />
+          <Block type="sensebox_motors_beginStepperMotor" />
+          <Block type="sensebox_motors_moveStepperMotor">
+            <Value name="steps">
+              <Block type="math_number">
+                <Field name="NUM">2048</Field>
+              </Block>
+            </Value>
+          </Block> */}
         </Category>
         {/* <Category name="Telegram" colour={getColour().sensebox}>
           <Block type="sensebox_telegram" />
