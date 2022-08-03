@@ -12,6 +12,7 @@ export const UI = {
   toolbox_variables: "Variablen",
   toolbox_serial: "Seriell",
   toolbox_advanced: "Erweitert",
+  toolbox_motors: "Motoren",
   variable_NUMBER: "Zahl (int)",
   variable_SHORT_NUMBER: "char",
   variable_LONG: "große Zahl (long)",
