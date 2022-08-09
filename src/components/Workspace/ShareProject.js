@@ -3,8 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { shareProject } from "../../actions/projectActions";
 import { clearMessages } from "../../actions/messageActions";
-import QRCode from "react-qr-code";
-// import axios from 'axios';
+import QRCode from 'qrcode.react';
 
 import moment from "moment";
 
@@ -14,20 +13,21 @@ import Snackbar from "../Snackbar";
 // import { Link } from "react-router-dom";
 
 import GridLoader from "react-spinners/GridLoader";
-import { EmailShareButton, FacebookShareButton, LinkedinShareButton, RedditShareButton, TelegramShareButton, TwitterShareButton, WhatsappShareButton} from "react-share";
-import { EmailIcon, FacebookIcon, LinkedinIcon, RedditIcon, TelegramIcon, TwitterIcon, WhatsappIcon} from "react-share";
+import { EmailShareButton, FacebookShareButton, TwitterShareButton, WhatsappShareButton} from "react-share";
+import { EmailIcon, FacebookIcon, TwitterIcon, WhatsappIcon} from "react-share";
 import { withStyles } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
+import Button from '@material-ui/core/Button';
 import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 
-import { faShareAlt, faCopy } from "@fortawesome/free-solid-svg-icons";
+import { faShareAlt, faCopy, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import * as Blockly from "blockly/core";
 
 const styles = (theme) => ({
-  button: {
+  iconButton: {
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.primary.contrastText,
     width: "40px",
@@ -36,6 +36,15 @@ const styles = (theme) => ({
       backgroundColor: theme.palette.primary.main,
       color: theme.palette.primary.contrastText,
     },
+  },
+  button: {
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.primary.contrastText,
+    "&:hover": {
+      backgroundColor: theme.palette.primary.main,
+      color: theme.palette.primary.contrastText,
+    },
+    borderRadius: 20,
   },
   link: {
     color: theme.palette.primary.main,
@@ -133,12 +142,26 @@ class WorkspaceFunc extends Component {
         .then(data => this.setState({ shortLink: data[0].link, isFetching: false, loading: false }));
   }
 
+  downloadQRCode = () => {
+    // Generate download with use canvas and stream
+    const canvas = document.getElementById("qr-gen");
+    const pngUrl = canvas
+      .toDataURL("image/png")
+      .replace("image/png", "image/octet-stream");
+    let downloadLink = document.createElement("a");
+    downloadLink.href = pngUrl;
+    downloadLink.download = `${this.state.shortLink}.png`;
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+  };
+
   render() {
     return (
       <div style={this.props.style}>
-        <Tooltip title={Blockly.Msg.tooltip_share_prschmersoject} arrow>
+        <Tooltip title={Blockly.Msg.tooltip_share_project} arrow>
           <IconButton
-            className={`shareBlocks ${this.props.classes.button}`}
+            className={`shareBlocks ${this.props.classes.iconButton}`}
             onClick={() => this.shareBlocks()}
           >
             <FontAwesomeIcon icon={faShareAlt} size="xs" />
@@ -196,7 +219,23 @@ class WorkspaceFunc extends Component {
                   </IconButton>
                 </Tooltip>
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
-                  <QRCode value={this.state.shortLink} />
+                  <QRCode
+                    id="qr-gen"
+                    value={this.state.shortLink}
+                    size={256}
+                    level={"L"}
+                    includeMargin={false}
+                  />
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px'}}>
+                  {/* <Tooltip title={Blockly.Msg.tooltip_download_qrcode} arrow>
+                    <IconButton onClick={() => this.downloadQRCode()} className={`download QR Code ${this.props.classes.button}`}>
+                      <FontAwesomeIcon icon={faDownload} size="xs" />
+                    </IconButton>
+                  </Tooltip> */}
+                  <Button className={`download QR Code ${this.props.classes.button}`} onClick={() => this.downloadQRCode()} variant="contained" startIcon={<FontAwesomeIcon icon={faDownload} size="xs" />}>
+                    Download QR code
+                  </Button>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: "20px"}}>
                   <FacebookShareButton url={this.state.shortLink} quote={"I created this sketch for my senseBox. Have a look!"} hashtag={"#senseBox"}>
@@ -208,15 +247,6 @@ class WorkspaceFunc extends Component {
                   <WhatsappShareButton url={this.state.shortLink} title={"Look at my SenseBox sketch that I created with Blockly!"} separator={": "}>
                     <WhatsappIcon size={32} round />
                   </WhatsappShareButton>
-                  <TelegramShareButton url={this.state.shortLink} title={"Look at my SenseBox sketch that I created with Blockly!"}>
-                    <TelegramIcon size={32} round />
-                  </TelegramShareButton>
-                  <RedditShareButton url={this.state.shortLink} title={"I created this sketch for my senseBox. Have a look!"}>
-                    <RedditIcon size={32} round />
-                  </RedditShareButton>
-                  <LinkedinShareButton url={this.state.shortLink} title={"SenseBox sketch with Blockly"} summary={"I created this sketch for my senseBox. Have a look!"} source={"https://blockly-react.netlify.app"}>
-                    <LinkedinIcon size={32} round />
-                  </LinkedinShareButton>
                   <EmailShareButton url={this.state.shortLink} subject={"SenseBox Blockly Sketch"} body={"I created this sketch for my senseBox. Have a look!"} separator={": "}>
                     <EmailIcon size={32} round />
                   </EmailShareButton>
