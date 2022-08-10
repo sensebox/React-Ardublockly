@@ -6,6 +6,7 @@ import "./sensebox-telegram";
 import "./sensebox-osem";
 import "./sensebox-web";
 import "./sensebox-display";
+import "./sensebox-motors";
 import "./sensebox-lora";
 import "./sensebox-led";
 import "./sensebox-rtc";
