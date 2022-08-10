@@ -298,6 +298,7 @@ class Toolbox extends React.Component {
             </Value>
           </Block>
         </Category>
+        
         {/* <Category name="Telegram" colour={getColour().sensebox}>
           <Block type="sensebox_telegram" />
           <Block type="sensebox_telegram_do" />
@@ -645,6 +646,33 @@ class Toolbox extends React.Component {
               </Value>
             </Block>
           </Category>
+          <Category name={Blockly.Msg.toolbox_motors} colour={getColour().motors}>
+          <Block type="sensebox_motors_beginServoMotor" />
+          <Block type="sensebox_motors_moveServoMotor">
+            <Value name="degrees">
+              <Block type="math_number">
+                <Field name="NUM">90</Field>
+              </Block>
+            </Value>
+          </Block>
+          {/* <Block type="sensebox_motors_I2CMotorBoard_begin" />
+          <Block type="sensebox_motors_I2CMotorBoard_moveDCMotor">
+            <Value name="speed">
+              <Block type="math_number">
+                <Field name="NUM">100</Field>
+              </Block>
+            </Value>
+          </Block>
+          <Block type="sensebox_motors_I2CMotorBoard_stopDCMotor" />
+          <Block type="sensebox_motors_beginStepperMotor" />
+          <Block type="sensebox_motors_moveStepperMotor">
+            <Value name="steps">
+              <Block type="math_number">
+                <Field name="NUM">2048</Field>
+              </Block>
+            </Value>
+          </Block> */}
+        </Category>
           <Category name="Watchdog" colour={getColour().io}>
             <Block type="watchdog_enable"></Block>
             <Block type="watchdog_reset"></Block>

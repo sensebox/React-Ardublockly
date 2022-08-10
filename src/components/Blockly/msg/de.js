@@ -7,6 +7,7 @@ import { LOOPS } from "./de/loops";
 import { MATH } from "./de/math";
 import { MQTT } from "./de/mqtt";
 import { DISPLAY } from "./de/sensebox-display";
+import { MOTORS } from "./de/sensebox-motors";
 import { LED } from "./de/sensebox-led";
 import { LORA } from "./de/sensebox-lora";
 import { OSEM } from "./de/sensebox-osem";
@@ -34,6 +35,7 @@ export const De = {
   ...MATH,
   ...MQTT,
   ...DISPLAY,
+  ...MOTORS,
   ...LED,
   ...LORA,
   ...OSEM,

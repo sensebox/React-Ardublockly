@@ -8,6 +8,7 @@ import { MATH } from "./en/math";
 import { MQTT } from "./en/mqtt";
 import { SENSEBOX } from "./en/sensebox";
 import { DISPLAY } from "./en/sensebox-display";
+import { MOTORS } from "./en/sensebox-motors";
 import { LED } from "./en/sensebox-led";
 import { LORA } from "./en/sensebox-lora";
 import { OSEM } from "./en/sensebox-osem";
@@ -34,6 +35,7 @@ export const En = {
   ...MATH,
   ...MQTT,
   ...DISPLAY,
+  ...MOTORS,
   ...LED,
   ...LORA,
   ...OSEM,
