@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { shareProject } from "../../actions/projectActions";
 import { clearMessages } from "../../actions/messageActions";
 import QRCode from 'qrcode.react';
+import { createId } from "mnemonic-id";
 
 import moment from "moment";
 
@@ -135,7 +136,7 @@ class WorkspaceFunc extends Component {
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ "slug": `blockly-${id}`, "url": `${window.location.origin}/share/${id}` })
+      body: JSON.stringify({ "slug": `blockly-${createId(5)}`, "url": `${window.location.origin}/share/${id}` })
     };
     fetch('https://www.snsbx.de/api/shorty', requestOptions)
         .then(response => response.json())
@@ -191,34 +192,37 @@ class WorkspaceFunc extends Component {
                 <Typography>
                   Über den folgenden Link kannst du dein Programm teilen:
                 </Typography>
-                <a
-                  href={this.state.shortLink}
-                  onClick={() => this.toggleDialog()}
-                  className={this.props.classes.link}
-                  target="_blank"
-                >{this.state.shortLink}</a>
-                <Tooltip
+                <div style={{ textAlign: "center" }}>
+                  <a
+                    href={this.state.shortLink}
+                    onClick={() => this.toggleDialog()}
+                    className={this.props.classes.link}
+                    target="_blank"
+                    rel="noreferrer"
+                  >{this.state.shortLink}</a>
+                  <Tooltip
                   title={Blockly.Msg.tooltip_copy_link}
                   arrow
                   style={{ marginRight: "5px" }}
-                >
-                  <IconButton
-                    onClick={() => {
-                      navigator.clipboard.writeText(
-                        this.state.shortLink
-                      );
-                      this.setState({
-                        snackbar: true,
-                        key: Date.now(),
-                        message: Blockly.Msg.messages_copylink_success,
-                        type: "success",
-                      });
-                    }}
                   >
-                    <FontAwesomeIcon icon={faCopy} size="xs" />
-                  </IconButton>
-                </Tooltip>
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <IconButton
+                      onClick={() => {
+                        navigator.clipboard.writeText(
+                          this.state.shortLink
+                        );
+                        this.setState({
+                          snackbar: true,
+                          key: Date.now(),
+                          message: Blockly.Msg.messages_copylink_success,
+                          type: "success",
+                        });
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faCopy} size="xs" />
+                    </IconButton>
+                  </Tooltip>
+                </div>                
+                <div style={{ marginTop: "10px", display: 'flex', justifyContent: 'center' }}>
                   <QRCode
                     id="qr-gen"
                     value={this.state.shortLink}
@@ -227,12 +231,7 @@ class WorkspaceFunc extends Component {
                     includeMargin={false}
                   />
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px'}}>
-                  {/* <Tooltip title={Blockly.Msg.tooltip_download_qrcode} arrow>
-                    <IconButton onClick={() => this.downloadQRCode()} className={`download QR Code ${this.props.classes.button}`}>
-                      <FontAwesomeIcon icon={faDownload} size="xs" />
-                    </IconButton>
-                  </Tooltip> */}
+                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px'}}>
                   <Button className={`download QR Code ${this.props.classes.button}`} onClick={() => this.downloadQRCode()} variant="contained" startIcon={<FontAwesomeIcon icon={faDownload} size="xs" />}>
                     Download QR code
                   </Button>
