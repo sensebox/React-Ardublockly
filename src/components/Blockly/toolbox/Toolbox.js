@@ -76,6 +76,8 @@ class Toolbox extends React.Component {
           <Block type="sensebox_sensor_watertemperature" />
           {/* <Block type="sensebox_windspeed" /> */}
           <Block type="sensebox_soundsensor_dfrobot" />
+          <Block type="sensebox_rainsensor_hydreon_rg15_init" />
+          <Block type="sensebox_rainsensor_hydreon_rg15" />
           <Block type="sensebox_multiplexer_init">
             <Value name="nrChannels">
               <Block type="math_number">

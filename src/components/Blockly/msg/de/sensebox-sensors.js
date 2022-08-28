@@ -132,10 +132,25 @@ Wenn die maximale Distanz überschritten wird, wird ein Wert von **O** ausgegebe
     "Schließe den Sensor an einen der 3 **digital/analog Ports** an. Der Sensor gibt dir den Messwert in dB mit einer Nachkommastelle",
   senseBox_soundsensor_dfrobot_helpurl:
     "https://docs.sensebox.de/hardware/sensoren-lautstaerke/",
-  /*
-   * BME680
-   */
 
+  /*
+  * rainsensor hydreon rg-15
+  */
+  sensebox_rainsensor_hydreon_rg15: "Regensensor (RG-15)",
+  sensebox_rainsensor_hydreon_rg15_port: "Serieller Port:",
+  sensebox_rainsensor_hydreon_rg15_serial1: "Serial1",
+  sensebox_rainsensor_hydreon_rg15_serial2: "Serial2",
+  sensebox_rainsensor_hydreon_rg15_value: "Messwert:",
+  sensebox_rainsensor_hydreon_rg15_totalAcc: "gesamter Niederschlag in mm",
+  sensebox_rainsensor_hydreon_rg15_rainInt: "Niederschlagsintensität in mm/h",
+  sensebox_rainsensor_hydreon_rg15_eventAcc: "Niederschlag pro Event in mm",
+  sensebox_rainsensor_hydreon_rg15_acc: "Niederschlag seit letzter Messung in mm",
+  sensebox_rainsensor_hydreon_rg15_tooltip: "Regensensor (RG-15) an einen der Seriellen Ports anschließen.",
+  sensebox_rainsensor_hydreon_rg15_helpurl: "TODO",
+
+  /*
+  * BME680
+  */
   senseBox_bme680: "Umweltsensor (BME680)",
   senseBox_bme_iaq: "Innenraumluftqualität (IAQ)",
   senseBox_bme_iaq_accuracy: "Kalibrierungswert",
