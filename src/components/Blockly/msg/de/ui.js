@@ -141,6 +141,7 @@ export const UI = {
 
   button_cancel: "Abbrechen",
   button_close: "Schließen",
+  button_save: "Speichern",
   button_accept: "Bestätigen",
   button_compile: "Kompilieren",
   button_create_variableCreate: "Erstelle Variable",
@@ -301,4 +302,10 @@ export const UI = {
   codeeditor_blockly_code: "Lade Blockly Code",
   codeeditor_compile_progress:
     "Dein Code wird nun kompiliert und anschließend auf deinen Computer heruntergeladen",
+
+  /**
+   * Device Selction
+   *  */
+  deviceselection_head: "Welches Board benutzt du?",
+  deviceselection_keep_selection: "Speichere meine Auswahl fürs nächste Mal"
 };

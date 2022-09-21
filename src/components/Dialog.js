@@ -24,7 +24,7 @@ class Dialog extends Component {
         </DialogContent>
         <DialogActions>
           {this.props.actions ? this.props.actions :
-            <Button onClick={this.props.onClick} color="primary">
+            <Button onClick={this.props.onClick} disabled={this.props.disabled} color="primary">
               {this.props.button}
             </Button>
           }
