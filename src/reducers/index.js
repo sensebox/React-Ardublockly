@@ -6,9 +6,11 @@ import generalReducer from './generalReducer';
 import projectReducer from './projectReducer';
 import messageReducer from './messageReducer';
 import authReducer from './authReducer';
+import boardReducer from './boardReducer'
 
 export default combineReducers({
   auth: authReducer,
+  board: boardReducer, 
   workspace: workspaceReducer,
   tutorial: tutorialReducer,
   builder: tutorialBuilderReducer,
