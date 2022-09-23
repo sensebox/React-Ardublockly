@@ -23,7 +23,6 @@ const setVariableFunction = function (defaultValue) {
       .getVariableMap()
       .getAllVariables();
     const myVar = allVars.filter((v) => v.name === variableName)[0];
-    console.log(myVar);
     var code = "";
     if (myVar !== undefined) {
       Blockly.Arduino.variables_[variableName + myVar.type] =

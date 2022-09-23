@@ -2,9 +2,9 @@ import { BOARD } from '../actions/types';
 
 const initialValue = () => {
   if (window.localStorage.getItem("board")) {
-    return window.localStorage.getItem("locale");
+    return window.localStorage.getItem("board");
   }
-  return "";
+  return "bla";
 };
 
 const initialState = {

@@ -12,7 +12,7 @@ import BlocklyWindow from "./Blockly/BlocklyWindow";
 import CodeViewer from "./CodeViewer";
 import TrashcanButtons from "./Workspace/TrashcanButtons";
 import HintTutorialExists from "./Tutorial/HintTutorialExists";
-import DeviceSelction from "./DeviceSelction";
+import DeviceSelection from "./DeviceSelection";
 
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
@@ -187,7 +187,7 @@ class Home extends Component {
             </Grid>
           ) : null}
         </Grid>
-        <DeviceSelction />
+        <DeviceSelection />
         <HintTutorialExists />
         {this.props.platform ? (
           <Dialog

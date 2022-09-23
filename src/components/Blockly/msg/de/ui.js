@@ -182,7 +182,8 @@ export const UI = {
   settings_sounds: "Töne",
   settings_sounds_text:
     "Aktiviere oder Deaktiviere Töne beim hinzufügen und löschen von Blöcken. Standardmäßig deaktiviert",
-
+  settings_board: "Board",
+  settings_board_text: "Wähle dein verwendetes Board aus",
   /**
    * 404
    */

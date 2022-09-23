@@ -23,6 +23,11 @@ const sensebox_mcu = {
     ["C5", "5"],
     ["C6", "6"],
   ],
+  digitalPinsRGB: [
+    ["A", "1"],
+    ["B", "3"],
+    ["C", "5"],
+  ],
   digitalPinsButton: [
     ["on Board", "0"],
     ["A1", "1"],
@@ -131,7 +136,7 @@ const sensebox_mini = {
   description: "senseBox Mini",
   compilerFlag: "arduino:samd",
   digitalPins: [
-    ["A1", "1"],
+    ["Test", "1"],
     ["A2", "2"],
     ["B3", "3"],
     ["B4", "4"],
@@ -147,6 +152,11 @@ const sensebox_mini = {
     ["B4", "4"],
     ["C5", "5"],
     ["C6", "6"],
+  ],
+  digitalPinsRGB: [
+    ["on Board", "7"],
+    ["B", "8"],
+    ["C", "1"],
   ],
   digitalPinsButton: [
     ["on Board", "0"],
@@ -247,7 +257,6 @@ const sensebox_mini = {
 var board = sensebox_mcu
 
 export const setBoard = (selectedBoard) => {
-  console.log(board)
   if (selectedBoard === "mini"){
     board = sensebox_mini
   }
@@ -258,6 +267,5 @@ export const setBoard = (selectedBoard) => {
 
 
 export const selectedBoard = () => {
-  console.log(board)
   return board;
 };

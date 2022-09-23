@@ -176,6 +176,8 @@ export const UI = {
   settings_sounds: "Sound",
   settings_sounds_text:
     "Enable or disable sounds when adding and deleting blocks. Disabled by default",
+  settings_board: "Board",
+  settings_board_text: "Choose your board",
 
   /**
    * 404
@@ -296,4 +298,11 @@ export const UI = {
   codeeditor_blockly_code: "Load blockly code",
   codeeditor_compile_progress:
     "Your code will now be compiled and then downloaded to your computer",
+
+      /**
+   * Device Selction
+   *  */
+  deviceselection_head: "Which board are you using?",
+  deviceselection_keep_selection: "Save my choice",
+
 };
