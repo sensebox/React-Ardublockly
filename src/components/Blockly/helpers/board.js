@@ -131,51 +131,38 @@ const sensebox_mcu = {
   parseKey: "_*_",
 };
 
-//Just for test purposes
+//senseBox MCU mini
 const sensebox_mini = {
   description: "senseBox Mini",
   compilerFlag: "arduino:samd",
   digitalPins: [
-    ["Test", "1"],
-    ["A2", "2"],
-    ["B3", "3"],
-    ["B4", "4"],
-    ["C5", "5"],
-    ["C6", "6"],
+    ["IO1", "1"],
+    ["IO2", "2"],
   ],
   digitalPinsLED: [
     ["BUILTIN_1", "7"],
     ["BUILTIN_2", "8"],
-    ["A1", "1"],
-    ["A2", "2"],
-    ["B3", "3"],
-    ["B4", "4"],
-    ["C5", "5"],
-    ["C6", "6"],
+    ["IO1", "1"],
+    ["IO2", "2"],
   ],
   digitalPinsRGB: [
     ["on Board", "7"],
-    ["B", "8"],
-    ["C", "1"],
+    ["IO1", "8"],
+    ["IO2", "1"],
   ],
   digitalPinsButton: [
     ["on Board", "0"],
-    ["A1", "1"],
-    ["A2", "2"],
+    ["IO1", "1"],
+    ["IO2", "2"],
 
   ],
   pwmPins: [
-    ["A1", "1"],
-    ["A2", "2"],
-    ["B3", "3"],
-    ["B4", "4"],
-    ["C5", "5"],
-    ["C6", "6"],
+    ["IO1", "1"],
+    ["IO2", "2"],
   ],
   serial: [
     ["serial", "SerialUSB"],
     ["serial_1", "Serial1"],
-    ["serial_2", "Serial2"],
   ],
   serialPins: {
     SerialUSB: [
