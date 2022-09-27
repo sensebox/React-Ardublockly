@@ -63,63 +63,56 @@ export const loadUser = () => (dispatch) => {
     });
 };
 
-var logoutTimerId;
-const timeToLogout = 14.9 * 60 * 1000; // nearly 15 minutes corresponding to the API
-
 // Login user
 export const login =
   ({ email, password }) =>
-  (dispatch) => {
-    dispatch({
-      type: USER_LOADING,
-    });
-    // Headers
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    // Request Body
-    const body = JSON.stringify({ email, password });
-    axios
-      .post(`${process.env.REACT_APP_BLOCKLY_API}/user`, body, config)
-      .then((res) => {
-        // Logout automatically if refreshToken "expired"
-        const logoutTimer = () =>
-          setTimeout(() => dispatch(logout()), timeToLogout);
-        logoutTimerId = logoutTimer();
-        dispatch(setLanguage(res.data.user.language));
-        dispatch({
-          type: LOGIN_SUCCESS,
-          payload: res.data,
-        });
-        dispatch({
-          type: GET_STATUS,
-          payload: res.data.user.status,
-        });
-        dispatch(returnSuccess(res.data.message, res.status, "LOGIN_SUCCESS"));
-      })
-      .catch((err) => {
-        dispatch(
-          returnErrors(
-            err.response.data.message,
-            err.response.status,
-            "LOGIN_FAIL"
-          )
-        );
-        dispatch({
-          type: LOGIN_FAIL,
-        });
-        var status = [];
-        if (window.localStorage.getItem("status")) {
-          status = JSON.parse(window.localStorage.getItem("status"));
-        }
-        dispatch({
-          type: GET_STATUS,
-          payload: status,
-        });
+    (dispatch) => {
+      dispatch({
+        type: USER_LOADING,
       });
-  };
+      // Headers
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      // Request Body
+      const body = JSON.stringify({ email, password });
+      axios
+        .post(`${process.env.REACT_APP_BLOCKLY_API}/user`, body, config)
+        .then((res) => {
+          dispatch(setLanguage(res.data.user.language));
+          dispatch({
+            type: LOGIN_SUCCESS,
+            payload: res.data,
+          });
+          dispatch({
+            type: GET_STATUS,
+            payload: res.data.user.status,
+          });
+          dispatch(returnSuccess(res.data.message, res.status, "LOGIN_SUCCESS"));
+        })
+        .catch((err) => {
+          dispatch(
+            returnErrors(
+              err.response.data.message,
+              err.response.status,
+              "LOGIN_FAIL"
+            )
+          );
+          dispatch({
+            type: LOGIN_FAIL,
+          });
+          var status = [];
+          if (window.localStorage.getItem("status")) {
+            status = JSON.parse(window.localStorage.getItem("status"));
+          }
+          dispatch({
+            type: GET_STATUS,
+            payload: status,
+          });
+        });
+    };
 
 // Logout User
 export const logout = () => (dispatch) => {
@@ -144,7 +137,6 @@ export const logout = () => (dispatch) => {
       }
       dispatch(setLanguage(locale));
       dispatch(returnSuccess(res.data.message, res.status, "LOGOUT_SUCCESS"));
-      clearTimeout(logoutTimerId);
     },
     error: (err) => {
       dispatch(
@@ -165,7 +157,6 @@ export const logout = () => (dispatch) => {
         type: GET_STATUS,
         payload: status,
       });
-      clearTimeout(logoutTimerId);
     },
   };
   axios
@@ -222,10 +213,6 @@ export const authInterceptor = () => (dispatch, getState) => {
             })
             .then((res) => {
               if (res.status === 200) {
-                clearTimeout(logoutTimerId);
-                const logoutTimer = () =>
-                  setTimeout(() => dispatch(logout()), timeToLogout);
-                logoutTimerId = logoutTimer();
                 dispatch({
                   type: REFRESH_TOKEN_SUCCESS,
                   payload: res.data,
