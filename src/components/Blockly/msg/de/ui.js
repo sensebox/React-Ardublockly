@@ -141,6 +141,7 @@ export const UI = {
 
   button_cancel: "Abbrechen",
   button_close: "Schließen",
+  button_save: "Speichern",
   button_accept: "Bestätigen",
   button_compile: "Kompilieren",
   button_create_variableCreate: "Erstelle Variable",
@@ -181,7 +182,8 @@ export const UI = {
   settings_sounds: "Töne",
   settings_sounds_text:
     "Aktiviere oder Deaktiviere Töne beim hinzufügen und löschen von Blöcken. Standardmäßig deaktiviert",
-
+  settings_board: "Board",
+  settings_board_text: "Wähle dein verwendetes Board aus",
   /**
    * 404
    */
@@ -301,4 +303,12 @@ export const UI = {
   codeeditor_blockly_code: "Lade Blockly Code",
   codeeditor_compile_progress:
     "Dein Code wird nun kompiliert und anschließend auf deinen Computer heruntergeladen",
+
+  /**
+   * Device Selction
+   *  */
+  deviceselection_head: "Welches Board benutzt du?",
+  deviceselection_keep_selection: "Speichere meine Auswahl fürs nächste Mal (Du kannst das Board später in den Einstellungen wechseln)",
+  deviceselection_footnote: "Hier kommst du zur alten Blockly Version für den ",
+  deviceselection_footnote_02: "oder die"
 };

@@ -89,7 +89,6 @@ class Compile extends Component {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         if (data.code === "Internal Server Error") {
           this.setState({
             progress: false,

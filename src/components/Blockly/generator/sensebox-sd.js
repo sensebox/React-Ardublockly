@@ -203,6 +203,5 @@ Blockly.Arduino.sensebox_sd_save_for_osem = function (block) {
   Blockly.Arduino.definitions_["SENSOR_ID" + id + ""] =
     "const char SENSOR_ID" + id + '[] PROGMEM = "' + sensor_id + '";';
   code += "addMeasurement(SENSOR_ID" + id + "," + sensor_value + ");\n";
-  console.log(code);
   return code;
 };

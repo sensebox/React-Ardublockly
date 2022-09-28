@@ -304,7 +304,6 @@ class Builder extends Component {
           newTutorial.append(`steps[${i}][xml]`, step.xml);
         }
       });
-      console.log(newTutorial);
       return newTutorial;
     }
   };

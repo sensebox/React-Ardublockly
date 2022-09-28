@@ -45,15 +45,11 @@ Blockly.Blocks['sensebox_rgb_led'] = {
 
 Blockly.Blocks['sensebox_ws2818_led_init'] = {
     init: function () {
-
-        var dropdownOptions = [[Blockly.Msg.senseBox_ultrasonic_port_A, '1'],
-        [Blockly.Msg.senseBox_ultrasonic_port_B, '3'], [Blockly.Msg.senseBox_ultrasonic_port_C, '5']];
-
         this.setColour(getColour().sensebox);
         this.appendDummyInput()
             .appendField(Blockly.Msg.senseBox_ws2818_rgb_led_init)
             .appendField("Port:")
-            .appendField(new Blockly.FieldDropdown(dropdownOptions), "Port")
+            .appendField(new Blockly.FieldDropdown(selectedBoard().digitalPinsRGB), "Port")
         this.appendValueInput("BRIGHTNESS", "brightness")
             .appendField((Blockly.Msg.senseBox_ws2818_rgb_led_brightness));
         this.appendValueInput("NUMBER", "number")
@@ -66,15 +62,11 @@ Blockly.Blocks['sensebox_ws2818_led_init'] = {
 
 Blockly.Blocks['sensebox_ws2818_led'] = {
     init: function () {
-
-        var dropdownOptions = [[Blockly.Msg.senseBox_ultrasonic_port_A, '1'],
-        [Blockly.Msg.senseBox_ultrasonic_port_B, '3'], [Blockly.Msg.senseBox_ultrasonic_port_C, '5']];
-
         this.setColour(getColour().sensebox);
         this.appendDummyInput()
             .appendField(Blockly.Msg.senseBox_ws2818_rgb_led)
             .appendField("Port:")
-            .appendField(new Blockly.FieldDropdown(dropdownOptions), "Port")
+            .appendField(new Blockly.FieldDropdown(selectedBoard().digitalPinsRGB), "Port")
         this.appendValueInput("POSITION", "position")
             .appendField((Blockly.Msg.senseBox_ws2818_rgb_led_position));
         this.appendValueInput("COLOR", 'Number')

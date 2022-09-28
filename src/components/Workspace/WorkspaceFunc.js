@@ -15,9 +15,6 @@ import DeleteProject from "./DeleteProject";
 import CopyCode from "./CopyCode";
 import AutoSave from "./AutoSave";
 class WorkspaceFunc extends Component {
-  componentDidUpdate() {
-    console.log(this.props.autosave);
-  }
 
   render() {
     return (
