@@ -36,6 +36,7 @@ import {
   faTools,
   faLightbulb,
   faCode,
+  faPuzzlePiece,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Blockly from "blockly";
@@ -213,6 +214,11 @@ class Navbar extends Component {
           </div>
           <List>
             {[
+                 {
+                  text: Blockly.Msg.navbar_blockly,
+                  icon: faPuzzlePiece,
+                  link: "/",
+                },
               {
                 text: Blockly.Msg.navbar_tutorials,
                 icon: faChalkboardTeacher,
