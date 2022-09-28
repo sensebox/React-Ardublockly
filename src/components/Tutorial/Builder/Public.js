@@ -36,7 +36,6 @@ const styles = (theme) => ({
 class Public extends Component {
   handleChange = (e) => {
     var value = e.target.checked;
-    console.log(value);
     if (this.props.property === "public") {
       this.props.tutorialPublic(value);
     } else if (this.props.property === "json") {

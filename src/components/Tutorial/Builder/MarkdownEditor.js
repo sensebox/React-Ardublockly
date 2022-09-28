@@ -44,7 +44,6 @@ const MarkdownEditor = (props) => {
         headers: { "Content-Type": "multipart/form-data" },
       })
         .then((res) => {
-          console.log(res);
           resolve(
             `${process.env.REACT_APP_BLOCKLY_API}/upload/` + res.data.filename
           );

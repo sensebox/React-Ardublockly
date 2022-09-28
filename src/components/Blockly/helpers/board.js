@@ -23,6 +23,11 @@ const sensebox_mcu = {
     ["C5", "5"],
     ["C6", "6"],
   ],
+  digitalPinsRGB: [
+    ["A", "1"],
+    ["B", "3"],
+    ["C", "5"],
+  ],
   digitalPinsButton: [
     ["on Board", "0"],
     ["A1", "1"],
@@ -126,6 +131,124 @@ const sensebox_mcu = {
   parseKey: "_*_",
 };
 
+//senseBox MCU mini
+const sensebox_mini = {
+  description: "senseBox Mini",
+  compilerFlag: "arduino:samd",
+  digitalPins: [
+    ["IO1", "1"],
+    ["IO2", "2"],
+  ],
+  digitalPinsLED: [
+    ["BUILTIN_1", "7"],
+    ["BUILTIN_2", "8"],
+    ["IO1", "1"],
+    ["IO2", "2"],
+  ],
+  digitalPinsRGB: [
+    ["on Board", "6"],
+    ["IO1", "1"],
+    ["IO2", "2"],
+  ],
+  digitalPinsButton: [
+    ["on Board", "0"],
+    ["IO1", "1"],
+    ["IO2", "2"],
+
+  ],
+  pwmPins: [
+    ["IO1", "1"],
+    ["IO2", "2"],
+  ],
+  serial: [
+    ["serial", "SerialUSB"],
+    ["serial_1", "Serial1"],
+  ],
+  serialPins: {
+    SerialUSB: [
+      ["RX", ""],
+      ["TX", ""],
+    ],
+    Serial1: [
+      ["RX", "11"],
+      ["TX", "10"],
+    ],
+    Serial2: [
+      ["RX", "13"],
+      ["TX", "12"],
+    ],
+  },
+  serialSpeed: [
+    ["300", "300"],
+    ["600", "600"],
+    ["1200", "1200"],
+    ["2400", "2400"],
+    ["4800", "4800"],
+    ["9600", "9600"],
+    ["14400", "14400"],
+    ["19200", "19200"],
+    ["28800", "28800"],
+    ["31250", "31250"],
+    ["38400", "38400"],
+    ["57600", "57600"],
+    ["115200", "115200"],
+  ],
+  spi: [["SPI", "SPI"]],
+  spiPins: {
+    SPI: [
+      ["MOSI", "19"],
+      ["MISO", "21"],
+      ["SCK", "20"],
+    ],
+  },
+  spiClockDivide: [
+    ["2 (8MHz)", "SPI_CLOCK_DIV2"],
+    ["4 (4MHz)", "SPI_CLOCK_DIV4"],
+    ["8 (2MHz)", "SPI_CLOCK_DIV8"],
+    ["16 (1MHz)", "SPI_CLOCK_DIV16"],
+    ["32 (500KHz)", "SPI_CLOCK_DIV32"],
+    ["64 (250KHz)", "SPI_CLOCK_DIV64"],
+    ["128 (125KHz)", "SPI_CLOCK_DIV128"],
+  ],
+  i2c: [["I2C", "Wire"]],
+  i2cPins: {
+    Wire: [
+      ["SDA", "17"],
+      ["SCL", "16"],
+    ],
+  },
+  i2cSpeed: [
+    ["100kHz", "100000L"],
+    ["400kHz", "400000L"],
+  ],
+  builtinLed: [
+    ["BUILTIN_1", "7"],
+    ["BUILTIN_2", "8"],
+  ],
+  interrupt: [
+    ["interrupt1", "1"],
+    ["interrupt2", "2"],
+  ],
+  analogPins: [
+    ["A1", "A1"],
+    ["A2", "A2"],
+  ],
+  serial_baud_rate: 9600,
+  parseKey: "_*_",
+};
+
+var board = sensebox_mcu
+
+export const setBoard = (selectedBoard) => {
+  if (selectedBoard === "mini"){
+    board = sensebox_mini
+  }
+  else {
+    board = sensebox_mcu
+  }
+}
+
+
 export const selectedBoard = () => {
-  return sensebox_mcu;
+  return board;
 };
