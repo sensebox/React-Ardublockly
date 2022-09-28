@@ -147,7 +147,6 @@ class TutorialHome extends Component {
     if (this.props.message.id === "GET_TUTORIALS_FAIL") {
       alert(this.props.message.msg);
     }
-    console.log(this.props.user);
   }
 
   componentWillUnmount() {

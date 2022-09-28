@@ -34,13 +34,11 @@ const styles = (theme) => ({
 
 class Difficulty extends Component {
   ratingChanged = (newRating) => {
-    console.log(newRating);
     this.handleChange(newRating);
   };
 
   handleChange = (e) => {
     var value = e;
-    console.log(value);
     if (this.props.property === "difficulty") {
       this.props.tutorialDifficulty(value);
     } else if (this.props.property === "json") {

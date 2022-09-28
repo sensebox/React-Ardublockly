@@ -37,7 +37,6 @@ class AutoSave extends Component {
   };
 
   componentDidMount() {
-    console.log(this.props.xml);
   }
 
   componentDidUpdate(prevProps) {

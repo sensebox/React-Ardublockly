@@ -38,7 +38,6 @@ const CodeEditor = (props) => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         if (data.code === "Internal Server Error") {
           setProgress(false);
           setOpen(true);
