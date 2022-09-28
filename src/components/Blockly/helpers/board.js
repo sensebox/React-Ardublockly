@@ -146,9 +146,9 @@ const sensebox_mini = {
     ["IO2", "2"],
   ],
   digitalPinsRGB: [
-    ["on Board", "7"],
-    ["IO1", "8"],
-    ["IO2", "1"],
+    ["on Board", "6"],
+    ["IO1", "1"],
+    ["IO2", "2"],
   ],
   digitalPinsButton: [
     ["on Board", "0"],
@@ -228,10 +228,6 @@ const sensebox_mini = {
   interrupt: [
     ["interrupt1", "1"],
     ["interrupt2", "2"],
-    ["interrupt3", "3"],
-    ["interrupt4", "4"],
-    ["interrupt5", "5"],
-    ["interrupt6", "6"],
   ],
   analogPins: [
     ["A1", "A1"],

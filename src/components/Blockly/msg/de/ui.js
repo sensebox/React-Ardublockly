@@ -308,5 +308,7 @@ export const UI = {
    * Device Selction
    *  */
   deviceselection_head: "Welches Board benutzt du?",
-  deviceselection_keep_selection: "Speichere meine Auswahl fürs nächste Mal"
+  deviceselection_keep_selection: "Speichere meine Auswahl fürs nächste Mal (Du kannst das Board später in den Einstellungen wechseln)",
+  deviceselection_footnote: "Hier kommst du zur alten Blockly Version für den ",
+  deviceselection_footnote_02: "oder die"
 };

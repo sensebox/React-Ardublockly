@@ -140,7 +140,7 @@ class DeviceSeclection extends Component {
           label={Blockly.Msg.deviceselection_keep_selection}
         />
         <Typography variant="body1" >
-          Hier kommst du zur alten Blockly Version für den <a href="https://sensebox.github.io/blockly/">Arduino UNO</a> oder die <a href="/">senseBox MCU</a>
+          {Blockly.Msg.deviceselection_footnote} <a href="https://sensebox.github.io/blockly/">Arduino UNO</a> {Blockly.Msg.deviceselection_footnote_02} <a href="/">senseBox MCU</a>
         </Typography>
       </Dialog>
     );
