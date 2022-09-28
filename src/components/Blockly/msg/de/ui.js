@@ -249,7 +249,7 @@ export const UI = {
   /**
    * Navbar
    */
-
+  navbar_blockly: "Blockly",
   navbar_tutorials: "Tutorials",
   navbar_tutorialbuilder: "Tutorial erstellen",
   navbar_gallery: "Galerie",
