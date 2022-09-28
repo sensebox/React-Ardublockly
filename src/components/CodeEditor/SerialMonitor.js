@@ -27,7 +27,6 @@ const SerialMonitor = () => {
             if (value) {
               //   byte array to string: https://stackoverflow.com/a/37542820
               const text = String.fromCharCode.apply(null, value);
-              console.log(text);
               setSerialPortContent((prevContent) => [
                 ...prevContent,
                 [new Date(), text],
