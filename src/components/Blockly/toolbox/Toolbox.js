@@ -21,11 +21,8 @@ class Toolbox extends React.Component {
         [`${Blockly.Msg.variable_LONG}`, "long"],
         [`${Blockly.Msg.variable_DECIMAL}`, "float"],
         [`${Blockly.Msg.variables_TEXT}`, "String"],
-        [`${Blockly.Msg.variables_ARRAY}`, "Array"],
         [`${Blockly.Msg.variables_CHARACTER}`, "char"],
         [`${Blockly.Msg.variables_BOOLEAN}`, "boolean"],
-        [`${Blockly.Msg.variables_NULL}`, "void"],
-        [`${Blockly.Msg.variables_UNDEF}`, "undefined"],
       ]
     );
     typedVarModal.init();
