@@ -933,8 +933,8 @@ Blockly.Msg.senseBox_telegram_message = "Message";
 Blockly.Msg.senseBox_telegram_send = "Send Message";
 Blockly.Msg.senseBox_telegram_token = "Token";
 Blockly.Msg.senseBox_temp = "Temperature in °C";
-Blockly.Msg.senseBox_temp_hum = "Temperature/Humidity Sensor (HDC1080)";
-Blockly.Msg.senseBox_temp_hum_tip = "Sensor measuring temperature and humidity";
+Blockly.Msg.sensebox_hdc1080 = "Temperature/Humidity Sensor (HDC1080)";
+Blockly.Msg.sensebox_hdc1080_tip = "Sensor measuring temperature and humidity";
 Blockly.Msg.senseBox_ultrasonic = "Ultrasonic distance sensor at Port";
 Blockly.Msg.senseBox_ultrasonic_echo = "Echo";
 Blockly.Msg.senseBox_ultrasonic_port_A = "A";
@@ -988,7 +988,7 @@ Blockly.Msg.senseBox_mqtt_publish = "Publish to Feed/Topic";
 Blockly.Msg.senseBox_windspeed = "Windspeedsensor";
 
 //Soundsensor
-Blockly.Msg.senseBox_soundsensor_dfrobot = "Soundsensor (DF Robot)";
+Blockly.Msg.sensebox_sen0232 = "Soundsensor (DF Robot)";
 
 /**
  * Add Translation for Blocks above

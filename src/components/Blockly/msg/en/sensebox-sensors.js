@@ -20,8 +20,8 @@ export const SENSORS = {
   /**
    * DPS310
    */
-  senseBox_sensor_dps310: "Airpressure/Temperature Sensor (DPS310)",
-  senseBox_sensor_dps310_tooltip:
+  sensebox_dps310: "Airpressure/Temperature Sensor (DPS310)",
+  sensebox_dps310_tooltip:
     "Connect the sensor to one of the 5 **I2C ports**. The sensor gives you the measured value for the air pressure in hPa. To calculate the correct altitude above sea level the sensor needs a current reference value.",
 
   /**
@@ -37,10 +37,10 @@ export const SENSORS = {
    * Temperature and Humidity Sensor (HDC1080)
    */
   senseBox_temp: "Temperature in °C",
-  senseBox_temp_hum: "Temperature/Humidity Sensor (HDC1080)",
-  senseBox_temp_hum_tooltip:
+  sensebox_hdc1080: "Temperature/Humidity Sensor (HDC1080)",
+  sensebox_hdc1080_tooltip:
     "This block returns the temperature and humidity sensor readings. Connect the sensor to one of the 5 I2C ports. Measured value is output with 2 decimal places.",
-  senseBox_temp_hum_helpurl:
+  sensebox_hdc1080_helpurl:
     "https://en.docs.sensebox.de/hardware/sensoren-temperatur-luftfeuchte/",
   senseBox_hum: "humidity in %",
   senseBox_hum_tip: "Measures humidity in %",
@@ -128,10 +128,10 @@ If the max distance is reached the a value of **O** will be returned`,
   /*
    * Soundsensor
    */
-  senseBox_soundsensor_dfrobot: "Soundsensor (DF Robot)",
-  senseBox_soundsensor_dfrobot_tooltip:
+  sensebox_sen0232: "Soundsensor (DF Robot)",
+  sensebox_sen0232_tooltip:
     "Connect the sensor to one of the 3 **digital/analog ports**. The sensor will give you the reading in dB with one decimal.",
-  senseBox_soundsensor_dfrobot_helpurl:
+  sensebox_sen0232_helpurl:
     "https://en.docs.sensebox.de/hardware/sensoren-lautstaerke/",
 
   /*

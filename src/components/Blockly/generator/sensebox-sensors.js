@@ -5,14 +5,14 @@ import Blockly from "blockly";
  *
  */
 
-Blockly.Arduino.sensebox_sensor_temp_hum = function () {
+Blockly.Arduino.sensebox_hdc1080 = function () {
   var dropdown_name = this.getFieldValue("NAME");
 
   Blockly.Arduino.libraries_["library_adafruithdc1000"] =
     "#include <Adafruit_HDC1000.h> // http://librarymanager/All#Adafruit_HDC1000_Library";
   Blockly.Arduino.definitions_["define_hdc"] =
     "Adafruit_HDC1000 hdc = Adafruit_HDC1000();";
-  Blockly.Arduino.setupCode_["sensebox_sensor_temp_hum"] = "hdc.begin();";
+  Blockly.Arduino.setupCode_["sensebox_hdc1080"] = "hdc.begin();";
   var code = `hdc.read${dropdown_name}()`;
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
@@ -22,7 +22,7 @@ Blockly.Arduino.sensebox_sensor_temp_hum = function () {
  *
  */
 
-Blockly.Arduino.sensebox_sensor_uv_light = function () {
+Blockly.Arduino.sensebox_tsl4531 = function () {
   var dropdown_name = this.getFieldValue("NAME");
   let code = "";
   Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
@@ -30,7 +30,7 @@ Blockly.Arduino.sensebox_sensor_uv_light = function () {
   if (dropdown_name === "UvIntensity") {
     Blockly.Arduino.libraries_["library_veml6070"] = "#include <VEML6070.h>";
     Blockly.Arduino.definitions_["define_veml"] = "VEML6070 veml;";
-    Blockly.Arduino.setupCode_["sensebox_sensor_uv_light"] = "veml.begin();";
+    Blockly.Arduino.setupCode_["sensebox_tsl4531"] = "veml.begin();";
     code = "veml.getUV()";
   }
   if (dropdown_name === "Illuminance") {
@@ -133,7 +133,7 @@ unsigned char measurementRate = 3;
  *
  */
 
-Blockly.Arduino.sensebox_sensor_bmx055_accelerometer = function () {
+Blockly.Arduino.sensebox_bmx055 = function () {
   var dropdown_value = this.getFieldValue("VALUE");
   var range = this.getFieldValue("RANGE");
   Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
@@ -150,7 +150,7 @@ Blockly.Arduino.sensebox_sensor_bmx055_accelerometer = function () {
  *
  */
 
-Blockly.Arduino.sensebox_sensor_sds011 = function () {
+Blockly.Arduino.sensebox_sds011 = function () {
   var dropdown_name = this.getFieldValue("NAME");
   var serial_name = this.getFieldValue("SERIAL");
   Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
@@ -174,7 +174,7 @@ Blockly.Arduino.sensebox_sensor_sds011 = function () {
  *
  */
 
-Blockly.Arduino.sensebox_sensor_pressure = function () {
+Blockly.Arduino.sensebox_bmp280 = function () {
   var dropdown_name = this.getFieldValue("NAME");
   var code = "";
   var referencePressure = this.getFieldValue("referencePressure");
@@ -212,7 +212,7 @@ bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,
  *
  */
 
-Blockly.Arduino.sensebox_sensor_bme680_bsec = function () {
+Blockly.Arduino.sensebox_bme680 = function () {
   var dropdown_name = this.getFieldValue("dropdown");
   let code = "";
   Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
@@ -324,7 +324,7 @@ Blockly.Arduino.sensebox_sensor_bme680_bsec = function () {
  *
  */
 
-Blockly.Arduino.sensebox_sensor_ultrasonic_ranger = function () {
+Blockly.Arduino.sensebox_hcsr04 = function () {
   var dropdown_pin_RX = this.getFieldValue("ultrasonic_trigger");
   var dropdown_pin_TX = this.getFieldValue("ultrasonic_echo");
   var port = this.getFieldValue("port");
@@ -520,7 +520,7 @@ return tsBuffer;
  * Block for Truebner STM50
  */
 
-Blockly.Arduino.sensebox_sensor_truebner_smt50 = function () {
+Blockly.Arduino.sensebox_smt50 = function () {
   Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   var dropdown_port = this.getFieldValue("Port");
   var dropdown_value = this.getFieldValue("value");
@@ -628,7 +628,7 @@ float getWindspeed(){
  *
  */
 
-Blockly.Arduino.sensebox_soundsensor_dfrobot = function () {
+Blockly.Arduino.sensebox_sen0232 = function () {
   Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   var dropdown_port = this.getFieldValue("Port");
   var dropdown_pin = 1;
@@ -659,7 +659,7 @@ float getSoundValue(){
  *
  */
 
-Blockly.Arduino.sensebox_sensor_dps310 = function () {
+Blockly.Arduino.sensebox_dps310 = function () {
   var dropdown_name = this.getFieldValue("NAME");
   var code = "";
   var referencePressure = this.getFieldValue("referencePressure");

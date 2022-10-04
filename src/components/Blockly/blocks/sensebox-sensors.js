@@ -3,15 +3,16 @@ import { getColour } from "../helpers/colour";
 import * as Types from "../helpers/types";
 import { selectedBoard } from "../helpers/board";
 import { FieldGridDropdown } from "@blockly/field-grid-dropdown";
+import sensorInfo  from "../helpers/sensorInfo";
 
 /**
  * HDC1080 Temperature and Humidity Sensor
  *
  */
 
-Blockly.Blocks["sensebox_sensor_temp_hum"] = {
-  init: function () {
-    this.appendDummyInput().appendField(Blockly.Msg.senseBox_temp_hum);
+Blockly.Blocks["sensebox_hdc1080"] = {
+  init: async function () {
+    this.appendDummyInput().appendField(Blockly.Msg.sensebox_hdc1080);
     this.appendDummyInput()
       .setAlign(Blockly.ALIGN_RIGHT)
       .appendField(Blockly.Msg.senseBox_value)
@@ -24,8 +25,8 @@ Blockly.Blocks["sensebox_sensor_temp_hum"] = {
       );
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);
-    this.setTooltip(Blockly.Msg.senseBox_temp_hum_tooltip);
-    this.setHelpUrl(Blockly.Msg.senseBox_temp_hum_helpurl);
+    this.setTooltip(await sensorInfo("hdc1080"));
+    this.setHelpUrl("https://sensors.wiki/sensor/detail/hdc1080");
   },
 };
 
@@ -34,8 +35,8 @@ Blockly.Blocks["sensebox_sensor_temp_hum"] = {
  *
  */
 
-Blockly.Blocks["sensebox_sensor_uv_light"] = {
-  init: function () {
+Blockly.Blocks["sensebox_tsl4531"] = {
+  init: async function () {
     this.appendDummyInput().appendField(Blockly.Msg.senseBox_uv_light);
     this.appendDummyInput()
       .setAlign(Blockly.ALIGN_RIGHT)
@@ -49,8 +50,8 @@ Blockly.Blocks["sensebox_sensor_uv_light"] = {
       );
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);
-    this.setTooltip(Blockly.Msg.senseBox_uv_light_tooltip);
-    this.setHelpUrl(Blockly.Msg.senseBox_uv_light_helpurl);
+    this.setTooltip(await sensorInfo("tsl4531"));
+    this.setHelpUrl("https://sensors.wiki/sensor/detail/tsl4531");
   },
 };
 
@@ -58,8 +59,8 @@ Blockly.Blocks["sensebox_sensor_uv_light"] = {
 BMX055 Three differen Blocks for Accelerometer, Gyroscope, Compass
 */
 
-Blockly.Blocks["sensebox_sensor_bmx055_accelerometer"] = {
-  init: function () {
+Blockly.Blocks["sensebox_bmx055"] = {
+  init: async function () {
     this.appendDummyInput().appendField(
       Blockly.Msg.senseBox_bmx055_accelerometer
     );
@@ -89,8 +90,8 @@ Blockly.Blocks["sensebox_sensor_bmx055_accelerometer"] = {
       );
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);
-    this.setTooltip(Blockly.Msg.senseBox_bmx055_accelerometer_tooltip);
-    this.setHelpUrl(Blockly.Msg.senseBox_bmx055_helpurl);
+    this.setTooltip(await sensorInfo("bmx055"));
+    this.setHelpUrl("https://sensors.wiki/sensor/detail/bmx055");
   },
 };
 
@@ -99,8 +100,8 @@ Blockly.Blocks["sensebox_sensor_bmx055_accelerometer"] = {
  *
  */
 
-Blockly.Blocks["sensebox_sensor_sds011"] = {
-  init: function () {
+Blockly.Blocks["sensebox_sds011"] = {
+  init: async function () {
     this.appendDummyInput().appendField(Blockly.Msg.senseBox_sds011);
     this.appendDummyInput()
       .setAlign(Blockly.ALIGN_RIGHT)
@@ -120,8 +121,8 @@ Blockly.Blocks["sensebox_sensor_sds011"] = {
       );
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);
-    this.setTooltip(Blockly.Msg.senseBox_sds011_tooltip);
-    this.setHelpUrl(Blockly.Msg.senseBox_sds011_helpurl);
+    this.setTooltip(await sensorInfo("sds011"));
+    this.setHelpUrl("https://sensors.wiki/sensor/detail/sds011");
   },
 };
 
@@ -130,8 +131,8 @@ Blockly.Blocks["sensebox_sensor_sds011"] = {
  *
  */
 
-Blockly.Blocks["sensebox_sensor_pressure"] = {
-  init: function () {
+Blockly.Blocks["sensebox_bmp280"] = {
+  init: async function () {
     var dropdownOptions = [
       [Blockly.Msg.senseBox_pressure, "Pressure"],
       [Blockly.Msg.senseBox_temp, "Temperature"],
@@ -153,8 +154,8 @@ Blockly.Blocks["sensebox_sensor_pressure"] = {
       .appendField(dropdown, "NAME");
     this.setColour(getColour().sensebox);
     this.setOutput(true, Types.DECIMAL.typeName);
-    this.setTooltip(Blockly.Msg.senseBox_pressure_tooltip);
-    this.setHelpUrl(Blockly.Msg.senseBox_pressure_helpurl);
+    this.setTooltip(await sensorInfo("bmp280"));
+    this.setHelpUrl("https://sensors.wiki/sensor/detail/bmp280");
     this.getField("NAME").setValidator(
       function (val) {
         this.updateShape_(val === "Altitude");
@@ -181,8 +182,8 @@ Blockly.Blocks["sensebox_sensor_pressure"] = {
  *
  */
 
-Blockly.Blocks["sensebox_sensor_bme680_bsec"] = {
-  init: function () {
+Blockly.Blocks["sensebox_bme680"] = {
+  init: async function () {
     var dropdownOptions = [
       [Blockly.Msg.senseBox_temp, "temperature"],
       [Blockly.Msg.senseBox_hum, "humidity"],
@@ -199,8 +200,8 @@ Blockly.Blocks["sensebox_sensor_bme680_bsec"] = {
       .appendField(new Blockly.FieldDropdown(dropdownOptions), "dropdown");
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);
-    this.setTooltip(Blockly.Msg.senseBox_bme_tooltip);
-    this.setHelpUrl(Blockly.Msg.senseBox_bme680_helpurl);
+    this.setTooltip(await sensorInfo("bme680"));
+    this.setHelpUrl("https://sensors.wiki/sensor/detail/bme680");
   },
 };
 
@@ -210,8 +211,8 @@ Blockly.Blocks["sensebox_sensor_bme680_bsec"] = {
  *
  */
 
-Blockly.Blocks["sensebox_sensor_ultrasonic_ranger"] = {
-  init: function () {
+Blockly.Blocks["sensebox_hcsr04"] = {
+  init: async function () {
     var dropdownOptions = [
       [Blockly.Msg.senseBox_ultrasonic_port_A, "A"],
       [Blockly.Msg.senseBox_ultrasonic_port_B, "B"],
@@ -243,8 +244,8 @@ Blockly.Blocks["sensebox_sensor_ultrasonic_ranger"] = {
       .appendField(new Blockly.FieldTextInput("250"), "maxDistance")
       .appendField("cm");
     this.setOutput(true, Types.NUMBER.typeName);
-    this.setTooltip(Blockly.Msg.senseBox_ultrasonic_tooltip);
-    this.setHelpUrl(Blockly.Msg.senseBox_ultrasonic_helpurl);
+    this.setTooltip(await sensorInfo("hcsr04"));
+    this.setHelpUrl("https://sensors.wiki/sensor/detail/hcsr04");
   },
   /**
    * Parse XML to restore the number of pins available.
@@ -367,7 +368,7 @@ Blockly.Blocks["sensebox_button"] = {
  */
 
 Blockly.Blocks["sensebox_scd30"] = {
-  init: function () {
+  init: async function () {
     var dropdownOptions = [
       [Blockly.Msg.senseBox_scd_co2, "CO2"],
       [Blockly.Msg.senseBox_temp, "temperature"],
@@ -380,8 +381,8 @@ Blockly.Blocks["sensebox_scd30"] = {
       .appendField(new Blockly.FieldDropdown(dropdownOptions), "dropdown");
     this.setOutput(true, Types.NUMBER.typeName);
     this.setColour(getColour().sensebox);
-    this.setTooltip(Blockly.Msg.senseBox_scd_tooltip);
-    this.setHelpUrl(Blockly.Msg.senseBox_scd_helpurl);
+    this.setTooltip(await sensorInfo("scd30"));
+    this.setHelpUrl("https://sensors.wiki/sensor/detail/scd30");
   },
   onchange: function (e) {
     var dropdown = this.getFieldValue("dropdown");
@@ -424,8 +425,8 @@ Blockly.Blocks["sensebox_gps"] = {
  * Block for Truebner STM50
  */
 
-Blockly.Blocks["sensebox_sensor_truebner_smt50"] = {
-  init: function () {
+Blockly.Blocks["sensebox_smt50"] = {
+  init: async function () {
     var dropdownOptions = [
       [Blockly.Msg.senseBox_ultrasonic_port_A, "A"],
       [Blockly.Msg.senseBox_ultrasonic_port_B, "B"],
@@ -446,8 +447,8 @@ Blockly.Blocks["sensebox_sensor_truebner_smt50"] = {
         "value"
       );
     this.setOutput(true, Types.NUMBER.typeName);
-    this.setTooltip(Blockly.Msg.senseBox_smt50_tooltip);
-    this.setHelpUrl(Blockly.Msg.senseBox_smt50_helpurl);
+    this.setTooltip(await sensorInfo("smt50"));
+    this.setHelpUrl("https://sensors.wiki/sensor/detail/smt50");
   },
 };
 
@@ -494,8 +495,8 @@ Blockly.Blocks['sensebox_windspeed'] = {
  * DF Robot Soundsensor
  */
 
-Blockly.Blocks["sensebox_soundsensor_dfrobot"] = {
-  init: function () {
+Blockly.Blocks["sensebox_sen0232"] = {
+  init: async function () {
     var dropdownOptions = [
       [Blockly.Msg.senseBox_ultrasonic_port_A, "A"],
       [Blockly.Msg.senseBox_ultrasonic_port_B, "B"],
@@ -503,12 +504,12 @@ Blockly.Blocks["sensebox_soundsensor_dfrobot"] = {
     ];
     this.setColour(getColour().sensebox);
     this.appendDummyInput()
-      .appendField(Blockly.Msg.senseBox_soundsensor_dfrobot)
+      .appendField(Blockly.Msg.sensebox_sen0232)
       .appendField("Port:")
       .appendField(new Blockly.FieldDropdown(dropdownOptions), "Port");
     this.setOutput(true, Types.DECIMAL.typeName);
-    this.setTooltip(Blockly.Msg.senseBox_soundsensor_dfrobot_tooltip);
-    this.setHelpUrl(Blockly.Msg.senseBox_soundsensor_dfrobot_helpurl);
+    this.setTooltip(await sensorInfo("sen0232"));
+    this.setHelpUrl("https://sensors.wiki/sensor/detail/sen0232");
   },
 };
 
@@ -517,8 +518,8 @@ Blockly.Blocks["sensebox_soundsensor_dfrobot"] = {
  *
  */
 
-Blockly.Blocks["sensebox_sensor_dps310"] = {
-  init: function () {
+Blockly.Blocks["sensebox_dps310"] = {
+  init: async function () {
     var dropdownOptions = [
       [Blockly.Msg.senseBox_pressure, "Pressure"],
       [Blockly.Msg.senseBox_temp, "Temperature"],
@@ -533,15 +534,15 @@ Blockly.Blocks["sensebox_sensor_dps310"] = {
         option === "Altitude";
       this.sourceBlock_.updateShape_(input);
     });
-    this.appendDummyInput().appendField(Blockly.Msg.senseBox_sensor_dps310);
+    this.appendDummyInput().appendField(Blockly.Msg.sensebox_dps310);
     this.appendDummyInput()
       .setAlign(Blockly.ALIGN_RIGHT)
       .appendField(Blockly.Msg.senseBox_value)
       .appendField(dropdown, "NAME");
     this.setColour(getColour().sensebox);
     this.setOutput(true, Types.DECIMAL.typeName);
-    this.setTooltip(Blockly.Msg.senseBox_sensor_dps310_tooltip);
-    this.setHelpUrl(Blockly.Msg.senseBox_sensor_dps310_helpurl);
+    this.setTooltip(await sensorInfo("dps310"));
+    this.setHelpUrl("https://sensors.wiki/sensor/detail/dps310");
     this.getField("NAME").setValidator(
       function (val) {
         this.updateShape_(val === "Altitude");

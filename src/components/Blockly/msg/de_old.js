@@ -765,8 +765,8 @@ Blockly.Msg.senseBox_rgb_led_tip =
  * Temperature and Humidity Sensor (HDC1080)
  */
 Blockly.Msg.senseBox_temp = "Temperatur in °C";
-Blockly.Msg.senseBox_temp_hum = "Temperatur-/Luftfeuchtigkeitssensor (HDC1080)";
-Blockly.Msg.senseBox_temp_hum_tooltip =
+Blockly.Msg.sensebox_hdc1080 = "Temperatur-/Luftfeuchtigkeitssensor (HDC1080)";
+Blockly.Msg.sensebox_hdc1080_tooltip =
   "Dieser Block gibt dir die Messwerte des Temperatur- und Luftfeuchtigkeitssensor zurück. Schließe den Sensor an einen der 5 I2C Anschlüsse an. Messwert wird mit 2 Nachkommastellen ausgegeben.";
 
 /**
@@ -1075,8 +1075,8 @@ Blockly.Msg.senseBox_windspeed_tooltip = "";
 /*
  * Soundsensor
  */
-Blockly.Msg.senseBox_soundsensor_dfrobot = "Soundsensor (DF Robot)";
-Blockly.Msg.senseBox_soundsensor_dfrobot_tooltip = "";
+Blockly.Msg.sensebox_sen0232 = "Soundsensor (DF Robot)";
+Blockly.Msg.sensebox_sen0232_tooltip = "";
 
 /*
  * BME680

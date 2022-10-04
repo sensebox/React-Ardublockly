@@ -21,10 +21,10 @@ export const SENSORS = {
   /**
    * DPS310
    */
-  senseBox_sensor_dps310: "Luftdruck-/Temperatursensor (DPS310)",
-  senseBox_sensor_dps310_tooltip:
+  sensebox_dps310: "Luftdruck-/Temperatursensor (DPS310)",
+  sensebox_dps310_tooltip:
     "Schließe den Sensor an einen der 5 **I2C-Anschlüsse** an. Der Sensor gibt dir den Messwert für den Luftdruck in hPa. Um die korrekte Höhe über NN zu berechnen benötigt der Sensor einen aktuellen Referenzwert.",
-  senseBox_sensor_dps310_helpurl: "",
+  sensebox_dps310_helpurl: "",
 
   /**
    * Mikro
@@ -38,10 +38,10 @@ export const SENSORS = {
    * Temperature and Humidity Sensor (HDC1080)
    */
   senseBox_temp: "Temperatur in °C",
-  senseBox_temp_hum: "Temperatur-/Luftfeuchtigkeitssensor (HDC1080)",
-  senseBox_temp_hum_tooltip:
+  sensebox_hdc1080: "Temperatur-/Luftfeuchtigkeitssensor (HDC1080)",
+  sensebox_hdc1080_tooltip:
     "Dieser Block gibt dir die Messwerte des Temperatur- und Luftfeuchtigkeitssensor zurück. Schließe den Sensor an einen der 5 I2C Anschlüsse an. Messwert wird mit 2 Nachkommastellen ausgegeben.",
-  senseBox_temp_hum_helpurl:
+  sensebox_hdc1080_helpurl:
     "https://docs.sensebox.de/hardware/sensoren-temperatur-luftfeuchte/",
 
   /**
@@ -127,10 +127,10 @@ Wenn die maximale Distanz überschritten wird, wird ein Wert von **O** ausgegebe
   /*
    * Soundsensor
    */
-  senseBox_soundsensor_dfrobot: "Soundsensor (DF Robot)",
-  senseBox_soundsensor_dfrobot_tooltip:
+  sensebox_sen0232: "Soundsensor (DF Robot)",
+  sensebox_sen0232_tooltip:
     "Schließe den Sensor an einen der 3 **digital/analog Ports** an. Der Sensor gibt dir den Messwert in dB mit einer Nachkommastelle",
-  senseBox_soundsensor_dfrobot_helpurl:
+  sensebox_sen0232_helpurl:
     "https://docs.sensebox.de/hardware/sensoren-lautstaerke/",
   /*
    * BME680
