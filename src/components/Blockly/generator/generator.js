@@ -26,6 +26,17 @@
 
 import * as Blockly from "blockly/core";
 
+import store from "../../../store";
+
+var ota = store.getState().general.platform
+  ? store.getState().general.platform
+  : null;
+store.subscribe(() => {
+  ota = store.getState().general.platform
+    ? store.getState().general.platform
+    : null;
+});
+
 /**
  * Arduino code generator.
  * @type !Blockly.Generator
@@ -51,9 +62,7 @@ Blockly["Arduino"].addReservedWords(
     "pulseIn,millis,micros,delay,delayMicroseconds,min,max,abs,constrain," +
     "map,pow,sqrt,sin,cos,tan,randomSeed,random,lowByte,highByte,bitRead," +
     "bitWrite,bitSet,bitClear,ultraSonicDistance,parseDouble,setNeoPixelColor," +
-    "bit,attachInterrupt,detachInterrupt,interrupts,noInterrupts",
-  "short",
-  "isBtnPressed"
+    "bit,attachInterrupt,detachInterrupt,interrupts,noInterrupts,short,isBtnPressed"
 );
 
 /**
@@ -139,53 +148,7 @@ Blockly["Arduino"].init = function (workspace) {
   //         Blockly.Names.DEVELOPER_VARIABLE_TYPE));
   // }
 
-  const doubleVariables = workspace.getVariablesOfType("Number");
-  let i = 0;
-  let variableCode = "";
-  for (i = 0; i < doubleVariables.length; i += 1) {
-    variableCode +=
-      "double " +
-      Blockly["Arduino"].nameDB_.getName(
-        doubleVariables[i].getId(),
-        Blockly.Variables.NAME_TYPE
-      ) +
-      " = 0; \n\n";
-  }
 
-  const stringVariables = workspace.getVariablesOfType("String");
-  for (i = 0; i < stringVariables.length; i += 1) {
-    variableCode +=
-      "String " +
-      Blockly["Arduino"].nameDB_.getName(
-        stringVariables[i].getId(),
-        Blockly.Variables.NAME_TYPE
-      ) +
-      ' = ""; \n\n';
-  }
-
-  const booleanVariables = workspace.getVariablesOfType("Boolean");
-  for (i = 0; i < booleanVariables.length; i += 1) {
-    variableCode +=
-      "boolean " +
-      Blockly["Arduino"].nameDB_.getDistinctName(
-        booleanVariables[i].getId(),
-        Blockly.Variables.NAME_TYPE
-      ) +
-      " = false; \n\n";
-  }
-
-  const colourVariables = workspace.getVariablesOfType("Colour");
-  for (i = 0; i < colourVariables.length; i += 1) {
-    variableCode +=
-      "RGB " +
-      Blockly["Arduino"].nameDB_.getName(
-        colourVariables[i].getId(),
-        Blockly.Variables.NAME_TYPE
-      ) +
-      " = {0, 0, 0}; \n\n";
-  }
-
-  Blockly["Arduino"].variablesInitCode_ = variableCode;
 };
 
 /**
@@ -254,26 +217,49 @@ Blockly["Arduino"].finish = function (code) {
     "\n}\n";
 
   let loopCode = "\nvoid loop() { \n" + loopCodeOnce + code + "\n}\n";
-
-  // Convert the definitions dictionary into a list.
-  code =
-    devVariables +
-    "\n" +
-    libraryCode +
-    "\n" +
-    variablesCode +
-    "\n" +
-    definitionsCode +
-    "\n" +
-    codeFunctions +
-    "\n" +
-    Blockly["Arduino"].variablesInitCode_ +
-    "\n" +
-    functionsCode +
-    "\n" +
-    setupCode +
-    "\n" +
-    loopCode;
+  // only add OTA code if tablet mode is enabled
+  if (ota === true) {
+    code =
+      devVariables +
+      "\n" +
+      "#include <SenseBoxOTA.h>" +
+      "\n" +
+      libraryCode +
+      "\n" +
+      variablesCode +
+      "\n" +
+      definitionsCode +
+      "\n" +
+      codeFunctions +
+      "\n" +
+      Blockly["Arduino"].variablesInitCode_ +
+      "\n" +
+      functionsCode +
+      "\n" +
+      setupCode +
+      "\n" +
+      loopCode;
+  } else {
+    // Convert the definitions dictionary into a list.
+    code =
+      devVariables +
+      "\n" +
+      libraryCode +
+      "\n" +
+      variablesCode +
+      "\n" +
+      definitionsCode +
+      "\n" +
+      codeFunctions +
+      "\n" +
+      Blockly["Arduino"].variablesInitCode_ +
+      "\n" +
+      functionsCode +
+      "\n" +
+      setupCode +
+      "\n" +
+      loopCode;
+  }
 
   // Clean up temporary data.
   delete Blockly["Arduino"].definitions_;

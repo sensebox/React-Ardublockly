@@ -10,6 +10,8 @@ export const UI = {
   toolbox_time: "Time",
   toolbox_functions: "Functions",
   toolbox_variables: "Variables",
+  toolbox_serial: "Serial",
+  toolbox_advanced: "Erweitert",
   variable_NUMBER: "Number (int)",
   variable_SHORT_NUMBER: "char",
   variable_LONG: " Zahl (long)",
@@ -49,6 +51,14 @@ export const UI = {
   tooltip_project_title: "Project title",
   tooltip_check_solution: "Check solution",
   tooltip_copy_code: "Copy Code to clipboard",
+  tooltip_statistics_current: "Number of current blocks",
+  tooltip_statistics_new: "Number of new blocks",
+  tooltip_statistics_changed: "Number of changed blocks",
+  tooltip_statistics_moved: "Number of moved blocks",
+  tooltip_statistics_deleted: "Number of deleted blocks",
+  tooltip_statistics_remaining: "Remaining blocks",
+  tooltip_statistics_show: "Show statistics",
+  tooltip_start_tour: "start Tour",
 
   /**
    * Messages
@@ -79,6 +89,15 @@ export const UI = {
   messages_LOGIN_FAIL: "The username or password is incorrect.",
   messages_login_error: "Enter both a username and a password.",
   messages_copy_code: "Copy code to clipboard succesfull",
+
+  /**
+   * Tablet Dialog
+   */
+  tabletDialog_headline: "Tablet mode is enabled!",
+  tabletDialog_text:
+    "Tablet mode has been activated. You can now copy program codes to your senseBox via the senseBox Connect app. Tablet mode can be deactivated in the settings",
+  tabletDialog_more:
+    "For more information and the link to download the app, please visit: ",
 
   /**
    * Reset Dialog
@@ -149,6 +168,16 @@ export const UI = {
     "The display of statistics on the usage of the blocks above the workspace can be shown or hidden.",
   settings_statistics_on: "On",
   settings_statistics_off: "Off",
+  settings_ota_head: "Tablet mode",
+  settings_ota_text:
+    "Tablet mode disables the code display and enables the possibility to transfer the program code via the senseBox Connect app. You can find more information on: ",
+  settings_ota_on: "Activated",
+  settings_ota_off: "Deactivated",
+  settings_sounds: "Sound",
+  settings_sounds_text:
+    "Enable or disable sounds when adding and deleting blocks. Disabled by default",
+  settings_board: "Board",
+  settings_board_text: "Choose your board",
 
   /**
    * 404
@@ -169,7 +198,7 @@ export const UI = {
   /**
    * Tutorials
    */
-
+  tutorials_home_head: "Tutorials",
   tutorials_assessment_task: "Task",
   tutorials_hardware_head:
     "For the implementation you need the following hardware:",
@@ -182,7 +211,9 @@ export const UI = {
   /**
    * Tutorial Builder
    */
-
+  uilder_createNew: "create new Tutorial",
+  builder_changeExisting: "change existing Tutorial",
+  builder_deleteExisting: "remove existing Tutorial",
   builder_solution: "Solution",
   builder_solution_submit: "Submit Solution",
   builder_example_submit: "Submit example",
@@ -193,6 +224,12 @@ export const UI = {
   builder_requirements_head: "Requirements.",
   builder_requirements_order:
     "Note that the order of ticking is authoritative.",
+  builder_difficulty: "Difficulty level",
+  builder_public_head: "Publish tutorial",
+  builder_public_label: "Publish tutorial for all users",
+  builder_review_head: "Publish tutorial",
+  builder_review_text:
+    "You can share your tutorial with other people directly from the link. If you want to publish your tutorial for all users in the overview you can activate it here. An administrator will view your tutorial and then activate it.",
 
   /**
    * Login
@@ -208,7 +245,7 @@ export const UI = {
   /**
    * Navbar
    */
-
+  navbar_blockly: "Blockly",
   navbar_tutorials: "Tutorials",
   navbar_tutorialbuilder: "Create tutorial",
   navbar_gallery: "Gallery",
@@ -248,4 +285,27 @@ export const UI = {
    */
   drawer_ideerror_head: "Oops something went wrong",
   drawer_ideerror_text: "An error occurred while compiling, check your blocks",
+
+  /**
+   * Code Editor
+   * */
+  codeeditor_libraries_head: "Installed Arduino Libraries",
+  codeeditor_libraries_text:
+    "For documentation, view the installed libraries and their examples",
+  codeeditor_save_code: "Download code",
+  codeeditor_open_code: "Open code",
+  codeeditor_reset_code: "Reset code",
+  codeeditor_blockly_code: "Load blockly code",
+  codeeditor_compile_progress:
+    "Your code will now be compiled and then downloaded to your computer",
+
+      /**
+   * Device Selction
+   *  */
+  deviceselection_head: "Which board are you using?",
+  deviceselection_keep_selection: "Save my choice (You can change the board later in the settings)",
+  deviceselection_footnote: "Here you can access the old blockly Version for the",
+  deviceselection_footnote_02: "or the",
+
+
 };

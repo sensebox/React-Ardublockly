@@ -17,13 +17,23 @@ Blockly.Arduino.sensebox_send_to_osem = function (block) {
 };
 
 Blockly.Arduino.sensebox_osem_connection = function (Block) {
+  var workspace = Blockly.getMainWorkspace();
+  var wifi = false;
+  var ethernet = false;
+  if (workspace.getBlocksByType("sensebox_wifi").length > 0) {
+    wifi = true;
+    ethernet = false;
+  } else if (workspace.getBlocksByType("sensebox_ethernet").length > 0) {
+    ethernet = true;
+    wifi = false;
+  }
   var box_id = this.getFieldValue("BoxID");
-  var host = this.getFieldValue("host");
   var branch = Blockly.Arduino.statementToCode(Block, "DO");
   var access_token = this.getFieldValue("access_token");
   var blocks = this.getDescendants();
   var type = this.getFieldValue("type");
   var ssl = this.getFieldValue("SSL");
+  var restart = this.getFieldValue("RESTART");
   var port = 0;
   var count = 0;
   if (blocks !== undefined) {
@@ -34,22 +44,63 @@ Blockly.Arduino.sensebox_osem_connection = function (Block) {
     }
   }
   var num_sensors = count;
-  Blockly.Arduino.libraries_["library_senseBoxMCU"] =
-    '#include "SenseBoxMCU.h"';
+  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.definitions_["num_sensors"] =
     "static const uint8_t NUM_SENSORS = " + num_sensors + ";";
   Blockly.Arduino.definitions_["SenseBoxID"] =
     'const char SENSEBOX_ID [] PROGMEM = "' + box_id + '";';
   Blockly.Arduino.definitions_["host"] =
-    "const char server [] PROGMEM =" + host + ";";
-  if (ssl === "TRUE") {
-    Blockly.Arduino.definitions_["WiFiSSLClient"] = "WiFiSSLClient client;";
-    port = 443;
-  } else if (ssl === "FALSE") {
-    Blockly.Arduino.definitions_["WiFiClient"] = "WiFiClient client;";
-    port = 80;
-  }
+    'const char server [] PROGMEM ="ingress.opensensemap.org";';
+  if (wifi === true) {
+    if (ssl === "TRUE") {
+      Blockly.Arduino.libraries_["library_bearSSL"] =
+        "#include <ArduinoBearSSL.h>";
+      Blockly.Arduino.libraries_["library_arduinoECC08"] =
+        "#include <ArduinoECCX08.h>";
+      Blockly.Arduino.definitions_["WiFiClient"] = "WiFiClient wifiClient;";
+      Blockly.Arduino.definitions_["BearSSLClient"] =
+        "BearSSLClient client(wifiClient);";
+      Blockly.Arduino.functionNames_["getTime"] = `unsigned long getTime() {
+      return WiFi.getTime();
+    }`;
+      Blockly.Arduino.setupCode_["initBearSSL"] =
+        "ArduinoBearSSL.onGetTime(getTime);";
+      port = 443;
+    } else if (ssl === "FALSE") {
+      Blockly.Arduino.definitions_["WiFiClient"] = "WiFiClient client;";
+      port = 80;
+    }
+  } else if (ethernet === true) {
+    if (ssl === "TRUE") {
+      Blockly.Arduino.libraries_["library_bearSSL"] =
+        "#include <ArduinoBearSSL.h>";
+      Blockly.Arduino.libraries_["library_arduinoECC08"] =
+        "#include <ArduinoECCX08.h>";
+      Blockly.Arduino.libraries_["library_ethernetUdp"] =
+        "#include <EthernetUdp.h>";
+      Blockly.Arduino.libraries_["library_NTPClient"] =
+        "#include <NTPClient.h>";
+      Blockly.Arduino.definitions_["EthernetClient"] =
+        "EthernetClient eclient;";
+      Blockly.Arduino.definitions_["BearSSLClient"] =
+        "BearSSLClient client(eclient);";
+      Blockly.Arduino.definitions_["EthernetUDP"] = "EthernetUDP Udp;";
+      Blockly.Arduino.definitions_["NTPClient"] = "NTPClient timeClient(Udp);";
+      Blockly.Arduino.functionNames_["getTime"] = `
+unsigned long getTime() {
+  timeClient.update();
+  return timeClient.getEpochTime();
+}`;
 
+      Blockly.Arduino.setupCode_["timeClient_begin"] = "timeClient.begin();";
+      Blockly.Arduino.setupCode_["initBearSSL"] =
+        "ArduinoBearSSL.onGetTime(getTime);";
+      port = 443;
+    } else if (ssl === "FALSE") {
+      Blockly.Arduino.definitions_["EthernetClient"] = "EthernetClient client;";
+      port = 80;
+    }
+  }
   Blockly.Arduino.definitions_["measurement"] = `typedef struct measurement {
       const char *sensorId;
       float value;
@@ -82,11 +133,16 @@ Blockly.Arduino.sensebox_osem_connection = function (Block) {
   }`;
     Blockly.Arduino.functionNames_["submitValues"] =
       `
-    void submitValues() {
+  void submitValues() {
+${
+  wifi === true
+    ? "if (WiFi.status() != WL_CONNECTED) {\nWiFi.disconnect();\ndelay(1000); // wait 1s\nWiFi.begin(ssid, pass);\ndelay(5000); // wait 5s\n}"
+    : ""
+}
   if (client.connected()) {
-    client.stop();
-    delay(10);
-  }
+      client.stop();
+      delay(1000);
+    }
   bool connected = false;
   char _server[strlen_P(server)];
   strcpy_P(_server, server);
@@ -116,11 +172,29 @@ Blockly.Arduino.sensebox_osem_connection = function (Block) {
           break;
         }
       }
+
+      while (client.available()) {
+        char c = client.read();
+        // if the server's disconnected, stop the client:
+        if (!client.connected()) {
+          client.stop();
+          break;
+        }
+      }
+
       num_measurements = 0;
       break;
     }
+    delay(1000);
+  }
+
+  ${
+    restart === "TRUE"
+      ? "if (connected == false) {\n  delay(5000);\n  noInterrupts();\n NVIC_SystemReset();\n while (1)\n ;\n }"
+      : ""
   }
   }`;
+
     var code = "";
     code += branch;
     code += "submitValues();\n";
@@ -197,11 +271,27 @@ Blockly.Arduino.sensebox_osem_connection = function (Block) {
             break;
           }
         }
+        while (client.available()) {
+          char c = client.read();
+          // if the server's disconnected, stop the client:
+          if (!client.connected()) {
+            client.stop();
+            break;
+          }
+          delay(1000);
+        }
     
         num_measurements = 0;
         break;
       }
     }
+
+    ${
+      restart === "TRUE"
+        ? "if (connected == false) {\n  delay(5000);\n  noInterrupts();\n NVIC_SystemReset();\n while (1)\n ;\n }"
+        : ""
+    }
+
   }`;
     code = "";
     code += branch;
@@ -210,7 +300,7 @@ Blockly.Arduino.sensebox_osem_connection = function (Block) {
       lat +
       "/float(10000000)),(" +
       lng +
-      "/float(10000000),(" +
+      "/float(10000000)),(" +
       altitude +
       "/float(100))," +
       timestamp +

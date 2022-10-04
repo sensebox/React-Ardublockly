@@ -10,6 +10,8 @@ export const UI = {
   toolbox_time: "Zeit",
   toolbox_functions: "Funktionen",
   toolbox_variables: "Variablen",
+  toolbox_serial: "Seriell",
+  toolbox_advanced: "Erweitert",
   variable_NUMBER: "Zahl (int)",
   variable_SHORT_NUMBER: "char",
   variable_LONG: "große Zahl (long)",
@@ -49,7 +51,14 @@ export const UI = {
   tooltip_project_title: "Titel des Projektes",
   tooltip_check_solution: "Lösung kontrollieren",
   tooltip_copy_code: "Code in die Zwischenablage kopieren",
-
+  tooltip_statistics_current: "Anzahl aktueller Blöcke",
+  tooltip_statistics_new: "Anzahl neuer Blöcke",
+  tooltip_statistics_changed: "Anzahl veränderter Blöcke",
+  tooltip_statistics_moved: "Anzahl bewegter Blöcke",
+  tooltip_statistics_deleted: "Anzahl gelöschter Blöcke",
+  tooltip_statistics_remaining: "Verbleibende Blöcke",
+  tooltip_statistics_show: "Statistiken anzeigen",
+  tooltip_start_tour: "Tour starten",
   /**
    * Messages
    *
@@ -76,12 +85,22 @@ export const UI = {
   messages_rename_success_01: "Das Projekt wurde erfolgreich in ",
   messages_rename_success_02: "umbenannt.",
   messages_newblockly_head:
-    "Willkommen zur neuen Version Blockly für die senseBox",
+    "Willkommen zur neuen senseBox Lern- und Programmierumgebung",
   messages_newblockly_text:
-    "Die neue Blockly-Version befindet sich derzeit in der Testphase. Wenn Sie einen Fehler finden, melden Sie diesen bitte in unserem [Forum](https://forum.sensebox.de/t/neue-blockly-version-beta-test-und-feedback/1176). Eine Übersicht über alle neuen Funktionen finden Sie [hier](/news)",
+    "Nach einer Testphase kann die neue senseBox Lern- und Programmierumgebung verwendet werden. Wenn Sie weiterhin Fehler finden, melden Sie diesen bitte in unserem [Forum](https://forum.sensebox.de/t/neue-blockly-version-beta-test-und-feedback/1176). Eine Übersicht über alle neuen Funktionen finden Sie [hier](/news)",
   messages_GET_TUTORIAL_FAIL: "Zurück zur Tutorials-Übersicht",
   messages_LOGIN_FAIL: "Der Benutzername oder das Passwort ist nicht korrekt.",
   messages_copy_code: "Code wurde in die Zwischenablage kopiert",
+
+  /**
+   * Tablet Dialog
+   */
+
+  tabletDialog_headline: "Tablet Modus ist aktiviert!",
+  tabletDialog_text:
+    "Der Tablet Modus wurde aktiviert. Du kannst nun Programmcodes über die senseBox Connect App auf deine senseBox kopieren. Der Tablet Modus kann in den Einstellungen deaktiviert werden",
+  tabletDialog_more:
+    "Weitere Informationen und den Link zum Download der App findest du unter: ",
 
   /**
    * Reset Dialog
@@ -122,6 +141,7 @@ export const UI = {
 
   button_cancel: "Abbrechen",
   button_close: "Schließen",
+  button_save: "Speichern",
   button_accept: "Bestätigen",
   button_compile: "Kompilieren",
   button_create_variableCreate: "Erstelle Variable",
@@ -154,7 +174,16 @@ export const UI = {
     "Die Anzeige von Statistiken zur Nutzung der Blöcke oberhalb der Arbeitsfläche kann ein- oder ausgeblendet werden.",
   settings_statistics_on: "An",
   settings_statistics_off: "Aus",
-
+  settings_ota_head: "Tablet Modus",
+  settings_ota_text:
+    "Der Tablet Modus deaktiviert die Code anzeige und aktiviert die Möglichkeit den Programmcode über die senseBox Connect App zu übertragen. Weitere Informationen dazu findest du unter: ",
+  settings_ota_on: "Aktiviert",
+  settings_ota_off: "Deaktiviert",
+  settings_sounds: "Töne",
+  settings_sounds_text:
+    "Aktiviere oder Deaktiviere Töne beim hinzufügen und löschen von Blöcken. Standardmäßig deaktiviert",
+  settings_board: "Board",
+  settings_board_text: "Wähle dein verwendetes Board aus",
   /**
    * 404
    */
@@ -175,7 +204,7 @@ export const UI = {
   /**
    * Tutorials
    */
-
+  tutorials_home_head: "Tutorial-Übersicht",
   tutorials_assessment_task: "Aufgabe",
   tutorials_hardware_head: "Für die Umsetzung benötigst du folgende Hardware:",
   tutorials_hardware_moreInformation:
@@ -187,7 +216,9 @@ export const UI = {
   /**
    * Tutorial Builder
    */
-
+  builder_createNew: "neues Tutorial erstellen",
+  builder_changeExisting: "bestehendes Tutorial ändern",
+  builder_deleteExisting: "bestehendes Tutorial löschen",
   builder_solution: "Lösung",
   builder_solution_submit: "Lösung einreichen",
   builder_example_submit: "Beispiel einreichen",
@@ -199,6 +230,12 @@ export const UI = {
   builder_requirements_head: "Voraussetzungen",
   builder_requirements_order:
     "Beachte, dass die Reihenfolge des Anhakens maßgebend ist.",
+  builder_difficulty: "Schwierigkeitsgrad",
+  builder_public_head: "Tutorial veröffentlichen",
+  builder_public_label: "Tutorial für alle Nutzer:innen veröffentlichen",
+  builder_review_head: "Tutorial veröffentlichen",
+  builder_review_text:
+    "Du kannst dein Tutorial direkt über den Link mit anderen Personen teilen. Wenn du dein Tutorial für alle Nutzer:innen in der Überischt veröffenltichen wollen kannst du es hier aktivieren. Ein Administrator wird dein Tutorial ansehen und anschließend freischalten.",
 
   /**
    * Login
@@ -212,10 +249,10 @@ export const UI = {
   /**
    * Navbar
    */
-
+  navbar_blockly: "Blockly",
   navbar_tutorials: "Tutorials",
   navbar_tutorialbuilder: "Tutorial erstellen",
-  navbar_gallery: "Gallerie",
+  navbar_gallery: "Galerie",
   navbar_projects: "Projekte",
 
   navbar_menu: "Menü",
@@ -253,4 +290,25 @@ export const UI = {
   drawer_ideerror_head: "Hoppla da ist was schief gegangen.",
   drawer_ideerror_text:
     "Beim kompilieren ist ein Fehler aufgetreten, überprüfe deine Blöcke.",
+
+  /**
+   * Code Editor
+   *  */
+  codeeditor_libraries_head: "Installierte Arduino Libraries",
+  codeeditor_libraries_text:
+    "Für die Dokumentation sehen Sie sich die installierten Bibliotheken und deren Beispiele an",
+  codeeditor_save_code: "Code herunterladen",
+  codeeditor_open_code: "Code öffnen",
+  codeeditor_reset_code: "Code zurücksetzen",
+  codeeditor_blockly_code: "Lade Blockly Code",
+  codeeditor_compile_progress:
+    "Dein Code wird nun kompiliert und anschließend auf deinen Computer heruntergeladen",
+
+  /**
+   * Device Selction
+   *  */
+  deviceselection_head: "Welches Board benutzt du?",
+  deviceselection_keep_selection: "Speichere meine Auswahl fürs nächste Mal (Du kannst das Board später in den Einstellungen wechseln)",
+  deviceselection_footnote: "Hier kommst du zur alten Blockly Version für den ",
+  deviceselection_footnote_02: "oder die"
 };

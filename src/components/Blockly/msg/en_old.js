@@ -544,7 +544,7 @@ Blockly.Msg.PROCEDURES_DEFRETURN_COMMENT =
 
 // Ardublockly strings
 Blockly.Msg.ARD_ANALOGREAD = "read analog pin#";
-Blockly.Msg.ARD_ANALOGREAD_TIP = "Return value between 0 and 1024";
+Blockly.Msg.ARD_ANALOGREAD_TIP = "Return value between 0 and 1023";
 Blockly.Msg.ARD_ANALOGWRITE = "set analog pin#";
 Blockly.Msg.ARD_ANALOGWRITE_TIP =
   "Write analog value between 0 and 255 to a specific PWM Port";
@@ -887,13 +887,13 @@ Blockly.Msg.senseBox_output_timestamp = "timestamp";
 Blockly.Msg.senseBox_piezo_tip = "simple piezo to make sound";
 Blockly.Msg.senseBox_poti = "Potentiometer";
 Blockly.Msg.senseBox_poti_tip = "Potentiometer";
-Blockly.Msg.senseBox_pressure = "Airpressure in Pa";
+Blockly.Msg.senseBox_pressure = "Airpressure in hPa";
 Blockly.Msg.senseBox_pressure_referencePressure = "Pressure at Sea Level";
 Blockly.Msg.senseBox_pressure_referencePressure_dim = "hPa";
 Blockly.Msg.senseBox_pressure_sensor =
   "Airpressure/Temperature Sensor (BMP280)";
 Blockly.Msg.senseBox_pressure_tip =
-  "airpressure sensor can measure the airpressure in Pa";
+  "airpressure sensor can measure the airpressure in hPa";
 Blockly.Msg.senseBox_rgb_led = "RGB-LED";
 Blockly.Msg.senseBox_rgb_led_tip = "RGB-LED";
 Blockly.Msg.senseBox_sd_create_file = "Create file on SD-Card";
@@ -933,8 +933,8 @@ Blockly.Msg.senseBox_telegram_message = "Message";
 Blockly.Msg.senseBox_telegram_send = "Send Message";
 Blockly.Msg.senseBox_telegram_token = "Token";
 Blockly.Msg.senseBox_temp = "Temperature in °C";
-Blockly.Msg.senseBox_temp_hum = "Temperature/Humidity Sensor (HDC1080)";
-Blockly.Msg.senseBox_temp_hum_tip = "Sensor measuring temperature and humidity";
+Blockly.Msg.sensebox_hdc1080 = "Temperature/Humidity Sensor (HDC1080)";
+Blockly.Msg.sensebox_hdc1080_tip = "Sensor measuring temperature and humidity";
 Blockly.Msg.senseBox_ultrasonic = "Ultrasonic distance sensor at Port";
 Blockly.Msg.senseBox_ultrasonic_echo = "Echo";
 Blockly.Msg.senseBox_ultrasonic_port_A = "A";
@@ -988,7 +988,7 @@ Blockly.Msg.senseBox_mqtt_publish = "Publish to Feed/Topic";
 Blockly.Msg.senseBox_windspeed = "Windspeedsensor";
 
 //Soundsensor
-Blockly.Msg.senseBox_soundsensor_dfrobot = "Soundsensor (DF Robot)";
+Blockly.Msg.sensebox_sen0232 = "Soundsensor (DF Robot)";
 
 /**
  * Add Translation for Blocks above

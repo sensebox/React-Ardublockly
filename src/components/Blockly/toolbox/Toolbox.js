@@ -21,11 +21,8 @@ class Toolbox extends React.Component {
         [`${Blockly.Msg.variable_LONG}`, "long"],
         [`${Blockly.Msg.variable_DECIMAL}`, "float"],
         [`${Blockly.Msg.variables_TEXT}`, "String"],
-        [`${Blockly.Msg.variables_ARRAY}`, "Array"],
         [`${Blockly.Msg.variables_CHARACTER}`, "char"],
         [`${Blockly.Msg.variables_BOOLEAN}`, "boolean"],
-        [`${Blockly.Msg.variables_NULL}`, "void"],
-        [`${Blockly.Msg.variables_UNDEF}`, "undefined"],
       ]
     );
     typedVarModal.init();
@@ -60,21 +57,22 @@ class Toolbox extends React.Component {
           name={Blockly.Msg.toolbox_sensors}
           colour={getColour().sensebox}
         >
-          <Block type="sensebox_sensor_temp_hum" />
-          <Block type="sensebox_sensor_uv_light" />
-          <Block type="sensebox_sensor_bmx055_accelerometer" />
-          <Block type="sensebox_sensor_sds011" />
-          <Block type="sensebox_sensor_pressure" />
-          <Block type="sensebox_sensor_bme680_bsec" />
+          <Block type="sensebox_hdc1080" />
+          <Block type="sensebox_tsl4531" />
+          <Block type="sensebox_bmx055" />
+          <Block type="sensebox_sds011" />
+          <Block type="sensebox_bmp280" />
+          <Block type="sensebox_dps310" />
+          <Block type="sensebox_bme680" />
           <Block type="sensebox_scd30" />
           <Block type="sensebox_gps" />
-          <Block type="sensebox_sensor_ultrasonic_ranger" />
+          <Block type="sensebox_hcsr04" />
           <Block type="sensebox_sensor_sound" />
           <Block type="sensebox_button" />
-          <Block type="sensebox_sensor_truebner_smt50" />
+          <Block type="sensebox_smt50" />
           <Block type="sensebox_sensor_watertemperature" />
           {/* <Block type="sensebox_windspeed" /> */}
-          <Block type="sensebox_soundsensor_dfrobot" />
+          <Block type="sensebox_sen0232" />
           <Block type="sensebox_multiplexer_init">
             <Value name="nrChannels">
               <Block type="math_number">
@@ -92,7 +90,14 @@ class Toolbox extends React.Component {
         </Category>
         <Category name="WIFI" colour={getColour().sensebox}>
           <Block type="sensebox_wifi" />
+          <Block type="sensebox_wifi_status" />
+          <Block type="sensebox_wifi_rssi" />
+          <Block type="sensebox_get_ip" />
           <Block type="sensebox_startap" />
+        </Category>
+        <Category name="Ethernet" colour={getColour().sensebox}>
+          <Block type="sensebox_ethernet" />
+          <Block type="sensebox_ethernetIp" />
         </Category>
         <Category name="SD" colour={getColour().sensebox}>
           <Block type="sensebox_sd_create_file" />
@@ -290,12 +295,12 @@ class Toolbox extends React.Component {
             </Value>
           </Block>
         </Category>
-        <Category name="Telegram" colour={getColour().sensebox}>
+        {/* <Category name="Telegram" colour={getColour().sensebox}>
           <Block type="sensebox_telegram" />
           <Block type="sensebox_telegram_do" />
           <Block type="sensebox_telegram_do_on_message" />
           <Block type="sensebox_telegram_send" />
-        </Category>
+        </Category> */}
         <Category name="openSenseMap" colour={getColour().sensebox}>
           <Block type="sensebox_interval_timer">
             <Value name="DO">
@@ -368,6 +373,7 @@ class Toolbox extends React.Component {
             <Block type="sensebox_lora_cayenne_humidity" />
             <Block type="sensebox_lora_cayenne_pressure" />
             <Block type="sensebox_lora_cayenne_luminosity" />
+            <Block type="sensebox_lora_cayenne_concentration" />
             <Block type="sensebox_lora_cayenne_sensor" />
             <Block type="sensebox_lora_cayenne_accelerometer" />
             <Block type="sensebox_lora_cayenne_gps" />
@@ -594,39 +600,52 @@ class Toolbox extends React.Component {
           colour={getColour().variables}
           custom="CREATE_TYPED_VARIABLE"
         ></Category>
-        <Category name="Arrays" colour={getColour().arrays}>
+        {/* <Category name="Arrays" colour={getColour().arrays}>
           <Block type="lists_create_empty" />
           <Block type="array_getIndex" />
           <Block type="lists_length" />
-        </Category>
+        </Category> */}
         <Category
           name={Blockly.Msg.toolbox_functions}
           colour={getColour().procedures}
           custom="PROCEDURE"
         ></Category>
         <sep></sep>
-        <Category name={Blockly.Msg.toolbox_io} colour={getColour().io}>
-          <Block type="io_digitalwrite"></Block>
-          <Block type="io_digitalread"></Block>
-          <Block type="io_builtin_led"></Block>
-          <Block type="io_analogwrite"></Block>
-          <Block type="io_analogread"></Block>
-          <Block type="io_highlow"></Block>
-          <Block type="io_pulsein">
-            <Value name="PULSETYPE">
-              <Shadow type="io_highlow"></Shadow>
-            </Value>
-          </Block>
-          <Block type="io_pulsetimeout">
-            <Value name="PULSETYPE">
-              <Shadow type="io_highlow"></Shadow>
-            </Value>
-            <Value name="TIMEOUT">
-              <Shadow type="math_number">
-                <Field name="NUM">100</Field>
-              </Shadow>
-            </Value>
-          </Block>
+        <Category name={Blockly.Msg.toolbox_advanced} colour={getColour().io}>
+          <Category
+            name={Blockly.Msg.toolbox_serial}
+            colour={getColour().serial}
+          >
+            <Block type="init_serial_monitor"></Block>
+            <Block type="print_serial_monitor"></Block>
+          </Category>
+          <Category name={Blockly.Msg.toolbox_io} colour={getColour().io}>
+            <Block type="io_digitalwrite"></Block>
+            <Block type="io_digitalread"></Block>
+            <Block type="io_builtin_led"></Block>
+            <Block type="io_analogwrite"></Block>
+            <Block type="io_analogread"></Block>
+            <Block type="io_highlow"></Block>
+            <Block type="io_pulsein">
+              <Value name="PULSETYPE">
+                <Shadow type="io_highlow"></Shadow>
+              </Value>
+            </Block>
+            <Block type="io_pulsetimeout">
+              <Value name="PULSETYPE">
+                <Shadow type="io_highlow"></Shadow>
+              </Value>
+              <Value name="TIMEOUT">
+                <Shadow type="math_number">
+                  <Field name="NUM">100</Field>
+                </Shadow>
+              </Value>
+            </Block>
+          </Category>
+          <Category name="Watchdog" colour={getColour().io}>
+            <Block type="watchdog_enable"></Block>
+            <Block type="watchdog_reset"></Block>
+          </Category>
         </Category>
         {/* this block is the initial block of the workspace; not necessary
                     to display, because it can only be used once anyway

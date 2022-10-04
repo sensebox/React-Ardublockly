@@ -31,14 +31,6 @@ const styles = (theme) => ({
 });
 
 class Textfield extends Component {
-  componentDidMount() {
-    if (this.props.error) {
-      if (this.props.property !== "media") {
-        this.props.deleteError(this.props.index, this.props.property);
-      }
-    }
-  }
-
   handleChange = (e) => {
     var value = e.target.value;
     if (this.props.property === "title") {

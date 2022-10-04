@@ -2,9 +2,8 @@ import * as Blockly from "blockly/core";
 
 Blockly.Arduino.sensebox_phyphox_init = function () {
   var name = this.getFieldValue("devicename");
+  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_["phyphox_library"] = `#include <phyphoxBle.h>`;
-  Blockly.Arduino.libraries_["library_senseBoxMCU"] =
-    '#include "SenseBoxMCU.h"';
   Blockly.Arduino.phyphoxSetupCode_[
     "phyphox_start"
   ] = `PhyphoxBLE::start("${name}");`;
@@ -91,7 +90,9 @@ Blockly.Arduino.sensebox_phyphox_graph = function () {
   code += `${label}.setUnitY("${unity}");\n`;
   code += `${label}.setLabelX("${labelx}");\n`;
   code += `${label}.setLabelY("${labely}");\n`;
-  code += `${label}.setStyle("${style}");\n`;
+  if (style === "dots"){
+    code += `${label}.setStyle("${style}");\n`;
+  }
   code += `${label}.setChannel(${channelX}, ${channelY});\n`;
   code += `firstView.addElement(${label});\n`;
   return code;
@@ -100,7 +101,6 @@ Blockly.Arduino.sensebox_phyphox_graph = function () {
 Blockly.Arduino.sensebox_phyphox_experiment_send = function () {
   var branch = Blockly.Arduino.statementToCode(this, "sendValues");
   var blocks = this.getDescendants();
-  console.log(blocks);
   var count = 0;
   if (blocks !== undefined) {
     for (var i = 0; i < blocks.length; i++) {
@@ -114,7 +114,6 @@ Blockly.Arduino.sensebox_phyphox_experiment_send = function () {
   var string = "";
 
   for (var j = 1; j <= count; j++) {
-    console.log("append");
     if (string === "") {
       string += `channel${j}`;
     } else if (string !== "") {

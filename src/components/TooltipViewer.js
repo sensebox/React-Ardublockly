@@ -42,6 +42,7 @@ class TooltipViewer extends Component {
     this.setState({ open: true });
   };
 
+
   render() {
     return (
       <Card

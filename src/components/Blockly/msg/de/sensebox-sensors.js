@@ -9,13 +9,22 @@ export const SENSORS = {
    * BMP280
    */
   senseBox_pressure_sensor: "Luftdruck-/Temperatursensor (BMP280)",
-  senseBox_pressure: "Luftdruck in Pa",
-  senseBox_pressure_dimension: "Luftdruck in Pa",
-  senseBox_pressure_tip:
-    "Schließe den Sensor an einen der 5 **I2C-Anschlüsse** an. Der Sensor gibt dir den Messwert für den Luftdruck in Pa. Um die korrekte Höhe über NN zu berechnen benötigt der Sensor einen aktuellen Referenzwert.",
+  senseBox_pressure: "Luftdruck in hPa",
+  senseBox_pressure_dimension: "Luftdruck in hPa",
+  senseBox_pressure_tooltip:
+    "Schließe den Sensor an einen der 5 **I2C-Anschlüsse** an. Der Sensor gibt dir den Messwert für den Luftdruck in hPa. Um die korrekte Höhe über NN zu berechnen benötigt der Sensor einen aktuellen Referenzwert.",
   senseBox_pressure_referencePressure: "Luftdruck auf NN",
   senseBox_pressure_referencePressure_dim: "hPa",
-  senseBox_pressure_helpurl: "",
+  senseBox_pressure_helpurl:
+    "https://docs.sensebox.de/hardware/sensoren-luftdruck-temperatur/",
+
+  /**
+   * DPS310
+   */
+  sensebox_dps310: "Luftdruck-/Temperatursensor (DPS310)",
+  sensebox_dps310_tooltip:
+    "Schließe den Sensor an einen der 5 **I2C-Anschlüsse** an. Der Sensor gibt dir den Messwert für den Luftdruck in hPa. Um die korrekte Höhe über NN zu berechnen benötigt der Sensor einen aktuellen Referenzwert.",
+  sensebox_dps310_helpurl: "",
 
   /**
    * Mikro
@@ -29,10 +38,10 @@ export const SENSORS = {
    * Temperature and Humidity Sensor (HDC1080)
    */
   senseBox_temp: "Temperatur in °C",
-  senseBox_temp_hum: "Temperatur-/Luftfeuchtigkeitssensor (HDC1080)",
-  senseBox_temp_hum_tooltip:
+  sensebox_hdc1080: "Temperatur-/Luftfeuchtigkeitssensor (HDC1080)",
+  sensebox_hdc1080_tooltip:
     "Dieser Block gibt dir die Messwerte des Temperatur- und Luftfeuchtigkeitssensor zurück. Schließe den Sensor an einen der 5 I2C Anschlüsse an. Messwert wird mit 2 Nachkommastellen ausgegeben.",
-  senseBox_temp_hum_helpurl:
+  sensebox_hdc1080_helpurl:
     "https://docs.sensebox.de/hardware/sensoren-temperatur-luftfeuchte/",
 
   /**
@@ -42,13 +51,15 @@ export const SENSORS = {
   senseBox_ultrasonic: "Ultraschall-Abstandssensor an Port",
   senseBox_ultrasonic_trigger: "Trigger",
   senseBox_ultrasonic_echo: "Echo",
+  senseBox_ultrasonic_maxDistance: "Maximale Distanz",
   senseBox_ultrasonic_port_A: "A",
   senseBox_ultrasonic_port_B: "B",
   senseBox_ultrasonic_port_C: "C",
   senseBox_ultrasonic_tooltip: `Misst die Distanz mithilfe von Ultraschall in cm. Schließe den Sensor an einen der drei Digital/Analog Ports an:
 
 - Trigger: Grünes Kabel
-- Echo: gelbes Kabel`,
+- Echo: gelbes Kabel
+Wenn die maximale Distanz überschritten wird, wird ein Wert von **O** ausgegeben`,
   senseBox_ultrasonic_helpurl:
     "https://docs.sensebox.de/hardware/sensoren-distanz/",
   /**
@@ -116,10 +127,10 @@ export const SENSORS = {
   /*
    * Soundsensor
    */
-  senseBox_soundsensor_dfrobot: "Soundsensor (DF Robot)",
-  senseBox_soundsensor_dfrobot_tooltip:
+  sensebox_sen0232: "Soundsensor (DF Robot)",
+  sensebox_sen0232_tooltip:
     "Schließe den Sensor an einen der 3 **digital/analog Ports** an. Der Sensor gibt dir den Messwert in dB mit einer Nachkommastelle",
-  senseBox_soundsensor_dfrobot_helpurl:
+  sensebox_sen0232_helpurl:
     "https://docs.sensebox.de/hardware/sensoren-lautstaerke/",
   /*
    * BME680
@@ -172,10 +183,8 @@ Die Messwerte für Temperatur, Luftfeuchtigkeit und Luftdruck können direkt ver
     "Dieser Block gibt dir den Messwert des Feinstaubsensor. Schließe den Feinstaubsensor an einen der 2 **Serial/UART** Anschlüssen an. Im Dropdown Menü zwischen PM2.5 und PM10 auswählen. Der Messwert wird dir als **Kommazahl** in µg/m3",
   senseBox_sds011_serial1: "Serial1",
   senseBox_sds011_serial2: "Serial2",
-  /*
-    senseBox_sds011_helpurl: "https://docs.sensebox.de/hardware/sensoren-feinstaub/",
-    */
-  senseBox_sds011_helpurl: "https://api.sensor-wiki.org",
+  senseBox_sds011_helpurl:
+    "https://docs.sensebox.de/hardware/sensoren-feinstaub/",
 
   /**
    * Button
@@ -184,6 +193,7 @@ Die Messwerte für Temperatur, Luftfeuchtigkeit und Luftdruck können direkt ver
   senseBox_button_isPressed: "ist gedrückt",
   senseBox_button_switch: "als Schalter",
   senseBox_button_wasPressed: "wurde gedrückt",
+  senseBox_button_longPress: "Gedrückt für",
   senseBox_button_tooltip: `Dieser Block gibt dir den Status des angeschlossenen Buttons. Im Dropdown Menü können verschiedene Modi für den Button ausgewählt werden. Angesteuert können entweder der on Board Button oder ein Button, der an einen der 6 digitalen Pins angeschlossen ist. verschiedene Modi:
 - "ist gedrückt": Mit diesem Modus kannst du abfragen ob der Block gerade gedrückt wird. Du erhältst entweder den Wert TRUE oder FALSE.
 - "wurde gedrückt": Mit diesem Modus kannst du abfragen ob der Block gedrückt wurde. Erst wenn der Knopf gedrückt und wieder losgelassen wurde erhältst du TRUE zurück

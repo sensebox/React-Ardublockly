@@ -9,13 +9,20 @@ export const SENSORS = {
    * BMP280
    */
   senseBox_pressure_sensor: "Airpressure/Temperature Sensor (BMP280)",
-  senseBox_pressure: "Airpressure in Pa",
-  senseBox_pressure_dimension: "Airpressure in Pa",
-  senseBox_pressure_tip:
-    "Connect the sensor to one of the 5 **I2C ports**. The sensor gives you the measured value for the air pressure in Pa. To calculate the correct altitude above sea level the sensor needs a current reference value.",
+  senseBox_pressure: "Airpressure in hPa",
+  senseBox_pressure_dimension: "Airpressure in hPa",
+  senseBox_pressure_tooltip:
+    "Connect the sensor to one of the 5 **I2C ports**. The sensor gives you the measured value for the air pressure in hPa. To calculate the correct altitude above sea level the sensor needs a current reference value.",
   senseBox_pressure_referencePressure: "Pressure at Sea Level",
   senseBox_pressure_referencePressure_dim: "hPa",
   senseBox_pressure_helpurl: "",
+
+  /**
+   * DPS310
+   */
+  sensebox_dps310: "Airpressure/Temperature Sensor (DPS310)",
+  sensebox_dps310_tooltip:
+    "Connect the sensor to one of the 5 **I2C ports**. The sensor gives you the measured value for the air pressure in hPa. To calculate the correct altitude above sea level the sensor needs a current reference value.",
 
   /**
    * Mikro
@@ -30,10 +37,10 @@ export const SENSORS = {
    * Temperature and Humidity Sensor (HDC1080)
    */
   senseBox_temp: "Temperature in °C",
-  senseBox_temp_hum: "Temperature/Humidity Sensor (HDC1080)",
-  senseBox_temp_hum_tooltip:
+  sensebox_hdc1080: "Temperature/Humidity Sensor (HDC1080)",
+  sensebox_hdc1080_tooltip:
     "This block returns the temperature and humidity sensor readings. Connect the sensor to one of the 5 I2C ports. Measured value is output with 2 decimal places.",
-  senseBox_temp_hum_helpurl:
+  sensebox_hdc1080_helpurl:
     "https://en.docs.sensebox.de/hardware/sensoren-temperatur-luftfeuchte/",
   senseBox_hum: "humidity in %",
   senseBox_hum_tip: "Measures humidity in %",
@@ -45,12 +52,14 @@ export const SENSORS = {
   senseBox_ultrasonic: "Ultrasonic distance sensor at Port",
   senseBox_ultrasonic_trigger: "Trigger",
   senseBox_ultrasonic_echo: "Echo",
+  senseBox_ultrasonic_maxDistance: "Max distance",
   senseBox_ultrasonic_port_A: "A",
   senseBox_ultrasonic_port_B: "B",
   senseBox_ultrasonic_port_C: "C",
   senseBox_ultrasonic_tooltip: `Measures the distance using ultrasound in cm. Connect the sensor to one of the three digital/analog ports:
 - Trigger: Green Cable
-- Echo: Yellow Cable`,
+- Echo: Yellow Cable
+If the max distance is reached the a value of **O** will be returned`,
   senseBox_ultrasonic_helpurl:
     "https://en.docs.sensebox.de/hardware/sensoren-distanz/",
 
@@ -119,10 +128,10 @@ export const SENSORS = {
   /*
    * Soundsensor
    */
-  senseBox_soundsensor_dfrobot: "Soundsensor (DF Robot)",
-  senseBox_soundsensor_dfrobot_tooltip:
+  sensebox_sen0232: "Soundsensor (DF Robot)",
+  sensebox_sen0232_tooltip:
     "Connect the sensor to one of the 3 **digital/analog ports**. The sensor will give you the reading in dB with one decimal.",
-  senseBox_soundsensor_dfrobot_helpurl:
+  sensebox_sen0232_helpurl:
     "https://en.docs.sensebox.de/hardware/sensoren-lautstaerke/",
 
   /*
@@ -174,10 +183,8 @@ The measured values for temperature, humidity and air pressure can be used direc
     "This block gives you the reading of the fine dust sensor. Connect the fine dust sensor to one of the 2 **Serial/UART** ports. Select between PM2.5 and PM10 in the dropdown menu. The measured value will be displayed as **comma number** in µg/m3",
   senseBox_sds011_serial1: "Serial1",
   senseBox_sds011_serial2: "Serial2",
-  /*
-    senseBox_sds011_helpurl: "https://docs.sensebox.de/hardware/sensoren-feinstaub/",
-    */
-  senseBox_sds011_helpurl: "https://api.sensor-wiki.org",
+  senseBox_sds011_helpurl:
+    "https://en.docs.sensebox.de/hardware/sensoren-feinstaub/",
 
   /**
    * Button
@@ -186,6 +193,7 @@ The measured values for temperature, humidity and air pressure can be used direc
   senseBox_button_isPressed: "is Pressed",
   senseBox_button_switch: "as Switch",
   senseBox_button_wasPressed: "was Pressed",
+  senseBox_button_longPress: "Pressed for",
   senseBox_button_tooltip: `This block gives you the status of the connected button. In the dropdown menu you can select different modes for the button. Either the on board button or a button connected to one of the 6 digital pins can be controlled. different modes:
 - "is pressed": With this mode you can check if the block is currently pressed. You get either the value TRUE or FALSE.
 - "was pressed": With this mode you can query if the block was pressed. Only if the button was pressed and released you will get TRUE.

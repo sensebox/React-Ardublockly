@@ -4,6 +4,7 @@ import { getColour } from "../helpers/colour";
 Blockly.Blocks["sensebox_phyphox_init"] = {
   init: function () {
     this.setColour(getColour().phyphox);
+    this.setHelpUrl(Blockly.Msg.sensebox_phyphox_helpurl);
     this.appendDummyInput()
       .appendField(Blockly.Msg.sensebox_phyphox_init)
       .appendField(new Blockly.FieldTextInput("Geräte Name"), "devicename");
@@ -37,6 +38,7 @@ Blockly.Blocks["sensebox_phyphox_experiment"] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setTooltip(Blockly.Msg.sensebox_phyphox_experiment_tooltip);
+    this.setHelpUrl(Blockly.Msg.sensebox_phyphox_helpurl);
   },
 };
 
@@ -63,8 +65,8 @@ Blockly.Blocks["sensebox_phyphox_graph"] = {
       .appendField(Blockly.Msg.sensebox_phyphox_graphStyle)
       .appendField(
         new Blockly.FieldDropdown([
-          [Blockly.Msg.sensebox_phyphox_style_dots, "dots"],
           [Blockly.Msg.sensebox_phyphox_style_line, "line"],
+          [Blockly.Msg.sensebox_phyphox_style_dots, "dots"],
         ]),
         "style"
       );
@@ -77,6 +79,7 @@ Blockly.Blocks["sensebox_phyphox_graph"] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setTooltip(Blockly.Msg.sensebox_phyphox_graph_tooltip);
+    this.setHelpUrl(Blockly.Msg.sensebox_phyphox_helpurl);
   },
 };
 
@@ -86,6 +89,7 @@ Blockly.Blocks["sensebox_phyphox_timestamp"] = {
     this.appendDummyInput().appendField(Blockly.Msg.sensebox_phyphox_timestamp);
     this.setOutput(true);
     this.setTooltip(Blockly.Msg.sensebox_phyphox_timestamp_tooltip);
+    this.setHelpUrl(Blockly.Msg.sensebox_phyphox_helpurl);
   },
 };
 
@@ -107,6 +111,7 @@ Blockly.Blocks["sensebox_phyphox_channel"] = {
 
     this.setOutput(true);
     this.setTooltip(Blockly.Msg.sensebox_phyphox_channel_tooltip);
+    this.setHelpUrl(Blockly.Msg.sensebox_phyphox_helpurl);
   },
 };
 
@@ -129,6 +134,7 @@ Blockly.Blocks["sensebox_phyphox_sendchannel"] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setTooltip(Blockly.Msg.sensebox_phyphox_sendchannel_tooltip);
+    this.setHelpUrl(Blockly.Msg.sensebox_phyphox_helpurl);
   },
 };
 
@@ -141,5 +147,6 @@ Blockly.Blocks["sensebox_phyphox_experiment_send"] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setTooltip(Blockly.Msg.sensebox_phyphox_experiment_send_tooltip);
+    this.setHelpUrl(Blockly.Msg.sensebox_phyphox_helpurl);
   },
 };

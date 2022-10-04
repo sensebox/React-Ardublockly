@@ -3,7 +3,8 @@
     "id": "senseboxmcu",
     "name": "senseBox MCU",
     "src": "senseboxmcu.png",
-    "url": "https://docs.sensebox.de/hardware/allgemein-sensebox-mcu/"
+    "url": "https://docs.sensebox.de/hardware/allgemein-sensebox-mcu/",
+    "description": "test"
   },
   {
     "id": "breadboard",

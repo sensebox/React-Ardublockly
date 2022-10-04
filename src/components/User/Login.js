@@ -50,7 +50,6 @@ export class Login extends Component {
       }
       // Check for login error
       else if (message.id === "LOGIN_FAIL") {
-        console.log("login fail");
         this.setState({
           email: "",
           password: "",
