@@ -140,7 +140,7 @@ class DeviceSeclection extends Component {
           label={Blockly.Msg.deviceselection_keep_selection}
         />
         <Typography variant="body1" >
-          {Blockly.Msg.deviceselection_footnote} <a href="https://sensebox.github.io/blockly/">Arduino UNO</a> {Blockly.Msg.deviceselection_footnote_02} <a href="/">senseBox MCU</a>
+          {Blockly.Msg.deviceselection_footnote} <a href="https://sensebox.github.io/blockly/">Arduino UNO</a> {Blockly.Msg.deviceselection_footnote_02} <a href="https://sensebox-blockly.netlify.app/ardublockly/?board=sensebox-mcu">senseBox MCU</a>
         </Typography>
       </Dialog>
     );
