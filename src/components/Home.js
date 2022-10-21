@@ -11,7 +11,7 @@ import WorkspaceFunc from "./Workspace/WorkspaceFunc";
 import BlocklyWindow from "./Blockly/BlocklyWindow";
 import CodeViewer from "./CodeViewer";
 import TrashcanButtons from "./Workspace/TrashcanButtons";
-import HintTutorialExists from "./Tutorial/HintTutorialExists";
+// import HintTutorialExists from "./Tutorial/HintTutorialExists";
 import DeviceSelection from "./DeviceSelection";
 
 import Grid from "@material-ui/core/Grid";
@@ -188,7 +188,7 @@ class Home extends Component {
           ) : null}
         </Grid>
         <DeviceSelection />
-        <HintTutorialExists />
+        {/* <HintTutorialExists /> */}
         {this.props.platform ? (
           <Dialog
             style={{ zIndex: 9999999 }}
