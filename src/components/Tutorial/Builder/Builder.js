@@ -10,6 +10,8 @@ import {
   resetTutorial as resetTutorialBuilder,
 } from "../../../actions/tutorialBuilderActions";
 import {
+  getAllTutorials,
+  getUserTutorials,
   getTutorials,
   resetTutorial,
   deleteTutorial,
@@ -19,12 +21,17 @@ import { clearMessages } from "../../../actions/messageActions";
 
 import axios from "axios";
 import { withRouter } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEyeSlash, faUserCheck } from "@fortawesome/free-solid-svg-icons";
 
 import Breadcrumbs from "../../Breadcrumbs";
 import Textfield from "./Textfield";
+import Difficulty from "./Difficulty";
 import Step from "./Step";
 import Dialog from "../../Dialog";
 import Snackbar from "../../Snackbar";
+import Public from "./Public";
+import Review from "./Review";
 
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -66,6 +73,8 @@ class Builder extends Component {
       tutorial: "new",
       open: false,
       title: "",
+      public: false,
+      difficulty: "",
       content: "",
       string: false,
       snackbar: false,
@@ -80,7 +89,11 @@ class Builder extends Component {
     // retrieve tutorials only if a potential user is loaded - authentication
     // is finished (success or failed)
     if (!this.props.authProgress) {
-      this.props.getTutorials();
+      if (this.props.user.role === "admin") {
+        this.props.getAllTutorials();
+      } else {
+        this.props.getUserTutorials();
+      }
     }
   }
 
@@ -89,8 +102,12 @@ class Builder extends Component {
       props.authProgress !== this.props.authProgress &&
       !this.props.authProgress
     ) {
-      // authentication is completed
-      this.props.getTutorials();
+      if (this.props.user.role === "admin") {
+        // authentication is completed
+        this.props.getAllTutorials();
+      } else {
+        this.props.getUserTutorials();
+      }
     }
     if (props.message !== this.props.message) {
       if (this.props.message.id === "GET_TUTORIALS_FAIL") {
@@ -258,6 +275,9 @@ class Builder extends Component {
       var steps = this.props.steps;
       var newTutorial = new FormData();
       newTutorial.append("title", this.props.title);
+      newTutorial.append("difficulty", this.props.difficulty);
+      newTutorial.append("public", this.props.public);
+      newTutorial.append("review", this.props.review);
       steps.forEach((step, i) => {
         if (step._id) {
           newTutorial.append(`steps[${i}][_id]`, step._id);
@@ -282,21 +302,6 @@ class Builder extends Component {
         if (step.xml) {
           // optional
           newTutorial.append(`steps[${i}][xml]`, step.xml);
-        }
-        if (step.media) {
-          // optional
-          if (step.media.youtube) {
-            newTutorial.append(
-              `steps[${i}][media][youtube]`,
-              step.media.youtube
-            );
-          }
-          if (step.media.picture) {
-            newTutorial.append(
-              `steps[${i}][media][picture]`,
-              step.media.picture
-            );
-          }
         }
       });
       return newTutorial;
@@ -370,9 +375,19 @@ class Builder extends Component {
   };
 
   render() {
-    var filteredTutorials = this.props.tutorials.filter(
-      (tutorial) => tutorial.creator === this.props.user.email
-    );
+    if (this.props.user.role === "admin") {
+      var filteredTutorials = this.props.tutorials;
+    } else {
+      filteredTutorials = this.props.tutorials.filter(
+        (tutorial) => tutorial.creator === this.props.user.email
+      );
+    }
+
+    // } else {
+    //   filteredTutorials = this.props.userTutorials.filter(
+    //     (tutorial) => tutorial.creator === this.props.user.email
+    //   );
+
     return (
       <div>
         <Breadcrumbs
@@ -462,7 +477,24 @@ class Builder extends Component {
               label="Tutorial"
             >
               {filteredTutorials.map((tutorial) => (
-                <MenuItem value={tutorial._id}>{tutorial.title}</MenuItem>
+                <MenuItem value={tutorial._id}>
+                  {tutorial.title}{" "}
+                  {tutorial.review && tutorial.public === false ? (
+                    <div>
+                      <FontAwesomeIcon icon={faUserCheck} />
+                      <FontAwesomeIcon icon={faEyeSlash} />
+                    </div>
+                  ) : tutorial.public === false ? (
+                    <FontAwesomeIcon icon={faEyeSlash} />
+                  ) : null}
+                </MenuItem>
+                /* ) : tutorial.public === false ? (
+                    <MenuItem value={tutorial._id}>
+                      {tutorial.title} <FontAwesomeIcon icon={faEyeSlash} />
+                    </MenuItem>
+                  ) : (
+                    <MenuItem value={tutorial._id}>{tutorial.title}</MenuItem>
+                  )} */
               ))}
             </Select>
           </FormControl>
@@ -487,6 +519,45 @@ class Builder extends Component {
               label={"Titel"}
               error={this.props.error.title}
             />
+            <div
+              style={{
+                borderRadius: "25px",
+                border: "1px solid lightgrey",
+                padding: "10px 14px 10px 10px",
+                marginBottom: "20px",
+              }}
+            >
+              <Difficulty
+                value={this.props.difficulty}
+                property={"difficulty"}
+                label={"difficulty"}
+                error={this.props.error.difficulty}
+              />
+              <Divider
+                variant="fullWidth"
+                style={{ margin: "30px 0 10px 0" }}
+              />
+
+              <Review
+                value={this.props.review}
+                property={"review"}
+                label={"review"}
+                error={this.props.error.review}
+              />
+              <Divider
+                variant="fullWidth"
+                style={{ margin: "30px 0 10px 0" }}
+              />
+
+              {this.props.user.blocklyRole === "admin" ? (
+                <Public
+                  value={this.props.public}
+                  property={"public"}
+                  label={"public"}
+                  error={this.props.error.public}
+                />
+              ) : null}
+            </div>
 
             {this.props.steps.map((step, i) => (
               <Step step={step} index={i} key={i} />
@@ -619,6 +690,8 @@ class Builder extends Component {
 }
 
 Builder.propTypes = {
+  getAllTutorials: PropTypes.func.isRequired,
+  getUserTutorials: PropTypes.func.isRequired,
   getTutorials: PropTypes.func.isRequired,
   resetTutorial: PropTypes.func.isRequired,
   clearMessages: PropTypes.func.isRequired,
@@ -631,6 +704,9 @@ Builder.propTypes = {
   resetTutorialBuilder: PropTypes.func.isRequired,
   tutorialProgress: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
+  difficulty: PropTypes.number.isRequired,
+  public: PropTypes.bool.isRequired,
+  review: PropTypes.bool.isRequired,
   id: PropTypes.string.isRequired,
   steps: PropTypes.array.isRequired,
   change: PropTypes.number.isRequired,
@@ -645,12 +721,16 @@ Builder.propTypes = {
 
 const mapStateToProps = (state) => ({
   title: state.builder.title,
+  difficulty: state.builder.difficulty,
+  review: state.builder.review,
+  public: state.builder.public,
   id: state.builder.id,
   steps: state.builder.steps,
   change: state.builder.change,
   error: state.builder.error,
   json: state.builder.json,
   isProgress: state.builder.progress,
+  userTutorials: state.tutorial.userTutorials,
   tutorials: state.tutorial.tutorials,
   message: state.message,
   user: state.auth.user,
@@ -665,6 +745,8 @@ export default connect(mapStateToProps, {
   tutorialId,
   resetTutorialBuilder,
   getTutorials,
+  getUserTutorials,
+  getAllTutorials,
   resetTutorial,
   tutorialProgress,
   clearMessages,

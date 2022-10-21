@@ -9,7 +9,7 @@ class Cookies extends Component {
         return (
             <CookieConsent
                 location="bottom"
-                buttonText="Okay!!"
+                buttonText="Okay!"
                 cookieName="cookieConsent"
                 style={{ background: "#2B373B" }}
                 buttonStyle={{ background: "white", color: "#4EAF47", fontSize: "1rem" }}

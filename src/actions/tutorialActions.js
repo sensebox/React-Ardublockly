@@ -84,6 +84,77 @@ export const getTutorials = () => (dispatch, getState) => {
     });
 };
 
+export const getAllTutorials = () => (dispatch, getState) => {
+  axios
+    .get(`${process.env.REACT_APP_BLOCKLY_API}/tutorial/getAllTutorials`)
+    .then((res) => {
+      var tutorials = res.data.tutorials;
+      existingTutorials(tutorials, getState().tutorial.status).then(
+        (status) => {
+          dispatch({
+            type: TUTORIAL_SUCCESS,
+            payload: status,
+          });
+          dispatch(updateStatus(status));
+          dispatch({
+            type: GET_TUTORIALS,
+            payload: tutorials,
+          });
+          dispatch({ type: TUTORIAL_PROGRESS });
+          dispatch(returnSuccess(res.data.message, res.status));
+        }
+      );
+    })
+    .catch((err) => {
+      if (err.response) {
+        dispatch(
+          returnErrors(
+            err.response.data.message,
+            err.response.status,
+            "GET_TUTORIALS_FAIL"
+          )
+        );
+      }
+      dispatch({ type: TUTORIAL_PROGRESS });
+    });
+};
+
+export const getUserTutorials = () => (dispatch, getState) => {
+  axios
+    .get(`${process.env.REACT_APP_BLOCKLY_API}/tutorial/getUserTutorials`)
+    .then((res) => {
+      var tutorials = res.data.tutorials;
+      existingTutorials(tutorials, getState().tutorial.status).then(
+        (status) => {
+          dispatch({
+            type: TUTORIAL_SUCCESS,
+            payload: status,
+          });
+          dispatch(updateStatus(status));
+          dispatch({
+            type: GET_TUTORIALS,
+            payload: tutorials,
+          });
+          dispatch({ type: TUTORIAL_PROGRESS });
+          dispatch(returnSuccess(res.data.message, res.status));
+        }
+      );
+    })
+    .catch((err) => {
+      console.log(err);
+      if (err.response) {
+        dispatch(
+          returnErrors(
+            err.response.data.message,
+            err.response.status,
+            "GET_TUTORIALS_FAIL"
+          )
+        );
+      }
+      dispatch({ type: TUTORIAL_PROGRESS });
+    });
+};
+
 export const updateStatus = (status) => (dispatch, getState) => {
   if (getState().auth.isAuthenticated) {
     // update user account in database - sync with redux store

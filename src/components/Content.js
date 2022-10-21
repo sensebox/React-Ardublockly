@@ -10,6 +10,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Routes from './Route/Routes';
 import Cookies from './Cookies';
+import { setBoard } from './Blockly/helpers/board';
 
 class Content extends Component {
 
@@ -19,6 +20,7 @@ class Content extends Component {
     } else if (this.props.language === 'en_US') {
       Blockly.setLocale(En);
     }
+    setBoard(this.props.board)
   }
 
   componentDidUpdate(props) {
@@ -29,6 +31,7 @@ class Content extends Component {
         Blockly.setLocale(En);
       }
     }
+    setBoard(this.props.board)
   }
 
   render() {
@@ -48,7 +51,8 @@ Content.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  language: state.general.language
+  language: state.general.language,
+  board: state.board.board
 });
 
 export default connect(mapStateToProps, null)(Content);

@@ -177,6 +177,8 @@ export const UI = {
   settings_sounds: "Sound",
   settings_sounds_text:
     "Enable or disable sounds when adding and deleting blocks. Disabled by default",
+  settings_board: "Board",
+  settings_board_text: "Choose your board",
 
   /**
    * 404
@@ -223,6 +225,12 @@ export const UI = {
   builder_requirements_head: "Requirements.",
   builder_requirements_order:
     "Note that the order of ticking is authoritative.",
+  builder_difficulty: "Difficulty level",
+  builder_public_head: "Publish tutorial",
+  builder_public_label: "Publish tutorial for all users",
+  builder_review_head: "Publish tutorial",
+  builder_review_text:
+    "You can share your tutorial with other people directly from the link. If you want to publish your tutorial for all users in the overview you can activate it here. An administrator will view your tutorial and then activate it.",
 
   /**
    * Login
@@ -238,7 +246,7 @@ export const UI = {
   /**
    * Navbar
    */
-
+  navbar_blockly: "Blockly",
   navbar_tutorials: "Tutorials",
   navbar_tutorialbuilder: "Create tutorial",
   navbar_gallery: "Gallery",
@@ -278,4 +286,27 @@ export const UI = {
    */
   drawer_ideerror_head: "Oops something went wrong",
   drawer_ideerror_text: "An error occurred while compiling, check your blocks",
+
+  /**
+   * Code Editor
+   * */
+  codeeditor_libraries_head: "Installed Arduino Libraries",
+  codeeditor_libraries_text:
+    "For documentation, view the installed libraries and their examples",
+  codeeditor_save_code: "Download code",
+  codeeditor_open_code: "Open code",
+  codeeditor_reset_code: "Reset code",
+  codeeditor_blockly_code: "Load blockly code",
+  codeeditor_compile_progress:
+    "Your code will now be compiled and then downloaded to your computer",
+
+      /**
+   * Device Selction
+   *  */
+  deviceselection_head: "Which board are you using?",
+  deviceselection_keep_selection: "Save my choice (You can change the board later in the settings)",
+  deviceselection_footnote: "Here you can access the old blockly Version for the",
+  deviceselection_footnote_02: "or the",
+
+
 };

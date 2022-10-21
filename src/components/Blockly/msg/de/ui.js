@@ -142,6 +142,7 @@ export const UI = {
 
   button_cancel: "Abbrechen",
   button_close: "Schließen",
+  button_save: "Speichern",
   button_accept: "Bestätigen",
   button_compile: "Kompilieren",
   button_create_variableCreate: "Erstelle Variable",
@@ -182,7 +183,8 @@ export const UI = {
   settings_sounds: "Töne",
   settings_sounds_text:
     "Aktiviere oder Deaktiviere Töne beim hinzufügen und löschen von Blöcken. Standardmäßig deaktiviert",
-
+  settings_board: "Board",
+  settings_board_text: "Wähle dein verwendetes Board aus",
   /**
    * 404
    */
@@ -229,6 +231,12 @@ export const UI = {
   builder_requirements_head: "Voraussetzungen",
   builder_requirements_order:
     "Beachte, dass die Reihenfolge des Anhakens maßgebend ist.",
+  builder_difficulty: "Schwierigkeitsgrad",
+  builder_public_head: "Tutorial veröffentlichen",
+  builder_public_label: "Tutorial für alle Nutzer:innen veröffentlichen",
+  builder_review_head: "Tutorial veröffentlichen",
+  builder_review_text:
+    "Du kannst dein Tutorial direkt über den Link mit anderen Personen teilen. Wenn du dein Tutorial für alle Nutzer:innen in der Überischt veröffenltichen wollen kannst du es hier aktivieren. Ein Administrator wird dein Tutorial ansehen und anschließend freischalten.",
 
   /**
    * Login
@@ -242,7 +250,7 @@ export const UI = {
   /**
    * Navbar
    */
-
+  navbar_blockly: "Blockly",
   navbar_tutorials: "Tutorials",
   navbar_tutorialbuilder: "Tutorial erstellen",
   navbar_gallery: "Galerie",
@@ -283,4 +291,25 @@ export const UI = {
   drawer_ideerror_head: "Hoppla da ist was schief gegangen.",
   drawer_ideerror_text:
     "Beim kompilieren ist ein Fehler aufgetreten, überprüfe deine Blöcke.",
+
+  /**
+   * Code Editor
+   *  */
+  codeeditor_libraries_head: "Installierte Arduino Libraries",
+  codeeditor_libraries_text:
+    "Für die Dokumentation sehen Sie sich die installierten Bibliotheken und deren Beispiele an",
+  codeeditor_save_code: "Code herunterladen",
+  codeeditor_open_code: "Code öffnen",
+  codeeditor_reset_code: "Code zurücksetzen",
+  codeeditor_blockly_code: "Lade Blockly Code",
+  codeeditor_compile_progress:
+    "Dein Code wird nun kompiliert und anschließend auf deinen Computer heruntergeladen",
+
+  /**
+   * Device Selction
+   *  */
+  deviceselection_head: "Welches Board benutzt du?",
+  deviceselection_keep_selection: "Speichere meine Auswahl fürs nächste Mal (Du kannst das Board später in den Einstellungen wechseln)",
+  deviceselection_footnote: "Hier kommst du zur alten Blockly Version für den ",
+  deviceselection_footnote_02: "oder die"
 };

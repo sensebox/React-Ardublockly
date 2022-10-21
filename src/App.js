@@ -1,35 +1,34 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import { BrowserRouter as Router } from 'react-router-dom';
+import { Router } from "react-router-dom";
 import { createBrowserHistory } from "history";
 
-import { Provider } from 'react-redux';
-import store from './store';
-import { loadUser } from './actions/authActions';
+import { Provider } from "react-redux";
+import store from "./store";
+import { loadUser } from "./actions/authActions";
 
-import './App.css';
+import "./App.css";
 
-import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider, createTheme } from "@material-ui/core/styles";
 
-import Content from './components/Content';
+import Content from "./components/Content";
 
-const theme = createMuiTheme({
+const theme = createTheme({
   palette: {
     primary: {
-      main: '#4EAF47',
-      contrastText: '#ffffff'
+      main: "#4EAF47",
+      contrastText: "#ffffff",
     },
     secondary: {
-      main: '#DDDDDD'
+      main: "#DDDDDD",
     },
     button: {
-      compile: '#e27136'
-    }
-  }
+      compile: "#e27136",
+    },
+  },
 });
 
 class App extends Component {
-
   componentDidMount() {
     store.dispatch(loadUser());
   }
