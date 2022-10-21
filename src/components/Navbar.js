@@ -266,7 +266,7 @@ class Navbar extends Component {
                       <ListItemIcon>
                         <FontAwesomeIcon icon={item.icon} />
                       </ListItemIcon>
-                      {item.text === "CodeEditor" ? (
+                      {item.text === "Code Editor" ? (
                         <Badge badgeContent={"Experimental"} color="primary">
                           <ListItemText primary={item.text} />
                         </Badge>
