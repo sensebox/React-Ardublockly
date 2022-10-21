@@ -24,6 +24,7 @@ import Login from "../User/Login";
 import Account from "../User/Account";
 import News from "../News";
 import Faq from "../Faq";
+import CodeEditor from "../CodeEditor/CodeEditor";
 
 class Routes extends Component {
   componentDidUpdate() {
@@ -46,6 +47,9 @@ class Routes extends Component {
           </PrivateRouteCreator>
           <Route path="/tutorial/:tutorialId" exact>
             <Tutorial />
+          </Route>
+          <Route path="/CodeEditor" exact>
+            <CodeEditor />
           </Route>
           {/* Sharing */}
           <PublicRoute path="/share/:shareId" exact>
@@ -100,7 +104,7 @@ class Routes extends Component {
 }
 
 Home.propTypes = {
-  visitPage: PropTypes.func.isRequired,
+  visitPage: PropTypes.func,
 };
 
 export default connect(null, { visitPage })(withRouter(Routes));

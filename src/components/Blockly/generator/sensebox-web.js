@@ -1,4 +1,12 @@
 import Blockly from "blockly";
+//import store from "../../../store";
+
+// preperations for the esp board
+// var selectedBoard = store.getState().board.board;
+// store.subscribe(() => {
+//   selectedBoard = store.getState().board.board;
+// });
+
 
 /* Wifi connection and openSenseMap Blocks*/
 Blockly.Arduino.sensebox_wifi = function (block) {
@@ -110,3 +118,5 @@ Blockly.Arduino.sensebox_ethernetIp = function () {
   var code = "Ethernet.localIP()";
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
+
+

@@ -101,7 +101,6 @@ Blockly.Arduino.sensebox_phyphox_graph = function () {
 Blockly.Arduino.sensebox_phyphox_experiment_send = function () {
   var branch = Blockly.Arduino.statementToCode(this, "sendValues");
   var blocks = this.getDescendants();
-  console.log(blocks);
   var count = 0;
   if (blocks !== undefined) {
     for (var i = 0; i < blocks.length; i++) {
@@ -115,7 +114,6 @@ Blockly.Arduino.sensebox_phyphox_experiment_send = function () {
   var string = "";
 
   for (var j = 1; j <= count; j++) {
-    console.log("append");
     if (string === "") {
       string += `channel${j}`;
     } else if (string !== "") {

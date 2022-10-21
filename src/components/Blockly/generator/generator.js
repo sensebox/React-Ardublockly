@@ -148,53 +148,7 @@ Blockly["Arduino"].init = function (workspace) {
   //         Blockly.Names.DEVELOPER_VARIABLE_TYPE));
   // }
 
-  const doubleVariables = workspace.getVariablesOfType("Number");
-  let i = 0;
-  let variableCode = "";
-  for (i = 0; i < doubleVariables.length; i += 1) {
-    variableCode +=
-      "double " +
-      Blockly["Arduino"].nameDB_.getName(
-        doubleVariables[i].getId(),
-        Blockly.Variables.NAME_TYPE
-      ) +
-      " = 0; \n\n";
-  }
 
-  const stringVariables = workspace.getVariablesOfType("String");
-  for (i = 0; i < stringVariables.length; i += 1) {
-    variableCode +=
-      "String " +
-      Blockly["Arduino"].nameDB_.getName(
-        stringVariables[i].getId(),
-        Blockly.Variables.NAME_TYPE
-      ) +
-      ' = ""; \n\n';
-  }
-
-  const booleanVariables = workspace.getVariablesOfType("Boolean");
-  for (i = 0; i < booleanVariables.length; i += 1) {
-    variableCode +=
-      "boolean " +
-      Blockly["Arduino"].nameDB_.getDistinctName(
-        booleanVariables[i].getId(),
-        Blockly.Variables.NAME_TYPE
-      ) +
-      " = false; \n\n";
-  }
-
-  const colourVariables = workspace.getVariablesOfType("Colour");
-  for (i = 0; i < colourVariables.length; i += 1) {
-    variableCode +=
-      "RGB " +
-      Blockly["Arduino"].nameDB_.getName(
-        colourVariables[i].getId(),
-        Blockly.Variables.NAME_TYPE
-      ) +
-      " = {0, 0, 0}; \n\n";
-  }
-
-  Blockly["Arduino"].variablesInitCode_ = variableCode;
 };
 
 /**

@@ -11,7 +11,8 @@ import WorkspaceFunc from "./Workspace/WorkspaceFunc";
 import BlocklyWindow from "./Blockly/BlocklyWindow";
 import CodeViewer from "./CodeViewer";
 import TrashcanButtons from "./Workspace/TrashcanButtons";
-import HintTutorialExists from "./Tutorial/HintTutorialExists";
+// import HintTutorialExists from "./Tutorial/HintTutorialExists";
+import DeviceSelection from "./DeviceSelection";
 
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
@@ -22,7 +23,7 @@ import { faCode } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TooltipViewer from "./TooltipViewer";
 import Dialog from "./Dialog";
-
+// import Autosave from "./Workspace/AutoSave";
 const styles = (theme) => ({
   codeOn: {
     backgroundColor: theme.palette.primary.main,
@@ -54,11 +55,11 @@ class Home extends Component {
       key: "",
       message: "",
       open: true,
+      initialXml: localStorage.getItem("autoSaveXML"),
     };
   }
 
   componentDidMount() {
-    console.log(this.props.platform);
     if (this.props.platform === true) {
       this.setState({ codeOn: false });
     }
@@ -119,10 +120,12 @@ class Home extends Component {
             <WorkspaceStats />
           </div>
         ) : null}
+
         <div
           className="workspaceFunc"
           style={{ float: "right", height: "40px", marginBottom: "20px" }}
         >
+          {/* <Autosave /> */}
           <WorkspaceFunc
             project={this.props.project}
             projectType={this.props.projectType}
@@ -161,6 +164,7 @@ class Home extends Component {
                 <FontAwesomeIcon icon={faCode} size="xs" />
               </IconButton>
             </Tooltip>
+
             <TrashcanButtons />
             <div className="blocklyWindow">
               {this.props.project ? (
@@ -169,7 +173,10 @@ class Home extends Component {
                   initialXml={this.props.project.xml}
                 />
               ) : (
-                <BlocklyWindow blocklyCSS={{ height: "80vH" }} />
+                <BlocklyWindow
+                  blocklyCSS={{ height: "80vH" }}
+                  initialXml={this.state.initialXml}
+                />
               )}
             </div>
           </Grid>
@@ -180,7 +187,8 @@ class Home extends Component {
             </Grid>
           ) : null}
         </Grid>
-        <HintTutorialExists />
+        <DeviceSelection />
+        {/* <HintTutorialExists /> */}
         {this.props.platform ? (
           <Dialog
             style={{ zIndex: 9999999 }}
@@ -216,7 +224,7 @@ Home.propTypes = {
   workspaceName: PropTypes.func.isRequired,
   message: PropTypes.object.isRequired,
   statistics: PropTypes.bool.isRequired,
-  platform: PropTypes.object.isRequired,
+  platform: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
