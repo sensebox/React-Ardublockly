@@ -34,11 +34,22 @@ const setVariableFunction = function (defaultValue) {
 };
 
 const getVariableFunction = function (block) {
-  const variableName = Blockly["Arduino"].nameDB_.getName(
-    block.getFieldValue("VAR"),
-    Blockly.Variables.NAME_TYPE
-  );
-  var code = variableName;
+  var id = block.getFieldValue("VAR");
+
+  const variableName = Blockly.Variables.getVariable(
+    Blockly.getMainWorkspace(),
+    id
+  ).name;
+
+  const allVars = Blockly.getMainWorkspace()
+  .getVariableMap()
+  .getAllVariables();
+const myVar = allVars.filter((v) => v.name === variableName)[0];
+  // const variableName = Blockly["Arduino"].nameDB_.getName(
+  //   block.getFieldValue("VAR"),
+  //   Blockly.Variables.NAME_TYPE
+  // );
+  var code = myVar.name;
   return [code, Blockly["Arduino"].ORDER_ATOMIC];
 };
 
