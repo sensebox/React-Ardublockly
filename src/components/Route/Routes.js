@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { visitPage } from "../../actions/generalActions";
+import { visitPage, setPlatform } from "../../actions/generalActions";
 
 import { Route, Switch, withRouter } from "react-router-dom";
 
@@ -27,6 +27,24 @@ import Faq from "../Faq";
 import CodeEditor from "../CodeEditor/CodeEditor";
 
 class Routes extends Component {
+
+  componentDidMount() {
+    const { location } = this.props;
+    const query = new URLSearchParams(location.search, [location.search]);
+    const mode = query.get('mode');
+
+    if (!this.props.platform && mode) {
+      switch (mode.toLowerCase()) {
+        case 'tablet':
+          this.props.setPlatform(true);
+          break;
+        default:
+          break;
+      }
+
+    }
+  }
+
   componentDidUpdate() {
     this.props.visitPage();
   }
@@ -105,6 +123,12 @@ class Routes extends Component {
 
 Home.propTypes = {
   visitPage: PropTypes.func,
+  platform: PropTypes.bool.isRequired,
+  setPlatform: PropTypes.func.isRequired
 };
 
-export default connect(null, { visitPage })(withRouter(Routes));
+const mapStateToProps = (state) => ({
+  platform: state.general.platform,
+});
+
+export default connect(mapStateToProps, { visitPage, setPlatform })(withRouter(Routes));
