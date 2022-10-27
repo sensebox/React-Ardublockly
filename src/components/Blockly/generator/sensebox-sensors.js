@@ -667,7 +667,7 @@ Blockly.Arduino.sensebox_rainsensor_hydreon_rg15 = function () {
   Blockly.Arduino.setupCode_["setup_rainsensor_rg15"] = "rainsensor_" + port + ".begin();";
   Blockly.Arduino.loopCodeOnce_["loop_rainsensor_rg15"] = "rainsensor_" + port + ".readAllData();"
 
-  var code = "rainsensor_" + port + "." + value + "();";
+  var code = "rainsensor_" + port + "." + value + "()";
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 

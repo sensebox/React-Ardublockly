@@ -146,7 +146,7 @@ Wenn die maximale Distanz überschritten wird, wird ein Wert von **O** ausgegebe
   sensebox_rainsensor_hydreon_rg15_eventAcc: "Niederschlag pro Event in mm",
   sensebox_rainsensor_hydreon_rg15_acc: "Niederschlag seit letzter Messung in mm",
   sensebox_rainsensor_hydreon_rg15_tooltip: "Regensensor (RG-15) an einen der Seriellen Ports anschließen.",
-  sensebox_rainsensor_hydreon_rg15_helpurl: "TODO",
+  sensebox_rainsensor_hydreon_rg15_helpurl: "https://rainsensors.com/products/rg-15/",
 
   /*
   * BME680
