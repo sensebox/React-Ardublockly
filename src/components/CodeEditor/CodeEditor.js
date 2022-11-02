@@ -176,19 +176,20 @@ void loop() {
               localStorage.getItem("ArduinoCode")
                 ? localStorage.getItem("ArduinoCode")
                 : `
-#include <senseBoxIO.h> //needs to be always included
+                #include <senseBoxIO.h> //needs to be always included
       
-void setup () {
-               
-}
+                void setup () {
+                              
+                }
                 
-void loop() {
-                
-}`
+                void loop() {
+                                
+                }`
             }
             value={fileContent}
             onMount={(editor, monaco) => {
               editorRef.current = editor;
+              saveValue();
             }}
           />
         </Grid>
