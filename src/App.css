@@ -62,3 +62,13 @@ td {
   flex-direction: column;
   align-items: center;
 }
+
+:root {
+  --url: url('./data/mcu_opacity.png');
+}
+
+.blocklySvg {
+  background-image: var(--url);
+  background-position: center;
+  background-repeat: no-repeat;
+}
