@@ -4,11 +4,11 @@ import { connect } from "react-redux";
 import Dialog from "./Dialog";
 
 import { withStyles } from "@material-ui/core/styles";
-import Checkbox from "@material-ui/core/Checkbox";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 import * as Blockly from "blockly";
 import { IconButton, Grid, Avatar, Typography } from "@material-ui/core";
 import { setBoard } from "../actions/boardAction";
+import mini_opacity from "../data/mini_opacity.png"
+import mcu_opacity from "../data/mcu_opacity.png"
 
 const styles = (theme) => ({
   link: {
@@ -27,15 +27,9 @@ const styles = (theme) => ({
 
 class DeviceSeclection extends Component {
   constructor(props) {
-    var previousPageWasAnotherDomain = props.pageVisits === 0;
-    var userWantToKeepBoard = window.localStorage.getItem("board")
-      ? true
-      : false;
     super(props);
     this.state = {
-      open: userWantToKeepBoard
-        ? !userWantToKeepBoard
-        : previousPageWasAnotherDomain,
+      open: true,
       selectedBoard : "",
       saveSettings: false,
 
@@ -43,10 +37,7 @@ class DeviceSeclection extends Component {
   }
 
   toggleDialog = () => {
-    this.setState({ open: !this.state });
-    if(this.state.saveSettings){
-      window.localStorage.setItem("board", this.state.selectedBoard) 
-    }
+    
     this.props.setBoard(this.state.selectedBoard)
 
   };
@@ -61,7 +52,14 @@ class DeviceSeclection extends Component {
 
   onclick = (e, value) => {
     console.log(e, value)
+    const root = document.querySelector(':root');
+    root.style.setProperty('--url', `url(${value === "mcu" ? mcu_opacity : mini_opacity })`);
     this.setState({selectedBoard: value})
+    this.props.setBoard(value)
+    this.setState({ open: !this.state });
+   
+
+   
   };
 
   render() {
@@ -74,7 +72,6 @@ class DeviceSeclection extends Component {
         title={Blockly.Msg.deviceselection_head}
         content={""}
         onClick={this.toggleDialog}
-        button={Blockly.Msg.button_accept}
         disabled={this.state.selectedBoard===""}
       >
         <div>
@@ -124,7 +121,7 @@ class DeviceSeclection extends Component {
             </Grid>
           </Grid>
         </div>
-        <FormControlLabel
+        {/* <FormControlLabel
           style={{ marginTop: "20px" }}
           classes={{ label: this.props.classes.label }}
           control={
@@ -138,7 +135,7 @@ class DeviceSeclection extends Component {
             />
           }
           label={Blockly.Msg.deviceselection_keep_selection}
-        />
+        /> */}
         <Typography variant="body1" >
           {Blockly.Msg.deviceselection_footnote} <a href="https://sensebox.github.io/blockly/">Arduino UNO</a> {Blockly.Msg.deviceselection_footnote_02} <a href="https://sensebox-blockly.netlify.app/ardublockly/?board=sensebox-mcu">senseBox MCU</a>
         </Typography>
