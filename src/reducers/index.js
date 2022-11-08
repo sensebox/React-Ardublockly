@@ -6,7 +6,8 @@ import generalReducer from './generalReducer';
 import projectReducer from './projectReducer';
 import messageReducer from './messageReducer';
 import authReducer from './authReducer';
-import boardReducer from './boardReducer'
+import boardReducer from './boardReducer';
+import sensorwikiReducer from './sensorwikiReducer';
 
 export default combineReducers({
   auth: authReducer,
@@ -16,5 +17,6 @@ export default combineReducers({
   builder: tutorialBuilderReducer,
   project: projectReducer,
   general: generalReducer,
-  message: messageReducer
+  message: messageReducer,
+  sensorwiki: sensorwikiReducer
 });

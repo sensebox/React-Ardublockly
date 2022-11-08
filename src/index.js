@@ -3,7 +3,12 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
+import store from "./store";
+import { fetchSensors } from "./actions/sensorwikiActions";
 
+store.dispatch(fetchSensors());
+
+fetchSensors();
 
 ReactDOM.render(
   <React.StrictMode>

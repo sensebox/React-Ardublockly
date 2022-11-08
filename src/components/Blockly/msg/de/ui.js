@@ -311,5 +311,15 @@ export const UI = {
   deviceselection_head: "Welches Board benutzt du?",
   deviceselection_keep_selection: "Speichere meine Auswahl fürs nächste Mal (Du kannst das Board später in den Einstellungen wechseln)",
   deviceselection_footnote: "Hier kommst du zur alten Blockly Version für den ",
-  deviceselection_footnote_02: "oder die"
+  deviceselection_footnote_02: "oder die",
+
+  /**
+   * Sensor Markdown Information
+   */
+  sensorinfo_info: "Informationen zum Sensor",
+  sensorinfo_description: "Beschreibung",
+  sensorinfo_measurable_phenos: "Messbare Phänomene",
+  sensorinfo_manufacturer: "Hersteller",
+  sensorinfo_lifetime: "Lebensdauer",
+  sensorinfo_explanation: "Diese Informationen wurden aus [sensors.wiki](https://sensors.wiki) entnommen. Für weitere Informationen besuchen Sie den Abschnitt über diesen Sensor "
 };

@@ -26,6 +26,7 @@ Blockly.Blocks["sensebox_sensor_temp_hum"] = {
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_temp_hum_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_temp_hum_helpurl);
+    this.data = "hdc1080";
   },
 };
 
@@ -51,6 +52,7 @@ Blockly.Blocks["sensebox_sensor_uv_light"] = {
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_uv_light_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_uv_light_helpurl);
+    this.data = "veml6070";
   },
 };
 
@@ -91,6 +93,7 @@ Blockly.Blocks["sensebox_sensor_bmx055_accelerometer"] = {
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_bmx055_accelerometer_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_bmx055_helpurl);
+    this.data = "bmx055";
   },
 };
 
@@ -122,6 +125,7 @@ Blockly.Blocks["sensebox_sensor_sds011"] = {
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_sds011_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_sds011_helpurl);
+    this.data = "sds011";
   },
 };
 
@@ -155,6 +159,7 @@ Blockly.Blocks["sensebox_sensor_pressure"] = {
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setTooltip(Blockly.Msg.senseBox_pressure_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_pressure_helpurl);
+    this.data = "bmp280";
     this.getField("NAME").setValidator(
       function (val) {
         this.updateShape_(val === "Altitude");
@@ -201,6 +206,7 @@ Blockly.Blocks["sensebox_sensor_bme680_bsec"] = {
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_bme_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_bme680_helpurl);
+    this.data = "bme680";
   },
 };
 
@@ -245,6 +251,7 @@ Blockly.Blocks["sensebox_sensor_ultrasonic_ranger"] = {
     this.setOutput(true, Types.NUMBER.typeName);
     this.setTooltip(Blockly.Msg.senseBox_ultrasonic_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_ultrasonic_helpurl);
+    this.data = "hc-sr04";
   },
   /**
    * Parse XML to restore the number of pins available.
@@ -382,6 +389,7 @@ Blockly.Blocks["sensebox_scd30"] = {
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_scd_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_scd_helpurl);
+    this.data = "scd30";
   },
   onchange: function (e) {
     var dropdown = this.getFieldValue("dropdown");
@@ -448,6 +456,7 @@ Blockly.Blocks["sensebox_sensor_truebner_smt50"] = {
     this.setOutput(true, Types.NUMBER.typeName);
     this.setTooltip(Blockly.Msg.senseBox_smt50_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_smt50_helpurl);
+    this.data = "smt50";
   },
 };
 
@@ -470,6 +479,7 @@ Blockly.Blocks["sensebox_sensor_watertemperature"] = {
       .appendField(new Blockly.FieldDropdown(dropdownOptions), "Port");
     this.setOutput(true, Types.NUMBER.typeName);
     this.setTooltip(Blockly.Msg.senseBox_watertemperature_tip);
+    this.data = "ds18b20";
   },
 };
 
@@ -542,6 +552,7 @@ Blockly.Blocks["sensebox_sensor_dps310"] = {
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setTooltip(Blockly.Msg.senseBox_sensor_dps310_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_sensor_dps310_helpurl);
+    this.data = "dps310";
     this.getField("NAME").setValidator(
       function (val) {
         this.updateShape_(val === "Altitude");
