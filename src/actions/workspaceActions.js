@@ -20,6 +20,11 @@ export const onChangeCode = () => (dispatch, getState) => {
   if (selectedBlock !== null) {
     code.helpurl = selectedBlock.helpUrl
     code.tooltip = selectedBlock.tooltip
+    if (selectedBlock.data) {
+      code.data = selectedBlock.data
+    } else {
+      code.data = null
+    }
   } else if (selectedBlock === null) {
     code.tooltip = Blockly.Msg.tooltip_hint
     code.helpurl = ''
