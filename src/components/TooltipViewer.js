@@ -57,7 +57,6 @@ class TooltipViewer extends Component {
             <ReactMarkdown linkTarget="_blank">
               {this.props.tooltip}
             </ReactMarkdown>
-
             {store.getState().workspace.code.data ? (
               <Button
                 label="Mehr"
@@ -74,7 +73,7 @@ class TooltipViewer extends Component {
             )}
           </Typography>
         </CardContent>
-        <Dialog
+        {store.getState().workspace.code.data ? (<Dialog
           open={this.state.open}
           TransitionComponent={Transition}
           keepMounted
@@ -93,7 +92,7 @@ class TooltipViewer extends Component {
               this.toggleDialog();
             }}>Close</Button>
           </DialogActions>
-        </Dialog>
+        </Dialog>) : (null)}
       </Card>
     );
   }
