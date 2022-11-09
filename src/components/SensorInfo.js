@@ -16,36 +16,35 @@ export default function LabTabs() {
         setValue(newValue);
     };
 
-    // get the description in the current language if no lang is give return english
+    // get the description in the current language if no lang is give return english or the first one
     function filterLanguage(options) {
-        console.log(options);
+        var lang;
         if (window.localStorage.getItem("locale")) {
-            var lang = window.localStorage.getItem("locale").split("_")[0];
+            lang = window.localStorage.getItem("locale").split("_")[0];
         }
         else {
-            var lang = "en";
+            lang = "en";
         }
         for (var i = 0; i < options.length; i++) {
-            console.log(options[i].languageCode, lang);
             if (options[i].languageCode === lang) {
                 return options[i].text;
             }
         }
         return options[0].text;
     }
-
     var currentStore = store.getState();
     // ALL SENSOR DATA FROM WIKI
     var sensorData = currentStore.sensorwiki;
     // NAME OF SELECTED BLOCK
-    var sensorName = currentStore.workspace.code.data;
+    var sensorName = currentStore.workspace.code.data.name;
     // SEARCH ALL DATA FOR SELECTED BLOCK NAME
     var sensorInfo = sensorData.find(function (element) {
         return element.slug === sensorName;
     });
-    console.log("SENSOR INFO: ", sensorInfo);
     if (sensorInfo) {
         sensorInfo.markdown = "# Markdown Test \n ## Markdown Test 2 \n ### Markdown Test 3";
+
+        // GET DESCRIPTION OF SELECTED BLOCK
         sensorInfo.details = `# ${sensorName.toUpperCase()}
 ${Blockly.Msg.sensorinfo_explanation} [${sensorName.toUpperCase()}](https://sensors.wiki/sensor/detail/${sensorName})
 ## ${Blockly.Msg.sensorinfo_description}
