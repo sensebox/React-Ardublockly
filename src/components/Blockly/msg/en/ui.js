@@ -15,14 +15,16 @@ export const UI = {
   toolbox_motors: "Motors",
   variable_NUMBER: "Number (int)",
   variable_SHORT_NUMBER: "char",
-  variable_LONG: " Zahl (long)",
+  variable_LONG: "Big number (long)",
   variable_DECIMAL: "Decimal (float)",
   variables_TEXT: "Text (string)",
   variables_ARRAY: "Array (array)",
-  variables_CHARACTER: "char (char)",
+  variables_CHARACTER: "Character (char)",
   variables_BOOLEAN: "Boolean (boolean)",
   variables_NULL: "void (void)",
   variables_UNDEF: "undefined",
+  variables_set: "set",
+  variables_to: "to",
 
   /**
    * Tooltips
@@ -145,6 +147,7 @@ export const UI = {
   button_next: "Next step",
   button_tutorial_overview: "Tutorial overview",
   button_login: "Login",
+  button_createVariable: "Create Typed Variable",
 
   /**
    *

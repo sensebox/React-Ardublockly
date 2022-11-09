@@ -19,10 +19,12 @@ export const UI = {
   variable_DECIMAL: "Kommazahl (float)",
   variables_TEXT: "Text (string)",
   variables_ARRAY: "Array (array)",
-  variables_CHARACTER: "char (char)",
+  variables_CHARACTER: "Buchstabe (char)",
   variables_BOOLEAN: "Boolean (boolean)",
   variables_NULL: "void (void)",
   variables_UNDEF: "undefined",
+  variables_set: "Schreibe",
+  variables_to: "",
 
   /**
    * Tooltips
@@ -150,6 +152,7 @@ export const UI = {
   button_next: "nächster Schritt",
   button_tutorial_overview: "Tutorial Übersicht",
   button_login: "Anmelden",
+  button_createVariable: "Typisierte Variable erstellen",
 
   /**
    *
