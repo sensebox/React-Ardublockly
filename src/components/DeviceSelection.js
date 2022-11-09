@@ -29,8 +29,8 @@ class DeviceSeclection extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: true,
-      selectedBoard : "",
+      open: this.props.selectedBoard !== "" ? false : true,
+      selectedBoard : this.props.selectedBoard,
       saveSettings: false,
 
     };
@@ -42,13 +42,6 @@ class DeviceSeclection extends Component {
 
   };
 
-  onChange = (e) => {
-    if (e.target.checked) {
-      this.setState({ saveSettings: true});
-    } else {
-      this.setState({ saveSettings: false});
-    }
-  };
 
   onclick = (e, value) => {
     console.log(e, value)
@@ -121,21 +114,6 @@ class DeviceSeclection extends Component {
             </Grid>
           </Grid>
         </div>
-        {/* <FormControlLabel
-          style={{ marginTop: "20px" }}
-          classes={{ label: this.props.classes.label }}
-          control={
-            <Checkbox
-              size={"small"}
-              value={true}
-              checked={this.state.checked}
-              onChange={(e) => this.onChange(e)}
-              name="dialog"
-              color="primary"
-            />
-          }
-          label={Blockly.Msg.deviceselection_keep_selection}
-        /> */}
         <Typography variant="body1" >
           {Blockly.Msg.deviceselection_footnote} <a href="https://sensebox.github.io/blockly/">Arduino UNO</a> {Blockly.Msg.deviceselection_footnote_02} <a href="https://sensebox-blockly.netlify.app/ardublockly/?board=sensebox-mcu">senseBox MCU</a>
         </Typography>

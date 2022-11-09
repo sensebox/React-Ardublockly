@@ -187,6 +187,7 @@ class Home extends Component {
             </Grid>
           ) : null}
         </Grid>
+        
         <DeviceSelection />
         {/* <HintTutorialExists /> */}
         {this.props.platform ? (
