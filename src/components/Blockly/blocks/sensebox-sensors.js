@@ -115,7 +115,7 @@ Blockly.Blocks["sensebox_sensor_sds011"] = {
       .appendField(Blockly.Msg.senseBox_sds011_dimension)
       .appendField(
         new Blockly.FieldDropdown(
-          selectedBoard().serial),
+          selectedBoard().serialSensors),
         "SERIAL"
       );
     this.setOutput(true, Types.DECIMAL.typeName);
