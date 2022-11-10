@@ -46,9 +46,13 @@ const sensebox_mcu = {
     ["C6", "6"],
   ],
   serial: [
-    ["serial", "SerialUSB"],
-    ["serial_1", "Serial1"],
-    ["serial_2", "Serial2"],
+    ["SerialUSB", "SerialUSB"],
+    ["Serial1", "Serial1"],
+    ["Serial2", "Serial2"],
+  ],
+  serialSensors: [
+    ["Serial1", "Serial1"],
+    ["Serial2", "Serial2"],
   ],
   serialPins: {
     SerialUSB: [
@@ -161,8 +165,11 @@ const sensebox_mini = {
     ["IO2", "2"],
   ],
   serial: [
-    ["serial", "SerialUSB"],
-    ["serial_1", "Serial1"],
+    ["SerialUSB", "SerialUSB"],
+    ["Serial1", "Serial1"],
+  ],
+  serialSensors: [
+    ["Serial1", "Serial1"],
   ],
   serialPins: {
     SerialUSB: [
