@@ -429,11 +429,12 @@ Blockly.Arduino.sensebox_scd30 = function () {
     "#include <SparkFun_SCD30_Arduino_Library.h> // http://librarymanager/All#SparkFun_SCD30_Arduino_Library";
   Blockly.Arduino.definitions_["SCD30"] = "SCD30 airSensor;";
   Blockly.Arduino.setupCode_["init_scd30"] = ` Wire.begin();
-  if (airSensor.begin() == false)
-  {
-    while (1)
-      ;
-  }`;
+if (airSensor.begin() == false)
+{
+  while (1)
+    ;
+}`;
+  Blockly.Arduino.setupCode_["scd30_staleData"] = "airSensor.useStaleData(true);";
   var code = "";
   switch (dropdown) {
     case "temperature":
