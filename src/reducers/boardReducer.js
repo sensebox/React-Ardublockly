@@ -1,8 +1,8 @@
 import { BOARD } from '../actions/types';
 
 const initialValue = () => {
-  if (window.localStorage.getItem("board")) {
-    return window.localStorage.getItem("board");
+  if (window.sessionStorage.getItem("board")) {
+    return window.sessionStorage.getItem("board");
   }
   return null;
 };

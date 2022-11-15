@@ -3,7 +3,7 @@ import {
 } from "./types";
 
 export const setBoard = (board) => (dispatch) => {
-  window.localStorage.setItem("board", board);
+  window.sessionStorage.setItem("board", board);
   dispatch({
     type: BOARD,
     payload: board,
