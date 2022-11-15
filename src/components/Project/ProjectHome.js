@@ -18,6 +18,7 @@ import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
 import Backdrop from "@material-ui/core/Backdrop";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import DeviceSelection from "../DeviceSelection";
 
 const styles = (theme) => ({
   link: {
@@ -60,9 +61,8 @@ class ProjectHome extends Component {
         this.setState({
           snackbar: true,
           key: Date.now(),
-          message: `Dein angefragtes ${
-            type === "gallery" ? "Galerie-" : ""
-          }Projekt konnte nicht gefunden werden.`,
+          message: `Dein angefragtes ${type === "gallery" ? "Galerie-" : ""
+            }Projekt konnte nicht gefunden werden.`,
           type: "error",
         });
       }
@@ -108,6 +108,7 @@ class ProjectHome extends Component {
         />
 
         <h1>{data}</h1>
+        <DeviceSelection />
         {this.props.progress ? (
           <Backdrop open invisible>
             <CircularProgress color="primary" />
@@ -127,9 +128,8 @@ class ProjectHome extends Component {
                         }}
                       >
                         <Link
-                          to={`/${
-                            data === "Projekte" ? "project" : "gallery"
-                          }/${project._id}`}
+                          to={`/${data === "Projekte" ? "project" : "gallery"
+                            }/${project._id}`}
                           style={{ textDecoration: "none", color: "inherit" }}
                         >
                           <h3 style={{ marginTop: 0 }}>{project.title}</h3>
@@ -153,7 +153,7 @@ class ProjectHome extends Component {
                           </Typography>
                         </Link>
                         {this.props.user &&
-                        this.props.user.email === project.creator ? (
+                          this.props.user.email === project.creator ? (
                           <div>
                             <Divider
                               style={{
