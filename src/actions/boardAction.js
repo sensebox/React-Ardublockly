@@ -1,10 +1,11 @@
 import {
-    BOARD,
-  } from "./types";
+  BOARD,
+} from "./types";
 
 export const setBoard = (board) => (dispatch) => {
-    dispatch({
-      type: BOARD,
-      payload: board,
-    });
-  };
+  window.localStorage.setItem("board", board);
+  dispatch({
+    type: BOARD,
+    payload: board,
+  });
+};

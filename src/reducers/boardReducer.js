@@ -4,7 +4,7 @@ const initialValue = () => {
   if (window.localStorage.getItem("board")) {
     return window.localStorage.getItem("board");
   }
-  return "bla";
+  return null;
 };
 
 const initialState = {
