@@ -37,6 +37,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import Snackbar from "../Snackbar";
 import Divider from "@material-ui/core/Divider";
+import DeviceSelection from "../DeviceSelection";
 
 const styles = (theme) => ({
   outerDiv: {
@@ -243,14 +244,11 @@ class TutorialHome extends Component {
                             cy="50%"
                             fill="none"
                             stroke-width="10"
-                            stroke-dashoffset={`${
-                              75 * 2 * Math.PI * (1 - (50 / 100 + success / 2))
-                            }`}
-                            stroke-dasharray={`${
-                              75 * 2 * Math.PI * (1 - (50 / 100 - success / 2))
-                            } ${
-                              75 * 2 * Math.PI * (1 - (50 / 100 + success / 2))
-                            }`}
+                            stroke-dashoffset={`${75 * 2 * Math.PI * (1 - (50 / 100 + success / 2))
+                              }`}
+                            stroke-dasharray={`${75 * 2 * Math.PI * (1 - (50 / 100 - success / 2))
+                              } ${75 * 2 * Math.PI * (1 - (50 / 100 + success / 2))
+                              }`}
                           ></circle>
                         )}
                         {success < 1 && !error ? (
@@ -265,9 +263,8 @@ class TutorialHome extends Component {
                             cy="50%"
                             fill="none"
                             stroke-width="10"
-                            stroke-dashoffset={`${
-                              75 * 2 * Math.PI * (1 - (50 / 100 + success / 2))
-                            }`}
+                            stroke-dashoffset={`${75 * 2 * Math.PI * (1 - (50 / 100 + success / 2))
+                              }`}
                             stroke-dasharray={`${75 * 2 * Math.PI}`}
                           ></circle>
                         ) : null}
@@ -279,8 +276,8 @@ class TutorialHome extends Component {
                         tutorialStatus === "Error"
                           ? this.props.classes.outerDivError
                           : tutorialStatus === "Success"
-                          ? this.props.classes.outerDivSuccess
-                          : null
+                            ? this.props.classes.outerDivSuccess
+                            : null
                       )}
                     >
                       <div className={this.props.classes.innerDiv}>
@@ -311,6 +308,7 @@ class TutorialHome extends Component {
             );
           })}
         </Grid>
+        <DeviceSelection />
         {this.props.user ? (
           <div>
             <h2>User Tutorials</h2>
