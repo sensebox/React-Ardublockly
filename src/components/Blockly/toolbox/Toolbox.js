@@ -16,7 +16,6 @@ class Toolbox extends React.Component {
       this.props.workspace,
       "callbackName",
       [
-        [`${Blockly.Msg.variable_SHORT_NUMBER}`, "char"],
         [`${Blockly.Msg.variable_NUMBER}`, "int"],
         [`${Blockly.Msg.variable_LONG}`, "long"],
         [`${Blockly.Msg.variable_DECIMAL}`, "float"],
@@ -33,7 +32,7 @@ class Toolbox extends React.Component {
 
     // Add your button and give it a callback name.
     const button = document.createElement("button");
-    button.setAttribute("text", "Create Typed Variable");
+    button.setAttribute("text", Blockly.Msg.button_createVariable);
     button.setAttribute("callbackKey", "callbackName");
 
     xmlList.push(button);
@@ -41,6 +40,7 @@ class Toolbox extends React.Component {
     // This gets all the variables that the user creates and adds them to the
     // flyout.
     const blockList = Blockly.VariablesDynamic.flyoutCategoryBlocks(workspace);
+    console.log(blockList);
     xmlList = xmlList.concat(blockList);
     return xmlList;
   }
