@@ -7,8 +7,6 @@ import { withStyles } from "@material-ui/core/styles";
 import * as Blockly from "blockly";
 import { IconButton, Grid, Avatar, Typography } from "@material-ui/core";
 import { setBoard } from "../actions/boardAction";
-import mini_opacity from "../data/mini_opacity.png"
-import mcu_opacity from "../data/mcu_opacity.png"
 
 const styles = (theme) => ({
   link: {
@@ -29,37 +27,29 @@ class DeviceSeclection extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: true,
-      selectedBoard : "",
+      open: props.selectedBoard ? false : true,
+      selectedBoard: "",
       saveSettings: false,
 
     };
   }
 
   toggleDialog = () => {
-    
     this.props.setBoard(this.state.selectedBoard)
-
   };
 
   onChange = (e) => {
     if (e.target.checked) {
-      this.setState({ saveSettings: true});
+      this.setState({ saveSettings: true });
     } else {
-      this.setState({ saveSettings: false});
+      this.setState({ saveSettings: false });
     }
   };
 
   onclick = (e, value) => {
-    console.log(e, value)
-    const root = document.querySelector(':root');
-    root.style.setProperty('--url', `url(${value === "mcu" ? mcu_opacity : mini_opacity })`);
-    this.setState({selectedBoard: value})
+    this.setState({ selectedBoard: value })
     this.props.setBoard(value)
     this.setState({ open: !this.state });
-   
-
-   
   };
 
   render() {
@@ -72,25 +62,24 @@ class DeviceSeclection extends Component {
         title={Blockly.Msg.deviceselection_head}
         content={""}
         onClick={this.toggleDialog}
-        disabled={this.state.selectedBoard===""}
+        disabled={this.state.selectedBoard === ""}
       >
         <div>
-          <Grid container spacing={2} style={{  textAlign : "center" }}>
+          <Grid container spacing={2} style={{ textAlign: "center" }}>
             <Grid item xs={6}>
-            <IconButton onClick={(e) => this.onclick(e, "mcu")}>
-              <Avatar
-                alt="Sensebox MCU"
-                src="/media/hardware/senseboxmcu.png"
-                style={{
-                  border: this.state.selectedBoard === "mcu" ? 'medium solid DeepSkyBlue': "0.1px solid lightgray",
-                  width:"20vw",
-                  height: "20vw"
-               }}
-              />
+              <IconButton onClick={(e) => this.onclick(e, "mcu")}>
+                <Avatar
+                  alt="Sensebox MCU"
+                  src="/media/hardware/senseboxmcu.png"
+                  style={{
+                    border: this.state.selectedBoard === "mcu" ? 'medium solid DeepSkyBlue' : "0.1px solid lightgray",
+                    width: "20vw",
+                    height: "20vw"
+                  }}
+                />
               </IconButton>
               <p>senseBox MCU</p>
             </Grid>
-
             {/* <Grid item xs={4}>
             <IconButton onClick={(e) => this.onclick(e, "esp")}>
               <Avatar
@@ -100,42 +89,27 @@ class DeviceSeclection extends Component {
                   border: this.state.selectedBoard == "esp" ? 'medium solid DeepSkyBlue': "0.1px solid lightgray",
                   width:"20vw",
                   height: "20vw"
-               }}
+              }}
               />
               </IconButton>
               <p>Sensebox ESP</p>
             </Grid> */}
             <Grid item xs={6}>
               <IconButton onClick={(e) => this.onclick(e, "mini")}>
-              <Avatar
-                alt="Sensebox Mini"
-                src="/media/hardware/senseboxmcumini.png"
-                 style={{
-                  border: this.state.selectedBoard === "mini" ? 'medium solid DeepSkyBlue': "0.1px solid lightgray",
-                  width:"20vw",
-                  height: "20vw"
-               }}
-              />
+                <Avatar
+                  alt="Sensebox Mini"
+                  src="/media/hardware/senseboxmcumini.png"
+                  style={{
+                    border: this.state.selectedBoard === "mini" ? 'medium solid DeepSkyBlue' : "0.1px solid lightgray",
+                    width: "20vw",
+                    height: "20vw"
+                  }}
+                />
               </IconButton>
               <p>senseBox MCU:mini</p>
             </Grid>
           </Grid>
         </div>
-        {/* <FormControlLabel
-          style={{ marginTop: "20px" }}
-          classes={{ label: this.props.classes.label }}
-          control={
-            <Checkbox
-              size={"small"}
-              value={true}
-              checked={this.state.checked}
-              onChange={(e) => this.onChange(e)}
-              name="dialog"
-              color="primary"
-            />
-          }
-          label={Blockly.Msg.deviceselection_keep_selection}
-        /> */}
         <Typography variant="body1" >
           {Blockly.Msg.deviceselection_footnote} <a href="https://sensebox.github.io/blockly/">Arduino UNO</a> {Blockly.Msg.deviceselection_footnote_02} <a href="https://sensebox-blockly.netlify.app/ardublockly/?board=sensebox-mcu">senseBox MCU</a>
         </Typography>
@@ -155,5 +129,5 @@ const mapStateToProps = (state) => ({
 
 export default connect(
   mapStateToProps,
-  {setBoard}
+  { setBoard }
 )(withStyles(styles, { withTheme: true })(DeviceSeclection));
