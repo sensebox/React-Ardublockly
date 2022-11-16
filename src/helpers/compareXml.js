@@ -15,11 +15,13 @@ const compareNumberOfBlocks = (originalBlocks, userBlocks) => {
     var blocks;
     if(originalBlocks.length > userBlocks.length){
       blocks = originalBlocks.length-userBlocks.length;
-      return {text: `Es wurde${blocks === 1 ? '' : 'n'} ${blocks} Bl${blocks === 1 ? 'ock' : 'öcke'} zu wenig verwendet.`, type: 'error'};
+      //return {text: `Es wurde${blocks === 1 ? '' : 'n'} ${blocks} Bl${blocks === 1 ? 'ock' : 'öcke'} zu wenig verwendet.`, type: 'error'};
+      return {text: `Du kannst deinen Programmcode kompilieren, aber es wurde${blocks === 1 ? '' : 'n'} ${blocks} Bl${blocks === 1 ? 'ock' : 'öcke'} weniger verwendet als in der hinterlegten Lösung.`, type: 'success'};
     }
     else {
       blocks = userBlocks.length-originalBlocks.length;
-      return {text: `Es wurde${blocks === 1 ? '' : 'n'} ${blocks} Bl${blocks === 1 ? 'ock' : 'öcke'} zu viel verwendet.`, type: 'error'};
+      //return {text: `Es wurde${blocks === 1 ? '' : 'n'} ${blocks} Bl${blocks === 1 ? 'ock' : 'öcke'} zu viel verwendet.`, type: 'error'};
+      return {text: `Du kannst deinen Programmcode kompilieren, aber es wurde${blocks === 1 ? '' : 'n'} ${blocks} Bl${blocks === 1 ? 'ock' : 'öcke'} mehr verwendet als in der hinterlegten Lösung.`, type: 'success'};
     }
   }
 };
