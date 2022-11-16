@@ -42,7 +42,7 @@ export default function LabTabs() {
         return element.slug === sensorName;
     });
     if (sensorInfo) {
-        sensorInfo.markdown = "# Markdown Test \n ## Markdown Test 2 \n ### Markdown Test 3";
+        sensorInfo.markdown = "Coming soon...";
 
         // GET DESCRIPTION OF SELECTED BLOCK
         sensorInfo.details = `# ${sensorName.toUpperCase()}
