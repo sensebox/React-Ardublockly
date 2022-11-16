@@ -663,9 +663,9 @@ Blockly.Arduino.sensebox_rainsensor_hydreon_rg15 = function () {
   var value = this.getFieldValue("VALUE");
   Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_["library_rainsensor_rg15"] = "#include <hydreon.h>";
-  Blockly.Arduino.definitions_["def_rainsensor_rg15"] = "HYDREON rainsensor_" + port + "(" + port + ");";
-  Blockly.Arduino.setupCode_["setup_rainsensor_rg15"] = "rainsensor_" + port + ".begin();";
-  Blockly.Arduino.loopCodeOnce_["loop_rainsensor_rg15"] = "rainsensor_" + port + ".readAllData();"
+  Blockly.Arduino.definitions_["def_rainsensor_rg15_" + port] = "HYDREON rainsensor_" + port + "(" + port + ");";
+  Blockly.Arduino.setupCode_["setup_rainsensor_rg15_" + port] = "rainsensor_" + port + ".begin();";
+  Blockly.Arduino.loopCodeOnce_["loop_rainsensor_rg15_" + port] = "rainsensor_" + port + ".readAllData();"
 
   var code = "rainsensor_" + port + "." + value + "()";
   return [code, Blockly.Arduino.ORDER_ATOMIC];
