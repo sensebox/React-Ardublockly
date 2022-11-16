@@ -38,6 +38,19 @@ export class Login extends Component {
     };
   }
 
+  componentDidMount() {
+    if (this.props.message.id === "LOGIN_FAIL") {
+      this.setState({
+        email: "",
+        password: "",
+        snackbar: true,
+        key: Date.now(),
+        message: Blockly.Msg.messages_LOGIN_FAIL,
+        type: "error",
+      });
+    }
+  }
+
   componentDidUpdate(props) {
     const { message } = this.props;
     if (message !== props.message) {
