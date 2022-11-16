@@ -1,11 +1,19 @@
 import { BOARD } from '../actions/types';
+import mini_opacity from "../data/mini_opacity.png"
+import mcu_opacity from "../data/mcu_opacity.png"
 
 const initialValue = () => {
-  if (window.localStorage.getItem("board")) {
-    return window.localStorage.getItem("board");
+  if (window.sessionStorage.getItem("board")) {
+    setBackgroundImage(window.sessionStorage.getItem("board"));
+    return window.sessionStorage.getItem("board");
   }
-  return "bla";
+  return null;
 };
+
+const setBackgroundImage = (board) => {
+  const root = document.querySelector(':root');
+  root.style.setProperty('--url', `url(${board === "mcu" ? mcu_opacity : mini_opacity})`);
+}
 
 const initialState = {
     board: initialValue()

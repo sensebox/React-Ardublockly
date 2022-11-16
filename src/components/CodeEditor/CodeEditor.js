@@ -11,6 +11,7 @@ import Sidebar from "./Sidebar";
 import Dialog from "../Dialog";
 import SaveIcon from "./SaveIcon";
 import store from "../../store";
+import DeviceSelection from "../DeviceSelection";
 
 const CodeEditor = (props) => {
   //const [filehandle, setFileHandle] = useState();
@@ -192,6 +193,7 @@ void loop() {
             }}
           />
         </Grid>
+        <DeviceSelection />
         <Grid item lg={4} md={4}>
           <Button
             style={{ padding: "1rem", margin: "1rem" }}
