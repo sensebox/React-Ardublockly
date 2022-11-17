@@ -68,7 +68,7 @@ class Compile extends Component {
     };
   }
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   componentDidUpdate(props) {
     if (props.name !== this.props.name) {
@@ -232,8 +232,8 @@ class Compile extends Component {
           >
             <div className="overlay">
               {/* <img src={Copy} width="400" alt="copyimage"></img> */}
-              <h2>Dein Code wird kompiliert!</h2>
-              <p>übertrage ihn anschließend mithlfe der senseBoxConnect-App</p>
+              <h2>{Blockly.Msg.compiledialog_process}</h2>
+              <p>{Blockly.Msg.compiledialog_instructions}</p>
               <p>
                 {Blockly.Msg.compile_overlay_help}
                 <a href="/faq" target="_blank">
@@ -291,7 +291,7 @@ class Compile extends Component {
           button={Blockly.Msg.button_close}
         >
           <div>
-            <p>Dein Code wurde erfolgreich kompiliert</p>
+            <p>{Blockly.Msg.compiledialog_success}</p>
             <a href={this.state.link}>
               <Button
                 style={{ color: "white" }}
@@ -303,7 +303,7 @@ class Compile extends Component {
                   icon={faClipboardCheck}
                   style={{ marginRight: "5px" }}
                 />{" "}
-                Starte Übertragung
+                {Blockly.Msg.tabletDialog_connect}
               </Button>
             </a>
           </div>

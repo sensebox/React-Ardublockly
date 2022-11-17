@@ -99,11 +99,14 @@ export const UI = {
    * Tablet Dialog
    */
 
+  tabletDialog_connect: "senseBox Connect App öffnen",
   tabletDialog_headline: "Tablet Modus ist aktiviert!",
   tabletDialog_text:
     "Der Tablet Modus wurde aktiviert. Du kannst nun Programmcodes über die senseBox Connect App auf deine senseBox kopieren. Der Tablet Modus kann in den Einstellungen deaktiviert werden",
   tabletDialog_more:
     "Weitere Informationen und den Link zum Download der App findest du unter: ",
+  compiledialog_process: "Dein Code wird compiliert!",
+  compiledialog_instructions: "Übertrage ihn anschließend mithlfe der senseBoxConnect-App..",
 
   /**
    * Reset Dialog
@@ -132,7 +135,7 @@ export const UI = {
    * Compile Dialog
    *
    */
-
+   compiledialog_success: "Dein Programm wurde erfolgreich kompiliert.",
   compiledialog_headline: "Fehler",
   compiledialog_text:
     "Beim kompilieren ist ein Fehler aufgetreten. Überprüfe deine Blöcke und versuche es erneut",

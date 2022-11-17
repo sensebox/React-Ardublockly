@@ -101,6 +101,7 @@ export const UI = {
     "Tablet mode has been activated. You can now copy program codes to your senseBox via the senseBox Connect app. Tablet mode can be deactivated in the settings",
   tabletDialog_more:
     "For more information and the link to download the app, please visit: ",
+  tabletDialog_connect: "Open senseBox Connect App",
 
   /**
    * Reset Dialog
@@ -128,10 +129,12 @@ export const UI = {
    * Compile Dialog
    *
    */
-
+  compiledialog_success: "Your code has been compiled successfully.",
   compiledialog_headline: "Error",
   compiledialog_text:
     "While compiling an error occured. Please check your blocks and try again",
+  compiledialog_process: "Your code is being compiled!",
+  compiledialog_instructions: "After that, transfer it using the senseBoxConnect app.",
 
   /**
    * Buttons
