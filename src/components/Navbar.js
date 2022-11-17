@@ -41,6 +41,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Blockly from "blockly";
 import Tooltip from "@material-ui/core/Tooltip";
+import NavbarSettings from "./NavbarSettings";
 
 const styles = (theme) => ({
   drawerWidth: {
@@ -127,6 +128,7 @@ class Navbar extends Component {
             <Link to={"/"} style={{ marginLeft: "10px" }}>
               <img src={senseboxLogo} alt="senseBox-Logo" width="30" />
             </Link>
+            <NavbarSettings />
             {isTutorial ? (
               <Link
                 to={"/tutorial"}
@@ -149,7 +151,7 @@ class Navbar extends Component {
                   onClick={() => {
                     this.openTour();
                   }}
-                  style={{ margin: "0 30px 0 auto" }}
+                  style={{ margin: "0 30px 0 0" }}
                 >
                   <FontAwesomeIcon icon={faQuestionCircle} />
                 </IconButton>
@@ -163,7 +165,7 @@ class Navbar extends Component {
                   onClick={() => {
                     this.openTour();
                   }}
-                  style={{ margin: "0 30px 0 auto" }}
+                  style={{ margin: "0 30px 0 0" }}
                 >
                   <FontAwesomeIcon icon={faQuestionCircle} />
                 </IconButton>
@@ -214,11 +216,11 @@ class Navbar extends Component {
           </div>
           <List>
             {[
-                 {
-                  text: Blockly.Msg.navbar_blockly,
-                  icon: faPuzzlePiece,
-                  link: "/",
-                },
+              {
+                text: Blockly.Msg.navbar_blockly,
+                icon: faPuzzlePiece,
+                link: "/",
+              },
               {
                 text: Blockly.Msg.navbar_tutorials,
                 icon: faChalkboardTeacher,
@@ -329,9 +331,9 @@ class Navbar extends Component {
                       onClick={
                         item.function
                           ? () => {
-                              item.function();
-                              this.toggleDrawer();
-                            }
+                            item.function();
+                            this.toggleDrawer();
+                          }
                           : this.toggleDrawer
                       }
                     >
