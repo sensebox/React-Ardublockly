@@ -5,12 +5,12 @@ import { setPlatform } from "../../actions/generalActions";
 
 import * as Blockly from "blockly/core";
 
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import Typography from "@material-ui/core/Typography";
-import FormHelperText from "@material-ui/core/FormHelperText";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import Typography from "@mui/material/Typography";
+import FormHelperText from "@mui/material/FormHelperText";
 
 class OtaSelector extends Component {
   componentDidMount() {
@@ -33,16 +33,16 @@ class OtaSelector extends Component {
             https://sensebox.de/app
           </a>
         </FormHelperText>
-        <FormControl>
+        <FormControl variant="standard">
           <InputLabel id="demo-simple-select-label">
             {Blockly.Msg.settings_statistics}
           </InputLabel>
           <Select
+            variant="standard"
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             value={this.props.platform}
-            onChange={(e) => this.props.setPlatform(e.target.value)}
-          >
+            onChange={(e) => this.props.setPlatform(e.target.value)}>
             <MenuItem value={true}>{Blockly.Msg.settings_ota_on}</MenuItem>
             <MenuItem value={false}>{Blockly.Msg.settings_ota_off}</MenuItem>
           </Select>

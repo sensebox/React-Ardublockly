@@ -7,16 +7,19 @@ import { setDescription, updateProject } from "../../actions/projectActions";
 import Snackbar from "../Snackbar";
 import Dialog from "../Dialog";
 
-import withWidth, { isWidthDown } from "@material-ui/core/withWidth";
-import { withStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import Tooltip from "@material-ui/core/Tooltip";
-import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
+import withStyles from '@mui/styles/withStyles';
+import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Blockly from "blockly/core";
+import { isWidthDown } from "@material-ui/core";
+
+// FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
+const withWidth = () => (WrappedComponent) => (props) => <WrappedComponent {...props} width="xs" />;
 
 const styles = (theme) => ({
   workspaceName: {
@@ -186,31 +189,31 @@ class WorkspaceName extends Component {
               this.state.projectType === "gallery" ? (
               <div>
                 <TextField
+                  variant="standard"
                   autoFocus
                   placeholder={
                     this.state.saveXml ? "Dateiname" : "Projekttitel"
                   }
                   value={this.state.name}
                   onChange={this.setFileName}
-                  style={{ marginBottom: "10px" }}
-                />
+                  style={{ marginBottom: "10px" }} />
                 <TextField
+                  variant="standard"
                   fullWidth
                   multiline
                   placeholder={"Projektbeschreibung"}
                   value={this.state.description}
                   onChange={this.setDescription}
-                  style={{ marginBottom: "10px" }}
-                />
+                  style={{ marginBottom: "10px" }} />
               </div>
             ) : (
               <TextField
+                variant="standard"
                 autoFocus
                 placeholder={this.state.saveXml ? "Dateiname" : "Projekttitel"}
                 value={this.state.name}
                 onChange={this.setFileName}
-                style={{ marginRight: "10px" }}
-              />
+                style={{ marginRight: "10px" }} />
             )}
             <Button
               disabled={!this.state.name}

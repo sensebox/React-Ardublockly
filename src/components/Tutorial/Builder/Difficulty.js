@@ -9,13 +9,13 @@ import {
   deleteError,
 } from "../../../actions/tutorialBuilderActions";
 
-import { withStyles } from "@material-ui/core/styles";
+import withStyles from '@mui/styles/withStyles';
 import ReactStars from "react-rating-stars-component";
 import * as Blockly from "blockly";
-import FormGroup from "@material-ui/core/FormGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormControl from "@material-ui/core/FormControl";
-import FormLabel from "@material-ui/core/FormLabel";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
 
 const styles = (theme) => ({
   multiline: {
@@ -55,7 +55,7 @@ class Difficulty extends Component {
 
   render() {
     return (
-      <FormControl component="fieldset">
+      <FormControl variant="standard" component="fieldset">
         <FormLabel component="legend">
           {Blockly.Msg.builder_difficulty}
         </FormLabel>

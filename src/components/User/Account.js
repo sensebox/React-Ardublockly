@@ -5,16 +5,16 @@ import { connect } from 'react-redux';
 import Breadcrumbs from '../Breadcrumbs';
 import Alert from '../Alert';
 
-import Grid from '@material-ui/core/Grid';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
-import Paper from '@material-ui/core/Paper';
-import Link from '@material-ui/core/Link';
-import Typography from '@material-ui/core/Typography';
-import Tooltip from '@material-ui/core/Tooltip';
+import Grid from '@mui/material/Grid';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Divider from '@mui/material/Divider';
+import Paper from '@mui/material/Paper';
+import Link from '@mui/material/Link';
+import Typography from '@mui/material/Typography';
+import Tooltip from '@mui/material/Tooltip';
 
 import { faUser, faAt, faMapMarkerAlt, faCloudSunRain, faBox, faUserTag } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -30,7 +30,12 @@ export class Account extends Component {
 
         <h1>Account</h1>
         <Alert>
-          Alle Angaben stammen von <Link color='primary' rel="noreferrer" target="_blank" href={'https://opensensemap.org/'}>openSenseMap</Link> und können dort verwaltet werden.
+          Alle Angaben stammen von <Link
+          color='primary'
+          rel="noreferrer"
+          target="_blank"
+          href={'https://opensensemap.org/'}
+          underline="hover">openSenseMap</Link> und können dort verwaltet werden.
         </Alert>
         <Paper style={{ width: 'max-content', maxWidth: '100%' }}>
           <List>
@@ -62,7 +67,12 @@ export class Account extends Component {
         <div style={{ marginBottom: '8px' }}>
           {this.props.user.boxes.length < 1 ?
             <Typography>
-              Du hast noch keine senseBox registriert. Besuche <Link color='primary' rel="noreferrer" target="_blank" href={'https://opensensemap.org/'}>openSenseMap</Link> um eine senseBox zu registrieren.
+              Du hast noch keine senseBox registriert. Besuche <Link
+              color='primary'
+              rel="noreferrer"
+              target="_blank"
+              href={'https://opensensemap.org/'}
+              underline="hover">openSenseMap</Link> um eine senseBox zu registrieren.
             </Typography>
             : <Typography style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>
               Du hast {this.props.user.boxes.length} {this.props.user.boxes.length === 1 ? 'senseBox' : 'senseBoxen'} registriert:
@@ -73,7 +83,13 @@ export class Account extends Component {
             var sensors = box.sensors.map(sensor => sensor.title);
             return (
               <Grid item xs={12} sm={6} md={4} xl={3} key={i}>
-                <Link rel="noreferrer" target="_blank" href={`https://opensensemap.org/explore/${box._id}`} color="primary" style={{ textDecoration: 'none', color: 'inherit' }}>
+                <Link
+                  rel="noreferrer"
+                  target="_blank"
+                  href={`https://opensensemap.org/explore/${box._id}`}
+                  color="primary"
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                  underline="hover">
                   <Paper>
                     <List>
                       <ListItem>
@@ -116,7 +132,7 @@ export class Account extends Component {
                   </Paper>
                 </Link>
               </Grid>
-            )
+            );
           })}
         </Grid>
       </div>

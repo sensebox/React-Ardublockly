@@ -10,14 +10,14 @@ import { initialXml } from '../Blockly/initialXml.js';
 
 import Snackbar from '../Snackbar';
 
-import { withStyles } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
+import withStyles from '@mui/styles/withStyles';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
 
 import { faShare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Dialog from '../Dialog';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 
 const styles = (theme) => ({
   button: {
@@ -81,7 +81,7 @@ class ResetWorkspace extends Component {
           <IconButton
             className={this.props.classes.button}
             onClick={() => this.openDialog()}
-          >
+            size="large">
             <FontAwesomeIcon icon={faShare} size="xs" flip='horizontal' />
           </IconButton>
         </Tooltip>
