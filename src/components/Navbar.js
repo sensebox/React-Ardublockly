@@ -142,7 +142,7 @@ class Navbar extends Component {
               </Link>
             ) : null}
             {isHome ? (
-              <Tooltip title={Blockly.Msg.tooltip_start_tour} arrow>
+              <Tooltip title={'Start Tour'} arrow>
                 <IconButton
                   color="inherit"
                   className={`openTour ${this.props.classes.button}`}
@@ -156,7 +156,7 @@ class Navbar extends Component {
               </Tooltip>
             ) : null}
             {isAssessment ? (
-              <Tooltip title={Blockly.Msg.tooltip_start_tour} arrow>
+              <Tooltip title={'Start tour'} arrow>
                 <IconButton
                   color="inherit"
                   className={`openTour ${this.props.classes.button}`}
@@ -267,7 +267,7 @@ class Navbar extends Component {
                         <FontAwesomeIcon icon={item.icon} />
                       </ListItemIcon>
                       {item.text === "Code Editor" ? (
-                        <Badge badgeContent={"Experimental"} color="primary">
+                        <Badge badgeContent={"Experimental"} color="primary" overlap="rectangular">
                           <ListItemText primary={item.text} />
                         </Badge>
                       ) : (

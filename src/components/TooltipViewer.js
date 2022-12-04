@@ -53,7 +53,7 @@ class TooltipViewer extends Component {
             {Blockly.Msg.tooltip_viewer}
           </Typography>
 
-          <Typography variant="body2" component="p">
+          <Typography variant="body2" component="span">
             <ReactMarkdown linkTarget="_blank">
               {this.props.tooltip}
             </ReactMarkdown>
