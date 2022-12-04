@@ -6,12 +6,12 @@ import { tutorialStep } from "../../actions/tutorialActions";
 import { withRouter } from "react-router-dom";
 
 import clsx from "clsx";
-import { alpha } from "@material-ui/core/styles";
-import { withStyles } from "@material-ui/core/styles";
-import Stepper from "@material-ui/core/Stepper";
-import Step from "@material-ui/core/Step";
-import StepLabel from "@material-ui/core/StepLabel";
-import Tooltip from "@material-ui/core/Tooltip";
+import { alpha } from "@mui/material/styles";
+import withStyles from '@mui/styles/withStyles';
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
+import Tooltip from "@mui/material/Tooltip";
 
 const styles = (theme) => ({
   verticalStepper: {

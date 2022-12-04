@@ -33,19 +33,19 @@ import Snackbar from "../../Snackbar";
 import Public from "./Public";
 import Review from "./Review";
 
-import { withStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import Backdrop from "@material-ui/core/Backdrop";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import Divider from "@material-ui/core/Divider";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
+import withStyles from '@mui/styles/withStyles';
+import Button from "@mui/material/Button";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
+import Divider from "@mui/material/Divider";
+import FormHelperText from "@mui/material/FormHelperText";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 import * as Blockly from "blockly";
 
 const styles = (theme) => ({
@@ -470,12 +470,12 @@ class Builder extends Component {
           <FormControl variant="outlined" style={{ width: "100%" }}>
             <InputLabel id="select-outlined-label">Tutorial</InputLabel>
             <Select
+              variant="standard"
               color="primary"
               labelId="select-outlined-label"
               value={this.props.id}
               onChange={(e) => this.onChangeId(e.target.value)}
-              label="Tutorial"
-            >
+              label="Tutorial">
               {filteredTutorials.map((tutorial) => (
                 <MenuItem value={tutorial._id}>
                   {tutorial.title}{" "}

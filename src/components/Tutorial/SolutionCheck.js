@@ -10,10 +10,10 @@ import Dialog from "../Dialog";
 
 import { checkXml } from "../../helpers/compareXml";
 
-import { withStyles } from "@material-ui/core/styles";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
-import Button from "@material-ui/core/Button";
+import withStyles from '@mui/styles/withStyles';
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import Button from "@mui/material/Button";
 
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -62,7 +62,7 @@ class SolutionCheck extends Component {
             className={`solutionCheck ${this.props.classes.compile}`}
             style={{ width: "40px", height: "40px", marginRight: "5px" }}
             onClick={() => this.check()}
-          >
+            size="large">
             <FontAwesomeIcon icon={faClipboardCheck} size="xs" />
           </IconButton>
         </Tooltip>

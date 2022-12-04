@@ -9,11 +9,11 @@ import { loadUser } from "./actions/authActions";
 
 import "./App.css";
 
-import { ThemeProvider, createTheme } from "@material-ui/core/styles";
+import { ThemeProvider, StyledEngineProvider, createTheme, adaptV4Theme } from "@mui/material/styles";
 
 import Content from "./components/Content";
 
-const theme = createTheme({
+const theme = createTheme(adaptV4Theme({
   palette: {
     primary: {
       main: "#4EAF47",
@@ -26,7 +26,7 @@ const theme = createTheme({
       compile: "#e27136",
     },
   },
-});
+}));
 
 class App extends Component {
   componentDidMount() {
@@ -36,13 +36,15 @@ class App extends Component {
   render() {
     const customHistory = createBrowserHistory();
     return (
-      <ThemeProvider theme={theme}>
-        <Provider store={store}>
-          <Router history={customHistory}>
-            <Content />
-          </Router>
-        </Provider>
-      </ThemeProvider>
+      <StyledEngineProvider injectFirst>
+        <ThemeProvider theme={theme}>
+          <Provider store={store}>
+            <Router history={customHistory}>
+              <Content />
+            </Router>
+          </Provider>
+        </ThemeProvider>
+      </StyledEngineProvider>
     );
   }
 }

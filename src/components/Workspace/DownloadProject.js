@@ -6,9 +6,9 @@ import { saveAs } from 'file-saver';
 
 import { detectWhitespacesAndReturnReadableResult } from '../../helpers/whitespace';
 
-import { withStyles } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
+import withStyles from '@mui/styles/withStyles';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
 
 import { faFileDownload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -46,7 +46,7 @@ class DownloadProject extends Component {
           <IconButton
             className={`saveBlocks ${this.props.classes.button}`}
             onClick={() => this.downloadXmlFile()}
-          >
+            size="large">
             <FontAwesomeIcon icon={faFileDownload} size="xs" />
           </IconButton>
         </Tooltip>

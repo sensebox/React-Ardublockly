@@ -5,12 +5,12 @@ import { setBoard } from '../../actions/boardAction';
 
 import * as Blockly from 'blockly/core';
 
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import Typography from '@material-ui/core/Typography';
-import FormHelperText from '@material-ui/core/FormHelperText';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import Typography from '@mui/material/Typography';
+import FormHelperText from '@mui/material/FormHelperText';
 
 class DeviceSelector extends Component {
 
@@ -22,18 +22,18 @@ class DeviceSelector extends Component {
 
 
   render(){
-    return(
+    return (
       <div>
         <Typography style={{fontWeight: 'bold'}}>{Blockly.Msg.settings_board}</Typography>
         <FormHelperText style={{color: 'black', lineHeight: 1.3, marginBottom: '8px'}}>{Blockly.Msg.settings_board_text}</FormHelperText>
-        <FormControl>
+        <FormControl variant="standard">
           <InputLabel id="demo-simple-select-label">{Blockly.Msg.settings_board}</InputLabel>
           <Select
+            variant="standard"
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             value={this.props.selectedBoard}
-            onChange={(e) => this.props.setBoard(e.target.value)}
-          >
+            onChange={(e) => this.props.setBoard(e.target.value)}>
             <MenuItem value="mcu">senseBox MCU</MenuItem>
             <MenuItem value="mini">senseBox MCU mini</MenuItem>
           </Select>

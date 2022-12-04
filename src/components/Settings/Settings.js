@@ -14,8 +14,8 @@ import OtaSelector from "./OtaSelector";
 import SoundsSelector from "./SoundsSelector";
 import DeviceSelector from "./DeviceSelector";
 
-import Button from "@material-ui/core/Button";
-import Paper from "@material-ui/core/Paper";
+import Button from "@mui/material/Button";
+import Paper from "@mui/material/Paper";
 
 class Settings extends Component {
   componentDidMount() {

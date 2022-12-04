@@ -9,14 +9,17 @@ import {
 
 import hardware from "../../../data/hardware.json";
 
-import { withStyles } from "@material-ui/core/styles";
-import withWidth, { isWidthDown } from "@material-ui/core/withWidth";
-import ImageList from "@material-ui/core/ImageList";
-import ImageListItem from "@material-ui/core/ImageListItem";
-import ImageListItemBar from "@material-ui/core/ImageListItemBar";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import FormLabel from "@material-ui/core/FormLabel";
+import withStyles from '@mui/styles/withStyles';
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
+import ImageListItemBar from "@mui/material/ImageListItemBar";
+import FormHelperText from "@mui/material/FormHelperText";
+import FormLabel from "@mui/material/FormLabel";
 import * as Blockly from "blockly";
+import { isWidthDown } from "@material-ui/core";
+
+// FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
+const withWidth = () => (WrappedComponent) => (props) => <WrappedComponent {...props} width="xs" />;
 
 const styles = (theme) => ({
   multiImageListItem: {

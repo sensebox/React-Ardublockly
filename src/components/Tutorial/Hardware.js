@@ -4,18 +4,22 @@ import Dialog from "../Dialog";
 
 import hardware from "../../data/hardware.json";
 
-import { withStyles } from "@material-ui/core/styles";
-import withWidth, { isWidthDown } from "@material-ui/core/withWidth";
-import Link from "@material-ui/core/Link";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import ImageList from "@material-ui/core/ImageList";
-import ImageListItem from "@material-ui/core/ImageListItem";
-import ImageListItemBar from "@material-ui/core/ImageListItemBar";
+import withStyles from '@mui/styles/withStyles';
+import Link from "@mui/material/Link";
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
+import ImageListItemBar from "@mui/material/ImageListItemBar";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExpandAlt } from "@fortawesome/free-solid-svg-icons";
 import * as Blockly from "blockly";
+import { isWidthDown } from "@material-ui/core";
+
+// FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
+const withWidth = () => (WrappedComponent) => (props) => <WrappedComponent {...props} width="xs" />;
+
 const styles = (theme) => ({
   expand: {
     "&:hover": {
@@ -93,7 +97,7 @@ class Hardware extends Component {
                       className={this.props.classes.expand}
                       aria-label="Vollbild"
                       onClick={() => this.handleClickOpen(hardwareInfo)}
-                    >
+                      size="large">
                       <FontAwesomeIcon icon={faExpandAlt} size="xs" />
                     </IconButton>
                   }
@@ -124,7 +128,7 @@ class Hardware extends Component {
               target="_blank"
               href={this.state.hardwareInfo.url}
               color="primary"
-            >
+              underline="hover">
               {Blockly.Msg.tutorials_hardware_here}
             </Link>
             .

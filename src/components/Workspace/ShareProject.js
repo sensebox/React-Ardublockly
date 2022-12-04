@@ -16,11 +16,11 @@ import Snackbar from "../Snackbar";
 import GridLoader from "react-spinners/GridLoader";
 import { EmailShareButton, FacebookShareButton, TwitterShareButton, WhatsappShareButton} from "react-share";
 import { EmailIcon, FacebookIcon, TwitterIcon, WhatsappIcon} from "react-share";
-import { withStyles } from "@material-ui/core/styles";
-import IconButton from "@material-ui/core/IconButton";
-import Button from '@material-ui/core/Button';
-import Tooltip from "@material-ui/core/Tooltip";
-import Typography from "@material-ui/core/Typography";
+import withStyles from '@mui/styles/withStyles';
+import IconButton from "@mui/material/IconButton";
+import Button from '@mui/material/Button';
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 
 import { faShareAlt, faCopy, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -164,7 +164,7 @@ class WorkspaceFunc extends Component {
           <IconButton
             className={`shareBlocks ${this.props.classes.iconButton}`}
             onClick={() => this.shareBlocks()}
-          >
+            size="large">
             <FontAwesomeIcon icon={faShareAlt} size="xs" />
           </IconButton>
         </Tooltip>
@@ -217,7 +217,7 @@ class WorkspaceFunc extends Component {
                           type: "success",
                         });
                       }}
-                    >
+                      size="large">
                       <FontAwesomeIcon icon={faCopy} size="xs" />
                     </IconButton>
                   </Tooltip>
