@@ -105,9 +105,8 @@ class WorkspaceName extends Component {
     return (
       <div style={this.props.style}>
         <Tooltip
-          title={`${Blockly.Msg.tooltip_project_title} ${
-            this.props.name ? `: ${this.props.name}` : ""
-          }`}
+          title={`${Blockly.Msg.tooltip_project_title} ${this.props.name ? `: ${this.props.name}` : ""
+            }`}
           arrow
           style={{ height: "100%" }}
         >
@@ -126,8 +125,8 @@ class WorkspaceName extends Component {
                   this.props.projectType === "gallery"
                     ? "Projektdaten ändern"
                     : this.props.projectType === "project"
-                    ? "Projekt umbenennen"
-                    : "Projekt benennen",
+                      ? "Projekt umbenennen"
+                      : "Projekt benennen",
                 content:
                   this.props.projectType === "gallery"
                     ? "Bitte gib einen Titel und eine Beschreibung für das Galerie-Projekt ein und bestätige die Angaben mit einem Klick auf 'Eingabe'."
@@ -136,13 +135,13 @@ class WorkspaceName extends Component {
             }}
           >
             {this.props.name &&
-            !isWidthDown(
-              this.props.projectType === "project" ||
-                this.props.projectType === "gallery"
-                ? "xl"
-                : "xs",
-              this.props.width
-            ) ? (
+              !isWidthDown(
+                this.props.projectType === "project" ||
+                  this.props.projectType === "gallery"
+                  ? "xl"
+                  : "xs",
+                this.props.width
+              ) ? (
               <Typography style={{ margin: "auto -3px auto 12px" }}>
                 {this.props.name}
               </Typography>
@@ -184,7 +183,7 @@ class WorkspaceName extends Component {
         >
           <div style={{ marginTop: "10px" }}>
             {this.props.projectType === "gallery" ||
-            this.state.projectType === "gallery" ? (
+              this.state.projectType === "gallery" ? (
               <div>
                 <TextField
                   autoFocus
