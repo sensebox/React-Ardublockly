@@ -32,7 +32,6 @@ class NavbarSettings extends Component {
 
 
     render() {
-        console.log(this.props.classes);
         return (
             <div style={{ margin: "0 0 0 auto", display: "flex" }}>
                 <div style={{ margin: "0 30px 0 auto", display: "flex" }}>
@@ -42,7 +41,7 @@ class NavbarSettings extends Component {
                             onChange={(e) => this.props.setBoard(e.target.value)}
                             disableUnderline={true}
                             style={{ backgroundColor: "transparent !important" }}
-
+                            // IconComponent={() => <div />}
                         >
                             <MenuItem value="mcu">senseBox MCU</MenuItem>
                             <MenuItem value="mini">senseBox MCU mini</MenuItem>
