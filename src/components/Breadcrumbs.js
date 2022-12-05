@@ -30,7 +30,7 @@ class Breadcrumbs extends Component {
       this.props.content && this.props.content.length > 0 ?
         <MaterialUIBreadcrumbs separator="›" style={{marginBottom: '20px'}}>
           <Link to={'/'} style={{textDecoration: 'none'}}>
-            <FontAwesomeIcon className={clsx(this.props.classes.home, this.props.classes.hover)} icon={faHome} size="xs"/>
+            <FontAwesomeIcon className={clsx(this.props.classes.home, this.props.classes.hover)} icon={faHome}  size="xs"/>
           </Link>
           {this.props.content.splice(0, this.props.content.length-1).map((content, i) => (
             <Link to={content.link} style={{textDecoration: 'none'}} key={i}>

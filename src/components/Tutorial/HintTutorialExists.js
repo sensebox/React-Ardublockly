@@ -78,7 +78,6 @@ class HintTutorialExists extends Component {
               checked={this.state.checked}
               onChange={(e) => this.onChange(e)}
               name="dialog"
-              color="primary"
             />
           }
           label={Blockly.Msg.labels_donotshowagain}

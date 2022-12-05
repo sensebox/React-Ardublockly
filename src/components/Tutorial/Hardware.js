@@ -98,7 +98,7 @@ class Hardware extends Component {
                       aria-label="Vollbild"
                       onClick={() => this.handleClickOpen(hardwareInfo)}
                       size="large">
-                      <FontAwesomeIcon icon={faExpandAlt} size="xs" />
+                      <FontAwesomeIcon icon={faExpandAlt}  size="xs" />
                     </IconButton>
                   }
                 />

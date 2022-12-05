@@ -287,6 +287,7 @@ class TutorialHome extends Component {
                             icon={
                               tutorialStatus === "Success" ? faCheck : faTimes
                             }
+                            
                           />
                         ) : (
                           <Typography
@@ -380,7 +381,7 @@ class TutorialHome extends Component {
                                 });
                               }}
                               size="large">
-                              <FontAwesomeIcon icon={faShareAlt} size="xs" />
+                              <FontAwesomeIcon icon={faShareAlt} size="xs"  />
                             </IconButton>
                           </Tooltip>
                           <Tooltip
@@ -391,7 +392,7 @@ class TutorialHome extends Component {
                               className={`publicTutorial ${this.props.classes.button}`}
                               disabled={!tutorial.public}
                               size="large">
-                              <FontAwesomeIcon icon={faEye} size="xs" />
+                              <FontAwesomeIcon icon={faEye} size="xs"  />
                             </IconButton>
                           </Tooltip>
                           {tutorial.review ? (

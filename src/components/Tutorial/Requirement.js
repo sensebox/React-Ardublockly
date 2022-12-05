@@ -166,6 +166,7 @@ class Requirement extends Component {
                             icon={
                               tutorialStatus === "Success" ? faCheck : faTimes
                             }
+                            
                           />
                         ) : (
                           <Typography

@@ -165,6 +165,7 @@ export class Login extends Component {
                       <FontAwesomeIcon
                         size="xs"
                         icon={this.state.showPassword ? faEyeSlash : faEye}
+                        
                       />
                     </IconButton>
                   </InputAdornment>

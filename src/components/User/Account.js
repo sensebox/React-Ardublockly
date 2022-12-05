@@ -42,7 +42,7 @@ export class Account extends Component {
             <ListItem>
               <Tooltip title='Nutzername'>
                 <ListItemIcon>
-                  <FontAwesomeIcon icon={faUser} />
+                  <FontAwesomeIcon icon={faUser}  />
                 </ListItemIcon>
               </Tooltip>
               <ListItemText primary={`Name: ${user.name}`} />
@@ -50,14 +50,14 @@ export class Account extends Component {
             <ListItem>
               <Tooltip title='Email'>
                 <ListItemIcon>
-                  <FontAwesomeIcon icon={faAt} />
+                  <FontAwesomeIcon icon={faAt}  />
                 </ListItemIcon>
               </Tooltip>
               <ListItemText primary={`Email: ${user.email}`} />
             </ListItem>
             <ListItem>
               <ListItemIcon>
-                <FontAwesomeIcon icon={faUserTag} />
+                <FontAwesomeIcon icon={faUserTag}  />
               </ListItemIcon>
               <ListItemText primary={`Userrolle: ${user.blocklyRole}`} />
             </ListItem>
@@ -98,7 +98,7 @@ export class Account extends Component {
                       <ListItem>
                         <Tooltip title='Modell'>
                           <ListItemIcon>
-                            <FontAwesomeIcon icon={faBox} />
+                            <FontAwesomeIcon icon={faBox}  />
                           </ListItemIcon>
                         </Tooltip>
                         <div>
@@ -109,7 +109,7 @@ export class Account extends Component {
                       <ListItem>
                         <Tooltip title='Standort'>
                           <ListItemIcon>
-                            <FontAwesomeIcon icon={faMapMarkerAlt} />
+                            <FontAwesomeIcon icon={faMapMarkerAlt}  />
                           </ListItemIcon>
                         </Tooltip>
                         <div>
@@ -120,7 +120,7 @@ export class Account extends Component {
                       <ListItem>
                         <Tooltip title='Sensoren'>
                           <ListItemIcon>
-                            <FontAwesomeIcon icon={faCloudSunRain} />
+                            <FontAwesomeIcon icon={faCloudSunRain}  />
                           </ListItemIcon>
                         </Tooltip>
                         <div>

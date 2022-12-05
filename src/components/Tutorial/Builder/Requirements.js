@@ -41,7 +41,6 @@ class Requirements extends Component {
                   checked={this.props.value.filter(id => id === tutorial._id).length > 0}
                   onChange={(e) => this.onChange(e)}
                   name="requirements"
-                  color="primary"
                 />
               }
               label={tutorial.title}

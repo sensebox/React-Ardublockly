@@ -9,11 +9,11 @@ import { loadUser } from "./actions/authActions";
 
 import "./App.css";
 
-import { ThemeProvider, StyledEngineProvider, createTheme, adaptV4Theme } from "@mui/material/styles";
+import { ThemeProvider, StyledEngineProvider, createTheme } from "@mui/material/styles";
 
 import Content from "./components/Content";
 
-const theme = createTheme(adaptV4Theme({
+const theme = createTheme({
   palette: {
     primary: {
       main: "#4EAF47",
@@ -26,7 +26,7 @@ const theme = createTheme(adaptV4Theme({
       compile: "#e27136",
     },
   },
-}));
+});
 
 class App extends Component {
   componentDidMount() {

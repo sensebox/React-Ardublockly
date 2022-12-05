@@ -70,7 +70,7 @@ class Snackbar extends Component {
           className={this.props.type === 'error' ? this.props.classes.error : this.props.classes.success}
           action={
             <IconButton onClick={this.onClose} style={{color: 'inherit'}} size="large">
-              <FontAwesomeIcon icon={faTimes} size="xs"/>
+              <FontAwesomeIcon icon={faTimes} size="xs" />
             </IconButton>
           }
           message={this.props.message}

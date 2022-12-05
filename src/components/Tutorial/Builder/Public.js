@@ -63,7 +63,6 @@ class Public extends Component {
               <Checkbox
                 checked={this.props.value}
                 onChange={this.handleChange}
-                color="primary"
                 name="checkedA"
                 inputProps={{ "aria-label": "secondary checkbox" }}
               />

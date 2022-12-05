@@ -161,7 +161,7 @@ class Home extends Component {
                 }}
                 onClick={() => this.onChange()}
                 size="large">
-                <FontAwesomeIcon icon={faCode} size="xs" />
+                <FontAwesomeIcon icon={faCode}  size="xs" />
               </IconButton>
             </Tooltip>
 
