@@ -99,7 +99,7 @@ class WorkspaceFunc extends Component {
 
 WorkspaceFunc.propTypes = {
   user: PropTypes.object,
-  autosave: PropTypes.bool,
+  autosave: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({

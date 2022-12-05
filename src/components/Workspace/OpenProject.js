@@ -129,7 +129,7 @@ OpenProject.propTypes = {
   clearStats: PropTypes.func.isRequired,
   workspaceName: PropTypes.func.isRequired,
   xml: PropTypes.string.isRequired,
-  name: PropTypes.string
+  name: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({

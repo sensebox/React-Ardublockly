@@ -301,7 +301,7 @@ class WorkspaceFunc extends Component {
 WorkspaceFunc.propTypes = {
   shareProject: PropTypes.func.isRequired,
   clearMessages: PropTypes.func.isRequired,
-  name: PropTypes.string,
+  name: PropTypes.string.isRequired,
   message: PropTypes.object.isRequired,
 };
 

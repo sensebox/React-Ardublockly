@@ -58,8 +58,8 @@ AutoSave.propTypes = {
   xml: PropTypes.string.isRequired,
   name: PropTypes.string,
   workspaceName: PropTypes.func.isRequired,
-  setAutosave: PropTypes.func,
-  autosave: PropTypes.bool,
+  setAutosave: PropTypes.func.isRequired,
+  autosave: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
