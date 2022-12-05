@@ -127,6 +127,7 @@ class StepperHorizontal extends Component {
                   <FontAwesomeIcon
                     className={this.props.classes.icon}
                     icon={tutorialStatus === "Success" ? faCheck : faTimes}
+                    
                   />
                 </div>
               ) : null}

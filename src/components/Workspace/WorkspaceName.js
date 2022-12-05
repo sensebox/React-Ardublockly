@@ -152,6 +152,7 @@ class WorkspaceName extends Component {
             <div style={{ width: "40px", display: "flex" }}>
               <FontAwesomeIcon
                 icon={faPen}
+                
                 style={{ height: "18px", width: "18px", margin: "auto" }}
               />
             </div>

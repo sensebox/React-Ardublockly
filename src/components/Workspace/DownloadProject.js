@@ -47,7 +47,7 @@ class DownloadProject extends Component {
             className={`saveBlocks ${this.props.classes.button}`}
             onClick={() => this.downloadXmlFile()}
             size="large">
-            <FontAwesomeIcon icon={faFileDownload} size="xs" />
+            <FontAwesomeIcon icon={faFileDownload} size="xs"  />
           </IconButton>
         </Tooltip>
       </div>

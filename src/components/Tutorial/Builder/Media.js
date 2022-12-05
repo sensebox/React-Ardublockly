@@ -97,7 +97,6 @@ class Media extends Component {
             <Switch
               checked={this.state.checked}
               onChange={(e) => this.onChangeSwitch(e.target.checked)}
-              color="primary"
             />
           }
         />
@@ -106,13 +105,13 @@ class Media extends Component {
             <RadioGroup row value={this.state.radioValue} onChange={(e) => {this.onChangeRadio(e.target.value);}}>
               <FormControlLabel style={{color: 'black'}}
                 value="picture"
-                control={<Radio color="primary" />}
+                control={<Radio />}
                 label="Bild"
                 labelPlacement="end"
               />
               <FormControlLabel style={{color: 'black'}}
                 value="youtube"
-                control={<Radio color="primary" />}
+                control={<Radio />}
                 label="Youtube-Video"
                 labelPlacement="end"
               />

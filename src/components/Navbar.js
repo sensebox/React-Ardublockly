@@ -214,11 +214,11 @@ class Navbar extends Component {
           </div>
           <List>
             {[
-                 {
-                  text: Blockly.Msg.navbar_blockly,
-                  icon: faPuzzlePiece,
-                  link: "/",
-                },
+              {
+                text: Blockly.Msg.navbar_blockly,
+                icon: faPuzzlePiece,
+                link: "/",
+              },
               {
                 text: Blockly.Msg.navbar_tutorials,
                 icon: faChalkboardTeacher,
@@ -329,9 +329,9 @@ class Navbar extends Component {
                       onClick={
                         item.function
                           ? () => {
-                              item.function();
-                              this.toggleDrawer();
-                            }
+                            item.function();
+                            this.toggleDrawer();
+                          }
                           : this.toggleDrawer
                       }
                     >

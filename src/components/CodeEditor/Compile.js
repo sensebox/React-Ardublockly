@@ -189,7 +189,7 @@ class Compile extends Component {
               className={`compileBlocks ${this.props.classes.iconButton}`}
               onClick={() => this.compile()}
               size="large">
-              <FontAwesomeIcon icon={faClipboardCheck} size="xs" />
+              <FontAwesomeIcon icon={faClipboardCheck} size="xs"  />
             </IconButton>
           </Tooltip>
         ) : (
@@ -201,6 +201,7 @@ class Compile extends Component {
           >
             <FontAwesomeIcon
               icon={faClipboardCheck}
+              
               style={{ marginRight: "5px" }}
             />{" "}
             Kompilieren
@@ -301,6 +302,7 @@ class Compile extends Component {
               >
                 <FontAwesomeIcon
                   icon={faClipboardCheck}
+                  
                   style={{ marginRight: "5px" }}
                 />{" "}
                 Starte Übertragung

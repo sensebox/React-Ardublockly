@@ -86,7 +86,7 @@ class Step extends Component {
                 style={index === 0 ? {} : { marginBottom: "5px" }}
                 onClick={() => this.props.addStep(index + 1)}
                 size="large">
-                <FontAwesomeIcon icon={faPlus} size="xs" />
+                <FontAwesomeIcon icon={faPlus}  size="xs" />
               </IconButton>
             </Tooltip>
             {index !== 0 ? (
@@ -101,7 +101,7 @@ class Step extends Component {
                     style={{ marginBottom: "5px" }}
                     onClick={() => this.props.changeStepIndex(index, index - 1)}
                     size="large">
-                    <FontAwesomeIcon icon={faAngleDoubleUp} size="xs" />
+                    <FontAwesomeIcon icon={faAngleDoubleUp}  size="xs" />
                   </IconButton>
                 </Tooltip>
                 <Tooltip
@@ -114,7 +114,7 @@ class Step extends Component {
                     style={{ marginBottom: "5px" }}
                     onClick={() => this.props.changeStepIndex(index, index + 1)}
                     size="large">
-                    <FontAwesomeIcon icon={faAngleDoubleDown} size="xs" />
+                    <FontAwesomeIcon icon={faAngleDoubleDown}  size="xs" />
                   </IconButton>
                 </Tooltip>
                 <Tooltip title={`Schritt ${index + 1} löschen`} arrow>
@@ -126,7 +126,7 @@ class Step extends Component {
                     )}
                     onClick={() => this.props.removeStep(index)}
                     size="large">
-                    <FontAwesomeIcon icon={faTrash} size="xs" />
+                    <FontAwesomeIcon icon={faTrash}  size="xs" />
                   </IconButton>
                 </Tooltip>
               </div>

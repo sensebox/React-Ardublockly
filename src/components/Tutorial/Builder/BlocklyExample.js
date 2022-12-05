@@ -139,7 +139,6 @@ class BlocklyExample extends Component {
               <Switch
                 checked={this.state.checked}
                 onChange={(e) => this.onChange(e.target.checked)}
-                color="primary"
               />
             }
           />

@@ -23,14 +23,14 @@ class StepType extends Component {
       <RadioGroup row value={this.props.value === 'task' ? 'task' : 'instruction'} onChange={(e) => this.onChange(e.target.value)}>
         <FormControlLabel style={{color: 'black'}}
           value="instruction"
-          control={<Radio color="primary" />}
+          control={<Radio />}
           label="Anleitung"
           labelPlacement="end"
         />
         <FormControlLabel style={{color: 'black'}}
           disabled={this.props.index === 0}
           value="task"
-          control={<Radio color="primary" />}
+          control={<Radio />}
           label="Aufgabe"
           labelPlacement="end"
         />

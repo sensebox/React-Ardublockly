@@ -407,7 +407,7 @@ class Builder extends Component {
           <FormControlLabel
             style={{ color: "black" }}
             value="new"
-            control={<Radio color="primary" />}
+            control={<Radio />}
             label={Blockly.Msg.builder_createNew}
             labelPlacement="end"
           />
@@ -417,7 +417,7 @@ class Builder extends Component {
                 style={{ color: "black" }}
                 disabled={this.props.index === 0}
                 value="change"
-                control={<Radio color="primary" />}
+                control={<Radio />}
                 label={Blockly.Msg.builder_changeExisting}
                 labelPlacement="end"
               />
@@ -425,7 +425,7 @@ class Builder extends Component {
                 style={{ color: "black" }}
                 disabled={this.props.index === 0}
                 value="delete"
-                control={<Radio color="primary" />}
+                control={<Radio />}
                 label={Blockly.Msg.builder_deleteExisting}
                 labelPlacement="end"
               />
