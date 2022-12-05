@@ -81,7 +81,6 @@ export const login =
       axios
         .post(`${process.env.REACT_APP_BLOCKLY_API}/user`, body, config)
         .then((res) => {
-          console.log(res);
           dispatch(setLanguage(res.data.user.language));
           dispatch({
             type: LOGIN_SUCCESS,
