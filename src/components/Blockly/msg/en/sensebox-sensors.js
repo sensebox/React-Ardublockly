@@ -211,14 +211,14 @@ The measured values for temperature, humidity and air pressure can be used direc
    * Feinstaubsensor Sensirion SPS30
    */
 
-     senseBox_sps30: "Feinstaubsensor Sensirion SPS30",
+     senseBox_sps30: "Particulate Matter Sensor (Sensirion SPS30)",
      senseBox_sps30_dimension: "in µg/m³",
      senseBox_sps30_1p0: "PM1.0",
      senseBox_sps30_2p5: "PM2.5",
      senseBox_sps30_4p0: "PM4.0",
      senseBox_sps30_10p0: "PM10",
      senseBox_sps30_tooltip:
-       "Dieser Block gibt dir den Messwert des Feinstaubsensor. Schließe den Feinstaubsensor an einen der 2 **Serial/UART** Anschlüssen an. Im Dropdown Menü zwischen PM2.5 und PM10 auswählen. Der Messwert wird dir als **Kommazahl** in µg/m3",
+     "This block gives you the measured value of the Sensirion SPS30 fine dust sensor. Connect the fine dust sensor to one of the 5 **I2C** connectors. Select between PM1.0, PM2.5, PM4.0 and PM10 in the dropdown menu. The measured value will be displayed as **decimal** in µg/m3",
      senseBox_sps30_helpurl:
        "https://docs.sensebox.de/hardware/sensoren-feinstaub/",
    

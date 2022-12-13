@@ -213,9 +213,8 @@ Die Messwerte für Temperatur, Luftfeuchtigkeit und Luftdruck können direkt ver
    senseBox_sps30_2p5: "PM2.5",
    senseBox_sps30_4p0: "PM4.0",
    senseBox_sps30_10p0: "PM10",
-   senseBox_sps30_tooltip:
-     "Dieser Block gibt dir den Messwert des Feinstaubsensor. Schließe den Feinstaubsensor an einen der 2 **Serial/UART** Anschlüssen an. Im Dropdown Menü zwischen PM2.5 und PM10 auswählen. Der Messwert wird dir als **Kommazahl** in µg/m3",
-   senseBox_sps30_helpurl:
+   senseBox_sps30_tooltip:"Dieser Block gibt dir den Messwert des Sensirion SPS30 Feinstaubsensor. Schließe den Feinstaubsensor an einen der 5 **I2C** Anschlüssen an. Im Dropdown Menü zwischen PM1.0, PM2.5, PM4.0 und PM10 auswählen. Der Messwert wird dir als **Kommazahl** in µg/m3",
+    senseBox_sps30_helpurl:
      "https://docs.sensebox.de/hardware/sensoren-feinstaub/",
  
 
