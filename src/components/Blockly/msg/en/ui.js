@@ -8,11 +8,15 @@ export const UI = {
   toolbox_math: "Math",
   toolbox_io: "Input/Output",
   toolbox_time: "Time",
+  toolbox_rtc: "RTC",
+  toolbox_ntp: "NTP",
   toolbox_functions: "Functions",
   toolbox_variables: "Variables",
   toolbox_serial: "Serial",
   toolbox_advanced: "Erweitert",
   toolbox_motors: "Motors",
+  toolbox_label_externalRTC: "External RTC",
+  toolbox_label_internalRTC: "Internal RTC",
   variable_NUMBER: "Number (int)",
   variable_SHORT_NUMBER: "char",
   variable_LONG: " Zahl (long)",
@@ -300,13 +304,13 @@ export const UI = {
   codeeditor_compile_progress:
     "Your code will now be compiled and then downloaded to your computer",
 
-      /**
+  /**
    * Device Selction
    *  */
   deviceselection_head: "Which board are you using?",
-  deviceselection_keep_selection: "Save my choice (You can change the board later in the settings)",
-  deviceselection_footnote: "Here you can access the old blockly Version for the",
+  deviceselection_keep_selection:
+    "Save my choice (You can change the board later in the settings)",
+  deviceselection_footnote:
+    "Here you can access the old blockly Version for the",
   deviceselection_footnote_02: "or the",
-
-
 };
