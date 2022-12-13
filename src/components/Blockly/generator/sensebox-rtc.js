@@ -94,3 +94,26 @@ uint8_t sec, min, hour, day, month;
   var code = `getTimeStamp()`;
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
+
+Blockly.Arduino.sensebox_internal_rtc_init = function () {
+  Blockly.Arduino.libraries_["RTClib"] = `#include <RTCZero.h>`;
+  Blockly.Arduino.definitions_["RTC"] = `RTCZero rtc;`;
+  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
+  Blockly.Arduino.setupCode_["rtc.begin"] = `rtc.begin();`;
+  return "";
+};
+
+Blockly.Arduino.sensebox_internal_rtc_set = function () {
+  var branch =
+    Blockly.Arduino.valueToCode(this, "time", Blockly.Arduino.ORDER_ATOMIC) ||
+    "0";
+  Blockly.Arduino.setupCode_["rtc.setEpoch"] = `rtc.setEpoch(${branch});`;
+  var code = ``;
+  return code;
+};
+
+Blockly.Arduino.sensebox_internal_rtc_get = function () {
+  var dropdown = this.getFieldValue("dropdown");
+  var code = `rtc.get${dropdown}()`;
+  return code;
+};
