@@ -5,7 +5,7 @@ export const RTC = {
   sensebox_rtc_set: "Set RTC time/date:",
   sensebox_rtc_set_tooltip:
     "Sets the time of the RTC. Note that you execute this block in the setup.",
-  sensebox_rtc_get_timestamp: "Get timestamp",
+  sensebox_rtc_get_timestamp: "Timestamp external RTC (RFC 3339)",
   sensebox_rtc_get_timestamp_tooltip:
     "Returns a timestamp formatted in ISO 8601. Ex: 2021-12-24T18:21Z",
   sensebox_rtc_get_tooltip: "Returns the selected value",
@@ -24,11 +24,11 @@ export const RTC = {
   sensebox_internal_rtc_set_tooltip:
     "Sets the time of the internal RTC. Note that you execute this block in the setup.",
   sensebox_internal_rtc_get: "Get: ",
-  sensebox_internal_rtc_get_timestamp: "Get internal RTC timestamp",
+  sensebox_internal_rtc_get_timestamp: "Timestamp internal RTC (RFC 3339)",
   sensebox_internal_rtc_get_timestamp_tooltip:
     "Returns a timestamp formatted in ISO 8601. Ex: 2021-12-24T18:21Z",
   sensebox_internal_rtc_get_tooltip: "Returns the selected value",
-  sensebox_internal_rtc_epoch: "epoch",
+  sensebox_internal_rtc_epoch: "Unix Time",
   sensebox_internal_rtc_year: "year",
   sensebox_internal_rtc_month: "month",
   sensebox_internal_rtc_day: "day",

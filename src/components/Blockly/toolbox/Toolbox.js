@@ -549,6 +549,7 @@ class Toolbox extends React.Component {
             <Block type="sensebox_internal_rtc_init"></Block>
             <Block type="sensebox_internal_rtc_set"></Block>
             <Block type="sensebox_internal_rtc_get"></Block>
+            <Block type="sensebox_internal_rtc_get_timestamp"></Block>
           </Category>
           <Category
             id="timeUTP"
