@@ -434,7 +434,8 @@ if (airSensor.begin() == false)
   while (1)
     ;
 }`;
-  Blockly.Arduino.setupCode_["scd30_staleData"] = "airSensor.useStaleData(true);";
+  Blockly.Arduino.setupCode_["scd30_staleData"] =
+    "airSensor.useStaleData(true);";
   var code = "";
   switch (dropdown) {
     case "temperature":
@@ -694,24 +695,27 @@ Blockly.Arduino.sensebox_sensor_dps310 = function () {
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
-
 /**
  * Sensirion SPS30 Fine Particlar Matter
  *
  */
 
- Blockly.Arduino.sensebox_sensor_sps30 = function () {
+Blockly.Arduino.sensebox_sensor_sps30 = function () {
   var dropdown_name = this.getFieldValue("value");
   Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_[
     "sps30"
   ] = `#include <sps30.h> // http://librarymanager/All#`;
-  Blockly.Arduino.variables_["sps30_measurement"] = "struct sps30_measurement m;";
-  Blockly.Arduino.variables_["sps30_auto_clean_days"] = "uint32_t auto_clean_days = 4;";
-  Blockly.Arduino.variables_["sps30_ret"] = "int16_t ret;";
-  Blockly.Arduino.variables_["sps30_interval_intervalsps"] = "const long intervalsps = 1000;";
-  Blockly.Arduino.variables_["sps30_time_startsps"] = "unsigned long time_startsps = 0;";
-  Blockly.Arduino.variables_["sps30_time_actualsps"] = "unsigned long time_actualsps = 0;";
+  Blockly.Arduino.variables_["sps30_measurement"] =
+    "struct sps30_measurement m;";
+  Blockly.Arduino.variables_["sps30_auto_clean_days"] =
+    "uint32_t auto_clean_days = 4;";
+  Blockly.Arduino.variables_["sps30_interval_intervalsps"] =
+    "const long intervalsps = 1000;";
+  Blockly.Arduino.variables_["sps30_time_startsps"] =
+    "unsigned long time_startsps = 0;";
+  Blockly.Arduino.variables_["sps30_time_actualsps"] =
+    "unsigned long time_actualsps = 0;";
   Blockly.Arduino.codeFunctions_["sps30_getData"] = `
 void getSPS30Data(){
 
@@ -731,8 +735,10 @@ do {
   `;
 
   Blockly.Arduino.setupCode_["sps30_begin"] = "sensirion_i2c_init();";
-  Blockly.Arduino.setupCode_["sps30_setFanCleaningInterval"] = "sps30_set_fan_auto_cleaning_interval_days(auto_clean_days);"
-  Blockly.Arduino.setupCode_["sps30_startMeasurement"] = "sps30_start_measurement();";
+  Blockly.Arduino.setupCode_["sps30_setFanCleaningInterval"] =
+    "sps30_set_fan_auto_cleaning_interval_days(auto_clean_days);";
+  Blockly.Arduino.setupCode_["sps30_startMeasurement"] =
+    "sps30_start_measurement();";
   Blockly.Arduino.loopCodeOnce_["getSPS30Data();"] = `
 time_startsps = millis();
 if (time_startsps > time_actualsps + intervalsps) {
