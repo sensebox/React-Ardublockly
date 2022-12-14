@@ -8,11 +8,15 @@ export const UI = {
   toolbox_math: "Mathematik",
   toolbox_io: "Eingang/Ausgang",
   toolbox_time: "Zeit",
+  toolbox_rtc: "RTC",
+  toolbox_ntp: "NTP",
   toolbox_functions: "Funktionen",
   toolbox_variables: "Variablen",
   toolbox_serial: "Seriell",
   toolbox_advanced: "Erweitert",
   toolbox_motors: "Motoren",
+  toolbox_label_externalRTC: "Externe RTC",
+  toolbox_label_internalRTC: "Interne RTC",
   variable_NUMBER: "Zahl (int)",
   variable_SHORT_NUMBER: "char",
   variable_LONG: "große Zahl (long)",
@@ -309,7 +313,8 @@ export const UI = {
    * Device Selction
    *  */
   deviceselection_head: "Welches Board benutzt du?",
-  deviceselection_keep_selection: "Speichere meine Auswahl fürs nächste Mal (Du kannst das Board später in den Einstellungen wechseln)",
+  deviceselection_keep_selection:
+    "Speichere meine Auswahl fürs nächste Mal (Du kannst das Board später in den Einstellungen wechseln)",
   deviceselection_footnote: "Hier kommst du zur alten Blockly Version für den ",
-  deviceselection_footnote_02: "oder die"
+  deviceselection_footnote_02: "oder die",
 };
