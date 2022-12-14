@@ -434,7 +434,8 @@ if (airSensor.begin() == false)
   while (1)
     ;
 }`;
-  Blockly.Arduino.setupCode_["scd30_staleData"] = "airSensor.useStaleData(true);";
+  Blockly.Arduino.setupCode_["scd30_staleData"] =
+    "airSensor.useStaleData(true);";
   var code = "";
   switch (dropdown) {
     case "temperature":

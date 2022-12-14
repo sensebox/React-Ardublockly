@@ -14,6 +14,6 @@ Blockly.Arduino.sensebox_ntp_init = function () {
 
 Blockly.Arduino.sensebox_ntp_get = function () {
   var format = this.getFieldValue("dropdown");
-  var code = `timeClient.${format}();`;
+  var code = `timeClient.${format}()`;
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };

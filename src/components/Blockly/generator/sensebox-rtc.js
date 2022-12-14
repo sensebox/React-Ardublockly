@@ -115,5 +115,25 @@ Blockly.Arduino.sensebox_internal_rtc_set = function () {
 Blockly.Arduino.sensebox_internal_rtc_get = function () {
   var dropdown = this.getFieldValue("dropdown");
   var code = `rtc.get${dropdown}()`;
-  return code;
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
+};
+
+Blockly.Arduino.sensebox_internal_rtc_get_timestamp = function () {
+  Blockly.Arduino.variables_["rtc_timestamp"] = `char timestamp[20];`;
+  Blockly.Arduino.codeFunctions_["getTimeStamp"] = `
+char* getTimeStamp() {
+uint8_t sec, min, hour, day, month;
+ uint16_t year;
+sec = rtc.getSeconds();
+min = rtc.getMinutes();
+hour = rtc.getHours();
+day = rtc.getDay();
+month = rtc.getMonth();
+year = rtc.getYear();
+ sprintf(timestamp, "%02d-%02d-%02dT%02d:%02d:%02dZ", year, month, day, hour, min, sec);
+ return timestamp;
+ }
+  `;
+  var code = `getTimeStamp()`;
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
 };

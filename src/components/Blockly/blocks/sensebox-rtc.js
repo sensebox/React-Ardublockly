@@ -97,9 +97,8 @@ Blockly.Blocks["sensebox_internal_rtc_set"] = {
   init: function () {
     this.setHelpUrl(Blockly.Msg.sensebox_rtc_helpurl);
     this.setColour(getColour().time);
-    this.appendDummyInput().appendField(Blockly.Msg.sensebox_internal_rtc_set);
     this.appendValueInput("time").appendField(
-      Blockly.Msg.sensebox_internal_rtc_epoch
+      Blockly.Msg.sensebox_internal_rtc_set
     );
     this.setPreviousStatement(true);
     this.setNextStatement(true);
@@ -127,5 +126,17 @@ Blockly.Blocks["sensebox_internal_rtc_get"] = {
       );
     this.setOutput(true, Types.LARGE_NUMBER.typeName);
     this.setTooltip(Blockly.Msg.sensebox_internal_rtc_get_tooltip);
+  },
+};
+
+Blockly.Blocks["sensebox_internal_rtc_get_timestamp"] = {
+  init: function () {
+    this.setHelpUrl(Blockly.Msg.sensebox_internal_rtc_helpurl);
+    this.setColour(getColour().time);
+    this.appendDummyInput().appendField(
+      Blockly.Msg.sensebox_internal_rtc_get_timestamp
+    );
+    this.setOutput(true);
+    this.setTooltip(Blockly.Msg.sensebox_internal_rtc_get_timestamp_tooltip);
   },
 };
