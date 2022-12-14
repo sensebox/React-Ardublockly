@@ -61,6 +61,7 @@ class Toolbox extends React.Component {
           <Block type="sensebox_sensor_uv_light" />
           <Block type="sensebox_sensor_bmx055_accelerometer" />
           <Block type="sensebox_sensor_sds011" />
+          <Block type="sensebox_sensor_sps30" />
           <Block type="sensebox_sensor_pressure" />
           <Block type="sensebox_sensor_dps310" />
           <Block type="sensebox_sensor_bme680_bsec" />
