@@ -23,13 +23,12 @@ const styles = (theme) => ({
     // borderWidth: '2px',
     borderRadius: "50%",
     borderColor: theme.palette.secondary.main,
-    width: "12px",
-    height: "12px",
+    width: "1rem",
     margin: "0 auto",
   },
   stepIconLarge: {
-    width: "24px",
-    height: "24px",
+    width: "2rem",
+    height: "1rem",
   },
   stepIconLargeSuccess: {
     borderColor: theme.palette.primary.main,
