@@ -15,7 +15,7 @@ import ImageListItemBar from "@mui/material/ImageListItemBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExpandAlt } from "@fortawesome/free-solid-svg-icons";
 import * as Blockly from "blockly";
-import { isWidthDown } from "@material-ui/core";
+import { isWidthDown } from "../../helpers/handleBreakpoints";
 
 // FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
 const withWidth = () => (WrappedComponent) => (props) => <WrappedComponent {...props} width="xs" />;
@@ -55,9 +55,9 @@ class Hardware extends Component {
   };
 
   render() {
-    var cols = isWidthDown("md", this.props.width)
-      ? isWidthDown("sm", this.props.width)
-        ? isWidthDown("xs", this.props.width)
+    var cols = isWidthDown("md", window.innerWidth)
+      ? isWidthDown("sm", window.innerWidth)
+        ? isWidthDown("xs", window.innerWidth)
           ? 2
           : 3
         : 4
