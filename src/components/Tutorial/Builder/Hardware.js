@@ -16,7 +16,7 @@ import ImageListItemBar from "@mui/material/ImageListItemBar";
 import FormHelperText from "@mui/material/FormHelperText";
 import FormLabel from "@mui/material/FormLabel";
 import * as Blockly from "blockly";
-import { isWidthDown } from "@material-ui/core";
+import { isWidthDown } from "../../../helpers/handleBreakpoints";
 
 // FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
 const withWidth = () => (WrappedComponent) => (props) => <WrappedComponent {...props} width="xs" />;
