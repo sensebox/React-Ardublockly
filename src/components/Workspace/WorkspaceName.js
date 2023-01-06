@@ -7,16 +7,19 @@ import { setDescription, updateProject } from "../../actions/projectActions";
 import Snackbar from "../Snackbar";
 import Dialog from "../Dialog";
 
-import withWidth, { isWidthDown } from "@material-ui/core/withWidth";
-import { withStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import Tooltip from "@material-ui/core/Tooltip";
-import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
+import withStyles from '@mui/styles/withStyles';
+import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Blockly from "blockly/core";
+import { isWidthDown } from "../../helpers/handleBreakpoints";
+
+// FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
+const withWidth = () => (WrappedComponent) => (props) => <WrappedComponent {...props} width="xs" />;
 
 const styles = (theme) => ({
   workspaceName: {
@@ -105,9 +108,8 @@ class WorkspaceName extends Component {
     return (
       <div style={this.props.style}>
         <Tooltip
-          title={`${Blockly.Msg.tooltip_project_title} ${
-            this.props.name ? `: ${this.props.name}` : ""
-          }`}
+          title={`${Blockly.Msg.tooltip_project_title} ${this.props.name ? `: ${this.props.name}` : ""
+            }`}
           arrow
           style={{ height: "100%" }}
         >
@@ -126,8 +128,8 @@ class WorkspaceName extends Component {
                   this.props.projectType === "gallery"
                     ? "Projektdaten ändern"
                     : this.props.projectType === "project"
-                    ? "Projekt umbenennen"
-                    : "Projekt benennen",
+                      ? "Projekt umbenennen"
+                      : "Projekt benennen",
                 content:
                   this.props.projectType === "gallery"
                     ? "Bitte gib einen Titel und eine Beschreibung für das Galerie-Projekt ein und bestätige die Angaben mit einem Klick auf 'Eingabe'."
@@ -136,13 +138,13 @@ class WorkspaceName extends Component {
             }}
           >
             {this.props.name &&
-            !isWidthDown(
-              this.props.projectType === "project" ||
-                this.props.projectType === "gallery"
-                ? "xl"
-                : "xs",
-              this.props.width
-            ) ? (
+              !isWidthDown(
+                this.props.projectType === "project" ||
+                  this.props.projectType === "gallery"
+                  ? "xl"
+                  : "xs",
+                this.props.width
+              ) ? (
               <Typography style={{ margin: "auto -3px auto 12px" }}>
                 {this.props.name}
               </Typography>
@@ -150,6 +152,7 @@ class WorkspaceName extends Component {
             <div style={{ width: "40px", display: "flex" }}>
               <FontAwesomeIcon
                 icon={faPen}
+                
                 style={{ height: "18px", width: "18px", margin: "auto" }}
               />
             </div>
@@ -184,34 +187,34 @@ class WorkspaceName extends Component {
         >
           <div style={{ marginTop: "10px" }}>
             {this.props.projectType === "gallery" ||
-            this.state.projectType === "gallery" ? (
+              this.state.projectType === "gallery" ? (
               <div>
                 <TextField
+                  variant="standard"
                   autoFocus
                   placeholder={
                     this.state.saveXml ? "Dateiname" : "Projekttitel"
                   }
                   value={this.state.name}
                   onChange={this.setFileName}
-                  style={{ marginBottom: "10px" }}
-                />
+                  style={{ marginBottom: "10px" }} />
                 <TextField
+                  variant="standard"
                   fullWidth
                   multiline
                   placeholder={"Projektbeschreibung"}
                   value={this.state.description}
                   onChange={this.setDescription}
-                  style={{ marginBottom: "10px" }}
-                />
+                  style={{ marginBottom: "10px" }} />
               </div>
             ) : (
               <TextField
+                variant="standard"
                 autoFocus
                 placeholder={this.state.saveXml ? "Dateiname" : "Projekttitel"}
                 value={this.state.name}
                 onChange={this.setFileName}
-                style={{ marginRight: "10px" }}
-              />
+                style={{ marginRight: "10px" }} />
             )}
             <Button
               disabled={!this.state.name}

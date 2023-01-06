@@ -5,13 +5,13 @@ import { changeContent, deleteProperty, setError, deleteError } from '../../../a
 
 import Textfield from './Textfield';
 
-import { withStyles } from '@material-ui/core/styles';
-import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import Button from '@material-ui/core/Button';
+import withStyles from '@mui/styles/withStyles';
+import Switch from '@mui/material/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormHelperText from '@mui/material/FormHelperText';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import Button from '@mui/material/Button';
 
 const styles = (theme) => ({
   errorColor: {
@@ -97,7 +97,6 @@ class Media extends Component {
             <Switch
               checked={this.state.checked}
               onChange={(e) => this.onChangeSwitch(e.target.checked)}
-              color="primary"
             />
           }
         />
@@ -106,13 +105,13 @@ class Media extends Component {
             <RadioGroup row value={this.state.radioValue} onChange={(e) => {this.onChangeRadio(e.target.value);}}>
               <FormControlLabel style={{color: 'black'}}
                 value="picture"
-                control={<Radio color="primary" />}
+                control={<Radio />}
                 label="Bild"
                 labelPlacement="end"
               />
               <FormControlLabel style={{color: 'black'}}
                 value="youtube"
-                control={<Radio color="primary" />}
+                control={<Radio />}
                 label="Youtube-Video"
                 labelPlacement="end"
               />

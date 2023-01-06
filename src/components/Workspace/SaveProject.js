@@ -9,13 +9,13 @@ import { withRouter } from 'react-router-dom';
 import Snackbar from '../Snackbar';
 import Dialog from '../Dialog';
 
-import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
-import TextField from '@material-ui/core/TextField';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+import withStyles from '@mui/styles/withStyles';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import TextField from '@mui/material/TextField';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 import { faSave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -136,7 +136,7 @@ class SaveProject extends Component {
           <IconButton
             className={this.props.classes.button}
             onClick={this.props.user.blocklyRole !== 'user' && (!this.props.project || this.props.user.email === this.props.project.creator) ? (e) => this.toggleMenu(e) : this.state.projectType === 'project' ? () => this.props.updateProject(this.state.projectType, this.props.project._id) : () => { this.setState({ projectType: 'project' }, () => this.saveProject()) }}
-          >
+            size="large">
             <FontAwesomeIcon icon={faSave} size="xs" />
           </IconButton>
         </Tooltip>
@@ -181,7 +181,15 @@ class SaveProject extends Component {
           button={'Abbrechen'}
         >
           <div style={{ marginTop: '10px' }}>
-            <TextField autoFocus fullWidth multiline placeholder={'Projektbeschreibung'} value={this.state.description} onChange={this.setDescription} style={{ marginBottom: '10px' }} />
+            <TextField
+              variant="standard"
+              autoFocus
+              fullWidth
+              multiline
+              placeholder={'Projektbeschreibung'}
+              value={this.state.description}
+              onChange={this.setDescription}
+              style={{ marginBottom: '10px' }} />
             <Button disabled={!this.state.description} variant='contained' color='primary' onClick={() => { this.workspaceDescription(); this.toggleDialog(); }}>Eingabe</Button>
           </div>
         </Dialog>

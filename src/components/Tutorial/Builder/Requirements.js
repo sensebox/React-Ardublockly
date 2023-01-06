@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { changeContent } from '../../../actions/tutorialBuilderActions';
 
-import FormGroup from '@material-ui/core/FormGroup';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormLabel from '@material-ui/core/FormLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
+import FormGroup from '@mui/material/FormGroup';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormLabel from '@mui/material/FormLabel';
+import FormHelperText from '@mui/material/FormHelperText';
+import FormControl from '@mui/material/FormControl';
 import * as Blockly from 'blockly'
 class Requirements extends Component {
 
@@ -26,11 +26,13 @@ class Requirements extends Component {
 
   render() {
     return (
-      <FormControl style={{ marginBottom: '10px', padding: '18.5px 14px', borderRadius: '25px', border: '1px solid lightgrey', width: 'calc(100% - 28px)' }}>
+      <FormControl
+        variant="standard"
+        style={{ marginBottom: '10px', padding: '18.5px 14px', borderRadius: '25px', border: '1px solid lightgrey', width: 'calc(100% - 28px)' }}>
         <FormLabel style={{ color: 'black' }}>{Blockly.Msg.builder_requirements_head}</FormLabel>
         <FormHelperText style={{ marginTop: '5px' }}>{Blockly.Msg.builder_requirements_order}</FormHelperText>
         <FormGroup>
-          {this.props.tutorials.filter(tutorial => tutorial._id !== this.props.id).map((tutorial, i) =>
+          {this.props.tutorials.filter(tutorial => tutorial._id !== this.props.id && tutorial.public).map((tutorial, i) =>
             <FormControlLabel
               key={i}
               control={
@@ -39,7 +41,6 @@ class Requirements extends Component {
                   checked={this.props.value.filter(id => id === tutorial._id).length > 0}
                   onChange={(e) => this.onChange(e)}
                   name="requirements"
-                  color="primary"
                 />
               }
               label={tutorial.title}

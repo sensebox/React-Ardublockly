@@ -3,10 +3,10 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Dialog from "./Dialog";
 
-import { withStyles } from "@material-ui/core/styles";
+import withStyles from '@mui/styles/withStyles';
 import * as Blockly from "blockly";
-import { IconButton, Grid, Avatar, Typography } from "@material-ui/core";
 import { setBoard } from "../actions/boardActions";
+import { IconButton, Grid, Avatar, Typography } from "@mui/material";
 
 const styles = (theme) => ({
   link: {
@@ -67,7 +67,7 @@ class DeviceSeclection extends Component {
         <div>
           <Grid container spacing={2} style={{ textAlign: "center" }}>
             <Grid item xs={6}>
-              <IconButton onClick={(e) => this.onclick(e, "mcu")}>
+              <IconButton onClick={(e) => this.onclick(e, "mcu")} size="large">
                 <Avatar
                   alt="Sensebox MCU"
                   src="/media/hardware/senseboxmcu.png"
@@ -95,7 +95,7 @@ class DeviceSeclection extends Component {
               <p>Sensebox ESP</p>
             </Grid> */}
             <Grid item xs={6}>
-              <IconButton onClick={(e) => this.onclick(e, "mini")}>
+              <IconButton onClick={(e) => this.onclick(e, "mini")} size="large">
                 <Avatar
                   alt="Sensebox Mini"
                   src="/media/hardware/senseboxmcumini.png"

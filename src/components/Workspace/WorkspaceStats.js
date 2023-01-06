@@ -4,13 +4,12 @@ import { connect } from "react-redux";
 
 import * as Blockly from "blockly/core";
 
-import withWidth, { isWidthDown } from "@material-ui/core/withWidth";
-import { withStyles } from "@material-ui/core/styles";
-import Tooltip from "@material-ui/core/Tooltip";
-import IconButton from "@material-ui/core/IconButton";
-import Chip from "@material-ui/core/Chip";
-import Avatar from "@material-ui/core/Avatar";
-import Popover from "@material-ui/core/Popover";
+import withStyles from '@mui/styles/withStyles';
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
+import Chip from "@mui/material/Chip";
+import Avatar from "@mui/material/Avatar";
+import Popover from "@mui/material/Popover";
 
 import {
   faPuzzlePiece,
@@ -21,6 +20,10 @@ import {
   faEllipsisH,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { isWidthDown } from "../../helpers/handleBreakpoints";
+
+// FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
+const withWidth = () => (WrappedComponent) => (props) => <WrappedComponent {...props} width="xs" />;
 
 const styles = (theme) => ({
   stats: {
@@ -174,7 +177,7 @@ class WorkspaceStats extends Component {
           <IconButton
             className={this.props.classes.menu}
             onClick={(event) => this.handleClick(event)}
-          >
+            size="large">
             <FontAwesomeIcon icon={faEllipsisH} size="xs" />
           </IconButton>
         </Tooltip>

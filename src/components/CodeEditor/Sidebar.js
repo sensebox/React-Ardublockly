@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import Blockly from "blockly";
 import { useSelector } from "react-redux";
-import Accordion from "@material-ui/core/Accordion";
-import AccordionSummary from "@material-ui/core/AccordionSummary";
-import AccordionDetails from "@material-ui/core/AccordionDetails";
-import Typography from "@material-ui/core/Typography";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import Typography from "@mui/material/Typography";
 import { LibraryVersions } from "../../data/versions.js";
 import { useMonaco } from "@monaco-editor/react";
-import { Button } from "@material-ui/core";
+import { Button } from "@mui/material";
 import SerialMonitor from "./SerialMonitor.js";
 import axios from "axios";
 import { useDispatch } from "react-redux";

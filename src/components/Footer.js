@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { Link } from 'react-router-dom';
 
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 
 class Footer extends Component {
   render() {

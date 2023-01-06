@@ -11,9 +11,7 @@ store.dispatch(fetchSensors());
 fetchSensors();
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <App />,
   document.getElementById("root")
 );
 

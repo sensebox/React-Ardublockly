@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Dialog from "../Dialog";
 
-import { withStyles } from "@material-ui/core/styles";
-import Checkbox from "@material-ui/core/Checkbox";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
+import withStyles from '@mui/styles/withStyles';
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import * as Blockly from "blockly";
 import ReactMarkdown from "react-markdown";
 
@@ -78,7 +78,6 @@ class HintTutorialExists extends Component {
               checked={this.state.checked}
               onChange={(e) => this.onChange(e)}
               name="dialog"
-              color="primary"
             />
           }
           label={Blockly.Msg.labels_donotshowagain}

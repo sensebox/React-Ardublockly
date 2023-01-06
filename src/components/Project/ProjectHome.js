@@ -11,13 +11,13 @@ import BlocklyWindow from "../Blockly/BlocklyWindow";
 import Snackbar from "../Snackbar";
 import WorkspaceFunc from "../Workspace/WorkspaceFunc";
 
-import { withStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import Divider from "@material-ui/core/Divider";
-import Typography from "@material-ui/core/Typography";
-import Backdrop from "@material-ui/core/Backdrop";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import withStyles from '@mui/styles/withStyles';
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
+import Divider from "@mui/material/Divider";
+import Typography from "@mui/material/Typography";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 import DeviceSelection from "../DeviceSelection";
 
 const styles = (theme) => ({
