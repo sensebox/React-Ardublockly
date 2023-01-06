@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { setBoard } from '../../actions/boardAction';
+import { setBoard } from '../../actions/boardActions';
 
 import * as Blockly from 'blockly/core';
 

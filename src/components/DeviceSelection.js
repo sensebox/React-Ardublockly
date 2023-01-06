@@ -6,7 +6,7 @@ import Dialog from "./Dialog";
 import { withStyles } from "@material-ui/core/styles";
 import * as Blockly from "blockly";
 import { IconButton, Grid, Avatar, Typography } from "@material-ui/core";
-import { setBoard } from "../actions/boardAction";
+import { setBoard } from "../actions/boardActions";
 
 const styles = (theme) => ({
   link: {

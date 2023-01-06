@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Blockly from "blockly";
 import { useSelector } from "react-redux";
 import Accordion from "@material-ui/core/Accordion";
@@ -10,17 +10,20 @@ import { useMonaco } from "@monaco-editor/react";
 import { Button } from "@material-ui/core";
 import SerialMonitor from "./SerialMonitor.js";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { getArduinoExamples } from "../../actions/arduinoActions";
+//import getArduinoExamples from "../../reducers/arduinoReducer"
 
 const Sidebar = () => {
-  //const [examples, setExamples] = React.useState([]);
+
+
+  const examples = useSelector((state) => state.arduino.examples);
   const user = useSelector((state) => state.auth.user);
-  // useEffect(() => {
-  //   axios
-  //     .get("https://coelho.opensensemap.org/items/blocklysamples")
-  //     .then((res) => {
-  //       setExamples(res.data.data);
-  //     });
-  // }, []);
+  const dispatch = useDispatch()
+
+    useEffect(() => {
+      dispatch(getArduinoExamples());
+    }, [dispatch]);
   const monaco = useMonaco();
   const loadCode = (code) => {
     monaco.editor.getModels()[0].setValue(code);
@@ -52,7 +55,7 @@ const Sidebar = () => {
           </AccordionDetails>
         </Accordion>
       ) : null}
-      {/* <Accordion>
+     <Accordion>
         <AccordionSummary
           expandIcon={""}
           aria-controls="panel1a-content"
@@ -71,13 +74,13 @@ const Sidebar = () => {
                   key={i}
                   onClick={() => loadCode(object.code)}
                 >
-                  {object.name}
+                  {object.title}
                 </Button>
               );
             })}
           </Typography>
         </AccordionDetails>
-      </Accordion> */}
+      </Accordion> 
       {user ? (
         <Accordion>
           <AccordionSummary

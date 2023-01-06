@@ -91,8 +91,11 @@ class SaveProject extends Component {
   saveProject = () => {
     var body = {
       xml: this.props.xml,
-      title: this.props.name
+      title: this.props.name,
+      board: this.props.board,
+      type: "blockly"
     };
+    console.log(body);
     if (this.state.projectType === 'gallery') {
       body.description = this.state.description;
     }
@@ -202,7 +205,8 @@ const mapStateToProps = state => ({
   description: state.project.description,
   xml: state.workspace.code.xml,
   message: state.message,
-  user: state.auth.user
+  user: state.auth.user,
+  board: state.board.board,
 });
 
 export default connect(mapStateToProps, { updateProject, setDescription })(withStyles(styles, { withTheme: true })(withRouter(SaveProject)));

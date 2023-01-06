@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { clearStats, workspaceName } from "../actions/workspaceActions";
-
+import { setBoard } from "../actions/boardActions";
 import * as Blockly from "blockly/core";
 import { createNameId } from "mnemonic-id";
-
+import * as BoardHelper from "./Blockly/helpers/board";
 import WorkspaceStats from "./Workspace/WorkspaceStats";
 import WorkspaceFunc from "./Workspace/WorkspaceFunc";
 import BlocklyWindow from "./Blockly/BlocklyWindow";
@@ -66,6 +66,10 @@ class Home extends Component {
     this.setState({ stats: window.localStorage.getItem("stats") });
     if (!this.props.project) {
       this.props.workspaceName(createNameId());
+    } else {
+      console.log(this.props.project);
+      this.props.setBoard(this.props.project.board);
+      BoardHelper.setBoard(this.props.project.board);
     }
     if (this.props.message && this.props.message.id === "GET_SHARE_FAIL") {
       this.setState({
@@ -187,7 +191,8 @@ class Home extends Component {
             </Grid>
           ) : null}
         </Grid>
-        <DeviceSelection />
+        {!this.props.board ? <DeviceSelection /> : null}
+        {/* <DeviceSelection /> */}
         {/* <HintTutorialExists /> */}
         {this.props.platform ? (
           <Dialog
@@ -220,6 +225,7 @@ class Home extends Component {
 }
 
 Home.propTypes = {
+  setBoard: PropTypes.func.isRequired,
   clearStats: PropTypes.func.isRequired,
   workspaceName: PropTypes.func.isRequired,
   message: PropTypes.object.isRequired,
@@ -231,8 +237,9 @@ const mapStateToProps = (state) => ({
   message: state.message,
   statistics: state.general.statistics,
   platform: state.general.platform,
+  board: state.board.board
 });
 
-export default connect(mapStateToProps, { clearStats, workspaceName })(
+export default connect(mapStateToProps, { clearStats, workspaceName, setBoard })(
   withStyles(styles, { withTheme: true })(Home)
 );

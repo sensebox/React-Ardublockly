@@ -8,6 +8,7 @@ import messageReducer from './messageReducer';
 import authReducer from './authReducer';
 import boardReducer from './boardReducer';
 import sensorwikiReducer from './sensorwikiReducer';
+import arduinoReducer from './arduinoReducer';
 
 export default combineReducers({
   auth: authReducer,
@@ -18,5 +19,6 @@ export default combineReducers({
   project: projectReducer,
   general: generalReducer,
   message: messageReducer,
-  sensorwiki: sensorwikiReducer
+  sensorwiki: sensorwikiReducer,
+  arduino: arduinoReducer
 });

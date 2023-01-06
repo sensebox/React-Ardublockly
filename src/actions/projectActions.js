@@ -90,7 +90,8 @@ export const updateProject = (type, id) => (dispatch, getState) => {
   var workspace = getState().workspace;
   var body = {
     xml: workspace.code.xml,
-    title: workspace.name
+    title: workspace.name,
+    board: getState().board.board,
   };
   var project = getState().project;
   if (type === 'gallery') {
@@ -165,7 +166,8 @@ export const deleteProject = (type, id) => (dispatch, getState) => {
 
 export const shareProject = (title, type, id) => (dispatch, getState) => {
   var body = {
-    title: title
+    title: title,
+    board: getState().board.board
   };
   if (type === 'project') {
     body.projectId = id;
