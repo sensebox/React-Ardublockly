@@ -5,19 +5,19 @@ import { workspaceName } from "../../actions/workspaceActions";
 
 import { detectWhitespacesAndReturnReadableResult } from "../../helpers/whitespace";
 
-import { withStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import Backdrop from "@material-ui/core/Backdrop";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
-import Divider from "@material-ui/core/Divider";
+import withStyles from '@mui/styles/withStyles';
+import Button from "@mui/material/Button";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import Divider from "@mui/material/Divider";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Blockly from "blockly/core";
 import Copy from "../copy.svg";
 
-import MuiDrawer from "@material-ui/core/Drawer";
+import MuiDrawer from "@mui/material/Drawer";
 import Dialog from "../Dialog";
 
 const styles = (theme) => ({
@@ -188,8 +188,8 @@ class Compile extends Component {
             <IconButton
               className={`compileBlocks ${this.props.classes.iconButton}`}
               onClick={() => this.compile()}
-            >
-              <FontAwesomeIcon icon={faClipboardCheck} size="xs" />
+              size="large">
+              <FontAwesomeIcon icon={faClipboardCheck} size="xs"  />
             </IconButton>
           </Tooltip>
         ) : (
@@ -202,6 +202,7 @@ class Compile extends Component {
             <FontAwesomeIcon
               icon={faClipboardCheck}
               style={{ marginRight: "5px" }}
+              
             />{" "}
             Kompilieren
           </Button>
@@ -302,6 +303,7 @@ class Compile extends Component {
                 <FontAwesomeIcon
                   icon={faClipboardCheck}
                   style={{ marginRight: "5px" }}
+                  
                 />{" "}
                 Starte Übertragung
               </Button>

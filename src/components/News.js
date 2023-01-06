@@ -4,11 +4,11 @@ import Breadcrumbs from './Breadcrumbs';
 
 import { withRouter } from 'react-router-dom';
 
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 import * as Blockly from 'blockly'
 import ReactMarkdown from 'react-markdown';
-import Container from '@material-ui/core/Container';
+import Container from '@mui/material/Container';
 
 const news = `
 

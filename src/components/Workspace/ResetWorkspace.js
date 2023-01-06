@@ -10,14 +10,14 @@ import { initialXml } from '../Blockly/initialXml.js';
 
 import Snackbar from '../Snackbar';
 
-import { withStyles } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
+import withStyles from '@mui/styles/withStyles';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
 
 import { faShare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Dialog from '../Dialog';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 
 const styles = (theme) => ({
   button: {
@@ -49,11 +49,11 @@ class ResetWorkspace extends Component {
   }
 
   toggleDialog = () => {
-    this.setState({ open: !this.state});
+    this.setState({ open: !this.state });
   }
 
   openDialog = () => {
-    this.setState({open: true});
+    this.setState({ open: true });
   }
 
   resetWorkspace = () => {
@@ -81,8 +81,8 @@ class ResetWorkspace extends Component {
           <IconButton
             className={this.props.classes.button}
             onClick={() => this.openDialog()}
-          >
-            <FontAwesomeIcon icon={faShare} size="xs" flip='horizontal' />
+            size="large">
+            <FontAwesomeIcon icon={faShare} size="xs" flip='horizontal'  />
           </IconButton>
         </Tooltip>
 
@@ -92,7 +92,7 @@ class ResetWorkspace extends Component {
           type={this.state.type}
           key={this.state.key}
         />
-         <Dialog
+        <Dialog
           open={this.state.open}
           title={Blockly.Msg.resetDialog_headline}
           content={Blockly.Msg.resetDialog_text}
@@ -100,9 +100,9 @@ class ResetWorkspace extends Component {
           onClick={() => { this.toggleDialog(); }}
           button={Blockly.Msg.button_cancel}
         > <div style={{ marginTop: '10px' }}>
-       
-        <Button variant='contained' color='primary' onClick={() => { this.resetWorkspace(); this.toggleDialog(); }}>Zurücksetzen</Button>
-      </div></Dialog>
+
+            <Button variant='contained' color='primary' onClick={() => { this.resetWorkspace(); this.toggleDialog(); }}>Zurücksetzen</Button>
+          </div></Dialog>
       </div>
     );
   };

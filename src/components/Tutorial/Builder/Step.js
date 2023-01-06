@@ -15,10 +15,10 @@ import BlocklyExample from "./BlocklyExample";
 import Requirements from "./Requirements";
 import Hardware from "./Hardware";
 
-import { withStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
+import withStyles from '@mui/styles/withStyles';
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
 
 import {
   faPlus,
@@ -85,8 +85,8 @@ class Step extends Component {
                 className={this.props.classes.button}
                 style={index === 0 ? {} : { marginBottom: "5px" }}
                 onClick={() => this.props.addStep(index + 1)}
-              >
-                <FontAwesomeIcon icon={faPlus} size="xs" />
+                size="large">
+                <FontAwesomeIcon icon={faPlus}  size="xs" />
               </IconButton>
             </Tooltip>
             {index !== 0 ? (
@@ -100,8 +100,8 @@ class Step extends Component {
                     className={this.props.classes.button}
                     style={{ marginBottom: "5px" }}
                     onClick={() => this.props.changeStepIndex(index, index - 1)}
-                  >
-                    <FontAwesomeIcon icon={faAngleDoubleUp} size="xs" />
+                    size="large">
+                    <FontAwesomeIcon icon={faAngleDoubleUp}  size="xs" />
                   </IconButton>
                 </Tooltip>
                 <Tooltip
@@ -113,8 +113,8 @@ class Step extends Component {
                     className={this.props.classes.button}
                     style={{ marginBottom: "5px" }}
                     onClick={() => this.props.changeStepIndex(index, index + 1)}
-                  >
-                    <FontAwesomeIcon icon={faAngleDoubleDown} size="xs" />
+                    size="large">
+                    <FontAwesomeIcon icon={faAngleDoubleDown}  size="xs" />
                   </IconButton>
                 </Tooltip>
                 <Tooltip title={`Schritt ${index + 1} löschen`} arrow>
@@ -125,8 +125,8 @@ class Step extends Component {
                       this.props.classes.delete
                     )}
                     onClick={() => this.props.removeStep(index)}
-                  >
-                    <FontAwesomeIcon icon={faTrash} size="xs" />
+                    size="large">
+                    <FontAwesomeIcon icon={faTrash}  size="xs" />
                   </IconButton>
                 </Tooltip>
               </div>

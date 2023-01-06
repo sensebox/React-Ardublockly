@@ -7,9 +7,9 @@ import { withRouter } from 'react-router-dom';
 
 import Snackbar from '../Snackbar';
 
-import { withStyles } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
+import withStyles from '@mui/styles/withStyles';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
 
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -61,8 +61,8 @@ class DeleteProject extends Component {
           <IconButton
             className={this.props.classes.buttonTrash}
             onClick={() => this.props.deleteProject(this.props.projectType, this.props.project._id)}
-          >
-            <FontAwesomeIcon icon={faTrashAlt} size="xs" />
+            size="large">
+            <FontAwesomeIcon icon={faTrashAlt} size="xs"  />
           </IconButton>
         </Tooltip>
 

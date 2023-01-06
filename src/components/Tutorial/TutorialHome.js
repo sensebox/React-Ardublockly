@@ -17,11 +17,11 @@ import clsx from "clsx";
 import Breadcrumbs from "../Breadcrumbs";
 
 import { Link } from "react-router-dom";
-import { alpha } from "@material-ui/core/styles";
-import { withStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
+import { alpha } from "@mui/material/styles";
+import withStyles from '@mui/styles/withStyles';
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
 
 import {
   faCheck,
@@ -33,10 +33,10 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Blockly from "blockly";
 import ReactStars from "react-rating-stars-component";
-import Tooltip from "@material-ui/core/Tooltip";
-import IconButton from "@material-ui/core/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
 import Snackbar from "../Snackbar";
-import Divider from "@material-ui/core/Divider";
+import Divider from "@mui/material/Divider";
 import DeviceSelection from "../DeviceSelection";
 
 const styles = (theme) => ({
@@ -287,6 +287,7 @@ class TutorialHome extends Component {
                             icon={
                               tutorialStatus === "Success" ? faCheck : faTimes
                             }
+                            
                           />
                         ) : (
                           <Typography
@@ -379,8 +380,8 @@ class TutorialHome extends Component {
                                   type: "success",
                                 });
                               }}
-                            >
-                              <FontAwesomeIcon icon={faShareAlt} size="xs" />
+                              size="large">
+                              <FontAwesomeIcon icon={faShareAlt} size="xs"  />
                             </IconButton>
                           </Tooltip>
                           <Tooltip
@@ -390,8 +391,8 @@ class TutorialHome extends Component {
                             <IconButton
                               className={`publicTutorial ${this.props.classes.button}`}
                               disabled={!tutorial.public}
-                            >
-                              <FontAwesomeIcon icon={faEye} size="xs" />
+                              size="large">
+                              <FontAwesomeIcon icon={faEye} size="xs"  />
                             </IconButton>
                           </Tooltip>
                           {tutorial.review ? (
@@ -402,7 +403,7 @@ class TutorialHome extends Component {
                               <IconButton
                                 className={`publicTutorial ${this.props.classes.button}`}
                                 disabled={!tutorial.review}
-                              >
+                                size="large">
                                 <FontAwesomeIcon icon={faUserCheck} size="xs" />
                               </IconButton>
                             </Tooltip>

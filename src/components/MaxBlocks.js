@@ -5,8 +5,8 @@ import { workspaceChange } from '../actions/workspaceActions';
 
 import * as Blockly from 'blockly/core';
 
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 
 class MaxBlocks extends Component {
 
@@ -28,12 +28,12 @@ class MaxBlocks extends Component {
     return (
       <div style={{display: 'inline', marginLeft: '10px'}}>
         <TextField
+          variant="standard"
           style={{width: '50px', marginRight: '5px'}}
           name="max"
           type="number"
           onChange={this.onChange}
-          value={this.state.max}
-        />
+          value={this.state.max} />
         <Button style={{marginRight: '10px', color: 'white'}} variant="contained" color="primary" onClick={this.setMaxBlocks}>
           Maximale Blöcke
         </Button>

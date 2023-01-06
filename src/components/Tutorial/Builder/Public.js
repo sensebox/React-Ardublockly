@@ -9,14 +9,14 @@ import {
   deleteError,
 } from "../../../actions/tutorialBuilderActions";
 
-import { withStyles } from "@material-ui/core/styles";
+import withStyles from '@mui/styles/withStyles';
 
 import * as Blockly from "blockly";
-import Checkbox from "@material-ui/core/Checkbox";
-import FormGroup from "@material-ui/core/FormGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormControl from "@material-ui/core/FormControl";
-import FormLabel from "@material-ui/core/FormLabel";
+import Checkbox from "@mui/material/Checkbox";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
 
 const styles = (theme) => ({
   multiline: {
@@ -52,7 +52,7 @@ class Public extends Component {
 
   render() {
     return (
-      <FormControl component="fieldset">
+      <FormControl variant="standard" component="fieldset">
         <FormLabel component="legend">
           {Blockly.Msg.builder_public_head}
         </FormLabel>
@@ -63,7 +63,6 @@ class Public extends Component {
               <Checkbox
                 checked={this.props.value}
                 onChange={this.handleChange}
-                color="primary"
                 name="checkedA"
                 inputProps={{ "aria-label": "secondary checkbox" }}
               />

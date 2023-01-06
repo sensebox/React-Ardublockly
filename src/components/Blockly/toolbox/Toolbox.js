@@ -611,7 +611,6 @@ class Toolbox extends React.Component {
           colour={getColour().procedures}
           custom="PROCEDURE"
         ></Category>
-        <sep></sep>
         <Category name={Blockly.Msg.toolbox_advanced} colour={getColour().io}>
           <Category
             name={Blockly.Msg.toolbox_serial}

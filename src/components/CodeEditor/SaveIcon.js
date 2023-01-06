@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleNotch, faSave } from "@fortawesome/free-solid-svg-icons";
-import Tooltip from "@material-ui/core/Tooltip";
+import Tooltip from "@mui/material/Tooltip";
 import React from "react";
 
 const SaveIcon = ({ loading }) => (
@@ -17,6 +17,7 @@ const SaveIcon = ({ loading }) => (
         <FontAwesomeIcon
           style={{ position: "absolute" }}
           icon={faCircleNotch}
+          
           spin={true}
           size="2x"
           color="grey"
@@ -30,6 +31,7 @@ const SaveIcon = ({ loading }) => (
           transform: "translate(-50%,-50%)",
         }}
         icon={faSave}
+        
         color={loading ? "grey" : "green"}
         size={loading ? "1x" : "lg"}
       />
