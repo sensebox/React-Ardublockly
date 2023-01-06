@@ -30,7 +30,7 @@ class Requirements extends Component {
         <FormLabel style={{ color: 'black' }}>{Blockly.Msg.builder_requirements_head}</FormLabel>
         <FormHelperText style={{ marginTop: '5px' }}>{Blockly.Msg.builder_requirements_order}</FormHelperText>
         <FormGroup>
-          {this.props.tutorials.filter(tutorial => tutorial._id !== this.props.id).map((tutorial, i) =>
+          {this.props.tutorials.filter(tutorial => tutorial._id !== this.props.id && tutorial.public).map((tutorial, i) =>
             <FormControlLabel
               key={i}
               control={
