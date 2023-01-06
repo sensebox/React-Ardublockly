@@ -8,9 +8,9 @@ import { saveAs } from "file-saver";
 
 import { detectWhitespacesAndReturnReadableResult } from "../../helpers/whitespace";
 
-import { withStyles } from "@material-ui/core/styles";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
+import withStyles from '@mui/styles/withStyles';
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
 
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -82,7 +82,7 @@ class Screenshot extends Component {
           <IconButton
             className={this.props.classes.button}
             onClick={() => this.getSvg()}
-          >
+            size="large">
             <FontAwesomeIcon icon={faCamera} size="xs" />
           </IconButton>
         </Tooltip>

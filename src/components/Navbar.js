@@ -8,20 +8,20 @@ import senseboxLogo from "./sensebox_logo.svg";
 
 import { withRouter } from "react-router-dom";
 
-import { withStyles } from "@material-ui/core/styles";
-import Drawer from "@material-ui/core/Drawer";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import List from "@material-ui/core/List";
-import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import LinearProgress from "@material-ui/core/LinearProgress";
+import withStyles from '@mui/styles/withStyles';
+import Drawer from "@mui/material/Drawer";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import List from "@mui/material/List";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import LinearProgress from "@mui/material/LinearProgress";
 import Tour from "reactour";
-import { Badge } from "@material-ui/core";
+import { Badge } from "@mui/material";
 import { home, assessment } from "./Tour";
 import {
   faBars,
@@ -40,7 +40,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Blockly from "blockly";
-import Tooltip from "@material-ui/core/Tooltip";
+import Tooltip from "@mui/material/Tooltip";
 
 const styles = (theme) => ({
   drawerWidth: {
@@ -116,7 +116,7 @@ class Navbar extends Component {
               onClick={this.toggleDrawer}
               style={{ margin: "0 10px" }}
               className="MenuButton"
-            >
+              size="large">
               <FontAwesomeIcon icon={faBars} />
             </IconButton>
             <Link to={"/"} style={{ textDecoration: "none", color: "inherit" }}>
@@ -142,7 +142,7 @@ class Navbar extends Component {
               </Link>
             ) : null}
             {isHome ? (
-              <Tooltip title={Blockly.Msg.tooltip_start_tour} arrow>
+              <Tooltip title={'Start Tour'} arrow>
                 <IconButton
                   color="inherit"
                   className={`openTour ${this.props.classes.button}`}
@@ -150,13 +150,13 @@ class Navbar extends Component {
                     this.openTour();
                   }}
                   style={{ margin: "0 30px 0 auto" }}
-                >
+                  size="large">
                   <FontAwesomeIcon icon={faQuestionCircle} />
                 </IconButton>
               </Tooltip>
             ) : null}
             {isAssessment ? (
-              <Tooltip title={Blockly.Msg.tooltip_start_tour} arrow>
+              <Tooltip title={'Start tour'} arrow>
                 <IconButton
                   color="inherit"
                   className={`openTour ${this.props.classes.button}`}
@@ -164,7 +164,7 @@ class Navbar extends Component {
                     this.openTour();
                   }}
                   style={{ margin: "0 30px 0 auto" }}
-                >
+                  size="large">
                   <FontAwesomeIcon icon={faQuestionCircle} />
                 </IconButton>
               </Tooltip>
@@ -214,11 +214,11 @@ class Navbar extends Component {
           </div>
           <List>
             {[
-                 {
-                  text: Blockly.Msg.navbar_blockly,
-                  icon: faPuzzlePiece,
-                  link: "/",
-                },
+              {
+                text: Blockly.Msg.navbar_blockly,
+                icon: faPuzzlePiece,
+                link: "/",
+              },
               {
                 text: Blockly.Msg.navbar_tutorials,
                 icon: faChalkboardTeacher,
@@ -267,7 +267,7 @@ class Navbar extends Component {
                         <FontAwesomeIcon icon={item.icon} />
                       </ListItemIcon>
                       {item.text === "Code Editor" ? (
-                        <Badge badgeContent={"Experimental"} color="primary">
+                        <Badge badgeContent={"Experimental"} color="primary" overlap="rectangular">
                           <ListItemText primary={item.text} />
                         </Badge>
                       ) : (
@@ -329,9 +329,9 @@ class Navbar extends Component {
                       onClick={
                         item.function
                           ? () => {
-                              item.function();
-                              this.toggleDrawer();
-                            }
+                            item.function();
+                            this.toggleDrawer();
+                          }
                           : this.toggleDrawer
                       }
                     >
