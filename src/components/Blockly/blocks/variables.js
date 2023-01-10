@@ -10,7 +10,7 @@ Blockly.Blocks["variables_set_dynamic"] = {
     this.setNextStatement(true, null);
     this.appendValueInput("VALUE")
       .appendField(Blockly.Msg.variables_set, Blockly.Msg.variables_set)
-      // .appendField("", "type")
+      .appendField("", "type")
       .appendField(new Blockly.FieldVariable("VAR"), "VAR")
       .appendField(Blockly.Msg.variables_to);
   },
