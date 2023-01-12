@@ -38,8 +38,10 @@ import {
   faCode,
   faPuzzlePiece,
   faUser,
-  faFlag,
   faMicrochip,
+  faEarthEurope,
+  faEarthAmericas,
+  faCaretDown
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Blockly from "blockly";
@@ -48,7 +50,6 @@ import MenuItem from '@mui/material/MenuItem'
 import Menu from '@mui/material/Menu'
 import { setLanguage } from "../actions/generalActions";
 import { setBoard } from "../actions/boardAction";
-import { Redirect } from "react-router-dom";
 
 const styles = (theme) => ({
   drawerWidth: {
@@ -138,92 +139,150 @@ class Navbar extends Component {
               <img src={senseboxLogo} alt="senseBox-Logo" width="30" />
             </Link>
             <div style={{ margin: "0 0 0 auto", display: "flex", alignItems: 'center', justifyContent: 'center' }} sx={{ display: 'none' }}>
-              {<IconButton
-                color="inherit"
-                onClick={(event) => { this.setState({ anchorElLang: event.target }) }}
-                style={{ margin: "0 30px 0 auto" }}
-                size="large"
-                sx={{ display: { xs: 'none', md: 'block' } }}
-              >
-                <FontAwesomeIcon icon={faFlag} />
-              </IconButton>}
-              <Menu
-                anchorEl={this.state.anchorElLang}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'center',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'center',
-                }}
-                open={Boolean(this.state.anchorElLang)}
-                onClose={() => {
-                  this.setState({ anchorElLang: null });
-                }}
-              >
-                <MenuItem
-                  value="de_DE"
-                  onClick={(event) => {
-                    this.props.setLanguage(event.currentTarget.getAttribute("value"));
-                    this.setState({ anchorElLang: null });
+              <div>
+                {
+                  this.props.selectedBoard === "mcu" ?
+                    (
+                      <button
+                        style={{ display: "flex", cursor: "pointer", alignItems: "center", alignContent: "center", paddingInline: "11px 7px", background: "transparent", color: "inherit", fontWeight: "bold", border: "2px solid white", borderRadius: "25px" }}
+                        onClick={(event) => { this.setState({ anchorElBoard: event.target }) }}
+                        sx={{ display: { xs: 'none', md: 'block' } }}
+                      >
+                        <FontAwesomeIcon
+                          icon={faMicrochip}
+                          style={{ blockSize: "24px", inlineSize: "24px", marginInline: "0px 8px" }}
+                        />
+                        <span>MCU</span>
+                        <FontAwesomeIcon
+                          icon={faCaretDown}
+                          style={{ blockSize: "24px", inlineSize: "24px" }}
+                        />
+                      </button>
+                    ) : (
+                      <button
+                        style={{ display: "flex", cursor: "pointer", alignItems: "center", alignContent: "center", paddingInline: "11px 7px", background: "transparent", color: "inherit", fontWeight: "bold", border: "2px solid white", borderRadius: "25px" }}
+                        onClick={(event) => { this.setState({ anchorElBoard: event.target }) }}
+                      >
+                        <FontAwesomeIcon
+                          icon={faMicrochip}
+                          style={{ blockSize: "24px", inlineSize: "24px", marginInline: "0px 8px" }}
+                        />
+                        <span>mini</span>
+                        <FontAwesomeIcon
+                          icon={faCaretDown}
+                          style={{ blockSize: "24px", inlineSize: "24px" }} />
+                      </button>
+
+                    )
+                }
+                <Menu
+                  anchorEl={this.state.anchorElBoard}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center',
                   }}
-                >
-                  DE
-                </MenuItem>
-                <MenuItem
-                  value="en_US"
-                  onClick={(event) => {
-                    this.props.setLanguage(event.currentTarget.getAttribute("value"));
-                    this.setState({ anchorElLang: null });
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center',
                   }}
-                >
-                  EN
-                </MenuItem>
-              </Menu>
-              {<IconButton
-                color="inherit"
-                onClick={(event) => { this.setState({ anchorElBoard: event.target }) }}
-                style={{ margin: "0 30px 0 auto" }}
-                size="large"
-                sx={{ display: { xs: 'none', md: 'block' } }}
-              >
-                <FontAwesomeIcon icon={faMicrochip} />
-              </IconButton>}
-              <Menu
-                anchorEl={this.state.anchorElBoard}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'center',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'center',
-                }}
-                open={Boolean(this.state.anchorElBoard)}
-                onClose={() => { this.setState({ anchorElBoard: null }); }}
-              >
-                <MenuItem
-                  value="mcu"
-                  onClick={(event) => {
-                    this.props.setBoard(event.currentTarget.getAttribute("value"));
+                  open={Boolean(this.state.anchorElBoard)}
+                  onClose={() => {
                     this.setState({ anchorElBoard: null });
                   }}
                 >
-                  MCU
-                </MenuItem>
-                <MenuItem
-                  value="mini"
-                  onClick={(event) => {
-                    this.props.setBoard(event.currentTarget.getAttribute("value"));
-                    this.setState({ anchorElBoard: null });
+                  <MenuItem
+                    value="mcu"
+                    onClick={(event) => {
+                      this.props.setBoard(event.currentTarget.getAttribute("value"));
+                      this.setState({ anchorElBoard: null });
+                    }}
+                  >
+                    MCU
+                  </MenuItem>
+                  <MenuItem
+                    value="mini"
+                    onClick={(event) => {
+                      this.props.setBoard(event.currentTarget.getAttribute("value"));
+                      this.setState({ anchorElBoard: null });
+                    }}
+                  >
+                    mini
+                  </MenuItem>
+                </Menu>
+              </div>
+              <div>
+                {
+                  this.props.language === "en_US" ?
+                    (
+                      <button
+                        style={{ display: "flex", cursor: "pointer", alignItems: "center", alignContent: "center", paddingInline: "11px 7px", background: "transparent", color: "inherit", fontWeight: "bold", border: "2px solid white", borderRadius: "25px" }}
+                        onClick={(event) => { this.setState({ anchorElLang: event.target }) }}
+                        sx={{ display: { xs: 'none', md: 'block' } }}
+                      >
+                        <FontAwesomeIcon
+                          icon={faEarthAmericas}
+                          style={{ blockSize: "24px", inlineSize: "24px", marginInline: "0px 8px" }}
+                        />
+                        <span>English</span>
+                        <FontAwesomeIcon
+                          icon={faCaretDown}
+                          style={{ blockSize: "24px", inlineSize: "24px" }}
+                        />
+                      </button>
+                    ) : (
+                      <button
+                        style={{ display: "flex", cursor: "pointer", alignItems: "center", alignContent: "center", paddingInline: "11px 7px", background: "transparent", color: "inherit", fontWeight: "bold", border: "2px solid white", borderRadius: "25px" }}
+                        onClick={(event) => { this.setState({ anchorElLang: event.target }) }}
+                      >
+                        <FontAwesomeIcon
+                          icon={faEarthEurope}
+                          style={{ blockSize: "24px", inlineSize: "24px", marginInline: "0px 8px" }}
+                        />
+                        <span>Deutsch</span>
+                        <FontAwesomeIcon
+                          icon={faCaretDown}
+                          style={{ blockSize: "24px", inlineSize: "24px" }} />
+                      </button>
+
+                    )
+                }
+                <Menu
+                  anchorEl={this.state.anchorElLang}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center',
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center',
+                  }}
+                  open={Boolean(this.state.anchorElLang)}
+                  onClose={() => {
+                    this.setState({ anchorElLang: null });
                   }}
                 >
-                  MINI
-                </MenuItem>
-              </Menu>
+                  <MenuItem
+                    value="de_DE"
+                    onClick={(event) => {
+                      this.props.setLanguage(event.currentTarget.getAttribute("value"));
+                      this.setState({ anchorElLang: null });
+                    }}
+                  >
+                    Deutsch
+                  </MenuItem>
+                  <MenuItem
+                    value="en_US"
+                    onClick={(event) => {
+                      this.props.setLanguage(event.currentTarget.getAttribute("value"));
+                      this.setState({ anchorElLang: null });
+                    }}
+                  >
+                    English
+                  </MenuItem>
+                </Menu>
+              </div>
               {isHome ? (
                 <Tooltip title={'Start Tour'} arrow>
                   <IconButton
@@ -232,7 +291,6 @@ class Navbar extends Component {
                     onClick={() => {
                       this.openTour();
                     }}
-                    style={{ margin: "0 30px 0 auto" }}
                     size="large">
                     <FontAwesomeIcon icon={faQuestionCircle} />
                   </IconButton>
@@ -246,7 +304,6 @@ class Navbar extends Component {
                     onClick={() => {
                       this.openTour();
                     }}
-                    style={{ margin: "0 30px 0 auto" }}
                     size="large">
                     <FontAwesomeIcon icon={faQuestionCircle} />
                   </IconButton>
@@ -294,9 +351,9 @@ class Navbar extends Component {
                     </div>
                     <hr style={{ borderTop: "3px solid #bbb", marginLeft: "5px", marginRight: "5px" }} />
                     <MenuItem>
-                    <Link to={"/settings"} style={{ textDecoration: 'none', color: "black" }}>
-                      {Blockly.Msg.navbar_settings}
-                    </Link>
+                      <Link to={"/settings"} style={{ textDecoration: 'none', color: "black" }}>
+                        {Blockly.Msg.navbar_settings}
+                      </Link>
                     </MenuItem>
                     <MenuItem
                       onClick={() => {
@@ -312,7 +369,7 @@ class Navbar extends Component {
                 (<Link to={"/user/login"} style={{ textDecoration: 'none', color: "white" }}>
                   <IconButton
                     color="inherit"
-                    style={{ margin: "0 30px 0 auto" }}
+                    style={{ margin: "0 0 0 auto" }}
                   >
                     <FontAwesomeIcon icon={faUser} />
                   </IconButton>
