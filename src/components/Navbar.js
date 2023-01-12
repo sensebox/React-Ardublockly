@@ -69,6 +69,8 @@ const styles = (theme) => ({
 class Navbar extends Component {
   constructor(props) {
     super(props);
+    this.langRef = React.createRef();
+    this.mcuRef = React.createRef();
     this.state = {
       open: false,
       isTourOpen: false,
@@ -145,7 +147,10 @@ class Navbar extends Component {
                     (
                       <button
                         style={{ display: "flex", cursor: "pointer", alignItems: "center", alignContent: "center", paddingInline: "11px 7px", background: "transparent", color: "inherit", fontWeight: "bold", border: "2px solid white", borderRadius: "25px" }}
-                        onClick={(event) => { this.setState({ anchorElBoard: event.target }) }}
+                        ref={this.mcuRef}
+                        onClick={() => {
+                          this.setState({ anchorElBoard: this.mcuRef.current })
+                        }}
                         sx={{ display: { xs: 'none', md: 'block' } }}
                       >
                         <FontAwesomeIcon
@@ -161,7 +166,10 @@ class Navbar extends Component {
                     ) : (
                       <button
                         style={{ display: "flex", cursor: "pointer", alignItems: "center", alignContent: "center", paddingInline: "11px 7px", background: "transparent", color: "inherit", fontWeight: "bold", border: "2px solid white", borderRadius: "25px" }}
-                        onClick={(event) => { this.setState({ anchorElBoard: event.target }) }}
+                        ref={this.mcuRef}
+                        onClick={() => {
+                          this.setState({ anchorElBoard: this.mcuRef.current })
+                        }}
                       >
                         <FontAwesomeIcon
                           icon={faMicrochip}
@@ -217,7 +225,10 @@ class Navbar extends Component {
                     (
                       <button
                         style={{ display: "flex", cursor: "pointer", alignItems: "center", alignContent: "center", paddingInline: "11px 7px", background: "transparent", color: "inherit", fontWeight: "bold", border: "2px solid white", borderRadius: "25px" }}
-                        onClick={(event) => { this.setState({ anchorElLang: event.target }) }}
+                        ref={this.langRef}
+                        onClick={() => {
+                          this.setState({ anchorElLang: this.langRef.current })
+                        }}
                         sx={{ display: { xs: 'none', md: 'block' } }}
                       >
                         <FontAwesomeIcon
@@ -233,7 +244,10 @@ class Navbar extends Component {
                     ) : (
                       <button
                         style={{ display: "flex", cursor: "pointer", alignItems: "center", alignContent: "center", paddingInline: "11px 7px", background: "transparent", color: "inherit", fontWeight: "bold", border: "2px solid white", borderRadius: "25px" }}
-                        onClick={(event) => { this.setState({ anchorElLang: event.target }) }}
+                        ref={this.langRef}
+                        onClick={() => {
+                          this.setState({ anchorElLang: this.langRef.current })
+                        }}
                       >
                         <FontAwesomeIcon
                           icon={faEarthEurope}
