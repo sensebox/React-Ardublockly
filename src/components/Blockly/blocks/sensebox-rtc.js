@@ -118,7 +118,7 @@ Blockly.Blocks["sensebox_internal_rtc_get"] = {
           [Blockly.Msg.sensebox_internal_rtc_year, "Year"],
           [Blockly.Msg.sensebox_internal_rtc_month, "Month"],
           [Blockly.Msg.sensebox_internal_rtc_day, "Day"],
-          [Blockly.Msg.sensebox_internal_rtc_hour, "Hour"],
+          [Blockly.Msg.sensebox_internal_rtc_hour, "Hours"],
           [Blockly.Msg.sensebox_internal_rtc_minutes, "Minutes"],
           [Blockly.Msg.sensebox_internal_rtc_seconds, "Seconds"],
         ]),
