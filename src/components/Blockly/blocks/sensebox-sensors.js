@@ -186,7 +186,7 @@ Blockly.Blocks["sensebox_sensor_bme680_bsec"] = {
     var dropdownOptions = [
       [Blockly.Msg.senseBox_temp, "temperature"],
       [Blockly.Msg.senseBox_hum, "humidity"],
-      [Blockly.Msg.senseBox_pressure, "pressure"],
+      [Blockly.Msg.senseBox_bme_pressure, "pressure"],
       [Blockly.Msg.senseBox_bme_iaq, "IAQ"],
       [Blockly.Msg.senseBox_bme_iaq_accuracy, "IAQAccuracy"],
       [Blockly.Msg.senseBox_bme_co2, "CO2"],

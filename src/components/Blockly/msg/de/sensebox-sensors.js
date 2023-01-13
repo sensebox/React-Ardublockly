@@ -140,6 +140,7 @@ Wenn die maximale Distanz überschritten wird, wird ein Wert von **O** ausgegebe
   senseBox_bme_iaq: "Innenraumluftqualität (IAQ)",
   senseBox_bme_iaq_accuracy: "Kalibrierungswert",
   senseBox_bme_co2: "CO2 Äquivalent",
+  senseBox_bme_pressure: "Luftdruck in Pa",
   senseBox_bme_breatheVocEquivalent: "Atemluft VOC Äquivalent",
   senseBox_bme_tooltip: `Schließe den Umweltsensor an einen der 5 **I2C-Anschlüsse** an. **Beachte:** Der Sensor benöigt eine gewisse Zeit zum kalibrieren. 
 Den Status der Kalibrierung kann über den Kalibrierungswert abgelesen werden. Er ist entweder 0, 1, 2 oder 3 und sagt folgendes aus:

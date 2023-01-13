@@ -141,6 +141,7 @@ If the max distance is reached the a value of **O** will be returned`,
   senseBox_bme680: "Environmental sensor (BME680)",
   senseBox_bme_iaq: "Indoor Air Quality (IAQ)",
   senseBox_bme_iaq_accuracy: "Calibration Value",
+  senseBox_bme_pressure: "Airpressure in Pa",
   senseBox_bme_co2: "CO2 Equivalent",
   senseBox_bme_breatheVocEquivalent: "Breathe VOC Equivalent",
   senseBox_bme_tooltip: `Connect the environmental sensor to one of the 5 **I2C ports**. **Note:** The sensor needs some time to calibrate. 
