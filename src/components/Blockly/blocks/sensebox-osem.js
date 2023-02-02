@@ -19,6 +19,7 @@ Blockly.Blocks["sensebox_osem_connection"] = {
     this.setColour(getColour().sensebox);
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_osem_connection)
+      .appendField( new Blockly.FieldDropdown([[Blockly.Msg.senseBox_osem_host, "opensensemap.org"], [Blockly.Msg.senseBox_osem_host_testing, "testing.opensensemap.org"]]), "HOST")
       .appendField("SSL")
       .appendField(new Blockly.FieldCheckbox(ssl), "SSL");
     this.appendDummyInput()
@@ -53,6 +54,10 @@ Blockly.Blocks["sensebox_osem_connection"] = {
       .setAlign(Blockly.ALIGN_LEFT)
       .appendField(Blockly.Msg.senseBox_osem_access_token)
       .appendField(new Blockly.FieldTextInput("access_token"), "access_token");
+    this.appendDummyInput()
+      .setAlign(Blockly.ALIGN_LEFT)
+      .appendField(Blockly.Msg.senseBox_osem_xallowtoken)
+      .appendField(new Blockly.FieldTextInput("ratelimit-token"), "ratelimit-token");
     this.appendStatementInput("DO")
       .appendField(Blockly.Msg.senseBox_sensor)
       .setCheck(null);
