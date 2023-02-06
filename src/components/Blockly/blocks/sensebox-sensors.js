@@ -118,7 +118,7 @@ Blockly.Blocks["sensebox_sensor_sds011"] = {
       .appendField(Blockly.Msg.senseBox_sds011_dimension)
       .appendField(
         new Blockly.FieldDropdown(
-          selectedBoard().serial),
+          selectedBoard().serialSensors),
         "SERIAL"
       );
     this.setOutput(true, Types.DECIMAL.typeName);
@@ -191,7 +191,7 @@ Blockly.Blocks["sensebox_sensor_bme680_bsec"] = {
     var dropdownOptions = [
       [Blockly.Msg.senseBox_temp, "temperature"],
       [Blockly.Msg.senseBox_hum, "humidity"],
-      [Blockly.Msg.senseBox_pressure, "pressure"],
+      [Blockly.Msg.senseBox_bme_pressure, "pressure"],
       [Blockly.Msg.senseBox_bme_iaq, "IAQ"],
       [Blockly.Msg.senseBox_bme_iaq_accuracy, "IAQAccuracy"],
       [Blockly.Msg.senseBox_bme_co2, "CO2"],
@@ -571,5 +571,33 @@ Blockly.Blocks["sensebox_sensor_dps310"] = {
     } else {
       this.removeInput("extraField", true);
     }
+  },
+};
+
+/**
+ * Sensirion SPS30 Fine Particular Matter Sensor
+ * added 02.12.2022 
+ */
+
+ Blockly.Blocks["sensebox_sensor_sps30"] = {
+  init: function () {
+    this.appendDummyInput().appendField(Blockly.Msg.senseBox_sps30);
+    this.appendDummyInput()
+      .setAlign(Blockly.ALIGN_LEFT)
+      .appendField(Blockly.Msg.senseBox_value)
+      .appendField(
+        new Blockly.FieldDropdown([
+          [Blockly.Msg.senseBox_sps30_1p0, "1p0"],
+          [Blockly.Msg.senseBox_sps30_2p5, "2p5"],
+          [Blockly.Msg.senseBox_sps30_4p0, "4p0"],
+          [Blockly.Msg.senseBox_sps30_10p0, "10p0"],
+        ]),
+        "value"
+      )
+      .appendField(Blockly.Msg.senseBox_sps30_dimension);
+    this.setOutput(true, Types.DECIMAL.typeName);
+    this.setColour(getColour().sensebox);
+    this.setTooltip(Blockly.Msg.senseBox_sps30_tooltip);
+    this.setHelpUrl(Blockly.Msg.senseBox_sps30_helpurl);
   },
 };

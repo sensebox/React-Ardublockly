@@ -141,6 +141,7 @@ If the max distance is reached the a value of **O** will be returned`,
   senseBox_bme680: "Environmental sensor (BME680)",
   senseBox_bme_iaq: "Indoor Air Quality (IAQ)",
   senseBox_bme_iaq_accuracy: "Calibration Value",
+  senseBox_bme_pressure: "Airpressure in Pa",
   senseBox_bme_co2: "CO2 Equivalent",
   senseBox_bme_breatheVocEquivalent: "Breathe VOC Equivalent",
   senseBox_bme_tooltip: `Connect the environmental sensor to one of the 5 **I2C ports**. **Note:** The sensor needs some time to calibrate. 
@@ -205,4 +206,23 @@ The measured values for temperature, humidity and air pressure can be used direc
    *
    */
   senseBox_watertemperature: "Water Temperature",
+
+
+    /**
+   * Feinstaubsensor Sensirion SPS30
+   */
+
+     senseBox_sps30: "Particulate Matter Sensor (Sensirion SPS30)",
+     senseBox_sps30_dimension: "in µg/m³",
+     senseBox_sps30_1p0: "PM1.0",
+     senseBox_sps30_2p5: "PM2.5",
+     senseBox_sps30_4p0: "PM4.0",
+     senseBox_sps30_10p0: "PM10",
+     senseBox_sps30_tooltip:
+     "This block gives you the measured value of the Sensirion SPS30 fine dust sensor. Connect the fine dust sensor to one of the 5 **I2C** connectors. Select between PM1.0, PM2.5, PM4.0 and PM10 in the dropdown menu. The measured value will be displayed as **decimal** in µg/m3",
+     senseBox_sps30_helpurl:
+       "https://docs.sensebox.de/hardware/sensoren-feinstaub/",
+   
+  
+
 };

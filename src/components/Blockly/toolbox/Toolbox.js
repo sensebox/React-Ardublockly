@@ -1,5 +1,5 @@
 import React from "react";
-import { Block, Value, Field, Shadow, Category } from "../";
+import { Block, Value, Field, Shadow, Category, Sep, Label } from "../";
 import { getColour } from "../helpers/colour";
 import "@blockly/block-plus-minus";
 import { TypedVariableModal } from "@blockly/plugin-typed-variable-modal";
@@ -61,6 +61,7 @@ class Toolbox extends React.Component {
           <Block type="sensebox_sensor_uv_light" />
           <Block type="sensebox_sensor_bmx055_accelerometer" />
           <Block type="sensebox_sensor_sds011" />
+          <Block type="sensebox_sensor_sps30" />
           <Block type="sensebox_sensor_pressure" />
           <Block type="sensebox_sensor_dps310" />
           <Block type="sensebox_sensor_bme680_bsec" />
@@ -295,7 +296,7 @@ class Toolbox extends React.Component {
             </Value>
           </Block>
         </Category>
-        
+
         {/* <Category name="Telegram" colour={getColour().sensebox}>
           <Block type="sensebox_telegram" />
           <Block type="sensebox_telegram_do" />
@@ -502,42 +503,63 @@ class Toolbox extends React.Component {
           <Block type="time_micros"></Block>
           <Block type="infinite_loop"></Block>
           <Block type="sensebox_interval_timer"></Block>
-          <Block type="sensebox_rtc_init"></Block>
-          <Block type="sensebox_rtc_set">
-            <Value name="second">
-              <Block type="math_number">
-                <Field name="NUM">00</Field>
-              </Block>
-            </Value>
-            <Value name="minutes">
-              <Block type="math_number">
-                <Field name="NUM">00</Field>
-              </Block>
-            </Value>
-            <Value name="hour">
-              <Block type="math_number">
-                <Field name="NUM">00</Field>
-              </Block>
-            </Value>
-            <Value name="day">
-              <Block type="math_number">
-                <Field name="NUM">01</Field>
-              </Block>
-            </Value>
-            <Value name="month">
-              <Block type="math_number">
-                <Field name="NUM">01</Field>
-              </Block>
-            </Value>
-            <Value name="year">
-              <Block type="math_number">
-                <Field name="NUM">1970</Field>
-              </Block>
-            </Value>
-          </Block>
-          {/* <Block type="sensebox_rtc_set_ntp"></Block> */}
-          <Block type="sensebox_rtc_get"></Block>
-          <Block type="sensebox_rtc_get_timestamp"></Block>
+          <Category
+            id="time"
+            name={Blockly.Msg.toolbox_rtc}
+            colour={getColour().time}
+          >
+            <Label text={Blockly.Msg.toolbox_label_externalRTC}></Label>
+            <Block type="sensebox_rtc_init"></Block>
+            <Block type="sensebox_rtc_set">
+              <Value name="second">
+                <Block type="math_number">
+                  <Field name="NUM">00</Field>
+                </Block>
+              </Value>
+              <Value name="minutes">
+                <Block type="math_number">
+                  <Field name="NUM">00</Field>
+                </Block>
+              </Value>
+              <Value name="hour">
+                <Block type="math_number">
+                  <Field name="NUM">00</Field>
+                </Block>
+              </Value>
+              <Value name="day">
+                <Block type="math_number">
+                  <Field name="NUM">01</Field>
+                </Block>
+              </Value>
+              <Value name="month">
+                <Block type="math_number">
+                  <Field name="NUM">01</Field>
+                </Block>
+              </Value>
+              <Value name="year">
+                <Block type="math_number">
+                  <Field name="NUM">1970</Field>
+                </Block>
+              </Value>
+            </Block>
+            {/* <Block type="sensebox_rtc_set_ntp"></Block> */}
+            <Block type="sensebox_rtc_get"></Block>
+            <Block type="sensebox_rtc_get_timestamp"></Block>
+            <Sep gap="40"></Sep>
+            <Label text={Blockly.Msg.toolbox_label_internalRTC}></Label>
+            <Block type="sensebox_internal_rtc_init"></Block>
+            <Block type="sensebox_internal_rtc_set"></Block>
+            <Block type="sensebox_internal_rtc_get"></Block>
+            <Block type="sensebox_internal_rtc_get_timestamp"></Block>
+          </Category>
+          <Category
+            id="timeUTP"
+            name={Blockly.Msg.toolbox_ntp}
+            colour={getColour().time}
+          >
+            <Block type="sensebox_ntp_init"></Block>
+            <Block type="sensebox_ntp_get"></Block>
+          </Category>
         </Category>
         <Category
           id="math"
@@ -642,16 +664,19 @@ class Toolbox extends React.Component {
               </Value>
             </Block>
           </Category>
-          <Category name={Blockly.Msg.toolbox_motors} colour={getColour().motors}>
-          <Block type="sensebox_motors_beginServoMotor" />
-          <Block type="sensebox_motors_moveServoMotor">
-            <Value name="degrees">
-              <Block type="math_number">
-                <Field name="NUM">90</Field>
-              </Block>
-            </Value>
-          </Block>
-          {/* <Block type="sensebox_motors_I2CMotorBoard_begin" />
+          <Category
+            name={Blockly.Msg.toolbox_motors}
+            colour={getColour().motors}
+          >
+            <Block type="sensebox_motors_beginServoMotor" />
+            <Block type="sensebox_motors_moveServoMotor">
+              <Value name="degrees">
+                <Block type="math_number">
+                  <Field name="NUM">90</Field>
+                </Block>
+              </Value>
+            </Block>
+            {/* <Block type="sensebox_motors_I2CMotorBoard_begin" />
           <Block type="sensebox_motors_I2CMotorBoard_moveDCMotor">
             <Value name="speed">
               <Block type="math_number">
@@ -668,7 +693,7 @@ class Toolbox extends React.Component {
               </Block>
             </Value>
           </Block> */}
-        </Category>
+          </Category>
           <Category name="Watchdog" colour={getColour().io}>
             <Block type="watchdog_enable"></Block>
             <Block type="watchdog_reset"></Block>

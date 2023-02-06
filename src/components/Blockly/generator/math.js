@@ -275,10 +275,15 @@ Blockly.Arduino["math_change"] = function (block) {
       "DELTA",
       Blockly.Arduino.ORDER_ADDITIVE
     ) || "0";
-  var varName = Blockly.Arduino.nameDB_.getName(
-    block.getFieldValue("VAR"),
-    Blockly.Variables.NAME_TYPE
-  );
+  var id = block.getFieldValue("VAR")
+  const varName = Blockly.Variables.getVariable(
+      Blockly.getMainWorkspace(),
+      id
+    ).name;
+  // var varName = Blockly.Arduino.nameDB_.getName(
+  //   block.getFieldValue("VAR"),
+  //   Blockly.Variables.NAME_TYPE
+  // );
   return varName + " += " + argument0 + ";\n";
 };
 
