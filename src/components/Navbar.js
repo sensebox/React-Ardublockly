@@ -365,6 +365,11 @@ class Navbar extends Component {
                     </div>
                     <hr style={{ borderTop: "3px solid #bbb", marginLeft: "5px", marginRight: "5px" }} />
                     <MenuItem>
+                      <Link to={"/user"} style={{ textDecoration: 'none', color: "black" }}>
+                        {Blockly.Msg.navbar_account}
+                      </Link>
+                    </MenuItem>
+                    <MenuItem>
                       <Link to={"/settings"} style={{ textDecoration: 'none', color: "black" }}>
                         {Blockly.Msg.navbar_settings}
                       </Link>
