@@ -43,7 +43,7 @@ class BlocklyWindow extends Component {
 
   componentDidUpdate(props) {
     const workspace = Blockly.getMainWorkspace();
-    var xml = this.props.initialXml;
+    var xml = localStorage.getItem("autoSaveXML");
     if (props.selectedBoard !== this.props.selectedBoard) {
       // change board
       if(!xml) xml = initialXml;

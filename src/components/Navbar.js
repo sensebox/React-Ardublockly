@@ -37,10 +37,19 @@ import {
   faLightbulb,
   faCode,
   faPuzzlePiece,
+  faUser,
+  faMicrochip,
+  faEarthEurope,
+  faEarthAmericas,
+  faCaretDown
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Blockly from "blockly";
 import Tooltip from "@mui/material/Tooltip";
+import MenuItem from '@mui/material/MenuItem'
+import Menu from '@mui/material/Menu'
+import { setLanguage } from "../actions/generalActions";
+import { setBoard } from "../actions/boardAction";
 
 const styles = (theme) => ({
   drawerWidth: {
@@ -60,9 +69,14 @@ const styles = (theme) => ({
 class Navbar extends Component {
   constructor(props) {
     super(props);
+    this.langRef = React.createRef();
+    this.mcuRef = React.createRef();
     this.state = {
       open: false,
       isTourOpen: false,
+      anchorElLang: null,
+      anchorElBoard: null,
+      anchorElUser: null
     };
   }
 
@@ -80,7 +94,6 @@ class Navbar extends Component {
 
   render() {
     var isHome = /^\/(\/.*$|$)/g.test(this.props.location.pathname);
-    var isTutorial = /^\/tutorial(\/.*$|$)/g.test(this.props.location.pathname);
     var isAssessment =
       /^\/tutorial\/.{1,}$/g.test(this.props.location.pathname) &&
       !this.props.tutorialIsLoading &&
@@ -127,55 +140,257 @@ class Navbar extends Component {
             <Link to={"/"} style={{ marginLeft: "10px" }}>
               <img src={senseboxLogo} alt="senseBox-Logo" width="30" />
             </Link>
-            {isTutorial ? (
-              <Link
-                to={"/tutorial"}
-                style={{
-                  textDecoration: "none",
-                  color: "inherit",
-                  marginLeft: "10px",
+            <div style={{ margin: "0 0 0 auto", display: "flex", alignItems: 'center', justifyContent: 'center' }} sx={{ display: 'none' }}>
+              <div>
+                {
+                  this.props.selectedBoard === "mcu" ?
+                    (
+                      <button
+                        style={{ display: "flex", cursor: "pointer", alignItems: "center", alignContent: "center", paddingInline: "11px 7px", background: "transparent", color: "inherit", fontWeight: "bold", border: "2px solid white", borderRadius: "25px" }}
+                        ref={this.mcuRef}
+                        onClick={() => {
+                          this.setState({ anchorElBoard: this.mcuRef.current })
+                        }}
+                        sx={{ display: { xs: 'none', md: 'block' } }}
+                      >
+                        <FontAwesomeIcon
+                          icon={faMicrochip}
+                          style={{ blockSize: "24px", inlineSize: "24px", marginInline: "0px 8px" }}
+                        />
+                        <span>MCU</span>
+                        <FontAwesomeIcon
+                          icon={faCaretDown}
+                          style={{ blockSize: "24px", inlineSize: "24px" }}
+                        />
+                      </button>
+                    ) : (
+                      <button
+                        style={{ display: "flex", cursor: "pointer", alignItems: "center", alignContent: "center", paddingInline: "11px 7px", background: "transparent", color: "inherit", fontWeight: "bold", border: "2px solid white", borderRadius: "25px" }}
+                        ref={this.mcuRef}
+                        onClick={() => {
+                          this.setState({ anchorElBoard: this.mcuRef.current })
+                        }}
+                      >
+                        <FontAwesomeIcon
+                          icon={faMicrochip}
+                          style={{ blockSize: "24px", inlineSize: "24px", marginInline: "0px 8px" }}
+                        />
+                        <span>mini</span>
+                        <FontAwesomeIcon
+                          icon={faCaretDown}
+                          style={{ blockSize: "24px", inlineSize: "24px" }} />
+                      </button>
+
+                    )
+                }
+                <Menu
+                  anchorEl={this.state.anchorElBoard}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center',
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center',
+                  }}
+                  open={Boolean(this.state.anchorElBoard)}
+                  onClose={() => {
+                    this.setState({ anchorElBoard: null });
+                  }}
+                >
+                  <MenuItem
+                    value="mcu"
+                    onClick={(event) => {
+                      this.props.setBoard(event.currentTarget.getAttribute("value"));
+                      this.setState({ anchorElBoard: null });
+                    }}
+                  >
+                    MCU
+                  </MenuItem>
+                  <MenuItem
+                    value="mini"
+                    onClick={(event) => {
+                      this.props.setBoard(event.currentTarget.getAttribute("value"));
+                      this.setState({ anchorElBoard: null });
+                    }}
+                  >
+                    mini
+                  </MenuItem>
+                </Menu>
+              </div>
+              <div>
+                {
+                  this.props.language === "en_US" ?
+                    (
+                      <button
+                        style={{ display: "flex", cursor: "pointer", alignItems: "center", alignContent: "center", paddingInline: "11px 7px", background: "transparent", color: "inherit", fontWeight: "bold", border: "2px solid white", borderRadius: "25px" }}
+                        ref={this.langRef}
+                        onClick={() => {
+                          this.setState({ anchorElLang: this.langRef.current })
+                        }}
+                        sx={{ display: { xs: 'none', md: 'block' } }}
+                      >
+                        <FontAwesomeIcon
+                          icon={faEarthAmericas}
+                          style={{ blockSize: "24px", inlineSize: "24px", marginInline: "0px 8px" }}
+                        />
+                        <span>English</span>
+                        <FontAwesomeIcon
+                          icon={faCaretDown}
+                          style={{ blockSize: "24px", inlineSize: "24px" }}
+                        />
+                      </button>
+                    ) : (
+                      <button
+                        style={{ display: "flex", cursor: "pointer", alignItems: "center", alignContent: "center", paddingInline: "11px 7px", background: "transparent", color: "inherit", fontWeight: "bold", border: "2px solid white", borderRadius: "25px" }}
+                        ref={this.langRef}
+                        onClick={() => {
+                          this.setState({ anchorElLang: this.langRef.current })
+                        }}
+                      >
+                        <FontAwesomeIcon
+                          icon={faEarthEurope}
+                          style={{ blockSize: "24px", inlineSize: "24px", marginInline: "0px 8px" }}
+                        />
+                        <span>Deutsch</span>
+                        <FontAwesomeIcon
+                          icon={faCaretDown}
+                          style={{ blockSize: "24px", inlineSize: "24px" }} />
+                      </button>
+
+                    )
+                }
+                <Menu
+                  anchorEl={this.state.anchorElLang}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center',
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center',
+                  }}
+                  open={Boolean(this.state.anchorElLang)}
+                  onClose={() => {
+                    this.setState({ anchorElLang: null });
+                  }}
+                >
+                  <MenuItem
+                    value="de_DE"
+                    onClick={(event) => {
+                      this.props.setLanguage(event.currentTarget.getAttribute("value"));
+                      this.setState({ anchorElLang: null });
+                    }}
+                  >
+                    Deutsch
+                  </MenuItem>
+                  <MenuItem
+                    value="en_US"
+                    onClick={(event) => {
+                      this.props.setLanguage(event.currentTarget.getAttribute("value"));
+                      this.setState({ anchorElLang: null });
+                    }}
+                  >
+                    English
+                  </MenuItem>
+                </Menu>
+              </div>
+              {isHome ? (
+                <Tooltip title={'Start Tour'} arrow>
+                  <IconButton
+                    color="inherit"
+                    className={`openTour ${this.props.classes.button}`}
+                    onClick={() => {
+                      this.openTour();
+                    }}
+                    size="large">
+                    <FontAwesomeIcon icon={faQuestionCircle} />
+                  </IconButton>
+                </Tooltip>
+              ) : null}
+              {isAssessment ? (
+                <Tooltip title={'Start tour'} arrow>
+                  <IconButton
+                    color="inherit"
+                    className={`openTour ${this.props.classes.button}`}
+                    onClick={() => {
+                      this.openTour();
+                    }}
+                    size="large">
+                    <FontAwesomeIcon icon={faQuestionCircle} />
+                  </IconButton>
+                </Tooltip>
+              ) : null}
+              <Tour
+                steps={isHome ? home() : assessment()}
+                isOpen={this.state.isTourOpen}
+                onRequestClose={() => {
+                  this.closeTour();
                 }}
-              >
-                <Typography variant="h6" noWrap>
-                  Tutorial
-                </Typography>
-              </Link>
-            ) : null}
-            {isHome ? (
-              <Tooltip title={'Start Tour'} arrow>
-                <IconButton
-                  color="inherit"
-                  className={`openTour ${this.props.classes.button}`}
-                  onClick={() => {
-                    this.openTour();
-                  }}
-                  style={{ margin: "0 30px 0 auto" }}
-                  size="large">
-                  <FontAwesomeIcon icon={faQuestionCircle} />
-                </IconButton>
-              </Tooltip>
-            ) : null}
-            {isAssessment ? (
-              <Tooltip title={'Start tour'} arrow>
-                <IconButton
-                  color="inherit"
-                  className={`openTour ${this.props.classes.button}`}
-                  onClick={() => {
-                    this.openTour();
-                  }}
-                  style={{ margin: "0 30px 0 auto" }}
-                  size="large">
-                  <FontAwesomeIcon icon={faQuestionCircle} />
-                </IconButton>
-              </Tooltip>
-            ) : null}
-            <Tour
-              steps={isHome ? home() : assessment()}
-              isOpen={this.state.isTourOpen}
-              onRequestClose={() => {
-                this.closeTour();
-              }}
-            />
+              />
+              {this.props.user ? (
+                <div>
+                  <IconButton
+                    color="inherit"
+                    onClick={(event) => { this.setState({ anchorElUser: event.target }) }}
+                    style={{ margin: "0 30px 0 auto" }}
+                    size="large"
+                    sx={{ display: { xs: 'none', md: 'block' } }}
+                  >
+                    <FontAwesomeIcon icon={faUser} />
+                  </IconButton>
+                  <Menu
+                    anchorEl={this.state.anchorElUser}
+                    anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'center',
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'center',
+                    }}
+                    open={Boolean(this.state.anchorElUser)}
+                    onClose={() => { this.setState({ anchorElUser: null }); }}
+                  >
+                    <div className="" style={{ paddingLeft: "16px", paddingRight: "16px", paddingTop: "16px" }}>
+                      <p style={{ fontWeight: "bold", margin: "0px" }}>
+                        {this.props.user.name}
+                      </p>
+                      <p style={{ marginTop: "0px", color: "#696969" }}>
+                        {this.props.user.email}
+                      </p>
+                    </div>
+                    <hr style={{ borderTop: "3px solid #bbb", marginLeft: "5px", marginRight: "5px" }} />
+                    <MenuItem>
+                      <Link to={"/settings"} style={{ textDecoration: 'none', color: "black" }}>
+                        {Blockly.Msg.navbar_settings}
+                      </Link>
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        this.props.logout()
+                      }}
+                    >
+                      {Blockly.Msg.navbar_logout}
+                    </MenuItem>
+                  </Menu>
+                </div>
+              )
+                :
+                (<Link to={"/user/login"} style={{ textDecoration: 'none', color: "white" }}>
+                  <IconButton
+                    color="inherit"
+                    style={{ margin: "0 0 0 auto" }}
+                  >
+                    <FontAwesomeIcon icon={faUser} />
+                  </IconButton>
+                </Link>
+                )
+              }
+            </div>
           </Toolbar>
         </AppBar>
         <Drawer
@@ -369,6 +584,10 @@ Navbar.propTypes = {
   user: PropTypes.object,
   tutorial: PropTypes.object,
   activeStep: PropTypes.number.isRequired,
+  setLanguage: PropTypes.func.isRequired,
+  language: PropTypes.string.isRequired,
+  setBoard: PropTypes.func.isRequired,
+  selectedBoard: PropTypes.string.isRequired
 };
 
 const mapStateToProps = (state) => ({
@@ -378,8 +597,10 @@ const mapStateToProps = (state) => ({
   user: state.auth.user,
   tutorial: state.tutorial.tutorials[0],
   activeStep: state.tutorial.activeStep,
+  language: state.general.language,
+  selectedBoard: state.board.board
 });
 
-export default connect(mapStateToProps, { logout })(
+export default connect(mapStateToProps, { logout, setLanguage, setBoard })(
   withStyles(styles, { withTheme: true })(withRouter(Navbar))
 );
