@@ -4,12 +4,22 @@
     "name": "senseBox MCU",
     "src": "senseboxmcu.png",
     "url": "https://docs.sensebox.de/hardware/allgemein-sensebox-mcu/",
+    "category": "boards",
     "description": "test"
+  },
+  {
+    "id": "senseboxmcumini",
+    "name": "senseBox MCU:mini",
+    "src": "senseboxmcumini.png",
+    "url": "https://docs.sensebox.de/hardware/allgemein-sensebox-mcu-mini/",
+    "category": "boards",
+    "description": ""
   },
   {
     "id": "breadboard",
     "name": "Breadboard",
     "src": "breadboard.png",
+    "category": "misc",
     "url": ""
   },
   {
@@ -56,8 +66,14 @@
   },
   {
     "id": "feinstaub",
-    "name": "Feinstaubsensor",
+    "name": "Feinstaubsensor (SDS011)",
     "src": "feinstaub.png",
+    "url": "https://docs.sensebox.de/hardware/sensoren-feinstaub/"
+  },
+  {
+    "id": "feinstaub-sps30",
+    "name": "Feinstaubsensor (SPS30)",
+    "src": "sps30.png",
     "url": "https://docs.sensebox.de/hardware/sensoren-feinstaub/"
   },
   {
@@ -140,8 +156,14 @@
   },
   {
     "id": "ds1820b",
-    "name": "Wassertemperatur",
-    "src": "ws2818.png",
+    "name": "Wassertemperatur Sensor",
+    "src": "wassertemp.png",
+    "url": ""
+  },
+  {
+    "id": "expander",
+    "name": "I2C Expander",
+    "src": "expander.png",
     "url": ""
   },
   {
@@ -160,6 +182,18 @@
     "id": "jst-female",
     "name": "JST-JST Kabel",
     "src": "jst-jst.png",
+    "url": ""
+  },
+  {
+    "id": "jst-qwiic",
+    "name": "JST-QWIIC Kabel",
+    "src": "jst-qwiic.png",
+    "url": ""
+  },
+  {
+    "id": "qwiic-qwiic",
+    "name": "QWIIC-QWICC Kabel",
+    "src": "qwiic-qwiic.png",
     "url": ""
   },
   {

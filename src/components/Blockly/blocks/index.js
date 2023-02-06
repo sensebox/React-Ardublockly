@@ -10,6 +10,7 @@ import "./sensebox-motors";
 import "./sensebox-lora";
 import "./sensebox-led";
 import "./sensebox-rtc";
+import "./sensebox-ntp";
 import "./sensebox-ble";
 import "./sensebox-sd";
 import "./mqtt";
