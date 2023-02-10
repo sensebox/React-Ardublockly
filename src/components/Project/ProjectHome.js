@@ -140,7 +140,7 @@ class ProjectHome extends Component {
                             svg
                             blockDisabled
                             initialXml={project.xml}
-                          />
+                          /> 
                           <Typography
                             variant="body2"
                             style={{

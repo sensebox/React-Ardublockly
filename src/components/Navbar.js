@@ -146,7 +146,7 @@ class Navbar extends Component {
                   this.props.selectedBoard === "mcu" ?
                     (
                       <button
-                        style={{ display: "flex", cursor: "pointer", alignItems: "center", alignContent: "center", paddingInline: "11px 7px", background: "transparent", color: "inherit", fontWeight: "bold", border: "2px solid white", borderRadius: "25px" }}
+                        style={{ display: "flex", marginRight:"1rem", cursor: "pointer", alignItems: "center", alignContent: "center", paddingInline: "11px 7px", background: "transparent", color: "inherit", fontWeight: "bold", border: "2px solid white", borderRadius: "25px" }}
                         ref={this.mcuRef}
                         onClick={() => {
                           this.setState({ anchorElBoard: this.mcuRef.current })
