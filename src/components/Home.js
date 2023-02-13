@@ -14,10 +14,10 @@ import TrashcanButtons from "./Workspace/TrashcanButtons";
 // import HintTutorialExists from "./Tutorial/HintTutorialExists";
 import DeviceSelection from "./DeviceSelection";
 
-import Grid from "@material-ui/core/Grid";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
-import { withStyles } from "@material-ui/core/styles";
+import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import withStyles from '@mui/styles/withStyles';
 
 import { faCode } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -160,8 +160,8 @@ class Home extends Component {
                   zIndex: 21,
                 }}
                 onClick={() => this.onChange()}
-              >
-                <FontAwesomeIcon icon={faCode} size="xs" />
+                size="large">
+                <FontAwesomeIcon icon={faCode}  size="xs" />
               </IconButton>
             </Tooltip>
 

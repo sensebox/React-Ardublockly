@@ -17,11 +17,11 @@ import clsx from "clsx";
 import Breadcrumbs from "../Breadcrumbs";
 
 import { Link } from "react-router-dom";
-import { alpha } from "@material-ui/core/styles";
-import { withStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
+import { alpha } from "@mui/material/styles";
+import withStyles from '@mui/styles/withStyles';
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
 
 import {
   faCheck,
@@ -33,10 +33,11 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Blockly from "blockly";
 import ReactStars from "react-rating-stars-component";
-import Tooltip from "@material-ui/core/Tooltip";
-import IconButton from "@material-ui/core/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
 import Snackbar from "../Snackbar";
-import Divider from "@material-ui/core/Divider";
+import Divider from "@mui/material/Divider";
+import DeviceSelection from "../DeviceSelection";
 
 const styles = (theme) => ({
   outerDiv: {
@@ -243,14 +244,11 @@ class TutorialHome extends Component {
                             cy="50%"
                             fill="none"
                             stroke-width="10"
-                            stroke-dashoffset={`${
-                              75 * 2 * Math.PI * (1 - (50 / 100 + success / 2))
-                            }`}
-                            stroke-dasharray={`${
-                              75 * 2 * Math.PI * (1 - (50 / 100 - success / 2))
-                            } ${
-                              75 * 2 * Math.PI * (1 - (50 / 100 + success / 2))
-                            }`}
+                            stroke-dashoffset={`${75 * 2 * Math.PI * (1 - (50 / 100 + success / 2))
+                              }`}
+                            stroke-dasharray={`${75 * 2 * Math.PI * (1 - (50 / 100 - success / 2))
+                              } ${75 * 2 * Math.PI * (1 - (50 / 100 + success / 2))
+                              }`}
                           ></circle>
                         )}
                         {success < 1 && !error ? (
@@ -265,9 +263,8 @@ class TutorialHome extends Component {
                             cy="50%"
                             fill="none"
                             stroke-width="10"
-                            stroke-dashoffset={`${
-                              75 * 2 * Math.PI * (1 - (50 / 100 + success / 2))
-                            }`}
+                            stroke-dashoffset={`${75 * 2 * Math.PI * (1 - (50 / 100 + success / 2))
+                              }`}
                             stroke-dasharray={`${75 * 2 * Math.PI}`}
                           ></circle>
                         ) : null}
@@ -279,8 +276,8 @@ class TutorialHome extends Component {
                         tutorialStatus === "Error"
                           ? this.props.classes.outerDivError
                           : tutorialStatus === "Success"
-                          ? this.props.classes.outerDivSuccess
-                          : null
+                            ? this.props.classes.outerDivSuccess
+                            : null
                       )}
                     >
                       <div className={this.props.classes.innerDiv}>
@@ -290,6 +287,7 @@ class TutorialHome extends Component {
                             icon={
                               tutorialStatus === "Success" ? faCheck : faTimes
                             }
+                            
                           />
                         ) : (
                           <Typography
@@ -311,6 +309,7 @@ class TutorialHome extends Component {
             );
           })}
         </Grid>
+        <DeviceSelection />
         {this.props.user ? (
           <div>
             <h2>User Tutorials</h2>
@@ -381,8 +380,8 @@ class TutorialHome extends Component {
                                   type: "success",
                                 });
                               }}
-                            >
-                              <FontAwesomeIcon icon={faShareAlt} size="xs" />
+                              size="large">
+                              <FontAwesomeIcon icon={faShareAlt} size="xs"  />
                             </IconButton>
                           </Tooltip>
                           <Tooltip
@@ -392,8 +391,8 @@ class TutorialHome extends Component {
                             <IconButton
                               className={`publicTutorial ${this.props.classes.button}`}
                               disabled={!tutorial.public}
-                            >
-                              <FontAwesomeIcon icon={faEye} size="xs" />
+                              size="large">
+                              <FontAwesomeIcon icon={faEye} size="xs"  />
                             </IconButton>
                           </Tooltip>
                           {tutorial.review ? (
@@ -404,7 +403,7 @@ class TutorialHome extends Component {
                               <IconButton
                                 className={`publicTutorial ${this.props.classes.button}`}
                                 disabled={!tutorial.review}
-                              >
+                                size="large">
                                 <FontAwesomeIcon icon={faUserCheck} size="xs" />
                               </IconButton>
                             </Tooltip>

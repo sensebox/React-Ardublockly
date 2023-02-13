@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 
 import * as Blockly from 'blockly/core';
 
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
-import { withStyles } from '@material-ui/core/styles';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import withStyles from '@mui/styles/withStyles';
 
 import { faTimes, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -56,30 +56,28 @@ class TrashcanButtons extends Component {
   }
 
   render() {
-    return (
-      this.state.closeTrashFlyout ?
-        <div>
-          <Tooltip title={Blockly.Msg.tooltip_trashcan_hide}>
-            <IconButton
-              className={this.props.classes.closeTrash}
-              style={{ width: '40px', height: '40px', position: 'absolute', bottom: 10, right: 10, zIndex: 21 }}
-              onClick={() => this.closeTrashcan()}
-            >
-              <FontAwesomeIcon icon={faTimes} size="xs" />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title={Blockly.Msg.tooltip_trashcan_delete}>
-            <IconButton
-              className={this.props.classes.deleteTrash}
-              style={{ width: '40px', height: '40px', position: 'absolute', bottom: 10, right: 50, zIndex: 21 }}
-              onClick={() => this.clearTrashcan()}
-            >
-              <FontAwesomeIcon icon={faTrash} size="xs" />
-            </IconButton>
-          </Tooltip>
-        </div>
-        : null
-    );
+    return this.state.closeTrashFlyout ?
+      <div>
+        <Tooltip title={Blockly.Msg.tooltip_trashcan_hide}>
+          <IconButton
+            className={this.props.classes.closeTrash}
+            style={{ width: '40px', height: '40px', position: 'absolute', bottom: 10, right: 10, zIndex: 21 }}
+            onClick={() => this.closeTrashcan()}
+            size="large">
+            <FontAwesomeIcon icon={faTimes} size="xs" />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title={Blockly.Msg.tooltip_trashcan_delete}>
+          <IconButton
+            className={this.props.classes.deleteTrash}
+            style={{ width: '40px', height: '40px', position: 'absolute', bottom: 10, right: 50, zIndex: 21 }}
+            onClick={() => this.clearTrashcan()}
+            size="large">
+            <FontAwesomeIcon icon={faTrash} size="xs" />
+          </IconButton>
+        </Tooltip>
+      </div>
+      : null;
   };
 }
 

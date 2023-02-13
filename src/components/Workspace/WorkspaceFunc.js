@@ -75,7 +75,7 @@ class WorkspaceFunc extends Component {
           <ResetWorkspace
             style={
               this.props.projectType === "project" ||
-              this.props.projectType === "gallery"
+                this.props.projectType === "gallery"
                 ? { marginRight: "5px" }
                 : null
             }
@@ -83,10 +83,10 @@ class WorkspaceFunc extends Component {
         ) : null}
 
         {!this.props.assessment &&
-        (this.props.projectType === "project" ||
-          this.props.projectType === "gallery") &&
-        this.props.user &&
-        this.props.user.email === this.props.project.creator ? (
+          (this.props.projectType === "project" ||
+            this.props.projectType === "gallery") &&
+          this.props.user &&
+          this.props.user.email === this.props.project.creator ? (
           <DeleteProject
             project={this.props.project}
             projectType={this.props.projectType}

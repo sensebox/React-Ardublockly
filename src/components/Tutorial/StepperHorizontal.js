@@ -7,12 +7,12 @@ import { withRouter } from "react-router-dom";
 import clsx from "clsx";
 
 // import tutorials from '../../data/tutorials';
-import { alpha } from "@material-ui/core/styles";
+import { alpha } from "@mui/material/styles";
 
-import { withStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import Tooltip from "@material-ui/core/Tooltip";
-import Button from "@material-ui/core/Button";
+import withStyles from '@mui/styles/withStyles';
+import Typography from "@mui/material/Typography";
+import Tooltip from "@mui/material/Tooltip";
+import Button from "@mui/material/Button";
 
 import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -127,6 +127,7 @@ class StepperHorizontal extends Component {
                   <FontAwesomeIcon
                     className={this.props.classes.icon}
                     icon={tutorialStatus === "Success" ? faCheck : faTimes}
+                    
                   />
                 </div>
               ) : null}

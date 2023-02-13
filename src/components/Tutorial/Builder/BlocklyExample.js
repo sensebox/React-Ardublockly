@@ -15,13 +15,13 @@ import * as Blockly from "blockly/core";
 import { initialXml } from "../../Blockly//initialXml.js";
 import BlocklyWindow from "../../Blockly/BlocklyWindow";
 
-import { withStyles } from "@material-ui/core/styles";
-import Switch from "@material-ui/core/Switch";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import FormLabel from "@material-ui/core/FormLabel";
-import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
+import withStyles from '@mui/styles/withStyles';
+import Switch from "@mui/material/Switch";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormHelperText from "@mui/material/FormHelperText";
+import FormLabel from "@mui/material/FormLabel";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
 
 const styles = (theme) => ({
   errorColor: {
@@ -139,7 +139,6 @@ class BlocklyExample extends Component {
               <Switch
                 checked={this.state.checked}
                 onChange={(e) => this.onChange(e.target.checked)}
-                color="primary"
               />
             }
           />

@@ -4,11 +4,11 @@ import { connect } from "react-redux";
 
 import clsx from "clsx";
 import { withRouter, Link } from "react-router-dom";
-import { alpha } from "@material-ui/core/styles";
-import { withStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import List from "@material-ui/core/List";
-import Tooltip from "@material-ui/core/Tooltip";
+import { alpha } from "@mui/material/styles";
+import withStyles from '@mui/styles/withStyles';
+import Typography from "@mui/material/Typography";
+import List from "@mui/material/List";
+import Tooltip from "@mui/material/Tooltip";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
@@ -166,6 +166,7 @@ class Requirement extends Component {
                             icon={
                               tutorialStatus === "Success" ? faCheck : faTimes
                             }
+                            
                           />
                         ) : (
                           <Typography

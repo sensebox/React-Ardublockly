@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 
-import { withStyles } from '@material-ui/core/styles';
-import MaterialUIBreadcrumbs from '@material-ui/core/Breadcrumbs';
-import Typography from '@material-ui/core/Typography';
+import withStyles from '@mui/styles/withStyles';
+import MaterialUIBreadcrumbs from '@mui/material/Breadcrumbs';
+import Typography from '@mui/material/Typography';
 
 import { faHome } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -30,7 +30,7 @@ class Breadcrumbs extends Component {
       this.props.content && this.props.content.length > 0 ?
         <MaterialUIBreadcrumbs separator="›" style={{marginBottom: '20px'}}>
           <Link to={'/'} style={{textDecoration: 'none'}}>
-            <FontAwesomeIcon className={clsx(this.props.classes.home, this.props.classes.hover)} icon={faHome} size="xs"/>
+            <FontAwesomeIcon className={clsx(this.props.classes.home, this.props.classes.hover)} icon={faHome}  size="xs"/>
           </Link>
           {this.props.content.splice(0, this.props.content.length-1).map((content, i) => (
             <Link to={content.link} style={{textDecoration: 'none'}} key={i}>

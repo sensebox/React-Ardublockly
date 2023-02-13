@@ -2,15 +2,16 @@ import React from "react";
 import { useState, useRef } from "react";
 import { default as MonacoEditor } from "@monaco-editor/react";
 import { withRouter } from "react-router-dom";
-import { Button, Grid } from "@material-ui/core";
+import { Button, Grid } from "@mui/material";
 import Blockly from "blockly/core";
-import Divider from "@material-ui/core/Divider";
+import Divider from "@mui/material/Divider";
 import { saveAs } from "file-saver";
-import Drawer from "@material-ui/core/Drawer";
+import Drawer from "@mui/material/Drawer";
 import Sidebar from "./Sidebar";
 import Dialog from "../Dialog";
 import SaveIcon from "./SaveIcon";
 import store from "../../store";
+import DeviceSelection from "../DeviceSelection";
 
 const CodeEditor = (props) => {
   //const [filehandle, setFileHandle] = useState();
@@ -192,6 +193,7 @@ void loop() {
             }}
           />
         </Grid>
+        <DeviceSelection />
         <Grid item lg={4} md={4}>
           <Button
             style={{ padding: "1rem", margin: "1rem" }}

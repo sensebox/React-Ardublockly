@@ -8,7 +8,7 @@ import {
   deleteError,
 } from "../../../actions/tutorialBuilderActions";
 
-import FormControl from "@material-ui/core/FormControl";
+import FormControl from "@mui/material/FormControl";
 import MarkdownIt from "markdown-it";
 import Editor from "react-markdown-editor-lite";
 import "react-markdown-editor-lite/lib/index.css";

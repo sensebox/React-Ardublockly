@@ -21,8 +21,8 @@ import NotFound from "../NotFound";
 import * as Blockly from "blockly";
 import { detectWhitespacesAndReturnReadableResult } from "../../helpers/whitespace";
 
-import Card from "@material-ui/core/Card";
-import Button from "@material-ui/core/Button";
+import Card from "@mui/material/Card";
+import Button from "@mui/material/Button";
 
 class Tutorial extends Component {
   componentDidMount() {

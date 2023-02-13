@@ -19,14 +19,16 @@ export const UI = {
   toolbox_label_internalRTC: "Internal RTC",
   variable_NUMBER: "Number (int)",
   variable_SHORT_NUMBER: "char",
-  variable_LONG: " Zahl (long)",
+  variable_LONG: "Big number (long)",
   variable_DECIMAL: "Decimal (float)",
   variables_TEXT: "Text (string)",
   variables_ARRAY: "Array (array)",
-  variables_CHARACTER: "char (char)",
+  variables_CHARACTER: "Character (char)",
   variables_BOOLEAN: "Boolean (boolean)",
   variables_NULL: "void (void)",
   variables_UNDEF: "undefined",
+  variables_set: "set",
+  variables_to: "to",
 
   /**
    * Tooltips
@@ -149,6 +151,7 @@ export const UI = {
   button_next: "Next step",
   button_tutorial_overview: "Tutorial overview",
   button_login: "Login",
+  button_createVariable: "Create Typed Variable",
 
   /**
    *
@@ -305,12 +308,23 @@ export const UI = {
     "Your code will now be compiled and then downloaded to your computer",
 
   /**
-   * Device Selction
-   *  */
+  * Device Selection
+  * */ 
+
   deviceselection_head: "Which board are you using?",
   deviceselection_keep_selection:
     "Save my choice (You can change the board later in the settings)",
   deviceselection_footnote:
     "Here you can access the old blockly Version for the",
   deviceselection_footnote_02: "or the",
+
+  /**
+   * Sensor Markdown Information
+   * */
+  sensorinfo_info: "Informationen regarding the Sensor",
+  sensorinfo_description: "Description",
+  sensorinfo_measurable_phenos: "Measurable Phenomena",
+  sensorinfo_manufacturer: "Manufacturer",
+  sensorinfo_lifetime: "Lifetime",
+  sensorinfo_explanation: "This information was fetched from [sensors.wiki](https://sensors.wiki). For more information visit the section on this sensor ",
 };
