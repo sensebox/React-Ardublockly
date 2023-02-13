@@ -45,7 +45,7 @@ class BlocklyWindow extends Component {
     const workspace = Blockly.getMainWorkspace();
     var xml = this.props.initialXml;
     if (props.selectedBoard !== this.props.selectedBoard) {
-      var xml = localStorage.getItem("autoSaveXML");
+       xml = localStorage.getItem("autoSaveXML");
       // change board
       if(!xml) xml = initialXml;
       var xmlDom = Blockly.Xml.textToDom(xml);
@@ -63,7 +63,7 @@ class BlocklyWindow extends Component {
     }
     if (props.language !== this.props.language) {
       // change language
-      var xml = localStorage.getItem("autoSaveXML");
+       xml = localStorage.getItem("autoSaveXML");
       if (!xml) xml = initialXml;
        xmlDom = Blockly.Xml.textToDom(xml);
       Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, workspace);
