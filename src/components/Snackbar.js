@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
-import { withStyles } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
-import MaterialUISnackbar from '@material-ui/core/Snackbar';
-import SnackbarContent from '@material-ui/core/SnackbarContent';
+import withStyles from '@mui/styles/withStyles';
+import IconButton from '@mui/material/IconButton';
+import MaterialUISnackbar from '@mui/material/Snackbar';
+import SnackbarContent from '@mui/material/SnackbarContent';
 
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -69,8 +69,8 @@ class Snackbar extends Component {
           style={{flexWrap: 'nowrap'}}
           className={this.props.type === 'error' ? this.props.classes.error : this.props.classes.success}
           action={
-            <IconButton onClick={this.onClose} style={{color: 'inherit'}}>
-              <FontAwesomeIcon icon={faTimes} size="xs"/>
+            <IconButton onClick={this.onClose} style={{color: 'inherit'}} size="large">
+              <FontAwesomeIcon icon={faTimes} size="xs" />
             </IconButton>
           }
           message={this.props.message}

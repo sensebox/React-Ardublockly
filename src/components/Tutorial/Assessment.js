@@ -6,22 +6,26 @@ import { workspaceName } from "../../actions/workspaceActions";
 import BlocklyWindow from "../Blockly/BlocklyWindow";
 import WorkspaceFunc from "../Workspace/WorkspaceFunc";
 
-import withWidth, { isWidthDown } from "@material-ui/core/withWidth";
-import Grid from "@material-ui/core/Grid";
-import Card from "@material-ui/core/Card";
-import Typography from "@material-ui/core/Typography";
+import Grid from "@mui/material/Grid";
+import Card from "@mui/material/Card";
+import Typography from "@mui/material/Typography";
 import * as Blockly from "blockly";
 import { initialXml } from "../Blockly/initialXml";
-import IconButton from "@material-ui/core/IconButton";
+import IconButton from "@mui/material/IconButton";
 import CodeViewer from "../CodeViewer";
 import TooltipViewer from "../TooltipViewer";
-import Tooltip from "@material-ui/core/Tooltip";
+import Tooltip from "@mui/material/Tooltip";
 import ReactMarkdown from "react-markdown";
 import { faCode } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { withStyles } from "@material-ui/core/styles";
+import withStyles from '@mui/styles/withStyles';
 import remarkGfm from "remark-gfm";
 import remarkGemoji from "remark-gemoji";
+import { isWidthDown } from "../../helpers/handleBreakpoints";
+
+
+// FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
+const withWidth = () => (WrappedComponent) => (props) => <WrappedComponent {...props} width="xs" />;
 
 const styles = (theme) => ({
   codeOn: {
@@ -98,11 +102,10 @@ class Assessment extends Component {
               }
             >
               <IconButton
-                className={`showCode ${
-                  this.state.codeOn
+                className={`showCode ${this.state.codeOn
                     ? this.props.classes.codeOn
                     : this.props.classes.codeOff
-                }`}
+                  }`}
                 style={{
                   width: "40px",
                   height: "40px",
@@ -112,8 +115,8 @@ class Assessment extends Component {
                   zIndex: 21,
                 }}
                 onClick={() => this.onChange()}
-              >
-                <FontAwesomeIcon icon={faCode} size="xs" />
+                size="large">
+                <FontAwesomeIcon icon={faCode}  size="xs" />
               </IconButton>
             </Tooltip>
             <BlocklyWindow

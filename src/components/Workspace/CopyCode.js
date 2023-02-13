@@ -3,10 +3,10 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { workspaceName } from "../../actions/workspaceActions";
 
-import { withStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
+import withStyles from '@mui/styles/withStyles';
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
 
 import { faCopy } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -68,7 +68,7 @@ class CopyCode extends Component {
             <IconButton
               className={`copyCode ${this.props.classes.iconButton}`}
               onClick={() => this.copyCode()}
-            >
+              size="large">
               <FontAwesomeIcon icon={faCopy} size="xs" />
             </IconButton>
           </Tooltip>

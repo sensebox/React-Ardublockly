@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { changeContent, deleteProperty, deleteError } from '../../../actions/tutorialBuilderActions';
 
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 class StepType extends Component {
 
@@ -23,14 +23,14 @@ class StepType extends Component {
       <RadioGroup row value={this.props.value === 'task' ? 'task' : 'instruction'} onChange={(e) => this.onChange(e.target.value)}>
         <FormControlLabel style={{color: 'black'}}
           value="instruction"
-          control={<Radio color="primary" />}
+          control={<Radio />}
           label="Anleitung"
           labelPlacement="end"
         />
         <FormControlLabel style={{color: 'black'}}
           disabled={this.props.index === 0}
           value="task"
-          control={<Radio color="primary" />}
+          control={<Radio />}
           label="Aufgabe"
           labelPlacement="end"
         />

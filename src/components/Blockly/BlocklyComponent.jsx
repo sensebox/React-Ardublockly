@@ -27,7 +27,7 @@ import Blockly from "blockly/core";
 import "blockly/blocks";
 import Toolbox from "./toolbox/Toolbox";
 
-import { Card } from "@material-ui/core";
+import { Card } from "@mui/material";
 import {
   ScrollOptions,
   ScrollBlockDragger,

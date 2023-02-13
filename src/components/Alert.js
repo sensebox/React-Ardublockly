@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 
-import { withStyles } from "@material-ui/core/styles";
-import { alpha } from "@material-ui/core/styles";
+import withStyles from '@mui/styles/withStyles';
+import { alpha } from "@mui/material/styles";
 
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 
 const styles = (theme) => ({
   alert: {

@@ -16,13 +16,19 @@ export const onChangeCode = () => (dispatch, getState) => {
   code.arduino = Blockly.Arduino.workspaceToCode(workspace);
   var xmlDom = Blockly.Xml.workspaceToDom(workspace);
   code.xml = Blockly.Xml.domToPrettyText(xmlDom);
-  var selectedBlock = Blockly.selected
+  var selectedBlock = Blockly.getSelected
   if (selectedBlock !== null) {
     code.helpurl = selectedBlock.helpUrl
     code.tooltip = selectedBlock.tooltip
+    if (selectedBlock.data) {
+      code.data = selectedBlock.data
+    } else {
+      code.data = null
+    }
   } else if (selectedBlock === null) {
     code.tooltip = Blockly.Msg.tooltip_hint
     code.helpurl = ''
+    code.data = null
   }
 
 
