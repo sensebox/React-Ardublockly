@@ -13,6 +13,8 @@ const maxInstances = {
   sensebox_lora_initialize_otaa: 1,
   sensebox_lora_initialize_abp: 1,
   sensebox_phyphox_init: 1,
+  sensebox_phyphox_experiment: 1,
+  sensebox_phyphox_experiment_send: 1,
   sensebox_ethernet: 1,
 };
 
