@@ -399,6 +399,7 @@ Blockly.Arduino.sensebox_button = function () {
   Blockly.Arduino.libraries_[
     "library_jcButtons"
   ] = `#include <JC_Button.h> // http://librarymanager/All#JC_Button`;
+
   Blockly.Arduino.definitions_["define_button" + dropdown_pin + ""] =
     "Button button_" + dropdown_pin + "(" + dropdown_pin + ");";
   Blockly.Arduino.setupCode_["setup_button" + dropdown_pin + ""] =
@@ -413,6 +414,10 @@ Blockly.Arduino.sensebox_button = function () {
   } else if (dropown_function === "longPress") {
     var time = this.getFieldValue("time");
     code = "button_" + dropdown_pin + ".pressedFor(" + time + ")";
+  } else if (dropown_function === "toggleButton") {
+    code = "button_" + dropdown_pin + ".toggleState()";
+    Blockly.Arduino.definitions_["define_button" + dropdown_pin + ""] =
+    "ToggleButton button_" + dropdown_pin + "(" + dropdown_pin + ");";
   }
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
