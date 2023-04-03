@@ -336,6 +336,7 @@ Blockly.Blocks["sensebox_button"] = {
           [Blockly.Msg.senseBox_button_isPressed, "isPressed"],
           [Blockly.Msg.senseBox_button_wasPressed, "wasPressed"],
           [Blockly.Msg.senseBox_button_longPress, "longPress"],
+          [Blockly.Msg.senseBox_button_switch,"toggleButton"]
         ]),
         "FUNCTION"
       )
