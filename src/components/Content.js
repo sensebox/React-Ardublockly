@@ -15,15 +15,22 @@ import { setBoard } from './Blockly/helpers/board';
 class Content extends Component {
 
   componentDidMount() {
+    console.log(this.props.board);
+    setBoard(this.props.board)
     if (this.props.language === 'de_DE') {
       Blockly.setLocale(De);
     } else if (this.props.language === 'en_US') {
       Blockly.setLocale(En);
     }
-    setBoard(this.props.board)
+    
   }
 
   componentDidUpdate(props) {
+    console.log(props.board);
+    console.log(this.props.board);
+   // if (props.board !== this.props.board) {
+      setBoard(this.props.board);
+      
     if (props.language !== this.props.language) {
       if (this.props.language === 'de_DE') {
         Blockly.setLocale(De);
@@ -31,7 +38,7 @@ class Content extends Component {
         Blockly.setLocale(En);
       }
     }
-    setBoard(this.props.board)
+   
   }
 
   render() {

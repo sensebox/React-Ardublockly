@@ -5,8 +5,8 @@ import Dialog from "./Dialog";
 
 import withStyles from '@mui/styles/withStyles';
 import * as Blockly from "blockly";
+import { setBoard } from "../actions/boardActions";
 import { IconButton, Grid, Avatar, Typography } from "@mui/material";
-import { setBoard } from "../actions/boardAction";
 
 const styles = (theme) => ({
   link: {
