@@ -231,15 +231,15 @@ Blockly.Arduino.sensebox_sensor_bme680_bsec = function () {
   Blockly.Arduino.functionNames_["checkIaqSensorStatus"] = `
     void checkIaqSensorStatus(void)
   {
-    if (iaqSensor.status != BSEC_OK) {
-      if (iaqSensor.status < BSEC_OK) {
+    if (iaqSensor.bsecStatus != BSEC_OK) {
+      if (iaqSensor.bsecStatus < BSEC_OK) {
         for (;;)
           errLeds(); /* Halt in case of failure */
       } 
     }
   
-    if (iaqSensor.bme680Status != BME680_OK) {
-      if (iaqSensor.bme680Status < BME680_OK) {
+    if (iaqSensor.bme68xStatus != BME68X_OK) {
+      if (iaqSensor.bme68xStatus < BME68X_OK) {
         for (;;)
           errLeds(); /* Halt in case of failure */
       } 
@@ -258,25 +258,29 @@ Blockly.Arduino.sensebox_sensor_bme680_bsec = function () {
   //Setup Code
   Blockly.Arduino.setupCode_["Wire.begin"] = "Wire.begin();";
   Blockly.Arduino.setupCode_["iaqSensor.begin"] =
-    "iaqSensor.begin(BME680_I2C_ADDR_PRIMARY, Wire);";
+    "iaqSensor.begin(BME68X_I2C_ADDR_LOW, Wire);";
   Blockly.Arduino.setupCode_["checkIaqSensorStatus"] =
     "checkIaqSensorStatus();";
   Blockly.Arduino.setupCode_["bsec_sensorlist"] = `
-    bsec_virtual_sensor_t sensorList[10] = {
-      BSEC_OUTPUT_RAW_TEMPERATURE,
-      BSEC_OUTPUT_RAW_PRESSURE,
-      BSEC_OUTPUT_RAW_HUMIDITY,
-      BSEC_OUTPUT_RAW_GAS,
-      BSEC_OUTPUT_IAQ,
-      BSEC_OUTPUT_STATIC_IAQ,
-      BSEC_OUTPUT_CO2_EQUIVALENT,
-      BSEC_OUTPUT_BREATH_VOC_EQUIVALENT,
-      BSEC_OUTPUT_SENSOR_HEAT_COMPENSATED_TEMPERATURE,
-      BSEC_OUTPUT_SENSOR_HEAT_COMPENSATED_HUMIDITY,
-    };
+bsec_virtual_sensor_t sensorList[13] = {
+    BSEC_OUTPUT_IAQ,
+    BSEC_OUTPUT_STATIC_IAQ,
+    BSEC_OUTPUT_CO2_EQUIVALENT,
+    BSEC_OUTPUT_BREATH_VOC_EQUIVALENT,
+    BSEC_OUTPUT_RAW_TEMPERATURE,
+    BSEC_OUTPUT_RAW_PRESSURE,
+    BSEC_OUTPUT_RAW_HUMIDITY,
+    BSEC_OUTPUT_RAW_GAS,
+    BSEC_OUTPUT_STABILIZATION_STATUS,
+    BSEC_OUTPUT_RUN_IN_STATUS,
+    BSEC_OUTPUT_SENSOR_HEAT_COMPENSATED_TEMPERATURE,
+    BSEC_OUTPUT_SENSOR_HEAT_COMPENSATED_HUMIDITY,
+    BSEC_OUTPUT_GAS_PERCENTAGE
+};
+
     `;
   Blockly.Arduino.setupCode_["iaqSensorUpdateSubscription"] =
-    "iaqSensor.updateSubscription(sensorList, 10, BSEC_SAMPLE_RATE_LP);\ncheckIaqSensorStatus();";
+    "iaqSensor.updateSubscription(sensorList, 13, BSEC_SAMPLE_RATE_LP);\ncheckIaqSensorStatus();";
   //Loop Code
   Blockly.Arduino.loopCodeOnce_["iaqloop"] = `
     if (iaqSensor.run()) {
