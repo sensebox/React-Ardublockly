@@ -527,10 +527,10 @@ Blockly.Blocks["sensebox_rainsensor_hydreon_rg15"] = {
       [Blockly.Msg.sensebox_rainsensor_hydreon_rg15_serial2, "Serial2"],
     ];
     var dropdownOptionsValues = [
-      [Blockly.Msg.sensebox_rainsensor_hydreon_rg15_totalAcc, "getTotalAccumulation"],
-      [Blockly.Msg.sensebox_rainsensor_hydreon_rg15_rainInt, "getRainfallIntensity"],
-      [Blockly.Msg.sensebox_rainsensor_hydreon_rg15_eventAcc, "getEventAccumulation"],
       [Blockly.Msg.sensebox_rainsensor_hydreon_rg15_acc, "getAccumulation"],
+      [Blockly.Msg.sensebox_rainsensor_hydreon_rg15_totalAcc, "getTotalAccumulation"],
+      [Blockly.Msg.sensebox_rainsensor_hydreon_rg15_eventAcc, "getEventAccumulation"],
+      [Blockly.Msg.sensebox_rainsensor_hydreon_rg15_rainInt, "getRainfallIntensity"],
     ];
     this.setColour(getColour().sensebox);
     this.appendDummyInput()
