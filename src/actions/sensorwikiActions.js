@@ -8,7 +8,7 @@ const fetchSensorWikiSuccess = sensors => ({
 export const fetchSensors =  () => {
     return async dispatch => {
         try {
-            let sensors = await axios.get('https://api.sensors.wiki/sensors/all')
+            let sensors = await axios.get('https://api.sensors.wiki/sensors/')
             dispatch(fetchSensorWikiSuccess(sensors.data))
         }
         catch(e){
