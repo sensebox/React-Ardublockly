@@ -67,6 +67,7 @@ const styles = (theme) => ({
   },
 });
 
+
 class Navbar extends Component {
   constructor(props) {
     super(props);
@@ -92,6 +93,16 @@ class Navbar extends Component {
   closeTour = () => {
     this.setState({ isTourOpen: false });
   };
+
+  componentDidMount() {
+    const { location } = this.props;
+    const query = new URLSearchParams(location.search, [location.search]);
+    const tour = query.get('tour');
+
+    if (!this.state.isTourOpen && tour) {
+      this.openTour();
+    }
+  }
 
   render() {
     var isHome = /^\/(\/.*$|$)/g.test(this.props.location.pathname);
