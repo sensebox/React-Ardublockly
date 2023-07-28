@@ -155,7 +155,7 @@ class Navbar extends Component {
                       endIcon={<FontAwesomeIcon icon={faCaretDown} />}
                       sx={{ display: { xs: "none", sm: "none", md: "flex" } }}
                     >
-                      {this.props.selectedBoard}
+                      {this.props.selectedBoard === "mcu" ? "MCU" : this.props.selectedBoard === "mini" ? "MCU:mini" : "MCU-S2"}
                     </Button>
                     <Menu
                       anchorEl={this.state.anchorElBoard}
@@ -180,7 +180,7 @@ class Navbar extends Component {
                           this.setState({ anchorElBoard: null });
                         }}
                       >
-                        mcu
+                        MCU
                       </MenuItem>
                       <MenuItem
                         value="mini"
@@ -189,7 +189,16 @@ class Navbar extends Component {
                           this.setState({ anchorElBoard: null });
                         }}
                       >
-                        mini
+                        MCU:mini
+                      </MenuItem>
+                      <MenuItem
+                        value="esp32"
+                        onClick={(event) => {
+                          this.props.setBoard(event.currentTarget.getAttribute("value"));
+                          this.setState({ anchorElBoard: null });
+                        }}
+                      >
+                        MCU-S2
                       </MenuItem>
                     </Menu>
                   </div>

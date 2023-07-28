@@ -79,7 +79,7 @@ class Compile extends Component {
   compile = () => {
     this.setState({ progress: true });
     const data = {
-      board: process.env.REACT_APP_BOARD,
+      board: this.props.selectedBoard === "mcu" ? "sensebox-mcu" : "sensebox-esp32s2",
       sketch: this.props.arduino,
     };
     fetch(`${process.env.REACT_APP_COMPILER_URL}/compile`, {
