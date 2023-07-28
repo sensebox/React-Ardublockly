@@ -30,6 +30,8 @@ Blockly.Arduino.sensebox_osem_connection = function (Block) {
   var box_id = this.getFieldValue("BoxID");
   var branch = Blockly.Arduino.statementToCode(Block, "DO");
   var access_token = this.getFieldValue("access_token");
+  var host = this.getFieldValue("HOST");
+  var ratelimit_token = this.getFieldValue("ratelimit-token");
   var blocks = this.getDescendants();
   var type = this.getFieldValue("type");
   var ssl = this.getFieldValue("SSL");
@@ -50,7 +52,7 @@ Blockly.Arduino.sensebox_osem_connection = function (Block) {
   Blockly.Arduino.definitions_["SenseBoxID"] =
     'const char SENSEBOX_ID [] PROGMEM = "' + box_id + '";';
   Blockly.Arduino.definitions_["host"] =
-    'const char server [] PROGMEM ="ingress.opensensemap.org";';
+    `const char server [] PROGMEM ="ingress.${host}";`;
   if (wifi === true) {
     if (ssl === "TRUE") {
       Blockly.Arduino.libraries_["library_bearSSL"] =
@@ -154,7 +156,7 @@ ${
     if (connected == true) {
       // construct the HTTP POST request:
       sprintf_P(buffer,
-                PSTR("POST /boxes/%s/data HTTP/1.1\\nAuthorization: ${access_token}\\nHost: %s\\nContent-Type: "
+                PSTR("POST /boxes/%s/data HTTP/1.1\\nAuthorization: ${access_token}\\nX-Allow-Token: ${ratelimit_token}\\nHost: %s\\nContent-Type: "
                      "text/csv\\nConnection: close\\nContent-Length: %i\\n\\n"),
                 SENSEBOX_ID, server, num_measurements * lengthMultiplikator);
       // send the HTTP POST request:
@@ -253,7 +255,7 @@ ${
       if (connected == true) {
         // construct the HTTP POST request:
         sprintf_P(buffer,
-                  PSTR("POST /boxes/%s/data HTTP/1.1\\nAuthorization: ${access_token}\\nHost: %s\\nContent-Type: "
+                  PSTR("POST /boxes/%s/data HTTP/1.1\\nAuthorization: ${access_token}\\nX-Allow-Token: ${ratelimit_token}\\nHost: %s\\nContent-Type: "
                        "text/csv\\nConnection: close\\nContent-Length: %i\\n\\n"),
                   SENSEBOX_ID, server, num_measurements * lengthMultiplikator);
         // send the HTTP POST request:
