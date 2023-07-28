@@ -757,3 +757,18 @@ if (time_startsps > time_actualsps + intervalsps) {
   var code = `m.mc_${dropdown_name}`;
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
+
+
+/**
+ * sense
+ * 
+ */
+
+Blockly.Arduino.sensebox_esp32s2_light = function () {
+  Blockly.Arduino.setupCode_["setup_sensebox_esp32s2_light"] = ` pinMode(21, OUTPUT);
+  analogReadResolution(12);
+  digitalWrite(21, HIGH);
+  `;
+  var code = "analogRead(14)";
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
+};

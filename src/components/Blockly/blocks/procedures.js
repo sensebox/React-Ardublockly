@@ -13,12 +13,16 @@ import * as Blockly from 'blockly/core';
 import { getColour } from '../helpers/colour';
 import * as Types from '../helpers/types';
 
+
+
 Blockly.Blocks['arduino_functions'] = {
     /**
      * Block for defining the Arduino setup() and loop() functions.
      * @this Blockly.Block
      */
     init: function () {
+        var board = window.sessionStorage.getItem("board");
+
         this.appendDummyInput()
             .appendField(Blockly.Msg.ARD_FUN_RUN_SETUP);
         this.appendStatementInput('SETUP_FUNC');
@@ -30,6 +34,7 @@ Blockly.Blocks['arduino_functions'] = {
         this.setTooltip(Blockly.Msg.ARD_FUN_RUN_TIP);
         this.setHelpUrl('https://arduino.cc/en/Reference/Loop');
         this.contextMenu = false;
+        this.data = {board: board, lang: "DE"};
     },
     /** @return {!boolean} True if the block instance is in the workspace. */
     getArduinoLoopsInstance: function () {
