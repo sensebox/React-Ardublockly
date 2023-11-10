@@ -256,26 +256,42 @@ const sensebox_esp32 = {
   description: "senseBox ESP32",
   compilerFlag: "esp32:esp32:esp32",
   digitalPins: [
-    ["IO1ESP", "1"],
     ["IO2", "2"],
+    ["IO3", "3"],
+    ["IO4", "4"],
+    ["IO5", "5"],
+    ["IO6", "6"],
+    ["IO7", "7"],
   ],
   digitalPorts: [
-    ["IO1-2", "A"],
+    ["IO2-3", "A"],
+    ["IO4-5", "B"],
+    ["IO6-7", "C"],
   ],
   digitalPinsLED: [
-    ["BUILTIN_1", "7"],
-    ["BUILTIN_2", "8"],
-    ["IO1", "1"],
     ["IO2", "2"],
+    ["IO3", "3"],
+    ["IO4", "4"],
+    ["IO5", "5"],
+    ["IO6", "6"],
+    ["IO7", "7"],
   ],
   digitalPinsRGB: [
-    ["on Board", "6"],
-    ["IO1-2", "1"],
+    ["on Board", "1"],
+    ["IO2", "2"],
+    ["IO3", "3"],
+    ["IO4", "4"],
+    ["IO5", "5"],
+    ["IO6", "6"],
+    ["IO7", "7"],
   ],
   digitalPinsButton: [
-    ["on Board", "0"],
-    ["IO1", "1"],
     ["IO2", "2"],
+    ["IO3", "3"],
+    ["IO4", "4"],
+    ["IO5", "5"],
+    ["IO6", "6"],
+    ["IO7", "7"],
 
   ],
   pwmPins: [
@@ -283,10 +299,11 @@ const sensebox_esp32 = {
     ["IO2", "2"],
   ],
   serial: [
-    ["SerialUSB", "SerialUSB"],
+    ["Serial", "Serial"],
     ["Serial1", "Serial1"],
   ],
   serialSensors: [
+  
     ["Serial1", "Serial1"],
   ],
   serialPins: {
@@ -338,8 +355,8 @@ const sensebox_esp32 = {
   i2c: [["I2C", "Wire"]],
   i2cPins: {
     Wire: [
-      ["SDA", "17"],
-      ["SCL", "16"],
+      ["SDA", "39"],
+      ["SCL", "40"],
     ],
   },
   i2cSpeed: [
@@ -355,8 +372,12 @@ const sensebox_esp32 = {
     ["interrupt2", "2"],
   ],
   analogPins: [
-    ["A1", "A1"],
-    ["A2", "A2"],
+    ["IO2", "2"],
+    ["IO3", "3"],
+    ["IO4", "4"],
+    ["IO5", "5"],
+    ["IO6", "6"],
+    ["IO7", "7"],
   ],
   serial_baud_rate: 9600,
   parseKey: "_*_",

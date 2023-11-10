@@ -12,7 +12,6 @@ import Blockly from "blockly";
 Blockly.Arduino.sensebox_esp_wifi = function (block) {
   var pw = this.getFieldValue("Password");
   var ssid = this.getFieldValue("SSID");
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_["library_WiFi"] = "#include <WiFi101.h>";
   Blockly.Arduino.variables_["ssid"] = `char ssid[] = "${ssid}";`;
   Blockly.Arduino.variables_["pass"] = `char pass[] = "${pw}";`;
@@ -60,7 +59,6 @@ Blockly.Arduino.sensebox_get_ip = function () {
 
 Blockly.Arduino.sensebox_startap = function (block) {
   var ssid = this.getFieldValue("SSID");
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_["library_WiFi"] = "#include <WiFi101.h>";
   Blockly.Arduino.setupCode_["wifi_startAP"] = `WiFi.beginAP(${ssid});`;
   var code = "";
@@ -74,8 +72,6 @@ Blockly.Arduino.sensebox_ethernet = function () {
   var dns = this.getFieldValue("dns");
   var mac = this.getFieldValue("mac");
   var dhcp = this.getFieldValue("dhcp");
-
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_["library_ethernet"] =
     "#include <Ethernet.h> // http://librarymanager/All#Ethernet";
 

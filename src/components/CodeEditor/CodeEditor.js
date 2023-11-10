@@ -98,7 +98,6 @@ void setup () {
 void loop() {
               
 }`;
-
     editorRef.current.setValue(resetCode);
   };
 

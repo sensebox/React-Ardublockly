@@ -1,5 +1,6 @@
 const colours = {
   sensebox: 120,
+  senseboxble: 120,
   logic: 210,
   loops: 10,
   math: 230,
