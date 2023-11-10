@@ -150,3 +150,23 @@ Blockly.Blocks["sensebox_phyphox_experiment_send"] = {
     this.setHelpUrl(Blockly.Msg.sensebox_phyphox_helpurl);
   },
 };
+
+/**
+ * senseBox BLE
+ * 
+ * 
+ */
+
+Blockly.Blocks["sensebox_ble_init"] = {
+  init: function () {
+    this.setColour(getColour().senseboxble);
+    this.setHelpUrl(Blockly.Msg.sensebox_ble_helpurl);
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.sensebox_ble_init)
+      .appendField(new Blockly.FieldTextInput("Geräte Name"), "devicename");
+
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip(Blockly.Msg.sensebox_ble_init_tooltip);
+  },
+};

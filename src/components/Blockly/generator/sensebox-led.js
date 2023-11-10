@@ -3,7 +3,6 @@ import * as Blockly from 'blockly/core';
 Blockly.Arduino.sensebox_led = function () {
     var dropdown_pin = this.getFieldValue('PIN');
     var dropdown_stat = this.getFieldValue('STAT');
-    Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
     Blockly.Arduino.setupCode_['setup_led_' + dropdown_pin] = 'pinMode(' + dropdown_pin + ', OUTPUT);';
     var code = 'digitalWrite(' + dropdown_pin + ',' + dropdown_stat + ');\n'
     return code;
@@ -12,7 +11,6 @@ Blockly.Arduino.sensebox_led = function () {
 Blockly.Arduino.sensebox_rgb_led = function () {
     var dropdown_pin = this.getFieldValue('PIN');
     var color = Blockly.Arduino.valueToCode(this, 'COLOR', Blockly.Arduino.ORDER_ATOMIC) || '0'
-    Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
     Blockly.Arduino.libraries_['define_rgb_led' + dropdown_pin] = '#include <Adafruit_NeoPixel.h>\n Adafruit_NeoPixel rgb_led_' + dropdown_pin + ' = Adafruit_NeoPixel(1,' + dropdown_pin + ',NEO_RGB + NEO_KHZ800);\n';
     Blockly.Arduino.setupCode_['setup_rgb_led' + dropdown_pin] = 'rgb_led_' + dropdown_pin + '.begin();';
     var code = 'rgb_led_' + dropdown_pin + '.setPixelColor(0,rgb_led_' + dropdown_pin + '.Color(' + color + '));\n';
@@ -25,7 +23,6 @@ Blockly.Arduino.sensebox_ws2818_led_init = function () {
     var dropdown_pin = this.getFieldValue('Port');
     var numPixel = Blockly.Arduino.valueToCode(this, 'NUMBER', Blockly.Arduino.ORDER_ATOMIC) || '1';
     var brightness = Blockly.Arduino.valueToCode(this, 'BRIGHTNESS', Blockly.Arduino.ORDER_ATOMIC) || '50'
-    Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
     Blockly.Arduino.definitions_['define_rgb_led' + dropdown_pin] = `#include <Adafruit_NeoPixel.h>\n Adafruit_NeoPixel rgb_led_${dropdown_pin}= Adafruit_NeoPixel(${numPixel}, ${dropdown_pin},NEO_GRB + NEO_KHZ800);\n`;
     Blockly.Arduino.setupCode_['setup_rgb_led' + dropdown_pin] = 'rgb_led_' + dropdown_pin + '.begin();\n';
     Blockly.Arduino.setupCode_['setup_rgb_led_brightness' + dropdown_pin] = `rgb_led_${dropdown_pin}.setBrightness(${brightness});\n`;
@@ -33,7 +30,6 @@ Blockly.Arduino.sensebox_ws2818_led_init = function () {
 };
 
 Blockly.Arduino.sensebox_ws2818_led = function () {
-    Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
     var dropdown_pin = this.getFieldValue('Port');
     var position = Blockly.Arduino.valueToCode(this, 'POSITION', Blockly.Arduino.ORDER_ATOMIC) || '0';
     var color = Blockly.Arduino.valueToCode(this, 'COLOR', Blockly.Arduino.ORDER_ATOMIC) || '0'
@@ -52,7 +48,6 @@ function hexToRgb(hex) {
 }
 
 Blockly.Arduino['colour_picker'] = function (block) {
-    Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
     const rgb = hexToRgb(block.getFieldValue('COLOUR'));
 
     return [rgb.r + ', ' + rgb.g + ', ' + rgb.b, Blockly.Arduino.ORDER_ATOMIC];
@@ -63,7 +58,6 @@ Blockly.Arduino['colour_random'] = function (block) {
 };
 
 Blockly.Arduino['colour_rgb'] = function (block) {
-    Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
     const red = Blockly.Arduino.valueToCode(block, 'RED', Blockly.Arduino.ORDER_ATOMIC);
     const green = Blockly.Arduino.valueToCode(block, 'GREEN', Blockly.Arduino.ORDER_ATOMIC);
     const blue = Blockly.Arduino.valueToCode(block, 'BLUE', Blockly.Arduino.ORDER_ATOMIC);

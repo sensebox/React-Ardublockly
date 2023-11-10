@@ -25,8 +25,6 @@ Blockly.Arduino.sensebox_sensor_temp_hum = function () {
 Blockly.Arduino.sensebox_sensor_uv_light = function () {
   var dropdown_name = this.getFieldValue("NAME");
   let code = "";
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
-
   if (dropdown_name === "UvIntensity") {
     Blockly.Arduino.libraries_["library_veml6070"] = "#include <VEML6070.h>";
     Blockly.Arduino.definitions_["define_veml"] = "VEML6070 veml;";
@@ -136,7 +134,6 @@ unsigned char measurementRate = 3;
 Blockly.Arduino.sensebox_sensor_bmx055_accelerometer = function () {
   var dropdown_value = this.getFieldValue("VALUE");
   var range = this.getFieldValue("RANGE");
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_["library_bmx055"] = `#include <BMX055.h>`;
   Blockly.Arduino.definitions_["define_bmx"] = "BMX055 bmx;";
   Blockly.Arduino.setupCode_["sensebox_sensor_bmx055"] =
@@ -153,7 +150,6 @@ Blockly.Arduino.sensebox_sensor_bmx055_accelerometer = function () {
 Blockly.Arduino.sensebox_sensor_sds011 = function () {
   var dropdown_name = this.getFieldValue("NAME");
   var serial_name = this.getFieldValue("SERIAL");
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_[
     "SdsDustSensor"
   ] = `#include <SdsDustSensor.h> // http://librarymanager/All#Nova_Fitness_Sds_dust_sensors_library`;
@@ -178,7 +174,6 @@ Blockly.Arduino.sensebox_sensor_pressure = function () {
   var dropdown_name = this.getFieldValue("NAME");
   var code = "";
   var referencePressure = this.getFieldValue("referencePressure");
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_[
     "adafruit_bmp280"
   ] = `#include <Adafruit_BMP280.h> // http://librarymanager/All#Adafruit_BMP280_Library`;
@@ -215,7 +210,6 @@ bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,
 Blockly.Arduino.sensebox_sensor_bme680_bsec = function () {
   var dropdown_name = this.getFieldValue("dropdown");
   let code = "";
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_["library_bsec"] =
     "#include <bsec.h> // http://librarymanager/All#BSEC_Software_Library";
   Blockly.Arduino.definitions_["bsec_iaqSensor"] = "Bsec iaqSensor;";
@@ -333,7 +327,6 @@ Blockly.Arduino.sensebox_sensor_ultrasonic_ranger = function () {
   var dropdown_pin_TX = this.getFieldValue("ultrasonic_echo");
   var port = this.getFieldValue("port");
   var maxDistance = this.getFieldValue("maxDistance");
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_[
     "library_newPing"
   ] = `#include <NewPing.h> // http://librarymanager/All#NewPing`;
@@ -357,7 +350,6 @@ Blockly.Arduino.sensebox_sensor_ultrasonic_ranger = function () {
 
 Blockly.Arduino.sensebox_sensor_sound = function () {
   var dropdown_pin = this.getFieldValue("PIN");
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.codeFunctions_["define_sound"] = `
 float getSoundValue(int pin) {
     unsigned long start = millis(); // Start des Messintervalls
@@ -399,7 +391,6 @@ float getSoundValue(int pin) {
 Blockly.Arduino.sensebox_button = function () {
   var dropdown_pin = this.getFieldValue("PIN");
   var dropown_function = this.getFieldValue("FUNCTION");
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_[
     "library_jcButtons"
   ] = `#include <JC_Button.h> // http://librarymanager/All#JC_Button`;
@@ -433,7 +424,6 @@ Blockly.Arduino.sensebox_button = function () {
 
 Blockly.Arduino.sensebox_scd30 = function () {
   var dropdown = this.getFieldValue("dropdown");
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_["scd30_library"] =
     "#include <SparkFun_SCD30_Arduino_Library.h> // http://librarymanager/All#SparkFun_SCD30_Arduino_Library";
   Blockly.Arduino.definitions_["SCD30"] = "SCD30 airSensor;";
@@ -469,7 +459,6 @@ if (airSensor.begin() == false)
 
 Blockly.Arduino.sensebox_gps = function () {
   var dropdown = this.getFieldValue("dropdown");
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_["gps_library"] =
     "#include <SparkFun_u-blox_GNSS_Arduino_Library.h> // http://librarymanager/All#SparkFun_u-blox_GNSS_Arduino_Library";
   Blockly.Arduino.libraries_["library_wire"] = "#include <Wire.h>";
@@ -532,7 +521,6 @@ return tsBuffer;
  */
 
 Blockly.Arduino.sensebox_sensor_truebner_smt50 = function () {
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   var dropdown_port = this.getFieldValue("Port");
   var dropdown_value = this.getFieldValue("value");
   var dropdown_pin = 1;
@@ -585,7 +573,6 @@ Blockly.Arduino.sensebox_sensor_watertemperature = function () {
   if (dropdown_port === "C") {
     dropdown_pin = 5;
   }
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_["library_oneWire"] =
     "#include <OneWire.h> // http://librarymanager/All#OneWire";
   Blockly.Arduino.libraries_["library_oneDallasTemperature"] =
@@ -640,7 +627,6 @@ float getWindspeed(){
  */
 
 Blockly.Arduino.sensebox_soundsensor_dfrobot = function () {
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   var dropdown_port = this.getFieldValue("Port");
   var dropdown_pin = 1;
   if (dropdown_port === "A") {
@@ -674,7 +660,6 @@ Blockly.Arduino.sensebox_sensor_dps310 = function () {
   var dropdown_name = this.getFieldValue("NAME");
   var code = "";
   var referencePressure = this.getFieldValue("referencePressure");
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_[
     "adafruit_dps310"
   ] = `#include <Adafruit_DPS310.h> // http://librarymanager/All#Adafruit_DPS310`;
@@ -711,7 +696,6 @@ Blockly.Arduino.sensebox_sensor_dps310 = function () {
 
 Blockly.Arduino.sensebox_sensor_sps30 = function () {
   var dropdown_name = this.getFieldValue("value");
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_[
     "sps30"
   ] = `#include <sps30.h> // http://librarymanager/All#`;
@@ -760,15 +744,11 @@ if (time_startsps > time_actualsps + intervalsps) {
 
 
 /**
- * sense
+ * ESP32S2 Light Sensor
  * 
  */
 
 Blockly.Arduino.sensebox_esp32s2_light = function () {
-  Blockly.Arduino.setupCode_["setup_sensebox_esp32s2_light"] = ` pinMode(21, OUTPUT);
-  analogReadResolution(12);
-  digitalWrite(21, HIGH);
-  `;
-  var code = "analogRead(14)";
+  var code = "analogRead(PD_SENSE)";
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
