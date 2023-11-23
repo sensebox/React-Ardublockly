@@ -9,33 +9,20 @@ import Blockly from "blockly";
 
 
 /* Wifi connection and openSenseMap Blocks*/
+
+
 Blockly.Arduino.sensebox_esp_wifi = function (block) {
   var pw = this.getFieldValue("Password");
   var ssid = this.getFieldValue("SSID");
-  Blockly.Arduino.libraries_["library_WiFi"] = "#include <WiFi101.h>";
-  Blockly.Arduino.variables_["ssid"] = `char ssid[] = "${ssid}";`;
-  Blockly.Arduino.variables_["pass"] = `char pass[] = "${pw}";`;
+  Blockly.Arduino.libraries_["library_WiFi_ESP"] = "#include <WiFiClientSecure.h>";
+  Blockly.Arduino.variables_["ssid"] = `char* ssid = "${ssid}";`;
+  Blockly.Arduino.variables_["pass"] = `char* password = "${pw}";`;
   Blockly.Arduino.variables_["wifi_Status"] = "int status = WL_IDLE_STATUS;";
   if (pw === "") {
-    Blockly.Arduino.setupCode_["wifi_begin"] = `
-    if (WiFi.status() == WL_NO_SHIELD) {
-        while (true);
-    }
-    while (status != WL_CONNECTED) {
-        status = WiFi.begin(ssid);
-        delay(5000);
-    }
-    `;
+    Blockly.Arduino.setupCode_["wifi_begin"] = "WiFi.begin(ssid, password);";
   } else
-    Blockly.Arduino.setupCode_["wifi_begin"] = `
-if (WiFi.status() == WL_NO_SHIELD) {
-    while (true);
-}
-while (status != WL_CONNECTED) {
-    status = WiFi.begin(ssid, pass);
-    delay(5000);
-}
-`;
+    Blockly.Arduino.setupCode_["wifi_begin"] = "WiFi.begin(ssid);";
+    Blockly.Arduino.setupCode_["wifi_wait"] = "while (WiFi.status() != WL_CONNECTED) {delay(1000);}";
   var code = "";
   return code;
 };
