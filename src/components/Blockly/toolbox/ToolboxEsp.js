@@ -13,6 +13,7 @@ import * as Blockly from "blockly/core";
         <Block type="sensebox_sensor_temp_hum" />
         <Block type="sensebox_sensor_uv_light" />
         <Block type="sensebox_esp32s2_light" />
+        <Block type="sensebox_esp32s2_mpu6050" />
         <Block type="sensebox_sensor_sds011" />
         <Block type="sensebox_sensor_sps30" />
         <Block type="sensebox_sensor_pressure" />
@@ -43,6 +44,7 @@ import * as Blockly from "blockly/core";
       </Category>
       <Category name="WIFI" colour={getColour().sensebox}>
         <Block type="sensebox_wifi" />
+        <Block type="sensebox_esp32s2_wifi_enterprise" />
         <Block type="sensebox_wifi_status" />
         <Block type="sensebox_wifi_rssi" />
         <Block type="sensebox_get_ip" />

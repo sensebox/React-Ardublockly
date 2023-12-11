@@ -170,3 +170,24 @@ Blockly.Blocks["sensebox_ble_init"] = {
     this.setTooltip(Blockly.Msg.sensebox_ble_init_tooltip);
   },
 };
+
+Blockly.Blocks["sensebox_ble_send"] = {
+  init: function () {
+    this.setColour(getColour().senseboxble);
+    this.appendValueInput("value")
+      .appendField(Blockly.Msg.sensebox_ble_send)
+      .appendField(
+        new Blockly.FieldDropdown([
+          ["1", "1"],
+          ["2", "2"],
+          ["3", "3"],
+        ]),
+        "channel"
+      );
+
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip(Blockly.Msg.sensebox_ble_send_tooltip);
+    this.setHelpUrl(Blockly.Msg.sensebox_ble_helpurl);
+  },
+};

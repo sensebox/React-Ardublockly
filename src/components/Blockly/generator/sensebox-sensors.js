@@ -744,7 +744,7 @@ if (time_startsps > time_actualsps + intervalsps) {
 
 
 /**
- * ESP32S2 Light Sensor
+ * senseBox MCU-S2 onboard Light Sensor
  * 
  */
 
@@ -752,3 +752,48 @@ Blockly.Arduino.sensebox_esp32s2_light = function () {
   var code = "analogRead(PD_SENSE)";
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
+
+/**
+  * senseBox MCU-S2 onboard MPU6050
+  * 
+  **/
+
+Blockly.Arduino.sensebox_esp32s2_mpu6050 = function () {
+  var code = "";
+  var dropdown = this.getFieldValue("value");
+  Blockly.Arduino.libraries_["esp32s2_mpu6050"] = `#include <Adafruit_MPU6050.h>`;
+  Blockly.Arduino.libraries_["Adafruit_Sensor"] = `#include <Adafruit_Sensor.h>`;
+  Blockly.Arduino.libraries_["library_wire"] = `#include <Wire.h>`;
+  Blockly.Arduino.definitions_["define_Adafruit_mpu6050"] = "Adafruit_MPU6050 mpu;";
+  Blockly.Arduino.setupCode_["Wire1.begin()"] = "Wire1.begin();"
+  Blockly.Arduino.setupCode_["mpu.begin()"] = "mpu.begin(0x68, Wire1);";
+  Blockly.Arduino.setupCode_["mpu.setAccelerometerRange()"] = "mpu.setAccelerometerRange(MPU6050_RANGE_8_G);";
+  Blockly.Arduino.loopCodeOnce_["mpu.getEvent"] = "mpu.getEvent(&a, &g, &temp);"
+  switch (dropdown) {
+    case "accelerationX":
+      code = "a.acceleration.x";
+      break;
+    case "accelerationY":
+      code = "a.acceleration.y";
+      break;
+    case "accelerationZ":
+      code = "a.acceleration.z";
+      break;
+    case "gyroscopeX":
+      code = "g.gyro.x";
+      break;
+    case "gyroscopeY":
+      code = "g.gyro.y";
+      break;
+    case "gyroscopeZ":
+      code = "g.gyro.z";
+      break;
+    case "temperature":
+      code = "temp.temperature";
+      break;
+    default:
+      code = "";
+  }
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
+};
+
