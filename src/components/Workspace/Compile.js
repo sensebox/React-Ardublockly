@@ -74,15 +74,16 @@ class Compile extends Component {
     if (props.name !== this.props.name) {
       this.setState({ name: this.props.name });
     }
+
   }
 
   compile = () => {
     this.setState({ progress: true });
     const data = {
-      board: this.props.selectedBoard === "mcu" ? "sensebox-mcu" : "sensebox-esp32s2",
+      board: this.props.selectedBoard === "mcu" || this.props.selectedBoard === "mini" ? "sensebox-mcu" : "sensebox-esp32s2",
       sketch: this.props.arduino,
     };
-    fetch(`${process.env.REACT_APP_COMPILER_URL}/compile`, {
+    fetch(`${this.props.compiler}/compile`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
@@ -115,7 +116,7 @@ class Compile extends Component {
     this.toggleDialog();
     this.props.workspaceName(this.state.name);
     window.open(
-      `${process.env.REACT_APP_COMPILER_URL}/download?id=${id}&board=${process.env.REACT_APP_BOARD}&filename=${filename}`,
+      `${this.props.compiler}/download?id=${id}&board=${process.env.REACT_APP_BOARD}&filename=${filename}`,
       "_self"
     );
     this.setState({ progress: false });
@@ -320,12 +321,16 @@ Compile.propTypes = {
   name: PropTypes.string,
   workspaceName: PropTypes.func.isRequired,
   platform: PropTypes.bool.isRequired,
+  compiler: PropTypes.string.isRequired,
+  selectedBoard: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   arduino: state.workspace.code.arduino,
   name: state.workspace.name,
   platform: state.general.platform,
+  compiler: state.general.compiler,
+  selectedBoard: state.board.board,
 });
 
 export default connect(mapStateToProps, { workspaceName })(

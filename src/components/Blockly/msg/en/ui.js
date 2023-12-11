@@ -186,6 +186,10 @@ export const UI = {
     "Enable or disable sounds when adding and deleting blocks. Disabled by default",
   settings_board: "Board",
   settings_board_text: "Choose your board",
+  settings_compiler: "Compiler URL",
+  settings_compiler_text:
+    "Enter the URL of the compiler you want to use. The default compiler is: https://compiler.sensebox.de",
+    settings_compiler_helperText: "Die URL must start https:// or http://",
 
   /**
    * 404
