@@ -36,6 +36,7 @@ class DeviceSelector extends Component {
             onChange={(e) => this.props.setBoard(e.target.value)}>
             <MenuItem value="mcu">senseBox MCU</MenuItem>
             <MenuItem value="mini">senseBox MCU mini</MenuItem>
+            <MenuItem value="esp32">senseBox MCU-S2</MenuItem>
           </Select>
         </FormControl>
       </div>

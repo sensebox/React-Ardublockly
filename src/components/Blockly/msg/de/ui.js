@@ -192,6 +192,12 @@ export const UI = {
     "Aktiviere oder Deaktiviere Töne beim hinzufügen und löschen von Blöcken. Standardmäßig deaktiviert",
   settings_board: "Board",
   settings_board_text: "Wähle dein verwendetes Board aus",
+  settings_compiler: "Compiler URL",
+  settings_compiler_text:
+    "Geben die URL des Compilers ein, den du verwenden möchten. Die Standard-URL ist: https://compiler.sensebox.de",
+  settings_compiler_helperText: "Die URL muss mit https:// oder http:// beginnen",
+
+
   /**
    * 404
    */
