@@ -4,6 +4,8 @@ export const WEB = {
    */
   senseBox_wifi_connect: "Verbinde mit WLAN",
   senseBox_wifi_ssid: "Netzwerkname",
+  senseBox_wifi_user: "Benutzername",
+  senseBox_wifi_password: "Passwort",
   senseBox_wifi_ip: "IP-Address",
   senseBox_wifi_ip_tooltip: "Gibt die IP-Address der senseBox aus",
   senseBox_wifi_status: "WiFi-Status",
