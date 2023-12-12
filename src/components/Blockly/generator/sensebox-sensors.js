@@ -765,8 +765,9 @@ Blockly.Arduino.sensebox_esp32s2_mpu6050 = function () {
   Blockly.Arduino.libraries_["Adafruit_Sensor"] = `#include <Adafruit_Sensor.h>`;
   Blockly.Arduino.libraries_["library_wire"] = `#include <Wire.h>`;
   Blockly.Arduino.definitions_["define_Adafruit_mpu6050"] = "Adafruit_MPU6050 mpu;";
+  Blockly.Arduino.definitions_["define_sensor_events"] = "sensors_event_t a, g, temp;";
   Blockly.Arduino.setupCode_["Wire1.begin()"] = "Wire1.begin();"
-  Blockly.Arduino.setupCode_["mpu.begin()"] = "mpu.begin(0x68, Wire1);";
+  Blockly.Arduino.setupCode_["mpu.begin()"] = "mpu.begin(0x68, &Wire1);";
   Blockly.Arduino.setupCode_["mpu.setAccelerometerRange()"] = "mpu.setAccelerometerRange(MPU6050_RANGE_8_G);";
   Blockly.Arduino.loopCodeOnce_["mpu.getEvent"] = "mpu.getEvent(&a, &g, &temp);"
   switch (dropdown) {
