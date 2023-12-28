@@ -505,12 +505,6 @@ import * as Blockly from "blockly/core";
           {/* <Block type="sensebox_rtc_set_ntp"></Block> */}
           <Block type="sensebox_rtc_get"></Block>
           <Block type="sensebox_rtc_get_timestamp"></Block>
-          <Sep gap="40"></Sep>
-          <Label text={Blockly.Msg.toolbox_label_internalRTC}></Label>
-          <Block type="sensebox_internal_rtc_init"></Block>
-          <Block type="sensebox_internal_rtc_set"></Block>
-          <Block type="sensebox_internal_rtc_get"></Block>
-          <Block type="sensebox_internal_rtc_get_timestamp"></Block>
         </Category>
         <Category
           id="timeUTP"
