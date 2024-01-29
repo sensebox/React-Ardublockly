@@ -115,6 +115,11 @@ Blockly.Arduino.sensebox_ethernetIp = function () {
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
+/**
+ * 
+ * ESP32S2 WiFi Code 
+ * 
+ */
 
 Blockly.Arduino.sensebox_esp32s2_wifi_enterprise = function () {
 /* WiFi connection for eduroam networks*/
@@ -151,6 +156,36 @@ Blockly.Arduino.sensebox_esp32s2_wifi_enterprise = function () {
   return code;
 };
 
+Blockly.Arduino.sensebox_esp32s2_wifi = function () {
+  var pw = this.getFieldValue("Password");
+  var ssid = this.getFieldValue("SSID");
+  Blockly.Arduino.libraries_["library_ESPWiFi"] = "#include <WiFi.h>";
+  Blockly.Arduino.variables_["ssid"] = `char ssid[] = "${ssid}";`;
+  Blockly.Arduino.variables_["pass"] = `char pass[] = "${pw}";`;
+  Blockly.Arduino.variables_["wifi_Status"] = "int status = WL_IDLE_STATUS;";
+  if (pw === "") {
+    Blockly.Arduino.setupCode_["wifi_begin"] = `
+    if (WiFi.status() == WL_NO_SHIELD) {
+        while (true);
+    }
+    while (status != WL_CONNECTED) {
+        status = WiFi.begin(ssid);
+        delay(5000);
+    }
+    `;
+  } else
+    Blockly.Arduino.setupCode_["wifi_begin"] = `
+if (WiFi.status() == WL_NO_SHIELD) {
+    while (true);
+}
+while (status != WL_CONNECTED) {
+    status = WiFi.begin(ssid, pass);
+    delay(5000);
+}
+`;
+  var code = "";
+  return code;
+};
 
 // Blockly.Arduino.definitions_["certificate"] = `
 // const char* root_ca = \
