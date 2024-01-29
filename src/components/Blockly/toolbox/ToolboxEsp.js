@@ -50,13 +50,13 @@ import * as Blockly from "blockly/core";
         <Block type="sensebox_get_ip" />
         <Block type="sensebox_startap" />
       </Category>
-      <Category name="ESPNOW" colour={getColour().sensebox}>
+      {/* <Category name="ESPNOW" colour={getColour().sensebox}>
         <Block type="sensebox_wifi" />
         <Block type="sensebox_wifi_status" />
         <Block type="sensebox_wifi_rssi" />
         <Block type="sensebox_get_ip" />
         <Block type="sensebox_startap" />
-      </Category>
+      </Category> */}
       <Category name="Ethernet" colour={getColour().sensebox}>
         <Block type="sensebox_ethernet" />
         <Block type="sensebox_ethernetIp" />
