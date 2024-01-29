@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@blockly/block-plus-minus": "^4.0.4",
     "@blockly/field-grid-dropdown": "^2.0.4",
     "@blockly/field-slider": "4.0.4",
