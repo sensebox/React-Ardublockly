@@ -22,7 +22,7 @@ Blockly.Blocks['arduino_functions'] = {
      */
     init: function () {
         var board = window.sessionStorage.getItem("board");
-
+        console.log(board);
         this.appendDummyInput()
             .appendField(Blockly.Msg.ARD_FUN_RUN_SETUP);
         this.appendStatementInput('SETUP_FUNC');
@@ -34,7 +34,7 @@ Blockly.Blocks['arduino_functions'] = {
         this.setTooltip(Blockly.Msg.ARD_FUN_RUN_TIP);
         this.setHelpUrl('https://arduino.cc/en/Reference/Loop');
         this.contextMenu = false;
-        this.data = {board: board, lang: "DE"};
+        this.data = board;
     },
     /** @return {!boolean} True if the block instance is in the workspace. */
     getArduinoLoopsInstance: function () {
