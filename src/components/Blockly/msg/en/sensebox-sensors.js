@@ -223,6 +223,7 @@ The measured values for temperature, humidity and air pressure can be used direc
      senseBox_sps30_helpurl:
        "https://docs.sensebox.de/hardware/sensoren-feinstaub/",
    
-  
+       senseBox_esp32_photodiode : "Light intensity",
+      senseBox_esp32_photodiode_tooltip : "The photodiode measures light intensity in a range from 0 to 4095. The brighter the environment, the higher the value."
 
 };

@@ -219,5 +219,12 @@ Die Messwerte für Temperatur, Luftfeuchtigkeit und Luftdruck können direkt ver
      "https://docs.sensebox.de/hardware/sensoren-feinstaub/",
  
 
+     /**
+ * Photodiode MCUS2(ESP32)
+ * 
+ */
+senseBox_esp32_photodiode: "Lichtintensität",
+senseBox_esp32_photodiode_tooltip: "Die Photodiode misst Lichtintensität. Der ausgegebene Wert ist eine **Ganzzahl** zwischen 0 und 4095. Je höher der Wert, desto heller ist die Umgebung."
 
     };
+
