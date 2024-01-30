@@ -598,15 +598,14 @@ Blockly.Blocks["sensebox_esp32s2_light"] = {
       .appendField(Blockly.Msg.senseBox_value)
       .appendField(
         new Blockly.FieldDropdown([
-          [Blockly.Msg.senseBox_light, "Illuminance"],
+          [Blockly.Msg.senseBox_esp32_photodiode, "Light intensity"],
         ]),
         "NAME"
       );
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);
-    this.setTooltip(Blockly.Msg.senseBox_uv_light_tooltip);
-    this.setHelpUrl(Blockly.Msg.senseBox_uv_light_helpurl);
-    this.data = {name: "veml6070"};
+    this.setTooltip(Blockly.Msg.senseBox_esp32_photodiode_tooltip);
+    this.data = {name: "Photodiode"};
   },
 };
 
