@@ -69,7 +69,7 @@ Blockly.Blocks["sensebox_osem_connection"] = {
     // Is the block nested in a loop?
     var block = this;
     do {
-      if (this.LOOP_TYPES.indexOf(block.type) !== -1) {
+      if (this.LOOP_TYPES.indexOf(block.type) !== -1 || block.type === 'switch_case') {
         legal = true;
         break;
       }
