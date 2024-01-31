@@ -69,7 +69,7 @@ Blockly.Blocks["sensebox_osem_connection"] = {
     // Is the block nested in a loop?
     var block = this;
     do {
-      if (this.LOOP_TYPES.indexOf(block.type) !== -1 || block.type === 'switch_case') {
+      if (this.LOOP_TYPES.indexOf(block.type) !== -1) {
         legal = true;
         break;
       }
@@ -122,7 +122,7 @@ Blockly.Blocks["sensebox_osem_connection"] = {
       this.removeInput("timeStamp", true);
     }
   },
-  LOOP_TYPES: ["sensebox_interval_timer"],
+  LOOP_TYPES: ["sensebox_interval_timer", "switch_case"],
 };
 Blockly.Blocks["sensebox_send_to_osem"] = {
   init: function () {
