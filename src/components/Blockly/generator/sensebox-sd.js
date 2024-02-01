@@ -205,3 +205,62 @@ Blockly.Arduino.sensebox_sd_save_for_osem = function (block) {
   code += "addMeasurement(SENSOR_ID" + id + "," + sensor_value + ");\n";
   return code;
 };
+
+/**
+ * senseBox-esp32-s2 sd Blocks
+ */
+
+Blockly.Arduino.sensebox_esp32s2_sd_create_file = function (block) {
+  var filename = this.getFieldValue("Filename");
+  var extension = this.getFieldValue("extension");
+  var newFileName = filename.concat(".", extension);
+
+
+  Blockly.Arduino.libraries_["library_sd"] = `#include <SD.h>`;
+  Blockly.Arduino.libraries_["library_spi"] = `#include <SPI.h>`;
+  Blockly.Arduino.libraries_["library_fs"] = `#include "FS.h"`;
+
+  Blockly.Arduino.definitions_["define_" + filename] = `File ${filename};`;
+  Blockly.Arduino.setupCode_["sensebox_esp32s2_sd"] = "//Init SD\n pinMode(SD_ENABLE,OUTPUT);\n digitalWrite(SD_ENABLE,LOW);\n SPIClass sdspi = SPIClass();\n sdspi.begin(VSPI_SCLK,VSPI_MISO,VSPI_MOSI,VSPI_SS);\n";
+
+  Blockly.Arduino.setupCode_["sensebox_esp32s2_sd", newFileName] = ` ${filename} = fs.open("/${newFileName}", FILE_WRITE);\n fs.open(${filename}, FILE_WRITE);\n ${filename}.close();\n `;
+  var code = "";
+  return code;
+};
+
+Blockly.Arduino.sensebox_esp32s2_sd_open_file = function (block) {
+  var filename = this.getFieldValue("Filename");
+  var extension = this.getFieldValue("extension");
+  var newFileName = filename.concat(".", extension);
+  var branch = Blockly.Arduino.statementToCode(block, "SD");
+  var code = ` ${filename} = fs.open("/${newFileName}", FILE_WRITE);\n`;
+  code +=branch;
+  code += ` ${filename}.close();\n`;
+  return code;
+};
+
+
+
+
+Blockly.Arduino.sensebox_esp32s2_sd_write_file = function (block) {
+  if (this.parentBlock_ != null) {
+    var filename = this.getSurroundParent().getFieldValue("Filename");
+  }
+
+
+
+  var branch =
+  Blockly.Arduino.valueToCode(this, "DATA", Blockly.Arduino.ORDER_ATOMIC) ||
+  '"Keine Eingabe"';
+
+  var linebreak = this.getFieldValue("linebreak");
+  if (linebreak === "TRUE") {
+    linebreak = "ln";
+  } else {
+    linebreak = "";
+  }
+
+
+  var code =`${filename}.print${linebreak}(${branch});\n`;
+  return code;
+};

@@ -583,3 +583,58 @@ Blockly.Blocks["sensebox_sensor_dps310"] = {
     this.setHelpUrl(Blockly.Msg.senseBox_sps30_helpurl);
   },
 };
+
+/**
+ * senseBox-MCU-S2 onBoard Light Sensor
+ * 
+ * 
+  */
+
+Blockly.Blocks["sensebox_esp32s2_light"] = {
+  init: function () {
+    this.appendDummyInput().appendField("ESP32-S2 Phododiode");
+    this.appendDummyInput()
+      .setAlign(Blockly.ALIGN_RIGHT)
+      .appendField(Blockly.Msg.senseBox_value)
+      .appendField(
+        new Blockly.FieldDropdown([
+          [Blockly.Msg.senseBox_esp32_photodiode, "Light intensity"],
+        ]),
+        "NAME"
+      );
+    this.setOutput(true, Types.DECIMAL.typeName);
+    this.setColour(getColour().sensebox);
+    this.setTooltip(Blockly.Msg.senseBox_esp32_photodiode_tooltip);
+    this.data = {name: "Photodiode"};
+  },
+};
+
+/**
+ * senseBox-MCU ESP32-S2 onBoard MPU6050
+ * 
+ * 
+*/
+
+Blockly.Blocks["sensebox_esp32s2_mpu6050"] = {
+  init: function () {
+    this.appendDummyInput().appendField("ESP32-S2 MPU6050");
+    this.appendDummyInput()
+      .setAlign(Blockly.ALIGN_RIGHT)
+      .appendField(Blockly.Msg.senseBox_value)
+      .appendField(
+        new Blockly.FieldDropdown([
+          ["X", "accelerationX"],
+          ["Y", "accelerationY"],
+          ["Z", "accelerationZ"],
+          [Blockly.Msg.senseBox_temp, "temperature"]
+        ]),
+        "value"
+      );
+    this.setOutput(true, Types.DECIMAL.typeName);
+    this.setColour(getColour().sensebox);
+    this.setTooltip(Blockly.Msg.senseBox_mpu6050_tooltip);
+    this.setHelpUrl(Blockly.Msg.senseBox_mpu6050_helpurl);
+    this.data = {name: "mpu6050"};
+  },
+};
+

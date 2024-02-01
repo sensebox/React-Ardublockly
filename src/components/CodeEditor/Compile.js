@@ -79,7 +79,7 @@ class Compile extends Component {
   compile = () => {
     this.setState({ progress: true });
     const data = {
-      board: process.env.REACT_APP_BOARD,
+      board: this.props.selectedBoard === "mcu" ? "sensebox-mcu" : "sensebox-esp32s2",
       sketch: this.props.arduino,
     };
     fetch(`${process.env.REACT_APP_COMPILER_URL}/compile`, {
@@ -115,7 +115,7 @@ class Compile extends Component {
     this.toggleDialog();
     this.props.workspaceName(this.state.name);
     window.open(
-      `${process.env.REACT_APP_COMPILER_URL}/download?id=${id}&board=${process.env.REACT_APP_BOARD}&filename=${filename}`,
+      `${process.env.REACT_APP_COMPILER_URL}/download?id=${id}&board=${this.props.selectedBoard === "mcu" ? "sensebox-mcu" : "sensebox-esp32s2"}&filename=${filename}`,
       "_self"
     );
     this.setState({ progress: false });
