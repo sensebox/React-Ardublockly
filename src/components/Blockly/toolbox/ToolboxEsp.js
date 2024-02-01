@@ -69,7 +69,7 @@ import * as Blockly from "blockly/core";
           </Value>
         </Block>
         <Block type="sensebox_esp32s2_sd_write_file" />
-        <Block type="sensebox_sd_open_file">
+        <Block type="sensebox_esp32s2_sd_open_file">
           <Value name="SD">
             <Block type="sensebox_sd_osem">
               <Value name="DO">
