@@ -797,4 +797,3 @@ Blockly.Arduino.sensebox_esp32s2_mpu6050 = function () {
   }
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
-
