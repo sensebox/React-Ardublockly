@@ -122,7 +122,7 @@ Blockly.Blocks["sensebox_osem_connection"] = {
       this.removeInput("timeStamp", true);
     }
   },
-  LOOP_TYPES: ["sensebox_interval_timer"],
+  LOOP_TYPES: ["sensebox_interval_timer", "switch_case"],
 };
 Blockly.Blocks["sensebox_send_to_osem"] = {
   init: function () {
