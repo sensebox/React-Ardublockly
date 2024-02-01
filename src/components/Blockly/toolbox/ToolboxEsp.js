@@ -43,12 +43,12 @@ import * as Blockly from "blockly/core";
         </Block>
       </Category>
       <Category name="WIFI" colour={getColour().sensebox}>
-        <Block type="sensebox_wifi" />
+        <Block type="sensebox_esp32s2_wifi" />
         <Block type="sensebox_esp32s2_wifi_enterprise" />
         <Block type="sensebox_wifi_status" />
         <Block type="sensebox_wifi_rssi" />
         <Block type="sensebox_get_ip" />
-        <Block type="sensebox_startap" />
+        <Block type="sensebox_esp32s2_startap" />
       </Category>
       {/* <Category name="ESPNOW" colour={getColour().sensebox}>
         <Block type="sensebox_wifi" />
