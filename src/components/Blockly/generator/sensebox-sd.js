@@ -221,9 +221,9 @@ Blockly.Arduino.sensebox_esp32s2_sd_create_file = function (block) {
   Blockly.Arduino.libraries_["library_fs"] = `#include "FS.h"`;
 
   Blockly.Arduino.definitions_["define_" + filename] = `File ${filename};`;
-  Blockly.Arduino.setupCode_["sensebox_esp32s2_sd"] = "//Init SD\n pinMode(SD_ENABLE,OUTPUT);\n digitalWrite(SD_ENABLE,LOW);\n SPIClass sdspi = SPIClass();\n sdspi.begin(VSPI_SCLK,VSPI_MISO,VSPI_MOSI,VSPI_SS);\n";
+  Blockly.Arduino.setupCode_["sensebox_esp32s2_sd"] = "//Init SD\n pinMode(SD_ENABLE,OUTPUT);\n digitalWrite(SD_ENABLE,LOW);\n SPIClass sdspi = SPIClass();\n sdspi.begin(VSPI_SCLK,VSPI_MISO,VSPI_MOSI,VSPI_SS);\n SD.begin(VSPI_SS,sdspi);";
 
-  Blockly.Arduino.setupCode_["sensebox_esp32s2_sd", newFileName] = ` ${filename} = fs.open("/${newFileName}", FILE_WRITE);\n fs.open(${filename}, FILE_WRITE);\n ${filename}.close();\n `;
+  Blockly.Arduino.setupCode_["sensebox_esp32s2_sd", newFileName] = ` ${filename} = SD.open("/${newFileName}", FILE_WRITE);\n ${filename}.close();\n `;
   var code = "";
   return code;
 };
@@ -233,7 +233,7 @@ Blockly.Arduino.sensebox_esp32s2_sd_open_file = function (block) {
   var extension = this.getFieldValue("extension");
   var newFileName = filename.concat(".", extension);
   var branch = Blockly.Arduino.statementToCode(block, "SD");
-  var code = ` ${filename} = fs.open("/${newFileName}", FILE_WRITE);\n`;
+  var code = ` ${filename} = SD.open("/${newFileName}", FILE_WRITE);\n`;
   code +=branch;
   code += ` ${filename}.close();\n`;
   return code;
