@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import * as Blockly from 'blockly/core';
 import { De } from './Blockly/msg/de';
 import { En } from './Blockly/msg/en';
+import { Hu} from './Blockly/msg/hu';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -19,6 +20,8 @@ class Content extends Component {
       Blockly.setLocale(De);
     } else if (this.props.language === 'en_US') {
       Blockly.setLocale(En);
+    } else if (this.props.language === 'hu_HU') {
+      Blockly.setLocale(Hu);
     }
     setBoard(this.props.board)
   }
@@ -29,6 +32,9 @@ class Content extends Component {
         Blockly.setLocale(De);
       } else if (this.props.language === 'en_US') {
         Blockly.setLocale(En);
+      }
+      else if (this.props.language === 'hu_HU') {
+        Blockly.setLocale(Hu);
       }
     }
     setBoard(this.props.board)
