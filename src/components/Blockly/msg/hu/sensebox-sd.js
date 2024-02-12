@@ -3,21 +3,21 @@ export const SD = {
    * SD-Block
    */
   senseBox_sd_create_file: "Create file on SD-Card",
-  senseBox_sd_write_file: " Write Data to SD-Card",
-  senseBox_sd_open_file: "Open a file from SD-Card",
+  senseBox_sd_write_file: "Adatok írása az SD-kártyára",
+  senseBox_sd_open_file: "Fájl megnyitása SD-kártyáról",
   senseBox_sd_create_file_tooltip:
-    "Creates a file on the card. Plug the SD-Bee into the **XBEE2** slot. The **maximum** length of the file name is **8 characters**. The file should be created first in *Setup()*",
+    "Fájl létrehozása a kártyán. Csatlakoztassa az SD-Bee-t a **XBEE2** foglalatba. A fájlnév **maximális** hossza **8 karakter**. A fájlt először a *Setup()*-ban kell létrehozni.",
   senseBox_sd_write_file_tooptip:
-    "Write data to the SD card. Note that the file must be opened first.",
+    "Adatok írása az SD-kártyára. Vegye figyelembe, hogy a fájlt először meg kell nyitni.",
   senseBox_sd_open_file_tooltip:
-    "Open the file on the SD card to save files. At the end of the loop, the file will be closed again automatically.",
+    "A fájlok mentéséhez nyissa meg a fájlt az SD-kártyán. A ciklus végén a fájl automatikusan újra bezáródik.",
   sensebox_sd_filename: "Data.csv",
   senseBox_sd_decimals: "decimals",
   sensebox_sd_osem: "Create CSV-file for openSenseMap",
-  sensebox_sd_osem_tip: "Creates a CSV-file for openSenseMap upload",
-  sensebox_sd_save_for_osem: "Save measurement",
+  sensebox_sd_osem_tip: "CSV-fájl létrehozása az openSenseMap feltöltéséhez",
+  sensebox_sd_save_for_osem: "Mérés mentése",
   sensebox_sd_save_for_osem_tip:
-    "Adds a measurement witht the corresponding Sensor ID to the CSV-file",
+    "Hozzáad egy mérést a megfelelő érzékelőazonosítóval a CSV-fájlhoz",
   sensebox_sd_save_for_osem_id: "Sensor ID:",
   sensebox_sd_measurement: "measurements",
 };
