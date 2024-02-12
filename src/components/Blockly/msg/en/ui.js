@@ -17,6 +17,7 @@ export const UI = {
   toolbox_motors: "Motors",
   toolbox_label_externalRTC: "External RTC",
   toolbox_label_internalRTC: "Internal RTC",
+  toolbox_label_led_matrix: "LED-Matrix",
   variable_NUMBER: "Number (int)",
   variable_SHORT_NUMBER: "char",
   variable_LONG: "Big number (long)",

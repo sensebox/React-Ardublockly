@@ -82,6 +82,7 @@ import * as Blockly from "blockly/core";
         <Block type="sensebox_sd_save_for_osem" />
       </Category>
       <Category name="LED" colour={getColour().sensebox}>
+      <Label text={Blockly.Msg.toolbox_label_led_matrix}></Label>
         <Block type="sensebox_rgb_led"></Block>
         <Block type="sensebox_led" />
         <Block type="sensebox_ws2818_led_init">
@@ -127,6 +128,9 @@ import * as Blockly from "blockly/core";
             </Block>
           </Value>
         </Block>
+        <Label text={Blockly.Msg.toolbox_label_led_matrix}></Label>
+        <Block type="sensebox_ws2812_matrix_init"></Block>
+        <Block type="sensebox_ws2812_matrix_text" />
       </Category>
       <Category name="Display" colour={getColour().sensebox}>
         <Block type="sensebox_display_beginDisplay" />

@@ -64,3 +64,44 @@ Blockly.Arduino['colour_rgb'] = function (block) {
 
     return [red + ', ' + green + ', ' + blue, Blockly.Arduino.ORDER_ATOMIC];
 };
+
+/**
+ * LED-Matrix Blocks
+ * 
+ * 
+ */
+
+
+Blockly.Arduino['sensebox_ws2812_matrix_init'] = function (block) {
+    var dropdown_pin = this.getFieldValue('Port');
+    var brightness = Blockly.Arduino.valueToCode(this, 'BRIGHTNESS', Blockly.Arduino.ORDER_ATOMIC) || '20'
+    Blockly.Arduino.libraries_['libraries_neopixel'] = `#include <Adafruit_NeoPixel.h>`;
+    Blockly.Arduino.libraries_['libraries_rgb_matrix'] = "#include <Adafruit_NeoMatrix.h>"
+    Blockly.Arduino.libraries_["library_AdafruitGFX"] =
+    "#include <Adafruit_GFX.h> // http://librarymanager/All#Adafruit_GFX_Library";
+    Blockly.Arduino.definitions_['definition_rgb_matrix' + dropdown_pin] = `Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(12, 8, ${dropdown_pin},
+        NEO_MATRIX_TOP     + NEO_MATRIX_LEFT +
+        NEO_MATRIX_ROWS + NEO_MATRIX_ZIGZAG,
+        NEO_GRB            + NEO_KHZ800);`;
+    Blockly.Arduino.setupCode_['matrix' + dropdown_pin] = 'matrix_' + dropdown_pin + '.begin();\n';
+    Blockly.Arduino.setupCode_['setup_matrix_brightness' + dropdown_pin] = `matrix_${dropdown_pin}.setBrightness(${brightness});\n`;
+    Blockly.Arduino.setupCode_['setup_matrix_color' + dropdown_pin] = `matrix_${dropdown_pin}.setColor(matrix.Color(255, 0, 0));\n`;
+    return '';
+
+
+}
+
+
+Blockly.Arduino['sensebox_ws2812_matrix_text'] = function (block) {
+    var code = "";
+    var dropdown_pin = this.getFieldValue('Port');
+    var value = Blockly.Arduino.valueToCode(this, "input", Blockly.Arduino.ORDER_ATOMIC) || '"Keine Eingabe"';
+    code+= "matrix_" + dropdown_pin + ".fillScreen(0);\n";
+    code+= "matrix_" + dropdown_pin + ".setCursor(x,0);\n";
+    code+= "matrix_" + dropdown_pin + ".print(F(" + value + "));\n";
+    code+= "matrix_" + dropdown_pin + ".show();\n";
+    return code;
+}
+
+
+

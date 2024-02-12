@@ -170,3 +170,42 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     }
 ]);  // END JSON EXTRACT (Do not delete this comment.)
 
+
+
+/**
+ * LED-Matrix Blocks
+ * 
+ * 
+ */
+
+
+Blockly.Blocks['sensebox_ws2812_matrix_init'] = {
+    init: function () {
+        this.setColour(getColour().sensebox);
+        this.appendDummyInput()
+            .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_init)
+            .appendField("Port:")
+            .appendField(new Blockly.FieldDropdown(selectedBoard().digitalPinsRGBMatrix), "Port")
+        this.appendValueInput("BRIGHTNESS", "brightness")
+            .appendField((Blockly.Msg.senseBox_ws2812_rgb_matrix_brightness));
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setTooltip(Blockly.Msg.senseBox_ws2812_rgb_matrix_init_tooltip);
+    }
+};
+
+Blockly.Blocks['sensebox_ws2812_matrix_text'] = {
+    init: function () {
+        this.setColour(getColour().sensebox);
+        this.appendDummyInput()
+            .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_print)
+            .appendField("Port:")
+            .appendField(new Blockly.FieldDropdown(selectedBoard().digitalPinsRGBMatrix), "Port")
+        this.appendValueInput("input")
+            .setCheck(null)
+            .appendField((Blockly.Msg.senseBox_ws2812_rgb_matrix_text));
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setTooltip(Blockly.Msg.senseBox_ws2812_rgb_matrix_init_tooltip);
+    }
+};
