@@ -34,7 +34,7 @@ export const BLE = {
   sensebox_phyphox_experiment_tooltip:
     "Create an experiment and give it a one unique name and a short description. Adjon hozzá legfeljebb 5 különböző grafikont a nézetben. ",
   sensebox_phyphox_graph_tooltip:
-    "Új gráfot hoz létre a kísérlethez. Adja meg a tengelyek egységét és címkéjét, valamint válassza ki a mért értékek megjelenítési stílusát. Adja hozzá az X- és Y-tengely értékeinek interfészéhez azt a csatornát, amelyen a mért értékek később elküldésre kerülnek. Ha időbélyeget szeretne létrehozni a Phyphox alkalmazáson keresztül, csatlakoztassa a *Timestamp*" blokkot,
+    "Új gráfot hoz létre a kísérlethez. Adja meg a tengelyek egységét és címkéjét, valamint válassza ki a mért értékek megjelenítési stílusát. Adja hozzá az X- és Y-tengely értékeinek interfészéhez azt a csatornát, amelyen a mért értékek később elküldésre kerülnek. Ha időbélyeget szeretne létrehozni a Phyphox alkalmazáson keresztül, csatlakoztassa a *Timestamp*",
   sensebox_phyphox_timestamp_tooltip:
     "Használja ezt a blokkot, ha időbélyeget szeretne létrehozni a Phyphox alkalmazáson keresztül",
   sensebox_phyphox_sendchannel_tooltip:
