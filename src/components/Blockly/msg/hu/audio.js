@@ -1,10 +1,9 @@
-
 export const AUDIO = {
-    ARD_TONEFREQ: "mit Frequenz",
-    ARD_TONE_FREQ: "Frequenz",
-    ARD_TONE_PIN: "Ton PIN#",
-    ARD_TONE_PIN_TIP: "Erzeugt einen Ton an Pin",
-    ARD_TONE_TIP: "Erzeugt einen Ton an Pin mit einer spezifischen Frequenz zwischen 31 - 65535 Hz",
-    ARD_TONE_WARNING: "Frequenz muss zwischen 31 - 65535 liegen",
-}
 
+    ARD_TONEFREQ: "at frequency",
+    ARD_TONE_FREQ: "frequency",
+    ARD_TONE_PIN: "Tone PIN#",
+    ARD_TONE_PIN_TIP: "Generate audio tones on a pin",
+    ARD_TONE_TIP: "Sets tone on pin to specified frequency within range 31 - 65535 Hz",
+    ARD_TONE_WARNING: "Frequency must be in range 31 - 65535",
+}

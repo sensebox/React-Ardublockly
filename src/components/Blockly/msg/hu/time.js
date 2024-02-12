@@ -1,22 +1,19 @@
 export const TIME = {
-  /**
-   * Interval Block
-   */
-  senseBox_interval_timer: "Intervall: ",
   senseBox_interval: "ms",
+  senseBox_interval_timer: "Interval: ",
   senseBox_interval_timer_tip:
-    "Definiere ein Intervall, das alle x Millisekunden ausgeführt wird",
-  ARD_TIME_DELAY: "Warte",
-  ARD_TIME_DELAY_MICROS: "Mikrosekunden",
-  ARD_TIME_DELAY_MICRO_TIP: "Warte eine spezifischen Zeit in Microsekunden",
-  ARD_TIME_DELAY_TIP: "Warte spezifische Zeit in Millisekunden",
-  ARD_TIME_INF: "Warte für immer (Beende Programm)",
-  ARD_TIME_INF_TIP: "Stoppt das Programm.",
-  ARD_TIME_MICROS: "Bereits vergangen Zeit (Mikrosekunden)",
+    "Define an interval to be executed every x milliseconds",
+  ARD_TIME_DELAY: "wait",
+  ARD_TIME_DELAY_MICROS: "microseconds",
+  ARD_TIME_DELAY_MICRO_TIP: "Wait specific time in microseconds",
+  ARD_TIME_DELAY_TIP: "Wait specific time in milliseconds",
+  ARD_TIME_INF: "wait forever (end program)",
+  ARD_TIME_INF_TIP: "Wait indefinitely, stopping the program.",
+  ARD_TIME_MICROS: "current elapsed Time (microseconds)",
   ARD_TIME_MICROS_TIP:
-    "Gibt eine Zahl in Microsekunden zurück, die der Zeitdauer des Aktuellen Programms entspricht. Muss als positiven Integer gespeichert werden", // untranslated
-  ARD_TIME_MILLIS: "Bereits vergangen Zeit (Millisekunden)",
+    "Returns the number of microseconds since the Arduino board began running the current program. Has to be stored in a positive long integer",
+  ARD_TIME_MILLIS: "current elapsed Time (milliseconds)",
   ARD_TIME_MILLIS_TIP:
-    "Gibt eine Zahl in Millisekunden zurück, die der Zeitdauer des Aktuellen Programms entspricht. Muss als positiven Integer gespeichert werden", // untranslated
-  ARD_TIME_MS: "Millisekunden",
+    "Returns the number of milliseconds since the Arduino board began running the current program. Has to be stored in a positive long integer",
+  ARD_TIME_MS: "milliseconds",
 };

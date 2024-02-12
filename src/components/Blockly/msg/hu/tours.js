@@ -1,22 +1,24 @@
 export const TOURS = {
 
+
     /**
      * Home Tour
      */
-    hometour_wrapper: "Willkommen zu Blockly für die senseBox. In dieser Tour werde ich dir alle wichtigen Funktionen der Oberfläche zeigen",
-    hometour_workspaceFunc: "Hier findest du alle Buttons um dein Programm zu übertragen, zu speichern oder zu teilen",
-    hometour_blocklyWindow: "Dies ist deine Arbeitsfläche. Hier kannst du mithilfe der Blöcke deinen Programmcode erstellen",
-    hometour_blocklyToolboxDiv: "In der Toolbox befinden sich alle Blöcke. Verbinde diese in der Arbeitsfläche und erstelle dein Programmcode",
-    hometour_compileBlocks: "Wenn du fertig mit dem Programmieren bist und deinen Programmcode auf die senseBox übertragen möchtest klicke hier um deinen Programmcode zu kompilieren.",
-    hometour_menuButton: "Im Menü findest du Tutorials und eine Gallery mit verschiedenen Beispiel Programmen. Logge dich über deinen openSenseMap Account ein und du erhälst noch mehr Funktionen",
-    hometour_showCode: "Über diesen Button kannst du dir den generierten Programmcode anzeigen lassen",
-    hometour_shareBlocks: "Erstelle über diesen Button einen Kurzlink und teile deine Blöcke mit anderen Nutzer:innen",
+    hometour_wrapper: "Welcome to the new Learn- and Programmingapp for the senseBox. In this tour I will show you all the important features of the interface",
+    hometour_workspaceFunc: "Here you will find all the buttons to compile, save or share your program",
+    hometour_blocklyWindow: "This is your workspace. Here you can use the blocks to create your program code",
+    hometour_blocklyToolboxDiv: "The toolbox contains all the blocks. Connect them in the workspace and create your program code.",
+    hometour_compileBlocks: "When you are done programming and want to transfer your program code to the senseBox click here to compile your program code.",
+    hometour_menuButton: "In the menu you will find tutorials and a gallery with different example programs. Log in with your openSenseMap account and you will get even more features.",
+    hometour_showCode: "With this button you can show the generated program code",
+    hometour_shareBlocks: "Use this button to create a short link and share your blocks with other users",
+
 
     /**
      * Assessment Tour
      */
 
-    assessmenttour_solutionCheck: "Wenn deine Lösung fertig ist klicke hier um diese zu überprüfen",
-    assessmenttour_assessmentDiv: "Los gehts! Löse die folgende Aufgabe, um das Tutorial abzuschließen.",
-    assessmenttour_injectionDiv: "Erstelle hier deine Lösung. Du kannst alle Blöcke aus der Toolbox verwenden.",
+    assessmenttour_solutionCheck: "When your solution is ready click here to check it",
+    assessmenttour_assessmentDiv: "Let's go! Solve the following task to complete the tutorial.",
+    assessmenttour_injectionDiv: "Create your solution here. You can use any blocks from the toolbox.",
 }

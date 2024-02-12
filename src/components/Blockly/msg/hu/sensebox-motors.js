@@ -4,16 +4,16 @@ export const MOTORS = {
      * Motors
      */
 
-    sensebox_motors_beginServoMotor: "Initialisiere Servomotor",
+    sensebox_motors_beginServoMotor: "Initialize Servo Motor",
     sensebox_motors_beginServoMotor_pin: "Pin:",
-    sensebox_motors_beginServoMotor_tooltip: "Verbinde einen digitalen Pin mit dem orangen Kabel des Servomotrors. Verbinde zusätzlich GND mit GND (schwarzes und braunes Kabel) und 5V mit 5V (rotes Kabel).",
-    sensebox_motors_beginServoMotor_helpurl: "https://de.wikipedia.org/wiki/Servomotor",
+    sensebox_motors_beginServoMotor_tooltip: "Connect one of the the digital pins to the orange wire of the Servo Motor. Also Connect GND to GND (black and brown wire) and 5V to 5V (red wire).",
+    sensebox_motors_beginServoMotor_helpurl: "https://en.wikipedia.org/wiki/Servomotor",
 
-    sensebox_motors_moveServoMotor: "Bewege Servomotor",
+    sensebox_motors_moveServoMotor: "Move Servo Motor",
     sensebox_motors_moveServoMotor_pin: "Pin:",
-    sensebox_motors_moveServoMotor_degrees: "Winkel in Grad:",
-    sensebox_motors_moveServoMotor_tooltip: "Der Servomotor kann zwischen 0 und 180 Grad bewegt werden.",
-    sensebox_motors_moveServoMotor_helpurl: "https://de.wikipedia.org/wiki/Servomotor",
+    sensebox_motors_moveServoMotor_degrees: "Degrees:",
+    sensebox_motors_moveServoMotor_tooltip: "The Servo Motor can be moved to a spezific angle between 0 and 180 degrees.",
+    sensebox_motors_moveServoMotor_helpurl: "https://en.wikipedia.org/wiki/Servomotor",
 
     sensebox_motors_I2CMotorBoard_begin: "Initialize I2C Motor Board",
     sensebox_motors_I2CMotorBoard_begin_tooltip: "Connect the I2C Moztor Board with the two DC Motors to one of the five I2C-Ports. Use this Block inside the setup()-function.",

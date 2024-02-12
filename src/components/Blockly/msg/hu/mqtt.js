@@ -1,15 +1,16 @@
-
 export const MQTT = {
-    /**
+
+    /***
      * MQTT
      */
-    senseBox_mqtt_init: "Verbinde mit MQTT Broker",
+
+    senseBox_mqtt_init: "Connect to MQTT Broker",
     senseBox_mqtt_server: "Server",
     senseBox_mqtt_port: "Port",
-    senseBox_mqtt_username: "Benutzername",
-    senseBox_mqtt_password: "Passwort",
+    senseBox_mqtt_username: "Username",
+    senseBox_mqtt_password: "Password",
     sensebox_mqtt_subscribe: "Subscribe to Feed",
-    senseBox_mqtt_publish: "Sende an Feed/Topic",
-    senseBox_mqtt_init_tooltip: "Initialisiere die Verbindung zu dem MQTT Broker. Verwende diesen Block innerhalb der setup()-Funktion und stelle zuerst eine Verbindung mit dem Wlan Netzwerk her.",
-    senseBox_mqtt_publish_tooltip: "Sende etwas an ein 'Topic' deines MQTT Brokers.",
+    senseBox_mqtt_publish: "Publish to Feed/Topic",
+    senseBox_mqtt_init_tooltip: "Initialise a connection to a MQTT Broker. Use this Block inside the setup()-function and make sure to connect to your wifi first.",
+    senseBox_mqtt_publish_tooltip: "Publish something to a specific topic to your MQTT Broker.",
 }

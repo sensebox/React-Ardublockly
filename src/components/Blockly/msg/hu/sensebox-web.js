@@ -2,28 +2,29 @@ export const WEB = {
   /**
    * WiFi
    */
-  senseBox_wifi_connect: "Verbinde mit WLAN",
-  senseBox_wifi_ssid: "Netzwerkname",
+  senseBox_wifi_connect: "Connect to Wifi",
+  senseBox_wifi_ssid: "Networkname",
   senseBox_wifi_ip: "IP-Address",
-  senseBox_wifi_ip_tooltip: "Gibt die IP-Address der senseBox aus",
-  senseBox_wifi_status: "WiFi-Status",
-  senseBox_wifi_status_tooltip: "Gibt den Status der WiFi-Verbindung aus",
+  senseBox_wifi_ip_tooltip: "The IP-Address of the SenseBox",
+  senseBox_wifi_status: "Status",
+  senseBox_wifi_status_tooltip: "The status of the Wifi connection",
   senseBox_wifi_rssi: "RSSI",
-  senseBox_wifi_rssi_tooltip: "Gibt die Sigal Stärke der WiFi-Verbindung",
+  senseBox_wifi_rssi_tooltip: "The signal strength of the Wifi connection",
   senseBox_wifi_tooltip:
-    "Stellt eine Verbindung mit einem WLAN-Netzwerk her. Möchtest du dich mit einem ungesicheren Netzwerk (z.B. Freifunk) verbinden lösche das Feld Passwort. Das WiFi-Bee muss auf den Steckplatz **XBEE1** aufgesteckt werden.",
-  senseBox_wifi_startap: "Initialisiere WLAN Access Point",
+    "Connects to a wireless network. If you want to connect to an unsecured network (e.g. Freifunk) clear the password field. The WiFi-Bee must be plugged into the **XBEE1** slot.",
+  senseBox_wifi_startap: "Initialize Wifi Access Point",
   senseBox_wifi_startap_tooltip:
-    "Erstellt einen WiFi-Accesspoint zu dem du dich verbinden kannst. Beachte, dass immer nur 1 Gerät gleichzeitig verbunden werden kann.",
-  senseBox_wifi_helpurl: "https://docs.sensebox.de/blockly/blockly-web-wifi/",
-  senseBox_ethernet: "Verbinde mit Ethernet",
+    "Creates a WiFi access point to which you can connect. Note that only 1 device can be connected at a time.",
+  senseBox_wifi_helpurl:
+    "https://en.docs.sensebox.de/blockly/blockly-web-wifi/",
+  senseBox_ethernet: "Connect to Ethernet",
   senseBox_ethernet_dhcp: "DHCP",
-  senseBox_ethernet_manuel_config: "Manuelle Konfiguration",
-  senseBox_ethernet_ip: "IP-Adresse",
+  senseBox_ethernet_manuel_config: "Manual configuration",
+  senseBox_ethernet_ip: "IP address",
   senseBox_ethernet_gateway: "Gateway",
-  senseBox_ethernet_subnetmask: "Subnetzmaske",
-  senseBox_ethernet_mac: "MAC-Adresse",
+  senseBox_ethernet_subnetmask: "Subnet mask",
+  senseBox_ethernet_mac: "MAC address",
   senseBox_ethernet_dns: "DNS-Server",
   senseBox_ethernet_tooltip:
-    "Verbinde das LAN-Bee mit dem Steckplatz XBEE1. Die meisten Netzwerke verwenden DHCP und vergeben automatisch eine IP-Adresse. Solltest du eine Manuelle Konfiguration durchführen wollen wählen im Dropdown Menü **Manuelle Konfiguration** aus und gebe die entsprechenden Daten ein.",
+    "Connect the LAN-Bee to the XBEE1 slot. Most networks use DHCP and assign an IP address automatically. If you want to do a manual configuration select **Manual Configuration** in the dropdown menu and enter the appropriate data.",
 };
