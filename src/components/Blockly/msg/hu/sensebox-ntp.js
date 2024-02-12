@@ -1,10 +1,10 @@
 export const NTP = {
-  sensebox_ntp_init: "Initialise NTP",
+  sensebox_ntp_init: "NTP inicializálása",
   sensebox_ntp_init_tooltip:
-    "Initialisiere die RTC. Schließe diese an einen der 5 I2C/Wire Anschlüsse an und lege die Batterie ein. Bevor du die Uhrzeit auslesen kannst muss diese zunächst einmal gesetzt werden. Dieser Schritt muss normalerweise nur einmalig durchgeführt werden.",
+    "Az RTC inicializálása. Csatlakoztassa az 5 I2C/Wire csatlakozás egyikéhez, és helyezze be az elemet. Mielőtt kiolvashatná az időt, először be kell állítani. Ezt a lépést általában csak egyszer kell elvégezni.",
   sensebox_ntp_get: "Get time from NTP Server: ",
   sensebox_ntp_get_tooltip:
-    "Gibt dir den ausgewählten Wert zurück. Unix Zeit entspricht der Anzahl der Sekunden seit dem 1.1.1970",
-  sensebox_ntp_epochTime: "Unix time",
-  sensebox_ntp_formattedTimeStamp: "Timestamp (hh:mm:ss)",
+    "Visszaadja a kiválasztott értéket. A Unix idő az 1970. január 1. óta eltelt másodpercek számának felel meg",
+  sensebox_ntp_epochTime: "Unix idő",
+  sensebox_ntp_formattedTimeStamp: "Időbélyeg (hh:mm:ss)",
 };
