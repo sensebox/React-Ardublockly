@@ -37,4 +37,18 @@ export const LED = {
   COLOUR_RGB_TITLE: "Farbe mit",
   COLOUR_RGB_TOOLTIP:
     "Erstelle eine Farbe mit selbst definierten Rot-, Grün- und Blauwerten. Alle Werte müssen zwischen 0 und 255 liegen. 0 ist hierbei die geringte Intensität der Farbe 255 die höchste.",
+
+    /**
+     * LED-Matrix
+     */
+
+
+    senseBox_ws2812_rgb_matrix_init: "LED-Matrix initialisieren",
+    senseBox_ws2812_rgb_matrix_print: "Zeige Text/Zahl",
+    senseBox_ws2812_rgb_matrix_text: "Input",
+    senseBox_ws2812_rgb_matrix_init_tooltip: "",
+    senseBox_ws2812_rgb_matrix_brightness: "",
+    senseBox_ws2812_rgb_matrix_print_tooltip: "",
+
+
 };
