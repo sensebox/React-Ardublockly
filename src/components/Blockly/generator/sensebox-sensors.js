@@ -85,7 +85,7 @@ void Lightsensor_begin()
 `;
 
     Blockly.Arduino.codeFunctions_["Lightsensor_getIlluminance"] = `
-unsigned int Lightsensor_getIlluminance()
+  uint32_t Lightsensor_getIlluminance()
   {
     unsigned int lux = 0;
     if (lightsensortype == 0) // TSL45315
