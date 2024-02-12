@@ -1,6 +1,6 @@
 export const UI = {
   /**
-   * Toolbox
+   * Eszköztár
    */
   toolbox_sensors: "Sensors",
   toolbox_logic: "Logic",
@@ -15,130 +15,130 @@ export const UI = {
   toolbox_serial: "Serial",
   toolbox_advanced: "Erweitert",
   toolbox_motors: "Motors",
-  toolbox_label_externalRTC: "External RTC",
-  toolbox_label_internalRTC: "Internal RTC",
-  variable_NUMBER: "Number (int)",
+  toolbox_label_externalRTC: "Külső RTC",
+  toolbox_label_internalRTC: "Belső RTC",
+  variable_NUMBER: "Szám (int)",
   variable_SHORT_NUMBER: "char",
-  variable_LONG: "Big number (long)",
+  variable_LONG: "Nagy szám (long)",
   variable_DECIMAL: "Decimal (float)",
-  variables_TEXT: "Text (string)",
-  variables_ARRAY: "Array (array)",
-  variables_CHARACTER: "Character (char)",
-  variables_BOOLEAN: "Boolean (boolean)",
+  variables_TEXT: "Szöveg (string)",
+  variables_ARRAY: "Tömb (tömb)",
+  variables_CHARACTER: "Karakter (char)",
+  variables_BOOLEAN: "Boolean (Boolean)",
   variables_NULL: "void (void)",
   variables_UNDEF: "undefined",
   variables_set: "set",
   variables_to: "to",
 
   /**
-   * Tooltips
+   * Eszköztippek
    *
    */
 
   tooltip_compile_code: "Compile code",
-  tooltip_save_blocks: "Save blocks",
-  tooltip_open_blocks: "Open blocks",
-  tooltip_screenshot: "Download screenshot",
-  tooltip_clear_workspace: "Reset workspace",
-  tooltip_share_blocks: "Share blocks",
+  tooltip_save_blocks: "Blokkok mentése",
+  tooltip_open_blocks: "Blokkok megnyitása",
+  tooltip_screenshot: "Képernyőkép letöltése",
+  tooltip_clear_workspace: "Munkatér visszaállítása",
+  tooltip_share_blocks: "Blokkok megosztása",
   tooltip_show_code: "Show code",
   tooltip_hide_code: "Hide code",
-  tooltip_delete_project: "Delete project",
-  tooltip_project_name: "Project name",
-  tooltip_download_project: "Download project",
-  tooltip_open_project: "Open project",
-  tooltip_update_project: "Update project",
-  tooltip_save_project: "Save project",
-  tooltip_create_project: "Create project",
-  tooltip_share_project: "Share project",
-  tooltip_reset_workspace: "Reset workspace",
+  tooltip_delete_project: "Projekt törlése",
+  tooltip_project_name: "Projekt neve",
+  tooltip_download_project: "Projekt letöltése",
+  tooltip_open_project: "Projekt megnyitása",
+  tooltip_update_project: "Projekt frissítése",
+  tooltip_save_project: "Projekt mentése",
+  tooltip_create_project: "Projekt létrehozása",
+  tooltip_share_project: "Projekt megosztása",
+  tooltip_reset_workspace: "Munkatér visszaállítása",
   tooltip_copy_link: "Cooy link",
-  tooltip_trashcan_hide: "hide deleted blocks",
-  tooltip_trashcan_delete: "empty trashcan",
-  tooltip_project_title: "Project title",
+  tooltip_trashcan_hide: "törölt blokkok elrejtése",
+  tooltip_trashcan_delete: "ürítsd ki a szemetesládát",
+  tooltip_project_title: "projekt címe",
   tooltip_check_solution: "Check solution",
   tooltip_copy_code: "Copy Code to clipboard",
-  tooltip_statistics_current: "Number of current blocks",
-  tooltip_statistics_new: "Number of new blocks",
-  tooltip_statistics_changed: "Number of changed blocks",
-  tooltip_statistics_moved: "Number of moved blocks",
-  tooltip_statistics_deleted: "Number of deleted blocks",
-  tooltip_statistics_remaining: "Remaining blocks",
-  tooltip_statistics_show: "Show statistics",
+  tooltip_statistics_current: "Az aktuális blokkok száma",
+  tooltip_statistics_new: "Új blokkok száma",
+  tooltip_statistics_changed: "Megváltozott blokkok száma",
+  tooltip_statistics_moved: "Az áthelyezett blokkok száma",
+  tooltip_statistics_deleted: "Törölt blokkok száma",
+  tooltip_statistics_remaining: "Megmaradt blokkok",
+  tooltip_statistics_show: "Statisztikák megjelenítése",
   tooltip_start_tour: "start Tour",
 
   /**
-   * Messages
+   * Üzenetek
    *
    */
 
-  messages_delete_project_failed: "Error deleting the project. Try again.",
-  messages_reset_workspace_success: "The project has been successfully reset.",
-  messages_PROJECT_UPDATE_SUCCESS: "The project was successfully updated.",
+  messages_delete_project_failed: "Hiba a projekt törlésében. Próbálja újra.",
+  messages_reset_workspace_success: "A projekt sikeresen visszaállt.",
+  messages_PROJECT_UPDATE_SUCCESS: "A projektet sikeresen frissítettük.",
   messages_GALLERY_UPDATE_SUCCESS:
-    "The gallery project was successfully updated.",
-  messages_PROJECT_UPDATE_FAIL: "Error updating the project. Try again.",
+    "A galéria projekt sikeresen frissült.",
+  messages_PROJECT_UPDATE_FAIL: "Hiba a projekt frissítésében. Próbálja meg újra.",
   messages_GALLERY_UPDATE_FAIL:
-    "Error updating the gallery project. Try again.",
-  messages_gallery_save_fail_1: "Error saving the ",
+    "Hiba a galéria projekt frissítésében. Try again.",
+  messages_gallery_save_fail_1: "Hiba a ",
   messages_gallery_save_fail_2: "Project. Try again.",
   messages_SHARE_SUCCESS: "Share program",
   messages_SHARE_FAIL:
-    "Error creating a link to share your program. Try again.",
-  messages_copylink_success: "Link successfully saved to clipboard.",
-  messages_rename_success_01: "The project was successfully saved to ",
-  messages_rename_success_02: "renamed.",
+    "Hiba a program megosztásához szükséges link létrehozásában. Try again.",
+  messages_copylink_success: "Link sikeresen elmentve a vágólapra.",
+  messages_rename_success_01: "A projekt sikeresen el lett mentve a ",
+  messages_rename_success_02: "átnevezve.",
   messages_newblockly_head:
-    "Welcome to the new version Blockly for the senseBox",
+    "Üdvözöljük a Blockly új verziójában a senseBox számára",
   messages_newblockly_text:
-    "The new Blockly version is currently in testing. If you find any errors please report them in our [forum](https://forum.sensebox.de/t/neue-blockly-version-beta-test-und-feedback/1176). You can find an overview of all new features [here](/news)",
-  messages_GET_TUTORIAL_FAIL: "Back to tutorials overview",
-  messages_LOGIN_FAIL: "The username or password is incorrect.",
-  messages_login_error: "Enter both a username and a password.",
+    "Az új Blockly verzió jelenleg tesztelés alatt áll. Ha bármilyen hibát találsz, kérjük, jelezd a [fórumon](https://forum.sensebox.de/t/neue-blockly-version-beta-test-und-feedback/1176). Az összes új funkcióról [itt](/news) találsz áttekintést",
+  messages_GET_TUTORIAL_FAIL: "Vissza az oktatóanyagok áttekintéséhez",
+  messages_LOGIN_FAIL: "A felhasználónév vagy a jelszó helytelen.",
+  messages_login_error: "Adj meg egy felhasználónevet és egy jelszót is.",
   messages_copy_code: "Copy code to clipboard succesfull",
 
   /**
-   * Tablet Dialog
+   * Tablet párbeszédpanel
    */
-  tabletDialog_headline: "Tablet mode is enabled!",
+  tabletDialog_headline: "Tablet mód engedélyezve!",
   tabletDialog_text:
-    "Tablet mode has been activated. You can now copy program codes to your senseBox via the senseBox Connect app. Tablet mode can be deactivated in the settings",
+    "Tablet mode has been activated. Mostantól a senseBox Connect alkalmazáson keresztül programkódokat másolhat a senseBox-ra. A táblagép üzemmód a beállításokban kikapcsolható",
   tabletDialog_more:
-    "For more information and the link to download the app, please visit: ",
+    "További információkért és az alkalmazás letöltésének linkjéért kérjük, látogasson el a következő weboldalra: ",
 
   /**
-   * Reset Dialog
+   * A párbeszédpanel alaphelyzetbe állítása
    */
 
-  resetDialog_headline: "Reset workspace?",
+  resetDialog_headline: "Munkatér visszaállítása?",
   resetDialog_text:
-    "Do you really want to reset the workspace? All blocks will be deleted!",
+    "Tényleg vissza akarja állítani a munkaterületet? Minden blokk törlődik!",
 
   /**
-   * Share Dialog
+   * Megosztás párbeszédpanel
    */
 
-  sharedialog_headline: "Your link has been created.",
-  sharedialog_text: "You can share your program using the following link.",
+  sharedialog_headline: "A linked elkészült.",
+  sharedialog_text: "A programodat a következő link segítségével oszthatod meg.",
 
   /**
-   * Project rename Dialog
+   * Projekt átnevezése párbeszédpanel
    */
 
   renamedialog_headline: "Rename project",
   renamedialog_text:
     "Please enter a name for the project and confirm it by clicking 'Confirm'.",
   /**
-   * Compile Dialog
+   * Kompilálási párbeszédpanel
    *
    */
 
   compiledialog_headline: "Error",
   compiledialog_text:
-    "While compiling an error occured. Please check your blocks and try again",
+    "A fordítás során hiba történt. Kérjük, ellenőrizze a blokkokat és próbálja meg újra",
 
   /**
-   * Buttons
+   * Gombok
    *
    */
 
@@ -147,10 +147,10 @@ export const UI = {
   button_accept: "Ok",
   button_compile: "Compile",
   button_create_variableCreate: "Create Variable",
-  button_back: "Back",
-  button_next: "Next step",
+  button_back: "Vissza",
+  button_next: "Következő lépés",
   button_tutorial_overview: "Tutorial overview",
-  button_login: "Login",
+  button_login: "Bejelentkezés",
   button_createVariable: "Create Typed Variable",
 
   /**
@@ -158,33 +158,33 @@ export const UI = {
    */
 
   filename: "Filename",
-  projectname: "Projectname",
+  projectname: "Projektnév",
   /**
-   * Settings
+   * Beállítások
    */
   settings_head: "Settings",
   settings_language: "Language",
   settings_language_text:
-    "Selection of the language applies to the entire application. A distinction can be made between German and English.",
+    "A nyelv kiválasztása az egész alkalmazásra vonatkozik. Különbséget lehet tenni a német és az angol nyelv között.",
   settings_language_de: "German",
   settings_language_en: "English",
-  settings_language_hu: "Hungarian",
+  settings_language_hu: "Magyar",
   settings_renderer: "Renderer",
   settings_renderer_text:
-    "The selected renderer determines the appearance of the blocks. A distinction can be made between 'Geras' and 'Zelos', whereby 'Zelos' is particularly suitable for a touch application.",
-  settings_statistics: "Statistics",
+    "A kiválasztott renderelő határozza meg a blokkok megjelenését. Különbséget lehet tenni a 'Geras' és a 'Zelos' között, ahol a 'Zelos' különösen alkalmas egy érintőképernyős alkalmazáshoz.",
+  settings_statistics: "Statisztikák",
   settings_statistics_text:
-    "The display of statistics on the usage of the blocks above the workspace can be shown or hidden.",
+    "A munkaterület feletti blokkok használatára vonatkozó statisztikák megjelenítése megjeleníthető vagy elrejthető.",
   settings_statistics_on: "On",
   settings_statistics_off: "Off",
   settings_ota_head: "Tablet mode",
   settings_ota_text:
-    "Tablet mode disables the code display and enables the possibility to transfer the program code via the senseBox Connect app. You can find more information on: ",
+    "Tablet mode: Tablet mode kikapcsolja a kód megjelenítését és lehetővé teszi a programkód átvitelét a senseBox Connect alkalmazáson keresztül. További információkat a következő oldalon talál: ",
   settings_ota_on: "Activated",
   settings_ota_off: "Deactivated",
   settings_sounds: "Sound",
   settings_sounds_text:
-    "Enable or disable sounds when adding and deleting blocks. Disabled by default",
+    "Hangok engedélyezése vagy letiltása blokkok hozzáadásakor és törlésekor. Alapértelmezés szerint kikapcsolva",
   settings_board: "Board",
   settings_board_text: "Choose your board",
 
@@ -192,64 +192,64 @@ export const UI = {
    * 404
    */
 
-  notfound_head: "The page you requested cannot be found.",
+  notfound_head: "Az Ön által kért oldal nem található.",
   notfound_text:
-    "The page you are looking for may have been removed, its name changed, or it may be temporarily unavailable.",
+    "A keresett oldal lehet, hogy eltávolították, a neve megváltozott, vagy átmenetileg nem elérhető.",
 
   /**
-   * Labels
+   * Címkék
    */
-  labels_donotshowagain: "Do not show dialog again",
+  labels_donotshowagain: "Ne jelenítsd meg újra a párbeszédpanelt",
   labels_here: "here",
-  labels_username: "Email or username",
-  labels_password: "Password",
+  labels_username: "Email vagy felhasználónév",
+  labels_password: "Jelszó",
 
   /**
-   * Tutorials
+   * Oktatóprogramok
    */
   tutorials_home_head: "Tutorials",
-  tutorials_assessment_task: "Task",
+  tutorials_assessment_task: "Feladat",
   tutorials_hardware_head:
-    "For the implementation you need the following hardware:",
+    "A megvalósításhoz a következő hardverre van szükség:",
   tutorials_hardware_moreInformation:
-    "You can find more information about the hardware component.",
+    "További információkat talál a hardverkomponensről.",
   tutorials_hardware_here: "here",
   tutorials_requirements:
-    "Before continuing with this tutorial, you should have successfully completed the following tutorials:",
+    "Mielőtt folytatná ezt a bemutatót, a következő bemutatókat kell sikeresen elvégeznie:",
 
   /**
    * Tutorial Builder
    */
-  uilder_createNew: "create new Tutorial",
-  builder_changeExisting: "change existing Tutorial",
-  builder_deleteExisting: "remove existing Tutorial",
+  uilder_createNew: "új oktatóprogram létrehozása",
+  builder_changeExisting: "meglévő oktatóprogram módosítása",
+  builder_deleteExisting: "meglévő oktatóprogram eltávolítása",
   builder_solution: "Solution",
   builder_solution_submit: "Submit Solution",
   builder_example_submit: "Submit example",
   builder_comment:
-    "Note: You can delete the initial setup() or infinite loop() block. Additionally, it is possible to select only any block, among others, without displaying it as disabled.",
-  builder_hardware_order: "Note that the order of selection is authoritative.",
-  builder_hardware_helper: "Select at least one hardware component.",
-  builder_requirements_head: "Requirements.",
+    "Megjegyzés: Törölheti a kezdeti setup() vagy a végtelen ciklus() blokkot. Ezen kívül lehetőség van arra is, hogy a többi blokk közül csak bármelyiket kiválassza, anélkül, hogy letiltottként jelenítené meg.",
+  builder_hardware_order: "Vegye figyelembe, hogy a kiválasztás sorrendje a mérvadó.",
+  builder_hardware_helper: "Válasszon ki legalább egy hardverkomponenst.",
+  builder_requirements_head: "Követelmények.",
   builder_requirements_order:
-    "Note that the order of ticking is authoritative.",
-  builder_difficulty: "Difficulty level",
+    "Vegye figyelembe, hogy a jelölés sorrendje a mérvadó.",
+  builder_difficulty: "Nehézségi szint",
   builder_public_head: "Publish tutorial",
   builder_public_label: "Publish tutorial for all users",
-  builder_review_head: "Publish tutorial",
+  builder_review_head: "Publish tutorial tutorial",
   builder_review_text:
-    "You can share your tutorial with other people directly from the link. If you want to publish your tutorial for all users in the overview you can activate it here. An administrator will view your tutorial and then activate it.",
+    "Megoszthatja a bemutatót másokkal közvetlenül a linkről. Ha az összes felhasználó számára szeretné közzétenni a bemutatót az áttekintésben, akkor itt aktiválhatja. Egy rendszergazda megnézi a bemutatót, majd aktiválja azt.",
 
   /**
-   * Login
+   * Bejelentkezés
    */
 
   login_head: "Login",
-  login_osem_account_01: "You need to have an ",
-  login_osem_account_02: "Account to login",
-  login_lostpassword: "Lost your password?",
+  login_osem_account_01: "Szükséged van egy ",
+  login_osem_account_02: "Fiók a bejelentkezéshez",
+  login_lostpassword: "Elfelejtette a jelszavát?",
   login_createaccount:
-    "If you don't have an openSenseMap account please register on ",
+    "Ha nincs openSenseMap-fiókja, kérjük, regisztráljon a ",
 
   /**
    * Navbar
@@ -257,7 +257,7 @@ export const UI = {
   navbar_blockly: "Blockly",
   navbar_tutorials: "Tutorials",
   navbar_tutorialbuilder: "Create tutorial",
-  navbar_gallery: "Gallery",
+  navbar_gallery: "Galéria",
   navbar_projects: "Projects",
 
   navbar_menu: "Menu",
@@ -267,65 +267,65 @@ export const UI = {
   navbar_settings: "Settings",
 
   /**
-   * Codeviewer
+   * Kódnéző
    */
 
   codeviewer_arduino: "Arduino Source Code",
-  codeviewer_xml: "XML Blocks",
+  codeviewer_xml: "XML blokkok",
 
   /**
    * Overlay
    */
 
-  compile_overlay_head: "Your program is now compiled and downloaded",
-  compile_overlay_text: "Then copy it to your senseBox MCU",
-  compile_overlay_help: "You need help? Have a look here: ",
+  compile_overlay_head: "A programodat lefordítottuk és letöltöttük",
+  compile_overlay_text: "Ezután másold át a senseBox MCU-ba",
+  compile_overlay_help: "Segítségre van szüksége? Nézze meg itt: ",
 
   /**
    * Tooltip Viewer
    */
 
   tooltip_viewer: "Help",
-  tooltip_moreInformation: "More informations can be found ",
-  tooltip_hint: "Select a Block to show the hint",
+  tooltip_moreInformation: "További információk a következő oldalon találhatók",
+  tooltip_hint: "Válasszon ki egy blokkot a súgó megjelenítéséhez",
 
   /**
    * IDEDrawer
    */
-  drawer_ideerror_head: "Oops something went wrong",
-  drawer_ideerror_text: "An error occurred while compiling, check your blocks",
+  drawer_ideerror_head: "Hoppá, valami rosszul sült el",
+  drawer_ideerror_text: "Hiba történt a fordítás során, ellenőrizze a blokkjait",
 
   /**
-   * Code Editor
+   * Kódszerkesztő
    * */
-  codeeditor_libraries_head: "Installed Arduino Libraries",
+  codeeditor_libraries_head: "Telepített Arduino könyvtárak",
   codeeditor_libraries_text:
-    "For documentation, view the installed libraries and their examples",
+    "A dokumentációhoz tekintse meg a telepített könyvtárakat és példáikat",
   codeeditor_save_code: "Download code",
   codeeditor_open_code: "Open code",
   codeeditor_reset_code: "Reset code",
-  codeeditor_blockly_code: "Load blockly code",
+  codeeditor_blockly_code: "Blokkoló kód betöltése",
   codeeditor_compile_progress:
-    "Your code will now be compiled and then downloaded to your computer",
+    "A kódod most lefordításra kerül, majd letöltődik a számítógépedre",
 
   /**
-  * Device Selection
-  * */ 
+  * Eszköz kiválasztása
+  * */
 
-  deviceselection_head: "Which board are you using?",
+  deviceselection_head: "Melyik kártyát használja?",
   deviceselection_keep_selection:
-    "Save my choice (You can change the board later in the settings)",
+    "(Később a beállításokban megváltoztathatja a lapot)",
   deviceselection_footnote:
-    "Here you can access the old blockly Version for the",
-  deviceselection_footnote_02: "or the",
+    "Itt elérheti a régi blockly verziót a",
+  deviceselection_footnote_02: "vagy a",
 
   /**
-   * Sensor Markdown Information
+   * Érzékelő Markdown információ
    * */
   sensorinfo_info: "Informationen regarding the Sensor",
-  sensorinfo_description: "Description",
-  sensorinfo_measurable_phenos: "Measurable Phenomena",
-  sensorinfo_manufacturer: "Manufacturer",
+  sensorinfo_description: "Leírás",
+  sensorinfo_measurable_phenos: "Mérhető jelenségek",
+  sensorinfo_manufacturer: "Gyártó",
   sensorinfo_lifetime: "Lifetime",
-  sensorinfo_explanation: "This information was fetched from [sensors.wiki](https://sensors.wiki). For more information visit the section on this sensor ",
+  sensorinfo_explanation: "[sensors.wiki](https://sensors.wiki). További információkért látogasson el az adott érzékelőre vonatkozó szakaszba ",
 };
