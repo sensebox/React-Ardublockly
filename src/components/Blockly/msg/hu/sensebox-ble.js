@@ -3,16 +3,16 @@ export const BLE = {
    * Phyphox Init
    */
   sensebox_phyphox_init: "Initialise Phyphox device with name:",
-  sensebox_phyphox_createExperiment: "Create experiment": "Kísérlet létrehozása",
+  sensebox_phyphox_createExperiment: "Create experiment: Kísérlet létrehozása",
   sensebox_phyphox_experimentName: "A kísérlet neve",
   sensebox_phyphox_experimentTitle: "Title",
   sensebox_phyphox_experimentCategory: "Category",
-  sensebox_phyphox_experimentDescription: "Description": "Leírás",
+  sensebox_phyphox_experimentDescription: "Description: Leírás",
   sensebox_phyphox_experiment_description:
     "A kísérlet rövid leírása",
   sensebox_phyphox_writeValues: "Értékeket küldeni",
   sensebox_phyphox_createView: "A grafikonokkal:",
-  sensebox_phyphox_createGraph: "Create Graph": "Create Graph",
+  sensebox_phyphox_createGraph: "Create Graph: Create Graph",
   sensebox_phyphox_graphLabel: "",
   sensebox_phyphox_unitx: "Unit x-axis",
   sensebox_phyphox_unity: "Unit y-axis",
