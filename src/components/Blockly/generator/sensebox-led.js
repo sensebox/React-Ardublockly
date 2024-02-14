@@ -74,12 +74,14 @@ Blockly.Arduino['colour_rgb'] = function (block) {
 
 Blockly.Arduino['sensebox_ws2812_matrix_init'] = function (block) {
     var dropdown_pin = this.getFieldValue('Port');
-    var brightness = Blockly.Arduino.valueToCode(this, 'BRIGHTNESS', Blockly.Arduino.ORDER_ATOMIC) || '20'
+    var brightness = this.getFieldValue('BRIGHTNESS');
     Blockly.Arduino.libraries_['libraries_neopixel'] = `#include <Adafruit_NeoPixel.h>`;
     Blockly.Arduino.libraries_['libraries_rgb_matrix'] = "#include <Adafruit_NeoMatrix.h>"
     Blockly.Arduino.libraries_["library_AdafruitGFX"] =
     "#include <Adafruit_GFX.h> // http://librarymanager/All#Adafruit_GFX_Library";
-    Blockly.Arduino.definitions_['definition_rgb_matrix' + dropdown_pin] = `Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(12, 8, ${dropdown_pin},
+    Blockly.Arduino.definitions_['definition_rgb_matrix_widht'] = "#define WIDTH 12;";
+    Blockly.Arduino.definitions_['definition_rgb_matrix_height'] = "#define HEIGHT 8;";
+    Blockly.Arduino.definitions_['definition_rgb_matrix' + dropdown_pin] = `Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(WIDTH, HEIGHT, ${dropdown_pin},
         NEO_MATRIX_TOP     + NEO_MATRIX_LEFT +
         NEO_MATRIX_ROWS + NEO_MATRIX_ZIGZAG,
         NEO_GRB            + NEO_KHZ800);`;
