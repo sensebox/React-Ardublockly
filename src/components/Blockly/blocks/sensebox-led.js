@@ -2,6 +2,7 @@ import * as Blockly from 'blockly';
 import { getColour } from '../helpers/colour'
 import { selectedBoard } from '../helpers/board'
 import * as Types from '../helpers/types'
+import { FieldSlider } from "@blockly/field-slider";
 
 
 Blockly.Blocks['sensebox_led'] = {
@@ -186,8 +187,9 @@ Blockly.Blocks['sensebox_ws2812_matrix_init'] = {
             .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_init)
             .appendField("Port:")
             .appendField(new Blockly.FieldDropdown(selectedBoard().digitalPinsRGBMatrix), "Port")
-        this.appendValueInput("BRIGHTNESS", "brightness")
-            .appendField((Blockly.Msg.senseBox_ws2812_rgb_matrix_brightness));
+        this.appendDummyInput()
+            .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_brightness)
+            .appendField(new FieldSlider(20, 0, 255), "BRIGHTNESS");
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setTooltip(Blockly.Msg.senseBox_ws2812_rgb_matrix_init_tooltip);
@@ -201,9 +203,13 @@ Blockly.Blocks['sensebox_ws2812_matrix_text'] = {
             .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_print)
             .appendField("Port:")
             .appendField(new Blockly.FieldDropdown(selectedBoard().digitalPinsRGBMatrix), "Port")
+        this.appendDummyInput("scroll")
+            .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_autoscroll)
+            .appendField(new Blockly.FieldCheckbox("TRUE"), "AUTOSCROLL");
         this.appendValueInput("input")
             .setCheck(null)
             .appendField((Blockly.Msg.senseBox_ws2812_rgb_matrix_text));
+        
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setTooltip(Blockly.Msg.senseBox_ws2812_rgb_matrix_init_tooltip);

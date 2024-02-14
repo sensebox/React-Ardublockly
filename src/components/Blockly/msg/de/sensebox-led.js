@@ -47,8 +47,9 @@ export const LED = {
     senseBox_ws2812_rgb_matrix_print: "Zeige Text/Zahl",
     senseBox_ws2812_rgb_matrix_text: "Input",
     senseBox_ws2812_rgb_matrix_init_tooltip: "",
-    senseBox_ws2812_rgb_matrix_brightness: "",
+    senseBox_ws2812_rgb_matrix_brightness: "Helligkeit: ",
     senseBox_ws2812_rgb_matrix_print_tooltip: "",
+    senseBox_ws2812_rgb_matrix_autoscroll: "Auto-Scroll",
 
 
 };
