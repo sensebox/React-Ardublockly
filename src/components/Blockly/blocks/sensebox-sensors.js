@@ -294,6 +294,36 @@ Blockly.Blocks["sensebox_sensor_ultrasonic_ranger"] = {
     }
   },
 };
+/**
+ * ToF Imager
+ *
+ */
+
+Blockly.Blocks["sensebox_tof_imager"] = {
+  init: function () {
+    var dropdownOptions = [
+      [Blockly.Msg.sensebox_distanz, "DistanzCM"],
+    ];
+    var dropdown = new Blockly.FieldDropdown(dropdownOptions, function (
+      option
+    ) {
+      var input =
+        option === "DistanzCM"
+    });
+    this.setColour(getColour().sensebox);
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.sensebox_tof_imager)
+      this.appendDummyInput()
+      .setAlign(Blockly.ALIGN_RIGHT)
+      .appendField(Blockly.Msg.senseBox_value)
+      .appendField(dropdown, "NAME");
+    this.setOutput(true, Types.NUMBER.typeName);
+    this.setTooltip(Blockly.Msg.sensebox_tof_imager_tooltip);
+  },
+  
+};
+
+
 
 /**
  * Microphone

@@ -343,6 +343,57 @@ Blockly.Arduino.sensebox_sensor_ultrasonic_ranger = function () {
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
+
+/**
+ * 
+ * ToF Imager
+ */
+
+Blockly.Arduino.sensebox_tof_imager = function () {
+  var port = this.getFieldValue("port");
+  console.log(port); 
+  Blockly.Arduino.libraries_[`library_vl53l8cx`] = `#include <Wire.h> \n#include <vl53l8cx_class.h> `;
+  Blockly.Arduino.variables_["define:_vl53l8cx"] = `
+VL53L8CX sensor_vl53l8cx_top(&Wire, -1, -1);  
+`;
+  Blockly.Arduino.setupCode_["setup_vl53l8cx"] = `
+  Wire.begin();
+  Wire.setClock(1000000); //Sensor has max I2C freq of 1MHz
+  sensor_vl53l8cx_top.begin();
+  sensor_vl53l8cx_top.init_sensor();
+  sensor_vl53l8cx_top.vl53l8cx_set_ranging_frequency_hz(30);
+  sensor_vl53l8cx_top.vl53l8cx_set_resolution(VL53L8CX_RESOLUTION_8X8);
+  sensor_vl53l8cx_top.vl53l8cx_start_ranging();
+  `;
+  Blockly.Arduino.codeFunctions_["define_tof_range"] = `
+float oldVl53l8cxMin = -1.0;
+float getVl53l8cxMin() {
+  VL53L8CX_ResultsData Results;
+  uint8_t NewDataReady = 0;
+  uint8_t status;
+
+  status = sensor_vl53l8cx_top.vl53l8cx_check_data_ready(&NewDataReady);
+
+  if ((!status) && (NewDataReady != 0)) {
+    sensor_vl53l8cx_top.vl53l8cx_get_ranging_data(&Results);
+    float min = 10000.0;
+    for(int i = 0; i < VL53L8CX_RESOLUTION_8X8*VL53L8CX_NB_TARGET_PER_ZONE; i++) {
+      if((&Results)->target_status[i]!=255){
+        float distance = (&Results)->distance_mm[i];
+        if(min > distance) {
+          min = distance;
+        }
+      }
+    }
+    oldVl53l8cxMin = (min==10000.0) ? 0.0 : min;
+  }
+  return oldVl53l8cxMin;
+  }`;
+  var code = "getVl53l8cxMin()";
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
+};
+
+
 /**
  * Microphone
  *
