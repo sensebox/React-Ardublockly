@@ -22,6 +22,7 @@ import * as Blockly from "blockly/core";
         <Block type="sensebox_scd30" />
         <Block type="sensebox_gps" />
         <Block type="sensebox_sensor_ultrasonic_ranger" />
+        <Block type="sensebox_tof_imager" />
         <Block type="sensebox_sensor_sound" />
         <Block type="sensebox_button" />
         <Block type="sensebox_sensor_truebner_smt50" />
