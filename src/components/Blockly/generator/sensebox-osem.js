@@ -252,9 +252,10 @@ ${
       if (connected == true) {
         // construct the HTTP POST request:
         sprintf_P(buffer,
-                  PSTR("POST /boxes/%s/data HTTP/1.1\\nAuthorization: ${access_token}\\nHost: %s\\nContent-Type: "
+                  PSTR("POST /boxes/%s/data HTTP/1.1\nHost: %s\\nContent-Type: "
                        "text/csv\\nConnection: close\\nContent-Length: %i\\n\\n"),
                   SENSEBOX_ID, server, num_measurements * lengthMultiplikator);
+
         // send the HTTP POST request:
         client.print(buffer);
         // send measurements
@@ -327,8 +328,7 @@ Blockly.Arduino.sensebox_esp32s2_osem_connection = function (Block) {
   var blocks = this.getDescendants();
   var type = this.getFieldValue("type");
   var restart = this.getFieldValue("RESTART");
-  var port = 443;
-  var port = 0;
+  var port = 80;
   var count = 0;
   if (blocks !== undefined) {
     for (var i = 0; i < blocks.length; i++) {
@@ -348,6 +348,7 @@ Blockly.Arduino.sensebox_esp32s2_osem_connection = function (Block) {
       const char *sensorId;
       float value;
     } measurement;`;
+  Blockly.Arduino.definitions_["WiFiClient"] = "WiFiClient client;";
   Blockly.Arduino.definitions_["buffer"] = "char buffer[750];";
   Blockly.Arduino.definitions_[
     "num_measurement"
@@ -361,6 +362,7 @@ Blockly.Arduino.sensebox_esp32s2_osem_connection = function (Block) {
     measurements[num_measurements].value = value;
     num_measurements++;
     }`;
+
   if (type === "Stationary") {
     Blockly.Arduino.functionNames_["writeMeasurementsToClient"] = `
     void writeMeasurementsToClient() {
@@ -390,52 +392,37 @@ ${
   char _server[strlen_P(server)];
   strcpy_P(_server, server);
   for (uint8_t timeout = 2; timeout != 0; timeout--) {
-    Serial.println(F("connecting..."));
     connected = client.connect(_server, ` +
       port +
       `);
-    if (connected == true) {
-      // construct the HTTP POST request:
-      sprintf_P(buffer,
-                PSTR("POST /boxes/%s/data HTTP/1.1\\nAuthorization: ${access_token}\\nHost: %s\\nContent-Type: "
-                     "text/csv\\nConnection: close\\nContent-Length: %i\\n\\n"),
-                SENSEBOX_ID, server, num_measurements * lengthMultiplikator);
-      // send the HTTP POST request:
-      client.print(buffer);
-      // send measurements
-      writeMeasurementsToClient();
-      // send empty line to end the request
-      client.println();
-      uint16_t timeout = 0;
-      // allow the response to be computed
-      while (timeout <= 5000) {
-        delay(10);
-        timeout = timeout + 10;
-        if (client.available()) {
-          break;
+      if (connected == true) {
+        // construct the HTTP POST request:
+        sprintf_P(buffer,PSTR("POST /boxes/%s/data HTTP/1.1\\nHost: %s\\nContent-Type:text/csv\\nConnection: close\\nContent-Length: %i\\n\\n"),
+                  SENSEBOX_ID, server, num_measurements * lengthMultiplikator);
+        // send the HTTP POST request:
+        client.print(buffer);
+        // send measurements
+        writeMeasurementsToClient();
+        // send empty line to end the request
+        client.println();
+        while(client.connected()){
+          String line = client.readStringUntil('\\n');
+          if ( line == "\\r"){
+            break;
+          }
         }
-      }
-
-      while (client.available()) {
-        char c = client.read();
-        // if the server's disconnected, stop the client:
-        if (!client.connected()) {
-          client.stop();
-          break;
+        while(client.available()){
+          char c = client.read();
         }
+        client.stop();
+  
+  
+        num_measurements = 0;
+        break;
       }
-
-      num_measurements = 0;
-      break;
-    }
     delay(1000);
   }
 
-  ${
-    restart === "TRUE"
-      ? "if (connected == false) {\n  delay(5000);\n  noInterrupts();\n NVIC_SystemReset();\n while (1)\n ;\n }"
-      : ""
-  }
   }`;
 
     var code = "";
@@ -489,7 +476,6 @@ ${
     char _server[strlen_P(server)];
     strcpy_P(_server, server);
     for (uint8_t timeout = 2; timeout != 0; timeout--) {
-      Serial.println(F("connecting..."));
       connected = client.connect(_server, ` +
       port +
       `);

@@ -164,9 +164,13 @@ Blockly.Arduino.sensebox_esp32s2_wifi = function () {
   Blockly.Arduino.variables_["pass"] = `char pass[] = "${pw}";`;
   Blockly.Arduino.setupCode_["wifi_begin"] = `
     WiFi.begin(ssid, pass);
-    if(WiFi.status() != WL_NO_SHIELD){
+    if(WiFi.status() == WL_NO_SHIELD){
       while(true);
-    } 
+    }
+    if(WiFi.status() != WL_CONNECTED){
+      WiFi.begin(ssid, pass);
+      delay(5000);
+    }  
   `;
   var code = "";
   return code;
