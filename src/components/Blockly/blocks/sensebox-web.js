@@ -251,3 +251,4 @@ Blockly.Blocks["sensebox_esp32s2_wifi"] = {
   },
   LOOP_TYPES: ["arduino_functions"],
 };
+
