@@ -3,6 +3,7 @@ export const WEB = {
    * WiFi
    */
   senseBox_wifi_connect: "Connect to Wifi",
+  sensebox_wifi_enterprise: "Connect to Wifi (WPA2 Enterprise)",
   senseBox_wifi_ssid: "Networkname",
   senseBox_wifi_user: "Username",
   senseBox_wifi_password: "Password",
