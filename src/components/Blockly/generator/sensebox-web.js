@@ -182,8 +182,7 @@ Blockly.Arduino.sensebox_esp32s2_startap = function (block) {
   Blockly.Arduino.libraries_["library_ESPWiFiClient"] = "#include <WiFiClient.h>";
   Blockly.Arduino.libraries_["WiFiAP"] = "#include <WiFiAP.h>";
   Blockly.Arduino.variables_["ssid"] = `const char ssid[] = "${ssid}";`;
-  Blockly.Arduino.variables_["server"] = `WiFiServer server(80);`;
-  Blockly.Arduino.setupCode_["wifi_startAP"] = `WiFi.softAP(ssid);\n server.begin();`;
+  Blockly.Arduino.setupCode_["wifi_startAP"] = `WiFi.softAP(ssid);\n`;
   var code ="";
   return code;
 }
