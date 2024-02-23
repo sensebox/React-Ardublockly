@@ -19,7 +19,7 @@ import Copy from "../copy.svg";
 
 import MuiDrawer from "@mui/material/Drawer";
 import Dialog from "../Dialog";
-import draganddrop from "../../data/draganddrop.gif";
+import copyesp32 from "../copy_esp32.svg";
 const styles = (theme) => ({
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
@@ -239,7 +239,7 @@ class Compile extends Component {
               <div style={{'text-align':'center'}}>
                 <h2>Dein Code wird kompiliert!</h2>
                   <p> Übertrage ihn per Drag & Drop auf deine MCU</p>
-                  <img src={draganddrop} width="600
+                  <img src={copyesp32} width="600
                   
                   " alt="draganddrop"></img>
                 </div>
