@@ -19,7 +19,7 @@ import Copy from "../copy.svg";
 
 import MuiDrawer from "@mui/material/Drawer";
 import Dialog from "../Dialog";
-
+import draganddrop from "../../data/draganddrop.gif";
 const styles = (theme) => ({
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
@@ -78,6 +78,7 @@ class Compile extends Component {
   }
 
   compile = () => {
+    console.log(this.props.selectedBoard);
     this.setState({ progress: true });
     const data = {
       board: this.props.selectedBoard === "mcu" || this.props.selectedBoard === "mini" ? "sensebox-mcu" : "sensebox-esp32s2",
@@ -234,8 +235,18 @@ class Compile extends Component {
           >
             <div className="overlay">
               {/* <img src={Copy} width="400" alt="copyimage"></img> */}
-              <h2>Dein Code wird kompiliert!</h2>
-              <p>übertrage ihn anschließend mithlfe der senseBoxConnect-App</p>
+              { this.props.selectedBoard === 'esp32' ? 
+              <div style={{'text-align':'center'}}>
+                <h2>Dein Code wird kompiliert!</h2>
+                  <p> Übertrage ihn per Drag & Drop auf deine MCU</p>
+                  <img src={draganddrop} width="600
+                  
+                  " alt="draganddrop"></img>
+                </div>
+                : <div>
+                   <h2>Dein Code wird kompiliesdsdrt!</h2>
+              <p>übertrage ihn anschließend mithlfe der senseBoxConnect-App</p> </div>}
+             
               <p>
                 {Blockly.Msg.compile_overlay_help}
                 <a href="/faq" target="_blank">
