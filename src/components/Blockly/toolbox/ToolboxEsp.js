@@ -132,6 +132,11 @@ import * as Blockly from "blockly/core";
         <Label text={Blockly.Msg.toolbox_label_led_matrix}></Label>
         <Block type="sensebox_ws2812_matrix_init"></Block>
         <Block type="sensebox_ws2812_matrix_text" />
+        <Block type="sensebox_ws2812_matrix_drawPixel" />
+        <Block type="sensebox_ws2812_matrix_drawBitmap" />
+        <Block type="sensebox_ws2812_matrix_bitmap" />
+        <Block type="sensebox_ws2812_matrix_custom_bitmap" /> 
+        <Block type="sensebox_ws2812_matrix_draw_custom_bitmap_example" />
       </Category>
       <Category name="Display" colour={getColour().sensebox}>
         <Block type="sensebox_display_beginDisplay" />
