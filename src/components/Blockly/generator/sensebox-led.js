@@ -79,15 +79,13 @@ Blockly.Arduino['sensebox_ws2812_matrix_init'] = function (block) {
     Blockly.Arduino.libraries_['libraries_rgb_matrix'] = "#include <Adafruit_NeoMatrix.h>"
     Blockly.Arduino.libraries_["library_AdafruitGFX"] =
     "#include <Adafruit_GFX.h> // http://librarymanager/All#Adafruit_GFX_Library";
-    Blockly.Arduino.definitions_['definition_rgb_matrix_widht'] = "#define WIDTH 12;";
-    Blockly.Arduino.definitions_['definition_rgb_matrix_height'] = "#define HEIGHT 8;";
-    Blockly.Arduino.definitions_['definition_rgb_matrix' + dropdown_pin] = `Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(WIDTH, HEIGHT, ${dropdown_pin},
-        NEO_MATRIX_TOP     + NEO_MATRIX_LEFT +
-        NEO_MATRIX_ROWS + NEO_MATRIX_ZIGZAG,
-        NEO_GRB            + NEO_KHZ800);`;
-    Blockly.Arduino.setupCode_['matrix' + dropdown_pin] = 'matrix_' + dropdown_pin + '.begin();\n';
+    Blockly.Arduino.definitions_['definition_rgb_matrix_widht'] = "#define WIDTH 12";
+    Blockly.Arduino.definitions_['definition_rgb_matrix_height'] = "#define HEIGHT 8";
+    Blockly.Arduino.definitions_['definition_rgb_matrix' + dropdown_pin] = `Adafruit_NeoMatrix matrix_${dropdown_pin} = Adafruit_NeoMatrix(WIDTH, HEIGHT, ${dropdown_pin}, NEO_MATRIX_TOP + NEO_MATRIX_LEFT + NEO_MATRIX_ROWS + NEO_MATRIX_ZIGZAG, NEO_GRB + NEO_KHZ800);`;
     Blockly.Arduino.setupCode_['setup_matrix_brightness' + dropdown_pin] = `matrix_${dropdown_pin}.setBrightness(${brightness});\n`;
-    Blockly.Arduino.setupCode_['setup_matrix_color' + dropdown_pin] = `matrix_${dropdown_pin}.setColor(matrix.Color(255, 0, 0));\n`;
+    Blockly.Arduino.setupCode_['matrix' + dropdown_pin] = 'matrix_' + dropdown_pin + '.begin();\n';
+
+   // Blockly.Arduino.setupCode_['setup_matrix_color' + dropdown_pin] = `matrix_${dropdown_pin}.setColor(matrix.Color(255, 0, 0));\n`;
     return '';
 
 
@@ -105,5 +103,95 @@ Blockly.Arduino['sensebox_ws2812_matrix_text'] = function (block) {
     return code;
 }
 
+
+
+Blockly.Arduino['sensebox_ws2812_matrix_drawPixel'] = function (block) {
+    var dropdown_pin = this.getFieldValue('Port');
+    var x = Blockly.Arduino.valueToCode(this, 'X', Blockly.Arduino.ORDER_ATOMIC);
+    var y = Blockly.Arduino.valueToCode(this, 'Y', Blockly.Arduino.ORDER_ATOMIC);
+    var color = Blockly.Arduino.valueToCode(this, 'COLOR', Blockly.Arduino.ORDER_ATOMIC);
+    var code = `matrix_${dropdown_pin}.drawPixel(${x},${y},matrix_${dropdown_pin}.Color(${color}));\n`;
+    code += `matrix_${dropdown_pin}.show();\n`;
+    return code;
+}
+
+Blockly.Arduino['sensebox_ws2812_matrix_drawBitmap'] = function (block) {
+    var dropdown_pin = this.getFieldValue('Port');
+    var value = Blockly.Arduino.valueToCode(this, "input", Blockly.Arduino.ORDER_ATOMIC) || '"Keine Eingabe"';
+    var code = `matrix_${dropdown_pin}.drawRGBBitmap(0,0, bitmap_${value}, WIDTH, HEIGHT);\n`;
+    code += `matrix_${dropdown_pin}.show();\n`;
+    return code;
+}
+
+
+Blockly.Arduino['sensebox_ws2812_matrix_bitmap'] = function (block) {
+    var dropdown_bitmap = this.getFieldValue('BITMAP');
+    var bitmap = "";
+    switch (dropdown_bitmap) {
+        case 'hat':
+            bitmap = `0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0xB5B6,   // 0x0010 (16) pixels
+            0x0000, 0x0000, 0x29B3, 0x29B3, 0x29B3, 0x0000, 0x0000, 0x0000, 0xB5B6, 0xB5B6, 0xE8E4, 0xB5B6, 0xE54F, 0xE54F, 0x29B3, 0x29B3,   // 0x0020 (32) pixels
+            0x29B3, 0x74DA, 0x74DA, 0x74DA, 0xB5B6, 0xB5B6, 0xE8E4, 0xB5B6, 0x0000, 0xE54F, 0x29B3, 0x29B3, 0x29B3, 0x74DA, 0x74DA, 0x74DA,   // 0x0030 (48) pixels
+            0xB5B6, 0xB5B6, 0xE8E4, 0xB5B6, 0xE54F, 0xE54F, 0x29B3, 0x29B3, 0x29B3, 0x74DA, 0x0000, 0x0000, 0xB5B6, 0xB5B6, 0xE8E4, 0xB5B6,   // 0x0040 (64) pixels
+            0x0000, 0xE54F, 0x29B3, 0x29B3, 0x29B3, 0x74DA, 0x74DA, 0x74DA, 0xB5B6, 0xB5B6, 0xE8E4, 0xB5B6, 0xE54F, 0xE54F, 0x29B3, 0x29B3,   // 0x0050 (80) pixels
+            0x29B3, 0x74DA, 0x74DA, 0x74DA, 0x0000, 0x0000, 0x0000, 0xB5B6, 0x0000, 0x0000, 0x29B3, 0x29B3, 0x29B3, 0x0000, 0x0000, 0x0000,   // 0x0060 (96) pixels`;
+            break;
+        case 'island':
+            bitmap = `0xFFCC, 0xFFCC, 0xFFCC, 0xFF89, 0xFCE3, 0xFB06, 0xFB06, 0xBC07, 0x6679, 0x569E, 0x4578, 0x3C95, 0xFFCC, 0xFFCC, 0xFFCC, 0x43E3,   // 0x0010 (16) pixels
+            0xA364, 0xFB06, 0xCBE7, 0x4688, 0x4EB9, 0x569E, 0x4578, 0x3C95, 0xFFCC, 0xFFCC, 0x54C5, 0x4BA3, 0xCB05, 0xF306, 0xB407, 0x2F08,   // 0x0020 (32) pixels
+            0x4ED9, 0x569E, 0x4578, 0x3C95, 0xFFCC, 0xFFCC, 0x54C5, 0x1B62, 0x22A2, 0x99E4, 0x8B25, 0x2F08, 0x56FA, 0x569E, 0x4578, 0x3C95,   // 0x0030 (48) pixels
+            0xFFCC, 0xFFCC, 0x4C64, 0x1B62, 0x2282, 0x31C1, 0x9305, 0x2F08, 0x573A, 0x569E, 0x4578, 0x3C95, 0xFFCC, 0xFFCC, 0x4CA5, 0x1BC3,   // 0x0040 (64) pixels
+            0x7344, 0xCB05, 0xCBE6, 0x2F08, 0x573A, 0x569E, 0x4578, 0x3C95, 0xFFCC, 0xFFCC, 0xF7AC, 0x43C3, 0x4342, 0xD305, 0xD3A6, 0x3EA8,   // 0x0050 (80) pixels
+            0x571A, 0x569E, 0x4578, 0x3C95, 0xFFCC, 0xFFCC, 0xFFCC, 0xFF89, 0xFCE3, 0xFB06, 0xFB06, 0xBC07, 0x6679, 0x569E, 0x4578, 0x3C95,   // 0x0060 (96) pixels`;
+            break;
+        case 'knight':
+            bitmap = `0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0xFFFF, 0xFFFF, 0x0000, 0x0000,   // 0x0010 (16) pixels
+            0x0000, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0x0000, 0x0000, 0x0000, 0x0000, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF,   // 0x0020 (32) pixels
+            0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0x0000, 0xFFFF, 0x0000, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF,   // 0x0030 (48) pixels
+            0x0000, 0xFFFF, 0x0000, 0x0000, 0x0000, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0x0000, 0x0000, 0x0000, 0x0000, 0xFFFF, 0x0000, 0xFFFF,   // 0x0040 (64) pixels
+            0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0x0000, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF,   // 0x0050 (80) pixels
+            0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0x0000, 0x0000, 0x0000, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0x0000, 0x0000, 0x0000,   // 0x0060 (96) pixels`;
+            break;
+        case 'Smiley':
+            bitmap = "{}";
+            break;
+        case 'Smiley':
+            bitmap = "{}";
+            break;
+        default:
+            bitmap = "{}";
+            break;
+    }
+    Blockly.Arduino.definitions_[`define_bitmap_${dropdown_bitmap}`] = `const uint16_t bitmap_${dropdown_bitmap}[] = {${bitmap}};`;
+    var code =dropdown_bitmap;
+    return [code, Blockly.Arduino.ORDER_ATOMIC];
+}
+
+Blockly.Arduino['sensebox_ws2812_matrix_custom_bitmap'] = function (block) {
+    var dropdown_pin = this.getFieldValue('Port');
+    Blockly.Arduino.definitions_[`define_custom_bitmap_${dropdown_pin}`] = `const uint16_t custom_bitmap[] = {};`;
+    var value = Blockly.Arduino.valueToCode(this, "input", Blockly.Arduino.ORDER_ATOMIC) || '"Keine Eingabe"';
+    var code = `matrix_${dropdown_pin}.drawBitmap(0,0,${value},WIDTH,HEIGHT,matrix_${dropdown_pin}.Color(255,255,255));\n`;
+    code += `matrix_${dropdown_pin}.show();\n`;
+    return code;
+}
+
+Blockly.Arduino['sensebox_ws2812_matrix_draw_custom_bitmap_example'] = function (block) {
+    var bitmap = "";
+    for (let i = 1; i <= 8; i += 1) {
+        for (let j = 1; j <= 12; j += 1) {
+            const colorHex = block.getFieldValue(i + ',' + j);
+            const color = hexToRgb(colorHex);
+            bitmap += `0x${color.r.toString(16).toUpperCase()}${color.g.toString(16).toUpperCase()}${color.b.toString(16).toUpperCase()}, `;
+        }
+        bitmap += '\n';
+
+    }
+    Blockly.Arduino.definitions_[`define_custom_draw_bitmap}`] = `const uint16_t bitmap_custom[] = {${bitmap}};`;
+    var code = `custom`;
+
+
+    return [code, Blockly.Arduino.ORDER_ATOMIC];
+}
 
 
