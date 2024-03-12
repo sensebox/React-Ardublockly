@@ -271,13 +271,13 @@ Blockly.Blocks['sensebox_ws2812_matrix_bitmap'] = {
         this.appendDummyInput()
             .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_bitmap)
             .appendField(new Blockly.FieldDropdown([
-                ["smile", "smile"],
+                ["happy", "happy"],
                 ["sad", "sad"],
+                ["angry", "angry"],
+                ["neutral", "neutral"],
                 ["hat", "hat"],
                 ["island", "island"],
                 ["knight", "knight"],
-                ["check", "check"],
-                ["cross", "cross"],
                 ["random", "random"]
             ]), "BITMAP");
         this.setOutput(true, null);
