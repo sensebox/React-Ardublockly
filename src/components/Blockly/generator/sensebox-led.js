@@ -182,7 +182,7 @@ Blockly.Arduino['sensebox_ws2812_matrix_draw_custom_bitmap_example'] = function 
         for (let j = 1; j <= 12; j += 1) {
             const colorHex = block.getFieldValue(i + ',' + j);
             const color = hexToRgb(colorHex);
-            bitmap += `0x${color.r.toString(16).toUpperCase()}${color.g.toString(16).toUpperCase()}${color.b.toString(16).toUpperCase()}, `;
+            bitmap += '0x' + (((color.r>>3) << 11) | ((color.g>>2) << 5) | (color.b>>3)).toString(16) + ', ';
         }
         bitmap += '\n';
 
