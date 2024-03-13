@@ -206,6 +206,9 @@ Blockly.Blocks['sensebox_ws2812_matrix_text'] = {
         this.appendDummyInput("scroll")
             .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_autoscroll)
             .appendField(new Blockly.FieldCheckbox("TRUE"), "AUTOSCROLL");
+        this.appendValueInput("COLOR", 'Number')
+            .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_color)
+            .setCheck("Colour");
         this.appendValueInput("input")
             .setCheck(null)
             .appendField((Blockly.Msg.senseBox_ws2812_rgb_matrix_text));
