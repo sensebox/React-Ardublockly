@@ -97,15 +97,23 @@ Blockly.Arduino['sensebox_ws2812_matrix_text'] = function (block) {
     var code = "";
     var dropdown_pin = this.getFieldValue('Port');
     var value = Blockly.Arduino.valueToCode(this, "input", Blockly.Arduino.ORDER_ATOMIC) || '"Keine Eingabe"';
-    code += "char txt[] = " + value + ";\n";
-    code += "int length = strlen(txt);\n";
-    code += "for(int i = 0; i<length*6+12; i++) {\n";
-    code += ` matrix_${dropdown_pin}.fillScreen(0);\n`;
-    code += ` matrix_${dropdown_pin}.setCursor(12-i, 0);\n`;
-    code += ` matrix_${dropdown_pin}.print(txt);\n`;
-    code += ` matrix_${dropdown_pin}.show();\n`;
-    code += ` delay(100);\n`;
-    code += "}\n";
+    var autoscroll = this.getFieldValue("AUTOSCROLL");
+    if (autoscroll === "TRUE") {
+        code += "char txt[] = " + value + ";\n";
+        code += "int length = strlen(txt);\n";
+        code += "for(int i = 0; i<length*6+12; i++) {\n";
+        code += ` matrix_${dropdown_pin}.fillScreen(0);\n`;
+        code += ` matrix_${dropdown_pin}.setCursor(12-i, 0);\n`;
+        code += ` matrix_${dropdown_pin}.print(txt);\n`;
+        code += ` matrix_${dropdown_pin}.show();\n`;
+        code += ` delay(100);\n`;
+        code += "}\n";
+    } else {
+        code += ` matrix_${dropdown_pin}.fillScreen(0);\n`;
+        code += ` matrix_${dropdown_pin}.setCursor(0, 0);\n`;
+        code += ` matrix_${dropdown_pin}.print(`+value+`);\n`;
+        code += ` matrix_${dropdown_pin}.show();\n`;
+    }
     return code;
 }
 
