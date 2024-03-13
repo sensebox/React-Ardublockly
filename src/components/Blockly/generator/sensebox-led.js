@@ -83,6 +83,7 @@ Blockly.Arduino['sensebox_ws2812_matrix_init'] = function (block) {
     Blockly.Arduino.definitions_['definition_rgb_matrix_height'] = "#define HEIGHT 8";
     Blockly.Arduino.definitions_['definition_rgb_matrix' + dropdown_pin] = `Adafruit_NeoMatrix matrix_${dropdown_pin} = Adafruit_NeoMatrix(WIDTH, HEIGHT, ${dropdown_pin}, NEO_MATRIX_TOP + NEO_MATRIX_LEFT + NEO_MATRIX_ROWS + NEO_MATRIX_ZIGZAG, NEO_GRB + NEO_KHZ800);`;
     Blockly.Arduino.setupCode_['setup_matrix_brightness' + dropdown_pin] = `matrix_${dropdown_pin}.setBrightness(${brightness});\n`;
+    Blockly.Arduino.setupCode_['setup_matrix_text_wrap' + dropdown_pin] = 'matrix_' + dropdown_pin + '.setTextWrap(false);\n';
     Blockly.Arduino.setupCode_['matrix' + dropdown_pin] = 'matrix_' + dropdown_pin + '.begin();\n';
 
    // Blockly.Arduino.setupCode_['setup_matrix_color' + dropdown_pin] = `matrix_${dropdown_pin}.setColor(matrix.Color(255, 0, 0));\n`;
@@ -96,10 +97,15 @@ Blockly.Arduino['sensebox_ws2812_matrix_text'] = function (block) {
     var code = "";
     var dropdown_pin = this.getFieldValue('Port');
     var value = Blockly.Arduino.valueToCode(this, "input", Blockly.Arduino.ORDER_ATOMIC) || '"Keine Eingabe"';
-    code+= "matrix_" + dropdown_pin + ".fillScreen(0);\n";
-    code+= "matrix_" + dropdown_pin + ".setCursor(x,0);\n";
-    code+= "matrix_" + dropdown_pin + ".print(F(" + value + "));\n";
-    code+= "matrix_" + dropdown_pin + ".show();\n";
+    code += "char txt[] = " + value + ";\n";
+    code += "int length = strlen(txt);\n";
+    code += "for(int i = 0; i<length*6+12; i++) {\n";
+    code += ` matrix_${dropdown_pin}.fillScreen(0);\n`;
+    code += ` matrix_${dropdown_pin}.setCursor(12-i, 0);\n`;
+    code += ` matrix_${dropdown_pin}.print(txt);\n`;
+    code += ` matrix_${dropdown_pin}.show();\n`;
+    code += ` delay(100);\n`;
+    code += "}\n";
     return code;
 }
 
