@@ -352,7 +352,8 @@ Blockly.Arduino.sensebox_sensor_ultrasonic_ranger = function () {
 Blockly.Arduino.sensebox_tof_imager = function () {
   var port = this.getFieldValue("port");
   console.log(port); 
-  Blockly.Arduino.libraries_[`library_vl53l8cx`] = `#include <Wire.h> \n#include <vl53l8cx_class.h> `;
+  Blockly.Arduino.libraries_["library_wire"] = "#include <Wire.h>";
+  Blockly.Arduino.libraries_[`library_vl53l8cx`] = `#include <vl53l8cx_class.h> `;
   Blockly.Arduino.variables_["define:_vl53l8cx"] = `
 VL53L8CX sensor_vl53l8cx_top(&Wire, -1, -1);  
 `;

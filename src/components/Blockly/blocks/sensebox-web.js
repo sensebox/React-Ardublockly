@@ -161,7 +161,7 @@ Blockly.Blocks["sensebox_esp32s2_wifi_enterprise"] = {
     this.setTooltip(Blockly.Msg.senseBox_wifi_tooltip);
     this.setHelpUrl("");
     this.setColour(getColour().sensebox);
-    this.appendDummyInput().appendField(Blockly.Msg.senseBox_wifi_connect);
+    this.appendDummyInput().appendField(Blockly.Msg.sensebox_wifi_enterprise);
     this.appendDummyInput()
       .setAlign(Blockly.ALIGN_LEFT)
       .appendField(Blockly.Msg.senseBox_wifi_ssid)
@@ -170,9 +170,9 @@ Blockly.Blocks["sensebox_esp32s2_wifi_enterprise"] = {
       .setAlign(Blockly.ALIGN_LEFT)
       .appendField(Blockly.Msg.senseBox_wifi_user)
       .appendField(new Blockly.FieldTextInput("User"), "User");
-      this.appendDummyInput()
+    this.appendDummyInput()
       .setAlign(Blockly.ALIGN_LEFT)
-      .appendField(Blockly.Msg.senseBox_user_password)
+      .appendField(Blockly.Msg.senseBox_wifi_password)
       .appendField(new Blockly.FieldTextInput("Password"), "Password");
     this.setHelpUrl(Blockly.Msg.senseBox_wifi_helpurl);
     this.setPreviousStatement(true, null);
@@ -251,3 +251,4 @@ Blockly.Blocks["sensebox_esp32s2_wifi"] = {
   },
   LOOP_TYPES: ["arduino_functions"],
 };
+

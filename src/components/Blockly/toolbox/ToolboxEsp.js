@@ -270,7 +270,7 @@ import * as Blockly from "blockly/core";
       <Category name="openSenseMap" colour={getColour().sensebox}>
         <Block type="sensebox_interval_timer">
           <Value name="DO">
-            <Block type="sensebox_osem_connection" />
+            <Block type="sensebox_esp32s2_osem_connection" />
           </Value>
         </Block>
         <Block type="sensebox_send_to_osem" />
