@@ -1,4 +1,4 @@
-import { Block, Value, Field, Shadow, Category, Sep, Label } from "..";
+import { Block, Value, Field, Shadow, Category, Label } from "..";
 import { getColour } from "../helpers/colour";
 import * as Blockly from "blockly/core";
   
@@ -83,7 +83,7 @@ import * as Blockly from "blockly/core";
         <Block type="sensebox_sd_save_for_osem" />
       </Category>
       <Category name="LED" colour={getColour().sensebox}>
-      <Label text={Blockly.Msg.toolbox_label_led_matrix}></Label>
+      <Label text={Blockly.Msg.toolbox_label_led_ws2812}></Label>
         <Block type="sensebox_rgb_led"></Block>
         <Block type="sensebox_led" />
         <Block type="sensebox_ws2818_led_init">
