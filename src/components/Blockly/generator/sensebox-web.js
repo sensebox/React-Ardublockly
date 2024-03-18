@@ -127,7 +127,7 @@ Blockly.Arduino.sensebox_esp32s2_wifi_enterprise = function () {
   var user = this.getFieldValue("User");
   var ssid = this.getFieldValue("SSID");
   Blockly.Arduino.libraries_["library_WiFi"] = "#include <WiFi.h>";
-  Blockly.Arduino.libraries_["library_wpa2"] = `#include "esp_wpa2.h`;
+  Blockly.Arduino.libraries_["library_wpa2"] = `#include "esp_wpa2.h"`;
   Blockly.Arduino.definitions_["define_identity"] = `#define EAP_IDENTITY "${user}"`;
   Blockly.Arduino.definitions_["define_username"] = `#define EAP_USERNAME "${user}"`;
   Blockly.Arduino.definitions_["define_password"] = `#define EAP_PASSWORD "${pw}"`;
@@ -164,9 +164,13 @@ Blockly.Arduino.sensebox_esp32s2_wifi = function () {
   Blockly.Arduino.variables_["pass"] = `char pass[] = "${pw}";`;
   Blockly.Arduino.setupCode_["wifi_begin"] = `
     WiFi.begin(ssid, pass);
-    if(WiFi.status() != WL_NO_SHIELD){
+    if(WiFi.status() == WL_NO_SHIELD){
       while(true);
-    } 
+    }
+    if(WiFi.status() != WL_CONNECTED){
+      WiFi.begin(ssid, pass);
+      delay(5000);
+    }  
   `;
   var code = "";
   return code;
@@ -178,8 +182,7 @@ Blockly.Arduino.sensebox_esp32s2_startap = function (block) {
   Blockly.Arduino.libraries_["library_ESPWiFiClient"] = "#include <WiFiClient.h>";
   Blockly.Arduino.libraries_["WiFiAP"] = "#include <WiFiAP.h>";
   Blockly.Arduino.variables_["ssid"] = `const char ssid[] = "${ssid}";`;
-  Blockly.Arduino.variables_["server"] = `WiFiServer server(80);`;
-  Blockly.Arduino.setupCode_["wifi_startAP"] = `WiFi.softAP(ssid);\n server.begin();`;
+  Blockly.Arduino.setupCode_["wifi_startAP"] = `WiFi.softAP(ssid);\n`;
   var code ="";
   return code;
 }
