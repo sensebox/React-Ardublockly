@@ -268,6 +268,11 @@ const sensebox_esp32 = {
     ["IO4-5", "B"],
     ["IO6-7", "C"],
   ],
+  digitalPinsRGBMatrix: [
+    ["A", "2"],
+    ["B", "4"],
+    ["C", "6"],
+  ],
   digitalPinsLED: [
     ["IO2", "2"],
     ["IO3", "3"],
