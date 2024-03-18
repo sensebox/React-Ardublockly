@@ -18,6 +18,7 @@ export const UI = {
   toolbox_label_externalRTC: "External RTC",
   toolbox_label_internalRTC: "Internal RTC",
   toolbox_label_led_matrix: "LED-Matrix",
+  toolbox_label_led_ws2812: "RGB-LED",
   variable_NUMBER: "Number (int)",
   variable_SHORT_NUMBER: "char",
   variable_LONG: "Big number (long)",
