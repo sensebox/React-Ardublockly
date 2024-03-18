@@ -37,4 +37,37 @@ export const LED = {
   COLOUR_RGB_TITLE: "Farbe mit",
   COLOUR_RGB_TOOLTIP:
     "Erstelle eine Farbe mit selbst definierten Rot-, Grün- und Blauwerten. Alle Werte müssen zwischen 0 und 255 liegen. 0 ist hierbei die geringte Intensität der Farbe 255 die höchste.",
+
+    /**
+     * LED-Matrix
+     */
+
+
+    senseBox_ws2812_rgb_matrix_init: "LED-Matrix initialisieren",
+    senseBox_ws2812_rgb_matrix_print: "Zeige Text/Zahl",
+    senseBox_ws2812_rgb_matrix_text: "Input",
+    senseBox_ws2812_rgb_matrix_init_tooltip: "",
+    senseBox_ws2812_rgb_matrix_brightness: "Helligkeit: ",
+    senseBox_ws2812_rgb_matrix_print_tooltip: "",
+    senseBox_ws2812_rgb_matrix_autoscroll: "Auto-Scroll",
+    senseBox_ws2812_rgb_matrix_draw_pixel: "Pixel setzen",
+    senseBox_ws2812_rgb_matrix_x: "X",
+    senseBox_ws2812_rgb_matrix_y: "Y",
+    senseBox_ws2812_rgb_matrix_color: "Farbe",
+    senseBox_ws2812_rgb_matrix_clear: "Matrix leeren",
+    senseBox_ws2812_rgb_matrix_clear_tooltip: "",
+    senseBox_ws2812_rgb_matrix_draw_bitmap: "Zeichne Bitmap",
+    senseBox_ws2812_rgb_matrix_draw_bitmap_tooltip: "",
+    senseBox_ws2812_rgb_matrix_bitmap: "Motiv",
+    senseBox_ws2812_rgb_matrix_bitmap_tooltip: "",
+    senseBox_ws2812_rgb_matrix_custom_bitmap_tooltip: "",
+    senseBox_ws2812_rgb_matrix_custom_bitmap: "Zeige eigene Bitmap",
+    senseBox_ws2812_rgb_matrix_custom_bitmap_example: "{0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0xB5B6,   // 0x0010 (16) pixels\n" +
+    "0x0000, 0x0000, 0x29B3, 0x29B3, 0x29B3, 0x0000, 0x0000, 0x0000, 0xB5B6, 0xB5B6, 0xE8E4, 0xB5B6, 0xE54F, 0xE54F, 0x29B3, 0x29B3," +  // 0x0020 (32) pixels"+
+    "0x29B3, 0x74DA, 0x74DA, 0x74DA, 0xB5B6, 0xB5B6, 0xE8E4, 0xB5B6, 0x0000, 0xE54F, 0x29B3, 0x29B3, 0x29B3, 0x74DA, 0x74DA, 0x74DA,   // 0x0030 (48) pixels "+
+    "0xB5B6, 0xB5B6, 0xE8E4, 0xB5B6, 0xE54F, 0xE54F, 0x29B3, 0x29B3, 0x29B3, 0x74DA, 0x0000, 0x0000, 0xB5B6, 0xB5B6, 0xE8E4, 0xB5B6,   // 0x0040 (64) pixels " +
+    "0x0000, 0xE54F, 0x29B3, 0x29B3, 0x29B3, 0x74DA, 0x74DA, 0x74DA, 0xB5B6, 0xB5B6, 0xE8E4, 0xB5B6, 0xE54F, 0xE54F, 0x29B3, 0x29B3,   // 0x0050 (80) pixels"   +
+    "0x29B3, 0x74DA, 0x74DA, 0x74DA, 0x0000, 0x0000, 0x0000, 0xB5B6, 0x0000, 0x0000, 0x29B3, 0x29B3, 0x29B3, 0x0000, 0x0000, 0x0000,   // 0x0060 (96) pixels}",
+
+
 };
