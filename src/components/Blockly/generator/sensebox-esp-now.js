@@ -43,6 +43,13 @@ Blockly.Arduino.sensebox_wifi_rssi = function () {
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
+Blockly.Arduino.sensebox_get_mac = function () {
+  Blockly.Arduino.definitions_["define_macadress"] = "macAddress mac;";
+  Blockly.Arduino.setupCode_["sensebox_get_mac"] = " mac = WiFi.macAddress();";
+  var code = "mac";
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
+};
+
 Blockly.Arduino.sensebox_get_ip = function () {
   Blockly.Arduino.definitions_["define_ipadress"] = "IPAddress ip;";
   Blockly.Arduino.setupCode_["sensebox_get_ip"] = " ip = WiFi.localIP();";
