@@ -14,7 +14,10 @@ Blockly.Arduino.sensebox_esp_now = function () {
 
 Blockly.Arduino.sensebox_esp_now_sender = function () {
   var mac_address = this.getFieldValue("mac-address");
-  // TODO check if mac_address has right format and change if necessary
+  if(!mac_address.startsWith("{")) {
+    mac_address = mac_address.replaceAll(":",", 0x");
+    mac_address = "{ 0x" + mac_address + " }";
+  }
   Blockly.Arduino.variables_["mac_address"] = `uint8_t mac_address[] = ${mac_address};`;
   Blockly.Arduino.variables_["peer_info"] = `esp_now_peer_info_t peerInfo;`;
   Blockly.Arduino.setupCode_["esp_now_sender"] = `
