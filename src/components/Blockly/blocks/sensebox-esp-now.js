@@ -48,11 +48,13 @@ Blockly.Blocks["sensebox_esp_now_receive"] = {
     this.jsonInit({
       "message0": Blockly.Msg.senseBox_esp_now_receive,
       "args0": [
-          {
-              "type": "input_value",
-              "name": "MSG",
-              "check": Types.getCompatibleTypes('string'),
-          }
+        {
+          "type": "field_variable",
+          "name": "VAR",
+          "defaultType": Types.TEXT.typeName,
+          "variable": "message"
+          // TODO check type?
+        },
       ],
     });
     this.appendStatementInput('DO')
