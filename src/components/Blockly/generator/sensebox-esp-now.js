@@ -14,7 +14,8 @@ Blockly.Arduino.sensebox_esp_now = function () {
 
 Blockly.Arduino.sensebox_esp_now_sender = function () {
   var mac_address = this.getFieldValue("mac-address");
-  Blockly.Arduino.variables_["mac_address"] = `uint8_t mac_address[] = "${mac_address}";`;
+  // TODO check if mac_address has right format and change if necessary
+  Blockly.Arduino.variables_["mac_address"] = `uint8_t mac_address[] = ${mac_address};`;
   Blockly.Arduino.variables_["peer_info"] = `esp_now_peer_info_t peerInfo;`;
   Blockly.Arduino.setupCode_["esp_now_sender"] = `
   memcpy(peerInfo.peer_addr, mac_address, 6);
@@ -28,9 +29,9 @@ Blockly.Arduino.sensebox_esp_now_sender = function () {
 };
 
 Blockly.Arduino.sensebox_get_mac = function () {
-  Blockly.Arduino.definitions_["define_macadress"] = "macAddress mac;";
-  Blockly.Arduino.setupCode_["sensebox_get_mac"] = " mac = WiFi.macAddress();";
-  var code = "mac";
+  Blockly.Arduino.definitions_["define_macadress"] = "String mac_address;";
+  Blockly.Arduino.setupCode_["sensebox_get_mac"] = " mac_address = WiFi.macAddress();";
+  var code = "mac_address";
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
@@ -54,16 +55,15 @@ Blockly.Arduino.sensebox_esp_now_receive = function (Block) {
   Blockly.Arduino.codeFunctions_["on_data_receive"] = `
     void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {`;
   if (myVar !== undefined) {
+    // Depending on the type of the variable it should be converted differently (eg "(float)*" instead of "char*")
     Blockly.Arduino.codeFunctions_["on_data_receive"] += `
-      ` + myVar.name + ` = incomingData;`;
+      ` + myVar.name + ` = (char*)incomingData;`;
   }
   Blockly.Arduino.codeFunctions_["on_data_receive"] += `
   `+ branch +`
   }
   `
   let code = "esp_now_register_recv_cb(OnDataRecv);";
-  Blockly.Arduino.definitions_["define_macadress"] = "macAddress mac;";
-  Blockly.Arduino.setupCode_["sensebox_get_mac"] = " mac = WiFi.macAddress();";
   return code;
 };
 
@@ -71,6 +71,7 @@ Blockly.Arduino.sensebox_esp_now_send = function () {
   var value =
     Blockly.Arduino.valueToCode(this, "value", Blockly.Arduino.ORDER_ATOMIC) ||
     `" "`;
+  // TODO test if all variable types work
   var code = `esp_err_t result = esp_now_send(mac_address, (const uint8_t*)` + value + `, sizeof(` + value + `));`;
   return code;
 };
