@@ -2,6 +2,8 @@ import Blockly from "blockly";
 import { getColour } from "../helpers/colour";
 import * as Types from "../helpers/types";
 
+// TODO: it should be possible to establish connection and send to more than one receiver
+
 Blockly.Blocks["sensebox_esp_now"] = {
   init: function () {
     this.appendDummyInput().appendField(
@@ -41,24 +43,36 @@ Blockly.Blocks["sensebox_get_mac"] = {
   },
 };
 
-// TODO
 Blockly.Blocks["sensebox_esp_now_receive"] = {
   init: function () {
-    this.setTooltip(Blockly.Msg.senseBox_wifi_mac_tooltip);
+    this.jsonInit({
+      "message0": Blockly.Msg.senseBox_esp_now_receive,
+      "args0": [
+          {
+              "type": "input_value",
+              "name": "MSG",
+              "check": Types.getCompatibleTypes('string'),
+          }
+      ],
+    });
+    this.appendStatementInput('DO')
+      .appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip(Blockly.Msg.senseBox_esp_now_receive_tooltip);
     this.setColour(getColour().sensebox);
-    this.appendDummyInput().appendField(Blockly.Msg.senseBox_wifi_mac);
-    this.setOutput(true, Types.TEXT.typeName);
     this.setHelpUrl(Blockly.Msg.senseBox_wifi_ip_helpurl);
   },
 };
 
-// TODO
 Blockly.Blocks["sensebox_esp_now_send"] = {
   init: function () {
-    this.setTooltip(Blockly.Msg.senseBox_wifi_mac_tooltip);
+    this.appendValueInput("value")
+      .appendField(Blockly.Msg.senseBox_esp_now_send);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip(Blockly.Msg.senseBox_esp_now_send_tooltip);
     this.setColour(getColour().sensebox);
-    this.appendDummyInput().appendField(Blockly.Msg.senseBox_wifi_mac);
-    this.setOutput(true, Types.TEXT.typeName);
     this.setHelpUrl(Blockly.Msg.senseBox_wifi_ip_helpurl);
   },
 };
