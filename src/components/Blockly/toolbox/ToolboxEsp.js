@@ -55,14 +55,7 @@ import * as Blockly from "blockly/core";
         <Block type="sensebox_esp_now" />
         <Block type="sensebox_esp_now_sender" />
         <Block type="sensebox_get_mac" />
-        <Block type="sensebox_esp_now_receive" >
-          <Value name="MSG">
-            <Block type="variables_get_dynamic" name="test">
-              <field name="message" variabletype="String">test</field>
-              {/* TODO what should go in here? */}
-            </Block>
-          </Value>
-        </Block>
+        <Block type="sensebox_esp_now_receive" />
         <Block type="sensebox_esp_now_send" />
       </Category>
       <Category name="Ethernet" colour={getColour().sensebox}>

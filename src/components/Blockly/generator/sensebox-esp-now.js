@@ -36,31 +36,18 @@ Blockly.Arduino.sensebox_get_mac = function () {
 };
 
 Blockly.Arduino.sensebox_esp_now_receive = function (Block) {
-  const variableName =
-        Blockly['Arduino'].valueToCode(
-            Block,
-            'MSG',
-            Blockly['Arduino'].ORDER_ASSIGNMENT
-        ) || "";
-  const allVars = Blockly.getMainWorkspace()
-    .getVariableMap()
-    .getAllVariables();
-  const myVar = allVars.filter((v) => v.name === variableName)[0];
-  if (myVar !== undefined) {
-    Blockly.Arduino.variables_[variableName + myVar.type] =
-    myVar.type + " " + myVar.name + ";\n";
-  }
+  var id = Block.getFieldValue("VAR")
+  const variable = Blockly.Variables.getVariable(
+    Blockly.getMainWorkspace(),
+    id
+  );
+  Blockly.Arduino.variables_[variable.name] = variable.type + " " + variable.name + ";\n";
   let branch = Blockly['Arduino'].statementToCode(Block, 'DO');
   branch = Blockly['Arduino'].addLoopTrap(branch, Block.id);
   Blockly.Arduino.codeFunctions_["on_data_receive"] = `
-    void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {`;
-  if (myVar !== undefined) {
-    // Depending on the type of the variable it should be converted differently (eg "(float)*" instead of "char*")
-    Blockly.Arduino.codeFunctions_["on_data_receive"] += `
-      ` + myVar.name + ` = (char*)incomingData;`;
-  }
-  Blockly.Arduino.codeFunctions_["on_data_receive"] += `
-  `+ branch +`
+  void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
+    ` + variable.name + ` = (char*)incomingData;
+  ` + branch +`
   }
   `
   let code = "esp_now_register_recv_cb(OnDataRecv);";
