@@ -2,8 +2,6 @@ import Blockly from "blockly";
 import { getColour } from "../helpers/colour";
 import * as Types from "../helpers/types";
 
-// TODO: it should be possible to establish connection and send to more than one receiver
-
 Blockly.Blocks["sensebox_esp_now"] = {
   init: function () {
     this.appendDummyInput().appendField(
@@ -25,8 +23,8 @@ Blockly.Blocks["sensebox_esp_now_sender"] = {
     this.appendDummyInput().appendField(Blockly.Msg.senseBox_esp_now_sender);
     this.appendDummyInput()
       .setAlign(Blockly.ALIGN_LEFT)
-      .appendField(Blockly.Msg.senseBox_mac_address)
-      .appendField(new Blockly.FieldTextInput("Mac-Address"), "mac-address");
+      .appendField(Blockly.Msg.senseBox_esp_now_send_mac)
+      .appendField(new Blockly.FieldTextInput("00:00:00:00:00:00"), "mac-address");
     this.setHelpUrl("");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -55,6 +53,13 @@ Blockly.Blocks["sensebox_esp_now_receive"] = {
           "variable": "message"
           // TODO check type?
         },
+        {
+          "type": "field_variable",
+          "name": "MAC",
+          "defaultType": Types.TEXT.typeName,
+          "variable": "mac_address"
+          // TODO check type?
+        },
       ],
     });
     this.appendStatementInput('DO')
@@ -69,8 +74,14 @@ Blockly.Blocks["sensebox_esp_now_receive"] = {
 
 Blockly.Blocks["sensebox_esp_now_send"] = {
   init: function () {
-    this.appendValueInput("value")
+    this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_esp_now_send);
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.senseBox_esp_now_send_mac)
+      .appendField(Blockly.Msg.senseBox_mac_address)
+      .appendField(new Blockly.FieldTextInput("00:00:00:00:00:00"), "mac-address");
+    this.appendValueInput("value")
+      .appendField(Blockly.Msg.senseBox_esp_now_send_message);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setTooltip(Blockly.Msg.senseBox_esp_now_send_tooltip);
