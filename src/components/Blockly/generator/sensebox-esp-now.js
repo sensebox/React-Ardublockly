@@ -18,16 +18,15 @@ Blockly.Arduino.sensebox_esp_now_sender = function () {
     mac_address = mac_address.replaceAll(":",", 0x");
     mac_address = "{ 0x" + mac_address + " }";
   }
-  Blockly.Arduino.variables_["mac_address"] = `uint8_t mac_address[] = ${mac_address};`;
   Blockly.Arduino.variables_["peer_info"] = `esp_now_peer_info_t peerInfo;`;
   Blockly.Arduino.setupCode_["esp_now_sender"] = `
-  memcpy(peerInfo.peer_addr, mac_address, 6);
   peerInfo.channel = 0;
-  peerInfo.encrypt = false;
+  peerInfo.encrypt = false;`;
+  var code = `
+  memcpy(peerInfo.peer_addr, new uint8_t[6] ${mac_address}, 6);
   if (esp_now_add_peer(&peerInfo) != ESP_OK){
       return;
   }`;
-  var code = "";
   return code;
 };
 
@@ -39,18 +38,26 @@ Blockly.Arduino.sensebox_get_mac = function () {
 };
 
 Blockly.Arduino.sensebox_esp_now_receive = function (Block) {
-  var id = Block.getFieldValue("VAR")
-  const variable = Blockly.Variables.getVariable(
+  var idMessage = Block.getFieldValue("VAR");
+  const varMessage = Blockly.Variables.getVariable(
     Blockly.getMainWorkspace(),
-    id
+    idMessage
   );
-  Blockly.Arduino.variables_[variable.name] = variable.type + " " + variable.name + ";\n";
+  var idAddress = Block.getFieldValue("MAC");
+  const varAddress = Blockly.Variables.getVariable(
+    Blockly.getMainWorkspace(),
+    idAddress
+  );
+  Blockly.Arduino.variables_[varMessage.name + varMessage.type] = varMessage.type + " " + varMessage.name + ";\n";
+  Blockly.Arduino.variables_[varAddress.name + varAddress.type] = varAddress.type + " " + varAddress.name + ";\n";
   let branch = Blockly['Arduino'].statementToCode(Block, 'DO');
   branch = Blockly['Arduino'].addLoopTrap(branch, Block.id);
   Blockly.Arduino.codeFunctions_["on_data_receive"] = `
   void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
-    ` + variable.name + ` = (char*)incomingData;
-  ` + branch +`
+    ${varMessage.name} = (char*)incomingData;
+    ${varAddress.name} = String(mac[0],HEX) + ":" + String(mac[1],HEX) + ":" + String(mac[2],HEX) + ":" + String(mac[3],HEX) + ":" + String(mac[4],HEX) + ":" + String(mac[5],HEX);
+    mac_address.toUpperCase();
+  ${branch}
   }
   `
   let code = "esp_now_register_recv_cb(OnDataRecv);";
@@ -61,8 +68,16 @@ Blockly.Arduino.sensebox_esp_now_send = function () {
   var value =
     Blockly.Arduino.valueToCode(this, "value", Blockly.Arduino.ORDER_ATOMIC) ||
     `" "`;
+  
+  var mac_address = this.getFieldValue("mac-address");
+  if(!mac_address.startsWith("{")) {
+    mac_address = mac_address.replaceAll(":",", 0x");
+    mac_address = "{ 0x" + mac_address + " }";
+  }
   // TODO test if all variable types work
-  var code = `esp_err_t result = esp_now_send(mac_address, (const uint8_t*)` + value + `, sizeof(` + value + `));`;
+  var code = `
+  esp_now_send(new uint8_t[6] ${mac_address}, (const uint8_t*)${value}, sizeof(${value}));
+  delay(5);`;
   return code;
 };
 
