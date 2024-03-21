@@ -81,7 +81,8 @@ Blockly.Blocks["sensebox_esp_now_send"] = {
       .appendField(Blockly.Msg.senseBox_mac_address)
       .appendField(new Blockly.FieldTextInput("00:00:00:00:00:00"), "mac-address");
     this.appendValueInput("value")
-      .appendField(Blockly.Msg.senseBox_esp_now_send_message);
+      .appendField(Blockly.Msg.senseBox_esp_now_send_message)
+      .setCheck(Types.getCompatibleTypes('String'));
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setTooltip(Blockly.Msg.senseBox_esp_now_send_tooltip);

@@ -74,7 +74,6 @@ Blockly.Arduino.sensebox_esp_now_send = function () {
     mac_address = mac_address.replaceAll(":",", 0x");
     mac_address = "{ 0x" + mac_address + " }";
   }
-  // TODO test if all variable types work
   var code = `
   esp_now_send(new uint8_t[6] ${mac_address}, (const uint8_t*)${value}, sizeof(${value}));
   delay(5);`;
