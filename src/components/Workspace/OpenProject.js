@@ -95,7 +95,7 @@ class OpenProject extends Component {
         open: true,
         title: Blockly.Msg.no_valid_data_type_title,
         content:
-          Blockly.Msg.no_valid_data_type
+          Blockly.Msg.no_valid_data_type_text
       });
     } else {
       var reader = new FileReader();

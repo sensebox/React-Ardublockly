@@ -139,6 +139,22 @@ export const UI = {
   compiledialog_text:
     "While compiling an error occured. Please check your blocks and try again",
 
+
+/**
+ * File Upload Dialog
+ */
+warning_file_board: "The selected board type differs from the board type of the loaded project. The project may not work as expected.",
+dialog_confirm: "Do you really want to insert the project from the XML file? All current blocks will be deleted.",
+
+/** Open Project */
+no_blocks_found_title: "No Blocks Found",
+no_blocks_found_text: "No blocks were detected. Please check the XML code and try again.",
+xml_loaded: "The project from the XML file has been successfully inserted.",
+no_valid_data_type_title: "Invalid File Type",
+no_valid_data_type_text: "The provided file did not match the required format. Only XML files are allowed.",
+no_valid_xml_title: "Invalid XML",
+no_valid_xml_text: "The XML file could not be parsed into blocks. Please check the XML code and try again.",
+
   /**
    * Buttons
    *
