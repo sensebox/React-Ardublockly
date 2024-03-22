@@ -36,7 +36,7 @@ class OpenProject extends Component {
       content: "",
       open: false,
       open2: false,
-      title2: "Blöcke laden",
+      title2: Blockly.Msg.dialog_title,
       snackbar: false,
       type: "",
       key: "",

@@ -147,6 +147,7 @@ warning_file_board: "The selected board type differs from the board type of the 
 dialog_confirm: "Do you really want to insert the project from the XML file? All current blocks will be deleted.",
 
 /** Open Project */
+dialog_title: "Load blocks from XML file",
 no_blocks_found_title: "No Blocks Found",
 no_blocks_found_text: "No blocks were detected. Please check the XML code and try again.",
 xml_loaded: "The project from the XML file has been successfully inserted.",
