@@ -22,7 +22,6 @@ Blockly.Blocks['arduino_functions'] = {
      */
     init: function () {
         var board = window.sessionStorage.getItem("board");
-        console.log(board);
         this.appendDummyInput()
             .appendField(Blockly.Msg.ARD_FUN_RUN_SETUP);
         this.appendStatementInput('SETUP_FUNC');
