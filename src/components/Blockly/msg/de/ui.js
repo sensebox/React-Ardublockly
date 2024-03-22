@@ -152,6 +152,7 @@ export const UI = {
 
 
 /** Open Project */
+  dialog_title: "Blöcke öffnen",
   no_blocks_found_title: "Keine Blöcke",
   no_blocks_found_text:"Es wurden keine Blöcke detektiert. Bitte überprüfe den XML-Code und versuche es erneut.",
   xml_loaded: "Das Projekt aus der XML-Datei wurde erfolgreich eingefügt.",
