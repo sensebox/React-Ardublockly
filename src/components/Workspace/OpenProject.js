@@ -52,7 +52,6 @@ class OpenProject extends Component {
   };
 
   toggleDialog2 = () => {
-    console.log("Moin");
     this.setState({ open2: !this.state.open2, title2: "" });
   };
 
@@ -67,9 +66,9 @@ class OpenProject extends Component {
       Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xmlBefore), workspace);
       this.setState({
         open: true,
-        title: "Keine Blöcke",
+        title: Blockly.Msg.no_blocks_found_title,
         content:
-          "Es wurden keine Blöcke detektiert. Bitte überprüfe den XML-Code und versuche es erneut.",
+          Blockly.Msg.no_blocks_found_text,
       });
     } else {
       if (!this.props.assessment) {
@@ -84,7 +83,7 @@ class OpenProject extends Component {
         type: "success",
         key: Date.now(),
         message:
-          "Das Projekt aus gegebener XML-Datei wurde erfolgreich eingefügt.",
+         Blockly.Msg.xml_loaded
       });
     }
 
@@ -94,9 +93,9 @@ class OpenProject extends Component {
     if (xmlFile.type !== "text/xml") {
       this.setState({
         open: true,
-        title: "Unzulässiger Dateityp",
+        title: Blockly.Msg.no_valid_data_type_title,
         content:
-          "Die übergebene Datei entsprach nicht dem geforderten Format. Es sind nur XML-Dateien zulässig.",
+          Blockly.Msg.no_valid_data_type
       });
     } else {
       var reader = new FileReader();
@@ -117,9 +116,9 @@ class OpenProject extends Component {
         } catch (err) {
           this.setState({
             open: true,
-            title: "Ungültige XML",
+            title: Blockly.Msg.no_valid_xml_title,
             content:
-              "Die XML-Datei konnte nicht in Blöcke zerlegt werden. Bitte überprüfe den XML-Code und versuche es erneut.",
+              Blockly.Msg.no_valid_xml_text
           });
         }
       };
@@ -176,22 +175,22 @@ class OpenProject extends Component {
             {this.state.selectedBoard !== this.state.xmlFileBoard ? (
               // give a warning that the board is different
               <Alert severity="warning" style={{ width: "fit-content" }}>
-                Der ausgewählte Boardtyp unterscheidet sich von dem Boardtyp des
-                geladenen Projekts. Möglicherweise funktioniert das Projekt
-                nicht wie erwartet.
+                {Blockly.Msg.warning_file_board}
               </Alert>
             ) : null}
             <p>
-              Möchtest du das Projekt aus der XML-Datei wirklich einfügen? Alle aktuellen Blöcke werden gelöscht.
-            </p>
+              {Blockly.Msg.dialog_confirm}
+              </p>
             <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", marginTop:"10px"}}>
             <Button
-              className={this.props.classes.button}
+            style={{width: "auto", height: "auto"}}
+            className={this.props.classes.button}
               onClick={this.toggleDialog2}
             >
               {Blockly.Msg.button_close}{" "}
             </Button>
             <Button
+            style={{width: "auto", height: "auto"}}
               className={this.props.classes.button}
               onClick={() => this.processXMLFile()}
             >
