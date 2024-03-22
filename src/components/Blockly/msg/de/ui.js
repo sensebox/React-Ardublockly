@@ -143,6 +143,22 @@ export const UI = {
   compiledialog_text:
     "Beim kompilieren ist ein Fehler aufgetreten. Überprüfe deine Blöcke und versuche es erneut",
 
+/**
+ * File Upload Dialog
+ */
+
+  warning_file_board: "Der ausgewählte Boardtyp unterscheidet sich von dem Boardtyp des geladenen Projekts. Möglicherweise funktioniert das Projekt nicht wie erwartet.",
+  dialog_confirm: "Möchtest du das Projekt aus der XML-Datei wirklich einfügen? Alle aktuellen Blöcke werden gelöscht.",
+
+
+/** Open Project */
+  no_blocks_found_title: "Keine Blöcke",
+  no_blocks_found_text:"Es wurden keine Blöcke detektiert. Bitte überprüfe den XML-Code und versuche es erneut.",
+  xml_loaded: "Das Projekt aus der XML-Datei wurde erfolgreich eingefügt.",
+  no_valid_data_type_title: "Unzulässiger Dateityp",
+  no_valid_data_type_text:"Die übergebene Datei entsprach nicht dem geforderten Format. Es sind nur XML-Dateien zulässig.",
+  no_valid_xml_title: "Ungültige XML",
+  no_valid_xml_text:"Die XML-Datei konnte nicht in Blöcke zerlegt werden. Bitte überprüfe den XML-Code und versuche es erneut.",
   /**
    * Buttons
    *
