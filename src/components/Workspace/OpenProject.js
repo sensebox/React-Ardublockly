@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { clearStats, workspaceName } from "../../actions/workspaceActions";
+import { setBoard } from "../../actions/boardAction";
 
 import * as Blockly from "blockly/core";
 
@@ -59,6 +60,7 @@ class OpenProject extends Component {
     const workspace = Blockly.getMainWorkspace();
     var xmlFile = this.state.xmlFileState;
     var xmlBefore = this.props.xml;
+    this.props.setBoard(this.state.xmlFileBoard)
     workspace.clear();
     this.props.clearStats();
     Blockly.Xml.domToWorkspace(xmlFile, workspace);
@@ -232,6 +234,6 @@ const mapStateToProps = (state) => ({
   name: state.workspace.name,
 });
 
-export default connect(mapStateToProps, { clearStats, workspaceName })(
+export default connect(mapStateToProps, { clearStats, workspaceName, setBoard })(
   withStyles(styles, { withTheme: true })(OpenProject)
 );
