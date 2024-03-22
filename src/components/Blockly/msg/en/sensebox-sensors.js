@@ -207,23 +207,35 @@ The measured values for temperature, humidity and air pressure can be used direc
    */
   senseBox_watertemperature: "Water Temperature",
 
-
-    /**
+  /**
    * Feinstaubsensor Sensirion SPS30
    */
 
-     senseBox_sps30: "Particulate Matter Sensor (Sensirion SPS30)",
-     senseBox_sps30_dimension: "in µg/m³",
-     senseBox_sps30_1p0: "PM1.0",
-     senseBox_sps30_2p5: "PM2.5",
-     senseBox_sps30_4p0: "PM4.0",
-     senseBox_sps30_10p0: "PM10",
-     senseBox_sps30_tooltip:
-     "This block gives you the measured value of the Sensirion SPS30 fine dust sensor. Connect the fine dust sensor to one of the 5 **I2C** connectors. Select between PM1.0, PM2.5, PM4.0 and PM10 in the dropdown menu. The measured value will be displayed as **decimal** in µg/m3",
-     senseBox_sps30_helpurl:
-       "https://docs.sensebox.de/hardware/sensoren-feinstaub/",
-   
-       senseBox_esp32_photodiode : "Light intensity",
-      senseBox_esp32_photodiode_tooltip : "The photodiode measures light intensity in a range from 0 to 4095. The brighter the environment, the higher the value."
+  senseBox_sps30: "Particulate Matter Sensor (Sensirion SPS30)",
+  senseBox_sps30_dimension: "in µg/m³",
+  senseBox_sps30_1p0: "PM1.0",
+  senseBox_sps30_2p5: "PM2.5",
+  senseBox_sps30_4p0: "PM4.0",
+  senseBox_sps30_10p0: "PM10",
+  senseBox_sps30_tooltip:
+    "This block gives you the measured value of the Sensirion SPS30 fine dust sensor. Connect the fine dust sensor to one of the 5 **I2C** connectors. Select between PM1.0, PM2.5, PM4.0 and PM10 in the dropdown menu. The measured value will be displayed as **decimal** in µg/m3",
+  senseBox_sps30_helpurl:
+    "https://docs.sensebox.de/hardware/sensoren-feinstaub/",
 
+  /**
+   * Photodiode MCUS2(ESP32)
+   *
+   */
+  senseBox_esp32_photodiode: "Light intensity",
+  senseBox_esp32_photodiode_tooltip:
+    "The photodiode measures light intensity in a range from 0 to 4095. The brighter the environment, the higher the value.",
+
+  /**
+   * ToF Imager
+   * 
+   */
+  sensebox_tof_imager: "TOF Imager",
+  sensebox_tof_imager_tooltip:
+    "The TOF imager measures distance using infrared light. The measurement value is returned in centimeters.",
+  sensebox_distanz: "Distance in cm",
 };

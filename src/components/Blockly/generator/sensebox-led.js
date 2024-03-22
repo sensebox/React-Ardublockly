@@ -20,7 +20,7 @@ Blockly.Arduino.sensebox_rgb_led = function () {
 
 
 Blockly.Arduino.sensebox_ws2818_led_init = function () {
-    var dropdown_pin = this.getFieldValue('Port');
+    var dropdown_pin = 1;
     var numPixel = Blockly.Arduino.valueToCode(this, 'NUMBER', Blockly.Arduino.ORDER_ATOMIC) || '1';
     var brightness = Blockly.Arduino.valueToCode(this, 'BRIGHTNESS', Blockly.Arduino.ORDER_ATOMIC) || '50'
     Blockly.Arduino.definitions_['define_rgb_led' + dropdown_pin] = `#include <Adafruit_NeoPixel.h>\n Adafruit_NeoPixel rgb_led_${dropdown_pin}= Adafruit_NeoPixel(${numPixel}, ${dropdown_pin},NEO_GRB + NEO_KHZ800);\n`;
