@@ -8,7 +8,7 @@ import * as Blockly from "blockly/core";
         <>
         <Category
         name={Blockly.Msg.toolbox_sensors}
-        colour={getColour().logic}
+        colour={getColour().sensebox}
       >
         <Block type="sensebox_sensor_temp_hum" />
         <Block type="sensebox_sensor_uv_light" />
@@ -371,9 +371,9 @@ import * as Blockly from "blockly/core";
           <Block type="sensebox_phyphox_channel"></Block>
           <Block type="sensebox_phyphox_sendchannel"></Block>
         </Category>
-        <Category id="senseboxble" name="senseBox BLE" colour={getColour().phyphox}>
+        {/* <Category id="senseboxble" name="senseBox BLE" colour={getColour().phyphox}>
           <Block type="sensebox_ble_init"></Block>
-        </Category>
+        </Category> */}
       </Category>
       <Category
         id="webserver"
