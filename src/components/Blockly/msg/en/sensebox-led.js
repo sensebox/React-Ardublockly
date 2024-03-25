@@ -42,4 +42,35 @@ export const LED = {
   COLOUR_RGB_TITLE: "colour with",
   COLOUR_RGB_TOOLTIP:
     "Create a colour with the specified amount of red, green, and blue. All values must be between 0 and 255.",
+  /**
+     * LED-Matrix
+     */
+
+
+  senseBox_ws2812_rgb_matrix_init: "Initialise LED-Matrix",
+  senseBox_ws2812_rgb_matrix_print: "Show text/number",
+  senseBox_ws2812_rgb_matrix_text: "Input",
+  senseBox_ws2812_rgb_matrix_init_tooltip: "",
+  senseBox_ws2812_rgb_matrix_brightness: "Brightness: ",
+  senseBox_ws2812_rgb_matrix_print_tooltip: "",
+  senseBox_ws2812_rgb_matrix_autoscroll: "Auto-Scroll",
+  senseBox_ws2812_rgb_matrix_draw_pixel: "Set pixels",
+  senseBox_ws2812_rgb_matrix_x: "X",
+  senseBox_ws2812_rgb_matrix_y: "Y",
+  senseBox_ws2812_rgb_matrix_color: "Color",
+  senseBox_ws2812_rgb_matrix_clear: "Clear matrix",
+  senseBox_ws2812_rgb_matrix_clear_tooltip: "",
+  senseBox_ws2812_rgb_matrix_draw_bitmap: "Draw bitmap",
+  senseBox_ws2812_rgb_matrix_draw_bitmap_tooltip: "",
+  senseBox_ws2812_rgb_matrix_bitmap: "Motive",
+  senseBox_ws2812_rgb_matrix_bitmap_tooltip: "",
+  senseBox_ws2812_rgb_matrix_custom_bitmap_tooltip: "",
+  senseBox_ws2812_rgb_matrix_custom_bitmap: "Show custom bitmap",
+  senseBox_ws2812_rgb_matrix_custom_bitmap_example: "{0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0xB5B6,   // 0x0010 (16) pixels\n" +
+  "0x0000, 0x0000, 0x29B3, 0x29B3, 0x29B3, 0x0000, 0x0000, 0x0000, 0xB5B6, 0xB5B6, 0xE8E4, 0xB5B6, 0xE54F, 0xE54F, 0x29B3, 0x29B3," +  // 0x0020 (32) pixels"+
+  "0x29B3, 0x74DA, 0x74DA, 0x74DA, 0xB5B6, 0xB5B6, 0xE8E4, 0xB5B6, 0x0000, 0xE54F, 0x29B3, 0x29B3, 0x29B3, 0x74DA, 0x74DA, 0x74DA,   // 0x0030 (48) pixels "+
+  "0xB5B6, 0xB5B6, 0xE8E4, 0xB5B6, 0xE54F, 0xE54F, 0x29B3, 0x29B3, 0x29B3, 0x74DA, 0x0000, 0x0000, 0xB5B6, 0xB5B6, 0xE8E4, 0xB5B6,   // 0x0040 (64) pixels " +
+  "0x0000, 0xE54F, 0x29B3, 0x29B3, 0x29B3, 0x74DA, 0x74DA, 0x74DA, 0xB5B6, 0xB5B6, 0xE8E4, 0xB5B6, 0xE54F, 0xE54F, 0x29B3, 0x29B3,   // 0x0050 (80) pixels"   +
+  "0x29B3, 0x74DA, 0x74DA, 0x74DA, 0x0000, 0x0000, 0x0000, 0xB5B6, 0x0000, 0x0000, 0x29B3, 0x29B3, 0x29B3, 0x0000, 0x0000, 0x0000,   // 0x0060 (96) pixels}",
+
 };

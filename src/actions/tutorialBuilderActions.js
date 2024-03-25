@@ -59,7 +59,7 @@ export const tutorialReview = (review) => (dispatch) => {
     type: BUILDER_REVIEW,
     payload: review,
   });
-  dispatch(changeTutorialBuilder());
+  dispatch(changeTutorialBuilder()); 
 };
 
 export const tutorialSteps = (steps) => (dispatch) => {

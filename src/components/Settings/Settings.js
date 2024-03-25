@@ -16,6 +16,7 @@ import DeviceSelector from "./DeviceSelector";
 
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
+import CompilerSelector from "./CompilerSelector";
 
 class Settings extends Component {
   componentDidMount() {
@@ -55,6 +56,9 @@ class Settings extends Component {
         </Paper>
         <Paper style={{ margin: "10px 0px", padding: "10px" }}>
           <DeviceSelector />
+        </Paper>
+        <Paper style={{ margin: "10px 0px", padding: "10px" }}>
+          <CompilerSelector />
         </Paper>
 
         <Button

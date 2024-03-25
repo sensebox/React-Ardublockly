@@ -51,6 +51,7 @@ export const PLATFORM = "PLATFORM";
 export const RENDERER = "RENDERER";
 export const SOUNDS = "SOUNDS";
 export const STATISTICS = "STATISTICS";
+export const COMPILER = "COMPILER";
 
 // messages
 export const GET_ERRORS = "GET_ERRORS";

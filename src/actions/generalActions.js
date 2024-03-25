@@ -5,6 +5,7 @@ import {
   SOUNDS,
   STATISTICS,
   PLATFORM,
+  COMPILER
 } from "./types";
 
 export const visitPage = () => (dispatch) => {
@@ -50,3 +51,10 @@ export const setStatistics = (showStatistics) => (dispatch) => {
     payload: showStatistics,
   });
 };
+
+export const setCompiler = (compiler) => (dispatch) => {
+    dispatch({
+      type: COMPILER,
+      payload: compiler,
+    });
+  };  

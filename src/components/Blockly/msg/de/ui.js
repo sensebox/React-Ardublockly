@@ -17,6 +17,8 @@ export const UI = {
   toolbox_motors: "Motoren",
   toolbox_label_externalRTC: "Externe RTC",
   toolbox_label_internalRTC: "Interne RTC",
+  toolbox_label_led_matrix: "LED-Matrix",
+  toolbox_label_led_ws2812: "RGB-LED",
   variable_NUMBER: "Zahl (int)",
   variable_SHORT_NUMBER: "char",
   variable_LONG: "große Zahl (long)",
@@ -141,6 +143,23 @@ export const UI = {
   compiledialog_text:
     "Beim kompilieren ist ein Fehler aufgetreten. Überprüfe deine Blöcke und versuche es erneut",
 
+/**
+ * File Upload Dialog
+ */
+
+  warning_file_board: "Der ausgewählte Boardtyp unterscheidet sich von dem Boardtyp des geladenen Projekts. Möglicherweise funktioniert das Projekt nicht wie erwartet.",
+  dialog_confirm: "Möchtest du das Projekt aus der XML-Datei wirklich einfügen? Alle aktuellen Blöcke werden gelöscht.",
+
+
+/** Open Project */
+  dialog_title: "Blöcke öffnen",
+  no_blocks_found_title: "Keine Blöcke",
+  no_blocks_found_text:"Es wurden keine Blöcke detektiert. Bitte überprüfe den XML-Code und versuche es erneut.",
+  xml_loaded: "Das Projekt aus der XML-Datei wurde erfolgreich eingefügt.",
+  no_valid_data_type_title: "Unzulässiger Dateityp",
+  no_valid_data_type_text:"Die übergebene Datei entsprach nicht dem geforderten Format. Es sind nur XML-Dateien zulässig.",
+  no_valid_xml_title: "Ungültige XML",
+  no_valid_xml_text:"Die XML-Datei konnte nicht in Blöcke zerlegt werden. Bitte überprüfe den XML-Code und versuche es erneut.",
   /**
    * Buttons
    *
@@ -192,6 +211,12 @@ export const UI = {
     "Aktiviere oder Deaktiviere Töne beim hinzufügen und löschen von Blöcken. Standardmäßig deaktiviert",
   settings_board: "Board",
   settings_board_text: "Wähle dein verwendetes Board aus",
+  settings_compiler: "Compiler URL",
+  settings_compiler_text:
+    "Geben die URL des Compilers ein, den du verwenden möchten. Die Standard-URL ist: https://compiler.sensebox.de",
+  settings_compiler_helperText: "Die URL muss mit https:// oder http:// beginnen",
+
+
   /**
    * 404
    */

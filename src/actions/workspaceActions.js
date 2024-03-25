@@ -15,6 +15,8 @@ export const onChangeCode = () => (dispatch, getState) => {
   var code = getState().workspace.code;
   code.arduino = Blockly.Arduino.workspaceToCode(workspace);
   var xmlDom = Blockly.Xml.workspaceToDom(workspace);
+  var board = getState().board.board
+  xmlDom.setAttribute('board', board)
   code.xml = Blockly.Xml.domToPrettyText(xmlDom);
   var selectedBlock = Blockly.getSelected();
   if (selectedBlock !== null) {

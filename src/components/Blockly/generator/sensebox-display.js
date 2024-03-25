@@ -8,7 +8,6 @@ Blockly.Arduino.sensebox_display_beginDisplay = function () {
     "#include <Adafruit_GFX.h> // http://librarymanager/All#Adafruit_GFX_Library";
   Blockly.Arduino.libraries_["library_AdafruitSSD1306"] =
     "#include <Adafruit_SSD1306.h> // http://librarymanager/All#Adafruit_SSD1306";
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.definitions_[
     "define_display_size"
   ] = `#define SCREEN_WIDTH 128\n#define SCREEN_HEIGHT 64`;
@@ -16,7 +15,7 @@ Blockly.Arduino.sensebox_display_beginDisplay = function () {
     "#define OLED_RESET -1\nAdafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);";
 
   Blockly.Arduino.setupCode_["sensebox_display_begin"] =
-    "senseBoxIO.powerI2C(true);\ndelay(2000);\ndisplay.begin(SSD1306_SWITCHCAPVCC, 0x3D);\ndisplay.display();\ndelay(100);\ndisplay.clearDisplay();";
+    "display.begin(SSD1306_SWITCHCAPVCC, 0x3D);\ndisplay.display();\ndelay(100);\ndisplay.clearDisplay();";
   var code = "";
   return code;
 };

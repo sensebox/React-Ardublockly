@@ -5,7 +5,6 @@ import * as Blockly from "blockly/core";
  */
 Blockly.Arduino.sensebox_telegram = function (Block) {
   let token = Block.getFieldValue("telegram_token");
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly["Arduino"].libraries_[
     "library_telegram"
   ] = `#include <UniversalTelegramBot.h>`;

@@ -5,7 +5,6 @@ Blockly.Arduino.sensebox_ntp_init = function () {
   Blockly.Arduino.libraries_["NTPClient"] = `#include <NTPClient.h>`;
   Blockly.Arduino.definitions_["WiFiUDP"] = `WiFiUDP ntpUDP;`;
   Blockly.Arduino.definitions_["NTPClient"] = `NTPClient timeClient(ntpUDP);`;
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.setupCode_["timeclient.begin"] = `timeClient.begin();`;
   Blockly.Arduino.setupCode_["timeclient.update"] = `timeClient.update();`;
   var code = ``;

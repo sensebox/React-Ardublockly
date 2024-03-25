@@ -66,43 +66,43 @@ class DeviceSeclection extends Component {
       >
         <div>
           <Grid container spacing={2} style={{ textAlign: "center" }}>
-            <Grid item xs={6}>
+            <Grid item xs={4}>
               <IconButton onClick={(e) => this.onclick(e, "mcu")} size="large">
                 <Avatar
                   alt="Sensebox MCU"
-                  src="/media/hardware/senseboxmcu.png"
+                  src="/media/hardware/blockly_mcu.png"
                   style={{
                     border: this.state.selectedBoard === "mcu" ? 'medium solid DeepSkyBlue' : "0.1px solid lightgray",
-                    width: "20vw",
-                    height: "20vw"
+                    width: "10vw",
+                    height: "10vw"
                   }}
                 />
               </IconButton>
               <p>senseBox MCU</p>
             </Grid>
-            {/* <Grid item xs={4}>
-            <IconButton onClick={(e) => this.onclick(e, "esp")}>
+            <Grid item xs={4}>
+            <IconButton onClick={(e) => this.onclick(e, "esp32")} size="large">
               <Avatar
                 alt="Sensebox ESP"
-                src="/media/hardware/senseboxmcu.png"
+                src="/media/hardware/blockly_esp.png"
                 style={{
-                  border: this.state.selectedBoard == "esp" ? 'medium solid DeepSkyBlue': "0.1px solid lightgray",
-                  width:"20vw",
-                  height: "20vw"
+                  border: this.state.selectedBoard === "esp32" ? 'medium solid DeepSkyBlue': "0.1px solid lightgray",
+                  width:"10vw",
+                  height: "10vw"
               }}
               />
               </IconButton>
-              <p>Sensebox ESP</p>
-            </Grid> */}
-            <Grid item xs={6}>
+              <p>senseBox MCU-S2</p>
+            </Grid>
+            <Grid item xs={4}>
               <IconButton onClick={(e) => this.onclick(e, "mini")} size="large">
                 <Avatar
                   alt="Sensebox Mini"
-                  src="/media/hardware/senseboxmcumini.png"
+                  src="/media/hardware/blockly_mini.png"
                   style={{
                     border: this.state.selectedBoard === "mini" ? 'medium solid DeepSkyBlue' : "0.1px solid lightgray",
-                    width: "20vw",
-                    height: "20vw"
+                    width: "10vw",
+                    height: "10vw"
                   }}
                 />
               </IconButton>

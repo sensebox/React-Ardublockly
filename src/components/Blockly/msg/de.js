@@ -18,6 +18,7 @@ import { SENSORS } from "./de/sensebox-sensors";
 import { SENSEBOX } from "./de/sensebox";
 import { TELEGRAM } from "./de/sensebox-telegram";
 import { WEB } from "./de/sensebox-web";
+import { ESP_NOW } from "./de/sensebox-esp-now";
 import { TEXT } from "./de/text";
 import { TIME } from "./de/time";
 import { TOURS } from "./de/tours";
@@ -47,6 +48,7 @@ export const De = {
   ...SENSEBOX,
   ...TELEGRAM,
   ...WEB,
+  ...ESP_NOW,
   ...TEXT,
   ...TIME,
   ...TOURS,

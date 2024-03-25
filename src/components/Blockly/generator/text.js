@@ -62,9 +62,10 @@ Blockly.Arduino["text_join"] = function (block) {
  */
 Blockly.Arduino["text_append"] = function (block) {
   // Append to a variable in place.
-  var varName = Blockly.Arduino.nameDB_.getName(
-    block.getFieldValue("VAR"),
-    Blockly.Variables.NAME_TYPE
+  var id = block.getFieldValue("VAR")
+  const variable = Blockly.Variables.getVariable(
+    Blockly.getMainWorkspace(),
+    id
   );
   var argument0 = Blockly.Arduino.valueToCode(
     block,
@@ -76,7 +77,7 @@ Blockly.Arduino["text_append"] = function (block) {
   } else {
     argument0 = "String(" + argument0 + ")";
   }
-  return varName + " += " + argument0 + ";\n";
+  return variable.name + " += " + argument0 + ";\n";
 };
 
 /**
