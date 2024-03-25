@@ -350,8 +350,7 @@ Blockly.Arduino.sensebox_sensor_ultrasonic_ranger = function () {
  */
 
 Blockly.Arduino.sensebox_tof_imager = function () {
-  var port = this.getFieldValue("port");
-  console.log(port); 
+  var dropdown_name = this.getFieldValue("dropdown");
   Blockly.Arduino.libraries_["library_wire"] = "#include <Wire.h>";
   Blockly.Arduino.libraries_[`library_vl53l8cx`] = `#include <vl53l8cx_class.h> `;
   Blockly.Arduino.variables_["define:_vl53l8cx"] = `
@@ -366,31 +365,141 @@ VL53L8CX sensor_vl53l8cx_top(&Wire, -1, -1);
   sensor_vl53l8cx_top.vl53l8cx_set_resolution(VL53L8CX_RESOLUTION_8X8);
   sensor_vl53l8cx_top.vl53l8cx_start_ranging();
   `;
-  Blockly.Arduino.codeFunctions_["define_tof_range"] = `
-float oldVl53l8cxMin = -1.0;
-float getVl53l8cxMin() {
-  VL53L8CX_ResultsData Results;
-  uint8_t NewDataReady = 0;
-  uint8_t status;
+  var code = "";
+  switch (dropdown_name) {
+    case "DistanzCM":
+      Blockly.Arduino.codeFunctions_["define_tof_range"] = `
+    float oldVl53l8cxMin = -1.0;
+    float getVl53l8cxMin() {
+      VL53L8CX_ResultsData Results;
+      uint8_t NewDataReady = 0;
+      uint8_t status;
 
-  status = sensor_vl53l8cx_top.vl53l8cx_check_data_ready(&NewDataReady);
+      status = sensor_vl53l8cx_top.vl53l8cx_check_data_ready(&NewDataReady);
 
-  if ((!status) && (NewDataReady != 0)) {
-    sensor_vl53l8cx_top.vl53l8cx_get_ranging_data(&Results);
-    float min = 10000.0;
-    for(int i = 0; i < VL53L8CX_RESOLUTION_8X8*VL53L8CX_NB_TARGET_PER_ZONE; i++) {
-      if((&Results)->target_status[i]!=255){
-        float distance = (&Results)->distance_mm[i];
-        if(min > distance) {
-          min = distance;
+      if ((!status) && (NewDataReady != 0)) {
+        sensor_vl53l8cx_top.vl53l8cx_get_ranging_data(&Results);
+        float min = 10000.0;
+        for(int i = 0; i < VL53L8CX_RESOLUTION_8X8*VL53L8CX_NB_TARGET_PER_ZONE; i++) {
+          if((&Results)->target_status[i]!=255){
+            float distance = (&Results)->distance_mm[i];
+            if(min > distance) {
+              min = distance;
+            }
+          }
         }
+        oldVl53l8cxMin = (min==10000.0) ? 0.0 : min;
       }
-    }
-    oldVl53l8cxMin = (min==10000.0) ? 0.0 : min;
+      return oldVl53l8cxMin;
+      }`;
+      code += "getVl53l8cxMin()";
+      break;
+    case "DistanzBM":
+      Blockly.Arduino.codeFunctions_["define_tof_range"] = `
+      uint16_t oldVl53l8cxBitmap[96] =
+      {
+        0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+        0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+        0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+        0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+        0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+        0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+      };
+      uint16_t* getVl53l8cxBitmap() {
+        VL53L8CX_ResultsData Result;
+        uint8_t NewDataReady = 0;
+        uint8_t status;
+      
+        status = sensor_vl53l8cx_top.vl53l8cx_check_data_ready(&NewDataReady);
+      
+        if ((!status) && (NewDataReady != 0)) {
+          sensor_vl53l8cx_top.vl53l8cx_get_ranging_data(&Result);
+          int8_t i, j, k;
+          uint8_t zones_per_line;
+          uint8_t number_of_zones = VL53L8CX_RESOLUTION_8X8;
+      
+          zones_per_line = (number_of_zones == 16) ? 4 : 8;
+      
+          for (j = 0; j < number_of_zones; j += zones_per_line)
+          {
+            for (k = (zones_per_line - 1); k >= 0; k--)
+            {
+              if((long)(&Result)->target_status[(VL53L8CX_NB_TARGET_PER_ZONE * (j+k))] ==255){
+                oldVl53l8cxBitmap[j + k + 2 + ((j+1)/2)] = (((0 >> 3) & 0x1F)<<11 | (((0 >> 2) & 0x3F) << 5) | ((0 >> 3) & 0x1F));
+              } else {
+                long distance = (long)(&Result)->distance_mm[(VL53L8CX_NB_TARGET_PER_ZONE * (j+k))];
+                int maxDist = distance;
+                if (maxDist > 2000) {
+                  maxDist = 2000;
+                }
+                int colVal = map(maxDist,0,2000,10,310);
+                oldVl53l8cxBitmap[j + k + 2 + ((j+1)/2)] = setLedColorHSV(colVal,1,1,(j+1)/8, k);
+              }
+            }
+          }
+        }
+        return oldVl53l8cxBitmap;
+      }
+      
+      uint16_t setLedColorHSV(int h, double s, double v, int x, int y) {
+        //this is the algorithm to convert from RGB to HSV
+        double r=0; 
+        double g=0; 
+        double b=0;
+      
+        double hf=h/60.0;
+      
+        int i=(int)floor(h/60.0);
+        double f = h/60.0 - i;
+        double pv = v * (1 - s);
+        double qv = v * (1 - s*f);
+        double tv = v * (1 - s * (1 - f));
+      
+        switch (i)
+        {
+        case 0: //rojo dominante
+          r = v;
+          g = tv;
+          b = pv;
+          break;
+        case 1: //verde
+          r = qv;
+          g = v;
+          b = pv;
+          break;
+        case 2: 
+          r = pv;
+          g = v;
+          b = tv;
+          break;
+        case 3: //azul
+          r = pv;
+          g = qv;
+          b = v;
+          break;
+        case 4:
+          r = tv;
+          g = pv;
+          b = v;
+          break;
+        case 5: //rojo
+          r = v;
+          g = pv;
+          b = qv;
+          break;
+        }
+      
+        //set each component to a integer value between 0 and 255
+        uint16_t red=constrain((int)255*r,0,255);
+        uint16_t green=constrain((int)255*g,0,255);
+        uint16_t blue=constrain((int)255*b,0,255);
+        return (((red >> 3) & 0x1F)<<11 | (((green >> 2) & 0x3F) << 5) | ((blue >> 3) & 0x1F));
+      }`;
+      code += "getVl53l8cxBitmap()";
+      break;
+    default:
+      break;
   }
-  return oldVl53l8cxMin;
-  }`;
-  var code = "getVl53l8cxMin()";
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
