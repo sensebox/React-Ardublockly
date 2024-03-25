@@ -233,6 +233,7 @@ senseBox_esp32_photodiode_tooltip: "Die Photodiode misst Lichtintensität. Der a
 sensebox_tof_imager: "TOF Imager",
 sensebox_tof_imager_tooltip: "Der TOF Imager misst die Distanz mithilfe von Infrarotlicht. Der Messwert wird in cm zurückgegeben.",
 sensebox_distanz: "Distanz in cm",
+sensebox_distanz_bitmap: "Distanz als Bitmap (für LED-Matrix)",
 
     };
 

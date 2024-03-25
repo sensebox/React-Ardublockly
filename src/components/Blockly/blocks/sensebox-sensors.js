@@ -303,20 +303,16 @@ Blockly.Blocks["sensebox_tof_imager"] = {
   init: function () {
     var dropdownOptions = [
       [Blockly.Msg.sensebox_distanz, "DistanzCM"],
+      [Blockly.Msg.sensebox_distanz_bitmap, "DistanzBM"]
     ];
-    var dropdown = new Blockly.FieldDropdown(dropdownOptions, function (
-      option
-    ) {
-      var input =
-        option === "DistanzCM"
-    });
+    var dropdown = new Blockly.FieldDropdown(dropdownOptions);
     this.setColour(getColour().sensebox);
     this.appendDummyInput()
       .appendField(Blockly.Msg.sensebox_tof_imager)
-      this.appendDummyInput()
+    this.appendDummyInput()
       .setAlign(Blockly.ALIGN_RIGHT)
       .appendField(Blockly.Msg.senseBox_value)
-      .appendField(dropdown, "NAME");
+      .appendField(dropdown, "dropdown");
     this.setOutput(true, Types.NUMBER.typeName);
     this.setTooltip(Blockly.Msg.sensebox_tof_imager_tooltip);
   },
