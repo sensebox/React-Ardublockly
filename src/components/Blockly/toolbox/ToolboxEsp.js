@@ -83,24 +83,14 @@ import * as Blockly from "blockly/core";
         <Block type="sensebox_sd_save_for_osem" />
       </Category>
       <Category name="LED" colour={getColour().sensebox}>
-        <Block type="sensebox_ws2818_led_init">
-          <Value name="NUMBER">
-            <Block type="math_number">
-              <Field name="NUM">1</Field>
-            </Block>
-          </Value>
+        <Block type="sensebox_esp32_ws2818_led_init">
           <Value name="BRIGHTNESS">
             <Block type="math_number">
               <Field name="NUM">30</Field>
             </Block>
           </Value>
         </Block>
-        <Block type="sensebox_ws2818_led">
-          <Value name="POSITION">
-            <Block type="math_number">
-              <Field name="NUM">0</Field>
-            </Block>
-          </Value>
+        <Block type="sensebox_esp32_ws2818_led">
           <Value name="COLOR">
             <Block type="math_number">
               <Field name="NUM">0</Field>

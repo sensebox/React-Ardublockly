@@ -10,6 +10,8 @@ export const LED = {
    */
   senseBox_ws2818_rgb_led: "Set RGB-LED at",
   senseBox_ws2818_rgb_led_init: "Initialise RGB LED (WS2818)",
+  senseBox_esp32_ws2818_rgb_led: "Set RGB-LED (onBoard) at",
+  senseBox_esp32_ws2818_rgb_led_init: "Initialise RGB LED (onBoard) ",
   senseBox_ws2818_rgb_led_position: "Position",
   senseBox_ws2818_rgb_led_brightness: "Brightness",
   senseBox_ws2818_rgb_led_tooltip:
