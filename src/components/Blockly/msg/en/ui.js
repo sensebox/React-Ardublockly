@@ -168,6 +168,7 @@ export const UI = {
     "Selection of the language applies to the entire application. A distinction can be made between German and English.",
   settings_language_de: "German",
   settings_language_en: "English",
+  settings_language_hu: "Hungarian",
   settings_renderer: "Renderer",
   settings_renderer_text:
     "The selected renderer determines the appearance of the blocks. A distinction can be made between 'Geras' and 'Zelos', whereby 'Zelos' is particularly suitable for a touch application.",
