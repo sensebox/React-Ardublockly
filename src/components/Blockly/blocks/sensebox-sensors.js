@@ -314,7 +314,7 @@ Blockly.Blocks["sensebox_tof_imager"] = {
       .setAlign(Blockly.ALIGN_RIGHT)
       .appendField(Blockly.Msg.senseBox_value)
       .appendField(dropdown, "dropdown");
-    this.setOutput(true, Types.NUMBER.typeName);
+    this.setOutput(true, "Bitmap");
     this.setTooltip(Blockly.Msg.sensebox_tof_imager_tooltip);
     this.getField("dropdown").setValidator(
       function (val) {

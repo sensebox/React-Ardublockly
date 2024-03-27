@@ -243,7 +243,7 @@ Blockly.Arduino['sensebox_ws2812_matrix_draw_custom_bitmap_example'] = function 
 
     }
     Blockly.Arduino.definitions_[`define_custom_draw_bitmap}`] = `const uint16_t bitmap_custom[] = {${bitmap}};`;
-    var code = `custom`;
+    var code = `bitmap_custom`;
 
 
     return [code, Blockly.Arduino.ORDER_ATOMIC];

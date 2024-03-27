@@ -37,7 +37,8 @@ Blockly.Blocks["print_serial_monitor"] = {
         "SERIAL_ID"
       )
       .appendField(Blockly.Msg.ARD_SERIAL_PRINT);
-    this.appendValueInput("CONTENT");
+    this.appendValueInput("CONTENT")
+      .setCheck(["Array", "boolean", "int", "char", "String", "long", "double", "float", "null"]);
     this.appendDummyInput()
       .appendField(new Blockly.FieldCheckbox("TRUE"), "NEW_LINE")
       .appendField(Blockly.Msg.ARD_SERIAL_PRINT_NEWLINE);
