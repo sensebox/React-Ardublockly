@@ -3,6 +3,7 @@ import { getColour } from "../helpers/colour";
 import * as Types from "../helpers/types";
 import { selectedBoard } from "../helpers/board";
 import { FieldGridDropdown } from "@blockly/field-grid-dropdown";
+import { FieldSlider } from "@blockly/field-slider";
 
 /**
  * HDC1080 Temperature and Humidity Sensor
@@ -302,8 +303,8 @@ Blockly.Blocks["sensebox_sensor_ultrasonic_ranger"] = {
 Blockly.Blocks["sensebox_tof_imager"] = {
   init: function () {
     var dropdownOptions = [
-      [Blockly.Msg.sensebox_distanz, "DistanzCM"],
-      [Blockly.Msg.sensebox_distanz_bitmap, "DistanzBM"]
+      [Blockly.Msg.sensebox_distance, "DistanzCM"],
+      [Blockly.Msg.sensebox_distance_bitmap, "DistanzBM"]
     ];
     var dropdown = new Blockly.FieldDropdown(dropdownOptions);
     this.setColour(getColour().sensebox);
@@ -315,8 +316,25 @@ Blockly.Blocks["sensebox_tof_imager"] = {
       .appendField(dropdown, "dropdown");
     this.setOutput(true, Types.NUMBER.typeName);
     this.setTooltip(Blockly.Msg.sensebox_tof_imager_tooltip);
+    this.getField("dropdown").setValidator(
+      function (val) {
+        this.updateShape_(val === "DistanzBM");
+      }.bind(this)
+    );
   },
-  
+  updateShape_(isAltitude) {
+    if (isAltitude) {
+      if (this.getInput("extraField") == null) {
+        this.appendDummyInput("extraField")
+        // .setAlign(Blockly.ALIGN_RIGHT) // This doesnt work for manual data input
+        .appendField(Blockly.Msg.sensebox_tof_imager_max_distance)
+        .appendField(new FieldSlider(2000, 1, 4000), "maxDistance")
+        .appendField(Blockly.Msg.sensebox_tof_imager_max_distance_unit);
+      }
+    } else {
+      this.removeInput("extraField", true);
+    }
+  }
 };
 
 
