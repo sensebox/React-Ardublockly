@@ -314,7 +314,7 @@ Blockly.Blocks["sensebox_tof_imager"] = {
       .setAlign(Blockly.ALIGN_RIGHT)
       .appendField(Blockly.Msg.senseBox_value)
       .appendField(dropdown, "dropdown");
-    this.setOutput(true, "Bitmap");
+      this.setOutput(true, Types.NUMBER.typeName);
     this.setTooltip(Blockly.Msg.sensebox_tof_imager_tooltip);
     this.getField("dropdown").setValidator(
       function (val) {
@@ -324,6 +324,7 @@ Blockly.Blocks["sensebox_tof_imager"] = {
   },
   updateShape_(isAltitude) {
     if (isAltitude) {
+      this.setOutput(true, "Bitmap");
       if (this.getInput("extraField") == null) {
         this.appendDummyInput("extraField")
         // .setAlign(Blockly.ALIGN_RIGHT) // This doesnt work for manual data input
@@ -332,6 +333,7 @@ Blockly.Blocks["sensebox_tof_imager"] = {
         .appendField(Blockly.Msg.sensebox_tof_imager_max_distance_unit);
       }
     } else {
+      this.setOutput(true, Types.NUMBER.typeName);
       this.removeInput("extraField", true);
     }
   }
