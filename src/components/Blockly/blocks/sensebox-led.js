@@ -206,7 +206,7 @@ Blockly.Blocks['sensebox_ws2812_matrix_text'] = {
             .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_color)
             .setCheck("Colour");
         this.appendValueInput("input")
-            .setCheck([Types.TEXT.typeName, Types.NUMBER.typeName])
+            .setCheck([Types.TEXT.typeName, Types.NUMBER.typeName, Types.DECIMAL.typeName])
             .appendField((Blockly.Msg.senseBox_ws2812_rgb_matrix_text));
 
         this.setPreviousStatement(true, null);

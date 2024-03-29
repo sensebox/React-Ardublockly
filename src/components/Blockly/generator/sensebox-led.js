@@ -101,8 +101,8 @@ Blockly.Arduino['sensebox_ws2812_matrix_text'] = function (block) {
     var color = Blockly.Arduino.valueToCode(this, 'COLOR', Blockly.Arduino.ORDER_ATOMIC);
     code += `matrix_${dropdown_pin}.setTextColor(matrix_${dropdown_pin}.Color(${color}));\n`;
     if (autoscroll === "TRUE") {
-        code += "char txt[] = " + value + ";\n";
-        code += "int length = strlen(txt);\n";
+        code += "String txt = String(" + value + ");\n";
+        code += "int length = txt.length();\n";
         code += "for(int i = 0; i<length*6+12; i++) {\n";
         code += ` matrix_${dropdown_pin}.fillScreen(0);\n`;
         code += ` matrix_${dropdown_pin}.setCursor(12-i, 0);\n`;
