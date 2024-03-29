@@ -396,7 +396,7 @@ VL53L8CX sensor_vl53l8cx_top(&Wire, -1, -1);
       code += "getVl53l8cxMin()";
       break;
     case "DistanzBM":
-      Blockly.Arduino.codeFunctions_["define_tof_range"] = `
+      Blockly.Arduino.codeFunctions_["define_tof_bitmap"] = `
       uint16_t oldVl53l8cxBitmap[96] =
       {
         0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
