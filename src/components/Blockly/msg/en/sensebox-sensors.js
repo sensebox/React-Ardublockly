@@ -234,11 +234,11 @@ The measured values for temperature, humidity and air pressure can be used direc
    * ToF Imager
    * 
    */
-  sensebox_tof_imager: "TOF Imager",
+  sensebox_tof_imager: "ToF Distance Imager",
   sensebox_tof_imager_tooltip:
-    "The TOF imager measures distance using infrared light. The measurement value is returned in centimeters.",
-  sensebox_distance: "Distance in cm",
-  sensebox_distance_bitmap: "Distance as bitmap (for LED-Matrix)",
+    "The ToF Distance Imager measures an image of 8x8 distances using infrared light. Connect the sensor to one of the I2C ports.",
+  sensebox_distance: "Closest distance in cm",
+  sensebox_distance_bitmap: "8x8 distances as bitmap (for LED-Matrix)",
   sensebox_tof_imager_max_distance: "Maximum measurable distance ",
-  sensebox_tof_imager_max_distance_unit: "mm",
+  sensebox_tof_imager_max_distance_unit: "cm",
 };

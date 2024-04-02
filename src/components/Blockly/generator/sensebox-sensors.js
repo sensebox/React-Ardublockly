@@ -430,10 +430,10 @@ VL53L8CX sensor_vl53l8cx_top(&Wire, -1, -1);
               } else {
                 long distance = (long)(&Result)->distance_mm[(VL53L8CX_NB_TARGET_PER_ZONE * (j+k))];
                 int maxDist = distance;
-                if (maxDist > ${maxDistance}) {
-                  maxDist = ${maxDistance};
+                if (maxDist > ${maxDistance} * 10) {
+                  maxDist = ${maxDistance} * 10;
                 }
-                int colVal = map(maxDist,0,${maxDistance},10,310);
+                int colVal = map(maxDist,0,${maxDistance} * 10,10,310);
                 oldVl53l8cxBitmap[j + k + 2 + ((j+1)/2)] = setLedColorHSV(colVal,1,1,(j+1)/8, k);
               }
             }
