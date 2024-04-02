@@ -206,7 +206,7 @@ Blockly.Blocks['sensebox_ws2812_matrix_text'] = {
             .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_color)
             .setCheck("Colour");
         this.appendValueInput("input")
-            .setCheck(null)
+            .setCheck([Types.TEXT.typeName, Types.NUMBER.typeName, Types.DECIMAL.typeName])
             .appendField((Blockly.Msg.senseBox_ws2812_rgb_matrix_text));
 
         this.setPreviousStatement(true, null);
@@ -256,7 +256,7 @@ Blockly.Blocks['sensebox_ws2812_matrix_drawBitmap'] = {
             .appendField("Port:")
             .appendField(new Blockly.FieldDropdown(selectedBoard().digitalPinsRGBMatrix), "Port")
         this.appendValueInput("input")
-            .setCheck(null)
+            .setCheck("Bitmap")
             .appendField((Blockly.Msg.senseBox_ws2812_rgb_matrix_bitmap));
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
@@ -279,7 +279,7 @@ Blockly.Blocks['sensebox_ws2812_matrix_bitmap'] = {
                 ["knight", "knight"],
                 ["random", "random"]
             ]), "BITMAP");
-        this.setOutput(true, null);
+        this.setOutput(true, "Bitmap");
         this.setTooltip(Blockly.Msg.senseBox_ws2812_rgb_matrix_bitmap_tooltip);
     }
 };
@@ -290,10 +290,8 @@ Blockly.Blocks['sensebox_ws2812_matrix_custom_bitmap'] = {
         this.appendDummyInput("BITMAP")
             .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_custom_bitmap)
             .appendField(new Blockly.FieldMultilineInput(Blockly.Msg.senseBox_ws2812_rgb_matrix_custom_bitmap_example),
-                'FIELDNAME')
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setOutput(true, null);
+                'FIELDNAME');
+        this.setOutput(true, "Bitmap");
         this.setTooltip(Blockly.Msg.senseBox_ws2812_rgb_matrix_custom_bitmap_tooltip);
     }
 };
@@ -809,7 +807,7 @@ Blockly.defineBlocksWithJsonArray([
                 colour: "#000000",
             },
         ],
-        output: "array",
+        output: "Bitmap",
         colour: getColour().sensebox,
         tooltip: "",
         helpUrl: "",

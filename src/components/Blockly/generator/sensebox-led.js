@@ -101,8 +101,8 @@ Blockly.Arduino['sensebox_ws2812_matrix_text'] = function (block) {
     var color = Blockly.Arduino.valueToCode(this, 'COLOR', Blockly.Arduino.ORDER_ATOMIC);
     code += `matrix_${dropdown_pin}.setTextColor(matrix_${dropdown_pin}.Color(${color}));\n`;
     if (autoscroll === "TRUE") {
-        code += "char txt[] = " + value + ";\n";
-        code += "int length = strlen(txt);\n";
+        code += "String txt = String(" + value + ");\n";
+        code += "int length = txt.length();\n";
         code += "for(int i = 0; i<length*6+12; i++) {\n";
         code += ` matrix_${dropdown_pin}.fillScreen(0);\n`;
         code += ` matrix_${dropdown_pin}.setCursor(12-i, 0);\n`;
@@ -228,7 +228,7 @@ Blockly.Arduino['sensebox_ws2812_matrix_custom_bitmap'] = function (block) {
     var value = Blockly.Arduino.valueToCode(this, "input", Blockly.Arduino.ORDER_ATOMIC) || '"Keine Eingabe"';
     var code = `matrix_${dropdown_pin}.drawBitmap(0,0,${value},WIDTH,HEIGHT,matrix_${dropdown_pin}.Color(255,255,255));\n`;
     code += `matrix_${dropdown_pin}.show();\n`;
-    return code;
+    return [code, Blockly.Arduino.ORDER_ATOMIC];
 }
 
 Blockly.Arduino['sensebox_ws2812_matrix_draw_custom_bitmap_example'] = function (block) {
@@ -243,7 +243,7 @@ Blockly.Arduino['sensebox_ws2812_matrix_draw_custom_bitmap_example'] = function 
 
     }
     Blockly.Arduino.definitions_[`define_custom_draw_bitmap}`] = `const uint16_t bitmap_custom[] = {${bitmap}};`;
-    var code = `custom`;
+    var code = `bitmap_custom`;
 
 
     return [code, Blockly.Arduino.ORDER_ATOMIC];

@@ -351,6 +351,7 @@ Blockly.Arduino.sensebox_sensor_ultrasonic_ranger = function () {
 
 Blockly.Arduino.sensebox_tof_imager = function () {
   var dropdown_name = this.getFieldValue("dropdown");
+  var maxDistance = this.getFieldValue("maxDistance");
   Blockly.Arduino.libraries_["library_wire"] = "#include <Wire.h>";
   Blockly.Arduino.libraries_[`library_vl53l8cx`] = `#include <vl53l8cx_class.h> `;
   Blockly.Arduino.variables_["define:_vl53l8cx"] = `
@@ -395,7 +396,7 @@ VL53L8CX sensor_vl53l8cx_top(&Wire, -1, -1);
       code += "getVl53l8cxMin()";
       break;
     case "DistanzBM":
-      Blockly.Arduino.codeFunctions_["define_tof_range"] = `
+      Blockly.Arduino.codeFunctions_["define_tof_bitmap"] = `
       uint16_t oldVl53l8cxBitmap[96] =
       {
         0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
@@ -429,10 +430,10 @@ VL53L8CX sensor_vl53l8cx_top(&Wire, -1, -1);
               } else {
                 long distance = (long)(&Result)->distance_mm[(VL53L8CX_NB_TARGET_PER_ZONE * (j+k))];
                 int maxDist = distance;
-                if (maxDist > 2000) {
-                  maxDist = 2000;
+                if (maxDist > ${maxDistance}) {
+                  maxDist = ${maxDistance};
                 }
-                int colVal = map(maxDist,0,2000,10,310);
+                int colVal = map(maxDist,0,${maxDistance},10,310);
                 oldVl53l8cxBitmap[j + k + 2 + ((j+1)/2)] = setLedColorHSV(colVal,1,1,(j+1)/8, k);
               }
             }
