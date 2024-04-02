@@ -131,6 +131,7 @@ import * as Blockly from "blockly/core";
       </Category>
         <Category name="LED Matrix" colour={getColour().sensebox}>
         <Block type="sensebox_ws2812_matrix_init"></Block>
+        <Block type="sensebox_ws2812_matrix_clear" />
         <Block type="sensebox_ws2812_matrix_text" />
         <Block type="sensebox_ws2812_matrix_drawPixel" />
         <Block type="sensebox_ws2812_matrix_drawBitmap" />
