@@ -138,7 +138,7 @@ Blockly.Arduino['sensebox_ws2812_matrix_drawPixel'] = function (block) {
     return code;
 }
 
-Blockly.Arduino['sensebox_ws2812_matrix_drawBitmap'] = function (block) {
+Blockly.Arduino['sensebox_ws2812_matrix_showBitmap'] = function (block) {
     var dropdown_pin = this.getFieldValue('Port');
     var value = Blockly.Arduino.valueToCode(this, "input", Blockly.Arduino.ORDER_ATOMIC) || '"Keine Eingabe"';
     var code = `matrix_${dropdown_pin}.drawRGBBitmap(0,0, ${value}, WIDTH, HEIGHT);\n`;

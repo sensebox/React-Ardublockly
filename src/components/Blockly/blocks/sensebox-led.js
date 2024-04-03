@@ -248,11 +248,11 @@ Blockly.Blocks['sensebox_ws2812_matrix_clear'] = {
     }
 };
 
-Blockly.Blocks['sensebox_ws2812_matrix_drawBitmap'] = {
+Blockly.Blocks['sensebox_ws2812_matrix_showBitmap'] = {
     init: function () {
         this.setColour(getColour().sensebox);
         this.appendDummyInput()
-            .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_draw_bitmap)
+            .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_show_bitmap)
             .appendField("Port:")
             .appendField(new Blockly.FieldDropdown(selectedBoard().digitalPinsRGBMatrix), "Port")
         this.appendValueInput("input")
@@ -260,7 +260,7 @@ Blockly.Blocks['sensebox_ws2812_matrix_drawBitmap'] = {
             .appendField((Blockly.Msg.senseBox_ws2812_rgb_matrix_bitmap));
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
-        this.setTooltip(Blockly.Msg.senseBox_ws2812_rgb_matrix_draw_bitmap_tooltip);
+        this.setTooltip(Blockly.Msg.senseBox_ws2812_rgb_matrix_show_bitmap_tooltip);
     }
 };
 
@@ -809,7 +809,7 @@ Blockly.defineBlocksWithJsonArray([
         ],
         output: "Bitmap",
         colour: getColour().sensebox,
-        tooltip: Blockly.Msg.senseBox_ws2812_rgb_matrix_draw_bitmap,
+        tooltip: Blockly.Msg.senseBox_ws2812_rgb_matrix_draw_bitmap_tooltip,
         helpUrl: "",
     },
 ]);
