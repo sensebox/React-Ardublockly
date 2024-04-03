@@ -96,6 +96,7 @@ Blockly.Arduino['sensebox_ws2812_matrix_clear'] = function (block) {
     var dropdown_pin = this.getFieldValue('Port');
     var code = "";
     code += `matrix_${dropdown_pin}.fillScreen(0);\n`;
+    code += `matrix_${dropdown_pin}.show();\n`;
     return code;
 }
 
