@@ -53,13 +53,16 @@ export const LED = {
     Beim Feld 'Color' kannst du eine Farbe für deinen Input wählen.`,
     senseBox_ws2812_rgb_matrix_autoscroll: `Auto-Scroll`,
     senseBox_ws2812_rgb_matrix_draw_pixel: `Pixel setzen`,
+    senseBox_ws2812_rgb_matrix_draw_pixel_tooltip: `Färbe ein Pixel an der Position (X,Y).
+    Entlang der X-Achse hat die LED-Matrix 12 Pixel und auf der Y-Achse 8.
+    Ein Block zum auswählen der Farbe befindet sich in der LED Kategorie.`,
     senseBox_ws2812_rgb_matrix_x: `X`,
     senseBox_ws2812_rgb_matrix_y: `Y`,
     senseBox_ws2812_rgb_matrix_color: `Farbe`,
     senseBox_ws2812_rgb_matrix_clear: `Matrix leeren`,
-    senseBox_ws2812_rgb_matrix_clear_tooltip: `Setze alle Pixel der LED-Matrix auf schwarz.`,
-    senseBox_ws2812_rgb_matrix_draw_bitmap: `Zeichne Bitmap`,
-    senseBox_ws2812_rgb_matrix_draw_bitmap_tooltip: `Zeige eine Bitmap an Farbwerten auf der LED-Matrix an.
+    senseBox_ws2812_rgb_matrix_clear_tooltip: `Setzt alle Pixel der LED-Matrix auf schwarz.`,
+    senseBox_ws2812_rgb_matrix_show_bitmap: `Zeige Bitmap`,
+    senseBox_ws2812_rgb_matrix_show_bitmap_tooltip: `Zeige eine Bitmap an Farbwerten auf der LED-Matrix an.
     Beispielsweise die Blöcke **Motiv** oder **Schreibe/Male eine eigene Bitmap** aus der LED-Matrix Kategorie. Alternativ kann auch der ToF Distanz Imager eine Bitmap ausgeben.`,
     senseBox_ws2812_rgb_matrix_bitmap: `Motiv`,
     senseBox_ws2812_rgb_matrix_bitmap_tooltip: `Enthält eine Auswahl an vordefinierten Farbwert-Bitmaps.`,
@@ -72,5 +75,5 @@ export const LED = {
     `0x0000, 0xE54F, 0x29B3, 0x29B3, 0x29B3, 0x74DA, 0x74DA, 0x74DA, 0xB5B6, 0xB5B6, 0xE8E4, 0xB5B6, 0xE54F, 0xE54F, 0x29B3, 0x29B3,   // 0x0050 (80) pixels`   +
     `0x29B3, 0x74DA, 0x74DA, 0x74DA, 0x0000, 0x0000, 0x0000, 0xB5B6, 0x0000, 0x0000, 0x29B3, 0x29B3, 0x29B3, 0x0000, 0x0000, 0x0000,   // 0x0060 (96) pixels}`,
     senseBox_ws2812_rgb_matrix_draw_bitmap: `Male eine eigene Bitmap`,
-    senseBox_ws2812_rgb_matrix_draw_bitmap_tooltip: ``,
+    senseBox_ws2812_rgb_matrix_draw_bitmap_tooltip: `Wähle anzuzeigende Farben für die einzelnen Pixel aus.`,
 };
