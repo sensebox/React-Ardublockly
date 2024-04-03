@@ -217,7 +217,7 @@ class Compile extends Component {
             <div className="overlay">
               <img src={Copy} width="400" alt="copyimage"></img>
               <h2>{Blockly.Msg.compile_overlay_head}</h2>
-              <p>{Blockly.Msg.compile_overlay_text}</p>
+              <h3>{Blockly.Msg.compile_overlay_text}</h3>
               <p>
                 {Blockly.Msg.compile_overlay_help}
                 <a href="/faq" target="_blank">
