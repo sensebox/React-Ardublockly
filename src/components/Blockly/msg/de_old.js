@@ -767,7 +767,7 @@ Blockly.Msg.senseBox_rgb_led_tip =
 Blockly.Msg.senseBox_temp = "Temperatur in °C";
 Blockly.Msg.senseBox_temp_hum = "Temperatur-/Luftfeuchtigkeitssensor (HDC1080)";
 Blockly.Msg.senseBox_temp_hum_tooltip =
-  "Dieser Block gibt dir die Messwerte des Temperatur- und Luftfeuchtigkeitssensor zurück. Schließe den Sensor an einen der 5 I2C Anschlüsse an. Messwert wird mit 2 Nachkommastellen ausgegeben.";
+  "Dieser Block gibt dir die Messwerte des Temperatur- und Luftfeuchtigkeitssensor zurück. Schließe den Sensor an einen der I2C Anschlüsse an. Messwert wird mit 2 Nachkommastellen ausgegeben.";
 
 /**
  * Ultraschalldistanzsensor

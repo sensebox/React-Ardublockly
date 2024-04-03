@@ -211,7 +211,7 @@ Blockly.Blocks['sensebox_ws2812_matrix_text'] = {
 
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
-        this.setTooltip(Blockly.Msg.senseBox_ws2812_rgb_matrix_init_tooltip);
+        this.setTooltip(Blockly.Msg.senseBox_ws2812_rgb_matrix_print_tooltip);
     }
 };
 
@@ -248,11 +248,11 @@ Blockly.Blocks['sensebox_ws2812_matrix_clear'] = {
     }
 };
 
-Blockly.Blocks['sensebox_ws2812_matrix_drawBitmap'] = {
+Blockly.Blocks['sensebox_ws2812_matrix_showBitmap'] = {
     init: function () {
         this.setColour(getColour().sensebox);
         this.appendDummyInput()
-            .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_draw_bitmap)
+            .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_show_bitmap)
             .appendField("Port:")
             .appendField(new Blockly.FieldDropdown(selectedBoard().digitalPinsRGBMatrix), "Port")
         this.appendValueInput("input")
@@ -260,7 +260,7 @@ Blockly.Blocks['sensebox_ws2812_matrix_drawBitmap'] = {
             .appendField((Blockly.Msg.senseBox_ws2812_rgb_matrix_bitmap));
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
-        this.setTooltip(Blockly.Msg.senseBox_ws2812_rgb_matrix_draw_bitmap_tooltip);
+        this.setTooltip(Blockly.Msg.senseBox_ws2812_rgb_matrix_show_bitmap_tooltip);
     }
 };
 
@@ -299,8 +299,7 @@ Blockly.Blocks['sensebox_ws2812_matrix_custom_bitmap'] = {
 Blockly.defineBlocksWithJsonArray([
     {
         type: "sensebox_ws2812_matrix_draw_custom_bitmap_example",
-        message0:
-            "Led Matrix Draw %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12 %13 %14 %15 %16 %17 %18 %19 %20 %21 %22 %23 %24 %25 %26 %27 %28 %29 %30 %31 %32 %33 %34 %35 %36 %37 %38 %39 %40 %41 %42 %43 %44 %45 %46 %47 %48 %49 %50 %51 %52 %53 %54 %55 %56 %57 %58 %59 %60 %61 %62 %63 %64 %65 %66 %67 %68 %69 %70 %71 %72 %73 %74 %75 %76 %77 %78 %79 %80 %81 %82 %83 %84 %85 %86 %87 %88 %89 %90 %91 %92 %93 %94 %95 %96 %97 %98 %99 %100 %101 %102 %103 %104",
+        message0: "Paint a custom Bitmap %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12 %13 %14 %15 %16 %17 %18 %19 %20 %21 %22 %23 %24 %25 %26 %27 %28 %29 %30 %31 %32 %33 %34 %35 %36 %37 %38 %39 %40 %41 %42 %43 %44 %45 %46 %47 %48 %49 %50 %51 %52 %53 %54 %55 %56 %57 %58 %59 %60 %61 %62 %63 %64 %65 %66 %67 %68 %69 %70 %71 %72 %73 %74 %75 %76 %77 %78 %79 %80 %81 %82 %83 %84 %85 %86 %87 %88 %89 %90 %91 %92 %93 %94 %95 %96 %97 %98 %99 %100 %101 %102 %103 %104",
         args0: [
             {
                 type: "input_dummy",
@@ -809,7 +808,7 @@ Blockly.defineBlocksWithJsonArray([
         ],
         output: "Bitmap",
         colour: getColour().sensebox,
-        tooltip: "",
+        tooltip: Blockly.Msg.senseBox_ws2812_rgb_matrix_draw_bitmap_tooltip,
         helpUrl: "",
     },
 ]);

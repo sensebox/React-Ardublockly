@@ -1,7 +1,7 @@
 export const RTC = {
   sensebox_rtc_init: "Initialisiere externe RTC",
   sensebox_rtc_init_tooltip:
-    "Initialisiere die RTC. Schließe diese an einen der 5 I2C/Wire Anschlüsse an und lege die Batterie ein. Bevor du die Uhrzeit auslesen kannst muss diese zunächst einmal gesetzt werden. Dieser Schritt muss normalerweise nur einmalig durchgeführt werden.",
+    "Initialisiere die RTC. Schließe diese an einen der I2C/Wire Anschlüsse an und lege die Batterie ein. Bevor du die Uhrzeit auslesen kannst muss diese zunächst einmal gesetzt werden. Dieser Schritt muss normalerweise nur einmalig durchgeführt werden.",
   sensebox_rtc_set: "Setze Uhrzeit/Datum der externen RTC",
   sensebox_rtc_set_tooltip:
     "Stellt die Uhrzeit der RTC ein. Beachte, dass du diesen Block im Setup ausführst.",
