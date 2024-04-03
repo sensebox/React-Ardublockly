@@ -306,7 +306,7 @@ export const UI = {
    */
 
   compile_overlay_head: "Dein Programm wird nun kompiliert und heruntergeladen",
-  compile_overlay_text: "Kopiere es anschließend auf deine senseBox MCU",
+  compile_overlay_text: "Übertrage es anschließend auf deine MCU-S2 und habe einen kleinen Moment Geduld.\n Sobald der Programmcode erfolgreich übertragen wurde, leuchtet die RGB-LED grün auf.\n Dieser Prozess kann bis zu 60 Sekunden dauern.",
   compile_overlay_help: "Benötigst du mehr Hilfe? Dann schaue hier: ",
 
   /**

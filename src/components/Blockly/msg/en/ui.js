@@ -300,7 +300,7 @@ no_valid_xml_text: "The XML file could not be parsed into blocks. Please check t
    */
 
   compile_overlay_head: "Your program is now compiled and downloaded",
-  compile_overlay_text: "Then copy it to your senseBox MCU",
+  compile_overlay_text: "Then you can transfer it to your MCU-S2 but please be patient for a moment.\n As soon as the program code has been successfully transferred, the RGB LED lights up green.\n This process can take up to 60 seconds.",
   compile_overlay_help: "You need help? Have a look here: ",
 
   /**
