@@ -12,7 +12,7 @@ export const SENSORS = {
   senseBox_pressure: "Luftdruck in hPa",
   senseBox_pressure_dimension: "Luftdruck in hPa",
   senseBox_pressure_tooltip:
-    "Schließe den Sensor an einen der 5 **I2C-Anschlüsse** an. Der Sensor gibt dir den Messwert für den Luftdruck in hPa. Um die korrekte Höhe über NN zu berechnen benötigt der Sensor einen aktuellen Referenzwert.",
+    "Schließe den Sensor an einen der **I2C-Anschlüsse** an. Der Sensor gibt dir den Messwert für den Luftdruck in hPa. Um die korrekte Höhe über NN zu berechnen benötigt der Sensor einen aktuellen Referenzwert.",
   senseBox_pressure_referencePressure: "Luftdruck auf NN",
   senseBox_pressure_referencePressure_dim: "hPa",
   senseBox_pressure_helpurl:
@@ -23,7 +23,7 @@ export const SENSORS = {
    */
   senseBox_sensor_dps310: "Luftdruck-/Temperatursensor (DPS310)",
   senseBox_sensor_dps310_tooltip:
-    "Schließe den Sensor an einen der 5 **I2C-Anschlüsse** an. Der Sensor gibt dir den Messwert für den Luftdruck in hPa. Um die korrekte Höhe über NN zu berechnen benötigt der Sensor einen aktuellen Referenzwert.",
+    "Schließe den Sensor an einen der **I2C-Anschlüsse** an. Der Sensor gibt dir den Messwert für den Luftdruck in hPa. Um die korrekte Höhe über NN zu berechnen benötigt der Sensor einen aktuellen Referenzwert.",
   senseBox_sensor_dps310_helpurl: "",
 
   /**
@@ -31,7 +31,7 @@ export const SENSORS = {
    */
   senseBox_sound: "Mikrofon",
   senseBox_sound_tip:
-    "Schließe den Sensor über das Breadbord an einen der 3 **analog/digital** Ports an. Gibt den Messwert des Mikrofons in Volt zurück",
+    "Schließe den Sensor über das Breadbord an einen der **analog/digital** Ports an. Gibt den Messwert des Mikrofons in Volt zurück",
   senseBox_sound_helpurl: "https://docs.sensebox.de/hardware/sensoren-mikro/",
 
   /**
@@ -40,7 +40,7 @@ export const SENSORS = {
   senseBox_temp: "Temperatur in °C",
   senseBox_temp_hum: "Temperatur-/Luftfeuchtigkeitssensor (HDC1080)",
   senseBox_temp_hum_tooltip:
-    "Dieser Block gibt dir die Messwerte des Temperatur- und Luftfeuchtigkeitssensor zurück. Schließe den Sensor an einen der 5 I2C Anschlüsse an. Messwert wird mit 2 Nachkommastellen ausgegeben.",
+    "Dieser Block gibt dir die Messwerte des Temperatur- und Luftfeuchtigkeitssensor zurück. Schließe den Sensor an einen der I2C Anschlüsse an. Messwert wird mit 2 Nachkommastellen ausgegeben.",
   senseBox_temp_hum_helpurl:
     "https://docs.sensebox.de/hardware/sensoren-temperatur-luftfeuchte/",
 
@@ -129,7 +129,7 @@ Wenn die maximale Distanz überschritten wird, wird ein Wert von **O** ausgegebe
    */
   senseBox_soundsensor_dfrobot: "Soundsensor (DF Robot)",
   senseBox_soundsensor_dfrobot_tooltip:
-    "Schließe den Sensor an einen der 3 **digital/analog Ports** an. Der Sensor gibt dir den Messwert in dB mit einer Nachkommastelle",
+    "Schließe den Sensor an einen der **digital/analog Ports** an. Der Sensor gibt dir den Messwert in dB mit einer Nachkommastelle",
   senseBox_soundsensor_dfrobot_helpurl:
     "https://docs.sensebox.de/hardware/sensoren-lautstaerke/",
   /*
@@ -142,7 +142,7 @@ Wenn die maximale Distanz überschritten wird, wird ein Wert von **O** ausgegebe
   senseBox_bme_co2: "CO2 Äquivalent",
   senseBox_bme_pressure: "Luftdruck in Pa",
   senseBox_bme_breatheVocEquivalent: "Atemluft VOC Äquivalent",
-  senseBox_bme_tooltip: `Schließe den Umweltsensor an einen der 5 **I2C-Anschlüsse** an. **Beachte:** Der Sensor benöigt eine gewisse Zeit zum kalibrieren. 
+  senseBox_bme_tooltip: `Schließe den Umweltsensor an einen der **I2C-Anschlüsse** an. **Beachte:** Der Sensor benöigt eine gewisse Zeit zum kalibrieren. 
 Den Status der Kalibrierung kann über den Kalibrierungswert abgelesen werden. Er ist entweder 0, 1, 2 oder 3 und sagt folgendes aus:
 
 - IAQ Accuracy : 0 heißt Sensor wird stabilisiert (dauert ca. 25 Minuten) oder dass es eine Zeitüberschreitung gab,
@@ -161,14 +161,14 @@ Die Messwerte für Temperatur, Luftfeuchtigkeit und Luftdruck können direkt ver
   senseBox_smt50_helpurl:
     "https://docs.sensebox.de/hardware/sensoren-truebner/",
   senseBox_smt50_tooltip:
-    "Schließe den Bodenfeuchtigkeit- und Temperatursensor an einen der 3 digital/analog Ports an und wähle den Port im Block aus. Der Sensor gibt die Bodentemperatur in °C und die Bodenfeuchtigkeit in % aus.",
+    "Schließe den Bodenfeuchtigkeit- und Temperatursensor an einen der digital/analog Ports an und wähle den Port im Block aus. Der Sensor gibt die Bodentemperatur in °C und die Bodenfeuchtigkeit in % aus.",
 
   /**
    * SCD30 CO2 Sensor
    */
   senseBox_scd30: "CO2 Sensor (Sensirion SCD30)",
   senseBox_scd_tooltip:
-    "Schließe den Sensor an einen der 5 **I2C-Anschlüsse** an. Der Sensor gibt dir den Messwert für die CO2-Konzentration in ppm. Der Temperaturmesswert kann aufgrund der Messung direkt am Sensor um einige Grad vom realen Wert abweichen.",
+    "Schließe den Sensor an einen der **I2C-Anschlüsse** an. Der Sensor gibt dir den Messwert für die CO2-Konzentration in ppm. Der Temperaturmesswert kann aufgrund der Messung direkt am Sensor um einige Grad vom realen Wert abweichen.",
   senseBox_scd_co2: "CO2 in ppm",
   senseBox_scd_helpurl: "https://docs.sensebox.de/hardware/sensoren-co2/",
 
@@ -214,7 +214,7 @@ Die Messwerte für Temperatur, Luftfeuchtigkeit und Luftdruck können direkt ver
    senseBox_sps30_2p5: "PM2.5",
    senseBox_sps30_4p0: "PM4.0",
    senseBox_sps30_10p0: "PM10",
-   senseBox_sps30_tooltip:"Dieser Block gibt dir den Messwert des Sensirion SPS30 Feinstaubsensor. Schließe den Feinstaubsensor an einen der 5 **I2C** Anschlüssen an. Im Dropdown Menü zwischen PM1.0, PM2.5, PM4.0 und PM10 auswählen. Der Messwert wird dir als **Kommazahl** in µg/m3",
+   senseBox_sps30_tooltip:"Dieser Block gibt dir den Messwert des Sensirion SPS30 Feinstaubsensor. Schließe den Feinstaubsensor an einen der **I2C** Anschlüssen an. Im Dropdown Menü zwischen PM1.0, PM2.5, PM4.0 und PM10 auswählen. Der Messwert wird dir als **Kommazahl** in µg/m3",
     senseBox_sps30_helpurl:
      "https://docs.sensebox.de/hardware/sensoren-feinstaub/",
  
@@ -230,12 +230,12 @@ senseBox_esp32_photodiode_tooltip: "Die Photodiode misst Lichtintensität. Der a
    * ToF Imager
    * 
    */
-sensebox_tof_imager: "TOF Imager",
-sensebox_tof_imager_tooltip: "Der TOF Imager misst die Distanz mithilfe von Infrarotlicht. Der Messwert wird in cm zurückgegeben.",
-sensebox_distance: "Distanz in cm",
-sensebox_distance_bitmap: "Distanz als Bitmap (für LED-Matrix)",
+sensebox_tof_imager: "ToF Distanz Imager",
+sensebox_tof_imager_tooltip: "Der ToF Distanz Imager misst ein Bild von 8x8 Distanzen mithilfe von Infrarotlicht. Schließe den Sensor an einen der I2C Anschlüsse an.",
+sensebox_distance: "Geringste Distanz in cm",
+sensebox_distance_bitmap: "8x8 Distanzen als Bitmap (für LED-Matrix)",
 sensebox_tof_imager_max_distance: "Maximal messbare Distanz ",
-sensebox_tof_imager_max_distance_unit: "mm",
+sensebox_tof_imager_max_distance_unit: "cm",
 
     };
 

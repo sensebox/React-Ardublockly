@@ -329,7 +329,7 @@ Blockly.Blocks["sensebox_tof_imager"] = {
         this.appendDummyInput("extraField")
         // .setAlign(Blockly.ALIGN_RIGHT) // This doesnt work for manual data input
         .appendField(Blockly.Msg.sensebox_tof_imager_max_distance)
-        .appendField(new FieldSlider(2000, 1, 4000), "maxDistance")
+        .appendField(new FieldSlider(200, 1, 400), "maxDistance")
         .appendField(Blockly.Msg.sensebox_tof_imager_max_distance_unit);
       }
     } else {
