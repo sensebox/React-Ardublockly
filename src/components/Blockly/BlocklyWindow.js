@@ -50,8 +50,7 @@ class BlocklyWindow extends Component {
       if(!xml) xml = initialXml;
       var xmlDom = Blockly.Xml.textToDom(xml);
       Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, workspace);
-      // var toolbox = workspace.getToolbox();
-      // workspace.updateToolbox(toolbox.toolboxDef_);
+
     }
  
     // if svg is true, then the update process is done in the BlocklySvg component

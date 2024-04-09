@@ -16,7 +16,7 @@ export const MOTORS = {
     sensebox_motors_moveServoMotor_helpurl: "https://en.wikipedia.org/wiki/Servomotor",
 
     sensebox_motors_I2CMotorBoard_begin: "Initialize I2C Motor Board",
-    sensebox_motors_I2CMotorBoard_begin_tooltip: "Connect the I2C Moztor Board with the two DC Motors to one of the five I2C-Ports. Use this Block inside the setup()-function.",
+    sensebox_motors_I2CMotorBoard_begin_tooltip: "Connect the I2C Moztor Board with the two DC Motors to one of the I2C-Ports. Use this Block inside the setup()-function.",
     sensebox_motors_I2CMotorBoard_begin_helpurl: "TODO",
 
     sensebox_motors_I2CMotorBoard_moveDCMotor: "Move",

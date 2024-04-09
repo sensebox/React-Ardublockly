@@ -25,8 +25,6 @@ Blockly.Arduino.sensebox_sensor_temp_hum = function () {
 Blockly.Arduino.sensebox_sensor_uv_light = function () {
   var dropdown_name = this.getFieldValue("NAME");
   let code = "";
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
-
   if (dropdown_name === "UvIntensity") {
     Blockly.Arduino.libraries_["library_veml6070"] = "#include <VEML6070.h>";
     Blockly.Arduino.definitions_["define_veml"] = "VEML6070 veml;";
@@ -136,7 +134,6 @@ unsigned char measurementRate = 3;
 Blockly.Arduino.sensebox_sensor_bmx055_accelerometer = function () {
   var dropdown_value = this.getFieldValue("VALUE");
   var range = this.getFieldValue("RANGE");
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_["library_bmx055"] = `#include <BMX055.h>`;
   Blockly.Arduino.definitions_["define_bmx"] = "BMX055 bmx;";
   Blockly.Arduino.setupCode_["sensebox_sensor_bmx055"] =
@@ -153,7 +150,6 @@ Blockly.Arduino.sensebox_sensor_bmx055_accelerometer = function () {
 Blockly.Arduino.sensebox_sensor_sds011 = function () {
   var dropdown_name = this.getFieldValue("NAME");
   var serial_name = this.getFieldValue("SERIAL");
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_[
     "SdsDustSensor"
   ] = `#include <SdsDustSensor.h> // http://librarymanager/All#Nova_Fitness_Sds_dust_sensors_library`;
@@ -191,7 +187,6 @@ Blockly.Arduino.sensebox_sensor_pressure = function () {
   var dropdown_name = this.getFieldValue("NAME");
   var code = "";
   var referencePressure = this.getFieldValue("referencePressure");
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_[
     "adafruit_bmp280"
   ] = `#include <Adafruit_BMP280.h> // http://librarymanager/All#Adafruit_BMP280_Library`;
@@ -228,7 +223,6 @@ bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,
 Blockly.Arduino.sensebox_sensor_bme680_bsec = function () {
   var dropdown_name = this.getFieldValue("dropdown");
   let code = "";
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_["library_bsec"] =
     "#include <bsec.h> // http://librarymanager/All#BSEC_Software_Library";
   Blockly.Arduino.definitions_["bsec_iaqSensor"] = "Bsec iaqSensor;";
@@ -346,7 +340,6 @@ Blockly.Arduino.sensebox_sensor_ultrasonic_ranger = function () {
   var dropdown_pin_TX = this.getFieldValue("ultrasonic_echo");
   var port = this.getFieldValue("port");
   var maxDistance = this.getFieldValue("maxDistance");
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_[
     "library_newPing"
   ] = `#include <NewPing.h> // http://librarymanager/All#NewPing`;
@@ -363,6 +356,168 @@ Blockly.Arduino.sensebox_sensor_ultrasonic_ranger = function () {
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
+
+/**
+ * 
+ * ToF Imager
+ */
+
+Blockly.Arduino.sensebox_tof_imager = function () {
+  var dropdown_name = this.getFieldValue("dropdown");
+  var maxDistance = this.getFieldValue("maxDistance");
+  Blockly.Arduino.libraries_["library_wire"] = "#include <Wire.h>";
+  Blockly.Arduino.libraries_[`library_vl53l8cx`] = `#include <vl53l8cx_class.h> `;
+  Blockly.Arduino.variables_["define:_vl53l8cx"] = `
+VL53L8CX sensor_vl53l8cx_top(&Wire, -1, -1);  
+`;
+  Blockly.Arduino.setupCode_["setup_vl53l8cx"] = `
+  Wire.begin();
+  Wire.setClock(1000000); //Sensor has max I2C freq of 1MHz
+  sensor_vl53l8cx_top.begin();
+  sensor_vl53l8cx_top.init_sensor();
+  sensor_vl53l8cx_top.vl53l8cx_set_ranging_frequency_hz(30);
+  sensor_vl53l8cx_top.vl53l8cx_set_resolution(VL53L8CX_RESOLUTION_8X8);
+  sensor_vl53l8cx_top.vl53l8cx_start_ranging();
+  `;
+  var code = "";
+  switch (dropdown_name) {
+    case "DistanzCM":
+      Blockly.Arduino.codeFunctions_["define_tof_range"] = `
+    float oldVl53l8cxMin = -1.0;
+    float getVl53l8cxMin() {
+      VL53L8CX_ResultsData Results;
+      uint8_t NewDataReady = 0;
+      uint8_t status;
+
+      status = sensor_vl53l8cx_top.vl53l8cx_check_data_ready(&NewDataReady);
+
+      if ((!status) && (NewDataReady != 0)) {
+        sensor_vl53l8cx_top.vl53l8cx_get_ranging_data(&Results);
+        float min = 10000.0;
+        for(int i = 0; i < VL53L8CX_RESOLUTION_8X8*VL53L8CX_NB_TARGET_PER_ZONE; i++) {
+          if((&Results)->target_status[i]!=255){
+            float distance = (&Results)->distance_mm[i];
+            if(min > distance) {
+              min = distance;
+            }
+          }
+        }
+        oldVl53l8cxMin = (min==10000.0) ? 0.0 : min;
+      }
+      return oldVl53l8cxMin;
+      }`;
+      code += "getVl53l8cxMin()";
+      break;
+    case "DistanzBM":
+      Blockly.Arduino.codeFunctions_["define_tof_bitmap"] = `
+      uint16_t oldVl53l8cxBitmap[96] =
+      {
+        0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+        0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+        0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+        0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+        0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+        0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+      };
+      uint16_t* getVl53l8cxBitmap() {
+        VL53L8CX_ResultsData Result;
+        uint8_t NewDataReady = 0;
+        uint8_t status;
+      
+        status = sensor_vl53l8cx_top.vl53l8cx_check_data_ready(&NewDataReady);
+      
+        if ((!status) && (NewDataReady != 0)) {
+          sensor_vl53l8cx_top.vl53l8cx_get_ranging_data(&Result);
+          int8_t i, j, k;
+          uint8_t zones_per_line;
+          uint8_t number_of_zones = VL53L8CX_RESOLUTION_8X8;
+      
+          zones_per_line = (number_of_zones == 16) ? 4 : 8;
+      
+          for (j = 0; j < number_of_zones; j += zones_per_line)
+          {
+            for (k = (zones_per_line - 1); k >= 0; k--)
+            {
+              if((long)(&Result)->target_status[(VL53L8CX_NB_TARGET_PER_ZONE * (j+k))] ==255){
+                oldVl53l8cxBitmap[j + k + 2 + ((j+1)/2)] = (((0 >> 3) & 0x1F)<<11 | (((0 >> 2) & 0x3F) << 5) | ((0 >> 3) & 0x1F));
+              } else {
+                long distance = (long)(&Result)->distance_mm[(VL53L8CX_NB_TARGET_PER_ZONE * (j+k))];
+                int maxDist = distance;
+                if (maxDist > ${maxDistance} * 10) {
+                  maxDist = ${maxDistance} * 10;
+                }
+                int colVal = map(maxDist,0,${maxDistance} * 10,10,310);
+                oldVl53l8cxBitmap[j + k + 2 + ((j+1)/2)] = setLedColorHSV(colVal,1,1,(j+1)/8, k);
+              }
+            }
+          }
+        }
+        return oldVl53l8cxBitmap;
+      }
+      
+      uint16_t setLedColorHSV(int h, double s, double v, int x, int y) {
+        //this is the algorithm to convert from RGB to HSV
+        double r=0; 
+        double g=0; 
+        double b=0;
+      
+        double hf=h/60.0;
+      
+        int i=(int)floor(h/60.0);
+        double f = h/60.0 - i;
+        double pv = v * (1 - s);
+        double qv = v * (1 - s*f);
+        double tv = v * (1 - s * (1 - f));
+      
+        switch (i)
+        {
+        case 0: //rojo dominante
+          r = v;
+          g = tv;
+          b = pv;
+          break;
+        case 1: //verde
+          r = qv;
+          g = v;
+          b = pv;
+          break;
+        case 2: 
+          r = pv;
+          g = v;
+          b = tv;
+          break;
+        case 3: //azul
+          r = pv;
+          g = qv;
+          b = v;
+          break;
+        case 4:
+          r = tv;
+          g = pv;
+          b = v;
+          break;
+        case 5: //rojo
+          r = v;
+          g = pv;
+          b = qv;
+          break;
+        }
+      
+        //set each component to a integer value between 0 and 255
+        uint16_t red=constrain((int)255*r,0,255);
+        uint16_t green=constrain((int)255*g,0,255);
+        uint16_t blue=constrain((int)255*b,0,255);
+        return (((red >> 3) & 0x1F)<<11 | (((green >> 2) & 0x3F) << 5) | ((blue >> 3) & 0x1F));
+      }`;
+      code += "getVl53l8cxBitmap()";
+      break;
+    default:
+      break;
+  }
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
+};
+
+
 /**
  * Microphone
  *
@@ -370,7 +525,6 @@ Blockly.Arduino.sensebox_sensor_ultrasonic_ranger = function () {
 
 Blockly.Arduino.sensebox_sensor_sound = function () {
   var dropdown_pin = this.getFieldValue("PIN");
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.codeFunctions_["define_sound"] = `
 float getSoundValue(int pin) {
     unsigned long start = millis(); // Start des Messintervalls
@@ -412,7 +566,6 @@ float getSoundValue(int pin) {
 Blockly.Arduino.sensebox_button = function () {
   var dropdown_pin = this.getFieldValue("PIN");
   var dropown_function = this.getFieldValue("FUNCTION");
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_[
     "library_jcButtons"
   ] = `#include <JC_Button.h> // http://librarymanager/All#JC_Button`;
@@ -446,7 +599,6 @@ Blockly.Arduino.sensebox_button = function () {
 
 Blockly.Arduino.sensebox_scd30 = function () {
   var dropdown = this.getFieldValue("dropdown");
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_["scd30_library"] =
     "#include <SparkFun_SCD30_Arduino_Library.h> // http://librarymanager/All#SparkFun_SCD30_Arduino_Library";
   Blockly.Arduino.definitions_["SCD30"] = "SCD30 airSensor;";
@@ -482,7 +634,6 @@ if (airSensor.begin() == false)
 
 Blockly.Arduino.sensebox_gps = function () {
   var dropdown = this.getFieldValue("dropdown");
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_["gps_library"] =
     "#include <SparkFun_u-blox_GNSS_Arduino_Library.h> // http://librarymanager/All#SparkFun_u-blox_GNSS_Arduino_Library";
   Blockly.Arduino.libraries_["library_wire"] = "#include <Wire.h>";
@@ -545,7 +696,6 @@ return tsBuffer;
  */
 
 Blockly.Arduino.sensebox_sensor_truebner_smt50 = function () {
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   var dropdown_port = this.getFieldValue("Port");
   var dropdown_value = this.getFieldValue("value");
   var dropdown_pin = 1;
@@ -598,7 +748,6 @@ Blockly.Arduino.sensebox_sensor_watertemperature = function () {
   if (dropdown_port === "C") {
     dropdown_pin = 5;
   }
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_["library_oneWire"] =
     "#include <OneWire.h> // http://librarymanager/All#OneWire";
   Blockly.Arduino.libraries_["library_oneDallasTemperature"] =
@@ -653,7 +802,6 @@ float getWindspeed(){
  */
 
 Blockly.Arduino.sensebox_soundsensor_dfrobot = function () {
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   var dropdown_port = this.getFieldValue("Port");
   var dropdown_pin = 1;
   if (dropdown_port === "A") {
@@ -687,7 +835,6 @@ Blockly.Arduino.sensebox_sensor_dps310 = function () {
   var dropdown_name = this.getFieldValue("NAME");
   var code = "";
   var referencePressure = this.getFieldValue("referencePressure");
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_[
     "adafruit_dps310"
   ] = `#include <Adafruit_DPS310.h> // http://librarymanager/All#Adafruit_DPS310`;
@@ -724,7 +871,6 @@ Blockly.Arduino.sensebox_sensor_dps310 = function () {
 
 Blockly.Arduino.sensebox_sensor_sps30 = function () {
   var dropdown_name = this.getFieldValue("value");
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
   Blockly.Arduino.libraries_[
     "sps30"
   ] = `#include <sps30.h> // http://librarymanager/All#`;
@@ -768,5 +914,61 @@ if (time_startsps > time_actualsps + intervalsps) {
   getSPS30Data();
 }`;
   var code = `m.mc_${dropdown_name}`;
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
+};
+
+
+/**
+ * senseBox MCU-S2 onboard Light Sensor
+ * 
+ */
+
+Blockly.Arduino.sensebox_esp32s2_light = function () {
+  var code = "analogRead(PD_SENSE)";
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
+};
+
+/**
+  * senseBox MCU-S2 onboard MPU6050
+  * 
+  **/
+
+Blockly.Arduino.sensebox_esp32s2_mpu6050 = function () {
+  var code = "";
+  var dropdown = this.getFieldValue("value");
+  Blockly.Arduino.libraries_["esp32s2_mpu6050"] = `#include <Adafruit_MPU6050.h>`;
+  Blockly.Arduino.libraries_["Adafruit_Sensor"] = `#include <Adafruit_Sensor.h>`;
+  Blockly.Arduino.libraries_["library_wire"] = `#include <Wire.h>`;
+  Blockly.Arduino.definitions_["define_Adafruit_mpu6050"] = "Adafruit_MPU6050 mpu;";
+  Blockly.Arduino.definitions_["define_sensor_events"] = "sensors_event_t a, g, temp;";
+  Blockly.Arduino.setupCode_["Wire1.begin()"] = "Wire1.begin();"
+  Blockly.Arduino.setupCode_["mpu.begin()"] = "mpu.begin(0x68, &Wire1);";
+  Blockly.Arduino.setupCode_["mpu.setAccelerometerRange()"] = "mpu.setAccelerometerRange(MPU6050_RANGE_8_G);";
+  Blockly.Arduino.loopCodeOnce_["mpu.getEvent"] = "mpu.getEvent(&a, &g, &temp);"
+  switch (dropdown) {
+    case "accelerationX":
+      code = "a.acceleration.x";
+      break;
+    case "accelerationY":
+      code = "a.acceleration.y";
+      break;
+    case "accelerationZ":
+      code = "a.acceleration.z";
+      break;
+    case "gyroscopeX":
+      code = "g.gyro.x";
+      break;
+    case "gyroscopeY":
+      code = "g.gyro.y";
+      break;
+    case "gyroscopeZ":
+      code = "g.gyro.z";
+      break;
+    case "temperature":
+      code = "temp.temperature";
+      break;
+    default:
+      code = "";
+  }
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };

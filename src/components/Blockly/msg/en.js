@@ -18,6 +18,7 @@ import { SD } from "./en/sensebox-sd";
 import { SENSORS } from "./en/sensebox-sensors";
 import { TELEGRAM } from "./en/sensebox-telegram";
 import { WEB } from "./en/sensebox-web";
+import { ESP_NOW } from "./en/sensebox-esp-now";
 import { TEXT } from "./en/text";
 import { TIME } from "./en/time";
 import { TOURS } from "./en/tours";
@@ -47,6 +48,7 @@ export const En = {
   ...SENSEBOX,
   ...TELEGRAM,
   ...WEB,
+  ...ESP_NOW,
   ...TEXT,
   ...TIME,
   ...TOURS,

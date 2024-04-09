@@ -5,7 +5,7 @@ export const DISPLAY = {
      */
 
     senseBox_display_beginDisplay: "Initialize Display",
-    senseBox_display_beginDisplay_tooltip: `Connect the Display to one of the five **I2C-Ports**. Use this Block inside the setup()-function.`,
+    senseBox_display_beginDisplay_tooltip: `Connect the Display to one of the **I2C-Ports**. Use this Block inside the setup()-function.`,
     senseBox_display_clearDisplay_tooltip: "Löscht die Anzeige auf dem Display. Sollte immer zu Begin oder am Ende der Endlosschleife aufgerufen werden.",
     senseBox_display_clearDisplay: "Clear Display",
     senseBox_display_printDisplay: "Show Text/Number",
