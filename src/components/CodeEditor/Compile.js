@@ -217,7 +217,9 @@ class Compile extends Component {
             <div className="overlay">
               <img src={Copy} width="400" alt="copyimage"></img>
               <h2>{Blockly.Msg.compile_overlay_head}</h2>
-              <h3>{Blockly.Msg.compile_overlay_text}</h3>
+              {this.props.selectedBoard === 'esp32'
+               ? <h3 style={{ padding: "0 2%", 'text-align':'center' }}>{Blockly.Msg.compile_overlay_text_esp32}</h3>
+               : <p>{Blockly.Msg.compile_overlay_text}</p>}
               <p>
                 {Blockly.Msg.compile_overlay_help}
                 <a href="/faq" target="_blank">

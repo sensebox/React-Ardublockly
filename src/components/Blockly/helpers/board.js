@@ -28,6 +28,11 @@ const sensebox_mcu = {
     ["C5", "5"],
     ["C6", "6"],
   ],
+  digitalPinsRGBMatrix: [
+    ["A", "2"],
+    ["B", "4"],
+    ["C", "6"],
+  ],
   digitalPinsRGB: [
     ["A", "1"],
     ["B", "3"],
@@ -156,6 +161,9 @@ const sensebox_mini = {
     ["BUILTIN_2", "8"],
     ["IO1", "1"],
     ["IO2", "2"],
+  ],
+  digitalPinsRGBMatrix: [
+    ["A", "2"],
   ],
   digitalPinsRGB: [
     ["on Board", "6"],
