@@ -17,6 +17,8 @@ export const UI = {
   toolbox_motors: "Motors",
   toolbox_label_externalRTC: "External RTC",
   toolbox_label_internalRTC: "Internal RTC",
+  toolbox_label_led_matrix: "LED-Matrix",
+  toolbox_label_led_ws2812: "RGB-LED",
   variable_NUMBER: "Number (int)",
   variable_SHORT_NUMBER: "char",
   variable_LONG: "Big number (long)",
@@ -137,6 +139,23 @@ export const UI = {
   compiledialog_text:
     "While compiling an error occured. Please check your blocks and try again",
 
+
+/**
+ * File Upload Dialog
+ */
+warning_file_board: "The selected board type differs from the board type of the loaded project. The project may not work as expected.",
+dialog_confirm: "Do you really want to insert the project from the XML file? All current blocks will be deleted.",
+
+/** Open Project */
+dialog_title: "Load blocks from XML file",
+no_blocks_found_title: "No Blocks Found",
+no_blocks_found_text: "No blocks were detected. Please check the XML code and try again.",
+xml_loaded: "The project from the XML file has been successfully inserted.",
+no_valid_data_type_title: "Invalid File Type",
+no_valid_data_type_text: "The provided file did not match the required format. Only XML files are allowed.",
+no_valid_xml_title: "Invalid XML",
+no_valid_xml_text: "The XML file could not be parsed into blocks. Please check the XML code and try again.",
+
   /**
    * Buttons
    *
@@ -186,6 +205,10 @@ export const UI = {
     "Enable or disable sounds when adding and deleting blocks. Disabled by default",
   settings_board: "Board",
   settings_board_text: "Choose your board",
+  settings_compiler: "Compiler URL",
+  settings_compiler_text:
+    "Enter the URL of the compiler you want to use. The default compiler is: https://compiler.sensebox.de",
+    settings_compiler_helperText: "Die URL must start https:// or http://",
 
   /**
    * 404
@@ -278,6 +301,7 @@ export const UI = {
 
   compile_overlay_head: "Your program is now compiled and downloaded",
   compile_overlay_text: "Then copy it to your senseBox MCU",
+  compile_overlay_text_esp32: "Then you can transfer it to your MCU-S2 but please be patient for a moment.\n As soon as the program code has been successfully transferred, the RGB LED lights up green.\n This process can take up to 60 seconds.",
   compile_overlay_help: "You need help? Have a look here: ",
 
   /**

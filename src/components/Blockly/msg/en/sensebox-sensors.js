@@ -12,7 +12,7 @@ export const SENSORS = {
   senseBox_pressure: "Airpressure in hPa",
   senseBox_pressure_dimension: "Airpressure in hPa",
   senseBox_pressure_tooltip:
-    "Connect the sensor to one of the 5 **I2C ports**. The sensor gives you the measured value for the air pressure in hPa. To calculate the correct altitude above sea level the sensor needs a current reference value.",
+    "Connect the sensor to one of the **I2C ports**. The sensor gives you the measured value for the air pressure in hPa. To calculate the correct altitude above sea level the sensor needs a current reference value.",
   senseBox_pressure_referencePressure: "Pressure at Sea Level",
   senseBox_pressure_referencePressure_dim: "hPa",
   senseBox_pressure_helpurl: "",
@@ -22,14 +22,14 @@ export const SENSORS = {
    */
   senseBox_sensor_dps310: "Airpressure/Temperature Sensor (DPS310)",
   senseBox_sensor_dps310_tooltip:
-    "Connect the sensor to one of the 5 **I2C ports**. The sensor gives you the measured value for the air pressure in hPa. To calculate the correct altitude above sea level the sensor needs a current reference value.",
+    "Connect the sensor to one of the **I2C ports**. The sensor gives you the measured value for the air pressure in hPa. To calculate the correct altitude above sea level the sensor needs a current reference value.",
 
   /**
    * Mikro
    */
   senseBox_sound: "Microphone",
   senseBox_sound_tip:
-    "Connect the sensor to one of the 3 **analog/digital** ports via the breadbord. Returns the reading of the microphone in volt",
+    "Connect the sensor to one of the **analog/digital** ports via the breadbord. Returns the reading of the microphone in volt",
   senseBox_sound_helpurl:
     "https://en.docs.sensebox.de/hardware/sensoren-mikro/",
 
@@ -39,7 +39,7 @@ export const SENSORS = {
   senseBox_temp: "Temperature in °C",
   senseBox_temp_hum: "Temperature/Humidity Sensor (HDC1080)",
   senseBox_temp_hum_tooltip:
-    "This block returns the temperature and humidity sensor readings. Connect the sensor to one of the 5 I2C ports. Measured value is output with 2 decimal places.",
+    "This block returns the temperature and humidity sensor readings. Connect the sensor to one of the I2C ports. Measured value is output with 2 decimal places.",
   senseBox_temp_hum_helpurl:
     "https://en.docs.sensebox.de/hardware/sensoren-temperatur-luftfeuchte/",
   senseBox_hum: "humidity in %",
@@ -130,7 +130,7 @@ If the max distance is reached the a value of **O** will be returned`,
    */
   senseBox_soundsensor_dfrobot: "Soundsensor (DF Robot)",
   senseBox_soundsensor_dfrobot_tooltip:
-    "Connect the sensor to one of the 3 **digital/analog ports**. The sensor will give you the reading in dB with one decimal.",
+    "Connect the sensor to one of the **digital/analog ports**. The sensor will give you the reading in dB with one decimal.",
   senseBox_soundsensor_dfrobot_helpurl:
     "https://en.docs.sensebox.de/hardware/sensoren-lautstaerke/",
 
@@ -144,7 +144,7 @@ If the max distance is reached the a value of **O** will be returned`,
   senseBox_bme_pressure: "Airpressure in Pa",
   senseBox_bme_co2: "CO2 Equivalent",
   senseBox_bme_breatheVocEquivalent: "Breathe VOC Equivalent",
-  senseBox_bme_tooltip: `Connect the environmental sensor to one of the 5 **I2C ports**. **Note:** The sensor needs some time to calibrate. 
+  senseBox_bme_tooltip: `Connect the environmental sensor to one of the **I2C ports**. **Note:** The sensor needs some time to calibrate. 
 The status of the calibration can be read from the calibration value. It is either 0, 1, 2 or 3 and says the following:
 
 - IAQ Accuracy : 0 means sensor is stabilized (takes about 25 minutes) or that there was a timeout,
@@ -163,14 +163,14 @@ The measured values for temperature, humidity and air pressure can be used direc
   senseBox_smt50_helpurl:
     "https://docs.sensebox.de/hardware/sensoren-truebner/",
   senseBox_smt50_tooltip:
-    "Schließe den Bodenfeuchtigkeit- und Temperatursensor an einen der 3 digital/analog Ports an und wähle den Port im Block aus. Der Sensor gibt die Bodentemperatur in °C und die Bodenfeuchtigkeit in % aus.",
+    "Schließe den Bodenfeuchtigkeit- und Temperatursensor an einen der digital/analog Ports an und wähle den Port im Block aus. Der Sensor gibt die Bodentemperatur in °C und die Bodenfeuchtigkeit in % aus.",
 
   /**
    * SCD30 CO2 Sensor
    */
   senseBox_scd30: "CO2 Sensor (Sensirion SCD30)",
   senseBox_scd_tooltip:
-    "Connect the sensor to one of the 5 **I2C ports**. The sensor will give you the reading for the CO2 concentration in ppm. The temperature reading may differ from the real value by a few degrees due to the measurement directly at the sensor.",
+    "Connect the sensor to one of the **I2C ports**. The sensor will give you the reading for the CO2 concentration in ppm. The temperature reading may differ from the real value by a few degrees due to the measurement directly at the sensor.",
   senseBox_scd_co2: "CO2 in ppm",
   senseBox_scd_helpurl: "https://en.docs.sensebox.de/hardware/sensoren-co2/",
   /**
@@ -207,22 +207,38 @@ The measured values for temperature, humidity and air pressure can be used direc
    */
   senseBox_watertemperature: "Water Temperature",
 
-
-    /**
+  /**
    * Feinstaubsensor Sensirion SPS30
    */
 
-     senseBox_sps30: "Particulate Matter Sensor (Sensirion SPS30)",
-     senseBox_sps30_dimension: "in µg/m³",
-     senseBox_sps30_1p0: "PM1.0",
-     senseBox_sps30_2p5: "PM2.5",
-     senseBox_sps30_4p0: "PM4.0",
-     senseBox_sps30_10p0: "PM10",
-     senseBox_sps30_tooltip:
-     "This block gives you the measured value of the Sensirion SPS30 fine dust sensor. Connect the fine dust sensor to one of the 5 **I2C** connectors. Select between PM1.0, PM2.5, PM4.0 and PM10 in the dropdown menu. The measured value will be displayed as **decimal** in µg/m3",
-     senseBox_sps30_helpurl:
-       "https://docs.sensebox.de/hardware/sensoren-feinstaub/",
-   
-  
+  senseBox_sps30: "Particulate Matter Sensor (Sensirion SPS30)",
+  senseBox_sps30_dimension: "in µg/m³",
+  senseBox_sps30_1p0: "PM1.0",
+  senseBox_sps30_2p5: "PM2.5",
+  senseBox_sps30_4p0: "PM4.0",
+  senseBox_sps30_10p0: "PM10",
+  senseBox_sps30_tooltip:
+    "This block gives you the measured value of the Sensirion SPS30 fine dust sensor. Connect the fine dust sensor to one of the **I2C** connectors. Select between PM1.0, PM2.5, PM4.0 and PM10 in the dropdown menu. The measured value will be displayed as **decimal** in µg/m3",
+  senseBox_sps30_helpurl:
+    "https://docs.sensebox.de/hardware/sensoren-feinstaub/",
 
+  /**
+   * Photodiode MCUS2(ESP32)
+   *
+   */
+  senseBox_esp32_photodiode: "Light intensity",
+  senseBox_esp32_photodiode_tooltip:
+    "The photodiode measures light intensity in a range from 0 to 4095. The brighter the environment, the higher the value.",
+
+  /**
+   * ToF Imager
+   * 
+   */
+  sensebox_tof_imager: "ToF Distance Imager",
+  sensebox_tof_imager_tooltip:
+    "The ToF Distance Imager measures an image of 8x8 distances using infrared light. Connect the sensor to one of the I2C ports.",
+  sensebox_distance: "Closest distance in cm",
+  sensebox_distance_bitmap: "8x8 distances as bitmap (for LED-Matrix)",
+  sensebox_tof_imager_max_distance: "Maximum measurable distance ",
+  sensebox_tof_imager_max_distance_unit: "cm",
 };

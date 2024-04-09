@@ -1,13 +1,21 @@
 import * as Blockly from "blockly/core";
 
+
 /**
  * Code generator to add code into the setup() and loop() functions.
  * Its use is not mandatory, but necessary to add manual code to setup().
  * @param {!Blockly.Block} block Block to generate the code from.
  * @return {string} Completed code.
  */
+
+
+
 Blockly.Arduino["arduino_functions"] = function (block) {
+  var board = window.sessionStorage.getItem("board");
+
+  if (board === "mcu" || board === "mini") {
   Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
+  }
   // Edited version of Blockly.Generator.prototype.statementToCode
   function statementToCodeNoTab(block, name) {
     var targetBlock = block.getInputTargetBlock(name);

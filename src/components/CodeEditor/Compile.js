@@ -19,6 +19,7 @@ import Copy from "../copy.svg";
 
 import MuiDrawer from "@mui/material/Drawer";
 import Dialog from "../Dialog";
+import copyesp32 from "../copy_esp32.svg";
 
 const styles = (theme) => ({
   backdrop: {
@@ -79,7 +80,7 @@ class Compile extends Component {
   compile = () => {
     this.setState({ progress: true });
     const data = {
-      board: process.env.REACT_APP_BOARD,
+      board: this.props.selectedBoard === "mcu" ? "sensebox-mcu" : "sensebox-esp32s2",
       sketch: this.props.arduino,
     };
     fetch(`${process.env.REACT_APP_COMPILER_URL}/compile`, {
@@ -115,7 +116,7 @@ class Compile extends Component {
     this.toggleDialog();
     this.props.workspaceName(this.state.name);
     window.open(
-      `${process.env.REACT_APP_COMPILER_URL}/download?id=${id}&board=${process.env.REACT_APP_BOARD}&filename=${filename}`,
+      `${process.env.REACT_APP_COMPILER_URL}/download?id=${id}&board=${this.props.selectedBoard === "mcu" ? "sensebox-mcu" : "sensebox-esp32s2"}&filename=${filename}`,
       "_self"
     );
     this.setState({ progress: false });
@@ -216,7 +217,9 @@ class Compile extends Component {
             <div className="overlay">
               <img src={Copy} width="400" alt="copyimage"></img>
               <h2>{Blockly.Msg.compile_overlay_head}</h2>
-              <p>{Blockly.Msg.compile_overlay_text}</p>
+              {this.props.selectedBoard === 'esp32'
+               ? <h3 style={{ padding: "0 2%", 'text-align':'center' }}>{Blockly.Msg.compile_overlay_text_esp32}</h3>
+               : <p>{Blockly.Msg.compile_overlay_text}</p>}
               <p>
                 {Blockly.Msg.compile_overlay_help}
                 <a href="/faq" target="_blank">
@@ -233,8 +236,16 @@ class Compile extends Component {
           >
             <div className="overlay">
               {/* <img src={Copy} width="400" alt="copyimage"></img> */}
-              <h2>Dein Code wird kompiliert!</h2>
-              <p>übertrage ihn anschließend mithlfe der senseBoxConnect-App</p>
+              { this.props.selectedBoard === 'esp32' ? 
+              <div>
+                <h2>Dein Code wird kompiliert!</h2>
+                  <p> Übertrage ihn per Drag & Drop auf deine MCU</p>
+                  <img src={copyesp32} width="200" alt="draganddrop"></img>
+                </div>
+                : <div>
+                   <h2>Dein Code wird kompiliert!</h2>
+              <p>übertrage ihn anschließend mithlfe der senseBoxConnect-App</p> </div>}
+             
               <p>
                 {Blockly.Msg.compile_overlay_help}
                 <a href="/faq" target="_blank">

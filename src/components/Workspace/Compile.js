@@ -19,7 +19,7 @@ import Copy from "../copy.svg";
 
 import MuiDrawer from "@mui/material/Drawer";
 import Dialog from "../Dialog";
-
+import copyesp32 from "../copy_esp32.svg";
 const styles = (theme) => ({
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
@@ -74,15 +74,17 @@ class Compile extends Component {
     if (props.name !== this.props.name) {
       this.setState({ name: this.props.name });
     }
+
   }
 
   compile = () => {
+    console.log(this.props.selectedBoard);
     this.setState({ progress: true });
     const data = {
-      board: process.env.REACT_APP_BOARD,
+      board: this.props.selectedBoard === "mcu" || this.props.selectedBoard === "mini" ? "sensebox-mcu" : "sensebox-esp32s2",
       sketch: this.props.arduino,
     };
-    fetch(`${process.env.REACT_APP_COMPILER_URL}/compile`, {
+    fetch(`${this.props.compiler}/compile`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
@@ -115,7 +117,7 @@ class Compile extends Component {
     this.toggleDialog();
     this.props.workspaceName(this.state.name);
     window.open(
-      `${process.env.REACT_APP_COMPILER_URL}/download?id=${id}&board=${process.env.REACT_APP_BOARD}&filename=${filename}`,
+      `${this.props.compiler}/download?id=${id}&board=${process.env.REACT_APP_BOARD}&filename=${filename}`,
       "_self"
     );
     this.setState({ progress: false });
@@ -216,7 +218,9 @@ class Compile extends Component {
             <div className="overlay">
               <img src={Copy} width="400" alt="copyimage"></img>
               <h2>{Blockly.Msg.compile_overlay_head}</h2>
-              <p>{Blockly.Msg.compile_overlay_text}</p>
+              {this.props.selectedBoard === 'esp32'
+               ? <h3 style={{ padding: "0 2%", 'text-align':'center'}}>{Blockly.Msg.compile_overlay_text_esp32}</h3>
+                : <p>{Blockly.Msg.compile_overlay_text}</p>}
               <p>
                 {Blockly.Msg.compile_overlay_help}
                 <a href="/faq" target="_blank">
@@ -233,8 +237,18 @@ class Compile extends Component {
           >
             <div className="overlay">
               {/* <img src={Copy} width="400" alt="copyimage"></img> */}
-              <h2>Dein Code wird kompiliert!</h2>
-              <p>übertrage ihn anschließend mithlfe der senseBoxConnect-App</p>
+              { this.props.selectedBoard === 'esp32' ? 
+              <div style={{'text-align':'center'}}>
+                <h2>Dein Code wird kompiliert!</h2>
+                  <p> Übertrage ihn per Drag & Drop auf deine MCU</p>
+                  <img src={copyesp32} width="600
+                  
+                  " alt="draganddrop"></img>
+                </div>
+                : <div>
+                   <h2>Dein Code wird kompiliesdsdrt!</h2>
+              <p>übertrage ihn anschließend mithlfe der senseBoxConnect-App</p> </div>}
+             
               <p>
                 {Blockly.Msg.compile_overlay_help}
                 <a href="/faq" target="_blank">
@@ -320,12 +334,16 @@ Compile.propTypes = {
   name: PropTypes.string,
   workspaceName: PropTypes.func.isRequired,
   platform: PropTypes.bool.isRequired,
+  compiler: PropTypes.string.isRequired,
+  selectedBoard: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   arduino: state.workspace.code.arduino,
   name: state.workspace.name,
   platform: state.general.platform,
+  compiler: state.general.compiler,
+  selectedBoard: state.board.board,
 });
 
 export default connect(mapStateToProps, { workspaceName })(

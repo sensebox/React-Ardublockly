@@ -1,6 +1,26 @@
 import * as Blockly from "blockly";
 import { getColour } from "../helpers/colour";
 
+
+var checkUnitLength = function (unit) {
+  var length = unit.length;
+  if (length > 5) {
+    alert("Die Einheit muss kleiner als 6 Zeichen sein");
+    return unit.slice(0, 5);
+  }
+  return unit;
+};
+
+var checkLabelLength = function (label) {
+  var length = label.length;
+  if (length > 20) {
+    alert("Das Label muss kleiner als 20 Zeichen sein");
+    return label.slice(0, 20);
+  }
+  return label;
+};
+
+
 Blockly.Blocks["sensebox_phyphox_init"] = {
   init: function () {
     this.setColour(getColour().phyphox);
@@ -51,16 +71,16 @@ Blockly.Blocks["sensebox_phyphox_graph"] = {
       .appendField(new Blockly.FieldTextInput("Label"), "label");
     this.appendDummyInput()
       .appendField(Blockly.Msg.sensebox_phyphox_unitx)
-      .appendField(new Blockly.FieldTextInput("Unit X"), "unitx");
+      .appendField(new Blockly.FieldTextInput("Unit", checkUnitLength), "unitx");
     this.appendDummyInput()
       .appendField(Blockly.Msg.sensebox_phyphox_unity)
-      .appendField(new Blockly.FieldTextInput("Unit Y"), "unity");
+      .appendField(new Blockly.FieldTextInput("Unit", checkUnitLength), "unity");
     this.appendDummyInput()
       .appendField(Blockly.Msg.sensebox_phyphox_labelx)
-      .appendField(new Blockly.FieldTextInput("Label X"), "labelx");
+      .appendField(new Blockly.FieldTextInput("Label X", checkLabelLength), "labelx");
     this.appendDummyInput()
       .appendField(Blockly.Msg.sensebox_phyphox_labely)
-      .appendField(new Blockly.FieldTextInput("Label Y"), "labely");
+      .appendField(new Blockly.FieldTextInput("Label Y", checkLabelLength), "labely");
     this.appendDummyInput()
       .appendField(Blockly.Msg.sensebox_phyphox_graphStyle)
       .appendField(
@@ -148,5 +168,46 @@ Blockly.Blocks["sensebox_phyphox_experiment_send"] = {
     this.setNextStatement(true, null);
     this.setTooltip(Blockly.Msg.sensebox_phyphox_experiment_send_tooltip);
     this.setHelpUrl(Blockly.Msg.sensebox_phyphox_helpurl);
+  },
+};
+
+/**
+ * senseBox BLE
+ * 
+ * 
+ */
+
+Blockly.Blocks["sensebox_ble_init"] = {
+  init: function () {
+    this.setColour(getColour().senseboxble);
+    this.setHelpUrl(Blockly.Msg.sensebox_ble_helpurl);
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.sensebox_ble_init)
+      .appendField(new Blockly.FieldTextInput("Geräte Name"), "devicename");
+
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip(Blockly.Msg.sensebox_ble_init_tooltip);
+  },
+};
+
+Blockly.Blocks["sensebox_ble_send"] = {
+  init: function () {
+    this.setColour(getColour().senseboxble);
+    this.appendValueInput("value")
+      .appendField(Blockly.Msg.sensebox_ble_send)
+      .appendField(
+        new Blockly.FieldDropdown([
+          ["1", "1"],
+          ["2", "2"],
+          ["3", "3"],
+        ]),
+        "channel"
+      );
+
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip(Blockly.Msg.sensebox_ble_send_tooltip);
+    this.setHelpUrl(Blockly.Msg.sensebox_ble_helpurl);
   },
 };
