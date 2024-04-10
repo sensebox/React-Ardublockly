@@ -221,7 +221,10 @@ Blockly.Blocks['sensebox_ws2812_matrix_drawPixel'] = {
         this.appendDummyInput()
             .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_draw_pixel)
             .appendField("Port:")
-            .appendField(new Blockly.FieldDropdown(selectedBoard().digitalPinsRGBMatrix), "Port")
+            .appendField(new Blockly.FieldDropdown(selectedBoard().digitalPinsRGBMatrix), "Port");
+        this.appendDummyInput("show")
+            .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_show)
+            .appendField(new Blockly.FieldCheckbox("TRUE"), "SHOW");
         this.appendValueInput("X", "Number")
             .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_x);
         this.appendValueInput("Y", "Number")
