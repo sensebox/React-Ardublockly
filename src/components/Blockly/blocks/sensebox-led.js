@@ -45,8 +45,6 @@ Blockly.Blocks['sensebox_rgb_led'] = {
 
 
 Blockly.Blocks['sensebox_ws2818_led_init'] = {
-
-    // when selected board == esp32 then append a digital port to the block
     init: function () {
         this.setColour(getColour().sensebox);       
         this.appendDummyInput()

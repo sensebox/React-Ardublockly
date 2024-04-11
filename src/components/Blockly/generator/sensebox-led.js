@@ -21,7 +21,6 @@ Blockly.Arduino.sensebox_rgb_led = function () {
 
 
 Blockly.Arduino.sensebox_ws2818_led_init = function () {
-    console.log(selectedBoard().title)
     let dropdown_pin = 1;
     if(selectedBoard().title === "MCU" || selectedBoard().title === "Mini"){
         dropdown_pin = this.getFieldValue('Port');
