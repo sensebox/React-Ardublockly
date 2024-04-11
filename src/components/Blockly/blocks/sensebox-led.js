@@ -48,11 +48,10 @@ Blockly.Blocks['sensebox_ws2818_led_init'] = {
 
     // when selected board == esp32 then append a digital port to the block
     init: function () {
-        
         this.setColour(getColour().sensebox);       
         this.appendDummyInput()
             .appendField(Blockly.Msg.senseBox_ws2818_rgb_led_init)
-        if(selectedBoard().title == "MCU"){
+        if(selectedBoard().title === "MCU" || selectedBoard().title === "Mini"){
             this.appendDummyInput().appendField("Port:")
                 .appendField(new Blockly.FieldDropdown(selectedBoard().digitalPinsRGB), "Port")
             } 
@@ -71,6 +70,10 @@ Blockly.Blocks['sensebox_ws2818_led'] = {
         this.setColour(getColour().sensebox);
         this.appendDummyInput()
             .appendField(Blockly.Msg.senseBox_ws2818_rgb_led)
+        if(selectedBoard().title === "MCU" || selectedBoard().title === "Mini"){
+            this.appendDummyInput().appendField("Port:")
+                .appendField(new Blockly.FieldDropdown(selectedBoard().digitalPinsRGB), "Port")
+            } 
         this.appendValueInput("POSITION", "position")
             .appendField((Blockly.Msg.senseBox_ws2818_rgb_led_position));
         this.appendValueInput("COLOR", 'Number')

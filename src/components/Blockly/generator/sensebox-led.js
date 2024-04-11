@@ -1,4 +1,5 @@
 import * as Blockly from 'blockly/core';
+import { selectedBoard } from '../helpers/board';
 
 Blockly.Arduino.sensebox_led = function () {
     var dropdown_pin = this.getFieldValue('PIN');
@@ -20,7 +21,11 @@ Blockly.Arduino.sensebox_rgb_led = function () {
 
 
 Blockly.Arduino.sensebox_ws2818_led_init = function () {
-    var dropdown_pin = 1;
+    console.log(selectedBoard().title)
+    let dropdown_pin = 1;
+    if(selectedBoard().title === "MCU" || selectedBoard().title === "Mini"){
+        dropdown_pin = this.getFieldValue('Port');
+    }
     var numPixel = Blockly.Arduino.valueToCode(this, 'NUMBER', Blockly.Arduino.ORDER_ATOMIC) || '1';
     var brightness = Blockly.Arduino.valueToCode(this, 'BRIGHTNESS', Blockly.Arduino.ORDER_ATOMIC) || '50'
     Blockly.Arduino.definitions_['define_rgb_led' + dropdown_pin] = `#include <Adafruit_NeoPixel.h>\n Adafruit_NeoPixel rgb_led_${dropdown_pin}= Adafruit_NeoPixel(${numPixel}, ${dropdown_pin},NEO_GRB + NEO_KHZ800);\n`;
@@ -30,7 +35,10 @@ Blockly.Arduino.sensebox_ws2818_led_init = function () {
 };
 
 Blockly.Arduino.sensebox_ws2818_led = function () {
-    var dropdown_pin = 1;
+    let dropdown_pin = 1;
+    if(selectedBoard().title === "MCU" || selectedBoard().title === "Mini"){
+        dropdown_pin = this.getFieldValue('Port');
+    }
     var position = Blockly.Arduino.valueToCode(this, 'POSITION', Blockly.Arduino.ORDER_ATOMIC) || '0';
     var color = Blockly.Arduino.valueToCode(this, 'COLOR', Blockly.Arduino.ORDER_ATOMIC) || '0'
     var code = `rgb_led_${dropdown_pin}.setPixelColor(${position},rgb_led_${dropdown_pin}.Color(${color}));\nrgb_led_${dropdown_pin}.show();\n`;
