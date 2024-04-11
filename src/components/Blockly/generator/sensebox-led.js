@@ -30,7 +30,7 @@ Blockly.Arduino.sensebox_ws2818_led_init = function () {
 };
 
 Blockly.Arduino.sensebox_ws2818_led = function () {
-    var dropdown_pin = this.getFieldValue('Port');
+    var dropdown_pin = 1;
     var position = Blockly.Arduino.valueToCode(this, 'POSITION', Blockly.Arduino.ORDER_ATOMIC) || '0';
     var color = Blockly.Arduino.valueToCode(this, 'COLOR', Blockly.Arduino.ORDER_ATOMIC) || '0'
     var code = `rgb_led_${dropdown_pin}.setPixelColor(${position},rgb_led_${dropdown_pin}.Color(${color}));\nrgb_led_${dropdown_pin}.show();\n`;
