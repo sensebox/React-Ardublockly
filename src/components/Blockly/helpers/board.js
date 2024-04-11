@@ -3,6 +3,7 @@
  *
  */
 const sensebox_mcu = {
+  title: "MCU",
   description: "senseBox Microcontroller Unit based on Microchip SAMD21G18A",
   compilerFlag: "arduino:samd",
   digitalPins: [
@@ -147,6 +148,7 @@ const sensebox_mcu = {
 
 //senseBox MCU mini
 const sensebox_mini = {
+  title: "Mini",
   description: "senseBox Mini",
   compilerFlag: "arduino:samd",
   digitalPins: [
@@ -261,6 +263,7 @@ const sensebox_mini = {
 
 //senseBox MCU mini
 const sensebox_esp32 = {
+  title: "MCU-S2",
   description: "senseBox ESP32",
   compilerFlag: "esp32:esp32:esp32",
   digitalPins: [
@@ -290,13 +293,10 @@ const sensebox_esp32 = {
     ["IO7", "7"],
   ],
   digitalPinsRGB: [
-    ["on Board", "1"],
-    ["IO2", "2"],
-    ["IO3", "3"],
-    ["IO4", "4"],
-    ["IO5", "5"],
-    ["IO6", "6"],
-    ["IO7", "7"],
+      ["on Board", "1"],
+      ["A", "3"],
+      ["B", "5"],
+      ["C", "7"],
   ],
   digitalPinsButton: [
     ["IO2", "2"],

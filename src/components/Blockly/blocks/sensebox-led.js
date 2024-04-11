@@ -46,9 +46,12 @@ Blockly.Blocks['sensebox_rgb_led'] = {
 
 Blockly.Blocks['sensebox_ws2818_led_init'] = {
     init: function () {
-        this.setColour(getColour().sensebox);
+        this.setColour(getColour().sensebox);       
         this.appendDummyInput()
-            .appendField(Blockly.Msg.senseBox_ws2818_rgb_led_init)
+            .appendField(Blockly.Msg.senseBox_ws2818_rgb_led_init);
+        this.appendDummyInput()
+                .appendField("Port:")
+                .appendField(new Blockly.FieldDropdown(selectedBoard().digitalPinsRGB), "Port");
         this.appendValueInput("BRIGHTNESS", "brightness")
             .appendField((Blockly.Msg.senseBox_ws2818_rgb_led_brightness));
         this.appendValueInput("NUMBER", "number")
@@ -64,6 +67,9 @@ Blockly.Blocks['sensebox_ws2818_led'] = {
         this.setColour(getColour().sensebox);
         this.appendDummyInput()
             .appendField(Blockly.Msg.senseBox_ws2818_rgb_led)
+            this.appendDummyInput()
+            .appendField("Port:")
+            .appendField(new Blockly.FieldDropdown(selectedBoard().digitalPinsRGB), "Port");
         this.appendValueInput("POSITION", "position")
             .appendField((Blockly.Msg.senseBox_ws2818_rgb_led_position));
         this.appendValueInput("COLOR", 'Number')
