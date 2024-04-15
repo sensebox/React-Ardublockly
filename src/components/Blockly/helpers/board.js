@@ -299,6 +299,7 @@ const sensebox_esp32 = {
       ["C", "7"],
   ],
   digitalPinsButton: [
+    ["on Board", "0"],
     ["IO2", "2"],
     ["IO3", "3"],
     ["IO4", "4"],
