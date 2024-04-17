@@ -49,13 +49,17 @@ export const LED = {
     senseBox_ws2812_rgb_matrix_init_tooltip: `Schließe die LED-Matrix an einen der **digital/analog Ports** an. Dieser Block muss im Setup() verwendet werden.`,
     senseBox_ws2812_rgb_matrix_brightness: `Helligkeit: `,
     senseBox_ws2812_rgb_matrix_print_tooltip: `Zeigt eine Zahl/Text auf dem Display an. 
-    Wenn ein Häckchen am 'Auto-Scroll' gesetzt  wurde, wandert der anzuzeigende Input von rechts nach links über die Matrix. Dies ist hilfreich um langen Input anzuzeigen. Nachfolgender Code wird erst ausgeführt, wenn der gesamte Input über die Matrix gewandert ist.
+    Wenn ein Häkchen am 'Auto-Scroll' gesetzt  wurde, wandert der anzuzeigende Input von rechts nach links über die Matrix. Dies ist hilfreich um langen Input anzuzeigen. Nachfolgender Code wird erst ausgeführt, wenn der gesamte Input über die Matrix gewandert ist.
     Beim Feld 'Color' kannst du eine Farbe für deinen Input wählen.`,
     senseBox_ws2812_rgb_matrix_autoscroll: `Auto-Scroll`,
     senseBox_ws2812_rgb_matrix_draw_pixel: `Pixel setzen`,
     senseBox_ws2812_rgb_matrix_draw_pixel_tooltip: `Färbe ein Pixel an der Position (X,Y).
     Entlang der X-Achse hat die LED-Matrix 12 Pixel und auf der Y-Achse 8.
-    Ein Block zum auswählen der Farbe befindet sich in der LED Kategorie.`,
+    Ein Block zum auswählen der Farbe befindet sich in der LED Kategorie.
+    Wenn du kein Häkchen an 'Zeige sofort' sofort setzt wird die Färbung des Pixels nur vorgemerkt und noch nicht dargestellt.
+    Dies ist hilfreich wenn du viele Pixel auf einmal färben möchtest, da die LED-Matrix sonst jedesmal flackert wenn du ein Pixel färbst.
+    Falls du also mehrere Pixel färbst, solltest du nur beim letzten Block das Häkchen setzen.`,
+    senseBox_ws2812_rgb_matrix_show: `Zeige sofort`,
     senseBox_ws2812_rgb_matrix_x: `X`,
     senseBox_ws2812_rgb_matrix_y: `Y`,
     senseBox_ws2812_rgb_matrix_color: `Farbe`,

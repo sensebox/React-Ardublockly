@@ -135,8 +135,11 @@ Blockly.Arduino['sensebox_ws2812_matrix_drawPixel'] = function (block) {
     var x = Blockly.Arduino.valueToCode(this, 'X', Blockly.Arduino.ORDER_ATOMIC);
     var y = Blockly.Arduino.valueToCode(this, 'Y', Blockly.Arduino.ORDER_ATOMIC);
     var color = Blockly.Arduino.valueToCode(this, 'COLOR', Blockly.Arduino.ORDER_ATOMIC);
+    var show = this.getFieldValue("SHOW");
     var code = `matrix_${dropdown_pin}.drawPixel(${x},${y},matrix_${dropdown_pin}.Color(${color}));\n`;
-    code += `matrix_${dropdown_pin}.show();\n`;
+    if (show === "TRUE") {
+        code += `matrix_${dropdown_pin}.show();\n`;
+    }
     return code;
 }
 
