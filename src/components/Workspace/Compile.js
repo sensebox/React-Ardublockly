@@ -5,7 +5,7 @@ import { workspaceName } from "../../actions/workspaceActions";
 
 import { detectWhitespacesAndReturnReadableResult } from "../../helpers/whitespace";
 
-import withStyles from '@mui/styles/withStyles';
+import withStyles from "@mui/styles/withStyles";
 import Button from "@mui/material/Button";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -16,6 +16,7 @@ import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Blockly from "blockly/core";
 import Copy from "../copy.svg";
+import store from "../../store";
 
 import MuiDrawer from "@mui/material/Drawer";
 import Dialog from "../Dialog";
@@ -74,14 +75,16 @@ class Compile extends Component {
     if (props.name !== this.props.name) {
       this.setState({ name: this.props.name });
     }
-
   }
 
   compile = () => {
-    console.log(this.props.selectedBoard);
     this.setState({ progress: true });
     const data = {
-      board: this.props.selectedBoard === "mcu" || this.props.selectedBoard === "mini" ? "sensebox-mcu" : "sensebox-esp32s2",
+      board:
+        this.props.selectedBoard === "mcu" ||
+        this.props.selectedBoard === "mini"
+          ? "sensebox-mcu"
+          : "sensebox-esp32s2",
       sketch: this.props.arduino,
     };
     fetch(`${this.props.compiler}/compile`, {
@@ -190,8 +193,9 @@ class Compile extends Component {
             <IconButton
               className={`compileBlocks ${this.props.classes.iconButton}`}
               onClick={() => this.compile()}
-              size="large">
-              <FontAwesomeIcon icon={faClipboardCheck} size="xs"  />
+              size="large"
+            >
+              <FontAwesomeIcon icon={faClipboardCheck} size="xs" />
             </IconButton>
           </Tooltip>
         ) : (
@@ -204,23 +208,30 @@ class Compile extends Component {
             <FontAwesomeIcon
               icon={faClipboardCheck}
               style={{ marginRight: "5px" }}
-              
             />{" "}
             Kompilieren
           </Button>
         )}
 
-        {this.props.platform === false ? (
+        {this.props.platform === null ? (
           <Backdrop
             className={this.props.classes.backdrop}
             open={this.state.progress}
           >
             <div className="overlay">
-              <img src={Copy} width="400" alt="copyimage"></img>
+              {this.props.selectedBoard === "esp32" ? (
+                <img src={copyesp32} width="400" alt="copyimage"></img>
+              ) : (
+                <img src={Copy} width="400" alt="copyimage"></img>
+              )}
               <h2>{Blockly.Msg.compile_overlay_head}</h2>
-              {this.props.selectedBoard === 'esp32'
-               ? <h3 style={{ padding: "0 2%", 'text-align':'center'}}>{Blockly.Msg.compile_overlay_text_esp32}</h3>
-                : <p>{Blockly.Msg.compile_overlay_text}</p>}
+              {this.props.selectedBoard === "esp32" ? (
+                <h3 style={{ padding: "0 2%", "text-align": "center" }}>
+                  {Blockly.Msg.compile_overlay_text_esp32}
+                </h3>
+              ) : (
+                <p>{Blockly.Msg.compile_overlay_text}</p>
+              )}
               <p>
                 {Blockly.Msg.compile_overlay_help}
                 <a href="/faq" target="_blank">
@@ -237,18 +248,27 @@ class Compile extends Component {
           >
             <div className="overlay">
               {/* <img src={Copy} width="400" alt="copyimage"></img> */}
-              { this.props.selectedBoard === 'esp32' ? 
-              <div style={{'text-align':'center'}}>
-                <h2>Dein Code wird kompiliert!</h2>
+              {this.props.selectedBoard === "esp32" ? (
+                <div style={{ "text-align": "center" }}>
+                  <h2>Dein Code wird kompiliert!</h2>
                   <p> Übertrage ihn per Drag & Drop auf deine MCU</p>
-                  <img src={copyesp32} width="600
+                  <img
+                    src={copyesp32}
+                    width="600
                   
-                  " alt="draganddrop"></img>
+                  "
+                    alt="draganddrop"
+                  ></img>
                 </div>
-                : <div>
-                   <h2>Dein Code wird kompiliesdsdrt!</h2>
-              <p>übertrage ihn anschließend mithlfe der senseBoxConnect-App</p> </div>}
-             
+              ) : (
+                <div>
+                  <h2>Dein Code wird kompiliert!</h2>
+                  <p>
+                    übertrage ihn anschließend mithlfe der senseBoxConnect-App
+                  </p>{" "}
+                </div>
+              )}
+
               <p>
                 {Blockly.Msg.compile_overlay_help}
                 <a href="/faq" target="_blank">
@@ -317,7 +337,6 @@ class Compile extends Component {
                 <FontAwesomeIcon
                   icon={faClipboardCheck}
                   style={{ marginRight: "5px" }}
-                  
                 />{" "}
                 Starte Übertragung
               </Button>
