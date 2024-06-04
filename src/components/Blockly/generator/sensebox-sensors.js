@@ -396,7 +396,7 @@ VL53L8CX sensor_vl53l8cx_top(&Wire, -1, -1);
         float min = 10000.0;
         for(int i = 0; i < VL53L8CX_RESOLUTION_8X8*VL53L8CX_NB_TARGET_PER_ZONE; i++) {
           if((&Results)->target_status[i]!=255){
-            float distance = (&Results)->distance_mm[i];
+            float distance = ((&Results)->distance_mm[i])/10;
             if(min > distance) {
               min = distance;
             }
