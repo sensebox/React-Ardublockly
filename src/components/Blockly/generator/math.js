@@ -386,7 +386,7 @@ Blockly.Arduino["math_random_int"] = function (block) {
       return min + (rand() % (max - min + 1));
     }
     `;
-  var code = `mathRandomInt(${argument0},${argument1});`;
+  var code = `mathRandomInt(${argument0},${argument1})`;
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
