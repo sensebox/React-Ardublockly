@@ -16,7 +16,6 @@ import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Blockly from "blockly/core";
 import Copy from "../copy.svg";
-import store from "../../store";
 
 import MuiDrawer from "@mui/material/Drawer";
 import Dialog from "../Dialog";
