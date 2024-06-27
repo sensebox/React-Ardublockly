@@ -508,8 +508,8 @@ Blockly.Blocks["sensebox_sensor_watertemperature"] = {
     this.setColour(getColour().sensebox);
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_watertemperature)
-      .appendField("Port:")
-      .appendField(new Blockly.FieldDropdown(selectedBoard().digitalPorts), "Port");
+      .appendField("Pin:")
+      .appendField(new Blockly.FieldDropdown(selectedBoard().digitalPins), "Pin");
     this.setOutput(true, Types.NUMBER.typeName);
     this.setTooltip(Blockly.Msg.senseBox_watertemperature_tip);
     this.data = {name: "ds18b20"};

@@ -737,17 +737,7 @@ Blockly.Arduino.sensebox_sensor_truebner_smt50 = function () {
  */
 
 Blockly.Arduino.sensebox_sensor_watertemperature = function () {
-  var dropdown_port = this.getFieldValue("Port");
-  var dropdown_pin = 1;
-  if (dropdown_port === "A") {
-    dropdown_pin = 1;
-  }
-  if (dropdown_port === "B") {
-    dropdown_pin = 3;
-  }
-  if (dropdown_port === "C") {
-    dropdown_pin = 5;
-  }
+  var dropdown_pin = this.getFieldValue("Pin");
   Blockly.Arduino.libraries_["library_oneWire"] =
     "#include <OneWire.h> // http://librarymanager/All#OneWire";
   Blockly.Arduino.libraries_["library_oneDallasTemperature"] =
