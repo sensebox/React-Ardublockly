@@ -36,7 +36,14 @@ Blockly['Arduino']['controls_for'] = function (Block) {
         Block.getFieldValue('VAR')
     ).name;
 
-
+    const allVars = Blockly.getMainWorkspace()
+        .getVariableMap()
+        .getAllVariables();
+    const myVar = allVars.filter((v) => v.name === loopIndexVariable)[0];
+    var initVariable = "";
+    if (Blockly.Arduino.variables_[loopIndexVariable + myVar.type] == undefined) {
+        initVariable = "int "; // alternatively set to 'myVar.type' but that could lead to issues if users choose a char or a boolean
+    }
 
     const branch = Blockly['Arduino'].statementToCode(Block, 'DO');
 
@@ -71,6 +78,7 @@ Blockly['Arduino']['controls_for'] = function (Block) {
 
     return (
         'for (' +
+        initVariable + 
         loopIndexVariable +
         ' = ' +
         startNumber +
