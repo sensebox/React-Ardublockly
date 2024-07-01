@@ -15,9 +15,9 @@ const sensebox_mcu = {
     ["C6", "6"],
   ],
   digitalPorts: [
-    ["A", "A"],
-    ["B", "B"],
-    ["C", "C"],
+    ["A", "IO1_2"],
+    ["B", "IO3_4"],
+    ["C", "IO5_6"],
   ],
   digitalPinsLED: [
     ["BUILTIN_1", "7"],
@@ -156,7 +156,7 @@ const sensebox_mini = {
     ["IO2", "2"],
   ],
   digitalPorts: [
-    ["IO1-2", "A"],
+    ["A", "IO1_2"],
   ],
   digitalPinsLED: [
     ["BUILTIN_1", "7"],
@@ -275,9 +275,9 @@ const sensebox_esp32 = {
     ["IO7", "7"],
   ],
   digitalPorts: [
-    ["IO2-3", "A"],
-    ["IO4-5", "B"],
-    ["IO6-7", "C"],
+    ["A", "IO2_3"],
+    ["B", "IO4_5"],
+    ["C", "IO6_7"],
   ],
   digitalPinsRGBMatrix: [
     ["A", "2"],

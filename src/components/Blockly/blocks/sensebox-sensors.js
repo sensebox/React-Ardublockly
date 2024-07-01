@@ -278,17 +278,29 @@ Blockly.Blocks["sensebox_sensor_ultrasonic_ranger"] = {
   updateShape_: function () {
     var input = this.getFieldValue("port");
     switch (input) {
-      case "A":
+      case "IO1_2":
         this.setFieldValue("1", "ultrasonic_trigger");
         this.setFieldValue("2", "ultrasonic_echo");
         break;
-      case "B":
+      case "IO2_3":
+        this.setFieldValue("2", "ultrasonic_trigger");
+        this.setFieldValue("3", "ultrasonic_echo");
+        break;
+      case "IO3_4":
         this.setFieldValue("3", "ultrasonic_trigger");
         this.setFieldValue("4", "ultrasonic_echo");
         break;
-      case "C":
+      case "IO4_5":
+        this.setFieldValue("4", "ultrasonic_trigger");
+        this.setFieldValue("5", "ultrasonic_echo");
+        break;
+      case "IO5_6":
         this.setFieldValue("5", "ultrasonic_trigger");
         this.setFieldValue("6", "ultrasonic_echo");
+        break;
+      case "IO6_7":
+        this.setFieldValue("6", "ultrasonic_trigger");
+        this.setFieldValue("7", "ultrasonic_echo");
         break;
       default:
         break;
@@ -508,8 +520,8 @@ Blockly.Blocks["sensebox_sensor_watertemperature"] = {
     this.setColour(getColour().sensebox);
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_watertemperature)
-      .appendField("Pin:")
-      .appendField(new Blockly.FieldDropdown(selectedBoard().digitalPins), "Pin");
+      .appendField("Port:")
+      .appendField(new Blockly.FieldDropdown(selectedBoard().digitalPorts), "Port");
     this.setOutput(true, Types.NUMBER.typeName);
     this.setTooltip(Blockly.Msg.senseBox_watertemperature_tip);
     this.data = {name: "ds18b20"};
