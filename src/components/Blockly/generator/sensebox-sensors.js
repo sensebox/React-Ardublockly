@@ -702,20 +702,20 @@ Blockly.Arduino.sensebox_sensor_truebner_smt50 = function () {
   var code = "";
   if (dropdown_value === "temp") {
     switch (dropdown_port) {
-      case "IO2_3":
-        dropdown_pin = 2;
+      case "IO3_2":
+        dropdown_pin = 3;
         break;
       case "IO3_4":
         dropdown_pin = 3;
         break;
-      case "IO4_5":
-        dropdown_pin = 4;
+      case "IO5_4":
+        dropdown_pin = 5;
         break;
       case "IO5_6":
         dropdown_pin = 5;
         break;
-      case "IO6_7":
-        dropdown_pin = 6;
+      case "IO7_6":
+        dropdown_pin = 7;
         break;
       default: // "IO1_2"
         dropdown_pin = 1
@@ -726,20 +726,20 @@ Blockly.Arduino.sensebox_sensor_truebner_smt50 = function () {
     return [code, Blockly.Arduino.ORDER_ATOMIC];
   } else if (dropdown_value === "soil") {
     switch (dropdown_port) {
-      case "IO2_3":
-        dropdown_pin = 3;
+      case "IO3_2":
+        dropdown_pin = 2;
         break;
       case "IO3_4":
         dropdown_pin = 4;
         break;
-      case "IO4_5":
-        dropdown_pin = 5;
+      case "IO5_4":
+        dropdown_pin = 4;
         break;
       case "IO5_6":
         dropdown_pin = 6;
         break;
-      case "IO6_7":
-        dropdown_pin = 7;
+      case "IO7_6":
+        dropdown_pin = 6;
         break;
       default: // "IO1_2"
         dropdown_pin = 2
@@ -760,24 +760,25 @@ Blockly.Arduino.sensebox_sensor_watertemperature = function () {
   var dropdown_port = this.getFieldValue("Port");
   var dropdown_pin = 1;
   switch (dropdown_port) {
-    case "IO2_3":
-      dropdown_pin = 2;
+    case "IO3_2":
+      dropdown_pin = 3;
       break;
     case "IO3_4":
       dropdown_pin = 3;
       break;
-    case "IO4_5":
-      dropdown_pin = 4;
+    case "IO5_4":
+      dropdown_pin = 5;
       break;
     case "IO5_6":
       dropdown_pin = 5;
       break;
-    case "IO6_7":
-      dropdown_pin = 6;
+    case "IO7_6":
+      dropdown_pin = 7;
       break;
     default: // "IO1_2"
       dropdown_pin = 1
   }
+  var dropdown_index = this.getFieldValue("Index");
   Blockly.Arduino.libraries_["library_oneWire"] =
     "#include <OneWire.h> // http://librarymanager/All#OneWire";
   Blockly.Arduino.libraries_["library_oneDallasTemperature"] =
@@ -788,8 +789,8 @@ Blockly.Arduino.sensebox_sensor_watertemperature = function () {
     "\nOneWire oneWire(ONE_WIRE_BUS);\nDallasTemperature sensors(&oneWire);";
   Blockly.Arduino.setupCode_["sensebox_oneWireSetup"] = "sensors.begin();";
   Blockly.Arduino.codeFunctions_["sensebox_requestTemp"] =
-    "float getWaterTemp(){\nsensors.requestTemperatures();\nreturn sensors.getTempCByIndex(0);\n}";
-  var code = "getWaterTemp()";
+    "float getWaterTemp(int index){\nsensors.requestTemperatures();\nreturn sensors.getTempCByIndex(index);\n}";
+  var code = "getWaterTemp("+dropdown_index+")";
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
@@ -835,20 +836,20 @@ Blockly.Arduino.sensebox_soundsensor_dfrobot = function () {
   var dropdown_port = this.getFieldValue("Port");
   var dropdown_pin = 1;
   switch (dropdown_port) {
-    case "IO2_3":
-      dropdown_pin = 2;
+    case "IO3_2":
+      dropdown_pin = 3;
       break;
     case "IO3_4":
       dropdown_pin = 3;
       break;
-    case "IO4_5":
-      dropdown_pin = 4;
+    case "IO5_4":
+      dropdown_pin = 5;
       break;
     case "IO5_6":
       dropdown_pin = 5;
       break;
-    case "IO6_7":
-      dropdown_pin = 6;
+    case "IO7_6":
+      dropdown_pin = 7;
       break;
     default: // "IO1_2"
       dropdown_pin = 1
