@@ -1021,3 +1021,68 @@ Blockly.Arduino.sensebox_esp32s2_mpu6050 = function () {
   }
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
+
+/**
+ * Block for Truebner STM50 on MCUS2
+ */
+
+Blockly.Arduino.sensebox_sensor_truebner_smt50_esp32 = function () {
+  var dropdown_port = this.getFieldValue("Port");
+  var dropdown_value = this.getFieldValue("value");
+  var dropdown_pin = 1;
+  var code = "";
+  Blockly.Arduino.setupCode_["analogReadResolution"] =
+    "analogReadResolution(12);";
+
+  if (dropdown_value === "temp") {
+    switch (dropdown_port) {
+      case "IO3_2":
+        dropdown_pin = 3;
+        break;
+      case "IO3_4":
+        dropdown_pin = 3;
+        break;
+      case "IO5_4":
+        dropdown_pin = 5;
+        break;
+      case "IO5_6":
+        dropdown_pin = 5;
+        break;
+      case "IO7_6":
+        dropdown_pin = 7;
+        break;
+      default: // "IO1_2"
+        dropdown_pin = 1;
+    }
+    Blockly.Arduino.codeFunctions_["sensebox_smt50_temp_esp32"] =
+      "float getSMT50Temperature(int analogPin){\n float voltage = analogReadMilliVolts(analogPin)/1000.0;\n return (voltage - 0.5) * 100;\n }";
+    code = "getSMT50Temperature(" + dropdown_pin + ")";
+    return [code, Blockly.Arduino.ORDER_ATOMIC];
+  } else if (dropdown_value === "soil") {
+    switch (dropdown_port) {
+      case "IO3_2":
+        dropdown_pin = 2;
+        break;
+      case "IO3_4":
+        dropdown_pin = 4;
+        break;
+      case "IO5_4":
+        dropdown_pin = 4;
+        break;
+      case "IO5_6":
+        dropdown_pin = 6;
+        break;
+      case "IO7_6":
+        dropdown_pin = 6;
+        break;
+      default: // "IO1_2"
+        dropdown_pin = 2;
+    }
+
+    Blockly.Arduino.codeFunctions_["sensebox_smt50_soil_esp32"] =
+      "float getSMT50Moisture(int analogPin){\n float voltage = analogReadMilliVolts(analogPin)/1000.0;\n   if (voltage >= 3) voltage = 3.0;\n  return (voltage * 50.0) / 3.0;\n}";
+
+    code = "getSMT50Moisture(" + dropdown_pin + ")";
+    return [code, Blockly.Arduino.ORDER_ATOMIC];
+  }
+};
