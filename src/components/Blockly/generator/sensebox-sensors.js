@@ -83,7 +83,7 @@ void Lightsensor_begin()
 `;
 
     Blockly.Arduino.codeFunctions_["Lightsensor_getIlluminance"] = `
-unsigned int Lightsensor_getIlluminance()
+  uint32_t Lightsensor_getIlluminance()
   {
     unsigned int lux = 0;
     if (lightsensortype == 0) // TSL45315
@@ -155,13 +155,26 @@ Blockly.Arduino.sensebox_sensor_sds011 = function () {
   ] = `#include <SdsDustSensor.h> // http://librarymanager/All#Nova_Fitness_Sds_dust_sensors_library`;
   Blockly.Arduino.definitions_["define_sds011"] =
     "SdsDustSensor sds(" + serial_name + ");";
+  Blockly.Arduino.functionNames_["sds011_getPmData()"] = `
+float getPmData(int type) {
+  PmResult pm = sds.queryPm();
+  if (pm.isOk()) {
+    if (type == 25){
+      return pm.pm25;
+    } else if (type == 10) {
+      return pm.pm10;
+    }
+  else return 0;
+  }
+}
+`
   Blockly.Arduino.setupCode_["sds011_begin"] = "sds.begin();";
   Blockly.Arduino.setupCode_["sds011_setQueryReportingMode"] =
     "sds.setQueryReportingMode();";
-  Blockly.Arduino.loopCodeOnce_[
-    "sds011_getData"
-  ] = `PmResult pm = sds.queryPm();`;
-  var code = `pm.${dropdown_name}`;
+  // Blockly.Arduino.loopCodeOnce_[
+  //   "sds011_getData"
+  // ] = `PmResult pm = sds.queryPm();`;
+  var code = `getPmData(${dropdown_name})`;
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
@@ -383,7 +396,7 @@ VL53L8CX sensor_vl53l8cx_top(&Wire, -1, -1);
         float min = 10000.0;
         for(int i = 0; i < VL53L8CX_RESOLUTION_8X8*VL53L8CX_NB_TARGET_PER_ZONE; i++) {
           if((&Results)->target_status[i]!=255){
-            float distance = (&Results)->distance_mm[i];
+            float distance = ((&Results)->distance_mm[i])/10;
             if(min > distance) {
               min = distance;
             }

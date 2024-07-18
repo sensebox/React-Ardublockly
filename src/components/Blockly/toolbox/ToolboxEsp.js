@@ -138,6 +138,25 @@ import * as Blockly from "blockly/core";
         <Block type="sensebox_ws2812_matrix_bitmap" />
         <Block type="sensebox_ws2812_matrix_custom_bitmap" /> 
         <Block type="sensebox_ws2812_matrix_draw_custom_bitmap_example" />
+        <Block type="colour_picker"></Block>
+        <Block type="colour_random"></Block>
+        <Block type="colour_rgb">
+          <Value name="RED">
+            <Block type="math_number">
+              <Field name="NUM">100</Field>
+            </Block>
+          </Value>
+          <Value name="GREEN">
+            <Block type="math_number">
+              <Field name="NUM">50</Field>
+            </Block>
+          </Value>
+          <Value name="BLUE">
+            <Block type="math_number">
+              <Field name="NUM">0</Field>
+            </Block>
+          </Value>
+        </Block>
       </Category>
       <Category name="Display" colour={getColour().sensebox}>
         <Block type="sensebox_display_beginDisplay" />

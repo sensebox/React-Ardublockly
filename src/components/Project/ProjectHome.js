@@ -136,11 +136,11 @@ class ProjectHome extends Component {
                           <Divider
                             style={{ marginTop: "1rem", marginBottom: "10px" }}
                           />
-                          <BlocklyWindow
+                          {/* <BlocklyWindow
                             svg
                             blockDisabled
                             initialXml={project.xml}
-                          /> 
+                          />  */}
                           <Typography
                             variant="body2"
                             style={{
