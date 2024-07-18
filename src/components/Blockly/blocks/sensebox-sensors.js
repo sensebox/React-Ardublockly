@@ -27,7 +27,7 @@ Blockly.Blocks["sensebox_sensor_temp_hum"] = {
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_temp_hum_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_temp_hum_helpurl);
-    this.data = {name: "hdc1080", connection: "I2C"};
+    this.data = { name: "hdc1080", connection: "I2C" };
   },
 };
 
@@ -53,7 +53,7 @@ Blockly.Blocks["sensebox_sensor_uv_light"] = {
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_uv_light_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_uv_light_helpurl);
-    this.data = {name: "veml6070"};
+    this.data = { name: "veml6070" };
   },
 };
 
@@ -94,7 +94,7 @@ Blockly.Blocks["sensebox_sensor_bmx055_accelerometer"] = {
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_bmx055_accelerometer_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_bmx055_helpurl);
-    this.data = {name: "bmx055"};
+    this.data = { name: "bmx055" };
   },
 };
 
@@ -118,15 +118,14 @@ Blockly.Blocks["sensebox_sensor_sds011"] = {
       )
       .appendField(Blockly.Msg.senseBox_sds011_dimension)
       .appendField(
-        new Blockly.FieldDropdown(
-          selectedBoard().serialSensors),
+        new Blockly.FieldDropdown(selectedBoard().serialSensors),
         "SERIAL"
       );
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_sds011_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_sds011_helpurl);
-    this.data = {name: "sds011"};
+    this.data = { name: "sds011" };
   },
 };
 
@@ -160,7 +159,7 @@ Blockly.Blocks["sensebox_sensor_pressure"] = {
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setTooltip(Blockly.Msg.senseBox_pressure_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_pressure_helpurl);
-    this.data = {name: "bmp280"};
+    this.data = { name: "bmp280" };
     this.getField("NAME").setValidator(
       function (val) {
         this.updateShape_(val === "Altitude");
@@ -207,7 +206,7 @@ Blockly.Blocks["sensebox_sensor_bme680_bsec"] = {
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_bme_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_bme680_helpurl);
-    this.data = {name: "bme680"};
+    this.data = { name: "bme680" };
   },
 };
 
@@ -219,10 +218,13 @@ Blockly.Blocks["sensebox_sensor_bme680_bsec"] = {
 
 Blockly.Blocks["sensebox_sensor_ultrasonic_ranger"] = {
   init: function () {
-    var dropdown = new FieldGridDropdown(selectedBoard().digitalPorts, function (option) {
-      var input = option === "A" || option === "B" || option === "C";
-      this.sourceBlock_.updateShape_(input);
-    });
+    var dropdown = new FieldGridDropdown(
+      selectedBoard().digitalPorts,
+      function (option) {
+        var input = option === "A" || option === "B" || option === "C";
+        this.sourceBlock_.updateShape_(input);
+      }
+    );
 
     this.setColour(getColour().sensebox);
     this.appendDummyInput()
@@ -247,7 +249,7 @@ Blockly.Blocks["sensebox_sensor_ultrasonic_ranger"] = {
     this.setOutput(true, Types.NUMBER.typeName);
     this.setTooltip(Blockly.Msg.senseBox_ultrasonic_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_ultrasonic_helpurl);
-    this.data = {name: "hc-sr04"};
+    this.data = { name: "hc-sr04" };
   },
   /**
    * Parse XML to restore the number of pins available.
@@ -316,12 +318,11 @@ Blockly.Blocks["sensebox_tof_imager"] = {
   init: function () {
     var dropdownOptions = [
       [Blockly.Msg.sensebox_distance, "DistanzCM"],
-      [Blockly.Msg.sensebox_distance_bitmap, "DistanzBM"]
+      [Blockly.Msg.sensebox_distance_bitmap, "DistanzBM"],
     ];
     var dropdown = new Blockly.FieldDropdown(dropdownOptions);
     this.setColour(getColour().sensebox);
-    this.appendDummyInput()
-      .appendField(Blockly.Msg.sensebox_tof_imager)
+    this.appendDummyInput().appendField(Blockly.Msg.sensebox_tof_imager);
     this.appendDummyInput()
       .setAlign(Blockly.ALIGN_RIGHT)
       .appendField(Blockly.Msg.senseBox_value)
@@ -339,19 +340,17 @@ Blockly.Blocks["sensebox_tof_imager"] = {
       this.setOutput(true, "Bitmap");
       if (this.getInput("extraField") == null) {
         this.appendDummyInput("extraField")
-        // .setAlign(Blockly.ALIGN_RIGHT) // This doesnt work for manual data input
-        .appendField(Blockly.Msg.sensebox_tof_imager_max_distance)
-        .appendField(new FieldSlider(200, 1, 400), "maxDistance")
-        .appendField(Blockly.Msg.sensebox_tof_imager_max_distance_unit);
+          // .setAlign(Blockly.ALIGN_RIGHT) // This doesnt work for manual data input
+          .appendField(Blockly.Msg.sensebox_tof_imager_max_distance)
+          .appendField(new FieldSlider(200, 1, 400), "maxDistance")
+          .appendField(Blockly.Msg.sensebox_tof_imager_max_distance_unit);
       }
     } else {
       this.setOutput(true, Types.NUMBER.typeName);
       this.removeInput("extraField", true);
     }
-  }
+  },
 };
-
-
 
 /**
  * Microphone
@@ -389,7 +388,7 @@ Blockly.Blocks["sensebox_button"] = {
           [Blockly.Msg.senseBox_button_isPressed, "isPressed"],
           [Blockly.Msg.senseBox_button_wasPressed, "wasPressed"],
           [Blockly.Msg.senseBox_button_longPress, "longPress"],
-          [Blockly.Msg.senseBox_button_switch,"toggleButton"]
+          [Blockly.Msg.senseBox_button_switch, "toggleButton"],
         ]),
         "FUNCTION"
       )
@@ -443,7 +442,7 @@ Blockly.Blocks["sensebox_scd30"] = {
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_scd_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_scd_helpurl);
-    this.data = {name: "scd30"};
+    this.data = { name: "scd30" };
   },
   onchange: function (e) {
     var dropdown = this.getFieldValue("dropdown");
@@ -487,12 +486,15 @@ Blockly.Blocks["sensebox_gps"] = {
  */
 
 Blockly.Blocks["sensebox_sensor_truebner_smt50"] = {
-  init: function () { 
+  init: function () {
     this.setColour(getColour().sensebox);
     this.appendDummyInput().appendField(Blockly.Msg.senseBox_smt50);
     this.appendDummyInput()
       .appendField("Port:")
-      .appendField(new Blockly.FieldDropdown(selectedBoard().digitalPorts), "Port");
+      .appendField(
+        new Blockly.FieldDropdown(selectedBoard().digitalPorts),
+        "Port"
+      );
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_value)
       .appendField(
@@ -505,7 +507,37 @@ Blockly.Blocks["sensebox_sensor_truebner_smt50"] = {
     this.setOutput(true, Types.NUMBER.typeName);
     this.setTooltip(Blockly.Msg.senseBox_smt50_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_smt50_helpurl);
-    this.data = {name: "smt50"};
+    this.data = { name: "smt50" };
+  },
+};
+
+/**
+ * Block for Truebner STM50 with MCUS2
+ */
+
+Blockly.Blocks["sensebox_sensor_truebner_smt50_esp32"] = {
+  init: function () {
+    this.setColour(getColour().sensebox);
+    this.appendDummyInput().appendField(Blockly.Msg.senseBox_smt50);
+    this.appendDummyInput()
+      .appendField("Port:")
+      .appendField(
+        new Blockly.FieldDropdown(selectedBoard().digitalPorts),
+        "Port"
+      );
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.senseBox_value)
+      .appendField(
+        new Blockly.FieldDropdown([
+          [Blockly.Msg.senseBox_temp, "temp"],
+          [Blockly.Msg.senseBox_soil, "soil"],
+        ]),
+        "value"
+      );
+    this.setOutput(true, Types.NUMBER.typeName);
+    this.setTooltip(Blockly.Msg.senseBox_smt50_tooltip);
+    this.setHelpUrl(Blockly.Msg.senseBox_smt50_helpurl);
+    this.data = { name: "smt50" };
   },
 };
 
@@ -516,17 +548,19 @@ Blockly.Blocks["sensebox_sensor_truebner_smt50"] = {
 
 Blockly.Blocks["sensebox_sensor_watertemperature"] = {
   init: function () {
-
     this.setColour(getColour().sensebox);
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_watertemperature)
       .appendField("Port:")
-      .appendField(new Blockly.FieldDropdown(selectedBoard().digitalPorts), "Port")
+      .appendField(
+        new Blockly.FieldDropdown(selectedBoard().digitalPorts),
+        "Port"
+      )
       .appendField("Index:")
       .appendField(new Blockly.FieldDropdown(selectedBoard().oneWire), "Index");
     this.setOutput(true, Types.NUMBER.typeName);
     this.setTooltip(Blockly.Msg.senseBox_watertemperature_tooltip);
-    this.data = {name: "ds18b20"};
+    this.data = { name: "ds18b20" };
   },
 };
 
@@ -557,7 +591,10 @@ Blockly.Blocks["sensebox_soundsensor_dfrobot"] = {
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_soundsensor_dfrobot)
       .appendField("Port:")
-      .appendField(new Blockly.FieldDropdown(selectedBoard().digitalPorts), "Port");
+      .appendField(
+        new Blockly.FieldDropdown(selectedBoard().digitalPorts),
+        "Port"
+      );
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setTooltip(Blockly.Msg.senseBox_soundsensor_dfrobot_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_soundsensor_dfrobot_helpurl);
@@ -594,7 +631,7 @@ Blockly.Blocks["sensebox_sensor_dps310"] = {
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setTooltip(Blockly.Msg.senseBox_sensor_dps310_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_sensor_dps310_helpurl);
-    this.data = {name: "dps310"};
+    this.data = { name: "dps310" };
     this.getField("NAME").setValidator(
       function (val) {
         this.updateShape_(val === "Altitude");
@@ -618,10 +655,10 @@ Blockly.Blocks["sensebox_sensor_dps310"] = {
 
 /**
  * Sensirion SPS30 Fine Particular Matter Sensor
- * added 02.12.2022 
+ * added 02.12.2022
  */
 
- Blockly.Blocks["sensebox_sensor_sps30"] = {
+Blockly.Blocks["sensebox_sensor_sps30"] = {
   init: function () {
     this.appendDummyInput().appendField(Blockly.Msg.senseBox_sps30);
     this.appendDummyInput()
@@ -646,9 +683,9 @@ Blockly.Blocks["sensebox_sensor_dps310"] = {
 
 /**
  * senseBox-MCU-S2 onBoard Light Sensor
- * 
- * 
-  */
+ *
+ *
+ */
 
 Blockly.Blocks["sensebox_esp32s2_light"] = {
   init: function () {
@@ -665,15 +702,15 @@ Blockly.Blocks["sensebox_esp32s2_light"] = {
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_esp32_photodiode_tooltip);
-    this.data = {name: "Photodiode"};
+    this.data = { name: "Photodiode" };
   },
 };
 
 /**
  * senseBox-MCU ESP32-S2 onBoard MPU6050
- * 
- * 
-*/
+ *
+ *
+ */
 
 Blockly.Blocks["sensebox_esp32s2_mpu6050"] = {
   init: function () {
@@ -686,7 +723,7 @@ Blockly.Blocks["sensebox_esp32s2_mpu6050"] = {
           ["X", "accelerationX"],
           ["Y", "accelerationY"],
           ["Z", "accelerationZ"],
-          [Blockly.Msg.senseBox_temp, "temperature"]
+          [Blockly.Msg.senseBox_temp, "temperature"],
         ]),
         "value"
       );
@@ -694,7 +731,6 @@ Blockly.Blocks["sensebox_esp32s2_mpu6050"] = {
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_mpu6050_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_mpu6050_helpurl);
-    this.data = {name: "mpu6050"};
+    this.data = { name: "mpu6050" };
   },
 };
-

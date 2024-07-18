@@ -24,7 +24,7 @@ export const ToolboxEsp = () => {
         <Block type="sensebox_tof_imager" />
         <Block type="sensebox_sensor_sound" />
         <Block type="sensebox_button" />
-        <Block type="sensebox_sensor_truebner_smt50" />
+        <Block type="sensebox_sensor_truebner_smt50_esp32" />
         <Block type="sensebox_sensor_watertemperature" />
         <Block type="sensebox_soundsensor_dfrobot" />
         <Block type="sensebox_multiplexer_init">
