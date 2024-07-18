@@ -206,6 +206,8 @@ The measured values for temperature, humidity and air pressure can be used direc
    *
    */
   senseBox_watertemperature: "Water Temperature",
+  senseBox_watertemperature_tooltip: 
+    "The water thermometer gives the temperature in degrees Celsius. Connect the sensor to one of the 6 connections of the One-Wire adapter and then connect the One-Wire adapter to one of the 3 digital/analog ports of the senseBox and select the port in the block. If you have only connected one thermometer to the One-Wire adapter, leave the index at 0. Each additional connected thermometer can be addressed accordingly with an index increased by 1. It does not matter to which port of the adapter the thermometers are connected.",
 
   /**
    * Feinstaubsensor Sensirion SPS30
