@@ -167,7 +167,7 @@ float getPmData(int type) {
   else return 0;
   }
 }
-`
+`;
   Blockly.Arduino.setupCode_["sds011_begin"] = "sds.begin();";
   Blockly.Arduino.setupCode_["sds011_setQueryReportingMode"] =
     "sds.setQueryReportingMode();";
@@ -356,9 +356,8 @@ Blockly.Arduino.sensebox_sensor_ultrasonic_ranger = function () {
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
-
 /**
- * 
+ *
  * ToF Imager
  */
 
@@ -366,7 +365,9 @@ Blockly.Arduino.sensebox_tof_imager = function () {
   var dropdown_name = this.getFieldValue("dropdown");
   var maxDistance = this.getFieldValue("maxDistance");
   Blockly.Arduino.libraries_["library_wire"] = "#include <Wire.h>";
-  Blockly.Arduino.libraries_[`library_vl53l8cx`] = `#include <vl53l8cx_class.h> `;
+  Blockly.Arduino.libraries_[
+    `library_vl53l8cx`
+  ] = `#include <vl53l8cx_class.h> `;
   Blockly.Arduino.variables_["define:_vl53l8cx"] = `
 VL53L8CX sensor_vl53l8cx_top(&Wire, -1, -1);  
 `;
@@ -517,7 +518,6 @@ VL53L8CX sensor_vl53l8cx_top(&Wire, -1, -1);
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
-
 /**
  * Microphone
  *
@@ -587,7 +587,7 @@ Blockly.Arduino.sensebox_button = function () {
   } else if (dropown_function === "toggleButton") {
     code = "button_" + dropdown_pin + ".toggleState()";
     Blockly.Arduino.definitions_["define_button" + dropdown_pin + ""] =
-    "ToggleButton button_" + dropdown_pin + "(" + dropdown_pin + ");";
+      "ToggleButton button_" + dropdown_pin + "(" + dropdown_pin + ");";
   }
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
@@ -718,7 +718,7 @@ Blockly.Arduino.sensebox_sensor_truebner_smt50 = function () {
         dropdown_pin = 7;
         break;
       default: // "IO1_2"
-        dropdown_pin = 1
+        dropdown_pin = 1;
     }
     Blockly.Arduino.codeFunctions_["sensebox_smt50_temp"] =
       "float getSMT50Temperature(int analogPin){\n  int sensorValue = analogRead(analogPin);\n  float voltage = sensorValue * (3.3 / 1024.0);\n   return (voltage - 0.5) * 100;\n}";
@@ -742,7 +742,7 @@ Blockly.Arduino.sensebox_sensor_truebner_smt50 = function () {
         dropdown_pin = 6;
         break;
       default: // "IO1_2"
-        dropdown_pin = 2
+        dropdown_pin = 2;
     }
     Blockly.Arduino.codeFunctions_["sensebox_smt50_soil"] =
       "float getSMT50Moisture(int analogPin){\n   int sensorValue = analogRead(analogPin);\n    float voltage = sensorValue * (3.3 / 1024.0);\n   return (voltage * 50) / 3;\n}";
@@ -776,7 +776,7 @@ Blockly.Arduino.sensebox_sensor_watertemperature = function () {
       dropdown_pin = 7;
       break;
     default: // "IO1_2"
-      dropdown_pin = 1
+      dropdown_pin = 1;
   }
   var dropdown_index = this.getFieldValue("Index");
   Blockly.Arduino.libraries_["library_oneWire"] =
@@ -790,7 +790,7 @@ Blockly.Arduino.sensebox_sensor_watertemperature = function () {
   Blockly.Arduino.setupCode_["sensebox_oneWireSetup"] = "sensors.begin();";
   Blockly.Arduino.codeFunctions_["sensebox_requestTemp"] =
     "float getWaterTemp(int index){\nsensors.requestTemperatures();\nreturn sensors.getTempCByIndex(index);\n}";
-  var code = "getWaterTemp("+dropdown_index+")";
+  var code = "getWaterTemp(" + dropdown_index + ")";
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
@@ -852,18 +852,19 @@ Blockly.Arduino.sensebox_soundsensor_dfrobot = function () {
       dropdown_pin = 7;
       break;
     default: // "IO1_2"
-      dropdown_pin = 1
+      dropdown_pin = 1;
   }
-  Blockly.Arduino.codeFunctions_["soundsensor"] =
-    `    
-float getSoundValue(){
-  float v = analogRead(` +
-    dropdown_pin +
-    `) * (3.3 / 1024.0);
-  float decibel = v * 50;
-  return decibel;
+  Blockly.Arduino.codeFunctions_["soundsensor"] = `    
+int getSoundValue(int sensorPin) {
+  float v = analogReadMilliVolts(sensorPin) / 1000.0;
+  float decibel;
+  if (v <= 0.6) decibel = 0.0;
+  if (v >= 2.6) decibel = 130.0;
+  else decibel = v * 50.0;
+  return int(decibel);
 }`;
-  var code = "getSoundValue()";
+  var code = "getSoundValue(" + dropdown_pin + ")";
+
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
@@ -958,10 +959,9 @@ if (time_startsps > time_actualsps + intervalsps) {
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
-
 /**
  * senseBox MCU-S2 onboard Light Sensor
- * 
+ *
  */
 
 Blockly.Arduino.sensebox_esp32s2_light = function () {
@@ -970,22 +970,30 @@ Blockly.Arduino.sensebox_esp32s2_light = function () {
 };
 
 /**
-  * senseBox MCU-S2 onboard MPU6050
-  * 
-  **/
+ * senseBox MCU-S2 onboard MPU6050
+ *
+ **/
 
 Blockly.Arduino.sensebox_esp32s2_mpu6050 = function () {
   var code = "";
   var dropdown = this.getFieldValue("value");
-  Blockly.Arduino.libraries_["esp32s2_mpu6050"] = `#include <Adafruit_MPU6050.h>`;
-  Blockly.Arduino.libraries_["Adafruit_Sensor"] = `#include <Adafruit_Sensor.h>`;
+  Blockly.Arduino.libraries_[
+    "esp32s2_mpu6050"
+  ] = `#include <Adafruit_MPU6050.h>`;
+  Blockly.Arduino.libraries_[
+    "Adafruit_Sensor"
+  ] = `#include <Adafruit_Sensor.h>`;
   Blockly.Arduino.libraries_["library_wire"] = `#include <Wire.h>`;
-  Blockly.Arduino.definitions_["define_Adafruit_mpu6050"] = "Adafruit_MPU6050 mpu;";
-  Blockly.Arduino.definitions_["define_sensor_events"] = "sensors_event_t a, g, temp;";
-  Blockly.Arduino.setupCode_["Wire1.begin()"] = "Wire1.begin();"
+  Blockly.Arduino.definitions_["define_Adafruit_mpu6050"] =
+    "Adafruit_MPU6050 mpu;";
+  Blockly.Arduino.definitions_["define_sensor_events"] =
+    "sensors_event_t a, g, temp;";
+  Blockly.Arduino.setupCode_["Wire1.begin()"] = "Wire1.begin();";
   Blockly.Arduino.setupCode_["mpu.begin()"] = "mpu.begin(0x68, &Wire1);";
-  Blockly.Arduino.setupCode_["mpu.setAccelerometerRange()"] = "mpu.setAccelerometerRange(MPU6050_RANGE_8_G);";
-  Blockly.Arduino.loopCodeOnce_["mpu.getEvent"] = "mpu.getEvent(&a, &g, &temp);"
+  Blockly.Arduino.setupCode_["mpu.setAccelerometerRange()"] =
+    "mpu.setAccelerometerRange(MPU6050_RANGE_8_G);";
+  Blockly.Arduino.loopCodeOnce_["mpu.getEvent"] =
+    "mpu.getEvent(&a, &g, &temp);";
   switch (dropdown) {
     case "accelerationX":
       code = "a.acceleration.x";
