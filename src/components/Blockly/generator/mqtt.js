@@ -23,7 +23,7 @@ Blockly.Arduino.sensebox_mqtt_setup = function () {
     '#define USERNAME      "' + username + '"';
   Blockly.Arduino.definitions_["mqtt_pass"] =
     '#define PASS      "' + pass + '"';
-  Blockly.Arduino.definitions_["wifi_client"] = "WiFiClient client;";
+  Blockly.Arduino.definitions_["WiFiClient"] = "WiFiClient client;";
   Blockly.Arduino.definitions_["mqtt_client"] =
     "Adafruit_MQTT_Client mqtt(&client, SERVER, SERVERPORT, USERNAME, PASS);";
   var code = "";

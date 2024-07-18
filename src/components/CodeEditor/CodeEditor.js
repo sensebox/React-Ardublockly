@@ -29,7 +29,11 @@ const CodeEditor = (props) => {
   const compile = () => {
     setProgress(true);
     const data = {
-      board: store.getState().selectedBoard === "mcu" ? "sensebox-mcu" : "sensebox-esp32s2",
+      board:
+        store.getState().board.board === "mcu" ||
+        store.getState().board.board === "mini"
+          ? "sensebox-mcu"
+          : "sensebox-esp32s2",
       sketch: editorRef.current.getValue(),
     };
     fetch(`${process.env.REACT_APP_COMPILER_URL}/compile`, {
@@ -49,7 +53,11 @@ const CodeEditor = (props) => {
         //setId(result);
         const filename = "sketch";
         window.open(
-          `${process.env.REACT_APP_COMPILER_URL}/download?id=${result}&board=${store.getState().selectedBoard === "mcu" ? "sensebox-mcu" : "sensebox-esp32s2"}&filename=${filename}`,
+          `${process.env.REACT_APP_COMPILER_URL}/download?id=${result}&board=${
+            store.getState().board.board === "mcu"
+              ? "sensebox-mcu"
+              : "sensebox-esp32s2"
+          }&filename=${filename}`,
           "_self"
         );
       })

@@ -59,7 +59,11 @@ export const LED = {
   senseBox_ws2812_rgb_matrix_draw_pixel: `Set pixels`,
   senseBox_ws2812_rgb_matrix_draw_pixel_tooltip: `Color a pixel at the position (X,Y).
   Along the X-axis the LED-Matrix has 12 pixels and on the Y-axis 8.
-  You can find the single color block in the LED category.`,
+  You can find the single color block in the LED category.
+  If you do not check the 'Draw immediately' box, the coloring of the pixel is only noted and not yet displayed.
+  This is helpful if you want to color many pixels at once, as otherwise the LED matrix will flicker every time you color a pixel.
+  So if you are coloring several pixels, you should only check the box for the last block.`,
+  senseBox_ws2812_rgb_matrix_show: `Draw immediatly`,
   senseBox_ws2812_rgb_matrix_x: `X`,
   senseBox_ws2812_rgb_matrix_y: `Y`,
   senseBox_ws2812_rgb_matrix_color: `Color`,

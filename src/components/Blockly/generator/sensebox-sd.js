@@ -233,7 +233,7 @@ Blockly.Arduino.sensebox_esp32s2_sd_open_file = function (block) {
   var extension = this.getFieldValue("extension");
   var newFileName = filename.concat(".", extension);
   var branch = Blockly.Arduino.statementToCode(block, "SD");
-  var code = ` ${filename} = SD.open("/${newFileName}", FILE_WRITE);\n`;
+  var code = ` ${filename} = SD.open("/${newFileName}", FILE_APPEND);\n`;
   code +=branch;
   code += ` ${filename}.close();\n`;
   return code;
