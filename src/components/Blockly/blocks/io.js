@@ -278,3 +278,37 @@ Blockly.Blocks["io_pulsetimeout"] = {
     return Types.NUMBER.typeName;
   },
 };
+
+Blockly.Blocks["io_analogreadmillivolt"] = {
+  /**
+   * Block for reading an analogue input.
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.setHelpUrl(
+      "https://docs.espressif.com/projects/arduino-esp32/en/latest/api/adc.html"
+    );
+    this.setColour(250);
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.ARD_ANALOGREADMILIVOLT)
+      .appendField("Port:")
+      .appendField(
+        new Blockly.FieldDropdown(selectedBoard().digitalPorts),
+        "Port"
+      );
+
+    this.setOutput(true, Types.NUMBER.typeName);
+    this.setTooltip(Blockly.Msg.ARD_ANALOGREADMILIVOLT_TIP);
+  },
+  /** @return {!string} The type of return value for the block, an integer. */
+  getBlockType: function () {
+    return Types.NUMBER.typeName;
+  },
+  /**
+   * Updates the content of the the pin related fields.
+   * @this Blockly.Block
+   */
+  updateFields: function () {
+    Blockly.Arduino.Boards.refreshBlockFieldDropdown(this, "PIN", "analogPins");
+  },
+};

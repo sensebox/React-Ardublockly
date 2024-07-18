@@ -45,6 +45,7 @@ class OpenProject extends Component {
       selectedBoard: "",
       xmlFileState: null,
       xmlFileBoard: "",
+      showOldXMLFileWarning: false,
     };
   }
 
@@ -57,10 +58,11 @@ class OpenProject extends Component {
   };
 
   processXMLFile = () => {
+    this.props.setBoard(this.state.xmlFileBoard);
+
     const workspace = Blockly.getMainWorkspace();
     var xmlFile = this.state.xmlFileState;
     var xmlBefore = this.props.xml;
-    this.props.setBoard(this.state.xmlFileBoard)
     workspace.clear();
     this.props.clearStats();
     Blockly.Xml.domToWorkspace(xmlFile, workspace);
@@ -69,8 +71,7 @@ class OpenProject extends Component {
       this.setState({
         open: true,
         title: Blockly.Msg.no_blocks_found_title,
-        content:
-          Blockly.Msg.no_blocks_found_text,
+        content: Blockly.Msg.no_blocks_found_text,
       });
     } else {
       if (!this.props.assessment) {
@@ -81,14 +82,13 @@ class OpenProject extends Component {
       }
       this.setState({
         open2: false,
+        showOldXMLFileWarning: false,
         snackbar: true,
         type: "success",
         key: Date.now(),
-        message:
-         Blockly.Msg.xml_loaded
+        message: Blockly.Msg.xml_loaded,
       });
     }
-
   };
 
   uploadXmlFile = (xmlFile) => {
@@ -96,31 +96,33 @@ class OpenProject extends Component {
       this.setState({
         open: true,
         title: Blockly.Msg.no_valid_data_type_title,
-        content:
-          Blockly.Msg.no_valid_data_type_text
+        content: Blockly.Msg.no_valid_data_type_text,
       });
     } else {
       var reader = new FileReader();
       reader.readAsText(xmlFile);
       reader.onloadend = () => {
-        var xmlDom = null;        
+        var xmlDom = null;
         try {
           xmlDom = Blockly.Xml.textToDom(reader.result);
           var boardAttribute = xmlDom.getAttribute("board");
+          if (!boardAttribute) {
+            this.setState({ showOldXMLFileWarning: true });
+            this.props.setBoard("mcu");
+          }
           // store attributes and open confirmation dialog
           this.setState({
             open2: true,
             selectedBoard: window.sessionStorage.getItem("board"),
             xmlFileName: xmlFile.name,
             xmlFileState: xmlDom,
-            xmlFileBoard: boardAttribute,
+            xmlFileBoard: boardAttribute ? boardAttribute : "mcu",
           });
         } catch (err) {
           this.setState({
             open: true,
             title: Blockly.Msg.no_valid_xml_title,
-            content:
-              Blockly.Msg.no_valid_xml_text
+            content: Blockly.Msg.no_valid_xml_text,
           });
         }
       };
@@ -173,33 +175,42 @@ class OpenProject extends Component {
           onClose={this.toggleDialog2}
           onClick={this.toggleDialog2}
         >
-          <div         >
+          <div>
             {this.state.selectedBoard !== this.state.xmlFileBoard ? (
               // give a warning that the board is different
               <Alert severity="warning" style={{ width: "fit-content" }}>
                 {Blockly.Msg.warning_file_board}
               </Alert>
             ) : null}
-            <p>
-              {Blockly.Msg.dialog_confirm}
-              </p>
-            <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", marginTop:"10px"}}>
-            <Button
-            style={{width: "auto", height: "auto"}}
-            className={this.props.classes.button}
-              onClick={this.toggleDialog2}
+            {this.state.showOldXMLFileWarning ? (
+              <Alert severity="warning" style={{ width: "fit-content" }}>
+                {Blockly.Msg.warning_old_xml_file}
+              </Alert>
+            ) : null}
+            <p>{Blockly.Msg.dialog_confirm}</p>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                gap: "10px",
+                marginTop: "10px",
+              }}
             >
-              {Blockly.Msg.button_close}{" "}
-            </Button>
-            <Button
-            style={{width: "auto", height: "auto"}}
-              className={this.props.classes.button}
-              onClick={() => this.processXMLFile()}
-            >
-              {Blockly.Msg.button_accept}
-            </Button>
+              <Button
+                style={{ width: "auto", height: "auto" }}
+                className={this.props.classes.button}
+                onClick={this.toggleDialog2}
+              >
+                {Blockly.Msg.button_close}{" "}
+              </Button>
+              <Button
+                style={{ width: "auto", height: "auto" }}
+                className={this.props.classes.button}
+                onClick={() => this.processXMLFile()}
+              >
+                {Blockly.Msg.button_accept}
+              </Button>
             </div>
-
           </div>
         </Dialog>
 
@@ -234,6 +245,8 @@ const mapStateToProps = (state) => ({
   name: state.workspace.name,
 });
 
-export default connect(mapStateToProps, { clearStats, workspaceName, setBoard })(
-  withStyles(styles, { withTheme: true })(OpenProject)
-);
+export default connect(mapStateToProps, {
+  clearStats,
+  workspaceName,
+  setBoard,
+})(withStyles(styles, { withTheme: true })(OpenProject));
