@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { getClassrooms } from '../../actions/classroomActions';
 
 import Breadcrumbs from '../Breadcrumbs';
 import Alert from '../Alert';
@@ -24,6 +25,7 @@ export class Account extends Component {
 
   render() {
     const { user } = this.props;
+    const { classrooms } = this.props;
     return (
       <div>
         <Breadcrumbs content={[{ link: '/user', title: 'Account' }]} />
@@ -137,6 +139,9 @@ export class Account extends Component {
             <Typography style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>
               Du hast {this.props.user.boxes.length} {this.props.user.boxes.length === 1 ? 'senseBox' : 'senseBoxen'} registriert:
           </Typography>
+          {this.props.classrooms.map((classroom, i) => {
+             <Typography key={i} style={{ fontWeight: 'bold', fontSize: '1.6rem' }}>{classroom.name}</Typography>
+          })};
         </Grid>
 
       </div>
@@ -146,11 +151,13 @@ export class Account extends Component {
 
 Account.propTypes = {
   user: PropTypes.object.isRequired,
+  classrooms: PropTypes.array.isRequired,
   getClassrooms: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   user: state.auth.user,
+  classrooms: state.classroom.classrooms
 });
 
-export default connect(mapStateToProps, null)(Account);
+export default connect(mapStateToProps, {getClassrooms})(Account);

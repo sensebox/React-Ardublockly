@@ -293,6 +293,7 @@ export const UI = {
   navbar_account: "Account",
   navbar_logout: "Logout",
   navbar_settings: "Settings",
+  navbar_classroom: "Classroom",
 
   /**
    * Codeviewer
