@@ -25,6 +25,10 @@ import Account from "../User/Account";
 import News from "../News";
 import Faq from "../Faq";
 import CodeEditor from "../CodeEditor/CodeEditor";
+import ClassroomHome from "../Classroom/ClassroomHome";
+import Classroom from "../Classroom/Classroom";
+import ClassroomProjectHome from "../Classroom/ClassroomProjectHome";
+import ClassroomProject from "../Classroom/ClassroomProject";
 
 class Routes extends Component {
 
@@ -93,6 +97,19 @@ class Routes extends Component {
           </IsLoggedRoute>
           <PrivateRoute path="/user" exact>
             <Account />
+          </PrivateRoute>
+          {/* Classroom */}
+          <PrivateRoute path="/classroom" exact>
+            <ClassroomHome />
+          </PrivateRoute>
+          <PrivateRoute path="/classroom/:classroomId" exact>
+            <Classroom />
+          </PrivateRoute>
+          <PublicRoute path="/classroom/projects/" exact>
+            <ClassroomProjectHome />
+          </PublicRoute>
+          <PrivateRoute path="/classroom/project/:projectId" exact>
+            <ClassroomProject />
           </PrivateRoute>
           {/* settings */}
           <PublicRoute path="/settings" exact>

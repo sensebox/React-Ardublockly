@@ -70,6 +70,7 @@ class ProjectHome extends Component {
   }
 
   componentDidUpdate(props) {
+    console.log(this.props.message);
     if (props.location.pathname !== this.props.location.pathname) {
       this.setState({ snackbar: false });
       this.props.getProjects(this.props.location.pathname.replace("/", ""));

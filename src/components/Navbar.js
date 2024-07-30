@@ -447,7 +447,7 @@ class Navbar extends Component {
                 text: Blockly.Msg.navbar_projects,
                 icon: faLayerGroup,
                 link: "/project",
-                restriction: this.props.isAuthenticated,
+                restriction: this.props.isAuthenticated ,
               },
               {
                 text: "Code Editor",
@@ -508,6 +508,18 @@ class Navbar extends Component {
                 text: Blockly.Msg.navbar_logout,
                 icon: faSignOutAlt,
                 function: this.props.logout,
+                restriction: this.props.isAuthenticated,
+              },
+              {
+                text: Blockly.Msg.navbar_classroom,
+                icon: faChalkboardTeacher,
+                link: "/classroom",
+                restriction: this.props.isAuthenticated && this.props.user?.blocklyRole !== "user",
+              },
+              {
+                text: Blockly.Msg.navbar_classroom,
+                icon: faChalkboardTeacher,
+                link: "/classroom/project",
                 restriction: this.props.isAuthenticated,
               },
               { text: "FAQ", icon: faQuestionCircle, link: "/faq" },
