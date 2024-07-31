@@ -58,38 +58,38 @@ const ProjectList = ({ projects }) => {
                 justifyContent: 'space-between',
               }}
             >
-                <div style={{ position: 'relative' }}>
-                  <BlocklyWindow
-                    svg
-                    blockDisabled
-                    initialXml={project.xml}
-                  />
-                  <IconButton
-                    style={{
-                      position: 'absolute',
-                      top: '10px',
-                      right: '10px',
-                      backgroundColor: '#fff',
-                      padding: '8px',
-                      borderRadius: '50%',
-                    }}
-                    onClick={(e) => handleMenuClick(e, project)}
-                  >
-                    <FontAwesomeIcon icon={faGear} />
-                  </IconButton>
-                </div>
-                <h3 style={{ marginTop: 0 }}>{project.title}</h3>
-                <Divider style={{ marginTop: "1rem", marginBottom: "10px" }} />
-                <Typography
-                  variant="body2"
+              <div style={{ position: 'relative' }}>
+                <BlocklyWindow
+                  svg
+                  blockDisabled
+                  initialXml={project.xml}
+                />
+                <IconButton
                   style={{
-                    fontStyle: "italic",
-                    margin: 0,
-                    marginTop: "-10px",
+                    position: 'absolute',
+                    top: '10px',
+                    right: '10px',
+                    backgroundColor: '#fff',
+                    padding: '8px',
+                    borderRadius: '50%',
                   }}
+                  onClick={(e) => handleMenuClick(e, project)}
                 >
-                  {project.description}
-                </Typography>
+                  <FontAwesomeIcon icon={faGear} />
+                </IconButton>
+              </div>
+              <h3 style={{ marginTop: 0 }}>{project.title}</h3>
+              <Divider style={{ marginTop: "1rem", marginBottom: "10px" }} />
+              <Typography
+                variant="body2"
+                style={{
+                  fontStyle: "italic",
+                  margin: 0,
+                  marginTop: "-10px",
+                }}
+              >
+                {project.description}
+              </Typography>
 
               <div style={{ marginTop: '1rem' }}>
                 <Button
@@ -118,7 +118,6 @@ const ProjectList = ({ projects }) => {
         ))}
       </Grid>
 
-      {/* Menu for project options */}
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
