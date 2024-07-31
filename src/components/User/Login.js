@@ -20,6 +20,8 @@ import InputAdornment from "@mui/material/InputAdornment";
 import CircularProgress from "@mui/material/CircularProgress";
 import Link from "@mui/material/Link";
 import * as Blockly from "blockly";
+import ClassroomLogin from "./ClassroomLogin";
+import { classroomLogin } from '../../actions/classroomAuthActions';
 
 export class Login extends Component {
   constructor(props) {
@@ -74,6 +76,11 @@ export class Login extends Component {
       }
     }
   }
+
+  handleClassroomLogin = (credentials) => {
+    this.props.classroomLogin(credentials.classroomCode, credentials.nickname);
+    console.log(this.props.isAuthenticated)
+  };
 
   onChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
@@ -219,6 +226,7 @@ export class Login extends Component {
             .
           </p>
         </div>
+        <ClassroomLogin onLogin={this.handleClassroomLogin}/>
       </div>
     );
   }
@@ -229,13 +237,16 @@ Login.propTypes = {
   login: PropTypes.func.isRequired,
   clearMessages: PropTypes.func.isRequired,
   progress: PropTypes.bool.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired,
+  classroomLogin: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   message: state.message,
   progress: state.auth.progress,
+  isAuthenticated: state.classroomAuth.isAuthenticated,
 });
 
-export default connect(mapStateToProps, { login, clearMessages })(
+export default connect(mapStateToProps, { login, clearMessages, classroomLogin })(
   withRouter(Login)
 );

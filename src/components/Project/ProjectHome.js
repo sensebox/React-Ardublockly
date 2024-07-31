@@ -51,6 +51,7 @@ class ProjectHome extends Component {
 
 <<<<<<< Updated upstream
   componentDidUpdate(props) {
+    console.log(this.props.message);
     if (props.location.pathname !== this.props.location.pathname) {
 =======
   componentDidUpdate(prevProps) {

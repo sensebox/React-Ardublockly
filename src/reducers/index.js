@@ -8,6 +8,8 @@ import messageReducer from './messageReducer';
 import authReducer from './authReducer';
 import boardReducer from './boardReducer';
 import sensorwikiReducer from './sensorwikiReducer';
+import classroomReducer from './classroomReducer';
+import classroomAuthReducer from './classroomAuthReducer';
 
 export default combineReducers({
   auth: authReducer,
@@ -18,5 +20,7 @@ export default combineReducers({
   project: projectReducer,
   general: generalReducer,
   message: messageReducer,
-  sensorwiki: sensorwikiReducer
+  sensorwiki: sensorwikiReducer,
+  classroom: classroomReducer,
+  classroomAuth: classroomAuthReducer
 });

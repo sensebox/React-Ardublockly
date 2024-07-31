@@ -67,8 +67,6 @@ export const PROJECT_DESCRIPTION = "PROJECT_DESCRIPTION";
 
 //board
 export const BOARD = "BOARD";
-<<<<<<< Updated upstream
-=======
 
 //classroom
 export const GET_CLASSROOM = "CLASSROOM";
@@ -92,8 +90,9 @@ export const POST_CLASSROOM_PROJECT = "POST_CLASSROOM_PROJECT";
 export const POST_CLASSROOM_PROJECT_SUCCESS = "POST_CLASSROOM_PROJECT_SUCCESS";
 export const POST_CLASSROOM_PROJECT_FAIL = "POST_CLASSROOM_PROJECT_FAIL";
 
+
 //classroomAuth
 
 export const CLASSROOM_LOGIN_SUCCESS = 'CLASSROOM_LOGIN_SUCCESS';
 export const CLASSROOM_LOGIN_FAILURE = 'CLASSROOM_LOGIN_FAILURE';
->>>>>>> Stashed changes
+

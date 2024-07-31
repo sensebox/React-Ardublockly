@@ -1,3 +1,4 @@
+
 import { GET_CLASSROOMS, GET_CLASSROOM, ADD_STUDENT, CREATE_CLASSROOM, DELETE_CLASSROOM, ADD_STUDENT_SUCCESS, DELETE_STUDENT_SUCCESS, GET_CLASSROOM_PROJECTS, GET_CLASSROOM_PROJECTS_SUCCESS, GET_CLASSROOM_PROJECT, GET_CLASSROOM_PROJECT_SUCCESS, POST_CLASSROOM_PROJECT_FAIL, POST_CLASSROOM_PROJECT_SUCCESS, POST_CLASSROOM_PROJECT } from '../actions/types';
 
 const initialState = {
@@ -56,11 +57,6 @@ export default function foo(state = initialState, action) {
         msg: action.payload.message,
         status: action.payload.status,
         id: 'GET_CLASSROOM_PROJECT_SUCCESS'
-      };
-    case GET_CLASSROOM_PROJECTS:
-      return {
-        ...state,
-        classroomProjects: action.payload
       };
       case GET_CLASSROOM_PROJECTS_SUCCESS:
         return {

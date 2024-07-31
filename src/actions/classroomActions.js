@@ -1,8 +1,10 @@
+
 import { GET_CLASSROOMS, GET_CLASSROOM, ADD_STUDENT_SUCCESS, CREATE_CLASSROOM, DELETE_STUDENT_SUCCESS, DELETE_STUDENT_FAIL, GET_CLASSROOM_PROJECTS_SUCCESS, GET_CLASSROOM_PROJECT_SUCCESS  } from './types';
 
 import axios from 'axios';
 import { returnErrors, returnSuccess } from './messageActions';
 import api from '../utils/axiosConfig';
+
 
 
 
@@ -149,6 +151,7 @@ export const getClassrooms = () => (dispatch) => {
       );
   };
 
+
   export const getClassroomProject = (classroomId, projectId ) => (dispatch ) => {
     const config = {
       success: res => {
@@ -204,6 +207,7 @@ export const getClassrooms = () => (dispatch) => {
       });
   };
 
+
 export const postClassroomProject = (classroomId, body) => (dispatch) => {
   const config = {
     success: res => {
@@ -223,8 +227,6 @@ export const postClassroomProject = (classroomId, body) => (dispatch) => {
       err.config.error(err);
     });
 };
-
-
   
 
 // export const updateProject = (type, id) => (dispatch, getState) => {
