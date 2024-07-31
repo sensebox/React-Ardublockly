@@ -154,11 +154,6 @@ export class Account extends Component {
               Du hast {this.props.user.boxes.length} {this.props.user.boxes.length === 1 ? 'senseBox' : 'senseBoxen'} registriert:
           </Typography>
         </Grid> */}
-            <Typography style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>
-              Du hast {this.props.user.boxes.length} {this.props.user.boxes.length === 1 ? 'senseBox' : 'senseBoxen'} registriert:
-          </Typography>
-        </Grid>
-
       </div>
     );
   }
@@ -170,7 +165,7 @@ Account.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  user: state.auth.user
+  user: state.auth.user,
   classroomUser: state.classroomAuth.classroomUser,
 });
 

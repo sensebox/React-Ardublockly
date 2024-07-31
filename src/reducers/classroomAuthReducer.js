@@ -16,8 +16,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         isAuthenticated: true,
-      return {
-        ...state,
+        token: action.payload.token,
         classroomUser: action.payload.student,
         message: action.payload.message,
         error: null,

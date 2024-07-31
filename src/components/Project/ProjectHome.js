@@ -49,14 +49,8 @@ class ProjectHome extends Component {
     this.handleMessages(this.props.message, type);
   }
 
-<<<<<<< Updated upstream
-  componentDidUpdate(props) {
-    console.log(this.props.message);
-    if (props.location.pathname !== this.props.location.pathname) {
-=======
   componentDidUpdate(prevProps) {
     if (prevProps.location.pathname !== this.props.location.pathname) {
->>>>>>> Stashed changes
       this.setState({ snackbar: false });
       this.props.getProjects(this.props.location.pathname.replace("/", ""));
     }
