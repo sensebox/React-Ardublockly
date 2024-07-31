@@ -25,6 +25,11 @@ import Account from "../User/Account";
 import News from "../News";
 import Faq from "../Faq";
 import CodeEditor from "../CodeEditor/CodeEditor";
+<<<<<<< Updated upstream
+=======
+import ClassroomHome from "../Classroom/ClassroomHome";
+import Classroom from "../Classroom/Classroom";
+>>>>>>> Stashed changes
 
 class Routes extends Component {
 
@@ -94,6 +99,16 @@ class Routes extends Component {
           <PrivateRoute path="/user" exact>
             <Account />
           </PrivateRoute>
+<<<<<<< Updated upstream
+=======
+          {/* Classroom */}
+          <PrivateRoute path="/classroom" exact>
+            <ClassroomHome />
+          </PrivateRoute>
+          <PrivateRoute path="/classroom/:classroomId" exact>
+            <Classroom />
+          </PrivateRoute>
+>>>>>>> Stashed changes
           {/* settings */}
           <PublicRoute path="/settings" exact>
             <Settings />
