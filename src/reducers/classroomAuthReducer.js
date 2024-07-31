@@ -2,6 +2,7 @@ import { LOGIN_SUCCESS, GET_STATUS, CLASSROOM_LOGIN_FAILURE } from '../actions/t
 
 const initialState = {
   token: localStorage.getItem("token"),
+  refreshToken: localStorage.getItem("refreshToken"),
   isAuthenticated: null,
   classroomUser: null,
   error: null,
@@ -10,6 +11,11 @@ const initialState = {
 export default function(state = initialState, action) {
   switch (action.type) {
     case LOGIN_SUCCESS:
+      localStorage.setItem("token", action.payload.token);
+      localStorage.setItem("refreshToken", action.payload.refreshToken);
+      return {
+        ...state,
+        isAuthenticated: true,
       return {
         ...state,
         classroomUser: action.payload.student,

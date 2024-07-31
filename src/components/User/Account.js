@@ -24,11 +24,21 @@ export class Account extends Component {
 
   render() {
     const { user } = this.props;
+    const { classroomUser } = this.props;
+    var userAccount = null;
+    if (!user) {
+      userAccount = { classroomUser};
+    }
+    else {
+      userAccount = user;
+    }
+    console.log(userAccount);
     return (
       <div>
         <Breadcrumbs content={[{ link: '/user', title: 'Account' }]} />
 
         <h1>Account</h1>
+        {user ? (
         <Alert>
           Alle Angaben stammen von <Link
           color='primary'
@@ -36,7 +46,11 @@ export class Account extends Component {
           target="_blank"
           href={'https://opensensemap.org/'}
           underline="hover">openSenseMap</Link> und können dort verwaltet werden.
-        </Alert>
+        </Alert>) : null}
+        {classroomUser ? (
+          <Alert>
+            Classroom User
+            </Alert>) : null}
         <Paper style={{ width: 'max-content', maxWidth: '100%' }}>
           <List>
             <ListItem>
@@ -45,9 +59,10 @@ export class Account extends Component {
                   <FontAwesomeIcon icon={faUser}  />
                 </ListItemIcon>
               </Tooltip>
-              <ListItemText primary={`Name: ${user.name}`} />
+              {user? <ListItemText primary={`Name: ${user.name}`} /> : classroomUser ? <ListItemText primary={`Name: ${classroomUser.name}`} /> : null}
+             
             </ListItem>
-            <ListItem>
+            {/* <ListItem>
               <Tooltip title='Email'>
                 <ListItemIcon>
                   <FontAwesomeIcon icon={faAt}  />
@@ -60,12 +75,12 @@ export class Account extends Component {
                 <FontAwesomeIcon icon={faUserTag}  />
               </ListItemIcon>
               <ListItemText primary={`Userrolle: ${user.blocklyRole}`} />
-            </ListItem>
+            </ListItem> */}
           </List>
         </Paper>
         <Divider style={{ marginBottom: '16px', marginTop: '16px' }} />
-        <div style={{ marginBottom: '8px' }}>
-          {this.props.user.boxes.length < 1 ?
+        {/* <div style={{ marginBottom: '8px' }}>
+          {userAccount.boxes.length < 1 ?
             <Typography>
               Du hast noch keine senseBox registriert. Besuche <Link
               color='primary'
@@ -77,8 +92,8 @@ export class Account extends Component {
             : <Typography style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>
               Du hast {this.props.user.boxes.length} {this.props.user.boxes.length === 1 ? 'senseBox' : 'senseBoxen'} registriert:
           </Typography>}
-        </div>
-        <Grid container spacing={2}>
+        </div> */}
+        {/* <Grid container spacing={2}>
           {this.props.user.boxes.map((box, i) => {
             var sensors = box.sensors.map(sensor => sensor.title);
             return (
@@ -134,6 +149,11 @@ export class Account extends Component {
               </Grid>
             );
           })}
+        </Grid>
+            <Typography style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>
+              Du hast {this.props.user.boxes.length} {this.props.user.boxes.length === 1 ? 'senseBox' : 'senseBoxen'} registriert:
+          </Typography>
+        </Grid> */}
             <Typography style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>
               Du hast {this.props.user.boxes.length} {this.props.user.boxes.length === 1 ? 'senseBox' : 'senseBoxen'} registriert:
           </Typography>
@@ -150,7 +170,8 @@ Account.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  user: state.auth.user,
+  user: state.auth.user
+  classroomUser: state.classroomAuth.classroomUser,
 });
 
 export default connect(mapStateToProps, null)(Account);

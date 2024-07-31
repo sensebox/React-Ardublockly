@@ -208,7 +208,6 @@ export class ClassroomHome extends Component {
         
               </Grid>
             );
-          })};
           <Grid item xs={12} sm={6} md={4} xl={3}>
             <Paper style={{ textAlign: 'center', padding: '20px' }}>
               <Typography style={{ fontWeight: 'bold', fontSize: '1.6rem', marginBottom: '20px' }}>

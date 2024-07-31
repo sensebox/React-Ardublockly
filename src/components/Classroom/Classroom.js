@@ -14,7 +14,8 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Item from '@mui/material/Grid';
 import ProjectList from './ProjectList';
-import { Tabs, Tab, Box, Typography } from '@mui/material';
+import { Tabs, Tab, Typography } from '@mui/material';
+
 import TabPanel from './TabPanel';
 
 
@@ -99,7 +100,10 @@ class Classroom extends Component {
   render() {
     const { classroom } = this.props;
     const sortedStudents = classroom?.students.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    const projects = classroom?.students.flatMap(student => student.projects);
+    //const projects = classroom?.students.flatMap(student => student.projects);
+    const projects = classroom?.students.flatMap(student => 
+      student.projects.map(project => ({ ...project, author: student.name }))
+    );
     const { tabIndex } = this.state;
     const breadcrumbContent = [
       { title: 'Classroom', link: '/classroom' },

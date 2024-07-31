@@ -1,7 +1,11 @@
-import { GET_CLASSROOMS, GET_CLASSROOM, ADD_STUDENT_SUCCESS, CREATE_CLASSROOM, DELETE_STUDENT_SUCCESS, DELETE_STUDENT_FAIL, GET_CLASSROOM_PROJECTS_SUCCESS  } from './types';
+
+import { GET_CLASSROOMS, GET_CLASSROOM, ADD_STUDENT_SUCCESS, CREATE_CLASSROOM, DELETE_STUDENT_SUCCESS, DELETE_STUDENT_FAIL, GET_CLASSROOM_PROJECTS_SUCCESS, GET_CLASSROOM_PROJECT_SUCCESS  } from './types';
 
 import axios from 'axios';
 import { returnErrors, returnSuccess } from './messageActions';
+import api from '../utils/axiosConfig';
+
+
 
 
 export const createClassroom = (classroom) => (dispatch) => {
@@ -147,24 +151,32 @@ export const getClassrooms = () => (dispatch) => {
       );
   };
 
-  export const getClassroomProject = (project) => (dispatch ) => {
-    axios.get(`${process.env.REACT_APP_BLOCKLY_API}/classroom/project`, project)
-      .then((res) => {
+
+  export const getClassroomProject = (classroomId, projectId ) => (dispatch ) => {
+    const config = {
+      success: res => {
+        var project = res.data.project;
+        dispatch({
+          type: GET_CLASSROOM_PROJECT_SUCCESS,
+          payload: project
+        });
         dispatch(returnSuccess(res.data.message, res.status, 'GET_CLASSROOM_PROJECT_SUCCESS'));
-      })
-      .catch((err) => {
+      },
+      error: err => {
         if (err.response) {
-          dispatch(
-            returnErrors(
-              err.response.data.message,
-              err.response.status,
-              "GET_CLASSROOM_PROJECT_FAIL"
-            )
-          );
+          dispatch(returnErrors(err.response.data.message, err.response.status, 'GET_CLASSROOM_PROJECT_FAIL'));
         }
       }
-      );
+    };
+    api.get(`/classroom/${classroomId}/${projectId}`, config)
+    .then(res => {
+      res.config.success(res);
+    })
+    .catch(err => {
+      err.config.error(err);
+    });
   };
+
 
   export const getClassroomProjects = (classroomCode, nickname, classroomId) => (dispatch ) => {
     const body = {
@@ -196,6 +208,25 @@ export const getClassrooms = () => (dispatch) => {
   };
 
 
+export const postClassroomProject = (classroomId, body) => (dispatch) => {
+  const config = {
+    success: res => {
+      dispatch(returnSuccess(res.data.message, res.status, 'POST_CLASSROOM_PROJECT_SUCCESS'));
+    },
+    error: err => {
+      if (err.response) {
+        dispatch(returnErrors(err.response.data.message, err.response.status, 'POST_CLASSROOM_PROJECT_FAIL'));
+      }
+    }
+  };
+  axios.post(`${process.env.REACT_APP_BLOCKLY_API}/classroom/${classroomId}/project`, body, config)
+    .then(res => {
+      res.config.success(res);
+    })
+    .catch(err => {
+      err.config.error(err);
+    });
+};
   
 
 // export const updateProject = (type, id) => (dispatch, getState) => {
