@@ -42,7 +42,7 @@ class WorkspaceFunc extends Component {
 
         {!this.props.multiple ? <CopyCode iconButton /> : null}
 
-        {this.props.user && !this.props.multiple ? (
+        {this.props.user || this.props.classroomUser && !this.props.multiple ? (
           <SaveProject
             style={{ marginRight: "5px" }}
             projectType={this.props.projectType}
@@ -102,11 +102,13 @@ class WorkspaceFunc extends Component {
 
 WorkspaceFunc.propTypes = {
   user: PropTypes.object,
+  classroomUser: PropTypes.object,
   autosave: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   user: state.auth.user,
+  classroomUser: state.classroomAuth.classroomUser,
   autosave: state.workspace.autosave,
 });
 
