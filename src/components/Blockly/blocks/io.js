@@ -13,6 +13,7 @@
 import Blockly from "blockly/core";
 import { selectedBoard } from "../helpers/board";
 import * as Types from "../helpers/types";
+import { getColour } from "../helpers/colour";
 
 Blockly.Blocks["io_digitalwrite"] = {
   /**
@@ -21,7 +22,7 @@ Blockly.Blocks["io_digitalwrite"] = {
    */
   init: function () {
     this.setHelpUrl("http://arduino.cc/en/Reference/DigitalWrite");
-    this.setColour(250);
+    this.setColour(getColour().io);
     this.appendValueInput("STATE")
       .appendField(Blockly.Msg.ARD_DIGITALWRITE)
       .appendField(
@@ -55,7 +56,7 @@ Blockly.Blocks["io_digitalread"] = {
    */
   init: function () {
     this.setHelpUrl("http://arduino.cc/en/Reference/DigitalRead");
-    this.setColour(250);
+    this.setColour(getColour().io);
     this.appendDummyInput()
       .appendField(Blockly.Msg.ARD_DIGITALREAD)
       .appendField(
@@ -89,7 +90,7 @@ Blockly.Blocks["io_builtin_led"] = {
    */
   init: function () {
     this.setHelpUrl("http://arduino.cc/en/Reference/DigitalWrite");
-    this.setColour(250);
+    this.setColour(getColour().io);
     this.appendValueInput("STATE")
       .appendField(Blockly.Msg.ARD_BUILTIN_LED)
       .appendField(
@@ -127,7 +128,7 @@ Blockly.Blocks["io_analogwrite"] = {
    */
   init: function () {
     this.setHelpUrl("http://arduino.cc/en/Reference/AnalogWrite");
-    this.setColour(250);
+    this.setColour(getColour().io);
     this.appendValueInput("NUM")
       .appendField(Blockly.Msg.ARD_ANALOGWRITE)
       .appendField(new Blockly.FieldDropdown(selectedBoard().pwmPins), "PIN")
@@ -158,7 +159,7 @@ Blockly.Blocks["io_analogread"] = {
    */
   init: function () {
     this.setHelpUrl("http://arduino.cc/en/Reference/AnalogRead");
-    this.setColour(250);
+    this.setColour(getColour().io);
     this.appendDummyInput()
       .appendField(Blockly.Msg.ARD_ANALOGREAD)
       .appendField(
@@ -188,7 +189,7 @@ Blockly.Blocks["io_highlow"] = {
    */
   init: function () {
     this.setHelpUrl("http://arduino.cc/en/Reference/Constants");
-    this.setColour(250);
+    this.setColour(getColour().io);
     this.appendDummyInput().appendField(
       new Blockly.FieldDropdown([
         [Blockly.Msg.ARD_HIGH, "HIGH"],
@@ -228,7 +229,7 @@ Blockly.Blocks["io_pulsein"] = {
       ],
       output: Types.NUMBER.typeName,
       inputsInline: true,
-      colour: 250,
+      colour: getColour().io,
       tooltip: Blockly.Msg.ARD_PULSE_TIP,
       helpUrl: "https://www.arduino.cc/en/Reference/PulseIn",
     });
@@ -268,7 +269,7 @@ Blockly.Blocks["io_pulsetimeout"] = {
       ],
       output: Types.NUMBER.typeName,
       inputsInline: true,
-      colour: 250,
+      colour: getColour().io,
       tooltip: Blockly.Msg.ARD_PULSETIMEOUT_TIP,
       helpUrl: "https://www.arduino.cc/en/Reference/PulseIn",
     });
@@ -288,7 +289,7 @@ Blockly.Blocks["io_analogreadmillivolt"] = {
     this.setHelpUrl(
       "https://docs.espressif.com/projects/arduino-esp32/en/latest/api/adc.html"
     );
-    this.setColour(250);
+    this.setColour(getColour().io);
     this.appendDummyInput()
       .appendField(Blockly.Msg.ARD_ANALOGREADMILIVOLT)
       .appendField("Port:")
