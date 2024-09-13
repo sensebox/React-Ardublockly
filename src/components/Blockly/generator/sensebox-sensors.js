@@ -1,4 +1,5 @@
 import Blockly from "blockly";
+import { selectedBoard } from "../helpers/board";
 
 /**
  * HDC1080 Temperature and Humidity Sensor
@@ -854,15 +855,34 @@ Blockly.Arduino.sensebox_soundsensor_dfrobot = function () {
     default: // "IO1_2"
       dropdown_pin = 1;
   }
-  Blockly.Arduino.codeFunctions_["soundsensor"] = `    
-int getSoundValue(int sensorPin) {
-  float v = analogReadMilliVolts(sensorPin) / 1000.0;
-  float decibel;
-  if (v <= 0.6) decibel = 0.0;
-  if (v >= 2.6) decibel = 130.0;
-  else decibel = v * 50.0;
-  return int(decibel);
-}`;
+
+  var board = selectedBoard().title;
+  console.log(board);
+  if (board === "MCU") {
+    Blockly.Arduino.codeFunctions_["soundsensor"] = `    
+  int getSoundValue(int sensorPin) {
+    float v = analogRead(sensorPin) / 1000.0;
+    float decibel;
+    if (v <= 0.6) decibel = 0.0;
+    if (v >= 2.6) decibel = 130.0;
+    else decibel = v * 50.0;
+    return int(decibel);
+  }`;
+  } else {
+    Blockly.Arduino.setupCode_[
+      "soundsensorbegin"
+    ] = `analogReadResolution(13);`;
+    Blockly.Arduino.codeFunctions_["soundsensor"] = `    
+    int getSoundValue(int sensorPin) {
+      float v = analogReadMilliVolts(sensorPin) / 1000.0;
+      float decibel;
+      if (v <= 0.6) decibel = 0.0;
+      if (v >= 2.6) decibel = 130.0;
+      else decibel = v * 50.0;
+      return int(decibel);
+    }`;
+  }
+
   var code = "getSoundValue(" + dropdown_pin + ")";
 
   return [code, Blockly.Arduino.ORDER_ATOMIC];
@@ -1032,7 +1052,7 @@ Blockly.Arduino.sensebox_sensor_truebner_smt50_esp32 = function () {
   var dropdown_pin = 1;
   var code = "";
   Blockly.Arduino.setupCode_["analogReadResolution"] =
-    "analogReadResolution(12);";
+    "analogReadResolution(13);";
 
   if (dropdown_value === "temp") {
     switch (dropdown_port) {
