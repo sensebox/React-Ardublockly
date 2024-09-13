@@ -857,7 +857,6 @@ Blockly.Arduino.sensebox_soundsensor_dfrobot = function () {
   }
 
   var board = selectedBoard().title;
-  console.log(board);
   if (board === "MCU") {
     Blockly.Arduino.codeFunctions_["soundsensor"] = `    
   int getSoundValue(int sensorPin) {
