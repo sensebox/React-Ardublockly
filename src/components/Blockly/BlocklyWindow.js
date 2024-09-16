@@ -38,6 +38,7 @@ class BlocklyWindow extends Component {
     zoomToFit.init();
     // Initialize plugin.
     const backpack = new Backpack(workspace);
+    
     backpack.init();
   }
 
@@ -45,14 +46,13 @@ class BlocklyWindow extends Component {
     const workspace = Blockly.getMainWorkspace();
     var xml = this.props.initialXml;
     if (props.selectedBoard !== this.props.selectedBoard) {
-       xml = localStorage.getItem("autoSaveXML");
+      xml = localStorage.getItem("autoSaveXML");
       // change board
-      if(!xml) xml = initialXml;
+      if (!xml) xml = initialXml;
       var xmlDom = Blockly.Xml.textToDom(xml);
       Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, workspace);
-
     }
- 
+
     // if svg is true, then the update process is done in the BlocklySvg component
     if (props.initialXml !== xml && !this.props.svg) {
       // guarantees that the current xml-code (this.props.initialXml) is rendered
@@ -62,14 +62,15 @@ class BlocklyWindow extends Component {
     }
     if (props.language !== this.props.language) {
       // change language
-       xml = localStorage.getItem("autoSaveXML");
+      xml = localStorage.getItem("autoSaveXML");
       if (!xml) xml = initialXml;
-       xmlDom = Blockly.Xml.textToDom(xml);
+      xmlDom = Blockly.Xml.textToDom(xml);
       Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, workspace);
       // var toolbox = workspace.getToolbox();
       // workspace.updateToolbox(toolbox.toolboxDef_);
     }
     Blockly.svgResize(workspace);
+
   }
 
   render() {

@@ -1,12 +1,11 @@
 import { Block, Value, Field, Shadow, Category, Label } from "..";
 import { getColour } from "../helpers/colour";
 import * as Blockly from "blockly/core";
-  
-  
-  export const ToolboxEsp = () => {
-    return (
-        <>
-        <Category
+
+export const ToolboxEsp = () => {
+  return (
+    <>
+      <Category
         name={Blockly.Msg.toolbox_sensors}
         colour={getColour().sensebox}
       >
@@ -25,7 +24,7 @@ import * as Blockly from "blockly/core";
         <Block type="sensebox_tof_imager" />
         <Block type="sensebox_sensor_sound" />
         <Block type="sensebox_button" />
-        <Block type="sensebox_sensor_truebner_smt50" />
+        <Block type="sensebox_sensor_truebner_smt50_esp32" />
         <Block type="sensebox_sensor_watertemperature" />
         <Block type="sensebox_soundsensor_dfrobot" />
         <Block type="sensebox_multiplexer_init">
@@ -129,14 +128,14 @@ import * as Blockly from "blockly/core";
         <Block type="sensebox_rgb_led"></Block>
         <Block type="sensebox_led" />
       </Category>
-        <Category name="LED Matrix" colour={getColour().sensebox}>
+      <Category name="LED Matrix" colour={getColour().sensebox}>
         <Block type="sensebox_ws2812_matrix_init"></Block>
         <Block type="sensebox_ws2812_matrix_clear" />
         <Block type="sensebox_ws2812_matrix_text" />
         <Block type="sensebox_ws2812_matrix_drawPixel" />
         <Block type="sensebox_ws2812_matrix_showBitmap" />
         <Block type="sensebox_ws2812_matrix_bitmap" />
-        <Block type="sensebox_ws2812_matrix_custom_bitmap" /> 
+        <Block type="sensebox_ws2812_matrix_custom_bitmap" />
         <Block type="sensebox_ws2812_matrix_draw_custom_bitmap_example" />
         <Block type="colour_picker"></Block>
         <Block type="colour_random"></Block>
@@ -366,10 +365,9 @@ import * as Blockly from "blockly/core";
         </Category>
       </Category>
       <Category id="Bluetooth" name="Bluetooth" colour={getColour().sensebox}>
-
-          <Category id="phyphox" name="Phyphox" colour={getColour().phyphox}>
+        <Category id="phyphox" name="Phyphox" colour={getColour().phyphox}>
           <Block type="sensebox_phyphox_init"></Block>
-            <Block type="sensebox_phyphox_experiment">
+          <Block type="sensebox_phyphox_experiment">
             <Value name="view">
               <Block type="sensebox_phyphox_graph">
                 <Value name="channel0">
@@ -395,11 +393,7 @@ import * as Blockly from "blockly/core";
           <Block type="sensebox_ble_init"></Block>
         </Category> */}
       </Category>
-      <Category
-        id="webserver"
-        name="Webserver"
-        colour={getColour().webserver}
-      >
+      <Category id="webserver" name="Webserver" colour={getColour().webserver}>
         <Block type="sensebox_initialize_http_server"></Block>
         <Block type="sensebox_http_on_client_connect"></Block>
         <Block type="sensebox_ip_address"></Block>
@@ -618,14 +612,12 @@ import * as Blockly from "blockly/core";
         custom="PROCEDURE"
       ></Category>
       <Category name={Blockly.Msg.toolbox_advanced} colour={getColour().io}>
-        <Category
-          name={Blockly.Msg.toolbox_serial}
-          colour={getColour().serial}
-        >
+        <Category name={Blockly.Msg.toolbox_serial} colour={getColour().serial}>
           <Block type="init_serial_monitor"></Block>
           <Block type="print_serial_monitor"></Block>
         </Category>
         <Category name={Blockly.Msg.toolbox_io} colour={getColour().io}>
+          <Block type="io_analogreadmillivolt"></Block>
           <Block type="io_digitalwrite"></Block>
           <Block type="io_digitalread"></Block>
           <Block type="io_builtin_led"></Block>
@@ -648,10 +640,7 @@ import * as Blockly from "blockly/core";
             </Value>
           </Block>
         </Category>
-        <Category
-          name={Blockly.Msg.toolbox_motors}
-          colour={getColour().motors}
-        >
+        <Category name={Blockly.Msg.toolbox_motors} colour={getColour().motors}>
           <Block type="sensebox_motors_beginServoMotor" />
           <Block type="sensebox_motors_moveServoMotor">
             <Value name="degrees">
@@ -683,5 +672,6 @@ import * as Blockly from "blockly/core";
           <Block type="watchdog_reset"></Block>
         </Category>
       </Category>
-      </>)}
-  
+    </>
+  );
+};

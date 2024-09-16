@@ -252,7 +252,7 @@ ${
       if (connected == true) {
         // construct the HTTP POST request:
         sprintf_P(buffer,
-                  PSTR("POST /boxes/%s/data HTTP/1.1\nHost: %s\\nContent-Type: "
+                  PSTR("POST /boxes/%s/data HTTP/1.1\\nHost: %s\\nContent-Type: "
                        "text/csv\\nConnection: close\\nContent-Length: %i\\n\\n"),
                   SENSEBOX_ID, server, num_measurements * lengthMultiplikator);
 
@@ -309,8 +309,6 @@ ${
   return code;
 };
 
-
-
 Blockly.Arduino.sensebox_esp32s2_osem_connection = function (Block) {
   var workspace = Blockly.getMainWorkspace();
   var wifi = false;
@@ -349,10 +347,11 @@ Blockly.Arduino.sensebox_esp32s2_osem_connection = function (Block) {
       const char *sensorId;
       float value;
     } measurement;`;
-    if (ssl === "TRUE") {
-      Blockly.Arduino.libraries_["library_wifiClientSecure"] = "#include <WiFiClientSecure.h>";
-      Blockly.Arduino.definitions_["WiFiClient"] = "WiFiClientSecure client;";
-      Blockly.Arduino.definitions_["root_ca"] = `const char* root_ca =
+  if (ssl === "TRUE") {
+    Blockly.Arduino.libraries_["library_wifiClientSecure"] =
+      "#include <WiFiClientSecure.h>";
+    Blockly.Arduino.definitions_["WiFiClient"] = "WiFiClientSecure client;";
+    Blockly.Arduino.definitions_["root_ca"] = `const char* root_ca =
       "-----BEGIN CERTIFICATE-----\\n"
       "MIIFazCCA1OgAwIBAgIRAIIQz7DSQONZRGPgu2OCiwAwDQYJKoZIhvcNAQELBQAw\\n"
       "TzELMAkGA1UEBhMCVVMxKTAnBgNVBAoTIEludGVybmV0IFNlY3VyaXR5IFJlc2Vh\\n"
@@ -383,14 +382,14 @@ Blockly.Arduino.sensebox_esp32s2_osem_connection = function (Block) {
       "4RgqsahDYVvTH9w7jXbyLeiNdd8XM2w9U/t7y0Ff/9yi0GE44Za4rF2LN9d11TPA\\n"
       "mRGunUHBcnWEvgJBQl9nJEiU0Zsnvgc/ubhPgXRR4Xq37Z0j4r7g1SgEEzwxA57d\\n"
       "emyPxgcYxn/eR44/KJ4EBs+lVDR3veyJm+kXQ99b21/+jh5Xos1AnX5iItreGCc=\\n"
-      "-----END CERTIFICATE-----\\n";`
-      Blockly.Arduino.setupCode_["wifiClientSecure_setRootCa"] = "client.setCACert(root_ca);";
-      port = 443;
-    }
-    else if (ssl === "FALSE") {
-      Blockly.Arduino.definitions_["WiFiClient"] = "WiFiClient client;";
-      port = 80;
-    }
+      "-----END CERTIFICATE-----\\n";`;
+    Blockly.Arduino.setupCode_["wifiClientSecure_setRootCa"] =
+      "client.setCACert(root_ca);";
+    port = 443;
+  } else if (ssl === "FALSE") {
+    Blockly.Arduino.definitions_["WiFiClient"] = "WiFiClient client;";
+    port = 80;
+  }
   Blockly.Arduino.definitions_["buffer"] = "char buffer[750];";
   Blockly.Arduino.definitions_[
     "num_measurement"
