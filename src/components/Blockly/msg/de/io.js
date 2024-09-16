@@ -1,6 +1,8 @@
 export const IO = {
-  ARD_ANALOGREAD: "lese analogen Pin#",
+  ARD_ANALOGREAD: "Lese analogen Wert an Port: ",
   ARD_ANALOGREAD_TIP: "Gibt einen Wert zwischen 0 und 1023 zurück",
+  ARD_ANALOGREADMILIVOLT: "Lese analogen Wert in Millivolt an:   ",
+  ARD_ANALOGREADMILIVOLT_TIP: "Gibt einen Wert in mV zurück",
   ARD_ANALOGWRITE: "setzte analogen Pin#",
   ARD_ANALOGWRITE_TIP:
     "Schreibe analogen Wert zwischen 0 und 255 an einen spezifischen PWM Port",

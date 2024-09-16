@@ -15,9 +15,9 @@ const sensebox_mcu = {
     ["C6", "6"],
   ],
   digitalPorts: [
-    ["A", "A"],
-    ["B", "B"],
-    ["C", "C"],
+    ["A", "IO1_2"],
+    ["B", "IO3_4"],
+    ["C", "IO5_6"],
   ],
   digitalPinsLED: [
     ["BUILTIN_1", "7"],
@@ -47,6 +47,14 @@ const sensebox_mcu = {
     ["B4", "4"],
     ["C5", "5"],
     ["C6", "6"],
+  ],
+  oneWire: [
+    ["0", "0"],
+    ["1", "1"],
+    ["2", "2"],
+    ["3", "3"],
+    ["4", "4"],
+    ["5", "5"],
   ],
   pwmPins: [
     ["A1", "1"],
@@ -156,7 +164,7 @@ const sensebox_mini = {
     ["IO2", "2"],
   ],
   digitalPorts: [
-    ["IO1-2", "A"],
+    ["A", "IO1_2"],
   ],
   digitalPinsLED: [
     ["BUILTIN_1", "7"],
@@ -176,6 +184,14 @@ const sensebox_mini = {
     ["IO1", "1"],
     ["IO2", "2"],
 
+  ],
+  oneWire: [
+    ["0", "0"],
+    ["1", "1"],
+    ["2", "2"],
+    ["3", "3"],
+    ["4", "4"],
+    ["5", "5"],
   ],
   pwmPins: [
     ["IO1", "1"],
@@ -275,9 +291,9 @@ const sensebox_esp32 = {
     ["IO7", "7"],
   ],
   digitalPorts: [
-    ["IO2-3", "A"],
-    ["IO4-5", "B"],
-    ["IO6-7", "C"],
+    ["A", "IO3_2"],
+    ["B", "IO5_4"],
+    ["C", "IO7_6"],
   ],
   digitalPinsRGBMatrix: [
     ["A", "2"],
@@ -307,6 +323,14 @@ const sensebox_esp32 = {
     ["IO6", "6"],
     ["IO7", "7"],
 
+  ],
+  oneWire: [
+    ["0", "0"],
+    ["1", "1"],
+    ["2", "2"],
+    ["3", "3"],
+    ["4", "4"],
+    ["5", "5"],
   ],
   pwmPins: [
     ["IO1", "1"],

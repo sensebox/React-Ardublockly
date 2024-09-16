@@ -149,7 +149,7 @@ export const UI = {
 
   warning_file_board: "Der ausgewählte Boardtyp unterscheidet sich von dem Boardtyp des geladenen Projekts. Möglicherweise funktioniert das Projekt nicht wie erwartet.",
   dialog_confirm: "Möchtest du das Projekt aus der XML-Datei wirklich einfügen? Alle aktuellen Blöcke werden gelöscht.",
-
+  warning_old_xml_file: "Die XML-Datei wurde mit einer älteren Version von Blockly erstellt. Standardmäßig wird das Board auf 'senseBox MCU' gesetzt.",
 
 /** Open Project */
   dialog_title: "Blöcke öffnen",
