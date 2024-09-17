@@ -923,6 +923,42 @@ Blockly.Arduino.sensebox_sensor_dps310 = function () {
       code = "";
   }
   return [code, Blockly.Arduino.ORDER_ATOMIC];
+};/**
+ * Infineon DPS310 Pressure Sensor
+ *
+ */
+
+Blockly.Arduino.sensebox_sensor_dps310 = function () {
+  var dropdown_name = this.getFieldValue("NAME");
+  var code = "";
+  var referencePressure = this.getFieldValue("referencePressure");
+  Blockly.Arduino.libraries_[
+    "adafruit_dps310"
+  ] = `#include <Adafruit_DPS310.h> // http://librarymanager/All#Adafruit_DPS310`;
+  Blockly.Arduino.definitions_["define_dps"] = "Adafruit_DPS310 dps;";
+  Blockly.Arduino.setupCode_["dps_begin"] = "dps.begin_I2C(0x76);";
+  Blockly.Arduino.setupCode_["dps_configuration"] = `
+  dps.configurePressure(DPS310_64HZ, DPS310_64SAMPLES);
+  dps.configureTemperature(DPS310_64HZ, DPS310_64SAMPLES);
+  `;
+  Blockly.Arduino.loopCodeOnce_["dps_events"] =
+    "sensors_event_t temp_event, pressure_event;";
+  Blockly.Arduino.loopCodeOnce_["dps_getEvents"] =
+    "dps.getEvents(&temp_event, &pressure_event);";
+  switch (dropdown_name) {
+    case "Temperature":
+      code = "temp_event.temperature";
+      break;
+    case "Pressure":
+      code = "pressure_event.pressure";
+      break;
+    case "Altitude":
+      code = "dps.readAltitude(" + referencePressure + ")";
+      break;
+    default:
+      code = "";
+  }
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
 /**
@@ -976,6 +1012,81 @@ if (time_startsps > time_actualsps + intervalsps) {
 }`;
   var code = `m.mc_${dropdown_name}`;
   return [code, Blockly.Arduino.ORDER_ATOMIC];
+};
+
+/**
+ * SB-041 SolarCharger
+ *
+ */
+Blockly.Arduino.sensebox_sensor_sb041 = function () {
+  var dropdown_name = this.getFieldValue("value");
+  Blockly.Arduino.libraries_["library_wire"] = `#include <Wire.h>`;
+  Blockly.Arduino.variables_["sb041_solar_voltage"] = "float solar_voltage;";
+  Blockly.Arduino.variables_["sb041_battery_voltage"] = "float battery_voltage;";
+  Blockly.Arduino.variables_["sb041_battery_level"] = "int battery_level;";
+  Blockly.Arduino.variables_["sb041_battery_temp"] = "float battery_temp;";
+  Blockly.Arduino.variables_["sb041_battery_status_info"] = "String battery_status_info;";
+  Blockly.Arduino.codeFunctions_["sb041_solar_update"] = `
+void solar_update() {
+  /*
+   * I2C i/f with following info on address 0x32:
+   * - Register 0: cell voltage, 20mV/LSB
+   * - Register 1: input voltage, 100mV/LSB
+   * - Register 2: status bits: [B,I,L3,L2,L1,L0,F,C]
+   *    B=battery present >2.8V
+   *    I=Input voltage present > 4.5V
+   *    L0-L3=battery status LEDs
+   *    F=Fast charge enabled
+   *    C=Charging
+   * - Register 3: temperature in C, signed 8-bit
+   * Thresholds: L0: 3.2V, L1: 3.6V, L2: 3.7V, L3: 3.9V <- somewhere the order
+   * is wrong
+   *
+   * i Switch to slow charge at 8*C Switch to fast charge at 12*C
+   */
+  byte address = 0x32;
+  Wire.beginTransmission(address);
+  byte error = Wire.endTransmission();
+  if (error == 0) {
+    Wire.requestFrom((uint8_t)address, (uint8_t)4);
+    uint vbat = Wire.read();
+    uint vin = Wire.read();
+    uint flags = Wire.read();
+    int temp = (int8_t)(Wire.read());
+    battery_voltage = 0.02 * vbat;
+    solar_voltage = 0.1 * vin;
+    if (flags & 32)
+      battery_level = 4;
+    else if (flags & 16)
+      battery_level = 3;
+    else if (flags & 8)
+      battery_level = 2;
+    else if (flags & 4)
+      battery_level = 1;
+    else
+      battery_level = 0;
+    if (flags & 1)
+      battery_status_info = "charging\\n" + String(flags);
+    else
+      battery_status_info = "not charging\\n";
+    if (flags & 64)
+      battery_status_info += "good input voltage\\n";
+    else
+      battery_status_info += "low input voltage\\n";
+    if (flags & 128)
+      battery_status_info += "battery present";
+    else
+      battery_status_info += "battery missing";
+  } else if (error == 2) {
+    battery_status_info = "solar module not connected";
+  } else if (error) {
+    battery_status_info = "unknown error ";
+    battery_status_info += String(error);
+  }
+}
+  `;
+  Blockly.Arduino.setupCode_["solar_update"] = "solar_update();";
+  return [dropdown_name, Blockly.Arduino.ORDER_ATOMIC];
 };
 
 /**
