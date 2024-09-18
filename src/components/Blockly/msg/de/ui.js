@@ -300,6 +300,8 @@ export const UI = {
   navbar_logout: "Abmelden",
   navbar_settings: "Einstellungen",
   navbar_classroom: "Klassenraum",
+  navbar_admin: "Admin",
+  
 
   /**
    * Codeviewer
