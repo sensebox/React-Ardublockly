@@ -8,6 +8,7 @@ import { Route, Switch, withRouter } from "react-router-dom";
 import PublicRoute from "./PublicRoute";
 import PrivateRoute from "./PrivateRoute";
 import PrivateRouteCreator from "./PrivateRouteCreator";
+import PrivateRouteAdmin from "./PrivateRouteAdmin";
 import IsLoggedRoute from "./IsLoggedRoute";
 
 import Home from "../Home";
@@ -27,6 +28,7 @@ import Faq from "../Faq";
 import CodeEditor from "../CodeEditor/CodeEditor";
 import Classroom from "../Classroom/Classroom";
 import ClassroomHome from "../Classroom/ClassroomHome";
+import AdminDashboard from "../User/AdminDashboard";
 
 class Routes extends Component {
 
@@ -96,6 +98,9 @@ class Routes extends Component {
           <PrivateRoute path="/user" exact>
             <Account />
           </PrivateRoute>
+          <PrivateRouteAdmin path="/admin" exact>
+            <AdminDashboard />
+          </PrivateRouteAdmin>
           {/* Classroom */}
           <PrivateRoute path="/classroom" exact>
             <ClassroomHome />

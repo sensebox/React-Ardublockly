@@ -10,6 +10,7 @@ import boardReducer from './boardReducer';
 import sensorwikiReducer from './sensorwikiReducer';
 import classroomReducer from './classroomReducer';
 import classroomAuthReducer from './classroomAuthReducer';
+import adminReducer from './adminReducer';
 
 export default combineReducers({
   auth: authReducer,
@@ -22,5 +23,6 @@ export default combineReducers({
   message: messageReducer,
   sensorwiki: sensorwikiReducer,
   classroom: classroomReducer,
-  classroomAuth: classroomAuthReducer
+  classroomAuth: classroomAuthReducer,
+  admin: adminReducer,
 });

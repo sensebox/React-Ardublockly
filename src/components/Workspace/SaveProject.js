@@ -144,7 +144,7 @@ class SaveProject extends Component {
         <Tooltip title={this.state.projectType === 'project' ? Blockly.Msg.tooltip_update_project : Blockly.Msg.tooltip_save_project} arrow>
           <IconButton
             className={this.props.classes.button}
-            onClick={this.props.user.blocklyRole !== 'user' && (!this.props.project || this.props.user.email === this.props.project.creator) ? (e) => this.toggleMenu(e) : this.state.projectType === 'project' ? () => this.props.updateProject(this.state.projectType, this.props.project._id) : () => { this.setState({ projectType: 'project' }, () => this.saveProject()) }}
+            onClick={(!this.props.classroomUser && (!this.props.project || this.props.user.email === this.props.project.creator)) ? (e) => this.toggleMenu(e) : this.state.projectType === 'project' ? () => this.props.updateProject(this.state.projectType, this.props.project._id) : () => { this.setState({ projectType: 'project' }, () => this.saveProject()) }}
             size="large">
             <FontAwesomeIcon icon={faSave} size="xs" />
           </IconButton>
@@ -204,7 +204,7 @@ class SaveProject extends Component {
         </Dialog>
       </div>
     );
-  };
+  }
 }
 
 SaveProject.propTypes = {

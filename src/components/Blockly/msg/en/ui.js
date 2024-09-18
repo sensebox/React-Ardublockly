@@ -288,6 +288,7 @@ no_valid_xml_text: "The XML file could not be parsed into blocks. Please check t
   navbar_logout: "Logout",
   navbar_settings: "Settings",
   navbar_classroom: "Classroom",
+  navbar_admin: "Admin",
 
   /**
    * Codeviewer

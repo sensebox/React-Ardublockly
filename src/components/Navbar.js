@@ -511,16 +511,18 @@ class Navbar extends Component {
                 restriction: this.props.isAuthenticated,
               },
               {
-                text: Blockly.Msg.navbar_classroom,
-                icon: faChalkboardTeacher,
-                link: "/classroom",
-                restriction: this.props.isAuthenticated && this.props.user?.blocklyRole !== "user",
+                text: Blockly.Msg.navbar_admin,
+                icon: faUserCircle,
+                link: "/admin",
+                restriction:
+                  this.props.isAuthenticated &&
+                  this.props.user?.blocklyRole === "admin",
               },
               {
                 text: Blockly.Msg.navbar_classroom,
                 icon: faChalkboardTeacher,
-                link: "/classroom/project",
-                restriction: this.props.isAuthenticated,
+                link: "/classroom",
+                restriction: this.props.isAuthenticated && this.props.user?.blocklyRole !== "user",
               },
               { text: "FAQ", icon: faQuestionCircle, link: "/faq" },
               {
