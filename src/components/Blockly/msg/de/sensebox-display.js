@@ -23,7 +23,7 @@ export const DISPLAY = {
     senseBox_display_black: "Schwarz",
     sensebox_display_show: "Zeige auf dem Display",
     sensebox_display_show_tip: "Zeigt den Nachfolgenden Inhalt auf dem Bildschirm",
-    senseBox_dipslay_plotTitle: "Titel",
+    senseBox_display_plotTitle: "Titel",
     senseBox_display_plotDisplay: "Zeichne Diagramm",
     senseBox_display_plotXLabel: "X-Achsen Beschriftung",
     senseBox_display_plotYLabel: "Y-Achsen Beschriftung",
@@ -34,6 +34,7 @@ export const DISPLAY = {
     senseBox_display_plotXTick: "X-Linienabstand",
     senseBox_display_plotYTick: "Y-Linienabstand",
     senseBox_display_plotTimeFrame: "Zeitabschnitt",
+	senseBox_display_plotDisplay_tooltip: "Zeichnet ein Diagramm auf dem Bildschirm. Der 'Titel' steht über dem Diagramm und die 'Achsen Beschriftung' neben der jeweiligen Achse. Die x-Achse zeigt die vergangene Zeit in Sekunden an. Was auf der y-Achse angezeigt wird, definierst du bei 'Wert'. Der x-Wertebereich und der y-Wertebereich definieren, in welchem Bereich die Daten auf dem Bildschirm angezeigt werden sollen. Wird also zum Beispiel ein Wert von 700 gemessen, der y-Wertebereich ist aber nur von 0 bis 500 definiert, wird die Messung nicht angezeigt. Die Linienabstände für x und y geben an, in welchen Abständen auf der Achse Striche und Zahlen gesetzt werden. Hierbei geht es vor allem um Übersichtlichkeit und die Möglichkeit, die Werte grob ablesen zu können. Bedenke hierbei, dass das Display sehr klein ist und deshalb nicht sehr viele Werte anzeigen kann. Der 'Zeitabschnitt' definiert, wie lange die Werte gemessen werden sollen. Nach so vielen Sekunden wird das Diagramm zurückgesetzt und neue Werte werden gemessen und angezeigt. Am besten orientierst du dich hierbei an dem 'x-Wertebereich Ende'. Denn wenn der 'Zeitabschnitt' größer ist, kannst du die Werte nicht mehr auf dem Display sehen. Ist der 'Zeitabschnitt' kleiner oder genauso groß, hast du sehr wenig Zeit, die Werte auf dem Display zu sehen, bevor sie gelöscht werden."
     sensebox_display_fillCircle: "Zeichne Punkt",
     sensebox_display_fillCircle_radius: "Radius",
     senseBox_display_fillCircle_tooltip: "Mit diesem Block kann ein Punkt auf dem Display angezeigt werden. Über die Koordinaten kannst du den Punkt auf dem Display platzieren und mithilfe des Radius die Größe bestimmen.",
