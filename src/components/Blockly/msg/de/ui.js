@@ -193,6 +193,7 @@ export const UI = {
     "Auswahl der Sprache gilt für die gesamte Anwendung. Es kann zwischen Deutsch und Englisch unterschieden werden.",
   settings_language_de: "Deutsch",
   settings_language_en: "Englisch",
+  settings_language_hu: "Ungarisch",
   settings_renderer: "Renderer",
   settings_renderer_text:
     "Der eingestellte Renderer bestimmt das Aussehen der Blöcke. Es kann zwischen 'Geras' und 'Zelos' unterschieden werden, wobei 'Zelos' insbesondere für eine Touch-Anwendung geeignet ist.",
