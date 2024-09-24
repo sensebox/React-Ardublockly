@@ -335,6 +335,7 @@ export const UI = {
   /**
    * Error View
    */
+  suggestion_pre_text: "Versuch es mal mit: ",
 
   display_not_declared:
     "Stelle sicher, dasss du das Display im Setup initialisiert hast.",
