@@ -339,6 +339,11 @@ export const UI = {
     "Your code will now be compiled and then downloaded to your computer",
 
   /**
+   * Error view
+   */
+
+  display_not_declared: "Initialise the display in the setup() function",
+  /**
    * Device Selection
    * */
 
