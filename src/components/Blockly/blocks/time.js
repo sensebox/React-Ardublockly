@@ -104,6 +104,25 @@ Blockly.Blocks["infinite_loop"] = {
   },
 };
 
+Blockly.Blocks["deep_sleep_esp32s2"] = {
+  /**
+   * Enter deep sleep and wake up after specific time.
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.setColour(getColour().time);
+    this.appendDummyInput().appendField();
+    this.setInputsInline(true);
+    this.setPreviousStatement(true);
+    this.appendValueInput("sleep_time")
+      .setCheck(Types.NUMBER.checkList)
+      .appendField(Blockly.Msg.deep_sleep_esp32s2);
+      this.appendDummyInput().appendField(Blockly.Msg.deep_sleep_esp32s2_unit);
+    this.setHelpUrl(deep_sleep_esp32s2_tooltip);
+    this.setTooltip(deep_sleep_esp32s2_helpurl);
+  },
+};
+
 // Blockly.Blocks["sensebox_interval_timer"] = {
 //   init: function () {
 //     this.setTooltip(Blockly.Msg.senseBox_interval_timer_tip);

@@ -19,6 +19,7 @@ export const ToolboxEsp = () => {
         <Block type="sensebox_sensor_dps310" />
         <Block type="sensebox_sensor_bme680_bsec" />
         <Block type="sensebox_scd30" />
+        <Block type="sensebox_sensor_sb041" />
         <Block type="sensebox_gps" />
         <Block type="sensebox_sensor_ultrasonic_ranger" />
         <Block type="sensebox_tof_imager" />
@@ -486,6 +487,7 @@ export const ToolboxEsp = () => {
         <Block type="time_millis"></Block>
         <Block type="time_micros"></Block>
         <Block type="infinite_loop"></Block>
+        <Block type="deep_sleep_esp32s2"></Block>
         <Block type="sensebox_interval_timer"></Block>
         <Category
           id="time"

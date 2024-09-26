@@ -91,6 +91,20 @@ Blockly.Arduino["infinite_loop"] = function (block) {
 //   return code;
 // };
 
+/**
+ * Code generator for deep sleep of ESP32-S2
+ * @param {!Blockly.Block} block Block to generate the code from.
+ * @return {string} Completed code.
+ */
+Blockly.Arduino["deep_sleep_esp32s2"] = function (block) {
+  Blockly.Arduino.libraries_["library_wire"] = `#include <Wire.h>`;
+  Blockly.Arduino.variables_["sb041_solar_voltage"] = "float solar_voltage;";
+  Blockly.Arduino.variables_["sb041_battery_voltage"] = "float battery_voltage;";
+  Blockly.Arduino.variables_["sb041_battery_level"] = "int battery_level;";
+  Blockly.Arduino.variables_["sb041_battery_temp"] = "float battery_temp;";
+  return "while(true);\n";
+};
+
 Blockly.Arduino.sensebox_interval_timer = function (block) {
   var intervalTime = this.getFieldValue("interval");
   var intervalName = this.getFieldValue("name");
