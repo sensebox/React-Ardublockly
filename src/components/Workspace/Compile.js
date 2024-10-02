@@ -20,6 +20,7 @@ import Copy from "../copy.svg";
 import MuiDrawer from "@mui/material/Drawer";
 import Dialog from "../Dialog";
 import copyesp32 from "../copy_esp32.svg";
+import { ErrorView } from "../CodeEditor/ErrorView";
 const styles = (theme) => ({
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
@@ -48,7 +49,7 @@ const styles = (theme) => ({
 const Drawer = withStyles((theme) => ({
   paperAnchorBottom: {
     backgroundColor: "black",
-    height: "20vH",
+    height: "30vH",
   },
 }))(MuiDrawer);
 
@@ -283,35 +284,7 @@ class Compile extends Component {
           open={this.state.open}
           onClose={this.toggleDrawer("bottom", false)}
         >
-          <h2
-            style={{
-              color: "#4EAF47",
-              paddingLeft: "1rem",
-              paddingRight: "1rem",
-            }}
-          >
-            {Blockly.Msg.drawer_ideerror_head}
-          </h2>
-          <p
-            style={{
-              color: "#4EAF47",
-              paddingLeft: "1rem",
-              paddingRight: "1rem",
-            }}
-          >
-            {Blockly.Msg.drawer_ideerror_text}
-          </p>
-          <Divider style={{ backgroundColor: "white" }} />
-          <p
-            style={{
-              backgroundColor: "black",
-              color: "#E47128",
-              padding: "1rem",
-            }}
-          >
-            {" "}
-            {`${this.state.error}`}{" "}
-          </p>
+          <ErrorView error={this.state.error} />
         </Drawer>
         <Dialog
           style={{ zIndex: 9999999 }}
