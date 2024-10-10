@@ -136,7 +136,7 @@ class Compile extends Component {
         this.state.name
       );
       this.setState({
-        link: `blocklyconnect-app://sketch/${filename}/${this.state.id}`,
+        link: `blocklyconnect-app://sketch/${filename}/${this.state.id}/${this.props.selectedBoard}`,
       });
       this.setState({ appDialog: true });
     } else {
