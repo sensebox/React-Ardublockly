@@ -58,7 +58,7 @@ Blockly.Blocks["sensebox_display_printDisplay"] = {
       .setCheck(null);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setTooltip(Blockly.Msg.senseBox_display_plotDisplay_tooltip);
+    this.setTooltip(Blockly.Msg.senseBox_display_printDisplay_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_display_helpurl);
   },
   /**
@@ -184,7 +184,7 @@ Blockly.Blocks["sensebox_display_plotDisplay"] = {
       .setCheck(null);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setTooltip(Blockly.Msg.senseBox_display_printDisplay_tooltip);
+    this.setTooltip(Blockly.Msg.senseBox_display_plotDisplay_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_display_helpurl);
   },
   /**
