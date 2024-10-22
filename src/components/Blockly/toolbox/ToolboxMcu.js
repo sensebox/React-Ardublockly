@@ -1,4 +1,4 @@
-import { Block, Value, Field, Shadow, Category, Sep, Label } from "..";
+import { Block, Value, Field, Statement, Shadow, Category, Sep, Label } from "..";
 import { getColour } from "../helpers/colour";
 import * as Blockly from "blockly/core";
   
@@ -19,7 +19,6 @@ import * as Blockly from "blockly/core";
         <Block type="sensebox_sensor_dps310" />
         <Block type="sensebox_sensor_bme680_bsec" />
         <Block type="sensebox_scd30" />
-        <Block type="sensebox_sensor_sb041" />
         <Block type="sensebox_gps" />
         <Block type="sensebox_sensor_ultrasonic_ranger" />
         <Block type="sensebox_sensor_sound" />
@@ -356,6 +355,31 @@ import * as Blockly from "blockly/core";
           <Block type="sensebox_lora_cayenne_accelerometer" />
           <Block type="sensebox_lora_cayenne_gps" />
         </Category>
+      </Category>
+      <Category id="sensebox_solar" name="Solar" colour={getColour().solar}>
+        <Block type="sensebox_solar_charger_sb041"/>
+        <Block type="sensebox_solar_deep_sleep"/>
+        <Block type="controls_ifelse">
+          <Value name="IF0">
+            <Block type="logic_compare">
+              <Field name="OP">LTE</Field>
+              <Value name="A">
+                <Block type="sensebox_solar_charger_sb041"/>
+              </Value>
+              <Value name="B">
+                <Block type="math_number">
+                  <Field name="NUM">2</Field>
+                </Block>
+              </Value>
+            </Block>
+          </Value>
+          <Statement name="DO0">
+            <Block type="sensebox_solar_deep_sleep"/>
+          </Statement>
+          <Statement name="ELSE">
+            <Block type="sensebox_solar_deep_sleep"/>
+          </Statement>
+        </Block>
       </Category>
       <Category id="phyphox" name="Phyphox" colour={getColour().phyphox}>
         <Block type="sensebox_phyphox_init"></Block>

@@ -27,18 +27,6 @@ export const SENSORS = {
   senseBox_sensor_dps310_helpurl: "",
 
   /**
-   * SB-041
-   */
-  senseBox_sensor_sb041: "Solarladeregler (SB-041)",
-  senseBox_sensor_sb041_solar_voltage: "Spannung der Solarplatte in V",
-  senseBox_sensor_sb041_battery_voltage: "Spannung der Batterie in V",
-  senseBox_sensor_sb041_battery_level: "Ladelevel der batterie in 1/4",
-  senseBox_sensor_sb041_battery_temp: "Temperatur der Batterie in C",
-  senseBox_sensor_sb041_tooltip:
-    "Schließe den Sensor an einen der **I2C-Anschlüsse** an. Der Sensor gibt dir den Messwert für den Luftdruck in hPa. Um die korrekte Höhe über NN zu berechnen benötigt der Sensor einen aktuellen Referenzwert.",
-  senseBox_sensor_sb041_helpurl: "",
-
-  /**
    * Mikro
    */
   senseBox_sound: "Mikrofon",
