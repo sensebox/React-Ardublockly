@@ -682,33 +682,6 @@ Blockly.Blocks["sensebox_sensor_sps30"] = {
 };
 
 /**
- * SB-041 SolarCharger
- */
-
-Blockly.Blocks["sensebox_sensor_sb041"] = {
-  init: function () {
-    this.appendDummyInput().appendField(Blockly.Msg.senseBox_sensor_sb041);
-    this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
-      .appendField(Blockly.Msg.senseBox_value)
-      .appendField(
-        new Blockly.FieldDropdown([
-          [Blockly.Msg.senseBox_sensor_sb041_solar_voltage, "solar_voltage"],
-          [Blockly.Msg.senseBox_sensor_sb041_battery_voltage, "battery_voltage"],
-          [Blockly.Msg.senseBox_sensor_sb041_battery_level, "battery_level"],
-          [Blockly.Msg.senseBox_sensor_sb041_battery_temp, "battery_temp"],
-          // [Blockly.Msg.senseBox_sensor_sb041_battery_status_info, "battery_status_info"],
-        ]),
-        "value"
-      )
-    this.setOutput(true, Types.DECIMAL.typeName);
-    this.setColour(getColour().sensebox);
-    this.setTooltip(Blockly.Msg.senseBox_sensor_sb041_tooltip);
-    this.setHelpUrl(Blockly.Msg.senseBox_sensor_sb041_helpurl);
-  },
-};
-
-/**
  * senseBox-MCU-S2 onBoard Light Sensor
  *
  *
