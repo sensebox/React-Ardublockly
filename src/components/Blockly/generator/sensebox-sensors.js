@@ -851,7 +851,7 @@ Blockly.Arduino.sensebox_soundsensor_dfrobot = function () {
   }
 
   var board = selectedBoard().title;
-  if (board === "MCU") {
+  if (board === "MCU" || board === "Mini") {
     Blockly.Arduino.codeFunctions_["soundsensor"] = `    
   int getSoundValue(int sensorPin) {
     float v = analogRead(sensorPin) / 1000.0;
