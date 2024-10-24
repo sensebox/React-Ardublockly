@@ -11,7 +11,7 @@ import BlocklyWindow from "../Blockly/BlocklyWindow";
 import Snackbar from "../Snackbar";
 import WorkspaceFunc from "../Workspace/WorkspaceFunc";
 
-import withStyles from '@mui/styles/withStyles';
+import withStyles from "@mui/styles/withStyles";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Divider from "@mui/material/Divider";
@@ -61,8 +61,9 @@ class ProjectHome extends Component {
         this.setState({
           snackbar: true,
           key: Date.now(),
-          message: `Dein angefragtes ${type === "gallery" ? "Galerie-" : ""
-            }Projekt konnte nicht gefunden werden.`,
+          message: `Dein angefragtes ${
+            type === "gallery" ? "Galerie-" : ""
+          }Projekt konnte nicht gefunden werden.`,
           type: "error",
         });
       }
@@ -128,13 +129,20 @@ class ProjectHome extends Component {
                         }}
                       >
                         <Link
-                          to={`/${data === "Projekte" ? "project" : "gallery"
-                            }/${project._id}`}
-                          style={{ textDecoration: "none", color: "inherit" }}
+                          to={`/${
+                            data === "Projekte" ? "project" : "gallery"
+                          }/${project._id}`}
+                          style={{
+                            textDecoration: "none",
+                            color: "inherit",
+                          }}
                         >
                           <h3 style={{ marginTop: 0 }}>{project.title}</h3>
                           <Divider
-                            style={{ marginTop: "1rem", marginBottom: "10px" }}
+                            style={{
+                              marginTop: "1rem",
+                              marginBottom: "10px",
+                            }}
                           />
                           {/* <BlocklyWindow
                             svg
@@ -153,7 +161,7 @@ class ProjectHome extends Component {
                           </Typography>
                         </Link>
                         {this.props.user &&
-                          this.props.user.email === project.creator ? (
+                        this.props.user.email === project.creator ? (
                           <div>
                             <Divider
                               style={{
@@ -161,13 +169,17 @@ class ProjectHome extends Component {
                                 marginBottom: "10px",
                               }}
                             />
-                            <div style={{ float: "right" }}>
+                            <div
+                              style={{
+                                float: "right",
+                              }}
+                            >
                               <WorkspaceFunc
                                 multiple
                                 project={project}
                                 projectType={this.props.location.pathname.replace(
                                   "/",
-                                  ""
+                                  "",
                                 )}
                               />
                             </div>

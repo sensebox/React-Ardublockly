@@ -30,7 +30,7 @@ Blockly.Blocks["array_getIndex"] = {
     this.setColour(getColour().arrays);
     this.appendDummyInput().appendField(
       new Blockly.FieldVariable("X", null, ["Array"], "Array"),
-      "FIELDNAME"
+      "FIELDNAME",
     );
     this.setOutput(true, Types.ARRAY.typeName);
     this.setTooltip(Blockly.Msg.ARD_TIME_MILLIS_TIP);

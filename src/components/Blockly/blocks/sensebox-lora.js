@@ -91,7 +91,7 @@ Blockly.Blocks["sensebox_send_lora_sensor_value"] = {
     this.setHelpUrl("");
     this.setColour(getColour().sensebox);
     this.appendValueInput("Value").appendField(
-      Blockly.Msg.senseBox_measurement
+      Blockly.Msg.senseBox_measurement,
     );
     this.appendDummyInput()
       .setAlign(Blockly.ALIGN_LEFT)
@@ -140,9 +140,9 @@ Blockly.Blocks["sensebox_lora_ttn_mapper"] = {
             ["1", "1"],
             ["2", "2"],
             ["3", "3"],
-          ].reverse()
+          ].reverse(),
         ),
-        "dropdown"
+        "dropdown",
       );
     // reverse() because i want 3 be be at first and i'm to lazy to write the array again
     this.appendValueInput("Latitude")
@@ -181,7 +181,7 @@ Blockly.Blocks["sensebox_lora_cayenne_temperature"] = {
     this.setHelpUrl("");
     this.setColour(getColour().sensebox);
     this.appendValueInput("Value").appendField(
-      Blockly.Msg.senseBox_LoRa_cayenne_temperature
+      Blockly.Msg.senseBox_LoRa_cayenne_temperature,
     );
     this.appendDummyInput()
       .setAlign(Blockly.ALIGN_LEFT)
@@ -198,7 +198,7 @@ Blockly.Blocks["sensebox_lora_cayenne_humidity"] = {
     this.setHelpUrl("");
     this.setColour(getColour().sensebox);
     this.appendValueInput("Value").appendField(
-      Blockly.Msg.senseBox_LoRa_cayenne_humidity
+      Blockly.Msg.senseBox_LoRa_cayenne_humidity,
     );
     this.appendDummyInput()
       .setAlign(Blockly.ALIGN_LEFT)
@@ -215,7 +215,7 @@ Blockly.Blocks["sensebox_lora_cayenne_pressure"] = {
     this.setHelpUrl("");
     this.setColour(getColour().sensebox);
     this.appendValueInput("Value").appendField(
-      Blockly.Msg.senseBox_LoRa_cayenne_pressure
+      Blockly.Msg.senseBox_LoRa_cayenne_pressure,
     );
     this.appendDummyInput()
       .setAlign(Blockly.ALIGN_LEFT)
@@ -232,7 +232,7 @@ Blockly.Blocks["sensebox_lora_cayenne_luminosity"] = {
     this.setHelpUrl("");
     this.setColour(getColour().sensebox);
     this.appendValueInput("Value").appendField(
-      Blockly.Msg.senseBox_LoRa_cayenne_luminosity
+      Blockly.Msg.senseBox_LoRa_cayenne_luminosity,
     );
     this.appendDummyInput()
       .setAlign(Blockly.ALIGN_LEFT)
@@ -249,7 +249,7 @@ Blockly.Blocks["sensebox_lora_cayenne_sensor"] = {
     this.setHelpUrl("");
     this.setColour(getColour().sensebox);
     this.appendValueInput("Value").appendField(
-      Blockly.Msg.senseBox_LoRa_cayenne_analog
+      Blockly.Msg.senseBox_LoRa_cayenne_analog,
     );
     this.appendDummyInput()
       .setAlign(Blockly.ALIGN_LEFT)
@@ -283,13 +283,13 @@ Blockly.Blocks["sensebox_lora_cayenne_gps"] = {
     this.setHelpUrl("");
     this.setColour(getColour().sensebox);
     this.appendValueInput("LAT").appendField(
-      Blockly.Msg.senseBox_LoRa_cayenne_lat
+      Blockly.Msg.senseBox_LoRa_cayenne_lat,
     );
     this.appendValueInput("LNG").appendField(
-      Blockly.Msg.senseBox_LoRa_cayenne_lng
+      Blockly.Msg.senseBox_LoRa_cayenne_lng,
     );
     this.appendValueInput("ALT").appendField(
-      Blockly.Msg.senseBox_LoRa_cayenne_alt
+      Blockly.Msg.senseBox_LoRa_cayenne_alt,
     );
     this.appendDummyInput()
       .setAlign(Blockly.ALIGN_LEFT)
@@ -307,7 +307,7 @@ Blockly.Blocks["sensebox_lora_cayenne_concentration"] = {
     this.setHelpUrl("");
     this.setColour(getColour().sensebox);
     this.appendValueInput("Value").appendField(
-      Blockly.Msg.senseBox_LoRa_cayenne_concentration
+      Blockly.Msg.senseBox_LoRa_cayenne_concentration,
     );
     this.appendDummyInput()
       .setAlign(Blockly.ALIGN_LEFT)

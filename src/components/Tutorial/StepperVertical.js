@@ -7,7 +7,7 @@ import { withRouter } from "react-router-dom";
 
 import clsx from "clsx";
 import { alpha } from "@mui/material/styles";
-import withStyles from '@mui/styles/withStyles';
+import withStyles from "@mui/styles/withStyles";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
@@ -67,7 +67,7 @@ class StepperVertical extends Component {
     var steps = this.props.steps;
     var activeStep = this.props.activeStep;
     var tutorialStatus = this.props.status.filter(
-      (status) => status._id === this.props.tutorial._id
+      (status) => status._id === this.props.tutorial._id,
     )[0];
     return (
       <div style={{ marginRight: "10px" }}>
@@ -79,7 +79,7 @@ class StepperVertical extends Component {
         >
           {steps.map((step, i) => {
             var tasksIndex = tutorialStatus.tasks.findIndex(
-              (task) => task._id === step._id
+              (task) => task._id === step._id,
             );
             var taskType =
               tasksIndex > -1 ? tutorialStatus.tasks[tasksIndex].type : null;
@@ -87,8 +87,8 @@ class StepperVertical extends Component {
               taskType === "success"
                 ? "Success"
                 : taskType === "error"
-                ? "Error"
-                : "Other";
+                  ? "Error"
+                  : "Other";
             return (
               <Step key={i}>
                 <Tooltip title={step.headline} placement="right" arrow>
@@ -96,7 +96,10 @@ class StepperVertical extends Component {
                     style={
                       i === activeStep
                         ? { padding: "5px 0" }
-                        : { padding: "5px 0", cursor: "pointer" }
+                        : {
+                            padding: "5px 0",
+                            cursor: "pointer",
+                          }
                     }
                     onClick={
                       i === activeStep
@@ -120,21 +123,21 @@ class StepperVertical extends Component {
                                   ],
                                   this.props.classes[
                                     "stepIconActive" + taskStatus
-                                  ]
+                                  ],
                                 )
                               : clsx(
                                   this.props.classes.stepIcon,
                                   this.props.classes.stepIconLarge,
                                   this.props.classes[
                                     "stepIconLarge" + taskStatus
-                                  ]
+                                  ],
                                 )
                             : i === activeStep
-                            ? clsx(
-                                this.props.classes.stepIcon,
-                                this.props.classes.stepIconActiveOther
-                              )
-                            : clsx(this.props.classes.stepIcon),
+                              ? clsx(
+                                  this.props.classes.stepIcon,
+                                  this.props.classes.stepIconActiveOther,
+                                )
+                              : clsx(this.props.classes.stepIcon),
                       }}
                     ></StepLabel>
                   </div>
@@ -164,5 +167,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, { tutorialStep })(
-  withRouter(withStyles(styles, { withTheme: true })(StepperVertical))
+  withRouter(withStyles(styles, { withTheme: true })(StepperVertical)),
 );

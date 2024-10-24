@@ -21,7 +21,7 @@ Blockly.Blocks["sensebox_sensor_temp_hum"] = {
           [Blockly.Msg.senseBox_temp, "Temperature"],
           [Blockly.Msg.senseBox_hum, "Humidity"],
         ]),
-        "NAME"
+        "NAME",
       );
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);
@@ -47,7 +47,7 @@ Blockly.Blocks["sensebox_sensor_uv_light"] = {
           [Blockly.Msg.senseBox_light, "Illuminance"],
           [Blockly.Msg.senseBox_uv, "UvIntensity"],
         ]),
-        "NAME"
+        "NAME",
       );
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);
@@ -64,7 +64,7 @@ BMX055 Three differen Blocks for Accelerometer, Gyroscope, Compass
 Blockly.Blocks["sensebox_sensor_bmx055_accelerometer"] = {
   init: function () {
     this.appendDummyInput().appendField(
-      Blockly.Msg.senseBox_bmx055_accelerometer
+      Blockly.Msg.senseBox_bmx055_accelerometer,
     );
     this.appendDummyInput()
       .setAlign(Blockly.ALIGN_LEFT)
@@ -76,7 +76,7 @@ Blockly.Blocks["sensebox_sensor_bmx055_accelerometer"] = {
           [Blockly.Msg.senseBox_bmx055_accelerometer_direction_z, "Z"],
           [Blockly.Msg.senseBox_bmx055_accelerometer_direction_total, "Total"],
         ]),
-        "VALUE"
+        "VALUE",
       );
     this.appendDummyInput()
       .setAlign(Blockly.ALIGN_LEFT)
@@ -88,7 +88,7 @@ Blockly.Blocks["sensebox_sensor_bmx055_accelerometer"] = {
           [Blockly.Msg.senseBox_bmx055_accelerometer_range_8g, "0x8"],
           [Blockly.Msg.senseBox_bmx055_accelerometer_range_16g, "0x0C"],
         ]),
-        "RANGE"
+        "RANGE",
       );
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);
@@ -114,12 +114,12 @@ Blockly.Blocks["sensebox_sensor_sds011"] = {
           [Blockly.Msg.senseBox_sds011_pm25, "25"],
           [Blockly.Msg.senseBox_sds011_pm10, "10"],
         ]),
-        "NAME"
+        "NAME",
       )
       .appendField(Blockly.Msg.senseBox_sds011_dimension)
       .appendField(
         new Blockly.FieldDropdown(selectedBoard().serialSensors),
-        "SERIAL"
+        "SERIAL",
       );
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);
@@ -142,7 +142,7 @@ Blockly.Blocks["sensebox_sensor_pressure"] = {
       [Blockly.Msg.senseBox_gps_alt, "Altitude"],
     ];
     var dropdown = new Blockly.FieldDropdown(dropdownOptions, function (
-      option
+      option,
     ) {
       var input =
         option === "Pressure" ||
@@ -163,7 +163,7 @@ Blockly.Blocks["sensebox_sensor_pressure"] = {
     this.getField("NAME").setValidator(
       function (val) {
         this.updateShape_(val === "Altitude");
-      }.bind(this)
+      }.bind(this),
     );
   },
   updateShape_(isAltitude) {
@@ -223,7 +223,7 @@ Blockly.Blocks["sensebox_sensor_ultrasonic_ranger"] = {
       function (option) {
         var input = option === "A" || option === "B" || option === "C";
         this.sourceBlock_.updateShape_(input);
-      }
+      },
     );
 
     this.setColour(getColour().sensebox);
@@ -235,12 +235,12 @@ Blockly.Blocks["sensebox_sensor_ultrasonic_ranger"] = {
       .appendField(Blockly.Msg.senseBox_ultrasonic_trigger)
       .appendField(
         new Blockly.FieldDropdown(selectedBoard().digitalPins),
-        "ultrasonic_trigger"
+        "ultrasonic_trigger",
       )
       .appendField(Blockly.Msg.senseBox_ultrasonic_echo)
       .appendField(
         new Blockly.FieldDropdown(selectedBoard().digitalPins),
-        "ultrasonic_echo"
+        "ultrasonic_echo",
       );
     this.appendDummyInput("maxDistance")
       .appendField(Blockly.Msg.senseBox_ultrasonic_maxDistance)
@@ -332,7 +332,7 @@ Blockly.Blocks["sensebox_tof_imager"] = {
     this.getField("dropdown").setValidator(
       function (val) {
         this.updateShape_(val === "DistanzBM");
-      }.bind(this)
+      }.bind(this),
     );
   },
   updateShape_(isAltitude) {
@@ -365,7 +365,7 @@ Blockly.Blocks["sensebox_sensor_sound"] = {
       .appendField("Pin:")
       .appendField(
         new Blockly.FieldDropdown(selectedBoard().analogPins),
-        "PIN"
+        "PIN",
       );
     this.setOutput(true, Types.NUMBER.typeName);
     this.setHelpUrl(Blockly.Msg.senseBox_sound_helpurl);
@@ -390,12 +390,12 @@ Blockly.Blocks["sensebox_button"] = {
           [Blockly.Msg.senseBox_button_longPress, "longPress"],
           [Blockly.Msg.senseBox_button_switch, "toggleButton"],
         ]),
-        "FUNCTION"
+        "FUNCTION",
       )
       .appendField("Pin:")
       .appendField(
         new Blockly.FieldDropdown(selectedBoard().digitalPinsButton),
-        "PIN"
+        "PIN",
       );
     this.setOutput(true, Types.BOOLEAN.typeName);
     this.setColour(getColour().sensebox);
@@ -403,7 +403,7 @@ Blockly.Blocks["sensebox_button"] = {
     this.getField("FUNCTION").setValidator(
       function (val) {
         this.updateShape_(val === "longPress");
-      }.bind(this)
+      }.bind(this),
     );
   },
   updateShape_(isLongPress) {
@@ -493,7 +493,7 @@ Blockly.Blocks["sensebox_sensor_truebner_smt50"] = {
       .appendField("Port:")
       .appendField(
         new Blockly.FieldDropdown(selectedBoard().digitalPorts),
-        "Port"
+        "Port",
       );
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_value)
@@ -502,7 +502,7 @@ Blockly.Blocks["sensebox_sensor_truebner_smt50"] = {
           [Blockly.Msg.senseBox_temp, "temp"],
           [Blockly.Msg.senseBox_soil, "soil"],
         ]),
-        "value"
+        "value",
       );
     this.setOutput(true, Types.NUMBER.typeName);
     this.setTooltip(Blockly.Msg.senseBox_smt50_tooltip);
@@ -523,7 +523,7 @@ Blockly.Blocks["sensebox_sensor_truebner_smt50_esp32"] = {
       .appendField("Port:")
       .appendField(
         new Blockly.FieldDropdown(selectedBoard().digitalPorts),
-        "Port"
+        "Port",
       );
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_value)
@@ -532,7 +532,7 @@ Blockly.Blocks["sensebox_sensor_truebner_smt50_esp32"] = {
           [Blockly.Msg.senseBox_temp, "temp"],
           [Blockly.Msg.senseBox_soil, "soil"],
         ]),
-        "value"
+        "value",
       );
     this.setOutput(true, Types.NUMBER.typeName);
     this.setTooltip(Blockly.Msg.senseBox_smt50_tooltip);
@@ -554,7 +554,7 @@ Blockly.Blocks["sensebox_sensor_watertemperature"] = {
       .appendField("Port:")
       .appendField(
         new Blockly.FieldDropdown(selectedBoard().digitalPorts),
-        "Port"
+        "Port",
       )
       .appendField("Index:")
       .appendField(new Blockly.FieldDropdown(selectedBoard().oneWire), "Index");
@@ -593,7 +593,7 @@ Blockly.Blocks["sensebox_soundsensor_dfrobot"] = {
       .appendField("Port:")
       .appendField(
         new Blockly.FieldDropdown(selectedBoard().digitalPorts),
-        "Port"
+        "Port",
       );
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setTooltip(Blockly.Msg.senseBox_soundsensor_dfrobot_tooltip);
@@ -614,7 +614,7 @@ Blockly.Blocks["sensebox_sensor_dps310"] = {
       [Blockly.Msg.senseBox_gps_alt, "Altitude"],
     ];
     var dropdown = new Blockly.FieldDropdown(dropdownOptions, function (
-      option
+      option,
     ) {
       var input =
         option === "Pressure" ||
@@ -635,7 +635,7 @@ Blockly.Blocks["sensebox_sensor_dps310"] = {
     this.getField("NAME").setValidator(
       function (val) {
         this.updateShape_(val === "Altitude");
-      }.bind(this)
+      }.bind(this),
     );
   },
   updateShape_(isAltitude) {
@@ -671,7 +671,7 @@ Blockly.Blocks["sensebox_sensor_sps30"] = {
           [Blockly.Msg.senseBox_sps30_4p0, "4p0"],
           [Blockly.Msg.senseBox_sps30_10p0, "10p0"],
         ]),
-        "value"
+        "value",
       )
       .appendField(Blockly.Msg.senseBox_sps30_dimension);
     this.setOutput(true, Types.DECIMAL.typeName);
@@ -697,7 +697,7 @@ Blockly.Blocks["sensebox_esp32s2_light"] = {
         new Blockly.FieldDropdown([
           [Blockly.Msg.senseBox_esp32_photodiode, "Light intensity"],
         ]),
-        "NAME"
+        "NAME",
       );
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);
@@ -725,7 +725,7 @@ Blockly.Blocks["sensebox_esp32s2_mpu6050"] = {
           ["Z", "accelerationZ"],
           [Blockly.Msg.senseBox_temp, "temperature"],
         ]),
-        "value"
+        "value",
       );
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);

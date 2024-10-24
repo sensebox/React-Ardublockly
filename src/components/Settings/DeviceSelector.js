@@ -26,7 +26,11 @@ class DeviceSelector extends Component {
           {Blockly.Msg.settings_board}
         </Typography>
         <FormHelperText
-          style={{ color: "black", lineHeight: 1.3, marginBottom: "8px" }}
+          style={{
+            color: "black",
+            lineHeight: 1.3,
+            marginBottom: "8px",
+          }}
         >
           {Blockly.Msg.settings_board_text}
         </FormHelperText>

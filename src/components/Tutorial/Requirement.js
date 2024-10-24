@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import clsx from "clsx";
 import { withRouter, Link } from "react-router-dom";
 import { alpha } from "@mui/material/styles";
-import withStyles from '@mui/styles/withStyles';
+import withStyles from "@mui/styles/withStyles";
 import Typography from "@mui/material/Typography";
 import List from "@mui/material/List";
 import Tooltip from "@mui/material/Tooltip";
@@ -66,7 +66,7 @@ class Requirement extends Component {
           {tutorialIds.map((tutorialId, i) => {
             var title = requirements[i].title;
             var status = this.props.status.filter(
-              (status) => status._id === tutorialId
+              (status) => status._id === tutorialId,
             )[0];
             var tasks = status.tasks;
             var error =
@@ -96,17 +96,26 @@ class Requirement extends Component {
                     error
                       ? `Mind. eine Aufgabe im Tutorial wurde nicht richtig gelöst.`
                       : success === 1
-                      ? `Das Tutorial wurde bereits erfolgreich abgeschlossen.`
-                      : `Das Tutorial ist zu ${success * 100}% abgeschlossen.`
+                        ? `Das Tutorial wurde bereits erfolgreich abgeschlossen.`
+                        : `Das Tutorial ist zu ${success * 100}% abgeschlossen.`
                   }
                   arrow
                 >
                   <div>
                     <div
                       className={clsx(this.props.classes.outerDiv)}
-                      style={{ width: "50px", height: "50px", border: 0 }}
+                      style={{
+                        width: "50px",
+                        height: "50px",
+                        border: 0,
+                      }}
                     >
-                      <svg style={{ width: "100%", height: "100%" }}>
+                      <svg
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                        }}
+                      >
                         {error || success === 1 ? (
                           <circle
                             className={
@@ -156,8 +165,8 @@ class Requirement extends Component {
                         tutorialStatus === "Error"
                           ? this.props.classes.outerDivError
                           : tutorialStatus === "Success"
-                          ? this.props.classes.outerDivSuccess
-                          : null
+                            ? this.props.classes.outerDivSuccess
+                            : null,
                       )}
                     >
                       <div className={this.props.classes.innerDiv}>
@@ -166,7 +175,6 @@ class Requirement extends Component {
                             icon={
                               tutorialStatus === "Success" ? faCheck : faTimes
                             }
-                            
                           />
                         ) : (
                           <Typography
@@ -230,5 +238,5 @@ const mapStateToProps = (state) => ({
 
 export default connect(
   mapStateToProps,
-  null
+  null,
 )(withStyles(styles, { withTheme: true })(withRouter(Requirement)));

@@ -24,7 +24,7 @@ class AutoSave extends Component {
     this.setState({
       timeout: resetTimeout(
         this.state.timeout,
-        setTimeout(this.saveValue, 400)
+        setTimeout(this.saveValue, 400),
       ),
       value: value,
     });
@@ -36,8 +36,7 @@ class AutoSave extends Component {
     setTimeout(() => this.setState({ ...this.state, saved: false }), 1000);
   };
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   componentDidUpdate(prevProps) {
     if (prevProps.xml !== this.props.xml) {
