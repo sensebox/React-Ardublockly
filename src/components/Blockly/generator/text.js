@@ -29,7 +29,7 @@ Blockly.Arduino["text_join"] = function (block) {
       Blockly.Arduino.valueToCode(
         block,
         "ADD0",
-        Blockly.Arduino.ORDER_UNARY_POSTFIX
+        Blockly.Arduino.ORDER_UNARY_POSTFIX,
       ) || '""';
     code = "String(" + argument0 + ")";
     return [code, Blockly.Arduino.ORDER_UNARY_POSTFIX];
@@ -40,7 +40,7 @@ Blockly.Arduino["text_join"] = function (block) {
       argument = Blockly.Arduino.valueToCode(
         block,
         "ADD" + n,
-        Blockly.Arduino.ORDER_NONE
+        Blockly.Arduino.ORDER_NONE,
       );
       if (argument === "") {
         code[n] = '""';
@@ -62,15 +62,15 @@ Blockly.Arduino["text_join"] = function (block) {
  */
 Blockly.Arduino["text_append"] = function (block) {
   // Append to a variable in place.
-  var id = block.getFieldValue("VAR")
+  var id = block.getFieldValue("VAR");
   const variable = Blockly.Variables.getVariable(
     Blockly.getMainWorkspace(),
-    id
+    id,
   );
   var argument0 = Blockly.Arduino.valueToCode(
     block,
     "TEXT",
-    Blockly.Arduino.ORDER_UNARY_POSTFIX
+    Blockly.Arduino.ORDER_UNARY_POSTFIX,
   );
   if (argument0 === "") {
     argument0 = '""';
@@ -92,7 +92,7 @@ Blockly.Arduino["text_length"] = function (block) {
     Blockly.Arduino.valueToCode(
       block,
       "VALUE",
-      Blockly.Arduino.ORDER_UNARY_POSTFIX
+      Blockly.Arduino.ORDER_UNARY_POSTFIX,
     ) || '""';
   var code = "String(" + argument0 + ").length()";
   return [code, Blockly.Arduino.ORDER_UNARY_POSTFIX];

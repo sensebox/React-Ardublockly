@@ -82,7 +82,10 @@ class Instruction extends Component {
             <Grid
               item
               xs={12}
-              style={{ display: "flex", justifyContent: "center" }}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+              }}
             >
               <BlocklyWindow svg blockDisabled initialXml={step.xml} />
             </Grid>

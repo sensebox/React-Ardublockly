@@ -26,3 +26,7 @@ Ensure that line 14 in [store.js](https://github.com/sensebox/React-Ardublockly/
 ## Demo
 
 A demo of the current status of the master branch can be accessed via [https://blockly-react.netlify.app/](https://blockly-react.netlify.app/) :rocket:.
+
+## Coding Guidelines
+
+We use the code formatter [prettier](https://prettier.io) for consistancy. The coresponding formatting settings can be found in the `.prettierrc.json` file. Possible options can be found [here](https://prettier.io/docs/en/options) but should only be changed if necessary.

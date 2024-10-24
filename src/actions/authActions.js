@@ -53,7 +53,7 @@ export const loadUser = () => (dispatch) => {
     .get(
       `${process.env.REACT_APP_BLOCKLY_API}/user`,
       config,
-      dispatch(authInterceptor())
+      dispatch(authInterceptor()),
     )
     .then((res) => {
       res.config.success(res);
@@ -66,53 +66,53 @@ export const loadUser = () => (dispatch) => {
 // Login user
 export const login =
   ({ email, password }) =>
-    (dispatch) => {
-      dispatch({
-        type: USER_LOADING,
-      });
-      // Headers
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-      // Request Body
-      const body = JSON.stringify({ email, password });
-      axios
-        .post(`${process.env.REACT_APP_BLOCKLY_API}/user`, body, config)
-        .then((res) => {
-          dispatch(setLanguage(res.data.user.language));
-          dispatch({
-            type: LOGIN_SUCCESS,
-            payload: res.data,
-          });
-          dispatch({
-            type: GET_STATUS,
-            payload: res.data.user.status,
-          });
-          dispatch(returnSuccess(res.data.message, res.status, "LOGIN_SUCCESS"));
-        })
-        .catch((err) => {
-          dispatch(
-            returnErrors(
-              err.response.data.message,
-              err.response.status,
-              "LOGIN_FAIL"
-            )
-          );
-          dispatch({
-            type: LOGIN_FAIL,
-          });
-          var status = [];
-          if (window.localStorage.getItem("status")) {
-            status = JSON.parse(window.localStorage.getItem("status"));
-          }
-          dispatch({
-            type: GET_STATUS,
-            payload: status,
-          });
-        });
+  (dispatch) => {
+    dispatch({
+      type: USER_LOADING,
+    });
+    // Headers
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
     };
+    // Request Body
+    const body = JSON.stringify({ email, password });
+    axios
+      .post(`${process.env.REACT_APP_BLOCKLY_API}/user`, body, config)
+      .then((res) => {
+        dispatch(setLanguage(res.data.user.language));
+        dispatch({
+          type: LOGIN_SUCCESS,
+          payload: res.data,
+        });
+        dispatch({
+          type: GET_STATUS,
+          payload: res.data.user.status,
+        });
+        dispatch(returnSuccess(res.data.message, res.status, "LOGIN_SUCCESS"));
+      })
+      .catch((err) => {
+        dispatch(
+          returnErrors(
+            err.response.data.message,
+            err.response.status,
+            "LOGIN_FAIL",
+          ),
+        );
+        dispatch({
+          type: LOGIN_FAIL,
+        });
+        var status = [];
+        if (window.localStorage.getItem("status")) {
+          status = JSON.parse(window.localStorage.getItem("status"));
+        }
+        dispatch({
+          type: GET_STATUS,
+          payload: status,
+        });
+      });
+  };
 
 // Logout User
 export const logout = () => (dispatch) => {
@@ -143,8 +143,8 @@ export const logout = () => (dispatch) => {
         returnErrors(
           err.response.data.message,
           err.response.status,
-          "LOGOUT_FAIL"
-        )
+          "LOGOUT_FAIL",
+        ),
       );
       dispatch({
         type: LOGOUT_FAIL,
@@ -184,7 +184,7 @@ export const authInterceptor = () => (dispatch, getState) => {
     },
     (error) => {
       Promise.reject(error);
-    }
+    },
   );
 
   // Add a response interceptor
@@ -234,7 +234,7 @@ export const authInterceptor = () => (dispatch, getState) => {
               // request failed, token could not be refreshed
               if (err.response) {
                 dispatch(
-                  returnErrors(err.response.data.message, err.response.status)
+                  returnErrors(err.response.data.message, err.response.status),
                 );
               }
               dispatch({
@@ -246,6 +246,6 @@ export const authInterceptor = () => (dispatch, getState) => {
       }
       // request status was unequal to 401, no possibility to refresh the token
       return Promise.reject(error);
-    }
+    },
   );
 };

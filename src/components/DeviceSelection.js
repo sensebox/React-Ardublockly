@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Dialog from "./Dialog";
 
-import withStyles from '@mui/styles/withStyles';
+import withStyles from "@mui/styles/withStyles";
 import * as Blockly from "blockly";
 import { IconButton, Grid, Avatar, Typography } from "@mui/material";
 import { setBoard } from "../actions/boardAction";
@@ -30,12 +30,11 @@ class DeviceSeclection extends Component {
       open: props.selectedBoard ? false : true,
       selectedBoard: "",
       saveSettings: false,
-
     };
   }
 
   toggleDialog = () => {
-    this.props.setBoard(this.state.selectedBoard)
+    this.props.setBoard(this.state.selectedBoard);
   };
 
   onChange = (e) => {
@@ -47,8 +46,8 @@ class DeviceSeclection extends Component {
   };
 
   onclick = (e, value) => {
-    this.setState({ selectedBoard: value })
-    this.props.setBoard(value)
+    this.setState({ selectedBoard: value });
+    this.props.setBoard(value);
     this.setState({ open: !this.state });
   };
 
@@ -72,25 +71,34 @@ class DeviceSeclection extends Component {
                   alt="Sensebox MCU"
                   src="/media/hardware/blockly_mcu.png"
                   style={{
-                    border: this.state.selectedBoard === "mcu" ? 'medium solid DeepSkyBlue' : "0.1px solid lightgray",
+                    border:
+                      this.state.selectedBoard === "mcu"
+                        ? "medium solid DeepSkyBlue"
+                        : "0.1px solid lightgray",
                     width: "10vw",
-                    height: "10vw"
+                    height: "10vw",
                   }}
                 />
               </IconButton>
               <p>senseBox MCU</p>
             </Grid>
             <Grid item xs={4}>
-            <IconButton onClick={(e) => this.onclick(e, "esp32")} size="large">
-              <Avatar
-                alt="Sensebox ESP"
-                src="/media/hardware/blockly_esp.png"
-                style={{
-                  border: this.state.selectedBoard === "esp32" ? 'medium solid DeepSkyBlue': "0.1px solid lightgray",
-                  width:"10vw",
-                  height: "10vw"
-              }}
-              />
+              <IconButton
+                onClick={(e) => this.onclick(e, "esp32")}
+                size="large"
+              >
+                <Avatar
+                  alt="Sensebox ESP"
+                  src="/media/hardware/blockly_esp.png"
+                  style={{
+                    border:
+                      this.state.selectedBoard === "esp32"
+                        ? "medium solid DeepSkyBlue"
+                        : "0.1px solid lightgray",
+                    width: "10vw",
+                    height: "10vw",
+                  }}
+                />
               </IconButton>
               <p>senseBox MCU-S2</p>
             </Grid>
@@ -100,9 +108,12 @@ class DeviceSeclection extends Component {
                   alt="Sensebox Mini"
                   src="/media/hardware/blockly_mini.png"
                   style={{
-                    border: this.state.selectedBoard === "mini" ? 'medium solid DeepSkyBlue' : "0.1px solid lightgray",
+                    border:
+                      this.state.selectedBoard === "mini"
+                        ? "medium solid DeepSkyBlue"
+                        : "0.1px solid lightgray",
                     width: "10vw",
-                    height: "10vw"
+                    height: "10vw",
                   }}
                 />
               </IconButton>
@@ -110,8 +121,13 @@ class DeviceSeclection extends Component {
             </Grid>
           </Grid>
         </div>
-        <Typography variant="body1" >
-          {Blockly.Msg.deviceselection_footnote} <a href="https://sensebox.github.io/blockly/">Arduino UNO</a> {Blockly.Msg.deviceselection_footnote_02} <a href="https://sensebox-blockly.netlify.app/ardublockly/?board=sensebox-mcu">senseBox MCU</a>
+        <Typography variant="body1">
+          {Blockly.Msg.deviceselection_footnote}{" "}
+          <a href="https://sensebox.github.io/blockly/">Arduino UNO</a>{" "}
+          {Blockly.Msg.deviceselection_footnote_02}{" "}
+          <a href="https://sensebox-blockly.netlify.app/ardublockly/?board=sensebox-mcu">
+            senseBox MCU
+          </a>
         </Typography>
       </Dialog>
     );
@@ -124,10 +140,9 @@ DeviceSeclection.propTypes = {
 
 const mapStateToProps = (state) => ({
   pageVisits: state.general.pageVisits,
-  selectedBoard: state.board.board
+  selectedBoard: state.board.board,
 });
 
-export default connect(
-  mapStateToProps,
-  { setBoard }
-)(withStyles(styles, { withTheme: true })(DeviceSeclection));
+export default connect(mapStateToProps, { setBoard })(
+  withStyles(styles, { withTheme: true })(DeviceSeclection),
+);

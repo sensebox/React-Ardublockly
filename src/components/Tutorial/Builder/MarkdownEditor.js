@@ -45,7 +45,7 @@ const MarkdownEditor = (props) => {
       })
         .then((res) => {
           resolve(
-            `${process.env.REACT_APP_BLOCKLY_API}/upload/` + res.data.filename
+            `${process.env.REACT_APP_BLOCKLY_API}/upload/` + res.data.filename,
           );
         })
         .catch((err) => {

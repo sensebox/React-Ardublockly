@@ -15,11 +15,14 @@ import DeleteProject from "./DeleteProject";
 import CopyCode from "./CopyCode";
 import AutoSave from "./AutoSave";
 class WorkspaceFunc extends Component {
-
   render() {
     return (
       <div
-        style={{ width: "max-content", display: "flex", alignItems: "center" }}
+        style={{
+          width: "max-content",
+          display: "flex",
+          alignItems: "center",
+        }}
       >
         {!this.props.assessment & !this.props.multiple ? <AutoSave /> : null}
         {!this.props.assessment ? (
@@ -75,7 +78,7 @@ class WorkspaceFunc extends Component {
           <ResetWorkspace
             style={
               this.props.projectType === "project" ||
-                this.props.projectType === "gallery"
+              this.props.projectType === "gallery"
                 ? { marginRight: "5px" }
                 : null
             }
@@ -83,10 +86,10 @@ class WorkspaceFunc extends Component {
         ) : null}
 
         {!this.props.assessment &&
-          (this.props.projectType === "project" ||
-            this.props.projectType === "gallery") &&
-          this.props.user &&
-          this.props.user.email === this.props.project.creator ? (
+        (this.props.projectType === "project" ||
+          this.props.projectType === "gallery") &&
+        this.props.user &&
+        this.props.user.email === this.props.project.creator ? (
           <DeleteProject
             project={this.props.project}
             projectType={this.props.projectType}

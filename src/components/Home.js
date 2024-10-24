@@ -17,7 +17,7 @@ import DeviceSelection from "./DeviceSelection";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
-import withStyles from '@mui/styles/withStyles';
+import withStyles from "@mui/styles/withStyles";
 
 import { faCode } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -116,14 +116,24 @@ class Home extends Component {
     return (
       <div>
         {this.props.statistics ? (
-          <div style={{ float: "left", height: "40px", position: "relative" }}>
+          <div
+            style={{
+              float: "left",
+              height: "40px",
+              position: "relative",
+            }}
+          >
             <WorkspaceStats />
           </div>
         ) : null}
 
         <div
           className="workspaceFunc"
-          style={{ float: "right", height: "40px", marginBottom: "20px" }}
+          style={{
+            float: "right",
+            height: "40px",
+            marginBottom: "20px",
+          }}
         >
           {/* <Autosave /> */}
           <WorkspaceFunc
@@ -160,8 +170,9 @@ class Home extends Component {
                   zIndex: 21,
                 }}
                 onClick={() => this.onChange()}
-                size="large">
-                <FontAwesomeIcon icon={faCode}  size="xs" />
+                size="large"
+              >
+                <FontAwesomeIcon icon={faCode} size="xs" />
               </IconButton>
             </Tooltip>
 
@@ -234,5 +245,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, { clearStats, workspaceName })(
-  withStyles(styles, { withTheme: true })(Home)
+  withStyles(styles, { withTheme: true })(Home),
 );

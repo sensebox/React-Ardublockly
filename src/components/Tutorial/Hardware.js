@@ -4,7 +4,7 @@ import Dialog from "../Dialog";
 
 import hardware from "../../data/hardware.json";
 
-import withStyles from '@mui/styles/withStyles';
+import withStyles from "@mui/styles/withStyles";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
@@ -18,7 +18,9 @@ import * as Blockly from "blockly";
 import { isWidthDown } from "../../helpers/handleBreakpoints";
 
 // FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
-const withWidth = () => (WrappedComponent) => (props) => <WrappedComponent {...props} width="xs" />;
+const withWidth = () => (WrappedComponent) => (props) => (
+  <WrappedComponent {...props} width="xs" />
+);
 
 const styles = (theme) => ({
   expand: {
@@ -69,11 +71,16 @@ class Hardware extends Component {
         <ImageList rowHeight={100} cols={cols} gap={10}>
           {this.props.picture.map((picture, i) => {
             var hardwareInfo = hardware.filter(
-              (hardware) => hardware.id === picture
+              (hardware) => hardware.id === picture,
             )[0];
             return (
               <ImageListItem key={i}>
-                <div style={{ margin: "auto", width: "max-content" }}>
+                <div
+                  style={{
+                    margin: "auto",
+                    width: "max-content",
+                  }}
+                >
                   <img
                     src={`/media/hardware/${hardwareInfo.src}`}
                     alt={hardwareInfo.name}
@@ -83,10 +90,15 @@ class Hardware extends Component {
                   />
                 </div>
                 <ImageListItemBar
-                  classes={{ root: this.props.classes.multiImageListItem }}
+                  classes={{
+                    root: this.props.classes.multiImageListItem,
+                  }}
                   title={
                     <div
-                      style={{ overflow: "hidden", textOverflow: "ellipsis" }}
+                      style={{
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}
                       className={this.props.classes.multiImageListItemTitle}
                     >
                       {hardwareInfo.name}
@@ -97,8 +109,9 @@ class Hardware extends Component {
                       className={this.props.classes.expand}
                       aria-label="Vollbild"
                       onClick={() => this.handleClickOpen(hardwareInfo)}
-                      size="large">
-                      <FontAwesomeIcon icon={faExpandAlt}  size="xs" />
+                      size="large"
+                    >
+                      <FontAwesomeIcon icon={faExpandAlt} size="xs" />
                     </IconButton>
                   }
                 />
@@ -128,7 +141,8 @@ class Hardware extends Component {
               target="_blank"
               href={this.state.hardwareInfo.url}
               color="primary"
-              underline="hover">
+              underline="hover"
+            >
               {Blockly.Msg.tutorials_hardware_here}
             </Link>
             .

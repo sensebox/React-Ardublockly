@@ -33,7 +33,7 @@ import Snackbar from "../../Snackbar";
 import Public from "./Public";
 import Review from "./Review";
 
-import withStyles from '@mui/styles/withStyles';
+import withStyles from "@mui/styles/withStyles";
 import Button from "@mui/material/Button";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -222,7 +222,7 @@ class Builder extends Component {
     if (this.state.tutorial === "change") {
       this.props.progress(true);
       var tutorial = this.props.tutorials.filter(
-        (tutorial) => tutorial._id === value
+        (tutorial) => tutorial._id === value,
       )[0];
       this.props.readJSON(tutorial);
       this.setState({
@@ -247,7 +247,7 @@ class Builder extends Component {
 
   resetTutorial = () => {
     var tutorial = this.props.tutorials.filter(
-      (tutorial) => tutorial._id === this.props.id
+      (tutorial) => tutorial._id === this.props.id,
     )[0];
     this.props.readJSON(tutorial);
     this.setState({
@@ -291,7 +291,7 @@ class Builder extends Component {
             step.requirements.forEach((requirement, j) => {
               newTutorial.append(
                 `steps[${i}][requirements][${j}]`,
-                requirement
+                requirement,
               );
             });
           }
@@ -330,7 +330,7 @@ class Builder extends Component {
         .post(
           `${process.env.REACT_APP_BLOCKLY_API}/tutorial/`,
           newTutorial,
-          config
+          config,
         )
         .then((res) => {
           res.config.success(res);
@@ -363,7 +363,7 @@ class Builder extends Component {
         .put(
           `${process.env.REACT_APP_BLOCKLY_API}/tutorial/${this.props.id}`,
           updatedTutorial,
-          config
+          config,
         )
         .then((res) => {
           res.config.success(res);
@@ -379,7 +379,7 @@ class Builder extends Component {
       var filteredTutorials = this.props.tutorials;
     } else {
       filteredTutorials = this.props.tutorials.filter(
-        (tutorial) => tutorial.creator === this.props.user.email
+        (tutorial) => tutorial.creator === this.props.user.email,
       );
     }
 
@@ -450,7 +450,10 @@ class Builder extends Component {
             <label htmlFor="open-json">
               <Button
                 component="span"
-                style={{ marginRight: "10px", marginBottom: "10px" }}
+                style={{
+                  marginRight: "10px",
+                  marginBottom: "10px",
+                }}
                 variant="contained"
                 color="primary"
               >
@@ -458,7 +461,10 @@ class Builder extends Component {
               </Button>
             </label>
             <Button
-              style={{ marginRight: "10px", marginBottom: "10px" }}
+              style={{
+                marginRight: "10px",
+                marginBottom: "10px",
+              }}
               variant="contained"
               color="primary"
               onClick={() => this.uploadJsonString()}
@@ -475,7 +481,8 @@ class Builder extends Component {
               labelId="select-outlined-label"
               value={this.props.id}
               onChange={(e) => this.onChangeId(e.target.value)}
-              label="Tutorial">
+              label="Tutorial"
+            >
               {filteredTutorials.map((tutorial) => (
                 <MenuItem value={tutorial._id}>
                   {tutorial.title}{" "}
@@ -573,7 +580,10 @@ class Builder extends Component {
                 {this.state.tutorial === "new" ? (
                   <div>
                     <Button
-                      style={{ marginRight: "10px", marginTop: "10px" }}
+                      style={{
+                        marginRight: "10px",
+                        marginTop: "10px",
+                      }}
                       variant="contained"
                       color="primary"
                       onClick={() => this.submitNew()}
@@ -591,7 +601,10 @@ class Builder extends Component {
                 ) : (
                   <div>
                     <Button
-                      style={{ marginRight: "10px", marginTop: "10px" }}
+                      style={{
+                        marginRight: "10px",
+                        marginTop: "10px",
+                      }}
                       variant="contained"
                       color="primary"
                       onClick={() => this.submitUpdate()}

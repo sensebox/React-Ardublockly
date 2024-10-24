@@ -124,12 +124,18 @@ export const LibraryVersions = () => {
       library: "CayenneLPP",
       link: "https://github.com/ElectronicCats/CayenneLPP",
     },
-    { library: "OneWire", link: "https://github.com/PaulStoffregen/OneWire" },
+    {
+      library: "OneWire",
+      link: "https://github.com/PaulStoffregen/OneWire",
+    },
     {
       library: "Nova Fitness Sds dust sensors library",
       link: "https://github.com/lewapek/sds-dust-sensors-arduino-library",
     },
-    { library: "JC_Button", link: "https://github.com/JChristensen/JC_Button" },
+    {
+      library: "JC_Button",
+      link: "https://github.com/JChristensen/JC_Button",
+    },
     { library: "SD", link: "https://github.com/arduino-libraries/SD" },
     {
       library: "BSEC Software Library",

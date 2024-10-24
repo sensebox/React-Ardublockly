@@ -5,7 +5,7 @@ import {
   SOUNDS,
   STATISTICS,
   PLATFORM,
-  COMPILER
+  COMPILER,
 } from "../actions/types";
 
 const initialLanguage = () => {
@@ -24,7 +24,7 @@ const initialPlatform = () => {
 
 const initialCompiler = () => {
   return process.env.REACT_APP_COMPILER_URL;
-}
+};
 
 const initialSounds = () => {
   if (window.localStorage.getItem("sounds")) {

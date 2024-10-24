@@ -1,55 +1,56 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { deleteProject } from '../../actions/projectActions';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { deleteProject } from "../../actions/projectActions";
 
-import { withRouter } from 'react-router-dom';
+import { withRouter } from "react-router-dom";
 
-import Snackbar from '../Snackbar';
+import Snackbar from "../Snackbar";
 
-import withStyles from '@mui/styles/withStyles';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
+import withStyles from "@mui/styles/withStyles";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
 
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import * as Blockly from 'blockly/core';
+import * as Blockly from "blockly/core";
 
 const styles = (theme) => ({
   buttonTrash: {
     backgroundColor: theme.palette.error.dark,
     color: theme.palette.primary.contrastText,
-    width: '40px',
-    height: '40px',
-    '&:hover': {
+    width: "40px",
+    height: "40px",
+    "&:hover": {
       backgroundColor: theme.palette.error.dark,
       color: theme.palette.primary.contrastText,
-    }
-  }
+    },
+  },
 });
 
-
-
 class DeleteProject extends Component {
-
   constructor(props) {
     super(props);
     this.inputRef = React.createRef();
     this.state = {
       snackbar: false,
-      type: '',
-      key: '',
-      message: ''
+      type: "",
+      key: "",
+      message: "",
     };
   }
 
   componentDidUpdate(props) {
     if (this.props.message !== props.message) {
-      if (this.props.message.id === 'PROJECT_DELETE_SUCCESS') {
+      if (this.props.message.id === "PROJECT_DELETE_SUCCESS") {
         this.props.history.push(`/${this.props.projectType}`);
-      }
-      else if (this.props.message.id === 'PROJECT_DELETE_FAIL') {
-        this.setState({ snackbar: true, key: Date.now(), message: Blockly.Msg.messages_delete_project_failed, type: 'error' });
+      } else if (this.props.message.id === "PROJECT_DELETE_FAIL") {
+        this.setState({
+          snackbar: true,
+          key: Date.now(),
+          message: Blockly.Msg.messages_delete_project_failed,
+          type: "error",
+        });
       }
     }
   }
@@ -60,9 +61,15 @@ class DeleteProject extends Component {
         <Tooltip title={Blockly.Msg.tooltip_delete_project} arrow>
           <IconButton
             className={this.props.classes.buttonTrash}
-            onClick={() => this.props.deleteProject(this.props.projectType, this.props.project._id)}
-            size="large">
-            <FontAwesomeIcon icon={faTrashAlt} size="xs"  />
+            onClick={() =>
+              this.props.deleteProject(
+                this.props.projectType,
+                this.props.project._id,
+              )
+            }
+            size="large"
+          >
+            <FontAwesomeIcon icon={faTrashAlt} size="xs" />
           </IconButton>
         </Tooltip>
 
@@ -74,17 +81,18 @@ class DeleteProject extends Component {
         />
       </div>
     );
-  };
+  }
 }
 
 DeleteProject.propTypes = {
   deleteProject: PropTypes.func.isRequired,
-  message: PropTypes.string.isRequired
+  message: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   message: state.message,
 });
 
-
-export default connect(mapStateToProps, { deleteProject })(withStyles(styles, { withTheme: true })(withRouter(DeleteProject)));
+export default connect(mapStateToProps, { deleteProject })(
+  withStyles(styles, { withTheme: true })(withRouter(DeleteProject)),
+);

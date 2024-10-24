@@ -10,7 +10,7 @@ import Dialog from "../Dialog";
 
 import { checkXml } from "../../helpers/compareXml";
 
-import withStyles from '@mui/styles/withStyles';
+import withStyles from "@mui/styles/withStyles";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Button from "@mui/material/Button";
@@ -60,10 +60,15 @@ class SolutionCheck extends Component {
         <Tooltip title={Blockly.Msg.tooltip_check_solution} arrow>
           <IconButton
             className={`solutionCheck ${this.props.classes.compile}`}
-            style={{ width: "40px", height: "40px", marginRight: "5px" }}
+            style={{
+              width: "40px",
+              height: "40px",
+              marginRight: "5px",
+            }}
             onClick={() => this.check()}
-            size="large">
-            <FontAwesomeIcon icon={faClipboardCheck}  size="xs" />
+            size="large"
+          >
+            <FontAwesomeIcon icon={faClipboardCheck} size="xs" />
           </IconButton>
         </Tooltip>
 
@@ -129,5 +134,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, { tutorialCheck, tutorialStep })(
-  withStyles(styles, { withTheme: true })(withRouter(SolutionCheck))
+  withStyles(styles, { withTheme: true })(withRouter(SolutionCheck)),
 );

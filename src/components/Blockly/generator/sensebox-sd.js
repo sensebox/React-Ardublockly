@@ -16,9 +16,8 @@ Blockly.Arduino.sensebox_sd_create_file = function (block) {
   Blockly.Arduino.libraries_["library_sd"] = "#include <SD.h>";
   Blockly.Arduino.definitions_["define_" + filename] = `File ${filename};`;
   Blockly.Arduino.setupCode_["sensebox_sd"] = "SD.begin(28);\n";
-  Blockly.Arduino.setupCode_[
-    "sensebox_sd" + filename
-  ] = `${filename} = SD.open("${newFileName}", FILE_WRITE);\n${filename}.close();\n`;
+  Blockly.Arduino.setupCode_["sensebox_sd" + filename] =
+    `${filename} = SD.open("${newFileName}", FILE_WRITE);\n${filename}.close();\n`;
   var code = "";
   return code;
 };
@@ -76,7 +75,7 @@ Blockly.Arduino.sensebox_sd_osem = function () {
   var timestamp = Blockly.Arduino.valueToCode(
     this,
     "timeStamp",
-    Blockly.Arduino.ORDER_ATOMIC
+    Blockly.Arduino.ORDER_ATOMIC,
   );
   Blockly.Arduino.definitions_["num_sensors"] =
     "static const uint8_t NUM_SENSORS = " + num_sensors + ";";
@@ -86,9 +85,8 @@ Blockly.Arduino.sensebox_sd_osem = function () {
     float value;
   } measurement;`;
   Blockly.Arduino.definitions_["buffer"] = "char buffer[750];";
-  Blockly.Arduino.definitions_[
-    "num_measurement"
-  ] = `measurement measurements[NUM_SENSORS];
+  Blockly.Arduino.definitions_["num_measurement"] =
+    `measurement measurements[NUM_SENSORS];
   uint8_t num_measurements = 0;`;
   if (type === "Stationary") {
     Blockly.Arduino.functionNames_["addMeasurement"] = `
@@ -130,12 +128,12 @@ void saveValues() {
     var lat = Blockly.Arduino.valueToCode(
       this,
       "lat",
-      Blockly.Arduino.ORDER_ATOMIC
+      Blockly.Arduino.ORDER_ATOMIC,
     );
     var lng = Blockly.Arduino.valueToCode(
       this,
       "lng",
-      Blockly.Arduino.ORDER_ATOMIC
+      Blockly.Arduino.ORDER_ATOMIC,
     );
     // var altitude = Blockly.Arduino.valueToCode(
     //   this,
@@ -150,9 +148,8 @@ void saveValues() {
         float value;
       } measurement;`;
     Blockly.Arduino.definitions_["buffer"] = "char buffer[750];";
-    Blockly.Arduino.definitions_[
-      "num_measurement"
-    ] = `measurement measurements[NUM_SENSORS];
+    Blockly.Arduino.definitions_["num_measurement"] =
+      `measurement measurements[NUM_SENSORS];
       uint8_t num_measurements = 0;`;
     Blockly.Arduino.functionNames_["addMeasurement"] = `
 void addMeasurement(const char *sensorId, float value) {
@@ -215,15 +212,16 @@ Blockly.Arduino.sensebox_esp32s2_sd_create_file = function (block) {
   var extension = this.getFieldValue("extension");
   var newFileName = filename.concat(".", extension);
 
-
   Blockly.Arduino.libraries_["library_sd"] = `#include <SD.h>`;
   Blockly.Arduino.libraries_["library_spi"] = `#include <SPI.h>`;
   Blockly.Arduino.libraries_["library_fs"] = `#include "FS.h"`;
 
   Blockly.Arduino.definitions_["define_" + filename] = `File ${filename};`;
   Blockly.Arduino.definitions_["define_sdspi"] = `SPIClass sdspi = SPIClass();`;
-  Blockly.Arduino.setupCode_["sensebox_esp32s2_sd"] = "//Init SD\n pinMode(SD_ENABLE,OUTPUT);\n digitalWrite(SD_ENABLE,LOW);\nsdspi.begin(VSPI_SCLK,VSPI_MISO,VSPI_MOSI,VSPI_SS);\n SD.begin(VSPI_SS,sdspi);";
-  Blockly.Arduino.setupCode_["sensebox_esp32s2_sd" + filename] = ` ${filename} = SD.open("/${newFileName}", FILE_WRITE);\n ${filename}.close();\n `;
+  Blockly.Arduino.setupCode_["sensebox_esp32s2_sd"] =
+    "//Init SD\n pinMode(SD_ENABLE,OUTPUT);\n digitalWrite(SD_ENABLE,LOW);\nsdspi.begin(VSPI_SCLK,VSPI_MISO,VSPI_MOSI,VSPI_SS);\n SD.begin(VSPI_SS,sdspi);";
+  Blockly.Arduino.setupCode_["sensebox_esp32s2_sd" + filename] =
+    ` ${filename} = SD.open("/${newFileName}", FILE_WRITE);\n ${filename}.close();\n `;
   var code = "";
   return code;
 };
@@ -234,24 +232,19 @@ Blockly.Arduino.sensebox_esp32s2_sd_open_file = function (block) {
   var newFileName = filename.concat(".", extension);
   var branch = Blockly.Arduino.statementToCode(block, "SD");
   var code = ` ${filename} = SD.open("/${newFileName}", FILE_APPEND);\n`;
-  code +=branch;
+  code += branch;
   code += ` ${filename}.close();\n`;
   return code;
 };
-
-
-
 
 Blockly.Arduino.sensebox_esp32s2_sd_write_file = function (block) {
   if (this.parentBlock_ != null) {
     var filename = this.getSurroundParent().getFieldValue("Filename");
   }
 
-
-
   var branch =
-  Blockly.Arduino.valueToCode(this, "DATA", Blockly.Arduino.ORDER_ATOMIC) ||
-  '"Keine Eingabe"';
+    Blockly.Arduino.valueToCode(this, "DATA", Blockly.Arduino.ORDER_ATOMIC) ||
+    '"Keine Eingabe"';
 
   var linebreak = this.getFieldValue("linebreak");
   if (linebreak === "TRUE") {
@@ -260,7 +253,6 @@ Blockly.Arduino.sensebox_esp32s2_sd_write_file = function (block) {
     linebreak = "";
   }
 
-
-  var code =`${filename}.print${linebreak}(${branch});\n`;
+  var code = `${filename}.print${linebreak}(${branch});\n`;
   return code;
 };

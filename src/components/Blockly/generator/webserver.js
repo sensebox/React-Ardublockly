@@ -88,7 +88,7 @@ Blockly.Arduino.sensebox_general_html_tag = function (block) {
   var branch = Blockly.Arduino.valueToCode(
     block,
     "DO" + n,
-    Blockly.Arduino.ORDER_NONE
+    Blockly.Arduino.ORDER_NONE,
   );
   if (branch.length > 0) {
     code += "\n " + branch;
@@ -99,7 +99,7 @@ Blockly.Arduino.sensebox_general_html_tag = function (block) {
     branch = Blockly.Arduino.valueToCode(
       block,
       "DO" + n,
-      Blockly.Arduino.ORDER_NONE
+      Blockly.Arduino.ORDER_NONE,
     );
     code += " +" + branch;
   }
@@ -125,7 +125,7 @@ Blockly.Arduino.sensebox_web_readHTML = function (block) {
   ];
   var functionName = Blockly.Arduino.addFunction(
     "generateHTML",
-    func.join("\n")
+    func.join("\n"),
   );
   var code = functionName + "()";
   return [code, Blockly.Arduino.ORDER_ATOMIC];

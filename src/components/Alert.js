@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import withStyles from '@mui/styles/withStyles';
+import withStyles from "@mui/styles/withStyles";
 import { alpha } from "@mui/material/styles";
 
 import Typography from "@mui/material/Typography";

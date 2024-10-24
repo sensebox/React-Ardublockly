@@ -163,18 +163,14 @@ const sensebox_mini = {
     ["IO1", "1"],
     ["IO2", "2"],
   ],
-  digitalPorts: [
-    ["A", "IO1_2"],
-  ],
+  digitalPorts: [["A", "IO1_2"]],
   digitalPinsLED: [
     ["BUILTIN_1", "7"],
     ["BUILTIN_2", "8"],
     ["IO1", "1"],
     ["IO2", "2"],
   ],
-  digitalPinsRGBMatrix: [
-    ["A", "2"],
-  ],
+  digitalPinsRGBMatrix: [["A", "2"]],
   digitalPinsRGB: [
     ["on Board", "6"],
     ["IO1-2", "1"],
@@ -183,7 +179,6 @@ const sensebox_mini = {
     ["on Board", "0"],
     ["IO1", "1"],
     ["IO2", "2"],
-
   ],
   oneWire: [
     ["0", "0"],
@@ -201,9 +196,7 @@ const sensebox_mini = {
     ["SerialUSB", "SerialUSB"],
     ["Serial1", "Serial1"],
   ],
-  serialSensors: [
-    ["Serial1", "Serial1"],
-  ],
+  serialSensors: [["Serial1", "Serial1"]],
   serialPins: {
     SerialUSB: [
       ["RX", ""],
@@ -309,10 +302,10 @@ const sensebox_esp32 = {
     ["IO7", "7"],
   ],
   digitalPinsRGB: [
-      ["on Board", "1"],
-      ["A", "3"],
-      ["B", "5"],
-      ["C", "7"],
+    ["on Board", "1"],
+    ["A", "3"],
+    ["B", "5"],
+    ["C", "7"],
   ],
   digitalPinsButton: [
     ["on Board", "0"],
@@ -322,7 +315,6 @@ const sensebox_esp32 = {
     ["IO5", "5"],
     ["IO6", "6"],
     ["IO7", "7"],
-
   ],
   oneWire: [
     ["0", "0"],
@@ -340,10 +332,7 @@ const sensebox_esp32 = {
     ["Serial", "Serial"],
     ["Serial1", "Serial1"],
   ],
-  serialSensors: [
-  
-    ["Serial1", "Serial1"],
-  ],
+  serialSensors: [["Serial1", "Serial1"]],
   serialPins: {
     SerialUSB: [
       ["RX", ""],
@@ -421,24 +410,23 @@ const sensebox_esp32 = {
   parseKey: "_*_",
 };
 
-var board = sensebox_mcu
+var board = sensebox_mcu;
 
 export const setBoard = (selectedBoard) => {
   switch (selectedBoard) {
     case "mcu":
-      board = sensebox_mcu
+      board = sensebox_mcu;
       break;
     case "mini":
-      board = sensebox_mini
+      board = sensebox_mini;
       break;
     case "esp32":
-      board = sensebox_esp32
+      board = sensebox_esp32;
       break;
     default:
-      board = sensebox_mcu
+      board = sensebox_mcu;
   }
-}
-
+};
 
 export const selectedBoard = () => {
   return board;

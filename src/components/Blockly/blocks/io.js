@@ -27,7 +27,7 @@ Blockly.Blocks["io_digitalwrite"] = {
       .appendField(Blockly.Msg.ARD_DIGITALWRITE)
       .appendField(
         new Blockly.FieldDropdown(selectedBoard().digitalPins),
-        "PIN"
+        "PIN",
       )
       .appendField(Blockly.Msg.ARD_WRITE_TO)
       .setCheck(Types.BOOLEAN.checkList);
@@ -44,7 +44,7 @@ Blockly.Blocks["io_digitalwrite"] = {
     Blockly.Arduino.Boards.refreshBlockFieldDropdown(
       this,
       "PIN",
-      "digitalPins"
+      "digitalPins",
     );
   },
 };
@@ -61,7 +61,7 @@ Blockly.Blocks["io_digitalread"] = {
       .appendField(Blockly.Msg.ARD_DIGITALREAD)
       .appendField(
         new Blockly.FieldDropdown(selectedBoard().digitalPins),
-        "PIN"
+        "PIN",
       );
     this.setOutput(true, "boolean");
     this.setTooltip(Blockly.Msg.ARD_DIGITALREAD_TIP);
@@ -78,7 +78,7 @@ Blockly.Blocks["io_digitalread"] = {
     Blockly.Arduino.Boards.refreshBlockFieldDropdown(
       this,
       "PIN",
-      "digitalPins"
+      "digitalPins",
     );
   },
 };
@@ -95,7 +95,7 @@ Blockly.Blocks["io_builtin_led"] = {
       .appendField(Blockly.Msg.ARD_BUILTIN_LED)
       .appendField(
         new Blockly.FieldDropdown(selectedBoard().builtinLed),
-        "BUILT_IN_LED"
+        "BUILT_IN_LED",
       )
       .appendField(Blockly.Msg.ARD_WRITE_TO)
       .setCheck(Types.BOOLEAN.compatibleTypes);
@@ -112,7 +112,7 @@ Blockly.Blocks["io_builtin_led"] = {
     Blockly.Arduino.Boards.refreshBlockFieldDropdown(
       this,
       "BUILT_IN_LED",
-      "builtinLed"
+      "builtinLed",
     );
   },
   /** @return {!string} The type of input value for the block, an integer. */
@@ -164,7 +164,7 @@ Blockly.Blocks["io_analogread"] = {
       .appendField(Blockly.Msg.ARD_ANALOGREAD)
       .appendField(
         new Blockly.FieldDropdown(selectedBoard().analogPins),
-        "PIN"
+        "PIN",
       );
     this.setOutput(true, Types.NUMBER.typeName);
     this.setTooltip(Blockly.Msg.ARD_ANALOGREAD_TIP);
@@ -195,7 +195,7 @@ Blockly.Blocks["io_highlow"] = {
         [Blockly.Msg.ARD_HIGH, "HIGH"],
         [Blockly.Msg.ARD_LOW, "LOW"],
       ]),
-      "STATE"
+      "STATE",
     );
     this.setOutput(true, Types.BOOLEAN.typeName);
     this.setTooltip(Blockly.Msg.ARD_HIGHLOW_TIP);
@@ -287,7 +287,7 @@ Blockly.Blocks["io_analogreadmillivolt"] = {
    */
   init: function () {
     this.setHelpUrl(
-      "https://docs.espressif.com/projects/arduino-esp32/en/latest/api/adc.html"
+      "https://docs.espressif.com/projects/arduino-esp32/en/latest/api/adc.html",
     );
     this.setColour(getColour().io);
     this.appendDummyInput()
@@ -295,7 +295,7 @@ Blockly.Blocks["io_analogreadmillivolt"] = {
       .appendField("Port:")
       .appendField(
         new Blockly.FieldDropdown(selectedBoard().digitalPorts),
-        "Port"
+        "Port",
       );
 
     this.setOutput(true, Types.NUMBER.typeName);

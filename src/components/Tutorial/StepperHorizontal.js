@@ -9,7 +9,7 @@ import clsx from "clsx";
 // import tutorials from '../../data/tutorials';
 import { alpha } from "@mui/material/styles";
 
-import withStyles from '@mui/styles/withStyles';
+import withStyles from "@mui/styles/withStyles";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import Button from "@mui/material/Button";
@@ -51,7 +51,7 @@ class StepperHorizontal extends Component {
   render() {
     var tutorialId = this.props.tutorial._id;
     var status = this.props.status.filter(
-      (status) => status._id === tutorialId
+      (status) => status._id === tutorialId,
     )[0];
     var tasks = status.tasks;
     var error = tasks.filter((task) => task.type === "error").length > 0;
@@ -78,7 +78,7 @@ class StepperHorizontal extends Component {
               this.props.classes.stepper,
               error
                 ? this.props.classes.stepperError
-                : this.props.classes.stepperSuccess
+                : this.props.classes.stepperSuccess,
             )}
           ></div>
         ) : null}
@@ -94,7 +94,7 @@ class StepperHorizontal extends Component {
             }}
             className={clsx(
               this.props.classes.stepper,
-              this.props.classes.stepperOther
+              this.props.classes.stepperOther,
             )}
           ></div>
         ) : null}
@@ -127,7 +127,6 @@ class StepperHorizontal extends Component {
                   <FontAwesomeIcon
                     className={this.props.classes.icon}
                     icon={tutorialStatus === "Success" ? faCheck : faTimes}
-                    
                   />
                 </div>
               ) : null}
@@ -180,5 +179,5 @@ const mapStateToProps = (state) => ({
 
 export default connect(
   mapStateToProps,
-  null
+  null,
 )(withRouter(withStyles(styles, { withTheme: true })(StepperHorizontal)));

@@ -27,21 +27,19 @@ import Faq from "../Faq";
 import CodeEditor from "../CodeEditor/CodeEditor";
 
 class Routes extends Component {
-
   componentDidMount() {
     const { location } = this.props;
     const query = new URLSearchParams(location.search, [location.search]);
-    const mode = query.get('mode');
+    const mode = query.get("mode");
 
     if (!this.props.platform && mode) {
       switch (mode.toLowerCase()) {
-        case 'tablet':
+        case "tablet":
           this.props.setPlatform(true);
           break;
         default:
           break;
       }
-
     }
   }
 
@@ -124,11 +122,13 @@ class Routes extends Component {
 Home.propTypes = {
   visitPage: PropTypes.func,
   platform: PropTypes.bool.isRequired,
-  setPlatform: PropTypes.func.isRequired
+  setPlatform: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   platform: state.general.platform,
 });
 
-export default connect(mapStateToProps, { visitPage, setPlatform })(withRouter(Routes));
+export default connect(mapStateToProps, { visitPage, setPlatform })(
+  withRouter(Routes),
+);

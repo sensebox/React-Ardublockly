@@ -9,7 +9,7 @@ import {
 
 import hardware from "../../../data/hardware.json";
 
-import withStyles from '@mui/styles/withStyles';
+import withStyles from "@mui/styles/withStyles";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
@@ -19,7 +19,9 @@ import * as Blockly from "blockly";
 import { isWidthDown } from "../../../helpers/handleBreakpoints";
 
 // FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
-const withWidth = () => (WrappedComponent) => (props) => <WrappedComponent {...props} width="xs" />;
+const withWidth = () => (WrappedComponent) => (props) => (
+  <WrappedComponent {...props} width="xs" />
+);
 
 const styles = (theme) => ({
   multiImageListItem: {
@@ -126,10 +128,15 @@ class Requirements extends Component {
                 />
               </div>
               <ImageListItemBar
-                classes={{ root: this.props.classes.multiImageListItem }}
+                classes={{
+                  root: this.props.classes.multiImageListItem,
+                }}
                 title={
                   <div
-                    style={{ overflow: "hidden", textOverflow: "ellipsis" }}
+                    style={{
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
                     className={this.props.classes.multiImageListItemTitle}
                   >
                     {picture.name}

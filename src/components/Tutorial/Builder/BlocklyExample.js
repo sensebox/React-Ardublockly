@@ -15,7 +15,7 @@ import * as Blockly from "blockly/core";
 import { initialXml } from "../../Blockly//initialXml.js";
 import BlocklyWindow from "../../Blockly/BlocklyWindow";
 
-import withStyles from '@mui/styles/withStyles';
+import withStyles from "@mui/styles/withStyles";
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormHelperText from "@mui/material/FormHelperText";
@@ -65,10 +65,10 @@ class BlocklyExample extends Component {
           checked: this.props.task
             ? this.props.task
             : this.props.value
-            ? true
-            : false,
+              ? true
+              : false,
         },
-        () => this.isError()
+        () => this.isError(),
       );
     }
     if (state.checked !== this.state.checked && this.state.checked) {
@@ -196,7 +196,10 @@ class BlocklyExample extends Component {
                         ? this.props.classes.errorButton
                         : null
                     }
-                    style={{ marginTop: "5px", height: "40px" }}
+                    style={{
+                      marginTop: "5px",
+                      height: "40px",
+                    }}
                     variant="contained"
                     color="primary"
                     disabled={this.state.disabled}

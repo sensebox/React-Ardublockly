@@ -6,7 +6,7 @@ import { FieldSlider } from "@blockly/field-slider";
 Blockly.Blocks["sensebox_display_beginDisplay"] = {
   init: function () {
     this.appendDummyInput().appendField(
-      Blockly.Msg.senseBox_display_beginDisplay
+      Blockly.Msg.senseBox_display_beginDisplay,
     );
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -19,7 +19,7 @@ Blockly.Blocks["sensebox_display_beginDisplay"] = {
 Blockly.Blocks["sensebox_display_clearDisplay"] = {
   init: function () {
     this.appendDummyInput().appendField(
-      Blockly.Msg.senseBox_display_clearDisplay
+      Blockly.Msg.senseBox_display_clearDisplay,
     );
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -33,7 +33,7 @@ Blockly.Blocks["sensebox_display_printDisplay"] = {
   init: function (block) {
     this.setColour(getColour().sensebox);
     this.appendDummyInput().appendField(
-      Blockly.Msg.senseBox_display_printDisplay
+      Blockly.Msg.senseBox_display_printDisplay,
     );
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_display_color)
@@ -42,7 +42,7 @@ Blockly.Blocks["sensebox_display_printDisplay"] = {
           [Blockly.Msg.senseBox_display_white, "WHITE,BLACK"],
           [Blockly.Msg.senseBox_display_black, "BLACK,WHITE"],
         ]),
-        "COLOR"
+        "COLOR",
       );
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_display_setSize)
@@ -91,25 +91,25 @@ Blockly.Blocks["sensebox_display_fastPrint"] = {
   init: function (block) {
     this.setColour(getColour().sensebox);
     this.appendDummyInput().appendField(
-      Blockly.Msg.senseBox_display_fastPrint_show
+      Blockly.Msg.senseBox_display_fastPrint_show,
     );
     this.appendValueInput("Title1", "Title1").appendField(
-      Blockly.Msg.senseBox_display_fastPrint_title
+      Blockly.Msg.senseBox_display_fastPrint_title,
     );
     this.appendValueInput("Value1", "Value1").appendField(
-      Blockly.Msg.senseBox_display_fastPrint_value
+      Blockly.Msg.senseBox_display_fastPrint_value,
     );
     this.appendValueInput("Dimension1", "Dimension1").appendField(
-      Blockly.Msg.senseBox_display_fastPrint_dimension
+      Blockly.Msg.senseBox_display_fastPrint_dimension,
     );
     this.appendValueInput("Title2", "Title2").appendField(
-      Blockly.Msg.senseBox_display_fastPrint_title
+      Blockly.Msg.senseBox_display_fastPrint_title,
     );
     this.appendValueInput("Value2", "Value2").appendField(
-      Blockly.Msg.senseBox_display_fastPrint_value
+      Blockly.Msg.senseBox_display_fastPrint_value,
     );
     this.appendValueInput("Dimension2", "Dimension2").appendField(
-      Blockly.Msg.senseBox_display_fastPrint_dimension
+      Blockly.Msg.senseBox_display_fastPrint_dimension,
     );
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -146,38 +146,38 @@ Blockly.Blocks["sensebox_display_plotDisplay"] = {
   init: function () {
     this.setColour(getColour().sensebox);
     this.appendDummyInput().appendField(
-      Blockly.Msg.senseBox_display_plotDisplay
+      Blockly.Msg.senseBox_display_plotDisplay,
     );
     this.appendValueInput("Title", "Text").appendField(
-      Blockly.Msg.senseBox_display_plotTitle
+      Blockly.Msg.senseBox_display_plotTitle,
     );
     this.appendValueInput("YLabel", "Text").appendField(
-      Blockly.Msg.senseBox_display_plotYLabel
+      Blockly.Msg.senseBox_display_plotYLabel,
     );
     this.appendValueInput("XLabel", "Text").appendField(
-      Blockly.Msg.senseBox_display_plotXLabel
+      Blockly.Msg.senseBox_display_plotXLabel,
     );
     this.appendValueInput("XRange1", "Number").appendField(
-      Blockly.Msg.senseBox_display_plotXRange1
+      Blockly.Msg.senseBox_display_plotXRange1,
     );
     this.appendValueInput("XRange2", "Number").appendField(
-      Blockly.Msg.senseBox_display_plotXRange2
+      Blockly.Msg.senseBox_display_plotXRange2,
     );
     this.appendValueInput("YRange1", "Number").appendField(
-      Blockly.Msg.senseBox_display_plotYRange1
+      Blockly.Msg.senseBox_display_plotYRange1,
     );
     this.appendValueInput("YRange2", "Number").appendField(
-      Blockly.Msg.senseBox_display_plotYRange2
+      Blockly.Msg.senseBox_display_plotYRange2,
     );
     this.setInputsInline(false);
     this.appendValueInput("XTick", "Number").appendField(
-      Blockly.Msg.senseBox_display_plotXTick
+      Blockly.Msg.senseBox_display_plotXTick,
     );
     this.appendValueInput("YTick", "Number").appendField(
-      Blockly.Msg.senseBox_display_plotYTick
+      Blockly.Msg.senseBox_display_plotYTick,
     );
     this.appendValueInput("TimeFrame", "Number").appendField(
-      Blockly.Msg.senseBox_display_plotTimeFrame
+      Blockly.Msg.senseBox_display_plotTimeFrame,
     );
     this.appendValueInput("plotDisplay")
       .appendField(Blockly.Msg.senseBox_display_printDisplay_value)
@@ -229,7 +229,7 @@ Blockly.Blocks["sensebox_display_fillCircle"] = {
   init: function () {
     this.setColour(getColour().sensebox);
     this.appendDummyInput().appendField(
-      Blockly.Msg.sensebox_display_fillCircle
+      Blockly.Msg.sensebox_display_fillCircle,
     );
     this.appendValueInput("X")
       .appendField(Blockly.Msg.senseBox_display_printDisplay_x)
@@ -279,7 +279,7 @@ Blockly.Blocks["sensebox_display_drawRectangle"] = {
   init: function () {
     this.setColour(getColour().sensebox);
     this.appendDummyInput().appendField(
-      Blockly.Msg.sensebox_display_drawRectangle
+      Blockly.Msg.sensebox_display_drawRectangle,
     );
     this.appendValueInput("X")
       .appendField(Blockly.Msg.senseBox_display_printDisplay_x)

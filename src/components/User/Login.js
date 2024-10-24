@@ -111,11 +111,20 @@ export class Login extends Component {
     return (
       <div>
         <Breadcrumbs
-          content={[{ link: "/user/login", title: Blockly.Msg.button_login }]}
+          content={[
+            {
+              link: "/user/login",
+              title: Blockly.Msg.button_login,
+            },
+          ]}
         />
 
         <div
-          style={{ maxWidth: "500px", marginLeft: "auto", marginRight: "auto" }}
+          style={{
+            maxWidth: "500px",
+            marginLeft: "auto",
+            marginRight: "auto",
+          }}
         >
           <h1>{Blockly.Msg.login_head}</h1>
           <Alert>
@@ -125,7 +134,8 @@ export class Login extends Component {
               rel="noreferrer"
               target="_blank"
               href={"https://opensensemap.org/"}
-              underline="hover">
+              underline="hover"
+            >
               openSenseMap
             </Link>{" "}
             {Blockly.Msg.login_osem_account_02}.
@@ -146,7 +156,8 @@ export class Login extends Component {
               name="email"
               value={this.state.email}
               onChange={this.onChange}
-              fullWidth={true} />
+              fullWidth={true}
+            />
             <TextField
               variant="standard"
               // variant='outlined'
@@ -161,18 +172,19 @@ export class Login extends Component {
                       onClick={this.handleClickShowPassword}
                       onMouseDown={this.handleMouseDownPassword}
                       edge="end"
-                      size="large">
+                      size="large"
+                    >
                       <FontAwesomeIcon
                         size="xs"
                         icon={this.state.showPassword ? faEyeSlash : faEye}
-                        
                       />
                     </IconButton>
                   </InputAdornment>
                 ),
               }}
               onChange={this.onChange}
-              fullWidth={true} />
+              fullWidth={true}
+            />
             <p>
               <Button
                 color="primary"
@@ -196,7 +208,8 @@ export class Login extends Component {
               target="_blank"
               href={"https://opensensemap.org/"}
               color="primary"
-              underline="hover">
+              underline="hover"
+            >
               {Blockly.Msg.login_lostpassword}
             </Link>
           </p>
@@ -213,7 +226,8 @@ export class Login extends Component {
               rel="noreferrer"
               target="_blank"
               href={"https://opensensemap.org/"}
-              underline="hover">
+              underline="hover"
+            >
               openSenseMap
             </Link>
             .
@@ -237,5 +251,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, { login, clearMessages })(
-  withRouter(Login)
+  withRouter(Login),
 );

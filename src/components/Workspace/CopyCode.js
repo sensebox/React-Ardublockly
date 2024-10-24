@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { workspaceName } from "../../actions/workspaceActions";
 
-import withStyles from '@mui/styles/withStyles';
+import withStyles from "@mui/styles/withStyles";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
@@ -68,7 +68,8 @@ class CopyCode extends Component {
             <IconButton
               className={`copyCode ${this.props.classes.iconButton}`}
               onClick={() => this.copyCode()}
-              size="large">
+              size="large"
+            >
               <FontAwesomeIcon icon={faCopy} size="xs" />
             </IconButton>
           </Tooltip>
@@ -106,5 +107,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, { workspaceName })(
-  withStyles(styles, { withTheme: true })(CopyCode)
+  withStyles(styles, { withTheme: true })(CopyCode),
 );

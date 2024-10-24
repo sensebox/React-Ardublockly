@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import withStyles from '@mui/styles/withStyles';
+import withStyles from "@mui/styles/withStyles";
 import MuiAccordion from "@mui/material/Accordion";
 import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
@@ -11,7 +11,9 @@ import * as Blockly from "blockly";
 import { default as MonacoEditor } from "@monaco-editor/react";
 
 // FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
-const withWidth = () => (WrappedComponent) => (props) => <WrappedComponent {...props} width="xs" />;
+const withWidth = () => (WrappedComponent) => (props) => (
+  <WrappedComponent {...props} width="xs" />
+);
 
 const Accordion = withStyles((theme) => ({
   root: {
@@ -64,7 +66,9 @@ class CodeViewer extends Component {
   }
 
   componentDidMount() {
-    this.setState({ componentHeight: this.myDiv.current.offsetHeight + "px" });
+    this.setState({
+      componentHeight: this.myDiv.current.offsetHeight + "px",
+    });
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -112,7 +116,13 @@ class CodeViewer extends Component {
           onChange={this.onChange}
         >
           <AccordionSummary>
-            <b style={{ fontSize: "20px", marginRight: "5px", width: "35px" }}>
+            <b
+              style={{
+                fontSize: "20px",
+                marginRight: "5px",
+                width: "35px",
+              }}
+            >
               {curlyBrackets}
             </b>
             <div style={{ margin: "auto 5px 2px 0px" }}>
@@ -147,7 +157,13 @@ class CodeViewer extends Component {
           onChange={this.onChange}
         >
           <AccordionSummary>
-            <b style={{ fontSize: "20px", marginRight: "5px", width: "35px" }}>
+            <b
+              style={{
+                fontSize: "20px",
+                marginRight: "5px",
+                width: "35px",
+              }}
+            >
               {unequal}
             </b>
             <div style={{ margin: "auto 5px 2px 0px" }}>

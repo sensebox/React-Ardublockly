@@ -18,14 +18,15 @@ import Tooltip from "@mui/material/Tooltip";
 import ReactMarkdown from "react-markdown";
 import { faCode } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import withStyles from '@mui/styles/withStyles';
+import withStyles from "@mui/styles/withStyles";
 import remarkGfm from "remark-gfm";
 import remarkGemoji from "remark-gemoji";
 import { isWidthDown } from "../../helpers/handleBreakpoints";
 
-
 // FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
-const withWidth = () => (WrappedComponent) => (props) => <WrappedComponent {...props} width="xs" />;
+const withWidth = () => (WrappedComponent) => (props) => (
+  <WrappedComponent {...props} width="xs" />
+);
 
 const styles = (theme) => ({
   codeOn: {
@@ -74,10 +75,10 @@ class Assessment extends Component {
     var tutorialId = this.props.tutorial._id;
     var currentTask = this.props.step;
     var status = this.props.status.filter(
-      (status) => status._id === tutorialId
+      (status) => status._id === tutorialId,
     )[0];
     var taskIndex = status.tasks.findIndex(
-      (task) => task._id === currentTask._id
+      (task) => task._id === currentTask._id,
     );
     var statusTask = status.tasks[taskIndex];
     console.log(statusTask);
@@ -102,10 +103,11 @@ class Assessment extends Component {
               }
             >
               <IconButton
-                className={`showCode ${this.state.codeOn
+                className={`showCode ${
+                  this.state.codeOn
                     ? this.props.classes.codeOn
                     : this.props.classes.codeOff
-                  }`}
+                }`}
                 style={{
                   width: "40px",
                   height: "40px",
@@ -115,8 +117,9 @@ class Assessment extends Component {
                   zIndex: 21,
                 }}
                 onClick={() => this.onChange()}
-                size="large">
-                <FontAwesomeIcon icon={faCode}  size="xs" />
+                size="large"
+              >
+                <FontAwesomeIcon icon={faCode} size="xs" />
               </IconButton>
             </Tooltip>
             <BlocklyWindow
@@ -192,5 +195,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, { workspaceName })(
-  withWidth()(withStyles(styles, { withTheme: true })(Assessment))
+  withWidth()(withStyles(styles, { withTheme: true })(Assessment)),
 );

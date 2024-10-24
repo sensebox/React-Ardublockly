@@ -14,7 +14,7 @@ Blockly.Arduino.sensebox_mqtt_setup = function () {
   Blockly.Arduino.libraries_["library_adafruitmqtt"] =
     '#include <Adafruit_MQTT.h> //http://librarymanager/All#Adafruit_MQTT_Library"';
   Blockly.Arduino.libraries_["library_adafruitmqttclient"] =
-    '#include <Adafruit_MQTT_Client.h>';
+    "#include <Adafruit_MQTT_Client.h>";
   Blockly.Arduino.definitions_["mqtt_server"] =
     '#define SERVER      "' + server + '"';
   Blockly.Arduino.definitions_["mqtt_port"] =
@@ -68,9 +68,8 @@ Blockly.Arduino.sensebox_mqtt_publish = function (block) {
   }
 
   //Blockly.Arduino.definitions_['mqtt_' + feed_client + ''] = 'Adafruit_MQTT_Publish ' + feed_client + ' = Adafruit_MQTT_Publish(&mqtt, USERNAME "/feeds/' + feedname + '");'
-  Blockly.Arduino.codeFunctions_[
-    "mqtt_connect_function"
-  ] = `// Function to connect and reconnect as necessary to the MQTT server.
+  Blockly.Arduino.codeFunctions_["mqtt_connect_function"] =
+    `// Function to connect and reconnect as necessary to the MQTT server.
     // Should be called in the loop function and it will take care if connecting.
 void MQTT_connect() {
       int8_t ret;

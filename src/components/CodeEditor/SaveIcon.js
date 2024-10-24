@@ -17,7 +17,6 @@ const SaveIcon = ({ loading }) => (
         <FontAwesomeIcon
           style={{ position: "absolute" }}
           icon={faCircleNotch}
-          
           spin={true}
           size="2x"
           color="grey"
@@ -31,7 +30,6 @@ const SaveIcon = ({ loading }) => (
           transform: "translate(-50%,-50%)",
         }}
         icon={faSave}
-        
         color={loading ? "grey" : "green"}
         size={loading ? "1x" : "lg"}
       />

@@ -1,12 +1,11 @@
 import { Block, Value, Field, Shadow, Category, Sep, Label } from "..";
 import { getColour } from "../helpers/colour";
 import * as Blockly from "blockly/core";
-  
-  
-  export const ToolboxMcu = () => {
-    return (
-        <>
-        <Category
+
+export const ToolboxMcu = () => {
+  return (
+    <>
+      <Category
         name={Blockly.Msg.toolbox_sensors}
         colour={getColour().sensebox}
       >
@@ -127,7 +126,7 @@ import * as Blockly from "blockly/core";
         <Block type="sensebox_ws2812_matrix_drawPixel" />
         <Block type="sensebox_ws2812_matrix_showBitmap" />
         <Block type="sensebox_ws2812_matrix_bitmap" />
-        <Block type="sensebox_ws2812_matrix_custom_bitmap" /> 
+        <Block type="sensebox_ws2812_matrix_custom_bitmap" />
         <Block type="sensebox_ws2812_matrix_draw_custom_bitmap_example" />
         <Block type="colour_picker"></Block>
         <Block type="colour_random"></Block>
@@ -380,11 +379,7 @@ import * as Blockly from "blockly/core";
         <Block type="sensebox_phyphox_channel"></Block>
         <Block type="sensebox_phyphox_sendchannel"></Block>
       </Category>
-      <Category
-        id="webserver"
-        name="Webserver"
-        colour={getColour().webserver}
-      >
+      <Category id="webserver" name="Webserver" colour={getColour().webserver}>
         <Block type="sensebox_initialize_http_server"></Block>
         <Block type="sensebox_http_on_client_connect"></Block>
         <Block type="sensebox_ip_address"></Block>
@@ -609,10 +604,7 @@ import * as Blockly from "blockly/core";
         custom="PROCEDURE"
       ></Category>
       <Category name={Blockly.Msg.toolbox_advanced} colour={getColour().io}>
-        <Category
-          name={Blockly.Msg.toolbox_serial}
-          colour={getColour().serial}
-        >
+        <Category name={Blockly.Msg.toolbox_serial} colour={getColour().serial}>
           <Block type="init_serial_monitor"></Block>
           <Block type="print_serial_monitor"></Block>
         </Category>
@@ -639,10 +631,7 @@ import * as Blockly from "blockly/core";
             </Value>
           </Block>
         </Category>
-        <Category
-          name={Blockly.Msg.toolbox_motors}
-          colour={getColour().motors}
-        >
+        <Category name={Blockly.Msg.toolbox_motors} colour={getColour().motors}>
           <Block type="sensebox_motors_beginServoMotor" />
           <Block type="sensebox_motors_moveServoMotor">
             <Value name="degrees">
@@ -674,5 +663,6 @@ import * as Blockly from "blockly/core";
           <Block type="watchdog_reset"></Block>
         </Category>
       </Category>
-      </>)}
-  
+    </>
+  );
+};

@@ -3,16 +3,14 @@ import "@blockly/block-plus-minus";
 import { TypedVariableModal } from "@blockly/plugin-typed-variable-modal";
 import * as Blockly from "blockly/core";
 import { connect } from "react-redux";
-import { ToolboxMcu}  from "./ToolboxMcu";
-import { ToolboxEsp}  from "./ToolboxEsp";
+import { ToolboxMcu } from "./ToolboxMcu";
+import { ToolboxEsp } from "./ToolboxEsp";
 
 class Toolbox extends React.Component {
-
-
   componentDidUpdate(props) {
     this.props.workspace.registerToolboxCategoryCallback(
       "CREATE_TYPED_VARIABLE",
-      this.createFlyout
+      this.createFlyout,
     );
 
     const typedVarModal = new TypedVariableModal(
@@ -25,7 +23,7 @@ class Toolbox extends React.Component {
         [`${Blockly.Msg.variables_TEXT}`, "String"],
         [`${Blockly.Msg.variables_CHARACTER}`, "char"],
         [`${Blockly.Msg.variables_BOOLEAN}`, "boolean"],
-      ]
+      ],
     );
     typedVarModal.init();
     if (props.selectedBoard !== this.props.selectedBoard) {
@@ -55,26 +53,26 @@ class Toolbox extends React.Component {
   }
 
   render() {
-
     return (
       <xml
-      xmlns="https://developers.google.com/blockly/xml"
-      id="blockly"
-      style={{ display: "none" }}
-      ref={this.props.toolbox}
+        xmlns="https://developers.google.com/blockly/xml"
+        id="blockly"
+        style={{ display: "none" }}
+        ref={this.props.toolbox}
       >
-       {this.props.selectedBoard === "mcu" || this.props.selectedBoard === "mini" ? <ToolboxMcu /> : <ToolboxEsp />}
-               
-       </xml>
+        {this.props.selectedBoard === "mcu" ||
+        this.props.selectedBoard === "mini" ? (
+          <ToolboxMcu />
+        ) : (
+          <ToolboxEsp />
+        )}
+      </xml>
     );
   }
 }
 
-
-
 const mapStateToProps = (state) => ({
-  selectedBoard: state.board.board
+  selectedBoard: state.board.board,
 });
 
 export default connect(mapStateToProps)(Toolbox);
-

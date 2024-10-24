@@ -202,40 +202,38 @@ Die Messwerte für Temperatur, Luftfeuchtigkeit und Luftdruck können direkt ver
 - "als Schalter": Wenn du diesen Block verwendest kannst du den Knopf wie ein Lichtschalter verwenden. Der Status wird gespeichert bis der Button erneut gedrückt wird`,
   senseBox_button_helpurl: "",
 
-
-
   /**
    * Feinstaubsensor Sensirion SPS30
    */
 
-   senseBox_sps30: "Feinstaubsensor Sensirion SPS30",
-   senseBox_sps30_dimension: "in µg/m³",
-   senseBox_sps30_1p0: "PM1.0",
-   senseBox_sps30_2p5: "PM2.5",
-   senseBox_sps30_4p0: "PM4.0",
-   senseBox_sps30_10p0: "PM10",
-   senseBox_sps30_tooltip:"Dieser Block gibt dir den Messwert des Sensirion SPS30 Feinstaubsensor. Schließe den Feinstaubsensor an einen der **I2C** Anschlüssen an. Im Dropdown Menü zwischen PM1.0, PM2.5, PM4.0 und PM10 auswählen. Der Messwert wird dir als **Kommazahl** in µg/m3",
-    senseBox_sps30_helpurl:
-     "https://docs.sensebox.de/hardware/sensoren-feinstaub/",
- 
+  senseBox_sps30: "Feinstaubsensor Sensirion SPS30",
+  senseBox_sps30_dimension: "in µg/m³",
+  senseBox_sps30_1p0: "PM1.0",
+  senseBox_sps30_2p5: "PM2.5",
+  senseBox_sps30_4p0: "PM4.0",
+  senseBox_sps30_10p0: "PM10",
+  senseBox_sps30_tooltip:
+    "Dieser Block gibt dir den Messwert des Sensirion SPS30 Feinstaubsensor. Schließe den Feinstaubsensor an einen der **I2C** Anschlüssen an. Im Dropdown Menü zwischen PM1.0, PM2.5, PM4.0 und PM10 auswählen. Der Messwert wird dir als **Kommazahl** in µg/m3",
+  senseBox_sps30_helpurl:
+    "https://docs.sensebox.de/hardware/sensoren-feinstaub/",
 
-     /**
- * Photodiode MCUS2(ESP32)
- * 
- */
-senseBox_esp32_photodiode: "Lichtintensität",
-senseBox_esp32_photodiode_tooltip: "Die Photodiode misst Lichtintensität. Der ausgegebene Wert ist eine **Ganzzahl** zwischen 0 und 4095. Je höher der Wert, desto heller ist die Umgebung.",
-  
-/**
-   * ToF Imager
-   * 
+  /**
+   * Photodiode MCUS2(ESP32)
+   *
    */
-sensebox_tof_imager: "ToF Distanz Imager",
-sensebox_tof_imager_tooltip: "Der ToF Distanz Imager misst ein Bild von 8x8 Distanzen mithilfe von Infrarotlicht. Schließe den Sensor an einen der I2C Anschlüsse an.",
-sensebox_distance: "Geringste Distanz in cm",
-sensebox_distance_bitmap: "8x8 Distanzen als Bitmap (für LED-Matrix)",
-sensebox_tof_imager_max_distance: "Maximal messbare Distanz ",
-sensebox_tof_imager_max_distance_unit: "cm",
+  senseBox_esp32_photodiode: "Lichtintensität",
+  senseBox_esp32_photodiode_tooltip:
+    "Die Photodiode misst Lichtintensität. Der ausgegebene Wert ist eine **Ganzzahl** zwischen 0 und 4095. Je höher der Wert, desto heller ist die Umgebung.",
 
-    };
-
+  /**
+   * ToF Imager
+   *
+   */
+  sensebox_tof_imager: "ToF Distanz Imager",
+  sensebox_tof_imager_tooltip:
+    "Der ToF Distanz Imager misst ein Bild von 8x8 Distanzen mithilfe von Infrarotlicht. Schließe den Sensor an einen der I2C Anschlüsse an.",
+  sensebox_distance: "Geringste Distanz in cm",
+  sensebox_distance_bitmap: "8x8 Distanzen als Bitmap (für LED-Matrix)",
+  sensebox_tof_imager_max_distance: "Maximal messbare Distanz ",
+  sensebox_tof_imager_max_distance_unit: "cm",
+};

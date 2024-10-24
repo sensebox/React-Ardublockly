@@ -1,4 +1,4 @@
-import { GET_ERRORS, CLEAR_MESSAGES, GET_SUCCESS } from './types';
+import { GET_ERRORS, CLEAR_MESSAGES, GET_SUCCESS } from "./types";
 
 // RETURN Errors
 export const returnErrors = (msg, status, id = null) => {
@@ -7,8 +7,8 @@ export const returnErrors = (msg, status, id = null) => {
     payload: {
       msg: msg,
       status: status,
-      id: id
-    }
+      id: id,
+    },
   };
 };
 
@@ -19,14 +19,14 @@ export const returnSuccess = (msg, status, id = null) => {
     payload: {
       msg: msg,
       status: status,
-      id: id
-    }
+      id: id,
+    },
   };
 };
 
 // CLEAR_MESSAGES
 export const clearMessages = () => {
   return {
-    type: CLEAR_MESSAGES
+    type: CLEAR_MESSAGES,
   };
 };

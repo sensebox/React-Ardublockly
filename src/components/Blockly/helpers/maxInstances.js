@@ -17,7 +17,7 @@ const maxInstances = {
   sensebox_phyphox_init: 1,
   sensebox_phyphox_experiment: 1,
   sensebox_phyphox_experiment_send: 1,
-  sensebox_ethernet: 1 ,
+  sensebox_ethernet: 1,
 };
 
 const maxInstancesEsp = {
@@ -32,15 +32,13 @@ const maxInstancesEsp = {
   sensebox_phyphox_init: 1,
   sensebox_phyphox_experiment: 1,
   sensebox_phyphox_experiment_send: 1,
-  sensebox_ethernet: 0 ,
+  sensebox_ethernet: 0,
 };
-
 
 export const getMaxInstances = () => {
   if (board === "esp32") {
     return maxInstancesEsp;
   } else if (board === "mcu" || board === "mini") {
     return maxInstances;
+  }
 };
-}
-

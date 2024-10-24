@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { shareProject } from "../../actions/projectActions";
 import { clearMessages } from "../../actions/messageActions";
-import QRCode from 'qrcode.react';
+import QRCode from "qrcode.react";
 import { createId } from "mnemonic-id";
 
 import moment from "moment";
@@ -14,15 +14,29 @@ import Snackbar from "../Snackbar";
 // import { Link } from "react-router-dom";
 
 import GridLoader from "react-spinners/GridLoader";
-import { EmailShareButton, FacebookShareButton, TwitterShareButton, WhatsappShareButton} from "react-share";
-import { EmailIcon, FacebookIcon, TwitterIcon, WhatsappIcon} from "react-share";
-import withStyles from '@mui/styles/withStyles';
+import {
+  EmailShareButton,
+  FacebookShareButton,
+  TwitterShareButton,
+  WhatsappShareButton,
+} from "react-share";
+import {
+  EmailIcon,
+  FacebookIcon,
+  TwitterIcon,
+  WhatsappIcon,
+} from "react-share";
+import withStyles from "@mui/styles/withStyles";
 import IconButton from "@mui/material/IconButton";
-import Button from '@mui/material/Button';
+import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-import { faShareAlt, faCopy, faDownload } from "@fortawesome/free-solid-svg-icons";
+import {
+  faShareAlt,
+  faCopy,
+  faDownload,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import * as Blockly from "blockly/core";
@@ -126,21 +140,30 @@ class WorkspaceFunc extends Component {
       this.props.shareProject(
         this.props.name || this.props.project.title,
         this.props.projectType,
-        this.props.project ? this.props.project._id : undefined
+        this.props.project ? this.props.project._id : undefined,
       );
     }
   };
 
   createShortlink(id) {
-    this.setState({ isFetching: true, loading: true })
+    this.setState({ isFetching: true, loading: true });
     const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ "slug": `blockly-${createId(5)}`, "url": `${window.location.origin}/share/${id}` })
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        slug: `blockly-${createId(5)}`,
+        url: `${window.location.origin}/share/${id}`,
+      }),
     };
-    fetch('https://www.snsbx.de/api/shorty', requestOptions)
-        .then(response => response.json())
-        .then(data => this.setState({ shortLink: data[0].link, isFetching: false, loading: false }));
+    fetch("https://www.snsbx.de/api/shorty", requestOptions)
+      .then((response) => response.json())
+      .then((data) =>
+        this.setState({
+          shortLink: data[0].link,
+          isFetching: false,
+          loading: false,
+        }),
+      );
   }
 
   downloadQRCode = () => {
@@ -164,7 +187,8 @@ class WorkspaceFunc extends Component {
           <IconButton
             className={`shareBlocks ${this.props.classes.iconButton}`}
             onClick={() => this.shareBlocks()}
-            size="large">
+            size="large"
+          >
             <FontAwesomeIcon icon={faShareAlt} size="xs" />
           </IconButton>
         </Tooltip>
@@ -182,116 +206,160 @@ class WorkspaceFunc extends Component {
           onClose={this.toggleDialog}
           onClick={this.toggleDialog}
           button={Blockly.Msg.button_close}
-        >            
-          { this.state.isFetching ? (
-            <div style={{ display: 'flex', justifyContent: 'center'}}>
-              <GridLoader color={"#4EAF47"} loading={this.state.loading} size={50} /> 
+        >
+          {this.state.isFetching ? (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <GridLoader
+                color={"#4EAF47"}
+                loading={this.state.loading}
+                size={50}
+              />
             </div>
-            ) : (
-              <div style={{ marginTop: "10px" }}>
-                <Typography>
-                  Über den folgenden Link kannst du dein Programm teilen:
-                </Typography>
-                <div style={{ textAlign: "center" }}>
-                  <a
-                    href={this.state.shortLink}
-                    onClick={() => this.toggleDialog()}
-                    className={this.props.classes.link}
-                    target="_blank"
-                    rel="noreferrer"
-                  >{this.state.shortLink}</a>
-                  <Tooltip
+          ) : (
+            <div style={{ marginTop: "10px" }}>
+              <Typography>
+                Über den folgenden Link kannst du dein Programm teilen:
+              </Typography>
+              <div style={{ textAlign: "center" }}>
+                <a
+                  href={this.state.shortLink}
+                  onClick={() => this.toggleDialog()}
+                  className={this.props.classes.link}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {this.state.shortLink}
+                </a>
+                <Tooltip
                   title={Blockly.Msg.tooltip_copy_link}
                   arrow
                   style={{ marginRight: "5px" }}
+                >
+                  <IconButton
+                    onClick={() => {
+                      navigator.clipboard.writeText(this.state.shortLink);
+                      this.setState({
+                        snackbar: true,
+                        key: Date.now(),
+                        message: Blockly.Msg.messages_copylink_success,
+                        type: "success",
+                      });
+                    }}
+                    size="large"
                   >
-                    <IconButton
-                      onClick={() => {
-                        navigator.clipboard.writeText(
-                          this.state.shortLink
-                        );
-                        this.setState({
-                          snackbar: true,
-                          key: Date.now(),
-                          message: Blockly.Msg.messages_copylink_success,
-                          type: "success",
-                        });
-                      }}
-                      size="large">
-                      <FontAwesomeIcon icon={faCopy} size="xs" />
-                    </IconButton>
-                  </Tooltip>
-                </div>                
-                <div style={{ marginTop: "10px", display: 'flex', justifyContent: 'center' }}>
-                  <QRCode
-                    id="qr-gen"
-                    value={this.state.shortLink}
-                    size={256}
-                    level={"L"}
-                    includeMargin={false}
-                  />
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px'}}>
-                  <Button className={`download QR Code ${this.props.classes.button}`} onClick={() => this.downloadQRCode()} variant="contained" startIcon={<FontAwesomeIcon icon={faDownload} size="xs" />}>
-                    Download QR code
-                  </Button>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'center', marginTop: "20px"}}>
-                  <FacebookShareButton url={this.state.shortLink} quote={"I created this sketch for my senseBox. Have a look!"} hashtag={"#senseBox"}>
-                    <FacebookIcon size={32} round />
-                  </FacebookShareButton>
-                  <TwitterShareButton url={this.state.shortLink} title={"I created this sketch for my senseBox. Have a look!"} hashtags={["senseBox", "Blockly", "citizenScience"]}>
-                    <TwitterIcon size={32} round />
-                  </TwitterShareButton>
-                  <WhatsappShareButton url={this.state.shortLink} title={"Look at my SenseBox sketch that I created with Blockly!"} separator={": "}>
-                    <WhatsappIcon size={32} round />
-                  </WhatsappShareButton>
-                  <EmailShareButton url={this.state.shortLink} subject={"SenseBox Blockly Sketch"} body={"I created this sketch for my senseBox. Have a look!"} separator={": "}>
-                    <EmailIcon size={32} round />
-                  </EmailShareButton>
-                </div>
-                { this.props.project &&
-                  this.props.project.shared &&
-                  this.props.message.id !== "SHARE_SUCCESS" ? (
-                  <Typography
-                    variant="body2"
-                    style={{ marginTop: "20px" }}
-                  >
-                    {`Das Projekt wurde bereits geteilt. Der Link ist noch mindestens ${
-                      moment(this.props.project.shared).diff(
-                        moment().utc(),
-                        "days"
-                      ) === 0
+                    <FontAwesomeIcon icon={faCopy} size="xs" />
+                  </IconButton>
+                </Tooltip>
+              </div>
+              <div
+                style={{
+                  marginTop: "10px",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <QRCode
+                  id="qr-gen"
+                  value={this.state.shortLink}
+                  size={256}
+                  level={"L"}
+                  includeMargin={false}
+                />
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: "20px",
+                }}
+              >
+                <Button
+                  className={`download QR Code ${this.props.classes.button}`}
+                  onClick={() => this.downloadQRCode()}
+                  variant="contained"
+                  startIcon={<FontAwesomeIcon icon={faDownload} size="xs" />}
+                >
+                  Download QR code
+                </Button>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: "20px",
+                }}
+              >
+                <FacebookShareButton
+                  url={this.state.shortLink}
+                  quote={"I created this sketch for my senseBox. Have a look!"}
+                  hashtag={"#senseBox"}
+                >
+                  <FacebookIcon size={32} round />
+                </FacebookShareButton>
+                <TwitterShareButton
+                  url={this.state.shortLink}
+                  title={"I created this sketch for my senseBox. Have a look!"}
+                  hashtags={["senseBox", "Blockly", "citizenScience"]}
+                >
+                  <TwitterIcon size={32} round />
+                </TwitterShareButton>
+                <WhatsappShareButton
+                  url={this.state.shortLink}
+                  title={
+                    "Look at my SenseBox sketch that I created with Blockly!"
+                  }
+                  separator={": "}
+                >
+                  <WhatsappIcon size={32} round />
+                </WhatsappShareButton>
+                <EmailShareButton
+                  url={this.state.shortLink}
+                  subject={"SenseBox Blockly Sketch"}
+                  body={"I created this sketch for my senseBox. Have a look!"}
+                  separator={": "}
+                >
+                  <EmailIcon size={32} round />
+                </EmailShareButton>
+              </div>
+              {this.props.project &&
+              this.props.project.shared &&
+              this.props.message.id !== "SHARE_SUCCESS" ? (
+                <Typography variant="body2" style={{ marginTop: "20px" }}>
+                  {`Das Projekt wurde bereits geteilt. Der Link ist noch mindestens ${
+                    moment(this.props.project.shared).diff(
+                      moment().utc(),
+                      "days",
+                    ) === 0
                       ? moment(this.props.project.shared).diff(
                           moment().utc(),
-                          "hours"
+                          "hours",
                         ) === 0
-                      ? `${moment(this.props.project.shared).diff(
-                          moment().utc(),
-                          "minutes"
-                        )} Minuten`
+                        ? `${moment(this.props.project.shared).diff(
+                            moment().utc(),
+                            "minutes",
+                          )} Minuten`
+                        : `${moment(this.props.project.shared).diff(
+                            moment().utc(),
+                            "hours",
+                          )} Stunden`
                       : `${moment(this.props.project.shared).diff(
                           moment().utc(),
-                          "hours"
-                        )} Stunden`
-                      : `${moment(this.props.project.shared).diff(
-                          moment().utc(),
-                          "days"
+                          "days",
                         )} Tage`
-                    } gültig.`}
-                  </Typography>
-                  ) : (
-                    <Typography
-                      variant="body2"
-                      style={{ marginTop: "20px" }}
-                    >
-                      {`Der Link ist nun ${process.env.REACT_APP_SHARE_LINK_EXPIRES} Tage gültig.`}
-                    </Typography>
-                  )
-                }
-              </div> 
-            )
-          }
+                  } gültig.`}
+                </Typography>
+              ) : (
+                <Typography variant="body2" style={{ marginTop: "20px" }}>
+                  {`Der Link ist nun ${process.env.REACT_APP_SHARE_LINK_EXPIRES} Tage gültig.`}
+                </Typography>
+              )}
+            </div>
+          )}
         </Dialog>
       </div>
     );
@@ -311,5 +379,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, { shareProject, clearMessages })(
-  withStyles(styles, { withTheme: true })(WorkspaceFunc)
+  withStyles(styles, { withTheme: true })(WorkspaceFunc),
 );

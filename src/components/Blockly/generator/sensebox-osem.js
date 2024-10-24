@@ -105,9 +105,8 @@ unsigned long getTime() {
       float value;
     } measurement;`;
   Blockly.Arduino.definitions_["buffer"] = "char buffer[750];";
-  Blockly.Arduino.definitions_[
-    "num_measurement"
-  ] = `measurement measurements[NUM_SENSORS];
+  Blockly.Arduino.definitions_["num_measurement"] =
+    `measurement measurements[NUM_SENSORS];
     uint8_t num_measurements = 0;`;
   Blockly.Arduino.definitions_["lengthMultiplikator"] =
     "const int lengthMultiplikator = 35;";
@@ -201,22 +200,22 @@ ${
     var lat = Blockly.Arduino.valueToCode(
       Block,
       "lat",
-      Blockly.Arduino.ORDER_ATOMIC
+      Blockly.Arduino.ORDER_ATOMIC,
     );
     var lng = Blockly.Arduino.valueToCode(
       Block,
       "lng",
-      Blockly.Arduino.ORDER_ATOMIC
+      Blockly.Arduino.ORDER_ATOMIC,
     );
     var timestamp = Blockly.Arduino.valueToCode(
       Block,
       "timeStamp",
-      Blockly.Arduino.ORDER_ATOMIC
+      Blockly.Arduino.ORDER_ATOMIC,
     );
     var altitude = Blockly.Arduino.valueToCode(
       Block,
       "altitude",
-      Blockly.Arduino.ORDER_ATOMIC
+      Blockly.Arduino.ORDER_ATOMIC,
     );
     Blockly.Arduino.definitions_["lengthMultiplikator"] =
       "const int lengthMultiplikator = 77;";
@@ -391,9 +390,8 @@ Blockly.Arduino.sensebox_esp32s2_osem_connection = function (Block) {
     port = 80;
   }
   Blockly.Arduino.definitions_["buffer"] = "char buffer[750];";
-  Blockly.Arduino.definitions_[
-    "num_measurement"
-  ] = `measurement measurements[NUM_SENSORS];
+  Blockly.Arduino.definitions_["num_measurement"] =
+    `measurement measurements[NUM_SENSORS];
     uint8_t num_measurements = 0;`;
   Blockly.Arduino.definitions_["lengthMultiplikator"] =
     "const int lengthMultiplikator = 35;";
@@ -473,22 +471,22 @@ ${
     var lat = Blockly.Arduino.valueToCode(
       Block,
       "lat",
-      Blockly.Arduino.ORDER_ATOMIC
+      Blockly.Arduino.ORDER_ATOMIC,
     );
     var lng = Blockly.Arduino.valueToCode(
       Block,
       "lng",
-      Blockly.Arduino.ORDER_ATOMIC
+      Blockly.Arduino.ORDER_ATOMIC,
     );
     var timestamp = Blockly.Arduino.valueToCode(
       Block,
       "timeStamp",
-      Blockly.Arduino.ORDER_ATOMIC
+      Blockly.Arduino.ORDER_ATOMIC,
     );
     var altitude = Blockly.Arduino.valueToCode(
       Block,
       "altitude",
-      Blockly.Arduino.ORDER_ATOMIC
+      Blockly.Arduino.ORDER_ATOMIC,
     );
     Blockly.Arduino.definitions_["lengthMultiplikator"] =
       "const int lengthMultiplikator = 77;";

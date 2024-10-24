@@ -19,10 +19,10 @@ Blockly.Blocks["sensebox_rtc_set"] = {
     this.setColour(getColour().time);
     this.appendDummyInput().appendField(Blockly.Msg.sensebox_rtc_set);
     this.appendValueInput("second").appendField(
-      Blockly.Msg.sensebox_rtc_second
+      Blockly.Msg.sensebox_rtc_second,
     );
     this.appendValueInput("minutes").appendField(
-      Blockly.Msg.sensebox_rtc_minutes
+      Blockly.Msg.sensebox_rtc_minutes,
     );
     this.appendValueInput("hour").appendField(Blockly.Msg.sensebox_rtc_hour);
     this.appendValueInput("day").appendField(Blockly.Msg.sensebox_rtc_day);
@@ -60,7 +60,7 @@ Blockly.Blocks["sensebox_rtc_get"] = {
           [Blockly.Msg.sensebox_rtc_month, "month"],
           [Blockly.Msg.sensebox_rtc_year, "year"],
         ]),
-        "dropdown"
+        "dropdown",
       );
     this.setOutput(true, Types.LARGE_NUMBER.typeName);
     this.setTooltip(Blockly.Msg.sensebox_rtc_get_tooltip);
@@ -98,7 +98,7 @@ Blockly.Blocks["sensebox_internal_rtc_set"] = {
     this.setHelpUrl(Blockly.Msg.sensebox_rtc_helpurl);
     this.setColour(getColour().time);
     this.appendValueInput("time").appendField(
-      Blockly.Msg.sensebox_internal_rtc_set
+      Blockly.Msg.sensebox_internal_rtc_set,
     );
     this.setPreviousStatement(true);
     this.setNextStatement(true);
@@ -122,7 +122,7 @@ Blockly.Blocks["sensebox_internal_rtc_get"] = {
           [Blockly.Msg.sensebox_internal_rtc_minutes, "Minutes"],
           [Blockly.Msg.sensebox_internal_rtc_seconds, "Seconds"],
         ]),
-        "dropdown"
+        "dropdown",
       );
     this.setOutput(true, Types.LARGE_NUMBER.typeName);
     this.setTooltip(Blockly.Msg.sensebox_internal_rtc_get_tooltip);
@@ -134,7 +134,7 @@ Blockly.Blocks["sensebox_internal_rtc_get_timestamp"] = {
     this.setHelpUrl(Blockly.Msg.sensebox_internal_rtc_helpurl);
     this.setColour(getColour().time);
     this.appendDummyInput().appendField(
-      Blockly.Msg.sensebox_internal_rtc_get_timestamp
+      Blockly.Msg.sensebox_internal_rtc_get_timestamp,
     );
     this.setOutput(true);
     this.setTooltip(Blockly.Msg.sensebox_internal_rtc_get_timestamp_tooltip);

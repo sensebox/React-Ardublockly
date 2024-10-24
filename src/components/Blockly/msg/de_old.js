@@ -1425,8 +1425,10 @@ Blockly.Msg.compile_overlay_text =
 Blockly.Msg.compile_overlay_help =
   "Benötigst du mehr Hilfe? Dann schaue hier: ";
 
-Blockly.Msg.warning_File_Board= "Der ausgewählte Boardtyp unterscheidet sich von dem Boardtyp des geladenen Projekts. Möglicherweise funktioniert das Projekt nicht wie erwartet.";
-Blockly.Msg.dialog_confirm = "Möchtest du das Projekt aus der XML-Datei wirklich einfügen? Alle aktuellen Blöcke werden gelöscht.";
+Blockly.Msg.warning_File_Board =
+  "Der ausgewählte Boardtyp unterscheidet sich von dem Boardtyp des geladenen Projekts. Möglicherweise funktioniert das Projekt nicht wie erwartet.";
+Blockly.Msg.dialog_confirm =
+  "Möchtest du das Projekt aus der XML-Datei wirklich einfügen? Alle aktuellen Blöcke werden gelöscht.";
 
 /**
  * Tooltip Viewer
@@ -1458,7 +1460,5 @@ Blockly.Msg.faq_q3_question = `Ich habe einen Fehler gefunden oder etwas funktio
 Blockly.Msg.faq_q3_answer = `
 Am besten legst du dazu ein Issue auf [Github](https://github.com/sensebox/React-Ardublockly/issues) an. Alternativ kannst du uns auch eine Email an info(at)sensebox.de senden
 `;
-
-
 
 export const De = Blockly.Msg;

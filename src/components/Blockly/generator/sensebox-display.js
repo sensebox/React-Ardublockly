@@ -8,9 +8,8 @@ Blockly.Arduino.sensebox_display_beginDisplay = function () {
     "#include <Adafruit_GFX.h> // http://librarymanager/All#Adafruit_GFX_Library";
   Blockly.Arduino.libraries_["library_AdafruitSSD1306"] =
     "#include <Adafruit_SSD1306.h> // http://librarymanager/All#Adafruit_SSD1306";
-  Blockly.Arduino.definitions_[
-    "define_display_size"
-  ] = `#define SCREEN_WIDTH 128\n#define SCREEN_HEIGHT 64`;
+  Blockly.Arduino.definitions_["define_display_size"] =
+    `#define SCREEN_WIDTH 128\n#define SCREEN_HEIGHT 64`;
   Blockly.Arduino.definitions_["define_display"] =
     "#define OLED_RESET -1\nAdafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);";
 
@@ -32,7 +31,7 @@ Blockly.Arduino.sensebox_display_printDisplay = function () {
     Blockly.Arduino.valueToCode(
       this,
       "printDisplay",
-      Blockly.Arduino.ORDER_ATOMIC
+      Blockly.Arduino.ORDER_ATOMIC,
     ) || '"Keine Eingabe"';
   var size = this.getFieldValue("SIZE");
   var color = this.getFieldValue("COLOR");
@@ -50,13 +49,13 @@ Blockly.Arduino.sensebox_display_fastPrint = function () {
   var value1 = Blockly.Arduino.valueToCode(
     this,
     "Value1",
-    Blockly.Arduino.ORDER_ATOMIC
+    Blockly.Arduino.ORDER_ATOMIC,
   );
   var dimension1 =
     Blockly.Arduino.valueToCode(
       this,
       "Dimension1",
-      Blockly.Arduino.ORDER_ATOMIC
+      Blockly.Arduino.ORDER_ATOMIC,
     ) || "0";
   var title2 =
     Blockly.Arduino.valueToCode(this, "Title2", Blockly.Arduino.ORDER_ATOMIC) ||
@@ -64,13 +63,13 @@ Blockly.Arduino.sensebox_display_fastPrint = function () {
   var value2 = Blockly.Arduino.valueToCode(
     this,
     "Value2",
-    Blockly.Arduino.ORDER_ATOMIC
+    Blockly.Arduino.ORDER_ATOMIC,
   );
   var dimension2 =
     Blockly.Arduino.valueToCode(
       this,
       "Dimension2",
-      Blockly.Arduino.ORDER_ATOMIC
+      Blockly.Arduino.ORDER_ATOMIC,
     ) || "0";
   Blockly.Arduino.codeFunctions_["sensebox_fastPrint"] = `
     void printOnDisplay(String title1, String measurement1, String unit1, String title2, String measurement2, String unit2) {
@@ -121,25 +120,25 @@ Blockly.Arduino.sensebox_display_plotDisplay = function () {
     Blockly.Arduino.valueToCode(
       this,
       "XRange1",
-      Blockly.Arduino.ORDER_ATOMIC
+      Blockly.Arduino.ORDER_ATOMIC,
     ) || "0";
   var XRange2 =
     Blockly.Arduino.valueToCode(
       this,
       "XRange2",
-      Blockly.Arduino.ORDER_ATOMIC
+      Blockly.Arduino.ORDER_ATOMIC,
     ) || "0";
   var YRange1 =
     Blockly.Arduino.valueToCode(
       this,
       "YRange1",
-      Blockly.Arduino.ORDER_ATOMIC
+      Blockly.Arduino.ORDER_ATOMIC,
     ) || "0";
   var YRange2 =
     Blockly.Arduino.valueToCode(
       this,
       "YRange2",
-      Blockly.Arduino.ORDER_ATOMIC
+      Blockly.Arduino.ORDER_ATOMIC,
     ) || "0";
   var XTick =
     Blockly.Arduino.valueToCode(this, "XTick", Blockly.Arduino.ORDER_ATOMIC) ||
@@ -151,13 +150,13 @@ Blockly.Arduino.sensebox_display_plotDisplay = function () {
     Blockly.Arduino.valueToCode(
       this,
       "TimeFrame",
-      Blockly.Arduino.ORDER_ATOMIC
+      Blockly.Arduino.ORDER_ATOMIC,
     ) || "0";
   var plotDisplay =
     Blockly.Arduino.valueToCode(
       this,
       "plotDisplay",
-      Blockly.Arduino.ORDER_ATOMIC
+      Blockly.Arduino.ORDER_ATOMIC,
     ) || '"Keine Eingabe"';
   Blockly.Arduino.libraries_["library_plot"] = "#include <Plot.h>";
   Blockly.Arduino.definitions_["define_plot_class"] =

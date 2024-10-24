@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 
 import * as Blockly from "blockly/core";
 
-import withStyles from '@mui/styles/withStyles';
+import withStyles from "@mui/styles/withStyles";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import Chip from "@mui/material/Chip";
@@ -23,7 +23,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { isWidthDown } from "../../helpers/handleBreakpoints";
 
 // FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
-const withWidth = () => (WrappedComponent) => (props) => <WrappedComponent {...props} width="xs" />;
+const withWidth = () => (WrappedComponent) => (props) => (
+  <WrappedComponent {...props} width="xs" />
+);
 
 const styles = (theme) => ({
   stats: {
@@ -142,7 +144,10 @@ class WorkspaceStats extends Component {
               remainingBlocksInfinity
                 ? bigDisplay
                   ? { marginRight: "1rem" }
-                  : { marginRight: "1rem", marginBottom: "5px" }
+                  : {
+                      marginRight: "1rem",
+                      marginBottom: "5px",
+                    }
                 : {}
             }
             color="primary"
@@ -160,7 +165,10 @@ class WorkspaceStats extends Component {
               style={
                 bigDisplay
                   ? { marginRight: "1rem" }
-                  : { marginRight: "1rem", marginBottom: "5px" }
+                  : {
+                      marginRight: "1rem",
+                      marginBottom: "5px",
+                    }
               }
               color="primary"
               label={workspace.remainingCapacity()}
@@ -177,7 +185,8 @@ class WorkspaceStats extends Component {
           <IconButton
             className={this.props.classes.menu}
             onClick={(event) => this.handleClick(event)}
-            size="large">
+            size="large"
+          >
             <FontAwesomeIcon icon={faEllipsisH} size="xs" />
           </IconButton>
         </Tooltip>
@@ -222,5 +231,5 @@ const mapStateToProps = (state) => ({
 
 export default connect(
   mapStateToProps,
-  null
+  null,
 )(withStyles(styles, { withTheme: true })(withWidth()(WorkspaceStats)));
