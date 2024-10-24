@@ -72,8 +72,7 @@ IPAddress myGateway(${gateway.replaceAll(".", ",")});
 IPAddress mySubnet(${subnetmask.replaceAll(".", ",")});
     `;
     Blockly.Arduino.setupCode_["ethernet_setup"] = `
-Ethernet.init(23);
-// start the Ethernet connection:
+Ethernet.init(23);// start the Ethernet connection:
 if (Ethernet.begin(mac) == 0) {
     // no point in carrying on, so do nothing forevermore:
     // try to congifure using IP address instead of DHCP:
@@ -84,10 +83,8 @@ delay(1000);
     `;
   } else {
     Blockly.Arduino.setupCode_["ethernet_setup"] = `
-Ethernet.init(23);
-// start the Ethernet connection:
-Ethernet.begin(mac);
-// give the Ethernet shield a second to initialize:
+Ethernet.init(23); // start the Ethernet connection:
+Ethernet.begin(mac); // give the Ethernet shield a second to initialize:
 delay(1000);
     `;
   }
