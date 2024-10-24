@@ -3,9 +3,8 @@ import * as Blockly from "blockly/core";
 Blockly.Arduino.sensebox_phyphox_init = function () {
   var name = this.getFieldValue("devicename");
   Blockly.Arduino.libraries_["phyphox_library"] = `#include <phyphoxBle.h>`;
-  Blockly.Arduino.phyphoxSetupCode_[
-    "phyphox_start"
-  ] = `PhyphoxBLE::start("${name}");`;
+  Blockly.Arduino.phyphoxSetupCode_["phyphox_start"] =
+    `PhyphoxBLE::start("${name}");`;
   var code = ``;
   return code;
 };
@@ -15,28 +14,21 @@ Blockly.Arduino.sensebox_phyphox_experiment = function () {
   var title = this.getFieldValue("title").replace(/[^a-zA-Z0-9]/g, "");
   var description = this.getFieldValue("description");
   var branch = Blockly.Arduino.statementToCode(this, "view");
-  Blockly.Arduino.phyphoxSetupCode_[
-    `PhyphoxBleExperiment_${experimentname}`
-  ] = `PhyphoxBleExperiment ${experimentname};`;
-  Blockly.Arduino.phyphoxSetupCode_[
-    `setTitle_${title}`
-  ] = `${experimentname}.setTitle("${title}");`;
-  Blockly.Arduino.phyphoxSetupCode_[
-    `setCategory_senseBoxExperiments}`
-  ] = `${experimentname}.setCategory("senseBox Experimente");`;
-  Blockly.Arduino.phyphoxSetupCode_[
-    `setDescription_${description}`
-  ] = `${experimentname}.setDescription("${description}");`;
-  Blockly.Arduino.phyphoxSetupCode_[
-    `addView_${experimentname}`
-  ] = `PhyphoxBleExperiment::View firstView;\nfirstView.setLabel("Messwerte"); //Create a "view"`;
+  Blockly.Arduino.phyphoxSetupCode_[`PhyphoxBleExperiment_${experimentname}`] =
+    `PhyphoxBleExperiment ${experimentname};`;
+  Blockly.Arduino.phyphoxSetupCode_[`setTitle_${title}`] =
+    `${experimentname}.setTitle("${title}");`;
+  Blockly.Arduino.phyphoxSetupCode_[`setCategory_senseBoxExperiments}`] =
+    `${experimentname}.setCategory("senseBox Experimente");`;
+  Blockly.Arduino.phyphoxSetupCode_[`setDescription_${description}`] =
+    `${experimentname}.setDescription("${description}");`;
+  Blockly.Arduino.phyphoxSetupCode_[`addView_${experimentname}`] =
+    `PhyphoxBleExperiment::View firstView;\nfirstView.setLabel("Messwerte"); //Create a "view"`;
   Blockly.Arduino.phyphoxSetupCode_[`addGraph`] = `${branch}`;
-  Blockly.Arduino.phyphoxSetupCode_[
-    `addView_firstview`
-  ] = `${experimentname}.addView(firstView);`; //Attach view to experiment
-  Blockly.Arduino.phyphoxSetupCode_[
-    `addExperiment_${experimentname}`
-  ] = `PhyphoxBLE::addExperiment(${experimentname});`; //Attach experiment to server
+  Blockly.Arduino.phyphoxSetupCode_[`addView_firstview`] =
+    `${experimentname}.addView(firstView);`; //Attach view to experiment
+  Blockly.Arduino.phyphoxSetupCode_[`addExperiment_${experimentname}`] =
+    `PhyphoxBLE::addExperiment(${experimentname});`; //Attach experiment to server
 
   var code = ``;
   return code;
@@ -74,13 +66,13 @@ Blockly.Arduino.sensebox_phyphox_graph = function () {
     Blockly.Arduino.valueToCode(
       this,
       "channel0",
-      Blockly.Arduino.ORDER_ATOMIC
+      Blockly.Arduino.ORDER_ATOMIC,
     ) || 0;
   var channelY =
     Blockly.Arduino.valueToCode(
       this,
       "channel1",
-      Blockly.Arduino.ORDER_ATOMIC
+      Blockly.Arduino.ORDER_ATOMIC,
     ) || 1;
 
   var code = `PhyphoxBleExperiment::Graph ${label};\n`; //Create graph which will plot random numbers over time
@@ -89,7 +81,7 @@ Blockly.Arduino.sensebox_phyphox_graph = function () {
   code += `${label}.setUnitY("${unity}");\n`;
   code += `${label}.setLabelX("${labelx}");\n`;
   code += `${label}.setLabelY("${labely}");\n`;
-  if (style === "dots"){
+  if (style === "dots") {
     code += `${label}.setStyle("${style}");\n`;
   }
   code += `${label}.setChannel(${channelX}, ${channelY});\n`;
@@ -124,15 +116,13 @@ Blockly.Arduino.sensebox_phyphox_experiment_send = function () {
   return code;
 };
 
-
 /**
  * senseBox BLE
- * 
- * 
+ *
+ *
  */
 
 Blockly.Arduino.sensebox_ble_init = function () {
-  
   var code = "";
   return code;
 };

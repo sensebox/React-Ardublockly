@@ -143,23 +143,29 @@ export const UI = {
   compiledialog_text:
     "Beim kompilieren ist ein Fehler aufgetreten. Überprüfe deine Blöcke und versuche es erneut",
 
-/**
- * File Upload Dialog
- */
+  /**
+   * File Upload Dialog
+   */
 
-  warning_file_board: "Der ausgewählte Boardtyp unterscheidet sich von dem Boardtyp des geladenen Projekts. Möglicherweise funktioniert das Projekt nicht wie erwartet.",
-  dialog_confirm: "Möchtest du das Projekt aus der XML-Datei wirklich einfügen? Alle aktuellen Blöcke werden gelöscht.",
-  warning_old_xml_file: "Die XML-Datei wurde mit einer älteren Version von Blockly erstellt. Standardmäßig wird das Board auf 'senseBox MCU' gesetzt.",
+  warning_file_board:
+    "Der ausgewählte Boardtyp unterscheidet sich von dem Boardtyp des geladenen Projekts. Möglicherweise funktioniert das Projekt nicht wie erwartet.",
+  dialog_confirm:
+    "Möchtest du das Projekt aus der XML-Datei wirklich einfügen? Alle aktuellen Blöcke werden gelöscht.",
+  warning_old_xml_file:
+    "Die XML-Datei wurde mit einer älteren Version von Blockly erstellt. Standardmäßig wird das Board auf 'senseBox MCU' gesetzt.",
 
-/** Open Project */
+  /** Open Project */
   dialog_title: "Blöcke öffnen",
   no_blocks_found_title: "Keine Blöcke",
-  no_blocks_found_text:"Es wurden keine Blöcke detektiert. Bitte überprüfe den XML-Code und versuche es erneut.",
+  no_blocks_found_text:
+    "Es wurden keine Blöcke detektiert. Bitte überprüfe den XML-Code und versuche es erneut.",
   xml_loaded: "Das Projekt aus der XML-Datei wurde erfolgreich eingefügt.",
   no_valid_data_type_title: "Unzulässiger Dateityp",
-  no_valid_data_type_text:"Die übergebene Datei entsprach nicht dem geforderten Format. Es sind nur XML-Dateien zulässig.",
+  no_valid_data_type_text:
+    "Die übergebene Datei entsprach nicht dem geforderten Format. Es sind nur XML-Dateien zulässig.",
   no_valid_xml_title: "Ungültige XML",
-  no_valid_xml_text:"Die XML-Datei konnte nicht in Blöcke zerlegt werden. Bitte überprüfe den XML-Code und versuche es erneut.",
+  no_valid_xml_text:
+    "Die XML-Datei konnte nicht in Blöcke zerlegt werden. Bitte überprüfe den XML-Code und versuche es erneut.",
   /**
    * Buttons
    *
@@ -214,8 +220,8 @@ export const UI = {
   settings_compiler: "Compiler URL",
   settings_compiler_text:
     "Geben die URL des Compilers ein, den du verwenden möchten. Die Standard-URL ist: https://compiler.sensebox.de",
-  settings_compiler_helperText: "Die URL muss mit https:// oder http:// beginnen",
-
+  settings_compiler_helperText:
+    "Die URL muss mit https:// oder http:// beginnen",
 
   /**
    * 404
@@ -307,7 +313,8 @@ export const UI = {
 
   compile_overlay_head: "Dein Programm wird nun kompiliert und heruntergeladen",
   compile_overlay_text: "Kopiere es anschließend auf deine senseBox MCU",
-  compile_overlay_text_esp32: "Übertrage es anschließend auf deine MCU-S2 und habe einen kleinen Moment Geduld.\n Sobald der Programmcode erfolgreich übertragen wurde, leuchtet die RGB-LED grün auf.\n Dieser Prozess kann bis zu 60 Sekunden dauern.",
+  compile_overlay_text_esp32:
+    "Übertrage es anschließend auf deine MCU-S2 und habe einen kleinen Moment Geduld.\n Sobald der Programmcode erfolgreich übertragen wurde, leuchtet die RGB-LED grün auf.\n Dieser Prozess kann bis zu 60 Sekunden dauern.",
   compile_overlay_help: "Benötigst du mehr Hilfe? Dann schaue hier: ",
 
   /**
@@ -355,5 +362,6 @@ export const UI = {
   sensorinfo_measurable_phenos: "Messbare Phänomene",
   sensorinfo_manufacturer: "Hersteller",
   sensorinfo_lifetime: "Lebensdauer",
-  sensorinfo_explanation: "Diese Informationen wurden aus [sensors.wiki](https://sensors.wiki) entnommen. Für weitere Informationen besuchen Sie den Abschnitt über diesen Sensor "
+  sensorinfo_explanation:
+    "Diese Informationen wurden aus [sensors.wiki](https://sensors.wiki) entnommen. Für weitere Informationen besuchen Sie den Abschnitt über diesen Sensor ",
 };

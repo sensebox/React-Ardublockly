@@ -1,12 +1,11 @@
 export const detectWhitespacesAndReturnReadableResult = (word) => {
-  var readableResult = '';
+  var readableResult = "";
   var space = false;
-  for(var i = 0; i < word.length; i++){
+  for (var i = 0; i < word.length; i++) {
     var letter = word[i];
-    if(/\s/g.test(letter)){
+    if (/\s/g.test(letter)) {
       space = true;
-    }
-    else {
+    } else {
       readableResult += space ? letter.toUpperCase() : letter;
       space = false;
     }

@@ -68,13 +68,13 @@ Blockly.Blocks["sensebox_ethernet"] = {
           [Blockly.Msg.senseBox_ethernet_dhcp, "Dhcp"],
           [Blockly.Msg.senseBox_ethernet_manuel_config, "Manual"],
         ]),
-        "dhcp"
+        "dhcp",
       );
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_ethernet_mac)
       .appendField(
         new Blockly.FieldTextInput("0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED"),
-        "mac"
+        "mac",
       );
 
     this.setHelpUrl(Blockly.Msg.senseBox_ethernet_helpurl);
@@ -83,7 +83,7 @@ Blockly.Blocks["sensebox_ethernet"] = {
     this.getField("dhcp").setValidator(
       function (val) {
         this.updateShape_(val === "Manual");
-      }.bind(this)
+      }.bind(this),
     );
   },
 
@@ -118,7 +118,7 @@ Blockly.Blocks["sensebox_ethernetIp"] = {
     this.setHelpUrl(Blockly.Msg.senseBox_ethernetIp_helpurl);
     this.setTooltip(Blockly.Msg.senseBox_ethernet_ip_tooltip);
     this.setOutput(true, null);
-  }
+  },
 };
 
 Blockly.Blocks["sensebox_wifi_status"] = {
@@ -153,7 +153,7 @@ Blockly.Blocks["sensebox_wifi_rssi"] = {
 
 /**
  * ESP32 WiFi
- * 
+ *
  */
 
 Blockly.Blocks["sensebox_esp32s2_wifi_enterprise"] = {
@@ -251,4 +251,3 @@ Blockly.Blocks["sensebox_esp32s2_wifi"] = {
   },
   LOOP_TYPES: ["arduino_functions"],
 };
-

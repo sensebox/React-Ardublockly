@@ -58,7 +58,7 @@ const CodeEditor = (props) => {
               ? "sensebox-mcu"
               : "sensebox-esp32s2"
           }&filename=${filename}`,
-          "_self"
+          "_self",
         );
       })
       .catch((err) => {

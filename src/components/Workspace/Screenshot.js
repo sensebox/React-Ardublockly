@@ -8,7 +8,7 @@ import { saveAs } from "file-saver";
 
 import { detectWhitespacesAndReturnReadableResult } from "../../helpers/whitespace";
 
-import withStyles from '@mui/styles/withStyles';
+import withStyles from "@mui/styles/withStyles";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 
@@ -82,7 +82,8 @@ class Screenshot extends Component {
           <IconButton
             className={this.props.classes.button}
             onClick={() => this.getSvg()}
-            size="large">
+            size="large"
+          >
             <FontAwesomeIcon icon={faCamera} size="xs" />
           </IconButton>
         </Tooltip>
@@ -101,5 +102,5 @@ const mapStateToProps = (state) => ({
 
 export default connect(
   mapStateToProps,
-  null
+  null,
 )(withStyles(styles, { withTheme: true })(Screenshot));

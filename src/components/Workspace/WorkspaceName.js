@@ -7,7 +7,7 @@ import { setDescription, updateProject } from "../../actions/projectActions";
 import Snackbar from "../Snackbar";
 import Dialog from "../Dialog";
 
-import withStyles from '@mui/styles/withStyles';
+import withStyles from "@mui/styles/withStyles";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import TextField from "@mui/material/TextField";
@@ -19,7 +19,9 @@ import * as Blockly from "blockly/core";
 import { isWidthDown } from "../../helpers/handleBreakpoints";
 
 // FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
-const withWidth = () => (WrappedComponent) => (props) => <WrappedComponent {...props} width="xs" />;
+const withWidth = () => (WrappedComponent) => (props) => (
+  <WrappedComponent {...props} width="xs" />
+);
 
 const styles = (theme) => ({
   workspaceName: {
@@ -91,7 +93,7 @@ class WorkspaceName extends Component {
       } else {
         this.props.updateProject(
           this.props.projectType,
-          this.props.project._id
+          this.props.project._id,
         );
       }
     } else {
@@ -108,8 +110,9 @@ class WorkspaceName extends Component {
     return (
       <div style={this.props.style}>
         <Tooltip
-          title={`${Blockly.Msg.tooltip_project_title} ${this.props.name ? `: ${this.props.name}` : ""
-            }`}
+          title={`${Blockly.Msg.tooltip_project_title} ${
+            this.props.name ? `: ${this.props.name}` : ""
+          }`}
           arrow
           style={{ height: "100%" }}
         >
@@ -138,13 +141,13 @@ class WorkspaceName extends Component {
             }}
           >
             {this.props.name &&
-              !isWidthDown(
-                this.props.projectType === "project" ||
-                  this.props.projectType === "gallery"
-                  ? "xl"
-                  : "xs",
-                this.props.width
-              ) ? (
+            !isWidthDown(
+              this.props.projectType === "project" ||
+                this.props.projectType === "gallery"
+                ? "xl"
+                : "xs",
+              this.props.width,
+            ) ? (
               <Typography style={{ margin: "auto -3px auto 12px" }}>
                 {this.props.name}
               </Typography>
@@ -152,8 +155,11 @@ class WorkspaceName extends Component {
             <div style={{ width: "40px", display: "flex" }}>
               <FontAwesomeIcon
                 icon={faPen}
-                
-                style={{ height: "18px", width: "18px", margin: "auto" }}
+                style={{
+                  height: "18px",
+                  width: "18px",
+                  margin: "auto",
+                }}
               />
             </div>
           </div>
@@ -187,7 +193,7 @@ class WorkspaceName extends Component {
         >
           <div style={{ marginTop: "10px" }}>
             {this.props.projectType === "gallery" ||
-              this.state.projectType === "gallery" ? (
+            this.state.projectType === "gallery" ? (
               <div>
                 <TextField
                   variant="standard"
@@ -197,7 +203,8 @@ class WorkspaceName extends Component {
                   }
                   value={this.state.name}
                   onChange={this.setFileName}
-                  style={{ marginBottom: "10px" }} />
+                  style={{ marginBottom: "10px" }}
+                />
                 <TextField
                   variant="standard"
                   fullWidth
@@ -205,7 +212,8 @@ class WorkspaceName extends Component {
                   placeholder={"Projektbeschreibung"}
                   value={this.state.description}
                   onChange={this.setDescription}
-                  style={{ marginBottom: "10px" }} />
+                  style={{ marginBottom: "10px" }}
+                />
               </div>
             ) : (
               <TextField
@@ -214,7 +222,8 @@ class WorkspaceName extends Component {
                 placeholder={this.state.saveXml ? "Dateiname" : "Projekttitel"}
                 value={this.state.name}
                 onChange={this.setFileName}
-                style={{ marginRight: "10px" }} />
+                style={{ marginRight: "10px" }}
+              />
             )}
             <Button
               disabled={!this.state.name}

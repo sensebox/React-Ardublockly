@@ -62,7 +62,7 @@ Blockly["Arduino"].addReservedWords(
     "pulseIn,millis,micros,delay,delayMicroseconds,min,max,abs,constrain," +
     "map,pow,sqrt,sin,cos,tan,randomSeed,random,lowByte,highByte,bitRead," +
     "bitWrite,bitSet,bitClear,ultraSonicDistance,parseDouble,setNeoPixelColor," +
-    "bit,attachInterrupt,detachInterrupt,interrupts,noInterrupts,short,isBtnPressed"
+    "bit,attachInterrupt,detachInterrupt,interrupts,noInterrupts,short,isBtnPressed",
 );
 
 /**
@@ -132,7 +132,7 @@ Blockly["Arduino"].init = function (workspace) {
 
   if (!Blockly["Arduino"].nameDB_) {
     Blockly["Arduino"].nameDB_ = new Blockly.Names(
-      Blockly["Arduino"].RESERVED_WORDS_
+      Blockly["Arduino"].RESERVED_WORDS_,
     );
   } else {
     Blockly["Arduino"].nameDB_.reset();
@@ -147,8 +147,6 @@ Blockly["Arduino"].init = function (workspace) {
   //     defvars.push(Blockly['Arduino'].nameDB_.getName(devVarList[i],
   //         Blockly.Names.DEVELOPER_VARIABLE_TYPE));
   // }
-
-
 };
 
 /**

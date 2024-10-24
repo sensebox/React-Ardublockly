@@ -38,7 +38,7 @@ class BlocklyWindow extends Component {
     zoomToFit.init();
     // Initialize plugin.
     const backpack = new Backpack(workspace);
-    
+
     backpack.init();
   }
 
@@ -70,7 +70,6 @@ class BlocklyWindow extends Component {
       // workspace.updateToolbox(toolbox.toolboxDef_);
     }
     Blockly.svgResize(workspace);
-
   }
 
   render() {
@@ -151,5 +150,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, { onChangeWorkspace, clearStats })(
-  BlocklyWindow
+  BlocklyWindow,
 );
