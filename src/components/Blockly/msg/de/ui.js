@@ -333,6 +333,13 @@ export const UI = {
     "Beim kompilieren ist ein Fehler aufgetreten, überprüfe deine Blöcke.",
 
   /**
+   * Error View
+   */
+  suggestion_pre_text: "Versuch es mal mit: ",
+
+  display_not_declared:
+    "Stelle sicher, dasss du das Display im Setup initialisiert hast.",
+  /**
    * Code Editor
    *  */
   codeeditor_libraries_head: "Installierte Arduino Libraries",
