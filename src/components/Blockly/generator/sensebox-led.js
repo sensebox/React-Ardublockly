@@ -14,12 +14,13 @@ Blockly.Arduino.sensebox_rgb_led = function () {
   var color =
     Blockly.Arduino.valueToCode(this, "COLOR", Blockly.Arduino.ORDER_ATOMIC) ||
     "0";
-  Blockly.Arduino.libraries_["define_rgb_led" + dropdown_pin] =
-    "#include <Adafruit_NeoPixel.h>\n Adafruit_NeoPixel rgb_led_" +
-    dropdown_pin +
-    " = Adafruit_NeoPixel(1," +
-    dropdown_pin +
-    ",NEO_RGB + NEO_KHZ800);\n";
+  Blockly.Arduino.libraries_["library_neopixel"] = "#include <Adafruit_NeoPixel.h>"
+  Blockly.Arduino.definitions_["define_rgb_led" + dropdown_pin] =
+  "Adafruit_NeoPixel rgb_led_" +
+  dropdown_pin +
+  " = Adafruit_NeoPixel(1," +
+  dropdown_pin +
+  ",NEO_RGB + NEO_KHZ800);\n";
   Blockly.Arduino.setupCode_["setup_rgb_led" + dropdown_pin] =
     "rgb_led_" + dropdown_pin + ".begin();";
   var code =
@@ -46,8 +47,8 @@ Blockly.Arduino.sensebox_ws2818_led_init = function () {
       "BRIGHTNESS",
       Blockly.Arduino.ORDER_ATOMIC,
     ) || "50";
-  Blockly.Arduino.definitions_["define_rgb_led" + dropdown_pin] =
-    `#include <Adafruit_NeoPixel.h>\n Adafruit_NeoPixel rgb_led_${dropdown_pin}= Adafruit_NeoPixel(${numPixel}, ${dropdown_pin},NEO_GRB + NEO_KHZ800);\n`;
+  Blockly.Arduino.libraries_["library_neopixel"] = "#include <Adafruit_NeoPixel.h>"
+  Blockly.Arduino.definitions_["define_rgb_led" + dropdown_pin] = `Adafruit_NeoPixel rgb_led_${dropdown_pin}= Adafruit_NeoPixel(${numPixel}, ${dropdown_pin},NEO_GRB + NEO_KHZ800);\n`;
   Blockly.Arduino.setupCode_["setup_rgb_led" + dropdown_pin] =
     "rgb_led_" + dropdown_pin + ".begin();\n";
   Blockly.Arduino.setupCode_["setup_rgb_led_brightness" + dropdown_pin] =
