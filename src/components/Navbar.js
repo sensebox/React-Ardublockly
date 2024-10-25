@@ -150,8 +150,13 @@ class Navbar extends Component {
               </Typography>
             </Link>
             <Link to={"/"} style={{ marginLeft: "10px" }}>
-              <img src={senseboxLogo} alt="senseBox-Logo" width="30" />
+              <img
+                src={senseboxLogo}
+                alt="senseBox-Logo"
+                style={{ width: "35px", height: "auto" }}
+              />
             </Link>
+
             <div
               style={{
                 margin: "0 0 0 auto",
