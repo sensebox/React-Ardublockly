@@ -7,7 +7,6 @@ import Blockly from "blockly";
 //   selectedBoard = store.getState().board.board;
 // });
 
-
 /* Wifi connection and openSenseMap Blocks*/
 Blockly.Arduino.sensebox_wifi = function (block) {
   var pw = this.getFieldValue("Password");
@@ -116,21 +115,24 @@ Blockly.Arduino.sensebox_ethernetIp = function () {
 };
 
 /**
- * 
- * ESP32S2 WiFi Code 
- * 
+ *
+ * ESP32S2 WiFi Code
+ *
  */
 
 Blockly.Arduino.sensebox_esp32s2_wifi_enterprise = function () {
-/* WiFi connection for eduroam networks*/
+  /* WiFi connection for eduroam networks*/
   var pw = this.getFieldValue("Password");
   var user = this.getFieldValue("User");
   var ssid = this.getFieldValue("SSID");
   Blockly.Arduino.libraries_["library_WiFi"] = "#include <WiFi.h>";
   Blockly.Arduino.libraries_["library_wpa2"] = `#include "esp_wpa2.h"`;
-  Blockly.Arduino.definitions_["define_identity"] = `#define EAP_IDENTITY "${user}"`;
-  Blockly.Arduino.definitions_["define_username"] = `#define EAP_USERNAME "${user}"`;
-  Blockly.Arduino.definitions_["define_password"] = `#define EAP_PASSWORD "${pw}"`;
+  Blockly.Arduino.definitions_["define_identity"] =
+    `#define EAP_IDENTITY "${user}"`;
+  Blockly.Arduino.definitions_["define_username"] =
+    `#define EAP_USERNAME "${user}"`;
+  Blockly.Arduino.definitions_["define_password"] =
+    `#define EAP_PASSWORD "${pw}"`;
   Blockly.Arduino.variables_["ssid"] = `char ssid[] = "${ssid}";`;
   Blockly.Arduino.variables_["pass"] = `char pass[] = "";`;
   Blockly.Arduino.variables_["wifi_Status"] = "int status = WL_IDLE_STATUS;";
@@ -150,8 +152,7 @@ Blockly.Arduino.sensebox_esp32s2_wifi_enterprise = function () {
         delay(5000);
     }
     `;
-  } else
-  Blockly.Arduino.setupCode_["wifi_begin"] = `initWiFi();`;
+  } else Blockly.Arduino.setupCode_["wifi_begin"] = `initWiFi();`;
   var code = "";
   return code;
 };
@@ -179,15 +180,14 @@ Blockly.Arduino.sensebox_esp32s2_wifi = function () {
 Blockly.Arduino.sensebox_esp32s2_startap = function (block) {
   var ssid = this.getFieldValue("SSID");
   Blockly.Arduino.libraries_["library_ESPWiFi"] = "#include <WiFi.h>";
-  Blockly.Arduino.libraries_["library_ESPWiFiClient"] = "#include <WiFiClient.h>";
+  Blockly.Arduino.libraries_["library_ESPWiFiClient"] =
+    "#include <WiFiClient.h>";
   Blockly.Arduino.libraries_["WiFiAP"] = "#include <WiFiAP.h>";
   Blockly.Arduino.variables_["ssid"] = `const char ssid[] = "${ssid}";`;
   Blockly.Arduino.setupCode_["wifi_startAP"] = `WiFi.softAP(ssid);\n`;
-  var code ="";
+  var code = "";
   return code;
-}
-
-
+};
 
 // Blockly.Arduino.definitions_["certificate"] = `
 // const char* root_ca = \
@@ -223,5 +223,3 @@ Blockly.Arduino.sensebox_esp32s2_startap = function (block) {
 //                     "emyPxgcYxn/eR44/KJ4EBs+lVDR3veyJm+kXQ99b21/+jh5Xos1AnX5iItreGCc=\n" \
 //                     "-----END CERTIFICATE-----\n" ;
 //                     `;
-
-

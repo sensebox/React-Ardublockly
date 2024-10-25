@@ -59,7 +59,7 @@ export const tutorialReview = (review) => (dispatch) => {
     type: BUILDER_REVIEW,
     payload: review,
   });
-  dispatch(changeTutorialBuilder()); 
+  dispatch(changeTutorialBuilder());
 };
 
 export const tutorialSteps = (steps) => (dispatch) => {
@@ -233,7 +233,7 @@ export const setSubmitError = () => (dispatch, getState) => {
     if (i === 0) {
       if (step.requirements && step.requirements.length > 0) {
         var requirements = step.requirements.filter((requirement) =>
-          /^[0-9a-fA-F]{24}$/.test(requirement)
+          /^[0-9a-fA-F]{24}$/.test(requirement),
         );
         if (requirements.length < step.requirements.length) {
           dispatch(changeContent(requirements, i, "requirements"));
@@ -244,7 +244,7 @@ export const setSubmitError = () => (dispatch, getState) => {
       } else {
         var hardwareIds = data.map((hardware) => hardware.id);
         var hardware = step.hardware.filter((hardware) =>
-          hardwareIds.includes(hardware)
+          hardwareIds.includes(hardware),
         );
         if (hardware.length < step.hardware.length) {
           dispatch(changeContent(hardware, i, "hardware"));

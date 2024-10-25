@@ -121,7 +121,7 @@ class Compile extends Component {
     this.props.workspaceName(this.state.name);
     window.open(
       `${this.props.compiler}/download?id=${id}&board=${process.env.REACT_APP_BOARD}&filename=${filename}`,
-      "_self"
+      "_self",
     );
     this.setState({ progress: false });
   };
@@ -133,7 +133,7 @@ class Compile extends Component {
   createFileName = () => {
     if (this.props.platform === true) {
       const filename = detectWhitespacesAndReturnReadableResult(
-        this.state.name
+        this.state.name,
       );
       this.setState({
         link: `blocklyconnect-app://sketch/${filename}/${this.state.id}`,
@@ -226,7 +226,12 @@ class Compile extends Component {
               )}
               <h2>{Blockly.Msg.compile_overlay_head}</h2>
               {this.props.selectedBoard === "esp32" ? (
-                <h3 style={{ padding: "0 2%", "text-align": "center" }}>
+                <h3
+                  style={{
+                    padding: "0 2%",
+                    "text-align": "center",
+                  }}
+                >
                   {Blockly.Msg.compile_overlay_text_esp32}
                 </h3>
               ) : (
@@ -338,5 +343,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, { workspaceName })(
-  withStyles(styles, { withTheme: true })(Compile)
+  withStyles(styles, { withTheme: true })(Compile),
 );

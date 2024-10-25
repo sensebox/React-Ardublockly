@@ -9,7 +9,7 @@ import {
   deleteError,
 } from "../../../actions/tutorialBuilderActions";
 
-import withStyles from '@mui/styles/withStyles';
+import withStyles from "@mui/styles/withStyles";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
@@ -42,7 +42,7 @@ class Textfield extends Component {
         value,
         this.props.index,
         this.props.property,
-        this.props.property2
+        this.props.property2,
       );
     }
     if (value.replace(/\s/g, "") === "") {

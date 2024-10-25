@@ -13,7 +13,7 @@ Blockly.Arduino["io_digitalwrite"] = function (block) {
     Blockly.Arduino.valueToCode(
       block,
       "STATE",
-      Blockly["Arduino"].ORDER_ATOMIC
+      Blockly["Arduino"].ORDER_ATOMIC,
     ) || "LOW";
   Blockly["Arduino"].setupCode_["pinMode"] = "pinMode(" + pin + ", OUTPUT);";
   var code = "digitalWrite(" + pin + ", " + stateOutput + ");\n";
@@ -71,7 +71,7 @@ Blockly.Arduino["io_analogwrite"] = function (block) {
   if (stateOutput < 0 || stateOutput > 255) {
     block.setWarningText(
       "The analogue value set must be between 0 and 255",
-      "pwm_value"
+      "pwm_value",
     );
   } else {
     block.setWarningText(null, "pwm_value");
@@ -111,7 +111,7 @@ Blockly.Arduino["io_pulsein"] = function (block) {
   var type = Blockly.Arduino.valueToCode(
     block,
     "PULSETYPE",
-    Blockly.Arduino.ORDER_ATOMIC
+    Blockly.Arduino.ORDER_ATOMIC,
   );
   Blockly["Arduino"].setupCode_["pinMode" + pin] =
     "pinMode(" + pin + ", INPUT);";
@@ -124,12 +124,12 @@ Blockly.Arduino["io_pulsetimeout"] = function (block) {
   var type = Blockly.Arduino.valueToCode(
     block,
     "PULSETYPE",
-    Blockly.Arduino.ORDER_ATOMIC
+    Blockly.Arduino.ORDER_ATOMIC,
   );
   var timeout = Blockly.Arduino.valueToCode(
     block,
     "TIMEOUT",
-    Blockly.Arduino.ORDER_ATOMIC
+    Blockly.Arduino.ORDER_ATOMIC,
   );
   Blockly["Arduino"].setupCode_["pinMode" + pin] =
     "pinMode(" + pin + ", INPUT);";
@@ -142,22 +142,22 @@ Blockly.Arduino["io_analogreadmillivolt"] = function (block) {
   var pin = 1;
   switch (dropdown_port) {
     case "IO3_2":
-        pin = 3;
+      pin = 3;
       break;
     case "IO3_4":
-        pin = 3;
+      pin = 3;
       break;
     case "IO5_4":
-        pin = 5;
+      pin = 5;
       break;
     case "IO5_6":
-        pin = 5;
+      pin = 5;
       break;
     case "IO7_6":
-        pin = 7;
+      pin = 7;
       break;
     default: // "IO1_2"
-    pin = 1;
+      pin = 1;
   }
 
   var code = "analogReadMilliVolts(" + pin + ")";
