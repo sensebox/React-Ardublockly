@@ -288,12 +288,11 @@ Blockly["Arduino"].scrubNakedValue = function (line) {
 
 /**
  * Format the generated Arduino code for better readability.
- * This function adds proper indentation and formatting for Arduino/C++ code.
+ * This function adds proper indentation and removes duplicate empty lines.
  * @param {string} code The Arduino code to format.
  * @return {string} Formatted Arduino code.
  */
 Blockly["Arduino"].formatCode = function (code) {
-  // Split the code into lines and apply indentation based on braces
   let formattedCode = "";
   let indentLevel = 0;
   const indentSize = 2; // Number of spaces per indentation level
@@ -313,15 +312,16 @@ Blockly["Arduino"].formatCode = function (code) {
     previousLineWasEmpty = line === "";
 
     // Adjust indentation for closing braces
-    if (line.startsWith("}") || line.startsWith("else")) {
+    if (line.startsWith("}")) {
       indentLevel = Math.max(0, indentLevel - 1);
     }
 
-    // Add the appropriate indentation
-    if (line !== "") {
+    // Special case for 'else if' and 'else' to ensure they align with 'if'
+    if (line.startsWith("else if") || line.startsWith("else")) {
       formattedCode += " ".repeat(indentLevel * indentSize) + line + "\n";
     } else {
-      formattedCode += "\n"; // Preserve single empty lines
+      // Add the appropriate indentation for normal lines
+      formattedCode += " ".repeat(indentLevel * indentSize) + line + "\n";
     }
 
     // Increase indentation after opening braces

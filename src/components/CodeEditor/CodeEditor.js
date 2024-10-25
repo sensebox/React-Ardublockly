@@ -130,6 +130,50 @@ void loop() {
     editorRef.current.setValue(code);
   };
 
+  const formatCode = () => {
+    var code = editorRef.current.getValue();
+    let formattedCode = "";
+    let indentLevel = 0;
+    const indentSize = 2; // Number of spaces per indentation level
+    let previousLineWasEmpty = false; // Track if the previous line was empty
+
+    const lines = code.split("\n");
+
+    lines.forEach((line) => {
+      line = line.trim();
+
+      // Skip duplicate empty lines
+      if (line === "" && previousLineWasEmpty) {
+        return; // Skip this line if it's an empty line after another empty line
+      }
+
+      // Mark if the current line is empty
+      previousLineWasEmpty = line === "";
+
+      // Adjust indentation for closing braces
+      if (line.startsWith("}")) {
+        indentLevel = Math.max(0, indentLevel - 1);
+      }
+
+      // Special case for 'else if' and 'else' to ensure they align with 'if'
+      if (line.startsWith("else if") || line.startsWith("else")) {
+        formattedCode += " ".repeat(indentLevel * indentSize) + line + "\n";
+      } else {
+        // Add the appropriate indentation for normal lines
+        formattedCode += " ".repeat(indentLevel * indentSize) + line + "\n";
+      }
+
+      // Increase indentation after opening braces
+      if (line.endsWith("{")) {
+        indentLevel++;
+      }
+    });
+
+    // Remove any trailing empty lines
+    formattedCode = formattedCode.replace(/\n\s*\n\s*\n/g, "\n\n").trim();
+    editorRef.current.setValue(formattedCode);
+  };
+
   return (
     <div>
       <Grid container spacing={2}>
@@ -241,6 +285,14 @@ void loop() {
             onClick={() => getBlocklyCode()}
           >
             {Blockly.Msg.codeeditor_blockly_code}
+          </Button>
+          <Button
+            style={{ padding: "1rem", margin: "1rem" }}
+            variant="contained"
+            color="primary"
+            onClick={() => formatCode()}
+          >
+            Code formatieren
           </Button>
           <Sidebar />
           <Dialog
