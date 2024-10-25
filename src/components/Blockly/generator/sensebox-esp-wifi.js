@@ -7,22 +7,21 @@ import Blockly from "blockly";
 //   selectedBoard = store.getState().board.board;
 // });
 
-
 /* Wifi connection and openSenseMap Blocks*/
-
 
 Blockly.Arduino.sensebox_esp_wifi = function (block) {
   var pw = this.getFieldValue("Password");
   var ssid = this.getFieldValue("SSID");
-  Blockly.Arduino.libraries_["library_WiFi_ESP"] = "#include <WiFiClientSecure.h>";
+  Blockly.Arduino.libraries_["library_WiFi_ESP"] =
+    "#include <WiFiClientSecure.h>";
   Blockly.Arduino.variables_["ssid"] = `char* ssid = "${ssid}";`;
   Blockly.Arduino.variables_["pass"] = `char* password = "${pw}";`;
   Blockly.Arduino.variables_["wifi_Status"] = "int status = WL_IDLE_STATUS;";
   if (pw === "") {
     Blockly.Arduino.setupCode_["wifi_begin"] = "WiFi.begin(ssid, password);";
-  } else
-    Blockly.Arduino.setupCode_["wifi_begin"] = "WiFi.begin(ssid);";
-    Blockly.Arduino.setupCode_["wifi_wait"] = "while (WiFi.status() != WL_CONNECTED) {delay(1000);}";
+  } else Blockly.Arduino.setupCode_["wifi_begin"] = "WiFi.begin(ssid);";
+  Blockly.Arduino.setupCode_["wifi_wait"] =
+    "while (WiFi.status() != WL_CONNECTED) {delay(1000);}";
   var code = "";
   return code;
 };
@@ -73,8 +72,7 @@ IPAddress myGateway(${gateway.replaceAll(".", ",")});
 IPAddress mySubnet(${subnetmask.replaceAll(".", ",")});
     `;
     Blockly.Arduino.setupCode_["ethernet_setup"] = `
-Ethernet.init(23);
-// start the Ethernet connection:
+Ethernet.init(23);// start the Ethernet connection:
 if (Ethernet.begin(mac) == 0) {
     // no point in carrying on, so do nothing forevermore:
     // try to congifure using IP address instead of DHCP:
@@ -85,10 +83,8 @@ delay(1000);
     `;
   } else {
     Blockly.Arduino.setupCode_["ethernet_setup"] = `
-Ethernet.init(23);
-// start the Ethernet connection:
-Ethernet.begin(mac);
-// give the Ethernet shield a second to initialize:
+Ethernet.init(23); // start the Ethernet connection:
+Ethernet.begin(mac); // give the Ethernet shield a second to initialize:
 delay(1000);
     `;
   }
@@ -101,6 +97,3 @@ Blockly.Arduino.sensebox_ethernetIp = function () {
   var code = "Ethernet.localIP()";
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
-
-
-

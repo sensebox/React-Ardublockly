@@ -1,6 +1,5 @@
 import * as Blockly from "blockly/core";
 
-
 /**
  * Code generator to add code into the setup() and loop() functions.
  * Its use is not mandatory, but necessary to add manual code to setup().
@@ -8,13 +7,12 @@ import * as Blockly from "blockly/core";
  * @return {string} Completed code.
  */
 
-
-
 Blockly.Arduino["arduino_functions"] = function (block) {
   var board = window.sessionStorage.getItem("board");
 
   if (board === "mcu" || board === "mini") {
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
+    Blockly.Arduino.libraries_["library_senseBoxIO"] =
+      "#include <senseBoxIO.h>";
   }
   // Edited version of Blockly.Generator.prototype.statementToCode
   function statementToCodeNoTab(block, name) {
@@ -22,7 +20,7 @@ Blockly.Arduino["arduino_functions"] = function (block) {
     var code = Blockly.Arduino.blockToCode(targetBlock);
     if (typeof code != "string") {
       throw new Error(
-        'Expecting code from statement block "' + targetBlock.type + '".'
+        'Expecting code from statement block "' + targetBlock.type + '".',
       );
     }
     return code;
@@ -43,7 +41,7 @@ Blockly.Arduino["procedures_defreturn"] = function (block) {
   // Define a procedure with a return value.
   const funcName = Blockly.Arduino.nameDB_.getName(
     block.getFieldValue("NAME"),
-    Blockly.Procedures.NAME_TYPE
+    Blockly.Procedures.NAME_TYPE,
   );
   const branch = Blockly.Arduino.statementToCode(block, "STACK");
   const returnType = block.getFieldValue("RETURN TYPE") || "void";
@@ -101,7 +99,7 @@ Blockly.Arduino["procedures_callreturn"] = function (block) {
   // Call a procedure with a return value.
   const funcName = Blockly.Arduino.nameDB_.getName(
     block.getFieldValue("NAME"),
-    Blockly.Procedures.NAME_TYPE
+    Blockly.Procedures.NAME_TYPE,
   );
   const args = [];
   for (let i = 0; i < block.arguments_.length; i++) {
@@ -109,7 +107,7 @@ Blockly.Arduino["procedures_callreturn"] = function (block) {
       Blockly.Arduino.valueToCode(
         block,
         "ARG" + i,
-        Blockly.Arduino.ORDER_COMMA
+        Blockly.Arduino.ORDER_COMMA,
       ) || "null";
   }
   const code = funcName + "(" + args.join(", ") + ")";
@@ -120,7 +118,7 @@ Blockly.Arduino["procedures_callnoreturn"] = function (block) {
   // Call a procedure with no return value.
   const funcName = Blockly.Arduino.nameDB_.getName(
     block.getFieldValue("NAME"),
-    Blockly.Procedures.NAME_TYPE
+    Blockly.Procedures.NAME_TYPE,
   );
   const args = [];
   for (let i = 0; i < block.arguments_.length; i++) {
@@ -128,7 +126,7 @@ Blockly.Arduino["procedures_callnoreturn"] = function (block) {
       Blockly.Arduino.valueToCode(
         block,
         "ARG" + i,
-        Blockly.Arduino.ORDER_COMMA
+        Blockly.Arduino.ORDER_COMMA,
       ) || "null";
   }
 

@@ -92,7 +92,10 @@ const Sidebar = () => {
               {user.boxes.map((box, i) => {
                 return (
                   <Button
-                    style={{ padding: "1rem", margin: "1rem" }}
+                    style={{
+                      padding: "1rem",
+                      margin: "1rem",
+                    }}
                     variant="contained"
                     color="primary"
                     key={i}
@@ -115,10 +118,18 @@ const Sidebar = () => {
           <Typography>{Blockly.Msg.codeeditor_libraries_head}</Typography>
         </AccordionSummary>
         <AccordionDetails
-          style={{ padding: 0, height: "60vH", backgroundColor: "white" }}
+          style={{
+            padding: 0,
+            height: "60vH",
+            backgroundColor: "white",
+          }}
         >
           <Typography
-            style={{ overflow: "auto", width: "100%", padding: "1rem" }}
+            style={{
+              overflow: "auto",
+              width: "100%",
+              padding: "1rem",
+            }}
           >
             <p>{Blockly.Msg.codeeditor_libraries_text}</p>
             {LibraryVersions().map((object, i) => {

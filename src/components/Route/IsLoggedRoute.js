@@ -1,15 +1,12 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 
-import { Route, Redirect } from 'react-router-dom';
-
+import { Route, Redirect } from "react-router-dom";
 
 class IsLoggedRoute extends Component {
-
   render() {
-    return (
-      !this.props.progress ?
+    return !this.props.progress ? (
       <Route
         {...this.props.exact}
         render={({ location }) =>
@@ -19,24 +16,24 @@ class IsLoggedRoute extends Component {
             <Redirect
               to={{
                 pathname: "/",
-                state: { from: location }
+                state: { from: location },
               }}
             />
           )
         }
-      /> : null
-    );
+      />
+    ) : null;
   }
 }
 
 IsLoggedRoute.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
-  progress: PropTypes.bool.isRequired
+  progress: PropTypes.bool.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
-  progress: state.auth.progress
+  progress: state.auth.progress,
 });
 
 export default connect(mapStateToProps, null)(IsLoggedRoute);

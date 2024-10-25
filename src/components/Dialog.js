@@ -1,13 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import Button from '@mui/material/Button';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import MaterialUIDialog from '@mui/material/Dialog';
+import Button from "@mui/material/Button";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import MaterialUIDialog from "@mui/material/Dialog";
 
 class Dialog extends Component {
-
   render() {
     return (
       <MaterialUIDialog
@@ -23,16 +22,21 @@ class Dialog extends Component {
           {this.props.children}
         </DialogContent>
         <DialogActions>
-          {this.props.actions ? this.props.actions :
-            <Button onClick={this.props.onClick} disabled={this.props.disabled} color="primary">
+          {this.props.actions ? (
+            this.props.actions
+          ) : (
+            <Button
+              onClick={this.props.onClick}
+              disabled={this.props.disabled}
+              color="primary"
+            >
               {this.props.button}
             </Button>
-          }
+          )}
         </DialogActions>
       </MaterialUIDialog>
     );
-  };
+  }
 }
-
 
 export default Dialog;
