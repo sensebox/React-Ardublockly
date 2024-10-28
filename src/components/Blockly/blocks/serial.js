@@ -12,12 +12,12 @@ Blockly.Blocks["init_serial_monitor"] = {
       .appendField(Blockly.Msg.ARD_SERIAL_SETUP)
       .appendField(
         new Blockly.FieldDropdown(selectedBoard().serial),
-        "SERIAL_ID"
+        "SERIAL_ID",
       )
       .appendField(Blockly.Msg.ARD_SERIAL_SPEED)
       .appendField(
         new Blockly.FieldDropdown(selectedBoard().serialSpeed),
-        "SPEED"
+        "SPEED",
       )
       .appendField(Blockly.Msg.ARD_SERIAL_BPS);
     this.setInputsInline(true);
@@ -34,11 +34,20 @@ Blockly.Blocks["print_serial_monitor"] = {
     this.appendDummyInput()
       .appendField(
         new Blockly.FieldDropdown(selectedBoard().serial),
-        "SERIAL_ID"
+        "SERIAL_ID",
       )
       .appendField(Blockly.Msg.ARD_SERIAL_PRINT);
-    this.appendValueInput("CONTENT")
-      .setCheck(["Array", "boolean", "int", "char", "String", "long", "double", "float", "null"]);
+    this.appendValueInput("CONTENT").setCheck([
+      "Array",
+      "boolean",
+      "int",
+      "char",
+      "String",
+      "long",
+      "double",
+      "float",
+      "null",
+    ]);
     this.appendDummyInput()
       .appendField(new Blockly.FieldCheckbox("TRUE"), "NEW_LINE")
       .appendField(Blockly.Msg.ARD_SERIAL_PRINT_NEWLINE);

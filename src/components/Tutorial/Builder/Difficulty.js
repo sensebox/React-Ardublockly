@@ -9,7 +9,7 @@ import {
   deleteError,
 } from "../../../actions/tutorialBuilderActions";
 
-import withStyles from '@mui/styles/withStyles';
+import withStyles from "@mui/styles/withStyles";
 import ReactStars from "react-rating-stars-component";
 import * as Blockly from "blockly";
 import FormGroup from "@mui/material/FormGroup";
@@ -48,7 +48,7 @@ class Difficulty extends Component {
         value,
         this.props.index,
         this.props.property,
-        this.props.property2
+        this.props.property2,
       );
     }
   };

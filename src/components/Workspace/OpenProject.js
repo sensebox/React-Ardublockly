@@ -77,7 +77,7 @@ class OpenProject extends Component {
       if (!this.props.assessment) {
         var extensionPosition = this.state.xmlFileName.lastIndexOf(".");
         this.props.workspaceName(
-          this.state.xmlFileName.substr(0, extensionPosition)
+          this.state.xmlFileName.substr(0, extensionPosition),
         );
       }
       this.setState({
@@ -134,7 +134,11 @@ class OpenProject extends Component {
       <div>
         <div
           ref={this.inputRef}
-          style={{ width: "max-content", height: "40px", marginRight: "5px" }}
+          style={{
+            width: "max-content",
+            height: "40px",
+            marginRight: "5px",
+          }}
         >
           <input
             style={{ display: "none" }}

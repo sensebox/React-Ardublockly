@@ -17,7 +17,7 @@ Blockly.Blocks["sensebox_sd_open_file"] = {
       .setAlign(Blockly.ALIGN_LEFT)
       .appendField(
         new Blockly.FieldTextInput("Data", checkFileName),
-        "Filename"
+        "Filename",
       )
       .appendField(".")
       .appendField(
@@ -25,7 +25,7 @@ Blockly.Blocks["sensebox_sd_open_file"] = {
           ["txt", "txt"],
           ["csv", "csv"],
         ]),
-        "extension"
+        "extension",
       );
     this.appendStatementInput("SD").setCheck(null);
     this.setPreviousStatement(true, null);
@@ -44,7 +44,7 @@ Blockly.Blocks["sensebox_sd_create_file"] = {
       .appendField(Blockly.Msg.senseBox_output_filename)
       .appendField(
         new Blockly.FieldTextInput("Data", checkFileName),
-        "Filename"
+        "Filename",
       )
       .appendField(".")
       .appendField(
@@ -52,7 +52,7 @@ Blockly.Blocks["sensebox_sd_create_file"] = {
           ["txt", "txt"],
           ["csv", "csv"],
         ]),
-        "extension"
+        "extension",
       );
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -119,10 +119,10 @@ Blockly.Blocks["sensebox_sd_osem"] = {
           [Blockly.Msg.senseBox_osem_stationary, "Stationary"],
           [Blockly.Msg.senseBox_osem_mobile, "Mobile"],
         ]),
-        "type"
+        "type",
       );
     this.appendValueInput("timeStamp", "Number").appendField(
-      Blockly.Msg.senseBox_gps_timeStamp
+      Blockly.Msg.senseBox_gps_timeStamp,
     );
     this.appendStatementInput("DO")
       .appendField(Blockly.Msg.sensebox_sd_measurement)
@@ -132,7 +132,7 @@ Blockly.Blocks["sensebox_sd_osem"] = {
     this.getField("type").setValidator(
       function (val) {
         this.updateShape_(val === "Mobile");
-      }.bind(this)
+      }.bind(this),
     );
   },
 
@@ -141,13 +141,13 @@ Blockly.Blocks["sensebox_sd_osem"] = {
       if (this.getInput("lat") == null) {
         this.appendValueInput("lat", "Number").appendField(
           Blockly.Msg.senseBox_gps_lat,
-          "gps"
+          "gps",
         );
         this.appendValueInput("lng", "Number").appendField(
-          Blockly.Msg.senseBox_gps_lng
+          Blockly.Msg.senseBox_gps_lng,
         );
         this.appendValueInput("altitude", "Number").appendField(
-          Blockly.Msg.senseBox_gps_alt
+          Blockly.Msg.senseBox_gps_alt,
         );
       }
     } else {
@@ -173,7 +173,6 @@ Blockly.Blocks["sensebox_sd_save_for_osem"] = {
   },
 };
 
-
 /**
  * senseBox-esp32-s2 sd Blocks
  */
@@ -185,7 +184,7 @@ Blockly.Blocks["sensebox_esp32s2_sd_open_file"] = {
       .setAlign(Blockly.ALIGN_LEFT)
       .appendField(
         new Blockly.FieldTextInput("Data", checkFileName),
-        "Filename"
+        "Filename",
       )
       .appendField(".")
       .appendField(
@@ -193,7 +192,7 @@ Blockly.Blocks["sensebox_esp32s2_sd_open_file"] = {
           ["txt", "txt"],
           ["csv", "csv"],
         ]),
-        "extension"
+        "extension",
       );
     this.appendStatementInput("SD").setCheck(null);
     this.setPreviousStatement(true, null);
@@ -204,7 +203,6 @@ Blockly.Blocks["sensebox_esp32s2_sd_open_file"] = {
   },
 };
 
-
 Blockly.Blocks["sensebox_esp32s2_sd_create_file"] = {
   init: function () {
     this.appendDummyInput()
@@ -213,7 +211,7 @@ Blockly.Blocks["sensebox_esp32s2_sd_create_file"] = {
       .appendField(Blockly.Msg.senseBox_output_filename)
       .appendField(
         new Blockly.FieldTextInput("Data", checkFileName),
-        "Filename"
+        "Filename",
       )
       .appendField(".")
       .appendField(
@@ -221,7 +219,7 @@ Blockly.Blocks["sensebox_esp32s2_sd_create_file"] = {
           ["txt", "txt"],
           ["csv", "csv"],
         ]),
-        "extension"
+        "extension",
       );
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);

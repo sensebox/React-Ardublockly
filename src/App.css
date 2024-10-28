@@ -29,7 +29,7 @@
   border-left: 10px solid#4EAF47;
   margin: 1.5em 10px;
   padding: 0.5em 10px;
-  quotes: "\201C""\201D""\2018""\2019";
+  quotes: "\201C" "\201D" "\2018" "\2019";
 }
 blockquote:before {
   color: #4eaf47;
@@ -64,7 +64,7 @@ td {
 }
 
 :root {
-  --url: url('./data/mcu_opacity.png');
+  --url: url("./data/mcu_opacity.png");
 }
 
 .blocklySvg {

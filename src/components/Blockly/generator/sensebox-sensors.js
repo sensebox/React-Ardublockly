@@ -151,9 +151,8 @@ Blockly.Arduino.sensebox_sensor_bmx055_accelerometer = function () {
 Blockly.Arduino.sensebox_sensor_sds011 = function () {
   var dropdown_name = this.getFieldValue("NAME");
   var serial_name = this.getFieldValue("SERIAL");
-  Blockly.Arduino.libraries_[
-    "SdsDustSensor"
-  ] = `#include <SdsDustSensor.h> // http://librarymanager/All#Nova_Fitness_Sds_dust_sensors_library`;
+  Blockly.Arduino.libraries_["SdsDustSensor"] =
+    `#include <SdsDustSensor.h> // http://librarymanager/All#Nova_Fitness_Sds_dust_sensors_library`;
   Blockly.Arduino.definitions_["define_sds011"] =
     "SdsDustSensor sds(" + serial_name + ");";
   Blockly.Arduino.functionNames_["sds011_getPmData()"] = `
@@ -188,9 +187,8 @@ Blockly.Arduino.sensebox_sensor_pressure = function () {
   var dropdown_name = this.getFieldValue("NAME");
   var code = "";
   var referencePressure = this.getFieldValue("referencePressure");
-  Blockly.Arduino.libraries_[
-    "adafruit_bmp280"
-  ] = `#include <Adafruit_BMP280.h> // http://librarymanager/All#Adafruit_BMP280_Library`;
+  Blockly.Arduino.libraries_["adafruit_bmp280"] =
+    `#include <Adafruit_BMP280.h> // http://librarymanager/All#Adafruit_BMP280_Library`;
   Blockly.Arduino.definitions_["define_pressure"] = "Adafruit_BMP280 bmp;";
   Blockly.Arduino.setupCode_["sensebox_bmp_sensor"] = "bmp.begin(0x76);";
   Blockly.Arduino.setupCode_["bmp_setSampling"] = `
@@ -341,17 +339,15 @@ Blockly.Arduino.sensebox_sensor_ultrasonic_ranger = function () {
   var dropdown_pin_TX = this.getFieldValue("ultrasonic_echo");
   var port = this.getFieldValue("port");
   var maxDistance = this.getFieldValue("maxDistance");
-  Blockly.Arduino.libraries_[
-    "library_newPing"
-  ] = `#include <NewPing.h> // http://librarymanager/All#NewPing`;
+  Blockly.Arduino.libraries_["library_newPing"] =
+    `#include <NewPing.h> // http://librarymanager/All#NewPing`;
   Blockly.Arduino.variables_["define_newPingVariables" + port] = `
 #define TRIGGER_PIN_${port} ${dropdown_pin_RX}
 #define ECHO_PIN_${port} ${dropdown_pin_TX}
 #define MAX_DISTANCE_${port} ${maxDistance}
   `;
-  Blockly.Arduino.definitions_[
-    "define_newPing" + port
-  ] = `NewPing sonar${port}(TRIGGER_PIN_${port}, ECHO_PIN_${port}, MAX_DISTANCE_${port});`;
+  Blockly.Arduino.definitions_["define_newPing" + port] =
+    `NewPing sonar${port}(TRIGGER_PIN_${port}, ECHO_PIN_${port}, MAX_DISTANCE_${port});`;
   var code;
   code = `sonar${port}.ping_cm()`;
   return [code, Blockly.Arduino.ORDER_ATOMIC];
@@ -366,9 +362,8 @@ Blockly.Arduino.sensebox_tof_imager = function () {
   var dropdown_name = this.getFieldValue("dropdown");
   var maxDistance = this.getFieldValue("maxDistance");
   Blockly.Arduino.libraries_["library_wire"] = "#include <Wire.h>";
-  Blockly.Arduino.libraries_[
-    `library_vl53l8cx`
-  ] = `#include <vl53l8cx_class.h> `;
+  Blockly.Arduino.libraries_[`library_vl53l8cx`] =
+    `#include <vl53l8cx_class.h> `;
   Blockly.Arduino.variables_["define:_vl53l8cx"] = `
 VL53L8CX sensor_vl53l8cx_top(&Wire, -1, -1);  
 `;
@@ -567,9 +562,8 @@ float getSoundValue(int pin) {
 Blockly.Arduino.sensebox_button = function () {
   var dropdown_pin = this.getFieldValue("PIN");
   var dropown_function = this.getFieldValue("FUNCTION");
-  Blockly.Arduino.libraries_[
-    "library_jcButtons"
-  ] = `#include <JC_Button.h> // http://librarymanager/All#JC_Button`;
+  Blockly.Arduino.libraries_["library_jcButtons"] =
+    `#include <JC_Button.h> // http://librarymanager/All#JC_Button`;
 
   Blockly.Arduino.definitions_["define_button" + dropdown_pin + ""] =
     "Button button_" + dropdown_pin + "(" + dropdown_pin + ");";
@@ -857,7 +851,7 @@ Blockly.Arduino.sensebox_soundsensor_dfrobot = function () {
   }
 
   var board = selectedBoard().title;
-  if (board === "MCU") {
+  if (board === "MCU" || board === "Mini") {
     Blockly.Arduino.codeFunctions_["soundsensor"] = `    
   int getSoundValue(int sensorPin) {
     float v = analogRead(sensorPin) / 1000.0;
@@ -868,9 +862,8 @@ Blockly.Arduino.sensebox_soundsensor_dfrobot = function () {
     return int(decibel);
   }`;
   } else {
-    Blockly.Arduino.setupCode_[
-      "soundsensorbegin"
-    ] = `analogReadResolution(13);`;
+    Blockly.Arduino.setupCode_["soundsensorbegin"] =
+      `analogReadResolution(13);`;
     Blockly.Arduino.codeFunctions_["soundsensor"] = `    
     int getSoundValue(int sensorPin) {
       float v = analogReadMilliVolts(sensorPin) / 1000.0;
@@ -896,9 +889,8 @@ Blockly.Arduino.sensebox_sensor_dps310 = function () {
   var dropdown_name = this.getFieldValue("NAME");
   var code = "";
   var referencePressure = this.getFieldValue("referencePressure");
-  Blockly.Arduino.libraries_[
-    "adafruit_dps310"
-  ] = `#include <Adafruit_DPS310.h> // http://librarymanager/All#Adafruit_DPS310`;
+  Blockly.Arduino.libraries_["adafruit_dps310"] =
+    `#include <Adafruit_DPS310.h> // http://librarymanager/All#Adafruit_DPS310`;
   Blockly.Arduino.definitions_["define_dps"] = "Adafruit_DPS310 dps;";
   Blockly.Arduino.setupCode_["dps_begin"] = "dps.begin_I2C(0x76);";
   Blockly.Arduino.setupCode_["dps_configuration"] = `
@@ -968,9 +960,8 @@ Blockly.Arduino.sensebox_sensor_dps310 = function () {
 
 Blockly.Arduino.sensebox_sensor_sps30 = function () {
   var dropdown_name = this.getFieldValue("value");
-  Blockly.Arduino.libraries_[
-    "sps30"
-  ] = `#include <sps30.h> // http://librarymanager/All#`;
+  Blockly.Arduino.libraries_["sps30"] =
+    `#include <sps30.h> // http://librarymanager/All#`;
   Blockly.Arduino.variables_["sps30_measurement"] =
     "struct sps30_measurement m;";
   Blockly.Arduino.variables_["sps30_auto_clean_days"] =
@@ -1032,12 +1023,10 @@ Blockly.Arduino.sensebox_esp32s2_light = function () {
 Blockly.Arduino.sensebox_esp32s2_mpu6050 = function () {
   var code = "";
   var dropdown = this.getFieldValue("value");
-  Blockly.Arduino.libraries_[
-    "esp32s2_mpu6050"
-  ] = `#include <Adafruit_MPU6050.h>`;
-  Blockly.Arduino.libraries_[
-    "Adafruit_Sensor"
-  ] = `#include <Adafruit_Sensor.h>`;
+  Blockly.Arduino.libraries_["esp32s2_mpu6050"] =
+    `#include <Adafruit_MPU6050.h>`;
+  Blockly.Arduino.libraries_["Adafruit_Sensor"] =
+    `#include <Adafruit_Sensor.h>`;
   Blockly.Arduino.libraries_["library_wire"] = `#include <Wire.h>`;
   Blockly.Arduino.definitions_["define_Adafruit_mpu6050"] =
     "Adafruit_MPU6050 mpu;";

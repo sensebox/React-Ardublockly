@@ -21,7 +21,7 @@ Blockly.Arduino["time_delay"] = function (block) {
     Blockly.Arduino.valueToCode(
       block,
       "DELAY_TIME_MILI",
-      Blockly.Arduino.ORDER_ATOMIC
+      Blockly.Arduino.ORDER_ATOMIC,
     ) || "0";
   var code = "delay(" + delayTime + ");\n";
   return code;
@@ -38,7 +38,7 @@ Blockly.Arduino["time_delaymicros"] = function (block) {
     Blockly.Arduino.valueToCode(
       block,
       "DELAY_TIME_MICRO",
-      Blockly.Arduino.ORDER_ATOMIC
+      Blockly.Arduino.ORDER_ATOMIC,
     ) || "0";
   var code = "delayMicroseconds(" + delayTimeMs + ");\n";
   return code;
@@ -112,9 +112,8 @@ Blockly.Arduino.sensebox_interval_timer = function (block) {
   const long interval${intervalName} = ${intervalTime};
   long time_start${intervalName} = 0;
   long time_actual${intervalName} = 0;`;
-  Blockly.Arduino.loopCodeOnce_[
-    `interval_loop${intervalName}`
-  ] = `time_start${intervalName} = millis();\n`;
+  Blockly.Arduino.loopCodeOnce_[`interval_loop${intervalName}`] =
+    `time_start${intervalName} = millis();\n`;
   var branch = Blockly.Arduino.statementToCode(block, "DO");
   var code = `
   if (time_start${intervalName} > time_actual${intervalName} + interval${intervalName}) {\n  time_actual${intervalName} = millis();\n`;

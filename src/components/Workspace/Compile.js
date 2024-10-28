@@ -20,6 +20,7 @@ import Copy from "../copy.svg";
 import MuiDrawer from "@mui/material/Drawer";
 import Dialog from "../Dialog";
 import copyesp32 from "../copy_esp32.svg";
+import { ErrorView } from "../CodeEditor/ErrorView";
 const styles = (theme) => ({
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
@@ -48,7 +49,7 @@ const styles = (theme) => ({
 const Drawer = withStyles((theme) => ({
   paperAnchorBottom: {
     backgroundColor: "black",
-    height: "20vH",
+    height: "30vH",
   },
 }))(MuiDrawer);
 
@@ -120,7 +121,7 @@ class Compile extends Component {
     this.props.workspaceName(this.state.name);
     window.open(
       `${this.props.compiler}/download?id=${id}&board=${process.env.REACT_APP_BOARD}&filename=${filename}`,
-      "_self"
+      "_self",
     );
     this.setState({ progress: false });
   };
@@ -132,7 +133,7 @@ class Compile extends Component {
   createFileName = () => {
     if (this.props.platform === true) {
       const filename = detectWhitespacesAndReturnReadableResult(
-        this.state.name
+        this.state.name,
       );
       this.setState({
         link: `blocklyconnect-app://sketch/${filename}/${this.state.id}`,
@@ -225,7 +226,12 @@ class Compile extends Component {
               )}
               <h2>{Blockly.Msg.compile_overlay_head}</h2>
               {this.props.selectedBoard === "esp32" ? (
-                <h3 style={{ padding: "0 2%", "text-align": "center" }}>
+                <h3
+                  style={{
+                    padding: "0 2%",
+                    "text-align": "center",
+                  }}
+                >
                   {Blockly.Msg.compile_overlay_text_esp32}
                 </h3>
               ) : (
@@ -283,35 +289,7 @@ class Compile extends Component {
           open={this.state.open}
           onClose={this.toggleDrawer("bottom", false)}
         >
-          <h2
-            style={{
-              color: "#4EAF47",
-              paddingLeft: "1rem",
-              paddingRight: "1rem",
-            }}
-          >
-            {Blockly.Msg.drawer_ideerror_head}
-          </h2>
-          <p
-            style={{
-              color: "#4EAF47",
-              paddingLeft: "1rem",
-              paddingRight: "1rem",
-            }}
-          >
-            {Blockly.Msg.drawer_ideerror_text}
-          </p>
-          <Divider style={{ backgroundColor: "white" }} />
-          <p
-            style={{
-              backgroundColor: "black",
-              color: "#E47128",
-              padding: "1rem",
-            }}
-          >
-            {" "}
-            {`${this.state.error}`}{" "}
-          </p>
+          <ErrorView error={this.state.error} />
         </Drawer>
         <Dialog
           style={{ zIndex: 9999999 }}
@@ -365,5 +343,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, { workspaceName })(
-  withStyles(styles, { withTheme: true })(Compile)
+  withStyles(styles, { withTheme: true })(Compile),
 );

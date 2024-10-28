@@ -32,7 +32,7 @@ Blockly.Blocks["sensebox_osem_connection"] = {
           [Blockly.Msg.senseBox_osem_stationary, "Stationary"],
           [Blockly.Msg.senseBox_osem_mobile, "Mobile"],
         ]),
-        "type"
+        "type",
       );
     if (!boxes) {
       this.appendDummyInput()
@@ -61,7 +61,7 @@ Blockly.Blocks["sensebox_osem_connection"] = {
     this.getField("type").setValidator(
       function (val) {
         this.updateShape_(val === "Mobile");
-      }.bind(this)
+      }.bind(this),
     );
   },
   onchange: function (e) {
@@ -89,7 +89,7 @@ Blockly.Blocks["sensebox_osem_connection"] = {
     selectedBox = this.getFieldValue("BoxID");
     if (selectedBox !== "" && boxes) {
       var accessToken = boxes.find(
-        (element) => element._id === selectedBox
+        (element) => element._id === selectedBox,
       ).access_token;
       if (accessToken !== undefined) {
         this.getField("access_token").setValue(accessToken);
@@ -103,16 +103,16 @@ Blockly.Blocks["sensebox_osem_connection"] = {
       if (this.getInput("lat") == null) {
         this.appendValueInput("lat", "Number").appendField(
           Blockly.Msg.senseBox_gps_lat,
-          "gps"
+          "gps",
         );
         this.appendValueInput("lng", "Number").appendField(
-          Blockly.Msg.senseBox_gps_lng
+          Blockly.Msg.senseBox_gps_lng,
         );
         this.appendValueInput("altitude", "Number").appendField(
-          Blockly.Msg.senseBox_gps_alt
+          Blockly.Msg.senseBox_gps_alt,
         );
         this.appendValueInput("timeStamp", "Number").appendField(
-          Blockly.Msg.senseBox_gps_timeStamp
+          Blockly.Msg.senseBox_gps_timeStamp,
         );
       }
     } else {
@@ -135,7 +135,7 @@ Blockly.Blocks["sensebox_send_to_osem"] = {
         .appendField("Phänomen")
         .appendField(
           new Blockly.FieldDropdown(this.generateOptions),
-          "SensorID"
+          "SensorID",
         );
     } else {
       this.appendValueInput("Value")
@@ -216,7 +216,7 @@ Blockly.Blocks["sensebox_esp32s2_osem_connection"] = {
           [Blockly.Msg.senseBox_osem_stationary, "Stationary"],
           [Blockly.Msg.senseBox_osem_mobile, "Mobile"],
         ]),
-        "type"
+        "type",
       );
     if (!boxes) {
       this.appendDummyInput()
@@ -245,7 +245,7 @@ Blockly.Blocks["sensebox_esp32s2_osem_connection"] = {
     this.getField("type").setValidator(
       function (val) {
         this.updateShape_(val === "Mobile");
-      }.bind(this)
+      }.bind(this),
     );
   },
   onchange: function (e) {
@@ -273,7 +273,7 @@ Blockly.Blocks["sensebox_esp32s2_osem_connection"] = {
     selectedBox = this.getFieldValue("BoxID");
     if (selectedBox !== "" && boxes) {
       var accessToken = boxes.find(
-        (element) => element._id === selectedBox
+        (element) => element._id === selectedBox,
       ).access_token;
       if (accessToken !== undefined) {
         this.getField("access_token").setValue(accessToken);
@@ -287,16 +287,16 @@ Blockly.Blocks["sensebox_esp32s2_osem_connection"] = {
       if (this.getInput("lat") == null) {
         this.appendValueInput("lat", "Number").appendField(
           Blockly.Msg.senseBox_gps_lat,
-          "gps"
+          "gps",
         );
         this.appendValueInput("lng", "Number").appendField(
-          Blockly.Msg.senseBox_gps_lng
+          Blockly.Msg.senseBox_gps_lng,
         );
         this.appendValueInput("altitude", "Number").appendField(
-          Blockly.Msg.senseBox_gps_alt
+          Blockly.Msg.senseBox_gps_alt,
         );
         this.appendValueInput("timeStamp", "Number").appendField(
-          Blockly.Msg.senseBox_gps_timeStamp
+          Blockly.Msg.senseBox_gps_timeStamp,
         );
       }
     } else {

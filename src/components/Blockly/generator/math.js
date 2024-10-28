@@ -75,7 +75,7 @@ Blockly.Arduino["math_single"] = function (block) {
       Blockly.Arduino.valueToCode(
         block,
         "NUM",
-        Blockly.Arduino.ORDER_UNARY_PREFIX
+        Blockly.Arduino.ORDER_UNARY_PREFIX,
       ) || "0";
     if (arg[0] === "-") {
       // --3 is not legal in C++ in this context.
@@ -89,14 +89,14 @@ Blockly.Arduino["math_single"] = function (block) {
       Blockly.Arduino.valueToCode(
         block,
         "NUM",
-        Blockly.Arduino.ORDER_UNARY_POSTFIX
+        Blockly.Arduino.ORDER_UNARY_POSTFIX,
       ) || "0";
   } else if (operator === "SIN" || operator === "COS" || operator === "TAN") {
     arg =
       Blockly.Arduino.valueToCode(
         block,
         "NUM",
-        Blockly.Arduino.ORDER_MULTIPLICATIVE
+        Blockly.Arduino.ORDER_MULTIPLICATIVE,
       ) || "0";
   } else {
     arg =
@@ -197,7 +197,7 @@ Blockly.Arduino["math_number_property"] = function (block) {
     Blockly.Arduino.valueToCode(
       block,
       "NUMBER_TO_CHECK",
-      Blockly.Arduino.ORDER_MULTIPLICATIVE
+      Blockly.Arduino.ORDER_MULTIPLICATIVE,
     ) || "0";
   var dropdown_property = block.getFieldValue("PROPERTY");
   var code;
@@ -250,7 +250,7 @@ Blockly.Arduino["math_number_property"] = function (block) {
         Blockly.Arduino.valueToCode(
           block,
           "DIVISOR",
-          Blockly.Arduino.ORDER_MULTIPLICATIVE
+          Blockly.Arduino.ORDER_MULTIPLICATIVE,
         ) || "0";
       code = number_to_check + " % " + divisor + " == 0";
       break;
@@ -273,13 +273,13 @@ Blockly.Arduino["math_change"] = function (block) {
     Blockly.Arduino.valueToCode(
       block,
       "DELTA",
-      Blockly.Arduino.ORDER_ADDITIVE
+      Blockly.Arduino.ORDER_ADDITIVE,
     ) || "0";
-  var id = block.getFieldValue("VAR")
+  var id = block.getFieldValue("VAR");
   const varName = Blockly.Variables.getVariable(
-      Blockly.getMainWorkspace(),
-      id
-    ).name;
+    Blockly.getMainWorkspace(),
+    id,
+  ).name;
   // var varName = Blockly.Arduino.nameDB_.getName(
   //   block.getFieldValue("VAR"),
   //   Blockly.Variables.NAME_TYPE
@@ -313,13 +313,13 @@ Blockly.Arduino["math_modulo"] = function (block) {
     Blockly.Arduino.valueToCode(
       block,
       "DIVIDEND",
-      Blockly.Arduino.ORDER_MULTIPLICATIVE
+      Blockly.Arduino.ORDER_MULTIPLICATIVE,
     ) || "0";
   var argument1 =
     Blockly.Arduino.valueToCode(
       block,
       "DIVISOR",
-      Blockly.Arduino.ORDER_MULTIPLICATIVE
+      Blockly.Arduino.ORDER_MULTIPLICATIVE,
     ) || "0";
   var code = argument0 + " % " + argument1;
   return [code, Blockly.Arduino.ORDER_MULTIPLICATIVE];
@@ -375,9 +375,8 @@ Blockly.Arduino["math_random_int"] = function (block) {
   var argument1 =
     Blockly.Arduino.valueToCode(block, "TO", Blockly.Arduino.ORDER_NONE) || "0";
   Blockly.Arduino.setupCode_["init_rand"] = "randomSeed(analogRead(0));";
-  Blockly.Arduino.functionNames_[
-    "math_random_int"
-  ] = `int mathRandomInt (int min, int max) {\n
+  Blockly.Arduino.functionNames_["math_random_int"] =
+    `int mathRandomInt (int min, int max) {\n
       if (min > max) {
         int temp = min;
         min = max;
