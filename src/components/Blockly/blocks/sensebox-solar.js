@@ -11,7 +11,7 @@ import { FieldSlider } from "@blockly/field-slider";
 Blockly.Blocks["sensebox_solar_charger_sb041"] = {
   init: function () {
     this.appendDummyInput().appendField(
-      Blockly.Msg.senseBox_solar_charger_sb041
+      Blockly.Msg.senseBox_solar_charger_sb041,
     );
     this.appendDummyInput()
       .setAlign(Blockly.ALIGN_LEFT)
@@ -35,7 +35,7 @@ Blockly.Blocks["sensebox_solar_charger_sb041"] = {
             "battery_temp",
           ],
         ]),
-        "value"
+        "measurement",
       );
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().solar);
@@ -45,10 +45,10 @@ Blockly.Blocks["sensebox_solar_charger_sb041"] = {
 };
 
 /**
- * Deep Sleep for Specific Time
+ * Deep Sleep and Restart
  */
 
-Blockly.Blocks["sensebox_solar_deep_sleep"] = {
+Blockly.Blocks["sensebox_solar_deep_sleep_and_restart"] = {
   init: function () {
     this.setColour(getColour().solar);
     this.appendDummyInput().appendField();
@@ -58,7 +58,7 @@ Blockly.Blocks["sensebox_solar_deep_sleep"] = {
       .setCheck(Types.NUMBER.checkList)
       .appendField(Blockly.Msg.sensebox_solar_deep_sleep);
     this.appendDummyInput().appendField(
-      Blockly.Msg.sensebox_solar_deep_sleep_unit
+      Blockly.Msg.sensebox_solar_deep_sleep_unit,
     );
     this.setHelpUrl(sensebox_solar_deep_sleep_tooltip);
     this.setTooltip(sensebox_solar_deep_sleep_helpurl);
