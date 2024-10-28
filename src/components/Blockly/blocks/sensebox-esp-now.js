@@ -4,9 +4,7 @@ import * as Types from "../helpers/types";
 
 Blockly.Blocks["sensebox_esp_now"] = {
   init: function () {
-    this.appendDummyInput().appendField(
-      Blockly.Msg.senseBox_esp_now_tooltip
-    );
+    this.appendDummyInput().appendField(Blockly.Msg.senseBox_esp_now_tooltip);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(getColour().sensebox);
@@ -24,7 +22,10 @@ Blockly.Blocks["sensebox_esp_now_sender"] = {
     this.appendDummyInput()
       .setAlign(Blockly.ALIGN_LEFT)
       .appendField(Blockly.Msg.senseBox_esp_now_send_mac)
-      .appendField(new Blockly.FieldTextInput("00:00:00:00:00:00"), "mac-address");
+      .appendField(
+        new Blockly.FieldTextInput("00:00:00:00:00:00"),
+        "mac-address",
+      );
     this.setHelpUrl("");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -44,26 +45,27 @@ Blockly.Blocks["sensebox_get_mac"] = {
 Blockly.Blocks["sensebox_esp_now_receive"] = {
   init: function () {
     this.jsonInit({
-      "message0": Blockly.Msg.senseBox_esp_now_receive,
-      "args0": [
+      message0: Blockly.Msg.senseBox_esp_now_receive,
+      args0: [
         {
-          "type": "field_variable",
-          "name": "VAR",
-          "defaultType": Types.TEXT.typeName,
-          "variable": "message"
+          type: "field_variable",
+          name: "VAR",
+          defaultType: Types.TEXT.typeName,
+          variable: "message",
           // TODO check type?
         },
         {
-          "type": "field_variable",
-          "name": "MAC",
-          "defaultType": Types.TEXT.typeName,
-          "variable": "mac_address"
+          type: "field_variable",
+          name: "MAC",
+          defaultType: Types.TEXT.typeName,
+          variable: "mac_address",
           // TODO check type?
         },
       ],
     });
-    this.appendStatementInput('DO')
-      .appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
+    this.appendStatementInput("DO").appendField(
+      Blockly.Msg.CONTROLS_REPEAT_INPUT_DO,
+    );
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setTooltip(Blockly.Msg.senseBox_esp_now_receive_tooltip);
@@ -74,14 +76,17 @@ Blockly.Blocks["sensebox_esp_now_receive"] = {
 
 Blockly.Blocks["sensebox_esp_now_send"] = {
   init: function () {
-    this.appendDummyInput()
-      .appendField(Blockly.Msg.senseBox_esp_now_send);
+    this.appendDummyInput().appendField(Blockly.Msg.senseBox_esp_now_send);
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_esp_now_send_mac)
       .appendField(Blockly.Msg.senseBox_mac_address)
-      .appendField(new Blockly.FieldTextInput("00:00:00:00:00:00"), "mac-address");
-    this.appendValueInput("value")
-      .appendField(Blockly.Msg.senseBox_esp_now_send_message);
+      .appendField(
+        new Blockly.FieldTextInput("00:00:00:00:00:00"),
+        "mac-address",
+      );
+    this.appendValueInput("value").appendField(
+      Blockly.Msg.senseBox_esp_now_send_message,
+    );
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setTooltip(Blockly.Msg.senseBox_esp_now_send_tooltip);

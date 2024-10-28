@@ -26,7 +26,11 @@ class SoundsSelector extends Component {
           {Blockly.Msg.settings_sounds}
         </Typography>
         <FormHelperText
-          style={{ color: "black", lineHeight: 1.3, marginBottom: "8px" }}
+          style={{
+            color: "black",
+            lineHeight: 1.3,
+            marginBottom: "8px",
+          }}
         >
           {Blockly.Msg.settings_sounds_text}
         </FormHelperText>
@@ -39,7 +43,8 @@ class SoundsSelector extends Component {
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             value={this.props.sounds}
-            onChange={(e) => this.props.setSounds(e.target.value)}>
+            onChange={(e) => this.props.setSounds(e.target.value)}
+          >
             <MenuItem value={false}>{Blockly.Msg.settings_ota_off}</MenuItem>
             <MenuItem value={true}>{Blockly.Msg.settings_ota_on}</MenuItem>
           </Select>

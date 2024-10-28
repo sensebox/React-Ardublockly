@@ -18,7 +18,7 @@ import Breadcrumbs from "../Breadcrumbs";
 
 import { Link } from "react-router-dom";
 import { alpha } from "@mui/material/styles";
-import withStyles from '@mui/styles/withStyles';
+import withStyles from "@mui/styles/withStyles";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
@@ -160,14 +160,14 @@ class TutorialHome extends Component {
   render() {
     var userTutorials = [];
     const publicTutorials = this.props.tutorials.filter(
-      (tutorial) => tutorial.public === true
+      (tutorial) => tutorial.public === true,
     );
     if (this.props.user && this.props.user.blocklyRole === "admin") {
       userTutorials = this.props.tutorials;
     }
     if (this.props.user && this.props.user.blocklyRole === "creator") {
       userTutorials = this.props.tutorials.filter(
-        (tutorial) => tutorial.creator === this.props.user.email
+        (tutorial) => tutorial.creator === this.props.user.email,
       );
     }
     return this.props.isLoading ? null : (
@@ -178,7 +178,7 @@ class TutorialHome extends Component {
         <Grid container spacing={2}>
           {publicTutorials.map((tutorial, i) => {
             var status = this.props.status.filter(
-              (status) => status._id === tutorial._id
+              (status) => status._id === tutorial._id,
             )[0];
             var tasks = status.tasks;
             var error =
@@ -198,7 +198,10 @@ class TutorialHome extends Component {
               <Grid item xs={12} sm={6} md={4} xl={3} key={i} style={{}}>
                 <Link
                   to={`/tutorial/${tutorial._id}`}
-                  style={{ textDecoration: "none", color: "inherit" }}
+                  style={{
+                    textDecoration: "none",
+                    color: "inherit",
+                  }}
                 >
                   <Paper
                     style={{
@@ -212,9 +215,18 @@ class TutorialHome extends Component {
                     <ReactStars {...firstExample} />
                     <div
                       className={clsx(this.props.classes.outerDiv)}
-                      style={{ width: "160px", height: "160px", border: 0 }}
+                      style={{
+                        width: "160px",
+                        height: "160px",
+                        border: 0,
+                      }}
                     >
-                      <svg style={{ width: "100%", height: "100%" }}>
+                      <svg
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                        }}
+                      >
                         {error || success === 1 ? (
                           <circle
                             className={
@@ -244,11 +256,14 @@ class TutorialHome extends Component {
                             cy="50%"
                             fill="none"
                             stroke-width="10"
-                            stroke-dashoffset={`${75 * 2 * Math.PI * (1 - (50 / 100 + success / 2))
-                              }`}
-                            stroke-dasharray={`${75 * 2 * Math.PI * (1 - (50 / 100 - success / 2))
-                              } ${75 * 2 * Math.PI * (1 - (50 / 100 + success / 2))
-                              }`}
+                            stroke-dashoffset={`${
+                              75 * 2 * Math.PI * (1 - (50 / 100 + success / 2))
+                            }`}
+                            stroke-dasharray={`${
+                              75 * 2 * Math.PI * (1 - (50 / 100 - success / 2))
+                            } ${
+                              75 * 2 * Math.PI * (1 - (50 / 100 + success / 2))
+                            }`}
                           ></circle>
                         )}
                         {success < 1 && !error ? (
@@ -263,8 +278,9 @@ class TutorialHome extends Component {
                             cy="50%"
                             fill="none"
                             stroke-width="10"
-                            stroke-dashoffset={`${75 * 2 * Math.PI * (1 - (50 / 100 + success / 2))
-                              }`}
+                            stroke-dashoffset={`${
+                              75 * 2 * Math.PI * (1 - (50 / 100 + success / 2))
+                            }`}
                             stroke-dasharray={`${75 * 2 * Math.PI}`}
                           ></circle>
                         ) : null}
@@ -277,7 +293,7 @@ class TutorialHome extends Component {
                           ? this.props.classes.outerDivError
                           : tutorialStatus === "Success"
                             ? this.props.classes.outerDivSuccess
-                            : null
+                            : null,
                       )}
                     >
                       <div className={this.props.classes.innerDiv}>
@@ -287,7 +303,6 @@ class TutorialHome extends Component {
                             icon={
                               tutorialStatus === "Success" ? faCheck : faTimes
                             }
-                            
                           />
                         ) : (
                           <Typography
@@ -316,7 +331,7 @@ class TutorialHome extends Component {
             <Grid container spacing={2}>
               {userTutorials.map((tutorial, i) => {
                 var status = this.props.status.filter(
-                  (status) => status._id === tutorial._id
+                  (status) => status._id === tutorial._id,
                 )[0];
                 var tasks = status.tasks;
                 var error =
@@ -348,7 +363,10 @@ class TutorialHome extends Component {
                     >
                       <Link
                         to={`/tutorial/${tutorial._id}`}
-                        style={{ textDecoration: "none", color: "inherit" }}
+                        style={{
+                          textDecoration: "none",
+                          color: "inherit",
+                        }}
                       >
                         {tutorial.title}
                         <ReactStars {...firstExample} />
@@ -370,7 +388,7 @@ class TutorialHome extends Component {
                               className={`shareTutorial ${this.props.classes.button}`}
                               onClick={() => {
                                 navigator.clipboard.writeText(
-                                  `${window.location.origin}/tutorial/${tutorial._id}`
+                                  `${window.location.origin}/tutorial/${tutorial._id}`,
                                 );
                                 this.setState({
                                   snackbar: true,
@@ -380,8 +398,9 @@ class TutorialHome extends Component {
                                   type: "success",
                                 });
                               }}
-                              size="large">
-                              <FontAwesomeIcon icon={faShareAlt} size="xs"  />
+                              size="large"
+                            >
+                              <FontAwesomeIcon icon={faShareAlt} size="xs" />
                             </IconButton>
                           </Tooltip>
                           <Tooltip
@@ -391,8 +410,9 @@ class TutorialHome extends Component {
                             <IconButton
                               className={`publicTutorial ${this.props.classes.button}`}
                               disabled={!tutorial.public}
-                              size="large">
-                              <FontAwesomeIcon icon={faEye} size="xs"  />
+                              size="large"
+                            >
+                              <FontAwesomeIcon icon={faEye} size="xs" />
                             </IconButton>
                           </Tooltip>
                           {tutorial.review ? (
@@ -403,7 +423,8 @@ class TutorialHome extends Component {
                               <IconButton
                                 className={`publicTutorial ${this.props.classes.button}`}
                                 disabled={!tutorial.review}
-                                size="large">
+                                size="large"
+                              >
                                 <FontAwesomeIcon icon={faUserCheck} size="xs" />
                               </IconButton>
                             </Tooltip>

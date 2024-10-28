@@ -26,7 +26,11 @@ class OtaSelector extends Component {
           {Blockly.Msg.settings_ota_head}
         </Typography>
         <FormHelperText
-          style={{ color: "black", lineHeight: 1.3, marginBottom: "8px" }}
+          style={{
+            color: "black",
+            lineHeight: 1.3,
+            marginBottom: "8px",
+          }}
         >
           {Blockly.Msg.settings_ota_text}
           <a href="https://sensebox.de/app" target="_blank" rel="noreferrer">
@@ -42,7 +46,8 @@ class OtaSelector extends Component {
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             value={this.props.platform}
-            onChange={(e) => this.props.setPlatform(e.target.value)}>
+            onChange={(e) => this.props.setPlatform(e.target.value)}
+          >
             <MenuItem value={true}>{Blockly.Msg.settings_ota_on}</MenuItem>
             <MenuItem value={false}>{Blockly.Msg.settings_ota_off}</MenuItem>
           </Select>

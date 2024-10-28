@@ -9,7 +9,7 @@ import {
   deleteError,
 } from "../../../actions/tutorialBuilderActions";
 
-import withStyles from '@mui/styles/withStyles';
+import withStyles from "@mui/styles/withStyles";
 
 import * as Blockly from "blockly";
 import Checkbox from "@mui/material/Checkbox";
@@ -45,7 +45,7 @@ class Review extends Component {
         value,
         this.props.index,
         this.props.property,
-        this.props.property2
+        this.props.property2,
       );
     }
   };
@@ -65,7 +65,9 @@ class Review extends Component {
                 checked={this.props.value}
                 onChange={this.handleChange}
                 name="checkedA"
-                inputProps={{ "aria-label": "secondary checkbox" }}
+                inputProps={{
+                  "aria-label": "secondary checkbox",
+                }}
               />
             }
             label="Ich möchte mein Tutorial öffentlich machen"

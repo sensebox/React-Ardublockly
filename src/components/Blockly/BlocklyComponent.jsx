@@ -61,7 +61,7 @@ class BlocklyComponent extends React.Component {
     if (initialXml) {
       Blockly.Xml.domToWorkspace(
         Blockly.Xml.textToDom(initialXml),
-        this.primaryWorkspace
+        this.primaryWorkspace,
       );
     }
   }
@@ -73,7 +73,7 @@ class BlocklyComponent extends React.Component {
   setXml(xml) {
     Blockly.Xml.domToWorkspace(
       Blockly.Xml.textToDom(xml),
-      this.primaryWorkspace
+      this.primaryWorkspace,
     );
   }
 

@@ -203,27 +203,27 @@ Blockly.Arduino.sensebox_lora_ttn_mapper = function (block) {
   var latitude = Blockly.Arduino.valueToCode(
     this,
     "Latitude",
-    Blockly.Arduino.ORDER_ATOMIC
+    Blockly.Arduino.ORDER_ATOMIC,
   );
   var longitude = Blockly.Arduino.valueToCode(
     this,
     "Longitude",
-    Blockly.Arduino.ORDER_ATOMIC
+    Blockly.Arduino.ORDER_ATOMIC,
   );
   var altitude = Blockly.Arduino.valueToCode(
     this,
     "Altitude",
-    Blockly.Arduino.ORDER_ATOMIC
+    Blockly.Arduino.ORDER_ATOMIC,
   );
   var pDOP = Blockly.Arduino.valueToCode(
     this,
     "pDOP",
-    Blockly.Arduino.ORDER_ATOMIC
+    Blockly.Arduino.ORDER_ATOMIC,
   );
   var fixType = Blockly.Arduino.valueToCode(
     this,
     "Fix Type",
-    Blockly.Arduino.ORDER_ATOMIC
+    Blockly.Arduino.ORDER_ATOMIC,
   );
   var fixTypeLimit = this.getFieldValue("dropdown");
   Blockly.Arduino.functionNames_["functions_do_send"] = `

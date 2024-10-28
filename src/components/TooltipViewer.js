@@ -14,14 +14,15 @@ import SensorInfo from "./SensorInfo";
 import store from "../store";
 
 // FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
-const withWidth = () => (WrappedComponent) => (props) => <WrappedComponent {...props} width="xs" />;
+const withWidth = () => (WrappedComponent) => (props) => (
+  <WrappedComponent {...props} width="xs" />
+);
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 class TooltipViewer extends Component {
-
   constructor(props) {
     super(props);
     this.inputRef = React.createRef();
@@ -75,26 +76,32 @@ class TooltipViewer extends Component {
             )}
           </Typography>
         </CardContent>
-        {store.getState().workspace.code.data ? (<Dialog
-          open={this.state.open}
-          TransitionComponent={Transition}
-          keepMounted
-          aria-describedby="alert-dialog-slide-description"
-          onClose={() => {
-            this.toggleDialog();
-          }}
-          maxWidth={"md"}
-          fullWidth={true}
-        >
-          <DialogContent>
-            <SensorInfo></SensorInfo>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => {
+        {store.getState().workspace.code.data ? (
+          <Dialog
+            open={this.state.open}
+            TransitionComponent={Transition}
+            keepMounted
+            aria-describedby="alert-dialog-slide-description"
+            onClose={() => {
               this.toggleDialog();
-            }}>Close</Button>
-          </DialogActions>
-        </Dialog>) : (null)}
+            }}
+            maxWidth={"md"}
+            fullWidth={true}
+          >
+            <DialogContent>
+              <SensorInfo></SensorInfo>
+            </DialogContent>
+            <DialogActions>
+              <Button
+                onClick={() => {
+                  this.toggleDialog();
+                }}
+              >
+                Close
+              </Button>
+            </DialogActions>
+          </Dialog>
+        ) : null}
       </Card>
     );
   }

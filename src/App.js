@@ -9,7 +9,11 @@ import { loadUser } from "./actions/authActions";
 
 import "./App.css";
 
-import { ThemeProvider, StyledEngineProvider, createTheme } from "@mui/material/styles";
+import {
+  ThemeProvider,
+  StyledEngineProvider,
+  createTheme,
+} from "@mui/material/styles";
 
 import Content from "./components/Content";
 
