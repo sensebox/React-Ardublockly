@@ -31,9 +31,15 @@ import store from "../../../../store";
 var ota = store.getState().general.platform
   ? store.getState().general.platform
   : null;
+var board = store.getState().board.board 
+  ? store.getState().board.board 
+  : null;
 store.subscribe(() => {
   ota = store.getState().general.platform
     ? store.getState().general.platform
+    : null;
+  board = store.getState().board.board
+    ? store.getState().board.board
     : null;
 });
 
@@ -230,7 +236,7 @@ Blockly.Generator.Arduino.finish = function (code) {
 
   let loopCode = "\nvoid loop() { \n" + loopCodeOnce + code + "\n}\n";
   // only add OTA code if tablet mode is enabled
-  if (ota === true) {
+  if (ota === true && board !== "esp32") {
     code =
       commentCode +
       "\n" +
