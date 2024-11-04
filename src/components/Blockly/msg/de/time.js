@@ -19,9 +19,4 @@ export const TIME = {
   ARD_TIME_MILLIS_TIP:
     "Gibt eine Zahl in Millisekunden zurück, die der Zeitdauer des Aktuellen Programms entspricht. Muss als positiven Integer gespeichert werden", // untranslated
   ARD_TIME_MS: "Millisekunden",
-
-  deep_sleep_esp32s2: "Tiefschlaf und Neustart nach",
-  deep_sleep_esp32s2_unit: "Sekunden",
-  deep_sleep_esp32s2_tooltip: "TODO",
-  deep_sleep_esp32s2_helpurl: "TODO"
 };
