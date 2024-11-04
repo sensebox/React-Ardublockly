@@ -1,4 +1,13 @@
-import { Block, Value, Field, Statement, Shadow, Category, Sep, Label } from "..";
+import {
+  Block,
+  Value,
+  Field,
+  Statement,
+  Shadow,
+  Category,
+  Sep,
+  Label,
+} from "..";
 import { getColour } from "../helpers/colour";
 import * as Blockly from "blockly/core";
 
@@ -355,31 +364,6 @@ export const ToolboxMcu = () => {
           <Block type="sensebox_lora_cayenne_gps" />
         </Category>
       </Category>
-      <Category id="sensebox_solar" name="Solar" colour={getColour().solar}>
-        <Block type="sensebox_solar_charger_sb041"/>
-        <Block type="sensebox_solar_deep_sleep"/>
-        <Block type="controls_ifelse">
-          <Value name="IF0">
-            <Block type="logic_compare">
-              <Field name="OP">LTE</Field>
-              <Value name="A">
-                <Block type="sensebox_solar_charger_sb041"/>
-              </Value>
-              <Value name="B">
-                <Block type="math_number">
-                  <Field name="NUM">2</Field>
-                </Block>
-              </Value>
-            </Block>
-          </Value>
-          <Statement name="DO0">
-            <Block type="sensebox_solar_deep_sleep"/>
-          </Statement>
-          <Statement name="ELSE">
-            <Block type="sensebox_solar_deep_sleep"/>
-          </Statement>
-        </Block>
-      </Category>
       <Category id="phyphox" name="Phyphox" colour={getColour().phyphox}>
         <Block type="sensebox_phyphox_init"></Block>
         <Block type="sensebox_phyphox_experiment">
@@ -403,6 +387,56 @@ export const ToolboxMcu = () => {
         <Block type="sensebox_phyphox_timestamp"></Block>
         <Block type="sensebox_phyphox_channel"></Block>
         <Block type="sensebox_phyphox_sendchannel"></Block>
+      </Category>
+      <Category id="sensebox_solar" name="Solar" colour={getColour().solar}>
+        <Block type="sensebox_solar_charger_SB041">
+          <Field name="value">battery_level</Field>
+        </Block>
+        <Block type="sensebox_solar_deep_sleep_and_restart">
+          <Value name="sleep_time">
+            <Block type="math_number">
+              <Field name="NUM">30</Field>
+            </Block>
+          </Value>
+          <Field name="time_scale"> * 60000</Field>
+        </Block>
+        <Block type="controls_ifelse">
+          <Value name="IF0">
+            <Block type="logic_compare">
+              <Field name="OP">GT</Field>
+              <Value name="A">
+                <Block type="sensebox_solar_charger_SB041">
+                  <Field name="value">battery_level</Field>
+                </Block>
+              </Value>
+              <Value name="B">
+                <Block type="math_number">
+                  <Field name="NUM">2</Field>
+                </Block>
+              </Value>
+            </Block>
+          </Value>
+          <Statement name="DO0">
+            <Block type="sensebox_solar_deep_sleep_and_restart">
+              <Value name="sleep_time">
+                <Block type="math_number">
+                  <Field name="NUM">30</Field>
+                </Block>
+              </Value>
+              <Field name="time_scale"> * 60000</Field>
+            </Block>
+          </Statement>
+          <Statement name="ELSE">
+            <Block type="sensebox_solar_deep_sleep_and_restart">
+              <Value name="sleep_time">
+                <Block type="math_number">
+                  <Field name="NUM">12</Field>
+                </Block>
+              </Value>
+              <Field name="time_scale"> * 3600000</Field>
+            </Block>
+          </Statement>
+        </Block>
       </Category>
       <Category id="webserver" name="Webserver" colour={getColour().webserver}>
         <Block type="sensebox_initialize_http_server"></Block>

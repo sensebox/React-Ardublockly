@@ -1,4 +1,4 @@
-import { Block, Value, Field, Shadow, Category, Label } from "..";
+import { Block, Value, Field, Statement, Shadow, Category, Label } from "..";
 import { getColour } from "../helpers/colour";
 import * as Blockly from "blockly/core";
 
@@ -393,6 +393,56 @@ export const ToolboxEsp = () => {
         {/* <Category id="senseboxble" name="senseBox BLE" colour={getColour().phyphox}>
           <Block type="sensebox_ble_init"></Block>
         </Category> */}
+      </Category>
+      <Category id="sensebox_solar" name="Solar" colour={getColour().solar}>
+        <Block type="sensebox_solar_charger_SB041">
+          <Field name="value">battery_level</Field>
+        </Block>
+        <Block type="sensebox_solar_deep_sleep_and_restart">
+          <Value name="sleep_time">
+            <Block type="math_number">
+              <Field name="NUM">30</Field>
+            </Block>
+          </Value>
+          <Field name="time_scale"> * 60000</Field>
+        </Block>
+        <Block type="controls_ifelse">
+          <Value name="IF0">
+            <Block type="logic_compare">
+              <Field name="OP">GT</Field>
+              <Value name="A">
+                <Block type="sensebox_solar_charger_SB041">
+                  <Field name="value">battery_level</Field>
+                </Block>
+              </Value>
+              <Value name="B">
+                <Block type="math_number">
+                  <Field name="NUM">2</Field>
+                </Block>
+              </Value>
+            </Block>
+          </Value>
+          <Statement name="DO0">
+            <Block type="sensebox_solar_deep_sleep_and_restart">
+              <Value name="sleep_time">
+                <Block type="math_number">
+                  <Field name="NUM">30</Field>
+                </Block>
+              </Value>
+              <Field name="time_scale"> * 60000</Field>
+            </Block>
+          </Statement>
+          <Statement name="ELSE">
+            <Block type="sensebox_solar_deep_sleep_and_restart">
+              <Value name="sleep_time">
+                <Block type="math_number">
+                  <Field name="NUM">12</Field>
+                </Block>
+              </Value>
+              <Field name="time_scale"> * 3600000</Field>
+            </Block>
+          </Statement>
+        </Block>
       </Category>
       <Category id="webserver" name="Webserver" colour={getColour().webserver}>
         <Block type="sensebox_initialize_http_server"></Block>
