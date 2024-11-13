@@ -363,18 +363,18 @@ Blockly.Arduino.sensebox_tof_imager = function () {
   var maxDistance = this.getFieldValue("maxDistance");
   Blockly.Arduino.libraries_["library_wire"] = "#include <Wire.h>";
   Blockly.Arduino.libraries_[`library_vl53l8cx`] =
-    `#include <vl53l8cx_class.h> `;
+    `#include <vl53l8cx.h> `;
   Blockly.Arduino.variables_["define:_vl53l8cx"] = `
-VL53L8CX sensor_vl53l8cx_top(&Wire, -1, -1);  
+VL53L8CX sensor_vl53l8cx(&Wire, -1, -1);  
 `;
   Blockly.Arduino.setupCode_["setup_vl53l8cx"] = `
   Wire.begin();
   Wire.setClock(1000000); //Sensor has max I2C freq of 1MHz
-  sensor_vl53l8cx_top.begin();
-  sensor_vl53l8cx_top.init_sensor();
-  sensor_vl53l8cx_top.vl53l8cx_set_ranging_frequency_hz(30);
-  sensor_vl53l8cx_top.vl53l8cx_set_resolution(VL53L8CX_RESOLUTION_8X8);
-  sensor_vl53l8cx_top.vl53l8cx_start_ranging();
+  sensor_vl53l8cx.begin();
+  sensor_vl53l8cx.init();
+  sensor_vl53l8cx.set_ranging_frequency_hz(30);
+  sensor_vl53l8cx.set_resolution(VL53L8CX_RESOLUTION_8X8);
+  sensor_vl53l8cx.start_ranging();
   `;
   var code = "";
   switch (dropdown_name) {
@@ -386,10 +386,10 @@ VL53L8CX sensor_vl53l8cx_top(&Wire, -1, -1);
       uint8_t NewDataReady = 0;
       uint8_t status;
 
-      status = sensor_vl53l8cx_top.vl53l8cx_check_data_ready(&NewDataReady);
+      status = sensor_vl53l8cx.check_data_ready(&NewDataReady);
 
       if ((!status) && (NewDataReady != 0)) {
-        sensor_vl53l8cx_top.vl53l8cx_get_ranging_data(&Results);
+        sensor_vl53l8cx.get_ranging_data(&Results);
         float min = 10000.0;
         for(int i = 0; i < VL53L8CX_RESOLUTION_8X8*VL53L8CX_NB_TARGET_PER_ZONE; i++) {
           if((&Results)->target_status[i]!=255){
@@ -421,10 +421,10 @@ VL53L8CX sensor_vl53l8cx_top(&Wire, -1, -1);
         uint8_t NewDataReady = 0;
         uint8_t status;
       
-        status = sensor_vl53l8cx_top.vl53l8cx_check_data_ready(&NewDataReady);
+        status = sensor_vl53l8cx.check_data_ready(&NewDataReady);
       
         if ((!status) && (NewDataReady != 0)) {
-          sensor_vl53l8cx_top.vl53l8cx_get_ranging_data(&Result);
+          sensor_vl53l8cx.get_ranging_data(&Result);
           int8_t i, j, k;
           uint8_t zones_per_line;
           uint8_t number_of_zones = VL53L8CX_RESOLUTION_8X8;
