@@ -393,12 +393,11 @@ export const ToolboxMcu = () => {
           <Field name="value">battery_level</Field>
         </Block>
         <Block type="sensebox_solar_deep_sleep_and_restart">
-          <Value name="sleep_time">
-            <Block type="math_number">
-              <Field name="NUM">30</Field>
-            </Block>
-          </Value>
+          <Field name="sleep_time">30</Field>
           <Field name="time_scale"> * 60000</Field>
+          <Field name="powerOffI2C">TRUE</Field>
+          <Field name="powerOffUART">TRUE</Field>
+          <Field name="powerOffXB">TRUE</Field>
         </Block>
         <Block type="controls_ifelse">
           <Value name="IF0">
@@ -418,22 +417,20 @@ export const ToolboxMcu = () => {
           </Value>
           <Statement name="DO0">
             <Block type="sensebox_solar_deep_sleep_and_restart">
-              <Value name="sleep_time">
-                <Block type="math_number">
-                  <Field name="NUM">30</Field>
-                </Block>
-              </Value>
+              <Field name="sleep_time">30</Field>
               <Field name="time_scale"> * 60000</Field>
+              <Field name="powerOffI2C">TRUE</Field>
+              <Field name="powerOffUART">TRUE</Field>
+              <Field name="powerOffXB">TRUE</Field>
             </Block>
           </Statement>
           <Statement name="ELSE">
             <Block type="sensebox_solar_deep_sleep_and_restart">
-              <Value name="sleep_time">
-                <Block type="math_number">
-                  <Field name="NUM">12</Field>
-                </Block>
-              </Value>
+              <Field name="sleep_time">12</Field>
               <Field name="time_scale"> * 3600000</Field>
+              <Field name="powerOffI2C">TRUE</Field>
+              <Field name="powerOffUART">TRUE</Field>
+              <Field name="powerOffXB">TRUE</Field>
             </Block>
           </Statement>
         </Block>
