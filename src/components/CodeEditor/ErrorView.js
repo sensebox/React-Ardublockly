@@ -10,6 +10,8 @@ export const ErrorView = ({ error }) => {
   const errorSuggestions = {
     "'display' was not declared in this scope":
       Blockly.Msg.display_not_declared,
+      "redefinition of": Blockly.Msg.variable_redeclared,
+      "conflicting declaration": Blockly.Msg.variable_redeclared,
   };
 
   const getSuggestion = (process) => {
