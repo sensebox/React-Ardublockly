@@ -33,11 +33,14 @@ export const SOLAR = {
    */
   sensebox_solar_deep_sleep_and_restart:
     "Stromsparender Tiefschlaf und Neustart nach",
-  sensebox_solar_deep_sleep_and_restart_milliseconds: "Millisekunden",
+  sensebox_solar_deep_sleep_and_restart_seconds: "Sekunden",
   sensebox_solar_deep_sleep_and_restart_minutes: "Minuten",
   sensebox_solar_deep_sleep_and_restart_hours: "Stunden",
+  sensebox_solar_deep_sleep_and_restart_milliseconds: "Millisekunden",
+  sensebox_solar_deep_sleep_and_restart_deactivate_ports:
+    "Anschlüsse zum deaktivieren:",
   sensebox_solar_deep_sleep_and_restart_tooltip:
-    "Dieser Block versetzt die senseBox für vorgegebene Zeit in einen Stromsparenden Tiefschlaf. Dabei werden jegliche Funktionen und angeschlossene Sensoren deaktiviert. Nach der vorgegebenen Zeit wacht die senseBox auf und startet neu. Dieser Block ist nützlich für den Solarbetrieb.",
+    "Dieser Block versetzt die senseBox für vorgegebene Zeit in einen Stromsparenden Tiefschlaf. Dabei werden jegliche Funktionen und die Sensoren an den angegebenen Anschlüssen deaktiviert. Nach der vorgegebenen Zeit wacht die senseBox auf und startet neu. Dieser Block ist nützlich für den Solarbetrieb.",
   sensebox_solar_deep_sleep_and_restart_helpurl:
     "https://sensebox.kaufen/product/solar-set",
 };

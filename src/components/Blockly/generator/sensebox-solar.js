@@ -1,5 +1,4 @@
 import Blockly from "blockly";
-import { selectedBoard } from "../helpers/board";
 
 /**
  * Solar Charger (SB-041)
@@ -92,20 +91,22 @@ void solar_update_SB041() {
  */
 Blockly.Arduino.sensebox_solar_deep_sleep_and_restart = function () {
   var board = window.sessionStorage.getItem("board");
-  var sleep_time =
-    Blockly.Arduino.valueToCode(
-      this,
-      "sleep_time",
-      Blockly.Arduino.ORDER_ATOMIC,
-    ) || "0";
+  var sleep_time = this.getFieldValue("sleep_time");
   var time_scale = this.getFieldValue("time_scale");
-  if (board === "esp") {
+  var powerOffI2C = this.getFieldValue("powerOffI2C") === "TRUE";
+  var powerOffUART = this.getFieldValue("powerOffUART") === "TRUE";
+  var powerOffXB = this.getFieldValue("powerOffXB") === "TRUE";
+  if (board === "esp32") {
+    Blockly.Arduino.libraries_["library_esp32_hal_gpio"] =
+      "#include <esp32-hal-gpio.h>;";
+    Blockly.Arduino.libraries_["library_pins_arduino"] =
+      "#include <pins_arduino.h>;";
     Blockly.Arduino.codeFunctions_["deep_sleep_and_restart"] = `
 // power saving deep sleep for specific time and a final restart
-void deep_sleep_and_restart(int sleep_time) {
-  digitalWrite(PIN_RGB_LED, HIGH);
-  digitalWrite(PIN_XB1_ENABLE, HIGH);
-  digitalWrite(PIN_UART_ENABLE, HIGH);
+void deep_sleep_and_restart(int sleep_time, bool powerOffI2C, bool powerOffUART, bool powerOffXB) {
+  digitalWrite(IO_ENABLE, powerOffI2C ? HIGH : LOW);
+  digitalWrite(PIN_XB1_ENABLE, powerOffUART ? HIGH : LOW);
+  digitalWrite(PIN_UART_ENABLE, powerOffXB ? HIGH : LOW);
   digitalWrite(PD_ENABLE, LOW);
   esp_sleep_enable_timer_wakeup(max(0, sleep_time - 1000));
   delay(1000);
@@ -113,13 +114,16 @@ void deep_sleep_and_restart(int sleep_time) {
 }
 `;
   } else {
-    // assume else board === "mcu" || board === "mini"
+    // assume board === "mcu" || board === "mini"
     Blockly.Arduino.libraries_["library_low_power"] =
       "#include <ArduinoLowPower.h>;";
     Blockly.Arduino.codeFunctions_["deep_sleep_and_restart"] = `
 // power saving deep sleep for specific time and a final restart
-void deep_sleep_and_restart(int sleep_time) {
-  senseBoxIO.powerNone();
+void deep_sleep_and_restart(int sleep_time, bool powerOffI2C, bool powerOffUART, bool powerOffXB) {
+  senseBoxIO.powerI2C(!powerOffI2C);
+  senseBoxIO.powerUART(!powerOffUART);
+  senseBoxIO.powerXB1(!powerOffXB);
+  senseBoxIO.powerXB2(!powerOffXB);
   LowPower.deepSleep(max(0, sleep_time - 1000));
   delay(1000);
   noInterrupts();
@@ -129,5 +133,5 @@ void deep_sleep_and_restart(int sleep_time) {
 }
   `;
   }
-  return `deep_sleep_and_restart(${sleep_time}${time_scale});`;
+  return `deep_sleep_and_restart(${sleep_time}${time_scale}, ${powerOffI2C}, ${powerOffUART}, ${powerOffXB});`;
 };
