@@ -193,19 +193,22 @@ Blockly.Generator.Arduino.finish = function (code) {
     functionsCode += Blockly.Generator.Arduino.functionNames_[key] + "\n";
   }
 
-  for (const key in Blockly.Generator.Arduino.setupCode_) {
-    preSetupCode += Blockly.Generator.Arduino.setupCode_[key] + "\n" || "";
+  for (const key in Blockly["Arduino"].setupCode_) {
+    if (key == "Wire.begin") {
+      // Wire needs to be initialized first
+      preSetupCode =
+        (Blockly["Arduino"].setupCode_[key] + "\n" || "") + preSetupCode;
+    } else {
+      preSetupCode += Blockly["Arduino"].setupCode_[key] + "\n" || "";
+    }
   }
 
   for (const key in Blockly.Generator.Arduino.loraSetupCode_) {
     loraSetupCode += Blockly.Generator.Arduino.loraSetupCode_[key] + "\n" || "";
   }
 
-  setupCode =
-    "\nvoid setup() { \n" + preSetupCode + "\n" + loraSetupCode + "\n}\n";
-  for (const key in Blockly.Generator.Arduino.phyphoxSetupCode_) {
-    phyphoxSetupCode +=
-      Blockly.Generator.Arduino.phyphoxSetupCode_[key] + "\n" || "";
+  for (const key in Blockly["Arduino"].phyphoxSetupCode_) {
+    phyphoxSetupCode += Blockly["Arduino"].phyphoxSetupCode_[key] + "\n" || "";
   }
 
   setupCode =

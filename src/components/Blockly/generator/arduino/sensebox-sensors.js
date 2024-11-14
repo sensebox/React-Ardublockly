@@ -61,11 +61,12 @@ void write_reg(byte address, uint8_t reg, uint8_t val)
     Wire.write(val);
     Wire.endTransmission();
   }`;
-
-    Blockly.Generator.Arduino.codeFunctions_["Lightsensor_begin"] = `
+    if (Blockly.Arduino.setupCode_["Wire.begin"] == undefined) {
+      Blockly.Arduino.setupCode_["Wire.begin"] = "Wire.begin();\n";
+    }
+    Blockly.Arduino.codeFunctions_["Lightsensor_begin"] = `
 void Lightsensor_begin()
   {
-    Wire.begin();
     unsigned int u = 0;
     u = read_reg(0x29, 0x80 | 0x0A); //id register
     if ((u & 0xF0) == 0xA0)            // TSL45315
@@ -274,12 +275,14 @@ Blockly.Generator.Arduino.forBlock["sensebox_sensor_bme680_bsec"] =
     delay(100);
   }`;
     //Setup Code
-    Blockly.Generator.Arduino.setupCode_["Wire.begin"] = "Wire.begin();";
-    Blockly.Generator.Arduino.setupCode_["iaqSensor.begin"] =
+    if (Blockly.Arduino.setupCode_["Wire.begin"] == undefined) {
+      Blockly.Arduino.setupCode_["Wire.begin"] = "Wire.begin();\n";
+    }
+    Blockly.Arduino.setupCode_["iaqSensor.begin"] =
       "iaqSensor.begin(BME68X_I2C_ADDR_LOW, Wire);";
-    Blockly.Generator.Arduino.setupCode_["checkIaqSensorStatus"] =
+    Blockly.Arduino.setupCode_["checkIaqSensorStatus"] =
       "checkIaqSensorStatus();";
-    Blockly.Generator.Arduino.setupCode_["bsec_sensorlist"] = `
+    Blockly.Arduino.setupCode_["bsec_sensorlist"] = `
 bsec_virtual_sensor_t sensorList[13] = {
     BSEC_OUTPUT_IAQ,
     BSEC_OUTPUT_STATIC_IAQ,
@@ -377,12 +380,20 @@ Blockly.Generator.Arduino.forBlock["sensebox_tof_imager"] = function () {
   Blockly.Generator.Arduino.libraries_["library_wire"] = "#include <Wire.h>";
   Blockly.Generator.Arduino.libraries_[`library_vl53l8cx`] =
     `#include <vl53l8cx.h> `;
-  Blockly.Generator.Arduino.variables_["define:_vl53l8cx"] = `
-VL53L8CX sensor_vl53l8cx(&Wire, -1, -1);  
-`;
-  Blockly.Generator.Arduino.setupCode_["setup_vl53l8cx"] = `
-  Wire.begin();
-  Wire.setClock(1000000); //Sensor has max I2C freq of 1MHz
+  Blockly.Arduino.variables_["define:_vl53l8cx"] = `
+    VL53L8CX sensor_vl53l8cx(&Wire, -1, -1);  
+    `;
+
+  if (Blockly.Arduino.setupCode_["Wire.begin"] == undefined) {
+    Blockly.Arduino.setupCode_["Wire.begin"] = `Wire.begin();
+      Wire.setClock(1000000); // VL53L8CX (ToF) has max I2C freq of 1MHz
+      sensor_vl53l8cx.set_i2c_address(0x51); // need to change address, because default address is shared with other sensor\n`;
+  } else {
+    Blockly.Arduino.setupCode_["Wire.begin"] +=
+      `Wire.setClock(1000000); //Sensor has max I2C freq of 1MHz
+      sensor_vl53l8cx.set_i2c_address(0x51); // need to change address, because default address is shared with other sensor\n`;
+  }
+  Blockly.Arduino.setupCode_["setup_vl53l8cx"] = `
   sensor_vl53l8cx.begin();
   sensor_vl53l8cx.init();
   sensor_vl53l8cx.set_ranging_frequency_hz(30);
@@ -610,8 +621,11 @@ Blockly.Generator.Arduino.forBlock["sensebox_scd30"] = function () {
   var dropdown = this.getFieldValue("dropdown");
   Blockly.Generator.Arduino.libraries_["scd30_library"] =
     "#include <SparkFun_SCD30_Arduino_Library.h> // http://librarymanager/All#SparkFun_SCD30_Arduino_Library";
-  Blockly.Generator.Arduino.definitions_["SCD30"] = "SCD30 airSensor;";
-  Blockly.Generator.Arduino.setupCode_["init_scd30"] = ` Wire.begin();
+  Blockly.Arduino.definitions_["SCD30"] = "SCD30 airSensor;";
+  if (Blockly.Arduino.setupCode_["Wire.begin"] == undefined) {
+    Blockly.Arduino.setupCode_["Wire.begin"] = "Wire.begin();\n";
+  }
+  Blockly.Arduino.setupCode_["init_scd30"] = ` 
 if (airSensor.begin() == false)
 {
   while (1)
@@ -645,9 +659,12 @@ Blockly.Generator.Arduino.forBlock["sensebox_gps"] = function () {
   var dropdown = this.getFieldValue("dropdown");
   Blockly.Generator.Arduino.libraries_["gps_library"] =
     "#include <SparkFun_u-blox_GNSS_Arduino_Library.h> // http://librarymanager/All#SparkFun_u-blox_GNSS_Arduino_Library";
-  Blockly.Generator.Arduino.libraries_["library_wire"] = "#include <Wire.h>";
-  Blockly.Generator.Arduino.definitions_["GPS"] = "SFE_UBLOX_GNSS myGNSS;";
-  Blockly.Generator.Arduino.setupCode_["init_gps"] = ` Wire.begin();
+  Blockly.Arduino.libraries_["library_wire"] = "#include <Wire.h>";
+  Blockly.Arduino.definitions_["GPS"] = "SFE_UBLOX_GNSS myGNSS;";
+  if (Blockly.Arduino.setupCode_["Wire.begin"] == undefined) {
+    Blockly.Arduino.setupCode_["Wire.begin"] = "Wire.begin();\n";
+  }
+  Blockly.Arduino.setupCode_["init_gps"] = `
 
   if (myGNSS.begin() == false) //Connect to the Ublox module using Wire port
   {
