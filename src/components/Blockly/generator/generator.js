@@ -194,15 +194,17 @@ Blockly["Arduino"].finish = function (code) {
   }
 
   for (const key in Blockly["Arduino"].setupCode_) {
-    preSetupCode += Blockly["Arduino"].setupCode_[key] + "\n" || "";
+    if(key=="Wire.begin") { // Wire needs to be initialized first
+      preSetupCode = (Blockly["Arduino"].setupCode_[key] + "\n" || "") + preSetupCode;
+    } else {
+      preSetupCode += Blockly["Arduino"].setupCode_[key] + "\n" || "";
+    }
   }
 
   for (const key in Blockly["Arduino"].loraSetupCode_) {
     loraSetupCode += Blockly["Arduino"].loraSetupCode_[key] + "\n" || "";
   }
 
-  setupCode =
-    "\nvoid setup() { \n" + preSetupCode + "\n" + loraSetupCode + "\n}\n";
   for (const key in Blockly["Arduino"].phyphoxSetupCode_) {
     phyphoxSetupCode += Blockly["Arduino"].phyphoxSetupCode_[key] + "\n" || "";
   }
