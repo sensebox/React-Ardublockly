@@ -19,7 +19,6 @@ export const ToolboxEsp = () => {
         <Block type="sensebox_sensor_dps310" />
         <Block type="sensebox_sensor_bme680_bsec" />
         <Block type="sensebox_scd30" />
-        <Block type="sensebox_sensor_sb041" />
         <Block type="sensebox_gps" />
         <Block type="sensebox_sensor_ultrasonic_ranger" />
         <Block type="sensebox_tof_imager" />
@@ -398,13 +397,12 @@ export const ToolboxEsp = () => {
         <Block type="sensebox_solar_charger_SB041">
           <Field name="value">battery_level</Field>
         </Block>
-        <Block type="sensebox_solar_deep_sleep_and_restart">
-          <Value name="sleep_time">
-            <Block type="math_number">
-              <Field name="NUM">30</Field>
-            </Block>
-          </Value>
+        {/* <Block type="sensebox_solar_deep_sleep_and_restart">
+          <Field name="sleep_time">30</Field>
           <Field name="time_scale"> * 60000</Field>
+          <Field name="powerOffI2C">TRUE</Field>
+          <Field name="powerOffUART">TRUE</Field>
+          <Field name="powerOffXB">TRUE</Field>
         </Block>
         <Block type="controls_ifelse">
           <Value name="IF0">
@@ -424,25 +422,23 @@ export const ToolboxEsp = () => {
           </Value>
           <Statement name="DO0">
             <Block type="sensebox_solar_deep_sleep_and_restart">
-              <Value name="sleep_time">
-                <Block type="math_number">
-                  <Field name="NUM">30</Field>
-                </Block>
-              </Value>
+              <Field name="sleep_time">30</Field>
               <Field name="time_scale"> * 60000</Field>
+              <Field name="powerOffI2C">TRUE</Field>
+              <Field name="powerOffUART">TRUE</Field>
+              <Field name="powerOffXB">TRUE</Field>
             </Block>
           </Statement>
           <Statement name="ELSE">
             <Block type="sensebox_solar_deep_sleep_and_restart">
-              <Value name="sleep_time">
-                <Block type="math_number">
-                  <Field name="NUM">12</Field>
-                </Block>
-              </Value>
+              <Field name="sleep_time">12</Field>
               <Field name="time_scale"> * 3600000</Field>
+              <Field name="powerOffI2C">TRUE</Field>
+              <Field name="powerOffUART">TRUE</Field>
+              <Field name="powerOffXB">TRUE</Field>
             </Block>
           </Statement>
-        </Block>
+        </Block> */}
       </Category>
       <Category id="webserver" name="Webserver" colour={getColour().webserver}>
         <Block type="sensebox_initialize_http_server"></Block>
@@ -537,7 +533,6 @@ export const ToolboxEsp = () => {
         <Block type="time_millis"></Block>
         <Block type="time_micros"></Block>
         <Block type="infinite_loop"></Block>
-        <Block type="deep_sleep_esp32s2"></Block>
         <Block type="sensebox_interval_timer"></Block>
         <Category
           id="time"
