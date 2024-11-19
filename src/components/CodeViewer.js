@@ -6,9 +6,13 @@ import withStyles from "@mui/styles/withStyles";
 import MuiAccordion from "@mui/material/Accordion";
 import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
+import IconButton from "@mui/material/IconButton";
+import { faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Card } from "@mui/material";
 import * as Blockly from "blockly";
 import { default as MonacoEditor } from "@monaco-editor/react";
+import { startSimulator, stopSimulator } from "../actions/simulatorActions";
 
 // FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
 const withWidth = () => (WrappedComponent) => (props) => (
@@ -125,9 +129,7 @@ class CodeViewer extends Component {
             >
               Simulator Icon
             </b> */}
-            <div style={{ margin: "auto 5px 2px 0px" }}>
-            Simulator
-            </div>
+            <div style={{ margin: "auto 5px 2px 0px" }}>Simulator</div>
           </AccordionSummary>
           <AccordionDetails
             style={{
@@ -136,6 +138,16 @@ class CodeViewer extends Component {
               backgroundColor: "white",
             }}
           >
+            {this.props.isSimulatorRunning ? (
+              <IconButton onClick={this.props.stopSimulator}>
+                <FontAwesomeIcon icon={faStop} />
+              </IconButton>
+            ) : (
+              <IconButton onClick={this.props.startSimulator}>
+                <FontAwesomeIcon icon={faPlay} />
+              </IconButton>
+            )}
+
             <MonacoEditor
               height="80vh"
               defaultLanguage="javascript"
@@ -230,13 +242,19 @@ CodeViewer.propTypes = {
   xml: PropTypes.string.isRequired,
   tooltip: PropTypes.string.isRequired,
   simulator: PropTypes.string.isRequired,
+  startSimulator: PropTypes.func.isRequired,
+  stopSimulator: PropTypes.func.isRequired,
+  isSimulatorRunning: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   arduino: state.workspace.code.arduino,
   xml: state.workspace.code.xml,
   tooltip: state.workspace.code.tooltip,
-  simulator: state.workspace.code.simulator,
+  simulator: state.simulator.code,
+  isSimulatorRunning: state.simulator.isRunning,
 });
 
-export default connect(mapStateToProps, null)(withWidth()(CodeViewer));
+export default connect(mapStateToProps, { startSimulator, stopSimulator })(
+  withWidth()(CodeViewer),
+);
