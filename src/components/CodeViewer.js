@@ -112,8 +112,43 @@ class CodeViewer extends Component {
         <Accordion
           square={true}
           style={{ margin: 0 }}
-          expanded={this.state.expanded}
-          onChange={this.onChange}
+          // expanded={this.state.expanded}
+          // onChange={this.onChange}
+        >
+          <AccordionSummary>
+            {/* <b
+              style={{
+                fontSize: "20px",
+                marginRight: "5px",
+                width: "35px",
+              }}
+            >
+              Simulator Icon
+            </b> */}
+            <div style={{ margin: "auto 5px 2px 0px" }}>
+            Simulator
+            </div>
+          </AccordionSummary>
+          <AccordionDetails
+            style={{
+              padding: 0,
+              height: `calc(${this.state.componentHeight} - 50px - 50px - 50px)`,
+              backgroundColor: "white",
+            }}
+          >
+            <MonacoEditor
+              height="80vh"
+              defaultLanguage="javascript"
+              value={this.props.simulator}
+              readOnly={true}
+            />
+          </AccordionDetails>
+        </Accordion>
+        <Accordion
+          square={true}
+          style={{ margin: 0 }}
+          // expanded={this.state.expanded}
+          // onChange={this.onChange}
         >
           <AccordionSummary>
             <b
@@ -132,7 +167,7 @@ class CodeViewer extends Component {
           <AccordionDetails
             style={{
               padding: 0,
-              height: `calc(${this.state.componentHeight} - 50px - 50px)`,
+              height: `calc(${this.state.componentHeight} - 50px - 50px - 50px)`,
               backgroundColor: "white",
             }}
           >
@@ -153,8 +188,8 @@ class CodeViewer extends Component {
         <Accordion
           square={true}
           style={{ margin: 0 }}
-          expanded={!this.state.expanded}
-          onChange={this.onChange}
+          // expanded={!this.state.expanded}
+          // onChange={this.onChange}
         >
           <AccordionSummary>
             <b
@@ -173,7 +208,7 @@ class CodeViewer extends Component {
           <AccordionDetails
             style={{
               padding: 0,
-              height: `calc(${this.state.componentHeight} - 50px - 50px)`,
+              height: `calc(${this.state.componentHeight} - 50px - 50px - 50px)`,
               backgroundColor: "white",
             }}
           >
@@ -194,12 +229,14 @@ CodeViewer.propTypes = {
   arduino: PropTypes.string.isRequired,
   xml: PropTypes.string.isRequired,
   tooltip: PropTypes.string.isRequired,
+  simulator: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   arduino: state.workspace.code.arduino,
   xml: state.workspace.code.xml,
   tooltip: state.workspace.code.tooltip,
+  simulator: state.workspace.code.simulator,
 });
 
 export default connect(mapStateToProps, null)(withWidth()(CodeViewer));
