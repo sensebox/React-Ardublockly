@@ -31,13 +31,6 @@ class Toolbox extends React.Component {
       console.log(this.props.selectedBoard);
       this.setState({ board: this.props.selectedBoard });
     }
-
-    //test
-    if (props.language !== this.props.language) {
-      console.log("change language");
-      console.log(this.props.language);
-      this.setState({ board: this.props.language });
-    }
     this.props.workspace.updateToolbox(this.props.toolbox.current);
   }
 
