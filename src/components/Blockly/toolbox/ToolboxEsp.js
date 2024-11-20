@@ -404,7 +404,7 @@ export const ToolboxEsp = () => {
         <Block type="sensebox_solar_deep_sleep_and_restart">
           <Field name="sleep_time">30</Field>
           <Field name="time_scale"> * 60000</Field>
-          <Field name="powerOffI2C">TRUE</Field>
+          <Field name="powerOffGPIO">TRUE</Field>
           <Field name="powerOffUART">TRUE</Field>
           <Field name="powerOffXB">TRUE</Field>
         </Block>
