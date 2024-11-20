@@ -171,4 +171,89 @@ export default function initDom(interpreter, globalObject) {
     "alert",
     interpreter.createNativeFunction(wrapper),
   );
+
+  // defined console.log
+  var wrapper = function log(text) {
+    console.log(text);
+  };
+  interpreter.setProperty(
+    globalObject,
+    "log",
+    interpreter.createNativeFunction(wrapper),
+  );
+
+  // ------------------------------------------------------------
+  // TIME
+  // ------------------------------------------------------------
+
+  // Define 'delay(number)' function.
+  var wrapper = function (ms, next) {
+    window.setTimeout(function () {
+      next();
+    }, ms);
+  };
+  interpreter.setProperty(
+    globalObject,
+    "delay",
+    interpreter.createAsyncFunction(wrapper),
+  );
+
+  // ------------------------------------------------------------
+  // OLED DISPLAY
+  // ------------------------------------------------------------
+
+  // Define 'drawText' function.
+  var wrapper = function drawText(text, startX, startY, size) {
+    const SCALE = 2;
+    const baseTextSize = 6;
+    const textSize = baseTextSize * SCALE * size;
+    const canvas = document.getElementById("oled-display");
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "white";
+    ctx.font = `${textSize}px monospace`;
+    ctx.fillText(text, startX * SCALE, startY * SCALE + textSize);
+  };
+
+  interpreter.setProperty(
+    globalObject,
+    "drawText",
+    interpreter.createNativeFunction(wrapper),
+  );
+
+  // Define 'display.clearDisplay' function.
+  var wrapper = function clearDisplay() {
+    const canvas = document.getElementById("oled-display");
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  };
+  interpreter.setProperty(
+    globalObject,
+    "clearDisplay",
+    interpreter.createNativeFunction(wrapper),
+  );
+
+  // ------------------------------------------------------------
+  // TEMPERATURE SENSOR
+  // ------------------------------------------------------------
+
+  // Define getTemperature function
+  var wrapper = function readTemperature() {
+    return document.getElementById("temperature-slider").value;
+  };
+  interpreter.setProperty(
+    globalObject,
+    "readTemperature",
+    interpreter.createNativeFunction(wrapper),
+  );
+
+  // Define getTemperature function
+  var wrapper = function readHumidity() {
+    return document.getElementById("humidity-slider").value;
+  };
+  interpreter.setProperty(
+    globalObject,
+    "readHumidity",
+    interpreter.createNativeFunction(wrapper),
+  );
 }

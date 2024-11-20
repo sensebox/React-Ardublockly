@@ -148,6 +148,61 @@ class CodeViewer extends Component {
               </IconButton>
             )}
 
+            <br />
+
+            <canvas
+              id="oled-display"
+              width="256"
+              height="128"
+              style={{
+                border: "1px solid black",
+                imageRendering: "pixelated",
+                height: "128px",
+                width: "256px",
+                backgroundColor: "black",
+              }}
+            ></canvas>
+
+            {/* temperature sensor slider */}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                margin: "10px",
+              }}
+            >
+              <label htmlFor="temperature-slider">Temperatur</label>
+              <input
+                type="range"
+                id="temperature-slider"
+                name="temperature"
+                min="0"
+                max="50"
+                style={{ width: "80%" }}
+              />
+            </div>
+
+            {/* rel. humidity sensor slider */}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                margin: "10px",
+              }}
+            >
+              <label htmlFor="humidity-slider">rel. Humidity</label>
+              <input
+                type="range"
+                id="humidity-slider"
+                name="humidity"
+                min="0"
+                max="100"
+                style={{ width: "80%" }}
+              />
+            </div>
+
             <MonacoEditor
               height="80vh"
               defaultLanguage="javascript"
