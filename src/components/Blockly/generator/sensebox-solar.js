@@ -93,18 +93,18 @@ Blockly.Arduino.sensebox_solar_deep_sleep_and_restart = function () {
   var board = window.sessionStorage.getItem("board");
   var sleep_time = this.getFieldValue("sleep_time");
   var time_scale = this.getFieldValue("time_scale");
-  var powerOffI2C = this.getFieldValue("powerOffI2C") === "TRUE";
-  var powerOffUART = this.getFieldValue("powerOffUART") === "TRUE";
-  var powerOffXB = this.getFieldValue("powerOffXB") === "TRUE";
   if (board === "esp32") {
+    var powerOffGPIO = this.getFieldValue("powerOffGPIO") === "TRUE";
+    var powerOffUART = this.getFieldValue("powerOffUART") === "TRUE";
+    var powerOffXB = this.getFieldValue("powerOffXB") === "TRUE";
     Blockly.Arduino.libraries_["library_esp32_hal_gpio"] =
       "#include <esp32-hal-gpio.h>;";
     Blockly.Arduino.libraries_["library_pins_arduino"] =
       "#include <pins_arduino.h>;";
     Blockly.Arduino.codeFunctions_["deep_sleep_and_restart"] = `
 // power saving deep sleep for specific time and a final restart
-void deep_sleep_and_restart(int sleep_time, bool powerOffI2C, bool powerOffUART, bool powerOffXB) {
-  digitalWrite(IO_ENABLE, powerOffI2C ? HIGH : LOW);
+void deep_sleep_and_restart(int sleep_time, bool powerOffGPIO, bool powerOffUART, bool powerOffXB) {
+  digitalWrite(IO_ENABLE, powerOffGPIO ? HIGH : LOW);
   digitalWrite(PIN_XB1_ENABLE, powerOffUART ? HIGH : LOW);
   digitalWrite(PIN_UART_ENABLE, powerOffXB ? HIGH : LOW);
   digitalWrite(PD_ENABLE, LOW);
@@ -113,8 +113,12 @@ void deep_sleep_and_restart(int sleep_time, bool powerOffI2C, bool powerOffUART,
   esp_deep_sleep_start();
 }
 `;
+    return `deep_sleep_and_restart(${sleep_time}${time_scale}, ${powerOffGPIO}, ${powerOffUART}, ${powerOffXB});`;
   } else {
     // assume board === "mcu" || board === "mini"
+    var powerOffI2C = this.getFieldValue("powerOffI2C") === "TRUE";
+    var powerOffUART = this.getFieldValue("powerOffUART") === "TRUE";
+    var powerOffXB = this.getFieldValue("powerOffXB") === "TRUE";
     Blockly.Arduino.libraries_["library_low_power"] =
       "#include <ArduinoLowPower.h>;";
     Blockly.Arduino.codeFunctions_["deep_sleep_and_restart"] = `
@@ -131,7 +135,7 @@ void deep_sleep_and_restart(int sleep_time, bool powerOffI2C, bool powerOffUART,
   while (1)
     ;
 }
-  `;
+`;
+    return `deep_sleep_and_restart(${sleep_time}${time_scale}, ${powerOffI2C}, ${powerOffUART}, ${powerOffXB});`;
   }
-  return `deep_sleep_and_restart(${sleep_time}${time_scale}, ${powerOffI2C}, ${powerOffUART}, ${powerOffXB});`;
 };

@@ -397,7 +397,7 @@ export const ToolboxEsp = () => {
         <Block type="sensebox_solar_charger_SB041">
           <Field name="value">battery_level</Field>
         </Block>
-        {/* <Block type="sensebox_solar_deep_sleep_and_restart">
+        <Block type="sensebox_solar_deep_sleep_and_restart">
           <Field name="sleep_time">30</Field>
           <Field name="time_scale"> * 60000</Field>
           <Field name="powerOffI2C">TRUE</Field>
@@ -424,7 +424,7 @@ export const ToolboxEsp = () => {
             <Block type="sensebox_solar_deep_sleep_and_restart">
               <Field name="sleep_time">30</Field>
               <Field name="time_scale"> * 60000</Field>
-              <Field name="powerOffI2C">TRUE</Field>
+              <Field name="powerOffGPIO">TRUE</Field>
               <Field name="powerOffUART">TRUE</Field>
               <Field name="powerOffXB">TRUE</Field>
             </Block>
@@ -433,12 +433,12 @@ export const ToolboxEsp = () => {
             <Block type="sensebox_solar_deep_sleep_and_restart">
               <Field name="sleep_time">12</Field>
               <Field name="time_scale"> * 3600000</Field>
-              <Field name="powerOffI2C">TRUE</Field>
+              <Field name="powerOffGPIO">TRUE</Field>
               <Field name="powerOffUART">TRUE</Field>
               <Field name="powerOffXB">TRUE</Field>
             </Block>
           </Statement>
-        </Block> */}
+        </Block>
       </Category>
       <Category id="webserver" name="Webserver" colour={getColour().webserver}>
         <Block type="sensebox_initialize_http_server"></Block>
