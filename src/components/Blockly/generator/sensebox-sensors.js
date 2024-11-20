@@ -362,8 +362,7 @@ Blockly.Arduino.sensebox_tof_imager = function () {
   var dropdown_name = this.getFieldValue("dropdown");
   var maxDistance = this.getFieldValue("maxDistance");
   Blockly.Arduino.libraries_["library_wire"] = "#include <Wire.h>";
-  Blockly.Arduino.libraries_[`library_vl53l8cx`] =
-    `#include <vl53l8cx.h> `;
+  Blockly.Arduino.libraries_[`library_vl53l8cx`] = `#include <vl53l8cx.h> `;
   Blockly.Arduino.variables_["define:_vl53l8cx"] = `
 VL53L8CX sensor_vl53l8cx(&Wire, -1, -1);  
 `;
@@ -891,42 +890,6 @@ Blockly.Arduino.sensebox_sensor_dps310 = function () {
   var referencePressure = this.getFieldValue("referencePressure");
   Blockly.Arduino.libraries_["adafruit_dps310"] =
     `#include <Adafruit_DPS310.h> // http://librarymanager/All#Adafruit_DPS310`;
-  Blockly.Arduino.definitions_["define_dps"] = "Adafruit_DPS310 dps;";
-  Blockly.Arduino.setupCode_["dps_begin"] = "dps.begin_I2C(0x76);";
-  Blockly.Arduino.setupCode_["dps_configuration"] = `
-  dps.configurePressure(DPS310_64HZ, DPS310_64SAMPLES);
-  dps.configureTemperature(DPS310_64HZ, DPS310_64SAMPLES);
-  `;
-  Blockly.Arduino.loopCodeOnce_["dps_events"] =
-    "sensors_event_t temp_event, pressure_event;";
-  Blockly.Arduino.loopCodeOnce_["dps_getEvents"] =
-    "dps.getEvents(&temp_event, &pressure_event);";
-  switch (dropdown_name) {
-    case "Temperature":
-      code = "temp_event.temperature";
-      break;
-    case "Pressure":
-      code = "pressure_event.pressure";
-      break;
-    case "Altitude":
-      code = "dps.readAltitude(" + referencePressure + ")";
-      break;
-    default:
-      code = "";
-  }
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
-};/**
- * Infineon DPS310 Pressure Sensor
- *
- */
-
-Blockly.Arduino.sensebox_sensor_dps310 = function () {
-  var dropdown_name = this.getFieldValue("NAME");
-  var code = "";
-  var referencePressure = this.getFieldValue("referencePressure");
-  Blockly.Arduino.libraries_[
-    "adafruit_dps310"
-  ] = `#include <Adafruit_DPS310.h> // http://librarymanager/All#Adafruit_DPS310`;
   Blockly.Arduino.definitions_["define_dps"] = "Adafruit_DPS310 dps;";
   Blockly.Arduino.setupCode_["dps_begin"] = "dps.begin_I2C(0x76);";
   Blockly.Arduino.setupCode_["dps_configuration"] = `
