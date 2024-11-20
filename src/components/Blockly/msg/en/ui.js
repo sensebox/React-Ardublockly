@@ -344,6 +344,7 @@ export const UI = {
 
   suggestion_pre_text: "Maybe you should try:",
   display_not_declared: "Initialise the display in the setup() function",
+  variable_redeclared: "Make sure that you do not use any special characters in your variable names. This includes spaces, asterisks or quotation marks.",
   /**
    * Device Selection
    * */
