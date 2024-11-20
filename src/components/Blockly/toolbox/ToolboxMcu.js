@@ -392,6 +392,10 @@ export const ToolboxMcu = () => {
         <Block type="sensebox_solar_charger_SB041">
           <Field name="value">battery_level</Field>
         </Block>
+        <Block type="sensebox_solar_ensure_wake_time">
+          <Field name="wake_time">30</Field>
+          <Field name="time_scale"> * 1000</Field>
+        </Block>
         <Block type="sensebox_solar_deep_sleep_and_restart">
           <Field name="sleep_time">30</Field>
           <Field name="time_scale"> * 60000</Field>
