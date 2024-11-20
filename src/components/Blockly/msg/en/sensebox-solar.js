@@ -26,6 +26,14 @@ export const SOLAR = {
     "https://sensebox.kaufen/product/solar-set",
 
   /**
+   * Ensure Wake Time
+   */
+  sensebox_solar_ensure_wake_time: "Minimum wake time of",
+  sensebox_solar_ensure_wake_time_tooltip:
+    "This block ensures that the senseBox has been awake for at least the specified amount of time since the last restart. **If you use the deep sleep block at the end of the main loop, place this block at the beginning of the main loop to ensure that all sensors have been active for at least the specified time.** For fine particular sensors, a minimum wake time of 30 seconds is recommended.",
+  sensebox_solar_ensure_wake_time_helpurl: "",
+
+  /**
    * Deep Sleep and Restart
    */
   sensebox_solar_deep_sleep_and_restart:
@@ -34,7 +42,6 @@ export const SOLAR = {
   sensebox_solar_deep_sleep_and_restart_minutes: "minutes",
   sensebox_solar_deep_sleep_and_restart_hours: "hours",
   sensebox_solar_deep_sleep_and_restart_tooltip:
-    "This block puts the senseBox into a power-saving deep sleep mode for a specified time. During this time, all functions and connected sensors are disabled. After the specified time, the senseBox wakes up and restarts. This block is useful for solar operation. ",
-  sensebox_solar_deep_sleep_and_restart_helpurl:
-    "https://sensebox.kaufen/product/solar-set",
+    "This block puts the senseBox into a **power-saving deep sleep** for a specified time. During this time, all functions and connected sensors are disabled. After the specified time, the senseBox wakes up and restarts. This block is useful for solar operation.",
+  sensebox_solar_deep_sleep_and_restart_helpurl: "",
 };

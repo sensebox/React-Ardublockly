@@ -61,9 +61,33 @@ Blockly.Blocks["sensebox_solar_charger_SB041"] = {
 };
 
 /**
+ * Ensure Wake Time
+ */
+Blockly.Blocks["sensebox_solar_ensure_wake_time"] = {
+  init: function () {
+    this.setColour(getColour().solar);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.sensebox_solar_ensure_wake_time)
+      .appendField(new Blockly.FieldNumber(0), "wake_time")
+      .appendField(
+        new Blockly.FieldDropdown([
+          [Blockly.Msg.sensebox_solar_hours, " * 3600000"],
+          [Blockly.Msg.sensebox_solar_minutes, " * 60000"],
+          [Blockly.Msg.sensebox_solar_seconds, " * 1000"],
+          [Blockly.Msg.sensebox_solar_milliseconds, ""],
+        ]),
+        "time_scale",
+      );
+    this.setTooltip(Blockly.Msg.sensebox_solar_ensure_wake_time_tooltip);
+    //this.setHelpUrl(Blockly.Msg.sensebox_solar_ensure_wake_time_helpurl);
+  },
+};
+
+/**
  * Deep Sleep and Restart
  */
-
 Blockly.Blocks["sensebox_solar_deep_sleep_and_restart"] = {
   init: function () {
     var board = window.sessionStorage.getItem("board");
@@ -74,19 +98,10 @@ Blockly.Blocks["sensebox_solar_deep_sleep_and_restart"] = {
       .appendField(new Blockly.FieldNumber(0), "sleep_time")
       .appendField(
         new Blockly.FieldDropdown([
-          [
-            Blockly.Msg.sensebox_solar_deep_sleep_and_restart_hours,
-            " * 3600000",
-          ],
-          [
-            Blockly.Msg.sensebox_solar_deep_sleep_and_restart_minutes,
-            " * 60000",
-          ],
-          [
-            Blockly.Msg.sensebox_solar_deep_sleep_and_restart_seconds,
-            " * 1000",
-          ],
-          [Blockly.Msg.sensebox_solar_deep_sleep_and_restart_milliseconds, ""],
+          [Blockly.Msg.sensebox_solar_hours, " * 3600000"],
+          [Blockly.Msg.sensebox_solar_minutes, " * 60000"],
+          [Blockly.Msg.sensebox_solar_seconds, " * 1000"],
+          [Blockly.Msg.sensebox_solar_milliseconds, ""],
         ]),
         "time_scale",
       );
@@ -114,66 +129,7 @@ Blockly.Blocks["sensebox_solar_deep_sleep_and_restart"] = {
         .appendField(", XB")
         .appendField(new Blockly.FieldCheckbox("TRUE"), "powerOffXB");
     }
-    this.setHelpUrl(Blockly.Msg.sensebox_solar_deep_sleep_and_restart_helpurl);
     this.setTooltip(Blockly.Msg.sensebox_solar_deep_sleep_and_restart_tooltip);
-  },
-};
-
-/**
- * Ensure Wake Time
- */
-
-Blockly.Blocks["sensebox_solar_ensure_wake_time"] = {
-  init: function () {
-    this.setColour(getColour().solar);
-    this.setPreviousStatement(true);
-    this.setNestStatement();
-    this.appendDummyInput()
-      .appendField(Blockly.Msg.sensebox_solar_ensure_wake_time)
-      .appendField(new Blockly.FieldNumber(0), "sleep_time")
-      .appendField(
-        new Blockly.FieldDropdown([
-          [
-            Blockly.Msg.sensebox_solar_deep_sleep_and_restart_hours,
-            " * 3600000",
-          ],
-          [
-            Blockly.Msg.sensebox_solar_deep_sleep_and_restart_minutes,
-            " * 60000",
-          ],
-          [
-            Blockly.Msg.sensebox_solar_deep_sleep_and_restart_seconds,
-            " * 1000",
-          ],
-          [Blockly.Msg.sensebox_solar_deep_sleep_and_restart_milliseconds, ""],
-        ]),
-        "time_scale",
-      );
-    if (board === "esp32") {
-      this.appendDummyInput()
-        .appendField(
-          Blockly.Msg.sensebox_solar_deep_sleep_and_restart_deactivate_ports,
-        )
-        .appendField("GPIO")
-        .appendField(new Blockly.FieldCheckbox("TRUE"), "powerOffGPIO")
-        .appendField(", UART")
-        .appendField(new Blockly.FieldCheckbox("TRUE"), "powerOffUART")
-        .appendField(", XB")
-        .appendField(new Blockly.FieldCheckbox("TRUE"), "powerOffXB");
-    } else {
-      // assume board === "mcu" || board === "mini"
-      this.appendDummyInput()
-        .appendField(
-          Blockly.Msg.sensebox_solar_deep_sleep_and_restart_deactivate_ports,
-        )
-        .appendField("I2C")
-        .appendField(new Blockly.FieldCheckbox("TRUE"), "powerOffI2C")
-        .appendField(", UART")
-        .appendField(new Blockly.FieldCheckbox("TRUE"), "powerOffUART")
-        .appendField(", XB")
-        .appendField(new Blockly.FieldCheckbox("TRUE"), "powerOffXB");
-    }
-    this.setHelpUrl(Blockly.Msg.sensebox_solar_deep_sleep_and_restart_helpurl);
-    this.setTooltip(Blockly.Msg.sensebox_solar_deep_sleep_and_restart_tooltip);
+    //this.setHelpUrl(Blockly.Msg.sensebox_solar_deep_sleep_and_restart_helpurl);
   },
 };
