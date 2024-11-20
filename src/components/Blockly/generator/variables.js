@@ -26,8 +26,8 @@ const setVariableFunction = function (defaultValue) {
     var code = "";
     if (myVar !== undefined) {
       Blockly.Arduino.variables_[variableName + myVar.type] =
-        myVar.type + " " + myVar.name + ";\n";
-      code = variableName + " = " + (variableValue || defaultValue) + ";\n";
+        myVar.type + " " + myVar.name.replace(/_/g, '__').replace(/[^a-zA-Z0-9_]/g, '_') + ";\n";
+      code = myVar.name.replace(/_/g, '__').replace(/[^a-zA-Z0-9_]/g, '_') + " = " + (variableValue || defaultValue) + ";\n";
     }
     return code;
   };
@@ -47,7 +47,7 @@ const getVariableFunction = function (block) {
   //   block.getFieldValue("VAR"),
   //   Blockly.Variables.NAME_TYPE
   // );
-  var code = myVar.name;
+  var code = myVar.name.replace(/_/g, '__').replace(/[^a-zA-Z0-9_]/g, '_');
   return [code, Blockly["Arduino"].ORDER_ATOMIC];
 };
 
