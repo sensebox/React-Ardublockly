@@ -13,6 +13,7 @@ import { Card } from "@mui/material";
 import * as Blockly from "blockly";
 import { default as MonacoEditor } from "@monaco-editor/react";
 import { startSimulator, stopSimulator } from "../actions/simulatorActions";
+import SimulatorFlow from "./Simulator";
 
 // FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
 const withWidth = () => (WrappedComponent) => (props) => (
@@ -150,65 +151,7 @@ class CodeViewer extends Component {
 
             <br />
 
-            <canvas
-              id="oled-display"
-              width="256"
-              height="128"
-              style={{
-                border: "1px solid black",
-                imageRendering: "pixelated",
-                height: "128px",
-                width: "256px",
-                backgroundColor: "black",
-              }}
-            ></canvas>
-
-            {/* temperature sensor slider */}
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                margin: "10px",
-              }}
-            >
-              <label htmlFor="temperature-slider">Temperatur</label>
-              <input
-                type="range"
-                id="temperature-slider"
-                name="temperature"
-                min="0"
-                max="50"
-                style={{ width: "80%" }}
-              />
-            </div>
-
-            {/* rel. humidity sensor slider */}
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                margin: "10px",
-              }}
-            >
-              <label htmlFor="humidity-slider">rel. Humidity</label>
-              <input
-                type="range"
-                id="humidity-slider"
-                name="humidity"
-                min="0"
-                max="100"
-                style={{ width: "80%" }}
-              />
-            </div>
-
-            <MonacoEditor
-              height="80vh"
-              defaultLanguage="javascript"
-              value={this.props.simulator}
-              readOnly={true}
-            />
+            <SimulatorFlow modules={this.props.modules} />
           </AccordionDetails>
         </Accordion>
         <Accordion
@@ -300,6 +243,7 @@ CodeViewer.propTypes = {
   startSimulator: PropTypes.func.isRequired,
   stopSimulator: PropTypes.func.isRequired,
   isSimulatorRunning: PropTypes.bool.isRequired,
+  modules: PropTypes.array.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -308,6 +252,7 @@ const mapStateToProps = (state) => ({
   tooltip: state.workspace.code.tooltip,
   simulator: state.simulator.code,
   isSimulatorRunning: state.simulator.isRunning,
+  modules: state.simulator.modules,
 });
 
 export default connect(mapStateToProps, { startSimulator, stopSimulator })(
