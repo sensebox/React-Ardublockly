@@ -4,6 +4,7 @@ import initDom from "../components/Simulator/initDom";
 
 const initialState = {
   code: "",
+  modules: [],
   isRunning: false,
   interpreter: null,
   abortController: null, // Added for abort control
@@ -29,12 +30,39 @@ function runInterpreter(interpreter, abortSignal) {
 export default function simulatorReducer(state = initialState, action) {
   switch (action.type) {
     case NEW_CODE: {
+      if (
+        JSON.stringify(action.payload.simulator) === JSON.stringify(state.code)
+      ) {
+        return state;
+      }
+
       const newInterpreter = new Interpreter(action.payload.simulator, initDom);
+
+      // Extract the modules comment
+      const moduleCommentMatch = action.payload.simulator.match(
+        /^\/\/\s*modules:\s*(.*)$/m,
+      );
+
+      let modules = [];
+      if (moduleCommentMatch) {
+        const modulesString = moduleCommentMatch[1]; // "display, temperature"
+        modules = modulesString.split(",").map((module) => module.trim());
+        console.log(modules); // ["display", "temperature"]
+      } else {
+        console.log("No modules comment found.");
+      }
+
+      if (state.isRunning) {
+        state.abortController.abort();
+      }
+
       return {
         ...state,
         code: action.payload.simulator,
+        modules: modules,
         interpreter: newInterpreter,
         abortController: null, // Reset abortController
+        isRunning: false,
       };
     }
     case START_SIMULATOR: {

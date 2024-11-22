@@ -45,22 +45,11 @@ Blockly["Simulator"] = javascriptGenerator;
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
 Blockly["Simulator"].init = function (workspace) {
-  // Create a dictionary of definitions to be printed before the code.
-  Blockly["Simulator"].libraries_ = Object.create(null);
-
-  Blockly["Simulator"].definitions_ = Object.create(null);
+  // creates a dictionary of modules / components that are used in the code
+  Blockly["Simulator"].modules_ = Object.create(null);
 
   // creates a list of code to be setup before the setup block
   Blockly["Simulator"].setupCode_ = Object.create(null);
-
-  // creates a list of code to be setup before the setup block
-  Blockly["Simulator"].phyphoxSetupCode_ = Object.create(null);
-
-  // creates a list of code to be setup before the setup block
-  Blockly["Simulator"].loraSetupCode_ = Object.create(null);
-
-  // creates a list of code for the loop to be runned once
-  Blockly["Simulator"].loopCodeOnce_ = Object.create(null);
 
   // creates a list of code for the loop to be runned once
   Blockly["Simulator"].codeFunctions_ = Object.create(null);
@@ -97,13 +86,18 @@ Blockly["Simulator"].finish = function (code) {
   const setupCode =
     Object.values(Blockly["Simulator"].setupCode_).join("\n") || "";
 
+  const modules =
+    Object.values(Blockly["Simulator"]?.modules_).join(", ") || "";
+
   const loopCode = `while (true) {
 ${code}}`;
 
   const simCode = `
-${commentCode}
+// modules: ${modules}
 ${setupCode}
 ${loopCode}`;
+
+  console.log(Blockly["Simulator"].formatCode(simCode));
 
   return Blockly["Simulator"].formatCode(simCode);
 };
