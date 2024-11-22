@@ -107,6 +107,9 @@ Blockly["Arduino"].init = function (workspace) {
   Blockly["Arduino"].definitions_ = Object.create(null);
 
   // creates a list of code to be setup before the setup block
+  Blockly["Arduino"].preSetupCode_ = Object.create(null);
+  
+  // creates a list of code to be setup before the setup block
   Blockly["Arduino"].setupCode_ = Object.create(null);
 
   // creates a list of code to be setup before the setup block
@@ -165,6 +168,7 @@ Blockly["Arduino"].finish = function (code) {
   let loopCodeOnce = "";
   let setupCode = "";
   let preSetupCode = "";
+  let mainSetupCode = "";
   let loraSetupCode = "";
   let devVariables = "\n";
 
@@ -193,12 +197,15 @@ Blockly["Arduino"].finish = function (code) {
     functionsCode += Blockly["Arduino"].functionNames_[key] + "\n";
   }
 
-  for (const key in Blockly["Arduino"].setupCode_) {
-    if(key=="Wire.begin") { // Wire needs to be initialized first
-      preSetupCode = (Blockly["Arduino"].setupCode_[key] + "\n" || "") + preSetupCode;
-    } else {
-      preSetupCode += Blockly["Arduino"].setupCode_[key] + "\n" || "";
+  if(Blockly["Arduino"].preSetupCode_["Wire.begin"]) {
+    preSetupCode += Blockly["Arduino"].preSetupCode_["Wire.begin"] + "\n";
+    if(Blockly["Arduino"].preSetupCode_["vl53l8cx_clock_address"]) {
+      preSetupCode += Blockly["Arduino"].preSetupCode_["vl53l8cx_clock_address"] + "\n";
     }
+  }
+
+  for (const key in Blockly["Arduino"].setupCode_) {
+    mainSetupCode += Blockly["Arduino"].setupCode_[key] + "\n" || "";
   }
 
   for (const key in Blockly["Arduino"].loraSetupCode_) {
@@ -212,6 +219,8 @@ Blockly["Arduino"].finish = function (code) {
   setupCode =
     "\nvoid setup() { \n" +
     preSetupCode +
+    "\n" +
+    mainSetupCode +
     "\n" +
     phyphoxSetupCode +
     "\n" +
