@@ -102,9 +102,12 @@ Blockly.Generator.Arduino.ORDER_NONE = 99; // (...)
  */
 Blockly.Generator.Arduino.init = function (workspace) {
   // Create a dictionary of definitions to be printed before the code.
-  Blockly.Generator.Arduino.libraries_ = Object.create(null);
+  Blockly["Arduino"].libraries_ = Object.create(null);
 
-  Blockly.Generator.Arduino.definitions_ = Object.create(null);
+  Blockly["Arduino"].definitions_ = Object.create(null);
+
+  // creates a list of code to be setup before the setup block
+  Blockly["Arduino"].preSetupCode_ = Object.create(null);
 
   // creates a list of code to be setup before the setup block
   Blockly.Generator.Arduino.setupCode_ = {};
@@ -165,6 +168,7 @@ Blockly.Generator.Arduino.finish = function (code) {
   let loopCodeOnce = "";
   let setupCode = "";
   let preSetupCode = "";
+  let mainSetupCode = "";
   let loraSetupCode = "";
   let devVariables = "\n";
 
@@ -189,18 +193,20 @@ Blockly.Generator.Arduino.finish = function (code) {
     codeFunctions += Blockly.Generator.Arduino.codeFunctions_[key] + "\n";
   }
 
-  for (const key in Blockly.Generator.Arduino.functionNames_) {
-    functionsCode += Blockly.Generator.Arduino.functionNames_[key] + "\n";
+  for (const key in Blockly["Arduino"].functionNames_) {
+    functionsCode += Blockly["Arduino"].functionNames_[key] + "\n";
+  }
+
+  if (Blockly["Arduino"].preSetupCode_["Wire.begin"]) {
+    preSetupCode += Blockly["Arduino"].preSetupCode_["Wire.begin"] + "\n";
+    if (Blockly["Arduino"].preSetupCode_["vl53l8cx_clock_address"]) {
+      preSetupCode +=
+        Blockly["Arduino"].preSetupCode_["vl53l8cx_clock_address"] + "\n";
+    }
   }
 
   for (const key in Blockly["Arduino"].setupCode_) {
-    if (key == "Wire.begin") {
-      // Wire needs to be initialized first
-      preSetupCode =
-        (Blockly["Arduino"].setupCode_[key] + "\n" || "") + preSetupCode;
-    } else {
-      preSetupCode += Blockly["Arduino"].setupCode_[key] + "\n" || "";
-    }
+    mainSetupCode += Blockly["Arduino"].setupCode_[key] + "\n" || "";
   }
 
   for (const key in Blockly.Generator.Arduino.loraSetupCode_) {
@@ -214,6 +220,8 @@ Blockly.Generator.Arduino.finish = function (code) {
   setupCode =
     "\nvoid setup() { \n" +
     preSetupCode +
+    "\n" +
+    mainSetupCode +
     "\n" +
     phyphoxSetupCode +
     "\n" +
