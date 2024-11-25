@@ -64,6 +64,9 @@ export const GET_PROJECT = "GET_PROJECT";
 export const GET_PROJECTS = "GET_PROJECTS";
 export const PROJECT_TYPE = "PROJECT_TYPE";
 export const PROJECT_DESCRIPTION = "PROJECT_DESCRIPTION";
+export const PROJECT_EMPTY = "PROJECT_EMPTY";
+export const GET_PROJECT_FAIL = "GET_PROJECT_FAIL";
+export const GET_PROJECTS_FAIL = "GET_PROJECTS_FAIL";
 
 //board
 export const BOARD = "BOARD";

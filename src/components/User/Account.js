@@ -1,172 +1,137 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-
-import Breadcrumbs from '../Breadcrumbs';
-import Alert from '../Alert';
-
-import Grid from '@mui/material/Grid';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Divider from '@mui/material/Divider';
-import Paper from '@mui/material/Paper';
-import Link from '@mui/material/Link';
-import Typography from '@mui/material/Typography';
-import Tooltip from '@mui/material/Tooltip';
-
-import { faUser, faAt, faMapMarkerAlt, faCloudSunRain, faBox, faUserTag } from "@fortawesome/free-solid-svg-icons";
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import axios from "axios";
+import { withRouter } from "react-router-dom"; // To handle redirects
+import Breadcrumbs from "../Breadcrumbs";
+import Alert from "../Alert";
+import Paper from "@mui/material/Paper";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Tooltip from "@mui/material/Tooltip";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
+import Link from "@mui/material/Link";
 
+class Account extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      userData: props.user || null, // Set initial user data from props if available
+      loading: !props.user, // Only set loading to true if there's no user in Redux
+      error: null,
+    };
+  }
 
-export class Account extends Component {
+  componentDidMount() {
+    // Check if the user is a social login user
+    const isSocialAccount = localStorage.getItem("isSocialAccount") === "true";
+
+    // If the user data is already available in Redux or the user is a social user, avoid fetching again
+    if (isSocialAccount && this.state.userData) {
+      console.log("Social login user detected, no need to fetch user data.");
+      this.setState({ loading: false });
+      return;
+    }
+
+    // If the user is not a social login user and no user data is available, fetch user data
+    if (!this.state.userData) {
+      const token = localStorage.getItem("token");
+
+      if (token) {
+        // Fetch user data from backend if not already available
+        axios
+          .get("http://localhost:8080/user/", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((response) => {
+            this.setState({ userData: response.data.user, loading: false });
+          })
+          .catch((error) => {
+            console.error("Error fetching user data:", error);
+            this.setState({ error: "Failed to load user data", loading: false });
+            localStorage.removeItem("token");
+
+            // Redirect to login page on error (e.g., token expired or invalid)
+            this.props.history.push("/user/login");
+          });
+      } else {
+        this.setState({ error: "No token found", loading: false });
+        this.props.history.push("/user/login"); // Redirect if no token is found
+      }
+    }
+  }
 
   render() {
-    const { user } = this.props;
+    const { userData, loading, error } = this.state;
     const { classroomUser } = this.props;
-    var userAccount = null;
-    if (!user) {
-      userAccount = { classroomUser};
+
+    if (loading) {
+      return <div>Loading...</div>;
     }
-    else {
-      userAccount = user;
+
+    if (error) {
+      return <div>{error}</div>;
     }
-    console.log(userAccount);
+
     return (
       <div>
-        <Breadcrumbs content={[{ link: '/user', title: 'Account' }]} />
+        <Breadcrumbs content={[{ link: "/user", title: "Account" }]} />
 
         <h1>Account</h1>
-        {user ? (
-        <Alert>
-          Alle Angaben stammen von <Link
-          color='primary'
-          rel="noreferrer"
-          target="_blank"
-          href={'https://opensensemap.org/'}
-          underline="hover">openSenseMap</Link> und können dort verwaltet werden.
-        </Alert>) : null}
-        {classroomUser ? (
+
+        {userData && (
           <Alert>
-            Classroom User
-            </Alert>) : null}
-        <Paper style={{ width: 'max-content', maxWidth: '100%' }}>
-          <List>
-            <ListItem>
-              <Tooltip title='Nutzername'>
-                <ListItemIcon>
-                  <FontAwesomeIcon icon={faUser}  />
-                </ListItemIcon>
-              </Tooltip>
-              {user? <ListItemText primary={`Name: ${user.name}`} /> : classroomUser ? <ListItemText primary={`Name: ${classroomUser.name}`} /> : null}
-             
-            </ListItem>
-            {/* <ListItem>
-              <Tooltip title='Email'>
-                <ListItemIcon>
-                  <FontAwesomeIcon icon={faAt}  />
-                </ListItemIcon>
-              </Tooltip>
-              <ListItemText primary={`Email: ${user.email}`} />
-            </ListItem>
-            <ListItem>
-              <ListItemIcon>
-                <FontAwesomeIcon icon={faUserTag}  />
-              </ListItemIcon>
-              <ListItemText primary={`Userrolle: ${user.blocklyRole}`} />
-            </ListItem> */}
-          </List>
-        </Paper>
-        <Divider style={{ marginBottom: '16px', marginTop: '16px' }} />
-        {/* <div style={{ marginBottom: '8px' }}>
-          {userAccount.boxes.length < 1 ?
-            <Typography>
-              Du hast noch keine senseBox registriert. Besuche <Link
-              color='primary'
+            Your information is managed by{" "}
+            <Link
+              color="primary"
               rel="noreferrer"
               target="_blank"
-              href={'https://opensensemap.org/'}
-              underline="hover">openSenseMap</Link> um eine senseBox zu registrieren.
-            </Typography>
-            : <Typography style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>
-              Du hast {this.props.user.boxes.length} {this.props.user.boxes.length === 1 ? 'senseBox' : 'senseBoxen'} registriert:
-          </Typography>}
-        </div> */}
-        {/* <Grid container spacing={2}>
-          {this.props.user.boxes.map((box, i) => {
-            var sensors = box.sensors.map(sensor => sensor.title);
-            return (
-              <Grid item xs={12} sm={6} md={4} xl={3} key={i}>
-                <Link
-                  rel="noreferrer"
-                  target="_blank"
-                  href={`https://opensensemap.org/explore/${box._id}`}
-                  color="primary"
-                  style={{ textDecoration: 'none', color: 'inherit' }}
-                  underline="hover">
-                  <Paper>
-                    <List>
-                      <ListItem>
-                        <Typography style={{ fontWeight: 'bold', fontSize: '1.6rem' }}>{box.name}</Typography>
-                      </ListItem>
-                      <ListItem>
-                        <Tooltip title='Modell'>
-                          <ListItemIcon>
-                            <FontAwesomeIcon icon={faBox}  />
-                          </ListItemIcon>
-                        </Tooltip>
-                        <div>
-                          <Typography style={{ fontWeight: 'bold', marginRight: '4px' }}>Modell: </Typography>
-                          <Typography>{box.model}</Typography>
-                        </div>
-                      </ListItem>
-                      <ListItem>
-                        <Tooltip title='Standort'>
-                          <ListItemIcon>
-                            <FontAwesomeIcon icon={faMapMarkerAlt}  />
-                          </ListItemIcon>
-                        </Tooltip>
-                        <div>
-                          <Typography style={{ fontWeight: 'bold', marginRight: '4px' }}>Standort: </Typography>
-                          <Typography>{`${box.exposure} (lon: ${box.currentLocation.coordinates[0]}, lat: ${box.currentLocation.coordinates[1]})`}</Typography>
-                        </div>
-                      </ListItem>
-                      <ListItem>
-                        <Tooltip title='Sensoren'>
-                          <ListItemIcon>
-                            <FontAwesomeIcon icon={faCloudSunRain}  />
-                          </ListItemIcon>
-                        </Tooltip>
-                        <div>
-                          <Typography style={{ fontWeight: 'bold', marginRight: '4px' }}>Sensoren: </Typography>
-                          <Typography>{sensors.join(', ')}</Typography>
-                        </div>
-                      </ListItem>
-                    </List>
-                  </Paper>
-                </Link>
-              </Grid>
-            );
-          })}
-        </Grid>
-            <Typography style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>
-              Du hast {this.props.user.boxes.length} {this.props.user.boxes.length === 1 ? 'senseBox' : 'senseBoxen'} registriert:
-          </Typography>
-        </Grid> */}
+              href={"https://opensensemap.org/"}
+              underline="hover"
+            >
+              openSenseMap
+            </Link>{" "}
+            and can be managed there.
+          </Alert>
+        )}
+
+        {classroomUser && <Alert>Classroom User</Alert>}
+
+        <Paper style={{ width: "max-content", maxWidth: "100%" }}>
+          <List>
+            <ListItem>
+              <Tooltip title="Username">
+                <ListItemIcon>
+                  <FontAwesomeIcon icon={faUser} />
+                </ListItemIcon>
+              </Tooltip>
+              {userData ? (
+                <ListItemText primary={`Name: ${userData.email}`} />
+              ) : classroomUser ? (
+                <ListItemText primary={`Name: ${classroomUser.name}`} />
+              ) : null}
+            </ListItem>
+          </List>
+        </Paper>
       </div>
     );
   }
 }
 
 Account.propTypes = {
-  user: PropTypes.object.isRequired,
-  getClassrooms: PropTypes.func.isRequired
+  user: PropTypes.object, // From Redux
+  classroomUser: PropTypes.object, // From Redux (if applicable)
+  history: PropTypes.object.isRequired, // From withRouter
 };
 
-const mapStateToProps = state => ({
-  user: state.auth.user,
-  classroomUser: state.classroomAuth.classroomUser,
+const mapStateToProps = (state) => ({
+  user: state.auth.user, // Redux state for logged-in user
+  classroomUser: state.classroomAuth.classroomUser, // Redux state for classroom users, if any
 });
 
-export default connect(mapStateToProps, null)(Account);
+export default connect(mapStateToProps)(withRouter(Account));

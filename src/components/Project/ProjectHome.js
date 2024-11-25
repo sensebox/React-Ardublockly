@@ -45,6 +45,7 @@ class ProjectHome extends Component {
       this.props.getProjects(type);
     } else if (type === "gallery") {
       this.props.getProjects(type);
+      
     }
     this.handleMessages(this.props.message, type);
   }
@@ -57,6 +58,7 @@ class ProjectHome extends Component {
     if (prevProps.message !== this.props.message) {
       this.handleMessages(this.props.message, this.props.location.pathname.replace("/", ""));
     }
+    console.log(this.props.projects);
   }
 
   componentWillUnmount() {
@@ -131,6 +133,17 @@ class ProjectHome extends Component {
           </Backdrop>
         ) : (
           <div>
+            {projects.length > 0 && !classroomUser && !user &&(
+              <div>
+              <Typography style={{ marginBottom: "10px" }}>
+                Hier findest du eine Übersicht aller frei verfügbaren Programme.
+              </Typography>
+               <Grid container spacing={2}>
+               {this.renderProjects(projects, data)}
+             </Grid>
+             </div>
+            )}
+
             {!classroomUser && user && projects.length > 0 && (
               <Grid container spacing={2}>
                 {this.renderProjects(projects, data)}

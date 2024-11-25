@@ -75,15 +75,14 @@ class Classroom extends Component {
   };
 
   componentDidMount() {
-    //  console.log(this.props.location.pathname.slice(11));
+    const classroomId = this.props.location.pathname.slice(11);
+  console.log('Fetching classroom with ID:', classroomId); // Add logging for debugging
+  this.props.getClassroom(classroomId); 
+
+    // if (!this.props.progress) {
     //   console.log(this.props);
-    //   this.props.getClassrooms();
-    //   console.log(this.props.classrooms);
     //   this.props.getClassroom(this.props.location.pathname.slice(11));
-    if (!this.props.progress) {
-      console.log(this.props);
-      this.props.getClassroom(this.props.location.pathname.slice(11));
-    }
+    // }
   }
 
   componentDidUpdate(prevProps) {
