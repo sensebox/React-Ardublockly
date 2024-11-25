@@ -45,12 +45,12 @@ Blockly.Generator.Arduino.forBlock["sensebox_esp_now_receive"] = function (
   block,
   generator,
 ) {
-  var idMessage = Block.getFieldValue("VAR");
+  var idMessage = block.getFieldValue("VAR");
   const varMessage = Blockly.Variables.getVariable(
     Blockly.getMainWorkspace(),
     idMessage,
   );
-  var idAddress = Block.getFieldValue("MAC");
+  var idAddress = block.getFieldValue("MAC");
   const varAddress = Blockly.Variables.getVariable(
     Blockly.getMainWorkspace(),
     idAddress,
@@ -59,8 +59,8 @@ Blockly.Generator.Arduino.forBlock["sensebox_esp_now_receive"] = function (
     varMessage.type + " " + varMessage.name + ";\n";
   Blockly.Generator.Arduino.variables_[varAddress.name + varAddress.type] =
     varAddress.type + " " + varAddress.name + ";\n";
-  let branch = Blockly.Generator.Arduino.statementToCode(Block, "DO");
-  branch = Blockly.Generator.Arduino.addLoopTrap(branch, Block.id);
+  let branch = Blockly.Generator.Arduino.statementToCode(block, "DO");
+  branch = Blockly.Generator.Arduino.addLoopTrap(branch, block.id);
   Blockly.Generator.Arduino.codeFunctions_["on_data_receive"] = `
   void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
     ${varMessage.name} = (char*)incomingData;

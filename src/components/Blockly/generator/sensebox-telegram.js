@@ -7,7 +7,7 @@ Blockly.Generator.Arduino.forBlock["sensebox_telegram"] = function (
   block,
   generator,
 ) {
-  let token = Block.getFieldValue("telegram_token");
+  let token = block.getFieldValue("telegram_token");
   Blockly.Generator.Arduino.libraries_["library_telegram"] =
     `#include <UniversalTelegramBot.h>`;
   Blockly.Generator.Arduino.functionNames_["WiFiSSLClient"] =

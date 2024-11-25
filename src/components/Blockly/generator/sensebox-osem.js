@@ -1,7 +1,7 @@
 import * as Blockly from "blockly";
 
 /**
- * Block send Data to the openSenseMap
+ * block send Data to the openSenseMap
  */
 Blockly.Generator.Arduino.forBlock["sensebox_send_to_osem"] = function (
   block,
@@ -37,7 +37,7 @@ Blockly.Generator.Arduino.forBlock["sensebox_osem_connection"] = function (
     wifi = false;
   }
   var box_id = this.getFieldValue("BoxID");
-  var branch = Blockly.Generator.Arduino.statementToCode(Block, "DO");
+  var branch = Blockly.Generator.Arduino.statementToCode(block, "DO");
   var access_token = this.getFieldValue("access_token");
   var blocks = this.getDescendants();
   var type = this.getFieldValue("type");
@@ -215,22 +215,22 @@ ${
     code += "submitValues();\n";
   } else if (type === "Mobile") {
     var lat = Blockly.Generator.Arduino.valueToCode(
-      Block,
+      block,
       "lat",
       Blockly.Generator.Arduino.ORDER_ATOMIC,
     );
     var lng = Blockly.Generator.Arduino.valueToCode(
-      Block,
+      block,
       "lng",
       Blockly.Generator.Arduino.ORDER_ATOMIC,
     );
     var timestamp = Blockly.Generator.Arduino.valueToCode(
-      Block,
+      block,
       "timeStamp",
       Blockly.Generator.Arduino.ORDER_ATOMIC,
     );
     var altitude = Blockly.Generator.Arduino.valueToCode(
-      Block,
+      block,
       "altitude",
       Blockly.Generator.Arduino.ORDER_ATOMIC,
     );
@@ -338,7 +338,7 @@ Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_osem_connection"] =
       wifi = false;
     }
     var box_id = this.getFieldValue("BoxID");
-    var branch = Blockly.Generator.Arduino.statementToCode(Block, "DO");
+    var branch = Blockly.Generator.Arduino.statementToCode(block, "DO");
     var access_token = this.getFieldValue("access_token");
     var blocks = this.getDescendants();
     var type = this.getFieldValue("type");
@@ -490,22 +490,22 @@ ${
       code += "submitValues();\n";
     } else if (type === "Mobile") {
       var lat = Blockly.Generator.Arduino.valueToCode(
-        Block,
+        block,
         "lat",
         Blockly.Generator.Arduino.ORDER_ATOMIC,
       );
       var lng = Blockly.Generator.Arduino.valueToCode(
-        Block,
+        block,
         "lng",
         Blockly.Generator.Arduino.ORDER_ATOMIC,
       );
       var timestamp = Blockly.Generator.Arduino.valueToCode(
-        Block,
+        block,
         "timeStamp",
         Blockly.Generator.Arduino.ORDER_ATOMIC,
       );
       var altitude = Blockly.Generator.Arduino.valueToCode(
-        Block,
+        block,
         "altitude",
         Blockly.Generator.Arduino.ORDER_ATOMIC,
       );
