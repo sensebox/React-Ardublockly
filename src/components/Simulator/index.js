@@ -1,131 +1,111 @@
-import { useCallback, useEffect, memo } from "react";
-import {
-  ReactFlow,
-  Node,
-  Edge,
-  Background,
-  Controls,
-  MiniMap,
-  useNodesState,
-  useEdgesState,
-  addEdge,
-  Connection,
-} from "@xyflow/react";
-import SenseBoxMCUS2 from "./nodes/mcu-s2";
-import "@xyflow/react/dist/style.css";
-import HDC1080 from "./nodes/hdc1080";
-import Display from "./nodes/display";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { startSimulator, stopSimulator } from "../../actions/simulatorActions";
+import IconButton from "@mui/material/IconButton";
+import { faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import SimulatorFlow from "./flow";
+import moment from "moment";
+import Box from "@mui/material/Box";
 
-const nodeTypes = {
-  board: SenseBoxMCUS2,
-  senseBox_hdc1080: HDC1080,
-  senseBox_display: Display,
-};
+export default function Simulator() {
+  const dispatch = useDispatch();
 
-const initialNodes = [
-  {
-    id: "b_0",
-    type: "board",
-    position: { x: 400, y: 100 },
-  },
-  // {
-  //   id: "2",
-  //   type: "hdc1080",
-  //   position: { x: 670, y: 400 },
-  //   data: {
-  //     label: "Team Structure",
-  //     description: "Who does what",
-  //     icon: "team",
-  //   },
-  // },
-  // {
-  //   id: "3",
-  //   type: "display",
-  //   position: { x: 200, y: 400 },
-  //   data: {
-  //     label: "Team Structure",
-  //     description: "Who does what",
-  //     icon: "team",
-  //   },
-  // },
-];
-
-const initialEdges = [
-  // { id: "e1-2", source: "1", target: "2" },
-  // { id: "e1-3", source: "1", target: "3" },
-  // { id: "e1-4", source: "1", target: "4" },
-  // { id: "e3-5", source: "3", target: "5" },
-  // { id: "e2-5", source: "2", target: "5" },
-  // { id: "e4-5", source: "4", target: "5" },
-];
-
-const SimulatorFlow = (props) => {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-
-  useEffect(() => {
-    // calculate new edges
-    const newEdges = [];
-    nodes.forEach((node) => {
-      if (node.type === "board") {
-        props.modules.forEach((module, index) => {
-          newEdges.push({
-            id: `e${node.id}-${index}`,
-            source: node.id,
-            target: `m_${index}`,
-          });
-        });
-      }
-    });
-
-    setEdges([...initialEdges, ...newEdges]);
-  }, [nodes]);
-
-  useEffect(() => {
-    const newNodes = props.modules
-      .map((module, index) => {
-        if (nodes.map((n) => n.type).includes(module)) {
-          return nodes.find((n) => n.type == module);
-        }
-        return {
-          id: `m_${index.toString()}`,
-          type: module,
-          position: { x: 200 + index * 200, y: 400 },
-        };
-      })
-      .filter((e) => e);
-
-    setNodes([initialNodes[0], ...newNodes]);
-  }, [props.modules]);
-
-  const onConnect = useCallback(
-    (params) => setEdges((eds) => addEdge(params, eds)),
-    [setEdges],
+  const simulationStartTimestamp = useSelector(
+    (state) => state.simulator.simulationStartTimestamp,
   );
+  const modules = useSelector((state) => state.simulator.modules);
+  const isSimulatorRunning = useSelector((state) => state.simulator.isRunning);
+  const [elapsedTime, setElapsedTime] = useState(0);
+
+  console.log(modules);
+
+  useEffect(() => {
+    if (!isSimulatorRunning || !simulationStartTimestamp) {
+      setElapsedTime(0);
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setElapsedTime(Date.now() - simulationStartTimestamp);
+    }, 10); // Update 10ms
+
+    return () => clearInterval(interval); // Cleanup
+  }, [isSimulatorRunning, simulationStartTimestamp]);
+
+  // Handle start and stop actions
+  const handleStart = () => {
+    dispatch(startSimulator()); // Dispatch action to start simulation
+  };
+
+  const handleStop = () => {
+    dispatch(stopSimulator()); // Dispatch action to stop simulation
+  };
 
   return (
     <div
       style={{
+        position: "relative",
         width: "100%",
         height: "100%",
       }}
     >
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
-        nodeTypes={nodeTypes}
-        fitView
-        connectionMode="loose"
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: "50%",
+          transform: "translate(-50%, 0)",
+          zIndex: 10,
+          background: "#fff",
+          boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+          borderRadius: "1rem",
+          padding: "0 1rem",
+          marginTop: "0.5rem",
+          display: "flex",
+          alignItems: "center",
+          gap: "0.5rem",
+        }}
       >
-        <Background />
-        <Controls />
-        {/* <MiniMap /> */}
-      </ReactFlow>
+        {isSimulatorRunning ? (
+          <IconButton onClick={handleStop}>
+            <FontAwesomeIcon icon={faStop} />
+          </IconButton>
+        ) : (
+          <IconButton onClick={handleStart}>
+            <FontAwesomeIcon icon={faPlay} />
+          </IconButton>
+        )}
+        <div
+          style={{
+            background: "lightgrey",
+            borderRadius: "1rem",
+            height: "fit-content",
+            padding: ".25rem 0.5rem",
+          }}
+        >
+          <Box sx={{ fontFamily: "Monospace" }}>
+            <SimulationTimer elapsedTime={elapsedTime} />
+          </Box>
+        </div>
+      </div>
+
+      <SimulatorFlow modules={modules} />
     </div>
   );
-};
+}
 
-export default memo(SimulatorFlow);
+const SimulationTimer = ({ elapsedTime }) => {
+  // If elapsedTime is less than 60, show seconds with decimals (e.g., 1.24s)
+  if (elapsedTime < 60000) {
+    const formattedTime = (elapsedTime / 1000).toFixed(1) + "s"; // Convert ms to seconds and format to 2 decimal places
+    return <span>{formattedTime}</span>;
+  }
+
+  // If elapsedTime is greater than or equal to 60s, show in minutes and seconds (e.g., 3m 25s)
+  const duration = moment.duration(elapsedTime);
+
+  const formattedTime = `${duration.minutes()}m ${duration.seconds()}s`;
+
+  return <span>{formattedTime}</span>;
+};

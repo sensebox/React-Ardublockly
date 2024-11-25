@@ -7,6 +7,7 @@ const initialState = {
   modules: [],
   isRunning: false,
   interpreter: null,
+  simulationStartTimestamp: null, // Timestamp when the simulation starts
   abortController: null, // Added for abort control
 };
 
@@ -61,6 +62,7 @@ export default function simulatorReducer(state = initialState, action) {
         code: action.payload.simulator,
         modules: modules,
         interpreter: newInterpreter,
+        simulationStartTimestamp: null,
         abortController: null, // Reset abortController
         isRunning: false,
       };
@@ -86,6 +88,7 @@ export default function simulatorReducer(state = initialState, action) {
       return {
         ...state,
         isRunning: true,
+        simulationStartTimestamp: new Date(),
         abortController, // Save the controller for stopping
       };
     }
@@ -99,6 +102,7 @@ export default function simulatorReducer(state = initialState, action) {
         ...state,
         isRunning: false,
         interpreter: new Interpreter(state.code, initDom), // Reset interpreter
+        simulationStartTimestamp: null,
         abortController: null, // Clear the controller
       };
     }

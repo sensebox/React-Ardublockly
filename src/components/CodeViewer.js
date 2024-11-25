@@ -6,14 +6,13 @@ import withStyles from "@mui/styles/withStyles";
 import MuiAccordion from "@mui/material/Accordion";
 import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
-import IconButton from "@mui/material/IconButton";
-import { faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Card } from "@mui/material";
 import * as Blockly from "blockly";
 import { default as MonacoEditor } from "@monaco-editor/react";
-import { startSimulator, stopSimulator } from "../actions/simulatorActions";
-import SimulatorFlow from "./Simulator";
+import { faMicrochip } from "@fortawesome/free-solid-svg-icons";
+
+import Simulator from "./Simulator";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
 const withWidth = () => (WrappedComponent) => (props) => (
@@ -121,16 +120,16 @@ class CodeViewer extends Component {
           // onChange={this.onChange}
         >
           <AccordionSummary>
-            {/* <b
+            <div
               style={{
-                fontSize: "20px",
-                marginRight: "5px",
-                width: "35px",
+                display: "flex",
+                gap: "1rem",
+                alignItems: "center",
               }}
             >
-              Simulator Icon
-            </b> */}
-            <div style={{ margin: "auto 5px 2px 0px" }}>Simulator</div>
+              <FontAwesomeIcon icon={faMicrochip} size="lg" />
+              <div style={{ margin: "auto 5px 2px 0px" }}>Simulator</div>
+            </div>
           </AccordionSummary>
           <AccordionDetails
             style={{
@@ -139,19 +138,7 @@ class CodeViewer extends Component {
               backgroundColor: "white",
             }}
           >
-            {this.props.isSimulatorRunning ? (
-              <IconButton onClick={this.props.stopSimulator}>
-                <FontAwesomeIcon icon={faStop} />
-              </IconButton>
-            ) : (
-              <IconButton onClick={this.props.startSimulator}>
-                <FontAwesomeIcon icon={faPlay} />
-              </IconButton>
-            )}
-
-            <br />
-
-            <SimulatorFlow modules={this.props.modules} />
+            <Simulator />
           </AccordionDetails>
         </Accordion>
         <Accordion
@@ -239,22 +226,12 @@ CodeViewer.propTypes = {
   arduino: PropTypes.string.isRequired,
   xml: PropTypes.string.isRequired,
   tooltip: PropTypes.string.isRequired,
-  simulator: PropTypes.string.isRequired,
-  startSimulator: PropTypes.func.isRequired,
-  stopSimulator: PropTypes.func.isRequired,
-  isSimulatorRunning: PropTypes.bool.isRequired,
-  modules: PropTypes.array.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   arduino: state.workspace.code.arduino,
   xml: state.workspace.code.xml,
   tooltip: state.workspace.code.tooltip,
-  simulator: state.simulator.code,
-  isSimulatorRunning: state.simulator.isRunning,
-  modules: state.simulator.modules,
 });
 
-export default connect(mapStateToProps, { startSimulator, stopSimulator })(
-  withWidth()(CodeViewer),
-);
+export default connect(mapStateToProps, null)(withWidth()(CodeViewer));
