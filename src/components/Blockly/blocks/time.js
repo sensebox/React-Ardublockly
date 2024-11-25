@@ -8,7 +8,7 @@
  *     The arduino built in functions syntax can be found in
  *     http://arduino.cc/en/Reference/HomePage
  */
-import Blockly from "blockly";
+import * as Blockly from "blockly";
 import { getColour } from "../helpers/colour";
 import * as Types from "../helpers/types";
 
@@ -64,7 +64,7 @@ Blockly.Blocks["time_millis"] = {
   },
   /** @return {string} The type of return value for the block, an integer. */
   getBlockType: function () {
-    return Blockly.Types.LARGE_NUMBER;
+    return Types.LARGE_NUMBER;
   },
 };
 
@@ -112,7 +112,7 @@ Blockly.Blocks["infinite_loop"] = {
 //     this.setColour(getColour().time);
 //     this.appendDummyInput().appendField(Blockly.Msg.senseBox_interval_timer);
 //     this.appendDummyInput()
-//       .setAlign(Blockly.ALIGN_LEFT)
+//       .setAlign(Blockly.inputs.Align.LEFT)
 //       .appendField(new Blockly.FieldTextInput("10000"), "interval")
 //       .appendField(Blockly.Msg.senseBox_interval);
 //     this.appendStatementInput("DO").setCheck(null);
@@ -132,7 +132,7 @@ Blockly.Blocks["sensebox_interval_timer"] = {
       .appendField(new Blockly.FieldTextInput("Interval"), "name");
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_interval_time)
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(new Blockly.FieldTextInput("10000"), "interval")
       .appendField(Blockly.Msg.senseBox_interval);
     this.appendStatementInput("DO").setCheck(null);
