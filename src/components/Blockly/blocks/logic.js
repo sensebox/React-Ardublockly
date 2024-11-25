@@ -1,4 +1,4 @@
-import Blockly from "blockly/core";
+import * as Blockly from "blockly/core";
 import { getColour } from "../helpers/colour";
 import * as Types from "../helpers/types";
 import { getCompatibleTypes } from "../helpers/types";
@@ -20,7 +20,7 @@ Blockly.Blocks["controls_if"] = {
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setMutator(
-      new Blockly.Mutator(["controls_if_elseif", "controls_if_else"]),
+      new Blockly.icons.MutatorIcon(["controls_if_elseif", "controls_if_else"]),
     );
     this.setTooltip(Blockly.Msg.CONTROLS_IF_TOOLTIP_1);
     this.elseifCount_ = 0;
@@ -110,10 +110,14 @@ Blockly.Blocks["controls_if"] = {
     this.updateShape_();
     // Reconnect any child blocks.
     for (var i = 1; i <= this.elseifCount_; i++) {
-      Blockly.Mutator.reconnect(valueConnections[i], this, "IF" + i);
-      Blockly.Mutator.reconnect(statementConnections[i], this, "DO" + i);
+      Blockly.icons.MutatorIcon.reconnect(valueConnections[i], this, "IF" + i);
+      Blockly.icons.MutatorIcon.reconnect(
+        statementConnections[i],
+        this,
+        "DO" + i,
+      );
     }
-    Blockly.Mutator.reconnect(elseStatementConnection, this, "ELSE");
+    Blockly.icons.MutatorIcon.reconnect(elseStatementConnection, this, "ELSE");
   },
   /**
    * Store pointers to any connected child blocks.
@@ -491,7 +495,9 @@ Blockly.Blocks["switch_case"] = {
       Blockly.Msg.cases_condition,
     );
     this.appendStatementInput("CASE0").appendField(Blockly.Msg.cases_do);
-    this.setMutator(new Blockly.Mutator(["case_incaseof", "case_default"]));
+    this.setMutator(
+      new Blockly.icons.MutatorIcon(["case_incaseof", "case_default"]),
+    );
     this.caseCount_ = 0;
     this.defaultCount_ = 0;
   },

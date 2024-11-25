@@ -6,6 +6,7 @@ import { createBrowserHistory } from "history";
 import { Provider } from "react-redux";
 import store from "./store";
 import { loadUser } from "./actions/authActions";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 import "./App.css";
 
@@ -44,7 +45,9 @@ class App extends Component {
         <ThemeProvider theme={theme}>
           <Provider store={store}>
             <Router history={customHistory}>
-              <Content />
+              <ErrorBoundary>
+                <Content />
+              </ErrorBoundary>
             </Router>
           </Provider>
         </ThemeProvider>
