@@ -368,15 +368,16 @@ Blockly.Arduino.sensebox_tof_imager = function () {
     `;
 
   Blockly.Arduino.preSetupCode_["Wire.begin"] = "Wire.begin();";
-  Blockly.Arduino.preSetupCode_["vl53l8cx_clock_address"] = `Wire.setClock(1000000); // VL53L8CX (ToF) has max I2C freq of 1MHz
-    sensor_vl53l8cx.set_i2c_address(0x51); // need to change address, because default address is shared with other sensor`;
+  Blockly.Arduino.preSetupCode_["vl53l8cx_clock_address"] = `sensor_vl53l8cx.set_i2c_address(0x51); // need to change address, because default address is shared with other sensor`;
 
   Blockly.Arduino.setupCode_["setup_vl53l8cx"] = `
+  Wire.setClock(1000000); // vl53l8cx can operate at 1MHz
   sensor_vl53l8cx.begin();
   sensor_vl53l8cx.init();
   sensor_vl53l8cx.set_ranging_frequency_hz(30);
   sensor_vl53l8cx.set_resolution(VL53L8CX_RESOLUTION_8X8);
   sensor_vl53l8cx.start_ranging();
+  Wire.setClock(100000); // lower the I2C clock to 0.1MHz again for compatibility with other sensors
   `;
   var code = "";
   switch (dropdown_name) {
@@ -388,10 +389,12 @@ Blockly.Arduino.sensebox_tof_imager = function () {
       uint8_t NewDataReady = 0;
       uint8_t status;
 
+      Wire.setClock(1000000); // vl53l8cx can operate at 1MHz
       status = sensor_vl53l8cx.check_data_ready(&NewDataReady);
 
       if ((!status) && (NewDataReady != 0)) {
         sensor_vl53l8cx.get_ranging_data(&Results);
+        Wire.setClock(100000); // lower the I2C clock to 0.1MHz again for compatibility with other sensors
         float min = 10000.0;
         for(int i = 0; i < VL53L8CX_RESOLUTION_8X8*VL53L8CX_NB_TARGET_PER_ZONE; i++) {
           if((&Results)->target_status[i]!=255){
