@@ -395,16 +395,23 @@ Blockly.Arduino.sensebox_tof_imager = function () {
       if ((!status) && (NewDataReady != 0)) {
         sensor_vl53l8cx.get_ranging_data(&Results);
         Wire.setClock(100000); // lower the I2C clock to 0.1MHz again for compatibility with other sensors
-        float min = 10000.0;
+        float minStatus5 = 10000.0;
+        float minStatus69 = 10000.0;
         for(int i = 0; i < VL53L8CX_RESOLUTION_8X8*VL53L8CX_NB_TARGET_PER_ZONE; i++) {
-          if((&Results)->target_status[i]!=255){
-            float distance = ((&Results)->distance_mm[i])/10;
-            if(min > distance) {
-              min = distance;
-            }
+          float distance = ((&Results)->distance_mm[i])/10;
+          if((&Results)->target_status[i] == 5 && minStatus5 > distance) {
+            minStatus5 = distance;
+          } else if(((&Results)->target_status[i] == 6 || (&Results)->target_status[i] == 9) && minStatus69 > distance) {
+            minStatus69 = distance;
           }
         }
-        oldVl53l8cxMin = (min==10000.0 || min < 0.0) ? 0.0 : min;
+        if (minStatus5 < 10000.0 && minStatus5 >=0) {
+          oldVl53l8cxMin = minStatus5;
+        } else if (minStatus69 < 10000.0 && minStatus69 >=0) {
+          oldVl53l8cxMin = minStatus69;
+        } else {
+          oldVl53l8cxMin = 0.0;
+        }
       }
       return oldVl53l8cxMin;
       }`;
