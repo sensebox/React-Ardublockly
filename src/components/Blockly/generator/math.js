@@ -23,7 +23,14 @@ Blockly.Generator.Arduino.forBlock["math_number"] = function (
   generator,
 ) {
   // Numeric value.
-  var code = parseFloat(block.getFieldValue("NUM"));
+  var unparsedCode = block.getFieldValue("NUM");
+  // understand decimal comma for german users
+  if (unparsedCode.includes(",")) {
+    // maybe add notification for educational purpose here
+    unparsedCode = unparsedCode.replace(",", ".");
+  }
+  var code = parseFloat(unparsedCode);
+  block.setFieldValue(code, "NUM");
   if (code === Infinity) {
     code = "INFINITY";
   } else if (code === -Infinity) {

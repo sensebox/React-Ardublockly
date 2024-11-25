@@ -339,7 +339,9 @@ export const UI = {
 
   display_not_declared:
     "Stelle sicher, dasss du das Display im Setup initialisiert hast.",
-  variable_redeclared: "Stelle sicher, dass du keine Sonderzeichen in deinen Variablennamen verwendest. Dazu gehören z.B. Leerzeichen, Sternchen oder Anführungszeichen.",
+  variable_redeclared:
+    "Stelle sicher, dass du keine Sonderzeichen in deinen Variablennamen verwendest. Dazu gehören z.B. Leerzeichen, Sternchen oder Anführungszeichen.",
+  
   /**
    * Code Editor
    *  */
