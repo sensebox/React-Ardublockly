@@ -1,9 +1,12 @@
 import * as Blockly from "blockly/core";
 
-Blockly.Simulator.sensebox_ws2818_led = function () {
+Blockly.Generator.Simulator.forBlock["sensebox_ws2818_led"] = function () {
   var color =
-    Blockly.Simulator.valueToCode(this, "COLOR", Blockly.Simulator.ORDER_ATOMIC) ||
-    "0";
+    Blockly.Generator.Simulator.valueToCode(
+      this,
+      "COLOR",
+      Blockly.Generator.Simulator.ORDER_ATOMIC,
+    ) || "0";
   var code = `neopixel(${color});`;
   return code;
 };
@@ -19,35 +22,50 @@ function hexToRgb(hex) {
     : null;
 }
 
-Blockly.Simulator["colour_picker"] = function (block) {
+Blockly.Generator.Simulator.forBlock["colour_picker"] = function (
+  block,
+  generator,
+) {
   const rgb = hexToRgb(block.getFieldValue("COLOUR"));
 
-  return [rgb.r + ", " + rgb.g + ", " + rgb.b, Blockly.Simulator.ORDER_ATOMIC];
-};
-
-Blockly.Simulator["colour_random"] = function (block) {
   return [
-    "random(0, 255), random(0, 255), random(0, 255)",
-    Blockly.Simulator.ORDER_ATOMIC,
+    rgb.r + ", " + rgb.g + ", " + rgb.b,
+    Blockly.Generator.Simulator.ORDER_ATOMIC,
   ];
 };
 
-Blockly.Simulator["colour_rgb"] = function (block) {
-  const red = Blockly.Simulator.valueToCode(
+Blockly.Generator.Simulator.forBlock["colour_random"] = function (
+  block,
+  generator,
+) {
+  return [
+    "random(0, 255), random(0, 255), random(0, 255)",
+    Blockly.Generator.Simulator.ORDER_ATOMIC,
+  ];
+};
+
+Blockly.Generator.Simulator.forBlock["colour_rgb"] = function (
+  block,
+  generator,
+) {
+  const red = Blockly.Generator.Simulator.valueToCode(
     block,
     "RED",
-    Blockly.Simulator.ORDER_ATOMIC,
+    Blockly.Generator.Simulator.ORDER_ATOMIC,
   );
-  const green = Blockly.Simulator.valueToCode(
+  const green = Blockly.Generator.Simulator.valueToCode(
     block,
     "GREEN",
-    Blockly.Simulator.ORDER_ATOMIC,
+    Blockly.Generator.Simulator.ORDER_ATOMIC,
   );
-  const blue = Blockly.Simulator.valueToCode(
+  const blue = Blockly.Generator.Simulator.valueToCode(
     block,
     "BLUE",
-    Blockly.Simulator.ORDER_ATOMIC,
+    Blockly.Generator.Simulator.ORDER_ATOMIC,
   );
 
-  return [red + ", " + green + ", " + blue, Blockly.Simulator.ORDER_ATOMIC];
+  return [
+    red + ", " + green + ", " + blue,
+    Blockly.Generator.Simulator.ORDER_ATOMIC,
+  ];
 };

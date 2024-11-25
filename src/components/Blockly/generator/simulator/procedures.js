@@ -7,17 +7,20 @@ import * as Blockly from "blockly/core";
  * @return {string} Completed code.
  */
 
-Blockly.Simulator["arduino_functions"] = function (block) {
+Blockly.Generator.Simulator.forBlock["arduino_functions"] = function (
+  block,
+  generator,
+) {
   var board = window.sessionStorage.getItem("board");
 
   if (board === "mcu" || board === "mini") {
-    Blockly.Simulator.libraries_["library_senseBoxIO"] =
+    Blockly.Generator.Simulator.libraries_["library_senseBoxIO"] =
       "#include <senseBoxIO.h>";
   }
   // Edited version of Blockly.Generator.prototype.statementToCode
   function statementToCodeNoTab(block, name) {
     var targetBlock = block.getInputTargetBlock(name);
-    var code = Blockly.Simulator.blockToCode(targetBlock);
+    var code = Blockly.Generator.Simulator.blockToCode(targetBlock);
     if (typeof code != "string") {
       throw new Error(
         'Expecting code from statement block "' + targetBlock.type + '".',
@@ -26,31 +29,41 @@ Blockly.Simulator["arduino_functions"] = function (block) {
     return code;
   }
 
-  var setupBranch = Blockly.Simulator.statementToCode(block, "SETUP_FUNC");
-  // //var setupCode = Blockly.Simulator.scrub_(block, setupBranch); No comment block
+  var setupBranch = Blockly.Generator.Simulator.statementToCode(
+    block,
+    "SETUP_FUNC",
+  );
+  // //var setupCode = Blockly.Generator.Simulator.scrub_(block, setupBranch); No comment block
   if (setupBranch) {
-    Blockly.Simulator.setupCode_["mainsetup"] = setupBranch;
+    Blockly.Generator.Simulator.setupCode_["mainsetup"] = setupBranch;
   }
 
   var loopBranch = statementToCodeNoTab(block, "LOOP_FUNC");
-  //var loopcode = Blockly.Simulator.scrub_(block, loopBranch); No comment block
+  //var loopcode = Blockly.Generator.Simulator.scrub_(block, loopBranch); No comment block
   return loopBranch;
 };
 
-Blockly.Simulator["procedures_defreturn"] = function (block) {
+Blockly.Generator.Simulator.forBlock["procedures_defreturn"] = function (
+  block,
+  generator,
+) {
   // Define a procedure with a return value.
-  const funcName = Blockly.Simulator.nameDB_.getName(
+  const funcName = Blockly.Generator.Simulator.nameDB_.getName(
     block.getFieldValue("NAME"),
     Blockly.Procedures.NAME_TYPE,
   );
-  const branch = Blockly.Simulator.statementToCode(block, "STACK");
+  const branch = Blockly.Generator.Simulator.statementToCode(block, "STACK");
   const returnType = block.getFieldValue("RETURN TYPE") || "void";
 
   let returnValue =
-    Blockly.Simulator.valueToCode(block, "RETURN", Blockly.Simulator.ORDER_NONE) ||
-    "";
+    Blockly.Generator.Simulator.valueToCode(
+      block,
+      "RETURN",
+      Blockly.Generator.Simulator.ORDER_NONE,
+    ) || "";
   if (returnValue) {
-    returnValue = Blockly.Simulator.INDENT + "return " + returnValue + ";\n";
+    returnValue =
+      Blockly.Generator.Simulator.INDENT + "return " + returnValue + ";\n";
   }
   const args = [];
   for (let i = 0; i < block.argumentVarModels_.length; i++) {
@@ -69,9 +82,9 @@ Blockly.Simulator["procedures_defreturn"] = function (block) {
     branch +
     returnValue +
     "}";
-  code = Blockly.Simulator.scrub_(block, code);
+  code = Blockly.Generator.Simulator.scrub_(block, code);
   // Add % so as not to collide with helper functions in definitions list.
-  Blockly.Simulator.functionNames_["%" + funcName] = code;
+  Blockly.Generator.Simulator.functionNames_["%" + funcName] = code;
   return null;
 };
 
@@ -92,41 +105,47 @@ function translateType(type) {
   }
 }
 
-Blockly.Simulator["procedures_defnoreturn"] =
-  Blockly.Simulator["procedures_defreturn"];
+Blockly.Generator.Simulator["procedures_defnoreturn"] =
+  Blockly.Generator.Simulator["procedures_defreturn"];
 
-Blockly.Simulator["procedures_callreturn"] = function (block) {
+Blockly.Generator.Simulator.forBlock["procedures_callreturn"] = function (
+  block,
+  generator,
+) {
   // Call a procedure with a return value.
-  const funcName = Blockly.Simulator.nameDB_.getName(
+  const funcName = Blockly.Generator.Simulator.nameDB_.getName(
     block.getFieldValue("NAME"),
     Blockly.Procedures.NAME_TYPE,
   );
   const args = [];
   for (let i = 0; i < block.arguments_.length; i++) {
     args[i] =
-      Blockly.Simulator.valueToCode(
+      Blockly.Generator.Simulator.valueToCode(
         block,
         "ARG" + i,
-        Blockly.Simulator.ORDER_COMMA,
+        Blockly.Generator.Simulator.ORDER_COMMA,
       ) || "null";
   }
   const code = funcName + "(" + args.join(", ") + ")";
-  return [code, Blockly.Simulator.ORDER_ATOMIC];
+  return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
 };
 
-Blockly.Simulator["procedures_callnoreturn"] = function (block) {
+Blockly.Generator.Simulator.forBlock["procedures_callnoreturn"] = function (
+  block,
+  generator,
+) {
   // Call a procedure with no return value.
-  const funcName = Blockly.Simulator.nameDB_.getName(
+  const funcName = Blockly.Generator.Simulator.nameDB_.getName(
     block.getFieldValue("NAME"),
     Blockly.Procedures.NAME_TYPE,
   );
   const args = [];
   for (let i = 0; i < block.arguments_.length; i++) {
     args[i] =
-      Blockly.Simulator.valueToCode(
+      Blockly.Generator.Simulator.valueToCode(
         block,
         "ARG" + i,
-        Blockly.Simulator.ORDER_COMMA,
+        Blockly.Generator.Simulator.ORDER_COMMA,
       ) || "null";
   }
 

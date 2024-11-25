@@ -1,4 +1,4 @@
-import Blockly from "blockly";
+import * as Blockly from "blockly";
 
 /**
  * @license Licensed under the Apache License, Version 2.0 (the "License"):
@@ -16,12 +16,15 @@ import Blockly from "blockly";
  * @param {!Blockly.Block} block Block to generate the code from.
  * @return {string} Completed code.
  */
-Blockly.Simulator["time_delay"] = function (block) {
+Blockly.Generator.Simulator.forBlock["time_delay"] = function (
+  block,
+  generator,
+) {
   var delayTime =
-    Blockly.Arduino.valueToCode(
+    Blockly.Generator.Simulator.valueToCode(
       block,
       "DELAY_TIME_MILI",
-      Blockly.Arduino.ORDER_ATOMIC,
+      Blockly.Generator.Simulator.ORDER_ATOMIC,
     ) || "0";
   var code = `delay(${delayTime});\n`;
   return code;
