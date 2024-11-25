@@ -413,9 +413,10 @@ Blockly.Generator.Arduino.forBlock["sensebox_tof_imager"] = function () {
         float minStatus69 = 10000.0;
         for(int i = 0; i < VL53L8CX_RESOLUTION_8X8*VL53L8CX_NB_TARGET_PER_ZONE; i++) {
           float distance = ((&Results)->distance_mm[i])/10;
-          if((&Results)->target_status[i] == 5 && minStatus5 > distance) {
+          float target_status = (&Results)->target_status[i];
+          if(target_status == 5 && minStatus5 > distance) {
             minStatus5 = distance;
-          } else if(((&Results)->target_status[i] == 6 || (&Results)->target_status[i] == 9) && minStatus69 > distance) {
+          } else if((target_status == 6 || target_status == 9) && minStatus69 > distance) {
             minStatus69 = distance;
           }
         }
@@ -447,10 +448,12 @@ Blockly.Generator.Arduino.forBlock["sensebox_tof_imager"] = function () {
         uint8_t NewDataReady = 0;
         uint8_t status;
       
+        Wire.setClock(1000000); // vl53l8cx can operate at 1MHz
         status = sensor_vl53l8cx.check_data_ready(&NewDataReady);
       
         if ((!status) && (NewDataReady != 0)) {
           sensor_vl53l8cx.get_ranging_data(&Result);
+          Wire.setClock(100000); // lower the I2C clock to 0.1MHz again for compatibility with other sensors
           int8_t i, j, k;
           uint8_t zones_per_line;
           uint8_t number_of_zones = VL53L8CX_RESOLUTION_8X8;
@@ -461,7 +464,8 @@ Blockly.Generator.Arduino.forBlock["sensebox_tof_imager"] = function () {
           {
             for (k = (zones_per_line - 1); k >= 0; k--)
             {
-              if((long)(&Result)->target_status[(VL53L8CX_NB_TARGET_PER_ZONE * (j+k))] ==255){
+              float target_status = (&Result)->target_status[(VL53L8CX_NB_TARGET_PER_ZONE * (j+k))];
+              if(target_status != 5 && target_status != 6 && target_status != 9) {
                 oldVl53l8cxBitmap[j + k + 2 + ((j+1)/2)] = (((0 >> 3) & 0x1F)<<11 | (((0 >> 2) & 0x3F) << 5) | ((0 >> 3) & 0x1F));
               } else {
                 long distance = (long)(&Result)->distance_mm[(VL53L8CX_NB_TARGET_PER_ZONE * (j+k))];
