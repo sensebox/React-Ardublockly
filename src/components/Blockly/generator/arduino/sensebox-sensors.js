@@ -415,7 +415,7 @@ Blockly.Generator.Arduino.forBlock["sensebox_tof_imager"] = function () {
             }
           }
         }
-        oldVl53l8cxMin = (min==10000.0) ? 0.0 : min;
+        oldVl53l8cxMin = (min==10000.0 || min < 0.0) ? 0.0 : min;
       }
       return oldVl53l8cxMin;
       }`;
