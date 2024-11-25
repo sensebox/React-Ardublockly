@@ -7,8 +7,10 @@ import {
   registerFieldMultilineInput,
   FieldMultilineInput,
 } from "@blockly/field-multilineinput";
+import { registerFieldColour } from "@blockly/field-colour";
 
 registerFieldMultilineInput();
+registerFieldColour();
 
 Blockly.Blocks["sensebox_led"] = {
   init: function () {
