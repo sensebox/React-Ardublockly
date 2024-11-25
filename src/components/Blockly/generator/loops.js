@@ -8,13 +8,13 @@ Blockly.Generator.Arduino.forBlock["controls_repeat_ext"] = function (
 
   const repeats =
     Blockly.Generator.Arduino.valueToCode(
-      Block,
+      block,
       "TIMES",
       Blockly.Generator.Arduino.ORDER_ASSIGNMENT,
     ) || "0";
 
-  let branch = Blockly.Generator.Arduino.statementToCode(Block, "DO");
-  branch = Blockly.Generator.Arduino.addLoopTrap(branch, Block.id);
+  let branch = Blockly.Generator.Arduino.statementToCode(block, "DO");
+  branch = Blockly.Generator.Arduino.addLoopTrap(branch, block.id);
   let code = "";
   const loopVar = "i";
   code +=
@@ -38,7 +38,7 @@ Blockly.Generator.Arduino.forBlock["controls_for"] = function (
   generator,
 ) {
   const loopIndexVariable = Blockly.getMainWorkspace().getVariableById(
-    Block.getFieldValue("VAR"),
+    block.getFieldValue("VAR"),
   ).name;
 
   const allVars = Blockly.getMainWorkspace().getVariableMap().getAllVariables();
@@ -51,18 +51,18 @@ Blockly.Generator.Arduino.forBlock["controls_for"] = function (
     initVariable = "int "; // alternatively set to 'myVar.type' but that could lead to issues if users choose a char or a boolean
   }
 
-  const branch = Blockly.Generator.Arduino.statementToCode(Block, "DO");
+  const branch = Blockly.Generator.Arduino.statementToCode(block, "DO");
 
   const startNumber =
     Blockly.Generator.Arduino.valueToCode(
-      Block,
+      block,
       "FROM",
       Blockly.Generator.Arduino.ORDER_ASSIGNMENT,
     ) || "0";
 
   const toNumber =
     Blockly.Generator.Arduino.valueToCode(
-      Block,
+      block,
       "TO",
       Blockly.Generator.Arduino.ORDER_ASSIGNMENT,
     ) || "0";
@@ -70,7 +70,7 @@ Blockly.Generator.Arduino.forBlock["controls_for"] = function (
   let byNumber = Math.abs(
     parseInt(
       Blockly.Generator.Arduino.valueToCode(
-        Block,
+        block,
         "BY",
         Blockly.Generator.Arduino.ORDER_ASSIGNMENT,
       ),
@@ -108,15 +108,15 @@ Blockly.Generator.Arduino.forBlock["controls_whileUntil"] = function (
   generator,
 ) {
   // Do while/until loop.
-  const until = Block.getFieldValue("MODE") === "UNTIL";
+  const until = block.getFieldValue("MODE") === "UNTIL";
   let argument0 =
     Blockly.Generator.Arduino.valueToCode(
-      Block,
+      block,
       "BOOL",
       Blockly.Generator.Arduino.ORDER_LOGICAL_AND,
     ) || "false";
-  let branch = Blockly.Generator.Arduino.statementToCode(Block, "DO");
-  branch = Blockly.Generator.Arduino.addLoopTrap(branch, Block.id);
+  let branch = Blockly.Generator.Arduino.statementToCode(block, "DO");
+  branch = Blockly.Generator.Arduino.addLoopTrap(branch, block.id);
   if (until) {
     argument0 = "!" + argument0;
   }
@@ -128,7 +128,7 @@ Blockly.Generator.Arduino.forBlock["controls_flow_statements"] = function (
   generator,
 ) {
   // Flow statements: continue, break.
-  switch (Block.getFieldValue("FLOW")) {
+  switch (block.getFieldValue("FLOW")) {
     case "BREAK":
       return "break;\n";
     case "CONTINUE":

@@ -5,7 +5,7 @@ Blockly.Generator.Arduino.forBlock["logic_boolean"] = function (
   generator,
 ) {
   // Boolean values true and false.
-  const code = Block.getFieldValue("BOOL") === "TRUE" ? "true" : "false";
+  const code = block.getFieldValue("BOOL") === "TRUE" ? "true" : "false";
   return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
@@ -22,15 +22,15 @@ Blockly.Generator.Arduino.forBlock["logic_compare"] = function (
     GT: ">",
     GTE: ">=",
   };
-  const operator = OPERATORS[Block.getFieldValue("OP")];
+  const operator = OPERATORS[block.getFieldValue("OP")];
   const order =
     operator === "==" || operator === "!="
       ? Blockly.Generator.Arduino.ORDER_EQUALITY
       : Blockly.Generator.Arduino.ORDER_RELATIONAL;
   const argument0 =
-    Blockly.Generator.Arduino.valueToCode(Block, "A", order) || "0";
+    Blockly.Generator.Arduino.valueToCode(block, "A", order) || "0";
   const argument1 =
-    Blockly.Generator.Arduino.valueToCode(Block, "B", order) || "0";
+    Blockly.Generator.Arduino.valueToCode(block, "B", order) || "0";
   const code = "( " + argument0 + " " + operator + " " + argument1 + ")";
   return [code, order];
 };
@@ -40,13 +40,13 @@ Blockly.Generator.Arduino.forBlock["logic_operation"] = function (
   generator,
 ) {
   // Operations 'and', 'or'.
-  const operator = Block.getFieldValue("OP") === "AND" ? "&&" : "||";
+  const operator = block.getFieldValue("OP") === "AND" ? "&&" : "||";
   const order =
     operator === "&&"
       ? Blockly.Generator.Arduino.ORDER_LOGICAL_AND
       : Blockly.Generator.Arduino.ORDER_LOGICAL_OR;
-  let argument0 = Blockly.Generator.Arduino.valueToCode(Block, "A", order);
-  let argument1 = Blockly.Generator.Arduino.valueToCode(Block, "B", order);
+  let argument0 = Blockly.Generator.Arduino.valueToCode(block, "A", order);
+  let argument1 = Blockly.Generator.Arduino.valueToCode(block, "B", order);
   if (!argument0 && !argument1) {
     // If there are no arguments, then the return value is false.
     argument0 = "false";
@@ -77,11 +77,11 @@ Blockly.Generator.Arduino.forBlock["controls_if"] = function (
   do {
     conditionCode =
       Blockly.Generator.Arduino.valueToCode(
-        Block,
+        block,
         "IF" + n,
         Blockly.Generator.Arduino.ORDER_NONE,
       ) || "false";
-    branchCode = Blockly.Generator.Arduino.statementToCode(Block, "DO" + n);
+    branchCode = Blockly.Generator.Arduino.statementToCode(block, "DO" + n);
     code +=
       (n > 0 ? " else " : "") +
       "if (" +
@@ -91,10 +91,10 @@ Blockly.Generator.Arduino.forBlock["controls_if"] = function (
       "}\n";
 
     ++n;
-  } while (Block.getInput("IF" + n));
+  } while (block.getInput("IF" + n));
 
-  if (Block.getInput("ELSE")) {
-    branchCode = Blockly.Generator.Arduino.statementToCode(Block, "ELSE");
+  if (block.getInput("ELSE")) {
+    branchCode = Blockly.Generator.Arduino.statementToCode(block, "ELSE");
     code += " else {\n" + branchCode + "}\n";
   }
   return code + "\n";
@@ -112,11 +112,11 @@ Blockly.Generator.Arduino.forBlock["controls_ifelse"] = function (
   do {
     conditionCode =
       Blockly.Generator.Arduino.valueToCode(
-        Block,
+        block,
         "IF" + n,
         Blockly.Generator.Arduino.ORDER_NONE,
       ) || "false";
-    branchCode = Blockly.Generator.Arduino.statementToCode(Block, "DO" + n);
+    branchCode = Blockly.Generator.Arduino.statementToCode(block, "DO" + n);
     code +=
       (n > 0 ? " else " : "") +
       "if (" +
@@ -126,10 +126,10 @@ Blockly.Generator.Arduino.forBlock["controls_ifelse"] = function (
       "}\n";
 
     ++n;
-  } while (Block.getInput("IF" + n));
+  } while (block.getInput("IF" + n));
 
-  if (Block.getInput("ELSE")) {
-    branchCode = Blockly.Generator.Arduino.statementToCode(Block, "ELSE");
+  if (block.getInput("ELSE")) {
+    branchCode = Blockly.Generator.Arduino.statementToCode(block, "ELSE");
     code += " else {\n" + branchCode + "}\n";
   }
   return code + "\n";
@@ -142,7 +142,7 @@ Blockly.Generator.Arduino.forBlock["logic_negate"] = function (
   // Negation.
   const order = Blockly.Generator.Arduino.ORDER_UNARY_PREFIX;
   const argument0 =
-    Blockly.Generator.Arduino.valueToCode(Block, "BOOL", order) || "true";
+    Blockly.Generator.Arduino.valueToCode(block, "BOOL", order) || "true";
   const code = "!" + argument0;
   return [code, order];
 };
