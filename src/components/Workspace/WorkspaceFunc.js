@@ -109,8 +109,8 @@ WorkspaceFunc.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  user: state.auth.user,
-  classroomUser: state.classroomAuth.classroomUser,
+  user: state.auth?.user,
+  classroomUser: state.classroomAuth?.classroomUser,
   autosave: state.workspace.autosave,
 });
 
