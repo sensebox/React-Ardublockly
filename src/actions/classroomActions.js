@@ -1,7 +1,5 @@
 
 import { GET_CLASSROOMS, GET_CLASSROOM, ADD_STUDENT_SUCCESS, CREATE_CLASSROOM, DELETE_STUDENT_SUCCESS, DELETE_STUDENT_FAIL, GET_CLASSROOM_PROJECTS_SUCCESS, GET_CLASSROOM_PROJECT_SUCCESS  } from './types';
-
-import axios from 'axios';
 import { returnErrors, returnSuccess } from './messageActions';
 import api from '../utils/axiosConfig';
 
@@ -20,7 +18,7 @@ export const createClassroom = (classroom) => (dispatch) => {
       }
     }
   };
-  axios.post(`${process.env.REACT_APP_BLOCKLY_API}/classroom`, classroom, config)
+  api.post(`${process.env.REACT_APP_BLOCKLY_API}/classroom`, classroom, config)
     .then(res => {
       res.config.success(res);
     })
@@ -40,7 +38,7 @@ export const deleteClassroom = (id) => (dispatch) => {
       }
     }
   };
-  axios.delete(`${process.env.REACT_APP_BLOCKLY_API}/classroom/${id}`, config)
+  api.delete(`${process.env.REACT_APP_BLOCKLY_API}/classroom/${id}`, config)
     .then(res => {
       res.config.success(res);
     })
@@ -68,7 +66,7 @@ export const addStudent = (classroomId, student) => (dispatch) => {
       }
     }
   };
-  axios.post(`${process.env.REACT_APP_BLOCKLY_API}/classroom/${classroomId}/adduser`, body, config)
+  api.post(`${process.env.REACT_APP_BLOCKLY_API}/classroom/${classroomId}/adduser`, body, config)
     .then(res => {
       res.config.success(res);
     })
@@ -83,7 +81,7 @@ export const deleteStudent = (classroomId, studentId) => (dispatch) => {
   };
   console.log(body);
   
-  axios.delete(`${process.env.REACT_APP_BLOCKLY_API}/classroom/${classroomId}/user`, { data: body })
+  api.delete(`${process.env.REACT_APP_BLOCKLY_API}/classroom/${classroomId}/user`, { data: body })
     .then(res => {
       dispatch({
         type: DELETE_STUDENT_SUCCESS,
@@ -116,7 +114,7 @@ export const getClassrooms = () => (dispatch) => {
       }
     }
   };
-  axios.get(`${process.env.REACT_APP_BLOCKLY_API}/classroom`, config)
+  api.get(`${process.env.REACT_APP_BLOCKLY_API}/classroom`, config)
     .then(res => {
       res.config.success(res);
     })
@@ -127,7 +125,8 @@ export const getClassrooms = () => (dispatch) => {
 
   
   export const getClassroom = (id) => (dispatch ) => {
-    axios
+    console.log('Fetching classroom:', id);
+    api
       .get(`${process.env.REACT_APP_BLOCKLY_API}/classroom/${id}`)
       .then((res) => {
         var classroom = res.data.classroom;
@@ -198,7 +197,7 @@ export const getClassrooms = () => (dispatch) => {
         }
       }
     };
-    axios.post(`${process.env.REACT_APP_BLOCKLY_API}/classroom/${classroomId}/projects`, body, config)
+    api.post(`${process.env.REACT_APP_BLOCKLY_API}/classroom/${classroomId}/projects`, body, config)
       .then(res => {
         res.config.success(res);
       })
@@ -219,7 +218,7 @@ export const postClassroomProject = (classroomId, body) => (dispatch) => {
       }
     }
   };
-  axios.post(`${process.env.REACT_APP_BLOCKLY_API}/classroom/${classroomId}/project`, body, config)
+  api.post(`${process.env.REACT_APP_BLOCKLY_API}/classroom/${classroomId}/project`, body, config)
     .then(res => {
       res.config.success(res);
     })

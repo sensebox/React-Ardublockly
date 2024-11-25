@@ -11,8 +11,8 @@ const initialState = {
 export default function(state = initialState, action) {
   switch (action.type) {
     case LOGIN_SUCCESS:
-      localStorage.setItem("token", action.payload.token);
-      localStorage.setItem("refreshToken", action.payload.refreshToken);
+     // localStorage.setItem("token", action.payload.token);
+     // localStorage.setItem("refreshToken", action.payload.refreshToken);
       return {
         ...state,
         isAuthenticated: true,

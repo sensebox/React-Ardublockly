@@ -20,6 +20,7 @@ import MenuItem from '@mui/material/MenuItem';
 
 import { faSave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import api from '../../utils/axiosConfig';
 
 import * as Blockly from 'blockly/core';
 
@@ -114,7 +115,7 @@ class SaveProject extends Component {
           window.scrollTo(0, 0);
         }
       };
-      axios.post(`${process.env.REACT_APP_BLOCKLY_API}/${this.state.projectType}`, projectData, config)
+      api.post(`${process.env.REACT_APP_BLOCKLY_API}/${this.state.projectType}`, projectData, config)
         .then(res => {
           res.config.success(res);
         })

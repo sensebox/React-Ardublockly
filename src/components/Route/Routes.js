@@ -29,6 +29,7 @@ import CodeEditor from "../CodeEditor/CodeEditor";
 import Classroom from "../Classroom/Classroom";
 import ClassroomHome from "../Classroom/ClassroomHome";
 import AdminDashboard from "../User/AdminDashboard";
+import SocialLoginRedirect from "../User/SocialLoginRedirect";
 
 class Routes extends Component {
 
@@ -98,6 +99,9 @@ class Routes extends Component {
           <PrivateRoute path="/user" exact>
             <Account />
           </PrivateRoute>
+          <Route path="/social-login-redirect" exact>
+            <SocialLoginRedirect />
+          </Route>
           <PrivateRouteAdmin path="/admin" exact>
             <AdminDashboard />
           </PrivateRouteAdmin>

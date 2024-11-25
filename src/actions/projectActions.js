@@ -1,7 +1,7 @@
-import { PROJECT_PROGRESS, GET_PROJECT, GET_PROJECTS, PROJECT_TYPE, PROJECT_DESCRIPTION } from './types';
+import { PROJECT_PROGRESS, GET_PROJECT, GET_PROJECTS, PROJECT_TYPE, PROJECT_DESCRIPTION, PROJECT_EMPTY, GET_PROJECT_FAIL, GET_PROJECTS_FAIL } from './types';
 
-import axios from 'axios';
 import { returnErrors, returnSuccess } from './messageActions';
+import api from '../utils/axiosConfig';
 
 export const setType = (type) => (dispatch) => {
   dispatch({
@@ -18,71 +18,79 @@ export const setDescription = (description) => (dispatch) => {
 };
 
 export const getProject = (type, id) => (dispatch) => {
-  dispatch({ type: PROJECT_PROGRESS });
-  dispatch(setType(type));
-  const config = {
-    success: res => {
-      var data = type === 'share' ? 'content' : type;
-      var project = res.data[data];
+  // Start progress
+  dispatch({ type: PROJECT_PROGRESS, payload: true });
+
+  api.get(`${process.env.REACT_APP_BLOCKLY_API}/${type}/${id}`)
+    .then(res => {
+      const dataKey = type === 'share' ? 'content' : type;
+      const project = res.data[dataKey];
+      console.log('API Response:', project); // Log the API response
       if (project) {
+        // Dispatch the project data
         dispatch({
           type: GET_PROJECT,
-          payload: project
+          payload: project,
         });
+
+        // Dispatch project description
         dispatch({
           type: PROJECT_DESCRIPTION,
-          payload: project.description
+          payload: project.description,
         });
-        dispatch({ type: PROJECT_PROGRESS });
+
+        // Stop progress
+        dispatch({ type: PROJECT_PROGRESS, payload: false });
+
+        // Dispatch success message
         dispatch(returnSuccess(res.data.message, res.status, 'GET_PROJECT_SUCCESS'));
+      } else {
+        // No project found, handle empty project case
+        dispatch({ type: PROJECT_PROGRESS, payload: false });
+        dispatch(returnErrors('No project found', res.status, 'PROJECT_EMPTY'));
       }
-      else {
-        dispatch({ type: PROJECT_PROGRESS });
-        dispatch(returnErrors(res.data.message, res.status, 'PROJECT_EMPTY'));
-      }
-    },
-    error: err => {
+    })
+    .catch(err => {
       if (err.response) {
         dispatch(returnErrors(err.response.data.message, err.response.status, 'GET_PROJECT_FAIL'));
       }
-      dispatch({ type: PROJECT_PROGRESS });
-    }
-  };
-  axios.get(`${process.env.REACT_APP_BLOCKLY_API}/${type}/${id}`, config)
-    .then(res => {
-      res.config.success(res);
-    })
-    .catch(err => {
-      err.config.error(err);
+
+      // Stop progress even if there's an error
+      dispatch({ type: PROJECT_PROGRESS, payload: false });
     });
 };
 
 export const getProjects = (type) => (dispatch) => {
+  // Indicate that project fetching is in progress
   dispatch({ type: PROJECT_PROGRESS });
-  const config = {
-    success: res => {
-      var data = type === 'project' ? 'projects' : 'galleries';
-      var projects = res.data[data];
+
+  // Make the API call
+  api.get(`${process.env.REACT_APP_BLOCKLY_API}/${type}`)
+    .then(res => {
+      // Determine the correct data field based on the type ('projects' for 'project', 'galleries' for others)
+      const dataKey = type === 'project' ? 'projects' : 'galleries';
+      const projects = res.data[dataKey];
+      console.log('API Response:', res.data[dataKey]); // Log the API response
+      // Dispatch the projects data
       dispatch({
         type: GET_PROJECTS,
         payload: projects
       });
-      dispatch({ type: PROJECT_PROGRESS });
-      dispatch(returnSuccess(res.data.message, res.status));
-    },
-    error: err => {
-      if (err.response) {
-        dispatch(returnErrors(err.response.data.message, err.response.status, 'GET_PROJECTS_FAIL'));
-      }
-      dispatch({ type: PROJECT_PROGRESS });
-    }
-  };
-  axios.get(`${process.env.REACT_APP_BLOCKLY_API}/${type}`, config)
-    .then(res => {
-      res.config.success(res);
+
+    // Stop progress
+    dispatch({ type: PROJECT_PROGRESS, payload: false });
+      
+    // Dispatch success message
+    dispatch(returnSuccess(res.data.message, res.status));
     })
     .catch(err => {
-      err.config.error(err);
+      // Handle error response
+      if (err.response) {
+        dispatch(returnErrors(err.response.data.message, err.response.status, GET_PROJECTS_FAIL));
+      }
+
+      // Stop the progress indicator even if there is an error
+      dispatch({ type: PROJECT_PROGRESS });
     });
 };
 
@@ -122,7 +130,7 @@ export const updateProject = (type, id) => (dispatch, getState) => {
       }
     }
   };
-  axios.put(`${process.env.REACT_APP_BLOCKLY_API}/${type}/${id}`, body, config)
+  api.put(`${process.env.REACT_APP_BLOCKLY_API}/${type}/${id}`, body, config)
     .then(res => {
       res.config.success(res);
     })
@@ -151,7 +159,7 @@ export const deleteProject = (type, id) => (dispatch, getState) => {
       dispatch(returnErrors(err.response.data.message, err.response.status, 'PROJECT_DELETE_FAIL'));
     }
   };
-  axios.delete(`${process.env.REACT_APP_BLOCKLY_API}/${type}/${id}`, config)
+  api.delete(`${process.env.REACT_APP_BLOCKLY_API}/${type}/${id}`, config)
     .then(res => {
       res.config.success(res);
     })
@@ -172,7 +180,7 @@ export const shareProject = (title, type, id) => (dispatch, getState) => {
   } else {
     body.xml = getState().workspace.code.xml;
   }
-  axios.post(`${process.env.REACT_APP_BLOCKLY_API}/share`, body)
+  api.post(`${process.env.REACT_APP_BLOCKLY_API}/share`, body)
     .then(res => {
       var shareContent = res.data.content;
       if (body.projectId) {

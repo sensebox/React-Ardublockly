@@ -17,6 +17,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 class Project extends Component {
 
   componentDidMount() {
+    console.log('Props in Project:', this.props);
+    console.log('Component did mount. Calling getProject()');
     this.props.resetProject();
     this.getProject();
   }
@@ -58,16 +60,20 @@ class Project extends Component {
   getProject = () => {
     const id = this.props.location.pathname.replace(/\/[a-z]{1,}\//, '');
     const param = this.props.location.pathname.replace(`/${id}`, '').replace('/', '');
-    if (this.props.user && !this.props.classroomUser) {
-      this.props.getProject(param, id);
-    } else if (this.props.classroomUser) {
-      this.props.getClassroomProject(this.props.classroomUser.classroomId, id);
-    }
+    console.log(param, id);
+    this.props.getProject(param, id);
+
+    // if (this.props.user && !this.props.classroomUser) {
+    //   this.props.getProject(param, id);
+    // } else if (this.props.classroomUser) {
+    //   this.props.getClassroomProject(this.props.classroomUser.classroomId, id);
+    // }
   }
 
   render() {
     const data = this.props.type === 'project' ? 'Projekte' : 'Galerie';
     const { progress, project, type, classroomProject } = this.props;
+    
 
     return (
       progress ?
@@ -105,8 +111,10 @@ Project.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  project: state.project.projects[0],
-  classroomProject: state.classroomAuth.classroomUser.projects[0],
+  project: Array.isArray(state.project.projects) && state.project.projects.length > 0 ? state.project.projects[0] : null,
+  classroomProject: state.classroomAuth.classroomUser && Array.isArray(state.classroomAuth.classroomUser.projects) 
+    ? state.classroomAuth.classroomUser.projects[0] 
+    : null,
   progress: state.project.progress,
   type: state.project.type,
   message: state.message,

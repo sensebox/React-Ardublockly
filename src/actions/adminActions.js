@@ -1,11 +1,11 @@
-
-import axios from 'axios';
 import { GET_USERS_SUCCESS, GET_USERS_FAIL, UPDATE_USER_ROLE_SUCCESS, UPDATE_USER_ROLE_FAIL } from './types';
+import api from '../utils/axiosConfig';
+
 
 // Fetch all users
 export const getUsers = () => async (dispatch) => {
   try {
-    const res = await  axios.get(`${process.env.REACT_APP_BLOCKLY_API}/user/users`)
+    const res = await  api.get(`${process.env.REACT_APP_BLOCKLY_API}/user/users`)
     dispatch({
       type: GET_USERS_SUCCESS,
       payload: res.data
@@ -26,7 +26,7 @@ export const updateUserRole = (userId, role) => async (dispatch) => {
     };
   
     try {
-      const res = await axios.put(`${process.env.REACT_APP_BLOCKLY_API}/user/role`, body);  // API endpoint to update user role
+      const res = await api.put(`${process.env.REACT_APP_BLOCKLY_API}/user/role`, body);  // API endpoint to update user role
       dispatch({
         type: UPDATE_USER_ROLE_SUCCESS,
         payload: { userId, role: res.data.newRole }  // Assuming response contains updated role
