@@ -49,7 +49,7 @@ Blockly.Blocks["procedures_defnoreturn"] = {
       .appendField(Blockly.Msg.PROCEDURES_DEFNORETURN)
       .appendField(nameField, "NAME")
       .appendField("", "PARAMS");
-    this.setMutator(new Blockly.Mutator(["procedures_mutatorarg"]));
+    this.setMutator(new Blockly.icons.MutatorIcon(["procedures_mutatorarg"]));
     if (
       (this.workspace.options.comments ||
         (this.workspace.options.parentWorkspace &&
@@ -270,7 +270,11 @@ Blockly.Blocks["procedures_defnoreturn"] = {
         if (hasStatements) {
           this.setStatements_(true);
           // Restore the stack, if one was saved.
-          Blockly.Mutator.reconnect(this.statementConnection_, this, "STACK");
+          Blockly.icons.MutatorIcon.reconnect(
+            this.statementConnection_,
+            this,
+            "STACK",
+          );
           this.statementConnection_ = null;
         } else {
           // Save the stack, then disconnect it.
@@ -471,9 +475,9 @@ Blockly.Blocks["procedures_defreturn"] = {
       .appendField(returnTypeField, "RETURN TYPE");
 
     this.appendValueInput("RETURN")
-      .setAlign(Blockly.ALIGN_RIGHT)
+      .setAlign(Blockly.inputs.Align.RIGHT)
       .appendField(Blockly.Msg["PROCEDURES_DEFRETURN_RETURN"]);
-    this.setMutator(new Blockly.Mutator(["procedures_mutatorarg"]));
+    this.setMutator(new Blockly.icons.MutatorIcon(["procedures_mutatorarg"]));
     if (
       (this.workspace.options.comments ||
         (this.workspace.options.parentWorkspace &&
@@ -704,7 +708,7 @@ Blockly.Blocks["procedures_mutatorarg"] = {
       return null;
     }
 
-    const outerWs = Blockly.mainWorkspace;
+    const outerWs = Blockly.getMainWorkspace();
     let model = outerWs.getVariable(varName, varType);
     // CHANGING VARIABLE NAME TO REFLECT TYPE
     if (model && model.name !== varName) {
@@ -738,7 +742,7 @@ Blockly.Blocks["procedures_mutatorarg"] = {
   deleteIntermediateVars_: function (varName, varType) {
     varName = varName || this.getFieldValue("NAME");
     varType = varType || this.getFieldValue("TYPE");
-    const outerWs = Blockly.mainWorkspace;
+    const outerWs = Blockly.getMainWorkspace();
     if (!outerWs) {
       return;
     }
@@ -904,7 +908,9 @@ Blockly.Blocks["procedures_callnoreturn"] = {
         if (quarkId in this.quarkConnections_) {
           const connection = this.quarkConnections_[quarkId];
           try {
-            if (!Blockly.Mutator.reconnect(connection, this, "ARG" + i)) {
+            if (
+              !Blockly.icons.MutatorIcon.reconnect(connection, this, "ARG" + i)
+            ) {
               // Block no longer exists or has been attached elsewhere.
               delete this.quarkConnections_[quarkId];
             }
@@ -954,7 +960,7 @@ Blockly.Blocks["procedures_callnoreturn"] = {
         // Add new input.
         field = new Blockly.FieldLabel(labelString);
         const input = this.appendValueInput("ARG" + i)
-          .setAlign(Blockly.ALIGN_RIGHT)
+          .setAlign(Blockly.inputs.Align.RIGHT)
           .appendField(field, "ARGNAME" + i)
           .setCheck(
             Types.getCompatibleTypes([this.argumentVarModels_[i].type]),
@@ -1020,7 +1026,7 @@ Blockly.Blocks["procedures_callnoreturn"] = {
 
     for (let i = 0, childNode; (childNode = xmlElement.childNodes[i]); i++) {
       if (childNode.nodeName.toLowerCase() === "arg") {
-        var variables = Blockly.mainWorkspace.getAllVariables();
+        var variables = Blockly.getMainWorkspace().getAllVariables();
 
         var varName = childNode.getAttribute("name");
         for (let y = 0; variables.length; y++) {
@@ -1116,8 +1122,8 @@ Blockly.Blocks["procedures_callnoreturn"] = {
         const block = document.createElement("block");
         block.setAttribute("type", this.defType_);
         const xy = this.getRelativeToSurfaceXY();
-        const x = xy.x + Blockly.SNAP_RADIUS * (this.RTL ? -1 : 1);
-        const y = xy.y + Blockly.SNAP_RADIUS * 2;
+        const x = xy.x + Blockly.config.snapRadius * (this.RTL ? -1 : 1);
+        const y = xy.y + Blockly.config.snapRadius * 2;
         block.setAttribute("x", x);
         block.setAttribute("y", y);
         const mutation = this.mutationToDom();
