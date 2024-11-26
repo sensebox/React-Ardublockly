@@ -234,11 +234,9 @@ Blockly.Blocks["sensebox_general_html_tag"] = {
     this.updateShape_();
     // Reconnect any child blocks.
     for (var i = 1; i <= this.additionalChildCount_; i++) {
-      Blockly.icons.MutatorIcon.reconnect(
-        statementConnections[i],
-        this,
-        "DO" + i,
-      );
+      if (statementConnections[i]) {
+        statementConnections[i].reconnect(this, "DO" + i);
+      }
     }
   },
   /**
