@@ -58,5 +58,5 @@ const getVariableFunction = function (block) {
   return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
-Blockly.Generator.Arduino["variables_set_dynamic"] = setVariableFunction();
-Blockly.Generator.Arduino["variables_get_dynamic"] = getVariableFunction;
+Blockly.Generator.Arduino.forBlock["variables_set_dynamic"] = setVariableFunction();
+Blockly.Generator.Arduino.forBlock["variables_get_dynamic"] = getVariableFunction;
