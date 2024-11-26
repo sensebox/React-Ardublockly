@@ -113,14 +113,16 @@ Blockly.Blocks["controls_if"] = {
     this.updateShape_();
     // Reconnect any child blocks.
     for (var i = 1; i <= this.elseifCount_; i++) {
-      Blockly.icons.MutatorIcon.reconnect(valueConnections[i], this, "IF" + i);
-      Blockly.icons.MutatorIcon.reconnect(
-        statementConnections[i],
-        this,
-        "DO" + i,
-      );
+      if (valueConnections[i]) {
+        valueConnections[i].reconnect(this, "IF" + i);
+      }
+      if (statementConnections[i]) {
+        statementConnections[i].reconnect(this, "DO" + i);
+      }
     }
-    Blockly.icons.MutatorIcon.reconnect(elseStatementConnection, this, "ELSE");
+    if (elseStatementConnection) {
+      elseStatementConnection.reconnect(this, "ELSE");
+    }
   },
   /**
    * Store pointers to any connected child blocks.

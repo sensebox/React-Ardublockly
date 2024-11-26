@@ -272,11 +272,9 @@ Blockly.Blocks["procedures_defnoreturn"] = {
         if (hasStatements) {
           this.setStatements_(true);
           // Restore the stack, if one was saved.
-          Blockly.icons.MutatorIcon.reconnect(
-            this.statementConnection_,
-            this,
-            "STACK",
-          );
+          if (this.statementConnection_) {
+            this.statementConnection_.reconnect(this, "STACK");
+          }
           this.statementConnection_ = null;
         } else {
           // Save the stack, then disconnect it.
@@ -912,8 +910,8 @@ Blockly.Blocks["procedures_callnoreturn"] = {
         if (quarkId in this.quarkConnections_) {
           const connection = this.quarkConnections_[quarkId];
           try {
-            if (
-              !Blockly.icons.MutatorIcon.reconnect(connection, this, "ARG" + i)
+            if (connection && 
+              !connection.reconnect(this, "ARG" + i)
             ) {
               // Block no longer exists or has been attached elsewhere.
               delete this.quarkConnections_[quarkId];
