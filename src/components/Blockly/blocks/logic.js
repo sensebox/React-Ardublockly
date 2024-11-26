@@ -20,7 +20,10 @@ Blockly.Blocks["controls_if"] = {
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setMutator(
-      new Blockly.icons.MutatorIcon(["controls_if_elseif", "controls_if_else"]),
+      new Blockly.icons.MutatorIcon(
+        ["controls_if_elseif", "controls_if_else"],
+        this,
+      ),
     );
     this.setTooltip(Blockly.Msg.CONTROLS_IF_TOOLTIP_1);
     this.elseifCount_ = 0;
@@ -496,7 +499,7 @@ Blockly.Blocks["switch_case"] = {
     );
     this.appendStatementInput("CASE0").appendField(Blockly.Msg.cases_do);
     this.setMutator(
-      new Blockly.icons.MutatorIcon(["case_incaseof", "case_default"]),
+      new Blockly.icons.MutatorIcon(["case_incaseof", "case_default"], this),
     );
     this.caseCount_ = 0;
     this.defaultCount_ = 0;

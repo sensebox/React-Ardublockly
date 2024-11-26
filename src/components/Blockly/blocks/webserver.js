@@ -163,7 +163,7 @@ Blockly.Blocks["sensebox_general_html_tag"] = {
     this.setHelpUrl("https://sensebox.de/books");
     this.setPreviousStatement(false);
     this.setNextStatement(false);
-    this.setMutator(new Blockly.icons.MutatorIcon(["additional_child"]));
+    this.setMutator(new Blockly.icons.MutatorIcon(["additional_child"], this));
     this.additionalChildCount_ = 0;
   },
   /**
