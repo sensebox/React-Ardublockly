@@ -105,8 +105,39 @@ function translateType(type) {
   }
 }
 
-Blockly.Generator.Arduino["procedures_defnoreturn"] =
-  Blockly.Generator.Arduino["procedures_defreturn"];
+Blockly.Generator.Arduino.forBlock["procedures_defnoreturn"] = function (
+  block,
+  generator,
+) {
+  // Define a procedure with a return value.
+  const funcName = Blockly.Generator.Arduino.nameDB_.getName(
+    block.getFieldValue("NAME"),
+    Blockly.Procedures.NAME_TYPE,
+  );
+  const branch = Blockly.Generator.Arduino.statementToCode(block, "STACK");
+  const returnType = "void";
+
+  const args = [];
+  for (let i = 0; i < block.argumentVarModels_.length; i++) {
+    args[i] =
+      translateType(block.argumentVarModels_[i].type) +
+      " " +
+      block.argumentVarModels_[i].name;
+  }
+  let code =
+    translateType(returnType) +
+    " " +
+    funcName +
+    "(" +
+    args.join(", ") +
+    ") {\n" +
+    branch +
+    "}";
+  code = Blockly.Generator.Arduino.scrub_(block, code);
+  // Add % so as not to collide with helper functions in definitions list.
+  Blockly.Generator.Arduino.functionNames_["%" + funcName] = code;
+  return null;
+};
 
 Blockly.Generator.Arduino.forBlock["procedures_callreturn"] = function (
   block,
