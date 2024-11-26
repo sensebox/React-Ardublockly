@@ -160,7 +160,7 @@ Blockly.Generator.Arduino.forBlock["switch_case"] = function (
     ) || "";
   var branch = Blockly.Generator.Arduino.statementToCode(
     block,
-    "CASECONDITON0" + n,
+    "CASECONDITION" + n,
   );
   var cases = "";
   var default_code = "";
