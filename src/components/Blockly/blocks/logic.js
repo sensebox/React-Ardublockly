@@ -522,8 +522,10 @@ Blockly.Blocks["switch_case"] = {
   },
 
   domToMutation: function (xmlElement) {
-    this.caseCount_ = parseInt(xmlElement.getAttribute("case"), 10);
+    this.caseCount_ = parseInt(xmlElement.getAttribute("case"), 10) || 0;
     this.defaultCount_ = parseInt(xmlElement.getAttribute("default"), 10);
+    this.removeInput("CASECONDITION0");
+    this.removeInput("CASE0");
     for (var x = 0; x <= this.caseCount_; x++) {
       this.appendValueInput("CASECONDITION" + x).appendField(
         Blockly.Msg.cases_condition,
@@ -546,7 +548,7 @@ Blockly.Blocks["switch_case"] = {
       connection = caseBlock.nextConnection;
     }
     if (this.defaultCount_) {
-      var defaultBlock = Blockly.Block.obtain(workspace, "case_default");
+      var defaultBlock = workspace.newBlock("case_default");
       defaultBlock.initSvg();
       connection.connect(defaultBlock.previousConnection);
     }

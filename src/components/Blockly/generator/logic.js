@@ -147,39 +147,42 @@ Blockly.Generator.Arduino.forBlock["logic_negate"] = function (
   return [code, order];
 };
 
-Blockly.Generator.Arduino.forBlock["switch_case"] = function (
-  block,
-  generator,
-) {
-  var n = 0;
+Blockly.Generator.Arduino.forBlock["switch_case"] = function (block) {
+  // Retrieve the switch condition
   var argument =
     Blockly.Generator.Arduino.valueToCode(
-      this,
+      block,
       "CONDITION",
       Blockly.Generator.Arduino.ORDER_NONE,
-    ) || "";
-  var branch = Blockly.Generator.Arduino.statementToCode(
-    block,
-    "CASECONDITION" + n,
-  );
+    ) || "0";
+
+  // Initialize variables for cases and the default case
   var cases = "";
-  var default_code = "";
-  var DO = Blockly.Generator.Arduino.statementToCode(block, "CASE" + n);
-  for (n = 0; n <= block.caseCount_; n++) {
-    DO = Blockly.Generator.Arduino.statementToCode(block, "CASE" + n);
-    branch =
+  var defaultCode = "";
+
+  // Iterate through all cases (ensure the loop covers all cases)
+  for (var n = 0; n <= block.caseCount_; n++) {
+    // Generate the case condition and corresponding code
+    var branch =
       Blockly.Generator.Arduino.valueToCode(
         block,
         "CASECONDITION" + n,
         Blockly.Generator.Arduino.ORDER_NONE,
       ) || "0";
-    cases += "case " + branch + ":\n";
-    cases += DO + "\nbreak;\n";
+    var code = Blockly.Generator.Arduino.statementToCode(block, "CASE" + n);
+    cases += "  case " + branch + ":\n" + code + "    break;\n";
   }
+
+  // Add the default case, if present
   if (block.defaultCount_) {
-    branch = Blockly.Generator.Arduino.statementToCode(block, "ONDEFAULT");
-    default_code = "default: \n" + branch + "\n break;\n";
+    var defaultBranch = Blockly.Generator.Arduino.statementToCode(
+      block,
+      "ONDEFAULT",
+    );
+    defaultCode = "  default:\n" + defaultBranch + "    break;\n";
   }
-  var code = "switch (" + argument + ") {\n" + cases + default_code + "}";
-  return code + "\n";
+
+  // Combine everything into a single switch statement
+  var code = "switch (" + argument + ") {\n" + cases + defaultCode + "}\n";
+  return code;
 };
