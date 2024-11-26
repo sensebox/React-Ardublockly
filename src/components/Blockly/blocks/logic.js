@@ -470,18 +470,18 @@ Blockly.Blocks["logic_compare"] = {
     }
     if (blockA !== null && blockB === null) {
       this.getInput("A").setCheck(
-        getCompatibleTypes(blockA.outputConnection.check_[0]),
+        getCompatibleTypes(blockA.outputConnection.check[0]),
       );
       this.getInput("B").setCheck(
-        getCompatibleTypes(blockA.outputConnection.check_[0]),
+        getCompatibleTypes(blockA.outputConnection.check[0]),
       );
     }
     if (blockB !== null && blockA === null) {
       this.getInput("B").setCheck(
-        getCompatibleTypes(blockB.outputConnection.check_[0]),
+        getCompatibleTypes(blockB.outputConnection.check[0]),
       );
       this.getInput("A").setCheck(
-        getCompatibleTypes(blockB.outputConnection.check_[0]),
+        getCompatibleTypes(blockB.outputConnection.check[0]),
       );
     }
   },
