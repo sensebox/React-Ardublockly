@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import SimulatorFlow from "./flow";
 import moment from "moment";
 import Box from "@mui/material/Box";
+import { ReactFlowProvider } from "@xyflow/react";
 
 export default function Simulator() {
   const dispatch = useDispatch();
@@ -89,8 +90,9 @@ export default function Simulator() {
           </Box>
         </div>
       </div>
-
-      <SimulatorFlow modules={modules} />
+      <ReactFlowProvider>
+        <SimulatorFlow modules={modules} />
+      </ReactFlowProvider>
     </div>
   );
 }

@@ -10,6 +10,7 @@ import {
   useEdgesState,
   addEdge,
   Connection,
+  useReactFlow,
 } from "@xyflow/react";
 import SenseBoxMCUS2 from "./nodes/mcu-s2";
 import "@xyflow/react/dist/style.css";
@@ -43,7 +44,11 @@ const SimulatorFlow = (props) => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
+  const reactFlow = useReactFlow();
+
   useEffect(() => {
+    reactFlow.fitView();
+
     // calculate new edges
     const newEdges = [];
     nodes.forEach((node) => {
