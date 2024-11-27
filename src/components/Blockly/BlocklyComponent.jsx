@@ -25,7 +25,6 @@ import React from "react";
 
 import * as Blockly from "blockly/core";
 import "blockly/blocks";
-import Toolbox from "./toolbox/Toolbox";
 
 import { Card } from "@mui/material";
 import {
@@ -34,7 +33,17 @@ import {
   ScrollMetricsManager,
 } from "@blockly/plugin-scroll-options";
 
+import { connect } from "react-redux";
+
 import { PositionedMinimap } from "@blockly/workspace-minimap";
+
+import { ToolboxBuilder } from "./toolbox/builder";
+import { getColour } from "./helpers/colour";
+import sensors from "./toolbox/modules/sensors";
+import wifi from "./toolbox/modules/wifi";
+import espnow from "./toolbox/modules/espnow";
+import ethernet from "./toolbox/modules/ethernet";
+import sd from "./toolbox/modules/sd";
 
 class BlocklyComponent extends React.Component {
   constructor(props) {
@@ -46,8 +55,19 @@ class BlocklyComponent extends React.Component {
 
   componentDidMount() {
     const { initialXml, children, ...rest } = this.props;
+
+    const senseBoxColor = getColour().sensebox;
+
+    const toolbox = new ToolboxBuilder()
+      .addCategory(Blockly.Msg.toolbox_sensors, senseBoxColor, sensors[this.props.selectedBoard])
+      .addCategory("WIFI", senseBoxColor, wifi[this.props.selectedBoard])
+      .addCategory("ESP-NOW", senseBoxColor, espnow[this.props.selectedBoard])
+      .addCategory("Ethernet", senseBoxColor, ethernet[this.props.selectedBoard])
+      .addCategory("SD", senseBoxColor, sd[this.props.selectedBoard])
+      .buildToolbox();
+
     const workspace = Blockly.inject(this.blocklyDiv.current, {
-      toolbox: this.toolbox.current,
+      toolbox: toolbox,
       plugins: {
         // These are both required.
         blockDragger: ScrollBlockDragger,
@@ -74,6 +94,22 @@ class BlocklyComponent extends React.Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.selectedBoard !== this.props.selectedBoard) {
+      const senseBoxColor = getColour().sensebox;
+
+      const toolbox = new ToolboxBuilder()
+        .addCategory(Blockly.Msg.toolbox_sensors, senseBoxColor, sensors[this.props.selectedBoard])
+        .addCategory("WIFI", senseBoxColor, wifi[this.props.selectedBoard])
+        .addCategory("ESP-NOW", senseBoxColor, espnow[this.props.selectedBoard])
+        .addCategory("Ethernet", senseBoxColor, ethernet[this.props.selectedBoard])
+        .addCategory("SD", senseBoxColor, sd[this.props.selectedBoard])
+        .buildToolbox();
+
+      this.primaryWorkspace.updateToolbox(toolbox);
+    }
+  }
+
   get workspace() {
     return this.primaryWorkspace;
   }
@@ -93,10 +129,14 @@ class BlocklyComponent extends React.Component {
           id="blocklyDiv"
           style={this.props.style ? this.props.style : {}}
         />
-        <Toolbox toolbox={this.toolbox} workspace={this.state.workspace} />
+        {/* <Toolbox toolbox={this.toolbox} workspace={this.state.workspace} /> */}
       </React.Fragment>
     );
   }
 }
 
-export default BlocklyComponent;
+const mapStateToProps = (state) => ({
+  selectedBoard: state.board.board,
+});
+
+export default connect(mapStateToProps)(BlocklyComponent);
