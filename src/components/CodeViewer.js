@@ -6,7 +6,7 @@ import withStyles from "@mui/styles/withStyles";
 import MuiAccordion from "@mui/material/Accordion";
 import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
-import { Card } from "@mui/material";
+import { Card, Chip } from "@mui/material";
 import * as Blockly from "blockly";
 import { default as MonacoEditor } from "@monaco-editor/react";
 import { faMicrochip } from "@fortawesome/free-solid-svg-icons";
@@ -63,7 +63,7 @@ class CodeViewer extends Component {
     this.state = {
       code: this.props.arduino,
       changed: false,
-      expanded: true,
+      expanded: "code",
       componentHeight: null,
     };
     this.myDiv = React.createRef();
@@ -104,8 +104,11 @@ class CodeViewer extends Component {
     }
   }
 
-  onChange = () => {
-    this.setState({ expanded: !this.state.expanded });
+  onChange = (panel) => (event, newExpanded) => {
+    this.setState({
+      ...this.state,
+      expanded: newExpanded ? panel : false,
+    });
   };
 
   render() {
@@ -116,8 +119,8 @@ class CodeViewer extends Component {
         <Accordion
           square={true}
           style={{ margin: 0 }}
-          // expanded={this.state.expanded}
-          // onChange={this.onChange}
+          expanded={this.state.expanded === "simulator"}
+          onChange={this.onChange("simulator")}
         >
           <AccordionSummary>
             <div
@@ -129,6 +132,10 @@ class CodeViewer extends Component {
             >
               <FontAwesomeIcon icon={faMicrochip} size="lg" />
               <div style={{ margin: "auto 5px 2px 0px" }}>Simulator</div>
+              {this.props.isSimulatorRunning &&
+                this.state.expanded !== "simulator" && (
+                  <Chip size="small" label="Running" color="success" />
+                )}
             </div>
           </AccordionSummary>
           <AccordionDetails
@@ -144,8 +151,8 @@ class CodeViewer extends Component {
         <Accordion
           square={true}
           style={{ margin: 0 }}
-          // expanded={this.state.expanded}
-          // onChange={this.onChange}
+          expanded={this.state.expanded === "code"}
+          onChange={this.onChange("code")}
         >
           <AccordionSummary>
             <b
@@ -185,8 +192,8 @@ class CodeViewer extends Component {
         <Accordion
           square={true}
           style={{ margin: 0 }}
-          // expanded={!this.state.expanded}
-          // onChange={this.onChange}
+          expanded={this.state.expanded === "xml"}
+          onChange={this.onChange("xml")}
         >
           <AccordionSummary>
             <b
@@ -226,12 +233,14 @@ CodeViewer.propTypes = {
   arduino: PropTypes.string.isRequired,
   xml: PropTypes.string.isRequired,
   tooltip: PropTypes.string.isRequired,
+  isSimulatorRunning: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   arduino: state.workspace.code.arduino,
   xml: state.workspace.code.xml,
   tooltip: state.workspace.code.tooltip,
+  isSimulatorRunning: state.simulator.isRunning,
 });
 
 export default connect(mapStateToProps, null)(withWidth()(CodeViewer));
