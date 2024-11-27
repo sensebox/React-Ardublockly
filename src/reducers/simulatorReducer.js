@@ -1,6 +1,6 @@
 import Interpreter from "js-interpreter";
 import { START_SIMULATOR, STOP_SIMULATOR, NEW_CODE } from "../actions/types";
-import initDom from "../components/Simulator/initDom";
+import initSimulator from "../components/Simulator/init";
 
 const initialState = {
   code: "",
@@ -37,7 +37,10 @@ export default function simulatorReducer(state = initialState, action) {
         return state;
       }
 
-      const newInterpreter = new Interpreter(action.payload.simulator, initDom);
+      const newInterpreter = new Interpreter(
+        action.payload.simulator,
+        initSimulator,
+      );
 
       // Extract the modules comment
       const moduleCommentMatch = action.payload.simulator.match(
@@ -103,7 +106,7 @@ export default function simulatorReducer(state = initialState, action) {
       return {
         ...state,
         isRunning: false,
-        interpreter: new Interpreter(state.code, initDom), // Reset interpreter
+        interpreter: new Interpreter(state.code, initSimulator), // Reset interpreter
         simulationStartTimestamp: null,
         abortController: null, // Clear the controller
       };
