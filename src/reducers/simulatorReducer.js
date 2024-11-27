@@ -41,14 +41,16 @@ export default function simulatorReducer(state = initialState, action) {
 
       // Extract the modules comment
       const moduleCommentMatch = action.payload.simulator.match(
-        /^\/\/\s*modules:\s*(.*)$/m,
+        /^\/\/\s*modules:\s*(.*?)\s*#$/m,
       );
 
       let modules = [];
       if (moduleCommentMatch) {
         const modulesString = moduleCommentMatch[1]; // "display, temperature"
-        modules = modulesString.split(",").map((module) => module.trim());
-        console.log(modules); // ["display", "temperature"]
+        modules = modulesString
+          .split(",")
+          .map((module) => module.trim())
+          .filter((m) => m.length > 0);
       } else {
         console.log("No modules comment found.");
       }
