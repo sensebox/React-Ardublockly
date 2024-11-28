@@ -3,6 +3,14 @@ import { getColour } from "../helpers/colour";
 import { selectedBoard } from "../helpers/board";
 import * as Types from "../helpers/types";
 import { FieldSlider } from "@blockly/field-slider";
+import {
+  registerFieldMultilineInput,
+  FieldMultilineInput,
+} from "@blockly/field-multilineinput";
+import { registerFieldColour } from "@blockly/field-colour";
+
+registerFieldMultilineInput();
+registerFieldColour();
 
 Blockly.Blocks["sensebox_led"] = {
   init: function () {
@@ -341,7 +349,7 @@ Blockly.Blocks["sensebox_ws2812_matrix_custom_bitmap"] = {
     this.appendDummyInput("BITMAP")
       .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_custom_bitmap)
       .appendField(
-        new Blockly.FieldMultilineInput(
+        new FieldMultilineInput(
           Blockly.Msg.senseBox_ws2812_rgb_matrix_custom_bitmap_example,
         ),
         "FIELDNAME",

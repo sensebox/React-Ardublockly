@@ -1,4 +1,4 @@
-import Blockly from "blockly";
+import * as Blockly from "blockly";
 import { getColour } from "../helpers/colour";
 import * as Types from "../helpers/types";
 
@@ -20,7 +20,7 @@ Blockly.Blocks["sensebox_esp_now_sender"] = {
     this.setColour(getColour().sensebox);
     this.appendDummyInput().appendField(Blockly.Msg.senseBox_esp_now_sender);
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_esp_now_send_mac)
       .appendField(
         new Blockly.FieldTextInput("00:00:00:00:00:00"),
