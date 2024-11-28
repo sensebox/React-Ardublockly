@@ -21,19 +21,19 @@ Blockly.Blocks["sensebox_mqtt_setup"] = {
         "service",
       );
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_mqtt_server)
       .appendField(new Blockly.FieldTextInput("Server"), "server");
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_mqtt_port)
       .appendField(new Blockly.FieldTextInput("Port"), "port");
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_mqtt_username)
       .appendField(new Blockly.FieldTextInput("Username"), "username");
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_mqtt_password, "passwordmsg")
       .appendField(new Blockly.FieldTextInput("Password"), "password");
     this.setPreviousStatement(true, null);

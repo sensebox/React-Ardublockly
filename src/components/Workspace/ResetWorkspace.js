@@ -61,7 +61,7 @@ class ResetWorkspace extends Component {
     const workspace = Blockly.getMainWorkspace();
     Blockly.Events.disable(); // https://groups.google.com/forum/#!topic/blockly/m7e3g0TC75Y
     // if events are disabled, then the workspace will be cleared AND the blocks are not in the trashcan
-    const xmlDom = Blockly.Xml.textToDom(initialXml);
+    const xmlDom = Blockly.utils.xml.textToDom(initialXml);
     Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, workspace);
     Blockly.Events.enable();
     workspace.options.maxBlocks = Infinity;

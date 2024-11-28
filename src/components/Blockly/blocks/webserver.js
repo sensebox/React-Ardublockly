@@ -1,4 +1,4 @@
-import Blockly from "blockly/core";
+import * as Blockly from "blockly/core";
 import { getColour } from "../helpers/colour";
 import { getCompatibleTypes } from "../helpers/types";
 import * as Types from "../helpers/types";
@@ -14,7 +14,7 @@ Blockly.Blocks["sensebox_initialize_http_server"] = {
     this.setColour(getColour().webserver);
     this.appendDummyInput().appendField(Blockly.Msg.senseBox_init_http_server);
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField("Port")
       .appendField(new Blockly.FieldNumber(80), "Port");
     this.setPreviousStatement(true, null);
@@ -56,7 +56,7 @@ Blockly.Blocks["sensebox_http_method"] = {
     this.setHelpUrl("https://sensebox.de/books");
   },
   getBlockType: function () {
-    return Blockly.Types.TEXT;
+    return Types.TEXT;
   },
 };
 
@@ -106,11 +106,11 @@ Blockly.Blocks["sensebox_generate_html_doc"] = {
   init: function () {
     this.appendDummyInput().appendField(Blockly.Msg.senseBox_html_document);
     this.appendValueInput("HEADER")
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .setCheck(getCompatibleTypes("String"))
       .appendField(Blockly.Msg.senseBox_html_header);
     this.appendValueInput("BODY")
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .setCheck(getCompatibleTypes("String"))
       .appendField(Blockly.Msg.senseBox_html_body);
     this.setInputsInline(false);
@@ -163,7 +163,7 @@ Blockly.Blocks["sensebox_general_html_tag"] = {
     this.setHelpUrl("https://sensebox.de/books");
     this.setPreviousStatement(false);
     this.setNextStatement(false);
-    this.setMutator(new Blockly.Mutator(["additional_child"]));
+    this.setMutator(new Blockly.icons.MutatorIcon(["additional_child"], this));
     this.additionalChildCount_ = 0;
   },
   /**
@@ -234,7 +234,9 @@ Blockly.Blocks["sensebox_general_html_tag"] = {
     this.updateShape_();
     // Reconnect any child blocks.
     for (var i = 1; i <= this.additionalChildCount_; i++) {
-      Blockly.Mutator.reconnect(statementConnections[i], this, "DO" + i);
+      if (statementConnections[i]) {
+        statementConnections[i].reconnect(this, "DO" + i);
+      }
     }
   },
   /**
@@ -274,7 +276,7 @@ Blockly.Blocks["sensebox_general_html_tag"] = {
     }
     // Rebuild block.
     for (i = 1; i <= this.additionalChildCount_; i++) {
-      this.appendValueInput("DO" + i, Blockly.Arduino.ORDER_NONE);
+      this.appendValueInput("DO" + i, Blockly.Generator.Arduino.ORDER_NONE);
     }
   },
 };
@@ -308,9 +310,9 @@ Blockly.Blocks["sensebox_web_readHTML"] = {
   init: function () {
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_sd_web_readHTML)
-      .setAlign(Blockly.ALIGN_LEFT);
+      .setAlign(Blockly.inputs.Align.LEFT);
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.sensebox_web_readHTML_filename)
       .appendField(new Blockly.FieldTextInput("index.txt"), "FILENAME");
     this.setOutput(true, Types.TEXT.typeName);
