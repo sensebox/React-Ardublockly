@@ -18,15 +18,46 @@ class ToolboxBuilder {
     if (!blocks || !name || !colour) {
       return this; // Return early to prevent adding an invalid category
     }
-  
+
     const category = new CategoryBuilder(name, colour)
       .addBlocks(blocks)
       .buildCategory();
-  
+
     this.toolbox.contents.push(category);
     return this;
   }
-  
+
+  addCustomCategory(name, colour, custom) {
+    if (!name || !colour || !custom) {
+      return this; // Return early to prevent adding an invalid category
+    }
+
+    const category = {
+      kind: "category",
+      name,
+      colour,
+      custom,
+    };
+
+    this.toolbox.contents.push(category);
+    return this;
+  }
+
+  addNestedCategory(name, colour, categories) {
+    if (!categories || !name || !colour) {
+      return this; // Return early to prevent adding an invalid category
+    }
+
+    const category = {
+      kind: "category",
+      name,
+      colour,
+      contents: categories,
+    };
+
+    this.toolbox.contents.push(category);
+    return this;
+  }
 }
 
 // Builder class for a category

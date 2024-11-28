@@ -107,7 +107,7 @@ Blockly.Generator.Arduino.init = function (workspace) {
   Blockly.Generator.Arduino.definitions_ = Object.create(null);
 
   // creates a list of code to be setup before the setup block
-  Blockly.Generator.Arduino.setupCode_ = {};
+  Blockly.Generator.Arduino.setupCode_ = Object.create(null);
 
   // creates a list of code to be setup before the setup block
   Blockly.Generator.Arduino.phyphoxSetupCode_ = Object.create(null);

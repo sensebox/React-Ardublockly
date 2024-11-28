@@ -18,7 +18,7 @@ export const sdOpenFileSave = {
     SD: {
       block: {
         kind: "block",
-        type: "sensebox_sd_write_file",
+        type: "sensebox_sd_osem",
         inputs: {
           DO: {
             block: {
@@ -33,28 +33,6 @@ export const sdOpenFileSave = {
 };
 export const sdOsem = { kind: "block", type: "sensebox_sd_osem" };
 
-{
-  /* <Category name="SD" colour={getColour().sensebox}>
-<Block type="sensebox_esp32s2_sd_create_file" />
-<Block type="sensebox_esp32s2_sd_open_file">
-  <Value name="SD">
-    <Block type="sensebox_esp32s2_sd_write_file"></Block>
-  </Value>
-</Block>
-<Block type="sensebox_esp32s2_sd_write_file" />
-<Block type="sensebox_esp32s2_sd_open_file">
-  <Value name="SD">
-    <Block type="sensebox_sd_osem">
-      <Value name="DO">
-        <Block type="sensebox_sd_save_for_osem"></Block>
-      </Value>
-    </Block>
-  </Value>
-</Block>
-<Block type="sensebox_sd_osem" />
-<Block type="sensebox_sd_save_for_osem" />
-</Category> */
-}
 export const esp32SDCreateFile = {
   kind: "block",
   type: "sensebox_esp32s2_sd_create_file",
@@ -67,21 +45,36 @@ export const esp32SDOpenFile = {
   kind: "block",
   type: "sensebox_esp32s2_sd_open_file",
   inputs: {
-    SD: { block: { kind: "block", type: "sensebox_esp32s2_sd_write_file" } },
+    SD: { block: esp32SDWriteFile },
   },
 };
-export const esp32SDSaveForOsem = {
+export const esp32SDOpenFileSave = {
   kind: "block",
-  type: "sensebox_esp32s2_sd_save_for_osem",
+  type: "sensebox_esp32s2_sd_open_file",
+  inputs: {
+    SD: {
+      block: {
+        kind: "block",
+        type: "sensebox_sd_osem",
+        inputs: {
+          DO: {
+            block: {
+              kind: "block",
+              type: "sensebox_sd_save_for_osem",
+            },
+          },
+        },
+      },
+    },
+  },
 };
-export const esp32SDOsem = { kind: "block", type: "sensebox_esp32s2_sd_osem" };
 
 export default {
   mcu: [
     sdCreateFile,
     sdOpenFile,
     sdWriteFile,
-    // sdOpenFileSave,
+    sdOpenFileSave,
     sdOsem,
     sdSaveForOsem,
   ],
@@ -89,7 +82,7 @@ export default {
     sdCreateFile,
     sdOpenFile,
     sdWriteFile,
-    // sdOpenFileSave,
+    sdOpenFileSave,
     sdOsem,
     sdSaveForOsem,
   ],
@@ -97,7 +90,8 @@ export default {
     esp32SDCreateFile,
     esp32SDOpenFile,
     esp32SDWriteFile,
-    esp32SDOsem,
-    esp32SDSaveForOsem,
+    esp32SDOpenFileSave,
+    sdOsem,
+    sdSaveForOsem,
   ],
 };

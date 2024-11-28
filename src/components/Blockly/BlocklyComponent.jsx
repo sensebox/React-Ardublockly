@@ -37,13 +37,31 @@ import { connect } from "react-redux";
 
 import { PositionedMinimap } from "@blockly/workspace-minimap";
 
-import { ToolboxBuilder } from "./toolbox/builder";
+import { CategoryBuilder, ToolboxBuilder } from "./toolbox/builder";
 import { getColour } from "./helpers/colour";
 import sensors from "./toolbox/modules/sensors";
 import wifi from "./toolbox/modules/wifi";
 import espnow from "./toolbox/modules/espnow";
 import ethernet from "./toolbox/modules/ethernet";
 import sd from "./toolbox/modules/sd";
+import led from "./toolbox/modules/led";
+import ledMatrix from "./toolbox/modules/led-matrix";
+import display from "./toolbox/modules/display";
+import opensensemap from "./toolbox/modules/opensensemap";
+import lora from "./toolbox/modules/lora";
+import phyphox from "./toolbox/modules/phyphox";
+import webserver from "./toolbox/modules/webserver";
+import mqtt from "./toolbox/modules/mqtt";
+import logic from "./toolbox/modules/logic";
+import loops from "./toolbox/modules/loops";
+import text from "./toolbox/modules/text";
+import time from "./toolbox/modules/time";
+import math from "./toolbox/modules/math";
+import audio from "./toolbox/modules/audio";
+import serial from "./toolbox/modules/serial";
+import io from "./toolbox/modules/io";
+import motors from "./toolbox/modules/motors";
+import watchdog from "./toolbox/modules/watchdog";
 
 class BlocklyComponent extends React.Component {
   constructor(props) {
@@ -53,18 +71,70 @@ class BlocklyComponent extends React.Component {
     this.state = { workspace: undefined };
   }
 
+  getToolbox(board) {
+    const senseBoxColor = getColour().sensebox;
+
+    // Create the advanced categories
+    const serialCategory = new CategoryBuilder(
+      Blockly.Msg.toolbox_serial,
+      getColour().serial,
+    )
+      .addBlocks(serial[board])
+      .buildCategory();
+    const ioCategory = new CategoryBuilder(
+      Blockly.Msg.toolbox_io,
+      getColour().io,
+    )
+      .addBlocks(io[board])
+      .buildCategory();
+    const motorsCategory = new CategoryBuilder(
+      Blockly.Msg.toolbox_motors,
+      getColour().motors,
+    )
+      .addBlocks(motors[board])
+      .buildCategory();
+    const watchdogCategory = new CategoryBuilder("Watchdog", getColour().io)
+      .addBlocks(watchdog[board])
+      .buildCategory();
+
+    return (
+      new ToolboxBuilder()
+        .addCategory(Blockly.Msg.toolbox_sensors, senseBoxColor, sensors[board])
+        .addCategory("WIFI", senseBoxColor, wifi[board])
+        .addCategory("ESP-NOW", senseBoxColor, espnow[board])
+        .addCategory("Ethernet", senseBoxColor, ethernet[board])
+        .addCategory("SD", senseBoxColor, sd[board])
+        .addCategory("LED", senseBoxColor, led[board])
+        .addCategory("LED Matrix", senseBoxColor, ledMatrix[board])
+        .addCategory("Display", senseBoxColor, display[board])
+        .addCategory("openSenseMap", senseBoxColor, opensensemap[board])
+        .addCategory("LoRa", senseBoxColor, lora[board])
+        .addCategory("Phyphox", getColour().phyphox, phyphox[board])
+        .addCategory("Webserver", getColour().webserver, webserver[board])
+        .addCategory("MQTT", getColour().mqtt, mqtt[board])
+        .addCategory(Blockly.Msg.toolbox_logic, getColour().logic, logic[board])
+        .addCategory(Blockly.Msg.toolbox_loops, getColour().loops, loops[board])
+        .addCategory("Text", getColour().text, text[board])
+        .addCategory(Blockly.Msg.toolbox_time, getColour().time, time[board])
+        .addCategory(Blockly.Msg.toolbox_math, getColour().math, math[board])
+        .addCategory("Audio", getColour().audio, audio[board])
+        // .addCustomCategory(Blockly.Msg.toolbox_variables, getColour().variables, "CREATE_TYPED_VARIABLE")  // TODO: This is not working
+        // .addCustomCategory(Blockly.Msg.toolbox_functions, getColour().procedures, "PROCEDURE")   // TODO: This is not working
+        .addNestedCategory(Blockly.Msg.toolbox_advanced, getColour().io, [
+          serialCategory,
+          ioCategory,
+          motorsCategory,
+          watchdogCategory,
+        ])
+
+        .buildToolbox()
+    );
+  }
+
   componentDidMount() {
     const { initialXml, children, ...rest } = this.props;
 
-    const senseBoxColor = getColour().sensebox;
-
-    const toolbox = new ToolboxBuilder()
-      .addCategory(Blockly.Msg.toolbox_sensors, senseBoxColor, sensors[this.props.selectedBoard])
-      .addCategory("WIFI", senseBoxColor, wifi[this.props.selectedBoard])
-      .addCategory("ESP-NOW", senseBoxColor, espnow[this.props.selectedBoard])
-      .addCategory("Ethernet", senseBoxColor, ethernet[this.props.selectedBoard])
-      .addCategory("SD", senseBoxColor, sd[this.props.selectedBoard])
-      .buildToolbox();
+    const toolbox = this.getToolbox(this.props.selectedBoard);
 
     const workspace = Blockly.inject(this.blocklyDiv.current, {
       toolbox: toolbox,
@@ -98,13 +168,7 @@ class BlocklyComponent extends React.Component {
     if (prevProps.selectedBoard !== this.props.selectedBoard) {
       const senseBoxColor = getColour().sensebox;
 
-      const toolbox = new ToolboxBuilder()
-        .addCategory(Blockly.Msg.toolbox_sensors, senseBoxColor, sensors[this.props.selectedBoard])
-        .addCategory("WIFI", senseBoxColor, wifi[this.props.selectedBoard])
-        .addCategory("ESP-NOW", senseBoxColor, espnow[this.props.selectedBoard])
-        .addCategory("Ethernet", senseBoxColor, ethernet[this.props.selectedBoard])
-        .addCategory("SD", senseBoxColor, sd[this.props.selectedBoard])
-        .buildToolbox();
+      const toolbox = this.getToolbox(this.props.selectedBoard);
 
       this.primaryWorkspace.updateToolbox(toolbox);
     }
