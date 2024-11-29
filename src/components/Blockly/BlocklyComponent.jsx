@@ -37,6 +37,13 @@ import { connect } from "react-redux";
 
 import { PositionedMinimap } from "@blockly/workspace-minimap";
 
+import { TypedVariableModal } from "@blockly/plugin-typed-variable-modal";
+
+import {
+  blocks,
+  unregisterProcedureBlocks,
+} from "@blockly/block-shareable-procedures";
+
 import { CategoryBuilder, ToolboxBuilder } from "./toolbox/builder";
 import { getColour } from "./helpers/colour";
 import sensors from "./toolbox/modules/sensors";
@@ -72,6 +79,9 @@ class BlocklyComponent extends React.Component {
   }
 
   getToolbox(board) {
+    if (!board) {
+      return new ToolboxBuilder().buildToolbox();
+    }
     const senseBoxColor = getColour().sensebox;
 
     // Create the advanced categories
@@ -118,7 +128,11 @@ class BlocklyComponent extends React.Component {
         .addCategory(Blockly.Msg.toolbox_time, getColour().time, time[board])
         .addCategory(Blockly.Msg.toolbox_math, getColour().math, math[board])
         .addCategory("Audio", getColour().audio, audio[board])
-        // .addCustomCategory(Blockly.Msg.toolbox_variables, getColour().variables, "CREATE_TYPED_VARIABLE")  // TODO: This is not working
+        .addCustomCategory(
+          Blockly.Msg.toolbox_variables,
+          getColour().variables,
+          "CREATE_TYPED_VARIABLE",
+        )
         // .addCustomCategory(Blockly.Msg.toolbox_functions, getColour().procedures, "PROCEDURE")   // TODO: This is not working
         .addNestedCategory(Blockly.Msg.toolbox_advanced, getColour().io, [
           serialCategory,
@@ -145,6 +159,26 @@ class BlocklyComponent extends React.Component {
       },
       ...rest,
     });
+
+    unregisterProcedureBlocks();
+    Blockly.common.defineBlocks(blocks);
+
+    workspace.registerToolboxCategoryCallback(
+      "CREATE_TYPED_VARIABLE",
+      this.createFlyout,
+    );
+
+    const typedVarModal = new TypedVariableModal(workspace, "callbackName", [
+      [`${Blockly.Msg.variable_NUMBER}`, "int"],
+      [`${Blockly.Msg.variable_LONG}`, "long"],
+      [`${Blockly.Msg.variable_DECIMAL}`, "float"],
+      [`${Blockly.Msg.variables_TEXT}`, "String"],
+      [`${Blockly.Msg.variables_CHARACTER}`, "char"],
+      [`${Blockly.Msg.variables_BOOLEAN}`, "boolean"],
+    ]);
+    typedVarModal.init();
+    // workspace.updateToolbox(this.props.toolbox.current);
+
     // Initialize plugin.
 
     // Initialize plugin.
@@ -162,6 +196,24 @@ class BlocklyComponent extends React.Component {
         this.primaryWorkspace,
       );
     }
+  }
+
+  createFlyout(workspace) {
+    let xmlList = [];
+
+    // Add your button and give it a callback name.
+    const button = document.createElement("button");
+    button.setAttribute("text", Blockly.Msg.button_createVariable);
+    button.setAttribute("callbackKey", "callbackName");
+
+    xmlList.push(button);
+
+    // This gets all the variables that the user creates and adds them to the
+    // flyout.
+    const blockList = Blockly.VariablesDynamic.flyoutCategoryBlocks(workspace);
+    console.log(blockList);
+    xmlList = xmlList.concat(blockList);
+    return xmlList;
   }
 
   componentDidUpdate(prevProps) {
