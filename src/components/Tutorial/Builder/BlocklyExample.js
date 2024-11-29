@@ -87,7 +87,7 @@ class BlocklyExample extends Component {
       var xml = this.props.value;
       // check if value is valid xml;
       try {
-        Blockly.Xml.textToDom(xml);
+        Blockly.utils.xml.textToDom(xml);
         this.props.deleteError(this.props.index, "xml");
       } catch (err) {
         xml = initialXml;

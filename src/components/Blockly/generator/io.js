@@ -7,15 +7,19 @@ import * as Blockly from "blockly/core";
  * @param {!Blockly.Block} block Block to generate the code from.
  * @return {string} Completed code.
  */
-Blockly.Arduino["io_digitalwrite"] = function (block) {
+Blockly.Generator.Arduino.forBlock["io_digitalwrite"] = function (
+  block,
+  generator,
+) {
   var pin = block.getFieldValue("PIN");
   var stateOutput =
-    Blockly.Arduino.valueToCode(
+    Blockly.Generator.Arduino.valueToCode(
       block,
       "STATE",
-      Blockly["Arduino"].ORDER_ATOMIC,
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
     ) || "LOW";
-  Blockly["Arduino"].setupCode_["pinMode"] = "pinMode(" + pin + ", OUTPUT);";
+  Blockly.Generator.Arduino.setupCode_["pinMode"] =
+    "pinMode(" + pin + ", OUTPUT);";
   var code = "digitalWrite(" + pin + ", " + stateOutput + ");\n";
   return code;
 };
@@ -27,12 +31,15 @@ Blockly.Arduino["io_digitalwrite"] = function (block) {
  * @param {!Blockly.Block} block Block to generate the code from.
  * @return {array} Completed code with order of operation.
  */
-Blockly.Arduino["io_digitalread"] = function (block) {
+Blockly.Generator.Arduino.forBlock["io_digitalread"] = function (
+  block,
+  generator,
+) {
   var pin = block.getFieldValue("PIN");
-  Blockly["Arduino"].setupCode_["pinMode" + pin] =
+  Blockly.Generator.Arduino.setupCode_["pinMode" + pin] =
     "pinMode(" + pin + ", INPUT);";
   var code = "digitalRead(" + pin + ")";
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
 /**
@@ -42,12 +49,18 @@ Blockly.Arduino["io_digitalread"] = function (block) {
  * @param {!Blockly.Block} block Block to generate the code from.
  * @return {string} Completed code.
  */
-Blockly.Arduino["io_builtin_led"] = function (block) {
+Blockly.Generator.Arduino.forBlock["io_builtin_led"] = function (
+  block,
+  generator,
+) {
   var pin = block.getFieldValue("BUILT_IN_LED");
   var stateOutput =
-    Blockly.Arduino.valueToCode(block, "STATE", Blockly.Arduino.ORDER_ATOMIC) ||
-    "LOW";
-  Blockly["Arduino"].setupCode_["pinMode" + pin] =
+    Blockly.Generator.Arduino.valueToCode(
+      block,
+      "STATE",
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
+    ) || "LOW";
+  Blockly.Generator.Arduino.setupCode_["pinMode" + pin] =
     "pindMode(" + pin + "OUTPUT);";
   var code = "digitalWrite(" + pin + ", " + stateOutput + ");\n";
   return code;
@@ -60,12 +73,18 @@ Blockly.Arduino["io_builtin_led"] = function (block) {
  * @param {!Blockly.Block} block Block to generate the code from.
  * @return {string} Completed code.
  */
-Blockly.Arduino["io_analogwrite"] = function (block) {
+Blockly.Generator.Arduino.forBlock["io_analogwrite"] = function (
+  block,
+  generator,
+) {
   var pin = block.getFieldValue("PIN");
   var stateOutput =
-    Blockly.Arduino.valueToCode(block, "NUM", Blockly.Arduino.ORDER_ATOMIC) ||
-    "0";
-  Blockly["Arduino"].setupCode_["pinMode" + pin] =
+    Blockly.Generator.Arduino.valueToCode(
+      block,
+      "NUM",
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
+    ) || "0";
+  Blockly.Generator.Arduino.setupCode_["pinMode" + pin] =
     "pinMode(" + pin + ", OUTPUT);";
   // Warn if the input value is out of range
   if (stateOutput < 0 || stateOutput > 255) {
@@ -87,12 +106,15 @@ Blockly.Arduino["io_analogwrite"] = function (block) {
  * @param {!Blockly.Block} block Block to generate the code from.
  * @return {array} Completed code with order of operation.
  */
-Blockly.Arduino["io_analogread"] = function (block) {
+Blockly.Generator.Arduino.forBlock["io_analogread"] = function (
+  block,
+  generator,
+) {
   var pin = block.getFieldValue("PIN");
-  Blockly["Arduino"].setupCode_["pinMode" + pin] =
+  Blockly.Generator.Arduino.setupCode_["pinMode" + pin] =
     "pinMode(" + pin + ", INPUT);";
   var code = "analogRead(" + pin + ")";
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
 /**
@@ -101,43 +123,49 @@ Blockly.Arduino["io_analogread"] = function (block) {
  * @param {!Blockly.Block} block Block to generate the code from.
  * @return {array} Completed code with order of operation.
  */
-Blockly.Arduino["io_highlow"] = function (block) {
+Blockly.Generator.Arduino.forBlock["io_highlow"] = function (block, generator) {
   var code = block.getFieldValue("STATE");
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
-Blockly.Arduino["io_pulsein"] = function (block) {
+Blockly.Generator.Arduino.forBlock["io_pulsein"] = function (block, generator) {
   var pin = block.getFieldValue("PULSEPIN");
-  var type = Blockly.Arduino.valueToCode(
+  var type = Blockly.Generator.Arduino.valueToCode(
     block,
     "PULSETYPE",
-    Blockly.Arduino.ORDER_ATOMIC,
+    Blockly.Generator.Arduino.ORDER_ATOMIC,
   );
-  Blockly["Arduino"].setupCode_["pinMode" + pin] =
+  Blockly.Generator.Arduino.setupCode_["pinMode" + pin] =
     "pinMode(" + pin + ", INPUT);";
   var code = "pulseIn(" + pin + ", " + type + ")";
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
-Blockly.Arduino["io_pulsetimeout"] = function (block) {
+Blockly.Generator.Arduino.forBlock["io_pulsetimeout"] = function (
+  block,
+  generator,
+) {
   var pin = block.getFieldValue("PULSEPIN");
-  var type = Blockly.Arduino.valueToCode(
+  var type = Blockly.Generator.Arduino.valueToCode(
     block,
     "PULSETYPE",
-    Blockly.Arduino.ORDER_ATOMIC,
+    Blockly.Generator.Arduino.ORDER_ATOMIC,
   );
-  var timeout = Blockly.Arduino.valueToCode(
+  var timeout = Blockly.Generator.Arduino.valueToCode(
     block,
     "TIMEOUT",
-    Blockly.Arduino.ORDER_ATOMIC,
+    Blockly.Generator.Arduino.ORDER_ATOMIC,
   );
-  Blockly["Arduino"].setupCode_["pinMode" + pin] =
+  Blockly.Generator.Arduino.setupCode_["pinMode" + pin] =
     "pinMode(" + pin + ", INPUT);";
   var code = "pulseIn(" + pin + ", " + type + ", " + timeout + ")";
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
-Blockly.Arduino["io_analogreadmillivolt"] = function (block) {
+Blockly.Generator.Arduino.forBlock["io_analogreadmillivolt"] = function (
+  block,
+  generator,
+) {
   var dropdown_port = this.getFieldValue("Port");
   var pin = 1;
   switch (dropdown_port) {
@@ -161,5 +189,5 @@ Blockly.Arduino["io_analogreadmillivolt"] = function (block) {
   }
 
   var code = "analogReadMilliVolts(" + pin + ")";
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
