@@ -1,4 +1,4 @@
-import Blockly from "blockly";
+import * as Blockly from "blockly";
 //import store from "../../../store";
 
 // preperations for the esp board
@@ -9,69 +9,80 @@ import Blockly from "blockly";
 
 /* Wifi connection and openSenseMap Blocks*/
 
-Blockly.Arduino.sensebox_esp_wifi = function (block) {
+Blockly.Generator.Arduino.forBlock["sensebox_esp_wifi"] = function (
+  block,
+  generator,
+) {
   var pw = this.getFieldValue("Password");
   var ssid = this.getFieldValue("SSID");
-  Blockly.Arduino.libraries_["library_WiFi_ESP"] =
+  Blockly.Generator.Arduino.libraries_["library_WiFi_ESP"] =
     "#include <WiFiClientSecure.h>";
-  Blockly.Arduino.variables_["ssid"] = `char* ssid = "${ssid}";`;
-  Blockly.Arduino.variables_["pass"] = `char* password = "${pw}";`;
-  Blockly.Arduino.variables_["wifi_Status"] = "int status = WL_IDLE_STATUS;";
+  Blockly.Generator.Arduino.variables_["ssid"] = `char* ssid = "${ssid}";`;
+  Blockly.Generator.Arduino.variables_["pass"] = `char* password = "${pw}";`;
+  Blockly.Generator.Arduino.variables_["wifi_Status"] =
+    "int status = WL_IDLE_STATUS;";
   if (pw === "") {
-    Blockly.Arduino.setupCode_["wifi_begin"] = "WiFi.begin(ssid, password);";
-  } else Blockly.Arduino.setupCode_["wifi_begin"] = "WiFi.begin(ssid);";
-  Blockly.Arduino.setupCode_["wifi_wait"] =
+    Blockly.Generator.Arduino.setupCode_["wifi_begin"] =
+      "WiFi.begin(ssid, password);";
+  } else
+    Blockly.Generator.Arduino.setupCode_["wifi_begin"] = "WiFi.begin(ssid);";
+  Blockly.Generator.Arduino.setupCode_["wifi_wait"] =
     "while (WiFi.status() != WL_CONNECTED) {delay(1000);}";
   var code = "";
   return code;
 };
 
-Blockly.Arduino.sensebox_wifi_status = function () {
+Blockly.Generator.Arduino.forBlock["sensebox_wifi_status"] = function () {
   var code = "WiFi.status()";
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
-Blockly.Arduino.sensebox_wifi_rssi = function () {
+Blockly.Generator.Arduino.forBlock["sensebox_wifi_rssi"] = function () {
   var code = "WiFi.RSSI()";
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
-Blockly.Arduino.sensebox_get_ip = function () {
-  Blockly.Arduino.definitions_["define_ipadress"] = "IPAddress ip;";
-  Blockly.Arduino.setupCode_["sensebox_get_ip"] = " ip = WiFi.localIP();";
+Blockly.Generator.Arduino.forBlock["sensebox_get_ip"] = function () {
+  Blockly.Generator.Arduino.definitions_["define_ipadress"] = "IPAddress ip;";
+  Blockly.Generator.Arduino.setupCode_["sensebox_get_ip"] =
+    " ip = WiFi.localIP();";
   var code = "ip";
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
-Blockly.Arduino.sensebox_startap = function (block) {
+Blockly.Generator.Arduino.forBlock["sensebox_startap"] = function (
+  block,
+  generator,
+) {
   var ssid = this.getFieldValue("SSID");
-  Blockly.Arduino.libraries_["library_WiFi"] = "#include <WiFi101.h>";
-  Blockly.Arduino.setupCode_["wifi_startAP"] = `WiFi.beginAP(${ssid});`;
+  Blockly.Generator.Arduino.libraries_["library_WiFi"] = "#include <WiFi101.h>";
+  Blockly.Generator.Arduino.setupCode_["wifi_startAP"] =
+    `WiFi.beginAP(${ssid});`;
   var code = "";
   return code;
 };
 
-Blockly.Arduino.sensebox_ethernet = function () {
+Blockly.Generator.Arduino.forBlock["sensebox_ethernet"] = function () {
   var ip = this.getFieldValue("ip");
   var gateway = this.getFieldValue("gateway");
   var subnetmask = this.getFieldValue("subnetmask");
   var dns = this.getFieldValue("dns");
   var mac = this.getFieldValue("mac");
   var dhcp = this.getFieldValue("dhcp");
-  Blockly.Arduino.libraries_["library_ethernet"] =
+  Blockly.Generator.Arduino.libraries_["library_ethernet"] =
     "#include <Ethernet.h> // http://librarymanager/All#Ethernet";
 
-  Blockly.Arduino.definitions_["ethernet_config"] = `
+  Blockly.Generator.Arduino.definitions_["ethernet_config"] = `
 byte mac[] = { ${mac}};`;
   if (dhcp === "Manual") {
-    Blockly.Arduino.definitions_["ethernet_manual_config"] = `
+    Blockly.Generator.Arduino.definitions_["ethernet_manual_config"] = `
 //Configure static IP setup (only needed if DHCP is disabled)
 IPAddress myIp(${ip.replaceAll(".", ", ")});
 IPAddress myDns(${dns.replaceAll(".", ",")});
 IPAddress myGateway(${gateway.replaceAll(".", ",")});
 IPAddress mySubnet(${subnetmask.replaceAll(".", ",")});
     `;
-    Blockly.Arduino.setupCode_["ethernet_setup"] = `
+    Blockly.Generator.Arduino.setupCode_["ethernet_setup"] = `
 Ethernet.init(23);// start the Ethernet connection:
 if (Ethernet.begin(mac) == 0) {
     // no point in carrying on, so do nothing forevermore:
@@ -82,7 +93,7 @@ if (Ethernet.begin(mac) == 0) {
 delay(1000);
     `;
   } else {
-    Blockly.Arduino.setupCode_["ethernet_setup"] = `
+    Blockly.Generator.Arduino.setupCode_["ethernet_setup"] = `
 Ethernet.init(23); // start the Ethernet connection:
 Ethernet.begin(mac); // give the Ethernet shield a second to initialize:
 delay(1000);
@@ -93,7 +104,7 @@ delay(1000);
   return code;
 };
 
-Blockly.Arduino.sensebox_ethernetIp = function () {
+Blockly.Generator.Arduino.forBlock["sensebox_ethernetIp"] = function () {
   var code = "Ethernet.localIP()";
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };

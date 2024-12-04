@@ -1,4 +1,4 @@
-import Blockly from "blockly";
+import * as Blockly from "blockly";
 //import store from "../../../store";
 
 // preperations for the esp board
@@ -8,15 +8,19 @@ import Blockly from "blockly";
 // });
 
 /* Wifi connection and openSenseMap Blocks*/
-Blockly.Arduino.sensebox_wifi = function (block) {
+Blockly.Generator.Arduino.forBlock["sensebox_wifi"] = function (
+  block,
+  generator,
+) {
   var pw = this.getFieldValue("Password");
   var ssid = this.getFieldValue("SSID");
-  Blockly.Arduino.libraries_["library_WiFi"] = "#include <WiFi101.h>";
-  Blockly.Arduino.variables_["ssid"] = `char ssid[] = "${ssid}";`;
-  Blockly.Arduino.variables_["pass"] = `char pass[] = "${pw}";`;
-  Blockly.Arduino.variables_["wifi_Status"] = "int status = WL_IDLE_STATUS;";
+  Blockly.Generator.Arduino.libraries_["library_WiFi"] = "#include <WiFi101.h>";
+  Blockly.Generator.Arduino.variables_["ssid"] = `char ssid[] = "${ssid}";`;
+  Blockly.Generator.Arduino.variables_["pass"] = `char pass[] = "${pw}";`;
+  Blockly.Generator.Arduino.variables_["wifi_Status"] =
+    "int status = WL_IDLE_STATUS;";
   if (pw === "") {
-    Blockly.Arduino.setupCode_["wifi_begin"] = `
+    Blockly.Generator.Arduino.setupCode_["wifi_begin"] = `
     if (WiFi.status() == WL_NO_SHIELD) {
         while (true);
     }
@@ -26,7 +30,7 @@ Blockly.Arduino.sensebox_wifi = function (block) {
     }
     `;
   } else
-    Blockly.Arduino.setupCode_["wifi_begin"] = `
+    Blockly.Generator.Arduino.setupCode_["wifi_begin"] = `
 if (WiFi.status() == WL_NO_SHIELD) {
     while (true);
 }
@@ -39,52 +43,57 @@ while (status != WL_CONNECTED) {
   return code;
 };
 
-Blockly.Arduino.sensebox_wifi_status = function () {
+Blockly.Generator.Arduino.forBlock["sensebox_wifi_status"] = function () {
   var code = "WiFi.status()";
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
-Blockly.Arduino.sensebox_wifi_rssi = function () {
+Blockly.Generator.Arduino.forBlock["sensebox_wifi_rssi"] = function () {
   var code = "WiFi.RSSI()";
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
-Blockly.Arduino.sensebox_get_ip = function () {
-  Blockly.Arduino.definitions_["define_ipadress"] = "IPAddress ip;";
-  Blockly.Arduino.setupCode_["sensebox_get_ip"] = " ip = WiFi.localIP();";
+Blockly.Generator.Arduino.forBlock["sensebox_get_ip"] = function () {
+  Blockly.Generator.Arduino.definitions_["define_ipadress"] = "IPAddress ip;";
+  Blockly.Generator.Arduino.setupCode_["sensebox_get_ip"] =
+    " ip = WiFi.localIP();";
   var code = "ip";
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
-Blockly.Arduino.sensebox_startap = function (block) {
+Blockly.Generator.Arduino.forBlock["sensebox_startap"] = function (
+  block,
+  generator,
+) {
   var ssid = this.getFieldValue("SSID");
-  Blockly.Arduino.libraries_["library_WiFi"] = "#include <WiFi101.h>";
-  Blockly.Arduino.setupCode_["wifi_startAP"] = `WiFi.beginAP("${ssid}");`;
+  Blockly.Generator.Arduino.libraries_["library_WiFi"] = "#include <WiFi101.h>";
+  Blockly.Generator.Arduino.setupCode_["wifi_startAP"] =
+    `WiFi.beginAP("${ssid}");`;
   var code = "";
   return code;
 };
 
-Blockly.Arduino.sensebox_ethernet = function () {
+Blockly.Generator.Arduino.forBlock["sensebox_ethernet"] = function () {
   var ip = this.getFieldValue("ip");
   var gateway = this.getFieldValue("gateway");
   var subnetmask = this.getFieldValue("subnetmask");
   var dns = this.getFieldValue("dns");
   var mac = this.getFieldValue("mac");
   var dhcp = this.getFieldValue("dhcp");
-  Blockly.Arduino.libraries_["library_ethernet"] =
+  Blockly.Generator.Arduino.libraries_["library_ethernet"] =
     "#include <Ethernet.h> // http://librarymanager/All#Ethernet";
 
-  Blockly.Arduino.definitions_["ethernet_config"] = `
+  Blockly.Generator.Arduino.definitions_["ethernet_config"] = `
 byte mac[] = { ${mac}};`;
   if (dhcp === "Manual") {
-    Blockly.Arduino.definitions_["ethernet_manual_config"] = `
+    Blockly.Generator.Arduino.definitions_["ethernet_manual_config"] = `
 //Configure static IP setup (only needed if DHCP is disabled)
 IPAddress myIp(${ip.replaceAll(".", ", ")});
 IPAddress myDns(${dns.replaceAll(".", ",")});
 IPAddress myGateway(${gateway.replaceAll(".", ",")});
 IPAddress mySubnet(${subnetmask.replaceAll(".", ",")});
     `;
-    Blockly.Arduino.setupCode_["ethernet_setup"] = `
+    Blockly.Generator.Arduino.setupCode_["ethernet_setup"] = `
 Ethernet.init(23);
 // start the Ethernet connection:
 if (Ethernet.begin(mac) == 0) {
@@ -96,7 +105,7 @@ if (Ethernet.begin(mac) == 0) {
 delay(1000);
     `;
   } else {
-    Blockly.Arduino.setupCode_["ethernet_setup"] = `
+    Blockly.Generator.Arduino.setupCode_["ethernet_setup"] = `
 Ethernet.init(23);
 // start the Ethernet connection:
 Ethernet.begin(mac);
@@ -109,9 +118,9 @@ delay(1000);
   return code;
 };
 
-Blockly.Arduino.sensebox_ethernetIp = function () {
+Blockly.Generator.Arduino.forBlock["sensebox_ethernetIp"] = function () {
   var code = "Ethernet.localIP()";
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
 /**
@@ -120,30 +129,33 @@ Blockly.Arduino.sensebox_ethernetIp = function () {
  *
  */
 
-Blockly.Arduino.sensebox_esp32s2_wifi_enterprise = function () {
-  /* WiFi connection for eduroam networks*/
-  var pw = this.getFieldValue("Password");
-  var user = this.getFieldValue("User");
-  var ssid = this.getFieldValue("SSID");
-  Blockly.Arduino.libraries_["library_WiFi"] = "#include <WiFi.h>";
-  Blockly.Arduino.libraries_["library_wpa2"] = `#include "esp_wpa2.h"`;
-  Blockly.Arduino.definitions_["define_identity"] =
-    `#define EAP_IDENTITY "${user}"`;
-  Blockly.Arduino.definitions_["define_username"] =
-    `#define EAP_USERNAME "${user}"`;
-  Blockly.Arduino.definitions_["define_password"] =
-    `#define EAP_PASSWORD "${pw}"`;
-  Blockly.Arduino.variables_["ssid"] = `char ssid[] = "${ssid}";`;
-  Blockly.Arduino.variables_["pass"] = `char pass[] = "";`;
-  Blockly.Arduino.variables_["wifi_Status"] = "int status = WL_IDLE_STATUS;";
-  Blockly.Arduino.codeFunctions_["initWifi"] = `
+Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_wifi_enterprise"] =
+  function () {
+    /* WiFi connection for eduroam networks*/
+    var pw = this.getFieldValue("Password");
+    var user = this.getFieldValue("User");
+    var ssid = this.getFieldValue("SSID");
+    Blockly.Generator.Arduino.libraries_["library_WiFi"] = "#include <WiFi.h>";
+    Blockly.Generator.Arduino.libraries_["library_wpa2"] =
+      `#include "esp_wpa2.h"`;
+    Blockly.Generator.Arduino.definitions_["define_identity"] =
+      `#define EAP_IDENTITY "${user}"`;
+    Blockly.Generator.Arduino.definitions_["define_username"] =
+      `#define EAP_USERNAME "${user}"`;
+    Blockly.Generator.Arduino.definitions_["define_password"] =
+      `#define EAP_PASSWORD "${pw}"`;
+    Blockly.Generator.Arduino.variables_["ssid"] = `char ssid[] = "${ssid}";`;
+    Blockly.Generator.Arduino.variables_["pass"] = `char pass[] = "";`;
+    Blockly.Generator.Arduino.variables_["wifi_Status"] =
+      "int status = WL_IDLE_STATUS;";
+    Blockly.Generator.Arduino.codeFunctions_["initWifi"] = `
   void initWiFi() {
     WiFi.mode(WIFI_STA);
     WiFi.begin(ssid, WPA2_AUTH_PEAP, EAP_IDENTITY, EAP_USERNAME, EAP_PASSWORD);
   }
   `;
-  if (pw === "") {
-    Blockly.Arduino.setupCode_["wifi_begin"] = `
+    if (pw === "") {
+      Blockly.Generator.Arduino.setupCode_["wifi_begin"] = `
     if (WiFi.status() == WL_NO_SHIELD) {
         while (true);
     }
@@ -152,18 +164,18 @@ Blockly.Arduino.sensebox_esp32s2_wifi_enterprise = function () {
         delay(5000);
     }
     `;
-  } else Blockly.Arduino.setupCode_["wifi_begin"] = `initWiFi();`;
-  var code = "";
-  return code;
-};
+    } else Blockly.Generator.Arduino.setupCode_["wifi_begin"] = `initWiFi();`;
+    var code = "";
+    return code;
+  };
 
-Blockly.Arduino.sensebox_esp32s2_wifi = function () {
+Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_wifi"] = function () {
   var pw = this.getFieldValue("Password");
   var ssid = this.getFieldValue("SSID");
-  Blockly.Arduino.libraries_["library_ESPWiFi"] = "#include <WiFi.h>";
-  Blockly.Arduino.variables_["ssid"] = `char ssid[] = "${ssid}";`;
-  Blockly.Arduino.variables_["pass"] = `char pass[] = "${pw}";`;
-  Blockly.Arduino.setupCode_["wifi_begin"] = `
+  Blockly.Generator.Arduino.libraries_["library_ESPWiFi"] = "#include <WiFi.h>";
+  Blockly.Generator.Arduino.variables_["ssid"] = `char ssid[] = "${ssid}";`;
+  Blockly.Generator.Arduino.variables_["pass"] = `char pass[] = "${pw}";`;
+  Blockly.Generator.Arduino.setupCode_["wifi_begin"] = `
     WiFi.begin(ssid, pass);
     if(WiFi.status() == WL_NO_SHIELD){
       while(true);
@@ -177,19 +189,23 @@ Blockly.Arduino.sensebox_esp32s2_wifi = function () {
   return code;
 };
 
-Blockly.Arduino.sensebox_esp32s2_startap = function (block) {
+Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_startap"] = function (
+  block,
+  generator,
+) {
   var ssid = this.getFieldValue("SSID");
-  Blockly.Arduino.libraries_["library_ESPWiFi"] = "#include <WiFi.h>";
-  Blockly.Arduino.libraries_["library_ESPWiFiClient"] =
+  Blockly.Generator.Arduino.libraries_["library_ESPWiFi"] = "#include <WiFi.h>";
+  Blockly.Generator.Arduino.libraries_["library_ESPWiFiClient"] =
     "#include <WiFiClient.h>";
-  Blockly.Arduino.libraries_["WiFiAP"] = "#include <WiFiAP.h>";
-  Blockly.Arduino.variables_["ssid"] = `const char ssid[] = "${ssid}";`;
-  Blockly.Arduino.setupCode_["wifi_startAP"] = `WiFi.softAP(ssid);\n`;
+  Blockly.Generator.Arduino.libraries_["WiFiAP"] = "#include <WiFiAP.h>";
+  Blockly.Generator.Arduino.variables_["ssid"] =
+    `const char ssid[] = "${ssid}";`;
+  Blockly.Generator.Arduino.setupCode_["wifi_startAP"] = `WiFi.softAP(ssid);\n`;
   var code = "";
   return code;
 };
 
-// Blockly.Arduino.definitions_["certificate"] = `
+// Blockly.Generator.Arduino.definitions_["certificate"] = `
 // const char* root_ca = \
 //                     "-----BEGIN CERTIFICATE-----\n" \
 //                     "MIIFazCCA1OgAwIBAgIRAIIQz7DSQONZRGPgu2OCiwAwDQYJKoZIhvcNAQELBQAw\n" \

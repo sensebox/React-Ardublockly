@@ -7,17 +7,20 @@ import * as Blockly from "blockly/core";
  * @return {string} Completed code.
  */
 
-Blockly.Arduino["arduino_functions"] = function (block) {
+Blockly.Generator.Arduino.forBlock["arduino_functions"] = function (
+  block,
+  generator,
+) {
   var board = window.sessionStorage.getItem("board");
 
   if (board === "mcu" || board === "mini") {
-    Blockly.Arduino.libraries_["library_senseBoxIO"] =
+    Blockly.Generator.Arduino.libraries_["library_senseBoxIO"] =
       "#include <senseBoxIO.h>";
   }
   // Edited version of Blockly.Generator.prototype.statementToCode
   function statementToCodeNoTab(block, name) {
     var targetBlock = block.getInputTargetBlock(name);
-    var code = Blockly.Arduino.blockToCode(targetBlock);
+    var code = Blockly.Generator.Arduino.blockToCode(targetBlock);
     if (typeof code != "string") {
       throw new Error(
         'Expecting code from statement block "' + targetBlock.type + '".',
@@ -26,31 +29,41 @@ Blockly.Arduino["arduino_functions"] = function (block) {
     return code;
   }
 
-  var setupBranch = Blockly.Arduino.statementToCode(block, "SETUP_FUNC");
-  // //var setupCode = Blockly.Arduino.scrub_(block, setupBranch); No comment block
+  var setupBranch = Blockly.Generator.Arduino.statementToCode(
+    block,
+    "SETUP_FUNC",
+  );
+  // //var setupCode = Blockly.Generator.Arduino.scrub_(block, setupBranch); No comment block
   if (setupBranch) {
-    Blockly.Arduino.setupCode_["mainsetup"] = setupBranch;
+    Blockly.Generator.Arduino.setupCode_["mainsetup"] = setupBranch;
   }
 
   var loopBranch = statementToCodeNoTab(block, "LOOP_FUNC");
-  //var loopcode = Blockly.Arduino.scrub_(block, loopBranch); No comment block
+  //var loopcode = Blockly.Generator.Arduino.scrub_(block, loopBranch); No comment block
   return loopBranch;
 };
 
-Blockly.Arduino["procedures_defreturn"] = function (block) {
+Blockly.Generator.Arduino.forBlock["procedures_defreturn"] = function (
+  block,
+  generator,
+) {
   // Define a procedure with a return value.
-  const funcName = Blockly.Arduino.nameDB_.getName(
+  const funcName = Blockly.Generator.Arduino.nameDB_.getName(
     block.getFieldValue("NAME"),
     Blockly.Procedures.NAME_TYPE,
   );
-  const branch = Blockly.Arduino.statementToCode(block, "STACK");
+  const branch = Blockly.Generator.Arduino.statementToCode(block, "STACK");
   const returnType = block.getFieldValue("RETURN TYPE") || "void";
 
   let returnValue =
-    Blockly.Arduino.valueToCode(block, "RETURN", Blockly.Arduino.ORDER_NONE) ||
-    "";
+    Blockly.Generator.Arduino.valueToCode(
+      block,
+      "RETURN",
+      Blockly.Generator.Arduino.ORDER_NONE,
+    ) || "";
   if (returnValue) {
-    returnValue = Blockly.Arduino.INDENT + "return " + returnValue + ";\n";
+    returnValue =
+      Blockly.Generator.Arduino.INDENT + "return " + returnValue + ";\n";
   }
   const args = [];
   for (let i = 0; i < block.argumentVarModels_.length; i++) {
@@ -69,9 +82,9 @@ Blockly.Arduino["procedures_defreturn"] = function (block) {
     branch +
     returnValue +
     "}";
-  code = Blockly.Arduino.scrub_(block, code);
+  code = Blockly.Generator.Arduino.scrub_(block, code);
   // Add % so as not to collide with helper functions in definitions list.
-  Blockly.Arduino.functionNames_["%" + funcName] = code;
+  Blockly.Generator.Arduino.functionNames_["%" + funcName] = code;
   return null;
 };
 
@@ -92,41 +105,78 @@ function translateType(type) {
   }
 }
 
-Blockly.Arduino["procedures_defnoreturn"] =
-  Blockly.Arduino["procedures_defreturn"];
+Blockly.Generator.Arduino.forBlock["procedures_defnoreturn"] = function (
+  block,
+  generator,
+) {
+  // Define a procedure with a return value.
+  const funcName = Blockly.Generator.Arduino.nameDB_.getName(
+    block.getFieldValue("NAME"),
+    Blockly.Procedures.NAME_TYPE,
+  );
+  const branch = Blockly.Generator.Arduino.statementToCode(block, "STACK");
+  const returnType = "void";
 
-Blockly.Arduino["procedures_callreturn"] = function (block) {
+  const args = [];
+  for (let i = 0; i < block.argumentVarModels_.length; i++) {
+    args[i] =
+      translateType(block.argumentVarModels_[i].type) +
+      " " +
+      block.argumentVarModels_[i].name;
+  }
+  let code =
+    translateType(returnType) +
+    " " +
+    funcName +
+    "(" +
+    args.join(", ") +
+    ") {\n" +
+    branch +
+    "}";
+  code = Blockly.Generator.Arduino.scrub_(block, code);
+  // Add % so as not to collide with helper functions in definitions list.
+  Blockly.Generator.Arduino.functionNames_["%" + funcName] = code;
+  return null;
+};
+
+Blockly.Generator.Arduino.forBlock["procedures_callreturn"] = function (
+  block,
+  generator,
+) {
   // Call a procedure with a return value.
-  const funcName = Blockly.Arduino.nameDB_.getName(
+  const funcName = Blockly.Generator.Arduino.nameDB_.getName(
     block.getFieldValue("NAME"),
     Blockly.Procedures.NAME_TYPE,
   );
   const args = [];
   for (let i = 0; i < block.arguments_.length; i++) {
     args[i] =
-      Blockly.Arduino.valueToCode(
+      Blockly.Generator.Arduino.valueToCode(
         block,
         "ARG" + i,
-        Blockly.Arduino.ORDER_COMMA,
+        Blockly.Generator.Arduino.ORDER_COMMA,
       ) || "null";
   }
   const code = funcName + "(" + args.join(", ") + ")";
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
-Blockly.Arduino["procedures_callnoreturn"] = function (block) {
+Blockly.Generator.Arduino.forBlock["procedures_callnoreturn"] = function (
+  block,
+  generator,
+) {
   // Call a procedure with no return value.
-  const funcName = Blockly.Arduino.nameDB_.getName(
+  const funcName = Blockly.Generator.Arduino.nameDB_.getName(
     block.getFieldValue("NAME"),
     Blockly.Procedures.NAME_TYPE,
   );
   const args = [];
   for (let i = 0; i < block.arguments_.length; i++) {
     args[i] =
-      Blockly.Arduino.valueToCode(
+      Blockly.Generator.Arduino.valueToCode(
         block,
         "ARG" + i,
-        Blockly.Arduino.ORDER_COMMA,
+        Blockly.Generator.Arduino.ORDER_COMMA,
       ) || "null";
   }
 

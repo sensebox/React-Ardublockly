@@ -1,17 +1,20 @@
 import * as Blockly from "blockly/core";
 
-Blockly["Arduino"]["controls_repeat_ext"] = function (Block) {
+Blockly.Generator.Arduino.forBlock["controls_repeat_ext"] = function (
+  block,
+  generator,
+) {
   // Repeat n times.
 
   const repeats =
-    Blockly["Arduino"].valueToCode(
-      Block,
+    Blockly.Generator.Arduino.valueToCode(
+      block,
       "TIMES",
-      Blockly["Arduino"].ORDER_ASSIGNMENT,
+      Blockly.Generator.Arduino.ORDER_ASSIGNMENT,
     ) || "0";
 
-  let branch = Blockly["Arduino"].statementToCode(Block, "DO");
-  branch = Blockly["Arduino"].addLoopTrap(branch, Block.id);
+  let branch = Blockly.Generator.Arduino.statementToCode(block, "DO");
+  branch = Blockly.Generator.Arduino.addLoopTrap(branch, block.id);
   let code = "";
   const loopVar = "i";
   code +=
@@ -30,40 +33,46 @@ Blockly["Arduino"]["controls_repeat_ext"] = function (Block) {
   return code;
 };
 
-Blockly["Arduino"]["controls_for"] = function (Block) {
-  const loopIndexVariable = Blockly.mainWorkspace.getVariableById(
-    Block.getFieldValue("VAR"),
+Blockly.Generator.Arduino.forBlock["controls_for"] = function (
+  block,
+  generator,
+) {
+  const loopIndexVariable = Blockly.getMainWorkspace().getVariableById(
+    block.getFieldValue("VAR"),
   ).name;
 
   const allVars = Blockly.getMainWorkspace().getVariableMap().getAllVariables();
   const myVar = allVars.filter((v) => v.name === loopIndexVariable)[0];
   var initVariable = "";
-  if (Blockly.Arduino.variables_[loopIndexVariable + myVar.type] == undefined) {
+  if (
+    Blockly.Generator.Arduino.variables_[loopIndexVariable + myVar.type] ==
+    undefined
+  ) {
     initVariable = "int "; // alternatively set to 'myVar.type' but that could lead to issues if users choose a char or a boolean
   }
 
-  const branch = Blockly["Arduino"].statementToCode(Block, "DO");
+  const branch = Blockly.Generator.Arduino.statementToCode(block, "DO");
 
   const startNumber =
-    Blockly["Arduino"].valueToCode(
-      Block,
+    Blockly.Generator.Arduino.valueToCode(
+      block,
       "FROM",
-      Blockly["Arduino"].ORDER_ASSIGNMENT,
+      Blockly.Generator.Arduino.ORDER_ASSIGNMENT,
     ) || "0";
 
   const toNumber =
-    Blockly["Arduino"].valueToCode(
-      Block,
+    Blockly.Generator.Arduino.valueToCode(
+      block,
       "TO",
-      Blockly["Arduino"].ORDER_ASSIGNMENT,
+      Blockly.Generator.Arduino.ORDER_ASSIGNMENT,
     ) || "0";
 
   let byNumber = Math.abs(
     parseInt(
-      Blockly["Arduino"].valueToCode(
-        Block,
+      Blockly.Generator.Arduino.valueToCode(
+        block,
         "BY",
-        Blockly["Arduino"].ORDER_ASSIGNMENT,
+        Blockly.Generator.Arduino.ORDER_ASSIGNMENT,
       ),
     ),
   );
@@ -94,26 +103,32 @@ Blockly["Arduino"]["controls_for"] = function (Block) {
   );
 };
 
-Blockly["Arduino"]["controls_whileUntil"] = function (Block) {
+Blockly.Generator.Arduino.forBlock["controls_whileUntil"] = function (
+  block,
+  generator,
+) {
   // Do while/until loop.
-  const until = Block.getFieldValue("MODE") === "UNTIL";
+  const until = block.getFieldValue("MODE") === "UNTIL";
   let argument0 =
-    Blockly["Arduino"].valueToCode(
-      Block,
+    Blockly.Generator.Arduino.valueToCode(
+      block,
       "BOOL",
-      Blockly["Arduino"].ORDER_LOGICAL_AND,
+      Blockly.Generator.Arduino.ORDER_LOGICAL_AND,
     ) || "false";
-  let branch = Blockly["Arduino"].statementToCode(Block, "DO");
-  branch = Blockly["Arduino"].addLoopTrap(branch, Block.id);
+  let branch = Blockly.Generator.Arduino.statementToCode(block, "DO");
+  branch = Blockly.Generator.Arduino.addLoopTrap(branch, block.id);
   if (until) {
     argument0 = "!" + argument0;
   }
   return "\twhile (" + argument0 + ") {\n" + branch + "\t}\n";
 };
 
-Blockly["Arduino"]["controls_flow_statements"] = function (Block) {
+Blockly.Generator.Arduino.forBlock["controls_flow_statements"] = function (
+  block,
+  generator,
+) {
   // Flow statements: continue, break.
-  switch (Block.getFieldValue("FLOW")) {
+  switch (block.getFieldValue("FLOW")) {
     case "BREAK":
       return "break;\n";
     case "CONTINUE":

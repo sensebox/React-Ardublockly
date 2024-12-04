@@ -1,12 +1,15 @@
 import * as Blockly from "blockly/core";
 
-Blockly.Arduino["print_serial_monitor"] = function (block) {
+Blockly.Generator.Arduino.forBlock["print_serial_monitor"] = function (
+  block,
+  generator,
+) {
   var serialId = block.getFieldValue("SERIAL_ID");
   var content =
-    Blockly.Arduino.valueToCode(
+    Blockly.Generator.Arduino.valueToCode(
       block,
       "CONTENT",
-      Blockly.Arduino.ORDER_ATOMIC,
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
     ) || "0";
   var checkbox_name = block.getFieldValue("NEW_LINE") === "TRUE";
   var code = "";
@@ -24,10 +27,13 @@ Blockly.Arduino["print_serial_monitor"] = function (block) {
  * @param {!Blockly.Block} block Block to generate the code from.
  * @return {array} Completed code.
  */
-Blockly.Arduino["init_serial_monitor"] = function (block) {
+Blockly.Generator.Arduino.forBlock["init_serial_monitor"] = function (
+  block,
+  generator,
+) {
   var serialId = block.getFieldValue("SERIAL_ID");
   var serialSpeed = block.getFieldValue("SPEED");
-  Blockly.Arduino.setupCode_["init_serial"] =
+  Blockly.Generator.Arduino.setupCode_["init_serial"] =
     `${serialId}.begin(${serialSpeed});`;
   var code = "";
   return code;
