@@ -61,11 +61,10 @@ void write_reg(byte address, uint8_t reg, uint8_t val)
     Wire.write(val);
     Wire.endTransmission();
   }`;
-
+    Blockly.Generator.Arduino.preSetupCode_["Wire.begin"] = "Wire.begin();";
     Blockly.Generator.Arduino.codeFunctions_["Lightsensor_begin"] = `
 void Lightsensor_begin()
   {
-    Wire.begin();
     unsigned int u = 0;
     u = read_reg(0x29, 0x80 | 0x0A); //id register
     if ((u & 0xF0) == 0xA0)            // TSL45315
@@ -273,13 +272,13 @@ Blockly.Generator.Arduino.forBlock["sensebox_sensor_bme680_bsec"] =
     digitalWrite(LED_BUILTIN, LOW);
     delay(100);
   }`;
-    //Setup Code
-    Blockly.Generator.Arduino.setupCode_["Wire.begin"] = "Wire.begin();";
-    Blockly.Generator.Arduino.setupCode_["iaqSensor.begin"] =
-      "iaqSensor.begin(BME68X_I2C_ADDR_LOW, Wire);";
-    Blockly.Generator.Arduino.setupCode_["checkIaqSensorStatus"] =
-      "checkIaqSensorStatus();";
-    Blockly.Generator.Arduino.setupCode_["bsec_sensorlist"] = `
+  //Setup Code
+  Blockly.Generator.Arduino.preSetupCode_["Wire.begin"] = "Wire.begin();";
+  Blockly.Generator.Arduino.setupCode_["iaqSensor.begin"] =
+    "iaqSensor.begin(BME68X_I2C_ADDR_LOW, Wire);";
+  Blockly.Generator.Arduino.setupCode_["checkIaqSensorStatus"] =
+    "checkIaqSensorStatus();";
+  Blockly.Generator.Arduino.setupCode_["bsec_sensorlist"] = `
 bsec_virtual_sensor_t sensorList[13] = {
     BSEC_OUTPUT_IAQ,
     BSEC_OUTPUT_STATIC_IAQ,
@@ -378,16 +377,20 @@ Blockly.Generator.Arduino.forBlock["sensebox_tof_imager"] = function () {
   Blockly.Generator.Arduino.libraries_[`library_vl53l8cx`] =
     `#include <vl53l8cx.h> `;
   Blockly.Generator.Arduino.variables_["define:_vl53l8cx"] = `
-VL53L8CX sensor_vl53l8cx(&Wire, -1, -1);  
-`;
+    VL53L8CX sensor_vl53l8cx(&Wire, -1, -1);  
+    `;
+
+  Blockly.Generator.Arduino.preSetupCode_["Wire.begin"] = "Wire.begin();";
+  Blockly.Generator.Arduino.preSetupCode_["vl53l8cx_clock_address"] = `sensor_vl53l8cx.set_i2c_address(0x51); // need to change address, because default address is shared with other sensor`;
+
   Blockly.Generator.Arduino.setupCode_["setup_vl53l8cx"] = `
-  Wire.begin();
-  Wire.setClock(1000000); //Sensor has max I2C freq of 1MHz
+  Wire.setClock(1000000); // vl53l8cx can operate at 1MHz
   sensor_vl53l8cx.begin();
   sensor_vl53l8cx.init();
   sensor_vl53l8cx.set_ranging_frequency_hz(30);
   sensor_vl53l8cx.set_resolution(VL53L8CX_RESOLUTION_8X8);
   sensor_vl53l8cx.start_ranging();
+  Wire.setClock(100000); // lower the I2C clock to 0.1MHz again for compatibility with other sensors
   `;
   var code = "";
   switch (dropdown_name) {
@@ -399,20 +402,30 @@ VL53L8CX sensor_vl53l8cx(&Wire, -1, -1);
       uint8_t NewDataReady = 0;
       uint8_t status;
 
+      Wire.setClock(1000000); // vl53l8cx can operate at 1MHz
       status = sensor_vl53l8cx.check_data_ready(&NewDataReady);
 
       if ((!status) && (NewDataReady != 0)) {
         sensor_vl53l8cx.get_ranging_data(&Results);
-        float min = 10000.0;
+        Wire.setClock(100000); // lower the I2C clock to 0.1MHz again for compatibility with other sensors
+        float minStatus5 = 10000.0;
+        float minStatus69 = 10000.0;
         for(int i = 0; i < VL53L8CX_RESOLUTION_8X8*VL53L8CX_NB_TARGET_PER_ZONE; i++) {
-          if((&Results)->target_status[i]!=255){
-            float distance = ((&Results)->distance_mm[i])/10;
-            if(min > distance) {
-              min = distance;
-            }
+          float distance = ((&Results)->distance_mm[i])/10;
+          float target_status = (&Results)->target_status[i];
+          if(target_status == 5 && minStatus5 > distance) {
+            minStatus5 = distance;
+          } else if((target_status == 6 || target_status == 9) && minStatus69 > distance) {
+            minStatus69 = distance;
           }
         }
-        oldVl53l8cxMin = (min==10000.0) ? 0.0 : min;
+        if (minStatus5 < 10000.0 && minStatus5 >=0) {
+          oldVl53l8cxMin = minStatus5;
+        } else if (minStatus69 < 10000.0 && minStatus69 >=0) {
+          oldVl53l8cxMin = minStatus69;
+        } else {
+          oldVl53l8cxMin = 0.0;
+        }
       }
       return oldVl53l8cxMin;
       }`;
@@ -434,10 +447,12 @@ VL53L8CX sensor_vl53l8cx(&Wire, -1, -1);
         uint8_t NewDataReady = 0;
         uint8_t status;
       
+        Wire.setClock(1000000); // vl53l8cx can operate at 1MHz
         status = sensor_vl53l8cx.check_data_ready(&NewDataReady);
       
         if ((!status) && (NewDataReady != 0)) {
           sensor_vl53l8cx.get_ranging_data(&Result);
+          Wire.setClock(100000); // lower the I2C clock to 0.1MHz again for compatibility with other sensors
           int8_t i, j, k;
           uint8_t zones_per_line;
           uint8_t number_of_zones = VL53L8CX_RESOLUTION_8X8;
@@ -448,7 +463,8 @@ VL53L8CX sensor_vl53l8cx(&Wire, -1, -1);
           {
             for (k = (zones_per_line - 1); k >= 0; k--)
             {
-              if((long)(&Result)->target_status[(VL53L8CX_NB_TARGET_PER_ZONE * (j+k))] ==255){
+              float target_status = (&Result)->target_status[(VL53L8CX_NB_TARGET_PER_ZONE * (j+k))];
+              if(target_status != 5 && target_status != 6 && target_status != 9) {
                 oldVl53l8cxBitmap[j + k + 2 + ((j+1)/2)] = (((0 >> 3) & 0x1F)<<11 | (((0 >> 2) & 0x3F) << 5) | ((0 >> 3) & 0x1F));
               } else {
                 long distance = (long)(&Result)->distance_mm[(VL53L8CX_NB_TARGET_PER_ZONE * (j+k))];
@@ -611,7 +627,8 @@ Blockly.Generator.Arduino.forBlock["sensebox_scd30"] = function () {
   Blockly.Generator.Arduino.libraries_["scd30_library"] =
     "#include <SparkFun_SCD30_Arduino_Library.h> // http://librarymanager/All#SparkFun_SCD30_Arduino_Library";
   Blockly.Generator.Arduino.definitions_["SCD30"] = "SCD30 airSensor;";
-  Blockly.Generator.Arduino.setupCode_["init_scd30"] = ` Wire.begin();
+  Blockly.Generator.Arduino.preSetupCode_["Wire.begin"] = "Wire.begin();";
+  Blockly.Generator.Arduino.setupCode_["init_scd30"] = ` 
 if (airSensor.begin() == false)
 {
   while (1)
@@ -647,7 +664,8 @@ Blockly.Generator.Arduino.forBlock["sensebox_gps"] = function () {
     "#include <SparkFun_u-blox_GNSS_Arduino_Library.h> // http://librarymanager/All#SparkFun_u-blox_GNSS_Arduino_Library";
   Blockly.Generator.Arduino.libraries_["library_wire"] = "#include <Wire.h>";
   Blockly.Generator.Arduino.definitions_["GPS"] = "SFE_UBLOX_GNSS myGNSS;";
-  Blockly.Generator.Arduino.setupCode_["init_gps"] = ` Wire.begin();
+  Blockly.Generator.Arduino.preSetupCode_["Wire.begin"] = "Wire.begin();";
+  Blockly.Generator.Arduino.setupCode_["init_gps"] = `
 
   if (myGNSS.begin() == false) //Connect to the Ublox module using Wire port
   {
