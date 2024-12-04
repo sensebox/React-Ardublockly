@@ -128,6 +128,7 @@ export const ToolboxMcu = () => {
         <Block type="sensebox_ws2812_matrix_bitmap" />
         <Block type="sensebox_ws2812_matrix_custom_bitmap" />
         <Block type="sensebox_ws2812_matrix_draw_custom_bitmap_example" />
+        <Block type="sensebox_ws2812_matrix_fullcolor" />
         <Block type="colour_picker"></Block>
         <Block type="colour_random"></Block>
         <Block type="colour_rgb">

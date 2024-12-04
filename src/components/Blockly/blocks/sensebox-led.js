@@ -878,3 +878,22 @@ Blockly.defineBlocksWithJsonArray([
     helpUrl: "",
   },
 ]);
+
+Blockly.Blocks["sensebox_ws2812_matrix_fullcolor"] = {
+  init: function () {
+    this.setColour(getColour().sensebox);
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_print)
+      .appendField("Port:")
+      .appendField(
+        new Blockly.FieldDropdown(selectedBoard().digitalPinsRGBMatrix),
+        "Port",
+      );
+    this.appendValueInput("COLOR", "Number")
+      .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_color)
+      .setCheck("Colour");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip(Blockly.Msg.senseBox_ws2812_rgb_matrix_print_tooltip);
+  },
+};
