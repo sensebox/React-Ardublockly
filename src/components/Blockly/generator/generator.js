@@ -107,7 +107,10 @@ Blockly.Generator.Arduino.init = function (workspace) {
   Blockly.Generator.Arduino.definitions_ = Object.create(null);
 
   // creates a list of code to be setup before the setup block
-  Blockly.Generator.Arduino.setupCode_ = {};
+  Blockly.Generator.Arduino.preSetupCode_ = Object.create(null);
+  
+  // creates a list of code to be setup before the setup block
+  Blockly.Generator.Arduino.setupCode_ = Object.create(null);
 
   // creates a list of code to be setup before the setup block
   Blockly.Generator.Arduino.phyphoxSetupCode_ = Object.create(null);
@@ -165,6 +168,7 @@ Blockly.Generator.Arduino.finish = function (code) {
   let loopCodeOnce = "";
   let setupCode = "";
   let preSetupCode = "";
+  let mainSetupCode = "";
   let loraSetupCode = "";
   let devVariables = "\n";
 
@@ -193,24 +197,30 @@ Blockly.Generator.Arduino.finish = function (code) {
     functionsCode += Blockly.Generator.Arduino.functionNames_[key] + "\n";
   }
 
+  if(Blockly.Generator.Arduino.preSetupCode_["Wire.begin"]) {
+    preSetupCode += Blockly.Generator.Arduino.preSetupCode_["Wire.begin"] + "\n";
+    if(Blockly.Generator.Arduino.preSetupCode_["vl53l8cx_clock_address"]) {
+      preSetupCode += Blockly.Generator.Arduino.preSetupCode_["vl53l8cx_clock_address"] + "\n";
+    }
+  }
+
   for (const key in Blockly.Generator.Arduino.setupCode_) {
-    preSetupCode += Blockly.Generator.Arduino.setupCode_[key] + "\n" || "";
+    mainSetupCode += Blockly.Generator.Arduino.setupCode_[key] + "\n" || "";
   }
 
   for (const key in Blockly.Generator.Arduino.loraSetupCode_) {
     loraSetupCode += Blockly.Generator.Arduino.loraSetupCode_[key] + "\n" || "";
   }
 
-  setupCode =
-    "\nvoid setup() { \n" + preSetupCode + "\n" + loraSetupCode + "\n}\n";
   for (const key in Blockly.Generator.Arduino.phyphoxSetupCode_) {
-    phyphoxSetupCode +=
-      Blockly.Generator.Arduino.phyphoxSetupCode_[key] + "\n" || "";
+    phyphoxSetupCode += Blockly.Generator.Arduino.phyphoxSetupCode_[key] + "\n" || "";
   }
 
   setupCode =
     "\nvoid setup() { \n" +
     preSetupCode +
+    "\n" +
+    mainSetupCode +
     "\n" +
     phyphoxSetupCode +
     "\n" +
