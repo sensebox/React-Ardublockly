@@ -72,6 +72,7 @@ class Toolbox extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
+  language: state.general.language,
   selectedBoard: state.board.board,
 });
 

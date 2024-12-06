@@ -1,4 +1,4 @@
-import Blockly from "blockly/core";
+import * as Blockly from "blockly/core";
 import { selectedBoard } from "../helpers/board";
 import * as Types from "../helpers/types";
 import { getColour } from "../helpers/colour";
@@ -35,10 +35,10 @@ Blockly.Blocks["io_tone"] = {
     ) {
       return; // Block deleted or irrelevant event
     }
-    var freq = Blockly.Arduino.valueToCode(
+    var freq = Blockly.Generator.Arduino.valueToCode(
       this,
       "FREQUENCY",
-      Blockly.Arduino.ORDER_ATOMIC,
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
     );
     if (freq < 31 || freq > 65535) {
       this.setWarningText(Blockly.Msg.ARD_TONE_WARNING, "io_tone");
@@ -64,6 +64,6 @@ Blockly.Blocks["io_notone"] = {
   },
   /** @return {!string} The type of input value for the block, an integer. */
   getBlockType: function () {
-    return Blockly.Types.NUMBER;
+    return Types.NUMBER;
   },
 };

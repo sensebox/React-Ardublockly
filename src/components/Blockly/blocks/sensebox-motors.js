@@ -18,7 +18,7 @@ Blockly.Blocks["sensebox_motors_beginServoMotor"] = {
         new Blockly.FieldDropdown(selectedBoard().digitalPins),
         "pin",
       )
-      .setAlign(Blockly.ALIGN_RIGHT);
+      .setAlign(Blockly.inputs.Align.RIGHT);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(getColour().motors);
@@ -38,10 +38,10 @@ Blockly.Blocks["sensebox_motors_moveServoMotor"] = {
         new Blockly.FieldDropdown(selectedBoard().digitalPins),
         "pin",
       )
-      .setAlign(Blockly.ALIGN_RIGHT);
+      .setAlign(Blockly.inputs.Align.RIGHT);
     this.appendValueInput("degrees", "Number")
       .appendField(Blockly.Msg.sensebox_motors_moveServoMotor_degrees)
-      .setAlign(Blockly.ALIGN_RIGHT);
+      .setAlign(Blockly.inputs.Align.RIGHT);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(getColour().motors);
@@ -80,7 +80,7 @@ Blockly.Blocks["sensebox_motors_I2CMotorBoard_moveDCMotor"] = {
       .appendField(Blockly.Msg.sensebox_motors_I2CMotorBoard_moveDCMotor_motor);
     this.appendValueInput("speed", "Number")
       .appendField(Blockly.Msg.sensebox_motors_I2CMotorBoard_moveDCMotor_speed)
-      .setAlign(Blockly.ALIGN_RIGHT);
+      .setAlign(Blockly.inputs.Align.RIGHT);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(getColour().motors);
@@ -129,7 +129,7 @@ Blockly.Blocks["sensebox_motors_beginStepperMotor"] = {
       Blockly.Msg.sensebox_motors_beginStepperMotor_pins,
     );
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_RIGHT)
+      .setAlign(Blockly.inputs.Align.RIGHT)
       .appendField(
         new Blockly.FieldDropdown(selectedBoard().digitalPins),
         "in1",
@@ -167,7 +167,7 @@ Blockly.Blocks["sensebox_motors_moveStepperMotor"] = {
       Blockly.Msg.sensebox_motors_moveStepperMotor,
     );
     this.appendValueInput("steps", "Number")
-      .setAlign(Blockly.ALIGN_RIGHT)
+      .setAlign(Blockly.inputs.Align.RIGHT)
       .appendField(Blockly.Msg.sensebox_motors_moveStepperMotor_step);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);

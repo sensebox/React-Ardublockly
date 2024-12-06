@@ -49,7 +49,7 @@ class BlocklyWindow extends Component {
       xml = localStorage.getItem("autoSaveXML");
       // change board
       if (!xml) xml = initialXml;
-      var xmlDom = Blockly.Xml.textToDom(xml);
+      var xmlDom = Blockly.utils.xml.textToDom(xml);
       Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, workspace);
     }
 
@@ -58,13 +58,13 @@ class BlocklyWindow extends Component {
       // guarantees that the current xml-code (this.props.initialXml) is rendered
       workspace.clear();
       if (!xml) xml = initialXml;
-      Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
+      Blockly.Xml.domToWorkspace(Blockly.utils.xml.textToDom(xml), workspace);
     }
     if (props.language !== this.props.language) {
       // change language
       xml = localStorage.getItem("autoSaveXML");
       if (!xml) xml = initialXml;
-      xmlDom = Blockly.Xml.textToDom(xml);
+      xmlDom = Blockly.utils.xml.textToDom(xml);
       Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, workspace);
       // var toolbox = workspace.getToolbox();
       // workspace.updateToolbox(toolbox.toolboxDef_);

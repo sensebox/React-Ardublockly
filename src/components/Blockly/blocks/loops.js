@@ -1,4 +1,4 @@
-import Blockly from "blockly";
+import * as Blockly from "blockly";
 import { getColour } from "../helpers/colour";
 import { getCompatibleTypes } from "../helpers/types";
 import * as Types from "../helpers/types";
@@ -131,7 +131,7 @@ Blockly.Blocks["controls_forEach"] = {
   customContextMenu: Blockly.Blocks["controls_for"].customContextMenu,
   /** @returns {!string} The type of the variable used in this block */
   getVarType: function (varName) {
-    return Blockly.Types.NUMBER;
+    return Types.NUMBER;
   },
 };
 

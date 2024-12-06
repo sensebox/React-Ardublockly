@@ -1,4 +1,4 @@
-import Blockly from "blockly";
+import * as Blockly from "blockly";
 import { selectedBoard } from "../helpers/board";
 
 /**
@@ -6,16 +6,17 @@ import { selectedBoard } from "../helpers/board";
  *
  */
 
-Blockly.Arduino.sensebox_sensor_temp_hum = function () {
+Blockly.Generator.Arduino.forBlock["sensebox_sensor_temp_hum"] = function () {
   var dropdown_name = this.getFieldValue("NAME");
 
-  Blockly.Arduino.libraries_["library_adafruithdc1000"] =
+  Blockly.Generator.Arduino.libraries_["library_adafruithdc1000"] =
     "#include <Adafruit_HDC1000.h> // http://librarymanager/All#Adafruit_HDC1000_Library";
-  Blockly.Arduino.definitions_["define_hdc"] =
+  Blockly.Generator.Arduino.definitions_["define_hdc"] =
     "Adafruit_HDC1000 hdc = Adafruit_HDC1000();";
-  Blockly.Arduino.setupCode_["sensebox_sensor_temp_hum"] = "hdc.begin();";
+  Blockly.Generator.Arduino.setupCode_["sensebox_sensor_temp_hum"] =
+    "hdc.begin();";
   var code = `hdc.read${dropdown_name}()`;
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
 /**
@@ -23,19 +24,22 @@ Blockly.Arduino.sensebox_sensor_temp_hum = function () {
  *
  */
 
-Blockly.Arduino.sensebox_sensor_uv_light = function () {
+Blockly.Generator.Arduino.forBlock["sensebox_sensor_uv_light"] = function () {
   var dropdown_name = this.getFieldValue("NAME");
   let code = "";
   if (dropdown_name === "UvIntensity") {
-    Blockly.Arduino.libraries_["library_veml6070"] = "#include <VEML6070.h>";
-    Blockly.Arduino.definitions_["define_veml"] = "VEML6070 veml;";
-    Blockly.Arduino.setupCode_["sensebox_sensor_uv_light"] = "veml.begin();";
+    Blockly.Generator.Arduino.libraries_["library_veml6070"] =
+      "#include <VEML6070.h>";
+    Blockly.Generator.Arduino.definitions_["define_veml"] = "VEML6070 veml;";
+    Blockly.Generator.Arduino.setupCode_["sensebox_sensor_uv_light"] =
+      "veml.begin();";
     code = "veml.getUV()";
   }
   if (dropdown_name === "Illuminance") {
-    Blockly.Arduino.libraries_["library_ltr329"] = `#include <LTR329.h>`;
-    Blockly.Arduino.libraries_["library_wire"] = "#include <Wire.h>";
-    Blockly.Arduino.codeFunctions_["read_reg"] = `
+    Blockly.Generator.Arduino.libraries_["library_ltr329"] =
+      `#include <LTR329.h>`;
+    Blockly.Generator.Arduino.libraries_["library_wire"] = "#include <Wire.h>";
+    Blockly.Generator.Arduino.codeFunctions_["read_reg"] = `
 int read_reg(byte address, uint8_t reg)
   {
     int i = 0;
@@ -49,7 +53,7 @@ int read_reg(byte address, uint8_t reg)
     return i;
   }
     `;
-    Blockly.Arduino.codeFunctions_["write_reg"] = `
+    Blockly.Generator.Arduino.codeFunctions_["write_reg"] = `
 void write_reg(byte address, uint8_t reg, uint8_t val)
   {
     Wire.beginTransmission(address);
@@ -58,7 +62,7 @@ void write_reg(byte address, uint8_t reg, uint8_t val)
     Wire.endTransmission();
   }`;
 
-    Blockly.Arduino.codeFunctions_["Lightsensor_begin"] = `
+    Blockly.Generator.Arduino.codeFunctions_["Lightsensor_begin"] = `
 void Lightsensor_begin()
   {
     Wire.begin();
@@ -83,7 +87,7 @@ void Lightsensor_begin()
   }
 `;
 
-    Blockly.Arduino.codeFunctions_["Lightsensor_getIlluminance"] = `
+    Blockly.Generator.Arduino.codeFunctions_["Lightsensor_getIlluminance"] = `
   uint32_t Lightsensor_getIlluminance()
   {
     unsigned int lux = 0;
@@ -111,7 +115,7 @@ void Lightsensor_begin()
   return lux;
   }
     `;
-    Blockly.Arduino.definitions_["define_lightsensor"] = `
+    Blockly.Generator.Arduino.definitions_["define_lightsensor"] = `
 bool lightsensortype = 0; //0 for tsl - 1 for ltr
 //settings for LTR sensor
 LTR329 LTR;
@@ -119,12 +123,12 @@ unsigned char gain = 1;
 unsigned char integrationTime = 0;
 unsigned char measurementRate = 3;
 `;
-    Blockly.Arduino.setupCode_["sensebox_sensor_illuminance"] =
+    Blockly.Generator.Arduino.setupCode_["sensebox_sensor_illuminance"] =
       "Lightsensor_begin();";
     code = "Lightsensor_getIlluminance()";
   }
 
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
 /**
@@ -132,30 +136,32 @@ unsigned char measurementRate = 3;
  *
  */
 
-Blockly.Arduino.sensebox_sensor_bmx055_accelerometer = function () {
-  var dropdown_value = this.getFieldValue("VALUE");
-  var range = this.getFieldValue("RANGE");
-  Blockly.Arduino.libraries_["library_bmx055"] = `#include <BMX055.h>`;
-  Blockly.Arduino.definitions_["define_bmx"] = "BMX055 bmx;";
-  Blockly.Arduino.setupCode_["sensebox_sensor_bmx055"] =
-    "bmx.beginAcc(" + range + ");";
-  var code = "bmx.getAcceleration" + dropdown_value + "()";
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
-};
+Blockly.Generator.Arduino.forBlock["sensebox_sensor_bmx055_accelerometer"] =
+  function () {
+    var dropdown_value = this.getFieldValue("VALUE");
+    var range = this.getFieldValue("RANGE");
+    Blockly.Generator.Arduino.libraries_["library_bmx055"] =
+      `#include <BMX055.h>`;
+    Blockly.Generator.Arduino.definitions_["define_bmx"] = "BMX055 bmx;";
+    Blockly.Generator.Arduino.setupCode_["sensebox_sensor_bmx055"] =
+      "bmx.beginAcc(" + range + ");";
+    var code = "bmx.getAcceleration" + dropdown_value + "()";
+    return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
+  };
 
 /**
  * SDS011 Fine Particlar Matter
  *
  */
 
-Blockly.Arduino.sensebox_sensor_sds011 = function () {
+Blockly.Generator.Arduino.forBlock["sensebox_sensor_sds011"] = function () {
   var dropdown_name = this.getFieldValue("NAME");
   var serial_name = this.getFieldValue("SERIAL");
-  Blockly.Arduino.libraries_["SdsDustSensor"] =
+  Blockly.Generator.Arduino.libraries_["SdsDustSensor"] =
     `#include <SdsDustSensor.h> // http://librarymanager/All#Nova_Fitness_Sds_dust_sensors_library`;
-  Blockly.Arduino.definitions_["define_sds011"] =
+  Blockly.Generator.Arduino.definitions_["define_sds011"] =
     "SdsDustSensor sds(" + serial_name + ");";
-  Blockly.Arduino.functionNames_["sds011_getPmData()"] = `
+  Blockly.Generator.Arduino.functionNames_["sds011_getPmData()"] = `
 float getPmData(int type) {
   PmResult pm = sds.queryPm();
   if (pm.isOk()) {
@@ -168,14 +174,14 @@ float getPmData(int type) {
   }
 }
 `;
-  Blockly.Arduino.setupCode_["sds011_begin"] = "sds.begin();";
-  Blockly.Arduino.setupCode_["sds011_setQueryReportingMode"] =
+  Blockly.Generator.Arduino.setupCode_["sds011_begin"] = "sds.begin();";
+  Blockly.Generator.Arduino.setupCode_["sds011_setQueryReportingMode"] =
     "sds.setQueryReportingMode();";
-  // Blockly.Arduino.loopCodeOnce_[
+  // Blockly.Generator.Arduino.loopCodeOnce_[
   //   "sds011_getData"
   // ] = `PmResult pm = sds.queryPm();`;
   var code = `getPmData(${dropdown_name})`;
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
 /**
@@ -183,15 +189,17 @@ float getPmData(int type) {
  *
  */
 
-Blockly.Arduino.sensebox_sensor_pressure = function () {
+Blockly.Generator.Arduino.forBlock["sensebox_sensor_pressure"] = function () {
   var dropdown_name = this.getFieldValue("NAME");
   var code = "";
   var referencePressure = this.getFieldValue("referencePressure");
-  Blockly.Arduino.libraries_["adafruit_bmp280"] =
+  Blockly.Generator.Arduino.libraries_["adafruit_bmp280"] =
     `#include <Adafruit_BMP280.h> // http://librarymanager/All#Adafruit_BMP280_Library`;
-  Blockly.Arduino.definitions_["define_pressure"] = "Adafruit_BMP280 bmp;";
-  Blockly.Arduino.setupCode_["sensebox_bmp_sensor"] = "bmp.begin(0x76);";
-  Blockly.Arduino.setupCode_["bmp_setSampling"] = `
+  Blockly.Generator.Arduino.definitions_["define_pressure"] =
+    "Adafruit_BMP280 bmp;";
+  Blockly.Generator.Arduino.setupCode_["sensebox_bmp_sensor"] =
+    "bmp.begin(0x76);";
+  Blockly.Generator.Arduino.setupCode_["bmp_setSampling"] = `
 bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,    
                   Adafruit_BMP280::SAMPLING_X2,  
                   Adafruit_BMP280::SAMPLING_X16,  
@@ -211,7 +219,7 @@ bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,
     default:
       code = "";
   }
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
 /**
@@ -219,22 +227,26 @@ bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,
  *
  */
 
-Blockly.Arduino.sensebox_sensor_bme680_bsec = function () {
-  var dropdown_name = this.getFieldValue("dropdown");
-  let code = "";
-  Blockly.Arduino.libraries_["library_bsec"] =
-    "#include <bsec.h> // http://librarymanager/All#BSEC_Software_Library";
-  Blockly.Arduino.definitions_["bsec_iaqSensor"] = "Bsec iaqSensor;";
-  Blockly.Arduino.variables_["bmeTemperatur"] = "float bmeTemperatur;";
-  Blockly.Arduino.variables_["bmeHumidity"] = "float bmeHumidity;";
-  Blockly.Arduino.variables_["bmePressure"] = "double bmePressure;";
-  Blockly.Arduino.variables_["bmeIAQ"] = "float bmeIAQ;";
-  Blockly.Arduino.variables_["bmeIAQAccuracy"] = "float bmeIAQAccuracy;";
-  Blockly.Arduino.variables_["bmeCO2"] = "int bmeCO2;";
-  Blockly.Arduino.variables_["bmeBreathVocEquivalent"] =
-    "float bmeBreathVocEquivalent;";
+Blockly.Generator.Arduino.forBlock["sensebox_sensor_bme680_bsec"] =
+  function () {
+    var dropdown_name = this.getFieldValue("dropdown");
+    let code = "";
+    Blockly.Generator.Arduino.libraries_["library_bsec"] =
+      "#include <bsec.h> // http://librarymanager/All#BSEC_Software_Library";
+    Blockly.Generator.Arduino.definitions_["bsec_iaqSensor"] =
+      "Bsec iaqSensor;";
+    Blockly.Generator.Arduino.variables_["bmeTemperatur"] =
+      "float bmeTemperatur;";
+    Blockly.Generator.Arduino.variables_["bmeHumidity"] = "float bmeHumidity;";
+    Blockly.Generator.Arduino.variables_["bmePressure"] = "double bmePressure;";
+    Blockly.Generator.Arduino.variables_["bmeIAQ"] = "float bmeIAQ;";
+    Blockly.Generator.Arduino.variables_["bmeIAQAccuracy"] =
+      "float bmeIAQAccuracy;";
+    Blockly.Generator.Arduino.variables_["bmeCO2"] = "int bmeCO2;";
+    Blockly.Generator.Arduino.variables_["bmeBreathVocEquivalent"] =
+      "float bmeBreathVocEquivalent;";
 
-  Blockly.Arduino.functionNames_["checkIaqSensorStatus"] = `
+    Blockly.Generator.Arduino.functionNames_["checkIaqSensorStatus"] = `
     void checkIaqSensorStatus(void)
   {
     if (iaqSensor.bsecStatus != BSEC_OK) {
@@ -252,7 +264,7 @@ Blockly.Arduino.sensebox_sensor_bme680_bsec = function () {
     }
   }
   `;
-  Blockly.Arduino.functionNames_["errLeds"] = `
+    Blockly.Generator.Arduino.functionNames_["errLeds"] = `
   void errLeds(void)
   {
     pinMode(LED_BUILTIN, OUTPUT);
@@ -261,13 +273,13 @@ Blockly.Arduino.sensebox_sensor_bme680_bsec = function () {
     digitalWrite(LED_BUILTIN, LOW);
     delay(100);
   }`;
-  //Setup Code
-  Blockly.Arduino.setupCode_["Wire.begin"] = "Wire.begin();";
-  Blockly.Arduino.setupCode_["iaqSensor.begin"] =
-    "iaqSensor.begin(BME68X_I2C_ADDR_LOW, Wire);";
-  Blockly.Arduino.setupCode_["checkIaqSensorStatus"] =
-    "checkIaqSensorStatus();";
-  Blockly.Arduino.setupCode_["bsec_sensorlist"] = `
+    //Setup Code
+    Blockly.Generator.Arduino.setupCode_["Wire.begin"] = "Wire.begin();";
+    Blockly.Generator.Arduino.setupCode_["iaqSensor.begin"] =
+      "iaqSensor.begin(BME68X_I2C_ADDR_LOW, Wire);";
+    Blockly.Generator.Arduino.setupCode_["checkIaqSensorStatus"] =
+      "checkIaqSensorStatus();";
+    Blockly.Generator.Arduino.setupCode_["bsec_sensorlist"] = `
 bsec_virtual_sensor_t sensorList[13] = {
     BSEC_OUTPUT_IAQ,
     BSEC_OUTPUT_STATIC_IAQ,
@@ -285,10 +297,10 @@ bsec_virtual_sensor_t sensorList[13] = {
 };
 
     `;
-  Blockly.Arduino.setupCode_["iaqSensorUpdateSubscription"] =
-    "iaqSensor.updateSubscription(sensorList, 13, BSEC_SAMPLE_RATE_LP);\ncheckIaqSensorStatus();";
-  //Loop Code
-  Blockly.Arduino.loopCodeOnce_["iaqloop"] = `
+    Blockly.Generator.Arduino.setupCode_["iaqSensorUpdateSubscription"] =
+      "iaqSensor.updateSubscription(sensorList, 13, BSEC_SAMPLE_RATE_LP);\ncheckIaqSensorStatus();";
+    //Loop Code
+    Blockly.Generator.Arduino.loopCodeOnce_["iaqloop"] = `
     if (iaqSensor.run()) {
       bmeTemperatur = iaqSensor.temperature;
       bmeHumidity = iaqSensor.humidity;
@@ -301,73 +313,74 @@ bsec_virtual_sensor_t sensorList[13] = {
       checkIaqSensorStatus();
     }
     `;
-  switch (dropdown_name) {
-    case "temperature":
-      code = "bmeTemperatur";
-      break;
-    case "humidity":
-      code = "bmeHumidity";
-      break;
-    case "pressure":
-      code = "bmePressure";
-      break;
-    case "IAQ":
-      code = "bmeIAQ";
-      break;
-    case "IAQAccuracy":
-      code = "bmeIAQAccuracy";
-      break;
-    case "CO2":
-      code = "bmeCO2";
-      break;
-    case "breathVocEquivalent":
-      code = "bmeBreathVocEquivalent";
-      break;
-    default:
-      break;
-  }
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
-};
+    switch (dropdown_name) {
+      case "temperature":
+        code = "bmeTemperatur";
+        break;
+      case "humidity":
+        code = "bmeHumidity";
+        break;
+      case "pressure":
+        code = "bmePressure";
+        break;
+      case "IAQ":
+        code = "bmeIAQ";
+        break;
+      case "IAQAccuracy":
+        code = "bmeIAQAccuracy";
+        break;
+      case "CO2":
+        code = "bmeCO2";
+        break;
+      case "breathVocEquivalent":
+        code = "bmeBreathVocEquivalent";
+        break;
+      default:
+        break;
+    }
+    return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
+  };
 
 /**
  * Ultrasonic Distance Sensor
  *
  */
 
-Blockly.Arduino.sensebox_sensor_ultrasonic_ranger = function () {
-  var dropdown_pin_RX = this.getFieldValue("ultrasonic_trigger");
-  var dropdown_pin_TX = this.getFieldValue("ultrasonic_echo");
-  var port = this.getFieldValue("port");
-  var maxDistance = this.getFieldValue("maxDistance");
-  Blockly.Arduino.libraries_["library_newPing"] =
-    `#include <NewPing.h> // http://librarymanager/All#NewPing`;
-  Blockly.Arduino.variables_["define_newPingVariables" + port] = `
+Blockly.Generator.Arduino.forBlock["sensebox_sensor_ultrasonic_ranger"] =
+  function () {
+    var dropdown_pin_RX = this.getFieldValue("ultrasonic_trigger");
+    var dropdown_pin_TX = this.getFieldValue("ultrasonic_echo");
+    var port = this.getFieldValue("port");
+    var maxDistance = this.getFieldValue("maxDistance");
+    Blockly.Generator.Arduino.libraries_["library_newPing"] =
+      `#include <NewPing.h> // http://librarymanager/All#NewPing`;
+    Blockly.Generator.Arduino.variables_["define_newPingVariables" + port] = `
 #define TRIGGER_PIN_${port} ${dropdown_pin_RX}
 #define ECHO_PIN_${port} ${dropdown_pin_TX}
 #define MAX_DISTANCE_${port} ${maxDistance}
   `;
-  Blockly.Arduino.definitions_["define_newPing" + port] =
-    `NewPing sonar${port}(TRIGGER_PIN_${port}, ECHO_PIN_${port}, MAX_DISTANCE_${port});`;
-  var code;
-  code = `sonar${port}.ping_cm()`;
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
-};
+    Blockly.Generator.Arduino.definitions_["define_newPing" + port] =
+      `NewPing sonar${port}(TRIGGER_PIN_${port}, ECHO_PIN_${port}, MAX_DISTANCE_${port});`;
+    var code;
+    code = `sonar${port}.ping_cm()`;
+    return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
+  };
 
 /**
  *
  * ToF Imager
  */
 
-Blockly.Arduino.sensebox_tof_imager = function () {
+Blockly.Generator.Arduino.forBlock["sensebox_tof_imager"] = function () {
   var dropdown_name = this.getFieldValue("dropdown");
   var maxDistance = this.getFieldValue("maxDistance");
-  Blockly.Arduino.libraries_["library_wire"] = "#include <Wire.h>";
-  Blockly.Arduino.libraries_[`library_vl53l8cx`] =
+  Blockly.Generator.Arduino.libraries_["library_wire"] = "#include <Wire.h>";
+  Blockly.Generator.Arduino.libraries_[`library_vl53l8cx`] =
     `#include <vl53l8cx.h> `;
-  Blockly.Arduino.variables_["define:_vl53l8cx"] = `
+  Blockly.Generator.Arduino.variables_["define:_vl53l8cx"] = `
 VL53L8CX sensor_vl53l8cx(&Wire, -1, -1);  
 `;
-  Blockly.Arduino.setupCode_["setup_vl53l8cx"] = `
+  Blockly.Generator.Arduino.setupCode_["setup_vl53l8cx"] = `
   Wire.begin();
   Wire.setClock(1000000); //Sensor has max I2C freq of 1MHz
   sensor_vl53l8cx.begin();
@@ -379,7 +392,7 @@ VL53L8CX sensor_vl53l8cx(&Wire, -1, -1);
   var code = "";
   switch (dropdown_name) {
     case "DistanzCM":
-      Blockly.Arduino.codeFunctions_["define_tof_range"] = `
+      Blockly.Generator.Arduino.codeFunctions_["define_tof_range"] = `
     float oldVl53l8cxMin = -1.0;
     float getVl53l8cxMin() {
       VL53L8CX_ResultsData Results;
@@ -406,7 +419,7 @@ VL53L8CX sensor_vl53l8cx(&Wire, -1, -1);
       code += "getVl53l8cxMin()";
       break;
     case "DistanzBM":
-      Blockly.Arduino.codeFunctions_["define_tof_bitmap"] = `
+      Blockly.Generator.Arduino.codeFunctions_["define_tof_bitmap"] = `
       uint16_t oldVl53l8cxBitmap[96] =
       {
         0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
@@ -511,7 +524,7 @@ VL53L8CX sensor_vl53l8cx(&Wire, -1, -1);
     default:
       break;
   }
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
 /**
@@ -519,9 +532,9 @@ VL53L8CX sensor_vl53l8cx(&Wire, -1, -1);
  *
  */
 
-Blockly.Arduino.sensebox_sensor_sound = function () {
+Blockly.Generator.Arduino.forBlock["sensebox_sensor_sound"] = function () {
   var dropdown_pin = this.getFieldValue("PIN");
-  Blockly.Arduino.codeFunctions_["define_sound"] = `
+  Blockly.Generator.Arduino.codeFunctions_["define_sound"] = `
 float getSoundValue(int pin) {
     unsigned long start = millis(); // Start des Messintervalls
     unsigned int peakToPeak = 0;	// Abstand von maximalem zu minimalem Amplitudenausschlag
@@ -551,7 +564,7 @@ float getSoundValue(int pin) {
     return volts;
 }`;
   var code = "getSoundValue(" + dropdown_pin + ")";
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
 /**
@@ -559,17 +572,17 @@ float getSoundValue(int pin) {
  *
  */
 
-Blockly.Arduino.sensebox_button = function () {
+Blockly.Generator.Arduino.forBlock["sensebox_button"] = function () {
   var dropdown_pin = this.getFieldValue("PIN");
   var dropown_function = this.getFieldValue("FUNCTION");
-  Blockly.Arduino.libraries_["library_jcButtons"] =
+  Blockly.Generator.Arduino.libraries_["library_jcButtons"] =
     `#include <JC_Button.h> // http://librarymanager/All#JC_Button`;
 
-  Blockly.Arduino.definitions_["define_button" + dropdown_pin + ""] =
+  Blockly.Generator.Arduino.definitions_["define_button" + dropdown_pin + ""] =
     "Button button_" + dropdown_pin + "(" + dropdown_pin + ");";
-  Blockly.Arduino.setupCode_["setup_button" + dropdown_pin + ""] =
+  Blockly.Generator.Arduino.setupCode_["setup_button" + dropdown_pin + ""] =
     "button_" + dropdown_pin + ".begin();";
-  Blockly.Arduino.loopCodeOnce_["loop_button" + dropdown_pin + ""] =
+  Blockly.Generator.Arduino.loopCodeOnce_["loop_button" + dropdown_pin + ""] =
     "button_" + dropdown_pin + ".read();";
   var code = "";
   if (dropown_function === "isPressed") {
@@ -581,10 +594,11 @@ Blockly.Arduino.sensebox_button = function () {
     code = "button_" + dropdown_pin + ".pressedFor(" + time + ")";
   } else if (dropown_function === "toggleButton") {
     code = "button_" + dropdown_pin + ".toggleState()";
-    Blockly.Arduino.definitions_["define_button" + dropdown_pin + ""] =
-      "ToggleButton button_" + dropdown_pin + "(" + dropdown_pin + ");";
+    Blockly.Generator.Arduino.definitions_[
+      "define_button" + dropdown_pin + ""
+    ] = "ToggleButton button_" + dropdown_pin + "(" + dropdown_pin + ");";
   }
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
 /**
@@ -592,18 +606,18 @@ Blockly.Arduino.sensebox_button = function () {
  *
  */
 
-Blockly.Arduino.sensebox_scd30 = function () {
+Blockly.Generator.Arduino.forBlock["sensebox_scd30"] = function () {
   var dropdown = this.getFieldValue("dropdown");
-  Blockly.Arduino.libraries_["scd30_library"] =
+  Blockly.Generator.Arduino.libraries_["scd30_library"] =
     "#include <SparkFun_SCD30_Arduino_Library.h> // http://librarymanager/All#SparkFun_SCD30_Arduino_Library";
-  Blockly.Arduino.definitions_["SCD30"] = "SCD30 airSensor;";
-  Blockly.Arduino.setupCode_["init_scd30"] = ` Wire.begin();
+  Blockly.Generator.Arduino.definitions_["SCD30"] = "SCD30 airSensor;";
+  Blockly.Generator.Arduino.setupCode_["init_scd30"] = ` Wire.begin();
 if (airSensor.begin() == false)
 {
   while (1)
     ;
 }`;
-  Blockly.Arduino.setupCode_["scd30_staleData"] =
+  Blockly.Generator.Arduino.setupCode_["scd30_staleData"] =
     "airSensor.useStaleData(true);";
   var code = "";
   switch (dropdown) {
@@ -619,7 +633,7 @@ if (airSensor.begin() == false)
     default:
       code = "";
   }
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
 /**
@@ -627,13 +641,13 @@ if (airSensor.begin() == false)
  *
  */
 
-Blockly.Arduino.sensebox_gps = function () {
+Blockly.Generator.Arduino.forBlock["sensebox_gps"] = function () {
   var dropdown = this.getFieldValue("dropdown");
-  Blockly.Arduino.libraries_["gps_library"] =
+  Blockly.Generator.Arduino.libraries_["gps_library"] =
     "#include <SparkFun_u-blox_GNSS_Arduino_Library.h> // http://librarymanager/All#SparkFun_u-blox_GNSS_Arduino_Library";
-  Blockly.Arduino.libraries_["library_wire"] = "#include <Wire.h>";
-  Blockly.Arduino.definitions_["GPS"] = "SFE_UBLOX_GNSS myGNSS;";
-  Blockly.Arduino.setupCode_["init_gps"] = ` Wire.begin();
+  Blockly.Generator.Arduino.libraries_["library_wire"] = "#include <Wire.h>";
+  Blockly.Generator.Arduino.definitions_["GPS"] = "SFE_UBLOX_GNSS myGNSS;";
+  Blockly.Generator.Arduino.setupCode_["init_gps"] = ` Wire.begin();
 
   if (myGNSS.begin() == false) //Connect to the Ublox module using Wire port
   {
@@ -661,10 +675,10 @@ Blockly.Arduino.sensebox_gps = function () {
       code = "myGNSS.getFixType()";
       break;
     case "timestamp":
-      Blockly.Arduino.variables_["timestampVars"] = `
+      Blockly.Generator.Arduino.variables_["timestampVars"] = `
 char tsBuffer[21];
       `;
-      Blockly.Arduino.codeFunctions_["getTimeStamp()"] = `
+      Blockly.Generator.Arduino.codeFunctions_["getTimeStamp()"] = `
 char* getTimeStamp()
 {
   if (myGNSS.getTimeValid() == true)
@@ -683,19 +697,79 @@ return tsBuffer;
     default:
       code = "";
   }
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
 /**
  * Block for Truebner STM50
  */
 
-Blockly.Arduino.sensebox_sensor_truebner_smt50 = function () {
-  var dropdown_port = this.getFieldValue("Port");
-  var dropdown_value = this.getFieldValue("value");
-  var dropdown_pin = 1;
-  var code = "";
-  if (dropdown_value === "temp") {
+Blockly.Generator.Arduino.forBlock["sensebox_sensor_truebner_smt50"] =
+  function () {
+    var dropdown_port = this.getFieldValue("Port");
+    var dropdown_value = this.getFieldValue("value");
+    var dropdown_pin = 1;
+    var code = "";
+    if (dropdown_value === "temp") {
+      switch (dropdown_port) {
+        case "IO3_2":
+          dropdown_pin = 3;
+          break;
+        case "IO3_4":
+          dropdown_pin = 3;
+          break;
+        case "IO5_4":
+          dropdown_pin = 5;
+          break;
+        case "IO5_6":
+          dropdown_pin = 5;
+          break;
+        case "IO7_6":
+          dropdown_pin = 7;
+          break;
+        default: // "IO1_2"
+          dropdown_pin = 1;
+      }
+      Blockly.Generator.Arduino.codeFunctions_["sensebox_smt50_temp"] =
+        "float getSMT50Temperature(int analogPin){\n  int sensorValue = analogRead(analogPin);\n  float voltage = sensorValue * (3.3 / 1024.0);\n   return (voltage - 0.5) * 100;\n}";
+      code = "getSMT50Temperature(" + dropdown_pin + ")";
+      return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
+    } else if (dropdown_value === "soil") {
+      switch (dropdown_port) {
+        case "IO3_2":
+          dropdown_pin = 2;
+          break;
+        case "IO3_4":
+          dropdown_pin = 4;
+          break;
+        case "IO5_4":
+          dropdown_pin = 4;
+          break;
+        case "IO5_6":
+          dropdown_pin = 6;
+          break;
+        case "IO7_6":
+          dropdown_pin = 6;
+          break;
+        default: // "IO1_2"
+          dropdown_pin = 2;
+      }
+      Blockly.Generator.Arduino.codeFunctions_["sensebox_smt50_soil"] =
+        "float getSMT50Moisture(int analogPin){\n   int sensorValue = analogRead(analogPin);\n    float voltage = sensorValue * (3.3 / 1024.0);\n   return (voltage * 50) / 3;\n}";
+      code = "getSMT50Moisture(" + dropdown_pin + ")";
+      return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
+    }
+  };
+
+/**
+ * DS18B20 Watertemperature
+ *
+ */
+
+Blockly.Generator.Arduino.forBlock["sensebox_sensor_watertemperature"] =
+  function () {
+    var dropdown_port = this.getFieldValue("Port");
+    var dropdown_pin = 1;
     switch (dropdown_port) {
       case "IO3_2":
         dropdown_pin = 3;
@@ -715,79 +789,22 @@ Blockly.Arduino.sensebox_sensor_truebner_smt50 = function () {
       default: // "IO1_2"
         dropdown_pin = 1;
     }
-    Blockly.Arduino.codeFunctions_["sensebox_smt50_temp"] =
-      "float getSMT50Temperature(int analogPin){\n  int sensorValue = analogRead(analogPin);\n  float voltage = sensorValue * (3.3 / 1024.0);\n   return (voltage - 0.5) * 100;\n}";
-    code = "getSMT50Temperature(" + dropdown_pin + ")";
-    return [code, Blockly.Arduino.ORDER_ATOMIC];
-  } else if (dropdown_value === "soil") {
-    switch (dropdown_port) {
-      case "IO3_2":
-        dropdown_pin = 2;
-        break;
-      case "IO3_4":
-        dropdown_pin = 4;
-        break;
-      case "IO5_4":
-        dropdown_pin = 4;
-        break;
-      case "IO5_6":
-        dropdown_pin = 6;
-        break;
-      case "IO7_6":
-        dropdown_pin = 6;
-        break;
-      default: // "IO1_2"
-        dropdown_pin = 2;
-    }
-    Blockly.Arduino.codeFunctions_["sensebox_smt50_soil"] =
-      "float getSMT50Moisture(int analogPin){\n   int sensorValue = analogRead(analogPin);\n    float voltage = sensorValue * (3.3 / 1024.0);\n   return (voltage * 50) / 3;\n}";
-    code = "getSMT50Moisture(" + dropdown_pin + ")";
-    return [code, Blockly.Arduino.ORDER_ATOMIC];
-  }
-};
-
-/**
- * DS18B20 Watertemperature
- *
- */
-
-Blockly.Arduino.sensebox_sensor_watertemperature = function () {
-  var dropdown_port = this.getFieldValue("Port");
-  var dropdown_pin = 1;
-  switch (dropdown_port) {
-    case "IO3_2":
-      dropdown_pin = 3;
-      break;
-    case "IO3_4":
-      dropdown_pin = 3;
-      break;
-    case "IO5_4":
-      dropdown_pin = 5;
-      break;
-    case "IO5_6":
-      dropdown_pin = 5;
-      break;
-    case "IO7_6":
-      dropdown_pin = 7;
-      break;
-    default: // "IO1_2"
-      dropdown_pin = 1;
-  }
-  var dropdown_index = this.getFieldValue("Index");
-  Blockly.Arduino.libraries_["library_oneWire"] =
-    "#include <OneWire.h> // http://librarymanager/All#OneWire";
-  Blockly.Arduino.libraries_["library_oneDallasTemperature"] =
-    "#include <DallasTemperature.h> // http://librarymanager/All#DallasTemperature";
-  Blockly.Arduino.definitions_["define_OneWire"] =
-    "#define ONE_WIRE_BUS " +
-    dropdown_pin +
-    "\nOneWire oneWire(ONE_WIRE_BUS);\nDallasTemperature sensors(&oneWire);";
-  Blockly.Arduino.setupCode_["sensebox_oneWireSetup"] = "sensors.begin();";
-  Blockly.Arduino.codeFunctions_["sensebox_requestTemp"] =
-    "float getWaterTemp(int index){\nsensors.requestTemperatures();\nreturn sensors.getTempCByIndex(index);\n}";
-  var code = "getWaterTemp(" + dropdown_index + ")";
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
-};
+    var dropdown_index = this.getFieldValue("Index");
+    Blockly.Generator.Arduino.libraries_["library_oneWire"] =
+      "#include <OneWire.h> // http://librarymanager/All#OneWire";
+    Blockly.Generator.Arduino.libraries_["library_oneDallasTemperature"] =
+      "#include <DallasTemperature.h> // http://librarymanager/All#DallasTemperature";
+    Blockly.Generator.Arduino.definitions_["define_OneWire"] =
+      "#define ONE_WIRE_BUS " +
+      dropdown_pin +
+      "\nOneWire oneWire(ONE_WIRE_BUS);\nDallasTemperature sensors(&oneWire);";
+    Blockly.Generator.Arduino.setupCode_["sensebox_oneWireSetup"] =
+      "sensors.begin();";
+    Blockly.Generator.Arduino.codeFunctions_["sensebox_requestTemp"] =
+      "float getWaterTemp(int index){\nsensors.requestTemperatures();\nreturn sensors.getTempCByIndex(index);\n}";
+    var code = "getWaterTemp(" + dropdown_index + ")";
+    return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
+  };
 
 /**
  * Windspeed
@@ -795,9 +812,9 @@ Blockly.Arduino.sensebox_sensor_watertemperature = function () {
 
 
 
-Blockly.Arduino.sensebox_windspeed = function () {
+Blockly.Generator.Arduino.forBlock["sensebox_windspeed"] = function() {
   var dropdown_pin = this.getFieldValue('PIN');
-  Blockly.Arduino.codeFunctions_['windspeed'] = `    
+  Blockly.Generator.Arduino.codeFunctions_['windspeed'] = `    
 float getWindspeed(){
   float voltageWind = analogRead(`+ dropdown_pin + `) * (3.3 / 1024.0);
   float windspeed = 0.0;
@@ -814,7 +831,7 @@ float getWindspeed(){
     return windspeed;
 }`
   var code = 'getWindspeed()';
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
  */
 
@@ -827,32 +844,33 @@ float getWindspeed(){
  *
  */
 
-Blockly.Arduino.sensebox_soundsensor_dfrobot = function () {
-  var dropdown_port = this.getFieldValue("Port");
-  var dropdown_pin = 1;
-  switch (dropdown_port) {
-    case "IO3_2":
-      dropdown_pin = 3;
-      break;
-    case "IO3_4":
-      dropdown_pin = 3;
-      break;
-    case "IO5_4":
-      dropdown_pin = 5;
-      break;
-    case "IO5_6":
-      dropdown_pin = 5;
-      break;
-    case "IO7_6":
-      dropdown_pin = 7;
-      break;
-    default: // "IO1_2"
-      dropdown_pin = 1;
-  }
+Blockly.Generator.Arduino.forBlock["sensebox_soundsensor_dfrobot"] =
+  function () {
+    var dropdown_port = this.getFieldValue("Port");
+    var dropdown_pin = 1;
+    switch (dropdown_port) {
+      case "IO3_2":
+        dropdown_pin = 3;
+        break;
+      case "IO3_4":
+        dropdown_pin = 3;
+        break;
+      case "IO5_4":
+        dropdown_pin = 5;
+        break;
+      case "IO5_6":
+        dropdown_pin = 5;
+        break;
+      case "IO7_6":
+        dropdown_pin = 7;
+        break;
+      default: // "IO1_2"
+        dropdown_pin = 1;
+    }
 
-  var board = selectedBoard().title;
-  if (board === "MCU" || board === "Mini") {
-    Blockly.Arduino.codeFunctions_["soundsensor"] = `    
+    var board = selectedBoard().title;
+    if (board === "MCU" || board === "Mini") {
+      Blockly.Generator.Arduino.codeFunctions_["soundsensor"] = `    
   int getSoundValue(int sensorPin) {
     float v = analogRead(sensorPin) / 1000.0;
     float decibel;
@@ -861,10 +879,10 @@ Blockly.Arduino.sensebox_soundsensor_dfrobot = function () {
     else decibel = v * 50.0;
     return int(decibel);
   }`;
-  } else {
-    Blockly.Arduino.setupCode_["soundsensorbegin"] =
-      `analogReadResolution(13);`;
-    Blockly.Arduino.codeFunctions_["soundsensor"] = `    
+    } else {
+      Blockly.Generator.Arduino.setupCode_["soundsensorbegin"] =
+        `analogReadResolution(13);`;
+      Blockly.Generator.Arduino.codeFunctions_["soundsensor"] = `    
     int getSoundValue(int sensorPin) {
       float v = analogReadMilliVolts(sensorPin) / 1000.0;
       float decibel;
@@ -873,33 +891,33 @@ Blockly.Arduino.sensebox_soundsensor_dfrobot = function () {
       else decibel = v * 50.0;
       return int(decibel);
     }`;
-  }
+    }
 
-  var code = "getSoundValue(" + dropdown_pin + ")";
+    var code = "getSoundValue(" + dropdown_pin + ")";
 
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
-};
+    return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
+  };
 
 /**
  * Infineon DPS310 Pressure Sensor
  *
  */
 
-Blockly.Arduino.sensebox_sensor_dps310 = function () {
+Blockly.Generator.Arduino.forBlock["sensebox_sensor_dps310"] = function () {
   var dropdown_name = this.getFieldValue("NAME");
   var code = "";
   var referencePressure = this.getFieldValue("referencePressure");
-  Blockly.Arduino.libraries_["adafruit_dps310"] =
+  Blockly.Generator.Arduino.libraries_["adafruit_dps310"] =
     `#include <Adafruit_DPS310.h> // http://librarymanager/All#Adafruit_DPS310`;
-  Blockly.Arduino.definitions_["define_dps"] = "Adafruit_DPS310 dps;";
-  Blockly.Arduino.setupCode_["dps_begin"] = "dps.begin_I2C(0x76);";
-  Blockly.Arduino.setupCode_["dps_configuration"] = `
+  Blockly.Generator.Arduino.definitions_["define_dps"] = "Adafruit_DPS310 dps;";
+  Blockly.Generator.Arduino.setupCode_["dps_begin"] = "dps.begin_I2C(0x76);";
+  Blockly.Generator.Arduino.setupCode_["dps_configuration"] = `
   dps.configurePressure(DPS310_64HZ, DPS310_64SAMPLES);
   dps.configureTemperature(DPS310_64HZ, DPS310_64SAMPLES);
   `;
-  Blockly.Arduino.loopCodeOnce_["dps_events"] =
+  Blockly.Generator.Arduino.loopCodeOnce_["dps_events"] =
     "sensors_event_t temp_event, pressure_event;";
-  Blockly.Arduino.loopCodeOnce_["dps_getEvents"] =
+  Blockly.Generator.Arduino.loopCodeOnce_["dps_getEvents"] =
     "dps.getEvents(&temp_event, &pressure_event);";
   switch (dropdown_name) {
     case "Temperature":
@@ -914,7 +932,7 @@ Blockly.Arduino.sensebox_sensor_dps310 = function () {
     default:
       code = "";
   }
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
 /**
@@ -922,21 +940,21 @@ Blockly.Arduino.sensebox_sensor_dps310 = function () {
  *
  */
 
-Blockly.Arduino.sensebox_sensor_sps30 = function () {
+Blockly.Generator.Arduino.forBlock["sensebox_sensor_sps30"] = function () {
   var dropdown_name = this.getFieldValue("value");
-  Blockly.Arduino.libraries_["sps30"] =
+  Blockly.Generator.Arduino.libraries_["sps30"] =
     `#include <sps30.h> // http://librarymanager/All#`;
-  Blockly.Arduino.variables_["sps30_measurement"] =
+  Blockly.Generator.Arduino.variables_["sps30_measurement"] =
     "struct sps30_measurement m;";
-  Blockly.Arduino.variables_["sps30_auto_clean_days"] =
+  Blockly.Generator.Arduino.variables_["sps30_auto_clean_days"] =
     "uint32_t auto_clean_days = 4;";
-  Blockly.Arduino.variables_["sps30_interval_intervalsps"] =
+  Blockly.Generator.Arduino.variables_["sps30_interval_intervalsps"] =
     "const long intervalsps = 1000;";
-  Blockly.Arduino.variables_["sps30_time_startsps"] =
+  Blockly.Generator.Arduino.variables_["sps30_time_startsps"] =
     "unsigned long time_startsps = 0;";
-  Blockly.Arduino.variables_["sps30_time_actualsps"] =
+  Blockly.Generator.Arduino.variables_["sps30_time_actualsps"] =
     "unsigned long time_actualsps = 0;";
-  Blockly.Arduino.codeFunctions_["sps30_getData"] = `
+  Blockly.Generator.Arduino.codeFunctions_["sps30_getData"] = `
 void getSPS30Data(){
 
 uint16_t data_ready;
@@ -954,19 +972,19 @@ do {
 }
   `;
 
-  Blockly.Arduino.setupCode_["sps30_begin"] = "sensirion_i2c_init();";
-  Blockly.Arduino.setupCode_["sps30_setFanCleaningInterval"] =
+  Blockly.Generator.Arduino.setupCode_["sps30_begin"] = "sensirion_i2c_init();";
+  Blockly.Generator.Arduino.setupCode_["sps30_setFanCleaningInterval"] =
     "sps30_set_fan_auto_cleaning_interval_days(auto_clean_days);";
-  Blockly.Arduino.setupCode_["sps30_startMeasurement"] =
+  Blockly.Generator.Arduino.setupCode_["sps30_startMeasurement"] =
     "sps30_start_measurement();";
-  Blockly.Arduino.loopCodeOnce_["getSPS30Data();"] = `
+  Blockly.Generator.Arduino.loopCodeOnce_["getSPS30Data();"] = `
 time_startsps = millis();
 if (time_startsps > time_actualsps + intervalsps) {
   time_actualsps = millis();
   getSPS30Data();
 }`;
   var code = `m.mc_${dropdown_name}`;
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
 /**
@@ -974,9 +992,9 @@ if (time_startsps > time_actualsps + intervalsps) {
  *
  */
 
-Blockly.Arduino.sensebox_esp32s2_light = function () {
+Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_light"] = function () {
   var code = "analogRead(PD_SENSE)";
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
 /**
@@ -984,23 +1002,24 @@ Blockly.Arduino.sensebox_esp32s2_light = function () {
  *
  **/
 
-Blockly.Arduino.sensebox_esp32s2_mpu6050 = function () {
+Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_mpu6050"] = function () {
   var code = "";
   var dropdown = this.getFieldValue("value");
-  Blockly.Arduino.libraries_["esp32s2_mpu6050"] =
+  Blockly.Generator.Arduino.libraries_["esp32s2_mpu6050"] =
     `#include <Adafruit_MPU6050.h>`;
-  Blockly.Arduino.libraries_["Adafruit_Sensor"] =
+  Blockly.Generator.Arduino.libraries_["Adafruit_Sensor"] =
     `#include <Adafruit_Sensor.h>`;
-  Blockly.Arduino.libraries_["library_wire"] = `#include <Wire.h>`;
-  Blockly.Arduino.definitions_["define_Adafruit_mpu6050"] =
+  Blockly.Generator.Arduino.libraries_["library_wire"] = `#include <Wire.h>`;
+  Blockly.Generator.Arduino.definitions_["define_Adafruit_mpu6050"] =
     "Adafruit_MPU6050 mpu;";
-  Blockly.Arduino.definitions_["define_sensor_events"] =
+  Blockly.Generator.Arduino.definitions_["define_sensor_events"] =
     "sensors_event_t a, g, temp;";
-  Blockly.Arduino.setupCode_["Wire1.begin()"] = "Wire1.begin();";
-  Blockly.Arduino.setupCode_["mpu.begin()"] = "mpu.begin(0x68, &Wire1);";
-  Blockly.Arduino.setupCode_["mpu.setAccelerometerRange()"] =
+  Blockly.Generator.Arduino.setupCode_["Wire1.begin()"] = "Wire1.begin();";
+  Blockly.Generator.Arduino.setupCode_["mpu.begin()"] =
+    "mpu.begin(0x68, &Wire1);";
+  Blockly.Generator.Arduino.setupCode_["mpu.setAccelerometerRange()"] =
     "mpu.setAccelerometerRange(MPU6050_RANGE_8_G);";
-  Blockly.Arduino.loopCodeOnce_["mpu.getEvent"] =
+  Blockly.Generator.Arduino.loopCodeOnce_["mpu.getEvent"] =
     "mpu.getEvent(&a, &g, &temp);";
   switch (dropdown) {
     case "accelerationX":
@@ -1027,70 +1046,71 @@ Blockly.Arduino.sensebox_esp32s2_mpu6050 = function () {
     default:
       code = "";
   }
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
 /**
  * Block for Truebner STM50 on MCUS2
  */
 
-Blockly.Arduino.sensebox_sensor_truebner_smt50_esp32 = function () {
-  var dropdown_port = this.getFieldValue("Port");
-  var dropdown_value = this.getFieldValue("value");
-  var dropdown_pin = 1;
-  var code = "";
-  Blockly.Arduino.setupCode_["analogReadResolution"] =
-    "analogReadResolution(13);";
+Blockly.Generator.Arduino.forBlock["sensebox_sensor_truebner_smt50_esp32"] =
+  function () {
+    var dropdown_port = this.getFieldValue("Port");
+    var dropdown_value = this.getFieldValue("value");
+    var dropdown_pin = 1;
+    var code = "";
+    Blockly.Generator.Arduino.setupCode_["analogReadResolution"] =
+      "analogReadResolution(13);";
 
-  if (dropdown_value === "temp") {
-    switch (dropdown_port) {
-      case "IO3_2":
-        dropdown_pin = 3;
-        break;
-      case "IO3_4":
-        dropdown_pin = 3;
-        break;
-      case "IO5_4":
-        dropdown_pin = 5;
-        break;
-      case "IO5_6":
-        dropdown_pin = 5;
-        break;
-      case "IO7_6":
-        dropdown_pin = 7;
-        break;
-      default: // "IO1_2"
-        dropdown_pin = 1;
+    if (dropdown_value === "temp") {
+      switch (dropdown_port) {
+        case "IO3_2":
+          dropdown_pin = 3;
+          break;
+        case "IO3_4":
+          dropdown_pin = 3;
+          break;
+        case "IO5_4":
+          dropdown_pin = 5;
+          break;
+        case "IO5_6":
+          dropdown_pin = 5;
+          break;
+        case "IO7_6":
+          dropdown_pin = 7;
+          break;
+        default: // "IO1_2"
+          dropdown_pin = 1;
+      }
+      Blockly.Generator.Arduino.codeFunctions_["sensebox_smt50_temp_esp32"] =
+        "float getSMT50Temperature(int analogPin){\n float voltage = analogReadMilliVolts(analogPin)/1000.0;\n return (voltage - 0.5) * 100;\n }";
+      code = "getSMT50Temperature(" + dropdown_pin + ")";
+      return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
+    } else if (dropdown_value === "soil") {
+      switch (dropdown_port) {
+        case "IO3_2":
+          dropdown_pin = 2;
+          break;
+        case "IO3_4":
+          dropdown_pin = 4;
+          break;
+        case "IO5_4":
+          dropdown_pin = 4;
+          break;
+        case "IO5_6":
+          dropdown_pin = 6;
+          break;
+        case "IO7_6":
+          dropdown_pin = 6;
+          break;
+        default: // "IO1_2"
+          dropdown_pin = 2;
+      }
+
+      Blockly.Generator.Arduino.codeFunctions_["sensebox_smt50_soil_esp32"] =
+        "float getSMT50Moisture(int analogPin){\n float voltage = analogReadMilliVolts(analogPin)/1000.0;\n   if (voltage >= 3) voltage = 3.0;\n  return (voltage * 50.0) / 3.0;\n}";
+
+      code = "getSMT50Moisture(" + dropdown_pin + ")";
+      return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
     }
-    Blockly.Arduino.codeFunctions_["sensebox_smt50_temp_esp32"] =
-      "float getSMT50Temperature(int analogPin){\n float voltage = analogReadMilliVolts(analogPin)/1000.0;\n return (voltage - 0.5) * 100;\n }";
-    code = "getSMT50Temperature(" + dropdown_pin + ")";
-    return [code, Blockly.Arduino.ORDER_ATOMIC];
-  } else if (dropdown_value === "soil") {
-    switch (dropdown_port) {
-      case "IO3_2":
-        dropdown_pin = 2;
-        break;
-      case "IO3_4":
-        dropdown_pin = 4;
-        break;
-      case "IO5_4":
-        dropdown_pin = 4;
-        break;
-      case "IO5_6":
-        dropdown_pin = 6;
-        break;
-      case "IO7_6":
-        dropdown_pin = 6;
-        break;
-      default: // "IO1_2"
-        dropdown_pin = 2;
-    }
-
-    Blockly.Arduino.codeFunctions_["sensebox_smt50_soil_esp32"] =
-      "float getSMT50Moisture(int analogPin){\n float voltage = analogReadMilliVolts(analogPin)/1000.0;\n   if (voltage >= 3) voltage = 3.0;\n  return (voltage * 50.0) / 3.0;\n}";
-
-    code = "getSMT50Moisture(" + dropdown_pin + ")";
-    return [code, Blockly.Arduino.ORDER_ATOMIC];
-  }
-};
+  };

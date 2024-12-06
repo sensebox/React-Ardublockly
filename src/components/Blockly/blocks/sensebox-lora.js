@@ -12,25 +12,25 @@ Blockly.Blocks["sensebox_lora_initialize_otaa"] = {
     this.setColour(getColour().sensebox);
     this.appendDummyInput().appendField("Initialize LoRa (OTAA)");
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_LoRa_device_id)
       .appendField("{")
       .appendField(new Blockly.FieldTextInput("DEVICE ID"), "DEVICEID")
       .appendField("}");
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_LoRa_app_id)
       .appendField("{")
       .appendField(new Blockly.FieldTextInput("APP ID"), "APPID")
       .appendField("}");
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_LoRa_app_key)
       .appendField("{")
       .appendField(new Blockly.FieldTextInput("APP KEY"), "APPKEY")
       .appendField("}");
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_LoRa_interval)
       .appendField(new Blockly.FieldTextInput("5"), "INTERVAL");
     this.setPreviousStatement(true, null);
@@ -45,23 +45,23 @@ Blockly.Blocks["sensebox_lora_initialize_abp"] = {
     this.setColour(getColour().sensebox);
     this.appendDummyInput().appendField("Initialize LoRa (ABP)");
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_LoRa_nwskey_id)
       .appendField("{")
       .appendField(new Blockly.FieldTextInput("NWSKEY"), "NWSKEY")
       .appendField("}");
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_LoRa_appskey_id)
       .appendField("{")
       .appendField(new Blockly.FieldTextInput("APPSKEY"), "APPSKEY")
       .appendField("}");
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_LoRa_devaddr_id)
       .appendField(new Blockly.FieldTextInput("DEVADDR"), "DEVADDR");
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_LoRa_interval)
       .appendField(new Blockly.FieldTextInput("5"), "INTERVAL");
     // this.appendStatementInput('DO')
@@ -94,7 +94,7 @@ Blockly.Blocks["sensebox_send_lora_sensor_value"] = {
       Blockly.Msg.senseBox_measurement,
     );
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField("Bytes")
       .appendField(new Blockly.FieldTextInput("2"), "MESSAGE_BYTES");
     this.setPreviousStatement(true, null);
@@ -131,7 +131,7 @@ Blockly.Blocks["sensebox_lora_ttn_mapper"] = {
     this.setColour(getColour().sensebox);
     this.appendDummyInput().appendField("TTN Mapper");
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_RIGHT)
+      .setAlign(Blockly.inputs.Align.RIGHT)
       .appendField("Fix Type Limit")
       .appendField(
         new Blockly.FieldDropdown(
@@ -184,7 +184,7 @@ Blockly.Blocks["sensebox_lora_cayenne_temperature"] = {
       Blockly.Msg.senseBox_LoRa_cayenne_temperature,
     );
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_LoRa_cayenne_channel)
       .appendField(new Blockly.FieldTextInput("1"), "CHANNEL");
     this.setPreviousStatement(true, null);
@@ -201,7 +201,7 @@ Blockly.Blocks["sensebox_lora_cayenne_humidity"] = {
       Blockly.Msg.senseBox_LoRa_cayenne_humidity,
     );
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_LoRa_cayenne_channel)
       .appendField(new Blockly.FieldTextInput("1"), "CHANNEL");
     this.setPreviousStatement(true, null);
@@ -218,7 +218,7 @@ Blockly.Blocks["sensebox_lora_cayenne_pressure"] = {
       Blockly.Msg.senseBox_LoRa_cayenne_pressure,
     );
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_LoRa_cayenne_channel)
       .appendField(new Blockly.FieldTextInput("1"), "CHANNEL");
     this.setPreviousStatement(true, null);
@@ -235,7 +235,7 @@ Blockly.Blocks["sensebox_lora_cayenne_luminosity"] = {
       Blockly.Msg.senseBox_LoRa_cayenne_luminosity,
     );
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_LoRa_cayenne_channel)
       .appendField(new Blockly.FieldTextInput("1"), "CHANNEL");
     this.setPreviousStatement(true, null);
@@ -252,7 +252,7 @@ Blockly.Blocks["sensebox_lora_cayenne_sensor"] = {
       Blockly.Msg.senseBox_LoRa_cayenne_analog,
     );
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_LoRa_cayenne_channel)
       .appendField(new Blockly.FieldTextInput("1"), "CHANNEL");
     this.setPreviousStatement(true, null);
@@ -269,7 +269,7 @@ Blockly.Blocks["sensebox_lora_cayenne_accelerometer"] = {
     this.appendValueInput("Y").appendField(Blockly.Msg.senseBox_LoRa_cayenne_y);
     this.appendValueInput("Z").appendField(Blockly.Msg.senseBox_LoRa_cayenne_z);
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_LoRa_cayenne_channel)
       .appendField(new Blockly.FieldTextInput("1"), "CHANNEL");
     this.setPreviousStatement(true, null);
@@ -292,7 +292,7 @@ Blockly.Blocks["sensebox_lora_cayenne_gps"] = {
       Blockly.Msg.senseBox_LoRa_cayenne_alt,
     );
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_LoRa_cayenne_channel)
       .appendField(new Blockly.FieldTextInput("1"), "CHANNEL");
     this.setPreviousStatement(true, null);
@@ -310,7 +310,7 @@ Blockly.Blocks["sensebox_lora_cayenne_concentration"] = {
       Blockly.Msg.senseBox_LoRa_cayenne_concentration,
     );
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_LoRa_cayenne_channel)
       .appendField(new Blockly.FieldTextInput("1"), "CHANNEL");
     this.setPreviousStatement(true, null);

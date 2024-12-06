@@ -25,7 +25,7 @@ Blockly.Blocks["sensebox_osem_connection"] = {
       .appendField(Blockly.Msg.senseBox_osem_restart)
       .appendField(new Blockly.FieldCheckbox("TRUE"), "RESTART");
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_osem_exposure)
       .appendField(
         new Blockly.FieldDropdown([
@@ -36,7 +36,7 @@ Blockly.Blocks["sensebox_osem_connection"] = {
       );
     if (!boxes) {
       this.appendDummyInput()
-        .setAlign(Blockly.ALIGN_LEFT)
+        .setAlign(Blockly.inputs.Align.LEFT)
         .appendField("senseBox ID")
         .appendField(new Blockly.FieldTextInput("senseBox ID"), "BoxID");
     } else {
@@ -45,12 +45,12 @@ Blockly.Blocks["sensebox_osem_connection"] = {
         dropdown.push([boxes[i].name, boxes[i]._id]);
       }
       this.appendDummyInput()
-        .setAlign(Blockly.ALIGN_LEFT)
+        .setAlign(Blockly.inputs.Align.LEFT)
         .appendField("senseBox ID")
         .appendField(new Blockly.FieldDropdown(dropdown), "BoxID");
     }
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_osem_access_token)
       .appendField(new Blockly.FieldTextInput("access_token"), "access_token");
     this.appendStatementInput("DO")
@@ -139,7 +139,7 @@ Blockly.Blocks["sensebox_send_to_osem"] = {
         );
     } else {
       this.appendValueInput("Value")
-        .setAlign(Blockly.ALIGN_LEFT)
+        .setAlign(Blockly.inputs.Align.LEFT)
         .appendField("Phänomen")
         .appendField(new Blockly.FieldTextInput("sensorID"), "SensorID");
     }
@@ -209,7 +209,7 @@ Blockly.Blocks["sensebox_esp32s2_osem_connection"] = {
       .appendField("SSL")
       .appendField(new Blockly.FieldCheckbox(ssl), "SSL");
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_osem_exposure)
       .appendField(
         new Blockly.FieldDropdown([
@@ -220,7 +220,7 @@ Blockly.Blocks["sensebox_esp32s2_osem_connection"] = {
       );
     if (!boxes) {
       this.appendDummyInput()
-        .setAlign(Blockly.ALIGN_LEFT)
+        .setAlign(Blockly.inputs.Align.LEFT)
         .appendField("senseBox ID")
         .appendField(new Blockly.FieldTextInput("senseBox ID"), "BoxID");
     } else {
@@ -229,12 +229,12 @@ Blockly.Blocks["sensebox_esp32s2_osem_connection"] = {
         dropdown.push([boxes[i].name, boxes[i]._id]);
       }
       this.appendDummyInput()
-        .setAlign(Blockly.ALIGN_LEFT)
+        .setAlign(Blockly.inputs.Align.LEFT)
         .appendField("senseBox ID")
         .appendField(new Blockly.FieldDropdown(dropdown), "BoxID");
     }
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_osem_access_token)
       .appendField(new Blockly.FieldTextInput("access_token"), "access_token");
     this.appendStatementInput("DO")

@@ -14,7 +14,7 @@ Blockly.Blocks["sensebox_sd_open_file"] = {
   init: function () {
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_sd_open_file)
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(
         new Blockly.FieldTextInput("Data", checkFileName),
         "Filename",
@@ -40,7 +40,7 @@ Blockly.Blocks["sensebox_sd_create_file"] = {
   init: function () {
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_sd_create_file)
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_output_filename)
       .appendField(
         new Blockly.FieldTextInput("Data", checkFileName),
@@ -66,7 +66,7 @@ Blockly.Blocks["sensebox_sd_write_file"] = {
   init: function () {
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_sd_write_file)
-      .setAlign(Blockly.ALIGN_LEFT);
+      .setAlign(Blockly.inputs.Align.LEFT);
     this.appendValueInput("DATA").setCheck(null);
     this.appendDummyInput("CheckboxText")
       .appendField(Blockly.Msg.senseBox_output_linebreak)
@@ -109,10 +109,10 @@ Blockly.Blocks["sensebox_sd_osem"] = {
     this.setHelpUrl(Blockly.Msg.sensebox_sd_helpurl);
     this.setColour(getColour().sensebox);
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.sensebox_sd_osem);
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_osem_exposure)
       .appendField(
         new Blockly.FieldDropdown([
@@ -165,7 +165,7 @@ Blockly.Blocks["sensebox_sd_save_for_osem"] = {
     this.setColour(getColour().sensebox);
     this.appendDummyInput().appendField(Blockly.Msg.sensebox_sd_save_for_osem);
     this.appendValueInput("Value")
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.sensebox_sd_save_for_osem_id)
       .appendField(new Blockly.FieldTextInput("sensorID"), "SensorID");
     this.setPreviousStatement(true, null);
@@ -181,7 +181,7 @@ Blockly.Blocks["sensebox_esp32s2_sd_open_file"] = {
   init: function () {
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_sd_open_file)
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(
         new Blockly.FieldTextInput("Data", checkFileName),
         "Filename",
@@ -207,7 +207,7 @@ Blockly.Blocks["sensebox_esp32s2_sd_create_file"] = {
   init: function () {
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_sd_create_file)
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_output_filename)
       .appendField(
         new Blockly.FieldTextInput("Data", checkFileName),
@@ -233,7 +233,7 @@ Blockly.Blocks["sensebox_esp32s2_sd_write_file"] = {
   init: function () {
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_sd_write_file)
-      .setAlign(Blockly.ALIGN_LEFT);
+      .setAlign(Blockly.inputs.Align.LEFT);
     this.appendValueInput("DATA").setCheck(null);
     this.appendDummyInput("CheckboxText")
       .appendField(Blockly.Msg.senseBox_output_linebreak)
