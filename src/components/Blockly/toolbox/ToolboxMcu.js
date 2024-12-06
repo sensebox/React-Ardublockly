@@ -394,9 +394,9 @@ export const ToolboxMcu = () => {
         </Block>
         <Block type="sensebox_solar_ensure_wake_time">
           <Field name="wake_time">30</Field>
-          <Field name="time_scale"> * 1000</Field>
+          <Field name="time_scale">1000</Field>
         </Block>
-        <Block type="sensebox_solar_deep_sleep_and_restart">
+        {/* <Block type="sensebox_solar_deep_sleep_and_restart">
           <Field name="sleep_time">30</Field>
           <Field name="time_scale"> * 60000</Field>
           <Field name="powerOffI2C">TRUE</Field>
@@ -437,7 +437,7 @@ export const ToolboxMcu = () => {
               <Field name="powerOffXB">TRUE</Field>
             </Block>
           </Statement>
-        </Block>
+        </Block> */}
       </Category>
       <Category id="webserver" name="Webserver" colour={getColour().webserver}>
         <Block type="sensebox_initialize_http_server"></Block>
