@@ -1,6 +1,7 @@
-import Blockly from "blockly";
+import * as Blockly from "blockly";
 import { getColour } from "../helpers/colour";
 import * as Types from "../helpers/types";
+import { selectedBoard } from "../helpers/board";
 
 /**
  * Solar Charger (SB-041)
@@ -73,10 +74,10 @@ Blockly.Blocks["sensebox_solar_ensure_wake_time"] = {
       .appendField(new Blockly.FieldNumber(0), "wake_time")
       .appendField(
         new Blockly.FieldDropdown([
-          [Blockly.Msg.sensebox_solar_hours, " * 3600000"],
-          [Blockly.Msg.sensebox_solar_minutes, " * 60000"],
-          [Blockly.Msg.sensebox_solar_seconds, " * 1000"],
-          [Blockly.Msg.sensebox_solar_milliseconds, ""],
+          [Blockly.Msg.sensebox_solar_hours, "3600000"],
+          [Blockly.Msg.sensebox_solar_minutes, "60000"],
+          [Blockly.Msg.sensebox_solar_seconds, "1000"],
+          [Blockly.Msg.sensebox_solar_milliseconds, "1"],
         ]),
         "time_scale",
       );

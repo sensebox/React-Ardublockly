@@ -1,23 +1,27 @@
-import Blockly from "blockly";
+import * as Blockly from "blockly";
 
 /**
  * Solar Charger (SB-041)
  */
-Blockly.Arduino.sensebox_solar_charger_SB041 = function () {
-  var value = this.getFieldValue("value");
-  Blockly.Arduino.libraries_["library_wire"] = "#include <Wire.h>;";
-  Blockly.Arduino.variables_["solar_panel_voltage"] =
-    "float solar_panel_voltage;";
-  Blockly.Arduino.variables_["solar_is_connected"] = "bool solar_is_connected;";
-  Blockly.Arduino.variables_["battery_voltage"] = "float battery_voltage;";
-  Blockly.Arduino.variables_["battery_level"] = "int battery_level;";
-  Blockly.Arduino.variables_["battery_is_charging"] =
-    "bool battery_is_charging;";
-  Blockly.Arduino.variables_["battery_is_fast_charging"] =
-    "bool battery_is_fast_charging;";
-  Blockly.Arduino.variables_["battery_temperature"] =
-    "float battery_temperature;";
-  Blockly.Arduino.codeFunctions_["solar_update_SB041"] = `
+Blockly.Generator.Arduino.forBlock["sensebox_solar_charger_SB041"] =
+  function () {
+    var value = this.getFieldValue("value");
+    Blockly.Generator.Arduino.libraries_["library_wire"] = "#include <Wire.h>;";
+    Blockly.Generator.Arduino.variables_["solar_panel_voltage"] =
+      "float solar_panel_voltage;";
+    Blockly.Generator.Arduino.variables_["solar_is_connected"] =
+      "bool solar_is_connected;";
+    Blockly.Generator.Arduino.variables_["battery_voltage"] =
+      "float battery_voltage;";
+    Blockly.Generator.Arduino.variables_["battery_level"] =
+      "int battery_level;";
+    Blockly.Generator.Arduino.variables_["battery_is_charging"] =
+      "bool battery_is_charging;";
+    Blockly.Generator.Arduino.variables_["battery_is_fast_charging"] =
+      "bool battery_is_fast_charging;";
+    Blockly.Generator.Arduino.variables_["battery_temperature"] =
+      "float battery_temperature;";
+    Blockly.Generator.Arduino.codeFunctions_["solar_update_SB041"] = `
 // update the values of the solar charger (SB-041)
 void solar_update_SB041() {
   /*
@@ -80,28 +84,31 @@ void solar_update_SB041() {
   }
 }
 `;
-  Blockly.Arduino.setupCode_["Wire.begin()"] = "Wire.begin();";
-  Blockly.Arduino.setupCode_["solar_update_SB041"] = "solar_update_SB041();";
-  Blockly.Arduino.loopCodeOnce_["solar_update_SB041"] = "solar_update_SB041();";
-  return [value, Blockly.Arduino.ORDER_ATOMIC];
-};
+    Blockly.Generator.Arduino.setupCode_["Wire.begin()"] = "Wire.begin();";
+    Blockly.Generator.Arduino.setupCode_["solar_update_SB041"] =
+      "solar_update_SB041();";
+    Blockly.Generator.Arduino.loopCodeOnce_["solar_update_SB041"] =
+      "solar_update_SB041();";
+    return [value, Blockly.Generator.Arduino.ORDER_ATOMIC];
+  };
 
 /**
  * Deep Sleep and Restart
  */
-Blockly.Arduino.sensebox_solar_deep_sleep_and_restart = function () {
-  var board = window.sessionStorage.getItem("board");
-  var sleep_time = this.getFieldValue("sleep_time");
-  var time_scale = this.getFieldValue("time_scale");
-  if (board === "esp32") {
-    var powerOffGPIO = this.getFieldValue("powerOffGPIO") === "TRUE";
-    var powerOffUART = this.getFieldValue("powerOffUART") === "TRUE";
-    var powerOffXB = this.getFieldValue("powerOffXB") === "TRUE";
-    Blockly.Arduino.libraries_["library_esp32_hal_gpio"] =
-      "#include <esp32-hal-gpio.h>;";
-    Blockly.Arduino.libraries_["library_pins_arduino"] =
-      "#include <pins_arduino.h>;";
-    Blockly.Arduino.codeFunctions_["deep_sleep_and_restart"] = `
+Blockly.Generator.Arduino.forBlock["sensebox_solar_deep_sleep_and_restart"] =
+  function () {
+    var board = window.sessionStorage.getItem("board");
+    var sleep_time = this.getFieldValue("sleep_time");
+    var time_scale = this.getFieldValue("time_scale");
+    if (board === "esp32") {
+      var powerOffGPIO = this.getFieldValue("powerOffGPIO") === "TRUE";
+      var powerOffUART = this.getFieldValue("powerOffUART") === "TRUE";
+      var powerOffXB = this.getFieldValue("powerOffXB") === "TRUE";
+      Blockly.Generator.Arduino.libraries_["library_esp32_hal_gpio"] =
+        "#include <esp32-hal-gpio.h>;";
+      Blockly.Generator.Arduino.libraries_["library_pins_arduino"] =
+        "#include <pins_arduino.h>;";
+      Blockly.Generator.Arduino.codeFunctions_["deep_sleep_and_restart"] = `
 // power saving deep sleep for specific time and a final restart
 void deep_sleep_and_restart(int sleep_time, bool powerOffGPIO, bool powerOffUART, bool powerOffXB) {
   digitalWrite(IO_ENABLE, powerOffGPIO ? HIGH : LOW);
@@ -113,15 +120,15 @@ void deep_sleep_and_restart(int sleep_time, bool powerOffGPIO, bool powerOffUART
   esp_deep_sleep_start();
 }
 `;
-    return `deep_sleep_and_restart(${sleep_time}${time_scale}, ${powerOffGPIO}, ${powerOffUART}, ${powerOffXB});`;
-  } else {
-    // assume board === "mcu" || board === "mini"
-    var powerOffI2C = this.getFieldValue("powerOffI2C") === "TRUE";
-    var powerOffUART = this.getFieldValue("powerOffUART") === "TRUE";
-    var powerOffXB = this.getFieldValue("powerOffXB") === "TRUE";
-    Blockly.Arduino.libraries_["library_low_power"] =
-      "#include <ArduinoLowPower.h>;";
-    Blockly.Arduino.codeFunctions_["deep_sleep_and_restart"] = `
+      return `deep_sleep_and_restart(${sleep_time}${time_scale}, ${powerOffGPIO}, ${powerOffUART}, ${powerOffXB});`;
+    } else {
+      // assume board === "mcu" || board === "mini"
+      var powerOffI2C = this.getFieldValue("powerOffI2C") === "TRUE";
+      var powerOffUART = this.getFieldValue("powerOffUART") === "TRUE";
+      var powerOffXB = this.getFieldValue("powerOffXB") === "TRUE";
+      Blockly.Generator.Arduino.libraries_["library_low_power"] =
+        "#include <ArduinoLowPower.h>;";
+      Blockly.Generator.Arduino.codeFunctions_["deep_sleep_and_restart"] = `
 // power saving deep sleep for specific time and a final restart
 void deep_sleep_and_restart(int sleep_time, bool powerOffI2C, bool powerOffUART, bool powerOffXB) {
   senseBoxIO.powerI2C(!powerOffI2C);
@@ -135,38 +142,40 @@ void deep_sleep_and_restart(int sleep_time, bool powerOffI2C, bool powerOffUART,
   while (true);
 }
 `;
-    return `deep_sleep_and_restart(${sleep_time}${time_scale}, ${powerOffI2C}, ${powerOffUART}, ${powerOffXB});`;
-  }
-};
+      return `deep_sleep_and_restart(${sleep_time}${time_scale}, ${powerOffI2C}, ${powerOffUART}, ${powerOffXB});`;
+    }
+  };
 
 /**
  * Ensure Wake Time
  */
-Blockly.Arduino.sensebox_solar_ensure_wake_time = function () {
-  var wake_time = this.getFieldValue("wake_time");
-  var time_scale = this.getFieldValue("time_scale");
-  return `
+Blockly.Generator.Arduino.forBlock["sensebox_solar_ensure_wake_time"] =
+  function () {
+    var wake_time = this.getFieldValue("wake_time");
+    var time_scale = this.getFieldValue("time_scale");
+    return `
 // ensure minimal wake time
 while(millis() < ${wake_time}${time_scale});
 `;
-};
+  };
 
 /**
  * Deep Sleep and Restart
  */
-Blockly.Arduino.sensebox_solar_deep_sleep_and_restart = function () {
-  var board = window.sessionStorage.getItem("board");
-  var sleep_time = this.getFieldValue("sleep_time");
-  var time_scale = this.getFieldValue("time_scale");
-  if (board === "esp32") {
-    var powerOffGPIO = this.getFieldValue("powerOffGPIO") === "TRUE";
-    var powerOffUART = this.getFieldValue("powerOffUART") === "TRUE";
-    var powerOffXB = this.getFieldValue("powerOffXB") === "TRUE";
-    Blockly.Arduino.libraries_["library_esp32_hal_gpio"] =
-      "#include <esp32-hal-gpio.h>;";
-    Blockly.Arduino.libraries_["library_pins_arduino"] =
-      "#include <pins_arduino.h>;";
-    Blockly.Arduino.codeFunctions_["deep_sleep_and_restart"] = `
+Blockly.Generator.Arduino.forBlock["sensebox_solar_deep_sleep_and_restart"] =
+  function () {
+    var board = window.sessionStorage.getItem("board");
+    var sleep_time = this.getFieldValue("sleep_time");
+    var time_scale = this.getFieldValue("time_scale");
+    if (board === "esp32") {
+      var powerOffGPIO = this.getFieldValue("powerOffGPIO") === "TRUE";
+      var powerOffUART = this.getFieldValue("powerOffUART") === "TRUE";
+      var powerOffXB = this.getFieldValue("powerOffXB") === "TRUE";
+      Blockly.Generator.Arduino.libraries_["library_esp32_hal_gpio"] =
+        "#include <esp32-hal-gpio.h>;";
+      Blockly.Generator.Arduino.libraries_["library_pins_arduino"] =
+        "#include <pins_arduino.h>;";
+      Blockly.Generator.Arduino.codeFunctions_["deep_sleep_and_restart"] = `
 // power saving deep sleep for specific time and a final restart
 void deep_sleep_and_restart(int sleep_time, bool powerOffGPIO, bool powerOffUART, bool powerOffXB) {
   digitalWrite(IO_ENABLE, powerOffGPIO ? HIGH : LOW);
@@ -178,15 +187,15 @@ void deep_sleep_and_restart(int sleep_time, bool powerOffGPIO, bool powerOffUART
   esp_deep_sleep_start();
 }
 `;
-    return `deep_sleep_and_restart(${sleep_time}${time_scale}, ${powerOffGPIO}, ${powerOffUART}, ${powerOffXB});`;
-  } else {
-    // assume board === "mcu" || board === "mini"
-    var powerOffI2C = this.getFieldValue("powerOffI2C") === "TRUE";
-    var powerOffUART = this.getFieldValue("powerOffUART") === "TRUE";
-    var powerOffXB = this.getFieldValue("powerOffXB") === "TRUE";
-    Blockly.Arduino.libraries_["library_low_power"] =
-      "#include <ArduinoLowPower.h>;";
-    Blockly.Arduino.codeFunctions_["deep_sleep_and_restart"] = `
+      return `deep_sleep_and_restart(${sleep_time}${time_scale}, ${powerOffGPIO}, ${powerOffUART}, ${powerOffXB});`;
+    } else {
+      // assume board === "mcu" || board === "mini"
+      var powerOffI2C = this.getFieldValue("powerOffI2C") === "TRUE";
+      var powerOffUART = this.getFieldValue("powerOffUART") === "TRUE";
+      var powerOffXB = this.getFieldValue("powerOffXB") === "TRUE";
+      Blockly.Generator.Arduino.libraries_["library_low_power"] =
+        "#include <ArduinoLowPower.h>;";
+      Blockly.Generator.Arduino.codeFunctions_["deep_sleep_and_restart"] = `
 // power saving deep sleep for specific time and a final restart
 void deep_sleep_and_restart(int sleep_time, bool powerOffI2C, bool powerOffUART, bool powerOffXB) {
   senseBoxIO.powerI2C(!powerOffI2C);
@@ -200,6 +209,6 @@ void deep_sleep_and_restart(int sleep_time, bool powerOffI2C, bool powerOffUART,
   while (true);
 }
 `;
-    return `deep_sleep_and_restart(${sleep_time}${time_scale}, ${powerOffI2C}, ${powerOffUART}, ${powerOffXB});`;
-  }
-};
+      return `deep_sleep_and_restart(${sleep_time} * ${time_scale}, ${powerOffI2C}, ${powerOffUART}, ${powerOffXB});`;
+    }
+  };
