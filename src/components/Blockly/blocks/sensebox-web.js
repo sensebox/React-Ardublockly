@@ -1,4 +1,4 @@
-import Blockly from "blockly";
+import * as Blockly from "blockly";
 import { getColour } from "../helpers/colour";
 import * as Types from "../helpers/types";
 
@@ -9,11 +9,11 @@ Blockly.Blocks["sensebox_wifi"] = {
     this.setColour(getColour().sensebox);
     this.appendDummyInput().appendField(Blockly.Msg.senseBox_wifi_connect);
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_wifi_ssid)
       .appendField(new Blockly.FieldTextInput("SSID"), "SSID");
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_output_password)
       .appendField(new Blockly.FieldTextInput("Password"), "Password");
     this.setHelpUrl(Blockly.Msg.senseBox_wifi_helpurl);
@@ -47,7 +47,7 @@ Blockly.Blocks["sensebox_startap"] = {
     this.setColour(getColour().sensebox);
     this.appendDummyInput().appendField(Blockly.Msg.senseBox_wifi_startap);
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_wifi_ssid)
       .appendField(new Blockly.FieldTextInput("SSID"), "SSID");
     this.setHelpUrl(Blockly.Msg.senseBox_wifi_helpurl);
@@ -163,15 +163,15 @@ Blockly.Blocks["sensebox_esp32s2_wifi_enterprise"] = {
     this.setColour(getColour().sensebox);
     this.appendDummyInput().appendField(Blockly.Msg.sensebox_wifi_enterprise);
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_wifi_ssid)
       .appendField(new Blockly.FieldTextInput("eduroam"), "SSID");
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_wifi_user)
       .appendField(new Blockly.FieldTextInput("User"), "User");
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_wifi_password)
       .appendField(new Blockly.FieldTextInput("Password"), "Password");
     this.setHelpUrl(Blockly.Msg.senseBox_wifi_helpurl);
@@ -205,7 +205,7 @@ Blockly.Blocks["sensebox_esp32s2_startap"] = {
     this.setColour(getColour().sensebox);
     this.appendDummyInput().appendField(Blockly.Msg.senseBox_wifi_startap);
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_wifi_ssid)
       .appendField(new Blockly.FieldTextInput("SSID"), "SSID");
     this.setHelpUrl(Blockly.Msg.senseBox_wifi_helpurl);
@@ -221,11 +221,11 @@ Blockly.Blocks["sensebox_esp32s2_wifi"] = {
     this.setColour(getColour().sensebox);
     this.appendDummyInput().appendField(Blockly.Msg.senseBox_wifi_connect);
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_wifi_ssid)
       .appendField(new Blockly.FieldTextInput("SSID"), "SSID");
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_output_password)
       .appendField(new Blockly.FieldTextInput("Password"), "Password");
     this.setHelpUrl(Blockly.Msg.senseBox_wifi_helpurl);

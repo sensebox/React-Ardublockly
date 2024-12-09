@@ -1,4 +1,4 @@
-import Blockly from "blockly";
+import * as Blockly from "blockly";
 import { getColour } from "../helpers/colour";
 
 Blockly.Blocks["sensebox_telegram"] = {
@@ -6,7 +6,7 @@ Blockly.Blocks["sensebox_telegram"] = {
     this.setColour(getColour().sensebox);
     this.appendDummyInput().appendField(Blockly.Msg.senseBox_telegram_init);
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField("telegram")
       .appendField(new Blockly.FieldTextInput("token"), "telegram_token");
     this.setPreviousStatement(true, null);
@@ -33,7 +33,7 @@ Blockly.Blocks["sensebox_telegram_do_on_message"] = {
       Blockly.Msg.senseBox_telegram_do_on_message,
     );
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_telegram_message)
       .appendField(new Blockly.FieldTextInput("/message"), "telegram_message");
     this.appendStatementInput("telegram_do_on_message").setCheck(null);

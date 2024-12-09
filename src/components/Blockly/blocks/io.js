@@ -10,7 +10,7 @@
  *
  * TODO: maybe change this to a "PIN" BlocklyType
  */
-import Blockly from "blockly/core";
+import * as Blockly from "blockly/core";
 import { selectedBoard } from "../helpers/board";
 import * as Types from "../helpers/types";
 import { getColour } from "../helpers/colour";
@@ -41,7 +41,7 @@ Blockly.Blocks["io_digitalwrite"] = {
    * @this Blockly.Block
    */
   updateFields: function () {
-    Blockly.Arduino.Boards.refreshBlockFieldDropdown(
+    Blockly.Generator.Arduino.Boards.refreshBlockFieldDropdown(
       this,
       "PIN",
       "digitalPins",
@@ -75,7 +75,7 @@ Blockly.Blocks["io_digitalread"] = {
    * @this Blockly.Block
    */
   updateFields: function () {
-    Blockly.Arduino.Boards.refreshBlockFieldDropdown(
+    Blockly.Generator.Arduino.Boards.refreshBlockFieldDropdown(
       this,
       "PIN",
       "digitalPins",
@@ -109,7 +109,7 @@ Blockly.Blocks["io_builtin_led"] = {
    * @this Blockly.Block
    */
   updateFields: function () {
-    Blockly.Arduino.Boards.refreshBlockFieldDropdown(
+    Blockly.Generator.Arduino.Boards.refreshBlockFieldDropdown(
       this,
       "BUILT_IN_LED",
       "builtinLed",
@@ -144,7 +144,11 @@ Blockly.Blocks["io_analogwrite"] = {
    * @this Blockly.Block
    */
   updateFields: function () {
-    Blockly.Arduino.Boards.refreshBlockFieldDropdown(this, "PIN", "pwmPins");
+    Blockly.Generator.Arduino.Boards.refreshBlockFieldDropdown(
+      this,
+      "PIN",
+      "pwmPins",
+    );
   },
   /** @return {!string} The type of input value for the block, an integer. */
   getBlockType: function () {
@@ -178,7 +182,11 @@ Blockly.Blocks["io_analogread"] = {
    * @this Blockly.Block
    */
   updateFields: function () {
-    Blockly.Arduino.Boards.refreshBlockFieldDropdown(this, "PIN", "analogPins");
+    Blockly.Generator.Arduino.Boards.refreshBlockFieldDropdown(
+      this,
+      "PIN",
+      "analogPins",
+    );
   },
 };
 
@@ -310,6 +318,10 @@ Blockly.Blocks["io_analogreadmillivolt"] = {
    * @this Blockly.Block
    */
   updateFields: function () {
-    Blockly.Arduino.Boards.refreshBlockFieldDropdown(this, "PIN", "analogPins");
+    Blockly.Generator.Arduino.Boards.refreshBlockFieldDropdown(
+      this,
+      "PIN",
+      "analogPins",
+    );
   },
 };

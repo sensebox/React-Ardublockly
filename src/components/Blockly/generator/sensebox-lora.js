@@ -1,15 +1,18 @@
 import * as Blockly from "blockly/core";
 
-Blockly.Arduino.sensebox_lora_initialize_otaa = function (block) {
+Blockly.Generator.Arduino.forBlock["sensebox_lora_initialize_otaa"] = function (
+  block,
+  generator,
+) {
   var deivceID = this.getFieldValue("DEVICEID");
   var appID = this.getFieldValue("APPID");
   var appKey = this.getFieldValue("APPKEY");
   var interval = this.getFieldValue("INTERVAL");
-  Blockly.Arduino.libraries_["library_spi"] = "#include <SPI.h>";
-  Blockly.Arduino.libraries_["library_lmic"] =
+  Blockly.Generator.Arduino.libraries_["library_spi"] = "#include <SPI.h>";
+  Blockly.Generator.Arduino.libraries_["library_lmic"] =
     "#include <lmic.h> // http://librarymanager/All#IBM_LMIC_framework";
-  Blockly.Arduino.libraries_["library_hal"] = "#include <hal/hal.h>";
-  Blockly.Arduino.definitions_["define_LoRaVariablesOTAA"] = `
+  Blockly.Generator.Arduino.libraries_["library_hal"] = "#include <hal/hal.h>";
+  Blockly.Generator.Arduino.definitions_["define_LoRaVariablesOTAA"] = `
     static const u1_t PROGMEM APPEUI[8]= {${appID}};
     void os_getArtEui (u1_t* buf) { memcpy_P(buf, APPEUI , 8);}
   
@@ -37,7 +40,7 @@ Blockly.Arduino.sensebox_lora_initialize_otaa = function (block) {
         .dio = {PIN_XB1_INT, PIN_XB1_INT, LMIC_UNUSED_PIN},
     };`;
 
-  Blockly.Arduino.codeFunctions_["functions_initLora"] = `
+  Blockly.Generator.Arduino.codeFunctions_["functions_initLora"] = `
     void initLora() {
       delay(2000);
       // LMIC init
@@ -49,7 +52,7 @@ Blockly.Arduino.sensebox_lora_initialize_otaa = function (block) {
       do_send(&sendjob);
     }`;
 
-  Blockly.Arduino.codeFunctions_["functions_onEvent"] = `
+  Blockly.Generator.Arduino.codeFunctions_["functions_onEvent"] = `
     void onEvent (ev_t ev) {
       Serial.print(os_getTime());
       Serial.print(": ");
@@ -119,18 +122,24 @@ Blockly.Arduino.sensebox_lora_initialize_otaa = function (block) {
               break;
       }
   }`;
-  Blockly.Arduino.loraSetupCode_["initLora"] = "initLora();\n";
-  Blockly.Arduino.setupCode_["serial.begin"] =
+  Blockly.Generator.Arduino.loraSetupCode_["initLora"] = "initLora();\n";
+  Blockly.Generator.Arduino.setupCode_["serial.begin"] =
     "Serial.begin(9600);\ndelay(1000);\n";
   var code = "";
   return code;
 };
 
-Blockly.Arduino.sensebox_lora_message_send = function (block) {
-  Blockly.Arduino.libraries_["library_lora_message"] =
+Blockly.Generator.Arduino.forBlock["sensebox_lora_message_send"] = function (
+  block,
+  generator,
+) {
+  Blockly.Generator.Arduino.libraries_["library_lora_message"] =
     "#include <LoraMessage.h>";
-  var lora_sensor_values = Blockly.Arduino.statementToCode(block, "DO");
-  Blockly.Arduino.functionNames_["functions_do_send"] = `
+  var lora_sensor_values = Blockly.Generator.Arduino.statementToCode(
+    block,
+    "DO",
+  );
+  Blockly.Generator.Arduino.functionNames_["functions_do_send"] = `
   void do_send(osjob_t* j){
       // Check if there is not a current TX/RX job running
       if (LMIC.opmode & OP_TXRXPEND) {
@@ -145,42 +154,53 @@ Blockly.Arduino.sensebox_lora_message_send = function (block) {
       }
       // Next TX is scheduled after TX_COMPLETE event.
   }`;
-  Blockly.Arduino.loopCodeOnce_["os_runloop"] = "os_runloop_once();";
+  Blockly.Generator.Arduino.loopCodeOnce_["os_runloop"] = "os_runloop_once();";
   return "";
 };
 
 /**
  * Block send Data to TTN
  */
-Blockly.Arduino.sensebox_send_lora_sensor_value = function (block) {
-  const reading =
-    Blockly.Arduino.valueToCode(this, "Value", Blockly.Arduino.ORDER_ATOMIC) ||
-    '"Keine Eingabe"';
-  var messageBytes = this.getFieldValue("MESSAGE_BYTES");
-  var code = "";
-  switch (Number(messageBytes)) {
-    case 1:
-      code = `message.addUint8(${reading});\n`;
-      break;
-    case 2:
-      code = `message.addUint16(${reading});\n`;
-      break;
-    case 3:
-      code = `message.addUint8(${reading});
+Blockly.Generator.Arduino.forBlock["sensebox_send_lora_sensor_value"] =
+  function (block, generator) {
+    const reading =
+      Blockly.Generator.Arduino.valueToCode(
+        this,
+        "Value",
+        Blockly.Generator.Arduino.ORDER_ATOMIC,
+      ) || '"Keine Eingabe"';
+    var messageBytes = this.getFieldValue("MESSAGE_BYTES");
+    var code = "";
+    switch (Number(messageBytes)) {
+      case 1:
+        code = `message.addUint8(${reading});\n`;
+        break;
+      case 2:
+        code = `message.addUint16(${reading});\n`;
+        break;
+      case 3:
+        code = `message.addUint8(${reading});
         message.addUint16(${reading} >> 8);\n`;
-      break;
-    default:
-      code = `message.addUint16(${reading});\n`;
-  }
-  return code;
-};
+        break;
+      default:
+        code = `message.addUint16(${reading});\n`;
+    }
+    return code;
+  };
 
-Blockly.Arduino.sensebox_lora_cayenne_send = function (block) {
-  Blockly.Arduino.libraries_["library_cayene"] =
+Blockly.Generator.Arduino.forBlock["sensebox_lora_cayenne_send"] = function (
+  block,
+  generator,
+) {
+  Blockly.Generator.Arduino.libraries_["library_cayene"] =
     "#include <CayenneLPP.h> // http://librarymanager/All#CayenneLPP";
-  Blockly.Arduino.variables_["variable_cayenne"] = "CayenneLPP lpp(51);";
-  var lora_sensor_values = Blockly.Arduino.statementToCode(block, "DO");
-  Blockly.Arduino.functionNames_["functions_do_send"] = `
+  Blockly.Generator.Arduino.variables_["variable_cayenne"] =
+    "CayenneLPP lpp(51);";
+  var lora_sensor_values = Blockly.Generator.Arduino.statementToCode(
+    block,
+    "DO",
+  );
+  Blockly.Generator.Arduino.functionNames_["functions_do_send"] = `
   void do_send(osjob_t* j){
       // Check if there is not a current TX/RX job running
       if (LMIC.opmode & OP_TXRXPEND) {
@@ -195,38 +215,41 @@ Blockly.Arduino.sensebox_lora_cayenne_send = function (block) {
       }
       // Next TX is scheduled after TX_COMPLETE event.
   }`;
-  Blockly.Arduino.loopCodeOnce_["os_runloop"] = "os_runloop_once();";
+  Blockly.Generator.Arduino.loopCodeOnce_["os_runloop"] = "os_runloop_once();";
   return "";
 };
 
-Blockly.Arduino.sensebox_lora_ttn_mapper = function (block) {
-  var latitude = Blockly.Arduino.valueToCode(
+Blockly.Generator.Arduino.forBlock["sensebox_lora_ttn_mapper"] = function (
+  block,
+  generator,
+) {
+  var latitude = Blockly.Generator.Arduino.valueToCode(
     this,
     "Latitude",
-    Blockly.Arduino.ORDER_ATOMIC,
+    Blockly.Generator.Arduino.ORDER_ATOMIC,
   );
-  var longitude = Blockly.Arduino.valueToCode(
+  var longitude = Blockly.Generator.Arduino.valueToCode(
     this,
     "Longitude",
-    Blockly.Arduino.ORDER_ATOMIC,
+    Blockly.Generator.Arduino.ORDER_ATOMIC,
   );
-  var altitude = Blockly.Arduino.valueToCode(
+  var altitude = Blockly.Generator.Arduino.valueToCode(
     this,
     "Altitude",
-    Blockly.Arduino.ORDER_ATOMIC,
+    Blockly.Generator.Arduino.ORDER_ATOMIC,
   );
-  var pDOP = Blockly.Arduino.valueToCode(
+  var pDOP = Blockly.Generator.Arduino.valueToCode(
     this,
     "pDOP",
-    Blockly.Arduino.ORDER_ATOMIC,
+    Blockly.Generator.Arduino.ORDER_ATOMIC,
   );
-  var fixType = Blockly.Arduino.valueToCode(
+  var fixType = Blockly.Generator.Arduino.valueToCode(
     this,
     "Fix Type",
-    Blockly.Arduino.ORDER_ATOMIC,
+    Blockly.Generator.Arduino.ORDER_ATOMIC,
   );
   var fixTypeLimit = this.getFieldValue("dropdown");
-  Blockly.Arduino.functionNames_["functions_do_send"] = `
+  Blockly.Generator.Arduino.functionNames_["functions_do_send"] = `
   void do_send(osjob_t* j){
       // Check if there is not a current TX/RX job running
       if (LMIC.opmode & OP_TXRXPEND) {
@@ -269,19 +292,22 @@ Blockly.Arduino.sensebox_lora_ttn_mapper = function (block) {
       }
       // Next TX is scheduled after TX_COMPLETE event.
   }`;
-  Blockly.Arduino.loopCodeOnce_["os_runloop"] = "os_runloop_once();";
+  Blockly.Generator.Arduino.loopCodeOnce_["os_runloop"] = "os_runloop_once();";
   return "";
 };
 
-Blockly.Arduino.sensebox_lora_initialize_abp = function (block) {
+Blockly.Generator.Arduino.forBlock["sensebox_lora_initialize_abp"] = function (
+  block,
+  generator,
+) {
   var nwskey = this.getFieldValue("NWSKEY");
   var appskey = this.getFieldValue("APPSKEY");
   var devaddr = this.getFieldValue("DEVADDR");
   var interval = this.getFieldValue("INTERVAL");
-  Blockly.Arduino.libraries_["library_spi"] = "#include <SPI.h>";
-  Blockly.Arduino.libraries_["library_lmic"] = "#include <lmic.h>";
-  Blockly.Arduino.libraries_["library_hal"] = "#include <hal/hal.h>";
-  Blockly.Arduino.definitions_["define_LoRaVariablesABP"] = `
+  Blockly.Generator.Arduino.libraries_["library_spi"] = "#include <SPI.h>";
+  Blockly.Generator.Arduino.libraries_["library_lmic"] = "#include <lmic.h>";
+  Blockly.Generator.Arduino.libraries_["library_hal"] = "#include <hal/hal.h>";
+  Blockly.Generator.Arduino.definitions_["define_LoRaVariablesABP"] = `
     // LoRaWAN NwkSKey, network session key
     // This is the default Semtech key, which is used by the early prototype TTN
     // network.
@@ -316,7 +342,7 @@ Blockly.Arduino.sensebox_lora_initialize_abp = function (block) {
         .dio = {PIN_XB1_INT, PIN_XB1_INT, LMIC_UNUSED_PIN},
     };`;
 
-  Blockly.Arduino.codeFunctions_["functions_initLora"] = `
+  Blockly.Generator.Arduino.codeFunctions_["functions_initLora"] = `
     void initLora() {
       delay(2000);
       // LMIC init
@@ -384,7 +410,7 @@ Blockly.Arduino.sensebox_lora_initialize_abp = function (block) {
       do_send(&sendjob);
     }`;
 
-  Blockly.Arduino.codeFunctions_["functions_onEvent"] = `
+  Blockly.Generator.Arduino.codeFunctions_["functions_onEvent"] = `
     void onEvent (ev_t ev) {
       Serial.print(os_getTime());
       Serial.print(": ");
@@ -449,85 +475,141 @@ Blockly.Arduino.sensebox_lora_initialize_abp = function (block) {
               break;
       }
   }`;
-  Blockly.Arduino.loraSetupCode_["initLora"] = "initLora();\n";
-  Blockly.Arduino.setupCode_["serial.begin"] =
+  Blockly.Generator.Arduino.loraSetupCode_["initLora"] = "initLora();\n";
+  Blockly.Generator.Arduino.setupCode_["serial.begin"] =
     "Serial.begin(9600);\ndelay(1000);\n";
   return "";
 };
 
-Blockly.Arduino.sensebox_lora_cayenne_temperature = function (block) {
-  var temperature =
-    Blockly.Arduino.valueToCode(this, "Value", Blockly.Arduino.ORDER_ATOMIC) ||
-    0;
-  var channel = this.getFieldValue("CHANNEL");
-  var code = `lpp.addTemperature(${channel}, ${temperature});\n`;
-  return code;
-};
+Blockly.Generator.Arduino.forBlock["sensebox_lora_cayenne_temperature"] =
+  function (block, generator) {
+    var temperature =
+      Blockly.Generator.Arduino.valueToCode(
+        this,
+        "Value",
+        Blockly.Generator.Arduino.ORDER_ATOMIC,
+      ) || 0;
+    var channel = this.getFieldValue("CHANNEL");
+    var code = `lpp.addTemperature(${channel}, ${temperature});\n`;
+    return code;
+  };
 
-Blockly.Arduino.sensebox_lora_cayenne_humidity = function (block) {
-  var humidity =
-    Blockly.Arduino.valueToCode(this, "Value", Blockly.Arduino.ORDER_ATOMIC) ||
-    0;
-  var channel = this.getFieldValue("CHANNEL");
-  var code = `lpp.addRelativeHumidity(${channel}, ${humidity});\n`;
-  return code;
-};
+Blockly.Generator.Arduino.forBlock["sensebox_lora_cayenne_humidity"] =
+  function (block, generator) {
+    var humidity =
+      Blockly.Generator.Arduino.valueToCode(
+        this,
+        "Value",
+        Blockly.Generator.Arduino.ORDER_ATOMIC,
+      ) || 0;
+    var channel = this.getFieldValue("CHANNEL");
+    var code = `lpp.addRelativeHumidity(${channel}, ${humidity});\n`;
+    return code;
+  };
 
-Blockly.Arduino.sensebox_lora_cayenne_pressure = function (block) {
-  var pressure =
-    Blockly.Arduino.valueToCode(this, "Value", Blockly.Arduino.ORDER_ATOMIC) ||
-    0;
-  var channel = this.getFieldValue("CHANNEL");
-  var code = `lpp.addBarometricPressure(${channel}, ${pressure});\n`;
-  return code;
-};
+Blockly.Generator.Arduino.forBlock["sensebox_lora_cayenne_pressure"] =
+  function (block, generator) {
+    var pressure =
+      Blockly.Generator.Arduino.valueToCode(
+        this,
+        "Value",
+        Blockly.Generator.Arduino.ORDER_ATOMIC,
+      ) || 0;
+    var channel = this.getFieldValue("CHANNEL");
+    var code = `lpp.addBarometricPressure(${channel}, ${pressure});\n`;
+    return code;
+  };
 
-Blockly.Arduino.sensebox_lora_cayenne_luminosity = function (block) {
-  var luminosity =
-    Blockly.Arduino.valueToCode(this, "Value", Blockly.Arduino.ORDER_ATOMIC) ||
-    0;
-  var channel = this.getFieldValue("CHANNEL");
-  var code = `lpp.addLuminosity(${channel}, ${luminosity});\n`;
-  return code;
-};
+Blockly.Generator.Arduino.forBlock["sensebox_lora_cayenne_luminosity"] =
+  function (block, generator) {
+    var luminosity =
+      Blockly.Generator.Arduino.valueToCode(
+        this,
+        "Value",
+        Blockly.Generator.Arduino.ORDER_ATOMIC,
+      ) || 0;
+    var channel = this.getFieldValue("CHANNEL");
+    var code = `lpp.addLuminosity(${channel}, ${luminosity});\n`;
+    return code;
+  };
 
-Blockly.Arduino.sensebox_lora_cayenne_sensor = function (block) {
+Blockly.Generator.Arduino.forBlock["sensebox_lora_cayenne_sensor"] = function (
+  block,
+  generator,
+) {
   var sensorValue =
-    Blockly.Arduino.valueToCode(this, "Value", Blockly.Arduino.ORDER_ATOMIC) ||
-    0;
+    Blockly.Generator.Arduino.valueToCode(
+      this,
+      "Value",
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
+    ) || 0;
   var channel = this.getFieldValue("CHANNEL");
   var code = `lpp.addAnalogInput(${channel}, ${sensorValue});\n`;
   return code;
 };
 
-Blockly.Arduino.sensebox_lora_cayenne_accelerometer = function (block) {
+Blockly.Generator.Arduino.sensebox_lora_cayenne_accelerometer = function (
+  block,
+) {
   var x =
-    Blockly.Arduino.valueToCode(this, "X", Blockly.Arduino.ORDER_ATOMIC) || 0;
+    Blockly.Generator.Arduino.valueToCode(
+      this,
+      "X",
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
+    ) || 0;
   var y =
-    Blockly.Arduino.valueToCode(this, "Y", Blockly.Arduino.ORDER_ATOMIC) || 0;
+    Blockly.Generator.Arduino.valueToCode(
+      this,
+      "Y",
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
+    ) || 0;
   var z =
-    Blockly.Arduino.valueToCode(this, "Z", Blockly.Arduino.ORDER_ATOMIC) || 0;
+    Blockly.Generator.Arduino.valueToCode(
+      this,
+      "Z",
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
+    ) || 0;
   var channel = this.getFieldValue("CHANNEL");
   var code = `lpp.addAccelerometer(${channel}, ${x}, ${y}, ${z});\n`;
   return code;
 };
 
-Blockly.Arduino.sensebox_lora_cayenne_gps = function (block) {
+Blockly.Generator.Arduino.forBlock["sensebox_lora_cayenne_gps"] = function (
+  block,
+  generator,
+) {
   var lat =
-    Blockly.Arduino.valueToCode(this, "LAT", Blockly.Arduino.ORDER_ATOMIC) || 0;
+    Blockly.Generator.Arduino.valueToCode(
+      this,
+      "LAT",
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
+    ) || 0;
   var lng =
-    Blockly.Arduino.valueToCode(this, "LNG", Blockly.Arduino.ORDER_ATOMIC) || 0;
+    Blockly.Generator.Arduino.valueToCode(
+      this,
+      "LNG",
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
+    ) || 0;
   var alt =
-    Blockly.Arduino.valueToCode(this, "ALT", Blockly.Arduino.ORDER_ATOMIC) || 0;
+    Blockly.Generator.Arduino.valueToCode(
+      this,
+      "ALT",
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
+    ) || 0;
   var channel = this.getFieldValue("CHANNEL");
   var code = `lpp.addGPS(${channel}, ${lat}, ${lng}, ${alt});\n`;
   return code;
 };
 
-Blockly.Arduino.sensebox_lora_cayenne_concentration = function (block) {
+Blockly.Generator.Arduino.sensebox_lora_cayenne_concentration = function (
+  block,
+) {
   var value =
-    Blockly.Arduino.valueToCode(this, "Value", Blockly.Arduino.ORDER_ATOMIC) ||
-    0;
+    Blockly.Generator.Arduino.valueToCode(
+      this,
+      "Value",
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
+    ) || 0;
   var channel = this.getFieldValue("CHANNEL");
   var code = `lpp.addConcentration(${channel}, ${value});\n`;
   return code;
