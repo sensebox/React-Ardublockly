@@ -390,26 +390,22 @@ export const ToolboxMcu = () => {
       </Category>
       <Category id="sensebox_solar" name="Solar" colour={getColour().solar}>
         <Block type="sensebox_solar_charger_SB041">
-          <Field name="value">battery_level</Field>
+          <Field name="MEASUREMENT">getBatteryLevel</Field>
         </Block>
-        <Block type="sensebox_solar_ensure_wake_time">
-          <Field name="wake_time">30</Field>
-          <Field name="time_scale">1000</Field>
+        <Block type="sensebox_solar_deep_sleep_and_restart">
+          <Field name="SLEEP_TIME">30</Field>
+          <Field name="TIME_SCALE">60000</Field>
+          <Field name="POWER_OFF_I2C">TRUE</Field>
+          <Field name="PPOWER_OFF_UART">TRUE</Field>
+          <Field name="PWER_OFF_XB">TRUE</Field>
         </Block>
-        {/* <Block type="sensebox_solar_deep_sleep_and_restart">
-          <Field name="sleep_time">30</Field>
-          <Field name="time_scale"> * 60000</Field>
-          <Field name="powerOffI2C">TRUE</Field>
-          <Field name="powerOffUART">TRUE</Field>
-          <Field name="powerOffXB">TRUE</Field>
-        </Block>
-        <Block type="controls_ifelse">
+        {/* <Block type="controls_ifelse">
           <Value name="IF0">
             <Block type="logic_compare">
               <Field name="OP">GT</Field>
               <Value name="A">
                 <Block type="sensebox_solar_charger_SB041">
-                  <Field name="value">battery_level</Field>
+                  <Field name="MASUREMENT">getBatteryLevel</Field>
                 </Block>
               </Value>
               <Value name="B">
@@ -421,20 +417,20 @@ export const ToolboxMcu = () => {
           </Value>
           <Statement name="DO0">
             <Block type="sensebox_solar_deep_sleep_and_restart">
-              <Field name="sleep_time">30</Field>
-              <Field name="time_scale"> * 60000</Field>
-              <Field name="powerOffI2C">TRUE</Field>
-              <Field name="powerOffUART">TRUE</Field>
-              <Field name="powerOffXB">TRUE</Field>
+              <Field name="SLEEP_TIME">30</Field>
+              <Field name="TIME_SCALE">60000</Field>
+              <Field name="POWER_OFF_I2C">TRUE</Field>
+              <Field name="PPOWER_OFF_UART">TRUE</Field>
+              <Field name="PWER_OFF_XB">TRUE</Field>
             </Block>
           </Statement>
           <Statement name="ELSE">
             <Block type="sensebox_solar_deep_sleep_and_restart">
-              <Field name="sleep_time">12</Field>
-              <Field name="time_scale"> * 3600000</Field>
-              <Field name="powerOffI2C">TRUE</Field>
-              <Field name="powerOffUART">TRUE</Field>
-              <Field name="powerOffXB">TRUE</Field>
+              <Field name="SLEEP_TIME">12</Field>
+              <Field name="TIME_SCALE">3600000</Field>
+              <Field name="POWER_OFF_I2C">TRUE</Field>
+              <Field name="PPOWER_OFF_UART">TRUE</Field>
+              <Field name="PWER_OFF_XB">TRUE</Field>
             </Block>
           </Statement>
         </Block> */}
