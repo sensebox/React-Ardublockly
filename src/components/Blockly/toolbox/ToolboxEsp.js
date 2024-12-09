@@ -403,7 +403,7 @@ export const ToolboxEsp = () => {
         </Block>
         <Block type="sensebox_solar_deep_sleep_and_restart">
           <Field name="sleep_time">30</Field>
-          <Field name="time_scale"> * 60000</Field>
+          <Field name="time_scale">60000</Field>
           <Field name="powerOffGPIO">TRUE</Field>
           <Field name="powerOffUART">TRUE</Field>
           <Field name="powerOffXB">TRUE</Field>
@@ -427,7 +427,7 @@ export const ToolboxEsp = () => {
           <Statement name="DO0">
             <Block type="sensebox_solar_deep_sleep_and_restart">
               <Field name="sleep_time">30</Field>
-              <Field name="time_scale"> * 60000</Field>
+              <Field name="time_scale">60000</Field>
               <Field name="powerOffGPIO">TRUE</Field>
               <Field name="powerOffUART">TRUE</Field>
               <Field name="powerOffXB">TRUE</Field>
@@ -436,7 +436,7 @@ export const ToolboxEsp = () => {
           <Statement name="ELSE">
             <Block type="sensebox_solar_deep_sleep_and_restart">
               <Field name="sleep_time">12</Field>
-              <Field name="time_scale"> * 3600000</Field>
+              <Field name="time_scale">3600000</Field>
               <Field name="powerOffGPIO">TRUE</Field>
               <Field name="powerOffUART">TRUE</Field>
               <Field name="powerOffXB">TRUE</Field>
