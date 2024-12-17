@@ -93,50 +93,40 @@ Blockly.Blocks["sensebox_solar_charger_SB041"] = {
 };
 
 /**
- * Ensure Wake Time
- */
-Blockly.Blocks["sensebox_solar_ensure_wake_time"] = {
-  init: function () {
-    this.setColour(getColour().solar);
-    this.setPreviousStatement(true);
-    this.setNextStatement(true);
-    this.appendDummyInput()
-      .appendField(Blockly.Msg.sensebox_solar_ensure_wake_time)
-      .appendField(new Blockly.FieldNumber(0), "wake_time")
-      .appendField(
-        new Blockly.FieldDropdown([
-          [Blockly.Msg.sensebox_solar_hours, "3600000"],
-          [Blockly.Msg.sensebox_solar_minutes, "60000"],
-          [Blockly.Msg.sensebox_solar_seconds, "1000"],
-          [Blockly.Msg.sensebox_solar_milliseconds, "1"],
-        ]),
-        "time_scale",
-      );
-    this.setTooltip(Blockly.Msg.sensebox_solar_ensure_wake_time_tooltip);
-    //this.setHelpUrl(Blockly.Msg.sensebox_solar_ensure_wake_time_helpurl);
-  },
-};
-
-/**
  * Deep Sleep and Restart
  */
 Blockly.Blocks["sensebox_solar_deep_sleep_and_restart"] = {
   init: function () {
     var board = selectedBoard().title;
+    var time_scales = [
+      [Blockly.Msg.sensebox_solar_deep_sleep_and_restart_hours, "3600000"],
+      [Blockly.Msg.sensebox_solar_deep_sleep_and_restart_minutes, "60000"],
+      [Blockly.Msg.sensebox_solar_deep_sleep_and_restart_seconds, "1000"],
+      [Blockly.Msg.sensebox_solar_deep_sleep_and_restart_milliseconds, "1"],
+    ];
+    var sensor_wake_up_seconds = [
+      ["30", "30"],
+      ["60", "60"],
+      ["120", "120"],
+    ];
     this.setColour(getColour().solar);
     this.setPreviousStatement(true);
+    this.appendDummyInput().appendField(
+      Blockly.Msg.sensebox_solar_deep_sleep_and_restart,
+    );
     this.appendDummyInput()
-      .appendField(Blockly.Msg.sensebox_solar_deep_sleep_and_restart)
-      .appendField(new Blockly.FieldNumber(0), "SLEEP_TIME")
+      .appendField(Blockly.Msg.sensebox_solar_deep_sleep_and_restart_sleep_time)
+      .appendField(new Blockly.FieldNumber(1), "SLEEP_TIME")
+      .appendField(new Blockly.FieldDropdown(time_scales), "TIME_SCALE");
+    this.appendDummyInput()
       .appendField(
-        new Blockly.FieldDropdown([
-          [Blockly.Msg.sensebox_solar_deep_sleep_and_restart_hours, "3600000"],
-          [Blockly.Msg.sensebox_solar_deep_sleep_and_restart_minutes, "60000"],
-          [Blockly.Msg.sensebox_solar_deep_sleep_and_restart_seconds, "1000"],
-          [Blockly.Msg.sensebox_solar_deep_sleep_and_restart_milliseconds, "1"],
-        ]),
-        "TIME_SCALE",
-      );
+        Blockly.Msg.sensebox_solar_deep_sleep_and_restart_minimal_wake_up_time,
+      )
+      .appendField(
+        new Blockly.FieldDropdown(sensor_wake_up_seconds),
+        "WAKE_SECONDS",
+      )
+      .appendField(Blockly.Msg.sensebox_solar_deep_sleep_and_restart_seconds);
     if (board === "MCU-S2") {
       this.appendDummyInput()
         .appendField(
@@ -161,7 +151,6 @@ Blockly.Blocks["sensebox_solar_deep_sleep_and_restart"] = {
         .appendField(", XB")
         .appendField(new Blockly.FieldCheckbox("TRUE"), "POWER_OFF_XB");
     }
-    this.appendDummyInput().appendField(Blockly.Msg.)
     this.setTooltip(Blockly.Msg.sensebox_solar_deep_sleep_and_restart_tooltip);
     //this.setHelpUrl(Blockly.Msg.sensebox_solar_deep_sleep_and_restart_helpurl);
   },

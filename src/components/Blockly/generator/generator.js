@@ -106,13 +106,13 @@ Blockly.Generator.Arduino.init = function (workspace) {
 
   Blockly.Generator.Arduino.definitions_ = Object.create(null);
 
-  // creates a list of code to be setup before the setup block
+  // creates a list of code to be in the setup block
   Blockly.Generator.Arduino.setupCode_ = {};
 
-  // creates a list of code to be setup before the setup block
+  // creates a list of phyphox code to be in the setup block
   Blockly.Generator.Arduino.phyphoxSetupCode_ = Object.create(null);
 
-  // creates a list of code to be setup before the setup block
+  // creates a list of lora code to be in the setup block
   Blockly.Generator.Arduino.loraSetupCode_ = Object.create(null);
 
   // creates a list of code for the loop to be runned once
@@ -201,8 +201,6 @@ Blockly.Generator.Arduino.finish = function (code) {
     loraSetupCode += Blockly.Generator.Arduino.loraSetupCode_[key] + "\n" || "";
   }
 
-  setupCode =
-    "\nvoid setup() { \n" + preSetupCode + "\n" + loraSetupCode + "\n}\n";
   for (const key in Blockly.Generator.Arduino.phyphoxSetupCode_) {
     phyphoxSetupCode +=
       Blockly.Generator.Arduino.phyphoxSetupCode_[key] + "\n" || "";
