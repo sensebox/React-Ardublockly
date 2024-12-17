@@ -9,8 +9,10 @@ export const MATH = {
     "Return the first number raised to the power of the second number.",
   MATH_CHANGE_HELPURL:
     "https://en.wikipedia.org/wiki/Programming_idiom#Incrementing_a_counter",
-  MATH_CHANGE_TITLE: "change %1 by %2",
-  MATH_CHANGE_TOOLTIP: "Add a number to variable '%1'.",
+  MATH_CHANGE_TITLE: "%1 %2 by %3",
+  MATH_CHANGE_UP: "increase",
+  MATH_CHANGE_DOWN: "decrease",
+  MATH_CHANGE_TOOLTIP: "Adds/Subtracts a number to/from the variable '%2'.",
   MATH_CONSTANT_HELPURL: "https://en.wikipedia.org/wiki/Mathematical_constant",
   MATH_CONSTANT_TOOLTIP:
     "Return one of the common constants: π (3.141…), e (2.718…), φ (1.618…), sqrt(2) (1.414…), sqrt(½) (0.707…), or ∞ (infinity).",

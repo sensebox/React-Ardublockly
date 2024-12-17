@@ -81,6 +81,29 @@ Blockly.Blocks["math_arithmetic"] = {
   //TODO: a getBlockType based on the two input types following C++ rules
 };
 
+Blockly.Blocks["math_negative"] = {
+  /**
+   * Block for single minus sign
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.jsonInit({
+      message0: "- %1",
+      args0: [
+        {
+          type: "input_value",
+          name: "NUM",
+          check: Types.getCompatibleTypes("float"),
+        },
+      ],
+      output: Types.DECIMAL.typeName,
+      colour: getColour().math,
+      helpUrl: Blockly.Msg.MATH_SINGLE_HELPURL,
+      tooltip: Blockly.Msg.MATH_SINGLE_TOOLTIP_NEG,
+    });
+  },
+};
+
 Blockly.Blocks["math_single"] = {
   /**
    * Block for advanced math operators with single operand.
@@ -96,7 +119,6 @@ Blockly.Blocks["math_single"] = {
           options: [
             [Blockly.Msg.MATH_SINGLE_OP_ROOT, "ROOT"],
             [Blockly.Msg.MATH_SINGLE_OP_ABSOLUTE, "ABS"],
-            ["-", "NEG"],
             ["ln", "LN"],
             ["log10", "LOG10"],
             ["e^", "EXP"],
@@ -120,7 +142,6 @@ Blockly.Blocks["math_single"] = {
       var TOOLTIPS = {
         ROOT: Blockly.Msg.MATH_SINGLE_TOOLTIP_ROOT,
         ABS: Blockly.Msg.MATH_SINGLE_TOOLTIP_ABS,
-        NEG: Blockly.Msg.MATH_SINGLE_TOOLTIP_NEG,
         LN: Blockly.Msg.MATH_SINGLE_TOOLTIP_LN,
         LOG10: Blockly.Msg.MATH_SINGLE_TOOLTIP_LOG10,
         EXP: Blockly.Msg.MATH_SINGLE_TOOLTIP_EXP,
@@ -281,13 +302,21 @@ Blockly.Blocks["math_number_property"] = {
 
 Blockly.Blocks["math_change"] = {
   /**
-   * Block for adding to a variable in place.
+   * Block for adding or subtracting to a variable in place.
    * @this Blockly.Block
    */
   init: function () {
     this.jsonInit({
       message0: Blockly.Msg.MATH_CHANGE_TITLE,
       args0: [
+        {
+          type: "field_dropdown",
+          name: "DIRECTION",
+          options: [
+            [Blockly.Msg.MATH_CHANGE_UP, "+="],
+            [Blockly.Msg.MATH_CHANGE_DOWN, "-="],
+          ],
+        },
         {
           type: "field_variable",
           name: "VAR",

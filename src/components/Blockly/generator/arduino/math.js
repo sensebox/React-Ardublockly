@@ -18,17 +18,10 @@ import * as Blockly from "blockly/core";
  * @param {!Blockly.Block} block Block to generate the code from.
  * @return {array} Completed code with order of operation.
  */
-Blockly.Generator.Arduino.forBlock["math_number"] = function (
-  block,
-  generator,
-) {
-  // Numeric value.
+Blockly.Generator.Arduino.forBlock["math_number"] = function (block) {
   var unparsedCode = block.getFieldValue("NUM");
-  // understand decimal comma for german users
-  if (unparsedCode.includes(",")) {
-    // maybe add notification for educational purpose here
-    unparsedCode = unparsedCode.replace(",", ".");
-  }
+  // understand decimal comma for german users (maybe add notification for educational purpose here)
+  unparsedCode = unparsedCode.replace(",", ".");
   var code = parseFloat(unparsedCode);
   block.setFieldValue(code, "NUM");
   if (code === Infinity) {
@@ -46,16 +39,13 @@ Blockly.Generator.Arduino.forBlock["math_number"] = function (
  * @param {!Blockly.Block} block Block to generate the code from.
  * @return {array} Completed code with order of operation.
  */
-Blockly.Generator.Arduino.forBlock["math_arithmetic"] = function (
-  block,
-  generator,
-) {
+Blockly.Generator.Arduino.forBlock["math_arithmetic"] = function (block) {
   var OPERATORS = {
     ADD: [" + ", Blockly.Generator.Arduino.ORDER_ADDITIVE],
     MINUS: [" - ", Blockly.Generator.Arduino.ORDER_ADDITIVE],
     MULTIPLY: [" * ", Blockly.Generator.Arduino.ORDER_MULTIPLICATIVE],
     DIVIDE: [" / ", Blockly.Generator.Arduino.ORDER_MULTIPLICATIVE],
-    POWER: [null, Blockly.Generator.Arduino.ORDER_NONE], // Handle power separately.
+    POWER: [" ^ ", Blockly.Generator.Arduino.ORDER_NONE], // Handle power separately.
   };
   var tuple = OPERATORS[block.getFieldValue("OP")];
   var operator = tuple[0];
@@ -66,24 +56,19 @@ Blockly.Generator.Arduino.forBlock["math_arithmetic"] = function (
     Blockly.Generator.Arduino.valueToCode(block, "B", order) || "0";
   var code;
   // Power in C++ requires a special case since it has no operator.
-  if (!operator) {
-    code = "Math.pow(" + argument0 + ", " + argument1 + ")";
+  if (operator === " ^ ") {
+    code = `Math.pow(${argument0}, ${argument1})`;
     return [code, Blockly.Generator.Arduino.ORDER_UNARY_POSTFIX];
   }
   code = argument0 + operator + argument1;
   return [code, order];
-};
-
-/**
+}; /**
  * Generator for math operators that contain a single operand (X).
  * Arduino code: loop { operator(X) }
  * @param {!Blockly.Block} block Block to generate the code from.
  * @return {array} Completed code with order of operation.
  */
-Blockly.Generator.Arduino.forBlock["math_single"] = function (
-  block,
-  generator,
-) {
+Blockly.Generator.Arduino.forBlock["math_single"] = function (block) {
   var operator = block.getFieldValue("OP");
   var code;
   var arg;
@@ -186,6 +171,123 @@ Blockly.Generator.Arduino.forBlock["math_single"] = function (
 };
 
 /**
+ * Generator math negative operant -(X).
+ * Arduino code: loop { -(X) }
+ * @param {!Blockly.Block} block Block to generate the code from.
+ * @return {array} Completed code with order of operation.
+ */
+Blockly.Generator.Arduino.forBlock["math_negative"] = function (block) {
+  var code;
+  var arg;
+  // Negation is a special case given its different operator precedents.
+  arg =
+    Blockly.Generator.Arduino.valueToCode(
+      block,
+      "NUM",
+      Blockly.Generator.Arduino.ORDER_UNARY_PREFIX,
+    ) || "0";
+  if (arg[0] === "-") {
+    // --3 is not legal in C++ in this context.
+    arg = " " + arg;
+  }
+  code = "-" + arg;
+  return [code, Blockly.Generator.Arduino.ORDER_UNARY_PREFIX];
+};
+
+/**
+ * Generator for math operators that contain a single operand (X).
+ * Arduino code: loop { operator(X) }
+ * @param {!Blockly.Block} block Block to generate the code from.
+ * @return {array} Completed code with order of operation.
+ */
+Blockly.Generator.Arduino.forBlock["math_single"] = function (block) {
+  var operator = block.getFieldValue("OP");
+  var code;
+  var arg;
+  if (operator === "ABS" || operator.substring(0, 5) === "ROUND") {
+    arg =
+      Blockly.Generator.Arduino.valueToCode(
+        block,
+        "NUM",
+        Blockly.Generator.Arduino.ORDER_UNARY_POSTFIX,
+      ) || "0";
+  } else if (operator === "SIN" || operator === "COS" || operator === "TAN") {
+    arg =
+      Blockly.Generator.Arduino.valueToCode(
+        block,
+        "NUM",
+        Blockly.Generator.Arduino.ORDER_MULTIPLICATIVE,
+      ) || "0";
+  } else {
+    arg =
+      Blockly.Generator.Arduino.valueToCode(
+        block,
+        "NUM",
+        Blockly.Generator.Arduino.ORDER_NONE,
+      ) || "0";
+  }
+  // First, handle cases which generate values that don't need parentheses.
+  switch (operator) {
+    case "ABS":
+      code = "abs(" + arg + ")";
+      break;
+    case "ROOT":
+      code = "sqrt(" + arg + ")";
+      break;
+    case "LN":
+      code = "log(" + arg + ")";
+      break;
+    case "EXP":
+      code = "exp(" + arg + ")";
+      break;
+    case "POW10":
+      code = "pow(10," + arg + ")";
+      break;
+    case "ROUND":
+      code = "round(" + arg + ")";
+      break;
+    case "ROUNDUP":
+      code = "ceil(" + arg + ")";
+      break;
+    case "ROUNDDOWN":
+      code = "floor(" + arg + ")";
+      break;
+    case "SIN":
+      code = "sin(" + arg + " / 180 * Math.PI)";
+      break;
+    case "COS":
+      code = "cos(" + arg + " / 180 * Math.PI)";
+      break;
+    case "TAN":
+      code = "tan(" + arg + " / 180 * Math.PI)";
+      break;
+    default:
+      break;
+  }
+  if (code) {
+    return [code, Blockly.Generator.Arduino.ORDER_UNARY_POSTFIX];
+  }
+  // Second, handle cases which generate values that may need parentheses.
+  switch (operator) {
+    case "LOG10":
+      code = "log(" + arg + ") / log(10)";
+      break;
+    case "ASIN":
+      code = "asin(" + arg + ") / M_PI * 180";
+      break;
+    case "ACOS":
+      code = "acos(" + arg + ") / M_PI * 180";
+      break;
+    case "ATAN":
+      code = "atan(" + arg + ") / M_PI * 180";
+      break;
+    default:
+      throw new Error("Unknown math operator: " + operator);
+  }
+  return [code, Blockly.Generator.Arduino.ORDER_MULTIPLICATIVE];
+};
+
+/**
  * Generator for math constants (PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2),
  * INFINITY).
  * Arduino code: loop { constant }
@@ -194,10 +296,7 @@ Blockly.Generator.Arduino.forBlock["math_single"] = function (
  * @param {!Blockly.Block} block Block to generate the code from.
  * @return {string} Completed code.
  */
-Blockly.Generator.Arduino.forBlock["math_constant"] = function (
-  block,
-  generator,
-) {
+Blockly.Generator.Arduino.forBlock["math_constant"] = function (block) {
   var CONSTANTS = {
     PI: ["M_PI", Blockly.Generator.Arduino.ORDER_UNARY_POSTFIX],
     E: ["M_E", Blockly.Generator.Arduino.ORDER_UNARY_POSTFIX],
@@ -219,10 +318,7 @@ Blockly.Generator.Arduino.forBlock["math_constant"] = function (
  * @param {!Blockly.Block} block Block to generate the code from.
  * @return {array} Completed code with order of operation.
  */
-Blockly.Generator.Arduino.forBlock["math_number_property"] = function (
-  block,
-  generator,
-) {
+Blockly.Generator.Arduino.forBlock["math_number_property"] = function (block) {
   var number_to_check =
     Blockly.Generator.Arduino.valueToCode(
       block,
@@ -232,33 +328,26 @@ Blockly.Generator.Arduino.forBlock["math_number_property"] = function (
   var dropdown_property = block.getFieldValue("PROPERTY");
   var code;
   if (dropdown_property === "PRIME") {
-    var func = [
-      "boolean " + Blockly.Generator.Arduino.DEF_FUNC_NAME + "(int n) {",
-      "  // https://en.wikipedia.org/wiki/Primality_test#Naive_methods",
-      "  if (n == 2 || n == 3) {",
-      "    return true;",
-      "  }",
-      "  // False if n is NaN, negative, is 1.",
-      "  // And false if n is divisible by 2 or 3.",
-      "  if (isnan(n) || (n <= 1) || (n == 1) || (n % 2 == 0) || " +
-        "(n % 3 == 0)) {",
-      "    return false;",
-      "  }",
-      "  // Check all the numbers of form 6k +/- 1, up to sqrt(n).",
-      "  for (int x = 6; x <= sqrt(n) + 1; x += 6) {",
-      "    if (n % (x - 1) == 0 || n % (x + 1) == 0) {",
-      "      return false;",
-      "    }",
-      "  }",
-      "  return true;",
-      "}",
-    ];
-    var funcName = Blockly.Generator.Arduino.addFunction(
-      "mathIsPrime",
-      func.join("\n"),
-    );
-    Blockly.Generator.Arduino.addInclude("math", "#include <math.h>");
-    code = funcName + "(" + number_to_check + ")";
+    Blockly.Generator.Arduino.codeFunctions_["isPrime"] =
+      `boolean isPrime(int n) {
+      // https://en.wikipedia.org/wiki/Primality_test#Naive_methods
+      if (n == 2 || n == 3) {
+        return true;
+      }
+      // False if n is NaN, negative, is 1 or divisible by 2 or 3.
+      if (isnan(n) || (n <= 1) || (n == 1) || (n % 2 == 0) || (n % 3 == 0)) {
+        return false;
+      }
+      // Check all the numbers of form 6k +/- 1, up to sqrt(n).
+      for (int x = 6; x <= sqrt(n) + 1; x += 6) {
+        if (n % (x - 1) == 0 || n % (x + 1) == 0) {
+          return false;
+        }
+      }
+      return true;
+    }`;
+    Blockly.Generator.Arduino.libraries_["math"] = "#include <math.h>";
+    code = `isPrime(${number_to_check})`;
     return [code, Blockly.Generator.Arduino.ORDER_UNARY_POSTFIX];
   }
   switch (dropdown_property) {
@@ -269,7 +358,7 @@ Blockly.Generator.Arduino.forBlock["math_number_property"] = function (
       code = number_to_check + " % 2 == 1";
       break;
     case "WHOLE":
-      Blockly.Generator.Arduino.addInclude("math", "#include <math.h>");
+      Blockly.Generator.Arduino.libraries_["math"] = "#include <math.h>";
       code = "(floor(" + number_to_check + ") == " + number_to_check + ")";
       break;
     case "POSITIVE":
@@ -294,17 +383,14 @@ Blockly.Generator.Arduino.forBlock["math_number_property"] = function (
 };
 
 /**
- * Generator to add (Y) to a variable (X).
+ * Generator to add/subtract (Y) to a variable (X).
  * If variable X has not been declared before this block it will be declared as
  * a (not initialised) global int, however globals are 0 initialised in C/C++.
  * Arduino code: loop { X += Y; }
  * @param {!Blockly.Block} block Block to generate the code from.
  * @return {array} Completed code with order of operation.
  */
-Blockly.Generator.Arduino.forBlock["math_change"] = function (
-  block,
-  generator,
-) {
+Blockly.Generator.Arduino.forBlock["math_change"] = function (block) {
   var argument0 =
     Blockly.Generator.Arduino.valueToCode(
       block,
@@ -347,10 +433,7 @@ Blockly.Generator.Arduino["math_on_list"] =
  * @param {!Blockly.Block} block Block to generate the code from.
  * @return {array} Completed code with order of operation.
  */
-Blockly.Generator.Arduino.forBlock["math_modulo"] = function (
-  block,
-  generator,
-) {
+Blockly.Generator.Arduino.forBlock["math_modulo"] = function (block) {
   var argument0 =
     Blockly.Generator.Arduino.valueToCode(
       block,
@@ -373,10 +456,7 @@ Blockly.Generator.Arduino.forBlock["math_modulo"] = function (
  * @param {!Blockly.Block} block Block to generate the code from.
  * @return {array} Completed code with order of operation.
  */
-Blockly.Generator.Arduino.forBlock["math_constrain"] = function (
-  block,
-  generator,
-) {
+Blockly.Generator.Arduino.forBlock["math_constrain"] = function (block) {
   // Constrain a number between two limits.
   var argument0 =
     Blockly.Generator.Arduino.valueToCode(
@@ -422,10 +502,7 @@ Blockly.Generator.Arduino.forBlock["math_constrain"] = function (
  * @param {!Blockly.Block} block Block to generate the code from.
  * @return {array} Completed code with order of operation.
  */
-Blockly.Generator.Arduino.forBlock["math_random_int"] = function (
-  block,
-  generator,
-) {
+Blockly.Generator.Arduino.forBlock["math_random_int"] = function (block) {
   var argument0 =
     Blockly.Generator.Arduino.valueToCode(
       block,
@@ -460,9 +537,6 @@ Blockly.Generator.Arduino.forBlock["math_random_int"] = function (
  * @param {!Blockly.Block} block Block to generate the code from.
  * @return {string} Completed code.
  */
-Blockly.Generator.Arduino.forBlock["math_random_float"] = function (
-  block,
-  generator,
-) {
+Blockly.Generator.Arduino.forBlock["math_random_float"] = function () {
   return ["(rand() / RAND_MAX)", Blockly.Generator.Arduino.ORDER_UNARY_POSTFIX];
 };

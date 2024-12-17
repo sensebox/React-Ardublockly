@@ -322,7 +322,7 @@ export const UI = {
    */
 
   tooltip_viewer: "Hilfe",
-  tooltip_moreInformation: "Mehr Informationen findest du ",
+  tooltip_moreInformation: "Mehr Informationen",
   tooltip_hint: "Wähle einen Block aus um dir die Hilfe anzeigen zu lassen",
 
   /**
@@ -341,7 +341,7 @@ export const UI = {
     "Stelle sicher, dasss du das Display im Setup initialisiert hast.",
   variable_redeclared:
     "Stelle sicher, dass du keine Sonderzeichen in deinen Variablennamen verwendest. Dazu gehören z.B. Leerzeichen, Sternchen oder Anführungszeichen.",
-  
+
   /**
    * Code Editor
    *  */
