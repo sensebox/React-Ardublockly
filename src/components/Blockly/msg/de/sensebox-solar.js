@@ -36,7 +36,8 @@ export const SOLAR = {
    * Deep Sleep and Restart
    */
   sensebox_solar_deep_sleep_and_restart:
-    "Stromsparender Tiefschlaf und Neustart nach",
+    "Stromsparender Tiefschlaf und Neustart",
+  sensebox_solar_deep_sleep_and_restart_sleep_time: "Schlafenszeit:",
   sensebox_solar_deep_sleep_and_restart_hours: "Stunden",
   sensebox_solar_deep_sleep_and_restart_minutes: "Minuten",
   sensebox_solar_deep_sleep_and_restart_seconds: "Sekunden",
@@ -44,7 +45,7 @@ export const SOLAR = {
   sensebox_solar_milliseconds: "Millisekunden",
   sensebox_solar_deep_sleep_and_restart_deactivate_ports:
     "Anschlüsse zum deaktivieren:",
-  sensebox_solar_deep_sleep_and_restart_minimal_wake_time: "Mindestwachzeit:",
+  sensebox_solar_deep_sleep_and_restart_minimal_wake_up_time: "Aufwachzeit:",
   sensebox_solar_deep_sleep_and_restart_tooltip:
     "Dieser Block versetzt die senseBox für vorgegebene Zeit in einen **Stromsparenden Tiefschlaf**. Dabei werden jegliche Funktionen und die Sensoren an den angegebenen Anschlüssen deaktiviert. Nach der vorgegebenen Zeit wacht die senseBox auf und startet neu. Dieser Block ist nützlich für den Solarbetrieb. \n Dieser Block stellt sicher, dass die senseBox mindestens die angegebene Zeit seit dem letzten Neustart wach war. **Wenn du den Tiefschlaf-Block am Ende der Endlosschleife verwendest, dann platziere diesen Block am Anfang der Endlosschleife, um sicherzugehen, dass alle Sensoren mindestens die angegebene Zeit lang aktiv waren.** Für die Feinstaubsensoren wird beispielsweise eine Mindestwachzeit von 30 Sekunden empfohlen.",
   sensebox_solar_deep_sleep_and_restart_helpurl: "",
