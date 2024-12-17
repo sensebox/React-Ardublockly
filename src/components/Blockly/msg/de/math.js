@@ -8,8 +8,10 @@ export const MATH = {
   MATH_ARITHMETIC_TOOLTIP_POWER:
     "Ist der erste Wert potenziert mit dem zweiten Wert.",
   MATH_CHANGE_HELPURL: "https://de.wikipedia.org/wiki/Inkrement_und_Dekrement",
-  MATH_CHANGE_TITLE: "erhöhe %1 um %2",
-  MATH_CHANGE_TOOLTIP: 'Addiert einen Wert zur Variable "%1" hinzu.',
+  MATH_CHANGE_TITLE: "%1 %2 um %3",
+  MATH_CHANGE_UP: "erhöhe",
+  MATH_CHANGE_DOWN: "verringere",
+  MATH_CHANGE_TOOLTIP: 'Addiert/Subtraiert einen Wert zur/von Variable "%2".',
   MATH_CONSTANT_HELPURL:
     "https://de.wikipedia.org/wiki/Mathematische_Konstante",
   MATH_CONSTANT_TOOLTIP:

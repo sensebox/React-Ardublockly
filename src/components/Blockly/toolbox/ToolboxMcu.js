@@ -538,6 +538,7 @@ export const ToolboxMcu = () => {
       >
         <Block type="math_number"></Block>
         <Block type="math_arithmetic"></Block>
+        <Block type="math_negative"></Block>
         <Block type="math_single"></Block>
         <Block type="math_trig"></Block>
         <Block type="math_constant"></Block>
