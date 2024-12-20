@@ -5,7 +5,6 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
-import { LibraryVersions } from "../../data/versions.js";
 import { useMonaco } from "@monaco-editor/react";
 import { Button } from "@mui/material";
 import SerialMonitor from "./SerialMonitor.js";
@@ -33,6 +32,27 @@ const Sidebar = () => {
         loadCode(res.data);
       });
   };
+
+  const [libraries, setLibraries] = React.useState([]);
+  React.useEffect(() => {
+    const fetchLibraries = async () => {
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_COMPILER_URL}/libraries`,
+        {
+          params: {
+            format: "json",
+          },
+        }
+      );
+      const myLibs = data.installed_libraries
+        .map(({ library }) => library)
+        .filter((lib) => lib.location == "user")
+        .sort((a, b) => a.name.localeCompare(b.name));
+        
+      setLibraries(myLibs);
+    };
+    fetchLibraries();
+  }, []);
 
   return (
     <div>
@@ -128,15 +148,16 @@ const Sidebar = () => {
             style={{
               overflow: "auto",
               width: "100%",
+              height: "100%",
               padding: "1rem",
             }}
           >
             <p>{Blockly.Msg.codeeditor_libraries_text}</p>
-            {LibraryVersions().map((object, i) => {
+            {libraries.map((library, i) => {
               return (
-                <p>
-                  <a href={object.link} target="_blank" rel="noreferrer">
-                    {object.library} {object.version}
+                <p key={library.name + i}>
+                  <a href={library.website} target="_blank" rel="noreferrer" >
+                    {library.name} {library.version}
                   </a>
                 </p>
               );
