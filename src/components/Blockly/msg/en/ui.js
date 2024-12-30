@@ -13,7 +13,7 @@ export const UI = {
   toolbox_functions: "Functions",
   toolbox_variables: "Variables",
   toolbox_serial: "Serial",
-  toolbox_advanced: "Erweitert",
+  toolbox_advanced: "Advanced",
   toolbox_motors: "Motors",
   toolbox_label_externalRTC: "External RTC",
   toolbox_label_internalRTC: "Internal RTC",

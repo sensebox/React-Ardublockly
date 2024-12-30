@@ -155,7 +155,7 @@ Blockly.Generator.Arduino.forBlock["sensebox_web_readHTML"] = function (
   Blockly.Generator.Arduino.codeFunctions_["define_sd" + filename] =
     "File webFile;";
   Blockly.Generator.Arduino.setupCode_["sensebox_sd"] = "SD.begin(28);";
-  Blockly.Generator.Arduino.codeFunctions_["generateHTML"] =
+  Blockly.Generator.Arduino.codeFunctions_["readHTML"] =
     `String readHTML(String filename){
     webFile = SD.open(filename, FILE_READ);
     String finalString = "";

@@ -126,8 +126,8 @@ class TooltipViewer extends Component {
 }
 
 TooltipViewer.propTypes = {
-  tooltip: PropTypes.string.isRequired,
-  helpurl: PropTypes.string.isRequired,
+  tooltip: PropTypes.string,
+  helpurl: PropTypes.string,
 };
 
 const mapStateToProps = (state) => ({
