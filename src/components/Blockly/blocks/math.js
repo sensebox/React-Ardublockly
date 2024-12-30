@@ -15,16 +15,7 @@ Blockly.Blocks["math_number"] = {
       "NUM",
     );
     this.setOutput(true, Types.NUMBER.typeName);
-    // Assign 'this' to a variable for use in the tooltip closure below.
-    var thisBlock = this;
-    // Number block is trivial.  Use tooltip of parent block if it exists.
-    this.setTooltip(function () {
-      var parent = thisBlock.getParent();
-      return (
-        (parent && parent.getInputsInline() && parent.tooltip) ||
-        Blockly.Msg.MATH_NUMBER_TOOLTIP
-      );
-    });
+    this.setTooltip(Blockly.Msg.MATH_NUMBER_TOOLTIP); //update in generator
   },
 };
 
@@ -64,19 +55,7 @@ Blockly.Blocks["math_arithmetic"] = {
       colour: getColour().math,
       helpUrl: Blockly.Msg.MATH_ARITHMETIC_HELPURL,
     });
-    // Assign 'this' to a variable for use in the tooltip closure below.
-    var thisBlock = this;
-    this.setTooltip(function () {
-      var mode = thisBlock.getFieldValue("OP");
-      var TOOLTIPS = {
-        ADD: Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_ADD,
-        MINUS: Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_MINUS,
-        MULTIPLY: Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_MULTIPLY,
-        DIVIDE: Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_DIVIDE,
-        POWER: Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_POWER,
-      };
-      return TOOLTIPS[mode];
-    });
+    this.setTooltip(Blockly.Msg.MATH_ARITHMETIC_TOOLTIP); //update in generator
   },
   //TODO: a getBlockType based on the two input types following C++ rules
 };
@@ -134,20 +113,7 @@ Blockly.Blocks["math_single"] = {
       output: Types.DECIMAL.typeName,
       colour: getColour().math,
       helpUrl: Blockly.Msg.MATH_SINGLE_HELPURL,
-    });
-    // Assign 'this' to a variable for use in the tooltip closure below.
-    var thisBlock = this;
-    this.setTooltip(function () {
-      var mode = thisBlock.getFieldValue("OP");
-      var TOOLTIPS = {
-        ROOT: Blockly.Msg.MATH_SINGLE_TOOLTIP_ROOT,
-        ABS: Blockly.Msg.MATH_SINGLE_TOOLTIP_ABS,
-        LN: Blockly.Msg.MATH_SINGLE_TOOLTIP_LN,
-        LOG10: Blockly.Msg.MATH_SINGLE_TOOLTIP_LOG10,
-        EXP: Blockly.Msg.MATH_SINGLE_TOOLTIP_EXP,
-        POW10: Blockly.Msg.MATH_SINGLE_TOOLTIP_POW10,
-      };
-      return TOOLTIPS[mode];
+      tooltip: Blockly.Msg.MATH_SINGLE_TOOLTIP, // update in generator
     });
   },
 };
@@ -182,20 +148,7 @@ Blockly.Blocks["math_trig"] = {
       output: Types.DECIMAL.typeName,
       colour: getColour().math,
       helpUrl: Blockly.Msg.MATH_TRIG_HELPURL,
-    });
-    // Assign 'this' to a variable for use in the tooltip closure below.
-    var thisBlock = this;
-    this.setTooltip(function () {
-      var mode = thisBlock.getFieldValue("OP");
-      var TOOLTIPS = {
-        SIN: Blockly.Msg.MATH_TRIG_TOOLTIP_SIN,
-        COS: Blockly.Msg.MATH_TRIG_TOOLTIP_COS,
-        TAN: Blockly.Msg.MATH_TRIG_TOOLTIP_TAN,
-        ASIN: Blockly.Msg.MATH_TRIG_TOOLTIP_ASIN,
-        ACOS: Blockly.Msg.MATH_TRIG_TOOLTIP_ACOS,
-        ATAN: Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN,
-      };
-      return TOOLTIPS[mode];
+      tooltip: Blockly.Msg.MATH_TRIG_TOOLTIP, // update in generator
     });
   },
 };
@@ -259,6 +212,7 @@ Blockly.Blocks["math_number_property"] = {
     this.setOutput(true, Types.BOOLEAN.typeName);
     this.setTooltip(Blockly.Msg.MATH_IS_TOOLTIP);
   },
+
   /**
    * Create XML to represent whether the 'divisorInput' should be present.
    * @return {Element} XML storage element.
@@ -313,8 +267,8 @@ Blockly.Blocks["math_change"] = {
           type: "field_dropdown",
           name: "DIRECTION",
           options: [
-            [Blockly.Msg.MATH_CHANGE_UP, "+="],
-            [Blockly.Msg.MATH_CHANGE_DOWN, "-="],
+            [Blockly.Msg.MATH_CHANGE_INCREASE, "+="],
+            [Blockly.Msg.MATH_CHANGE_DECREASE, "-="],
           ],
         },
         {
@@ -337,12 +291,7 @@ Blockly.Blocks["math_change"] = {
     });
     // Assign 'this' to a variable for use in the tooltip closure below.
     var thisBlock = this;
-    this.setTooltip(function () {
-      return Blockly.Msg.MATH_CHANGE_TOOLTIP.replace(
-        "%1",
-        thisBlock.getFieldValue("VAR"),
-      );
-    });
+    this.setTooltip(Blockly.Msg.MATH_CHANGE_TOOLTIP); // update in generator
   },
 };
 
@@ -407,6 +356,7 @@ Blockly.Blocks["math_on_list"] = {
       .setCheck(Types.getCompatibleTypes("array"))
       .appendField(dropdown, "OP");
     this.setTooltip(function () {
+      //TODO: move to generator and add a generic tooltip here when implementing in toolbox
       var mode = thisBlock.getFieldValue("OP");
       var TOOLTIPS = {
         SUM: Blockly.Msg.MATH_ONLIST_TOOLTIP_SUM,
