@@ -2,6 +2,18 @@ import * as Blockly from "blockly/core";
 import { getColour } from "../helpers/colour";
 import * as Types from "../helpers/types";
 
+/*
+ * NOTE/TODO:
+ * Updating the tooltips in multiple of the following blocks should be done using the setTooltip()
+ * function with an update function as parameter as discripted in these docs
+ * https://developers.google.com/blockly/reference/js/blockly.field_class.settooltip_1_method?hl=de
+ *
+ * This does not work as described in this issue
+ * https://github.com/sensebox/React-Ardublockly/issues/381
+ *
+ * Therefore the update is done for know in the generator functions as a workaround.
+ */
+
 Blockly.Blocks["math_number"] = {
   /**
    * Block for numeric value.
