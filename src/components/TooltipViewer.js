@@ -60,20 +60,38 @@ class TooltipViewer extends Component {
             <ReactMarkdown linkTarget="_blank">
               {this.props.tooltip}
             </ReactMarkdown>
-            {store.getState().workspace.code.data ? (
-              <Button
-                label="Mehr"
-                variant="contained"
-                color="primary"
-                onClick={() => {
-                  this.openDialog();
-                }}
-              >
-                Sensor Informationen
-              </Button>
-            ) : (
-              <ReactMarkdown>{`${Blockly.Msg.tooltip_moreInformation} [${Blockly.Msg.labels_here}](${this.props.helpurl})`}</ReactMarkdown>
-            )}
+            <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
+              {store.getState().workspace.code.data && (
+                <Button
+                  label="Mehr" //TODO language
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {
+                    this.openDialog();
+                  }}
+                >
+                  {/* TODO language} */}
+                  Sensor Informationen
+                </Button>
+              )}
+              {this.props.helpurl && (
+                <Button
+                  label="helper"
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {
+                    window.open(
+                      this.props.helpurl,
+                      "_blank",
+                      "noopener,noreferrer",
+                    );
+                  }}
+                  title={this.props.helpurl}
+                >
+                  {Blockly.Msg.tooltip_moreInformation}
+                </Button>
+              )}
+            </div>
           </Typography>
         </CardContent>
         {store.getState().workspace.code.data ? (
@@ -108,13 +126,14 @@ class TooltipViewer extends Component {
 }
 
 TooltipViewer.propTypes = {
-  tooltip: PropTypes.string.isRequired,
-  helpurl: PropTypes.string.isRequired,
+  tooltip: PropTypes.string,
+  helpurl: PropTypes.string,
 };
 
 const mapStateToProps = (state) => ({
   tooltip: state.workspace.code.tooltip,
   helpurl: state.workspace.code.helpurl,
+  language: state.general.language,
 });
 
 export default connect(mapStateToProps, null)(withWidth()(TooltipViewer));

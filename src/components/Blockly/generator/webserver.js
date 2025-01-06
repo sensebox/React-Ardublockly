@@ -155,21 +155,15 @@ Blockly.Generator.Arduino.forBlock["sensebox_web_readHTML"] = function (
   Blockly.Generator.Arduino.codeFunctions_["define_sd" + filename] =
     "File webFile;";
   Blockly.Generator.Arduino.setupCode_["sensebox_sd"] = "SD.begin(28);";
-  var func = [
-    "String generateHTML(){",
-    ' webFile = SD.open("' + filename + '", FILE_READ);',
-    ' String finalString ="";',
-    " while (webFile.available())",
-    "   {",
-    "   finalString+=(char)webFile.read();",
-    "   }",
-    " return finalString;",
-    "}",
-  ];
-  var functionName = Blockly.Generator.Arduino.addFunction(
-    "generateHTML",
-    func.join("\n"),
-  );
-  var code = functionName + "()";
+  Blockly.Generator.Arduino.codeFunctions_["readHTML"] =
+    `String readHTML(String filename){
+    webFile = SD.open(filename, FILE_READ);
+    String finalString = "";
+    while (webFile.available()) {
+      finalString += (char)webFile.read();
+    }
+    return finalString;
+  }`;
+  var code = `readHTML("${filename}")`;
   return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
