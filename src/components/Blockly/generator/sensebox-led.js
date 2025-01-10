@@ -367,7 +367,6 @@ Blockly.Generator.Arduino.forBlock["sensebox_ws2812_matrix_custom_bitmap"] = fun
   // Hole die Eingabe aus dem FieldMultilineInput
   var customBitmap = block.getFieldValue("input") || "{}";
 
-
   // Gib die Bitmap als Rückgabewert zurück
   return [customBitmap, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
