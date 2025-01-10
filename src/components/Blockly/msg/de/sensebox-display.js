@@ -8,6 +8,7 @@ export const DISPLAY = {
 
 **Anschluss:** I2C
 `,
+
   senseBox_display_clearDisplay_tooltip:
     "Löscht die Anzeige auf dem Display. Sollte immer zu Begin oder am Ende der Endlosschleife aufgerufen werden.",
   senseBox_display_clearDisplay: "Display löschen",

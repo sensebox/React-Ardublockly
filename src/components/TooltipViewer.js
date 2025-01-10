@@ -42,66 +42,39 @@ class TooltipViewer extends Component {
   render() {
     return (
       <Card
-        className="tooltipViewer"
-        style={{
-          height: "100%",
-          margin: "1vH 0 0 0",
-          maxHeight: "19vH",
-          overflow: "auto",
-        }}
-        ref={this.myDiv}
+      className="helpSection"
+      style={{
+        height: "auto",
+        marginTop: "1vh",
+        padding: "1rem",
+        backgroundColor: "#f9f9f9",
+        borderRadius: "10px",
+        border: "1px solid #ddd",
+      }}
       >
-        <CardContent>
-          <Typography variant="h5" component="h2">
-            {Blockly.Msg.tooltip_viewer}
-          </Typography>
-
-          <Typography variant="body2" component="span">
-            <ReactMarkdown linkTarget="_blank">
-              {this.props.tooltip}
-            </ReactMarkdown>
-            {store.getState().workspace.code.data ? (
-              <Button
-                label="Mehr"
-                variant="contained"
-                color="primary"
-                onClick={() => {
-                  this.openDialog();
-                }}
-              >
-                Sensor Informationen
-              </Button>
-            ) : (
-              <ReactMarkdown>{`${Blockly.Msg.tooltip_moreInformation} [${Blockly.Msg.labels_here}](${this.props.helpurl})`}</ReactMarkdown>
-            )}
-          </Typography>
-        </CardContent>
-        {store.getState().workspace.code.data ? (
-          <Dialog
-            open={this.state.open}
-            TransitionComponent={Transition}
-            keepMounted
-            aria-describedby="alert-dialog-slide-description"
-            onClose={() => {
-              this.toggleDialog();
-            }}
-            maxWidth={"md"}
-            fullWidth={true}
-          >
-            <DialogContent>
-              <SensorInfo></SensorInfo>
-            </DialogContent>
-            <DialogActions>
-              <Button
-                onClick={() => {
-                  this.toggleDialog();
-                }}
-              >
-                Close
-              </Button>
-            </DialogActions>
-          </Dialog>
-        ) : null}
+      <CardContent>
+        <Typography variant="h6" component="h2" style={{ marginBottom: "0.5rem" }}>
+        Sensor Informationen
+        </Typography>
+        <ReactMarkdown linkTarget="_blank">
+        {this.props.tooltip}
+        </ReactMarkdown>
+        {this.props.helpurl && (
+        <Button
+          variant="contained"
+          color="primary"
+          href={this.props.helpurl}
+          target="_blank"
+          style={{
+          padding: "0.5rem 1rem",
+          borderRadius: "5px",
+          fontSize: "0.9rem",
+          }}
+        >
+          Zur Dokumentation
+        </Button>
+        )}
+      </CardContent>
       </Card>
     );
   }
