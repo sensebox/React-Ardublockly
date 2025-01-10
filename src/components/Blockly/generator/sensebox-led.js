@@ -364,36 +364,17 @@ Blockly.Generator.Arduino.forBlock["sensebox_ws2812_matrix_bitmap"] = function (
 Blockly.Generator.Arduino.forBlock["sensebox_ws2812_matrix_custom_bitmap"] = function (
   block,
 ) {
-  // Hole die Eingabe aus dem FieldMultilineInput
+
   var customBitmap = block.getFieldValue("input") || "{}";
 
-  // Gib die Bitmap als Rückgabewert zurück
+  // if empty set to empty object 
+  if (!customBitmap || customBitmap === "0") {
+    customBitmap = "{}";
+  }
+  
   return [customBitmap, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
-
-// Blockly.Generator.Arduino.forBlock["sensebox_ws2812_matrix_custom_bitmap"] = function (
-//   block,
-// ) {
-//   var dropdown_pin = this.getFieldValue("Port");
-//   // Hole den Input-Wert des Blocks
-//   var value =
-//     Blockly.Generator.Arduino.valueToCode(
-//       block,
-//       "input",
-//       Blockly.Generator.Arduino.ORDER_ATOMIC,
-//     ) || "{}"; // Falls keine Eingabe vorhanden ist, wird ein leeres Array genutzt.
-
-//   // Definiere das custom_bitmap Array basierend auf dem Input
-//   Blockly.Generator.Arduino.definitions_[
-//     `define_custom_bitmap_${dropdown_pin}`
-//   ] = `const uint16_t custom_bitmap[] = ${value};`;
-
-//   // Generiere den Code, der die Bitmap zeichnet
-//   var code = `matrix_${dropdown_pin}.drawBitmap(0, 0, custom_bitmap, WIDTH, HEIGHT, matrix_${dropdown_pin}.Color(255, 255, 255));\n`;
-//   code += `matrix_${dropdown_pin}.show();\n`;
-//   return code;
-// };
 
 
 Blockly.Generator.Arduino["sensebox_ws2812_matrix_draw_custom_bitmap_example"] =
