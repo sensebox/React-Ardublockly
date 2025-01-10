@@ -368,8 +368,7 @@ Blockly.Blocks["sensebox_ws2812_matrix_custom_bitmap"] = {
       .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_custom_bitmap)
       .appendField(
         new FieldMultilineInput(
-          Blockly.Msg.senseBox_ws2812_rgb_matrix_custom_bitmap_example,
-        ),
+          Blockly.Msg.senseBox_ws2812_rgb_matrix_custom_bitmap_example        ),
         "input",
       );
     this.setOutput(true, "Bitmap");
