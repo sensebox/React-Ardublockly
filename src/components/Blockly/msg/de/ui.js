@@ -222,7 +222,7 @@ export const UI = {
     "Geben die URL des Compilers ein, den du verwenden möchten. Die Standard-URL ist: https://compiler.sensebox.de",
   settings_compiler_helperText:
     "Die URL muss mit https:// oder http:// beginnen",
-    settings_compiler_readOnly: "Compiler URL ändern",
+  settings_compiler_readOnly: "Compiler URL ändern",
 
   /**
    * 404
@@ -323,7 +323,8 @@ export const UI = {
    */
 
   tooltip_viewer: "Hilfe",
-  tooltip_moreInformation: "Mehr Informationen",
+  tooltip_moreInformation: "Mehr Informationen findest du ",
+  tooltip_moreInformation_02: "Informationem zum Block",
   tooltip_hint: "Wähle einen Block aus um dir die Hilfe anzeigen zu lassen",
 
   /**

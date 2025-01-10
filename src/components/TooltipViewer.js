@@ -29,6 +29,7 @@ class TooltipViewer extends Component {
     this.state = {
       open: false,
     };
+    console.log("TooltipViewer constructor", props);
   }
 
   toggleDialog = () => {
@@ -44,21 +45,42 @@ class TooltipViewer extends Component {
       <Card
         className="helpSection"
         style={{
-          height: "auto",
+          height: "25vh",
+          overflowY: "scroll",
           marginTop: "1vh",
           padding: "1rem",
           backgroundColor: "#f9f9f9",
           borderRadius: "10px",
           border: "1px solid #ddd",
+          boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
         }}
       >
         <CardContent>
           <Typography
             variant="h6"
             component="h2"
-            style={{ marginBottom: "0.5rem" }}
+            style={{
+              marginBottom: "0.5rem",
+              position: "relative",
+              paddingBottom: "0.3rem",
+            }}
           >
-            Sensor Informationen
+            <span style={{ display: "inline-block" }}>
+              {Blockly.Msg.tooltip_moreInformation_02}
+            </span>
+            <span
+              style={{
+                content: "''",
+                display: "block",
+                width: "50%",
+                height: "4px",
+                backgroundColor: "#4caf50",
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                borderRadius: "2px",
+              }}
+            ></span>
           </Typography>
           <ReactMarkdown linkTarget="_blank">
             {this.props.tooltip}
