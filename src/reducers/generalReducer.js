@@ -23,7 +23,7 @@ const initialPlatform = () => {
 };
 
 const initialCompiler = () => {
-  return "https://compiler.sensebox.de";
+  return process.env.INITIAL_COMPILER_URL;
 };
 
 const initialSounds = () => {
