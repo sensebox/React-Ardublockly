@@ -890,8 +890,8 @@ Blockly.Generator.Arduino.forBlock["sensebox_soundsensor_dfrobot"] =
     var board = selectedBoard().title;
     if (board === "MCU" || board === "Mini") {
       Blockly.Generator.Arduino.codeFunctions_["soundsensor"] = `    
-  int getSoundValue(int sensorPin) {
-    float v = analogRead(sensorPin) / 1000.0;
+    int getSoundValue(int sensorPin) {
+    float v = analogRead(sensorPin) * (3.3 / 1024.0);
     float decibel;
     if (v <= 0.6) decibel = 0.0;
     if (v >= 2.6) decibel = 130.0;
