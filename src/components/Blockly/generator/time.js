@@ -1,4 +1,4 @@
-import Blockly from "blockly";
+import * as Blockly from "blockly";
 
 /**
  * @license Licensed under the Apache License, Version 2.0 (the "License"):
@@ -16,12 +16,12 @@ import Blockly from "blockly";
  * @param {!Blockly.Block} block Block to generate the code from.
  * @return {string} Completed code.
  */
-Blockly.Arduino["time_delay"] = function (block) {
+Blockly.Generator.Arduino.forBlock["time_delay"] = function (block, generator) {
   var delayTime =
-    Blockly.Arduino.valueToCode(
+    Blockly.Generator.Arduino.valueToCode(
       block,
       "DELAY_TIME_MILI",
-      Blockly.Arduino.ORDER_ATOMIC,
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
     ) || "0";
   var code = "delay(" + delayTime + ");\n";
   return code;
@@ -33,12 +33,15 @@ Blockly.Arduino["time_delay"] = function (block) {
  * @param {!Blockly.Block} block Block to generate the code from.
  * @return {string} Completed code.
  */
-Blockly.Arduino["time_delaymicros"] = function (block) {
+Blockly.Generator.Arduino.forBlock["time_delaymicros"] = function (
+  block,
+  generator,
+) {
   var delayTimeMs =
-    Blockly.Arduino.valueToCode(
+    Blockly.Generator.Arduino.valueToCode(
       block,
       "DELAY_TIME_MICRO",
-      Blockly.Arduino.ORDER_ATOMIC,
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
     ) || "0";
   var code = "delayMicroseconds(" + delayTimeMs + ");\n";
   return code;
@@ -50,9 +53,12 @@ Blockly.Arduino["time_delaymicros"] = function (block) {
  * @param {!Blockly.Block} block Block to generate the code from.
  * @return {array} Completed code with order of operation.
  */
-Blockly.Arduino["time_millis"] = function (block) {
+Blockly.Generator.Arduino.forBlock["time_millis"] = function (
+  block,
+  generator,
+) {
   var code = "millis()";
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
 /**
@@ -61,9 +67,12 @@ Blockly.Arduino["time_millis"] = function (block) {
  * @param {!Blockly.Block} block Block to generate the code from.
  * @return {array} Completed code with order of operation.
  */
-Blockly.Arduino["time_micros"] = function (block) {
+Blockly.Generator.Arduino.forBlock["time_micros"] = function (
+  block,
+  generator,
+) {
   var code = "micros()";
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
 /**
@@ -72,17 +81,21 @@ Blockly.Arduino["time_micros"] = function (block) {
  * @param {!Blockly.Block} block Block to generate the code from.
  * @return {string} Completed code.
  */
-Blockly.Arduino["infinite_loop"] = function (block) {
+Blockly.Generator.Arduino.forBlock["infinite_loop"] = function (
+  block,
+  generator,
+) {
   return "while(true);\n";
 };
 
-// Blockly.Arduino.sensebox_interval_timer = function (block) {
+// Blockly.Generator.Arduino.forBlock["sensebox_interval_timer"] = function(block, generator) {
+
 //   var interval = this.getFieldValue("interval");
-//   Blockly.Arduino.variables_["define_interval_variables"] =
+//   Blockly.Generator.Arduino.variables_["define_interval_variables"] =
 //     "const long interval = " +
 //     interval +
 //     ";\nlong time_start = 0;\nlong time_actual = 0;";
-//   var branch = Blockly.Arduino.statementToCode(block, "DO");
+//   var branch = Blockly.Generator.Arduino.statementToCode(block, "DO");
 //   var code = "time_start = millis();\n";
 //   code +=
 //     "if (time_start > time_actual + interval) {\n  time_actual = millis();\n";
@@ -91,16 +104,21 @@ Blockly.Arduino["infinite_loop"] = function (block) {
 //   return code;
 // };
 
-Blockly.Arduino.sensebox_interval_timer = function (block) {
+Blockly.Generator.Arduino.forBlock["sensebox_interval_timer"] = function (
+  block,
+  generator,
+) {
   var intervalTime = this.getFieldValue("interval");
   var intervalName = this.getFieldValue("name");
-  Blockly.Arduino.variables_[`define_interval_variables${intervalName}`] = `
+  Blockly.Generator.Arduino.variables_[
+    `define_interval_variables${intervalName}`
+  ] = `
   const long interval${intervalName} = ${intervalTime};
   long time_start${intervalName} = 0;
   long time_actual${intervalName} = 0;`;
-  Blockly.Arduino.loopCodeOnce_[`interval_loop${intervalName}`] =
+  Blockly.Generator.Arduino.loopCodeOnce_[`interval_loop${intervalName}`] =
     `time_start${intervalName} = millis();\n`;
-  var branch = Blockly.Arduino.statementToCode(block, "DO");
+  var branch = Blockly.Generator.Arduino.statementToCode(block, "DO");
   var code = `
   if (time_start${intervalName} > time_actual${intervalName} + interval${intervalName}) {\n  time_actual${intervalName} = millis();\n`;
   code += branch;

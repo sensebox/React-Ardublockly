@@ -1,22 +1,31 @@
-import Blockly from "blockly";
+import * as Blockly from "blockly";
 
 /**
- * Block send Data to the openSenseMap
+ * block send Data to the openSenseMap
  */
-Blockly.Arduino.sensebox_send_to_osem = function (block) {
+Blockly.Generator.Arduino.forBlock["sensebox_send_to_osem"] = function (
+  block,
+  generator,
+) {
   var code = "";
   var sensor_id = this.getFieldValue("SensorID");
   var id = sensor_id.slice(-3).toUpperCase();
   var sensor_value =
-    Blockly.Arduino.valueToCode(this, "Value", Blockly.Arduino.ORDER_ATOMIC) ||
-    '"Keine Eingabe"';
-  Blockly.Arduino.definitions_["SENSOR_ID" + id + ""] =
+    Blockly.Generator.Arduino.valueToCode(
+      this,
+      "Value",
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
+    ) || '"Keine Eingabe"';
+  Blockly.Generator.Arduino.definitions_["SENSOR_ID" + id + ""] =
     "const char SENSOR_ID" + id + '[] PROGMEM = "' + sensor_id + '";';
   code += "addMeasurement(SENSOR_ID" + id + "," + sensor_value + ");\n";
   return code;
 };
 
-Blockly.Arduino.sensebox_osem_connection = function (Block) {
+Blockly.Generator.Arduino.forBlock["sensebox_osem_connection"] = function (
+  block,
+  generator,
+) {
   var workspace = Blockly.getMainWorkspace();
   var wifi = false;
   var ethernet = false;
@@ -28,7 +37,7 @@ Blockly.Arduino.sensebox_osem_connection = function (Block) {
     wifi = false;
   }
   var box_id = this.getFieldValue("BoxID");
-  var branch = Blockly.Arduino.statementToCode(Block, "DO");
+  var branch = Blockly.Generator.Arduino.statementToCode(block, "DO");
   var access_token = this.getFieldValue("access_token");
   var blocks = this.getDescendants();
   var type = this.getFieldValue("type");
@@ -44,80 +53,88 @@ Blockly.Arduino.sensebox_osem_connection = function (Block) {
     }
   }
   var num_sensors = count;
-  Blockly.Arduino.definitions_["num_sensors"] =
+  Blockly.Generator.Arduino.definitions_["num_sensors"] =
     "static const uint8_t NUM_SENSORS = " + num_sensors + ";";
-  Blockly.Arduino.definitions_["SenseBoxID"] =
+  Blockly.Generator.Arduino.definitions_["SenseBoxID"] =
     'const char SENSEBOX_ID [] PROGMEM = "' + box_id + '";';
-  Blockly.Arduino.definitions_["host"] =
+  Blockly.Generator.Arduino.definitions_["host"] =
     'const char server [] PROGMEM ="ingress.opensensemap.org";';
   if (wifi === true) {
     if (ssl === "TRUE") {
-      Blockly.Arduino.libraries_["library_bearSSL"] =
+      Blockly.Generator.Arduino.libraries_["library_bearSSL"] =
         "#include <ArduinoBearSSL.h>";
-      Blockly.Arduino.libraries_["library_arduinoECC08"] =
+      Blockly.Generator.Arduino.libraries_["library_arduinoECC08"] =
         "#include <ArduinoECCX08.h>";
-      Blockly.Arduino.definitions_["WiFiClient"] = "WiFiClient wifiClient;";
-      Blockly.Arduino.definitions_["BearSSLClient"] =
+      Blockly.Generator.Arduino.definitions_["WiFiClient"] =
+        "WiFiClient wifiClient;";
+      Blockly.Generator.Arduino.definitions_["BearSSLClient"] =
         "BearSSLClient client(wifiClient);";
-      Blockly.Arduino.functionNames_["getTime"] = `unsigned long getTime() {
+      Blockly.Generator.Arduino.functionNames_["getTime"] =
+        `unsigned long getTime() {
       return WiFi.getTime();
     }`;
-      Blockly.Arduino.setupCode_["initBearSSL"] =
+      Blockly.Generator.Arduino.setupCode_["initBearSSL"] =
         "ArduinoBearSSL.onGetTime(getTime);";
       port = 443;
     } else if (ssl === "FALSE") {
-      Blockly.Arduino.definitions_["WiFiClient"] = "WiFiClient client;";
+      Blockly.Generator.Arduino.definitions_["WiFiClient"] =
+        "WiFiClient client;";
       port = 80;
     }
   } else if (ethernet === true) {
     if (ssl === "TRUE") {
-      Blockly.Arduino.libraries_["library_bearSSL"] =
+      Blockly.Generator.Arduino.libraries_["library_bearSSL"] =
         "#include <ArduinoBearSSL.h>";
-      Blockly.Arduino.libraries_["library_arduinoECC08"] =
+      Blockly.Generator.Arduino.libraries_["library_arduinoECC08"] =
         "#include <ArduinoECCX08.h>";
-      Blockly.Arduino.libraries_["library_ethernetUdp"] =
+      Blockly.Generator.Arduino.libraries_["library_ethernetUdp"] =
         "#include <EthernetUdp.h>";
-      Blockly.Arduino.libraries_["library_NTPClient"] =
+      Blockly.Generator.Arduino.libraries_["library_NTPClient"] =
         "#include <NTPClient.h>";
-      Blockly.Arduino.definitions_["EthernetClient"] =
+      Blockly.Generator.Arduino.definitions_["EthernetClient"] =
         "EthernetClient eclient;";
-      Blockly.Arduino.definitions_["BearSSLClient"] =
+      Blockly.Generator.Arduino.definitions_["BearSSLClient"] =
         "BearSSLClient client(eclient);";
-      Blockly.Arduino.definitions_["EthernetUDP"] = "EthernetUDP Udp;";
-      Blockly.Arduino.definitions_["NTPClient"] = "NTPClient timeClient(Udp);";
-      Blockly.Arduino.functionNames_["getTime"] = `
+      Blockly.Generator.Arduino.definitions_["EthernetUDP"] =
+        "EthernetUDP Udp;";
+      Blockly.Generator.Arduino.definitions_["NTPClient"] =
+        "NTPClient timeClient(Udp);";
+      Blockly.Generator.Arduino.functionNames_["getTime"] = `
 unsigned long getTime() {
   timeClient.update();
   return timeClient.getEpochTime();
 }`;
 
-      Blockly.Arduino.setupCode_["timeClient_begin"] = "timeClient.begin();";
-      Blockly.Arduino.setupCode_["initBearSSL"] =
+      Blockly.Generator.Arduino.setupCode_["timeClient_begin"] =
+        "timeClient.begin();";
+      Blockly.Generator.Arduino.setupCode_["initBearSSL"] =
         "ArduinoBearSSL.onGetTime(getTime);";
       port = 443;
     } else if (ssl === "FALSE") {
-      Blockly.Arduino.definitions_["EthernetClient"] = "EthernetClient client;";
+      Blockly.Generator.Arduino.definitions_["EthernetClient"] =
+        "EthernetClient client;";
       port = 80;
     }
   }
-  Blockly.Arduino.definitions_["measurement"] = `typedef struct measurement {
+  Blockly.Generator.Arduino.definitions_["measurement"] =
+    `typedef struct measurement {
       const char *sensorId;
       float value;
     } measurement;`;
-  Blockly.Arduino.definitions_["buffer"] = "char buffer[750];";
-  Blockly.Arduino.definitions_["num_measurement"] =
+  Blockly.Generator.Arduino.definitions_["buffer"] = "char buffer[750];";
+  Blockly.Generator.Arduino.definitions_["num_measurement"] =
     `measurement measurements[NUM_SENSORS];
     uint8_t num_measurements = 0;`;
-  Blockly.Arduino.definitions_["lengthMultiplikator"] =
+  Blockly.Generator.Arduino.definitions_["lengthMultiplikator"] =
     "const int lengthMultiplikator = 35;";
-  Blockly.Arduino.functionNames_["addMeasurement"] = `
+  Blockly.Generator.Arduino.functionNames_["addMeasurement"] = `
     void addMeasurement(const char *sensorId, float value) {
     measurements[num_measurements].sensorId = sensorId;
     measurements[num_measurements].value = value;
     num_measurements++;
     }`;
   if (type === "Stationary") {
-    Blockly.Arduino.functionNames_["writeMeasurementsToClient"] = `
+    Blockly.Generator.Arduino.functionNames_["writeMeasurementsToClient"] = `
     void writeMeasurementsToClient() {
     // iterate throug the measurements array
     for (uint8_t i = 0; i < num_measurements; i++) {
@@ -129,7 +146,7 @@ unsigned long getTime() {
     // reset num_measurements
     num_measurements = 0;
   }`;
-    Blockly.Arduino.functionNames_["submitValues"] =
+    Blockly.Generator.Arduino.functionNames_["submitValues"] =
       `
   void submitValues() {
 ${
@@ -197,29 +214,29 @@ ${
     code += branch;
     code += "submitValues();\n";
   } else if (type === "Mobile") {
-    var lat = Blockly.Arduino.valueToCode(
-      Block,
+    var lat = Blockly.Generator.Arduino.valueToCode(
+      block,
       "lat",
-      Blockly.Arduino.ORDER_ATOMIC,
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
     );
-    var lng = Blockly.Arduino.valueToCode(
-      Block,
+    var lng = Blockly.Generator.Arduino.valueToCode(
+      block,
       "lng",
-      Blockly.Arduino.ORDER_ATOMIC,
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
     );
-    var timestamp = Blockly.Arduino.valueToCode(
-      Block,
+    var timestamp = Blockly.Generator.Arduino.valueToCode(
+      block,
       "timeStamp",
-      Blockly.Arduino.ORDER_ATOMIC,
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
     );
-    var altitude = Blockly.Arduino.valueToCode(
-      Block,
+    var altitude = Blockly.Generator.Arduino.valueToCode(
+      block,
       "altitude",
-      Blockly.Arduino.ORDER_ATOMIC,
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
     );
-    Blockly.Arduino.definitions_["lengthMultiplikator"] =
+    Blockly.Generator.Arduino.definitions_["lengthMultiplikator"] =
       "const int lengthMultiplikator = 77;";
-    Blockly.Arduino.functionNames_["writeMeasurementsToClient"] = `
+    Blockly.Generator.Arduino.functionNames_["writeMeasurementsToClient"] = `
       void writeMeasurementsToClient(float lat, float lng, float altitude, char* timeStamp) {
       // iterate throug the measurements array
       for (uint8_t i = 0; i < num_measurements; i++) {
@@ -231,9 +248,9 @@ ${
       // reset num_measurements
       num_measurements = 0;
       }`;
-    Blockly.Arduino.variables_["latitude"] = "float latitude;";
-    Blockly.Arduino.variables_["longitude"] = "float longitude;";
-    Blockly.Arduino.functionNames_["submitValues"] =
+    Blockly.Generator.Arduino.variables_["latitude"] = "float latitude;";
+    Blockly.Generator.Arduino.variables_["longitude"] = "float longitude;";
+    Blockly.Generator.Arduino.functionNames_["submitValues"] =
       `
       void submitValues(float lat, float lng, float altitude, char* timeStamp) {
     if (client.connected()) {
@@ -308,49 +325,52 @@ ${
   return code;
 };
 
-Blockly.Arduino.sensebox_esp32s2_osem_connection = function (Block) {
-  var workspace = Blockly.getMainWorkspace();
-  var wifi = false;
-  var ethernet = false;
-  if (workspace.getBlocksByType("sensebox_wifi").length > 0) {
-    wifi = true;
-    ethernet = false;
-  } else if (workspace.getBlocksByType("sensebox_ethernet").length > 0) {
-    ethernet = true;
-    wifi = false;
-  }
-  var box_id = this.getFieldValue("BoxID");
-  var branch = Blockly.Arduino.statementToCode(Block, "DO");
-  var access_token = this.getFieldValue("access_token");
-  var blocks = this.getDescendants();
-  var type = this.getFieldValue("type");
-  var ssl = this.getFieldValue("SSL");
-  var restart = this.getFieldValue("RESTART");
-  var port;
-  var count = 0;
-  if (blocks !== undefined) {
-    for (var i = 0; i < blocks.length; i++) {
-      if (blocks[i].type === "sensebox_send_to_osem") {
-        count++;
+Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_osem_connection"] =
+  function (block, generator) {
+    var workspace = Blockly.getMainWorkspace();
+    var wifi = false;
+    var ethernet = false;
+    if (workspace.getBlocksByType("sensebox_wifi").length > 0) {
+      wifi = true;
+      ethernet = false;
+    } else if (workspace.getBlocksByType("sensebox_ethernet").length > 0) {
+      ethernet = true;
+      wifi = false;
+    }
+    var box_id = this.getFieldValue("BoxID");
+    var branch = Blockly.Generator.Arduino.statementToCode(block, "DO");
+    var access_token = this.getFieldValue("access_token");
+    var blocks = this.getDescendants();
+    var type = this.getFieldValue("type");
+    var ssl = this.getFieldValue("SSL");
+    var restart = this.getFieldValue("RESTART");
+    var port;
+    var count = 0;
+    if (blocks !== undefined) {
+      for (var i = 0; i < blocks.length; i++) {
+        if (blocks[i].type === "sensebox_send_to_osem") {
+          count++;
+        }
       }
     }
-  }
-  var num_sensors = count;
-  Blockly.Arduino.definitions_["num_sensors"] =
-    "static const uint8_t NUM_SENSORS = " + num_sensors + ";";
-  Blockly.Arduino.definitions_["SenseBoxID"] =
-    'const char* SENSEBOX_ID = "' + box_id + '";';
-  Blockly.Arduino.definitions_["host"] =
-    'const char* server ="ingress.opensensemap.org";';
-  Blockly.Arduino.definitions_["measurement"] = `typedef struct measurement {
+    var num_sensors = count;
+    Blockly.Generator.Arduino.definitions_["num_sensors"] =
+      "static const uint8_t NUM_SENSORS = " + num_sensors + ";";
+    Blockly.Generator.Arduino.definitions_["SenseBoxID"] =
+      'const char* SENSEBOX_ID = "' + box_id + '";';
+    Blockly.Generator.Arduino.definitions_["host"] =
+      'const char* server ="ingress.opensensemap.org";';
+    Blockly.Generator.Arduino.definitions_["measurement"] =
+      `typedef struct measurement {
       const char *sensorId;
       float value;
     } measurement;`;
-  if (ssl === "TRUE") {
-    Blockly.Arduino.libraries_["library_wifiClientSecure"] =
-      "#include <WiFiClientSecure.h>";
-    Blockly.Arduino.definitions_["WiFiClient"] = "WiFiClientSecure client;";
-    Blockly.Arduino.definitions_["root_ca"] = `const char* root_ca =
+    if (ssl === "TRUE") {
+      Blockly.Generator.Arduino.libraries_["library_wifiClientSecure"] =
+        "#include <WiFiClientSecure.h>";
+      Blockly.Generator.Arduino.definitions_["WiFiClient"] =
+        "WiFiClientSecure client;";
+      Blockly.Generator.Arduino.definitions_["root_ca"] = `const char* root_ca =
       "-----BEGIN CERTIFICATE-----\\n"
       "MIIFazCCA1OgAwIBAgIRAIIQz7DSQONZRGPgu2OCiwAwDQYJKoZIhvcNAQELBQAw\\n"
       "TzELMAkGA1UEBhMCVVMxKTAnBgNVBAoTIEludGVybmV0IFNlY3VyaXR5IFJlc2Vh\\n"
@@ -382,28 +402,29 @@ Blockly.Arduino.sensebox_esp32s2_osem_connection = function (Block) {
       "mRGunUHBcnWEvgJBQl9nJEiU0Zsnvgc/ubhPgXRR4Xq37Z0j4r7g1SgEEzwxA57d\\n"
       "emyPxgcYxn/eR44/KJ4EBs+lVDR3veyJm+kXQ99b21/+jh5Xos1AnX5iItreGCc=\\n"
       "-----END CERTIFICATE-----\\n";`;
-    Blockly.Arduino.setupCode_["wifiClientSecure_setRootCa"] =
-      "client.setCACert(root_ca);";
-    port = 443;
-  } else if (ssl === "FALSE") {
-    Blockly.Arduino.definitions_["WiFiClient"] = "WiFiClient client;";
-    port = 80;
-  }
-  Blockly.Arduino.definitions_["buffer"] = "char buffer[750];";
-  Blockly.Arduino.definitions_["num_measurement"] =
-    `measurement measurements[NUM_SENSORS];
+      Blockly.Generator.Arduino.setupCode_["wifiClientSecure_setRootCa"] =
+        "client.setCACert(root_ca);";
+      port = 443;
+    } else if (ssl === "FALSE") {
+      Blockly.Generator.Arduino.definitions_["WiFiClient"] =
+        "WiFiClient client;";
+      port = 80;
+    }
+    Blockly.Generator.Arduino.definitions_["buffer"] = "char buffer[750];";
+    Blockly.Generator.Arduino.definitions_["num_measurement"] =
+      `measurement measurements[NUM_SENSORS];
     uint8_t num_measurements = 0;`;
-  Blockly.Arduino.definitions_["lengthMultiplikator"] =
-    "const int lengthMultiplikator = 35;";
-  Blockly.Arduino.functionNames_["addMeasurement"] = `
+    Blockly.Generator.Arduino.definitions_["lengthMultiplikator"] =
+      "const int lengthMultiplikator = 35;";
+    Blockly.Generator.Arduino.functionNames_["addMeasurement"] = `
     void addMeasurement(const char *sensorId, float value) {
     measurements[num_measurements].sensorId = sensorId;
     measurements[num_measurements].value = value;
     num_measurements++;
     }`;
 
-  if (type === "Stationary") {
-    Blockly.Arduino.functionNames_["writeMeasurementsToClient"] = `
+    if (type === "Stationary") {
+      Blockly.Generator.Arduino.functionNames_["writeMeasurementsToClient"] = `
     void writeMeasurementsToClient() {
     // iterate throug the measurements array
     for (uint8_t i = 0; i < num_measurements; i++) {
@@ -415,8 +436,8 @@ Blockly.Arduino.sensebox_esp32s2_osem_connection = function (Block) {
     // reset num_measurements
     num_measurements = 0;
   }`;
-    Blockly.Arduino.functionNames_["submitValues"] =
-      `
+      Blockly.Generator.Arduino.functionNames_["submitValues"] =
+        `
   void submitValues() {
 ${
   wifi === true
@@ -432,8 +453,8 @@ ${
   strcpy_P(_server, server);
   for (uint8_t timeout = 2; timeout != 0; timeout--) {
     connected = client.connect(_server, ` +
-      port +
-      `);
+        port +
+        `);
       if (connected == true) {
         // construct the HTTP POST request:
         sprintf_P(buffer,PSTR("POST /boxes/%s/data HTTP/1.1\\nAuthorization: ${access_token}\\nHost: %s\\nContent-Type:text/csv\\nConnection: close\\nContent-Length: %i\\n\\n"),
@@ -464,33 +485,33 @@ ${
 
   }`;
 
-    var code = "";
-    code += branch;
-    code += "submitValues();\n";
-  } else if (type === "Mobile") {
-    var lat = Blockly.Arduino.valueToCode(
-      Block,
-      "lat",
-      Blockly.Arduino.ORDER_ATOMIC,
-    );
-    var lng = Blockly.Arduino.valueToCode(
-      Block,
-      "lng",
-      Blockly.Arduino.ORDER_ATOMIC,
-    );
-    var timestamp = Blockly.Arduino.valueToCode(
-      Block,
-      "timeStamp",
-      Blockly.Arduino.ORDER_ATOMIC,
-    );
-    var altitude = Blockly.Arduino.valueToCode(
-      Block,
-      "altitude",
-      Blockly.Arduino.ORDER_ATOMIC,
-    );
-    Blockly.Arduino.definitions_["lengthMultiplikator"] =
-      "const int lengthMultiplikator = 77;";
-    Blockly.Arduino.functionNames_["writeMeasurementsToClient"] = `
+      var code = "";
+      code += branch;
+      code += "submitValues();\n";
+    } else if (type === "Mobile") {
+      var lat = Blockly.Generator.Arduino.valueToCode(
+        block,
+        "lat",
+        Blockly.Generator.Arduino.ORDER_ATOMIC,
+      );
+      var lng = Blockly.Generator.Arduino.valueToCode(
+        block,
+        "lng",
+        Blockly.Generator.Arduino.ORDER_ATOMIC,
+      );
+      var timestamp = Blockly.Generator.Arduino.valueToCode(
+        block,
+        "timeStamp",
+        Blockly.Generator.Arduino.ORDER_ATOMIC,
+      );
+      var altitude = Blockly.Generator.Arduino.valueToCode(
+        block,
+        "altitude",
+        Blockly.Generator.Arduino.ORDER_ATOMIC,
+      );
+      Blockly.Generator.Arduino.definitions_["lengthMultiplikator"] =
+        "const int lengthMultiplikator = 77;";
+      Blockly.Generator.Arduino.functionNames_["writeMeasurementsToClient"] = `
       void writeMeasurementsToClient(float lat, float lng, float altitude, char* timeStamp) {
       // iterate throug the measurements array
       for (uint8_t i = 0; i < num_measurements; i++) {
@@ -502,10 +523,10 @@ ${
       // reset num_measurements
       num_measurements = 0;
       }`;
-    Blockly.Arduino.variables_["latitude"] = "float latitude;";
-    Blockly.Arduino.variables_["longitude"] = "float longitude;";
-    Blockly.Arduino.functionNames_["submitValues"] =
-      `
+      Blockly.Generator.Arduino.variables_["latitude"] = "float latitude;";
+      Blockly.Generator.Arduino.variables_["longitude"] = "float longitude;";
+      Blockly.Generator.Arduino.functionNames_["submitValues"] =
+        `
       void submitValues(float lat, float lng, float altitude, char* timeStamp) {
     if (client.connected()) {
       client.stop();
@@ -516,8 +537,8 @@ ${
     strcpy_P(_server, server);
     for (uint8_t timeout = 2; timeout != 0; timeout--) {
       connected = client.connect(_server, ` +
-      port +
-      `);
+        port +
+        `);
       if (connected == true) {
         // construct the HTTP POST request:
         sprintf_P(buffer,
@@ -561,18 +582,18 @@ ${
     }
 
   }`;
-    code = "";
-    code += branch;
-    code +=
-      "submitValues((" +
-      lat +
-      "/float(10000000)),(" +
-      lng +
-      "/float(10000000)),(" +
-      altitude +
-      "/float(100))," +
-      timestamp +
-      ");\n";
-  }
-  return code;
-};
+      code = "";
+      code += branch;
+      code +=
+        "submitValues((" +
+        lat +
+        "/float(10000000)),(" +
+        lng +
+        "/float(10000000)),(" +
+        altitude +
+        "/float(100))," +
+        timestamp +
+        ");\n";
+    }
+    return code;
+  };

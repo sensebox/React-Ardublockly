@@ -101,19 +101,21 @@ class TooltipViewer extends Component {
         </Button>
         )}
       </CardContent>
+
       </Card>
     );
   }
 }
 
 TooltipViewer.propTypes = {
-  tooltip: PropTypes.string.isRequired,
-  helpurl: PropTypes.string.isRequired,
+  tooltip: PropTypes.string,
+  helpurl: PropTypes.string,
 };
 
 const mapStateToProps = (state) => ({
   tooltip: state.workspace.code.tooltip,
   helpurl: state.workspace.code.helpurl,
+  language: state.general.language,
 });
 
 export default connect(mapStateToProps, null)(withWidth()(TooltipViewer));

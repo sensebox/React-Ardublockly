@@ -1,6 +1,7 @@
 export const MATH = {
   MATH_ADDITION_SYMBOL: "+", // untranslated
   MATH_ARITHMETIC_HELPURL: "https://de.wikipedia.org/wiki/Grundrechenart",
+  MATH_ARITHMETIC_TOOLTIP: "Operationen auf zwei Zahlen.",
   MATH_ARITHMETIC_TOOLTIP_ADD: "Ist die Summe zweier Werte.",
   MATH_ARITHMETIC_TOOLTIP_DIVIDE: "Ist der Quotient zweier Werte.",
   MATH_ARITHMETIC_TOOLTIP_MINUS: "Ist die Differenz zweier Werte.",
@@ -8,8 +9,12 @@ export const MATH = {
   MATH_ARITHMETIC_TOOLTIP_POWER:
     "Ist der erste Wert potenziert mit dem zweiten Wert.",
   MATH_CHANGE_HELPURL: "https://de.wikipedia.org/wiki/Inkrement_und_Dekrement",
-  MATH_CHANGE_TITLE: "erhöhe %1 um %2",
-  MATH_CHANGE_TOOLTIP: 'Addiert einen Wert zur Variable "%1" hinzu.',
+  MATH_CHANGE_TITLE: "%1 %2 um %3",
+  MATH_CHANGE_INCREASE: "erhöhe",
+  MATH_CHANGE_DECREASE: "verringere",
+  MATH_CHANGE_TOOLTIP: "Addiert/Subtraiert einen Wert zur/von einer Variable.",
+  MATH_CHANGE_TOOLTIP_WITH_VARIABLE:
+    'Addiert/Subtraiert einen Wert zur/von Variable "%1".',
   MATH_CONSTANT_HELPURL:
     "https://de.wikipedia.org/wiki/Mathematische_Konstante",
   MATH_CONSTANT_TOOLTIP:
@@ -34,17 +39,18 @@ export const MATH = {
   MATH_MODULO_TOOLTIP: "Der Rest nach einer Division.",
   MATH_MULTIPLICATION_SYMBOL: "×",
   MATH_NUMBER_HELPURL: "https://de.wikipedia.org/wiki/Zahl",
-  MATH_NUMBER_TOOLTIP: "Eine Zahl.",
+  MATH_NUMBER_TOOLTIP:
+    "Eine Zahl. Es kann sowohl eine ganze Zahl (0, -1, 4, ...) oder eine Kommerzahl (0.5, 3.14, ...) sein.",
   MATH_ONLIST_HELPURL:
     "http://www.sysplus.ch/einstieg.php?links:menu&seite:4125&grad:Crash&prog:Excel",
-  MATH_ONLIST_OPERATOR_AVERAGE: "Mittelwert einer Liste",
-  MATH_ONLIST_OPERATOR_MAX: "Maximalwert einer Liste",
-  MATH_ONLIST_OPERATOR_MEDIAN: "Median einer Liste",
-  MATH_ONLIST_OPERATOR_MIN: "Minimalwert einer Liste",
-  MATH_ONLIST_OPERATOR_MODE: "am häufigsten in Liste",
-  MATH_ONLIST_OPERATOR_RANDOM: "Zufallswert einer Liste",
-  MATH_ONLIST_OPERATOR_STD_DEV: "Standardabweichung einer Liste",
-  MATH_ONLIST_OPERATOR_SUM: "Summe einer Liste",
+  MATH_ONLIST_OPERATOR_AVERAGE: "Mittelwert einer Liste.",
+  MATH_ONLIST_OPERATOR_MAX: "Maximalwert einer Liste.",
+  MATH_ONLIST_OPERATOR_MEDIAN: "Median einer Liste.",
+  MATH_ONLIST_OPERATOR_MIN: "Minimalwert einer Liste.",
+  MATH_ONLIST_OPERATOR_MODE: "am häufigsten in Liste.",
+  MATH_ONLIST_OPERATOR_RANDOM: "Zufallswert einer Liste.",
+  MATH_ONLIST_OPERATOR_STD_DEV: "Standardabweichung einer Liste.",
+  MATH_ONLIST_OPERATOR_SUM: "Summe einer Liste.",
   MATH_ONLIST_TOOLTIP_AVERAGE:
     "Ist der Durchschnittswert aller Werte in einer Liste.",
   MATH_ONLIST_TOOLTIP_MAX: "Ist der größte Wert in einer Liste.",
@@ -72,6 +78,7 @@ export const MATH = {
   MATH_ROUND_OPERATOR_ROUNDUP: "aufrunden",
   MATH_ROUND_TOOLTIP: "Eine Zahl auf- oder abrunden.",
   MATH_SINGLE_HELPURL: "https://de.wikipedia.org/wiki/Quadratwurzel",
+  MATH_SINGLE_TOOLTIP: "Operationen auf einer einzelnen Zahl.",
   MATH_SINGLE_OP_ABSOLUTE: "Absolutwert",
   MATH_SINGLE_OP_ROOT: "Quadratwurzel",
   MATH_SINGLE_TOOLTIP_ABS: "Ist der Absolutwert eines Wertes.",
@@ -87,6 +94,7 @@ export const MATH = {
   MATH_TRIG_ATAN: "atan",
   MATH_TRIG_COS: "cos",
   MATH_TRIG_HELPURL: "https://de.wikipedia.org/wiki/Trigonometrie",
+  MATH_TRIG_TOOLTIP: "Trigonometrische Opreationen.",
   MATH_TRIG_SIN: "sin",
   MATH_TRIG_TAN: "tan",
   MATH_TRIG_TOOLTIP_ACOS: "Ist der Arkuskosinus des Eingabewertes.",
