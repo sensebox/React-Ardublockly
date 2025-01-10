@@ -38,7 +38,7 @@ class App extends Component {
   componentDidMount() {
     store.dispatch(loadUser());
     // set initial compiler 
-    store.dispatch(setCompiler("https://compiler.sensebox.de"));
+    store.dispatch(setCompiler(process.env.INITIAL_COMPILER_URL));
   }
 
   render() {
