@@ -8,22 +8,22 @@ import * as Blockly from "blockly/core";
  * @return {array} Completed code with order of operation.
  */
 
-Blockly.Arduino["io_tone"] = function (block) {
+Blockly.Generator.Arduino.forBlock["io_tone"] = function (block, generator) {
   var pin = block.getFieldValue("TONEPIN");
-  var freq = Blockly.Arduino.valueToCode(
+  var freq = Blockly.Generator.Arduino.valueToCode(
     block,
     "FREQUENCY",
-    Blockly.Arduino.ORDER_ATOMIC,
+    Blockly.Generator.Arduino.ORDER_ATOMIC,
   );
-  Blockly.Arduino.setupCode_["io_tone" + pin] =
+  Blockly.Generator.Arduino.setupCode_["io_tone" + pin] =
     "pinMode(" + pin + ", OUTPUT);\n";
   var code = "tone(" + pin + "," + freq + ");\n";
   return code;
 };
 
-Blockly.Arduino["io_notone"] = function (block) {
+Blockly.Generator.Arduino.forBlock["io_notone"] = function (block, generator) {
   var pin = block.getFieldValue("TONEPIN");
-  Blockly.Arduino.setupCode_["io_tone" + pin] =
+  Blockly.Generator.Arduino.setupCode_["io_tone" + pin] =
     "pinMode(" + pin + ", OUTPUT);\n";
   var code = "noTone(" + pin + ");\n";
   return code;

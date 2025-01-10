@@ -193,7 +193,6 @@ class CodeViewer extends Component {
 CodeViewer.propTypes = {
   arduino: PropTypes.string.isRequired,
   xml: PropTypes.string.isRequired,
-  tooltip: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({

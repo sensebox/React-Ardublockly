@@ -67,7 +67,10 @@ class OpenProject extends Component {
     this.props.clearStats();
     Blockly.Xml.domToWorkspace(xmlFile, workspace);
     if (workspace.getAllBlocks().length < 1) {
-      Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xmlBefore), workspace);
+      Blockly.Xml.domToWorkspace(
+        Blockly.utils.xml.textToDom(xmlBefore),
+        workspace,
+      );
       this.setState({
         open: true,
         title: Blockly.Msg.no_blocks_found_title,
@@ -104,7 +107,7 @@ class OpenProject extends Component {
       reader.onloadend = () => {
         var xmlDom = null;
         try {
-          xmlDom = Blockly.Xml.textToDom(reader.result);
+          xmlDom = Blockly.utils.xml.textToDom(reader.result);
           var boardAttribute = xmlDom.getAttribute("board");
           if (!boardAttribute) {
             this.setState({ showOldXMLFileWarning: true });

@@ -1,4 +1,4 @@
-import Blockly from "blockly";
+import * as Blockly from "blockly";
 import { getColour } from "../helpers/colour";
 import * as Types from "../helpers/types";
 import { selectedBoard } from "../helpers/board";
@@ -14,7 +14,7 @@ Blockly.Blocks["sensebox_sensor_temp_hum"] = {
   init: function () {
     this.appendDummyInput().appendField(Blockly.Msg.senseBox_temp_hum);
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_RIGHT)
+      .setAlign(Blockly.inputs.Align.RIGHT)
       .appendField(Blockly.Msg.senseBox_value)
       .appendField(
         new Blockly.FieldDropdown([
@@ -40,7 +40,7 @@ Blockly.Blocks["sensebox_sensor_uv_light"] = {
   init: function () {
     this.appendDummyInput().appendField(Blockly.Msg.senseBox_uv_light);
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_RIGHT)
+      .setAlign(Blockly.inputs.Align.RIGHT)
       .appendField(Blockly.Msg.senseBox_value)
       .appendField(
         new Blockly.FieldDropdown([
@@ -67,7 +67,7 @@ Blockly.Blocks["sensebox_sensor_bmx055_accelerometer"] = {
       Blockly.Msg.senseBox_bmx055_accelerometer,
     );
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_bmx055_accelerometer_direction)
       .appendField(
         new Blockly.FieldDropdown([
@@ -79,7 +79,7 @@ Blockly.Blocks["sensebox_sensor_bmx055_accelerometer"] = {
         "VALUE",
       );
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_bmx055_accelerometer_range)
       .appendField(
         new Blockly.FieldDropdown([
@@ -107,7 +107,7 @@ Blockly.Blocks["sensebox_sensor_sds011"] = {
   init: function () {
     this.appendDummyInput().appendField(Blockly.Msg.senseBox_sds011);
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_RIGHT)
+      .setAlign(Blockly.inputs.Align.RIGHT)
       .appendField(Blockly.Msg.senseBox_value)
       .appendField(
         new Blockly.FieldDropdown([
@@ -152,7 +152,7 @@ Blockly.Blocks["sensebox_sensor_pressure"] = {
     });
     this.appendDummyInput().appendField(Blockly.Msg.senseBox_pressure_sensor);
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_RIGHT)
+      .setAlign(Blockly.inputs.Align.RIGHT)
       .appendField(Blockly.Msg.senseBox_value)
       .appendField(dropdown, "NAME");
     this.setColour(getColour().sensebox);
@@ -170,7 +170,7 @@ Blockly.Blocks["sensebox_sensor_pressure"] = {
     if (isAltitude) {
       if (this.getInput("extraField") == null) {
         this.appendDummyInput("extraField")
-          .setAlign(Blockly.ALIGN_RIGHT)
+          .setAlign(Blockly.inputs.Align.RIGHT)
           .appendField(Blockly.Msg.senseBox_pressure_referencePressure)
           .appendField(new Blockly.FieldTextInput("1013"), "referencePressure")
           .appendField(Blockly.Msg.senseBox_pressure_referencePressure_dim);
@@ -199,7 +199,7 @@ Blockly.Blocks["sensebox_sensor_bme680_bsec"] = {
     ];
     this.appendDummyInput().appendField(Blockly.Msg.senseBox_bme680);
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_RIGHT)
+      .setAlign(Blockly.inputs.Align.RIGHT)
       .appendField(Blockly.Msg.senseBox_value)
       .appendField(new Blockly.FieldDropdown(dropdownOptions), "dropdown");
     this.setOutput(true, Types.DECIMAL.typeName);
@@ -231,7 +231,7 @@ Blockly.Blocks["sensebox_sensor_ultrasonic_ranger"] = {
       .appendField(Blockly.Msg.senseBox_ultrasonic)
       .appendField(dropdown, "port");
     this.appendDummyInput("TrigEcho")
-      .setAlign(Blockly.ALIGN_RIGHT)
+      .setAlign(Blockly.inputs.Align.RIGHT)
       .appendField(Blockly.Msg.senseBox_ultrasonic_trigger)
       .appendField(
         new Blockly.FieldDropdown(selectedBoard().digitalPins),
@@ -324,7 +324,7 @@ Blockly.Blocks["sensebox_tof_imager"] = {
     this.setColour(getColour().sensebox);
     this.appendDummyInput().appendField(Blockly.Msg.sensebox_tof_imager);
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_RIGHT)
+      .setAlign(Blockly.inputs.Align.RIGHT)
       .appendField(Blockly.Msg.senseBox_value)
       .appendField(dropdown, "dropdown");
     this.setOutput(true, Types.NUMBER.typeName);
@@ -341,7 +341,7 @@ Blockly.Blocks["sensebox_tof_imager"] = {
       this.setOutput(true, "Bitmap");
       if (this.getInput("extraField") == null) {
         this.appendDummyInput("extraField")
-          // .setAlign(Blockly.ALIGN_RIGHT) // This doesnt work for manual data input
+          // .setAlign(Blockly.inputs.Align.RIGHT) // This doesnt work for manual data input
           .appendField(Blockly.Msg.sensebox_tof_imager_max_distance)
           .appendField(new FieldSlider(200, 1, 400), "maxDistance")
           .appendField(Blockly.Msg.sensebox_tof_imager_max_distance_unit);
@@ -411,7 +411,7 @@ Blockly.Blocks["sensebox_button"] = {
     if (isLongPress) {
       if (this.getInput("extraField") == null) {
         this.appendDummyInput("extraField")
-          .setAlign(Blockly.ALIGN_RIGHT)
+          .setAlign(Blockly.inputs.Align.RIGHT)
           .appendField(Blockly.Msg.senseBox_button_longPress_time)
           .appendField(new Blockly.FieldTextInput("1000"), "time")
           .appendField("ms");
@@ -436,7 +436,7 @@ Blockly.Blocks["sensebox_scd30"] = {
     ];
     this.appendDummyInput().appendField(Blockly.Msg.senseBox_scd30);
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_RIGHT)
+      .setAlign(Blockly.inputs.Align.RIGHT)
       .appendField(Blockly.Msg.senseBox_value)
       .appendField(new Blockly.FieldDropdown(dropdownOptions), "dropdown");
     this.setOutput(true, Types.NUMBER.typeName);
@@ -473,7 +473,7 @@ Blockly.Blocks["sensebox_gps"] = {
     ];
     this.appendDummyInput().appendField("GPS Modul");
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_RIGHT)
+      .setAlign(Blockly.inputs.Align.RIGHT)
       .appendField(Blockly.Msg.senseBox_value)
       .appendField(new Blockly.FieldDropdown(dropdownOptions), "dropdown");
     this.setOutput(true, Types.NUMBER.typeName);
@@ -626,7 +626,7 @@ Blockly.Blocks["sensebox_sensor_dps310"] = {
     });
     this.appendDummyInput().appendField(Blockly.Msg.senseBox_sensor_dps310);
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_RIGHT)
+      .setAlign(Blockly.inputs.Align.RIGHT)
       .appendField(Blockly.Msg.senseBox_value)
       .appendField(dropdown, "NAME");
     this.setColour(getColour().sensebox);
@@ -644,7 +644,7 @@ Blockly.Blocks["sensebox_sensor_dps310"] = {
     if (isAltitude) {
       if (this.getInput("extraField") == null) {
         this.appendDummyInput("extraField")
-          .setAlign(Blockly.ALIGN_RIGHT)
+          .setAlign(Blockly.inputs.Align.RIGHT)
           .appendField(Blockly.Msg.senseBox_pressure_referencePressure)
           .appendField(new Blockly.FieldTextInput("1013"), "referencePressure")
           .appendField(Blockly.Msg.senseBox_pressure_referencePressure_dim);
@@ -664,7 +664,7 @@ Blockly.Blocks["sensebox_sensor_sps30"] = {
   init: function () {
     this.appendDummyInput().appendField(Blockly.Msg.senseBox_sps30);
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_value)
       .appendField(
         new Blockly.FieldDropdown([
@@ -693,7 +693,7 @@ Blockly.Blocks["sensebox_esp32s2_light"] = {
   init: function () {
     this.appendDummyInput().appendField("ESP32-S2 Phododiode");
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_RIGHT)
+      .setAlign(Blockly.inputs.Align.RIGHT)
       .appendField(Blockly.Msg.senseBox_value)
       .appendField(
         new Blockly.FieldDropdown([
@@ -719,7 +719,7 @@ Blockly.Blocks["sensebox_esp32s2_mpu6050"] = {
   init: function () {
     this.appendDummyInput().appendField("ESP32-S2 MPU6050");
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_RIGHT)
+      .setAlign(Blockly.inputs.Align.RIGHT)
       .appendField(Blockly.Msg.senseBox_value)
       .appendField(
         new Blockly.FieldDropdown([

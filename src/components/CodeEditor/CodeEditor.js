@@ -3,7 +3,7 @@ import { useState, useRef } from "react";
 import { default as MonacoEditor } from "@monaco-editor/react";
 import { withRouter } from "react-router-dom";
 import { Button, Grid } from "@mui/material";
-import Blockly from "blockly/core";
+import * as Blockly from "blockly/core";
 import Divider from "@mui/material/Divider";
 import { saveAs } from "file-saver";
 import Drawer from "@mui/material/Drawer";
