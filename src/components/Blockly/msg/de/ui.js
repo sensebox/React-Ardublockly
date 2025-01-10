@@ -222,6 +222,7 @@ export const UI = {
     "Geben die URL des Compilers ein, den du verwenden möchten. Die Standard-URL ist: https://compiler.sensebox.de",
   settings_compiler_helperText:
     "Die URL muss mit https:// oder http:// beginnen",
+    settings_compiler_readOnly: "Compiler URL ändern",
 
   /**
    * 404

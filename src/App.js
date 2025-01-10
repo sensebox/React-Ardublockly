@@ -17,6 +17,7 @@ import {
 } from "@mui/material/styles";
 
 import Content from "./components/Content";
+import { setCompiler } from "./actions/generalActions";
 
 const theme = createTheme({
   palette: {
@@ -36,6 +37,8 @@ const theme = createTheme({
 class App extends Component {
   componentDidMount() {
     store.dispatch(loadUser());
+    // set initial compiler 
+    store.dispatch(setCompiler("https://compiler.sensebox.de"));
   }
 
   render() {
