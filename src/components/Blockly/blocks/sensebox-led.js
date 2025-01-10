@@ -364,13 +364,13 @@ Blockly.Blocks["sensebox_ws2812_matrix_bitmap"] = {
 Blockly.Blocks["sensebox_ws2812_matrix_custom_bitmap"] = {
   init: function () {
     this.setColour(getColour().sensebox);
-    this.appendDummyInput("BITMAP")
+    this.appendDummyInput("input")
       .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_custom_bitmap)
       .appendField(
         new FieldMultilineInput(
           Blockly.Msg.senseBox_ws2812_rgb_matrix_custom_bitmap_example,
         ),
-        "FIELDNAME",
+        "input",
       );
     this.setOutput(true, "Bitmap");
     this.setTooltip(
