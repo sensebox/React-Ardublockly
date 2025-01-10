@@ -127,7 +127,7 @@ Blockly.Blocks["sensebox_osem_connection"] = {
 Blockly.Blocks["sensebox_send_to_osem"] = {
   init: function () {
     this.setTooltip(Blockly.Msg.senseBox_send_to_osem_tip);
-    this.setHelpUrl("");
+    this.setHelpUrl(Blockly.Msg.senseBox_osem_connection_helpurl);
     this.setColour(getColour().sensebox);
     this.appendDummyInput().appendField(Blockly.Msg.senseBox_send_to_osem);
     if (boxes) {

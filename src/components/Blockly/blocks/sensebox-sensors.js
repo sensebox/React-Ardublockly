@@ -329,6 +329,7 @@ Blockly.Blocks["sensebox_tof_imager"] = {
       .appendField(dropdown, "dropdown");
     this.setOutput(true, Types.NUMBER.typeName);
     this.setTooltip(Blockly.Msg.sensebox_tof_imager_tooltip);
+    this.setHelpUrl(Blockly.Msg.sensebox_tof_imager_helpurl);
     this.getField("dropdown").setValidator(
       function (val) {
         this.updateShape_(val === "DistanzBM");
@@ -478,6 +479,7 @@ Blockly.Blocks["sensebox_gps"] = {
     this.setOutput(true, Types.NUMBER.typeName);
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_gps_tooltip);
+    this.setHelpUrl(Blockly.Msg.senseBox_gps_helpurl);
   },
 };
 
@@ -702,6 +704,7 @@ Blockly.Blocks["sensebox_esp32s2_light"] = {
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_esp32_photodiode_tooltip);
+    this.setHelpUrl(Blockly.Msg.senseBox_esp32_photodiode_helpurl);
     this.data = { name: "Photodiode" };
   },
 };
