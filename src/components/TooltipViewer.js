@@ -42,84 +42,43 @@ class TooltipViewer extends Component {
   render() {
     return (
       <Card
-        className="tooltipViewer"
+        className="helpSection"
         style={{
-          height: "100%",
-          margin: "1vH 0 0 0",
-          maxHeight: "19vH",
-          overflow: "auto",
+          height: "auto",
+          marginTop: "1vh",
+          padding: "1rem",
+          backgroundColor: "#f9f9f9",
+          borderRadius: "10px",
+          border: "1px solid #ddd",
         }}
-        ref={this.myDiv}
       >
         <CardContent>
-          <Typography variant="h5" component="h2">
-            {Blockly.Msg.tooltip_viewer}
-          </Typography>
-
-          <Typography variant="body2" component="span">
-            <ReactMarkdown linkTarget="_blank">
-              {this.props.tooltip}
-            </ReactMarkdown>
-            <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
-              {store.getState().workspace.code.data && (
-                <Button
-                  label="Mehr" //TODO language
-                  variant="contained"
-                  color="primary"
-                  onClick={() => {
-                    this.openDialog();
-                  }}
-                >
-                  {/* TODO language} */}
-                  Sensor Informationen
-                </Button>
-              )}
-              {this.props.helpurl && (
-                <Button
-                  label="helper"
-                  variant="contained"
-                  color="primary"
-                  onClick={() => {
-                    window.open(
-                      this.props.helpurl,
-                      "_blank",
-                      "noopener,noreferrer",
-                    );
-                  }}
-                  title={this.props.helpurl}
-                >
-                  {Blockly.Msg.tooltip_moreInformation}
-                </Button>
-              )}
-            </div>
-          </Typography>
-        </CardContent>
-        {store.getState().workspace.code.data ? (
-          <Dialog
-            open={this.state.open}
-            TransitionComponent={Transition}
-            keepMounted
-            aria-describedby="alert-dialog-slide-description"
-            onClose={() => {
-              this.toggleDialog();
-            }}
-            maxWidth={"md"}
-            fullWidth={true}
+          <Typography
+            variant="h6"
+            component="h2"
+            style={{ marginBottom: "0.5rem" }}
           >
-            <DialogContent>
-              <SensorInfo></SensorInfo>
-            </DialogContent>
-            <DialogActions>
-              <Button
-                onClick={() => {
-                  this.toggleDialog();
-                }}
-              >
-                Close
-              </Button>
-            </DialogActions>
-          </Dialog>
-        ) : null}
+            Sensor Informationen
+          </Typography>
+          <ReactMarkdown linkTarget="_blank">
+            {this.props.tooltip}
+          </ReactMarkdown>
+          {this.props.helpurl && (
+            <Button
+              variant="contained"
+              color="primary"
+              href={this.props.helpurl}
+              target="_blank"
+              style={{
+                padding: "0.5rem 1rem",
+                borderRadius: "5px",
+                fontSize: "0.9rem",
+              }}
+            >
+              Zur Dokumentation
+            </Button>
+          )}
+        </CardContent>
       </Card>
     );
   }
