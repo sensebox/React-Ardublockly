@@ -8,6 +8,9 @@ import messageReducer from "./messageReducer";
 import authReducer from "./authReducer";
 import boardReducer from "./boardReducer";
 import sensorwikiReducer from "./sensorwikiReducer";
+import classroomReducer from "./classroomReducer";
+import classroomAuthReducer from "./classroomAuthReducer";
+import adminReducer from "./adminReducer";
 
 export default combineReducers({
   auth: authReducer,
@@ -19,4 +22,7 @@ export default combineReducers({
   general: generalReducer,
   message: messageReducer,
   sensorwiki: sensorwikiReducer,
+  classroom: classroomReducer,
+  classroomAuth: classroomAuthReducer,
+  admin: adminReducer,
 });

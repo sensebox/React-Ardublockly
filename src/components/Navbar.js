@@ -150,13 +150,8 @@ class Navbar extends Component {
               </Typography>
             </Link>
             <Link to={"/"} style={{ marginLeft: "10px" }}>
-              <img
-                src={senseboxLogo}
-                alt="senseBox-Logo"
-                style={{ width: "35px", height: "auto" }}
-              />
+              <img src={senseboxLogo} alt="senseBox-Logo" width="30" />
             </Link>
-
             <div
               style={{
                 margin: "0 0 0 auto",
@@ -182,19 +177,11 @@ class Navbar extends Component {
                       }}
                       ref={this.mcuRef}
                       onClick={() => {
-                        this.setState({
-                          anchorElBoard: this.mcuRef.current,
-                        });
+                        this.setState({ anchorElBoard: this.mcuRef.current });
                       }}
                       startIcon={<FontAwesomeIcon icon={faMicrochip} />}
                       endIcon={<FontAwesomeIcon icon={faCaretDown} />}
-                      sx={{
-                        display: {
-                          xs: "none",
-                          sm: "none",
-                          md: "flex",
-                        },
-                      }}
+                      sx={{ display: { xs: "none", sm: "none", md: "flex" } }}
                     >
                       {this.props.selectedBoard === "mcu"
                         ? "MCU"
@@ -215,9 +202,7 @@ class Navbar extends Component {
                       }}
                       open={Boolean(this.state.anchorElBoard)}
                       onClose={() => {
-                        this.setState({
-                          anchorElBoard: null,
-                        });
+                        this.setState({ anchorElBoard: null });
                       }}
                     >
                       <MenuItem
@@ -226,9 +211,7 @@ class Navbar extends Component {
                           this.props.setBoard(
                             event.currentTarget.getAttribute("value"),
                           );
-                          this.setState({
-                            anchorElBoard: null,
-                          });
+                          this.setState({ anchorElBoard: null });
                         }}
                       >
                         MCU
@@ -239,9 +222,7 @@ class Navbar extends Component {
                           this.props.setBoard(
                             event.currentTarget.getAttribute("value"),
                           );
-                          this.setState({
-                            anchorElBoard: null,
-                          });
+                          this.setState({ anchorElBoard: null });
                         }}
                       >
                         MCU:mini
@@ -252,9 +233,7 @@ class Navbar extends Component {
                           this.props.setBoard(
                             event.currentTarget.getAttribute("value"),
                           );
-                          this.setState({
-                            anchorElBoard: null,
-                          });
+                          this.setState({ anchorElBoard: null });
                         }}
                       >
                         MCU-S2
@@ -277,19 +256,11 @@ class Navbar extends Component {
                         }}
                         ref={this.langRef}
                         onClick={() => {
-                          this.setState({
-                            anchorElLang: this.langRef.current,
-                          });
+                          this.setState({ anchorElLang: this.langRef.current });
                         }}
                         startIcon={<FontAwesomeIcon icon={faEarthAmericas} />}
                         endIcon={<FontAwesomeIcon icon={faCaretDown} />}
-                        sx={{
-                          display: {
-                            xs: "none",
-                            sm: "none",
-                            md: "flex",
-                          },
-                        }}
+                        sx={{ display: { xs: "none", sm: "none", md: "flex" } }}
                       >
                         English
                       </Button>
@@ -308,19 +279,11 @@ class Navbar extends Component {
                         }}
                         ref={this.langRef}
                         onClick={() => {
-                          this.setState({
-                            anchorElLang: this.langRef.current,
-                          });
+                          this.setState({ anchorElLang: this.langRef.current });
                         }}
                         startIcon={<FontAwesomeIcon icon={faEarthEurope} />}
                         endIcon={<FontAwesomeIcon icon={faCaretDown} />}
-                        sx={{
-                          display: {
-                            xs: "none",
-                            sm: "none",
-                            md: "flex",
-                          },
-                        }}
+                        sx={{ display: { xs: "none", sm: "none", md: "flex" } }}
                       >
                         Deutsch
                       </Button>
@@ -338,9 +301,7 @@ class Navbar extends Component {
                       }}
                       open={Boolean(this.state.anchorElLang)}
                       onClose={() => {
-                        this.setState({
-                          anchorElLang: null,
-                        });
+                        this.setState({ anchorElLang: null });
                       }}
                     >
                       <MenuItem
@@ -349,9 +310,7 @@ class Navbar extends Component {
                           this.props.setLanguage(
                             event.currentTarget.getAttribute("value"),
                           );
-                          this.setState({
-                            anchorElLang: null,
-                          });
+                          this.setState({ anchorElLang: null });
                         }}
                       >
                         Deutsch
@@ -362,9 +321,7 @@ class Navbar extends Component {
                           this.props.setLanguage(
                             event.currentTarget.getAttribute("value"),
                           );
-                          this.setState({
-                            anchorElLang: null,
-                          });
+                          this.setState({ anchorElLang: null });
                         }}
                       >
                         English
@@ -413,9 +370,7 @@ class Navbar extends Component {
                   <IconButton
                     color="inherit"
                     onClick={(event) => {
-                      this.setState({
-                        anchorElUser: event.target,
-                      });
+                      this.setState({ anchorElUser: event.target });
                     }}
                     style={{ margin: "0 30px 0 0" }}
                     size="large"
@@ -435,9 +390,7 @@ class Navbar extends Component {
                     }}
                     open={Boolean(this.state.anchorElUser)}
                     onClose={() => {
-                      this.setState({
-                        anchorElUser: null,
-                      });
+                      this.setState({ anchorElUser: null });
                     }}
                   >
                     <div
@@ -448,20 +401,10 @@ class Navbar extends Component {
                         paddingTop: "16px",
                       }}
                     >
-                      <p
-                        style={{
-                          fontWeight: "bold",
-                          margin: "0px",
-                        }}
-                      >
+                      <p style={{ fontWeight: "bold", margin: "0px" }}>
                         {this.props.user.name}
                       </p>
-                      <p
-                        style={{
-                          marginTop: "0px",
-                          color: "#696969",
-                        }}
-                      >
+                      <p style={{ marginTop: "0px", color: "#696969" }}>
                         {this.props.user.email}
                       </p>
                     </div>
@@ -475,10 +418,7 @@ class Navbar extends Component {
                     <MenuItem>
                       <Link
                         to={"/user"}
-                        style={{
-                          textDecoration: "none",
-                          color: "black",
-                        }}
+                        style={{ textDecoration: "none", color: "black" }}
                       >
                         {Blockly.Msg.navbar_account}
                       </Link>
@@ -486,10 +426,7 @@ class Navbar extends Component {
                     <MenuItem>
                       <Link
                         to={"/settings"}
-                        style={{
-                          textDecoration: "none",
-                          color: "black",
-                        }}
+                        style={{ textDecoration: "none", color: "black" }}
                       >
                         {Blockly.Msg.navbar_settings}
                       </Link>
@@ -506,10 +443,7 @@ class Navbar extends Component {
               ) : (
                 <Link
                   to={"/user/login"}
-                  style={{
-                    textDecoration: "none",
-                    color: "white",
-                  }}
+                  style={{ textDecoration: "none", color: "white" }}
                 >
                   <IconButton
                     color="inherit"
@@ -604,10 +538,7 @@ class Navbar extends Component {
                   <Link
                     to={item.link}
                     key={index}
-                    style={{
-                      textDecoration: "none",
-                      color: "inherit",
-                    }}
+                    style={{ textDecoration: "none", color: "inherit" }}
                   >
                     <ListItem button onClick={this.toggleDrawer}>
                       <ListItemIcon>
@@ -657,10 +588,22 @@ class Navbar extends Component {
                 restriction: this.props.isAuthenticated,
               },
               {
-                text: "FAQ",
-                icon: faQuestionCircle,
-                link: "/faq",
+                text: Blockly.Msg.navbar_admin,
+                icon: faUserCircle,
+                link: "/admin",
+                restriction:
+                  this.props.isAuthenticated &&
+                  this.props.user?.blocklyRole === "admin",
               },
+              {
+                text: Blockly.Msg.navbar_classroom,
+                icon: faChalkboardTeacher,
+                link: "/classroom",
+                restriction:
+                  this.props.isAuthenticated &&
+                  this.props.user?.blocklyRole !== "user",
+              },
+              { text: "FAQ", icon: faQuestionCircle, link: "/faq" },
               {
                 text: Blockly.Msg.navbar_settings,
                 icon: faCog,
@@ -677,10 +620,7 @@ class Navbar extends Component {
                   <Link
                     to={item.link}
                     key={index}
-                    style={{
-                      textDecoration: "none",
-                      color: "inherit",
-                    }}
+                    style={{ textDecoration: "none", color: "inherit" }}
                   >
                     <ListItem
                       button
