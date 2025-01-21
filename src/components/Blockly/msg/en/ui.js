@@ -317,6 +317,7 @@ export const UI = {
 
   tooltip_viewer: "Help",
   tooltip_moreInformation: "More information",
+  tooltip_moreInformation_02: "Information about the Block",
   tooltip_hint: "Select a Block to show the hint",
 
   /**
