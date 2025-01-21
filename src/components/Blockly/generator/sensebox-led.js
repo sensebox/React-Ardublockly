@@ -365,8 +365,16 @@ Blockly.Generator.Arduino.forBlock["sensebox_ws2812_matrix_custom_bitmap"] = fun
 
   const bitmapName = block.getFieldValue('name');
 
-  var customBitmap = block.getFieldValue("input") || "{}";
+  var inputValue = block.getFieldValue("input") || "{}";
 
+  // Remove existing { and } if present at the start and end
+  if (inputValue.startsWith("{") && inputValue.endsWith("}")) {
+    inputValue = inputValue.slice(1, -1);
+  }
+  
+  // Add { and } around the value
+  var customBitmap = "{" + inputValue + "}";
+  
   Blockly.Generator.Arduino.definitions_[`define_bitmap_${bitmapName}`] =
   `const uint16_t bitmap_${bitmapName}[] = ${customBitmap};`;
   // if empty set to empty object 
@@ -376,7 +384,6 @@ Blockly.Generator.Arduino.forBlock["sensebox_ws2812_matrix_custom_bitmap"] = fun
   
   return [`bitmap_${bitmapName}`, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
-
 
 
 Blockly.Generator.Arduino.forBlock["sensebox_ws2812_matrix_draw_custom_bitmap_example"] =

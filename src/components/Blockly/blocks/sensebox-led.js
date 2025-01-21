@@ -355,14 +355,15 @@ Blockly.Blocks["sensebox_ws2812_matrix_custom_bitmap"] = {
       .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.sensebox_led_custom_bitmap)
       .appendField(new Blockly.FieldTextInput(words[Math.floor(Math.random() * words.length)]  ),"name");
-
     this.appendDummyInput("input")
       .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_custom_bitmap)
+      .appendField("{")
       .appendField(
         new FieldMultilineInput(
           Blockly.Msg.senseBox_ws2812_rgb_matrix_custom_bitmap_example        ),
         "input",
-      );
+      )
+      .appendField("}")
 
     this.setOutput(true, "Bitmap");
     this.setTooltip(
