@@ -267,10 +267,8 @@ Blockly.Generator.Arduino.forBlock["sensebox_ws2812_matrix_showBitmap"] = functi
       Blockly.Generator.Arduino.ORDER_ATOMIC,
     ) || '"Keine Eingabe"';
 
-    Blockly.Generator.Arduino.definitions_[`define_bitmap_${dropdown_pin}`] =
-    `const uint16_t bitmap_${dropdown_pin}[] = ${value};`;
     
-    var code = `matrix_${dropdown_pin}.drawRGBBitmap(0,0, bitmap_${dropdown_pin}, WIDTH, HEIGHT);\n`;
+    var code = `matrix_${dropdown_pin}.drawRGBBitmap(0,0, ${value}, WIDTH, HEIGHT);\n`;
   code += `matrix_${dropdown_pin}.show();\n`;
   return code;
 };
@@ -365,21 +363,26 @@ Blockly.Generator.Arduino.forBlock["sensebox_ws2812_matrix_custom_bitmap"] = fun
   block,
 ) {
 
+  const bitmapName = block.getFieldValue('name');
+
   var customBitmap = block.getFieldValue("input") || "{}";
 
+  Blockly.Generator.Arduino.definitions_[`define_bitmap_${bitmapName}`] =
+  `const uint16_t bitmap_${bitmapName}[] = ${customBitmap};`;
   // if empty set to empty object 
   if (!customBitmap || customBitmap === "0") {
     customBitmap = "{}";
   }
   
-  return [customBitmap, Blockly.Generator.Arduino.ORDER_ATOMIC];
+  return [`bitmap_${bitmapName}`, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
 
 
-Blockly.Generator.Arduino["sensebox_ws2812_matrix_draw_custom_bitmap_example"] =
+Blockly.Generator.Arduino.forBlock["sensebox_ws2812_matrix_draw_custom_bitmap_example"] =
   function (block) {
     var bitmap = "";
+    const bitmapName = block.getFieldValue('name')
     for (let i = 1; i <= 8; i += 1) {
       for (let j = 1; j <= 12; j += 1) {
         const colorHex = block.getFieldValue(i + "," + j);
@@ -395,9 +398,9 @@ Blockly.Generator.Arduino["sensebox_ws2812_matrix_draw_custom_bitmap_example"] =
       }
       bitmap += "\n";
     }
-    Blockly.Generator.Arduino.definitions_[`define_custom_draw_bitmap}`] =
-      `const uint16_t bitmap_custom[] = {${bitmap}};`;
-    var code = `bitmap_custom`;
+    Blockly.Generator.Arduino.definitions_[`define_${bitmapName}_example`] =
+      `const uint16_t bitmap_${bitmapName}[] = {${bitmap}};`;
+    var code = `bitmap_${bitmapName}`;
 
 
     return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
