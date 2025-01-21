@@ -48,7 +48,7 @@ class TooltipViewer extends Component {
         height: "25vh",
         overflowY: "scroll",
         marginTop: "1vh",
-        padding: "1rem",
+        padding: "1.1rem",
         borderRadius: "4px",
         border: "1px solid #ddd",
         boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
