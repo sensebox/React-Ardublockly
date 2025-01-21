@@ -38,7 +38,8 @@ class App extends Component {
   componentDidMount() {
     store.dispatch(loadUser());
     // set initial compiler 
-    store.dispatch(setCompiler(process.env.INITIAL_COMPILER_URL));
+    console.log("compiler",  process.env.REACT_APP_INITIAL_COMPILER_URL)
+    store.dispatch(setCompiler(process.env.REACT_APP_INITIAL_COMPILER_URL));
   }
 
   render() {
