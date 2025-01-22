@@ -36,7 +36,7 @@ const CodeEditor = (props) => {
           : "sensebox-esp32s2",
       sketch: editorRef.current.getValue(),
     };
-    fetch(`${process.env.REACT_APP_COMPILER_URL}/compile`, {
+    fetch(`${this.props.selectedCompiler}/compile`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
@@ -53,7 +53,7 @@ const CodeEditor = (props) => {
         //setId(result);
         const filename = "sketch";
         window.open(
-          `${process.env.REACT_APP_COMPILER_URL}/download?id=${result}&board=${
+          `${this.props.selectedCompiler}/download?id=${result}&board=${
             store.getState().board.board === "mcu"
               ? "sensebox-mcu"
               : "sensebox-esp32s2"

@@ -17,6 +17,7 @@ import {
 } from "@mui/material/styles";
 
 import Content from "./components/Content";
+import { setCompiler } from "./actions/generalActions";
 
 const theme = createTheme({
   palette: {
@@ -36,6 +37,9 @@ const theme = createTheme({
 class App extends Component {
   componentDidMount() {
     store.dispatch(loadUser());
+    // set initial compiler 
+    console.log("compiler",  process.env.REACT_APP_INITIAL_COMPILER_URL)
+    store.dispatch(setCompiler(process.env.REACT_APP_INITIAL_COMPILER_URL));
   }
 
   render() {
