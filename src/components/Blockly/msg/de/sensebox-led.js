@@ -10,6 +10,8 @@ export const LED = {
   senseBox_ws2818_rgb_led_init_tooltip: `Schließe die RGB-LED an einen der **digital/analog Ports** an. Wenn mehrere RGB-LEDs miteinander verkettet werden kannst du über die Position bestimmen welche LED angesteuert wird. `,
   senseBox_ws2818_rgb_led_color: `Farbe`,
   senseBox_ws2818_rgb_led_number: `Anzahl`,
+  senseBox_ws2818_rgb_led_helpurl: 'https://docs.sensebox.de/docs/hardware/accessoires/rgb-led-esp32',
+  senseBox_ws2818_rgb_led_helpurl_2: 'https://docs.sensebox.de/docs/hardware/accessoires/rgb-led',
 
   /**
    * Color
@@ -75,4 +77,5 @@ export const LED = {
     `0x29B3, 0x74DA, 0x74DA, 0x74DA, 0x0000, 0x0000, 0x0000, 0xB5B6, 0x0000, 0x0000, 0x29B3, 0x29B3, 0x29B3, 0x0000, 0x0000, 0x0000,   // 0x0060 (96) pixels}`,
   senseBox_ws2812_rgb_matrix_draw_bitmap: `Male eine eigene Bitmap`,
   senseBox_ws2812_rgb_matrix_draw_bitmap_tooltip: `Wähle anzuzeigende Farben für die einzelnen Pixel aus.`,
+  senseBox_ws2812_rgb_matrix_helpurl: 'https://docs.sensebox.de/docs/hardware/accessoires/led-matrix',
 };
