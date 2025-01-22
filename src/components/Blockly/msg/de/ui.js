@@ -323,6 +323,7 @@ export const UI = {
    */
 
   tooltip_viewer: "Hilfe",
+  tooltip_moreInformation_02: "Informationen zum Block",
   tooltip_moreInformation: "Mehr Informationen",
   tooltip_hint: "Wähle einen Block aus um dir die Hilfe anzeigen zu lassen",
 
