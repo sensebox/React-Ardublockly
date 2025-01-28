@@ -14,6 +14,7 @@
 ---
 
 <a name="deutsch"></a>
+
 # 🇩🇪 Deutsch
 
 Eine moderne, React-basierte Version der [senseBox](https://sensebox.de) Ardublockly-Umgebung. Dieses Projekt ist die Weiterentwicklung von [blockly.sensebox.de](https://blockly.sensebox.de/ardublockly/?lang=de&board=sensebox-mcu) und bietet eine verbesserte Benutzeroberfläche sowie neue Funktionen.
@@ -39,6 +40,7 @@ Eine moderne, React-basierte Version der [senseBox](https://sensebox.de) Ardublo
 ### Entwicklungsumgebung einrichten
 
 1. Repository klonen oder herunterladen:
+
    ```bash
    git clone https://github.com/sensebox/React-Ardublockly.git
    # oder
@@ -46,11 +48,13 @@ Eine moderne, React-basierte Version der [senseBox](https://sensebox.de) Ardublo
    ```
 
 2. In das Projektverzeichnis wechseln:
+
    ```bash
    cd React-Ardublockly
    ```
 
 3. Abhängigkeiten installieren:
+
    ```bash
    npm ci   # Empfohlen für reproduzierbare Builds
    # oder
@@ -58,6 +62,7 @@ Eine moderne, React-basierte Version der [senseBox](https://sensebox.de) Ardublo
    ```
 
 4. Entwicklungsserver starten:
+
    ```bash
    npm start
    ```
@@ -74,6 +79,7 @@ Eine moderne, React-basierte Version der [senseBox](https://sensebox.de) Ardublo
 ### Compiler-Einstellungen
 
 Die Compiler-URL kann in der `.env`-Datei konfiguriert werden:
+
 ```
 REACT_APP_COMPILER_URL=https://compiler.sensebox.de
 ```
@@ -96,6 +102,7 @@ REACT_APP_COMPILER_URL=https://compiler.sensebox.de
 ### Commit-Nachrichten
 
 Bitte folgen Sie dem Format:
+
 ```
 [Bereich] Kurze Beschreibung
 
@@ -129,6 +136,7 @@ Eine Live-Demo der aktuellen Version finden Sie unter [https://sensebox-ardubloc
 ---
 
 <a name="english"></a>
+
 # 🇬🇧 English
 
 A modern, React-based version of the [senseBox](https://sensebox.de) Ardublockly environment. This project is the continuation of [blockly.sensebox.de](https://blockly.sensebox.de/ardublockly/?lang=de&board=sensebox-mcu) and offers an improved user interface and new features.
@@ -154,6 +162,7 @@ A modern, React-based version of the [senseBox](https://sensebox.de) Ardublockly
 ### Setting up the Development Environment
 
 1. Clone or download repository:
+
    ```bash
    git clone https://github.com/sensebox/React-Ardublockly.git
    # or
@@ -161,11 +170,13 @@ A modern, React-based version of the [senseBox](https://sensebox.de) Ardublockly
    ```
 
 2. Change to project directory:
+
    ```bash
    cd React-Ardublockly
    ```
 
 3. Install dependencies:
+
    ```bash
    npm ci   # Recommended for reproducible builds
    # or
@@ -173,6 +184,7 @@ A modern, React-based version of the [senseBox](https://sensebox.de) Ardublockly
    ```
 
 4. Start development server:
+
    ```bash
    npm start
    ```
@@ -189,6 +201,7 @@ A modern, React-based version of the [senseBox](https://sensebox.de) Ardublockly
 ### Compiler Settings
 
 The compiler URL can be configured in the `.env` file:
+
 ```
 REACT_APP_COMPILER_URL=https://compiler.sensebox.de
 ```
@@ -211,6 +224,7 @@ REACT_APP_COMPILER_URL=https://compiler.sensebox.de
 ### Commit Messages
 
 Please follow this format:
+
 ```
 [Area] Brief description
 
