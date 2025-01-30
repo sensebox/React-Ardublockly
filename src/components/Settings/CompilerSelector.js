@@ -24,7 +24,9 @@ class CompilerSelector extends Component {
     // Ensure that Blockly.setLocale is adopted in the component.
     // Otherwise, the text will not be displayed until the next update of the component.
     this.forceUpdate();
+    
   }
+
 
   changeStatus = () => {
     this.setState({ readOnly: !this.state.readOnly });
@@ -33,36 +35,41 @@ class CompilerSelector extends Component {
   render() {
     return (
       <div>
-        <Typography style={{ fontWeight: "bold" }}>
-          {Blockly.Msg.settings_compiler}
-        </Typography>
-        <FormHelperText
-          style={{
-            color: "black",
-            lineHeight: 1.3,
-            marginBottom: "8px",
-          }}
-        >
-          {Blockly.Msg.settings_compiler_text}
-        </FormHelperText>
-        <FormControl variant="standard">
-          <TextField
-            id="outlined-helperText"
-            label="Helper text"
-            helperText={Blockly.Msg.settings_compiler_helperText}
-            onChange={(e) => this.props.setCompiler(e.target.value)}
-            value={this.props.selectedCompiler}
-            InputProps={{
-              readOnly: !this.state.readOnly,
-            }}
-          />
-          <FormControlLabel
-            control={<Checkbox defaultChecked />}
-            checked={this.state.readOnly}
-            onChange={this.changeStatus}
-            label="Change URL"
-          />
-        </FormControl>
+      <Typography style={{ fontWeight: "bold" }}>
+        {Blockly.Msg.settings_compiler}
+      </Typography>
+      <FormHelperText
+        style={{
+        color: "black",
+        lineHeight: 1.3,
+        marginBottom: "8px",
+        }}
+      >
+        {Blockly.Msg.settings_compiler_text}
+      </FormHelperText>
+      <FormControl variant="standard">
+        <FormControlLabel
+        control={<Checkbox defaultChecked />}
+        checked={this.state.readOnly}
+        onChange={this.changeStatus}
+        label={Blockly.Msg.settings_compiler_readOnly}
+        />
+        <TextField
+        id="outlined-helperText"
+        label="Helper text"
+        helperText={Blockly.Msg.settings_compiler_helperText}
+        onChange={(e) => this.props.setCompiler(e.target.value)}
+        value={this.props.selectedCompiler}
+        InputProps={{
+          readOnly: !this.state.readOnly,
+        }}
+        style={{
+          backgroundColor: !this.state.readOnly ? "#f0f0f0" : "white",
+          color: this.state.readOnly ? "gray" : "black",
+          borderRadius: "5px",
+        }}
+        />
+      </FormControl>
       </div>
     );
   }
