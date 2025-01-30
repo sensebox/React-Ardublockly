@@ -23,7 +23,7 @@ const initialPlatform = () => {
 };
 
 const initialCompiler = () => {
-  return process.env.REACT_APP_COMPILER_URL;
+  return process.env.INITIAL_COMPILER_URL;
 };
 
 const initialSounds = () => {
