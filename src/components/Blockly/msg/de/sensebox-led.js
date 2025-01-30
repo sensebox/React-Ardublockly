@@ -75,6 +75,8 @@ export const LED = {
     `0x29B3, 0x74DA, 0x74DA, 0x74DA, 0x0000, 0x0000, 0x0000, 0xB5B6, 0x0000, 0x0000, 0x29B3, 0x29B3, 0x29B3, 0x0000, 0x0000, 0x0000`,
   senseBox_ws2812_rgb_matrix_draw_bitmap: `Male eine eigene Bitmap`,
   senseBox_ws2812_rgb_matrix_draw_bitmap_tooltip: `Wähle anzuzeigende Farben für die einzelnen Pixel aus.`,
-  sensebox_led_custom_bitmap: "Bitmap Name"
-
+  sensebox_led_custom_bitmap: "Bitmap Name",
+  senseBox_ws2812_rgb_matrix_fullcolor: "Setze alle Pixel auf eine Farbe",
+  senseBox_ws2812_rgb_matrix_fullcolor_tooltip:
+    "Setze alle Pixel auf eine Farbe. Wähle eine Farbe aus der Palette.",
 };
