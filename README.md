@@ -19,11 +19,57 @@ This project was created with [Create React App](https://github.com/facebook/cre
 
 4. open [localhost:3000](http://localhost:3000)
 
-## Troubleshoot
+## 🔧 Configuration
 
-Ensure that line 14 in [store.js](https://github.com/sensebox/React-Ardublockly/blob/master/src/store.js#L14) is commented out or otherwise you have installed [Redux DevTools Extension](http://extension.remotedev.io/).
+### Board Selection
 
-## Demo
+- **senseBox MCU**: Standard board with Arduino compatibility
+- **senseBox MCU-S2**: ESP32-based board with extended functionality
+
+### Compiler Settings
+
+The compiler URL can be configured in the `.env` file:
+
+```
+REACT_APP_COMPILER_URL=https://compiler.sensebox.de
+```
+
+## 📝 Development Guidelines
+
+### Code Style
+
+- We use [Prettier](https://prettier.io) for consistent formatting
+- Configuration in `.prettierrc.json`
+- ESLint for JavaScript/React best practices
+
+### Branching Strategy
+
+If you want to contribute **please use the development branch** ! The main branch is only used for production and may be outdated!
+
+- `main`: Production branch
+- `development`: Development branch
+- Feature branches: `feature/name-of-feature`
+- Bugfix branches: `bugfix/name-of-bug`
+
+## 🤝 Contributing
+
+1. Create a fork
+2. Create feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit changes (`git commit -m '[Area] Add amazing feature'`)
+4. Push branch (`git push origin feature/AmazingFeature`)
+5. Create Pull Request
+
+## 🐛 Known Issues
+
+- Redux DevTools must be installed or the corresponding line in `store.js` must be commented out
+- Some boards require special drivers for USB connection
+
+## 📚 Documentation
+
+- [User Manual](https://docs.sensebox.de/docs/category/blockly-2)
+- [Hardware-Glossar](https://docs.sensebox.de/docs/category/glossar)
+
+## 🌐 Demo
 
 A demo of the current status of the master branch can be accessed via [https://blockly-react.netlify.app/](https://blockly-react.netlify.app/) :rocket:.
 
