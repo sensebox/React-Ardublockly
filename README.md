@@ -83,8 +83,8 @@ REACT_APP_COMPILER_URL=https://compiler.sensebox.de
 - ESLint for JavaScript/React best practices
 
 ### Branching Strategy
-
-- `master`: Production branch
+If you want to contribute **please use the development branch** ! The main branch is only used for production and may be outdated!
+- `main`: Production branch 
 - `development`: Development branch
 - Feature branches: `feature/name-of-feature`
 - Bugfix branches: `bugfix/name-of-bug`
