@@ -226,7 +226,7 @@ Blockly.Blocks["sensebox_ws2812_matrix_init"] = {
       );
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_brightness)
-      .appendField(new FieldSlider(20, 0, 255), "BRIGHTNESS");
+      .appendField(new FieldSlider(20, 0, 40), "BRIGHTNESS");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setTooltip(Blockly.Msg.senseBox_ws2812_rgb_matrix_init_tooltip);
