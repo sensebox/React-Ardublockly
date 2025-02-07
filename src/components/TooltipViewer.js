@@ -29,6 +29,7 @@ class TooltipViewer extends Component {
     this.state = {
       open: false,
     };
+    console.log("TooltipViewer constructor", props);
   }
 
   toggleDialog = () => {
@@ -42,79 +43,78 @@ class TooltipViewer extends Component {
   render() {
     return (
       <Card
-        className="tooltipViewer"
-        style={{
-          height: "100%",
-          margin: "1vH 0 0 0",
-          maxHeight: "19vH",
-          overflow: "auto",
-        }}
-        ref={this.myDiv}
+      className="helpSection"
+      style={{
+        height: "25vh",
+        overflowY: "scroll",
+        marginTop: "1vh",
+        padding: "1.1rem",
+        borderRadius: "4px",
+        border: "1px solid #ddd",
+        boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+      }}
       >
-        <CardContent>
-          <Typography variant="h5" component="h2">
-            {Blockly.Msg.tooltip_viewer}
-          </Typography>
+      <CardContent>
+      <Typography
+      variant="h6"
+      component="h2"
+      style={{
+        marginBottom: "0.5rem",
+        position: "relative",
+        paddingBottom: "0.3rem",
+      }}
+    >
+      <span style={{ display: "inline-block" }}> 
+        {Blockly.Msg.tooltip_moreInformation_02}
+      </span>
+      <span
+        style={{
+          content: "''",
+          display: "block",
+          width: "50%",
+          height: "4px",
+          backgroundColor: "#4caf50",
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          borderRadius: "2px",
+        }}
+      ></span>
+    </Typography>
+        <ReactMarkdown linkTarget="_blank">
+        {this.props.tooltip}
+        </ReactMarkdown>
+        {this.props.helpurl && (
+        <Button
+          variant="contained"
+          color="primary"
+          href={this.props.helpurl}
+          target="_blank"
+          style={{
+          padding: "0.5rem 1rem",
+          borderRadius: "5px",
+          fontSize: "0.9rem",
+          }}
+        >
+          Zur Dokumentation
+        </Button>
+        )}
+      </CardContent>
 
-          <Typography variant="body2" component="span">
-            <ReactMarkdown linkTarget="_blank">
-              {this.props.tooltip}
-            </ReactMarkdown>
-            {store.getState().workspace.code.data ? (
-              <Button
-                label="Mehr"
-                variant="contained"
-                color="primary"
-                onClick={() => {
-                  this.openDialog();
-                }}
-              >
-                Sensor Informationen
-              </Button>
-            ) : (
-              <ReactMarkdown>{`${Blockly.Msg.tooltip_moreInformation} [${Blockly.Msg.labels_here}](${this.props.helpurl})`}</ReactMarkdown>
-            )}
-          </Typography>
-        </CardContent>
-        {store.getState().workspace.code.data ? (
-          <Dialog
-            open={this.state.open}
-            TransitionComponent={Transition}
-            keepMounted
-            aria-describedby="alert-dialog-slide-description"
-            onClose={() => {
-              this.toggleDialog();
-            }}
-            maxWidth={"md"}
-            fullWidth={true}
-          >
-            <DialogContent>
-              <SensorInfo></SensorInfo>
-            </DialogContent>
-            <DialogActions>
-              <Button
-                onClick={() => {
-                  this.toggleDialog();
-                }}
-              >
-                Close
-              </Button>
-            </DialogActions>
-          </Dialog>
-        ) : null}
       </Card>
     );
   }
 }
 
 TooltipViewer.propTypes = {
-  tooltip: PropTypes.string.isRequired,
-  helpurl: PropTypes.string.isRequired,
+  tooltip: PropTypes.string,
+  helpurl: PropTypes.string,
 };
 
 const mapStateToProps = (state) => ({
   tooltip: state.workspace.code.tooltip,
   helpurl: state.workspace.code.helpurl,
+  language: state.general.language,
 });
 
 export default connect(mapStateToProps, null)(withWidth()(TooltipViewer));
