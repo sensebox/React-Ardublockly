@@ -8,20 +8,29 @@ export const UI = {
   toolbox_math: "Math",
   toolbox_io: "Input/Output",
   toolbox_time: "Time",
+  toolbox_rtc: "RTC",
+  toolbox_ntp: "NTP",
   toolbox_functions: "Functions",
   toolbox_variables: "Variables",
   toolbox_serial: "Serial",
-  toolbox_advanced: "Erweitert",
+  toolbox_advanced: "Advanced",
+  toolbox_motors: "Motors",
+  toolbox_label_externalRTC: "External RTC",
+  toolbox_label_internalRTC: "Internal RTC",
+  toolbox_label_led_matrix: "LED-Matrix",
+  toolbox_label_led_ws2812: "RGB-LED",
   variable_NUMBER: "Number (int)",
   variable_SHORT_NUMBER: "char",
-  variable_LONG: " Zahl (long)",
+  variable_LONG: "Big number (long)",
   variable_DECIMAL: "Decimal (float)",
   variables_TEXT: "Text (string)",
   variables_ARRAY: "Array (array)",
-  variables_CHARACTER: "char (char)",
+  variables_CHARACTER: "Character (char)",
   variables_BOOLEAN: "Boolean (boolean)",
   variables_NULL: "void (void)",
   variables_UNDEF: "undefined",
+  variables_set: "set",
+  variables_to: "to",
 
   /**
    * Tooltips
@@ -131,6 +140,29 @@ export const UI = {
     "While compiling an error occured. Please check your blocks and try again",
 
   /**
+   * File Upload Dialog
+   */
+  warning_file_board:
+    "The selected board type differs from the board type of the loaded project. The project may not work as expected.",
+  dialog_confirm:
+    "Do you really want to insert the project from the XML file? All current blocks will be deleted.",
+  warning_old_xml_file:
+    "The XML file is from an older version of Blockly. The board will be defaulted to 'senseBox MCU.",
+
+  /** Open Project */
+  dialog_title: "Load blocks from XML file",
+  no_blocks_found_title: "No Blocks Found",
+  no_blocks_found_text:
+    "No blocks were detected. Please check the XML code and try again.",
+  xml_loaded: "The project from the XML file has been successfully inserted.",
+  no_valid_data_type_title: "Invalid File Type",
+  no_valid_data_type_text:
+    "The provided file did not match the required format. Only XML files are allowed.",
+  no_valid_xml_title: "Invalid XML",
+  no_valid_xml_text:
+    "The XML file could not be parsed into blocks. Please check the XML code and try again.",
+
+  /**
    * Buttons
    *
    */
@@ -144,6 +176,7 @@ export const UI = {
   button_next: "Next step",
   button_tutorial_overview: "Tutorial overview",
   button_login: "Login",
+  button_createVariable: "Create Typed Variable",
 
   /**
    *
@@ -176,6 +209,13 @@ export const UI = {
   settings_sounds: "Sound",
   settings_sounds_text:
     "Enable or disable sounds when adding and deleting blocks. Disabled by default",
+  settings_board: "Board",
+  settings_board_text: "Choose your board",
+  settings_compiler: "Compiler URL",
+  settings_compiler_text:
+    "Enter the URL of the compiler you want to use. The default compiler is: https://compiler.sensebox.de",
+  settings_compiler_helperText: "Die URL must start https:// or http://",
+  settings_compiler_readOnly: "Change compiler URL",
 
   /**
    * 404
@@ -222,6 +262,12 @@ export const UI = {
   builder_requirements_head: "Requirements.",
   builder_requirements_order:
     "Note that the order of ticking is authoritative.",
+  builder_difficulty: "Difficulty level",
+  builder_public_head: "Publish tutorial",
+  builder_public_label: "Publish tutorial for all users",
+  builder_review_head: "Publish tutorial",
+  builder_review_text:
+    "You can share your tutorial with other people directly from the link. If you want to publish your tutorial for all users in the overview you can activate it here. An administrator will view your tutorial and then activate it.",
 
   /**
    * Login
@@ -237,7 +283,7 @@ export const UI = {
   /**
    * Navbar
    */
-
+  navbar_blockly: "Blockly",
   navbar_tutorials: "Tutorials",
   navbar_tutorialbuilder: "Create tutorial",
   navbar_gallery: "Gallery",
@@ -262,6 +308,8 @@ export const UI = {
 
   compile_overlay_head: "Your program is now compiled and downloaded",
   compile_overlay_text: "Then copy it to your senseBox MCU",
+  compile_overlay_text_esp32:
+    "Then you can transfer it to your MCU-S2 but please be patient for a moment.\n As soon as the program code has been successfully transferred, the RGB LED lights up green.\n This process can take up to 60 seconds.",
   compile_overlay_help: "You need help? Have a look here: ",
 
   /**
@@ -269,7 +317,8 @@ export const UI = {
    */
 
   tooltip_viewer: "Help",
-  tooltip_moreInformation: "More informations can be found ",
+  tooltip_moreInformation: "More information",
+  tooltip_moreInformation_02: "Information about the Block",
   tooltip_hint: "Select a Block to show the hint",
 
   /**
@@ -277,4 +326,47 @@ export const UI = {
    */
   drawer_ideerror_head: "Oops something went wrong",
   drawer_ideerror_text: "An error occurred while compiling, check your blocks",
+
+  /**
+   * Code Editor
+   * */
+  codeeditor_libraries_head: "Installed Arduino Libraries",
+  codeeditor_libraries_text:
+    "For documentation, view the installed libraries and their examples",
+  codeeditor_save_code: "Download code",
+  codeeditor_open_code: "Open code",
+  codeeditor_reset_code: "Reset code",
+  codeeditor_blockly_code: "Load blockly code",
+  codeeditor_compile_progress:
+    "Your code will now be compiled and then downloaded to your computer",
+
+  /**
+   * Error view
+   */
+
+  suggestion_pre_text: "Maybe you should try:",
+  display_not_declared: "Initialise the display in the setup() function",
+  variable_redeclared:
+    "Make sure that you do not use any special characters in your variable names. This includes spaces, asterisks or quotation marks.",
+  /**
+   * Device Selection
+   * */
+
+  deviceselection_head: "Which board are you using?",
+  deviceselection_keep_selection:
+    "Save my choice (You can change the board later in the settings)",
+  deviceselection_footnote:
+    "Here you can access the old blockly Version for the",
+  deviceselection_footnote_02: "or the",
+
+  /**
+   * Sensor Markdown Information
+   * */
+  sensorinfo_info: "Informationen regarding the Sensor",
+  sensorinfo_description: "Description",
+  sensorinfo_measurable_phenos: "Measurable Phenomena",
+  sensorinfo_manufacturer: "Manufacturer",
+  sensorinfo_lifetime: "Lifetime",
+  sensorinfo_explanation:
+    "This information was fetched from [sensors.wiki](https://sensors.wiki). For more information visit the section on this sensor ",
 };

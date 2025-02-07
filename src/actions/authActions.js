@@ -53,7 +53,7 @@ export const loadUser = () => (dispatch) => {
     .get(
       `${process.env.REACT_APP_BLOCKLY_API}/user`,
       config,
-      dispatch(authInterceptor())
+      dispatch(authInterceptor()),
     )
     .then((res) => {
       res.config.success(res);
@@ -62,9 +62,6 @@ export const loadUser = () => (dispatch) => {
       err.config.error(err);
     });
 };
-
-var logoutTimerId;
-const timeToLogout = 14.9 * 60 * 1000; // nearly 15 minutes corresponding to the API
 
 // Login user
 export const login =
@@ -84,10 +81,6 @@ export const login =
     axios
       .post(`${process.env.REACT_APP_BLOCKLY_API}/user`, body, config)
       .then((res) => {
-        // Logout automatically if refreshToken "expired"
-        const logoutTimer = () =>
-          setTimeout(() => dispatch(logout()), timeToLogout);
-        logoutTimerId = logoutTimer();
         dispatch(setLanguage(res.data.user.language));
         dispatch({
           type: LOGIN_SUCCESS,
@@ -104,8 +97,8 @@ export const login =
           returnErrors(
             err.response.data.message,
             err.response.status,
-            "LOGIN_FAIL"
-          )
+            "LOGIN_FAIL",
+          ),
         );
         dispatch({
           type: LOGIN_FAIL,
@@ -144,15 +137,14 @@ export const logout = () => (dispatch) => {
       }
       dispatch(setLanguage(locale));
       dispatch(returnSuccess(res.data.message, res.status, "LOGOUT_SUCCESS"));
-      clearTimeout(logoutTimerId);
     },
     error: (err) => {
       dispatch(
         returnErrors(
           err.response.data.message,
           err.response.status,
-          "LOGOUT_FAIL"
-        )
+          "LOGOUT_FAIL",
+        ),
       );
       dispatch({
         type: LOGOUT_FAIL,
@@ -165,7 +157,6 @@ export const logout = () => (dispatch) => {
         type: GET_STATUS,
         payload: status,
       });
-      clearTimeout(logoutTimerId);
     },
   };
   axios
@@ -193,7 +184,7 @@ export const authInterceptor = () => (dispatch, getState) => {
     },
     (error) => {
       Promise.reject(error);
-    }
+    },
   );
 
   // Add a response interceptor
@@ -222,10 +213,6 @@ export const authInterceptor = () => (dispatch, getState) => {
             })
             .then((res) => {
               if (res.status === 200) {
-                clearTimeout(logoutTimerId);
-                const logoutTimer = () =>
-                  setTimeout(() => dispatch(logout()), timeToLogout);
-                logoutTimerId = logoutTimer();
                 dispatch({
                   type: REFRESH_TOKEN_SUCCESS,
                   payload: res.data,
@@ -247,7 +234,7 @@ export const authInterceptor = () => (dispatch, getState) => {
               // request failed, token could not be refreshed
               if (err.response) {
                 dispatch(
-                  returnErrors(err.response.data.message, err.response.status)
+                  returnErrors(err.response.data.message, err.response.status),
                 );
               }
               dispatch({
@@ -259,6 +246,6 @@ export const authInterceptor = () => (dispatch, getState) => {
       }
       // request status was unequal to 401, no possibility to refresh the token
       return Promise.reject(error);
-    }
+    },
   );
 };

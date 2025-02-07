@@ -1,47 +1,51 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import Dialog from '../Dialog';
+import Dialog from "../Dialog";
 
-import hardware from '../../data/hardware.json';
+import hardware from "../../data/hardware.json";
 
-import { withStyles } from '@material-ui/core/styles';
-import withWidth, { isWidthDown } from '@material-ui/core/withWidth';
-import Link from '@material-ui/core/Link';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
-import GridListTileBar from '@material-ui/core/GridListTileBar';
+import withStyles from "@mui/styles/withStyles";
+import Link from "@mui/material/Link";
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
+import ImageListItemBar from "@mui/material/ImageListItemBar";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExpandAlt } from "@fortawesome/free-solid-svg-icons";
-import * as Blockly from 'blockly'
-const styles = theme => ({
+import * as Blockly from "blockly";
+import { isWidthDown } from "../../helpers/handleBreakpoints";
+
+// FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
+const withWidth = () => (WrappedComponent) => (props) => (
+  <WrappedComponent {...props} width="xs" />
+);
+
+const styles = (theme) => ({
   expand: {
-    '&:hover': {
+    "&:hover": {
       color: theme.palette.primary.main,
     },
-    '&:active': {
+    "&:active": {
       color: theme.palette.primary.main,
     },
-    color: theme.palette.text.primary
+    color: theme.palette.text.primary,
   },
-  multiGridListTile: {
+  multiImageListItem: {
     background: theme.palette.primary.main,
     opacity: 0.9,
-    height: '30px'
+    height: "30px",
   },
-  multiGridListTileTitle: {
-    color: theme.palette.text.primary
-  }
+  multiImageListItemTitle: {
+    color: theme.palette.text.primary,
+  },
 });
 
-
 class Hardware extends Component {
-
   state = {
     open: false,
-    hardwareInfo: {}
+    hardwareInfo: {},
   };
 
   handleClickOpen = (hardwareInfo) => {
@@ -53,36 +57,68 @@ class Hardware extends Component {
   };
 
   render() {
-    var cols = isWidthDown('md', this.props.width) ? isWidthDown('sm', this.props.width) ? isWidthDown('xs', this.props.width) ? 2 : 3 : 4 : 6;
+    var cols = isWidthDown("md", window.innerWidth)
+      ? isWidthDown("sm", window.innerWidth)
+        ? isWidthDown("xs", window.innerWidth)
+          ? 2
+          : 3
+        : 4
+      : 6;
     return (
-      <div style={{ marginTop: '10px', marginBottom: '5px' }}>
+      <div style={{ marginTop: "10px", marginBottom: "5px" }}>
         <Typography>{Blockly.Msg.tutorials_hardware_head}</Typography>
 
-        <GridList cellHeight={100} cols={cols} spacing={10}>
+        <ImageList rowHeight={100} cols={cols} gap={10}>
           {this.props.picture.map((picture, i) => {
-            var hardwareInfo = hardware.filter(hardware => hardware.id === picture)[0];
+            var hardwareInfo = hardware.filter(
+              (hardware) => hardware.id === picture,
+            )[0];
             return (
-              <GridListTile key={i}>
-                <div style={{ margin: 'auto', width: 'max-content' }}>
-                  <img src={`/media/hardware/${hardwareInfo.src}`} alt={hardwareInfo.name} height={100} style={{ cursor: 'pointer' }} onClick={() => this.handleClickOpen(hardwareInfo)} />
+              <ImageListItem key={i}>
+                <div
+                  style={{
+                    margin: "auto",
+                    width: "max-content",
+                  }}
+                >
+                  <img
+                    src={`/media/hardware/${hardwareInfo.src}`}
+                    alt={hardwareInfo.name}
+                    height={100}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => this.handleClickOpen(hardwareInfo)}
+                  />
                 </div>
-                <GridListTileBar
-                  classes={{ root: this.props.classes.multiGridListTile }}
+                <ImageListItemBar
+                  classes={{
+                    root: this.props.classes.multiImageListItem,
+                  }}
                   title={
-                    <div style={{ overflow: 'hidden', textOverflow: 'ellipsis' }} className={this.props.classes.multiGridListTileTitle}>
+                    <div
+                      style={{
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}
+                      className={this.props.classes.multiImageListItemTitle}
+                    >
                       {hardwareInfo.name}
                     </div>
                   }
                   actionIcon={
-                    <IconButton className={this.props.classes.expand} aria-label='Vollbild' onClick={() => this.handleClickOpen(hardwareInfo)}>
+                    <IconButton
+                      className={this.props.classes.expand}
+                      aria-label="Vollbild"
+                      onClick={() => this.handleClickOpen(hardwareInfo)}
+                      size="large"
+                    >
                       <FontAwesomeIcon icon={faExpandAlt} size="xs" />
                     </IconButton>
                   }
                 />
-              </GridListTile>
-            )
+              </ImageListItem>
+            );
           })}
-        </GridList>
+        </ImageList>
 
         <Dialog
           style={{ zIndex: 1500 }}
@@ -94,14 +130,27 @@ class Hardware extends Component {
           button={Blockly.Msg.button_close}
         >
           <div>
-            <img src={`/media/hardware/${this.state.hardwareInfo.src}`} width="100%" alt={this.state.hardwareInfo.name} />
-            {Blockly.Msg.tutorials_hardware_moreInformation} <Link rel="noreferrer" target="_blank" href={this.state.hardwareInfo.url} color="primary">{Blockly.Msg.tutorials_hardware_here}</Link>.
+            <img
+              src={`/media/hardware/${this.state.hardwareInfo.src}`}
+              width="100%"
+              alt={this.state.hardwareInfo.name}
+            />
+            {Blockly.Msg.tutorials_hardware_moreInformation}{" "}
+            <Link
+              rel="noreferrer"
+              target="_blank"
+              href={this.state.hardwareInfo.url}
+              color="primary"
+              underline="hover"
+            >
+              {Blockly.Msg.tutorials_hardware_here}
+            </Link>
+            .
           </div>
         </Dialog>
-
       </div>
     );
-  };
+  }
 }
 
 export default withWidth()(withStyles(styles, { withTheme: true })(Hardware));

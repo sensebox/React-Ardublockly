@@ -8,19 +8,20 @@ import senseboxLogo from "./sensebox_logo.svg";
 
 import { withRouter } from "react-router-dom";
 
-import { withStyles } from "@material-ui/core/styles";
-import Drawer from "@material-ui/core/Drawer";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import List from "@material-ui/core/List";
-import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import LinearProgress from "@material-ui/core/LinearProgress";
+import withStyles from "@mui/styles/withStyles";
+import Drawer from "@mui/material/Drawer";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import List from "@mui/material/List";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import LinearProgress from "@mui/material/LinearProgress";
 import Tour from "reactour";
+import { Badge } from "@mui/material";
 import { home, assessment } from "./Tour";
 import {
   faBars,
@@ -34,10 +35,22 @@ import {
   faChalkboardTeacher,
   faTools,
   faLightbulb,
+  faCode,
+  faPuzzlePiece,
+  faUser,
+  faMicrochip,
+  faEarthEurope,
+  faEarthAmericas,
+  faCaretDown,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Blockly from "blockly";
-import Tooltip from "@material-ui/core/Tooltip";
+import Tooltip from "@mui/material/Tooltip";
+import MenuItem from "@mui/material/MenuItem";
+import Menu from "@mui/material/Menu";
+import { setLanguage } from "../actions/generalActions";
+import { setBoard } from "../actions/boardAction";
+import { Button } from "@mui/material";
 
 const styles = (theme) => ({
   drawerWidth: {
@@ -57,9 +70,14 @@ const styles = (theme) => ({
 class Navbar extends Component {
   constructor(props) {
     super(props);
+    this.langRef = React.createRef();
+    this.mcuRef = React.createRef();
     this.state = {
       open: false,
       isTourOpen: false,
+      anchorElLang: null,
+      anchorElBoard: null,
+      anchorElUser: null,
     };
   }
 
@@ -75,9 +93,18 @@ class Navbar extends Component {
     this.setState({ isTourOpen: false });
   };
 
+  componentDidMount() {
+    const { location } = this.props;
+    const query = new URLSearchParams(location.search, [location.search]);
+    const tour = query.get("tour");
+
+    if (!this.state.isTourOpen && tour) {
+      this.openTour();
+    }
+  }
+
   render() {
     var isHome = /^\/(\/.*$|$)/g.test(this.props.location.pathname);
-    var isTutorial = /^\/tutorial(\/.*$|$)/g.test(this.props.location.pathname);
     var isAssessment =
       /^\/tutorial\/.{1,}$/g.test(this.props.location.pathname) &&
       !this.props.tutorialIsLoading &&
@@ -113,6 +140,7 @@ class Navbar extends Component {
               onClick={this.toggleDrawer}
               style={{ margin: "0 10px" }}
               className="MenuButton"
+              size="large"
             >
               <FontAwesomeIcon icon={faBars} />
             </IconButton>
@@ -122,57 +150,376 @@ class Navbar extends Component {
               </Typography>
             </Link>
             <Link to={"/"} style={{ marginLeft: "10px" }}>
-              <img src={senseboxLogo} alt="senseBox-Logo" width="30" />
+              <img
+                src={senseboxLogo}
+                alt="senseBox-Logo"
+                style={{ width: "35px", height: "auto" }}
+              />
             </Link>
-            {isTutorial ? (
-              <Link
-                to={"/tutorial"}
-                style={{
-                  textDecoration: "none",
-                  color: "inherit",
-                  marginLeft: "10px",
-                }}
-              >
-                <Typography variant="h6" noWrap>
-                  Tutorial
-                </Typography>
-              </Link>
-            ) : null}
-            {isHome ? (
-              <Tooltip title={Blockly.Msg.tooltip_start_tour} arrow>
-                <IconButton
-                  color="inherit"
-                  className={`openTour ${this.props.classes.button}`}
-                  onClick={() => {
-                    this.openTour();
-                  }}
-                  style={{ margin: "0 30px 0 auto" }}
-                >
-                  <FontAwesomeIcon icon={faQuestionCircle} />
-                </IconButton>
-              </Tooltip>
-            ) : null}
-            {isAssessment ? (
-              <Tooltip title={Blockly.Msg.tooltip_start_tour} arrow>
-                <IconButton
-                  color="inherit"
-                  className={`openTour ${this.props.classes.button}`}
-                  onClick={() => {
-                    this.openTour();
-                  }}
-                  style={{ margin: "0 30px 0 auto" }}
-                >
-                  <FontAwesomeIcon icon={faQuestionCircle} />
-                </IconButton>
-              </Tooltip>
-            ) : null}
-            <Tour
-              steps={isHome ? home() : assessment()}
-              isOpen={this.state.isTourOpen}
-              onRequestClose={() => {
-                this.closeTour();
+
+            <div
+              style={{
+                margin: "0 0 0 auto",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
-            />
+            >
+              {isHome ? (
+                <div style={{ display: "flex" }}>
+                  <div style={{ padding: "12px" }}>
+                    <Button
+                      style={{
+                        textTransform: "none",
+                        cursor: "pointer",
+                        alignItems: "center",
+                        alignContent: "center",
+                        background: "transparent",
+                        color: "inherit",
+                        fontWeight: "bold",
+                        border: "2px solid white",
+                        borderRadius: "25px",
+                      }}
+                      ref={this.mcuRef}
+                      onClick={() => {
+                        this.setState({
+                          anchorElBoard: this.mcuRef.current,
+                        });
+                      }}
+                      startIcon={<FontAwesomeIcon icon={faMicrochip} />}
+                      endIcon={<FontAwesomeIcon icon={faCaretDown} />}
+                      sx={{
+                        display: {
+                          xs: "none",
+                          sm: "none",
+                          md: "flex",
+                        },
+                      }}
+                    >
+                      {this.props.selectedBoard === "mcu"
+                        ? "MCU"
+                        : this.props.selectedBoard === "mini"
+                          ? "MCU:mini"
+                          : "MCU-S2"}
+                    </Button>
+                    <Menu
+                      anchorEl={this.state.anchorElBoard}
+                      anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "center",
+                      }}
+                      keepMounted
+                      transformOrigin={{
+                        vertical: "top",
+                        horizontal: "center",
+                      }}
+                      open={Boolean(this.state.anchorElBoard)}
+                      onClose={() => {
+                        this.setState({
+                          anchorElBoard: null,
+                        });
+                      }}
+                    >
+                      <MenuItem
+                        value="mcu"
+                        onClick={(event) => {
+                          this.props.setBoard(
+                            event.currentTarget.getAttribute("value"),
+                          );
+                          this.setState({
+                            anchorElBoard: null,
+                          });
+                        }}
+                      >
+                        MCU
+                      </MenuItem>
+                      <MenuItem
+                        value="mini"
+                        onClick={(event) => {
+                          this.props.setBoard(
+                            event.currentTarget.getAttribute("value"),
+                          );
+                          this.setState({
+                            anchorElBoard: null,
+                          });
+                        }}
+                      >
+                        MCU:mini
+                      </MenuItem>
+                      <MenuItem
+                        value="esp32"
+                        onClick={(event) => {
+                          this.props.setBoard(
+                            event.currentTarget.getAttribute("value"),
+                          );
+                          this.setState({
+                            anchorElBoard: null,
+                          });
+                        }}
+                      >
+                        MCU-S2
+                      </MenuItem>
+                    </Menu>
+                  </div>
+                  <div style={{ padding: "12px" }}>
+                    {this.props.language === "en_US" ? (
+                      <Button
+                        style={{
+                          textTransform: "none",
+                          cursor: "pointer",
+                          alignItems: "center",
+                          alignContent: "center",
+                          background: "transparent",
+                          color: "inherit",
+                          fontWeight: "bold",
+                          border: "2px solid white",
+                          borderRadius: "25px",
+                        }}
+                        ref={this.langRef}
+                        onClick={() => {
+                          this.setState({
+                            anchorElLang: this.langRef.current,
+                          });
+                        }}
+                        startIcon={<FontAwesomeIcon icon={faEarthAmericas} />}
+                        endIcon={<FontAwesomeIcon icon={faCaretDown} />}
+                        sx={{
+                          display: {
+                            xs: "none",
+                            sm: "none",
+                            md: "flex",
+                          },
+                        }}
+                      >
+                        English
+                      </Button>
+                    ) : (
+                      <Button
+                        style={{
+                          textTransform: "none",
+                          cursor: "pointer",
+                          alignItems: "center",
+                          alignContent: "center",
+                          background: "transparent",
+                          color: "inherit",
+                          fontWeight: "bold",
+                          border: "2px solid white",
+                          borderRadius: "25px",
+                        }}
+                        ref={this.langRef}
+                        onClick={() => {
+                          this.setState({
+                            anchorElLang: this.langRef.current,
+                          });
+                        }}
+                        startIcon={<FontAwesomeIcon icon={faEarthEurope} />}
+                        endIcon={<FontAwesomeIcon icon={faCaretDown} />}
+                        sx={{
+                          display: {
+                            xs: "none",
+                            sm: "none",
+                            md: "flex",
+                          },
+                        }}
+                      >
+                        Deutsch
+                      </Button>
+                    )}
+                    <Menu
+                      anchorEl={this.state.anchorElLang}
+                      anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "center",
+                      }}
+                      keepMounted
+                      transformOrigin={{
+                        vertical: "top",
+                        horizontal: "center",
+                      }}
+                      open={Boolean(this.state.anchorElLang)}
+                      onClose={() => {
+                        this.setState({
+                          anchorElLang: null,
+                        });
+                      }}
+                    >
+                      <MenuItem
+                        value="de_DE"
+                        onClick={(event) => {
+                          this.props.setLanguage(
+                            event.currentTarget.getAttribute("value"),
+                          );
+                          this.setState({
+                            anchorElLang: null,
+                          });
+                        }}
+                      >
+                        Deutsch
+                      </MenuItem>
+                      <MenuItem
+                        value="en_US"
+                        onClick={(event) => {
+                          this.props.setLanguage(
+                            event.currentTarget.getAttribute("value"),
+                          );
+                          this.setState({
+                            anchorElLang: null,
+                          });
+                        }}
+                      >
+                        English
+                      </MenuItem>
+                    </Menu>
+                  </div>
+                </div>
+              ) : null}
+              {isHome ? (
+                <Tooltip title={"Start Tour"} arrow>
+                  <IconButton
+                    color="inherit"
+                    className={`openTour ${this.props.classes.button}`}
+                    onClick={() => {
+                      this.openTour();
+                    }}
+                    size="large"
+                  >
+                    <FontAwesomeIcon icon={faQuestionCircle} />
+                  </IconButton>
+                </Tooltip>
+              ) : null}
+              {isAssessment ? (
+                <Tooltip title={"Start tour"} arrow>
+                  <IconButton
+                    color="inherit"
+                    className={`openTour ${this.props.classes.button}`}
+                    onClick={() => {
+                      this.openTour();
+                    }}
+                    size="large"
+                  >
+                    <FontAwesomeIcon icon={faQuestionCircle} />
+                  </IconButton>
+                </Tooltip>
+              ) : null}
+              <Tour
+                steps={isHome ? home() : assessment()}
+                isOpen={this.state.isTourOpen}
+                onRequestClose={() => {
+                  this.closeTour();
+                }}
+              />
+              {this.props.user ? (
+                <div>
+                  <IconButton
+                    color="inherit"
+                    onClick={(event) => {
+                      this.setState({
+                        anchorElUser: event.target,
+                      });
+                    }}
+                    style={{ margin: "0 30px 0 0" }}
+                    size="large"
+                  >
+                    <FontAwesomeIcon icon={faUser} />
+                  </IconButton>
+                  <Menu
+                    anchorEl={this.state.anchorElUser}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "center",
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "center",
+                    }}
+                    open={Boolean(this.state.anchorElUser)}
+                    onClose={() => {
+                      this.setState({
+                        anchorElUser: null,
+                      });
+                    }}
+                  >
+                    <div
+                      className=""
+                      style={{
+                        paddingLeft: "16px",
+                        paddingRight: "16px",
+                        paddingTop: "16px",
+                      }}
+                    >
+                      <p
+                        style={{
+                          fontWeight: "bold",
+                          margin: "0px",
+                        }}
+                      >
+                        {this.props.user.name}
+                      </p>
+                      <p
+                        style={{
+                          marginTop: "0px",
+                          color: "#696969",
+                        }}
+                      >
+                        {this.props.user.email}
+                      </p>
+                    </div>
+                    <hr
+                      style={{
+                        borderTop: "3px solid #bbb",
+                        marginLeft: "5px",
+                        marginRight: "5px",
+                      }}
+                    />
+                    <MenuItem>
+                      <Link
+                        to={"/user"}
+                        style={{
+                          textDecoration: "none",
+                          color: "black",
+                        }}
+                      >
+                        {Blockly.Msg.navbar_account}
+                      </Link>
+                    </MenuItem>
+                    <MenuItem>
+                      <Link
+                        to={"/settings"}
+                        style={{
+                          textDecoration: "none",
+                          color: "black",
+                        }}
+                      >
+                        {Blockly.Msg.navbar_settings}
+                      </Link>
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        this.props.logout();
+                      }}
+                    >
+                      {Blockly.Msg.navbar_logout}
+                    </MenuItem>
+                  </Menu>
+                </div>
+              ) : (
+                <Link
+                  to={"/user/login"}
+                  style={{
+                    textDecoration: "none",
+                    color: "white",
+                  }}
+                >
+                  <IconButton
+                    color="inherit"
+                    style={{ margin: "0 30px 0 auto" }}
+                  >
+                    <FontAwesomeIcon icon={faUser} />
+                  </IconButton>
+                </Link>
+              )}
+            </div>
           </Toolbar>
         </AppBar>
         <Drawer
@@ -212,6 +559,11 @@ class Navbar extends Component {
           <List>
             {[
               {
+                text: Blockly.Msg.navbar_blockly,
+                icon: faPuzzlePiece,
+                link: "/",
+              },
+              {
                 text: Blockly.Msg.navbar_tutorials,
                 icon: faChalkboardTeacher,
                 link: "/tutorial",
@@ -236,24 +588,42 @@ class Navbar extends Component {
                 link: "/project",
                 restriction: this.props.isAuthenticated,
               },
+              {
+                text: "Code Editor",
+                icon: faCode,
+                link: "/codeeditor",
+              },
             ].map((item, index) => {
               if (
                 item.restriction ||
                 Object.keys(item).filter(
-                  (attribute) => attribute === "restriction"
+                  (attribute) => attribute === "restriction",
                 ).length === 0
               ) {
                 return (
                   <Link
                     to={item.link}
                     key={index}
-                    style={{ textDecoration: "none", color: "inherit" }}
+                    style={{
+                      textDecoration: "none",
+                      color: "inherit",
+                    }}
                   >
                     <ListItem button onClick={this.toggleDrawer}>
                       <ListItemIcon>
                         <FontAwesomeIcon icon={item.icon} />
                       </ListItemIcon>
-                      <ListItemText primary={item.text} />
+                      {item.text === "Code Editor" ? (
+                        <Badge
+                          badgeContent={"Experimental"}
+                          color="primary"
+                          overlap="rectangular"
+                        >
+                          <ListItemText primary={item.text} />
+                        </Badge>
+                      ) : (
+                        <ListItemText primary={item.text} />
+                      )}
                     </ListItem>
                   </Link>
                 );
@@ -286,7 +656,11 @@ class Navbar extends Component {
                 function: this.props.logout,
                 restriction: this.props.isAuthenticated,
               },
-              { text: "FAQ", icon: faQuestionCircle, link: "/faq" },
+              {
+                text: "FAQ",
+                icon: faQuestionCircle,
+                link: "/faq",
+              },
               {
                 text: Blockly.Msg.navbar_settings,
                 icon: faCog,
@@ -296,14 +670,17 @@ class Navbar extends Component {
               if (
                 item.restriction ||
                 Object.keys(item).filter(
-                  (attribute) => attribute === "restriction"
+                  (attribute) => attribute === "restriction",
                 ).length === 0
               ) {
                 return (
                   <Link
                     to={item.link}
                     key={index}
-                    style={{ textDecoration: "none", color: "inherit" }}
+                    style={{
+                      textDecoration: "none",
+                      color: "inherit",
+                    }}
                   >
                     <ListItem
                       button
@@ -346,10 +723,14 @@ class Navbar extends Component {
 Navbar.propTypes = {
   tutorialIsLoading: PropTypes.bool.isRequired,
   projectIsLoading: PropTypes.bool.isRequired,
-  isAuthenticated: PropTypes.bool.isRequired,
+  isAuthenticated: PropTypes.bool,
   user: PropTypes.object,
-  tutorial: PropTypes.object.isRequired,
+  tutorial: PropTypes.object,
   activeStep: PropTypes.number.isRequired,
+  setLanguage: PropTypes.func.isRequired,
+  language: PropTypes.string.isRequired,
+  setBoard: PropTypes.func.isRequired,
+  selectedBoard: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -359,8 +740,10 @@ const mapStateToProps = (state) => ({
   user: state.auth.user,
   tutorial: state.tutorial.tutorials[0],
   activeStep: state.tutorial.activeStep,
+  language: state.general.language,
+  selectedBoard: state.board.board,
 });
 
-export default connect(mapStateToProps, { logout })(
-  withStyles(styles, { withTheme: true })(withRouter(Navbar))
+export default connect(mapStateToProps, { logout, setLanguage, setBoard })(
+  withStyles(styles, { withTheme: true })(withRouter(Navbar)),
 );

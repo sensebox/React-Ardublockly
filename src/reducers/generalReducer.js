@@ -5,6 +5,7 @@ import {
   SOUNDS,
   STATISTICS,
   PLATFORM,
+  COMPILER,
 } from "../actions/types";
 
 const initialLanguage = () => {
@@ -21,11 +22,15 @@ const initialPlatform = () => {
   return getPlatform();
 };
 
+const initialCompiler = () => {
+  return process.env.INITIAL_COMPILER_URL;
+};
+
 const initialSounds = () => {
   if (window.localStorage.getItem("sounds")) {
     return window.localStorage.getItem("sounds");
   } else {
-    return "off";
+    return false;
   }
 };
 
@@ -74,6 +79,7 @@ const initialState = {
   sounds: initialSounds(),
   statistics: initialStatistics(),
   platform: initialPlatform(),
+  compiler: initialCompiler(),
 };
 
 export default function foo(state = initialState, action) {
@@ -111,6 +117,11 @@ export default function foo(state = initialState, action) {
       return {
         ...state,
         statistics: action.payload,
+      };
+    case COMPILER:
+      return {
+        ...state,
+        compiler: action.payload,
       };
     default:
       return state;

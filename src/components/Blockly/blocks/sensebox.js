@@ -6,10 +6,10 @@ Blockly.Blocks["sensebox_multiplexer_init"] = {
   init: function () {
     this.appendDummyInput().appendField(Blockly.Msg.senseBox_multiplexer_init);
     this.appendValueInput("nrChannels").setCheck(
-      Types.getCompatibleTypes("int")
+      Types.getCompatibleTypes("int"),
     );
     this.appendDummyInput().appendField(
-      Blockly.Msg.senseBox_multplexer_nchannels
+      Blockly.Msg.senseBox_multplexer_nchannels,
     );
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -23,7 +23,7 @@ Blockly.Blocks["sensebox_multiplexer_init"] = {
 Blockly.Blocks["sensebox_multiplexer_changeChannel"] = {
   init: function () {
     this.appendDummyInput().appendField(
-      Blockly.Msg.senseBox_multiplexer_changeChannel
+      Blockly.Msg.senseBox_multiplexer_changeChannel,
     );
     this.appendValueInput("Channel").setCheck(Types.getCompatibleTypes("int"));
     this.setInputsInline("true");

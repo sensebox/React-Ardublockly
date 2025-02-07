@@ -12,9 +12,11 @@ import RenderSelector from "./RenderSelector";
 import StatsSelector from "./StatsSelector";
 import OtaSelector from "./OtaSelector";
 import SoundsSelector from "./SoundsSelector";
+import DeviceSelector from "./DeviceSelector";
 
-import Button from "@material-ui/core/Button";
-import Paper from "@material-ui/core/Paper";
+import Button from "@mui/material/Button";
+import Paper from "@mui/material/Paper";
+import CompilerSelector from "./CompilerSelector";
 
 class Settings extends Component {
   componentDidMount() {
@@ -51,6 +53,12 @@ class Settings extends Component {
         </Paper>
         <Paper style={{ margin: "10px 0px", padding: "10px" }}>
           <SoundsSelector />
+        </Paper>
+        <Paper style={{ margin: "10px 0px", padding: "10px" }}>
+          <DeviceSelector />
+        </Paper>
+        <Paper style={{ margin: "10px 0px", padding: "10px" }}>
+          <CompilerSelector />
         </Paper>
 
         <Button

@@ -5,12 +5,12 @@ import { setPlatform } from "../../actions/generalActions";
 
 import * as Blockly from "blockly/core";
 
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import Typography from "@material-ui/core/Typography";
-import FormHelperText from "@material-ui/core/FormHelperText";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import Typography from "@mui/material/Typography";
+import FormHelperText from "@mui/material/FormHelperText";
 
 class OtaSelector extends Component {
   componentDidMount() {
@@ -26,18 +26,23 @@ class OtaSelector extends Component {
           {Blockly.Msg.settings_ota_head}
         </Typography>
         <FormHelperText
-          style={{ color: "black", lineHeight: 1.3, marginBottom: "8px" }}
+          style={{
+            color: "black",
+            lineHeight: 1.3,
+            marginBottom: "8px",
+          }}
         >
           {Blockly.Msg.settings_ota_text}
           <a href="https://sensebox.de/app" target="_blank" rel="noreferrer">
             https://sensebox.de/app
           </a>
         </FormHelperText>
-        <FormControl>
+        <FormControl variant="standard">
           <InputLabel id="demo-simple-select-label">
             {Blockly.Msg.settings_statistics}
           </InputLabel>
           <Select
+            variant="standard"
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             value={this.props.platform}

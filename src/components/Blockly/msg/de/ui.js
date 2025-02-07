@@ -8,20 +8,29 @@ export const UI = {
   toolbox_math: "Mathematik",
   toolbox_io: "Eingang/Ausgang",
   toolbox_time: "Zeit",
+  toolbox_rtc: "RTC",
+  toolbox_ntp: "NTP",
   toolbox_functions: "Funktionen",
   toolbox_variables: "Variablen",
   toolbox_serial: "Seriell",
   toolbox_advanced: "Erweitert",
+  toolbox_motors: "Motoren",
+  toolbox_label_externalRTC: "Externe RTC",
+  toolbox_label_internalRTC: "Interne RTC",
+  toolbox_label_led_matrix: "LED-Matrix",
+  toolbox_label_led_ws2812: "RGB-LED",
   variable_NUMBER: "Zahl (int)",
   variable_SHORT_NUMBER: "char",
   variable_LONG: "große Zahl (long)",
   variable_DECIMAL: "Kommazahl (float)",
   variables_TEXT: "Text (string)",
   variables_ARRAY: "Array (array)",
-  variables_CHARACTER: "char (char)",
+  variables_CHARACTER: "Buchstabe (char)",
   variables_BOOLEAN: "Boolean (boolean)",
   variables_NULL: "void (void)",
   variables_UNDEF: "undefined",
+  variables_set: "Schreibe",
+  variables_to: "",
 
   /**
    * Tooltips
@@ -135,12 +144,36 @@ export const UI = {
     "Beim kompilieren ist ein Fehler aufgetreten. Überprüfe deine Blöcke und versuche es erneut",
 
   /**
+   * File Upload Dialog
+   */
+
+  warning_file_board:
+    "Der ausgewählte Boardtyp unterscheidet sich von dem Boardtyp des geladenen Projekts. Möglicherweise funktioniert das Projekt nicht wie erwartet.",
+  dialog_confirm:
+    "Möchtest du das Projekt aus der XML-Datei wirklich einfügen? Alle aktuellen Blöcke werden gelöscht.",
+  warning_old_xml_file:
+    "Die XML-Datei wurde mit einer älteren Version von Blockly erstellt. Standardmäßig wird das Board auf 'senseBox MCU' gesetzt.",
+
+  /** Open Project */
+  dialog_title: "Blöcke öffnen",
+  no_blocks_found_title: "Keine Blöcke",
+  no_blocks_found_text:
+    "Es wurden keine Blöcke detektiert. Bitte überprüfe den XML-Code und versuche es erneut.",
+  xml_loaded: "Das Projekt aus der XML-Datei wurde erfolgreich eingefügt.",
+  no_valid_data_type_title: "Unzulässiger Dateityp",
+  no_valid_data_type_text:
+    "Die übergebene Datei entsprach nicht dem geforderten Format. Es sind nur XML-Dateien zulässig.",
+  no_valid_xml_title: "Ungültige XML",
+  no_valid_xml_text:
+    "Die XML-Datei konnte nicht in Blöcke zerlegt werden. Bitte überprüfe den XML-Code und versuche es erneut.",
+  /**
    * Buttons
    *
    */
 
   button_cancel: "Abbrechen",
   button_close: "Schließen",
+  button_save: "Speichern",
   button_accept: "Bestätigen",
   button_compile: "Kompilieren",
   button_create_variableCreate: "Erstelle Variable",
@@ -148,6 +181,7 @@ export const UI = {
   button_next: "nächster Schritt",
   button_tutorial_overview: "Tutorial Übersicht",
   button_login: "Anmelden",
+  button_createVariable: "Typisierte Variable erstellen",
 
   /**
    *
@@ -181,6 +215,14 @@ export const UI = {
   settings_sounds: "Töne",
   settings_sounds_text:
     "Aktiviere oder Deaktiviere Töne beim hinzufügen und löschen von Blöcken. Standardmäßig deaktiviert",
+  settings_board: "Board",
+  settings_board_text: "Wähle dein verwendetes Board aus",
+  settings_compiler: "Compiler URL",
+  settings_compiler_text:
+    "Geben die URL des Compilers ein, den du verwenden möchten. Die Standard-URL ist: https://compiler.sensebox.de",
+  settings_compiler_helperText:
+    "Die URL muss mit https:// oder http:// beginnen",
+    settings_compiler_readOnly: "Compiler URL ändern",
 
   /**
    * 404
@@ -228,6 +270,12 @@ export const UI = {
   builder_requirements_head: "Voraussetzungen",
   builder_requirements_order:
     "Beachte, dass die Reihenfolge des Anhakens maßgebend ist.",
+  builder_difficulty: "Schwierigkeitsgrad",
+  builder_public_head: "Tutorial veröffentlichen",
+  builder_public_label: "Tutorial für alle Nutzer:innen veröffentlichen",
+  builder_review_head: "Tutorial veröffentlichen",
+  builder_review_text:
+    "Du kannst dein Tutorial direkt über den Link mit anderen Personen teilen. Wenn du dein Tutorial für alle Nutzer:innen in der Überischt veröffenltichen wollen kannst du es hier aktivieren. Ein Administrator wird dein Tutorial ansehen und anschließend freischalten.",
 
   /**
    * Login
@@ -241,7 +289,7 @@ export const UI = {
   /**
    * Navbar
    */
-
+  navbar_blockly: "Blockly",
   navbar_tutorials: "Tutorials",
   navbar_tutorialbuilder: "Tutorial erstellen",
   navbar_gallery: "Galerie",
@@ -266,6 +314,8 @@ export const UI = {
 
   compile_overlay_head: "Dein Programm wird nun kompiliert und heruntergeladen",
   compile_overlay_text: "Kopiere es anschließend auf deine senseBox MCU",
+  compile_overlay_text_esp32:
+    "Übertrage es anschließend auf deine MCU-S2 und habe einen kleinen Moment Geduld.\n Sobald der Programmcode erfolgreich übertragen wurde, leuchtet die RGB-LED grün auf.\n Dieser Prozess kann bis zu 60 Sekunden dauern.",
   compile_overlay_help: "Benötigst du mehr Hilfe? Dann schaue hier: ",
 
   /**
@@ -273,7 +323,8 @@ export const UI = {
    */
 
   tooltip_viewer: "Hilfe",
-  tooltip_moreInformation: "Mehr Informationen findest du ",
+  tooltip_moreInformation_02: "Informationen zum Block",
+  tooltip_moreInformation: "Mehr Informationen",
   tooltip_hint: "Wähle einen Block aus um dir die Hilfe anzeigen zu lassen",
 
   /**
@@ -282,4 +333,47 @@ export const UI = {
   drawer_ideerror_head: "Hoppla da ist was schief gegangen.",
   drawer_ideerror_text:
     "Beim kompilieren ist ein Fehler aufgetreten, überprüfe deine Blöcke.",
+
+  /**
+   * Error View
+   */
+  suggestion_pre_text: "Versuch es mal mit: ",
+
+  display_not_declared:
+    "Stelle sicher, dasss du das Display im Setup initialisiert hast.",
+  variable_redeclared:
+    "Stelle sicher, dass du keine Sonderzeichen in deinen Variablennamen verwendest. Dazu gehören z.B. Leerzeichen, Sternchen oder Anführungszeichen.",
+
+  /**
+   * Code Editor
+   *  */
+  codeeditor_libraries_head: "Installierte Arduino Libraries",
+  codeeditor_libraries_text:
+    "Für die Dokumentation sehen Sie sich die installierten Bibliotheken und deren Beispiele an",
+  codeeditor_save_code: "Code herunterladen",
+  codeeditor_open_code: "Code öffnen",
+  codeeditor_reset_code: "Code zurücksetzen",
+  codeeditor_blockly_code: "Lade Blockly Code",
+  codeeditor_compile_progress:
+    "Dein Code wird nun kompiliert und anschließend auf deinen Computer heruntergeladen",
+
+  /**
+   * Device Selction
+   *  */
+  deviceselection_head: "Welches Board benutzt du?",
+  deviceselection_keep_selection:
+    "Speichere meine Auswahl fürs nächste Mal (Du kannst das Board später in den Einstellungen wechseln)",
+  deviceselection_footnote: "Hier kommst du zur alten Blockly Version für den ",
+  deviceselection_footnote_02: "oder die",
+
+  /**
+   * Sensor Markdown Information
+   */
+  sensorinfo_info: "Informationen zum Sensor",
+  sensorinfo_description: "Beschreibung",
+  sensorinfo_measurable_phenos: "Messbare Phänomene",
+  sensorinfo_manufacturer: "Hersteller",
+  sensorinfo_lifetime: "Lebensdauer",
+  sensorinfo_explanation:
+    "Diese Informationen wurden aus [sensors.wiki](https://sensors.wiki) entnommen. Für weitere Informationen besuchen Sie den Abschnitt über diesen Sensor ",
 };

@@ -23,16 +23,18 @@
 
 import React from "react";
 
-import Blockly from "blockly/core";
+import * as Blockly from "blockly/core";
 import "blockly/blocks";
 import Toolbox from "./toolbox/Toolbox";
 
-import { Card } from "@material-ui/core";
+import { Card } from "@mui/material";
 import {
   ScrollOptions,
   ScrollBlockDragger,
   ScrollMetricsManager,
 } from "@blockly/plugin-scroll-options";
+
+import { PositionedMinimap } from "@blockly/workspace-minimap";
 
 class BlocklyComponent extends React.Component {
   constructor(props) {
@@ -44,7 +46,7 @@ class BlocklyComponent extends React.Component {
 
   componentDidMount() {
     const { initialXml, children, ...rest } = this.props;
-    this.primaryWorkspace = Blockly.inject(this.blocklyDiv.current, {
+    const workspace = Blockly.inject(this.blocklyDiv.current, {
       toolbox: this.toolbox.current,
       plugins: {
         // These are both required.
@@ -55,13 +57,19 @@ class BlocklyComponent extends React.Component {
     });
     // Initialize plugin.
 
+    // Initialize plugin.
+    // const minimap = new PositionedMinimap(workspace);
+    // minimap.init();
+
+    this.primaryWorkspace = workspace;
+
     this.setState({ workspace: this.primaryWorkspace });
     const plugin = new ScrollOptions(this.workspace);
     plugin.init({ enableWheelScroll: true, enableEdgeScroll: false });
     if (initialXml) {
       Blockly.Xml.domToWorkspace(
-        Blockly.Xml.textToDom(initialXml),
-        this.primaryWorkspace
+        Blockly.utils.xml.textToDom(initialXml),
+        this.primaryWorkspace,
       );
     }
   }
@@ -72,8 +80,8 @@ class BlocklyComponent extends React.Component {
 
   setXml(xml) {
     Blockly.Xml.domToWorkspace(
-      Blockly.Xml.textToDom(xml),
-      this.primaryWorkspace
+      Blockly.utils.xml.textToDom(xml),
+      this.primaryWorkspace,
     );
   }
 

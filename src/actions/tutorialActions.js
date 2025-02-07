@@ -41,8 +41,8 @@ export const getTutorial = (id) => (dispatch, getState) => {
           returnErrors(
             err.response.data.message,
             err.response.status,
-            "GET_TUTORIAL_FAIL"
-          )
+            "GET_TUTORIAL_FAIL",
+          ),
         );
       }
       dispatch({ type: TUTORIAL_PROGRESS });
@@ -67,7 +67,7 @@ export const getTutorials = () => (dispatch, getState) => {
           });
           dispatch({ type: TUTORIAL_PROGRESS });
           dispatch(returnSuccess(res.data.message, res.status));
-        }
+        },
       );
     })
     .catch((err) => {
@@ -76,8 +76,79 @@ export const getTutorials = () => (dispatch, getState) => {
           returnErrors(
             err.response.data.message,
             err.response.status,
-            "GET_TUTORIALS_FAIL"
-          )
+            "GET_TUTORIALS_FAIL",
+          ),
+        );
+      }
+      dispatch({ type: TUTORIAL_PROGRESS });
+    });
+};
+
+export const getAllTutorials = () => (dispatch, getState) => {
+  axios
+    .get(`${process.env.REACT_APP_BLOCKLY_API}/tutorial/getAllTutorials`)
+    .then((res) => {
+      var tutorials = res.data.tutorials;
+      existingTutorials(tutorials, getState().tutorial.status).then(
+        (status) => {
+          dispatch({
+            type: TUTORIAL_SUCCESS,
+            payload: status,
+          });
+          dispatch(updateStatus(status));
+          dispatch({
+            type: GET_TUTORIALS,
+            payload: tutorials,
+          });
+          dispatch({ type: TUTORIAL_PROGRESS });
+          dispatch(returnSuccess(res.data.message, res.status));
+        },
+      );
+    })
+    .catch((err) => {
+      if (err.response) {
+        dispatch(
+          returnErrors(
+            err.response.data.message,
+            err.response.status,
+            "GET_TUTORIALS_FAIL",
+          ),
+        );
+      }
+      dispatch({ type: TUTORIAL_PROGRESS });
+    });
+};
+
+export const getUserTutorials = () => (dispatch, getState) => {
+  axios
+    .get(`${process.env.REACT_APP_BLOCKLY_API}/tutorial/getUserTutorials`)
+    .then((res) => {
+      var tutorials = res.data.tutorials;
+      existingTutorials(tutorials, getState().tutorial.status).then(
+        (status) => {
+          dispatch({
+            type: TUTORIAL_SUCCESS,
+            payload: status,
+          });
+          dispatch(updateStatus(status));
+          dispatch({
+            type: GET_TUTORIALS,
+            payload: tutorials,
+          });
+          dispatch({ type: TUTORIAL_PROGRESS });
+          dispatch(returnSuccess(res.data.message, res.status));
+        },
+      );
+    })
+    .catch((err) => {
+      console.log(err);
+      if (err.response) {
+        dispatch(
+          returnErrors(
+            err.response.data.message,
+            err.response.status,
+            "GET_TUTORIALS_FAIL",
+          ),
         );
       }
       dispatch({ type: TUTORIAL_PROGRESS });
@@ -116,7 +187,7 @@ export const deleteTutorial = (id) => (dispatch, getState) => {
         payload: tutorials,
       });
       dispatch(
-        returnSuccess(res.data.message, res.status, "TUTORIAL_DELETE_SUCCESS")
+        returnSuccess(res.data.message, res.status, "TUTORIAL_DELETE_SUCCESS"),
       );
     },
     error: (err) => {
@@ -124,8 +195,8 @@ export const deleteTutorial = (id) => (dispatch, getState) => {
         returnErrors(
           err.response.data.message,
           err.response.status,
-          "TUTORIAL_DELETE_FAIL"
-        )
+          "TUTORIAL_DELETE_FAIL",
+        ),
       );
     },
   };
@@ -162,10 +233,10 @@ export const tutorialCheck = (status, step) => (dispatch, getState) => {
   var tutorialsStatus = getState().tutorial.status;
   var id = getState().tutorial.tutorials[0]._id;
   var tutorialsStatusIndex = tutorialsStatus.findIndex(
-    (tutorialStatus) => tutorialStatus._id === id
+    (tutorialStatus) => tutorialStatus._id === id,
   );
   var tasksIndex = tutorialsStatus[tutorialsStatusIndex].tasks.findIndex(
-    (task) => task._id === step._id
+    (task) => task._id === step._id,
   );
   tutorialsStatus[tutorialsStatusIndex].tasks[tasksIndex] = {
     ...tutorialsStatus[tutorialsStatusIndex].tasks[tasksIndex],
@@ -189,10 +260,10 @@ export const storeTutorialXml = (code) => (dispatch, getState) => {
     if (steps && steps[activeStep].type === "task") {
       var tutorialsStatus = getState().tutorial.status;
       var tutorialsStatusIndex = tutorialsStatus.findIndex(
-        (tutorialStatus) => tutorialStatus._id === id
+        (tutorialStatus) => tutorialStatus._id === id,
       );
       var tasksIndex = tutorialsStatus[tutorialsStatusIndex].tasks.findIndex(
-        (task) => task._id === steps[activeStep]._id
+        (task) => task._id === steps[activeStep]._id,
       );
       tutorialsStatus[tutorialsStatusIndex].tasks[tasksIndex] = {
         ...tutorialsStatus[tutorialsStatusIndex].tasks[tasksIndex],
@@ -229,7 +300,7 @@ const existingTutorials = (tutorials, status) =>
       // deleting old tutorials which do not longer exist
       if (existingTutorialIds.length > 0) {
         status = newstatus.filter(
-          (status) => existingTutorialIds.indexOf(status._id) > -1
+          (status) => existingTutorialIds.indexOf(status._id) > -1,
         );
       }
       resolve(status);
@@ -246,7 +317,7 @@ const existingTutorial = (tutorial, status) =>
         var tasksId = task._id;
         if (
           status[statusIndex].tasks.findIndex(
-            (task) => task._id === tasksId
+            (task) => task._id === tasksId,
           ) === -1
         ) {
           // task does not exist
@@ -257,7 +328,7 @@ const existingTutorial = (tutorial, status) =>
       // deleting old tasks which do not longer exist
       if (existingTaskIds.length > 0) {
         status[statusIndex].tasks = status[statusIndex].tasks.filter(
-          (task) => existingTaskIds.indexOf(task._id) > -1
+          (task) => existingTaskIds.indexOf(task._id) > -1,
         );
       }
     } else {

@@ -1,31 +1,16 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
-import * as Sentry from "@sentry/react";
-import { Integrations } from "@sentry/tracing";
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
+import * as serviceWorker from "./serviceWorker";
+import store from "./store";
+import { fetchSensors } from "./actions/sensorwikiActions";
 
+store.dispatch(fetchSensors());
 
-Sentry.init({
-  dsn: "https://ffe5d54461f64c46b4bed5d77c130d6f@o507523.ingest.sentry.io/5598758",
-  autoSessionTracking: true,
-  integrations: [
-    new Integrations.BrowserTracing(),
-  ],
+fetchSensors();
 
-  // We recommend adjusting this value in production, or using tracesSampler
-  // for finer control
-  tracesSampleRate: 1.0,
-});
-
-
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+ReactDOM.render(<App />, document.getElementById("root"));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
