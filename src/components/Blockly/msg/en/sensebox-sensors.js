@@ -135,19 +135,20 @@ If the max distance is reached the a value of **O** will be returned`,
     "https://en.docs.sensebox.de/hardware/sensoren-lautstaerke/",
 
   /*
-  * rainsensor hydreon rg-15
-  */
-  sensebox_rainsensor_hydreon_rg15: "Rainsensor (RG-15)",
-  sensebox_rainsensor_hydreon_rg15_port: "Serial Port:",
-  sensebox_rainsensor_hydreon_rg15_serial1: "Serial1",
-  sensebox_rainsensor_hydreon_rg15_serial2: "Serial2",
-  sensebox_rainsensor_hydreon_rg15_value: "value:",
-  sensebox_rainsensor_hydreon_rg15_totalAcc: "total Accumulation in mm",
-  sensebox_rainsensor_hydreon_rg15_rainInt: "Rainfall Intensity in mm/h",
-  sensebox_rainsensor_hydreon_rg15_eventAcc: "Accumulation per Event in mm",
-  sensebox_rainsensor_hydreon_rg15_acc: "Accumulation since last loop in mm",
-  sensebox_rainsensor_hydreon_rg15_tooltip: "Connect Rainsensor (RG-15) to one of the Serial ports.",
-  sensebox_rainsensor_hydreon_rg15_helpurl: "https://rainsensors.com/products/rg-15/",
+   * rg15 rainsensor
+   */
+  sensebox_rg15_rainsensor: "Rainsensor (RG-15)",
+  sensebox_rg15_rainsensor_port: "Serial Port:",
+  sensebox_rg15_rainsensor_serial1: "Serial1",
+  sensebox_rg15_rainsensor_serial2: "Serial2",
+  sensebox_rg15_rainsensor_value: "value:",
+  sensebox_rg15_rainsensor_totalAcc: "total Accumulation in mm",
+  sensebox_rg15_rainsensor_rainInt: "Rainfall Intensity in mm/h",
+  sensebox_rg15_rainsensor_eventAcc: "Accumulation per Event in mm",
+  sensebox_rg15_rainsensor_acc: "Accumulation since last loop in mm",
+  sensebox_rg15_rainsensor_tooltip:
+    "Connect Rainsensor (RG-15) to one of the Serial ports.",
+  sensebox_rg15_rainsensor_helpurl: "https://rainsensors.com/products/rg-15/",
 
   /*
    * BME680
