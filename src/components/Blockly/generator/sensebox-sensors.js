@@ -272,13 +272,13 @@ Blockly.Generator.Arduino.forBlock["sensebox_sensor_bme680_bsec"] =
     digitalWrite(LED_BUILTIN, LOW);
     delay(100);
   }`;
-  //Setup Code
-  Blockly.Generator.Arduino.preSetupCode_["Wire.begin"] = "Wire.begin();";
-  Blockly.Generator.Arduino.setupCode_["iaqSensor.begin"] =
-    "iaqSensor.begin(BME68X_I2C_ADDR_LOW, Wire);";
-  Blockly.Generator.Arduino.setupCode_["checkIaqSensorStatus"] =
-    "checkIaqSensorStatus();";
-  Blockly.Generator.Arduino.setupCode_["bsec_sensorlist"] = `
+    //Setup Code
+    Blockly.Generator.Arduino.preSetupCode_["Wire.begin"] = "Wire.begin();";
+    Blockly.Generator.Arduino.setupCode_["iaqSensor.begin"] =
+      "iaqSensor.begin(BME68X_I2C_ADDR_LOW, Wire);";
+    Blockly.Generator.Arduino.setupCode_["checkIaqSensorStatus"] =
+      "checkIaqSensorStatus();";
+    Blockly.Generator.Arduino.setupCode_["bsec_sensorlist"] = `
 bsec_virtual_sensor_t sensorList[13] = {
     BSEC_OUTPUT_IAQ,
     BSEC_OUTPUT_STATIC_IAQ,
@@ -381,7 +381,8 @@ Blockly.Generator.Arduino.forBlock["sensebox_tof_imager"] = function () {
     `;
 
   Blockly.Generator.Arduino.preSetupCode_["Wire.begin"] = "Wire.begin();";
-  Blockly.Generator.Arduino.preSetupCode_["vl53l8cx_clock_address"] = `sensor_vl53l8cx.set_i2c_address(0x51); // need to change address, because default address is shared with other sensor`;
+  Blockly.Generator.Arduino.preSetupCode_["vl53l8cx_clock_address"] =
+    `sensor_vl53l8cx.set_i2c_address(0x51); // need to change address, because default address is shared with other sensor`;
 
   Blockly.Generator.Arduino.setupCode_["setup_vl53l8cx"] = `
   Wire.setClock(1000000); // vl53l8cx can operate at 1MHz
@@ -917,20 +918,24 @@ Blockly.Generator.Arduino.forBlock["sensebox_soundsensor_dfrobot"] =
   };
 
 /**
- * rainsensor hydreon rg-15
+ * rg15 rainsensor
  */
 
-Blockly.Arduino.sensebox_rainsensor_hydreon_rg15 = function () {
+Blockly.Generator.Arduino.forBlock["sensebox_rg15_rainsensor"] = function () {
   var port = this.getFieldValue("SERIAL");
   var value = this.getFieldValue("VALUE");
-  Blockly.Arduino.libraries_["library_senseBoxIO"] = "#include <senseBoxIO.h>";
-  Blockly.Arduino.libraries_["library_rainsensor_rg15"] = "#include <hydreon.h>";
-  Blockly.Arduino.definitions_["def_rainsensor_rg15_" + port] = "HYDREON rainsensor_" + port + "(" + port + ");";
-  Blockly.Arduino.setupCode_["setup_rainsensor_rg15_" + port] = "rainsensor_" + port + ".begin();";
-  Blockly.Arduino.loopCodeOnce_["loop_rainsensor_rg15_" + port] = "rainsensor_" + port + ".readAllData();"
+  Blockly.Generator.Arduino.libraries_["library_senseBoxIO"] =
+    "#include <senseBoxIO.h>";
+  Blockly.Generator.Arduino.libraries_["library_rg15"] = "#include <RG15.h>";
+  Blockly.Generator.Arduino.definitions_["def_rg15_rainsensor_" + port] =
+    "RG15 rg15_" + port + "(" + port + ");";
+  Blockly.Generator.Arduino.setupCode_["setup_rg15_rainsensor_" + port] =
+    "rg15_" + port + ".begin();";
+  Blockly.Generator.Arduino.loopCodeOnce_["loop_rg15_rainsensor_" + port] =
+    "rg15_" + port + ".poll();";
 
-  var code = "rainsensor_" + port + "." + value + "()";
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+  var code = "rg15_" + port + "." + value + "()";
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
 /**

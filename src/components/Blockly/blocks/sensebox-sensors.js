@@ -603,39 +603,34 @@ Blockly.Blocks["sensebox_soundsensor_dfrobot"] = {
   },
 };
 
-
-
 /**
- * rainsensor hydreon rg-15 
+ * rg15 rainsensor
  */
 
-Blockly.Blocks["sensebox_rainsensor_hydreon_rg15"] = {
+Blockly.Blocks["sensebox_rg15_rainsensor"] = {
   init: function () {
-    var dropdownOptionsPorts = [
-      [Blockly.Msg.sensebox_rainsensor_hydreon_rg15_serial1, "Serial1"],
-      [Blockly.Msg.sensebox_rainsensor_hydreon_rg15_serial2, "Serial2"],
-    ];
     var dropdownOptionsValues = [
-      [Blockly.Msg.sensebox_rainsensor_hydreon_rg15_acc, "getAccumulation"],
-      [Blockly.Msg.sensebox_rainsensor_hydreon_rg15_totalAcc, "getTotalAccumulation"],
-      [Blockly.Msg.sensebox_rainsensor_hydreon_rg15_eventAcc, "getEventAccumulation"],
-      [Blockly.Msg.sensebox_rainsensor_hydreon_rg15_rainInt, "getRainfallIntensity"],
+      [Blockly.Msg.sensebox_rg15_rainsensor_acc, "getAccumulation"],
+      [Blockly.Msg.sensebox_rg15_rainsensor_totalAcc, "getTotalAccumulation"],
+      [Blockly.Msg.sensebox_rg15_rainsensor_eventAcc, "getEventAccumulation"],
+      [Blockly.Msg.sensebox_rg15_rainsensor_rainInt, "getRainfallIntensity"],
     ];
     this.setColour(getColour().sensebox);
+    this.appendDummyInput().appendField(Blockly.Msg.sensebox_rg15_rainsensor);
     this.appendDummyInput()
-      .appendField(Blockly.Msg.sensebox_rainsensor_hydreon_rg15);
+      .appendField(Blockly.Msg.sensebox_rg15_rainsensor_port)
+      .appendField(
+        new Blockly.FieldDropdown(selectedBoard().serialSensors),
+        "SERIAL",
+      );
     this.appendDummyInput()
-      .appendField(Blockly.Msg.sensebox_rainsensor_hydreon_rg15_port)
-      .appendField(new Blockly.FieldDropdown(dropdownOptionsPorts), "SERIAL");
-    this.appendDummyInput()
-      .appendField(Blockly.Msg.sensebox_rainsensor_hydreon_rg15_value)
+      .appendField(Blockly.Msg.sensebox_rg15_rainsensor_value)
       .appendField(new Blockly.FieldDropdown(dropdownOptionsValues), "VALUE");
     this.setOutput(true, Types.DECIMAL.typeName);
-    this.setTooltip(Blockly.Msg.sensebox_rainsensor_hydreon_rg15_tooltip);
-    this.setHelpUrl(Blockly.Msg.sensebox_rainsensor_hydreon_rg15_helpurl);
+    this.setTooltip(Blockly.Msg.sensebox_rg15_rainsensor_tooltip);
+    this.setHelpUrl(Blockly.Msg.sensebox_rg15_rainsensor_helpurl);
   },
 };
-
 
 /**
  * Infineon DPS310 Pressure Sensor
