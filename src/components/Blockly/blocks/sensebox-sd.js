@@ -14,10 +14,10 @@ Blockly.Blocks["sensebox_sd_open_file"] = {
   init: function () {
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_sd_open_file)
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(
         new Blockly.FieldTextInput("Data", checkFileName),
-        "Filename"
+        "Filename",
       )
       .appendField(".")
       .appendField(
@@ -25,7 +25,7 @@ Blockly.Blocks["sensebox_sd_open_file"] = {
           ["txt", "txt"],
           ["csv", "csv"],
         ]),
-        "extension"
+        "extension",
       );
     this.appendStatementInput("SD").setCheck(null);
     this.setPreviousStatement(true, null);
@@ -40,11 +40,11 @@ Blockly.Blocks["sensebox_sd_create_file"] = {
   init: function () {
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_sd_create_file)
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_output_filename)
       .appendField(
         new Blockly.FieldTextInput("Data", checkFileName),
-        "Filename"
+        "Filename",
       )
       .appendField(".")
       .appendField(
@@ -52,7 +52,7 @@ Blockly.Blocks["sensebox_sd_create_file"] = {
           ["txt", "txt"],
           ["csv", "csv"],
         ]),
-        "extension"
+        "extension",
       );
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -66,7 +66,7 @@ Blockly.Blocks["sensebox_sd_write_file"] = {
   init: function () {
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_sd_write_file)
-      .setAlign(Blockly.ALIGN_LEFT);
+      .setAlign(Blockly.inputs.Align.LEFT);
     this.appendValueInput("DATA").setCheck(null);
     this.appendDummyInput("CheckboxText")
       .appendField(Blockly.Msg.senseBox_output_linebreak)
@@ -109,20 +109,20 @@ Blockly.Blocks["sensebox_sd_osem"] = {
     this.setHelpUrl(Blockly.Msg.sensebox_sd_helpurl);
     this.setColour(getColour().sensebox);
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.sensebox_sd_osem);
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_osem_exposure)
       .appendField(
         new Blockly.FieldDropdown([
           [Blockly.Msg.senseBox_osem_stationary, "Stationary"],
           [Blockly.Msg.senseBox_osem_mobile, "Mobile"],
         ]),
-        "type"
+        "type",
       );
     this.appendValueInput("timeStamp", "Number").appendField(
-      Blockly.Msg.senseBox_gps_timeStamp
+      Blockly.Msg.senseBox_gps_timeStamp,
     );
     this.appendStatementInput("DO")
       .appendField(Blockly.Msg.sensebox_sd_measurement)
@@ -132,7 +132,7 @@ Blockly.Blocks["sensebox_sd_osem"] = {
     this.getField("type").setValidator(
       function (val) {
         this.updateShape_(val === "Mobile");
-      }.bind(this)
+      }.bind(this),
     );
   },
 
@@ -141,13 +141,13 @@ Blockly.Blocks["sensebox_sd_osem"] = {
       if (this.getInput("lat") == null) {
         this.appendValueInput("lat", "Number").appendField(
           Blockly.Msg.senseBox_gps_lat,
-          "gps"
+          "gps",
         );
         this.appendValueInput("lng", "Number").appendField(
-          Blockly.Msg.senseBox_gps_lng
+          Blockly.Msg.senseBox_gps_lng,
         );
         this.appendValueInput("altitude", "Number").appendField(
-          Blockly.Msg.senseBox_gps_alt
+          Blockly.Msg.senseBox_gps_alt,
         );
       }
     } else {
@@ -165,10 +165,107 @@ Blockly.Blocks["sensebox_sd_save_for_osem"] = {
     this.setColour(getColour().sensebox);
     this.appendDummyInput().appendField(Blockly.Msg.sensebox_sd_save_for_osem);
     this.appendValueInput("Value")
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.sensebox_sd_save_for_osem_id)
       .appendField(new Blockly.FieldTextInput("sensorID"), "SensorID");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
   },
+};
+
+/**
+ * senseBox-esp32-s2 sd Blocks
+ */
+
+Blockly.Blocks["sensebox_esp32s2_sd_open_file"] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.senseBox_sd_open_file)
+      .setAlign(Blockly.inputs.Align.LEFT)
+      .appendField(
+        new Blockly.FieldTextInput("Data", checkFileName),
+        "Filename",
+      )
+      .appendField(".")
+      .appendField(
+        new Blockly.FieldDropdown([
+          ["txt", "txt"],
+          ["csv", "csv"],
+        ]),
+        "extension",
+      );
+    this.appendStatementInput("SD").setCheck(null);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(getColour().sensebox);
+    this.setTooltip(Blockly.Msg.senseBox_sd_open_file_tooltip);
+    this.setHelpUrl(Blockly.Msg.sensebox_sd_helpurl);
+  },
+};
+
+Blockly.Blocks["sensebox_esp32s2_sd_create_file"] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.senseBox_sd_create_file)
+      .setAlign(Blockly.inputs.Align.LEFT)
+      .appendField(Blockly.Msg.senseBox_output_filename)
+      .appendField(
+        new Blockly.FieldTextInput("Data", checkFileName),
+        "Filename",
+      )
+      .appendField(".")
+      .appendField(
+        new Blockly.FieldDropdown([
+          ["txt", "txt"],
+          ["csv", "csv"],
+        ]),
+        "extension",
+      );
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(getColour().sensebox);
+    this.setTooltip(Blockly.Msg.senseBox_sd_create_file_tooltip);
+    this.setHelpUrl(Blockly.Msg.sensebox_sd_helpurl);
+  },
+};
+
+Blockly.Blocks["sensebox_esp32s2_sd_write_file"] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.senseBox_sd_write_file)
+      .setAlign(Blockly.inputs.Align.LEFT);
+    this.appendValueInput("DATA").setCheck(null);
+    this.appendDummyInput("CheckboxText")
+      .appendField(Blockly.Msg.senseBox_output_linebreak)
+      .appendField(new Blockly.FieldCheckbox("TRUE"), "linebreak");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(getColour().sensebox);
+    this.setTooltip(Blockly.Msg.senseBox_sd_write_file_tooltip);
+    this.setHelpUrl(Blockly.Msg.sensebox_sd_helpurl);
+  },
+  /**
+   * Called whenever anything on the workspace changes.
+   * Add warning if block is not nested inside a the correct loop.
+   * @param {!Blockly.Events.Abstract} e Change event.
+   * @this Blockly.Block
+   */
+  onchange: function (e) {
+    var legal = false;
+    // Is the block nested in a loop?
+    var block = this;
+    do {
+      if (this.LOOP_TYPES.indexOf(block.type) !== -1) {
+        legal = true;
+        break;
+      }
+      block = block.getSurroundParent();
+    } while (block);
+    if (legal) {
+      this.setWarningText(null);
+    } else {
+      this.setWarningText(Blockly.Msg.CONTROLS_FLOW_STATEMENTS_WARNING);
+    }
+  },
+  LOOP_TYPES: ["sensebox_esp32s2_sd_open_file"],
 };

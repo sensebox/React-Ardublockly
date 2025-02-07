@@ -1,49 +1,61 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import { BrowserRouter as Router } from 'react-router-dom';
+import { Router } from "react-router-dom";
 import { createBrowserHistory } from "history";
 
-import { Provider } from 'react-redux';
-import store from './store';
-import { loadUser } from './actions/authActions';
+import { Provider } from "react-redux";
+import store from "./store";
+import { loadUser } from "./actions/authActions";
+import ErrorBoundary from "./components/ErrorBoundary";
 
-import './App.css';
+import "./App.css";
 
-import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import {
+  ThemeProvider,
+  StyledEngineProvider,
+  createTheme,
+} from "@mui/material/styles";
 
-import Content from './components/Content';
+import Content from "./components/Content";
+import { setCompiler } from "./actions/generalActions";
 
-const theme = createMuiTheme({
+const theme = createTheme({
   palette: {
     primary: {
-      main: '#4EAF47',
-      contrastText: '#ffffff'
+      main: "#4EAF47",
+      contrastText: "#ffffff",
     },
     secondary: {
-      main: '#DDDDDD'
+      main: "#DDDDDD",
     },
     button: {
-      compile: '#e27136'
-    }
-  }
+      compile: "#e27136",
+    },
+  },
 });
 
 class App extends Component {
-
   componentDidMount() {
     store.dispatch(loadUser());
+    // set initial compiler 
+    console.log("compiler",  process.env.REACT_APP_INITIAL_COMPILER_URL)
+    store.dispatch(setCompiler(process.env.REACT_APP_INITIAL_COMPILER_URL));
   }
 
   render() {
     const customHistory = createBrowserHistory();
     return (
-      <ThemeProvider theme={theme}>
-        <Provider store={store}>
-          <Router history={customHistory}>
-            <Content />
-          </Router>
-        </Provider>
-      </ThemeProvider>
+      <StyledEngineProvider injectFirst>
+        <ThemeProvider theme={theme}>
+          <Provider store={store}>
+            <Router history={customHistory}>
+              <ErrorBoundary>
+                <Content />
+              </ErrorBoundary>
+            </Router>
+          </Provider>
+        </ThemeProvider>
+      </StyledEngineProvider>
     );
   }
 }

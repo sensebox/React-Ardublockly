@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import Breadcrumbs from './Breadcrumbs';
+import Breadcrumbs from "./Breadcrumbs";
 
-import { withRouter } from 'react-router-dom';
+import { withRouter } from "react-router-dom";
 
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import * as Blockly from 'blockly'
-import ReactMarkdown from 'react-markdown';
-import Container from '@material-ui/core/Container';
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import * as Blockly from "blockly";
+import ReactMarkdown from "react-markdown";
+import Container from "@mui/material/Container";
 
 const news = `
 
@@ -104,50 +104,52 @@ Wenn ein Block angeklickt und markiert ist (gelbe Umrandung) wird im Hilfefenste
 Falls ihr Fehler findet legt bitte ein Issue in folgendem Repository an: [React-Ardublockly](https://github.com/sensebox/React-Ardublockly/issues)
 
 
-`
-
-
-
+`;
 
 class News extends Component {
+  componentDidMount() {
+    // Ensure that Blockly.setLocale is adopted in the component.
+    // Otherwise, the text will not be displayed until the next update of the component.
+    this.forceUpdate();
+  }
 
-    componentDidMount() {
-        // Ensure that Blockly.setLocale is adopted in the component.
-        // Otherwise, the text will not be displayed until the next update of the component.
-        this.forceUpdate();
-    }
-
-    render() {
-        return (
-            <div>
-                <Breadcrumbs content={[{ link: this.props.location.pathname, title: 'News' }]} />
-                <Container fixed>
-                    <Typography variant='body1'><ReactMarkdown className="news" children={news}>
-                    </ReactMarkdown></Typography>
-                </Container>
-                {
-                    this.props.button ?
-                        <Button
-                            style={{ marginTop: '20px' }}
-                            variant="contained"
-                            color="primary"
-                            onClick={() => { this.props.history.push(this.props.button.link) }}
-                        >
-                            {this.props.button.title}
-                        </Button>
-                        :
-                        <Button
-                            style={{ marginTop: '20px' }}
-                            variant="contained"
-                            color="primary"
-                            onClick={() => { this.props.history.push('/') }}
-                        >
-                            {Blockly.Msg.button_back}
-                        </Button>
-                }
-            </div >
-        );
-    };
+  render() {
+    return (
+      <div>
+        <Breadcrumbs
+          content={[{ link: this.props.location.pathname, title: "News" }]}
+        />
+        <Container fixed>
+          <Typography variant="body1">
+            <ReactMarkdown className="news" children={news}></ReactMarkdown>
+          </Typography>
+        </Container>
+        {this.props.button ? (
+          <Button
+            style={{ marginTop: "20px" }}
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              this.props.history.push(this.props.button.link);
+            }}
+          >
+            {this.props.button.title}
+          </Button>
+        ) : (
+          <Button
+            style={{ marginTop: "20px" }}
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              this.props.history.push("/");
+            }}
+          >
+            {Blockly.Msg.button_back}
+          </Button>
+        )}
+      </div>
+    );
+  }
 }
 
 export default withRouter(News);

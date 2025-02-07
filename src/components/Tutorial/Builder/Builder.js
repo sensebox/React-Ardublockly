@@ -10,6 +10,8 @@ import {
   resetTutorial as resetTutorialBuilder,
 } from "../../../actions/tutorialBuilderActions";
 import {
+  getAllTutorials,
+  getUserTutorials,
   getTutorials,
   resetTutorial,
   deleteTutorial,
@@ -19,26 +21,31 @@ import { clearMessages } from "../../../actions/messageActions";
 
 import axios from "axios";
 import { withRouter } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEyeSlash, faUserCheck } from "@fortawesome/free-solid-svg-icons";
 
 import Breadcrumbs from "../../Breadcrumbs";
 import Textfield from "./Textfield";
+import Difficulty from "./Difficulty";
 import Step from "./Step";
 import Dialog from "../../Dialog";
 import Snackbar from "../../Snackbar";
+import Public from "./Public";
+import Review from "./Review";
 
-import { withStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import Backdrop from "@material-ui/core/Backdrop";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import Divider from "@material-ui/core/Divider";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
+import withStyles from "@mui/styles/withStyles";
+import Button from "@mui/material/Button";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
+import Divider from "@mui/material/Divider";
+import FormHelperText from "@mui/material/FormHelperText";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 import * as Blockly from "blockly";
 
 const styles = (theme) => ({
@@ -66,6 +73,8 @@ class Builder extends Component {
       tutorial: "new",
       open: false,
       title: "",
+      public: false,
+      difficulty: "",
       content: "",
       string: false,
       snackbar: false,
@@ -80,7 +89,11 @@ class Builder extends Component {
     // retrieve tutorials only if a potential user is loaded - authentication
     // is finished (success or failed)
     if (!this.props.authProgress) {
-      this.props.getTutorials();
+      if (this.props.user.role === "admin") {
+        this.props.getAllTutorials();
+      } else {
+        this.props.getUserTutorials();
+      }
     }
   }
 
@@ -89,8 +102,12 @@ class Builder extends Component {
       props.authProgress !== this.props.authProgress &&
       !this.props.authProgress
     ) {
-      // authentication is completed
-      this.props.getTutorials();
+      if (this.props.user.role === "admin") {
+        // authentication is completed
+        this.props.getAllTutorials();
+      } else {
+        this.props.getUserTutorials();
+      }
     }
     if (props.message !== this.props.message) {
       if (this.props.message.id === "GET_TUTORIALS_FAIL") {
@@ -205,7 +222,7 @@ class Builder extends Component {
     if (this.state.tutorial === "change") {
       this.props.progress(true);
       var tutorial = this.props.tutorials.filter(
-        (tutorial) => tutorial._id === value
+        (tutorial) => tutorial._id === value,
       )[0];
       this.props.readJSON(tutorial);
       this.setState({
@@ -230,7 +247,7 @@ class Builder extends Component {
 
   resetTutorial = () => {
     var tutorial = this.props.tutorials.filter(
-      (tutorial) => tutorial._id === this.props.id
+      (tutorial) => tutorial._id === this.props.id,
     )[0];
     this.props.readJSON(tutorial);
     this.setState({
@@ -258,6 +275,9 @@ class Builder extends Component {
       var steps = this.props.steps;
       var newTutorial = new FormData();
       newTutorial.append("title", this.props.title);
+      newTutorial.append("difficulty", this.props.difficulty);
+      newTutorial.append("public", this.props.public);
+      newTutorial.append("review", this.props.review);
       steps.forEach((step, i) => {
         if (step._id) {
           newTutorial.append(`steps[${i}][_id]`, step._id);
@@ -271,7 +291,7 @@ class Builder extends Component {
             step.requirements.forEach((requirement, j) => {
               newTutorial.append(
                 `steps[${i}][requirements][${j}]`,
-                requirement
+                requirement,
               );
             });
           }
@@ -282,21 +302,6 @@ class Builder extends Component {
         if (step.xml) {
           // optional
           newTutorial.append(`steps[${i}][xml]`, step.xml);
-        }
-        if (step.media) {
-          // optional
-          if (step.media.youtube) {
-            newTutorial.append(
-              `steps[${i}][media][youtube]`,
-              step.media.youtube
-            );
-          }
-          if (step.media.picture) {
-            newTutorial.append(
-              `steps[${i}][media][picture]`,
-              step.media.picture
-            );
-          }
         }
       });
       return newTutorial;
@@ -325,7 +330,7 @@ class Builder extends Component {
         .post(
           `${process.env.REACT_APP_BLOCKLY_API}/tutorial/`,
           newTutorial,
-          config
+          config,
         )
         .then((res) => {
           res.config.success(res);
@@ -358,7 +363,7 @@ class Builder extends Component {
         .put(
           `${process.env.REACT_APP_BLOCKLY_API}/tutorial/${this.props.id}`,
           updatedTutorial,
-          config
+          config,
         )
         .then((res) => {
           res.config.success(res);
@@ -370,9 +375,19 @@ class Builder extends Component {
   };
 
   render() {
-    var filteredTutorials = this.props.tutorials.filter(
-      (tutorial) => tutorial.creator === this.props.user.email
-    );
+    if (this.props.user.role === "admin") {
+      var filteredTutorials = this.props.tutorials;
+    } else {
+      filteredTutorials = this.props.tutorials.filter(
+        (tutorial) => tutorial.creator === this.props.user.email,
+      );
+    }
+
+    // } else {
+    //   filteredTutorials = this.props.userTutorials.filter(
+    //     (tutorial) => tutorial.creator === this.props.user.email
+    //   );
+
     return (
       <div>
         <Breadcrumbs
@@ -392,7 +407,7 @@ class Builder extends Component {
           <FormControlLabel
             style={{ color: "black" }}
             value="new"
-            control={<Radio color="primary" />}
+            control={<Radio />}
             label={Blockly.Msg.builder_createNew}
             labelPlacement="end"
           />
@@ -402,7 +417,7 @@ class Builder extends Component {
                 style={{ color: "black" }}
                 disabled={this.props.index === 0}
                 value="change"
-                control={<Radio color="primary" />}
+                control={<Radio />}
                 label={Blockly.Msg.builder_changeExisting}
                 labelPlacement="end"
               />
@@ -410,7 +425,7 @@ class Builder extends Component {
                 style={{ color: "black" }}
                 disabled={this.props.index === 0}
                 value="delete"
-                control={<Radio color="primary" />}
+                control={<Radio />}
                 label={Blockly.Msg.builder_deleteExisting}
                 labelPlacement="end"
               />
@@ -435,7 +450,10 @@ class Builder extends Component {
             <label htmlFor="open-json">
               <Button
                 component="span"
-                style={{ marginRight: "10px", marginBottom: "10px" }}
+                style={{
+                  marginRight: "10px",
+                  marginBottom: "10px",
+                }}
                 variant="contained"
                 color="primary"
               >
@@ -443,7 +461,10 @@ class Builder extends Component {
               </Button>
             </label>
             <Button
-              style={{ marginRight: "10px", marginBottom: "10px" }}
+              style={{
+                marginRight: "10px",
+                marginBottom: "10px",
+              }}
               variant="contained"
               color="primary"
               onClick={() => this.uploadJsonString()}
@@ -455,6 +476,7 @@ class Builder extends Component {
           <FormControl variant="outlined" style={{ width: "100%" }}>
             <InputLabel id="select-outlined-label">Tutorial</InputLabel>
             <Select
+              variant="standard"
               color="primary"
               labelId="select-outlined-label"
               value={this.props.id}
@@ -462,7 +484,24 @@ class Builder extends Component {
               label="Tutorial"
             >
               {filteredTutorials.map((tutorial) => (
-                <MenuItem value={tutorial._id}>{tutorial.title}</MenuItem>
+                <MenuItem value={tutorial._id}>
+                  {tutorial.title}{" "}
+                  {tutorial.review && tutorial.public === false ? (
+                    <div>
+                      <FontAwesomeIcon icon={faUserCheck} />
+                      <FontAwesomeIcon icon={faEyeSlash} />
+                    </div>
+                  ) : tutorial.public === false ? (
+                    <FontAwesomeIcon icon={faEyeSlash} />
+                  ) : null}
+                </MenuItem>
+                /* ) : tutorial.public === false ? (
+                    <MenuItem value={tutorial._id}>
+                      {tutorial.title} <FontAwesomeIcon icon={faEyeSlash} />
+                    </MenuItem>
+                  ) : (
+                    <MenuItem value={tutorial._id}>{tutorial.title}</MenuItem>
+                  )} */
               ))}
             </Select>
           </FormControl>
@@ -487,6 +526,45 @@ class Builder extends Component {
               label={"Titel"}
               error={this.props.error.title}
             />
+            <div
+              style={{
+                borderRadius: "25px",
+                border: "1px solid lightgrey",
+                padding: "10px 14px 10px 10px",
+                marginBottom: "20px",
+              }}
+            >
+              <Difficulty
+                value={this.props.difficulty}
+                property={"difficulty"}
+                label={"difficulty"}
+                error={this.props.error.difficulty}
+              />
+              <Divider
+                variant="fullWidth"
+                style={{ margin: "30px 0 10px 0" }}
+              />
+
+              <Review
+                value={this.props.review}
+                property={"review"}
+                label={"review"}
+                error={this.props.error.review}
+              />
+              <Divider
+                variant="fullWidth"
+                style={{ margin: "30px 0 10px 0" }}
+              />
+
+              {this.props.user.blocklyRole === "admin" ? (
+                <Public
+                  value={this.props.public}
+                  property={"public"}
+                  label={"public"}
+                  error={this.props.error.public}
+                />
+              ) : null}
+            </div>
 
             {this.props.steps.map((step, i) => (
               <Step step={step} index={i} key={i} />
@@ -502,7 +580,10 @@ class Builder extends Component {
                 {this.state.tutorial === "new" ? (
                   <div>
                     <Button
-                      style={{ marginRight: "10px", marginTop: "10px" }}
+                      style={{
+                        marginRight: "10px",
+                        marginTop: "10px",
+                      }}
                       variant="contained"
                       color="primary"
                       onClick={() => this.submitNew()}
@@ -520,7 +601,10 @@ class Builder extends Component {
                 ) : (
                   <div>
                     <Button
-                      style={{ marginRight: "10px", marginTop: "10px" }}
+                      style={{
+                        marginRight: "10px",
+                        marginTop: "10px",
+                      }}
                       variant="contained"
                       color="primary"
                       onClick={() => this.submitUpdate()}
@@ -619,6 +703,8 @@ class Builder extends Component {
 }
 
 Builder.propTypes = {
+  getAllTutorials: PropTypes.func.isRequired,
+  getUserTutorials: PropTypes.func.isRequired,
   getTutorials: PropTypes.func.isRequired,
   resetTutorial: PropTypes.func.isRequired,
   clearMessages: PropTypes.func.isRequired,
@@ -631,6 +717,9 @@ Builder.propTypes = {
   resetTutorialBuilder: PropTypes.func.isRequired,
   tutorialProgress: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
+  difficulty: PropTypes.number.isRequired,
+  public: PropTypes.bool.isRequired,
+  review: PropTypes.bool.isRequired,
   id: PropTypes.string.isRequired,
   steps: PropTypes.array.isRequired,
   change: PropTypes.number.isRequired,
@@ -645,12 +734,16 @@ Builder.propTypes = {
 
 const mapStateToProps = (state) => ({
   title: state.builder.title,
+  difficulty: state.builder.difficulty,
+  review: state.builder.review,
+  public: state.builder.public,
   id: state.builder.id,
   steps: state.builder.steps,
   change: state.builder.change,
   error: state.builder.error,
   json: state.builder.json,
   isProgress: state.builder.progress,
+  userTutorials: state.tutorial.userTutorials,
   tutorials: state.tutorial.tutorials,
   message: state.message,
   user: state.auth.user,
@@ -665,6 +758,8 @@ export default connect(mapStateToProps, {
   tutorialId,
   resetTutorialBuilder,
   getTutorials,
+  getUserTutorials,
+  getAllTutorials,
   resetTutorial,
   tutorialProgress,
   clearMessages,

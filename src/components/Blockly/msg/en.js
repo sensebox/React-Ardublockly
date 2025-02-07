@@ -8,14 +8,17 @@ import { MATH } from "./en/math";
 import { MQTT } from "./en/mqtt";
 import { SENSEBOX } from "./en/sensebox";
 import { DISPLAY } from "./en/sensebox-display";
+import { MOTORS } from "./en/sensebox-motors";
 import { LED } from "./en/sensebox-led";
 import { LORA } from "./en/sensebox-lora";
 import { OSEM } from "./en/sensebox-osem";
 import { RTC } from "./en/sensebox-rtc";
+import { NTP } from "./en/sensebox-ntp";
 import { SD } from "./en/sensebox-sd";
 import { SENSORS } from "./en/sensebox-sensors";
 import { TELEGRAM } from "./en/sensebox-telegram";
 import { WEB } from "./en/sensebox-web";
+import { ESP_NOW } from "./en/sensebox-esp-now";
 import { TEXT } from "./en/text";
 import { TIME } from "./en/time";
 import { TOURS } from "./en/tours";
@@ -34,15 +37,18 @@ export const En = {
   ...MATH,
   ...MQTT,
   ...DISPLAY,
+  ...MOTORS,
   ...LED,
   ...LORA,
   ...OSEM,
   ...RTC,
+  ...NTP,
   ...SD,
   ...SENSORS,
   ...SENSEBOX,
   ...TELEGRAM,
   ...WEB,
+  ...ESP_NOW,
   ...TEXT,
   ...TIME,
   ...TOURS,

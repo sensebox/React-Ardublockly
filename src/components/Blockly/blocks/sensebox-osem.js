@@ -25,18 +25,18 @@ Blockly.Blocks["sensebox_osem_connection"] = {
       .appendField(Blockly.Msg.senseBox_osem_restart)
       .appendField(new Blockly.FieldCheckbox("TRUE"), "RESTART");
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_osem_exposure)
       .appendField(
         new Blockly.FieldDropdown([
           [Blockly.Msg.senseBox_osem_stationary, "Stationary"],
           [Blockly.Msg.senseBox_osem_mobile, "Mobile"],
         ]),
-        "type"
+        "type",
       );
     if (!boxes) {
       this.appendDummyInput()
-        .setAlign(Blockly.ALIGN_LEFT)
+        .setAlign(Blockly.inputs.Align.LEFT)
         .appendField("senseBox ID")
         .appendField(new Blockly.FieldTextInput("senseBox ID"), "BoxID");
     } else {
@@ -45,12 +45,12 @@ Blockly.Blocks["sensebox_osem_connection"] = {
         dropdown.push([boxes[i].name, boxes[i]._id]);
       }
       this.appendDummyInput()
-        .setAlign(Blockly.ALIGN_LEFT)
+        .setAlign(Blockly.inputs.Align.LEFT)
         .appendField("senseBox ID")
         .appendField(new Blockly.FieldDropdown(dropdown), "BoxID");
     }
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(Blockly.Msg.senseBox_osem_access_token)
       .appendField(new Blockly.FieldTextInput("access_token"), "access_token");
     this.appendStatementInput("DO")
@@ -61,7 +61,7 @@ Blockly.Blocks["sensebox_osem_connection"] = {
     this.getField("type").setValidator(
       function (val) {
         this.updateShape_(val === "Mobile");
-      }.bind(this)
+      }.bind(this),
     );
   },
   onchange: function (e) {
@@ -89,7 +89,7 @@ Blockly.Blocks["sensebox_osem_connection"] = {
     selectedBox = this.getFieldValue("BoxID");
     if (selectedBox !== "" && boxes) {
       var accessToken = boxes.find(
-        (element) => element._id === selectedBox
+        (element) => element._id === selectedBox,
       ).access_token;
       if (accessToken !== undefined) {
         this.getField("access_token").setValue(accessToken);
@@ -103,16 +103,16 @@ Blockly.Blocks["sensebox_osem_connection"] = {
       if (this.getInput("lat") == null) {
         this.appendValueInput("lat", "Number").appendField(
           Blockly.Msg.senseBox_gps_lat,
-          "gps"
+          "gps",
         );
         this.appendValueInput("lng", "Number").appendField(
-          Blockly.Msg.senseBox_gps_lng
+          Blockly.Msg.senseBox_gps_lng,
         );
         this.appendValueInput("altitude", "Number").appendField(
-          Blockly.Msg.senseBox_gps_alt
+          Blockly.Msg.senseBox_gps_alt,
         );
         this.appendValueInput("timeStamp", "Number").appendField(
-          Blockly.Msg.senseBox_gps_timeStamp
+          Blockly.Msg.senseBox_gps_timeStamp,
         );
       }
     } else {
@@ -122,12 +122,12 @@ Blockly.Blocks["sensebox_osem_connection"] = {
       this.removeInput("timeStamp", true);
     }
   },
-  LOOP_TYPES: ["sensebox_interval_timer"],
+  LOOP_TYPES: ["sensebox_interval_timer", "switch_case"],
 };
 Blockly.Blocks["sensebox_send_to_osem"] = {
   init: function () {
     this.setTooltip(Blockly.Msg.senseBox_send_to_osem_tip);
-    this.setHelpUrl("");
+    this.setHelpUrl(Blockly.Msg.senseBox_osem_connection_helpurl);
     this.setColour(getColour().sensebox);
     this.appendDummyInput().appendField(Blockly.Msg.senseBox_send_to_osem);
     if (boxes) {
@@ -135,11 +135,11 @@ Blockly.Blocks["sensebox_send_to_osem"] = {
         .appendField("Phänomen")
         .appendField(
           new Blockly.FieldDropdown(this.generateOptions),
-          "SensorID"
+          "SensorID",
         );
     } else {
       this.appendValueInput("Value")
-        .setAlign(Blockly.ALIGN_LEFT)
+        .setAlign(Blockly.inputs.Align.LEFT)
         .appendField("Phänomen")
         .appendField(new Blockly.FieldTextInput("sensorID"), "SensorID");
     }
@@ -195,5 +195,116 @@ Blockly.Blocks["sensebox_send_to_osem"] = {
    * To add a new loop type add this to your code:
    * Blockly.Blocks['controls_flow_statements'].LOOP_TYPES.push('custom_loop');
    */
-  LOOP_TYPES: ["sensebox_osem_connection"],
+  LOOP_TYPES: ["sensebox_osem_connection", "sensebox_esp32s2_osem_connection"],
+};
+
+Blockly.Blocks["sensebox_esp32s2_osem_connection"] = {
+  init: function () {
+    var ssl = "TRUE";
+    this.setTooltip(Blockly.Msg.senseBox_osem_connection_tip);
+    this.setHelpUrl(Blockly.Msg.senseBox_osem_connection_helpurl);
+    this.setColour(getColour().sensebox);
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.senseBox_osem_connection)
+      .appendField("SSL")
+      .appendField(new Blockly.FieldCheckbox(ssl), "SSL");
+    this.appendDummyInput()
+      .setAlign(Blockly.inputs.Align.LEFT)
+      .appendField(Blockly.Msg.senseBox_osem_exposure)
+      .appendField(
+        new Blockly.FieldDropdown([
+          [Blockly.Msg.senseBox_osem_stationary, "Stationary"],
+          [Blockly.Msg.senseBox_osem_mobile, "Mobile"],
+        ]),
+        "type",
+      );
+    if (!boxes) {
+      this.appendDummyInput()
+        .setAlign(Blockly.inputs.Align.LEFT)
+        .appendField("senseBox ID")
+        .appendField(new Blockly.FieldTextInput("senseBox ID"), "BoxID");
+    } else {
+      var dropdown = [];
+      for (var i = 0; i < boxes.length; i++) {
+        dropdown.push([boxes[i].name, boxes[i]._id]);
+      }
+      this.appendDummyInput()
+        .setAlign(Blockly.inputs.Align.LEFT)
+        .appendField("senseBox ID")
+        .appendField(new Blockly.FieldDropdown(dropdown), "BoxID");
+    }
+    this.appendDummyInput()
+      .setAlign(Blockly.inputs.Align.LEFT)
+      .appendField(Blockly.Msg.senseBox_osem_access_token)
+      .appendField(new Blockly.FieldTextInput("access_token"), "access_token");
+    this.appendStatementInput("DO")
+      .appendField(Blockly.Msg.senseBox_sensor)
+      .setCheck(null);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.getField("type").setValidator(
+      function (val) {
+        this.updateShape_(val === "Mobile");
+      }.bind(this),
+    );
+  },
+  onchange: function (e) {
+    var legal = false;
+    // Is the block nested in a loop?
+    var block = this;
+    do {
+      if (this.LOOP_TYPES.indexOf(block.type) !== -1) {
+        legal = true;
+        break;
+      }
+      block = block.getSurroundParent();
+    } while (block);
+    if (legal) {
+      this.setWarningText(null);
+    } else {
+      this.setWarningText(Blockly.Msg.CONTROLS_FLOW_STATEMENTS_WARNING);
+    }
+
+    /**
+     * List of block types that are loops and thus do not need warnings.
+     * To add a new loop type add this to your code:
+     * Blockly.Blocks['controls_flow_statements'].LOOP_TYPES.push('custom_loop');
+     */
+    selectedBox = this.getFieldValue("BoxID");
+    if (selectedBox !== "" && boxes) {
+      var accessToken = boxes.find(
+        (element) => element._id === selectedBox,
+      ).access_token;
+      if (accessToken !== undefined) {
+        this.getField("access_token").setValue(accessToken);
+      } else {
+        this.getField("access_token").setValue("access_token");
+      }
+    }
+  },
+  updateShape_(isMobile) {
+    if (isMobile) {
+      if (this.getInput("lat") == null) {
+        this.appendValueInput("lat", "Number").appendField(
+          Blockly.Msg.senseBox_gps_lat,
+          "gps",
+        );
+        this.appendValueInput("lng", "Number").appendField(
+          Blockly.Msg.senseBox_gps_lng,
+        );
+        this.appendValueInput("altitude", "Number").appendField(
+          Blockly.Msg.senseBox_gps_alt,
+        );
+        this.appendValueInput("timeStamp", "Number").appendField(
+          Blockly.Msg.senseBox_gps_timeStamp,
+        );
+      }
+    } else {
+      this.removeInput("lat", true);
+      this.removeInput("lng", true);
+      this.removeInput("altitude", true);
+      this.removeInput("timeStamp", true);
+    }
+  },
+  LOOP_TYPES: ["sensebox_interval_timer", "switch_case"],
 };

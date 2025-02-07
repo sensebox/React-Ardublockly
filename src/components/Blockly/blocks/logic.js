@@ -1,4 +1,4 @@
-import Blockly from "blockly/core";
+import * as Blockly from "blockly/core";
 import { getColour } from "../helpers/colour";
 import * as Types from "../helpers/types";
 import { getCompatibleTypes } from "../helpers/types";
@@ -15,12 +15,15 @@ Blockly.Blocks["controls_if"] = {
       .setCheck(Types.getCompatibleTypes("boolean"))
       .appendField(Blockly.Msg.CONTROLS_IF_MSG_IF);
     this.appendStatementInput("DO0").appendField(
-      Blockly.Msg.CONTROLS_IF_MSG_THEN
+      Blockly.Msg.CONTROLS_IF_MSG_THEN,
     );
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setMutator(
-      new Blockly.Mutator(["controls_if_elseif", "controls_if_else"])
+      new Blockly.icons.MutatorIcon(
+        ["controls_if_elseif", "controls_if_else"],
+        this,
+      ),
     );
     this.setTooltip(Blockly.Msg.CONTROLS_IF_TOOLTIP_1);
     this.elseifCount_ = 0;
@@ -110,10 +113,16 @@ Blockly.Blocks["controls_if"] = {
     this.updateShape_();
     // Reconnect any child blocks.
     for (var i = 1; i <= this.elseifCount_; i++) {
-      Blockly.Mutator.reconnect(valueConnections[i], this, "IF" + i);
-      Blockly.Mutator.reconnect(statementConnections[i], this, "DO" + i);
+      if (valueConnections[i]) {
+        valueConnections[i].reconnect(this, "IF" + i);
+      }
+      if (statementConnections[i]) {
+        statementConnections[i].reconnect(this, "DO" + i);
+      }
     }
-    Blockly.Mutator.reconnect(elseStatementConnection, this, "ELSE");
+    if (elseStatementConnection) {
+      elseStatementConnection.reconnect(this, "ELSE");
+    }
   },
   /**
    * Store pointers to any connected child blocks.
@@ -169,12 +178,12 @@ Blockly.Blocks["controls_if"] = {
         .setCheck(Types.getCompatibleTypes("boolean"))
         .appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSEIF);
       this.appendStatementInput("DO" + i).appendField(
-        Blockly.Msg.CONTROLS_IF_MSG_THEN
+        Blockly.Msg.CONTROLS_IF_MSG_THEN,
       );
     }
     if (this.elseCount_) {
       this.appendStatementInput("ELSE").appendField(
-        Blockly.Msg.CONTROLS_IF_MSG_ELSE
+        Blockly.Msg.CONTROLS_IF_MSG_ELSE,
       );
     }
   },
@@ -202,7 +211,7 @@ Blockly.Blocks["controls_if_elseif"] = {
   init: function () {
     this.setColour(getColour().logic);
     this.appendDummyInput().appendField(
-      Blockly.Msg.CONTROLS_IF_ELSEIF_TITLE_ELSEIF
+      Blockly.Msg.CONTROLS_IF_ELSEIF_TITLE_ELSEIF,
     );
     this.setPreviousStatement(true);
     this.setNextStatement(true);
@@ -219,7 +228,7 @@ Blockly.Blocks["controls_if_else"] = {
   init: function () {
     this.setColour(getColour().logic);
     this.appendDummyInput().appendField(
-      Blockly.Msg.CONTROLS_IF_ELSE_TITLE_ELSE
+      Blockly.Msg.CONTROLS_IF_ELSE_TITLE_ELSE,
     );
     this.setPreviousStatement(true);
     this.setTooltip(Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP);
@@ -430,7 +439,7 @@ Blockly.Blocks["logic_compare"] = {
     this.appendValueInput("A");
     this.appendValueInput("B").appendField(
       new Blockly.FieldDropdown(OPERATORS),
-      "OP"
+      "OP",
     );
     this.setInputsInline(true);
     // Assign 'this' to a variable for use in the tooltip closure below.
@@ -463,18 +472,18 @@ Blockly.Blocks["logic_compare"] = {
     }
     if (blockA !== null && blockB === null) {
       this.getInput("A").setCheck(
-        getCompatibleTypes(blockA.outputConnection.check_[0])
+        getCompatibleTypes(blockA.outputConnection.check[0]),
       );
       this.getInput("B").setCheck(
-        getCompatibleTypes(blockA.outputConnection.check_[0])
+        getCompatibleTypes(blockA.outputConnection.check[0]),
       );
     }
     if (blockB !== null && blockA === null) {
       this.getInput("B").setCheck(
-        getCompatibleTypes(blockB.outputConnection.check_[0])
+        getCompatibleTypes(blockB.outputConnection.check[0]),
       );
       this.getInput("A").setCheck(
-        getCompatibleTypes(blockB.outputConnection.check_[0])
+        getCompatibleTypes(blockB.outputConnection.check[0]),
       );
     }
   },
@@ -488,10 +497,12 @@ Blockly.Blocks["switch_case"] = {
     this.setNextStatement(true);
     this.appendValueInput("CONDITION").appendField(Blockly.Msg.cases_switch);
     this.appendValueInput("CASECONDITION0").appendField(
-      Blockly.Msg.cases_condition
+      Blockly.Msg.cases_condition,
     );
     this.appendStatementInput("CASE0").appendField(Blockly.Msg.cases_do);
-    this.setMutator(new Blockly.Mutator(["case_incaseof", "case_default"]));
+    this.setMutator(
+      new Blockly.icons.MutatorIcon(["case_incaseof", "case_default"], this),
+    );
     this.caseCount_ = 0;
     this.defaultCount_ = 0;
   },
@@ -511,11 +522,13 @@ Blockly.Blocks["switch_case"] = {
   },
 
   domToMutation: function (xmlElement) {
-    this.caseCount_ = parseInt(xmlElement.getAttribute("case"), 10);
+    this.caseCount_ = parseInt(xmlElement.getAttribute("case"), 10) || 0;
     this.defaultCount_ = parseInt(xmlElement.getAttribute("default"), 10);
+    this.removeInput("CASECONDITION0");
+    this.removeInput("CASE0");
     for (var x = 0; x <= this.caseCount_; x++) {
       this.appendValueInput("CASECONDITION" + x).appendField(
-        Blockly.Msg.cases_condition
+        Blockly.Msg.cases_condition,
       );
       this.appendStatementInput("CASE" + x).appendField(Blockly.Msg.cases_do);
     }
@@ -535,7 +548,7 @@ Blockly.Blocks["switch_case"] = {
       connection = caseBlock.nextConnection;
     }
     if (this.defaultCount_) {
-      var defaultBlock = Blockly.Block.obtain(workspace, "case_default");
+      var defaultBlock = workspace.newBlock("case_default");
       defaultBlock.initSvg();
       connection.connect(defaultBlock.previousConnection);
     }
@@ -559,10 +572,10 @@ Blockly.Blocks["switch_case"] = {
         case "case_incaseof":
           this.caseCount_++;
           var caseconditionInput = this.appendValueInput(
-            "CASECONDITION" + this.caseCount_
+            "CASECONDITION" + this.caseCount_,
           ).appendField(Blockly.Msg.cases_condition);
           var caseInput = this.appendStatementInput(
-            "CASE" + this.caseCount_
+            "CASE" + this.caseCount_,
           ).appendField(Blockly.Msg.cases_do);
           if (caseBlock.valueConnection_) {
             caseconditionInput.connection.connect(caseBlock.valueConnection_);
@@ -644,7 +657,7 @@ Blockly.Blocks["case_default"] = {
     this.setPreviousStatement(true);
     this.setNextStatement(false);
     this.setTooltip(
-      "This function will run if there aren't any matching cases."
+      "This function will run if there aren't any matching cases.",
     );
     this.contextMenu = false;
   },

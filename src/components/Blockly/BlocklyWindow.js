@@ -12,6 +12,7 @@ import "./generator/index";
 import { ZoomToFitControl } from "@blockly/zoom-to-fit";
 import { initialXml } from "./initialXml.js";
 import { getMaxInstances } from "./helpers/maxInstances";
+import { Backpack } from "@blockly/workspace-backpack";
 
 class BlocklyWindow extends Component {
   constructor(props) {
@@ -35,23 +36,35 @@ class BlocklyWindow extends Component {
     Blockly.svgResize(workspace);
     const zoomToFit = new ZoomToFitControl(workspace);
     zoomToFit.init();
+    // Initialize plugin.
+    const backpack = new Backpack(workspace);
+
+    backpack.init();
   }
 
   componentDidUpdate(props) {
     const workspace = Blockly.getMainWorkspace();
-
     var xml = this.props.initialXml;
+    if (props.selectedBoard !== this.props.selectedBoard) {
+      xml = localStorage.getItem("autoSaveXML");
+      // change board
+      if (!xml) xml = initialXml;
+      var xmlDom = Blockly.utils.xml.textToDom(xml);
+      Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, workspace);
+    }
+
     // if svg is true, then the update process is done in the BlocklySvg component
     if (props.initialXml !== xml && !this.props.svg) {
       // guarantees that the current xml-code (this.props.initialXml) is rendered
       workspace.clear();
       if (!xml) xml = initialXml;
-      Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
+      Blockly.Xml.domToWorkspace(Blockly.utils.xml.textToDom(xml), workspace);
     }
     if (props.language !== this.props.language) {
       // change language
+      xml = localStorage.getItem("autoSaveXML");
       if (!xml) xml = initialXml;
-      var xmlDom = Blockly.Xml.textToDom(xml);
+      xmlDom = Blockly.utils.xml.textToDom(xml);
       Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, workspace);
       // var toolbox = workspace.getToolbox();
       // workspace.updateToolbox(toolbox.toolboxDef_);
@@ -124,16 +137,18 @@ BlocklyWindow.propTypes = {
   onChangeWorkspace: PropTypes.func.isRequired,
   clearStats: PropTypes.func.isRequired,
   renderer: PropTypes.string.isRequired,
-  sounds: PropTypes.string.isRequired,
+  sounds: PropTypes.bool.isRequired,
   language: PropTypes.string.isRequired,
+  selectedBoard: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   renderer: state.general.renderer,
   sounds: state.general.sounds,
   language: state.general.language,
+  selectedBoard: state.board.board,
 });
 
 export default connect(mapStateToProps, { onChangeWorkspace, clearStats })(
-  BlocklyWindow
+  BlocklyWindow,
 );

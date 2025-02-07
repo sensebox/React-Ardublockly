@@ -767,7 +767,7 @@ Blockly.Msg.senseBox_rgb_led_tip =
 Blockly.Msg.senseBox_temp = "Temperatur in °C";
 Blockly.Msg.senseBox_temp_hum = "Temperatur-/Luftfeuchtigkeitssensor (HDC1080)";
 Blockly.Msg.senseBox_temp_hum_tooltip =
-  "Dieser Block gibt dir die Messwerte des Temperatur- und Luftfeuchtigkeitssensor zurück. Schließe den Sensor an einen der 5 I2C Anschlüsse an. Messwert wird mit 2 Nachkommastellen ausgegeben.";
+  "Dieser Block gibt dir die Messwerte des Temperatur- und Luftfeuchtigkeitssensor zurück. Schließe den Sensor an einen der I2C Anschlüsse an. Messwert wird mit 2 Nachkommastellen ausgegeben.";
 
 /**
  * Ultraschalldistanzsensor
@@ -1424,6 +1424,11 @@ Blockly.Msg.compile_overlay_text =
   "Kopiere es anschließend auf deine senseBox MCU";
 Blockly.Msg.compile_overlay_help =
   "Benötigst du mehr Hilfe? Dann schaue hier: ";
+
+Blockly.Msg.warning_File_Board =
+  "Der ausgewählte Boardtyp unterscheidet sich von dem Boardtyp des geladenen Projekts. Möglicherweise funktioniert das Projekt nicht wie erwartet.";
+Blockly.Msg.dialog_confirm =
+  "Möchtest du das Projekt aus der XML-Datei wirklich einfügen? Alle aktuellen Blöcke werden gelöscht.";
 
 /**
  * Tooltip Viewer

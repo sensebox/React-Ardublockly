@@ -1,5 +1,6 @@
 const colours = {
   sensebox: 120,
+  senseboxble: 120,
   logic: 210,
   loops: 10,
   math: 230,
@@ -14,6 +15,7 @@ const colours = {
   serial: 230,
   webserver: 40,
   phyphox: 25,
+  motors: 190,
 };
 
 export const getColour = () => {

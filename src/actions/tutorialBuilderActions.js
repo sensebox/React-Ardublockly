@@ -4,6 +4,9 @@ import {
   BUILDER_CHANGE,
   BUILDER_ERROR,
   BUILDER_TITLE,
+  BUILDER_PUBLIC,
+  BUILDER_DIFFICULTY,
+  BUILDER_REVIEW,
   BUILDER_ID,
   BUILDER_ADD_STEP,
   BUILDER_DELETE_STEP,
@@ -31,6 +34,30 @@ export const tutorialTitle = (title) => (dispatch) => {
   dispatch({
     type: BUILDER_TITLE,
     payload: title,
+  });
+  dispatch(changeTutorialBuilder());
+};
+
+export const tutorialPublic = (pub) => (dispatch) => {
+  dispatch({
+    type: BUILDER_PUBLIC,
+    payload: pub,
+  });
+  dispatch(changeTutorialBuilder());
+};
+
+export const tutorialDifficulty = (difficulty) => (dispatch) => {
+  dispatch({
+    type: BUILDER_DIFFICULTY,
+    payload: difficulty,
+  });
+  dispatch(changeTutorialBuilder());
+};
+
+export const tutorialReview = (review) => (dispatch) => {
+  dispatch({
+    type: BUILDER_REVIEW,
+    payload: review,
   });
   dispatch(changeTutorialBuilder());
 };
@@ -206,7 +233,7 @@ export const setSubmitError = () => (dispatch, getState) => {
     if (i === 0) {
       if (step.requirements && step.requirements.length > 0) {
         var requirements = step.requirements.filter((requirement) =>
-          /^[0-9a-fA-F]{24}$/.test(requirement)
+          /^[0-9a-fA-F]{24}$/.test(requirement),
         );
         if (requirements.length < step.requirements.length) {
           dispatch(changeContent(requirements, i, "requirements"));
@@ -217,7 +244,7 @@ export const setSubmitError = () => (dispatch, getState) => {
       } else {
         var hardwareIds = data.map((hardware) => hardware.id);
         var hardware = step.hardware.filter((hardware) =>
-          hardwareIds.includes(hardware)
+          hardwareIds.includes(hardware),
         );
         if (hardware.length < step.hardware.length) {
           dispatch(changeContent(hardware, i, "hardware"));
@@ -320,6 +347,7 @@ export const readJSON = (json) => (dispatch, getState) => {
     return object;
   });
   dispatch(tutorialTitle(json.title));
+  dispatch(tutorialDifficulty(json.difficulty));
   dispatch(tutorialSteps(steps));
   dispatch(setSubmitError());
   dispatch(progress(false));

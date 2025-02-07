@@ -11,18 +11,19 @@ import WorkspaceFunc from "./Workspace/WorkspaceFunc";
 import BlocklyWindow from "./Blockly/BlocklyWindow";
 import CodeViewer from "./CodeViewer";
 import TrashcanButtons from "./Workspace/TrashcanButtons";
-import HintTutorialExists from "./Tutorial/HintTutorialExists";
+// import HintTutorialExists from "./Tutorial/HintTutorialExists";
+import DeviceSelection from "./DeviceSelection";
 
-import Grid from "@material-ui/core/Grid";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
-import { withStyles } from "@material-ui/core/styles";
+import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import withStyles from "@mui/styles/withStyles";
 
 import { faCode } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TooltipViewer from "./TooltipViewer";
 import Dialog from "./Dialog";
-
+// import Autosave from "./Workspace/AutoSave";
 const styles = (theme) => ({
   codeOn: {
     backgroundColor: theme.palette.primary.main,
@@ -54,11 +55,11 @@ class Home extends Component {
       key: "",
       message: "",
       open: true,
+      initialXml: localStorage.getItem("autoSaveXML"),
     };
   }
 
   componentDidMount() {
-    console.log(this.props.platform);
     if (this.props.platform === true) {
       this.setState({ codeOn: false });
     }
@@ -115,14 +116,26 @@ class Home extends Component {
     return (
       <div>
         {this.props.statistics ? (
-          <div style={{ float: "left", height: "40px", position: "relative" }}>
+          <div
+            style={{
+              float: "left",
+              height: "40px",
+              position: "relative",
+            }}
+          >
             <WorkspaceStats />
           </div>
         ) : null}
+
         <div
           className="workspaceFunc"
-          style={{ float: "right", height: "40px", marginBottom: "20px" }}
+          style={{
+            float: "right",
+            height: "40px",
+            marginBottom: "20px",
+          }}
         >
+          {/* <Autosave /> */}
           <WorkspaceFunc
             project={this.props.project}
             projectType={this.props.projectType}
@@ -157,10 +170,12 @@ class Home extends Component {
                   zIndex: 21,
                 }}
                 onClick={() => this.onChange()}
+                size="large"
               >
                 <FontAwesomeIcon icon={faCode} size="xs" />
               </IconButton>
             </Tooltip>
+
             <TrashcanButtons />
             <div className="blocklyWindow">
               {this.props.project ? (
@@ -169,7 +184,10 @@ class Home extends Component {
                   initialXml={this.props.project.xml}
                 />
               ) : (
-                <BlocklyWindow blocklyCSS={{ height: "80vH" }} />
+                <BlocklyWindow
+                  blocklyCSS={{ height: "80vH" }}
+                  initialXml={this.state.initialXml}
+                />
               )}
             </div>
           </Grid>
@@ -180,7 +198,8 @@ class Home extends Component {
             </Grid>
           ) : null}
         </Grid>
-        <HintTutorialExists />
+        <DeviceSelection />
+        {/* <HintTutorialExists /> */}
         {this.props.platform ? (
           <Dialog
             style={{ zIndex: 9999999 }}
@@ -216,7 +235,7 @@ Home.propTypes = {
   workspaceName: PropTypes.func.isRequired,
   message: PropTypes.object.isRequired,
   statistics: PropTypes.bool.isRequired,
-  platform: PropTypes.object.isRequired,
+  platform: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -226,5 +245,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, { clearStats, workspaceName })(
-  withStyles(styles, { withTheme: true })(Home)
+  withStyles(styles, { withTheme: true })(Home),
 );

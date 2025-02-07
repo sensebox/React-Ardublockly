@@ -1,5 +1,4 @@
-import * as Blockly from 'blockly/core';
-
+import * as Blockly from "blockly/core";
 
 /**
  * Code generator for the map block.
@@ -7,18 +6,49 @@ import * as Blockly from 'blockly/core';
  * @param {!Blockly.Block} block Block to generate the code from.
  * @return {array} Completed code with order of operation.
  */
-Blockly.Arduino['base_map'] = function (block) {
-    var valueNum = Blockly.Arduino.valueToCode(
-        block, 'NUM', Blockly.Arduino.ORDER_NONE) || '0';
-    var fromMin = Blockly.Arduino.valueToCode(
-        block, 'FMIN', Blockly.Arduino.ORDER_ATOMIC) || '0';
-    var fromMax = Blockly.Arduino.valueToCode(
-        block, 'FMAX', Blockly.Arduino.ORDER_ATOMIC) || '0';
-    var valueDmin = Blockly.Arduino.valueToCode(
-        block, 'DMIN', Blockly.Arduino.ORDER_ATOMIC) || '0';
-    var valueDmax = Blockly.Arduino.valueToCode(
-        block, 'DMAX', Blockly.Arduino.ORDER_ATOMIC) || '0';
+Blockly.Generator.Arduino.forBlock["base_map"] = function (block, generator) {
+  var valueNum =
+    Blockly.Generator.Arduino.valueToCode(
+      block,
+      "NUM",
+      Blockly.Generator.Arduino.ORDER_NONE,
+    ) || "0";
+  var fromMin =
+    Blockly.Generator.Arduino.valueToCode(
+      block,
+      "FMIN",
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
+    ) || "0";
+  var fromMax =
+    Blockly.Generator.Arduino.valueToCode(
+      block,
+      "FMAX",
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
+    ) || "0";
+  var valueDmin =
+    Blockly.Generator.Arduino.valueToCode(
+      block,
+      "DMIN",
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
+    ) || "0";
+  var valueDmax =
+    Blockly.Generator.Arduino.valueToCode(
+      block,
+      "DMAX",
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
+    ) || "0";
 
-    var code = 'map(' + valueNum + ',' + fromMin + ',' + fromMax + ',' + valueDmin + ',' + valueDmax + ')';
-    return [code, Blockly.Arduino.ORDER_NONE];
+  var code =
+    "map(" +
+    valueNum +
+    "," +
+    fromMin +
+    "," +
+    fromMax +
+    "," +
+    valueDmin +
+    "," +
+    valueDmax +
+    ")";
+  return [code, Blockly.Generator.Arduino.ORDER_NONE];
 };

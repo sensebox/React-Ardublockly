@@ -4,9 +4,11 @@ import Hardware from "./Hardware";
 import Requirement from "./Requirement";
 import BlocklyWindow from "../Blockly/BlocklyWindow";
 
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import remarkGemoji from "remark-gemoji";
 
 class Instruction extends Component {
   render() {
@@ -15,14 +17,13 @@ class Instruction extends Component {
     var areRequirements = step.requirements && step.requirements.length > 0;
     return (
       <div>
-        <Typography variant="h4" style={{ marginBottom: "5px" }}>
-          {step.headline}
-        </Typography>
         <Typography style={isHardware ? {} : { marginBottom: "5px" }}>
           <ReactMarkdown
             className={"tutorial"}
             linkTarget={"_blank"}
             skipHtml={false}
+            allowDangerousHtml={true}
+            remarkPlugins={[remarkGfm, remarkGemoji]}
           >
             {step.text}
           </ReactMarkdown>
@@ -81,7 +82,10 @@ class Instruction extends Component {
             <Grid
               item
               xs={12}
-              style={{ display: "flex", justifyContent: "center" }}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+              }}
             >
               <BlocklyWindow svg blockDisabled initialXml={step.xml} />
             </Grid>

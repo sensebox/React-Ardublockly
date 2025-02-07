@@ -1,4 +1,4 @@
-import Blockly, { FieldDropdown } from "blockly/core";
+import * as Blockly from "blockly/core";
 import * as Types from "../helpers/types";
 import { getColour } from "../helpers/colour";
 
@@ -14,7 +14,7 @@ Blockly.Blocks["lists_create_empty"] = {
     this.appendValueInput("NUMBER");
     this.appendDummyInput()
       .appendField("Items of Type")
-      .appendField(new FieldDropdown(Types.VARIABLE_TYPES), "type");
+      .appendField(new Blockly.FieldDropdown(Types.VARIABLE_TYPES), "type");
     this.setOutput(true, Types.ARRAY.typeName);
     this.setTooltip(Blockly.Msg.ARD_TIME_MILLIS_TIP);
   },
@@ -30,7 +30,7 @@ Blockly.Blocks["array_getIndex"] = {
     this.setColour(getColour().arrays);
     this.appendDummyInput().appendField(
       new Blockly.FieldVariable("X", null, ["Array"], "Array"),
-      "FIELDNAME"
+      "FIELDNAME",
     );
     this.setOutput(true, Types.ARRAY.typeName);
     this.setTooltip(Blockly.Msg.ARD_TIME_MILLIS_TIP);

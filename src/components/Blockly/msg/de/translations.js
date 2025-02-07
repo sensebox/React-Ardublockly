@@ -204,7 +204,7 @@ export const TRANSLATIONS = {
   VARIABLES_SET_TOOLTIP: "Setzt den Wert einer Variable.",
   MATH_CHANGE_TITLE_ITEM: "Element",
   PROCEDURES_DEFRETURN_TITLE: "zu",
-  CONTROLS_IF_IF_TITLE_IF: "if",
+  CONTROLS_IF_IF_TITLE_IF: "wenn",
   CONTROLS_WHILEUNTIL_INPUT_DO: "mache",
   CONTROLS_IF_MSG_THEN: "mache",
   CONTROLS_IF_ELSE_TITLE_ELSE: "sonst",
@@ -262,4 +262,6 @@ export const TRANSLATIONS = {
   senseBox_poti_tip: "Potenziometer",
   senseBox_soil: "Bodenfeuchte",
   senseBox_watertemperature: "Wassertemperatur",
+  senseBox_watertemperature_tooltip:
+    "Das Wasserthermometer gibt Temperatur in Grad Celsius aus. Schließe den Sensor an einen der 6 Anschlüsse des One-Wire Adapters an und schließe dann den One-Wire Adapter an einen der 3 digital/analog Ports der senseBox an und wähle den Port im Block aus. Wenn du nur ein Thermometer am One-Wire Adapter angeschlossen hast, dann belasse den Index bei 0. Jedes weitere angeschlossene Thermometer kann entsprechend mit einem um 1 erhöhten Index angesprochen werden. Es kommt dabei nicht darauf an, an welchem Anschluss des Adapters die Thermometer angeschlossen werden.",
 };

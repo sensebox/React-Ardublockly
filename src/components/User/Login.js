@@ -10,15 +10,15 @@ import Snackbar from "../Snackbar";
 import Alert from "../Alert";
 import Breadcrumbs from "../Breadcrumbs";
 
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import TextField from "@material-ui/core/TextField";
-import Divider from "@material-ui/core/Divider";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import Link from "@material-ui/core/Link";
+import TextField from "@mui/material/TextField";
+import Divider from "@mui/material/Divider";
+import InputAdornment from "@mui/material/InputAdornment";
+import CircularProgress from "@mui/material/CircularProgress";
+import Link from "@mui/material/Link";
 import * as Blockly from "blockly";
 
 export class Login extends Component {
@@ -38,6 +38,19 @@ export class Login extends Component {
     };
   }
 
+  componentDidMount() {
+    if (this.props.message.id === "LOGIN_FAIL") {
+      this.setState({
+        email: "",
+        password: "",
+        snackbar: true,
+        key: Date.now(),
+        message: Blockly.Msg.messages_LOGIN_FAIL,
+        type: "error",
+      });
+    }
+  }
+
   componentDidUpdate(props) {
     const { message } = this.props;
     if (message !== props.message) {
@@ -50,7 +63,6 @@ export class Login extends Component {
       }
       // Check for login error
       else if (message.id === "LOGIN_FAIL") {
-        console.log("login fail");
         this.setState({
           email: "",
           password: "",
@@ -99,11 +111,20 @@ export class Login extends Component {
     return (
       <div>
         <Breadcrumbs
-          content={[{ link: "/user/login", title: Blockly.Msg.button_login }]}
+          content={[
+            {
+              link: "/user/login",
+              title: Blockly.Msg.button_login,
+            },
+          ]}
         />
 
         <div
-          style={{ maxWidth: "500px", marginLeft: "auto", marginRight: "auto" }}
+          style={{
+            maxWidth: "500px",
+            marginLeft: "auto",
+            marginRight: "auto",
+          }}
         >
           <h1>{Blockly.Msg.login_head}</h1>
           <Alert>
@@ -113,6 +134,7 @@ export class Login extends Component {
               rel="noreferrer"
               target="_blank"
               href={"https://opensensemap.org/"}
+              underline="hover"
             >
               openSenseMap
             </Link>{" "}
@@ -126,6 +148,7 @@ export class Login extends Component {
           />
           <form onSubmit={this.onSubmit}>
             <TextField
+              variant="standard"
               style={{ marginBottom: "10px" }}
               // variant='outlined'
               type="text"
@@ -136,6 +159,7 @@ export class Login extends Component {
               fullWidth={true}
             />
             <TextField
+              variant="standard"
               // variant='outlined'
               type={this.state.showPassword ? "text" : "password"}
               label={Blockly.Msg.labels_password}
@@ -148,6 +172,7 @@ export class Login extends Component {
                       onClick={this.handleClickShowPassword}
                       onMouseDown={this.handleMouseDownPassword}
                       edge="end"
+                      size="large"
                     >
                       <FontAwesomeIcon
                         size="xs"
@@ -183,6 +208,7 @@ export class Login extends Component {
               target="_blank"
               href={"https://opensensemap.org/"}
               color="primary"
+              underline="hover"
             >
               {Blockly.Msg.login_lostpassword}
             </Link>
@@ -200,6 +226,7 @@ export class Login extends Component {
               rel="noreferrer"
               target="_blank"
               href={"https://opensensemap.org/"}
+              underline="hover"
             >
               openSenseMap
             </Link>
@@ -224,5 +251,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, { login, clearMessages })(
-  withRouter(Login)
+  withRouter(Login),
 );

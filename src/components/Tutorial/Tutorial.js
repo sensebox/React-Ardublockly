@@ -21,8 +21,8 @@ import NotFound from "../NotFound";
 import * as Blockly from "blockly";
 import { detectWhitespacesAndReturnReadableResult } from "../../helpers/whitespace";
 
-import Card from "@material-ui/core/Card";
-import Button from "@material-ui/core/Button";
+import Card from "@mui/material/Card";
+import Button from "@mui/material/Button";
 
 class Tutorial extends Component {
   componentDidMount() {
@@ -76,13 +76,16 @@ class Tutorial extends Component {
             var steps = this.props.tutorial.steps;
             var step = steps[this.props.activeStep];
             var name = `${detectWhitespacesAndReturnReadableResult(
-              tutorial.title
+              tutorial.title,
             )}_${detectWhitespacesAndReturnReadableResult(step.headline)}`;
             return (
               <div>
                 <Breadcrumbs
                   content={[
-                    { link: "/tutorial", title: "Tutorial" },
+                    {
+                      link: "/tutorial",
+                      title: "Tutorial",
+                    },
                     {
                       link: `/tutorial/${this.props.tutorial._id}`,
                       title: tutorial.title,
@@ -120,7 +123,10 @@ class Tutorial extends Component {
                       }}
                     >
                       <Button
-                        style={{ marginRight: "10px", height: "35px" }}
+                        style={{
+                          marginRight: "10px",
+                          height: "35px",
+                        }}
                         variant="contained"
                         disabled={this.props.activeStep === 0}
                         onClick={() =>

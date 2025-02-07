@@ -9,11 +9,11 @@ import {
   deleteError,
 } from "../../../actions/tutorialBuilderActions";
 
-import { withStyles } from "@material-ui/core/styles";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from "@material-ui/core/FormControl";
-import FormHelperText from "@material-ui/core/FormHelperText";
+import withStyles from "@mui/styles/withStyles";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
+import FormHelperText from "@mui/material/FormHelperText";
 
 const styles = (theme) => ({
   multiline: {
@@ -31,14 +31,6 @@ const styles = (theme) => ({
 });
 
 class Textfield extends Component {
-  componentDidMount() {
-    if (this.props.error) {
-      if (this.props.property !== "media") {
-        this.props.deleteError(this.props.index, this.props.property);
-      }
-    }
-  }
-
   handleChange = (e) => {
     var value = e.target.value;
     if (this.props.property === "title") {
@@ -50,7 +42,7 @@ class Textfield extends Component {
         value,
         this.props.index,
         this.props.property,
-        this.props.property2
+        this.props.property2,
       );
     }
     if (value.replace(/\s/g, "") === "") {
