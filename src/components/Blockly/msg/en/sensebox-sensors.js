@@ -31,7 +31,7 @@ export const SENSORS = {
   senseBox_sound_tip:
     "Connect the sensor to one of the **analog/digital** ports via the breadbord. Returns the reading of the microphone in volt",
   senseBox_sound_helpurl:
-    "https://en.docs.sensebox.de/hardware/sensoren-mikro/",
+    "https://docs.sensebox.de/en/hardware/sensoren-mikro/",
 
   /**
    * Temperature and Humidity Sensor (HDC1080)
@@ -41,7 +41,7 @@ export const SENSORS = {
   senseBox_temp_hum_tooltip:
     "This block returns the temperature and humidity sensor readings. Connect the sensor to one of the I2C ports. Measured value is output with 2 decimal places.",
   senseBox_temp_hum_helpurl:
-    "https://en.docs.sensebox.de/hardware/sensoren-temperatur-luftfeuchte/",
+    "https://docs.sensebox.de/en/hardware/sensoren-temperatur-luftfeuchte/",
   senseBox_hum: "humidity in %",
   senseBox_hum_tip: "Measures humidity in %",
 
@@ -61,7 +61,7 @@ export const SENSORS = {
 - Echo: Yellow Cable
 If the max distance is reached the a value of **O** will be returned`,
   senseBox_ultrasonic_helpurl:
-    "https://en.docs.sensebox.de/hardware/sensoren-distanz/",
+    "https://docs.sensebox.de/en/hardware/sensoren-distanz/",
 
   /**
    * UV and Lightsensor
@@ -73,7 +73,7 @@ If the max distance is reached the a value of **O** will be returned`,
     "Sensor measures UV light or brightness. Brightness is output as **integer** in lux. UV intensity as **decimal** in µW/cm².",
   senseBox_light: "Illuminance in Lux",
   senseBox_uv_light_helpurl:
-    "https://en.docs.sensebox.de/hardware/sensoren-helligkeit-uv/",
+    "https://docs.sensebox.de/en/hardware/sensoren-helligkeit-uv/",
 
   /**
    * BMX055
@@ -117,7 +117,7 @@ If the max distance is reached the a value of **O** will be returned`,
 
 **Note:** The GPS module needs a relatively long time (about 5-10 minutes) until it has found your location!
 `,
-  senseBox_gps_helpurl: "https://en.docs.sensebox.de/hardware/sensoren-gps/",
+  senseBox_gps_helpurl: "https://docs.sensebox.de/en/hardware/sensoren-gps/",
 
   /**
    * Windspeed
@@ -132,7 +132,7 @@ If the max distance is reached the a value of **O** will be returned`,
   senseBox_soundsensor_dfrobot_tooltip:
     "Connect the sensor to one of the **digital/analog ports**. The sensor will give you the reading in dB with one decimal.",
   senseBox_soundsensor_dfrobot_helpurl:
-    "https://en.docs.sensebox.de/hardware/sensoren-lautstaerke/",
+    "https://docs.sensebox.de/en/hardware/sensoren-lautstaerke/",
 
   /*
    * BME680
@@ -154,7 +154,7 @@ The status of the calibration can be read from the calibration value. It is eith
 
 The measured values for temperature, humidity and air pressure can be used directly,`,
   senseBox_bme680_helpurl:
-    "https://en.docs.sensebox.de/hardware/sensoren-umweltsensor/",
+    "https://docs.sensebox.de/en/hardware/sensoren-umweltsensor/",
 
   /**
    * Truebner SMT50
@@ -172,7 +172,7 @@ The measured values for temperature, humidity and air pressure can be used direc
   senseBox_scd_tooltip:
     "Connect the sensor to one of the **I2C ports**. The sensor will give you the reading for the CO2 concentration in ppm. The temperature reading may differ from the real value by a few degrees due to the measurement directly at the sensor.",
   senseBox_scd_co2: "CO2 in ppm",
-  senseBox_scd_helpurl: "https://en.docs.sensebox.de/hardware/sensoren-co2/",
+  senseBox_scd_helpurl: "https://docs.sensebox.de/en/hardware/sensoren-co2/",
   /**
    * Feinstaubsensor (SDS011)
    */
@@ -185,7 +185,7 @@ The measured values for temperature, humidity and air pressure can be used direc
   senseBox_sds011_serial1: "Serial1",
   senseBox_sds011_serial2: "Serial2",
   senseBox_sds011_helpurl:
-    "https://en.docs.sensebox.de/hardware/sensoren-feinstaub/",
+    "https://docs.sensebox.de/en/hardware/sensoren-feinstaub/",
 
   /**
    * Button
@@ -222,7 +222,7 @@ The measured values for temperature, humidity and air pressure can be used direc
   senseBox_sps30_tooltip:
     "This block gives you the measured value of the Sensirion SPS30 fine dust sensor. Connect the fine dust sensor to one of the **I2C** connectors. Select between PM1.0, PM2.5, PM4.0 and PM10 in the dropdown menu. The measured value will be displayed as **decimal** in µg/m3",
   senseBox_sps30_helpurl:
-    "https://docs.sensebox.de/hardware/sensoren-feinstaub/",
+    "https://docs.sensebox.de/en/hardware/sensoren-feinstaub/",
 
   /**
    * Photodiode MCUS2(ESP32)
