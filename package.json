@@ -61,7 +61,7 @@
     "react-error-overlay": "6.0.9"
   },
   "scripts": {
-    "start": "node node_modules/react-scripts/bin/react-scripts.js start",
+    "start": "node_modules/react-scripts/bin/react-scripts.js start",
     "dev": "set \"REACT_APP_BLOCKLY_API=http://localhost:8080\" && npm start",
     "build": "react-scripts build",
     "test": "react-scripts test",
