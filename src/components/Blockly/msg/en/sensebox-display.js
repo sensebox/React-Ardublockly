@@ -50,5 +50,5 @@ export const DISPLAY = {
   sensebox_display_fastPrint_tooltip:
     "Show two measurements with title and dimension on the display",
   senseBox_display_helpurl:
-    "https://en.docs.sensebox.de/blockly/blockly-display/",
+    "https://docs.sensebox.de/en/blockly/blockly-display/",
 };
