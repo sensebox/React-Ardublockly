@@ -1,27 +1,31 @@
 import * as Blockly from "blockly/core";
 
-Blockly.Arduino.sensebox_led = function () {
+Blockly.Generator.Arduino.forBlock["sensebox_led"] = function () {
   var dropdown_pin = this.getFieldValue("PIN");
   var dropdown_stat = this.getFieldValue("STAT");
-  Blockly.Arduino.setupCode_["setup_led_" + dropdown_pin] =
+  Blockly.Generator.Arduino.setupCode_["setup_led_" + dropdown_pin] =
     "pinMode(" + dropdown_pin + ", OUTPUT);";
   var code = "digitalWrite(" + dropdown_pin + "," + dropdown_stat + ");\n";
   return code;
 };
 
-Blockly.Arduino.sensebox_rgb_led = function () {
+Blockly.Generator.Arduino.forBlock["sensebox_rgb_led"] = function () {
   var dropdown_pin = this.getFieldValue("PIN");
   var color =
-    Blockly.Arduino.valueToCode(this, "COLOR", Blockly.Arduino.ORDER_ATOMIC) ||
-    "0";
-  Blockly.Arduino.libraries_["library_neopixel"] = "#include <Adafruit_NeoPixel.h>"
-  Blockly.Arduino.definitions_["define_rgb_led" + dropdown_pin] =
-  "Adafruit_NeoPixel rgb_led_" +
-  dropdown_pin +
-  " = Adafruit_NeoPixel(1," +
-  dropdown_pin +
-  ",NEO_RGB + NEO_KHZ800);\n";
-  Blockly.Arduino.setupCode_["setup_rgb_led" + dropdown_pin] =
+    Blockly.Generator.Arduino.valueToCode(
+      this,
+      "COLOR",
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
+    ) || "0";
+  Blockly.Generator.Arduino.libraries_["library_neopixel"] =
+    "#include <Adafruit_NeoPixel.h>";
+  Blockly.Generator.Arduino.definitions_["define_rgb_led" + dropdown_pin] =
+    "Adafruit_NeoPixel rgb_led_" +
+    dropdown_pin +
+    " = Adafruit_NeoPixel(1," +
+    dropdown_pin +
+    ",NEO_RGB + NEO_KHZ800);\n";
+  Blockly.Generator.Arduino.setupCode_["setup_rgb_led" + dropdown_pin] =
     "rgb_led_" + dropdown_pin + ".begin();";
   var code =
     "rgb_led_" +
@@ -35,39 +39,48 @@ Blockly.Arduino.sensebox_rgb_led = function () {
   return code;
 };
 
-Blockly.Arduino.sensebox_ws2818_led_init = function () {
+Blockly.Generator.Arduino.forBlock["sensebox_ws2818_led_init"] = function () {
   let dropdown_pin = 1;
   dropdown_pin = this.getFieldValue("Port");
   var numPixel =
-    Blockly.Arduino.valueToCode(this, "NUMBER", Blockly.Arduino.ORDER_ATOMIC) ||
-    "1";
+    Blockly.Generator.Arduino.valueToCode(
+      this,
+      "NUMBER",
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
+    ) || "1";
   var brightness =
-    Blockly.Arduino.valueToCode(
+    Blockly.Generator.Arduino.valueToCode(
       this,
       "BRIGHTNESS",
-      Blockly.Arduino.ORDER_ATOMIC,
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
     ) || "50";
-  Blockly.Arduino.libraries_["library_neopixel"] = "#include <Adafruit_NeoPixel.h>"
-  Blockly.Arduino.definitions_["define_rgb_led" + dropdown_pin] = `Adafruit_NeoPixel rgb_led_${dropdown_pin}= Adafruit_NeoPixel(${numPixel}, ${dropdown_pin},NEO_GRB + NEO_KHZ800);\n`;
-  Blockly.Arduino.setupCode_["setup_rgb_led" + dropdown_pin] =
+  Blockly.Generator.Arduino.libraries_["library_neopixel"] =
+    "#include <Adafruit_NeoPixel.h>";
+  Blockly.Generator.Arduino.definitions_["define_rgb_led" + dropdown_pin] =
+    `Adafruit_NeoPixel rgb_led_${dropdown_pin}= Adafruit_NeoPixel(${numPixel}, ${dropdown_pin},NEO_GRB + NEO_KHZ800);\n`;
+  Blockly.Generator.Arduino.setupCode_["setup_rgb_led" + dropdown_pin] =
     "rgb_led_" + dropdown_pin + ".begin();\n";
-  Blockly.Arduino.setupCode_["setup_rgb_led_brightness" + dropdown_pin] =
-    `rgb_led_${dropdown_pin}.setBrightness(${brightness});\n`;
+  Blockly.Generator.Arduino.setupCode_[
+    "setup_rgb_led_brightness" + dropdown_pin
+  ] = `rgb_led_${dropdown_pin}.setBrightness(${brightness});\n`;
   return "";
 };
 
-Blockly.Arduino.sensebox_ws2818_led = function () {
+Blockly.Generator.Arduino.forBlock["sensebox_ws2818_led"] = function () {
   let dropdown_pin = 1;
   dropdown_pin = this.getFieldValue("Port");
   var position =
-    Blockly.Arduino.valueToCode(
+    Blockly.Generator.Arduino.valueToCode(
       this,
       "POSITION",
-      Blockly.Arduino.ORDER_ATOMIC,
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
     ) || "0";
   var color =
-    Blockly.Arduino.valueToCode(this, "COLOR", Blockly.Arduino.ORDER_ATOMIC) ||
-    "0";
+    Blockly.Generator.Arduino.valueToCode(
+      this,
+      "COLOR",
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
+    ) || "0";
   var code = `rgb_led_${dropdown_pin}.setPixelColor(${position},rgb_led_${dropdown_pin}.Color(${color}));\nrgb_led_${dropdown_pin}.show();\n`;
   return code;
 };
@@ -83,37 +96,49 @@ function hexToRgb(hex) {
     : null;
 }
 
-Blockly.Arduino["colour_picker"] = function (block) {
+Blockly.Generator.Arduino.forBlock["colour_picker"] = function (
+  block,
+  generator,
+) {
   const rgb = hexToRgb(block.getFieldValue("COLOUR"));
 
-  return [rgb.r + ", " + rgb.g + ", " + rgb.b, Blockly.Arduino.ORDER_ATOMIC];
-};
-
-Blockly.Arduino["colour_random"] = function (block) {
   return [
-    "random(0, 255), random(0, 255), random(0, 255)",
-    Blockly.Arduino.ORDER_ATOMIC,
+    rgb.r + ", " + rgb.g + ", " + rgb.b,
+    Blockly.Generator.Arduino.ORDER_ATOMIC,
   ];
 };
 
-Blockly.Arduino["colour_rgb"] = function (block) {
-  const red = Blockly.Arduino.valueToCode(
+Blockly.Generator.Arduino.forBlock["colour_random"] = function (
+  block,
+  generator,
+) {
+  return [
+    "random(0, 255), random(0, 255), random(0, 255)",
+    Blockly.Generator.Arduino.ORDER_ATOMIC,
+  ];
+};
+
+Blockly.Generator.Arduino.forBlock["colour_rgb"] = function (block, generator) {
+  const red = Blockly.Generator.Arduino.valueToCode(
     block,
     "RED",
-    Blockly.Arduino.ORDER_ATOMIC,
+    Blockly.Generator.Arduino.ORDER_ATOMIC,
   );
-  const green = Blockly.Arduino.valueToCode(
+  const green = Blockly.Generator.Arduino.valueToCode(
     block,
     "GREEN",
-    Blockly.Arduino.ORDER_ATOMIC,
+    Blockly.Generator.Arduino.ORDER_ATOMIC,
   );
-  const blue = Blockly.Arduino.valueToCode(
+  const blue = Blockly.Generator.Arduino.valueToCode(
     block,
     "BLUE",
-    Blockly.Arduino.ORDER_ATOMIC,
+    Blockly.Generator.Arduino.ORDER_ATOMIC,
   );
 
-  return [red + ", " + green + ", " + blue, Blockly.Arduino.ORDER_ATOMIC];
+  return [
+    red + ", " + green + ", " + blue,
+    Blockly.Generator.Arduino.ORDER_ATOMIC,
+  ];
 };
 
 /**
@@ -122,33 +147,43 @@ Blockly.Arduino["colour_rgb"] = function (block) {
  *
  */
 
-Blockly.Arduino["sensebox_ws2812_matrix_init"] = function (block) {
+Blockly.Generator.Arduino.forBlock["sensebox_ws2812_matrix_init"] = function (
+  block,
+  generator,
+) {
   var dropdown_pin = this.getFieldValue("Port");
   var brightness = this.getFieldValue("BRIGHTNESS");
-  Blockly.Arduino.libraries_["libraries_neopixel"] =
+  Blockly.Generator.Arduino.libraries_["libraries_neopixel"] =
     `#include <Adafruit_NeoPixel.h>`;
-  Blockly.Arduino.libraries_["libraries_rgb_matrix"] =
+  Blockly.Generator.Arduino.libraries_["libraries_rgb_matrix"] =
     "#include <Adafruit_NeoMatrix.h>";
-  Blockly.Arduino.libraries_["library_AdafruitGFX"] =
+  Blockly.Generator.Arduino.libraries_["library_AdafruitGFX"] =
     "#include <Adafruit_GFX.h> // http://librarymanager/All#Adafruit_GFX_Library";
-  Blockly.Arduino.definitions_["definition_rgb_matrix_widht"] =
+  Blockly.Generator.Arduino.definitions_["definition_rgb_matrix_widht"] =
     "#define WIDTH 12";
-  Blockly.Arduino.definitions_["definition_rgb_matrix_height"] =
+  Blockly.Generator.Arduino.definitions_["definition_rgb_matrix_height"] =
     "#define HEIGHT 8";
-  Blockly.Arduino.definitions_["definition_rgb_matrix" + dropdown_pin] =
+  Blockly.Generator.Arduino.definitions_[
+    "definition_rgb_matrix" + dropdown_pin
+  ] =
     `Adafruit_NeoMatrix matrix_${dropdown_pin} = Adafruit_NeoMatrix(WIDTH, HEIGHT, ${dropdown_pin}, NEO_MATRIX_TOP + NEO_MATRIX_LEFT + NEO_MATRIX_ROWS + NEO_MATRIX_ZIGZAG, NEO_GRB + NEO_KHZ800);`;
-  Blockly.Arduino.setupCode_["setup_matrix_brightness" + dropdown_pin] =
-    `matrix_${dropdown_pin}.setBrightness(${brightness});\n`;
-  Blockly.Arduino.setupCode_["setup_matrix_text_wrap" + dropdown_pin] =
-    "matrix_" + dropdown_pin + ".setTextWrap(false);\n";
-  Blockly.Arduino.setupCode_["matrix" + dropdown_pin] =
+  Blockly.Generator.Arduino.setupCode_[
+    "setup_matrix_brightness" + dropdown_pin
+  ] = `matrix_${dropdown_pin}.setBrightness(${brightness});\n`;
+  Blockly.Generator.Arduino.setupCode_[
+    "setup_matrix_text_wrap" + dropdown_pin
+  ] = "matrix_" + dropdown_pin + ".setTextWrap(false);\n";
+  Blockly.Generator.Arduino.setupCode_["matrix" + dropdown_pin] =
     "matrix_" + dropdown_pin + ".begin();\n";
 
-  // Blockly.Arduino.setupCode_['setup_matrix_color' + dropdown_pin] = `matrix_${dropdown_pin}.setColor(matrix.Color(255, 0, 0));\n`;
+  // Blockly.Generator.Arduino.setupCode_['setup_matrix_color' + dropdown_pin] = `matrix_${dropdown_pin}.setColor(matrix.Color(255, 0, 0));\n`;
   return "";
 };
 
-Blockly.Arduino["sensebox_ws2812_matrix_clear"] = function (block) {
+Blockly.Generator.Arduino.forBlock["sensebox_ws2812_matrix_clear"] = function (
+  block,
+  generator,
+) {
   var dropdown_pin = this.getFieldValue("Port");
   var code = "";
   code += `matrix_${dropdown_pin}.fillScreen(0);\n`;
@@ -156,17 +191,23 @@ Blockly.Arduino["sensebox_ws2812_matrix_clear"] = function (block) {
   return code;
 };
 
-Blockly.Arduino["sensebox_ws2812_matrix_text"] = function (block) {
+Blockly.Generator.Arduino.forBlock["sensebox_ws2812_matrix_text"] = function (
+  block,
+  generator,
+) {
   var code = "";
   var dropdown_pin = this.getFieldValue("Port");
   var value =
-    Blockly.Arduino.valueToCode(this, "input", Blockly.Arduino.ORDER_ATOMIC) ||
-    '"Keine Eingabe"';
+    Blockly.Generator.Arduino.valueToCode(
+      this,
+      "input",
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
+    ) || '"Keine Eingabe"';
   var autoscroll = this.getFieldValue("AUTOSCROLL");
-  var color = Blockly.Arduino.valueToCode(
+  var color = Blockly.Generator.Arduino.valueToCode(
     this,
     "COLOR",
-    Blockly.Arduino.ORDER_ATOMIC,
+    Blockly.Generator.Arduino.ORDER_ATOMIC,
   );
   code += `matrix_${dropdown_pin}.setTextColor(matrix_${dropdown_pin}.Color(${color}));\n`;
   if (autoscroll === "TRUE") {
@@ -188,34 +229,51 @@ Blockly.Arduino["sensebox_ws2812_matrix_text"] = function (block) {
   return code;
 };
 
-Blockly.Arduino["sensebox_ws2812_matrix_drawPixel"] = function (block) {
-  var dropdown_pin = this.getFieldValue("Port");
-  var x = Blockly.Arduino.valueToCode(this, "X", Blockly.Arduino.ORDER_ATOMIC);
-  var y = Blockly.Arduino.valueToCode(this, "Y", Blockly.Arduino.ORDER_ATOMIC);
-  var color = Blockly.Arduino.valueToCode(
-    this,
-    "COLOR",
-    Blockly.Arduino.ORDER_ATOMIC,
-  );
-  var show = this.getFieldValue("SHOW");
-  var code = `matrix_${dropdown_pin}.drawPixel(${x},${y},matrix_${dropdown_pin}.Color(${color}));\n`;
-  if (show === "TRUE") {
+Blockly.Generator.Arduino.forBlock["sensebox_ws2812_matrix_drawPixel"] =
+  function (block) {
+    var dropdown_pin = this.getFieldValue("Port");
+    var x = Blockly.Generator.Arduino.valueToCode(
+      this,
+      "X",
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
+    );
+    var y = Blockly.Generator.Arduino.valueToCode(
+      this,
+      "Y",
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
+    );
+    var color = Blockly.Generator.Arduino.valueToCode(
+      this,
+      "COLOR",
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
+    );
+    var show = this.getFieldValue("SHOW");
+    var code = `matrix_${dropdown_pin}.drawPixel(${x},${y},matrix_${dropdown_pin}.Color(${color}));\n`;
+    if (show === "TRUE") {
+      code += `matrix_${dropdown_pin}.show();\n`;
+    }
+    return code;
+  };
+
+Blockly.Generator.Arduino.forBlock["sensebox_ws2812_matrix_showBitmap"] =
+  function (block) {
+    var dropdown_pin = this.getFieldValue("Port");
+    var value =
+      Blockly.Generator.Arduino.valueToCode(
+        this,
+        "input",
+        Blockly.Generator.Arduino.ORDER_ATOMIC,
+      ) || '"Keine Eingabe"';
+
+    var code = `matrix_${dropdown_pin}.drawRGBBitmap(0,0, ${value}, WIDTH, HEIGHT);\n`;
     code += `matrix_${dropdown_pin}.show();\n`;
-  }
-  return code;
-};
+    return code;
+  };
 
-Blockly.Arduino["sensebox_ws2812_matrix_showBitmap"] = function (block) {
-  var dropdown_pin = this.getFieldValue("Port");
-  var value =
-    Blockly.Arduino.valueToCode(this, "input", Blockly.Arduino.ORDER_ATOMIC) ||
-    '"Keine Eingabe"';
-  var code = `matrix_${dropdown_pin}.drawRGBBitmap(0,0, ${value}, WIDTH, HEIGHT);\n`;
-  code += `matrix_${dropdown_pin}.show();\n`;
-  return code;
-};
-
-Blockly.Arduino["sensebox_ws2812_matrix_bitmap"] = function (block) {
+Blockly.Generator.Arduino.forBlock["sensebox_ws2812_matrix_bitmap"] = function (
+  block,
+  generator,
+) {
   var dropdown_bitmap = this.getFieldValue("BITMAP");
   var bitmap = "";
   switch (dropdown_bitmap) {
@@ -292,45 +350,90 @@ Blockly.Arduino["sensebox_ws2812_matrix_bitmap"] = function (block) {
             0x2589, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x2589, 0x2589, 0x2589, 0x2589, 0x0000, 0x0000, 0x0000, 0x0000,`;
       break;
   }
-  Blockly.Arduino.definitions_[`define_bitmap_${dropdown_bitmap}`] =
+  Blockly.Generator.Arduino.definitions_[`define_bitmap_${dropdown_bitmap}`] =
     `const uint16_t bitmap_${dropdown_bitmap}[] = {${bitmap}};`;
   var code = "bitmap_" + dropdown_bitmap;
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
-Blockly.Arduino["sensebox_ws2812_matrix_custom_bitmap"] = function (block) {
-  var dropdown_pin = this.getFieldValue("Port");
-  Blockly.Arduino.definitions_[`define_custom_bitmap_${dropdown_pin}`] =
-    `const uint16_t custom_bitmap[] = {};`;
-  var value =
-    Blockly.Arduino.valueToCode(this, "input", Blockly.Arduino.ORDER_ATOMIC) ||
-    '"Keine Eingabe"';
-  var code = `matrix_${dropdown_pin}.drawBitmap(0,0,${value},WIDTH,HEIGHT,matrix_${dropdown_pin}.Color(255,255,255));\n`;
-  code += `matrix_${dropdown_pin}.show();\n`;
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+Blockly.Generator.Arduino.forBlock["sensebox_ws2812_matrix_custom_bitmap"] =
+  function (block) {
+    const bitmapName = block.getFieldValue("name");
+
+    var inputValue = block.getFieldValue("input") || "{}";
+
+    // Remove existing { and } if present at the start and end
+    if (inputValue.startsWith("{") && inputValue.endsWith("}")) {
+      inputValue = inputValue.slice(1, -1);
+    }
+
+    // Add { and } around the value
+    var customBitmap = "{" + inputValue + "}";
+
+    Blockly.Generator.Arduino.definitions_[`define_bitmap_${bitmapName}`] =
+      `const uint16_t bitmap_${bitmapName}[] = ${customBitmap};`;
+    // if empty set to empty object
+    if (!customBitmap || customBitmap === "0") {
+      customBitmap = "{}";
+    }
+
+    return [`bitmap_${bitmapName}`, Blockly.Generator.Arduino.ORDER_ATOMIC];
+  };
+
+Blockly.Generator.Arduino.forBlock[
+  "sensebox_ws2812_matrix_draw_custom_bitmap_example"
+] = function (block) {
+  var bitmap = "";
+  const bitmapName = block.getFieldValue("name");
+  for (let i = 1; i <= 8; i += 1) {
+    for (let j = 1; j <= 12; j += 1) {
+      const colorHex = block.getFieldValue(i + "," + j);
+      const color = hexToRgb(colorHex);
+      bitmap +=
+        "0x" +
+        (
+          ((color.r >> 3) << 11) |
+          ((color.g >> 2) << 5) |
+          (color.b >> 3)
+        ).toString(16) +
+        ", ";
+    }
+    bitmap += "\n";
+  }
+  Blockly.Generator.Arduino.definitions_[`define_${bitmapName}_example`] =
+    `const uint16_t bitmap_${bitmapName}[] = {${bitmap}};`;
+  var code = `bitmap_${bitmapName}`;
+
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
-Blockly.Arduino["sensebox_ws2812_matrix_draw_custom_bitmap_example"] =
+Blockly.Generator.Arduino.forBlock["sensebox_ws2812_matrix_fullcolor"] =
   function (block) {
     var bitmap = "";
+    var colorRgb =
+      Blockly.Generator.Arduino.valueToCode(
+        this,
+        "COLOR",
+        Blockly.Generator.Arduino.ORDER_ATOMIC,
+      ) || "0,255,0";
+    const [r, g, b] = colorRgb
+      .split(",")
+      .map((value) => parseInt(value.trim(), 10));
+    var dropdown_pin = this.getFieldValue("Port");
     for (let i = 1; i <= 8; i += 1) {
       for (let j = 1; j <= 12; j += 1) {
-        const colorHex = block.getFieldValue(i + "," + j);
-        const color = hexToRgb(colorHex);
         bitmap +=
           "0x" +
-          (
-            ((color.r >> 3) << 11) |
-            ((color.g >> 2) << 5) |
-            (color.b >> 3)
-          ).toString(16) +
+          (((r >> 3) << 11) | ((g >> 2) << 5) | (b >> 3)).toString(16) +
           ", ";
       }
       bitmap += "\n";
     }
-    Blockly.Arduino.definitions_[`define_custom_draw_bitmap}`] =
-      `const uint16_t bitmap_custom[] = {${bitmap}};`;
-    var code = `bitmap_custom`;
-
-    return [code, Blockly.Arduino.ORDER_ATOMIC];
+    console.log(bitmap);
+    Blockly.Generator.Arduino.definitions_[
+      `define_custom_draw_bitmap_full_${r}}`
+    ] = `const uint16_t bitmap_full_${r}[] = {${bitmap}};`;
+    var code = `matrix_${dropdown_pin}.drawRGBBitmap(0,0,bitmap_full_${r},WIDTH,HEIGHT);\n`;
+    code += `matrix_${dropdown_pin}.show();\n`;
+    return code;
   };

@@ -108,7 +108,7 @@ class CodeViewer extends Component {
     var curlyBrackets = "{ }";
     var unequal = "<>";
     return (
-      <Card style={{ height: "100%", maxHeight: "60vH" }} ref={this.myDiv}>
+      <Card style={{ height: "100%", maxHeight: "50vH" }} ref={this.myDiv}>
         <Accordion
           square={true}
           style={{ margin: 0 }}
@@ -193,7 +193,6 @@ class CodeViewer extends Component {
 CodeViewer.propTypes = {
   arduino: PropTypes.string.isRequired,
   xml: PropTypes.string.isRequired,
-  tooltip: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({

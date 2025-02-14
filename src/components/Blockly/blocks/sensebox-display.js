@@ -219,7 +219,7 @@ Blockly.Blocks["sensebox_display_show"] = {
     this.appendDummyInput().appendField(Blockly.Msg.sensebox_display_show);
     this.appendStatementInput("SHOW");
     this.setTooltip(Blockly.Msg.sensebox_display_show_tip);
-    this.setHelpUrl("");
+    this.setHelpUrl(Blockly.Msg.senseBox_display_helpurl);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
   },

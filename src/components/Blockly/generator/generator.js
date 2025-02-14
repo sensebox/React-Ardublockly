@@ -31,9 +31,15 @@ import store from "../../../store";
 var ota = store.getState().general.platform
   ? store.getState().general.platform
   : null;
+var board = store.getState().board.board 
+  ? store.getState().board.board 
+  : null;
 store.subscribe(() => {
   ota = store.getState().general.platform
     ? store.getState().general.platform
+    : null;
+  board = store.getState().board.board
+    ? store.getState().board.board
     : null;
 });
 
@@ -41,7 +47,7 @@ store.subscribe(() => {
  * Arduino code generator.
  * @type !Blockly.Generator
  */
-Blockly["Arduino"] = new Blockly.Generator("Arduino");
+Blockly.Generator.Arduino = new Blockly.Generator("Arduino");
 
 /**
  * List of illegal variable names.
@@ -50,7 +56,7 @@ Blockly["Arduino"] = new Blockly.Generator("Arduino");
  * accidentally clobbering a built-in object or function.
  * @private
  */
-Blockly["Arduino"].addReservedWords(
+Blockly.Generator.Arduino.addReservedWords(
   // http://arduino.cc/en/Reference/HomePage
   "setup,loop,if,else,for,switch,case,while," +
     "do,break,continue,return,goto,define,include," +
@@ -69,25 +75,25 @@ Blockly["Arduino"].addReservedWords(
  * Order of operation ENUMs.
  *
  */
-Blockly["Arduino"].ORDER_ATOMIC = 0; // 0 "" ...
-Blockly["Arduino"].ORDER_UNARY_POSTFIX = 1; // expr++ expr-- () [] .
-Blockly["Arduino"].ORDER_UNARY_PREFIX = 2; // -expr !expr ~expr ++expr --expr
-Blockly["Arduino"].ORDER_MULTIPLICATIVE = 3; // * / % ~/
-Blockly["Arduino"].ORDER_ADDITIVE = 4; // + -
-Blockly["Arduino"].ORDER_LOGICAL_NOT = 4.4; // !
-Blockly["Arduino"].ORDER_SHIFT = 5; // << >>
-Blockly["Arduino"].ORDER_MODULUS = 5.3; // %
-Blockly["Arduino"].ORDER_RELATIONAL = 6; // is is! >= > <= <
-Blockly["Arduino"].ORDER_EQUALITY = 7; // === !== === !==
-Blockly["Arduino"].ORDER_BITWISE_AND = 8; // &
-Blockly["Arduino"].ORDER_BITWISE_XOR = 9; // ^
-Blockly["Arduino"].ORDER_BITWISE_OR = 10; // |
-Blockly["Arduino"].ORDER_LOGICAL_AND = 11; // &&
-Blockly["Arduino"].ORDER_LOGICAL_OR = 12; // ||
-Blockly["Arduino"].ORDER_CONDITIONAL = 13; // expr ? expr : expr
-Blockly["Arduino"].ORDER_ASSIGNMENT = 14; // = *= /= ~/= %= += -= <<= >>= &= ^= |=
-Blockly["Arduino"].ORDER_COMMA = 18; // ,
-Blockly["Arduino"].ORDER_NONE = 99; // (...)
+Blockly.Generator.Arduino.ORDER_ATOMIC = 0; // 0 "" ...
+Blockly.Generator.Arduino.ORDER_UNARY_POSTFIX = 1; // expr++ expr-- () [] .
+Blockly.Generator.Arduino.ORDER_UNARY_PREFIX = 2; // -expr !expr ~expr ++expr --expr
+Blockly.Generator.Arduino.ORDER_MULTIPLICATIVE = 3; // * / % ~/
+Blockly.Generator.Arduino.ORDER_ADDITIVE = 4; // + -
+Blockly.Generator.Arduino.ORDER_LOGICAL_NOT = 4.4; // !
+Blockly.Generator.Arduino.ORDER_SHIFT = 5; // << >>
+Blockly.Generator.Arduino.ORDER_MODULUS = 5.3; // %
+Blockly.Generator.Arduino.ORDER_RELATIONAL = 6; // is is! >= > <= <
+Blockly.Generator.Arduino.ORDER_EQUALITY = 7; // === !== === !==
+Blockly.Generator.Arduino.ORDER_BITWISE_AND = 8; // &
+Blockly.Generator.Arduino.ORDER_BITWISE_XOR = 9; // ^
+Blockly.Generator.Arduino.ORDER_BITWISE_OR = 10; // |
+Blockly.Generator.Arduino.ORDER_LOGICAL_AND = 11; // &&
+Blockly.Generator.Arduino.ORDER_LOGICAL_OR = 12; // ||
+Blockly.Generator.Arduino.ORDER_CONDITIONAL = 13; // expr ? expr : expr
+Blockly.Generator.Arduino.ORDER_ASSIGNMENT = 14; // = *= /= ~/= %= += -= <<= >>= &= ^= |=
+Blockly.Generator.Arduino.ORDER_COMMA = 18; // ,
+Blockly.Generator.Arduino.ORDER_NONE = 99; // (...)
 
 /**
  *
@@ -100,45 +106,48 @@ Blockly["Arduino"].ORDER_NONE = 99; // (...)
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
-Blockly["Arduino"].init = function (workspace) {
+Blockly.Generator.Arduino.init = function (workspace) {
   // Create a dictionary of definitions to be printed before the code.
-  Blockly["Arduino"].libraries_ = Object.create(null);
+  Blockly.Generator.Arduino.libraries_ = Object.create(null);
 
-  Blockly["Arduino"].definitions_ = Object.create(null);
-
-  // creates a list of code to be setup before the setup block
-  Blockly["Arduino"].setupCode_ = Object.create(null);
+  Blockly.Generator.Arduino.definitions_ = Object.create(null);
 
   // creates a list of code to be setup before the setup block
-  Blockly["Arduino"].phyphoxSetupCode_ = Object.create(null);
+  Blockly.Generator.Arduino.preSetupCode_ = Object.create(null);
+  
+  // creates a list of code to be setup before the setup block
+  Blockly.Generator.Arduino.setupCode_ = Object.create(null);
 
   // creates a list of code to be setup before the setup block
-  Blockly["Arduino"].loraSetupCode_ = Object.create(null);
+  Blockly.Generator.Arduino.phyphoxSetupCode_ = Object.create(null);
+
+  // creates a list of code to be setup before the setup block
+  Blockly.Generator.Arduino.loraSetupCode_ = Object.create(null);
 
   // creates a list of code for the loop to be runned once
-  Blockly["Arduino"].loopCodeOnce_ = Object.create(null);
+  Blockly.Generator.Arduino.loopCodeOnce_ = Object.create(null);
 
   // creates a list of code for the loop to be runned once
-  Blockly["Arduino"].codeFunctions_ = Object.create(null);
+  Blockly.Generator.Arduino.codeFunctions_ = Object.create(null);
 
   // creates a list of code variables
-  Blockly["Arduino"].variables_ = Object.create(null);
+  Blockly.Generator.Arduino.variables_ = Object.create(null);
 
   // Create a dictionary mapping desired function names in definitions_
   // to actual function names (to avoid collisions with user functions).
-  Blockly["Arduino"].functionNames_ = Object.create(null);
+  Blockly.Generator.Arduino.functionNames_ = Object.create(null);
 
-  Blockly["Arduino"].variablesInitCode_ = "";
+  Blockly.Generator.Arduino.variablesInitCode_ = "";
 
-  if (!Blockly["Arduino"].nameDB_) {
-    Blockly["Arduino"].nameDB_ = new Blockly.Names(
-      Blockly["Arduino"].RESERVED_WORDS_,
+  if (!Blockly.Generator.Arduino.nameDB_) {
+    Blockly.Generator.Arduino.nameDB_ = new Blockly.Names(
+      Blockly.Generator.Arduino.RESERVED_WORDS_,
     );
   } else {
-    Blockly["Arduino"].nameDB_.reset();
+    Blockly.Generator.Arduino.nameDB_.reset();
   }
 
-  Blockly["Arduino"].nameDB_.setVariableMap(workspace.getVariableMap());
+  Blockly.Generator.Arduino.nameDB_.setVariableMap(workspace.getVariableMap());
 
   // We don't have developer variables for now
   // // Add developer variables (not created or named by the user).
@@ -154,7 +163,7 @@ Blockly["Arduino"].init = function (workspace) {
  * @param {string} code Generated code.
  * @return {string} Completed code.
  */
-Blockly["Arduino"].finish = function (code) {
+Blockly.Generator.Arduino.finish = function (code) {
   let commentCode = "";
   let libraryCode = "";
   let variablesCode = "";
@@ -165,51 +174,59 @@ Blockly["Arduino"].finish = function (code) {
   let loopCodeOnce = "";
   let setupCode = "";
   let preSetupCode = "";
+  let mainSetupCode = "";
   let loraSetupCode = "";
   let devVariables = "\n";
 
   commentCode = "// Code generated by senseBox Blockly on " + new Date();
-  for (const key in Blockly["Arduino"].libraries_) {
-    libraryCode += Blockly["Arduino"].libraries_[key] + "\n";
+  for (const key in Blockly.Generator.Arduino.libraries_) {
+    libraryCode += Blockly.Generator.Arduino.libraries_[key] + "\n";
   }
 
-  for (const key in Blockly["Arduino"].variables_) {
-    variablesCode += Blockly["Arduino"].variables_[key] + "\n";
+  for (const key in Blockly.Generator.Arduino.variables_) {
+    variablesCode += Blockly.Generator.Arduino.variables_[key] + "\n";
   }
 
-  for (const key in Blockly["Arduino"].definitions_) {
-    definitionsCode += Blockly["Arduino"].definitions_[key] + "\n";
+  for (const key in Blockly.Generator.Arduino.definitions_) {
+    definitionsCode += Blockly.Generator.Arduino.definitions_[key] + "\n";
   }
 
-  for (const key in Blockly["Arduino"].loopCodeOnce_) {
-    loopCodeOnce += Blockly["Arduino"].loopCodeOnce_[key] + "\n";
+  for (const key in Blockly.Generator.Arduino.loopCodeOnce_) {
+    loopCodeOnce += Blockly.Generator.Arduino.loopCodeOnce_[key] + "\n";
   }
 
-  for (const key in Blockly["Arduino"].codeFunctions_) {
-    codeFunctions += Blockly["Arduino"].codeFunctions_[key] + "\n";
+  for (const key in Blockly.Generator.Arduino.codeFunctions_) {
+    codeFunctions += Blockly.Generator.Arduino.codeFunctions_[key] + "\n";
   }
 
-  for (const key in Blockly["Arduino"].functionNames_) {
-    functionsCode += Blockly["Arduino"].functionNames_[key] + "\n";
+  for (const key in Blockly.Generator.Arduino.functionNames_) {
+    functionsCode += Blockly.Generator.Arduino.functionNames_[key] + "\n";
   }
 
-  for (const key in Blockly["Arduino"].setupCode_) {
-    preSetupCode += Blockly["Arduino"].setupCode_[key] + "\n" || "";
+  if(Blockly.Generator.Arduino.preSetupCode_["Wire.begin"]) {
+    preSetupCode += Blockly.Generator.Arduino.preSetupCode_["Wire.begin"] + "\n";
+    if(Blockly.Generator.Arduino.preSetupCode_["vl53l8cx_clock_address"]) {
+      preSetupCode += Blockly.Generator.Arduino.preSetupCode_["vl53l8cx_clock_address"] + "\n";
+    }
   }
 
-  for (const key in Blockly["Arduino"].loraSetupCode_) {
-    loraSetupCode += Blockly["Arduino"].loraSetupCode_[key] + "\n" || "";
+  for (const key in Blockly.Generator.Arduino.setupCode_) {
+    mainSetupCode += Blockly.Generator.Arduino.setupCode_[key] + "\n" || "";
   }
 
-  setupCode =
-    "\nvoid setup() { \n" + preSetupCode + "\n" + loraSetupCode + "\n}\n";
-  for (const key in Blockly["Arduino"].phyphoxSetupCode_) {
-    phyphoxSetupCode += Blockly["Arduino"].phyphoxSetupCode_[key] + "\n" || "";
+  for (const key in Blockly.Generator.Arduino.loraSetupCode_) {
+    loraSetupCode += Blockly.Generator.Arduino.loraSetupCode_[key] + "\n" || "";
+  }
+
+  for (const key in Blockly.Generator.Arduino.phyphoxSetupCode_) {
+    phyphoxSetupCode += Blockly.Generator.Arduino.phyphoxSetupCode_[key] + "\n" || "";
   }
 
   setupCode =
     "\nvoid setup() { \n" +
     preSetupCode +
+    "\n" +
+    mainSetupCode +
     "\n" +
     phyphoxSetupCode +
     "\n" +
@@ -218,7 +235,7 @@ Blockly["Arduino"].finish = function (code) {
 
   let loopCode = "\nvoid loop() { \n" + loopCodeOnce + code + "\n}\n";
   // only add OTA code if tablet mode is enabled
-  if (ota === true) {
+  if (ota === true && board !== "esp32") {
     code =
       commentCode +
       "\n" +
@@ -234,7 +251,7 @@ Blockly["Arduino"].finish = function (code) {
       "\n" +
       codeFunctions +
       "\n" +
-      Blockly["Arduino"].variablesInitCode_ +
+      Blockly.Generator.Arduino.variablesInitCode_ +
       "\n" +
       functionsCode +
       "\n" +
@@ -256,7 +273,7 @@ Blockly["Arduino"].finish = function (code) {
       "\n" +
       codeFunctions +
       "\n" +
-      Blockly["Arduino"].variablesInitCode_ +
+      Blockly.Generator.Arduino.variablesInitCode_ +
       "\n" +
       functionsCode +
       "\n" +
@@ -266,14 +283,14 @@ Blockly["Arduino"].finish = function (code) {
   }
 
   // Clean up temporary data.
-  delete Blockly["Arduino"].definitions_;
-  delete Blockly["Arduino"].functionNames_;
-  delete Blockly["Arduino"].loopCodeOnce_;
-  delete Blockly["Arduino"].variablesInitCode_;
-  delete Blockly["Arduino"].libraries_;
-  Blockly["Arduino"].nameDB_.reset();
+  delete Blockly.Generator.Arduino.definitions_;
+  delete Blockly.Generator.Arduino.functionNames_;
+  delete Blockly.Generator.Arduino.loopCodeOnce_;
+  delete Blockly.Generator.Arduino.variablesInitCode_;
+  delete Blockly.Generator.Arduino.libraries_;
+  Blockly.Generator.Arduino.nameDB_.reset();
 
-  return Blockly["Arduino"].formatCode(code);
+  return Blockly.Generator.Arduino.formatCode(code);
 };
 
 /**
@@ -282,7 +299,7 @@ Blockly["Arduino"].finish = function (code) {
  * @param {string} line Line of generated code.
  * @return {string} Legal line of code.
  */
-Blockly["Arduino"].scrubNakedValue = function (line) {
+Blockly.Generator.Arduino.scrubNakedValue = function (line) {
   return line + ";\n";
 };
 
@@ -292,7 +309,7 @@ Blockly["Arduino"].scrubNakedValue = function (line) {
  * @param {string} code The Arduino code to format.
  * @return {string} Formatted Arduino code.
  */
-Blockly["Arduino"].formatCode = function (code) {
+Blockly.Generator.Arduino.formatCode = function (code) {
   let formattedCode = "";
   let indentLevel = 0;
   const indentSize = 2; // Number of spaces per indentation level
@@ -341,7 +358,7 @@ Blockly["Arduino"].formatCode = function (code) {
  * @return {string} Arduino string.
  * @private
  */
-Blockly["Arduino"].quote_ = function (string) {
+Blockly.Generator.Arduino.quote_ = function (string) {
   // Can't use goog.string.quote since Google's style guide recommends
   // JS string literals use single quotes.
   string = string
@@ -361,7 +378,8 @@ Blockly["Arduino"].quote_ = function (string) {
  * @return {string} Arduino code with comments and subsequent blocks added.
  * @private
  */
-Blockly["Arduino"].scrub_ = function (block, code) {
+
+Blockly.Generator.Arduino.scrub_ = function (block, code) {
   let commentCode = "";
   // Only collect comments for blocks that aren't inline.
   if (!block.outputConnection || !block.outputConnection.targetConnection) {
@@ -369,17 +387,23 @@ Blockly["Arduino"].scrub_ = function (block, code) {
     let comment = block.getCommentText();
     //@ts-ignore
     comment = comment
-      ? Blockly.utils.string.wrap(comment, Blockly["Arduino"].COMMENT_WRAP - 3)
+      ? Blockly.utils.string.wrap(
+          comment,
+          Blockly.Generator.Arduino.COMMENT_WRAP - 3,
+        )
       : null;
     if (comment) {
       if (block.getProcedureDef) {
         // Use a comment block for function comments.
         commentCode +=
           "/**\n" +
-          Blockly["Arduino"].prefixLines(comment + "\n", " * ") +
+          Blockly.Generator.Arduino.prefixLines(comment + "\n", " * ") +
           " */\n";
       } else {
-        commentCode += Blockly["Arduino"].prefixLines(comment + "\n", "// ");
+        commentCode += Blockly.Generator.Arduino.prefixLines(
+          comment + "\n",
+          "// ",
+        );
       }
     }
     // Collect comments for all value arguments.
@@ -388,15 +412,19 @@ Blockly["Arduino"].scrub_ = function (block, code) {
       if (block.inputList[i].type === Blockly.INPUT_VALUE) {
         const childBlock = block.inputList[i].connection.targetBlock();
         if (childBlock) {
-          const comment = Blockly["Arduino"].allNestedComments(childBlock);
+          const comment =
+            Blockly.Generator.Arduino.allNestedComments(childBlock);
           if (comment) {
-            commentCode += Blockly["Arduino"].prefixLines(comment, "// ");
+            commentCode += Blockly.Generator.Arduino.prefixLines(
+              comment,
+              "// ",
+            );
           }
         }
       }
     }
   }
   const nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-  const nextCode = Blockly["Arduino"].blockToCode(nextBlock);
+  const nextCode = Blockly.Generator.Arduino.blockToCode(nextBlock);
   return commentCode + code + nextCode;
 };

@@ -24,7 +24,7 @@ class BlocklySvg extends Component {
     const workspace = Blockly.getMainWorkspace();
     workspace.clear();
     Blockly.Xml.domToWorkspace(
-      Blockly.Xml.textToDom(this.props.initialXml),
+      Blockly.utils.xml.textToDom(this.props.initialXml),
       workspace,
     );
     var canvas = workspace.svgBlockCanvas_.cloneNode(true);
