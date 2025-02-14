@@ -13,7 +13,7 @@ export const UI = {
   toolbox_functions: "Functions",
   toolbox_variables: "Variables",
   toolbox_serial: "Serial",
-  toolbox_advanced: "Erweitert",
+  toolbox_advanced: "Advanced",
   toolbox_motors: "Motors",
   toolbox_label_externalRTC: "External RTC",
   toolbox_label_internalRTC: "Internal RTC",
@@ -215,6 +215,7 @@ export const UI = {
   settings_compiler_text:
     "Enter the URL of the compiler you want to use. The default compiler is: https://compiler.sensebox.de",
   settings_compiler_helperText: "Die URL must start https:// or http://",
+  settings_compiler_readOnly: "Change compiler URL",
 
   /**
    * 404
@@ -316,7 +317,8 @@ export const UI = {
    */
 
   tooltip_viewer: "Help",
-  tooltip_moreInformation: "More informations can be found ",
+  tooltip_moreInformation: "More information",
+  tooltip_moreInformation_02: "Information about the Block",
   tooltip_hint: "Select a Block to show the hint",
 
   /**
@@ -344,7 +346,8 @@ export const UI = {
 
   suggestion_pre_text: "Maybe you should try:",
   display_not_declared: "Initialise the display in the setup() function",
-  variable_redeclared: "Make sure that you do not use any special characters in your variable names. This includes spaces, asterisks or quotation marks.",
+  variable_redeclared:
+    "Make sure that you do not use any special characters in your variable names. This includes spaces, asterisks or quotation marks.",
   /**
    * Device Selection
    * */

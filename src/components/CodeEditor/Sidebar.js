@@ -1,5 +1,5 @@
 import React from "react";
-import Blockly from "blockly";
+import * as Blockly from "blockly";
 import { useSelector } from "react-redux";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";

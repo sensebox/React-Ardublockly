@@ -3,6 +3,14 @@ import { getColour } from "../helpers/colour";
 import { selectedBoard } from "../helpers/board";
 import * as Types from "../helpers/types";
 import { FieldSlider } from "@blockly/field-slider";
+import {
+  registerFieldMultilineInput,
+  FieldMultilineInput,
+} from "@blockly/field-multilineinput";
+import { registerFieldColour } from "@blockly/field-colour";
+
+registerFieldMultilineInput();
+registerFieldColour();
 
 Blockly.Blocks["sensebox_led"] = {
   init: function () {
@@ -97,6 +105,12 @@ Blockly.Blocks["sensebox_ws2818_led"] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setTooltip(Blockly.Msg.senseBox_ws2818_rgb_led_tooltip);
+    if (selectedBoard().title === "MCU-S2") {
+      this.setHelpUrl(Blockly.Msg.senseBox_ws2818_rgb_led_helpurl);
+    }
+    else {
+      this.setHelpUrl(Blockly.Msg.senseBox_ws2818_rgb_led_helpurl_2);
+    }
   },
 };
 
@@ -212,10 +226,11 @@ Blockly.Blocks["sensebox_ws2812_matrix_init"] = {
       );
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_brightness)
-      .appendField(new FieldSlider(20, 0, 255), "BRIGHTNESS");
+      .appendField(new FieldSlider(20, 0, 40), "BRIGHTNESS");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setTooltip(Blockly.Msg.senseBox_ws2812_rgb_matrix_init_tooltip);
+    this.setHelpUrl(Blockly.Msg.senseBox_ws2812_rgb_matrix_helpurl);
   },
 };
 
@@ -246,6 +261,9 @@ Blockly.Blocks["sensebox_ws2812_matrix_text"] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setTooltip(Blockly.Msg.senseBox_ws2812_rgb_matrix_print_tooltip);
+    this.setHelpUrl(Blockly.Msg.senseBox_ws2812_rgb_matrix_helpurl);
+
+    
   },
 };
 
@@ -274,6 +292,8 @@ Blockly.Blocks["sensebox_ws2812_matrix_drawPixel"] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setTooltip(Blockly.Msg.senseBox_ws2812_rgb_matrix_draw_pixel_tooltip);
+    this.setHelpUrl(Blockly.Msg.senseBox_ws2812_rgb_matrix_helpurl);
+
   },
 };
 
@@ -290,6 +310,8 @@ Blockly.Blocks["sensebox_ws2812_matrix_clear"] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setTooltip(Blockly.Msg.senseBox_ws2812_rgb_matrix_clear_tooltip);
+    this.setHelpUrl(Blockly.Msg.senseBox_ws2812_rgb_matrix_helpurl);
+
   },
 };
 
@@ -309,6 +331,8 @@ Blockly.Blocks["sensebox_ws2812_matrix_showBitmap"] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setTooltip(Blockly.Msg.senseBox_ws2812_rgb_matrix_show_bitmap_tooltip);
+    this.setHelpUrl(Blockly.Msg.senseBox_ws2812_rgb_matrix_helpurl);
+
   },
 };
 
@@ -330,26 +354,54 @@ Blockly.Blocks["sensebox_ws2812_matrix_bitmap"] = {
         ]),
         "BITMAP",
       );
+
     this.setOutput(true, "Bitmap");
     this.setTooltip(Blockly.Msg.senseBox_ws2812_rgb_matrix_bitmap_tooltip);
+    this.setHelpUrl(Blockly.Msg.senseBox_ws2812_rgb_matrix_helpurl);
+
   },
 };
 
 Blockly.Blocks["sensebox_ws2812_matrix_custom_bitmap"] = {
   init: function () {
+    // array to create random names
+    const words = [
+      "alpha",
+      "beta",
+      "gamma",
+      "delta",
+      "epsilon",
+      "zeta",
+      "theta",
+    ];
+
     this.setColour(getColour().sensebox);
-    this.appendDummyInput("BITMAP")
-      .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_custom_bitmap)
+    this.appendDummyInput()
+      .setAlign(Blockly.inputs.Align.LEFT)
+      .appendField(Blockly.Msg.sensebox_led_custom_bitmap)
       .appendField(
-        new Blockly.FieldMultilineInput(
+        new Blockly.FieldTextInput(
+          words[Math.floor(Math.random() * words.length)],
+        ),
+        "name",
+      );
+    this.appendDummyInput("input")
+      .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_custom_bitmap)
+      .appendField("{")
+      .appendField(
+        new FieldMultilineInput(
           Blockly.Msg.senseBox_ws2812_rgb_matrix_custom_bitmap_example,
         ),
-        "FIELDNAME",
-      );
+        "input",
+      )
+      .appendField("}");
+
     this.setOutput(true, "Bitmap");
     this.setTooltip(
       Blockly.Msg.senseBox_ws2812_rgb_matrix_custom_bitmap_tooltip,
     );
+    this.setHelpUrl(Blockly.Msg.senseBox_ws2812_rgb_matrix_helpurl);
+
   },
 };
 
@@ -357,8 +409,13 @@ Blockly.defineBlocksWithJsonArray([
   {
     type: "sensebox_ws2812_matrix_draw_custom_bitmap_example",
     message0:
-      "Paint a custom Bitmap %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12 %13 %14 %15 %16 %17 %18 %19 %20 %21 %22 %23 %24 %25 %26 %27 %28 %29 %30 %31 %32 %33 %34 %35 %36 %37 %38 %39 %40 %41 %42 %43 %44 %45 %46 %47 %48 %49 %50 %51 %52 %53 %54 %55 %56 %57 %58 %59 %60 %61 %62 %63 %64 %65 %66 %67 %68 %69 %70 %71 %72 %73 %74 %75 %76 %77 %78 %79 %80 %81 %82 %83 %84 %85 %86 %87 %88 %89 %90 %91 %92 %93 %94 %95 %96 %97 %98 %99 %100 %101 %102 %103 %104",
+      "Name: %1 Paint a custom Bitmap %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12 %13 %14 %15 %16 %17 %18 %19 %20 %21 %22 %23 %24 %25 %26 %27 %28 %29 %30 %31 %32 %33 %34 %35 %36 %37 %38 %39 %40 %41 %42 %43 %44 %45 %46 %47 %48 %49 %50 %51 %52 %53 %54 %55 %56 %57 %58 %59 %60 %61 %62 %63 %64 %65 %66 %67 %68 %69 %70 %71 %72 %73 %74 %75 %76 %77 %78 %79 %80 %81 %82 %83 %84 %85 %86 %87 %88 %89 %90 %91 %92 %93 %94 %95 %96 %97 %98 %99 %100 %101 %102 %103 %104 %105",
     args0: [
+      {
+        type: "field_input",
+        name: "name",
+        text: "custom_bitmap1",
+      },
       {
         type: "input_dummy",
       },
@@ -867,6 +924,26 @@ Blockly.defineBlocksWithJsonArray([
     output: "Bitmap",
     colour: getColour().sensebox,
     tooltip: Blockly.Msg.senseBox_ws2812_rgb_matrix_draw_bitmap_tooltip,
-    helpUrl: "",
+    helpUrl: Blockly.Msg.senseBox_ws2812_rgb_matrix_helpurl,
+
   },
 ]);
+
+Blockly.Blocks["sensebox_ws2812_matrix_fullcolor"] = {
+  init: function () {
+    this.setColour(getColour().sensebox);
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_fullcolor)
+      .appendField("Port:")
+      .appendField(
+        new Blockly.FieldDropdown(selectedBoard().digitalPinsRGBMatrix),
+        "Port",
+      );
+    this.appendValueInput("COLOR", "Number")
+      .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_color)
+      .setCheck("Colour");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip(Blockly.Msg.senseBox_ws2812_rgb_matrix_fullcolor_tooltip);
+  },
+};

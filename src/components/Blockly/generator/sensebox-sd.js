@@ -1,4 +1,4 @@
-import Blockly from "blockly";
+import * as Blockly from "blockly";
 
 /* SD-Card Blocks using the Standard SD Library*/
 /**
@@ -8,38 +8,51 @@ import Blockly from "blockly";
  * @return {array} Completed code with order of operation.
  */
 
-Blockly.Arduino.sensebox_sd_create_file = function (block) {
+Blockly.Generator.Arduino.forBlock["sensebox_sd_create_file"] = function (
+  block,
+  generator,
+) {
   var filename = this.getFieldValue("Filename");
   var extension = this.getFieldValue("extension");
   var newFileName = filename.concat(".", extension);
-  Blockly.Arduino.libraries_["library_spi"] = "#include <SPI.h>";
-  Blockly.Arduino.libraries_["library_sd"] = "#include <SD.h>";
-  Blockly.Arduino.definitions_["define_" + filename] = `File ${filename};`;
-  Blockly.Arduino.setupCode_["sensebox_sd"] = "SD.begin(28);\n";
-  Blockly.Arduino.setupCode_["sensebox_sd" + filename] =
+  Blockly.Generator.Arduino.libraries_["library_spi"] = "#include <SPI.h>";
+  Blockly.Generator.Arduino.libraries_["library_sd"] = "#include <SD.h>";
+  Blockly.Generator.Arduino.definitions_["define_" + filename] =
+    `File ${filename};`;
+  Blockly.Generator.Arduino.setupCode_["sensebox_sd"] = "SD.begin(28);\n";
+  Blockly.Generator.Arduino.setupCode_["sensebox_sd" + filename] =
     `${filename} = SD.open("${newFileName}", FILE_WRITE);\n${filename}.close();\n`;
   var code = "";
   return code;
 };
 
-Blockly.Arduino.sensebox_sd_open_file = function (block) {
+Blockly.Generator.Arduino.forBlock["sensebox_sd_open_file"] = function (
+  block,
+  generator,
+) {
   var filename = this.getFieldValue("Filename");
   var extension = this.getFieldValue("extension");
   var newFileName = filename.concat(".", extension);
-  var branch = Blockly.Arduino.statementToCode(block, "SD");
+  var branch = Blockly.Generator.Arduino.statementToCode(block, "SD");
   var code = `${filename} = SD.open("${newFileName}", FILE_WRITE);\n`;
   code += branch;
   code += `${filename}.close();\n`;
   return code;
 };
 
-Blockly.Arduino.sensebox_sd_write_file = function (block) {
+Blockly.Generator.Arduino.forBlock["sensebox_sd_write_file"] = function (
+  block,
+  generator,
+) {
   if (this.parentBlock_ != null) {
     var filename = this.getSurroundParent().getFieldValue("Filename");
   }
   var branch =
-    Blockly.Arduino.valueToCode(this, "DATA", Blockly.Arduino.ORDER_ATOMIC) ||
-    '"Keine Eingabe"';
+    Blockly.Generator.Arduino.valueToCode(
+      this,
+      "DATA",
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
+    ) || '"Keine Eingabe"';
   var linebreak = this.getFieldValue("linebreak");
   if (linebreak === "TRUE") {
     linebreak = "ln";
@@ -55,14 +68,14 @@ Blockly.Arduino.sensebox_sd_write_file = function (block) {
   return code;
 };
 
-Blockly.Arduino.sensebox_sd_osem = function () {
+Blockly.Generator.Arduino.forBlock["sensebox_sd_osem"] = function () {
   if (this.parentBlock_ != null) {
     var filename = this.getSurroundParent().getFieldValue("Filename");
   }
 
   var type = this.getFieldValue("type");
   var blocks = this.getDescendants();
-  var branch = Blockly.Arduino.statementToCode(this, "DO");
+  var branch = Blockly.Generator.Arduino.statementToCode(this, "DO");
   var count = 0;
   if (blocks !== undefined) {
     for (var i = 0; i < blocks.length; i++) {
@@ -72,31 +85,32 @@ Blockly.Arduino.sensebox_sd_osem = function () {
     }
   }
   var num_sensors = count;
-  var timestamp = Blockly.Arduino.valueToCode(
+  var timestamp = Blockly.Generator.Arduino.valueToCode(
     this,
     "timeStamp",
-    Blockly.Arduino.ORDER_ATOMIC,
+    Blockly.Generator.Arduino.ORDER_ATOMIC,
   );
-  Blockly.Arduino.definitions_["num_sensors"] =
+  Blockly.Generator.Arduino.definitions_["num_sensors"] =
     "static const uint8_t NUM_SENSORS = " + num_sensors + ";";
 
-  Blockly.Arduino.definitions_["measurement"] = `typedef struct measurement {
+  Blockly.Generator.Arduino.definitions_["measurement"] =
+    `typedef struct measurement {
     const char *sensorId;
     float value;
   } measurement;`;
-  Blockly.Arduino.definitions_["buffer"] = "char buffer[750];";
-  Blockly.Arduino.definitions_["num_measurement"] =
+  Blockly.Generator.Arduino.definitions_["buffer"] = "char buffer[750];";
+  Blockly.Generator.Arduino.definitions_["num_measurement"] =
     `measurement measurements[NUM_SENSORS];
   uint8_t num_measurements = 0;`;
   if (type === "Stationary") {
-    Blockly.Arduino.functionNames_["addMeasurement"] = `
+    Blockly.Generator.Arduino.functionNames_["addMeasurement"] = `
 void addMeasurement(const char *sensorId, float value) {
     measurements[num_measurements].sensorId = sensorId;
     measurements[num_measurements].value = value;
     num_measurements++;
     }
 `;
-    Blockly.Arduino.functionNames_["writeMeasurementsToSdCard"] = `
+    Blockly.Generator.Arduino.functionNames_["writeMeasurementsToSdCard"] = `
 void writeMeasurementsToSdCard(char* timeStamp) {
     // iterate throug the measurements array
     for (uint8_t i = 0; i < num_measurements; i++) {
@@ -108,7 +122,7 @@ sprintf_P(buffer, PSTR("%s,%9.2f,%s"), measurements[i].sensorId, measurements[i]
     num_measurements = 0;
 }
 `;
-    Blockly.Arduino.functionNames_["saveValues"] = `
+    Blockly.Generator.Arduino.functionNames_["saveValues"] = `
 void saveValues() {
 
 
@@ -124,41 +138,43 @@ void saveValues() {
     /**
      * add mobile functions here
      */
-    Blockly.Arduino.libraries_["dtostrf.h"] = "#include <avr/dtostrf.h>";
-    var lat = Blockly.Arduino.valueToCode(
+    Blockly.Generator.Arduino.libraries_["dtostrf.h"] =
+      "#include <avr/dtostrf.h>";
+    var lat = Blockly.Generator.Arduino.valueToCode(
       this,
       "lat",
-      Blockly.Arduino.ORDER_ATOMIC,
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
     );
-    var lng = Blockly.Arduino.valueToCode(
+    var lng = Blockly.Generator.Arduino.valueToCode(
       this,
       "lng",
-      Blockly.Arduino.ORDER_ATOMIC,
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
     );
-    // var altitude = Blockly.Arduino.valueToCode(
+    // var altitude = Blockly.Generator.Arduino.valueToCode(
     //   this,
     //   "altitude",
-    //   Blockly.Arduino.ORDER_ATOMIC
+    //   Blockly.Generator.Arduino.ORDER_ATOMIC
     // );
-    Blockly.Arduino.definitions_["num_sensors"] =
+    Blockly.Generator.Arduino.definitions_["num_sensors"] =
       "static const uint8_t NUM_SENSORS = " + num_sensors + ";";
 
-    Blockly.Arduino.definitions_["measurement"] = `typedef struct measurement {
+    Blockly.Generator.Arduino.definitions_["measurement"] =
+      `typedef struct measurement {
         const char *sensorId;
         float value;
       } measurement;`;
-    Blockly.Arduino.definitions_["buffer"] = "char buffer[750];";
-    Blockly.Arduino.definitions_["num_measurement"] =
+    Blockly.Generator.Arduino.definitions_["buffer"] = "char buffer[750];";
+    Blockly.Generator.Arduino.definitions_["num_measurement"] =
       `measurement measurements[NUM_SENSORS];
       uint8_t num_measurements = 0;`;
-    Blockly.Arduino.functionNames_["addMeasurement"] = `
+    Blockly.Generator.Arduino.functionNames_["addMeasurement"] = `
 void addMeasurement(const char *sensorId, float value) {
         measurements[num_measurements].sensorId = sensorId;
         measurements[num_measurements].value = value;
         num_measurements++;
         }
     `;
-    Blockly.Arduino.functionNames_["writeMeasurementsToSdCard"] = `
+    Blockly.Generator.Arduino.functionNames_["writeMeasurementsToSdCard"] = `
 void writeMeasurementsToSdCard(char* timeStamp, int32_t latitudes, int32_t longitudes) {
     // iterate throug the measurements array
         for (uint8_t i = 0; i < num_measurements; i++) {
@@ -176,7 +192,7 @@ void writeMeasurementsToSdCard(char* timeStamp, int32_t latitudes, int32_t longi
             num_measurements = 0;
         }
     `;
-    Blockly.Arduino.functionNames_["saveValues"] = `
+    Blockly.Generator.Arduino.functionNames_["saveValues"] = `
     void saveValues() {
           // send measurements
           writeMeasurementsToSdCard(${timestamp}, ${lat}, ${lng}); 
@@ -190,14 +206,20 @@ void writeMeasurementsToSdCard(char* timeStamp, int32_t latitudes, int32_t longi
   return code;
 };
 
-Blockly.Arduino.sensebox_sd_save_for_osem = function (block) {
+Blockly.Generator.Arduino.forBlock["sensebox_sd_save_for_osem"] = function (
+  block,
+  generator,
+) {
   var code = "";
   var sensor_id = this.getFieldValue("SensorID");
   var id = sensor_id.slice(-3).toUpperCase();
   var sensor_value =
-    Blockly.Arduino.valueToCode(block, "Value", Blockly.Arduino.ORDER_ATOMIC) ||
-    '"Keine Eingabe"';
-  Blockly.Arduino.definitions_["SENSOR_ID" + id + ""] =
+    Blockly.Generator.Arduino.valueToCode(
+      block,
+      "Value",
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
+    ) || '"Keine Eingabe"';
+  Blockly.Generator.Arduino.definitions_["SENSOR_ID" + id + ""] =
     "const char SENSOR_ID" + id + '[] PROGMEM = "' + sensor_id + '";';
   code += "addMeasurement(SENSOR_ID" + id + "," + sensor_value + ");\n";
   return code;
@@ -207,52 +229,62 @@ Blockly.Arduino.sensebox_sd_save_for_osem = function (block) {
  * senseBox-esp32-s2 sd Blocks
  */
 
-Blockly.Arduino.sensebox_esp32s2_sd_create_file = function (block) {
+Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_sd_create_file"] =
+  function (block, generator) {
+    var filename = this.getFieldValue("Filename");
+    var extension = this.getFieldValue("extension");
+    var newFileName = filename.concat(".", extension);
+
+    Blockly.Generator.Arduino.libraries_["library_sd"] = `#include <SD.h>`;
+    Blockly.Generator.Arduino.libraries_["library_spi"] = `#include <SPI.h>`;
+    Blockly.Generator.Arduino.libraries_["library_fs"] = `#include "FS.h"`;
+
+    Blockly.Generator.Arduino.definitions_["define_" + filename] =
+      `File ${filename};`;
+    Blockly.Generator.Arduino.definitions_["define_sdspi"] =
+      `SPIClass sdspi = SPIClass();`;
+    Blockly.Generator.Arduino.setupCode_["sensebox_esp32s2_sd"] =
+      "//Init SD\n pinMode(SD_ENABLE,OUTPUT);\n digitalWrite(SD_ENABLE,LOW);\nsdspi.begin(VSPI_SCLK,VSPI_MISO,VSPI_MOSI,VSPI_SS);\n SD.begin(VSPI_SS,sdspi);";
+    Blockly.Generator.Arduino.setupCode_["sensebox_esp32s2_sd" + filename] =
+      ` ${filename} = SD.open("/${newFileName}", FILE_WRITE);\n ${filename}.close();\n `;
+    var code = "";
+    return code;
+  };
+
+Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_sd_open_file"] = function (
+  block,
+  generator,
+) {
   var filename = this.getFieldValue("Filename");
   var extension = this.getFieldValue("extension");
   var newFileName = filename.concat(".", extension);
-
-  Blockly.Arduino.libraries_["library_sd"] = `#include <SD.h>`;
-  Blockly.Arduino.libraries_["library_spi"] = `#include <SPI.h>`;
-  Blockly.Arduino.libraries_["library_fs"] = `#include "FS.h"`;
-
-  Blockly.Arduino.definitions_["define_" + filename] = `File ${filename};`;
-  Blockly.Arduino.definitions_["define_sdspi"] = `SPIClass sdspi = SPIClass();`;
-  Blockly.Arduino.setupCode_["sensebox_esp32s2_sd"] =
-    "//Init SD\n pinMode(SD_ENABLE,OUTPUT);\n digitalWrite(SD_ENABLE,LOW);\nsdspi.begin(VSPI_SCLK,VSPI_MISO,VSPI_MOSI,VSPI_SS);\n SD.begin(VSPI_SS,sdspi);";
-  Blockly.Arduino.setupCode_["sensebox_esp32s2_sd" + filename] =
-    ` ${filename} = SD.open("/${newFileName}", FILE_WRITE);\n ${filename}.close();\n `;
-  var code = "";
-  return code;
-};
-
-Blockly.Arduino.sensebox_esp32s2_sd_open_file = function (block) {
-  var filename = this.getFieldValue("Filename");
-  var extension = this.getFieldValue("extension");
-  var newFileName = filename.concat(".", extension);
-  var branch = Blockly.Arduino.statementToCode(block, "SD");
+  var branch = Blockly.Generator.Arduino.statementToCode(block, "SD");
   var code = ` ${filename} = SD.open("/${newFileName}", FILE_APPEND);\n`;
   code += branch;
   code += ` ${filename}.close();\n`;
   return code;
 };
 
-Blockly.Arduino.sensebox_esp32s2_sd_write_file = function (block) {
-  if (this.parentBlock_ != null) {
-    var filename = this.getSurroundParent().getFieldValue("Filename");
-  }
+Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_sd_write_file"] =
+  function (block, generator) {
+    if (this.parentBlock_ != null) {
+      var filename = this.getSurroundParent().getFieldValue("Filename");
+    }
 
-  var branch =
-    Blockly.Arduino.valueToCode(this, "DATA", Blockly.Arduino.ORDER_ATOMIC) ||
-    '"Keine Eingabe"';
+    var branch =
+      Blockly.Generator.Arduino.valueToCode(
+        this,
+        "DATA",
+        Blockly.Generator.Arduino.ORDER_ATOMIC,
+      ) || '"Keine Eingabe"';
 
-  var linebreak = this.getFieldValue("linebreak");
-  if (linebreak === "TRUE") {
-    linebreak = "ln";
-  } else {
-    linebreak = "";
-  }
+    var linebreak = this.getFieldValue("linebreak");
+    if (linebreak === "TRUE") {
+      linebreak = "ln";
+    } else {
+      linebreak = "";
+    }
 
-  var code = `${filename}.print${linebreak}(${branch});\n`;
-  return code;
-};
+    var code = `${filename}.print${linebreak}(${branch});\n`;
+    return code;
+  };
