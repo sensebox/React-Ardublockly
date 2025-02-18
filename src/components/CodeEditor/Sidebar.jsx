@@ -9,6 +9,7 @@ import { useMonaco } from "@monaco-editor/react";
 import { Button } from "@mui/material";
 import SerialMonitor from "./SerialMonitor";
 import axios from "axios";
+import store from "../../store.js";
 
 const Sidebar = () => {
   //const [examples, setExamples] = React.useState([]);
@@ -23,6 +24,7 @@ const Sidebar = () => {
   //     });
   // }, []);
   const monaco = useMonaco();
+  const compilerUrl = store.getState().general.compiler;
   const loadCode = (code) => {
     monaco.editor.getModels()[0].setValue(code);
   };
