@@ -39,13 +39,13 @@ const MarkdownEditor = (props) => {
       formData.append("files", files);
       axios({
         method: "post",
-        url: `${process.env.REACT_APP_BLOCKLY_API}/upload/uploadImage`,
+        url: `${import.meta.env.VITE_BLOCKLY_API}/upload/uploadImage`,
         data: formData,
         headers: { "Content-Type": "multipart/form-data" },
       })
         .then((res) => {
           resolve(
-            `${process.env.REACT_APP_BLOCKLY_API}/upload/` + res.data.filename,
+            `${import.meta.env.VITE_BLOCKLY_API}/upload/` + res.data.filename,
           );
         })
         .catch((err) => {
