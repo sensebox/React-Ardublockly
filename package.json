@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@blockly/block-plus-minus": "^8.0.9",
     "@blockly/field-colour": "^5.0.9",
     "@blockly/field-grid-dropdown": "^5.0.9",
@@ -57,11 +56,10 @@
     "watchpack": "^2.3.1"
   },
   "resolutions": {
-    "//": "See https://github.com/facebook/create-react-app/issues/11773",
     "react-error-overlay": "6.0.9"
   },
   "scripts": {
-    "start": "node_modules/react-scripts/bin/react-scripts.js start",
+    "start": "react-scripts start",
     "dev": "set \"REACT_APP_BLOCKLY_API=http://localhost:8080\" && npm start",
     "build": "react-scripts build",
     "test": "react-scripts test",

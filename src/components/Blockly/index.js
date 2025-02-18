@@ -18,13 +18,13 @@
 
 /**
  * @fileoverview XML wrappers for block, category, value, field and shadow.
- * @author samelh@google.com (Sam El-Husseini)
+ * @author ...
  */
 
 import React from "react";
 import BlocklyComponent from "./BlocklyComponent";
 
-export default BlocklyComponent;
+// Benannte Exporte zuerst definieren
 
 const Block = (p) => {
   const { children, ...props } = p;
@@ -68,4 +68,7 @@ const Label = (p) => {
   return React.createElement("label", props, children);
 };
 
+// Benannte Exporte bereitstellen
 export { Block, Category, Value, Field, Shadow, Sep, Label };
+
+// Default-Export ans Ende verschieben
