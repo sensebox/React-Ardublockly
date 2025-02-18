@@ -37,6 +37,8 @@ const Sidebar = () => {
 
   const [libraries, setLibraries] = React.useState([]);
   React.useEffect(() => {
+    if(!compilerUrl) return;
+
     const fetchLibraries = async () => {
       const { data } = await axios.get(
         `${compilerUrl}/libraries`,
@@ -54,7 +56,7 @@ const Sidebar = () => {
       setLibraries(myLibs);
     };
     fetchLibraries();
-  }, []);
+  }, [compilerUrl]);
 
   return (
     <div>
