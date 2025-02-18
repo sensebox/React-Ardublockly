@@ -75,7 +75,7 @@ const LibrariesAccordion = ({ libraries }) => {
                           Author: {library.author}
                         </Typography>
                         <Typography variant="body2" color="textSecondary">
-                          Description: {library.sentence}
+                          {Blockly.Msg.sensorinfo_description}: {library.sentence}
                         </Typography>
                       </>
                     }
