@@ -15,6 +15,7 @@ import { RTC } from "./de/sensebox-rtc";
 import { NTP } from "./de/sensebox-ntp";
 import { SD } from "./de/sensebox-sd";
 import { SENSORS } from "./de/sensebox-sensors";
+import { SOLAR } from "./de/sensebox-solar";
 import { SENSEBOX } from "./de/sensebox";
 import { TELEGRAM } from "./de/sensebox-telegram";
 import { WEB } from "./de/sensebox-web";
@@ -45,6 +46,7 @@ export const De = {
   ...NTP,
   ...SD,
   ...SENSORS,
+  ...SOLAR,
   ...SENSEBOX,
   ...TELEGRAM,
   ...WEB,

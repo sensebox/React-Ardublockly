@@ -31,16 +31,12 @@ import store from "../../../store";
 var ota = store.getState().general.platform
   ? store.getState().general.platform
   : null;
-var board = store.getState().board.board 
-  ? store.getState().board.board 
-  : null;
+var board = store.getState().board.board ? store.getState().board.board : null;
 store.subscribe(() => {
   ota = store.getState().general.platform
     ? store.getState().general.platform
     : null;
-  board = store.getState().board.board
-    ? store.getState().board.board
-    : null;
+  board = store.getState().board.board ? store.getState().board.board : null;
 });
 
 /**
@@ -114,14 +110,14 @@ Blockly.Generator.Arduino.init = function (workspace) {
 
   // creates a list of code to be setup before the setup block
   Blockly.Generator.Arduino.preSetupCode_ = Object.create(null);
-  
+
   // creates a list of code to be setup before the setup block
   Blockly.Generator.Arduino.setupCode_ = Object.create(null);
 
-  // creates a list of code to be setup before the setup block
+  // creates a list of phyphox code to be in the setup block
   Blockly.Generator.Arduino.phyphoxSetupCode_ = Object.create(null);
 
-  // creates a list of code to be setup before the setup block
+  // creates a list of lora code to be in the setup block
   Blockly.Generator.Arduino.loraSetupCode_ = Object.create(null);
 
   // creates a list of code for the loop to be runned once
@@ -203,10 +199,13 @@ Blockly.Generator.Arduino.finish = function (code) {
     functionsCode += Blockly.Generator.Arduino.functionNames_[key] + "\n";
   }
 
-  if(Blockly.Generator.Arduino.preSetupCode_["Wire.begin"]) {
-    preSetupCode += Blockly.Generator.Arduino.preSetupCode_["Wire.begin"] + "\n";
-    if(Blockly.Generator.Arduino.preSetupCode_["vl53l8cx_clock_address"]) {
-      preSetupCode += Blockly.Generator.Arduino.preSetupCode_["vl53l8cx_clock_address"] + "\n";
+  if (Blockly.Generator.Arduino.preSetupCode_["Wire.begin"]) {
+    preSetupCode +=
+      Blockly.Generator.Arduino.preSetupCode_["Wire.begin"] + "\n";
+    if (Blockly.Generator.Arduino.preSetupCode_["vl53l8cx_clock_address"]) {
+      preSetupCode +=
+        Blockly.Generator.Arduino.preSetupCode_["vl53l8cx_clock_address"] +
+        "\n";
     }
   }
 
@@ -219,7 +218,8 @@ Blockly.Generator.Arduino.finish = function (code) {
   }
 
   for (const key in Blockly.Generator.Arduino.phyphoxSetupCode_) {
-    phyphoxSetupCode += Blockly.Generator.Arduino.phyphoxSetupCode_[key] + "\n" || "";
+    phyphoxSetupCode +=
+      Blockly.Generator.Arduino.phyphoxSetupCode_[key] + "\n" || "";
   }
 
   setupCode =
