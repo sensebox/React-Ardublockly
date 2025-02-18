@@ -65,7 +65,8 @@
     "dev": "set \"REACT_APP_BLOCKLY_API=http://localhost:8080\" && npm start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "e2e": "cypress open"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -77,6 +78,10 @@
   ],
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "cypress": "^14.0.3",
+    "eslint": "^9.20.1",
+    "eslint-config-react-app": "^7.0.1",
+    "eslint-plugin-cypress": "^4.1.0",
     "prettier": "^3.3.3"
   }
 }
