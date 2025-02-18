@@ -1,4 +1,4 @@
-/// <reference types="Cypress" />
+/// <reference types="cypress" />
 
 describe("Code Editor Page Tests", () => {
   it("[CodeEditor] visits the code editor page", () => {
@@ -39,8 +39,11 @@ describe("Code Editor Page Tests", () => {
     // check if the request was successful
     cy.wait("@getLibraries").then((interception) => {
       expect(interception.response.statusCode).to.eq(200);
-      expect(interception.response.body).to.have.property("installed_libraries");
-      expect(interception.response.body.installed_libraries).to.be.an("array").that.is.not.empty;
+      expect(interception.response.body).to.have.property(
+        "installed_libraries",
+      );
+      expect(interception.response.body.installed_libraries).to.be.an("array")
+        .that.is.not.empty;
     });
   });
 });
