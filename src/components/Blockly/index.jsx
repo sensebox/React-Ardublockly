@@ -23,7 +23,6 @@
 
 import React from "react";
 
-
 const Block = (p) => {
   const { children, ...props } = p;
   props.is = "blockly";

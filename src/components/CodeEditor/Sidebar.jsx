@@ -7,7 +7,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import { useMonaco } from "@monaco-editor/react";
 import { Button } from "@mui/material";
-import SerialMonitor from "./SerialMonitor.js";
+import SerialMonitor from "./SerialMonitor";
 import axios from "axios";
 
 const Sidebar = () => {
