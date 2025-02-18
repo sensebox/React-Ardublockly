@@ -7,7 +7,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import { useMonaco } from "@monaco-editor/react";
 import { Button } from "@mui/material";
-import SerialMonitor from "./SerialMonitor.js";
+import SerialMonitor from "./SerialMonitor";
 import axios from "axios";
 
 const Sidebar = () => {
@@ -37,7 +37,7 @@ const Sidebar = () => {
   React.useEffect(() => {
     const fetchLibraries = async () => {
       const { data } = await axios.get(
-        `${process.env.REACT_APP_COMPILER_URL}/libraries`,
+        `${import.meta.env.VITE_COMPILER_URL}/libraries`,
         {
           params: {
             format: "json",

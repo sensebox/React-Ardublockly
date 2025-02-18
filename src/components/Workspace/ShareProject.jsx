@@ -355,7 +355,7 @@ class WorkspaceFunc extends Component {
                 </Typography>
               ) : (
                 <Typography variant="body2" style={{ marginTop: "20px" }}>
-                  {`Der Link ist nun ${process.env.REACT_APP_SHARE_LINK_EXPIRES} Tage gültig.`}
+                  {`Der Link ist nun ${import.meta.env.VITE_SHARE_LINK_EXPIRES} Tage gültig.`}
                 </Typography>
               )}
             </div>

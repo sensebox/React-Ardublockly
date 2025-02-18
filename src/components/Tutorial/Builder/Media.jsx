@@ -153,7 +153,7 @@ class Media extends Component {
                         this.props.url
                           ? this.props.url
                           : this.props.picture
-                            ? `${process.env.REACT_APP_BLOCKLY_API}/media/${this.props.picture.path}`
+                            ? `${import.meta.env.VITE_BLOCKLY_API}/media/${this.props.picture.path}`
                             : ""
                       }
                       alt={""}

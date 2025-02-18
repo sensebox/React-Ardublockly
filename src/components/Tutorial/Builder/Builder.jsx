@@ -328,7 +328,7 @@ class Builder extends Component {
       };
       axios
         .post(
-          `${process.env.REACT_APP_BLOCKLY_API}/tutorial/`,
+          `${import.meta.env.VITE_BLOCKLY_API}/tutorial/`,
           newTutorial,
           config,
         )
@@ -361,7 +361,7 @@ class Builder extends Component {
       };
       axios
         .put(
-          `${process.env.REACT_APP_BLOCKLY_API}/tutorial/${this.props.id}`,
+          `${import.meta.env.VITE_BLOCKLY_API}/tutorial/${this.props.id}`,
           updatedTutorial,
           config,
         )
