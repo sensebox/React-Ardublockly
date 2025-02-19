@@ -26,7 +26,6 @@ const CodeEditor = () => {
   const [time, setTime] = useState(null);
   const [value, setValue] = useState("");
   const [resetDialog, setResetDialog] = useState(false);
-
   const compilerUrl = useSelector((state) => state.general.compiler);
 
   const compile = () => {
@@ -56,7 +55,7 @@ const CodeEditor = () => {
         //setId(result);
         const filename = "sketch";
         window.open(
-          `${this.props.selectedCompiler}/download?id=${result}&board=${
+          `${compilerUrl}/download?id=${result}&board=${
             store.getState().board.board === "mcu"
               ? "sensebox-mcu"
               : "sensebox-esp32s2"
