@@ -6,9 +6,9 @@ import * as serviceWorker from "./serviceWorker";
 import store from "./store";
 import { fetchSensors } from "./actions/sensorwikiActions";
 
-store.dispatch(fetchSensors());
+// store.dispatch(fetchSensors());
 
-fetchSensors();
+// fetchSensors();
 
 ReactDOM.render(<App />, document.getElementById("root"));
 
