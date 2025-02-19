@@ -10,9 +10,9 @@ import { Card, Chip } from "@mui/material";
 import * as Blockly from "blockly";
 import { default as MonacoEditor } from "@monaco-editor/react";
 import { faMicrochip } from "@fortawesome/free-solid-svg-icons";
-
 import Simulator from "./Simulator";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 
 // FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
 const withWidth = () => (WrappedComponent) => (props) => (
@@ -109,6 +109,7 @@ class CodeViewer extends Component {
       ...this.state,
       expanded: newExpanded ? panel : false,
     });
+
   };
 
   render() {
@@ -153,6 +154,7 @@ class CodeViewer extends Component {
           style={{ margin: 0 }}
           expanded={this.state.expanded === "code"}
           onChange={this.onChange("code")}
+
         >
           <AccordionSummary>
             <b
@@ -213,6 +215,7 @@ class CodeViewer extends Component {
             style={{
               padding: 0,
               height: `calc(${this.state.componentHeight} - 50px - 50px - 50px)`,
+
               backgroundColor: "white",
             }}
           >
@@ -242,3 +245,4 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, null)(withWidth()(CodeViewer));
+

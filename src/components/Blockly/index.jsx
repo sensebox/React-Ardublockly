@@ -18,7 +18,8 @@
 
 /**
  * @fileoverview XML wrappers for block, category, value, field and shadow.
- * @author ...
+
+ * @author samelh@google.com (Sam El-Husseini)
  */
 
 import React from "react";
@@ -64,8 +65,4 @@ const Label = (p) => {
   props.is = "blockly";
   return React.createElement("label", props, children);
 };
-
-// Benannte Exporte bereitstellen
 export { Block, Category, Value, Field, Shadow, Sep, Label };
-
-// Default-Export ans Ende verschieben
