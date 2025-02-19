@@ -6,9 +6,13 @@ import withStyles from "@mui/styles/withStyles";
 import MuiAccordion from "@mui/material/Accordion";
 import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
-import { Card } from "@mui/material";
+import { Card, Chip } from "@mui/material";
 import * as Blockly from "blockly";
 import { default as MonacoEditor } from "@monaco-editor/react";
+import { faMicrochip } from "@fortawesome/free-solid-svg-icons";
+
+import Simulator from "./Simulator";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
 const withWidth = () => (WrappedComponent) => (props) => (
@@ -59,7 +63,7 @@ class CodeViewer extends Component {
     this.state = {
       code: this.props.arduino,
       changed: false,
-      expanded: true,
+      expanded: "code",
       componentHeight: null,
     };
     this.myDiv = React.createRef();
@@ -100,8 +104,11 @@ class CodeViewer extends Component {
     }
   }
 
-  onChange = () => {
-    this.setState({ expanded: !this.state.expanded });
+  onChange = (panel) => (event, newExpanded) => {
+    this.setState({
+      ...this.state,
+      expanded: newExpanded ? panel : false,
+    });
   };
 
   render() {
@@ -112,8 +119,40 @@ class CodeViewer extends Component {
         <Accordion
           square={true}
           style={{ margin: 0 }}
-          expanded={this.state.expanded}
-          onChange={this.onChange}
+          expanded={this.state.expanded === "simulator"}
+          onChange={this.onChange("simulator")}
+        >
+          <AccordionSummary>
+            <div
+              style={{
+                display: "flex",
+                gap: "1rem",
+                alignItems: "center",
+              }}
+            >
+              <FontAwesomeIcon icon={faMicrochip} size="lg" />
+              <div style={{ margin: "auto 5px 2px 0px" }}>Simulator</div>
+              {this.props.isSimulatorRunning &&
+                this.state.expanded !== "simulator" && (
+                  <Chip size="small" label="Running" color="success" />
+                )}
+            </div>
+          </AccordionSummary>
+          <AccordionDetails
+            style={{
+              padding: 0,
+              height: `calc(${this.state.componentHeight} - 50px - 50px - 50px)`,
+              backgroundColor: "white",
+            }}
+          >
+            <Simulator />
+          </AccordionDetails>
+        </Accordion>
+        <Accordion
+          square={true}
+          style={{ margin: 0 }}
+          expanded={this.state.expanded === "code"}
+          onChange={this.onChange("code")}
         >
           <AccordionSummary>
             <b
@@ -132,7 +171,7 @@ class CodeViewer extends Component {
           <AccordionDetails
             style={{
               padding: 0,
-              height: `calc(${this.state.componentHeight} - 50px - 50px)`,
+              height: `calc(${this.state.componentHeight} - 50px - 50px - 50px)`,
               backgroundColor: "white",
             }}
           >
@@ -153,8 +192,8 @@ class CodeViewer extends Component {
         <Accordion
           square={true}
           style={{ margin: 0 }}
-          expanded={!this.state.expanded}
-          onChange={this.onChange}
+          expanded={this.state.expanded === "xml"}
+          onChange={this.onChange("xml")}
         >
           <AccordionSummary>
             <b
@@ -173,7 +212,7 @@ class CodeViewer extends Component {
           <AccordionDetails
             style={{
               padding: 0,
-              height: `calc(${this.state.componentHeight} - 50px - 50px)`,
+              height: `calc(${this.state.componentHeight} - 50px - 50px - 50px)`,
               backgroundColor: "white",
             }}
           >
@@ -199,6 +238,7 @@ const mapStateToProps = (state) => ({
   arduino: state.workspace.code.arduino,
   xml: state.workspace.code.xml,
   tooltip: state.workspace.code.tooltip,
+  isSimulatorRunning: state.simulator.isRunning,
 });
 
 export default connect(mapStateToProps, null)(withWidth()(CodeViewer));
