@@ -1,8 +1,9 @@
-import React, { memo } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { Handle, Position } from "@xyflow/react";
 import SensorGraphic from "./hdc1080.png";
 
 const HDC1080 = ({ data }) => {
+
   return (
     <div
       style={{
@@ -62,6 +63,21 @@ const HDC1080 = ({ data }) => {
             style={{ width: "80%" }}
           />
         </div>
+        {error && (
+          <div
+            style={{
+              color: "#666",
+              fontSize: "0.8rem",
+              textAlign: "center",
+              padding: "5px",
+              backgroundColor: "#f5f5f5",
+              borderRadius: "3px",
+              marginTop: "5px",
+            }}
+          >
+            {error}
+          </div>
+        )}
       </div>
       <Handle
         type="target"
