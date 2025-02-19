@@ -130,7 +130,7 @@ class SaveProject extends Component {
     };
     axios
       .post(
-        `${process.env.REACT_APP_BLOCKLY_API}/${this.state.projectType}`,
+        `${import.meta.env.VITE_BLOCKLY_API}/${this.state.projectType}`,
         body,
         config,
       )
