@@ -26,8 +26,6 @@ const CodeEditor = () => {
   const [time, setTime] = useState(null);
   const [value, setValue] = useState("");
   const [resetDialog, setResetDialog] = useState(false);
-  const compilerUrl = store.getState().general.compiler;
-
   const compilerUrl = useSelector((state) => state.general.compiler);
 
   const compile = () => {
