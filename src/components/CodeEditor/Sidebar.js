@@ -13,6 +13,8 @@ import axios from "axios";
 const Sidebar = () => {
   //const [examples, setExamples] = React.useState([]);
   const user = useSelector((state) => state.auth.user);
+  const compilerUrl = useSelector((state) => state.general.compiler);
+  
   // useEffect(() => {
   //   axios
   //     .get("https://coelho.opensensemap.org/items/blocklysamples")
@@ -35,9 +37,11 @@ const Sidebar = () => {
 
   const [libraries, setLibraries] = React.useState([]);
   React.useEffect(() => {
+    if(!compilerUrl) return;
+
     const fetchLibraries = async () => {
       const { data } = await axios.get(
-        `${process.env.REACT_APP_COMPILER_URL}/libraries`,
+        `${compilerUrl}/libraries`,
         {
           params: {
             format: "json",
@@ -52,7 +56,7 @@ const Sidebar = () => {
       setLibraries(myLibs);
     };
     fetchLibraries();
-  }, []);
+  }, [compilerUrl]);
 
   return (
     <div>

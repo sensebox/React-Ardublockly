@@ -22,9 +22,7 @@
  */
 
 import React from "react";
-import BlocklyComponent from "./BlocklyComponent";
 
-// Benannte Exporte zuerst definieren
 
 const Block = (p) => {
   const { children, ...props } = p;

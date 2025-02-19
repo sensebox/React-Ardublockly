@@ -67,6 +67,7 @@
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject"
+    "e2e": "cypress open"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -78,7 +79,11 @@
   ],
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "prettier": "^3.3.3",
+    "cypress": "^14.0.3",
+    "eslint": "^9.20.1",
+    "eslint-plugin-cypress": "^4.1.0",
     "react-app-rewired": "^2.2.1"
+    "eslint-plugin-react": "^7.37.4",
+    "prettier": "^3.3.3"
   }
 }
