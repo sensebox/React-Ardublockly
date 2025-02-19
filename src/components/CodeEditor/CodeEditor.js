@@ -12,8 +12,9 @@ import Dialog from "../Dialog";
 import SaveIcon from "./SaveIcon";
 import store from "../../store";
 import DeviceSelection from "../DeviceSelection";
+import { useSelector } from "react-redux";
 
-const CodeEditor = (props) => {
+const CodeEditor = () => {
   //const [filehandle, setFileHandle] = useState();
   const [fileContent, setFileContent] = useState("");
   const [progress, setProgress] = useState(false);
@@ -26,6 +27,8 @@ const CodeEditor = (props) => {
   const [value, setValue] = useState("");
   const [resetDialog, setResetDialog] = useState(false);
   const compilerUrl = store.getState().general.compiler;
+
+  const compilerUrl = useSelector((state) => state.general.compiler);
 
   const compile = () => {
     setProgress(true);
