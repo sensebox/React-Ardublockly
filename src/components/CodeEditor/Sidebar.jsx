@@ -9,10 +9,13 @@ import { useMonaco } from "@monaco-editor/react";
 import { Button } from "@mui/material";
 import SerialMonitor from "./SerialMonitor";
 import axios from "axios";
+import LibrariesAccordion from "./LibrariesAccordion.js";
 
 const Sidebar = () => {
   //const [examples, setExamples] = React.useState([]);
   const user = useSelector((state) => state.auth.user);
+  const compilerUrl = useSelector((state) => state.general.compiler);
+  
   // useEffect(() => {
   //   axios
   //     .get("https://coelho.opensensemap.org/items/blocklysamples")
@@ -35,9 +38,11 @@ const Sidebar = () => {
 
   const [libraries, setLibraries] = React.useState([]);
   React.useEffect(() => {
+    if(!compilerUrl) return;
+
     const fetchLibraries = async () => {
       const { data } = await axios.get(
-        `${import.meta.env.VITE_COMPILER_URL}/libraries`,
+        `${compilerUrl}/libraries`,
         {
           params: {
             format: "json",
@@ -52,7 +57,7 @@ const Sidebar = () => {
       setLibraries(myLibs);
     };
     fetchLibraries();
-  }, []);
+  }, [compilerUrl]);
 
   return (
     <div>
@@ -129,42 +134,7 @@ const Sidebar = () => {
           </AccordionDetails>
         </Accordion>
       ) : null}
-      <Accordion>
-        <AccordionSummary
-          expandIcon={""}
-          aria-controls="panel2a-content"
-          id="panel2a-header"
-        >
-          <Typography>{Blockly.Msg.codeeditor_libraries_head}</Typography>
-        </AccordionSummary>
-        <AccordionDetails
-          style={{
-            padding: 0,
-            height: "60vH",
-            backgroundColor: "white",
-          }}
-        >
-          <Typography
-            style={{
-              overflow: "auto",
-              width: "100%",
-              height: "100%",
-              padding: "1rem",
-            }}
-          >
-            <p>{Blockly.Msg.codeeditor_libraries_text}</p>
-            {libraries.map((library, i) => {
-              return (
-                <p key={library.name + i}>
-                  <a href={library.website} target="_blank" rel="noreferrer" >
-                    {library.name} {library.version}
-                  </a>
-                </p>
-              );
-            })}
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
+      <LibrariesAccordion libraries={libraries} />
     </div>
   );
 };
