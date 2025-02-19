@@ -15,6 +15,8 @@ import LibrariesAccordion from "./LibrariesAccordion.js";
 const Sidebar = () => {
   //const [examples, setExamples] = React.useState([]);
   const user = useSelector((state) => state.auth.user);
+  const compilerUrl = useSelector((state) => state.general.compiler);
+  
   // useEffect(() => {
   //   axios
   //     .get("https://coelho.opensensemap.org/items/blocklysamples")
@@ -38,6 +40,8 @@ const Sidebar = () => {
 
   const [libraries, setLibraries] = React.useState([]);
   React.useEffect(() => {
+    if(!compilerUrl) return;
+
     const fetchLibraries = async () => {
       const { data } = await axios.get(
         `${compilerUrl}/libraries`,
@@ -55,7 +59,7 @@ const Sidebar = () => {
       setLibraries(myLibs);
     };
     fetchLibraries();
-  }, []);
+  }, [compilerUrl]);
 
   return (
     <div>
