@@ -332,7 +332,7 @@ export const UI = {
    * */
   codeeditor_libraries_head: "Installed Arduino Libraries",
   codeeditor_libraries_text:
-    "For documentation, view the installed libraries and their examples",
+    "Below are all arduino libraries which are installed on the compiler. You can use them in your code. For more information click on the library.",
   codeeditor_save_code: "Download code",
   codeeditor_open_code: "Open code",
   codeeditor_reset_code: "Reset code",

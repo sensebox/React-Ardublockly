@@ -46,8 +46,6 @@ A modern, React-based version of the [senseBox](https://sensebox.de) Ardublockly
 3. Install dependencies:
 
    ```bash
-   npm ci   # Recommended for reproducible builds
-   # or
    npm install   # Alternative
    ```
 
