@@ -2,6 +2,7 @@
   "name": "blockly-react",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@blockly/block-plus-minus": "^8.0.9",
