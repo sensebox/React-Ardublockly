@@ -12,8 +12,9 @@ import Dialog from "../Dialog";
 import SaveIcon from "./SaveIcon";
 import store from "../../store";
 import DeviceSelection from "../DeviceSelection";
+import { useSelector } from "react-redux";
 
-const CodeEditor = (props) => {
+const CodeEditor = () => {
   //const [filehandle, setFileHandle] = useState();
   const [fileContent, setFileContent] = useState("");
   const [progress, setProgress] = useState(false);
@@ -26,6 +27,8 @@ const CodeEditor = (props) => {
   const [value, setValue] = useState("");
   const [resetDialog, setResetDialog] = useState(false);
 
+  const compilerUrl = useSelector((state) => state.general.compiler);
+
   const compile = () => {
     setProgress(true);
     const data = {
@@ -36,7 +39,7 @@ const CodeEditor = (props) => {
           : "sensebox-esp32s2",
       sketch: editorRef.current.getValue(),
     };
-    fetch(`${this.props.selectedCompiler}/compile`, {
+    fetch(`${compilerUrl}/compile`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
