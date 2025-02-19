@@ -67,3 +67,7 @@ export const PROJECT_DESCRIPTION = "PROJECT_DESCRIPTION";
 
 //board
 export const BOARD = "BOARD";
+
+// simulator
+export const START_SIMULATOR = "START_SIMULATOR";
+export const STOP_SIMULATOR = "STOP_SIMULATOR";

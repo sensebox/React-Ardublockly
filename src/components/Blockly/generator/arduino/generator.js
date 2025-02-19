@@ -26,7 +26,7 @@
 
 import * as Blockly from "blockly/core";
 
-import store from "../../../store";
+import store from "../../../../store";
 
 var ota = store.getState().general.platform
   ? store.getState().general.platform

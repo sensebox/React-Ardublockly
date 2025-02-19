@@ -1,5 +1,5 @@
 import * as Blockly from "blockly";
-import { selectedBoard } from "../helpers/board";
+import { selectedBoard } from "../../helpers/board";
 
 /**
  * HDC1080 Temperature and Humidity Sensor
