@@ -2,6 +2,7 @@
   "name": "blockly-react",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@blockly/block-plus-minus": "^8.0.9",
     "@blockly/field-colour": "^5.0.9",
