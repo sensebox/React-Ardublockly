@@ -9,7 +9,6 @@ import { useMonaco } from "@monaco-editor/react";
 import { Button } from "@mui/material";
 import SerialMonitor from "./SerialMonitor.js";
 import axios from "axios";
-import store from "../../store.js";
 import LibrariesAccordion from "./LibrariesAccordion.js";
 
 const Sidebar = () => {
@@ -25,7 +24,6 @@ const Sidebar = () => {
   //     });
   // }, []);
   const monaco = useMonaco();
-  const compilerUrl = store.getState().general.compiler;
   const loadCode = (code) => {
     monaco.editor.getModels()[0].setValue(code);
   };
