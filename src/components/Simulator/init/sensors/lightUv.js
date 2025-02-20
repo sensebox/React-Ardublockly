@@ -5,7 +5,7 @@ export default function initLightUv(interpreter, globalObject) {
     };
     interpreter.setProperty(
       globalObject,
-      "Lightsensor_getIlluminance",
+      "readIlluminance",
       interpreter.createNativeFunction(wrapper),
     );
   
@@ -15,7 +15,7 @@ export default function initLightUv(interpreter, globalObject) {
     };
     interpreter.setProperty(
       globalObject,
-      "getUV",
+      "readUvIntensity",
       interpreter.createNativeFunction(wrapper),
     );
   }
