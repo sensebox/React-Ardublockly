@@ -15,3 +15,12 @@ Blockly.Generator.Simulator.forBlock["sensebox_sensor_temp_hum"] = function () {
   var code = `read${dropdown_name}()`;
   return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
 };
+
+Blockly.Generator.Simulator.forBlock["sensebox_sensor_uv_light"] = function () {
+  Blockly.Generator.Simulator.modules_["senseBox_lightUv"] = "senseBox_lightUv";
+
+  var dropdown_name = this.getFieldValue("NAME");
+
+  var code = `read${dropdown_name}()`;
+  return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
+};

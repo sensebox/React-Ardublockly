@@ -235,7 +235,7 @@ Home.propTypes = {
   workspaceName: PropTypes.func.isRequired,
   message: PropTypes.object.isRequired,
   statistics: PropTypes.bool.isRequired,
-  platform: PropTypes.bool.isRequired,
+  platform: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({

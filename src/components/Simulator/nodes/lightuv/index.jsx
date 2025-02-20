@@ -1,8 +1,8 @@
 import React, { memo } from "react";
 import { Handle, Position } from "@xyflow/react";
-import SensorGraphic from "./hdc1080.png";
+import SensorGraphic from "./lightuv.png";
 
-const HDC1080 = ({ data }) => {
+const lightUv = ({ data }) => {
 
 
   return (
@@ -35,13 +35,13 @@ const HDC1080 = ({ data }) => {
           }}
           className="nodrag"
         >
-          <label htmlFor="temperature-slider">🌡️</label>
+          <label htmlFor="lux-slider">🌡️</label>
           <input
             type="range"
-            id="temperature-slider"
-            name="temperature"
-            min="-40"
-            max="50"
+            id="lux-slider"
+            name="lux"
+            min="0"
+            max="10000"
             style={{ width: "80%" }}
           />
         </div>
@@ -54,16 +54,17 @@ const HDC1080 = ({ data }) => {
           }}
           className="nodrag"
         >
-          <label htmlFor="humidity-slider">☁️</label>
+          <label htmlFor="uv-slider">☁️</label>
           <input
             type="range"
-            id="humidity-slider"
-            name="humidity"
+            id="uv-slider"
+            name="uv"
             min="0"
             max="100"
             style={{ width: "80%" }}
           />
         </div>
+       
       </div>
       <Handle
         type="target"
@@ -85,4 +86,4 @@ const HDC1080 = ({ data }) => {
   );
 };
 
-export default memo(HDC1080);
+export default memo(lightUv);

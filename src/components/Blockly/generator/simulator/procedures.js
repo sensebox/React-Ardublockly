@@ -7,20 +7,10 @@ import * as Blockly from "blockly/core";
  * @return {string} Completed code.
  */
 
-Blockly.Generator.Simulator.forBlock["arduino_functions"] = function (block) {
-  // Ensure libraries_ object exists
-  if (!Blockly.Generator.Simulator.libraries_) {
-    Blockly.Generator.Simulator.libraries_ = Object.create(null);
-  }
-
-  // Safely set library
-  try {
-    Blockly.Generator.Simulator.libraries_["library_senseBoxIO"] =
-      "#include <SenseBoxIO.h>";
-  } catch (err) {
-    console.warn("Could not set library_senseBoxIO");
-  }
-
+Blockly.Generator.Simulator.forBlock["arduino_functions"] = function (
+  block,
+  generator,
+) {
   var board = window.sessionStorage.getItem("board");
 
   if (board === "mcu" || board === "mini") {
