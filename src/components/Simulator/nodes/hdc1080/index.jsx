@@ -3,6 +3,21 @@ import { Handle, Position } from "@xyflow/react";
 import SensorGraphic from "./hdc1080.png";
 
 const HDC1080 = ({ data }) => {
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    try {
+      // Check if required simulator features are available
+      if (
+        !document.getElementById("temperature-slider") ||
+        !document.getElementById("humidity-slider")
+      ) {
+        setError("Simulator initializing...");
+      }
+    } catch (err) {
+      setError("Simulator initializing...");
+    }
+  }, []);
 
   return (
     <div

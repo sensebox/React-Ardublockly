@@ -3,6 +3,22 @@ import { Handle, Position } from "@xyflow/react";
 import SensorGraphic from "./lightuv.png";
 
 const lightUv = ({ data }) => {
+    const [error, setError] = useState(null);
+  
+    useEffect(() => {
+      try {
+        // Check if required simulator features are available
+        if (
+          !document.getElementById("lux-slider") ||
+          !document.getElementById("uv-slider")
+        ) {
+          setError("Simulator initializing...");
+        }
+      } catch (err) {
+        setError("Simulator initializing...");
+      }
+    }, []);
+
   return (
     <div
       style={{
