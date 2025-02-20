@@ -386,7 +386,7 @@ Blockly.Blocks["procedures_defnoreturn"] = {
   displayRenamedVar_: function (oldName, newName) {
     this.updateParams_();
     // Update the mutator's variables if the mutator is open.
-    if (this.mutator.isVisible()) {
+    if (this.mutator.bubbleIsVisible()) {
       const blocks = this.mutator.workspace_.getAllBlocks(false);
       for (let i = 0, block; (block = blocks[i]); i++) {
         if (
@@ -832,7 +832,7 @@ Blockly.Blocks["procedures_callnoreturn"] = {
       this.workspace,
     );
     const mutatorOpen =
-      defBlock && defBlock.mutator && defBlock.mutator.isVisible();
+      defBlock && defBlock.mutator && defBlock.mutator.bubbleIsVisible();
     if (!mutatorOpen) {
       this.quarkConnections_ = {};
       this.quarkIds_ = null;
