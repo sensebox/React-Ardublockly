@@ -1,23 +1,9 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo } from "react";
 import { Handle, Position } from "@xyflow/react";
 import SensorGraphic from "./hdc1080.png";
 
 const HDC1080 = ({ data }) => {
-  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    try {
-      // Check if required simulator features are available
-      if (
-        !document.getElementById("temperature-slider") ||
-        !document.getElementById("humidity-slider")
-      ) {
-        setError("Simulator initializing...");
-      }
-    } catch (err) {
-      setError("Simulator initializing...");
-    }
-  }, []);
 
   return (
     <div
@@ -78,21 +64,6 @@ const HDC1080 = ({ data }) => {
             style={{ width: "80%" }}
           />
         </div>
-        {error && (
-          <div
-            style={{
-              color: "#666",
-              fontSize: "0.8rem",
-              textAlign: "center",
-              padding: "5px",
-              backgroundColor: "#f5f5f5",
-              borderRadius: "3px",
-              marginTop: "5px",
-            }}
-          >
-            {error}
-          </div>
-        )}
       </div>
       <Handle
         type="target"

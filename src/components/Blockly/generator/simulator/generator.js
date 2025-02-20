@@ -27,29 +27,53 @@
 import * as Blockly from "blockly/core";
 import { javascriptGenerator } from "blockly/javascript";
 
-// Initialize the simulator generator
-Blockly.Generator.Simulator = new Blockly.Generator("Simulator");
+/**
+ * Arduino code generator.
+ * @type !Blockly.Generator
+ */
+Blockly.Generator.Simulator = javascriptGenerator;
 
-// Initialize required properties
+/**
+ *
+ * @param {} workspace
+ *
+ * Blockly Types
+ */
+
+/**
+ * Initialise the database of variable names.
+ * @param {!Blockly.Workspace} workspace Workspace to generate code from.
+ */
 Blockly.Generator.Simulator.init = function (workspace) {
-  // Create all required objects
-  this.libraries_ = Object.create(null);
-  this.definitions_ = Object.create(null);
-  this.modules_ = Object.create(null);
-  this.variables_ = Object.create(null);
-  this.functionNames_ = Object.create(null);
-  this.setupCode_ = Object.create(null);
-  this.loopCode_ = Object.create(null);
+  // creates a dictionary of modules / components that are used in the code
+  Blockly.Generator.Simulator.modules_ = Object.create(null);
 
-  // Add default block handler for unimplemented blocks
-  this.defaultBlockHandler = function (block) {
-    // Return empty string for statement blocks
-    if (block.outputConnection === null) {
-      return "";
-    }
-    // Return '0' for value blocks
-    return ["0", Blockly.Generator.Simulator.ORDER_ATOMIC];
-  };
+  // creates a list of code to be setup before the setup block
+  Blockly.Generator.Simulator.setupCode_ = Object.create(null);
+
+  // creates a list of code for the loop to be runned once
+  Blockly.Generator.Simulator.codeFunctions_ = Object.create(null);
+
+  // creates a list of code variables
+  Blockly.Generator.Simulator.variables_ = Object.create(null);
+
+  // Create a dictionary mapping desired function names in definitions_
+  // to actual function names (to avoid collisions with user functions).
+  Blockly.Generator.Simulator.functionNames_ = Object.create(null);
+
+  Blockly.Generator.Simulator.variablesInitCode_ = "";
+
+  if (!Blockly.Generator.Simulator.nameDB_) {
+    Blockly.Generator.Simulator.nameDB_ = new Blockly.Names(
+      Blockly.Generator.Simulator.RESERVED_WORDS_,
+    );
+  } else {
+    Blockly.Generator.Simulator.nameDB_.reset();
+  }
+
+  Blockly.Generator.Simulator.nameDB_.setVariableMap(
+    workspace.getVariableMap(),
+  );
 };
 
 /**
@@ -72,7 +96,7 @@ ${code}}`;
 ${setupCode}
 ${loopCode}`;
 
-  console.log( Blockly.Generator.Simulator.formatCode(simCode));
+  console.log(Blockly.Generator.Simulator.formatCode(simCode));
 
   return Blockly.Generator.Simulator.formatCode(simCode);
 };
@@ -162,38 +186,52 @@ Blockly.Generator.Simulator.quote_ = function (string) {
  * @return {string} Arduino code with comments and subsequent blocks added.
  * @private
  */
-Blockly.Generator.Simulator.scrub_ = function (block, code, opt_thisOnly) {
+Blockly.Generator.Simulator.scrub_ = function (block, code) {
+  let commentCode = "";
+  // Only collect comments for blocks that aren't inline.
+  if (!block.outputConnection || !block.outputConnection.targetConnection) {
+    // Collect comment for this block.
+    let comment = block.getCommentText();
+    //@ts-ignore
+    comment = comment
+      ? Blockly.utils.string.wrap(
+          comment,
+          Blockly.Generator.Simulator.COMMENT_WRAP - 3,
+        )
+      : null;
+    if (comment) {
+      if (block.getProcedureDef) {
+        // Use a comment block for function comments.
+        commentCode +=
+          "/**\n" +
+          Blockly.Generator.Simulator.prefixLines(comment + "\n", " * ") +
+          " */\n";
+      } else {
+        commentCode += Blockly.Generator.Simulator.prefixLines(
+          comment + "\n",
+          "// ",
+        );
+      }
+    }
+    // Collect comments for all value arguments.
+    // Don't collect comments for nested statements.
+    for (let i = 0; i < block.inputList.length; i++) {
+      if (block.inputList[i].type === Blockly.INPUT_VALUE) {
+        const childBlock = block.inputList[i].connection.targetBlock();
+        if (childBlock) {
+          const comment =
+            Blockly.Generator.Simulator.allNestedComments(childBlock);
+          if (comment) {
+            commentCode += Blockly.Generator.Simulator.prefixLines(
+              comment,
+              "// ",
+            );
+          }
+        }
+      }
+    }
+  }
   const nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-  if (nextBlock && !opt_thisOnly) {
-    return code + this.blockToCode(nextBlock);
-  }
-  return code;
-};
-
-// Override blockToCode to handle unknown blocks
-Blockly.Generator.Simulator.blockToCode = function (block) {
-  if (!block) {
-    return "";
-  }
-
-  if (block.disabled) {
-    return "";
-  }
-
-  let func = this[block.type] || this.forBlock[block.type];
-
-  if (!func) {
-    console.warn(
-      `Block "${block.type}" not implemented in simulator - using stub`,
-    );
-    func = this.defaultBlockHandler;
-  }
-
-  let code = func.call(block, block);
-
-  if (Array.isArray(code)) {
-    return [code[0], this.ORDER_NONE];
-  }
-
-  return code;
+  const nextCode = Blockly.Generator.Simulator.blockToCode(nextBlock);
+  return commentCode + code + nextCode;
 };
