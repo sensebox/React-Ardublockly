@@ -60,7 +60,7 @@ class OtaSelector extends Component {
 OtaSelector.propTypes = {
   setPlatform: PropTypes.func.isRequired,
   language: PropTypes.string.isRequired,
-  platform: PropTypes.bool.isRequired,
+  platform: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
