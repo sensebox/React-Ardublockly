@@ -14,6 +14,8 @@ Blockly.Generator.Simulator.forBlock["sensebox_display_printDisplay"] =
       "senseBox_display";
     var x = this.getFieldValue("X");
     var y = this.getFieldValue("Y");
+
+
     var printDisplay =
       Blockly.Generator.Simulator.valueToCode(
         this,
@@ -23,5 +25,5 @@ Blockly.Generator.Simulator.forBlock["sensebox_display_printDisplay"] =
     var size = this.getFieldValue("SIZE");
     var color = this.getFieldValue("COLOR");
     var code = `drawText(${printDisplay}, ${x}, ${y}, ${size}, "${color.split(",")[0]}");\n`;
-    return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
+    return code;
     };
