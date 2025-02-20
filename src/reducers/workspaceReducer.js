@@ -13,6 +13,7 @@ const initialState = {
   code: {
     arduino: "",
     xml: "",
+    simulator: "",
   },
   stats: {
     create: -1, // initialXML is created automatically, Block is not part of the statistics

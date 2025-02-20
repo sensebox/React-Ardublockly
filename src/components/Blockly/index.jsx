@@ -18,6 +18,7 @@
 
 /**
  * @fileoverview XML wrappers for block, category, value, field and shadow.
+
  * @author samelh@google.com (Sam El-Husseini)
  */
 
@@ -64,5 +65,4 @@ const Label = (p) => {
   props.is = "blockly";
   return React.createElement("label", props, children);
 };
-
 export { Block, Category, Value, Field, Shadow, Sep, Label };
