@@ -17,10 +17,12 @@ import SenseBoxMCUS2 from "./nodes/mcu-s2";
 import "@xyflow/react/dist/style.css";
 import HDC1080 from "./nodes/hdc1080";
 import Display from "./nodes/display";
+import lightuv from "./nodes/lightuv";
 
 const nodeTypes = {
   board: SenseBoxMCUS2,
   senseBox_hdc1080: HDC1080,
+  senseBox_lightUv: lightuv,
   senseBox_display: Display,
 };
 

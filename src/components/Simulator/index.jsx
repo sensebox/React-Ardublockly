@@ -20,7 +20,7 @@ export default function Simulator() {
   const isSimulatorRunning = useSelector((state) => state.simulator.isRunning);
   const [elapsedTime, setElapsedTime] = useState(0);
 
-  console.log(modules);
+  console.log("module", modules);
 
   useEffect(() => {
     if (!isSimulatorRunning || !simulationStartTimestamp) {
