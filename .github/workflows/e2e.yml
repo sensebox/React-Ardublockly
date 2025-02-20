@@ -28,5 +28,6 @@ jobs:
         with:
           report-path: "./ctrf/*.json"
           test-report: true
+          pull-request: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
