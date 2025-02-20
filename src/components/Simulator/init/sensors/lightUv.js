@@ -11,7 +11,7 @@ export default function initLightUv(interpreter, globalObject) {
   
     // Define getTemperature function
     var wrapper = function getUV() {
-      return document.getElementById("humidity-slider").value;
+      return document.getElementById("uv-slider").value;
     };
     interpreter.setProperty(
       globalObject,
