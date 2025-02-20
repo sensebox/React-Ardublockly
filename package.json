@@ -64,7 +64,8 @@
     "dev": "set \"VITE_BLOCKLY_API=http://localhost:8080\" && npm start",
     "start": "vite",
     "build": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "e2e": "cypress run"
   },
   "browserslist": [
     ">0.2%",
@@ -74,11 +75,12 @@
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@vitejs/plugin-react": "^4.3.4",
-    "vite": "^6.1.0",
     "cypress": "^14.0.3",
+    "cypress-ctrf-json-reporter": "^0.0.11",
     "eslint": "^9.20.1",
     "eslint-plugin-cypress": "^4.1.0",
     "eslint-plugin-react": "^7.37.4",
-    "prettier": "^3.3.3"
+    "prettier": "^3.3.3",
+    "vite": "^6.1.0"
   }
 }
