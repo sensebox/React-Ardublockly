@@ -2,15 +2,11 @@
 import { useCallback, useEffect, memo } from "react";
 import {
   ReactFlow,
-  Node,
-  Edge,
   Background,
   Controls,
-  MiniMap,
   useNodesState,
   useEdgesState,
   addEdge,
-  Connection,
   useReactFlow,
 } from "@xyflow/react";
 import SenseBoxMCUS2 from "./nodes/mcu-s2";
