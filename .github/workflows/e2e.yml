@@ -22,8 +22,9 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           build: npm run build
-          start: npx  --yes serve -s build -l 3000
+          start: npx --yes serve -s build -l 3000
       - name: Run CTRF annotations
+        if: always()
         uses: ctrf-io/github-test-reporter@v1
         with:
           report-path: "./ctrf/*.json"
