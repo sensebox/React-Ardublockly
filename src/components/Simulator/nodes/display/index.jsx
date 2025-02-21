@@ -7,6 +7,7 @@ const Display = ({ data }) => {
     <div
       style={{
         maxWidth: "350px",
+        zIndex:100
       }}
     >
       <div
