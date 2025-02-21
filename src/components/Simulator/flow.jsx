@@ -104,6 +104,7 @@ const SimulatorFlow = (props) => {
         nodeTypes={nodeTypes}
         fitView
         connectionMode="loose"
+        minZoom={0.1}
       >
         <Background />
         <Controls />
