@@ -254,7 +254,7 @@ class Compile extends Component {
             <div className="overlay">
               {/* <img src={Copy} width="400" alt="copyimage"></img> */}
               {this.props.selectedBoard === "esp32" ? (
-                <div style={{ "text-align": "center" }}>
+                <div style={{ "textAlign": "center" }}>
                   <h2>Dein Code wird kompiliert!</h2>
                   <p> Übertrage ihn per Drag & Drop auf deine MCU</p>
                   <img
@@ -329,7 +329,7 @@ Compile.propTypes = {
   arduino: PropTypes.string.isRequired,
   name: PropTypes.string,
   workspaceName: PropTypes.func.isRequired,
-  platform: PropTypes.bool.isRequired,
+  platform: PropTypes.bool,
   compiler: PropTypes.string.isRequired,
   selectedBoard: PropTypes.string.isRequired,
 };
