@@ -3,14 +3,28 @@ import { Handle, Position } from "@xyflow/react";
 import SensorGraphic from "./hdc1080.png";
 
 const HDC1080 = ({ data }) => {
-
+  // Für Temperatur und Luftfeuchte:
+  const sensorConfigTempHumidity = [
+    { id: "temp", emoji: "🌡️", label: "Temperatur (°C)", min: -20, max: 50, step: 0.5, initial: 20 },
+    { id: "humidity", emoji: "💧", label: "Luftfeuchte (%)", min: 0, max: 100, step: 1, initial: 50 },
+  ];
 
   return (
     <div
       style={{
         maxWidth: "200px",
+        backgroundColor: "#dddddd",
+        borderRadius: "10px",
       }}
-    >
+    > 
+    <span style={{
+      textAlign: "center",
+      display: "block",
+      padding: "10px",
+      fontSize: "1.5rem",
+      fontWeight: "bold",
+      
+    }}>HDC1080</span>
       <img
         src={SensorGraphic}
         style={{

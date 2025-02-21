@@ -63,6 +63,7 @@ const SimulatorFlow = (props) => {
     });
 
     setEdges([...initialEdges, ...newEdges]);
+
   }, [nodes]);
 
   useEffect(() => {
@@ -74,7 +75,7 @@ const SimulatorFlow = (props) => {
         return {
           id: `m_${index.toString()}`,
           type: module,
-          position: { x: 200 + index * 200, y: 400 },
+          position: { x: 200 + Math.random()  * 200, y: 400 },
         };
       })
       .filter((e) => e);
