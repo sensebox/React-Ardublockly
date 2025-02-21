@@ -115,6 +115,7 @@ const SensorNode = ({ title, sensors, imageSrc, maxWidth = "300px" }) => {
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <input
                     type="range"
+                    id={sensor.id + "-slider" } 
                     min={sensor.min}
                     max={sensor.max}
                     step={sensor.step ?? 1}
