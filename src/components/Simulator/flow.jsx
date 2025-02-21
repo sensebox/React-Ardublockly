@@ -1,4 +1,3 @@
-
 import { useCallback, useEffect, memo } from "react";
 import {
   ReactFlow,
@@ -14,12 +13,16 @@ import "@xyflow/react/dist/style.css";
 import HDC1080 from "./nodes/hdc1080";
 import Display from "./nodes/display";
 import lightuv from "./nodes/lightuv";
+import SMT50 from "./nodes/smt50";
+
 
 const nodeTypes = {
   board: SenseBoxMCUS2,
   senseBox_hdc1080: HDC1080,
   senseBox_lightUv: lightuv,
   senseBox_display: Display,
+  senseBox_smt50: SMT50,  // Add this line
+  // ... other node types
 };
 
 const initialNodes = [
