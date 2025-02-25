@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState } from "react";
 import { Handle, Position } from "@xyflow/react";
 
-const SensorNode = ({ title, sensors, imageSrc, maxWidth = "300px" }) => {
+const SensorNode = ({ title, sensors, imageSrc, maxWidth = "250px" }) => {
   // Initialwerte für alle Sensoren festlegen
   const initialValues = sensors.reduce((acc, sensor) => {
     acc[sensor.id] = sensor.initial !== undefined ? sensor.initial : sensor.min;
@@ -42,7 +42,7 @@ const SensorNode = ({ title, sensors, imageSrc, maxWidth = "300px" }) => {
           textAlign: "center",
           display: "block",
           padding: "15px",
-          fontSize: "2rem",
+          fontSize: "1.5rem",
           fontWeight: "bold",
           color: "#333",
         }}
@@ -147,9 +147,7 @@ const SensorNode = ({ title, sensors, imageSrc, maxWidth = "300px" }) => {
           ))}
         </div>
       )}
-
-      {/* Handles (z. B. für Verbindungen in einem Graph-Editor) */}
-      <Handle
+      {/* <Handle
         type="target"
         position={Position.Left}
         style={{
@@ -166,7 +164,7 @@ const SensorNode = ({ title, sensors, imageSrc, maxWidth = "300px" }) => {
           height: "1.5rem",
           backgroundColor: "#ffcc33",
         }}
-      />
+      /> */}
     </div>
   );
 };
