@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { Handle, Position } from "@xyflow/react";
 
 const SensorNode = ({ title, sensors, imageSrc, maxWidth = "300px" }) => {
@@ -10,6 +10,7 @@ const SensorNode = ({ title, sensors, imageSrc, maxWidth = "300px" }) => {
 
   const [values, setValues] = useState(initialValues);
   const [showOverlay, setShowOverlay] = useState(false);
+  const [isHovered, setIsHovered] = useState(false); // Hover-State
 
   const handleChange = (id) => (e) => {
     setValues({ ...values, [id]: Number(e.target.value) });
@@ -24,10 +25,16 @@ const SensorNode = ({ title, sensors, imageSrc, maxWidth = "300px" }) => {
         borderRadius: "10px",
         overflow: "hidden",
         fontSize: "1.2rem",
-
+        // Übergang für den Hover-Effekt
+        transition: "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
+        // Veränderte Eigenschaften bei Hover
+        transform: isHovered ? "scale(1.03)" : "scale(1)",
+        boxShadow: isHovered ? "0 8px 15px rgba(0, 0, 0, 0.3)" : "none",
+        cursor: "pointer",
       }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       onClick={() => setShowOverlay(!showOverlay)}
-
     >
       {/* Titel */}
       <span
@@ -39,10 +46,10 @@ const SensorNode = ({ title, sensors, imageSrc, maxWidth = "300px" }) => {
           fontWeight: "bold",
           color: "#333",
         }}
-        
       >
         {title}
       </span>
+
       {/* Bild, das bei Klick das Overlay öffnet */}
       <img
         src={imageSrc}
@@ -50,12 +57,10 @@ const SensorNode = ({ title, sensors, imageSrc, maxWidth = "300px" }) => {
         style={{
           width: "100%",
           display: "block",
-          cursor: !showOverlay ? "pointer" : "default",
-        }}
-        onClick={() => {
-          if (!showOverlay) setShowOverlay(true);
+          pointerEvents: "none", // Bild selbst ist nicht klickbar, sondern das ganze Div
         }}
       />
+
       {/* Overlay mit den Slidern */}
       {showOverlay && (
         <div
@@ -66,11 +71,11 @@ const SensorNode = ({ title, sensors, imageSrc, maxWidth = "300px" }) => {
             right: "0",
             padding: "15px",
             background: "#1b7d10b3", // Transparenter Hintergrund (#669933)
-            backdropFilter: "blur(5px)",
             display: "flex",
             flexDirection: "column",
             gap: "15px",
           }}
+          // Verhindert, dass Klicks im Overlay das Schließen sofort wieder auslösen
           onClick={(e) => e.stopPropagation()}
         >
           {/* Schließen-Button */}
@@ -115,7 +120,7 @@ const SensorNode = ({ title, sensors, imageSrc, maxWidth = "300px" }) => {
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <input
                     type="range"
-                    id={sensor.id + "-slider" } 
+                    id={sensor.id + "-slider"}
                     min={sensor.min}
                     max={sensor.max}
                     step={sensor.step ?? 1}
@@ -142,7 +147,8 @@ const SensorNode = ({ title, sensors, imageSrc, maxWidth = "300px" }) => {
           ))}
         </div>
       )}
-      {/* Handles (zum Beispiel für Verbindungen in einem Graph-Editor) */}
+
+      {/* Handles (z. B. für Verbindungen in einem Graph-Editor) */}
       <Handle
         type="target"
         position={Position.Left}

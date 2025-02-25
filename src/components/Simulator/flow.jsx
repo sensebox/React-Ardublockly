@@ -63,6 +63,7 @@ const SimulatorFlow = (props) => {
     });
 
     setEdges([...initialEdges, ...newEdges]);
+    console.log("nodes: ", nodes);
   }, [nodes]);
 
   useEffect(() => {
