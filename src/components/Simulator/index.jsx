@@ -8,6 +8,8 @@ import SimulatorFlow from "./flow";
 import moment from "moment";
 import Box from "@mui/material/Box";
 import { ReactFlowProvider } from "@xyflow/react";
+import { setModules } from "../../actions/generalActions";
+import store from "../../store";
 
 export default function Simulator() {
   const dispatch = useDispatch();
@@ -37,7 +39,8 @@ export default function Simulator() {
 
   useEffect(() => {
     console.log("Modules changed", modules);
-},[modules])
+    store.dispatch(setModules(modules));
+  },[modules])
   // Handle start and stop actions
   const handleStart = () => {
     dispatch(startSimulator());

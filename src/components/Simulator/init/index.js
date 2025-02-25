@@ -5,6 +5,7 @@ import initLogAndAlert from "./log";
 import initNeopixel from "./neopixel";
 import initHDC1080 from "./sensors/hdc1080";
 import initLightUv from "./sensors/lightUv";
+import initPd from "./sensors/photodiode";
 import initTime from "./time";
 
 export default function initSimulator(interpreter, globalObject) {
@@ -15,4 +16,5 @@ export default function initSimulator(interpreter, globalObject) {
   initHDC1080(interpreter, globalObject);
   initLightUv(interpreter, globalObject);
   initNeopixel(interpreter, globalObject);
+  initPd(interpreter, globalObject);
 }

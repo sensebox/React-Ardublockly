@@ -2,6 +2,7 @@
 import React, { memo } from "react";
 import { Handle, Position } from "@xyflow/react";
 import SvgBoardComplex from "./svg";
+import { useEffect } from "react";
 
 const SenseBoxMCUS2 = ({ data }) => {
   return (
