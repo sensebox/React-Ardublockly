@@ -8,7 +8,8 @@ import BlocklySvg from "./BlocklySvg";
 
 import * as Blockly from "blockly/core";
 import "./blocks/index";
-import "./generator/index";
+import "./generator/arduino";
+import "./generator/simulator";
 import { ZoomToFitControl } from "@blockly/zoom-to-fit";
 import { initialXml } from "./initialXml.js";
 import { getMaxInstances } from "./helpers/maxInstances";
