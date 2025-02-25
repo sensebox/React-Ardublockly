@@ -1,5 +1,7 @@
 import React, { memo, useEffect, useState } from "react";
 import { Handle, Position } from "@xyflow/react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClose } from "@fortawesome/free-solid-svg-icons";
 
 const SensorNode = ({ title, sensors, imageSrc, maxWidth = "250px" }) => {
   // Initialwerte für alle Sensoren festlegen
@@ -83,7 +85,7 @@ const SensorNode = ({ title, sensors, imageSrc, maxWidth = "250px" }) => {
             style={{
               position: "absolute",
               top: "10px",
-              right: "10px",
+              right: "15px",
               cursor: "pointer",
               fontWeight: "bold",
               color: "#ffcc33", // Farbe für den Schließen-Button
@@ -93,7 +95,7 @@ const SensorNode = ({ title, sensors, imageSrc, maxWidth = "250px" }) => {
             }}
             onClick={() => setShowOverlay(false)}
           >
-            X
+            <FontAwesomeIcon icon={faClose} />
           </div>
           {sensors.map((sensor) => (
             <div
@@ -147,7 +149,7 @@ const SensorNode = ({ title, sensors, imageSrc, maxWidth = "250px" }) => {
           ))}
         </div>
       )}
-      {/* <Handle
+      {/* {/* <Handle
         type="target"
         position={Position.Left}
         style={{
@@ -155,7 +157,7 @@ const SensorNode = ({ title, sensors, imageSrc, maxWidth = "250px" }) => {
           height: "1.5rem",
           backgroundColor: "#ffcc33",
         }}
-      />
+      /> */}
       <Handle
         type="source"
         position={Position.Right}
@@ -164,7 +166,7 @@ const SensorNode = ({ title, sensors, imageSrc, maxWidth = "250px" }) => {
           height: "1.5rem",
           backgroundColor: "#ffcc33",
         }}
-      /> */}
+      /> 
     </div>
   );
 };
