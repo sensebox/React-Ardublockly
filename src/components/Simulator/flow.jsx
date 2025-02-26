@@ -14,12 +14,15 @@ import "@xyflow/react/dist/style.css";
 import HDC1080 from "./nodes/hdc1080";
 import Display from "./nodes/display";
 import lightuv from "./nodes/lightuv";
+import WaterTemp from "./nodes/watertemp";
 
 const nodeTypes = {
   board: SenseBoxMCUS2,
   senseBox_hdc1080: HDC1080,
   senseBox_lightUv: lightuv,
   senseBox_display: Display,
+  senseBox_waterTemp: WaterTemp,
+
 };
 
 const initialNodes = [

@@ -1,4 +1,3 @@
-
 import * as Blockly from "blockly";
 import { selectedBoard } from "../../helpers/board";
 
@@ -22,5 +21,12 @@ Blockly.Generator.Simulator.forBlock["sensebox_sensor_uv_light"] = function () {
   var dropdown_name = this.getFieldValue("NAME");
 
   var code = `read${dropdown_name}()`;
+  return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
+};
+
+Blockly.Generator.Simulator.forBlock["sensebox_sensor_watertemperature"] = function () {
+  Blockly.Generator.Simulator.modules_["senseBox_waterTemp"] = "senseBox_waterTemp";
+
+  var code = "readWaterTemperature()";
   return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
 };
