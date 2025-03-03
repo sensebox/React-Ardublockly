@@ -48,8 +48,8 @@ const SvgBoardComplex = (props) =>  {
 
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="2648.25"
-    height="2412.56"
+    width="283"
+    height="258"
     preserveAspectRatio="none"
     viewBox="-1153.315 -950.06 2648.255 2412.558"
   >
