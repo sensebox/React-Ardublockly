@@ -22,10 +22,6 @@ const WaterTemp = ({ data }) => {
       sensors={sensorConfigWaterTemp}
       imageSrc={SensorGraphic}
       maxWidth="150px"
-      onError={(e) => {
-        console.error('Image failed to load:', e);
-        e.target.src = 'fallback-image-path.png'; // Optional fallback
-      }}
     />
   );
 };
