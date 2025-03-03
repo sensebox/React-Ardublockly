@@ -1,5 +1,4 @@
-import { useEffect,useRef } from "react";
-import store from "../../../../store";
+import { useEffect,useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
 
@@ -10,11 +9,21 @@ const SvgBoardComplex = (props) =>  {
 
   const modules = useSelector((state) => state.simulator.modules);
 
-  const hightlightPhotodiode = () => {
+  const [photodiodeSelected, setPhotodiodeSelected] = useState(false);
+  const [imuSelected, setImuSelected] = useState(false);
+
+  const highlightPhotodiode = () => {
     if (photodiodeRectangle.current) {
       photodiodeRectangle.current.style.stroke = "rgb(255, 221, 53)";
     }
   };
+
+  const deselectPhotodiode = () => {
+    if (photodiodeRectangle.current) {
+      photodiodeRectangle.current.style.stroke = "transparent";
+    }
+  };
+  
 
   const highlightImu = () => {
     if (imuRectangle.current) {
@@ -24,12 +33,19 @@ const SvgBoardComplex = (props) =>  {
 
   useEffect(() => {
     if (modules.includes("sensebox_esp32s2_light")) {
-      hightlightPhotodiode();
+      setPhotodiodeSelected(true);
+
+      highlightPhotodiode();
+    }
+    else {
+      deselectPhotodiode();
     }
   }, [props]);
 
   
   return (
+    <div>
+
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="2648.25"
@@ -8312,6 +8328,7 @@ const SvgBoardComplex = (props) =>  {
       ></path>
     </g>
   </svg>
+  </div>
 )};
 
 export default SvgBoardComplex;
