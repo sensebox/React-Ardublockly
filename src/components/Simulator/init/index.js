@@ -14,6 +14,6 @@ export default function initSimulator(interpreter, globalObject) {
   initDisplay(interpreter, globalObject);
   initHDC1080(interpreter, globalObject);
   initLightUv(interpreter, globalObject);
-  initSMT50(interpreter, globalObject); // Add this line
+  initSMT50(interpreter, globalObject); 
   initNeopixel(interpreter, globalObject);
 }
