@@ -121,8 +121,8 @@ class Routes extends Component {
 
 Home.propTypes = {
   visitPage: PropTypes.func,
-  platform: PropTypes.bool.isRequired,
-  setPlatform: PropTypes.func.isRequired,
+  platform: PropTypes.bool,
+  setPlatform: PropTypes.func,
 };
 
 const mapStateToProps = (state) => ({

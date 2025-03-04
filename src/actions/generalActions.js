@@ -58,3 +58,11 @@ export const setCompiler = (compiler) => (dispatch) => {
     payload: compiler,
   });
 };
+
+export const setModules = (modules) => (dispatch) => {
+  console.log("Setting modules", modules);
+  dispatch({
+    type: "SET_MODULES",
+    payload: modules,
+  });
+}
