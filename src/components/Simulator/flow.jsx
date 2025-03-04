@@ -14,12 +14,15 @@ import "@xyflow/react/dist/style.css";
 import HDC1080 from "./nodes/hdc1080";
 import Display from "./nodes/display";
 import lightuv from "./nodes/lightuv";
+import store from "../../store";
+import photodiode from "./nodes/photodiode";
 
 const nodeTypes = {
   board: SenseBoxMCUS2,
   senseBox_hdc1080: HDC1080,
   senseBox_lightUv: lightuv,
   senseBox_display: Display,
+  sensebox_esp32s2_light: photodiode
 };
 
 const initialNodes = [
@@ -43,7 +46,10 @@ const SimulatorFlow = (props) => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
+  
+
   const reactFlow = useReactFlow();
+
 
   useEffect(() => {
     reactFlow.fitView();
@@ -63,7 +69,6 @@ const SimulatorFlow = (props) => {
     });
 
     setEdges([...initialEdges, ...newEdges]);
-    console.log("nodes: ", nodes);
   }, [nodes]);
 
   useEffect(() => {
@@ -79,6 +84,8 @@ const SimulatorFlow = (props) => {
         };
       })
       .filter((e) => e);
+
+
 
     setNodes([initialNodes[0], ...newNodes]);
   }, [props.modules]);
