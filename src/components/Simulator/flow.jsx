@@ -15,12 +15,14 @@ import HDC1080 from "./nodes/hdc1080";
 import Display from "./nodes/display";
 import lightuv from "./nodes/lightuv";
 import store from "../../store";
+import photodiode from "./nodes/photodiode";
 
 const nodeTypes = {
   board: SenseBoxMCUS2,
   senseBox_hdc1080: HDC1080,
   senseBox_lightUv: lightuv,
   senseBox_display: Display,
+  sensebox_esp32s2_light: photodiode
 };
 
 const initialNodes = [

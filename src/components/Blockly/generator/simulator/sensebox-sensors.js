@@ -33,3 +33,4 @@ Blockly.Generator.Simulator.forBlock["sensebox_esp32s2_light"] = function () {
   var code = `readPhotodiode()`;
   return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
 };
+
