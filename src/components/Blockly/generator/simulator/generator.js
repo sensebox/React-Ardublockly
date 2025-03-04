@@ -96,7 +96,7 @@ ${code}}`;
 ${setupCode}
 ${loopCode}`;
 
-
+console.log(Blockly.Generator.Simulator.formatCode(simCode));
   return Blockly.Generator.Simulator.formatCode(simCode);
 };
 

@@ -15,6 +15,8 @@ import HDC1080 from "./nodes/hdc1080";
 import Display from "./nodes/display";
 import lightuv from "./nodes/lightuv";
 import WaterTemp from "./nodes/watertemp";
+import store from "../../store";
+import photodiode from "./nodes/photodiode";
 
 const nodeTypes = {
   board: SenseBoxMCUS2,
@@ -22,7 +24,7 @@ const nodeTypes = {
   senseBox_lightUv: lightuv,
   senseBox_display: Display,
   senseBox_waterTemp: WaterTemp,
-
+  sensebox_esp32s2_light: photodiode
 };
 
 const initialNodes = [
@@ -46,7 +48,10 @@ const SimulatorFlow = (props) => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
+  
+
   const reactFlow = useReactFlow();
+
 
   useEffect(() => {
     reactFlow.fitView();
@@ -66,7 +71,6 @@ const SimulatorFlow = (props) => {
     });
 
     setEdges([...initialEdges, ...newEdges]);
-    console.log("nodes: ", nodes);
   }, [nodes]);
 
   useEffect(() => {
@@ -82,6 +86,8 @@ const SimulatorFlow = (props) => {
         };
       })
       .filter((e) => e);
+
+
 
     setNodes([initialNodes[0], ...newNodes]);
   }, [props.modules]);

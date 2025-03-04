@@ -30,3 +30,13 @@ Blockly.Generator.Simulator.forBlock["sensebox_sensor_watertemperature"] = funct
   var code = "readWaterTemperature()";
   return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
 };
+
+Blockly.Generator.Simulator.forBlock["sensebox_esp32s2_light"] = function () {
+  Blockly.Generator.Simulator.modules_["sensebox_esp32s2_light"] = "sensebox_esp32s2_light";
+
+  var dropdown_name = this.getFieldValue("NAME");
+
+  var code = `readPhotodiode()`;
+  return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
+};
+
