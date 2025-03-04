@@ -14,6 +14,7 @@ import "@xyflow/react/dist/style.css";
 import HDC1080 from "./nodes/hdc1080";
 import Display from "./nodes/display";
 import lightuv from "./nodes/lightuv";
+import WaterTemp from "./nodes/watertemp";
 import store from "../../store";
 import photodiode from "./nodes/photodiode";
 
@@ -22,6 +23,7 @@ const nodeTypes = {
   senseBox_hdc1080: HDC1080,
   senseBox_lightUv: lightuv,
   senseBox_display: Display,
+  senseBox_waterTemp: WaterTemp,
   sensebox_esp32s2_light: photodiode
 };
 
