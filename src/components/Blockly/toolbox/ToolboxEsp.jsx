@@ -1,7 +1,8 @@
 import { Block, Value, Field, Shadow, Category, Label } from "..";
 import { getColour } from "../helpers/colour";
 import * as Blockly from "blockly/core";
-
+import '@blockly/toolbox-search';
+import './custom-toolbox.css'
 export const ToolboxEsp = () => {
   return (
     <>
@@ -674,6 +675,8 @@ export const ToolboxEsp = () => {
           <Block type="watchdog_reset"></Block>
         </Category>
       </Category>
+      <Category name="Search" kind="search" >      </Category>
+
     </>
   );
 };
