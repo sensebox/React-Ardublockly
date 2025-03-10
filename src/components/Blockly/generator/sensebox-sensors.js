@@ -924,14 +924,12 @@ Blockly.Generator.Arduino.forBlock["sensebox_soundsensor_dfrobot"] =
 Blockly.Generator.Arduino.forBlock["sensebox_rg15_rainsensor"] = function () {
   var port = this.getFieldValue("SERIAL");
   var value = this.getFieldValue("VALUE");
-  Blockly.Generator.Arduino.libraries_["library_senseBoxIO"] =
-    "#include <senseBoxIO.h>";
   Blockly.Generator.Arduino.libraries_["library_rg15"] = "#include <RG15.h>";
   Blockly.Generator.Arduino.definitions_["def_rg15_rainsensor_" + port] =
     "RG15 rg15_" + port + "(" + port + ");";
   Blockly.Generator.Arduino.setupCode_["setup_rg15_rainsensor_" + port] = `
     rg15_${port}.begin();
-    rg15_${port}.reset();`;
+    rg15_${port}.resetAccumulation();`;
   Blockly.Generator.Arduino.loopCodeOnce_["loop_rg15_rainsensor_" + port] =
     "rg15_" + port + ".poll();";
 
