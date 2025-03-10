@@ -1,0 +1,34 @@
+name: Cypress Tests
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*.*.*"]
+  pull_request:
+    branches:
+      - main
+      - development
+  workflow_dispatch:
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      # Install npm dependencies, cache them correctly
+      # and run all Cypress tests
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          build: npm run build
+          start: npx --yes serve -s build -l 3000
+      - name: Run CTRF annotations
+        if: always()
+        uses: ctrf-io/github-test-reporter@v1
+        with:
+          report-path: "./ctrf/*.json"
+          test-report: true
+          pull-request: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
