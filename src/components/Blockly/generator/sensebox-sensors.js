@@ -929,8 +929,9 @@ Blockly.Generator.Arduino.forBlock["sensebox_rg15_rainsensor"] = function () {
   Blockly.Generator.Arduino.libraries_["library_rg15"] = "#include <RG15.h>";
   Blockly.Generator.Arduino.definitions_["def_rg15_rainsensor_" + port] =
     "RG15 rg15_" + port + "(" + port + ");";
-  Blockly.Generator.Arduino.setupCode_["setup_rg15_rainsensor_" + port] =
-    "rg15_" + port + ".begin();";
+  Blockly.Generator.Arduino.setupCode_["setup_rg15_rainsensor_" + port] = `
+    rg15_${port}.begin();
+    rg15_${port}.reset();`;
   Blockly.Generator.Arduino.loopCodeOnce_["loop_rg15_rainsensor_" + port] =
     "rg15_" + port + ".poll();";
 
