@@ -610,8 +610,8 @@ Blockly.Blocks["sensebox_soundsensor_dfrobot"] = {
 Blockly.Blocks["sensebox_rg15_rainsensor"] = {
   init: function () {
     var dropdownOptionsValues = [
-      [Blockly.Msg.sensebox_rg15_rainsensor_acc, "getAccumulation"],
       [Blockly.Msg.sensebox_rg15_rainsensor_totalAcc, "getTotalAccumulation"],
+      [Blockly.Msg.sensebox_rg15_rainsensor_acc, "getAccumulation"],
       [Blockly.Msg.sensebox_rg15_rainsensor_eventAcc, "getEventAccumulation"],
       [Blockly.Msg.sensebox_rg15_rainsensor_rainInt, "getRainfallIntensity"],
     ];
