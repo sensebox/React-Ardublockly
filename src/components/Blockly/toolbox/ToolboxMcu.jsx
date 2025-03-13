@@ -12,6 +12,7 @@ export const ToolboxMcu = () => {
         <Block type="sensebox_sensor_temp_hum" />
         <Block type="sensebox_sensor_uv_light" />
         <Block type="sensebox_sensor_bmx055_accelerometer" />
+        <Block type="sensebox_sensor_icm20948" />
         <Block type="sensebox_sensor_sds011" />
         <Block type="sensebox_sensor_sps30" />
         <Block type="sensebox_sensor_pressure" />
