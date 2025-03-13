@@ -17,6 +17,7 @@ import lightuv from "./nodes/lightuv";
 import WaterTemp from "./nodes/watertemp";
 import store from "../../store";
 import photodiode from "./nodes/photodiode";
+import scd30 from "./nodes/scd30";
 
 const nodeTypes = {
   board: SenseBoxMCUS2,
@@ -24,7 +25,8 @@ const nodeTypes = {
   senseBox_lightUv: lightuv,
   senseBox_display: Display,
   senseBox_waterTemp: WaterTemp,
-  sensebox_esp32s2_light: photodiode
+  sensebox_esp32s2_light: photodiode,
+  sensebox_scd30: scd30,
 };
 
 const initialNodes = [
