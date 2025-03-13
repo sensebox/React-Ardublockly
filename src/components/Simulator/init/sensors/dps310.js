@@ -17,4 +17,14 @@ export default function initDPS310(interpreter, globalObject) {
       "readPressureDPS310",
       interpreter.createNativeFunction(wrapper),
     );
+
+    var wrapper = function readAltitudeDPS310() {
+      return document.getElementById("alt-slider").value;
+    };
+    interpreter.setProperty(
+      globalObject,
+      "readAltitudeDPS310",
+      interpreter.createNativeFunction(wrapper),
+    );
+
   }
