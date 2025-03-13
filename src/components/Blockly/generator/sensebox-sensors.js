@@ -1137,6 +1137,7 @@ Blockly.Generator.Arduino.forBlock["sensebox_sensor_truebner_smt50_esp32"] =
 Blockly.Generator.Arduino.forBlock["sensebox_sensor_icm20948"] = function () {
   var code = "";
   var dropdown = this.getFieldValue("value");
+  var range = this.getFieldValue("RANGE");
   Blockly.Generator.Arduino.libraries_["icm20X_lib"] =
     `#include <Adafruit_ICM20X.h>`;
   Blockly.Generator.Arduino.libraries_["icm20948_lib"] =
@@ -1150,15 +1151,34 @@ Blockly.Generator.Arduino.forBlock["sensebox_sensor_icm20948"] = function () {
     "Adafruit_ICM20948 icm;";
   Blockly.Generator.Arduino.definitions_["measurement_delay"] =
     "uint16_t measurement_delay_us = 65535; // Delay between measurements for testing";
-
   Blockly.Generator.Arduino.setupCode_["icm.begin()"] =
     "icm.begin_I2C(0x69, &Wire1);";
-  Blockly.Generator.Arduino.setupCode_["icm.setAccelerometerRange()"] =
-    "icm.setAccelRange(ICM20948_ACCEL_RANGE_16_G);";
+  switch (range) {
+    case "2G":
+      Blockly.Generator.Arduino.setupCode_["icm.setAccelerometerRange()"] =
+        "icm.setAccelRange(ICM20948_ACCEL_RANGE_2_G);";
+      break;
+    case "4G":
+      Blockly.Generator.Arduino.setupCode_["icm.setAccelerometerRange()"] =
+        "icm.setAccelRange(ICM20948_ACCEL_RANGE_4_G);";
+      break;
+    case "8g":
+      Blockly.Generator.Arduino.setupCode_["icm.setAccelerometerRange()"] =
+        "icm.setAccelRange(ICM20948_ACCEL_RANGE_8_G);";
+      break;
+    case "16G":
+      Blockly.Generator.Arduino.setupCode_["icm.setAccelerometerRange()"] =
+        "icm.setAccelRange(ICM20948_ACCEL_RANGE_16_G);";
+      break;
+    default:
+      Blockly.Generator.Arduino.setupCode_["icm.setAccelerometerRange()"] =
+        "icm.setAccelRange(ICM20948_ACCEL_RANGE_2_G);";
+  }
 
   Blockly.Generator.Arduino.loopCodeOnce_["icm.getEvent"] =
     "  icm.getEvent(&accel, &gyro, &temp, &mag);";
 
+  console.log("dropdwon", dropdown);
   switch (dropdown) {
     case "accelerationX":
       code = "accel.acceleration.x";
@@ -1168,18 +1188,6 @@ Blockly.Generator.Arduino.forBlock["sensebox_sensor_icm20948"] = function () {
       break;
     case "accelerationZ":
       code = "accel.acceleration.z";
-      break;
-    case "gyroscopeX":
-      code = "gyro.gyro.x";
-      break;
-    case "gyroscopeY":
-      code = "gyro.gyro.y";
-      break;
-    case "gyroscopeZ":
-      code = "gyro.gyro.z";
-      break;
-    case "temperature":
-      code = "temp.temperature";
       break;
     default:
       code = "";

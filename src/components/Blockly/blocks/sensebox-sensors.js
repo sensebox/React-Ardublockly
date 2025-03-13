@@ -758,10 +758,10 @@ Blockly.Blocks["sensebox_sensor_icm20948"] = {
       .appendField(Blockly.Msg.senseBox_bmx055_accelerometer_range)
       .appendField(
         new Blockly.FieldDropdown([
-          [Blockly.Msg.senseBox_bmx055_accelerometer_range_2g, "0x3"],
-          [Blockly.Msg.senseBox_bmx055_accelerometer_range_4g, "0x5"],
-          [Blockly.Msg.senseBox_bmx055_accelerometer_range_8g, "0x8"],
-          [Blockly.Msg.senseBox_bmx055_accelerometer_range_16g, "0x0C"],
+          [Blockly.Msg.senseBox_bmx055_accelerometer_range_2g, "2G"],
+          [Blockly.Msg.senseBox_bmx055_accelerometer_range_4g, "4G"],
+          [Blockly.Msg.senseBox_bmx055_accelerometer_range_8g, "8G"],
+          [Blockly.Msg.senseBox_bmx055_accelerometer_range_16g, "16G"],
         ]),
         "RANGE",
       );
