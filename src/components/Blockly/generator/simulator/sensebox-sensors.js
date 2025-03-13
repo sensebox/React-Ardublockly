@@ -40,3 +40,15 @@ Blockly.Generator.Simulator.forBlock["sensebox_esp32s2_light"] = function () {
   return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
 };
 
+
+
+Blockly.Generator.Simulator.forBlock["sensebox_sensor_bme680_bsec"] = function () {
+  Blockly.Generator.Simulator.modules_["sensebox_sensor_bme680_bsec"] = "sensebox_sensor_bme680_bsec";
+
+  var dropdown_name = this.getFieldValue("dropdown");
+  console.log(dropdown_name)
+  var code = `read${dropdown_name}BME680()`;
+
+  return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
+};
+
