@@ -6,6 +6,8 @@ import './custom-toolbox.css'
 export const ToolboxEsp = () => {
   return (
     <>
+        <Category id="des" name="Search" kind="search" >      </Category>
+
       <Category
         name={Blockly.Msg.toolbox_sensors}
         colour={getColour().sensebox}
@@ -675,7 +677,6 @@ export const ToolboxEsp = () => {
           <Block type="watchdog_reset"></Block>
         </Category>
       </Category>
-      <Category name="Search" kind="search" >      </Category>
 
     </>
   );
