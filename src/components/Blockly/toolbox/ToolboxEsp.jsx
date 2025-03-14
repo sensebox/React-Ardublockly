@@ -6,7 +6,7 @@ import './custom-toolbox.css'
 export const ToolboxEsp = () => {
   return (
     <>
-        <Category id="des" name="Search" kind="search" >      </Category>
+        <Category name="Search" kind="search" >      </Category>
 
       <Category
         name={Blockly.Msg.toolbox_sensors}
