@@ -4,7 +4,7 @@ import initLogAndAlert from "./log";
 import initNeopixel from "./neopixel";
 import initHDC1080 from "./sensors/hdc1080";
 import initLightUv from "./sensors/lightUv";
-import initSMT50 from "./sensors/smt50"; // Add this import
+import initSMT50 from "./sensors/smt50"; 
 import initTime from "./time";
 
 export default function initSimulator(interpreter, globalObject) {
@@ -14,6 +14,6 @@ export default function initSimulator(interpreter, globalObject) {
   initDisplay(interpreter, globalObject);
   initHDC1080(interpreter, globalObject);
   initLightUv(interpreter, globalObject);
-  initSMT50(interpreter, globalObject); // Add this line
+  initSMT50(interpreter, globalObject); 
   initNeopixel(interpreter, globalObject);
 }

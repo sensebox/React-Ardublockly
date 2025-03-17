@@ -417,6 +417,8 @@ Blockly.Generator.Arduino.forBlock["sensebox_tof_imager"] = function () {
             minStatus5 = distance;
           } else if((target_status == 6 || target_status == 9) && minStatus69 > distance) {
             minStatus69 = distance;
+          } else {
+            oldVl53l8cxMin = 0.0;
           }
         }
         if (minStatus5 < 10000.0 && minStatus5 >=0) {
@@ -1132,3 +1134,14 @@ Blockly.Generator.Arduino.forBlock["sensebox_sensor_truebner_smt50_esp32"] =
       return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
     }
   };
+
+// For temperature measurement
+Blockly.Generator.Arduino.codeFunctions_["sensebox_smt50_temp_esp32"] =
+  "float getSMT50Temperature(int analogPin){\n float voltage = analogReadMilliVolts(analogPin)/1000.0;\n return (voltage - 0.5) * 100;\n }";
+
+// For soil moisture measurement  
+Blockly.Generator.Arduino.codeFunctions_["sensebox_smt50_soil_esp32"] =
+  "float getSMT50Moisture(int analogPin){\n float voltage = analogReadMilliVolts(analogPin)/1000.0;\n   if (voltage >= 3) voltage = 3.0;\n  return (voltage * 50.0) / 3.0;\n}";
+
+Blockly.Generator.Arduino.setupCode_["analogReadResolution"] = 
+  "analogReadResolution(13);";
