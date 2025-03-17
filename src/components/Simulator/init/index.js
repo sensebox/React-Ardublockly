@@ -10,6 +10,8 @@ import initPd from "./sensors/photodiode";
 import initTime from "./time";
 import initFluoroASM from "./sensors/fluoroASM";
 import initSPS30 from "./sensors/sps30";
+import initWaterTemp from "./sensors/waterTemp";
+import initPhotodiode from "./sensors/photodiode";
 
 export default function initSimulator(interpreter, globalObject) {
   initDom(interpreter, globalObject);
@@ -19,11 +21,9 @@ export default function initSimulator(interpreter, globalObject) {
   initHDC1080(interpreter, globalObject);
   initLightUv(interpreter, globalObject);
   initNeopixel(interpreter, globalObject);
-<<<<<<< Updated upstream
+  initWaterTemp(interpreter, globalObject);
   initPd(interpreter, globalObject);
-}
-=======
   initFluoroASM(interpreter, globalObject);
   initSPS30(interpreter, globalObject);
+  initPhotodiode(interpreter, globalObject);
 }
->>>>>>> Stashed changes
