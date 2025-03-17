@@ -2,6 +2,8 @@
  * Define boards and pins
  *
  */
+// path: src/components/Blockly/helpers/board.js
+// Ergänzt
 const sensebox_mcu = {
   title: "MCU",
   description: "senseBox Microcontroller Unit based on Microchip SAMD21G18A",
@@ -119,11 +121,18 @@ const sensebox_mcu = {
     ["64 (250KHz)", "SPI_CLOCK_DIV64"],
     ["128 (125KHz)", "SPI_CLOCK_DIV128"],
   ],
-  i2c: [["I2C", "Wire"]],
+  i2c: [
+    ["I2C", "Wire"],
+    ["FluoroASM", "Wire"], // Das wurde ergänzt
+  ],
   i2cPins: {
     Wire: [
       ["SDA", "17"],
       ["SCL", "16"],
+    ],
+    FluoroASM: [
+      ["SDA", "39"], // Das wurde ergänzt, falls der Sensor einen anderen SDA nutzt
+      ["SCL", "40"], // Das wurde ergänzt, falls der Sensor einen anderen SCL nutzt
     ],
   },
   i2cSpeed: [

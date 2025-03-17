@@ -1,5 +1,5 @@
 import * as Blockly from "blockly";
-import { selectedBoard } from "../../helpers/board";
+import { selectedBoard } from "../helpers/board";
 
 /**
  * HDC1080 Temperature and Humidity Sensor
@@ -272,13 +272,13 @@ Blockly.Generator.Arduino.forBlock["sensebox_sensor_bme680_bsec"] =
     digitalWrite(LED_BUILTIN, LOW);
     delay(100);
   }`;
-    //Setup Code
-    Blockly.Generator.Arduino.preSetupCode_["Wire.begin"] = "Wire.begin();";
-    Blockly.Generator.Arduino.setupCode_["iaqSensor.begin"] =
-      "iaqSensor.begin(BME68X_I2C_ADDR_LOW, Wire);";
-    Blockly.Generator.Arduino.setupCode_["checkIaqSensorStatus"] =
-      "checkIaqSensorStatus();";
-    Blockly.Generator.Arduino.setupCode_["bsec_sensorlist"] = `
+  //Setup Code
+  Blockly.Generator.Arduino.preSetupCode_["Wire.begin"] = "Wire.begin();";
+  Blockly.Generator.Arduino.setupCode_["iaqSensor.begin"] =
+    "iaqSensor.begin(BME68X_I2C_ADDR_LOW, Wire);";
+  Blockly.Generator.Arduino.setupCode_["checkIaqSensorStatus"] =
+    "checkIaqSensorStatus();";
+  Blockly.Generator.Arduino.setupCode_["bsec_sensorlist"] = `
 bsec_virtual_sensor_t sensorList[13] = {
     BSEC_OUTPUT_IAQ,
     BSEC_OUTPUT_STATIC_IAQ,
@@ -381,8 +381,7 @@ Blockly.Generator.Arduino.forBlock["sensebox_tof_imager"] = function () {
     `;
 
   Blockly.Generator.Arduino.preSetupCode_["Wire.begin"] = "Wire.begin();";
-  Blockly.Generator.Arduino.preSetupCode_["vl53l8cx_clock_address"] =
-    `sensor_vl53l8cx.set_i2c_address(0x51); // need to change address, because default address is shared with other sensor`;
+  Blockly.Generator.Arduino.preSetupCode_["vl53l8cx_clock_address"] = `sensor_vl53l8cx.set_i2c_address(0x51); // need to change address, because default address is shared with other sensor`;
 
   Blockly.Generator.Arduino.setupCode_["setup_vl53l8cx"] = `
   Wire.setClock(1000000); // vl53l8cx can operate at 1MHz
@@ -1133,178 +1132,3 @@ Blockly.Generator.Arduino.forBlock["sensebox_sensor_truebner_smt50_esp32"] =
       return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
     }
   };
-
-/**
- * SPS30 Initialisierung
- */
-
-Blockly.Generator.Arduino.forBlock["sensebox_sps30_init"] = function (block) {
-  Blockly.Generator.Arduino.libraries_["sps30"] =
-    `#include <sps30.h> // http://librarymanager/All#`;
-  Blockly.Generator.Arduino.variables_["sps30_measurement"] =
-    "struct sps30_measurement m;";
-  Blockly.Generator.Arduino.variables_["sps30_auto_clean_days"] =
-    "uint32_t auto_clean_days = 4;";
-  Blockly.Generator.Arduino.variables_["sps30_interval_intervalsps"] =
-    "const long intervalsps = 1000;";
-  Blockly.Generator.Arduino.variables_["sps30_time_startsps"] =
-    "unsigned long time_startsps = 0;";
-  Blockly.Generator.Arduino.variables_["sps30_time_actualsps"] =
-    "unsigned long time_actualsps = 0;";
-  Blockly.Generator.Arduino.codeFunctions_["sps30_init"] = `
-void initSPS30() {
-  int16_t ret;
-  
-  // Initialize I2C library
-  Wire.begin();
-  
-  // Begin SPS30 sensor
-  ret = sps30_probe();
-  if (ret < 0) {
-    Serial.println("SPS30 sensor probing failed");
-    return;
-  }
-  
-  // Set auto-cleaning interval
-  ret = sps30_set_fan_auto_cleaning_interval_days(auto_clean_days);
-  if (ret < 0) {
-    Serial.println("Setting auto-cleaning interval failed");
-  }
-  
-  // Start measurement
-  ret = sps30_start_measurement();
-  if (ret < 0) {
-    Serial.println("Starting measurement failed");
-  }
-}`;
-
-  return `initSPS30();\n`;
-};
-
-/**
- * SPS30 Auto-Clean Interval setzen
- */
-
-Blockly.Generator.Arduino.forBlock["sensebox_sps30_clean_interval"] = function (
-  block,
-) {
-  var days =
-    Blockly.Generator.Arduino.valueToCode(
-      block,
-      "DAYS",
-      Blockly.Generator.Arduino.ORDER_ATOMIC,
-    ) || "4";
-
-  return `
-// Set SPS30 auto-cleaning interval
-auto_clean_days = ${days};
-sps30_set_fan_auto_cleaning_interval_days(auto_clean_days);
-`;
-};
-
-/**
- * SPS30 Messintervall setzen
- */
-
-Blockly.Generator.Arduino.forBlock["sensebox_sps30_measure_interval"] =
-  function (block) {
-    var interval =
-      Blockly.Generator.Arduino.valueToCode(
-        block,
-        "INTERVAL",
-        Blockly.Generator.Arduino.ORDER_ATOMIC,
-      ) || "1";
-
-    return `
-// Set SPS30 measurement interval
-intervalsps = ${interval} * 1000; // Convert to milliseconds
-`;
-  };
-
-/**
- * SPS30 manuelle Reinigung starten
- */
-
-Blockly.Generator.Arduino.forBlock["sensebox_sps30_clean"] = function (block) {
-  Blockly.Generator.Arduino.codeFunctions_["sps30_clean"] = `
-void startSPS30Cleaning() {
-  int16_t ret;
-  ret = sps30_start_manual_fan_cleaning();
-  if (ret < 0) {
-    Serial.println("Starting manual fan cleaning failed");
-  }
-}`;
-
-  return `startSPS30Cleaning();\n`;
-};
-
-/**
- * SPS30 Feinstaubwert lesen
- */
-
-Blockly.Generator.Arduino.forBlock["sensebox_sps30_read"] = function (block) {
-  var dropdown_name = block.getFieldValue("value");
-  Blockly.Generator.Arduino.libraries_["sps30"] =
-    `#include <sps30.h> // http://librarymanager/All#`;
-  Blockly.Generator.Arduino.variables_["sps30_measurement"] =
-    "struct sps30_measurement m;";
-  Blockly.Generator.Arduino.variables_["sps30_auto_clean_days"] =
-    "uint32_t auto_clean_days = 4;";
-  Blockly.Generator.Arduino.variables_["sps30_interval_intervalsps"] =
-    "const long intervalsps = 1000;";
-  Blockly.Generator.Arduino.variables_["sps30_time_startsps"] =
-    "unsigned long time_startsps = 0;";
-  Blockly.Generator.Arduino.variables_["sps30_time_actualsps"] =
-    "unsigned long time_actualsps = 0;";
-  Blockly.Generator.Arduino.codeFunctions_["sps30_getData"] = `
-void getSPS30Data(){
-  uint16_t data_ready;
-  int16_t ret;
-      
-  time_actualsps = millis();
-  if (time_actualsps - time_startsps >= intervalsps || time_startsps == 0) {
-    time_startsps = time_actualsps;
-      
-    // Check if data is ready
-    ret = sps30_read_data_ready(&data_ready);
-    if (ret < 0) {
-      Serial.println("Error reading data-ready flag");
-      return;
-    }
-      
-    if (data_ready) {
-      // Read measurement
-      ret = sps30_read_measurement(&m);
-      if (ret < 0) {
-        Serial.println("Error reading measurement");
-        return;
-      }
-    }
-  }
-}`;
-
-  Blockly.Generator.Arduino.setupCode_["sps30_init_setup"] = `
-// Initialize SPS30 sensor
-initSPS30();
-`;
-
-  var code = "";
-  switch (dropdown_name) {
-    case "1p0":
-      code = "getSPS30Data();\nm.mc_1p0";
-      break;
-    case "2p5":
-      code = "getSPS30Data();\nm.mc_2p5";
-      break;
-    case "4p0":
-      code = "getSPS30Data();\nm.mc_4p0";
-      break;
-    case "10p0":
-      code = "getSPS30Data();\nm.mc_10p0";
-      break;
-    default:
-      code = "getSPS30Data();\nm.mc_2p5";
-  }
-
-  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
-};

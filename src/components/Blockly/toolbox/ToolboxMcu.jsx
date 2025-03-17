@@ -1,3 +1,4 @@
+// path: src/components/Blockly/toolbox/ToolboxMcu.jsx
 import { Block, Value, Field, Shadow, Category, Sep, Label } from "..";
 import { getColour } from "../helpers/colour";
 import * as Blockly from "blockly/core";
@@ -9,6 +10,25 @@ export const ToolboxMcu = () => {
         name={Blockly.Msg.toolbox_sensors}
         colour={getColour().sensebox}
       >
+        <Category name="SPS30 Feinstaubsensor" colour={getColour().sensebox}>
+          <Block type="sensebox_sps30_init" />
+          <Block type="sensebox_sps30_clean_interval">
+            <Value name="DAYS">
+              <Shadow type="math_number">
+                <Field name="NUM">4</Field>
+              </Shadow>
+            </Value>
+          </Block>
+          <Block type="sensebox_sps30_measure_interval">
+            <Value name="INTERVAL">
+              <Shadow type="math_number">
+                <Field name="NUM">1</Field>
+              </Shadow>
+            </Value>
+          </Block>
+          <Block type="sensebox_sps30_read" />
+          <Block type="sensebox_sps30_clean" />
+        </Category>
         <Block type="sensebox_sensor_temp_hum" />
         <Block type="sensebox_sensor_uv_light" />
         <Block type="sensebox_sensor_bmx055_accelerometer" />

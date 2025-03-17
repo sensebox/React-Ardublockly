@@ -1,3 +1,5 @@
+// path: src/components/Blockly/toolbox/ToolboxEsp.jsx
+// Ergänzt
 import { Block, Value, Field, Shadow, Category, Label } from "..";
 import { getColour } from "../helpers/colour";
 import * as Blockly from "blockly/core";
@@ -9,6 +11,25 @@ export const ToolboxEsp = () => {
         name={Blockly.Msg.toolbox_sensors}
         colour={getColour().sensebox}
       >
+        <Category name="SPS30 Feinstaubsensor" colour={getColour().sensebox}>
+          <Block type="sensebox_sps30_init" />
+          <Block type="sensebox_sps30_clean_interval">
+            <Value name="DAYS">
+              <Shadow type="math_number">
+                <Field name="NUM">4</Field>
+              </Shadow>
+            </Value>
+          </Block>
+          <Block type="sensebox_sps30_measure_interval">
+            <Value name="INTERVAL">
+              <Shadow type="math_number">
+                <Field name="NUM">1</Field>
+              </Shadow>
+            </Value>
+          </Block>
+          <Block type="sensebox_sps30_read" />
+          <Block type="sensebox_sps30_clean" />
+        </Category>
         <Block type="sensebox_sensor_temp_hum" />
         <Block type="sensebox_sensor_uv_light" />
         <Block type="sensebox_esp32s2_light" />
@@ -613,6 +634,32 @@ export const ToolboxEsp = () => {
         colour={getColour().procedures}
         custom="PROCEDURE"
       ></Category>
+      {/* // Das wurde ergänzt   */}
+      <Category name="FluoroASM LEDs" colour={getColour().sensebox}>
+        <Block type="sensebox_fluoroASM_led_init" />
+        <Block type="sensebox_fluoroASM_led_set" />
+        <Block type="sensebox_fluoroASM_led_sequence">
+          <Value name="DELAY">
+            <Block type="math_number">
+              <Field name="NUM">500</Field>
+            </Block>
+          </Value>
+        </Block>
+        <Block type="sensebox_fluoroASM_led_fade">
+          <Value name="MAX_BRIGHTNESS">
+            <Block type="math_number">
+              <Field name="NUM">100</Field>
+            </Block>
+          </Value>
+        </Block>
+      </Category>
+      <Category name="FluoroASM Sensor" colour={getColour().sensebox}>
+        <Block type="sensebox_fluoroASM_init" />
+        <Block type="sensebox_fluoroASM_read" />
+        <Block type="sensebox_fluoroASM_noise" />
+        <Block type="sensebox_fluoroASM_i2c" />
+      </Category>
+      {/* // Bis hier */}
       <Category name={Blockly.Msg.toolbox_advanced} colour={getColour().io}>
         <Category name={Blockly.Msg.toolbox_serial} colour={getColour().serial}>
           <Block type="init_serial_monitor"></Block>

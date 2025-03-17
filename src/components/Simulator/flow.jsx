@@ -1,4 +1,5 @@
-
+// path: src/components/Simulator/flow.jsx
+// Ergänzt
 import { useCallback, useEffect, memo } from "react";
 import {
   ReactFlow,
@@ -14,17 +15,27 @@ import "@xyflow/react/dist/style.css";
 import HDC1080 from "./nodes/hdc1080";
 import Display from "./nodes/display";
 import lightuv from "./nodes/lightuv";
+<<<<<<< Updated upstream
 import WaterTemp from "./nodes/watertemp";
 import store from "../../store";
 import photodiode from "./nodes/photodiode";
+=======
+import FluoroASM from "./nodes/fluoroASM";
+import Sps30 from "./nodes/sps30";
+>>>>>>> Stashed changes
 
 const nodeTypes = {
   board: SenseBoxMCUS2,
   senseBox_hdc1080: HDC1080,
   senseBox_lightUv: lightuv,
   senseBox_display: Display,
+<<<<<<< Updated upstream
   senseBox_waterTemp: WaterTemp,
   sensebox_esp32s2_light: photodiode
+=======
+  senseBox_fluoroASM: FluoroASM,
+  senseBox_sps30: Sps30,
+>>>>>>> Stashed changes
 };
 
 const initialNodes = [
@@ -54,7 +65,15 @@ const SimulatorFlow = (props) => {
 
 
   useEffect(() => {
+    if (import.meta.env.MODE === "development") {
+      console.log("Aktive Module: ", props.modules);
+    } // Das wurde ergänzt
+
     reactFlow.fitView();
+
+    if (import.meta.env.MODE === "development") {
+      console.log("Aktive Module: ", props.modules);
+    } // Das wurde ergänzt
 
     // calculate new edges
     const newEdges = [];
@@ -71,6 +90,13 @@ const SimulatorFlow = (props) => {
     });
 
     setEdges([...initialEdges, ...newEdges]);
+<<<<<<< Updated upstream
+=======
+
+    if (import.meta.env.MODE === "development") {
+      console.log("nodes: ", nodes);
+    }
+>>>>>>> Stashed changes
   }, [nodes]);
 
   useEffect(() => {
@@ -82,7 +108,8 @@ const SimulatorFlow = (props) => {
         return {
           id: `m_${index.toString()}`,
           type: module,
-          position: { x: 200 + Math.random()  * 200, y: 400 },
+          position: { x: 200 + Math.random() * 200, y: 400 },
+          style: { width: 200, height: 150 },
         };
       })
       .filter((e) => e);
@@ -101,7 +128,10 @@ const SimulatorFlow = (props) => {
     <div
       style={{
         width: "100%",
+        // height: "600px",
         height: "100%",
+        // border: "1px solid #ddd",
+        // borderRadius: "4px",
       }}
     >
       <ReactFlow

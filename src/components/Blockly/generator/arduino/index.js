@@ -1,3 +1,5 @@
+// path: src/components/Blockly/generator/arduino/index.js
+// Ergänzt
 import "./generator";
 import "./loops";
 import "./sensebox-sensors";
@@ -28,3 +30,4 @@ import "./variables";
 import "./lists";
 import "./watchdog";
 import "./webserver";
+import "./sensebox-fluoroASM"; // Das wurde ergänzt
