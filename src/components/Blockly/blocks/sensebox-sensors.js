@@ -519,28 +519,73 @@ Blockly.Blocks["sensebox_sensor_truebner_smt50"] = {
 
 Blockly.Blocks["sensebox_sensor_truebner_smt50_esp32"] = {
   init: function () {
-    this.setColour(getColour().sensebox);
-    this.appendDummyInput().appendField(Blockly.Msg.senseBox_smt50);
     this.appendDummyInput()
+      .appendField("SMT50")
       .appendField("Port:")
       .appendField(
-        new Blockly.FieldDropdown(selectedBoard().digitalPorts),
-        "Port",
-      );
-    this.appendDummyInput()
+        new Blockly.FieldDropdown([
+          ["A", "A"],
+          ["B", "B"],
+          ["C", "C"]
+        ]),
+        "Port"
+      )
+      .appendField("Index:")
+      .appendField(
+        new Blockly.FieldDropdown([
+          ["0", "0"],
+          ["1", "1"],
+          ["2", "2"],
+          ["3", "3"],
+          ["4", "4"],
+          ["5", "5"]
+        ]),
+        "Index"
+      )
       .appendField(Blockly.Msg.senseBox_value)
       .appendField(
         new Blockly.FieldDropdown([
-          [Blockly.Msg.senseBox_temp, "temp"],
-          [Blockly.Msg.senseBox_soil, "soil"],
+          [Blockly.Msg.senseBox_soil_temperature, "temp"],
+          [Blockly.Msg.senseBox_soil_moisture, "soil"]
         ]),
-        "value",
+        "value"
       );
     this.setOutput(true, Types.NUMBER.typeName);
-    this.setTooltip(Blockly.Msg.senseBox_smt50_tooltip);
-    this.setHelpUrl(Blockly.Msg.senseBox_smt50_helpurl);
-    this.data = { name: "smt50" };
-  },
+    this.setColour(getColour().sensebox);
+    this.setTooltip(Blockly.Msg.sensebox_sensor_smt50_tooltip);
+  }
+};
+
+Blockly.Generator.Arduino.forBlock["sensebox_sensor_truebner_smt50_esp32"] = function () {
+  var dropdown_port = this.getFieldValue("Port");
+  var dropdown_index = this.getFieldValue("Index");
+  var dropdown_value = this.getFieldValue("value");
+  var pin;
+  
+  // Map ports A,B,C to corresponding ESP32 pins
+  switch(dropdown_port) {
+    case "A":
+      pin = 25; // ESP32 pin for Port A
+      break;
+    case "B": 
+      pin = 26; // ESP32 pin for Port B
+      break;
+    case "C":
+      pin = 27; // ESP32 pin for Port C
+      break;
+    default:
+      pin = 25;
+  }
+
+  Blockly.Generator.Arduino.libraries_["library_smt50"] = "#include <SMT50.h>";
+  Blockly.Generator.Arduino.definitions_["smt50"] = 
+    `SMT50 smt50_${dropdown_port}${dropdown_index}(${pin});`;
+
+  var code = dropdown_value === "temp" ? 
+    `smt50_${dropdown_port}${dropdown_index}.getTemperature()` :
+    `smt50_${dropdown_port}${dropdown_index}.getMoisture()`;
+
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
 /**

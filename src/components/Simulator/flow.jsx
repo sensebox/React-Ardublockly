@@ -21,8 +21,7 @@ const nodeTypes = {
   senseBox_hdc1080: HDC1080,
   senseBox_lightUv: lightuv,
   senseBox_display: Display,
-  senseBox_smt50: SMT50,  // Add this line
-  // ... other node types
+  senseBox_smt50_esp32: SMT50  
 };
 
 const initialNodes = [
