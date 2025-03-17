@@ -13,11 +13,6 @@ const setVariableFunction = function (defaultValue) {
     //   id,
     //   Blockly.Variables.NAME_TYPE
     // );
-    const variableValue = Blockly.Generator.Arduino.valueToCode(
-      block,
-      "VALUE",
-      Blockly.Generator.Arduino.ORDER_ATOMIC,
-    );
 
     const allVars = Blockly.getMainWorkspace()
       .getVariableMap()
@@ -25,16 +20,32 @@ const setVariableFunction = function (defaultValue) {
     const myVar = allVars.filter((v) => v.name === variableName)[0];
     var code = "";
     if (myVar !== undefined) {
-      Blockly.Generator.Arduino.variables_[variableName + myVar.type] =
-        myVar.type +
-        " " +
-        myVar.name.replace(/_/g, "__").replace(/[^a-zA-Z0-9_]/g, "_") +
-        ";\n";
-      code =
-        myVar.name.replace(/_/g, "__").replace(/[^a-zA-Z0-9_]/g, "_") +
-        " = " +
-        (variableValue || defaultValue) +
-        ";\n";
+      const variableValue = Blockly.Generator.Arduino.valueToCode(
+        block,
+        "VALUE",
+        Blockly.Generator.Arduino.ORDER_ATOMIC,
+      );
+      if (myVar.type === "bitmap") {
+        Blockly.Generator.Arduino.variables_[variableName + myVar.type] =
+          "uint16_t " +
+          myVar.name.replace(/_/g, "__").replace(/[^a-zA-Z0-9_]/g, "_") +
+          "[96]" +
+          ";\n";
+        if (variableValue != "") {
+          code ="memcpy("+myVar.name.replace(/_/g, "__").replace(/[^a-zA-Z0-9_]/g, "_")+", "+variableValue+", sizeof(96));\n";
+        }
+      } else {
+        Blockly.Generator.Arduino.variables_[variableName + myVar.type] =
+          myVar.type +
+          " " +
+          myVar.name.replace(/_/g, "__").replace(/[^a-zA-Z0-9_]/g, "_") +
+          ";\n";
+        code =
+          myVar.name.replace(/_/g, "__").replace(/[^a-zA-Z0-9_]/g, "_") +
+          " = " +
+          (variableValue || defaultValue) +
+          ";\n";
+      }
     }
     return code;
   };

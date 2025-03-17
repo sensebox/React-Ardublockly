@@ -364,29 +364,9 @@ Blockly.Blocks["sensebox_ws2812_matrix_bitmap"] = {
 
 Blockly.Blocks["sensebox_ws2812_matrix_custom_bitmap"] = {
   init: function () {
-    // array to create random names
-    const words = [
-      "alpha",
-      "beta",
-      "gamma",
-      "delta",
-      "epsilon",
-      "zeta",
-      "theta",
-    ];
-
+    this.setHelpUrl(Blockly.Msg.senseBox_ws2812_rgb_matrix_helpurl);
     this.setColour(getColour().sensebox);
-    this.appendDummyInput()
-      .setAlign(Blockly.inputs.Align.LEFT)
-      .appendField(Blockly.Msg.sensebox_led_custom_bitmap)
-      .appendField(
-        new Blockly.FieldTextInput(
-          words[Math.floor(Math.random() * words.length)],
-        ),
-        "name",
-      );
     this.appendDummyInput("input")
-      .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_custom_bitmap)
       .appendField("{")
       .appendField(
         new FieldMultilineInput(
@@ -395,13 +375,10 @@ Blockly.Blocks["sensebox_ws2812_matrix_custom_bitmap"] = {
         "input",
       )
       .appendField("}");
-
     this.setOutput(true, "Bitmap");
     this.setTooltip(
       Blockly.Msg.senseBox_ws2812_rgb_matrix_custom_bitmap_tooltip,
     );
-    this.setHelpUrl(Blockly.Msg.senseBox_ws2812_rgb_matrix_helpurl);
-
   },
 };
 

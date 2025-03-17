@@ -23,6 +23,7 @@ export const UI = {
   variable_SHORT_NUMBER: "char",
   variable_LONG: "Big number (long)",
   variable_DECIMAL: "Decimal (float)",
+  variable_BITMAP: "Bitmap (LED-Matrix)",
   variables_TEXT: "Text (string)",
   variables_ARRAY: "Array (array)",
   variables_CHARACTER: "Character (char)",
