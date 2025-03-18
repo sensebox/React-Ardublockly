@@ -1,4 +1,3 @@
-
 import initDisplay from "./display";
 import initDom from "./dom";
 import initLogAndAlert from "./log";
@@ -7,6 +6,7 @@ import initHDC1080 from "./sensors/hdc1080";
 import initLightUv from "./sensors/lightUv";
 import initPd from "./sensors/photodiode";
 import initTime from "./time";
+import initSMT50 from "./sensors/smt50";
 
 export default function initSimulator(interpreter, globalObject) {
   initDom(interpreter, globalObject);
@@ -17,4 +17,5 @@ export default function initSimulator(interpreter, globalObject) {
   initLightUv(interpreter, globalObject);
   initNeopixel(interpreter, globalObject);
   initPd(interpreter, globalObject);
+  initSMT50(interpreter, globalObject);
 }

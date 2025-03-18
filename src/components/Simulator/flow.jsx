@@ -26,7 +26,7 @@ const nodeTypes = {
   senseBox_display: Display,
   senseBox_waterTemp: WaterTemp,
   sensebox_esp32s2_light: photodiode,
-  sensebox_smt50_esp32: SMT50,
+  senseBox_smt50: SMT50,  
 
 };
 
