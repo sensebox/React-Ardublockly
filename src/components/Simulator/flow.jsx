@@ -1,4 +1,3 @@
-
 import { useCallback, useEffect, memo } from "react";
 import {
   ReactFlow,
@@ -17,6 +16,7 @@ import lightuv from "./nodes/lightuv";
 import WaterTemp from "./nodes/watertemp";
 import store from "../../store";
 import photodiode from "./nodes/photodiode";
+import UltrasonicSensor from "./nodes/ultrasonic";
 
 const nodeTypes = {
   board: SenseBoxMCUS2,
@@ -24,7 +24,8 @@ const nodeTypes = {
   senseBox_lightUv: lightuv,
   senseBox_display: Display,
   senseBox_waterTemp: WaterTemp,
-  sensebox_esp32s2_light: photodiode
+  sensebox_esp32s2_light: photodiode,
+  sensebox_sensor_ultrasonic_ranger: UltrasonicSensor
 };
 
 const initialNodes = [
