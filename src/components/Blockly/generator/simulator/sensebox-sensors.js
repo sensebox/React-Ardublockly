@@ -40,3 +40,14 @@ Blockly.Generator.Simulator.forBlock["sensebox_esp32s2_light"] = function () {
   return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
 };
 
+Blockly.Generator.Simulator.forBlock["sensebox_sensor_truebner_smt50_esp32"] = function () {
+  Blockly.Generator.Simulator.modules_["senseBox_smt50"] = "senseBox_smt50";
+  
+  var dropdown_value = this.getFieldValue("value");
+  var code = dropdown_value === "temp" ? 
+    "readSoilTemperature()" : 
+    "readSoilMoisture()";
+    
+  return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
+};
+
