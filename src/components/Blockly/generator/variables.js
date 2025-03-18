@@ -27,24 +27,15 @@ const setVariableFunction = function (defaultValue) {
       );
       if (myVar.type === "bitmap") {
         Blockly.Generator.Arduino.variables_[variableName + myVar.type] =
-          "uint16_t " +
-          myVar.name.replace(/_/g, "__").replace(/[^a-zA-Z0-9_]/g, "_") +
-          "[96]" +
-          ";\n";
+          `uint16_t ${variableName}[96];\n`;
         if (variableValue != "") {
-          code ="memcpy("+myVar.name.replace(/_/g, "__").replace(/[^a-zA-Z0-9_]/g, "_")+", "+variableValue+", sizeof(96));\n";
+          code =`memcpy(${variableName}, ${variableValue}, sizeof(${variableName}));\n`;
         }
       } else {
         Blockly.Generator.Arduino.variables_[variableName + myVar.type] =
-          myVar.type +
-          " " +
-          myVar.name.replace(/_/g, "__").replace(/[^a-zA-Z0-9_]/g, "_") +
-          ";\n";
+          `${myVar.type} ${variableName};\n`;
         code =
-          myVar.name.replace(/_/g, "__").replace(/[^a-zA-Z0-9_]/g, "_") +
-          " = " +
-          (variableValue || defaultValue) +
-          ";\n";
+        `${variableName} = ${(variableValue || defaultValue)};\n`;
       }
     }
     return code;
