@@ -370,21 +370,28 @@ const styles = (theme) => ({
 const Compile = (props) => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
+  const fallbackTexts = {
+    de_DE: "Code kompilieren",
+    en_US: "Compile code",
+  };
+
+  // Verwende den Tooltip aus Blockly.Msg oder den Fallback basierend auf der aktuellen Sprache
+  const tooltipText =
+    Blockly.Msg.tooltip_compile_code ||
+    fallbackTexts[props.language] ||
+    fallbackTexts.en_US; // Englisch als letzter Fallback
   const openDialog = () => {
     setDialogOpen(true);
   };
 
   return (
     <div>
-      <Tooltip
-        title={Blockly.Msg.tooltip_compile_code}
-        arrow
-        style={{ marginRight: "5px" }}
-      >
+      <Tooltip title={tooltipText} arrow style={{ marginRight: "5px" }}>
         <IconButton
           className={`compileBlocks ${props.classes.iconButton}`}
           onClick={openDialog}
           size="large"
+          aria-label="Compile code"
         >
           <FontAwesomeIcon icon={faClipboardCheck} size="xs" />
         </IconButton>
@@ -423,6 +430,7 @@ const mapStateToProps = (state) => ({
   compiler: state.general.compiler,
   selectedBoard: state.board.board,
   appLink: state.general.appLink,
+  language: state.general.language,
 });
 
 export default connect(mapStateToProps, { workspaceName })(
