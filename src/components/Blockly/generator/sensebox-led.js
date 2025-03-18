@@ -356,10 +356,14 @@ Blockly.Generator.Arduino.forBlock["sensebox_ws2812_matrix_bitmap"] = function (
   return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
-let customBitmapCounter = 0;
 Blockly.Generator.Arduino.forBlock["sensebox_ws2812_matrix_custom_bitmap"] =
   function (block) {
-    let bitmapName = customBitmapCounter++;
+    // Generate a unique name for the bitmap
+    let hash = 0;
+    for (let i = 0; i < block.id.length; i++) {
+      hash = (hash * 31 + block.id.charCodeAt(i)) >>> 0; // 32-bit unsigned integer
+    }
+    let bitmapName = hash.toString(16);
 
     var inputValue = block.getFieldValue("input") || "{}";
 
@@ -373,10 +377,6 @@ Blockly.Generator.Arduino.forBlock["sensebox_ws2812_matrix_custom_bitmap"] =
 
     Blockly.Generator.Arduino.definitions_[`define_bitmap_${bitmapName}`] =
       `const uint16_t bitmap_${bitmapName}[] = ${customBitmap};`;
-    // if empty set to empty object
-    if (!customBitmap || customBitmap === "0") {
-      customBitmap = "{}";
-    }
 
     return [`bitmap_${bitmapName}`, Blockly.Generator.Arduino.ORDER_ATOMIC];
   };
