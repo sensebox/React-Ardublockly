@@ -8,6 +8,7 @@ import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import CloseIcon from "@mui/icons-material/Close";
+import { connect } from "react-redux";
 
 // Definiere die senseboxColors
 const senseboxColors = {
@@ -41,21 +42,44 @@ const RoundIconButton = styled(IconButton)(() => ({
   },
 }));
 
-const downloads = [
-  {
-    name: "sketch.bin",
-    size: "276 KB",
-    time: "Wird heruntergeladen...",
-    type: "binary",
+// Texte für verschiedene Sprachen
+const texts = {
+  de: {
+    downloads: "Downloads",
+    downloading: "Wird heruntergeladen...",
+    downloadComplete: "Herunterladen abgeschlossen",
+    fileName: "sketch.bin",
   },
-];
+  en: {
+    downloads: "Downloads",
+    downloading: "Downloading...",
+    downloadComplete: "Download complete",
+    fileName: "sketch.bin",
+  },
+};
 
-export default function DownloadAnimation() {
+function DownloadAnimation({ language }) {
   const [showDownloads, setShowDownloads] = useState(false);
   const [isFileClicked, setIsFileClicked] = useState(false);
   const cursorControls = useAnimation();
   const downloadButtonRef = useRef(null);
   const fileRef = useRef(null);
+
+  // Konvertiere die Redux-Spracheinstellung in das Format, das wir verwenden
+  const currentLanguage = language === "de_DE" ? "de" : "en";
+
+  // Texte für die aktuelle Sprache
+  const t = texts[currentLanguage] || texts.de;
+
+  // Downloads-Array mit lokalisierten Texten
+  const downloads = [
+    {
+      name: t.fileName,
+      size: "276 KB",
+      time: t.downloading,
+      type: "binary",
+    },
+  ];
 
   // Animationssequenz
   useEffect(() => {
@@ -217,7 +241,7 @@ export default function DownloadAnimation() {
               borderBottom: "1px solid rgba(0,0,0,0.1)",
             }}
           >
-            <Box sx={{ color: "#202124", fontSize: 14 }}>Downloads</Box>
+            <Box sx={{ color: "#202124", fontSize: 14 }}>{t.downloads}</Box>
             <StyledIconButton>
               <CloseIcon sx={{ fontSize: 16, color: "#5f6368" }} />
             </StyledIconButton>
@@ -298,9 +322,7 @@ export default function DownloadAnimation() {
                   <Box component="span" sx={{ mx: 1 }}>
                     •
                   </Box>
-                  {isFileClicked
-                    ? "Herunterladen abgeschlossen"
-                    : download.time}
+                  {isFileClicked ? t.downloadComplete : download.time}
                 </Box>
               </motion.div>
             ))}
@@ -310,3 +332,10 @@ export default function DownloadAnimation() {
     </Box>
   );
 }
+
+// Verbinde die Komponente mit Redux, um auf die Spracheinstellung zuzugreifen
+const mapStateToProps = (state) => ({
+  language: state.general.language, // Hole die Spracheinstellung aus dem Redux-Store
+});
+
+export default connect(mapStateToProps)(DownloadAnimation);

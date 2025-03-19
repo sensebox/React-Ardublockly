@@ -4,8 +4,9 @@ function useCompileProgress(sketchPath, fqbn) {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
+    const compilerURL = import.meta.env.VITE_INITIAL_COMPILER_URL;
     const eventSource = new EventSource(
-      `http://localhost:3001/compile-progress?sketchPath=${encodeURIComponent(sketchPath)}&fqbn=${encodeURIComponent(fqbn)}`,
+      `${compilerURL}/compile-progress?sketchPath=${encodeURIComponent(sketchPath)}&fqbn=${encodeURIComponent(fqbn)}`,
     );
 
     eventSource.onmessage = (e) => {
