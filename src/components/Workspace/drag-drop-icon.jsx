@@ -10,6 +10,29 @@ import ImageOutlinedIcon from "@mui/icons-material/ImageOutlined";
 import StarOutlinedIcon from "@mui/icons-material/StarOutlined";
 import StorageOutlinedIcon from "@mui/icons-material/StorageOutlined";
 import { senseboxColors } from "./theme";
+import { connect } from "react-redux";
+
+// Texte für verschiedene Sprachen
+const texts = {
+  de: {
+    quickAccess: "Schnellzugriff",
+    desktop: "Desktop",
+    downloads: "Downloads",
+    documents: "Dokumente",
+    pictures: "Bilder",
+    sensebox: "SENSEBOX (E:)",
+    fileName: "sketch.bin",
+  },
+  en: {
+    quickAccess: "Quick Access",
+    desktop: "Desktop",
+    downloads: "Downloads",
+    documents: "Documents",
+    pictures: "Pictures",
+    sensebox: "SENSEBOX (E:)",
+    fileName: "sketch.bin",
+  },
+};
 
 // SidebarItem Component
 const SidebarItem = styled(Box)({
@@ -24,7 +47,13 @@ const SidebarItem = styled(Box)({
   },
 });
 
-export function DragDropIcon() {
+function DragDropIconComponent({ language }) {
+  // Konvertiere die Redux-Spracheinstellung in das Format, das wir verwenden
+  const currentLanguage = language === "de_DE" ? "de" : "en";
+
+  // Texte für die aktuelle Sprache
+  const t = texts[currentLanguage] || texts.de;
+
   // Animation Keyframes für die Datei
   const fileAnimation = {
     x: [
@@ -118,23 +147,23 @@ export function DragDropIcon() {
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
           <SidebarItem>
             <StarOutlinedIcon sx={{ color: "#4EAF46" }} />
-            <span>Schnellzugriff</span>
+            <span>{t.quickAccess}</span>
           </SidebarItem>
           <SidebarItem>
             <MonitorOutlinedIcon sx={{ color: "#4EAF46" }} />
-            <span>Desktop</span>
+            <span>{t.desktop}</span>
           </SidebarItem>
           <SidebarItem>
             <FolderOutlinedIcon sx={{ color: "#4EAF46" }} />
-            <span>Downloads</span>
+            <span>{t.downloads}</span>
           </SidebarItem>
           <SidebarItem>
             <InsertDriveFileOutlinedIcon sx={{ color: "#4EAF46" }} />
-            <span>Dokumente</span>
+            <span>{t.documents}</span>
           </SidebarItem>
           <SidebarItem>
             <ImageOutlinedIcon sx={{ color: "#4EAF46" }} />
-            <span>Bilder</span>
+            <span>{t.pictures}</span>
           </SidebarItem>
           <Box sx={{ mt: 2 }}>
             <motion.div
@@ -194,7 +223,7 @@ export function DragDropIcon() {
                 }}
               >
                 <StorageOutlinedIcon sx={{ fontSize: 16, color: "#4B5563" }} />
-                <span>SENSEBOX (E:)</span>
+                <span>{t.sensebox}</span>
               </Box>
             </motion.div>
           </Box>
@@ -231,7 +260,7 @@ export function DragDropIcon() {
             sx={{ fontSize: 16, color: "text.secondary" }}
           />
           <Typography sx={{ fontSize: 13, color: "grey.700" }}>
-            sketch.bin
+            {t.fileName}
           </Typography>
         </Box>
 
@@ -271,7 +300,7 @@ export function DragDropIcon() {
           <InsertDriveFileOutlinedIcon
             sx={{ fontSize: 16, color: "#4B5563" }}
           />
-          <span style={{ fontSize: 13, color: "#374151" }}>sketch.bin</span>
+          <span style={{ fontSize: 13, color: "#374151" }}>{t.fileName}</span>
         </motion.div>
 
         {/* Cursor */}
@@ -327,3 +356,10 @@ export function DragDropIcon() {
     </Box>
   );
 }
+
+// Verbinde die Komponente mit Redux, um auf die Spracheinstellung zuzugreifen
+const mapStateToProps = (state) => ({
+  language: state.general.language, // Hole die Spracheinstellung aus dem Redux-Store
+});
+
+export const DragDropIcon = connect(mapStateToProps)(DragDropIconComponent);

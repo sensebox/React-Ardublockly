@@ -321,6 +321,7 @@ export const UI = {
   tooltip_moreInformation_02: "Information about the Block",
   tooltip_hint: "Select a Block to show the hint",
 
+  // path: src/components/Blockly/msg/en/ui.js
   /**
    * IDEDrawer
    */
