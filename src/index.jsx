@@ -5,7 +5,6 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import store from "./store";
 import { fetchSensors } from "./actions/sensorwikiActions";
-import "./components/CodeEditor/blockly-msg-setup";
 
 // store.dispatch(fetchSensors());
 

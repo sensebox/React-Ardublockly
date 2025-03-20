@@ -1303,6 +1303,17 @@ Blockly.Msg.assessmenttour_injectionDiv =
  * Overlay
  */
 
+/**
+ * Overlay
+ */
+Blockly.Msg.compile_overlay_compile = "Compilation in progress...";
+Blockly.Msg.compile_overlay_download = "Preparing download...";
+Blockly.Msg.compile_overlay_transfer = "Transfer the file to your senseBox";
+Blockly.Msg.compile_overlay_error = "An error has occurred";
+Blockly.Msg.compile_overlay_app_transfer = "Preparing app transfer...";
+Blockly.Msg.compile_overlay_code_compiled = "Code successfully compiled!";
+Blockly.Msg.compile_overlay_start_transfer = "Start transfer";
+Blockly.Msg.compile_overlay_close = "Close";
 Blockly.Msg.compile_overlay_head =
   "Your program is now compiled and downloaded";
 Blockly.Msg.compile_overlay_text = "Then copy it to your senseBox MCU";

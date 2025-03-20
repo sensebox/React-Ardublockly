@@ -101,8 +101,10 @@ const styles = {
     borderRadius: "8px",
     overflow: "hidden",
     maxWidth: "1200px", // Erhöht auf 1200px für mehr Breite
-    margin: showDetails ? "-8% auto 0" : "-13% auto 0", // Dynamischer Margin basierend auf showDetails
-    transition: "margin 0.3s ease", // Sanfte Übergangsanimation
+    margin: showDetails ? "-8% auto 0" : "-34% auto 0", // Dynamischer Margin basierend auf showDetails
+    // transition: "margin 0.8s ease", // Sanfte Übergangsanimation
+    transition:
+      "width 0.5s ease, height 0.5s ease, max-width 0.5s ease, max-height 0.5s ease",
     display: "flex",
     flexDirection: "column",
     // alignContent: "center",
