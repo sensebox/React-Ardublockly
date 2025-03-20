@@ -194,7 +194,6 @@ class Home extends Component {
           {this.state.codeOn ? (
             <Grid item xs={12} md={4}>
               <CodeViewer />
-              <TooltipViewer />
             </Grid>
           ) : null}
         </Grid>

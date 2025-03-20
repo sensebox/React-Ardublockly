@@ -45,13 +45,11 @@ class TooltipViewer extends Component {
       <Card
       className="helpSection"
       style={{
-        height: "25vh",
+        height: "100%",
         overflowY: "scroll",
-        marginTop: "1vh",
         padding: "1.1rem",
         borderRadius: "4px",
         border: "1px solid #ddd",
-        boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
       }}
       >
       <CardContent>

@@ -9,9 +9,10 @@ import MuiAccordionDetails from "@mui/material/AccordionDetails";
 import { Card, Chip } from "@mui/material";
 import * as Blockly from "blockly";
 import { default as MonacoEditor } from "@monaco-editor/react";
-import { faMicrochip } from "@fortawesome/free-solid-svg-icons";
+import { faInfoCircle, faMicrochip } from "@fortawesome/free-solid-svg-icons";
 import Simulator from "./Simulator";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import TooltipViewer from "./TooltipViewer";
 
 
 // FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
@@ -116,7 +117,8 @@ class CodeViewer extends Component {
     var curlyBrackets = "{ }";
     var unequal = "<>";
     return (
-      <Card style={{ height: "100%", maxHeight: "50vH" }} ref={this.myDiv}>
+      <Card style={{ height: "100%", maxHeight: "80vH" }} ref={this.myDiv}>
+        {/* Simulator Accordion  */}
         <Accordion
           square={true}
           style={{ margin: 0 }}
@@ -142,13 +144,14 @@ class CodeViewer extends Component {
           <AccordionDetails
             style={{
               padding: 0,
-              height: `calc(${this.state.componentHeight} - 50px - 50px - 50px)`,
+              height: `calc(${this.state.componentHeight} - 50px - 50px - 50px - 50px)`,
               backgroundColor: "white",
             }}
           >
             <Simulator />
           </AccordionDetails>
         </Accordion>
+        {/* Source Code Accordion */}
         <Accordion
           square={true}
           style={{ margin: 0 }}
@@ -173,12 +176,12 @@ class CodeViewer extends Component {
           <AccordionDetails
             style={{
               padding: 0,
-              height: `calc(${this.state.componentHeight} - 50px - 50px - 50px)`,
+              height: `calc(${this.state.componentHeight} - 50px - 50px - 50px - 50px)`,
               backgroundColor: "white",
             }}
           >
             <MonacoEditor
-              height="80vh"
+              height="70vh"
               defaultLanguage="cpp"
               value={this.props.arduino}
               // modified={this.props.arduino}
@@ -191,6 +194,7 @@ class CodeViewer extends Component {
             />
           </AccordionDetails>
         </Accordion>
+        {/* XML Accordion */}
         <Accordion
           square={true}
           style={{ margin: 0 }}
@@ -214,7 +218,7 @@ class CodeViewer extends Component {
           <AccordionDetails
             style={{
               padding: 0,
-              height: `calc(${this.state.componentHeight} - 50px - 50px - 50px)`,
+              height: `calc(${this.state.componentHeight} - 50px - 50px - 50px - 50px)`,
 
               backgroundColor: "white",
             }}
@@ -226,6 +230,31 @@ class CodeViewer extends Component {
               readOnly={true}
             />
           </AccordionDetails>
+        </Accordion>
+        {/* Tooltip Viewer Accordion */}
+        <Accordion
+          square={true}
+          style={{ margin: 0 }}
+          expanded={this.state.expanded === "tooltip"}
+          onChange={this.onChange("tooltip")}
+        >
+        <AccordionSummary>
+          <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+            <FontAwesomeIcon icon={faInfoCircle} size="lg" />
+            <div style={{ margin: "auto 5px 2px 0px" }}>
+              Hilfe
+              </div>
+          </div>
+        </AccordionSummary>
+        <AccordionDetails
+          style={{
+            padding: 0,
+            height: `calc(${this.state.componentHeight} - 50px - 50px - 50px - 50px)`,
+            backgroundColor: "white",
+          }}>
+          <TooltipViewer />
+          </AccordionDetails>
+
         </Accordion>
       </Card>
     );
