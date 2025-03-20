@@ -7,6 +7,7 @@ import initDPS310 from "./sensors/dps310";
 import initHDC1080 from "./sensors/hdc1080";
 import initLightUv from "./sensors/lightUv";
 import initPd from "./sensors/photodiode";
+import initSCD30 from "./sensors/scd30";
 import initTime from "./time";
 
 export default function initSimulator(interpreter, globalObject) {
@@ -18,5 +19,6 @@ export default function initSimulator(interpreter, globalObject) {
   initLightUv(interpreter, globalObject);
   initNeopixel(interpreter, globalObject);
   initPd(interpreter, globalObject);
+  initSCD30(interpreter, globalObject);
   initDPS310(interpreter, globalObject);
 }
