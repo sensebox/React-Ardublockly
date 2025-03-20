@@ -6,7 +6,7 @@ import SensorNode from "../../uiComponents/SensorNode";
 const tofimager = ({ data }) => {
   const sensorConfigTOF = [
     { 
-      id: "distance", 
+      id: "dist", 
       emoji: "📏", 
       label: "Distance (mm)", 
       min: 0, 
