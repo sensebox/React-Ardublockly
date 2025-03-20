@@ -15,6 +15,7 @@ import HDC1080 from "./nodes/hdc1080";
 import Display from "./nodes/display";
 import lightuv from "./nodes/lightuv";
 import WaterTemp from "./nodes/watertemp";
+import SMT50 from "./nodes/smt50";
 import store from "../../store";
 import photodiode from "./nodes/photodiode";
 import scd30 from "./nodes/scd30";
@@ -27,6 +28,7 @@ const nodeTypes = {
   senseBox_display: Display,
   senseBox_waterTemp: WaterTemp,
   sensebox_esp32s2_light: photodiode,
+  senseBox_smt50: SMT50,  
   sensebox_scd30: scd30,
   sensebox_sensor_dps310: dps310
 };
