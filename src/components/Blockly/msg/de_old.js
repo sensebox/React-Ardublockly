@@ -1461,4 +1461,66 @@ Blockly.Msg.faq_q3_answer = `
 Am besten legst du dazu ein Issue auf [Github](https://github.com/sensebox/React-Ardublockly/issues) an. Alternativ kannst du uns auch eine Email an info(at)sensebox.de senden
 `;
 
+/**
+ *  Fehlermuster als JSON-String
+ */
+
+Blockly.Msg.errorPatterns = `{
+  "'display' was not declared in this scope": "display_not_declared",
+  "display not declared": "display_not_declared",
+  "redefinition of": "variable_redeclared",
+  "conflicting declaration": "variable_redeclared",
+  "redeclared": "variable_redeclared",
+  "'WHITE' was not declared": "white_not_declared",
+  "'BLACK' was not declared": "black_not_declared",
+  "no matching function": "no_matching_function",
+  "expected ';'": "expected_semicolon",
+  "expected ')'": "expected_parenthesis",
+  "undefined reference to": "undefined_reference",
+  "'undefined' was not declared": "undefined_error",
+  "was not declared": "was_not_declared",
+  "expected primary-expression before": "missing_parameter"
+}`;
+/**
+ *  Übersetzungen für die Fehlermeldungen
+ */
+
+Blockly.Msg.drawer_ideerror_head = "Ups, etwas ist schiefgelaufen";
+Blockly.Msg.drawer_ideerror_text =
+  "Beim Kompilieren ist ein Fehler aufgetreten, überprüfe deine Blöcke";
+Blockly.Msg.suggestion_pre_text = "Vielleicht solltest du versuchen:";
+Blockly.Msg.error_details = "Details anzeigen";
+Blockly.Msg.hide_details = "Details ausblenden";
+Blockly.Msg.copy_error = "Fehler kopieren";
+Blockly.Msg.copied = "Kopiert!";
+Blockly.Msg.close = "SCHLIESSEN";
+Blockly.Msg.display_not_declared =
+  "Stelle sicher, dass du das Display in der Setup-Funktion initialisierst.";
+Blockly.Msg.variable_redeclared =
+  "Stelle sicher, dass du keine Sonderzeichen in deinen Variablennamen verwendest.";
+Blockly.Msg.undefined_error =
+  "Die Variable 'undefined' existiert in C/C++ nicht. Verwende stattdessen eine definierte Variable.";
+Blockly.Msg.white_not_declared =
+  "Definiere die Farbkonstanten (z.B. WHITE, BLACK) bevor du sie verwendest.";
+Blockly.Msg.black_not_declared =
+  "Definiere die Farbkonstanten (z.B. WHITE, BLACK) bevor du sie verwendest.";
+Blockly.Msg.no_matching_function =
+  "Überprüfe die Funktionsparameter und Datentypen.";
+Blockly.Msg.expected_semicolon = "Füge ein Semikolon am Ende der Zeile hinzu.";
+Blockly.Msg.expected_parenthesis =
+  "Schließe die Klammer in deinem Funktionsaufruf.";
+Blockly.Msg.undefined_reference =
+  "Stelle sicher, dass alle verwendeten Funktionen definiert sind.";
+Blockly.Msg.was_not_declared =
+  "Eine Variable oder Funktion wurde verwendet, aber nicht deklariert.";
+Blockly.Msg.missing_parameter =
+  "Du hast einen Parameter vergessen. Überprüfe die Funktion und füge alle benötigten Werte hinzu.";
+Blockly.Msg.what_to_do_next = "Was du jetzt tun kannst:";
+Blockly.Msg.in_function = "In Funktion";
+Blockly.Msg.line = "Zeile";
+Blockly.Msg.column = "Spalte";
+Blockly.Msg.command_failed =
+  "Befehl fehlgeschlagen: 1: Nicht abgefangene schwerwiegende Ausnahme";
+Blockly.Msg.suggestion_prefix = "Vorschlag:";
+
 export const De = Blockly.Msg;
