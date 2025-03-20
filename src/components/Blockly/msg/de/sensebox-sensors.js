@@ -24,7 +24,8 @@ export const SENSORS = {
   senseBox_sensor_dps310: "Luftdruck-/Temperatursensor (DPS310)",
   senseBox_sensor_dps310_tooltip:
     "Schließe den Sensor an einen der **I2C-Anschlüsse** an. Der Sensor gibt dir den Messwert für den Luftdruck in hPa. Um die korrekte Höhe über NN zu berechnen benötigt der Sensor einen aktuellen Referenzwert.",
-  senseBox_sensor_dps310_helpurl: "https://docs.sensebox.de/docs/hardware/sensors/luftdruck-temperatur",
+  senseBox_sensor_dps310_helpurl:
+    "https://docs.sensebox.de/docs/hardware/sensors/luftdruck-temperatur",
 
   /**
    * Mikro
@@ -116,7 +117,8 @@ Wenn die maximale Distanz überschritten wird, wird ein Wert von **O** ausgegebe
 
 **Beachte:** Das GPS Modul benöigt beim ersten Verwenden relativ lange (ca. 5-10 Minuten) bis es deinen Standort gefunden hat!
 `,
-  senseBox_gps_helpurl: "https://docs.sensebox.de/docs/hardware/accessoires/gps/",
+  senseBox_gps_helpurl:
+    "https://docs.sensebox.de/docs/hardware/accessoires/gps/",
 
   /**
    * Windspeed
@@ -224,16 +226,17 @@ Die Messwerte für Temperatur, Luftfeuchtigkeit und Luftdruck können direkt ver
   senseBox_esp32_photodiode: "Lichtintensität",
   senseBox_esp32_photodiode_tooltip:
     "Die Photodiode misst Lichtintensität. Der ausgegebene Wert ist eine **Ganzzahl** zwischen 0 und 4095. Je höher der Wert, desto heller ist die Umgebung.",
-    senseBox_esp32_photodiode_helpurl:"https://docs.sensebox.de/docs/hardware/sensors/photodiode",
-  
+  senseBox_esp32_photodiode_helpurl:
+    "https://docs.sensebox.de/docs/hardware/sensors/photodiode",
+
   /**
-   * MPU6050 */  
-  senseBox_mpu6050_tooltip: "Der MPU6050 ist ein Beschleunigungs- und Gyroskopsensor. Schließe den Sensor an einen der I2C Anschlüsse an. Der Sensor gibt dir die Beschleunigung in m/s² und die Winkelgeschwindigkeit in °/s zurück.",
-  senseBox_mpu6050_helpurl:"https://docs.sensebox.de/docs/hardware/sensors/mpu6050/",
+   * MPU6050 */
+  senseBox_mpu6050_tooltip:
+    "Der MPU6050 ist ein Beschleunigungs- und Gyroskopsensor. Schließe den Sensor an einen der I2C Anschlüsse an. Der Sensor gibt dir die Beschleunigung in m/s² und die Winkelgeschwindigkeit in °/s zurück.",
+  senseBox_mpu6050_helpurl:
+    "https://docs.sensebox.de/docs/hardware/sensors/mpu6050/",
 
-
-
-  /** 
+  /**
    * ToF Imager
    *
    */
@@ -244,5 +247,11 @@ Die Messwerte für Temperatur, Luftfeuchtigkeit und Luftdruck können direkt ver
   sensebox_distance_bitmap: "8x8 Distanzen als Bitmap (für LED-Matrix)",
   sensebox_tof_imager_max_distance: "Maximal messbare Distanz ",
   sensebox_tof_imager_max_distance_unit: "cm",
-  sensebox_tof_imager_helpurl: "https://docs.sensebox.de/docs/hardware/sensors/tof",
+  sensebox_tof_imager_helpurl:
+    "https://docs.sensebox.de/docs/hardware/sensors/tof",
+
+  /**
+   * ICM Accel/Gyro
+   */
+  senseBox_icm20948: "Beschleunigungs-/Gyroskopsensor (ICM20948)",
 };
