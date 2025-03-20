@@ -14,9 +14,13 @@ import HDC1080 from "./nodes/hdc1080";
 import Display from "./nodes/display";
 import lightuv from "./nodes/lightuv";
 import WaterTemp from "./nodes/watertemp";
+import SMT50 from "./nodes/smt50";
 import store from "../../store";
 import photodiode from "./nodes/photodiode";
 import tofimager from "./nodes/tofimager";
+import bme680 from "./nodes/bme680";
+import scd30 from "./nodes/scd30";
+import dps310 from "./nodes/dps310";
 
 const nodeTypes = {
   board: SenseBoxMCUS2,
@@ -26,6 +30,10 @@ const nodeTypes = {
   senseBox_waterTemp: WaterTemp,
   sensebox_esp32s2_light: photodiode,
   sensebox_tof_imager: tofimager,
+  sensebox_sensor_bme680_bsec: bme680,
+  senseBox_smt50: SMT50,  
+  sensebox_scd30: scd30,
+  sensebox_sensor_dps310: dps310
 };
 
 const initialNodes = [
