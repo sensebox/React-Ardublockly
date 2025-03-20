@@ -41,7 +41,7 @@ export const SENSORS = {
   senseBox_temp_hum_tooltip:
     "This block returns the temperature and humidity sensor readings. Connect the sensor to one of the I2C ports. Measured value is output with 2 decimal places.",
   senseBox_temp_hum_helpurl:
-    "https://docs.sensebox.de/en/hardware/sensoren-temperatur-luftfeuchte/",
+    "https://docs.sensebox.de/en/hardware/sensoren-temperatur-luftfeuchte",
   senseBox_hum: "humidity in %",
   senseBox_hum_tip: "Measures humidity in %",
 
@@ -231,6 +231,8 @@ The measured values for temperature, humidity and air pressure can be used direc
   senseBox_esp32_photodiode: "Light intensity",
   senseBox_esp32_photodiode_tooltip:
     "The photodiode measures light intensity in a range from 0 to 4095. The brighter the environment, the higher the value.",
+  senseBox_esp32_photodiode_helpurl:
+    "https://docs.sensebox.de/en/docs/hardware/sensors/photodiode",
 
   /**
    * ToF Imager
