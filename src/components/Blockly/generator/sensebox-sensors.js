@@ -1136,7 +1136,7 @@ Blockly.Generator.Arduino.forBlock["sensebox_sensor_truebner_smt50_esp32"] =
 
 Blockly.Generator.Arduino.forBlock["sensebox_sensor_icm20948"] = function () {
   var code = "";
-  var dropdown = this.getFieldValue("value");
+  var dropdown = this.getFieldValue("VALUE");
   var range = this.getFieldValue("RANGE");
   Blockly.Generator.Arduino.libraries_["icm20X_lib"] =
     `#include <Adafruit_ICM20X.h>`;
@@ -1192,5 +1192,6 @@ Blockly.Generator.Arduino.forBlock["sensebox_sensor_icm20948"] = function () {
     default:
       code = "";
   }
+
   return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
