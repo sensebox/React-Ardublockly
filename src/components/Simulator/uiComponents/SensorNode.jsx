@@ -23,7 +23,7 @@ const SensorNode = ({ title, sensors, imageSrc, maxWidth = "250px" }) => {
       style={{
         position: "relative",
         maxWidth,
-        background: "#1b7d1066", // Transparent background
+        background: "#1b7d1066", 
         borderRadius: "10px",
         overflow: "hidden",
         fontSize: "1.2rem",
@@ -69,13 +69,11 @@ const SensorNode = ({ title, sensors, imageSrc, maxWidth = "250px" }) => {
             bottom: "0",
             left: "0",
             right: "0",
-            height: "300px",         // Fixed height for the container
             padding: "15px",
             background: "#1b7d10b3",  // Transparent background
             display: "flex",
             flexDirection: "column",
             gap: "15px",
-            overflowY: "auto",       // Enable vertical scrolling
           }}
           onClick={(e) => e.stopPropagation()}
         >
