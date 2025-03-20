@@ -746,10 +746,18 @@ Blockly.Blocks["sensebox_sensor_icm20948"] = {
       .appendField(Blockly.Msg.senseBox_bmx055_accelerometer_direction)
       .appendField(
         new Blockly.FieldDropdown([
-          [Blockly.Msg.senseBox_bmx055_accelerometer_direction_x, "X"],
-          [Blockly.Msg.senseBox_bmx055_accelerometer_direction_y, "Y"],
-          [Blockly.Msg.senseBox_bmx055_accelerometer_direction_z, "Z"],
-          [Blockly.Msg.senseBox_bmx055_accelerometer_direction_total, "Total"],
+          [
+            Blockly.Msg.senseBox_bmx055_accelerometer_direction_x,
+            "accelerationX",
+          ],
+          [
+            Blockly.Msg.senseBox_bmx055_accelerometer_direction_y,
+            "accelerationY",
+          ],
+          [
+            Blockly.Msg.senseBox_bmx055_accelerometer_direction_z,
+            "accelerationZ",
+          ],
         ]),
         "VALUE",
       );
