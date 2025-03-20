@@ -13,7 +13,11 @@ import {
 } from "@mui/material";
 import * as Blockly from "blockly";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronCircleDown, faChevronDown, faExternalLink } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChevronCircleDown,
+  faChevronDown,
+  faExternalLink,
+} from "@fortawesome/free-solid-svg-icons";
 
 const LibrariesAccordion = ({ libraries }) => {
   return (
@@ -23,9 +27,7 @@ const LibrariesAccordion = ({ libraries }) => {
         aria-controls="libraries-content"
         id="libraries-header"
       >
-        <Typography variant="h6">
-          {Blockly.Msg.codeeditor_libraries_head}
-        </Typography>
+        <Typography>{Blockly.Msg.codeeditor_libraries_head}</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <Box
@@ -75,7 +77,8 @@ const LibrariesAccordion = ({ libraries }) => {
                           Author: {library.author}
                         </Typography>
                         <Typography variant="body2" color="textSecondary">
-                          {Blockly.Msg.sensorinfo_description}: {library.sentence}
+                          {Blockly.Msg.sensorinfo_description}:{" "}
+                          {library.sentence}
                         </Typography>
                       </>
                     }
