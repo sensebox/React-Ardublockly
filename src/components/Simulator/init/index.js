@@ -9,6 +9,7 @@ import initLightUv from "./sensors/lightUv";
 import initPd from "./sensors/photodiode";
 import initSCD30 from "./sensors/scd30";
 import initTime from "./time";
+import initTOFImager from "./sensors/tofimager";
 import initSMT50 from "./sensors/smt50";
 
 export default function initSimulator(interpreter, globalObject) {
@@ -20,6 +21,7 @@ export default function initSimulator(interpreter, globalObject) {
   initLightUv(interpreter, globalObject);
   initNeopixel(interpreter, globalObject);
   initPd(interpreter, globalObject);
+  initTOFImager(interpreter, globalObject);
   initBME680(interpreter, globalObject);
   initSMT50(interpreter, globalObject);
   initSCD30(interpreter, globalObject);

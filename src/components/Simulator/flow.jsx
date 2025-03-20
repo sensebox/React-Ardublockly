@@ -1,4 +1,3 @@
-
 import { useCallback, useEffect, memo } from "react";
 import {
   ReactFlow,
@@ -18,6 +17,7 @@ import WaterTemp from "./nodes/watertemp";
 import SMT50 from "./nodes/smt50";
 import store from "../../store";
 import photodiode from "./nodes/photodiode";
+import tofimager from "./nodes/tofimager";
 import bme680 from "./nodes/bme680";
 import scd30 from "./nodes/scd30";
 import dps310 from "./nodes/dps310";
@@ -29,6 +29,7 @@ const nodeTypes = {
   senseBox_display: Display,
   senseBox_waterTemp: WaterTemp,
   sensebox_esp32s2_light: photodiode,
+  sensebox_tof_imager: tofimager,
   sensebox_sensor_bme680_bsec: bme680,
   senseBox_smt50: SMT50,  
   sensebox_scd30: scd30,
