@@ -3,6 +3,7 @@ import initDisplay from "./display";
 import initDom from "./dom";
 import initLogAndAlert from "./log";
 import initNeopixel from "./neopixel";
+import initDPS310 from "./sensors/dps310";
 import initHDC1080 from "./sensors/hdc1080";
 import initLightUv from "./sensors/lightUv";
 import initPd from "./sensors/photodiode";
@@ -19,4 +20,5 @@ export default function initSimulator(interpreter, globalObject) {
   initNeopixel(interpreter, globalObject);
   initPd(interpreter, globalObject);
   initSCD30(interpreter, globalObject);
+  initDPS310(interpreter, globalObject);
 }
