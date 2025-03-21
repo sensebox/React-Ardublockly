@@ -385,4 +385,8 @@ export const UI = {
   compile_overlay_head: "Your program is now compiled and downloaded",
   compile_overlay_text: "Then copy it to your senseBox MCU",
   compile_overlay_help: "You need help? Have a look here: ",
+  compile: "Compile",
+  download: "Download",
+  transfer: "Transfer",
+  dialog_close: "Back to Blockly",
 };
