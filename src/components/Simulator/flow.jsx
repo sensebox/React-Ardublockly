@@ -8,6 +8,7 @@ import {
   addEdge,
   useReactFlow,
 } from "@xyflow/react";
+import SenseBoxWireEdge from "./edges/senseBoxWire";
 import SenseBoxMCUS2 from "./nodes/mcu-s2";
 import "@xyflow/react/dist/style.css";
 import HDC1080 from "./nodes/hdc1080";
@@ -37,6 +38,10 @@ const nodeTypes = {
   sensebox_scd30: scd30,
   sensebox_sensor_dps310: dps310
 };
+
+const edgeTypes = {
+  multicolor: SenseBoxWireEdge,
+}
 
 const initialNodes = [
   {
@@ -76,6 +81,7 @@ const SimulatorFlow = (props) => {
             id: `e${node.id}-${index}`,
             source: node.id,
             target: `m_${index}`,
+            type: "multicolor",
           });
         });
       }
@@ -122,6 +128,7 @@ const SimulatorFlow = (props) => {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
         fitView
         connectionMode="loose"
         minZoom={0.1}
