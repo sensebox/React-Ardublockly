@@ -245,7 +245,7 @@ Blockly.Blocks["sensebox_display_roboeyes"] = {
         "POSITION",
       );
     this.appendDummyInput()
-      .appendField(Blockly.Msg.sensebox_display_roboeyes_radius)
+      .appendField(Blockly.Msg.sensebox_display_roboeyes_emotion)
       .appendField(
         new Blockly.FieldDropdown([
           [Blockly.Msg.sensebox_display_roboeyes_default, "DEFAULT"],
