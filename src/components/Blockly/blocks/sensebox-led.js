@@ -326,7 +326,7 @@ Blockly.Blocks["sensebox_ws2812_matrix_showBitmap"] = {
         "Port",
       );
     this.appendValueInput("input")
-      .setCheck("Bitmap")
+      .setCheck(Types.BITMAP.typeName)
       .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_bitmap);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -355,7 +355,7 @@ Blockly.Blocks["sensebox_ws2812_matrix_bitmap"] = {
         "BITMAP",
       );
 
-    this.setOutput(true, "Bitmap");
+    this.setOutput(true, Types.BITMAP.typeName);
     this.setTooltip(Blockly.Msg.senseBox_ws2812_rgb_matrix_bitmap_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_ws2812_rgb_matrix_helpurl);
 
@@ -366,14 +366,14 @@ Blockly.Blocks["sensebox_ws2812_matrix_custom_bitmap"] = {
   init: function () {
     this.setHelpUrl(Blockly.Msg.senseBox_ws2812_rgb_matrix_helpurl);
     this.setColour(getColour().sensebox);
-    this.appendValueInput("input")
+    this.appendDummyInput("input")
       .appendField("{")
       .appendField(
         new FieldMultilineInput(
           Blockly.Msg.senseBox_ws2812_rgb_matrix_custom_bitmap_example,
         ),
         "input",
-      ).setCheck(Types.BITMAP.getCompatibleTypes)
+      )
       .appendField("}");
     this.setOutput(true, Types.BITMAP.typeName);
     this.setTooltip(
@@ -898,7 +898,7 @@ Blockly.defineBlocksWithJsonArray([
         colour: "#000000",
       },
     ],
-    output: "Bitmap",
+    output: Types.BITMAP.typeName,
     colour: getColour().sensebox,
     tooltip: Blockly.Msg.senseBox_ws2812_rgb_matrix_draw_bitmap_tooltip,
     helpUrl: Blockly.Msg.senseBox_ws2812_rgb_matrix_helpurl,
