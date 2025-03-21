@@ -238,6 +238,7 @@ export const ToolboxMcu = () => {
             </Block>
           </Value>
         </Block>
+        <Block type="sensebox_display_roboeyes" />
         <Block type="sensebox_display_fillCircle">
           <Value name="X">
             <Block type="math_number">
