@@ -8,7 +8,7 @@ import {
   addEdge,
   useReactFlow,
 } from "@xyflow/react";
-import SenseBoxWireEdge from "./edges/senseBoxWire";
+import SenseBoxWireEdge from "./uiComponents/senseBoxWire";
 import SenseBoxMCUS2 from "./nodes/mcu-s2";
 import "@xyflow/react/dist/style.css";
 import HDC1080 from "./nodes/hdc1080";
