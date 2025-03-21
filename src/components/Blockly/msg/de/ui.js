@@ -381,7 +381,7 @@ export const UI = {
   /**
    * Compilation dialog
    * */
-  compile_overlay_compile: "Kompilieren des Codes...",
+  compile_overlay_compile: "Code wird kompiliert...",
   compile_overlay_download: "Bereite den Download vor...",
   compile_overlay_transfer: "Datei auf die senseBox übertragen",
   compile_overlay_error: "Ein Fehler ist aufgetreten",
