@@ -614,13 +614,7 @@ class Navbar extends Component {
                         <FontAwesomeIcon icon={item.icon} />
                       </ListItemIcon>
                       {item.text === "Code Editor" ? (
-                        <Badge
-                          badgeContent={"Experimental"}
-                          color="primary"
-                          overlap="rectangular"
-                        >
-                          <ListItemText primary={item.text} />
-                        </Badge>
+                        <ListItemText primary={item.text} />
                       ) : (
                         <ListItemText primary={item.text} />
                       )}

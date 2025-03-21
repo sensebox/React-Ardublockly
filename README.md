@@ -69,7 +69,7 @@ A modern, React-based version of the [senseBox](https://sensebox.de) Ardublockly
 The compiler URL can be configured in the `.env` file:
 
 ```
-REACT_APP_COMPILER_URL=https://compiler.sensebox.de
+VITE_COMPILER_URL=https://compiler.sensebox.de
 ```
 
 ## 📝 Development Guidelines

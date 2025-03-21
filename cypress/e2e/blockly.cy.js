@@ -7,7 +7,7 @@ describe("Blockly Editor Page Tests", () => {
 
   it("[Blockly] selects senseBox ESP", () => {
     cy.visit("/");
-    cy.get('img[alt="Sensebox ESP"]').click();
+    cy.get('img[alt="Sensebox ESP"]', { timeout: 8000 }).click();
   });
 
   it("[Blockly] compiles code", () => {
@@ -32,6 +32,5 @@ describe("Blockly Editor Page Tests", () => {
       expect(interception.response.body.data).to.have.property("id");
       expect(interception.response.body.data.id).to.be.a("string");
     });
-
   });
 });
