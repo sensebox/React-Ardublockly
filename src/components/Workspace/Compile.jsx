@@ -120,7 +120,7 @@ class Compile extends Component {
     this.toggleDialog();
     this.props.workspaceName(this.state.name);
     window.open(
-      `${this.props.compiler}/download?id=${id}&board=${process.env.REACT_APP_BOARD}&filename=${filename}`,
+      `${this.props.compiler}/download?id=${id}&board=${import.meta.env.VITE_BOARD}&filename=${filename}`,
       "_self",
     );
     this.setState({ progress: false });

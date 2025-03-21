@@ -51,7 +51,7 @@ export const loadUser = () => (dispatch) => {
   };
   axios
     .get(
-      `${process.env.REACT_APP_BLOCKLY_API}/user`,
+      `${import.meta.env.VITE_BLOCKLY_API}/user`,
       config,
       dispatch(authInterceptor()),
     )
@@ -79,7 +79,7 @@ export const login =
     // Request Body
     const body = JSON.stringify({ email, password });
     axios
-      .post(`${process.env.REACT_APP_BLOCKLY_API}/user`, body, config)
+      .post(`${import.meta.env.VITE_BLOCKLY_API}/user`, body, config)
       .then((res) => {
         dispatch(setLanguage(res.data.user.language));
         dispatch({
