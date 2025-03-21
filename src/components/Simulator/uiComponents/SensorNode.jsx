@@ -1,10 +1,10 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useState } from "react";
 import { Handle, Position } from "@xyflow/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 
 const SensorNode = ({ title, sensors, imageSrc, maxWidth = "250px" }) => {
-  // Initialwerte für alle Sensoren festlegen
+  // Initial values for all sensors
   const initialValues = sensors.reduce((acc, sensor) => {
     acc[sensor.id] = sensor.initial !== undefined ? sensor.initial : sensor.min;
     return acc;
@@ -12,7 +12,7 @@ const SensorNode = ({ title, sensors, imageSrc, maxWidth = "250px" }) => {
 
   const [values, setValues] = useState(initialValues);
   const [showOverlay, setShowOverlay] = useState(false);
-  const [isHovered, setIsHovered] = useState(false); // Hover-State
+  const [isHovered, setIsHovered] = useState(false);
 
   const handleChange = (id) => (e) => {
     setValues({ ...values, [id]: Number(e.target.value) });
@@ -23,13 +23,11 @@ const SensorNode = ({ title, sensors, imageSrc, maxWidth = "250px" }) => {
       style={{
         position: "relative",
         maxWidth,
-        background: "#1b7d1066", // Transparenter Hintergrund (#669933)
+        background: "#1b7d1066", 
         borderRadius: "10px",
         overflow: "hidden",
         fontSize: "1.2rem",
-        // Übergang für den Hover-Effekt
         transition: "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
-        // Veränderte Eigenschaften bei Hover
         transform: isHovered ? "scale(1.03)" : "scale(1)",
         boxShadow: isHovered ? "0 8px 15px rgba(0, 0, 0, 0.3)" : "none",
         cursor: "pointer",
@@ -38,7 +36,7 @@ const SensorNode = ({ title, sensors, imageSrc, maxWidth = "250px" }) => {
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => setShowOverlay(!showOverlay)}
     >
-      {/* Titel */}
+      {/* Title */}
       <span
         style={{
           textAlign: "center",
@@ -52,18 +50,18 @@ const SensorNode = ({ title, sensors, imageSrc, maxWidth = "250px" }) => {
         {title}
       </span>
 
-      {/* Bild, das bei Klick das Overlay öffnet */}
+      {/* Image that opens the overlay when clicked */}
       <img
         src={imageSrc}
         alt="Sensor Graphic"
         style={{
           width: "100%",
           display: "block",
-          pointerEvents: "none", // Bild selbst ist nicht klickbar, sondern das ganze Div
+          pointerEvents: "none",
         }}
       />
 
-      {/* Overlay mit den Slidern */}
+      {/* Overlay with the sliders */}
       {showOverlay && (
         <div
           style={{
@@ -72,15 +70,14 @@ const SensorNode = ({ title, sensors, imageSrc, maxWidth = "250px" }) => {
             left: "0",
             right: "0",
             padding: "15px",
-            background: "#1b7d10b3", // Transparenter Hintergrund (#669933)
+            background: "#1b7d10b3",  // Transparent background
             display: "flex",
             flexDirection: "column",
             gap: "15px",
           }}
-          // Verhindert, dass Klicks im Overlay das Schließen sofort wieder auslösen
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Schließen-Button */}
+          {/* Close button */}
           <div
             style={{
               position: "absolute",
@@ -88,7 +85,7 @@ const SensorNode = ({ title, sensors, imageSrc, maxWidth = "250px" }) => {
               right: "15px",
               cursor: "pointer",
               fontWeight: "bold",
-              color: "#ffcc33", // Farbe für den Schließen-Button
+              color: "#ffcc33",
               fontSize: "1.5rem",
               userSelect: "none",
               zIndex: 2,
@@ -130,7 +127,7 @@ const SensorNode = ({ title, sensors, imageSrc, maxWidth = "250px" }) => {
                     onChange={handleChange(sensor.id)}
                     style={{
                       width: "100%",
-                      accentColor: "#00cccc", // Slider-Farbe
+                      accentColor: "#00cccc",
                     }}
                   />
                   <span
@@ -149,15 +146,7 @@ const SensorNode = ({ title, sensors, imageSrc, maxWidth = "250px" }) => {
           ))}
         </div>
       )}
-      {/* {/* <Handle
-        type="target"
-        position={Position.Left}
-        style={{
-          width: "1.5rem",
-          height: "1.5rem",
-          backgroundColor: "#ffcc33",
-        }}
-      /> */}
+
       <Handle
         type="source"
         position={Position.Right}

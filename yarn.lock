@@ -304,6 +304,11 @@
   dependencies:
     "@blockly/plugin-modal" "^7.0.12"
 
+"@blockly/toolbox-search@^2.0.12":
+  version "2.0.12"
+  resolved "https://registry.yarnpkg.com/@blockly/toolbox-search/-/toolbox-search-2.0.12.tgz#d6debd7560ebb1aaafe2d13c0fc107baee5e68c1"
+  integrity sha512-lZlBkWjW0pbU7gH8hiRQ9EkNy/sO7O4w4G5b49zeabmlfXxnXPrVVVxg+DVGGUifXqcNN5sGLQBrpbdPRJR+6w==
+
 "@blockly/workspace-backpack@^6.0.9":
   version "6.0.12"
   resolved "https://registry.npmjs.org/@blockly/workspace-backpack/-/workspace-backpack-6.0.12.tgz"

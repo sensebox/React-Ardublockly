@@ -1,5 +1,3 @@
-// path: src/components/Simulator/flow.jsx
-// Ergänzt
 import { useCallback, useEffect, memo } from "react";
 import {
   ReactFlow,
@@ -10,6 +8,7 @@ import {
   addEdge,
   useReactFlow,
 } from "@xyflow/react";
+import SenseBoxWireEdge from "./uiComponents/senseBoxWire";
 import SenseBoxMCUS2 from "./nodes/mcu-s2";
 import "@xyflow/react/dist/style.css";
 import HDC1080 from "./nodes/hdc1080";
@@ -17,8 +16,14 @@ import Display from "./nodes/display";
 import lightuv from "./nodes/lightuv";
 
 import WaterTemp from "./nodes/watertemp";
+import SMT50 from "./nodes/smt50";
 import store from "../../store";
 import photodiode from "./nodes/photodiode";
+import UltrasonicSensor from "./nodes/ultrasonic";
+import tofimager from "./nodes/tofimager";
+import bme680 from "./nodes/bme680";
+import scd30 from "./nodes/scd30";
+import dps310 from "./nodes/dps310";
 
 import FluoroASM from "./nodes/fluoroASM";
 import Sps30 from "./nodes/sps30";
@@ -31,10 +36,19 @@ const nodeTypes = {
 
   senseBox_waterTemp: WaterTemp,
   sensebox_esp32s2_light: photodiode,
-
   senseBox_fluoroASM: FluoroASM,
   senseBox_sps30: Sps30,
+  sensebox_sensor_ultrasonic_ranger: UltrasonicSensor,
+  sensebox_tof_imager: tofimager,
+  sensebox_sensor_bme680_bsec: bme680,
+  senseBox_smt50: SMT50,  
+  sensebox_scd30: scd30,
+  sensebox_sensor_dps310: dps310
 };
+
+const edgeTypes = {
+  multicolor: SenseBoxWireEdge,
+}
 
 const initialNodes = [
   {
@@ -79,6 +93,7 @@ const SimulatorFlow = (props) => {
             id: `e${node.id}-${index}`,
             source: node.id,
             target: `m_${index}`,
+            type: "multicolor",
           });
         });
       }
@@ -131,6 +146,7 @@ const SimulatorFlow = (props) => {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
         fitView
         connectionMode="loose"
         minZoom={0.1}

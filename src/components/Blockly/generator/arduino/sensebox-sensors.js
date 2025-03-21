@@ -313,13 +313,13 @@ bsec_virtual_sensor_t sensorList[13] = {
     }
     `;
     switch (dropdown_name) {
-      case "temperature":
+      case "Temperature":
         code = "bmeTemperatur";
         break;
-      case "humidity":
+      case "Humidity":
         code = "bmeHumidity";
         break;
-      case "pressure":
+      case "Pressure":
         code = "bmePressure";
         break;
       case "IAQ":

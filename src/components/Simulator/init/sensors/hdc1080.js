@@ -1,7 +1,7 @@
 export default function initHDC1080(interpreter, globalObject) {
     // Define getTemperature function
     var wrapper = function readTemperature() {
-      return document.getElementById("temperature-slider").value;
+      return document.getElementById("temp-slider").value;
     };
     interpreter.setProperty(
       globalObject,
