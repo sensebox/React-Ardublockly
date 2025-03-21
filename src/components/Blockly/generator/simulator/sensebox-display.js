@@ -1,3 +1,4 @@
+// path: src/components/Blockly/generator/simulator/sensebox-display.js
 import * as Blockly from "blockly/core";
 
 Blockly.Generator.Simulator.forBlock["sensebox_display_clearDisplay"] =
@@ -15,7 +16,6 @@ Blockly.Generator.Simulator.forBlock["sensebox_display_printDisplay"] =
     var x = this.getFieldValue("X");
     var y = this.getFieldValue("Y");
 
-
     var printDisplay =
       Blockly.Generator.Simulator.valueToCode(
         this,
@@ -26,4 +26,4 @@ Blockly.Generator.Simulator.forBlock["sensebox_display_printDisplay"] =
     var color = this.getFieldValue("COLOR");
     var code = `drawText(${printDisplay}, ${x}, ${y}, ${size}, "${color.split(",")[0]}");\n`;
     return code;
-    };
+  };

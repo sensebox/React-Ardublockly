@@ -1,3 +1,5 @@
+// path: src/components/Blockly/blocks/index.js
+// Ergänzt
 import * as Blockly from "blockly";
 import { getColour } from "../helpers/colour";
 import * as Types from "../helpers/types";
@@ -737,3 +739,30 @@ Blockly.Blocks["sensebox_esp32s2_mpu6050"] = {
     this.data = { name: "mpu6050" };
   },
 };
+
+// Das wurde ergänzt:
+
+// FluoroASM-Block
+
+// Blockly.Msg.sensebox_fluoroASM_category = "FluoroASM Quanten-Sensoren";
+
+// Blockly.Blocks["sensebox_sensor_fluoroASM"] = {
+//   init: function () {
+//     this.appendDummyInput().appendField("FluoroASM Quanten-Sensor");
+//     this.appendDummyInput()
+//       .setAlign(Blockly.inputs.Align.RIGHT)
+//       .appendField("Wert auslesen")
+//       .appendField(
+//         new Blockly.FieldDropdown([
+//           ["Quantensignal", "QuantumValue"],
+//           ["Quantenrauschen", "QuantumNoise"],
+//         ]),
+//         "NAME",
+//       );
+//     this.setOutput(true, Types.DECIMAL.typeName); // Float/Dezimalwert
+//     this.setColour(getColour().sensebox);
+//     this.setTooltip("Liest den FluoroASM Quanten-Sensorwert aus");
+//     this.setHelpUrl(""); // Falls eine Doku existiert
+//     this.data = { name: "fluoroASM", connection: "I2C" };
+//   },
+// };

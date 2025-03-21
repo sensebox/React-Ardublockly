@@ -40,6 +40,7 @@ Blockly.Generator.Simulator.forBlock["sensebox_esp32s2_light"] = function () {
   return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
 };
 
+
 Blockly.Generator.Simulator.forBlock["sensebox_sensor_ultrasonic_ranger"] = function () {
   Blockly.Generator.Simulator.modules_["sensebox_sensor_ultrasonic_ranger"] = "sensebox_sensor_ultrasonic_ranger";
   var code = "readUltrasonicDistance()";
@@ -94,4 +95,3 @@ Blockly.Generator.Simulator.forBlock["sensebox_sensor_dps310"] = function () {
   var code = `read${dropdown_name}DPS310()`;
   return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
 };
-

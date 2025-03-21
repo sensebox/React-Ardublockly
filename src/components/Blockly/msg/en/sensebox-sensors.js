@@ -1,3 +1,4 @@
+// path: src/components/Blockly/msg/en/sensebox-sensors.js
 export const SENSORS = {
   /**
    * Sensors
