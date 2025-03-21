@@ -1,5 +1,3 @@
-//  src/components/CodeEditor/ErrorView.jsx
-
 "use client";
 
 import * as Blockly from "blockly/core";
