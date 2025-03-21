@@ -370,4 +370,19 @@ export const UI = {
   sensorinfo_lifetime: "Lifetime",
   sensorinfo_explanation:
     "This information was fetched from [sensors.wiki](https://sensors.wiki). For more information visit the section on this sensor ",
+
+  /**
+   * Compile Dialog
+   */
+  compile_overlay_compile: "Compilation in progress...",
+  compile_overlay_download: "Preparing download...",
+  compile_overlay_transfer: "Transfer the file to your senseBox",
+  compile_overlay_error: "An error has occurred",
+  compile_overlay_app_transfer: "Preparing app transfer...",
+  compile_overlay_code_compiled: "Code successfully compiled!",
+  compile_overlay_start_transfer: "Start transfer",
+  compile_overlay_close: "Close",
+  compile_overlay_head: "Your program is now compiled and downloaded",
+  compile_overlay_text: "Then copy it to your senseBox MCU",
+  compile_overlay_help: "You need help? Have a look here: ",
 };
