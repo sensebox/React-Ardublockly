@@ -40,7 +40,7 @@ export const DISPLAY = {
   senseBox_display_plotTimeFrame: "Zeitabschnitt",
   sensebox_display_roboeyes: "Zeichne Augen",
   sensebox_display_roboeyes_position: "Position",
-  sensebox_display_roboeyes_radius: "Emotion",
+  sensebox_display_roboeyes_emotion: "Emotion",
   sensebox_display_roboeyes_default: "neutral",
   sensebox_display_roboeyes_happy: "glücklich",
   sensebox_display_roboeyes_tired: "müde",
