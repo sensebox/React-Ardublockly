@@ -392,4 +392,8 @@ export const UI = {
   compile_overlay_head: "Dein Programm wird nun kompiliert und heruntergeladen",
   compile_overlay_text: "Kopiere es anschließend auf deine senseBox ",
   compile_overlay_help: " Benötigst du mehr Hilfe? Dann schaue hier: ",
+  compile: "Kompilieren",
+  download: "Herunterladen",
+  transfer: "Übertragen",
+  dialog_close: "Zurück zu Blockly",
 };
