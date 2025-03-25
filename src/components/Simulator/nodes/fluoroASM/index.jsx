@@ -2,7 +2,7 @@ import React, { memo } from "react";
 import { Handle, Position } from "@xyflow/react";
 import FluoroBee from "./fluoroBee"; // SVG-Komponente einbinden
 
-const Sps30 = ({ data }) => {
+const FluoroASM = ({ data }) => {
   return (
     <div
       style={{
@@ -40,4 +40,4 @@ const Sps30 = ({ data }) => {
   );
 };
 
-export default memo(Sps30);
+export default memo(FluoroASM);

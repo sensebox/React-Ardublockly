@@ -79,6 +79,9 @@ const SimulatorFlow = (props) => {
     nodes.forEach((node) => {
       if (node.type === "board") {
         props.modules.forEach((module, index) => {
+          if (module === "sensebox_fluoroASM_init") {
+            return;
+          }
           newEdges.push({
             id: `e${node.id}-${index}`,
             source: node.id,
@@ -87,8 +90,14 @@ const SimulatorFlow = (props) => {
           });
         });
       }
+      if(node.type === "sensebox_fluoroASM_init") {
+        const beePosition = { x:396.82729304066527, y:34.11579832935985}
+        node.draggable = true;
+        node.position = beePosition;
+        
+      }
     });
-
+    console.log(nodes)
     setEdges([...initialEdges, ...newEdges]);
   }, [nodes]);
 
