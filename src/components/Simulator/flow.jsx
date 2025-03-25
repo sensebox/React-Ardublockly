@@ -38,7 +38,7 @@ const nodeTypes = {
   senseBox_smt50: SMT50,  
   sensebox_scd30: scd30,
   sensebox_sensor_dps310: dps310,
-  sensebox_fluoroASM: fluoroASM,
+  sensebox_fluoroASM_init: fluoroASM,
 };
 
 const edgeTypes = {

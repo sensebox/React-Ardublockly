@@ -1,13 +1,13 @@
 export default function initFluoroASM(interpreter, globalObject) {
 
-    var wrapper = function readLEDState (led) {
-        const readLEDState = document.getElementById(led-selector).value;
-        return readLEDState;
+    var wrapper = function setLEDState (led) {
+        const setLEDState = document.getElementById(led-selector).value;
+        return setLEDState;
     };
   
     interpreter.setProperty(
       globalObject,
-      "readLEDState",
+      "setLEDState",
       interpreter.createNativeFunction(wrapper),
     );
 
