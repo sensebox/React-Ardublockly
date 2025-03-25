@@ -95,7 +95,6 @@ const SimulatorFlow = (props) => {
         const beePosition = { x:497.69717682803514, y:47.304223387137014}
         node.draggable = false;
         node.position = beePosition;
-        console.log(node)
       }
     });
     setEdges([...initialEdges, ...newEdges]);
