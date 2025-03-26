@@ -103,6 +103,9 @@ const SimulatorFlow = (props) => {
   useEffect(() => {
     const newNodes = props.modules
       .map((module, index) => {
+        if (module === "sensebox_fluoroASM_setLED2") {
+          return
+        }
         if (nodes.map((n) => n.type).includes(module)) {
           return nodes.find((n) => n.type == module);
         }

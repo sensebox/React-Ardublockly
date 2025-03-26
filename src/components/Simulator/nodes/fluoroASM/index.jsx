@@ -6,7 +6,7 @@ import { Input } from "blockly/core";
 
 const FluoroASM = ({ data }) => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [filterEnabled, setFilterEnabled] = useState(true);
+  const [filterEnabled, setFilterEnabled] = useState(false);
   const [withDiamond, setWithDiamond] = useState(true);
   const [ledColor, setLedColor] = useState("yellow");
 
@@ -41,10 +41,7 @@ const FluoroASM = ({ data }) => {
       }}
       onClick={toggleMenu}
     >
-        <FluoroBee filterEnabled={filterEnabled} color={ledColor} />
-
-
-      
+      <FluoroBee filterEnabled={filterEnabled} color={ledColor} />
       {menuOpen && (
         <div
           onClick={(e) => e.stopPropagation()} // Klicks innerhalb des Menüs lösen nicht das Toggle aus

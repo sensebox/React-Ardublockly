@@ -400,6 +400,8 @@ export const ToolboxEsp = () => {
       <Category id="QOOOL" name="QOOOL" colour={getColour().sensebox}>
         <Block type="sensebox_fluoroASM_init"></Block>
         <Block type="sensebox_fluoroASM_setLED"></Block>
+        <Block type="sensebox_fluoroASM_setLED2"></Block>
+
         </Category>
       <Category id="webserver" name="Webserver" colour={getColour().webserver}>
         <Block type="sensebox_initialize_http_server"></Block>

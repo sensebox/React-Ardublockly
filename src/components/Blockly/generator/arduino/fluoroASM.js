@@ -13,3 +13,9 @@ Blockly.Generator.Arduino.forBlock["sensebox_fluoroASM_setLED"] = function (bloc
     const code = `fluoroASM_setLED(${ledColor});\n`;
     return code;
     }
+    Blockly.Generator.Arduino.forBlock["sensebox_fluoroASM_setLED2"] = function (block) {
+        const ledColor = block.getFieldValue("LED_COLOR");
+        
+        const code = `fluoroASM_setLED(${ledColor});\n`;
+        return code;
+        }
