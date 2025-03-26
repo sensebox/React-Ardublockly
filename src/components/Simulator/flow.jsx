@@ -80,6 +80,7 @@ const SimulatorFlow = (props) => {
       if (node.type === "board") {
         node.draggable = false
         props.modules.forEach((module, index) => {
+          // dont draw an edge with the fluoro bee
           if (module === "sensebox_fluoroASM_init") {
             return;
           }
@@ -95,6 +96,7 @@ const SimulatorFlow = (props) => {
         const beePosition = { x:497.69717682803514, y:47.304223387137014}
         node.draggable = false;
         node.position = beePosition;
+        node.zIndex = 1000;
       }
     });
     setEdges([...initialEdges, ...newEdges]);
@@ -103,6 +105,7 @@ const SimulatorFlow = (props) => {
   useEffect(() => {
     const newNodes = props.modules
       .map((module, index) => {
+        // skip the block for led - only use init block for node creation
         if (module === "sensebox_fluoroASM_setLED2") {
           return
         }
