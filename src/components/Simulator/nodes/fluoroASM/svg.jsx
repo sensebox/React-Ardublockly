@@ -1,3 +1,5 @@
+import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as React from "react";
 
 const SvgFluoroBee = (props) => {
@@ -15,12 +17,17 @@ const SvgFluoroBee = (props) => {
     led4: "#FFFF66",
   };
 
+
   const toggleLED = (led) =>
     setLedColors((prev) => ({
       ...prev,
       [led]: prev[led] === toggledColors[led] ? "#000" : toggledColors[led],
     }));
 
+    React.useEffect(() => {
+      console.log(props)
+    }, [props]  
+    )
 
   return (
     <div>
@@ -37,6 +44,7 @@ const SvgFluoroBee = (props) => {
       basemcu.dxf - scale = 1.000000, origin = (0.000000, 0.000000), method =
       manual
     </desc>
+    
     <g id="g37" transform="translate(-276.891 -469.924)">
       <path
         id="path5"
@@ -433,7 +441,41 @@ const SvgFluoroBee = (props) => {
         transform="translate(276.891 469.924)"
       ></path>
     </g>
+    {props.filterEnabled && (
+       <g id="filter" stroke="#000" transform={`translate(-276.722 ${-447.292 + props.filterOffset})`}  >
+       <path
+         id="path5"
+         fill="none"
+         d="M364.152 583.855a3.78 3.78 0 0 0 3.779-3.78V459.132a3.78 3.78 0 0 0-3.78-3.78 3.78 3.78 0 0 1-3.779-3.779 3.78 3.78 0 0 0-3.78-3.78h-7.559a3.78 3.78 0 0 0-3.78 3.78 3.78 3.78 0 0 1-3.779 3.78H303.68a3.78 3.78 0 0 1-3.78-3.78 3.78 3.78 0 0 0-3.779-3.78h-7.56a3.78 3.78 0 0 0-3.779 3.78 3.78 3.78 0 0 1-3.78 3.78 3.78 3.78 0 0 0-3.779 3.78v120.944a3.78 3.78 0 0 0 3.78 3.78h75.591z"
+       ></path>
+       <path
+         id="path6"
+         fill="none"
+         d="M349.033 515.824a26.457 26.457 0 0 0-52.913 0 26.457 26.457 0 0 0 52.913 0z"
+       ></path>
+       <path
+         id="path462"
+         fill="#000"
+         strokeOpacity="0"
+         strokeWidth="0.965"
+         d="M279.041 581.634c-.801-.966-1.031-17.85-.85-62.502l.249-61.178 3.015-1.328c1.72-.758 3.585-2.624 4.343-4.344 1.189-2.698 1.817-3.046 5.987-3.312 5.009-.32 7.405.898 7.405 3.76 0 3.272 3.193 3.776 23.915 3.776 18.007 0 20.343-.182 21.68-1.689.823-.929 1.655-2.557 1.847-3.62.294-1.617 1.232-1.976 5.79-2.216 5.429-.286 5.442-.28 7.229 3.355 1.148 2.336 2.655 3.839 4.203 4.19l2.413.55v125.38l-43.064.25c-35.539.208-43.255.02-44.162-1.072zm55.003-40.927c17.179-7.722 21.258-30.92 7.803-44.375-6.892-6.892-17.723-9.47-27.655-6.583-4.349 1.264-6.727 2.752-10.615 6.64-15.31 15.31-8.456 40.595 12.503 46.13 4.475 1.181 13.28.293 17.964-1.812z"
+       ></path>
+       <ellipse
+         id="colourFilter"
+         cx="322.291"
+         cy="515.319"
+         fill="#f90c0c"
+         fillOpacity="0.499"
+         strokeOpacity="0"
+         strokeWidth="1.019"
+         rx="26.042"
+         ry="26.538"
+       ></ellipse>
+     </g>
+     )}
+   
   </svg>
+
     </div>
   );
 };

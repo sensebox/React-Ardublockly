@@ -1,3 +1,5 @@
+import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect,useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
@@ -11,6 +13,7 @@ const SvgBoardComplex = (props) =>  {
 
   const [photodiodeSelected, setPhotodiodeSelected] = useState(false);
   const [imuSelected, setImuSelected] = useState(false);
+  const [isPressed, setIsPressed] = useState(false);
 
   const highlightPhotodiode = () => {
     if (photodiodeRectangle.current) {
@@ -23,8 +26,16 @@ const SvgBoardComplex = (props) =>  {
       photodiodeRectangle.current.style.stroke = "transparent";
     }
   };
-  
 
+  const handleBtnClick = () => {
+    setIsPressed(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsPressed(false);
+  };
+
+  
   const highlightImu = () => {
     if (imuRectangle.current) {
       imuRectangle.current.style.stroke = "rgb(255, 221, 53)";
@@ -45,7 +56,18 @@ const SvgBoardComplex = (props) =>  {
   
   return (
     <div>
-
+            <style>
+        {`
+          /* Beim Hover wird der Cursor zum Pointer und die Umrandung (stroke) ändert sich */
+          #mcu_switch_button:hover {
+            cursor: pointer;
+            /* Beispiel: Änderung der stroke-Farbe und stroke-Breite */
+            stroke: #fff383;
+            stroke-width: 4px;
+            transition: stroke 0.2s ease-in-out, stroke-width 0.2s ease-in-out;
+          }
+        `}
+      </style>
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="283"
@@ -3971,7 +3993,13 @@ const SvgBoardComplex = (props) =>  {
             transform="scale(2.52407)"
           ></path>
           <g
-            id="board-complex_svg___3103675514496"
+            id="mcu_switch_button"
+            onClick={() => handleBtnClick()}
+            onMouseUp={() => handleBtnClick()}
+            onMouseDown={() => handleBtnClick()}
+            onMouseLeave={() => handleMouseLeave()}
+            onMouseDownCapture={() => handleBtnClick()}
+            aria-pressed={isPressed}
             stroke="#2B2A29"
             strokeMiterlimit="22.926"
             strokeWidth="2.7"
@@ -8328,6 +8356,7 @@ const SvgBoardComplex = (props) =>  {
       ></path>
     </g>
   </svg>
+
   </div>
 )};
 

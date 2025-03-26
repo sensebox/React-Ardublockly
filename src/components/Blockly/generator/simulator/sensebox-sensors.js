@@ -95,3 +95,11 @@ Blockly.Generator.Simulator.forBlock["sensebox_sensor_dps310"] = function () {
   return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
 };
 
+Blockly.Generator.Simulator.forBlock["sensebox_button"] = function () {
+  Blockly.Generator.Simulator.modules_["sensebox_button"] = "sensebox_button";
+
+  var dropdown = this.getFieldValue("FUNCTION");
+
+  var code = `${dropdown}()`;
+  return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
+};

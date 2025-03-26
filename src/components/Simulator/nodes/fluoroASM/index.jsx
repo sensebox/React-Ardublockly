@@ -1,14 +1,17 @@
 import React, { useState, memo } from "react";
 import { Handle, Position } from "@xyflow/react";
-import FluoroBee from "./fluoroBee"; // SVG-Komponente einbinden
 import { Checkbox, InputLabel, MenuItem, Select } from "@mui/material";
 import { Input } from "blockly/core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
+import SvgFluoroBee from "./svg";
 
 const FluoroASM = ({ data }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [filterEnabled, setFilterEnabled] = useState(false);
   const [withDiamond, setWithDiamond] = useState(true);
   const [ledColor, setLedColor] = useState("yellow");
+  const [filterOffset, setFilterOffset] = React.useState(0);
 
   const toggleMenu = () => {
     setMenuOpen((prev) => !prev);
@@ -32,6 +35,21 @@ const FluoroASM = ({ data }) => {
     setLedColor(e.target.value);
   };
 
+      // State für den vertikalen Offset des Filters
+
+  const moveFilterUp = (e) => {
+    // Da in SVG ein kleinerer y-Wert das Element nach oben verschiebt,
+    // subtrahieren wir einen festen Wert
+    e.stopPropagation();
+    setFilterOffset((prev) => prev - 10);
+  };
+
+  const moveFilterDown = (e) => {
+    e.stopPropagation();
+    setFilterOffset((prev) => prev + 10);
+  };
+  
+
   return (
     <div
       style={{
@@ -41,7 +59,14 @@ const FluoroASM = ({ data }) => {
       }}
       onClick={toggleMenu}
     >
-      <FluoroBee filterEnabled={filterEnabled} color={ledColor} />
+        <SvgFluoroBee filterEnabled={filterEnabled} filterOffset={filterOffset}   />
+      {filterEnabled && (
+              <div style={{ position:"absolute", top:"50px", left:"95px", display: "flex", flexDirection: "column" }}>
+              <button onClick={moveFilterUp} style={{ marginBottom: "5px" }}><FontAwesomeIcon icon={faArrowUp}/> </button>
+              <button onClick={moveFilterDown}><FontAwesomeIcon icon={faArrowDown} /> </button>
+            </div>
+            )}
+
       {menuOpen && (
         <div
           onClick={(e) => e.stopPropagation()} // Klicks innerhalb des Menüs lösen nicht das Toggle aus
@@ -61,6 +86,10 @@ const FluoroASM = ({ data }) => {
 
           }}
         >
+          <span style={{color:'white', fontSize: "0.9rem" }}>Filter aktiv </span>
+
+<input type="checkbox" checked={filterEnabled} onChange={handleFilterChange} />
+
           {/* Close-Button */}
           <div
             style={{
@@ -77,34 +106,7 @@ const FluoroASM = ({ data }) => {
             ×
           </div>
 
-          <div >
-            {/* Checkbox für Filter an/aus */}
-            <span style={{color:'white', fontSize: "0.9rem" }}>Filter aktiv </span>
 
-            <input type="checkbox" checked={filterEnabled} onChange={handleFilterChange} />
-
-
-            {/* Radiobuttons für Filter-Typ */}
-            <div>
-            <span style={{ fontSize: "0.9rem" ,color:'white'}}>Filter typ: </span>
-
-            <select value={ledColor} onChange={handleLedColorChange}>
-            <option value="with">mit Diamant</option>
-            <option value="without">ohne Diamant</option>
-            </select>
-            </div>
-
-            {/* Dropdown für LED-Farbe */}
-            <div>
-              <span style={{ color:'white', fontSize: "0.9rem" }}>LED Farbe: </span>
-              <select value={ledColor} onChange={handleLedColorChange}>
-                <option value="#FFFF66">Gelb</option>
-                <option value="#3399FF">Blau</option>
-                <option value="#33FF33">Grün</option>
-                <option value="#FF3333">Rot</option>
-              </select>
-            </div>
-          </div>
 
           {/* Tooltip-Pfeil */}
           <div
@@ -127,3 +129,28 @@ const FluoroASM = ({ data }) => {
 };
 
 export default memo(FluoroASM);
+
+/** 
+<div >
+
+
+<div>
+<span style={{ fontSize: "0.9rem" ,color:'white'}}>Filter typ: </span>
+
+<select value={ledColor} onChange={handleLedColorChange}>
+<option value="with">mit Diamant</option>
+<option value="without">ohne Diamant</option>
+</select>
+</div>
+
+<div>
+  <span style={{ color:'white', fontSize: "0.9rem" }}>LED Farbe: </span>
+  <select value={ledColor} onChange={handleLedColorChange}>
+    <option value="#FFFF66">Gelb</option>
+    <option value="#3399FF">Blau</option>
+    <option value="#33FF33">Grün</option>
+    <option value="#FF3333">Rot</option>
+  </select>
+</div>
+</div>
+*/
