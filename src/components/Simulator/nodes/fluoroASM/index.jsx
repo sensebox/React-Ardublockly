@@ -38,13 +38,13 @@ const FluoroASM = ({ data }) => {
       // State für den vertikalen Offset des Filters
 
   const moveFilterUp = (e) => {
-    // Da in SVG ein kleinerer y-Wert das Element nach oben verschiebt,
-    // subtrahieren wir einen festen Wert
+    // stop menu from toggling
     e.stopPropagation();
     setFilterOffset((prev) => prev - 10);
   };
 
   const moveFilterDown = (e) => {
+    // stop menu from toggling
     e.stopPropagation();
     setFilterOffset((prev) => prev + 10);
   };
@@ -69,7 +69,7 @@ const FluoroASM = ({ data }) => {
 
       {menuOpen && (
         <div
-          onClick={(e) => e.stopPropagation()} // Klicks innerhalb des Menüs lösen nicht das Toggle aus
+          onClick={(e) => e.stopPropagation()} // 
           style={{
             position: "absolute",
             bottom: "100%",

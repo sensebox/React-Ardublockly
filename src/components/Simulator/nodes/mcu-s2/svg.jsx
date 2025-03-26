@@ -13,7 +13,9 @@ const SvgBoardComplex = (props) =>  {
 
   const [photodiodeSelected, setPhotodiodeSelected] = useState(false);
   const [imuSelected, setImuSelected] = useState(false);
-  const [isPressed, setIsPressed] = useState(false);
+  const [pressed, setPressed] = useState(false);
+  // Track if the button was pressed (e.g. after mouseUp)
+  const [wasPressedFlag, setWasPressedFlag] = useState(false);
 
   const highlightPhotodiode = () => {
     if (photodiodeRectangle.current) {
@@ -27,12 +29,18 @@ const SvgBoardComplex = (props) =>  {
     }
   };
 
-  const handleBtnClick = () => {
-    setIsPressed(true);
+
+
+  // Also resets the "wasPressed" flag for a new click cycle.
+  const handleMouseDown = () => {
+    setWasPressedFlag(false); // reset previous click status
+    setPressed(true);
   };
 
-  const handleMouseLeave = () => {
-    setIsPressed(false);
+  // Handler for when the button is released.
+  const handleMouseUp = () => {
+    setPressed(false);
+    setWasPressedFlag(true);
   };
 
   
@@ -3994,16 +4002,17 @@ const SvgBoardComplex = (props) =>  {
           ></path>
           <g
             id="mcu_switch_button"
-            onClick={() => handleBtnClick()}
-            onMouseUp={() => handleBtnClick()}
-            onMouseDown={() => handleBtnClick()}
-            onMouseLeave={() => handleMouseLeave()}
-            onMouseDownCapture={() => handleBtnClick()}
-            aria-pressed={isPressed}
+            aria-pressed={pressed}
+            // We add a custom attribute to indicate that the button was pressed.
+            data-was-pressed={wasPressedFlag}
+            style={{ pointerEvents: "all"}}
             stroke="#2B2A29"
             strokeMiterlimit="22.926"
             strokeWidth="2.7"
             transform="scale(2.52407)"
+            onPointerDown={handleMouseDown}
+            onPointerUp={handleMouseUp}
+
           >
             <path
               id="board-complex_svg__path397"

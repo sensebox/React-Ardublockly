@@ -106,7 +106,7 @@ const SimulatorFlow = (props) => {
     const newNodes = props.modules
       .map((module, index) => {
         // skip the block for led - only use init block for node creation
-        if (module === "sensebox_fluoroASM_setLED2") {
+        if (module === "sensebox_fluoroASM_setLED2" || module === "sensebox_button") {
           return
         }
         if (nodes.map((n) => n.type).includes(module)) {
@@ -145,6 +145,8 @@ const SimulatorFlow = (props) => {
         onConnect={onConnect}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
+        zoomOnDoubleClick={false}
+        zoomOnPinch={false}
         fitView
         connectionMode="loose"
         minZoom={0.1}

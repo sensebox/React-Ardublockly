@@ -45,9 +45,21 @@ export default function Simulator() {
   const handleStart = () => {
     dispatch(startSimulator());
   };
+  const resetLEDs = () => {
+    const flurorLED1 = document.getElementById("fluoro_led1");
+    const flurorLED2 = document.getElementById("fluoro_led2");
+    const flurorLED3 = document.getElementById("fluoro_led3");
+    const flurorLED4 = document.getElementById("fluoro_led4");
+    flurorLED1.style.fill = "black";
+    flurorLED2.style.fill = "black";
+    flurorLED3.style.fill = "black";
+    flurorLED4.style.fill = "black";
+  };
+
 
   const handleStop = () => {
     dispatch(stopSimulator());
+    resetLEDs();
   };
 
   const handleInfoClick = () => {

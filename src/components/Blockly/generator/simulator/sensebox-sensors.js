@@ -101,5 +101,6 @@ Blockly.Generator.Simulator.forBlock["sensebox_button"] = function () {
   var dropdown = this.getFieldValue("FUNCTION");
 
   var code = `${dropdown}()`;
+
   return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
 };
