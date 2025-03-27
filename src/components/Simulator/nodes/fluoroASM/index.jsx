@@ -15,10 +15,10 @@ const FluoroASM = ({ data }) => {
 
 
   const offsets = {
-    led4: -39,
-    led3: -26,
-    led2: -13,
-    led1: 0,
+    Led4: -39,
+    Led3: -26,
+    Led2: -13,
+    Led1: 0,
   };
 
 
@@ -76,8 +76,8 @@ const FluoroASM = ({ data }) => {
         <SvgFluoroBee filterEnabled={filterEnabled} filterOffset={filterOffset}   />
       {filterEnabled && (
               <div style={{ position:"absolute", top:"50px", left:"95px", display: "flex", flexDirection: "column" }}>
-              <button disabled={filterOffset === offsets.led4} onClick={moveFilterUp} style={{ marginBottom: "5px" }}><FontAwesomeIcon icon={faArrowUp}/> </button>
-              <button disabled={filterOffset === offsets.led1} onClick={moveFilterDown}><FontAwesomeIcon icon={faArrowDown} /> </button>
+              <button disabled={filterOffset === offsets.Led4} onClick={moveFilterUp} style={{ marginBottom: "5px" }}><FontAwesomeIcon icon={faArrowUp}/> </button>
+              <button disabled={filterOffset === offsets.Led1} onClick={moveFilterDown}><FontAwesomeIcon icon={faArrowDown} /> </button>
             </div>
             )}
 
