@@ -136,7 +136,7 @@ const SimulatorFlow = (props) => {
         width: "100%",
         height: "100%",
       }}
-    >
+    > 
       <ReactFlow
         nodes={nodes}
         edges={edges}

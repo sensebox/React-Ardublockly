@@ -17,6 +17,7 @@ export default function initButton(interpreter, globalObject) {
         const button = document.getElementById("mcu_switch_button");
         const wasPressed = button.getAttribute("data-was-pressed");
         const wasPressedBool = wasPressed === "true";   
+        button.setAttribute("data-was-pressed", "false");
         return wasPressedBool;
     };
 

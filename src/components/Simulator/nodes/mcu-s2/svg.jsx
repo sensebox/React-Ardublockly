@@ -43,6 +43,10 @@ const SvgBoardComplex = (props) =>  {
     setWasPressedFlag(true);
   };
 
+  const handleBtnClick = () => {
+    setWasPressedFlag(true);
+  };
+
   
   const highlightImu = () => {
     if (imuRectangle.current) {
@@ -4012,6 +4016,7 @@ const SvgBoardComplex = (props) =>  {
             transform="scale(2.52407)"
             onPointerDown={handleMouseDown}
             onPointerUp={handleMouseUp}
+            onClick={handleBtnClick}
 
           >
             <path
