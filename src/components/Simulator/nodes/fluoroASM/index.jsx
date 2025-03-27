@@ -9,7 +9,7 @@ import SvgFluoroBee from "./svg";
 const FluoroASM = ({ data }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [filterEnabled, setFilterEnabled] = useState(false);
-  const [withDiamond, setWithDiamond] = useState(true);
+  const [diamondEnabled, setDiamondEnabled] = useState(false);
   const [ledColor, setLedColor] = useState("yellow");
   const [filterOffset, setFilterOffset] = React.useState(0);
 
@@ -38,7 +38,7 @@ const FluoroASM = ({ data }) => {
   };
 
   const handleDiamondChange = (e) => {
-    console.log(e.target.value);
+    setDiamondEnabled(e.target.checked);
   };
 
   const handleLedColorChange = (e) => {
@@ -73,7 +73,7 @@ const FluoroASM = ({ data }) => {
       }}
       onClick={toggleMenu}
     >
-        <SvgFluoroBee filterEnabled={filterEnabled} filterOffset={filterOffset}   />
+        <SvgFluoroBee filterEnabled={filterEnabled} filterOffset={filterOffset} diamondEnabled={diamondEnabled}   />
       {filterEnabled && (
               <div style={{ position:"absolute", top:"50px", left:"95px", display: "flex", flexDirection: "column" }}>
               <button disabled={filterOffset === offsets.Led4} onClick={moveFilterUp} style={{ marginBottom: "5px" }}><FontAwesomeIcon icon={faArrowUp}/> </button>
@@ -113,7 +113,11 @@ const FluoroASM = ({ data }) => {
                 </option>
               ))}
             </select>
+            <span style={{color:'white', fontSize: "0.9rem" }}>Diamant aktiv </span>
+          <input type="checkbox" checked={diamondEnabled} onChange={handleDiamondChange} />
+
             </div>
+            
             )}
           
           {/* Close-Button */}
