@@ -13,6 +13,17 @@ const FluoroASM = ({ data }) => {
   const [ledColor, setLedColor] = useState("yellow");
   const [filterOffset, setFilterOffset] = React.useState(0);
 
+
+  const offsets = {
+    led4: -39,
+    led3: -26,
+    led2: -13,
+    led1: 0,
+  };
+
+
+
+
   const toggleMenu = () => {
     setMenuOpen((prev) => !prev);
   };
@@ -40,13 +51,16 @@ const FluoroASM = ({ data }) => {
   const moveFilterUp = (e) => {
     // stop menu from toggling
     e.stopPropagation();
-    setFilterOffset((prev) => prev - 10);
+
+    setFilterOffset((prev) => prev - 13);
+    console.log(filterOffset);
+
   };
 
   const moveFilterDown = (e) => {
     // stop menu from toggling
     e.stopPropagation();
-    setFilterOffset((prev) => prev + 10);
+    setFilterOffset((prev) => prev + 13);
   };
   
 
@@ -62,8 +76,8 @@ const FluoroASM = ({ data }) => {
         <SvgFluoroBee filterEnabled={filterEnabled} filterOffset={filterOffset}   />
       {filterEnabled && (
               <div style={{ position:"absolute", top:"50px", left:"95px", display: "flex", flexDirection: "column" }}>
-              <button onClick={moveFilterUp} style={{ marginBottom: "5px" }}><FontAwesomeIcon icon={faArrowUp}/> </button>
-              <button onClick={moveFilterDown}><FontAwesomeIcon icon={faArrowDown} /> </button>
+              <button disabled={filterOffset === offsets.led4} onClick={moveFilterUp} style={{ marginBottom: "5px" }}><FontAwesomeIcon icon={faArrowUp}/> </button>
+              <button disabled={filterOffset === offsets.led1} onClick={moveFilterDown}><FontAwesomeIcon icon={faArrowDown} /> </button>
             </div>
             )}
 
@@ -87,9 +101,21 @@ const FluoroASM = ({ data }) => {
           }}
         >
           <span style={{color:'white', fontSize: "0.9rem" }}>Filter aktiv </span>
-
-<input type="checkbox" checked={filterEnabled} onChange={handleFilterChange} />
-
+          <input type="checkbox" checked={filterEnabled} onChange={handleFilterChange} />
+          <br />
+          {filterEnabled && (
+            <div>
+            <span style={{color:'white', fontSize: "0.9rem" }}>Filter an: </span>
+            <select value={filterOffset} onChange={(e) => setFilterOffset(parseInt(e.target.value))}>
+              {Object.keys(offsets).map((key) => (
+                <option key={key} value={offsets[key]}>
+                  {key}
+                </option>
+              ))}
+            </select>
+            </div>
+            )}
+          
           {/* Close-Button */}
           <div
             style={{
