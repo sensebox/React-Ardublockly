@@ -72,8 +72,6 @@ const SimulatorFlow = (props) => {
 
 
   useEffect(() => {
-    reactFlow.fitView();
-
     // calculate new edges
     const newEdges = [];
     nodes.forEach((node) => {
@@ -149,6 +147,7 @@ const SimulatorFlow = (props) => {
         zoomOnPinch={false}
         fitView
         connectionMode="loose"
+
       >
         <Background />
         <Controls />

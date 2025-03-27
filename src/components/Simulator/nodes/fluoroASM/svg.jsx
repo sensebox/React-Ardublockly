@@ -23,15 +23,6 @@ const SvgFluoroBee = (props) => {
   };
 
 
-  React.useEffect(() => {
-    console.log(props)
-  }, [props])
-
-  const toggleLED = (led) =>
-    setLedColors((prev) => ({
-      ...prev,
-      [led]: prev[led] === toggledColors[led] ? "#000" : toggledColors[led],
-    }));
 
   return (
     <div>
