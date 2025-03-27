@@ -113,6 +113,7 @@ const FluoroASM = ({ data }) => {
                 </option>
               ))}
             </select>
+            <br></br>
             <span style={{color:'white', fontSize: "0.9rem" }}>Diamant aktiv </span>
           <input type="checkbox" checked={diamondEnabled} onChange={handleDiamondChange} />
 
