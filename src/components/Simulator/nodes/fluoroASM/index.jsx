@@ -1,4 +1,4 @@
-import React, { useState, memo } from "react";
+import React, { useState, memo, useEffect } from "react";
 import { Handle, Position } from "@xyflow/react";
 import { Checkbox, InputLabel, MenuItem, Select } from "@mui/material";
 import { Input } from "blockly/core";
@@ -12,17 +12,24 @@ const FluoroASM = ({ data }) => {
   const [diamondEnabled, setDiamondEnabled] = useState(false);
   const [ledColor, setLedColor] = useState("yellow");
   const [filterOffset, setFilterOffset] = React.useState(0);
-
+  const [ledSelected, setLedSelected] = React.useState(0);
 
   const offsets = {
-    Led4: -39,
-    Led3: -26,
-    Led2: -13,
     Led1: 0,
+    Led2: -13,
+    Led3: -26,
+    Led4: -39,
   };
 
 
 
+  useEffect(() => {
+    setLedSelected(Object.values(offsets).indexOf(filterOffset) + 1 || 0);
+  }, [filterOffset]);
+  
+  useEffect(() => {
+    if (!filterEnabled) setDiamondEnabled(false);
+  }, [filterEnabled]);
 
   const toggleMenu = () => {
     setMenuOpen((prev) => !prev);
@@ -73,7 +80,7 @@ const FluoroASM = ({ data }) => {
       }}
       onClick={toggleMenu}
     >
-        <SvgFluoroBee filterEnabled={filterEnabled} filterOffset={filterOffset} diamondEnabled={diamondEnabled}   />
+        <SvgFluoroBee ledSelected={ledSelected } filterEnabled={filterEnabled} filterOffset={filterOffset} diamondEnabled={diamondEnabled}   />
       {filterEnabled && (
               <div style={{ position:"absolute", top:"50px", left:"95px", display: "flex", flexDirection: "column" }}>
               <button disabled={filterOffset === offsets.Led4} onClick={moveFilterUp} style={{ marginBottom: "5px" }}><FontAwesomeIcon icon={faArrowUp}/> </button>

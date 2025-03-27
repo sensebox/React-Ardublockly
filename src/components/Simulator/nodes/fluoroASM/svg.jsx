@@ -11,6 +11,9 @@ const SvgFluoroBee = (props) => {
   });
 
 
+  const [diamondColors, setDiamondColors] = React.useState(
+  ["#CCCCCC", "#D4002A", "#AA4444", "#CCCCCC"] )
+
 
   const toggledColors = {
     led1: "#FF3333",
@@ -19,6 +22,10 @@ const SvgFluoroBee = (props) => {
     led4: "#FFFF66",
   };
 
+
+  React.useEffect(() => {
+    console.log(props)
+  }, [props])
 
   const toggleLED = (led) =>
     setLedColors((prev) => ({
@@ -438,6 +445,7 @@ const SvgFluoroBee = (props) => {
         transform="translate(276.891 469.924)"
       ></path>
     </g>
+    
     {props.filterEnabled && (
        <g id="g9" stroke="#000" transform={`translate(-71.321 ${ -855.812 + props.filterOffset })`}>
        <path
@@ -504,11 +512,11 @@ const SvgFluoroBee = (props) => {
        ></ellipse>
      </g>
      )}
-     {props.diamondEnabled && (
+      {props.diamondEnabled && (
           <g
-          id="g2"
-          fill="#a7bde3"
-          fillOpacity="0.337"
+          id="fluoroDiamond"
+          fill={diamondColors[props.ledSelected - 1]}
+          fillOpacity="0.8"d
           stroke="#000"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -525,7 +533,6 @@ const SvgFluoroBee = (props) => {
           ></path>
         </g>
       )}
-   
   </svg>
 
     </div>
