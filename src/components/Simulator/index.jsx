@@ -59,7 +59,9 @@ export default function Simulator() {
 
   const handleStop = () => {
     dispatch(stopSimulator());
+    if(modules.includes("sensebox_fluoroASM_init")) {
     resetLEDs();
+    }
   };
 
   const handleInfoClick = () => {

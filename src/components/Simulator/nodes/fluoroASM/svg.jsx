@@ -825,7 +825,7 @@ const SvgFluoroBee = (props) => {
         }}
       >
         <tspan x={418.96289} y={97.936633} id="tspan5" />
-        <tspan x={402.74414} y={112.93663} id="tspan7">
+        <tspan x={398.74414} y={112.93663} id="tspan7">
           {"Fluoro"}
         </tspan>
       </text>
