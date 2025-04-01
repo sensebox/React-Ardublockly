@@ -229,21 +229,25 @@ Blockly.Blocks["sensebox_display_show"] = {
 Blockly.Blocks["sensebox_display_roboeyes"] = {
   init: function () {
     var dropdown = new FieldGridDropdown(
-      [ ["top-left","NW"], ["top","N"], ["top-right","NE"],
-        ["left","W"], ["center","DEFAULT"], ["right","E"],
-        ["bottom-left","SW"], ["bottom","S"], ["bottom-right","SE"]],
-      ()=>{},{columns: 3}
+      [
+        [Blockly.Msg.sensebox_display_roboeyes_position_top_left, "NW"],
+        [Blockly.Msg.sensebox_display_roboeyes_position_top, "N"],
+        [Blockly.Msg.sensebox_display_roboeyes_position_top_right, "NE"],
+        [Blockly.Msg.sensebox_display_roboeyes_position_left, "W"],
+        [Blockly.Msg.sensebox_display_roboeyes_position_center, "DEFAULT"],
+        [Blockly.Msg.sensebox_display_roboeyes_position_right, "E"],
+        [Blockly.Msg.sensebox_display_roboeyes_position_bottom_left, "SW"],
+        [Blockly.Msg.sensebox_display_roboeyes_position_bottom, "S"],
+        [Blockly.Msg.sensebox_display_roboeyes_position_bottom_right, "SE"],
+      ],
+      () => {},
+      { columns: 3 },
     );
     this.setColour(getColour().sensebox);
-    this.appendDummyInput().appendField(
-      Blockly.Msg.sensebox_display_roboeyes,
-    );
+    this.appendDummyInput().appendField(Blockly.Msg.sensebox_display_roboeyes);
     this.appendDummyInput()
       .appendField(Blockly.Msg.sensebox_display_roboeyes_position)
-      .appendField(
-        dropdown,
-        "POSITION",
-      );
+      .appendField(dropdown, "POSITION");
     this.appendDummyInput()
       .appendField(Blockly.Msg.sensebox_display_roboeyes_emotion)
       .appendField(

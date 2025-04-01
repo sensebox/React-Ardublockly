@@ -46,7 +46,17 @@ export const DISPLAY = {
   sensebox_display_roboeyes_tired: "müde",
   sensebox_display_roboeyes_angry: "wütend",
   sensebox_display_roboeyes_blink: "blinzeln",
-  senseBox_display_roboeyes_tooltip: "Mit diesem Block können Augen auf dem Display angezeigt werden.",
+  sensebox_display_roboeyes_position_top_left: "oben links",
+  sensebox_display_roboeyes_position_top_right: "oben rechts",
+  sensebox_display_roboeyes_position_bottom_left: "unten links",
+  sensebox_display_roboeyes_position_bottom_right: "unten rechts",
+  sensebox_display_roboeyes_position_center: "mittig",
+  sensebox_display_roboeyes_position_left: "links",
+  sensebox_display_roboeyes_position_right: "rechts",
+  sensebox_display_roboeyes_position_top: "oben",
+  sensebox_display_roboeyes_position_bottom: "unten",
+  senseBox_display_roboeyes_tooltip:
+    "Mit diesem Block können Augen auf dem Display angezeigt werden.",
   sensebox_display_fillCircle: "Zeichne Punkt",
   sensebox_display_fillCircle_radius: "Radius",
   senseBox_display_fillCircle_tooltip:
