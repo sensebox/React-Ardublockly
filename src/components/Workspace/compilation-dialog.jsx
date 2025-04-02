@@ -10,12 +10,14 @@ import {
   Step,
   StepLabel,
   Button,
+  Typography,
 } from "@mui/material";
 import { CodeCompilationIcon } from "./code-compilation-icon";
 import DownloadAnimation from "./download-animation";
 import { DragDropIcon } from "./drag-drop-icon";
 import { connect, useSelector } from "react-redux";
 import * as Blockly from "blockly/core";
+import { ErrorView } from "../ErrorView/ErrorView";
 
 const headerStyle = {
   fontSize: "1.5rem",
@@ -23,15 +25,21 @@ const headerStyle = {
   margin: "1rem",
   fontWeight: "bold",
 };
-function CompilationDialog({ open, code, selectedBoard, filename }) {
+function CompilationDialog({ open, code, selectedBoard, filename, onClose }) {
   const [activeStep, setActiveStep] = useState(0);
   const [sketchId, setSketchId] = useState(null);
+  const [error, setError] = useState(null);
   const myRef = React.createRef();
   const compilerUrl = useSelector((state) => state.general.compiler);
 
   useEffect(() => {
     if (open) {
       handleCompile();
+    }
+    if (!open) {
+      setActiveStep(0);
+      setSketchId(null);
+      setError(null);
     }
   }, [open]);
 
@@ -64,6 +72,10 @@ function CompilationDialog({ open, code, selectedBoard, filename }) {
         }),
       });
       const data = await response.json();
+      if (!response.ok) {
+        setError(data.message);
+        return;
+      }
       if (data.data.id) {
         setSketchId(data.data.id);
       }
@@ -81,6 +93,7 @@ function CompilationDialog({ open, code, selectedBoard, filename }) {
   };
 
   const handleClose = () => {
+    onClose();
     setActiveStep(0);
     setSketchId(null);
   };
@@ -104,7 +117,8 @@ function CompilationDialog({ open, code, selectedBoard, filename }) {
             alignItems: "center",
           }}
         >
-          {activeStep === 0 && (
+          {error && <ErrorView error={error} />}
+          {activeStep === 0 && !error && (
             <div style={{ textAlign: "center" }}>
               <span style={headerStyle}>
                 {Blockly.Msg.compile_overlay_compile}{" "}
@@ -115,7 +129,7 @@ function CompilationDialog({ open, code, selectedBoard, filename }) {
               />
             </div>
           )}
-          {activeStep === 1 && (
+          {activeStep === 1 && !error && (
             <div>
               <span style={headerStyle}>
                 {" "}
@@ -124,7 +138,7 @@ function CompilationDialog({ open, code, selectedBoard, filename }) {
               <DownloadAnimation />
             </div>
           )}
-          {activeStep === 2 && (
+          {activeStep === 2 && !error && (
             <div style={{ textAlign: "center" }}>
               <span style={headerStyle}>
                 {Blockly.Msg.compile_overlay_transfer}
@@ -150,10 +164,21 @@ function CompilationDialog({ open, code, selectedBoard, filename }) {
         >
           <Stepper activeStep={activeStep} alternativeLabel>
             <Step key={1}>
-              <StepLabel>{Blockly.Msg.compile} </StepLabel>
+              <StepLabel
+                error={error}
+                optional={
+                  error && (
+                    <Typography variant="caption" color="error">
+                      {error && Blockly.Msg.compile_overlay_error}
+                    </Typography>
+                  )
+                }
+              >
+                {Blockly.Msg.compile}
+              </StepLabel>
             </Step>
             <Step key={2}>
-              <StepLabel>{Blockly.Msg.download}</StepLabel>
+              <StepLabel>{Blockly.Msg.download} </StepLabel>
             </Step>
             <Step key={3}>
               <StepLabel>{Blockly.Msg.transfer}</StepLabel>
