@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlSpace="preserve"
+   id="svg37"
+   width="92.308"
+   height="190.106"
+   version="1.1"
+   viewBox="0 0 92.308 190.106"
+   sodipodi:docname="svgfluoro.svg"
+   inkscape:version="1.4 (e7c3feb1, 2024-10-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><defs
+   id="defs1" />
+<sodipodi:namedview
+   id="namedview1"
+   pagecolor="#ffffff"
+   bordercolor="#000000"
+   borderopacity="0.25"
+   inkscape:showpageshadow="2"
+   inkscape:pageopacity="0.0"
+   inkscape:pagecheckerboard="0"
+   inkscape:deskcolor="#d1d1d1"
+   showgrid="true"
+   inkscape:zoom="0.96453809"
+   inkscape:cx="-85.533169"
+   inkscape:cy="114.04423"
+   inkscape:window-width="1512"
+   inkscape:window-height="839"
+   inkscape:window-x="204"
+   inkscape:window-y="1238"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="g37">
+  <inkscape:grid
+     id="grid1"
+     units="px"
+     originx="0"
+     originy="0"
+     spacingx="1"
+     spacingy="0.99999999"
+     empcolor="#0099e5"
+     empopacity="0.30196078"
+     color="#0099e5"
+     opacity="0.14901961"
+     empspacing="5"
+     enabled="true"
+     visible="true" />
+</sodipodi:namedview>
+<desc
+   id="desc1">
+      basemcu.dxf - scale = 1.000000, origin = (0.000000, 0.000000), method =
+      manual
+    </desc>
+<g
+   id="g37"
+   transform="translate(-276.891 -469.924)"><path
+   id="path5"
+   fill="none"
+   stroke="#000"
+   d="M334.084 659.53h22.677l11.339-11.338V470.554H277.39v177.638l11.339 11.338h22.677a3.78 3.78 0 0 1 3.78-3.779h15.117a3.78 3.78 0 0 1 3.78 3.78z" />
+<path
+   id="path6"
+   fill="none"
+   stroke="#000"
+   d="M327.47 631.184a4.724 4.724 0 0 0-9.449 0 4.724 4.724 0 0 0 9.449 0z" />
+<path
+   id="path7"
+   fill="none"
+   stroke="#000"
+   d="M327.47 616.066a4.724 4.724 0 0 0-9.449 0 4.724 4.724 0 0 0 9.449 0z" />
+<path
+   id="path8"
+   fill="none"
+   stroke="#000"
+   d="M327.47 600.948a4.724 4.724 0 0 0-9.449 0 4.724 4.724 0 0 0 9.449 0z" />
+<path
+   id="path9"
+   fill="none"
+   stroke="#000"
+   d="M357.706 495.121a4.724 4.724 0 0 0-9.449 0 4.724 4.724 0 0 0 9.45 0z" />
+<path
+   id="path10"
+   fill="none"
+   stroke="#000"
+   d="M357.706 510.24a4.724 4.724 0 0 0-9.449 0 4.724 4.724 0 0 0 9.45 0z" />
+<path
+   id="path11"
+   fill="none"
+   stroke="#000"
+   d="M357.706 525.357a4.724 4.724 0 0 0-9.449 0 4.724 4.724 0 0 0 9.45 0z" />
+<path
+   id="path12"
+   fill="none"
+   stroke="#000"
+   d="M357.706 480.003a4.724 4.724 0 0 0-9.449 0 4.724 4.724 0 0 0 9.45 0z" />
+<path
+   id="path13"
+   fill="none"
+   stroke="#000"
+   d="M297.234 525.357a4.724 4.724 0 0 0-9.45 0 4.724 4.724 0 0 0 9.45 0z" />
+<path
+   id="path14"
+   fill="none"
+   stroke="#000"
+   d="M297.234 510.24a4.724 4.724 0 0 0-9.45 0 4.724 4.724 0 0 0 9.45 0z" />
+<path
+   id="path15"
+   fill="none"
+   stroke="#000"
+   d="M297.234 495.121a4.724 4.724 0 0 0-9.45 0 4.724 4.724 0 0 0 9.45 0z" />
+<path
+   id="path16"
+   fill="none"
+   stroke="#000"
+   d="M297.234 480.003a4.724 4.724 0 0 0-9.45 0 4.724 4.724 0 0 0 9.45 0z" />
+<path
+   id="path17"
+   fill="none"
+   stroke="#000"
+   d="M366.399 599.058a2.079 2.079 0 0 0-4.158 0 2.079 2.079 0 0 0 4.158 0z" />
+<path
+   id="path18"
+   fill="none"
+   stroke="#000"
+   d="M366.399 591.499a2.079 2.079 0 0 0-4.158 0 2.079 2.079 0 0 0 4.158 0z" />
+<path
+   id="path19"
+   fill="none"
+   stroke="#000"
+   d="M366.399 583.94a2.079 2.079 0 0 0-4.158 0 2.079 2.079 0 0 0 4.158 0z" />
+<path
+   id="path20"
+   fill="none"
+   stroke="#000"
+   d="M366.399 576.38a2.079 2.079 0 0 0-4.158 0 2.079 2.079 0 0 0 4.158 0z" />
+<path
+   id="path21"
+   fill="none"
+   stroke="#000"
+   d="M366.399 568.822a2.079 2.079 0 0 0-4.158 0 2.079 2.079 0 0 0 4.158 0z" />
+<path
+   id="path22"
+   fill="none"
+   stroke="#000"
+   d="M366.399 561.263a2.079 2.079 0 0 0-4.158 0 2.079 2.079 0 0 0 4.158 0z" />
+<path
+   id="path23"
+   fill="none"
+   stroke="#000"
+   d="M366.399 553.704a2.079 2.079 0 0 0-4.158 0 2.079 2.079 0 0 0 4.158 0z" />
+<path
+   id="path24"
+   fill="none"
+   stroke="#000"
+   d="M366.399 546.145a2.079 2.079 0 0 0-4.158 0 2.079 2.079 0 0 0 4.158 0z" />
+<path
+   id="path25"
+   fill="none"
+   stroke="#000"
+   d="M366.399 538.586a2.079 2.079 0 0 0-4.158 0 2.079 2.079 0 0 0 4.158 0z" />
+<path
+   id="path26"
+   fill="none"
+   stroke="#000"
+   d="M366.399 531.027a2.079 2.079 0 0 0-4.158 0 2.079 2.079 0 0 0 4.158 0z" />
+<path
+   id="path27"
+   fill="none"
+   stroke="#000"
+   d="M283.25 531.027a2.079 2.079 0 0 0-4.158 0 2.079 2.079 0 0 0 4.157 0z" />
+<path
+   id="path28"
+   fill="none"
+   stroke="#000"
+   d="M283.25 538.586a2.079 2.079 0 0 0-4.158 0 2.079 2.079 0 0 0 4.157 0z" />
+<path
+   id="path29"
+   fill="none"
+   stroke="#000"
+   d="M283.25 553.704a2.079 2.079 0 0 0-4.158 0 2.079 2.079 0 0 0 4.157 0z" />
+<path
+   id="path30"
+   fill="none"
+   stroke="#000"
+   d="M283.25 546.145a2.079 2.079 0 0 0-4.158 0 2.079 2.079 0 0 0 4.157 0z" />
+<path
+   id="path31"
+   fill="none"
+   stroke="#000"
+   d="M283.25 561.263a2.079 2.079 0 0 0-4.158 0 2.079 2.079 0 0 0 4.157 0z" />
+<path
+   id="path32"
+   fill="none"
+   stroke="#000"
+   d="M283.25 576.38a2.079 2.079 0 0 0-4.158 0 2.079 2.079 0 0 0 4.157 0z" />
+<path
+   id="path33"
+   fill="none"
+   stroke="#000"
+   d="M283.25 568.822a2.079 2.079 0 0 0-4.158 0 2.079 2.079 0 0 0 4.157 0z" />
+<path
+   id="path34"
+   fill="none"
+   stroke="#000"
+   d="M283.25 583.94a2.079 2.079 0 0 0-4.158 0 2.079 2.079 0 0 0 4.157 0z" />
+<path
+   id="path35"
+   fill="none"
+   stroke="#000"
+   d="M283.25 591.499a2.079 2.079 0 0 0-4.158 0 2.079 2.079 0 0 0 4.157 0z" />
+<path
+   id="path36"
+   fill="none"
+   stroke="#000"
+   d="M283.25 599.058a2.079 2.079 0 0 0-4.158 0 2.079 2.079 0 0 0 4.157 0z" />
+<path
+   id="path37"
+   fill="none"
+   stroke="#000"
+   d="M327.47 646.302a4.724 4.724 0 0 0-9.449 0 4.724 4.724 0 0 0 9.449 0z" />
+<path
+   id="path5-0"
+   fill="none"
+   stroke="#000"
+   d="M334.467 659.4h22.678l11.338-11.338V470.424h-90.709v177.638l11.339 11.339h22.677a3.78 3.78 0 0 1 3.78-3.78h15.118a3.78 3.78 0 0 1 3.78 3.78z" />
+<path
+   id="fluoro_led1"
+   style="fill:#000000;fill-opacity:0.98039216" />
+{ledColors.led1}
+        fillOpacity=&quot;1&quot;
+        stroke=&quot;#000&quot;
+        strokeWidth=&quot;0.54&quot;
+        d=&quot;M38.952 117.285v-5.128h13.506v10.256H38.952Z&quot;
+        transform=&quot;translate(276.891 469.924)&quot;
+      &gt;<g
+   id="g1"
+   transform="translate(-0.25714506)">
+  <rect
+     style="fill:#4d4d4d;fill-opacity:1;stroke:#000000;stroke-width:0.921343;stroke-dasharray:none;stroke-opacity:0"
+     id="rect1"
+     width="3.0347366"
+     height="1.7505358"
+     x="294.82187"
+     y="547.39679" />
+  <rect
+     style="fill:#4d4d4d;fill-opacity:1;stroke:#000000;stroke-width:0.921343;stroke-dasharray:none;stroke-opacity:0"
+     id="rect1-0"
+     width="3.0347366"
+     height="1.7505358"
+     x="294.86578"
+     y="551.41693" />
+  <path
+     id="rect44-0-1-4-7-3"
+     fill="#000000"
+     fillOpacity="1"
+     stroke="#000000"
+     strokeOpacity="1"
+     d="m 298.37669,544.66213 h 6.079 v 11.24 h -6.079 z" />
+  <rect
+     style="fill:#999999;fill-opacity:1;stroke:#000000;stroke-width:0.921343;stroke-dasharray:none;stroke-opacity:0"
+     id="rect1-9"
+     width="3.0347366"
+     height="1.7505358"
+     x="304.35165"
+     y="549.38464" />
+</g>
+<g
+   id="g2"
+   transform="translate(-0.13229927,13.020302)">
+  <rect
+     style="fill:#4d4d4d;fill-opacity:1;stroke:#000000;stroke-width:0.921343;stroke-dasharray:none;stroke-opacity:0"
+     id="rect1-08"
+     width="3.0347366"
+     height="1.7505358"
+     x="294.82187"
+     y="547.39679" />
+  <rect
+     style="fill:#4d4d4d;fill-opacity:1;stroke:#000000;stroke-width:0.921343;stroke-dasharray:none;stroke-opacity:0"
+     id="rect1-0-1"
+     width="3.0347366"
+     height="1.7505358"
+     x="294.86578"
+     y="551.41693" />
+  <path
+     id="rect44-0-1-4-7-3-0"
+     fill="#000000"
+     fillOpacity="1"
+     stroke="#000000"
+     strokeOpacity="1"
+     d="m 298.37669,544.66213 h 6.079 v 11.24 h -6.079 z" />
+  <rect
+     style="fill:#999999;fill-opacity:1;stroke:#000000;stroke-width:0.921343;stroke-dasharray:none;stroke-opacity:0"
+     id="rect1-9-3"
+     width="3.0347366"
+     height="1.7505358"
+     x="304.35165"
+     y="549.38464" />
+</g>
+<g
+   id="g2-0"
+   transform="translate(-0.00457036,27.278737)">
+  <rect
+     style="fill:#4d4d4d;fill-opacity:1;stroke:#000000;stroke-width:0.921343;stroke-dasharray:none;stroke-opacity:0"
+     id="rect1-08-8"
+     width="3.0347366"
+     height="1.7505358"
+     x="294.82187"
+     y="547.39679" />
+  <rect
+     style="fill:#4d4d4d;fill-opacity:1;stroke:#000000;stroke-width:0.921343;stroke-dasharray:none;stroke-opacity:0"
+     id="rect1-0-1-4"
+     width="3.0347366"
+     height="1.7505358"
+     x="294.86578"
+     y="551.41693" />
+  <path
+     id="rect44-0-1-4-7-3-0-9"
+     fill="#000000"
+     fillOpacity="1"
+     stroke="#000000"
+     strokeOpacity="1"
+     d="m 298.37669,544.66213 h 6.079 v 11.24 h -6.079 z" />
+  <rect
+     style="fill:#999999;fill-opacity:1;stroke:#000000;stroke-width:0.921343;stroke-dasharray:none;stroke-opacity:0"
+     id="rect1-9-3-3"
+     width="3.0347366"
+     height="1.7505358"
+     x="304.35165"
+     y="549.38464" />
+</g>
+<g
+   id="g2-0-3"
+   transform="translate(-0.36595591,41.767839)">
+  <rect
+     style="fill:#4d4d4d;fill-opacity:1;stroke:#000000;stroke-width:0.921343;stroke-dasharray:none;stroke-opacity:0"
+     id="rect1-08-8-8"
+     width="3.0347366"
+     height="1.7505358"
+     x="294.82187"
+     y="547.39679" />
+  <rect
+     style="fill:#4d4d4d;fill-opacity:1;stroke:#000000;stroke-width:0.921343;stroke-dasharray:none;stroke-opacity:0"
+     id="rect1-0-1-4-7"
+     width="3.0347366"
+     height="1.7505358"
+     x="294.86578"
+     y="551.41693" />
+  <path
+     id="rect44-0-1-4-7-3-0-9-8"
+     fill="#000000"
+     fillOpacity="1"
+     stroke="#000000"
+     strokeOpacity="1"
+     d="m 298.37669,544.66213 h 6.079 v 11.24 h -6.079 z" />
+  <rect
+     style="fill:#999999;fill-opacity:1;stroke:#000000;stroke-width:0.921343;stroke-dasharray:none;stroke-opacity:0"
+     id="rect1-9-3-3-0"
+     width="3.0347366"
+     height="1.7505358"
+     x="304.35165"
+     y="549.38464" />
+</g>
+<rect
+   style="fill:#000000;fill-opacity:0.980392;stroke:#000000;stroke-width:0.984715;stroke-dasharray:none;stroke-opacity:0"
+   id="rect2"
+   width="7.1484885"
+   height="5.1670432"
+   x="324.83438"
+   y="549.83459" />
+<rect
+   style="fill:#808080;fill-opacity:0.980392;stroke:#000000;stroke-width:1;stroke-dasharray:none;stroke-opacity:0"
+   id="rect3"
+   width="2.2456381"
+   height="5.1517582"
+   x="322.59634"
+   y="549.84235" />
+<rect
+   style="fill:#808080;fill-opacity:0.980392;stroke:#000000;stroke-width:1.00245;stroke-dasharray:none;stroke-opacity:0"
+   id="rect3-3"
+   width="2.2431915"
+   height="5.1826448"
+   x="331.86047"
+   y="549.82904" />
+</g>
+<path
+   id="fluoro_led2" />
+{ledColors.led2}
+        fillOpacity=&quot;1&quot;
+        stroke=&quot;#000&quot;
+        strokeWidth=&quot;0.54&quot;
+        d=&quot;M38.947 103.86v-5.155h13.451v10.31H38.947z&quot;
+        transform=&quot;translate(276.891 469.924)&quot;
+      &gt;</svg>

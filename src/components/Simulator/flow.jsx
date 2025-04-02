@@ -23,6 +23,7 @@ import tofimager from "./nodes/tofimager";
 import bme680 from "./nodes/bme680";
 import scd30 from "./nodes/scd30";
 import dps310 from "./nodes/dps310";
+import fluoroASM from "./nodes/fluoroASM";
 
 const nodeTypes = {
   board: SenseBoxMCUS2,
@@ -36,7 +37,8 @@ const nodeTypes = {
   sensebox_sensor_bme680_bsec: bme680,
   senseBox_smt50: SMT50,  
   sensebox_scd30: scd30,
-  sensebox_sensor_dps310: dps310
+  sensebox_sensor_dps310: dps310,
+  sensebox_fluoroASM_init: fluoroASM,
 };
 
 const edgeTypes = {
@@ -70,13 +72,16 @@ const SimulatorFlow = (props) => {
 
 
   useEffect(() => {
-    reactFlow.fitView();
-
     // calculate new edges
     const newEdges = [];
     nodes.forEach((node) => {
       if (node.type === "board") {
+        node.draggable = false
         props.modules.forEach((module, index) => {
+          // dont draw an edge with the fluoro bee
+          if (module === "sensebox_fluoroASM_init") {
+            return;
+          }
           newEdges.push({
             id: `e${node.id}-${index}`,
             source: node.id,
@@ -85,14 +90,23 @@ const SimulatorFlow = (props) => {
           });
         });
       }
+      if(node.type === "sensebox_fluoroASM_init") {
+        const beePosition = { x:497.69717682803514, y:47.304223387137014}
+        node.draggable = false;
+        node.position = beePosition;
+        node.zIndex = 1000;
+      }
     });
-
     setEdges([...initialEdges, ...newEdges]);
   }, [nodes]);
 
   useEffect(() => {
     const newNodes = props.modules
       .map((module, index) => {
+        // skip the block for led - only use init block for node creation
+        if (module === "sensebox_fluoroASM_setLED2" || module === "sensebox_button") {
+          return
+        }
         if (nodes.map((n) => n.type).includes(module)) {
           return nodes.find((n) => n.type == module);
         }
@@ -120,7 +134,7 @@ const SimulatorFlow = (props) => {
         width: "100%",
         height: "100%",
       }}
-    >
+    > 
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -129,9 +143,11 @@ const SimulatorFlow = (props) => {
         onConnect={onConnect}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
+        zoomOnDoubleClick={false}
+        zoomOnPinch={false}
         fitView
         connectionMode="loose"
-        minZoom={0.1}
+
       >
         <Background />
         <Controls />
