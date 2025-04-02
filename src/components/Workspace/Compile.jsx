@@ -36,6 +36,7 @@ const Compile = (props) => {
     fallbackTexts.en_US; // Englisch als letzter Fallback
   const openDialog = () => {
     setDialogOpen(true);
+    console.log(props.platform);
   };
 
   return (
