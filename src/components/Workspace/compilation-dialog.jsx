@@ -25,11 +25,11 @@ const headerStyle = {
   margin: "1rem",
   fontWeight: "bold",
 };
+
 function CompilationDialog({ open, code, selectedBoard, filename, onClose }) {
   const [activeStep, setActiveStep] = useState(0);
   const [sketchId, setSketchId] = useState(null);
   const [error, setError] = useState(null);
-  const myRef = React.createRef();
   const compilerUrl = useSelector((state) => state.general.compiler);
 
   useEffect(() => {
@@ -57,7 +57,7 @@ function CompilationDialog({ open, code, selectedBoard, filename, onClose }) {
   const handleCompile = async () => {
     try {
       const board =
-        selectedBoard == "mcu" || selectedBoard == "mini"
+        selectedBoard === "mcu" || selectedBoard === "mini"
           ? "sensebox-mcu"
           : "sensebox-esp32s2";
 
@@ -73,17 +73,18 @@ function CompilationDialog({ open, code, selectedBoard, filename, onClose }) {
       });
       const data = await response.json();
       if (!response.ok) {
-        setError(data.message);
+        // setError(data.message);
         return;
       }
       if (data.data.id) {
         setSketchId(data.data.id);
       }
-      setActiveStep(1);
-    } catch (error) {
-      console.error("Compilation failed", error);
+      // setActiveStep(1);
+    } catch (err) {
+      console.error("Compilation failed", err);
     }
   };
+
   const handleDownloadURL = () => {
     const downloadUrl = `${compilerUrl}/download?id=${sketchId}&board=sensebox-mcu&filename=${filename}`;
     const link = document.createElement("a");
@@ -99,14 +100,20 @@ function CompilationDialog({ open, code, selectedBoard, filename, onClose }) {
   };
 
   return (
-    <Dialog ref={myRef} open={open} onClose={handleClose}>
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      // Feste Größe über PaperProps: Breite und Höhe passen für alle Steps
+      PaperProps={{
+        style: { width: "600px", minHeight: "600px", maxHeight: "600px" },
+      }}
+    >
       <DialogContent
         style={{
           padding: "2rem",
-          minHeight: "500px",
-          minWidth: "400px",
           display: "flex",
           flexDirection: "column",
+          height: "100%",
         }}
       >
         <Box
@@ -115,13 +122,14 @@ function CompilationDialog({ open, code, selectedBoard, filename, onClose }) {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            overflow: "auto", // Falls der Inhalt größer wird als der Container
           }}
         >
           {error && <ErrorView error={error} />}
           {activeStep === 0 && !error && (
             <div style={{ textAlign: "center" }}>
               <span style={headerStyle}>
-                {Blockly.Msg.compile_overlay_compile}{" "}
+                {Blockly.Msg.compile_overlay_compile}
               </span>
               <CodeCompilationIcon
                 style={{ width: 100, height: 100 }}
@@ -130,9 +138,8 @@ function CompilationDialog({ open, code, selectedBoard, filename, onClose }) {
             </div>
           )}
           {activeStep === 1 && !error && (
-            <div>
+            <div style={{ textAlign: "center" }}>
               <span style={headerStyle}>
-                {" "}
                 {Blockly.Msg.compile_overlay_download}
               </span>
               <DownloadAnimation />
@@ -155,13 +162,7 @@ function CompilationDialog({ open, code, selectedBoard, filename, onClose }) {
             </div>
           )}
         </Box>
-        <Box
-          style={{
-            flexShrink: 0,
-            paddingTop: "1rem",
-            marginTop: "1rem",
-          }}
-        >
+        <Box style={{ flexShrink: 0, paddingTop: "1rem", marginTop: "1rem" }}>
           <Stepper activeStep={activeStep} alternativeLabel>
             <Step key={1}>
               <StepLabel
@@ -169,7 +170,7 @@ function CompilationDialog({ open, code, selectedBoard, filename, onClose }) {
                 optional={
                   error && (
                     <Typography variant="caption" color="error">
-                      {error && Blockly.Msg.compile_overlay_error}
+                      {Blockly.Msg.compile_overlay_error}
                     </Typography>
                   )
                 }
@@ -178,7 +179,7 @@ function CompilationDialog({ open, code, selectedBoard, filename, onClose }) {
               </StepLabel>
             </Step>
             <Step key={2}>
-              <StepLabel>{Blockly.Msg.download} </StepLabel>
+              <StepLabel>{Blockly.Msg.download}</StepLabel>
             </Step>
             <Step key={3}>
               <StepLabel>{Blockly.Msg.transfer}</StepLabel>
@@ -200,7 +201,7 @@ CompilationDialog.propTypes = {
   filename: PropTypes.string.isRequired,
   platform: PropTypes.bool.isRequired,
   appLink: PropTypes.string,
-  language: PropTypes.string.isRequired, // Globale Sprache aus Redux
+  language: PropTypes.string.isRequired,
 };
 
 CompilationDialog.defaultProps = {
