@@ -11,6 +11,7 @@ import {
   StepLabel,
   Button,
   Typography,
+  IconButton,
 } from "@mui/material";
 import { CodeCompilationIcon } from "./code-compilation-icon";
 import DownloadAnimation from "./download-animation";
@@ -18,6 +19,9 @@ import { DragDropIcon } from "./drag-drop-icon";
 import { connect, useSelector } from "react-redux";
 import * as Blockly from "blockly/core";
 import { ErrorView } from "../ErrorView/ErrorView";
+import { getPlatform } from "../../reducers/generalReducer";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClipboardCheck, faCloud } from "@fortawesome/free-solid-svg-icons";
 
 const headerStyle = {
   fontSize: "1.5rem",
@@ -26,10 +30,18 @@ const headerStyle = {
   fontWeight: "bold",
 };
 
-function CompilationDialog({ open, code, selectedBoard, filename, onClose }) {
+function CompilationDialog({
+  open,
+  code,
+  selectedBoard,
+  filename,
+  onClose,
+  platform,
+}) {
   const [activeStep, setActiveStep] = useState(0);
   const [sketchId, setSketchId] = useState(null);
   const [error, setError] = useState(null);
+  const [magicLink, setMagicLink] = useState(null);
   const compilerUrl = useSelector((state) => state.general.compiler);
 
   useEffect(() => {
@@ -45,7 +57,7 @@ function CompilationDialog({ open, code, selectedBoard, filename, onClose }) {
 
   useEffect(() => {
     let timeoutId;
-    if (activeStep === 1) {
+    if (activeStep === 1 && !platform) {
       handleDownloadURL();
       timeoutId = setTimeout(() => {
         setActiveStep(2);
@@ -53,6 +65,10 @@ function CompilationDialog({ open, code, selectedBoard, filename, onClose }) {
     }
     return () => clearTimeout(timeoutId);
   }, [activeStep]);
+
+  useEffect(() => {
+    console.log(platform);
+  }, []);
 
   const handleCompile = async () => {
     try {
@@ -91,6 +107,16 @@ function CompilationDialog({ open, code, selectedBoard, filename, onClose }) {
     link.href = downloadUrl;
     link.download = `${filename}.bin`;
     link.click();
+  };
+
+  const handleMagicLink = () => {
+    if (this.props.selectedBoard === "esp32") {
+      setMagicLink(
+        `blocklyconnect-app://sketch/${filename}/${this.sketchId}/${this.props.selectedBoard}`,
+      );
+    } else {
+      setMagicLink(`blocklyconnect-app://sketch/${filename}/${this.sketchId}`);
+    }
   };
 
   const handleClose = () => {
@@ -137,7 +163,7 @@ function CompilationDialog({ open, code, selectedBoard, filename, onClose }) {
               />
             </div>
           )}
-          {activeStep === 1 && !error && (
+          {activeStep === 1 && !error && !platform && (
             <div style={{ textAlign: "center" }}>
               <span style={headerStyle}>
                 {Blockly.Msg.compile_overlay_download}
@@ -145,11 +171,31 @@ function CompilationDialog({ open, code, selectedBoard, filename, onClose }) {
               <DownloadAnimation />
             </div>
           )}
+          {activeStep === 1 && !error && platform && (
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "12px" }}
+            >
+              <span style={headerStyle}> Over-The-Air Übertragung </span>
+              Der Code wurde erfolgreich kompiliert! Starte jetzt mit der
+              Übertragung mit der senseBox:connect App
+              <Button
+                style={{ color: "white", marginTop: "1rem" }}
+                variant="contained"
+              >
+                <FontAwesomeIcon
+                  style={{ marginRight: "5px" }}
+                  icon={faClipboardCheck}
+                />
+                Starte Übertragung
+              </Button>
+            </div>
+          )}
           {activeStep === 2 && !error && (
             <div style={{ textAlign: "center" }}>
               <span style={headerStyle}>
                 {Blockly.Msg.compile_overlay_transfer}
               </span>
+
               <DragDropIcon />
               <Button
                 style={{ marginTop: "1rem" }}
@@ -181,9 +227,11 @@ function CompilationDialog({ open, code, selectedBoard, filename, onClose }) {
             <Step key={2}>
               <StepLabel>{Blockly.Msg.download}</StepLabel>
             </Step>
-            <Step key={3}>
-              <StepLabel>{Blockly.Msg.transfer}</StepLabel>
-            </Step>
+            {!platform && (
+              <Step key={3}>
+                <StepLabel>{Blockly.Msg.transfer}</StepLabel>
+              </Step>
+            )}
           </Stepper>
         </Box>
       </DialogContent>
