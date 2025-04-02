@@ -3,22 +3,10 @@
 import { Box } from "@mui/material";
 import { motion } from "framer-motion";
 import { senseboxColors } from "./theme";
-import { useEffect } from "react";
 
 export function CodeCompilationIcon() {
-  console.log("[CodeCompilationIcon] Rendering");
-
-  useEffect(() => {
-    console.debug("[CodeCompilationIcon] Animation cycle started");
-    return () => console.debug("[CodeCompilationIcon] Animation cycle cleanup");
-  }, []);
-
   return (
-    <Box
-      sx={{ position: "relative", width: 400, height: 200 }}
-      onMouseEnter={() => console.debug("[CodeCompilationIcon] Mouse entered")}
-      onMouseLeave={() => console.debug("[CodeCompilationIcon] Mouse left")}
-    >
+    <Box sx={{ position: "relative", width: 500, height: 250 }}>
       <Box
         sx={{
           position: "absolute",
@@ -28,7 +16,7 @@ export function CodeCompilationIcon() {
           border: `1px solid ${senseboxColors.blue}30`,
           overflow: "hidden",
           fontFamily: "monospace",
-          fontSize: 18,
+          fontSize: 24,
         }}
       >
         {/* Code animation content */}
