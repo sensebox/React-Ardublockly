@@ -73,13 +73,13 @@ function CompilationDialog({ open, code, selectedBoard, filename, onClose }) {
       });
       const data = await response.json();
       if (!response.ok) {
-        // setError(data.message);
+        setError(data.message);
         return;
       }
       if (data.data.id) {
         setSketchId(data.data.id);
       }
-      // setActiveStep(1);
+      setActiveStep(1);
     } catch (err) {
       console.error("Compilation failed", err);
     }
