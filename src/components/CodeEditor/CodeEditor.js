@@ -12,8 +12,9 @@ import Dialog from "../Dialog";
 import SaveIcon from "./SaveIcon";
 import store from "../../store";
 import DeviceSelection from "../DeviceSelection";
+import { useSelector } from "react-redux";
 
-const CodeEditor = (props) => {
+const CodeEditor = () => {
   //const [filehandle, setFileHandle] = useState();
   const [fileContent, setFileContent] = useState("");
   const [progress, setProgress] = useState(false);
@@ -25,6 +26,7 @@ const CodeEditor = (props) => {
   const [time, setTime] = useState(null);
   const [value, setValue] = useState("");
   const [resetDialog, setResetDialog] = useState(false);
+  const compilerUrl = useSelector((state) => state.general.compiler);
 
   const compile = () => {
     setProgress(true);
@@ -36,7 +38,7 @@ const CodeEditor = (props) => {
           : "sensebox-esp32s2",
       sketch: editorRef.current.getValue(),
     };
-    fetch(`${this.props.selectedCompiler}/compile`, {
+    fetch(`${compilerUrl}/compile`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
@@ -53,7 +55,7 @@ const CodeEditor = (props) => {
         //setId(result);
         const filename = "sketch";
         window.open(
-          `${this.props.selectedCompiler}/download?id=${result}&board=${
+          `${compilerUrl}/download?id=${result}&board=${
             store.getState().board.board === "mcu"
               ? "sensebox-mcu"
               : "sensebox-esp32s2"

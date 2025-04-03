@@ -135,9 +135,19 @@ class Compile extends Component {
       const filename = detectWhitespacesAndReturnReadableResult(
         this.state.name,
       );
-      this.setState({
-        link: `blocklyconnect-app://sketch/${filename}/${this.state.id}/${this.props.selectedBoard}`,
-      });
+
+
+      // TODO: When new connect app is released, the selected board can also be supplied with both boards
+      if (this.props.selectedBoard === "esp32") {
+        this.setState({
+          link: `blocklyconnect-app://sketch/${filename}/${this.state.id}/${this.props.selectedBoard}`,
+        });
+      }
+      else {
+        this.setState({
+          link: `blocklyconnect-app://sketch/${filename}/${this.state.id}`,
+        });
+      }
       this.setState({ appDialog: true });
     } else {
       if (this.state.name) {

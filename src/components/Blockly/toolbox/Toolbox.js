@@ -23,6 +23,7 @@ class Toolbox extends React.Component {
         [`${Blockly.Msg.variables_TEXT}`, "String"],
         [`${Blockly.Msg.variables_CHARACTER}`, "char"],
         [`${Blockly.Msg.variables_BOOLEAN}`, "boolean"],
+        [`${Blockly.Msg.variable_BITMAP}`, "bitmap"],
       ],
     );
     typedVarModal.init();
