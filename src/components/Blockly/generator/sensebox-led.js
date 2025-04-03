@@ -229,47 +229,46 @@ Blockly.Generator.Arduino.forBlock["sensebox_ws2812_matrix_text"] = function (
   return code;
 };
 
-Blockly.Generator.Arduino["sensebox_ws2812_matrix_drawPixel"] = function (
-  block,
-) {
-  var dropdown_pin = this.getFieldValue("Port");
-  var x = Blockly.Generator.Arduino.valueToCode(
-    this,
-    "X",
-    Blockly.Generator.Arduino.ORDER_ATOMIC,
-  );
-  var y = Blockly.Generator.Arduino.valueToCode(
-    this,
-    "Y",
-    Blockly.Generator.Arduino.ORDER_ATOMIC,
-  );
-  var color = Blockly.Generator.Arduino.valueToCode(
-    this,
-    "COLOR",
-    Blockly.Generator.Arduino.ORDER_ATOMIC,
-  );
-  var show = this.getFieldValue("SHOW");
-  var code = `matrix_${dropdown_pin}.drawPixel(${x},${y},matrix_${dropdown_pin}.Color(${color}));\n`;
-  if (show === "TRUE") {
-    code += `matrix_${dropdown_pin}.show();\n`;
-  }
-  return code;
-};
-
-Blockly.Generator.Arduino["sensebox_ws2812_matrix_showBitmap"] = function (
-  block,
-) {
-  var dropdown_pin = this.getFieldValue("Port");
-  var value =
-    Blockly.Generator.Arduino.valueToCode(
+Blockly.Generator.Arduino.forBlock["sensebox_ws2812_matrix_drawPixel"] =
+  function (block) {
+    var dropdown_pin = this.getFieldValue("Port");
+    var x = Blockly.Generator.Arduino.valueToCode(
       this,
-      "input",
+      "X",
       Blockly.Generator.Arduino.ORDER_ATOMIC,
-    ) || '"Keine Eingabe"';
-  var code = `matrix_${dropdown_pin}.drawRGBBitmap(0,0, ${value}, WIDTH, HEIGHT);\n`;
-  code += `matrix_${dropdown_pin}.show();\n`;
-  return code;
-};
+    );
+    var y = Blockly.Generator.Arduino.valueToCode(
+      this,
+      "Y",
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
+    );
+    var color = Blockly.Generator.Arduino.valueToCode(
+      this,
+      "COLOR",
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
+    );
+    var show = this.getFieldValue("SHOW");
+    var code = `matrix_${dropdown_pin}.drawPixel(${x},${y},matrix_${dropdown_pin}.Color(${color}));\n`;
+    if (show === "TRUE") {
+      code += `matrix_${dropdown_pin}.show();\n`;
+    }
+    return code;
+  };
+
+Blockly.Generator.Arduino.forBlock["sensebox_ws2812_matrix_showBitmap"] =
+  function (block) {
+    var dropdown_pin = this.getFieldValue("Port");
+    var value =
+      Blockly.Generator.Arduino.valueToCode(
+        this,
+        "input",
+        Blockly.Generator.Arduino.ORDER_ATOMIC,
+      ) || '"Keine Eingabe"';
+
+    var code = `matrix_${dropdown_pin}.drawRGBBitmap(0,0, ${value}, WIDTH, HEIGHT);\n`;
+    code += `matrix_${dropdown_pin}.show();\n`;
+    return code;
+  };
 
 Blockly.Generator.Arduino.forBlock["sensebox_ws2812_matrix_bitmap"] = function (
   block,
@@ -357,45 +356,85 @@ Blockly.Generator.Arduino.forBlock["sensebox_ws2812_matrix_bitmap"] = function (
   return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
-Blockly.Generator.Arduino["sensebox_ws2812_matrix_custom_bitmap"] = function (
-  block,
-) {
-  var dropdown_pin = this.getFieldValue("Port");
-  Blockly.Generator.Arduino.definitions_[
-    `define_custom_bitmap_${dropdown_pin}`
-  ] = `const uint16_t custom_bitmap[] = {};`;
-  var value =
-    Blockly.Generator.Arduino.valueToCode(
-      this,
-      "input",
-      Blockly.Generator.Arduino.ORDER_ATOMIC,
-    ) || '"Keine Eingabe"';
-  var code = `matrix_${dropdown_pin}.drawBitmap(0,0,${value},WIDTH,HEIGHT,matrix_${dropdown_pin}.Color(255,255,255));\n`;
-  code += `matrix_${dropdown_pin}.show();\n`;
+Blockly.Generator.Arduino.forBlock["sensebox_ws2812_matrix_custom_bitmap"] =
+  function (block) {
+    // Generate a unique name for the bitmap
+    let hash = 0;
+    for (let i = 0; i < block.id.length; i++) {
+      hash = (hash * 31 + block.id.charCodeAt(i)) >>> 0; // 32-bit unsigned integer
+    }
+    let bitmapName = hash.toString(16);
+
+    var inputValue = block.getFieldValue("input") || "{}";
+
+    // Remove existing { and } if present at the start and end
+    if (inputValue.startsWith("{") && inputValue.endsWith("}")) {
+      inputValue = inputValue.slice(1, -1);
+    }
+
+    // Add { and } around the value
+    var customBitmap = "{" + inputValue + "}";
+
+    Blockly.Generator.Arduino.definitions_[`define_bitmap_${bitmapName}`] =
+      `const uint16_t bitmap_${bitmapName}[] = ${customBitmap};`;
+
+    return [`bitmap_${bitmapName}`, Blockly.Generator.Arduino.ORDER_ATOMIC];
+  };
+
+Blockly.Generator.Arduino.forBlock[
+  "sensebox_ws2812_matrix_draw_custom_bitmap_example"
+] = function (block) {
+  var bitmap = "";
+  const bitmapName = block.getFieldValue("name");
+  for (let i = 1; i <= 8; i += 1) {
+    for (let j = 1; j <= 12; j += 1) {
+      const colorHex = block.getFieldValue(i + "," + j);
+      const color = hexToRgb(colorHex);
+      bitmap +=
+        "0x" +
+        (
+          ((color.r >> 3) << 11) |
+          ((color.g >> 2) << 5) |
+          (color.b >> 3)
+        ).toString(16) +
+        ", ";
+    }
+    bitmap += "\n";
+  }
+  Blockly.Generator.Arduino.definitions_[`define_${bitmapName}_example`] =
+    `const uint16_t bitmap_${bitmapName}[] = {${bitmap}};`;
+  var code = `bitmap_${bitmapName}`;
+
   return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
-Blockly.Generator.Arduino["sensebox_ws2812_matrix_draw_custom_bitmap_example"] =
+Blockly.Generator.Arduino.forBlock["sensebox_ws2812_matrix_fullcolor"] =
   function (block) {
     var bitmap = "";
+    var colorRgb =
+      Blockly.Generator.Arduino.valueToCode(
+        this,
+        "COLOR",
+        Blockly.Generator.Arduino.ORDER_ATOMIC,
+      ) || "0,255,0";
+    const [r, g, b] = colorRgb
+      .split(",")
+      .map((value) => parseInt(value.trim(), 10));
+    var dropdown_pin = this.getFieldValue("Port");
     for (let i = 1; i <= 8; i += 1) {
       for (let j = 1; j <= 12; j += 1) {
-        const colorHex = block.getFieldValue(i + "," + j);
-        const color = hexToRgb(colorHex);
         bitmap +=
           "0x" +
-          (
-            ((color.r >> 3) << 11) |
-            ((color.g >> 2) << 5) |
-            (color.b >> 3)
-          ).toString(16) +
+          (((r >> 3) << 11) | ((g >> 2) << 5) | (b >> 3)).toString(16) +
           ", ";
       }
       bitmap += "\n";
     }
-    Blockly.Generator.Arduino.definitions_[`define_custom_draw_bitmap}`] =
-      `const uint16_t bitmap_custom[] = {${bitmap}};`;
-    var code = `bitmap_custom`;
-
-    return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
+    console.log(bitmap);
+    Blockly.Generator.Arduino.definitions_[
+      `define_custom_draw_bitmap_full_${r}}`
+    ] = `const uint16_t bitmap_full_${r}[] = {${bitmap}};`;
+    var code = `matrix_${dropdown_pin}.drawRGBBitmap(0,0,bitmap_full_${r},WIDTH,HEIGHT);\n`;
+    code += `matrix_${dropdown_pin}.show();\n`;
+    return code;
   };

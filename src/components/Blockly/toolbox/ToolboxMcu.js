@@ -133,6 +133,7 @@ export const ToolboxMcu = () => {
         <Block type="sensebox_ws2812_matrix_clear" />
         <Block type="sensebox_ws2812_matrix_text" />
         <Block type="sensebox_ws2812_matrix_drawPixel" />
+        <Block type="sensebox_ws2812_matrix_fullcolor" />
         <Block type="sensebox_ws2812_matrix_showBitmap" />
         <Block type="sensebox_ws2812_matrix_bitmap" />
         <Block type="sensebox_ws2812_matrix_custom_bitmap" />

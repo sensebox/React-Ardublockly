@@ -23,6 +23,7 @@ export const UI = {
   variable_SHORT_NUMBER: "char",
   variable_LONG: "große Zahl (long)",
   variable_DECIMAL: "Kommazahl (float)",
+  variable_BITMAP: "Bitmap (LED-Matrix)",
   variables_TEXT: "Text (string)",
   variables_ARRAY: "Array (array)",
   variables_CHARACTER: "Buchstabe (char)",
@@ -349,7 +350,7 @@ export const UI = {
    *  */
   codeeditor_libraries_head: "Installierte Arduino Libraries",
   codeeditor_libraries_text:
-    "Für die Dokumentation sehen Sie sich die installierten Bibliotheken und deren Beispiele an",
+    "Unten stehen alle Arduino Libraries, welche auf dem Compiler installiert sind. Klicke auf eine Library um mehr Informationen zu erhalten.",
   codeeditor_save_code: "Code herunterladen",
   codeeditor_open_code: "Code öffnen",
   codeeditor_reset_code: "Code zurücksetzen",

@@ -19,7 +19,7 @@ export const WEB = {
   senseBox_wifi_startap_tooltip:
     "Creates a WiFi access point to which you can connect. Note that only 1 device can be connected at a time.",
   senseBox_wifi_helpurl:
-    "https://en.docs.sensebox.de/blockly/blockly-web-wifi/",
+    "https://docs.sensebox.de/en/blockly/blockly-web-wifi/",
   senseBox_ethernet: "Connect to Ethernet",
   senseBox_ethernet_dhcp: "DHCP",
   senseBox_ethernet_manuel_config: "Manual configuration",
