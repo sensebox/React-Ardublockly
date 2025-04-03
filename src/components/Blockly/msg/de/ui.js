@@ -396,4 +396,8 @@ export const UI = {
   download: "Herunterladen",
   transfer: "Übertragen",
   dialog_close: "Zurück zu Blockly",
+  goToApp: "Gehe zur Connect App",
+  goToApp_text:
+    "Der Code wurde erfolgreich kompiliert! Klicke den unteren Button um zur senseBox:connect App zu gelangen und die Übertragung des Sketches fertigzustellen!",
+  goToApp_title: "Over-The-Air Übertragung",
 };
