@@ -170,11 +170,8 @@ function CompilationDialog({
             <div
               style={{ display: "flex", flexDirection: "column", gap: "12px" }}
             >
-              <span style={headerStyle}> Over-The-Air Übertragung </span>
-              <span style={{ margin: "1rem" }}>
-                Der Code wurde erfolgreich kompiliert! Starte jetzt mit der
-                Übertragung mit der senseBox:connect App
-              </span>
+              <span style={headerStyle}> {Blockly.Msg.goToApp_title} </span>
+              <span style={{ margin: "1rem" }}>{Blockly.Msg.goToApp_text}</span>
               <a
                 href={
                   selectedBoard === "esp32"
@@ -190,7 +187,7 @@ function CompilationDialog({
                     style={{ marginRight: "5px" }}
                     icon={faLink}
                   />
-                  Gehe zur Connect App
+                  {Blockly.Msg.goToApp}
                 </Button>
               </a>
             </div>
@@ -230,7 +227,8 @@ function CompilationDialog({
               </StepLabel>
             </Step>
             <Step key={2}>
-              <StepLabel>{Blockly.Msg.download}</StepLabel>
+              {!platform && <StepLabel>{Blockly.Msg.download}</StepLabel>}
+              {platform && <StepLabel>{Blockly.Msg.transfer}</StepLabel>}
             </Step>
             {!platform && (
               <Step key={3}>
