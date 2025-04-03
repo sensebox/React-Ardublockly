@@ -1,3 +1,4 @@
+// src/components/Blockly/msg/de/ui.js
 export const UI = {
   /**
    * Toolbox
@@ -223,7 +224,7 @@ export const UI = {
     "Geben die URL des Compilers ein, den du verwenden möchten. Die Standard-URL ist: https://compiler.sensebox.de",
   settings_compiler_helperText:
     "Die URL muss mit https:// oder http:// beginnen",
-    settings_compiler_readOnly: "Compiler URL ändern",
+  settings_compiler_readOnly: "Compiler URL ändern",
 
   /**
    * 404
@@ -377,4 +378,27 @@ export const UI = {
   sensorinfo_lifetime: "Lebensdauer",
   sensorinfo_explanation:
     "Diese Informationen wurden aus [sensors.wiki](https://sensors.wiki) entnommen. Für weitere Informationen besuchen Sie den Abschnitt über diesen Sensor ",
+
+  /**
+   * Compilation dialog
+   * */
+  compile_overlay_compile: "Code wird kompiliert...",
+  compile_overlay_download: "Bereite den Download vor...",
+  compile_overlay_transfer: "Datei auf die senseBox übertragen",
+  compile_overlay_error: "Ein Fehler ist aufgetreten",
+  compile_overlay_app_transfer: "Übertrage die Datei auf die senseBox",
+  compile_overlay_code_compiled: "Code wurde kompiliert!",
+  compile_overlay_start_transfer: "Starte die Übertragung",
+  compile_overlay_close: "Schließen",
+  compile_overlay_head: "Dein Programm wird nun kompiliert und heruntergeladen",
+  compile_overlay_text: "Kopiere es anschließend auf deine senseBox ",
+  compile_overlay_help: " Benötigst du mehr Hilfe? Dann schaue hier: ",
+  compile: "Kompilieren",
+  download: "Herunterladen",
+  transfer: "Übertragen",
+  dialog_close: "Zurück zu Blockly",
+  goToApp: "Gehe zur Connect App",
+  goToApp_text:
+    "Der Code wurde erfolgreich kompiliert! Klicke den unteren Button um zur senseBox:connect App zu gelangen und die Übertragung des Sketches fertigzustellen!",
+  goToApp_title: "Over-The-Air Übertragung",
 };

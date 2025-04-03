@@ -42,7 +42,7 @@ class Instruction extends Component {
               }}
             >
               <img
-                src={`${process.env.REACT_APP_BLOCKLY_API}/media/${step.media.picture.path}`}
+                src={`${import.meta.env.VITE_BLOCKLY_API}/media/${step.media.picture.path}`}
                 alt=""
                 style={{ maxHeight: "40vH", maxWidth: "100%" }}
               />
