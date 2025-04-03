@@ -25,6 +25,7 @@ import {
   faClipboardCheck,
   faCloud,
   faLink,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 
 const headerStyle = {
@@ -193,20 +194,35 @@ function CompilationDialog({
             </div>
           )}
           {activeStep === 2 && !error && (
-            <div style={{ textAlign: "center" }}>
-              <span style={headerStyle}>
-                {Blockly.Msg.compile_overlay_transfer}
-              </span>
-
-              <DragDropIcon />
-              <Button
-                style={{ marginTop: "1rem" }}
-                variant="contained"
-                color="primary"
+            <div style={{ position: "relative" }}>
+              <IconButton
                 onClick={handleClose}
+                style={{
+                  position: "absolute",
+                  top: "-35px",
+                  right: "-50px",
+                  fontSize: "2rem",
+                  color: "#4EAF47",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                }}
               >
-                {Blockly.Msg.dialog_close}
-              </Button>
+                <FontAwesomeIcon icon={faXmark} />
+              </IconButton>
+
+              <div style={{ textAlign: "center" }}>
+                <span style={headerStyle}>
+                  {Blockly.Msg.compile_overlay_transfer}
+                </span>
+                <DragDropIcon />
+                <div style={{ marginTop: "1rem" }}>
+                  Übertrage den Sketch per Drag & Drop auf deine MCU.
+                </div>
+                <span>
+                  Benötigst du mehr Hilfe, dann schau in{" "}
+                  <a href="https://blockly.sensebox.de/faq">unser FAQ</a>
+                </span>
+              </div>
             </div>
           )}
         </Box>
