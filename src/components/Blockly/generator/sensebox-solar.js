@@ -74,15 +74,15 @@ void deep_sleep_and_restart(int sleep_time, bool powerOffI2C, bool powerOffUART,
     }
   };
 
-/**
- * Ensure Wake Time
- */
-Blockly.Generator.Arduino.forBlock["sensebox_solar_ensure_wake_time"] =
-  function () {
-    var wake_time = this.getFieldValue("wake_time");
-    var time_scale = this.getFieldValue("time_scale");
-    return `
-// ensure minimal wake time
-while(millis() < ${wake_time}${time_scale});
-`;
-  };
+// /**
+//  * Ensure Wake Time
+//  */
+// Blockly.Generator.Arduino.forBlock["sensebox_solar_ensure_wake_time"] =
+//   function () {
+//     var wake_time = this.getFieldValue("wake_time");
+//     var time_scale = this.getFieldValue("time_scale");
+//     return `
+// // ensure minimal wake time
+// while(millis() < ${wake_time}${time_scale});
+// `;
+//   };

@@ -400,7 +400,7 @@ export const ToolboxEsp = () => {
           <Block type="sensebox_ble_init"></Block>
         </Category> */}
       </Category>
-      <Category id="sensebox_solar" name="Solar" colour={getColour().solar}>
+      {/* <Category id="sensebox_solar" name="Solar" colour={getColour().solar}>
         <Block type="sensebox_solar_charger_SB041">
           <Field name="value">battery_level</Field>
         </Block>
@@ -450,7 +450,7 @@ export const ToolboxEsp = () => {
             </Block>
           </Statement>
         </Block>
-      </Category>
+      </Category> */}
       <Category id="webserver" name="Webserver" colour={getColour().webserver}>
         <Block type="sensebox_initialize_http_server"></Block>
         <Block type="sensebox_http_on_client_connect"></Block>
