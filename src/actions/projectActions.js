@@ -62,7 +62,7 @@ export const getProject = (type, id) => (dispatch) => {
     },
   };
   axios
-    .get(`${process.env.REACT_APP_BLOCKLY_API}/${type}/${id}`, config)
+    .get(`${import.meta.env.VITE_BLOCKLY_API}/${type}/${id}`, config)
     .then((res) => {
       res.config.success(res);
     })
@@ -98,7 +98,7 @@ export const getProjects = (type) => (dispatch) => {
     },
   };
   axios
-    .get(`${process.env.REACT_APP_BLOCKLY_API}/${type}`, config)
+    .get(`${import.meta.env.VITE_BLOCKLY_API}/${type}`, config)
     .then((res) => {
       res.config.success(res);
     })
@@ -160,7 +160,7 @@ export const updateProject = (type, id) => (dispatch, getState) => {
     },
   };
   axios
-    .put(`${process.env.REACT_APP_BLOCKLY_API}/${type}/${id}`, body, config)
+    .put(`${import.meta.env.VITE_BLOCKLY_API}/${type}/${id}`, body, config)
     .then((res) => {
       res.config.success(res);
     })
@@ -200,7 +200,7 @@ export const deleteProject = (type, id) => (dispatch, getState) => {
     },
   };
   axios
-    .delete(`${process.env.REACT_APP_BLOCKLY_API}/${type}/${id}`, config)
+    .delete(`${import.meta.env.VITE_BLOCKLY_API}/${type}/${id}`, config)
     .then((res) => {
       res.config.success(res);
     })
@@ -221,7 +221,7 @@ export const shareProject = (title, type, id) => (dispatch, getState) => {
     body.xml = getState().workspace.code.xml;
   }
   axios
-    .post(`${process.env.REACT_APP_BLOCKLY_API}/share`, body)
+    .post(`${import.meta.env.VITE_BLOCKLY_API}/share`, body)
     .then((res) => {
       var shareContent = res.data.content;
       if (body.projectId) {

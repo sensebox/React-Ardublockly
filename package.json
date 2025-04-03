@@ -2,6 +2,7 @@
   "name": "blockly-react",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@blockly/block-plus-minus": "^8.0.9",
@@ -11,6 +12,7 @@
     "@blockly/field-slider": "7.0.9",
     "@blockly/plugin-scroll-options": "^6.0.9",
     "@blockly/plugin-typed-variable-modal": "^8.0.9",
+    "@blockly/toolbox-search": "^2.0.12",
     "@blockly/workspace-backpack": "^6.0.9",
     "@blockly/workspace-minimap": "^0.2.9",
     "@blockly/zoom-to-fit": "^6.0.9",
@@ -20,6 +22,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@monaco-editor/react": "^4.3.1",
+    "@mui/icons-material": "^5.10.16",
     "@mui/lab": "^5.0.0-alpha.110",
     "@mui/material": "^5.10.16",
     "@mui/styles": "^5.10.16",
@@ -29,6 +32,7 @@
     "axios": "^0.28.0",
     "blockly": "^11.1.1",
     "file-saver": "^2.0.5",
+    "framer-motion": "^5.6.0",
     "markdown-it": "^12.3.2",
     "mnemonic-id": "^3.2.7",
     "moment": "^2.29.4",
@@ -43,7 +47,6 @@
     "react-rating-stars-component": "^2.2.0",
     "react-redux": "^7.2.9",
     "react-router-dom": "^5.3.3",
-    "react-scripts": "^5.0.1",
     "react-share": "^4.4.0",
     "react-spinners": "^0.13.3",
     "reactour": "^1.18.7",
@@ -61,12 +64,11 @@
     "react-error-overlay": "6.0.9"
   },
   "scripts": {
-    "start": "node_modules/react-scripts/bin/react-scripts.js start",
-    "dev": "set \"REACT_APP_BLOCKLY_API=http://localhost:8080\" && npm start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "e2e": "cypress open"
+    "dev": "set \"VITE_BLOCKLY_API=http://localhost:8080\" && npm start",
+    "start": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
+    "e2e": "cypress run"
   },
   "browserslist": [
     ">0.2%",
@@ -75,10 +77,13 @@
   ],
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@vitejs/plugin-react": "^4.3.4",
     "cypress": "^14.0.3",
+    "cypress-ctrf-json-reporter": "^0.0.11",
     "eslint": "^9.20.1",
     "eslint-plugin-cypress": "^4.1.0",
     "eslint-plugin-react": "^7.37.4",
-    "prettier": "^3.3.3"
+    "prettier": "^3.3.3",
+    "vite": "^6.1.0"
   }
 }

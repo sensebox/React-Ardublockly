@@ -270,7 +270,7 @@ const sensebox_mini = {
   parseKey: "_*_",
 };
 
-//senseBox MCU mini
+//senseBox MCU-S2
 const sensebox_esp32 = {
   title: "MCU-S2",
   description: "senseBox ESP32",
@@ -330,21 +330,17 @@ const sensebox_esp32 = {
   ],
   serial: [
     ["Serial", "Serial"],
-    ["Serial1", "Serial1"],
+    ["Serial0", "Serial0"],
   ],
-  serialSensors: [["Serial1", "Serial1"]],
+  serialSensors: [["Serial0", "Serial0"]],
   serialPins: {
     SerialUSB: [
       ["RX", ""],
       ["TX", ""],
     ],
-    Serial1: [
-      ["RX", "11"],
-      ["TX", "10"],
-    ],
-    Serial2: [
-      ["RX", "13"],
-      ["TX", "12"],
+    Serial0: [
+      ["RX", "40"],
+      ["TX", "39"],
     ],
   },
   serialSpeed: [
