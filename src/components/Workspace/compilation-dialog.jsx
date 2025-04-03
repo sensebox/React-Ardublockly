@@ -21,7 +21,11 @@ import * as Blockly from "blockly/core";
 import { ErrorView } from "../ErrorView/ErrorView";
 import { getPlatform } from "../../reducers/generalReducer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClipboardCheck, faCloud } from "@fortawesome/free-solid-svg-icons";
+import {
+  faClipboardCheck,
+  faCloud,
+  faLink,
+} from "@fortawesome/free-solid-svg-icons";
 
 const headerStyle = {
   fontSize: "1.5rem",
@@ -88,14 +92,15 @@ function CompilationDialog({
         }),
       });
       const data = await response.json();
+      console.log(data);
       if (!response.ok) {
         setError(data.message);
         return;
       }
       if (data.data.id) {
         setSketchId(data.data.id);
+        setActiveStep(1);
       }
-      setActiveStep(1);
     } catch (err) {
       console.error("Compilation failed", err);
     }
@@ -107,16 +112,6 @@ function CompilationDialog({
     link.href = downloadUrl;
     link.download = `${filename}.bin`;
     link.click();
-  };
-
-  const handleMagicLink = () => {
-    if (this.props.selectedBoard === "esp32") {
-      setMagicLink(
-        `blocklyconnect-app://sketch/${filename}/${this.sketchId}/${this.props.selectedBoard}`,
-      );
-    } else {
-      setMagicLink(`blocklyconnect-app://sketch/${filename}/${this.sketchId}`);
-    }
   };
 
   const handleClose = () => {
@@ -176,18 +171,28 @@ function CompilationDialog({
               style={{ display: "flex", flexDirection: "column", gap: "12px" }}
             >
               <span style={headerStyle}> Over-The-Air Übertragung </span>
-              Der Code wurde erfolgreich kompiliert! Starte jetzt mit der
-              Übertragung mit der senseBox:connect App
-              <Button
-                style={{ color: "white", marginTop: "1rem" }}
-                variant="contained"
+              <span style={{ margin: "1rem" }}>
+                Der Code wurde erfolgreich kompiliert! Starte jetzt mit der
+                Übertragung mit der senseBox:connect App
+              </span>
+              <a
+                href={
+                  selectedBoard === "esp32"
+                    ? `blocklyconnect-app://sketch/${filename}/${sketchId}/${selectedBoard}`
+                    : `blocklyconnect-app://sketch/${filename}/${sketchId}`
+                }
               >
-                <FontAwesomeIcon
-                  style={{ marginRight: "5px" }}
-                  icon={faClipboardCheck}
-                />
-                Starte Übertragung
-              </Button>
+                <Button
+                  style={{ color: "white", margin: "1rem" }}
+                  variant="contained"
+                >
+                  <FontAwesomeIcon
+                    style={{ marginRight: "5px" }}
+                    icon={faLink}
+                  />
+                  Gehe zur Connect App
+                </Button>
+              </a>
             </div>
           )}
           {activeStep === 2 && !error && (
