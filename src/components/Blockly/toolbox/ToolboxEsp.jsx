@@ -1,10 +1,15 @@
 import { Block, Value, Field, Shadow, Category, Label } from "..";
 import { getColour } from "../helpers/colour";
 import * as Blockly from "blockly/core";
+import "@blockly/toolbox-search";
+import "./search-category.css";
 
 export const ToolboxEsp = () => {
   return (
     <>
+      <Category name="Search" kind="search">
+        {" "}
+      </Category>
       <Category
         name={Blockly.Msg.toolbox_sensors}
         colour={getColour().sensebox}
