@@ -1152,7 +1152,7 @@ Blockly.Generator.Arduino.forBlock["sensebox_sensor_icm20948"] = function () {
   Blockly.Generator.Arduino.definitions_["measurement_delay"] =
     "uint16_t measurement_delay_us = 65535; // Delay between measurements for testing";
   Blockly.Generator.Arduino.setupCode_["icm.begin()"] =
-    "icm.begin_I2C(0x69, &Wire1);";
+    "icm.begin_I2C(0x68, &Wire1);";
   switch (range) {
     case "2G":
       Blockly.Generator.Arduino.setupCode_["icm.setAccelerometerRange()"] =
