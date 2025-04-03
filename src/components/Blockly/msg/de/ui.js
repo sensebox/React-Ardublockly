@@ -341,7 +341,7 @@ export const UI = {
   suggestion_pre_text: "Versuch es mal mit: ",
 
   display_not_declared:
-    "Stelle sicher, dasss du das Display im Setup initialisiert hast.",
+    "Stelle sicher, dass du das Display im Setup initialisiert hast.",
   variable_redeclared:
     "Stelle sicher, dass du keine Sonderzeichen in deinen Variablennamen verwendest. Dazu gehören z.B. Leerzeichen, Sternchen oder Anführungszeichen.",
 
