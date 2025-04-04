@@ -338,7 +338,7 @@ Blockly.Blocks["sensebox_tof_imager"] = {
   },
   updateShape_(isAltitude) {
     if (isAltitude) {
-      this.setOutput(true, "Bitmap");
+      this.setOutput(true, Types.BITMAP.typeName);
       if (this.getInput("extraField") == null) {
         this.appendDummyInput("extraField")
           // .setAlign(Blockly.inputs.Align.RIGHT) // This doesnt work for manual data input

@@ -1,4 +1,13 @@
-import { Block, Value, Field, Shadow, Category, Sep, Label } from "..";
+import {
+  Block,
+  Value,
+  Field,
+  Statement,
+  Shadow,
+  Category,
+  Sep,
+  Label,
+} from "..";
 import { getColour } from "../helpers/colour";
 import * as Blockly from "blockly/core";
 import "@blockly/toolbox-search";
@@ -387,6 +396,7 @@ export const ToolboxMcu = () => {
         <Block type="sensebox_phyphox_channel"></Block>
         <Block type="sensebox_phyphox_sendchannel"></Block>
       </Category>
+
       <Category id="webserver" name="Webserver" colour={getColour().webserver}>
         <Block type="sensebox_initialize_http_server"></Block>
         <Block type="sensebox_http_on_client_connect"></Block>
@@ -665,6 +675,53 @@ export const ToolboxMcu = () => {
               <Field name="NUM">2048</Field>
             </Block>
           </Value>
+        </Block> */}
+        </Category>
+        <Category id="sensebox_solar" name="Solar" colour={getColour().solar}>
+          <Block type="sensebox_solar_charger_SB041">
+            <Field name="MEASUREMENT">getBatteryLevel</Field>
+          </Block>
+          <Block type="sensebox_solar_deep_sleep_and_restart">
+            <Field name="SLEEP_TIME">30</Field>
+            <Field name="TIME_SCALE">60000</Field>
+            <Field name="POWER_OFF_I2C">TRUE</Field>
+            <Field name="POWER_OFF_UART">TRUE</Field>
+            <Field name="POWER_OFF_XB">TRUE</Field>
+          </Block>
+          {/* <Block type="controls_ifelse">
+          <Value name="IF0">
+            <Block type="logic_compare">
+              <Field name="OP">GT</Field>
+              <Value name="A">
+                <Block type="sensebox_solar_charger_SB041">
+                  <Field name="MASUREMENT">getBatteryLevel</Field>
+                </Block>
+              </Value>
+              <Value name="B">
+                <Block type="math_number">
+                  <Field name="NUM">2</Field>
+                </Block>
+              </Value>
+            </Block>
+          </Value>
+          <Statement name="DO0">
+            <Block type="sensebox_solar_deep_sleep_and_restart">
+              <Field name="SLEEP_TIME">30</Field>
+              <Field name="TIME_SCALE">60000</Field>
+              <Field name="POWER_OFF_I2C">TRUE</Field>
+              <Field name="PPOWER_OFF_UART">TRUE</Field>
+              <Field name="PWER_OFF_XB">TRUE</Field>
+            </Block>
+          </Statement>
+          <Statement name="ELSE">
+            <Block type="sensebox_solar_deep_sleep_and_restart">
+              <Field name="SLEEP_TIME">12</Field>
+              <Field name="TIME_SCALE">3600000</Field>
+              <Field name="POWER_OFF_I2C">TRUE</Field>
+              <Field name="PPOWER_OFF_UART">TRUE</Field>
+              <Field name="PWER_OFF_XB">TRUE</Field>
+            </Block>
+          </Statement>
         </Block> */}
         </Category>
         <Category name="Watchdog" colour={getColour().io}>

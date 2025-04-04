@@ -326,7 +326,7 @@ Blockly.Blocks["sensebox_ws2812_matrix_showBitmap"] = {
         "Port",
       );
     this.appendValueInput("input")
-      .setCheck("Bitmap")
+      .setCheck(Types.BITMAP.typeName)
       .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_bitmap);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -355,7 +355,7 @@ Blockly.Blocks["sensebox_ws2812_matrix_bitmap"] = {
         "BITMAP",
       );
 
-    this.setOutput(true, "Bitmap");
+    this.setOutput(true, Types.BITMAP.typeName);
     this.setTooltip(Blockly.Msg.senseBox_ws2812_rgb_matrix_bitmap_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_ws2812_rgb_matrix_helpurl);
 
@@ -364,29 +364,9 @@ Blockly.Blocks["sensebox_ws2812_matrix_bitmap"] = {
 
 Blockly.Blocks["sensebox_ws2812_matrix_custom_bitmap"] = {
   init: function () {
-    // array to create random names
-    const words = [
-      "alpha",
-      "beta",
-      "gamma",
-      "delta",
-      "epsilon",
-      "zeta",
-      "theta",
-    ];
-
+    this.setHelpUrl(Blockly.Msg.senseBox_ws2812_rgb_matrix_helpurl);
     this.setColour(getColour().sensebox);
-    this.appendDummyInput()
-      .setAlign(Blockly.inputs.Align.LEFT)
-      .appendField(Blockly.Msg.sensebox_led_custom_bitmap)
-      .appendField(
-        new Blockly.FieldTextInput(
-          words[Math.floor(Math.random() * words.length)],
-        ),
-        "name",
-      );
     this.appendDummyInput("input")
-      .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_custom_bitmap)
       .appendField("{")
       .appendField(
         new FieldMultilineInput(
@@ -395,13 +375,10 @@ Blockly.Blocks["sensebox_ws2812_matrix_custom_bitmap"] = {
         "input",
       )
       .appendField("}");
-
-    this.setOutput(true, "Bitmap");
+    this.setOutput(true, Types.BITMAP.typeName);
     this.setTooltip(
       Blockly.Msg.senseBox_ws2812_rgb_matrix_custom_bitmap_tooltip,
     );
-    this.setHelpUrl(Blockly.Msg.senseBox_ws2812_rgb_matrix_helpurl);
-
   },
 };
 
@@ -921,7 +898,7 @@ Blockly.defineBlocksWithJsonArray([
         colour: "#000000",
       },
     ],
-    output: "Bitmap",
+    output: Types.BITMAP.typeName,
     colour: getColour().sensebox,
     tooltip: Blockly.Msg.senseBox_ws2812_rgb_matrix_draw_bitmap_tooltip,
     helpUrl: Blockly.Msg.senseBox_ws2812_rgb_matrix_helpurl,
