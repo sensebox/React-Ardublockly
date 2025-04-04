@@ -604,6 +604,35 @@ Blockly.Blocks["sensebox_soundsensor_dfrobot"] = {
 };
 
 /**
+ * rg15 rainsensor
+ */
+
+Blockly.Blocks["sensebox_rg15_rainsensor"] = {
+  init: function () {
+    var dropdownOptionsValues = [
+      [Blockly.Msg.sensebox_rg15_rainsensor_totalAcc, "getTotalAccumulation"],
+      [Blockly.Msg.sensebox_rg15_rainsensor_acc, "getAccumulation"],
+      [Blockly.Msg.sensebox_rg15_rainsensor_eventAcc, "getEventAccumulation"],
+      [Blockly.Msg.sensebox_rg15_rainsensor_rainInt, "getRainfallIntensity"],
+    ];
+    this.setColour(getColour().sensebox);
+    this.appendDummyInput().appendField(Blockly.Msg.sensebox_rg15_rainsensor);
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.sensebox_rg15_rainsensor_port)
+      .appendField(
+        new Blockly.FieldDropdown(selectedBoard().serialSensors),
+        "SERIAL",
+      );
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.sensebox_rg15_rainsensor_value)
+      .appendField(new Blockly.FieldDropdown(dropdownOptionsValues), "VALUE");
+    this.setOutput(true, Types.DECIMAL.typeName);
+    this.setTooltip(Blockly.Msg.sensebox_rg15_rainsensor_tooltip);
+    this.setHelpUrl(Blockly.Msg.sensebox_rg15_rainsensor_helpurl);
+  },
+};
+
+/**
  * Infineon DPS310 Pressure Sensor
  *
  */
