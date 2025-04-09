@@ -13,6 +13,7 @@ const FluoroASM = ({ data }) => {
   const [ledColor, setLedColor] = useState("yellow");
   const [filterOffset, setFilterOffset] = React.useState(0);
   const [ledSelected, setLedSelected] = React.useState(0);
+  const [filterColour, setFilterColour] = useState("#f90c0c");
 
   const offsets = {
     Led1: 0,
@@ -45,6 +46,9 @@ const FluoroASM = ({ data }) => {
   const handleDiamondChange = (e) => {
     setDiamondEnabled(e.target.checked);
   };
+  const handleFilterColourChange = (e) => {
+    setFilterColour(e.target.value);
+  }
 
   const handleLedColorChange = (e) => {
 
@@ -78,7 +82,7 @@ const FluoroASM = ({ data }) => {
       }}
       onClick={toggleMenu}
     >
-        <SvgFluoroBee ledSelected={ledSelected } filterEnabled={filterEnabled} filterOffset={filterOffset} diamondEnabled={diamondEnabled}   />
+        <SvgFluoroBee ledSelected={ledSelected } filterEnabled={filterEnabled} filterOffset={filterOffset} diamondEnabled={diamondEnabled} filterColour={filterColour}   />
       {filterEnabled && (
               <div style={{ position:"absolute", top:"50px", left:"95px", display: "flex", flexDirection: "column" }}>
               <button disabled={filterOffset === offsets.Led4} onClick={moveFilterUp} style={{ marginBottom: "5px" }}><FontAwesomeIcon icon={faArrowUp}/> </button>
@@ -121,6 +125,13 @@ const FluoroASM = ({ data }) => {
             <br></br>
             <span style={{color:'white', fontSize: "0.9rem" }}>Diamant aktiv </span>
           <input type="checkbox" checked={diamondEnabled} onChange={handleDiamondChange} />
+          <br>
+          </br>
+          <span style={{color:'white', fontSize: "0.9rem" }}>Filter Farbe: </span>
+          <select value={filterColour} onChange={handleFilterColourChange}>
+            <option value="#f90c0c">Rot</option>
+            <option value="#280cf9">Blau</option>
+            </select>
 
             </div>
             

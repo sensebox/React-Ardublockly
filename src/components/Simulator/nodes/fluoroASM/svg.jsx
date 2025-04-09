@@ -12,7 +12,7 @@ const SvgFluoroBee = (props) => {
 
 
   const [diamondColors, setDiamondColors] = React.useState(
-  ["#CCCCCC", "#D4002A", "#AA4444", "#CCCCCC"] )
+  ["white", "white", "red", "red"] )
 
 
   const toggledColors = {
@@ -1051,7 +1051,7 @@ const SvgFluoroBee = (props) => {
          id="path463-5-3"
          cx="118.471"
          cy="971.559"
-         fill="#f90c0c"
+         fill={props.filterColour}
          fillOpacity="0.499"
          strokeOpacity="0"
          strokeWidth="1.019"
@@ -1072,14 +1072,6 @@ const SvgFluoroBee = (props) => {
   strokeWidth="2.306"
   transform={`translate(40 ${87 + props.filterOffset})scale(0.09)`}
 >
-  {props.ledSelected === 2 && (
-  <animate
-  attributeName="fill-opacity"
-  values="0.5;1;0.5"
-  dur="2s"
-  repeatCount="indefinite"
-/>
-  )}
 
   <path
     id="path1"
