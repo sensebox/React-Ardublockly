@@ -1,10 +1,10 @@
 export default function initFluoroASM(interpreter, globalObject) {
 
     const toggledColors = {
+      led3: "#33FF33",
+      led4: "#3399FF",
       led1: "#FF3333",
-      led2: "#33FF33",
-      led3: "#3399FF",
-      led4: "#FFFF66",
+      led2: "#FFFF66",
     };
 
     var wrapper = function toggleLED (led, on) {
