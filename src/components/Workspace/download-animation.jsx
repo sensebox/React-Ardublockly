@@ -90,7 +90,7 @@ function DownloadAnimation({ language }) {
       // 1. Bewege Cursor zum Download-Button (angepasste Position für schmalere Box)
       await cursorControls.start({
         opacity: 1,
-        x: 320, // Angepasst für schmalere Box
+        x: 240, // Angepasst für schmalere Box
         y: 20,
         transition: { duration: 1 },
       });
