@@ -264,4 +264,12 @@ export const TRANSLATIONS = {
   senseBox_watertemperature: "Wassertemperatur",
   senseBox_watertemperature_tooltip:
     "Das Wasserthermometer gibt Temperatur in Grad Celsius aus. Schließe den Sensor an einen der 6 Anschlüsse des One-Wire Adapters an und schließe dann den One-Wire Adapter an einen der 3 digital/analog Ports der senseBox an und wähle den Port im Block aus. Wenn du nur ein Thermometer am One-Wire Adapter angeschlossen hast, dann belasse den Index bei 0. Jedes weitere angeschlossene Thermometer kann entsprechend mit einem um 1 erhöhten Index angesprochen werden. Es kommt dabei nicht darauf an, an welchem Anschluss des Adapters die Thermometer angeschlossen werden.",
+
+  compile_overlay_compile: "Kompilierung läuft...",
+  compile_overlay_download: " Download wird vorbereitet...",
+  compile_overlay_transfer: "Übertrage die Datei auf deine senseBox",
+  compile_overlay_error: "Ein Fehler ist aufgetreten",
+  compile_overlay_code_compiled: "Code erfolgreich kompiliert!",
+  compile_overlay_start_transfer: "Starte Übertragung",
+  compile_overlay_close: "Schließen",
 };

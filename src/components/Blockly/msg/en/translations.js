@@ -241,4 +241,12 @@ export const TRANSLATIONS = {
   senseBox_serial_tip:
     "prints the values to the serial monitor in the arduino IDE. Good way to have a fast and easy feedback for your programm",
   senseBox_soil: "Soil Moisture",
+
+  compile_overlay_compile: "Compilation in progress...",
+  compile_overlay_download: "Preparing download...",
+  compile_overlay_transfer: "Transfer the file to your senseBox",
+  compile_overlay_error: "An error has occurred",
+  compile_overlay_code_compiled: "Code successfully compiled!",
+  compile_overlay_start_transfer: "Start transfer",
+  compile_overlay_close: "Close",
 };
