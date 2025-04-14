@@ -110,18 +110,36 @@ Blockly.Generator.Arduino.forBlock["sensebox_interval_timer"] = function (
 ) {
   var intervalTime = this.getFieldValue("interval");
   var intervalName = this.getFieldValue("name");
-  Blockly.Generator.Arduino.variables_[
-    `define_interval_variables${intervalName}`
-  ] = `
+
+  // Erstelle einen Schlüssel für das Intervall
+  var key = `define_interval_variables${intervalName}`;
+
+  // Falls dieser Name schon existiert, hänge einen leserlichen Suffix an (z.B. _Dup1, _Dup2, etc.)
+  if (Blockly.Generator.Arduino.variables_[key]) {
+    var duplicateCount = 1;
+    var newKey = `define_interval_variables${intervalName}_Dup${duplicateCount}`;
+    while (Blockly.Generator.Arduino.variables_[newKey]) {
+      duplicateCount++;
+      newKey = `define_interval_variables${intervalName}_Dup${duplicateCount}`;
+    }
+    intervalName = intervalName + "_Dup" + duplicateCount;
+    key = newKey;
+  }
+
+  Blockly.Generator.Arduino.variables_[key] = `
   const long interval${intervalName} = ${intervalTime};
   long time_start${intervalName} = 0;
   long time_actual${intervalName} = 0;`;
+
   Blockly.Generator.Arduino.loopCodeOnce_[`interval_loop${intervalName}`] =
     `time_start${intervalName} = millis();\n`;
+
   var branch = Blockly.Generator.Arduino.statementToCode(block, "DO");
   var code = `
-  if (time_start${intervalName} > time_actual${intervalName} + interval${intervalName}) {\n  time_actual${intervalName} = millis();\n`;
-  code += branch;
-  code += "}\n";
+  if (time_start${intervalName} > time_actual${intervalName} + interval${intervalName}) {
+    time_actual${intervalName} = millis();
+    ${branch}
+  }
+  `;
   return code;
 };
