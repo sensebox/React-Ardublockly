@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 import { Handle, Position } from "@xyflow/react";
-import SensorGraphic from "./ultrasonic.png"; 
+import SensorGraphic from "./hc-sr04.png"; 
 import SensorNode from "../../uiComponents/SensorNode";
 
 const UltrasonicSensor = ({ data }) => {
@@ -21,7 +21,7 @@ const UltrasonicSensor = ({ data }) => {
       title="Ultrasonic HC-SR04"
       sensors={sensorConfigUltrasonic}
       imageSrc={SensorGraphic}
-      maxWidth="150px"
+      maxWidth="64%"
     />
   );
 };

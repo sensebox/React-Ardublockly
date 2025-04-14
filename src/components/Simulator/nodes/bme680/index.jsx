@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import SensorGraphic from "./bme680.png";
+import SensorGraphic from "./sensorBME680 v9.png";
 import SensorNode from "../../uiComponents/SensorNode";
 
 const BME680 = ({ data }) => {
@@ -18,6 +18,8 @@ const BME680 = ({ data }) => {
       title="BME680"
       sensors={sensorConfigBME680}
       imageSrc={SensorGraphic}
+      maxWidth="64%"
+  
     />
   );
 };

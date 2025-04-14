@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 import { Handle, Position } from "@xyflow/react";
-import SensorGraphic from "./hdc1080.png";
+import SensorGraphic from "./senseBox-HDC1080_v22 v4.png";
 import SensorNode from "../../uiComponents/SensorNode";
 
 const HDC1080 = ({ data }) => {
@@ -15,6 +15,8 @@ const HDC1080 = ({ data }) => {
       title="HDC1080"
       sensors={sensorConfigTempHumidity}
       imageSrc={SensorGraphic}
+      maxWidth="64%"
+      
     />
   );
 };

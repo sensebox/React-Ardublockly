@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 import { Handle, Position } from "@xyflow/react";
-import SensorGraphic from "./watertemp.png";
+import SensorGraphic from "./Wassertemperatur Sensor v2.png";
 import SensorNode from "../../uiComponents/SensorNode";
 
 const WaterTemp = ({ data }) => {
@@ -21,7 +21,7 @@ const WaterTemp = ({ data }) => {
       title="DS18B20" 
       sensors={sensorConfigWaterTemp}
       imageSrc={SensorGraphic}
-      maxWidth="150px"
+      maxWidth="64%"
     />
   );
 };

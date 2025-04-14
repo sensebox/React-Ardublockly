@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 import { Handle, Position } from "@xyflow/react";
-import SensorGraphic from "./smt50.png"; 
+import SensorGraphic from "./SMT50 v2.png"; 
 import SensorNode from "../../uiComponents/SensorNode";
 
 const SMT50 = ({ data }) => {
@@ -14,7 +14,7 @@ const SMT50 = ({ data }) => {
       title="SMT50"
       sensors={sensorConfigSMT50}
       imageSrc={SensorGraphic}
-      maxWidth="150px"
+      maxWidth="64%"
     />
   );
 };

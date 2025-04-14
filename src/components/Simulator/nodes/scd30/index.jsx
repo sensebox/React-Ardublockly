@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import SensorGraphic from "./scd30.png";
+import SensorGraphic from "./SCD30 v1.png";
 import SensorNode from "../../uiComponents/SensorNode";
 
 
@@ -18,6 +18,7 @@ const SCD30 = ({ data }) => {
             title="SCD30"
             sensors={sensorConfigSCD30}
             imageSrc={SensorGraphic}
+             maxWidth="64%"
         />
 
     )
