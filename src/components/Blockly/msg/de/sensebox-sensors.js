@@ -134,10 +134,24 @@ Wenn die maximale Distanz überschritten wird, wird ein Wert von **O** ausgegebe
     "Schließe den Sensor an einen der **Digital/Analog Ports** an. Der Sensor gibt dir den Messwert in dB mit einer Nachkommastelle",
   senseBox_soundsensor_dfrobot_helpurl:
     "https://docs.sensebox.de/hardware/sensoren-lautstaerke/",
+
+  /*
+   * rg15 rainsensor
+   */
+  sensebox_rg15_rainsensor: "Regensensor (RG-15)",
+  sensebox_rg15_rainsensor_port: "Serieller Port:",
+  sensebox_rg15_rainsensor_value: "Messwert:",
+  sensebox_rg15_rainsensor_totalAcc: "gesamter Niederschlag in mm",
+  sensebox_rg15_rainsensor_rainInt: "Niederschlagsintensität in mm/h",
+  sensebox_rg15_rainsensor_eventAcc: "Niederschlag pro Event in mm",
+  sensebox_rg15_rainsensor_acc: "Niederschlag seit letzter Messung in mm",
+  sensebox_rg15_rainsensor_tooltip:
+    "Regensensor (RG-15) an einen der Seriellen Ports anschließen.",
+  sensebox_rg15_rainsensor_helpurl: "https://rainsensors.com/products/rg-15/",
+
   /*
    * BME680
    */
-
   senseBox_bme680: "Umweltsensor (BME680)",
   senseBox_bme_iaq: "Innenraumluftqualität (IAQ)",
   senseBox_bme_iaq_accuracy: "Kalibrierungswert",
@@ -233,8 +247,8 @@ Die Messwerte für Temperatur, Luftfeuchtigkeit und Luftdruck können direkt ver
    * MPU6050 */
   senseBox_mpu6050_tooltip:
     "Der MPU6050 ist ein Beschleunigungs- und Gyroskopsensor. Schließe den Sensor an einen der I2C Anschlüsse an. Der Sensor gibt dir die Beschleunigung in m/s² und die Winkelgeschwindigkeit in °/s zurück.",
-  senseBox_mpu6050_helpurl:
-    "https://docs.sensebox.de/docs/hardware/sensors/mpu6050",
+  senseBox_mpu6050_helpurl: "https://docs.sensebox.de/docs/hardware/sensors/mpu6050",
+
 
   /**
    * ToF Imager

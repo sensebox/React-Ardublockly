@@ -339,7 +339,7 @@ Blockly.Blocks["sensebox_tof_imager"] = {
   },
   updateShape_(isAltitude) {
     if (isAltitude) {
-      this.setOutput(true, "Bitmap");
+      this.setOutput(true, Types.BITMAP.typeName);
       if (this.getInput("extraField") == null) {
         this.appendDummyInput("extraField")
           // .setAlign(Blockly.inputs.Align.RIGHT) // This doesnt work for manual data input
@@ -601,6 +601,35 @@ Blockly.Blocks["sensebox_soundsensor_dfrobot"] = {
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setTooltip(Blockly.Msg.senseBox_soundsensor_dfrobot_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_soundsensor_dfrobot_helpurl);
+  },
+};
+
+/**
+ * rg15 rainsensor
+ */
+
+Blockly.Blocks["sensebox_rg15_rainsensor"] = {
+  init: function () {
+    var dropdownOptionsValues = [
+      [Blockly.Msg.sensebox_rg15_rainsensor_totalAcc, "getTotalAccumulation"],
+      [Blockly.Msg.sensebox_rg15_rainsensor_acc, "getAccumulation"],
+      [Blockly.Msg.sensebox_rg15_rainsensor_eventAcc, "getEventAccumulation"],
+      [Blockly.Msg.sensebox_rg15_rainsensor_rainInt, "getRainfallIntensity"],
+    ];
+    this.setColour(getColour().sensebox);
+    this.appendDummyInput().appendField(Blockly.Msg.sensebox_rg15_rainsensor);
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.sensebox_rg15_rainsensor_port)
+      .appendField(
+        new Blockly.FieldDropdown(selectedBoard().serialSensors),
+        "SERIAL",
+      );
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.sensebox_rg15_rainsensor_value)
+      .appendField(new Blockly.FieldDropdown(dropdownOptionsValues), "VALUE");
+    this.setOutput(true, Types.DECIMAL.typeName);
+    this.setTooltip(Blockly.Msg.sensebox_rg15_rainsensor_tooltip);
+    this.setHelpUrl(Blockly.Msg.sensebox_rg15_rainsensor_helpurl);
   },
 };
 

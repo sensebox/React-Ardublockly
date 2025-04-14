@@ -1,10 +1,15 @@
-import { Block, Value, Field, Shadow, Category, Label } from "..";
+import { Block, Value, Field, Statement, Shadow, Category, Label } from "..";
 import { getColour } from "../helpers/colour";
 import * as Blockly from "blockly/core";
+import "@blockly/toolbox-search";
+import "./search-category.css";
 
 export const ToolboxEsp = () => {
   return (
     <>
+      <Category name="Search" kind="search">
+        {" "}
+      </Category>
       <Category
         name={Blockly.Msg.toolbox_sensors}
         colour={getColour().sensebox}
@@ -26,6 +31,7 @@ export const ToolboxEsp = () => {
         <Block type="sensebox_button" />
         <Block type="sensebox_sensor_truebner_smt50_esp32" />
         <Block type="sensebox_sensor_watertemperature" />
+        {/* <Block type="sensebox_rg15_rainsensor" /> */}
         <Block type="sensebox_soundsensor_dfrobot" />
         <Block type="sensebox_multiplexer_init">
           <Value name="nrChannels">
@@ -247,6 +253,7 @@ export const ToolboxEsp = () => {
             </Block>
           </Value>
         </Block>
+        <Block type="sensebox_display_roboeyes" />
         <Block type="sensebox_display_fillCircle">
           <Value name="X">
             <Block type="math_number">
@@ -394,6 +401,57 @@ export const ToolboxEsp = () => {
           <Block type="sensebox_ble_init"></Block>
         </Category> */}
       </Category>
+      {/* <Category id="sensebox_solar" name="Solar" colour={getColour().solar}>
+        <Block type="sensebox_solar_charger_SB041">
+          <Field name="value">battery_level</Field>
+        </Block>
+        <Block type="sensebox_solar_ensure_wake_time">
+          <Field name="wake_time">30</Field>
+          <Field name="time_scale"> * 1000</Field>
+        </Block>
+        <Block type="sensebox_solar_deep_sleep_and_restart">
+          <Field name="sleep_time">30</Field>
+          <Field name="time_scale">60000</Field>
+          <Field name="powerOffGPIO">TRUE</Field>
+          <Field name="powerOffUART">TRUE</Field>
+          <Field name="powerOffXB">TRUE</Field>
+        </Block>
+        <Block type="controls_ifelse">
+          <Value name="IF0">
+            <Block type="logic_compare">
+              <Field name="OP">GT</Field>
+              <Value name="A">
+                <Block type="sensebox_solar_charger_SB041">
+                  <Field name="value">battery_level</Field>
+                </Block>
+              </Value>
+              <Value name="B">
+                <Block type="math_number">
+                  <Field name="NUM">2</Field>
+                </Block>
+              </Value>
+            </Block>
+          </Value>
+          <Statement name="DO0">
+            <Block type="sensebox_solar_deep_sleep_and_restart">
+              <Field name="sleep_time">30</Field>
+              <Field name="time_scale">60000</Field>
+              <Field name="powerOffGPIO">TRUE</Field>
+              <Field name="powerOffUART">TRUE</Field>
+              <Field name="powerOffXB">TRUE</Field>
+            </Block>
+          </Statement>
+          <Statement name="ELSE">
+            <Block type="sensebox_solar_deep_sleep_and_restart">
+              <Field name="sleep_time">12</Field>
+              <Field name="time_scale">3600000</Field>
+              <Field name="powerOffGPIO">TRUE</Field>
+              <Field name="powerOffUART">TRUE</Field>
+              <Field name="powerOffXB">TRUE</Field>
+            </Block>
+          </Statement>
+        </Block>
+      </Category> */}
       <Category id="webserver" name="Webserver" colour={getColour().webserver}>
         <Block type="sensebox_initialize_http_server"></Block>
         <Block type="sensebox_http_on_client_connect"></Block>

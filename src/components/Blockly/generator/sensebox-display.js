@@ -220,6 +220,25 @@ Blockly.Generator.Arduino.forBlock["sensebox_display_plotDisplay"] =
     return code;
   };
 
+  Blockly.Generator.Arduino.forBlock["sensebox_display_roboeyes"] =
+  function () {
+    Blockly.Generator.Arduino.definitions_["define_roboeyes"] = 
+    "#include <FluxGarage_RoboEyes.h>\n" +
+    "roboEyes roboEyes;\n";
+    Blockly.Generator.Arduino.setupCode_["sensebox_roboeye_setup"] = 
+    "roboEyes.begin(SCREEN_WIDTH, SCREEN_HEIGHT, 100);\n";
+    let code = "";
+    var position = this.getFieldValue("POSITION") || "DEFAULT";
+    code += "roboEyes.setPosition(" + position + ");\n";
+    var emotion = this.getFieldValue("EMOTION") || "DEFAULT";
+    code += "roboEyes.setMood(" + emotion + ");\n";
+    code += "roboEyes.drawEyes();\n" +
+    "roboEyes.drawEyes();\n" +
+    "roboEyes.drawEyes();\n" +
+    "roboEyes.drawEyes();\n";
+    return code;
+  };
+
 Blockly.Generator.Arduino.forBlock["sensebox_display_fillCircle"] =
   function () {
     let code = "";
