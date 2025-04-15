@@ -21,7 +21,7 @@ const tofimager = ({ data }) => {
       title="TOF Imager"
       sensors={sensorConfigTOF}
       imageSrc={SensorGraphic}
-      maxWidth="64%"
+      
     />
   );
 };

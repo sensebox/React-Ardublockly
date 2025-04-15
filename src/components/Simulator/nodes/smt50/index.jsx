@@ -14,7 +14,7 @@ const SMT50 = ({ data }) => {
       title="SMT50"
       sensors={sensorConfigSMT50}
       imageSrc={SensorGraphic}
-      maxWidth="64%"
+   
     />
   );
 };

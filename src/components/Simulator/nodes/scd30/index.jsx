@@ -18,7 +18,7 @@ const SCD30 = ({ data }) => {
             title="SCD30"
             sensors={sensorConfigSCD30}
             imageSrc={SensorGraphic}
-             maxWidth="64%"
+             
         />
 
     )

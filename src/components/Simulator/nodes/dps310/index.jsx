@@ -15,7 +15,7 @@ const DPS310 = ({ data }) => {
     title="DPS310"
     sensors={sensorConfigDPS310}
     imageSrc={SensorGraphic}
-    maxWidth="64%"
+    
 />
   );
 };

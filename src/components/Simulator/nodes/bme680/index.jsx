@@ -18,7 +18,7 @@ const BME680 = ({ data }) => {
       title="BME680"
       sensors={sensorConfigBME680}
       imageSrc={SensorGraphic}
-      maxWidth="64%"
+      
   
     />
   );

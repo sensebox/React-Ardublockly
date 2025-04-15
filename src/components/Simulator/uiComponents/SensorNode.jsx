@@ -3,7 +3,7 @@ import { Handle, Position } from "@xyflow/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 
-const SensorNode = ({ title, sensors, imageSrc, maxWidth = "250px" }) => {
+const SensorNode = ({ title, sensors, imageSrc, width = "162px" }) => {
   // Initial values for all sensors
   const initialValues = sensors.reduce((acc, sensor) => {
     acc[sensor.id] = sensor.initial !== undefined ? sensor.initial : sensor.min;
@@ -22,7 +22,7 @@ const SensorNode = ({ title, sensors, imageSrc, maxWidth = "250px" }) => {
     <div
       style={{
         position: "relative",
-        maxWidth,
+        width,
         background: "#1b7d1066", 
         borderRadius: "10px",
         overflow: "hidden",

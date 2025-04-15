@@ -15,7 +15,7 @@ const HDC1080 = ({ data }) => {
       title="HDC1080"
       sensors={sensorConfigTempHumidity}
       imageSrc={SensorGraphic}
-      maxWidth="64%"
+      
       
     />
   );

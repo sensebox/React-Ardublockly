@@ -21,7 +21,7 @@ const WaterTemp = ({ data }) => {
       title="DS18B20" 
       sensors={sensorConfigWaterTemp}
       imageSrc={SensorGraphic}
-      maxWidth="64%"
+      
     />
   );
 };

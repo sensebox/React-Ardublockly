@@ -21,7 +21,7 @@ const UltrasonicSensor = ({ data }) => {
       title="Ultrasonic HC-SR04"
       sensors={sensorConfigUltrasonic}
       imageSrc={SensorGraphic}
-      maxWidth="64%"
+      
     />
   );
 };
