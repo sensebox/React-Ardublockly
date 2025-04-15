@@ -18,8 +18,154 @@ class BlocklyWindow extends Component {
   constructor(props) {
     super(props);
     this.simpleWorkspace = React.createRef();
-    this.backpackImg = null;
+    this.backpackBlockPosition = null;
+    this.allowNewArduinoFunction = true;
+    this.backpack = null;
+    this.backpackInitialized = false;
   }
+
+  // Hilfsfunktion für die Block-Validierung
+  validateArduinoFunctionBlock = (workspace, newBlock) => {
+    const existingBlocks = workspace
+      .getAllBlocks()
+      .filter((block) => block.type === "arduino_functions");
+
+    if (existingBlocks.length > 0) {
+      if (newBlock) {
+        const oldBlock = existingBlocks[0];
+        const oldPosition = oldBlock.getRelativeToSurfaceXY();
+        oldBlock.dispose();
+        newBlock.moveTo(oldPosition);
+      }
+      return false;
+    }
+    return true;
+  };
+
+  // Backpack Event-Handler
+  handleBackpackDragStart = (block) => {
+    if (block.type === "arduino_functions") {
+      this.backpackBlockPosition = block.getRelativeToSurfaceXY();
+    }
+  };
+
+  handleBackpackDragEnd = (block) => {
+    if (block.type === "arduino_functions") {
+      const workspace = Blockly.getMainWorkspace();
+      const existingBlocks = workspace
+        .getAllBlocks()
+        .filter((b) => b.type === "arduino_functions");
+
+      if (existingBlocks.length > 1) {
+        existingBlocks[0].dispose();
+        block.moveTo(this.backpackBlockPosition);
+      }
+    }
+  };
+
+  handleBackpackDrop = (block) => {
+    if (block.type === "arduino_functions") {
+      const workspace = Blockly.getMainWorkspace();
+      this.validateArduinoFunctionBlock(workspace, block);
+    }
+  };
+
+  // Aktualisiere die Backpack-UI
+  updateBackpackUI = () => {
+    if (!this.backpack) return;
+
+    try {
+      const backpackElement = document.querySelector(".blocklyBackpack");
+      if (backpackElement) {
+        backpackElement.setAttribute("title", Blockly.Msg["EMPTY_BACKPACK"]);
+      }
+
+      if (this.backpack) {
+        this.backpack.options.contextMenu = {
+          emptyBackpack: true,
+          removeFromBackpack: true,
+          copyToBackpack: true,
+          copyAllToBackpack: true,
+          pasteAllToBackpack: true,
+          disablePreconditionChecks: false,
+        };
+      }
+
+      if (process.env.NODE_ENV === "development") {
+        console.log("Backpack UI updated");
+      }
+    } catch (error) {
+      if (process.env.NODE_ENV === "development") {
+        console.error("Error updating Backpack UI:", error);
+      }
+    }
+  };
+
+  // Initialisiere den Backpack
+  initializeBackpack = (workspace) => {
+    if (this.backpackInitialized) {
+      if (process.env.NODE_ENV === "development") {
+        console.log("Backpack already initialized, updating translations only");
+      }
+      this.updateBackpackUI();
+      return;
+    }
+
+    const backpackOptions = {
+      allowEmptyBackpackOpen: true,
+      useFilledBackpackImage: true,
+      skipSerializerRegistration: false,
+      contextMenu: {
+        emptyBackpack: true,
+        removeFromBackpack: true,
+        copyToBackpack: true,
+        copyAllToBackpack: true,
+        pasteAllToBackpack: true,
+        disablePreconditionChecks: false,
+      },
+    };
+
+    this.backpack = new Backpack(workspace, backpackOptions);
+
+    this.backpack.onDragStart = (block) => {
+      if (block.type === "arduino_functions") {
+        return false;
+      }
+      return true;
+    };
+
+    const originalCopyToBackpack = this.backpack.copyToBackpack;
+    this.backpack.copyToBackpack = (block) => {
+      if (block.type === "arduino_functions") {
+        return;
+      }
+      return originalCopyToBackpack.call(this.backpack, block);
+    };
+
+    const originalCopyAllToBackpack = this.backpack.copyAllToBackpack;
+    this.backpack.copyAllToBackpack = (blocks) => {
+      const filteredBlocks = blocks.filter(
+        (block) => block.type !== "arduino_functions",
+      );
+      return originalCopyAllToBackpack.call(this.backpack, filteredBlocks);
+    };
+
+    const originalPasteAllFromBackpack = this.backpack.pasteAllFromBackpack;
+    this.backpack.pasteAllFromBackpack = (blocks) => {
+      const filteredBlocks = blocks.filter(
+        (block) => block.type !== "arduino_functions",
+      );
+      return originalPasteAllFromBackpack.call(this.backpack, filteredBlocks);
+    };
+
+    this.backpack.init();
+    this.backpackInitialized = true;
+    if (process.env.NODE_ENV === "development") {
+      console.log("Backpack initialized");
+    }
+
+    this.updateBackpackUI();
+  };
 
   componentDidMount() {
     const workspace = Blockly.getMainWorkspace();
@@ -27,12 +173,39 @@ class BlocklyWindow extends Component {
     this.props.clearStats();
 
     workspace.addChangeListener(Blockly.Events.disableOrphans);
+
     workspace.addChangeListener((event) => {
       this.props.onChangeWorkspace(event);
-      if (this.props.blockDisabled) {
-        Blockly.Events.disableOrphans(event);
+
+      try {
+        if (
+          event.type === Blockly.Events.BLOCK_CREATE ||
+          event.type === Blockly.Events.BLOCK_PASTE ||
+          event.type === Blockly.Events.BACKPACK_DRAG
+        ) {
+          const allBlocks = workspace.getAllBlocks();
+          const arduinoFunctionBlocks = allBlocks.filter(
+            (block) => block.type === "arduino_functions",
+          );
+
+          if (arduinoFunctionBlocks.length > 1) {
+            const firstBlock = arduinoFunctionBlocks[0];
+            const position = firstBlock.getRelativeToSurfaceXY();
+
+            arduinoFunctionBlocks.slice(1).forEach((block) => {
+              block.dispose();
+            });
+
+            firstBlock.moveTo(position);
+          }
+        }
+      } catch (error) {
+        if (process.env.NODE_ENV === "development") {
+          console.error("Error validating blocks:", error);
+        }
       }
     });
+
     Blockly.svgResize(workspace);
 
     const zoomToFit = new ZoomToFitControl(workspace);
