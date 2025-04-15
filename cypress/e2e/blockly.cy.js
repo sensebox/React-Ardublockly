@@ -25,7 +25,33 @@ describe("Blockly Editor Page Tests", () => {
     cy.visit("/user/login");
   });
 
-  /// <reference types="cypress" />
+  it("[Blockly] navigates to tutorial and back", () => {
+    cy.visit("/");
+    cy.get('img[alt="Sensebox ESP"]').click();
+
+    // get a button that has an SVG with the class "fa-bars" inside it
+    // this is the button that opens the menu
+    const menuButton = cy.get("button").find("svg.fa-bars").parents("button");
+
+    // click the button
+    menuButton.click();
+
+    // click the a with href "/tutorial"
+    cy.get('a[href="/tutorial"]').click();
+    cy.wait(1000);
+    cy.url().should("include", "/tutorial");
+    cy.wait(1000);
+
+    // click the button
+    menuButton.click();
+
+    // click the a with href "/" and deep inside it an span containing "Blockly"
+    cy.get('a[href="/"]').find("span").contains("Blockly").parents("a").click();
+    cy.wait(1000);
+    cy.url().should("include", "/");
+
+    cy.get('img[alt="Sensebox ESP"]').should("exist");
+  });
 
   it("[Blockly] selects senseBox ESP", () => {
     cy.visit("/");
