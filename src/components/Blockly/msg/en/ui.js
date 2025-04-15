@@ -194,6 +194,7 @@ export const UI = {
   button_tutorial_overview: "Tutorial overview",
   button_login: "Login",
   button_createVariable: "Create Typed Variable",
+  button_reset: "Reset",
 
   /**
    *
