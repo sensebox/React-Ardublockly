@@ -199,12 +199,18 @@ function CompilationDialog({
                 onClick={handleClose}
                 style={{
                   position: "absolute",
-                  top: "-35px",
+                  top: "-31px",
                   right: "-50px",
                   fontSize: "2rem",
                   color: "#4EAF47",
                   fontWeight: "bold",
                   cursor: "pointer",
+                  borderRadius: "50%",
+                  width: "40px",
+                  height: "40px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
                 <FontAwesomeIcon icon={faXmark} />
