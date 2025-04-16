@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { workspaceName } from "../../actions/workspaceActions";
+import moment from "moment";
+import "moment/locale/de";
 
 import { detectWhitespacesAndReturnReadableResult } from "../../helpers/whitespace";
 
@@ -135,9 +137,10 @@ class Compile extends Component {
   download = () => {
     const id = this.state.id;
     const counter = getCompilationCounter();
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+    moment.locale('de');
+    const timestamp = moment().format('DD-MM-YYYY_HH_mm_ss');
     const cleanName = detectWhitespacesAndReturnReadableResult(this.state.name);
-    const filename = `${cleanName}_v${VERSION}_c${counter}_${timestamp}`;
+    const filename = `${cleanName}_${timestamp}`;
 
     this.toggleDialog();
     this.props.workspaceName(this.state.name);
