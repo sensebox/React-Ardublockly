@@ -101,14 +101,15 @@ function CompilationDialog({
   };
 
   const handleDownloadURL = () => {
+    // Generiere Timestamp nach erfolgreicher Kompilierung
     moment.locale("de");
-    const timestamp = moment().format("YYYY-MM-DD-HH-mm-ss");
+    const timestamp = moment().format("DD-MM-YYYY_HH_mm_ss");
 
     const cleanName = detectWhitespacesAndReturnReadableResult(filename);
-    const downloadUrl = `${compilerUrl}/download?id=${sketchId}&board=sensebox-mcu&filename=${timestamp}_${cleanName}`;
+    const downloadUrl = `${compilerUrl}/download?id=${sketchId}&board=sensebox-mcu&filename=${cleanName}_${timestamp}`;
     const link = document.createElement("a");
     link.href = downloadUrl;
-    link.download = `${timestamp}_${cleanName}.bin`;
+    link.download = `${cleanName}_${timestamp}.bin`;
     link.click();
   };
 
