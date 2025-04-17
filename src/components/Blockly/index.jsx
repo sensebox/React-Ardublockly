@@ -22,9 +22,6 @@
  */
 
 import React from "react";
-import BlocklyComponent from "./BlocklyComponent";
-
-export default BlocklyComponent;
 
 const Block = (p) => {
   const { children, ...props } = p;
@@ -42,6 +39,12 @@ const Value = (p) => {
   const { children, ...props } = p;
   props.is = "blockly";
   return React.createElement("value", props, children);
+};
+
+const Statement = (p) => {
+  const { children, ...props } = p;
+  props.is = "blockly";
+  return React.createElement("statement", props, children);
 };
 
 const Field = (p) => {
@@ -68,4 +71,4 @@ const Label = (p) => {
   return React.createElement("label", props, children);
 };
 
-export { Block, Category, Value, Field, Shadow, Sep, Label };
+export { Block, Category, Value, Statement, Field, Shadow, Sep, Label };

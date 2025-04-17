@@ -18,7 +18,7 @@ export const tutorialProgress = () => (dispatch) => {
 
 export const getTutorial = (id) => (dispatch, getState) => {
   axios
-    .get(`${process.env.REACT_APP_BLOCKLY_API}/tutorial/${id}`)
+    .get(`${import.meta.env.VITE_BLOCKLY_API}/tutorial/${id}`)
     .then((res) => {
       var tutorial = res.data.tutorial;
       existingTutorial(tutorial, getState().tutorial.status).then((status) => {
@@ -51,7 +51,7 @@ export const getTutorial = (id) => (dispatch, getState) => {
 
 export const getTutorials = () => (dispatch, getState) => {
   axios
-    .get(`${process.env.REACT_APP_BLOCKLY_API}/tutorial`)
+    .get(`${import.meta.env.VITE_BLOCKLY_API}/tutorial`)
     .then((res) => {
       var tutorials = res.data.tutorials;
       existingTutorials(tutorials, getState().tutorial.status).then(
@@ -86,7 +86,7 @@ export const getTutorials = () => (dispatch, getState) => {
 
 export const getAllTutorials = () => (dispatch, getState) => {
   axios
-    .get(`${process.env.REACT_APP_BLOCKLY_API}/tutorial/getAllTutorials`)
+    .get(`${import.meta.env.VITE_BLOCKLY_API}/tutorial/getAllTutorials`)
     .then((res) => {
       var tutorials = res.data.tutorials;
       existingTutorials(tutorials, getState().tutorial.status).then(
@@ -121,7 +121,7 @@ export const getAllTutorials = () => (dispatch, getState) => {
 
 export const getUserTutorials = () => (dispatch, getState) => {
   axios
-    .get(`${process.env.REACT_APP_BLOCKLY_API}/tutorial/getUserTutorials`)
+    .get(`${import.meta.env.VITE_BLOCKLY_API}/tutorial/getUserTutorials`)
     .then((res) => {
       var tutorials = res.data.tutorials;
       existingTutorials(tutorials, getState().tutorial.status).then(
@@ -159,7 +159,7 @@ export const updateStatus = (status) => (dispatch, getState) => {
   if (getState().auth.isAuthenticated) {
     // update user account in database - sync with redux store
     axios
-      .put(`${process.env.REACT_APP_BLOCKLY_API}/user/status`, {
+      .put(`${import.meta.env.VITE_BLOCKLY_API}/user/status`, {
         status: status,
       })
       .then((res) => {})
@@ -201,7 +201,7 @@ export const deleteTutorial = (id) => (dispatch, getState) => {
     },
   };
   axios
-    .delete(`${process.env.REACT_APP_BLOCKLY_API}/tutorial/${id}`, config)
+    .delete(`${import.meta.env.VITE_BLOCKLY_API}/tutorial/${id}`, config)
     .then((res) => {
       res.config.success(res);
     })

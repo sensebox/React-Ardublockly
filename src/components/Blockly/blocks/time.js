@@ -123,16 +123,26 @@ Blockly.Blocks["infinite_loop"] = {
 
 Blockly.Blocks["sensebox_interval_timer"] = {
   init: function () {
+    // Initialisiere einen statischen Zähler, falls noch nicht vorhanden
+    if (typeof Blockly.Blocks.sensebox_interval_timer.counter === "undefined") {
+      Blockly.Blocks.sensebox_interval_timer.counter = 0;
+    }
+    // Zähler erhöhen
+    Blockly.Blocks.sensebox_interval_timer.counter++;
+    var uniqueNumber = Blockly.Blocks.sensebox_interval_timer.counter;
+    var defaultName = "Interval" + uniqueNumber;
+
     this.setTooltip(Blockly.Msg.senseBox_interval_timer_tip);
     this.setInputsInline(true);
     this.setHelpUrl("");
     this.setColour(getColour().time);
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_interval_timer)
-      .appendField(new Blockly.FieldTextInput("Interval"), "name");
+      // Setzt den Standardnamen als "Interval1", "Interval2", etc.
+      .appendField(new Blockly.FieldTextInput(defaultName), "name");
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_interval_time)
-      .setAlign(Blockly.inputs.Align.LEFT)
+      .setAlign(Blockly.ALIGN_LEFT)
       .appendField(new Blockly.FieldTextInput("10000"), "interval")
       .appendField(Blockly.Msg.senseBox_interval);
     this.appendStatementInput("DO").setCheck(null);

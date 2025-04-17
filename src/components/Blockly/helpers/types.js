@@ -15,6 +15,12 @@ export const CHARACTER = {
   typeMsgName: "ARD_TYPE_CHAR",
 };
 
+export const BITMAP = {
+  typeId: "Bitmap",
+  typeName: "bitmap",
+  typeMsgName: "ARD_TYPE_BITMAP",
+};
+
 export const BOOLEAN = {
   typeId: "Boolean",
   typeName: "boolean",
@@ -88,6 +94,7 @@ export const CHILD_BLOCK_MISSING = {
 const compatibleTypes = {
   Array: ["Array"],
   boolean: ["boolean"],
+  bitmap: ["bitmap"],
   int: ["int", "long", "double", "float"],
   char: ["char"],
   String: ["String"],
@@ -109,6 +116,7 @@ export const VARIABLE_TYPES = [
   ["TEXT", "String"],
   ["CHARACTER", "char"],
   ["BOOLEAN", "boolean"],
+  ["BITMAP", "bitmap"],
   ["NULL", "void"],
   ["UNDEF", "undefined"],
 ];

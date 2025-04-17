@@ -23,6 +23,7 @@ export const UI = {
   variable_SHORT_NUMBER: "char",
   variable_LONG: "Big number (long)",
   variable_DECIMAL: "Decimal (float)",
+  variable_BITMAP: "Bitmap (LED-Matrix)",
   variables_TEXT: "Text (string)",
   variables_ARRAY: "Array (array)",
   variables_CHARACTER: "Character (char)",
@@ -321,6 +322,7 @@ export const UI = {
   tooltip_moreInformation_02: "Information about the Block",
   tooltip_hint: "Select a Block to show the hint",
 
+  // path: src/components/Blockly/msg/en/ui.js
   /**
    * IDEDrawer
    */
@@ -332,7 +334,7 @@ export const UI = {
    * */
   codeeditor_libraries_head: "Installed Arduino Libraries",
   codeeditor_libraries_text:
-    "For documentation, view the installed libraries and their examples",
+    "Below are all arduino libraries which are installed on the compiler. You can use them in your code. For more information click on the library.",
   codeeditor_save_code: "Download code",
   codeeditor_open_code: "Open code",
   codeeditor_reset_code: "Reset code",
@@ -369,4 +371,27 @@ export const UI = {
   sensorinfo_lifetime: "Lifetime",
   sensorinfo_explanation:
     "This information was fetched from [sensors.wiki](https://sensors.wiki). For more information visit the section on this sensor ",
+
+  /**
+   * Compile Dialog
+   */
+  compile_overlay_compile: "Compilation in progress...",
+  compile_overlay_download: "Preparing download...",
+  compile_overlay_transfer: "Transfer the file to your senseBox",
+  compile_overlay_error: "An error has occurred",
+  compile_overlay_app_transfer: "Preparing app transfer...",
+  compile_overlay_code_compiled: "Code successfully compiled!",
+  compile_overlay_start_transfer: "Start transfer",
+  compile_overlay_close: "Close",
+  compile_overlay_head: "Your program is now compiled and downloaded",
+  compile_overlay_text: "Then copy it to your senseBox MCU",
+  compile_overlay_help: "You need help? Have a look here: ",
+  compile: "Compile",
+  download: "Download",
+  transfer: "Transfer",
+  dialog_close: "Back to Blockly",
+  goToApp: "Go to the Connect App",
+  goToApp_text:
+    "The code has been compiled successfully. Start with the transfer by clicking on the button below, redirecting you to the senseBox:connect App ! ",
+  goToApp_title: "Over-The-Air Transfer",
 };

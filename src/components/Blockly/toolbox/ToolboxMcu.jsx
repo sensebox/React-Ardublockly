@@ -1,18 +1,31 @@
-import { Block, Value, Field, Shadow, Category, Label } from "..";
+import {
+  Block,
+  Value,
+  Field,
+  Statement,
+  Shadow,
+  Category,
+  Sep,
+  Label,
+} from "..";
 import { getColour } from "../helpers/colour";
 import * as Blockly from "blockly/core";
+import "@blockly/toolbox-search";
+import "./search-category.css";
 
-export const ToolboxEsp = () => {
+export const ToolboxMcu = () => {
   return (
     <>
+      <Category name="Suche" kind="search">
+        {" "}
+      </Category>
       <Category
         name={Blockly.Msg.toolbox_sensors}
         colour={getColour().sensebox}
       >
         <Block type="sensebox_sensor_temp_hum" />
         <Block type="sensebox_sensor_uv_light" />
-        <Block type="sensebox_esp32s2_light" />
-        <Block type="sensebox_esp32s2_mpu6050" />
+        <Block type="sensebox_sensor_bmx055_accelerometer" />
         <Block type="sensebox_sensor_sds011" />
         <Block type="sensebox_sensor_sps30" />
         <Block type="sensebox_sensor_pressure" />
@@ -21,11 +34,12 @@ export const ToolboxEsp = () => {
         <Block type="sensebox_scd30" />
         <Block type="sensebox_gps" />
         <Block type="sensebox_sensor_ultrasonic_ranger" />
-        <Block type="sensebox_tof_imager" />
         <Block type="sensebox_sensor_sound" />
         <Block type="sensebox_button" />
-        <Block type="sensebox_sensor_truebner_smt50_esp32" />
+        <Block type="sensebox_sensor_truebner_smt50" />
         <Block type="sensebox_sensor_watertemperature" />
+        {/* <Block type="sensebox_rg15_rainsensor" /> */}
+        {/* <Block type="sensebox_windspeed" /> */}
         <Block type="sensebox_soundsensor_dfrobot" />
         <Block type="sensebox_multiplexer_init">
           <Value name="nrChannels">
@@ -43,33 +57,25 @@ export const ToolboxEsp = () => {
         </Block>
       </Category>
       <Category name="WIFI" colour={getColour().sensebox}>
-        <Block type="sensebox_esp32s2_wifi" />
-        <Block type="sensebox_esp32s2_wifi_enterprise" />
+        <Block type="sensebox_wifi" />
         <Block type="sensebox_wifi_status" />
         <Block type="sensebox_wifi_rssi" />
         <Block type="sensebox_get_ip" />
-        <Block type="sensebox_esp32s2_startap" />
-      </Category>
-      <Category name="ESPNOW" colour={getColour().sensebox}>
-        <Block type="sensebox_esp_now" />
-        <Block type="sensebox_esp_now_sender" />
-        <Block type="sensebox_get_mac" />
-        <Block type="sensebox_esp_now_receive" />
-        <Block type="sensebox_esp_now_send" />
+        <Block type="sensebox_startap" />
       </Category>
       <Category name="Ethernet" colour={getColour().sensebox}>
         <Block type="sensebox_ethernet" />
         <Block type="sensebox_ethernetIp" />
       </Category>
       <Category name="SD" colour={getColour().sensebox}>
-        <Block type="sensebox_esp32s2_sd_create_file" />
-        <Block type="sensebox_esp32s2_sd_open_file">
+        <Block type="sensebox_sd_create_file" />
+        <Block type="sensebox_sd_open_file">
           <Value name="SD">
-            <Block type="sensebox_esp32s2_sd_write_file"></Block>
+            <Block type="sensebox_sd_write_file"></Block>
           </Value>
         </Block>
-        <Block type="sensebox_esp32s2_sd_write_file" />
-        <Block type="sensebox_esp32s2_sd_open_file">
+        <Block type="sensebox_sd_write_file" />
+        <Block type="sensebox_sd_open_file">
           <Value name="SD">
             <Block type="sensebox_sd_osem">
               <Value name="DO">
@@ -82,6 +88,8 @@ export const ToolboxEsp = () => {
         <Block type="sensebox_sd_save_for_osem" />
       </Category>
       <Category name="LED" colour={getColour().sensebox}>
+        <Block type="sensebox_rgb_led"></Block>
+        <Block type="sensebox_led" />
         <Block type="sensebox_ws2818_led_init">
           <Value name="NUMBER">
             <Block type="math_number">
@@ -125,14 +133,13 @@ export const ToolboxEsp = () => {
             </Block>
           </Value>
         </Block>
-        <Block type="sensebox_rgb_led"></Block>
-        <Block type="sensebox_led" />
       </Category>
       <Category name="LED Matrix" colour={getColour().sensebox}>
         <Block type="sensebox_ws2812_matrix_init"></Block>
         <Block type="sensebox_ws2812_matrix_clear" />
         <Block type="sensebox_ws2812_matrix_text" />
         <Block type="sensebox_ws2812_matrix_drawPixel" />
+        <Block type="sensebox_ws2812_matrix_fullcolor" />
         <Block type="sensebox_ws2812_matrix_showBitmap" />
         <Block type="sensebox_ws2812_matrix_bitmap" />
         <Block type="sensebox_ws2812_matrix_custom_bitmap" />
@@ -246,6 +253,7 @@ export const ToolboxEsp = () => {
             </Block>
           </Value>
         </Block>
+        <Block type="sensebox_display_roboeyes" />
         <Block type="sensebox_display_fillCircle">
           <Value name="X">
             <Block type="math_number">
@@ -289,7 +297,7 @@ export const ToolboxEsp = () => {
       <Category name="openSenseMap" colour={getColour().sensebox}>
         <Block type="sensebox_interval_timer">
           <Value name="DO">
-            <Block type="sensebox_esp32s2_osem_connection" />
+            <Block type="sensebox_osem_connection" />
           </Value>
         </Block>
         <Block type="sensebox_send_to_osem" />
@@ -364,35 +372,31 @@ export const ToolboxEsp = () => {
           <Block type="sensebox_lora_cayenne_gps" />
         </Category>
       </Category>
-      <Category id="Bluetooth" name="Bluetooth" colour={getColour().sensebox}>
-        <Category id="phyphox" name="Phyphox" colour={getColour().phyphox}>
-          <Block type="sensebox_phyphox_init"></Block>
-          <Block type="sensebox_phyphox_experiment">
-            <Value name="view">
-              <Block type="sensebox_phyphox_graph">
-                <Value name="channel0">
-                  <Block type="sensebox_phyphox_timestamp"></Block>
-                </Value>
-                <Value name="channel1">
-                  <Block type="sensebox_phyphox_channel"></Block>
-                </Value>
-              </Block>
-            </Value>
-          </Block>
-          <Block type="sensebox_phyphox_experiment_send">
-            <Value name="sendValues">
-              <Block type="sensebox_phyphox_sendchannel"></Block>
-            </Value>
-          </Block>
-          <Block type="sensebox_phyphox_graph"></Block>
-          <Block type="sensebox_phyphox_timestamp"></Block>
-          <Block type="sensebox_phyphox_channel"></Block>
-          <Block type="sensebox_phyphox_sendchannel"></Block>
-        </Category>
-        {/* <Category id="senseboxble" name="senseBox BLE" colour={getColour().phyphox}>
-          <Block type="sensebox_ble_init"></Block>
-        </Category> */}
+      <Category id="phyphox" name="Phyphox" colour={getColour().phyphox}>
+        <Block type="sensebox_phyphox_init"></Block>
+        <Block type="sensebox_phyphox_experiment">
+          <Value name="view">
+            <Block type="sensebox_phyphox_graph">
+              <Value name="channel0">
+                <Block type="sensebox_phyphox_timestamp"></Block>
+              </Value>
+              <Value name="channel1">
+                <Block type="sensebox_phyphox_channel"></Block>
+              </Value>
+            </Block>
+          </Value>
+        </Block>
+        <Block type="sensebox_phyphox_experiment_send">
+          <Value name="sendValues">
+            <Block type="sensebox_phyphox_sendchannel"></Block>
+          </Value>
+        </Block>
+        <Block type="sensebox_phyphox_graph"></Block>
+        <Block type="sensebox_phyphox_timestamp"></Block>
+        <Block type="sensebox_phyphox_channel"></Block>
+        <Block type="sensebox_phyphox_sendchannel"></Block>
       </Category>
+
       <Category id="webserver" name="Webserver" colour={getColour().webserver}>
         <Block type="sensebox_initialize_http_server"></Block>
         <Block type="sensebox_http_on_client_connect"></Block>
@@ -529,6 +533,12 @@ export const ToolboxEsp = () => {
           {/* <Block type="sensebox_rtc_set_ntp"></Block> */}
           <Block type="sensebox_rtc_get"></Block>
           <Block type="sensebox_rtc_get_timestamp"></Block>
+          <Sep gap="40"></Sep>
+          <Label text={Blockly.Msg.toolbox_label_internalRTC}></Label>
+          <Block type="sensebox_internal_rtc_init"></Block>
+          <Block type="sensebox_internal_rtc_set"></Block>
+          <Block type="sensebox_internal_rtc_get"></Block>
+          <Block type="sensebox_internal_rtc_get_timestamp"></Block>
         </Category>
         <Category
           id="timeUTP"
@@ -618,7 +628,6 @@ export const ToolboxEsp = () => {
           <Block type="print_serial_monitor"></Block>
         </Category>
         <Category name={Blockly.Msg.toolbox_io} colour={getColour().io}>
-          <Block type="io_analogreadmillivolt"></Block>
           <Block type="io_digitalwrite"></Block>
           <Block type="io_digitalread"></Block>
           <Block type="io_builtin_led"></Block>
@@ -666,6 +675,53 @@ export const ToolboxEsp = () => {
               <Field name="NUM">2048</Field>
             </Block>
           </Value>
+        </Block> */}
+        </Category>
+        <Category id="sensebox_solar" name="Solar" colour={getColour().solar}>
+          <Block type="sensebox_solar_charger_SB041">
+            <Field name="MEASUREMENT">getBatteryLevel</Field>
+          </Block>
+          <Block type="sensebox_solar_deep_sleep_and_restart">
+            <Field name="SLEEP_TIME">30</Field>
+            <Field name="TIME_SCALE">60000</Field>
+            <Field name="POWER_OFF_I2C">TRUE</Field>
+            <Field name="POWER_OFF_UART">TRUE</Field>
+            <Field name="POWER_OFF_XB">TRUE</Field>
+          </Block>
+          {/* <Block type="controls_ifelse">
+          <Value name="IF0">
+            <Block type="logic_compare">
+              <Field name="OP">GT</Field>
+              <Value name="A">
+                <Block type="sensebox_solar_charger_SB041">
+                  <Field name="MASUREMENT">getBatteryLevel</Field>
+                </Block>
+              </Value>
+              <Value name="B">
+                <Block type="math_number">
+                  <Field name="NUM">2</Field>
+                </Block>
+              </Value>
+            </Block>
+          </Value>
+          <Statement name="DO0">
+            <Block type="sensebox_solar_deep_sleep_and_restart">
+              <Field name="SLEEP_TIME">30</Field>
+              <Field name="TIME_SCALE">60000</Field>
+              <Field name="POWER_OFF_I2C">TRUE</Field>
+              <Field name="PPOWER_OFF_UART">TRUE</Field>
+              <Field name="PWER_OFF_XB">TRUE</Field>
+            </Block>
+          </Statement>
+          <Statement name="ELSE">
+            <Block type="sensebox_solar_deep_sleep_and_restart">
+              <Field name="SLEEP_TIME">12</Field>
+              <Field name="TIME_SCALE">3600000</Field>
+              <Field name="POWER_OFF_I2C">TRUE</Field>
+              <Field name="PPOWER_OFF_UART">TRUE</Field>
+              <Field name="PWER_OFF_XB">TRUE</Field>
+            </Block>
+          </Statement>
         </Block> */}
         </Category>
         <Category name="Watchdog" colour={getColour().io}>
