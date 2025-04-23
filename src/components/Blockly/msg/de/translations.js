@@ -269,5 +269,9 @@ export const TRANSLATIONS = {
   COPY_TO_BACKPACK: "In Rucksack kopieren",
   COPY_ALL_TO_BACKPACK: "Alle Blöcke in Rucksack kopieren",
   PASTE_ALL_FROM_BACKPACK: "Alle Blöcke aus Rucksack einfügen",
+  ARDUINO_FUNCTION_BLOCK_WARNING: "Arduino-Funktionsblöcke können nicht im Rucksack gespeichert werden",
+  ARDUINO_FUNCTION_BLOCKS_SKIPPED: "Arduino-Funktionsblöcke wurden übersprungen",
+  BLOCKS_ADDED_TO_BACKPACK: "%1 Blöcke zum Rucksack hinzugefügt",
+  BLOCKS_PASTED_FROM_BACKPACK: "%1 Blöcke aus dem Rucksack eingefügt",
 };
 
