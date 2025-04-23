@@ -249,4 +249,8 @@ export const TRANSLATIONS = {
   COPY_TO_BACKPACK: "Copy to Backpack",
   COPY_ALL_TO_BACKPACK: "Copy All to Backpack",
   PASTE_ALL_FROM_BACKPACK: "Paste All from Backpack",
+  ARDUINO_FUNCTION_BLOCK_WARNING: "Arduino function blocks cannot be saved in the backpack",
+  ARDUINO_FUNCTION_BLOCKS_SKIPPED: "Arduino function blocks were skipped",
+  BLOCKS_ADDED_TO_BACKPACK: "%1 blocks added to backpack",
+  BLOCKS_PASTED_FROM_BACKPACK: "%1 blocks pasted from backpack",
 };
