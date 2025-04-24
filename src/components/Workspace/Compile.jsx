@@ -38,12 +38,7 @@ const styles = (theme) => ({
 });
 
 const Compile = (props) => {
-  const {
-    state,
-    compile,
-    toggleDialog,
-    setFileName,
-  } = useCompile(props);
+  const { state, compile, toggleDialog, setFileName } = useCompile(props);
 
   const fallbackTexts = {
     de_DE: "Code kompilieren",
@@ -84,10 +79,7 @@ const Compile = (props) => {
       )}
 
       {props.platform === null && (
-        <Backdrop
-          className={props.classes.backdrop}
-          open={state.progress}
-        >
+        <Backdrop className={props.classes.backdrop} open={state.progress}>
           <div className="overlay">
             {props.selectedBoard === "esp32" ? (
               <img src={copyesp32} width="400" alt="copyimage" />
@@ -164,5 +156,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, { workspaceName })(
-  withStyles(styles)(Compile)
+  withStyles(styles)(Compile),
 );

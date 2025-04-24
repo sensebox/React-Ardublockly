@@ -84,6 +84,6 @@ export const LED = {
   senseBox_ws2812_rgb_matrix_fullcolor: "Set all pixels to one color",
   senseBox_ws2812_rgb_matrix_fullcolor_tooltip:
     "Set all pixels to one color. Select a color from the palette",
-    senseBox_ws2812_rgb_matrix_helpurl: 'https://docs.sensebox.de/en/docs/hardware/accessoires/led-matrix',
-
+  senseBox_ws2812_rgb_matrix_helpurl:
+    "https://docs.sensebox.de/en/docs/hardware/accessoires/led-matrix",
 };
