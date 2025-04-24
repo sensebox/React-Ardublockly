@@ -23,7 +23,7 @@ const SensorNode = ({ title, sensors, imageSrc, width = "162px" }) => {
       style={{
         position: "relative",
         width,
-        background: "#1b7d1066", 
+        background: "#1b7d1066",
         borderRadius: "10px",
         overflow: "hidden",
         fontSize: "1.2rem",
@@ -70,7 +70,7 @@ const SensorNode = ({ title, sensors, imageSrc, width = "162px" }) => {
             left: "0",
             right: "0",
             padding: "15px",
-            background: "#1b7d10b3",  // Transparent background
+            background: "#1b7d10b3", // Transparent background
             display: "flex",
             flexDirection: "column",
             gap: "15px",
@@ -155,7 +155,7 @@ const SensorNode = ({ title, sensors, imageSrc, width = "162px" }) => {
           height: "1.5rem",
           backgroundColor: "#ffcc33",
         }}
-      /> 
+      />
     </div>
   );
 };
