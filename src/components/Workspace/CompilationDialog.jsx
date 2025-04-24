@@ -19,7 +19,10 @@ import * as Blockly from "blockly/core";
 import { ErrorView } from "../ErrorView/ErrorView";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faLink, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { detectWhitespacesAndReturnReadableResult } from "../../helpers/whitespace";
+import moment from "moment";
+import "moment/locale/de";
 import moment from "moment";
 import "moment/locale/de";
 
@@ -101,15 +104,14 @@ function CompilationDialog({
   };
 
   const handleDownloadURL = () => {
-    // Generiere Timestamp nach erfolgreicher Kompilierung
     moment.locale("de");
-    const timestamp = moment().format("DD-MM-YYYY_HH_mm_ss");
+    const timestamp = moment().format("YYYY-MM-DD-HH-mm-ss");
 
     const cleanName = detectWhitespacesAndReturnReadableResult(filename);
-    const downloadUrl = `${compilerUrl}/download?id=${sketchId}&board=sensebox-mcu&filename=${cleanName}_${timestamp}`;
+    const downloadUrl = `${compilerUrl}/download?id=${sketchId}&board=sensebox-mcu&filename=${timestamp}_${cleanName}`;
     const link = document.createElement("a");
     link.href = downloadUrl;
-    link.download = `${cleanName}_${timestamp}.bin`;
+    link.download = `${timestamp}_${cleanName}.bin`;
     link.click();
   };
 
