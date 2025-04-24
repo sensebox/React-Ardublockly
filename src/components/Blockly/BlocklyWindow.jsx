@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { onChangeWorkspace, clearStats } from "../../actions/workspaceActions";
-
+import "./blockly-animations.css";
 import BlocklyComponent from "./BlocklyComponent";
 import BlocklySvg from "./BlocklySvg";
 
@@ -18,58 +18,79 @@ class BlocklyWindow extends Component {
   constructor(props) {
     super(props);
     this.simpleWorkspace = React.createRef();
+    this.backpackImg = null;
   }
 
   componentDidMount() {
     const workspace = Blockly.getMainWorkspace();
     this.props.onChangeWorkspace({});
     this.props.clearStats();
+
     workspace.addChangeListener(Blockly.Events.disableOrphans);
     workspace.addChangeListener((event) => {
       this.props.onChangeWorkspace(event);
-
-      // switch on that a block is displayed disabled or not depending on whether it is correctly connected
-      // for SVG display, a deactivated block in the display is undesirable
       if (this.props.blockDisabled) {
         Blockly.Events.disableOrphans(event);
       }
     });
     Blockly.svgResize(workspace);
+
     const zoomToFit = new ZoomToFitControl(workspace);
     zoomToFit.init();
-    // Initialize plugin.
-    const backpack = new Backpack(workspace);
 
+    const backpack = new Backpack(workspace);
     backpack.init();
+
+    const waitForBackpackImage = (cb, retries = 5) => {
+      const img = document.querySelector("image.blocklyBackpack");
+      if (img) return cb(img);
+      if (retries > 0) {
+        setTimeout(() => waitForBackpackImage(cb, retries - 1), 100);
+      }
+    };
+
+    waitForBackpackImage((img) => {
+      this.backpackImg = img;
+      img.addEventListener("animationend", () => {
+        img.classList.remove("rucksack-wiggle-once");
+      });
+    });
+
+    const originalOnDrop = backpack.onDrop.bind(backpack);
+    backpack.onDrop = (dragElement) => {
+      originalOnDrop(dragElement);
+
+      if (this.backpackImg) {
+        this.backpackImg.classList.remove("rucksack-wiggle-once");
+
+        void this.backpackImg.offsetWidth;
+        this.backpackImg.classList.add("rucksack-wiggle-once");
+      }
+    };
   }
 
-  componentDidUpdate(props) {
+  componentDidUpdate(prevProps) {
     const workspace = Blockly.getMainWorkspace();
-    var xml = this.props.initialXml;
-    if (props.selectedBoard !== this.props.selectedBoard) {
-      xml = localStorage.getItem("autoSaveXML");
-      // change board
-      if (!xml) xml = initialXml;
-      var xmlDom = Blockly.utils.xml.textToDom(xml);
+    let xml = this.props.initialXml;
+
+    if (prevProps.selectedBoard !== this.props.selectedBoard) {
+      xml = localStorage.getItem("autoSaveXML") || initialXml;
+      const xmlDom = Blockly.utils.xml.textToDom(xml);
       Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, workspace);
     }
 
-    // if svg is true, then the update process is done in the BlocklySvg component
-    if (props.initialXml !== xml && !this.props.svg) {
-      // guarantees that the current xml-code (this.props.initialXml) is rendered
+    if (prevProps.initialXml !== this.props.initialXml && !this.props.svg) {
       workspace.clear();
-      if (!xml) xml = initialXml;
+      xml = this.props.initialXml || initialXml;
       Blockly.Xml.domToWorkspace(Blockly.utils.xml.textToDom(xml), workspace);
     }
-    if (props.language !== this.props.language) {
-      // change language
-      xml = localStorage.getItem("autoSaveXML");
-      if (!xml) xml = initialXml;
-      xmlDom = Blockly.utils.xml.textToDom(xml);
+
+    if (prevProps.language !== this.props.language) {
+      xml = localStorage.getItem("autoSaveXML") || initialXml;
+      const xmlDom = Blockly.utils.xml.textToDom(xml);
       Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, workspace);
-      // var toolbox = workspace.getToolbox();
-      // workspace.updateToolbox(toolbox.toolboxDef_);
     }
+
     Blockly.svgResize(workspace);
   }
 
@@ -79,21 +100,13 @@ class BlocklyWindow extends Component {
         <BlocklyComponent
           ref={this.simpleWorkspace}
           style={this.props.svg ? { height: 0 } : this.props.blocklyCSS}
-          readOnly={
-            this.props.readOnly !== undefined ? this.props.readOnly : false
-          }
-          trashcan={
-            this.props.trashcan !== undefined ? this.props.trashcan : true
-          }
+          readOnly={this.props.readOnly ?? false}
+          trashcan={this.props.trashcan ?? true}
           renderer={this.props.renderer}
           sounds={this.props.sounds}
           maxInstances={getMaxInstances()}
           zoom={{
-            // https://developers.google.com/blockly/guides/configure/web/zoom
-            controls:
-              this.props.zoomControls !== undefined
-                ? this.props.zoomControls
-                : true,
+            controls: this.props.zoomControls ?? true,
             wheel: false,
             startScale: 1,
             maxScale: 3,
@@ -101,34 +114,30 @@ class BlocklyWindow extends Component {
             scaleSpeed: 1.2,
           }}
           grid={
-            this.props.grid !== undefined && !this.props.grid
+            this.props.grid === false
               ? {}
               : {
-                  // https://developers.google.com/blockly/guides/configure/web/grid
                   spacing: 20,
                   length: 1,
-                  colour: "#4EAF47", // senseBox-green
+                  colour: "#4EAF47",
                   snap: false,
                 }
           }
-          media={"/media/blockly/"}
+          media="/media/blockly/"
           move={
-            this.props.move !== undefined && !this.props.move
+            this.props.move === false
               ? {}
               : {
-                  // https://developers.google.com/blockly/guides/configure/web/move
                   scrollbars: true,
                   drag: true,
                   wheel: true,
                 }
           }
-          initialXml={
-            this.props.initialXml ? this.props.initialXml : initialXml
-          }
-        ></BlocklyComponent>
-        {this.props.svg && this.props.initialXml ? (
+          initialXml={this.props.initialXml || initialXml}
+        />
+        {this.props.svg && this.props.initialXml && (
           <BlocklySvg initialXml={this.props.initialXml} />
-        ) : null}
+        )}
       </div>
     );
   }
@@ -150,6 +159,7 @@ const mapStateToProps = (state) => ({
   selectedBoard: state.board.board,
 });
 
-export default connect(mapStateToProps, { onChangeWorkspace, clearStats })(
-  BlocklyWindow,
-);
+export default connect(mapStateToProps, {
+  onChangeWorkspace,
+  clearStats,
+})(BlocklyWindow);

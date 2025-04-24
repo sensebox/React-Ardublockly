@@ -1,0 +1,83 @@
+@-webkit-keyframes wiggle {
+  0% {
+    -webkit-transform: rotateX(10deg);
+  }
+  25% {
+    -webkit-transform: rotateX(-10deg);
+  }
+  50% {
+    -webkit-transform: rotateX(20deg);
+  }
+  75% {
+    -webkit-transform: rotateX(-5deg);
+  }
+  100% {
+    -webkit-transform: rotateX(0deg);
+  }
+}
+@-ms-keyframes wiggle {
+  0% {
+    -ms-transform: rotateX(10deg);
+  }
+  25% {
+    -ms-transform: rotateX(-10deg);
+  }
+  50% {
+    -ms-transform: rotateX(20deg);
+  }
+  75% {
+    -ms-transform: rotateX(-5deg);
+  }
+  100% {
+    -ms-transform: rotateX(0deg);
+  }
+}
+@keyframes wiggle {
+  0% {
+    transform: rotateX(10deg);
+  }
+  25% {
+    transform: rotateX(-10deg);
+  }
+  50% {
+    transform: rotateX(20deg);
+  }
+  75% {
+    transform: rotateX(-5deg);
+  }
+  100% {
+    transform: rotateX(0deg);
+  }
+}
+
+.rucksack-wiggle-once {
+  -webkit-animation-name: wiggle;
+  -webkit-animation-duration: 1s;
+  -webkit-animation-iteration-count: 1;
+  -webkit-animation-timing-function: ease-in-out;
+
+  animation-name: wiggle;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in-out;
+
+  transform-origin: center center;
+  -webkit-transform-origin: center center;
+  -ms-transform-origin: center center;
+}
+
+.rucksack-wiggle {
+  -webkit-animation-name: wiggle;
+  -webkit-animation-duration: 1s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: ease-in-out;
+
+  animation-name: wiggle;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+
+  transform-origin: center center;
+  -webkit-transform-origin: center center;
+  -ms-transform-origin: center center;
+}
