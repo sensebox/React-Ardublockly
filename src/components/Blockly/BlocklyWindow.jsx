@@ -209,6 +209,7 @@ class BlocklyWindow extends Component {
 
     Blockly.svgResize(workspace);
 
+
     const zoomToFit = new ZoomToFitControl(workspace);
     zoomToFit.init();
 

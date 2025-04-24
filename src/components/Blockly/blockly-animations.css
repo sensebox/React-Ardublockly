@@ -1,52 +1,52 @@
 @-webkit-keyframes wiggle {
   0% {
-    -webkit-transform: rotate(10deg);
+    -webkit-transform: rotateX(10deg);
   }
   25% {
-    -webkit-transform: rotate(-10deg);
+    -webkit-transform: rotateX(-10deg);
   }
   50% {
-    -webkit-transform: rotate(20deg);
+    -webkit-transform: rotateX(20deg);
   }
   75% {
-    -webkit-transform: rotate(-5deg);
+    -webkit-transform: rotateX(-5deg);
   }
   100% {
-    -webkit-transform: rotate(0deg);
+    -webkit-transform: rotateX(0deg);
   }
 }
 @-ms-keyframes wiggle {
   0% {
-    -ms-transform: rotate(10deg);
+    -ms-transform: rotateX(10deg);
   }
   25% {
-    -ms-transform: rotate(-10deg);
+    -ms-transform: rotateX(-10deg);
   }
   50% {
-    -ms-transform: rotate(20deg);
+    -ms-transform: rotateX(20deg);
   }
   75% {
-    -ms-transform: rotate(-5deg);
+    -ms-transform: rotateX(-5deg);
   }
   100% {
-    -ms-transform: rotate(0deg);
+    -ms-transform: rotateX(0deg);
   }
 }
 @keyframes wiggle {
   0% {
-    transform: rotate(10deg);
+    transform: rotateX(10deg);
   }
   25% {
-    transform: rotate(-10deg);
+    transform: rotateX(-10deg);
   }
   50% {
-    transform: rotate(20deg);
+    transform: rotateX(20deg);
   }
   75% {
-    transform: rotate(-5deg);
+    transform: rotateX(-5deg);
   }
   100% {
-    transform: rotate(0deg);
+    transform: rotateX(0deg);
   }
 }
 
@@ -61,9 +61,9 @@
   animation-iteration-count: 1;
   animation-timing-function: ease-in-out;
 
-  transform-origin: 20px 30px;
-  -webkit-transform-origin: 20px 30px;
-  -ms-transform-origin: 20px 30px;
+  transform-origin: center center;
+  -webkit-transform-origin: center center;
+  -ms-transform-origin: center center;
 }
 
 .rucksack-wiggle {
@@ -77,7 +77,7 @@
   animation-iteration-count: infinite;
   animation-timing-function: ease-in-out;
 
-  transform-origin: 20px 30px;
-  -webkit-transform-origin: 20px 30px;
-  -ms-transform-origin: 20px 30px;
+  transform-origin: center center;
+  -webkit-transform-origin: center center;
+  -ms-transform-origin: center center;
 }
