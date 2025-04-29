@@ -1235,4 +1235,7 @@ Blockly.Msg.faq_q3_answer = `
 The best way to do this is to create an issue on [Github](https://github.com/sensebox/React-Ardublockly/issues). Alternatively you can send us an email to info(at)sensebox.de
 `;
 
+Blockly.Msg.PROCEDURES_INVALID_NAME =
+  "The name '%1' is invalid and cannot be used.";
+
 export const En = Blockly.Msg;
