@@ -26,6 +26,7 @@ import React from "react";
 import * as Blockly from "blockly/core";
 import "blockly/blocks";
 import Toolbox from "./toolbox/Toolbox";
+import { reservedWords } from "./helpers/reservedWords";
 
 import { Card } from "@mui/material";
 import {
@@ -62,6 +63,22 @@ class BlocklyComponent extends React.Component {
     // minimap.init();
 
     this.primaryWorkspace = workspace;
+
+    workspace.addChangeListener((event) => {
+      if (event.type === Blockly.Events.VAR_CREATE) {
+        const variable = workspace.getVariableById(event.varId);
+        const newName = variable.name;
+
+        // Check if the new variable name is in the reserved words list
+        if (reservedWords.has(newName)) {
+          alert(
+            `"${newName}" is a reserved word and cannot be used as a variable name.`,
+          );
+          // Delete the variable
+          workspace.deleteVariableById(event.varId);
+        }
+      }
+    });
 
     this.setState({ workspace: this.primaryWorkspace });
     const plugin = new ScrollOptions(this.workspace);
