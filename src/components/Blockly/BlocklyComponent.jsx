@@ -6,6 +6,7 @@ import "@blockly/toolbox-search"; // search plugin auto-registers here
 
 import Toolbox from "./toolbox/Toolbox";
 import { reservedWords } from "./helpers/reservedWords";
+import Snackbar from "../Snackbar";
 
 import { Card } from "@mui/material";
 import {
@@ -22,7 +23,7 @@ class BlocklyComponent extends React.Component {
     this.blocklyDiv = React.createRef();
     this.toolbox = React.createRef();
     this.primaryWorkspace = null;
-    this.state = { workspace: undefined };
+    this.state = { workspace: undefined, snackbar: false };
   }
 
   componentDidMount() {
@@ -47,9 +48,17 @@ class BlocklyComponent extends React.Component {
 
         // Check if the new variable name is in the reserved words list
         if (reservedWords.has(newName)) {
-          alert(
-            `"${newName}" is a reserved word and cannot be used as a variable name.`,
-          );
+          // Show a snackbar or alert to inform the user
+          this.setState({
+            snackbar: true,
+            key: Date.now(),
+            type: "error",
+            message: `"${newName}" ${Blockly.Msg.messages_reserve_word}`,
+          });
+          // // Optionally, you can use a snackbar component from Material-UI
+          // alert(
+          //   `"${newName}" is a reserved word and cannot be used as a variable name.`,
+          // );
           // Delete the variable
           workspace.deleteVariableById(event.varId);
         }
@@ -96,6 +105,12 @@ class BlocklyComponent extends React.Component {
           style={this.props.style ? this.props.style : {}}
         />
         <Toolbox toolbox={this.toolbox} workspace={this.state.workspace} />
+        <Snackbar
+          open={this.state.snackbar}
+          message={this.state.message}
+          type={this.state.type}
+          key={this.state.key}
+        />
       </>
     );
   }

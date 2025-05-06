@@ -99,6 +99,8 @@ export const UI = {
   messages_LOGIN_FAIL: "The username or password is incorrect.",
   messages_login_error: "Enter both a username and a password.",
   messages_copy_code: "Copy code to clipboard succesfull",
+  messages_reserve_word:
+    "is a reserved word and cannot be used as a variable name.",
 
   /**
    * Tablet Dialog
