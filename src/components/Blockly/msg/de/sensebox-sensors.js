@@ -43,7 +43,7 @@ export const SENSORS = {
   senseBox_temp_hum_tooltip:
     "Dieser Block gibt dir die Messwerte des Temperatur- und Luftfeuchtigkeitssensor zurück. Schließe den Sensor an einen der I2C Anschlüsse an. Messwert wird mit 2 Nachkommastellen ausgegeben.",
   senseBox_temp_hum_helpurl:
-    "https://docs.sensebox.de/hardware/sensoren-temperatur-luftfeuchte/",
+    "https://docs.sensebox.de/hardware/sensoren-temperatur-luftfeuchte",
 
   /**
    * Ultraschalldistanzsensor
@@ -186,7 +186,7 @@ Die Messwerte für Temperatur, Luftfeuchtigkeit und Luftdruck können direkt ver
   senseBox_scd_tooltip:
     "Schließe den Sensor an einen der **I2C-Anschlüsse** an. Der Sensor gibt dir den Messwert für die CO2-Konzentration in ppm. Der Temperaturmesswert kann aufgrund der Messung direkt am Sensor um einige Grad vom realen Wert abweichen.",
   senseBox_scd_co2: "CO2 in ppm",
-  senseBox_scd_helpurl: "https://docs.sensebox.de/hardware/sensoren-co2/",
+  senseBox_scd_helpurl: "https://docs.sensebox.de/hardware/sensoren-co2",
 
   /**
    * Feinstaubsensor (SDS011)
@@ -201,7 +201,7 @@ Die Messwerte für Temperatur, Luftfeuchtigkeit und Luftdruck können direkt ver
   senseBox_sds011_serial1: "Serial1",
   senseBox_sds011_serial2: "Serial2",
   senseBox_sds011_helpurl:
-    "https://docs.sensebox.de/docs/hardware/sensors/feinstaub-sds011/",
+    "https://docs.sensebox.de/docs/hardware/sensors/feinstaub-sds011",
 
   /**
    * Button
@@ -231,7 +231,7 @@ Die Messwerte für Temperatur, Luftfeuchtigkeit und Luftdruck können direkt ver
   senseBox_sps30_tooltip:
     "Dieser Block gibt dir den Messwert des Sensirion SPS30 Feinstaubsensor. Schließe den Feinstaubsensor an einen der **I2C** Anschlüssen an. Im Dropdown Menü zwischen PM1.0, PM2.5, PM4.0 und PM10 auswählen. Der Messwert wird dir als **Kommazahl** in µg/m3",
   senseBox_sps30_helpurl:
-    "https://docs.sensebox.de/docs/hardware/sensors/feinstaub-sps30/",
+    "https://docs.sensebox.de/docs/hardware/sensors/feinstaub-sps30",
 
   /**
    * Photodiode MCUS2(ESP32)
@@ -247,8 +247,8 @@ Die Messwerte für Temperatur, Luftfeuchtigkeit und Luftdruck können direkt ver
    * MPU6050 */
   senseBox_mpu6050_tooltip:
     "Der MPU6050 ist ein Beschleunigungs- und Gyroskopsensor. Schließe den Sensor an einen der I2C Anschlüsse an. Der Sensor gibt dir die Beschleunigung in m/s² und die Winkelgeschwindigkeit in °/s zurück.",
-  senseBox_mpu6050_helpurl:
-    "https://docs.sensebox.de/docs/hardware/sensors/mpu6050/",
+  senseBox_mpu6050_helpurl: "https://docs.sensebox.de/docs/hardware/sensors/mpu6050",
+
 
   /**
    * ToF Imager
