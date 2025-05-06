@@ -50,7 +50,7 @@ describe("Blockly Editor Page Tests", () => {
     cy.wait(1000);
     cy.url().should("include", "/");
 
-    cy.get('img[alt="Sensebox ESP"]').should("exist");
+    cy.get('button[aria-label="Compile code"]').should("exist");
   });
 
   it("[Blockly] selects senseBox ESP", () => {
