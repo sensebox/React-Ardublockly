@@ -1,30 +1,9 @@
-/**
- * @license
- *
- * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-/**
- * @fileoverview Blockly React Component.
- * @author samelh@google.com (Sam El-Husseini)
- */
-
 import React from "react";
 
 import * as Blockly from "blockly/core";
 import "blockly/blocks";
+import "@blockly/toolbox-search"; // search plugin auto-registers here
+
 import Toolbox from "./toolbox/Toolbox";
 
 import { Card } from "@mui/material";
@@ -41,36 +20,41 @@ class BlocklyComponent extends React.Component {
     super(props);
     this.blocklyDiv = React.createRef();
     this.toolbox = React.createRef();
+    this.primaryWorkspace = null;
     this.state = { workspace: undefined };
   }
 
   componentDidMount() {
     const { initialXml, children, ...rest } = this.props;
+
     const workspace = Blockly.inject(this.blocklyDiv.current, {
       toolbox: this.toolbox.current,
       plugins: {
-        // These are both required.
         blockDragger: ScrollBlockDragger,
         metricsManager: ScrollMetricsManager,
       },
       ...rest,
     });
-    // Initialize plugin.
-
-    // Initialize plugin.
-    // const minimap = new PositionedMinimap(workspace);
-    // minimap.init();
 
     this.primaryWorkspace = workspace;
+    this.setState({ workspace });
 
-    this.setState({ workspace: this.primaryWorkspace });
-    const plugin = new ScrollOptions(this.workspace);
+    const plugin = new ScrollOptions(workspace);
     plugin.init({ enableWheelScroll: true, enableEdgeScroll: false });
+
     if (initialXml) {
       Blockly.Xml.domToWorkspace(
         Blockly.utils.xml.textToDom(initialXml),
-        this.primaryWorkspace,
+        workspace,
       );
+    }
+  }
+
+  // Properly dispose the workspace on unmount
+  componentWillUnmount() {
+    if (this.primaryWorkspace) {
+      this.primaryWorkspace.dispose();
+      this.primaryWorkspace = null;
     }
   }
 
@@ -87,14 +71,14 @@ class BlocklyComponent extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
+      <>
         <Card
           ref={this.blocklyDiv}
           id="blocklyDiv"
           style={this.props.style ? this.props.style : {}}
         />
         <Toolbox toolbox={this.toolbox} workspace={this.state.workspace} />
-      </React.Fragment>
+      </>
     );
   }
 }
