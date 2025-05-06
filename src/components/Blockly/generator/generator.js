@@ -25,6 +25,7 @@
 // https://developers.google.com/blockly/guides/create-custom-blocks/generating-code
 
 import * as Blockly from "blockly/core";
+import { reservedWords } from "../helpers/reservedWords";
 
 import store from "../../../store";
 
@@ -52,20 +53,7 @@ Blockly.Generator.Arduino = new Blockly.Generator("Arduino");
  * accidentally clobbering a built-in object or function.
  * @private
  */
-Blockly.Generator.Arduino.addReservedWords(
-  // http://arduino.cc/en/Reference/HomePage
-  "setup,loop,if,else,for,switch,case,while," +
-    "do,break,continue,return,goto,define,include," +
-    "HIGH,LOW,INPUT,OUTPUT,INPUT_PULLUP,true,false," +
-    "interger, constants,floating,point,void,boolean,char," +
-    "unsigned,byte,int,word,long,float,double,string,String,array," +
-    "static, volatile,const,sizeof,pinMode,digitalWrite,digitalRead," +
-    "analogReference,analogRead,analogWrite,tone,noTone,shiftOut,shitIn," +
-    "pulseIn,millis,micros,delay,delayMicroseconds,min,max,abs,constrain," +
-    "map,pow,sqrt,sin,cos,tan,randomSeed,random,lowByte,highByte,bitRead," +
-    "bitWrite,bitSet,bitClear,ultraSonicDistance,parseDouble,setNeoPixelColor," +
-    "bit,attachInterrupt,detachInterrupt,interrupts,noInterrupts,short,isBtnPressed",
-);
+Blockly.Generator.Arduino.addReservedWords(reservedWords);
 
 /**
  * Order of operation ENUMs.

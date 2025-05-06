@@ -5,6 +5,7 @@ import "blockly/blocks";
 import "@blockly/toolbox-search"; // search plugin auto-registers here
 
 import Toolbox from "./toolbox/Toolbox";
+import { reservedWords } from "./helpers/reservedWords";
 
 import { Card } from "@mui/material";
 import {
@@ -37,7 +38,22 @@ class BlocklyComponent extends React.Component {
     });
 
     this.primaryWorkspace = workspace;
-    this.setState({ workspace });
+
+    workspace.addChangeListener((event) => {
+      if (event.type === Blockly.Events.VAR_CREATE) {
+        const variable = workspace.getVariableById(event.varId);
+        const newName = variable.name;
+
+        // Check if the new variable name is in the reserved words list
+        if (reservedWords.has(newName)) {
+          alert(
+            `"${newName}" is a reserved word and cannot be used as a variable name.`,
+          );
+          // Delete the variable
+          workspace.deleteVariableById(event.varId);
+        }
+      }
+    });
 
     const plugin = new ScrollOptions(workspace);
     plugin.init({ enableWheelScroll: true, enableEdgeScroll: false });
