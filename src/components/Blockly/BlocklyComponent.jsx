@@ -42,24 +42,30 @@ class BlocklyComponent extends React.Component {
     this.setState({ workspace });
 
     workspace.addChangeListener((event) => {
-      if (event.type === Blockly.Events.VAR_CREATE) {
+      if (
+        event.type === Blockly.Events.VAR_CREATE ||
+        event.type === Blockly.Events.VAR_RENAME
+      ) {
         const variable = workspace.getVariableById(event.varId);
         const newName = variable.name;
-
-        // Check if the new variable name is in the reserved words list
+        if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(newName)) {
+          // Check if the new name is a valid variable name
+          this.setState({
+            snackbar: true,
+            key: Date.now(),
+            type: "error",
+            message: `${Blockly.Msg.messages_invalid_variable_name}`,
+          });
+          workspace.deleteVariableById(event.varId);
+        }
         if (reservedWords.has(newName)) {
-          // Show a snackbar or alert to inform the user
+          // Check if the new name is a reserved word
           this.setState({
             snackbar: true,
             key: Date.now(),
             type: "error",
             message: `"${newName}" ${Blockly.Msg.messages_reserve_word}`,
           });
-          // // Optionally, you can use a snackbar component from Material-UI
-          // alert(
-          //   `"${newName}" is a reserved word and cannot be used as a variable name.`,
-          // );
-          // Delete the variable
           workspace.deleteVariableById(event.varId);
         }
       }
