@@ -288,6 +288,7 @@ class BlocklyWindow extends Component {
     const zoomToFit = new ZoomToFitControl(workspace);
     zoomToFit.init();
 
+    // Initialize plugin.
     const backpack = new Backpack(workspace);
     backpack.init();
 
