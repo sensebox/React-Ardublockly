@@ -101,6 +101,8 @@ export const UI = {
   messages_copy_code: "Copy code to clipboard succesfull",
   messages_reserve_word:
     "is a reserved word and cannot be used as a variable name.",
+  messages_invalid_variable_name:
+    "Invalid variable name, only letters, numbers and underscores are allowed.",
 
   /**
    * Tablet Dialog
