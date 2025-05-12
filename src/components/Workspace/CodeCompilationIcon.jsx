@@ -14,7 +14,7 @@ export function CodeCompilationIcon() {
           inset: 16,
           bgcolor: "rgba(124, 124, 127, 0.24)",
           borderRadius: 2,
-          border: `1px solid ${theme.palette.senseboxColors.blue}30`,
+          border: `1px solid ${theme.palette.senseboxColors.green}30`,
           overflow: "hidden",
           fontFamily: "monospace",
           fontSize: 24,
@@ -25,7 +25,7 @@ export function CodeCompilationIcon() {
           style={{
             position: "absolute",
             inset: 15,
-            color: theme.palette.senseboxColors.blue,
+            color: theme.palette.senseboxColors.green,
           }}
           animate={{ opacity: [1, 0] }}
           transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
@@ -43,7 +43,7 @@ export function CodeCompilationIcon() {
           style={{
             position: "absolute",
             inset: 15,
-            color: theme.palette.senseboxColors.blue,
+            color: theme.palette.senseboxColors.green,
           }}
           animate={{ opacity: [0, 1] }}
           transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
@@ -63,7 +63,7 @@ export function CodeCompilationIcon() {
             left: 0,
             width: "100%",
             height: 2,
-            background: `linear-gradient(90deg, transparent, ${theme.palette.senseboxColors.blue}50, transparent)`,
+            background: `linear-gradient(90deg, transparent, ${theme.palette.senseboxColors.green}50, transparent)`,
           }}
           animate={{ y: [0, 160, 0] }}
           transition={{
