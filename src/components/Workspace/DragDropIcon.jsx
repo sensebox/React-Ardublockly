@@ -147,7 +147,7 @@ function DragDropIconComponent() {
                   "transparent", // Start
                   "transparent", // Während des Ziehens
                   "transparent", // Kurz vor dem Loslassen
-                  `${theme.palette.senseboxColors.blue}40`, // Highlight beim Loslassen (verstärkt)
+                  `${theme.palette.senseboxColors.green}40`, // Highlight beim Loslassen (verstärkt)
                   "transparent", // Zurück zu normal
                   "transparent", // Bereit für nächste Animation
                 ],

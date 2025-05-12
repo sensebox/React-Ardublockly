@@ -124,7 +124,7 @@ function DownloadAnimation() {
         bgcolor: "#f8f9fa",
         borderRadius: 2,
         overflow: "visible",
-        border: `1px solid ${theme.palette.senseboxColors.blue}30`,
+        border: `1px solid ${theme.palette.senseboxColors.green}30`,
         mx: "auto",
       }}
     >
@@ -191,8 +191,8 @@ function DownloadAnimation() {
                 ? "rgba(0, 0, 0, 0.15)"
                 : "rgba(0, 0, 0, 0.1)",
             },
-            color: theme.palette.senseboxColors.blue,
-            border: `2px solid ${theme.palette.senseboxColors.blue}`,
+            color: theme.palette.senseboxColors.green,
+            border: `2px solid ${theme.palette.senseboxColors.green}`,
           }}
         >
           <FileDownloadIcon sx={{ fontSize: 16 }} />
@@ -262,7 +262,7 @@ function DownloadAnimation() {
                         transition={{ duration: 2 }}
                         style={{
                           height: 2,
-                          backgroundColor: theme.palette.senseboxColors.blue,
+                          backgroundColor: theme.palette.senseboxColors.green,
                           borderRadius: 1,
                           marginTop: 2,
                         }}

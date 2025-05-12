@@ -28,11 +28,14 @@ const theme = createTheme({
     secondary: {
       main: "#DDDDDD",
     },
+    background: {
+      white: "#ffffff",
+    },
     button: {
       compile: "#e27136",
     },
     senseboxColors: {
-      blue: "#4EAF46",
+      blue: "#3ab0e8",
       green: "#4EAF47",
     },
   },
