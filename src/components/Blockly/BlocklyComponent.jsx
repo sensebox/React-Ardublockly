@@ -5,6 +5,8 @@ import "blockly/blocks";
 import "@blockly/toolbox-search"; // search plugin auto-registers here
 
 import Toolbox from "./toolbox/Toolbox";
+import { reservedWords } from "./helpers/reservedWords";
+import Snackbar from "../Snackbar";
 
 import { Card } from "@mui/material";
 import {
@@ -21,7 +23,7 @@ class BlocklyComponent extends React.Component {
     this.blocklyDiv = React.createRef();
     this.toolbox = React.createRef();
     this.primaryWorkspace = null;
-    this.state = { workspace: undefined };
+    this.state = { workspace: undefined, snackbar: false };
   }
 
   componentDidMount() {
@@ -39,7 +41,38 @@ class BlocklyComponent extends React.Component {
     this.primaryWorkspace = workspace;
     this.setState({ workspace });
 
-    const plugin = new ScrollOptions(workspace);
+    workspace.addChangeListener((event) => {
+      if (
+        event.type === Blockly.Events.VAR_CREATE ||
+        event.type === Blockly.Events.VAR_RENAME
+      ) {
+        const variable = workspace.getVariableById(event.varId);
+        const newName = variable.name;
+        if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(newName)) {
+          // Check if the new name is a valid variable name
+          this.setState({
+            snackbar: true,
+            key: Date.now(),
+            type: "error",
+            message: `${Blockly.Msg.messages_invalid_variable_name}`,
+          });
+          workspace.deleteVariableById(event.varId);
+        }
+        if (reservedWords.has(newName)) {
+          // Check if the new name is a reserved word
+          this.setState({
+            snackbar: true,
+            key: Date.now(),
+            type: "error",
+            message: `"${newName}" ${Blockly.Msg.messages_reserve_word}`,
+          });
+          workspace.deleteVariableById(event.varId);
+        }
+      }
+    });
+
+    this.setState({ workspace: this.primaryWorkspace });
+    const plugin = new ScrollOptions(this.workspace);
     plugin.init({ enableWheelScroll: true, enableEdgeScroll: false });
 
     if (initialXml) {
@@ -78,6 +111,12 @@ class BlocklyComponent extends React.Component {
           style={this.props.style ? this.props.style : {}}
         />
         <Toolbox toolbox={this.toolbox} workspace={this.state.workspace} />
+        <Snackbar
+          open={this.state.snackbar}
+          message={this.state.message}
+          type={this.state.type}
+          key={this.state.key}
+        />
       </>
     );
   }
