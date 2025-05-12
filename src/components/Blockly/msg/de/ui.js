@@ -102,7 +102,10 @@ export const UI = {
   messages_GET_TUTORIAL_FAIL: "Zurück zur Tutorials-Übersicht",
   messages_LOGIN_FAIL: "Der Benutzername oder das Passwort ist nicht korrekt.",
   messages_copy_code: "Code wurde in die Zwischenablage kopiert",
-
+  messages_reserve_word:
+    "ist ein reserviertes Wort und kann nicht als Variablenname verwendet werden",
+  messages_invalid_variable_name:
+    "Der Variablenname ist ungültig. Verwende nur Buchstaben, Zahlen und Unterstriche.",
   /**
    * Tablet Dialog
    */
