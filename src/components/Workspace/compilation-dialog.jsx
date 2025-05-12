@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import {
@@ -19,14 +17,11 @@ import { DragDropIcon } from "./drag-drop-icon";
 import { connect, useSelector } from "react-redux";
 import * as Blockly from "blockly/core";
 import { ErrorView } from "../ErrorView/ErrorView";
-import { getPlatform } from "../../reducers/generalReducer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faClipboardCheck,
-  faCloud,
-  faLink,
-  faXmark,
-} from "@fortawesome/free-solid-svg-icons";
+import { faLink, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { detectWhitespacesAndReturnReadableResult } from "../../helpers/whitespace";
+import moment from "moment";
+import "moment/locale/de";
 
 const headerStyle = {
   fontSize: "1.5rem",
@@ -108,10 +103,14 @@ function CompilationDialog({
   };
 
   const handleDownloadURL = () => {
-    const downloadUrl = `${compilerUrl}/download?id=${sketchId}&board=sensebox-mcu&filename=${filename}`;
+    moment.locale("de");
+    const timestamp = moment().format("YYYY-MM-DD-HH-mm-ss");
+
+    const cleanName = detectWhitespacesAndReturnReadableResult(filename);
+    const downloadUrl = `${compilerUrl}/download?id=${sketchId}&board=sensebox-mcu&filename=${timestamp}_${cleanName}`;
     const link = document.createElement("a");
     link.href = downloadUrl;
-    link.download = `${filename}.bin`;
+    link.download = `${timestamp}_${cleanName}.bin`;
     link.click();
   };
 
@@ -125,7 +124,6 @@ function CompilationDialog({
     <Dialog
       open={open}
       onClose={handleClose}
-      // Feste Größe über PaperProps: Breite und Höhe passen für alle Steps
       PaperProps={{
         style: { width: "600px", minHeight: "600px", maxHeight: "600px" },
       }}
@@ -144,7 +142,7 @@ function CompilationDialog({
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            overflow: "auto", // Falls der Inhalt größer wird als der Container
+            overflow: "auto",
           }}
         >
           {error && <ErrorView error={error} />}

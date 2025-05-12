@@ -29,13 +29,12 @@ const setVariableFunction = function (defaultValue) {
         Blockly.Generator.Arduino.variables_[variableName + myVar.type] =
           `uint16_t ${variableName}[96];\n`;
         if (variableValue != "") {
-          code =`memcpy(${variableName}, ${variableValue}, sizeof(${variableName}));\n`;
+          code = `memcpy(${variableName}, ${variableValue}, sizeof(${variableName}));\n`;
         }
       } else {
         Blockly.Generator.Arduino.variables_[variableName + myVar.type] =
           `${myVar.type} ${variableName};\n`;
-        code =
-        `${variableName} = ${(variableValue || defaultValue)};\n`;
+        code = `${variableName} = ${variableValue || defaultValue};\n`;
       }
     }
     return code;
@@ -60,5 +59,7 @@ const getVariableFunction = function (block) {
   return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
-Blockly.Generator.Arduino.forBlock["variables_set_dynamic"] = setVariableFunction();
-Blockly.Generator.Arduino.forBlock["variables_get_dynamic"] = getVariableFunction;
+Blockly.Generator.Arduino.forBlock["variables_set_dynamic"] =
+  setVariableFunction();
+Blockly.Generator.Arduino.forBlock["variables_get_dynamic"] =
+  getVariableFunction;
