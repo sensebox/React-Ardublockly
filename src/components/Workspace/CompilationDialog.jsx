@@ -11,10 +11,10 @@ import {
   Typography,
   IconButton,
 } from "@mui/material";
-import { CodeCompilationIcon } from "./code-compilation-icon";
-import DownloadAnimation from "./download-animation";
-import { DragDropIcon } from "./drag-drop-icon";
-import { connect, useSelector } from "react-redux";
+import { CodeCompilationIcon } from "./CodeCompilationIcon";
+import DownloadAnimation from "./DownloadAnimation";
+import { DragDropIcon } from "./DragDropIcon";
+import { useSelector } from "react-redux";
 import * as Blockly from "blockly/core";
 import { ErrorView } from "../ErrorView/ErrorView";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -41,7 +41,6 @@ function CompilationDialog({
   const [activeStep, setActiveStep] = useState(0);
   const [sketchId, setSketchId] = useState(null);
   const [error, setError] = useState(null);
-  const [magicLink, setMagicLink] = useState(null);
   const compilerUrl = useSelector((state) => state.general.compiler);
 
   useEffect(() => {
@@ -272,7 +271,6 @@ CompilationDialog.propTypes = {
   filename: PropTypes.string.isRequired,
   platform: PropTypes.bool.isRequired,
   appLink: PropTypes.string,
-  language: PropTypes.string.isRequired,
 };
 
 CompilationDialog.defaultProps = {
@@ -283,8 +281,4 @@ CompilationDialog.defaultProps = {
   onCompileComplete: () => {},
 };
 
-const mapStateToProps = (state) => ({
-  language: state.general.language,
-});
-
-export default connect(mapStateToProps)(CompilationDialog);
+export default CompilationDialog;

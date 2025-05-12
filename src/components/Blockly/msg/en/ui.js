@@ -144,6 +144,17 @@ export const UI = {
   compiledialog_headline: "Error",
   compiledialog_text:
     "While compiling an error occured. Please check your blocks and try again",
+  compile_animation_downloads: "Downloads",
+  compile_animation_downloading: "Downloading...",
+  compile_animation_downloadComplete: "Download complete",
+  compile_animation_fileName: "sketch.bin",
+  dragdrop_icon_quickAccess: "Quick Access",
+  dragdrop_icon_desktop: "Desktop",
+  dragdrop_icon_downloads: "Downloads",
+  dragdrop_icon_documents: "Documents",
+  dragdrop_icon_pictures: "Pictures",
+  dragdrop_icon_sensebox: "SENSEBOX (E:)",
+  dragdrop_icon_fileName: "sketch.bin",
 
   /**
    * File Upload Dialog

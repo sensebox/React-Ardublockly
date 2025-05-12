@@ -31,6 +31,10 @@ const theme = createTheme({
     button: {
       compile: "#e27136",
     },
+    senseboxColors: {
+      blue: "#4EAF46",
+      green: "#4EAF47",
+    },
   },
 });
 

@@ -9,30 +9,9 @@ import MonitorOutlinedIcon from "@mui/icons-material/MonitorOutlined";
 import ImageOutlinedIcon from "@mui/icons-material/ImageOutlined";
 import StarOutlinedIcon from "@mui/icons-material/StarOutlined";
 import StorageOutlinedIcon from "@mui/icons-material/StorageOutlined";
-import { senseboxColors } from "./theme";
 import { connect } from "react-redux";
-
-// Texte für verschiedene Sprachen
-const texts = {
-  de: {
-    quickAccess: "Schnellzugriff",
-    desktop: "Desktop",
-    downloads: "Downloads",
-    documents: "Dokumente",
-    pictures: "Bilder",
-    sensebox: "SENSEBOX (E:)",
-    fileName: "sketch.bin",
-  },
-  en: {
-    quickAccess: "Quick Access",
-    desktop: "Desktop",
-    downloads: "Downloads",
-    documents: "Documents",
-    pictures: "Pictures",
-    sensebox: "SENSEBOX (E:)",
-    fileName: "sketch.bin",
-  },
-};
+import * as Blockly from "blockly";
+import { useTheme } from "@mui/styles";
 
 // SidebarItem Component
 const SidebarItem = styled(Box)({
@@ -47,14 +26,9 @@ const SidebarItem = styled(Box)({
   },
 });
 
-function DragDropIconComponent({ language }) {
-  // Konvertiere die Redux-Spracheinstellung in das Format, das wir verwenden
-  const currentLanguage = language === "de_DE" ? "de" : "en";
+function DragDropIconComponent() {
+  const theme = useTheme();
 
-  // Texte für die aktuelle Sprache
-  const t = texts[currentLanguage] || texts.de;
-
-  // Animation Keyframes für die Datei
   const fileAnimation = {
     x: [
       16, // Start
@@ -147,23 +121,23 @@ function DragDropIconComponent({ language }) {
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
           <SidebarItem>
             <StarOutlinedIcon sx={{ color: "#4EAF46" }} />
-            <span>{t.quickAccess}</span>
+            <span>{Blockly.Msg.dragdrop_icon_quickAccess}</span>
           </SidebarItem>
           <SidebarItem>
             <MonitorOutlinedIcon sx={{ color: "#4EAF46" }} />
-            <span>{t.desktop}</span>
+            <span>{Blockly.Msg.dragdrop_icon_desktop}</span>
           </SidebarItem>
           <SidebarItem>
             <FolderOutlinedIcon sx={{ color: "#4EAF46" }} />
-            <span>{t.downloads}</span>
+            <span>{Blockly.Msg.dragdrop_icon_downloads}</span>
           </SidebarItem>
           <SidebarItem>
             <InsertDriveFileOutlinedIcon sx={{ color: "#4EAF46" }} />
-            <span>{t.documents}</span>
+            <span>{Blockly.Msg.dragdrop_icon_documents}</span>
           </SidebarItem>
           <SidebarItem>
             <ImageOutlinedIcon sx={{ color: "#4EAF46" }} />
-            <span>{t.pictures}</span>
+            <span>{Blockly.Msg.dragdrop_icon_pictures}</span>
           </SidebarItem>
           <Box sx={{ mt: 2 }}>
             <motion.div
@@ -173,7 +147,7 @@ function DragDropIconComponent({ language }) {
                   "transparent", // Start
                   "transparent", // Während des Ziehens
                   "transparent", // Kurz vor dem Loslassen
-                  `${senseboxColors.blue}40`, // Highlight beim Loslassen (verstärkt)
+                  `${theme.palette.senseboxColors.blue}40`, // Highlight beim Loslassen (verstärkt)
                   "transparent", // Zurück zu normal
                   "transparent", // Bereit für nächste Animation
                 ],
@@ -223,7 +197,7 @@ function DragDropIconComponent({ language }) {
                 }}
               >
                 <StorageOutlinedIcon sx={{ fontSize: 16, color: "#4B5563" }} />
-                <span>{t.sensebox}</span>
+                <span>{Blockly.Msg.dragdrop_icon_sensebox}</span>
               </Box>
             </motion.div>
           </Box>
@@ -260,7 +234,7 @@ function DragDropIconComponent({ language }) {
             sx={{ fontSize: 16, color: "text.secondary" }}
           />
           <Typography sx={{ fontSize: 13, color: "grey.700" }}>
-            {t.fileName}
+            {Blockly.Msg.dragdrop_icon_fileName}
           </Typography>
         </Box>
 
@@ -300,7 +274,9 @@ function DragDropIconComponent({ language }) {
           <InsertDriveFileOutlinedIcon
             sx={{ fontSize: 16, color: "#4B5563" }}
           />
-          <span style={{ fontSize: 13, color: "#374151" }}>{t.fileName}</span>
+          <span style={{ fontSize: 13, color: "#374151" }}>
+            {Blockly.Msg.dragdrop_icon_fileName}
+          </span>
         </motion.div>
 
         {/* Cursor */}
