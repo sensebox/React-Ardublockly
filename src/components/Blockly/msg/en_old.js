@@ -1235,4 +1235,11 @@ Blockly.Msg.faq_q3_answer = `
 The best way to do this is to create an issue on [Github](https://github.com/sensebox/React-Ardublockly/issues). Alternatively you can send us an email to info(at)sensebox.de
 `;
 
+// Backpack translations
+Blockly.Msg.EMPTY_BACKPACK = "Empty Backpack";
+Blockly.Msg.REMOVE_FROM_BACKPACK = "Remove from Backpack";
+Blockly.Msg.COPY_TO_BACKPACK = "Copy to Backpack";
+Blockly.Msg.COPY_ALL_TO_BACKPACK = "Copy All to Backpack";
+Blockly.Msg.PASTE_ALL_FROM_BACKPACK = "Paste All from Backpack";
+
 export const En = Blockly.Msg;

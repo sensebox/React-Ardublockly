@@ -241,4 +241,16 @@ export const TRANSLATIONS = {
   senseBox_serial_tip:
     "prints the values to the serial monitor in the arduino IDE. Good way to have a fast and easy feedback for your programm",
   senseBox_soil: "Soil Moisture",
+  senseBox_watertemperature: "Water Temperature",
+  senseBox_watertemperature_tooltip:
+    "The water thermometer outputs temperature in degrees Celsius. Connect the sensor to one of the 6 ports of the One-Wire adapter and then connect the One-Wire adapter to one of the 3 digital/analog ports of the senseBox and select the port in the block. If you only have one thermometer connected to the One-Wire adapter, then leave the index at 0. Each additional connected thermometer can be addressed with an index increased by 1. It does not matter at which port of the adapter the thermometers are connected.",
+  EMPTY_BACKPACK: "Empty Backpack",
+  REMOVE_FROM_BACKPACK: "Remove from Backpack",
+  COPY_TO_BACKPACK: "Copy to Backpack",
+  COPY_ALL_TO_BACKPACK: "Copy All to Backpack",
+  PASTE_ALL_FROM_BACKPACK: "Paste All from Backpack",
+  ARDUINO_FUNCTION_BLOCK_WARNING: "Arduino function blocks cannot be saved in the backpack",
+  ARDUINO_FUNCTION_BLOCKS_SKIPPED: "Arduino function blocks were skipped",
+  BLOCKS_ADDED_TO_BACKPACK: "%1 blocks added to backpack",
+  BLOCKS_PASTED_FROM_BACKPACK: "%1 blocks pasted from backpack",
 };
