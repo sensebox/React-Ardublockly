@@ -148,7 +148,17 @@ export const UI = {
   compiledialog_headline: "Fehler",
   compiledialog_text:
     "Beim kompilieren ist ein Fehler aufgetreten. Überprüfe deine Blöcke und versuche es erneut",
-
+  compile_animation_downloads: "Downloads",
+  compile_animation_downloading: "Wird heruntergeladen...",
+  compile_animation_downloadComplete: "Herunterladen abgeschlossen",
+  compile_animation_fileName: "sketch.bin",
+  dragdrop_icon_quickAccess: "Schnellzugriff",
+  dragdrop_icon_desktop: "Desktop",
+  dragdrop_icon_downloads: "Downloads",
+  dragdrop_icon_documents: "Dokumente",
+  dragdrop_icon_pictures: "Bilder",
+  dragdrop_icon_sensebox: "SENSEBOX (E:)",
+  dragdrop_icon_fileName: "sketch.bin",
   /**
    * File Upload Dialog
    */

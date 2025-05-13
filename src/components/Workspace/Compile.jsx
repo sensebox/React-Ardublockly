@@ -5,7 +5,7 @@ import { IconButton, Tooltip } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { workspaceName } from "../../actions/workspaceActions";
-import CompilationDialog from "./compilation-dialog";
+import CompilationDialog from "./CompilationDialog";
 import withStyles from "@mui/styles/withStyles";
 
 const styles = (theme) => ({

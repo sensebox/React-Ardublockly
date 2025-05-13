@@ -8,12 +8,8 @@ import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import CloseIcon from "@mui/icons-material/Close";
-import { connect } from "react-redux";
-
-// Definiere die senseboxColors
-const senseboxColors = {
-  blue: "#4EAF46",
-};
+import { useTheme } from "@mui/material/styles";
+import * as Blockly from "blockly";
 
 // Styled IconButton Komponente für normale Buttons
 const StyledIconButton = styled(IconButton)(() => ({
@@ -42,41 +38,20 @@ const RoundIconButton = styled(IconButton)(() => ({
   },
 }));
 
-// Texte für verschiedene Sprachen
-const texts = {
-  de: {
-    downloads: "Downloads",
-    downloading: "Wird heruntergeladen...",
-    downloadComplete: "Herunterladen abgeschlossen",
-    fileName: "sketch.bin",
-  },
-  en: {
-    downloads: "Downloads",
-    downloading: "Downloading...",
-    downloadComplete: "Download complete",
-    fileName: "sketch.bin",
-  },
-};
-
-function DownloadAnimation({ language }) {
+function DownloadAnimation() {
   const [showDownloads, setShowDownloads] = useState(false);
   const [isFileClicked, setIsFileClicked] = useState(false);
   const cursorControls = useAnimation();
   const downloadButtonRef = useRef(null);
   const fileRef = useRef(null);
-
-  // Konvertiere die Redux-Spracheinstellung in das Format, das wir verwenden
-  const currentLanguage = language === "de_DE" ? "de" : "en";
-
-  // Texte für die aktuelle Sprache
-  const t = texts[currentLanguage] || texts.de;
+  const theme = useTheme();
 
   // Downloads-Array mit lokalisierten Texten
   const downloads = [
     {
-      name: t.fileName,
+      name: Blockly.Msg.compile_animation_fileName,
       size: "276 KB",
-      time: t.downloading,
+      time: Blockly.Msg.compile_animation_downloading,
       type: "binary",
     },
   ];
@@ -149,7 +124,7 @@ function DownloadAnimation({ language }) {
         bgcolor: "#f8f9fa",
         borderRadius: 2,
         overflow: "visible",
-        border: `1px solid ${senseboxColors.blue}30`,
+        border: `1px solid ${theme.palette.senseboxColors.green}30`,
         mx: "auto",
       }}
     >
@@ -216,8 +191,8 @@ function DownloadAnimation({ language }) {
                 ? "rgba(0, 0, 0, 0.15)"
                 : "rgba(0, 0, 0, 0.1)",
             },
-            color: senseboxColors.blue,
-            border: `2px solid ${senseboxColors.blue}`,
+            color: theme.palette.senseboxColors.green,
+            border: `2px solid ${theme.palette.senseboxColors.green}`,
           }}
         >
           <FileDownloadIcon sx={{ fontSize: 16 }} />
@@ -241,7 +216,9 @@ function DownloadAnimation({ language }) {
               borderBottom: "1px solid rgba(0,0,0,0.1)",
             }}
           >
-            <Box sx={{ color: "#202124", fontSize: 14 }}>{t.downloads}</Box>
+            <Box sx={{ color: "#202124", fontSize: 14 }}>
+              {Blockly.Msg.compile_animation_downloads}
+            </Box>
             <StyledIconButton>
               <CloseIcon sx={{ fontSize: 16, color: "#5f6368" }} />
             </StyledIconButton>
@@ -285,7 +262,7 @@ function DownloadAnimation({ language }) {
                         transition={{ duration: 2 }}
                         style={{
                           height: 2,
-                          backgroundColor: senseboxColors.blue,
+                          backgroundColor: theme.palette.senseboxColors.green,
                           borderRadius: 1,
                           marginTop: 2,
                         }}
@@ -322,7 +299,9 @@ function DownloadAnimation({ language }) {
                   <Box component="span" sx={{ mx: 1 }}>
                     •
                   </Box>
-                  {isFileClicked ? t.downloadComplete : download.time}
+                  {isFileClicked
+                    ? Blockly.Msg.compile_animation_downloadComplete
+                    : download.time}
                 </Box>
               </motion.div>
             ))}
@@ -333,9 +312,4 @@ function DownloadAnimation({ language }) {
   );
 }
 
-// Verbinde die Komponente mit Redux, um auf die Spracheinstellung zuzugreifen
-const mapStateToProps = (state) => ({
-  language: state.general.language, // Hole die Spracheinstellung aus dem Redux-Store
-});
-
-export default connect(mapStateToProps)(DownloadAnimation);
+export default DownloadAnimation;
