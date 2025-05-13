@@ -8,6 +8,7 @@ export const UI = {
   toolbox_math: "Math",
   toolbox_io: "Input/Output",
   toolbox_time: "Time",
+  toolbox_time_control: "Time control",
   toolbox_rtc: "RTC",
   toolbox_ntp: "NTP",
   toolbox_functions: "Functions",

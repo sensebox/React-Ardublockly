@@ -528,24 +528,30 @@ export const ToolboxEsp = () => {
         name={Blockly.Msg.toolbox_time}
         colour={getColour().time}
       >
-        <Block type="time_delay">
-          <Value name="DELAY_TIME_MILI">
-            <Block type="math_number">
-              <Field name="NUM">1000</Field>
-            </Block>
-          </Value>
-        </Block>
-        <Block type="time_delaymicros">
-          <Value name="DELAY_TIME_MICRO">
-            <Block type="math_number">
-              <Field name="NUM">100</Field>
-            </Block>
-          </Value>
-        </Block>
-        <Block type="time_millis"></Block>
-        <Block type="time_micros"></Block>
-        <Block type="infinite_loop"></Block>
-        <Block type="sensebox_interval_timer"></Block>
+        <Category
+          id="time_control"
+          name={Blockly.Msg.toolbox_time_control}
+          colour={getColour().time}
+        >
+          <Block type="time_delay">
+            <Value name="DELAY_TIME_MILI">
+              <Block type="math_number">
+                <Field name="NUM">1000</Field>
+              </Block>
+            </Value>
+          </Block>
+          <Block type="time_delaymicros">
+            <Value name="DELAY_TIME_MICRO">
+              <Block type="math_number">
+                <Field name="NUM">100</Field>
+              </Block>
+            </Value>
+          </Block>
+          <Block type="time_millis"></Block>
+          <Block type="time_micros"></Block>
+          <Block type="infinite_loop"></Block>
+          <Block type="sensebox_interval_timer"></Block>
+        </Category>
         <Category
           id="time"
           name={Blockly.Msg.toolbox_rtc}
