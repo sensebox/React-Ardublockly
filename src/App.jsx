@@ -28,8 +28,15 @@ const theme = createTheme({
     secondary: {
       main: "#DDDDDD",
     },
+    background: {
+      white: "#ffffff",
+    },
     button: {
       compile: "#e27136",
+    },
+    senseboxColors: {
+      blue: "#3ab0e8",
+      green: "#4EAF47",
     },
   },
 });
@@ -37,8 +44,8 @@ const theme = createTheme({
 class App extends Component {
   componentDidMount() {
     store.dispatch(loadUser());
-    // set initial compiler 
-    console.log("compiler",  import.meta.env.VITE_INITIAL_COMPILER_URL)
+    // set initial compiler
+    console.log("compiler", import.meta.env.VITE_INITIAL_COMPILER_URL);
     store.dispatch(setCompiler(import.meta.env.VITE_INITIAL_COMPILER_URL));
   }
 
