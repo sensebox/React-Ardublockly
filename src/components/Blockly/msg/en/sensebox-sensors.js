@@ -261,4 +261,9 @@ The measured values for temperature, humidity and air pressure can be used direc
   sensebox_distance_bitmap: "8x8 distances as bitmap (for LED-Matrix)",
   sensebox_tof_imager_max_distance: "Maximum measurable distance ",
   sensebox_tof_imager_max_distance_unit: "cm",
+
+  /**
+   * ICM Accel/Gyro
+   */
+  senseBox_icm20948: "Accelerometer/Gyroscope (ICM20948)",
 };

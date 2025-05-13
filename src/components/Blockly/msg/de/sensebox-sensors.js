@@ -242,13 +242,18 @@ Die Messwerte für Temperatur, Luftfeuchtigkeit und Luftdruck können direkt ver
     "Die Photodiode misst Lichtintensität. Der ausgegebene Wert ist eine **Ganzzahl** zwischen 0 und 4095. Je höher der Wert, desto heller ist die Umgebung.",
   senseBox_esp32_photodiode_helpurl:
     "https://docs.sensebox.de/docs/hardware/sensors/photodiode",
-
   /**
    * MPU6050 */
   senseBox_mpu6050_tooltip:
     "Der MPU6050 ist ein Beschleunigungs- und Gyroskopsensor. Schließe den Sensor an einen der I2C Anschlüsse an. Der Sensor gibt dir die Beschleunigung in m/s² und die Winkelgeschwindigkeit in °/s zurück.",
   senseBox_mpu6050_helpurl: "https://docs.sensebox.de/docs/hardware/sensors/mpu6050",
 
+  /**
+   * MPU6050 */
+  senseBox_mpu6050_tooltip:
+    "Der MPU6050 ist ein Beschleunigungs- und Gyroskopsensor. Schließe den Sensor an einen der I2C Anschlüsse an. Der Sensor gibt dir die Beschleunigung in m/s² und die Winkelgeschwindigkeit in °/s zurück.",
+  senseBox_mpu6050_helpurl:
+    "https://docs.sensebox.de/docs/hardware/sensors/mpu6050/",
 
   /**
    * ToF Imager
@@ -263,4 +268,9 @@ Die Messwerte für Temperatur, Luftfeuchtigkeit und Luftdruck können direkt ver
   sensebox_tof_imager_max_distance_unit: "cm",
   sensebox_tof_imager_helpurl:
     "https://docs.sensebox.de/docs/hardware/sensors/tof",
+  /**
+   * ICM Accel/Gyro
+   */
+  senseBox_icm20948: "Beschleunigungs-/Gyroskopsensor (ICM20948)",
+
 };

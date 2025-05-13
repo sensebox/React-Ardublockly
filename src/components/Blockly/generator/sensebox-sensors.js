@@ -1153,3 +1153,65 @@ Blockly.Generator.Arduino.forBlock["sensebox_sensor_truebner_smt50_esp32"] =
       return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
     }
   };
+
+Blockly.Generator.Arduino.forBlock["sensebox_sensor_icm20948"] = function () {
+  var code = "";
+  var dropdown = this.getFieldValue("VALUE");
+  var range = this.getFieldValue("RANGE");
+  Blockly.Generator.Arduino.libraries_["icm20X_lib"] =
+    `#include <Adafruit_ICM20X.h>`;
+  Blockly.Generator.Arduino.libraries_["icm20948_lib"] =
+    `#include <Adafruit_ICM20948.h>`;
+  Blockly.Generator.Arduino.libraries_["Adafruit_Sensor"] =
+    `#include <Adafruit_Sensor.h>`;
+  Blockly.Generator.Arduino.libraries_["library_wire"] = `#include <Wire.h>`;
+  Blockly.Generator.Arduino.definitions_["define_sensor_events"] =
+    "sensors_event_t accel, gyro, mag, temp;";
+  Blockly.Generator.Arduino.definitions_["define_Adafruit_icm20948"] =
+    "Adafruit_ICM20948 icm;";
+  Blockly.Generator.Arduino.definitions_["measurement_delay"] =
+    "uint16_t measurement_delay_us = 65535; // Delay between measurements for testing";
+  Blockly.Generator.Arduino.setupCode_["icm.begin()"] =
+    "icm.begin_I2C(0x68, &Wire1);";
+  switch (range) {
+    case "2G":
+      Blockly.Generator.Arduino.setupCode_["icm.setAccelerometerRange()"] =
+        "icm.setAccelRange(ICM20948_ACCEL_RANGE_2_G);";
+      break;
+    case "4G":
+      Blockly.Generator.Arduino.setupCode_["icm.setAccelerometerRange()"] =
+        "icm.setAccelRange(ICM20948_ACCEL_RANGE_4_G);";
+      break;
+    case "8g":
+      Blockly.Generator.Arduino.setupCode_["icm.setAccelerometerRange()"] =
+        "icm.setAccelRange(ICM20948_ACCEL_RANGE_8_G);";
+      break;
+    case "16G":
+      Blockly.Generator.Arduino.setupCode_["icm.setAccelerometerRange()"] =
+        "icm.setAccelRange(ICM20948_ACCEL_RANGE_16_G);";
+      break;
+    default:
+      Blockly.Generator.Arduino.setupCode_["icm.setAccelerometerRange()"] =
+        "icm.setAccelRange(ICM20948_ACCEL_RANGE_2_G);";
+  }
+
+  Blockly.Generator.Arduino.loopCodeOnce_["icm.getEvent"] =
+    "  icm.getEvent(&accel, &gyro, &temp, &mag);";
+
+  console.log("dropdwon", dropdown);
+  switch (dropdown) {
+    case "accelerationX":
+      code = "accel.acceleration.x";
+      break;
+    case "accelerationY":
+      code = "accel.acceleration.y";
+      break;
+    case "accelerationZ":
+      code = "accel.acceleration.z";
+      break;
+    default:
+      code = "";
+  }
+
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
+};
