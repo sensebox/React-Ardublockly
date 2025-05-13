@@ -96,6 +96,7 @@ export const IO = {
   ARD_STEPPER_TWO_PINS: "2",
   ARD_TYPE_ARRAY: "Array",
   ARD_TYPE_BOOL: "Boolean",
+  ARD_TYPE_BITMAP: "Bitmap",
   ARD_TYPE_CHAR: "Character",
   ARD_TYPE_CHILDBLOCKMISSING: "ChildBlockMissing",
   ARD_TYPE_DECIMAL: "Decimal",

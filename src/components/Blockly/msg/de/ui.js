@@ -1,3 +1,4 @@
+// src/components/Blockly/msg/de/ui.js
 export const UI = {
   /**
    * Toolbox
@@ -8,6 +9,7 @@ export const UI = {
   toolbox_math: "Mathematik",
   toolbox_io: "Eingang/Ausgang",
   toolbox_time: "Zeit",
+  toolbox_time_control: "Zeitsteuerung",
   toolbox_rtc: "RTC",
   toolbox_ntp: "NTP",
   toolbox_functions: "Funktionen",
@@ -23,6 +25,7 @@ export const UI = {
   variable_SHORT_NUMBER: "char",
   variable_LONG: "große Zahl (long)",
   variable_DECIMAL: "Kommazahl (float)",
+  variable_BITMAP: "Bitmap (LED-Matrix)",
   variables_TEXT: "Text (string)",
   variables_ARRAY: "Array (array)",
   variables_CHARACTER: "Buchstabe (char)",
@@ -100,7 +103,10 @@ export const UI = {
   messages_GET_TUTORIAL_FAIL: "Zurück zur Tutorials-Übersicht",
   messages_LOGIN_FAIL: "Der Benutzername oder das Passwort ist nicht korrekt.",
   messages_copy_code: "Code wurde in die Zwischenablage kopiert",
-
+  messages_reserve_word:
+    "ist ein reserviertes Wort und kann nicht als Variablenname verwendet werden",
+  messages_invalid_variable_name:
+    "Der Variablenname ist ungültig. Verwende nur Buchstaben, Zahlen und Unterstriche.",
   /**
    * Tablet Dialog
    */
@@ -222,7 +228,7 @@ export const UI = {
     "Geben die URL des Compilers ein, den du verwenden möchten. Die Standard-URL ist: https://compiler.sensebox.de",
   settings_compiler_helperText:
     "Die URL muss mit https:// oder http:// beginnen",
-    settings_compiler_readOnly: "Compiler URL ändern",
+  settings_compiler_readOnly: "Compiler URL ändern",
 
   /**
    * 404
@@ -340,7 +346,7 @@ export const UI = {
   suggestion_pre_text: "Versuch es mal mit: ",
 
   display_not_declared:
-    "Stelle sicher, dasss du das Display im Setup initialisiert hast.",
+    "Stelle sicher, dass du das Display im Setup initialisiert hast.",
   variable_redeclared:
     "Stelle sicher, dass du keine Sonderzeichen in deinen Variablennamen verwendest. Dazu gehören z.B. Leerzeichen, Sternchen oder Anführungszeichen.",
 
@@ -376,4 +382,27 @@ export const UI = {
   sensorinfo_lifetime: "Lebensdauer",
   sensorinfo_explanation:
     "Diese Informationen wurden aus [sensors.wiki](https://sensors.wiki) entnommen. Für weitere Informationen besuchen Sie den Abschnitt über diesen Sensor ",
+
+  /**
+   * Compilation dialog
+   * */
+  compile_overlay_compile: "Code wird kompiliert...",
+  compile_overlay_download: "Bereite den Download vor...",
+  compile_overlay_transfer: "Datei auf die senseBox übertragen",
+  compile_overlay_error: "Ein Fehler ist aufgetreten",
+  compile_overlay_app_transfer: "Übertrage die Datei auf die senseBox",
+  compile_overlay_code_compiled: "Code wurde kompiliert!",
+  compile_overlay_start_transfer: "Starte die Übertragung",
+  compile_overlay_close: "Schließen",
+  compile_overlay_head: "Dein Programm wird nun kompiliert und heruntergeladen",
+  compile_overlay_text: "Kopiere es anschließend auf deine senseBox ",
+  compile_overlay_help: " Benötigst du mehr Hilfe? Dann schaue hier: ",
+  compile: "Kompilieren",
+  download: "Herunterladen",
+  transfer: "Übertragen",
+  dialog_close: "Zurück zu Blockly",
+  goToApp: "Gehe zur Connect App",
+  goToApp_text:
+    "Der Code wurde erfolgreich kompiliert! Klicke den unteren Button um zur senseBox:connect App zu gelangen und die Übertragung des Sketches fertigzustellen!",
+  goToApp_title: "Over-The-Air Übertragung",
 };

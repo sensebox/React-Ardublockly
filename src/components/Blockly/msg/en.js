@@ -16,6 +16,7 @@ import { RTC } from "./en/sensebox-rtc";
 import { NTP } from "./en/sensebox-ntp";
 import { SD } from "./en/sensebox-sd";
 import { SENSORS } from "./en/sensebox-sensors";
+import { SOLAR } from "./en/sensebox-solar";
 import { TELEGRAM } from "./en/sensebox-telegram";
 import { WEB } from "./en/sensebox-web";
 import { ESP_NOW } from "./en/sensebox-esp-now";
@@ -45,6 +46,7 @@ export const En = {
   ...NTP,
   ...SD,
   ...SENSORS,
+  ...SOLAR,
   ...SENSEBOX,
   ...TELEGRAM,
   ...WEB,

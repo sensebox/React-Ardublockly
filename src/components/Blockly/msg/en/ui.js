@@ -8,6 +8,7 @@ export const UI = {
   toolbox_math: "Math",
   toolbox_io: "Input/Output",
   toolbox_time: "Time",
+  toolbox_time_control: "Time control",
   toolbox_rtc: "RTC",
   toolbox_ntp: "NTP",
   toolbox_functions: "Functions",
@@ -23,6 +24,7 @@ export const UI = {
   variable_SHORT_NUMBER: "char",
   variable_LONG: "Big number (long)",
   variable_DECIMAL: "Decimal (float)",
+  variable_BITMAP: "Bitmap (LED-Matrix)",
   variables_TEXT: "Text (string)",
   variables_ARRAY: "Array (array)",
   variables_CHARACTER: "Character (char)",
@@ -98,6 +100,10 @@ export const UI = {
   messages_LOGIN_FAIL: "The username or password is incorrect.",
   messages_login_error: "Enter both a username and a password.",
   messages_copy_code: "Copy code to clipboard succesfull",
+  messages_reserve_word:
+    "is a reserved word and cannot be used as a variable name.",
+  messages_invalid_variable_name:
+    "Invalid variable name, only letters, numbers and underscores are allowed.",
 
   /**
    * Tablet Dialog
@@ -321,6 +327,7 @@ export const UI = {
   tooltip_moreInformation_02: "Information about the Block",
   tooltip_hint: "Select a Block to show the hint",
 
+  // path: src/components/Blockly/msg/en/ui.js
   /**
    * IDEDrawer
    */
@@ -369,4 +376,27 @@ export const UI = {
   sensorinfo_lifetime: "Lifetime",
   sensorinfo_explanation:
     "This information was fetched from [sensors.wiki](https://sensors.wiki). For more information visit the section on this sensor ",
+
+  /**
+   * Compile Dialog
+   */
+  compile_overlay_compile: "Compilation in progress...",
+  compile_overlay_download: "Preparing download...",
+  compile_overlay_transfer: "Transfer the file to your senseBox",
+  compile_overlay_error: "An error has occurred",
+  compile_overlay_app_transfer: "Preparing app transfer...",
+  compile_overlay_code_compiled: "Code successfully compiled!",
+  compile_overlay_start_transfer: "Start transfer",
+  compile_overlay_close: "Close",
+  compile_overlay_head: "Your program is now compiled and downloaded",
+  compile_overlay_text: "Then copy it to your senseBox MCU",
+  compile_overlay_help: "You need help? Have a look here: ",
+  compile: "Compile",
+  download: "Download",
+  transfer: "Transfer",
+  dialog_close: "Back to Blockly",
+  goToApp: "Go to the Connect App",
+  goToApp_text:
+    "The code has been compiled successfully. Start with the transfer by clicking on the button below, redirecting you to the senseBox:connect App ! ",
+  goToApp_title: "Over-The-Air Transfer",
 };
