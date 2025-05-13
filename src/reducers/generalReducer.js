@@ -34,7 +34,7 @@ const initialSounds = () => {
   }
 };
 
-const getPlatform = () => {
+export const getPlatform = () => {
   if (window.localStorage.getItem("platform")) {
     return JSON.parse(window.localStorage.getItem("platform"));
   }

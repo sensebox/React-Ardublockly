@@ -43,7 +43,7 @@ export const SENSORS = {
   senseBox_temp_hum_tooltip:
     "Dieser Block gibt dir die Messwerte des Temperatur- und Luftfeuchtigkeitssensor zurück. Schließe den Sensor an einen der I2C Anschlüsse an. Messwert wird mit 2 Nachkommastellen ausgegeben.",
   senseBox_temp_hum_helpurl:
-    "https://docs.sensebox.de/hardware/sensoren-temperatur-luftfeuchte/",
+    "https://docs.sensebox.de/hardware/sensoren-temperatur-luftfeuchte",
 
   /**
    * Ultraschalldistanzsensor
@@ -134,10 +134,24 @@ Wenn die maximale Distanz überschritten wird, wird ein Wert von **O** ausgegebe
     "Schließe den Sensor an einen der **Digital/Analog Ports** an. Der Sensor gibt dir den Messwert in dB mit einer Nachkommastelle",
   senseBox_soundsensor_dfrobot_helpurl:
     "https://docs.sensebox.de/hardware/sensoren-lautstaerke/",
+
+  /*
+   * rg15 rainsensor
+   */
+  sensebox_rg15_rainsensor: "Regensensor (RG-15)",
+  sensebox_rg15_rainsensor_port: "Serieller Port:",
+  sensebox_rg15_rainsensor_value: "Messwert:",
+  sensebox_rg15_rainsensor_totalAcc: "gesamter Niederschlag in mm",
+  sensebox_rg15_rainsensor_rainInt: "Niederschlagsintensität in mm/h",
+  sensebox_rg15_rainsensor_eventAcc: "Niederschlag pro Event in mm",
+  sensebox_rg15_rainsensor_acc: "Niederschlag seit letzter Messung in mm",
+  sensebox_rg15_rainsensor_tooltip:
+    "Regensensor (RG-15) an einen der Seriellen Ports anschließen.",
+  sensebox_rg15_rainsensor_helpurl: "https://rainsensors.com/products/rg-15/",
+
   /*
    * BME680
    */
-
   senseBox_bme680: "Umweltsensor (BME680)",
   senseBox_bme_iaq: "Innenraumluftqualität (IAQ)",
   senseBox_bme_iaq_accuracy: "Kalibrierungswert",
@@ -172,7 +186,7 @@ Die Messwerte für Temperatur, Luftfeuchtigkeit und Luftdruck können direkt ver
   senseBox_scd_tooltip:
     "Schließe den Sensor an einen der **I2C-Anschlüsse** an. Der Sensor gibt dir den Messwert für die CO2-Konzentration in ppm. Der Temperaturmesswert kann aufgrund der Messung direkt am Sensor um einige Grad vom realen Wert abweichen.",
   senseBox_scd_co2: "CO2 in ppm",
-  senseBox_scd_helpurl: "https://docs.sensebox.de/hardware/sensoren-co2/",
+  senseBox_scd_helpurl: "https://docs.sensebox.de/hardware/sensoren-co2",
 
   /**
    * Feinstaubsensor (SDS011)
@@ -187,7 +201,7 @@ Die Messwerte für Temperatur, Luftfeuchtigkeit und Luftdruck können direkt ver
   senseBox_sds011_serial1: "Serial1",
   senseBox_sds011_serial2: "Serial2",
   senseBox_sds011_helpurl:
-    "https://docs.sensebox.de/docs/hardware/sensors/feinstaub-sds011/",
+    "https://docs.sensebox.de/docs/hardware/sensors/feinstaub-sds011",
 
   /**
    * Button
@@ -217,7 +231,7 @@ Die Messwerte für Temperatur, Luftfeuchtigkeit und Luftdruck können direkt ver
   senseBox_sps30_tooltip:
     "Dieser Block gibt dir den Messwert des Sensirion SPS30 Feinstaubsensor. Schließe den Feinstaubsensor an einen der **I2C** Anschlüssen an. Im Dropdown Menü zwischen PM1.0, PM2.5, PM4.0 und PM10 auswählen. Der Messwert wird dir als **Kommazahl** in µg/m3",
   senseBox_sps30_helpurl:
-    "https://docs.sensebox.de/docs/hardware/sensors/feinstaub-sps30/",
+    "https://docs.sensebox.de/docs/hardware/sensors/feinstaub-sps30",
 
   /**
    * Photodiode MCUS2(ESP32)
@@ -228,6 +242,11 @@ Die Messwerte für Temperatur, Luftfeuchtigkeit und Luftdruck können direkt ver
     "Die Photodiode misst Lichtintensität. Der ausgegebene Wert ist eine **Ganzzahl** zwischen 0 und 4095. Je höher der Wert, desto heller ist die Umgebung.",
   senseBox_esp32_photodiode_helpurl:
     "https://docs.sensebox.de/docs/hardware/sensors/photodiode",
+  /**
+   * MPU6050 */
+  senseBox_mpu6050_tooltip:
+    "Der MPU6050 ist ein Beschleunigungs- und Gyroskopsensor. Schließe den Sensor an einen der I2C Anschlüsse an. Der Sensor gibt dir die Beschleunigung in m/s² und die Winkelgeschwindigkeit in °/s zurück.",
+  senseBox_mpu6050_helpurl: "https://docs.sensebox.de/docs/hardware/sensors/mpu6050",
 
   /**
    * MPU6050 */
@@ -249,9 +268,9 @@ Die Messwerte für Temperatur, Luftfeuchtigkeit und Luftdruck können direkt ver
   sensebox_tof_imager_max_distance_unit: "cm",
   sensebox_tof_imager_helpurl:
     "https://docs.sensebox.de/docs/hardware/sensors/tof",
-
   /**
    * ICM Accel/Gyro
    */
   senseBox_icm20948: "Beschleunigungs-/Gyroskopsensor (ICM20948)",
+
 };
