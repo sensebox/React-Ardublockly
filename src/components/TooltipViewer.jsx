@@ -29,7 +29,6 @@ class TooltipViewer extends Component {
     this.state = {
       open: false,
     };
-    console.log("TooltipViewer constructor", props);
   }
 
   toggleDialog = () => {

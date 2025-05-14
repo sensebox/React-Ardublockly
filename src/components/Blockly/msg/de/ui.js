@@ -366,6 +366,7 @@ export const UI = {
   codeeditor_libraries_head: "Installierte Arduino Libraries",
   codeeditor_libraries_text:
     "Unten stehen alle Arduino Libraries, welche auf dem Compiler installiert sind. Klicke auf eine Library um mehr Informationen zu erhalten.",
+  codeeditor_compile_code: "Code kompilieren",
   codeeditor_save_code: "Code herunterladen",
   codeeditor_open_code: "Code öffnen",
   codeeditor_reset_code: "Code zurücksetzen",
