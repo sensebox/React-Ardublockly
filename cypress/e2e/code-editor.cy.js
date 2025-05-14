@@ -13,7 +13,7 @@ describe("Code Editor Page Tests", () => {
   it("[CodeEditor] compiles code", () => {
     cy.visit("/codeeditor");
     cy.get('img[alt="Sensebox ESP"]').click();
-    cy.get("button").contains("Kompilieren").click();
+    cy.get("#compile").click();
   });
 
   it("[CodeEditor] opens reset dialog", () => {

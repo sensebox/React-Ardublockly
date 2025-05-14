@@ -215,6 +215,7 @@ void loop() {
         <Grid item lg={4} md={4}>
           <Button
             style={{ padding: "1rem", margin: "1rem" }}
+            id="compile"
             variant="contained"
             color="primary"
             onClick={handleDialogOpen}
