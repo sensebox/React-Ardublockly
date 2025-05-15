@@ -13,6 +13,7 @@ import SaveIcon from "./SaveIcon";
 import store from "../../store";
 import DeviceSelection from "../DeviceSelection";
 import { useSelector } from "react-redux";
+import CompilationDialog from "../Workspace/CompilationDialog";
 
 const CodeEditor = () => {
   //const [filehandle, setFileHandle] = useState();
@@ -27,46 +28,27 @@ const CodeEditor = () => {
   const [value, setValue] = useState("");
   const [resetDialog, setResetDialog] = useState(false);
   const compilerUrl = useSelector((state) => state.general.compiler);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
-  const compile = () => {
-    setProgress(true);
-    const data = {
-      board:
-        store.getState().board.board === "mcu" ||
-        store.getState().board.board === "mini"
-          ? "sensebox-mcu"
-          : "sensebox-esp32s2",
-      sketch: editorRef.current.getValue(),
-    };
-    fetch(`${compilerUrl}/compile`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.code === "Internal Server Error") {
-          setProgress(false);
-          setOpen(true);
-          setError(data.message);
-        }
-        setProgress(false);
-        const result = data.data.id;
-        //setId(result);
-        const filename = "sketch";
-        window.open(
-          `${compilerUrl}/download?id=${result}&board=${
-            store.getState().board.board === "mcu"
-              ? "sensebox-mcu"
-              : "sensebox-esp32s2"
-          }&filename=${filename}`,
-          "_self",
-        );
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const handleDialogOpen = () => {
+    setDialogOpen(true);
   };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
+
+  const selectedBoard = store.getState().board.board;
+  const filename = "sketch";
+  const baseCode = `
+${selectedBoard === "mcu" || selectedBoard === "mini" ? "#include <senseBoxIO.h>" : ""}    
+void setup () {
+             
+}
+              
+void loop() {
+              
+}`;
 
   const saveIno = () => {
     var filename = "sketch";
@@ -98,17 +80,8 @@ const CodeEditor = () => {
   };
 
   const resetCode = () => {
-    const resetCode = `
-#include <senseBoxIO.h> //needs to be always included
-    
-void setup () {
-             
-}
-              
-void loop() {
-              
-}`;
-    editorRef.current.setValue(resetCode);
+    editorRef.current.setValue(baseCode);
+    formatCode();
   };
 
   const resetTimeout = (id, newID) => {
@@ -229,15 +202,7 @@ void loop() {
             defaultValue={
               localStorage.getItem("ArduinoCode")
                 ? localStorage.getItem("ArduinoCode")
-                : `#include <senseBoxIO.h> //needs to be always included
-      
-void setup () {
-                              
-}
-             
-void loop() {
-                               
-}`
+                : baseCode
             }
             value={fileContent}
             onMount={(editor, monaco) => {
@@ -250,12 +215,20 @@ void loop() {
         <Grid item lg={4} md={4}>
           <Button
             style={{ padding: "1rem", margin: "1rem" }}
+            id="compile"
             variant="contained"
             color="primary"
-            onClick={() => compile()}
+            onClick={handleDialogOpen}
           >
-            Kompilieren
+            {Blockly.Msg.codeeditor_compile_code}
           </Button>
+          <CompilationDialog
+            open={dialogOpen}
+            onClose={handleDialogClose}
+            selectedBoard={selectedBoard}
+            code={editorRef.current?.getValue() || ""}
+            filename={filename}
+          />
           <Button
             style={{ padding: "1rem", margin: "1rem" }}
             variant="contained"
