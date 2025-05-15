@@ -113,7 +113,11 @@ Blockly.Generator.Arduino.forBlock["sensebox_display_show"] = function (
   generator,
 ) {
   var show = Blockly.Generator.Arduino.statementToCode(block, "SHOW");
-  var code = "";
+  var code = "#if ROBOEYES\n";
+  code += "if(roboEyesTaskHandle && roboEyesTaskHandle!=NULL){\n";
+  code += "endRoboEyesTask();\n";
+  code += "}\n";
+  code += "#endif\n";
   code += show;
   code += "display.display();\n";
   return code;
@@ -220,24 +224,52 @@ Blockly.Generator.Arduino.forBlock["sensebox_display_plotDisplay"] =
     return code;
   };
 
-  Blockly.Generator.Arduino.forBlock["sensebox_display_roboeyes"] =
-  function () {
-    Blockly.Generator.Arduino.definitions_["define_roboeyes"] = 
+Blockly.Generator.Arduino.forBlock["sensebox_display_roboeyes"] = function () {
+  Blockly.Generator.Arduino.definitions_["define_roboeyes"] =
     "#include <FluxGarage_RoboEyes.h>\n" +
-    "roboEyes roboEyes;\n";
-    Blockly.Generator.Arduino.setupCode_["sensebox_roboeye_setup"] = 
+    "#define ROBOEYES true\n" +
+    "roboEyes roboEyes;\n\n" +
+    "void updateRoboEyes(void *param) {\n" +
+    "while (true) {\n" +
+    "roboEyes.update();\n" +
+    "delay(20);\n" +
+    "}\n" +
+    "}\n" +
+    "TaskHandle_t roboEyesTaskHandle = NULL;\n" +
+    "void startRoboEyesTask() {\n" +
+    "  if(roboEyesTaskHandle == NULL){\n" +
+    "    xTaskCreate(\n" +
+    "    updateRoboEyes,\n" +
+    '    "updateRoboEyes",\n' +
+    "    900,\n" +
+    "    NULL,\n" +
+    "    1,\n" +
+    "    &roboEyesTaskHandle);\n" +
+    " }\n" +
+    "}\n" +
+    "void endRoboEyesTask() {\n" +
+    "  if(roboEyesTaskHandle!=NULL){\n" +
+    "    vTaskDelete( roboEyesTaskHandle );\n" +
+    "    display.clearDisplay();\n" +
+    "    roboEyesTaskHandle = NULL;\n" +
+    " }\n" +
+    "}\n";
+  Blockly.Generator.Arduino.setupCode_["sensebox_roboeye_setup"] =
     "roboEyes.begin(SCREEN_WIDTH, SCREEN_HEIGHT, 100);\n";
-    let code = "";
-    var position = this.getFieldValue("POSITION") || "DEFAULT";
-    code += "roboEyes.setPosition(" + position + ");\n";
-    var emotion = this.getFieldValue("EMOTION") || "DEFAULT";
-    code += "roboEyes.setMood(" + emotion + ");\n";
-    code += "roboEyes.drawEyes();\n" +
-    "roboEyes.drawEyes();\n" +
-    "roboEyes.drawEyes();\n" +
-    "roboEyes.drawEyes();\n";
-    return code;
-  };
+  let code = "";
+  var position = this.getFieldValue("POSITION") || "DEFAULT";
+  code += "roboEyes.setPosition(" + position + ");\n";
+  var emotion = this.getFieldValue("EMOTION") || "DEFAULT";
+  code += "roboEyes.setMood(" + emotion + ");\n";
+  var blink = this.getFieldValue("BLINK");
+  if (blink === "TRUE") {
+    code += "roboEyes.setAutoblinker(ON, 3, 2);\n";
+  } else {
+    code += "roboEyes.setAutoblinker(OFF);\n";
+  }
+  code += "startRoboEyesTask();\n";
+  return code;
+};
 
 Blockly.Generator.Arduino.forBlock["sensebox_display_fillCircle"] =
   function () {
