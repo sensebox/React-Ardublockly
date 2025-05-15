@@ -41,7 +41,7 @@ export const SENSORS = {
   senseBox_temp_hum_tooltip:
     "This block returns the temperature and humidity sensor readings. Connect the sensor to one of the I2C ports. Measured value is output with 2 decimal places.",
   senseBox_temp_hum_helpurl:
-    "https://docs.sensebox.de/en/hardware/sensoren-temperatur-luftfeuchte/",
+    "https://docs.sensebox.de/en/hardware/sensoren-temperatur-luftfeuchte",
   senseBox_hum: "humidity in %",
   senseBox_hum_tip: "Measures humidity in %",
 
@@ -133,6 +133,22 @@ If the max distance is reached the a value of **O** will be returned`,
     "Connect the sensor to one of the **digital/analog ports**. The sensor will give you the reading in dB with one decimal.",
   senseBox_soundsensor_dfrobot_helpurl:
     "https://docs.sensebox.de/en/hardware/sensoren-lautstaerke/",
+
+  /*
+   * rg15 rainsensor
+   */
+  sensebox_rg15_rainsensor: "Rainsensor (RG-15)",
+  sensebox_rg15_rainsensor_port: "Serial Port:",
+  sensebox_rg15_rainsensor_serial1: "Serial1",
+  sensebox_rg15_rainsensor_serial2: "Serial2",
+  sensebox_rg15_rainsensor_value: "value:",
+  sensebox_rg15_rainsensor_totalAcc: "total Accumulation in mm",
+  sensebox_rg15_rainsensor_rainInt: "Rainfall Intensity in mm/h",
+  sensebox_rg15_rainsensor_eventAcc: "Accumulation per Event in mm",
+  sensebox_rg15_rainsensor_acc: "Accumulation since last loop in mm",
+  sensebox_rg15_rainsensor_tooltip:
+    "Connect Rainsensor (RG-15) to one of the Serial ports.",
+  sensebox_rg15_rainsensor_helpurl: "https://rainsensors.com/products/rg-15/",
 
   /*
    * BME680
@@ -231,6 +247,8 @@ The measured values for temperature, humidity and air pressure can be used direc
   senseBox_esp32_photodiode: "Light intensity",
   senseBox_esp32_photodiode_tooltip:
     "The photodiode measures light intensity in a range from 0 to 4095. The brighter the environment, the higher the value.",
+  senseBox_esp32_photodiode_helpurl:
+    "https://docs.sensebox.de/en/docs/hardware/sensors/photodiode",
 
   /**
    * ToF Imager
@@ -243,4 +261,9 @@ The measured values for temperature, humidity and air pressure can be used direc
   sensebox_distance_bitmap: "8x8 distances as bitmap (for LED-Matrix)",
   sensebox_tof_imager_max_distance: "Maximum measurable distance ",
   sensebox_tof_imager_max_distance_unit: "cm",
+
+  /**
+   * ICM Accel/Gyro
+   */
+  senseBox_icm20948: "Accelerometer/Gyroscope (ICM20948)",
 };

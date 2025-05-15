@@ -23,7 +23,7 @@ const initialPlatform = () => {
 };
 
 const initialCompiler = () => {
-  return process.env.INITIAL_COMPILER_URL;
+  return import.meta.env.INITIAL_COMPILER_URL;
 };
 
 const initialSounds = () => {
@@ -34,7 +34,7 @@ const initialSounds = () => {
   }
 };
 
-const getPlatform = () => {
+export const getPlatform = () => {
   if (window.localStorage.getItem("platform")) {
     return JSON.parse(window.localStorage.getItem("platform"));
   }
