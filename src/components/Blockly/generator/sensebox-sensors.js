@@ -272,13 +272,13 @@ Blockly.Generator.Arduino.forBlock["sensebox_sensor_bme680_bsec"] =
     digitalWrite(LED_BUILTIN, LOW);
     delay(100);
   }`;
-  //Setup Code
-  Blockly.Generator.Arduino.preSetupCode_["Wire.begin"] = "Wire.begin();";
-  Blockly.Generator.Arduino.setupCode_["iaqSensor.begin"] =
-    "iaqSensor.begin(BME68X_I2C_ADDR_LOW, Wire);";
-  Blockly.Generator.Arduino.setupCode_["checkIaqSensorStatus"] =
-    "checkIaqSensorStatus();";
-  Blockly.Generator.Arduino.setupCode_["bsec_sensorlist"] = `
+    //Setup Code
+    Blockly.Generator.Arduino.preSetupCode_["Wire.begin"] = "Wire.begin();";
+    Blockly.Generator.Arduino.setupCode_["iaqSensor.begin"] =
+      "iaqSensor.begin(BME68X_I2C_ADDR_LOW, Wire);";
+    Blockly.Generator.Arduino.setupCode_["checkIaqSensorStatus"] =
+      "checkIaqSensorStatus();";
+    Blockly.Generator.Arduino.setupCode_["bsec_sensorlist"] = `
 bsec_virtual_sensor_t sensorList[13] = {
     BSEC_OUTPUT_IAQ,
     BSEC_OUTPUT_STATIC_IAQ,
@@ -381,7 +381,8 @@ Blockly.Generator.Arduino.forBlock["sensebox_tof_imager"] = function () {
     `;
 
   Blockly.Generator.Arduino.preSetupCode_["Wire.begin"] = "Wire.begin();";
-  Blockly.Generator.Arduino.preSetupCode_["vl53l8cx_clock_address"] = `sensor_vl53l8cx.set_i2c_address(0x51); // need to change address, because default address is shared with other sensor`;
+  Blockly.Generator.Arduino.preSetupCode_["vl53l8cx_clock_address"] =
+    `sensor_vl53l8cx.set_i2c_address(0x51); // need to change address, because default address is shared with other sensor`;
 
   Blockly.Generator.Arduino.setupCode_["setup_vl53l8cx"] = `
   Wire.setClock(1000000); // vl53l8cx can operate at 1MHz
@@ -917,6 +918,26 @@ Blockly.Generator.Arduino.forBlock["sensebox_soundsensor_dfrobot"] =
   };
 
 /**
+ * rg15 rainsensor
+ */
+
+Blockly.Generator.Arduino.forBlock["sensebox_rg15_rainsensor"] = function () {
+  var port = this.getFieldValue("SERIAL");
+  var value = this.getFieldValue("VALUE");
+  Blockly.Generator.Arduino.libraries_["library_rg15"] = "#include <RG15.h>";
+  Blockly.Generator.Arduino.definitions_["def_rg15_rainsensor_" + port] =
+    "RG15 rg15_" + port + "(" + port + ");";
+  Blockly.Generator.Arduino.setupCode_["setup_rg15_rainsensor_" + port] = `
+    rg15_${port}.begin();
+    rg15_${port}.resetAccumulation();`;
+  Blockly.Generator.Arduino.loopCodeOnce_["loop_rg15_rainsensor_" + port] =
+    "rg15_" + port + ".poll();";
+
+  var code = "rg15_" + port + "." + value + "()";
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
+};
+
+/**
  * Infineon DPS310 Pressure Sensor
  *
  */
@@ -1132,3 +1153,65 @@ Blockly.Generator.Arduino.forBlock["sensebox_sensor_truebner_smt50_esp32"] =
       return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
     }
   };
+
+Blockly.Generator.Arduino.forBlock["sensebox_sensor_icm20948"] = function () {
+  var code = "";
+  var dropdown = this.getFieldValue("VALUE");
+  var range = this.getFieldValue("RANGE");
+  Blockly.Generator.Arduino.libraries_["icm20X_lib"] =
+    `#include <Adafruit_ICM20X.h>`;
+  Blockly.Generator.Arduino.libraries_["icm20948_lib"] =
+    `#include <Adafruit_ICM20948.h>`;
+  Blockly.Generator.Arduino.libraries_["Adafruit_Sensor"] =
+    `#include <Adafruit_Sensor.h>`;
+  Blockly.Generator.Arduino.libraries_["library_wire"] = `#include <Wire.h>`;
+  Blockly.Generator.Arduino.definitions_["define_sensor_events"] =
+    "sensors_event_t accel, gyro, mag, temp;";
+  Blockly.Generator.Arduino.definitions_["define_Adafruit_icm20948"] =
+    "Adafruit_ICM20948 icm;";
+  Blockly.Generator.Arduino.definitions_["measurement_delay"] =
+    "uint16_t measurement_delay_us = 65535; // Delay between measurements for testing";
+  Blockly.Generator.Arduino.setupCode_["icm.begin()"] =
+    "icm.begin_I2C(0x68, &Wire1);";
+  switch (range) {
+    case "2G":
+      Blockly.Generator.Arduino.setupCode_["icm.setAccelerometerRange()"] =
+        "icm.setAccelRange(ICM20948_ACCEL_RANGE_2_G);";
+      break;
+    case "4G":
+      Blockly.Generator.Arduino.setupCode_["icm.setAccelerometerRange()"] =
+        "icm.setAccelRange(ICM20948_ACCEL_RANGE_4_G);";
+      break;
+    case "8g":
+      Blockly.Generator.Arduino.setupCode_["icm.setAccelerometerRange()"] =
+        "icm.setAccelRange(ICM20948_ACCEL_RANGE_8_G);";
+      break;
+    case "16G":
+      Blockly.Generator.Arduino.setupCode_["icm.setAccelerometerRange()"] =
+        "icm.setAccelRange(ICM20948_ACCEL_RANGE_16_G);";
+      break;
+    default:
+      Blockly.Generator.Arduino.setupCode_["icm.setAccelerometerRange()"] =
+        "icm.setAccelRange(ICM20948_ACCEL_RANGE_2_G);";
+  }
+
+  Blockly.Generator.Arduino.loopCodeOnce_["icm.getEvent"] =
+    "  icm.getEvent(&accel, &gyro, &temp, &mag);";
+
+  console.log("dropdwon", dropdown);
+  switch (dropdown) {
+    case "accelerationX":
+      code = "accel.acceleration.x";
+      break;
+    case "accelerationY":
+      code = "accel.acceleration.y";
+      break;
+    case "accelerationZ":
+      code = "accel.acceleration.z";
+      break;
+    default:
+      code = "";
+  }
+
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
+};
