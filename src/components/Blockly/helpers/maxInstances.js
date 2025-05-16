@@ -18,6 +18,7 @@ const maxInstances = {
   sensebox_phyphox_experiment: 1,
   sensebox_phyphox_experiment_send: 1,
   sensebox_ethernet: 1,
+  arduino_functions: 1,
 };
 
 const maxInstancesEsp = {
@@ -33,6 +34,7 @@ const maxInstancesEsp = {
   sensebox_phyphox_experiment: 1,
   sensebox_phyphox_experiment_send: 1,
   sensebox_ethernet: 0,
+  arduino_functions: 1,
 };
 
 export const getMaxInstances = () => {
