@@ -416,4 +416,11 @@ export const UI = {
   goToApp_text:
     "Der Code wurde erfolgreich kompiliert! Klicke den unteren Button um zur senseBox:connect App zu gelangen und die Übertragung des Sketches fertigzustellen!",
   goToApp_title: "Over-The-Air Übertragung",
+
+  // Backpack translations
+  EMPTY_BACKPACK: "Rucksack leeren",
+  REMOVE_FROM_BACKPACK: "Entfernen aus Rucksack",
+  COPY_TO_BACKPACK: "Kopieren in Rucksack",
+  COPY_ALL_TO_BACKPACK: "Alle Blöcke in Rucksack kopieren",
+  PASTE_ALL_FROM_BACKPACK: "Alle Blöcke aus Rucksack einfügen",
 };

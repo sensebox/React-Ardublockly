@@ -30,39 +30,22 @@ Blockly.Blocks["arduino_functions"] = {
     this.setHelpUrl("https://arduino.cc/en/Reference/Loop");
     this.contextMenu = false;
     this.data = board;
-    
-    
-    this.isBackpackable = function() {
-      return false;
-    };
 
-    this.onDragStart = function() {
-      return false;
-    };
-    
-    this.isDeletable = function() {
-      return false;
-    };
-    
-    this.isDuplicatable = function() {
-      return false;
-    };
-    
-    this.isCopyable = function() {
-      return false;
-    };
-    
-    this.isPasteable = function() {
-      return false;
-    };
-    
-    this.isMovable = function() {
-      return false;
-    };
-    
-    this.isEditable = function() {
-      return false;
-    };
+    this.isBackpackable = false;
+
+    this.onDragStart = false;
+
+    this.isDeletable = false;
+
+    this.isDuplicatable = false;
+
+    this.isCopyable = false;
+
+    this.isPasteable = false;
+
+    this.isMovable = false;
+
+    this.isEditable = false;
   },
   /** @return {!boolean} True if the block instance is in the workspace. */
   getArduinoLoopsInstance: function () {
