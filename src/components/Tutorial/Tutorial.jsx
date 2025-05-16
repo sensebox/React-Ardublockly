@@ -29,6 +29,7 @@ class Tutorial extends Component {
     this.props.tutorialProgress();
     // retrieve tutorial only if a potential user is loaded - authentication
     // is finished (success or failed)
+    console.log(this.props);
     if (!this.props.progress) {
       this.props.getTutorial(this.props.match.params.tutorialId);
     }

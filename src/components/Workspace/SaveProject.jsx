@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { updateProject, setDescription } from "../../actions/projectActions";
+import { postClassroomProject } from "../../actions/classroomActions";
 
 import axios from "axios";
 import { withRouter } from "react-router-dom";
@@ -19,6 +20,7 @@ import MenuItem from "@mui/material/MenuItem";
 
 import { faSave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import api from "../../utils/axiosConfig";
 
 import * as Blockly from "blockly/core";
 
@@ -54,14 +56,14 @@ class SaveProject extends Component {
     };
   }
 
-  componentDidUpdate(props) {
-    if (props.projectType !== this.props.projectType) {
+  componentDidUpdate(prevProps) {
+    if (prevProps.projectType !== this.props.projectType) {
       this.setState({ projectType: this.props.projectType });
     }
-    if (props.description !== this.props.description) {
+    if (prevProps.description !== this.props.description) {
       this.setState({ description: this.props.description });
     }
-    if (this.props.message !== props.message) {
+    if (this.props.message !== prevProps.message) {
       if (this.props.message.id === "PROJECT_UPDATE_SUCCESS") {
         this.setState({
           snackbar: true,
@@ -90,57 +92,79 @@ class SaveProject extends Component {
           message: Blockly.Msg.messages_GALLERY_UPDATE_FAIL,
           type: "error",
         });
+      } else if (this.props.message.id === "SAVE_CLASSROOM_PROJECT_SUCCESS") {
+        this.setState({
+          snackbar: true,
+          key: Date.now(),
+          message: "Classroom project saved successfully",
+          type: "success",
+        });
+      } else if (this.props.message.id === "SAVE_CLASSROOM_PROJECT_FAIL") {
+        this.setState({
+          snackbar: true,
+          key: Date.now(),
+          message: "Failed to save classroom project",
+          type: "error",
+        });
       }
     }
   }
 
   toggleMenu = (e) => {
-    this.setState({
-      menuOpen: !this.state.menuOpen,
-      anchor: e.currentTarget,
-    });
+    this.setState({ menuOpen: !this.state.menuOpen, anchor: e.currentTarget });
   };
 
   toggleDialog = () => {
-    this.setState({ open: !this.state, title: "", content: "" });
+    this.setState({ open: !this.state.open, title: "", content: "" });
   };
 
   saveProject = () => {
-    var body = {
+    const { user, classroomUser } = this.props;
+    const projectData = {
       xml: this.props.xml,
       title: this.props.name,
     };
+
     if (this.state.projectType === "gallery") {
-      body.description = this.state.description;
+      projectData.description = this.state.description;
     }
-    const config = {
-      success: (res) => {
-        var project = res.data[this.state.projectType];
-        this.props.history.push(`/${this.state.projectType}/${project._id}`);
-      },
-      error: (err) => {
-        this.setState({
-          snackbar: true,
-          key: Date.now(),
-          message: `${Blockly.Msg.messages_gallery_save_fail_1} ${this.state.projectType === "gallery" ? "Galerie-" : ""} ${Blockly.Msg.messages_gallery_save_fail_2}`,
-          type: "error",
+
+    if (user && !classroomUser) {
+      const config = {
+        success: (res) => {
+          const project = res.data[this.state.projectType];
+          this.props.history.push(`/${this.state.projectType}/${project._id}`);
+        },
+        error: (err) => {
+          this.setState({
+            snackbar: true,
+            key: Date.now(),
+            message: `${Blockly.Msg.messages_gallery_save_fail_1} ${this.state.projectType === "gallery" ? "Galerie-" : ""} ${Blockly.Msg.messages_gallery_save_fail_2}`,
+            type: "error",
+          });
+          window.scrollTo(0, 0);
+        },
+      };
+      api 
+        .post(
+          `${import.meta.env.VITE_BLOCKLY_API}/${this.state.projectType}`,
+          projectData,
+          config,
+        )
+        .then((res) => {
+          res.config.success(res);
+        })
+        .catch((err) => {
+          err.config.error(err);
         });
+    } else if (classroomUser) {
+      projectData.nickname = classroomUser.nickname;
+      this.props.postClassroomProject(classroomUser.classroomId, projectData);
+    }
         window.scrollTo(0, 0);
-      },
+      }
     };
-    axios
-      .post(
-        `${import.meta.env.VITE_BLOCKLY_API}/${this.state.projectType}`,
-        body,
-        config,
-      )
-      .then((res) => {
-        res.config.success(res);
-      })
-      .catch((err) => {
-        err.config.error(err);
-      });
-  };
+  
 
   setDescription = (e) => {
     this.setState({ description: e.target.value });
@@ -165,7 +189,7 @@ class SaveProject extends Component {
           <IconButton
             className={this.props.classes.button}
             onClick={
-              this.props.user.blocklyRole !== "user" &&
+              !this.props.classroomUser &&
               (!this.props.project ||
                 this.props.user.email === this.props.project.creator)
                 ? (e) => this.toggleMenu(e)
@@ -296,16 +320,20 @@ class SaveProject extends Component {
       </div>
     );
   }
-}
+
+
+
 
 SaveProject.propTypes = {
   updateProject: PropTypes.func.isRequired,
   setDescription: PropTypes.func.isRequired,
+  postClassroomProject: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   xml: PropTypes.string.isRequired,
   message: PropTypes.object.isRequired,
   user: PropTypes.object,
+  classroomUser: PropTypes.object,
 };
 
 const mapStateToProps = (state) => ({
@@ -314,8 +342,11 @@ const mapStateToProps = (state) => ({
   xml: state.workspace.code.xml,
   message: state.message,
   user: state.auth.user,
+  classroomUser: state.classroomAuth?.classroomUser,
 });
 
-export default connect(mapStateToProps, { updateProject, setDescription })(
-  withStyles(styles, { withTheme: true })(withRouter(SaveProject)),
-);
+export default connect(mapStateToProps, {
+  updateProject,
+  setDescription,
+  postClassroomProject,
+})(withStyles(styles, { withTheme: true })(withRouter(SaveProject)));
