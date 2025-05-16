@@ -8,12 +8,13 @@ export const UI = {
   toolbox_math: "Math",
   toolbox_io: "Input/Output",
   toolbox_time: "Time",
+  toolbox_time_control: "Time control",
   toolbox_rtc: "RTC",
   toolbox_ntp: "NTP",
   toolbox_functions: "Functions",
   toolbox_variables: "Variables",
   toolbox_serial: "Serial",
-  toolbox_advanced: "Erweitert",
+  toolbox_advanced: "Advanced",
   toolbox_motors: "Motors",
   toolbox_label_externalRTC: "External RTC",
   toolbox_label_internalRTC: "Internal RTC",
@@ -23,6 +24,7 @@ export const UI = {
   variable_SHORT_NUMBER: "char",
   variable_LONG: "Big number (long)",
   variable_DECIMAL: "Decimal (float)",
+  variable_BITMAP: "Bitmap (LED-Matrix)",
   variables_TEXT: "Text (string)",
   variables_ARRAY: "Array (array)",
   variables_CHARACTER: "Character (char)",
@@ -98,6 +100,10 @@ export const UI = {
   messages_LOGIN_FAIL: "The username or password is incorrect.",
   messages_login_error: "Enter both a username and a password.",
   messages_copy_code: "Copy code to clipboard succesfull",
+  messages_reserve_word:
+    "is a reserved word and cannot be used as a variable name.",
+  messages_invalid_variable_name:
+    "Invalid variable name, only letters, numbers and underscores are allowed.",
 
   /**
    * Tablet Dialog
@@ -138,6 +144,17 @@ export const UI = {
   compiledialog_headline: "Error",
   compiledialog_text:
     "While compiling an error occured. Please check your blocks and try again",
+  compile_animation_downloads: "Downloads",
+  compile_animation_downloading: "Downloading...",
+  compile_animation_downloadComplete: "Download complete",
+  compile_animation_fileName: "sketch.bin",
+  dragdrop_icon_quickAccess: "Quick Access",
+  dragdrop_icon_desktop: "Desktop",
+  dragdrop_icon_downloads: "Downloads",
+  dragdrop_icon_documents: "Documents",
+  dragdrop_icon_pictures: "Pictures",
+  dragdrop_icon_sensebox: "SENSEBOX (E:)",
+  dragdrop_icon_fileName: "sketch.bin",
 
   /**
    * File Upload Dialog
@@ -215,6 +232,7 @@ export const UI = {
   settings_compiler_text:
     "Enter the URL of the compiler you want to use. The default compiler is: https://compiler.sensebox.de",
   settings_compiler_helperText: "Die URL must start https:// or http://",
+  settings_compiler_readOnly: "Change compiler URL",
 
   /**
    * 404
@@ -318,9 +336,11 @@ export const UI = {
    */
 
   tooltip_viewer: "Help",
-  tooltip_moreInformation: "More informations can be found ",
+  tooltip_moreInformation: "More information",
+  tooltip_moreInformation_02: "Information about the Block",
   tooltip_hint: "Select a Block to show the hint",
 
+  // path: src/components/Blockly/msg/en/ui.js
   /**
    * IDEDrawer
    */
@@ -332,7 +352,8 @@ export const UI = {
    * */
   codeeditor_libraries_head: "Installed Arduino Libraries",
   codeeditor_libraries_text:
-    "For documentation, view the installed libraries and their examples",
+    "Below are all arduino libraries which are installed on the compiler. You can use them in your code. For more information click on the library.",
+  codeeditor_compile_code: "Compile code",
   codeeditor_save_code: "Download code",
   codeeditor_open_code: "Open code",
   codeeditor_reset_code: "Reset code",
@@ -346,7 +367,8 @@ export const UI = {
 
   suggestion_pre_text: "Maybe you should try:",
   display_not_declared: "Initialise the display in the setup() function",
-  variable_redeclared: "Make sure that you do not use any special characters in your variable names. This includes spaces, asterisks or quotation marks.",
+  variable_redeclared:
+    "Make sure that you do not use any special characters in your variable names. This includes spaces, asterisks or quotation marks.",
   /**
    * Device Selection
    * */
@@ -368,4 +390,27 @@ export const UI = {
   sensorinfo_lifetime: "Lifetime",
   sensorinfo_explanation:
     "This information was fetched from [sensors.wiki](https://sensors.wiki). For more information visit the section on this sensor ",
+
+  /**
+   * Compile Dialog
+   */
+  compile_overlay_compile: "Compilation in progress...",
+  compile_overlay_download: "Preparing download...",
+  compile_overlay_transfer: "Transfer the file to your senseBox",
+  compile_overlay_error: "An error has occurred",
+  compile_overlay_app_transfer: "Preparing app transfer...",
+  compile_overlay_code_compiled: "Code successfully compiled!",
+  compile_overlay_start_transfer: "Start transfer",
+  compile_overlay_close: "Close",
+  compile_overlay_head: "Your program is now compiled and downloaded",
+  compile_overlay_text: "Then copy it to your senseBox MCU",
+  compile_overlay_help: "You need help? Have a look here: ",
+  compile: "Compile",
+  download: "Download",
+  transfer: "Transfer",
+  dialog_close: "Back to Blockly",
+  goToApp: "Go to the Connect App",
+  goToApp_text:
+    "The code has been compiled successfully. Start with the transfer by clicking on the button below, redirecting you to the senseBox:connect App ! ",
+  goToApp_title: "Over-The-Air Transfer",
 };

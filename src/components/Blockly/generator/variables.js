@@ -13,11 +13,6 @@ const setVariableFunction = function (defaultValue) {
     //   id,
     //   Blockly.Variables.NAME_TYPE
     // );
-    const variableValue = Blockly.Generator.Arduino.valueToCode(
-      block,
-      "VALUE",
-      Blockly.Generator.Arduino.ORDER_ATOMIC,
-    );
 
     const allVars = Blockly.getMainWorkspace()
       .getVariableMap()
@@ -25,16 +20,23 @@ const setVariableFunction = function (defaultValue) {
     const myVar = allVars.filter((v) => v.name === variableName)[0];
     var code = "";
     if (myVar !== undefined) {
-      Blockly.Generator.Arduino.variables_[variableName + myVar.type] =
-        myVar.type +
-        " " +
-        myVar.name.replace(/_/g, "__").replace(/[^a-zA-Z0-9_]/g, "_") +
-        ";\n";
-      code =
-        myVar.name.replace(/_/g, "__").replace(/[^a-zA-Z0-9_]/g, "_") +
-        " = " +
-        (variableValue || defaultValue) +
-        ";\n";
+      const variableValue = Blockly.Generator.Arduino.valueToCode(
+        block,
+        "VALUE",
+        Blockly.Generator.Arduino.ORDER_ATOMIC,
+      );
+      if (myVar.type === "bitmap") {
+        Blockly.Generator.Arduino.variables_[variableName + myVar.type] =
+          `uint16_t ${variableName}[96];\n`;
+        if (variableValue != "") {
+          code =`memcpy(${variableName}, ${variableValue}, sizeof(${variableName}));\n`;
+        }
+      } else {
+        Blockly.Generator.Arduino.variables_[variableName + myVar.type] =
+          `${myVar.type} ${variableName};\n`;
+        code =
+        `${variableName} = ${(variableValue || defaultValue)};\n`;
+      }
     }
     return code;
   };
@@ -58,5 +60,5 @@ const getVariableFunction = function (block) {
   return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
-Blockly.Generator.Arduino["variables_set_dynamic"] = setVariableFunction();
-Blockly.Generator.Arduino["variables_get_dynamic"] = getVariableFunction;
+Blockly.Generator.Arduino.forBlock["variables_set_dynamic"] = setVariableFunction();
+Blockly.Generator.Arduino.forBlock["variables_get_dynamic"] = getVariableFunction;

@@ -49,7 +49,9 @@ Blockly.Blocks["procedures_defnoreturn"] = {
       .appendField(Blockly.Msg.PROCEDURES_DEFNORETURN)
       .appendField(nameField, "NAME")
       .appendField("", "PARAMS");
-    this.setMutator(new Blockly.icons.MutatorIcon(["procedures_mutatorarg"]));
+    this.setMutator(
+      new Blockly.icons.MutatorIcon(["procedures_mutatorarg"], this),
+    );
     if (
       (this.workspace.options.comments ||
         (this.workspace.options.parentWorkspace &&
@@ -270,11 +272,9 @@ Blockly.Blocks["procedures_defnoreturn"] = {
         if (hasStatements) {
           this.setStatements_(true);
           // Restore the stack, if one was saved.
-          Blockly.icons.MutatorIcon.reconnect(
-            this.statementConnection_,
-            this,
-            "STACK",
-          );
+          if (this.statementConnection_) {
+            this.statementConnection_.reconnect(this, "STACK");
+          }
           this.statementConnection_ = null;
         } else {
           // Save the stack, then disconnect it.
@@ -386,7 +386,7 @@ Blockly.Blocks["procedures_defnoreturn"] = {
   displayRenamedVar_: function (oldName, newName) {
     this.updateParams_();
     // Update the mutator's variables if the mutator is open.
-    if (this.mutator.isVisible()) {
+    if (this.mutator.bubbleIsVisible()) {
       const blocks = this.mutator.workspace_.getAllBlocks(false);
       for (let i = 0, block; (block = blocks[i]); i++) {
         if (
@@ -477,7 +477,9 @@ Blockly.Blocks["procedures_defreturn"] = {
     this.appendValueInput("RETURN")
       .setAlign(Blockly.inputs.Align.RIGHT)
       .appendField(Blockly.Msg["PROCEDURES_DEFRETURN_RETURN"]);
-    this.setMutator(new Blockly.icons.MutatorIcon(["procedures_mutatorarg"]));
+    this.setMutator(
+      new Blockly.icons.MutatorIcon(["procedures_mutatorarg"], this),
+    );
     if (
       (this.workspace.options.comments ||
         (this.workspace.options.parentWorkspace &&
@@ -830,7 +832,7 @@ Blockly.Blocks["procedures_callnoreturn"] = {
       this.workspace,
     );
     const mutatorOpen =
-      defBlock && defBlock.mutator && defBlock.mutator.isVisible();
+      defBlock && defBlock.mutator && defBlock.mutator.bubbleIsVisible();
     if (!mutatorOpen) {
       this.quarkConnections_ = {};
       this.quarkIds_ = null;
@@ -908,8 +910,8 @@ Blockly.Blocks["procedures_callnoreturn"] = {
         if (quarkId in this.quarkConnections_) {
           const connection = this.quarkConnections_[quarkId];
           try {
-            if (
-              !Blockly.icons.MutatorIcon.reconnect(connection, this, "ARG" + i)
+            if (connection && 
+              !connection.reconnect(this, "ARG" + i)
             ) {
               // Block no longer exists or has been attached elsewhere.
               delete this.quarkConnections_[quarkId];

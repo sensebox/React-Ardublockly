@@ -163,7 +163,7 @@ Blockly.Blocks["sensebox_general_html_tag"] = {
     this.setHelpUrl("https://sensebox.de/books");
     this.setPreviousStatement(false);
     this.setNextStatement(false);
-    this.setMutator(new Blockly.icons.MutatorIcon(["additional_child"]));
+    this.setMutator(new Blockly.icons.MutatorIcon(["additional_child"], this));
     this.additionalChildCount_ = 0;
   },
   /**
@@ -234,11 +234,9 @@ Blockly.Blocks["sensebox_general_html_tag"] = {
     this.updateShape_();
     // Reconnect any child blocks.
     for (var i = 1; i <= this.additionalChildCount_; i++) {
-      Blockly.icons.MutatorIcon.reconnect(
-        statementConnections[i],
-        this,
-        "DO" + i,
-      );
+      if (statementConnections[i]) {
+        statementConnections[i].reconnect(this, "DO" + i);
+      }
     }
   },
   /**

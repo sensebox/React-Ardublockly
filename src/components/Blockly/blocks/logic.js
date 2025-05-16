@@ -20,7 +20,10 @@ Blockly.Blocks["controls_if"] = {
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setMutator(
-      new Blockly.icons.MutatorIcon(["controls_if_elseif", "controls_if_else"]),
+      new Blockly.icons.MutatorIcon(
+        ["controls_if_elseif", "controls_if_else"],
+        this,
+      ),
     );
     this.setTooltip(Blockly.Msg.CONTROLS_IF_TOOLTIP_1);
     this.elseifCount_ = 0;
@@ -110,14 +113,16 @@ Blockly.Blocks["controls_if"] = {
     this.updateShape_();
     // Reconnect any child blocks.
     for (var i = 1; i <= this.elseifCount_; i++) {
-      Blockly.icons.MutatorIcon.reconnect(valueConnections[i], this, "IF" + i);
-      Blockly.icons.MutatorIcon.reconnect(
-        statementConnections[i],
-        this,
-        "DO" + i,
-      );
+      if (valueConnections[i]) {
+        valueConnections[i].reconnect(this, "IF" + i);
+      }
+      if (statementConnections[i]) {
+        statementConnections[i].reconnect(this, "DO" + i);
+      }
     }
-    Blockly.icons.MutatorIcon.reconnect(elseStatementConnection, this, "ELSE");
+    if (elseStatementConnection) {
+      elseStatementConnection.reconnect(this, "ELSE");
+    }
   },
   /**
    * Store pointers to any connected child blocks.
@@ -467,18 +472,18 @@ Blockly.Blocks["logic_compare"] = {
     }
     if (blockA !== null && blockB === null) {
       this.getInput("A").setCheck(
-        getCompatibleTypes(blockA.outputConnection.check_[0]),
+        getCompatibleTypes(blockA.outputConnection.check[0]),
       );
       this.getInput("B").setCheck(
-        getCompatibleTypes(blockA.outputConnection.check_[0]),
+        getCompatibleTypes(blockA.outputConnection.check[0]),
       );
     }
     if (blockB !== null && blockA === null) {
       this.getInput("B").setCheck(
-        getCompatibleTypes(blockB.outputConnection.check_[0]),
+        getCompatibleTypes(blockB.outputConnection.check[0]),
       );
       this.getInput("A").setCheck(
-        getCompatibleTypes(blockB.outputConnection.check_[0]),
+        getCompatibleTypes(blockB.outputConnection.check[0]),
       );
     }
   },
@@ -496,7 +501,7 @@ Blockly.Blocks["switch_case"] = {
     );
     this.appendStatementInput("CASE0").appendField(Blockly.Msg.cases_do);
     this.setMutator(
-      new Blockly.icons.MutatorIcon(["case_incaseof", "case_default"]),
+      new Blockly.icons.MutatorIcon(["case_incaseof", "case_default"], this),
     );
     this.caseCount_ = 0;
     this.defaultCount_ = 0;
@@ -517,8 +522,10 @@ Blockly.Blocks["switch_case"] = {
   },
 
   domToMutation: function (xmlElement) {
-    this.caseCount_ = parseInt(xmlElement.getAttribute("case"), 10);
+    this.caseCount_ = parseInt(xmlElement.getAttribute("case"), 10) || 0;
     this.defaultCount_ = parseInt(xmlElement.getAttribute("default"), 10);
+    this.removeInput("CASECONDITION0");
+    this.removeInput("CASE0");
     for (var x = 0; x <= this.caseCount_; x++) {
       this.appendValueInput("CASECONDITION" + x).appendField(
         Blockly.Msg.cases_condition,
@@ -541,7 +548,7 @@ Blockly.Blocks["switch_case"] = {
       connection = caseBlock.nextConnection;
     }
     if (this.defaultCount_) {
-      var defaultBlock = Blockly.Block.obtain(workspace, "case_default");
+      var defaultBlock = workspace.newBlock("case_default");
       defaultBlock.initSvg();
       connection.connect(defaultBlock.previousConnection);
     }

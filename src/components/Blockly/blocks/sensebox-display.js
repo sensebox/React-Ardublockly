@@ -2,6 +2,7 @@ import * as Blockly from "blockly/core";
 import { getColour } from "../helpers/colour";
 import * as Types from "../helpers/types";
 import { FieldSlider } from "@blockly/field-slider";
+import { FieldGridDropdown } from "@blockly/field-grid-dropdown";
 
 Blockly.Blocks["sensebox_display_beginDisplay"] = {
   init: function () {
@@ -219,7 +220,48 @@ Blockly.Blocks["sensebox_display_show"] = {
     this.appendDummyInput().appendField(Blockly.Msg.sensebox_display_show);
     this.appendStatementInput("SHOW");
     this.setTooltip(Blockly.Msg.sensebox_display_show_tip);
-    this.setHelpUrl("");
+    this.setHelpUrl(Blockly.Msg.senseBox_display_helpurl);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+  },
+};
+
+Blockly.Blocks["sensebox_display_roboeyes"] = {
+  init: function () {
+    var dropdown = new FieldGridDropdown(
+      [
+        [Blockly.Msg.sensebox_display_roboeyes_position_top_left, "NW"],
+        [Blockly.Msg.sensebox_display_roboeyes_position_top, "N"],
+        [Blockly.Msg.sensebox_display_roboeyes_position_top_right, "NE"],
+        [Blockly.Msg.sensebox_display_roboeyes_position_left, "W"],
+        [Blockly.Msg.sensebox_display_roboeyes_position_center, "DEFAULT"],
+        [Blockly.Msg.sensebox_display_roboeyes_position_right, "E"],
+        [Blockly.Msg.sensebox_display_roboeyes_position_bottom_left, "SW"],
+        [Blockly.Msg.sensebox_display_roboeyes_position_bottom, "S"],
+        [Blockly.Msg.sensebox_display_roboeyes_position_bottom_right, "SE"],
+      ],
+      () => {},
+      { columns: 3 },
+    );
+    this.setColour(getColour().sensebox);
+    this.appendDummyInput().appendField(Blockly.Msg.sensebox_display_roboeyes);
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.sensebox_display_roboeyes_position)
+      .appendField(dropdown, "POSITION");
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.sensebox_display_roboeyes_emotion)
+      .appendField(
+        new Blockly.FieldDropdown([
+          [Blockly.Msg.sensebox_display_roboeyes_default, "DEFAULT"],
+          [Blockly.Msg.sensebox_display_roboeyes_happy, "HAPPY"],
+          [Blockly.Msg.sensebox_display_roboeyes_tired, "TIRED"],
+          [Blockly.Msg.sensebox_display_roboeyes_angry, "ANGRY"],
+        ]),
+        "EMOTION",
+      );
+    this.setInputsInline(false);
+    this.setTooltip(Blockly.Msg.sensebox_display_roboeyes_tooltip);
+    this.setHelpUrl(Blockly.Msg.senseBox_display_helpurl);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
   },

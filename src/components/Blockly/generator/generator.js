@@ -25,16 +25,19 @@
 // https://developers.google.com/blockly/guides/create-custom-blocks/generating-code
 
 import * as Blockly from "blockly/core";
+import { reservedWords } from "../helpers/reservedWords";
 
 import store from "../../../store";
 
 var ota = store.getState().general.platform
   ? store.getState().general.platform
   : null;
+var board = store.getState().board.board ? store.getState().board.board : null;
 store.subscribe(() => {
   ota = store.getState().general.platform
     ? store.getState().general.platform
     : null;
+  board = store.getState().board.board ? store.getState().board.board : null;
 });
 
 /**
@@ -50,20 +53,7 @@ Blockly.Generator.Arduino = new Blockly.Generator("Arduino");
  * accidentally clobbering a built-in object or function.
  * @private
  */
-Blockly.Generator.Arduino.addReservedWords(
-  // http://arduino.cc/en/Reference/HomePage
-  "setup,loop,if,else,for,switch,case,while," +
-    "do,break,continue,return,goto,define,include," +
-    "HIGH,LOW,INPUT,OUTPUT,INPUT_PULLUP,true,false," +
-    "interger, constants,floating,point,void,boolean,char," +
-    "unsigned,byte,int,word,long,float,double,string,String,array," +
-    "static, volatile,const,sizeof,pinMode,digitalWrite,digitalRead," +
-    "analogReference,analogRead,analogWrite,tone,noTone,shiftOut,shitIn," +
-    "pulseIn,millis,micros,delay,delayMicroseconds,min,max,abs,constrain," +
-    "map,pow,sqrt,sin,cos,tan,randomSeed,random,lowByte,highByte,bitRead," +
-    "bitWrite,bitSet,bitClear,ultraSonicDistance,parseDouble,setNeoPixelColor," +
-    "bit,attachInterrupt,detachInterrupt,interrupts,noInterrupts,short,isBtnPressed",
-);
+Blockly.Generator.Arduino.addReservedWords(reservedWords);
 
 /**
  * Order of operation ENUMs.
@@ -107,12 +97,15 @@ Blockly.Generator.Arduino.init = function (workspace) {
   Blockly.Generator.Arduino.definitions_ = Object.create(null);
 
   // creates a list of code to be setup before the setup block
-  Blockly.Generator.Arduino.setupCode_ = {};
+  Blockly.Generator.Arduino.preSetupCode_ = Object.create(null);
 
   // creates a list of code to be setup before the setup block
+  Blockly.Generator.Arduino.setupCode_ = Object.create(null);
+
+  // creates a list of phyphox code to be in the setup block
   Blockly.Generator.Arduino.phyphoxSetupCode_ = Object.create(null);
 
-  // creates a list of code to be setup before the setup block
+  // creates a list of lora code to be in the setup block
   Blockly.Generator.Arduino.loraSetupCode_ = Object.create(null);
 
   // creates a list of code for the loop to be runned once
@@ -165,6 +158,7 @@ Blockly.Generator.Arduino.finish = function (code) {
   let loopCodeOnce = "";
   let setupCode = "";
   let preSetupCode = "";
+  let mainSetupCode = "";
   let loraSetupCode = "";
   let devVariables = "\n";
 
@@ -193,16 +187,24 @@ Blockly.Generator.Arduino.finish = function (code) {
     functionsCode += Blockly.Generator.Arduino.functionNames_[key] + "\n";
   }
 
+  if (Blockly.Generator.Arduino.preSetupCode_["Wire.begin"]) {
+    preSetupCode +=
+      Blockly.Generator.Arduino.preSetupCode_["Wire.begin"] + "\n";
+    if (Blockly.Generator.Arduino.preSetupCode_["vl53l8cx_clock_address"]) {
+      preSetupCode +=
+        Blockly.Generator.Arduino.preSetupCode_["vl53l8cx_clock_address"] +
+        "\n";
+    }
+  }
+
   for (const key in Blockly.Generator.Arduino.setupCode_) {
-    preSetupCode += Blockly.Generator.Arduino.setupCode_[key] + "\n" || "";
+    mainSetupCode += Blockly.Generator.Arduino.setupCode_[key] + "\n" || "";
   }
 
   for (const key in Blockly.Generator.Arduino.loraSetupCode_) {
     loraSetupCode += Blockly.Generator.Arduino.loraSetupCode_[key] + "\n" || "";
   }
 
-  setupCode =
-    "\nvoid setup() { \n" + preSetupCode + "\n" + loraSetupCode + "\n}\n";
   for (const key in Blockly.Generator.Arduino.phyphoxSetupCode_) {
     phyphoxSetupCode +=
       Blockly.Generator.Arduino.phyphoxSetupCode_[key] + "\n" || "";
@@ -212,6 +214,8 @@ Blockly.Generator.Arduino.finish = function (code) {
     "\nvoid setup() { \n" +
     preSetupCode +
     "\n" +
+    mainSetupCode +
+    "\n" +
     phyphoxSetupCode +
     "\n" +
     loraSetupCode +
@@ -219,7 +223,7 @@ Blockly.Generator.Arduino.finish = function (code) {
 
   let loopCode = "\nvoid loop() { \n" + loopCodeOnce + code + "\n}\n";
   // only add OTA code if tablet mode is enabled
-  if (ota === true) {
+  if (ota === true && board !== "esp32") {
     code =
       commentCode +
       "\n" +
