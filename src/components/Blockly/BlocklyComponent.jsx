@@ -35,6 +35,7 @@ class BlocklyComponent extends React.Component {
         blockDragger: ScrollBlockDragger,
         metricsManager: ScrollMetricsManager,
       },
+
       ...rest,
     });
 
