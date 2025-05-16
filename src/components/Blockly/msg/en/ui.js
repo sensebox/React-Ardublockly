@@ -412,4 +412,11 @@ export const UI = {
   goToApp_text:
     "The code has been compiled successfully. Start with the transfer by clicking on the button below, redirecting you to the senseBox:connect App ! ",
   goToApp_title: "Over-The-Air Transfer",
+
+  // Backpack translations
+  EMPTY_BACKPACK: "Empty Backpack",
+  REMOVE_FROM_BACKPACK: "Remove from Backpack",
+  COPY_TO_BACKPACK: "Copy to Backpack",
+  COPY_ALL_TO_BACKPACK: "Copy All to Backpack",
+  PASTE_ALL_FROM_BACKPACK: "Paste All from Backpack",
 };
