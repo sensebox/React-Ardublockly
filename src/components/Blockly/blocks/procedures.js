@@ -43,7 +43,9 @@ Blockly.Blocks["arduino_functions"] = {
 
     this.isPasteable = false;
 
-    this.isMovable = false;
+    this.isMovable = function () {
+      return false;
+    };
 
     this.isEditable = false;
   },
