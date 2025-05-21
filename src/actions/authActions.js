@@ -20,6 +20,7 @@ export const loadUser = () => (dispatch) => {
   dispatch({
     type: USER_LOADING,
   });
+  console.log("loadUser");
   const config = {
     success: (res) => {
       dispatch({
@@ -116,60 +117,111 @@ export const login =
 
 // Logout User
 export const logout = () => (dispatch) => {
-  const config = {
-    success: (res) => {
-      dispatch({
-        type: LOGOUT_SUCCESS,
-      });
-      var status = [];
+  axios
+    .post("http://localhost:8080/user/logout") // adjust if needed
+    .then((res) => {
+      // Clear Redux auth state
+      dispatch({ type: LOGOUT_SUCCESS });
+
+      // Restore previous local status
+      let status = [];
       if (window.localStorage.getItem("status")) {
         status = JSON.parse(window.localStorage.getItem("status"));
       }
-      dispatch({
-        type: GET_STATUS,
-        payload: status,
-      });
-      var locale = "en_US";
+      dispatch({ type: GET_STATUS, payload: status });
+
+      // Determine locale
+      let locale = "en_US";
       if (window.localStorage.getItem("locale")) {
         locale = window.localStorage.getItem("locale");
       } else if (navigator.language === "de-DE") {
         locale = "de_DE";
       }
       dispatch(setLanguage(locale));
+
+      // Notify success
       dispatch(returnSuccess(res.data.message, res.status, "LOGOUT_SUCCESS"));
-    },
-    error: (err) => {
-      dispatch(
-        returnErrors(
-          err.response.data.message,
-          err.response.status,
-          "LOGOUT_FAIL",
-        ),
-      );
-      dispatch({
-        type: LOGOUT_FAIL,
-      });
-      var status = [];
+    })
+    .catch((err) => {
+      // Only dispatch error if it's not unauthorized
+      if (err.response && err.response.status !== 401) {
+        dispatch(
+          returnErrors(
+            err.response.data.message,
+            err.response.status,
+            "LOGOUT_FAIL",
+          ),
+        );
+      }
+
+      // Dispatch fallback fail
+      dispatch({ type: LOGOUT_FAIL });
+
+      // Fallback: Restore previous status
+      let status = [];
       if (window.localStorage.getItem("status")) {
         status = JSON.parse(window.localStorage.getItem("status"));
       }
-      dispatch({
-        type: GET_STATUS,
-        payload: status,
-      });
-    },
-  };
-  axios
-    .post("https://api.opensensemap.org/users/sign-out", {}, config)
-    .then((res) => {
-      res.config.success(res);
-    })
-    .catch((err) => {
-      if (err.response && err.response.status !== 401) {
-        err.config.error(err);
-      }
+      dispatch({ type: GET_STATUS, payload: status });
     });
 };
+
+// // Logout User
+// export const logout = () => (dispatch) => {
+//   const config = {
+//     success: (res) => {
+//       dispatch({
+//         type: LOGOUT_SUCCESS,
+//       });
+//       var status = [];
+//       if (window.localStorage.getItem("status")) {
+//         status = JSON.parse(window.localStorage.getItem("status"));
+//       }
+//       dispatch({
+//         type: GET_STATUS,
+//         payload: status,
+//       });
+//       var locale = "en_US";
+//       if (window.localStorage.getItem("locale")) {
+//         locale = window.localStorage.getItem("locale");
+//       } else if (navigator.language === "de-DE") {
+//         locale = "de_DE";
+//       }
+//       dispatch(setLanguage(locale));
+//       dispatch(returnSuccess(res.data.message, res.status, "LOGOUT_SUCCESS"));
+//     },
+//     error: (err) => {
+//       dispatch(
+//         returnErrors(
+//           err.response.data.message,
+//           err.response.status,
+//           "LOGOUT_FAIL",
+//         ),
+//       );
+//       dispatch({
+//         type: LOGOUT_FAIL,
+//       });
+//       var status = [];
+//       if (window.localStorage.getItem("status")) {
+//         status = JSON.parse(window.localStorage.getItem("status"));
+//       }
+//       dispatch({
+//         type: GET_STATUS,
+//         payload: status,
+//       });
+//     },
+//   };
+//   axios
+//     .post("https://api.opensensemap.org/users/sign-out", {}, config)
+//     .then((res) => {
+//       res.config.success(res);
+//     })
+//     .catch((err) => {
+//       if (err.response && err.response.status !== 401) {
+//         err.config.error(err);
+//       }
+//     });
+// };
 
 // Social login action
 export const socialLogin = (token) => (dispatch) => {
@@ -185,8 +237,8 @@ export const socialLogin = (token) => (dispatch) => {
   localStorage.setItem("token", token);
 
   // Fetch user data from the backend
-  axios
-    .get("http://localhost:8080/user/me") // Endpoint to fetch user data
+  return axios
+    .get("http://localhost:8080/user") // Endpoint to fetch user data
     .then((res) => {
       dispatch({
         type: LOGIN_SUCCESS,
@@ -195,15 +247,15 @@ export const socialLogin = (token) => (dispatch) => {
           token, // Store the token
         },
       });
+      return res.data;
     })
     .catch((err) => {
       dispatch({ type: AUTH_ERROR });
       console.error("Error loading user data", err);
     });
 };
-
 export const authInterceptor = () => (dispatch, getState) => {
-  // Add a request interceptor
+  // Request Interceptor
   axios.interceptors.request.use(
     (config) => {
       config.headers["Content-Type"] = "application/json";
@@ -211,71 +263,96 @@ export const authInterceptor = () => (dispatch, getState) => {
       if (token) {
         config.headers["Authorization"] = `Bearer ${token}`;
       }
+      config.withCredentials = true; // Always send cookies (e.g., for refresh)
       return config;
     },
-    (error) => {
-      Promise.reject(error);
-    },
+    (error) => Promise.reject(error),
   );
 
-  // Add a response interceptor
+  let isRefreshing = false;
+  let failedQueue = [];
+
+  const processQueue = (error, token = null) => {
+    failedQueue.forEach((prom) => {
+      if (error) {
+        prom.reject(error);
+      } else {
+        prom.resolve(token);
+      }
+    });
+
+    failedQueue = [];
+  };
+
+  // In your setup file:
   axios.interceptors.response.use(
-    (response) => {
-      // request was successfull
-      return response;
-    },
-    (error) => {
+    (response) => response,
+    async (error) => {
       const originalRequest = error.config;
-      const refreshToken = getState().auth.refreshToken;
-      if (refreshToken) {
-        // try to refresh the token failed
-        if (error.response.status === 401 && originalRequest._retry) {
-          // router.push('/login');
-          return Promise.reject(error);
-        }
-        // token was not valid and 1st try to refresh the token
-        if (error.response.status === 401 && !originalRequest._retry) {
-          originalRequest._retry = true;
-          const refreshToken = getState().auth.refreshToken;
-          // request to refresh the token, in request-body is the refreshToken
-          axios
-            .post("https://api.opensensemap.org/users/refresh-auth", {
-              token: refreshToken,
-            })
-            .then((res) => {
-              if (res.status === 200) {
-                dispatch({
-                  type: REFRESH_TOKEN_SUCCESS,
-                  payload: res.data,
-                });
-                axios.defaults.headers.common["Authorization"] =
-                  "Bearer " + getState().auth.token;
-                // request was successfull, new request with the old parameters and the refreshed token
-                return axios(originalRequest)
-                  .then((res) => {
-                    originalRequest.success(res);
-                  })
-                  .catch((err) => {
-                    originalRequest.error(err);
-                  });
-              }
-              return Promise.reject(error);
-            })
-            .catch((err) => {
-              // request failed, token could not be refreshed
-              if (err.response) {
-                dispatch(
-                  returnErrors(err.response.data.message, err.response.status),
-                );
-              }
-              dispatch({
-                type: AUTH_ERROR,
-              });
-              return Promise.reject(error);
+      const token = localStorage.getItem("token");
+      if (error.response?.status === 401 && !originalRequest._retry && token) {
+        originalRequest._retry = true;
+
+        if (isRefreshing) {
+          // Wait until the token is refreshed
+          return new Promise(function (resolve, reject) {
+            failedQueue.push({
+              resolve: (token) => {
+                originalRequest.headers["Authorization"] = `Bearer ${token}`;
+                resolve(axios(originalRequest));
+              },
+              reject: (err) => reject(err),
             });
+          });
+        }
+
+        isRefreshing = true;
+
+        try {
+          const res = await axios.post(
+            `http://localhost:8080/user/refresh-token`,
+            {},
+            {
+              withCredentials: true,
+              headers: { "Content-Type": "application/json" },
+            },
+          );
+
+          if (res.status === 200 && res.data?.token) {
+            const newToken = res.data.token;
+            console.log(res.data);
+            dispatch({
+              type: REFRESH_TOKEN_SUCCESS,
+              payload: res.data,
+            });
+
+            localStorage.setItem("token", newToken);
+            axios.defaults.headers.common["Authorization"] =
+              `Bearer ${newToken}`;
+            processQueue(null, newToken);
+
+            originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
+            return axios(originalRequest);
+          }
+        } catch (refreshError) {
+          processQueue(refreshError, null);
+          dispatch({ type: AUTH_ERROR });
+
+          if (refreshError.response) {
+            dispatch(
+              returnErrors(
+                refreshError.response.data.message,
+                refreshError.response.status,
+              ),
+            );
+          }
+
+          return Promise.reject(refreshError);
+        } finally {
+          isRefreshing = false;
         }
       }
-      // request status was unequal to 401, no possibility to refresh the token
+
       return Promise.reject(error);
     },
   );

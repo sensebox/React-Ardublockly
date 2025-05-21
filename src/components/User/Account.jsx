@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import axios from "axios";
+import api from "../../utils/axiosConfig";
 import { withRouter } from "react-router-dom"; // To handle redirects
 import Breadcrumbs from "../Breadcrumbs";
 import Alert from "../Alert";
@@ -26,43 +26,17 @@ class Account extends Component {
   }
 
   componentDidMount() {
-    // Check if the user is a social login user
-    const isSocialAccount = localStorage.getItem("isSocialAccount") === "true";
-
-    // If the user data is already available in Redux or the user is a social user, avoid fetching again
-    if (isSocialAccount && this.state.userData) {
-      console.log("Social login user detected, no need to fetch user data.");
-      this.setState({ loading: false });
-      return;
-    }
-
-    // If the user is not a social login user and no user data is available, fetch user data
     if (!this.state.userData) {
-      const token = localStorage.getItem("token");
-
-      if (token) {
-        // Fetch user data from backend if not already available
-        axios
-          .get("http://localhost:8080/user/", {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          })
-          .then((response) => {
-            this.setState({ userData: response.data.user, loading: false });
-          })
-          .catch((error) => {
-            console.error("Error fetching user data:", error);
-            this.setState({ error: "Failed to load user data", loading: false });
-            localStorage.removeItem("token");
-
-            // Redirect to login page on error (e.g., token expired or invalid)
-            this.props.history.push("/user/login");
-          });
-      } else {
-        this.setState({ error: "No token found", loading: false });
-        this.props.history.push("/user/login"); // Redirect if no token is found
-      }
+      api
+        .get("http://localhost:8080/user/")
+        .then((response) => {
+          this.setState({ userData: response.data.user, loading: false });
+        })
+        .catch((error) => {
+          console.error("Error fetching user data:", error);
+          // No token removal or redirect here — handled in interceptor
+          this.setState({ error: "Failed to load user data", loading: false });
+        });
     }
   }
 
@@ -84,7 +58,7 @@ class Account extends Component {
 
         <h1>Account</h1>
 
-        {userData && (
+        {userData.accountType === "osem" && (
           <Alert>
             Your information is managed by{" "}
             <Link
@@ -111,7 +85,13 @@ class Account extends Component {
                 </ListItemIcon>
               </Tooltip>
               {userData ? (
-                <ListItemText primary={`Name: ${userData.email}`} />
+                <div>
+                  <ListItemText primary={`Name: ${userData.email}`} />
+                  <ListItemText
+                    primary={`Account Type: ${userData.accountType}`}
+                  />
+                  <ListItemText primary={`User ID: ${userData._id}`} />
+                </div>
               ) : classroomUser ? (
                 <ListItemText primary={`Name: ${classroomUser.name}`} />
               ) : null}

@@ -87,11 +87,12 @@ class WorkspaceFunc extends Component {
           />
         ) : null}
 
-        {!this.props.assessment &&
-        (this.props.projectType === "project" ||
-          this.props.projectType === "gallery") &&
-        this.props.user &&
-        this.props.user.email === this.props.project.creator ? (
+        {(!this.props.assessment &&
+          (this.props.projectType === "project" ||
+            this.props.projectType === "gallery") &&
+          this.props.user &&
+          this.props.user.id === this.props.project.creator) ||
+        this.props.user.blocklyRole === "admin" ? (
           <DeleteProject
             project={this.props.project}
             projectType={this.props.projectType}

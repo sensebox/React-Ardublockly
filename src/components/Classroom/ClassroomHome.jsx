@@ -40,15 +40,17 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { createCustomId } from "mnemonic-id";
 import InputAdornment from "@mui/material/InputAdornment";
+import api from "../../utils/axiosConfig";
 
 export class ClassroomHome extends Component {
   constructor(props) {
     super(props);
     this.state = {
       open: false,
+      userData: props.user || null, // Set initial user data from props if available
       classroom: {
         title: "",
-        creator: this.props.user.email,
+        creator: "",
         classroomCode: "",
         description: "",
         students: [],
@@ -95,6 +97,7 @@ export class ClassroomHome extends Component {
       classroom: {
         ...this.state.classroom,
         classroomCode: classroomCode.toUpperCase(),
+        creator: this.props.user.email,
       },
     });
     console.log(JSON.stringify(this.state.classroom));
@@ -107,8 +110,24 @@ export class ClassroomHome extends Component {
   };
 
   componentDidMount() {
-    this.props.getClassrooms();
-    localStorage.setItem("classrooms", this.props.classrooms);
+    if (!this.state.userData) {
+      api
+        .get("http://localhost:8080/user/")
+        .then((response) => {
+          this.setState({ userData: response.data.user }, () => {
+            // Now we have user, fetch classrooms
+            this.props.getClassrooms();
+            console.log("User data fetched:", this.state.userData);
+            console.log("Classrooms fetched:", this.props.classrooms);
+          });
+        })
+        .catch((error) => {
+          console.error("Error fetching user data:", error);
+          this.setState({ error: "Failed to load user data" });
+        });
+    } else {
+      this.props.getClassrooms();
+    }
   }
 
   render() {
@@ -274,6 +293,7 @@ export class ClassroomHome extends Component {
                   label="Name"
                   type="text"
                   fullWidth
+                  required
                   variant="standard"
                   value={this.state.classroom.title}
                   onChange={(e) => this.addTitle(e)}
@@ -284,6 +304,7 @@ export class ClassroomHome extends Component {
                   type="text"
                   fullWidth
                   variant="standard"
+                  required
                   value={this.state.classroom.desription}
                   onChange={(e) => this.addDescription(e)}
                 />
@@ -339,7 +360,7 @@ ClassroomHome.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  user: state.auth?.user,
+  user: state.auth.user,
   classrooms: state.classroom?.classrooms,
 });
 

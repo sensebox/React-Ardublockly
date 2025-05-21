@@ -1,26 +1,31 @@
-// src/utils/axiosConfig.js
-import axios from 'axios';
-import store from '../store'; // Pfad zu Ihrem Redux-Store
-import { LOGOUT } from '../actions/types';
-import { returnErrors } from '../actions/messageActions';
-
+import axios from "axios";
 
 const api = axios.create({
-  baseURL: process.env.REACT_APP_BLOCKLY_API,
+  baseURL: import.meta.env.VITE_BLOCKLY_API,
 });
 
 // Interceptor zum Hinzufügen des Tokens zu jedem Request
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`;
+      config.headers["Authorization"] = `Bearer ${token}`;
     }
     return config;
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
+);
+
+api.interceptors.response.use(
+  (res) => res,
+  (err) => {
+    if (!err.response) {
+      console.error("API unreachable");
+    }
+    return Promise.reject(err);
+  },
 );
 
 // // Interceptor zum Behandeln von Fehlern

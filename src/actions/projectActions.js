@@ -7,6 +7,7 @@ import {
 } from "./types";
 
 import axios from "axios";
+import api from "../utils/axiosConfig";
 import { returnErrors, returnSuccess } from "./messageActions";
 
 export const setType = (type) => (dispatch) => {
@@ -97,7 +98,7 @@ export const getProjects = (type) => (dispatch) => {
       dispatch({ type: PROJECT_PROGRESS });
     },
   };
-  axios
+  api
     .get(`${import.meta.env.VITE_BLOCKLY_API}/${type}`, config)
     .then((res) => {
       res.config.success(res);

@@ -11,7 +11,7 @@ import BlocklyWindow from "../Blockly/BlocklyWindow";
 import Snackbar from "../Snackbar";
 import WorkspaceFunc from "../Workspace/WorkspaceFunc";
 
-import withStyles from '@mui/styles/withStyles';
+import withStyles from "@mui/styles/withStyles";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Divider from "@mui/material/Divider";
@@ -42,10 +42,16 @@ class ProjectHome extends Component {
   componentDidMount() {
     const type = this.props.location.pathname.replace("/", "");
     if (type === "project" && this.props.user && !this.props.classroomUser) {
-      this.props.getProjects(type);
+      if (
+        this.props.user.accountType === "osem" ||
+        this.props.user.accountType === "social"
+      ) {
+        this.props.getProjects(type);
+      } else if (this.props.user.accountType === "classroom") {
+        this.props.getClassroomProjects();
+      }
     } else if (type === "gallery") {
       this.props.getProjects(type);
-      
     }
     this.handleMessages(this.props.message, type);
   }
@@ -56,7 +62,10 @@ class ProjectHome extends Component {
       this.props.getProjects(this.props.location.pathname.replace("/", ""));
     }
     if (prevProps.message !== this.props.message) {
-      this.handleMessages(this.props.message, this.props.location.pathname.replace("/", ""));
+      this.handleMessages(
+        this.props.message,
+        this.props.location.pathname.replace("/", ""),
+      );
     }
     console.log(this.props.projects);
   }
@@ -96,34 +105,51 @@ class ProjectHome extends Component {
   renderProjects(projects, data) {
     return projects.map((project, i) => (
       <Grid item xs={12} sm={6} md={4} xl={3} key={i}>
-        <Paper style={{ padding: "1rem", position: "relative", overflow: "hidden" }}>
-          <Link to={`/${data === "Projekte" ? "project" : "gallery"}/${project._id}`} style={{ textDecoration: "none", color: "inherit" }}>
+        <Paper
+          style={{ padding: "1rem", position: "relative", overflow: "hidden" }}
+        >
+          <Link
+            to={`/${data === "Projekte" ? "project" : "gallery"}/${project._id}`}
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
             <h3 style={{ marginTop: 0 }}>{project.title}</h3>
             <Divider style={{ marginTop: "1rem", marginBottom: "10px" }} />
-            <Typography variant="body2" style={{ fontStyle: "italic", margin: 0, marginTop: "-10px" }}>
+            <Typography
+              variant="body2"
+              style={{ fontStyle: "italic", margin: 0, marginTop: "-10px" }}
+            >
               {project.description}
             </Typography>
           </Link>
-          {this.props.user && this.props.user.email === project.creator && (
-            <div>
-              <Divider style={{ marginTop: "10px", marginBottom: "10px" }} />
-              <div style={{ float: "right" }}>
-                <WorkspaceFunc multiple project={project} projectType={this.props.location.pathname.replace("/", "")} />
+          {(this.props.user && this.props.user.id === project.creator) ||
+            (this.props.user.blocklyRole === "admin" && (
+              <div>
+                <Divider style={{ marginTop: "10px", marginBottom: "10px" }} />
+                <div style={{ float: "right" }}>
+                  <WorkspaceFunc
+                    multiple
+                    project={project}
+                    projectType={this.props.location.pathname.replace("/", "")}
+                  />
+                </div>
               </div>
-            </div>
-          )}
+            ))}
         </Paper>
       </Grid>
     ));
   }
 
   render() {
-    const data = this.props.location.pathname === "/project" ? "Projekte" : "Galerie";
-    const { user, projects, classroomUser, classroomProjects, progress } = this.props;
-    
+    const data =
+      this.props.location.pathname === "/project" ? "Projekte" : "Galerie";
+    const { user, projects, classroomUser, classroomProjects, progress } =
+      this.props;
+
     return (
       <div>
-        <Breadcrumbs content={[{ link: this.props.location.pathname, title: data }]} />
+        <Breadcrumbs
+          content={[{ link: this.props.location.pathname, title: data }]}
+        />
 
         <h1>{data}</h1>
         <DeviceSelection />
@@ -133,15 +159,16 @@ class ProjectHome extends Component {
           </Backdrop>
         ) : (
           <div>
-            {projects.length > 0 && !classroomUser && !user &&(
+            {projects.length > 0 && !classroomUser && !user && (
               <div>
-              <Typography style={{ marginBottom: "10px" }}>
-                Hier findest du eine Übersicht aller frei verfügbaren Programme.
-              </Typography>
-               <Grid container spacing={2}>
-               {this.renderProjects(projects, data)}
-             </Grid>
-             </div>
+                <Typography style={{ marginBottom: "10px" }}>
+                  Hier findest du eine Übersicht aller frei verfügbaren
+                  Programme.
+                </Typography>
+                <Grid container spacing={2}>
+                  {this.renderProjects(projects, data)}
+                </Grid>
+              </div>
             )}
 
             {!classroomUser && user && projects.length > 0 && (
@@ -154,12 +181,14 @@ class ProjectHome extends Component {
                 {this.renderProjects(classroomProjects, data)}
               </Grid>
             )}
-            {(!classroomUser && projects.length === 0) || (classroomUser && classroomProjects.length === 0) ? (
+            {(!classroomUser && projects.length === 0) ||
+            (classroomUser && classroomProjects.length === 0) ? (
               <div>
                 <Typography style={{ marginBottom: "10px" }}>
                   Es sind aktuell keine Projekte vorhanden.
                 </Typography>
-                {this.props.location.pathname.replace("/", "") === "project" && (
+                {this.props.location.pathname.replace("/", "") ===
+                  "project" && (
                   <Typography>
                     Erstelle jetzt dein{" "}
                     <Link to={"/"} className={this.props.classes.link}>
@@ -176,7 +205,12 @@ class ProjectHome extends Component {
             ) : null}
           </div>
         )}
-        <Snackbar open={this.state.snackbar} message={this.state.message} type={this.state.type} key={this.state.key} />
+        <Snackbar
+          open={this.state.snackbar}
+          message={this.state.message}
+          type={this.state.type}
+          key={this.state.key}
+        />
       </div>
     );
   }
@@ -196,7 +230,9 @@ ProjectHome.propTypes = {
 
 const mapStateToProps = (state) => ({
   projects: state.project.projects,
-  classroomProjects: state.classroomAuth.classroomUser ? state.classroomAuth.classroomUser.projects : [],
+  classroomProjects: state.classroomAuth.classroomUser
+    ? state.classroomAuth.classroomUser.projects
+    : [],
   progress: state.project.progress,
   user: state.auth.user,
   message: state.message,

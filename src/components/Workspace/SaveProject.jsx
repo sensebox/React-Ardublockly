@@ -145,7 +145,7 @@ class SaveProject extends Component {
           window.scrollTo(0, 0);
         },
       };
-      api 
+      api
         .post(
           `${import.meta.env.VITE_BLOCKLY_API}/${this.state.projectType}`,
           projectData,
@@ -161,10 +161,8 @@ class SaveProject extends Component {
       projectData.nickname = classroomUser.nickname;
       this.props.postClassroomProject(classroomUser.classroomId, projectData);
     }
-        window.scrollTo(0, 0);
-      }
-    };
-  
+    window.scrollTo(0, 0);
+  };
 
   setDescription = (e) => {
     this.setState({ description: e.target.value });
@@ -320,9 +318,7 @@ class SaveProject extends Component {
       </div>
     );
   }
-
-
-
+}
 
 SaveProject.propTypes = {
   updateProject: PropTypes.func.isRequired,

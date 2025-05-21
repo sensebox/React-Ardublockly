@@ -1,230 +1,324 @@
-import { GET_CLASSROOMS, GET_CLASSROOM, ADD_STUDENT_SUCCESS, CREATE_CLASSROOM, DELETE_STUDENT_SUCCESS, DELETE_STUDENT_FAIL, GET_CLASSROOM_PROJECTS_SUCCESS, GET_CLASSROOM_PROJECT_SUCCESS  } from './types';
-import { returnErrors, returnSuccess } from './messageActions';
-import api from '../utils/axiosConfig';
-
-
+import {
+  GET_CLASSROOMS,
+  GET_CLASSROOM,
+  ADD_STUDENT_SUCCESS,
+  CREATE_CLASSROOM,
+  DELETE_STUDENT_SUCCESS,
+  DELETE_STUDENT_FAIL,
+  GET_CLASSROOM_PROJECTS_SUCCESS,
+  GET_CLASSROOM_PROJECT_SUCCESS,
+} from "./types";
+import { returnErrors, returnSuccess } from "./messageActions";
+import api from "../utils/axiosConfig";
 
 export const createClassroom = (classroom) => (dispatch) => {
   console.log(classroom);
   const config = {
-    success: res => {
-      dispatch(returnSuccess(res.data.message, res.status, 'CREATE_CLASSROOM_SUCCESS'));
+    success: (res) => {
+      dispatch(
+        returnSuccess(res.data.message, res.status, "CREATE_CLASSROOM_SUCCESS"),
+      );
     },
-    error: err => {
+    error: (err) => {
       if (err.response) {
-        dispatch(returnErrors(err.response.data.message, err.response.status, 'CREATE_CLASSROOM_FAIL'));
+        dispatch(
+          returnErrors(
+            err.response.data.message,
+            err.response.status,
+            "CREATE_CLASSROOM_FAIL",
+          ),
+        );
       }
-    }
+    },
   };
-  api.post(`${process.env.REACT_APP_BLOCKLY_API}/classroom`, classroom, config)
-    .then(res => {
+  api
+    .post(`${import.meta.env.VITE_BLOCKLY_API}/classroom`, classroom, config)
+    .then((res) => {
       res.config.success(res);
     })
-    .catch(err => {
+    .catch((err) => {
       err.config.error(err);
     });
 };
 
 export const deleteClassroom = (id) => (dispatch) => {
   const config = {
-    success: res => {
+    success: (res) => {
       dispatch(returnSuccess(res.data.message, res.status));
     },
-    error: err => {
+    error: (err) => {
       if (err.response) {
-        dispatch(returnErrors(err.response.data.message, err.response.status, 'DELETE_CLASSROOM_FAIL'));
+        dispatch(
+          returnErrors(
+            err.response.data.message,
+            err.response.status,
+            "DELETE_CLASSROOM_FAIL",
+          ),
+        );
       }
-    }
+    },
   };
-  api.delete(`${process.env.REACT_APP_BLOCKLY_API}/classroom/${id}`, config)
-    .then(res => {
+  api
+    .delete(`${import.meta.env.VITE_BLOCKLY_API}/classroom/${id}`, config)
+    .then((res) => {
       res.config.success(res);
     })
-    .catch(err => {
+    .catch((err) => {
       err.config.error(err);
     });
 };
 
-
 export const addStudent = (classroomId, student) => (dispatch) => {
   const body = {
-    students: [student]
-  }
+    students: [student],
+  };
   const config = {
-    success: res => {
+    success: (res) => {
       dispatch({
         type: ADD_STUDENT_SUCCESS,
-        payload: student
+        payload: student,
       });
-      dispatch(returnSuccess(res.data.message, res.status, 'ADD_STUDENT_SUCCESS'));
+      dispatch(
+        returnSuccess(res.data.message, res.status, "ADD_STUDENT_SUCCESS"),
+      );
     },
-    error: err => {
+    error: (err) => {
       if (err.response) {
-        dispatch(returnErrors(err.response.data.message, err.response.status, 'ADD_STUDENT_FAIL'));
+        dispatch(
+          returnErrors(
+            err.response.data.message,
+            err.response.status,
+            "ADD_STUDENT_FAIL",
+          ),
+        );
       }
-    }
+    },
   };
-  api.post(`${process.env.REACT_APP_BLOCKLY_API}/classroom/${classroomId}/adduser`, body, config)
-    .then(res => {
+  api
+    .post(
+      `${import.meta.env.VITE_BLOCKLY_API}/classroom/${classroomId}/adduser`,
+      body,
+      config,
+    )
+    .then((res) => {
       res.config.success(res);
     })
-    .catch(err => {
+    .catch((err) => {
       err.config.error(err);
     });
 };
 
 export const deleteStudent = (classroomId, studentId) => (dispatch) => {
   const body = {
-    _id: studentId
+    _id: studentId,
   };
   console.log(body);
-  
-  api.delete(`${process.env.REACT_APP_BLOCKLY_API}/classroom/${classroomId}/user`, { data: body })
-    .then(res => {
+
+  api
+    .delete(
+      `${import.meta.env.VITE_BLOCKLY_API}/classroom/${classroomId}/user`,
+      { data: body },
+    )
+    .then((res) => {
       dispatch({
         type: DELETE_STUDENT_SUCCESS,
-        payload: studentId
+        payload: studentId,
       });
-      dispatch(returnSuccess(res.data.message, res.status, 'DELETE_STUDENT_SUCCESS'));
+      dispatch(
+        returnSuccess(res.data.message, res.status, "DELETE_STUDENT_SUCCESS"),
+      );
     })
-    .catch(err => {
+    .catch((err) => {
       if (err.response) {
-        dispatch(returnErrors(err.response.data.message, err.response.status, 'DELETE_STUDENT_FAIL'));
+        dispatch(
+          returnErrors(
+            err.response.data.message,
+            err.response.status,
+            "DELETE_STUDENT_FAIL",
+          ),
+        );
       }
     });
 };
 
-
 export const getClassrooms = () => (dispatch) => {
   const config = {
-    success: res => {
-      console.log(res.data.classrooms);
+    success: (res) => {
       var classrooms = res.data.classrooms;
       dispatch({
         type: GET_CLASSROOMS,
-        payload: classrooms
+        payload: classrooms,
       });
       dispatch(returnSuccess(res.data.message, res.status));
     },
-    error: err => {
+    error: (err) => {
       if (err.response) {
-        dispatch(returnErrors(err.response.data.message, err.response.status, 'GET_CLASSROOMS_FAIL'));
+        dispatch(
+          returnErrors(
+            err.response.data.message,
+            err.response.status,
+            "GET_CLASSROOMS_FAIL",
+          ),
+        );
       }
-    }
+    },
   };
-  api.get(`${process.env.REACT_APP_BLOCKLY_API}/classroom`, config)
-    .then(res => {
+  api
+    .get(`${import.meta.env.VITE_BLOCKLY_API}/classroom`, config)
+    .then((res) => {
       res.config.success(res);
     })
-    .catch(err => {
+    .catch((err) => {
       err.config.error(err);
     });
 };
 
-  
-  export const getClassroom = (id) => (dispatch ) => {
-    console.log('Fetching classroom:', id);
-    api
-      .get(`${process.env.REACT_APP_BLOCKLY_API}/classroom/${id}`)
-      .then((res) => {
-        var classroom = res.data.classroom;
+export const getClassroom = (id) => (dispatch) => {
+  console.log("Fetching classroom:", id);
+  api
+    .get(`${import.meta.env.VITE_BLOCKLY_API}/classroom/${id}`)
+    .then((res) => {
+      var classroom = res.data.classroom;
+      dispatch({
+        type: GET_CLASSROOM,
+        payload: classroom,
+      });
+      dispatch(returnSuccess(res.data.message, res.status));
+    })
+    .catch((err) => {
+      if (err.response) {
+        dispatch(
+          returnErrors(
+            err.response.data.message,
+            err.response.status,
+            "GET_CLASSROOM_FAIL",
+          ),
+        );
+      }
+    });
+};
+
+export const getClassroomProject = (classroomId, projectId) => (dispatch) => {
+  const config = {
+    success: (res) => {
+      var project = res.data.project;
+      dispatch({
+        type: GET_CLASSROOM_PROJECT_SUCCESS,
+        payload: project,
+      });
+      dispatch(
+        returnSuccess(
+          res.data.message,
+          res.status,
+          "GET_CLASSROOM_PROJECT_SUCCESS",
+        ),
+      );
+    },
+    error: (err) => {
+      if (err.response) {
+        dispatch(
+          returnErrors(
+            err.response.data.message,
+            err.response.status,
+            "GET_CLASSROOM_PROJECT_FAIL",
+          ),
+        );
+      }
+    },
+  };
+  api
+    .get(`/classroom/${classroomId}/${projectId}`, config)
+    .then((res) => {
+      res.config.success(res);
+    })
+    .catch((err) => {
+      err.config.error(err);
+    });
+};
+
+export const getClassroomProjects =
+  (classroomCode, nickname, classroomId) => (dispatch) => {
+    const body = {
+      classroomCode: classroomCode,
+      nickname: nickname,
+    };
+    const config = {
+      success: (res) => {
+        var projects = res.data.projects;
         dispatch({
-          type: GET_CLASSROOM,
-          payload: classroom,
+          type: GET_CLASSROOM_PROJECTS_SUCCESS,
+          payload: projects,
         });
-        dispatch(returnSuccess(res.data.message, res.status));
-      })
-      .catch((err) => {
+        dispatch(
+          returnSuccess(
+            res.data.message,
+            res.status,
+            "GET_CLASSROOM_PROJECTS_SUCCESS",
+          ),
+        );
+      },
+      error: (err) => {
         if (err.response) {
           dispatch(
             returnErrors(
               err.response.data.message,
               err.response.status,
-              "GET_CLASSROOM_FAIL"
-            )
+              "GET_CLASSROOM_PROJECTS_FAIL",
+            ),
           );
         }
-      }
-      );
-  };
-
-  export const getClassroomProject = (classroomId, projectId ) => (dispatch ) => {
-    const config = {
-      success: res => {
-        var project = res.data.project;
-        dispatch({
-          type: GET_CLASSROOM_PROJECT_SUCCESS,
-          payload: project
-        });
-        dispatch(returnSuccess(res.data.message, res.status, 'GET_CLASSROOM_PROJECT_SUCCESS'));
       },
-      error: err => {
-        if (err.response) {
-          dispatch(returnErrors(err.response.data.message, err.response.status, 'GET_CLASSROOM_PROJECT_FAIL'));
-        }
-      }
     };
-    api.get(`/classroom/${classroomId}/${projectId}`, config)
-    .then(res => {
-      res.config.success(res);
-    })
-    .catch(err => {
-      err.config.error(err);
-    });
-  };
-
-
-  export const getClassroomProjects = (classroomCode, nickname, classroomId) => (dispatch ) => {
-    const body = {
-      classroomCode: classroomCode,
-      nickname: nickname
-    }
-    const config = {
-      success: res => {
-        var projects = res.data.projects;
-        dispatch({
-          type: GET_CLASSROOM_PROJECTS_SUCCESS,
-          payload: projects
-        });
-        dispatch(returnSuccess(res.data.message, res.status, 'GET_CLASSROOM_PROJECTS_SUCCESS'));
-      },
-      error: err => {
-        if (err.response) {
-          dispatch(returnErrors(err.response.data.message, err.response.status, 'GET_CLASSROOM_PROJECTS_FAIL'));
-        }
-      }
-    };
-    api.post(`${process.env.REACT_APP_BLOCKLY_API}/classroom/${classroomId}/projects`, body, config)
-      .then(res => {
+    api
+      .post(
+        `${import.meta.env.VITE_BLOCKLY_API}/classroom/${classroomId}/projects`,
+        body,
+        config,
+      )
+      .then((res) => {
         res.config.success(res);
       })
-      .catch(err => {
+      .catch((err) => {
         err.config.error(err);
       });
   };
 
 export const postClassroomProject = (classroomId, body) => (dispatch) => {
   const config = {
-    success: res => {
-      dispatch(returnSuccess(res.data.message, res.status, 'POST_CLASSROOM_PROJECT_SUCCESS'));
+    success: (res) => {
+      dispatch(
+        returnSuccess(
+          res.data.message,
+          res.status,
+          "POST_CLASSROOM_PROJECT_SUCCESS",
+        ),
+      );
     },
-    error: err => {
+    error: (err) => {
       if (err.response) {
-        dispatch(returnErrors(err.response.data.message, err.response.status, 'POST_CLASSROOM_PROJECT_FAIL'));
+        dispatch(
+          returnErrors(
+            err.response.data.message,
+            err.response.status,
+            "POST_CLASSROOM_PROJECT_FAIL",
+          ),
+        );
       }
-    }
+    },
   };
-  api.post(`${process.env.REACT_APP_BLOCKLY_API}/classroom/${classroomId}/project`, body, config)
-    .then(res => {
+  api
+    .post(
+      `${import.meta.env.VITE_BLOCKLY_API}/classroom/${classroomId}/project`,
+      body,
+      config,
+    )
+    .then((res) => {
       res.config.success(res);
     })
-    .catch(err => {
+    .catch((err) => {
       err.config.error(err);
     });
 };
-
-
-  
 
 // export const updateProject = (type, id) => (dispatch, getState) => {
 //   var workspace = getState().workspace;
@@ -262,7 +356,7 @@ export const postClassroomProject = (classroomId, body) => (dispatch) => {
 //       }
 //     }
 //   };
-//   axios.put(`${process.env.REACT_APP_BLOCKLY_API}/${type}/${id}`, body, config)
+//   axios.put(`${import.meta.env.VITE_BLOCKLY_API}/${type}/${id}`, body, config)
 //     .then(res => {
 //       res.config.success(res);
 //     })
@@ -291,7 +385,7 @@ export const postClassroomProject = (classroomId, body) => (dispatch) => {
 //       dispatch(returnErrors(err.response.data.message, err.response.status, 'PROJECT_DELETE_FAIL'));
 //     }
 //   };
-//   axios.delete(`${process.env.REACT_APP_BLOCKLY_API}/${type}/${id}`, config)
+//   axios.delete(`${import.meta.env.VITE_BLOCKLY_API}/${type}/${id}`, config)
 //     .then(res => {
 //       res.config.success(res);
 //     })
@@ -302,7 +396,6 @@ export const postClassroomProject = (classroomId, body) => (dispatch) => {
 //     });
 // };
 
-
 // export const shareProject = (title, type, id) => (dispatch, getState) => {
 //   var body = {
 //     title: title
@@ -312,7 +405,7 @@ export const postClassroomProject = (classroomId, body) => (dispatch) => {
 //   } else {
 //     body.xml = getState().workspace.code.xml;
 //   }
-//   axios.post(`${process.env.REACT_APP_BLOCKLY_API}/share`, body)
+//   axios.post(`${import.meta.env.VITE_BLOCKLY_API}/share`, body)
 //     .then(res => {
 //       var shareContent = res.data.content;
 //       if (body.projectId) {
@@ -332,7 +425,6 @@ export const postClassroomProject = (classroomId, body) => (dispatch) => {
 //       }
 //     });
 // };
-
 
 // export const resetProject = () => (dispatch) => {
 //   dispatch({

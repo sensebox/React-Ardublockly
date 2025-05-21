@@ -11,7 +11,6 @@ import {
 
 const initialState = {
   token: localStorage.getItem("token"),
-  refreshToken: localStorage.getItem("refreshToken"),
   isAuthenticated: false,
   progress: true,
   user: null,
@@ -33,30 +32,54 @@ export default function foo(state = initialState, action) {
       };
     case LOGIN_SUCCESS:
       console.log("Login success", action.payload);
-         localStorage.setItem("token", action.payload.token);
-        // localStorage.setItem("refreshToken", action.payload.refreshToken);
-        return {
-          ...state,
-          user: action.payload.user,
-          token: action.payload.token,
-          refreshToken: action.payload.refreshToken,
-          isAuthenticated: true,
-          progress: false,
-        };
+      localStorage.setItem("token", action.payload.token);
+      // localStorage.setItem("refreshToken", action.payload.refreshToken);
+      return {
+        ...state,
+        user: action.payload.user,
+        token: action.payload.token,
+        isAuthenticated: true,
+        progress: false,
+      };
     case AUTH_ERROR:
+      return {
+        ...state,
+        token: null,
+        user: null,
+        isAuthenticated: false,
+        progress: false,
+      };
     case LOGIN_FAIL:
+      console.log("Login fail", action.payload);
+      localStorage.removeItem("token");
+      // localStorage.removeItem("refreshToken");
+      return {
+        ...state,
+        token: null,
+        user: null,
+        isAuthenticated: false,
+        progress: false,
+      };
+    case REFRESH_TOKEN_SUCCESS:
+      console.log("REFRESH_TOKEN_SUCCESS", action.payload);
+      localStorage.setItem("token", action.payload.token);
+      return {
+        ...state,
+        user: action.payload.user,
+        token: action.payload.token,
+        isAuthenticated: true,
+        progress: false,
+      };
     case LOGOUT_SUCCESS:
-      case LOGOUT_FAIL:
-        localStorage.removeItem("token");
-        localStorage.removeItem("refreshToken");
-        return {
-          ...state,
-          token: null,
-          refreshToken: null,
-          user: null,
-          isAuthenticated: false,
-          progress: false,
-        };
+    case LOGOUT_FAIL:
+      localStorage.removeItem("token");
+      return {
+        ...state,
+        token: null,
+        user: null,
+        isAuthenticated: false,
+        progress: false,
+      };
     default:
       return state;
   }

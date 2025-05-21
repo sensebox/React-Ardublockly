@@ -12,7 +12,7 @@ const initialState = {
   error: null,
 };
 
-export default function (state = initialState, action) {
+export default function foo(state = initialState, action) {
   switch (action.type) {
     case LOGIN_SUCCESS:
       // localStorage.setItem("token", action.payload.token);

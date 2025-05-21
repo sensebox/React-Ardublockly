@@ -7,23 +7,21 @@ const SocialLoginRedirect = (props) => {
   const history = useHistory();
 
   useEffect(() => {
-    // Capture the token from the URL
     const params = new URLSearchParams(window.location.search);
     const token = params.get("token");
-
+    console.log("Token from URL:", token);
     if (token) {
-      console.log("Token received from URL:", token); // For debugging
-
-      // Dispatch the socialLogin action to store the token and authenticate the user
-      props.socialLogin(token);
-
-      // Clean up the URL by removing the token
-      window.history.replaceState({}, document.title, "/user");
-
-      // Redirect the user to the desired protected route (e.g., /user)
-      setTimeout(() => history.push("/user"), 1000); // Delay to ensure token is stored
+      console.log("Token received from URL:", token);
+      props
+        .socialLogin(token)
+        .then(() => {
+          window.history.replaceState({}, document.title, "/user");
+          history.push("/user");
+        })
+        .catch(() => {
+          history.push("/user/login");
+        });
     } else {
-      // If no token is found, redirect to the login page
       history.push("/user/login");
     }
   }, [history, props]);
