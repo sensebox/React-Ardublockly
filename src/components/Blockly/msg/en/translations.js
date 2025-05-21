@@ -241,4 +241,7 @@ export const TRANSLATIONS = {
   senseBox_serial_tip:
     "prints the values to the serial monitor in the arduino IDE. Good way to have a fast and easy feedback for your programm",
   senseBox_soil: "Soil Moisture",
+  senseBox_watertemperature: "Water Temperature",
+  senseBox_watertemperature_tooltip:
+    "The water thermometer outputs temperature in degrees Celsius. Connect the sensor to one of the 6 ports of the One-Wire adapter and then connect the One-Wire adapter to one of the 3 digital/analog ports of the senseBox and select the port in the block. If you only have one thermometer connected to the One-Wire adapter, then leave the index at 0. Each additional connected thermometer can be addressed with an index increased by 1. It does not matter at which port of the adapter the thermometers are connected.",
 };
