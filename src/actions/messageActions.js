@@ -13,7 +13,7 @@ export const returnErrors = (msg, status, id = null) => {
 };
 
 // RETURN Success
-export const returnSuccess = (msg, status, id = null) => {
+export const returnSuccess = (msg, status, id) => {
   return {
     type: GET_SUCCESS,
     payload: {
