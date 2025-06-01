@@ -740,14 +740,14 @@ Blockly.Blocks["sensebox_esp32s2_light"] = {
 };
 
 /**
- * senseBox-MCU ESP32-S2 onBoard MPU6050
+ * senseBox-MCU ESP32-S2 onBoard accelerometer
  *
  *
  */
 
-Blockly.Blocks["sensebox_esp32s2_mpu6050"] = {
+Blockly.Blocks["sensebox_esp32s2_accelerometer"] = {
   init: function () {
-    this.appendDummyInput().appendField("ESP32-S2 MPU6050");
+    this.appendDummyInput().appendField(Blockly.Msg.senseBox_accelerometer);
     this.appendDummyInput()
       .setAlign(Blockly.inputs.Align.RIGHT)
       .appendField(Blockly.Msg.senseBox_value)
@@ -762,9 +762,9 @@ Blockly.Blocks["sensebox_esp32s2_mpu6050"] = {
       );
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);
-    this.setTooltip(Blockly.Msg.senseBox_mpu6050_tooltip);
-    this.setHelpUrl(withBoardParam(Blockly.Msg.senseBox_mpu6050_helpurl));
-    this.data = { name: "mpu6050" };
+    this.setTooltip(Blockly.Msg.senseBox_accelerometer_tooltip);
+    this.setHelpUrl(withBoardParam(Blockly.Msg.senseBox_accelerometer_helpurl));
+    this.data = { name: "acceleration" };
   },
 };
 
@@ -805,8 +805,8 @@ Blockly.Blocks["sensebox_sensor_icm20948"] = {
       );
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);
-    this.setTooltip(Blockly.Msg.senseBox_mpu6050_tooltip);
-    this.setHelpUrl(Blockly.Msg.senseBox_mpu6050_helpurl);
+    this.setTooltip(Blockly.Msg.senseBox_accelerometer_tooltip);
+    this.setHelpUrl(Blockly.Msg.senseBox_accelerometer_helpurl);
     this.data = { name: "icm20948" };
   },
 };
