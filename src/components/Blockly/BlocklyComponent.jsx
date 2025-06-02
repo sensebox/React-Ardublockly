@@ -16,6 +16,7 @@ import {
 } from "@blockly/plugin-scroll-options";
 
 import { PositionedMinimap } from "@blockly/workspace-minimap";
+import LevelSelector from "./LevelSelector";
 
 class BlocklyComponent extends React.Component {
   constructor(props) {
@@ -105,6 +106,7 @@ class BlocklyComponent extends React.Component {
   render() {
     return (
       <>
+        <LevelSelector />
         <Card
           ref={this.blocklyDiv}
           id="blocklyDiv"
