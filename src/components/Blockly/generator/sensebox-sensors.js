@@ -1059,7 +1059,7 @@ Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_accelerometer"] =
     Blockly.Generator.Arduino.definitions_["define_ICM42670P"] =
       "ICM42670 icm = ICM42670(Wire1, 0);";
     Blockly.Generator.Arduino.definitions_["define_ICM20948"] =
-      "ICM20948_WE myIMU = ICM20948_WE(0x68);";
+      "ICM20948_WE myIMU = ICM20948_WE(&Wire1, 0x68);";
     Blockly.Generator.Arduino.definitions_["define_acceleration_switch"] =
       "int sensorActive = 0; // 0: none, 1: MPU6050, 2: ICM42670P, 3: ICM20948";
     Blockly.Generator.Arduino.setupCode_["Wire1.begin()"] = "Wire1.begin();";
@@ -1116,15 +1116,15 @@ Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_accelerometer"] =
       "} else {\n" +
       "myIMU.readSensor();\n" +
       "xyzFloat accRaw;\n" +
-      "myIMU.getCorrectedAccRawValues(&accRaw);\n" +
+      "myIMU.getAccRawValues(&accRaw);\n" +
       'if (sensorValueType == "accelerationX") {\n' +
-      "return accRaw.x * 9.81 / 16384.0;\n" + // TODO: this conversion was generated and not tested
+      "return accRaw.x * 9.81 / 4096.0;\n" +
       '} else if (sensorValueType == "accelerationY") {\n' +
-      "return accRaw.y * 9.81 / 16384.0;\n" + // TODO: this conversion was generated and not tested
+      "return accRaw.y * 9.81 / 4096.0;\n" +
       '} else if (sensorValueType == "accelerationZ") {\n' +
-      "return accRaw.z * 9.81 / 16384.0;\n" + // TODO: this conversion was generated and not tested
+      "return accRaw.z * 9.81 / 4096.0;\n" +
       '} else if (sensorValueType == "temperature") {\n' +
-      "return myIMU.getTemperature();\n" + // TODO: does it need to be converted?
+      "return myIMU.getTemperature();\n" +
       "} else {\n" +
       "return 0.0;\n" +
       "}\n" +
