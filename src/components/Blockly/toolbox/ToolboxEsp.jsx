@@ -3,8 +3,10 @@ import { getColour } from "../helpers/colour";
 import * as Blockly from "blockly/core";
 import "@blockly/toolbox-search";
 import "./search-category.css";
+import { useLevelStore } from "../../../store/useLevelStore";
 
 export const ToolboxEsp = () => {
+  const level = useLevelStore((state) => state.level);
   return (
     <>
       <Statement name="onstart">des</Statement>
@@ -12,6 +14,22 @@ export const ToolboxEsp = () => {
       <Category name="Search" kind="search">
         {" "}
       </Category>
+      {level === 1 && (
+        <Category name="Only Level 1" colour={getColour().sensebox}>
+          <Label text="This category is only visible in Level 1" />
+        </Category>
+      )}
+      {level === 2 && (
+        <Category name="Only Level 2" colour={getColour().sensebox}>
+          <Label text="This category is only visible in Level 2" />
+        </Category>
+      )}
+      {level === 3 && (
+        <Category name="Only Level 3" colour={getColour().sensebox}>
+          <Label text="This category is only visible in Level 3" />
+        </Category>
+      )}
+
       <Category
         name={Blockly.Msg.toolbox_sensors}
         colour={getColour().sensebox}
@@ -403,6 +421,7 @@ export const ToolboxEsp = () => {
           <Block type="sensebox_ble_init"></Block>
         </Category> */}
       </Category>
+
       {/* <Category id="sensebox_solar" name="Solar" colour={getColour().solar}>
         <Block type="sensebox_solar_charger_SB041">
           <Field name="value">battery_level</Field>

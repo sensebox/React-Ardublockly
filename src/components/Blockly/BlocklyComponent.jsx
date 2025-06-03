@@ -17,8 +17,10 @@ import {
 
 import { PositionedMinimap } from "@blockly/workspace-minimap";
 import LevelSelector from "./LevelSelector";
+import { useLevelStore } from "../../store/useLevelStore";
 
 class BlocklyComponent extends React.Component {
+  level = 0;
   constructor(props) {
     super(props);
     this.blocklyDiv = React.createRef();
