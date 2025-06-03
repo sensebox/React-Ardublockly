@@ -51,7 +51,7 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      codeOn: useLevelStore.getState().level === 3,
+      codeOn: useLevelStore.getState().level === 4,
       snackbar: false,
       type: "",
       key: "",
@@ -64,7 +64,7 @@ class Home extends Component {
 
   componentDidMount() {
     this.level = useLevelStore.subscribe((newLevel) => {
-      if (newLevel.level == 3) {
+      if (newLevel.level == 4) {
         this.setState({ codeOn: true });
       } else {
         this.setState({ codeOn: false });

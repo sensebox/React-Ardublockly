@@ -81,6 +81,10 @@ const LevelSelector: React.FC<LevelSelectorProps> = ({}) => {
           <FontAwesomeIcon icon="level-up-alt" />
           Level 3
         </MenuItem>
+        <MenuItem onClick={() => handleSelect(4)}>
+          <FontAwesomeIcon icon="level-up-alt" />
+          Level 4
+        </MenuItem>
       </Menu>{" "}
       {/* {[1, 2, 3].map((level) => (
         <IconButton

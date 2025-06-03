@@ -2,7 +2,7 @@ import { Block, Value, Field, Statement, Shadow, Category, Label } from "../..";
 import { getColour } from "../../helpers/colour";
 import * as Blockly from "blockly/core";
 
-export const ToolBoxEspLevel3 = (props) => {
+export const ToolBoxEspLevel4 = (props) => {
   return (
     <>
       <Category
@@ -263,6 +263,17 @@ export const ToolBoxEspLevel3 = (props) => {
         <Block type="text_length" />
         <Block type="text_isEmpty" />
       </Category>
+      <Category name="ESPNOW" colour={getColour().sensebox}>
+        <Block type="sensebox_esp_now" />
+        <Block type="sensebox_esp_now_sender" />
+        <Block type="sensebox_get_mac" />
+        <Block type="sensebox_esp_now_receive" />
+        <Block type="sensebox_esp_now_send" />
+      </Category>
+      <Category name="Ethernet" colour={getColour().sensebox}>
+        <Block type="sensebox_ethernet" />
+        <Block type="sensebox_ethernetIp" />
+      </Category>
       <Category name="SD" colour={getColour().sensebox}>
         <Block type="sensebox_esp32s2_sd_create_file" />
         <Block type="sensebox_esp32s2_sd_open_file">
@@ -390,7 +401,25 @@ export const ToolBoxEspLevel3 = (props) => {
           <Block type="sensebox_ble_init"></Block>
         </Category> */}
       </Category>
-
+      <Category id="webserver" name="Webserver" colour={getColour().webserver}>
+        <Block type="sensebox_initialize_http_server"></Block>
+        <Block type="sensebox_http_on_client_connect"></Block>
+        <Block type="sensebox_ip_address"></Block>
+        <Block type="sensebox_http_method"></Block>
+        <Block type="sensebox_http_uri"></Block>
+        <Block type="sensebox_http_protocol_version"></Block>
+        <Block type="sensebox_http_user_agent"></Block>
+        <Block type="sensebox_generate_http_succesful_response"></Block>
+        <Block type="sensebox_generate_http_not_found_response"></Block>
+        <Block type="sensebox_generate_html_doc"></Block>
+        <Block type="sensebox_general_html_tag"></Block>
+        <Block type="sensebox_web_readHTML"></Block>
+      </Category>
+      <Category id="mqtt" name="MQTT" colour={getColour().mqtt}>
+        <Block type="sensebox_mqtt_setup" />
+        <Block type="sensebox_mqtt_publish" />
+        {/* <Block type="sensebox_mqtt_subscribe" /> */}
+      </Category>
       <Category name={Blockly.Msg.toolbox_logic} colour={getColour().logic}>
         <Block type="controls_if" />
         <Block type="controls_ifelse" />
@@ -495,6 +524,77 @@ export const ToolBoxEspLevel3 = (props) => {
         colour={getColour().variables}
         custom="CREATE_TYPED_VARIABLE"
       ></Category>
+      {/* <Category name="Arrays" colour={getColour().arrays}>
+        <Block type="lists_create_empty" />
+        <Block type="array_getIndex" />
+        <Block type="lists_length" />
+      </Category> */}
+      <Category
+        name={Blockly.Msg.toolbox_functions}
+        colour={getColour().procedures}
+        custom="PROCEDURE"
+      ></Category>
+      <Category name={Blockly.Msg.toolbox_advanced} colour={getColour().io}>
+        <Category name={Blockly.Msg.toolbox_serial} colour={getColour().serial}>
+          <Block type="init_serial_monitor"></Block>
+          <Block type="print_serial_monitor"></Block>
+        </Category>
+        <Category name={Blockly.Msg.toolbox_io} colour={getColour().io}>
+          <Block type="io_analogreadmillivolt"></Block>
+          <Block type="io_digitalwrite"></Block>
+          <Block type="io_digitalread"></Block>
+          <Block type="io_builtin_led"></Block>
+          <Block type="io_analogwrite"></Block>
+          <Block type="io_analogread"></Block>
+          <Block type="io_highlow"></Block>
+          <Block type="io_pulsein">
+            <Value name="PULSETYPE">
+              <Shadow type="io_highlow"></Shadow>
+            </Value>
+          </Block>
+          <Block type="io_pulsetimeout">
+            <Value name="PULSETYPE">
+              <Shadow type="io_highlow"></Shadow>
+            </Value>
+            <Value name="TIMEOUT">
+              <Shadow type="math_number">
+                <Field name="NUM">100</Field>
+              </Shadow>
+            </Value>
+          </Block>
+        </Category>
+        <Category name={Blockly.Msg.toolbox_motors} colour={getColour().motors}>
+          <Block type="sensebox_motors_beginServoMotor" />
+          <Block type="sensebox_motors_moveServoMotor">
+            <Value name="degrees">
+              <Block type="math_number">
+                <Field name="NUM">90</Field>
+              </Block>
+            </Value>
+          </Block>
+          {/* <Block type="sensebox_motors_I2CMotorBoard_begin" />
+        <Block type="sensebox_motors_I2CMotorBoard_moveDCMotor">
+          <Value name="speed">
+            <Block type="math_number">
+              <Field name="NUM">100</Field>
+            </Block>
+          </Value>
+        </Block>
+        <Block type="sensebox_motors_I2CMotorBoard_stopDCMotor" />
+        <Block type="sensebox_motors_beginStepperMotor" />
+        <Block type="sensebox_motors_moveStepperMotor">
+          <Value name="steps">
+            <Block type="math_number">
+              <Field name="NUM">2048</Field>
+            </Block>
+          </Value>
+        </Block> */}
+        </Category>
+        <Category name="Watchdog" colour={getColour().io}>
+          <Block type="watchdog_enable"></Block>
+          <Block type="watchdog_reset"></Block>
+        </Category>
+      </Category>
       <Category
         id="time"
         name={Blockly.Msg.toolbox_time}
