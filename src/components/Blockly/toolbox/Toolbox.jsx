@@ -4,7 +4,7 @@ import { TypedVariableModal } from "@blockly/plugin-typed-variable-modal";
 import * as Blockly from "blockly/core";
 import { connect } from "react-redux";
 import { ToolboxMcu } from "./ToolboxMcu";
-import { ToolboxEsp } from "./ToolboxEsp";
+import { ToolboxEsp } from "./ESP/ToolboxEsp";
 import { useLevelStore } from "../../../store/useLevelStore";
 
 class Toolbox extends React.Component {
