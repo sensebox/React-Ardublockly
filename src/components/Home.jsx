@@ -23,6 +23,7 @@ import { faCode } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TooltipViewer from "./TooltipViewer";
 import Dialog from "./Dialog";
+import { useLevelStore } from "../store/useLevelStore";
 // import Autosave from "./Workspace/AutoSave";
 const styles = (theme) => ({
   codeOn: {
@@ -46,20 +47,30 @@ const styles = (theme) => ({
 });
 
 class Home extends Component {
+  level = 0;
   constructor(props) {
     super(props);
     this.state = {
-      codeOn: true,
+      codeOn: useLevelStore.getState().level === 3,
       snackbar: false,
       type: "",
       key: "",
       message: "",
       open: true,
       initialXml: localStorage.getItem("autoSaveXML"),
+      level: 1,
     };
   }
 
   componentDidMount() {
+    this.level = useLevelStore.subscribe((newLevel) => {
+      if (newLevel.level == 3) {
+        this.setState({ codeOn: true });
+      } else {
+        this.setState({ codeOn: false });
+      }
+    });
+
     if (this.props.platform === true) {
       this.setState({ codeOn: false });
     }
