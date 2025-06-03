@@ -5,6 +5,7 @@ import { selectedBoard } from "../helpers/board";
 import { FieldGridDropdown } from "@blockly/field-grid-dropdown";
 import { FieldSlider } from "@blockly/field-slider";
 import { withBoardParam } from "../helpers/helpUrlBuilder";
+import { useLevelStore } from "../../../store/useLevelStore";
 
 /**
  * HDC1080 Temperature and Humidity Sensor
@@ -13,7 +14,13 @@ import { withBoardParam } from "../helpers/helpUrlBuilder";
 
 Blockly.Blocks["sensebox_sensor_temp_hum"] = {
   init: function () {
-    this.appendDummyInput().appendField(Blockly.Msg.senseBox_temp_hum);
+    let level = useLevelStore.getState().level;
+    if (level === 1) {
+      this.appendDummyInput().appendField("Temperatur und Luftfeuchtigkeit");
+    } else {
+      this.appendDummyInput().appendField(Blockly.Msg.senseBox_temp_hum);
+    }
+
     this.appendDummyInput()
       .setAlign(Blockly.inputs.Align.RIGHT)
       .appendField(Blockly.Msg.senseBox_value)

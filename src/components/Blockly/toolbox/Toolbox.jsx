@@ -46,6 +46,8 @@ class Toolbox extends React.Component {
     }
 
     this.props.workspace.updateToolbox(this.props.toolbox.current);
+    // close the flyout to update the toolbox' contents also
+    this.props.workspace.toolbox.flyout.setVisible(false);
   }
 
   createFlyout(workspace) {
