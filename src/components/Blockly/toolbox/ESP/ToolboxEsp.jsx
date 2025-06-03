@@ -15,9 +15,9 @@ export const ToolboxEsp = () => {
       <Category name="Search" kind="search">
         {" "}
       </Category>
-      {level > 0 && <ToolBoxEspLevel1 />}
-      {level > 1 && <ToolBoxEspLevel2 />}
-      {level > 2 && <ToolBoxEspLevel3 />}
+      {level == 1 && <ToolBoxEspLevel1 />}
+      {level == 2 && <ToolBoxEspLevel2 />}
+      {level == 3 && <ToolBoxEspLevel3 />}
     </>
   );
 };
