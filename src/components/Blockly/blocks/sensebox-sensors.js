@@ -16,21 +16,28 @@ Blockly.Blocks["sensebox_sensor_temp_hum"] = {
   init: function () {
     let level = useLevelStore.getState().level;
     if (level === 1) {
-      this.appendDummyInput().appendField("Temperatur und Luftfeuchtigkeit");
+      this.appendDummyInput().appendField(
+        new Blockly.FieldImage(
+          "https://cdn-icons-png.flaticon.com/512/4158/4158502.png",
+          40,
+          40,
+          "senseBox HDC1080",
+        ),
+      );
     } else {
       this.appendDummyInput().appendField(Blockly.Msg.senseBox_temp_hum);
+      this.appendDummyInput()
+        .setAlign(Blockly.inputs.Align.RIGHT)
+        .appendField(Blockly.Msg.senseBox_value)
+        .appendField(
+          new Blockly.FieldDropdown([
+            [Blockly.Msg.senseBox_temp, "Temperature"],
+            [Blockly.Msg.senseBox_hum, "Humidity"],
+          ]),
+          "NAME",
+        );
     }
 
-    this.appendDummyInput()
-      .setAlign(Blockly.inputs.Align.RIGHT)
-      .appendField(Blockly.Msg.senseBox_value)
-      .appendField(
-        new Blockly.FieldDropdown([
-          [Blockly.Msg.senseBox_temp, "Temperature"],
-          [Blockly.Msg.senseBox_hum, "Humidity"],
-        ]),
-        "NAME",
-      );
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_temp_hum_tooltip);
@@ -46,17 +53,29 @@ Blockly.Blocks["sensebox_sensor_temp_hum"] = {
 
 Blockly.Blocks["sensebox_sensor_uv_light"] = {
   init: function () {
-    this.appendDummyInput().appendField(Blockly.Msg.senseBox_uv_light);
-    this.appendDummyInput()
-      .setAlign(Blockly.inputs.Align.RIGHT)
-      .appendField(Blockly.Msg.senseBox_value)
-      .appendField(
-        new Blockly.FieldDropdown([
-          [Blockly.Msg.senseBox_light, "Illuminance"],
-          [Blockly.Msg.senseBox_uv, "UvIntensity"],
-        ]),
-        "NAME",
+    let level = useLevelStore.getState().level;
+    if (level === 1) {
+      this.appendDummyInput().appendField(
+        new Blockly.FieldImage(
+          "https://cdn3.iconfinder.com/data/icons/meteocons/512/sun-symbol-512.png",
+          40,
+          40,
+          "senseBox VEML6070",
+        ),
       );
+    } else {
+      this.appendDummyInput().appendField(Blockly.Msg.senseBox_uv_light);
+      this.appendDummyInput()
+        .setAlign(Blockly.inputs.Align.RIGHT)
+        .appendField(Blockly.Msg.senseBox_value)
+        .appendField(
+          new Blockly.FieldDropdown([
+            [Blockly.Msg.senseBox_light, "Illuminance"],
+            [Blockly.Msg.senseBox_uv, "UvIntensity"],
+          ]),
+          "NAME",
+        );
+    }
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_uv_light_tooltip);
@@ -324,25 +343,38 @@ Blockly.Blocks["sensebox_sensor_ultrasonic_ranger"] = {
 
 Blockly.Blocks["sensebox_tof_imager"] = {
   init: function () {
-    var dropdownOptions = [
-      [Blockly.Msg.sensebox_distance, "DistanzCM"],
-      [Blockly.Msg.sensebox_distance_bitmap, "DistanzBM"],
-    ];
-    var dropdown = new Blockly.FieldDropdown(dropdownOptions);
+    let level = useLevelStore.getState().level;
+    if (level === 1) {
+      this.appendDummyInput().appendField(
+        new Blockly.FieldImage(
+          "https://cdn-icons-png.flaticon.com/512/1189/1189097.png",
+          40,
+          40,
+          "senseBox ToF Imager",
+        ),
+      );
+    } else {
+      var dropdownOptions = [
+        [Blockly.Msg.sensebox_distance, "DistanzCM"],
+        [Blockly.Msg.sensebox_distance_bitmap, "DistanzBM"],
+      ];
+      var dropdown = new Blockly.FieldDropdown(dropdownOptions);
+      this.appendDummyInput().appendField(Blockly.Msg.sensebox_tof_imager);
+      this.appendDummyInput()
+        .setAlign(Blockly.inputs.Align.RIGHT)
+        .appendField(Blockly.Msg.senseBox_value)
+        .appendField(dropdown, "dropdown");
+      this.getField("dropdown").setValidator(
+        function (val) {
+          this.updateShape_(val === "DistanzBM");
+        }.bind(this),
+      );
+    }
     this.setColour(getColour().sensebox);
-    this.appendDummyInput().appendField(Blockly.Msg.sensebox_tof_imager);
-    this.appendDummyInput()
-      .setAlign(Blockly.inputs.Align.RIGHT)
-      .appendField(Blockly.Msg.senseBox_value)
-      .appendField(dropdown, "dropdown");
+
     this.setOutput(true, Types.NUMBER.typeName);
     this.setTooltip(Blockly.Msg.sensebox_tof_imager_tooltip);
     this.setHelpUrl(withBoardParam(Blockly.Msg.sensebox_tof_imager_helpurl));
-    this.getField("dropdown").setValidator(
-      function (val) {
-        this.updateShape_(val === "DistanzBM");
-      }.bind(this),
-    );
   },
   updateShape_(isAltitude) {
     if (isAltitude) {

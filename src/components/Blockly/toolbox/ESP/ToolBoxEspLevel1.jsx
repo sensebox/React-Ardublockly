@@ -8,24 +8,17 @@ export const ToolBoxEspLevel1 = (props) => {
       <Category
         name={Blockly.Msg.toolbox_sensors}
         colour={getColour().sensebox}
+        style={{ paddingBottom: "10px" }}
       >
-        <Block type="sensebox_sensor_temp_hum" level="1" />
+        <Block type="sensebox_sensor_temp_hum" />
         <Block type="sensebox_sensor_uv_light" />
         <Block type="sensebox_tof_imager" />
       </Category>
       <Category name="LED" colour={getColour().sensebox}>
-        <Block type="sensebox_ws2818_led">
-          <Value name="POSITION">
-            <Block type="math_number">
-              <Field name="NUM">0</Field>
-            </Block>
-          </Value>
-          <Value name="COLOR">
-            <Block type="math_number">
-              <Field name="NUM">0</Field>
-            </Block>
-          </Value>
-        </Block>
+        <Block type="sensebox_ws2818_led_red" />
+        <Block type="sensebox_ws2818_led_blue" />
+        <Block type="sensebox_ws2818_led_yellow" />
+        <Block type="sensebox_ws2818_led_off" />
       </Category>
       <Category name="Display" colour={getColour().sensebox}>
         <Block type="sensebox_display_beginDisplay" />
