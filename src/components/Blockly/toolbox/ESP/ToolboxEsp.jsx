@@ -7,6 +7,7 @@ import { useLevelStore } from "../../../../store/useLevelStore";
 import { ToolBoxEspLevel1 } from "./ToolBoxEspLevel1";
 import { ToolBoxEspLevel2 } from "./ToolBoxEspLevel2";
 import { ToolBoxEspLevel3 } from "./ToolBoxEspLevel3";
+import { ToolBoxEspLevel4 } from "./ToolBoxEspLevel4";
 
 export const ToolboxEsp = () => {
   const level = useLevelStore((state) => state.level);
@@ -18,6 +19,7 @@ export const ToolboxEsp = () => {
       {level == 1 && <ToolBoxEspLevel1 />}
       {level == 2 && <ToolBoxEspLevel2 />}
       {level == 3 && <ToolBoxEspLevel3 />}
+      {level == 4 && <ToolBoxEspLevel4 />}
     </>
   );
 };
