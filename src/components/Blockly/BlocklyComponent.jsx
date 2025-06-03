@@ -108,7 +108,6 @@ class BlocklyComponent extends React.Component {
   render() {
     return (
       <>
-        <LevelSelector />
         <Card
           ref={this.blocklyDiv}
           id="blocklyDiv"

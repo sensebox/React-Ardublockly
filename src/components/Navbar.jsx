@@ -51,6 +51,7 @@ import Menu from "@mui/material/Menu";
 import { setLanguage } from "../actions/generalActions";
 import { setBoard } from "../actions/boardAction";
 import { Button } from "@mui/material";
+import LevelSelector from "./Blockly/LevelSelector";
 
 const styles = (theme) => ({
   drawerWidth: {
@@ -78,6 +79,7 @@ class Navbar extends Component {
       anchorElLang: null,
       anchorElBoard: null,
       anchorElUser: null,
+      anchorElLevel: null,
     };
   }
 
@@ -167,6 +169,8 @@ class Navbar extends Component {
             >
               {isHome ? (
                 <div style={{ display: "flex" }}>
+                  <LevelSelector anchorElLevel={this.state.anchorElLevel} />
+
                   <div style={{ padding: "12px" }}>
                     <Button
                       style={{
