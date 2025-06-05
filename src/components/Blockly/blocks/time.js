@@ -170,6 +170,7 @@ Blockly.Blocks["time_delay_1s"] = {
         ),
       )
       .appendField(new Blockly.FieldLabel("1", ""), "DELAY_TIME_1S");
+    this.setPreviousStatement(true, null);
 
     this.setNextStatement(true, null);
     this.setTooltip(Blockly.Msg.ARD_TIME_DELAY_TIP);
@@ -196,6 +197,7 @@ Blockly.Blocks["time_delay_2s"] = {
       )
       .appendField(new Blockly.FieldLabel("2", ""), "DELAY_TIME_1S");
 
+    this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setTooltip(Blockly.Msg.ARD_TIME_DELAY_TIP);
   },
@@ -220,6 +222,7 @@ Blockly.Blocks["time_delay_5s"] = {
         ),
       )
       .appendField(new Blockly.FieldLabel("5", ""), "DELAY_TIME_1S");
+    this.setPreviousStatement(true, null);
 
     this.setNextStatement(true, null);
     this.setTooltip(Blockly.Msg.ARD_TIME_DELAY_TIP);
