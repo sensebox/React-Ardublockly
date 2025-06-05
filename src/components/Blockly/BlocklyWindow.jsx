@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { onChangeWorkspace, clearStats } from "../../actions/workspaceActions";
 import { Alert, Snackbar } from '@mui/material';
-
+import "./blockly-animations.css";
 import BlocklyComponent from "./BlocklyComponent";
 import BlocklySvg from "./BlocklySvg";
 
@@ -37,9 +37,10 @@ class BlocklyWindow extends Component {
 
 
   validateArduinoFunctionBlock = (workspace, newBlock) => {
-    const existingBlocks = workspace.getAllBlocks()
-      .filter(block => block.type === 'arduino_functions');
-    
+    const existingBlocks = workspace
+      .getAllBlocks()
+      .filter((block) => block.type === "arduino_functions");
+
     if (existingBlocks.length > 0) {
       if (newBlock) {
         const oldBlock = existingBlocks[0];
@@ -54,17 +55,18 @@ class BlocklyWindow extends Component {
 
 
   handleBackpackDragStart = (block) => {
-    if (block.type === 'arduino_functions') {
+    if (block.type === "arduino_functions") {
       this.backpackBlockPosition = block.getRelativeToSurfaceXY();
     }
   };
 
   handleBackpackDragEnd = (block) => {
-    if (block.type === 'arduino_functions') {
+    if (block.type === "arduino_functions") {
       const workspace = Blockly.getMainWorkspace();
-      const existingBlocks = workspace.getAllBlocks()
-        .filter(b => b.type === 'arduino_functions');
-      
+      const existingBlocks = workspace
+        .getAllBlocks()
+        .filter((b) => b.type === "arduino_functions");
+
       if (existingBlocks.length > 1) {
         existingBlocks[0].dispose();
         block.moveTo(this.backpackBlockPosition);
@@ -73,7 +75,7 @@ class BlocklyWindow extends Component {
   };
 
   handleBackpackDrop = (block) => {
-    if (block.type === 'arduino_functions') {
+    if (block.type === "arduino_functions") {
       const workspace = Blockly.getMainWorkspace();
       this.validateArduinoFunctionBlock(workspace, block);
     }
@@ -82,13 +84,12 @@ class BlocklyWindow extends Component {
 
   updateBackpackUI = () => {
     if (!this.backpack) return;
-    
+
     try {
-      const backpackElement = document.querySelector('.blocklyBackpack');
+      const backpackElement = document.querySelector(".blocklyBackpack");
       if (backpackElement) {
-        backpackElement.setAttribute('title', Blockly.Msg['EMPTY_BACKPACK']);
+        backpackElement.setAttribute("title", Blockly.Msg["EMPTY_BACKPACK"]);
       }
-      
       if (this.backpack) {
         this.backpack.options.contextMenu = {
           emptyBackpack: true,
@@ -96,16 +97,16 @@ class BlocklyWindow extends Component {
           copyToBackpack: true,
           copyAllToBackpack: true,
           pasteAllToBackpack: true,
-          disablePreconditionChecks: false
+          disablePreconditionChecks: false,
         };
       }
-      
-      if (process.env.NODE_ENV === 'development') {
-        console.log('Backpack UI updated');
+
+      if (process.env.NODE_ENV === "development") {
+        console.log("Backpack UI updated");
       }
     } catch (error) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Error updating Backpack UI:', error);
+      if (process.env.NODE_ENV === "development") {
+        console.error("Error updating Backpack UI:", error);
       }
     }
   };
@@ -113,13 +114,12 @@ class BlocklyWindow extends Component {
  
   initializeBackpack = (workspace) => {
     if (this.backpackInitialized) {
-      if (process.env.NODE_ENV === 'development') {
-        console.log('Backpack already initialized, updating translations only');
+      if (process.env.NODE_ENV === "development") {
+        console.log("Backpack already initialized, updating translations only");
       }
       this.updateBackpackUI();
       return;
     }
-    
     const backpackOptions = {
       allowEmptyBackpackOpen: true,
       useFilledBackpackImage: true,
@@ -130,10 +130,9 @@ class BlocklyWindow extends Component {
         copyToBackpack: true,
         copyAllToBackpack: true,
         pasteAllToBackpack: true,
-        disablePreconditionChecks: false
-      }
+        disablePreconditionChecks: false,
+      },
     };
-    
     this.backpack = new Backpack(workspace, backpackOptions);
     
 
@@ -202,7 +201,6 @@ class BlocklyWindow extends Component {
       }
       return result;
     };
-    
     const originalCopyAllToBackpack = this.backpack.copyAllToBackpack;
     this.backpack.copyAllToBackpack = (blocks) => {
       const filteredBlocks = blocks.filter(block => block.type !== 'arduino_functions');
@@ -224,7 +222,6 @@ class BlocklyWindow extends Component {
       }
       return result;
     };
-    
     const originalPasteAllFromBackpack = this.backpack.pasteAllFromBackpack;
     this.backpack.pasteAllFromBackpack = (blocks) => {
       const filteredBlocks = blocks.filter(block => block.type !== 'arduino_functions');
@@ -238,13 +235,13 @@ class BlocklyWindow extends Component {
       }
       return result;
     };
-    
+
     this.backpack.init();
     this.backpackInitialized = true;
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Backpack initialized');
+    if (process.env.NODE_ENV === "development") {
+      console.log("Backpack initialized");
     }
-    
+
     this.updateBackpackUI();
   };
 
@@ -252,80 +249,99 @@ class BlocklyWindow extends Component {
     const workspace = Blockly.getMainWorkspace();
     this.props.onChangeWorkspace({});
     this.props.clearStats();
+
     workspace.addChangeListener(Blockly.Events.disableOrphans);
-    
     workspace.addChangeListener((event) => {
       this.props.onChangeWorkspace(event);
 
       try {
-        if (event.type === Blockly.Events.BLOCK_CREATE || 
-            event.type === Blockly.Events.BLOCK_PASTE ||
-            event.type === Blockly.Events.BACKPACK_DRAG) {
-          
+        if (
+          event.type === Blockly.Events.BLOCK_CREATE ||
+          event.type === Blockly.Events.BLOCK_PASTE ||
+          event.type === Blockly.Events.BACKPACK_DRAG
+        ) {
           const allBlocks = workspace.getAllBlocks();
-          const arduinoFunctionBlocks = allBlocks.filter(block => block.type === 'arduino_functions');
-          
+          const arduinoFunctionBlocks = allBlocks.filter(
+            (block) => block.type === "arduino_functions",
+          );
+
           if (arduinoFunctionBlocks.length > 1) {
             const firstBlock = arduinoFunctionBlocks[0];
             const position = firstBlock.getRelativeToSurfaceXY();
-            
-            arduinoFunctionBlocks.slice(1).forEach(block => {
+
+            arduinoFunctionBlocks.slice(1).forEach((block) => {
               block.dispose();
             });
-            
+
             firstBlock.moveTo(position);
           }
         }
       } catch (error) {
-        if (process.env.NODE_ENV === 'development') {
-          console.error('Error validating blocks:', error);
+        if (process.env.NODE_ENV === "development") {
+          console.error("Error validating blocks:", error);
         }
       }
     });
 
     Blockly.svgResize(workspace);
+
     const zoomToFit = new ZoomToFitControl(workspace);
     zoomToFit.init();
 
-    this.initializeBackpack(workspace);
-  }
+    const backpack = new Backpack(workspace);
+    backpack.init();
 
-  componentWillUnmount() {
-    if (this.backpack) {
-      this.backpack.dispose();
-      this.backpackInitialized = false;
-    }
+    const waitForBackpackImage = (cb, retries = 5) => {
+      const img = document.querySelector("image.blocklyBackpack");
+      if (img) return cb(img);
+      if (retries > 0) {
+        setTimeout(() => waitForBackpackImage(cb, retries - 1), 100);
+      }
+    };
+
+    waitForBackpackImage((img) => {
+      this.backpackImg = img;
+      img.addEventListener("animationend", () => {
+        img.classList.remove("rucksack-wiggle-once");
+      });
+    });
+
+    const originalOnDrop = backpack.onDrop.bind(backpack);
+    backpack.onDrop = (dragElement) => {
+      originalOnDrop(dragElement);
+
+      if (this.backpackImg) {
+        this.backpackImg.classList.remove("rucksack-wiggle-once");
+
+        void this.backpackImg.offsetWidth;
+        this.backpackImg.classList.add("rucksack-wiggle-once");
+      }
+    };
   }
 
   componentDidUpdate(prevProps) {
     const workspace = Blockly.getMainWorkspace();
-    var xml = this.props.initialXml;
+    let xml = this.props.initialXml;
+
     if (prevProps.selectedBoard !== this.props.selectedBoard) {
-      xml = localStorage.getItem("autoSaveXML");
-      if (!xml) xml = initialXml;
-      var xmlDom = Blockly.utils.xml.textToDom(xml);
+      xml = localStorage.getItem("autoSaveXML") || initialXml;
+      const xmlDom = Blockly.utils.xml.textToDom(xml);
       Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, workspace);
     }
 
-    if (prevProps.initialXml !== xml && !this.props.svg) {
+    if (prevProps.initialXml !== this.props.initialXml && !this.props.svg) {
       workspace.clear();
-      if (!xml) xml = initialXml;
+      xml = this.props.initialXml || initialXml;
       Blockly.Xml.domToWorkspace(Blockly.utils.xml.textToDom(xml), workspace);
     }
-    
+
     if (prevProps.language !== this.props.language) {
-      if (process.env.NODE_ENV === 'development') {
-        console.log('Language changed from', prevProps.language, 'to', this.props.language);
-      }
-      
-      this.updateBackpackUI();
-      
-      xml = localStorage.getItem("autoSaveXML");
-      if (!xml) xml = initialXml;
-      xmlDom = Blockly.utils.xml.textToDom(xml);
+      xml = localStorage.getItem("autoSaveXML") || initialXml;
+      const xmlDom = Blockly.utils.xml.textToDom(xml);
       Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, workspace);
     }
-    
+
+
     Blockly.svgResize(workspace);
   }
 
@@ -335,21 +351,13 @@ class BlocklyWindow extends Component {
         <BlocklyComponent
           ref={this.simpleWorkspace}
           style={this.props.svg ? { height: 0 } : this.props.blocklyCSS}
-          readOnly={
-            this.props.readOnly !== undefined ? this.props.readOnly : false
-          }
-          trashcan={
-            this.props.trashcan !== undefined ? this.props.trashcan : true
-          }
+          readOnly={this.props.readOnly ?? false}
+          trashcan={this.props.trashcan ?? true}
           renderer={this.props.renderer}
           sounds={this.props.sounds}
           maxInstances={getMaxInstances()}
           zoom={{
-            // https://developers.google.com/blockly/guides/configure/web/zoom
-            controls:
-              this.props.zoomControls !== undefined
-                ? this.props.zoomControls
-                : true,
+            controls: this.props.zoomControls ?? true,
             wheel: false,
             startScale: 1,
             maxScale: 3,
@@ -357,32 +365,28 @@ class BlocklyWindow extends Component {
             scaleSpeed: 1.2,
           }}
           grid={
-            this.props.grid !== undefined && !this.props.grid
+            this.props.grid === false
               ? {}
               : {
-                  // https://developers.google.com/blockly/guides/configure/web/grid
                   spacing: 20,
                   length: 1,
-                  colour: "#4EAF47", // senseBox-green
+                  colour: "#4EAF47",
                   snap: false,
                 }
           }
-          media={"/media/blockly/"}
+          media="/media/blockly/"
           move={
-            this.props.move !== undefined && !this.props.move
+            this.props.move === false
               ? {}
               : {
-                  // https://developers.google.com/blockly/guides/configure/web/move
                   scrollbars: true,
                   drag: true,
                   wheel: true,
                 }
           }
-          initialXml={
-            this.props.initialXml ? this.props.initialXml : initialXml
-          }
-        ></BlocklyComponent>
-        {this.props.svg && this.props.initialXml ? (
+          initialXml={this.props.initialXml || initialXml}
+        />
+        {this.props.svg && this.props.initialXml && (
           <BlocklySvg initialXml={this.props.initialXml} />
         ) : null}
         
@@ -421,6 +425,7 @@ const mapStateToProps = (state) => ({
   selectedBoard: state.board.board,
 });
 
-export default connect(mapStateToProps, { onChangeWorkspace, clearStats })(
-  BlocklyWindow,
-);
+export default connect(mapStateToProps, {
+  onChangeWorkspace,
+  clearStats,
+})(BlocklyWindow);

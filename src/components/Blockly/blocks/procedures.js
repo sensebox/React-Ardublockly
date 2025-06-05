@@ -943,9 +943,7 @@ Blockly.Blocks["procedures_callnoreturn"] = {
         if (quarkId in this.quarkConnections_) {
           const connection = this.quarkConnections_[quarkId];
           try {
-            if (connection && 
-              !connection.reconnect(this, "ARG" + i)
-            ) {
+            if (connection && !connection.reconnect(this, "ARG" + i)) {
               // Block no longer exists or has been attached elsewhere.
               delete this.quarkConnections_[quarkId];
             }
