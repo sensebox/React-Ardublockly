@@ -90,7 +90,6 @@ class BlocklyWindow extends Component {
       if (backpackElement) {
         backpackElement.setAttribute("title", Blockly.Msg["EMPTY_BACKPACK"]);
       }
-
       if (this.backpack) {
         this.backpack.options.contextMenu = {
           emptyBackpack: true,
@@ -121,7 +120,6 @@ class BlocklyWindow extends Component {
       this.updateBackpackUI();
       return;
     }
-
     const backpackOptions = {
       allowEmptyBackpackOpen: true,
       useFilledBackpackImage: true,
@@ -135,7 +133,6 @@ class BlocklyWindow extends Component {
         disablePreconditionChecks: false,
       },
     };
-
     this.backpack = new Backpack(workspace, backpackOptions);
     
 
@@ -204,7 +201,6 @@ class BlocklyWindow extends Component {
       }
       return result;
     };
-
     const originalCopyAllToBackpack = this.backpack.copyAllToBackpack;
     this.backpack.copyAllToBackpack = (blocks) => {
       const filteredBlocks = blocks.filter(block => block.type !== 'arduino_functions');
@@ -226,7 +222,6 @@ class BlocklyWindow extends Component {
       }
       return result;
     };
-
     const originalPasteAllFromBackpack = this.backpack.pasteAllFromBackpack;
     this.backpack.pasteAllFromBackpack = (blocks) => {
       const filteredBlocks = blocks.filter(block => block.type !== 'arduino_functions');
@@ -256,7 +251,6 @@ class BlocklyWindow extends Component {
     this.props.clearStats();
 
     workspace.addChangeListener(Blockly.Events.disableOrphans);
-
     workspace.addChangeListener((event) => {
       this.props.onChangeWorkspace(event);
 
@@ -346,6 +340,7 @@ class BlocklyWindow extends Component {
       const xmlDom = Blockly.utils.xml.textToDom(xml);
       Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, workspace);
     }
+
 
     Blockly.svgResize(workspace);
   }
