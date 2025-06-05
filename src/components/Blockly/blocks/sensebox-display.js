@@ -88,6 +88,25 @@ Blockly.Blocks["sensebox_display_printDisplay"] = {
   LOOP_TYPES: ["sensebox_display_show"],
 };
 
+Blockly.Blocks["sensebox_display_printEasy"] = {
+  init: function (block) {
+    this.setColour(getColour().sensebox);
+    this.appendDummyInput().appendField(
+      new Blockly.FieldImage(
+        "https://cdn-icons-png.flaticon.com/512/833/833313.png",
+        30,
+        30,
+      ),
+    );
+
+    this.appendValueInput("printDisplay").setCheck(null);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip(Blockly.Msg.senseBox_display_printDisplay_tooltip);
+    this.setHelpUrl(Blockly.Msg.senseBox_display_helpurl);
+  },
+};
+
 Blockly.Blocks["sensebox_display_fastPrint"] = {
   init: function (block) {
     this.setColour(getColour().sensebox);

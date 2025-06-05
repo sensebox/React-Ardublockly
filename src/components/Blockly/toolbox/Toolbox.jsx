@@ -4,9 +4,21 @@ import { TypedVariableModal } from "@blockly/plugin-typed-variable-modal";
 import * as Blockly from "blockly/core";
 import { connect } from "react-redux";
 import { ToolboxMcu } from "./ToolboxMcu";
-import { ToolboxEsp } from "./ToolboxEsp";
+import { ToolboxEsp } from "./ESP/ToolboxEsp";
+import { useLevelStore } from "../../../store/useLevelStore";
 
 class Toolbox extends React.Component {
+  selectedLevel = 0;
+  constructor(props) {
+    super(props);
+    this.state = { level: 0 };
+  }
+  componentDidMount() {
+    this.level = useLevelStore.subscribe((newLevel) => {
+      // use set state to trigger component re-render
+      this.setState({ level: newLevel });
+    });
+  }
   componentDidUpdate(props) {
     this.props.workspace.registerToolboxCategoryCallback(
       "CREATE_TYPED_VARIABLE",
@@ -32,7 +44,10 @@ class Toolbox extends React.Component {
       console.log(this.props.selectedBoard);
       this.setState({ board: this.props.selectedBoard });
     }
+
     this.props.workspace.updateToolbox(this.props.toolbox.current);
+    // close the flyout to update the toolbox' contents also
+    this.props.workspace.toolbox.flyout.setVisible(false);
   }
 
   createFlyout(workspace) {

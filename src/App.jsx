@@ -7,7 +7,6 @@ import { Provider } from "react-redux";
 import store from "./store";
 import { loadUser } from "./actions/authActions";
 import ErrorBoundary from "./components/ErrorBoundary";
-
 import "./App.css";
 
 import {
@@ -18,6 +17,7 @@ import {
 
 import Content from "./components/Content";
 import { setCompiler } from "./actions/generalActions";
+import { useLevelStore } from "./store/useLevelStore";
 
 const theme = createTheme({
   palette: {
@@ -47,6 +47,16 @@ class App extends Component {
     // set initial compiler
     console.log("compiler", import.meta.env.VITE_INITIAL_COMPILER_URL);
     store.dispatch(setCompiler(import.meta.env.VITE_INITIAL_COMPILER_URL));
+
+    const params = new URLSearchParams(window.location.search);
+    const lvl = params.get("level");
+    if (lvl !== null) {
+      const n = parseInt(lvl, 10);
+      if (!isNaN(n) && [1, 2, 3, 4].includes(n)) {
+        // setLevel im Zustand-Store aufrufen
+        useLevelStore.getState().setLevel(n);
+      }
+    }
   }
 
   render() {

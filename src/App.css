@@ -1,3 +1,8 @@
+.blocklyLabelBig {
+  font-size: 10.5em;
+  font-weight: bold;
+}
+
 .wrapper {
   min-height: calc(
     100vh - 60px

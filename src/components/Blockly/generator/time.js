@@ -143,3 +143,30 @@ Blockly.Generator.Arduino.forBlock["sensebox_interval_timer"] = function (
   `;
   return code;
 };
+
+Blockly.Generator.Arduino.forBlock["time_delay_1s"] = function (
+  block,
+  generator,
+) {
+  var delayTime = 1000;
+  var code = "delay(" + delayTime + ");\n";
+  return code;
+};
+
+Blockly.Generator.Arduino.forBlock["time_delay_2s"] = function (
+  block,
+  generator,
+) {
+  var delayTime = 2000;
+  var code = "delay(" + delayTime + ");\n";
+  return code;
+};
+
+Blockly.Generator.Arduino.forBlock["time_delay_5s"] = function (
+  block,
+  generator,
+) {
+  var delayTime = 5000;
+  var code = "delay(" + delayTime + ");\n";
+  return code;
+};

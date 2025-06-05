@@ -85,6 +85,106 @@ Blockly.Generator.Arduino.forBlock["sensebox_ws2818_led"] = function () {
   return code;
 };
 
+/**
+ * Helfer: Initialisiert (falls noch nicht geschehen) eine NeoPixel-Instanz
+ *  - pin:     Der GPIO-Pin (z.B. "1")
+ *  - numPixel: Anzahl der Pixel (hier immer 1)
+ *  - brightness: Globale Helligkeit (z.B. 50)
+ */
+function initNeoPixel(blockGenerator, pin, numPixel, brightness) {
+  // Bibliothek nur einmal hinzufügen
+  blockGenerator.libraries_["library_neopixel"] =
+    "#include <Adafruit_NeoPixel.h>";
+
+  // Definition nur hinzufügen, wenn es für diesen Pin noch keine Definition gibt
+  const defKey = "define_rgb_led" + pin;
+  if (!blockGenerator.definitions_[defKey]) {
+    blockGenerator.definitions_[defKey] =
+      `Adafruit_NeoPixel rgb_led_${pin} = Adafruit_NeoPixel(${numPixel}, ${pin}, NEO_GRB + NEO_KHZ800);\n`;
+  }
+
+  // setup.begin() nur einmal einfügen
+  const setupBeginKey = "setup_rgb_led" + pin;
+  if (!blockGenerator.setupCode_[setupBeginKey]) {
+    blockGenerator.setupCode_[setupBeginKey] = `rgb_led_${pin}.begin();\n`;
+  }
+
+  // setup.setBrightness() nur einmal einfügen
+  const setupBrightKey = "setup_rgb_led_brightness" + pin;
+  if (!blockGenerator.setupCode_[setupBrightKey]) {
+    blockGenerator.setupCode_[setupBrightKey] =
+      `rgb_led_${pin}.setBrightness(${brightness});\n`;
+  }
+}
+
+Blockly.Generator.Arduino.forBlock["sensebox_ws2818_led_red"] = function (
+  block,
+) {
+  const dropdown_pin = 1;
+  const position = 0;
+  const numPixel = 1;
+  const brightness = 50;
+  const color = "255, 0, 0"; // Rot
+
+  initNeoPixel(Blockly.Generator.Arduino, dropdown_pin, numPixel, brightness);
+
+  const code =
+    `rgb_led_${dropdown_pin}.setPixelColor(${position}, rgb_led_${dropdown_pin}.Color(${color}));\n` +
+    `rgb_led_${dropdown_pin}.show();\n`;
+  return code;
+};
+
+Blockly.Generator.Arduino.forBlock["sensebox_ws2818_led_blue"] = function (
+  block,
+) {
+  const dropdown_pin = 1;
+  const position = 0;
+  const numPixel = 1;
+  const brightness = 50;
+  const color = "0, 0, 255"; // Blau
+
+  initNeoPixel(Blockly.Generator.Arduino, dropdown_pin, numPixel, brightness);
+
+  const code =
+    `rgb_led_${dropdown_pin}.setPixelColor(${position}, rgb_led_${dropdown_pin}.Color(${color}));\n` +
+    `rgb_led_${dropdown_pin}.show();\n`;
+  return code;
+};
+
+Blockly.Generator.Arduino.forBlock["sensebox_ws2818_led_yellow"] = function (
+  block,
+) {
+  const dropdown_pin = 1;
+  const position = 0;
+  const numPixel = 1;
+  const brightness = 50;
+  const color = "255, 255,0 "; // Blau
+
+  initNeoPixel(Blockly.Generator.Arduino, dropdown_pin, numPixel, brightness);
+
+  const code =
+    `rgb_led_${dropdown_pin}.setPixelColor(${position}, rgb_led_${dropdown_pin}.Color(${color}));\n` +
+    `rgb_led_${dropdown_pin}.show();\n`;
+  return code;
+};
+
+Blockly.Generator.Arduino.forBlock["sensebox_ws2818_led_yellow"] = function (
+  block,
+) {
+  const dropdown_pin = 1;
+  const position = 0;
+  const numPixel = 1;
+  const brightness = 50;
+  const color = "255, 255,0 "; // Blau
+
+  initNeoPixel(Blockly.Generator.Arduino, dropdown_pin, numPixel, brightness);
+
+  const code =
+    `rgb_led_${dropdown_pin}.setPixelColor(${position}, rgb_led_${dropdown_pin}.Color(${color}));\n` +
+    `rgb_led_${dropdown_pin}.show();\n`;
+  return code;
+};
+
 function hexToRgb(hex) {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result

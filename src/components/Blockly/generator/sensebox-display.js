@@ -1,4 +1,43 @@
+import { Block } from "@mui/icons-material";
 import * as Blockly from "blockly/core";
+
+/**
+ * Helfer: Initialisiert das OLED-Display (Adafruit SSD1306) nur einmal pro Sketch.
+ *
+ * @param {object} blockGenerator  Referenz auf Blockly.Generator.Arduino
+ */
+function initDisplay(blockGenerator) {
+  // 1) Bibliotheken nur einmal hinzufügen
+  blockGenerator.libraries_["library_spi"] = "#include <SPI.h>";
+  blockGenerator.libraries_["library_wire"] = "#include <Wire.h>";
+  blockGenerator.libraries_["library_AdafruitGFX"] =
+    "#include <Adafruit_GFX.h> // http://librarymanager/All#Adafruit_GFX_Library";
+  blockGenerator.libraries_["library_AdafruitSSD1306"] =
+    "#include <Adafruit_SSD1306.h> // http://librarymanager/All#Adafruit_SSD1306";
+
+  // 2) Definitions (Größe und Instanz) nur hinzufügen, wenn noch nicht vorhanden
+  const defSizeKey = "define_display_size";
+  if (!blockGenerator.definitions_[defSizeKey]) {
+    blockGenerator.definitions_[defSizeKey] =
+      "#define SCREEN_WIDTH 128\n#define SCREEN_HEIGHT 64";
+  }
+
+  const defDisplayKey = "define_display";
+  if (!blockGenerator.definitions_[defDisplayKey]) {
+    blockGenerator.definitions_[defDisplayKey] =
+      "#define OLED_RESET -1\nAdafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);";
+  }
+
+  // 3) Setup-Code (display.begin, display.display, clearDisplay) nur einmal einfügen
+  const setupKey = "sensebox_display_begin";
+  if (!blockGenerator.setupCode_[setupKey]) {
+    blockGenerator.setupCode_[setupKey] =
+      "display.begin(SSD1306_SWITCHCAPVCC, 0x3D);\n" +
+      "display.display();\n" +
+      "delay(100);\n" +
+      "display.clearDisplay();\n";
+  }
+}
 
 /*Display Blocks*/
 Blockly.Generator.Arduino.forBlock["sensebox_display_beginDisplay"] =
@@ -44,6 +83,28 @@ Blockly.Generator.Arduino.forBlock["sensebox_display_printDisplay"] =
     code += "display.println(" + printDisplay + ");\n";
     return code;
   };
+
+Blockly.Generator.Arduino.forBlock["sensebox_display_printEasy"] = function () {
+  initDisplay(Blockly.Generator.Arduino);
+  var x = 0;
+  var y = 0;
+  var printDisplay =
+    Blockly.Generator.Arduino.valueToCode(
+      this,
+      "printDisplay",
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
+    ) || '"Keine Eingabe"';
+  var size = 2;
+  var color = "WHITE";
+
+  var code = "display.setCursor(" + x + "," + y + ");\n";
+  code += "display.setTextSize(" + size + ");\n";
+  code += "display.setTextColor(" + color + ");\n";
+  code += "display.println(" + printDisplay + ");\n";
+  code += "display.display();\n";
+
+  return code;
+};
 
 Blockly.Generator.Arduino.forBlock["sensebox_display_fastPrint"] = function () {
   var title1 =
@@ -220,24 +281,23 @@ Blockly.Generator.Arduino.forBlock["sensebox_display_plotDisplay"] =
     return code;
   };
 
-  Blockly.Generator.Arduino.forBlock["sensebox_display_roboeyes"] =
-  function () {
-    Blockly.Generator.Arduino.definitions_["define_roboeyes"] = 
-    "#include <FluxGarage_RoboEyes.h>\n" +
-    "roboEyes roboEyes;\n";
-    Blockly.Generator.Arduino.setupCode_["sensebox_roboeye_setup"] = 
+Blockly.Generator.Arduino.forBlock["sensebox_display_roboeyes"] = function () {
+  Blockly.Generator.Arduino.definitions_["define_roboeyes"] =
+    "#include <FluxGarage_RoboEyes.h>\n" + "roboEyes roboEyes;\n";
+  Blockly.Generator.Arduino.setupCode_["sensebox_roboeye_setup"] =
     "roboEyes.begin(SCREEN_WIDTH, SCREEN_HEIGHT, 100);\n";
-    let code = "";
-    var position = this.getFieldValue("POSITION") || "DEFAULT";
-    code += "roboEyes.setPosition(" + position + ");\n";
-    var emotion = this.getFieldValue("EMOTION") || "DEFAULT";
-    code += "roboEyes.setMood(" + emotion + ");\n";
-    code += "roboEyes.drawEyes();\n" +
+  let code = "";
+  var position = this.getFieldValue("POSITION") || "DEFAULT";
+  code += "roboEyes.setPosition(" + position + ");\n";
+  var emotion = this.getFieldValue("EMOTION") || "DEFAULT";
+  code += "roboEyes.setMood(" + emotion + ");\n";
+  code +=
+    "roboEyes.drawEyes();\n" +
     "roboEyes.drawEyes();\n" +
     "roboEyes.drawEyes();\n" +
     "roboEyes.drawEyes();\n";
-    return code;
-  };
+  return code;
+};
 
 Blockly.Generator.Arduino.forBlock["sensebox_display_fillCircle"] =
   function () {

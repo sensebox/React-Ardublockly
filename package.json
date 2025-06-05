@@ -57,7 +57,8 @@
     "remark-gfm": "^3.0.1",
     "styled-components": "^4.4.1",
     "uuid": "^8.3.1",
-    "watchpack": "^2.3.1"
+    "watchpack": "^2.3.1",
+    "zustand": "3"
   },
   "resolutions": {
     "//": "See https://github.com/facebook/create-react-app/issues/11773",
