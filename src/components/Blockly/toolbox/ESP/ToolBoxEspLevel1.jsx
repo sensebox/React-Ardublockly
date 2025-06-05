@@ -21,39 +21,16 @@ export const ToolBoxEspLevel1 = (props) => {
         <Block type="sensebox_ws2818_led_off" />
       </Category>
       <Category name="Display" colour={getColour().sensebox}>
-        <Block type="sensebox_display_beginDisplay" />
-        <Block type="sensebox_display_show" />
-        <Block type="sensebox_display_clearDisplay" />
-        <Block type="sensebox_display_printDisplay">
-          <Value name="SIZE">
-            <Block type="math_number">
-              <Field name="NUM">1</Field>
-            </Block>
-          </Value>
-          <Value name="X">
-            <Block type="math_number">
-              <Field name="NUM">0</Field>
-            </Block>
-          </Value>
-          <Value name="Y">
-            <Block type="math_number">
-              <Field name="NUM">0</Field>
-            </Block>
-          </Value>
-        </Block>
+        <Block type="sensebox_display_printEasy" />
       </Category>
       <Category
         id="time_control"
         name={Blockly.Msg.toolbox_time_control}
         colour={getColour().time}
       >
-        <Block type="time_delay">
-          <Value name="DELAY_TIME_MILI">
-            <Block type="math_number">
-              <Field name="NUM">1000</Field>
-            </Block>
-          </Value>
-        </Block>
+        <Block type="time_delay_1s" />
+        <Block type="time_delay_2s" />
+        <Block type="time_delay_5s" />
       </Category>
     </>
   );

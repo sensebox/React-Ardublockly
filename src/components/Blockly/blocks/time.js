@@ -150,3 +150,78 @@ Blockly.Blocks["sensebox_interval_timer"] = {
     this.setNextStatement(true, null);
   },
 };
+
+Blockly.Blocks["time_delay_1s"] = {
+  /**
+   * Delay block definition
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.setHelpUrl("http://arduino.cc/en/Reference/Delay");
+    this.setColour(getColour().time);
+
+    // Erst das Icon, dann eine große "1"
+    this.appendDummyInput()
+      .appendField(
+        new Blockly.FieldImage(
+          "https://cdn-icons-png.flaticon.com/512/31/31048.png",
+          30,
+          30,
+        ),
+      )
+      .appendField(new Blockly.FieldLabel("1", ""), "DELAY_TIME_1S");
+
+    this.setNextStatement(true, null);
+    this.setTooltip(Blockly.Msg.ARD_TIME_DELAY_TIP);
+  },
+};
+
+Blockly.Blocks["time_delay_2s"] = {
+  /**
+   * Delay block definition
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.setHelpUrl("http://arduino.cc/en/Reference/Delay");
+    this.setColour(getColour().time);
+
+    // Erst das Icon, dann eine große "1"
+    this.appendDummyInput()
+      .appendField(
+        new Blockly.FieldImage(
+          "https://cdn-icons-png.flaticon.com/512/31/31048.png",
+          30,
+          30,
+        ),
+      )
+      .appendField(new Blockly.FieldLabel("2", ""), "DELAY_TIME_1S");
+
+    this.setNextStatement(true, null);
+    this.setTooltip(Blockly.Msg.ARD_TIME_DELAY_TIP);
+  },
+};
+
+Blockly.Blocks["time_delay_5s"] = {
+  /**
+   * Delay block definition
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.setHelpUrl("http://arduino.cc/en/Reference/Delay");
+    this.setColour(getColour().time);
+
+    // Erst das Icon, dann eine große "1"
+    this.appendDummyInput()
+      .appendField(
+        new Blockly.FieldImage(
+          "https://cdn-icons-png.flaticon.com/512/31/31048.png",
+          30,
+          30,
+        ),
+      )
+      .appendField(new Blockly.FieldLabel("5", ""), "DELAY_TIME_1S");
+
+    this.setNextStatement(true, null);
+    this.setTooltip(Blockly.Msg.ARD_TIME_DELAY_TIP);
+  },
+};
