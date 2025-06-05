@@ -264,4 +264,14 @@ export const TRANSLATIONS = {
   senseBox_watertemperature: "Wassertemperatur",
   senseBox_watertemperature_tooltip:
     "Das Wasserthermometer gibt Temperatur in Grad Celsius aus. Schließe den Sensor an einen der 6 Anschlüsse des One-Wire Adapters an und schließe dann den One-Wire Adapter an einen der 3 digital/analog Ports der senseBox an und wähle den Port im Block aus. Wenn du nur ein Thermometer am One-Wire Adapter angeschlossen hast, dann belasse den Index bei 0. Jedes weitere angeschlossene Thermometer kann entsprechend mit einem um 1 erhöhten Index angesprochen werden. Es kommt dabei nicht darauf an, an welchem Anschluss des Adapters die Thermometer angeschlossen werden.",
+  EMPTY_BACKPACK: "Rucksack leeren",
+  REMOVE_FROM_BACKPACK: "Aus Rucksack entfernen",
+  COPY_TO_BACKPACK: "In Rucksack kopieren",
+  COPY_ALL_TO_BACKPACK: "Alle Blöcke in Rucksack kopieren",
+  PASTE_ALL_FROM_BACKPACK: "Alle Blöcke aus Rucksack einfügen",
+  ARDUINO_FUNCTION_BLOCK_WARNING: "Arduino-Funktionsblöcke können nicht im Rucksack gespeichert werden",
+  ARDUINO_FUNCTION_BLOCKS_SKIPPED: "Arduino-Funktionsblöcke wurden übersprungen",
+  BLOCKS_ADDED_TO_BACKPACK: "%1 Blöcke zum Rucksack hinzugefügt",
+  BLOCKS_PASTED_FROM_BACKPACK: "%1 Blöcke aus dem Rucksack eingefügt",
 };
+

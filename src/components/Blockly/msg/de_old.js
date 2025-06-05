@@ -1461,4 +1461,11 @@ Blockly.Msg.faq_q3_answer = `
 Am besten legst du dazu ein Issue auf [Github](https://github.com/sensebox/React-Ardublockly/issues) an. Alternativ kannst du uns auch eine Email an info(at)sensebox.de senden
 `;
 
+
+Blockly.Msg.EMPTY_BACKPACK = "Rucksack leeren";
+Blockly.Msg.REMOVE_FROM_BACKPACK = "Entfernen aus Rucksack";
+Blockly.Msg.COPY_TO_BACKPACK = "Kopieren in Rucksack";
+Blockly.Msg.COPY_ALL_TO_BACKPACK = "Alle Kopieren in Rucksack";
+Blockly.Msg.PASTE_ALL_FROM_BACKPACK = "Alle Einfügen aus Rucksack";
+
 export const De = Blockly.Msg;
