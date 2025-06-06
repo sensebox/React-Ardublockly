@@ -147,6 +147,7 @@ const SimulatorFlow = (props) => {
         zoomOnPinch={false}
         fitView
         connectionMode="loose"
+        
 
       >
         <Background />

@@ -144,7 +144,7 @@ class CodeViewer extends Component {
           <AccordionDetails
             style={{
               padding: 0,
-              height: `calc(${this.state.componentHeight} - 50px - 50px - 50px - 50px)`,
+              height: `calc(${this.state.componentHeight} - 50px  - 50px)`,
               backgroundColor: "white",
             }}
           >
@@ -152,85 +152,8 @@ class CodeViewer extends Component {
           </AccordionDetails>
         </Accordion>
         {/* Source Code Accordion */}
-        <Accordion
-          square={true}
-          style={{ margin: 0 }}
-          expanded={this.state.expanded === "code"}
-          onChange={this.onChange("code")}
-
-        >
-          <AccordionSummary>
-            <b
-              style={{
-                fontSize: "20px",
-                marginRight: "5px",
-                width: "35px",
-              }}
-            >
-              {curlyBrackets}
-            </b>
-            <div style={{ margin: "auto 5px 2px 0px" }}>
-              {Blockly.Msg.codeviewer_arduino}
-            </div>
-          </AccordionSummary>
-          <AccordionDetails
-            style={{
-              padding: 0,
-              height: `calc(${this.state.componentHeight} - 50px - 50px - 50px - 50px)`,
-              backgroundColor: "white",
-            }}
-          >
-            <MonacoEditor
-              height="70vh"
-              defaultLanguage="cpp"
-              value={this.props.arduino}
-              // modified={this.props.arduino}
-              // original={this.state.code}
-              options={{
-                readOnly: true,
-
-                fontSize: "16px",
-              }}
-            />
-          </AccordionDetails>
-        </Accordion>
-        {/* XML Accordion */}
-        <Accordion
-          square={true}
-          style={{ margin: 0 }}
-          expanded={this.state.expanded === "xml"}
-          onChange={this.onChange("xml")}
-        >
-          <AccordionSummary>
-            <b
-              style={{
-                fontSize: "20px",
-                marginRight: "5px",
-                width: "35px",
-              }}
-            >
-              {unequal}
-            </b>
-            <div style={{ margin: "auto 5px 2px 0px" }}>
-              {Blockly.Msg.codeviewer_xml}
-            </div>
-          </AccordionSummary>
-          <AccordionDetails
-            style={{
-              padding: 0,
-              height: `calc(${this.state.componentHeight} - 50px - 50px - 50px - 50px)`,
-
-              backgroundColor: "white",
-            }}
-          >
-            <MonacoEditor
-              height="80vh"
-              defaultLanguage="xml"
-              value={this.props.xml}
-              readOnly={true}
-            />
-          </AccordionDetails>
-        </Accordion>
+        
+      
         {/* Tooltip Viewer Accordion */}
         <Accordion
           square={true}
@@ -249,7 +172,7 @@ class CodeViewer extends Component {
         <AccordionDetails
           style={{
             padding: 0,
-            height: `calc(${this.state.componentHeight} - 50px - 50px - 50px - 50px)`,
+            height: `calc(${this.state.componentHeight} - 50px - 50px)`,
             backgroundColor: "white",
           }}>
           <TooltipViewer />
