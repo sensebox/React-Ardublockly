@@ -1,28 +1,39 @@
 import React, { memo } from "react";
 import { Handle, Position } from "@xyflow/react";
-import SensorGraphic from "./tofimager.png";
+import SensorGraphic from "./ToF-LensCover.png";
 import SensorNode from "../../uiComponents/SensorNode";
 
 const tofimager = ({ data }) => {
   const sensorConfigTOF = [
-    { 
-      id: "dist", 
-      emoji: "📏", 
-      label: "Distance (mm)", 
-      min: 0, 
-      max: 4000, 
-      step: 1, 
-      initial: 1000 
-    }
+    {
+      id: "dist",
+      emoji: "📏",
+      label: "Distance (mm)",
+      min: 0,
+      max: 4000,
+      step: 1,
+      initial: 1000,
+    },
   ];
 
   return (
-    <SensorNode
-      title="TOF Imager"
-      sensors={sensorConfigTOF}
-      imageSrc={SensorGraphic}
-      maxWidth="150px"
-    />
+    <div style={{ position: "relative" }}>
+      <SensorNode
+        title="TOF Imager"
+        sensors={sensorConfigTOF}
+        imageSrc={SensorGraphic}
+      />
+      <Handle
+        type="target"
+        position={Position.Left}
+        style={{ background: "#ffcc33" }}
+      />
+      <Handle
+        type="source"
+        position={Position.Right}
+        style={{ background: "#ffcc33" }}
+      />
+    </div>
   );
 };
 
