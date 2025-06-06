@@ -145,6 +145,9 @@ const SimulatorFlow = (props) => {
         edgeTypes={edgeTypes}
         zoomOnDoubleClick={false}
         zoomOnPinch={false}
+        fitViewOptions={{
+          padding:2
+        }}
         fitView
         connectionMode="loose"
         

@@ -64,7 +64,7 @@ class CodeViewer extends Component {
     this.state = {
       code: this.props.arduino,
       changed: false,
-      expanded: "code",
+      expanded: "simulator",
       componentHeight: null,
     };
     this.myDiv = React.createRef();
