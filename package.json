@@ -14,7 +14,7 @@
     "@blockly/plugin-typed-variable-modal": "^8.0.9",
     "@blockly/toolbox-search": "^2.0.12",
     "@blockly/workspace-backpack": "^6.0.9",
-    "@blockly/workspace-minimap": "^0.2.9",
+    "@blockly/workspace-minimap": "^0.2.12",
     "@blockly/zoom-to-fit": "^6.0.9",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
