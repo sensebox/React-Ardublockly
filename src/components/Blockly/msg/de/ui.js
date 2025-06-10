@@ -416,4 +416,15 @@ export const UI = {
   goToApp_text:
     "Der Code wurde erfolgreich kompiliert! Klicke den unteren Button um zur senseBox:connect App zu gelangen und die Übertragung des Sketches fertigzustellen!",
   goToApp_title: "Over-The-Air Übertragung",
+  EMPTY_BACKPACK: "Rucksack leeren",
+  COPY_TO_BACKPACK: "Block in den Rucksack legen",
+  REMOVE_FROM_BACKPACK: "Block aus dem Rucksack entfernen",
+  COPY_ALL_TO_BACKPACK: "Alle Blöcke in den Rucksack kopieren",
+  PASTE_ALL_FROM_BACKPACK: "Alle Blöcke aus dem Rucksack einfügen",
+  ARDUINO_FUNCTION_BLOCK_WARNING:
+    "Arduino-Funktionsblöcke können nicht im Rucksack gespeichert werden",
+  ARDUINO_FUNCTION_BLOCKS_SKIPPED:
+    "Arduino-Funktionsblöcke wurden übersprungen",
+  BLOCKS_ADDED_TO_BACKPACK: "%1 Blöcke zum Rucksack hinzugefügt",
+  BLOCKS_PASTED_FROM_BACKPACK: "%1 Blöcke aus dem Rucksack eingefügt",
 };
