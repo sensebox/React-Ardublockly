@@ -25,6 +25,7 @@ import Account from "../User/Account";
 import News from "../News";
 import Faq from "../Faq";
 import CodeEditor from "../CodeEditor/CodeEditor";
+import GalleryPage from "../Gallery/GalleryPage";
 
 class Routes extends Component {
   componentDidMount() {
@@ -73,7 +74,7 @@ class Routes extends Component {
           </PublicRoute>
           {/* Gallery-Projects */}
           <PublicRoute path="/gallery" exact>
-            <ProjectHome />
+            <GalleryPage />
           </PublicRoute>
           <PublicRoute path="/gallery/:galleryId" exact>
             <Project />
