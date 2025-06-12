@@ -1,41 +1,58 @@
-// src/components/Gallery/GalleryPage.jsx
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { getProjects, resetProject } from "../../actions/projectActions";
 import { clearMessages } from "../../actions/messageActions";
-
 import Breadcrumbs from "../Breadcrumbs";
 import Snackbar from "../Snackbar";
 import WorkspaceFunc from "../Workspace/WorkspaceFunc";
 import withStyles from "@mui/styles/withStyles";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
-import Divider from "@mui/material/Divider";
-import Typography from "@mui/material/Typography";
-import Backdrop from "@mui/material/Backdrop";
-import CircularProgress from "@mui/material/CircularProgress";
-import DeviceSelection from "../DeviceSelection";
+import {
+  Grid,
+  Box,
+  Card,
+  CardHeader,
+  CardContent,
+  CardActions,
+  Avatar,
+  Typography,
+  Chip,
+  Stack,
+  TextField,
+  MenuItem,
+  Skeleton,
+  IconButton,
+  Button,
+} from "@mui/material";
 import { Link } from "react-router-dom";
-import Box from "@mui/material/Box";
-import Avatar from "@mui/material/Avatar";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import IconButton from "@mui/material/IconButton";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import Tooltip from "@mui/material/Tooltip";
-import Chip from "@mui/material/Chip";
-import Stack from "@mui/material/Stack";
-import Image from "@mui/material/ImageListItem";
+import DatePicker from "@mui/lab/DatePicker";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
 
 const styles = (theme) => ({
   link: {
     color: theme.palette.primary.main,
     textDecoration: "none",
+    "&:hover": { textDecoration: "underline" },
+  },
+  filterRow: {
+    display: "flex",
+    gap: theme.spacing(2),
+    flexWrap: "wrap",
+    marginBottom: theme.spacing(2),
+    alignItems: "center",
+  },
+  filterField: {
+    flex: "1 1 200px",
+    minWidth: 160,
+  },
+  card: {
+    transition: "transform 0.2s, box-shadow 0.2s",
     "&:hover": {
-      textDecoration: "underline",
+      transform: "scale(1.03)",
+      boxShadow: theme.shadows[6],
     },
   },
 });
@@ -46,26 +63,22 @@ class GalleryPage extends Component {
     type: "",
     key: "",
     message: "",
+    searchText: "",
+    category: "all",
+    dateFrom: null,
+    dateTo: null,
+    sortOption: "newest", // 'newest' | 'az'
+    tagFilters: [], // array of tags to include
   };
 
   componentDidMount() {
     this.props.getProjects("gallery");
-    if (this.props.message) {
-      if (this.props.message.id === "GALLERY_DELETE_SUCCESS") {
-        this.setState({
-          snackbar: true,
-          key: Date.now(),
-          message: `Dein Galerie-Projekt wurde erfolgreich gelöscht.`,
-          type: "success",
-        });
-      } else if (this.props.message.id === "GET_PROJECT_FAIL") {
-        this.setState({
-          snackbar: true,
-          key: Date.now(),
-          message: `Dein angefragtes Galerie-Projekt konnte nicht gefunden werden.`,
-          type: "error",
-        });
-      }
+    this.handleMessage(this.props.message);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.message !== this.props.message) {
+      this.handleMessage(this.props.message);
     }
   }
 
@@ -74,26 +87,229 @@ class GalleryPage extends Component {
     this.props.clearMessages();
   }
 
+  handleMessage(message) {
+    if (!message) return;
+    if (message.id === "GALLERY_DELETE_SUCCESS") {
+      this.setState({
+        snackbar: true,
+        key: Date.now(),
+        message: "Dein Galerie-Projekt wurde erfolgreich gelöscht.",
+        type: "success",
+      });
+    } else if (message.id === "GET_PROJECT_FAIL") {
+      this.setState({
+        snackbar: true,
+        key: Date.now(),
+        message:
+          "Dein angefragtes Galerie-Projekt konnte nicht gefunden werden.",
+        type: "error",
+      });
+    }
+  }
+
+  handleSearchChange = (e) => this.setState({ searchText: e.target.value });
+  handleCategoryChange = (e) => this.setState({ category: e.target.value });
+  handleDateFromChange = (date) => this.setState({ dateFrom: date });
+  handleDateToChange = (date) => this.setState({ dateTo: date });
+  handleSortChange = (e) => this.setState({ sortOption: e.target.value });
+  handleTagFilterChange = (e) => this.setState({ tagFilters: e.target.value });
+  handleResetFilters = () =>
+    this.setState({
+      searchText: "",
+      category: "all",
+      dateFrom: null,
+      dateTo: null,
+      sortOption: "newest",
+      tagFilters: [],
+    });
+
+  applyFilters(projects) {
+    const { searchText, category, dateFrom, dateTo, tagFilters } = this.state;
+    return projects.filter((proj) => {
+      const matchesSearch =
+        proj.title.toLowerCase().includes(searchText.toLowerCase()) ||
+        (proj.description || "")
+          .toLowerCase()
+          .includes(searchText.toLowerCase());
+      const matchesCategory = category === "all" || proj.category === category;
+      let matchesDate = true;
+      if (proj.createdAt) {
+        const created = new Date(proj.createdAt);
+        if (dateFrom && created < dateFrom) matchesDate = false;
+        if (dateTo && created > dateTo) matchesDate = false;
+      }
+      const matchesTags =
+        tagFilters.length === 0 ||
+        (proj.tags || []).some((tag) => tagFilters.includes(tag));
+      return matchesSearch && matchesCategory && matchesDate && matchesTags;
+    });
+  }
+
+  applySort(projects) {
+    const { sortOption } = this.state;
+    return projects.sort((a, b) => {
+      if (sortOption === "newest") {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      } else if (sortOption === "az") {
+        return a.title.localeCompare(b.title);
+      }
+      return 0;
+    });
+  }
+
   render() {
+    const { classes, projects, progress, user } = this.props;
+    const {
+      searchText,
+      category,
+      dateFrom,
+      dateTo,
+      sortOption,
+      tagFilters,
+      snackbar,
+      message,
+      type,
+      key,
+    } = this.state;
+
+    // Filter & Sort
+    const filtered = this.applyFilters(projects);
+    const sorted = this.applySort(filtered.slice()); // slice to avoid mutating state
+
+    // Derive available categories & tags
+    const categories = Array.from(
+      new Set(projects.map((p) => p.category)),
+    ).filter((c) => c);
+    const tags = Array.from(new Set(projects.flatMap((p) => p.tags || [])));
+
     return (
       <Box>
         <Breadcrumbs content={[{ link: "/gallery", title: "Galerie" }]} />
-
         <Typography variant="h4" gutterBottom>
           Galerie
         </Typography>
-        <DeviceSelection />
-        {this.props.progress ? (
-          <Backdrop open invisible>
-            <CircularProgress color="primary" />
-          </Backdrop>
+
+        <Box className={classes.filterRow}>
+          <TextField
+            className={classes.filterField}
+            label="Suche"
+            variant="outlined"
+            size="small"
+            value={searchText}
+            onChange={this.handleSearchChange}
+          />
+
+          <TextField
+            className={classes.filterField}
+            select
+            label="Kategorie"
+            variant="outlined"
+            size="small"
+            value={category}
+            onChange={this.handleCategoryChange}
+          >
+            <MenuItem value="all">Alle</MenuItem>
+            {categories.map((cat) => (
+              <MenuItem key={cat} value={cat}>
+                {cat}
+              </MenuItem>
+            ))}
+          </TextField>
+
+          <TextField
+            className={classes.filterField}
+            select
+            label="Tags"
+            variant="outlined"
+            size="small"
+            SelectProps={{ multiple: true }}
+            value={tagFilters}
+            onChange={this.handleTagFilterChange}
+          >
+            {tags.map((tag) => (
+              <MenuItem key={tag} value={tag}>
+                {tag}
+              </MenuItem>
+            ))}
+          </TextField>
+
+          <TextField
+            className={classes.filterField}
+            select
+            label="Sortieren"
+            variant="outlined"
+            size="small"
+            value={sortOption}
+            onChange={this.handleSortChange}
+          >
+            <MenuItem value="newest">Neueste zuerst</MenuItem>
+            <MenuItem value="az">Titel A → Z</MenuItem>
+          </TextField>
+
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <DatePicker
+              label="Von"
+              value={dateFrom}
+              onChange={this.handleDateFromChange}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  size="small"
+                  className={classes.filterField}
+                />
+              )}
+            />
+            <DatePicker
+              label="Bis"
+              value={dateTo}
+              onChange={this.handleDateToChange}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  size="small"
+                  className={classes.filterField}
+                />
+              )}
+            />
+          </LocalizationProvider>
+
+          <Button
+            className={classes.filterField}
+            variant="text"
+            size="small"
+            onClick={this.handleResetFilters}
+          >
+            Filter zurücksetzen
+          </Button>
+        </Box>
+
+        {progress ? (
+          <Grid container spacing={3}>
+            {Array.from({ length: 6 }).map((_, idx) => (
+              <Grid item xs={12} sm={6} md={4} xl={3} key={idx}>
+                <Card>
+                  <Skeleton
+                    variant="rectangular"
+                    height={140}
+                    animation="wave"
+                  />
+                  <CardContent>
+                    <Skeleton width="60%" />
+                    <Skeleton width="80%" />
+                    <Skeleton width="40%" />
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
         ) : (
           <Box mt={2}>
-            {this.props.projects.length > 0 ? (
+            {sorted.length > 0 ? (
               <Grid container spacing={3}>
-                {this.props.projects.map((project, i) => (
+                {sorted.map((project, i) => (
                   <Grid item xs={12} sm={6} md={4} xl={3} key={i}>
                     <Card
+                      className={classes.card}
                       elevation={3}
                       sx={{
                         height: "100%",
@@ -103,14 +319,13 @@ class GalleryPage extends Component {
                     >
                       <CardHeader
                         avatar={
-                          <Avatar aria-label="creator">
+                          <Avatar>
                             {project.title.charAt(0).toUpperCase()}
                           </Avatar>
                         }
                         title={project.title}
                         subheader={project.creator}
                       />
-                      {/* Vorschau Bild (Platzhalter oder project.thumbnail falls vorhanden) */}
                       <Box
                         sx={{
                           height: 140,
@@ -121,8 +336,7 @@ class GalleryPage extends Component {
                         }}
                       >
                         <Typography variant="caption" color="text.secondary">
-                          Vorschau folgt{" "}
-                          {/* Optional: Bild oder generierter Screenshot */}
+                          Vorschau folgt
                         </Typography>
                       </Box>
                       <CardContent sx={{ flexGrow: 1 }}>
@@ -133,24 +347,20 @@ class GalleryPage extends Component {
                         >
                           {project.description}
                         </Typography>
-                        {/* Tags / Kategorien */}
                         <Stack direction="row" spacing={1} flexWrap="wrap">
-                          {(project.tags || ["Experiment", "Sensor"]).map(
-                            (tag, idx) => (
-                              <Chip
-                                key={idx}
-                                label={tag}
-                                size="small"
-                                variant="outlined"
-                              />
-                            ),
-                          )}
+                          {(project.tags || []).map((tag, idx) => (
+                            <Chip
+                              key={idx}
+                              label={tag}
+                              size="small"
+                              variant="outlined"
+                            />
+                          ))}
                           {project.category && (
                             <Chip
                               label={project.category}
                               size="small"
                               color="primary"
-                              variant="filled"
                             />
                           )}
                         </Stack>
@@ -168,14 +378,13 @@ class GalleryPage extends Component {
                             <VisibilityIcon />
                           </IconButton>
                         </Tooltip>
-                        {this.props.user &&
-                          this.props.user.email === project.creator && (
-                            <WorkspaceFunc
-                              multiple
-                              project={project}
-                              projectType="gallery"
-                            />
-                          )}
+                        {user && user.email === project.creator && (
+                          <WorkspaceFunc
+                            multiple
+                            project={project}
+                            projectType="gallery"
+                          />
+                        )}
                       </CardActions>
                     </Card>
                   </Grid>
@@ -188,12 +397,8 @@ class GalleryPage extends Component {
             )}
           </Box>
         )}
-        <Snackbar
-          open={this.state.snackbar}
-          message={this.state.message}
-          type={this.state.type}
-          key={this.state.key}
-        />
+
+        <Snackbar open={snackbar} message={message} type={type} key={key} />
       </Box>
     );
   }
