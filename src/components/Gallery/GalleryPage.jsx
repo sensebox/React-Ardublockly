@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { getProjects, resetProject } from "../../actions/projectActions";
@@ -14,6 +14,7 @@ import {
   CardHeader,
   CardContent,
   CardActions,
+  CardActionArea,
   Avatar,
   Typography,
   Chip,
@@ -21,15 +22,13 @@ import {
   TextField,
   MenuItem,
   Skeleton,
-  IconButton,
   Button,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import Tooltip from "@mui/material/Tooltip";
-import DatePicker from "@mui/lab/DatePicker";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import {
+  determineLevelFromXML,
+  extractTagsFromProject,
+} from "../../components/projectUtils";
 
 const styles = (theme) => ({
   link: {
@@ -64,15 +63,15 @@ class GalleryPage extends Component {
     key: "",
     message: "",
     searchText: "",
-    category: "all",
     dateFrom: null,
     dateTo: null,
-    sortOption: "newest", // 'newest' | 'az'
-    tagFilters: [], // array of tags to include
+    sortOption: "newest",
+    tagFilters: [],
+    levelFilter: "all",
   };
 
-  componentDidMount() {
-    this.props.getProjects("gallery");
+  async componentDidMount() {
+    await this.props.getProjects("gallery");
     this.handleMessage(this.props.message);
   }
 
@@ -87,7 +86,7 @@ class GalleryPage extends Component {
     this.props.clearMessages();
   }
 
-  handleMessage(message) {
+  handleMessage = (message) => {
     if (!message) return;
     if (message.id === "GALLERY_DELETE_SUCCESS") {
       this.setState({
@@ -105,43 +104,49 @@ class GalleryPage extends Component {
         type: "error",
       });
     }
-  }
+  };
 
   handleSearchChange = (e) => this.setState({ searchText: e.target.value });
-  handleCategoryChange = (e) => this.setState({ category: e.target.value });
-  handleDateFromChange = (date) => this.setState({ dateFrom: date });
-  handleDateToChange = (date) => this.setState({ dateTo: date });
   handleSortChange = (e) => this.setState({ sortOption: e.target.value });
   handleTagFilterChange = (e) => this.setState({ tagFilters: e.target.value });
+  handleLevelFilterChange = (e) =>
+    this.setState({ levelFilter: e.target.value });
   handleResetFilters = () =>
     this.setState({
       searchText: "",
-      category: "all",
       dateFrom: null,
       dateTo: null,
       sortOption: "newest",
       tagFilters: [],
+      levelFilter: "all",
     });
 
   applyFilters(projects) {
-    const { searchText, category, dateFrom, dateTo, tagFilters } = this.state;
+    const { searchText, dateFrom, dateTo, tagFilters, levelFilter } =
+      this.state;
+
     return projects.filter((proj) => {
       const matchesSearch =
         proj.title.toLowerCase().includes(searchText.toLowerCase()) ||
         (proj.description || "")
           .toLowerCase()
           .includes(searchText.toLowerCase());
-      const matchesCategory = category === "all" || proj.category === category;
+
       let matchesDate = true;
       if (proj.createdAt) {
         const created = new Date(proj.createdAt);
         if (dateFrom && created < dateFrom) matchesDate = false;
         if (dateTo && created > dateTo) matchesDate = false;
       }
+
       const matchesTags =
         tagFilters.length === 0 ||
         (proj.tags || []).some((tag) => tagFilters.includes(tag));
-      return matchesSearch && matchesCategory && matchesDate && matchesTags;
+
+      const matchesLevel =
+        levelFilter === "all" || proj.level === Number(levelFilter);
+
+      return matchesSearch && matchesDate && matchesTags && matchesLevel;
     });
   }
 
@@ -158,28 +163,18 @@ class GalleryPage extends Component {
   }
 
   render() {
-    const { classes, projects, progress, user } = this.props;
-    const {
-      searchText,
-      category,
-      dateFrom,
-      dateTo,
-      sortOption,
-      tagFilters,
-      snackbar,
-      message,
-      type,
-      key,
-    } = this.state;
+    const { classes, progress, user } = this.props;
+    const rawProjects = this.props.projects || [];
+    const projects = rawProjects.map((p) => ({
+      ...p,
+      level: determineLevelFromXML(p.xml),
+      tags: extractTagsFromProject(p),
+    }));
 
-    // Filter & Sort
+    const { searchText, tagFilters, snackbar, message, type, key } = this.state;
+
     const filtered = this.applyFilters(projects);
-    const sorted = this.applySort(filtered.slice()); // slice to avoid mutating state
-
-    // Derive available categories & tags
-    const categories = Array.from(
-      new Set(projects.map((p) => p.category)),
-    ).filter((c) => c);
+    const sorted = this.applySort(filtered.slice());
     const tags = Array.from(new Set(projects.flatMap((p) => p.tags || [])));
 
     return (
@@ -198,24 +193,6 @@ class GalleryPage extends Component {
             value={searchText}
             onChange={this.handleSearchChange}
           />
-
-          <TextField
-            className={classes.filterField}
-            select
-            label="Kategorie"
-            variant="outlined"
-            size="small"
-            value={category}
-            onChange={this.handleCategoryChange}
-          >
-            <MenuItem value="all">Alle</MenuItem>
-            {categories.map((cat) => (
-              <MenuItem key={cat} value={cat}>
-                {cat}
-              </MenuItem>
-            ))}
-          </TextField>
-
           <TextField
             className={classes.filterField}
             select
@@ -232,46 +209,6 @@ class GalleryPage extends Component {
               </MenuItem>
             ))}
           </TextField>
-
-          <TextField
-            className={classes.filterField}
-            select
-            label="Sortieren"
-            variant="outlined"
-            size="small"
-            value={sortOption}
-            onChange={this.handleSortChange}
-          >
-            <MenuItem value="newest">Neueste zuerst</MenuItem>
-            <MenuItem value="az">Titel A → Z</MenuItem>
-          </TextField>
-
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DatePicker
-              label="Von"
-              value={dateFrom}
-              onChange={this.handleDateFromChange}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  size="small"
-                  className={classes.filterField}
-                />
-              )}
-            />
-            <DatePicker
-              label="Bis"
-              value={dateTo}
-              onChange={this.handleDateToChange}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  size="small"
-                  className={classes.filterField}
-                />
-              )}
-            />
-          </LocalizationProvider>
 
           <Button
             className={classes.filterField}
@@ -317,67 +254,69 @@ class GalleryPage extends Component {
                         flexDirection: "column",
                       }}
                     >
-                      <CardHeader
-                        avatar={
-                          <Avatar>
-                            {project.title.charAt(0).toUpperCase()}
-                          </Avatar>
-                        }
-                        title={project.title}
-                        subheader={project.creator}
-                      />
-                      <Box
-                        sx={{
-                          height: 140,
-                          backgroundColor: "#f5f5f5",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
+                      <CardActionArea
+                        component={Link}
+                        to={`/gallery/${project._id}`}
+                        sx={{ flexGrow: 1, textAlign: "left" }}
                       >
-                        <Typography variant="caption" color="text.secondary">
-                          Vorschau folgt
-                        </Typography>
-                      </Box>
-                      <CardContent sx={{ flexGrow: 1 }}>
-                        <Typography
-                          variant="body2"
-                          color="text.secondary"
-                          sx={{ fontStyle: "italic", mb: 1 }}
+                        <CardHeader
+                          avatar={
+                            <Avatar>
+                              {project.title.charAt(0).toUpperCase()}
+                            </Avatar>
+                          }
+                          title={project.title}
+                          subheader={project.creator}
+                        />
+                        <Box
+                          sx={{
+                            height: 140,
+                            backgroundColor: "#f5f5f5",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
                         >
-                          {project.description}
-                        </Typography>
-                        <Stack direction="row" spacing={1} flexWrap="wrap">
-                          {(project.tags || []).map((tag, idx) => (
-                            <Chip
-                              key={idx}
-                              label={tag}
-                              size="small"
-                              variant="outlined"
-                            />
-                          ))}
-                          {project.category && (
-                            <Chip
-                              label={project.category}
-                              size="small"
-                              color="primary"
-                            />
-                          )}
-                        </Stack>
-                      </CardContent>
+                          <Typography variant="caption" color="text.secondary">
+                            Vorschau folgt
+                          </Typography>
+                        </Box>
+                        <CardContent sx={{ flexGrow: 1 }}>
+                          <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            sx={{ fontStyle: "italic", mb: 1 }}
+                          >
+                            {project.description}
+                          </Typography>
+                          <Stack direction="row" spacing={1} flexWrap="wrap">
+                            {(project.tags || []).map((tag, idx) => {
+                              const isActive =
+                                this.state.tagFilters.includes(tag);
+                              return (
+                                <Chip
+                                  key={idx}
+                                  label={tag}
+                                  size="small"
+                                  variant={isActive ? "filled" : "primary"}
+                                  color={isActive ? "primary" : "default"}
+                                />
+                              );
+                            })}
+                            {project.category && (
+                              <Chip
+                                label={project.category}
+                                size="small"
+                                color="primary"
+                              />
+                            )}
+                          </Stack>
+                        </CardContent>
+                      </CardActionArea>
                       <CardActions
                         disableSpacing
                         sx={{ justifyContent: "space-between" }}
                       >
-                        <Tooltip title="Ansehen">
-                          <IconButton
-                            component={Link}
-                            to={`/gallery/${project._id}`}
-                            size="large"
-                          >
-                            <VisibilityIcon />
-                          </IconButton>
-                        </Tooltip>
                         {user && user.email === project.creator && (
                           <WorkspaceFunc
                             multiple
