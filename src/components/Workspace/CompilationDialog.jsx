@@ -177,6 +177,7 @@ function CompilationDialog({
                 }
               >
                 <Button
+                  onClick={handleClose}
                   style={{ color: "white", margin: "1rem" }}
                   variant="contained"
                 >
