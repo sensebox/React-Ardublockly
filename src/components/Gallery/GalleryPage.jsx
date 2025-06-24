@@ -15,14 +15,11 @@ import {
   CardContent,
   CardActions,
   CardActionArea,
-  Avatar,
   Typography,
   Chip,
   Stack,
   TextField,
-  MenuItem,
   Skeleton,
-  Button,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import {
@@ -31,6 +28,7 @@ import {
 } from "../../components/projectUtils";
 import DrawerFilters from "./DrawerFilters";
 import { styled } from "@mui/material/styles";
+import { withRouter } from "react-router-dom";
 
 const styles = (theme) => ({
   link: {
@@ -81,8 +79,15 @@ class GalleryPage extends Component {
   };
 
   async componentDidMount() {
-    await this.props.getProjects("gallery");
-    this.handleMessage(this.props.message);
+    const params = new URLSearchParams(this.props.location.search);
+    const tagFilters = params.get("tags") ? params.get("tags").split(",") : [];
+    const levelFilter = params.get("levels")
+      ? params.get("levels").split(",")
+      : "all";
+    this.setState({ tagFilters, levelFilter }, async () => {
+      await this.props.getProjects("gallery");
+      this.handleMessage(this.props.message);
+    });
   }
 
   componentDidUpdate(prevProps) {
@@ -172,6 +177,14 @@ class GalleryPage extends Component {
     });
   }
 
+  getProjectImage(project) {
+    if (project.imageUrl) {
+      return project.imageUrl;
+    }
+
+    return "/placeholder-image.png";
+  }
+
   render() {
     const { classes, progress, user } = this.props;
     const rawProjects = this.props.projects || [];
@@ -206,17 +219,25 @@ class GalleryPage extends Component {
           <DrawerFilters
             tags={tags}
             selectedTags={tagFilters}
-            onApply={({ tagFilters }) => this.setState({ tagFilters })}
-            onClear={() => this.setState({ tagFilters: [] })}
+            onApply={({ tagFilters, difficultyFilters }) => {
+              const params = new URLSearchParams();
+              if (tagFilters.length) params.set("tags", tagFilters.join(","));
+              if (difficultyFilters && difficultyFilters.length)
+                params.set("levels", difficultyFilters.join(","));
+              this.props.history.push({ search: params.toString() });
+              this.setState({
+                tagFilters,
+                levelFilter:
+                  difficultyFilters && difficultyFilters.length > 0
+                    ? difficultyFilters
+                    : "all",
+              });
+            }}
+            onClear={() => {
+              this.props.history.push({ search: "" });
+              this.setState({ tagFilters: [], levelFilter: "all" });
+            }}
           />
-          {/* <Button
-            className={classes.filterField}
-            variant="text"
-            size="small"
-            onClick={this.handleResetFilters}
-          >
-            Filter zurücksetzen
-          </Button> */}
         </Box>
 
         {progress ? (
@@ -259,16 +280,17 @@ class GalleryPage extends Component {
                         sx={{ flexGrow: 1, textAlign: "left" }}
                       >
                         <CardHeader
-                          avatar={
-                            <Avatar>
-                              {project.title.charAt(0).toUpperCase()}
-                            </Avatar>
-                          }
+                          className={classes.cardHeader}
+                          sx={{ backgroundColor: "primary.main" }}
                           title={
                             <ProjectTitle
                               variant="h6"
                               component="h3"
-                              sx={{ fontWeight: "bold" }}
+                              sx={{
+                                fontWeight: "bold",
+                                backgroundColor: "primary.main",
+                                color: "white",
+                              }}
                               gutterBottom
                             >
                               {project.title}
@@ -282,13 +304,24 @@ class GalleryPage extends Component {
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
+                            overflow: "hidden",
                           }}
                         >
-                          <Typography variant="caption" color="text.secondary">
-                            Vorschau folgt
-                          </Typography>
+                          <img
+                            src={this.getProjectImage(project)}
+                            alt={project.title}
+                            style={{
+                              maxHeight: "100%",
+                              maxWidth: "100%",
+                              objectFit: "contain",
+                            }}
+                          />
                         </Box>
-                        <CardContent sx={{ flexGrow: 1 }}>
+                        <CardContent
+                          sx={{
+                            flexGrow: 1,
+                          }}
+                        >
                           <Typography
                             variant="body2"
                             color="text.secondary"
@@ -368,8 +401,10 @@ const mapStateToProps = (state) => ({
   message: state.message,
 });
 
-export default connect(mapStateToProps, {
-  getProjects,
-  resetProject,
-  clearMessages,
-})(withStyles(styles, { withTheme: true })(GalleryPage));
+export default withRouter(
+  connect(mapStateToProps, {
+    getProjects,
+    resetProject,
+    clearMessages,
+  })(withStyles(styles, { withTheme: true })(GalleryPage)),
+);

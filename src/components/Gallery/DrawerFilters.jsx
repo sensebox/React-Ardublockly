@@ -21,6 +21,8 @@ export default function DrawerFilters({
 }) {
   const [open, setOpen] = React.useState(false);
   const [localTags, setLocalTags] = React.useState(selectedTags);
+  const DIFFICULTY_LEVELS = ["Leicht", "Mittel", "Schwer", "Sehr schwer"];
+  const [localDifficulties, setLocalDifficulties] = React.useState([]);
 
   React.useEffect(() => {
     setLocalTags(selectedTags);
@@ -104,7 +106,31 @@ export default function DrawerFilters({
             })}
           </Box>
         </FormControl>
-
+        <FormControl component="fieldset" sx={{ px: 2, mb: 2 }}>
+          <FormLabel component="legend">Schwierigkeitsgrad</FormLabel>
+          <Box sx={{ mt: 1, display: "flex", flexWrap: "wrap", gap: 1 }}>
+            {DIFFICULTY_LEVELS.map((level) => {
+              const selected = localDifficulties.includes(level);
+              return (
+                <Chip
+                  key={level}
+                  label={level}
+                  clickable
+                  size="small"
+                  variant={selected ? "filled" : "outlined"}
+                  color={selected ? "primary" : "default"}
+                  onClick={() =>
+                    setLocalDifficulties((prev) =>
+                      prev.includes(level)
+                        ? prev.filter((l) => l !== level)
+                        : [...prev, level],
+                    )
+                  }
+                />
+              );
+            })}
+          </Box>
+        </FormControl>
         <Box sx={{ flexGrow: 1 }} />
         <Divider sx={{ my: 2 }} />
 
@@ -121,6 +147,7 @@ export default function DrawerFilters({
             variant="outlined"
             onClick={() => {
               setLocalTags([]);
+              setLocalDifficulties([]);
               onClear?.();
             }}
           >
@@ -129,7 +156,10 @@ export default function DrawerFilters({
           <Button
             variant="contained"
             onClick={() => {
-              onApply({ tagFilters: localTags });
+              onApply({
+                tagFilters: localTags,
+                difficultyFilters: localDifficulties,
+              });
               setOpen(false);
             }}
           >
