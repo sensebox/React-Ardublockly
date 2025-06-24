@@ -268,7 +268,7 @@ CompilationDialog.propTypes = {
   onCompileComplete: PropTypes.func,
   compiler: PropTypes.string.isRequired,
   code: PropTypes.string.isRequired,
-  filename: PropTypes.string.isRequired,
+  filename: PropTypes.string,
   platform: PropTypes.bool.isRequired,
   appLink: PropTypes.string,
 };

@@ -23,6 +23,7 @@ import { faCode } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TooltipViewer from "./TooltipViewer";
 import Dialog from "./Dialog";
+import { getPlatform } from "../reducers/generalReducer";
 // import Autosave from "./Workspace/AutoSave";
 const styles = (theme) => ({
   codeOn: {
@@ -60,8 +61,10 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    if (this.props.platform === true) {
+    if (getPlatform() === true) {
       this.setState({ codeOn: false });
+      console.log("Platform detected, hiding code view.");
+      console.log(getPlatform());
     }
     this.setState({ stats: window.localStorage.getItem("stats") });
     if (!this.props.project) {
@@ -235,7 +238,7 @@ Home.propTypes = {
   workspaceName: PropTypes.func.isRequired,
   message: PropTypes.object.isRequired,
   statistics: PropTypes.bool.isRequired,
-  platform: PropTypes.bool.isRequired,
+  platform: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
