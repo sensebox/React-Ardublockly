@@ -29,6 +29,8 @@ import {
   determineLevelFromXML,
   extractTagsFromProject,
 } from "../../components/projectUtils";
+import DrawerFilters from "../../components/Gallery/Drawer";
+import { styled } from "@mui/material/styles";
 
 const styles = (theme) => ({
   link: {
@@ -55,6 +57,14 @@ const styles = (theme) => ({
     },
   },
 });
+
+const ProjectTitle = styled(Typography)(({ theme }) => ({
+  fontWeight: theme.typography.fontWeightBold,
+  textTransform: "capitalize",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  whiteSpace: "nowrap",
+}));
 
 class GalleryPage extends Component {
   state = {
@@ -193,31 +203,20 @@ class GalleryPage extends Component {
             value={searchText}
             onChange={this.handleSearchChange}
           />
-          <TextField
-            className={classes.filterField}
-            select
-            label="Tags"
-            variant="outlined"
-            size="small"
-            SelectProps={{ multiple: true }}
-            value={tagFilters}
-            onChange={this.handleTagFilterChange}
-          >
-            {tags.map((tag) => (
-              <MenuItem key={tag} value={tag}>
-                {tag}
-              </MenuItem>
-            ))}
-          </TextField>
-
-          <Button
+          <DrawerFilters
+            tags={tags}
+            selectedTags={tagFilters}
+            onApply={({ tagFilters }) => this.setState({ tagFilters })}
+            onClear={() => this.setState({ tagFilters: [] })}
+          />
+          {/* <Button
             className={classes.filterField}
             variant="text"
             size="small"
             onClick={this.handleResetFilters}
           >
             Filter zurücksetzen
-          </Button>
+          </Button> */}
         </Box>
 
         {progress ? (
@@ -265,8 +264,16 @@ class GalleryPage extends Component {
                               {project.title.charAt(0).toUpperCase()}
                             </Avatar>
                           }
-                          title={project.title}
-                          subheader={project.creator}
+                          title={
+                            <ProjectTitle
+                              variant="h6"
+                              component="h3"
+                              sx={{ fontWeight: "bold" }}
+                              gutterBottom
+                            >
+                              {project.title}
+                            </ProjectTitle>
+                          }
                         />
                         <Box
                           sx={{

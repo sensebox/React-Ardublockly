@@ -7,7 +7,6 @@ import { Provider } from "react-redux";
 import store from "./store";
 import { loadUser } from "./actions/authActions";
 import ErrorBoundary from "./components/ErrorBoundary";
-
 import "./App.css";
 
 import {
