@@ -29,7 +29,7 @@ import {
   determineLevelFromXML,
   extractTagsFromProject,
 } from "../../components/projectUtils";
-import DrawerFilters from "../../components/Gallery/Drawer";
+import DrawerFilters from "./DrawerFilters";
 import { styled } from "@mui/material/styles";
 
 const styles = (theme) => ({
