@@ -287,7 +287,7 @@ class GalleryPage extends Component {
                               variant="h6"
                               component="h3"
                               sx={{
-                                fontWeight: "bold",
+                                fontWeight: "normal",
                                 backgroundColor: "primary.main",
                                 color: "white",
                               }}
