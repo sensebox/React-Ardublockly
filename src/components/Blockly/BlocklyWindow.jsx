@@ -76,7 +76,7 @@ class BlocklyWindow extends Component {
 
   render() {
     return (
-      <div>
+      <>
         <BlocklyComponent
           ref={this.simpleWorkspace}
           style={this.props.svg ? { height: 0 } : this.props.blocklyCSS}
@@ -130,7 +130,7 @@ class BlocklyWindow extends Component {
         {this.props.svg && this.props.initialXml ? (
           <BlocklySvg initialXml={this.props.initialXml} />
         ) : null}
-      </div>
+      </>
     );
   }
 }

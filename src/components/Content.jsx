@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 
 import * as Blockly from "blockly/core";
 import { De } from "./Blockly/msg/de";
@@ -34,6 +35,10 @@ class Content extends Component {
   }
 
   render() {
+    const { location } = this.props;
+    if (location && location.pathname === "/minimal") {
+      return <Routes />;
+    }
     return (
       <div className="wrapper">
         <Navbar />
@@ -47,6 +52,7 @@ class Content extends Component {
 
 Content.propTypes = {
   language: PropTypes.string.isRequired,
+  minimal: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
@@ -54,4 +60,4 @@ const mapStateToProps = (state) => ({
   board: state.board.board,
 });
 
-export default connect(mapStateToProps, null)(Content);
+export default connect(mapStateToProps, null)(withRouter(Content));
