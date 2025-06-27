@@ -149,6 +149,7 @@ const mapStateToProps = (state) => ({
   sounds: state.general.sounds,
   language: state.general.language,
   selectedBoard: state.board.board,
+  initialXml: state.project?.xml,
 });
 
 export default connect(mapStateToProps, { onChangeWorkspace, clearStats })(

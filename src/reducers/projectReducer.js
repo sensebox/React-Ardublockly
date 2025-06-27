@@ -4,6 +4,7 @@ import {
   GET_PROJECTS,
   PROJECT_TYPE,
   PROJECT_DESCRIPTION,
+  RESET_PROJECT,
 } from "../actions/types";
 
 const initialState = {
@@ -11,6 +12,7 @@ const initialState = {
   type: "",
   description: "",
   progress: false,
+  xml: "",
 };
 
 export default function foo(state = initialState, action) {
@@ -24,11 +26,13 @@ export default function foo(state = initialState, action) {
       return {
         ...state,
         projects: action.payload,
+        xml: "",
       };
     case GET_PROJECT:
       return {
         ...state,
         projects: [action.payload],
+        xml: action.payload.xml || "",
       };
     case PROJECT_TYPE:
       return {
@@ -39,6 +43,10 @@ export default function foo(state = initialState, action) {
       return {
         ...state,
         description: action.payload,
+      };
+    case RESET_PROJECT:
+      return {
+        ...initialState,
       };
     default:
       return state;
