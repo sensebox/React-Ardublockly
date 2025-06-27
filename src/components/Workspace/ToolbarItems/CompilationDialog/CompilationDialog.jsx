@@ -51,6 +51,7 @@ function CompilationDialog({
       setSketchId(null);
       setError(null);
     }
+    console.log("selected board:", selectedBoard);
   }, [open]);
 
   useEffect(() => {
@@ -166,11 +167,7 @@ function CompilationDialog({
               <span style={headerStyle}> {Blockly.Msg.goToApp_title} </span>
               <span style={{ margin: "1rem" }}>{Blockly.Msg.goToApp_text}</span>
               <a
-                href={
-                  selectedBoard === "esp32"
-                    ? `blocklyconnect-app://sketch/${filename}/${sketchId}/${selectedBoard}`
-                    : `blocklyconnect-app://sketch/${filename}/${sketchId}`
-                }
+                href={`blocklyconnect-app://sketch/${filename}/${sketchId}/${selectedBoard}`}
               >
                 <Button
                   style={{ color: "white", margin: "1rem" }}
