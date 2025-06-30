@@ -1,70 +1,26 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { clearStats, workspaceName } from "../actions/workspaceActions";
-
 import * as Blockly from "blockly/core";
-import { createNameId } from "mnemonic-id";
-
 import BlocklyWindow from "./Blockly/BlocklyWindow";
-
-import withStyles from "@mui/styles/withStyles";
-import { Button } from "@mui/material";
 import store from "../store";
-import { setPlatform } from "../actions/generalActions";
+import { setPlatform, setRenderer } from "../actions/generalActions";
+import BoardSelector from "./BoardSelector";
+import { setBoard } from "../actions/boardAction";
 
-const styles = (theme) => ({
-  codeOn: {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.primary.contrastText,
-    "&:hover": {
-      backgroundColor: theme.palette.primary.contrastText,
-      color: theme.palette.primary.main,
-      border: `1px solid ${theme.palette.secondary.main}`,
-    },
-  },
-  codeOff: {
-    backgroundColor: theme.palette.primary.contrastText,
-    color: theme.palette.primary.main,
-    border: `1px solid ${theme.palette.secondary.main}`,
-    "&:hover": {
-      backgroundColor: theme.palette.primary.main,
-      color: theme.palette.primary.contrastText,
-    },
-  },
-});
-
-class Home extends Component {
+class MinimalHome extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      codeOn: true,
-      snackbar: false,
-      type: "",
-      key: "",
-      message: "",
-      open: true,
       initialXml: localStorage.getItem("autoSaveXML"),
     };
   }
 
   componentDidMount() {
-    if (this.props.platform === true) {
-      this.setState({ codeOn: false });
-    }
-    this.setState({ stats: window.localStorage.getItem("stats") });
-    if (!this.props.project) {
-      this.props.workspaceName(createNameId());
-    }
-    if (this.props.message && this.props.message.id === "GET_SHARE_FAIL") {
-      this.setState({
-        snackbar: true,
-        key: Date.now(),
-        message: `Das angefragte geteilte Projekt konnte nicht gefunden werden.`,
-        type: "error",
-      });
-    }
-    store.dispatch(setPlatform(""));
+    store.dispatch(setRenderer("zelos"));
+    window.localStorage.setItem("ota", true);
+    store.dispatch(setPlatform(false));
     // Listen for messages from Flutter
     window.addEventListener("message", this.handleFlutterMessage);
   }
@@ -81,6 +37,7 @@ class Home extends Component {
   componentWillUnmount() {
     this.props.clearStats();
     this.props.workspaceName(null);
+    window.localStorage.removeItem("ota");
     window.removeEventListener("message", this.handleFlutterMessage);
   }
 
@@ -140,18 +97,6 @@ class Home extends Component {
     }
   };
 
-  toggleDialog = () => {
-    this.setState({ open: !this.state });
-  };
-
-  onChangeCheckbox = (e) => {
-    if (e.target.checked) {
-      window.localStorage.setItem("ota", e.target.checked);
-    } else {
-      window.localStorage.removeItem("ota");
-    }
-  };
-
   onChange = () => {
     this.setState({ codeOn: !this.state.codeOn });
     const workspace = Blockly.getMainWorkspace();
@@ -163,33 +108,52 @@ class Home extends Component {
 
   render() {
     return (
-      <div className="blocklyWindow" style={{ height: "100%" }}>
-        <BlocklyWindow initialXml={this.state.initialXml} />
+      <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+          }}
+        >
+          <BoardSelector
+            selectedBoard={this.props.selectedBoard}
+            setBoard={this.props.setBoard}
+          />
+        </div>
+        <div style={{ flex: 1 }}>
+          <BlocklyWindow
+            initialXml={this.state.initialXml}
+            selectedBoard={
+              this.props.selectedBoard === "mcu" ||
+              this.props.selectedBoard === "mini"
+                ? "sensebox-mcu"
+                : "sensebox-esp32s2"
+            }
+          />
+        </div>
       </div>
     );
   }
 }
 
-Home.propTypes = {
-  clearStats: PropTypes.func.isRequired,
-  workspaceName: PropTypes.func.isRequired,
-  message: PropTypes.object.isRequired,
-  statistics: PropTypes.bool.isRequired,
+MinimalHome.propTypes = {
   platform: PropTypes.bool.isRequired,
   arduinoCode: PropTypes.string.isRequired,
   board: PropTypes.string.isRequired,
   compilerUrl: PropTypes.string.isRequired,
+  setBoard: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  message: state.message,
-  statistics: state.general.statistics,
   platform: state.general.platform,
   arduinoCode: state.workspace.code.arduino,
   selectedBoard: state.board.board,
   compilerUrl: state.general.compiler,
 });
 
-export default connect(mapStateToProps, { clearStats, workspaceName })(
-  withStyles(styles, { withTheme: true })(Home),
-);
+export default connect(mapStateToProps, {
+  clearStats,
+  workspaceName,
+  setBoard,
+})(MinimalHome);

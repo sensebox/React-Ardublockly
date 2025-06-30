@@ -21,7 +21,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import LinearProgress from "@mui/material/LinearProgress";
 import Tour from "reactour";
-import { Badge } from "@mui/material";
+import { Badge, Box, Container } from "@mui/material";
 import { home, assessment } from "./Tour";
 import {
   faBars,
@@ -51,6 +51,7 @@ import Menu from "@mui/material/Menu";
 import { setLanguage } from "../actions/generalActions";
 import { setBoard } from "../actions/boardAction";
 import { Button } from "@mui/material";
+import BoardSelector from "./BoardSelector";
 
 const styles = (theme) => ({
   drawerWidth: {
@@ -167,100 +168,20 @@ class Navbar extends Component {
             >
               {isHome ? (
                 <div style={{ display: "flex" }}>
-                  <div style={{ padding: "12px" }}>
-                    <Button
-                      style={{
-                        textTransform: "none",
-                        cursor: "pointer",
-                        alignItems: "center",
-                        alignContent: "center",
-                        background: "transparent",
-                        color: "inherit",
-                        fontWeight: "bold",
-                        border: "2px solid white",
-                        borderRadius: "25px",
-                      }}
-                      ref={this.mcuRef}
-                      onClick={() => {
-                        this.setState({
-                          anchorElBoard: this.mcuRef.current,
-                        });
-                      }}
-                      startIcon={<FontAwesomeIcon icon={faMicrochip} />}
-                      endIcon={<FontAwesomeIcon icon={faCaretDown} />}
-                      sx={{
-                        display: {
-                          xs: "none",
-                          sm: "none",
-                          md: "flex",
-                        },
-                      }}
-                    >
-                      {this.props.selectedBoard === "mcu"
-                        ? "MCU"
-                        : this.props.selectedBoard === "mini"
-                          ? "MCU:mini"
-                          : "MCU-S2"}
-                    </Button>
-                    <Menu
-                      anchorEl={this.state.anchorElBoard}
-                      anchorOrigin={{
-                        vertical: "bottom",
-                        horizontal: "center",
-                      }}
-                      keepMounted
-                      transformOrigin={{
-                        vertical: "top",
-                        horizontal: "center",
-                      }}
-                      open={Boolean(this.state.anchorElBoard)}
-                      onClose={() => {
-                        this.setState({
-                          anchorElBoard: null,
-                        });
-                      }}
-                    >
-                      <MenuItem
-                        value="mcu"
-                        onClick={(event) => {
-                          this.props.setBoard(
-                            event.currentTarget.getAttribute("value"),
-                          );
-                          this.setState({
-                            anchorElBoard: null,
-                          });
-                        }}
-                      >
-                        MCU
-                      </MenuItem>
-                      <MenuItem
-                        value="mini"
-                        onClick={(event) => {
-                          this.props.setBoard(
-                            event.currentTarget.getAttribute("value"),
-                          );
-                          this.setState({
-                            anchorElBoard: null,
-                          });
-                        }}
-                      >
-                        MCU:mini
-                      </MenuItem>
-                      <MenuItem
-                        value="esp32"
-                        onClick={(event) => {
-                          this.props.setBoard(
-                            event.currentTarget.getAttribute("value"),
-                          );
-                          this.setState({
-                            anchorElBoard: null,
-                          });
-                        }}
-                      >
-                        MCU-S2
-                      </MenuItem>
-                    </Menu>
-                  </div>
+                  <Box
+                    sx={{
+                      display: {
+                        xs: "none",
+                        sm: "none",
+                        md: "flex",
+                      },
+                    }}
+                  >
+                    <BoardSelector
+                      selectedBoard={this.props.selectedBoard}
+                      setBoard={this.props.setBoard}
+                    />
+                  </Box>
                   <div style={{ padding: "12px" }}>
                     {this.props.language === "en_US" ? (
                       <Button
