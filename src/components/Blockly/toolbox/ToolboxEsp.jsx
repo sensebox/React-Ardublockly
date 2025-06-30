@@ -1,13 +1,15 @@
-import { Block, Value, Field, Shadow, Category, Label } from "..";
+import { Block, Value, Field, Statement, Shadow, Category, Label } from "..";
 import { getColour } from "../helpers/colour";
 import * as Blockly from "blockly/core";
-import '@blockly/toolbox-search';
-import './custom-toolbox.css'
+import "@blockly/toolbox-search";
+import "./search-category.css";
+
 export const ToolboxEsp = () => {
   return (
     <>
-        <Category name="Search" kind="search" >      </Category>
-
+      <Category name="Search" kind="search">
+        {" "}
+      </Category>
       <Category
         name={Blockly.Msg.toolbox_sensors}
         colour={getColour().sensebox}
@@ -29,6 +31,7 @@ export const ToolboxEsp = () => {
         <Block type="sensebox_button" />
         <Block type="sensebox_sensor_truebner_smt50_esp32" />
         <Block type="sensebox_sensor_watertemperature" />
+        <Block type="sensebox_rg15_rainsensor" />
         <Block type="sensebox_soundsensor_dfrobot" />
         <Block type="sensebox_multiplexer_init">
           <Value name="nrChannels">
@@ -250,6 +253,7 @@ export const ToolboxEsp = () => {
             </Block>
           </Value>
         </Block>
+        <Block type="sensebox_display_roboeyes" />
         <Block type="sensebox_display_fillCircle">
           <Value name="X">
             <Block type="math_number">
@@ -400,8 +404,7 @@ export const ToolboxEsp = () => {
       <Category id="QOOOL" name="QOOOL" colour={getColour().sensebox}>
         <Block type="sensebox_fluoroASM_init"></Block>
         <Block type="sensebox_fluoroASM_setLED2"></Block>
-
-        </Category>
+      </Category>
       <Category id="webserver" name="Webserver" colour={getColour().webserver}>
         <Block type="sensebox_initialize_http_server"></Block>
         <Block type="sensebox_http_on_client_connect"></Block>
@@ -478,24 +481,30 @@ export const ToolboxEsp = () => {
         name={Blockly.Msg.toolbox_time}
         colour={getColour().time}
       >
-        <Block type="time_delay">
-          <Value name="DELAY_TIME_MILI">
-            <Block type="math_number">
-              <Field name="NUM">1000</Field>
-            </Block>
-          </Value>
-        </Block>
-        <Block type="time_delaymicros">
-          <Value name="DELAY_TIME_MICRO">
-            <Block type="math_number">
-              <Field name="NUM">100</Field>
-            </Block>
-          </Value>
-        </Block>
-        <Block type="time_millis"></Block>
-        <Block type="time_micros"></Block>
-        <Block type="infinite_loop"></Block>
-        <Block type="sensebox_interval_timer"></Block>
+        <Category
+          id="time_control"
+          name={Blockly.Msg.toolbox_time_control}
+          colour={getColour().time}
+        >
+          <Block type="time_delay">
+            <Value name="DELAY_TIME_MILI">
+              <Block type="math_number">
+                <Field name="NUM">1000</Field>
+              </Block>
+            </Value>
+          </Block>
+          <Block type="time_delaymicros">
+            <Value name="DELAY_TIME_MICRO">
+              <Block type="math_number">
+                <Field name="NUM">100</Field>
+              </Block>
+            </Value>
+          </Block>
+          <Block type="time_millis"></Block>
+          <Block type="time_micros"></Block>
+          <Block type="infinite_loop"></Block>
+          <Block type="sensebox_interval_timer"></Block>
+        </Category>
         <Category
           id="time"
           name={Blockly.Msg.toolbox_rtc}
@@ -682,7 +691,6 @@ export const ToolboxEsp = () => {
           <Block type="watchdog_reset"></Block>
         </Category>
       </Category>
-
     </>
   );
 };

@@ -25,6 +25,7 @@ class BlocklyWindow extends Component {
     const workspace = Blockly.getMainWorkspace();
     this.props.onChangeWorkspace({});
     this.props.clearStats();
+    workspace.addChangeListener(Blockly.Events.disableOrphans);
     workspace.addChangeListener((event) => {
       this.props.onChangeWorkspace(event);
 
@@ -37,6 +38,7 @@ class BlocklyWindow extends Component {
     Blockly.svgResize(workspace);
     const zoomToFit = new ZoomToFitControl(workspace);
     zoomToFit.init();
+
     // Initialize plugin.
     const backpack = new Backpack(workspace);
 

@@ -1,14 +1,24 @@
-import { Block, Value, Field, Shadow, Category, Sep, Label } from "..";
+import {
+  Block,
+  Value,
+  Field,
+  Statement,
+  Shadow,
+  Category,
+  Sep,
+  Label,
+} from "..";
 import { getColour } from "../helpers/colour";
 import * as Blockly from "blockly/core";
-import '@blockly/toolbox-search';
-import './custom-toolbox.css'
+import "@blockly/toolbox-search";
+import "./search-category.css";
 
 export const ToolboxMcu = () => {
   return (
     <>
-        <Category name="Search" kind="search" >      </Category>
-
+      <Category name="Suche" kind="search">
+        {" "}
+      </Category>
       <Category
         name={Blockly.Msg.toolbox_sensors}
         colour={getColour().sensebox}
@@ -16,6 +26,7 @@ export const ToolboxMcu = () => {
         <Block type="sensebox_sensor_temp_hum" />
         <Block type="sensebox_sensor_uv_light" />
         <Block type="sensebox_sensor_bmx055_accelerometer" />
+        <Block type="sensebox_sensor_icm20948" />
         <Block type="sensebox_sensor_sds011" />
         <Block type="sensebox_sensor_sps30" />
         <Block type="sensebox_sensor_pressure" />
@@ -28,6 +39,7 @@ export const ToolboxMcu = () => {
         <Block type="sensebox_button" />
         <Block type="sensebox_sensor_truebner_smt50" />
         <Block type="sensebox_sensor_watertemperature" />
+        <Block type="sensebox_rg15_rainsensor" />
         {/* <Block type="sensebox_windspeed" /> */}
         <Block type="sensebox_soundsensor_dfrobot" />
         <Block type="sensebox_multiplexer_init">
@@ -242,6 +254,7 @@ export const ToolboxMcu = () => {
             </Block>
           </Value>
         </Block>
+        <Block type="sensebox_display_roboeyes" />
         <Block type="sensebox_display_fillCircle">
           <Value name="X">
             <Block type="math_number">
@@ -384,6 +397,7 @@ export const ToolboxMcu = () => {
         <Block type="sensebox_phyphox_channel"></Block>
         <Block type="sensebox_phyphox_sendchannel"></Block>
       </Category>
+
       <Category id="webserver" name="Webserver" colour={getColour().webserver}>
         <Block type="sensebox_initialize_http_server"></Block>
         <Block type="sensebox_http_on_client_connect"></Block>
@@ -460,24 +474,30 @@ export const ToolboxMcu = () => {
         name={Blockly.Msg.toolbox_time}
         colour={getColour().time}
       >
-        <Block type="time_delay">
-          <Value name="DELAY_TIME_MILI">
-            <Block type="math_number">
-              <Field name="NUM">1000</Field>
-            </Block>
-          </Value>
-        </Block>
-        <Block type="time_delaymicros">
-          <Value name="DELAY_TIME_MICRO">
-            <Block type="math_number">
-              <Field name="NUM">100</Field>
-            </Block>
-          </Value>
-        </Block>
-        <Block type="time_millis"></Block>
-        <Block type="time_micros"></Block>
-        <Block type="infinite_loop"></Block>
-        <Block type="sensebox_interval_timer"></Block>
+        <Category
+          id="time_control"
+          name={Blockly.Msg.toolbox_time_control}
+          colour={getColour().time}
+        >
+          <Block type="time_delay">
+            <Value name="DELAY_TIME_MILI">
+              <Block type="math_number">
+                <Field name="NUM">1000</Field>
+              </Block>
+            </Value>
+          </Block>
+          <Block type="time_delaymicros">
+            <Value name="DELAY_TIME_MICRO">
+              <Block type="math_number">
+                <Field name="NUM">100</Field>
+              </Block>
+            </Value>
+          </Block>
+          <Block type="time_millis"></Block>
+          <Block type="time_micros"></Block>
+          <Block type="infinite_loop"></Block>
+          <Block type="sensebox_interval_timer"></Block>
+        </Category>
         <Category
           id="time"
           name={Blockly.Msg.toolbox_rtc}
@@ -662,6 +682,53 @@ export const ToolboxMcu = () => {
               <Field name="NUM">2048</Field>
             </Block>
           </Value>
+        </Block> */}
+        </Category>
+        <Category id="sensebox_solar" name="Solar" colour={getColour().solar}>
+          <Block type="sensebox_solar_charger_SB041">
+            <Field name="MEASUREMENT">getBatteryLevel</Field>
+          </Block>
+          <Block type="sensebox_solar_deep_sleep_and_restart">
+            <Field name="SLEEP_TIME">30</Field>
+            <Field name="TIME_SCALE">60000</Field>
+            <Field name="POWER_OFF_I2C">TRUE</Field>
+            <Field name="POWER_OFF_UART">TRUE</Field>
+            <Field name="POWER_OFF_XB">TRUE</Field>
+          </Block>
+          {/* <Block type="controls_ifelse">
+          <Value name="IF0">
+            <Block type="logic_compare">
+              <Field name="OP">GT</Field>
+              <Value name="A">
+                <Block type="sensebox_solar_charger_SB041">
+                  <Field name="MASUREMENT">getBatteryLevel</Field>
+                </Block>
+              </Value>
+              <Value name="B">
+                <Block type="math_number">
+                  <Field name="NUM">2</Field>
+                </Block>
+              </Value>
+            </Block>
+          </Value>
+          <Statement name="DO0">
+            <Block type="sensebox_solar_deep_sleep_and_restart">
+              <Field name="SLEEP_TIME">30</Field>
+              <Field name="TIME_SCALE">60000</Field>
+              <Field name="POWER_OFF_I2C">TRUE</Field>
+              <Field name="PPOWER_OFF_UART">TRUE</Field>
+              <Field name="PWER_OFF_XB">TRUE</Field>
+            </Block>
+          </Statement>
+          <Statement name="ELSE">
+            <Block type="sensebox_solar_deep_sleep_and_restart">
+              <Field name="SLEEP_TIME">12</Field>
+              <Field name="TIME_SCALE">3600000</Field>
+              <Field name="POWER_OFF_I2C">TRUE</Field>
+              <Field name="PPOWER_OFF_UART">TRUE</Field>
+              <Field name="PWER_OFF_XB">TRUE</Field>
+            </Block>
+          </Statement>
         </Block> */}
         </Category>
         <Category name="Watchdog" colour={getColour().io}>

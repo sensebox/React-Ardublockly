@@ -14,6 +14,7 @@ import "./sensebox-rtc";
 import "./sensebox-ntp";
 import "./sensebox-ble";
 import "./sensebox-sd";
+import "./sensebox-solar";
 import "./mqtt";
 import "./text";
 import "./io";

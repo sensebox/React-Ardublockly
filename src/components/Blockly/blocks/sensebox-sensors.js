@@ -4,6 +4,7 @@ import * as Types from "../helpers/types";
 import { selectedBoard } from "../helpers/board";
 import { FieldGridDropdown } from "@blockly/field-grid-dropdown";
 import { FieldSlider } from "@blockly/field-slider";
+import { withBoardParam } from "../helpers/helpUrlBuilder";
 
 /**
  * HDC1080 Temperature and Humidity Sensor
@@ -26,7 +27,7 @@ Blockly.Blocks["sensebox_sensor_temp_hum"] = {
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_temp_hum_tooltip);
-    this.setHelpUrl(Blockly.Msg.senseBox_temp_hum_helpurl);
+    this.setHelpUrl(withBoardParam(Blockly.Msg.senseBox_temp_hum_helpurl));
     this.data = { name: "hdc1080", connection: "I2C" };
   },
 };
@@ -52,7 +53,7 @@ Blockly.Blocks["sensebox_sensor_uv_light"] = {
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_uv_light_tooltip);
-    this.setHelpUrl(Blockly.Msg.senseBox_uv_light_helpurl);
+    this.setHelpUrl(withBoardParam(Blockly.Msg.senseBox_uv_light_helpurl));
     this.data = { name: "veml6070" };
   },
 };
@@ -158,7 +159,7 @@ Blockly.Blocks["sensebox_sensor_pressure"] = {
     this.setColour(getColour().sensebox);
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setTooltip(Blockly.Msg.senseBox_pressure_tooltip);
-    this.setHelpUrl(Blockly.Msg.senseBox_pressure_helpurl);
+    this.setHelpUrl(withBoardParam(Blockly.Msg.senseBox_pressure_helpurl));
     this.data = { name: "bmp280" };
     this.getField("NAME").setValidator(
       function (val) {
@@ -329,7 +330,7 @@ Blockly.Blocks["sensebox_tof_imager"] = {
       .appendField(dropdown, "dropdown");
     this.setOutput(true, Types.NUMBER.typeName);
     this.setTooltip(Blockly.Msg.sensebox_tof_imager_tooltip);
-    this.setHelpUrl(Blockly.Msg.sensebox_tof_imager_helpurl);
+    this.setHelpUrl(withBoardParam(Blockly.Msg.sensebox_tof_imager_helpurl));
     this.getField("dropdown").setValidator(
       function (val) {
         this.updateShape_(val === "DistanzBM");
@@ -338,7 +339,7 @@ Blockly.Blocks["sensebox_tof_imager"] = {
   },
   updateShape_(isAltitude) {
     if (isAltitude) {
-      this.setOutput(true, "Bitmap");
+      this.setOutput(true, Types.BITMAP.typeName);
       if (this.getInput("extraField") == null) {
         this.appendDummyInput("extraField")
           // .setAlign(Blockly.inputs.Align.RIGHT) // This doesnt work for manual data input
@@ -369,7 +370,7 @@ Blockly.Blocks["sensebox_sensor_sound"] = {
         "PIN",
       );
     this.setOutput(true, Types.NUMBER.typeName);
-    this.setHelpUrl(Blockly.Msg.senseBox_sound_helpurl);
+    this.setHelpUrl(withBoardParam(Blockly.Msg.senseBox_sound_helpurl));
     this.setTooltip(Blockly.Msg.senseBox_sound_tooltip);
   },
 };
@@ -538,7 +539,7 @@ Blockly.Blocks["sensebox_sensor_truebner_smt50_esp32"] = {
       );
     this.setOutput(true, Types.NUMBER.typeName);
     this.setTooltip(Blockly.Msg.senseBox_smt50_tooltip);
-    this.setHelpUrl(Blockly.Msg.senseBox_smt50_helpurl);
+    this.setHelpUrl(withBoardParam(Blockly.Msg.senseBox_smt50_helpurl));
     this.data = { name: "smt50" };
   },
 };
@@ -604,6 +605,35 @@ Blockly.Blocks["sensebox_soundsensor_dfrobot"] = {
 };
 
 /**
+ * rg15 rainsensor
+ */
+
+Blockly.Blocks["sensebox_rg15_rainsensor"] = {
+  init: function () {
+    var dropdownOptionsValues = [
+      [Blockly.Msg.sensebox_rg15_rainsensor_totalAcc, "getTotalAccumulation"],
+      [Blockly.Msg.sensebox_rg15_rainsensor_acc, "getAccumulation"],
+      [Blockly.Msg.sensebox_rg15_rainsensor_eventAcc, "getEventAccumulation"],
+      [Blockly.Msg.sensebox_rg15_rainsensor_rainInt, "getRainfallIntensity"],
+    ];
+    this.setColour(getColour().sensebox);
+    this.appendDummyInput().appendField(Blockly.Msg.sensebox_rg15_rainsensor);
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.sensebox_rg15_rainsensor_port)
+      .appendField(
+        new Blockly.FieldDropdown(selectedBoard().serialSensors),
+        "SERIAL",
+      );
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.sensebox_rg15_rainsensor_value)
+      .appendField(new Blockly.FieldDropdown(dropdownOptionsValues), "VALUE");
+    this.setOutput(true, Types.DECIMAL.typeName);
+    this.setTooltip(Blockly.Msg.sensebox_rg15_rainsensor_tooltip);
+    this.setHelpUrl(Blockly.Msg.sensebox_rg15_rainsensor_helpurl);
+  },
+};
+
+/**
  * Infineon DPS310 Pressure Sensor
  *
  */
@@ -632,7 +662,7 @@ Blockly.Blocks["sensebox_sensor_dps310"] = {
     this.setColour(getColour().sensebox);
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setTooltip(Blockly.Msg.senseBox_sensor_dps310_tooltip);
-    this.setHelpUrl(Blockly.Msg.senseBox_sensor_dps310_helpurl);
+    this.setHelpUrl(withBoardParam(Blockly.Msg.senseBox_sensor_dps310_helpurl));
     this.data = { name: "dps310" };
     this.getField("NAME").setValidator(
       function (val) {
@@ -733,7 +763,50 @@ Blockly.Blocks["sensebox_esp32s2_mpu6050"] = {
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_mpu6050_tooltip);
-    this.setHelpUrl(Blockly.Msg.senseBox_mpu6050_helpurl);
+    this.setHelpUrl(withBoardParam(Blockly.Msg.senseBox_mpu6050_helpurl));
     this.data = { name: "mpu6050" };
+  },
+};
+
+Blockly.Blocks["sensebox_sensor_icm20948"] = {
+  init: function () {
+    this.appendDummyInput().appendField(Blockly.Msg.senseBox_icm20948);
+    this.appendDummyInput()
+      .setAlign(Blockly.inputs.Align.LEFT)
+      .appendField(Blockly.Msg.senseBox_bmx055_accelerometer_direction)
+      .appendField(
+        new Blockly.FieldDropdown([
+          [
+            Blockly.Msg.senseBox_bmx055_accelerometer_direction_x,
+            "accelerationX",
+          ],
+          [
+            Blockly.Msg.senseBox_bmx055_accelerometer_direction_y,
+            "accelerationY",
+          ],
+          [
+            Blockly.Msg.senseBox_bmx055_accelerometer_direction_z,
+            "accelerationZ",
+          ],
+        ]),
+        "VALUE",
+      );
+    this.appendDummyInput()
+      .setAlign(Blockly.inputs.Align.LEFT)
+      .appendField(Blockly.Msg.senseBox_bmx055_accelerometer_range)
+      .appendField(
+        new Blockly.FieldDropdown([
+          [Blockly.Msg.senseBox_bmx055_accelerometer_range_2g, "2G"],
+          [Blockly.Msg.senseBox_bmx055_accelerometer_range_4g, "4G"],
+          [Blockly.Msg.senseBox_bmx055_accelerometer_range_8g, "8G"],
+          [Blockly.Msg.senseBox_bmx055_accelerometer_range_16g, "16G"],
+        ]),
+        "RANGE",
+      );
+    this.setOutput(true, Types.DECIMAL.typeName);
+    this.setColour(getColour().sensebox);
+    this.setTooltip(Blockly.Msg.senseBox_mpu6050_tooltip);
+    this.setHelpUrl(Blockly.Msg.senseBox_mpu6050_helpurl);
+    this.data = { name: "icm20948" };
   },
 };
