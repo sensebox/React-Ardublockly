@@ -22,7 +22,7 @@ Blockly.Blocks["sensebox_sensor_temp_hum"] = {
           [Blockly.Msg.senseBox_temp, "Temperature"],
           [Blockly.Msg.senseBox_hum, "Humidity"],
         ]),
-        "NAME",
+        "phenomenon",
       );
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);

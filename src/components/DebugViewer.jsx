@@ -1,133 +1,95 @@
-import React, { useEffect, useState, useRef } from "react";
-import {
-  Box,
-  Paper,
-  Typography,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-} from "@mui/material";
+// src/components/DebugLogger.jsx
+import React, { useRef } from "react";
+import { useSelector } from "react-redux";
+import { Box, Paper, List, ListItem, Typography } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClock, faMousePointer } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCubes, // Blockly
+  faMousePointer, // Klicks
+  faWrench, // Simulator
+} from "@fortawesome/free-solid-svg-icons";
+import { selectLogs } from "../reducers/logReducer";
 
-/**
- * DebugLogger
- * Logs every user click event on the page, showing the element's inner HTML (truncated to 90 chars) and timestamp.
- * Clicking a log entry outputs the full outer HTML to the console.
- * Ignores clicks within the log panel itself.
- * Styled with Material-UI and FontAwesome icons.
- * Positioning is controlled by the parent component.
- */
+const TYPE_CONFIG = {
+  blockly: { color: "green", icon: faCubes },
+  click: { color: "goldenrod", icon: faMousePointer },
+  simulator: { color: "blue", icon: faWrench },
+};
+
 export default function DebugLogger() {
-  const [logs, setLogs] = useState([]);
+  const logs = useSelector(selectLogs);
   const panelRef = useRef(null);
 
-  useEffect(() => {
-    const handleClick = (e) => {
-      // Ignore clicks inside this debug panel
-      if (panelRef.current && panelRef.current.contains(e.target)) {
-        return;
-      }
-
-      const elementDesc = `des`;
-
-      // Capture inner and outer HTML
-      const inner = e.target.innerHTML || "";
-      const full = e.target.outerHTML;
-      const truncated = inner.length > 90 ? `${inner.slice(0, 90)}…` : inner;
-
-      const timestamp = new Date();
-
-      setLogs((prev) => [
-        {
-          element: elementDesc,
-          time: timestamp,
-          title: truncated,
-          fullHtml: full,
-        },
-        ...prev,
-      ]);
-    };
-
-    document.addEventListener("click", handleClick, true);
-    return () => document.removeEventListener("click", handleClick, true);
-  }, []);
-
   return (
-    <Box
+    <Paper
       ref={panelRef}
-      component={Paper}
-      elevation={3}
       sx={{
         bgcolor: "common.white",
-        color: "text.primary",
-        p: 2,
-        maxHeight: 400,
+        p: 1,
+        maxHeight: 300,
         overflowY: "auto",
       }}
     >
-      <Typography
-        variant="subtitle1"
-        sx={{ mb: 1, letterSpacing: 1, color: "grey.700" }}
-      >
-        Debug Log
-      </Typography>
+      <List disablePadding>
+        {[...logs].reverse().map((log) => {
+          const { color, icon } = TYPE_CONFIG[log.type] || {};
+          const title = log.title ? log.title.slice(0, 90) : "(no title)";
+          const description = log.description || "";
+          const timestamp = new Date(log.timestamp).toLocaleString();
 
-      <List dense disablePadding>
-        {logs.length === 0 ? (
-          <ListItem sx={{ p: 1, bgcolor: "grey.100", borderRadius: 1, mb: 1 }}>
-            <ListItemText
-              primary={
-                <Typography variant="body2" color="text.secondary">
-                  No events yet...
-                </Typography>
-              }
-            />
-          </ListItem>
-        ) : (
-          logs.map((log, idx) => (
+          return (
             <ListItem
-              key={idx}
-              alignItems="flex-start"
+              key={log.id}
               button
-              onClick={() => console.log(log.fullHtml)}
-              sx={{
-                p: 1,
-                bgcolor: "grey.50",
-                border: "1px solid rgba(0,0,0,0.08)",
-                borderRadius: 1,
-                mb: 1,
-              }}
+              onClick={() => console.log(log)}
+              disablePadding
+              sx={{ mb: 1 }}
             >
-              <ListItemIcon sx={{ minWidth: 32, color: "grey.500" }}>
-                <FontAwesomeIcon icon={faMousePointer} />
-              </ListItemIcon>
-              <ListItemText
-                primary={
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  bgcolor: "grey.50",
+                  border: 1,
+                  borderColor: "grey.300",
+                  borderRadius: 1,
+                  width: "100%",
+                  px: 1,
+                  py: 0.75,
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={icon}
+                  style={{ color, marginRight: 12, marginTop: 4 }}
+                />
+                <Box sx={{ flexGrow: 1, pr: 1 }}>
                   <Typography
-                    component="span"
+                    variant="subtitle2"
+                    noWrap
+                    sx={{ fontWeight: 500 }}
+                  >
+                    {title}
+                  </Typography>
+                  <Typography
                     variant="body2"
-                    sx={{ fontFamily: "monospace" }}
+                    color="textSecondary"
+                    sx={{ mt: 0.5 }}
                   >
-                    {log.title || "(no inner HTML)"}
+                    {description}
                   </Typography>
-                }
-                secondary={
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
-                  >
-                    <FontAwesomeIcon icon={faClock} />
-                    {log.time.toLocaleString()}
-                  </Typography>
-                }
-              />
+                </Box>
+                <Typography
+                  variant="caption"
+                  color="textSecondary"
+                  sx={{ whiteSpace: "nowrap", ml: 1 }}
+                >
+                  {timestamp}
+                </Typography>
+              </Box>
             </ListItem>
-          ))
-        )}
+          );
+        })}
       </List>
-    </Box>
+    </Paper>
   );
 }
