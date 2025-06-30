@@ -14,7 +14,7 @@ import "./sensebox-rtc";
 import "./sensebox-ntp";
 import "./sensebox-ble";
 import "./sensebox-sd";
-import "./sensebox-solar";
+
 import "./mqtt";
 import "./logic";
 import "./text";
@@ -29,4 +29,4 @@ import "./variables";
 import "./lists";
 import "./watchdog";
 import "./webserver";
-import "./fluoroASM"
+import "./fluoroASM";
