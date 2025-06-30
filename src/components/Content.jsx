@@ -36,7 +36,10 @@ class Content extends Component {
 
   render() {
     const { location } = this.props;
-    if (location && location.pathname === "/minimal") {
+    if (
+      (location && location.pathname === "/minimal") ||
+      location.pathname === "/docs"
+    ) {
       return <Routes />;
     }
     return (

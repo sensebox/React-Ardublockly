@@ -26,6 +26,7 @@ import News from "../News";
 import Faq from "../Faq";
 import CodeEditor from "../CodeEditor/CodeEditor";
 import MinimalHome from "../MinimalHome";
+import DocsHome from "../DocsHome";
 
 class Routes extends Component {
   componentDidMount() {
@@ -57,6 +58,9 @@ class Routes extends Component {
         </PublicRoute>
         <PublicRoute path="/minimal" exact>
           <MinimalHome />
+        </PublicRoute>
+        <PublicRoute path="/docs" exact>
+          <DocsHome />
         </PublicRoute>
         {/* Tutorials */}
         <PublicRoute path="/tutorial" exact>
