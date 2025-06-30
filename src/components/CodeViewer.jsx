@@ -13,7 +13,7 @@ import { faInfoCircle, faMicrochip } from "@fortawesome/free-solid-svg-icons";
 import Simulator from "./Simulator";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TooltipViewer from "./TooltipViewer";
-
+import DebugViewer from "./DebugViewer";
 
 // FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
 const withWidth = () => (WrappedComponent) => (props) => (
@@ -110,7 +110,6 @@ class CodeViewer extends Component {
       ...this.state,
       expanded: newExpanded ? panel : false,
     });
-
   };
 
   render() {
@@ -144,40 +143,48 @@ class CodeViewer extends Component {
           <AccordionDetails
             style={{
               padding: 0,
-              height: `calc(${this.state.componentHeight} - 50px  - 50px)`,
+              height: `calc(${this.state.componentHeight} - 50px  - 50px - 50px)`,
               backgroundColor: "white",
             }}
           >
             <Simulator />
           </AccordionDetails>
         </Accordion>
-        {/* Source Code Accordion */}
-        
-      
-        {/* Tooltip Viewer Accordion */}
         <Accordion
           square={true}
           style={{ margin: 0 }}
           expanded={this.state.expanded === "tooltip"}
           onChange={this.onChange("tooltip")}
         >
-        <AccordionSummary>
-          <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
-            <FontAwesomeIcon icon={faInfoCircle} size="lg" />
-            <div style={{ margin: "auto 5px 2px 0px" }}>
-              Hilfe
-              </div>
-          </div>
-        </AccordionSummary>
-        <AccordionDetails
-          style={{
-            padding: 0,
-            height: `calc(${this.state.componentHeight} - 50px - 50px)`,
-            backgroundColor: "white",
-          }}>
-          <TooltipViewer />
+          <AccordionSummary>
+            <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+              <FontAwesomeIcon icon={faInfoCircle} size="lg" />
+              <div style={{ margin: "auto 5px 2px 0px" }}>Hilfe</div>
+            </div>
+          </AccordionSummary>
+          <AccordionDetails
+            style={{
+              padding: 0,
+              height: `calc(${this.state.componentHeight} - 50px - 50px)`,
+              backgroundColor: "white",
+            }}
+          >
+            <TooltipViewer />
           </AccordionDetails>
-
+        </Accordion>
+        <Accordion
+          square={true}
+          style={{ margin: 0 }}
+          expanded={this.state.expanded === "debugger"}
+          onChange={this.onChange("debugger")}
+        >
+          <AccordionSummary>
+            <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+              <FontAwesomeIcon icon={faInfoCircle} size="lg" />
+              <div style={{ margin: "auto 5px 2px 0px" }}>Debug Viewer</div>
+            </div>
+          </AccordionSummary>
+          <DebugViewer />
         </Accordion>
       </Card>
     );
@@ -197,4 +204,3 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, null)(withWidth()(CodeViewer));
-
