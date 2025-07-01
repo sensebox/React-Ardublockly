@@ -22,7 +22,7 @@ Blockly.Blocks["sensebox_sensor_temp_hum"] = {
           [Blockly.Msg.senseBox_temp, "Temperature"],
           [Blockly.Msg.senseBox_hum, "Humidity"],
         ]),
-        "NAME",
+        "phenomenon",
       );
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);
@@ -190,9 +190,9 @@ Blockly.Blocks["sensebox_sensor_pressure"] = {
 Blockly.Blocks["sensebox_sensor_bme680_bsec"] = {
   init: function () {
     var dropdownOptions = [
-      [Blockly.Msg.senseBox_temp, "temperature"],
-      [Blockly.Msg.senseBox_hum, "humidity"],
-      [Blockly.Msg.senseBox_bme_pressure, "pressure"],
+      [Blockly.Msg.senseBox_temp, "Temperature"],
+      [Blockly.Msg.senseBox_hum, "Humidity"],
+      [Blockly.Msg.senseBox_bme_pressure, "Pressure"],
       [Blockly.Msg.senseBox_bme_iaq, "IAQ"],
       [Blockly.Msg.senseBox_bme_iaq_accuracy, "IAQAccuracy"],
       [Blockly.Msg.senseBox_bme_co2, "CO2"],

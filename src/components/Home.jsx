@@ -194,7 +194,6 @@ class Home extends Component {
           {this.state.codeOn ? (
             <Grid item xs={12} md={4}>
               <CodeViewer />
-              <TooltipViewer />
             </Grid>
           ) : null}
         </Grid>
@@ -235,7 +234,7 @@ Home.propTypes = {
   workspaceName: PropTypes.func.isRequired,
   message: PropTypes.object.isRequired,
   statistics: PropTypes.bool.isRequired,
-  platform: PropTypes.bool.isRequired,
+  platform: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({

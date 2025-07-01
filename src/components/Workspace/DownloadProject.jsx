@@ -55,7 +55,7 @@ class DownloadProject extends Component {
 
 DownloadProject.propTypes = {
   xml: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
 };
 
 const mapStateToProps = (state) => ({

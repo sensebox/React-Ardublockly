@@ -6,9 +6,14 @@ import withStyles from "@mui/styles/withStyles";
 import MuiAccordion from "@mui/material/Accordion";
 import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
-import { Card } from "@mui/material";
+import { Card, Chip } from "@mui/material";
 import * as Blockly from "blockly";
 import { default as MonacoEditor } from "@monaco-editor/react";
+import { faInfoCircle, faMicrochip } from "@fortawesome/free-solid-svg-icons";
+import Simulator from "./Simulator";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import TooltipViewer from "./TooltipViewer";
+import DebugViewer from "./DebugViewer";
 
 // FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
 const withWidth = () => (WrappedComponent) => (props) => (
@@ -59,7 +64,7 @@ class CodeViewer extends Component {
     this.state = {
       code: this.props.arduino,
       changed: false,
-      expanded: true,
+      expanded: "simulator",
       componentHeight: null,
     };
     this.myDiv = React.createRef();
@@ -100,74 +105,61 @@ class CodeViewer extends Component {
     }
   }
 
-  onChange = () => {
-    this.setState({ expanded: !this.state.expanded });
+  onChange = (panel) => (event, newExpanded) => {
+    this.setState({
+      ...this.state,
+      expanded: newExpanded ? panel : false,
+    });
   };
 
   render() {
     var curlyBrackets = "{ }";
     var unequal = "<>";
     return (
-      <Card style={{ height: "100%", maxHeight: "50vH" }} ref={this.myDiv}>
+      <Card style={{ height: "100%", maxHeight: "80vH" }} ref={this.myDiv}>
+        {/* Simulator Accordion  */}
         <Accordion
           square={true}
           style={{ margin: 0 }}
-          expanded={this.state.expanded}
-          onChange={this.onChange}
+          expanded={this.state.expanded === "simulator"}
+          onChange={this.onChange("simulator")}
         >
           <AccordionSummary>
-            <b
+            <div
               style={{
-                fontSize: "20px",
-                marginRight: "5px",
-                width: "35px",
+                display: "flex",
+                gap: "1rem",
+                alignItems: "center",
               }}
             >
-              {curlyBrackets}
-            </b>
-            <div style={{ margin: "auto 5px 2px 0px" }}>
-              {Blockly.Msg.codeviewer_arduino}
+              <FontAwesomeIcon icon={faMicrochip} size="lg" />
+              <div style={{ margin: "auto 5px 2px 0px" }}>Simulator</div>
+              {this.props.isSimulatorRunning &&
+                this.state.expanded !== "simulator" && (
+                  <Chip size="small" label="Running" color="success" />
+                )}
             </div>
           </AccordionSummary>
           <AccordionDetails
             style={{
               padding: 0,
-              height: `calc(${this.state.componentHeight} - 50px - 50px)`,
+              height: `calc(${this.state.componentHeight} - 50px  - 50px - 50px)`,
               backgroundColor: "white",
             }}
           >
-            <MonacoEditor
-              height="80vh"
-              defaultLanguage="cpp"
-              value={this.props.arduino}
-              // modified={this.props.arduino}
-              // original={this.state.code}
-              options={{
-                readOnly: true,
-
-                fontSize: "16px",
-              }}
-            />
+            <Simulator />
           </AccordionDetails>
         </Accordion>
         <Accordion
           square={true}
           style={{ margin: 0 }}
-          expanded={!this.state.expanded}
-          onChange={this.onChange}
+          expanded={this.state.expanded === "tooltip"}
+          onChange={this.onChange("tooltip")}
         >
           <AccordionSummary>
-            <b
-              style={{
-                fontSize: "20px",
-                marginRight: "5px",
-                width: "35px",
-              }}
-            >
-              {unequal}
-            </b>
-            <div style={{ margin: "auto 5px 2px 0px" }}>
-              {Blockly.Msg.codeviewer_xml}
+            <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+              <FontAwesomeIcon icon={faInfoCircle} size="lg" />
+              <div style={{ margin: "auto 5px 2px 0px" }}>Hilfe</div>
             </div>
           </AccordionSummary>
           <AccordionDetails
@@ -177,13 +169,22 @@ class CodeViewer extends Component {
               backgroundColor: "white",
             }}
           >
-            <MonacoEditor
-              height="80vh"
-              defaultLanguage="xml"
-              value={this.props.xml}
-              readOnly={true}
-            />
+            <TooltipViewer />
           </AccordionDetails>
+        </Accordion>
+        <Accordion
+          square={true}
+          style={{ margin: 0 }}
+          expanded={this.state.expanded === "debugger"}
+          onChange={this.onChange("debugger")}
+        >
+          <AccordionSummary>
+            <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+              <FontAwesomeIcon icon={faInfoCircle} size="lg" />
+              <div style={{ margin: "auto 5px 2px 0px" }}>Debug Viewer</div>
+            </div>
+          </AccordionSummary>
+          <DebugViewer />
         </Accordion>
       </Card>
     );
@@ -199,6 +200,7 @@ const mapStateToProps = (state) => ({
   arduino: state.workspace.code.arduino,
   xml: state.workspace.code.xml,
   tooltip: state.workspace.code.tooltip,
+  isSimulatorRunning: state.simulator.isRunning,
 });
 
 export default connect(mapStateToProps, null)(withWidth()(CodeViewer));

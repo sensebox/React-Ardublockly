@@ -1,5 +1,5 @@
 import * as Blockly from "blockly";
-import { selectedBoard } from "../helpers/board";
+import { selectedBoard } from "../../helpers/board";
 
 /**
  * HDC1080 Temperature and Humidity Sensor
@@ -7,7 +7,7 @@ import { selectedBoard } from "../helpers/board";
  */
 
 Blockly.Generator.Arduino.forBlock["sensebox_sensor_temp_hum"] = function () {
-  var dropdown_name = this.getFieldValue("NAME");
+  var dropdown_name = this.getFieldValue("phenomenon");
 
   Blockly.Generator.Arduino.libraries_["library_adafruithdc1000"] =
     "#include <Adafruit_HDC1000.h> // http://librarymanager/All#Adafruit_HDC1000_Library";
@@ -313,13 +313,13 @@ bsec_virtual_sensor_t sensorList[13] = {
     }
     `;
     switch (dropdown_name) {
-      case "temperature":
+      case "Temperature":
         code = "bmeTemperatur";
         break;
-      case "humidity":
+      case "Humidity":
         code = "bmeHumidity";
         break;
-      case "pressure":
+      case "Pressure":
         code = "bmePressure";
         break;
       case "IAQ":

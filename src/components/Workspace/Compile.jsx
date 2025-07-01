@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { IconButton, Tooltip } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { workspaceName } from "../../actions/workspaceActions";
 import CompilationDialog from "./CompilationDialog";
 import withStyles from "@mui/styles/withStyles";
+import { addLog } from "../../reducers/logReducer";
 
 const styles = (theme) => ({
   iconButton: {
@@ -23,7 +24,7 @@ const styles = (theme) => ({
 
 const Compile = (props) => {
   const [dialogOpen, setDialogOpen] = useState(false);
-
+  const dispatch = useDispatch();
   const fallbackTexts = {
     de_DE: "Code kompilieren",
     en_US: "Compile code",
@@ -35,6 +36,13 @@ const Compile = (props) => {
     fallbackTexts[props.language] ||
     fallbackTexts.en_US; // Englisch als letzter Fallback
   const openDialog = () => {
+    // dispatch(
+    //   addLog({
+    //     type: "click",
+    //     title: "Kompilieren Knopf gedrückt!",
+    //     description: `${props.name} wird kompiliert...`,
+    //   }),
+    // );
     setDialogOpen(true);
     console.log(props.platform);
   };
@@ -70,7 +78,7 @@ Compile.propTypes = {
   arduino: PropTypes.string.isRequired,
   name: PropTypes.string,
   workspaceName: PropTypes.func.isRequired,
-  platform: PropTypes.bool.isRequired,
+  platform: PropTypes.bool,
   compiler: PropTypes.string.isRequired,
   selectedBoard: PropTypes.string.isRequired,
   iconButton: PropTypes.bool,
