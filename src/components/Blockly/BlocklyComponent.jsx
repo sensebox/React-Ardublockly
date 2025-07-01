@@ -60,7 +60,9 @@ class BlocklyComponent extends React.Component {
         event.type === "selected" ||
         event.type === Blockly.Events.TOOLBOX_ITEM_SELECT ||
         event.type === Blockly.Events.MOVE ||
-        event.type === Blockly.Events.BLOCK_DRAG
+        event.type === Blockly.Events.BLOCK_DRAG ||
+        event.type === "block_field_intermediate_change" ||
+        event.type === "change"
       )
         return;
       {
@@ -77,21 +79,21 @@ class BlocklyComponent extends React.Component {
             }
             actionText = `Block erstellt: ${incomingEvent.json.type}`;
             title = "Block erstellt";
-            description = `Der folgende Block wurde erstellt: ${incomingEvent.json.type}`;
+            description = `${incomingEvent.json.type}`;
             break;
           case Blockly.Events.DELETE:
             actionText = "Block gelöscht";
             title = "Block gelöscht";
-            description = `Der folgende Block wurde gelöscht: ${incomingEvent.json.type}`;
+            description = `${incomingEvent.oldJson.type}`;
             break;
           case Blockly.Events.CHANGE:
             if (event.oldValue && event.newValue) {
-              actionText = `${event.name} geändert: Von "${event.oldValue}" zu "${event.newValue}"`;
+              title = "Block geändert";
+              description = `${event.name} geändert: Von "${event.oldValue}" zu "${event.newValue}"`;
             } else {
               actionText = "Block geändert";
+              description = "";
             }
-            title = "Block geändert";
-            description = `Der Block wurde geändert: ${event.name}`;
             break;
           case Blockly.Events.MOVE:
             actionText = "Block verschoben";
@@ -119,8 +121,6 @@ class BlocklyComponent extends React.Component {
             description = `Ein unbekanntes Event wurde empfangen: ${incomingEvent.type}`;
         }
 
-        console.log(event);
-        // Hier dispatchen wir über die prop addLog()
         addLog({
           type: "blockly",
           description,
