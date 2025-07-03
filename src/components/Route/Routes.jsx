@@ -9,6 +9,7 @@ import PublicRoute from "./PublicRoute";
 import PrivateRoute from "./PrivateRoute";
 import PrivateRouteCreator from "./PrivateRouteCreator";
 import IsLoggedRoute from "./IsLoggedRoute";
+import PrivateRouteAdmin from "./PrivateRouteAdmin";
 
 import Home from "../Home";
 import Tutorial from "../Tutorial/Tutorial";
@@ -25,6 +26,10 @@ import Account from "../User/Account";
 import News from "../News";
 import Faq from "../Faq";
 import CodeEditor from "../CodeEditor/CodeEditor";
+import ClassroomHome from "../Classroom/ClassroomHome";
+import Classroom from "../Classroom/Classroom";
+import SocialLoginRedirect from "../User/SocialLoginRedirect";
+import AdminDashboard from "../User/AdminDashboard";
 
 class Routes extends Component {
   componentDidMount() {
@@ -92,7 +97,20 @@ class Routes extends Component {
           <PrivateRoute path="/user" exact>
             <Account />
           </PrivateRoute>
+          {/* Classroom */}
+          <PrivateRoute path="/classroom" exact>
+            <ClassroomHome />
+          </PrivateRoute>
+          <PrivateRoute path="/classroom/:classroomId" exact>
+            <Classroom />
+          </PrivateRoute>
+          <PrivateRoute path="/social-login-redirect" exact>
+            <SocialLoginRedirect />
+          </PrivateRoute>
           {/* settings */}
+          <PrivateRouteAdmin path="/admin" exact>
+            <AdminDashboard />
+          </PrivateRouteAdmin>
           <PublicRoute path="/settings" exact>
             <Settings />
           </PublicRoute>

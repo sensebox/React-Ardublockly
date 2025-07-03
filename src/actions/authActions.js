@@ -171,6 +171,37 @@ export const logout = () => (dispatch) => {
     });
 };
 
+// Social login action
+export const socialLogin = (token) => (dispatch) => {
+  console.log("Storing token in localStorage:", token); // Add this for debugging
+
+  // Set token in Authorization header for all future requests
+  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+  // Start loading user data
+  dispatch({ type: USER_LOADING });
+
+  // Save the token in localStorage
+  localStorage.setItem("token", token);
+
+  // Fetch user data from the backend
+  axios
+    .get("http://localhost:8080/user/me") // Endpoint to fetch user data
+    .then((res) => {
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: {
+          user: res.data, // User data from the response
+          token, // Store the token
+        },
+      });
+    })
+    .catch((err) => {
+      dispatch({ type: AUTH_ERROR });
+      console.error("Error loading user data", err);
+    });
+};
+
 export const authInterceptor = () => (dispatch, getState) => {
   // Add a request interceptor
   axios.interceptors.request.use(

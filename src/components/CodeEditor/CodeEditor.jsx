@@ -1,12 +1,16 @@
-import React from "react";
-import { useState, useRef } from "react";
-import { default as MonacoEditor } from "@monaco-editor/react";
+import React, { useState, useRef } from "react";
+import MonacoEditor from "@monaco-editor/react";
 import { withRouter } from "react-router-dom";
-import { Button, Grid } from "@mui/material";
+import {
+  Button,
+  Grid,
+  Divider,
+  Drawer,
+  TextField,
+  Typography,
+} from "@mui/material";
 import * as Blockly from "blockly/core";
-import Divider from "@mui/material/Divider";
 import { saveAs } from "file-saver";
-import Drawer from "@mui/material/Drawer";
 import Sidebar from "./Sidebar";
 import Dialog from "../Dialog";
 import SaveIcon from "./SaveIcon";
@@ -19,9 +23,10 @@ const CodeEditor = () => {
   //const [filehandle, setFileHandle] = useState();
   const [fileContent, setFileContent] = useState("");
   const [progress, setProgress] = useState(false);
-  // const [id, setId] = useState("");
   const [open, setOpen] = useState(false);
   const [error, setError] = useState("");
+  const [filename, setFilename] = useState("sketch");
+  const [renameDialogOpen, setRenameDialogOpen] = useState(false);
   const editorRef = useRef(null);
   const [autoSave, setAutoSave] = useState(false);
   const [time, setTime] = useState(null);
@@ -39,7 +44,6 @@ const CodeEditor = () => {
   };
 
   const selectedBoard = store.getState().board.board;
-  const filename = "sketch";
   const baseCode = `
 ${selectedBoard === "mcu" || selectedBoard === "mini" ? "#include <senseBoxIO.h>" : ""}    
 void setup () {
@@ -51,18 +55,14 @@ void loop() {
 }`;
 
   const saveIno = () => {
-    var filename = "sketch";
-    var code = editorRef.current.getValue();
-
-    filename = `${filename}.ino`;
-    var blob = new Blob([code], { type: "text/plain;charset=utf-8" });
-    saveAs(blob, filename);
+    const blob = new Blob([editorRef.current.getValue()], {
+      type: "text/plain;charset=utf-8",
+    });
+    saveAs(blob, `${filename}.ino`);
   };
 
   const openIno = async () => {
     const [myFileHandle] = await window.showOpenFilePicker();
-    //setFileHandle(myFileHandle);
-
     const file = await myFileHandle.getFile();
     const contents = await file.text();
     setFileContent(contents);
@@ -75,7 +75,6 @@ void loop() {
     ) {
       return;
     }
-
     setOpen(false);
   };
 
@@ -101,78 +100,30 @@ void loop() {
   };
 
   const getBlocklyCode = () => {
-    var code = store.getState().workspace.code.arduino;
+    const code = store.getState().workspace.code.arduino;
     editorRef.current.setValue(code);
   };
 
-  const formatCode = () => {
-    var code = editorRef.current.getValue();
-    let formattedCode = "";
-    let indentLevel = 0;
-    const indentSize = 2; // Number of spaces per indentation level
-    let previousLineWasEmpty = false; // Track if the previous line was empty
+  const openRenameDialog = () => {
+    setRenameDialogOpen(true);
+  };
 
-    const lines = code.split("\n");
-
-    lines.forEach((line) => {
-      line = line.trim();
-
-      // Skip duplicate empty lines
-      if (line === "" && previousLineWasEmpty) {
-        return; // Skip this line if it's an empty line after another empty line
-      }
-
-      // Mark if the current line is empty
-      previousLineWasEmpty = line === "";
-
-      // Adjust indentation for closing braces
-      if (line.startsWith("}")) {
-        indentLevel = Math.max(0, indentLevel - 1);
-      }
-
-      // Special case for 'else if' and 'else' to ensure they align with 'if'
-      if (line.startsWith("else if") || line.startsWith("else")) {
-        formattedCode += " ".repeat(indentLevel * indentSize) + line + "\n";
-      } else {
-        // Add the appropriate indentation for normal lines
-        formattedCode += " ".repeat(indentLevel * indentSize) + line + "\n";
-      }
-
-      // Increase indentation after opening braces
-      if (line.endsWith("{")) {
-        indentLevel++;
-      }
-    });
-
-    // Remove any trailing empty lines
-    formattedCode = formattedCode.replace(/\n\s*\n\s*\n/g, "\n\n").trim();
-    editorRef.current.setValue(formattedCode);
+  const handleRename = () => {
+    setRenameDialogOpen(false);
   };
 
   return (
     <div>
       <Grid container spacing={2}>
         <Drawer
-          anchor={"bottom"}
+          anchor="bottom"
           open={open}
           onClose={toggleDrawer("bottom", false)}
         >
-          <h2
-            style={{
-              color: "#4EAF47",
-              paddingLeft: "1rem",
-              paddingRight: "1rem",
-            }}
-          >
+          <h2 style={{ color: "#4EAF47", padding: "1rem" }}>
             {Blockly.Msg.drawer_ideerror_head}
           </h2>
-          <p
-            style={{
-              color: "#4EAF47",
-              paddingLeft: "1rem",
-              paddingRight: "1rem",
-            }}
-          >
+          <p style={{ color: "#4EAF47", padding: "1rem" }}>
             {Blockly.Msg.drawer_ideerror_text}
           </p>
           <Divider style={{ backgroundColor: "white" }} />
@@ -183,8 +134,7 @@ void loop() {
               padding: "1rem",
             }}
           >
-            {" "}
-            {`${error}`}{" "}
+            {error}
           </p>
         </Drawer>
         <Grid item lg={8} md={8}>
@@ -192,12 +142,10 @@ void loop() {
             <h1>Code Editor</h1>
             <SaveIcon loading={autoSave} />
           </div>
-
+          <Typography variant="h6">Filename: {filename}</Typography>
           <MonacoEditor
             height="80vh"
-            onChange={(value) => {
-              editValue(value);
-            }}
+            onChange={editValue}
             defaultLanguage="cpp"
             defaultValue={
               localStorage.getItem("ArduinoCode")
@@ -205,7 +153,7 @@ void loop() {
                 : baseCode
             }
             value={fileContent}
-            onMount={(editor, monaco) => {
+            onMount={(editor) => {
               editorRef.current = editor;
               saveValue();
             }}
@@ -233,7 +181,7 @@ void loop() {
             style={{ padding: "1rem", margin: "1rem" }}
             variant="contained"
             color="primary"
-            onClick={() => saveIno()}
+            onClick={saveIno}
           >
             {Blockly.Msg.codeeditor_save_code}
           </Button>
@@ -241,7 +189,7 @@ void loop() {
             style={{ padding: "1rem", margin: "1rem" }}
             variant="contained"
             color="primary"
-            onClick={() => openIno()}
+            onClick={openIno}
           >
             {Blockly.Msg.codeeditor_open_code}
           </Button>
@@ -257,7 +205,7 @@ void loop() {
             style={{ padding: "1rem", margin: "1rem" }}
             variant="contained"
             color="primary"
-            onClick={() => getBlocklyCode()}
+            onClick={getBlocklyCode}
           >
             {Blockly.Msg.codeeditor_blockly_code}
           </Button>
@@ -265,34 +213,29 @@ void loop() {
             style={{ padding: "1rem", margin: "1rem" }}
             variant="contained"
             color="primary"
-            onClick={() => formatCode()}
+            onClick={openRenameDialog}
           >
-            Code formatieren
+            Rename Code
           </Button>
           <Sidebar />
           <Dialog
             style={{ zIndex: 9999999 }}
             fullWidth
-            maxWidth={"sm"}
+            maxWidth="sm"
             open={progress}
-            title={"Code wird kompiliert"}
-            content={""}
+            title="Code wird kompiliert"
+            content=""
           >
             <div>{Blockly.Msg.codeeditor_compile_progress}</div>
-          </Dialog>{" "}
+          </Dialog>
           <Dialog
             open={resetDialog}
             title={Blockly.Msg.resetDialog_headline}
             content={Blockly.Msg.resetDialog_text}
-            onClose={() => {
-              setResetDialog(false);
-            }}
-            onClick={() => {
-              setResetDialog(false);
-            }}
+            onClose={() => setResetDialog(false)}
+            onClick={() => setResetDialog(false)}
             button={Blockly.Msg.button_cancel}
           >
-            {" "}
             <div style={{ marginTop: "10px" }}>
               <Button
                 variant="contained"
@@ -303,6 +246,31 @@ void loop() {
                 }}
               >
                 Zurücksetzen
+              </Button>
+            </div>
+          </Dialog>
+          <Dialog
+            open={renameDialogOpen}
+            title="Rename Code"
+            content={
+              <TextField
+                label="Filename"
+                value={filename}
+                onChange={(e) => setFilename(e.target.value)}
+                fullWidth
+              />
+            }
+            onClose={() => setRenameDialogOpen(false)}
+            onClick={handleRename}
+            button="Rename"
+          >
+            <div style={{ marginTop: "10px" }}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleRename}
+              >
+                Rename
               </Button>
             </div>
           </Dialog>
