@@ -1050,7 +1050,7 @@ Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_accelerometer"] =
     Blockly.Generator.Arduino.libraries_["esp32s2_icm42670"] =
       `#include "ICM42670P.h"`;
     Blockly.Generator.Arduino.libraries_["esp32s2_icm20948"] =
-      `#include <ICM20948_WE.h>`;
+      `#include <Adafruit_ICM20948.h>`;
     Blockly.Generator.Arduino.libraries_["Adafruit_Sensor"] =
       `#include <Adafruit_Sensor.h>`;
     Blockly.Generator.Arduino.libraries_["library_wire"] = `#include <Wire.h>`;
@@ -1059,7 +1059,7 @@ Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_accelerometer"] =
     Blockly.Generator.Arduino.definitions_["define_ICM42670P"] =
       "ICM42670 icm = ICM42670(Wire1, 0);";
     Blockly.Generator.Arduino.definitions_["define_ICM20948"] =
-      "ICM20948_WE myIMU = ICM20948_WE(&Wire1, 0x68);";
+      "Adafruit_ICM20948 icm2;";
     Blockly.Generator.Arduino.definitions_["define_acceleration_switch"] =
       "int sensorActive = 0; // 0: none, 1: MPU6050, 2: ICM42670P, 3: ICM20948";
     Blockly.Generator.Arduino.setupCode_["Wire1.begin()"] = "Wire1.begin();";
@@ -1068,24 +1068,22 @@ Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_accelerometer"] =
       "  {\n" +
       "    mpu.setAccelerometerRange(MPU6050_RANGE_8_G);\n" +
       "    mpu.setFilterBandwidth(MPU6050_BAND_21_HZ);\n" +
-      "    sensorActive = 0;\n" +
+      "    sensorActive = 1;\n" +
       "  }\n" +
       "  else if (icm.begin() == 0) // If MPU6050 fails, try ICM42670P\n" +
       "  {\n" +
       "    icm.startAccel(21, 8); // Accel ODR = 100 Hz, Range = 8G\n" +
-      "    sensorActive = 1;\n" +
-      "  }\n" +
-      "  else\n" +
-      "  {\n" +
-      "    myIMU.init();\n" +
-      "    myIMU.autoOffsets();\n" +
-      "    myIMU.setAccRange(ICM20948_ACC_RANGE_8G);\n" +
-      "    myIMU.setAccSampleRateDivider(4); // 100 Hz sample rate\n" +
       "    sensorActive = 2;\n" +
+      "  }\n" +
+      "  else if (icm2.begin_I2C(0x68, &Wire1))\n" +
+      "  {\n" +
+      "    icm2.setAccelRange(ICM20948_ACCEL_RANGE_8_G);\n" +
+      "    icm2.setAccelRateDivisor(10.25); // 100 Hz sample rate\n" +
+      "    sensorActive = 3;\n" +
       "  }";
     Blockly.Generator.Arduino.codeFunctions_["sensebox_requestAcceleration"] =
       "float getAcceleration(String sensorValueType) {\n" +
-      "if (sensorActive == 0) {\n" +
+      "if (sensorActive == 1) {\n" +
       "sensors_event_t a, g, temp;\n" +
       "mpu.getEvent(&a, &g, &temp);\n" +
       'if (sensorValueType == "accelerationX") {\n' +
@@ -1099,7 +1097,7 @@ Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_accelerometer"] =
       "} else {\n" +
       "return 0.0;\n" +
       "}\n" +
-      "} else if (sensorActive == 1) {\n" +
+      "} else if (sensorActive == 2) {\n" +
       "inv_imu_sensor_event_t imu_event;\n" +
       "icm.getDataFromRegisters(imu_event);\n" +
       'if (sensorValueType == "accelerationX") {\n' +
@@ -1113,21 +1111,22 @@ Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_accelerometer"] =
       "} else {\n" +
       "return 0.0;\n" +
       "}\n" +
-      "} else {\n" +
-      "myIMU.readSensor();\n" +
-      "xyzFloat accRaw;\n" +
-      "myIMU.getAccRawValues(&accRaw);\n" +
+      "} else if (sensorActive == 2) {\n" +
+      "sensors_event_t a, g, m, temp;\n" +
+      "icm2.getEvent(&a, &g, &m, &temp);\n" +
       'if (sensorValueType == "accelerationX") {\n' +
-      "return accRaw.x * 9.81 / 4096.0;\n" +
+      "return a.acceleration.x;\n" +
       '} else if (sensorValueType == "accelerationY") {\n' +
-      "return accRaw.y * 9.81 / 4096.0;\n" +
+      "return a.acceleration.y;\n" +
       '} else if (sensorValueType == "accelerationZ") {\n' +
-      "return accRaw.z * 9.81 / 4096.0;\n" +
+      "return a.acceleration.z;\n" +
       '} else if (sensorValueType == "temperature") {\n' +
-      "return myIMU.getTemperature();\n" +
+      "return temp.temperature;\n" +
       "} else {\n" +
       "return 0.0;\n" +
       "}\n" +
+      "} else {\n" +
+      "return 0.0;\n" +
       "}\n" +
       "}\n";
     var code = 'getAcceleration("' + dropdown + '")';
