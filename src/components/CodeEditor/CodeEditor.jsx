@@ -13,7 +13,7 @@ import SaveIcon from "./SaveIcon";
 import store from "../../store";
 import DeviceSelection from "../DeviceSelection";
 import { useSelector } from "react-redux";
-import CompilationDialog from "../Workspace/CompilationDialog";
+import CompilationDialog from "../Workspace/ToolbarItems/CompilationDialog/CompilationDialog";
 
 const CodeEditor = () => {
   //const [filehandle, setFileHandle] = useState();
