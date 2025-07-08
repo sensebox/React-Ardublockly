@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { updateProject, setDescription } from "../../actions/projectActions";
+import { updateProject, setDescription } from "../../../actions/projectActions";
 
 import axios from "axios";
 import { withRouter } from "react-router-dom";
 
-import Snackbar from "../Snackbar";
-import Dialog from "../Dialog";
+import Snackbar from "../../Snackbar";
+import Dialog from "../../Dialog";
 
 import withStyles from "@mui/styles/withStyles";
 import Button from "@mui/material/Button";

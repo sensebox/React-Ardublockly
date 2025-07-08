@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { workspaceName } from "../../actions/workspaceActions";
 
 import BlocklyWindow from "../Blockly/BlocklyWindow";
-import WorkspaceFunc from "../Workspace/WorkspaceFunc";
+import WorkspaceToolbar from "../Workspace/WorkspaceToolbar";
 
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -85,7 +85,7 @@ class Assessment extends Component {
     return (
       <div className="assessmentDiv" style={{ width: "100%" }}>
         <div style={{ float: "right", height: "40px" }}>
-          <WorkspaceFunc assessment />
+          <WorkspaceToolbar assessment />
         </div>
         <Grid container spacing={2} style={{ marginBottom: "5px" }}>
           <Grid

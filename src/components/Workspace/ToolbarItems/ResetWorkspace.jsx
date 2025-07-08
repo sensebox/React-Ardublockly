@@ -5,14 +5,14 @@ import {
   clearStats,
   onChangeCode,
   workspaceName,
-} from "../../actions/workspaceActions";
+} from "../../../actions/workspaceActions.js";
 
 import * as Blockly from "blockly/core";
 
 import { createNameId } from "mnemonic-id";
-import { initialXml } from "../Blockly/initialXml.js";
+import { initialXml } from "../../Blockly/initialXml.js";
 
-import Snackbar from "../Snackbar";
+import Snackbar from "../../Snackbar.jsx";
 
 import withStyles from "@mui/styles/withStyles";
 import IconButton from "@mui/material/IconButton";
@@ -20,7 +20,7 @@ import Tooltip from "@mui/material/Tooltip";
 
 import { faShare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Dialog from "../Dialog";
+import Dialog from "../../Dialog.jsx";
 import Button from "@mui/material/Button";
 
 const styles = (theme) => ({
