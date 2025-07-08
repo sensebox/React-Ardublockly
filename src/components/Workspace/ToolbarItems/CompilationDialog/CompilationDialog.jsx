@@ -18,10 +18,9 @@ import DownloadAnimation from "./DownloadAnimation";
 import { DragDropIcon } from "./DragDropIcon";
 import { useSelector } from "react-redux";
 import * as Blockly from "blockly/core";
-import { ErrorView } from "../ErrorView/ErrorView";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink, faXmark } from "@fortawesome/free-solid-svg-icons";
-
+import { ErrorView } from "../../../ErrorView/ErrorView";
 const headerStyle = {
   fontSize: "1.5rem",
   color: "#4EAF47",

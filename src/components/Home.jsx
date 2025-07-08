@@ -7,7 +7,7 @@ import * as Blockly from "blockly/core";
 import { createNameId } from "mnemonic-id";
 
 import WorkspaceStats from "./Workspace/WorkspaceStats";
-import WorkspaceFunc from "./Workspace/WorkspaceFunc";
+import WorkspaceToolbar from "./Workspace/WorkspaceToolbar";
 import BlocklyWindow from "./Blockly/BlocklyWindow";
 import CodeViewer from "./CodeViewer";
 import TrashcanButtons from "./Workspace/TrashcanButtons";
@@ -136,7 +136,7 @@ class Home extends Component {
           }}
         >
           {/* <Autosave /> */}
-          <WorkspaceFunc
+          <WorkspaceToolbar
             project={this.props.project}
             projectType={this.props.projectType}
           />
