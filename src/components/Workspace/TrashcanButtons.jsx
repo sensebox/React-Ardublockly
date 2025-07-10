@@ -1,109 +1,84 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-
+import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import * as Blockly from "blockly/core";
-
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import withStyles from "@mui/styles/withStyles";
-
-import { faTimes, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { IconButton, Tooltip, useTheme } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes, faTrash } from "@fortawesome/free-solid-svg-icons";
 
-const styles = (theme) => ({
-  closeTrash: {
-    "&:hover": {
-      backgroundColor: "transparent",
-      color: theme.palette.primary.main,
-    },
-  },
-  deleteTrash: {
-    "&:hover": {
-      backgroundColor: "transparent",
-      color: theme.palette.primary.main,
-    },
-  },
-});
+const TrashcanButtons = () => {
+  const theme = useTheme();
+  const workspaceChange = useSelector((state) => state.workspace.change);
+  const [flyoutOpen, setFlyoutOpen] = useState(() => {
+    const ws = Blockly.getMainWorkspace();
+    return ws?.trashcan?.contentsIsOpen() ?? false;
+  });
 
-class TrashcanButtons extends Component {
-  state = {
-    closeTrashFlyout: false,
-  };
-
-  componentDidUpdate(previousProps, previousState) {
+  // Sync flyout state when workspace.change updates
+  useEffect(() => {
     const workspace = Blockly.getMainWorkspace();
-    const contentsIsOpen = workspace.trashcan.contentsIsOpen();
-    if (previousState.closeTrashFlyout !== contentsIsOpen) {
-      this.setState({ closeTrashFlyout: contentsIsOpen });
-    }
-  }
+    const isOpen = workspace.trashcan.contentsIsOpen();
+    setFlyoutOpen(isOpen);
+  }, [workspaceChange]);
 
-  closeTrashcan = () => {
-    this.setState({ closeTrashFlyout: false });
+  const closeTrashcan = () => {
+    setFlyoutOpen(false);
     const workspace = Blockly.getMainWorkspace();
-    // https://github.com/google/blockly/blob/master/core/blockly.js#L314
     workspace.trashcan.flyout.hide();
   };
 
-  clearTrashcan = () => {
-    this.setState({ closeTrashFlyout: false });
+  const clearTrashcan = () => {
+    setFlyoutOpen(false);
     const workspace = Blockly.getMainWorkspace();
-    // https://developers.google.com/blockly/reference/js/Blockly.Trashcan#emptyContents
     workspace.trashcan.emptyContents();
   };
 
-  render() {
-    return this.state.closeTrashFlyout ? (
-      <div>
-        <Tooltip title={Blockly.Msg.tooltip_trashcan_hide}>
-          <IconButton
-            className={this.props.classes.closeTrash}
-            style={{
-              width: "40px",
-              height: "40px",
-              position: "absolute",
-              bottom: 10,
-              right: 10,
-              zIndex: 21,
-            }}
-            onClick={() => this.closeTrashcan()}
-            size="large"
-          >
-            <FontAwesomeIcon icon={faTimes} size="xs" />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title={Blockly.Msg.tooltip_trashcan_delete}>
-          <IconButton
-            className={this.props.classes.deleteTrash}
-            style={{
-              width: "40px",
-              height: "40px",
-              position: "absolute",
-              bottom: 10,
-              right: 50,
-              zIndex: 21,
-            }}
-            onClick={() => this.clearTrashcan()}
-            size="large"
-          >
-            <FontAwesomeIcon icon={faTrash} size="xs" />
-          </IconButton>
-        </Tooltip>
-      </div>
-    ) : null;
-  }
-}
+  if (!flyoutOpen) return null;
 
-TrashcanButtons.propTypes = {
-  workspaceChange: PropTypes.number.isRequired,
+  return (
+    <>
+      <Tooltip title={Blockly.Msg.tooltip_trashcan_hide}>
+        <IconButton
+          onClick={closeTrashcan}
+          size="large"
+          sx={{
+            width: "40px",
+            height: "40px",
+            position: "absolute",
+            bottom: "10px",
+            right: "10px",
+            zIndex: 21,
+            "&:hover": {
+              backgroundColor: "transparent",
+              color: theme.palette.primary.main,
+            },
+          }}
+        >
+          <FontAwesomeIcon icon={faTimes} size="xs" />
+        </IconButton>
+      </Tooltip>
+
+      <Tooltip title={Blockly.Msg.tooltip_trashcan_delete}>
+        <IconButton
+          onClick={clearTrashcan}
+          size="large"
+          sx={{
+            width: "40px",
+            height: "40px",
+            position: "absolute",
+            bottom: "10px",
+            right: "50px",
+            zIndex: 21,
+            "&:hover": {
+              backgroundColor: "transparent",
+              color: theme.palette.primary.main,
+            },
+          }}
+        >
+          <FontAwesomeIcon icon={faTrash} size="xs" />
+        </IconButton>
+      </Tooltip>
+    </>
+  );
 };
 
-const mapStateToProps = (state) => ({
-  workspaceChange: state.workspace.change,
-});
-
-export default connect(
-  mapStateToProps,
-  null,
-)(withStyles(styles, { withTheme: true })(TrashcanButtons));
+export default TrashcanButtons;
