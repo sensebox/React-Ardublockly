@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { logout } from "../actions/authActions";
 
-import senseboxLogo from "./sensebox_logo.svg";
+import senseboxLogo from "@/sensebox_logo.svg";
 
 import { withRouter } from "react-router-dom";
 
@@ -21,7 +21,6 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import LinearProgress from "@mui/material/LinearProgress";
 import Tour from "reactour";
-import { Badge } from "@mui/material";
 import { home, assessment } from "./Tour";
 import {
   faBars,

@@ -6,7 +6,7 @@ import { withRouter } from "react-router-dom";
 
 import * as Blockly from "blockly/core";
 
-import Breadcrumbs from "../Breadcrumbs";
+import Breadcrumbs from "../ui/Breadcrumbs";
 import LanguageSelector from "./LanguageSelector";
 import RenderSelector from "./RenderSelector";
 import StatsSelector from "./StatsSelector";

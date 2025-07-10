@@ -24,11 +24,11 @@ import { withRouter } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEyeSlash, faUserCheck } from "@fortawesome/free-solid-svg-icons";
 
-import Breadcrumbs from "../../Breadcrumbs";
+import Breadcrumbs from "../../ui/Breadcrumbs";
 import Textfield from "./Textfield";
 import Difficulty from "./Difficulty";
 import Step from "./Step";
-import Dialog from "../../Dialog";
+import Dialog from "../../ui/Dialog";
 import Snackbar from "../../Snackbar";
 import Public from "./Public";
 import Review from "./Review";

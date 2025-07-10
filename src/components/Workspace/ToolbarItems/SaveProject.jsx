@@ -7,7 +7,7 @@ import axios from "axios";
 import { withRouter } from "react-router-dom";
 
 import Snackbar from "../../Snackbar";
-import Dialog from "../../Dialog";
+import Dialog from "../../ui/Dialog";
 
 import withStyles from "@mui/styles/withStyles";
 import Button from "@mui/material/Button";

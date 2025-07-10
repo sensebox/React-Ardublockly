@@ -8,7 +8,7 @@ import { createId } from "mnemonic-id";
 
 import moment from "moment";
 
-import Dialog from "../../Dialog";
+import Dialog from "../../ui/Dialog";
 import Snackbar from "../../Snackbar";
 
 // import { Link } from "react-router-dom";
