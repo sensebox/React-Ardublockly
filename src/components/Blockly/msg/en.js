@@ -27,6 +27,7 @@ import { TRANSLATIONS } from "./en/translations";
 import { UI } from "./en/ui";
 import { VARIABLES } from "./en/variables";
 import { WEBSERVER } from "./en/webserver";
+import { FLUOROASM } from "./en/fluoroASM";
 
 export const En = {
   ...AUDIO,
@@ -58,4 +59,5 @@ export const En = {
   ...UI,
   ...VARIABLES,
   ...WEBSERVER,
+  ...FLUOROASM,
 };
