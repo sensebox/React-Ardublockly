@@ -263,24 +263,24 @@
     "@babel/helper-validator-identifier" "^7.25.9"
 
 "@blockly/block-plus-minus@^8.0.9":
-  version "8.0.12"
-  resolved "https://registry.yarnpkg.com/@blockly/block-plus-minus/-/block-plus-minus-8.0.12.tgz#7f99ee323420e6eba5dc342891d35760ebf7850b"
-  integrity sha512-QqHzKJ+5SiOjac2cnACbJRbF1LxArNUx9F/Xtp6/nurcFQiw2/bp3+deIEZDSBBA3yAGj7JzFUXl7aVNmwDt3g==
+  version "8.0.16"
+  resolved "https://registry.yarnpkg.com/@blockly/block-plus-minus/-/block-plus-minus-8.0.16.tgz#a9cbe345771577d77120ed41dc7303a4f9fe3763"
+  integrity sha512-hefQLW6pLEHlqUpN3IZf2nQueuLg6zh65mZb+1tmVN1Gn60o54z0fnD/LLn45BoMj0MEJA+agEwCIY2oxQWp7w==
 
 "@blockly/field-colour@^5.0.9":
-  version "5.0.12"
-  resolved "https://registry.yarnpkg.com/@blockly/field-colour/-/field-colour-5.0.12.tgz#b412c77801ea3c209307ed470ebc4e6dd15c380a"
-  integrity sha512-vNw6L/B0cpf+j0S6pShX31bOI16KJu+eACpsfHGOBZbb7+LT3bYKcGHe6+VRe+KtIE3jGlY7vYfnaJdOCrYlfQ==
+  version "5.0.19"
+  resolved "https://registry.yarnpkg.com/@blockly/field-colour/-/field-colour-5.0.19.tgz#9421b1a3a95c8f46f9ec28ad2c4921801e9fc1a7"
+  integrity sha512-OLqGHTihuqtnZi51lsmd8uhZK+kyf07V9fd0wFQ+dfFhuyVcqrQkKBEE5NvDzdcdSLgdewWMBesGzweo5Q1XCg==
 
 "@blockly/field-grid-dropdown@^5.0.9":
-  version "5.0.12"
-  resolved "https://registry.yarnpkg.com/@blockly/field-grid-dropdown/-/field-grid-dropdown-5.0.12.tgz#4d7b934bb9f9ea566d66cd8b4147eafdf6c811be"
-  integrity sha512-wBxOfiMvOMMDcQGGweeKJMpyq9Eki3Y14pX0PlvjYvPKC7/AWcnUFHbicvIFC+DloeBXyxp44ppDMr8kc3mA+w==
+  version "5.0.16"
+  resolved "https://registry.yarnpkg.com/@blockly/field-grid-dropdown/-/field-grid-dropdown-5.0.16.tgz#b22da5b7b41b7195a1ea714e71b1492af1cc2f5d"
+  integrity sha512-UIbacLyJyCRTVKZoh5IDQviIlNaFeYHEuigwdQU95GJi37ef9sMI5N9sedqxFCVe71XHuhz8l4eMInQwC24Reg==
 
 "@blockly/field-multilineinput@^5.0.10":
-  version "5.0.13"
-  resolved "https://registry.yarnpkg.com/@blockly/field-multilineinput/-/field-multilineinput-5.0.13.tgz#08d6214baf70759b2877b701e3c5e87f6b3be404"
-  integrity sha512-qJ3e2m7SIoQTQB0VRvsPWbqmXQRBMyrHJa/DBBVjhoou6wXwLaBqcdSOtLru7DFKccEg+rjkQLvwV+uK89R2wA==
+  version "5.0.17"
+  resolved "https://registry.yarnpkg.com/@blockly/field-multilineinput/-/field-multilineinput-5.0.17.tgz#e396e63e67a61f0704ec30cdc1c0256330c7b133"
+  integrity sha512-kI5dgsJDAggXgkjcKDIwHZ59ZqsVQE+96vT6+FUCjRE82vYp1KAV2/PK9tSBqB2LU8nWUAeBdOT1dD8fOwz5yA==
 
 "@blockly/field-slider@7.0.9":
   version "7.0.9"
