@@ -1,78 +1,81 @@
-import React, { Component } from "react";
+import React from "react";
+import { Link as RouterLink } from "react-router-dom";
+import { Box, Link, Typography, useTheme } from "@mui/material";
 
-import { Link } from "react-router-dom";
+const Footer = () => {
+  const theme = useTheme();
 
-import Typography from "@mui/material/Typography";
-
-class Footer extends Component {
-  render() {
-    return (
-      <footer style={{ position: "absolute", bottom: "0", width: "100%" }}>
-        <div
-          style={{
-            minHeight: "30px",
-            backgroundColor: "#4EAF47",
-            textAlign: "center",
-            paddingTop: "2px",
+  return (
+    <Box
+      component="footer"
+      sx={{
+        position: "absolute",
+        bottom: 0,
+        width: "100%",
+      }}
+    >
+      <Box
+        sx={{
+          minHeight: 30,
+          backgroundColor: theme.palette.primary.main,
+          textAlign: "center",
+          py: 0.5,
+        }}
+      >
+        <Box
+          sx={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 1,
+            color: theme.palette.primary.contrastText,
           }}
         >
-          <div style={{ color: "white", height: "100%" }}>
-            <Link
-              to={"/impressum"}
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              Impressum
-            </Link>
-            <Typography
-              style={{
-                margin: "0px 10px 0px 10px",
-                display: "initial",
-                fontSize: "1rem",
-              }}
-            >
-              |
-            </Typography>
-            <Link
-              to={"/privacy"}
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              Privacy
-            </Link>
-            <Typography
-              style={{
-                margin: "0px 10px 0px 10px",
-                display: "initial",
-                fontSize: "1rem",
-              }}
-            >
-              |
-            </Typography>
-            <Link
-              to={"/news"}
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              News
-            </Link>
-            <Typography
-              style={{
-                margin: "0px 10px 0px 10px",
-                display: "initial",
-                fontSize: "1rem",
-              }}
-            >
-              |
-            </Typography>
-            <a
-              href="https://sensebox.de"
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              sensebox.de
-            </a>
-          </div>
-        </div>
-      </footer>
-    );
-  }
-}
+          <Link
+            component={RouterLink}
+            to="/impressum"
+            underline="none"
+            color="inherit"
+          >
+            Impressum
+          </Link>
+
+          <Typography component="span">|</Typography>
+
+          <Link
+            component={RouterLink}
+            to="/privacy"
+            underline="none"
+            color="inherit"
+          >
+            Privacy
+          </Link>
+
+          <Typography component="span">|</Typography>
+
+          <Link
+            component={RouterLink}
+            to="/news"
+            underline="none"
+            color="inherit"
+          >
+            News
+          </Link>
+
+          <Typography component="span">|</Typography>
+
+          <Link
+            href="https://sensebox.de"
+            target="_blank"
+            rel="noopener noreferrer"
+            underline="none"
+            color="inherit"
+          >
+            sensebox.de
+          </Link>
+        </Box>
+      </Box>
+    </Box>
+  );
+};
 
 export default Footer;

@@ -1,57 +1,38 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import * as Blockly from "blockly/core";
 import { De } from "./Blockly/msg/de";
 import { En } from "./Blockly/msg/en";
 
 import Navbar from "./Navbar";
-import Footer from "./Footer";
 import Routes from "./Route/Routes";
 import Cookies from "./Cookies";
+import Footer from "./Footer";
 import { setBoard } from "./Blockly/helpers/board";
 
-class Content extends Component {
-  componentDidMount() {
-    if (this.props.language === "de_DE") {
+const Content = () => {
+  const language = useSelector((state) => state.general.language);
+  const board = useSelector((state) => state.board.board);
+
+  useEffect(() => {
+    // Blockly-Locale setzen
+    if (language === "de_DE") {
       Blockly.setLocale(De);
-    } else if (this.props.language === "en_US") {
+    } else if (language === "en_US") {
       Blockly.setLocale(En);
     }
-    setBoard(this.props.board);
-  }
+    // Board initialisieren
+    setBoard(board);
+  }, [language, board]);
 
-  componentDidUpdate(props) {
-    if (props.language !== this.props.language) {
-      if (this.props.language === "de_DE") {
-        Blockly.setLocale(De);
-      } else if (this.props.language === "en_US") {
-        Blockly.setLocale(En);
-      }
-    }
-    setBoard(this.props.board);
-  }
-
-  render() {
-    return (
-      <div className="wrapper">
-        <Navbar />
-        <Routes />
-        <Cookies />
-        <Footer />
-      </div>
-    );
-  }
-}
-
-Content.propTypes = {
-  language: PropTypes.string.isRequired,
+  return (
+    <div className="wrapper">
+      <Navbar />
+      <Routes />
+      <Cookies />
+      <Footer />
+    </div>
+  );
 };
 
-const mapStateToProps = (state) => ({
-  language: state.general.language,
-  board: state.board.board,
-});
-
-export default connect(mapStateToProps, null)(Content);
+export default Content;
