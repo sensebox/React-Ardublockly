@@ -1,14 +1,12 @@
-import React, { Component } from "react";
-
-import withStyles from "@mui/styles/withStyles";
+import React, { useState, useEffect } from "react";
+import { makeStyles } from "@mui/styles";
 import IconButton from "@mui/material/IconButton";
-import MaterialUISnackbar from "@mui/material/Snackbar";
+import Snackbar from "@mui/material/Snackbar";
 import SnackbarContent from "@mui/material/SnackbarContent";
-
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   success: {
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.primary.contrastText,
@@ -17,79 +15,55 @@ const styles = (theme) => ({
     backgroundColor: theme.palette.error.dark,
     color: theme.palette.error.contrastText,
   },
-});
+}));
 
-class Snackbar extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      open: props.open,
+export default function AppSnackbar(props) {
+  const { open: initialOpen, message, type, key: snackKey } = props;
+  const classes = useStyles();
+  const [open, setOpen] = useState(initialOpen);
+
+  useEffect(() => {
+    let timeout;
+    if (open) {
+      timeout = setTimeout(() => {
+        setOpen(false);
+      }, 5000);
+    }
+    return () => {
+      clearTimeout(timeout);
     };
-    this.timeout = null;
-  }
+  }, [open]);
 
-  componentDidMount() {
-    if (this.state.open) {
-      this.autoHideDuration();
-    }
-  }
-
-  componentDidUpdate() {
-    if (!this.state.open) {
-      clearTimeout(this.timeout);
-    }
-  }
-
-  componentWillUnmount() {
-    if (this.state.open) {
-      clearTimeout(this.timeout);
-    }
-  }
-
-  onClose = () => {
-    this.setState({ open: false });
+  const handleClose = () => {
+    setOpen(false);
   };
 
-  autoHideDuration = () => {
-    this.timeout = setTimeout(() => {
-      this.onClose();
-    }, 5000);
-  };
-
-  render() {
-    return (
-      <MaterialUISnackbar
-        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-        open={this.state.open}
-        key={this.props.key}
-        style={{
-          left: "22px",
-          bottom: "40px",
-          width: "300px",
-          zIndex: "100",
-        }}
-      >
-        <SnackbarContent
-          style={{ flexWrap: "nowrap" }}
-          className={
-            this.props.type === "error"
-              ? this.props.classes.error
-              : this.props.classes.success
-          }
-          action={
-            <IconButton
-              onClick={this.onClose}
-              style={{ color: "inherit" }}
-              size="large"
-            >
-              <FontAwesomeIcon icon={faTimes} size="xs" />
-            </IconButton>
-          }
-          message={this.props.message}
-        />
-      </MaterialUISnackbar>
-    );
-  }
+  return (
+    <Snackbar
+      anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+      open={open}
+      key={snackKey}
+      style={{
+        left: "22px",
+        bottom: "40px",
+        width: "300px",
+        zIndex: "100",
+      }}
+    >
+      <SnackbarContent
+        style={{ flexWrap: "nowrap" }}
+        className={type === "error" ? classes.error : classes.success}
+        message={message}
+        action={
+          <IconButton
+            onClick={handleClose}
+            style={{ color: "inherit" }}
+            size="large"
+          >
+            <FontAwesomeIcon icon={faTimes} size="xs" />
+          </IconButton>
+        }
+      />
+    </Snackbar>
+  );
 }
-
-export default withStyles(styles, { withTheme: true })(Snackbar);
