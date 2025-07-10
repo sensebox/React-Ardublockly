@@ -20,7 +20,7 @@ import Tooltip from "@mui/material/Tooltip";
 
 import { faShare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Dialog from "../../Dialog.jsx";
+import Dialog from "../../ui/Dialog.jsx";
 import Button from "@mui/material/Button";
 
 const styles = (theme) => ({

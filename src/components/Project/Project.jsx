@@ -7,8 +7,8 @@ import { clearMessages, returnErrors } from "../../actions/messageActions";
 
 import { withRouter } from "react-router-dom";
 
-import Home from "../Home";
-import Breadcrumbs from "../Breadcrumbs";
+import Home from "../Pages/Home";
+import Breadcrumbs from "../ui/Breadcrumbs";
 
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";

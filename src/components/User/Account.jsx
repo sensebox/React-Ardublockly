@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import Breadcrumbs from "../Breadcrumbs";
-import Alert from "../Alert";
+import Breadcrumbs from "../ui/Breadcrumbs";
+import Alert from "../ui/Alert";
 
 import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";

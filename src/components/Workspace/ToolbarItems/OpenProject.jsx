@@ -7,7 +7,7 @@ import { setBoard } from "../../../actions/boardAction";
 import * as Blockly from "blockly/core";
 
 import Snackbar from "../../Snackbar";
-import Dialog from "../../Dialog";
+import Dialog from "../../ui/Dialog";
 
 import withStyles from "@mui/styles/withStyles";
 import Tooltip from "@mui/material/Tooltip";

@@ -20,7 +20,8 @@ import { useSelector } from "react-redux";
 import * as Blockly from "blockly/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { ErrorView } from "../../../ErrorView/ErrorView";
+import { ErrorView } from "../../../ui/ErrorView.jsx";
+
 const headerStyle = {
   fontSize: "1.5rem",
   color: "#4EAF47",

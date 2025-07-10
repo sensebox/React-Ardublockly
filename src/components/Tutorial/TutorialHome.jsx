@@ -14,7 +14,7 @@ import { clearMessages } from "../../actions/messageActions";
 
 import clsx from "clsx";
 
-import Breadcrumbs from "../Breadcrumbs";
+import Breadcrumbs from "../ui/Breadcrumbs";
 
 import { Link } from "react-router-dom";
 import { alpha } from "@mui/material/styles";

@@ -7,8 +7,8 @@ import { clearMessages } from "../../actions/messageActions";
 import { withRouter } from "react-router-dom";
 
 import Snackbar from "../Snackbar";
-import Alert from "../Alert";
-import Breadcrumbs from "../Breadcrumbs";
+import Alert from "../ui/Alert";
+import Breadcrumbs from "../ui/Breadcrumbs";
 
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
