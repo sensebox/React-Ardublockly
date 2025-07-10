@@ -10,8 +10,8 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import Slide from "@mui/material/Slide";
-import SensorInfo from "./SensorInfo";
-import store from "../store";
+import SensorInfo from "../SensorInfo";
+import store from "../../store";
 
 // FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
 const withWidth = () => (WrappedComponent) => (props) => (
