@@ -64,10 +64,6 @@ function CompilationDialog({
     return () => clearTimeout(timeoutId);
   }, [activeStep]);
 
-  useEffect(() => {
-    console.log(platform);
-  }, []);
-
   const handleCompile = async () => {
     try {
       const board =

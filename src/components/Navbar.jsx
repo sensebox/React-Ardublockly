@@ -115,6 +115,7 @@ const Navbar = () => {
   };
   const changeBoard = (val) => {
     dispatch(setBoard(val));
+
     handleBoardClose();
   };
   const handleLogout = () => {
@@ -216,13 +217,13 @@ const Navbar = () => {
                     open={Boolean(anchorElBoard)}
                     onClose={handleBoardClose}
                   >
-                    {["mcu", "mini", "esp32"].map((b) => (
+                    {["MCU", "MCU:mini", "MCU-S2"].map((b) => (
                       <MenuItem
                         key={b}
                         value={b}
                         onClick={() => changeBoard(b)}
                       >
-                        {b.toUpperCase()}
+                        {b}
                       </MenuItem>
                     ))}
                   </Menu>
