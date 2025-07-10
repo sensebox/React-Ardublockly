@@ -5,7 +5,7 @@ import { workspaceName } from "../../../actions/workspaceActions";
 import { setDescription, updateProject } from "../../../actions/projectActions";
 
 import Snackbar from "../../Snackbar";
-import Dialog from "../../Dialog";
+import Dialog from "../../ui/Dialog";
 
 import withStyles from "@mui/styles/withStyles";
 import Button from "@mui/material/Button";

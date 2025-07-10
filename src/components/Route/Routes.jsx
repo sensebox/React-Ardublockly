@@ -10,21 +10,21 @@ import PrivateRoute from "./PrivateRoute";
 import PrivateRouteCreator from "./PrivateRouteCreator";
 import IsLoggedRoute from "./IsLoggedRoute";
 
-import Home from "../Home";
+import Home from "../Pages/Home";
 import Tutorial from "../Tutorial/Tutorial";
 import TutorialHome from "../Tutorial/TutorialHome";
 import Builder from "../Tutorial/Builder/Builder";
-import NotFound from "../NotFound";
+import NotFound from "../Pages/NotFound";
 import ProjectHome from "../Project/ProjectHome";
 import Project from "../Project/Project";
 import Settings from "../Settings/Settings";
-import Impressum from "../Impressum";
-import Privacy from "../Privacy";
+import Impressum from "../Pages/Impressum";
+import Privacy from "../Pages/Privacy";
 import Login from "../User/Login";
 import Account from "../User/Account";
-import News from "../News";
-import Faq from "../Faq";
-import CodeEditor from "../CodeEditor/CodeEditor";
+import News from "../Pages/News";
+import Faq from "../Pages/Faq";
+import CodeEditor from "../Pages/CodeEditor/CodeEditor";
 
 class Routes extends Component {
   componentDidMount() {

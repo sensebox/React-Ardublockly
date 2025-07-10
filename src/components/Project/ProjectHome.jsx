@@ -6,7 +6,7 @@ import { clearMessages } from "../../actions/messageActions";
 
 import { Link, withRouter } from "react-router-dom";
 
-import Breadcrumbs from "../Breadcrumbs";
+import Breadcrumbs from "../ui/Breadcrumbs";
 import BlocklyWindow from "../Blockly/BlocklyWindow";
 import Snackbar from "../Snackbar";
 import WorkspaceToolbar from "../Workspace/WorkspaceToolbar";
