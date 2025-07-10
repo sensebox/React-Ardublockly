@@ -75,9 +75,7 @@ const DeviceSelection = () => {
                 }}
               />
             </IconButton>
-            <Typography sx={{ fontSize: "0.9rem", color: "grey" }}>
-              {label}
-            </Typography>
+            <Typography sx={{ fontSize: "0.9rem" }}>{label}</Typography>
           </Grid>
         ))}
       </Grid>
