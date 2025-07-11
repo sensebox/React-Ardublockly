@@ -108,7 +108,11 @@ class BlocklyComponent extends React.Component {
         <Card
           ref={this.blocklyDiv}
           id="blocklyDiv"
-          style={this.props.style ? this.props.style : {}}
+          style={
+            this.props.style
+              ? this.props.style
+              : { height: "100%", width: "100%" }
+          }
         />
         <Toolbox toolbox={this.toolbox} workspace={this.state.workspace} />
         <Snackbar

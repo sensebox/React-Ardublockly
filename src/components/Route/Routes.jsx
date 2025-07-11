@@ -25,6 +25,7 @@ import Account from "../User/Account";
 import News from "../News";
 import Faq from "../Faq";
 import CodeEditor from "../CodeEditor/CodeEditor";
+import MinimalHome from "../MinimalHome";
 
 class Routes extends Component {
   componentDidMount() {
@@ -49,72 +50,75 @@ class Routes extends Component {
 
   render() {
     return (
-      <div style={{ margin: "0 22px" }}>
-        <Switch>
-          <PublicRoute path="/" exact>
-            <Home />
-          </PublicRoute>
-          {/* Tutorials */}
-          <PublicRoute path="/tutorial" exact>
-            <TutorialHome />
-          </PublicRoute>
-          <PrivateRouteCreator path="/tutorial/builder" exact>
-            <Builder />
-          </PrivateRouteCreator>
-          <Route path="/tutorial/:tutorialId" exact>
-            <Tutorial />
-          </Route>
-          <Route path="/CodeEditor" exact>
-            <CodeEditor />
-          </Route>
-          {/* Sharing */}
-          <PublicRoute path="/share/:shareId" exact>
-            <Project />
-          </PublicRoute>
-          {/* Gallery-Projects */}
-          <PublicRoute path="/gallery" exact>
-            <ProjectHome />
-          </PublicRoute>
-          <PublicRoute path="/gallery/:galleryId" exact>
-            <Project />
-          </PublicRoute>
-          {/* User-Projects */}
-          <PrivateRoute path="/project" exact>
-            <ProjectHome />
-          </PrivateRoute>
-          <PrivateRoute path="/project/:projectId" exact>
-            <Project />
-          </PrivateRoute>
-          {/* User */}
-          <IsLoggedRoute path="/user/login" exact>
-            <Login />
-          </IsLoggedRoute>
-          <PrivateRoute path="/user" exact>
-            <Account />
-          </PrivateRoute>
-          {/* settings */}
-          <PublicRoute path="/settings" exact>
-            <Settings />
-          </PublicRoute>
-          {/* privacy */}
-          <PublicRoute path="/impressum" exact>
-            <Impressum />
-          </PublicRoute>
-          <PublicRoute path="/privacy" exact>
-            <Privacy />
-          </PublicRoute>
-          <PublicRoute path="/news" exact>
-            <News />
-          </PublicRoute>
-          <PublicRoute path="/faq" exact>
-            <Faq />
-          </PublicRoute>
-          {/* Not Found */}
-          <PublicRoute>
-            <NotFound />
-          </PublicRoute>
-        </Switch>
-      </div>
+      // <div style={{ margin: "0 22px" }}>
+      <Switch>
+        <PublicRoute path="/" exact>
+          <Home />
+        </PublicRoute>
+        <PublicRoute path="/minimal" exact>
+          <MinimalHome />
+        </PublicRoute>
+        {/* Tutorials */}
+        <PublicRoute path="/tutorial" exact>
+          <TutorialHome />
+        </PublicRoute>
+        <PrivateRouteCreator path="/tutorial/builder" exact>
+          <Builder />
+        </PrivateRouteCreator>
+        <Route path="/tutorial/:tutorialId" exact>
+          <Tutorial />
+        </Route>
+        <Route path="/CodeEditor" exact>
+          <CodeEditor />
+        </Route>
+        {/* Sharing */}
+        <PublicRoute path="/share/:shareId" exact>
+          <Project />
+        </PublicRoute>
+        {/* Gallery-Projects */}
+        <PublicRoute path="/gallery" exact>
+          <ProjectHome />
+        </PublicRoute>
+        <PublicRoute path="/gallery/:galleryId" exact>
+          <Project />
+        </PublicRoute>
+        {/* User-Projects */}
+        <PrivateRoute path="/project" exact>
+          <ProjectHome />
+        </PrivateRoute>
+        <PrivateRoute path="/project/:projectId" exact>
+          <Project />
+        </PrivateRoute>
+        {/* User */}
+        <IsLoggedRoute path="/user/login" exact>
+          <Login />
+        </IsLoggedRoute>
+        <PrivateRoute path="/user" exact>
+          <Account />
+        </PrivateRoute>
+        {/* settings */}
+        <PublicRoute path="/settings" exact>
+          <Settings />
+        </PublicRoute>
+        {/* privacy */}
+        <PublicRoute path="/impressum" exact>
+          <Impressum />
+        </PublicRoute>
+        <PublicRoute path="/privacy" exact>
+          <Privacy />
+        </PublicRoute>
+        <PublicRoute path="/news" exact>
+          <News />
+        </PublicRoute>
+        <PublicRoute path="/faq" exact>
+          <Faq />
+        </PublicRoute>
+        {/* Not Found */}
+        <PublicRoute>
+          <NotFound />
+        </PublicRoute>
+      </Switch>
+      // </div>
     );
   }
 }
