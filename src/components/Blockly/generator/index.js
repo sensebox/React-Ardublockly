@@ -29,3 +29,4 @@ import "./variables";
 import "./lists";
 import "./watchdog";
 import "./webserver";
+import "./fluoroASM";
