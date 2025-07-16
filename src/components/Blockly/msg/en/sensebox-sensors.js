@@ -251,6 +251,14 @@ The measured values for temperature, humidity and air pressure can be used direc
     "https://docs.sensebox.de/en/docs/hardware/sensors/photodiode",
 
   /**
+   * accelerometer MCUS2(ESP32) */
+  senseBox_accelerometer: "ESP32-S2 Accelerometer",
+  senseBox_accelerometer_tooltip:
+    "The senseBox MCU S2 has one of the following accelerometers on board: MPU6050, ICM-42670-P or ICM-20948. These sensor gives you the acceleration in m/s².",
+  senseBox_accelerometer_helpurl:
+    "https://docs.sensebox.de/docs/hardware/sensors/mpu6050", // TODO: mpu6050 is just one of the supported acceleration sensors of this block
+
+  /**
    * ToF Imager
    *
    */
