@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import Breadcrumbs from "./Breadcrumbs";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
 import { withRouter } from "react-router-dom";
 
@@ -15,7 +15,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
-import { FaqQuestions } from "../data/faq";
+import { FaqQuestions } from "../../data/faq";
 
 class Faq extends Component {
   state = {

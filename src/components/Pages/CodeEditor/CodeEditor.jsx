@@ -8,12 +8,12 @@ import Divider from "@mui/material/Divider";
 import { saveAs } from "file-saver";
 import Drawer from "@mui/material/Drawer";
 import Sidebar from "./Sidebar";
-import Dialog from "../Dialog";
+import Dialog from "@/components/ui/Dialog";
 import SaveIcon from "./SaveIcon";
-import store from "../../store";
-import DeviceSelection from "../DeviceSelection";
+import store from "@/store";
+import DeviceSelection from "@/components/DeviceSelection";
 import { useSelector } from "react-redux";
-import CompilationDialog from "../Workspace/CompilationDialog";
+import CompilationDialog from "@/components/Workspace/ToolbarItems/CompilationDialog/CompilationDialog";
 
 const CodeEditor = () => {
   //const [filehandle, setFileHandle] = useState();

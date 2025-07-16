@@ -1,9 +1,10 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { setBoard } from "../../actions/boardAction";
 
 import * as Blockly from "blockly/core";
+
+import Snackbar from "../Snackbar";
 
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -12,56 +13,74 @@ import Select from "@mui/material/Select";
 import Typography from "@mui/material/Typography";
 import FormHelperText from "@mui/material/FormHelperText";
 
-class DeviceSelector extends Component {
-  componentDidMount() {
-    // Ensure that Blockly.setLocale is adopted in the component.
-    // Otherwise, the text will not be displayed until the next update of the component.
-    this.forceUpdate();
-  }
+export default function DeviceSelector() {
+  const dispatch = useDispatch();
+  const selectedBoard = useSelector((s) => s.board.board);
 
-  render() {
-    return (
-      <div>
-        <Typography style={{ fontWeight: "bold" }}>
+  // force re-render so Blockly.Msg is up-to-date
+  const [, forceUpdate] = useState(0);
+  useEffect(() => {
+    forceUpdate((n) => n + 1);
+  }, []);
+
+  // snackbar state
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackInfo, setSnackInfo] = useState({
+    type: "success",
+    key: 0,
+    message: "",
+  });
+
+  const handleChange = (e) => {
+    const value = e.target.value;
+    dispatch(setBoard(value));
+
+    setSnackInfo({
+      type: "success",
+      key: Date.now(),
+      // you can replace this with a Blockly.Msg key if available
+      message: `${Blockly.Msg.settings_board} geändert: ${value === "mcu" ? "senseBox MCU" : value === "mini" ? "senseBox MCU mini" : "senseBox MCU-S2"}`,
+    });
+    setSnackbarOpen(true);
+  };
+
+  return (
+    <div>
+      <Typography style={{ fontWeight: "bold" }}>
+        {Blockly.Msg.settings_board}
+      </Typography>
+      <FormHelperText
+        style={{
+          color: "black",
+          lineHeight: 1.3,
+          marginBottom: "8px",
+        }}
+      >
+        {Blockly.Msg.settings_board_text}
+      </FormHelperText>
+      <FormControl variant="standard">
+        <InputLabel id="device-selector-label">
           {Blockly.Msg.settings_board}
-        </Typography>
-        <FormHelperText
-          style={{
-            color: "black",
-            lineHeight: 1.3,
-            marginBottom: "8px",
-          }}
+        </InputLabel>
+        <Select
+          variant="standard"
+          labelId="device-selector-label"
+          id="device-selector"
+          value={selectedBoard}
+          onChange={handleChange}
         >
-          {Blockly.Msg.settings_board_text}
-        </FormHelperText>
-        <FormControl variant="standard">
-          <InputLabel id="demo-simple-select-label">
-            {Blockly.Msg.settings_board}
-          </InputLabel>
-          <Select
-            variant="standard"
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={this.props.selectedBoard}
-            onChange={(e) => this.props.setBoard(e.target.value)}
-          >
-            <MenuItem value="mcu">senseBox MCU</MenuItem>
-            <MenuItem value="mini">senseBox MCU mini</MenuItem>
-            <MenuItem value="esp32">senseBox MCU-S2</MenuItem>
-          </Select>
-        </FormControl>
-      </div>
-    );
-  }
+          <MenuItem value="mcu">senseBox MCU</MenuItem>
+          <MenuItem value="mini">senseBox MCU mini</MenuItem>
+          <MenuItem value="esp32">senseBox MCU-S2</MenuItem>
+        </Select>
+      </FormControl>
+
+      <Snackbar
+        open={snackbarOpen}
+        message={snackInfo.message}
+        type={snackInfo.type}
+        key={snackInfo.key}
+      />
+    </div>
+  );
 }
-
-DeviceSelector.propTypes = {
-  setBoard: PropTypes.func.isRequired,
-  selectedBoard: PropTypes.string.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  selectedBoard: state.board.board,
-});
-
-export default connect(mapStateToProps, { setBoard })(DeviceSelector);
