@@ -1,148 +1,111 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import Dialog from "./Dialog";
-
-import withStyles from "@mui/styles/withStyles";
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import Dialog from "./ui/Dialog";
 import * as Blockly from "blockly";
-import { IconButton, Grid, Avatar, Typography } from "@mui/material";
+import {
+  IconButton,
+  Grid,
+  Avatar,
+  Typography,
+  Link,
+  useTheme,
+} from "@mui/material";
 import { setBoard } from "../actions/boardAction";
 
-const styles = (theme) => ({
-  link: {
-    color: theme.palette.primary.main,
-    textDecoration: "none",
-    "&:hover": {
-      color: theme.palette.primary.main,
-      textDecoration: `underline`,
+const DeviceSelection = () => {
+  const theme = useTheme();
+  const dispatch = useDispatch();
+  const currentBoard = useSelector((state) => state.board.board);
+
+  // Dialog geöffnet, wenn noch kein Board gesetzt ist
+  const [open, setOpen] = useState(!currentBoard);
+  const [selectedBoard, setSelectedBoard] = useState(currentBoard || "");
+
+  const boards = [
+    {
+      value: "mcu",
+      alt: "Sensebox MCU",
+      label: "senseBox MCU",
+      src: "/media/hardware/blockly_mcu.png",
     },
-  },
-  label: {
-    fontSize: "0.9rem",
-    color: "grey",
-  },
-});
+    {
+      value: "esp32",
+      alt: "Sensebox ESP",
+      label: "senseBox MCU-S2",
+      src: "/media/hardware/blockly_esp.png",
+    },
+    {
+      value: "mini",
+      alt: "Sensebox Mini",
+      label: "senseBox MCU:mini",
+      src: "/media/hardware/blockly_mini.png",
+    },
+  ];
 
-class DeviceSeclection extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      open: props.selectedBoard ? false : true,
-      selectedBoard: "",
-      saveSettings: false,
-    };
-  }
-
-  toggleDialog = () => {
-    this.props.setBoard(this.state.selectedBoard);
+  const handleBoardSelect = (value) => {
+    setSelectedBoard(value);
+    dispatch(setBoard(value));
+    setOpen(false);
   };
 
-  onChange = (e) => {
-    if (e.target.checked) {
-      this.setState({ saveSettings: true });
-    } else {
-      this.setState({ saveSettings: false });
-    }
-  };
-
-  onclick = (e, value) => {
-    this.setState({ selectedBoard: value });
-    this.props.setBoard(value);
-    this.setState({ open: !this.state });
-  };
-
-  render() {
-    return (
-      <Dialog
-        style={{ zIndex: 9999999 }}
-        fullWidth
-        maxWidth={"xl"}
-        open={this.state.open}
-        title={Blockly.Msg.deviceselection_head}
-        content={""}
-        onClick={this.toggleDialog}
-        disabled={this.state.selectedBoard === ""}
-      >
-        <div>
-          <Grid container spacing={2} style={{ textAlign: "center" }}>
-            <Grid item xs={4}>
-              <IconButton onClick={(e) => this.onclick(e, "mcu")} size="large">
-                <Avatar
-                  alt="Sensebox MCU"
-                  src="/media/hardware/blockly_mcu.png"
-                  style={{
-                    border:
-                      this.state.selectedBoard === "mcu"
-                        ? "medium solid DeepSkyBlue"
-                        : "0.1px solid lightgray",
-                    width: "10vw",
-                    height: "10vw",
-                  }}
-                />
-              </IconButton>
-              <p>senseBox MCU</p>
-            </Grid>
-            <Grid item xs={4}>
-              <IconButton
-                onClick={(e) => this.onclick(e, "esp32")}
-                size="large"
-              >
-                <Avatar
-                  alt="Sensebox ESP"
-                  src="/media/hardware/blockly_esp.png"
-                  style={{
-                    border:
-                      this.state.selectedBoard === "esp32"
-                        ? "medium solid DeepSkyBlue"
-                        : "0.1px solid lightgray",
-                    width: "10vw",
-                    height: "10vw",
-                  }}
-                />
-              </IconButton>
-              <p>senseBox MCU-S2</p>
-            </Grid>
-            <Grid item xs={4}>
-              <IconButton onClick={(e) => this.onclick(e, "mini")} size="large">
-                <Avatar
-                  alt="Sensebox Mini"
-                  src="/media/hardware/blockly_mini.png"
-                  style={{
-                    border:
-                      this.state.selectedBoard === "mini"
-                        ? "medium solid DeepSkyBlue"
-                        : "0.1px solid lightgray",
-                    width: "10vw",
-                    height: "10vw",
-                  }}
-                />
-              </IconButton>
-              <p>senseBox MCU:mini</p>
-            </Grid>
+  return (
+    <Dialog
+      open={open}
+      fullWidth
+      maxWidth="xl"
+      title={Blockly.Msg.deviceselection_head}
+      onClick={() => dispatch(setBoard(selectedBoard))}
+      disabled={!selectedBoard}
+      sx={{ zIndex: 9999999 }}
+    >
+      <Grid container spacing={2} sx={{ textAlign: "center" }}>
+        {boards.map(({ value, alt, label, src }) => (
+          <Grid item xs={4} key={value}>
+            <IconButton size="large" onClick={() => handleBoardSelect(value)}>
+              <Avatar
+                alt={alt}
+                src={src}
+                sx={{
+                  border:
+                    selectedBoard === value
+                      ? `3px solid ${theme.palette.primary.main}`
+                      : "0.1px solid lightgray",
+                  width: "10vw",
+                  height: "10vw",
+                }}
+              />
+            </IconButton>
+            <Typography sx={{ fontSize: "0.9rem" }}>{label}</Typography>
           </Grid>
-        </div>
-        <Typography variant="body1">
-          {Blockly.Msg.deviceselection_footnote}{" "}
-          <a href="https://sensebox.github.io/blockly/">Arduino UNO</a>{" "}
-          {Blockly.Msg.deviceselection_footnote_02}{" "}
-          <a href="https://sensebox-blockly.netlify.app/ardublockly/?board=sensebox-mcu">
-            senseBox MCU
-          </a>
-        </Typography>
-      </Dialog>
-    );
-  }
-}
+        ))}
+      </Grid>
 
-DeviceSeclection.propTypes = {
-  pageVisits: PropTypes.number.isRequired,
+      <Typography variant="body1" sx={{ mt: 2 }}>
+        {Blockly.Msg.deviceselection_footnote}{" "}
+        <Link
+          href="https://sensebox.github.io/blockly/"
+          sx={{
+            color: theme.palette.primary.main,
+            textDecoration: "none",
+            "&:hover": { textDecoration: "underline" },
+          }}
+        >
+          Arduino UNO
+        </Link>{" "}
+        {Blockly.Msg.deviceselection_footnote_02}{" "}
+        <Link
+          href="https://sensebox-blockly.netlify.app/ardublockly/?board=sensebox-mcu"
+          sx={{
+            color: theme.palette.primary.main,
+            textDecoration: "none",
+            "&:hover": { textDecoration: "underline" },
+          }}
+        >
+          senseBox MCU
+        </Link>
+      </Typography>
+    </Dialog>
+  );
 };
 
-const mapStateToProps = (state) => ({
-  pageVisits: state.general.pageVisits,
-  selectedBoard: state.board.board,
-});
-
-export default connect(mapStateToProps, { setBoard })(
-  withStyles(styles, { withTheme: true })(DeviceSeclection),
-);
+export default DeviceSelection;

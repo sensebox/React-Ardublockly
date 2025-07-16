@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { workspaceName } from "../../actions/workspaceActions";
-import SaveIcon from "../CodeEditor/SaveIcon";
+import { workspaceName } from "../../../actions/workspaceActions";
+import SaveIcon from "@/components/Pages/CodeEditor/SaveIcon";
 
 const resetTimeout = (id, newID) => {
   clearTimeout(id);
