@@ -98,7 +98,6 @@ function CompilationDialog({
 
   const handleDownloadURL = () => {
     const timestamp = new Date();
-
     const downloadUrl = `${compilerUrl}/download?id=${sketchId}&board=sensebox-mcu&filename=${filename}_v${counter}`;
     const link = document.createElement("a");
     link.href = downloadUrl;
