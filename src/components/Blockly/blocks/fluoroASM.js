@@ -42,6 +42,17 @@ Blockly.Blocks["sensebox_fluoroASM_setLED"] = {
       Blockly.Msg.senseBox_ws2818_rgb_led_brightness,
     );
     this.appendDummyInput()
+      .appendField(Blockly.Msg.fluoro_led)
+      .appendField(Blockly.Msg.fluoro_number)
+      .appendField(
+        new Blockly.FieldDropdown([
+          ["1", "1"],
+          ["2", "2"],
+          ["3", "3"],
+          ["4", "4"],
+        ]),
+        "LED_NUMBER",
+      )
       .appendField(Blockly.Msg.senseBox_basic_state)
       .appendField(
         new Blockly.FieldDropdown([
