@@ -124,7 +124,7 @@ export const UI = {
   resetDialog_headline: "Workspace zurücksetzen?",
   resetDialog_text:
     "Möchtest du wirklich die Workspace zurücksetzen? Hierbei werden alle Blöcke gelöscht!",
-
+  reset_text: "Zurücksetzen",
   /**
    * Share Dialog
    */

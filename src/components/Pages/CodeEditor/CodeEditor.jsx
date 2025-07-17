@@ -302,7 +302,7 @@ void loop() {
                   setResetDialog(false);
                 }}
               >
-                Zurücksetzen
+                {Blockly.Msg.reset_text}
               </Button>
             </div>
           </Dialog>
