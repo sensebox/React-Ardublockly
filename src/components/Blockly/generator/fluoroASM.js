@@ -10,16 +10,16 @@ Blockly.Generator.Arduino.forBlock["sensebox_fluoroASM_init"] = function () {
 Blockly.Generator.Arduino.forBlock["sensebox_fluoroASM_setLED"] = function (
   block,
 ) {
-  const ledColor = block.getFieldValue("LED_COLOR");
+  const ledNumber = block.getFieldValue("LED_NUMBER");
 
-  const code = `fluoroASM_setLED(${ledColor});\n`;
+  const code = `fluoroASM_setLED(${ledNumber});\n`;
   return code;
 };
 Blockly.Generator.Arduino.forBlock["sensebox_fluoroASM_setLED2"] = function (
   block,
 ) {
-  const ledColor = block.getFieldValue("LED_COLOR");
-
-  const code = `fluoroASM_setLED(${ledColor});\n`;
+  const ledNumber = block.getFieldValue("LED_NUMBER");
+  const status = block.getFieldValue("STAT");
+  const code = `fluoroASM_setLED(${ledNumber}, ${status});\n`;
   return code;
 };
