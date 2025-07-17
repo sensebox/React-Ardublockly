@@ -52,6 +52,6 @@ export const SOLAR = {
     "Ports to deactivate:",
   sensebox_solar_deep_sleep_and_restart_minimal_wake_up_time: "Wake-up time:",
   sensebox_solar_deep_sleep_and_restart_tooltip:
-    "This block puts the senseBox into a **power-saving deep sleep** for a specified time. This deactivates all functions and the sensors at the specified connections. After the specified time, the senseBox wakes up and restarts. This block is useful for solar operation. \n This block ensures that the senseBox has been awake for at least the specified time since the last restart. **If you use the deep sleep block at the end of the endless loop, place this block at the beginning of the endless loop to ensure that all sensors have been active for at least the specified time.** For example, a minimum wake-up time of 30 seconds is recommended for the particulate matter sensors.",
+    "This block puts the senseBox into a **power-saving deep sleep** for a specified time. During this time, all functions and connected sensors are disabled. After the specified time, the senseBox wakes up and restarts. This block is useful for solar operation.",
   sensebox_solar_deep_sleep_and_restart_helpurl: "",
 };
