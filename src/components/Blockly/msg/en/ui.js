@@ -121,6 +121,7 @@ export const UI = {
   resetDialog_headline: "Reset workspace?",
   resetDialog_text:
     "Do you really want to reset the workspace? All blocks will be deleted!",
+  reset_text: "Reset",
 
   /**
    * Share Dialog
