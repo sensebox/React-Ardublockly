@@ -312,10 +312,10 @@
   resolved "https://registry.yarnpkg.com/@blockly/toolbox-search/-/toolbox-search-2.0.16.tgz#b226097490fb9c69b79c7bee8f15d4644ed8b18d"
   integrity sha512-pg49w17DjV+BmjjRveMww1pGFm3ZKs6tX5oRnK0Uj5rCJIEWWIHsRpipcgZQ7U75vD2jFmvCVMzz0PZsPlhYvA==
 
-"@blockly/workspace-backpack@^7.0.0":
-  version "7.0.1"
-  resolved "https://registry.yarnpkg.com/@blockly/workspace-backpack/-/workspace-backpack-7.0.1.tgz#342b97a5e7336876a4b695352b7a1cbecbcb5c7b"
-  integrity sha512-kSl7CYTZ1aPvDX0vkkel8/KCMJjyYh7bHs3ZlWuKDAsCIuWpxZ4bcKawfCXIpw5V9dNAoiRAXEMEY0Vc6dn3Tw==
+"@blockly/workspace-backpack@^6.0.9":
+  version "6.0.16"
+  resolved "https://registry.yarnpkg.com/@blockly/workspace-backpack/-/workspace-backpack-6.0.16.tgz#9a96e009aa47c0b9c181fbb46b5533c23639838d"
+  integrity sha512-jZZgThFkGEBGYcBtWzMTTFE3XkepqIBTTcLVKODhw5zPNABtGRwcys4wh/I7c925Wbbm+pKfDa3XdzjbgkQGVQ==
 
 "@blockly/workspace-minimap@^0.2.9":
   version "0.2.16"
