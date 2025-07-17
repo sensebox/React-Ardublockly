@@ -401,7 +401,7 @@ export const ToolboxEsp = () => {
           <Block type="sensebox_ble_init"></Block>
         </Category> */}
       </Category>
-      <Category id="QOOOL" name="QOOOL" colour={getColour().sensebox}>
+      <Category id="QOOOL" name="QOOOL" colour={"#b7b645"}>
         <Block type="sensebox_fluoroASM_init"></Block>
         <Block type="sensebox_fluoroASM_setLED2"></Block>
       </Category>{" "}
