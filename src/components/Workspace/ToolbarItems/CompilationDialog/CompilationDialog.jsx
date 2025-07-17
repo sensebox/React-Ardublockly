@@ -108,6 +108,7 @@ function CompilationDialog({
 
   const handleClose = (event, reason) => {
     const shouldClose =
+      error ||
       activeStep === 2 ||
       (reason !== "backdropClick" && reason !== "escapeKeyDown");
 
@@ -123,7 +124,7 @@ function CompilationDialog({
     <Dialog
       open={open}
       onClose={handleClose}
-      disableEscapeKeyDown={activeStep !== 2}
+      disableEscapeKeyDown={activeStep !== 2 || !error}
       // Feste Größe über PaperProps: Breite und Höhe passen für alle Steps
       PaperProps={{
         style: { width: "600px", minHeight: "600px", maxHeight: "600px" },
