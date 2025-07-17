@@ -41,13 +41,17 @@ export const SOLAR = {
   /**
    * Deep Sleep and Restart
    */
-  sensebox_solar_deep_sleep_and_restart:
-    "Power-saving deep sleep and restart after",
+  sensebox_solar_deep_sleep_and_restart: "Power-saving deep sleep and restart",
+  sensebox_solar_deep_sleep_and_restart_sleep_time: "Sleep time:",
   sensebox_solar_deep_sleep_and_restart_hours: "hours",
   sensebox_solar_deep_sleep_and_restart_minutes: "minutes",
   sensebox_solar_deep_sleep_and_restart_seconds: "seconds",
-  sensebox_solar_deep_sleep_and_restart_milliseconds: "milliseconds",
+  sensebox_solar_deep_sleep_and_restart_milliseconds: "Milliseconds",
+  sensebox_solar_milliseconds: "Milliseconds",
+  sensebox_solar_deep_sleep_and_restart_deactivate_ports:
+    "Ports to deactivate:",
+  sensebox_solar_deep_sleep_and_restart_minimal_wake_up_time: "Wake-up time:",
   sensebox_solar_deep_sleep_and_restart_tooltip:
-    "This block puts the senseBox into a **power-saving deep sleep** for a specified time. During this time, all functions and connected sensors are disabled. After the specified time, the senseBox wakes up and restarts. This block is useful for solar operation.",
+    "This block puts the senseBox into a **power-saving deep sleep** for a specified time. This deactivates all functions and the sensors at the specified connections. After the specified time, the senseBox wakes up and restarts. This block is useful for solar operation. \n This block ensures that the senseBox has been awake for at least the specified time since the last restart. **If you use the deep sleep block at the end of the endless loop, place this block at the beginning of the endless loop to ensure that all sensors have been active for at least the specified time.** For example, a minimum wake-up time of 30 seconds is recommended for the particulate matter sensors.",
   sensebox_solar_deep_sleep_and_restart_helpurl: "",
 };
