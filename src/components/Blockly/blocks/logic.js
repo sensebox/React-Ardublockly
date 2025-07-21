@@ -1,5 +1,5 @@
 import * as Blockly from "blockly/core";
-import { getColour } from "../helpers/colour";
+import { getColour } from "@/components/Blockly/helpers/colour";
 import * as Types from "../helpers/types";
 import { getCompatibleTypes } from "../helpers/types";
 

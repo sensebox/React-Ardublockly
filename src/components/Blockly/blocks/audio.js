@@ -1,7 +1,7 @@
 import * as Blockly from "blockly/core";
-import { selectedBoard } from "../helpers/board";
+import { selectedBoard } from "@/components/Blockly/helpers/board";
 import * as Types from "../helpers/types";
-import { getColour } from "../helpers/colour";
+import { getColour } from "@/components/Blockly/helpers/colour";
 
 Blockly.Blocks["io_tone"] = {
   init: function () {
