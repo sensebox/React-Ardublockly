@@ -595,7 +595,7 @@ class Builder extends Component {
                       variant="contained"
                       onClick={() => this.resetFull()}
                     >
-                      Zurücksetzen
+                      {Blockly.Msg.reset_text}
                     </Button>
                   </div>
                 ) : (
@@ -616,7 +616,7 @@ class Builder extends Component {
                       variant="contained"
                       onClick={() => this.resetTutorial()}
                     >
-                      Zurücksetzen
+                      {Blockly.Msg.reset_text}
                     </Button>
                   </div>
                 )}

@@ -119,7 +119,7 @@ class ResetWorkspace extends Component {
                 this.toggleDialog();
               }}
             >
-              Zurücksetzen
+              {Blockly.Msg.reset_text}
             </Button>
           </div>
         </Dialog>
