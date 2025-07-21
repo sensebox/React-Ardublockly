@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import MonacoEditor from "@monaco-editor/react";
 import * as Blockly from "blockly";
+import Simulator from "../Simulator";
 
 const Accordion = styled(MuiAccordion)(({ theme }) => ({
   border: `1px solid ${theme.palette.secondary.main}`,
@@ -36,7 +37,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(() => ({
 const CodeViewer = () => {
   const arduino = useSelector((s) => s.workspace.code.arduino);
   const xml = useSelector((s) => s.workspace.code.xml);
-  const [expandedPanel, setExpandedPanel] = useState("arduino");
+  const [expandedPanel, setExpandedPanel] = useState("simulator");
 
   const handleChange = (panel) => (_, isExpanded) => {
     setExpandedPanel(isExpanded ? panel : false);
@@ -53,8 +54,8 @@ const CodeViewer = () => {
     >
       <Accordion
         style={{ width: "100%" }}
-        expanded={expandedPanel === "arduino"}
-        onChange={handleChange("arduino")}
+        expanded={expandedPanel === "simulator"}
+        onChange={handleChange("simulator")}
         sx={{ margin: 0 }}
       >
         <AccordionSummary>
@@ -74,12 +75,7 @@ const CodeViewer = () => {
             bgcolor: "background.paper",
           }}
         >
-          <MonacoEditor
-            height="100%"
-            defaultLanguage="cpp"
-            value={arduino}
-            options={{ readOnly: true, fontSize: 16 }}
-          />
+          <Simulator />
         </AccordionDetails>
       </Accordion>
 

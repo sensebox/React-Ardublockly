@@ -1,5 +1,5 @@
 import * as Blockly from "blockly";
-import { getColour } from "../helpers/colour";
+import { getColour } from "@/components/Blockly/helpers/colour";
 import * as Types from "../helpers/types";
 
 Blockly.Blocks["sensebox_esp_now"] = {

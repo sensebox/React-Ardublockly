@@ -1,7 +1,7 @@
 import * as Blockly from "blockly/core";
-import { getColour } from "../helpers/colour";
+import { getColour } from "@/components/Blockly/helpers/colour";
 
-import store from "../../../store";
+import store from "@/store";
 
 var boxes = store.getState().auth.user
   ? store.getState().auth.user.boxes

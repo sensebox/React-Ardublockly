@@ -8,7 +8,7 @@ import {
   Sep,
   Label,
 } from "..";
-import { getColour } from "../helpers/colour";
+import { getColour } from "@/components/Blockly/helpers/colour";
 import * as Blockly from "blockly/core";
 import "@blockly/toolbox-search";
 import "./search-category.css";

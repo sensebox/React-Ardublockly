@@ -7,8 +7,9 @@ import BlocklyComponent from "./BlocklyComponent";
 import BlocklySvg from "./BlocklySvg";
 
 import * as Blockly from "blockly/core";
-import "./blocks/index";
-import "./generator/index";
+import "@/components/Blockly/blocks/index";
+import "@/components/Blockly/generator/javascript/index";
+import "@/components/Blockly/generator/arduino/index";
 import { ZoomToFitControl } from "@blockly/zoom-to-fit";
 import { initialXml } from "./initialXml.js";
 import { getMaxInstances } from "./helpers/maxInstances";

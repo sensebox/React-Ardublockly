@@ -1,7 +1,7 @@
 import * as Blockly from "blockly";
-import { getColour } from "../helpers/colour";
+import { getColour } from "@/components/Blockly/helpers/colour";
 import * as Types from "../helpers/types";
-import { selectedBoard } from "../helpers/board";
+import { selectedBoard } from "@/components/Blockly/helpers/board";
 import { FieldGridDropdown } from "@blockly/field-grid-dropdown";
 import { FieldSlider } from "@blockly/field-slider";
 import { withBoardParam } from "../helpers/helpUrlBuilder";
