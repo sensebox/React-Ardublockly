@@ -1,11 +1,10 @@
-import * as Blockly from "blockly/core";
-import { javascriptGenerator } from "blockly/javascript";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { Sparklines, SparklinesLine } from "react-sparklines";
 
 const GraphViewer = () => {
-  const modules = useSelector((state) => state.simulator.modules);
   const moduleValues = useSelector((state) => state.simulator.moduleValues);
+  const [history, setHistory] = useState({});
 
   const ignoredModules = [
     "sensebox_fluoroASM_init",
@@ -15,21 +14,42 @@ const GraphViewer = () => {
   ];
 
   useEffect(() => {
-    console.log("new values", moduleValues);
+    setHistory((prev) => {
+      const updated = { ...prev };
+
+      for (const key in moduleValues) {
+        if (ignoredModules.includes(key)) continue;
+
+        const value = moduleValues[key];
+        if (typeof value !== "number") continue;
+
+        const safeKey = key.toLowerCase();
+        const prevList = updated[safeKey] || [];
+
+        updated[safeKey] = [...prevList, value];
+      }
+
+      return updated;
+    });
   }, [moduleValues]);
 
   return (
     <div>
-      {Object.keys(moduleValues).map((value, index) => {
-        if (ignoredModules.includes(value)) {
-          return null;
-        }
-        return (
-          <div key={index}>
-            {value}: {moduleValues[value]}
-          </div>
-        );
-      })}
+      {Object.keys(moduleValues)
+        .filter((key) => !ignoredModules.includes(key))
+        .map((key) => {
+          const safeKey = key.toLowerCase();
+          const data = history[safeKey] || [];
+
+          return (
+            <div key={key} style={{ marginBottom: "1rem" }}>
+              <strong>{key}</strong>: {moduleValues[key]}
+              <Sparklines data={data} width={100} height={20}>
+                <SparklinesLine color="#00cccc" />
+              </Sparklines>
+            </div>
+          );
+        })}
     </div>
   );
 };
