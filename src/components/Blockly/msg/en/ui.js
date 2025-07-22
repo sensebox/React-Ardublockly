@@ -320,6 +320,7 @@ export const UI = {
   codeviewer_xml: "XML Blocks",
   codeviewer_simulator: "Simulator",
   codeviewer_debug: "Debug",
+  codeviewer_graph: "Graph",
 
   /**
    * Overlay

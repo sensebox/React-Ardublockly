@@ -8,7 +8,7 @@ import {
   faMousePointer, // Klicks
   faWrench, // Simulator
 } from "@fortawesome/free-solid-svg-icons";
-import { selectLogs } from "../reducers/logReducer";
+import { selectLogs } from "../../reducers/logReducer";
 
 const TYPE_CONFIG = {
   blockly: { color: "green", icon: faCubes },
