@@ -1,49 +1,38 @@
-import React, { useState, memo, useEffect, use } from "react";
-import { Handle, Position } from "@xyflow/react";
-import { Checkbox, InputLabel, MenuItem, Select } from "@mui/material";
-import { Input } from "blockly/core";
+import React, { memo } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addLog } from "@/actions/logReducer";
+import {
+  setFilterEnabled,
+  setDiamondEnabled,
+  setFilterOffset,
+  setFilterColour,
+  setLedColor,
+} from "@/actions/fluoroActions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import SvgFluoroBee from "./svg";
-import { useDispatch } from "react-redux";
-import { addLog } from "@/actions/logReducer";
 
-const FluoroASM = ({ data }) => {
+const offsets = {
+  Led1: 0,
+  Led2: -13,
+  Led3: -26,
+  Led4: -39,
+};
+
+const FluoroASM = () => {
   const dispatch = useDispatch();
+  const {
+    filterEnabled,
+    diamondEnabled,
+    filterOffset,
+    filterColour,
+    ledColor,
+  } = useSelector((state) => state.fluoroASM);
 
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [filterEnabled, setFilterEnabled] = useState(false);
-  const [diamondEnabled, setDiamondEnabled] = useState(false);
-  const [ledColor, setLedColor] = useState("yellow");
-  const [filterOffset, setFilterOffset] = React.useState(0);
-  const [ledSelected, setLedSelected] = React.useState(0);
-  const [filterColour, setFilterColour] = useState("#f90c0c");
-
-  const offsets = {
-    Led1: 0,
-    Led2: -13,
-    Led3: -26,
-    Led4: -39,
-  };
-
-  useEffect(() => {
-    setLedSelected(Object.values(offsets).indexOf(filterOffset) + 1 || 0);
-  }, [filterOffset]);
-
-  useEffect(() => {
-    if (!filterEnabled) setDiamondEnabled(false);
-  }, [filterEnabled]);
-
-  const toggleMenu = () => {
-    setMenuOpen((prev) => !prev);
-  };
-
-  const closeMenu = (e) => {
-    e.stopPropagation(); // verhindert, dass der Klick den Node erneut toggled
-    setMenuOpen(false);
-  };
+  const ledSelected = Object.values(offsets).indexOf(filterOffset) + 1 || 0;
 
   const handleFilterChange = (e) => {
+    dispatch(setFilterEnabled(e.target.checked));
     dispatch(
       addLog({
         type: "simulator",
@@ -51,13 +40,14 @@ const FluoroASM = ({ data }) => {
         title: "FluoroASM",
       }),
     );
-    setFilterEnabled(e.target.checked);
   };
 
   const handleDiamondChange = (e) => {
-    setDiamondEnabled(e.target.checked);
+    dispatch(setDiamondEnabled(e.target.checked));
   };
+
   const handleFilterColourChange = (e) => {
+    dispatch(setFilterColour(e.target.value));
     dispatch(
       addLog({
         type: "simulator",
@@ -65,16 +55,19 @@ const FluoroASM = ({ data }) => {
         title: "FluoroASM",
       }),
     );
-    setFilterColour(e.target.value);
+  };
+
+  const handleFilterOffsetChange = (e) => {
+    dispatch(setFilterOffset(parseInt(e.target.value)));
   };
 
   const handleLedColorChange = (e) => {
-    setLedColor(e.target.value);
+    dispatch(setLedColor(e.target.value));
   };
 
-  // State für den vertikalen Offset des Filters
-
   const moveFilterUp = (e) => {
+    e.stopPropagation();
+    dispatch(setFilterOffset(filterOffset - 13));
     dispatch(
       addLog({
         type: "simulator",
@@ -82,12 +75,11 @@ const FluoroASM = ({ data }) => {
         title: "FluoroASM",
       }),
     );
-    // stop menu from toggling
-    e.stopPropagation();
-    setFilterOffset((prev) => prev - 13);
   };
 
   const moveFilterDown = (e) => {
+    e.stopPropagation();
+    dispatch(setFilterOffset(filterOffset + 13));
     dispatch(
       addLog({
         type: "simulator",
@@ -95,19 +87,18 @@ const FluoroASM = ({ data }) => {
         title: "FluoroASM",
       }),
     );
+  };
 
-    // stop menu from toggling
+  const [menuOpen, setMenuOpen] = React.useState(false);
+  const toggleMenu = () => setMenuOpen((prev) => !prev);
+  const closeMenu = (e) => {
     e.stopPropagation();
-    setFilterOffset((prev) => prev + 13);
+    setMenuOpen(false);
   };
 
   return (
     <div
-      style={{
-        minWidth: "150px",
-        position: "relative",
-        cursor: "pointer",
-      }}
+      style={{ minWidth: "150px", position: "relative", cursor: "pointer" }}
       onClick={toggleMenu}
     >
       <SvgFluoroBee
@@ -117,6 +108,7 @@ const FluoroASM = ({ data }) => {
         diamondEnabled={diamondEnabled}
         filterColour={filterColour}
       />
+
       {filterEnabled && (
         <div
           style={{
@@ -130,22 +122,21 @@ const FluoroASM = ({ data }) => {
           <button
             disabled={filterOffset === offsets.Led4}
             onClick={moveFilterUp}
-            style={{ marginBottom: "5px" }}
           >
-            <FontAwesomeIcon icon={faArrowUp} />{" "}
+            <FontAwesomeIcon icon={faArrowUp} />
           </button>
           <button
             disabled={filterOffset === offsets.Led1}
             onClick={moveFilterDown}
           >
-            <FontAwesomeIcon icon={faArrowDown} />{" "}
+            <FontAwesomeIcon icon={faArrowDown} />
           </button>
         </div>
       )}
 
       {menuOpen && (
         <div
-          onClick={(e) => e.stopPropagation()} //
+          onClick={(e) => e.stopPropagation()}
           style={{
             position: "absolute",
             bottom: "100%",
@@ -162,7 +153,7 @@ const FluoroASM = ({ data }) => {
           }}
         >
           <span style={{ color: "white", fontSize: "0.9rem" }}>
-            Filter aktiv{" "}
+            Filter aktiv
           </span>
           <input
             type="checkbox"
@@ -170,42 +161,52 @@ const FluoroASM = ({ data }) => {
             onChange={handleFilterChange}
           />
           <br />
+
           {filterEnabled && (
-            <div>
+            <>
               <span style={{ color: "white", fontSize: "0.9rem" }}>
-                Filter an:{" "}
+                Filter an:
               </span>
-              <select
-                value={filterOffset}
-                onChange={(e) => setFilterOffset(parseInt(e.target.value))}
-              >
-                {Object.keys(offsets).map((key) => (
-                  <option key={key} value={offsets[key]}>
-                    {key}
+              <select value={filterOffset} onChange={handleFilterOffsetChange}>
+                {Object.entries(offsets).map(([label, value]) => (
+                  <option key={label} value={value}>
+                    {label}
                   </option>
                 ))}
               </select>
-              <br></br>
+
+              <br />
               <span style={{ color: "white", fontSize: "0.9rem" }}>
-                Diamant aktiv{" "}
+                Diamant aktiv
               </span>
               <input
                 type="checkbox"
                 checked={diamondEnabled}
                 onChange={handleDiamondChange}
               />
-              <br></br>
+
+              <br />
               <span style={{ color: "white", fontSize: "0.9rem" }}>
-                Filter Farbe:{" "}
+                Filter Farbe:
               </span>
               <select value={filterColour} onChange={handleFilterColourChange}>
                 <option value="#f90c0c">Rot</option>
                 <option value="#280cf9">Blau</option>
               </select>
-            </div>
+
+              <br />
+              <span style={{ color: "white", fontSize: "0.9rem" }}>
+                LED Farbe:
+              </span>
+              <select value={ledColor} onChange={handleLedColorChange}>
+                <option value="#FFFF66">Gelb</option>
+                <option value="#3399FF">Blau</option>
+                <option value="#33FF33">Grün</option>
+                <option value="#FF3333">Rot</option>
+              </select>
+            </>
           )}
 
-          {/* Close-Button */}
           <div
             style={{
               position: "absolute",
@@ -220,8 +221,6 @@ const FluoroASM = ({ data }) => {
           >
             ×
           </div>
-
-          {/* Tooltip-Pfeil */}
           <div
             style={{
               position: "absolute",
@@ -242,28 +241,3 @@ const FluoroASM = ({ data }) => {
 };
 
 export default memo(FluoroASM);
-
-/** 
-<div >
-
-
-<div>
-<span style={{ fontSize: "0.9rem" ,color:'white'}}>Filter typ: </span>
-
-<select value={ledColor} onChange={handleLedColorChange}>
-<option value="with">mit Diamant</option>
-<option value="without">ohne Diamant</option>
-</select>
-</div>
-
-<div>
-  <span style={{ color:'white', fontSize: "0.9rem" }}>LED Farbe: </span>
-  <select value={ledColor} onChange={handleLedColorChange}>
-    <option value="#FFFF66">Gelb</option>
-    <option value="#3399FF">Blau</option>
-    <option value="#33FF33">Grün</option>
-    <option value="#FF3333">Rot</option>
-  </select>
-</div>
-</div>
-*/

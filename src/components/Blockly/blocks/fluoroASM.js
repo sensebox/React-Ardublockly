@@ -6,13 +6,80 @@ import { Block } from "..";
 Blockly.Blocks["sensebox_fluoroASM_init"] = {
   init: function () {
     this.appendDummyInput().appendField("Init FluoroASM Bee");
+
+    this.appendDummyInput()
+      .appendField("Filter aktiv")
+      .appendField(
+        new Blockly.FieldCheckbox("TRUE", function (value) {
+          window.dispatchRedux?.({
+            type: "FLUORO_SET_FILTER_ENABLED",
+            payload: value === "TRUE",
+          });
+        }),
+        "FILTER_ACTIVE",
+      );
+
+    this.appendDummyInput()
+      .appendField("Filter an:")
+      .appendField(
+        new Blockly.FieldDropdown(
+          [
+            ["Led1", "LED1"],
+            ["Led2", "LED2"],
+            ["Led3", "LED3"],
+          ],
+          function (value) {
+            const offsetMap = { LED1: 0, LED2: -13, LED3: -26 };
+            window.dispatchRedux?.({
+              type: "FLUORO_SET_FILTER_OFFSET",
+              payload: offsetMap[value],
+            });
+          },
+        ),
+        "FILTER_TARGET",
+      );
+
+    this.appendDummyInput()
+      .appendField("Diamant aktiv")
+      .appendField(
+        new Blockly.FieldCheckbox("FALSE", function (value) {
+          window.dispatchRedux?.({
+            type: "FLUORO_SET_DIAMOND_ENABLED",
+            payload: value === "TRUE",
+          });
+        }),
+        "DIAMOND_ACTIVE",
+      );
+
+    this.appendDummyInput()
+      .appendField("Filter Farbe:")
+      .appendField(
+        new Blockly.FieldDropdown(
+          [
+            ["Rot", "RED"],
+            ["Grün", "GREEN"],
+            ["Blau", "BLUE"],
+          ],
+          function (value) {
+            const colorMap = {
+              RED: "#f90c0c",
+              GREEN: "#33FF33",
+              BLUE: "#280cf9",
+            };
+            window.dispatchRedux?.({
+              type: "FLUORO_SET_FILTER_COLOR",
+              payload: colorMap[value],
+            });
+          },
+        ),
+        "FILTER_COLOR",
+      );
+
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(getColour().sensebox);
-
     this.setTooltip(Blockly.Msg.tooltip_text);
-
-    this.setHelpUrl(text);
+    this.setHelpUrl("");
   },
 };
 

@@ -9,6 +9,7 @@ import authReducer from "./authReducer";
 import boardReducer from "./boardReducer";
 import sensorwikiReducer from "./sensorwikiReducer";
 import simulatorReducer from "./simulatorReducer";
+import { fluoroASMReducer } from "./fluoroASMReducer";
 
 export default combineReducers({
   auth: authReducer,
@@ -21,4 +22,5 @@ export default combineReducers({
   message: messageReducer,
   sensorwiki: sensorwikiReducer,
   simulator: simulatorReducer,
+  fluoroASM: fluoroASMReducer,
 });
