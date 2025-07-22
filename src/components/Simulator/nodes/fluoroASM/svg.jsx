@@ -33,6 +33,20 @@ const SvgFluoroBee = (props) => {
     led4: "#FFFF66",
   };
 
+  const getDiamondColor = () => {
+    if (filterOffset === 0) return "white";
+    if (filterOffset === 13.4) return "white";
+    if (filterOffset === 27.2) return "#b42041";
+    if (filterOffset === 40.4) return "#b42041";
+  };
+
+  const getDiamondOpacity = () => {
+    if (filterOffset === 0) return 0.3;
+    if (filterOffset === 13.4) return 0.3;
+    if (filterOffset === 27.2) return 0.5;
+    if (filterOffset === 40.4) return 0.5;
+  };
+
   React.useEffect(() => {
     console.log(filterOffset);
   }, [filterOffset]);
@@ -587,16 +601,15 @@ const SvgFluoroBee = (props) => {
             ></ellipse>
           </g>
         )}
-        {props.diamondEnabled && (
+        {diamondEnabled && (
           <g
             id="fluoroDiamond"
-            fill={diamondColors[props.ledSelected - 1]}
-            fillOpacity="0.8"
-            stroke="#000"
+            fillOpacity={getDiamondOpacity()}
+            fill={getDiamondColor()}
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth="2.306"
-            transform={`translate(40 ${87 + props.filterOffset})scale(0.09)`}
+            transform={`translate(42 ${57 + filterOffset})scale(0.05)`}
           >
             <path
               id="path1"
