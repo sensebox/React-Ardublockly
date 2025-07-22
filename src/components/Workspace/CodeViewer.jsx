@@ -73,7 +73,7 @@ const CodeViewer = () => {
         </AccordionSummary>
         <AccordionDetails
           sx={{
-            height: "calc(50vh - 50px - 55px - 50px)",
+            height: "calc(50vh - 50px - 55px )",
             bgcolor: "background.paper",
           }}
         >
@@ -100,37 +100,11 @@ const CodeViewer = () => {
         </AccordionSummary>
         <AccordionDetails
           sx={{
-            height: "calc(50vh - 50px - 50px - 50px)",
+            height: "calc(50vh - 50px - 50px )",
             bgcolor: "background.paper",
           }}
         >
           <DebugViewer />
-        </AccordionDetails>
-      </Accordion>
-      <Accordion
-        style={{ width: "100%" }}
-        expanded={expandedPanel === "graph"}
-        onChange={handleChange("graph")}
-        sx={{ margin: 0 }}
-      >
-        <AccordionSummary>
-          <Typography
-            component="span"
-            sx={{ fontSize: 20, fontWeight: "bold", mr: 1, width: 35 }}
-          >
-            {"[ ]"}
-          </Typography>
-          <Typography sx={{ m: "auto 5px 2px 0" }}>
-            {Blockly.Msg.codeviewer_graph}
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails
-          sx={{
-            height: "calc(50vh - 50px - 50px)",
-            bgcolor: "background.paper",
-          }}
-        >
-          <GraphViewer />
         </AccordionDetails>
       </Accordion>
     </Card>
