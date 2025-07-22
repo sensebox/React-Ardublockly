@@ -142,7 +142,7 @@ const SensorNode = ({ title, sensors, imageSrc, width = "300px" }) => {
           </div>
         ))}
       </div>
-      )
+
       <Handle
         type="source"
         position={Position.Right}
