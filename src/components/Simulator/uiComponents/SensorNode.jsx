@@ -49,7 +49,6 @@ const SensorNode = ({ title, sensors, imageSrc, width = "300px" }) => {
       >
         {title}
       </span>
-
       {/* Image that opens the overlay when clicked */}
       <img
         src={imageSrc}
@@ -60,93 +59,90 @@ const SensorNode = ({ title, sensors, imageSrc, width = "300px" }) => {
           pointerEvents: "none",
         }}
       />
-
       {/* Overlay with the sliders */}
-      {showOverlay && (
+      <div
+        style={{
+          position: "absolute",
+          bottom: "0",
+          left: "0",
+          right: "0",
+          padding: "15px",
+          background: "#1b7d10b3", // Transparent background
+          display: showOverlay ? "flex" : "none",
+          flexDirection: "column",
+          gap: "15px",
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Close button */}
         <div
           style={{
             position: "absolute",
-            bottom: "0",
-            left: "0",
-            right: "0",
-            padding: "15px",
-            background: "#1b7d10b3", // Transparent background
-            display: "flex",
-            flexDirection: "column",
-            gap: "15px",
+            top: "10px",
+            right: "15px",
+            cursor: "pointer",
+            fontWeight: "bold",
+            color: "#ffcc33",
+            fontSize: "1.5rem",
+            userSelect: "none",
+            zIndex: 2,
           }}
-          onClick={(e) => e.stopPropagation()}
+          onClick={() => setShowOverlay(false)}
         >
-          {/* Close button */}
+          <FontAwesomeIcon icon={faClose} />
+        </div>
+        {sensors.map((sensor) => (
           <div
+            key={sensor.id}
             style={{
-              position: "absolute",
-              top: "10px",
-              right: "15px",
-              cursor: "pointer",
-              fontWeight: "bold",
-              color: "#ffcc33",
-              fontSize: "1.5rem",
-              userSelect: "none",
-              zIndex: 2,
+              display: "flex",
+              alignItems: "center",
             }}
-            onClick={() => setShowOverlay(false)}
+            className="nodrag"
           >
-            <FontAwesomeIcon icon={faClose} />
-          </div>
-          {sensors.map((sensor) => (
-            <div
-              key={sensor.id}
-              style={{
-                display: "flex",
-                alignItems: "center",
-              }}
-              className="nodrag"
-            >
-              <span style={{ fontSize: "2rem", marginRight: "10px" }}>
-                {sensor.emoji}
-              </span>
-              <div style={{ flex: 1 }}>
-                <div
+            <span style={{ fontSize: "2rem", marginRight: "10px" }}>
+              {sensor.emoji}
+            </span>
+            <div style={{ flex: 1 }}>
+              <div
+                style={{
+                  fontWeight: "bold",
+                  marginBottom: "6px",
+                  color: "#ffcc33",
+                }}
+              >
+                {sensor.label}
+              </div>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <input
+                  type="range"
+                  id={sensor.id + "-slider"}
+                  min={sensor.min}
+                  max={sensor.max}
+                  step={sensor.step ?? 1}
+                  value={values[sensor.id]}
+                  onChange={handleChange(sensor.id)}
                   style={{
-                    fontWeight: "bold",
-                    marginBottom: "6px",
-                    color: "#ffcc33",
+                    width: "100%",
+                    accentColor: "#00cccc",
+                  }}
+                />
+                <span
+                  style={{
+                    marginLeft: "10px",
+                    minWidth: "50px",
+                    textAlign: "right",
+                    color: "#fff",
                   }}
                 >
-                  {sensor.label}
-                </div>
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <input
-                    type="range"
-                    id={sensor.id + "-slider"}
-                    min={sensor.min}
-                    max={sensor.max}
-                    step={sensor.step ?? 1}
-                    value={values[sensor.id]}
-                    onChange={handleChange(sensor.id)}
-                    style={{
-                      width: "100%",
-                      accentColor: "#00cccc",
-                    }}
-                  />
-                  <span
-                    style={{
-                      marginLeft: "10px",
-                      minWidth: "50px",
-                      textAlign: "right",
-                      color: "#fff",
-                    }}
-                  >
-                    {values[sensor.id]}
-                  </span>
-                </div>
+                  {values[sensor.id]}
+                </span>
               </div>
             </div>
-          ))}
-        </div>
-      )}
-
+          </div>
+        ))}
+      </div>
+      )
       <Handle
         type="source"
         position={Position.Right}
