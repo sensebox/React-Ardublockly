@@ -397,61 +397,11 @@ export const ToolboxEsp = () => {
           <Block type="sensebox_phyphox_channel"></Block>
           <Block type="sensebox_phyphox_sendchannel"></Block>
         </Category>
-        {/* <Category id="senseboxble" name="senseBox BLE" colour={getColour().phyphox}>
-          <Block type="sensebox_ble_init"></Block>
-        </Category> */}
       </Category>
-      {/* <Category id="sensebox_solar" name="Solar" colour={getColour().solar}>
-        <Block type="sensebox_solar_charger_SB041">
-          <Field name="value">battery_level</Field>
-        </Block>
-        <Block type="sensebox_solar_ensure_wake_time">
-          <Field name="wake_time">30</Field>
-          <Field name="time_scale"> * 1000</Field>
-        </Block>
-        <Block type="sensebox_solar_deep_sleep_and_restart">
-          <Field name="sleep_time">30</Field>
-          <Field name="time_scale">60000</Field>
-          <Field name="powerOffGPIO">TRUE</Field>
-          <Field name="powerOffUART">TRUE</Field>
-          <Field name="powerOffXB">TRUE</Field>
-        </Block>
-        <Block type="controls_ifelse">
-          <Value name="IF0">
-            <Block type="logic_compare">
-              <Field name="OP">GT</Field>
-              <Value name="A">
-                <Block type="sensebox_solar_charger_SB041">
-                  <Field name="value">battery_level</Field>
-                </Block>
-              </Value>
-              <Value name="B">
-                <Block type="math_number">
-                  <Field name="NUM">2</Field>
-                </Block>
-              </Value>
-            </Block>
-          </Value>
-          <Statement name="DO0">
-            <Block type="sensebox_solar_deep_sleep_and_restart">
-              <Field name="sleep_time">30</Field>
-              <Field name="time_scale">60000</Field>
-              <Field name="powerOffGPIO">TRUE</Field>
-              <Field name="powerOffUART">TRUE</Field>
-              <Field name="powerOffXB">TRUE</Field>
-            </Block>
-          </Statement>
-          <Statement name="ELSE">
-            <Block type="sensebox_solar_deep_sleep_and_restart">
-              <Field name="sleep_time">12</Field>
-              <Field name="time_scale">3600000</Field>
-              <Field name="powerOffGPIO">TRUE</Field>
-              <Field name="powerOffUART">TRUE</Field>
-              <Field name="powerOffXB">TRUE</Field>
-            </Block>
-          </Statement>
-        </Block>
-      </Category> */}
+      <Category id="QOOOL" name="QOOOL" colour={"#c67d3f"}>
+        <Block type="sensebox_fluoroASM_init"></Block>
+        <Block type="sensebox_fluoroASM_setLED2"></Block>
+      </Category>
       <Category id="webserver" name="Webserver" colour={getColour().webserver}>
         <Block type="sensebox_initialize_http_server"></Block>
         <Block type="sensebox_http_on_client_connect"></Block>
