@@ -47,6 +47,10 @@ const FluoroASM = () => {
   };
 
   const handleFilterColourChange = (e) => {
+    // Safari fix to release mouse
+    const evt = new MouseEvent("mouseup", { bubbles: true });
+    document.dispatchEvent(evt);
+
     dispatch(setFilterColour(e.target.value));
     dispatch(
       addLog({
@@ -58,15 +62,26 @@ const FluoroASM = () => {
   };
 
   const handleFilterOffsetChange = (e) => {
+    // Safari fix to release mouse
+    const evt = new MouseEvent("mouseup", { bubbles: true });
+    document.dispatchEvent(evt);
     dispatch(setFilterOffset(parseInt(e.target.value)));
   };
 
   const handleLedColorChange = (e) => {
+    // Safari fix to release mouse
+    const evt = new MouseEvent("mouseup", { bubbles: true });
+    document.dispatchEvent(evt);
+
     dispatch(setLedColor(e.target.value));
   };
 
   const moveFilterUp = (e) => {
     e.stopPropagation();
+    // Safari fix to release mouse
+    const evt = new MouseEvent("mouseup", { bubbles: true });
+    document.dispatchEvent(evt);
+
     dispatch(setFilterOffset(filterOffset - 13));
     dispatch(
       addLog({
@@ -79,6 +94,10 @@ const FluoroASM = () => {
 
   const moveFilterDown = (e) => {
     e.stopPropagation();
+    // Safari fix to release mouse
+    const evt = new MouseEvent("mouseup", { bubbles: true });
+    document.dispatchEvent(evt);
+
     dispatch(setFilterOffset(filterOffset + 13));
     dispatch(
       addLog({
