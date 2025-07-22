@@ -27,9 +27,10 @@ Blockly.Blocks["sensebox_fluoroASM_init"] = {
             ["Led1", "LED1"],
             ["Led2", "LED2"],
             ["Led3", "LED3"],
+            ["Led4", "LED4"],
           ],
           function (value) {
-            const offsetMap = { LED1: 0, LED2: -13, LED3: -26 };
+            const offsetMap = { LED1: -42, LED2: -30, LED3: -17, LED4: -4 };
             window.dispatchRedux?.({
               type: "FLUORO_SET_FILTER_OFFSET",
               payload: offsetMap[value],
