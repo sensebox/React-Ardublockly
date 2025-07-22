@@ -10,6 +10,7 @@ import boardReducer from "./boardReducer";
 import sensorwikiReducer from "./sensorwikiReducer";
 import simulatorReducer from "./simulatorReducer";
 import { fluoroASMReducer } from "./fluoroASMReducer";
+import logReducer from "./logReducer";
 
 export default combineReducers({
   auth: authReducer,
@@ -23,4 +24,5 @@ export default combineReducers({
   sensorwiki: sensorwikiReducer,
   simulator: simulatorReducer,
   fluoroASM: fluoroASMReducer,
+  logs: logReducer,
 });

@@ -11,6 +11,7 @@ import {
 import MonacoEditor from "@monaco-editor/react";
 import * as Blockly from "blockly";
 import Simulator from "../Simulator";
+import DebugViewer from "../DebugViewer";
 
 const Accordion = styled(MuiAccordion)(({ theme }) => ({
   border: `1px solid ${theme.palette.secondary.main}`,
@@ -66,12 +67,12 @@ const CodeViewer = () => {
             {"{ }"}
           </Typography>
           <Typography sx={{ m: "auto 5px 2px 0" }}>
-            {Blockly.Msg.codeviewer_arduino}
+            {Blockly.Msg.codeviewer_simulator}
           </Typography>
         </AccordionSummary>
         <AccordionDetails
           sx={{
-            height: "calc(50vh - 50px)",
+            height: "calc(50vh - 50px - 55px)",
             bgcolor: "background.paper",
           }}
         >
@@ -80,9 +81,9 @@ const CodeViewer = () => {
       </Accordion>
 
       <Accordion
-        square
-        expanded={expandedPanel === "xml"}
-        onChange={handleChange("xml")}
+        style={{ width: "100%" }}
+        expanded={expandedPanel === "debug"}
+        onChange={handleChange("debug")}
         sx={{ margin: 0 }}
       >
         <AccordionSummary>
@@ -93,21 +94,16 @@ const CodeViewer = () => {
             {"<>"}
           </Typography>
           <Typography sx={{ m: "auto 5px 2px 0" }}>
-            {Blockly.Msg.codeviewer_xml}
+            {Blockly.Msg.codeviewer_debug}
           </Typography>
         </AccordionSummary>
         <AccordionDetails
           sx={{
-            height: "calc(50vh - 50px)",
+            height: "calc(50vh - 50px - 50px)",
             bgcolor: "background.paper",
           }}
         >
-          <MonacoEditor
-            height="100%"
-            defaultLanguage="xml"
-            value={xml}
-            options={{ readOnly: true }}
-          />
+          <DebugViewer />
         </AccordionDetails>
       </Accordion>
     </Card>

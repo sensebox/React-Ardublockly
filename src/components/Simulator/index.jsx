@@ -14,6 +14,7 @@ import Box from "@mui/material/Box";
 import { ReactFlowProvider } from "@xyflow/react";
 import { setModules } from "../../actions/generalActions";
 import store from "../../store";
+import { addLog } from "@/reducers/logReducer";
 
 export default function Simulator() {
   const dispatch = useDispatch();
@@ -48,6 +49,14 @@ export default function Simulator() {
   // Handle start and stop actions
   const handleStart = () => {
     dispatch(startSimulator());
+    dispatch(
+      addLog({
+        type: "simulator",
+        title: "Simulator Started",
+        description: "",
+        timestamp: new Date().toISOString(),
+      }),
+    );
   };
   const resetLEDs = () => {
     const flurorLED1 = document.getElementById("fluoro_led1");
@@ -65,6 +74,14 @@ export default function Simulator() {
     if (modules.includes("sensebox_fluoroASM_init")) {
       resetLEDs();
     }
+    dispatch(
+      addLog({
+        type: "simulator",
+        title: "Simulator stopped",
+        description: "",
+        timestamp: new Date().toISOString(),
+      }),
+    );
   };
 
   const handleInfoClick = () => {

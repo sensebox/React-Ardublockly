@@ -16,7 +16,7 @@ const TYPE_CONFIG = {
   simulator: { color: "blue", icon: faWrench },
 };
 
-export default function DebugLogger() {
+export default function DebugViewer() {
   const logs = useSelector(selectLogs);
   const panelRef = useRef(null);
 
