@@ -16,6 +16,8 @@ import {
 } from "@blockly/plugin-scroll-options";
 
 import { PositionedMinimap } from "@blockly/workspace-minimap";
+import { addLog } from "@/reducers/logReducer";
+import { connect } from "react-redux";
 
 class BlocklyComponent extends React.Component {
   constructor(props) {
@@ -28,6 +30,7 @@ class BlocklyComponent extends React.Component {
 
   componentDidMount() {
     const { initialXml, children, ...rest } = this.props;
+    const { addLog } = this.props; // aus connect
 
     const workspace = Blockly.inject(this.blocklyDiv.current, {
       toolbox: this.toolbox.current,
@@ -40,6 +43,79 @@ class BlocklyComponent extends React.Component {
 
     this.primaryWorkspace = workspace;
     this.setState({ workspace });
+
+    const onBlocklyChange = (event) => {
+      const IGNORED_EVENTS = [
+        Blockly.Events.VIEWPORT_CHANGE,
+        Blockly.Events.FINISHED_LOADING,
+        "click",
+        "selected",
+        Blockly.Events.TOOLBOX_ITEM_SELECT,
+        Blockly.Events.MOVE,
+        Blockly.Events.BLOCK_DRAG,
+        "block_field_intermediate_change",
+      ];
+
+      if (IGNORED_EVENTS.includes(event.type)) return;
+
+      console.log("Blockly-Event:", event);
+
+      let title = "";
+      let description = "";
+
+      switch (event.type) {
+        case Blockly.Events.CREATE:
+          if (event.json?.type === "arduino_functions") return;
+          title = "Block erstellt";
+          description = `Blocktyp: ${event.json?.type || "Unbekannt"}`;
+          break;
+
+        case Blockly.Events.DELETE:
+          title = "Block gelöscht";
+          description = `Blocktyp: ${event.oldJson?.type || "Unbekannt"}`;
+          break;
+
+        case Blockly.Events.CHANGE:
+          title = "Block geändert";
+          description = event.name
+            ? `${event.name} geändert: Von "${event.oldValue}" zu "${event.newValue}"`
+            : "Ein Wert wurde geändert.";
+          break;
+
+        case Blockly.Events.MOVE:
+          title = "Block verschoben";
+          description = `Block verschoben (ID: ${event.blockId})`;
+          break;
+
+        case Blockly.Events.BLOCK_CREATE:
+          title = "Block erstellt (verschachtelt)";
+          description = `Innerhalb eines Blocks erstellt: ${event.json?.type || "Unbekannt"}`;
+          break;
+
+        case Blockly.Events.BLOCK_DELETE:
+          title = "Block gelöscht (verschachtelt)";
+          description = `Innerhalb eines Blocks gelöscht: ${event.oldJson?.type || "Unbekannt"}`;
+          break;
+
+        case Blockly.Events.BLOCK_CHANGE:
+          title = "Block geändert (verschachtelt)";
+          description = `Innerhalb eines Blocks geändert: ${event.json?.type || "Unbekannt"}`;
+          break;
+
+        default:
+          title = "Unbekanntes Event";
+          description = `Ein unbekanntes Event wurde empfangen: ${event.type}`;
+          break;
+      }
+
+      addLog({
+        type: "blockly",
+        title,
+        description,
+      });
+    };
+
+    workspace.addChangeListener(onBlocklyChange);
 
     workspace.addChangeListener((event) => {
       if (
@@ -122,4 +198,4 @@ class BlocklyComponent extends React.Component {
   }
 }
 
-export default BlocklyComponent;
+export default connect(null, { addLog })(BlocklyComponent);
