@@ -13,10 +13,10 @@ import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import SvgFluoroBee from "./svg";
 
 const offsets = {
+  Led4: 38,
+  Led3: 28,
+  Led2: 14,
   Led1: 0,
-  Led2: -13,
-  Led3: -26,
-  Led4: -39,
 };
 
 const FluoroASM = () => {
@@ -109,7 +109,7 @@ const FluoroASM = () => {
   };
 
   const [menuOpen, setMenuOpen] = React.useState(false);
-  const toggleMenu = () => setMenuOpen((prev) => !prev);
+  const toggleMenu = () => setMenuOpen((prev) => false);
   const closeMenu = (e) => {
     e.stopPropagation();
     setMenuOpen(false);
