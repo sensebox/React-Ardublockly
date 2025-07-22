@@ -2,6 +2,7 @@ import React, { memo, useState } from "react";
 import { Handle, Position } from "@xyflow/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
+import store from "@/store";
 
 const SensorNode = ({ title, sensors, imageSrc, width = "300px" }) => {
   // Initial values for all sensors
@@ -15,7 +16,18 @@ const SensorNode = ({ title, sensors, imageSrc, width = "300px" }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const handleChange = (id) => (e) => {
-    setValues({ ...values, [id]: Number(e.target.value) });
+    const newValue = Number(e.target.value);
+    setValues({ ...values, [id]: newValue });
+    const sensor = sensors.find((s) => s.id === id);
+    if (sensor?.type) {
+      store.dispatch({
+        type: "SET_MODULE_VALUE",
+        payload: {
+          type: sensor.type,
+          value: newValue,
+        },
+      });
+    }
   };
 
   return (
@@ -142,7 +154,7 @@ const SensorNode = ({ title, sensors, imageSrc, width = "300px" }) => {
           </div>
         ))}
       </div>
-      )
+
       <Handle
         type="source"
         position={Position.Right}

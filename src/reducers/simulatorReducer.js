@@ -10,12 +10,12 @@ import initSimulator from "../components/Simulator/init";
 const initialState = {
   code: "",
   modules: [],
+  moduleValues: {},
   isRunning: false,
   interpreter: null,
-  simulationStartTimestamp: null, // Timestamp when the simulation starts
-  abortController: null, // Added for abort control
+  simulationStartTimestamp: null,
+  abortController: null,
 };
-
 function runInterpreter(interpreter, abortSignal) {
   return new Promise((resolve, reject) => {
     const nextStep = () => {
@@ -62,11 +62,16 @@ export default function simulatorReducer(state = initialState, action) {
           .map((type, index) => ({
             id: `m_${index}`,
             type,
-            value: null, // Initialwert
           }));
       } else {
         console.log("No modules comment found.");
       }
+
+      // Initialisiere Werte separat
+      const moduleValues = {};
+      modules.forEach((mod) => {
+        moduleValues[mod.type] = null;
+      });
 
       if (state.isRunning) {
         state.abortController.abort();
@@ -75,10 +80,11 @@ export default function simulatorReducer(state = initialState, action) {
       return {
         ...state,
         code: action.payload.simulator,
-        modules: modules,
+        modules,
+        moduleValues,
         interpreter: newInterpreter,
         simulationStartTimestamp: null,
-        abortController: null, // Reset abortController
+        abortController: null,
         isRunning: false,
       };
     }
@@ -122,14 +128,16 @@ export default function simulatorReducer(state = initialState, action) {
       };
     }
     case SET_MODULE_VALUE: {
-      const { id, value } = action.payload;
+      const { type, value } = action.payload;
       return {
         ...state,
-        modules: state.modules.map((mod) =>
-          mod.id === id ? { ...mod, value } : mod,
-        ),
+        moduleValues: {
+          ...state.moduleValues,
+          [type]: value,
+        },
       };
     }
+
     default:
       return state;
   }
