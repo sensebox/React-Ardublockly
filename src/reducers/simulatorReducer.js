@@ -1,5 +1,10 @@
 import Interpreter from "js-interpreter";
-import { START_SIMULATOR, STOP_SIMULATOR, NEW_CODE } from "../actions/types";
+import {
+  START_SIMULATOR,
+  STOP_SIMULATOR,
+  NEW_CODE,
+  SET_MODULE_VALUE,
+} from "../actions/types";
 import initSimulator from "../components/Simulator/init";
 
 const initialState = {
@@ -53,7 +58,12 @@ export default function simulatorReducer(state = initialState, action) {
         modules = modulesString
           .split(",")
           .map((module) => module.trim())
-          .filter((m) => m.length > 0);
+          .filter((m) => m.length > 0)
+          .map((type, index) => ({
+            id: `m_${index}`,
+            type,
+            value: null, // Initialwert
+          }));
       } else {
         console.log("No modules comment found.");
       }
@@ -109,6 +119,15 @@ export default function simulatorReducer(state = initialState, action) {
         interpreter: new Interpreter(state.code, initSimulator), // Reset interpreter
         simulationStartTimestamp: null,
         abortController: null, // Clear the controller
+      };
+    }
+    case SET_MODULE_VALUE: {
+      const { id, value } = action.payload;
+      return {
+        ...state,
+        modules: state.modules.map((mod) =>
+          mod.id === id ? { ...mod, value } : mod,
+        ),
       };
     }
     default:

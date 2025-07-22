@@ -71,3 +71,4 @@ export const BOARD = "BOARD";
 // simulator
 export const START_SIMULATOR = "START_SIMULATOR";
 export const STOP_SIMULATOR = "STOP_SIMULATOR";
+export const SET_MODULE_VALUE = "SET_MODULE_VALUE";
