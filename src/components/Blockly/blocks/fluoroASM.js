@@ -10,7 +10,7 @@ Blockly.Blocks["sensebox_fluoroASM_init"] = {
     this.appendDummyInput()
       .appendField("Filter aktiv")
       .appendField(
-        new Blockly.FieldCheckbox("TRUE", function (value) {
+        new Blockly.FieldCheckbox("FALSE", function (value) {
           window.dispatchRedux?.({
             type: "FLUORO_SET_FILTER_ENABLED",
             payload: value === "TRUE",
