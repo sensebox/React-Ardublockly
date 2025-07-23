@@ -12,4 +12,5 @@ Have fun discovering the fluorescence!
 Thank you!`,
   fluoro_number: "Pin",
   fluoro_led: "Fluroro light",
+  brightness: "Brightness",
 };
