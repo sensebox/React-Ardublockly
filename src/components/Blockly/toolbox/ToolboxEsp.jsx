@@ -403,7 +403,7 @@ export const ToolboxEsp = () => {
       </Category>
       <Category id="QOOOL" name="QOOOL" colour={"#b7b645"}>
         <Block type="sensebox_fluoroASM_init"></Block>
-        <Block type="sensebox_fluoroASM_setLED2">
+        <Block type="sensebox_fluoroASM_setLED">
           <Value name="BRIGHTNESS">
             <Block type="math_number">
               <Field name="NUM">30</Field>
