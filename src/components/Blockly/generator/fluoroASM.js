@@ -2,14 +2,14 @@ import * as Blockly from "blockly/core";
 
 Blockly.Generator.Arduino.forBlock["sensebox_fluoroASM_init"] = function () {
   Blockly.Generator.Arduino.setupCode_["sensebox_fluoroASM_init"] =
-    `pinMode(18, OUTPUT);
+    ` pinMode(18, OUTPUT);
     pinMode(17, OUTPUT);
     pinMode(37, OUTPUT);
     pinMode(38, OUTPUT);
-    digitalWrite(blau, LOW);
-    digitalWrite(gruen, LOW);
-    digitalWrite(gelb, LOW);
-    digitalWrite(rot, LOW);
+    digitalWrite(18, LOW);
+    digitalWrite(17, LOW);
+    digitalWrite(37, LOW);
+    digitalWrite(38, LOW);
     `;
   let code = "";
   return code;
