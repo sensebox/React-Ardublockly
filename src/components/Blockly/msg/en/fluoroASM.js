@@ -1,7 +1,6 @@
 export const FLUOROASM = {
   senseBox_fluoroASM_init: "Initialize FluoroASM",
   senseBox_fluoroASM_setLED: "Turn on Fluoro LED",
-  senseBox_fluoroASM_setLED2: "Turn on Fluoro LED",
   senseBox_fluoro_tooltip: `With the QOOOL Fluoro you can explore the basics of fluorescence - directly in the Blockly environment. In this digital experiment, you control coloured LEDs and combine them with different colour filters. Particularly exciting: some filters contain a microdiamond with so-called NV centres (nitrogen vacancy centres). These special defects can be excited by light and then emit some of the energy in the form of visible light. This effect is called fluorescence.
 What can you try out in the simulator? 
 - Switch different LEDs (red, green, blue, white) on or off \n
