@@ -19,14 +19,6 @@ Blockly.Generator.Arduino.forBlock["sensebox_fluoroASM_setLED"] = function (
   block,
 ) {
   const ledNumber = block.getFieldValue("LED_NUMBER");
-
-  const code = `fluoroASM_setLED(${ledNumber});\n`;
-  return code;
-};
-Blockly.Generator.Arduino.forBlock["sensebox_fluoroASM_setLED2"] = function (
-  block,
-) {
-  const ledNumber = block.getFieldValue("LED_NUMBER");
   const status = block.getFieldValue("STAT");
   var brightness =
     Blockly.Generator.Arduino.valueToCode(
@@ -50,6 +42,9 @@ Blockly.Generator.Arduino.forBlock["sensebox_fluoroASM_setLED2"] = function (
       break;
     default:
       pin = 18;
+  }
+  if (status === "LOW") {
+    brightness = 0; // Set brightness to 0 if the LED is turned off
   }
   const code = `analogWrite(${pin}, ${brightness});\n`;
   return code;
