@@ -1,3 +1,6 @@
+import { Label } from "@mui/icons-material";
+import { Box, Button, Input } from "@mui/material";
+import { ScatterChart, SparkLineChart } from "@mui/x-charts";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Sparklines, SparklinesLine } from "react-sparklines";
@@ -5,6 +8,8 @@ import { Sparklines, SparklinesLine } from "react-sparklines";
 const GraphViewer = () => {
   const moduleValues = useSelector((state) => state.simulator.moduleValues);
   const isSimlatorRunning = useSelector((state) => state.simulator.isRunning);
+  const [limitNumbers, setLimitNumbers] = useState(0);
+  const [limitNumberSet, setLimitNumberSet] = useState(0);
   const [history, setHistory] = useState({});
 
   const ignoredModules = [
@@ -15,33 +20,33 @@ const GraphViewer = () => {
   ];
 
   useEffect(() => {
-    if (!isSimlatorRunning) return;
-    setHistory((prev) => {
-      const updated = { ...prev };
-
-      for (const key in moduleValues) {
-        if (ignoredModules.includes(key)) continue;
-
-        const value = moduleValues[key];
-        if (typeof value !== "number") continue;
-
-        const safeKey = key.toLowerCase();
-        const prevList = updated[safeKey] || [];
-
-        updated[safeKey] = [...prevList, value]; // max 20 Werte
-      }
-
-      return updated;
-    });
-  }, [moduleValues, isSimlatorRunning]);
+    let intervalId;
+    if (isSimlatorRunning) {
+      intervalId = setInterval(() => {
+        setHistory((prev) => {
+          const updated = { ...prev };
+          for (const key in moduleValues) {
+            if (ignoredModules.includes(key)) continue;
+            const value = moduleValues[key];
+            if (typeof value !== "number") continue;
+            const safeKey = key.toLowerCase();
+            const prevList = updated[safeKey] || [];
+            updated[safeKey] = [...prevList, value];
+          }
+          return updated;
+        });
+      }, 100);
+    }
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [isSimlatorRunning, moduleValues]);
 
   const formatLabel = (key) =>
     key.replace("sensebox_", "").replace("senseBox_", "").replace(/_/g, " ");
 
   return (
     <div>
-      <h2>📈 Live Modul-Daten</h2>
-
       <div
         style={{
           display: "flex",
@@ -54,7 +59,9 @@ const GraphViewer = () => {
           .map((key) => {
             const safeKey = key.toLowerCase();
             const data = history[safeKey] || [];
-
+            if (limitNumberSet > 0) {
+              data.splice(0, data.length - limitNumberSet);
+            }
             return (
               <div
                 key={key}
@@ -78,6 +85,36 @@ const GraphViewer = () => {
                 </div>
                 <div
                   style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                    marginBottom: "0.5rem",
+                  }}
+                >
+                  <Label
+                    htmlFor={`limit-input-${key}`}
+                    style={{ fontSize: "0.95rem", color: "#555" }}
+                  >
+                    Set history limit:
+                  </Label>
+                  <Input
+                    id={`limit-input-${key}`}
+                    type="number"
+                    value={limitNumbers}
+                    onChange={(e) => setLimitNumbers(e.target.value)}
+                    placeholder="Limit"
+                    sx={{ width: "80px" }}
+                  />
+                  <Button
+                    onClick={() => setLimitNumberSet(limitNumbers)}
+                    variant="contained"
+                    size="small"
+                  >
+                    Reset Limit
+                  </Button>
+                </div>
+                <div
+                  style={{
                     fontSize: "0.9rem",
                     marginBottom: "0.5rem",
                     color: "#666",
@@ -85,12 +122,27 @@ const GraphViewer = () => {
                 >
                   {moduleValues[key]}
                 </div>
-                <Sparklines data={data} width={180} height={30}>
-                  <SparklinesLine
-                    color="#00cccc"
-                    style={{ strokeWidth: 3, fill: "none" }}
+                <Box
+                  sx={{
+                    width: "100%",
+                    height: "200px",
+                    display: "flex",
+                    alignItems: "center",
+                    boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
+                  }}
+                >
+                  <ScatterChart
+                    series={[
+                      {
+                        data: data.map((item, index) => {
+                          return { x: index, y: item };
+                        }),
+                        label: formatLabel(key),
+                        id: key,
+                      },
+                    ]}
                   />
-                </Sparklines>
+                </Box>
               </div>
             );
           })}

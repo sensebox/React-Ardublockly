@@ -70,7 +70,12 @@ export default function simulatorReducer(state = initialState, action) {
       // Initialisiere Werte separat
       const moduleValues = {};
       modules.forEach((mod) => {
-        moduleValues[mod.type] = null;
+        if (mod.type === "senseBox_hdc1080") {
+          moduleValues["senseBox_hdc1080_temp"] = 20;
+          moduleValues["senseBox_hdc1080_humidity"] = 50;
+        } else {
+          moduleValues[mod.type] = null;
+        }
       });
 
       if (state.isRunning) {
@@ -92,7 +97,7 @@ export default function simulatorReducer(state = initialState, action) {
       console.log("START_SIMULATOR");
 
       const abortController = new AbortController();
-
+      console.log(state);
       runInterpreter(state.interpreter, abortController.signal)
         .then(() => {
           console.log("Interpreter finished running");

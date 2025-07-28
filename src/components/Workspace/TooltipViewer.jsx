@@ -93,7 +93,7 @@ const TooltipViewer = () => {
               </Button>
             )}
           </TabPanel>
-          <TabPanel value="graph">
+          <TabPanel keepMounted={true} value="graph">
             <GraphViewer />
           </TabPanel>
         </TabContext>
