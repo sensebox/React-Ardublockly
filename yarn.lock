@@ -285,10 +285,10 @@
   resolved "https://registry.yarnpkg.com/@blockly/field-multilineinput/-/field-multilineinput-5.0.17.tgz#e396e63e67a61f0704ec30cdc1c0256330c7b133"
   integrity sha512-kI5dgsJDAggXgkjcKDIwHZ59ZqsVQE+96vT6+FUCjRE82vYp1KAV2/PK9tSBqB2LU8nWUAeBdOT1dD8fOwz5yA==
 
-"@blockly/field-slider@7.0.9":
-  version "7.0.9"
-  resolved "https://registry.yarnpkg.com/@blockly/field-slider/-/field-slider-7.0.9.tgz#f4b96e343f247e865f5dd0703d3bc03a5b421048"
-  integrity sha512-E+JAvPYAPWm49AUom6Fd5RJJeDdEtd0jW6LVYx8aqHBH3XfYbWseTFOWLs5KLcP7h4s3b91+yf2ppgPo+MBULQ==
+"@blockly/field-slider@8.0.2":
+  version "8.0.2"
+  resolved "https://registry.yarnpkg.com/@blockly/field-slider/-/field-slider-8.0.2.tgz#ff655e0ad99ceb90016d135e58ad7b125f554753"
+  integrity sha512-7CZsayIUcgFSAYnYWn6itkjo7WNIt+XOkp9bwzZA6Jhr9WfeJEZsUcXN/9tjKwJYD5rSUiFe2cARnuMlKCr15g==
 
 "@blockly/plugin-modal@^7.0.16":
   version "7.0.16"
@@ -1060,6 +1060,11 @@
   version "2.11.8"
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.8.tgz#6b79032e760a0899cd4204710beede972a3a185f"
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
+
+"@rolldown/pluginutils@1.0.0-beta.19":
+  version "1.0.0-beta.19"
+  resolved "https://registry.yarnpkg.com/@rolldown/pluginutils/-/pluginutils-1.0.0-beta.19.tgz#fc3b95145a8e7a3bf92754269d8e4f40eea8a244"
+  integrity sha512-3FL3mnMbPu0muGOCaKAhhFEYmqv9eTfPSJRJmANrCwtgK8VuxpsZDGK+m0LYAGoyO8+0j5uRe4PeyPDK1yA/hA==
 
 "@rollup/rollup-android-arm-eabi@4.40.2":
   version "4.40.2"
@@ -5588,10 +5593,10 @@ tinyglobby@^0.2.13:
     fdir "^6.4.4"
     picomatch "^4.0.2"
 
-tldts-core@^6.1.84:
-  version "6.1.84"
-  resolved "https://registry.yarnpkg.com/tldts-core/-/tldts-core-6.1.84.tgz#f8ac2af9969bf9c2f7a99fa05d9c667b5e5b768c"
-  integrity sha512-NaQa1W76W2aCGjXybvnMYzGSM4x8fvG2AN/pla7qxcg0ZHbooOPhA8kctmOZUDfZyhDL27OGNbwAeig8P4p1vg==
+tldts-core@^6.1.86:
+  version "6.1.86"
+  resolved "https://registry.yarnpkg.com/tldts-core/-/tldts-core-6.1.86.tgz#a93e6ed9d505cb54c542ce43feb14c73913265d8"
+  integrity sha512-Je6p7pkk+KMzMv2XXKmAE3McmolOQFdxkKw0R8EYNr7sELW46JqnNeTX8ybPiQgvg1ymCoF8LXs5fzFaZvJPTA==
 
 tldts@^6.1.32:
   version "6.1.86"
