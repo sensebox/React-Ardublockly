@@ -110,7 +110,9 @@ function CompilationDialog({
     const shouldClose =
       error ||
       activeStep === 2 ||
-      (reason !== "backdropClick" && reason !== "escapeKeyDown");
+      (platform && activeStep === 1)(
+        reason !== "backdropClick" && reason !== "escapeKeyDown",
+      );
 
     if (!shouldClose) return;
 
