@@ -93,7 +93,7 @@ const TooltipViewer = () => {
               </Button>
             )}
           </TabPanel>
-          <TabPanel keepMounted={true} value="graph">
+          <TabPanel style={{ padding: "0px" }} keepMounted={true} value="graph">
             <GraphViewer />
           </TabPanel>
         </TabContext>
