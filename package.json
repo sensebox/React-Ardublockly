@@ -7,7 +7,7 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@blockly/block-plus-minus": "^8.0.9",
     "@blockly/field-colour": "^5.0.9",
-    "@blockly/field-grid-dropdown": "^5.0.9",
+    "@blockly/field-grid-dropdown": "^6.0.3",
     "@blockly/field-multilineinput": "^5.0.10",
     "@blockly/field-slider": "8.0.2",
     "@blockly/plugin-scroll-options": "^6.0.9",
