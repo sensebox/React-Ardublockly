@@ -40,6 +40,7 @@ function CompilationDialog({
   const [activeStep, setActiveStep] = useState(0);
   const [sketchId, setSketchId] = useState(null);
   const [error, setError] = useState(null);
+  const [counter, setCounter] = useState(0);
   const compilerUrl = useSelector((state) => state.general.compiler);
 
   useEffect(() => {
@@ -97,27 +98,36 @@ function CompilationDialog({
   };
 
   const handleDownloadURL = () => {
-    const downloadUrl = `${compilerUrl}/download?id=${sketchId}&board=sensebox-mcu&filename=${filename}`;
+    const timestamp = new Date();
+    const downloadUrl = `${compilerUrl}/download?id=${sketchId}&board=sensebox-mcu&filename=${filename}_v${counter}`;
     const link = document.createElement("a");
     link.href = downloadUrl;
-    link.download = `${filename}.bin`;
+    link.download = `${counter}_${timestamp}.bin`;
+    setCounter(counter + 1);
     link.click();
   };
 
   const handleClose = (event, reason) => {
-    if (reason !== "backdropClick" && reason !== "escapeKeyDown") {
-      onClose();
-      setActiveStep(0);
-      setSketchId(null);
-      setError(null);
-    }
+    const shouldClose =
+      error ||
+      activeStep === 2 ||
+      (platform && activeStep === 1)(
+        reason !== "backdropClick" && reason !== "escapeKeyDown",
+      );
+
+    if (!shouldClose) return;
+
+    onClose();
+    setActiveStep(0);
+    setSketchId(null);
+    setError(null);
   };
 
   return (
     <Dialog
       open={open}
       onClose={handleClose}
-      disableEscapeKeyDown
+      disableEscapeKeyDown={activeStep !== 2 || !error}
       // Feste Größe über PaperProps: Breite und Höhe passen für alle Steps
       PaperProps={{
         style: { width: "600px", minHeight: "600px", maxHeight: "600px" },

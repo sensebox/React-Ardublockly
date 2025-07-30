@@ -275,10 +275,10 @@
   resolved "https://registry.yarnpkg.com/@blockly/field-colour/-/field-colour-5.0.19.tgz#9421b1a3a95c8f46f9ec28ad2c4921801e9fc1a7"
   integrity sha512-OLqGHTihuqtnZi51lsmd8uhZK+kyf07V9fd0wFQ+dfFhuyVcqrQkKBEE5NvDzdcdSLgdewWMBesGzweo5Q1XCg==
 
-"@blockly/field-grid-dropdown@^5.0.9":
-  version "5.0.16"
-  resolved "https://registry.yarnpkg.com/@blockly/field-grid-dropdown/-/field-grid-dropdown-5.0.16.tgz#b22da5b7b41b7195a1ea714e71b1492af1cc2f5d"
-  integrity sha512-UIbacLyJyCRTVKZoh5IDQviIlNaFeYHEuigwdQU95GJi37ef9sMI5N9sedqxFCVe71XHuhz8l4eMInQwC24Reg==
+"@blockly/field-grid-dropdown@^6.0.3":
+  version "6.0.3"
+  resolved "https://registry.yarnpkg.com/@blockly/field-grid-dropdown/-/field-grid-dropdown-6.0.3.tgz#559d8ec6cced43c0e7a3ed46e0c01de997c78330"
+  integrity sha512-BeCmxNz4FuvZ9GRTw+RM8jWADK2DhQupacKRdhFlEnhR9akOSTwIgeaWoqnIvBkLvXLtSwAJTuQG5wyXoGGd0A==
 
 "@blockly/field-multilineinput@^5.0.10":
   version "5.0.17"
