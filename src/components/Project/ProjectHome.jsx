@@ -6,10 +6,10 @@ import { clearMessages } from "../../actions/messageActions";
 
 import { Link, withRouter } from "react-router-dom";
 
-import Breadcrumbs from "../Breadcrumbs";
+import Breadcrumbs from "../ui/Breadcrumbs";
 import BlocklyWindow from "../Blockly/BlocklyWindow";
 import Snackbar from "../Snackbar";
-import WorkspaceFunc from "../Workspace/WorkspaceFunc";
+import WorkspaceToolbar from "../Workspace/WorkspaceToolbar";
 
 import withStyles from "@mui/styles/withStyles";
 import Grid from "@mui/material/Grid";
@@ -174,7 +174,7 @@ class ProjectHome extends Component {
                                 float: "right",
                               }}
                             >
-                              <WorkspaceFunc
+                              <WorkspaceToolbar
                                 multiple
                                 project={project}
                                 projectType={this.props.location.pathname.replace(

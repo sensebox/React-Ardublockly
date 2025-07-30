@@ -4,8 +4,8 @@ import { connect } from "react-redux";
 import { IconButton, Tooltip } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
-import { workspaceName } from "../../actions/workspaceActions";
-import CompilationDialog from "./CompilationDialog";
+import { workspaceName } from "../../../actions/workspaceActions";
+import CompilationDialog from "../ToolbarItems/CompilationDialog/CompilationDialog";
 import withStyles from "@mui/styles/withStyles";
 
 const styles = (theme) => ({

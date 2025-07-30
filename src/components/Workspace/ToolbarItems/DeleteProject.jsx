@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { deleteProject } from "../../actions/projectActions";
+import { deleteProject } from "../../../actions/projectActions";
 
 import { withRouter } from "react-router-dom";
 
-import Snackbar from "../Snackbar";
+import Snackbar from "../../Snackbar";
 
 import withStyles from "@mui/styles/withStyles";
 import IconButton from "@mui/material/IconButton";

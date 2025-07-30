@@ -6,11 +6,11 @@ import { withRouter } from "react-router-dom";
 
 import * as Blockly from "blockly/core";
 
-import Breadcrumbs from "../Breadcrumbs";
+import Breadcrumbs from "../ui/Breadcrumbs";
 import LanguageSelector from "./LanguageSelector";
 import RenderSelector from "./RenderSelector";
 import StatsSelector from "./StatsSelector";
-import OtaSelector from "./OtaSelector";
+import TabletMode from "./TabletMode";
 import SoundsSelector from "./SoundsSelector";
 import DeviceSelector from "./DeviceSelector";
 
@@ -49,7 +49,7 @@ class Settings extends Component {
           <StatsSelector />
         </Paper>
         <Paper style={{ margin: "10px 0px", padding: "10px" }}>
-          <OtaSelector />
+          <TabletMode />
         </Paper>
         <Paper style={{ margin: "10px 0px", padding: "10px" }}>
           <SoundsSelector />
