@@ -15,14 +15,26 @@ import {
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { useSelector } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
+import { deleteProject } from "@/actions/projectActions";
+import { useState } from "react";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from "@mui/material";
 const GalleryItem = ({ project }) => {
   const theme = useTheme();
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
-
+  const [openDialog, setOpenDialog] = useState(false);
   const getProjectImage = (project) => {
     return project.imageUrl || "/placeholder-image.png";
+  };
+
+  const handleDeleteProject = () => {
+    dispatch(deleteProject("gallery", project._id));
   };
 
   return (
@@ -142,14 +154,13 @@ const GalleryItem = ({ project }) => {
           </Button>
           {user && user.email === project.creator && (
             <Button
-              component={Link}
-              to={`/gallery/${project._id}`}
+              onClick={() => setOpenDialog(true)}
               fullWidth
               color="error"
               startIcon={<FontAwesomeIcon icon={faTrash} />}
               sx={{
-                background: theme.palette.background.white, // heller Hintergrund
-                color: theme.palette.primary.error, // roter Text
+                background: theme.palette.background.white,
+                color: theme.palette.primary.error,
                 borderRadius: "50px",
                 fontWeight: "bold",
                 border: `1px solid ${theme.palette.primary.error}`,
@@ -165,6 +176,35 @@ const GalleryItem = ({ project }) => {
           )}
         </Box>
       </Card>
+      <Dialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        aria-labelledby="delete-dialog-title"
+      >
+        <DialogTitle id="delete-dialog-title">
+          {Blockly.Msg.tooltip_delete_project}
+        </DialogTitle>
+        <DialogContent>
+          <Typography>
+            Bist du sicher, dass du dieses Projekt löschen möchtest?
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenDialog(false)} color="primary">
+            Abbrechen
+          </Button>
+          <Button
+            onClick={() => {
+              handleDeleteProject();
+              setOpenDialog(false);
+            }}
+            color="error"
+            variant="contained"
+          >
+            Löschen
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Grid>
   );
 };
