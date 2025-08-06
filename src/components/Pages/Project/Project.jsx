@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { workspaceName } from "../../actions/workspaceActions";
-import { getProject, resetProject } from "../../actions/projectActions";
-import { clearMessages, returnErrors } from "../../actions/messageActions";
+import { workspaceName } from "@/actions/workspaceActions";
+import { getProject, resetProject } from "@/actions/projectActions";
+import { clearMessages, returnErrors } from "@/actions/messageActions";
 
 import { withRouter } from "react-router-dom";
 
-import Home from "../Pages/Home";
-import Breadcrumbs from "../ui/Breadcrumbs";
+import Home from "@/components/Pages/Home";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";

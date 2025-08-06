@@ -293,6 +293,12 @@ export const UI = {
   builder_review_text:
     "Du kannst dein Tutorial direkt über den Link mit anderen Personen teilen. Wenn du dein Tutorial für alle Nutzer:innen in der Überischt veröffenltichen wollen kannst du es hier aktivieren. Ein Administrator wird dein Tutorial ansehen und anschließend freischalten.",
 
+  // Gallery
+
+  gallery_home_head: "Gallerie",
+  show_in_blockly: "Anzeigen",
+  searchQuery_placeholder: "Suche nach Projekttitel",
+  my_projects: "Nur meine Projekte anzeigen",
   /**
    * Login
    */
