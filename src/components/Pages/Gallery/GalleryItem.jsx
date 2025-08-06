@@ -23,14 +23,6 @@ const GalleryItem = ({ project }) => {
     return project.imageUrl || "/placeholder-image.png";
   };
 
-  const getNameFromEmail = (email) => {
-    const namePart = email?.split("@")[0];
-    return namePart
-      ?.replace(".", " ")
-      .replace("_", " ")
-      .replace(/\b\w/g, (l) => l.toUpperCase());
-  };
-
   return (
     <Grid item xs={12} sm={6} md={4} xl={3}>
       <Card
@@ -116,8 +108,6 @@ const GalleryItem = ({ project }) => {
             </Stack>
           </CardContent>
         </CardActionArea>
-
-        {/* 👇 Button unten */}
         <Box sx={{ p: 2, pt: 0 }}>
           <Button
             component={Link}
@@ -125,16 +115,16 @@ const GalleryItem = ({ project }) => {
             fullWidth
             startIcon={<FontAwesomeIcon icon={faEye} />}
             sx={{
-              background: "#fff",
-              color: "#28a745",
+              background: theme.palette.background.white,
+              color: theme.palette.primary.main,
               borderRadius: "50px",
               fontWeight: "bold",
-              borderColor: "#28a745",
+              borderColor: theme.palette.primary.main,
               border: "1px solid",
               transition: "all 0.2s ease-in-out",
               "&:hover": {
-                backgroundColor: "#28a745",
-                color: "#fff",
+                backgroundColor: theme.palette.primary.main,
+                color: theme.palette.background.white,
               },
             }}
           >
