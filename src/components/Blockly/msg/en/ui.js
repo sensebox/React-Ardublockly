@@ -292,6 +292,7 @@ export const UI = {
   gallery_home_head: "Gallery",
   show_in_blockly: "Show",
   searchQuery_placeholder: "Search for project title",
+  my_projects: "Show only my projects",
 
   /**
    * Login

@@ -1,6 +1,9 @@
 import { getProjects } from "@/actions/projectActions";
 import {
   Box,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
   Grid,
   IconButton,
   Pagination,
@@ -31,13 +34,18 @@ const GalleryHome = () => {
   ];
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [onlyMyProjects, setOnlyMyProjects] = useState(false);
+
   useEffect(() => {
     dispatch(getProjects("gallery"));
-    console.log("user", user);
   }, []);
 
   const filteredProjects = projects
-    .filter((project) => allowedAuthors.includes(project.creator))
+    .filter((project) => {
+      const isAllowed = allowedAuthors.includes(project.creator);
+      const isOwn = !onlyMyProjects || (user && project.creator === user.email);
+      return isAllowed && isOwn;
+    })
     .filter((project) =>
       project.title.toLowerCase().includes(searchQuery.toLowerCase()),
     );
@@ -85,6 +93,25 @@ const GalleryHome = () => {
           }}
           sx={{ flex: "0 1 80%" }}
         />
+
+        {user && (
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, ml: 2 }}>
+            <FormControl variant="standard">
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={onlyMyProjects}
+                    onChange={(e) => {
+                      setOnlyMyProjects(e.target.checked);
+                      setCurrentPage(1); // Seite zurücksetzen
+                    }}
+                  />
+                }
+                label={Blockly.Msg.my_projects}
+              />
+            </FormControl>
+          </Box>
+        )}
 
         <Box
           sx={{
