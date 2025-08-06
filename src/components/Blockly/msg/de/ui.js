@@ -297,6 +297,7 @@ export const UI = {
 
   gallery_home_head: "Gallerie",
   show_in_blockly: "Anzeigen",
+  searchQuery_placeholder: "Suche nach Projekttitel",
   /**
    * Login
    */
