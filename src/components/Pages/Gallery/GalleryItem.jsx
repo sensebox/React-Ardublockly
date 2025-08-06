@@ -14,10 +14,12 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { useSelector } from "react-redux";
 
 const GalleryItem = ({ project }) => {
   const theme = useTheme();
+  const user = useSelector((state) => state.auth.user);
 
   const getProjectImage = (project) => {
     return project.imageUrl || "/placeholder-image.png";
@@ -108,7 +110,15 @@ const GalleryItem = ({ project }) => {
             </Stack>
           </CardContent>
         </CardActionArea>
-        <Box sx={{ p: 2, pt: 0 }}>
+        <Box
+          sx={{
+            p: 2,
+            pt: 0,
+            display: "flex",
+            flexDirection: "column",
+            gap: "8px",
+          }}
+        >
           <Button
             component={Link}
             to={`/gallery/${project._id}`}
@@ -130,6 +140,29 @@ const GalleryItem = ({ project }) => {
           >
             {Blockly.Msg.show_in_blockly}
           </Button>
+          {user && user.email === project.creator && (
+            <Button
+              component={Link}
+              to={`/gallery/${project._id}`}
+              fullWidth
+              color="error"
+              startIcon={<FontAwesomeIcon icon={faTrash} />}
+              sx={{
+                background: theme.palette.background.white, // heller Hintergrund
+                color: theme.palette.primary.error, // roter Text
+                borderRadius: "50px",
+                fontWeight: "bold",
+                border: `1px solid ${theme.palette.primary.error}`,
+                transition: "all 0.2s ease-in-out",
+                "&:hover": {
+                  backgroundColor: theme.palette.primary.error,
+                  color: theme.palette.background.white,
+                },
+              }}
+            >
+              {Blockly.Msg.tooltip_delete_project}
+            </Button>
+          )}
         </Box>
       </Card>
     </Grid>
