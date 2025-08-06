@@ -287,6 +287,10 @@ export const UI = {
   builder_review_text:
     "You can share your tutorial with other people directly from the link. If you want to publish your tutorial for all users in the overview you can activate it here. An administrator will view your tutorial and then activate it.",
 
+  // Gallery
+
+  gallery_home_head: "Gallery",
+
   /**
    * Login
    */

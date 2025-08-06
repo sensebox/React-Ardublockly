@@ -23,7 +23,6 @@ const ProjectTitle = styled(Typography)(({ theme }) => ({
   textTransform: "capitalize",
   overflow: "hidden",
   textOverflow: "ellipsis",
-  whiteSpace: "nowrap",
 }));
 
 const GalleryItem = ({ project, key }) => {
@@ -64,13 +63,18 @@ const GalleryItem = ({ project, key }) => {
                   fontWeight: "normal",
                   backgroundColor: "primary.main",
                   color: "white",
+                  wordWrap: "break-word",
+                  height: "6vh",
+                  alignContent: "center",
+                  textAlign: "center",
                 }}
                 gutterBottom
               >
                 {project.title}
               </ProjectTitle>
             }
-          />
+          ></CardHeader>
+
           <Box
             sx={{
               height: 140,
@@ -88,14 +92,11 @@ const GalleryItem = ({ project, key }) => {
                 maxHeight: "100%",
                 maxWidth: "100%",
                 objectFit: "contain",
+                padding: "15px",
               }}
             />
           </Box>
-          <CardContent
-            sx={{
-              flexGrow: 1,
-            }}
-          >
+          <CardContent sx={{ flexGrow: 1 }}>
             <Typography
               variant="body2"
               color="text.secondary"
@@ -103,19 +104,17 @@ const GalleryItem = ({ project, key }) => {
             >
               {project.description}
             </Typography>
-            <Stack direction="row" spacing={1} flexWrap="wrap">
-              {(project.tags || []).map((tag, idx) => {
-                const isActive = this.state.tagFilters.includes(tag);
-                return (
-                  <Chip
-                    key={idx}
-                    label={tag}
-                    size="small"
-                    variant={isActive ? "filled" : "primary"}
-                    color={isActive ? "primary" : "default"}
-                  />
-                );
-              })}
+
+            <Stack direction="row" spacing={1} flexWrap="wrap" mb={1}>
+              {(project.tags || []).map((tag, idx) => (
+                <Chip
+                  key={idx}
+                  label={tag}
+                  size="small"
+                  variant="outlined"
+                  color="default"
+                />
+              ))}
               {project.category && (
                 <Chip label={project.category} size="small" color="primary" />
               )}

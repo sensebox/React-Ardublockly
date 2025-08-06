@@ -1,8 +1,10 @@
 import { getProjects } from "@/actions/projectActions";
-import { Grid } from "@mui/material";
+import { Grid, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import GalleryItem from "./GalleryItem";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import * as Blockly from "blockly";
 
 const GalleryHome = () => {
   const dispatch = useDispatch();
@@ -13,22 +15,37 @@ const GalleryHome = () => {
     "e.c-schneider@reedu.de",
     "verena.witte@yahoo.de",
   ];
+  const [searchQuery, setSearchQuery] = useState("");
   useEffect(() => {
     dispatch(getProjects("gallery"));
   }, []);
 
+  const filteredProjects = projects
+    .filter((project) => allowedAuthors.includes(project.creator))
+    .filter((project) =>
+      project.title.toLowerCase().includes(searchQuery.toLowerCase()),
+    );
+
   return (
     <div>
-      <h1>Gallery Projects</h1>
+      <Breadcrumbs content={[{ link: "/Gallery", title: "Gallerie" }]} />
+
+      <h1>{Blockly.Msg.gallery_home_head}</h1>
+      <TextField
+        fullWidth
+        label="Suche nach Projekttitel"
+        variant="outlined"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        sx={{ mb: 3 }}
+      />
       {projects.length === 0 ? (
         <p>No projects found in the gallery.</p>
       ) : (
         <Grid container spacing={2}>
-          {projects
-            .filter((project) => allowedAuthors.includes(project.creator))
-            .map((project, i) => (
-              <GalleryItem project={project} key={i} />
-            ))}
+          {filteredProjects.map((project, i) => (
+            <GalleryItem project={project} key={i} />
+          ))}
         </Grid>
       )}
     </div>
