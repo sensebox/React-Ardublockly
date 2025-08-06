@@ -23,19 +23,19 @@ const DeviceSelection = () => {
 
   const boards = [
     {
-      value: "mcu",
+      value: "MCU",
       alt: "Sensebox MCU",
       label: "senseBox MCU",
       src: "/media/hardware/blockly_mcu.png",
     },
     {
-      value: "esp32",
+      value: "MCU-S2",
       alt: "Sensebox ESP",
       label: "senseBox MCU-S2",
       src: "/media/hardware/blockly_esp.png",
     },
     {
-      value: "mini",
+      value: "MCU:mini",
       alt: "Sensebox Mini",
       label: "senseBox MCU:mini",
       src: "/media/hardware/blockly_mini.png",

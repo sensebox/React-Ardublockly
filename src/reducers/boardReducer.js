@@ -14,13 +14,13 @@ const initialValue = () => {
 const setBackgroundImage = (board) => {
   const root = document.querySelector(":root");
   switch (board) {
-    case "mcu":
+    case "MCU":
       root.style.setProperty("--url", `url(${mcu_opacity})`);
       break;
-    case "mini":
+    case "MCU:mini":
       root.style.setProperty("--url", `url(${mini_opacity})`);
       break;
-    case "esp32":
+    case "MCU-S2":
       root.style.setProperty("--url", `url(${esp_opacity})`);
       break;
     default:

@@ -69,7 +69,7 @@ function CompilationDialog({
   const handleCompile = async () => {
     try {
       const board =
-        selectedBoard === "mcu" || selectedBoard === "mini"
+        selectedBoard === "MCU" || selectedBoard === "MCU:mini"
           ? "sensebox-mcu"
           : "sensebox-esp32s2";
 
