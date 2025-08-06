@@ -21,16 +21,19 @@ const GalleryHome = () => {
   const dispatch = useDispatch();
   const theme = useTheme();
   const projects = useSelector((state) => state.project.projects);
+  const user = useSelector((state) => state.auth.user);
   const allowedAuthors = [
     "mario.pesch@uni-muenster.de",
     "p_scha35@uni-muenster.de",
     "e.c-schneider@reedu.de",
     "verena.witte@yahoo.de",
+    ...(user && user.email ? [user.email] : []),
   ];
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   useEffect(() => {
     dispatch(getProjects("gallery"));
+    console.log("user", user);
   }, []);
 
   const filteredProjects = projects
