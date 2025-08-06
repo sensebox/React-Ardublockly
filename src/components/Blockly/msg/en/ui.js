@@ -290,6 +290,7 @@ export const UI = {
   // Gallery
 
   gallery_home_head: "Gallery",
+  show_in_blockly: "Show",
 
   /**
    * Login

@@ -1,8 +1,8 @@
-import BlocklyWindow from "@/components/Blockly/BlocklyWindow";
-import GalleryHome from "./GalleryHome";
+import * as Blockly from "blockly";
 
 import {
   Box,
+  Button,
   Card,
   CardActionArea,
   CardContent,
@@ -14,9 +14,8 @@ import {
   Typography,
 } from "@mui/material";
 import { Link } from "react-router-dom/cjs/react-router-dom";
-import { useEffect } from "react";
-import BlocklySvg from "@/components/Blockly/BlocklySvg";
-import { WorkspaceSvg } from "blockly";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
 
 const ProjectTitle = styled(Typography)(({ theme }) => ({
   fontWeight: theme.typography.fontWeightBold,
@@ -43,16 +42,11 @@ const GalleryItem = ({ project, key }) => {
           flexDirection: "column",
           transition: "transform 0.2s, box-shadow 0.2s",
           "&:hover": {
-            transform: "translateY(-4px) scale(1.03)",
             boxShadow: 6,
           },
         }}
       >
-        <CardActionArea
-          component={Link}
-          to={`/gallery/${project._id}`}
-          sx={{ flexGrow: 1, textAlign: "left" }}
-        >
+        <CardActionArea sx={{ flexGrow: 1, textAlign: "left" }}>
           <CardHeader
             sx={{ backgroundColor: "primary.main" }}
             title={
@@ -104,7 +98,6 @@ const GalleryItem = ({ project, key }) => {
             >
               {project.description}
             </Typography>
-
             <Stack direction="row" spacing={1} flexWrap="wrap" mb={1}>
               {(project.tags || []).map((tag, idx) => (
                 <Chip
@@ -121,6 +114,29 @@ const GalleryItem = ({ project, key }) => {
             </Stack>
           </CardContent>
         </CardActionArea>
+        <Box sx={{ p: 2, pt: 0 }}>
+          <Button
+            component={Link}
+            to={`/gallery/${project._id}`}
+            fullWidth
+            startIcon={<FontAwesomeIcon icon={faEye} />}
+            sx={{
+              background: "#fff",
+              color: "#28a745",
+              borderRadius: "50px",
+              fontWeight: "bold",
+              borderColor: "#28a745",
+              border: "1px solid",
+              transition: "all 0.2s ease-in-out",
+              "&:hover": {
+                backgroundColor: "#28a745",
+                color: "#fff",
+              },
+            }}
+          >
+            {Blockly.Msg.show_in_blockly}
+          </Button>
+        </Box>
       </Card>
     </Grid>
   );
