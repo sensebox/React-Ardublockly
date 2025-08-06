@@ -60,7 +60,7 @@ const GalleryHome = () => {
       <Typography variant="h4" gutterBottom>
         {Blockly.Msg.gallery_home_head}
       </Typography>
-
+      {/* Start der Menüleiste - hier später Kategorie und Schwierigkeit hin  */}
       <Box
         sx={{
           display: "flex",
@@ -71,7 +71,6 @@ const GalleryHome = () => {
           gap: 2,
         }}
       >
-        {/* 🔍 Suchfeld – nimmt ca. 80% Platz ein */}
         <TextField
           fullWidth
           label={Blockly.Msg.searchQuery_placeholder}
@@ -84,7 +83,6 @@ const GalleryHome = () => {
           sx={{ flex: "0 1 80%" }}
         />
 
-        {/* 👉 Page-Steuerung */}
         <Box
           sx={{
             display: "flex",
@@ -93,7 +91,6 @@ const GalleryHome = () => {
             gap: 1,
           }}
         >
-          {/* < Pfeil zurück */}
           <IconButton
             disabled={currentPage === 1}
             onClick={() => setCurrentPage((prev) => prev - 1)}
@@ -117,8 +114,6 @@ const GalleryHome = () => {
           >
             {currentPage}
           </Typography>
-
-          {/* > Pfeil vor */}
           <IconButton
             disabled={currentPage === totalPages}
             onClick={() => setCurrentPage((prev) => prev + 1)}
@@ -128,7 +123,6 @@ const GalleryHome = () => {
         </Box>
       </Box>
 
-      {/* 📦 Galerie */}
       {filteredProjects.length === 0 ? (
         <Typography>Keine Projekte gefunden.</Typography>
       ) : (
