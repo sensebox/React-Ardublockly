@@ -204,11 +204,7 @@ const Navbar = () => {
                       borderRadius: "25px",
                     }}
                   >
-                    {selectedBoard === "mcu"
-                      ? "MCU"
-                      : selectedBoard === "mini"
-                        ? "MCU:mini"
-                        : "MCU-S2"}
+                    {selectedBoard}
                   </Button>
                   <Menu
                     anchorEl={anchorElBoard}
