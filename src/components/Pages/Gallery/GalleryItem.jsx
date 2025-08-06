@@ -1,35 +1,34 @@
 import * as Blockly from "blockly";
-
 import {
   Box,
   Button,
   Card,
   CardActionArea,
   CardContent,
-  CardHeader,
   Chip,
   Grid,
   Stack,
-  styled,
   Typography,
+  Avatar,
+  useTheme,
 } from "@mui/material";
-import { Link } from "react-router-dom/cjs/react-router-dom";
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 
-const ProjectTitle = styled(Typography)(({ theme }) => ({
-  fontWeight: theme.typography.fontWeightBold,
-  textTransform: "capitalize",
-  overflow: "hidden",
-  textOverflow: "ellipsis",
-}));
+const GalleryItem = ({ project }) => {
+  const theme = useTheme();
 
-const GalleryItem = ({ project, key }) => {
   const getProjectImage = (project) => {
-    if (project.imageUrl) {
-      return project.imageUrl;
-    }
-    return "/placeholder-image.png";
+    return project.imageUrl || "/placeholder-image.png";
+  };
+
+  const getNameFromEmail = (email) => {
+    const namePart = email?.split("@")[0];
+    return namePart
+      ?.replace(".", " ")
+      .replace("_", " ")
+      .replace(/\b\w/g, (l) => l.toUpperCase());
   };
 
   return (
@@ -46,32 +45,10 @@ const GalleryItem = ({ project, key }) => {
           },
         }}
       >
-        <CardActionArea sx={{ flexGrow: 1, textAlign: "left" }}>
-          <CardHeader
-            sx={{ backgroundColor: "primary.main" }}
-            title={
-              <ProjectTitle
-                variant="h6"
-                component="h3"
-                sx={{
-                  fontWeight: "normal",
-                  backgroundColor: "primary.main",
-                  color: "white",
-                  wordWrap: "break-word",
-                  height: "6vh",
-                  alignContent: "center",
-                  textAlign: "center",
-                }}
-                gutterBottom
-              >
-                {project.title}
-              </ProjectTitle>
-            }
-          ></CardHeader>
-
+        <CardActionArea sx={{ textAlign: "left", cursor: "default" }}>
           <Box
             sx={{
-              height: 140,
+              height: 160,
               backgroundColor: "#f5f5f5",
               display: "flex",
               alignItems: "center",
@@ -90,14 +67,39 @@ const GalleryItem = ({ project, key }) => {
               }}
             />
           </Box>
+
+          {/* 📄 Inhalt: Titel, Beschreibung, Tags */}
           <CardContent sx={{ flexGrow: 1 }}>
+            {/* Titel */}
             <Typography
-              variant="body2"
-              color="text.secondary"
-              sx={{ fontStyle: "italic", mb: 1 }}
+              variant="h6"
+              component="h3"
+              sx={{
+                fontWeight: "bold",
+                textTransform: "capitalize",
+                color: theme.palette.primary.main,
+                textAlign: "center",
+                fontWeight: 900,
+                height: "5vh",
+                alignContent: "center",
+                mb: 1,
+              }}
             >
+              {project.title}
+            </Typography>
+            <hr
+              style={{
+                color: "#eee",
+                width: "80%",
+                marginBottom: "10px",
+              }}
+            ></hr>
+            {/* Beschreibung */}
+            <Typography variant="h7" color="text.main">
               {project.description}
             </Typography>
+
+            {/* Tags */}
             <Stack direction="row" spacing={1} flexWrap="wrap" mb={1}>
               {(project.tags || []).map((tag, idx) => (
                 <Chip
@@ -114,6 +116,8 @@ const GalleryItem = ({ project, key }) => {
             </Stack>
           </CardContent>
         </CardActionArea>
+
+        {/* 👇 Button unten */}
         <Box sx={{ p: 2, pt: 0 }}>
           <Button
             component={Link}
