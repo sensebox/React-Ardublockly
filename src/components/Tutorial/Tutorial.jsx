@@ -12,12 +12,12 @@ import {
 
 import { withRouter } from "react-router-dom";
 
-import Breadcrumbs from "../Breadcrumbs";
+import Breadcrumbs from "../ui/Breadcrumbs";
 import StepperHorizontal from "./StepperHorizontal";
 import StepperVertical from "./StepperVertical";
 import Instruction from "./Instruction";
 import Assessment from "./Assessment";
-import NotFound from "../NotFound";
+import NotFound from "../Pages/NotFound";
 import * as Blockly from "blockly";
 import { detectWhitespacesAndReturnReadableResult } from "../../helpers/whitespace";
 

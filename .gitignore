@@ -24,4 +24,3 @@ yarn-error.log*
 
 crtf/*
 cypress/downloads/*
-yarn.lock

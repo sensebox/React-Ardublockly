@@ -1,16 +1,14 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { tutorialCheck, tutorialStep } from "../../actions/tutorialActions";
 
-import { withRouter } from "react-router-dom";
-
-import Compile from "../Workspace/Compile";
-import Dialog from "../Dialog";
+import Compile from "@/components/Workspace/ToolbarItems/Compile";
+import Dialog from "@/components/ui/Dialog";
 
 import { checkXml } from "../../helpers/compareXml";
 
-import withStyles from "@mui/styles/withStyles";
+import { makeStyles } from "@mui/styles";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Button from "@mui/material/Button";
@@ -20,7 +18,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import * as Blockly from "blockly";
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   compile: {
     backgroundColor: theme.palette.button.compile,
     color: theme.palette.primary.contrastText,
@@ -29,110 +27,98 @@ const styles = (theme) => ({
       color: theme.palette.primary.contrastText,
     },
   },
-});
+}));
 
-class SolutionCheck extends Component {
-  state = {
-    open: false,
-    msg: "",
-  };
+export default function SolutionCheck() {
+  const classes = useStyles();
+  const dispatch = useDispatch();
+  const history = useHistory();
 
-  toggleDialog = () => {
-    if (this.state.open) {
-      this.setState({ open: false, msg: "" });
+  const activeStep = useSelector((s) => s.tutorial.activeStep);
+  const xml = useSelector((s) => s.workspace.code.xml);
+  const tutorial = useSelector((s) => s.tutorial.tutorials[0]);
+
+  const [open, setOpen] = useState(false);
+  const [msg, setMsg] = useState({});
+
+  const toggleDialog = () => {
+    if (open) {
+      setOpen(false);
+      setMsg("");
     } else {
-      this.setState({ open: !this.state });
+      setOpen(true);
     }
   };
 
-  check = () => {
-    const tutorial = this.props.tutorial;
-    const step = tutorial.steps[this.props.activeStep];
-    var msg = checkXml(step.xml, this.props.xml);
-    this.props.tutorialCheck(msg.type, step);
-    this.setState({ msg, open: true });
+  const check = () => {
+    const step = tutorial.steps[activeStep];
+    const result = checkXml(step.xml, xml);
+    dispatch(tutorialCheck(result.type, step));
+    setMsg(result);
+    setOpen(true);
   };
 
-  render() {
-    const steps = this.props.tutorial.steps;
-    return (
-      <div>
-        <Tooltip title={Blockly.Msg.tooltip_check_solution} arrow>
-          <IconButton
-            className={`solutionCheck ${this.props.classes.compile}`}
-            style={{
-              width: "40px",
-              height: "40px",
-              marginRight: "5px",
-            }}
-            onClick={() => this.check()}
-            size="large"
-          >
-            <FontAwesomeIcon icon={faClipboardCheck} size="xs" />
-          </IconButton>
-        </Tooltip>
+  const isLastStep = tutorial.steps.length - 1 === activeStep;
 
-        <Dialog
-          style={{ zIndex: 9999999 }}
-          fullWidth
-          maxWidth={"sm"}
-          open={this.state.open}
-          title={this.state.msg.type === "error" ? "Fehler" : "Erfolg"}
-          content={this.state.msg.text}
-          onClose={this.toggleDialog}
-          onClick={this.toggleDialog}
-          button={Blockly.Msg.button_close}
+  return (
+    <div>
+      <Tooltip title={Blockly.Msg.tooltip_check_solution} arrow>
+        <IconButton
+          className={`solutionCheck ${classes.compile}`}
+          style={{
+            width: "40px",
+            height: "40px",
+            marginRight: "5px",
+          }}
+          onClick={check}
+          size="large"
         >
-          {this.state.msg.type === "success" ? (
-            <div style={{ marginTop: "20px", display: "flex" }}>
-              <Compile />
-              {this.props.activeStep === steps.length - 1 ? (
-                <Button
-                  style={{ marginLeft: "10px" }}
-                  variant="contained"
-                  color="primary"
-                  onClick={() => {
-                    this.toggleDialog();
-                    this.props.history.push(`/tutorial/`);
-                  }}
-                >
-                  {Blockly.Msg.button_tutorial_overview}
-                </Button>
-              ) : (
-                <Button
-                  style={{ marginLeft: "10px" }}
-                  variant="contained"
-                  color="primary"
-                  onClick={() => {
-                    this.toggleDialog();
-                    this.props.tutorialStep(this.props.activeStep + 1);
-                  }}
-                >
-                  {Blockly.Msg.button_next}
-                </Button>
-              )}
-            </div>
-          ) : null}
-        </Dialog>
-      </div>
-    );
-  }
+          <FontAwesomeIcon icon={faClipboardCheck} size="xs" />
+        </IconButton>
+      </Tooltip>
+
+      <Dialog
+        style={{ zIndex: 9999999 }}
+        fullWidth
+        maxWidth={"sm"}
+        open={open}
+        title={msg.type === "error" ? "Fehler" : "Erfolg"}
+        content={msg.text}
+        onClose={toggleDialog}
+        onClick={toggleDialog}
+        button={Blockly.Msg.button_close}
+      >
+        {msg.type === "success" && (
+          <div style={{ marginTop: "20px", display: "flex" }}>
+            <Compile />
+            {isLastStep ? (
+              <Button
+                style={{ marginLeft: "10px" }}
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                  toggleDialog();
+                  history.push(`/tutorial/`);
+                }}
+              >
+                {Blockly.Msg.button_tutorial_overview}
+              </Button>
+            ) : (
+              <Button
+                style={{ marginLeft: "10px" }}
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                  toggleDialog();
+                  dispatch(tutorialStep(activeStep + 1));
+                }}
+              >
+                {Blockly.Msg.button_next}
+              </Button>
+            )}
+          </div>
+        )}
+      </Dialog>
+    </div>
+  );
 }
-
-SolutionCheck.propTypes = {
-  tutorialCheck: PropTypes.func.isRequired,
-  tutorialStep: PropTypes.func.isRequired,
-  activeStep: PropTypes.number.isRequired,
-  xml: PropTypes.string.isRequired,
-  tutorial: PropTypes.object.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  activeStep: state.tutorial.activeStep,
-  xml: state.workspace.code.xml,
-  tutorial: state.tutorial.tutorials[0],
-});
-
-export default connect(mapStateToProps, { tutorialCheck, tutorialStep })(
-  withStyles(styles, { withTheme: true })(withRouter(SolutionCheck)),
-);

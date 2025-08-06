@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { workspaceName } from "../../actions/workspaceActions";
-import { setDescription, updateProject } from "../../actions/projectActions";
+import { workspaceName } from "../../../actions/workspaceActions";
+import { setDescription, updateProject } from "../../../actions/projectActions";
 
-import Snackbar from "../Snackbar";
-import Dialog from "../Dialog";
+import Snackbar from "../../Snackbar";
+import Dialog from "../../ui/Dialog";
 
 import withStyles from "@mui/styles/withStyles";
 import Button from "@mui/material/Button";
@@ -16,7 +16,7 @@ import Typography from "@mui/material/Typography";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Blockly from "blockly/core";
-import { isWidthDown } from "../../helpers/handleBreakpoints";
+import { isWidthDown } from "../../../helpers/handleBreakpoints";
 
 // FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
 const withWidth = () => (WrappedComponent) => (props) => (

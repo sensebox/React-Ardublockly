@@ -1,235 +1,162 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-
+import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import * as Blockly from "blockly/core";
-
-import withStyles from "@mui/styles/withStyles";
-import Tooltip from "@mui/material/Tooltip";
-import IconButton from "@mui/material/IconButton";
-import Chip from "@mui/material/Chip";
-import Avatar from "@mui/material/Avatar";
-import Popover from "@mui/material/Popover";
-
+import {
+  Box,
+  IconButton,
+  Tooltip,
+  Chip,
+  Avatar,
+  Popover,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPuzzlePiece,
-  faTrash,
   faPlus,
   faPen,
   faArrowsAlt,
+  faTrash,
   faEllipsisH,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { isWidthDown } from "../../helpers/handleBreakpoints";
 
-// FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
-const withWidth = () => (WrappedComponent) => (props) => (
-  <WrappedComponent {...props} width="xs" />
-);
+const WorkspaceStats = () => {
+  const theme = useTheme();
+  const isBig = useMediaQuery(theme.breakpoints.up("sm"));
 
-const styles = (theme) => ({
-  stats: {
-    backgroundColor: theme.palette.primary.main,
-    display: "inline",
-    marginLeft: "50px",
-    padding: "3px 10px",
-    // borderRadius: '25%'
-  },
-  menu: {
-    backgroundColor: theme.palette.secondary.main,
-    color: theme.palette.secondary.contrastText,
-    width: "40px",
-    height: "40px",
-    "&:hover": {
-      backgroundColor: theme.palette.secondary.main,
-      color: theme.palette.primary.main,
+  // Redux-State
+  const stats = useSelector((s) => s.workspace.stats);
+  const workspaceChange = useSelector((s) => s.workspace.change);
+
+  // Popover-Anker
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  // Workspace-Metriken
+  const [wsMetrics, setWsMetrics] = useState({ total: 0, remaining: null });
+  useEffect(() => {
+    const ws = Blockly.getMainWorkspace();
+    setWsMetrics({
+      total: ws?.getAllBlocks().length ?? 0,
+      remaining:
+        ws && ws.remainingCapacity() !== Infinity
+          ? ws.remainingCapacity()
+          : null,
+    });
+  }, [workspaceChange]);
+
+  // Daten für Chips
+  const chipData = [
+    {
+      label: wsMetrics.total,
+      icon: faPuzzlePiece,
+      title: Blockly.Msg.tooltip_statistics_current,
     },
-  },
-});
+    {
+      label: stats.create > 0 ? stats.create : 0,
+      icon: faPlus,
+      title: Blockly.Msg.tooltip_statistics_new,
+    },
+    {
+      label: stats.change,
+      icon: faPen,
+      title: Blockly.Msg.tooltip_statistics_changed,
+    },
+    {
+      label: stats.move > 0 ? stats.move : 0,
+      icon: faArrowsAlt,
+      title: Blockly.Msg.tooltip_statistics_moved,
+    },
+    {
+      label: stats.delete,
+      icon: faTrash,
+      title: Blockly.Msg.tooltip_statistics_deleted,
+    },
+    ...(wsMetrics.remaining != null
+      ? [
+          {
+            label: wsMetrics.remaining,
+            icon: null,
+            title: Blockly.Msg.tooltip_statistics_remaining,
+          },
+        ]
+      : []),
+  ];
 
-class WorkspaceStats extends Component {
-  state = {
-    anchor: null,
-  };
+  const handleOpen = (e) => setAnchorEl(e.currentTarget);
+  const handleClose = () => setAnchorEl(null);
 
-  handleClose = () => {
-    this.setState({ anchor: null });
-  };
+  // Alle Chips rendern
+  const chips = chipData.map(({ label, icon, title }, idx) => (
+    <Tooltip key={idx} title={title} arrow>
+      <Chip
+        variant="outlined"
+        color="primary"
+        style={{
+          backgroundColor: theme.palette.primary.main,
+          color: theme.palette.primary.contrastText,
+        }}
+        avatar={
+          icon ? (
+            <Avatar>
+              <FontAwesomeIcon icon={icon} />
+            </Avatar>
+          ) : undefined
+        }
+        label={label}
+        sx={{ mr: 1, mb: isBig ? 0 : 1 }}
+      />
+    </Tooltip>
+  ));
 
-  handleClick = (event) => {
-    this.setState({ anchor: event.currentTarget });
-  };
-
-  render() {
-    const bigDisplay = !isWidthDown("sm", this.props.width);
-    const workspace = Blockly.getMainWorkspace();
-    const remainingBlocksInfinity = workspace
-      ? workspace.remainingCapacity() !== Infinity
-      : null;
-    const stats = (
-      <div style={bigDisplay ? { display: "flex" } : { display: "inline" }}>
-        <Tooltip title={Blockly.Msg.tooltip_statistics_current} arrow>
-          <Chip
-            style={
-              bigDisplay
-                ? { marginRight: "1rem" }
-                : { marginRight: "1rem", marginBottom: "5px" }
-            }
-            color="primary"
-            avatar={
-              <Avatar>
-                <FontAwesomeIcon icon={faPuzzlePiece} />
-              </Avatar>
-            }
-            label={workspace ? workspace.getAllBlocks().length : 0}
-          ></Chip>
-        </Tooltip>
-        <Tooltip title={Blockly.Msg.tooltip_statistics_new} arrow>
-          <Chip
-            style={
-              bigDisplay
-                ? { marginRight: "1rem" }
-                : { marginRight: "1rem", marginBottom: "5px" }
-            }
-            color="primary"
-            avatar={
-              <Avatar>
-                <FontAwesomeIcon icon={faPlus} />
-              </Avatar>
-            }
-            label={this.props.create > 0 ? this.props.create : 0}
-          >
-            {" "}
-            {/* initialXML is created automatically, Block is not part of the statistics */}
-          </Chip>
-        </Tooltip>
-        <Tooltip title={Blockly.Msg.tooltip_statistics_changed} arrow>
-          <Chip
-            style={
-              bigDisplay
-                ? { marginRight: "1rem" }
-                : { marginRight: "1rem", marginBottom: "5px" }
-            }
-            color="primary"
-            avatar={
-              <Avatar>
-                <FontAwesomeIcon icon={faPen} />
-              </Avatar>
-            }
-            label={this.props.change}
-          ></Chip>
-        </Tooltip>
-        <Tooltip title={Blockly.Msg.tooltip_statistics_moved} arrow>
-          <Chip
-            style={
-              bigDisplay
-                ? { marginRight: "1rem" }
-                : { marginRight: "1rem", marginBottom: "5px" }
-            }
-            color="primary"
-            avatar={
-              <Avatar>
-                <FontAwesomeIcon icon={faArrowsAlt} />
-              </Avatar>
-            }
-            label={this.props.move > 0 ? this.props.move : 0}
-          >
-            {" "}
-            {/* initialXML is moved automatically, Block is not part of the statistics */}
-          </Chip>
-        </Tooltip>
-        <Tooltip title={Blockly.Msg.tooltip_statistics_deleted} arrow>
-          <Chip
-            style={
-              remainingBlocksInfinity
-                ? bigDisplay
-                  ? { marginRight: "1rem" }
-                  : {
-                      marginRight: "1rem",
-                      marginBottom: "5px",
-                    }
-                : {}
-            }
-            color="primary"
-            avatar={
-              <Avatar>
-                <FontAwesomeIcon icon={faTrash} />
-              </Avatar>
-            }
-            label={this.props.delete}
-          ></Chip>
-        </Tooltip>
-        {remainingBlocksInfinity ? (
-          <Tooltip title={Blockly.Msg.tooltip_statistics_remaining} arrow>
-            <Chip
-              style={
-                bigDisplay
-                  ? { marginRight: "1rem" }
-                  : {
-                      marginRight: "1rem",
-                      marginBottom: "5px",
-                    }
-              }
-              color="primary"
-              label={workspace.remainingCapacity()}
-            ></Chip>
-          </Tooltip>
-        ) : null}
-      </div>
-    );
-    return bigDisplay ? (
-      <div style={{ bottom: 0, position: "absolute" }}>{stats}</div>
-    ) : (
-      <div>
-        <Tooltip title={Blockly.Msg.tooltip_statistics_show} arrow>
-          <IconButton
-            className={this.props.classes.menu}
-            onClick={(event) => this.handleClick(event)}
-            size="large"
-          >
-            <FontAwesomeIcon icon={faEllipsisH} size="xs" />
-          </IconButton>
-        </Tooltip>
-        <Popover
-          open={Boolean(this.state.anchor)}
-          anchorEl={this.state.anchor}
-          onClose={this.handleClose}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "center",
-          }}
-          transformOrigin={{
-            vertical: "top",
-            horizontal: "center",
-          }}
-          PaperProps={{
-            style: { margin: "5px" },
+  // Großes Display: Chips unten fix anzeigen
+  if (isBig) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          whiteSpace: "nowrap",
+          position: "absolute",
+          bottom: 0,
+          width: "100%",
+          p: 1,
+          bgcolor: "transparent",
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            whiteSpace: "nowrap",
+            gap: 1,
           }}
         >
-          <div style={{ margin: "10px" }}>{stats}</div>
-        </Popover>
-      </div>
+          {chips}
+        </Box>{" "}
+      </Box>
     );
   }
-}
 
-WorkspaceStats.propTypes = {
-  create: PropTypes.number.isRequired,
-  change: PropTypes.number.isRequired,
-  delete: PropTypes.number.isRequired,
-  move: PropTypes.number.isRequired,
-  workspaceChange: PropTypes.number.isRequired,
+  // Kleines Display: Popover über Ellipsis-Button
+  return (
+    <>
+      <Tooltip title={Blockly.Msg.tooltip_statistics_show} arrow>
+        <IconButton size="large" onClick={handleOpen} sx={{}}>
+          <FontAwesomeIcon icon={faEllipsisH} />
+        </IconButton>
+      </Tooltip>
+      <Popover
+        open={Boolean(anchorEl)}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        transformOrigin={{ vertical: "top", horizontal: "center" }}
+        PaperProps={{ sx: { m: 1, p: 1 } }}
+      >
+        <Box sx={{ display: "flex", flexWrap: "wrap" }}>{chips}</Box>
+      </Popover>
+    </>
+  );
 };
 
-const mapStateToProps = (state) => ({
-  create: state.workspace.stats.create,
-  change: state.workspace.stats.change,
-  delete: state.workspace.stats.delete,
-  move: state.workspace.stats.move,
-  workspaceChange: state.workspace.change,
-});
-
-export default connect(
-  mapStateToProps,
-  null,
-)(withStyles(styles, { withTheme: true })(withWidth()(WorkspaceStats)));
+export default WorkspaceStats;

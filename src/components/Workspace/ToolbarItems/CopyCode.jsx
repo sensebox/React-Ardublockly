@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { workspaceName } from "../../actions/workspaceActions";
+import { workspaceName } from "../../../actions/workspaceActions";
 
 import withStyles from "@mui/styles/withStyles";
 import Button from "@mui/material/Button";
@@ -11,7 +11,7 @@ import Tooltip from "@mui/material/Tooltip";
 import { faCopy } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Blockly from "blockly/core";
-import Snackbar from "../Snackbar";
+import Snackbar from "../../Snackbar";
 
 const styles = (theme) => ({
   backdrop: {

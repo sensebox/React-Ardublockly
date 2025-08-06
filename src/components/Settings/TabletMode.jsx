@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setBoard } from "../../actions/boardAction";
+import { setPlatform } from "../../actions/generalActions";
 
 import * as Blockly from "blockly/core";
 
@@ -13,9 +13,9 @@ import Select from "@mui/material/Select";
 import Typography from "@mui/material/Typography";
 import FormHelperText from "@mui/material/FormHelperText";
 
-export default function DeviceSelector() {
+export default function TabletMode() {
   const dispatch = useDispatch();
-  const selectedBoard = useSelector((s) => s.board.board);
+  const platform = useSelector((s) => s.general.platform);
 
   // force re-render so Blockly.Msg is up-to-date
   const [, forceUpdate] = useState(0);
@@ -33,13 +33,13 @@ export default function DeviceSelector() {
 
   const handleChange = (e) => {
     const value = e.target.value;
-    dispatch(setBoard(value));
-
+    dispatch(setPlatform(value));
     setSnackInfo({
       type: "success",
       key: Date.now(),
-      // you can replace this with a Blockly.Msg key if available
-      message: `${Blockly.Msg.settings_board} geändert: ${value === "MCU" ? "senseBox MCU" : value === "MCU:mini" ? "senseBox MCU mini" : "senseBox MCU-S2"}`,
+      message:
+        Blockly.Msg.settings_ota_changed ||
+        `${Blockly.Msg.settings_ota_head} ${value ? Blockly.Msg.settings_ota_on.toLowerCase() : Blockly.Msg.settings_ota_off.toLowerCase()}`,
     });
     setSnackbarOpen(true);
   };
@@ -47,7 +47,7 @@ export default function DeviceSelector() {
   return (
     <div>
       <Typography style={{ fontWeight: "bold" }}>
-        {Blockly.Msg.settings_board}
+        {Blockly.Msg.settings_ota_head}
       </Typography>
       <FormHelperText
         style={{
@@ -56,22 +56,29 @@ export default function DeviceSelector() {
           marginBottom: "8px",
         }}
       >
-        {Blockly.Msg.settings_board_text}
+        {Blockly.Msg.settings_ota_text}
+        <a
+          href="https://sensebox.de/app"
+          target="_blank"
+          rel="noreferrer"
+          style={{ marginLeft: "4px" }}
+        >
+          https://sensebox.de/app
+        </a>
       </FormHelperText>
       <FormControl variant="standard">
-        <InputLabel id="device-selector-label">
-          {Blockly.Msg.settings_board}
+        <InputLabel id="ota-selector-label">
+          {Blockly.Msg.settings_statistics}
         </InputLabel>
         <Select
           variant="standard"
-          labelId="device-selector-label"
-          id="device-selector"
-          value={selectedBoard}
+          labelId="ota-selector-label"
+          id="ota-selector"
+          value={platform}
           onChange={handleChange}
         >
-          <MenuItem value="MCU">senseBox MCU</MenuItem>
-          <MenuItem value="MCU:mini">senseBox MCU mini</MenuItem>
-          <MenuItem value="MCU-S2">senseBox MCU-S2</MenuItem>
+          <MenuItem value={true}>{Blockly.Msg.settings_ota_on}</MenuItem>
+          <MenuItem value={false}>{Blockly.Msg.settings_ota_off}</MenuItem>
         </Select>
       </FormControl>
 
