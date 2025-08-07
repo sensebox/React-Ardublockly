@@ -325,7 +325,7 @@ const sensebox_esp32 = {
     ["5", "5"],
   ],
   pwmPins: [
-    ["IO1", "1"],
+    ["IO1", "1"], // TODO: is this correct?
     ["IO2", "2"],
   ],
   serial: [
@@ -406,6 +406,113 @@ const sensebox_esp32 = {
   parseKey: "_*_",
 };
 
+//senseBox Eye
+const sensebox_eye = {
+  title: "Eye",
+  description: "senseBox Eye",
+  compilerFlag: "esp32:esp32:esp32", // TODO: Paula?
+  digitalPins: [
+    ["IO14", "14"],
+    ["IO48", "48"],
+  ],
+  digitalPorts: [["A", "IO48_14"]],
+  digitalPinsRGBMatrix: [["A", "14"]],
+  digitalPinsLED: [
+    ["IO14", "14"],
+    ["IO48", "48"],
+  ],
+  digitalPinsRGB: [
+    ["on Board", "45"],
+    ["A", "48"],
+  ],
+  digitalPinsButton: [
+    ["on Board", "0"],
+    ["IO14", "14"],
+    ["IO48", "48"],
+  ],
+  oneWire: [
+    ["0", "0"],
+    ["1", "1"],
+    ["2", "2"],
+    ["3", "3"],
+    ["4", "4"],
+    ["5", "5"],
+  ],
+  pwmPins: [
+    ["IO14", "14"],
+    ["IO48", "48"],
+  ],
+  serial: [
+    ["Serial", "Serial"],
+    ["Serial0", "Serial0"],
+  ],
+  serialSensors: [["Serial0", "Serial0"]],
+  serialPins: {
+    SerialUSB: [
+      ["RX", ""],
+      ["TX", ""],
+    ],
+    Serial0: [
+      ["RX", "1"],
+      ["TX", "2"],
+    ],
+  },
+  serialSpeed: [
+    ["300", "300"],
+    ["600", "600"],
+    ["1200", "1200"],
+    ["2400", "2400"],
+    ["4800", "4800"],
+    ["9600", "9600"],
+    ["14400", "14400"],
+    ["19200", "19200"],
+    ["28800", "28800"],
+    ["31250", "31250"],
+    ["38400", "38400"],
+    ["57600", "57600"],
+    ["115200", "115200"],
+  ],
+  // spi: [["SPI", "SPI"]],
+  // spiPins: { // TODO: Paula?
+  //   SPI: [
+  //     ["MOSI", "19"],
+  //     ["MISO", "21"],
+  //     ["SCK", "20"],
+  //   ],
+  // },
+  // spiClockDivide: [
+  //   ["2 (8MHz)", "SPI_CLOCK_DIV2"],
+  //   ["4 (4MHz)", "SPI_CLOCK_DIV4"],
+  //   ["8 (2MHz)", "SPI_CLOCK_DIV8"],
+  //   ["16 (1MHz)", "SPI_CLOCK_DIV16"],
+  //   ["32 (500KHz)", "SPI_CLOCK_DIV32"],
+  //   ["64 (250KHz)", "SPI_CLOCK_DIV64"],
+  //   ["128 (125KHz)", "SPI_CLOCK_DIV128"],
+  // ],
+  i2c: [["I2C", "Wire"]],
+  i2cPins: {
+    Wire: [
+      ["SDA", "2"],
+      ["SCL", "1"],
+    ],
+  },
+  i2cSpeed: [
+    ["100kHz", "100000L"],
+    ["400kHz", "400000L"],
+  ],
+  builtinLed: [["BUILTIN_1", "45"]],
+  interrupt: [
+    ["interrupt1", "1"],
+    ["interrupt2", "2"],
+  ],
+  analogPins: [
+    ["IO14", "14"],
+    ["IO48", "48"],
+  ],
+  serial_baud_rate: 9600,
+  parseKey: "_*_",
+};
+
 var board = sensebox_mcu;
 
 export const setBoard = (selectedBoard) => {
@@ -418,6 +525,9 @@ export const setBoard = (selectedBoard) => {
       break;
     case "esp32":
       board = sensebox_esp32;
+      break;
+    case "eye":
+      board = sensebox_eye;
       break;
     default:
       board = sensebox_mcu;

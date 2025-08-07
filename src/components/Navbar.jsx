@@ -114,7 +114,24 @@ const Navbar = () => {
     handleLangClose();
   };
   const changeBoard = (val) => {
-    dispatch(setBoard(val));
+    let board;
+    switch (val) {
+      case "MCU":
+        board = "mcu";
+        break;
+      case "MCU:mini":
+        board = "mini";
+        break;
+      case "MCU-S2":
+        board = "esp32";
+        break;
+      case "Eye":
+        board = "eye";
+        break;
+      default:
+        board = "mcu";
+    }
+    dispatch(setBoard(board));
 
     handleBoardClose();
   };
@@ -208,7 +225,9 @@ const Navbar = () => {
                       ? "MCU"
                       : selectedBoard === "mini"
                         ? "MCU:mini"
-                        : "MCU-S2"}
+                        : selectedBoard === "esp32"
+                          ? "MCU-S2"
+                          : "Eye"}
                   </Button>
                   <Menu
                     anchorEl={anchorElBoard}
@@ -217,7 +236,7 @@ const Navbar = () => {
                     open={Boolean(anchorElBoard)}
                     onClose={handleBoardClose}
                   >
-                    {["MCU", "MCU:mini", "MCU-S2"].map((b) => (
+                    {["MCU", "MCU:mini", "MCU-S2", "Eye"].map((b) => (
                       <MenuItem
                         key={b}
                         value={b}

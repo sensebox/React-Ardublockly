@@ -68,11 +68,20 @@ function CompilationDialog({
 
   const handleCompile = async () => {
     try {
-      const board =
-        selectedBoard === "mcu" || selectedBoard === "mini"
-          ? "sensebox-mcu"
-          : "sensebox-esp32s2";
-
+      let board;
+      switch (selectedBoard) {
+        case "mcu":
+          board = "sensebox-mcu";
+          break;
+        case "mini":
+          board = "sensebox-mini";
+          break;
+        case "eye":
+          board = "sensebox-eye";
+          break;
+        default:
+          board = "sensebox-esp32s2";
+      }
       const response = await fetch(`${compilerUrl}/compile`, {
         method: "POST",
         headers: {
