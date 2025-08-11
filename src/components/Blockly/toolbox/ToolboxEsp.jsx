@@ -89,7 +89,7 @@ export const ToolboxEsp = () => {
         <Block type="sensebox_sd_exists">
           <Value name="FILENAME">
             <Block type="text">
-              <Field name="num">Dateiname</Field>
+              <Field name="TEXT">Dateiname</Field>
             </Block>
           </Value>
         </Block>

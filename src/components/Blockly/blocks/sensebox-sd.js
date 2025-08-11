@@ -274,9 +274,9 @@ Blockly.Blocks["sensebox_sd_exists"] = {
   init: function () {
     this.appendValueInput("FILENAME")
       .appendField(Blockly.Msg.sensebox_sd_exists)
-      .appendField(Blockly.Msg.filename + ":");
-
+      .appendField(Blockly.Msg.filename);
     this.setOutput(true);
+
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_sd_exists_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_sd_exists_tooltip);
