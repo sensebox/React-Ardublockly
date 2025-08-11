@@ -269,3 +269,28 @@ Blockly.Blocks["sensebox_esp32s2_sd_write_file"] = {
   },
   LOOP_TYPES: ["sensebox_esp32s2_sd_open_file"],
 };
+
+Blockly.Blocks["sensebox_sd_exists"] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.sensebox_sd_exists)
+      .setAlign(Blockly.inputs.Align.LEFT)
+      .appendField(
+        new Blockly.FieldTextInput("Data", checkFileName),
+        "Filename",
+      )
+      .appendField(".")
+      .appendField(
+        new Blockly.FieldDropdown([
+          ["txt", "txt"],
+          ["csv", "csv"],
+        ]),
+        "extension",
+      );
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(getColour().sensebox);
+    this.setTooltip(Blockly.Msg.senseBox_sd_exists_tooltip);
+    this.setHelpUrl(Blockly.Msg.senseBox_sd_exists_tooltip);
+  },
+};

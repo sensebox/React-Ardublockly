@@ -86,6 +86,7 @@ export const ToolboxEsp = () => {
         </Block>
         <Block type="sensebox_sd_osem" />
         <Block type="sensebox_sd_save_for_osem" />
+        <Block type="sensebox_sd_exists" />
       </Category>
       <Category name="LED" colour={getColour().sensebox}>
         <Block type="sensebox_ws2818_led_init">
