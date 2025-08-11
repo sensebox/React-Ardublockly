@@ -136,7 +136,7 @@ const Navbar = () => {
         classes={{ root: classes.appBarColor }}
         style={{
           height: "50px",
-          marginBottom: tutorialIsLoading || projectIsLoading ? "0px" : "30px",
+          marginBottom: tutorialIsLoading || projectIsLoading ? "0px" : "5px",
           boxShadow:
             tutorialIsLoading || projectIsLoading
               ? "none"

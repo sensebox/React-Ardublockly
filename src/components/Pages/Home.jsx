@@ -109,43 +109,22 @@ const Home = () => {
         </div>
       )}
 
-      <div
-        className="workspaceFunc"
-        style={{
-          float: "right",
-          height: "40px",
-          marginBottom: "20px",
-        }}
-      >
-        <WorkspaceToolbar project={project} projectType={projectType} />
-      </div>
-
       {/* Blockly + Code Viewer */}
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={codeOn ? 7 : 8} style={{ position: "relative" }}>
+      <Grid sx={{ marginTop: "5px" }} container spacing={2}>
+        {codeOn && (
+          <Grid item xs={12} md={6} style={{ height: "100%" }}>
+            <CodeViewer />
+            <TooltipViewer />
+          </Grid>
+        )}
+        <Grid item xs={12} md={6} style={{ position: "relative" }}>
           <Tooltip
             title={
               codeOn
                 ? Blockly.Msg.tooltip_hide_code
                 : Blockly.Msg.tooltip_show_code
             }
-          >
-            <IconButton
-              className={`showCode ${codeOn ? classes.codeOn : classes.codeOff}`}
-              style={{
-                width: "40px",
-                height: "40px",
-                position: "absolute",
-                top: -12,
-                right: 8,
-                zIndex: 21,
-              }}
-              onClick={toggleCode}
-              size="large"
-            >
-              <FontAwesomeIcon icon={faCode} size="xs" />
-            </IconButton>
-          </Tooltip>
+          ></Tooltip>
 
           <TrashcanButtons />
           <div className="blocklyWindow">
@@ -155,14 +134,16 @@ const Home = () => {
             />
           </div>
         </Grid>
-
-        {codeOn && (
-          <Grid item xs={12} md={5} style={{ height: "100%" }}>
-            <CodeViewer />
-            <TooltipViewer />
-          </Grid>
-        )}
       </Grid>
+      <div
+        className="workspaceFunc"
+        style={{
+          float: "right",
+          height: "20px",
+        }}
+      >
+        <WorkspaceToolbar project={project} projectType={projectType} />
+      </div>
 
       {/* Device Selection */}
       <DeviceSelection />

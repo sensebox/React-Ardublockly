@@ -150,10 +150,10 @@ const SimulatorFlow = (props) => {
         }}
         fitView
         connectionMode="loose"
+        onInit={(e) => e.fitView()}
       >
         <Background />
         <Controls />
-        {/* <MiniMap /> */}
       </ReactFlow>
     </div>
   );
