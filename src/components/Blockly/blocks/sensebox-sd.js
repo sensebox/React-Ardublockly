@@ -272,23 +272,11 @@ Blockly.Blocks["sensebox_esp32s2_sd_write_file"] = {
 
 Blockly.Blocks["sensebox_sd_exists"] = {
   init: function () {
-    this.appendDummyInput()
+    this.appendValueInput("FILENAME")
       .appendField(Blockly.Msg.sensebox_sd_exists)
-      .setAlign(Blockly.inputs.Align.LEFT)
-      .appendField(
-        new Blockly.FieldTextInput("Data", checkFileName),
-        "Filename",
-      )
-      .appendField(".")
-      .appendField(
-        new Blockly.FieldDropdown([
-          ["txt", "txt"],
-          ["csv", "csv"],
-        ]),
-        "extension",
-      );
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
+      .appendField(Blockly.Msg.filename + ":");
+
+    this.setOutput(true);
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_sd_exists_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_sd_exists_tooltip);
