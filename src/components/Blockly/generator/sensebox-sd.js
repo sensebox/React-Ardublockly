@@ -293,13 +293,17 @@ Blockly.Generator.Arduino.forBlock["sensebox_sd_exists"] = function (
   block,
   generator,
 ) {
-  var filename = this.getFieldValue("Filename");
-  var extension = this.getFieldValue("extension");
-  var newFileName = filename.concat(".", extension);
+  // var filename = this.getFieldValue("FILENAME");
+  var filename = Blockly.Generator.Arduino.valueToCode(
+    this,
+    "FILENAME",
+    Blockly.Generator.Arduino.ORDER_ATOMIC,
+  );
+
   Blockly.Generator.Arduino.libraries_["library_spi"] = "#include <SPI.h>";
   Blockly.Generator.Arduino.libraries_["library_sd"] = "#include <SD.h>";
   Blockly.Generator.Arduino.setupCode_["sensebox_sd"] = "SD.begin(28);\n";
 
-  var code = `SD.exists("${newFileName}")`;
-  return code;
+  var code = `SD.exists(${filename})`;
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
