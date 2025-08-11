@@ -24,6 +24,7 @@ import { makeStyles } from "@mui/styles";
 // Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCode } from "@fortawesome/free-solid-svg-icons";
+import { Box } from "@mui/material";
 
 const useStyles = makeStyles((theme) => ({
   codeOn: {
@@ -111,13 +112,21 @@ const Home = () => {
 
       {/* Blockly + Code Viewer */}
       <Grid sx={{ marginTop: "5px" }} container spacing={2}>
-        {codeOn && (
-          <Grid item xs={12} md={6} style={{ height: "100%" }}>
+        <Grid
+          item
+          xs={12}
+          md={6}
+          sx={{ display: "flex", flexDirection: "column", height: "80vh" }}
+        >
+          <Box sx={{ flex: 1 }}>
             <CodeViewer />
+          </Box>
+          <Box sx={{ flex: 1 }}>
             <TooltipViewer />
-          </Grid>
-        )}
-        <Grid item xs={12} md={6} style={{ position: "relative" }}>
+          </Box>
+        </Grid>
+
+        <Grid item xs={12} md={6}>
           <Tooltip
             title={
               codeOn

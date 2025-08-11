@@ -49,7 +49,6 @@ const CodeViewer = () => {
     <Card
       sx={{
         height: "100%",
-        maxHeight: "50vh",
         display: "flex",
         flexDirection: "column",
       }}

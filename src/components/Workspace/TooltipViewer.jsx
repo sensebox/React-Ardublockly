@@ -30,7 +30,7 @@ const TooltipViewer = () => {
     <Card
       className="helpSection"
       sx={{
-        height: "25vh",
+        height: "100%",
         overflowY: "auto",
         mt: 2,
         borderRadius: 1,
