@@ -116,7 +116,11 @@ const Home = () => {
           item
           xs={12}
           md={6}
-          sx={{ display: "flex", flexDirection: "column", height: "80vh" }}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "8px",
+          }}
         >
           <Box sx={{ flex: 1 }}>
             <CodeViewer />

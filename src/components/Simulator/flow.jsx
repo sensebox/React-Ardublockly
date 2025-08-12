@@ -71,6 +71,9 @@ const SimulatorFlow = (props) => {
   const reactFlow = useReactFlow();
 
   useEffect(() => {
+    reactFlow.fitView();
+  }, [modules]);
+  useEffect(() => {
     // calculate new edges
     const newEdges = [];
     nodes.forEach((node) => {

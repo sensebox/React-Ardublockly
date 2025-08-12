@@ -53,59 +53,7 @@ const CodeViewer = () => {
         flexDirection: "column",
       }}
     >
-      <Accordion
-        style={{ width: "100%" }}
-        expanded={expandedPanel === "simulator"}
-        onChange={handleChange("simulator")}
-        sx={{ margin: 0 }}
-      >
-        <AccordionSummary>
-          <Typography
-            component="span"
-            sx={{ fontSize: 20, fontWeight: "bold", mr: 1, width: 35 }}
-          >
-            {"{ }"}
-          </Typography>
-          <Typography sx={{ m: "auto 5px 2px 0" }}>
-            {Blockly.Msg.codeviewer_simulator}
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails
-          sx={{
-            height: "calc(50vh - 50px - 55px )",
-            bgcolor: "background.paper",
-          }}
-        >
-          <Simulator />
-        </AccordionDetails>
-      </Accordion>
-
-      <Accordion
-        style={{ width: "100%" }}
-        expanded={expandedPanel === "debug"}
-        onChange={handleChange("debug")}
-        sx={{ margin: 0 }}
-      >
-        <AccordionSummary>
-          <Typography
-            component="span"
-            sx={{ fontSize: 20, fontWeight: "bold", mr: 1, width: 35 }}
-          >
-            {"<>"}
-          </Typography>
-          <Typography sx={{ m: "auto 5px 2px 0" }}>
-            {Blockly.Msg.codeviewer_debug}
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails
-          sx={{
-            height: "calc(50vh - 50px - 50px )",
-            bgcolor: "background.paper",
-          }}
-        >
-          <DebugViewer />
-        </AccordionDetails>
-      </Accordion>
+      <Simulator />
     </Card>
   );
 };
