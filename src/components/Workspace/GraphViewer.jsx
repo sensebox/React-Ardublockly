@@ -88,11 +88,10 @@ const MetricSlide = ({ title, value, series, theme }) => (
       <Typography sx={{ fontWeight: 600, color: "text.primary" }}>
         {title}
       </Typography>
-      <Typography sx={{ fontSize: 14 }}>{String(value)}</Typography>
       <Box sx={{ width: "100%", minHeight: 0 }}>
         <ScatterChart
           series={[{ data: series.map((y, x) => ({ x, y })), label: title }]}
-          height={180}
+          height={230}
           hideLegend
           colors={[theme.palette.primary.main]}
           xAxis={[{ disableTicks: false }]}
@@ -143,46 +142,53 @@ const GraphViewer = () => {
         minHeight: 0,
       }}
     >
-      {/* Floating Settings + Clear icons */}
-      <Box
-        sx={{
-          position: "absolute",
-          bottom: "47%",
-          left: "42%",
-          zIndex: 100,
-          background: "#fff",
-          borderRadius: "50%",
-          boxShadow: 1,
-        }}
-      >
-        <IconButton
-          aria-label="Einstellungen"
-          style={{ color: theme.palette.primary.main }}
-          onClick={() => {
-            setTempLimit(limit);
-            setSettingsOpen(true);
-          }}
-          size="small"
-        >
-          <SettingsIcon />
-        </IconButton>
-      </Box>
-      <Box
-        sx={{
+      <div
+        style={{
           position: "absolute",
           bottom: "47%",
           left: "45%",
           zIndex: 100,
-          background: "#fff",
-          borderRadius: "50%",
-          boxShadow: 1,
+          display: "flex",
+          flexDirection: "row",
+          gap: 8,
         }}
       >
-        <IconButton aria-label="Daten löschen" onClick={clearData} size="small">
-          <DeleteIcon />
-        </IconButton>
-      </Box>
-
+        <Box
+          sx={{
+            background: "#fff",
+            borderRadius: "50%",
+            boxShadow: 1,
+          }}
+        >
+          <IconButton
+            aria-label="Einstellungen"
+            style={{ color: theme.palette.primary.main }}
+            onClick={() => {
+              setTempLimit(limit);
+              setSettingsOpen(true);
+            }}
+            size="small"
+          >
+            <SettingsIcon />
+          </IconButton>
+        </Box>
+        <Box
+          sx={{
+            background: "#fff",
+            borderRadius: "50%",
+            boxShadow: 1,
+          }}
+        >
+          <IconButton
+            aria-label="Daten löschen"
+            onClick={clearData}
+            size="small"
+            color="error"
+          >
+            <DeleteIcon />
+          </IconButton>
+        </Box>
+      </div>
       <Box sx={{ flex: 1, minHeight: 0, overflow: "hidden" }}>
         {keys.length === 0 ? (
           <Box

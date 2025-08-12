@@ -26,7 +26,7 @@ export default function DebugViewer() {
       sx={{
         bgcolor: "common.white",
         p: 1,
-        maxHeight: 300,
+        maxHeight: 250,
         overflowY: "auto",
       }}
     >

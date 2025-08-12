@@ -7,6 +7,8 @@ import {
   Button,
   Slide,
   Tab,
+  Fade,
+  Box,
 } from "@mui/material";
 import ReactMarkdown from "react-markdown";
 import * as Blockly from "blockly";
@@ -94,23 +96,41 @@ const SlidePanel = ({
 // ———————————————————————————————————————
 // Tab contents as tiny components
 // ———————————————————————————————————————
-const HelpTab = ({ tooltip, helpurl }) => (
-  <>
-    <UnderlinedTitle>{Blockly.Msg.tooltip_moreInformation_02}</UnderlinedTitle>
-    <ReactMarkdown linkTarget="_blank">{tooltip}</ReactMarkdown>
-    {helpurl && (
-      <Button
-        variant="contained"
-        color="primary"
-        href={helpurl}
-        target="_blank"
-        sx={{ mt: 2, px: 2, py: 1, borderRadius: 1, fontSize: "0.9rem" }}
-      >
-        Zur Dokumentation
-      </Button>
-    )}
-  </>
-);
+
+const HelpTab = ({ tooltip, helpurl }) => {
+  // change key when the markdown content changes
+  const markdownKey = `${tooltip ?? ""}`; // or `${helpurl ?? ""}|${tooltip?.length ?? 0}`
+
+  return (
+    <>
+      <UnderlinedTitle>
+        {Blockly.Msg.tooltip_moreInformation_02}
+      </UnderlinedTitle>
+
+      <Fade in key={markdownKey} timeout={350}>
+        <Box
+          sx={{
+            maxHeight: 230,
+          }}
+        >
+          <ReactMarkdown linkTarget="_blank">{tooltip}</ReactMarkdown>
+        </Box>
+      </Fade>
+
+      {helpurl && (
+        <Button
+          variant="contained"
+          color="primary"
+          href={helpurl}
+          target="_blank"
+          sx={{ mt: 2, px: 2, py: 1, borderRadius: 1, fontSize: "0.9rem" }}
+        >
+          Zur Dokumentation
+        </Button>
+      )}
+    </>
+  );
+};
 
 const GraphTab = () => <GraphViewer />;
 const DebugTab = () => <DebugViewer />;
@@ -119,7 +139,8 @@ const DebugTab = () => <DebugViewer />;
 // Main component
 // ———————————————————————————————————————
 const TooltipViewer = () => {
-  const { tooltip, helpurl } = useSelector((s) => s.workspace.code);
+  const tooltip = useSelector((s) => s.workspace.code.tooltip);
+  const helpurl = useSelector((s) => s.workspace.code.helpurl);
   const [value, setValue] = React.useState("help");
 
   return (
@@ -143,7 +164,11 @@ const TooltipViewer = () => {
             direction="left"
             sx={{ p: 1.5 }}
           >
-            <HelpTab tooltip={tooltip} helpurl={helpurl} />
+            <HelpTab
+              tooltip={tooltip}
+              helpurl={helpurl}
+              inProp={value === "help"}
+            />{" "}
           </SlidePanel>
 
           <SlidePanel
