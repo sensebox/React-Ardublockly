@@ -28,7 +28,18 @@ const IGNORED = [
   "senseBox_hdc1080",
 ];
 
-const formatLabel = (key) => key.replace(/sensebox?_?/i, "").replace(/_/g, " ");
+const labels = {
+  sensebox_smt50_moisture: "Bodenfeuchte in % (SMT50)",
+  sensebox_smt50_temp: "Temperatur (SMT50)",
+  sensebox_light_uv: "UV-Strahlung",
+  sensebox_light_lux: "Beleuchtung in Lux",
+  sensebox_scd_co2: "CO2 Konzentration (SCD30)",
+  sensebox_scd_temp: "Temperatur(SCD30)",
+  sensebox_scd_humi: "rel. Luftfeuchte(SCD30)",
+  sensebox_tof_dist: "Distanz in mm(ToF)",
+  senseBox_hdc1080_temp: "Temperatur (HDC1080)",
+  senseBox_hdc1080_humidity: "rel. Luftfeuchte (HDC1080)",
+};
 
 // ———————————————————————————————————————
 // History stream + clear function
@@ -86,11 +97,13 @@ const MetricSlide = ({ title, value, series, theme }) => (
       }}
     >
       <Typography sx={{ fontWeight: 600, color: "text.primary" }}>
-        {title}
+        {labels[title]}
       </Typography>
       <Box sx={{ width: "100%", minHeight: 0 }}>
         <ScatterChart
-          series={[{ data: series.map((y, x) => ({ x, y })), label: title }]}
+          series={[
+            { data: series.map((y, x) => ({ x, y })), label: labels[title] },
+          ]}
           height={230}
           hideLegend
           colors={[theme.palette.primary.main]}
@@ -222,7 +235,7 @@ const GraphViewer = () => {
               return (
                 <SwiperSlide key={key} style={{ height: "100%" }}>
                   <MetricSlide
-                    title={formatLabel(key)}
+                    title={key}
                     value={moduleValues[key]}
                     series={limited}
                     theme={theme}
