@@ -12,13 +12,14 @@ import {
   Typography,
 } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { ScatterChart } from "@mui/x-charts";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation, Keyboard, A11y } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import { useTheme } from "@mui/styles";
+import { useTheme } from "@mui/material/styles";
 
 const IGNORED = [
   "sensebox_fluoroASM_init",
@@ -29,6 +30,9 @@ const IGNORED = [
 
 const formatLabel = (key) => key.replace(/sensebox?_?/i, "").replace(/_/g, " ");
 
+// ———————————————————————————————————————
+// History stream + clear function
+// ———————————————————————————————————————
 const useHistoryStream = (isRunning, moduleValues) => {
   const [history, setHistory] = useState({});
   const latest = useRef(moduleValues);
@@ -56,7 +60,9 @@ const useHistoryStream = (isRunning, moduleValues) => {
     return () => clearInterval(id);
   }, [isRunning]);
 
-  return history;
+  const clearHistory = () => setHistory({});
+
+  return [history, clearHistory];
 };
 
 const MetricSlide = ({ title, value, series, theme }) => (
@@ -101,7 +107,8 @@ const GraphViewer = () => {
   const moduleValues = useSelector((s) => s.simulator.moduleValues);
   const isRunning = useSelector((s) => s.simulator.isRunning);
   const theme = useTheme();
-  const history = useHistoryStream(isRunning, moduleValues);
+
+  const [history, clearHistory] = useHistoryStream(isRunning, moduleValues);
   const [limit, setLimit] = useState(0);
 
   // Settings dialog state
@@ -123,6 +130,10 @@ const GraphViewer = () => {
     setSettingsOpen(false);
   };
 
+  const clearData = () => {
+    clearHistory(); // wipe all graph data
+  };
+
   return (
     <Box
       sx={{
@@ -132,7 +143,30 @@ const GraphViewer = () => {
         minHeight: 0,
       }}
     >
-      {/* Floating Cog icon for settings */}
+      {/* Floating Settings + Clear icons */}
+      <Box
+        sx={{
+          position: "absolute",
+          bottom: "47%",
+          left: "42%",
+          zIndex: 100,
+          background: "#fff",
+          borderRadius: "50%",
+          boxShadow: 1,
+        }}
+      >
+        <IconButton
+          aria-label="Einstellungen"
+          style={{ color: theme.palette.primary.main }}
+          onClick={() => {
+            setTempLimit(limit);
+            setSettingsOpen(true);
+          }}
+          size="small"
+        >
+          <SettingsIcon />
+        </IconButton>
+      </Box>
       <Box
         sx={{
           position: "absolute",
@@ -144,18 +178,8 @@ const GraphViewer = () => {
           boxShadow: 1,
         }}
       >
-        <IconButton
-          aria-label="Einstellungen"
-          style={{
-            color: theme.palette.primary.main,
-          }}
-          onClick={() => {
-            setTempLimit(limit);
-            setSettingsOpen(true);
-          }}
-          size="small"
-        >
-          <SettingsIcon />
+        <IconButton aria-label="Daten löschen" onClick={clearData} size="small">
+          <DeleteIcon />
         </IconButton>
       </Box>
 
@@ -183,9 +207,6 @@ const GraphViewer = () => {
             style={{
               height: "100%",
               "--swiper-pagination-color": theme.palette.primary.main,
-              ".swiper-pagination-bullet": {
-                borderRadius: "!important 0px",
-              },
             }}
           >
             {keys.map((key) => {
