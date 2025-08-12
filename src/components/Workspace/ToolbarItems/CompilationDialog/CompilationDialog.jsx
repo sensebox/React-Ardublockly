@@ -104,19 +104,26 @@ function CompilationDialog({
   };
 
   const handleClose = (event, reason) => {
-    if (reason !== "backdropClick" && reason !== "escapeKeyDown") {
-      onClose();
-      setActiveStep(0);
-      setSketchId(null);
-      setError(null);
-    }
+    const shouldClose =
+      error ||
+      activeStep === 2 ||
+      (platform && activeStep === 1)(
+        reason !== "backdropClick" && reason !== "escapeKeyDown",
+      );
+
+    if (!shouldClose) return;
+
+    onClose();
+    setActiveStep(0);
+    setSketchId(null);
+    setError(null);
   };
 
   return (
     <Dialog
       open={open}
       onClose={handleClose}
-      disableEscapeKeyDown
+      disableEscapeKeyDown={activeStep !== 2 || !error}
       // Feste Größe über PaperProps: Breite und Höhe passen für alle Steps
       PaperProps={{
         style: { width: "600px", minHeight: "600px", maxHeight: "600px" },

@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import store from "@/store";
 
-const SensorNode = ({ title, sensors, imageSrc, width = "150px" }) => {
+const SensorNode = ({ title, sensors, imageSrc, width = "180px" }) => {
   // Initial values for all sensors
   const initialValues = sensors.reduce((acc, sensor) => {
     acc[sensor.id] = sensor.initial !== undefined ? sensor.initial : sensor.min;
@@ -112,9 +112,6 @@ const SensorNode = ({ title, sensors, imageSrc, width = "150px" }) => {
             }}
             className="nodrag"
           >
-            <span style={{ fontSize: "2rem", marginRight: "10px" }}>
-              {sensor.emoji}
-            </span>
             <div style={{ flex: 1 }}>
               <div
                 style={{
