@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import store from "@/store";
 
-const SensorNode = ({ title, sensors, imageSrc, width = "180px" }) => {
+const SensorNode = ({ title, sensors, imageSrc, width = "300px" }) => {
   // Initial values for all sensors
   const initialValues = sensors.reduce((acc, sensor) => {
     acc[sensor.id] = sensor.initial !== undefined ? sensor.initial : sensor.min;

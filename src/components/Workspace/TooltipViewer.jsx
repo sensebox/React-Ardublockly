@@ -80,11 +80,11 @@ const UnderlinedTitle = ({ children }) => (
 const SlidePanel = ({
   activeValue,
   myValue,
-  direction = "left",
+  direction = "up",
   children,
   sx,
 }) => (
-  <Slide in={activeValue === myValue} direction={direction}>
+  <Slide timeout={500} in={activeValue === myValue} direction={direction}>
     <div>
       <TabPanel keepMounted value={myValue} sx={sx}>
         {children}
@@ -183,7 +183,7 @@ const TooltipViewer = () => {
           <SlidePanel
             activeValue={value}
             myValue="debug"
-            direction="up"
+            direction="left"
             sx={{ p: 2 }}
           >
             <DebugTab />
