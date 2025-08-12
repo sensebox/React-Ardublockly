@@ -12,6 +12,7 @@ const sensorConfigLuxUv = [
     max: 10000,
     step: 1,
     initial: 2500,
+    type: "sensebox_light_uv",
   },
   {
     id: "uv",
@@ -21,6 +22,7 @@ const sensorConfigLuxUv = [
     max: 100,
     step: 1,
     initial: 55,
+    type: "sensebox_light_lux",
   },
 ];
 

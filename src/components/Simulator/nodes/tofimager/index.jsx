@@ -13,6 +13,7 @@ const tofimager = ({ data }) => {
       max: 4000,
       step: 1,
       initial: 1000,
+      type: "sensebox_tof_dist",
     },
   ];
 

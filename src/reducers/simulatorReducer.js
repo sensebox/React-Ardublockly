@@ -41,7 +41,7 @@ export default function simulatorReducer(state = initialState, action) {
       ) {
         return state;
       }
-
+      console.log(initSimulator, action.payload);
       const newInterpreter = new Interpreter(
         action.payload.simulator,
         initSimulator,
@@ -70,11 +70,31 @@ export default function simulatorReducer(state = initialState, action) {
       // Initialisiere Werte separat
       const moduleValues = {};
       modules.forEach((mod) => {
-        if (mod.type === "senseBox_hdc1080") {
-          moduleValues["senseBox_hdc1080_temp"] = 20;
-          moduleValues["senseBox_hdc1080_humidity"] = 50;
-        } else {
-          moduleValues[mod.type] = null;
+        switch (mod.type) {
+          case "senseBox_hdc1080":
+            moduleValues["senseBox_hdc1080_temp"] = 20;
+            moduleValues["senseBox_hdc1080_humidity"] = 50;
+            break;
+          case "sensebox_sensor_dps310":
+            moduleValues["sensebox_dps310_temp"] = 20;
+            moduleValues["sensebox_dps310_pressure"] = 1013;
+            moduleValues["sensebox_dps310_altitude"] = 0;
+            break;
+          case "senseBox_lightUv":
+            moduleValues["sensebox_light_uv"] = 55;
+            moduleValues["sensebox_light_lux"] = 2500;
+          case "sensebox_scd30":
+            moduleValues["sensebox_scd_co2"] = 400;
+            moduleValues["sensebox_scd_temp"] = 20;
+            moduleValues["sensebox_scd_humi"] = 50;
+          case "sensebox_tof_imager":
+            moduleValues["sensebox_tof_dist"] = 1000;
+          case "senseBox_smt50":
+            moduleValues["sensebox_smt50_temp"] = 20;
+            moduleValues["sensebox_smt50_moisture"] = 50;
+          default:
+            moduleValues[mod.type] = null;
+            break;
         }
       });
 
