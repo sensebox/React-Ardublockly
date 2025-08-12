@@ -21,7 +21,7 @@ export const setBoard = (board) => (dispatch) => {
       root.style.setProperty("--url", `url(${eye_opacity})`);
       break;
     case "eye":
-      root.style.setProperty("--url", `url(${esp_opacity})`);
+      root.style.setProperty("--url", `url(${eye_opacity})`);
       break;
     default:
       break;
