@@ -300,6 +300,10 @@ export const UI = {
   searchQuery_placeholder: "Suche nach Projekttitel",
   my_projects: "Nur meine Projekte anzeigen",
   no_projects_found: "Keine Projekte gefunden",
+  delete_project: "Bist du sicher, dass du dieses Projekt löschen möchtest?",
+  delete: "Löschen",
+  edit_project: "Projekt bearbeiten",
+  confirm: "Bestätigen",
   /**
    * Login
    */
