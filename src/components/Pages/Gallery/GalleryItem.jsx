@@ -88,7 +88,7 @@ const GalleryItem = ({ project }) => {
                 fontWeight: 900,
                 height: "5vh",
                 alignContent: "center",
-                mb: 1,
+                mb: "15px",
               }}
             >
               {project.title}
