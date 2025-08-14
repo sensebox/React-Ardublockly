@@ -293,6 +293,7 @@ export const UI = {
   show_in_blockly: "Show",
   searchQuery_placeholder: "Search for project title",
   my_projects: "Show only my projects",
+  no_projects_found: "No projects found.",
 
   /**
    * Login

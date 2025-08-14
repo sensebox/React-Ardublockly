@@ -295,10 +295,11 @@ export const UI = {
 
   // Gallery
 
-  gallery_home_head: "Gallerie",
+  gallery_home_head: "Galerie",
   show_in_blockly: "Anzeigen",
   searchQuery_placeholder: "Suche nach Projekttitel",
   my_projects: "Nur meine Projekte anzeigen",
+  no_projects_found: "Keine Projekte gefunden",
   /**
    * Login
    */
