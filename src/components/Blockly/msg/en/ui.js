@@ -294,7 +294,10 @@ export const UI = {
   searchQuery_placeholder: "Search for project title",
   my_projects: "Show only my projects",
   no_projects_found: "No projects found.",
-
+  delete_project: "Are you sure you want to delete this project?",
+  delete: "Delete",
+  edit_project: "Edit project",
+  confirm: "Confirm",
   /**
    * Login
    */

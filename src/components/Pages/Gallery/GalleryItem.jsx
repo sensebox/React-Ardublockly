@@ -240,12 +240,12 @@ const GalleryItem = ({ project }) => {
           {Blockly.Msg.tooltip_delete_project}
         </DialogTitle>
         <DialogContent>
-          <Typography>
-            Bist du sicher, dass du dieses Projekt löschen möchtest?
-          </Typography>
+          <Typography>{Blockly.Msg.delete_project}</Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenDelete(false)}>Abbrechen</Button>
+          <Button onClick={() => setOpenDelete(false)}>
+            {Blockly.Msg.button_cancel}
+          </Button>
           <Button
             onClick={() => {
               handleDeleteProject();
@@ -254,7 +254,7 @@ const GalleryItem = ({ project }) => {
             color="error"
             variant="contained"
           >
-            Löschen
+            {Blockly.Msg.delete}
           </Button>
         </DialogActions>
       </Dialog>
@@ -267,7 +267,9 @@ const GalleryItem = ({ project }) => {
         maxWidth="xs"
         fullWidth
       >
-        <DialogTitle id="rename-dialog-title">Projekt bearbeiten</DialogTitle>
+        <DialogTitle id="rename-dialog-title">
+          {Blockly.Msg.edit_project}{" "}
+        </DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
@@ -288,9 +290,12 @@ const GalleryItem = ({ project }) => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenRename(false)}>Abbrechen</Button>
+          <Button onClick={() => setOpenRename(false)}>
+            {" "}
+            {Blockly.Msg.button_cancel}
+          </Button>
           <Button onClick={handleSubmitRename} variant="contained">
-            Submit
+            {Blockly.Msg.confirm}
           </Button>
         </DialogActions>
       </Dialog>
