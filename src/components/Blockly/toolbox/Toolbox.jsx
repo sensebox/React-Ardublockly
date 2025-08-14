@@ -5,9 +5,11 @@ import * as Blockly from "blockly/core";
 import { useSelector } from "react-redux";
 import { ToolboxMcu } from "./ToolboxMcu";
 import { ToolboxEsp } from "./ToolboxEsp";
+import { languages } from "prismjs";
 
 const Toolbox = ({ workspace, toolbox }) => {
   const selectedBoard = useSelector((state) => state.board.board);
+  const language = useSelector((state) => state.general.language);
   const previousBoard = useRef(null);
 
   // Register typed variable flyout on board change or mount
@@ -41,7 +43,7 @@ const Toolbox = ({ workspace, toolbox }) => {
 
     // Update toolbox
     workspace.updateToolbox(toolbox.current);
-  }, [workspace, toolbox, selectedBoard]);
+  }, [workspace, toolbox, selectedBoard, language]);
 
   return (
     <xml
