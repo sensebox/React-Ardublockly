@@ -30,7 +30,6 @@ const GalleryHome = () => {
     ...import.meta.env.VITE_PROJECTS_ALLOWED_AUTHORS.split(","),
     user && user.email ? user.email : null,
   ];
-  console.log(allowedAuthors);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
