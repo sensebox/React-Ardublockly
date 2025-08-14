@@ -158,7 +158,7 @@ const GalleryHome = () => {
       ) : (
         <Grid container spacing={2}>
           {currentProjects.map((project, i) => (
-            <GalleryItem project={project} key={i} />
+            <GalleryItem project={project} key={project._id} />
           ))}
         </Grid>
       )}
