@@ -43,7 +43,13 @@ const GalleryItem = ({ project }) => {
   const [titleInput, setTitleInput] = useState(project.title ?? "");
   const [descriptionInput, setDescriptionInput] = useState(
     project.description ?? "",
-  ); // ⬅️ neu
+  );
+
+  const [optimisticTitle, setOptimisticTitle] = useState(null);
+  const [optimisticDesc, setOptimisticDesc] = useState(null);
+
+  const displayTitle = optimisticTitle ?? project.title;
+  const displayDesc = optimisticDesc ?? project.description;
 
   const getProjectImage = (p) => p.imageUrl || "/placeholder-image.png";
 
@@ -58,9 +64,16 @@ const GalleryItem = ({ project }) => {
   };
 
   const handleSubmitRename = () => {
-    dispatch(workspaceName(titleInput.trim()));
-    dispatch(setDescription(descriptionInput.trim()));
+    const t = titleInput.trim();
+    const d = descriptionInput.trim();
 
+    // sofort anzeigen
+    setOptimisticTitle(t);
+    setOptimisticDesc(d);
+
+    // Redux-State befüllen, dann speichern
+    dispatch(workspaceName(t));
+    dispatch(setDescription(d));
     dispatch(updateProject("gallery", project._id));
 
     setOpenRename(false);
@@ -123,7 +136,7 @@ const GalleryItem = ({ project }) => {
                   lineHeight: 1.2,
                 }}
               >
-                {project.title}
+                {displayTitle}
               </Typography>
 
               {user && user.email === project.creator && (
@@ -147,7 +160,7 @@ const GalleryItem = ({ project }) => {
             <hr style={{ color: "#eee", width: "80%", marginBottom: 10 }} />
 
             <Typography variant="body2" color="text.main">
-              {project.description}
+              {displayDesc}{" "}
             </Typography>
 
             <Stack direction="row" spacing={1} flexWrap="wrap" mb={1}>
