@@ -153,7 +153,7 @@ const GalleryHome = () => {
       </Box>
 
       {filteredProjects.length === 0 ? (
-        <Typography>Keine Projekte gefunden.</Typography>
+        <Typography>{Blockly.Msg.no_projects_found} </Typography>
       ) : (
         <Grid container spacing={2}>
           {currentProjects.map((project, i) => (
