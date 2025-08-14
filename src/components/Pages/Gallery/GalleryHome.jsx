@@ -25,13 +25,8 @@ const GalleryHome = () => {
   const theme = useTheme();
   const projects = useSelector((state) => state.project.projects);
   const user = useSelector((state) => state.auth.user);
-  const allowedAuthors = [
-    "mario.pesch@uni-muenster.de",
-    "p_scha35@uni-muenster.de",
-    "e.c-schneider@reedu.de",
-    "verena.witte@yahoo.de",
-    ...(user && user.email ? [user.email] : []),
-  ];
+
+  const allowedAuthors = import.meta.env.PROJECTS_ALLOWED_AUTHORS.split(",");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [onlyMyProjects, setOnlyMyProjects] = useState(false);
