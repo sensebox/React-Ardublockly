@@ -410,13 +410,13 @@ var board = sensebox_mcu;
 
 export const setBoard = (selectedBoard) => {
   switch (selectedBoard) {
-    case "mcu":
+    case "MCU":
       board = sensebox_mcu;
       break;
-    case "mini":
+    case "MCU:mini":
       board = sensebox_mini;
       break;
-    case "esp32":
+    case "MCU-S2":
       board = sensebox_esp32;
       break;
     default:

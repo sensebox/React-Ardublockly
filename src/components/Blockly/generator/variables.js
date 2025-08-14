@@ -56,8 +56,7 @@ const getVariableFunction = function (block) {
   //   block.getFieldValue("VAR"),
   //   Blockly.Variables.NAME_TYPE
   // );
-  var code = myVar.name.replace(/_/g, "__").replace(/[^a-zA-Z0-9_]/g, "_");
-  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
+  return [myVar.name, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
 Blockly.Generator.Arduino.forBlock["variables_set_dynamic"] = setVariableFunction();

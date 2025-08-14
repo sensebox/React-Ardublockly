@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import Breadcrumbs from "./Breadcrumbs";
+import Breadcrumbs from "../ui/Breadcrumbs";
 
 import { withRouter } from "react-router-dom";
 

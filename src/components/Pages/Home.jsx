@@ -1,18 +1,18 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { clearStats, workspaceName } from "../actions/workspaceActions";
+import { clearStats, workspaceName } from "@/actions/workspaceActions";
 
 import * as Blockly from "blockly/core";
 import { createNameId } from "mnemonic-id";
 
-import WorkspaceStats from "./Workspace/WorkspaceStats";
-import WorkspaceFunc from "./Workspace/WorkspaceFunc";
-import BlocklyWindow from "./Blockly/BlocklyWindow";
-import CodeViewer from "./CodeViewer";
-import TrashcanButtons from "./Workspace/TrashcanButtons";
+import WorkspaceStats from "../Workspace/WorkspaceStats";
+import WorkspaceToolbar from "../Workspace/WorkspaceToolbar";
+import BlocklyWindow from "../Blockly/BlocklyWindow";
+import CodeViewer from "../Workspace/CodeViewer";
+import TrashcanButtons from "../Workspace/TrashcanButtons";
 // import HintTutorialExists from "./Tutorial/HintTutorialExists";
-import DeviceSelection from "./DeviceSelection";
+import DeviceSelection from "../DeviceSelection";
 
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
@@ -21,8 +21,9 @@ import withStyles from "@mui/styles/withStyles";
 
 import { faCode } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import TooltipViewer from "./TooltipViewer";
-import Dialog from "./Dialog";
+import TooltipViewer from "@/components/Workspace/TooltipViewer";
+import Dialog from "@/components/ui/Dialog";
+
 // import Autosave from "./Workspace/AutoSave";
 const styles = (theme) => ({
   codeOn: {
@@ -136,7 +137,7 @@ class Home extends Component {
           }}
         >
           {/* <Autosave /> */}
-          <WorkspaceFunc
+          <WorkspaceToolbar
             project={this.props.project}
             projectType={this.props.projectType}
           />

@@ -87,6 +87,13 @@ export const ToolboxMcu = () => {
         </Block>
         <Block type="sensebox_sd_osem" />
         <Block type="sensebox_sd_save_for_osem" />
+        <Block type="sensebox_sd_exists">
+          <Value name="FILENAME">
+            <Block type="text">
+              <Field name="TEXT">Dateiname</Field>
+            </Block>
+          </Value>
+        </Block>
       </Category>
       <Category name="LED" colour={getColour().sensebox}>
         <Block type="sensebox_rgb_led"></Block>
