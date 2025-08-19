@@ -224,7 +224,7 @@ export const TRANSLATIONS = {
   senseBox_off: "off",
   senseBox_on: "on",
 
-  senseBox_output_filename: "filename",
+  senseBox_output_filename: "Filename",
   senseBox_output_format: "format:",
   senseBox_output_linebreak: "linebreak",
   senseBox_output_networkid: "networkID",

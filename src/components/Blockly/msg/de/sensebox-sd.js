@@ -25,4 +25,6 @@ export const SD = {
   sensebox_sd_exists: "Datei existiert bereits",
   senseBox_sd_exists_tooltip:
     "SD.exists() in Arduino überprüft, ob eine Datei oder ein Verzeichnis auf der SD-Karte vorhanden ist.",
+  sd_max_chars:
+    "Maximal 8 Zeichen sind erlaubt! Der Rest wird im Programmcode abgeschnitten.",
 };

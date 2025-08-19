@@ -233,7 +233,7 @@ export const TRANSLATIONS = {
   senseBox_off: "Aus",
   senseBox_on: "Ein",
   senseBox_sensor: "Sensoren",
-  senseBox_output_filename: "Daten",
+  senseBox_output_filename: "Dateiname",
   senseBox_output_format: "Format:",
   senseBox_output_linebreak: "Zeilenumbruch",
   senseBox_output_networkid: "NetzwerkID",
