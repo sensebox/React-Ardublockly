@@ -243,17 +243,12 @@ Die Messwerte für Temperatur, Luftfeuchtigkeit und Luftdruck können direkt ver
   senseBox_esp32_photodiode_helpurl:
     "https://docs.sensebox.de/docs/hardware/sensors/photodiode",
   /**
-   * MPU6050 */
-  senseBox_mpu6050_tooltip:
-    "Der MPU6050 ist ein Beschleunigungs- und Gyroskopsensor. Schließe den Sensor an einen der I2C Anschlüsse an. Der Sensor gibt dir die Beschleunigung in m/s² und die Winkelgeschwindigkeit in °/s zurück.",
-  senseBox_mpu6050_helpurl: "https://docs.sensebox.de/docs/hardware/sensors/mpu6050",
-
-  /**
-   * MPU6050 */
-  senseBox_mpu6050_tooltip:
-    "Der MPU6050 ist ein Beschleunigungs- und Gyroskopsensor. Schließe den Sensor an einen der I2C Anschlüsse an. Der Sensor gibt dir die Beschleunigung in m/s² und die Winkelgeschwindigkeit in °/s zurück.",
-  senseBox_mpu6050_helpurl:
-    "https://docs.sensebox.de/docs/hardware/sensors/mpu6050/",
+   * accelerometer MCUS2(ESP32) */
+  senseBox_accelerometer: "ESP32-S2 Beschleunigungssensor",
+  senseBox_accelerometer_tooltip:
+    "Die senseBox MCU S2 hat einen der folgenden Beschleunigungssensoren an Bord: MPU6050, ICM-42670-P oder ICM-20948. Diese Sensoren geben dir die Beschleunigung in m/s² zurück.",
+  senseBox_accelerometer_helpurl:
+    "https://docs.sensebox.de/docs/hardware/sensors/mpu6050", // TODO: mpu6050 is just one of the supported acceleration sensors of this block
 
   /**
    * ToF Imager
@@ -272,5 +267,4 @@ Die Messwerte für Temperatur, Luftfeuchtigkeit und Luftdruck können direkt ver
    * ICM Accel/Gyro
    */
   senseBox_icm20948: "Beschleunigungs-/Gyroskopsensor (ICM20948)",
-
 };
