@@ -81,7 +81,6 @@ class Assessment extends Component {
       (task) => task._id === currentTask._id,
     );
     var statusTask = status.tasks[taskIndex];
-    console.log(statusTask);
     return (
       <div className="assessmentDiv" style={{ width: "100%" }}>
         <div style={{ float: "right", height: "40px" }}>

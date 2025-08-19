@@ -40,7 +40,6 @@ class ProjectHome extends Component {
 
   componentDidMount() {
     var type = this.props.location.pathname.replace("/", "");
-    console.log("Fetching projects for type:", type);
     this.props.getProjects(type);
     if (this.props.message) {
       if (this.props.message.id === "PROJECT_DELETE_SUCCESS") {

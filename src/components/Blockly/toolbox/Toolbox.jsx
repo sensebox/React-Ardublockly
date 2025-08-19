@@ -36,8 +36,6 @@ const Toolbox = ({ workspace, toolbox }) => {
 
     // Log board change
     if (previousBoard.current !== selectedBoard) {
-      console.log("change board");
-      console.log(selectedBoard);
       previousBoard.current = selectedBoard;
     }
 
