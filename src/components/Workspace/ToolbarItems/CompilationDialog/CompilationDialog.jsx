@@ -52,7 +52,6 @@ function CompilationDialog({
       setSketchId(null);
       setError(null);
     }
-    console.log("selected board:", selectedBoard);
   }, [open]);
 
   useEffect(() => {
