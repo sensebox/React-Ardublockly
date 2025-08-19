@@ -15,7 +15,6 @@ import { getMaxInstances } from "./helpers/maxInstances";
 import { Backpack } from "@blockly/workspace-backpack";
 import { De } from "@/components/Blockly/msg/de";
 import { En } from "@/components//Blockly/msg/en";
-import { setBoard } from "./helpers/board";
 
 class BlocklyWindow extends Component {
   constructor(props) {
@@ -51,8 +50,6 @@ class BlocklyWindow extends Component {
     const workspace = Blockly.getMainWorkspace();
     var xml = this.props.initialXml;
     if (props.selectedBoard !== this.props.selectedBoard) {
-      setBoard(this.props.selectedBoard);
-
       xml = localStorage.getItem("autoSaveXML");
       // change board
       if (!xml) xml = initialXml;

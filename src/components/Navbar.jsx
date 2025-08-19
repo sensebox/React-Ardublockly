@@ -115,7 +115,6 @@ const Navbar = () => {
   };
   const changeBoard = (val) => {
     dispatch(setBoard(val));
-
     handleBoardClose();
   };
   const handleLogout = () => {

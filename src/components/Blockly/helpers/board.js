@@ -406,9 +406,9 @@ const sensebox_esp32 = {
   parseKey: "_*_",
 };
 
-var board = sensebox_mcu;
+var board = sensebox_esp32;
 
-export const setBoard = (selectedBoard) => {
+export const setBoardHelper = (selectedBoard) => {
   switch (selectedBoard) {
     case "MCU":
       board = sensebox_mcu;
