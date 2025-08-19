@@ -206,11 +206,16 @@ Blockly.Blocks["sensebox_esp32s2_sd_open_file"] = {
   init: function () {
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_sd_open_file)
+      .setAlign(Blockly.inputs.Align.LEFT);
+
+    // Variablen-Input für Basis-Dateiname
+    this.appendValueInput("FILENAME")
+      .setCheck("String")
       .setAlign(Blockly.inputs.Align.LEFT)
-      .appendField(
-        new Blockly.FieldTextInput("Data", checkFileName),
-        "Filename",
-      )
+      .appendField(Blockly.Msg.senseBox_output_filename);
+
+    // Dropdown für Endung
+    this.appendDummyInput()
       .appendField(".")
       .appendField(
         new Blockly.FieldDropdown([
@@ -219,7 +224,10 @@ Blockly.Blocks["sensebox_esp32s2_sd_open_file"] = {
         ]),
         "extension",
       );
+
+    // Inhalt, der in die Datei geschrieben werden soll
     this.appendStatementInput("SD").setCheck(null);
+
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(getColour().sensebox);
@@ -232,12 +240,16 @@ Blockly.Blocks["sensebox_esp32s2_sd_create_file"] = {
   init: function () {
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_sd_create_file)
+      .setAlign(Blockly.inputs.Align.LEFT);
+
+    // Variablen-Input für Dateiname
+    this.appendValueInput("FILENAME")
+      .setCheck("String")
       .setAlign(Blockly.inputs.Align.LEFT)
-      .appendField(Blockly.Msg.senseBox_output_filename)
-      .appendField(
-        new Blockly.FieldTextInput("Data", checkFileName),
-        "Filename",
-      )
+      .appendField(Blockly.Msg.senseBox_output_filename);
+
+    // Endung per Dropdown
+    this.appendDummyInput()
       .appendField(".")
       .appendField(
         new Blockly.FieldDropdown([
@@ -246,6 +258,7 @@ Blockly.Blocks["sensebox_esp32s2_sd_create_file"] = {
         ]),
         "extension",
       );
+
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(getColour().sensebox);
