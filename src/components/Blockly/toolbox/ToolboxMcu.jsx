@@ -93,6 +93,11 @@ export const ToolboxMcu = () => {
               <Field name="TEXT">Data</Field>
             </Block>
           </Value>
+          <Value name="FILENAME">
+            <Block type="text">
+              <Field name="TEXT">Data</Field>
+            </Block>
+          </Value>
           <Value name="SD">
             <Block type="sensebox_sd_osem">
               <Value name="DO">
