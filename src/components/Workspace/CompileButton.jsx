@@ -66,7 +66,7 @@ function CompileButton({
 CompileButton.propTypes = {
   iconButton: PropTypes.bool,
   code: PropTypes.string.isRequired,
-  filename: PropTypes.string.isRequired,
+  filename: PropTypes.string,
   compiler: PropTypes.string.isRequired,
   selectedBoard: PropTypes.string.isRequired,
   className: PropTypes.string,

@@ -301,7 +301,7 @@ class SaveProject extends Component {
 SaveProject.propTypes = {
   updateProject: PropTypes.func.isRequired,
   setDescription: PropTypes.func.isRequired,
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   description: PropTypes.string.isRequired,
   xml: PropTypes.string.isRequired,
   message: PropTypes.object.isRequired,
