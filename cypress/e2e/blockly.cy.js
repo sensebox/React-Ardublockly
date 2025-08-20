@@ -66,6 +66,27 @@ describe("Blockly Editor Page Tests", () => {
   it("[Blockly] selects senseBox Mini", () => {
     cy.visit("/");
     cy.get('img[alt="Sensebox Mini"]', { timeout: 8000 }).click();
+  }); /// <reference types="cypress" />
+
+  it("[Blockly] changes the language in settings and verifies via headline", () => {
+    cy.visit("/settings");
+
+    cy.get("#language-selector").click();
+
+    cy.get('li[data-value="en_US"]').click();
+
+    cy.get("#settingsLanguage")
+      .should("be.visible")
+      .and("contain.text", "Language");
+
+    // jetzt zurückwechseln auf Deutsch
+    cy.get("#language-selector").click();
+    cy.get('li[data-value="de_DE"]').click();
+
+    // prüfen, ob die Überschrift wieder deutsch ist
+    cy.get("#settingsLanguage")
+      .should("be.visible")
+      .and("contain.text", "Sprache");
   });
 
   it("[Blockly] compiles code", () => {

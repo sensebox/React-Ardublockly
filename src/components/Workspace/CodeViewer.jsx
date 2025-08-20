@@ -64,7 +64,7 @@ const CodeViewer = () => {
           >
             {"{ }"}
           </Typography>
-          <Typography sx={{ m: "auto 5px 2px 0" }}>
+          <Typography id="codeviewer-headline" sx={{ m: "auto 5px 2px 0" }}>
             {Blockly.Msg.codeviewer_arduino}
           </Typography>
         </AccordionSummary>
