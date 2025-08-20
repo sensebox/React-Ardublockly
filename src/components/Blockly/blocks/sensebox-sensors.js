@@ -2,7 +2,6 @@ import * as Blockly from "blockly";
 import { getColour } from "../helpers/colour";
 import * as Types from "../helpers/types";
 import { selectedBoard } from "../helpers/board";
-import { FieldGridDropdown } from "@blockly/field-grid-dropdown";
 import { FieldSlider } from "@blockly/field-slider";
 import { withBoardParam } from "../helpers/helpUrlBuilder";
 
@@ -219,7 +218,15 @@ Blockly.Blocks["sensebox_sensor_bme680_bsec"] = {
 
 Blockly.Blocks["sensebox_sensor_ultrasonic_ranger"] = {
   init: function () {
-    var dropdown = new FieldGridDropdown(
+    // var dropdown = new FieldGridDropdown(
+    //   selectedBoard().digitalPorts,
+    //   function (option) {
+    //     var input = option === "A" || option === "B" || option === "C";
+    //     this.sourceBlock_.updateShape_(input);
+    //   },
+    // );
+
+    var dropdown2 = new Blockly.FieldDropdown(
       selectedBoard().digitalPorts,
       function (option) {
         var input = option === "A" || option === "B" || option === "C";
@@ -230,7 +237,7 @@ Blockly.Blocks["sensebox_sensor_ultrasonic_ranger"] = {
     this.setColour(getColour().sensebox);
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_ultrasonic)
-      .appendField(dropdown, "port");
+      .appendField(dropdown2, "port");
     this.appendDummyInput("TrigEcho")
       .setAlign(Blockly.inputs.Align.RIGHT)
       .appendField(Blockly.Msg.senseBox_ultrasonic_trigger)
@@ -740,14 +747,14 @@ Blockly.Blocks["sensebox_esp32s2_light"] = {
 };
 
 /**
- * senseBox-MCU ESP32-S2 onBoard MPU6050
+ * senseBox-MCU ESP32-S2 onBoard accelerometer
  *
  *
  */
 
-Blockly.Blocks["sensebox_esp32s2_mpu6050"] = {
+Blockly.Blocks["sensebox_esp32s2_accelerometer"] = {
   init: function () {
-    this.appendDummyInput().appendField("ESP32-S2 MPU6050");
+    this.appendDummyInput().appendField(Blockly.Msg.senseBox_accelerometer);
     this.appendDummyInput()
       .setAlign(Blockly.inputs.Align.RIGHT)
       .appendField(Blockly.Msg.senseBox_value)
@@ -762,9 +769,9 @@ Blockly.Blocks["sensebox_esp32s2_mpu6050"] = {
       );
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);
-    this.setTooltip(Blockly.Msg.senseBox_mpu6050_tooltip);
-    this.setHelpUrl(withBoardParam(Blockly.Msg.senseBox_mpu6050_helpurl));
-    this.data = { name: "mpu6050" };
+    this.setTooltip(Blockly.Msg.senseBox_accelerometer_tooltip);
+    this.setHelpUrl(withBoardParam(Blockly.Msg.senseBox_accelerometer_helpurl));
+    this.data = { name: "acceleration" };
   },
 };
 
@@ -805,8 +812,8 @@ Blockly.Blocks["sensebox_sensor_icm20948"] = {
       );
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);
-    this.setTooltip(Blockly.Msg.senseBox_mpu6050_tooltip);
-    this.setHelpUrl(Blockly.Msg.senseBox_mpu6050_helpurl);
+    this.setTooltip(Blockly.Msg.senseBox_accelerometer_tooltip);
+    this.setHelpUrl(Blockly.Msg.senseBox_accelerometer_helpurl);
     this.data = { name: "icm20948" };
   },
 };

@@ -20,7 +20,7 @@ describe("Code Editor Page Tests", () => {
     cy.visit("/codeeditor");
     cy.get('img[alt="Sensebox ESP"]').click();
     cy.get("button").contains("Reset code").click();
-    cy.get("button").contains("Zurücksetzen").should("exist");
+    cy.get("button").contains("Reset").should("exist");
   });
 
   it("[CodeEditor] fetches libraries", () => {

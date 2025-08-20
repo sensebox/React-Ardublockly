@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import Dialog from "../Dialog";
+import Dialog from "../ui/Dialog";
 
 import hardware from "../../data/hardware.json";
 

@@ -22,4 +22,9 @@ export const SD = {
     "Füge eine Messung mit Sensor ID zur CSV-Datei hinzu",
   sensebox_sd_save_for_osem_id: "Sensor ID:",
   sensebox_sd_measurement: "Messwerte",
+  sensebox_sd_exists: "Datei existiert bereits",
+  senseBox_sd_exists_tooltip:
+    "SD.exists() in Arduino überprüft, ob eine Datei oder ein Verzeichnis auf der SD-Karte vorhanden ist.",
+  sd_max_chars:
+    "Maximal 8 Zeichen sind erlaubt! Der Rest wird im Programmcode abgeschnitten.",
 };
