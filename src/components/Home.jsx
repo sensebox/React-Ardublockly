@@ -236,6 +236,8 @@ Home.propTypes = {
   message: PropTypes.object.isRequired,
   statistics: PropTypes.bool.isRequired,
   platform: PropTypes.bool.isRequired,
+  project: PropTypes.object,
+  projectType: PropTypes.string,
 };
 
 const mapStateToProps = (state) => ({

@@ -47,7 +47,7 @@ class AutoSave extends Component {
   render() {
     return (
       <div>
-        <SaveIcon loading={this.state.saved} autosave={this.props.autosave} />
+        <SaveIcon loading={this.state.saved} />
       </div>
     );
   }
@@ -57,12 +57,9 @@ AutoSave.propTypes = {
   xml: PropTypes.string.isRequired,
   name: PropTypes.string,
   workspaceName: PropTypes.func.isRequired,
-  setAutosave: PropTypes.func.isRequired,
-  autosave: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  auto: state.general.autosave,
   xml: state.workspace.code.xml,
   name: state.workspace.name,
 });

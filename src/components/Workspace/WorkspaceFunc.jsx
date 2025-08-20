@@ -102,12 +102,14 @@ class WorkspaceFunc extends Component {
 
 WorkspaceFunc.propTypes = {
   user: PropTypes.object,
-  autosave: PropTypes.bool.isRequired,
+  assessment: PropTypes.bool,
+  multiple: PropTypes.bool,
+  project: PropTypes.object,
+  projectType: PropTypes.string,
 };
 
 const mapStateToProps = (state) => ({
   user: state.auth.user,
-  autosave: state.workspace.autosave,
 });
 
 export default connect(mapStateToProps, null)(WorkspaceFunc);
