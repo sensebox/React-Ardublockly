@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { workspaceName } from "../../actions/workspaceActions";
 
 import BlocklyWindow from "../Blockly/BlocklyWindow";
-import WorkspaceFunc from "../Workspace/WorkspaceFunc";
+import WorkspaceToolbar from "../Workspace/WorkspaceToolbar";
 
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -12,8 +12,8 @@ import Typography from "@mui/material/Typography";
 import * as Blockly from "blockly";
 import { initialXml } from "../Blockly/initialXml";
 import IconButton from "@mui/material/IconButton";
-import CodeViewer from "../CodeViewer";
-import TooltipViewer from "../TooltipViewer";
+import CodeViewer from "../Workspace/CodeViewer";
+import TooltipViewer from "../Workspace/TooltipViewer";
 import Tooltip from "@mui/material/Tooltip";
 import ReactMarkdown from "react-markdown";
 import { faCode } from "@fortawesome/free-solid-svg-icons";
@@ -81,11 +81,10 @@ class Assessment extends Component {
       (task) => task._id === currentTask._id,
     );
     var statusTask = status.tasks[taskIndex];
-    console.log(statusTask);
     return (
       <div className="assessmentDiv" style={{ width: "100%" }}>
         <div style={{ float: "right", height: "40px" }}>
-          <WorkspaceFunc assessment />
+          <WorkspaceToolbar assessment />
         </div>
         <Grid container spacing={2} style={{ marginBottom: "5px" }}>
           <Grid

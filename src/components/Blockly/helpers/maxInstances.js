@@ -36,9 +36,9 @@ const maxInstancesEsp = {
 };
 
 export const getMaxInstances = () => {
-  if (board === "esp32") {
+  if (board === "MCU-S2") {
     return maxInstancesEsp;
-  } else if (board === "mcu" || board === "mini") {
+  } else if (board === "MCU" || board === "MCU:mini") {
     return maxInstances;
   }
 };

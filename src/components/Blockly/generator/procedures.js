@@ -13,7 +13,7 @@ Blockly.Generator.Arduino.forBlock["arduino_functions"] = function (
 ) {
   var board = window.sessionStorage.getItem("board");
 
-  if (board === "mcu" || board === "mini") {
+  if (board === "MCU" || board === "MCU:mini") {
     Blockly.Generator.Arduino.libraries_["library_senseBoxIO"] =
       "#include <senseBoxIO.h>";
   }

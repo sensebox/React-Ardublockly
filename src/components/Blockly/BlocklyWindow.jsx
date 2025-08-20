@@ -13,6 +13,8 @@ import { ZoomToFitControl } from "@blockly/zoom-to-fit";
 import { initialXml } from "./initialXml.js";
 import { getMaxInstances } from "./helpers/maxInstances";
 import { Backpack } from "@blockly/workspace-backpack";
+import { De } from "@/components/Blockly/msg/de";
+import { En } from "@/components//Blockly/msg/en";
 
 class BlocklyWindow extends Component {
   constructor(props) {
@@ -64,6 +66,11 @@ class BlocklyWindow extends Component {
     }
     if (props.language !== this.props.language) {
       // change language
+      const locales = {
+        de_DE: De,
+        en_US: En,
+      };
+      Blockly.setLocale(locales[this.props.language] || En);
       xml = localStorage.getItem("autoSaveXML");
       if (!xml) xml = initialXml;
       xmlDom = Blockly.utils.xml.textToDom(xml);

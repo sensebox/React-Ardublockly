@@ -14,11 +14,16 @@ Blockly.Blocks["sensebox_sd_open_file"] = {
   init: function () {
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_sd_open_file)
+      .setAlign(Blockly.inputs.Align.LEFT);
+
+    // String-Variable für Dateiname
+    this.appendValueInput("FILENAME")
+      .setCheck("String")
       .setAlign(Blockly.inputs.Align.LEFT)
-      .appendField(
-        new Blockly.FieldTextInput("Data", checkFileName),
-        "Filename",
-      )
+      .appendField(Blockly.Msg.senseBox_output_filename);
+
+    // Dropdown für Endung
+    this.appendDummyInput()
       .appendField(".")
       .appendField(
         new Blockly.FieldDropdown([
@@ -27,25 +32,44 @@ Blockly.Blocks["sensebox_sd_open_file"] = {
         ]),
         "extension",
       );
+
+    // Inhalt, der in die Datei geschrieben wird
     this.appendStatementInput("SD").setCheck(null);
+
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_sd_open_file_tooltip);
     this.setHelpUrl(Blockly.Msg.sensebox_sd_helpurl);
   },
+  onchange: function () {
+    var targetBlock = this.getInputTargetBlock("FILENAME");
+    if (targetBlock && targetBlock.type === "text") {
+      var txt = targetBlock.getFieldValue("TEXT") || "";
+      if (txt.length > 8) {
+        this.setWarningText(Blockly.Msg.sd_max_chars);
+      } else {
+        this.setWarningText(null);
+      }
+    }
+  },
 };
 
+// -------- BLOCK ----------
 Blockly.Blocks["sensebox_sd_create_file"] = {
   init: function () {
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_sd_create_file)
+      .setAlign(Blockly.inputs.Align.LEFT);
+
+    // Variablen-Input für den Basis-Dateinamen
+    this.appendValueInput("FILENAME")
+      .setCheck("String")
       .setAlign(Blockly.inputs.Align.LEFT)
-      .appendField(Blockly.Msg.senseBox_output_filename)
-      .appendField(
-        new Blockly.FieldTextInput("Data", checkFileName),
-        "Filename",
-      )
+      .appendField(Blockly.Msg.senseBox_output_filename);
+
+    // Dropdown für die Endung
+    this.appendDummyInput()
       .appendField(".")
       .appendField(
         new Blockly.FieldDropdown([
@@ -54,6 +78,7 @@ Blockly.Blocks["sensebox_sd_create_file"] = {
         ]),
         "extension",
       );
+
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(getColour().sensebox);
@@ -181,11 +206,16 @@ Blockly.Blocks["sensebox_esp32s2_sd_open_file"] = {
   init: function () {
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_sd_open_file)
+      .setAlign(Blockly.inputs.Align.LEFT);
+
+    // Variablen-Input für Basis-Dateiname
+    this.appendValueInput("FILENAME")
+      .setCheck("String")
       .setAlign(Blockly.inputs.Align.LEFT)
-      .appendField(
-        new Blockly.FieldTextInput("Data", checkFileName),
-        "Filename",
-      )
+      .appendField(Blockly.Msg.senseBox_output_filename);
+
+    // Dropdown für Endung
+    this.appendDummyInput()
       .appendField(".")
       .appendField(
         new Blockly.FieldDropdown([
@@ -194,7 +224,10 @@ Blockly.Blocks["sensebox_esp32s2_sd_open_file"] = {
         ]),
         "extension",
       );
+
+    // Inhalt, der in die Datei geschrieben werden soll
     this.appendStatementInput("SD").setCheck(null);
+
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(getColour().sensebox);
@@ -207,12 +240,16 @@ Blockly.Blocks["sensebox_esp32s2_sd_create_file"] = {
   init: function () {
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_sd_create_file)
+      .setAlign(Blockly.inputs.Align.LEFT);
+
+    // Variablen-Input für Dateiname
+    this.appendValueInput("FILENAME")
+      .setCheck("String")
       .setAlign(Blockly.inputs.Align.LEFT)
-      .appendField(Blockly.Msg.senseBox_output_filename)
-      .appendField(
-        new Blockly.FieldTextInput("Data", checkFileName),
-        "Filename",
-      )
+      .appendField(Blockly.Msg.senseBox_output_filename);
+
+    // Endung per Dropdown
+    this.appendDummyInput()
       .appendField(".")
       .appendField(
         new Blockly.FieldDropdown([
@@ -221,6 +258,7 @@ Blockly.Blocks["sensebox_esp32s2_sd_create_file"] = {
         ]),
         "extension",
       );
+
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(getColour().sensebox);
@@ -268,4 +306,17 @@ Blockly.Blocks["sensebox_esp32s2_sd_write_file"] = {
     }
   },
   LOOP_TYPES: ["sensebox_esp32s2_sd_open_file"],
+};
+
+Blockly.Blocks["sensebox_sd_exists"] = {
+  init: function () {
+    this.appendValueInput("FILENAME")
+      .appendField(Blockly.Msg.sensebox_sd_exists)
+      .appendField(Blockly.Msg.filename);
+    this.setOutput(true);
+
+    this.setColour(getColour().sensebox);
+    this.setTooltip(Blockly.Msg.senseBox_sd_exists_tooltip);
+    this.setHelpUrl(Blockly.Msg.senseBox_sd_exists_tooltip);
+  },
 };
