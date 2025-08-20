@@ -53,6 +53,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { setLanguage } from "../actions/generalActions";
 import { setBoard } from "../actions/boardAction";
+import { De } from "./Blockly/msg/de";
+import { En } from "./Blockly/msg/en";
 
 const useStyles = makeStyles((theme) => ({
   drawerWidth: {
@@ -111,6 +113,11 @@ const Navbar = () => {
 
   const changeLanguage = (val) => {
     dispatch(setLanguage(val));
+    if (val === "de_DE") {
+      Blockly.setLocale(De);
+    } else if (val === "en_US") {
+      Blockly.setLocale(En);
+    }
     handleLangClose();
   };
   const changeBoard = (val) => {
