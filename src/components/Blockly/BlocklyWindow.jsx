@@ -65,12 +65,6 @@ class BlocklyWindow extends Component {
       Blockly.Xml.domToWorkspace(Blockly.utils.xml.textToDom(xml), workspace);
     }
     if (props.language !== this.props.language) {
-      // change language
-      const locales = {
-        de_DE: De,
-        en_US: En,
-      };
-      Blockly.setLocale(locales[this.props.language] || En);
       xml = localStorage.getItem("autoSaveXML");
       if (!xml) xml = initialXml;
       xmlDom = Blockly.utils.xml.textToDom(xml);
