@@ -141,7 +141,7 @@ BlocklyWindow.propTypes = {
   renderer: PropTypes.string.isRequired,
   sounds: PropTypes.bool.isRequired,
   language: PropTypes.string.isRequired,
-  selectedBoard: PropTypes.string.isRequired,
+  selectedBoard: PropTypes.string,
 };
 
 const mapStateToProps = (state) => ({

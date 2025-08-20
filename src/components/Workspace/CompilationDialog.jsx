@@ -260,11 +260,11 @@ function CompilationDialog({
 CompilationDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  selectedBoard: PropTypes.string.isRequired,
+  selectedBoard: PropTypes.string,
   onCompileComplete: PropTypes.func,
   compiler: PropTypes.string.isRequired,
   code: PropTypes.string.isRequired,
-  filename: PropTypes.string.isRequired,
+  filename: PropTypes.string,
   platform: PropTypes.bool.isRequired,
   appLink: PropTypes.string,
 };

@@ -724,7 +724,7 @@ Navbar.propTypes = {
   setLanguage: PropTypes.func.isRequired,
   language: PropTypes.string.isRequired,
   setBoard: PropTypes.func.isRequired,
-  selectedBoard: PropTypes.string.isRequired,
+  selectedBoard: PropTypes.string,
 };
 
 const mapStateToProps = (state) => ({

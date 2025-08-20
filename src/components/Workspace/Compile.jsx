@@ -72,7 +72,7 @@ Compile.propTypes = {
   workspaceName: PropTypes.func.isRequired,
   platform: PropTypes.bool.isRequired,
   compiler: PropTypes.string.isRequired,
-  selectedBoard: PropTypes.string.isRequired,
+  selectedBoard: PropTypes.string,
   iconButton: PropTypes.bool,
   appLink: PropTypes.string,
   classes: PropTypes.object.isRequired,
