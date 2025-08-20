@@ -68,14 +68,30 @@ export const ToolboxEsp = () => {
         <Block type="sensebox_ethernetIp" />
       </Category>
       <Category name="SD" colour={getColour().sensebox}>
-        <Block type="sensebox_esp32s2_sd_create_file" />
+        <Block type="sensebox_esp32s2_sd_create_file">
+          <Value name="FILENAME">
+            <Block type="text">
+              <Field name="TEXT">Data</Field>
+            </Block>
+          </Value>
+        </Block>
         <Block type="sensebox_esp32s2_sd_open_file">
+          <Value name="FILENAME">
+            <Block type="text">
+              <Field name="TEXT">Data</Field>
+            </Block>
+          </Value>
           <Value name="SD">
             <Block type="sensebox_esp32s2_sd_write_file"></Block>
           </Value>
         </Block>
         <Block type="sensebox_esp32s2_sd_write_file" />
         <Block type="sensebox_esp32s2_sd_open_file">
+          <Value name="FILENAME">
+            <Block type="text">
+              <Field name="TEXT">Data</Field>
+            </Block>
+          </Value>
           <Value name="SD">
             <Block type="sensebox_sd_osem">
               <Value name="DO">

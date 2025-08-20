@@ -70,7 +70,6 @@ const createFlyout = (workspace) => {
   xmlList.push(button);
 
   const blockList = Blockly.VariablesDynamic.flyoutCategoryBlocks(workspace);
-  console.log(blockList);
   return xmlList.concat(blockList);
 };
 
