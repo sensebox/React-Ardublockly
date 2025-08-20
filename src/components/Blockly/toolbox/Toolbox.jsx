@@ -5,7 +5,8 @@ import * as Blockly from "blockly/core";
 import { useSelector } from "react-redux";
 import { ToolboxMcu } from "./ToolboxMcu";
 import { ToolboxEsp } from "./ToolboxEsp";
-import { languages } from "prismjs";
+import { De } from "@/components/Blockly/msg/de";
+import { En } from "@/components/Blockly/msg/en";
 
 const Toolbox = ({ workspace, toolbox }) => {
   const selectedBoard = useSelector((state) => state.board.board);
@@ -39,7 +40,6 @@ const Toolbox = ({ workspace, toolbox }) => {
       previousBoard.current = selectedBoard;
     }
 
-    // Update toolbox
     workspace.updateToolbox(toolbox.current);
   }, [workspace, toolbox, selectedBoard, language]);
 
