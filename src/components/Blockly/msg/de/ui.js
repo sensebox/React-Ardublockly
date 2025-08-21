@@ -124,7 +124,7 @@ export const UI = {
   resetDialog_headline: "Workspace zurücksetzen?",
   resetDialog_text:
     "Möchtest du wirklich die Workspace zurücksetzen? Hierbei werden alle Blöcke gelöscht!",
-
+  reset_text: "Zurücksetzen",
   /**
    * Share Dialog
    */
@@ -293,6 +293,17 @@ export const UI = {
   builder_review_text:
     "Du kannst dein Tutorial direkt über den Link mit anderen Personen teilen. Wenn du dein Tutorial für alle Nutzer:innen in der Überischt veröffenltichen wollen kannst du es hier aktivieren. Ein Administrator wird dein Tutorial ansehen und anschließend freischalten.",
 
+  // Gallery
+
+  gallery_home_head: "Galerie",
+  show_in_blockly: "Anzeigen",
+  searchQuery_placeholder: "Suche nach Projekttitel",
+  my_projects: "Nur meine Projekte anzeigen",
+  no_projects_found: "Keine Projekte gefunden",
+  delete_project: "Bist du sicher, dass du dieses Projekt löschen möchtest?",
+  delete: "Löschen",
+  edit_project: "Projekt bearbeiten",
+  confirm: "Bestätigen",
   /**
    * Login
    */

@@ -1037,56 +1037,101 @@ Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_light"] = function () {
 };
 
 /**
- * senseBox MCU-S2 onboard MPU6050
+ * senseBox MCU-S2 onboard accelerometer
  *
  **/
 
-Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_mpu6050"] = function () {
-  var code = "";
-  var dropdown = this.getFieldValue("value");
-  Blockly.Generator.Arduino.libraries_["esp32s2_mpu6050"] =
-    `#include <Adafruit_MPU6050.h>`;
-  Blockly.Generator.Arduino.libraries_["Adafruit_Sensor"] =
-    `#include <Adafruit_Sensor.h>`;
-  Blockly.Generator.Arduino.libraries_["library_wire"] = `#include <Wire.h>`;
-  Blockly.Generator.Arduino.definitions_["define_Adafruit_mpu6050"] =
-    "Adafruit_MPU6050 mpu;";
-  Blockly.Generator.Arduino.definitions_["define_sensor_events"] =
-    "sensors_event_t a, g, temp;";
-  Blockly.Generator.Arduino.setupCode_["Wire1.begin()"] = "Wire1.begin();";
-  Blockly.Generator.Arduino.setupCode_["mpu.begin()"] =
-    "mpu.begin(0x68, &Wire1);";
-  Blockly.Generator.Arduino.setupCode_["mpu.setAccelerometerRange()"] =
-    "mpu.setAccelerometerRange(MPU6050_RANGE_8_G);";
-  Blockly.Generator.Arduino.loopCodeOnce_["mpu.getEvent"] =
-    "mpu.getEvent(&a, &g, &temp);";
-  switch (dropdown) {
-    case "accelerationX":
-      code = "a.acceleration.x";
-      break;
-    case "accelerationY":
-      code = "a.acceleration.y";
-      break;
-    case "accelerationZ":
-      code = "a.acceleration.z";
-      break;
-    case "gyroscopeX":
-      code = "g.gyro.x";
-      break;
-    case "gyroscopeY":
-      code = "g.gyro.y";
-      break;
-    case "gyroscopeZ":
-      code = "g.gyro.z";
-      break;
-    case "temperature":
-      code = "temp.temperature";
-      break;
-    default:
-      code = "";
-  }
-  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
-};
+Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_accelerometer"] =
+  function () {
+    var code = "";
+    var dropdown = this.getFieldValue("value");
+    Blockly.Generator.Arduino.libraries_["esp32s2_mpu6050"] =
+      `#include <Adafruit_MPU6050.h>`;
+    Blockly.Generator.Arduino.libraries_["esp32s2_icm42670"] =
+      `#include "ICM42670P.h"`;
+    Blockly.Generator.Arduino.libraries_["esp32s2_icm20948"] =
+      `#include <Adafruit_ICM20948.h>`;
+    Blockly.Generator.Arduino.libraries_["Adafruit_Sensor"] =
+      `#include <Adafruit_Sensor.h>`;
+    Blockly.Generator.Arduino.libraries_["library_wire"] = `#include <Wire.h>`;
+    Blockly.Generator.Arduino.definitions_["define_Adafruit_mpu6050"] =
+      "Adafruit_MPU6050 mpu;";
+    Blockly.Generator.Arduino.definitions_["define_ICM42670P"] =
+      "ICM42670 icm = ICM42670(Wire1, 0);";
+    Blockly.Generator.Arduino.definitions_["define_ICM20948"] =
+      "Adafruit_ICM20948 icm2;";
+    Blockly.Generator.Arduino.definitions_["define_acceleration_switch"] =
+      "int sensorActive = 0; // 0: none, 1: MPU6050, 2: ICM42670P, 3: ICM20948";
+    Blockly.Generator.Arduino.setupCode_["Wire1.begin()"] = "Wire1.begin();";
+    Blockly.Generator.Arduino.setupCode_["begin_acceleration"] =
+      "if (mpu.begin(0x68, &Wire1)) // Try MPU6050 first\n" +
+      "  {\n" +
+      "    mpu.setAccelerometerRange(MPU6050_RANGE_8_G);\n" +
+      "    mpu.setFilterBandwidth(MPU6050_BAND_21_HZ);\n" +
+      "    sensorActive = 1;\n" +
+      "  }\n" +
+      "  else if (icm.begin() == 0) // If MPU6050 fails, try ICM42670P\n" +
+      "  {\n" +
+      "    icm.startAccel(21, 8); // Accel ODR = 100 Hz, Range = 8G\n" +
+      "    sensorActive = 2;\n" +
+      "  }\n" +
+      "  else if (icm2.begin_I2C(0x68, &Wire1))\n" +
+      "  {\n" +
+      "    icm2.setAccelRange(ICM20948_ACCEL_RANGE_8_G);\n" +
+      "    icm2.setAccelRateDivisor(10.25); // 100 Hz sample rate\n" +
+      "    sensorActive = 3;\n" +
+      "  }";
+    Blockly.Generator.Arduino.codeFunctions_["sensebox_requestAcceleration"] =
+      "float getAcceleration(String sensorValueType) {\n" +
+      "if (sensorActive == 1) {\n" +
+      "sensors_event_t a, g, temp;\n" +
+      "mpu.getEvent(&a, &g, &temp);\n" +
+      'if (sensorValueType == "accelerationX") {\n' +
+      "return a.acceleration.x;\n" +
+      '} else if (sensorValueType == "accelerationY") {\n' +
+      "return a.acceleration.y;\n" +
+      '} else if (sensorValueType == "accelerationZ") {\n' +
+      "return a.acceleration.z;\n" +
+      '} else if (sensorValueType == "temperature") {\n' +
+      "return temp.temperature;\n" +
+      "} else {\n" +
+      "return 0.0;\n" +
+      "}\n" +
+      "} else if (sensorActive == 2) {\n" +
+      "inv_imu_sensor_event_t imu_event;\n" +
+      "icm.getDataFromRegisters(imu_event);\n" +
+      'if (sensorValueType == "accelerationX") {\n' +
+      "return (imu_event.accel[0]*9.81)/4096.0;\n" +
+      '} else if (sensorValueType == "accelerationY") {\n' +
+      "return (imu_event.accel[1]*9.81)/4096.0;\n" +
+      '} else if (sensorValueType == "accelerationZ") {\n' +
+      "return (imu_event.accel[2]*9.81)/4096.0;\n" +
+      '} else if (sensorValueType == "temperature") {\n' +
+      "return (imu_event.temperature/132.48)+25.0;\n" +
+      "} else {\n" +
+      "return 0.0;\n" +
+      "}\n" +
+      "} else if (sensorActive == 2) {\n" +
+      "sensors_event_t a, g, m, temp;\n" +
+      "icm2.getEvent(&a, &g, &m, &temp);\n" +
+      'if (sensorValueType == "accelerationX") {\n' +
+      "return a.acceleration.x;\n" +
+      '} else if (sensorValueType == "accelerationY") {\n' +
+      "return a.acceleration.y;\n" +
+      '} else if (sensorValueType == "accelerationZ") {\n' +
+      "return a.acceleration.z;\n" +
+      '} else if (sensorValueType == "temperature") {\n' +
+      "return temp.temperature;\n" +
+      "} else {\n" +
+      "return 0.0;\n" +
+      "}\n" +
+      "} else {\n" +
+      "return 0.0;\n" +
+      "}\n" +
+      "}\n";
+    var code = 'getAcceleration("' + dropdown + '")';
+    return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
+  };
 
 /**
  * Block for Truebner STM50 on MCUS2

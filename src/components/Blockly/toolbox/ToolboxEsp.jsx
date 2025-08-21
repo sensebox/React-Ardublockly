@@ -17,7 +17,7 @@ export const ToolboxEsp = () => {
         <Block type="sensebox_sensor_temp_hum" />
         <Block type="sensebox_sensor_uv_light" />
         <Block type="sensebox_esp32s2_light" />
-        <Block type="sensebox_esp32s2_mpu6050" />
+        <Block type="sensebox_esp32s2_accelerometer" />
         <Block type="sensebox_sensor_sds011" />
         <Block type="sensebox_sensor_sps30" />
         <Block type="sensebox_sensor_pressure" />
@@ -68,14 +68,30 @@ export const ToolboxEsp = () => {
         <Block type="sensebox_ethernetIp" />
       </Category>
       <Category name="SD" colour={getColour().sensebox}>
-        <Block type="sensebox_esp32s2_sd_create_file" />
+        <Block type="sensebox_esp32s2_sd_create_file">
+          <Value name="FILENAME">
+            <Block type="text">
+              <Field name="TEXT">Data</Field>
+            </Block>
+          </Value>
+        </Block>
         <Block type="sensebox_esp32s2_sd_open_file">
+          <Value name="FILENAME">
+            <Block type="text">
+              <Field name="TEXT">Data</Field>
+            </Block>
+          </Value>
           <Value name="SD">
             <Block type="sensebox_esp32s2_sd_write_file"></Block>
           </Value>
         </Block>
         <Block type="sensebox_esp32s2_sd_write_file" />
         <Block type="sensebox_esp32s2_sd_open_file">
+          <Value name="FILENAME">
+            <Block type="text">
+              <Field name="TEXT">Data</Field>
+            </Block>
+          </Value>
           <Value name="SD">
             <Block type="sensebox_sd_osem">
               <Value name="DO">
@@ -86,6 +102,13 @@ export const ToolboxEsp = () => {
         </Block>
         <Block type="sensebox_sd_osem" />
         <Block type="sensebox_sd_save_for_osem" />
+        <Block type="sensebox_sd_exists">
+          <Value name="FILENAME">
+            <Block type="text">
+              <Field name="TEXT">Dateiname</Field>
+            </Block>
+          </Value>
+        </Block>
       </Category>
       <Category name="LED" colour={getColour().sensebox}>
         <Block type="sensebox_ws2818_led_init">
