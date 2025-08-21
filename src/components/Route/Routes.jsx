@@ -119,7 +119,7 @@ class Routes extends Component {
   }
 }
 
-Home.propTypes = {
+Routes.propTypes = {
   visitPage: PropTypes.func,
   platform: PropTypes.bool.isRequired,
   setPlatform: PropTypes.func.isRequired,
