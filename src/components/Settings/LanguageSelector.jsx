@@ -44,7 +44,7 @@ export default function LanguageSelector() {
 
   return (
     <div>
-      <Typography style={{ fontWeight: "bold" }}>
+      <Typography id="settingsLanguage" style={{ fontWeight: "bold" }}>
         {Blockly.Msg.settings_language}
       </Typography>
       <FormHelperText
