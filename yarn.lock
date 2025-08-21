@@ -2013,10 +2013,10 @@ csstype@^3.0.2, csstype@^3.1.3:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.1.3.tgz#d80ff294d114fb0e6ac500fbf85b60137d7eff81"
   integrity sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==
 
-cypress-ctrf-json-reporter@^0.0.11:
-  version "0.0.11"
-  resolved "https://registry.yarnpkg.com/cypress-ctrf-json-reporter/-/cypress-ctrf-json-reporter-0.0.11.tgz#3d079ff44a3fddebcea171ad49afea874e9ff0a7"
-  integrity sha512-fckUaYDEfulf8o86WZIHP760VNwMKg8g1DnR64afxryzgGRhN5n6/XpNfMfHggjO/yrRQdZb3d1X5tI6FXoMXg==
+cypress-ctrf-json-reporter@^0.0.12:
+  version "0.0.12"
+  resolved "https://registry.yarnpkg.com/cypress-ctrf-json-reporter/-/cypress-ctrf-json-reporter-0.0.12.tgz#961b6e54e541a87c4e53de99739963351521db43"
+  integrity sha512-CkHZ80fZz2d5wrqU5GdaHbhhi+EL6Sl9pVMi2xLiiQv9lkXG5TxhOpke/2pZ76WSx8l4NaRBF9zfEL6n/0QpGw==
 
 cypress@^14.0.3:
   version "14.5.3"
