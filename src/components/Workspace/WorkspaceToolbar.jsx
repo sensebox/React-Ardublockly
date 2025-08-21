@@ -89,8 +89,8 @@ const WorkspaceToolbar = ({
 WorkspaceToolbar.propTypes = {
   assessment: PropTypes.bool,
   multiple: PropTypes.bool,
-  project: PropTypes.object.isRequired,
-  projectType: PropTypes.string.isRequired,
+  project: PropTypes.object,
+  projectType: PropTypes.string,
 };
 
 export default memo(WorkspaceToolbar);

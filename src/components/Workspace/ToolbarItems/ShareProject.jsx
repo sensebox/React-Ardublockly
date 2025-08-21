@@ -71,7 +71,7 @@ const styles = (theme) => ({
   },
 });
 
-class WorkspaceFunc extends Component {
+class ShareProject extends Component {
   constructor(props) {
     super(props);
     this.inputRef = React.createRef();
@@ -366,10 +366,10 @@ class WorkspaceFunc extends Component {
   }
 }
 
-WorkspaceFunc.propTypes = {
+ShareProject.propTypes = {
   shareProject: PropTypes.func.isRequired,
   clearMessages: PropTypes.func.isRequired,
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   message: PropTypes.object.isRequired,
 };
 
@@ -379,5 +379,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, { shareProject, clearMessages })(
-  withStyles(styles, { withTheme: true })(WorkspaceFunc),
+  withStyles(styles, { withTheme: true })(ShareProject),
 );
