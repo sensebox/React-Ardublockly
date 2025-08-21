@@ -37,9 +37,9 @@ Blockly.Generator.Arduino.forBlock["controls_for"] = function (
   block,
   generator,
 ) {
-  const loopIndexVariable = Blockly.getMainWorkspace().getVariableById(
-    block.getFieldValue("VAR"),
-  ).name;
+  const loopIndexVariable = Blockly.getMainWorkspace()
+    .getVariableMap()
+    .getVariableById(block.getFieldValue("VAR")).name;
 
   const allVars = Blockly.getMainWorkspace().getVariableMap().getAllVariables();
   const myVar = allVars.filter((v) => v.name === loopIndexVariable)[0];
