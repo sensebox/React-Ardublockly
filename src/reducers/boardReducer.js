@@ -8,9 +8,7 @@ const initialValue = () => {
     setBackgroundImage(window.sessionStorage.getItem("board"));
     return window.sessionStorage.getItem("board");
   }
-  // Default to esp32 (MCU-S2) if no board is selected
-  setBackgroundImage("esp32");
-  return "esp32";
+  return null;
 };
 
 const setBackgroundImage = (board) => {
