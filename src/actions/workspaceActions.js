@@ -20,6 +20,7 @@ export const workspaceChange = () => (dispatch) => {
 };
 
 export const onChangeCode = () => (dispatch, getState) => {
+  console.log("changed", Blockly.getSelected());
   const workspace = Blockly.getMainWorkspace();
   var code = getState().workspace.code;
   code.arduino = Blockly.Generator.Arduino.workspaceToCode(workspace);
@@ -36,11 +37,12 @@ export const onChangeCode = () => (dispatch, getState) => {
     } else {
       code.data = null;
     }
-  } else if (selectedBlock === null) {
-    code.tooltip = Blockly.Msg.tooltip_hint;
-    code.helpurl = "";
-    code.data = null;
   }
+  // else if (selectedBlock === null) {
+  //   code.tooltip = Blockly.Msg.tooltip_hint;
+  //   code.helpurl = "";
+  //   code.data = null;
+  // }
 
   dispatch({
     type: NEW_CODE,
