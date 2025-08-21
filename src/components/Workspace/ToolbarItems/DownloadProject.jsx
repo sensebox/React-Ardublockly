@@ -30,7 +30,9 @@ const styles = (theme) => ({
 class DownloadProject extends Component {
   downloadXmlFile = () => {
     var code = this.props.xml;
-    var fileName = detectWhitespacesAndReturnReadableResult(this.props.name);
+    var fileName = detectWhitespacesAndReturnReadableResult(
+      this.props.name || "untitled",
+    );
     fileName = `${fileName}.xml`;
     var blob = new Blob([code], { type: "text/xml" });
     saveAs(blob, fileName);
@@ -55,7 +57,7 @@ class DownloadProject extends Component {
 
 DownloadProject.propTypes = {
   xml: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
 };
 
 const mapStateToProps = (state) => ({

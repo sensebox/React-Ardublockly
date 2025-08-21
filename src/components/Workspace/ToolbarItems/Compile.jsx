@@ -57,7 +57,7 @@ const Compile = (props) => {
         selectedBoard={props.selectedBoard}
         compiler={props.compiler}
         code={props.arduino}
-        filename={props.name}
+        filename={props.name || "sketch"}
         platform={props.platform}
         appLink={props.appLink || ""}
       />
