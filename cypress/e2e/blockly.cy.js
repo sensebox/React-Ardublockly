@@ -89,6 +89,21 @@ describe("Blockly Editor Page Tests", () => {
       .and("contain.text", "Sprache");
   });
 
+  it("[Blockly] changes to tablet mode and compiles code", () => {
+    cy.intercept({
+      method: "POST",
+      pathname: "/compile",
+    }).as("compile");
+
+    cy.visit("/settings");
+    cy.get("#ota-selector").click();
+    cy.contains("li", "Activated").click();
+    cy.visit("/");
+    cy.contains("button", "Close").click();
+    cy.get('img[alt="Sensebox ESP"]').click();
+    cy.get('button[aria-label="Compile code"]').click();
+  });
+
   it("[Blockly] compiles code", () => {
     // intercept the request to the compiler
 
@@ -98,6 +113,7 @@ describe("Blockly Editor Page Tests", () => {
     }).as("compile");
 
     cy.visit("/");
+
     cy.get('img[alt="Sensebox ESP"]').click();
     cy.get('button[aria-label="Compile code"]').click();
 
