@@ -107,9 +107,8 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform }) {
     const shouldClose =
       error ||
       activeStep === 2 ||
-      (platform && activeStep === 1)(
-        reason !== "backdropClick" && reason !== "escapeKeyDown",
-      );
+      (activeStep === 1 && platform && !error) ||
+      (reason !== "backdropClick" && reason !== "escapeKeyDown");
 
     if (!shouldClose) return;
 
