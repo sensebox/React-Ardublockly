@@ -80,6 +80,7 @@ function CompilationDialog({
         body: JSON.stringify({
           sketch: code,
           board,
+          projectId: filename,
         }),
       });
       const data = await response.json();
