@@ -77,6 +77,7 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform }) {
         body: JSON.stringify({
           sketch: code,
           board,
+          projectId: filename,
         }),
       });
       const data = await response.json();
