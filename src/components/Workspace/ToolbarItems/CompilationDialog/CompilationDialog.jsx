@@ -39,7 +39,7 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform }) {
   const [counter, setCounter] = useState(0);
   const filename = useSelector((state) => state.workspace.name) || "sketch";
   const compilerUrl = useSelector((state) => state.general.compiler);
-
+  const sessionId = useSelector((state) => state.general.sessionId);
   useEffect(() => {
     if (open) {
       handleCompile();
@@ -77,7 +77,7 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform }) {
         body: JSON.stringify({
           sketch: code,
           board,
-          projectId: filename,
+          projectId: sessionId,
         }),
       });
       const data = await response.json();
