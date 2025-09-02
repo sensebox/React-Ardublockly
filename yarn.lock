@@ -270,67 +270,69 @@
     "@babel/helper-string-parser" "^7.27.1"
     "@babel/helper-validator-identifier" "^7.27.1"
 
-"@blockly/block-plus-minus@^8.0.9":
-  version "8.0.16"
-  resolved "https://registry.yarnpkg.com/@blockly/block-plus-minus/-/block-plus-minus-8.0.16.tgz#a9cbe345771577d77120ed41dc7303a4f9fe3763"
-  integrity sha512-hefQLW6pLEHlqUpN3IZf2nQueuLg6zh65mZb+1tmVN1Gn60o54z0fnD/LLn45BoMj0MEJA+agEwCIY2oxQWp7w==
+"@blockly/block-plus-minus@^9.0.1":
+  version "9.0.2"
+  resolved "https://registry.yarnpkg.com/@blockly/block-plus-minus/-/block-plus-minus-9.0.2.tgz#f80a029a3906f741cb332012ef7f1c72ad12d8c6"
+  integrity sha512-S3C53KJdPOA8d3/yJPqGxo0Prz4DJB/qOOkkLcEU01kxT9aQNuzafirvnUpqkw6v3suVFPFGJAew9O2lxcX9jA==
 
-"@blockly/field-colour@^5.0.9":
-  version "5.0.19"
-  resolved "https://registry.yarnpkg.com/@blockly/field-colour/-/field-colour-5.0.19.tgz#9421b1a3a95c8f46f9ec28ad2c4921801e9fc1a7"
-  integrity sha512-OLqGHTihuqtnZi51lsmd8uhZK+kyf07V9fd0wFQ+dfFhuyVcqrQkKBEE5NvDzdcdSLgdewWMBesGzweo5Q1XCg==
+"@blockly/field-colour@^6.0.4":
+  version "6.0.4"
+  resolved "https://registry.yarnpkg.com/@blockly/field-colour/-/field-colour-6.0.4.tgz#f86bf99700572c128e0538ca08c265db5ab92091"
+  integrity sha512-/sNTrP/wQHwpLN8sEbBDvRBFkY9+7U+WAfnA66wmgRJc4N02F41kX89C29CLUS4SUVkElUuh9spYH6Lj7G4KRQ==
+  dependencies:
+    "@blockly/field-grid-dropdown" "^6.0.3"
 
 "@blockly/field-grid-dropdown@^6.0.3":
   version "6.0.3"
   resolved "https://registry.yarnpkg.com/@blockly/field-grid-dropdown/-/field-grid-dropdown-6.0.3.tgz#559d8ec6cced43c0e7a3ed46e0c01de997c78330"
   integrity sha512-BeCmxNz4FuvZ9GRTw+RM8jWADK2DhQupacKRdhFlEnhR9akOSTwIgeaWoqnIvBkLvXLtSwAJTuQG5wyXoGGd0A==
 
-"@blockly/field-multilineinput@^5.0.10":
-  version "5.0.17"
-  resolved "https://registry.yarnpkg.com/@blockly/field-multilineinput/-/field-multilineinput-5.0.17.tgz#e396e63e67a61f0704ec30cdc1c0256330c7b133"
-  integrity sha512-kI5dgsJDAggXgkjcKDIwHZ59ZqsVQE+96vT6+FUCjRE82vYp1KAV2/PK9tSBqB2LU8nWUAeBdOT1dD8fOwz5yA==
+"@blockly/field-multilineinput@^6.0.1":
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/@blockly/field-multilineinput/-/field-multilineinput-6.0.2.tgz#e93f7b42244c1dbd88ea6578e8c207e029398e02"
+  integrity sha512-3zOjT0oA/Z5x/N622FvcfieEsoInGh/JO0FRZMFUP69jNVT1NfZkpWKKlTNfkhSTQ56313REQ4WtvAoXR1ygSQ==
 
 "@blockly/field-slider@8.0.2":
   version "8.0.2"
   resolved "https://registry.yarnpkg.com/@blockly/field-slider/-/field-slider-8.0.2.tgz#ff655e0ad99ceb90016d135e58ad7b125f554753"
   integrity sha512-7CZsayIUcgFSAYnYWn6itkjo7WNIt+XOkp9bwzZA6Jhr9WfeJEZsUcXN/9tjKwJYD5rSUiFe2cARnuMlKCr15g==
 
-"@blockly/plugin-modal@^7.0.16":
-  version "7.0.16"
-  resolved "https://registry.yarnpkg.com/@blockly/plugin-modal/-/plugin-modal-7.0.16.tgz#b72bb02fb43daeae3a73abd617e28dd52185e284"
-  integrity sha512-Xh/BzIWkvHk7RmkhSbjy8nGqDMqB+CMzW7wQrbB7bx1Mt8ENIXXQdeap4uunYpgv9AnTzqLvp5okD8sd5xAm0g==
+"@blockly/plugin-modal@^8.0.2":
+  version "8.0.2"
+  resolved "https://registry.yarnpkg.com/@blockly/plugin-modal/-/plugin-modal-8.0.2.tgz#44dde73cc23c597637eb045db40e15b72e0e5551"
+  integrity sha512-+omksrLc0XZwNmLbN+1KVrW0AlrbARw+lD8oVPwSDTuUefs27qEuSPzhI4lwrord+vWr95suOoDGhfWv67odsA==
 
-"@blockly/plugin-scroll-options@^6.0.9":
-  version "6.0.16"
-  resolved "https://registry.yarnpkg.com/@blockly/plugin-scroll-options/-/plugin-scroll-options-6.0.16.tgz#63e2a94c3ea6684612f848395bc4084b7e0ed9e6"
-  integrity sha512-/GaxROH7idtPS23zR0BlsUFKThHRrV88hbnkm/RuU7YVX6wfk7SfpXe9j8pV2Y+WnbDVGqNv5wVvmdrgfb+bKg==
+"@blockly/plugin-scroll-options@^7.0.1":
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/@blockly/plugin-scroll-options/-/plugin-scroll-options-7.0.2.tgz#41bf48d0eb50823c44fec2c59b09b6c78ae186c4"
+  integrity sha512-mAlDgVsA1Zc1mbrsNKWZNsCTrggdavdjq3IvZ+2lr0FXBBWNMqp6d0r8xMDrdmaUzyK+/ggDfMnfmtCmZvdrgA==
 
-"@blockly/plugin-typed-variable-modal@^8.0.9":
-  version "8.0.16"
-  resolved "https://registry.yarnpkg.com/@blockly/plugin-typed-variable-modal/-/plugin-typed-variable-modal-8.0.16.tgz#e098ff743be7669042abbb0552eb909c3224d2fa"
-  integrity sha512-Xl2cb369orlTgAbIV0I6I+PkhQFP9QTZILGJboizbf8C/QNOxNK17Dib4n1/03UJ+TYqCnW0tSQ+MFMRh1Pi3Q==
+"@blockly/plugin-typed-variable-modal@^9.0.2":
+  version "9.0.2"
+  resolved "https://registry.yarnpkg.com/@blockly/plugin-typed-variable-modal/-/plugin-typed-variable-modal-9.0.2.tgz#763b485f6bada34879221984b7e56d4fb62ea315"
+  integrity sha512-6QyVp+iLQUrp+G06CHEZjWY9qyevFz2DSkegZHGawq/EjB8vZZjFWiybxlZfXrS2x++T7TO/UwZx99vZACOZWw==
   dependencies:
-    "@blockly/plugin-modal" "^7.0.16"
+    "@blockly/plugin-modal" "^8.0.2"
 
-"@blockly/toolbox-search@^2.0.12":
-  version "2.0.16"
-  resolved "https://registry.yarnpkg.com/@blockly/toolbox-search/-/toolbox-search-2.0.16.tgz#b226097490fb9c69b79c7bee8f15d4644ed8b18d"
-  integrity sha512-pg49w17DjV+BmjjRveMww1pGFm3ZKs6tX5oRnK0Uj5rCJIEWWIHsRpipcgZQ7U75vD2jFmvCVMzz0PZsPlhYvA==
+"@blockly/toolbox-search@^3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@blockly/toolbox-search/-/toolbox-search-3.0.2.tgz#0d327b02a4603ab3b46136abcbc108237c002724"
+  integrity sha512-NnwK9hjyxhCOmCuF1FGH8Ca+wiZ7E7LWFdx+X8Bi4szZkPBLd9ZY3lp8bWi9WlmQax3sXQ3QAMC9/bq2OXAkdw==
 
-"@blockly/workspace-backpack@^6.0.9":
-  version "6.0.16"
-  resolved "https://registry.yarnpkg.com/@blockly/workspace-backpack/-/workspace-backpack-6.0.16.tgz#9a96e009aa47c0b9c181fbb46b5533c23639838d"
-  integrity sha512-jZZgThFkGEBGYcBtWzMTTFE3XkepqIBTTcLVKODhw5zPNABtGRwcys4wh/I7c925Wbbm+pKfDa3XdzjbgkQGVQ==
+"@blockly/workspace-backpack@^7.0.2":
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/@blockly/workspace-backpack/-/workspace-backpack-7.0.2.tgz#8d8e642db816eba6c2d3d9fe427776dfffa9d201"
+  integrity sha512-1QRI/mHWtzWYWPy+otrbajSTA8DZ6r1Q1jfHJUpl0UyKsRwx79a/XQKdWvtJVTJdRji4yTQVj2fPWNv3ING5mQ==
 
-"@blockly/workspace-minimap@^0.2.9":
-  version "0.2.16"
-  resolved "https://registry.yarnpkg.com/@blockly/workspace-minimap/-/workspace-minimap-0.2.16.tgz#b29a3afb0c70ba316782a724753b5be3d1e6133b"
-  integrity sha512-pfvl4J4+iv47sLWHpT9jKweQ8x7pJ1C2wlY3vO171Z8Ty7jHqY19qkltc2f2LfiIDxmTYVbtiA06Artoi5YFxw==
+"@blockly/workspace-minimap@^0.3.2":
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/@blockly/workspace-minimap/-/workspace-minimap-0.3.2.tgz#093b9df1f2fd3602470c56ca3a51f5b0997383b3"
+  integrity sha512-eDA0VFN6Ob/zHRYJceWh0CBVFQVQXEQ0xPEr02sloE8HVRd62uBDsfMKzBU1uikeHq/bZ6sntCQGNHaNNL0mdQ==
 
-"@blockly/zoom-to-fit@^6.0.9":
-  version "6.0.16"
-  resolved "https://registry.yarnpkg.com/@blockly/zoom-to-fit/-/zoom-to-fit-6.0.16.tgz#a049fe638021b6df6efcc56f67b0c154278abb6c"
-  integrity sha512-4z/YIZAkuCb4Q+F8F1G8dxoXC6ENud1mftClcgD/fe9TtbcJiNR+l/F2s5gyJvx7/heRuAprfoSiK1MuyKR67A==
+"@blockly/zoom-to-fit@^7.0.1":
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/@blockly/zoom-to-fit/-/zoom-to-fit-7.0.2.tgz#0826a873197dbad67766125de9a3438a4adaa21a"
+  integrity sha512-foUKSUsP8q+kVVDZeF7t340DlVUCYKHQaREjzElZnU+mo0iC4UCwYVi7BNfh5GvEbxt9jzIgFhwYYfpwv+unXg==
 
 "@csstools/color-helpers@^5.0.2":
   version "5.0.2"
@@ -717,6 +719,11 @@
   resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-common-types/-/fontawesome-common-types-6.7.2.tgz#7123d74b0c1e726794aed1184795dbce12186470"
   integrity sha512-Zs+YeHUC5fkt7Mg1l6XTniei3k4bwG/yo3iFUtZWd/pMx9g3fdvkSK9E0FOC+++phXOka78uJcYb8JaFkW52Xg==
 
+"@fortawesome/fontawesome-common-types@7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-common-types/-/fontawesome-common-types-7.0.0.tgz#1a03eb151263bffcc9c4d0b0b0ffef04496e4382"
+  integrity sha512-PGMrIYXLGA5K8RWy8zwBkd4vFi4z7ubxtet6Yn13Plf6krRTwPbdlCwlcfmoX0R7B4Z643QvrtHmdQ5fNtfFCg==
+
 "@fortawesome/fontawesome-svg-core@^6.2.1":
   version "6.7.2"
   resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-svg-core/-/fontawesome-svg-core-6.7.2.tgz#0ac6013724d5cc327c1eb81335b91300a4fce2f2"
@@ -724,12 +731,12 @@
   dependencies:
     "@fortawesome/fontawesome-common-types" "6.7.2"
 
-"@fortawesome/free-solid-svg-icons@^6.2.1":
-  version "6.7.2"
-  resolved "https://registry.yarnpkg.com/@fortawesome/free-solid-svg-icons/-/free-solid-svg-icons-6.7.2.tgz#fe25883b5eb8464a82918599950d283c465b57f6"
-  integrity sha512-GsBrnOzU8uj0LECDfD5zomZJIjrPhIlWU82AHwa2s40FKH+kcxQaBvBo3Z4TxyZHIyX8XTDxsyA33/Vx9eFuQA==
+"@fortawesome/free-solid-svg-icons@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@fortawesome/free-solid-svg-icons/-/free-solid-svg-icons-7.0.0.tgz#26362f9f97e33fc3739752af584a015d8a365850"
+  integrity sha512-njSLAllkOddYDCXgTFboXn54Oe5FcvpkWq+FoetOHR64PbN0608kM02Lze0xtISGpXgP+i26VyXRQA0Irh3Obw==
   dependencies:
-    "@fortawesome/fontawesome-common-types" "6.7.2"
+    "@fortawesome/fontawesome-common-types" "7.0.0"
 
 "@fortawesome/react-fontawesome@^0.2.0":
   version "0.2.2"
@@ -1843,13 +1850,13 @@ aws4@^1.8.0:
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.13.2.tgz#0aa167216965ac9474ccfa83892cfb6b3e1e52ef"
   integrity sha512-lHe62zvbTB5eEABUVi/AwVh0ZKY9rMMDhmm+eeyuuUQbQ3+J+fONVQOZyj+DdrvD4BY33uYniyRJ4UJIaSKAfw==
 
-axios@^0.28.0:
-  version "0.28.1"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-0.28.1.tgz#2a7bcd34a3837b71ee1a5ca3762214b86b703e70"
-  integrity sha512-iUcGA5a7p0mVb4Gm/sy+FSECNkPFT4y7wt6OM/CDpO/OnNCvSs3PoMG8ibrC9jRoGYU0gUK5pXVC4NPXq6lHRQ==
+axios@^0.30.0:
+  version "0.30.1"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.30.1.tgz#7ab803b877eca707ea5f4de55ea0358fe26898e0"
+  integrity sha512-2XabsR1u0/B6OoKy57/xJmPkQiUvdoV93oW4ww+Xjee7C2er/O5U77lvqycDkT2VQDtfjYcjw8ZV8GDaoqwjHQ==
   dependencies:
-    follow-redirects "^1.15.0"
-    form-data "^4.0.0"
+    follow-redirects "^1.15.4"
+    form-data "^4.0.4"
     proxy-from-env "^1.1.0"
 
 babel-plugin-macros@^3.1.0:
@@ -2214,10 +2221,10 @@ csstype@^3.0.2, csstype@^3.1.3:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.1.3.tgz#d80ff294d114fb0e6ac500fbf85b60137d7eff81"
   integrity sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==
 
-cypress-ctrf-json-reporter@^0.0.11:
-  version "0.0.11"
-  resolved "https://registry.yarnpkg.com/cypress-ctrf-json-reporter/-/cypress-ctrf-json-reporter-0.0.11.tgz#3d079ff44a3fddebcea171ad49afea874e9ff0a7"
-  integrity sha512-fckUaYDEfulf8o86WZIHP760VNwMKg8g1DnR64afxryzgGRhN5n6/XpNfMfHggjO/yrRQdZb3d1X5tI6FXoMXg==
+cypress-ctrf-json-reporter@^0.0.12:
+  version "0.0.12"
+  resolved "https://registry.yarnpkg.com/cypress-ctrf-json-reporter/-/cypress-ctrf-json-reporter-0.0.12.tgz#961b6e54e541a87c4e53de99739963351521db43"
+  integrity sha512-CkHZ80fZz2d5wrqU5GdaHbhhi+EL6Sl9pVMi2xLiiQv9lkXG5TxhOpke/2pZ76WSx8l4NaRBF9zfEL6n/0QpGw==
 
 cypress@^14.0.3:
   version "14.5.2"
@@ -3101,10 +3108,10 @@ focus-outline-manager@^1.0.2:
   resolved "https://registry.yarnpkg.com/focus-outline-manager/-/focus-outline-manager-1.0.2.tgz#7bf3658865341fb6b08d042a037b9d2868b119b5"
   integrity sha512-bHWEmjLsTjGP9gVs7P3Hyl+oY5NlMW8aTSPdTJ+X2GKt6glDctt9fUCLbRV+d/l8NDC40+FxMjp9WlTQXaQALw==
 
-follow-redirects@^1.15.0:
-  version "1.15.9"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.9.tgz#a604fa10e443bf98ca94228d9eebcc2e8a2c8ee1"
-  integrity sha512-gew4GsXizNgdoRyqmyfMHyAmXsZDk6mHkSxZFCzW9gwlbtOW44CDtYavM+y+72qD/Vq2l550kMF52DT8fOLJqQ==
+follow-redirects@^1.15.4:
+  version "1.15.11"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.11.tgz#777d73d72a92f8ec4d2e410eb47352a56b8e8340"
+  integrity sha512-deG2P0JfjrTxl50XGCDyfI97ZGVCxIpfKYmfyrQ54n5FO/0gfIES8C/Psl6kWVDolizcaaxZJnTS0QSMxvnsBQ==
 
 for-each@^0.3.3, for-each@^0.3.5:
   version "0.3.5"
@@ -3118,7 +3125,18 @@ forever-agent@~0.6.1:
   resolved "https://registry.yarnpkg.com/forever-agent/-/forever-agent-0.6.1.tgz#fbc71f0c41adeb37f96c577ad1ed42d8fdacca91"
   integrity sha512-j0KLYPhm6zeac4lz3oJ3o65qvgQCcPubiyotZrXqEaG4hNagNYO8qdlUrX5vwqv9ohqeT/Z3j6+yW067yWWdUw==
 
-form-data@^4.0.0, form-data@~4.0.0:
+form-data@^4.0.4:
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/form-data/-/form-data-4.0.4.tgz#784cdcce0669a9d68e94d11ac4eea98088edd2c4"
+  integrity sha512-KrGhL9Q4zjj0kiUt5OO4Mr/A/jlI2jDYs5eHBpYHPcBEVSiipAvn2Ko2HnPe20rmcuuvMHNdZFp+4IlGTMF0Ow==
+  dependencies:
+    asynckit "^0.4.0"
+    combined-stream "^1.0.8"
+    es-set-tostringtag "^2.1.0"
+    hasown "^2.0.2"
+    mime-types "^2.1.12"
+
+form-data@~4.0.0:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/form-data/-/form-data-4.0.3.tgz#608b1b3f3e28be0fccf5901fc85fb3641e5cf0ae"
   integrity sha512-qsITQPfmvMOSAdeyZ+12I1c+CKSstAFAwu+97zrnWAbIr5u8wfsExUzCesVLC8NgHuRUqNN4Zy6UPWUTRGslcA==
@@ -5123,13 +5141,12 @@ react-clientside-effect@^1.2.7:
   dependencies:
     "@babel/runtime" "^7.12.13"
 
-react-cookie-consent@^7.2.1:
-  version "7.6.0"
-  resolved "https://registry.yarnpkg.com/react-cookie-consent/-/react-cookie-consent-7.6.0.tgz#1ef99292b74f85b56ba6b93005cb753cc9016cb7"
-  integrity sha512-FGPZWCMXRQ+1Km+IOg+6+CyBA1OlS5NQ8svbI1B/iQlyon/ZbREGzkPamQmf9PHU+ULBY9Gik9DDhLUtdawMMQ==
+react-cookie-consent@^9.0.0:
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/react-cookie-consent/-/react-cookie-consent-9.0.0.tgz#26dc3a3387cc8524275864a4ed4584af881435f0"
+  integrity sha512-Blyj+m+Zz7SFHYqT18p16EANgnSg2sIyU6Yp3vk83AnOnSW7qnehPkUe4+8+qxztJrNmCH5GP+VHsWzAKVOoZA==
   dependencies:
     js-cookie "^2.2.1"
-    prop-types "^15.7.2"
 
 react-dom@^17.0.2:
   version "17.0.2"
