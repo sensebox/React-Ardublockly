@@ -160,3 +160,17 @@ Blockly.Generator.Simulator.forBlock["sensebox_sensor_sps30"] = function () {
 
   return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
 };
+
+Blockly.Generator.Simulator.forBlock["sensebox_rg15_rainsensor"] = function () {
+  Blockly.Generator.Simulator.modules_["sensebox_rg15_rainsensor"] =
+    "sensebox_rg15_rainsensor";
+
+  var dropdown = this.getFieldValue("VALUE");
+  if (dropdown === "getEventAccumulation" || dropdown === "getAccumulation") {
+    dropdown = "getTotalAccumulation";
+  }
+
+  var code = `${dropdown}()`;
+
+  return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
+};

@@ -104,6 +104,9 @@ export default function simulatorReducer(state = initialState, action) {
             moduleValues["sensebox_sps_pm25"] = 0;
             moduleValues["sensebox_sps_pm4"] = 0;
             moduleValues["sensebox_sps_pm10"] = 0;
+          case "sensebox_rg15_rainsensor":
+            moduleValues["sensebox_rg15_total_rainfall"] = 0;
+            moduleValues["sensebox_rg15_rainfall_intensity"] = 0;
           default:
             moduleValues[mod.type] = null;
             break;

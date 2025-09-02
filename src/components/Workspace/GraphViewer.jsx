@@ -48,6 +48,8 @@ const labels = {
   sensebox_sps_pm25: "Feinstaub(PM25)",
   sensebox_sps_pm4: "Feinstaub(PM4)",
   sensebox_sps_pm10: "Feinstaub(PM10)",
+  sensebox_rg15_total_rainfall: "Niederschlag(Total)",
+  sensebox_rg15_rainfall_intensity: "Niederschlagsintensität",
 };
 
 // ———————————————————————————————————————
