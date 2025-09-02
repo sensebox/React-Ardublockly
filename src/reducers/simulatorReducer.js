@@ -99,6 +99,11 @@ export default function simulatorReducer(state = initialState, action) {
           case "sensebox_sensor_sds011":
             moduleValues["sensebox_sds_pm10"] = 0;
             moduleValues["sensebox_sds_pm25"] = 0;
+          case "sensebox_sensor_sps30":
+            moduleValues["sensebox_sps_pm1"] = 0;
+            moduleValues["sensebox_sps_pm25"] = 0;
+            moduleValues["sensebox_sps_pm4"] = 0;
+            moduleValues["sensebox_sps_pm10"] = 0;
 
           default:
             moduleValues[mod.type] = null;

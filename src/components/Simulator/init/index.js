@@ -16,6 +16,7 @@ import initFluoroASM from "./sensors/fluoroASM";
 import initButton from "./sensors/button";
 import initAccelerometer from "./sensors/accelerometer";
 import initSDS011 from "./sensors/sds011";
+import initSPS30 from "./sensors/sds011";
 
 export default function initSimulator(interpreter, globalObject) {
   initDom(interpreter, globalObject);
@@ -35,5 +36,6 @@ export default function initSimulator(interpreter, globalObject) {
   initFluoroASM(interpreter, globalObject);
   initAccelerometer(interpreter, globalObject);
   initSDS011(interpreter, globalObject);
+  initSPS30(interpreter, globalObject);
   initButton(interpreter, globalObject);
 }

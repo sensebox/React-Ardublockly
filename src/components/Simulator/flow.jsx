@@ -44,6 +44,7 @@ const nodeTypes = {
   sensebox_fluoroASM_init: fluoroASM,
   sensebox_esp32s2_accelerometer: accelerometer,
   sensebox_sensor_sds011: sds011,
+  sensebox_sensor_sps30: sps30,
 };
 
 const edgeTypes = {

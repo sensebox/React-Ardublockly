@@ -44,6 +44,10 @@ const labels = {
   accelerometer_z: "Beschleunigung(Z-Achse)",
   sensebox_sds_pm10: "Feinstaub(PM10)",
   sensebox_sds_pm25: "Feinstaub(PM25)",
+  sensebox_sps_pm1: "Feinstaub(PM1)",
+  sensebox_sps_pm25: "Feinstaub(PM25)",
+  sensebox_sps_pm4: "Feinstaub(PM4)",
+  sensebox_sps_pm10: "Feinstaub(PM10)",
 };
 
 // ———————————————————————————————————————
