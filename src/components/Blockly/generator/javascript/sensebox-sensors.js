@@ -112,3 +112,15 @@ Blockly.Generator.Simulator.forBlock["sensebox_button"] = function () {
 
   return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
 };
+
+Blockly.Generator.Simulator.forBlock["sensebox_esp32s2_accelerometer"] =
+  function () {
+    Blockly.Generator.Simulator.modules_["sensebox_esp32s2_accelerometer"] =
+      "sensebox_esp32s2_accelerometer";
+
+    var dropdown = this.getFieldValue("value");
+
+    var code = `${dropdown}()`;
+
+    return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
+  };

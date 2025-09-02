@@ -39,6 +39,9 @@ const labels = {
   sensebox_tof_dist: "Distanz in mm(ToF)",
   senseBox_hdc1080_temp: "Temperatur (HDC1080)",
   senseBox_hdc1080_humidity: "rel. Luftfeuchte (HDC1080)",
+  accelerometer_x: "Beschleunigung(X-Achse)",
+  accelerometer_y: "Beschleunigung(Y-Achse)",
+  accelerometer_z: "Beschleunigung(Z-Achse)",
 };
 
 // ———————————————————————————————————————

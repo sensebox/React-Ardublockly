@@ -92,6 +92,10 @@ export default function simulatorReducer(state = initialState, action) {
           case "senseBox_smt50":
             moduleValues["sensebox_smt50_temp"] = 20;
             moduleValues["sensebox_smt50_moisture"] = 50;
+          case "sensebox_esp32s2_accelerometer":
+            moduleValues["accelerometer_x"] = 0;
+            moduleValues["accelerometer_y"] = 0;
+            moduleValues["accelerometer_z"] = 0;
           default:
             moduleValues[mod.type] = null;
             break;
