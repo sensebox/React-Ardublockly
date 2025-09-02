@@ -27,6 +27,7 @@ import fluoroASM from "./nodes/fluoroASM";
 import { useSelector } from "react-redux";
 import accelerometer from "./nodes/accelerometer";
 import sds011 from "./nodes/sds011";
+import sps30 from "./nodes/sps30";
 
 const nodeTypes = {
   board: SenseBoxMCUS2,
