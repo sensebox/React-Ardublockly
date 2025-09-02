@@ -40,8 +40,9 @@ function CompilationDialog({
   const [activeStep, setActiveStep] = useState(0);
   const [sketchId, setSketchId] = useState(null);
   const [error, setError] = useState(null);
+  const [counter, setCounter] = useState(0);
   const compilerUrl = useSelector((state) => state.general.compiler);
-
+  const sessionId = useSelector((state) => state.general.sessionId);
   useEffect(() => {
     if (open) {
       handleCompile();
@@ -67,7 +68,7 @@ function CompilationDialog({
   const handleCompile = async () => {
     try {
       const board =
-        selectedBoard === "mcu" || selectedBoard === "mini"
+        selectedBoard === "MCU" || selectedBoard === "MCU:mini"
           ? "sensebox-mcu"
           : "sensebox-esp32s2";
 
@@ -79,6 +80,7 @@ function CompilationDialog({
         body: JSON.stringify({
           sketch: code,
           board,
+          projectId: sessionId,
         }),
       });
       const data = await response.json();
@@ -96,27 +98,35 @@ function CompilationDialog({
   };
 
   const handleDownloadURL = () => {
-    const downloadUrl = `${compilerUrl}/download?id=${sketchId}&board=sensebox-mcu&filename=${filename}`;
+    const timestamp = new Date();
+    const downloadUrl = `${compilerUrl}/download?id=${sketchId}&board=sensebox-mcu&filename=${filename}_v${counter}`;
     const link = document.createElement("a");
     link.href = downloadUrl;
-    link.download = `${filename}.bin`;
+    link.download = `${counter}_${timestamp}.bin`;
+    setCounter(counter + 1);
     link.click();
   };
 
   const handleClose = (event, reason) => {
-    if (reason !== "backdropClick" && reason !== "escapeKeyDown") {
-      onClose();
-      setActiveStep(0);
-      setSketchId(null);
-      setError(null);
-    }
+    const shouldClose =
+      error ||
+      activeStep === 2 ||
+      (activeStep === 1 && platform && !error) ||
+      (reason !== "backdropClick" && reason !== "escapeKeyDown");
+
+    if (!shouldClose) return;
+
+    onClose();
+    setActiveStep(0);
+    setSketchId(null);
+    setError(null);
   };
 
   return (
     <Dialog
       open={open}
       onClose={handleClose}
-      disableEscapeKeyDown
+      disableEscapeKeyDown={activeStep !== 2 || !error}
       // Feste Größe über PaperProps: Breite und Höhe passen für alle Steps
       PaperProps={{
         style: { width: "600px", minHeight: "600px", maxHeight: "600px" },
@@ -166,11 +176,7 @@ function CompilationDialog({
               <span style={headerStyle}> {Blockly.Msg.goToApp_title} </span>
               <span style={{ margin: "1rem" }}>{Blockly.Msg.goToApp_text}</span>
               <a
-                href={
-                  selectedBoard === "esp32"
-                    ? `blocklyconnect-app://sketch/${filename}/${sketchId}/${selectedBoard}`
-                    : `blocklyconnect-app://sketch/${filename}/${sketchId}`
-                }
+                href={`blocklyconnect-app://sketch/${filename}/${sketchId}/${selectedBoard}`}
               >
                 <Button
                   style={{ color: "white", margin: "1rem" }}

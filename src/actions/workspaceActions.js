@@ -37,10 +37,6 @@ export const onChangeCode = () => (dispatch, getState) => {
     } else {
       code.data = null;
     }
-  } else if (selectedBlock === null) {
-    code.tooltip = Blockly.Msg.tooltip_hint;
-    code.helpurl = "";
-    code.data = null;
   }
 
   dispatch({

@@ -1,15 +1,14 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { getProjects, resetProject } from "../../actions/projectActions";
-import { clearMessages } from "../../actions/messageActions";
+import { getProjects, resetProject } from "@/actions/projectActions";
+import { clearMessages } from "@/actions/messageActions";
 
 import { Link, withRouter } from "react-router-dom";
 
-import Breadcrumbs from "../ui/Breadcrumbs";
-import BlocklyWindow from "../Blockly/BlocklyWindow";
-import Snackbar from "../Snackbar";
-import WorkspaceToolbar from "../Workspace/WorkspaceToolbar";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import Snackbar from "@/components/Snackbar";
+import WorkspaceToolbar from "@/components/Workspace/WorkspaceToolbar";
 
 import withStyles from "@mui/styles/withStyles";
 import Grid from "@mui/material/Grid";
@@ -18,7 +17,7 @@ import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
-import DeviceSelection from "../DeviceSelection";
+import DeviceSelection from "@/components/DeviceSelection";
 
 const styles = (theme) => ({
   link: {
@@ -73,6 +72,10 @@ class ProjectHome extends Component {
   componentDidUpdate(props) {
     if (props.location.pathname !== this.props.location.pathname) {
       this.setState({ snackbar: false });
+      console.log(
+        "Updating projects for type:",
+        this.props.location.pathname.replace("/", ""),
+      );
       this.props.getProjects(this.props.location.pathname.replace("/", ""));
     }
     if (props.message !== this.props.message) {

@@ -68,14 +68,30 @@ export const ToolboxEsp = () => {
         <Block type="sensebox_ethernetIp" />
       </Category>
       <Category name="SD" colour={getColour().sensebox}>
-        <Block type="sensebox_esp32s2_sd_create_file" />
+        <Block type="sensebox_esp32s2_sd_create_file">
+          <Value name="FILENAME">
+            <Block type="text">
+              <Field name="TEXT">Data</Field>
+            </Block>
+          </Value>
+        </Block>
         <Block type="sensebox_esp32s2_sd_open_file">
+          <Value name="FILENAME">
+            <Block type="text">
+              <Field name="TEXT">Data</Field>
+            </Block>
+          </Value>
           <Value name="SD">
             <Block type="sensebox_esp32s2_sd_write_file"></Block>
           </Value>
         </Block>
         <Block type="sensebox_esp32s2_sd_write_file" />
         <Block type="sensebox_esp32s2_sd_open_file">
+          <Value name="FILENAME">
+            <Block type="text">
+              <Field name="TEXT">Data</Field>
+            </Block>
+          </Value>
           <Value name="SD">
             <Block type="sensebox_sd_osem">
               <Value name="DO">
@@ -86,6 +102,13 @@ export const ToolboxEsp = () => {
         </Block>
         <Block type="sensebox_sd_osem" />
         <Block type="sensebox_sd_save_for_osem" />
+        <Block type="sensebox_sd_exists">
+          <Value name="FILENAME">
+            <Block type="text">
+              <Field name="TEXT">Dateiname</Field>
+            </Block>
+          </Value>
+        </Block>
       </Category>
       <Category name="LED" colour={getColour().sensebox}>
         <Block type="sensebox_ws2818_led_init">
@@ -402,6 +425,67 @@ export const ToolboxEsp = () => {
         <Block type="sensebox_fluoroASM_init"></Block>
         <Block type="sensebox_fluoroASM_setLED2"></Block>
       </Category>
+      <Category id="QOOOL" name="QOOOL" colour={"#b7b645"}>
+        <Block type="sensebox_fluoroASM_init"></Block>
+        <Block type="sensebox_fluoroASM_setLED">
+          <Value name="BRIGHTNESS">
+            <Block type="math_number">
+              <Field name="NUM">30</Field>
+            </Block>
+          </Value>
+        </Block>
+      </Category>{" "}
+      {/* <Category id="sensebox_solar" name="Solar" colour={getColour().solar}>
+        <Block type="sensebox_solar_charger_SB041">
+          <Field name="value">battery_level</Field>
+        </Block>
+        <Block type="sensebox_solar_ensure_wake_time">
+          <Field name="wake_time">30</Field>
+          <Field name="time_scale"> * 1000</Field>
+        </Block>
+        <Block type="sensebox_solar_deep_sleep_and_restart">
+          <Field name="sleep_time">30</Field>
+          <Field name="time_scale">60000</Field>
+          <Field name="powerOffGPIO">TRUE</Field>
+          <Field name="powerOffUART">TRUE</Field>
+          <Field name="powerOffXB">TRUE</Field>
+        </Block>
+        <Block type="controls_ifelse">
+          <Value name="IF0">
+            <Block type="logic_compare">
+              <Field name="OP">GT</Field>
+              <Value name="A">
+                <Block type="sensebox_solar_charger_SB041">
+                  <Field name="value">battery_level</Field>
+                </Block>
+              </Value>
+              <Value name="B">
+                <Block type="math_number">
+                  <Field name="NUM">2</Field>
+                </Block>
+              </Value>
+            </Block>
+          </Value>
+          <Statement name="DO0">
+            <Block type="sensebox_solar_deep_sleep_and_restart">
+              <Field name="sleep_time">30</Field>
+              <Field name="time_scale">60000</Field>
+              <Field name="powerOffGPIO">TRUE</Field>
+              <Field name="powerOffUART">TRUE</Field>
+              <Field name="powerOffXB">TRUE</Field>
+            </Block>
+          </Statement>
+          <Statement name="ELSE">
+            <Block type="sensebox_solar_deep_sleep_and_restart">
+              <Field name="sleep_time">12</Field>
+              <Field name="time_scale">3600000</Field>
+              <Field name="powerOffGPIO">TRUE</Field>
+              <Field name="powerOffUART">TRUE</Field>
+              <Field name="powerOffXB">TRUE</Field>
+            </Block>
+          </Statement>
+        </Block>
+      </Category> */}
       <Category id="webserver" name="Webserver" colour={getColour().webserver}>
         <Block type="sensebox_initialize_http_server"></Block>
         <Block type="sensebox_http_on_client_connect"></Block>

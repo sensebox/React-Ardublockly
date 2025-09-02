@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { visitPage, setPlatform } from "../../actions/generalActions";
-
+import { visitPage, setPlatform } from "@/actions/generalActions";
 import { Route, Switch, withRouter } from "react-router-dom";
 
 import PublicRoute from "./PublicRoute";
@@ -15,8 +14,6 @@ import Tutorial from "../Tutorial/Tutorial";
 import TutorialHome from "../Tutorial/TutorialHome";
 import Builder from "../Tutorial/Builder/Builder";
 import NotFound from "../Pages/NotFound";
-import ProjectHome from "../Project/ProjectHome";
-import Project from "../Project/Project";
 import Settings from "../Settings/Settings";
 import Impressum from "../Pages/Impressum";
 import Privacy from "../Pages/Privacy";
@@ -25,6 +22,9 @@ import Account from "../User/Account";
 import News from "../Pages/News";
 import Faq from "../Pages/Faq";
 import CodeEditor from "../Pages/CodeEditor/CodeEditor";
+import GalleryHome from "../Pages/Gallery/GalleryHome";
+import Project from "@/components/Pages/Project/Project";
+import ProjectHome from "@/components/Pages/Project/ProjectHome";
 
 class Routes extends Component {
   componentDidMount() {
@@ -73,7 +73,7 @@ class Routes extends Component {
           </PublicRoute>
           {/* Gallery-Projects */}
           <PublicRoute path="/gallery" exact>
-            <ProjectHome />
+            <GalleryHome />
           </PublicRoute>
           <PublicRoute path="/gallery/:galleryId" exact>
             <Project />
@@ -119,7 +119,7 @@ class Routes extends Component {
   }
 }
 
-Home.propTypes = {
+Routes.propTypes = {
   visitPage: PropTypes.func,
   platform: PropTypes.bool.isRequired,
   setPlatform: PropTypes.func.isRequired,

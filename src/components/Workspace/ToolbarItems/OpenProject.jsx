@@ -244,7 +244,9 @@ OpenProject.propTypes = {
   clearStats: PropTypes.func.isRequired,
   workspaceName: PropTypes.func.isRequired,
   xml: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
+  setBoard: PropTypes.func,
+  assessment: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({

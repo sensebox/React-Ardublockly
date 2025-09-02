@@ -53,6 +53,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { setLanguage } from "../actions/generalActions";
 import { setBoard } from "../actions/boardAction";
+import { De } from "./Blockly/msg/de";
+import { En } from "./Blockly/msg/en";
 
 const useStyles = makeStyles((theme) => ({
   drawerWidth: {
@@ -111,11 +113,15 @@ const Navbar = () => {
 
   const changeLanguage = (val) => {
     dispatch(setLanguage(val));
+    if (val === "de_DE") {
+      Blockly.setLocale(De);
+    } else if (val === "en_US") {
+      Blockly.setLocale(En);
+    }
     handleLangClose();
   };
   const changeBoard = (val) => {
     dispatch(setBoard(val));
-
     handleBoardClose();
   };
   const handleLogout = () => {
@@ -204,13 +210,10 @@ const Navbar = () => {
                       borderRadius: "25px",
                     }}
                   >
-                    {selectedBoard === "mcu"
-                      ? "MCU"
-                      : selectedBoard === "mini"
-                        ? "MCU:mini"
-                        : "MCU-S2"}
+                    {selectedBoard}
                   </Button>
                   <Menu
+                    id="navbarBoardSelect"
                     anchorEl={anchorElBoard}
                     anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
                     transformOrigin={{ vertical: "top", horizontal: "center" }}
@@ -233,6 +236,7 @@ const Navbar = () => {
                   <Button
                     ref={langRef}
                     onClick={handleLangOpen}
+                    id="navbar-language-select"
                     startIcon={
                       <FontAwesomeIcon
                         icon={
@@ -265,10 +269,16 @@ const Navbar = () => {
                     open={Boolean(anchorElLang)}
                     onClose={handleLangClose}
                   >
-                    <MenuItem onClick={() => changeLanguage("de_DE")}>
+                    <MenuItem
+                      id="navbar-language-select-de"
+                      onClick={() => changeLanguage("de_DE")}
+                    >
                       Deutsch
                     </MenuItem>
-                    <MenuItem onClick={() => changeLanguage("en_US")}>
+                    <MenuItem
+                      id="navbar-language-select-en"
+                      onClick={() => changeLanguage("en_US")}
+                    >
                       English
                     </MenuItem>
                   </Menu>

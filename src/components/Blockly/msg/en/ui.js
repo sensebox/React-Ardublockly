@@ -121,6 +121,7 @@ export const UI = {
   resetDialog_headline: "Reset workspace?",
   resetDialog_text:
     "Do you really want to reset the workspace? All blocks will be deleted!",
+  reset_text: "Reset",
 
   /**
    * Share Dialog
@@ -286,6 +287,17 @@ export const UI = {
   builder_review_text:
     "You can share your tutorial with other people directly from the link. If you want to publish your tutorial for all users in the overview you can activate it here. An administrator will view your tutorial and then activate it.",
 
+  // Gallery
+
+  gallery_home_head: "Gallery",
+  show_in_blockly: "Show",
+  searchQuery_placeholder: "Search for project title",
+  my_projects: "Show only my projects",
+  no_projects_found: "No projects found.",
+  delete_project: "Are you sure you want to delete this project?",
+  delete: "Delete",
+  edit_project: "Edit project",
+  confirm: "Confirm",
   /**
    * Login
    */

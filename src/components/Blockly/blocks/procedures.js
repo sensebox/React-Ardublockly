@@ -251,7 +251,7 @@ Blockly.Blocks["procedures_defnoreturn"] = {
     while (paramBlock) {
       const varName = paramBlock.getFieldValue("NAME");
       this.arguments_.push(varName);
-      const variable = this.workspace.getVariable(
+      const variable = this.workspace.getVariableMap().getVariable(
         varName,
         paramBlock.getFieldValue("TYPE"), // NOTES SETTING TYPE OF VARIABLE
       );
@@ -334,13 +334,13 @@ Blockly.Blocks["procedures_defnoreturn"] = {
    * @this Blockly.Block
    */
   renameVarById: function (oldId, newId) {
-    const oldVariable = this.workspace.getVariableById(oldId);
+    const oldVariable = this.workspace.getVariableMap().getVariableById(oldId);
     if (oldVariable.type !== "") {
       // Procedure arguments always have the empty type.
       return;
     }
     const oldName = oldVariable.name;
-    const newVar = this.workspace.getVariableById(newId);
+    const newVar = this.workspace.getVariableMap().getVariableById(newId);
 
     let change = false;
     for (let i = 0; i < this.argumentVarModels_.length; i++) {
@@ -719,7 +719,7 @@ Blockly.Blocks["procedures_mutatorarg"] = {
     }
 
     if (!model) {
-      model = outerWs.createVariable(varName, varType);
+      model = outerWs.getVariableMap().createVariable(varName, varType);
       // CHANGING VARIABLE NAME TO REFLECT TYPE
       if (model && this.createdVariables_) {
         this.createdVariables_.push(model);
@@ -1026,7 +1026,9 @@ Blockly.Blocks["procedures_callnoreturn"] = {
 
     for (let i = 0, childNode; (childNode = xmlElement.childNodes[i]); i++) {
       if (childNode.nodeName.toLowerCase() === "arg") {
-        var variables = Blockly.getMainWorkspace().getAllVariables();
+        var variables = Blockly.getMainWorkspace()
+          .getVariableMap()
+          .getAllVariables();
 
         var varName = childNode.getAttribute("name");
         for (let y = 0; variables.length; y++) {

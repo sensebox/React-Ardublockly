@@ -2,7 +2,6 @@ import * as Blockly from "blockly";
 import { getColour } from "@/components/Blockly/helpers/colour";
 import * as Types from "../helpers/types";
 import { selectedBoard } from "@/components/Blockly/helpers/board";
-import { FieldGridDropdown } from "@blockly/field-grid-dropdown";
 import { FieldSlider } from "@blockly/field-slider";
 import { withBoardParam } from "../helpers/helpUrlBuilder";
 
@@ -219,7 +218,15 @@ Blockly.Blocks["sensebox_sensor_bme680_bsec"] = {
 
 Blockly.Blocks["sensebox_sensor_ultrasonic_ranger"] = {
   init: function () {
-    var dropdown = new FieldGridDropdown(
+    // var dropdown = new FieldGridDropdown(
+    //   selectedBoard().digitalPorts,
+    //   function (option) {
+    //     var input = option === "A" || option === "B" || option === "C";
+    //     this.sourceBlock_.updateShape_(input);
+    //   },
+    // );
+
+    var dropdown2 = new Blockly.FieldDropdown(
       selectedBoard().digitalPorts,
       function (option) {
         var input = option === "A" || option === "B" || option === "C";
@@ -230,7 +237,7 @@ Blockly.Blocks["sensebox_sensor_ultrasonic_ranger"] = {
     this.setColour(getColour().sensebox);
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_ultrasonic)
-      .appendField(dropdown, "port");
+      .appendField(dropdown2, "port");
     this.appendDummyInput("TrigEcho")
       .setAlign(Blockly.inputs.Align.RIGHT)
       .appendField(Blockly.Msg.senseBox_ultrasonic_trigger)

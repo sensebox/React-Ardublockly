@@ -36,7 +36,6 @@ const Compile = (props) => {
     fallbackTexts.en_US; // Englisch als letzter Fallback
   const openDialog = () => {
     setDialogOpen(true);
-    console.log(props.platform);
   };
 
   return (
@@ -58,7 +57,7 @@ const Compile = (props) => {
         selectedBoard={props.selectedBoard}
         compiler={props.compiler}
         code={props.arduino}
-        filename={props.name}
+        filename={props.name || "sketch"}
         platform={props.platform}
         appLink={props.appLink || ""}
       />

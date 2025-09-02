@@ -41,7 +41,7 @@ const CodeEditor = () => {
   const selectedBoard = store.getState().board.board;
   const filename = "sketch";
   const baseCode = `
-${selectedBoard === "mcu" || selectedBoard === "mini" ? "#include <senseBoxIO.h>" : ""}    
+${selectedBoard === "MCU" || selectedBoard === "MCU:mini" ? "#include <senseBoxIO.h>" : ""}    
 void setup () {
              
 }
@@ -302,7 +302,7 @@ void loop() {
                   setResetDialog(false);
                 }}
               >
-                Zurücksetzen
+                {Blockly.Msg.reset_text}
               </Button>
             </div>
           </Dialog>

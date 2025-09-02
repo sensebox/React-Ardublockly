@@ -122,7 +122,9 @@ class BlocklyComponent extends React.Component {
         event.type === Blockly.Events.VAR_CREATE ||
         event.type === Blockly.Events.VAR_RENAME
       ) {
-        const variable = workspace.getVariableById(event.varId);
+        const variable = workspace
+          .getVariableMap()
+          .getVariableById(event.varId);
         const newName = variable.name;
         if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(newName)) {
           // Check if the new name is a valid variable name
@@ -132,7 +134,7 @@ class BlocklyComponent extends React.Component {
             type: "error",
             message: `${Blockly.Msg.messages_invalid_variable_name}`,
           });
-          workspace.deleteVariableById(event.varId);
+          workspace.getVariableMap().deleteVariableById(event.varId);
         }
         if (reservedWords.has(newName)) {
           // Check if the new name is a reserved word
@@ -142,7 +144,7 @@ class BlocklyComponent extends React.Component {
             type: "error",
             message: `"${newName}" ${Blockly.Msg.messages_reserve_word}`,
           });
-          workspace.deleteVariableById(event.varId);
+          workspace.getVariableMap().deleteVariableById(event.varId);
         }
       }
     });

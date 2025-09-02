@@ -14,6 +14,8 @@ import { ZoomToFitControl } from "@blockly/zoom-to-fit";
 import { initialXml } from "./initialXml.js";
 import { getMaxInstances } from "./helpers/maxInstances";
 import { Backpack } from "@blockly/workspace-backpack";
+import { De } from "@/components/Blockly/msg/de";
+import { En } from "@/components//Blockly/msg/en";
 
 class BlocklyWindow extends Component {
   constructor(props) {
@@ -64,7 +66,6 @@ class BlocklyWindow extends Component {
       Blockly.Xml.domToWorkspace(Blockly.utils.xml.textToDom(xml), workspace);
     }
     if (props.language !== this.props.language) {
-      // change language
       xml = localStorage.getItem("autoSaveXML");
       if (!xml) xml = initialXml;
       xmlDom = Blockly.utils.xml.textToDom(xml);
