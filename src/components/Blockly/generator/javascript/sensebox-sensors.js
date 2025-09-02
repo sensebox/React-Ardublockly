@@ -124,3 +124,14 @@ Blockly.Generator.Simulator.forBlock["sensebox_esp32s2_accelerometer"] =
 
     return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
   };
+
+Blockly.Generator.Simulator.forBlock["sensebox_sensor_sds011"] = function () {
+  Blockly.Generator.Simulator.modules_["sensebox_sensor_sds011"] =
+    "sensebox_sensor_sds011";
+
+  var dropdown = this.getFieldValue("value");
+
+  var code = `${dropdown}()`;
+
+  return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
+};

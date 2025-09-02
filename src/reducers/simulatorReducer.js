@@ -96,6 +96,10 @@ export default function simulatorReducer(state = initialState, action) {
             moduleValues["accelerometer_x"] = 0;
             moduleValues["accelerometer_y"] = 0;
             moduleValues["accelerometer_z"] = 0;
+          case "sensebox_sensor_sds011":
+            moduleValues["sensebox_sds_pm10"] = 0;
+            moduleValues["sensebox_sds_pm25"] = 0;
+
           default:
             moduleValues[mod.type] = null;
             break;

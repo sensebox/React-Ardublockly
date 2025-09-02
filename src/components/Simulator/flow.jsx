@@ -26,6 +26,7 @@ import dps310 from "./nodes/dps310";
 import fluoroASM from "./nodes/fluoroASM";
 import { useSelector } from "react-redux";
 import accelerometer from "./nodes/accelerometer";
+import sds011 from "./nodes/sds011";
 
 const nodeTypes = {
   board: SenseBoxMCUS2,
@@ -42,6 +43,7 @@ const nodeTypes = {
   sensebox_sensor_dps310: dps310,
   sensebox_fluoroASM_init: fluoroASM,
   sensebox_esp32s2_accelerometer: accelerometer,
+  sensebox_sensor_sds011: sds011,
 };
 
 const edgeTypes = {
