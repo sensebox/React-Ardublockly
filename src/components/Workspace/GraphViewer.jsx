@@ -155,54 +155,51 @@ const GraphViewer = () => {
         minHeight: 0,
       }}
     >
-      <div
-        style={{
-          position: "absolute",
-          bottom: "47%",
-          left: "45%",
-          zIndex: 100,
-          display: "flex",
-          flexDirection: "row",
-          gap: 8,
-        }}
-      >
-        <Box
-          sx={{
-            background: "#fff",
-            borderRadius: "50%",
-            boxShadow: 1,
-          }}
-        >
-          <IconButton
-            aria-label="Einstellungen"
-            style={{ color: theme.palette.primary.main }}
-            onClick={() => {
-              setTempLimit(limit);
-              setSettingsOpen(true);
-            }}
-            size="small"
-          >
-            <SettingsIcon />
-          </IconButton>
-        </Box>
-        <Box
-          sx={{
-            background: "#fff",
-            borderRadius: "50%",
-            boxShadow: 1,
-          }}
-        >
-          <IconButton
-            aria-label="Daten löschen"
-            onClick={clearData}
-            size="small"
-            color="error"
-          >
-            <DeleteIcon />
-          </IconButton>
-        </Box>
-      </div>
       <Box sx={{ flex: 1, minHeight: 0, overflow: "hidden" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "end",
+            gap: 8,
+          }}
+        >
+          <Box
+            sx={{
+              background: "#fff",
+              borderRadius: "50%",
+              boxShadow: 1,
+            }}
+          >
+            <IconButton
+              aria-label="Einstellungen"
+              style={{ color: theme.palette.primary.main }}
+              onClick={() => {
+                setTempLimit(limit);
+                setSettingsOpen(true);
+              }}
+              size="small"
+            >
+              <SettingsIcon />
+            </IconButton>
+          </Box>
+          <Box
+            sx={{
+              background: "#fff",
+              borderRadius: "50%",
+              boxShadow: 1,
+            }}
+          >
+            <IconButton
+              aria-label="Daten löschen"
+              onClick={clearData}
+              size="small"
+              color="error"
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Box>
+        </div>
         {keys.length === 0 ? (
           <Box
             sx={{
