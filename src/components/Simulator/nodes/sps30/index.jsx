@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import SensorGraphic from "./sps30.png"; // Update image to sps30
+import SensorGraphic from "./sps30.png";
 import SensorNode from "../../uiComponents/SensorNode";
 import { Handle, Position } from "@xyflow/react";
 

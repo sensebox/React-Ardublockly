@@ -104,7 +104,6 @@ export default function simulatorReducer(state = initialState, action) {
             moduleValues["sensebox_sps_pm25"] = 0;
             moduleValues["sensebox_sps_pm4"] = 0;
             moduleValues["sensebox_sps_pm10"] = 0;
-
           default:
             moduleValues[mod.type] = null;
             break;
