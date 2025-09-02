@@ -58,8 +58,6 @@ class BlocklyComponent extends React.Component {
 
       if (IGNORED_EVENTS.includes(event.type)) return;
 
-      console.log("Blockly-Event:", event);
-
       let title = "";
       let description = "";
 

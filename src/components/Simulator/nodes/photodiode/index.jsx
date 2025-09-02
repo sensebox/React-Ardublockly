@@ -12,6 +12,7 @@ const sensorConfigPhotodiode = [
     max: 10000,
     step: 1,
     initial: 2500,
+    type: "sensebox_esp32s2_light",
   },
 ];
 

@@ -1,16 +1,21 @@
 import Interpreter from "js-interpreter";
-import { START_SIMULATOR, STOP_SIMULATOR, NEW_CODE } from "../actions/types";
+import {
+  START_SIMULATOR,
+  STOP_SIMULATOR,
+  NEW_CODE,
+  SET_MODULE_VALUE,
+} from "../actions/types";
 import initSimulator from "../components/Simulator/init";
 
 const initialState = {
   code: "",
   modules: [],
+  moduleValues: {},
   isRunning: false,
   interpreter: null,
-  simulationStartTimestamp: null, // Timestamp when the simulation starts
-  abortController: null, // Added for abort control
+  simulationStartTimestamp: null,
+  abortController: null,
 };
-
 function runInterpreter(interpreter, abortSignal) {
   return new Promise((resolve, reject) => {
     const nextStep = () => {
@@ -36,7 +41,7 @@ export default function simulatorReducer(state = initialState, action) {
       ) {
         return state;
       }
-
+      console.log(initSimulator, action.payload);
       const newInterpreter = new Interpreter(
         action.payload.simulator,
         initSimulator,
@@ -53,10 +58,45 @@ export default function simulatorReducer(state = initialState, action) {
         modules = modulesString
           .split(",")
           .map((module) => module.trim())
-          .filter((m) => m.length > 0);
+          .filter((m) => m.length > 0)
+          .map((type, index) => ({
+            id: `m_${index}`,
+            type,
+          }));
       } else {
         console.log("No modules comment found.");
       }
+
+      // Initialisiere Werte separat
+      const moduleValues = {};
+      modules.forEach((mod) => {
+        switch (mod.type) {
+          case "senseBox_hdc1080":
+            moduleValues["senseBox_hdc1080_temp"] = 20;
+            moduleValues["senseBox_hdc1080_humidity"] = 50;
+            break;
+          case "sensebox_sensor_dps310":
+            moduleValues["sensebox_dps310_temp"] = 20;
+            moduleValues["sensebox_dps310_pressure"] = 1013;
+            moduleValues["sensebox_dps310_altitude"] = 0;
+            break;
+          case "senseBox_lightUv":
+            moduleValues["sensebox_light_uv"] = 55;
+            moduleValues["sensebox_light_lux"] = 2500;
+          case "sensebox_scd30":
+            moduleValues["sensebox_scd_co2"] = 400;
+            moduleValues["sensebox_scd_temp"] = 20;
+            moduleValues["sensebox_scd_humi"] = 50;
+          case "sensebox_tof_imager":
+            moduleValues["sensebox_tof_dist"] = 1000;
+          case "senseBox_smt50":
+            moduleValues["sensebox_smt50_temp"] = 20;
+            moduleValues["sensebox_smt50_moisture"] = 50;
+          default:
+            moduleValues[mod.type] = null;
+            break;
+        }
+      });
 
       if (state.isRunning) {
         state.abortController.abort();
@@ -65,10 +105,11 @@ export default function simulatorReducer(state = initialState, action) {
       return {
         ...state,
         code: action.payload.simulator,
-        modules: modules,
+        modules,
+        moduleValues,
         interpreter: newInterpreter,
         simulationStartTimestamp: null,
-        abortController: null, // Reset abortController
+        abortController: null,
         isRunning: false,
       };
     }
@@ -76,7 +117,7 @@ export default function simulatorReducer(state = initialState, action) {
       console.log("START_SIMULATOR");
 
       const abortController = new AbortController();
-
+      console.log(state);
       runInterpreter(state.interpreter, abortController.signal)
         .then(() => {
           console.log("Interpreter finished running");
@@ -111,6 +152,17 @@ export default function simulatorReducer(state = initialState, action) {
         abortController: null, // Clear the controller
       };
     }
+    case SET_MODULE_VALUE: {
+      const { type, value } = action.payload;
+      return {
+        ...state,
+        moduleValues: {
+          ...state.moduleValues,
+          [type]: value,
+        },
+      };
+    }
+
     default:
       return state;
   }

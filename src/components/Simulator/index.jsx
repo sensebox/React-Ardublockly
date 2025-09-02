@@ -169,7 +169,7 @@ export default function Simulator() {
 
       {/* MAIN SIMULATOR AREA */}
       <ReactFlowProvider>
-        <SimulatorFlow modules={modules} />
+        <SimulatorFlow />
       </ReactFlowProvider>
     </div>
   );

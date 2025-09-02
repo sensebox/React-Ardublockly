@@ -12,6 +12,7 @@ const sensorConfigSCD30 = [
     max: 2000,
     step: 1,
     initial: 400,
+    type: "sensebox_scd_co2",
   },
   {
     id: "temp-scd30",
@@ -21,6 +22,7 @@ const sensorConfigSCD30 = [
     max: 50,
     step: 1,
     initial: 20,
+    type: "sensebox_scd_temp",
   },
   {
     id: "humidity-scd30",
@@ -30,6 +32,7 @@ const sensorConfigSCD30 = [
     max: 100,
     step: 1,
     initial: 50,
+    type: "sensebox_scd_humi",
   },
 ];
 

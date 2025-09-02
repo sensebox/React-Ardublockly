@@ -47,9 +47,6 @@ const SvgFluoroBee = (props) => {
     if (filterOffset === 40.4) return 0.5;
   };
 
-  React.useEffect(() => {
-    console.log(filterOffset);
-  }, [filterOffset]);
   return (
     <div>
       <svg

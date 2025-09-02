@@ -45,7 +45,6 @@ class App extends Component {
   componentDidMount() {
     store.dispatch(loadUser());
     // set initial compiler
-    console.log("compiler", import.meta.env.VITE_INITIAL_COMPILER_URL);
     store.dispatch(setCompiler(import.meta.env.VITE_INITIAL_COMPILER_URL));
     window.dispatchRedux = store.dispatch;
   }

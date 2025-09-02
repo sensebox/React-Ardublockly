@@ -8,7 +8,7 @@ import {
   faMousePointer, // Klicks
   faWrench, // Simulator
 } from "@fortawesome/free-solid-svg-icons";
-import { selectLogs } from "../reducers/logReducer";
+import { selectLogs } from "../../reducers/logReducer";
 
 const TYPE_CONFIG = {
   blockly: { color: "green", icon: faCubes },
@@ -26,7 +26,7 @@ export default function DebugViewer() {
       sx={{
         bgcolor: "common.white",
         p: 1,
-        maxHeight: 300,
+        maxHeight: 250,
         overflowY: "auto",
       }}
     >
