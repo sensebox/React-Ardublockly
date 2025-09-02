@@ -24,6 +24,7 @@ import bme680 from "./nodes/bme680";
 import scd30 from "./nodes/scd30";
 import dps310 from "./nodes/dps310";
 import fluoroASM from "./nodes/fluoroASM";
+import { useSelector } from "react-redux";
 
 const nodeTypes = {
   board: SenseBoxMCUS2,
@@ -65,18 +66,22 @@ const initialEdges = [
 const SimulatorFlow = (props) => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const modules = useSelector((state) => state.simulator.modules);
 
   const reactFlow = useReactFlow();
 
+  useEffect(() => {
+    reactFlow.fitView();
+  }, [modules]);
   useEffect(() => {
     // calculate new edges
     const newEdges = [];
     nodes.forEach((node) => {
       if (node.type === "board") {
         node.draggable = false;
-        props.modules.forEach((module, index) => {
+        modules.forEach((module, index) => {
           // dont draw an edge with the fluoro bee
-          if (module === "sensebox_fluoroASM_init") {
+          if (module.type === "sensebox_fluoroASM_init") {
             return;
           }
           newEdges.push({
@@ -98,28 +103,28 @@ const SimulatorFlow = (props) => {
   }, [nodes]);
 
   useEffect(() => {
-    const newNodes = props.modules
+    const newNodes = modules
       .map((module, index) => {
         // skip the block for led - only use init block for node creation
         if (
-          module === "sensebox_fluoroASM_setLED2" ||
-          module === "sensebox_button"
+          module.type === "sensebox_fluoroASM_setLED2" ||
+          module.type === "sensebox_button"
         ) {
           return;
         }
-        if (nodes.map((n) => n.type).includes(module)) {
-          return nodes.find((n) => n.type == module);
+        if (nodes.map((n) => n.type).includes(module.type)) {
+          return nodes.find((n) => n.type == module.type);
         }
         return {
           id: `m_${index.toString()}`,
-          type: module,
+          type: module.type,
           position: { x: 200 + Math.random() * 200, y: 400 },
         };
       })
       .filter((e) => e);
 
     setNodes([initialNodes[0], ...newNodes]);
-  }, [props.modules]);
+  }, [modules]);
 
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
@@ -148,10 +153,10 @@ const SimulatorFlow = (props) => {
         }}
         fitView
         connectionMode="loose"
+        onInit={(e) => e.fitView()}
       >
         <Background />
         <Controls />
-        {/* <MiniMap /> */}
       </ReactFlow>
     </div>
   );

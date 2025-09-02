@@ -14,6 +14,7 @@ const HDC1080 = ({ data }) => {
       max: 50,
       step: 0.5,
       initial: 20,
+      type: "senseBox_hdc1080_temp",
     },
     {
       id: "humidity",
@@ -23,6 +24,7 @@ const HDC1080 = ({ data }) => {
       max: 100,
       step: 1,
       initial: 50,
+      type: "senseBox_hdc1080_humidity",
     },
   ];
 

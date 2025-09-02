@@ -13,6 +13,7 @@ const SMT50 = ({ data }) => {
       max: 60,
       step: 0.5,
       initial: 20,
+      type: "sensebox_smt50_temp",
     },
     {
       id: "soilmoisture",
@@ -22,6 +23,7 @@ const SMT50 = ({ data }) => {
       max: 100,
       step: 1,
       initial: 50,
+      type: "sensebox_smt50_moisture",
     },
   ];
 

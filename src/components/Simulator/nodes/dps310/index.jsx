@@ -10,7 +10,8 @@ const sensorConfigDPS310 = [
     min: -40,
     max: 85,
     step: 0.1,
-    initial: 25,
+    initial: 20,
+    type: "sensebox_dps310_temp",
   },
   {
     id: "pres",
@@ -20,6 +21,7 @@ const sensorConfigDPS310 = [
     max: 1260,
     step: 1,
     initial: 1013,
+    type: "sensebox_dps310_pressure",
   },
   {
     id: "alt",
@@ -29,6 +31,7 @@ const sensorConfigDPS310 = [
     max: 10000,
     step: 1,
     initial: 0,
+    type: "sensebox_dps310_altitude",
   },
 ];
 

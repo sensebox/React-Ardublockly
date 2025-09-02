@@ -64,6 +64,7 @@ import { Block } from "..";
 Blockly.Blocks["sensebox_fluoroASM_init"] = {
   init: function () {
     this.appendDummyInput().appendField("Init FluoroASM Bee");
+    this.setColour("#c67d3f");
 
     this.appendDummyInput()
       .appendField("Filter aktiv")
@@ -136,7 +137,6 @@ Blockly.Blocks["sensebox_fluoroASM_init"] = {
 
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.tooltip_text);
     this.setHelpUrl("");
   },
@@ -144,6 +144,8 @@ Blockly.Blocks["sensebox_fluoroASM_init"] = {
 
 Blockly.Blocks["sensebox_fluoroASM_setLED"] = {
   init: function () {
+    this.setColour("#c67d3f");
+
     this.appendDummyInput()
       .appendField("Fluoro LED einschalten")
       .appendField(
@@ -157,7 +159,6 @@ Blockly.Blocks["sensebox_fluoroASM_setLED"] = {
       );
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(getColour().sensebox);
     const text = `Mit dem QOOOL Fluoro kannst Du die Grundlagen von Fluoreszenz erforschen – direkt in der Blockly-Umgebung. In diesem digitalen Experiment steuerst du farbige LEDs und kombinierst sie mit verschiedenen Farbfiltern. Besonders spannend: manche Filter enthalten einen Mikrodiamanten mit sogenannten NV-Zentren (Stickstoff-Leerstellen-Zentren). Diese speziellen Defekte können durch Licht angeregt werden und geben dann einen Teil der Energie in Form von sichtbarem Licht wieder ab. Dieser Effekt heißt Fluoreszenz.
 
 Was kannst Du im Simulator ausprobieren? 

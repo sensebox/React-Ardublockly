@@ -423,7 +423,7 @@ export const ToolboxEsp = () => {
       </Category>
       <Category id="QOOOL" name="QOOOL" colour={"#c67d3f"}>
         <Block type="sensebox_fluoroASM_init"></Block>
-        <Block type="sensebox_fluoroASM_setLED2"></Block>
+        <Block type="sensebox_fluoroASM_setLED"></Block>
       </Category>
       <Category id="QOOOL" name="QOOOL" colour={"#b7b645"}>
         <Block type="sensebox_fluoroASM_init"></Block>
