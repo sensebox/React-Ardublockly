@@ -48,6 +48,8 @@ import {
   faEarthEurope,
   faEarthAmericas,
   faCaretDown,
+  faBaby,
+  faBabyCarriage,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -421,6 +423,11 @@ const Navbar = () => {
               text: Blockly.Msg.navbar_blockly,
               icon: faPuzzlePiece,
               link: "/",
+            },
+            {
+              text: "Blockly BASIC",
+              icon: faBabyCarriage,
+              link: "/basic",
             },
             {
               text: Blockly.Msg.navbar_tutorials,

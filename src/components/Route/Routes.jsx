@@ -25,6 +25,7 @@ import CodeEditor from "../Pages/CodeEditor/CodeEditor";
 import GalleryHome from "../Pages/Gallery/GalleryHome";
 import Project from "@/components/Pages/Project/Project";
 import ProjectHome from "@/components/Pages/Project/ProjectHome";
+import BasicPage from "../Pages/BasicPage";
 
 class Routes extends Component {
   componentDidMount() {
@@ -53,6 +54,9 @@ class Routes extends Component {
         <Switch>
           <PublicRoute path="/" exact>
             <Home />
+          </PublicRoute>
+          <PublicRoute path="/basic" exact>
+            <BasicPage />
           </PublicRoute>
           {/* Tutorials */}
           <PublicRoute path="/tutorial" exact>
