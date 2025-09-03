@@ -25,7 +25,7 @@ import CodeEditor from "../Pages/CodeEditor/CodeEditor";
 import GalleryHome from "../Pages/Gallery/GalleryHome";
 import Project from "@/components/Pages/Project/Project";
 import ProjectHome from "@/components/Pages/Project/ProjectHome";
-import BasicPage from "../Pages/BasicPage";
+import BasicPage from "../Pages/BasicPage/BasicPage";
 
 class Routes extends Component {
   componentDidMount() {

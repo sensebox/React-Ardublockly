@@ -1,0 +1,41 @@
+// src/components/Blockly/toolbox/ToolboxBasicPseudo.jsx
+import React from "react";
+import {
+  Block,
+  Value,
+  Field,
+  Statement,
+  Shadow,
+  Category,
+  Sep,
+  Label,
+} from "..";
+import * as Blockly from "blockly/core";
+import { getColour } from "../helpers/colour";
+
+export const ToolboxBasic = () => (
+  <>
+    <Category name={Blockly.Msg.toolbox_sensors} colour={getColour().logic}>
+      <Block type="sensebox_sensor_temp_hum" />
+    </Category>
+    <Category name="Display" colour={getColour().sensebox}>
+      <Block type="basic_display" />
+    </Category>
+    <Category name="LED" colour={getColour().sensebox}>
+      <Block type="basic_red"></Block>
+      <Block type="basic_blue"></Block>
+      <Block type="basic_yellow"></Block>
+      <Block type="basic_off"></Block>
+    </Category>
+    <Category name="Zeit">
+      <Block type="time_delay">
+        <Value name="DELAY_TIME_MILI">
+          <Block type="math_number">
+            <Field name="NUM">1000</Field>
+          </Block>
+        </Value>
+      </Block>
+      "
+    </Category>
+  </>
+);
