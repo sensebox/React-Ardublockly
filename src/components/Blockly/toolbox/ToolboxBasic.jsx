@@ -1,5 +1,5 @@
 // src/components/Blockly/toolbox/ToolboxBasicPseudo.jsx
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Block,
   Value,
@@ -12,30 +12,47 @@ import {
 } from "..";
 import * as Blockly from "blockly/core";
 import { getColour } from "../helpers/colour";
-
-export const ToolboxBasic = () => (
-  <>
-    <Category name={Blockly.Msg.toolbox_sensors} colour={getColour().logic}>
-      <Block type="sensebox_sensor_temp_hum" />
-    </Category>
-    <Category name="Display" colour={getColour().sensebox}>
-      <Block type="basic_display" />
-    </Category>
-    <Category name="LED" colour={getColour().sensebox}>
-      <Block type="basic_red"></Block>
-      <Block type="basic_blue"></Block>
-      <Block type="basic_yellow"></Block>
-      <Block type="basic_off"></Block>
-    </Category>
-    <Category name="Zeit">
-      <Block type="time_delay">
-        <Value name="DELAY_TIME_MILI">
-          <Block type="math_number">
-            <Field name="NUM">1000</Field>
-          </Block>
-        </Value>
-      </Block>
-      "
-    </Category>
-  </>
-);
+import "./toolbox_style.css";
+export const ToolboxBasic = () => {
+  return (
+    <>
+      <Category
+        name={Blockly.Msg.toolbox_sensors}
+        colour={getColour().sensebox}
+        css-icon="customIcon fa fa-cloud"
+      >
+        <Block type="sensebox_sensor_temp_hum" />
+      </Category>
+      <Category
+        css-icon="customIcon fa fa-desktop"
+        name="Display"
+        colour={getColour().sensebox}
+      >
+        <Block type="basic_display" />
+      </Category>
+      <Category
+        name="LED"
+        colour={getColour().sensebox}
+        css-icon="customIcon fa fa-lightbulb"
+      >
+        <Block type="basic_red"></Block>
+        <Block type="basic_blue"></Block>
+        <Block type="basic_yellow"></Block>
+        <Block type="basic_off"></Block>
+      </Category>
+      <Category
+        name="Zeit"
+        colour={getColour().logic}
+        css-icon="customIcon fa fa-clock"
+      >
+        <Block type="time_delay">
+          <Value name="DELAY_TIME_MILI">
+            <Block type="math_number">
+              <Field name="NUM">1000</Field>
+            </Block>
+          </Value>
+        </Block>
+      </Category>
+    </>
+  );
+};

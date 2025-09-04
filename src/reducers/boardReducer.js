@@ -13,6 +13,9 @@ const initialValue = () => {
 
 const setBackgroundImage = (board) => {
   const root = document.querySelector(":root");
+  if (window.location.pathname === "/basic") {
+    return;
+  }
   switch (board) {
     case "MCU":
       root.style.setProperty("--url", `url(${mcu_opacity})`);

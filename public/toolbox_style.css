@@ -1,0 +1,23 @@
+.blocklyToolboxCategoryLabel {
+  font-family: "Comic Sans MS", "Comic Sans", Inter, ui-sans-serif !important;
+  font-size: 32px !important;
+  font-weight: 600;
+  margin: 10px;
+}
+.blocklyToolboxCategory {
+  padding: 20px;
+  margin-bottom: 1em;
+  border-radius: 4px;
+  /* Optionale Schatten für Verspieltheit */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  border-bottom: 2px solid #e0e0e0; /* Light grey bottom border */
+}
+
+/* Makes the icon bigger and green */
+.customIcon {
+  font-size: 20px;
+  padding: 10px;
+}
+
+.hallo {
+}

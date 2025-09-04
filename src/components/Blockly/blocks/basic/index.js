@@ -7,6 +7,7 @@ Blockly.defineBlocksWithJsonArray([
     args0: [{ type: "field_input", name: "value", text: "Text" }],
     previousStatement: true,
     nextStatement: null,
+    colour: 230,
   },
 ]);
 

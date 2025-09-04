@@ -4,6 +4,7 @@ import * as Blockly from "blockly";
 import "blockly/blocks";
 import { onChangeWorkspace } from "@/actions/workspaceActions";
 import { useDispatch } from "react-redux";
+import { BasicTheme } from "@/components/Blockly/themes/basicTheme";
 const getGeneratorByName = (name) => {
   if (!name) return Blockly.Basic;
   // bevorzugt den Pfad, den du schon nutzt:
@@ -45,7 +46,7 @@ const BlocklyCard = ({
     const ws = Blockly.inject(containerRef.current, {
       toolbox: toolboxConfig,
       renderer: "zelos",
-      theme,
+      theme: BasicTheme,
       trashcan: true,
       collapse: true,
       zoom: {
