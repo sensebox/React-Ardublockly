@@ -112,3 +112,65 @@ Blockly.Generator.Simulator.forBlock["sensebox_button"] = function () {
 
   return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
 };
+
+Blockly.Generator.Simulator.forBlock["sensebox_esp32s2_accelerometer"] =
+  function () {
+    Blockly.Generator.Simulator.modules_["sensebox_esp32s2_accelerometer"] =
+      "sensebox_esp32s2_accelerometer";
+
+    var dropdown = this.getFieldValue("value");
+
+    var code = `${dropdown}()`;
+
+    return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
+  };
+
+Blockly.Generator.Simulator.forBlock["sensebox_sensor_sds011"] = function () {
+  Blockly.Generator.Simulator.modules_["sensebox_sensor_sds011"] =
+    "sensebox_sensor_sds011";
+
+  var dropdown = this.getFieldValue("value");
+
+  var code = `${dropdown}()`;
+
+  return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
+};
+
+Blockly.Generator.Simulator.forBlock["sensebox_sensor_sps30"] = function () {
+  Blockly.Generator.Simulator.modules_["sensebox_sensor_sps30"] =
+    "sensebox_sensor_sps30";
+
+  var dropdown = this.getFieldValue("value");
+  switch (dropdown) {
+    case "1p0":
+      dropdown = "PM1";
+      break;
+    case "2p5":
+      dropdown = "PM25";
+      break;
+    case "4o0":
+      dropdown = "PM4";
+      break;
+    case "10p0":
+      dropdown = "PM10";
+      break;
+    default:
+  }
+  var code = `$read${dropdown}SPS30()`;
+
+  return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
+};
+
+Blockly.Generator.Simulator.forBlock["sensebox_rg15_rainsensor"] = function () {
+  Blockly.Generator.Simulator.modules_["sensebox_rg15_rainsensor"] =
+    "sensebox_rg15_rainsensor";
+
+  var dropdown = this.getFieldValue("VALUE");
+  if (dropdown === "getEventAccumulation" || dropdown === "getAccumulation") {
+    dropdown = "getTotalAccumulation";
+  }
+
+  var code = `${dropdown}()`;
+
+  return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
+};

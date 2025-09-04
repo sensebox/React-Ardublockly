@@ -39,6 +39,17 @@ const labels = {
   sensebox_tof_dist: "Distanz in mm(ToF)",
   senseBox_hdc1080_temp: "Temperatur (HDC1080)",
   senseBox_hdc1080_humidity: "rel. Luftfeuchte (HDC1080)",
+  accelerometer_x: "Beschleunigung(X-Achse)",
+  accelerometer_y: "Beschleunigung(Y-Achse)",
+  accelerometer_z: "Beschleunigung(Z-Achse)",
+  sensebox_sds_pm10: "Feinstaub(PM10)",
+  sensebox_sds_pm25: "Feinstaub(PM25)",
+  sensebox_sps_pm1: "Feinstaub(PM1)",
+  sensebox_sps_pm25: "Feinstaub(PM25)",
+  sensebox_sps_pm4: "Feinstaub(PM4)",
+  sensebox_sps_pm10: "Feinstaub(PM10)",
+  sensebox_rg15_total_rainfall: "Niederschlag(Total)",
+  sensebox_rg15_rainfall_intensity: "Niederschlagsintensität",
 };
 
 // ———————————————————————————————————————
@@ -155,54 +166,51 @@ const GraphViewer = () => {
         minHeight: 0,
       }}
     >
-      <div
-        style={{
-          position: "absolute",
-          bottom: "47%",
-          left: "45%",
-          zIndex: 100,
-          display: "flex",
-          flexDirection: "row",
-          gap: 8,
-        }}
-      >
-        <Box
-          sx={{
-            background: "#fff",
-            borderRadius: "50%",
-            boxShadow: 1,
-          }}
-        >
-          <IconButton
-            aria-label="Einstellungen"
-            style={{ color: theme.palette.primary.main }}
-            onClick={() => {
-              setTempLimit(limit);
-              setSettingsOpen(true);
-            }}
-            size="small"
-          >
-            <SettingsIcon />
-          </IconButton>
-        </Box>
-        <Box
-          sx={{
-            background: "#fff",
-            borderRadius: "50%",
-            boxShadow: 1,
-          }}
-        >
-          <IconButton
-            aria-label="Daten löschen"
-            onClick={clearData}
-            size="small"
-            color="error"
-          >
-            <DeleteIcon />
-          </IconButton>
-        </Box>
-      </div>
       <Box sx={{ flex: 1, minHeight: 0, overflow: "hidden" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "end",
+            gap: 8,
+          }}
+        >
+          <Box
+            sx={{
+              background: "#fff",
+              borderRadius: "50%",
+              boxShadow: 1,
+            }}
+          >
+            <IconButton
+              aria-label="Einstellungen"
+              style={{ color: theme.palette.primary.main }}
+              onClick={() => {
+                setTempLimit(limit);
+                setSettingsOpen(true);
+              }}
+              size="small"
+            >
+              <SettingsIcon />
+            </IconButton>
+          </Box>
+          <Box
+            sx={{
+              background: "#fff",
+              borderRadius: "50%",
+              boxShadow: 1,
+            }}
+          >
+            <IconButton
+              aria-label="Daten löschen"
+              onClick={clearData}
+              size="small"
+              color="error"
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Box>
+        </div>
         {keys.length === 0 ? (
           <Box
             sx={{
