@@ -25,9 +25,9 @@
 // https://developers.google.com/blockly/guides/create-custom-blocks/generating-code
 
 import * as Blockly from "blockly/core";
-import { reservedWords } from "../helpers/reservedWords";
+import { reservedWords } from "../../helpers/reservedWords";
 
-import store from "../../../store";
+import store from "@/store";
 
 var ota = store.getState().general.platform
   ? store.getState().general.platform
