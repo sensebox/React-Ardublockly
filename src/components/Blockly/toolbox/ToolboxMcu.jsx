@@ -57,65 +57,7 @@ export const ToolboxMcu = () => {
           </Value>
         </Block>
       </Category>
-      <Category name="WIFI" colour={getColour().sensebox}>
-        <Block type="sensebox_wifi" />
-        <Block type="sensebox_wifi_status" />
-        <Block type="sensebox_wifi_rssi" />
-        <Block type="sensebox_get_ip" />
-        <Block type="sensebox_startap" />
-      </Category>
-      <Category name="Ethernet" colour={getColour().sensebox}>
-        <Block type="sensebox_ethernet" />
-        <Block type="sensebox_ethernetIp" />
-      </Category>
-      <Category name="SD" colour={getColour().sensebox}>
-        <Block type="sensebox_sd_create_file">
-          <Value name="FILENAME">
-            <Block type="text">
-              <Field name="TEXT">Data</Field>
-            </Block>
-          </Value>
-        </Block>
-        <Block type="sensebox_sd_open_file">
-          <Value name="FILENAME">
-            <Block type="text">
-              <Field name="TEXT">Data</Field>
-            </Block>
-          </Value>
-          <Value name="SD">
-            <Block type="sensebox_sd_write_file"></Block>
-          </Value>
-        </Block>
-        <Block type="sensebox_sd_write_file" />
-        <Block type="sensebox_sd_open_file">
-          <Value name="FILENAME">
-            <Block type="text">
-              <Field name="TEXT">Data</Field>
-            </Block>
-          </Value>
-          <Value name="FILENAME">
-            <Block type="text">
-              <Field name="TEXT">Data</Field>
-            </Block>
-          </Value>
-          <Value name="SD">
-            <Block type="sensebox_sd_osem">
-              <Value name="DO">
-                <Block type="sensebox_sd_save_for_osem"></Block>
-              </Value>
-            </Block>
-          </Value>
-        </Block>
-        <Block type="sensebox_sd_osem" />
-        <Block type="sensebox_sd_save_for_osem" />
-        <Block type="sensebox_sd_exists">
-          <Value name="FILENAME">
-            <Block type="text">
-              <Field name="TEXT">Data</Field>
-            </Block>
-          </Value>
-        </Block>
-      </Category>
+
       <Category name="LED" colour={getColour().sensebox}>
         <Block type="sensebox_rgb_led"></Block>
         <Block type="sensebox_led" />
@@ -162,37 +104,38 @@ export const ToolboxMcu = () => {
             </Block>
           </Value>
         </Block>
+        <Category name="LED Matrix" colour={getColour().sensebox}>
+          <Block type="sensebox_ws2812_matrix_init"></Block>
+          <Block type="sensebox_ws2812_matrix_clear" />
+          <Block type="sensebox_ws2812_matrix_text" />
+          <Block type="sensebox_ws2812_matrix_drawPixel" />
+          <Block type="sensebox_ws2812_matrix_fullcolor" />
+          <Block type="sensebox_ws2812_matrix_showBitmap" />
+          <Block type="sensebox_ws2812_matrix_bitmap" />
+          <Block type="sensebox_ws2812_matrix_custom_bitmap" />
+          <Block type="sensebox_ws2812_matrix_draw_custom_bitmap_example" />
+          <Block type="colour_picker"></Block>
+          <Block type="colour_random"></Block>
+          <Block type="colour_rgb">
+            <Value name="RED">
+              <Block type="math_number">
+                <Field name="NUM">100</Field>
+              </Block>
+            </Value>
+            <Value name="GREEN">
+              <Block type="math_number">
+                <Field name="NUM">50</Field>
+              </Block>
+            </Value>
+            <Value name="BLUE">
+              <Block type="math_number">
+                <Field name="NUM">0</Field>
+              </Block>
+            </Value>
+          </Block>
+        </Category>
       </Category>
-      <Category name="LED Matrix" colour={getColour().sensebox}>
-        <Block type="sensebox_ws2812_matrix_init"></Block>
-        <Block type="sensebox_ws2812_matrix_clear" />
-        <Block type="sensebox_ws2812_matrix_text" />
-        <Block type="sensebox_ws2812_matrix_drawPixel" />
-        <Block type="sensebox_ws2812_matrix_fullcolor" />
-        <Block type="sensebox_ws2812_matrix_showBitmap" />
-        <Block type="sensebox_ws2812_matrix_bitmap" />
-        <Block type="sensebox_ws2812_matrix_custom_bitmap" />
-        <Block type="sensebox_ws2812_matrix_draw_custom_bitmap_example" />
-        <Block type="colour_picker"></Block>
-        <Block type="colour_random"></Block>
-        <Block type="colour_rgb">
-          <Value name="RED">
-            <Block type="math_number">
-              <Field name="NUM">100</Field>
-            </Block>
-          </Value>
-          <Value name="GREEN">
-            <Block type="math_number">
-              <Field name="NUM">50</Field>
-            </Block>
-          </Value>
-          <Value name="BLUE">
-            <Block type="math_number">
-              <Field name="NUM">0</Field>
-            </Block>
-          </Value>
-        </Block>
-      </Category>
+
       <Category name="Display" colour={getColour().sensebox}>
         <Block type="sensebox_display_beginDisplay" />
         <Block type="sensebox_display_show" />
@@ -323,128 +266,171 @@ export const ToolboxMcu = () => {
           </Value>
         </Block>
       </Category>
-      <Category name="openSenseMap" colour={getColour().sensebox}>
-        <Block type="sensebox_interval_timer">
-          <Value name="DO">
-            <Block type="sensebox_osem_connection" />
-          </Value>
-        </Block>
-        <Block type="sensebox_send_to_osem" />
-      </Category>
+
       <Category
-        id="catSenseBoxOutput_LoRa"
-        name="  LoRa"
+        name={Blockly.Msg.toolbox_internet_and_comms}
         colour={getColour().sensebox}
       >
-        <Category
-          id="catSenseBoxOutput_LoRa_activation"
-          name="    Aktivierung"
-          colour={getColour().sensebox}
-        >
-          <Block type="sensebox_lora_initialize_otaa" />
-          <Block type="sensebox_lora_initialize_abp" />
+        <Category name="WIFI" colour={getColour().sensebox}>
+          <Block type="sensebox_wifi" />
+          <Block type="sensebox_wifi_status" />
+          <Block type="sensebox_wifi_rssi" />
+          <Block type="sensebox_get_ip" />
+          <Block type="sensebox_startap" />
         </Category>
-        <Category
-          id="catSenseBoxOutput_LoRa_loramessage"
-          name="    Lora Message"
-          colour={getColour().sensebox}
-        >
-          <Block type="sensebox_lora_message_send" />
-          <Block type="sensebox_send_lora_sensor_value" />
+        <Category name="openSenseMap" colour={getColour().sensebox}>
+          <Block type="sensebox_interval_timer">
+            <Value name="DO">
+              <Block type="sensebox_osem_connection" />
+            </Value>
+          </Block>
+          <Block type="sensebox_send_to_osem" />
         </Category>
-        <Category
-          id="catSenseBoxOutput_Map"
-          name="    TTN Mapper"
-          colour={getColour().sensebox}
-        >
-          <Block type="sensebox_lora_ttn_mapper">
-            <Value name="Latitude">
-              <Block type="sensebox_gps">
-                <Field name="dropdown">latitude</Field>
-              </Block>
-            </Value>
-            <Value name="Longitude">
-              <Block type="sensebox_gps">
-                <Field name="dropdown">longitude</Field>
-              </Block>
-            </Value>
-            <Value name="Altitude">
-              <Block type="sensebox_gps">
-                <Field name="dropdown">altitude</Field>
-              </Block>
-            </Value>
-            <Value name="pDOP">
-              <Block type="sensebox_gps">
-                <Field name="dropdown">pDOP</Field>
-              </Block>
-            </Value>
-            <Value name="Fix Type">
-              <Block type="sensebox_gps">
-                <Field name="dropdown">fixType</Field>
+        <Category id="phyphox" name="Phyphox" colour={getColour().phyphox}>
+          <Block type="sensebox_phyphox_init"></Block>
+          <Block type="sensebox_phyphox_experiment">
+            <Value name="view">
+              <Block type="sensebox_phyphox_graph">
+                <Value name="channel0">
+                  <Block type="sensebox_phyphox_timestamp"></Block>
+                </Value>
+                <Value name="channel1">
+                  <Block type="sensebox_phyphox_channel"></Block>
+                </Value>
               </Block>
             </Value>
           </Block>
+          <Block type="sensebox_phyphox_experiment_send">
+            <Value name="sendValues">
+              <Block type="sensebox_phyphox_sendchannel"></Block>
+            </Value>
+          </Block>
+          <Block type="sensebox_phyphox_graph"></Block>
+          <Block type="sensebox_phyphox_timestamp"></Block>
+          <Block type="sensebox_phyphox_channel"></Block>
+          <Block type="sensebox_phyphox_sendchannel"></Block>
         </Category>
         <Category
-          id="catSenseBoxOutput_LoRa_cayenne"
-          name="    Cayenne LPP"
+          id="catSenseBoxOutput_LoRa"
+          name="  LoRa"
           colour={getColour().sensebox}
         >
-          <Block type="sensebox_lora_cayenne_send" />
-          <Block type="sensebox_lora_cayenne_temperature" />
-          <Block type="sensebox_lora_cayenne_humidity" />
-          <Block type="sensebox_lora_cayenne_pressure" />
-          <Block type="sensebox_lora_cayenne_luminosity" />
-          <Block type="sensebox_lora_cayenne_concentration" />
-          <Block type="sensebox_lora_cayenne_sensor" />
-          <Block type="sensebox_lora_cayenne_accelerometer" />
-          <Block type="sensebox_lora_cayenne_gps" />
+          <Category
+            id="catSenseBoxOutput_LoRa_activation"
+            name="    Aktivierung"
+            colour={getColour().sensebox}
+          >
+            <Block type="sensebox_lora_initialize_otaa" />
+            <Block type="sensebox_lora_initialize_abp" />
+          </Category>
+          <Category
+            id="catSenseBoxOutput_LoRa_loramessage"
+            name="    Lora Message"
+            colour={getColour().sensebox}
+          >
+            <Block type="sensebox_lora_message_send" />
+            <Block type="sensebox_send_lora_sensor_value" />
+          </Category>
+          <Category
+            id="catSenseBoxOutput_Map"
+            name="    TTN Mapper"
+            colour={getColour().sensebox}
+          >
+            <Block type="sensebox_lora_ttn_mapper">
+              <Value name="Latitude">
+                <Block type="sensebox_gps">
+                  <Field name="dropdown">latitude</Field>
+                </Block>
+              </Value>
+              <Value name="Longitude">
+                <Block type="sensebox_gps">
+                  <Field name="dropdown">longitude</Field>
+                </Block>
+              </Value>
+              <Value name="Altitude">
+                <Block type="sensebox_gps">
+                  <Field name="dropdown">altitude</Field>
+                </Block>
+              </Value>
+              <Value name="pDOP">
+                <Block type="sensebox_gps">
+                  <Field name="dropdown">pDOP</Field>
+                </Block>
+              </Value>
+              <Value name="Fix Type">
+                <Block type="sensebox_gps">
+                  <Field name="dropdown">fixType</Field>
+                </Block>
+              </Value>
+            </Block>
+          </Category>
+          <Category
+            id="catSenseBoxOutput_LoRa_cayenne"
+            name="    Cayenne LPP"
+            colour={getColour().sensebox}
+          >
+            <Block type="sensebox_lora_cayenne_send" />
+            <Block type="sensebox_lora_cayenne_temperature" />
+            <Block type="sensebox_lora_cayenne_humidity" />
+            <Block type="sensebox_lora_cayenne_pressure" />
+            <Block type="sensebox_lora_cayenne_luminosity" />
+            <Block type="sensebox_lora_cayenne_concentration" />
+            <Block type="sensebox_lora_cayenne_sensor" />
+            <Block type="sensebox_lora_cayenne_accelerometer" />
+            <Block type="sensebox_lora_cayenne_gps" />
+          </Category>
         </Category>
       </Category>
-      <Category id="phyphox" name="Phyphox" colour={getColour().phyphox}>
-        <Block type="sensebox_phyphox_init"></Block>
-        <Block type="sensebox_phyphox_experiment">
-          <Value name="view">
-            <Block type="sensebox_phyphox_graph">
-              <Value name="channel0">
-                <Block type="sensebox_phyphox_timestamp"></Block>
-              </Value>
-              <Value name="channel1">
-                <Block type="sensebox_phyphox_channel"></Block>
+
+      <Category name="SD" colour={getColour().sensebox}>
+        <Block type="sensebox_sd_create_file">
+          <Value name="FILENAME">
+            <Block type="text">
+              <Field name="TEXT">Data</Field>
+            </Block>
+          </Value>
+        </Block>
+        <Block type="sensebox_sd_open_file">
+          <Value name="FILENAME">
+            <Block type="text">
+              <Field name="TEXT">Data</Field>
+            </Block>
+          </Value>
+          <Value name="SD">
+            <Block type="sensebox_sd_write_file"></Block>
+          </Value>
+        </Block>
+        <Block type="sensebox_sd_write_file" />
+        <Block type="sensebox_sd_open_file">
+          <Value name="FILENAME">
+            <Block type="text">
+              <Field name="TEXT">Data</Field>
+            </Block>
+          </Value>
+          <Value name="FILENAME">
+            <Block type="text">
+              <Field name="TEXT">Data</Field>
+            </Block>
+          </Value>
+          <Value name="SD">
+            <Block type="sensebox_sd_osem">
+              <Value name="DO">
+                <Block type="sensebox_sd_save_for_osem"></Block>
               </Value>
             </Block>
           </Value>
         </Block>
-        <Block type="sensebox_phyphox_experiment_send">
-          <Value name="sendValues">
-            <Block type="sensebox_phyphox_sendchannel"></Block>
+        <Block type="sensebox_sd_osem" />
+        <Block type="sensebox_sd_save_for_osem" />
+        <Block type="sensebox_sd_exists">
+          <Value name="FILENAME">
+            <Block type="text">
+              <Field name="TEXT">Data</Field>
+            </Block>
           </Value>
         </Block>
-        <Block type="sensebox_phyphox_graph"></Block>
-        <Block type="sensebox_phyphox_timestamp"></Block>
-        <Block type="sensebox_phyphox_channel"></Block>
-        <Block type="sensebox_phyphox_sendchannel"></Block>
       </Category>
 
-      <Category id="webserver" name="Webserver" colour={getColour().webserver}>
-        <Block type="sensebox_initialize_http_server"></Block>
-        <Block type="sensebox_http_on_client_connect"></Block>
-        <Block type="sensebox_ip_address"></Block>
-        <Block type="sensebox_http_method"></Block>
-        <Block type="sensebox_http_uri"></Block>
-        <Block type="sensebox_http_protocol_version"></Block>
-        <Block type="sensebox_http_user_agent"></Block>
-        <Block type="sensebox_generate_http_succesful_response"></Block>
-        <Block type="sensebox_generate_http_not_found_response"></Block>
-        <Block type="sensebox_generate_html_doc"></Block>
-        <Block type="sensebox_general_html_tag"></Block>
-        <Block type="sensebox_web_readHTML"></Block>
-      </Category>
-      <Category id="mqtt" name="MQTT" colour={getColour().mqtt}>
-        <Block type="sensebox_mqtt_setup" />
-        <Block type="sensebox_mqtt_publish" />
-        {/* <Block type="sensebox_mqtt_subscribe" /> */}
-      </Category>
       <Category name={Blockly.Msg.toolbox_logic} colour={getColour().logic}>
         <Block type="controls_if" />
         <Block type="controls_ifelse" />
@@ -762,6 +748,33 @@ export const ToolboxMcu = () => {
         <Category name="Watchdog" colour={getColour().io}>
           <Block type="watchdog_enable"></Block>
           <Block type="watchdog_reset"></Block>
+        </Category>
+        <Category name="Ethernet" colour={getColour().sensebox}>
+          <Block type="sensebox_ethernet" />
+          <Block type="sensebox_ethernetIp" />
+        </Category>
+        <Category
+          id="webserver"
+          name="Webserver"
+          colour={getColour().webserver}
+        >
+          <Block type="sensebox_initialize_http_server"></Block>
+          <Block type="sensebox_http_on_client_connect"></Block>
+          <Block type="sensebox_ip_address"></Block>
+          <Block type="sensebox_http_method"></Block>
+          <Block type="sensebox_http_uri"></Block>
+          <Block type="sensebox_http_protocol_version"></Block>
+          <Block type="sensebox_http_user_agent"></Block>
+          <Block type="sensebox_generate_http_succesful_response"></Block>
+          <Block type="sensebox_generate_http_not_found_response"></Block>
+          <Block type="sensebox_generate_html_doc"></Block>
+          <Block type="sensebox_general_html_tag"></Block>
+          <Block type="sensebox_web_readHTML"></Block>
+        </Category>
+        <Category id="mqtt" name="MQTT" colour={getColour().mqtt}>
+          <Block type="sensebox_mqtt_setup" />
+          <Block type="sensebox_mqtt_publish" />
+          {/* <Block type="sensebox_mqtt_subscribe" /> */}
         </Category>
       </Category>
     </>
