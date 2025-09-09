@@ -1703,10 +1703,10 @@ blob-util@^2.0.2:
   resolved "https://registry.yarnpkg.com/blob-util/-/blob-util-2.0.2.tgz#3b4e3c281111bb7f11128518006cdc60b403a1eb"
   integrity sha512-T7JQa+zsXXEa6/8ZhHcQEW1UFfVM49Ts65uBkFL6fz2QmrElqmbajIDJvuA0tEhRe5eIjpV9ZF+0RfZR9voJFQ==
 
-blockly@^12.2.0:
-  version "12.2.0"
-  resolved "https://registry.yarnpkg.com/blockly/-/blockly-12.2.0.tgz#054bc3fab110e9add0b948eeb504855b75ce5a99"
-  integrity sha512-s4QL9ogEMzc4Pxfe8Oi3Kmu6SQ0ts2thzmRYjdnMSEIVZFpBZ4OUuNKvpFICqujO0yfAo99zON8KzxAFw8hA1w==
+blockly@^12.3.0:
+  version "12.3.0"
+  resolved "https://registry.yarnpkg.com/blockly/-/blockly-12.3.0.tgz#baeba0000fdfe17267b4601c231668cde0e40608"
+  integrity sha512-dtxM6Dk8cm0QW4vMJTXmn7xi7a4GnQdXu28Esuuofx7DsYfq73456O5tm3ShUMDcXaFg8w3GVfgoH8I9v6gSVA==
   dependencies:
     jsdom "26.1.0"
 
