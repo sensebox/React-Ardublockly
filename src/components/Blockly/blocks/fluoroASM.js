@@ -88,7 +88,8 @@ Blockly.Blocks["sensebox_fluoroASM_setLED"] = {
     this.setColour("#c67d3f");
 
     this.appendDummyInput()
-      .appendField("Fluoro LED einschalten")
+      .appendField(Blockly.Msg.fluoro_led)
+      .appendField(Blockly.Msg.fluoro_number)
       .appendField(
         new Blockly.FieldDropdown([
           ["1", "1"],
@@ -98,13 +99,18 @@ Blockly.Blocks["sensebox_fluoroASM_setLED"] = {
         ]),
         "LED_NUMBER",
       );
-
     this.appendValueInput("BRIGHTNESS", "brightness").appendField(
       Blockly.Msg.senseBox_ws2818_rgb_led_brightness,
     );
-
-    this.setPreviousStatement(true, null);
-
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.senseBox_basic_state)
+      .appendField(
+        new Blockly.FieldDropdown([
+          [Blockly.Msg.senseBox_on, "HIGH"],
+          [Blockly.Msg.senseBox_off, "LOW"],
+        ]),
+        "STAT",
+      );
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setTooltip(Blockly.Msg.senseBox_fluoro_tooltip);
