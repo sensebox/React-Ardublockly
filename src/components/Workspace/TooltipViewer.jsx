@@ -101,9 +101,6 @@ const HelpTab = ({ tooltip, helpurl }) => {
   // change key when the markdown content changes
   const markdownKey = `${tooltip ?? ""}`; // or `${helpurl ?? ""}|${tooltip?.length ?? 0}`
 
-  useEffect(() => {
-    console.log("tooltip changed", tooltip);
-  }, [tooltip]);
   return (
     <>
       <UnderlinedTitle>
