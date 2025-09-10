@@ -23,7 +23,7 @@ import { useTheme } from "@mui/material/styles";
 
 const IGNORED = [
   "sensebox_fluoroASM_init",
-  "sensebox_fluoroASM_setLED2",
+  "sensebox_fluoroASM_setLED",
   "senseBox_display",
   "senseBox_hdc1080",
 ];

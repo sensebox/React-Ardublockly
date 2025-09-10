@@ -52,6 +52,7 @@ function CompilationDialog({
       setSketchId(null);
       setError(null);
     }
+    console.log("Compiling code:", code);
   }, [open]);
 
   useEffect(() => {

@@ -115,7 +115,7 @@ const SimulatorFlow = (props) => {
       .map((module, index) => {
         // skip the block for led - only use init block for node creation
         if (
-          module.type === "sensebox_fluoroASM_setLED2" ||
+          module.type === "sensebox_fluoroASM_setLED" ||
           module.type === "sensebox_button"
         ) {
           return;
