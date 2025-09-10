@@ -33,7 +33,7 @@ const headerStyle = {
 };
 
 function CompilationDialog({ open, code, selectedBoard, onClose, platform }) {
-  const [activeStep, setActiveStep] = useState(5);
+  const [activeStep, setActiveStep] = useState(0);
   const [sketchId, setSketchId] = useState(null);
   const [error, setError] = useState(null);
   const [counter, setCounter] = useState(0);
@@ -42,14 +42,13 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform }) {
 
   useEffect(() => {
     if (open) {
-      // handleCompile();
+      handleCompile();
     }
     if (!open) {
-      setActiveStep(5);
+      setActiveStep(0);
       setSketchId(null);
       setError(null);
     }
-    console.log(code);
   }, [open]);
 
   useEffect(() => {
@@ -148,8 +147,6 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform }) {
           }}
         >
           {error && <ErrorView error={error} />}
-          {activeStep === 5 && !error && <TransferStep />}
-
           {activeStep === 0 && !error && (
             <div style={{ textAlign: "center" }}>
               <span style={headerStyle}>
@@ -191,45 +188,7 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform }) {
               </a>
             </div>
           )}
-          {activeStep === 2 && !error && (
-            <TransferStep />
-            // <div style={{ position: "relative" }}>
-            //   <IconButton
-            //     onClick={handleClose}
-            //     style={{
-            //       position: "absolute",
-            //       top: "-31px",
-            //       right: "-50px",
-            //       fontSize: "2rem",
-            //       color: "#4EAF47",
-            //       fontWeight: "bold",
-            //       cursor: "pointer",
-            //       borderRadius: "50%",
-            //       width: "40px",
-            //       height: "40px",
-            //       display: "flex",
-            //       alignItems: "center",
-            //       justifyContent: "center",
-            //     }}
-            //   >
-            //     <FontAwesomeIcon icon={faXmark} />
-            //   </IconButton>
-
-            //   <div style={{ textAlign: "center" }}>
-            //     <span style={headerStyle}>
-            //       {Blockly.Msg.compile_overlay_transfer}
-            //     </span>
-            //     <DragDropIcon />
-            //     <div style={{ marginTop: "1rem" }}>
-            //       Übertrage den Sketch per Drag & Drop auf deine MCU.
-            //     </div>
-            //     <span>
-            //       Benötigst du mehr Hilfe, dann schau in{" "}
-            //       <a href="https://blockly.sensebox.de/faq">unser FAQ</a>
-            //     </span>
-            //   </div>
-            // </div>
-          )}
+          {activeStep === 2 && !error && <TransferStep />}
         </Box>
         <Box style={{ flexShrink: 0, paddingTop: "1rem", marginTop: "1rem" }}>
           <Stepper activeStep={activeStep} alternativeLabel>
