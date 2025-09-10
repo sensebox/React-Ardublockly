@@ -42,13 +42,14 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform }) {
   const sessionId = useSelector((state) => state.general.sessionId);
   useEffect(() => {
     if (open) {
-      handleCompile();
+      // handleCompile();
     }
     if (!open) {
-      setActiveStep(0);
+      setActiveStep(5);
       setSketchId(null);
       setError(null);
     }
+    console.log(code);
   }, [open]);
 
   useEffect(() => {
@@ -147,6 +148,8 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform }) {
           }}
         >
           {error && <ErrorView error={error} />}
+          {activeStep === 5 && !error && <TransferStep />}
+
           {activeStep === 0 && !error && (
             <div style={{ textAlign: "center" }}>
               <span style={headerStyle}>
