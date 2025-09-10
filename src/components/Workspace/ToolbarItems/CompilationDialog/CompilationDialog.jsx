@@ -11,7 +11,6 @@ import {
   StepLabel,
   Button,
   Typography,
-  IconButton,
 } from "@mui/material";
 import { CodeCompilationIcon } from "./CodeCompilationIcon";
 import DownloadAnimation from "./DownloadAnimation";
@@ -21,6 +20,10 @@ import * as Blockly from "blockly/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { ErrorView } from "../../../ui/ErrorView.jsx";
+import FolderIcon from "@mui/icons-material/Folder";
+import UsbIcon from "@mui/icons-material/Usb";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import TransferStep from "./TransferStep";
 
 const headerStyle = {
   fontSize: "1.5rem",
@@ -29,29 +32,24 @@ const headerStyle = {
   fontWeight: "bold",
 };
 
-function CompilationDialog({
-  open,
-  code,
-  selectedBoard,
-  filename,
-  onClose,
-  platform,
-}) {
-  const [activeStep, setActiveStep] = useState(0);
+function CompilationDialog({ open, code, selectedBoard, onClose, platform }) {
+  const [activeStep, setActiveStep] = useState(5);
   const [sketchId, setSketchId] = useState(null);
   const [error, setError] = useState(null);
   const [counter, setCounter] = useState(0);
+  const filename = useSelector((state) => state.workspace.name) || "sketch";
   const compilerUrl = useSelector((state) => state.general.compiler);
 
   useEffect(() => {
     if (open) {
-      handleCompile();
+      // handleCompile();
     }
     if (!open) {
-      setActiveStep(0);
+      setActiveStep(5);
       setSketchId(null);
       setError(null);
     }
+    console.log(code);
   }, [open]);
 
   useEffect(() => {
@@ -129,7 +127,7 @@ function CompilationDialog({
       disableEscapeKeyDown={activeStep !== 2 || !error}
       // Feste Größe über PaperProps: Breite und Höhe passen für alle Steps
       PaperProps={{
-        style: { width: "600px", minHeight: "600px", maxHeight: "600px" },
+        style: { width: "600px", minHeight: "650px", maxHeight: "600px" },
       }}
     >
       <DialogContent
@@ -150,6 +148,8 @@ function CompilationDialog({
           }}
         >
           {error && <ErrorView error={error} />}
+          {activeStep === 5 && !error && <TransferStep />}
+
           {activeStep === 0 && !error && (
             <div style={{ textAlign: "center" }}>
               <span style={headerStyle}>
@@ -192,42 +192,43 @@ function CompilationDialog({
             </div>
           )}
           {activeStep === 2 && !error && (
-            <div style={{ position: "relative" }}>
-              <IconButton
-                onClick={handleClose}
-                style={{
-                  position: "absolute",
-                  top: "-31px",
-                  right: "-50px",
-                  fontSize: "2rem",
-                  color: "#4EAF47",
-                  fontWeight: "bold",
-                  cursor: "pointer",
-                  borderRadius: "50%",
-                  width: "40px",
-                  height: "40px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <FontAwesomeIcon icon={faXmark} />
-              </IconButton>
+            <TransferStep />
+            // <div style={{ position: "relative" }}>
+            //   <IconButton
+            //     onClick={handleClose}
+            //     style={{
+            //       position: "absolute",
+            //       top: "-31px",
+            //       right: "-50px",
+            //       fontSize: "2rem",
+            //       color: "#4EAF47",
+            //       fontWeight: "bold",
+            //       cursor: "pointer",
+            //       borderRadius: "50%",
+            //       width: "40px",
+            //       height: "40px",
+            //       display: "flex",
+            //       alignItems: "center",
+            //       justifyContent: "center",
+            //     }}
+            //   >
+            //     <FontAwesomeIcon icon={faXmark} />
+            //   </IconButton>
 
-              <div style={{ textAlign: "center" }}>
-                <span style={headerStyle}>
-                  {Blockly.Msg.compile_overlay_transfer}
-                </span>
-                <DragDropIcon />
-                <div style={{ marginTop: "1rem" }}>
-                  Übertrage den Sketch per Drag & Drop auf deine MCU.
-                </div>
-                <span>
-                  Benötigst du mehr Hilfe, dann schau in{" "}
-                  <a href="https://blockly.sensebox.de/faq">unser FAQ</a>
-                </span>
-              </div>
-            </div>
+            //   <div style={{ textAlign: "center" }}>
+            //     <span style={headerStyle}>
+            //       {Blockly.Msg.compile_overlay_transfer}
+            //     </span>
+            //     <DragDropIcon />
+            //     <div style={{ marginTop: "1rem" }}>
+            //       Übertrage den Sketch per Drag & Drop auf deine MCU.
+            //     </div>
+            //     <span>
+            //       Benötigst du mehr Hilfe, dann schau in{" "}
+            //       <a href="https://blockly.sensebox.de/faq">unser FAQ</a>
+            //     </span>
+            //   </div>
+            // </div>
           )}
         </Box>
         <Box style={{ flexShrink: 0, paddingTop: "1rem", marginTop: "1rem" }}>
