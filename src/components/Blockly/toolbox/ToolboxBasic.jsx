@@ -12,7 +12,6 @@ import {
 } from "..";
 import * as Blockly from "blockly/core";
 import { getColour } from "../helpers/colour";
-import "./toolbox_style.css";
 export const ToolboxBasic = () => {
   return (
     <>

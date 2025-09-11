@@ -49,6 +49,21 @@ const BasicPage = () => {
     return parser.parseFromString(xmlText, "text/xml").documentElement;
   }, []);
 
+  useEffect(() => {
+    var head = document.head;
+    var link = document.createElement("link");
+
+    link.type = "text/css";
+    link.rel = "stylesheet";
+    link.href = "./toolbox_style.css";
+
+    head.appendChild(link);
+
+    return () => {
+      head.removeChild(link);
+    };
+  }, []);
+
   return (
     <Box
       sx={{
