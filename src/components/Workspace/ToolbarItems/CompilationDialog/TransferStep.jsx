@@ -101,7 +101,7 @@ export default function TransferStep() {
               primary={
                 <>
                   3. <b>{filename}.bin</b> per Drag & Drop auf die senseBox
-                  ziehen
+                  kopieren
                 </>
               }
             />
@@ -124,7 +124,12 @@ export default function TransferStep() {
         {/* Steps-Row */}
         <Box display="flex" justifyContent="space-between" alignItems="center">
           {/* Step 1: Downloads */}
-          <Box textAlign="center" zIndex={1}>
+          <Box
+            textAlign="center"
+            zIndex={1}
+            flexDirection="column"
+            alignItems={"center"}
+          >
             <Box
               sx={{
                 width: 64,
@@ -145,7 +150,12 @@ export default function TransferStep() {
           </Box>
 
           {/* Step 2: File */}
-          <Box textAlign="center" zIndex={1}>
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems={"center"}
+            zIndex={1}
+          >
             <Box
               sx={{
                 width: 64,
@@ -183,12 +193,17 @@ export default function TransferStep() {
               </Box>
             </Box>
             <Typography variant="body2" fontWeight="bold">
-              sketch
+              {filename}.bin
             </Typography>
           </Box>
 
           {/* Step 3: senseBox */}
-          <Box textAlign="center" zIndex={1}>
+          <Box
+            textAlign="center"
+            zIndex={1}
+            flexDirection="column"
+            alignItems={"center"}
+          >
             <Box
               sx={{
                 width: 64,
