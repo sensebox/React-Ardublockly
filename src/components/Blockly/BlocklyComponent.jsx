@@ -1,26 +1,11 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 
 import * as Blockly from "blockly/core";
 import "./blocks/index";
-import "@/components/Blockly/generator/basic/index";
-import "@/components/Blockly/generator/arduino/index";
-
-import { onChangeWorkspace, clearStats } from "../../actions/workspaceActions";
-import { ZoomToFitControl } from "@blockly/zoom-to-fit";
-import { Backpack } from "@blockly/workspace-backpack";
-import { initialXml } from "./initialXml.js";
-import { getMaxInstances } from "./helpers/maxInstances";
+import "@/components/Blockly/generator/index";
 
 import Toolbox from "./toolbox/Toolbox";
-import BlocklySvg from "./BlocklySvg";
 import { reservedWords } from "./helpers/reservedWords";
 import Snackbar from "../Snackbar";
 
