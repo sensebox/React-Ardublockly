@@ -55,8 +55,7 @@ const BasicPage = () => {
 
     link.type = "text/css";
     link.rel = "stylesheet";
-    link.href = "./toolbox_style.css";
-
+    link.href = new URL("./toolbox_style.css", import.meta.url).href;
     head.appendChild(link);
 
     return () => {
