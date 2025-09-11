@@ -10,6 +10,7 @@ import WorkspaceStats from "../Workspace/WorkspaceStats";
 import WorkspaceToolbar from "../Workspace/WorkspaceToolbar";
 import BlocklyWindow from "../Blockly/BlocklyWindow";
 import CodeViewer from "../Workspace/CodeViewer";
+import TrashcanButtons from "../Workspace/TrashcanButtons";
 import DeviceSelection from "../DeviceSelection";
 import TooltipViewer from "@/components/Workspace/TooltipViewer";
 import Dialog from "@/components/ui/Dialog";

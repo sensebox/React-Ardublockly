@@ -1,12 +1,21 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 
 import * as Blockly from "blockly/core";
 import "./blocks/index";
-import "@/components/Blockly/generator/arduino/index";
+
 import "@/components/Blockly/generator/basic/index";
+import "@/components/Blockly/generator/arduino/index";
 
 import Toolbox from "./toolbox/Toolbox";
+import BlocklySvg from "./BlocklySvg";
 import { reservedWords } from "./helpers/reservedWords";
 import Snackbar from "../Snackbar";
 
@@ -27,6 +36,7 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
   const blocklyDivRef = useRef(null);
   const toolboxRef = useRef(null);
   const [workspace, setWorkspace] = useState(undefined);
+
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -80,7 +90,6 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
     // ScrollOptions plugin
     const scrollPlugin = new ScrollOptions(ws);
     scrollPlugin.init({ enableWheelScroll: true, enableEdgeScroll: false });
-    // 🔥 SAUBERE LÖSUNG: Nutze Promise.resolve().then, um nach der Initialisierung zu laden
     if (initialXml) {
       Promise.resolve().then(() => {
         try {
