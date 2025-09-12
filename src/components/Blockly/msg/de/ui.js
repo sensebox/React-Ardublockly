@@ -34,6 +34,7 @@ export const UI = {
   variables_UNDEF: "undefined",
   variables_set: "Schreibe",
   variables_to: "",
+  toolbox_internet_and_comms: "Datenübertragung",
 
   /**
    * Tooltips
