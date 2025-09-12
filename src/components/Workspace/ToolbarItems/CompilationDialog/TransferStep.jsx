@@ -18,11 +18,12 @@ import {
   InfoOutlined,
   Book,
   BookOutlined,
+  Block,
 } from "@mui/icons-material";
 import { useTheme } from "@mui/styles";
 import { useSelector } from "react-redux";
 import { IconButton, Tooltip } from "@mui/material";
-
+import * as Blockly from "blockly/core";
 export default function TransferStep() {
   const theme = useTheme();
   const filename = useSelector((state) => state.workspace.name);
@@ -47,10 +48,10 @@ export default function TransferStep() {
           color={theme.palette.primary.main}
           gutterBottom
         >
-          Datei übertragen
+          {Blockly.Msg.transfer_headline}
         </Typography>
         <Typography color="text.secondary">
-          Ziehe die Datei aus deinem Downloads-Ordner auf die senseBox
+          {Blockly.Msg.transfer_subline}
         </Typography>
       </Box>
 
@@ -64,7 +65,7 @@ export default function TransferStep() {
         }}
       >
         <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
-          Schritte zur Übertragung:
+          {Blockly.Msg.steps_to_transfer}
         </Typography>
 
         <List dense>
@@ -74,7 +75,7 @@ export default function TransferStep() {
                 sx={{ fontSize: 32, color: theme.palette.primary.main }}
               />
             </ListItemIcon>
-            <ListItemText primary="1. Downloads-Ordner öffnen" />
+            <ListItemText primary={Blockly.Msg.step_1} />
           </ListItem>
 
           <ListItem>
@@ -105,7 +106,8 @@ export default function TransferStep() {
             <ListItemText
               primary={
                 <>
-                  2. Datei <b>{filename}.bin</b> finden
+                  {Blockly.Msg.file} <b>{filename}.bin</b>{" "}
+                  {Blockly.Msg.step_2}{" "}
                 </>
               }
             />
@@ -122,14 +124,7 @@ export default function TransferStep() {
               >
                 <Memory />
               </ListItemIcon>
-              <ListItemText
-                primary={
-                  <>
-                    3. MCU in den <b>Lernmodus</b> versetzen <br />
-                    (zweimal schnell den roten Reset-Knopf drücken)
-                  </>
-                }
-              />
+              <ListItemText primary={<>{Blockly.Msg.mcu_to_learnmode} </>} />
             </ListItem>
           )}
 
@@ -142,13 +137,14 @@ export default function TransferStep() {
                 <>
                   {selectedBoard === "MCU" ? (
                     <>
-                      4. <b>{filename}.bin</b> per Drag & Drop auf die senseBox
-                      kopieren
+                      {Blockly.Msg.step_3_mcu.replace("{filename}", filename)}
                     </>
                   ) : (
                     <>
-                      3. <b>{filename}.bin</b> per Drag & Drop auf die senseBox
-                      kopieren
+                      {Blockly.Msg.step_3_esp32.replace(
+                        "{filename}",
+                        filename,
+                      )}{" "}
                     </>
                   )}
                 </>
@@ -161,7 +157,7 @@ export default function TransferStep() {
           variant="caption"
           sx={{ display: "block", textAlign: "right" }}
         >
-          Benötigst du Hilfe?{" "}
+          {Blockly.Msg.need_help}{" "}
           <Box
             component="a"
             href={
@@ -178,7 +174,7 @@ export default function TransferStep() {
               "&:hover": { textDecoration: "underline" },
             }}
           >
-            Schau in unserer Dokumentation vorbei!
+            {Blockly.Msg.compile_overlay_help_2}
           </Box>
         </Typography>
       </Box>

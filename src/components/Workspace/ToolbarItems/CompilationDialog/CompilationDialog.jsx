@@ -33,7 +33,7 @@ const headerStyle = {
 };
 
 function CompilationDialog({ open, code, selectedBoard, onClose, platform }) {
-  const [activeStep, setActiveStep] = useState(5);
+  const [activeStep, setActiveStep] = useState(0);
   const [sketchId, setSketchId] = useState(null);
   const [error, setError] = useState(null);
   const [counter, setCounter] = useState(0);
@@ -42,10 +42,10 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform }) {
 
   useEffect(() => {
     if (open) {
-      // handleCompile();
+      handleCompile();
     }
     if (!open) {
-      setActiveStep(5);
+      setActiveStep(0);
       setSketchId(null);
       setError(null);
     }
@@ -147,7 +147,6 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform }) {
           }}
         >
           {error && <ErrorView error={error} />}
-          {activeStep === 5 && !error && <TransferStep />}
           {activeStep === 0 && !error && (
             <div style={{ textAlign: "center" }}>
               <span style={headerStyle}>
