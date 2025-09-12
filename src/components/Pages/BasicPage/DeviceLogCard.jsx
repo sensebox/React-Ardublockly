@@ -81,6 +81,7 @@ const DeviceLogCard = ({ log, logBoxRef, onClear, onCopy }) => {
             m: 0,
             p: 1.5,
             height: "100%",
+            fontSize: "0.6rem",
             overflowY: "auto",
             border: "1px solid #e0e0e0",
             borderRadius: "8px",

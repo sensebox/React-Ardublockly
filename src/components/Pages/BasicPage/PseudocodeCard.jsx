@@ -38,7 +38,14 @@ const PseudocodeCard = ({ script, setScript, connected, onSend }) => {
           </Typography>
         }
       />
-      <CardContent sx={{ pt: 0, flex: "1 1 0", minHeight: 0, display: "flex" }}>
+      <CardContent
+        sx={{
+          pt: 0,
+          flex: "1 1 0",
+          minHeight: 0,
+          display: "flex",
+        }}
+      >
         <TextField
           value={basicCode}
           multiline

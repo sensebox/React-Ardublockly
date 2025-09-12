@@ -45,12 +45,11 @@ const BlocklyCard = ({
 
     const ws = Blockly.inject(containerRef.current, {
       toolbox: toolboxConfig,
-      renderer: "zelos",
+      renderer: "Thrasos",
       theme: BasicTheme,
       trashcan: true,
       collapse: true,
       zoom: {
-        controls: true,
         wheel: true,
         startScale: 1,
         maxScale: 3,
@@ -59,7 +58,7 @@ const BlocklyCard = ({
         pinch: true,
       },
       grid: { spacing: 20, length: 3, colour: "#ddd", snap: true },
-      move: { scrollbars: true, drag: true, wheel: true },
+      move: { scrollbars: false, drag: true, wheel: true },
       sounds: false,
     });
 
