@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { use, useEffect, useMemo, useRef, useState } from "react";
 import {
   Accordion,
   accordionClasses,
@@ -8,6 +8,11 @@ import {
   Box,
   Fade,
   Typography,
+  useTheme,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
 } from "@mui/material";
 import ConnectWizard from "./ConnectWizard";
 import LeftPlaceholder from "./BlocklyCard";
@@ -21,15 +26,23 @@ import { useSelector } from "react-redux";
 import * as Blockly from "blockly";
 import { onChangeCode, onChangeWorkspace } from "@/actions/workspaceActions";
 import "@/components/Blockly/blocks/basic/index"; // registriert Block
-import { ExpandMore } from "@mui/icons-material";
+import {
+  Upload,
+  Usb,
+  Link,
+  Code,
+  PlayArrow,
+  Autorenew,
+} from "@mui/icons-material";
 
 const BasicPage = () => {
   const [script, setScript] = useState("");
   const [log, setLog] = useState("");
   const [code, setCode] = useState("");
-  const [expanded, setExpanded] = useState(false);
-  const handleExpansion = () => {
-    setExpanded(!expanded);
+  const [expanded, setExpanded] = React.useState("panel1");
+  const theme = useTheme();
+  const handleChange = (panel) => (event, newExpanded) => {
+    setExpanded(newExpanded ? panel : false);
   };
   const logBoxRef = useRef(null);
 
@@ -86,27 +99,29 @@ const BasicPage = () => {
         display: "flex",
         flexDirection: "column",
         gap: 2,
-        height: "100vh",
+        height: "80vh",
         boxSizing: "border-box",
       }}
     >
-      {/* Linke Seite */}
-      <Box sx={{ display: "flex", gap: 2, flex: "1 1 auto", minHeight: 0 }}>
-        <BlocklyCard
-          toolboxXml={toolboxDom} // ⬅️ jetzt echtes XML-DOM-Element
-          blocklyCSS={{ height: "100%" }}
-        />
+      <Box sx={{ display: "flex", gap: 2, flex: 1, minHeight: 0 }}>
+        {/* Linke Seite */}
+        <Box sx={{ flex: " 0 0 70%", minHeight: 0, display: "flex" }}>
+          <BlocklyCard
+            toolboxXml={toolboxDom}
+            blocklyCSS={{ flex: 1, minHeight: 0 }}
+          />
+        </Box>
+
         {/* Rechte Seite */}
         <Box
           sx={{
-            flex: "1 1 50%",
+            flex: 1,
+            minHeight: 0,
             display: "flex",
             flexDirection: "column",
             gap: 2,
-            minHeight: "50%", // rechte Seite immer mindestens 50%
           }}
         >
-          {/* ConnectWizard nimmt nur so viel Platz wie er braucht */}
           <Box sx={{ flex: "0 0 auto" }}>
             <ConnectWizard
               supported={supported}
@@ -120,56 +135,131 @@ const BasicPage = () => {
             />
           </Box>
 
-          <Box sx={{ flex: "1 1 auto", overflow: "auto" }}>
+          <Box
+            sx={{
+              flex: 1,
+              minHeight: 0,
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+            }}
+          >
             <Accordion
-              expanded={expanded}
-              onChange={handleExpansion}
-              slots={{ transition: Fade }}
-              slotProps={{ transition: { timeout: 400 } }}
-              sx={[
-                {
-                  borderRadius: 3,
-                  border: (theme) => `1px solid ${theme.palette.divider}`,
-                  boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
-                  overflow: "hidden",
-                  transition: "box-shadow 0.3s ease",
-                  "&:hover": {
-                    boxShadow: "0 6px 16px rgba(0,0,0,0.12)",
-                  },
+              expanded={expanded === "panel1"}
+              onChange={handleChange("panel1")}
+              sx={{
+                borderRadius: 3,
+                border: `1px solid ${theme.palette.divider}`,
+                boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+                overflow: "hidden",
+                "&:hover": {
+                  boxShadow: "0 6px 16px rgba(0,0,0,0.12)",
                 },
-                expanded
-                  ? {
-                      [`& .${accordionClasses.region}`]: {
-                        height: "auto",
-                      },
-                      [`& .${accordionDetailsClasses.root}`]: {
-                        display: "block",
-                      },
-                    }
-                  : {
-                      [`& .${accordionClasses.region}`]: {
-                        height: 0,
-                      },
-                      [`& .${accordionDetailsClasses.root}`]: {
-                        display: "none",
-                      },
-                    },
-              ]}
+              }}
             >
               <AccordionSummary
-                expandIcon={<ExpandMore />}
-                aria-controls="devContainer"
-                id="devContainer-header"
+                aria-controls="panel1d-content"
+                id="panel1d-header"
+                sx={{
+                  borderBottom: `5px ${theme.palette.primary.main} solid`,
+                  borderRadius: "5px",
+                }}
               >
-                <Typography variant="h6">Fortgeschritten</Typography>
+                <Typography component="h2">Kurzanleitung</Typography>
               </AccordionSummary>
-              <AccordionDetails sx={{ height: "100%" }}>
+              <AccordionDetails>
+                <List dense disablePadding>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Upload color="primary" />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary="SenseBoxOS Sketch aufspielen"
+                      secondary="Über Arduino IDE oder senseBox:MCU Flasher aufspielen"
+                    />
+                  </ListItem>
+
+                  <ListItem>
+                    <ListItemIcon>
+                      <Usb color="primary" />
+                    </ListItemIcon>
+                    <ListItemText primary="Mit PC verbinden" />
+                  </ListItem>
+
+                  <ListItem>
+                    <ListItemIcon>
+                      <Link color="primary" />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary="Auf „Verbinden“ klicken"
+                      secondary="SenseBox im erscheinenden Dialog auswählen"
+                    />
+                  </ListItem>
+
+                  <ListItem>
+                    <ListItemIcon>
+                      <Code color="primary" />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary="Code mit „Code senden“ übertragen"
+                      secondary="Dein Blockly-Code wird an die MCU geschickt"
+                    />
+                  </ListItem>
+
+                  <ListItem>
+                    <ListItemIcon>
+                      <PlayArrow color="primary" />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary="Mit Play oder Loop starten"
+                      secondary={
+                        <>
+                          <Typography component="span" fontWeight="bold">
+                            Play:
+                          </Typography>{" "}
+                          führt den Code einmal aus –{" "}
+                          <Typography component="span" fontWeight="bold">
+                            Loop:
+                          </Typography>{" "}
+                          wiederholt ihn endlos.
+                        </>
+                      }
+                    />
+                  </ListItem>
+                </List>
+              </AccordionDetails>
+            </Accordion>
+            <Accordion
+              expanded={expanded === "panel2"}
+              onChange={handleChange("panel2")}
+              sx={{
+                borderRadius: 3,
+                border: (theme) => `1px solid ${theme.palette.divider}`,
+                boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+                overflow: "hidden",
+                "&:hover": {
+                  boxShadow: "0 6px 16px rgba(0,0,0,0.12)",
+                },
+              }}
+            >
+              <AccordionSummary
+                aria-controls="panel2d-content"
+                id="panel2d-header"
+                sx={{
+                  borderBottom: `5px ${theme.palette.primary.main} solid`,
+                  borderRadius: "5px",
+                }}
+              >
+                <Typography component="span">Code & Log</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
                 <Box
                   sx={{
                     display: "flex",
                     flexDirection: "row",
                     gap: 2,
-                    height: "100%",
+                    flex: 1,
+                    minHeight: 0,
                   }}
                 >
                   <PseudocodeCard

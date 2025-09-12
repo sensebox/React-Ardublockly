@@ -11,6 +11,7 @@ import {
   Divider,
   Stack,
   TextField,
+  ToggleButton,
   Typography,
   useTheme,
 } from "@mui/material";
@@ -43,7 +44,7 @@ const ConnectWizard = ({
         borderRadius: 3,
         border: `1px solid ${theme.palette.divider}`,
         boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
-        p: 3,
+        p: 2,
       }}
     >
       <CardHeader
@@ -55,36 +56,6 @@ const ConnectWizard = ({
           >
             senseBox:basic
           </Typography>
-        }
-        subheader={
-          <Stack
-            direction="row"
-            spacing={2}
-            justifyContent="center"
-            alignItems="center"
-            divider={<Divider orientation="vertical" flexItem />}
-            sx={{ mt: 1 }}
-          >
-            <Stack direction="row" spacing={1} alignItems="center">
-              <Box
-                sx={{
-                  width: 10,
-                  height: 10,
-                  borderRadius: "50%",
-                  bgcolor: connected ? theme.palette.primary.main : "grey.500",
-                  animation: connected ? "pulse 1.5s infinite" : "none",
-                  "@keyframes pulse": {
-                    "0%": { transform: "scale(1)", opacity: 1 },
-                    "50%": { transform: "scale(1.4)", opacity: 0.6 },
-                    "100%": { transform: "scale(1)", opacity: 1 },
-                  },
-                }}
-              />
-              <Typography variant="body2">Web Serial</Typography>
-            </Stack>
-            <Typography variant="body2">Baud: 115200</Typography>
-            <Typography variant="body2">Newline: LF (\n)</Typography>
-          </Stack>
         }
       />
 
@@ -165,6 +136,7 @@ const ConnectWizard = ({
               </Box>
               <Button
                 fullWidth
+                color={connected ? "error" : "primary"}
                 variant={connected ? "outlined" : "contained"}
                 startIcon={connected ? <LinkOff /> : <Usb />}
                 onClick={connected ? onDisconnect : onConnect}
@@ -194,16 +166,7 @@ const ConnectWizard = ({
               subheader="Configure and control pseudocode transmission"
             />
             <CardContent>
-              <TextField
-                fullWidth
-                label="Line Delay (ms)"
-                type="number"
-                value={delay}
-                onChange={(e) => setDelay(Number(e.target.value))}
-                sx={{ mb: 3 }}
-                inputProps={{ min: 0, max: 10000 }}
-              />
-              <Stack direction="row" spacing={2}>
+              <Stack direction="column" spacing={2}>
                 <Button
                   onClick={() => onQuick("RUN")}
                   disabled={!connected}
@@ -215,6 +178,16 @@ const ConnectWizard = ({
                   Start
                 </Button>
                 <Button
+                  onClick={() => onQuick("LOOP")}
+                  disabled={!connected}
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  startIcon={<Autorenew />}
+                >
+                  Loop
+                </Button>
+                <Button
                   onClick={() => onQuick("STOP")}
                   disabled={!connected}
                   fullWidth
@@ -224,66 +197,10 @@ const ConnectWizard = ({
                 >
                   Stop
                 </Button>
-                <Button
-                  onClick={() => onQuick("RUNLOOP")}
-                  variant="outlined"
-                  color="secondary"
-                  disabled={!connected}
-                  sx={{
-                    minWidth: 60,
-                    animation: connected ? "spin 2s linear infinite" : "none",
-                    "@keyframes spin": {
-                      "0%": { transform: "rotate(0deg)" },
-                      "100%": { transform: "rotate(360deg)" },
-                    },
-                  }}
-                >
-                  <Autorenew />
-                </Button>
               </Stack>
             </CardContent>
           </Card>
         </Box>
-
-        {/* Status Bar */}
-        <Card
-          variant="outlined"
-          sx={{
-            mt: 3,
-            borderRadius: 2,
-            boxShadow: "0 2px 6px rgba(0,0,0,0.06)",
-          }}
-        >
-          <CardContent>
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <Stack direction="row" spacing={2} alignItems="center">
-                <Stack direction="row" spacing={1} alignItems="center">
-                  <Bolt
-                    fontSize="small"
-                    color={connected ? "primary" : "disabled"}
-                  />
-                  <Typography variant="body2" fontWeight={600}>
-                    Status: {status}
-                  </Typography>
-                </Stack>
-                {connected && (
-                  <Badge
-                    color="primary"
-                    variant="outlined"
-                    badgeContent="ESP32 Ready"
-                  />
-                )}
-              </Stack>
-              <Typography variant="caption" color="text.secondary">
-                Delay: {delay} ms
-              </Typography>
-            </Stack>
-          </CardContent>
-        </Card>
       </CardContent>
     </Card>
   );
