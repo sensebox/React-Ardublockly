@@ -33,7 +33,7 @@ export const UI = {
   variables_UNDEF: "undefined",
   variables_set: "set",
   variables_to: "to",
-  toolbox_internet_and_comms: "Internet and Communication",
+  toolbox_internet_and_comms: "Data transmission",
 
   /**
    * Tooltips
