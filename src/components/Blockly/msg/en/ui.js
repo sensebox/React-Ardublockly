@@ -423,4 +423,25 @@ export const UI = {
   goToApp_text:
     "The code has been compiled successfully. Start with the transfer by clicking on the button below, redirecting you to the senseBox:connect App ! ",
   goToApp_title: "Over-The-Air Transfer",
+
+  transfer_headline: "Transfer file",
+  transfer_subline: "Drag the file from your downloads folder to the senseBox",
+  steps_to_transfer: "Steps for transfer:",
+
+  step_1: "1. Open the Downloads folder",
+  file: "2. Find the file ",
+  step_2: "",
+  mcu_to_learnmode:
+    "3. Set the MCU to learning mode (press the red reset button twice quickly)",
+  step_3_mcu: "4. Drag and drop {filename}.bin onto the senseBox",
+  step_3_esp32: "3. Drag and drop {filename}.bin onto the senseBox",
+
+  // Labels for the icons below (Steps row)
+  transfer_label_downloads: "Downloads",
+  transfer_label_file: "{filename}.bin",
+  transfer_label_sensebox: "senseBox",
+
+  // Help link
+  need_help: "Need help?",
+  compile_overlay_help_2: "Check out our documentation!",
 };
