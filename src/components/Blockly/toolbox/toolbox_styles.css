@@ -5,13 +5,36 @@
   border-radius: 5px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
   background: #fff;
-  margin: 4px 0;
-  outline: none;
-  padding: 2px;
   margin: 2px;
+  padding: 2px;
   align-content: center;
+  outline: none; /* Fokus-Ring weg */
 }
 
-.blocklyToolboxCategory:not(:has(input[type="search"])):focus {
-  outline: none;
+/* Fokus generell bei Toolbox-Elementen deaktivieren */
+.blocklyToolboxCategory:focus,
+.blocklyToolboxCategoryContainer:focus,
+.blocklyTreeRow:focus,
+.blocklyTreeLabel:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Alle Kategorien mit aria-level=2 */
+.blocklyToolboxCategoryContainer[aria-level="2"] {
+  margin-left: 20px;
+}
+
+/* Tiefergehende Ebenen einrücken */
+.blocklyToolboxCategoryContainer[aria-level="3"] {
+  margin-left: 40px;
+}
+
+.blocklyToolboxCategoryContainer[aria-level="4"] {
+  margin-left: 60px;
+}
+
+/* Toolbox Breite */
+.blocklyToolbox {
+  width: 15vw;
 }
