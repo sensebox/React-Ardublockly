@@ -53,52 +53,53 @@ export const ToolboxEsp = () => {
 
       {/* ============================== LEDS & COLORS ============================== */}
       <Category name="LED" colour={getColour().sensebox}>
-        <Block type="sensebox_ws2818_led_init">
-          <Value name="NUMBER">
-            <Block type="math_number">
-              <Field name="NUM">1</Field>
-            </Block>
-          </Value>
-          <Value name="BRIGHTNESS">
-            <Block type="math_number">
-              <Field name="NUM">30</Field>
-            </Block>
-          </Value>
-        </Block>
-        <Block type="sensebox_ws2818_led">
-          <Value name="POSITION">
-            <Block type="math_number">
-              <Field name="NUM">0</Field>
-            </Block>
-          </Value>
-          <Value name="COLOR">
-            <Block type="math_number">
-              <Field name="NUM">0</Field>
-            </Block>
-          </Value>
-        </Block>
-        <Block type="colour_picker" />
-        <Block type="colour_random" />
-        <Block type="colour_rgb">
-          <Value name="RED">
-            <Block type="math_number">
-              <Field name="NUM">100</Field>
-            </Block>
-          </Value>
-          <Value name="GREEN">
-            <Block type="math_number">
-              <Field name="NUM">50</Field>
-            </Block>
-          </Value>
-          <Value name="BLUE">
-            <Block type="math_number">
-              <Field name="NUM">0</Field>
-            </Block>
-          </Value>
-        </Block>
-        <Block type="sensebox_rgb_led" />
-        <Block type="sensebox_led" />
-
+        <Category name="RGB LED" colour={getColour().sensebox}>
+          <Block type="sensebox_ws2818_led_init">
+            <Value name="NUMBER">
+              <Block type="math_number">
+                <Field name="NUM">1</Field>
+              </Block>
+            </Value>
+            <Value name="BRIGHTNESS">
+              <Block type="math_number">
+                <Field name="NUM">30</Field>
+              </Block>
+            </Value>
+          </Block>
+          <Block type="sensebox_ws2818_led">
+            <Value name="POSITION">
+              <Block type="math_number">
+                <Field name="NUM">0</Field>
+              </Block>
+            </Value>
+            <Value name="COLOR">
+              <Block type="math_number">
+                <Field name="NUM">0</Field>
+              </Block>
+            </Value>
+          </Block>
+          <Block type="colour_picker" />
+          <Block type="colour_random" />
+          <Block type="colour_rgb">
+            <Value name="RED">
+              <Block type="math_number">
+                <Field name="NUM">100</Field>
+              </Block>
+            </Value>
+            <Value name="GREEN">
+              <Block type="math_number">
+                <Field name="NUM">50</Field>
+              </Block>
+            </Value>
+            <Value name="BLUE">
+              <Block type="math_number">
+                <Field name="NUM">0</Field>
+              </Block>
+            </Value>
+          </Block>
+          <Block type="sensebox_rgb_led" />
+          <Block type="sensebox_led" />
+        </Category>
         {/* -------- LED MATRIX -------- */}
         <Category name="LED Matrix" colour={getColour().sensebox}>
           <Block type="sensebox_ws2812_matrix_init" />
@@ -137,6 +138,7 @@ export const ToolboxEsp = () => {
         <Block type="sensebox_display_beginDisplay" />
         <Block type="sensebox_display_show" />
         <Block type="sensebox_display_clearDisplay" />
+
         <Block type="sensebox_display_printDisplay">
           <Value name="SIZE">
             <Block type="math_number">
@@ -154,6 +156,8 @@ export const ToolboxEsp = () => {
             </Block>
           </Value>
         </Block>
+        <Block type="text" />
+
         <Block type="sensebox_display_fastPrint">
           <Value name="Title1">
             <Block type="text">
