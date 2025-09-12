@@ -10,12 +10,25 @@ import {
   ListItemText,
   ListItemIcon,
 } from "@mui/material";
-import { FolderOpen, Usb } from "@mui/icons-material";
+import {
+  ArrowForward,
+  FolderOpen,
+  Memory,
+  Usb,
+  InfoOutlined,
+  Book,
+  BookOutlined,
+  Block,
+} from "@mui/icons-material";
 import { useTheme } from "@mui/styles";
 import { useSelector } from "react-redux";
+import { IconButton, Tooltip } from "@mui/material";
+import * as Blockly from "blockly/core";
 export default function TransferStep() {
   const theme = useTheme();
   const filename = useSelector((state) => state.workspace.name);
+  const selectedBoard = useSelector((state) => state.board.board);
+  console.log("Selected Board in TransferStep:", selectedBoard);
   return (
     <Box
       sx={{
@@ -35,10 +48,10 @@ export default function TransferStep() {
           color={theme.palette.primary.main}
           gutterBottom
         >
-          Datei übertragen
+          {Blockly.Msg.transfer_headline}
         </Typography>
         <Typography color="text.secondary">
-          Ziehe die Datei aus deinem Downloads-Ordner auf die senseBox
+          {Blockly.Msg.transfer_subline}
         </Typography>
       </Box>
 
@@ -48,20 +61,25 @@ export default function TransferStep() {
           border: "1px solid #e5e7eb",
           borderRadius: 2,
           p: 2,
+          position: "relative",
         }}
       >
         <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
-          Schritte zur Übertragung:
+          {Blockly.Msg.steps_to_transfer}
         </Typography>
+
         <List dense>
           <ListItem>
-            <ListItemIcon>
-              <FolderOpen sx={{ fontSize: 36, color: "#4EAF47" }} />
+            <ListItemIcon sx={{ justifyContent: "center" }}>
+              <FolderOpen
+                sx={{ fontSize: 32, color: theme.palette.primary.main }}
+              />
             </ListItemIcon>
-            <ListItemText primary="1. Downloads-Ordner öffnen" />
+            <ListItemText primary={Blockly.Msg.step_1} />
           </ListItem>
+
           <ListItem>
-            <ListItemIcon>
+            <ListItemIcon sx={{ justifyContent: "center" }}>
               <Box
                 sx={{
                   width: 32,
@@ -83,36 +101,88 @@ export default function TransferStep() {
                 >
                   bin
                 </Typography>
-              </Box>{" "}
+              </Box>
             </ListItemIcon>
             <ListItemText
               primary={
                 <>
-                  2. Datei <b>{filename}.bin</b> finden
+                  {Blockly.Msg.file} <b>{filename}.bin</b>{" "}
+                  {Blockly.Msg.step_2}{" "}
                 </>
               }
             />
           </ListItem>
+
+          {/* Nur anzeigen wenn MCU ausgewählt */}
+          {selectedBoard === "MCU" && (
+            <ListItem>
+              <ListItemIcon
+                sx={{
+                  justifyContent: "center",
+                  color: theme.palette.primary.main,
+                }}
+              >
+                <Memory />
+              </ListItemIcon>
+              <ListItemText primary={<>{Blockly.Msg.mcu_to_learnmode} </>} />
+            </ListItem>
+          )}
+
           <ListItem>
-            <ListItemIcon>
-              <Usb sx={{ color: "#4EAF47" }} />
+            <ListItemIcon sx={{ justifyContent: "center" }}>
+              <Usb sx={{ fontSize: 32, color: theme.palette.primary.main }} />
             </ListItemIcon>
             <ListItemText
               primary={
                 <>
-                  3. <b>{filename}.bin</b> per Drag & Drop auf die senseBox
-                  kopieren
+                  {selectedBoard === "MCU" ? (
+                    <>
+                      {Blockly.Msg.step_3_mcu.replace("{filename}", filename)}
+                    </>
+                  ) : (
+                    <>
+                      {Blockly.Msg.step_3_esp32.replace(
+                        "{filename}",
+                        filename,
+                      )}{" "}
+                    </>
+                  )}
                 </>
               }
             />
           </ListItem>
         </List>
+        {/* Hilfe-Link unten rechts */}
+        <Typography
+          variant="caption"
+          sx={{ display: "block", textAlign: "right" }}
+        >
+          {Blockly.Msg.need_help}{" "}
+          <Box
+            component="a"
+            href={
+              selectedBoard === "MCU"
+                ? "https://docs.sensebox.de/docs/boards/mcu/mcu-kompilieren"
+                : "https://docs.sensebox.de/docs/boards/mcus2/mcus2-kompilieren#kompilieren"
+            }
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              color: "primary.main",
+              textDecoration: "none",
+              fontWeight: "bold",
+              "&:hover": { textDecoration: "underline" },
+            }}
+          >
+            {Blockly.Msg.compile_overlay_help_2}
+          </Box>
+        </Typography>
       </Box>
 
       <Card
         variant="outlined"
         sx={{
-          p: 2,
+          p: 1,
           borderStyle: "dashed",
           borderColor: "grey.400",
           borderWidth: 2,
@@ -125,15 +195,15 @@ export default function TransferStep() {
         <Box display="flex" justifyContent="space-between" alignItems="center">
           {/* Step 1: Downloads */}
           <Box
+            display="flex"
             textAlign="center"
-            zIndex={1}
             flexDirection="column"
-            alignItems={"center"}
+            alignItems="center"
           >
             <Box
               sx={{
-                width: 64,
-                height: 64,
+                width: 48,
+                height: 48,
                 bgcolor: theme.palette.senseboxColors.blue,
                 borderRadius: 2,
                 display: "flex",
@@ -149,17 +219,21 @@ export default function TransferStep() {
             </Typography>
           </Box>
 
+          {/* Pfeil */}
+          <ArrowForward
+            sx={{
+              fontSize: 42,
+              color: theme.palette.primary.main,
+              marginBottom: "5px",
+            }}
+          />
+
           {/* Step 2: File */}
-          <Box
-            display="flex"
-            flexDirection="column"
-            alignItems={"center"}
-            zIndex={1}
-          >
+          <Box display="flex" flexDirection="column" alignItems="center">
             <Box
               sx={{
-                width: 64,
-                height: 64,
+                width: 48,
+                height: 48,
                 bgcolor: "grey.100",
                 border: "2px solid",
                 borderColor: "grey.300",
@@ -173,7 +247,7 @@ export default function TransferStep() {
               <Box
                 sx={{
                   width: 32,
-                  height: 40,
+                  height: 32,
                   bgcolor: "white",
                   border: "1px solid",
                   borderColor: "grey.400",
@@ -197,17 +271,27 @@ export default function TransferStep() {
             </Typography>
           </Box>
 
+          {/* Pfeil */}
+          <ArrowForward
+            sx={{
+              fontSize: 42,
+
+              color: theme.palette.primary.main,
+              marginBottom: "5px",
+            }}
+          />
+
           {/* Step 3: senseBox */}
           <Box
+            display="flex"
             textAlign="center"
-            zIndex={1}
             flexDirection="column"
-            alignItems={"center"}
+            alignItems="center"
           >
             <Box
               sx={{
-                width: 64,
-                height: 64,
+                width: 48,
+                height: 48,
                 bgcolor: theme.palette.primary.main,
                 borderRadius: 2,
                 display: "flex",
@@ -218,43 +302,11 @@ export default function TransferStep() {
             >
               <Usb sx={{ fontSize: 36, color: "white" }} />
             </Box>
-            <Typography
-              variant="body2"
-              fontWeight="bold"
-              color={theme.palette.primary.main}
-            >
+            <Typography variant="body2" fontWeight="bold">
               senseBox
             </Typography>
           </Box>
         </Box>
-
-        {/* Animated Dot über die ganze Reihe */}
-        <Box
-          sx={{
-            position: "absolute",
-            top: "40%",
-            left: "8%",
-            width: "16px",
-            height: "16px",
-            borderRadius: "50%",
-            bgcolor: "primary.main",
-            transform: "translateY(-50%)",
-            animation: "moveFile 3s ease-in-out infinite",
-          }}
-        />
-
-        <style>
-          {`
-@keyframes moveFile {
-  0%, 8%   { left: 8%; }
-  35%, 42% { left: 48%; }
-  80%,100% { left: 88%; }
-}
-
-
-
-    `}
-        </style>
       </Card>
       {/* <TransferHint filename={filename} /> */}
     </Box>

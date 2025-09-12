@@ -126,7 +126,7 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform }) {
       disableEscapeKeyDown={activeStep !== 2 || !error}
       // Feste Größe über PaperProps: Breite und Höhe passen für alle Steps
       PaperProps={{
-        style: { width: "600px", minHeight: "650px", maxHeight: "600px" },
+        style: { width: "600px", minHeight: "700px", maxHeight: "600px" },
       }}
     >
       <DialogContent
