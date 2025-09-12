@@ -33,7 +33,7 @@ const headerStyle = {
 };
 
 function CompilationDialog({ open, code, selectedBoard, onClose, platform }) {
-  const [activeStep, setActiveStep] = useState(0);
+  const [activeStep, setActiveStep] = useState(5);
   const [sketchId, setSketchId] = useState(null);
   const [error, setError] = useState(null);
   const [counter, setCounter] = useState(0);
@@ -42,10 +42,10 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform }) {
 
   useEffect(() => {
     if (open) {
-      handleCompile();
+      // handleCompile();
     }
     if (!open) {
-      setActiveStep(0);
+      setActiveStep(5);
       setSketchId(null);
       setError(null);
     }
@@ -126,7 +126,7 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform }) {
       disableEscapeKeyDown={activeStep !== 2 || !error}
       // Feste Größe über PaperProps: Breite und Höhe passen für alle Steps
       PaperProps={{
-        style: { width: "600px", minHeight: "650px", maxHeight: "600px" },
+        style: { width: "600px", minHeight: "700px", maxHeight: "600px" },
       }}
     >
       <DialogContent
@@ -147,6 +147,7 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform }) {
           }}
         >
           {error && <ErrorView error={error} />}
+          {activeStep === 5 && !error && <TransferStep />}
           {activeStep === 0 && !error && (
             <div style={{ textAlign: "center" }}>
               <span style={headerStyle}>
