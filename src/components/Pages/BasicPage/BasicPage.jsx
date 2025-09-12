@@ -59,7 +59,9 @@ const BasicPage = () => {
     head.appendChild(link);
 
     return () => {
-      head.removeChild(link);
+      if (head.contains(link)) {
+        head.removeChild(link);
+      }
     };
   }, []);
 
