@@ -34,6 +34,7 @@ import {
   PlayArrow,
   Autorenew,
 } from "@mui/icons-material";
+import TutorialAccordion from "./TutorialAccordion";
 
 const BasicPage = () => {
   const [script, setScript] = useState("");
@@ -106,10 +107,7 @@ const BasicPage = () => {
       <Box sx={{ display: "flex", gap: 2, flex: 1, minHeight: 0 }}>
         {/* Linke Seite */}
         <Box sx={{ flex: " 0 0 70%", minHeight: 0, display: "flex" }}>
-          <BlocklyCard
-            toolboxXml={toolboxDom}
-            blocklyCSS={{ flex: 1, minHeight: 0 }}
-          />
+          <BlocklyCard toolboxXml={toolboxDom} blocklyCSS={{ width: "99%" }} />
         </Box>
 
         {/* Rechte Seite */}
@@ -122,19 +120,6 @@ const BasicPage = () => {
             gap: 2,
           }}
         >
-          <Box sx={{ flex: "0 0 auto" }}>
-            <ConnectWizard
-              supported={supported}
-              connected={connected}
-              status={status}
-              delay={delay}
-              setDelay={setDelay}
-              onConnect={connect}
-              onDisconnect={disconnect}
-              onQuick={(cmd) => sendLine(cmd)}
-            />
-          </Box>
-
           <Box
             sx={{
               flex: 1,
@@ -149,7 +134,7 @@ const BasicPage = () => {
               onChange={handleChange("panel1")}
               sx={{
                 borderRadius: 3,
-                border: `1px solid ${theme.palette.divider}`,
+                border: (theme) => `1px solid ${theme.palette.divider}`,
                 boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
                 overflow: "hidden",
                 "&:hover": {
@@ -165,68 +150,19 @@ const BasicPage = () => {
                   borderRadius: "5px",
                 }}
               >
-                <Typography component="h2">Kurzanleitung</Typography>
+                <Typography component="span">Verbinden</Typography>
               </AccordionSummary>
               <AccordionDetails>
-                <List dense disablePadding>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Upload color="primary" />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary="SenseBoxOS Sketch aufspielen"
-                      secondary="Über Arduino IDE oder senseBox:MCU Flasher aufspielen"
-                    />
-                  </ListItem>
-
-                  <ListItem>
-                    <ListItemIcon>
-                      <Usb color="primary" />
-                    </ListItemIcon>
-                    <ListItemText primary="Mit PC verbinden" />
-                  </ListItem>
-
-                  <ListItem>
-                    <ListItemIcon>
-                      <Link color="primary" />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary="Auf „Verbinden“ klicken"
-                      secondary="SenseBox im erscheinenden Dialog auswählen"
-                    />
-                  </ListItem>
-
-                  <ListItem>
-                    <ListItemIcon>
-                      <Code color="primary" />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary="Code mit „Code senden“ übertragen"
-                      secondary="Dein Blockly-Code wird an die MCU geschickt"
-                    />
-                  </ListItem>
-
-                  <ListItem>
-                    <ListItemIcon>
-                      <PlayArrow color="primary" />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary="Mit Play oder Loop starten"
-                      secondary={
-                        <>
-                          <Typography component="span" fontWeight="bold">
-                            Play:
-                          </Typography>{" "}
-                          führt den Code einmal aus –{" "}
-                          <Typography component="span" fontWeight="bold">
-                            Loop:
-                          </Typography>{" "}
-                          wiederholt ihn endlos.
-                        </>
-                      }
-                    />
-                  </ListItem>
-                </List>
+                <ConnectWizard
+                  supported={supported}
+                  connected={connected}
+                  status={status}
+                  delay={delay}
+                  setDelay={setDelay}
+                  onConnect={connect}
+                  onDisconnect={disconnect}
+                  onQuick={(cmd) => sendLine(cmd)}
+                />
               </AccordionDetails>
             </Accordion>
             <Accordion
@@ -234,7 +170,7 @@ const BasicPage = () => {
               onChange={handleChange("panel2")}
               sx={{
                 borderRadius: 3,
-                border: (theme) => `1px solid ${theme.palette.divider}`,
+                border: `1px solid ${theme.palette.divider}`,
                 boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
                 overflow: "hidden",
                 "&:hover": {
@@ -250,16 +186,41 @@ const BasicPage = () => {
                   borderRadius: "5px",
                 }}
               >
+                <Typography component="h2">Kurzanleitung</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <TutorialAccordion />
+              </AccordionDetails>
+            </Accordion>
+            <Accordion
+              expanded={expanded === "panel3"}
+              onChange={handleChange("panel3")}
+              sx={{
+                borderRadius: 3,
+                border: (theme) => `1px solid ${theme.palette.divider}`,
+                boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+                overflow: "hidden",
+                "&:hover": {
+                  boxShadow: "0 6px 16px rgba(0,0,0,0.12)",
+                },
+              }}
+            >
+              <AccordionSummary
+                aria-controls="panel3d-content"
+                id="panel3  d-header"
+                sx={{
+                  borderBottom: `5px ${theme.palette.primary.main} solid`,
+                  borderRadius: "5px",
+                }}
+              >
                 <Typography component="span">Code & Log</Typography>
               </AccordionSummary>
               <AccordionDetails>
                 <Box
                   sx={{
                     display: "flex",
-                    flexDirection: "row",
+                    flexDirection: "column",
                     gap: 2,
-                    flex: 1,
-                    minHeight: 0,
                   }}
                 >
                   <PseudocodeCard

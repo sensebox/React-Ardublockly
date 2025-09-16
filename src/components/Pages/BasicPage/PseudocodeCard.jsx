@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Box,
   Button,
   Card,
   CardActions,
@@ -17,78 +18,54 @@ const PseudocodeCard = ({ script, setScript, connected, onSend }) => {
   const basicCode = useSelector((s) => s.workspace.code.basic);
 
   return (
-    <Card
-      elevation={3}
+    <Box
       sx={{
-        borderRadius: "16px",
         display: "flex",
         flexDirection: "column",
-        flex: "1 1 0",
-        minHeight: 0,
-        "&:hover": { boxShadow: 6 },
+        gap: 2,
       }}
     >
-      <CardHeader
-        title={
-          <Typography
-            variant="h6"
-            sx={{ fontWeight: 900, color: theme.palette.primary.main }}
-          >
-            Pseudocode (jede Zeile wird mit \n gesendet)
-          </Typography>
-        }
-      />
-      <CardContent
+      <TextField
+        value={basicCode}
+        multiline
+        fullWidth
         sx={{
-          pt: 0,
-          flex: "1 1 0",
-          minHeight: 0,
-          display: "flex",
+          flex: 1,
+          "& .MuiInputBase-root": {
+            height: "100%",
+            alignItems: "start",
+            fontFamily:
+              "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+            overflow: "auto",
+          },
+          "& textarea": {
+            height: "100% !important",
+          },
+        }}
+        minRows={6}
+      />
+
+      <Button
+        onClick={onSend}
+        disabled={!connected}
+        startIcon={<Send />}
+        fullWidth
+        sx={{
+          background: theme.palette.background.white,
+          color: theme.palette.primary.main,
+          borderRadius: "50px",
+          fontWeight: "bold",
+          border: "1px solid",
+          borderColor: theme.palette.primary.main,
+          "&:hover": {
+            backgroundColor: theme.palette.primary.main,
+            color: theme.palette.background.white,
+          },
         }}
       >
-        <TextField
-          value={basicCode}
-          multiline
-          fullWidth
-          sx={{
-            flex: 1,
-            "& .MuiInputBase-root": {
-              height: "100%",
-              alignItems: "start",
-              fontFamily:
-                "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
-              overflow: "auto",
-            },
-            "& textarea": {
-              height: "100% !important",
-            },
-          }}
-          minRows={6}
-        />
-      </CardContent>
-      <CardActions sx={{ p: 2, pt: 0 }}>
-        <Button
-          onClick={onSend}
-          disabled={!connected}
-          startIcon={<Send />}
-          fullWidth
-          sx={{
-            background: theme.palette.background.white,
-            color: theme.palette.primary.main,
-            borderRadius: "50px",
-            fontWeight: "bold",
-            border: "1px solid",
-            borderColor: theme.palette.primary.main,
-            "&:hover": {
-              backgroundColor: theme.palette.primary.main,
-              color: theme.palette.background.white,
-            },
-          }}
-        >
-          Send Lines
-        </Button>
-      </CardActions>
-    </Card>
+        Send Lines
+      </Button>
+    </Box>
   );
 };
 

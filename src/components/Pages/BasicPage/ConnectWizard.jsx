@@ -23,6 +23,8 @@ import {
   Bolt,
   Settings,
   LinkOff,
+  Bluetooth,
+  Computer,
 } from "@mui/icons-material";
 
 const ConnectWizard = ({
@@ -38,171 +40,156 @@ const ConnectWizard = ({
   const theme = useTheme();
 
   return (
-    <Card
-      elevation={4}
+    <Box
       sx={{
-        borderRadius: 3,
-        border: `1px solid ${theme.palette.divider}`,
-        boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+        display: "grid",
+        gap: 3,
         p: 2,
       }}
     >
-      <CardHeader
-        title={
-          <Typography
-            variant="h4"
-            sx={{ fontWeight: 900, color: theme.palette.primary.main }}
-            align="center"
-          >
-            senseBox:basic
-          </Typography>
-        }
-      />
-
-      <CardContent>
-        {/* Main Grid */}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-around",
+          gap: 4,
+          backgroundColor: "#f5f5f5",
+          borderRadius: "5px",
+          p: 2,
+        }}
+      >
         <Box
           sx={{
-            display: "grid",
-            gap: 3,
-            gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 1,
           }}
         >
-          {/* Connection Card */}
-          <Card
-            variant="outlined"
+          <Box
             sx={{
-              borderRadius: 2,
-              boxShadow: "0 2px 6px rgba(0,0,0,0.06)",
+              display: "flex",
+              flexDirection: "row",
+              gap: 1,
+              alignItems: "center",
             }}
           >
-            <CardHeader
-              title={
-                <Stack direction="row" spacing={1} alignItems="center">
-                  <Usb fontSize="small" />
-                  <Typography variant="h6">Device Connection</Typography>
-                </Stack>
-              }
-              subheader="Connect to your ESP32 device via USB"
+            <Bluetooth
+              sx={{
+                color: connected
+                  ? theme.palette.success.main
+                  : theme.palette.error.main,
+              }}
             />
-            <CardContent>
-              <Box
-                sx={{
-                  p: 2,
-                  mb: 2,
-                  borderRadius: 2,
-                  border: 2,
-                  borderColor: connected
-                    ? theme.palette.primary.light
-                    : theme.palette.error.light,
-                  bgcolor: connected
-                    ? theme.palette.primary.main + "11"
-                    : theme.palette.error.main + "11",
-                }}
-              >
-                <Stack
-                  direction="row"
-                  alignItems="center"
-                  justifyContent="space-between"
-                >
-                  <Stack direction="row" spacing={1} alignItems="center">
-                    <Box
-                      sx={{
-                        width: 12,
-                        height: 12,
-                        borderRadius: "50%",
-                        bgcolor: connected
-                          ? theme.palette.primary.main
-                          : theme.palette.error.main,
-                        animation: connected ? "pulse 1.5s infinite" : "none",
-                      }}
-                    />
-                    <Typography
-                      fontWeight={600}
-                      color={
-                        connected
-                          ? theme.palette.primary.main
-                          : theme.palette.error.main
-                      }
-                    >
-                      {connected ? "Connected" : "Disconnected"}
-                    </Typography>
-                  </Stack>
-                  <Badge
-                    color={connected ? "primary" : "error"}
-                    badgeContent={connected ? "Active" : "Inactive"}
-                  />
-                </Stack>
-              </Box>
-              <Button
-                fullWidth
-                color={connected ? "error" : "primary"}
-                variant={connected ? "outlined" : "contained"}
-                startIcon={connected ? <LinkOff /> : <Usb />}
-                onClick={connected ? onDisconnect : onConnect}
-                disabled={!supported}
-                sx={{ py: 1.5 }}
-              >
-                {connected ? "Disconnect" : "Connect Device"}
-              </Button>
-            </CardContent>
-          </Card>
+            <div
+              style={{
+                width: "10px",
+                height: "10px",
+                backgroundColor: connected
+                  ? theme.palette.success.main
+                  : theme.palette.error.main,
+                borderRadius: "50%",
+                boxShadow: connected ? "0 0 8px #00cc44" : "0 0 8px #ff3333",
+                animation: "pulse 2s infinite",
+              }}
+              className="status-dot"
+            />
+            <style>
+              {`
+    @keyframes pulse {
+      0%   { box-shadow: 0 0 6px ${connected ? "#00cc44" : "#ff3333"}; }
+      50%  { box-shadow: 0 0 15px ${connected ? "#00ff55" : "#ff6666"}; }
+      100% { box-shadow: 0 0 6px ${connected ? "#00cc44" : "#ff3333"}; }
+    }
+  `}
+            </style>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 1,
+            }}
+          >
+            <span>{connected ? "Connected" : "Disconnected"}</span>
 
-          {/* Control Panel */}
-          <Card
-            variant="outlined"
-            sx={{
-              borderRadius: 2,
-              boxShadow: "0 2px 6px rgba(0,0,0,0.06)",
-            }}
-          >
-            <CardHeader
-              title={
-                <Stack direction="row" spacing={1} alignItems="center">
-                  <Settings fontSize="small" />
-                  <Typography variant="h6">Control Panel</Typography>
-                </Stack>
-              }
-              subheader="Configure and control pseudocode transmission"
-            />
-            <CardContent>
-              <Stack direction="column" spacing={2}>
-                <Button
-                  onClick={() => onQuick("RUN")}
-                  disabled={!connected}
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  startIcon={<PlayArrow />}
-                >
-                  Start
-                </Button>
-                <Button
-                  onClick={() => onQuick("LOOP")}
-                  disabled={!connected}
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  startIcon={<Autorenew />}
-                >
-                  Loop
-                </Button>
-                <Button
-                  onClick={() => onQuick("STOP")}
-                  disabled={!connected}
-                  fullWidth
-                  variant="contained"
-                  color="error"
-                  startIcon={<Stop />}
-                >
-                  Stop
-                </Button>
-              </Stack>
-            </CardContent>
-          </Card>
+            <Box
+              sx={{
+                backgroundColor: connected
+                  ? theme.palette.success.main
+                  : theme.palette.error.main,
+                color: "white",
+                textAlign: "center",
+                display: "inline-block",
+                py: 0.2,
+                px: 0.6,
+                fontSize: 14,
+                borderRadius: 10,
+              }}
+            >
+              {connected ? "Active" : "Inactive"}
+            </Box>
+          </Box>
         </Box>
-      </CardContent>
-    </Card>
+        <Button
+          color={connected ? "error" : "primary"}
+          variant={connected ? "outlined" : "contained"}
+          onClick={connected ? onDisconnect : onConnect}
+          disabled={!supported}
+          startIcon={<Computer />}
+          size="medium"
+          sx={{ py: 1.5 }}
+        >
+          {connected ? "Disconnect" : "Connect Device"}
+        </Button>
+      </Box>
+
+      <Box
+        sx={{
+          display: "flex",
+          gap: 4,
+          justifyContent: "space-between",
+          width: "100%",
+        }}
+      >
+        <Button
+          onClick={() => onQuick("RUN")}
+          disabled={!connected}
+          size="large"
+          variant="contained"
+          color="primary"
+        >
+          <div>
+            <PlayArrow /> <br />
+            Start
+          </div>
+        </Button>
+        <Button
+          onClick={() => onQuick("LOOP")}
+          disabled={!connected}
+          variant="contained"
+          size="large"
+          color="primary"
+        >
+          <div>
+            <Autorenew /> <br />
+            Loop
+          </div>
+        </Button>
+        <Button
+          onClick={() => onQuick("STOP")}
+          size="large"
+          disabled={!connected}
+          variant="contained"
+          color="error"
+        >
+          <div>
+            <Stop /> <br />
+            Stop
+          </div>
+        </Button>
+      </Box>
+    </Box>
   );
 };
 
