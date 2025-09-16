@@ -8,6 +8,8 @@
   margin: 2px;
   padding: 2px;
   align-content: center;
+  max-width: 13.5vw;
+
   outline: none; /* Fokus-Ring weg */
 }
 
