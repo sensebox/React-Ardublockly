@@ -26,14 +26,7 @@ import { useSelector } from "react-redux";
 import * as Blockly from "blockly";
 import { onChangeCode, onChangeWorkspace } from "@/actions/workspaceActions";
 import "@/components/Blockly/blocks/basic/index"; // registriert Block
-import {
-  Upload,
-  Usb,
-  Link,
-  Code,
-  PlayArrow,
-  Autorenew,
-} from "@mui/icons-material";
+import { ExpandMoreRounded } from "@mui/icons-material";
 import TutorialAccordion from "./TutorialAccordion";
 
 const BasicPage = () => {
@@ -145,12 +138,15 @@ const BasicPage = () => {
               <AccordionSummary
                 aria-controls="panel1d-content"
                 id="panel1d-header"
+                expandIcon={<ExpandMoreRounded />}
                 sx={{
                   borderBottom: `5px ${theme.palette.primary.main} solid`,
                   borderRadius: "5px",
                 }}
               >
-                <Typography component="span">Verbinden</Typography>
+                <Typography variant="h6" component="h2">
+                  Verbinden
+                </Typography>
               </AccordionSummary>
               <AccordionDetails>
                 <ConnectWizard
@@ -181,12 +177,15 @@ const BasicPage = () => {
               <AccordionSummary
                 aria-controls="panel2d-content"
                 id="panel2d-header"
+                expandIcon={<ExpandMoreRounded />}
                 sx={{
                   borderBottom: `5px ${theme.palette.primary.main} solid`,
                   borderRadius: "5px",
                 }}
               >
-                <Typography component="h2">Kurzanleitung</Typography>
+                <Typography variant="h6" component="h2">
+                  Kurzanleitung
+                </Typography>
               </AccordionSummary>
               <AccordionDetails>
                 <TutorialAccordion />
@@ -208,12 +207,15 @@ const BasicPage = () => {
               <AccordionSummary
                 aria-controls="panel3d-content"
                 id="panel3  d-header"
+                expandIcon={<ExpandMoreRounded />}
                 sx={{
                   borderBottom: `5px ${theme.palette.primary.main} solid`,
                   borderRadius: "5px",
                 }}
               >
-                <Typography component="span">Code & Log</Typography>
+                <Typography variant="h6" component="h2">
+                  Code & Log
+                </Typography>
               </AccordionSummary>
               <AccordionDetails>
                 <Box

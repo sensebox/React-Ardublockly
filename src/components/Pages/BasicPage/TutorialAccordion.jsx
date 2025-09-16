@@ -19,7 +19,7 @@ const TutorialAccordion = () => {
   return (
     <List dense disablePadding>
       <ListItem
-        sx={{ mb: 1, borderRadius: 2, bgcolor: "grey.50", boxShadow: 1 }}
+        sx={{ mb: 2, borderRadius: 2, bgcolor: "grey.50", boxShadow: 1 }}
       >
         {" "}
         <ListItemIcon>
@@ -32,7 +32,7 @@ const TutorialAccordion = () => {
       </ListItem>
 
       <ListItem
-        sx={{ mb: 1, borderRadius: 2, bgcolor: "grey.50", boxShadow: 1 }}
+        sx={{ mb: 2, borderRadius: 2, bgcolor: "grey.50", boxShadow: 1 }}
       >
         <ListItemIcon>
           <Usb color="primary" />
@@ -41,7 +41,7 @@ const TutorialAccordion = () => {
       </ListItem>
 
       <ListItem
-        sx={{ mb: 1, borderRadius: 2, bgcolor: "grey.50", boxShadow: 1 }}
+        sx={{ mb: 2, borderRadius: 2, bgcolor: "grey.50", boxShadow: 1 }}
       >
         {" "}
         <ListItemIcon>
@@ -54,7 +54,7 @@ const TutorialAccordion = () => {
       </ListItem>
 
       <ListItem
-        sx={{ mb: 1, borderRadius: 2, bgcolor: "grey.50", boxShadow: 1 }}
+        sx={{ mb: 2, borderRadius: 2, bgcolor: "grey.50", boxShadow: 1 }}
       >
         {" "}
         <ListItemIcon>
@@ -67,7 +67,7 @@ const TutorialAccordion = () => {
       </ListItem>
 
       <ListItem
-        sx={{ mb: 1, borderRadius: 2, bgcolor: "grey.50", boxShadow: 1 }}
+        sx={{ mb: 2, borderRadius: 2, bgcolor: "grey.50", boxShadow: 1 }}
       >
         {" "}
         <ListItemIcon>

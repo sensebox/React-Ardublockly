@@ -1,38 +1,21 @@
 "use client";
 
 import React from "react";
-import {
-  Badge,
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  Divider,
-  Stack,
-  TextField,
-  ToggleButton,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Box, Button, Typography, useTheme } from "@mui/material";
 import {
   Usb,
   PlayArrow,
   Autorenew,
   Stop,
-  Bolt,
-  Settings,
-  LinkOff,
   Bluetooth,
   Computer,
+  BluetoothDisabled,
+  Code,
 } from "@mui/icons-material";
 
 const ConnectWizard = ({
   supported,
   connected,
-  status,
-  delay,
-  setDelay,
   onConnect,
   onDisconnect,
   onQuick,
@@ -74,13 +57,12 @@ const ConnectWizard = ({
               alignItems: "center",
             }}
           >
-            <Bluetooth
-              sx={{
-                color: connected
-                  ? theme.palette.success.main
-                  : theme.palette.error.main,
-              }}
-            />
+            {connected ? (
+              <Bluetooth sx={{ color: theme.palette.success.main }} />
+            ) : (
+              <BluetoothDisabled sx={{ color: theme.palette.error.main }} />
+            )}
+
             <div
               style={{
                 width: "10px",
@@ -108,15 +90,21 @@ const ConnectWizard = ({
             sx={{
               display: "flex",
               flexDirection: "column",
-              gap: 1,
             }}
           >
-            <span>{connected ? "Connected" : "Disconnected"}</span>
+            <Typography
+              sx={{
+                fontWeight: 600,
+                color: "#6b7280",
+              }}
+            >
+              {connected ? "Connected" : "Disconnected"}
+            </Typography>
 
             <Box
               sx={{
                 backgroundColor: connected
-                  ? theme.palette.success.main
+                  ? theme.palette.primary.main
                   : theme.palette.error.main,
                 color: "white",
                 textAlign: "center",
@@ -127,7 +115,7 @@ const ConnectWizard = ({
                 borderRadius: 10,
               }}
             >
-              {connected ? "Active" : "Inactive"}
+              {connected ? "senseBox bereit" : "Inactive"}
             </Box>
           </Box>
         </Box>
@@ -143,6 +131,17 @@ const ConnectWizard = ({
           {connected ? "Disconnect" : "Connect Device"}
         </Button>
       </Box>
+
+      {connected && (
+        <Button
+          fullWidth
+          variant="contained"
+          onClick={() => console.log("Hallo")}
+          startIcon={<Code />}
+        >
+          Send Code{" "}
+        </Button>
+      )}
 
       <Box
         sx={{
