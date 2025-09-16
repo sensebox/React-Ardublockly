@@ -19,6 +19,7 @@ const ConnectWizard = ({
   onConnect,
   onDisconnect,
   onQuick,
+  onSend,
 }) => {
   const theme = useTheme();
 
@@ -136,7 +137,7 @@ const ConnectWizard = ({
         <Button
           fullWidth
           variant="contained"
-          onClick={() => console.log("Hallo")}
+          onClick={onSend}
           startIcon={<Code />}
         >
           Send Code{" "}
@@ -164,7 +165,7 @@ const ConnectWizard = ({
           </div>
         </Button>
         <Button
-          onClick={() => onQuick("LOOP")}
+          onClick={() => onQuick("RUNLOOP")}
           disabled={!connected}
           variant="contained"
           size="large"
