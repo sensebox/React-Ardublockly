@@ -83,7 +83,7 @@ function TutorialHome() {
           gap: 2,
         }}
       >
-        <Box sx={{ flex: "0 1 55%" }}>
+        <Box sx={{ flex: "0 1 75%" }}>
           <TextField
             fullWidth
             label={Blockly.Msg.searchQuery_placeholder || "Tutorials suchen"}
@@ -94,18 +94,26 @@ function TutorialHome() {
         </Box>
         <Box
           sx={{
-            flex: "0 1 40%",
+            flex: "0 1 20%",
             display: "flex",
+            alignItems: "center",
+            border: `1px solid #c4c4c4`,
+            borderRadius: 2,
+            padding: "4px",
           }}
         >
           <ToggleButtonGroup
             value={difficulty}
             exclusive
             onChange={(e, newValue) => setDifficulty(newValue)}
+            size="small"
             sx={{
               justifyContent: "space-between",
-              gap: 1,
-
+              gap: 2,
+              "& .MuiToggleButton-root": {
+                border: "1px solid #c4c4c4 ",
+                borderRadius: "5px",
+              },
               "& .MuiToggleButton-root.Mui-selected": {
                 backgroundColor: theme.palette.primary.main,
                 fontWeight: 800,
