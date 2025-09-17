@@ -140,7 +140,11 @@ function TutorialHome() {
       <Grid container spacing={2}>
         {filteredTutorials.length > 0 ? (
           filteredTutorials.map((tutorial) => (
-            <TutorialItem key={tutorial._id} tutorial={tutorial} />
+            <TutorialItem
+              key={tutorial._id}
+              tutorial={tutorial}
+              level={getDifficultyLevel(tutorial.difficulty)}
+            />
           ))
         ) : (
           <Typography variant="body1" sx={{ ml: 2 }}>
