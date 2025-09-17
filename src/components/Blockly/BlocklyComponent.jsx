@@ -6,6 +6,7 @@ import "./blocks/index";
 
 import "@/components/Blockly/generator/basic/index";
 import "@/components/Blockly/generator/arduino/index";
+import "@/components/Blockly/generator/basic/index";
 
 import Toolbox from "./toolbox/Toolbox";
 import { reservedWords } from "./helpers/reservedWords";
