@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
 import { getTutorials } from "../../actions/tutorialActions";
 import Breadcrumbs from "../ui/Breadcrumbs";
-import { useTheme } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import * as Blockly from "blockly";
 import DeviceSelection from "../DeviceSelection";
@@ -16,6 +15,9 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  ToggleButtonGroup,
+  ToggleButton,
+  useTheme,
 } from "@mui/material";
 
 function getDifficultyLevel(value) {
@@ -24,23 +26,6 @@ function getDifficultyLevel(value) {
   if (value <= 3) return 3;
   if (value <= 4) return 4;
   return 5;
-}
-
-function getDifficultyLabel(level) {
-  switch (level) {
-    case 1:
-      return "Sehr leicht";
-    case 2:
-      return "Leicht";
-    case 3:
-      return "Mittel";
-    case 4:
-      return "Schwer";
-    case 5:
-      return "Sehr schwer";
-    default:
-      return "Unbekannt";
-  }
 }
 
 function TutorialHome() {
@@ -98,31 +83,51 @@ function TutorialHome() {
           gap: 2,
         }}
       >
-        <TextField
-          fullWidth
-          label={Blockly.Msg.searchQuery_placeholder || "Tutorials suchen"}
-          variant="outlined"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          sx={{ flex: "1 1 60%" }}
-        />
-
-        <FormControl sx={{ flex: "1 1 30%", minWidth: 150 }}>
-          <InputLabel id="difficulty-label">Schwierigkeit</InputLabel>
-          <Select
-            labelId="difficulty-label"
+        <Box sx={{ flex: "0 1 55%" }}>
+          <TextField
+            fullWidth
+            label={Blockly.Msg.searchQuery_placeholder || "Tutorials suchen"}
+            variant="outlined"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </Box>
+        <Box
+          sx={{
+            flex: "0 1 40%",
+            display: "flex",
+          }}
+        >
+          <ToggleButtonGroup
             value={difficulty}
-            label="Schwierigkeit"
-            onChange={(e) => setDifficulty(e.target.value)}
+            exclusive
+            onChange={(e, newValue) => setDifficulty(newValue)}
+            sx={{
+              justifyContent: "space-between",
+              gap: 1,
+
+              "& .MuiToggleButton-root.Mui-selected": {
+                backgroundColor: theme.palette.primary.main,
+                fontWeight: 800,
+                color: "#fff",
+                "&:hover": {
+                  backgroundColor: "darkgreen",
+                },
+              },
+              "& .MuiToggleButton-root:hover": {
+                backgroundColor: theme.palette.primary.main,
+                color: "#fff",
+                fontWeight: 800,
+              },
+            }}
           >
-            <MenuItem value="">Alle</MenuItem>
-            <MenuItem value={1}>Stufe 1 (Sehr leicht)</MenuItem>
-            <MenuItem value={2}>Stufe 2 (Leicht)</MenuItem>
-            <MenuItem value={3}>Stufe 3 (Mittel)</MenuItem>
-            <MenuItem value={4}>Stufe 4 (Schwer)</MenuItem>
-            <MenuItem value={5}>Stufe 5 (Sehr schwer)</MenuItem>
-          </Select>
-        </FormControl>
+            <ToggleButton value={1}>Sehr leicht</ToggleButton>
+            <ToggleButton value={2}>Leicht</ToggleButton>
+            <ToggleButton value={3}>Mittel</ToggleButton>
+            <ToggleButton value={4}>Schwer</ToggleButton>
+            <ToggleButton value={5}>Sehr schwer</ToggleButton>
+          </ToggleButtonGroup>
+        </Box>
       </Box>
 
       <h2>Alle Tutorials</h2>
