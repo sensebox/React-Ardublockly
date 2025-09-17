@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import {
@@ -14,11 +14,27 @@ import {
 } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
+import DifficultyLabel from "./DifficultyLabel";
 
-function TutorialItem({ tutorial }) {
+function getDifficultyLevel(value) {
+  if (value <= 1) return 1;
+  if (value <= 2) return 2;
+  if (value <= 3) return 3;
+  if (value <= 4) return 4;
+  return 5;
+}
+
+function TutorialItem({ tutorial, level }) {
   const theme = useTheme();
-
+  const labels = ["Sehr leicht", "Leicht", "Mittel", "Schwer", "Sehr schwer"];
   const getTutorialImage = (t) => t.imageUrl || "/placeholder-image.png";
+  const getDifficultyLabel = (value) => {
+    const idx = Math.max(
+      0,
+      Math.min(labels.length - 1, getDifficultyLevel(value) - 1),
+    );
+    return labels[idx].toLocaleUpperCase();
+  };
 
   return (
     <Grid item xs={12} sm={6} md={4} xl={3} key={tutorial._id}>
@@ -32,12 +48,11 @@ function TutorialItem({ tutorial }) {
           "&:hover": { boxShadow: 6 },
         }}
       >
-        <CardActionArea sx={{ textAlign: "left", flexGrow: 1 }}>
-          {/* Bildbereich */}
+        <CardActionArea sx={{ textAlign: "left", flexGrow: 1, p: 1 }}>
+          <DifficultyLabel level={getDifficultyLabel(level)} />
           <Box
             sx={{
               height: 160,
-              backgroundColor: "#f5f5f5",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -51,11 +66,12 @@ function TutorialItem({ tutorial }) {
                 maxHeight: "100%",
                 maxWidth: "100%",
                 objectFit: "contain",
-                padding: 15,
+                backgroundColor: "#f5f5f5",
+
+                padding: "40px",
               }}
             />
           </Box>
-
           {/* Titel & Beschreibung */}
           <CardContent
             sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}
