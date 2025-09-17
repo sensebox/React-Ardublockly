@@ -433,6 +433,19 @@ export const ToolboxEsp = () => {
         </Block>
       </Category>
 
+      {/* ============================== TEXT ============================== */}
+      <Category id="text" name="Text" colour={getColour().text}>
+        <Block type="text" />
+        <Block type="text_join" />
+        <Block type="text_append">
+          <Value name="TEXT">
+            <Block type="text" />
+          </Value>
+        </Block>
+        <Block type="text_length" />
+        <Block type="text_isEmpty" />
+      </Category>
+
       {/* ============================== LOGIC ============================== */}
       <Category name={Blockly.Msg.toolbox_logic} colour={getColour().logic}>
         <Block type="controls_if" />
@@ -476,19 +489,6 @@ export const ToolboxEsp = () => {
           </Value>
         </Block>
         <Block type="controls_flow_statements" />
-      </Category>
-
-      {/* ============================== TEXT ============================== */}
-      <Category id="text" name="Text" colour={getColour().text}>
-        <Block type="text" />
-        <Block type="text_join" />
-        <Block type="text_append">
-          <Value name="TEXT">
-            <Block type="text" />
-          </Value>
-        </Block>
-        <Block type="text_length" />
-        <Block type="text_isEmpty" />
       </Category>
 
       {/* ============================== TIME ============================== */}
