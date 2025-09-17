@@ -223,7 +223,7 @@ Blockly.Generator.Arduino.finish = function (code) {
 
   let loopCode = "\nvoid loop() { \n" + loopCodeOnce + code + "\n}\n";
   // only add OTA code if tablet mode is enabled
-  if (ota === true && board !== "esp32") {
+  if (ota === true && board !== "MCU-S2") {
     code =
       commentCode +
       "\n" +
