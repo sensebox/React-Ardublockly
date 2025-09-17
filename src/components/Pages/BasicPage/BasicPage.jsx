@@ -100,7 +100,7 @@ const BasicPage = () => {
       <Box sx={{ display: "flex", gap: 2, flex: 1, minHeight: 0 }}>
         {/* Linke Seite */}
         <Box sx={{ flex: " 0 0 70%", minHeight: 0, display: "flex" }}>
-          <BlocklyCard toolboxXml={toolboxDom} />
+          <BlocklyCard generatorName="Basic" toolboxXml={toolboxDom} />
         </Box>
 
         {/* Rechte Seite */}

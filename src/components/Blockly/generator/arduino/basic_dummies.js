@@ -34,3 +34,31 @@ Blockly.Generator.Arduino.forBlock["basic_off"] = function (
 ) {
   return ""; // nichts generieren
 };
+
+Blockly.Generator.Arduino.forBlock["time_delay_1s"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};
+
+Blockly.Generator.Arduino.forBlock["time_delay_2s"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};
+
+Blockly.Generator.Arduino.forBlock["time_delay_5s"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};
+
+Blockly.Generator.Arduino.forBlock["display_print_basic"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};

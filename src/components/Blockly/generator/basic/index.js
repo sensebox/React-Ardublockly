@@ -1,36 +1,6 @@
 // src/components/Blockly/generators/basic/index.js
+import "./generator";
 import * as Blockly from "blockly/core";
-
-// Neuen Generator registrieren
-Blockly.Generator.Basic = new Blockly.Generator("Basic");
-
-// Operator-Prioritäten (einfach gehalten)
-Blockly.Generator.Basic.ORDER_ATOMIC = 0; // Literale, Variablen
-Blockly.Generator.Basic.ORDER_RELATIONAL = 3;
-Blockly.Generator.Basic.ORDER_ADDITIVE = 5;
-Blockly.Generator.Basic.ORDER_MULTIPLICATIVE = 7;
-
-// Schlüsselwörter, die nicht als Variablennamen benutzt werden sollen
-Blockly.Generator.Basic.addReservedWords(
-  "PRINT,IF,THEN,ELSE,ENDIF,ELSEIF,FOR,TO,STEP,NEXT,WHILE,WEND,REPEAT,UNTIL,LET",
-);
-
-// Utils
-Blockly.Generator.Basic.INDENT = "  ";
-Blockly.Generator.Basic.scrub_ = function (block, code) {
-  // Kommentarzeilen anfügen, falls vorhanden
-  const comment = block.getCommentText();
-  if (comment) {
-    code = code + Blockly.Generator.Basic.prefixLines(comment, "REM ") + "\n";
-  }
-  return code;
-};
-
-// Statement-Join am Ende
-Blockly.Generator.Basic.finish = function (code) {
-  // Statements zu einem String zusammenfügen
-  return code.join ? code.join("") : code;
-};
 
 // ------- Expressions (return [code, order]) -------
 
@@ -193,6 +163,27 @@ Blockly.Generator.Basic.forBlock["basic_blue"] = function (block, generator) {
 };
 Blockly.Generator.Basic.forBlock["basic_off"] = function (block, generator) {
   return `led(0,0,0)`;
+};
+
+Blockly.Generator.Basic.forBlock["display_print_basic"] = function (
+  block,
+  generator,
+) {
+  const value =
+    generator.valueToCode(block, "inside", generator.ORDER_ATOMIC) || '""';
+  return `display(${value})`;
+};
+
+Blockly.Generator.Basic.forBlock["time_delay_1s"] = function () {
+  return "delay(1000)"; // nichts generieren
+};
+
+Blockly.Generator.Basic.forBlock["time_delay_2s"] = function () {
+  return "delay(2000)"; // nichts generieren
+};
+
+Blockly.Generator.Basic.forBlock["time_delay_5s"] = function () {
+  return "delay(5000)"; // nichts generieren
 };
 
 // Default-Fallback: Unsupported Block -> Kommentar

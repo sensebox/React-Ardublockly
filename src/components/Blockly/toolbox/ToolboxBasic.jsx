@@ -27,7 +27,8 @@ export const ToolboxBasic = () => {
         name="Display"
         colour={getColour().sensebox}
       >
-        <Block type="basic_display" />
+        <Block type="display_print_basic" />
+        <Block type="text" />
       </Category>
       <Category
         name="LED"
@@ -44,13 +45,9 @@ export const ToolboxBasic = () => {
         colour={getColour().logic}
         css-icon="customIcon fa fa-clock"
       >
-        <Block type="time_delay">
-          <Value name="DELAY_TIME_MILI">
-            <Block type="math_number">
-              <Field name="NUM">1000</Field>
-            </Block>
-          </Value>
-        </Block>
+        <Block type="time_delay_1s" />
+        <Block type="time_delay_2s" />
+        <Block type="time_delay_5s" />
       </Category>
     </>
   );

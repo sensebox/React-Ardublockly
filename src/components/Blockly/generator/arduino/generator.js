@@ -92,6 +92,7 @@ Blockly.Generator.Arduino.ORDER_NONE = 99; // (...)
  */
 Blockly.Generator.Arduino.init = function (workspace) {
   // Create a dictionary of definitions to be printed before the code.
+
   Blockly.Generator.Arduino.libraries_ = Object.create(null);
 
   Blockly.Generator.Arduino.definitions_ = Object.create(null);
@@ -369,6 +370,7 @@ Blockly.Generator.Arduino.quote_ = function (string) {
 
 Blockly.Generator.Arduino.scrub_ = function (block, code) {
   let commentCode = "";
+
   // Only collect comments for blocks that aren't inline.
   if (!block.outputConnection || !block.outputConnection.targetConnection) {
     // Collect comment for this block.

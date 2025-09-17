@@ -24,7 +24,7 @@ const BlocklyCard = ({
   onWorkspaceChanged,
   blocklyCSS,
   themeMode = "light",
-  generatorName = "javascript", // ⬅️ NEU
+  generatorName = "Basic", // ⬅️ NEU
 }) => {
   const containerRef = useRef(null);
   const dispatch = useDispatch();
@@ -82,6 +82,8 @@ const BlocklyCard = ({
     ws.addChangeListener(fire);
     ws.addChangeListener((event) => {
       dispatch(onChangeWorkspace(event));
+      const code = Blockly.Generator.Basic.workspaceToCode(ws);
+      console.log(code);
     });
     const ro = new ResizeObserver(() => Blockly.svgResize(ws));
     ro.observe(containerRef.current);
