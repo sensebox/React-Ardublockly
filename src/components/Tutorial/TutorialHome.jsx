@@ -97,8 +97,6 @@ function TutorialHome() {
             flex: "0 1 20%",
             display: "flex",
             alignItems: "center",
-            border: `1px solid #c4c4c4`,
-            borderRadius: 2,
             padding: "4px",
           }}
         >
