@@ -31,6 +31,7 @@ const theme = createTheme({
     },
     background: {
       white: "#ffffff",
+      grey: "#f9fafb",
     },
     button: {
       compile: "#e27136",
