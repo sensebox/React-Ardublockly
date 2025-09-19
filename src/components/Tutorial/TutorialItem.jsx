@@ -128,7 +128,7 @@ function TutorialItem({ tutorial, level }) {
               },
             }}
           >
-            Show
+            Anzeigen
           </Button>
         </Box>
       </Card>
