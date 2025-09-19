@@ -1,99 +1,90 @@
-import React, { Component } from "react";
+import { Book, Info } from "@mui/icons-material";
+import { Box, Typography, useTheme } from "@mui/material";
+import { useEffect } from "react";
+import HardwareCard from "./HardwareCard";
 
-import Hardware from "./Hardware";
-import Requirement from "./Requirement";
-import BlocklyWindow from "../Blockly/BlocklyWindow";
+const Instruction = ({ step }) => {
+  const theme = useTheme();
 
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import remarkGemoji from "remark-gemoji";
+  useEffect(() => {
+    console.log(step);
+  }, []);
+  return (
+    <Box>
+      <Box
+        sx={{
+          backgroundColor: theme.palette.background.grey,
+          borderRadius: "10px",
+          borderLeft: `5px solid ${theme.palette.primary.main}`,
+          p: 5,
+          m: 4,
+          gap: 2,
+          display: "flex",
+          boxShadow: 1,
 
-class Instruction extends Component {
-  render() {
-    var step = this.props.step;
-    var isHardware = step.hardware && step.hardware.length > 0;
-    var areRequirements = step.requirements && step.requirements.length > 0;
-    return (
-      <div>
-        <Typography style={isHardware ? {} : { marginBottom: "5px" }}>
-          <ReactMarkdown
-            className={"tutorial"}
-            linkTarget={"_blank"}
-            skipHtml={false}
-            allowDangerousHtml={true}
-            remarkPlugins={[remarkGfm, remarkGemoji]}
-          >
-            {step.text}
-          </ReactMarkdown>
+          flexDirection: "column",
+        }}
+      >
+        <Typography
+          sx={{
+            fontWeight: "bold",
+            alignItems: "center",
+            display: "flex",
+          }}
+        >
+          <Book sx={{ color: theme.palette.primary.main }} />
+          Was lernst du in dieser Challenge?
         </Typography>
-        {isHardware ? <Hardware picture={step.hardware} /> : null}
-        {areRequirements > 0 ? (
-          <Requirement requirements={step.requirements} />
-        ) : null}
-        {step.media ? (
-          step.media.picture ? (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                marginBottom: "5px",
-              }}
-            >
-              <img
-                src={`${import.meta.env.VITE_BLOCKLY_API}/media/${step.media.picture.path}`}
-                alt=""
-                style={{ maxHeight: "40vH", maxWidth: "100%" }}
-              />
-            </div>
-          ) : step.media.youtube ? (
-            /*16:9; width: 800px; height: width/16*9=450px*/
-            <div style={{ maxWidth: "800px", margin: "auto" }}>
-              <div
-                style={{
-                  position: "relative",
-                  height: 0,
-                  paddingBottom: "calc(100% / 16 * 9)",
-                }}
-              >
-                <iframe
-                  title={step.media.youtube}
-                  style={{
-                    position: "absolute",
-                    top: "0",
-                    left: "0",
-                    width: "100%",
-                    maxWidth: "800px",
-                    height: "100%",
-                    maxHeight: "450px",
-                  }}
-                  src={`https://www.youtube.com/embed/${step.media.youtube}`}
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
-            </div>
-          ) : null
-        ) : null}
-        {step.xml ? (
-          <Grid container spacing={2} style={{ marginBottom: "5px" }}>
-            <Grid
-              item
-              xs={12}
-              style={{
+        <Typography>{step.text}</Typography>
+      </Box>
+      <Box
+        sx={{
+          backgroundColor: theme.palette.background.grey,
+          borderRadius: "10px",
+          borderLeft: `5px solid ${theme.palette.primary.main}`,
+          p: 5,
+          m: 4,
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+          boxShadow: 1,
+        }}
+      >
+        <Typography
+          sx={{
+            fontWeight: "bold",
+          }}
+        >
+          <Info sx={{ color: theme.palette.primary.main }} />
+          Benötigte Hardware
+        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 2,
+            justifyContent: "flex-start",
+          }}
+        >
+          {step.hardware.map((sensor, idx) => (
+            <Box
+              key={sensor.id || idx}
+              sx={{
+                flex: "1 0 30%",
+                maxWidth: "32%",
+                minWidth: "180px",
+                boxSizing: "border-box",
                 display: "flex",
                 justifyContent: "center",
               }}
             >
-              <BlocklyWindow svg blockDisabled initialXml={step.xml} />
-            </Grid>
-          </Grid>
-        ) : null}
-      </div>
-    );
-  }
-}
+              <HardwareCard component={sensor} />
+            </Box>
+          ))}
+        </Box>
+      </Box>
+    </Box>
+  );
+};
 
 export default Instruction;
