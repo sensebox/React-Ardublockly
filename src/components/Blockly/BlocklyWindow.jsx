@@ -4,7 +4,9 @@ import PropTypes from "prop-types";
 
 import * as Blockly from "blockly/core";
 import "./blocks/index";
-import "@/components/Blockly/generator/index";
+import "@/components/Blockly/generator/basic/index";
+import "@/components/Blockly/generator/arduino/index";
+import "@/components/Blockly/generator/basic/index";
 
 import { onChangeWorkspace, clearStats } from "../../actions/workspaceActions";
 import { ZoomToFitControl } from "@blockly/zoom-to-fit";
