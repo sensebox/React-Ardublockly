@@ -325,6 +325,8 @@ export const ToolboxMcu = () => {
       </Category>
       <Category name="openSenseMap" colour={getColour().sensebox}>
         <Block type="sensebox_interval_timer">
+          <Field name="name">osem_interval</Field>
+          <Field name="interval">60000</Field>
           <Value name="DO">
             <Block type="sensebox_osem_connection" />
           </Value>
