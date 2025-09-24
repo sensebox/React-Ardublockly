@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import {
   Box,
@@ -10,15 +10,42 @@ import {
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { useDispatch, useSelector } from "react-redux";
 
-const TutorialFooter = ({
-  activeStep,
-  tutorialSteps,
-  setCurrentStep,
-  hardwareComponents,
-}) => {
+const TutorialFooter = ({}) => {
   const theme = useTheme();
-  const progress = (activeStep / tutorialSteps.length) * 100;
+  const dispatch = useDispatch();
+  const activeStep = useSelector((state) => state.tutorial.activeStep);
+  const tutorial = useSelector((state) => state.tutorial.tutorials[0]);
+
+  const progress = (activeStep / tutorial.steps.length) * 100;
+
+  const changeStep = (step) => {
+    dispatch({
+      type: "TUTORIAL_STEP",
+      payload: step,
+    });
+  };
+
+  const nextStep = () => {
+    if (activeStep < tutorial.steps.length - 1) {
+      changeStep(activeStep + 1);
+    }
+  };
+
+  const previousStep = () => {
+    if (activeStep > 0) {
+      changeStep(activeStep - 1);
+    }
+  };
+
+  const setCurrentStep = (stepId) => {
+    changeStep(stepId);
+  };
+
+  useEffect(() => {
+    console.log("tutorial in footer", tutorial);
+  }, []);
 
   return (
     <Box
@@ -45,7 +72,7 @@ const TutorialFooter = ({
               Tutorial Fortschritt
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Schritt {activeStep} von {tutorialSteps.length}
+              Schritt {activeStep} von {tutorial.steps.length - 1}
             </Typography>
           </Box>
 
@@ -58,9 +85,9 @@ const TutorialFooter = ({
 
             {/* Step Indicators */}
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              {tutorialSteps.map((step, index) => {
-                const isCurrent = step.id === activeStep;
-                const isCompleted = step.completed;
+              {tutorial.steps.map((step, index) => {
+                const isCurrent = index === activeStep;
+                const isCompleted = index < activeStep;
 
                 return (
                   <Box
@@ -78,7 +105,7 @@ const TutorialFooter = ({
                           ? theme.palette.success.main
                           : theme.palette.text.secondary,
                     }}
-                    onClick={() => setCurrentStep(step.id)}
+                    onClick={() => changeStep(index)}
                   >
                     <Box
                       sx={{
@@ -144,7 +171,7 @@ const TutorialFooter = ({
             variant="outlined"
             disabled={activeStep === 0}
             startIcon={<ChevronLeftIcon />}
-            onClick={() => setactiveStep(Math.max(activeStep - 1, 1))}
+            onClick={() => previousStep()}
           >
             Zurück
           </Button>
@@ -152,9 +179,7 @@ const TutorialFooter = ({
           <Button
             variant="contained"
             endIcon={<ChevronRightIcon />}
-            onClick={() =>
-              setactiveStep(Math.min(activeStep + 1, tutorialSteps.length))
-            }
+            onClick={() => nextStep()}
           >
             Weiter
           </Button>
@@ -162,13 +187,6 @@ const TutorialFooter = ({
       </Box>
     </Box>
   );
-};
-
-TutorialFooter.propTypes = {
-  activeStep: PropTypes.number.isRequired,
-  tutorialSteps: PropTypes.array.isRequired,
-  setactiveStep: PropTypes.func.isRequired,
-  hardwareComponents: PropTypes.array.isRequired,
 };
 
 export default TutorialFooter;

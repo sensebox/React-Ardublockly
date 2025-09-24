@@ -6,9 +6,6 @@ import HardwareCard from "./HardwareCard";
 const Instruction = ({ step }) => {
   const theme = useTheme();
 
-  useEffect(() => {
-    console.log(step);
-  }, []);
   return (
     <Box>
       <Box
