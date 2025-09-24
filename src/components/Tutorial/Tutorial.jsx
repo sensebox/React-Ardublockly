@@ -26,34 +26,32 @@ import { Card, Button, Box, Stepper, useTheme } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import TutorialFooter from "./TutorialFooter";
 import { set } from "date-fns";
+import TaskStep from "./TaskStep";
 
 export default function Tutorial() {
   const { tutorialId } = useParams();
   const dispatch = useDispatch();
   const theme = useTheme();
 
-  const change = useSelector((state) => state.tutorial.change);
-  const status = useSelector((state) => state.tutorial.status);
-  const activeStep = useSelector((state) => state.tutorial.activeStep);
   const tutorial = useSelector((state) => state.tutorial.tutorials[0]);
-  const isLoading = useSelector((state) => state.tutorial.progress);
   const message = useSelector((state) => state.message);
   const progress = useSelector((state) => state.auth.progress);
-
+  const activeStep = useSelector((state) => state.tutorial.activeStep);
   const [currentStep, setCurrentStep] = useState();
   // initial load
   useEffect(() => {
     dispatch(getTutorial(tutorialId));
+    dispatch({
+      type: "TUTORIAL_STEP",
+      payload: 0, // oder welcher Schritt aktiv sein soll
+    });
+    console.log(activeStep);
   }, []);
 
   useEffect(() => {
     tutorial?.steps && setCurrentStep(tutorial.steps[activeStep]);
-    console.log(tutorial);
-
-    console.log(currentStep);
+    console.log("Current Step set to:", activeStep);
   }, [activeStep, tutorial]);
-
-  if (isLoading) return null;
 
   if (!tutorial) {
     if (message.id === "GET_TUTORIAL_FAIL") {
@@ -86,9 +84,9 @@ export default function Tutorial() {
           mx: "15vw",
         }}
       >
-        {activeStep === 0 && <Instruction step={currentStep} />}
+        {activeStep === 0 && <Instruction step={tutorial.steps[activeStep]} />}
+        {activeStep > 0 && <TaskStep step={tutorial.steps[activeStep]} />}
         <TutorialFooter
-          activeStep={activeStep}
           tutorialSteps={tutorial.steps}
           setCurrentStep={(currentStep) => dispatch(tutorialStep(currentStep))}
           progress={progress}
