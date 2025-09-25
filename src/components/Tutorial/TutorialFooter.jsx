@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import PropTypes from "prop-types";
 import {
   Box,
   Button,
@@ -12,13 +11,19 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useDispatch, useSelector } from "react-redux";
 
-const TutorialFooter = ({}) => {
+const TutorialFooter = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const activeStep = useSelector((state) => state.tutorial.activeStep);
   const tutorial = useSelector((state) => state.tutorial.tutorials[0]);
 
-  const progress = (activeStep / tutorial.steps.length) * 100;
+  // add one extra step for "Fertig"
+  const allSteps = [
+    ...tutorial.steps,
+    { id: "finished", title: "Fertig", isCompletion: true },
+  ];
+
+  const progress = ((activeStep + 1) / allSteps.length) * 100;
 
   const changeStep = (step) => {
     dispatch({
@@ -28,7 +33,7 @@ const TutorialFooter = ({}) => {
   };
 
   const nextStep = () => {
-    if (activeStep < tutorial.steps.length - 1) {
+    if (activeStep < allSteps.length - 1) {
       changeStep(activeStep + 1);
     }
   };
@@ -39,13 +44,9 @@ const TutorialFooter = ({}) => {
     }
   };
 
-  const setCurrentStep = (stepId) => {
-    changeStep(stepId);
-  };
-
   useEffect(() => {
     console.log("tutorial in footer", tutorial);
-  }, []);
+  }, [tutorial]);
 
   return (
     <Box
@@ -54,12 +55,15 @@ const TutorialFooter = ({}) => {
         borderTop: `1px solid ${theme.palette.divider}`,
         bgcolor: theme.palette.background.paper,
         backdropFilter: "blur(4px)",
-        mt: 4,
-        py: 3,
+        py: 1,
+        position: "sticky",
+        bottom: 0,
+        backgroundColor: "white",
+        zIndex: 1,
       }}
     >
       <Box sx={{ maxWidth: "960px", mx: "auto", px: 2 }}>
-        {/* Progress Bar mit Steps */}
+        {/* Progress Bar */}
         <Box sx={{ mb: 3 }}>
           <Box
             sx={{
@@ -72,7 +76,7 @@ const TutorialFooter = ({}) => {
               Tutorial Fortschritt
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Schritt {activeStep} von {tutorial.steps.length - 1}
+              Schritt {activeStep + 1} von {allSteps.length}
             </Typography>
           </Box>
 
@@ -85,13 +89,13 @@ const TutorialFooter = ({}) => {
 
             {/* Step Indicators */}
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              {tutorial.steps.map((step, index) => {
+              {allSteps.map((step, index) => {
                 const isCurrent = index === activeStep;
                 const isCompleted = index < activeStep;
 
                 return (
                   <Box
-                    key={step.id}
+                    key={step.id || index}
                     sx={{
                       display: "flex",
                       flexDirection: "column",
@@ -109,8 +113,8 @@ const TutorialFooter = ({}) => {
                   >
                     <Box
                       sx={{
-                        width: 32,
-                        height: 32,
+                        width: 24,
+                        height: 24,
                         borderRadius: "50%",
                         border: "2px solid",
                         display: "flex",
@@ -138,8 +142,10 @@ const TutorialFooter = ({}) => {
                     >
                       {isCompleted ? (
                         <CheckCircleIcon sx={{ fontSize: 16 }} />
+                      ) : step.isCompletion ? (
+                        "✓"
                       ) : (
-                        step.id
+                        index + 1
                       )}
                     </Box>
                     <Typography
@@ -157,12 +163,11 @@ const TutorialFooter = ({}) => {
           </Box>
         </Box>
 
-        {/* Navigation Buttons */}
+        {/* Navigation */}
         <Box
           sx={{
             display: "flex",
             justifyContent: "space-between",
-            alignItems: "center",
             maxWidth: "960px",
             mx: "auto",
           }}
@@ -171,15 +176,16 @@ const TutorialFooter = ({}) => {
             variant="outlined"
             disabled={activeStep === 0}
             startIcon={<ChevronLeftIcon />}
-            onClick={() => previousStep()}
+            onClick={previousStep}
           >
             Zurück
           </Button>
 
           <Button
             variant="contained"
+            disabled={activeStep === allSteps.length - 1}
             endIcon={<ChevronRightIcon />}
-            onClick={() => nextStep()}
+            onClick={nextStep}
           >
             Weiter
           </Button>
