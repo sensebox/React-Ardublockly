@@ -74,6 +74,7 @@ class StepperVertical extends Component {
         <Stepper
           activeStep={activeStep}
           orientation="vertical"
+          alternativeLabel
           connector={<div className={this.props.classes.connector}></div>}
           classes={{ root: this.props.classes.verticalStepper }}
         >
@@ -91,57 +92,52 @@ class StepperVertical extends Component {
                   : "Other";
             return (
               <Step key={i}>
-                <Tooltip title={step.headline} placement="right" arrow>
+                <Tooltip
+                  title={
+                    step.title || (i === 0 ? "Einleitung" : `Schritt ${i}`)
+                  }
+                  placement="right"
+                  arrow
+                >
                   <div
                     style={
                       i === activeStep
                         ? { padding: "5px 0" }
-                        : {
-                            padding: "5px 0",
-                            cursor: "pointer",
-                          }
+                        : { padding: "5px 0", cursor: "pointer" }
                     }
                     onClick={
-                      i === activeStep
-                        ? null
-                        : () => {
-                            this.props.tutorialStep(i);
-                          }
+                      i === activeStep ? null : () => this.props.tutorialStep(i)
                     }
-                  >
-                    <StepLabel
-                      StepIconComponent={"div"}
-                      classes={{
-                        root:
-                          step.type === "task"
-                            ? i === activeStep
-                              ? clsx(
-                                  this.props.classes.stepIcon,
-                                  this.props.classes.stepIconLarge,
-                                  this.props.classes[
-                                    "stepIconLarge" + taskStatus
-                                  ],
-                                  this.props.classes[
-                                    "stepIconActive" + taskStatus
-                                  ],
-                                )
-                              : clsx(
-                                  this.props.classes.stepIcon,
-                                  this.props.classes.stepIconLarge,
-                                  this.props.classes[
-                                    "stepIconLarge" + taskStatus
-                                  ],
-                                )
-                            : i === activeStep
-                              ? clsx(
-                                  this.props.classes.stepIcon,
-                                  this.props.classes.stepIconActiveOther,
-                                )
-                              : clsx(this.props.classes.stepIcon),
-                      }}
-                    ></StepLabel>
-                  </div>
+                  ></div>
                 </Tooltip>
+                <StepLabel
+                  StepIconComponent="div"
+                  classes={{
+                    root:
+                      step.type === "task"
+                        ? i === activeStep
+                          ? clsx(
+                              this.props.classes.stepIcon,
+                              this.props.classes.stepIconLarge,
+                              this.props.classes["stepIconLarge" + taskStatus],
+                              this.props.classes["stepIconActive" + taskStatus],
+                            )
+                          : clsx(
+                              this.props.classes.stepIcon,
+                              this.props.classes.stepIconLarge,
+                              this.props.classes["stepIconLarge" + taskStatus],
+                            )
+                        : i === activeStep
+                          ? clsx(
+                              this.props.classes.stepIcon,
+                              this.props.classes.stepIconActiveOther,
+                            )
+                          : clsx(this.props.classes.stepIcon),
+                  }}
+                >
+                  {/* 👉 Text-Inhalt */}
+                  {step.title || (i === 0 ? "Einleitung" : `Schritt ${i}`)}
+                </StepLabel>
               </Step>
             );
           })}
