@@ -21,7 +21,7 @@ const TutorialFinished = ({ currentStepData }) => {
       <Confetti
         width={window.innerWidth}
         height={window.innerHeight}
-        numberOfPieces={200}
+        numberOfPieces={500}
         recycle={false} // nur einmal abfeuern
       />
 
