@@ -1,32 +1,19 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
-import {
-  getTutorial,
-  resetTutorial,
-  tutorialStep,
-  tutorialProgress,
-} from "../../actions/tutorialActions";
-import { workspaceName } from "../../actions/workspaceActions";
-import { clearMessages } from "../../actions/messageActions";
+import { getTutorial, tutorialStep } from "../../actions/tutorialActions";
 
-import Breadcrumbs from "../ui/Breadcrumbs";
-import StepperHorizontal from "./StepperHorizontal";
-import StepperVertical from "./StepperVertical";
-import Instruction from "./Instruction";
-import Assessment from "./Assessment";
 import NotFound from "../Pages/NotFound";
+import Instruction from "./Instruction";
+import TaskStep from "./TaskStep";
+import TutorialProgressCard from "./TutorialProgessCard";
+import TutorialFooter from "./TutorialFooter";
+import TutorialFinished from "./TutorialFinished"; // 👉 neu importieren
 
 import * as Blockly from "blockly";
-import { detectWhitespacesAndReturnReadableResult } from "../../helpers/whitespace";
-
-import { Card, Button, Box, Stepper, useTheme } from "@mui/material";
-import { ChevronLeft, ChevronRight } from "@mui/icons-material";
-import TutorialFooter from "./TutorialFooter";
-import { set } from "date-fns";
-import TaskStep from "./TaskStep";
+import { Box, useTheme } from "@mui/material";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Tutorial() {
   const { tutorialId } = useParams();
@@ -35,22 +22,24 @@ export default function Tutorial() {
 
   const tutorial = useSelector((state) => state.tutorial.tutorials[0]);
   const message = useSelector((state) => state.message);
-  const progress = useSelector((state) => state.auth.progress);
   const activeStep = useSelector((state) => state.tutorial.activeStep);
   const [currentStep, setCurrentStep] = useState();
+
   // initial load
   useEffect(() => {
     dispatch(getTutorial(tutorialId));
     dispatch({
       type: "TUTORIAL_STEP",
-      payload: 0, // oder welcher Schritt aktiv sein soll
+      payload: 0,
     });
-    console.log(activeStep);
-  }, []);
+  }, [dispatch, tutorialId]);
 
   useEffect(() => {
-    tutorial?.steps && setCurrentStep(tutorial.steps[activeStep]);
-    console.log("Current Step set to:", activeStep);
+    if (tutorial?.steps && activeStep < tutorial.steps.length) {
+      setCurrentStep(tutorial.steps[activeStep]);
+    } else {
+      setCurrentStep(null);
+    }
   }, [activeStep, tutorial]);
 
   if (!tutorial) {
@@ -67,42 +56,60 @@ export default function Tutorial() {
     return null;
   }
 
-  return (
-    <Box>
-      <Breadcrumbs
-        content={[
-          { link: "/tutorial", title: "Tutorial" },
-          { link: `/tutorial/${tutorial._id}`, title: tutorial.title },
-        ]}
-      />
+  // Animation Varianten
+  const variants = {
+    initial: { opacity: 0, x: 100 },
+    animate: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: -100 },
+  };
 
+  const isFinished = activeStep >= tutorial.steps.length;
+
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignContent: "flex-start",
+      }}
+    >
       <Box
         sx={{
           display: "flex",
-          flexDirection: "column",
-          minHeight: "80vh",
-          mx: "15vw",
+          flexDirection: "row",
+          width: "100%",
+          p: 2,
+          justifyContent: "center",
         }}
       >
-        {activeStep === 0 && <Instruction step={tutorial.steps[activeStep]} />}
-        {activeStep > 0 && <TaskStep step={tutorial.steps[activeStep]} />}
-        <TutorialFooter
-          tutorialSteps={tutorial.steps}
-          setCurrentStep={(currentStep) => dispatch(tutorialStep(currentStep))}
-          progress={progress}
-        />
+        {/* ProgressCard links - 20% */}
+        <Box sx={{ flex: "0 0 20%" }}>
+          <TutorialProgressCard />
+        </Box>
+
+        {/* Animierter Bereich rechts - 75% */}
+        <Box
+          sx={{
+            flex: "0 0 75%",
+            position: "relative",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <AnimatePresence mode="wait">
+            {isFinished ? (
+              <TutorialFinished key="finished" />
+            ) : activeStep === 0 ? (
+              <Instruction step={tutorial.steps[activeStep]} key={activeStep} />
+            ) : (
+              <TaskStep step={tutorial.steps[activeStep]} key={activeStep} />
+            )}
+          </AnimatePresence>
+        </Box>
       </Box>
+
+      <TutorialFooter />
     </Box>
   );
 }
-
-Tutorial.propTypes = {
-  // Nur noch Doku für Props aus Redux/Router nötig
-  change: PropTypes.number,
-  status: PropTypes.array,
-  activeStep: PropTypes.number,
-  tutorial: PropTypes.object,
-  isLoading: PropTypes.bool,
-  message: PropTypes.object,
-  progress: PropTypes.bool,
-};
