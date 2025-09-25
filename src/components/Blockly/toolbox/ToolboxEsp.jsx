@@ -70,14 +70,14 @@ export const ToolboxEsp = () => {
       <Category name="SD" colour={getColour().sensebox}>
         <Block type="sensebox_esp32s2_sd_create_file">
           <Value name="FILENAME">
-            <Block type="text">
+            <Block type="text8">
               <Field name="TEXT">Data</Field>
             </Block>
           </Value>
         </Block>
         <Block type="sensebox_esp32s2_sd_open_file">
           <Value name="FILENAME">
-            <Block type="text">
+            <Block type="text8">
               <Field name="TEXT">Data</Field>
             </Block>
           </Value>
@@ -88,7 +88,7 @@ export const ToolboxEsp = () => {
         <Block type="sensebox_esp32s2_sd_write_file" />
         <Block type="sensebox_esp32s2_sd_open_file">
           <Value name="FILENAME">
-            <Block type="text">
+            <Block type="text8">
               <Field name="TEXT">Data</Field>
             </Block>
           </Value>
@@ -104,7 +104,7 @@ export const ToolboxEsp = () => {
         <Block type="sensebox_sd_save_for_osem" />
         <Block type="sensebox_sd_exists">
           <Value name="FILENAME">
-            <Block type="text">
+            <Block type="text8">
               <Field name="TEXT">Dateiname</Field>
             </Block>
           </Value>
