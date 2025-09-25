@@ -103,3 +103,10 @@ Blockly.Generator.Arduino.forBlock["text_length"] = function (
   var code = "String(" + argument0 + ").length()";
   return [code, Blockly.Generator.Arduino.ORDER_UNARY_POSTFIX];
 };
+
+Blockly.Generator.Arduino.forBlock["text8"] = function (block, generator) {
+  var code = Blockly.Generator.Arduino.quote_(block.getFieldValue("TEXT"));
+  code = code.substring(0, 8); // Sicherheit: max. 8 Zeichen
+
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
+};

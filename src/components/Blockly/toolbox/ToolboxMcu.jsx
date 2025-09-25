@@ -71,14 +71,14 @@ export const ToolboxMcu = () => {
       <Category name="SD" colour={getColour().sensebox}>
         <Block type="sensebox_sd_create_file">
           <Value name="FILENAME">
-            <Block type="text">
+            <Block type="text8">
               <Field name="TEXT">Data</Field>
             </Block>
           </Value>
         </Block>
         <Block type="sensebox_sd_open_file">
           <Value name="FILENAME">
-            <Block type="text">
+            <Block type="text8">
               <Field name="TEXT">Data</Field>
             </Block>
           </Value>
@@ -89,12 +89,12 @@ export const ToolboxMcu = () => {
         <Block type="sensebox_sd_write_file" />
         <Block type="sensebox_sd_open_file">
           <Value name="FILENAME">
-            <Block type="text">
+            <Block type="text8">
               <Field name="TEXT">Data</Field>
             </Block>
           </Value>
           <Value name="FILENAME">
-            <Block type="text">
+            <Block type="text8">
               <Field name="TEXT">Data</Field>
             </Block>
           </Value>
@@ -110,7 +110,7 @@ export const ToolboxMcu = () => {
         <Block type="sensebox_sd_save_for_osem" />
         <Block type="sensebox_sd_exists">
           <Value name="FILENAME">
-            <Block type="text">
+            <Block type="text8">
               <Field name="TEXT">Data</Field>
             </Block>
           </Value>
