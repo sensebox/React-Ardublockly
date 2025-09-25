@@ -14,6 +14,7 @@ import TutorialFinished from "./TutorialFinished"; // 👉 neu importieren
 import * as Blockly from "blockly";
 import { Box, useTheme } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
+import Breadcrumbs from "../ui/Breadcrumbs";
 
 export default function Tutorial() {
   const { tutorialId } = useParams();
@@ -73,6 +74,16 @@ export default function Tutorial() {
         alignContent: "flex-start",
       }}
     >
+      <Breadcrumbs
+        content={[
+          { link: "/tutorial", title: "Tutorials" },
+          {
+            link: `/tutorial/${tutorialId}`,
+            title: tutorial?.title || "Aktuelles Tutorial",
+          },
+        ]}
+      />
+
       <Box
         sx={{
           display: "flex",

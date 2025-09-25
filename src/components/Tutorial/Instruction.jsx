@@ -21,6 +21,7 @@ const Instruction = ({ step }) => {
           flexWrap: "wrap",
           justifyContent: "space-around",
           mt: 2,
+          width: "100%",
         }}
       >
         {step.hardware.map((sensor, idx) => (
@@ -32,6 +33,7 @@ const Instruction = ({ step }) => {
               minWidth: "80px",
               boxSizing: "border-box",
               display: "flex",
+              justifyContent: "center",
             }}
           >
             <HardwareCard component={sensor} />
