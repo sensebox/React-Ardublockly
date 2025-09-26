@@ -90,6 +90,7 @@ export default function Tutorial() {
           flexDirection: "row",
           width: "100%",
           p: 2,
+          gap: 4,
           justifyContent: "center",
         }}
       >
@@ -101,7 +102,7 @@ export default function Tutorial() {
         {/* Animierter Bereich rechts - 75% */}
         <Box
           sx={{
-            flex: "0 0 75%",
+            flex: "0 0 60%",
             position: "relative",
             display: "flex",
             justifyContent: "center",

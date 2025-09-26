@@ -7,7 +7,7 @@ const variants = {
   exit: { opacity: 0, x: -100 },
 };
 
-const TutorialSlide = ({ children, title, stepNumber }) => {
+const BuildSlide = ({ children, title, stepNumber }) => {
   return (
     <motion.div
       variants={variants}
@@ -51,4 +51,4 @@ const TutorialSlide = ({ children, title, stepNumber }) => {
   );
 };
 
-export default TutorialSlide;
+export default BuildSlide;
