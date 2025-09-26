@@ -47,7 +47,7 @@ const TutorialProgressCard = () => {
       <CardHeader
         title={
           <Typography variant="h6" fontWeight={600}>
-            Tutorial Fortschritt
+            {tutorial.title || "Tutorial Titel"}
           </Typography>
         }
         subheader={
