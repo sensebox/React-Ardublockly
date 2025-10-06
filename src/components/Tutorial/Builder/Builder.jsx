@@ -1,164 +1,57 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  checkError,
-  readJSON,
-  jsonString,
-  progress,
-  tutorialId,
-  resetTutorial as resetTutorialBuilder,
-} from "../../../actions/tutorialBuilderActions";
-import {
-  getAllTutorials,
-  getUserTutorials,
-  resetTutorial,
-  deleteTutorial,
-  tutorialProgress,
-} from "../../../actions/tutorialActions";
-import { clearMessages } from "../../../actions/messageActions";
-
-import axios from "axios";
-import { useHistory } from "react-router-dom";
-
-import { useTheme, Box } from "@mui/material";
 import TutorialBuilderProgressCard from "./TutorialBuilderProgessCard";
 import BuildSlide from "./BuildSlide";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import { Box, Button, Typography } from "@mui/material";
+import { Info, Save } from "@mui/icons-material";
+import { motion, AnimatePresence } from "framer-motion";
+import "@uiw/react-md-editor/markdown-editor.css";
+import "@uiw/react-markdown-preview/markdown.css";
 
+import MDEditor from "@uiw/react-md-editor";
+import HardwareCard from "../HardwareCard";
+import { useTheme } from "@mui/styles";
 const Builder = () => {
-  const dispatch = useDispatch();
-  const history = useHistory();
+  // 🔥 States für das gesamte Tutorial
   const theme = useTheme();
+  const [title, setTitle] = useState("Tutorial Titel");
+  const [subtitle, setSubtitle] = useState("Kurze Beschreibung");
+  const [steps, setSteps] = useState([
+    { id: "intro", title: "Einleitung", subtitle: "Starte hier!" },
+    {
+      id: "finish",
+      title: "Abschluss",
+      subtitle: "Übersicht & Zusammenfassung",
+    },
+  ]);
+  const [difficulty, setDifficulty] = useState(3);
+  const [selectedHardware, setSelectedHardware] = useState([]);
+  const [isPublic, setIsPublic] = useState(true);
+  const [review, setReview] = useState(false);
+  const [creator, setCreator] = useState("mario.pesch@uni-muenster.de");
+  const [activeStep, setActiveStep] = useState(0);
+  const variants = {
+    initial: { opacity: 0, x: 100 },
+    animate: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: -100 },
+  };
 
-  // Redux state
-  const {
-    title,
-    difficulty,
-    review,
+  // ✅ JSON Object Builder
+  const buildTutorialJSON = () => ({
     public: isPublic,
-    id,
-    steps,
-    progress: isProgress,
-    tutorials,
-    message,
-  } = useSelector((state) => ({
-    title: state.builder.title,
-    difficulty: state.builder.difficulty,
-    review: state.builder.review,
-    public: state.builder.public,
-    id: state.builder.id,
-    steps: state.builder.steps,
-    error: state.builder.error,
-    json: state.builder.json,
-    progress: state.builder.progress,
-    tutorials: state.tutorial.tutorials,
-    message: state.message,
-  }));
-
-  // Local state
-  const [dialog, setDialog] = useState({
-    open: false,
-    string: false,
-    title: "",
-    content: "",
+    review: review,
+    creator: creator,
+    title: title,
+    difficulty: difficulty,
+    steps: steps.map((s) => ({
+      id: s.id,
+      headline: s.title,
+      text: s.subtitle,
+      hardware: selectedHardware,
+      type: "instruction",
+    })),
   });
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    key: "",
-    message: "",
-    type: "",
-  });
-
-  useEffect(() => {
-    return () => {
-      resetFull();
-      dispatch(resetTutorial());
-      if (message.msg) dispatch(clearMessages());
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const resetFull = () => {
-    dispatch(resetTutorialBuilder());
-    setSnackbar({
-      open: true,
-      key: Date.now(),
-      message: "Das Tutorial wurde erfolgreich zurückgesetzt.",
-      type: "success",
-    });
-    window.scrollTo(0, 0);
-  };
-
-  const submit = () => {
-    if (dispatch(checkError())) {
-      setSnackbar({
-        open: true,
-        key: Date.now(),
-        message: "Die Angaben sind nicht vollständig.",
-        type: "error",
-      });
-      window.scrollTo(0, 0);
-      return null;
-    }
-    const newTutorial = new FormData();
-    newTutorial.append("title", title);
-    newTutorial.append("difficulty", difficulty);
-    newTutorial.append("public", isPublic);
-    newTutorial.append("review", review);
-    steps.forEach((step, i) => {
-      if (step._id) newTutorial.append(`steps[${i}][_id]`, step._id);
-      newTutorial.append(`steps[${i}][type]`, step.type);
-      newTutorial.append(`steps[${i}][headline]`, step.headline);
-      newTutorial.append(`steps[${i}][text]`, step.text);
-      if (i === 0 && step.type === "instruction") {
-        step.requirements?.forEach((req, j) =>
-          newTutorial.append(`steps[${i}][requirements][${j}]`, req),
-        );
-        step.hardware?.forEach((hw, j) =>
-          newTutorial.append(`steps[${i}][hardware][${j}]`, hw),
-        );
-      }
-      if (step.xml) newTutorial.append(`steps[${i}][xml]`, step.xml);
-    });
-    return newTutorial;
-  };
-
-  const submitNew = () => {
-    const form = submit();
-    if (!form) return;
-    axios
-      .post(`${import.meta.env.VITE_BLOCKLY_API}/tutorial/`, form)
-      .then((res) => {
-        history.push(`/tutorial/${res.data.tutorial._id}`);
-      })
-      .catch(() =>
-        setSnackbar({
-          open: true,
-          key: Date.now(),
-          message: "Fehler beim Erstellen.",
-          type: "error",
-        }),
-      );
-  };
-
-  const submitUpdate = () => {
-    const form = submit();
-    if (!form) return;
-    axios
-      .put(`${import.meta.env.VITE_BLOCKLY_API}/tutorial/${id}`, form)
-      .then((res) => {
-        history.push(`/tutorial/${res.data.tutorial._id}`);
-      })
-      .catch(() =>
-        setSnackbar({
-          open: true,
-          key: Date.now(),
-          message: "Fehler beim Ändern.",
-          type: "error",
-        }),
-      );
-  };
 
   return (
     <Box>
@@ -179,11 +72,40 @@ const Builder = () => {
         }}
       >
         {/* ProgressCard links - 20% */}
-        <Box sx={{ flex: "0 0 20%" }}>
-          <TutorialBuilderProgressCard />
+        <Box
+          sx={{
+            flex: "0 0 20%",
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+          }}
+        >
+          <TutorialBuilderProgressCard
+            title={title}
+            setTitle={setTitle}
+            subtitle={subtitle}
+            setSubtitle={setSubtitle}
+            steps={steps}
+            setSteps={setSteps}
+            difficulty={difficulty}
+            setDifficulty={setDifficulty}
+            selectedHardware={selectedHardware}
+            setSelectedHardware={setSelectedHardware}
+            activeStep={activeStep}
+            setActiveStep={setActiveStep}
+          />
+          <Button
+            variant="contained"
+            startIcon={<Save />}
+            onClick={() => {
+              console.log(buildTutorialJSON());
+            }}
+          >
+            Tutorial speichern
+          </Button>
         </Box>
 
-        {/* Animierter Bereich rechts - 75% */}
+        {/* Vorschau-Bereich rechts */}
         <Box
           sx={{
             flex: "0 0 60%",
@@ -191,28 +113,73 @@ const Builder = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            overflow: "hidden",
+            minHeight: 300, // 👈 Feste Höhe verhindert Kollaps
           }}
         >
-          <BuildSlide />
+          <AnimatePresence mode="wait">
+            <BuildSlide key={steps[activeStep]?.id} stepNumber={activeStep + 1}>
+              <div data-color-mode="light">
+                <MDEditor
+                  height={300}
+                  width={"100%"}
+                  color="light"
+                  value={steps[activeStep]?.text || ""}
+                  onChange={(value) => {
+                    const updated = [...steps];
+                    updated[activeStep].text = value || "";
+                    setSteps(updated);
+                  }}
+                  preview="live"
+                />{" "}
+              </div>
+              {steps[activeStep]?.id === "intro" &&
+                selectedHardware.length > 0 && (
+                  <div>
+                    <Typography
+                      sx={{
+                        fontWeight: "bold",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Info sx={{ color: theme.palette.primary.main, mr: 1 }} />
+                      Benötigte Hardware
+                    </Typography>
+
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        justifyContent: "center",
+                        gap: 2,
+                        mt: 2,
+                        width: "100%",
+                      }}
+                    >
+                      {selectedHardware.map((sensor, index) => (
+                        <Box
+                          key={index}
+                          sx={{
+                            flex: "1 1 calc(25% - 16px)", // 🔥 max 4 pro Reihe
+                            maxWidth: "25%",
+                            minWidth: "120px",
+                            display: "flex",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <HardwareCard component={sensor} />
+                        </Box>
+                      ))}
+                    </Box>
+                  </div>
+                )}
+            </BuildSlide>
+          </AnimatePresence>
         </Box>
       </Box>
-      <Box></Box>
     </Box>
   );
-};
-
-Builder.propTypes = {
-  title: PropTypes.string,
-  difficulty: PropTypes.number,
-  review: PropTypes.bool,
-  public: PropTypes.bool,
-  id: PropTypes.string,
-  steps: PropTypes.array,
-  error: PropTypes.object,
-  json: PropTypes.string,
-  isProgress: PropTypes.bool,
-  tutorials: PropTypes.array,
-  message: PropTypes.object,
 };
 
 export default Builder;

@@ -25,7 +25,7 @@ const BuildSlide = ({ children, title, stepNumber }) => {
         justifyContent: "center",
       }}
     >
-      <Card sx={{}}>
+      <Card sx={{ width: "100%", overflow: "scroll" }}>
         <CardContent>
           {(title || stepNumber !== undefined) && (
             <Box

@@ -1,17 +1,15 @@
-import React, { useState } from "react";
+import React, { act, useState } from "react";
 import {
   Box,
   Card,
   CardHeader,
   CardContent,
   Typography,
-  LinearProgress,
   useTheme,
   IconButton,
   TextField,
   ToggleButtonGroup,
   ToggleButton,
-  Button,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
@@ -19,32 +17,26 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { motion, AnimatePresence } from "framer-motion";
-import { Add, PlusOne } from "@mui/icons-material";
-import HardwareButtonWithModal from "./AddNewHardware";
 import HardwareSelectorModal from "./AddNewHardware";
-const TutorialBuilderProgressCard = () => {
+const TutorialBuilderProgressCard = ({
+  title,
+  setTitle,
+  subtitle,
+  setSubtitle,
+  steps,
+  setSteps,
+  difficulty,
+  setDifficulty,
+  selectedHardware,
+  setSelectedHardware,
+  activeStep,
+  setActiveStep,
+}) => {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const activeStep = useSelector((state) => state.tutorial.activeStep);
   const tutorialFromStore = useSelector((state) => state.tutorial.tutorials[0]);
-  const [title, setTitle] = useState("Tutorial Titel");
-  const [subtitle, setSubtitle] = useState("Kurze Beschreibung");
-  const [steps, setSteps] = useState(
-    tutorialFromStore?.steps || [
-      { id: "intro", title: "Einleitung", subtitle: "Starte hier!" },
-      {
-        id: "finish",
-        title: "Abschluss",
-        subtitle: "Übersicht & Zusammenfassung",
-      },
-    ],
-  );
-  const [selectedHardware, setSelectedHardware] = useState([]);
+
   const [modalOpen, setModalOpen] = useState(false);
-  const [difficulty, setDifficulty] = useState(
-    tutorialFromStore?.difficulty || 3,
-  );
 
   const progress = ((activeStep + 1) / steps.length) * 100;
 
@@ -75,11 +67,11 @@ const TutorialBuilderProgressCard = () => {
 
   const handleDragEnd = (result) => {
     if (!result.destination) return;
-
+    console.log(result);
     const items = Array.from(steps);
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
-
+    setActiveStep(result.destination.index);
     setSteps(items);
 
     // Wenn der verschobene Step aktiv war → neuen Index dispatchen
@@ -248,7 +240,7 @@ const TutorialBuilderProgressCard = () => {
                         <Box
                           ref={provided.innerRef}
                           {...provided.draggableProps} // immer hier dran!
-                          onClick={() => changeStep(index)}
+                          onClick={() => setActiveStep(index)}
                           sx={{
                             display: "flex",
                             alignItems: "center",
@@ -340,7 +332,10 @@ const TutorialBuilderProgressCard = () => {
                             onClick={(e) => e.stopPropagation()}
                             {...provided.dragHandleProps} // ✅ DragHandle hier
                             sx={{
-                              color: theme.palette.text.secondary,
+                              color:
+                                activeStep === index
+                                  ? theme.palette.primary.contrastText
+                                  : theme.palette.text.secondary,
                               cursor: "grab",
                             }}
                           >
