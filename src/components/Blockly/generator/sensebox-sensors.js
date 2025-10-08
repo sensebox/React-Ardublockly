@@ -1260,3 +1260,14 @@ Blockly.Generator.Arduino.forBlock["sensebox_sensor_icm20948"] = function () {
 
   return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
+
+Blockly.Generator.Arduino.forBlock["sensebox_sensor_max17048"] = function () {
+  var code = "";
+  var dropdown = this.getFieldValue("value");
+  Blockly.Generator.Arduino.libraries_["adafruit_max1704x"] =
+    `#include "Adafruit_MAX1704X.h" // http://librarymanager/All#Adafruit_MAX1704X`;
+  Blockly.Generator.Arduino.definitions_["define_max17048"] =
+    "Adafruit_MAX17048 maxlipo;";
+  Blockly.Generator.Arduino.setupCode_["max17048.begin()"] = "maxlipo.begin();";
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
+};
