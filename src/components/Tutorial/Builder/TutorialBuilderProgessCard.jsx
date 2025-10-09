@@ -103,11 +103,6 @@ const TutorialBuilderProgressCard = ({
         }
         subheader={
           <Box sx={{ mt: 1, display: "flex", flexDirection: "column", gap: 1 }}>
-            <Typography variant="body2" color="text.secondary">
-              Schritt {Math.min(activeStep + 1, steps.length)} von{" "}
-              {steps.length}
-            </Typography>
-
             {/* Kurzbeschreibung */}
             <TextField
               variant="standard"
