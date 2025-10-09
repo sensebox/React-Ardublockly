@@ -5,9 +5,9 @@ import { useParams } from "react-router-dom";
 import { getTutorial, tutorialStep } from "../../actions/tutorialActions";
 
 import NotFound from "../Pages/NotFound";
-import Instruction from "./Instruction";
-import TaskStep from "./TaskStep";
-import TutorialProgressCard from "./TutorialProgessCard";
+import Instruction from "./TutorialItem/Instruction";
+import TaskStep from "./TutorialItem/TaskStep";
+import TutorialProgressCard from "./TutorialItem/TutorialProgessCard";
 import TutorialFooter from "./TutorialFooter";
 import TutorialFinished from "./TutorialFinished"; // 👉 neu importieren
 
@@ -91,6 +91,7 @@ export default function Tutorial() {
           width: "100%",
           p: 2,
           gap: 4,
+          minHeight: "50vh",
           justifyContent: "center",
         }}
       >

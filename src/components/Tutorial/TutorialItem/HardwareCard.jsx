@@ -11,7 +11,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { MenuBook } from "@mui/icons-material";
-import COMPONENT_MAP from "./componentMap"; // Pfad ggf. anpassen
+import COMPONENT_MAP from "../componentMap"; // Pfad ggf. anpassen
 const HardwareCard = ({ component }) => {
   const theme = useTheme();
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import TutorialBuilderProgressCard from "./TutorialBuilderProgessCard";
 import BuildSlide from "./BuildSlide";
@@ -8,50 +8,122 @@ import { Info, Save } from "@mui/icons-material";
 import { motion, AnimatePresence } from "framer-motion";
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
-
 import MDEditor from "@uiw/react-md-editor";
-import HardwareCard from "../HardwareCard";
+import HardwareCard from "../TutorialItem/HardwareCard";
 import { useTheme } from "@mui/styles";
-const Builder = () => {
-  // 🔥 States für das gesamte Tutorial
-  const theme = useTheme();
-  const [title, setTitle] = useState("Tutorial Titel");
-  const [subtitle, setSubtitle] = useState("Kurze Beschreibung");
-  const [steps, setSteps] = useState([
-    { id: "intro", title: "Einleitung", subtitle: "Starte hier!" },
-    {
-      id: "finish",
-      title: "Abschluss",
-      subtitle: "Übersicht & Zusammenfassung",
-    },
-  ]);
-  const [difficulty, setDifficulty] = useState(3);
-  const [selectedHardware, setSelectedHardware] = useState([]);
-  const [isPublic, setIsPublic] = useState(true);
-  const [review, setReview] = useState(false);
-  const [creator, setCreator] = useState("mario.pesch@uni-muenster.de");
-  const [activeStep, setActiveStep] = useState(0);
-  const variants = {
-    initial: { opacity: 0, x: 100 },
-    animate: { opacity: 1, x: 0 },
-    exit: { opacity: 0, x: -100 },
-  };
+import { useSelector } from "react-redux";
+import WhatNext from "./WhatNext";
+import QuestionEditor from "./QuestionEditor";
+import QuestionList from "./QuestionList";
+import BlocklyExample from "./BlocklyExample";
 
-  // ✅ JSON Object Builder
+const Builder = ({ existingTutorial }) => {
+  const theme = useTheme();
+  const user = useSelector((state) => state.auth.user);
+  const token = useSelector((state) => state.auth.token);
+
+  // 🔥 Global States
+  const [title, setTitle] = useState(
+    existingTutorial?.title || "Tutorial Titel",
+  );
+  const [subtitle, setSubtitle] = useState(
+    existingTutorial?.subtitle || "Kurze Beschreibung",
+  );
+  const [steps, setSteps] = useState(
+    existingTutorial?.steps || [
+      { id: "intro", title: "Einleitung", subtitle: "Starte hier!" },
+      {
+        id: "finish",
+        title: "Abschluss",
+        subtitle: "Übersicht & Zusammenfassung",
+      },
+    ],
+  );
+  const [difficulty, setDifficulty] = useState(
+    existingTutorial?.difficulty || 3,
+  );
+  const [selectedHardware, setSelectedHardware] = useState(
+    existingTutorial?.hardware || [],
+  );
+  const [isPublic, setIsPublic] = useState(existingTutorial?.public ?? true);
+  const [review, setReview] = useState(existingTutorial?.review ?? false);
+  const [creator, setCreator] = useState(
+    existingTutorial?.creator || user.email || "unknown",
+  );
+  const [activeStep, setActiveStep] = useState(0);
+  const [category, setCategory] = useState(
+    existingTutorial?.category || "task",
+  );
+
+  // 🧠 NEW: Learnings state
+  const [learnings, setLearnings] = useState(
+    existingTutorial?.learnings || [
+      {
+        title: "",
+        description: "",
+      },
+    ],
+  );
+
   const buildTutorialJSON = () => ({
     public: isPublic,
-    review: review,
-    creator: creator,
-    title: title,
-    difficulty: difficulty,
+    review,
+    creator,
+    title,
+    difficulty,
     steps: steps.map((s) => ({
       id: s.id,
       headline: s.title,
       text: s.subtitle,
       hardware: selectedHardware,
       type: "instruction",
+      category: s.category || "instruction",
+      questionData: s.questionData || null, // 👈 HIER hinzugefügt
+      xml: s.xml || null, // 👈 HIER hinzugefügt
     })),
+    learnings,
   });
+
+  useEffect(() => {
+    console.log(buildTutorialJSON());
+  }, [
+    steps,
+    title,
+    subtitle,
+    difficulty,
+    selectedHardware,
+    learnings,
+    category,
+  ]);
+
+  const saveTutorial = async () => {
+    const newTutorial = buildTutorialJSON();
+    console.log("Posting this tutorial:", newTutorial);
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BLOCKLY_API}/tutorial/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(newTutorial),
+        },
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || "Fehler beim Speichern");
+      }
+
+      const data = await response.json();
+      console.log("Tutorial saved:", data);
+    } catch (err) {
+      console.error("Fehler beim Speichern:", err);
+    }
+  };
 
   return (
     <Box>
@@ -61,17 +133,20 @@ const Builder = () => {
           { link: "/tutorial/builder", title: "Tutorial Builder" },
         ]}
       />
+
       <Box
         sx={{
           display: "flex",
           flexDirection: "row",
+          boxSizing: "border-box",
           width: "100%",
+          height: "80vh",
           p: 2,
           gap: 4,
           justifyContent: "center",
         }}
       >
-        {/* ProgressCard links - 20% */}
+        {/* Left Side */}
         <Box
           sx={{
             flex: "0 0 20%",
@@ -97,15 +172,13 @@ const Builder = () => {
           <Button
             variant="contained"
             startIcon={<Save />}
-            onClick={() => {
-              console.log(buildTutorialJSON());
-            }}
+            onClick={saveTutorial}
           >
             Tutorial speichern
           </Button>
         </Box>
 
-        {/* Vorschau-Bereich rechts */}
+        {/* Right Side */}
         <Box
           sx={{
             flex: "0 0 60%",
@@ -113,29 +186,61 @@ const Builder = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            overflow: "hidden",
-            minHeight: 300, // 👈 Feste Höhe verhindert Kollaps
           }}
         >
           <AnimatePresence mode="wait">
-            <BuildSlide key={steps[activeStep]?.id} stepNumber={activeStep + 1}>
-              <div data-color-mode="light">
-                <MDEditor
-                  height={300}
-                  width={"100%"}
-                  color="light"
-                  value={steps[activeStep]?.text || ""}
-                  onChange={(value) => {
+            <BuildSlide
+              title={steps[activeStep]?.title}
+              stepNumber={activeStep + 1}
+              key={steps[activeStep]?.id}
+              setCategory={setCategory}
+              category={category}
+              setSteps={setSteps}
+              steps={steps}
+            >
+              {steps[activeStep]?.category !== "blockly" && (
+                <div data-color-mode="light">
+                  <MDEditor
+                    height={"35vh"}
+                    value={steps[activeStep]?.text || ""}
+                    onChange={(value) => {
+                      const updated = [...steps];
+                      updated[activeStep].text = value || "";
+                      setSteps(updated);
+                    }}
+                    preview="live"
+                  />
+                </div>
+              )}
+
+              {steps[activeStep]?.category === "question" && (
+                <QuestionList
+                  questions={steps[activeStep].questions || []}
+                  setQuestions={(newList) => {
                     const updated = [...steps];
-                    updated[activeStep].text = value || "";
+                    updated[activeStep].questions = newList;
                     setSteps(updated);
                   }}
-                  preview="live"
-                />{" "}
-              </div>
+                />
+              )}
+
+              {steps[activeStep]?.category === "blockly" && (
+                <BlocklyExample
+                  index={activeStep}
+                  task={false}
+                  value={steps[activeStep]?.xml || ""}
+                  onXmlChange={(newXml) => {
+                    const updated = [...steps];
+                    updated[activeStep].xml = newXml;
+                    setSteps(updated);
+                  }}
+                />
+              )}
+
+              {/* Hardware Overview nur im Intro */}
               {steps[activeStep]?.id === "intro" &&
                 selectedHardware.length > 0 && (
-                  <div>
+                  <Box sx={{ mt: 3 }}>
                     <Typography
                       sx={{
                         fontWeight: "bold",
@@ -161,7 +266,7 @@ const Builder = () => {
                         <Box
                           key={index}
                           sx={{
-                            flex: "1 1 calc(25% - 16px)", // 🔥 max 4 pro Reihe
+                            flex: "1 1 calc(25% - 16px)",
                             maxWidth: "25%",
                             minWidth: "120px",
                             display: "flex",
@@ -172,8 +277,13 @@ const Builder = () => {
                         </Box>
                       ))}
                     </Box>
-                  </div>
+                  </Box>
                 )}
+
+              {/* ✅ Learnings (nur im Abschluss) */}
+              {steps[activeStep]?.id === "finish" && (
+                <WhatNext learnings={learnings} setLearnings={setLearnings} />
+              )}
             </BuildSlide>
           </AnimatePresence>
         </Box>

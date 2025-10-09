@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import HomeIcon from "@mui/icons-material/Home";
-import TutorialSlide from "./TutorialSlide";
+import TutorialSlide from "./TutorialItem/TutorialSlide";
 import { ArrowForward, Celebration, PartyMode } from "@mui/icons-material";
 
 const TutorialFinished = ({ currentStepData }) => {
