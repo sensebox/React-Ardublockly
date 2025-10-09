@@ -25,7 +25,7 @@ const TutorialSlide = ({ children, title, stepNumber }) => {
         justifyContent: "center",
       }}
     >
-      <Card sx={{}}>
+      <Card sx={{ width: "100%", overflow: "auto", maxHeight: "80vh" }}>
         <CardContent>
           {(title || stepNumber !== undefined) && (
             <Box
