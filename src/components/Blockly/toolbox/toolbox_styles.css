@@ -4,7 +4,7 @@ input[type="search"] {
 
 /* Alle Kategorien außer die, die ein Search-Input enthalten */
 .blocklyToolboxCategory:not(:has(input[type="search"])) {
-  height: 30px !important;
+  height: 36px !important; /* 30px + 20% = 36px */
   border: 1px solid rgba(0, 128, 0, 0.4);
   border-radius: 5px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
@@ -60,7 +60,7 @@ input[type="search"] {
   
   /* Larger touch targets for categories */
   .blocklyToolboxCategory:not(:has(input[type="search"])) {
-    height: 44px !important; /* iOS recommended minimum touch target */
+    height: 53px !important; /* 44px + 20% = 52.8px rounded to 53px */
     font-size: 16px;
     padding: 8px;
   }
@@ -74,7 +74,7 @@ input[type="search"] {
   input[type="search"] {
     font-size: 16px;
     padding: 10px 14px;
-    height: 32px;
+    height: 38px; /* 32px + 20% = 38.4px rounded to 38px */
   }
 }
 
@@ -86,7 +86,7 @@ input[type="search"] {
   
   /* Slightly smaller text but maintain touch target size */
   .blocklyToolboxCategory:not(:has(input[type="search"])) {
-    height: 44px !important;
+    height: 53px !important; /* 44px + 20% = 52.8px rounded to 53px */
     font-size: 14px;
   }
   
@@ -94,7 +94,7 @@ input[type="search"] {
   input[type="search"] {
     font-size: 14px;
     padding: 8px 12px;
-    height: 28px;
+    height: 34px; /* 28px + 20% = 33.6px rounded to 34px */
   }
   
   /* Reduce indentation on small screens */
