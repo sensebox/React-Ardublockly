@@ -1,3 +1,7 @@
+input[type="search"] {
+  width: calc(100vw - 40px);
+}
+
 /* Alle Kategorien außer die, die ein Search-Input enthalten */
 .blocklyToolboxCategory:not(:has(input[type="search"])) {
   height: 30px !important;
@@ -34,17 +38,24 @@
   margin-left: 60px;
 }
 
-/* Toolbox Breite */
+/* Toolbox - full width for horizontal layout */
 .blocklyToolbox {
-  width: 15vw;
+  width: 100% !important;
+  height: auto !important;
+}
+
+/* Toolbox contents should wrap to allow search on its own line */
+.blocklyToolboxContents {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: flex-start !important;
 }
 
 /* Mobile/Tablet optimizations */
 @media (max-width: 768px) {
-  /* Wider toolbox for better touch access on tablets */
+  /* Full width toolbox on tablets */
   .blocklyToolbox {
-    width: 25vw;
-    min-width: 200px;
+    width: 100% !important;
   }
   
   /* Larger touch targets for categories */
@@ -58,19 +69,32 @@
   .blocklyToolboxCategory:not(:has(input[type="search"])) {
     margin: 4px;
   }
+  
+  /* Larger search field on tablets */
+  input[type="search"] {
+    font-size: 16px;
+    padding: 10px 14px;
+    height: 32px;
+  }
 }
 
 @media (max-width: 480px) {
-  /* Even wider toolbox on phones for better usability */
+  /* Full width toolbox on phones */
   .blocklyToolbox {
-    width: 35vw;
-    min-width: 150px;
+    width: 100% !important;
   }
   
   /* Slightly smaller text but maintain touch target size */
   .blocklyToolboxCategory:not(:has(input[type="search"])) {
     height: 44px !important;
     font-size: 14px;
+  }
+  
+  /* Search field on phones */
+  input[type="search"] {
+    font-size: 14px;
+    padding: 8px 12px;
+    height: 28px;
   }
   
   /* Reduce indentation on small screens */
