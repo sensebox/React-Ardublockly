@@ -45,7 +45,9 @@ const BlocklyApp = () => {
   useEffect(() => {
     // Resize Workspace on updates
     const workspace = Blockly.getMainWorkspace();
-    Blockly.svgResize(workspace);
+    if (workspace && workspace.options) {
+      Blockly.svgResize(workspace);
+    }
   });
 
   // Mobile-optimized configuration
