@@ -38,6 +38,8 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
   useEffect(() => {
     const ws = Blockly.inject(blocklyDivRef.current, {
       toolbox: toolboxRef.current,
+      horizontalLayout: true,
+      toolboxPosition: 'end',
       plugins: {
         blockDragger: ScrollBlockDragger,
         metricsManager: ScrollMetricsManager,
