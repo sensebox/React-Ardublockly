@@ -38,3 +38,65 @@
 .blocklyToolbox {
   width: 15vw;
 }
+
+/* Mobile/Tablet optimizations */
+@media (max-width: 768px) {
+  /* Wider toolbox for better touch access on tablets */
+  .blocklyToolbox {
+    width: 25vw;
+    min-width: 200px;
+  }
+  
+  /* Larger touch targets for categories */
+  .blocklyToolboxCategory:not(:has(input[type="search"])) {
+    height: 44px !important; /* iOS recommended minimum touch target */
+    font-size: 16px;
+    padding: 8px;
+  }
+  
+  /* Better spacing for touch */
+  .blocklyToolboxCategory:not(:has(input[type="search"])) {
+    margin: 4px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Even wider toolbox on phones for better usability */
+  .blocklyToolbox {
+    width: 35vw;
+    min-width: 150px;
+  }
+  
+  /* Slightly smaller text but maintain touch target size */
+  .blocklyToolboxCategory:not(:has(input[type="search"])) {
+    height: 44px !important;
+    font-size: 14px;
+  }
+  
+  /* Reduce indentation on small screens */
+  .blocklyToolboxCategoryContainer[aria-level="2"] {
+    margin-left: 10px;
+  }
+  
+  .blocklyToolboxCategoryContainer[aria-level="3"] {
+    margin-left: 20px;
+  }
+  
+  .blocklyToolboxCategoryContainer[aria-level="4"] {
+    margin-left: 30px;
+  }
+}
+
+/* Improve block rendering for touch devices */
+@media (hover: none) and (pointer: coarse) {
+  /* Increase spacing between blocks in flyout */
+  .blocklyFlyout .blocklyBlockCanvas > .blocklyDraggable {
+    margin: 8px 0 !important;
+  }
+  
+  /* Larger scroll bars for touch */
+  .blocklyScrollbarHandle {
+    width: 12px !important;
+    height: 12px !important;
+  }
+}

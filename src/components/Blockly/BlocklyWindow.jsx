@@ -31,6 +31,7 @@ export default function BlocklyWindow(props) {
     blocklyCSS,
     initialXml: initialXmlProp,
     zoomControls,
+    zoom,
     grid,
     move,
     readOnly,
@@ -134,35 +135,42 @@ export default function BlocklyWindow(props) {
 
   // Compute zoom/grid/move config with sensible defaults
   const zoomConfig = useMemo(
-    () => ({
-      controls: zoomControls !== undefined ? zoomControls : true,
-      wheel: false,
-      startScale: 1,
-      maxScale: 3,
-      minScale: 0.3,
-      scaleSpeed: 1.2,
-    }),
-    [zoomControls],
+    () =>
+      zoom !== undefined
+        ? zoom
+        : {
+            controls: zoomControls !== undefined ? zoomControls : true,
+            wheel: false,
+            startScale: 1,
+            maxScale: 3,
+            minScale: 0.3,
+            scaleSpeed: 1.2,
+          },
+    [zoom, zoomControls],
   );
 
   const gridConfig = useMemo(
     () =>
-      grid !== undefined && !grid
-        ? {}
-        : {
-            spacing: 20,
-            length: 1,
-            colour: "#4EAF47", // senseBox-green
-            snap: false,
-          },
+      grid !== undefined && grid !== false
+        ? typeof grid === "object"
+          ? grid
+          : {
+              spacing: 20,
+              length: 1,
+              colour: "#4EAF47", // senseBox-green
+              snap: false,
+            }
+        : {},
     [grid],
   );
 
   const moveConfig = useMemo(
     () =>
-      move !== undefined && !move
-        ? {}
-        : { scrollbars: true, drag: true, wheel: true },
+      move !== undefined && move !== false
+        ? typeof move === "object"
+          ? move
+          : { scrollbars: true, drag: true, wheel: true }
+        : {},
     [move],
   );
 
@@ -193,6 +201,7 @@ BlocklyWindow.propTypes = {
   blocklyCSS: PropTypes.object,
   initialXml: PropTypes.string,
   zoomControls: PropTypes.bool,
+  zoom: PropTypes.object,
   grid: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
   move: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
   readOnly: PropTypes.bool,
