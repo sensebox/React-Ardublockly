@@ -97,7 +97,11 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
 
   return (
     <>
-      <Card ref={blocklyDivRef} id="blocklyDiv" style={style ? style : {}} />
+      <Card
+        ref={blocklyDivRef}
+        id="blocklyDiv"
+        style={style ? style : { height: "100%", width: "100%" }}
+      />
       <Toolbox toolbox={toolboxRef} workspace={workspace} />
       <Snackbar
         open={snackbar.open}

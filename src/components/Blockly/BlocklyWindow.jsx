@@ -167,7 +167,7 @@ export default function BlocklyWindow(props) {
   );
 
   return (
-    <div>
+    <div style={{ height: "100%", width: "100%" }}>
       <BlocklyComponent
         style={svg ? { height: 0 } : blocklyCSS}
         readOnly={readOnly !== undefined ? readOnly : false}

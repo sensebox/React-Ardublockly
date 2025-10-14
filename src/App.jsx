@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { Router } from "react-router-dom";
+import { Router, Route, Switch } from "react-router-dom";
 import { createBrowserHistory } from "history";
 
 import { Provider } from "react-redux";
@@ -17,6 +17,7 @@ import {
 } from "@mui/material/styles";
 
 import Content from "./components/Content";
+import AppContent from "./components/AppContent";
 import { setCompiler } from "./actions/generalActions";
 
 const theme = createTheme({
@@ -57,7 +58,14 @@ class App extends Component {
           <Provider store={store}>
             <Router history={customHistory}>
               <ErrorBoundary>
-                <Content />
+                <Switch>
+                  <Route path="/app" exact>
+                    <AppContent />
+                  </Route>
+                  <Route path="/">
+                    <Content />
+                  </Route>
+                </Switch>
               </ErrorBoundary>
             </Router>
           </Provider>
