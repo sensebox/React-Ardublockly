@@ -601,16 +601,15 @@ Blockly.Generator.Arduino.forBlock["sensebox_lora_cayenne_gps"] = function (
   return code;
 };
 
-Blockly.Generator.Arduino.sensebox_lora_cayenne_concentration = function (
-  block,
-) {
-  var value =
-    Blockly.Generator.Arduino.valueToCode(
-      this,
-      "Value",
-      Blockly.Generator.Arduino.ORDER_ATOMIC,
-    ) || 0;
-  var channel = this.getFieldValue("CHANNEL");
-  var code = `lpp.addConcentration(${channel}, ${value});\n`;
-  return code;
-};
+Blockly.Generator.Arduino.forBlock["sensebox_lora_cayenne_concentration"] =
+  function (block) {
+    var value =
+      Blockly.Generator.Arduino.valueToCode(
+        this,
+        "Value",
+        Blockly.Generator.Arduino.ORDER_ATOMIC,
+      ) || 0;
+    var channel = this.getFieldValue("CHANNEL");
+    var code = `lpp.addConcentration(${channel}, ${value});\n`;
+    return code;
+  };
