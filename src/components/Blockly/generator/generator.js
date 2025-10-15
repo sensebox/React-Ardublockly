@@ -222,8 +222,10 @@ Blockly.Generator.Arduino.finish = function (code) {
     "\n}\n";
 
   let loopCode = "\nvoid loop() { \n" + loopCodeOnce + code + "\n}\n";
-  // only add OTA code if tablet mode is enabled
-  if (ota === true && board !== "esp32") {
+  // only add OTA code if tablet mode is enabled AND not using remote compilation
+  const isRemoteCompilation = store.getState().general.compiler && 
+    store.getState().general.compiler.includes('http');
+  if (ota === true && board !== "esp32" && !isRemoteCompilation) {
     code =
       commentCode +
       "\n" +

@@ -7,9 +7,11 @@ import { setRenderer } from "@/actions/generalActions";
 import { clearStats, workspaceName } from "@/actions/workspaceActions";
 import BlocklyWindow from "../Blockly/BlocklyWindow";
 import DeviceSelection from "../DeviceSelection";
+import WorkspaceToolbar from "../Workspace/WorkspaceToolbar";
+import { Box } from "@mui/material";
 import "./BlocklyApp.css";
 
-const BlocklyApp = () => {
+const BlocklyApp = ({ project = null, projectType = null }) => {
   const dispatch = useDispatch();
   const [initialXml, setInitialXml] = useState(
     localStorage.getItem("autoSaveXML"),
@@ -18,7 +20,7 @@ const BlocklyApp = () => {
   useEffect(() => {
     dispatch(workspaceName(createNameId()));
     
-    // Force Zelos renderer for mobile/touch optimization
+    // Force tablet mode and Zelos renderer for mobile/touch optimization
     dispatch(setRenderer("zelos"));
 
     // Update viewport meta tag for better mobile experience
@@ -80,6 +82,13 @@ const BlocklyApp = () => {
   return (
     <div className="blockly-app-container">
       <div style={{ flex: 1, height: "100%", position: "relative" }}>
+        {/* Toolbar */}
+      <Box
+        className="workspaceFunc"
+        sx={{ float: "right", height: "40px", mb: 2 }}
+      >
+        <WorkspaceToolbar project={project} projectType={projectType} />
+      </Box>
         <BlocklyWindow
           initialXml={initialXml}
           zoom={mobileConfig.zoom}
