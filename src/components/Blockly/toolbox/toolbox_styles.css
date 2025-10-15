@@ -29,13 +29,13 @@ input[type="search"] {
   margin-left: 20px;
 }
 
-/* Tiefergehende Ebenen einrücken */
+/* In horizontal layout, third level categories should appear next to second level, not indented */
 .blocklyToolboxCategoryContainer[aria-level="3"] {
-  margin-left: 40px;
+  margin-left: 0px;
 }
 
 .blocklyToolboxCategoryContainer[aria-level="4"] {
-  margin-left: 60px;
+  margin-left: 0px;
 }
 
 /* Toolbox - full width for horizontal layout */
@@ -49,6 +49,46 @@ input[type="search"] {
   display: flex !important;
   flex-wrap: wrap !important;
   align-items: flex-start !important;
+}
+
+/* iPad specific optimizations */
+@media (min-width: 769px) and (max-width: 1024px) {
+  /* iPad portrait and landscape */
+  .blocklyToolbox {
+    width: 100% !important;
+  }
+  
+  /* Ensure third level categories appear next to second level on iPad */
+  .blocklyToolboxCategoryContainer[aria-level="3"] {
+    margin-left: 0px !important;
+    position: relative !important;
+  }
+  
+  .blocklyToolboxCategoryContainer[aria-level="4"] {
+    margin-left: 0px !important;
+    position: relative !important;
+  }
+  
+  /* Improve touch targets for iPad */
+  .blocklyToolboxCategory:not(:has(input[type="search"])) {
+    height: 48px !important;
+    font-size: 16px;
+    padding: 8px;
+    min-width: 120px;
+  }
+  
+  /* Better spacing for iPad touch */
+  .blocklyToolboxCategory:not(:has(input[type="search"])) {
+    margin: 3px;
+  }
+  
+  /* iPad search field */
+  input[type="search"] {
+    font-size: 16px;
+    padding: 10px 14px;
+    height: 36px;
+    min-width: 200px;
+  }
 }
 
 /* Mobile/Tablet optimizations */
@@ -102,12 +142,31 @@ input[type="search"] {
     margin-left: 10px;
   }
   
+  /* Keep third level categories aligned next to second level on mobile too */
   .blocklyToolboxCategoryContainer[aria-level="3"] {
-    margin-left: 20px;
+    margin-left: 0px;
   }
   
   .blocklyToolboxCategoryContainer[aria-level="4"] {
-    margin-left: 30px;
+    margin-left: 0px;
+  }
+}
+
+/* Safari/iPad specific fixes */
+@supports (-webkit-appearance: none) {
+  /* Fix for Safari rendering issues */
+  .blocklyToolboxCategoryContainer[aria-level="3"],
+  .blocklyToolboxCategoryContainer[aria-level="4"] {
+    margin-left: 0px !important;
+    transform: translateZ(0); /* Force hardware acceleration */
+  }
+  
+  /* Ensure proper touch handling in Safari */
+  .blocklyToolboxCategory {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
   }
 }
 
@@ -123,4 +182,13 @@ input[type="search"] {
     width: 12px !important;
     height: 12px !important;
   }
+  
+  /* Additional iPad touch fixes */
+  .blocklyToolboxCategoryContainer[aria-level="3"],
+  .blocklyToolboxCategoryContainer[aria-level="4"] {
+    margin-left: 0px !important;
+    position: relative !important;
+    z-index: 1;
+  }
 }
+
