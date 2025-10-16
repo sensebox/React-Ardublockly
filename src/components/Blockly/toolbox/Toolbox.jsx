@@ -63,11 +63,8 @@ const Toolbox = ({ workspace, toolbox }) => {
         const toolboxInstance = workspace.getToolbox();
         if (!toolboxInstance) return;
 
-        console.log('Setting up toolbox collapse functionality');
-
         // Get all category elements
         const categoryElements = document.querySelectorAll('.blocklyToolboxCategory');
-        console.log('Found category elements:', categoryElements.length);
 
         categoryElements.forEach((element, index) => {
           // Remove existing event listeners by cloning the element
@@ -76,13 +73,11 @@ const Toolbox = ({ workspace, toolbox }) => {
 
           // Add new click handler
           newElement.addEventListener('click', (e) => {
-            console.log('Category clicked:', newElement.textContent.trim());
             
             // Allow the default Blockly behavior to happen first
             setTimeout(() => {
               const toolboxInstance = workspace.getToolbox();
               if (!toolboxInstance) {
-                console.log('No toolbox instance found');
                 return;
               }
 
@@ -143,7 +138,6 @@ const Toolbox = ({ workspace, toolbox }) => {
 
           // Also handle touch events for mobile
           newElement.addEventListener('touchend', (e) => {
-            console.log('Category touched:', newElement.textContent.trim());
             // Trigger the same logic as click
             newElement.click();
           });
