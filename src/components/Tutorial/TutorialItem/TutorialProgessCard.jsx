@@ -19,14 +19,7 @@ const TutorialProgressCard = () => {
   const tutorial = useSelector((state) => state.tutorial.tutorials[0]);
 
   // künstlich einen "Abschluss"-Step anhängen
-  const stepsWithFinish = [
-    ...tutorial.steps,
-    {
-      id: "finish",
-      title: "Abschluss",
-      subtitle: "Übersicht & Zusammenfassung",
-    },
-  ];
+  const stepsWithFinish = [...tutorial.steps];
 
   const progress = ((activeStep + 1) / stepsWithFinish.length) * 100;
 
@@ -35,6 +28,7 @@ const TutorialProgressCard = () => {
       type: "TUTORIAL_STEP",
       payload: step,
     });
+    console.log("tutorial", tutorial);
   };
 
   return (
@@ -124,11 +118,11 @@ const TutorialProgressCard = () => {
                   fontWeight={isCurrent ? 600 : 400}
                   noWrap
                 >
-                  {step.title ||
+                  {step.headline ||
                     (index === 0 ? "Einleitung" : `Schritt ${index}`)}
                 </Typography>
                 <Typography variant="caption" sx={{ opacity: 0.75 }} noWrap>
-                  {step.subtitle || "Beschreibung folgt…"}
+                  {step.text || "Beschreibung folgt…"}
                 </Typography>
               </Box>
             </Box>
