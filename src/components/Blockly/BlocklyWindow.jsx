@@ -136,99 +136,61 @@ export default function BlocklyWindow(props) {
 
   // Compute zoom/grid/move config with sensible defaults
   const zoomConfig = useMemo(
-    () => {
-      if (zoom !== undefined) return zoom;
-      
-      // Default zoom config
-      const defaultZoom = {
-        controls: zoomControls !== undefined ? zoomControls : true,
-        wheel: false,
-        startScale: 1,
-        maxScale: 3,
-        minScale: 0.3,
-        scaleSpeed: 1.2,
-      };
-      
-      // Mobile-optimized zoom config for embedded mode
-      if (isEmbedded) {
-        return {
-          ...defaultZoom,
-          wheel: true, // Enable pinch-to-zoom for mobile
-          startScale: 0.9, // Slightly zoomed out for better overview
-          scaleSpeed: 1.1, // Smoother zoom on mobile
-          pinch: true, // Enable pinch gestures
-        };
-      }
-      
-      return defaultZoom;
-    },
-    [zoom, zoomControls, isEmbedded],
+    () =>
+      zoom !== undefined
+        ? zoom
+        : {
+            controls: zoomControls !== undefined ? zoomControls : true,
+            wheel: false,
+            startScale: 1,
+            maxScale: 3,
+            minScale: 0.3,
+            scaleSpeed: 1.2,
+          },
+    [zoom, zoomControls],
   );
 
   const gridConfig = useMemo(
-    () => {
-      if (grid === undefined || grid === false) return {};
-      
-      if (typeof grid === "object") return grid;
-      
-      // Default grid config
-      const defaultGrid = {
-        spacing: 20,
-        length: 1,
-        colour: "#4EAF47", // senseBox-green
-        snap: false,
-      };
-      
-      // Mobile-optimized grid config for embedded mode
-      if (isEmbedded) {
-        return {
-          ...defaultGrid,
-          snap: true, // Enable snap for easier block placement on touch
-        };
-      }
-      
-      return defaultGrid;
-    },
-    [grid, isEmbedded],
+    () =>
+      grid !== undefined && grid !== false
+        ? typeof grid === "object"
+          ? grid
+          : {
+              spacing: 20,
+              length: 1,
+              colour: "#4EAF47", // senseBox-green
+              snap: false,
+            }
+        : {},
+    [grid],
   );
 
   const moveConfig = useMemo(
-    () => {
-      if (move === undefined || move === false) return {};
-      
-      if (typeof move === "object") return move;
-      
-      // Default move config
-      const defaultMove = { scrollbars: true, drag: true, wheel: true };
-      
-      // Mobile-optimized move config for embedded mode
-      if (isEmbedded) {
-        return {
-          ...defaultMove,
-          wheel: true, // Enable wheel/pinch zoom for mobile
-        };
-      }
-      
-      return defaultMove;
-    },
-    [move, isEmbedded],
+    () =>
+      move !== undefined && move !== false
+        ? typeof move === "object"
+          ? move
+          : { scrollbars: true, drag: true, wheel: true }
+        : {},
+    [move],
   );
 
-  // Mobile-specific styling only for embedded mode
-  const containerStyles = {
+  // Mobile-specific styling for embedded mode
+  const embeddedStyles = isEmbedded ? {
     height: "100%",
     width: "100%",
-    ...(isEmbedded && {
-      overflow: "hidden",
-      touchAction: "none", // Prevent default touch behaviors
-      WebkitTouchCallout: "none", // Disable iOS callout
-      WebkitUserSelect: "none", // Disable text selection
-      userSelect: "none",
-    })
+    overflow: "hidden",
+    touchAction: "none", // Prevent default touch behaviors
+    WebkitTouchCallout: "none", // Disable iOS callout
+    WebkitUserSelect: "none", // Disable text selection
+    userSelect: "none",
+  } : {
+    height: "100%",
+    width: "100%"
   };
 
   return (
-    <div style={containerStyles}>
+    <div style={embeddedStyles}>
       <BlocklyComponent
         style={svg ? { height: 0 } : blocklyCSS}
         readOnly={readOnly !== undefined ? readOnly : false}
