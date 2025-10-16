@@ -77,6 +77,7 @@ const Compile = (props) => {
         filename={props.name || "sketch"}
         platform={props.isEmbedded ? true : props.platform}
         appLink={props.appLink || ""}
+        isEmbedded={props.isEmbedded}
       />
     </div>
   );

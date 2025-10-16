@@ -429,6 +429,7 @@ export const UI = {
   goToApp_text:
     "Der Code wurde erfolgreich kompiliert! Klicke den unteren Button um zur senseBox:connect App zu gelangen und die Übertragung des Sketches fertigzustellen!",
   goToApp_title: "Over-The-Air Übertragung",
+  goToTransferScreen: "Datenübertragung fortsetzen",
 
   transfer_headline: "Datei übertragen",
   transfer_subline:
