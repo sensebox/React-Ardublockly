@@ -42,6 +42,8 @@ function TutorialHome() {
 
   useEffect(() => {
     dispatch(getTutorials());
+    console.log("Tutorials loaded", tutorials);
+    console.log("User", user);
   }, [dispatch]);
 
   // Tutorials nach Suchbegriff & Schwierigkeit filtern
@@ -157,7 +159,22 @@ function TutorialHome() {
         <div>
           <h2>User Tutorials</h2>
           <Grid container spacing={2}>
-            {/* Falls auch gefiltert werden soll: userTutorials hier einbauen */}
+            {filteredTutorials.filter((t) => t.creator === user.email).length >
+            0 ? (
+              filteredTutorials
+                .filter((t) => t.creator === user.email)
+                .map((tutorial) => (
+                  <TutorialItem
+                    key={tutorial._id}
+                    tutorial={tutorial}
+                    level={getDifficultyLevel(tutorial.difficulty)}
+                  />
+                ))
+            ) : (
+              <Typography variant="body1" sx={{ ml: 2 }}>
+                Du hast noch keine Tutorials erstellt.
+              </Typography>
+            )}
           </Grid>
         </div>
       )}
