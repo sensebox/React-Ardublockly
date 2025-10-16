@@ -1,32 +1,38 @@
 import React from "react";
 import Confetti from "react-confetti";
-import {
-  Box,
-  CardContent,
-  Typography,
-  Button,
-  Grid,
-  useTheme,
-} from "@mui/material";
+import { Box, CardContent, Typography, Button, useTheme } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import HomeIcon from "@mui/icons-material/Home";
+import { ArrowForward, Celebration } from "@mui/icons-material";
 import TutorialSlide from "./TutorialItem/TutorialSlide";
-import { ArrowForward, Celebration, PartyMode } from "@mui/icons-material";
 
-const TutorialFinished = ({ currentStepData }) => {
+const TutorialFinished = ({ tutorial }) => {
   const theme = useTheme();
+
+  // 🧩 Step mit type "finish" finden
+  const finishStep = tutorial?.steps?.find((s) => s.type === "finish");
+  const finishText =
+    finishStep?.text ||
+    "Herzlichen Glückwunsch! Du hast alle Schritte erfolgreich abgeschlossen.";
+
+  // 🎓 Dynamische Lerninhalte
+  const learnings = tutorial?.learnings || [];
+
+  // 🚀 Dynamische “Was kommt als Nächstes”
+  const upcoming = tutorial?.upcoming || [];
 
   return (
     <TutorialSlide>
-      {/* 🎉 Konfetti Overlay, füllt einfach das Fenster */}
+      {/* 🎉 Konfetti einmalig */}
       <Confetti
         width={window.innerWidth}
         height={window.innerHeight}
-        numberOfPieces={500}
-        recycle={false} // nur einmal abfeuern
+        numberOfPieces={300}
+        recycle={false}
       />
 
       <CardContent sx={{ textAlign: "center", p: 4 }}>
+        {/* 🎉 Header */}
         <Box sx={{ mb: 4 }}>
           <Box
             sx={{
@@ -44,25 +50,24 @@ const TutorialFinished = ({ currentStepData }) => {
             <Celebration sx={{ fontSize: 48, color: "white" }} />
           </Box>
           <Box sx={{ mt: 2 }}>
-            <Typography variant="body1" sx={{ mb: 1 }}>
-              {currentStepData?.description}
+            <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
+              Tutorial abgeschlossen!
             </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Du hast alle Schritte erfolgreich durchgeführt und dabei wichtige
-              Grundlagen der Elektronik und Programmierung gelernt.
+            <Typography variant="body1" color="text.secondary">
+              {finishText}
             </Typography>
           </Box>
         </Box>
-        {/* Lerninhalte */}
-        <Box sx={{ display: "flex", gap: 2 }}>
+
+        {/* 📘 Lerninhalte */}
+        {learnings.length > 0 && (
           <Box
             sx={{
               bgcolor: theme.palette.primary[50] || theme.palette.action.hover,
               borderRadius: 2,
               p: 4,
               mb: 4,
-              flex: "1 1 calc(50% - 10px)",
-              boxSizing: "border-box",
+              textAlign: "left",
             }}
           >
             <Typography
@@ -73,210 +78,106 @@ const TutorialFinished = ({ currentStepData }) => {
             >
               Was du gelernt hast
             </Typography>
+
             <Box
               sx={{
                 display: "flex",
                 flexWrap: "wrap",
                 gap: 2,
-                textAlign: "left",
               }}
             >
-              <Box
-                sx={{
-                  flex: "1 1 calc(50% - 10px)",
-                  boxSizing: "border-box",
-                }}
-              >
-                <Box sx={{ display: "flex", gap: 2 }}>
+              {learnings.map((learning, index) => (
+                <Box
+                  key={index}
+                  sx={{
+                    flex: "1 1 calc(50% - 10px)",
+                    boxSizing: "border-box",
+                    display: "flex",
+                    gap: 2,
+                    alignItems: "flex-start",
+                  }}
+                >
                   <CheckCircleIcon
-                    sx={{ color: theme.palette.primary.main, mt: "2px" }}
+                    sx={{
+                      color: theme.palette.primary.main,
+                      mt: "2px",
+                      flexShrink: 0,
+                    }}
                   />
                   <Box>
                     <Typography variant="subtitle2" fontWeight={500}>
-                      Hardware-Software Integration
+                      {learning.title || "Lerninhalt"}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      Code auf Mikrocontroller laden und testen
+                      {learning.description || ""}
                     </Typography>
                   </Box>
                 </Box>
-              </Box>
-              <Box
-                sx={{
-                  flex: "1 1 calc(50% - 10px)",
-                  boxSizing: "border-box",
-                }}
-              >
-                <Box sx={{ display: "flex", gap: 2 }}>
-                  <CheckCircleIcon
-                    sx={{ color: theme.palette.primary.main, mt: "2px" }}
-                  />
-                  <Box>
-                    <Typography variant="subtitle2" fontWeight={500}>
-                      Hardware-Software Integration
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      Code auf Mikrocontroller laden und testen
-                    </Typography>
-                  </Box>
-                </Box>
-              </Box>
-              <Box
-                sx={{
-                  flex: "1 1 calc(50% - 10px)",
-                  boxSizing: "border-box",
-                }}
-              >
-                <Box sx={{ display: "flex", gap: 2 }}>
-                  <CheckCircleIcon
-                    sx={{ color: theme.palette.primary.main, mt: "2px" }}
-                  />
-                  <Box>
-                    <Typography variant="subtitle2" fontWeight={500}>
-                      Hardware-Software Integration
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      Code auf Mikrocontroller laden und testen
-                    </Typography>
-                  </Box>
-                </Box>
-              </Box>
-              <Box
-                sx={{
-                  flex: "1 1 calc(50% - 10px)",
-                  boxSizing: "border-box",
-                }}
-              >
-                <Box sx={{ display: "flex", gap: 2 }}>
-                  <CheckCircleIcon
-                    sx={{ color: theme.palette.primary.main, mt: "2px" }}
-                  />
-                  <Box>
-                    <Typography variant="subtitle2" fontWeight={500}>
-                      Hardware-Software Integration
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      Code auf Mikrocontroller laden und testen
-                    </Typography>
-                  </Box>
-                </Box>
-              </Box>
+              ))}
             </Box>
           </Box>
+        )}
 
+        {/* 🚀 Was kommt als Nächstes */}
+        {upcoming.length > 0 && (
           <Box
             sx={{
-              flex: "1 1 calc(50% - 10px)",
-              boxSizing: "border-box",
+              bgcolor:
+                theme.palette.secondary[50] || theme.palette.action.hover,
+              borderRadius: 2,
+              p: 4,
+              mb: 4,
+              textAlign: "left",
             }}
           >
+            <Typography
+              variant="h6"
+              fontWeight={600}
+              color="primary"
+              gutterBottom
+            >
+              Was kommt als Nächstes
+            </Typography>
+
             <Box
               sx={{
-                bgcolor:
-                  theme.palette.secondary[50] || theme.palette.action.hover,
-                borderRadius: 2,
-                p: 4,
-                mb: 4,
-                flex: "1 1 calc(50% - 10px)",
-                boxSizing: "border-box",
+                display: "flex",
+                flexWrap: "wrap",
+                gap: 2,
               }}
             >
-              <Typography
-                variant="h6"
-                fontWeight={600}
-                color="primary"
-                gutterBottom
-              >
-                Was kommt als Nächstes
-              </Typography>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  gap: 2,
-                  textAlign: "left",
-                }}
-              >
+              {upcoming.map((item, index) => (
                 <Box
-                  sx={{ flex: "1 1 calc(50% - 10px)", boxSizing: "border-box" }}
+                  key={index}
+                  sx={{
+                    flex: "1 1 calc(50% - 10px)",
+                    boxSizing: "border-box",
+                    display: "flex",
+                    gap: 2,
+                  }}
                 >
-                  <Box sx={{ display: "flex", gap: 2 }}>
-                    <ArrowForward
-                      sx={{ color: theme.palette.primary.main, mt: "2px" }}
-                    />
-                    <Box>
-                      <Typography variant="subtitle2" fontWeight={500}>
-                        Eigenes Projekt starten
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        Entwickle eine eigene Idee und setze sie mit dem
-                        Gelernten um.
-                      </Typography>
-                    </Box>
+                  <ArrowForward
+                    sx={{
+                      color: theme.palette.primary.main,
+                      mt: "2px",
+                      flexShrink: 0,
+                    }}
+                  />
+                  <Box>
+                    <Typography variant="subtitle2" fontWeight={500}>
+                      {item.title || "Nächster Schritt"}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {item.description || ""}
+                    </Typography>
                   </Box>
                 </Box>
-
-                <Box
-                  sx={{ flex: "1 1 calc(50% - 10px)", boxSizing: "border-box" }}
-                >
-                  <Box sx={{ display: "flex", gap: 2 }}>
-                    <ArrowForward
-                      sx={{ color: theme.palette.primary.main, mt: "2px" }}
-                    />
-                    <Box>
-                      <Typography variant="subtitle2" fontWeight={500}>
-                        Sensor erweitern
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        Ergänze dein Projekt mit zusätzlichen Sensoren oder
-                        Aktoren.
-                      </Typography>
-                    </Box>
-                  </Box>
-                </Box>
-
-                <Box
-                  sx={{ flex: "1 1 calc(50% - 10px)", boxSizing: "border-box" }}
-                >
-                  <Box sx={{ display: "flex", gap: 2 }}>
-                    <ArrowForward
-                      sx={{ color: theme.palette.primary.main, mt: "2px" }}
-                    />
-                    <Box>
-                      <Typography variant="subtitle2" fontWeight={500}>
-                        Daten visualisieren
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        Stelle deine Messwerte in Diagrammen oder Dashboards
-                        dar.
-                      </Typography>
-                    </Box>
-                  </Box>
-                </Box>
-
-                <Box
-                  sx={{ flex: "1 1 calc(50% - 10px)", boxSizing: "border-box" }}
-                >
-                  <Box sx={{ display: "flex", gap: 2 }}>
-                    <ArrowForward
-                      sx={{ color: theme.palette.primary.main, mt: "2px" }}
-                    />
-                    <Box>
-                      <Typography variant="subtitle2" fontWeight={500}>
-                        Nächstes Tutorial
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        Wähle ein fortgeschrittenes Tutorial aus, um tiefer
-                        einzutauchen.
-                      </Typography>
-                    </Box>
-                  </Box>
-                </Box>
-              </Box>
+              ))}
             </Box>
           </Box>
-        </Box>
+        )}
 
+        {/* 🔙 Zurück-Button */}
         <Button
           component="a"
           href="/tutorial"

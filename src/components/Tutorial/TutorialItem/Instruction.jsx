@@ -5,7 +5,6 @@ import TutorialSlide from "./TutorialSlide";
 
 const Instruction = ({ tutorial }) => {
   const theme = useTheme();
-  console.log("Instruction tutorial", tutorial);
   // find the instruction step
   const step = (tutorial?.steps || []).find(
     (s) => s.type === "instruction",

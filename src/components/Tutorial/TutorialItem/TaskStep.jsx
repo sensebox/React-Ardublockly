@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import MarkdownIt from "markdown-it";
 import { useSelector } from "react-redux";
 import TutorialSlide from "./TutorialSlide";
+import QuestionBlock from "./QuestionCard";
+import QuestionCard from "./QuestionCard";
 
 const md = new MarkdownIt();
 
@@ -35,13 +37,16 @@ md.renderer.rules.image = function (tokens, idx, options, env, self) {
 const TaskStep = ({ step }) => {
   const activeStep = useSelector((state) => state.tutorial.activeStep);
 
-  useEffect(() => {
-    console.log("TaskStep", step);
-  }, [step]);
-
   return (
     <TutorialSlide stepNumber={activeStep}>
       <div dangerouslySetInnerHTML={{ __html: md.render(step.text) }} />
+      {step.type === "question" && step.questionData && (
+        <div>
+          {step.questionData.map((q, idx) => {
+            return <QuestionCard key={idx} questionData={q} />;
+          })}
+        </div>
+      )}
     </TutorialSlide>
   );
 };
