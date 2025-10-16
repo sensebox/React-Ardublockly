@@ -28,7 +28,6 @@ const TutorialProgressCard = () => {
       type: "TUTORIAL_STEP",
       payload: step,
     });
-    console.log("tutorial", tutorial);
   };
 
   return (
