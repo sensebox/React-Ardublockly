@@ -120,13 +120,19 @@ const TutorialBuilderProgressCard = ({
           </Box>
         }
       />
-      <CardContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+      <CardContent
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 1,
+        }}
+      >
         {/* 🔥 ToggleButtonGroup */}
         <ToggleButtonGroup
           value={difficulty}
           exclusive
           onChange={(e, newValue) => newValue && setDifficulty(newValue)}
-          size="small"
+          size=""
           sx={{
             justifyContent: "space-between",
             gap: 2,
@@ -207,160 +213,173 @@ const TutorialBuilderProgressCard = ({
         )}
 
         {/* Steps mit Drag & Drop */}
-        <DragDropContext onDragEnd={handleDragEnd}>
-          <Droppable droppableId="steps">
-            {(provided) => (
-              <Box
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-                sx={{
-                  maxHeight: 400,
-                  overflowY: "auto",
-                  p: 1,
-                  border: "1px solid #e0e0e0", // ✅ dünner Rahmen
-                  borderRadius: 2, // ✅ abgerundet
-                  boxShadow: "0 2px 6px rgba(0,0,0,0.1)", // ✅ dezenter Shadow
-                }}
-              >
-                {steps.map((step, index) => {
-                  const isCurrent = index === activeStep;
+        <Box sx={{ position: "relative" }}>
+          <DragDropContext onDragEnd={handleDragEnd}>
+            <Droppable droppableId="steps">
+              {(provided) => (
+                <Box
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                  sx={{
+                    maxHeight: "30vh",
+                    overflowY: "auto",
+                    p: 1,
+                    border: "1px solid #e0e0e0",
+                    borderRadius: 2,
+                    boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+                  }}
+                >
+                  {steps.map((step, index) => {
+                    const isCurrent = index === activeStep;
 
-                  return (
-                    <Draggable
-                      key={step.id}
-                      draggableId={step.id}
-                      index={index}
-                    >
-                      {(provided, snapshot) => (
-                        <Box
-                          ref={provided.innerRef}
-                          {...provided.draggableProps} // immer hier dran!
-                          onClick={() => setActiveStep(index)}
-                          sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            border: "1px solid #e0e0e0", // ✅ dünner Rahmen
-                            borderRadius: 2, // ✅ abgerundet
-                            boxShadow: "0 2px 6px rgba(0,0,0,0.1)", // ✅ dezenter Shadow
-
-                            gap: 2,
-                            px: 2,
-                            py: 1.5,
-                            mb: 1,
-                            borderRadius: 2,
-                            bgcolor: isCurrent
-                              ? theme.palette.primary.main
-                              : snapshot.isDragging
-                                ? theme.palette.action.selected
-                                : "transparent",
-                            color: isCurrent
-                              ? theme.palette.primary.contrastText
-                              : theme.palette.text.primary,
-                            boxShadow: snapshot.isDragging
-                              ? "0 4px 8px rgba(0,0,0,0.2)"
-                              : "none",
-                          }}
-                        >
-                          <RadioButtonUncheckedIcon
+                    return (
+                      <Draggable
+                        key={step.id}
+                        draggableId={step.id}
+                        index={index}
+                      >
+                        {(provided, snapshot) => (
+                          <Box
+                            ref={provided.innerRef}
+                            {...provided.draggableProps} // immer hier dran!
+                            onClick={() => setActiveStep(index)}
                             sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              border: "1px solid #e0e0e0", // ✅ dünner Rahmen
+                              borderRadius: 2, // ✅ abgerundet
+                              boxShadow: "0 2px 6px rgba(0,0,0,0.1)", // ✅ dezenter Shadow
+
+                              gap: 2,
+                              px: 2,
+                              py: 1.5,
+                              mb: 1,
+                              borderRadius: 2,
+                              bgcolor: isCurrent
+                                ? theme.palette.primary.main
+                                : snapshot.isDragging
+                                  ? theme.palette.action.selected
+                                  : "transparent",
                               color: isCurrent
                                 ? theme.palette.primary.contrastText
-                                : theme.palette.text.secondary,
-                              flexShrink: 0,
-                              cursor: "pointer",
+                                : theme.palette.text.primary,
+                              boxShadow: snapshot.isDragging
+                                ? "0 4px 8px rgba(0,0,0,0.2)"
+                                : "none",
                             }}
-                          />
-
-                          {/* Titel + Untertitel */}
-                          <Box sx={{ flex: 1, minWidth: 0 }}>
-                            <TextField
-                              value={step.title}
-                              onChange={(e) =>
-                                updateStep(index, "title", e.target.value)
-                              }
-                              variant="standard"
-                              fullWidth
-                              InputProps={{
-                                disableUnderline: true,
-                                style: {
-                                  color: isCurrent
-                                    ? theme.palette.primary.contrastText
-                                    : theme.palette.text.primary,
-                                  fontWeight: isCurrent ? 600 : 400,
-                                },
-                              }}
-                            />
-                            <TextField
-                              value={step.subtitle}
-                              onChange={(e) =>
-                                updateStep(index, "subtitle", e.target.value)
-                              }
-                              variant="standard"
-                              fullWidth
-                              InputProps={{
-                                disableUnderline: true,
-                                style: {
-                                  color: isCurrent
-                                    ? theme.palette.primary.contrastText
-                                    : theme.palette.text.secondary,
-                                  fontSize: "0.8rem",
-                                },
-                              }}
-                            />
-                          </Box>
-
-                          {/* Trash Icon */}
-                          <IconButton
-                            size="small"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              deleteStep(index);
-                            }}
-                            sx={{ color: theme.palette.error.main }}
                           >
-                            <DeleteIcon />
-                          </IconButton>
-
-                          {/* Drag Handle Icon */}
-                          <IconButton
-                            size="small"
-                            onClick={(e) => e.stopPropagation()}
-                            {...provided.dragHandleProps} // ✅ DragHandle hier
-                            sx={{
-                              color:
-                                activeStep === index
+                            <RadioButtonUncheckedIcon
+                              sx={{
+                                color: isCurrent
                                   ? theme.palette.primary.contrastText
                                   : theme.palette.text.secondary,
-                              cursor: "grab",
-                            }}
-                          >
-                            <DragHandleIcon />
-                          </IconButton>
-                        </Box>
-                      )}
-                    </Draggable>
-                  );
-                })}
-                {provided.placeholder}
-              </Box>
-            )}
-          </Droppable>
-        </DragDropContext>
+                                flexShrink: 0,
+                                cursor: "pointer",
+                              }}
+                            />
 
-        {/* Plus-Button */}
-        <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-          <IconButton
-            onClick={addStep}
-            color="primary"
+                            {/* Titel + Untertitel */}
+                            <Box sx={{ flex: 1, minWidth: 0 }}>
+                              <TextField
+                                value={step.title}
+                                onChange={(e) =>
+                                  updateStep(index, "title", e.target.value)
+                                }
+                                variant="standard"
+                                fullWidth
+                                InputProps={{
+                                  disableUnderline: true,
+                                  style: {
+                                    color: isCurrent
+                                      ? theme.palette.primary.contrastText
+                                      : theme.palette.text.primary,
+                                    fontWeight: isCurrent ? 600 : 400,
+                                  },
+                                }}
+                              />
+                              <TextField
+                                value={step.subtitle}
+                                onChange={(e) =>
+                                  updateStep(index, "subtitle", e.target.value)
+                                }
+                                variant="standard"
+                                fullWidth
+                                InputProps={{
+                                  disableUnderline: true,
+                                  style: {
+                                    color: isCurrent
+                                      ? theme.palette.primary.contrastText
+                                      : theme.palette.text.secondary,
+                                    fontSize: "0.8rem",
+                                  },
+                                }}
+                              />
+                            </Box>
+
+                            {/* Trash Icon */}
+                            <IconButton
+                              size="small"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                deleteStep(index);
+                              }}
+                              sx={{ color: theme.palette.error.main }}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+
+                            {/* Drag Handle Icon */}
+                            <IconButton
+                              size="small"
+                              onClick={(e) => e.stopPropagation()}
+                              {...provided.dragHandleProps} // ✅ DragHandle hier
+                              sx={{
+                                color:
+                                  activeStep === index
+                                    ? theme.palette.primary.contrastText
+                                    : theme.palette.text.secondary,
+                                cursor: "grab",
+                              }}
+                            >
+                              <DragHandleIcon />
+                            </IconButton>
+                          </Box>
+                        )}
+                      </Draggable>
+                    );
+                  })}{" "}
+                  {provided.placeholder}
+                </Box>
+              )}
+            </Droppable>
+          </DragDropContext>
+
+          {/* Plus-Button sticky */}
+          <Box
             sx={{
-              border: `2px dashed ${theme.palette.primary.main}`,
-              borderRadius: "50%",
-              width: 40,
-              height: 40,
+              position: "sticky",
+              bottom: 0,
+              background: "white",
+              display: "flex",
+              justifyContent: "center",
+              p: 1,
+              mt: 1,
+              borderTop: "1px solid #eee",
             }}
           >
-            <AddCircleOutlineIcon />
-          </IconButton>
+            <IconButton
+              onClick={addStep}
+              color="primary"
+              sx={{
+                border: `2px dashed ${theme.palette.primary.main}`,
+                borderRadius: "50%",
+                width: 40,
+                height: 40,
+              }}
+            >
+              <AddCircleOutlineIcon />
+            </IconButton>
+          </Box>
         </Box>
       </CardContent>
     </Card>

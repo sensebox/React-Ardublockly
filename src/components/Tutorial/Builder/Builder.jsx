@@ -16,12 +16,14 @@ import WhatNext from "./WhatNext";
 import QuestionEditor from "./QuestionEditor";
 import QuestionList from "./QuestionList";
 import BlocklyExample from "./BlocklyExample";
+import AppSnackbar from "@/components/Snackbar";
+import { useHistory } from "react-router-dom";
 
 const Builder = ({ existingTutorial }) => {
   const theme = useTheme();
   const user = useSelector((state) => state.auth.user);
   const token = useSelector((state) => state.auth.token);
-
+  const history = useHistory();
   // 🔥 Global States
   const [title, setTitle] = useState(
     existingTutorial?.title || "Tutorial Titel",
@@ -65,6 +67,15 @@ const Builder = ({ existingTutorial }) => {
     ],
   );
 
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackInfo, setSnackInfo] = useState({
+    type: "success",
+    key: 0,
+    message: "",
+  });
+
+  const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
+
   const buildTutorialJSON = () => ({
     public: isPublic,
     review,
@@ -80,6 +91,7 @@ const Builder = ({ existingTutorial }) => {
       category: s.category || "instruction",
       questionData: s.questionData || null, // 👈 HIER hinzugefügt
       xml: s.xml || null, // 👈 HIER hinzugefügt
+      learnings: s.learnings || null, // 👈 HIER hinzugefügt
     })),
     learnings,
   });
@@ -98,6 +110,7 @@ const Builder = ({ existingTutorial }) => {
 
   const saveTutorial = async () => {
     const newTutorial = buildTutorialJSON();
+    setSaveButtonDisabled(true);
     console.log("Posting this tutorial:", newTutorial);
 
     try {
@@ -120,6 +133,14 @@ const Builder = ({ existingTutorial }) => {
 
       const data = await response.json();
       console.log("Tutorial saved:", data);
+      setSnackInfo({
+        type: "success",
+        key: Date.now(),
+        message: "Tutorial erfolgreich gespeichert!",
+      });
+      setSnackbarOpen(true);
+      setSaveButtonDisabled(false);
+      history.push("/tutorial");
     } catch (err) {
       console.error("Fehler beim Speichern:", err);
     }
@@ -173,6 +194,7 @@ const Builder = ({ existingTutorial }) => {
             variant="contained"
             startIcon={<Save />}
             onClick={saveTutorial}
+            disabled={saveButtonDisabled}
           >
             Tutorial speichern
           </Button>
@@ -288,6 +310,12 @@ const Builder = ({ existingTutorial }) => {
           </AnimatePresence>
         </Box>
       </Box>
+      <AppSnackbar
+        open={snackbarOpen}
+        message={snackInfo.message}
+        type={snackInfo.type}
+        key={snackInfo.key}
+      />
     </Box>
   );
 };
