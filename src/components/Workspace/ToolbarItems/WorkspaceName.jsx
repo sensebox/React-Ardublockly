@@ -34,6 +34,24 @@ const styles = (theme) => ({
       color: theme.palette.primary.main,
     },
   },
+  workspaceNameEmbedded: {
+    minHeight: "48px",
+    backgroundColor: theme.palette.secondary.main,
+    borderRadius: "25px",
+    display: "inline-flex",
+    cursor: "pointer",
+    padding: "8px 16px",
+    fontSize: "16px",
+    fontWeight: "500",
+    minWidth: "120px",
+    "&:hover": {
+      color: theme.palette.primary.main,
+      backgroundColor: theme.palette.secondary.light || theme.palette.secondary.main,
+    },
+    "&:active": {
+      transform: "scale(0.98)",
+    },
+  },
 });
 
 class WorkspaceName extends Component {
@@ -117,7 +135,7 @@ class WorkspaceName extends Component {
           style={{ height: "100%" }}
         >
           <div
-            className={this.props.classes.workspaceName}
+            className={this.props.isEmbedded ? this.props.classes.workspaceNameEmbedded : this.props.classes.workspaceName}
             onClick={() => {
               if (this.props.multiple) {
                 this.props.workspaceName(this.props.project.title);
@@ -152,12 +170,15 @@ class WorkspaceName extends Component {
                 {this.props.name}
               </Typography>
             ) : null}
-            <div style={{ width: "40px", display: "flex" }}>
+            <div style={{ 
+              width: this.props.isEmbedded ? "48px" : "40px", 
+              display: "flex" 
+            }}>
               <FontAwesomeIcon
                 icon={faPen}
                 style={{
-                  height: "18px",
-                  width: "18px",
+                  height: this.props.isEmbedded ? "20px" : "18px",
+                  width: this.props.isEmbedded ? "20px" : "18px",
                   margin: "auto",
                 }}
               />
@@ -250,6 +271,7 @@ WorkspaceName.propTypes = {
   name: PropTypes.string,
   description: PropTypes.string.isRequired,
   message: PropTypes.object.isRequired,
+  isEmbedded: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({

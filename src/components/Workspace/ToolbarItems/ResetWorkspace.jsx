@@ -34,6 +34,23 @@ const styles = (theme) => ({
       color: theme.palette.primary.contrastText,
     },
   },
+  buttonEmbedded: {
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.primary.contrastText,
+    width: "48px",
+    height: "48px",
+    minWidth: "48px",
+    minHeight: "48px",
+    padding: "12px",
+    "&:hover": {
+      backgroundColor: theme.palette.primary.main,
+      color: theme.palette.primary.contrastText,
+      transform: "scale(1.05)",
+    },
+    "&:active": {
+      transform: "scale(0.95)",
+    },
+  },
 });
 
 class ResetWorkspace extends Component {
@@ -83,11 +100,11 @@ class ResetWorkspace extends Component {
       <div style={this.props.style}>
         <Tooltip title={Blockly.Msg.tooltip_reset_workspace} arrow>
           <IconButton
-            className={this.props.classes.button}
+            className={this.props.isEmbedded ? this.props.classes.buttonEmbedded : this.props.classes.button}
             onClick={() => this.openDialog()}
             size="large"
           >
-            <FontAwesomeIcon icon={faShare} size="xs" flip="horizontal" />
+            <FontAwesomeIcon icon={faShare} size={this.props.isEmbedded ? "sm" : "xs"} flip="horizontal" />
           </IconButton>
         </Tooltip>
 
@@ -132,6 +149,7 @@ ResetWorkspace.propTypes = {
   clearStats: PropTypes.func.isRequired,
   onChangeCode: PropTypes.func.isRequired,
   workspaceName: PropTypes.func.isRequired,
+  isEmbedded: PropTypes.bool,
 };
 
 export default connect(null, { clearStats, onChangeCode, workspaceName })(

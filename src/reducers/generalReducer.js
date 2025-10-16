@@ -6,6 +6,7 @@ import {
   STATISTICS,
   PLATFORM,
   COMPILER,
+  EMBEDDED_MODE,
 } from "../actions/types";
 
 const initialLanguage = () => {
@@ -23,7 +24,7 @@ const initialPlatform = () => {
 };
 
 const initialCompiler = () => {
-  return import.meta.env.INITIAL_COMPILER_URL;
+  return import.meta.env.VITE_INITIAL_COMPILER_URL || "https://compile.sensebox.de";
 };
 
 const initialSounds = () => {
@@ -80,6 +81,7 @@ const initialState = {
   statistics: initialStatistics(),
   platform: initialPlatform(),
   compiler: initialCompiler(),
+  embeddedMode: false,
 };
 
 export default function foo(state = initialState, action) {
@@ -122,6 +124,11 @@ export default function foo(state = initialState, action) {
       return {
         ...state,
         compiler: action.payload,
+      };
+    case EMBEDDED_MODE:
+      return {
+        ...state,
+        embeddedMode: action.payload,
       };
     default:
       return state;

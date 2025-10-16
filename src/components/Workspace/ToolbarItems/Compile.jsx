@@ -19,6 +19,23 @@ const styles = (theme) => ({
       color: theme.palette.primary.contrastText,
     },
   },
+  iconButtonEmbedded: {
+    backgroundColor: theme.palette.button.compile,
+    color: theme.palette.primary.contrastText,
+    width: "48px",
+    height: "48px",
+    minWidth: "48px",
+    minHeight: "48px",
+    padding: "12px",
+    "&:hover": {
+      backgroundColor: theme.palette.button.compile,
+      color: theme.palette.primary.contrastText,
+      transform: "scale(1.05)",
+    },
+    "&:active": {
+      transform: "scale(0.95)",
+    },
+  },
 });
 
 const Compile = (props) => {
@@ -42,12 +59,12 @@ const Compile = (props) => {
     <div>
       <Tooltip title={tooltipText} arrow style={{ marginRight: "5px" }}>
         <IconButton
-          className={`compileBlocks ${props.classes.iconButton}`}
+          className={`compileBlocks ${props.isEmbedded ? props.classes.iconButtonEmbedded : props.classes.iconButton}`}
           onClick={openDialog}
-          size="large"
+          size={props.isEmbedded ? "large" : "large"}
           aria-label="Compile code"
         >
-          <FontAwesomeIcon icon={faClipboardCheck} size="xs" />
+          <FontAwesomeIcon icon={faClipboardCheck} size={props.isEmbedded ? "sm" : "xs"} />
         </IconButton>
       </Tooltip>
 
@@ -58,7 +75,7 @@ const Compile = (props) => {
         compiler={props.compiler}
         code={props.arduino}
         filename={props.name || "sketch"}
-        platform={props.platform}
+        platform={props.isEmbedded ? true : props.platform}
         appLink={props.appLink || ""}
       />
     </div>
@@ -75,6 +92,7 @@ Compile.propTypes = {
   iconButton: PropTypes.bool,
   appLink: PropTypes.string,
   classes: PropTypes.object.isRequired,
+  isEmbedded: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({

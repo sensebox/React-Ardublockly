@@ -5,15 +5,23 @@ import * as Blockly from "blockly/core";
 import { useSelector } from "react-redux";
 import { ToolboxMcu } from "./ToolboxMcu";
 import { ToolboxEsp } from "./ToolboxEsp";
+import { useEmbeddedToolbox } from "./useEmbeddedToolbox";
 import "./toolbox_styles.css";
+
 const Toolbox = ({ workspace, toolbox }) => {
   const selectedBoard = useSelector((state) => state.board.board);
   const language = useSelector((state) => state.general.language);
+  const isEmbedded = useSelector((state) => state.general.embeddedMode);
   const previousBoard = useRef(null);
 
   // Register typed variable flyout on board change or mount
   useEffect(() => {
     if (!workspace || !toolbox?.current) return;
+
+    // Check if workspace is still valid (not disposed)
+    if (workspace.isDisposed && workspace.isDisposed()) {
+      return;
+    }
 
     // Register callback
     workspace.registerToolboxCategoryCallback(
@@ -37,9 +45,13 @@ const Toolbox = ({ workspace, toolbox }) => {
     if (previousBoard.current !== selectedBoard) {
       previousBoard.current = selectedBoard;
     }
+    if (workspace.toolbox) {
+      workspace.updateToolbox(toolbox.current);
+    }
 
-    workspace.updateToolbox(toolbox.current);
   }, [workspace, toolbox, selectedBoard, language]);
+
+  useEmbeddedToolbox(workspace, isEmbedded);
 
   return (
     <xml
@@ -47,6 +59,7 @@ const Toolbox = ({ workspace, toolbox }) => {
       id="blockly"
       style={{ display: "none" }}
       ref={toolbox}
+      className={isEmbedded ? "embedded-mode" : ""}
     >
       {selectedBoard === "MCU" || selectedBoard === "MCU:mini" ? (
         <ToolboxMcu />
