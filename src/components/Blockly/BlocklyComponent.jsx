@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 
@@ -105,12 +105,19 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEmbedded]);
 
+  const cardStyle = useMemo(() => {
+    return isEmbedded ?{
+      height: "100%",
+      width: "100%",
+    } : {};
+  }, [isEmbedded]);
+
   return (
     <>
       <Card
         ref={blocklyDivRef}
         id="blocklyDiv"
-        style={style ? style : { height: "100%", width: "100%" }}
+        style={style ? style : cardStyle}
       />
       <Toolbox toolbox={toolboxRef} workspace={workspace} />
       <Snackbar

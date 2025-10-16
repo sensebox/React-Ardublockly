@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 
-import { Router, Route, Switch } from "react-router-dom";
+import { Router, Route, Switch, useLocation } from "react-router-dom";
 import { createBrowserHistory } from "history";
 
-import { Provider } from "react-redux";
+import { Provider, useDispatch } from "react-redux";
 import store from "./store";
 import { loadUser } from "./actions/authActions";
 import ErrorBoundary from "./components/ErrorBoundary";
@@ -18,7 +18,20 @@ import {
 
 import Content from "./components/Content";
 import EmbeddedBlockly from "./components/EmbeddedBlockly";
-import { setCompiler } from "./actions/generalActions";
+import { setCompiler, setEmbeddedMode } from "./actions/generalActions";
+
+// Component to handle route-based embedded mode
+const RouteHandler = () => {
+  const location = useLocation();
+  const dispatch = useDispatch();
+  
+  React.useEffect(() => {
+    // Set embedded mode based on current route
+    dispatch(setEmbeddedMode(location.pathname === '/embedded'));
+  }, [location.pathname, dispatch]);
+  
+  return null;
+};
 
 const theme = createTheme({
   palette: {
@@ -57,6 +70,7 @@ class App extends Component {
         <ThemeProvider theme={theme}>
           <Provider store={store}>
             <Router history={customHistory}>
+              <RouteHandler />
               <ErrorBoundary>
                 <Switch>
                   <Route path="/embedded" exact>

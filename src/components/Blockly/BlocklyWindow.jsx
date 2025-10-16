@@ -24,6 +24,7 @@ export default function BlocklyWindow(props) {
   const sounds = useSelector((state) => state.general.sounds);
   const language = useSelector((state) => state.general.language);
   const selectedBoard = useSelector((state) => state.board.board);
+  const isEmbedded = useSelector((state) => state.general.embeddedMode);
 
   const {
     svg,
@@ -174,8 +175,22 @@ export default function BlocklyWindow(props) {
     [move],
   );
 
+  // Mobile-specific styling for embedded mode
+  const embeddedStyles = isEmbedded ? {
+    height: "100%",
+    width: "100%",
+    overflow: "hidden",
+    touchAction: "none", // Prevent default touch behaviors
+    WebkitTouchCallout: "none", // Disable iOS callout
+    WebkitUserSelect: "none", // Disable text selection
+    userSelect: "none",
+  } : {
+    height: "100%",
+    width: "100%"
+  };
+
   return (
-    <div style={{ height: "100%", width: "100%" }}>
+    <div style={embeddedStyles}>
       <BlocklyComponent
         style={svg ? { height: 0 } : blocklyCSS}
         readOnly={readOnly !== undefined ? readOnly : false}
