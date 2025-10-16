@@ -18,10 +18,7 @@ const TutorialFooter = () => {
   const tutorial = useSelector((state) => state.tutorial.tutorials[0]);
 
   // add one extra step for "Fertig"
-  const allSteps = [
-    ...tutorial.steps,
-    { id: "finished", title: "Fertig", isCompletion: true },
-  ];
+  const allSteps = [...tutorial.steps];
 
   const progress = ((activeStep + 1) / allSteps.length) * 100;
 
@@ -43,10 +40,6 @@ const TutorialFooter = () => {
       changeStep(activeStep - 1);
     }
   };
-
-  useEffect(() => {
-    console.log("tutorial in footer", tutorial);
-  }, [tutorial]);
 
   return (
     <Box
@@ -181,14 +174,23 @@ const TutorialFooter = () => {
             Zurück
           </Button>
 
-          <Button
-            variant="contained"
-            disabled={activeStep === allSteps.length - 1}
-            endIcon={<ChevronRightIcon />}
-            onClick={nextStep}
-          >
-            Weiter
-          </Button>
+          {activeStep === allSteps.length - 1 ? (
+            <Button
+              variant="contained"
+              endIcon={<CheckCircleIcon />}
+              onClick={() => (window.location.href = "/tutorial")}
+            >
+              Zurück zur Übersicht
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              endIcon={<ChevronRightIcon />}
+              onClick={nextStep}
+            >
+              Weiter
+            </Button>
+          )}
         </Box>
       </Box>
     </Box>

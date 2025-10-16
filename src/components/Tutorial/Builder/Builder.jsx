@@ -76,37 +76,26 @@ const Builder = ({ existingTutorial }) => {
 
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
 
-  const buildTutorialJSON = () => ({
-    public: isPublic,
-    review,
-    creator,
-    title,
-    difficulty,
-    steps: steps.map((s) => ({
-      id: s.id,
-      headline: s.title,
-      text: s.subtitle,
+  const buildTutorialJSON = () => (
+    console.log("building tutorial json with steps", steps),
+    {
+      public: isPublic,
+      review,
+      creator,
+      title,
+      difficulty,
+      learnings,
       hardware: selectedHardware,
-      type: "instruction",
-      category: s.category || "instruction",
-      questionData: s.questionData || null, // 👈 HIER hinzugefügt
-      xml: s.xml || null, // 👈 HIER hinzugefügt
-      learnings: s.learnings || null, // 👈 HIER hinzugefügt
-    })),
-    learnings,
-  });
-
-  useEffect(() => {
-    console.log(buildTutorialJSON());
-  }, [
-    steps,
-    title,
-    subtitle,
-    difficulty,
-    selectedHardware,
-    learnings,
-    category,
-  ]);
+      steps: steps.map((s) => ({
+        id: s.id,
+        headline: s.title,
+        text: s.subtitle,
+        type: s.category || "instruction",
+        questionData: s.questions || null, // 👈 HIER hinzugefügt
+        xml: s.xml || null, // 👈 HIER hinzugefügt
+      })),
+    }
+  );
 
   const saveTutorial = async () => {
     const newTutorial = buildTutorialJSON();
@@ -139,10 +128,11 @@ const Builder = ({ existingTutorial }) => {
         message: "Tutorial erfolgreich gespeichert!",
       });
       setSnackbarOpen(true);
-      setSaveButtonDisabled(false);
       history.push("/tutorial");
     } catch (err) {
       console.error("Fehler beim Speichern:", err);
+    } finally {
+      setSaveButtonDisabled(false);
     }
   };
 

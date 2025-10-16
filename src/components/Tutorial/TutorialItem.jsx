@@ -40,10 +40,11 @@ function TutorialItem({ tutorial, level }) {
     return labels[idx].toLocaleUpperCase();
   };
 
-  console.log("TutorialItem user", tutorial);
+  useEffect(() => {
+    console.log("tutorial item", tutorial);
+  }, []);
 
   const handleDelete = () => {
-    console.log("Deleting tutorial", tutorial._id);
     dispatch(deleteTutorial(tutorial._id));
   };
 
