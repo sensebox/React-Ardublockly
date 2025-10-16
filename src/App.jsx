@@ -19,6 +19,7 @@ import {
 import Content from "./components/Content";
 import EmbeddedBlockly from "./components/EmbeddedBlockly";
 import RouteHandler from "./components/RouteHandler";
+import EmbeddedRoute from "./components/Route/EmbeddedRoute";
 import { setCompiler } from "./actions/generalActions";
 
 const theme = createTheme({
@@ -46,7 +47,10 @@ const theme = createTheme({
 
 class App extends Component {
   componentDidMount() {
-    store.dispatch(loadUser());
+    // Only call loadUser() if not on embedded route
+    if (window.location.pathname !== '/embedded') {
+      store.dispatch(loadUser());
+    }
     // set initial compiler
     store.dispatch(setCompiler(import.meta.env.VITE_INITIAL_COMPILER_URL));
   }
@@ -61,9 +65,9 @@ class App extends Component {
               <RouteHandler />
               <ErrorBoundary>
                 <Switch>
-                  <Route path="/embedded" exact>
+                  <EmbeddedRoute path="/embedded" exact>
                     <EmbeddedBlockly />
-                  </Route>
+                  </EmbeddedRoute>
                   <Route path="/">
                     <Content />
                   </Route>

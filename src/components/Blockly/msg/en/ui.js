@@ -424,7 +424,6 @@ export const UI = {
   goToApp_text:
     "The code has been compiled successfully. Start with the transfer by clicking on the button below, redirecting you to the senseBox:connect App ! ",
   goToApp_title: "Over-The-Air Transfer",
-  goToTransferScreen: "Proceed with data transfer",
 
   transfer_headline: "Transfer file",
   transfer_subline: "Drag the file from your downloads folder to the senseBox",
