@@ -32,10 +32,8 @@ const WorkspaceToolbar = ({
 
   // iPad-friendly styles for embedded mode
   const embeddedStyle = isEmbedded ? {
-    padding: "8px 12px",
     minHeight: "48px",
     minWidth: "48px",
-    marginRight: "8px",
   } : {};
 
   // Simplified toolbar for embedded mode - only show: save, name, compile, share, reset
