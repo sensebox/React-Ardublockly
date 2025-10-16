@@ -113,10 +113,11 @@ export default function Tutorial() {
           <AnimatePresence mode="wait">
             {(() => {
               const currentStep = tutorial.steps[activeStep];
+              console.log(currentStep);
               const type = currentStep?.type; // <-- falls 'type' im Step definiert ist
 
               if (type === "finish") {
-                return <TutorialFinished key="finished" />;
+                return <TutorialFinished key="finished" tutorial={tutorial} />;
               }
 
               if (type === "instruction") {

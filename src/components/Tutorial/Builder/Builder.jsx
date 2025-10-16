@@ -18,6 +18,7 @@ import QuestionList from "./QuestionList";
 import BlocklyExample from "./BlocklyExample";
 import AppSnackbar from "@/components/Snackbar";
 import { useHistory } from "react-router-dom";
+import { sub } from "date-fns";
 
 const Builder = ({ existingTutorial }) => {
   const theme = useTheme();
@@ -33,10 +34,16 @@ const Builder = ({ existingTutorial }) => {
   );
   const [steps, setSteps] = useState(
     existingTutorial?.steps || [
-      { id: "intro", title: "Einleitung", subtitle: "Starte hier!" },
+      {
+        id: "intro",
+        title: "Einleitung",
+        subtitle: "Starte hier!",
+        type: "instruction",
+      },
       {
         id: "finish",
         title: "Abschluss",
+        type: "finish",
         subtitle: "Übersicht & Zusammenfassung",
       },
     ],
@@ -89,8 +96,9 @@ const Builder = ({ existingTutorial }) => {
       steps: steps.map((s) => ({
         id: s.id,
         headline: s.title,
-        text: s.subtitle,
-        type: s.category || "instruction",
+        subtitle: s.subtitle || "",
+        text: s.text || "",
+        type: s.category || s.type,
         questionData: s.questions || null, // 👈 HIER hinzugefügt
         xml: s.xml || null, // 👈 HIER hinzugefügt
       })),
