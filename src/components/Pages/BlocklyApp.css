@@ -28,6 +28,12 @@ body:has(.blockly-app-container) {
   width: 100% !important;
 }
 
+/* Ensure BlocklyWindow container takes remaining space after toolbar */
+.blockly-app-container > div > div:last-child {
+  height: 100%;
+  overflow: hidden;
+}
+
 /* Optimize for notched devices (iPhone X and newer) */
 @supports (padding: max(0px)) {
   .blockly-app-container {

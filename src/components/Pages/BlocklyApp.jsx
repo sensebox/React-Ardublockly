@@ -81,20 +81,36 @@ const BlocklyApp = ({ project = null, projectType = null }) => {
 
   return (
     <div className="blockly-app-container">
-      <div style={{ flex: 1, height: "100%", position: "relative" }}>
+      <div style={{ 
+        display: "flex", 
+        flexDirection: "column", 
+        height: "100%", 
+        position: "relative" 
+      }}>
         {/* Toolbar */}
-      <Box
-        className="workspaceFunc"
-        sx={{ float: "right", height: "40px", mb: 2 }}
-      >
-        <WorkspaceToolbar project={project} projectType={projectType} />
-      </Box>
-        <BlocklyWindow
-          initialXml={initialXml}
-          zoom={mobileConfig.zoom}
-          move={mobileConfig.move}
-          grid={mobileConfig.grid}
-        />
+        <Box
+          className="workspaceFunc"
+          sx={{ 
+            height: "40px", 
+            flexShrink: 0,
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+            padding: "0 16px"
+          }}
+        >
+          <WorkspaceToolbar project={project} projectType={projectType} />
+        </Box>
+        
+        {/* Blockly Workspace */}
+        <div style={{ flex: 1, minHeight: 0 }}>
+          <BlocklyWindow
+            initialXml={initialXml}
+            zoom={mobileConfig.zoom}
+            move={mobileConfig.move}
+            grid={mobileConfig.grid}
+          />
+        </div>
       </div>
       <DeviceSelection />
     </div>
