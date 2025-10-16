@@ -13,8 +13,10 @@ import {
   Button,
 } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import DifficultyLabel from "./DifficultyLabel";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteTutorial } from "@/actions/tutorialActions";
 
 function getDifficultyLevel(value) {
   if (value <= 1) return 1;
@@ -26,6 +28,8 @@ function getDifficultyLevel(value) {
 
 function TutorialItem({ tutorial, level }) {
   const theme = useTheme();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
   const labels = ["Sehr leicht", "Leicht", "Mittel", "Schwer", "Sehr schwer"];
   const getTutorialImage = (t) => t.imageUrl || "/placeholder-image.png";
   const getDifficultyLabel = (value) => {
@@ -34,6 +38,13 @@ function TutorialItem({ tutorial, level }) {
       Math.min(labels.length - 1, getDifficultyLevel(value) - 1),
     );
     return labels[idx].toLocaleUpperCase();
+  };
+
+  console.log("TutorialItem user", tutorial);
+
+  const handleDelete = () => {
+    console.log("Deleting tutorial", tutorial._id);
+    dispatch(deleteTutorial(tutorial._id));
   };
 
   return (
@@ -108,7 +119,7 @@ function TutorialItem({ tutorial, level }) {
         </CardActionArea>
 
         {/* Button-Bereich IMMER unten */}
-        <Box sx={{ p: 2, pt: 0 }}>
+        <Box sx={{ p: 2, pt: 0, gap: 2, display: "flex" }}>
           <Button
             component={Link}
             to={`/tutorial/${tutorial._id}`}
@@ -130,6 +141,59 @@ function TutorialItem({ tutorial, level }) {
           >
             Anzeigen
           </Button>
+          {/* Editier-Button nur anzeigen, wenn Tutorial editierbar ist */}
+          {tutorial.creator === user.email && (
+            <Box
+              sx={{
+                display: "flex",
+                gap: 1,
+                flexGrow: 1,
+                flexDirection: "column",
+              }}
+            >
+              <Button
+                component={Link}
+                to={`/tutorial/${tutorial._id}`}
+                fullWidth
+                startIcon={<FontAwesomeIcon icon={faPencil} />}
+                sx={{
+                  background: theme.palette.background.white,
+                  color: "theme.palette.primary.main",
+                  borderRadius: "50px",
+                  fontWeight: "bold",
+                  border: "1px solid",
+                  borderColor: theme.palette.primary.main,
+                  transition: "all 0.2s ease-in-out",
+                  "&:hover": {
+                    backgroundColor: theme.palette.primary.main,
+                    color: theme.palette.background.white,
+                  },
+                }}
+              >
+                Bearbeiten
+              </Button>
+              <Button
+                fullWidth
+                startIcon={<FontAwesomeIcon icon={faTrash} />}
+                sx={{
+                  background: theme.palette.background.white,
+                  color: "red",
+                  borderRadius: "50px",
+                  fontWeight: "bold",
+                  border: "1px solid",
+                  borderColor: "red",
+                  transition: "all 0.2s ease-in-out",
+                  "&:hover": {
+                    backgroundColor: "red",
+                    color: theme.palette.background.white,
+                  },
+                }}
+                onClick={handleDelete}
+              >
+                Löschen
+              </Button>
+            </Box>
+          )}
         </Box>
       </Card>
     </Grid>
