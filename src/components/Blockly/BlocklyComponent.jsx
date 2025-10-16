@@ -118,6 +118,7 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
         ref={blocklyDivRef}
         id="blocklyDiv"
         style={style ? style : cardStyle}
+        className={isEmbedded ? "embedded-mode" : ""}
       />
       <Toolbox toolbox={toolboxRef} workspace={workspace} />
       <Snackbar
