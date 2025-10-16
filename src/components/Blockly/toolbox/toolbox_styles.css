@@ -25,8 +25,10 @@
   min-height: 50px !important;
 }
 
-/* Base styling for all categories */
-.blocklyToolboxCategory:not(:has(input[type="search"])) {
+/* Normal mode - use default Blockly styling (no custom overrides) */
+
+/* Embedded mode base styling for all categories */
+.embedded-mode .blocklyToolboxCategory:not(:has(input[type="search"])) {
   height: 36px !important; /* 30px + 20% = 36px */
   border-radius: 5px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
@@ -38,16 +40,16 @@
   position: relative;
 }
 
-/* Level 1 (Top-level) categories - Primary style */
-.blocklyToolboxCategoryContainer[aria-level="1"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
+/* Embedded mode Level 1 (Top-level) categories - Primary style */
+.embedded-mode .blocklyToolboxCategoryContainer[aria-level="1"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
   border: 1px solid rgba(0, 128, 0, 0.4);
   background: #fff;
   font-weight: 600;
   font-size: 14px;
 }
 
-/* Level 2 (Sub-categories) - Secondary style */
-.blocklyToolboxCategoryContainer[aria-level="2"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
+/* Embedded mode Level 2 (Sub-categories) - Secondary style */
+.embedded-mode .blocklyToolboxCategoryContainer[aria-level="2"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
   border: 1px solid #4CAF50;
   background: #E8F5E8;
   font-weight: 500;
@@ -55,8 +57,8 @@
   height: 32px !important;
 }
 
-/* Level 3 (Sub-sub-categories) - Tertiary style */
-.blocklyToolboxCategoryContainer[aria-level="3"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
+/* Embedded mode Level 3 (Sub-sub-categories) - Tertiary style */
+.embedded-mode .blocklyToolboxCategoryContainer[aria-level="3"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
   border: 1px solid #FF9800;
   background: #FFF3E0;
   font-weight: 400;
@@ -64,8 +66,8 @@
   height: 28px !important;
 }
 
-/* Level 4+ (Deep nested) - Quaternary style */
-.blocklyToolboxCategoryContainer[aria-level="4"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
+/* Embedded mode Level 4+ (Deep nested) - Quaternary style */
+.embedded-mode .blocklyToolboxCategoryContainer[aria-level="4"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
   border: 1px solid #9C27B0;
   background: #F3E5F5;
   font-weight: 400;
@@ -73,22 +75,22 @@
   height: 26px !important;
 }
 
-/* Fokus generell bei Toolbox-Elementen deaktivieren */
-.blocklyToolboxCategory:focus,
-.blocklyToolboxCategoryContainer:focus,
-.blocklyTreeRow:focus,
-.blocklyTreeLabel:focus {
+/* Embedded mode - disable focus styling */
+.embedded-mode .blocklyToolboxCategory:focus,
+.embedded-mode .blocklyToolboxCategoryContainer:focus,
+.embedded-mode .blocklyTreeRow:focus,
+.embedded-mode .blocklyTreeLabel:focus {
   outline: none !important;
   box-shadow: none !important;
 }
 
-/* Alle Kategorien mit aria-level=2 */
-.blocklyToolboxCategoryContainer[aria-level="2"] {
+/* Embedded mode - category indentation and positioning */
+.embedded-mode .blocklyToolboxCategoryContainer[aria-level="2"] {
   margin-left: 20px;
 }
 
-/* In horizontal layout, third level categories should appear next to second level, not indented */
-.blocklyToolboxCategoryContainer[aria-level="3"] {
+/* In embedded mode horizontal layout, third level categories should appear next to second level, not indented */
+.embedded-mode .blocklyToolboxCategoryContainer[aria-level="3"] {
   margin-left: 0px !important;
   position: relative !important;
   top: 0 !important;
@@ -96,7 +98,7 @@
   transform: none !important;
 }
 
-.blocklyToolboxCategoryContainer[aria-level="4"] {
+.embedded-mode .blocklyToolboxCategoryContainer[aria-level="4"] {
   margin-left: 0px !important;
   position: relative !important;
   top: 0 !important;
@@ -154,193 +156,64 @@
   left: 0 !important;
 }
 
-/* iPad specific optimizations for embedded mode */
-@media (min-width: 769px) and (max-width: 1024px) {
-  /* iPad portrait and landscape */
-  .embedded-mode .blocklyToolbox {
-    width: 100% !important;
-  }
-  
-  /* Ensure third level categories appear next to second level on iPad */
-  .embedded-mode .blocklyToolboxCategoryContainer[aria-level="3"] {
-    margin-left: 0px !important;
-    position: relative !important;
-    top: 0 !important;
-    left: 0 !important;
-    transform: none !important;
-    display: inline-block !important;
-    vertical-align: top !important;
-  }
-  
-  .embedded-mode .blocklyToolboxCategoryContainer[aria-level="4"] {
-    margin-left: 0px !important;
-    position: relative !important;
-    top: 0 !important;
-    left: 0 !important;
-    transform: none !important;
-    display: inline-block !important;
-    vertical-align: top !important;
-  }
-  
-  /* Improve touch targets for iPad - maintain hierarchy */
-  .embedded-mode .blocklyToolboxCategoryContainer[aria-level="1"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
-    height: 52px !important;
-    font-size: 16px;
-    padding: 8px;
-    min-width: 140px;
-  }
-  
-  .embedded-mode .blocklyToolboxCategoryContainer[aria-level="2"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
-    height: 48px !important;
-    font-size: 15px;
-    padding: 6px;
-    min-width: 120px;
-  }
-  
-  .embedded-mode .blocklyToolboxCategoryContainer[aria-level="3"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
-    height: 44px !important;
-    font-size: 14px;
-    padding: 6px;
-    min-width: 100px;
-  }
-  
-  .embedded-mode .blocklyToolboxCategoryContainer[aria-level="4"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
-    height: 40px !important;
-    font-size: 13px;
-    padding: 4px;
-    min-width: 90px;
-  }
-  
-  /* Better spacing for iPad touch */
-  .embedded-mode .blocklyToolboxCategory:not(:has(input[type="search"])) {
-    margin: 3px;
-  }
-  
-  /* iPad search field */
-  .embedded-mode input[type="search"] {
-    font-size: 16px;
-    padding: 10px 14px;
-    height: 36px;
-    min-width: 200px;
-  }
+/* iPad optimizations for embedded mode - simplified since only iPad is used */
+.embedded-mode .blocklyToolboxCategoryContainer[aria-level="1"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
+  height: 52px !important;
+  font-size: 16px;
+  padding: 8px;
+  min-width: 140px;
 }
 
-/* Mobile/Tablet optimizations for embedded mode */
-@media (max-width: 768px) {
-  /* Full width toolbox on tablets */
-  .embedded-mode .blocklyToolbox {
-    width: 100% !important;
-  }
-  
-  /* Larger touch targets for categories - maintain hierarchy */
-  .embedded-mode .blocklyToolboxCategoryContainer[aria-level="1"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
-    height: 56px !important;
-    font-size: 16px;
-    padding: 8px;
-  }
-  
-  .embedded-mode .blocklyToolboxCategoryContainer[aria-level="2"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
-    height: 53px !important;
-    font-size: 15px;
-    padding: 8px;
-  }
-  
-  .embedded-mode .blocklyToolboxCategoryContainer[aria-level="3"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
-    height: 50px !important;
-    font-size: 14px;
-    padding: 6px;
-  }
-  
-  .embedded-mode .blocklyToolboxCategoryContainer[aria-level="4"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
-    height: 47px !important;
-    font-size: 13px;
-    padding: 6px;
-  }
-  
-  /* Better spacing for touch */
-  .embedded-mode .blocklyToolboxCategory:not(:has(input[type="search"])) {
-    margin: 4px;
-  }
-  
-  /* Larger search field on tablets */
-  .embedded-mode input[type="search"] {
-    font-size: 16px;
-    padding: 10px 14px;
-    height: 38px; /* 32px + 20% = 38.4px rounded to 38px */
-  }
+.embedded-mode .blocklyToolboxCategoryContainer[aria-level="2"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
+  height: 48px !important;
+  font-size: 15px;
+  padding: 6px;
+  min-width: 120px;
 }
 
-@media (max-width: 480px) {
-  /* Full width toolbox on phones */
-  .embedded-mode .blocklyToolbox {
-    width: 100% !important;
-  }
-  
-  /* Slightly smaller text but maintain touch target size */
-  .embedded-mode .blocklyToolboxCategory:not(:has(input[type="search"])) {
-    height: 53px !important; /* 44px + 20% = 52.8px rounded to 53px */
-    font-size: 14px;
-  }
-  
-  /* Search field on phones */
-  .embedded-mode input[type="search"] {
-    font-size: 14px;
-    padding: 8px 12px;
-    height: 34px; /* 28px + 20% = 33.6px rounded to 34px */
-  }
-  
-  /* Reduce indentation on small screens */
-  .embedded-mode .blocklyToolboxCategoryContainer[aria-level="2"] {
-    margin-left: 10px;
-  }
-  
-  /* Keep third level categories aligned next to second level on mobile too */
-  .embedded-mode .blocklyToolboxCategoryContainer[aria-level="3"] {
-    margin-left: 0px;
-  }
-  
-  .embedded-mode .blocklyToolboxCategoryContainer[aria-level="4"] {
-    margin-left: 0px;
-  }
+.embedded-mode .blocklyToolboxCategoryContainer[aria-level="3"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
+  height: 44px !important;
+  font-size: 14px;
+  padding: 6px;
+  min-width: 100px;
 }
 
-/* Safari/iPad specific fixes for embedded mode */
-@supports (-webkit-appearance: none) {
-  /* Fix for Safari rendering issues */
-  .embedded-mode .blocklyToolboxCategoryContainer[aria-level="3"],
-  .embedded-mode .blocklyToolboxCategoryContainer[aria-level="4"] {
-    margin-left: 0px !important;
-    transform: translateZ(0); /* Force hardware acceleration */
-  }
-  
-  /* Ensure proper touch handling in Safari */
-  .embedded-mode .blocklyToolboxCategory {
-    -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    user-select: none;
-  }
+.embedded-mode .blocklyToolboxCategoryContainer[aria-level="4"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
+  height: 40px !important;
+  font-size: 13px;
+  padding: 4px;
+  min-width: 90px;
 }
 
-/* Improve block rendering for touch devices in embedded mode */
-@media (hover: none) and (pointer: coarse) {
-  /* Increase spacing between blocks in flyout */
-  .embedded-mode .blocklyFlyout .blocklyBlockCanvas > .blocklyDraggable {
-    margin: 8px 0 !important;
-  }
-  
-  /* Larger scroll bars for touch */
-  .embedded-mode .blocklyScrollbarHandle {
-    width: 12px !important;
-    height: 12px !important;
-  }
-  
-  /* Additional iPad touch fixes */
-  .embedded-mode .blocklyToolboxCategoryContainer[aria-level="3"],
-  .embedded-mode .blocklyToolboxCategoryContainer[aria-level="4"] {
-    margin-left: 0px !important;
-    position: relative !important;
-    z-index: 1;
-  }
+/* Better spacing for iPad touch */
+.embedded-mode .blocklyToolboxCategory:not(:has(input[type="search"])) {
+  margin: 3px;
+}
+
+/* iPad search field */
+.embedded-mode input[type="search"] {
+  font-size: 16px;
+  padding: 10px 14px;
+  height: 36px;
+  min-width: 200px;
+}
+
+/* iPad touch optimizations */
+.embedded-mode .blocklyToolboxCategory {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* iPad flyout spacing */
+.embedded-mode .blocklyFlyout .blocklyBlockCanvas > .blocklyDraggable {
+  margin: 8px 0 !important;
+}
+
+/* iPad scroll bars */
+.embedded-mode .blocklyScrollbarHandle {
+  width: 12px !important;
+  height: 12px !important;
 }
 
