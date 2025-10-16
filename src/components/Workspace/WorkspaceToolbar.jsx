@@ -28,7 +28,67 @@ const WorkspaceToolbar = ({
   projectType,
 }) => {
   const user = useSelector((state) => state.auth.user);
+  const isEmbedded = useSelector((state) => state.general.embeddedMode);
 
+  // iPad-friendly styles for embedded mode
+  const embeddedStyle = isEmbedded ? {
+    padding: "8px 12px",
+    minHeight: "48px",
+    minWidth: "48px",
+    marginRight: "8px",
+  } : {};
+
+  // Simplified toolbar for embedded mode - only show: save, name, compile, share, reset
+  if (isEmbedded) {
+    return (
+      <div style={{
+        ...containerStyle,
+        justifyContent: "space-between",
+        width: "100%",
+        padding: "0 16px"
+      }}>
+        <WorkspaceName
+          style={{ 
+            marginRight: "8px",
+            ...embeddedStyle
+          }}
+          multiple={multiple}
+          project={project}
+          projectType={projectType}
+          isEmbedded={isEmbedded}
+        />
+        
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          {!multiple && (
+            <Compile 
+              iconButton 
+              style={embeddedStyle}
+              isEmbedded={isEmbedded}
+            />
+          )}
+
+          {projectType !== "gallery" && !assessment && (
+            <ShareProject
+              style={embeddedStyle}
+              multiple={multiple}
+              project={project}
+              projectType={projectType}
+              isEmbedded={isEmbedded}
+            />
+          )}
+
+          {!multiple && (
+            <ResetWorkspace
+              style={embeddedStyle}
+              isEmbedded={isEmbedded}
+            />
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // Original toolbar for non-embedded mode
   return (
     <div style={containerStyle}>
       {!assessment && !multiple && <AutoSave />}

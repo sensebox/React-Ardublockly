@@ -91,7 +91,7 @@ const EmbeddedBlockly = ({ project = null, projectType = null }) => {
         <Box
           className="workspaceFunc"
           sx={{ 
-            height: "40px", 
+            height: "64px", 
             flexShrink: 0,
             display: "flex",
             justifyContent: "flex-end",

@@ -52,6 +52,23 @@ const styles = (theme) => ({
       color: theme.palette.primary.contrastText,
     },
   },
+  iconButtonEmbedded: {
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.primary.contrastText,
+    width: "48px",
+    height: "48px",
+    minWidth: "48px",
+    minHeight: "48px",
+    padding: "12px",
+    "&:hover": {
+      backgroundColor: theme.palette.primary.main,
+      color: theme.palette.primary.contrastText,
+      transform: "scale(1.05)",
+    },
+    "&:active": {
+      transform: "scale(0.95)",
+    },
+  },
   button: {
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.primary.contrastText,
@@ -185,11 +202,11 @@ class ShareProject extends Component {
       <div style={this.props.style}>
         <Tooltip title={Blockly.Msg.tooltip_share_project} arrow>
           <IconButton
-            className={`shareBlocks ${this.props.classes.iconButton}`}
+            className={`shareBlocks ${this.props.isEmbedded ? this.props.classes.iconButtonEmbedded : this.props.classes.iconButton}`}
             onClick={() => this.shareBlocks()}
             size="large"
           >
-            <FontAwesomeIcon icon={faShareAlt} size="xs" />
+            <FontAwesomeIcon icon={faShareAlt} size={this.props.isEmbedded ? "sm" : "xs"} />
           </IconButton>
         </Tooltip>
 
@@ -371,6 +388,7 @@ ShareProject.propTypes = {
   clearMessages: PropTypes.func.isRequired,
   name: PropTypes.string,
   message: PropTypes.object.isRequired,
+  isEmbedded: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
