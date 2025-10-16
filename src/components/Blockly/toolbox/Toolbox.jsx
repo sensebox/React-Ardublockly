@@ -10,11 +10,17 @@ import "./toolbox_styles.css";
 const Toolbox = ({ workspace, toolbox }) => {
   const selectedBoard = useSelector((state) => state.board.board);
   const language = useSelector((state) => state.general.language);
+  const isEmbedded = useSelector((state) => state.general.embeddedMode);
   const previousBoard = useRef(null);
 
   // Register typed variable flyout on board change or mount
   useEffect(() => {
     if (!workspace || !toolbox?.current) return;
+
+    // Check if workspace is still valid (not disposed)
+    if (workspace.isDisposed && workspace.isDisposed()) {
+      return;
+    }
 
     // Register callback
     workspace.registerToolboxCategoryCallback(
@@ -38,8 +44,17 @@ const Toolbox = ({ workspace, toolbox }) => {
     if (previousBoard.current !== selectedBoard) {
       previousBoard.current = selectedBoard;
     }
+    // Check workspace validity before updating toolbox
+    if (workspace.toolbox) {
+      workspace.updateToolbox(toolbox.current);
+    }
 
-    workspace.updateToolbox(toolbox.current);
+    // Only set up mobile-specific toolbox behavior when in embedded mode
+    if (!isEmbedded) {
+      return () => {
+        // Cleanup function for non-embedded mode
+      };
+    }
 
     // Simple and direct approach - override the toolbox's click behavior
     const setupToolboxCollapse = () => {
@@ -155,7 +170,7 @@ const Toolbox = ({ workspace, toolbox }) => {
       // Restore original updateToolbox method
       workspace.updateToolbox = originalMethod;
     };
-  }, [workspace, toolbox, selectedBoard, language]);
+  }, [workspace, toolbox, selectedBoard, language, isEmbedded]);
 
   return (
     <xml

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
 
 import * as Blockly from "blockly/core";
 import "./blocks/index";
@@ -26,6 +27,7 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
   const blocklyDivRef = useRef(null);
   const toolboxRef = useRef(null);
   const [workspace, setWorkspace] = useState(undefined);
+  const isEmbedded = useSelector((state) => state.general.embeddedMode);
 
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -36,16 +38,22 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
 
   // Inject Blockly once on mount
   useEffect(() => {
-    const ws = Blockly.inject(blocklyDivRef.current, {
+    const blocklyOptions = {
       toolbox: toolboxRef.current,
-      horizontalLayout: true,
-      toolboxPosition: 'end',
       plugins: {
         blockDragger: ScrollBlockDragger,
         metricsManager: ScrollMetricsManager,
       },
       ...rest,
-    });
+    };
+
+    // Only apply mobile layout options when in embedded mode
+    if (isEmbedded) {
+      blocklyOptions.horizontalLayout = true;
+      blocklyOptions.toolboxPosition = 'end';
+    }
+
+    const ws = Blockly.inject(blocklyDivRef.current, blocklyOptions);
 
     setWorkspace(ws);
 
@@ -95,7 +103,7 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
       ws?.dispose();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isEmbedded]);
 
   return (
     <>

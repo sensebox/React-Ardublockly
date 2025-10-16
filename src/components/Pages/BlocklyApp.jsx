@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import * as Blockly from "blockly/core";
 import { createNameId } from "mnemonic-id";
 import { setRenderer } from "@/actions/generalActions";
@@ -13,6 +13,7 @@ import "./BlocklyApp.css";
 
 const BlocklyApp = ({ project = null, projectType = null }) => {
   const dispatch = useDispatch();
+  const isEmbedded = useSelector((state) => state.general.embeddedMode);
   const [initialXml, setInitialXml] = useState(
     localStorage.getItem("autoSaveXML"),
   );
@@ -20,29 +21,37 @@ const BlocklyApp = ({ project = null, projectType = null }) => {
   useEffect(() => {
     dispatch(workspaceName(createNameId()));
     
-    // Force tablet mode and Zelos renderer for mobile/touch optimization
-    dispatch(setRenderer("zelos"));
+    // Only apply mobile optimizations when in embedded mode
+    if (isEmbedded) {
+      // Force tablet mode and Zelos renderer for mobile/touch optimization
+      dispatch(setRenderer("zelos"));
 
-    // Update viewport meta tag for better mobile experience
-    const viewport = document.querySelector('meta[name="viewport"]');
-    const originalContent = viewport?.getAttribute("content");
-    if (viewport) {
-      viewport.setAttribute(
-        "content",
-        "width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover"
-      );
+      // Update viewport meta tag for better mobile experience
+      const viewport = document.querySelector('meta[name="viewport"]');
+      const originalContent = viewport?.getAttribute("content");
+      if (viewport) {
+        viewport.setAttribute(
+          "content",
+          "width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover"
+        );
+      }
+
+      return () => {
+        dispatch(clearStats());
+        dispatch(workspaceName(null));
+        
+        // Restore original viewport
+        if (viewport && originalContent) {
+          viewport.setAttribute("content", originalContent);
+        }
+      };
     }
 
     return () => {
       dispatch(clearStats());
       dispatch(workspaceName(null));
-      
-      // Restore original viewport
-      if (viewport && originalContent) {
-        viewport.setAttribute("content", originalContent);
-      }
     };
-  }, [dispatch]);
+  }, [dispatch, isEmbedded]);
 
   useEffect(() => {
     // Resize Workspace on updates
@@ -52,8 +61,8 @@ const BlocklyApp = ({ project = null, projectType = null }) => {
     }
   });
 
-  // Mobile-optimized configuration
-  const mobileConfig = {
+  // Mobile-optimized configuration (only used in embedded mode)
+  const mobileConfig = isEmbedded ? {
     // Enable pinch-to-zoom and better touch gestures
     move: {
       scrollbars: true,
@@ -77,7 +86,7 @@ const BlocklyApp = ({ project = null, projectType = null }) => {
       colour: "#4EAF47",
       snap: true, // Enable snap for easier block placement on touch
     },
-  };
+  } : {};
 
   return (
     <div className="blockly-app-container">
@@ -106,9 +115,11 @@ const BlocklyApp = ({ project = null, projectType = null }) => {
         <div style={{ flex: 1, minHeight: 0 }}>
           <BlocklyWindow
             initialXml={initialXml}
-            zoom={mobileConfig.zoom}
-            move={mobileConfig.move}
-            grid={mobileConfig.grid}
+            {...(isEmbedded && {
+              zoom: mobileConfig.zoom,
+              move: mobileConfig.move,
+              grid: mobileConfig.grid,
+            })}
           />
         </div>
       </div>
