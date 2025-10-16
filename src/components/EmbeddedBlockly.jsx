@@ -8,7 +8,7 @@ import { setBoardHelper } from "./Blockly/helpers/board";
 import BlocklyApp from "./Pages/BlocklyApp";
 
 
-const AppContent = () => {
+const EmbeddedBlockly = () => {
   const language = useSelector((state) => state.general.language);
   const board = useSelector((state) => state.board.board);
 
@@ -31,5 +31,4 @@ const AppContent = () => {
   );
 };
 
-export default AppContent;
-
+export default EmbeddedBlockly;

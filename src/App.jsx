@@ -17,7 +17,7 @@ import {
 } from "@mui/material/styles";
 
 import Content from "./components/Content";
-import AppContent from "./components/AppContent";
+import EmbeddedBlockly from "./components/EmbeddedBlockly";
 import { setCompiler } from "./actions/generalActions";
 
 const theme = createTheme({
@@ -59,8 +59,8 @@ class App extends Component {
             <Router history={customHistory}>
               <ErrorBoundary>
                 <Switch>
-                  <Route path="/app" exact>
-                    <AppContent />
+                  <Route path="/embedded" exact>
+                    <EmbeddedBlockly />
                   </Route>
                   <Route path="/">
                     <Content />
