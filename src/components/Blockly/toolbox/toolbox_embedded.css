@@ -1,0 +1,115 @@
+/* Embedded/Mobile-specific toolbox optimizations */
+
+/* Apply these styles only when .embedded-mode class is present */
+.embedded-mode .blocklyToolbox {
+  width: 100% !important;
+  height: auto !important;
+}
+
+.embedded-mode .blocklyToolboxContents {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: flex-start !important;
+}
+
+/* Force horizontal layout for all nested categories in embedded mode */
+.embedded-mode .blocklyToolboxCategoryContainer {
+  display: inline-block !important;
+  vertical-align: top !important;
+}
+
+/* Remove indentation for nested categories in embedded mode */
+.embedded-mode .blocklyToolboxCategoryContainer[aria-level="2"] {
+  margin-left: 0px !important;
+}
+
+.embedded-mode .blocklyToolboxCategoryContainer[aria-level="3"] {
+  margin-left: 0px !important;
+  position: relative !important;
+  top: 0 !important;
+  left: 0 !important;
+  transform: none !important;
+}
+
+.embedded-mode .blocklyToolboxCategoryContainer[aria-level="4"] {
+  margin-left: 0px !important;
+  position: relative !important;
+  top: 0 !important;
+  left: 0 !important;
+  transform: none !important;
+}
+
+/* Ensure proper spacing between categories in embedded mode */
+.embedded-mode .blocklyToolboxCategoryContainer[aria-level="3"],
+.embedded-mode .blocklyToolboxCategoryContainer[aria-level="4"] {
+  margin-right: 10px !important;
+  margin-bottom: 5px !important;
+}
+
+/* Larger touch targets for embedded mode */
+.embedded-mode .blocklyToolboxCategoryContainer[aria-level="1"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
+  height: 52px !important;
+  font-size: 16px;
+  padding: 8px;
+  min-width: 140px;
+}
+
+.embedded-mode .blocklyToolboxCategoryContainer[aria-level="2"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
+  height: 48px !important;
+  font-size: 15px;
+  padding: 6px;
+  min-width: 120px;
+}
+
+.embedded-mode .blocklyToolboxCategoryContainer[aria-level="3"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
+  height: 44px !important;
+  font-size: 14px;
+  padding: 6px;
+  min-width: 100px;
+}
+
+.embedded-mode .blocklyToolboxCategoryContainer[aria-level="4"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
+  height: 40px !important;
+  font-size: 13px;
+  padding: 4px;
+  min-width: 90px;
+}
+
+/* Better spacing for embedded mode touch */
+.embedded-mode .blocklyToolboxCategory:not(:has(input[type="search"])) {
+  margin: 3px;
+}
+
+/* Embedded mode search field */
+.embedded-mode input[type="search"] {
+  font-size: 16px;
+  padding: 10px 14px;
+  height: 36px;
+  min-width: 200px;
+}
+
+/* Touch device optimizations for embedded mode */
+.embedded-mode .blocklyToolboxCategory {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Improve block rendering for touch devices in embedded mode */
+.embedded-mode .blocklyFlyout .blocklyBlockCanvas > .blocklyDraggable {
+  margin: 8px 0 !important;
+}
+
+.embedded-mode .blocklyScrollbarHandle {
+  width: 12px !important;
+  height: 12px !important;
+}
+
+/* Safari/iPad specific fixes for embedded mode */
+.embedded-mode .blocklyToolboxCategoryContainer[aria-level="3"],
+.embedded-mode .blocklyToolboxCategoryContainer[aria-level="4"] {
+  margin-left: 0px !important;
+  transform: translateZ(0); /* Force hardware acceleration */
+  z-index: 1;
+}

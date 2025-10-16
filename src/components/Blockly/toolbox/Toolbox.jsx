@@ -5,7 +5,9 @@ import * as Blockly from "blockly/core";
 import { useSelector } from "react-redux";
 import { ToolboxMcu } from "./ToolboxMcu";
 import { ToolboxEsp } from "./ToolboxEsp";
+import { useEmbeddedToolbox } from "./useEmbeddedToolbox";
 import "./toolbox_styles.css";
+import "./toolbox_embedded.css";
 
 const Toolbox = ({ workspace, toolbox }) => {
   const selectedBoard = useSelector((state) => state.board.board);
@@ -44,127 +46,13 @@ const Toolbox = ({ workspace, toolbox }) => {
     if (previousBoard.current !== selectedBoard) {
       previousBoard.current = selectedBoard;
     }
-    // Check workspace validity before updating toolbox
     if (workspace.toolbox) {
       workspace.updateToolbox(toolbox.current);
     }
 
-    // Only set up mobile-specific toolbox behavior when in embedded mode
-    if (!isEmbedded) {
-      return () => {
-        // Cleanup function for non-embedded mode
-      };
-    }
+  }, [workspace, toolbox, selectedBoard, language]);
 
-    // Simple and direct approach - override the toolbox's click behavior
-    const setupToolboxCollapse = () => {
-      // Wait for toolbox to be rendered
-      setTimeout(() => {
-        const toolboxInstance = workspace.getToolbox();
-        if (!toolboxInstance) return;
-
-        // Get all category elements
-        const categoryElements = document.querySelectorAll('.blocklyToolboxCategory');
-
-        categoryElements.forEach((element, index) => {
-          // Remove existing event listeners by cloning the element
-          const newElement = element.cloneNode(true);
-          element.parentNode.replaceChild(newElement, element);
-
-          // Add new click handler
-          newElement.addEventListener('click', (e) => {
-            
-            // Allow the default Blockly behavior to happen first
-            setTimeout(() => {
-              const toolboxInstance = workspace.getToolbox();
-              if (!toolboxInstance) {
-                return;
-              }
-
-              // Try different methods to get selected item
-              let selectedItem = null;
-              if (toolboxInstance.getSelectedItem) {
-                selectedItem = toolboxInstance.getSelectedItem();
-              } else if (toolboxInstance.getSelectedItemId) {
-                const selectedId = toolboxInstance.getSelectedItemId();
-                // Try to find the item by ID
-                if (toolboxInstance.getToolboxItems) {
-                  const items = toolboxInstance.getToolboxItems();
-                  selectedItem = items.find(item => item.id === selectedId);
-                }
-              }
-
-              if (!selectedItem) {
-                // Try to get all items and find the one that's expanded
-                if (toolboxInstance.getToolboxItems) {
-                  const items = toolboxInstance.getToolboxItems();
-                  selectedItem = items.find(item => item.isExpanded && item.isExpanded());
-                }
-                return;
-              }
-
-              // Get all categories using the correct API
-              let allCategories = [];
-              if (toolboxInstance.getToolboxItems) {
-                allCategories = toolboxInstance.getToolboxItems();
-              } else {
-                return;
-              }
-
-              // Build hierarchy of selected item
-              const selectedHierarchy = [];
-              let current = selectedItem;
-              while (current) {
-                selectedHierarchy.push(current);
-                current = current.getParent && current.getParent();
-              }
-
-              // Collapse all categories not in the hierarchy
-              allCategories.forEach((category) => {
-                if (!category) return;
-                
-                if (!selectedHierarchy.includes(category)) {
-                  // Try different methods to collapse
-                  if (category.setExpanded && typeof category.setExpanded === 'function') {
-                    category.setExpanded(false);
-                  } else if (category.setOpen && typeof category.setOpen === 'function') {
-                    category.setOpen(false);
-                  }
-                  // Note: Some categories might not have collapse methods (like search)
-                }
-              });
-            }, 100);
-          });
-
-          // Also handle touch events for mobile
-          newElement.addEventListener('touchend', (e) => {
-            // Trigger the same logic as click
-            newElement.click();
-          });
-        });
-      }, 500);
-    };
-
-    // Set up the collapse functionality
-    setupToolboxCollapse();
-
-    // Also set up when toolbox updates
-    const originalUpdateToolbox = workspace.updateToolbox;
-    workspace.updateToolbox = function(toolboxDef) {
-      const result = originalUpdateToolbox.call(this, toolboxDef);
-      // Re-setup after toolbox update
-      setTimeout(setupToolboxCollapse, 300);
-      return result;
-    };
-
-    // Store original method for cleanup
-    const originalMethod = originalUpdateToolbox;
-
-    return () => {
-      // Restore original updateToolbox method
-      workspace.updateToolbox = originalMethod;
-    };
-  }, [workspace, toolbox, selectedBoard, language, isEmbedded]);
+  useEmbeddedToolbox(workspace, isEmbedded);
 
   return (
     <xml
@@ -172,6 +60,7 @@ const Toolbox = ({ workspace, toolbox }) => {
       id="blockly"
       style={{ display: "none" }}
       ref={toolbox}
+      className={isEmbedded ? "embedded-mode" : ""}
     >
       {selectedBoard === "MCU" || selectedBoard === "MCU:mini" ? (
         <ToolboxMcu />
