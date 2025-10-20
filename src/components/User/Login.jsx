@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
-import { login } from "../../actions/authActions";
+import { login, loginOpenSenseMap } from "../../actions/authActions"; // ✅ beide Actions
 
 import Snackbar from "../Snackbar";
 import Alert from "../ui/Alert";
@@ -16,6 +16,12 @@ import Divider from "@mui/material/Divider";
 import InputAdornment from "@mui/material/InputAdornment";
 import CircularProgress from "@mui/material/CircularProgress";
 import Link from "@mui/material/Link";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
+
 import * as Blockly from "blockly";
 
 export default function Login() {
@@ -30,6 +36,7 @@ export default function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [authProvider, setAuthProvider] = useState("native"); // ✅ Standard: native
   const [snackbar, setSnackbar] = useState(false);
   const [snackInfo, setSnackInfo] = useState({
     type: "",
@@ -38,7 +45,7 @@ export default function Login() {
   });
   const [showPassword, setShowPassword] = useState(false);
 
-  // on mount, if previous login failed, show error
+  // Fehler bei Mount anzeigen
   useEffect(() => {
     if (message.id === "LOGIN_FAIL") {
       setEmail("");
@@ -50,9 +57,9 @@ export default function Login() {
       });
       setSnackbar(true);
     }
-  }, []); // run once on mount
+  }, []);
 
-  // on message change, handle success or failure
+  // Erfolg/Fehler behandeln
   useEffect(() => {
     if (message.id === "LOGIN_SUCCESS") {
       if (redirectPath) {
@@ -70,21 +77,26 @@ export default function Login() {
       });
       setSnackbar(true);
     }
-  }, [message]); // re-run when message changes
+  }, [message, history, redirectPath]);
 
   const handleChange = (setter) => (e) => setter(e.target.value);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (email && password) {
-      dispatch(login({ email, password }));
-    } else {
+    if (!email || !password) {
       setSnackInfo({
         type: "error",
         key: Date.now(),
         message: Blockly.Msg.messages_login_error,
       });
       setSnackbar(true);
+      return;
+    }
+
+    if (authProvider === "native") {
+      dispatch(login({ email, password })); // ✅ native
+    } else {
+      dispatch(loginOpenSenseMap({ email, password })); // ✅ openSenseMap
     }
   };
 
@@ -101,25 +113,50 @@ export default function Login() {
         style={{ maxWidth: "500px", marginLeft: "auto", marginRight: "auto" }}
       >
         <h1>{Blockly.Msg.login_head}</h1>
-        <Alert>
-          {Blockly.Msg.login_osem_account_01}{" "}
-          <Link
-            color="primary"
-            rel="noreferrer"
-            target="_blank"
-            href="https://opensensemap.org/"
-            underline="hover"
+
+        {/* 🔘 Auth Provider Auswahl */}
+        <FormControl component="fieldset" sx={{ mb: 2 }}>
+          <FormLabel component="legend">Login mit</FormLabel>
+          <RadioGroup
+            row
+            value={authProvider}
+            onChange={(e) => setAuthProvider(e.target.value)}
           >
-            openSenseMap
-          </Link>{" "}
-          {Blockly.Msg.login_osem_account_02}.
-        </Alert>
+            <FormControlLabel
+              value="native"
+              control={<Radio />}
+              label="Eigenes Konto"
+            />
+            <FormControlLabel
+              value="opensensemap"
+              control={<Radio />}
+              label="openSenseMap"
+            />
+          </RadioGroup>
+        </FormControl>
+
+        {authProvider === "opensensemap" && (
+          <Alert>
+            {Blockly.Msg.login_osem_account_01}{" "}
+            <Link
+              color="primary"
+              rel="noreferrer"
+              target="_blank"
+              href="https://opensensemap.org/"
+              underline="hover"
+            >
+              openSenseMap
+            </Link>{" "}
+            {Blockly.Msg.login_osem_account_02}.
+          </Alert>
+        )}
 
         <Snackbar
           open={snackbar}
           message={snackInfo.message}
           type={snackInfo.type}
           key={snackInfo.key}
+          onClose={() => setSnackbar(false)}
         />
 
         <form onSubmit={handleSubmit}>
@@ -178,30 +215,34 @@ export default function Login() {
           </p>
         </form>
 
-        <p style={{ textAlign: "center", fontSize: "0.8rem" }}>
-          <Link
-            rel="noreferrer"
-            target="_blank"
-            href="https://opensensemap.org/"
-            color="primary"
-            underline="hover"
-          >
-            {Blockly.Msg.login_lostpassword}
-          </Link>
-        </p>
-        <Divider variant="fullWidth" />
-        <p style={{ textAlign: "center", padding: "0 34px" }}>
-          {Blockly.Msg.login_createaccount}{" "}
-          <Link
-            rel="noreferrer"
-            target="_blank"
-            href="https://opensensemap.org/"
-            underline="hover"
-          >
-            openSenseMap
-          </Link>
-          .
-        </p>
+        {authProvider === "opensensemap" && (
+          <>
+            <p style={{ textAlign: "center", fontSize: "0.8rem" }}>
+              <Link
+                rel="noreferrer"
+                target="_blank"
+                href="https://opensensemap.org/"
+                color="primary"
+                underline="hover"
+              >
+                {Blockly.Msg.login_lostpassword}
+              </Link>
+            </p>
+            <Divider variant="fullWidth" />
+            <p style={{ textAlign: "center", padding: "0 34px" }}>
+              {Blockly.Msg.login_createaccount}{" "}
+              <Link
+                rel="noreferrer"
+                target="_blank"
+                href="https://opensensemap.org/"
+                underline="hover"
+              >
+                openSenseMap
+              </Link>
+              .
+            </p>
+          </>
+        )}
       </div>
     </div>
   );

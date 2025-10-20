@@ -431,8 +431,7 @@ const Navbar = () => {
               text: Blockly.Msg.navbar_tutorialbuilder,
               icon: faTools,
               link: "/tutorial/builder",
-              restriction:
-                user && user.blocklyRole !== "user" && isAuthenticated,
+              restriction: user,
             },
             {
               text: Blockly.Msg.navbar_gallery,
