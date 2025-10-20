@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
-import { getTutorial, tutorialStep } from "../../actions/tutorialActions";
+import { getTutorial } from "../../actions/tutorialActions";
 
 import NotFound from "../Pages/NotFound";
 import Instruction from "./TutorialItem/Instruction";
 import TaskStep from "./TutorialItem/TaskStep";
 import TutorialProgressCard from "./TutorialItem/TutorialProgessCard";
 import TutorialFooter from "./TutorialFooter";
-import TutorialFinished from "./TutorialFinished"; // 👉 neu importieren
+import TutorialFinished from "./TutorialFinished";
 
 import * as Blockly from "blockly";
 import { Box, useTheme } from "@mui/material";
@@ -26,13 +26,10 @@ export default function Tutorial() {
   const activeStep = useSelector((state) => state.tutorial.activeStep);
   const [currentStep, setCurrentStep] = useState();
 
-  // initial load
+  // Initial load
   useEffect(() => {
     dispatch(getTutorial(tutorialId));
-    dispatch({
-      type: "TUTORIAL_STEP",
-      payload: 0,
-    });
+    dispatch({ type: "TUTORIAL_STEP", payload: 0 });
   }, [dispatch, tutorialId]);
 
   useEffect(() => {
@@ -57,7 +54,6 @@ export default function Tutorial() {
     return null;
   }
 
-  // Animation Varianten
   const variants = {
     initial: { opacity: 0, x: 100 },
     animate: { opacity: 1, x: 0 },
@@ -71,49 +67,64 @@ export default function Tutorial() {
       sx={{
         display: "flex",
         flexDirection: "column",
-        alignContent: "flex-start",
+        minHeight: "85vh", // 👈 volle Höhe
+        backgroundColor: theme.palette.background.default,
       }}
     >
-      <Breadcrumbs
-        content={[
-          { link: "/tutorial", title: "Tutorials" },
-          {
-            link: `/tutorial/${tutorialId}`,
-            title: tutorial?.title || "Aktuelles Tutorial",
-          },
-        ]}
-      />
+      {/* Header (Breadcrumbs) */}
+      <Box sx={{ flexShrink: 0 }}>
+        <Breadcrumbs
+          content={[
+            { link: "/tutorial", title: "Tutorials" },
+            {
+              link: `/tutorial/${tutorialId}`,
+              title: tutorial?.title || "Aktuelles Tutorial",
+            },
+          ]}
+        />
+      </Box>
 
+      {/* Hauptinhalt */}
       <Box
         sx={{
+          flexGrow: 1, // 👈 nimmt gesamten verfügbaren Platz ein
           display: "flex",
           flexDirection: "row",
           width: "100%",
           p: 2,
           gap: 4,
-          minHeight: "50vh",
           justifyContent: "center",
+          alignItems: "stretch", // alles gleiche Höhe
         }}
       >
         {/* ProgressCard links - 20% */}
-        <Box sx={{ flex: "0 0 20%" }}>
+        <Box
+          sx={{
+            flex: "0 0 20%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+          }}
+        >
           <TutorialProgressCard />
         </Box>
 
-        {/* Animierter Bereich rechts - 75% */}
+        {/* Hauptbereich rechts */}
         <Box
           sx={{
-            flex: "0 0 60%",
+            flex: "1 1 auto",
             position: "relative",
             display: "flex",
+            flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
+            minHeight: "100%",
           }}
         >
           <AnimatePresence mode="wait">
             {(() => {
               const currentStep = tutorial.steps[activeStep];
-              const type = currentStep?.type; // <-- falls 'type' im Step definiert ist
+              const type = currentStep?.type;
 
               if (type === "finish") {
                 return <TutorialFinished key="finished" tutorial={tutorial} />;
@@ -129,7 +140,10 @@ export default function Tutorial() {
         </Box>
       </Box>
 
-      <TutorialFooter />
+      {/* Footer – immer am unteren Rand */}
+      <Box sx={{ flexShrink: 0 }}>
+        <TutorialFooter />
+      </Box>
     </Box>
   );
 }
