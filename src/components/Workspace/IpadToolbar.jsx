@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
 import { IPAD_CONFIG } from "../../config/ipadConfig";
 import WorkspaceName from "./ToolbarItems/WorkspaceName";
 import Compile from "./ToolbarItems/Compile";
@@ -12,6 +13,7 @@ const IpadToolbar = ({
   project, 
   projectType 
 }) => {
+  const selectedBoard = useSelector((state) => state.board.board);
   // iPad-optimized toolbar layout for embedded mode
   return (
     <div style={{
@@ -34,7 +36,7 @@ const IpadToolbar = ({
       />
       
       <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-        {!multiple && (
+        {!multiple && selectedBoard && (
           <Compile 
             iconButton 
             style={{
