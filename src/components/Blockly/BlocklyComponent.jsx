@@ -51,6 +51,8 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
     if (isEmbedded) {
       blocklyOptions.horizontalLayout = true;
       blocklyOptions.toolboxPosition = 'end';
+      // Ensure toolbox icon sprites and other assets load correctly in embedded view
+      blocklyOptions.media = '/media/blockly/';
     }
 
     const ws = Blockly.inject(blocklyDivRef.current, blocklyOptions);

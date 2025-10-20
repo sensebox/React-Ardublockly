@@ -90,6 +90,16 @@ export const useEmbeddedToolbox = (workspace, isEmbedded) => {
             targetElement.click();
           });
         });
+
+        // Set accent color CSS variable from the category left border
+        const rows = document.querySelectorAll('.blocklyToolboxCategory');
+        rows.forEach((row) => {
+          const styles = window.getComputedStyle(row);
+          const borderLeftColor = styles.getPropertyValue('border-left-color');
+          if (borderLeftColor) {
+            row.style.setProperty('--cat-accent', borderLeftColor.trim());
+          }
+        });
       }, 500);
     };
 
@@ -98,6 +108,17 @@ export const useEmbeddedToolbox = (workspace, isEmbedded) => {
     workspace.updateToolbox = function(toolboxDef) {
       const result = originalUpdateToolboxRef.current.call(this, toolboxDef);
       setTimeout(setupToolboxCollapse, 300);
+      // Re-apply accent colors after updates
+      setTimeout(() => {
+        const rows = document.querySelectorAll('.blocklyToolboxCategory');
+        rows.forEach((row) => {
+          const styles = window.getComputedStyle(row);
+          const borderLeftColor = styles.getPropertyValue('border-left-color');
+          if (borderLeftColor) {
+            row.style.setProperty('--cat-accent', borderLeftColor.trim());
+          }
+        });
+      }, 350);
       return result;
     };
     return () => {
