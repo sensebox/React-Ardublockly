@@ -156,45 +156,45 @@
   left: 0 !important;
 }
 
-/* iPad optimizations for embedded mode - simplified since only iPad is used */
+/* iPad category heights - using CSS custom properties */
 .embedded-mode .blocklyToolboxCategoryContainer[aria-level="1"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
-  height: 52px !important;
+  height: var(--ipad-category-height-1) !important;
   font-size: 16px;
   padding: 8px;
   min-width: 140px;
 }
 
 .embedded-mode .blocklyToolboxCategoryContainer[aria-level="2"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
-  height: 48px !important;
+  height: var(--ipad-category-height-2) !important;
   font-size: 15px;
   padding: 6px;
   min-width: 120px;
 }
 
 .embedded-mode .blocklyToolboxCategoryContainer[aria-level="3"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
-  height: 44px !important;
+  height: var(--ipad-category-height-3) !important;
   font-size: 14px;
   padding: 6px;
   min-width: 100px;
 }
 
 .embedded-mode .blocklyToolboxCategoryContainer[aria-level="4"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
-  height: 40px !important;
+  height: var(--ipad-category-height-4) !important;
   font-size: 13px;
   padding: 4px;
   min-width: 90px;
 }
 
-/* Better spacing for iPad touch */
+/* iPad touch spacing */
 .embedded-mode .blocklyToolboxCategory:not(:has(input[type="search"])) {
-  margin: 3px;
+  margin: var(--ipad-category-margin);
 }
 
 /* iPad search field */
 .embedded-mode input[type="search"] {
   font-size: 16px;
   padding: 10px 14px;
-  height: 36px;
+  height: var(--ipad-search-height);
   min-width: 200px;
 }
 

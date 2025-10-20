@@ -1,23 +1,23 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setEmbeddedMode } from "../actions/generalActions";
+import { IPAD_CONFIG } from "../config/ipadConfig";
 
 const RouteHandler = () => {
   const location = useLocation();
   const dispatch = useDispatch();
-  const previousPathnameRef = React.useRef(location.pathname);
+  const previousPathnameRef = useRef(location.pathname);
   
-  React.useEffect(() => {
+  useEffect(() => {
     const currentPathname = location.pathname;
     const previousPathname = previousPathnameRef.current;
     
-    // Always dispatch on first load (when previousPathname equals currentPathname)
-    // or when transitioning between embedded and non-embedded routes
-    const isCurrentEmbedded = currentPathname === '/embedded';
-    const wasPreviousEmbedded = previousPathname === '/embedded';
+    const isCurrentEmbedded = currentPathname === IPAD_CONFIG.ROUTE;
+    const wasPreviousEmbedded = previousPathname === IPAD_CONFIG.ROUTE;
     
-    if (previousPathname === currentPathname || isCurrentEmbedded !== wasPreviousEmbedded) {
+    // Only dispatch when actually changing between embedded and non-embedded modes
+    if (isCurrentEmbedded !== wasPreviousEmbedded) {
       dispatch(setEmbeddedMode(isCurrentEmbedded));
     }
     
