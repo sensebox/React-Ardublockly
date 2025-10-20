@@ -30,6 +30,7 @@ import withStyles from "@mui/styles/withStyles";
 import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
+import { getEmbeddedButtonStyles } from "../../../styles/embeddedButtonStyles";
 import Typography from "@mui/material/Typography";
 
 import {
@@ -41,52 +42,39 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import * as Blockly from "blockly/core";
 
-const styles = (theme) => ({
-  iconButton: {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.primary.contrastText,
-    width: "40px",
-    height: "40px",
-    "&:hover": {
+const styles = (theme) => {
+  const embeddedStyles = getEmbeddedButtonStyles(theme);
+  return {
+    iconButton: {
       backgroundColor: theme.palette.primary.main,
       color: theme.palette.primary.contrastText,
+      width: "40px",
+      height: "40px",
+      "&:hover": {
+        backgroundColor: theme.palette.primary.main,
+        color: theme.palette.primary.contrastText,
+      },
     },
-  },
-  iconButtonEmbedded: {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.primary.contrastText,
-    width: "48px",
-    height: "48px",
-    minWidth: "48px",
-    minHeight: "48px",
-    padding: "12px",
-    "&:hover": {
+    button: {
       backgroundColor: theme.palette.primary.main,
       color: theme.palette.primary.contrastText,
-      transform: "scale(1.05)",
+      "&:hover": {
+        backgroundColor: theme.palette.primary.main,
+        color: theme.palette.primary.contrastText,
+      },
+      borderRadius: 20,
     },
-    "&:active": {
-      transform: "scale(0.95)",
-    },
-  },
-  button: {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.primary.contrastText,
-    "&:hover": {
-      backgroundColor: theme.palette.primary.main,
-      color: theme.palette.primary.contrastText,
-    },
-    borderRadius: 20,
-  },
-  link: {
-    color: theme.palette.primary.main,
-    textDecoration: "none",
-    "&:hover": {
+    link: {
       color: theme.palette.primary.main,
-      textDecoration: "underline",
+      textDecoration: "none",
+      "&:hover": {
+        color: theme.palette.primary.main,
+        textDecoration: "underline",
+      },
     },
-  },
-});
+    iconButtonEmbedded: embeddedStyles.buttonEmbedded,
+  };
+};
 
 class ShareProject extends Component {
   constructor(props) {

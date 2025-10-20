@@ -7,36 +7,24 @@ import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { workspaceName } from "../../../actions/workspaceActions";
 import CompilationDialog from "../ToolbarItems/CompilationDialog/CompilationDialog";
 import withStyles from "@mui/styles/withStyles";
+import { getEmbeddedButtonStyles } from "../../../styles/embeddedButtonStyles";
 
-const styles = (theme) => ({
-  iconButton: {
-    backgroundColor: theme.palette.button.compile,
-    color: theme.palette.primary.contrastText,
-    width: "40px",
-    height: "40px",
-    "&:hover": {
+const styles = (theme) => {
+  const embeddedStyles = getEmbeddedButtonStyles(theme);
+  return {
+    iconButton: {
       backgroundColor: theme.palette.button.compile,
       color: theme.palette.primary.contrastText,
+      width: "40px",
+      height: "40px",
+      "&:hover": {
+        backgroundColor: theme.palette.button.compile,
+        color: theme.palette.primary.contrastText,
+      },
     },
-  },
-  iconButtonEmbedded: {
-    backgroundColor: theme.palette.button.compile,
-    color: theme.palette.primary.contrastText,
-    width: "48px",
-    height: "48px",
-    minWidth: "48px",
-    minHeight: "48px",
-    padding: "12px",
-    "&:hover": {
-      backgroundColor: theme.palette.button.compile,
-      color: theme.palette.primary.contrastText,
-      transform: "scale(1.05)",
-    },
-    "&:active": {
-      transform: "scale(0.95)",
-    },
-  },
-});
+    iconButtonEmbedded: embeddedStyles.iconButtonEmbedded,
+  };
+};
 
 const Compile = (props) => {
   const [dialogOpen, setDialogOpen] = useState(false);

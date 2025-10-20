@@ -10,6 +10,7 @@ import Dialog from "../../ui/Dialog";
 import withStyles from "@mui/styles/withStyles";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
+import { getEmbeddedButtonStyles } from "../../../styles/embeddedButtonStyles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
@@ -23,36 +24,22 @@ const withWidth = () => (WrappedComponent) => (props) => (
   <WrappedComponent {...props} width="xs" />
 );
 
-const styles = (theme) => ({
-  workspaceName: {
-    minHeight: "40px",
-    backgroundColor: theme.palette.secondary.main,
-    borderRadius: "25px",
-    display: "inline-flex",
-    cursor: "pointer",
-    "&:hover": {
-      color: theme.palette.primary.main,
+const styles = (theme) => {
+  const embeddedStyles = getEmbeddedButtonStyles(theme);
+  return {
+    workspaceName: {
+      minHeight: "40px",
+      backgroundColor: theme.palette.secondary.main,
+      borderRadius: "25px",
+      display: "inline-flex",
+      cursor: "pointer",
+      "&:hover": {
+        color: theme.palette.primary.main,
+      },
     },
-  },
-  workspaceNameEmbedded: {
-    minHeight: "48px",
-    backgroundColor: theme.palette.secondary.main,
-    borderRadius: "25px",
-    display: "inline-flex",
-    cursor: "pointer",
-    padding: "8px 16px",
-    fontSize: "16px",
-    fontWeight: "500",
-    minWidth: "120px",
-    "&:hover": {
-      color: theme.palette.primary.main,
-      backgroundColor: theme.palette.secondary.light || theme.palette.secondary.main,
-    },
-    "&:active": {
-      transform: "scale(0.98)",
-    },
-  },
-});
+    workspaceNameEmbedded: embeddedStyles.workspaceNameEmbedded,
+  };
+};
 
 class WorkspaceName extends Component {
   constructor(props) {

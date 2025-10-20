@@ -17,41 +17,29 @@ import Snackbar from "../../Snackbar.jsx";
 import withStyles from "@mui/styles/withStyles";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
+import { getEmbeddedButtonStyles } from "../../../styles/embeddedButtonStyles";
 
 import { faShare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Dialog from "../../ui/Dialog.jsx";
 import Button from "@mui/material/Button";
 
-const styles = (theme) => ({
-  button: {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.primary.contrastText,
-    width: "40px",
-    height: "40px",
-    "&:hover": {
+const styles = (theme) => {
+  const embeddedStyles = getEmbeddedButtonStyles(theme);
+  return {
+    button: {
       backgroundColor: theme.palette.primary.main,
       color: theme.palette.primary.contrastText,
+      width: "40px",
+      height: "40px",
+      "&:hover": {
+        backgroundColor: theme.palette.primary.main,
+        color: theme.palette.primary.contrastText,
+      },
     },
-  },
-  buttonEmbedded: {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.primary.contrastText,
-    width: "48px",
-    height: "48px",
-    minWidth: "48px",
-    minHeight: "48px",
-    padding: "12px",
-    "&:hover": {
-      backgroundColor: theme.palette.primary.main,
-      color: theme.palette.primary.contrastText,
-      transform: "scale(1.05)",
-    },
-    "&:active": {
-      transform: "scale(0.95)",
-    },
-  },
-});
+    buttonEmbedded: embeddedStyles.buttonEmbedded,
+  };
+};
 
 class ResetWorkspace extends Component {
   constructor(props) {
