@@ -55,8 +55,15 @@ const TutorialBuilderProgressCard = ({
       id: `step-${Date.now()}`,
       title: `Neuer Schritt`,
       subtitle: "Beschreibung folgt…",
+      xml: "",
     };
-    setSteps([...steps, newStep]);
+
+    const updatedSteps = [...steps];
+    // Füge neuen Step direkt nach dem aktiven Step ein
+    updatedSteps.splice(activeStep + 1, 0, newStep);
+
+    setSteps(updatedSteps);
+    setActiveStep(activeStep + 1); // optional: gleich zum neuen Step springen
   };
 
   const deleteStep = (index) => {
