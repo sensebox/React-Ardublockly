@@ -139,7 +139,7 @@ function TutorialItem({ tutorial, level }) {
             Anzeigen
           </Button>
           {/* Editier-Button nur anzeigen, wenn Tutorial editierbar ist */}
-          {tutorial.creator === user.email && (
+          {user && tutorial.creator === user.email && (
             <Box
               sx={{
                 display: "flex",
