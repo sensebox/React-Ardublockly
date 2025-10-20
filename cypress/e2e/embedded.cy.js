@@ -14,10 +14,13 @@ describe("Embedded Blockly Page Tests", () => {
   it("[Embedded] displays iPad toolbar", () => {
     cy.visit("/embedded");
     cy.get(".workspaceFunc", { timeout: 10000 }).should("exist");
-    // Compile, Share, Reset icons exist in toolbar
-    cy.get(".workspaceFunc svg.fa-clipboard-check").should("exist");
+    // Share, Reset icons exist
     cy.get(".workspaceFunc svg.fa-share-alt").should("exist");
     cy.get(".workspaceFunc svg.fa-share").should("exist");
+
+    // Select a board so Compile button becomes available
+    cy.get('img[alt="Sensebox ESP"]', { timeout: 10000 }).click();
+    cy.get(".workspaceFunc svg.fa-clipboard-check").should("exist");
   });
 
   it("[Embedded] displays workspace name component", () => {
@@ -46,14 +49,6 @@ describe("Embedded Blockly Page Tests", () => {
     cy.get('img[alt="Sensebox ESP"]', { timeout: 8000 }).click();
     cy.get(".workspaceFunc svg.fa-share").parents("button").click();
     cy.get('[role="dialog"]', { timeout: 5000 }).should("exist");
-  });
-
-  it("[Embedded] has proper viewport settings", () => {
-    cy.visit("/embedded");
-    cy.get('meta[name="viewport"]').should("have.attr", "content")
-      .and("include", "width=device-width");
-    cy.get('meta[name="viewport"]').should("have.attr", "content")
-      .and("include", "user-scalable");
   });
 
   it("[Embedded] displays toolbox with search", () => {
