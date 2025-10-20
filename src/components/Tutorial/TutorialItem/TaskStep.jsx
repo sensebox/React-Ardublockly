@@ -6,7 +6,7 @@ import QuestionBlock from "./QuestionCard";
 import QuestionCard from "./QuestionCard";
 import SolutionCheck from "./SolutionCheck";
 import BlocklyWindow from "@/components/Blockly/BlocklyWindow";
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 
 const md = new MarkdownIt();
 
@@ -50,8 +50,51 @@ const TaskStep = ({ step }) => {
         </div>
       )}
       {step.type === "blockly" && step.xml && (
-        <Box className="blocklyWindow">
-          <BlocklyWindow blocklyCSS={{ height: "40vH" }} />
+        <Box
+          className="blocklyWindow"
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 2,
+          }}
+        >
+          {/* Blockly mit Rahmen */}
+          <Box
+            sx={{
+              borderRadius: 3,
+              boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+              border: "1px solid rgba(0,0,0,0.1)",
+              overflow: "hidden",
+              backgroundColor: "#fff",
+              p: 1,
+            }}
+          >
+            <BlocklyWindow
+              blocklyCSS={{
+                height: "40vh",
+                width: "50vw",
+              }}
+              tutorial
+            />
+            {/* Einführungstext */}
+            <Typography
+              variant="body2"
+              sx={{
+                fontStyle: "italic",
+                color: "text.secondary",
+                textAlign: "center",
+                maxWidth: "50vw",
+                mt: 2,
+              }}
+            >
+              Hier sollst du den vorgegebenen Sketch nachbauen. Wenn du fertig
+              bist, klicke auf <b>„Lösung einreichen“</b>, um zu sehen, ob dein
+              Ergebnis korrekt ist.
+            </Typography>
+          </Box>
+
+          {/* Lösung prüfen */}
           <SolutionCheck solutionXml={step.xml} activeStep={activeStep} />
         </Box>
       )}

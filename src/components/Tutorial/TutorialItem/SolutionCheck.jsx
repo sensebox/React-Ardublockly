@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import {
   Box,
   Typography,
-  IconButton,
-  Tooltip,
   Button,
   Divider,
   List,
@@ -14,7 +12,6 @@ import {
 import Dialog from "@/components/ui/Dialog";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faClipboardCheck,
   faCheckCircle,
   faTimesCircle,
   faInfoCircle,
@@ -26,8 +23,6 @@ import { checkXml } from "@/helpers/compareXml";
 export default function SolutionCheck({
   solutionXml,
   isLastStep = false,
-
-  onNextStep,
   onFinish,
 }) {
   const xml = useSelector((s) => s.workspace.code.xml);
@@ -76,26 +71,26 @@ export default function SolutionCheck({
 
   return (
     <>
-      <Tooltip
-        title={Blockly.Msg.tooltip_check_solution || "Lösung prüfen"}
-        arrow
-      >
-        <IconButton
-          sx={{
-            width: 40,
-            height: 40,
-            marginRight: 1,
-            backgroundColor: "#4CAF50",
-            color: "#fff",
-            "&:hover": { backgroundColor: "#43A047" },
-          }}
+      {/* ✅ Großer Button */}
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+        <Button
+          variant="contained"
+          color="primary"
           onClick={check}
-          size="large"
+          sx={{
+            px: 4,
+            py: 1.5,
+            borderRadius: "10px",
+            fontWeight: 600,
+            textTransform: "none",
+            fontSize: "1rem",
+          }}
         >
-          <FontAwesomeIcon icon={faClipboardCheck} size="xs" />
-        </IconButton>
-      </Tooltip>
+          Lösung einreichen
+        </Button>
+      </Box>
 
+      {/* Dialog mit Analyse */}
       <Dialog
         fullWidth
         maxWidth="sm"
@@ -115,6 +110,9 @@ export default function SolutionCheck({
             </Typography>
           </Box>
         }
+        // 👇 Nur anzeigen, wenn Ergebnis falsch ist
+        button={!isSuccess ? Blockly.Msg.button_close || "Schließen" : null}
+        onClick={!isSuccess ? handleClose : undefined}
         content={
           <Box>
             <Typography
@@ -164,9 +162,8 @@ export default function SolutionCheck({
             )}
           </Box>
         }
-        button={Blockly.Msg.button_close || "Schließen"}
-        onClick={handleClose}
       >
+        {/* ✅ Nur bei erfolgreichem Ergebnis zeigen */}
         {isSuccess && (
           <Box
             sx={{ mt: 3, display: "flex", justifyContent: "flex-end", gap: 1 }}

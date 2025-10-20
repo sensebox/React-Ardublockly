@@ -33,6 +33,7 @@ export default function BlocklyWindow(props) {
     grid,
     move,
     readOnly,
+    tutorial,
   } = props;
 
   // One-time workspace setup
@@ -166,7 +167,19 @@ export default function BlocklyWindow(props) {
   );
 
   return (
-    <div>
+    <div
+      style={
+        tutorial
+          ? {
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+              height: "100%",
+            }
+          : {}
+      }
+    >
       <BlocklyComponent
         style={svg ? { height: 0 } : blocklyCSS}
         readOnly={readOnly !== undefined ? readOnly : false}
