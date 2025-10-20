@@ -4,6 +4,9 @@ import { useSelector } from "react-redux";
 import TutorialSlide from "./TutorialSlide";
 import QuestionBlock from "./QuestionCard";
 import QuestionCard from "./QuestionCard";
+import SolutionCheck from "./SolutionCheck";
+import BlocklyWindow from "@/components/Blockly/BlocklyWindow";
+import { Box, Grid } from "@mui/material";
 
 const md = new MarkdownIt();
 
@@ -36,7 +39,6 @@ md.renderer.rules.image = function (tokens, idx, options, env, self) {
 
 const TaskStep = ({ step }) => {
   const activeStep = useSelector((state) => state.tutorial.activeStep);
-
   return (
     <TutorialSlide stepNumber={activeStep}>
       <div dangerouslySetInnerHTML={{ __html: md.render(step.text) }} />
@@ -46,6 +48,12 @@ const TaskStep = ({ step }) => {
             return <QuestionCard key={idx} questionData={q} />;
           })}
         </div>
+      )}
+      {step.type === "blockly" && step.xml && (
+        <Box className="blocklyWindow">
+          <BlocklyWindow blocklyCSS={{ height: "40vH" }} />
+          <SolutionCheck solutionXml={step.xml} activeStep={activeStep} />
+        </Box>
       )}
     </TutorialSlide>
   );
