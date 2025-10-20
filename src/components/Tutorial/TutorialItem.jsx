@@ -168,7 +168,7 @@ function TutorialItem({ tutorial, level }) {
               >
                 <Button
                   component={Link}
-                  to={`/tutorial/${tutorial._id}`}
+                  to={`/tutorial/${tutorial._id}/edit`}
                   fullWidth
                   startIcon={<FontAwesomeIcon icon={faPencil} />}
                   sx={{

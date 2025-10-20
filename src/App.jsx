@@ -45,8 +45,6 @@ const theme = createTheme({
 
 class App extends Component {
   componentDidMount() {
-    store.dispatch(loadUser());
-    // set initial compiler
     store.dispatch(setCompiler(import.meta.env.VITE_INITIAL_COMPILER_URL));
   }
 
