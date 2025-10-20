@@ -121,7 +121,7 @@ const TutorialProgressCard = () => {
                     (index === 0 ? "Einleitung" : `Schritt ${index}`)}
                 </Typography>
                 <Typography variant="caption" sx={{ opacity: 0.75 }} noWrap>
-                  {step.text || "Beschreibung folgt…"}
+                  {step.subtitle || "Beschreibung folgt…"}
                 </Typography>
               </Box>
             </Box>
