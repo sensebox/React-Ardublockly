@@ -43,7 +43,7 @@ const TutorialBuilderProgressCard = ({
   const changeStep = (stepIndex) => {
     dispatch({ type: "TUTORIAL_STEP", payload: stepIndex });
   };
-
+  console.log(steps);
   const updateStep = (index, key, value) => {
     const updated = [...steps];
     updated[index][key] = value;
@@ -242,8 +242,8 @@ const TutorialBuilderProgressCard = ({
 
                     return (
                       <Draggable
-                        key={step.id}
-                        draggableId={step.id}
+                        key={step._id || step.id}
+                        draggableId={step._id || step.id}
                         index={index}
                       >
                         {(provided, snapshot) => (

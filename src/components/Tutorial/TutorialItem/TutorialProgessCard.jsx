@@ -44,7 +44,9 @@ const TutorialProgressCard = () => {
           </Typography>
         }
         subheader={
-          <Box sx={{ mt: 1 }}>
+          <Box>
+            {tutorial.subtitle}
+
             <LinearProgress
               variant="determinate"
               value={progress}
@@ -117,7 +119,7 @@ const TutorialProgressCard = () => {
                   fontWeight={isCurrent ? 600 : 400}
                   noWrap
                 >
-                  {step.headline ||
+                  {step.title ||
                     (index === 0 ? "Einleitung" : `Schritt ${index}`)}
                 </Typography>
                 <Typography variant="caption" sx={{ opacity: 0.75 }} noWrap>
