@@ -13,25 +13,20 @@
 .embedded-mode input[type="search"] {
   width: calc(100vw - 40px) !important;
   vertical-align: middle !important;
-  margin: auto 0 !important;
+  -webkit-user-select: text !important;
+  user-select: text !important;
 }
 
 /* Ensure search category container centers the search input vertically */
 .embedded-mode .blocklyToolboxCategory:has(input[type="search"]) {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  height: auto !important;
-  min-height: 50px !important;
+    height: auto !important;
+    margin-left: 4px !important;
 }
-
-/* Normal mode - use default Blockly styling (no custom overrides) */
 
 /* Embedded mode base styling for all categories */
 .embedded-mode .blocklyToolboxCategory:not(:has(input[type="search"])) {
-  height: 36px !important; /* 30px + 20% = 36px */
+  height: 30px !important; /* 30px + 20% = 36px */
   border-radius: 5px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
   background: #fff;
   margin: 2px;
   padding: 2px;
@@ -188,14 +183,6 @@
 /* iPad touch spacing */
 .embedded-mode .blocklyToolboxCategory:not(:has(input[type="search"])) {
   margin: var(--ipad-category-margin);
-}
-
-/* iPad search field */
-.embedded-mode input[type="search"] {
-  font-size: 16px;
-  padding: 10px 14px;
-  height: var(--ipad-search-height);
-  min-width: 200px;
 }
 
 /* iPad touch optimizations */

@@ -19,10 +19,17 @@ export const useEmbeddedToolbox = (workspace, isEmbedded) => {
         const categoryElements = document.querySelectorAll('.blocklyToolboxCategory');
 
         categoryElements.forEach((element) => {
-          const newElement = element.cloneNode(true);
-          element.parentNode.replaceChild(newElement, element);
+          const containsInput = !!element.querySelector('input');
+          const targetElement = containsInput ? element : element.cloneNode(true);
+          if (!containsInput) {
+            element.parentNode.replaceChild(targetElement, element);
+          }
 
-          newElement.addEventListener('click', (e) => {
+          targetElement.addEventListener('click', (e) => {
+            // Ignore clicks originating from input elements (e.g., search field)
+            if (e && e.target && (e.target.tagName === 'INPUT' || (e.target.closest && e.target.closest('input')))) {
+              return;
+            }
             setTimeout(() => {
               const toolboxInstance = workspace.getToolbox();
               if (!toolboxInstance) {
@@ -75,8 +82,12 @@ export const useEmbeddedToolbox = (workspace, isEmbedded) => {
             }, 100);
           });
 
-          newElement.addEventListener('touchend', (e) => {
-            newElement.click();
+          targetElement.addEventListener('touchend', (e) => {
+            // Ignore touches originating from input elements (e.g., search field)
+            if (e && e.target && (e.target.tagName === 'INPUT' || (e.target.closest && e.target.closest('input')))) {
+              return;
+            }
+            targetElement.click();
           });
         });
       }, 500);
