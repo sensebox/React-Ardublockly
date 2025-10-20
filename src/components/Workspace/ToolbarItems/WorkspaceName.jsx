@@ -157,15 +157,12 @@ class WorkspaceName extends Component {
                 {this.props.name}
               </Typography>
             ) : null}
-            <div style={{ 
-              width: this.props.isEmbedded ? "48px" : "40px", 
-              display: "flex" 
-            }}>
+            <div style={{ width: "40px", display: "flex" }}>
               <FontAwesomeIcon
                 icon={faPen}
                 style={{
-                  height: this.props.isEmbedded ? "20px" : "18px",
-                  width: this.props.isEmbedded ? "20px" : "18px",
+                  height: "18px",
+                  width: "18px",
                   margin: "auto",
                 }}
               />

@@ -49,7 +49,7 @@ const Compile = (props) => {
         <IconButton
           className={`compileBlocks ${props.isEmbedded ? props.classes.iconButtonEmbedded : props.classes.iconButton}`}
           onClick={openDialog}
-          size={props.isEmbedded ? "large" : "large"}
+          size={"large"}
           aria-label="Compile code"
         >
           <FontAwesomeIcon icon={faClipboardCheck} size={props.isEmbedded ? "sm" : "xs"} />
@@ -63,7 +63,7 @@ const Compile = (props) => {
         compiler={props.compiler}
         code={props.arduino}
         filename={props.name || "sketch"}
-        platform={props.isEmbedded ? true : props.platform}
+        platform={props.platform}
         appLink={props.appLink || ""}
       />
     </div>
