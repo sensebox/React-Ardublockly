@@ -53,8 +53,9 @@ const TutorialBuilderProgressCard = ({
   const addStep = () => {
     const newStep = {
       id: `step-${Date.now()}`,
-      title: `Neuer Schritt`,
-      subtitle: "Beschreibung folgt…",
+      title: ``,
+      subtitle: "",
+      type: "task",
       xml: "",
     };
 
@@ -289,6 +290,7 @@ const TutorialBuilderProgressCard = ({
                             <Box sx={{ flex: 1, minWidth: 0 }}>
                               <TextField
                                 value={step.title}
+                                placeholder="Neuer Schritt"
                                 onChange={(e) =>
                                   updateStep(index, "title", e.target.value)
                                 }
@@ -306,6 +308,7 @@ const TutorialBuilderProgressCard = ({
                               />
                               <TextField
                                 value={step.subtitle}
+                                placeholder="Beschreibung hinzufügen"
                                 onChange={(e) =>
                                   updateStep(index, "subtitle", e.target.value)
                                 }

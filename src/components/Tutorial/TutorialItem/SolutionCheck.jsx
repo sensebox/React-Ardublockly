@@ -8,7 +8,11 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Dialog from "@/components/ui/Dialog";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -29,12 +33,14 @@ export default function SolutionCheck({
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [msg, setMsg] = useState(null);
+  const [expanded, setExpanded] = useState(false);
   const activeStep = useSelector((state) => state.tutorial.activeStep);
   const tutorial = useSelector((state) => state.tutorial.tutorials[0]);
 
   const handleClose = () => {
     setOpen(false);
     setMsg(null);
+    setExpanded(false);
   };
 
   const check = () => {
@@ -127,37 +133,71 @@ export default function SolutionCheck({
               {msg?.text}
             </Typography>
 
+            {/* Accordion für Analyse */}
             {msg?.details && (
               <>
-                <Divider sx={{ my: 1 }} />
-                <Typography variant="subtitle2" sx={{ mb: 1 }}>
-                  Analyse:
-                </Typography>
-                <List dense>
-                  {msg.details.map((detail, i) => (
-                    <ListItem key={i}>
-                      <ListItemIcon>
-                        <FontAwesomeIcon
-                          icon={
-                            detail.type === "error"
-                              ? faTimesCircle
-                              : detail.type === "success"
-                                ? faCheckCircle
-                                : faInfoCircle
-                          }
-                          color={
-                            detail.type === "error"
-                              ? "#E53935"
-                              : detail.type === "success"
-                                ? "#43A047"
-                                : "#FFA000"
-                          }
-                        />
-                      </ListItemIcon>
-                      <ListItemText primary={detail.text} />
-                    </ListItem>
-                  ))}
-                </List>
+                <Accordion
+                  expanded={expanded}
+                  onChange={() => setExpanded(!expanded)}
+                  sx={{
+                    borderRadius: 2,
+                    boxShadow: "none",
+                    border: "1px solid #ddd",
+                    mt: 1,
+                    "&:before": { display: "none" },
+                  }}
+                >
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="analysis-content"
+                    id="analysis-header"
+                  >
+                    <Typography
+                      variant="subtitle2"
+                      sx={{
+                        fontWeight: 600,
+                        color: "text.primary",
+                      }}
+                    >
+                      Hilfe anzeigen
+                    </Typography>
+                  </AccordionSummary>
+
+                  <AccordionDetails>
+                    <Divider sx={{ mb: 1 }} />
+                    <Typography
+                      variant="subtitle2"
+                      sx={{ mb: 1, fontWeight: 500 }}
+                    >
+                      Analyse:
+                    </Typography>
+                    <List dense>
+                      {msg.details.map((detail, i) => (
+                        <ListItem key={i}>
+                          <ListItemIcon>
+                            <FontAwesomeIcon
+                              icon={
+                                detail.type === "error"
+                                  ? faTimesCircle
+                                  : detail.type === "success"
+                                    ? faCheckCircle
+                                    : faInfoCircle
+                              }
+                              color={
+                                detail.type === "error"
+                                  ? "#E53935"
+                                  : detail.type === "success"
+                                    ? "#43A047"
+                                    : "#FFA000"
+                              }
+                            />
+                          </ListItemIcon>
+                          <ListItemText primary={detail.text} />
+                        </ListItem>
+                      ))}
+                    </List>
+                  </AccordionDetails>
+                </Accordion>
               </>
             )}
           </Box>
