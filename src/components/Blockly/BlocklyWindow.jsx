@@ -26,7 +26,6 @@ export default function BlocklyWindow(props) {
   const sounds = useSelector((state) => state.general.sounds);
   const language = useSelector((state) => state.general.language);
   const selectedBoard = useSelector((state) => state.board.board);
-
   const {
     svg,
     blockDisabled,
