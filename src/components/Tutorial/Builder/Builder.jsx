@@ -24,12 +24,8 @@ const Builder = ({ existingTutorial }) => {
   const token = useSelector((state) => state.auth.token);
   const history = useHistory();
   // 🔥 Global States
-  const [title, setTitle] = useState(
-    existingTutorial?.title || "Tutorial Titel",
-  );
-  const [subtitle, setSubtitle] = useState(
-    existingTutorial?.subtitle || "Kurze Beschreibung",
-  );
+  const [title, setTitle] = useState(existingTutorial?.title || "");
+  const [subtitle, setSubtitle] = useState(existingTutorial?.subtitle || "");
   const [steps, setSteps] = useState(
     existingTutorial?.steps || [
       {
@@ -80,6 +76,10 @@ const Builder = ({ existingTutorial }) => {
   });
 
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
+
+  useEffect(() => {
+    console.log(steps[activeStep]);
+  }, [activeStep]);
 
   const buildTutorialJSON = () => (
     console.log("building tutorial json with steps", steps),
@@ -245,8 +245,7 @@ const Builder = ({ existingTutorial }) => {
               {steps[activeStep]?.category === "blockly" && (
                 <BlocklyExample
                   index={activeStep}
-                  task={false}
-                  value={steps[activeStep]?.xml || ""}
+                  value={steps[activeStep]?.xml || ""} // Fallback, falls xml undefined ist
                   onXmlChange={(newXml) => {
                     const updated = [...steps];
                     updated[activeStep].xml = newXml;

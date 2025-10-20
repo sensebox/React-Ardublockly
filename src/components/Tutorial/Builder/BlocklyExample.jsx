@@ -36,10 +36,10 @@ const BlocklyExample = ({ index, task = false, value, onXmlChange }) => {
 
   useEffect(() => {
     validateXML();
-  }, [xml]);
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [xml, value]);
   const validateXML = () => {
-    let localXml = value;
+    let localXml = value || initialXml; // <--- fallback hinzugefügt
     try {
       Blockly.utils.xml.textToDom(localXml);
       dispatch(deleteError(index, "xml"));
