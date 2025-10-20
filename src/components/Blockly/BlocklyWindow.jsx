@@ -11,6 +11,7 @@ import { ZoomToFitControl } from "@blockly/zoom-to-fit";
 import { Backpack } from "@blockly/workspace-backpack";
 import { initialXml } from "./initialXml.js";
 import { getMaxInstances } from "./helpers/maxInstances";
+import { IPAD_BLOCKLY_CONFIG, IPAD_CONTAINER_STYLES, DEFAULT_BLOCKLY_CONFIG } from "../../config/ipadConfig";
 
 import BlocklySvg from "./BlocklySvg";
 
@@ -139,28 +140,13 @@ export default function BlocklyWindow(props) {
     () => {
       if (zoom !== undefined) return zoom;
       
-      // Default zoom config
-      const defaultZoom = {
-        controls: zoomControls !== undefined ? zoomControls : true,
-        wheel: false,
-        startScale: 1,
-        maxScale: 3,
-        minScale: 0.3,
-        scaleSpeed: 1.2,
+      // Use iPad config for embedded mode, default config otherwise
+      const baseConfig = isEmbedded ? IPAD_BLOCKLY_CONFIG.zoom : DEFAULT_BLOCKLY_CONFIG.zoom;
+      
+      return {
+        ...baseConfig,
+        controls: zoomControls !== undefined ? zoomControls : baseConfig.controls,
       };
-      
-      // Mobile-optimized zoom config for embedded mode
-      if (isEmbedded) {
-        return {
-          ...defaultZoom,
-          wheel: true, // Enable pinch-to-zoom for mobile
-          startScale: 0.9, // Slightly zoomed out for better overview
-          scaleSpeed: 1.1, // Smoother zoom on mobile
-          pinch: true, // Enable pinch gestures
-        };
-      }
-      
-      return defaultZoom;
     },
     [zoom, zoomControls, isEmbedded],
   );
@@ -171,23 +157,8 @@ export default function BlocklyWindow(props) {
       
       if (typeof grid === "object") return grid;
       
-      // Default grid config
-      const defaultGrid = {
-        spacing: 20,
-        length: 1,
-        colour: "#4EAF47", // senseBox-green
-        snap: false,
-      };
-      
-      // Mobile-optimized grid config for embedded mode
-      if (isEmbedded) {
-        return {
-          ...defaultGrid,
-          snap: true, // Enable snap for easier block placement on touch
-        };
-      }
-      
-      return defaultGrid;
+      // Use iPad config for embedded mode, default config otherwise
+      return isEmbedded ? IPAD_BLOCKLY_CONFIG.grid : DEFAULT_BLOCKLY_CONFIG.grid;
     },
     [grid, isEmbedded],
   );
@@ -198,18 +169,8 @@ export default function BlocklyWindow(props) {
       
       if (typeof move === "object") return move;
       
-      // Default move config
-      const defaultMove = { scrollbars: true, drag: true, wheel: true };
-      
-      // Mobile-optimized move config for embedded mode
-      if (isEmbedded) {
-        return {
-          ...defaultMove,
-          wheel: true, // Enable wheel/pinch zoom for mobile
-        };
-      }
-      
-      return defaultMove;
+      // Use iPad config for embedded mode, default config otherwise
+      return isEmbedded ? IPAD_BLOCKLY_CONFIG.move : DEFAULT_BLOCKLY_CONFIG.move;
     },
     [move, isEmbedded],
   );
@@ -218,13 +179,7 @@ export default function BlocklyWindow(props) {
   const containerStyles = {
     height: "100%",
     width: "100%",
-    ...(isEmbedded && {
-      overflow: "hidden",
-      touchAction: "none", // Prevent default touch behaviors
-      WebkitTouchCallout: "none", // Disable iOS callout
-      WebkitUserSelect: "none", // Disable text selection
-      userSelect: "none",
-    })
+    ...(isEmbedded && IPAD_CONTAINER_STYLES)
   };
 
   return (

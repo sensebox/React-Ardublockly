@@ -38,3 +38,37 @@ export const IPAD_BLOCKLY_CONFIG = {
     snap: true,
   },
 };
+
+// iPad-specific container styles for embedded mode
+export const IPAD_CONTAINER_STYLES = {
+  height: "100%",
+  width: "100%",
+  overflow: "hidden",
+  touchAction: "none", // Prevent default touch behaviors
+  WebkitTouchCallout: "none", // Disable iOS callout
+  WebkitUserSelect: "none", // Disable text selection
+  userSelect: "none",
+};
+
+// Default Blockly configurations (used when not in embedded mode)
+export const DEFAULT_BLOCKLY_CONFIG = {
+  zoom: {
+    controls: true,
+    wheel: false,
+    startScale: 1,
+    maxScale: 3,
+    minScale: 0.3,
+    scaleSpeed: 1.2,
+  },
+  grid: {
+    spacing: 20,
+    length: 1,
+    colour: "#4EAF47", // senseBox-green
+    snap: false,
+  },
+  move: {
+    scrollbars: true,
+    drag: true,
+    wheel: true,
+  },
+};
