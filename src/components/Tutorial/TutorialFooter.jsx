@@ -45,6 +45,8 @@ const TutorialFooter = () => {
     const step = tutorial.steps[activeStep];
     if (step.type === "blockly") {
       setDisabled(true);
+    } else {
+      setDisabled(false);
     }
   }, [activeStep]);
 
