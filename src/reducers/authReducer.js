@@ -7,14 +7,17 @@ import {
   LOGOUT_SUCCESS,
   LOGOUT_FAIL,
   REFRESH_TOKEN_SUCCESS,
+  REGISTER_SUCCESS,
 } from "../actions/types";
 
+// authReducer.js
 const initialState = {
-  token: localStorage.getItem("token"),
-  refreshToken: localStorage.getItem("refreshToken"),
-  isAuthenticated: null,
-  progress: true,
+  token: localStorage.getItem("token") || null,
+  refreshToken: localStorage.getItem("refreshToken") || null,
   user: null,
+  isAuthenticated: !!localStorage.getItem("token"),
+  isLoading: false,
+  error: null,
 };
 
 export default function foo(state = initialState, action) {
@@ -56,6 +59,13 @@ export default function foo(state = initialState, action) {
         user: null,
         isAuthenticated: false,
         progress: false,
+      };
+    case REGISTER_SUCCESS:
+      return {
+        ...state,
+        ...action.payload,
+        isAuthenticated: true,
+        isLoading: false,
       };
     default:
       return state;

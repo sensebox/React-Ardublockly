@@ -64,6 +64,10 @@ class Routes extends Component {
           <Route path="/tutorial/:tutorialId" exact>
             <Tutorial />
           </Route>
+          <PrivateRoute path="/tutorial/:tutorialId/edit" exact>
+            <Builder />
+          </PrivateRoute>
+
           <Route path="/CodeEditor" exact>
             <CodeEditor />
           </Route>

@@ -25,6 +25,9 @@ function Home({ project, projectType }) {
   const statistics = useSelector((state) => state.general.statistics);
   const platform = useSelector((state) => state.general.platform);
 
+  const [toolbox, setToolbox] = useState(null);
+  const selectedBoard = useSelector((state) => state.board.board);
+
   const [codeOn, setCodeOn] = useState(true);
   const [open, setOpen] = useState(true);
   const [initialXml, setInitialXml] = useState(
@@ -50,6 +53,8 @@ function Home({ project, projectType }) {
       dispatch(workspaceName(null));
     };
   }, [platform, project, message]);
+
+  useEffect;
 
   useEffect(() => {
     // Resize Workspace on updates
