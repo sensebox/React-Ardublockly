@@ -25,7 +25,7 @@
 
 /* Consolidated embedded toolbox base + variables */
 .embedded-mode .blocklyToolbox {
-  --cat-height: 36px;
+  --cat-height: 42px;
   --cat-padding-x: 8px;
 }
 
