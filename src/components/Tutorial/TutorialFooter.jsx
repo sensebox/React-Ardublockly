@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -16,7 +16,7 @@ const TutorialFooter = () => {
   const dispatch = useDispatch();
   const activeStep = useSelector((state) => state.tutorial.activeStep);
   const tutorial = useSelector((state) => state.tutorial.tutorials[0]);
-
+  const [disabled, setDisabled] = useState(false);
   // add one extra step for "Fertig"
   const allSteps = [...tutorial.steps];
 
@@ -41,6 +41,13 @@ const TutorialFooter = () => {
     }
   };
 
+  useEffect(() => {
+    const step = tutorial.steps[activeStep];
+    if (step.type === "blockly") {
+      setDisabled(true);
+    }
+  }, [activeStep]);
+
   return (
     <Box
       component="footer"
@@ -57,12 +64,11 @@ const TutorialFooter = () => {
     >
       <Box sx={{ maxWidth: "960px", mx: "auto", px: 2 }}>
         {/* Progress Bar */}
-        <Box sx={{ mb: 3 }}>
+        <Box>
           <Box
             sx={{
               display: "flex",
               justifyContent: "space-between",
-              mb: 1,
             }}
           >
             <Typography variant="body2" fontWeight="500">
@@ -186,6 +192,7 @@ const TutorialFooter = () => {
             <Button
               variant="contained"
               endIcon={<ChevronRightIcon />}
+              disabled={disabled}
               onClick={nextStep}
             >
               Weiter
