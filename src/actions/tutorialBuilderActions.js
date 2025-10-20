@@ -83,7 +83,7 @@ export const addStep = (index) => (dispatch, getState) => {
   var step = {
     id: index + 1,
     type: "instruction",
-    headline: "",
+    title: "",
     text: "",
   };
   steps.splice(index, 0, step);

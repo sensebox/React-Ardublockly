@@ -27,6 +27,7 @@ import "@uiw/react-markdown-preview/markdown.css";
 import MDEditor from "@uiw/react-md-editor";
 import { motion, AnimatePresence } from "framer-motion";
 import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 // Hilfsfunktionen
 const createInitialSteps = () => [
@@ -65,7 +66,7 @@ const buildTutorialPayload = ({
   hardware: selectedHardware,
   steps: steps.map((step) => ({
     id: step.id,
-    headline: step.title,
+    title: step.title,
     subtitle: step.subtitle || "",
     text: step.text || "",
     type: step.type,
@@ -83,10 +84,13 @@ const validateRequiredFields = ({ title, subtitle }) => {
 
 // Hauptkomponente
 const Builder = () => {
-  const { tutorialId } = useParams();
+  const params = useLocation();
+  // ODER rein mit Regex (ohne Abhängigkeit):
+  const isValidObjectId = (id) => /^[0-9a-fA-F]{24}$/.test(id);
 
-  const existingTutorialId = "hallo";
-  console.log(tutorialId);
+  const existingTutorialId = isValidObjectId(params.pathname.split("/")[2])
+    ? params.pathname.split("/")[2]
+    : undefined;
   const [existingTutorial, setExistingTutorial] = useState(null);
   const [loading, setLoading] = useState(!!existingTutorialId);
 
@@ -106,7 +110,7 @@ const Builder = () => {
   const [creator] = useState(
     existingTutorial?.creator || user.email || "unknown",
   );
-  const [category, setCategory] = useState(existingTutorial?.type || "task");
+  const [category, setCategory] = useState("task");
   const [learnings, setLearnings] = useState(
     existingTutorial?.learnings || [{ title: "", description: "" }],
   );
@@ -133,8 +137,6 @@ const Builder = () => {
       return;
     }
 
-    console.log("getting tutorial");
-
     const fetchTutorial = async () => {
       try {
         const res = await fetch(
@@ -147,7 +149,7 @@ const Builder = () => {
         );
         if (res.ok) {
           const tutorial = await res.json();
-          setExistingTutorial(tutorial);
+          setExistingTutorial(tutorial.tutorial);
         } else {
           console.error("Tutorial nicht gefunden");
         }
@@ -164,6 +166,8 @@ const Builder = () => {
   // Sobald existingTutorial geladen ist → States befüllen
   useEffect(() => {
     if (existingTutorial) {
+      console.log("neues tutorial", existingTutorial);
+
       setTitle(existingTutorial.title || "");
       setSubtitle(existingTutorial.subtitle || "");
       setSteps(existingTutorial.steps || createInitialSteps());
@@ -267,6 +271,7 @@ const Builder = () => {
 
   // 🎨 Render
   const currentStep = steps[activeStep] || {};
+  console.log("logging urrent", currentStep);
 
   if (loading) {
     return (
@@ -346,7 +351,7 @@ const Builder = () => {
               stepNumber={activeStep + 1}
               key={currentStep.id}
               setCategory={setCategory}
-              category={category}
+              category={currentStep.category}
               setSteps={setSteps}
               steps={steps}
             >
