@@ -167,6 +167,7 @@ export const loginOpenSenseMap =
         type: LOGIN_SUCCESS,
         payload: res.data,
       });
+
       dispatch({
         type: GET_STATUS,
         payload: res.data.user.status,
@@ -181,7 +182,6 @@ export const loginOpenSenseMap =
         /* ignore */
       }
       dispatch({ type: GET_STATUS, payload: status });
-
       if (err.response) {
         dispatch(
           returnErrors(
@@ -216,13 +216,14 @@ export const logout = () => (dispatch) => {
   dispatch(returnSuccess("Successfully logged out.", 200, "LOGOUT_SUCCESS"));
 };
 
-// ======================
-// Helper: Auth Header
-// ======================
 export const authHeader = () => {
-  const token = JSON.parse(localStorage.getItem("token"));
-  if (token) {
-    return { Authorization: `Bearer ${token}` };
+  try {
+    const token = localStorage.getItem("token");
+    if (token && typeof token === "string" && token.trim() !== "") {
+      return { Authorization: `Bearer ${token}` };
+    }
+  } catch (e) {
+    console.warn("Failed to read token from localStorage", e);
   }
   return {};
 };
