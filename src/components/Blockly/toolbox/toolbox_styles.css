@@ -211,3 +211,16 @@
   line-height: var(--cat-height) !important;
 }
 
+/* Embedded: visually distinguish subcategory levels with soft background hues */
+.embedded-mode .blocklyToolbox .blocklyToolboxCategoryContainer[aria-level="2"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
+  background: #E8F5E8; /* light green */
+}
+
+.embedded-mode .blocklyToolbox .blocklyToolboxCategoryContainer[aria-level="3"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
+  background: #FFF3E0; /* light orange */
+}
+
+.embedded-mode .blocklyToolbox .blocklyToolboxCategoryContainer[aria-level="4"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
+  background: #F3E5F5; /* light purple */
+}
+
