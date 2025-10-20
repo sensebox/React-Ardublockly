@@ -20,7 +20,7 @@ const variants = {
 const BuildSlide = ({ children, title, stepNumber, setSteps, steps }) => {
   const theme = useTheme();
   const [category, setCategory] = useState(
-    steps[stepNumber - 1]?.category || "task",
+    steps[stepNumber - 1]?.type || "task",
   );
   const updateStep = (index, key, value) => {
     setCategory(value);

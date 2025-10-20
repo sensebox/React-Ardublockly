@@ -13,7 +13,10 @@ const Instruction = ({ tutorial }) => {
   return (
     <TutorialSlide title="Einleitung">
       <Box sx={{ my: 2 }}>{step.text}</Box>
-
+      <Typography sx={{ fontWeight: "bold" }}>
+        <Info sx={{ color: theme.palette.primary.main, mr: 1 }} />
+        Benötigte Hardware
+      </Typography>
       <Box
         sx={{
           display: "flex",
@@ -25,16 +28,11 @@ const Instruction = ({ tutorial }) => {
       >
         {tutorial.hardware &&
           tutorial.hardware.map((sensor, idx) => (
-            <div>
-              <Typography sx={{ fontWeight: "bold" }}>
-                <Info sx={{ color: theme.palette.primary.main, mr: 1 }} />
-                Benötigte Hardware
-              </Typography>
+            <div key={idx}>
               <Box
                 key={sensor.id || idx}
                 sx={{
                   flex: "1",
-                  maxWidth: "22%",
                   minWidth: "80px",
                   boxSizing: "border-box",
                   display: "flex",

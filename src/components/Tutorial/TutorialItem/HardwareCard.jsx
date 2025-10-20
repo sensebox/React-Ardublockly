@@ -14,7 +14,7 @@ import { MenuBook } from "@mui/icons-material";
 import COMPONENT_MAP from "../componentMap"; // Pfad ggf. anpassen
 const HardwareCard = ({ component }) => {
   const theme = useTheme();
-
+  console.log(component);
   const compData = COMPONENT_MAP[component] || {
     name: component,
     image: "/media/hardware/3dmodels/coming-soon.png", // Fallback
@@ -25,6 +25,7 @@ const HardwareCard = ({ component }) => {
     <Card
       sx={{
         height: "100%",
+
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",

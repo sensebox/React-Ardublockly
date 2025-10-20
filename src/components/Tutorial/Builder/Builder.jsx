@@ -19,7 +19,7 @@ import AppSnackbar from "@/components/Snackbar";
 import { useHistory } from "react-router-dom";
 import Dialog from "@/components/ui/Dialog";
 import { Error as ErrorIcon, WarningAmber } from "@mui/icons-material";
-
+import COMPONENT_MAP from "../componentMap";
 const Builder = ({ existingTutorial }) => {
   const theme = useTheme();
   const user = useSelector((state) => state.auth.user);
@@ -57,9 +57,7 @@ const Builder = ({ existingTutorial }) => {
     existingTutorial?.creator || user.email || "unknown",
   );
   const [activeStep, setActiveStep] = useState(0);
-  const [category, setCategory] = useState(
-    existingTutorial?.category || "task",
-  );
+  const [category, setCategory] = useState(existingTutorial?.type || "task");
   const [learnings, setLearnings] = useState(
     existingTutorial?.learnings || [{ title: "", description: "" }],
   );
@@ -89,7 +87,7 @@ const Builder = ({ existingTutorial }) => {
       headline: s.title,
       subtitle: s.subtitle || "",
       text: s.text || "",
-      type: s.category || s.type,
+      type: s.type,
       questionData: s.questions || null,
       xml: s.xml || null,
     })),
@@ -150,6 +148,9 @@ const Builder = ({ existingTutorial }) => {
     }
   };
 
+  useEffect(() => {
+    console.log(selectedHardware, steps[activeStep]);
+  }, [selectedHardware]);
   return (
     <Box>
       <Breadcrumbs
@@ -225,7 +226,7 @@ const Builder = ({ existingTutorial }) => {
               setSteps={setSteps}
               steps={steps}
             >
-              {steps[activeStep]?.category === "blockly" && (
+              {steps[activeStep]?.type === "blockly" && (
                 <BlocklyExample
                   index={activeStep}
                   value={steps[activeStep]?.xml || ""}
@@ -237,7 +238,7 @@ const Builder = ({ existingTutorial }) => {
                 />
               )}
 
-              {steps[activeStep]?.category === "question" && (
+              {steps[activeStep]?.type === "question" && (
                 <QuestionList
                   questions={steps[activeStep].questions || []}
                   setQuestions={(newList) => {
@@ -248,8 +249,8 @@ const Builder = ({ existingTutorial }) => {
                 />
               )}
 
-              {steps[activeStep]?.category !== "blockly" &&
-                steps[activeStep]?.category !== "question" && (
+              {steps[activeStep]?.type !== "blockly" &&
+                steps[activeStep]?.type !== "question" && (
                   <div data-color-mode="light">
                     <MDEditor
                       height={"35vh"}
@@ -264,7 +265,35 @@ const Builder = ({ existingTutorial }) => {
                   </div>
                 )}
 
-              {steps[activeStep]?.id === "finish" && (
+              {steps[activeStep]?.type === "instruction" && (
+                <div>
+                  <Typography sx={{ fontWeight: "bold" }}>
+                    <Info sx={{ color: theme.palette.primary.main, mr: 1 }} />
+                    Benötigte Hardware
+                  </Typography>
+                  <Box
+                    sx={{
+                      display: "grid",
+                      gridTemplateColumns:
+                        "repeat(auto-fill, minmax(180px, 1fr))",
+                      gap: 2,
+                      justifyItems: "center",
+                      mt: 2,
+                      width: "100%",
+                    }}
+                  >
+                    {selectedHardware.map((sensor, idx) => {
+                      return (
+                        <Box key={sensor} sx={{ width: "100%", maxWidth: 180 }}>
+                          <HardwareCard component={sensor} />
+                        </Box>
+                      );
+                    })}
+                  </Box>
+                </div>
+              )}
+
+              {steps[activeStep]?.type === "finish" && (
                 <WhatNext learnings={learnings} setLearnings={setLearnings} />
               )}
             </BuildSlide>
@@ -348,7 +377,9 @@ const Builder = ({ existingTutorial }) => {
                   animate={{ scale: 1 }}
                   transition={{ type: "spring", stiffness: 120 }}
                 >
-                  <CheckCircle sx={{ fontSize: 64, color: "success.main" }} />
+                  <CheckCircle
+                    sx={{ fontSize: 64, color: theme.palette.primary.main }}
+                  />
                 </motion.div>
                 <Typography variant="body1" fontWeight={600}>
                   Tutorial erfolgreich gespeichert!
