@@ -15,7 +15,7 @@ describe("Embedded Blockly Page Tests", () => {
     cy.visit("/embedded");
     cy.get(".workspaceFunc", { timeout: 10000 }).should("exist");
     // Share, Reset icons exist
-    cy.get(".workspaceFunc svg.fa-share-alt").should("exist");
+    cy.get(".workspaceFunc svg.fa-share-nodes").should("exist");
     cy.get(".workspaceFunc svg.fa-share").should("exist");
 
     // Select a board so Compile button becomes available
