@@ -7,7 +7,7 @@ import { useIpadEmbeddedMode } from "@/hooks/useIpadEmbeddedMode";
 import { clearStats, workspaceName } from "@/actions/workspaceActions";
 import BlocklyWindow from "./Blockly/BlocklyWindow";
 import DeviceSelection from "./DeviceSelection";
-import WorkspaceToolbar from "./Workspace/WorkspaceToolbar";
+import IpadToolbar from "./Workspace/IpadToolbar";
 import { Box } from "@mui/material";
 import { IPAD_BLOCKLY_CONFIG, IPAD_CONFIG } from "@/config/ipadConfig";
 import "./EmbeddedBlockly.css";
@@ -59,7 +59,7 @@ const EmbeddedBlockly = ({ project = null, projectType = null }) => {
             padding: IPAD_CONFIG.TOOLBAR.padding
           }}
         >
-          <WorkspaceToolbar project={project} projectType={projectType} />
+          <IpadToolbar project={project} projectType={projectType} />
         </Box>
         
         {/* Blockly Workspace with iPad config */}

@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useSelector } from "react-redux";
 import { IPAD_CONFIG } from "../../config/ipadConfig";
 import WorkspaceName from "./ToolbarItems/WorkspaceName";
 import Compile from "./ToolbarItems/Compile";
@@ -13,14 +12,7 @@ const IpadToolbar = ({
   project, 
   projectType 
 }) => {
-  const isEmbedded = useSelector((state) => state.general.embeddedMode);
-
-  if (!isEmbedded) {
-    // Return original toolbar for non-embedded mode
-    return null; // This will be handled by the original WorkspaceToolbar
-  }
-
-  // iPad-optimized toolbar layout
+  // iPad-optimized toolbar layout for embedded mode
   return (
     <div style={{
       display: "flex",
@@ -38,7 +30,7 @@ const IpadToolbar = ({
         multiple={multiple}
         project={project}
         projectType={projectType}
-        isEmbedded={isEmbedded}
+        isEmbedded={true}
       />
       
       <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
@@ -49,7 +41,7 @@ const IpadToolbar = ({
               minHeight: IPAD_CONFIG.TOUCH.minHeight,
               minWidth: IPAD_CONFIG.TOUCH.minWidth,
             }}
-            isEmbedded={isEmbedded}
+            isEmbedded={true}
           />
         )}
 
@@ -62,7 +54,7 @@ const IpadToolbar = ({
             multiple={multiple}
             project={project}
             projectType={projectType}
-            isEmbedded={isEmbedded}
+            isEmbedded={true}
           />
         )}
 
@@ -72,7 +64,7 @@ const IpadToolbar = ({
               minHeight: IPAD_CONFIG.TOUCH.minHeight,
               minWidth: IPAD_CONFIG.TOUCH.minWidth,
             }}
-            isEmbedded={isEmbedded}
+            isEmbedded={true}
           />
         )}
       </div>

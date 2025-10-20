@@ -16,8 +16,9 @@ const RouteHandler = () => {
     const isCurrentEmbedded = currentPathname === IPAD_CONFIG.ROUTE;
     const wasPreviousEmbedded = previousPathname === IPAD_CONFIG.ROUTE;
     
-    // Only dispatch when actually changing between embedded and non-embedded modes
-    if (isCurrentEmbedded !== wasPreviousEmbedded) {
+    // Always dispatch on first load (when previousPathname equals currentPathname)
+    // or when transitioning between embedded and non-embedded modes
+    if (previousPathname === currentPathname || isCurrentEmbedded !== wasPreviousEmbedded) {
       dispatch(setEmbeddedMode(isCurrentEmbedded));
     }
     
