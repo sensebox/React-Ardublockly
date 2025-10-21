@@ -44,6 +44,7 @@ export default function Tutorial() {
   useEffect(() => {
     if (
       currentStep &&
+      currentStep.questionData &&
       currentStep.type === "question" &&
       currentStep.questionData.length > 0
     ) {

@@ -18,6 +18,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import HardwareSelectorModal from "./AddNewHardware";
+import { SaveOutlined, Save } from "@mui/icons-material";
 const TutorialBuilderProgressCard = ({
   title,
   setTitle,
@@ -31,13 +32,14 @@ const TutorialBuilderProgressCard = ({
   setSelectedHardware,
   activeStep,
   setActiveStep,
+  setAutosaveEnabled,
+  autosaveEnabled,
 }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const tutorialFromStore = useSelector((state) => state.tutorial.tutorials[0]);
 
   const [modalOpen, setModalOpen] = useState(false);
-
   const progress = ((activeStep + 1) / steps.length) * 100;
 
   const changeStep = (stepIndex) => {
@@ -93,20 +95,34 @@ const TutorialBuilderProgressCard = ({
     <Card sx={{ borderRadius: 3, boxShadow: 3 }}>
       <CardHeader
         title={
-          <TextField
-            variant="standard"
-            id="tutorial-title"
-            fullWidth
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            InputProps={{
-              sx: {
-                fontWeight: 600,
-                fontSize: "1.25rem", // entspricht Typography h6
-              },
-            }}
-            placeholder="Tutorial Titel"
-          />
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <TextField
+              variant="standard"
+              id="tutorial-title"
+              fullWidth
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              InputProps={{
+                sx: {
+                  fontWeight: 600,
+                  fontSize: "1.25rem", // entspricht Typography h6
+                },
+              }}
+              placeholder="Tutorial Titel"
+            />
+            <IconButton
+              onClick={() => setAutosaveEnabled(!autosaveEnabled)}
+              size="small"
+              color={autosaveEnabled ? "primary" : "default"}
+              title={
+                autosaveEnabled
+                  ? "Zwischenspeichern aktiviert"
+                  : "Zwischenspeichern deaktiviert"
+              }
+            >
+              {autosaveEnabled ? <Save /> : <SaveOutlined />}
+            </IconButton>
+          </Box>
         }
         subheader={
           <Box sx={{ mt: 1, display: "flex", flexDirection: "column", gap: 1 }}>

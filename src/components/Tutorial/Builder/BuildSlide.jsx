@@ -34,7 +34,6 @@ const BuildSlide = ({
     setSteps(updated);
   };
 
-  console.log(type);
   return (
     <motion.div
       variants={variants}
