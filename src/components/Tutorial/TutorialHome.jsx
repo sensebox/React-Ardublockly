@@ -42,8 +42,6 @@ function TutorialHome() {
 
   useEffect(() => {
     dispatch(getTutorials());
-    console.log("Tutorials loaded", tutorials);
-    console.log("User", user);
   }, [dispatch]);
 
   // Tutorials nach Suchbegriff & Schwierigkeit filtern

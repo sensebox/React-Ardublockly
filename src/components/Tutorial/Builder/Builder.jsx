@@ -111,7 +111,7 @@ const Builder = () => {
   const [creator] = useState(
     existingTutorial?.creator || user.email || "unknown",
   );
-  const [category, setCategory] = useState("task");
+  const [type, setType] = useState("task");
   const [learnings, setLearnings] = useState(
     existingTutorial?.learnings || [{ title: "", description: "" }],
   );
@@ -175,7 +175,6 @@ const Builder = () => {
       setLearnings(
         existingTutorial.learnings || [{ title: "", description: "" }],
       );
-      // category, isPublic, review, creator – falls nötig
     } else if (!existingTutorialId) {
       // Neues Tutorial → Standardwerte
       setTitle("");
@@ -237,7 +236,6 @@ const Builder = () => {
       if (!response.ok) throw new Error("Netzwerkfehler");
 
       const data = await response.json();
-      console.log("neue data", data);
       setSavedTutorialId(data.tutorial._id || existingTutorialId); // bei PUT ist _id oft nicht im Response
       setSavingState("success");
       setSnackInfo({
@@ -271,6 +269,9 @@ const Builder = () => {
 
   // 🎨 Render
   const currentStep = steps[activeStep] || {};
+  useEffect(() => {
+    console.log(currentStep);
+  }, [currentStep]);
 
   if (loading) {
     return (
@@ -364,8 +365,8 @@ const Builder = () => {
               title={currentStep.title}
               stepNumber={activeStep + 1}
               key={currentStep.id}
-              setCategory={setCategory}
-              category={currentStep.category}
+              setType={setType}
+              type={currentStep.type}
               setSteps={setSteps}
               steps={steps}
             >
