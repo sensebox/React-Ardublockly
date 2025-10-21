@@ -15,7 +15,6 @@ import TextField from "@mui/material/TextField";
 import Divider from "@mui/material/Divider";
 import InputAdornment from "@mui/material/InputAdornment";
 import CircularProgress from "@mui/material/CircularProgress";
-import Link from "@mui/material/Link";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
@@ -23,6 +22,7 @@ import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 
 import * as Blockly from "blockly";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -134,6 +134,14 @@ export default function Login() {
             />
           </RadioGroup>
         </FormControl>
+        {authProvider === "native" && (
+          <div style={{ textAlign: "center" }}>
+            {Blockly.Msg.no_account || "No account yet?"}{" "}
+            <Link to="/user/register">
+              {Blockly.Msg.button_register || "Register now"}
+            </Link>
+          </div>
+        )}
 
         {authProvider === "opensensemap" && (
           <Alert>
