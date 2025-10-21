@@ -76,6 +76,7 @@ const TaskStep = ({ step, setNextStepDisabled }) => {
           {/* Blockly mit Rahmen */}
           <Box
             sx={{
+              width: "100%",
               borderRadius: 3,
               boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
               border: "1px solid rgba(0,0,0,0.1)",
@@ -87,7 +88,7 @@ const TaskStep = ({ step, setNextStepDisabled }) => {
             <BlocklyWindow
               blocklyCSS={{
                 height: "40vh",
-                width: "50vw",
+                width: "100%",
               }}
               tutorial
             />
