@@ -50,15 +50,7 @@ body:has(.blockly-app-container) {
   overflow: hidden;
 }
 
-/* iPad-specific toolbar */
-.blockly-app-container .workspaceFunc {
-  height: var(--ipad-toolbar-height);
-  flex-shrink: 0;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  padding: 0 16px;
-}
+/* iPad-specific toolbar - removed workspaceFunc class, using embedded-toolbar instead */
 
 /* Embedded toolbar styling */
 .embedded-toolbar {
