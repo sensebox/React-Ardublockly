@@ -121,7 +121,7 @@ const Builder = () => {
   const [activeStep, setActiveStep] = useState(0);
 
   // 🔥 NEU: Zustand für Autosave
-  const [autosaveEnabled, setAutosaveEnabled] = useState(false);
+  const [autosaveEnabled, setAutosaveEnabled] = useState(true);
 
   //  Speichern
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
