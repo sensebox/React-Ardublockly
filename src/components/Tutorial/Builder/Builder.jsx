@@ -70,7 +70,7 @@ const buildTutorialPayload = ({
     subtitle: step.subtitle || "",
     text: step.text || "",
     type: step.type,
-    questionData: step.questions || null,
+    questionData: step.questionData || null,
     xml: step.xml || null,
   })),
 });
@@ -121,7 +121,7 @@ const Builder = () => {
   const [activeStep, setActiveStep] = useState(0);
 
   // 🔥 NEU: Zustand für Autosave
-  const [autosaveEnabled, setAutosaveEnabled] = useState(true);
+  const [autosaveEnabled, setAutosaveEnabled] = useState(false);
 
   //  Speichern
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
@@ -311,6 +311,7 @@ const Builder = () => {
       return;
     }
 
+    console.log("savign", steps);
     const payload = buildTutorialPayload({
       title,
       subtitle,
@@ -322,6 +323,7 @@ const Builder = () => {
       review,
       creator,
     });
+    console.log("playload", payload);
     setSaveButtonDisabled(true);
     setSavingState("loading");
 
@@ -390,12 +392,12 @@ const Builder = () => {
 
   const updateStepText = (text) => updateStepField("text", text);
   const updateStepXml = (xml) => updateStepField("xml", xml);
-  const updateStepQuestions = (questions) =>
-    updateStepField("questions", questions);
+  const updateStepQuestions = (questionData) =>
+    updateStepField("questionData", questionData); // ✅ RICHTIG
 
   // 🎨 Render
   const currentStep = steps[activeStep] || {};
-
+  console.log(currentStep);
   if (loading) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
@@ -513,7 +515,7 @@ const Builder = () => {
 
               {currentStep.type === "question" && (
                 <QuestionList
-                  questions={currentStep.questions || []}
+                  questions={currentStep.questionData || []}
                   setQuestions={updateStepQuestions}
                 />
               )}

@@ -12,7 +12,6 @@ import QuestionEditor from "./QuestionEditor";
 
 const QuestionList = ({ questions, setQuestions }) => {
   const theme = useTheme();
-
   const addQuestion = () => {
     setQuestions([
       ...questions,
