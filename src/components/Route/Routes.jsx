@@ -26,6 +26,7 @@ import GalleryHome from "../Pages/Gallery/GalleryHome";
 import Project from "@/components/Pages/Project/Project";
 import ProjectHome from "@/components/Pages/Project/ProjectHome";
 import BasicPage from "../Pages/BasicPage/BasicPage";
+import Register from "../User/Register";
 
 class Routes extends Component {
   componentDidMount() {
@@ -97,6 +98,9 @@ class Routes extends Component {
           <IsLoggedRoute path="/user/login" exact>
             <Login />
           </IsLoggedRoute>
+          <PublicRoute path="/user/register" exact>
+            <Register />
+          </PublicRoute>
           <PrivateRoute path="/user" exact>
             <Account />
           </PrivateRoute>

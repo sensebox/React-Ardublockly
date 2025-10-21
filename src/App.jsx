@@ -48,8 +48,7 @@ class App extends Component {
     // In deiner App.js oder beim App-Start
     const token = localStorage.getItem("token");
     if (token) {
-      console.log("loading user", token);
-      store.dispatch(loadUser()); // ← JA, das brauchst du!
+      store.dispatch(loadUser());
     }
     store.dispatch(setCompiler(import.meta.env.VITE_INITIAL_COMPILER_URL));
   }
