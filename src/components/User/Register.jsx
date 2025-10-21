@@ -1,9 +1,6 @@
 // src/components/Auth/Register.jsx
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { register } from "../../actions/authActions";
-
 import Snackbar from "../Snackbar";
 import Breadcrumbs from "../ui/Breadcrumbs";
 import Button from "@mui/material/Button";
@@ -17,16 +14,8 @@ import * as Blockly from "blockly";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 export default function Register() {
-  const dispatch = useDispatch();
   const history = useHistory();
 
-  const message = useSelector((s) => s.message);
-  const progress = useSelector((s) => s.auth.progress);
-
-  // Zustand: Zeige Success-Seite?
-  const [showSuccess, setShowSuccess] = useState(false);
-
-  // Formular-Zustände (nur wenn nicht erfolgreich)
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -38,126 +27,71 @@ export default function Register() {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  // Fehler bei Mount anzeigen
-  useEffect(() => {
-    if (message.id === "REGISTER_FAIL" && !showSuccess) {
-      setSnackInfo({
-        type: "error",
-        key: Date.now(),
-        message: Blockly.Msg.messages_REGISTER_FAIL || "Registration failed.",
-      });
-      setSnackbar(true);
-    }
-  }, [message, showSuccess]);
-
-  // Erfolg: Zeige Success-Seite
-  useEffect(() => {
-    if (message.id === "REGISTER_SUCCESS") {
-      setShowSuccess(true);
-    }
-  }, [message]);
-
-  const handleChange = (setter) => (e) => setter(e.target.value);
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!email || !password) {
-      setSnackInfo({
-        type: "error",
-        key: Date.now(),
-        message:
-          Blockly.Msg.messages_register_error ||
-          "Email and password are required.",
-      });
-      setSnackbar(true);
+      showError("Bitte E-Mail und Passwort eingeben.");
       return;
     }
 
     if (password !== confirmPassword) {
-      setSnackInfo({
-        type: "error",
-        key: Date.now(),
-        message:
-          Blockly.Msg.messages_password_mismatch || "Passwords do not match.",
-      });
-      setSnackbar(true);
+      showError("Passwörter stimmen nicht überein.");
       return;
     }
 
     if (password.length < 6) {
-      setSnackInfo({
-        type: "error",
-        key: Date.now(),
-        message:
-          Blockly.Msg.messages_password_too_short ||
-          "Password must be at least 6 characters.",
-      });
-      setSnackbar(true);
+      showError("Das Passwort muss mindestens 6 Zeichen lang sein.");
       return;
     }
 
-    dispatch(register({ email, password }));
+    try {
+      setLoading(true);
+
+      const res = await fetch(
+        `${import.meta.env.VITE_BLOCKLY_API}/user/register`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        },
+      );
+
+      const data = await res.json();
+
+      if (res.ok) {
+        // ✅ Weiterleiten zum Success Screen
+        history.push("/user/register/success");
+      } else {
+        showError(data.message || "Registrierung fehlgeschlagen.");
+      }
+    } catch (err) {
+      console.error(err);
+      showError("Serverfehler bei der Registrierung.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleClickShowPassword = () => setShowPassword((v) => !v);
-  const handleMouseDownPassword = (e) => e.preventDefault();
-  const handleClickShowConfirmPassword = () =>
-    setShowConfirmPassword((v) => !v);
+  const showError = (msg) => {
+    setSnackInfo({
+      type: "error",
+      key: Date.now(),
+      message: msg,
+    });
+    setSnackbar(true);
+  };
 
-  // Success-Seite anzeigen
-  if (showSuccess) {
-    return (
-      <div>
-        <Breadcrumbs
-          content={[
-            { link: "/user/register", title: Blockly.Msg.button_register },
-          ]}
-        />
-        <div
-          style={{
-            maxWidth: "500px",
-            marginLeft: "auto",
-            marginRight: "auto",
-            textAlign: "center",
-          }}
-        >
-          <h1>{Blockly.Msg.register_success_head || "Account created!"}</h1>
-          <p style={{ fontSize: "1.1rem", color: "#4EAF47" }}>
-            {Blockly.Msg.register_success_message ||
-              "Your account has been successfully created."}
-          </p>
-          <p>
-            {Blockly.Msg.register_success_login_prompt ||
-              "You can now log in with your credentials."}
-          </p>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => history.push("/user/login")}
-            style={{ marginTop: "20px" }}
-          >
-            {Blockly.Msg.button_login || "Go to Login"}
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
-  // Normales Registrierungsformular
   return (
     <div>
       <Breadcrumbs
-        content={[
-          { link: "/user/register", title: Blockly.Msg.button_register },
-        ]}
+        content={[{ link: "/user/register", title: "Registrieren" }]}
       />
 
-      <div
-        style={{ maxWidth: "500px", marginLeft: "auto", marginRight: "auto" }}
-      >
-        <h1>{Blockly.Msg.register_head || "Create Account"}</h1>
+      <div style={{ maxWidth: "500px", margin: "0 auto" }}>
+        <h1>Konto erstellen</h1>
 
         <Snackbar
           open={snackbar}
@@ -170,30 +104,28 @@ export default function Register() {
         <form onSubmit={handleSubmit}>
           <TextField
             variant="standard"
-            style={{ marginBottom: "10px" }}
-            type="text"
-            label={Blockly.Msg.labels_email || "Email"}
+            label="E-Mail"
             name="email"
+            type="email"
             value={email}
-            onChange={handleChange(setEmail)}
+            onChange={(e) => setEmail(e.target.value)}
             fullWidth
+            sx={{ mb: 2 }}
           />
           <TextField
             variant="standard"
-            type={showPassword ? "text" : "password"}
-            label={Blockly.Msg.labels_password || "Password"}
+            label="Passwort"
             name="password"
+            type={showPassword ? "text" : "password"}
             value={password}
-            onChange={handleChange(setPassword)}
+            onChange={(e) => setPassword(e.target.value)}
             fullWidth
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
+                    onClick={() => setShowPassword(!showPassword)}
                     edge="end"
-                    size="large"
                   >
                     <FontAwesomeIcon
                       icon={showPassword ? faEyeSlash : faEye}
@@ -203,24 +135,22 @@ export default function Register() {
                 </InputAdornment>
               ),
             }}
-            style={{ marginBottom: "10px" }}
+            sx={{ mb: 2 }}
           />
           <TextField
             variant="standard"
-            type={showConfirmPassword ? "text" : "password"}
-            label={Blockly.Msg.labels_confirm_password || "Confirm Password"}
+            label="Passwort bestätigen"
             name="confirmPassword"
+            type={showConfirmPassword ? "text" : "password"}
             value={confirmPassword}
-            onChange={handleChange(setConfirmPassword)}
+            onChange={(e) => setConfirmPassword(e.target.value)}
             fullWidth
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
-                    onClick={handleClickShowConfirmPassword}
-                    onMouseDown={handleMouseDownPassword}
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                     edge="end"
-                    size="large"
                   >
                     <FontAwesomeIcon
                       icon={showConfirmPassword ? faEyeSlash : faEye}
@@ -230,31 +160,20 @@ export default function Register() {
                 </InputAdornment>
               ),
             }}
-            style={{ marginBottom: "20px" }}
+            sx={{ mb: 3 }}
           />
-          <p>
-            <Button
-              color="primary"
-              variant="contained"
-              type="submit"
-              style={{ width: "100%" }}
-            >
-              {progress ? (
-                <div style={{ height: "24.5px" }}>
-                  <CircularProgress color="inherit" size={20} />
-                </div>
-              ) : (
-                Blockly.Msg.button_register || "Register"
-              )}
-            </Button>
-          </p>
+
+          <Button variant="contained" color="primary" type="submit" fullWidth>
+            {loading ? (
+              <CircularProgress color="inherit" size={20} />
+            ) : (
+              "Registrieren"
+            )}
+          </Button>
         </form>
 
-        <p style={{ textAlign: "center" }}>
-          {Blockly.Msg.already_have_account || "Already have an account?"}{" "}
-          <Link to="/user/login" underline="hover">
-            {Blockly.Msg.button_login || "Log in"}
-          </Link>
+        <p style={{ textAlign: "center", marginTop: "1rem" }}>
+          Bereits ein Konto? <Link to="/user/login">Anmelden</Link>
         </p>
       </div>
     </div>
