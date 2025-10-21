@@ -41,7 +41,7 @@ const TaskStep = ({ step, setNextStepDisabled }) => {
   const activeStep = useSelector((state) => state.tutorial.activeStep);
 
   useEffect(() => {
-    if (step.type === "question" && step.questionData.length > 0) {
+    if (step.type === "question" && step.questionData) {
       setNextStepDisabled(true);
       console.log("disbaling");
     }
