@@ -137,7 +137,7 @@ const TutorialProgressCard = () => {
           <Button
             variant="outlined"
             startIcon={<Edit />}
-            onClick={() => history.push(`/tutorial/${tutorial.id}/edit`)}
+            onClick={() => history.push(`/tutorial/${tutorial._id}/edit`)}
           >
             Tutorial bearbeiten
           </Button>
