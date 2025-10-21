@@ -370,6 +370,14 @@ const Builder = () => {
               setSteps={setSteps}
               steps={steps}
             >
+              <div data-color-mode="light">
+                <MDEditor
+                  height="35vh"
+                  value={currentStep.text || ""}
+                  onChange={updateStepText}
+                  preview="live"
+                />
+              </div>
               {currentStep.type === "blockly" && (
                 <BlocklyExample
                   index={activeStep}
@@ -384,18 +392,6 @@ const Builder = () => {
                   setQuestions={updateStepQuestions}
                 />
               )}
-
-              {currentStep.type !== "blockly" &&
-                currentStep.type !== "question" && (
-                  <div data-color-mode="light">
-                    <MDEditor
-                      height="35vh"
-                      value={currentStep.text || ""}
-                      onChange={updateStepText}
-                      preview="live"
-                    />
-                  </div>
-                )}
 
               {currentStep.type === "instruction" &&
                 selectedHardware.length > 0 && (
