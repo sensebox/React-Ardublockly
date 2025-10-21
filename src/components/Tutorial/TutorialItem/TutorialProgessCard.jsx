@@ -133,7 +133,7 @@ const TutorialProgressCard = () => {
             </Box>
           );
         })}
-        {tutorial.creator === user.email && (
+        {user && tutorial.creator === user.email && (
           <Button
             variant="outlined"
             startIcon={<Edit />}

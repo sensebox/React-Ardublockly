@@ -97,6 +97,7 @@ const TutorialBuilderProgressCard = ({
         title={
           <TextField
             variant="standard"
+            id="tutorial-title"
             fullWidth
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -113,6 +114,7 @@ const TutorialBuilderProgressCard = ({
           <Box sx={{ mt: 1, display: "flex", flexDirection: "column", gap: 1 }}>
             {/* Kurzbeschreibung */}
             <TextField
+              id="tutorial-subtitle"
               variant="standard"
               fullWidth
               value={subtitle}
@@ -307,6 +309,7 @@ const TutorialBuilderProgressCard = ({
                                 }}
                               />
                               <TextField
+                                id="tutorial-subtitle"
                                 value={step.subtitle}
                                 placeholder="Beschreibung hinzufügen"
                                 onChange={(e) =>

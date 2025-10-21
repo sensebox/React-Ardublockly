@@ -168,6 +168,7 @@ function TutorialItem({ tutorial, level }) {
               >
                 <Button
                   component={Link}
+                  id={`edit${tutorial._id}`}
                   to={`/tutorial/${tutorial._id}/edit`}
                   fullWidth
                   startIcon={<FontAwesomeIcon icon={faPencil} />}
@@ -190,6 +191,7 @@ function TutorialItem({ tutorial, level }) {
 
                 <Button
                   fullWidth
+                  id={`delete${tutorial._id}`}
                   startIcon={<FontAwesomeIcon icon={faTrash} />}
                   sx={{
                     background: theme.palette.background.white,
@@ -252,6 +254,7 @@ function TutorialItem({ tutorial, level }) {
                     Abbrechen
                   </Button>
                   <Button
+                    id="confirmDelete"
                     variant="contained"
                     color="error"
                     onClick={handleDelete}

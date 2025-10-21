@@ -27,6 +27,7 @@ import Project from "@/components/Pages/Project/Project";
 import ProjectHome from "@/components/Pages/Project/ProjectHome";
 import BasicPage from "../Pages/BasicPage/BasicPage";
 import Register from "../User/Register";
+import RegisterSuccess from "../User/RegisterSuccess";
 
 class Routes extends Component {
   componentDidMount() {
@@ -100,6 +101,9 @@ class Routes extends Component {
           </IsLoggedRoute>
           <PublicRoute path="/user/register" exact>
             <Register />
+          </PublicRoute>
+          <PublicRoute path="/user/register/success" exact>
+            <RegisterSuccess />
           </PublicRoute>
           <PrivateRoute path="/user" exact>
             <Account />

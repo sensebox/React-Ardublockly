@@ -167,8 +167,6 @@ const Builder = () => {
   // Sobald existingTutorial geladen ist → States befüllen
   useEffect(() => {
     if (existingTutorial) {
-      console.log("neues tutorial", existingTutorial);
-
       setTitle(existingTutorial.title || "");
       setSubtitle(existingTutorial.subtitle || "");
       setSteps(existingTutorial.steps || createInitialSteps());
@@ -239,7 +237,8 @@ const Builder = () => {
       if (!response.ok) throw new Error("Netzwerkfehler");
 
       const data = await response.json();
-      setSavedTutorialId(data._id || existingTutorialId); // bei PUT ist _id oft nicht im Response
+      console.log("neue data", data);
+      setSavedTutorialId(data.tutorial._id || existingTutorialId); // bei PUT ist _id oft nicht im Response
       setSavingState("success");
       setSnackInfo({
         type: "success",
@@ -248,6 +247,7 @@ const Builder = () => {
           ? "Tutorial erfolgreich aktualisiert!"
           : "Tutorial erfolgreich gespeichert!",
       });
+
       setSnackbarOpen(true);
     } catch (err) {
       console.error("Speichern fehlgeschlagen:", err);
@@ -271,7 +271,6 @@ const Builder = () => {
 
   // 🎨 Render
   const currentStep = steps[activeStep] || {};
-  console.log("logging urrent", currentStep);
 
   if (loading) {
     return (
@@ -431,15 +430,6 @@ const Builder = () => {
           </AnimatePresence>
         </Box>
       </Box>
-
-      {/* Snackbar */}
-      <AppSnackbar
-        open={snackbarOpen}
-        message={snackInfo.message}
-        type={snackInfo.type}
-        key={snackInfo.key}
-        onClose={() => setSnackbarOpen(false)}
-      />
 
       {/* Speicher-Dialog */}
       <SaveStatusDialog

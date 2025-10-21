@@ -14,4 +14,19 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands'
+import "./commands";
+// cypress/support/e2e.js
+Cypress.on("uncaught:exception", (err, runnable) => {
+  // Prüfe auf bekannte Monaco-Fehler
+  if (
+    err.message.includes("LoadError") ||
+    err.message.includes("loader.js") ||
+    err.message.includes("monaco-editor") ||
+    err.message.includes("[object Event]") // Dein spezifischer Fehler
+  ) {
+    // Verhindere, dass Cypress den Test abbricht
+    return false;
+  }
+  // Bei allen anderen Fehlern: Test abbrechen
+  return true;
+});
