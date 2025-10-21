@@ -1,5 +1,5 @@
-// iPad-specific configuration for embedded mode
-export const IPAD_CONFIG = {
+// Embedded mode configuration
+export const EMBEDDED_CONFIG = {
   ROUTE: '/embedded',
   RENDERER: 'zelos',
   VIEWPORT: {
@@ -7,8 +7,8 @@ export const IPAD_CONFIG = {
   },
 };
 
-// iPad-specific Blockly configuration
-export const IPAD_BLOCKLY_CONFIG = {
+// Embedded mode Blockly configuration
+export const EMBEDDED_BLOCKLY_CONFIG = {
   move: {
     scrollbars: true,
     drag: true,
@@ -21,7 +21,7 @@ export const IPAD_BLOCKLY_CONFIG = {
     maxScale: 3,
     minScale: 0.3,
     scaleSpeed: 1.1,
-    pinch: true, // iPad supports pinch gestures
+    pinch: true, // Embedded mode supports pinch gestures
   },
   grid: {
     spacing: 20,

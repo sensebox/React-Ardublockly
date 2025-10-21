@@ -11,7 +11,7 @@ import { ZoomToFitControl } from "@blockly/zoom-to-fit";
 import { Backpack } from "@blockly/workspace-backpack";
 import { initialXml } from "./initialXml.js";
 import { getMaxInstances } from "./helpers/maxInstances";
-import { IPAD_BLOCKLY_CONFIG, DEFAULT_BLOCKLY_CONFIG } from "../../config/ipadConfig";
+import { EMBEDDED_BLOCKLY_CONFIG, DEFAULT_BLOCKLY_CONFIG } from "../../config/embeddedConfig";
 
 import BlocklySvg from "./BlocklySvg";
 
@@ -140,8 +140,8 @@ export default function BlocklyWindow(props) {
     () => {
       if (zoom !== undefined) return zoom;
       
-      // Use iPad config for embedded mode, default config otherwise
-      const baseConfig = isEmbedded ? IPAD_BLOCKLY_CONFIG.zoom : DEFAULT_BLOCKLY_CONFIG.zoom;
+      // Use embedded config for embedded mode, default config otherwise
+      const baseConfig = isEmbedded ? EMBEDDED_BLOCKLY_CONFIG.zoom : DEFAULT_BLOCKLY_CONFIG.zoom;
       
       return {
         ...baseConfig,
@@ -157,7 +157,7 @@ export default function BlocklyWindow(props) {
       
       if (typeof grid === "object") return grid;
       
-      return isEmbedded ? IPAD_BLOCKLY_CONFIG.grid : DEFAULT_BLOCKLY_CONFIG.grid;
+      return isEmbedded ? EMBEDDED_BLOCKLY_CONFIG.grid : DEFAULT_BLOCKLY_CONFIG.grid;
     },
     [grid, isEmbedded],
   );
@@ -168,7 +168,7 @@ export default function BlocklyWindow(props) {
       
       if (typeof move === "object") return move;
       
-      return isEmbedded ? IPAD_BLOCKLY_CONFIG.move : DEFAULT_BLOCKLY_CONFIG.move;
+      return isEmbedded ? EMBEDDED_BLOCKLY_CONFIG.move : DEFAULT_BLOCKLY_CONFIG.move;
     },
     [move, isEmbedded],
   );

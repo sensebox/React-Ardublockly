@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import * as Blockly from "blockly/core";
 import { createNameId } from "mnemonic-id";
-import { useIpadEmbeddedMode } from "@/hooks/useIpadEmbeddedMode";
+import { useEmbeddedMode } from "@/hooks/useEmbeddedMode";
 
 import { clearStats, workspaceName } from "@/actions/workspaceActions";
 import BlocklyWindow from "./Blockly/BlocklyWindow";
 import DeviceSelection from "./DeviceSelection";
-import IpadToolbar from "./Workspace/IpadToolbar";
-import { IPAD_BLOCKLY_CONFIG } from "@/config/ipadConfig";
+import EmbeddedToolbar from "./Workspace/EmbeddedToolbar";
+import { EMBEDDED_BLOCKLY_CONFIG } from "@/config/embeddedConfig";
 import "./EmbeddedBlockly.css";
 
 const EmbeddedBlockly = ({ project = null, projectType = null }) => {
@@ -17,8 +17,8 @@ const EmbeddedBlockly = ({ project = null, projectType = null }) => {
     localStorage.getItem("autoSaveXML"),
   );
 
-  // iPad-specific setup
-  useIpadEmbeddedMode();
+  // Embedded mode setup
+  useEmbeddedMode();
 
   useEffect(() => {
     dispatch(workspaceName(createNameId()));
@@ -41,15 +41,15 @@ const EmbeddedBlockly = ({ project = null, projectType = null }) => {
   return (
     <div className="blockly-app-container">
       <div className="embedded-toolbar">
-        <IpadToolbar project={project} projectType={projectType} />
+        <EmbeddedToolbar project={project} projectType={projectType} />
       </div>
       
       <div className="embedded-workspace">
         <BlocklyWindow
           initialXml={initialXml}
-          zoom={IPAD_BLOCKLY_CONFIG.zoom}
-          move={IPAD_BLOCKLY_CONFIG.move}
-          grid={IPAD_BLOCKLY_CONFIG.grid}
+          zoom={EMBEDDED_BLOCKLY_CONFIG.zoom}
+          move={EMBEDDED_BLOCKLY_CONFIG.move}
+          grid={EMBEDDED_BLOCKLY_CONFIG.grid}
         />
       </div>
       

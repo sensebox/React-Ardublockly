@@ -6,14 +6,14 @@ import Compile from "./ToolbarItems/Compile";
 import ShareProject from "./ToolbarItems/ShareProject";
 import ResetWorkspace from "./ToolbarItems/ResetWorkspace";
 
-const IpadToolbar = ({ 
+const EmbeddedToolbar = ({ 
   assessment = false, 
   multiple = false, 
   project, 
   projectType 
 }) => {
   const selectedBoard = useSelector((state) => state.board.board);
-  // iPad-optimized toolbar layout for embedded mode
+  // Embedded-optimized toolbar layout for embedded mode
   return (
     <div style={{
       display: "flex",
@@ -55,11 +55,11 @@ const IpadToolbar = ({
   );
 };
 
-IpadToolbar.propTypes = {
+EmbeddedToolbar.propTypes = {
   assessment: PropTypes.bool,
   multiple: PropTypes.bool,
   project: PropTypes.object,
   projectType: PropTypes.string,
 };
 
-export default IpadToolbar;
+export default EmbeddedToolbar;
