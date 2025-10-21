@@ -1,50 +1,51 @@
-/* Embedded mode workspace container adjustments */
-.embedded-mode .blocklyMainBackground {
-  width: 100% !important;
-  height: 100% !important;
-}
+/* =============================================================================
+   EMBEDDED MODE TOOLBOX STYLES
+   ============================================================================= */
 
-.embedded-mode .blocklyWorkspace {
-  width: 100% !important;
-  height: 100% !important;
-}
-
-/* Embedded mode search field - only adjust width and vertical alignment */
-.embedded-mode input[type="search"] {
-  width: calc(100vw - 40px) !important;
-  vertical-align: middle !important;
-  -webkit-user-select: text !important;
-  user-select: text !important;
-}
-
-/* Ensure search category container centers the search input vertically */
-.embedded-mode .blocklyToolboxCategory:has(input[type="search"]) {
-    height: auto !important;
-    margin-left: 4px !important;
-}
-
-/* Consolidated embedded toolbox base + variables */
+/* -----------------------------------------------------------------------------
+   CSS Variables & Base Configuration
+   ----------------------------------------------------------------------------- */
 .embedded-mode .blocklyToolbox {
   --cat-height: 42px;
   --cat-padding-x: 8px;
+  --cat-col-gap: 8px;
+  --cat-cols: 4;
+  --cat-col-width: calc((100% - (var(--cat-cols) - 1) * var(--cat-col-gap)) / var(--cat-cols));
+  
+  /* Chevron constants */
+  --chevron-size: 6px;
+  --chevron-border: 2px;
+  --chevron-transition: transform 120ms ease;
+  --chevron-right-offset: calc(2 * var(--cat-padding-x));
 }
 
+/* -----------------------------------------------------------------------------
+   Search Field Styling
+   ----------------------------------------------------------------------------- */
+.embedded-mode input[type="search"] {
+  width: calc(100vw -  var(--cat-padding-x)) ;
+  vertical-align: middle !important;
+  user-select: text !important;
+  -webkit-user-select: text !important;
+}
+/* Search should occupy the full first line (all 4 columns) */
+.embedded-mode .blocklyToolbox .blocklyToolboxCategoryContainer:has(input[type="search"]) {
+  max-width: calc(100vw - 12px) !important;
+}
+
+/* -----------------------------------------------------------------------------
+   Category Button Styling
+   ----------------------------------------------------------------------------- */
 .embedded-mode .blocklyToolbox .blocklyToolboxCategory {
   height: var(--cat-height) !important;
-  min-height: var(--cat-height) !important;
-  line-height: var(--cat-height) !important;
-  display: flex;
-  align-items: center;
   border-radius: 5px;
   background: #fff;
-  margin: 2px;
-  padding: 0 2px;
-  align-content: center;
-  outline: none; /* remove default focus ring */
+  padding: 0 2px 0 0 !important; /* Remove Blockly's default indentation */
   position: relative;
+  width: 100%;
 }
 
-/* Embedded mode - disable focus styling */
+/* Disable focus styling */
 .embedded-mode .blocklyToolboxCategory:focus,
 .embedded-mode .blocklyToolboxCategoryContainer:focus,
 .embedded-mode .blocklyTreeRow:focus,
@@ -53,114 +54,29 @@
   box-shadow: none !important;
 }
 
-/* Embedded mode - category indentation and positioning */
-/* Remove indentation for subcategories in embedded view */
-.embedded-mode .blocklyToolboxCategoryContainer[aria-level="2"] {
-  margin-left: 0 !important;
-}
-
-/* In embedded mode horizontal layout, third level categories should appear next to second level, not indented */
-.embedded-mode .blocklyToolboxCategoryContainer[aria-level="3"] {
-  margin-left: 0px !important;
-  position: relative !important;
-  top: 0 !important;
-  left: 0 !important;
-  transform: none !important;
-}
-
-.embedded-mode .blocklyToolboxCategoryContainer[aria-level="4"] {
-  margin-left: 0px !important;
-  position: relative !important;
-  top: 0 !important;
-  left: 0 !important;
-  transform: none !important;
-}
-
-/* Remove inline padding-left added by Blockly for nested levels */
-.embedded-mode .blocklyToolbox .blocklyToolboxCategory {
-  padding-left: 0 !important;
-}
-
-/* Normal toolbox layout - default behavior */
-.blocklyToolbox {
-  width: auto !important;
-  min-width: 200px;
-  max-width: 300px;
-}
-
-/* Embedded mode specific styles - only apply when .embedded-mode class is present */
-.embedded-mode .blocklyToolbox {
-  width: 100% !important;
-  height: auto !important;
-  min-width: 100% !important;
-  max-width: none !important;
-  min-height: 60px !important;
-  max-height: none !important;
-  /* Don't override position - let Blockly handle toolboxPosition: 'end' */
-}
-
-.embedded-mode .blocklyToolbox .blocklyToolboxContents {
+/* -----------------------------------------------------------------------------
+   Category Layout & Positioning
+   ----------------------------------------------------------------------------- */
+/* Top-level categories: fixed-width grid (fit var(--cat-cols) per row) */
+.embedded-mode .blocklyToolbox .blocklyToolboxCategoryContainer[aria-level="1"] {
   display: flex !important;
+  flex: 0 0 var(--cat-col-width) !important;
+}
+
+/* -----------------------------------------------------------------------------
+   Expanded Category Layout (Subcategories)
+   ----------------------------------------------------------------------------- */
+/* When a category is expanded, its subcategories should flow horizontally */
+.embedded-mode .blocklyToolboxCategoryContainer[aria-expanded="true"] {
   flex-wrap: wrap !important;
-  align-items: flex-start !important;
 }
-
-/* Force horizontal layout for all nested categories in embedded mode */
-.embedded-mode .blocklyToolboxCategoryContainer {
-  display: inline-block !important;
-  vertical-align: top !important;
-}
-
-/* Ensure proper spacing between categories at all levels in embedded mode */
-.embedded-mode .blocklyToolboxCategoryContainer[aria-level="3"],
-.embedded-mode .blocklyToolboxCategoryContainer[aria-level="4"] {
-  margin-right: 10px !important;
-  margin-bottom: 5px !important;
-}
-
-/* Ensure nested categories flow horizontally in embedded mode */
-.embedded-mode .blocklyToolboxCategoryContainer[aria-level="2"] .blocklyToolboxCategoryContainer[aria-level="3"],
-.embedded-mode .blocklyToolboxCategoryContainer[aria-level="3"] .blocklyToolboxCategoryContainer[aria-level="4"] {
-  display: inline-block !important;
-  margin-left: 0px !important;
-  margin-right: 10px !important;
-  position: relative !important;
-  top: 0 !important;
-  left: 0 !important;
-}
-
-/* Removed iPad per-level heights in favor of single --cat-height */
-
-/* iPad touch optimizations */
-.embedded-mode .blocklyToolboxCategory {
-  -webkit-tap-highlight-color: transparent;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  user-select: none;
-}
-
-/* iPad flyout spacing */
-.embedded-mode .blocklyFlyout .blocklyBlockCanvas > .blocklyDraggable {
-  margin: 8px 0 !important;
-}
-
-/* iPad scroll bars */
-.embedded-mode .blocklyScrollbarHandle {
-  width: 12px !important;
-  height: 12px !important;
-}
-
-/* Embedded toolbox: ensure expandable category icons are visible and styled */
+/* -----------------------------------------------------------------------------
+   Chevron Icons for Expandable Categories
+   ----------------------------------------------------------------------------- */
 .embedded-mode .blocklyToolbox .blocklyToolboxCategoryIconClosed,
 .embedded-mode .blocklyToolbox .blocklyToolboxCategoryIconOpen {
   position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 12px;
-  height: 12px;
-  visibility: visible !important;
-  display: inline-block;
+  right: var(--chevron-right-offset);
   color: var(--cat-accent, currentColor);
 }
 
@@ -170,30 +86,27 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 6px;
-  height: 6px;
-  border-right: 2px solid currentColor;
-  border-bottom: 2px solid currentColor;
+  width: var(--chevron-size);
+  height: var(--chevron-size);
+  border-right: var(--chevron-border) solid currentColor;
+  border-bottom: var(--chevron-border) solid currentColor;
   transform-origin: center;
-  transition: transform 120ms ease;
+  transition: var(--chevron-transition);
 }
 
-/* Closed: chevron points right */
-.embedded-mode .blocklyToolbox .blocklyToolboxCategoryIconClosed::before {
-  transform: translate(-50%, -50%) rotate(-45deg);
-}
-
-/* Open: chevron points down */
-.embedded-mode .blocklyToolbox .blocklyToolboxCategoryIconOpen::before {
-  transform: translate(-50%, -50%) rotate(45deg);
-}
-
-/* Also rotate when the container is expanded (defensive if icon class doesn't switch) */
+/* Rotate when the container is expanded */
 .embedded-mode .blocklyToolbox .blocklyToolboxCategoryContainer[aria-expanded="true"] .blocklyToolboxCategoryIconClosed::before {
   transform: translate(-50%, -50%) rotate(45deg);
 }
 
-/* Embedded toolbox row layout: label first, icon last */
+/* Rotate when the container is closed */
+.embedded-mode .blocklyToolbox .blocklyToolboxCategoryContainer[aria-expanded="false"] .blocklyToolboxCategoryIconClosed::before {
+  transform: translate(0%, -50%) rotate(-45deg);
+}
+
+/* -----------------------------------------------------------------------------
+   Category Row Layout & Typography
+   ----------------------------------------------------------------------------- */
 .embedded-mode .blocklyToolbox .blocklyTreeRowContentContainer {
   display: flex;
   align-items: center;
@@ -201,17 +114,9 @@
   padding-right: 24px; /* reserve space for absolute chevron */
 }
 
-.embedded-mode .blocklyToolbox .blocklyToolboxCategoryLabel,
-.embedded-mode .blocklyToolbox .blocklyTreeLabel,
-.embedded-mode .blocklyToolbox .blocklyToolboxItemLabel {
-  flex: 1 1 auto;
-  margin-right: 0;
-  padding-left: 8px !important; /* add subtle text padding */
-  padding-right: 8px;
-  line-height: var(--cat-height) !important;
-}
-
-/* Embedded: visually distinguish subcategory levels with soft background hues */
+/* -----------------------------------------------------------------------------
+   Visual Distinction for Subcategory Levels
+   ----------------------------------------------------------------------------- */
 .embedded-mode .blocklyToolbox .blocklyToolboxCategoryContainer[aria-level="2"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
   background: #E8F5E8; /* light green */
 }
@@ -224,3 +129,21 @@
   background: #F3E5F5; /* light purple */
 }
 
+/* -----------------------------------------------------------------------------
+   Touch Optimizations (iPad)
+   ----------------------------------------------------------------------------- */
+.embedded-mode .blocklyToolboxCategory {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.embedded-mode .blocklyFlyout .blocklyBlockCanvas > .blocklyDraggable {
+  margin: 8px 0 !important;
+}
+
+.embedded-mode .blocklyScrollbarHandle {
+  width: 12px !important;
+  height: 12px !important;
+}
