@@ -32,7 +32,7 @@ const headerStyle = {
   fontWeight: "bold",
 };
 
-function CompilationDialog({ open, code, selectedBoard, onClose, platform }) {
+function CompilationDialog({ open, code, selectedBoard, onClose, platform, isEmbedded = false }) {
   const [activeStep, setActiveStep] = useState(0);
   const [sketchId, setSketchId] = useState(null);
   const [error, setError] = useState(null);
@@ -170,8 +170,12 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform }) {
             <div
               style={{ display: "flex", flexDirection: "column", gap: "12px" }}
             >
-              <span style={headerStyle}> {Blockly.Msg.goToApp_title} </span>
-              <span style={{ margin: "1rem" }}>{Blockly.Msg.goToApp_text}</span>
+              <span style={headerStyle}> 
+                {Blockly.Msg.goToApp_title} 
+              </span>
+              <span style={{ margin: "1rem" }}>
+                {isEmbedded ? Blockly.Msg.goToApp_text_embedded : Blockly.Msg.goToApp_text}
+              </span>
               <a
                 href={`blocklyconnect-app://sketch/${filename}/${sketchId}/${selectedBoard}`}
               >
@@ -183,7 +187,7 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform }) {
                     style={{ marginRight: "5px" }}
                     icon={faLink}
                   />
-                  {Blockly.Msg.goToApp}
+                  {isEmbedded ? Blockly.Msg.goToApp_embedded : Blockly.Msg.goToApp}
                 </Button>
               </a>
             </div>
@@ -232,6 +236,7 @@ CompilationDialog.propTypes = {
   filename: PropTypes.string.isRequired,
   platform: PropTypes.bool.isRequired,
   appLink: PropTypes.string,
+  isEmbedded: PropTypes.bool,
 };
 
 CompilationDialog.defaultProps = {

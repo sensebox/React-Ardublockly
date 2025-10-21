@@ -63,8 +63,9 @@ const Compile = (props) => {
         compiler={props.compiler}
         code={props.arduino}
         filename={props.name || "sketch"}
-        platform={props.platform}
+        platform={props.isEmbedded ? true : props.platform}
         appLink={props.appLink || ""}
+        isEmbedded={props.isEmbedded}
       />
     </div>
   );
