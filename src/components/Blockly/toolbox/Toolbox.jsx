@@ -5,21 +5,17 @@ import * as Blockly from "blockly/core";
 import { useSelector } from "react-redux";
 import { ToolboxMcu } from "./ToolboxMcu";
 import { ToolboxEsp } from "./ToolboxEsp";
-import { useEmbeddedToolbox } from "./useEmbeddedToolbox";
+import { De } from "@/components/Blockly/msg/de";
+import { En } from "@/components/Blockly/msg/en";
 
 const Toolbox = ({ workspace, toolbox }) => {
   const selectedBoard = useSelector((state) => state.board.board);
   const language = useSelector((state) => state.general.language);
-  const isEmbedded = useSelector((state) => state.general.embeddedMode);
   const previousBoard = useRef(null);
 
   // Register typed variable flyout on board change or mount
   useEffect(() => {
     if (!workspace || !toolbox?.current) return;
-
-    if (workspace.isDisposed && workspace.isDisposed()) {
-      return;
-    }
 
     // Register callback
     workspace.registerToolboxCategoryCallback(
@@ -43,13 +39,9 @@ const Toolbox = ({ workspace, toolbox }) => {
     if (previousBoard.current !== selectedBoard) {
       previousBoard.current = selectedBoard;
     }
-    if (workspace.toolbox) {
-      workspace.updateToolbox(toolbox.current);
-    }
 
+    workspace.updateToolbox(toolbox.current);
   }, [workspace, toolbox, selectedBoard, language]);
-
-  useEmbeddedToolbox(workspace, false); // Always false for regular toolbox
 
   return (
     <xml
