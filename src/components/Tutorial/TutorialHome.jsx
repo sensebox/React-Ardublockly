@@ -18,7 +18,12 @@ import {
   ToggleButtonGroup,
   ToggleButton,
   useTheme,
+  Button,
+  IconButton,
 } from "@mui/material";
+import { faPencil, faTools } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 function getDifficultyLevel(value) {
   if (value <= 1) return 1;
@@ -82,7 +87,7 @@ function TutorialHome() {
           gap: 2,
         }}
       >
-        <Box sx={{ flex: "0 1 75%" }}>
+        <Box sx={{ flex: "0 1 65%" }}>
           <TextField
             fullWidth
             label={Blockly.Msg.searchQuery_placeholder || "Tutorials suchen"}
@@ -133,6 +138,40 @@ function TutorialHome() {
             <ToggleButton value={5}>Sehr schwer</ToggleButton>
           </ToggleButtonGroup>
         </Box>
+        {user && (
+          <Box
+            sx={{
+              flex: "0 1 10%",
+              display: "flex",
+              alignItems: "center",
+              p: 0.5,
+            }}
+          >
+            <Link to="/tutorial/builder" style={{ textDecoration: "none" }}>
+              <Button
+                variant="contained"
+                startIcon={<FontAwesomeIcon icon={faTools} />}
+                sx={{
+                  borderRadius: "5px",
+                  textTransform: "none",
+                  fontWeight: 600,
+                  backgroundColor: theme.palette.primary.main,
+                  color: "white",
+                  px: 2,
+                  py: 1,
+                  fontSize: "0.9rem",
+                  boxShadow: "none",
+                  "&:hover": {
+                    backgroundColor: theme.palette.primary.dark,
+                    boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+                  },
+                }}
+              >
+                Tutorial erstellen
+              </Button>
+            </Link>
+          </Box>
+        )}
       </Box>
       <h2>Alle Tutorials</h2>
       Damit Tutorials in dieser Gallerie angezeigt werden, müssen Sie von uns

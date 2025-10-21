@@ -323,7 +323,6 @@ const Builder = () => {
       review,
       creator,
     });
-    console.log("playload", payload);
     setSaveButtonDisabled(true);
     setSavingState("loading");
 
