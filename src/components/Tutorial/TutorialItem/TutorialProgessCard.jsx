@@ -7,17 +7,21 @@ import {
   Typography,
   LinearProgress,
   useTheme,
+  Button,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
+import { Edit } from "@mui/icons-material";
+import { useHistory } from "react-router-dom";
 
 const TutorialProgressCard = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
+  const history = useHistory();
   const activeStep = useSelector((state) => state.tutorial.activeStep);
   const tutorial = useSelector((state) => state.tutorial.tutorials[0]);
-
+  const user = useSelector((state) => state.auth.user);
   // künstlich einen "Abschluss"-Step anhängen
   const stepsWithFinish = [...tutorial.steps];
 
@@ -129,6 +133,15 @@ const TutorialProgressCard = () => {
             </Box>
           );
         })}
+        {tutorial.creator === user.email && (
+          <Button
+            variant="outlined"
+            startIcon={<Edit />}
+            onClick={() => history.push(`/tutorial/${tutorial.id}/edit`)}
+          >
+            Tutorial bearbeiten
+          </Button>
+        )}
       </CardContent>
     </Card>
   );

@@ -20,6 +20,7 @@ import {
   CheckCircle,
   WarningAmber,
   Error as ErrorIcon,
+  Visibility,
 } from "@mui/icons-material";
 import { useTheme } from "@mui/styles";
 import "@uiw/react-md-editor/markdown-editor.css";
@@ -300,7 +301,6 @@ const Builder = () => {
           justifyContent: "center",
         }}
       >
-        {/* Sidebar */}
         <Box
           sx={{
             flex: "0 0 20%",
@@ -332,6 +332,22 @@ const Builder = () => {
           >
             Tutorial speichern
           </Button>
+          {existingTutorialId && (
+            <Button
+              variant="outlined"
+              startIcon={<Visibility />}
+              onClick={() =>
+                history.push(
+                  existingTutorialId
+                    ? `/tutorial/${existingTutorialId}`
+                    : "/tutorial",
+                )
+              }
+              disabled={saveButtonDisabled}
+            >
+              Tutorial ansehen
+            </Button>
+          )}
         </Box>
 
         {/* Main Content */}
