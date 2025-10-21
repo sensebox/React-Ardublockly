@@ -27,7 +27,6 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
   const blocklyDivRef = useRef(null);
   const toolboxRef = useRef(null);
   const [workspace, setWorkspace] = useState(undefined);
-  console.log("blockly component", initialXml);
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",

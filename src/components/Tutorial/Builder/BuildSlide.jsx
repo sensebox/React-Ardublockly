@@ -23,18 +23,18 @@ const BuildSlide = ({
   stepNumber,
   setSteps,
   steps,
-  category,
+  type,
+  setType,
 }) => {
   const theme = useTheme();
-  const [type, setType] = useState(category);
   const updateStep = (index, key, value) => {
     setType(value);
-    console.log("Update Step:", index, key, value);
     const updated = [...steps];
     updated[index][key] = value;
-    console.log("updated", updated);
     setSteps(updated);
   };
+
+  console.log(type);
   return (
     <motion.div
       variants={variants}
@@ -76,24 +76,26 @@ const BuildSlide = ({
                   {`Schritt ${stepNumber}`}
                 </Box>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  <FormControl size="small" fullWidth>
-                    <InputLabel id="category-label">Kategorie</InputLabel>
-                    <Select
-                      labelId="category-label"
-                      label="Kategorie"
-                      value={type}
-                      sx={{
-                        borderColor: theme.palette.primary.main,
-                      }}
-                      onChange={(e) =>
-                        updateStep(stepNumber - 1, "type", e.target.value)
-                      }
-                    >
-                      <MenuItem value="task">Aufgabe</MenuItem>
-                      <MenuItem value="question">Fragestellung</MenuItem>
-                      <MenuItem value="blockly">Blockly-Aufgabe</MenuItem>
-                    </Select>
-                  </FormControl>
+                  {!(type === "instruction" || type === "finish") && (
+                    <FormControl size="small" fullWidth>
+                      <InputLabel id="category-label">Kategorie</InputLabel>
+                      <Select
+                        labelId="category-label"
+                        label="Kategorie"
+                        value={type}
+                        sx={{
+                          borderColor: theme.palette.primary.main,
+                        }}
+                        onChange={(e) =>
+                          updateStep(stepNumber - 1, "type", e.target.value)
+                        }
+                      >
+                        <MenuItem value="task">Aufgabe</MenuItem>
+                        <MenuItem value="question">Fragestellung</MenuItem>
+                        <MenuItem value="blockly">Blockly-Aufgabe</MenuItem>
+                      </Select>
+                    </FormControl>
+                  )}
                 </Box>
               </Box>
 

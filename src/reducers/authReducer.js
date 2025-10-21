@@ -36,7 +36,6 @@ export default function foo(state = initialState, action) {
       };
     case LOGIN_SUCCESS:
     case REFRESH_TOKEN_SUCCESS:
-      console.log("Hallo");
       localStorage.setItem("token", action.payload.token);
       localStorage.setItem("refreshToken", action.payload.refreshToken);
       return {
