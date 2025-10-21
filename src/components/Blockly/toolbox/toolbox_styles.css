@@ -8,9 +8,7 @@
 .embedded-mode .blocklyToolbox {
   --cat-height: 42px;
   --cat-padding-x: 8px;
-  --cat-col-gap: 8px;
-  --cat-cols: 4;
-  --cat-col-width: calc((100% - (var(--cat-cols) - 1) * var(--cat-col-gap)) / var(--cat-cols));
+  --cat-min-width: calc(25vw - 9px);
   
   /* Chevron constants */
   --chevron-size: 6px;
@@ -23,14 +21,15 @@
    Search Field Styling
    ----------------------------------------------------------------------------- */
 .embedded-mode input[type="search"] {
-  width: calc(100vw -  var(--cat-padding-x)) ;
+  width: calc(100vw);
   vertical-align: middle !important;
   user-select: text !important;
   -webkit-user-select: text !important;
 }
 /* Search should occupy the full first line (all 4 columns) */
 .embedded-mode .blocklyToolbox .blocklyToolboxCategoryContainer:has(input[type="search"]) {
-  max-width: calc(100vw - 12px) !important;
+  width: calc(100vw - 2 * var(--cat-padding-x)) !important;
+  max-width: calc(100vw - 2 * var(--cat-padding-x)) !important;
 }
 
 /* -----------------------------------------------------------------------------
@@ -42,7 +41,8 @@
   background: #fff;
   padding: 0 2px 0 0 !important; /* Remove Blockly's default indentation */
   position: relative;
-  width: 100%;
+  width: var(--cat-width);
+  flex-shrink: 0;
 }
 
 /* Disable focus styling */
@@ -57,18 +57,46 @@
 /* -----------------------------------------------------------------------------
    Category Layout & Positioning
    ----------------------------------------------------------------------------- */
-/* Top-level categories: fixed-width grid (fit var(--cat-cols) per row) */
-.embedded-mode .blocklyToolbox .blocklyToolboxCategoryContainer[aria-level="1"] {
-  display: flex !important;
-  flex: 0 0 var(--cat-col-width) !important;
+/* Main toolbox container: natural flow */
+.embedded-mode .blocklyToolbox {
+  padding: var(--cat-padding-x);
+}
+
+/* Apply minimum width to all category containers */
+.embedded-mode .blocklyToolbox .blocklyToolboxCategoryContainer {
+  min-width: var(--cat-min-width) !important;
 }
 
 /* -----------------------------------------------------------------------------
    Expanded Category Layout (Subcategories)
    ----------------------------------------------------------------------------- */
-/* When a category is expanded, its subcategories should flow horizontally */
+/* Force subcategories to flow horizontally */
+.embedded-mode .blocklyToolboxCategoryContainer[aria-level="2"],
+.embedded-mode .blocklyToolboxCategoryContainer[aria-level="3"],
+.embedded-mode .blocklyToolboxCategoryContainer[aria-level="4"] {
+  display: inline-block !important;
+  vertical-align: top !important;
+}
+
+/* Remove right padding from the last subcategory */
+.embedded-mode .blocklyToolboxCategoryContainer[aria-level="2"]:last-child,
+.embedded-mode .blocklyToolboxCategoryContainer[aria-level="3"]:last-child,
+.embedded-mode .blocklyToolboxCategoryContainer[aria-level="4"]:last-child {
+  padding-right: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Remove left padding from every fourth subcategory */
+.embedded-mode .blocklyToolboxCategoryContainer[aria-level="2"]:nth-child(4n),
+.embedded-mode .blocklyToolboxCategoryContainer[aria-level="3"]:nth-child(4n),
+.embedded-mode .blocklyToolboxCategoryContainer[aria-level="4"]:nth-child(4n) {
+  margin-right: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Ensure expanded categories maintain fixed width but allow subcategories to be visible */
 .embedded-mode .blocklyToolboxCategoryContainer[aria-expanded="true"] {
-  flex-wrap: wrap !important;
+  display: inline-block !important;
 }
 /* -----------------------------------------------------------------------------
    Chevron Icons for Expandable Categories
