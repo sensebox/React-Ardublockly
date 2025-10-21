@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -83,10 +83,12 @@ const validateRequiredFields = ({ title, subtitle }) => {
   return missing;
 };
 
+// 🔥 HILFSFUNKTION: Tiefer Vergleich (einfach, aber ausreichend für Tutorial-Steps)
+const deepEqual = (obj1, obj2) => JSON.stringify(obj1) === JSON.stringify(obj2);
+
 // Hauptkomponente
 const Builder = () => {
   const params = useLocation();
-  // ODER rein mit Regex (ohne Abhängigkeit):
   const isValidObjectId = (id) => /^[0-9a-fA-F]{24}$/.test(id);
 
   const existingTutorialId = isValidObjectId(params.pathname.split("/")[2])
@@ -119,9 +121,12 @@ const Builder = () => {
   //  UI & Navigation
   const [activeStep, setActiveStep] = useState(0);
 
+  // 🔥 NEU: Zustand für Autosave
+  const [autosaveEnabled, setAutosaveEnabled] = useState(false);
+
   //  Speichern
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
-  const [savingState, setSavingState] = useState("idle"); // idle | loading | success | error | missing
+  const [savingState, setSavingState] = useState("idle");
   const [savedTutorialId, setSavedTutorialId] = useState(null);
 
   //  Snackbar
@@ -131,6 +136,19 @@ const Builder = () => {
     key: 0,
     message: "",
   });
+
+  // 🔥 NEU: Ref für letzten gespeicherten Zustand
+  const lastSavedState = useRef({
+    title: "",
+    subtitle: "",
+    steps: [],
+    difficulty: 3,
+    learnings: [],
+    selectedHardware: [],
+  });
+
+  // 🔥 NEU: Ref, um laufende Requests zu verhindern
+  const isAutosaving = useRef(false);
 
   useEffect(() => {
     if (!existingTutorialId) {
@@ -176,7 +194,6 @@ const Builder = () => {
         existingTutorial.learnings || [{ title: "", description: "" }],
       );
     } else if (!existingTutorialId) {
-      // Neues Tutorial → Standardwerte
       setTitle("");
       setSubtitle("");
       setSteps(createInitialSteps());
@@ -186,7 +203,102 @@ const Builder = () => {
     }
   }, [existingTutorial, existingTutorialId]);
 
-  // 📤 Speichern-Funktion
+  // 🔥 AUTOSAVE: Wenn activeStep wechselt UND autosave aktiv UND sich was geändert hat
+  useEffect(() => {
+    if (!autosaveEnabled || isAutosaving.current) return;
+
+    // Zustand, den wir speichern würden
+    const currentState = {
+      title,
+      subtitle,
+      steps,
+      difficulty,
+      learnings,
+      selectedHardware,
+    };
+
+    // 🔥 Prüfe: Hat sich etwas geändert?
+    if (deepEqual(currentState, lastSavedState.current)) {
+      console.log(
+        "Keine Änderungen seit letztem Autosave – überspringe Request.",
+      );
+      return;
+    }
+
+    const autosave = async () => {
+      isAutosaving.current = true;
+
+      const missing = validateRequiredFields({ title, subtitle });
+      if (missing.length > 0) {
+        console.warn("Autosave abgebrochen: Pflichtfelder fehlen");
+        isAutosaving.current = false;
+        return;
+      }
+
+      const payload = buildTutorialPayload({
+        title,
+        subtitle,
+        difficulty,
+        learnings,
+        selectedHardware,
+        steps,
+        isPublic,
+        review,
+        creator,
+      });
+
+      try {
+        let url = `${import.meta.env.VITE_BLOCKLY_API}/tutorial/`;
+        let method = "POST";
+
+        if (savedTutorialId) {
+          url = `${import.meta.env.VITE_BLOCKLY_API}/tutorial/${savedTutorialId}`;
+          method = "PUT";
+        } else if (existingTutorialId) {
+          url = `${import.meta.env.VITE_BLOCKLY_API}/tutorial/${existingTutorialId}`;
+          method = "PUT";
+        }
+
+        const response = await fetch(url, {
+          method,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) throw new Error("Autosave Netzwerkfehler");
+
+        const data = await response.json();
+        if (!savedTutorialId && !existingTutorialId) {
+          setSavedTutorialId(data.tutorial._id);
+        }
+
+        // 🔥 Aktualisiere den letzten gespeicherten Zustand
+        lastSavedState.current = { ...currentState };
+
+        console.log("Autosave erfolgreich");
+      } catch (err) {
+        console.error("Autosave fehlgeschlagen:", err);
+      } finally {
+        isAutosaving.current = false;
+      }
+    };
+
+    autosave();
+  }, [
+    activeStep,
+    autosaveEnabled,
+    title,
+    subtitle,
+    steps,
+    learnings,
+    selectedHardware,
+    difficulty,
+  ]);
+
+  // 📤 Speichern-Funktion (wie bisher)
   const saveTutorial = async () => {
     const missing = validateRequiredFields({ title, subtitle });
     if (missing.length > 0) {
@@ -218,8 +330,10 @@ const Builder = () => {
       let url = `${import.meta.env.VITE_BLOCKLY_API}/tutorial/`;
       let method = "POST";
 
-      // 🔁 Wenn existingTutorialId vorhanden → PUT
-      if (existingTutorialId) {
+      if (savedTutorialId) {
+        url = `${import.meta.env.VITE_BLOCKLY_API}/tutorial/${savedTutorialId}`;
+        method = "PUT";
+      } else if (existingTutorialId) {
         url = `${import.meta.env.VITE_BLOCKLY_API}/tutorial/${existingTutorialId}`;
         method = "PUT";
       }
@@ -236,15 +350,28 @@ const Builder = () => {
       if (!response.ok) throw new Error("Netzwerkfehler");
 
       const data = await response.json();
-      setSavedTutorialId(data.tutorial._id || existingTutorialId); // bei PUT ist _id oft nicht im Response
+      setSavedTutorialId(
+        data.tutorial._id || existingTutorialId || savedTutorialId,
+      );
       setSavingState("success");
       setSnackInfo({
         type: "success",
         key: Date.now(),
-        message: existingTutorialId
-          ? "Tutorial erfolgreich aktualisiert!"
-          : "Tutorial erfolgreich gespeichert!",
+        message:
+          savedTutorialId || existingTutorialId
+            ? "Tutorial erfolgreich aktualisiert!"
+            : "Tutorial erfolgreich gespeichert!",
       });
+
+      // 🔥 Aktualisiere auch nach manuellem Speichern
+      lastSavedState.current = {
+        title,
+        subtitle,
+        steps,
+        difficulty,
+        learnings,
+        selectedHardware,
+      };
 
       setSnackbarOpen(true);
     } catch (err) {
@@ -269,9 +396,6 @@ const Builder = () => {
 
   // 🎨 Render
   const currentStep = steps[activeStep] || {};
-  useEffect(() => {
-    console.log(currentStep);
-  }, [currentStep]);
 
   if (loading) {
     return (
@@ -322,6 +446,8 @@ const Builder = () => {
             setSelectedHardware={setSelectedHardware}
             activeStep={activeStep}
             setActiveStep={setActiveStep}
+            autosaveEnabled={autosaveEnabled}
+            setAutosaveEnabled={setAutosaveEnabled}
           />
 
           <Button
