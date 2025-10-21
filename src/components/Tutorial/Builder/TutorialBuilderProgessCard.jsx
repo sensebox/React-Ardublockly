@@ -43,7 +43,6 @@ const TutorialBuilderProgressCard = ({
   const changeStep = (stepIndex) => {
     dispatch({ type: "TUTORIAL_STEP", payload: stepIndex });
   };
-  console.log(steps);
   const updateStep = (index, key, value) => {
     const updated = [...steps];
     updated[index][key] = value;
@@ -75,7 +74,6 @@ const TutorialBuilderProgressCard = ({
 
   const handleDragEnd = (result) => {
     if (!result.destination) return;
-    console.log(result);
     const items = Array.from(steps);
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);

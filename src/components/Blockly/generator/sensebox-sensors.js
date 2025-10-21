@@ -1243,7 +1243,6 @@ Blockly.Generator.Arduino.forBlock["sensebox_sensor_icm20948"] = function () {
   Blockly.Generator.Arduino.loopCodeOnce_["icm.getEvent"] =
     "  icm.getEvent(&accel, &gyro, &temp, &mag);";
 
-  console.log("dropdwon", dropdown);
   switch (dropdown) {
     case "accelerationX":
       code = "accel.acceleration.x";

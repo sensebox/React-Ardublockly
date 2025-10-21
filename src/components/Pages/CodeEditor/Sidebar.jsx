@@ -28,9 +28,6 @@ const Sidebar = () => {
     monaco.editor.getModels()[0].setValue(code);
   };
 
-  useEffect(() => {
-    console.log(user);
-  }, []);
   const getOsemScript = (id) => {
     axios
       .get(`https://api.opensensemap.org/boxes/${id}/script/`)
