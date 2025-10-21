@@ -1,19 +1,32 @@
-.custom-search-category {
-}
 .blocklyToolboxContents:first-child {
   padding: 1px;
 }
 input[type="search"] {
   background-color: #f9f9f9;
-  border: 1px solid #ccc;
-  padding: 4px;
+  border: 1px solid #ccc !important;
+  padding: 8px;
   border-radius: 4px;
   background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' height='16' width='16' viewBox='0 0 24 24'%3E%3Cpath fill='%23aaa' d='M15.5 14h-.79l-.28-.27a6.471 6.471 0 001.48-5.34C15.03 5.01 12.02 2 8.5 2S2 5.01 2 8.5 5.01 15 8.5 15a6.5 6.5 0 005.34-1.48l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-7 0C6.01 14 4 11.99 4 9.5S6.01 5 8.5 5 13 7.01 13 9.5 10.99 14 8.5 14z'%3E%3C/path%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-size: 16px;
   background-position: right 8px center;
+  outline: none;
+  width: 14vw;
 }
 
 #blockly-y {
   margin-bottom: 5px;
+}
+
+/* Alle Kategorien außer die, die ein Search-Input enthalten */
+.blocklyToolboxCategory:has(input[type="search"]) {
+  height: 30px !important;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  background: #fff;
+  outline: none;
+  padding: 8px;
+  margin: 2px;
+  align-content: center;
+  outline: none;
 }
