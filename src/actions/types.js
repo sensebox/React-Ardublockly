@@ -52,6 +52,7 @@ export const RENDERER = "RENDERER";
 export const SOUNDS = "SOUNDS";
 export const STATISTICS = "STATISTICS";
 export const COMPILER = "COMPILER";
+export const EMBEDDED_MODE = "EMBEDDED_MODE";
 
 // messages
 export const GET_ERRORS = "GET_ERRORS";

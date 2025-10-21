@@ -23,18 +23,20 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Dialog from "../../ui/Dialog.jsx";
 import Button from "@mui/material/Button";
 
-const styles = (theme) => ({
-  button: {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.primary.contrastText,
-    width: "40px",
-    height: "40px",
-    "&:hover": {
+const styles = (theme) => {
+  return {
+    button: {
       backgroundColor: theme.palette.primary.main,
       color: theme.palette.primary.contrastText,
+      width: "40px",
+      height: "40px",
+      "&:hover": {
+        backgroundColor: theme.palette.primary.main,
+        color: theme.palette.primary.contrastText,
+      },
     },
-  },
-});
+  };
+};
 
 class ResetWorkspace extends Component {
   constructor(props) {
@@ -83,11 +85,11 @@ class ResetWorkspace extends Component {
       <div style={this.props.style}>
         <Tooltip title={Blockly.Msg.tooltip_reset_workspace} arrow>
           <IconButton
-            className={this.props.classes.button}
+            className={this.props.isEmbedded ? `${this.props.classes.buttonEmbedded} embedded-button embedded-button-primary` : this.props.classes.button}
             onClick={() => this.openDialog()}
             size="large"
           >
-            <FontAwesomeIcon icon={faShare} size="xs" flip="horizontal" />
+            <FontAwesomeIcon icon={faShare} size={this.props.isEmbedded ? "sm" : "xs"} flip="horizontal" />
           </IconButton>
         </Tooltip>
 
@@ -132,8 +134,13 @@ ResetWorkspace.propTypes = {
   clearStats: PropTypes.func.isRequired,
   onChangeCode: PropTypes.func.isRequired,
   workspaceName: PropTypes.func.isRequired,
+  isEmbedded: PropTypes.bool,
 };
 
-export default connect(null, { clearStats, onChangeCode, workspaceName })(
+const mapStateToProps = (state) => ({
+  isEmbedded: state.general.embeddedMode,
+});
+
+export default connect(mapStateToProps, { clearStats, onChangeCode, workspaceName })(
   withStyles(styles, { withTheme: true })(ResetWorkspace),
 );

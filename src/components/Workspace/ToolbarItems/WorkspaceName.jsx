@@ -23,18 +23,20 @@ const withWidth = () => (WrappedComponent) => (props) => (
   <WrappedComponent {...props} width="xs" />
 );
 
-const styles = (theme) => ({
-  workspaceName: {
-    minHeight: "40px",
-    backgroundColor: theme.palette.secondary.main,
-    borderRadius: "25px",
-    display: "inline-flex",
-    cursor: "pointer",
-    "&:hover": {
-      color: theme.palette.primary.main,
+const styles = (theme) => {
+  return {
+    workspaceName: {
+      minHeight: "40px",
+      backgroundColor: theme.palette.secondary.main,
+      borderRadius: "25px",
+      display: "inline-flex",
+      cursor: "pointer",
+      "&:hover": {
+        color: theme.palette.primary.main,
+      },
     },
-  },
-});
+  };
+};
 
 class WorkspaceName extends Component {
   constructor(props) {
@@ -117,7 +119,7 @@ class WorkspaceName extends Component {
           style={{ height: "100%" }}
         >
           <div
-            className={this.props.classes.workspaceName}
+            className={this.props.isEmbedded ? `${this.props.classes.workspaceNameEmbedded} embedded-workspace-name` : this.props.classes.workspaceName}
             onClick={() => {
               if (this.props.multiple) {
                 this.props.workspaceName(this.props.project.title);
@@ -250,12 +252,14 @@ WorkspaceName.propTypes = {
   name: PropTypes.string,
   description: PropTypes.string.isRequired,
   message: PropTypes.object.isRequired,
+  isEmbedded: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
   name: state.workspace.name,
   description: state.project.description,
   message: state.message,
+  isEmbedded: state.general.embeddedMode,
 });
 
 export default connect(mapStateToProps, {
