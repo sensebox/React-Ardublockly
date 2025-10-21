@@ -70,14 +70,14 @@ export default function HardwareSelectorModal({
         variant="outlined"
         size="small"
         sx={{
-          fontSize: "0.6rem",
-          border: "1px dashed #99a1af",
+          fontSize: "1rem",
+          border: "3px dashed #99a1af",
           color: "#4a5565",
         }}
         startIcon={<AddIcon />}
         onClick={() => setOpen(true)}
       >
-        Hardware hinzufügen
+        Hardware bearbeiten
       </Button>
 
       <Dialog
