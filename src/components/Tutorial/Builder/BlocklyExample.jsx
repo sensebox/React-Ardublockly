@@ -137,16 +137,14 @@ const BlocklyExample = ({ index, task = false, value, onXmlChange }) => {
 
   // Funktion, die aufgerufen wird, wenn sich der Workspace ändert (mit Debouncing)
   const handleWorkspaceChanged = () => {
-    console.log("BlocklyExample: Workspace changed, scheduling save..."); // 🔧 Debug-Log
-
-    if (debounceTimerRef.current) {
-      clearTimeout(debounceTimerRef.current);
-    }
-
-    debounceTimerRef.current = setTimeout(() => {
-      console.log("BlocklyExample: Debounced save triggered."); // 🔧 Debug-Log
-      saveCurrentXml();
-    }, 500); // 500ms Verzögerung
+    // console.log("BlocklyExample: Workspace changed, scheduling save..."); // 🔧 Debug-Log
+    // if (debounceTimerRef.current) {
+    //   clearTimeout(debounceTimerRef.current);
+    // }
+    // debounceTimerRef.current = setTimeout(() => {
+    //   console.log("BlocklyExample: Debounced save triggered."); // 🔧 Debug-Log
+    //   saveCurrentXml();
+    // }, 500); // 500ms Verzögerung
   };
 
   // Cleanup: Lösche den Timer beim Entfernen der Komponente
