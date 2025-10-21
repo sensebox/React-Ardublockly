@@ -26,25 +26,30 @@ import {
 const BlocklyExample = ({ index, task = false, value, onXmlChange }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const xml = useSelector((state) => state.workspace.code.xml);
+  // ❌ NICHT MEHR BENÖTIGT: const xml = useSelector((state) => state.workspace.code.xml);
   const [xmlState, setXmlState] = useState(null);
   const [input, setInput] = useState(null);
-  const [disabled, setDisabled] = useState(false);
-  const [submitted, setSubmitted] = useState(false); // ✅ Neuer State
-
+  // Zustand für disabled basierend auf dem aktuellen Workspace-Inhalt
+  const [disabled, setDisabled] = useState(true); // Standardmäßig deaktiviert
+  const [submitted, setSubmitted] = useState(false);
   moment.updateLocale("de");
 
+  // Effekt zum Setzen von xmlState und Validierung
   useEffect(() => {
     validateXML();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [xml, value]);
+  }, [value]); // Nur 'value' als Abhängigkeit, nicht 'xml' aus dem Store
+
   const validateXML = () => {
-    let localXml = value || initialXml; // <--- fallback hinzugefügt
+    let localXml = value;
+    if (!localXml) {
+      localXml = initialXml; // Falls value leer ist, nutze initialXml
+    }
     try {
       Blockly.utils.xml.textToDom(localXml);
       dispatch(deleteError(index, "xml"));
     } catch (err) {
-      localXml = initialXml;
+      console.error("Invalid XML:", err);
+      // Optional: Setze auf initialXml oder zeige Fehler
       dispatch(setError(index, "xml"));
     }
 
@@ -55,22 +60,61 @@ const BlocklyExample = ({ index, task = false, value, onXmlChange }) => {
     setXmlState(localXml);
   };
 
-  const handleSubmit = () => {
-    dispatch(changeContent(xml, index, "xml"));
-    setInput(moment().format("LTS"));
-    setSubmitted(true); // ✅ aktiviert grünen Rand + Checkmark
+  // Funktion zum Speichern des aktuellen Workspace-XMLs
+  const saveCurrentXml = () => {
+    const workspace = Blockly.getMainWorkspace();
+    if (!workspace) {
+      console.warn("Blockly workspace not found for saving.");
+      return;
+    }
+    try {
+      const currentXmlString = Blockly.Xml.domToText(
+        Blockly.Xml.workspaceToDom(workspace),
+      );
+      dispatch(changeContent(currentXmlString, index, "xml"));
+      setInput(moment().format("LTS"));
+      setSubmitted(true);
 
-    if (onXmlChange) onXmlChange(xml);
+      if (onXmlChange) onXmlChange(currentXmlString); // Gebe aktuellen Zustand weiter
 
-    // Checkmark nach 3 Sekunden wieder ausblenden
-    setTimeout(() => setSubmitted(false), 3000);
+      // Checkmark nach 3 Sekunden wieder ausblenden
+      setTimeout(() => setSubmitted(false), 3000);
+    } catch (e) {
+      console.error("Failed to serialize current workspace XML:", e);
+    }
   };
 
-  useEffect(() => {
+  // Funktion zum Prüfen, ob Workspace Blöcke hat
+  const checkWorkspaceForBlocks = () => {
     const workspace = Blockly.getMainWorkspace();
-    const hasBlocks = workspace?.getAllBlocks().length > 0;
+    if (!workspace) {
+      console.warn("Blockly workspace not found for block count check.");
+      // Gehe davon aus, dass es keine Blöcke gibt, wenn Workspace nicht da ist
+      setDisabled(true);
+      return;
+    }
+    const hasBlocks = workspace.getAllBlocks().length > 0;
     setDisabled(!hasBlocks);
-  }, [xml]);
+  };
+
+  // Effekt zum Setzen von 'disabled', wenn sich xmlState ändert (z.B. initial)
+  useEffect(() => {
+    if (xmlState) {
+      try {
+        const tempWorkspace = new Blockly.Workspace(); // Temporärer Headless-Workspace
+        const xmlDom = Blockly.utils.xml.textToDom(xmlState);
+        Blockly.Xml.domToWorkspace(xmlDom, tempWorkspace);
+        const hasBlocks = tempWorkspace.getAllBlocks().length > 0;
+        setDisabled(!hasBlocks);
+        tempWorkspace.dispose(); // Wichtig: Aufräumen
+      } catch (e) {
+        console.error("Could not validate initial XML for block count:", e);
+        setDisabled(true);
+      }
+    } else {
+      setDisabled(true); // Kein XML = Button deaktiviert
+    }
+  }, [xmlState]); // Wird ausgelöst, wenn xmlState sich ändert (also nach validateXML)
 
   return (
     <Box
@@ -157,7 +201,7 @@ const BlocklyExample = ({ index, task = false, value, onXmlChange }) => {
                 scroll
                 blockDisabled={task}
                 trashcan={false}
-                initialXml={xmlState}
+                initialXml={value}
                 blocklyCSS={{ height: "40vh", width: "100%" }}
               />
             </Grid>
@@ -167,7 +211,7 @@ const BlocklyExample = ({ index, task = false, value, onXmlChange }) => {
             <Button
               variant="contained"
               color="primary"
-              onClick={handleSubmit}
+              onClick={saveCurrentXml} // 🔥 Verwende die neue Funktion
               disabled={disabled}
               sx={{ mt: 1, height: "40px" }}
               startIcon={<FileUpload />}
