@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Box,
   Button,
@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 import "moment/locale/de";
 import * as Blockly from "blockly/core";
-import { FileUpload, CheckCircle } from "@mui/icons-material";
+import { FileUpload, CheckCircle, RotateLeft } from "@mui/icons-material"; // 🔥 Icon für Reset
 import { motion, AnimatePresence } from "framer-motion";
 
 import BlocklyWindow from "../../Blockly/BlocklyWindow";
@@ -23,33 +23,46 @@ import {
   deleteError,
 } from "../../../actions/tutorialBuilderActions";
 
+// 🔥 Importiere Dialog und Snackbar, falls nicht bereits in BlocklyExample vorhanden
+import Dialog from "@/components/ui/Dialog";
+import Snackbar from "@/components/Snackbar";
+
 const BlocklyExample = ({ index, task = false, value, onXmlChange }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
-  // ❌ NICHT MEHR BENÖTIGT: const xml = useSelector((state) => state.workspace.code.xml);
   const [xmlState, setXmlState] = useState(null);
   const [input, setInput] = useState(null);
-  // Zustand für disabled basierend auf dem aktuellen Workspace-Inhalt
-  const [disabled, setDisabled] = useState(true); // Standardmäßig deaktiviert
+  const [disabled, setDisabled] = useState(true);
   const [submitted, setSubmitted] = useState(false);
+
+  // 🔥 Zustand für den Reset-Dialog und die Snackbar
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    type: "info",
+    key: 0,
+  });
+
+  // Ref für den Debounce-Timer
+  const debounceTimerRef = useRef(null);
+
   moment.updateLocale("de");
 
-  // Effekt zum Setzen von xmlState und Validierung
   useEffect(() => {
     validateXML();
-  }, [value]); // Nur 'value' als Abhängigkeit, nicht 'xml' aus dem Store
+  }, [value]);
 
   const validateXML = () => {
     let localXml = value;
     if (!localXml) {
-      localXml = initialXml; // Falls value leer ist, nutze initialXml
+      localXml = initialXml;
     }
     try {
       Blockly.utils.xml.textToDom(localXml);
       dispatch(deleteError(index, "xml"));
     } catch (err) {
       console.error("Invalid XML:", err);
-      // Optional: Setze auf initialXml oder zeige Fehler
       dispatch(setError(index, "xml"));
     }
 
@@ -75,46 +88,102 @@ const BlocklyExample = ({ index, task = false, value, onXmlChange }) => {
       setInput(moment().format("LTS"));
       setSubmitted(true);
 
-      if (onXmlChange) onXmlChange(currentXmlString); // Gebe aktuellen Zustand weiter
+      if (onXmlChange) onXmlChange(currentXmlString);
 
-      // Checkmark nach 3 Sekunden wieder ausblenden
       setTimeout(() => setSubmitted(false), 3000);
     } catch (e) {
       console.error("Failed to serialize current workspace XML:", e);
     }
   };
 
-  // Funktion zum Prüfen, ob Workspace Blöcke hat
-  const checkWorkspaceForBlocks = () => {
+  // 🔥 Funktion zum Zurücksetzen des Workspaces
+  const resetWorkspace = () => {
     const workspace = Blockly.getMainWorkspace();
     if (!workspace) {
-      console.warn("Blockly workspace not found for block count check.");
-      // Gehe davon aus, dass es keine Blöcke gibt, wenn Workspace nicht da ist
-      setDisabled(true);
+      console.warn("Blockly workspace not found for reset.");
       return;
     }
-    const hasBlocks = workspace.getAllBlocks().length > 0;
-    setDisabled(!hasBlocks);
+
+    try {
+      // 🔥 Verwende den initialXml-Wert (oder initialXml als Fallback)
+      const resetXml = value || initialXml;
+      const xmlDom = Blockly.utils.xml.textToDom(resetXml);
+
+      // 🔥 Deaktiviere Events, um unnötige Callbacks zu vermeiden
+      Blockly.Events.disable();
+      // 🔥 Lösche den Workspace und lade das Reset-XML
+      Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, workspace);
+      // 🔥 Aktiviere Events wieder
+      Blockly.Events.enable();
+
+      // 🔥 Setze disabled Status basierend auf dem Reset-XML
+      const tempWorkspace = new Blockly.Workspace();
+      Blockly.Xml.domToWorkspace(xmlDom, tempWorkspace);
+      const hasBlocks = tempWorkspace.getAllBlocks().length > 0;
+      tempWorkspace.dispose();
+      setDisabled(!hasBlocks);
+
+      console.log("BlocklyExample: Workspace reset to initial state.");
+    } catch (e) {
+      console.error("Failed to reset workspace:", e);
+      setSnackbar({
+        open: true,
+        type: "error",
+        key: Date.now(),
+        message: "Fehler beim Zurücksetzen des Workspace.",
+      });
+    }
   };
+
+  // Funktion, die aufgerufen wird, wenn sich der Workspace ändert (mit Debouncing)
+  const handleWorkspaceChanged = () => {
+    console.log("BlocklyExample: Workspace changed, scheduling save..."); // 🔧 Debug-Log
+
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+
+    debounceTimerRef.current = setTimeout(() => {
+      console.log("BlocklyExample: Debounced save triggered."); // 🔧 Debug-Log
+      saveCurrentXml();
+    }, 500); // 500ms Verzögerung
+  };
+
+  // Cleanup: Lösche den Timer beim Entfernen der Komponente
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
+  }, []);
 
   // Effekt zum Setzen von 'disabled', wenn sich xmlState ändert (z.B. initial)
   useEffect(() => {
     if (xmlState) {
       try {
-        const tempWorkspace = new Blockly.Workspace(); // Temporärer Headless-Workspace
+        const tempWorkspace = new Blockly.Workspace();
         const xmlDom = Blockly.utils.xml.textToDom(xmlState);
         Blockly.Xml.domToWorkspace(xmlDom, tempWorkspace);
         const hasBlocks = tempWorkspace.getAllBlocks().length > 0;
         setDisabled(!hasBlocks);
-        tempWorkspace.dispose(); // Wichtig: Aufräumen
+        tempWorkspace.dispose();
       } catch (e) {
         console.error("Could not validate initial XML for block count:", e);
         setDisabled(true);
       }
     } else {
-      setDisabled(true); // Kein XML = Button deaktiviert
+      setDisabled(true);
     }
-  }, [xmlState]); // Wird ausgelöst, wenn xmlState sich ändert (also nach validateXML)
+  }, [xmlState]);
+
+  // 🔥 Funktionen für Dialog-Öffnen/Schließen
+  const openDialog = () => {
+    setDialogOpen(true);
+  };
+  const closeDialog = () => {
+    setDialogOpen(false);
+  };
 
   return (
     <Box
@@ -203,17 +272,28 @@ const BlocklyExample = ({ index, task = false, value, onXmlChange }) => {
                 trashcan={false}
                 initialXml={value}
                 blocklyCSS={{ height: "40vh", width: "100%" }}
+                onWorkspaceChanged={handleWorkspaceChanged}
               />
             </Grid>
           </Grid>
 
-          <Box sx={{ display: "flex", justifyContent: "flex-end", p: 1 }}>
+          <Box sx={{ display: "flex", justifyContent: "space-between", p: 1 }}>
+            {/* 🔥 Reset-Button links */}
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={openDialog} // Öffnet den Bestätigungsdialog
+              startIcon={<RotateLeft />}
+            >
+              Workspace zurücksetzen
+            </Button>
+
             <Button
               variant="contained"
               color="primary"
-              onClick={saveCurrentXml} // 🔥 Verwende die neue Funktion
+              onClick={saveCurrentXml} // Der Button ruft es auch manuell auf (ohne Debounce)
               disabled={disabled}
-              sx={{ mt: 1, height: "40px" }}
+              sx={{ height: "40px" }}
               startIcon={<FileUpload />}
             >
               {task
@@ -223,6 +303,48 @@ const BlocklyExample = ({ index, task = false, value, onXmlChange }) => {
           </Box>
         </Box>
       )}
+
+      {/* 🔥 Snackbar */}
+      <Snackbar
+        open={snackbar.open}
+        message={snackbar.message}
+        type={snackbar.type}
+        key={snackbar.key}
+        onClose={() => setSnackbar((s) => ({ ...s, open: false }))}
+      />
+
+      {/* 🔥 Bestätigungsdialog */}
+      <Dialog
+        open={dialogOpen}
+        title="Workspace zurücksetzen?"
+        content="Möchtest du den Workspace wirklich auf den Anfangszustand zurücksetzen? Alle deine Änderungen gehen verloren."
+        onClose={closeDialog}
+        onClick={closeDialog} // Schließt bei Klick auf Overlay/Abbrechen
+        button="Abbrechen"
+      >
+        <div
+          style={{
+            marginTop: "10px",
+            display: "flex",
+            justifyContent: "flex-end",
+            gap: "8px",
+          }}
+        >
+          <Button variant="outlined" onClick={closeDialog}>
+            Abbrechen
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => {
+              resetWorkspace(); // Führt das Zurücksetzen aus
+              closeDialog(); // Schließt den Dialog
+            }}
+          >
+            Zurücksetzen
+          </Button>
+        </div>
+      </Dialog>
     </Box>
   );
 };
