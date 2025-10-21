@@ -11,7 +11,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useDispatch, useSelector } from "react-redux";
 
-const TutorialFooter = () => {
+const TutorialFooter = ({ nextStepDisabled }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const activeStep = useSelector((state) => state.tutorial.activeStep);
@@ -110,7 +110,7 @@ const TutorialFooter = () => {
                           ? theme.palette.success.main
                           : theme.palette.text.secondary,
                     }}
-                    onClick={() => changeStep(index)}
+                    // onClick={() => changeStep(index)}
                   >
                     <Box
                       sx={{
@@ -194,7 +194,7 @@ const TutorialFooter = () => {
             <Button
               variant="contained"
               endIcon={<ChevronRightIcon />}
-              disabled={disabled}
+              disabled={nextStepDisabled}
               onClick={nextStep}
             >
               Weiter
