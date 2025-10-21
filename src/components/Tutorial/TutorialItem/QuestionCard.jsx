@@ -13,7 +13,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, Cancel, HelpOutline } from "@mui/icons-material";
 
-const QuestionCard = ({ questionData }) => {
+const QuestionCard = ({ questionData, setNextStepDisabled }) => {
   const theme = useTheme();
   const [selected, setSelected] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -32,6 +32,7 @@ const QuestionCard = ({ questionData }) => {
     const correctAnswer = answers.find((a) => a.correct);
     const correct = selected === correctAnswer?.text;
     setIsCorrect(correct);
+    if (correct) setNextStepDisabled(false);
     setSubmitted(true);
   };
 

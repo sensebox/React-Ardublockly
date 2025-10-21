@@ -24,6 +24,7 @@ export default function Tutorial() {
   const tutorial = useSelector((state) => state.tutorial.tutorials[0]);
   const message = useSelector((state) => state.message);
   const activeStep = useSelector((state) => state.tutorial.activeStep);
+  const [nextStepDisabled, setNextStepDisabled] = useState(false);
   const [currentStep, setCurrentStep] = useState();
 
   // Initial load
@@ -39,6 +40,16 @@ export default function Tutorial() {
       setCurrentStep(null);
     }
   }, [activeStep, tutorial]);
+
+  useEffect(() => {
+    if (
+      currentStep &&
+      currentStep.type === "question" &&
+      currentStep.questionData.length > 0
+    ) {
+      setNextStepDisabled(true);
+    }
+  }, [currentStep]);
 
   if (!tutorial) {
     if (message.id === "GET_TUTORIAL_FAIL") {
@@ -126,7 +137,13 @@ export default function Tutorial() {
                 return <Instruction tutorial={tutorial} key={activeStep} />;
               }
 
-              return <TaskStep step={currentStep} key={activeStep} />;
+              return (
+                <TaskStep
+                  setNextStepDisabled={setNextStepDisabled}
+                  step={currentStep}
+                  key={activeStep}
+                />
+              );
             })()}
           </AnimatePresence>
         </Box>
@@ -134,7 +151,7 @@ export default function Tutorial() {
 
       {/* Footer – immer am unteren Rand */}
       <Box sx={{ flexShrink: 0 }}>
-        <TutorialFooter />
+        <TutorialFooter nextStepDisabled={nextStepDisabled} />
       </Box>
     </Box>
   );

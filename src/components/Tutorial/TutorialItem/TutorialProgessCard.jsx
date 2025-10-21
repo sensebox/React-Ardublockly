@@ -77,7 +77,7 @@ const TutorialProgressCard = () => {
             <Box
               key={step.id || index}
               component="button"
-              onClick={() => changeStep(index)}
+              // onClick={() => changeStep(index)}
               sx={{
                 all: "unset",
                 cursor: "pointer",

@@ -37,15 +37,29 @@ md.renderer.rules.image = function (tokens, idx, options, env, self) {
   `;
 };
 
-const TaskStep = ({ step }) => {
+const TaskStep = ({ step, setNextStepDisabled }) => {
   const activeStep = useSelector((state) => state.tutorial.activeStep);
+
+  useEffect(() => {
+    if (step.type === "question" && step.questionData.length > 0) {
+      setNextStepDisabled(true);
+      console.log("disbaling");
+    }
+  }, [step]);
+
   return (
     <TutorialSlide stepNumber={activeStep}>
       <div dangerouslySetInnerHTML={{ __html: md.render(step.text) }} />
       {step.type === "question" && step.questionData && (
         <div>
           {step.questionData.map((q, idx) => {
-            return <QuestionCard key={idx} questionData={q} />;
+            return (
+              <QuestionCard
+                setNextStepDisabled={setNextStepDisabled}
+                key={idx}
+                questionData={q}
+              />
+            );
           })}
         </div>
       )}
