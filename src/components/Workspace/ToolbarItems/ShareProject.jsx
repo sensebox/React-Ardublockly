@@ -379,6 +379,7 @@ ShareProject.propTypes = {
 const mapStateToProps = (state) => ({
   name: state.workspace.name,
   message: state.message,
+  isEmbedded: state.general.embeddedMode,
 });
 
 export default connect(mapStateToProps, { shareProject, clearMessages })(

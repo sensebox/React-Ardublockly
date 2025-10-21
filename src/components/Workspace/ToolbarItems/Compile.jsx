@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 import { IconButton, Tooltip } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
@@ -24,6 +25,7 @@ const styles = (theme) => {
 
 const Compile = (props) => {
   const [dialogOpen, setDialogOpen] = useState(false);
+  const isEmbedded = useSelector((state) => state.general.embeddedMode);
 
   const fallbackTexts = {
     de_DE: "Code kompilieren",
@@ -43,12 +45,12 @@ const Compile = (props) => {
     <div>
       <Tooltip title={tooltipText} arrow style={{ marginRight: "5px" }}>
         <IconButton
-          className={`compileBlocks ${props.isEmbedded ? `${props.classes.iconButtonEmbedded} embedded-button embedded-button-compile` : props.classes.iconButton}`}
+          className={`compileBlocks ${isEmbedded ? `${props.classes.iconButtonEmbedded} embedded-button embedded-button-compile` : props.classes.iconButton}`}
           onClick={openDialog}
           size={"large"}
           aria-label="Compile code"
         >
-          <FontAwesomeIcon icon={faClipboardCheck} size={props.isEmbedded ? "sm" : "xs"} />
+          <FontAwesomeIcon icon={faClipboardCheck} size={isEmbedded ? "sm" : "xs"} />
         </IconButton>
       </Tooltip>
 
@@ -59,9 +61,9 @@ const Compile = (props) => {
         compiler={props.compiler}
         code={props.arduino}
         filename={props.name || "sketch"}
-        platform={props.isEmbedded ? true : props.platform}
+        platform={isEmbedded ? true : props.platform}
         appLink={props.appLink || ""}
-        isEmbedded={props.isEmbedded}
+        isEmbedded={isEmbedded}
       />
     </div>
   );
@@ -77,7 +79,6 @@ Compile.propTypes = {
   iconButton: PropTypes.bool,
   appLink: PropTypes.string,
   classes: PropTypes.object.isRequired,
-  isEmbedded: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({

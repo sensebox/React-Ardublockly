@@ -259,6 +259,7 @@ const mapStateToProps = (state) => ({
   name: state.workspace.name,
   description: state.project.description,
   message: state.message,
+  isEmbedded: state.general.embeddedMode,
 });
 
 export default connect(mapStateToProps, {

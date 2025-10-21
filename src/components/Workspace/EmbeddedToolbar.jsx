@@ -25,14 +25,12 @@ const EmbeddedToolbar = ({
         multiple={multiple}
         project={project}
         projectType={projectType}
-        isEmbedded={true}
       />
       
       <div style={{ display: "flex", alignItems: "center", gap: "16px", flex: 1, justifyContent: "flex-end" }}>
         {!multiple && selectedBoard && (
           <Compile 
             iconButton 
-            isEmbedded={true}
           />
         )}
 
@@ -41,13 +39,11 @@ const EmbeddedToolbar = ({
             multiple={multiple}
             project={project}
             projectType={projectType}
-            isEmbedded={true}
           />
         )}
 
         {!multiple && (
           <ResetWorkspace
-            isEmbedded={true}
           />
         )}
       </div>

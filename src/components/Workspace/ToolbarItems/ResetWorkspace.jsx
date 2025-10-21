@@ -137,6 +137,10 @@ ResetWorkspace.propTypes = {
   isEmbedded: PropTypes.bool,
 };
 
-export default connect(null, { clearStats, onChangeCode, workspaceName })(
+const mapStateToProps = (state) => ({
+  isEmbedded: state.general.embeddedMode,
+});
+
+export default connect(mapStateToProps, { clearStats, onChangeCode, workspaceName })(
   withStyles(styles, { withTheme: true })(ResetWorkspace),
 );
