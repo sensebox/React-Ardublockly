@@ -73,7 +73,6 @@ function TutorialHome() {
     <div>
       <Breadcrumbs content={[{ link: "/tutorial", title: "Tutorial" }]} />
       <h1>{Blockly.Msg.tutorials_home_head}</h1>
-
       {/* Suche + Schwierigkeit Filter */}
       <Box
         sx={{
@@ -137,24 +136,29 @@ function TutorialHome() {
           </ToggleButtonGroup>
         </Box>
       </Box>
-
       <h2>Alle Tutorials</h2>
+      Damit Tutorials in dieser Gallerie angezeigt werden, müssen Sie von uns
+      überprüft werden. Falls dein Tutorial hier erscheinen soll, stelle dein
+      Tutorial auf öffentlich und schreibe uns an auf support@sensebox.de
       <Grid container spacing={2}>
         {filteredTutorials.length > 0 ? (
-          filteredTutorials.map((tutorial) => (
-            <TutorialItem
-              key={tutorial._id}
-              tutorial={tutorial}
-              level={getDifficultyLevel(tutorial.difficulty)}
-            />
-          ))
+          filteredTutorials.map(
+            (tutorial) =>
+              tutorial.review &&
+              tutorial.public && (
+                <TutorialItem
+                  key={tutorial._id}
+                  tutorial={tutorial}
+                  level={getDifficultyLevel(tutorial.difficulty)}
+                />
+              ),
+          )
         ) : (
           <Typography variant="body1" sx={{ ml: 2 }}>
             Keine Tutorials gefunden.
           </Typography>
         )}
       </Grid>
-
       {user && (
         <div>
           <h2>User Tutorials</h2>
@@ -178,7 +182,6 @@ function TutorialHome() {
           </Grid>
         </div>
       )}
-
       <DeviceSelection />
     </div>
   );
