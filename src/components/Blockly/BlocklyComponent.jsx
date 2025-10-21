@@ -7,6 +7,7 @@ import "./blocks/index";
 import "@/components/Blockly/generator/index";
 
 import Toolbox from "./toolbox/Toolbox";
+import EmbeddedToolbox from "./toolbox/EmbeddedToolbox";
 import { reservedWords } from "./helpers/reservedWords";
 import Snackbar from "../Snackbar";
 
@@ -122,7 +123,11 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
         style={style ? style : cardStyle}
         className={isEmbedded ? "embedded-mode" : ""}
       />
-      <Toolbox toolbox={toolboxRef} workspace={workspace} />
+      {isEmbedded ? (
+        <EmbeddedToolbox toolbox={toolboxRef} workspace={workspace} />
+      ) : (
+        <Toolbox toolbox={toolboxRef} workspace={workspace} />
+      )}
       <Snackbar
         open={snackbar.open}
         message={snackbar.message}

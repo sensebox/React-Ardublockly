@@ -6,11 +6,11 @@ import { useSelector } from "react-redux";
 import { ToolboxMcu } from "./ToolboxMcu";
 import { ToolboxEsp } from "./ToolboxEsp";
 import { useEmbeddedToolbox } from "./useEmbeddedToolbox";
+import "./embedded_toolbox_styles.css";
 
-const Toolbox = ({ workspace, toolbox }) => {
+const EmbeddedToolbox = ({ workspace, toolbox }) => {
   const selectedBoard = useSelector((state) => state.board.board);
   const language = useSelector((state) => state.general.language);
-  const isEmbedded = useSelector((state) => state.general.embeddedMode);
   const previousBoard = useRef(null);
 
   // Register typed variable flyout on board change or mount
@@ -49,7 +49,7 @@ const Toolbox = ({ workspace, toolbox }) => {
 
   }, [workspace, toolbox, selectedBoard, language]);
 
-  useEmbeddedToolbox(workspace, false); // Always false for regular toolbox
+  useEmbeddedToolbox(workspace, true); // Always embedded for this component
 
   return (
     <xml
@@ -57,6 +57,7 @@ const Toolbox = ({ workspace, toolbox }) => {
       id="blockly"
       style={{ display: "none" }}
       ref={toolbox}
+      className="embedded-mode"
     >
       {selectedBoard === "MCU" || selectedBoard === "MCU:mini" ? (
         <ToolboxMcu />
@@ -81,4 +82,4 @@ const createFlyout = (workspace) => {
   return xmlList.concat(blockList);
 };
 
-export default Toolbox;
+export default EmbeddedToolbox;

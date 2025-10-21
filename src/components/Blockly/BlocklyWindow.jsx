@@ -157,7 +157,6 @@ export default function BlocklyWindow(props) {
       
       if (typeof grid === "object") return grid;
       
-      // Use iPad config for embedded mode, default config otherwise
       return isEmbedded ? IPAD_BLOCKLY_CONFIG.grid : DEFAULT_BLOCKLY_CONFIG.grid;
     },
     [grid, isEmbedded],
@@ -169,17 +168,15 @@ export default function BlocklyWindow(props) {
       
       if (typeof move === "object") return move;
       
-      // Use iPad config for embedded mode, default config otherwise
       return isEmbedded ? IPAD_BLOCKLY_CONFIG.move : DEFAULT_BLOCKLY_CONFIG.move;
     },
     [move, isEmbedded],
   );
 
-  // Mobile-specific styling only for embedded mode
-  const containerStyles = {
+  const containerStyles =isEmbedded ? {
     height: "100%",
     width: "100%"
-  };
+  } : {};
 
   return (
     <div style={containerStyles}>
