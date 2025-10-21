@@ -17,7 +17,6 @@ import Snackbar from "../../Snackbar.jsx";
 import withStyles from "@mui/styles/withStyles";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
-import { getEmbeddedButtonStyles } from "../../../styles/embeddedButtonStyles";
 
 import { faShare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -25,7 +24,6 @@ import Dialog from "../../ui/Dialog.jsx";
 import Button from "@mui/material/Button";
 
 const styles = (theme) => {
-  const embeddedStyles = getEmbeddedButtonStyles(theme);
   return {
     button: {
       backgroundColor: theme.palette.primary.main,
@@ -37,7 +35,6 @@ const styles = (theme) => {
         color: theme.palette.primary.contrastText,
       },
     },
-    buttonEmbedded: embeddedStyles.buttonEmbedded,
   };
 };
 
@@ -88,7 +85,7 @@ class ResetWorkspace extends Component {
       <div style={this.props.style}>
         <Tooltip title={Blockly.Msg.tooltip_reset_workspace} arrow>
           <IconButton
-            className={this.props.isEmbedded ? this.props.classes.buttonEmbedded : this.props.classes.button}
+            className={this.props.isEmbedded ? `${this.props.classes.buttonEmbedded} embedded-button embedded-button-primary` : this.props.classes.button}
             onClick={() => this.openDialog()}
             size="large"
           >

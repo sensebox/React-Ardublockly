@@ -10,7 +10,6 @@ import Dialog from "../../ui/Dialog";
 import withStyles from "@mui/styles/withStyles";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
-import { getEmbeddedButtonStyles } from "../../../styles/embeddedButtonStyles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
@@ -25,7 +24,6 @@ const withWidth = () => (WrappedComponent) => (props) => (
 );
 
 const styles = (theme) => {
-  const embeddedStyles = getEmbeddedButtonStyles(theme);
   return {
     workspaceName: {
       minHeight: "40px",
@@ -37,7 +35,6 @@ const styles = (theme) => {
         color: theme.palette.primary.main,
       },
     },
-    workspaceNameEmbedded: embeddedStyles.workspaceNameEmbedded,
   };
 };
 
@@ -122,7 +119,7 @@ class WorkspaceName extends Component {
           style={{ height: "100%" }}
         >
           <div
-            className={this.props.isEmbedded ? this.props.classes.workspaceNameEmbedded : this.props.classes.workspaceName}
+            className={this.props.isEmbedded ? `${this.props.classes.workspaceNameEmbedded} embedded-workspace-name` : this.props.classes.workspaceName}
             onClick={() => {
               if (this.props.multiple) {
                 this.props.workspaceName(this.props.project.title);

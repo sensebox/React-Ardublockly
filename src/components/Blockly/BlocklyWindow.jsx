@@ -11,7 +11,7 @@ import { ZoomToFitControl } from "@blockly/zoom-to-fit";
 import { Backpack } from "@blockly/workspace-backpack";
 import { initialXml } from "./initialXml.js";
 import { getMaxInstances } from "./helpers/maxInstances";
-import { IPAD_BLOCKLY_CONFIG, IPAD_CONTAINER_STYLES, DEFAULT_BLOCKLY_CONFIG } from "../../config/ipadConfig";
+import { IPAD_BLOCKLY_CONFIG, DEFAULT_BLOCKLY_CONFIG } from "../../config/ipadConfig";
 
 import BlocklySvg from "./BlocklySvg";
 
@@ -178,8 +178,7 @@ export default function BlocklyWindow(props) {
   // Mobile-specific styling only for embedded mode
   const containerStyles = {
     height: "100%",
-    width: "100%",
-    ...(isEmbedded && IPAD_CONTAINER_STYLES)
+    width: "100%"
   };
 
   return (

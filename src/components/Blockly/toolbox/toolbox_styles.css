@@ -26,11 +26,6 @@
   user-select: text !important;
   -webkit-user-select: text !important;
 }
-/* Search should occupy the full first line (all 4 columns) */
-.embedded-mode .blocklyToolbox .blocklyToolboxCategoryContainer:has(input[type="search"]) {
-  width: calc(100vw - 2 * var(--cat-padding-x)) !important;
-  max-width: calc(100vw - 2 * var(--cat-padding-x)) !important;
-}
 
 /* -----------------------------------------------------------------------------
    Category Button Styling
@@ -76,6 +71,17 @@
 .embedded-mode .blocklyToolboxCategoryContainer[aria-level="4"] {
   display: inline-block !important;
   vertical-align: top !important;
+}
+
+/* Override horizontal layout for search field */
+.embedded-mode .blocklyToolboxCategoryContainer:has(input[type="search"]) {
+  display: block !important;
+  width: 100% !important;
+}
+
+/* Override horizontal layout margins for search field */
+.embedded-mode .blocklyToolbox[layout="h"] .blocklyToolboxCategoryContainer:has(input[type="search"]) {
+  margin: 0 0 0-3px;
 }
 
 /* Remove right padding from the last subcategory */
@@ -158,9 +164,10 @@
 }
 
 /* -----------------------------------------------------------------------------
-   Touch Optimizations (iPad)
+   Touch Optimizations (iPad) - Using shared .touch-optimized class
    ----------------------------------------------------------------------------- */
 .embedded-mode .blocklyToolboxCategory {
+  /* Use shared touch optimizations from shared-styles.css */
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
   -webkit-user-select: none;

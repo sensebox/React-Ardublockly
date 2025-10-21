@@ -8,8 +8,7 @@ import { clearStats, workspaceName } from "@/actions/workspaceActions";
 import BlocklyWindow from "./Blockly/BlocklyWindow";
 import DeviceSelection from "./DeviceSelection";
 import IpadToolbar from "./Workspace/IpadToolbar";
-import { Box } from "@mui/material";
-import { IPAD_BLOCKLY_CONFIG, IPAD_CONFIG } from "@/config/ipadConfig";
+import { IPAD_BLOCKLY_CONFIG } from "@/config/ipadConfig";
 import "./EmbeddedBlockly.css";
 
 const EmbeddedBlockly = ({ project = null, projectType = null }) => {
@@ -41,37 +40,19 @@ const EmbeddedBlockly = ({ project = null, projectType = null }) => {
 
   return (
     <div className="blockly-app-container">
-      <div style={{ 
-        display: "flex", 
-        flexDirection: "column", 
-        height: "100%", 
-        position: "relative" 
-      }}>
-        {/* iPad-optimized Toolbar */}
-        <Box
-          className="workspaceFunc"
-          sx={{ 
-            height: IPAD_CONFIG.TOOLBAR.height, 
-            flexShrink: 0,
-            display: "flex",
-            justifyContent: "flex-end",
-            alignItems: "center",
-            padding: IPAD_CONFIG.TOOLBAR.padding
-          }}
-        >
-          <IpadToolbar project={project} projectType={projectType} />
-        </Box>
-        
-        {/* Blockly Workspace with iPad config */}
-        <div style={{ flex: 1, minHeight: 0 }}>
-          <BlocklyWindow
-            initialXml={initialXml}
-            zoom={IPAD_BLOCKLY_CONFIG.zoom}
-            move={IPAD_BLOCKLY_CONFIG.move}
-            grid={IPAD_BLOCKLY_CONFIG.grid}
-          />
-        </div>
+      <div className="embedded-toolbar">
+        <IpadToolbar project={project} projectType={projectType} />
       </div>
+      
+      <div className="embedded-workspace">
+        <BlocklyWindow
+          initialXml={initialXml}
+          zoom={IPAD_BLOCKLY_CONFIG.zoom}
+          move={IPAD_BLOCKLY_CONFIG.move}
+          grid={IPAD_BLOCKLY_CONFIG.grid}
+        />
+      </div>
+      
       <DeviceSelection />
     </div>
   );

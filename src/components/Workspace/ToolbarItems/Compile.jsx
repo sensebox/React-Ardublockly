@@ -7,10 +7,7 @@ import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { workspaceName } from "../../../actions/workspaceActions";
 import CompilationDialog from "../ToolbarItems/CompilationDialog/CompilationDialog";
 import withStyles from "@mui/styles/withStyles";
-import { getEmbeddedButtonStyles } from "../../../styles/embeddedButtonStyles";
-
 const styles = (theme) => {
-  const embeddedStyles = getEmbeddedButtonStyles(theme);
   return {
     iconButton: {
       backgroundColor: theme.palette.button.compile,
@@ -22,7 +19,6 @@ const styles = (theme) => {
         color: theme.palette.primary.contrastText,
       },
     },
-    iconButtonEmbedded: embeddedStyles.iconButtonEmbedded,
   };
 };
 
@@ -47,7 +43,7 @@ const Compile = (props) => {
     <div>
       <Tooltip title={tooltipText} arrow style={{ marginRight: "5px" }}>
         <IconButton
-          className={`compileBlocks ${props.isEmbedded ? props.classes.iconButtonEmbedded : props.classes.iconButton}`}
+          className={`compileBlocks ${props.isEmbedded ? `${props.classes.iconButtonEmbedded} embedded-button embedded-button-compile` : props.classes.iconButton}`}
           onClick={openDialog}
           size={"large"}
           aria-label="Compile code"

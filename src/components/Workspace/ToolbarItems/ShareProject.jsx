@@ -30,7 +30,6 @@ import withStyles from "@mui/styles/withStyles";
 import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
-import { getEmbeddedButtonStyles } from "../../../styles/embeddedButtonStyles";
 import Typography from "@mui/material/Typography";
 
 import {
@@ -43,7 +42,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Blockly from "blockly/core";
 
 const styles = (theme) => {
-  const embeddedStyles = getEmbeddedButtonStyles(theme);
   return {
     iconButton: {
       backgroundColor: theme.palette.primary.main,
@@ -72,7 +70,6 @@ const styles = (theme) => {
         textDecoration: "underline",
       },
     },
-    iconButtonEmbedded: embeddedStyles.buttonEmbedded,
   };
 };
 
@@ -190,7 +187,7 @@ class ShareProject extends Component {
       <div style={this.props.style}>
         <Tooltip title={Blockly.Msg.tooltip_share_project} arrow>
           <IconButton
-            className={`shareBlocks ${this.props.isEmbedded ? this.props.classes.iconButtonEmbedded : this.props.classes.iconButton}`}
+            className={`shareBlocks ${this.props.isEmbedded ? `${this.props.classes.iconButtonEmbedded} embedded-button embedded-button-primary` : this.props.classes.iconButton}`}
             onClick={() => this.shareBlocks()}
             size="large"
           >

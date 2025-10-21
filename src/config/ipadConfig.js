@@ -5,14 +5,6 @@ export const IPAD_CONFIG = {
   VIEWPORT: {
     content: "width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover"
   },
-  TOOLBAR: {
-    height: '64px',
-    padding: '0 16px'
-  },
-  TOUCH: {
-    minHeight: '48px',
-    minWidth: '48px'
-  }
 };
 
 // iPad-specific Blockly configuration
@@ -39,16 +31,6 @@ export const IPAD_BLOCKLY_CONFIG = {
   },
 };
 
-// iPad-specific container styles for embedded mode
-export const IPAD_CONTAINER_STYLES = {
-  height: "100%",
-  width: "100%",
-  overflow: "hidden",
-  touchAction: "none", // Prevent default touch behaviors
-  WebkitTouchCallout: "none", // Disable iOS callout
-  WebkitUserSelect: "none", // Disable text selection
-  userSelect: "none",
-};
 
 // Default Blockly configurations (used when not in embedded mode)
 export const DEFAULT_BLOCKLY_CONFIG = {

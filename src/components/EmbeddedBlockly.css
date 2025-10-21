@@ -1,14 +1,11 @@
 /* iPad-specific optimizations for EmbeddedBlockly */
 
 :root {
+  /* iPad Configuration Values - Moved from ipadConfig.js */
   --ipad-toolbar-height: 64px;
-  --ipad-touch-min-size: 48px;
-  --ipad-category-height-1: 52px;
-  --ipad-category-height-2: 48px;
-  --ipad-category-height-3: 44px;
-  --ipad-category-height-4: 40px;
-  --ipad-search-height: 36px;
-  --ipad-category-margin: 3px;
+  --ipad-toolbar-padding: 0 8px;
+  --ipad-touch-min-height: 48px;
+  --ipad-touch-min-width: 48px;
 }
 
 /* Prevent body scroll when in app mode */
@@ -25,6 +22,12 @@ body:has(.blockly-app-container) {
   width: 100vw;
   overflow: hidden;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  touch-action: none; /* Prevent default touch behaviors */
+  -webkit-touch-callout: none; /* Disable iOS callout */
+  -webkit-user-select: none; /* Disable text selection */
+  user-select: none;
 }
 
 /* iPad touch optimizations - no phone-specific media queries needed */
@@ -55,6 +58,128 @@ body:has(.blockly-app-container) {
   justify-content: flex-end;
   align-items: center;
   padding: 0 16px;
+}
+
+/* Embedded toolbar styling */
+.embedded-toolbar {
+  height: var(--ipad-toolbar-height);
+  padding: var(--ipad-toolbar-padding);
+  flex-shrink: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+/* Embedded workspace styling */
+.embedded-workspace {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ensure Blockly workspace takes full height in embedded mode */
+.embedded-workspace #blocklyDiv {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+/* =============================================================================
+   EMBEDDED BUTTON STYLES
+   ============================================================================= */
+
+/* Base embedded button styling */
+.embedded-button {
+  width: var(--ipad-touch-min-width) !important;
+  height: var(--ipad-touch-min-height) !important;
+  padding: 12px !important;
+  min-width: var(--ipad-touch-min-width) !important;
+  min-height: var(--ipad-touch-min-height) !important;
+  transition: transform 120ms ease !important;
+  margin: 0 8px !important; /* Even spacing between buttons */
+}
+
+.embedded-button:first-child {
+  margin-left: 0 !important;
+}
+
+.embedded-button:last-child {
+  margin-right: 0 !important;
+}
+
+.embedded-button:hover {
+  transform: scale(1.05) !important;
+}
+
+.embedded-button:active {
+  transform: scale(0.95) !important;
+}
+
+/* Primary embedded button (Reset, Share) */
+.embedded-button-primary {
+  background-color: #4EAF47 !important;
+  color: #ffffff !important;
+}
+
+.embedded-button-primary:hover {
+  background-color: #4EAF47 !important;
+  color: #ffffff !important;
+}
+
+/* Compile embedded button */
+.embedded-button-compile {
+  background-color: #e27136 !important;
+  color: #ffffff !important;
+}
+
+.embedded-button-compile:hover {
+  background-color: #e27136 !important;
+  color: #ffffff !important;
+}
+
+/* Workspace name embedded styling */
+.embedded-workspace-name {
+  height: var(--ipad-touch-min-height) !important; /* Match button height */
+  background-color: #DDDDDD !important;
+  border-radius: 25px !important;
+  display: inline-flex !important;
+  align-items: center !important; /* Center text vertically */
+  cursor: pointer !important;
+  padding: 0 16px !important; /* Remove top/bottom padding to match button height */
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  width: calc(30vw - 8px) !important;
+  min-width: 120px !important;
+  transition: transform 120ms ease !important;
+  overflow: hidden !important; /* Hide overflow text */
+  white-space: nowrap !important; /* Prevent text wrapping */
+  text-overflow: ellipsis !important; /* Show ellipsis for overflow */
+}
+
+/* Text inside workspace name should have proper spacing */
+.embedded-workspace-name .MuiTypography-root {
+  flex: 1 !important; /* Take available space */
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+  margin: 0 8px 0 0 !important; /* Space between text and icon */
+}
+
+/* Icon container in workspace name */
+.embedded-workspace-name > div {
+  flex-shrink: 0 !important; /* Don't shrink the icon container */
+  width: 40px !important;
+  display: flex !important;
+}
+
+.embedded-workspace-name:hover {
+  background-color: #CCCCCC !important;
+  transform: scale(1.02) !important;
+}
+
+.embedded-workspace-name:active {
+  transform: scale(0.98) !important;
 }
 
 /* Optimize for notched devices (iPad Pro) */
