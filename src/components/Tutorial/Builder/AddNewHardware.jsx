@@ -74,6 +74,7 @@ export default function HardwareSelectorModal({
           border: "3px dashed #99a1af",
           color: "#4a5565",
         }}
+        id="edit_hardware"
         startIcon={<AddIcon />}
         onClick={() => setOpen(true)}
       >

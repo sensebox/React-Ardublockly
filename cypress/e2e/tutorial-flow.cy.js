@@ -103,6 +103,16 @@ describe("End-to-End Tutorial Flow", () => {
     cy.get('img[alt="Sensebox ESP"]').click();
     cy.get(`#edit${createdTutorialId}`).click();
     cy.get("#tutorial-title").type(updatedTitle);
+    cy.get("#accordion_builder_advanced").click();
+
+    cy.get('button[value="1"]').click();
+
+    cy.get(`#edit_hardware`).click();
+    cy.get('img[alt="MCU-S2"]').click();
+    cy.get('img[alt="Display"]').click();
+    cy.get('img[alt="GPS"]').click();
+    cy.get("button").contains("Fertig").click(); // Klicke, um zur Tutorial-Seite zu gelangen
+
     cy.contains("button", "Tutorial speichern").click();
 
     // Warte auf Erfolgsmeldung
@@ -112,6 +122,10 @@ describe("End-to-End Tutorial Flow", () => {
 
     // Optional: Prüfe auch im UI
     cy.contains(updatedTitle).should("be.visible");
+
+    cy.contains("GPS").should("be.visible");
+    cy.contains("Display").should("be.visible");
+    cy.contains("MCU-S2").should("be.visible");
   });
 
   it("7. deletes the test tutorial", () => {
