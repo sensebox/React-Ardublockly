@@ -63,6 +63,8 @@ describe("End-to-End Tutorial Flow", () => {
     // Eingaben vornehmen
     cy.get("#tutorial-title").type(initialTitle);
     cy.get("#tutorial-subtitle").type("Test123");
+    cy.get("#accordion_builder_advanced").click();
+
     cy.get('button[value="3"]').click();
 
     // ❗ Klicke auf den Speichern-Button
