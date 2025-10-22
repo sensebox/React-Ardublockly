@@ -21,7 +21,7 @@ import {
   Button,
   IconButton,
 } from "@mui/material";
-import { faPencil, faTools } from "@fortawesome/free-solid-svg-icons";
+import { faPencil, faPlus, faTools } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
@@ -150,7 +150,7 @@ function TutorialHome() {
             <Link to="/tutorial/builder" style={{ textDecoration: "none" }}>
               <Button
                 variant="contained"
-                startIcon={<FontAwesomeIcon icon={faTools} />}
+                startIcon={<FontAwesomeIcon icon={faPlus} />}
                 sx={{
                   borderRadius: "5px",
                   textTransform: "none",
