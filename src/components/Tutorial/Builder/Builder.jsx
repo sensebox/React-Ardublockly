@@ -427,7 +427,7 @@ const Builder = () => {
       >
         <Box
           sx={{
-            flex: "0 0 20%",
+            flex: "0 0 30%",
             display: "flex",
             flexDirection: "column",
             gap: 2,
