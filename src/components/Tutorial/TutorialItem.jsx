@@ -21,6 +21,7 @@ import Dialog from "@/components/ui/Dialog";
 import { CheckCircle, Error as ErrorIcon } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 import Snackbar from "../Snackbar";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function getDifficultyLevel(value) {
   if (value <= 1) return 1;
@@ -33,6 +34,7 @@ function getDifficultyLevel(value) {
 function TutorialItem({ tutorial, level }) {
   const theme = useTheme();
   const dispatch = useDispatch();
+  const history = useHistory();
   const user = useSelector((state) => state.auth.user);
 
   // Modal states
@@ -74,7 +76,10 @@ function TutorialItem({ tutorial, level }) {
             "&:hover": { boxShadow: 6 },
           }}
         >
-          <CardActionArea sx={{ textAlign: "left", flexGrow: 1, p: 1 }}>
+          <CardActionArea
+            onClick={() => history.push(`/tutorial/${tutorial._id}`)}
+            sx={{ textAlign: "left", flexGrow: 1, p: 1 }}
+          >
             <DifficultyLabel level={getDifficultyLabel(level)} />
 
             <Box
