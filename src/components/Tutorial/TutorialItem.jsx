@@ -148,7 +148,7 @@ function TutorialItem({ tutorial, level }) {
               sx={{
                 background: theme.palette.background.white,
                 color: theme.palette.primary.main,
-                borderRadius: "50px",
+                borderRadius: "5px",
                 fontWeight: "bold",
                 border: "1px solid",
                 borderColor: theme.palette.primary.main,
@@ -180,7 +180,7 @@ function TutorialItem({ tutorial, level }) {
                   sx={{
                     background: theme.palette.background.white,
                     color: theme.palette.primary.main,
-                    borderRadius: "50px",
+                    borderRadius: "5px",
                     fontWeight: "bold",
                     border: "1px solid",
                     borderColor: theme.palette.primary.main,
@@ -201,7 +201,7 @@ function TutorialItem({ tutorial, level }) {
                   sx={{
                     background: theme.palette.background.white,
                     color: "red",
-                    borderRadius: "50px",
+                    borderRadius: "5px",
                     fontWeight: "bold",
                     border: "1px solid",
                     borderColor: "red",
@@ -231,10 +231,10 @@ function TutorialItem({ tutorial, level }) {
           dialogState === "confirm"
             ? "Tutorial löschen?"
             : dialogState === "loading"
-              ? "Tutorial wird gelöscht..."
-              : dialogState === "success"
-                ? "Erfolgreich gelöscht!"
-                : "Fehler beim Löschen"
+            ? "Tutorial wird gelöscht..."
+            : dialogState === "success"
+            ? "Erfolgreich gelöscht!"
+            : "Fehler beim Löschen"
         }
         content={
           <Box
