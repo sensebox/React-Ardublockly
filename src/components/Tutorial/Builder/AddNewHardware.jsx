@@ -70,7 +70,7 @@ export default function HardwareSelectorModal({
         variant="outlined"
         size="small"
         sx={{
-          fontSize: "1rem",
+          fontSize: "0.8rem",
           border: "3px dashed #99a1af",
           color: "#4a5565",
         }}
