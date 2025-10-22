@@ -167,7 +167,12 @@ const TutorialBuilderProgressCard = ({
           }}
         >
           <AccordionSummary expandIcon={<ExpandCircleDown />}>
-            <Typography sx={{ fontWeight: 600 }}>Erweitert</Typography>
+            <Typography
+              id={"accordion_builder_advanced"}
+              sx={{ fontWeight: 600 }}
+            >
+              Erweitert
+            </Typography>
           </AccordionSummary>
 
           <AccordionDetails>
