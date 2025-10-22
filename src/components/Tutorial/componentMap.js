@@ -1,7 +1,7 @@
 // componentMap.js
 const COMPONENT_MAP = {
   "mcu-s2": {
-    name: " MCU-S2",
+    name: "MCU-S2",
     image: "/media/hardware/3dmodels/mcus2.png",
     docUrl:
       "https://docs.sensebox.de/docs/boards/mcus2/mcu-s2-overview?board=edus2",
