@@ -10,7 +10,7 @@ const COMPONENT_MAP = {
   "ble-bee": {
     name: "BLE Bee",
     image: "/media/hardware/3dmodels/ble-bee.png",
-    docUrl: "docs.sensebox.de/docs/hardware/bee/bluetooth-bee/",
+    docUrl: "https://docs.sensebox.de/docs/hardware/bee/bluetooth-bee/",
     sensor: "Bee",
   },
   "lan-bee": {
@@ -53,7 +53,7 @@ const COMPONENT_MAP = {
     name: "LoRa Bee",
     image: "/media/hardware/3dmodels/lora_bee.png",
     docUrl: "https://docs.sensebox.de/docs/hardware/bee/lora-bee",
-    sebsor: "Bee",
+    sensor: "Bee",
   },
   tofsensor: {
     name: "TOF Sensor",
@@ -82,8 +82,8 @@ const COMPONENT_MAP = {
   expander: {
     name: "Expander",
     image: "/media/hardware/3dmodels/expander.png",
-    sensor: "Zubehör",
     docUrl: "https://docs.sensebox.de/docs/hardware/accessoires/expander",
+    sensor: "Zubehör",
   },
   scd30: {
     name: "SCD30",
@@ -100,14 +100,14 @@ const COMPONENT_MAP = {
   gps: {
     name: "GPS",
     image: "/media/hardware/3dmodels/gps.png",
-    sensor: "Zubehör",
     docUrl: "https://docs.sensebox.de/docs/hardware/accessoires/gps",
+    sensor: "Zubehör",
   },
   "sd-bee": {
     name: "SD Bee",
     image: "/media/hardware/3dmodels/sd_bee.png",
-    sensor: "Bee",
     docUrl: "https://docs.sensebox.de/docs/hardware/sd",
+    sensor: "Bee",
   },
   "wifi-bee": {
     name: "WiFi Bee",
