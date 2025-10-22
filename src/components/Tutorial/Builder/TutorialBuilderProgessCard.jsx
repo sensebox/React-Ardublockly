@@ -18,7 +18,14 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import HardwareSelectorModal from "./AddNewHardware";
-import { SaveOutlined, Save } from "@mui/icons-material";
+import {
+  SaveOutlined,
+  Save,
+  Expand,
+  ExpandCircleDown,
+} from "@mui/icons-material";
+import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
+
 const TutorialBuilderProgressCard = ({
   title,
   setTitle,
@@ -151,62 +158,83 @@ const TutorialBuilderProgressCard = ({
           gap: 1,
         }}
       >
-        {/* 🔥 ToggleButtonGroup */}
-        <ToggleButtonGroup
-          value={difficulty}
-          exclusive
-          onChange={(e, newValue) => newValue && setDifficulty(newValue)}
-          size=""
+        <Accordion
           sx={{
-            justifyContent: "space-between",
-            gap: 2,
-            "& .MuiToggleButton-root": {
-              border: "1px solid #c4c4c4 ",
-              borderRadius: "5px",
-            },
-            "& .MuiToggleButton-root.Mui-selected": {
-              backgroundColor: theme.palette.primary.main,
-              fontWeight: 800,
-              color: "#fff",
-              "&:hover": { backgroundColor: theme.palette.primary.dark },
-            },
-            "& .MuiToggleButton-root:hover": {
-              backgroundColor: theme.palette.primary.main,
-              color: "#fff",
-              fontWeight: 800,
-            },
+            boxShadow: "none",
+            border: "1px solid #e0e0e0",
+            borderRadius: 2,
+            "&:before": { display: "none" },
           }}
         >
-          <ToggleButton size="small" value={1}>
-            Sehr leicht
-          </ToggleButton>
-          <ToggleButton value={2}>Leicht</ToggleButton>
-          <ToggleButton value={3}>Mittel</ToggleButton>
-          <ToggleButton value={4}>Schwer</ToggleButton>
-          <ToggleButton value={5}>Sehr schwer</ToggleButton>
-        </ToggleButtonGroup>
+          <AccordionSummary expandIcon={<ExpandCircleDown />}>
+            <Typography sx={{ fontWeight: 600 }}>Erweitert</Typography>
+          </AccordionSummary>
 
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Typography
-            sx={{
-              fontWeight: 800,
-            }}
-          >
-            Benötigte Hardware
-          </Typography>
-          <HardwareSelectorModal
-            open={modalOpen}
-            onClose={() => setModalOpen(false)}
-            selectedHardware={selectedHardware}
-            onHardwareSelect={setSelectedHardware}
-          />
-        </Box>
+          <AccordionDetails>
+            {/* 🔥 Difficulty Selection */}
+            <Box sx={{ mb: 2 }}>
+              <Typography sx={{ fontWeight: 600, mb: 1 }}>
+                Schwierigkeitsgrad
+              </Typography>
+              <ToggleButtonGroup
+                value={difficulty}
+                exclusive
+                onChange={(e, newValue) => newValue && setDifficulty(newValue)}
+                sx={{
+                  justifyContent: "space-between",
+                  flexWrap: "wrap",
+                  gap: 1,
+                  "& .MuiToggleButton-root": {
+                    border: "1px solid #c4c4c4",
+                    borderRadius: "6px",
+                    flex: "1 1 30%",
+                    minWidth: "100px",
+                  },
+                  "& .MuiToggleButton-root.Mui-selected": {
+                    backgroundColor: theme.palette.primary.main,
+                    fontWeight: 700,
+                    color: "#fff",
+                    "&:hover": { backgroundColor: theme.palette.primary.dark },
+                  },
+                  "& .MuiToggleButton-root:hover": {
+                    backgroundColor: theme.palette.primary.light,
+                    color: "#fff",
+                  },
+                }}
+              >
+                <ToggleButton size="small" value={1}>
+                  Sehr leicht
+                </ToggleButton>
+                <ToggleButton value={2}>Leicht</ToggleButton>
+                <ToggleButton value={3}>Mittel</ToggleButton>
+                <ToggleButton value={4}>Schwer</ToggleButton>
+                <ToggleButton value={5}>Sehr schwer</ToggleButton>
+              </ToggleButtonGroup>
+            </Box>
+
+            {/* 🧱 Hardware Selection */}
+            <Box sx={{ mt: 2 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  mb: 1,
+                }}
+              >
+                <Typography sx={{ fontWeight: 600 }}>
+                  Benötigte Hardware
+                </Typography>
+                <HardwareSelectorModal
+                  open={modalOpen}
+                  onClose={() => setModalOpen(false)}
+                  selectedHardware={selectedHardware}
+                  onHardwareSelect={setSelectedHardware}
+                />
+              </Box>
+            </Box>
+          </AccordionDetails>
+        </Accordion>
         {/* Übersicht der ausgewählten Hardware */}
         {selectedHardware.length > 0 && (
           <Box
