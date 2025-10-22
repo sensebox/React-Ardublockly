@@ -5,6 +5,35 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import HomeIcon from "@mui/icons-material/Home";
 import { ArrowForward, Celebration } from "@mui/icons-material";
 import TutorialSlide from "./TutorialItem/TutorialSlide";
+import MarkdownIt from "markdown-it";
+const md = new MarkdownIt();
+
+// Image-Renderer anpassen
+const defaultImageRenderer =
+  md.renderer.rules.image ||
+  function (tokens, idx, options, env, self) {
+    return self.renderToken(tokens, idx, options);
+  };
+
+md.renderer.rules.image = function (tokens, idx, options, env, self) {
+  const token = tokens[idx];
+  token.attrs = token.attrs || [];
+  token.attrs = token.attrs.filter(
+    ([name]) => name !== "width" && name !== "height" && name !== "style",
+  );
+  token.attrs.push([
+    "style",
+    "max-width:250px; height:auto; display:block; margin:auto;",
+  ]);
+  const imgHtml = defaultImageRenderer(tokens, idx, options, env, self);
+  return `
+    <div style="text-align:center;">
+      <div style="display:inline-block; padding:12px; background:#f5f5f5;">
+        ${imgHtml}
+      </div>
+    </div>
+  `;
+};
 
 const TutorialFinished = ({ tutorial }) => {
   const theme = useTheme();
@@ -54,11 +83,15 @@ const TutorialFinished = ({ tutorial }) => {
               Tutorial abgeschlossen!
             </Typography>
             <Typography variant="body1" color="text.secondary">
-              {finishText}
+              {/* {finishText} */}
             </Typography>
           </Box>
         </Box>
-
+        <Box sx={{ my: 2 }}>
+          <div
+            dangerouslySetInnerHTML={{ __html: md.render(finishStep.text) }}
+          />
+        </Box>
         {/* 📘 Lerninhalte */}
         {learnings.length > 0 && (
           <Box
