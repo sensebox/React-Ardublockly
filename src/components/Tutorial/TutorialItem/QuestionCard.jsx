@@ -4,10 +4,9 @@ import {
   Card,
   CardContent,
   Typography,
-  RadioGroup,
-  FormControlLabel,
   Radio,
   Checkbox,
+  FormControlLabel,
   Button,
   useTheme,
 } from "@mui/material";
@@ -31,14 +30,12 @@ const QuestionCard = ({ questionData, setNextStepDisabled }) => {
 
   const handleSelect = (value) => {
     if (multipleChoice) {
-      // Toggle für Checkboxen
       setSelected((prev) =>
         prev.includes(value)
           ? prev.filter((v) => v !== value)
           : [...prev, value],
       );
     } else {
-      // Nur eine Antwort für Single Choice
       setSelected([value]);
     }
   };
@@ -64,6 +61,11 @@ const QuestionCard = ({ questionData, setNextStepDisabled }) => {
     setSubmitted(false);
     setIsCorrect(false);
   };
+
+  // Sammle Feedbacks der ausgewählten Antworten (falls vorhanden)
+  const selectedFeedbacks = answers
+    .filter((a) => selected.includes(a.text) && a.feedback)
+    .map((a) => a.feedback);
 
   return (
     <Card
@@ -174,7 +176,7 @@ const QuestionCard = ({ questionData, setNextStepDisabled }) => {
           })}
         </Box>
 
-        {/* Feedback Animation */}
+        {/* Gesamtfeedback nach Abgabe */}
         <AnimatePresence>
           {submitted && (
             <motion.div
@@ -206,12 +208,32 @@ const QuestionCard = ({ questionData, setNextStepDisabled }) => {
                       sx={{ color: theme.palette.error.main, fontSize: 28 }}
                     />
                     <Typography color="error.main" fontWeight={600}>
-                      Leider falsch – die richtigen Antworten sind grün
-                      markiert.
+                      Leider nicht ganz richtig.
                     </Typography>
                   </>
                 )}
               </Box>
+
+              {/* 🧠 Custom Feedback der gewählten Antworten */}
+              {selectedFeedbacks.length > 0 && (
+                <Box sx={{ mt: 1.5, pl: 4 }}>
+                  {selectedFeedbacks.map((fb, idx) => (
+                    <Typography
+                      key={idx}
+                      variant="body2"
+                      sx={{
+                        color: isCorrect
+                          ? theme.palette.success.dark
+                          : theme.palette.error.dark,
+                        fontStyle: "italic",
+                        mb: 0.5,
+                      }}
+                    >
+                      💡 {fb}
+                    </Typography>
+                  ))}
+                </Box>
+              )}
             </motion.div>
           )}
         </AnimatePresence>
