@@ -445,4 +445,16 @@ export const UI = {
   // Help link
   need_help: "Need help?",
   compile_overlay_help_2: "Check out our documentation!",
+
+  button_register: "Register now",
+  register_head: "Create your account",
+  labels_confirm_password: "Confirm password",
+  messages_password_mismatch: "Passwords do not match.",
+  messages_password_too_short: "Password must be at least 6 characters.",
+  messages_register_error: "Please fill in all fields.",
+  already_have_account: "Already have an account?",
+  no_account: "If you don't have an account ",
+  register_success_head: "Account created!",
+  register_success_message: "Your account has been successfully created.",
+  register_success_login_prompt: "You can now log in with your credentials.",
 };

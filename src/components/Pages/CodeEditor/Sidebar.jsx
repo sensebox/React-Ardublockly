@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import * as Blockly from "blockly";
 import { useSelector } from "react-redux";
 import Accordion from "@mui/material/Accordion";
@@ -15,7 +15,7 @@ const Sidebar = () => {
   //const [examples, setExamples] = React.useState([]);
   const user = useSelector((state) => state.auth.user);
   const compilerUrl = useSelector((state) => state.general.compiler);
-  
+
   // useEffect(() => {
   //   axios
   //     .get("https://coelho.opensensemap.org/items/blocklysamples")
@@ -38,22 +38,19 @@ const Sidebar = () => {
 
   const [libraries, setLibraries] = React.useState([]);
   React.useEffect(() => {
-    if(!compilerUrl) return;
+    if (!compilerUrl) return;
 
     const fetchLibraries = async () => {
-      const { data } = await axios.get(
-        `${compilerUrl}/libraries`,
-        {
-          params: {
-            format: "json",
-          },
-        }
-      );
+      const { data } = await axios.get(`${compilerUrl}/libraries`, {
+        params: {
+          format: "json",
+        },
+      });
       const myLibs = data.installed_libraries
         .map(({ library }) => library)
         .filter((lib) => lib.location == "user")
         .sort((a, b) => a.name.localeCompare(b.name));
-        
+
       setLibraries(myLibs);
     };
     fetchLibraries();

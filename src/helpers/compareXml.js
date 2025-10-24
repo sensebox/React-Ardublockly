@@ -1,7 +1,68 @@
-export const checkXml = (originalXmlString, userXmlString) => {
-  var originalXml = parseXml(originalXmlString);
-  var userXml = parseXml(userXmlString);
-  return compareXml(originalXml, userXml);
+export const checkXml = (solutionXmlString, userXmlString) => {
+  const parser = new DOMParser();
+  const solutionXml = parser.parseFromString(solutionXmlString, "text/xml");
+  const userXml = parser.parseFromString(userXmlString, "text/xml");
+
+  const solutionBlocks = Array.from(solutionXml.getElementsByTagName("block"));
+  const userBlocks = Array.from(userXml.getElementsByTagName("block"));
+
+  const solutionTypes = solutionBlocks.map((b) => b.getAttribute("type"));
+  const userTypes = userBlocks.map((b) => b.getAttribute("type"));
+
+  // --- Analyse ---
+  const missingBlocks = solutionTypes.filter((t) => !userTypes.includes(t));
+  const extraBlocks = userTypes.filter((t) => !solutionTypes.includes(t));
+
+  const details = [];
+
+  if (missingBlocks.length === 0 && extraBlocks.length === 0) {
+    return {
+      type: "success",
+      text: "Super! Dein Blockly-Programm enthält alle wichtigen Blöcke der Musterlösung.",
+      details: [
+        {
+          type: "success",
+          text: "Alle benötigten Blocktypen wurden gefunden.",
+        },
+      ],
+    };
+  }
+
+  if (missingBlocks.length === 0 && extraBlocks.length > 0) {
+    details.push({
+      type: "info",
+      text: `Du hast zusätzliche Blöcke verwendet (${extraBlocks.join(", ")}).`,
+    });
+    return {
+      type: "success",
+      text: "Sehr gut! Du hast alle notwendigen Blöcke verwendet. Es sind nur einige zusätzliche Blöcke enthalten, das ist aber kein Problem.",
+      details,
+    };
+  }
+
+  if (missingBlocks.length > 0) {
+    details.push({
+      type: "error",
+      text: `Dir fehlen folgende Blocktypen: ${missingBlocks.join(", ")}.`,
+    });
+    if (extraBlocks.length > 0) {
+      details.push({
+        type: "info",
+        text: `Zusätzlich hast du einige weitere Blöcke verwendet (${extraBlocks.join(", ")}).`,
+      });
+    }
+    return {
+      type: "error",
+      text: "Fast geschafft! Es fehlen noch einige wichtige Blöcke, damit dein Programm vollständig ist.",
+      details,
+    };
+  }
+
+  return {
+    type: "error",
+    text: "Das XML konnte nicht vollständig verglichen werden.",
+    details,
+  };
 };
 
 const parseXml = (xmlString) => {

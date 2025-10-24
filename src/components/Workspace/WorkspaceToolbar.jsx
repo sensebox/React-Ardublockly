@@ -13,7 +13,7 @@ import ResetWorkspace from "./ToolbarItems/ResetWorkspace";
 import DeleteProject from "./ToolbarItems/DeleteProject";
 import CopyCode from "./ToolbarItems/CopyCode";
 import AutoSave from "./ToolbarItems/AutoSave";
-import SolutionCheck from "../Tutorial/SolutionCheck";
+import SolutionCheck from "../Tutorial/TutorialItem/SolutionCheck";
 
 const containerStyle = {
   width: "max-content",

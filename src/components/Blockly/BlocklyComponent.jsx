@@ -26,7 +26,6 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
   const blocklyDivRef = useRef(null);
   const toolboxRef = useRef(null);
   const [workspace, setWorkspace] = useState(undefined);
-
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -80,10 +79,14 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
     // ScrollOptions plugin
     const scrollPlugin = new ScrollOptions(ws);
     scrollPlugin.init({ enableWheelScroll: true, enableEdgeScroll: false });
-
-    // Load initial XML
+    // 🔥 SAUBERE LÖSUNG: Nutze Promise.resolve().then, um nach der Initialisierung zu laden
     if (initialXml) {
-      Blockly.Xml.domToWorkspace(Blockly.utils.xml.textToDom(initialXml), ws);
+      Promise.resolve().then(() => {
+        try {
+          const xmlDom = Blockly.utils.xml.textToDom(initialXml);
+          Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, ws);
+        } catch (e) {}
+      });
     }
 
     // Cleanup on unmount

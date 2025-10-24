@@ -25,6 +25,8 @@ import CodeEditor from "../Pages/CodeEditor/CodeEditor";
 import GalleryHome from "../Pages/Gallery/GalleryHome";
 import Project from "@/components/Pages/Project/Project";
 import ProjectHome from "@/components/Pages/Project/ProjectHome";
+import Register from "../User/Register";
+import RegisterSuccess from "../User/RegisterSuccess";
 
 class Routes extends Component {
   componentDidMount() {
@@ -58,12 +60,16 @@ class Routes extends Component {
           <PublicRoute path="/tutorial" exact>
             <TutorialHome />
           </PublicRoute>
-          <PrivateRouteCreator path="/tutorial/builder" exact>
+          <PrivateRoute path="/tutorial/builder" exact>
             <Builder />
-          </PrivateRouteCreator>
+          </PrivateRoute>
           <Route path="/tutorial/:tutorialId" exact>
             <Tutorial />
           </Route>
+          <PrivateRoute path="/tutorial/:tutorialId/edit" exact>
+            <Builder />
+          </PrivateRoute>
+
           <Route path="/CodeEditor" exact>
             <CodeEditor />
           </Route>
@@ -89,6 +95,12 @@ class Routes extends Component {
           <IsLoggedRoute path="/user/login" exact>
             <Login />
           </IsLoggedRoute>
+          <PublicRoute path="/user/register" exact>
+            <Register />
+          </PublicRoute>
+          <PublicRoute path="/user/register/success" exact>
+            <RegisterSuccess />
+          </PublicRoute>
           <PrivateRoute path="/user" exact>
             <Account />
           </PrivateRoute>

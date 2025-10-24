@@ -9,7 +9,6 @@ export const ToolboxEsp = () => {
   return (
     <>
       {/* ============================== SEARCH ============================== */}
-      <Category name="Search" kind="search" />
 
       {/* ============================== SENSORS ============================== */}
       <Category

@@ -57,7 +57,7 @@ const TooltipViewer = () => {
           ></span>
         </Typography>
 
-        <ReactMarkdown linkTarget="_blank">{tooltip}</ReactMarkdown>
+        {/* <ReactMarkdown linkTarget="_blank">{tooltip}</ReactMarkdown> */}
 
         {helpurl && (
           <Button

@@ -28,7 +28,6 @@ export default function TransferStep() {
   const theme = useTheme();
   const filename = useSelector((state) => state.workspace.name);
   const selectedBoard = useSelector((state) => state.board.board);
-  console.log("Selected Board in TransferStep:", selectedBoard);
   return (
     <Box
       sx={{
