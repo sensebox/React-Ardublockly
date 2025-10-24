@@ -18,7 +18,6 @@ import BlocklyWindow from "../../Blockly/BlocklyWindow";
 import { initialXml } from "../../Blockly/initialXml.js";
 import {
   changeContent,
-  deleteProperty,
   setError,
   deleteError,
 } from "../../../actions/tutorialBuilderActions";

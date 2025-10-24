@@ -40,6 +40,12 @@ const theme = createTheme({
       blue: "#3ab0e8",
       green: "#4EAF47",
     },
+    feedback: {
+      success: "#4CAF50", // vorher hartkodiert
+      error: "#E53935",
+      warning: "#FFA000",
+      border: "#DDDDDD",
+    },
   },
 });
 

@@ -11,6 +11,7 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  useTheme,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Dialog from "@/components/ui/Dialog";
@@ -19,10 +20,12 @@ import {
   faCheckCircle,
   faTimesCircle,
   faInfoCircle,
+  faClipboardCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import * as Blockly from "blockly";
 import { useDispatch, useSelector } from "react-redux";
 import { checkXml } from "@/helpers/compareXml";
+import CompilationDialog from "@/components/Workspace/ToolbarItems/CompilationDialog/CompilationDialog";
 
 export default function SolutionCheck({
   solutionXml,
@@ -32,10 +35,14 @@ export default function SolutionCheck({
   const xml = useSelector((s) => s.workspace.code.xml);
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [msg, setMsg] = useState(null);
   const [expanded, setExpanded] = useState(false);
   const activeStep = useSelector((state) => state.tutorial.activeStep);
   const tutorial = useSelector((state) => state.tutorial.tutorials[0]);
+  const arduino = useSelector((s) => s.workspace.code.arduino);
+  const selectedBoard = useSelector((state) => state.board.board);
+  const theme = useTheme();
 
   const handleClose = () => {
     setOpen(false);
@@ -107,7 +114,9 @@ export default function SolutionCheck({
             <FontAwesomeIcon
               icon={isSuccess ? faCheckCircle : faTimesCircle}
               style={{
-                color: isSuccess ? "#4CAF50" : "#E53935",
+                color: isSuccess
+                  ? theme.palette.feedback.success
+                  : theme.palette.feedback.error,
                 fontSize: "1.5rem",
               }}
             />
@@ -116,7 +125,6 @@ export default function SolutionCheck({
             </Typography>
           </Box>
         }
-        // 👇 Nur anzeigen, wenn Ergebnis falsch ist
         button={!isSuccess ? Blockly.Msg.button_close || "Schließen" : null}
         onClick={!isSuccess ? handleClose : undefined}
         content={
@@ -126,7 +134,9 @@ export default function SolutionCheck({
               sx={{
                 mt: 1,
                 mb: 2,
-                color: isSuccess ? "success.main" : "error.main",
+                color: isSuccess
+                  ? theme.palette.feedback.success
+                  : theme.palette.feedback.error,
                 fontWeight: 500,
               }}
             >
@@ -135,71 +145,71 @@ export default function SolutionCheck({
 
             {/* Accordion für Analyse */}
             {msg?.details && (
-              <>
-                <Accordion
-                  expanded={expanded}
-                  onChange={() => setExpanded(!expanded)}
-                  sx={{
-                    borderRadius: 2,
-                    boxShadow: "none",
-                    border: "1px solid #ddd",
-                    mt: 1,
-                    "&:before": { display: "none" },
-                  }}
+              <Accordion
+                expanded={expanded}
+                onChange={() => setExpanded(!expanded)}
+                sx={{
+                  borderRadius: 2,
+                  boxShadow: "none",
+                  border: `1px solid ${theme.palette.feedback.border}`,
+                  mt: 1,
+                  "&:before": { display: "none" },
+                }}
+              >
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="analysis-content"
+                  id="analysis-header"
                 >
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="analysis-content"
-                    id="analysis-header"
+                  <Typography
+                    variant="subtitle2"
+                    sx={{ fontWeight: 600, color: "text.primary" }}
                   >
-                    <Typography
-                      variant="subtitle2"
-                      sx={{
-                        fontWeight: 600,
-                        color: "text.primary",
-                      }}
-                    >
-                      Hilfe anzeigen
-                    </Typography>
-                  </AccordionSummary>
+                    Hilfe anzeigen
+                  </Typography>
+                </AccordionSummary>
 
-                  <AccordionDetails>
-                    <Divider sx={{ mb: 1 }} />
-                    <Typography
-                      variant="subtitle2"
-                      sx={{ mb: 1, fontWeight: 500 }}
-                    >
-                      Analyse:
-                    </Typography>
-                    <List dense>
-                      {msg.details.map((detail, i) => (
-                        <ListItem key={i}>
-                          <ListItemIcon>
-                            <FontAwesomeIcon
-                              icon={
-                                detail.type === "error"
-                                  ? faTimesCircle
-                                  : detail.type === "success"
-                                    ? faCheckCircle
-                                    : faInfoCircle
-                              }
-                              color={
-                                detail.type === "error"
-                                  ? "#E53935"
-                                  : detail.type === "success"
-                                    ? "#43A047"
-                                    : "#FFA000"
-                              }
-                            />
-                          </ListItemIcon>
-                          <ListItemText primary={detail.text} />
-                        </ListItem>
-                      ))}
-                    </List>
-                  </AccordionDetails>
-                </Accordion>
-              </>
+                <AccordionDetails>
+                  <Divider sx={{ mb: 1 }} />
+                  <Typography
+                    variant="subtitle2"
+                    sx={{ mb: 1, fontWeight: 500 }}
+                  >
+                    Analyse:
+                  </Typography>
+                  <List dense>
+                    {msg.details.map((detail, i) => (
+                      <ListItem key={i}>
+                        <ListItemIcon>
+                          <FontAwesomeIcon
+                            icon={
+                              detail.type === "error"
+                                ? faTimesCircle
+                                : detail.type === "success"
+                                  ? faCheckCircle
+                                  : faInfoCircle
+                            }
+                            color={
+                              detail.type === "error"
+                                ? theme.palette.feedback.error
+                                : detail.type === "success"
+                                  ? theme.palette.feedback.success
+                                  : theme.palette.feedback.warning
+                            }
+                          />
+                        </ListItemIcon>
+                        <ListItemText primary={detail.text} />
+                      </ListItem>
+                    ))}
+                  </List>
+                </AccordionDetails>
+              </Accordion>
             )}
+
+            <Box sx={{ mt: 1, color: "text.secondary" }}>
+              Du kannst den Programmcode jetzt kompilieren und live auf deiner
+              senseBox testen!
+            </Box>
           </Box>
         }
       >
@@ -208,6 +218,29 @@ export default function SolutionCheck({
           <Box
             sx={{ mt: 3, display: "flex", justifyContent: "flex-end", gap: 1 }}
           >
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: theme.palette.button.compile,
+                "&:hover": {
+                  backgroundColor: theme.palette.senseboxColors.blue,
+                },
+                color: theme.palette.primary.contrastText,
+              }}
+              onClick={() => setDialogOpen(true)}
+              startIcon={<FontAwesomeIcon icon={faClipboardCheck} />}
+            >
+              Compile
+            </Button>
+
+            <CompilationDialog
+              open={dialogOpen}
+              onClose={() => setDialogOpen(false)}
+              selectedBoard={selectedBoard}
+              code={arduino}
+              filename={"sketch"}
+            />
+
             {isLastStep ? (
               <Button variant="contained" color="primary" onClick={onFinish}>
                 {Blockly.Msg.button_tutorial_overview || "Zur Übersicht"}

@@ -396,7 +396,6 @@ const Builder = () => {
 
   // 🎨 Render
   const currentStep = steps[activeStep] || {};
-  console.log(currentStep);
   if (loading) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
