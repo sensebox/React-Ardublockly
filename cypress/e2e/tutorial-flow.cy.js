@@ -73,7 +73,7 @@ describe("End-to-End Tutorial Flow", () => {
     // Warte auf Erfolgsmeldung
     cy.contains("Tutorial erfolgreich gespeichert!").should("be.visible");
 
-    cy.get("button").contains("Zum Tutorial").click(); // Klicke, um zur Tutorial-Seite zu gelangen
+    cy.get("button").contains("Zum Tutorial").click();
 
     cy.url().then((url) => {
       const match = url.match(/\/tutorial\/([a-f0-9]{24})/);
@@ -111,14 +111,13 @@ describe("End-to-End Tutorial Flow", () => {
     cy.get('img[alt="MCU-S2"]').click();
     cy.get('img[alt="Display"]').click();
     cy.get('img[alt="GPS"]').click();
-    cy.get("button").contains("Fertig").click(); // Klicke, um zur Tutorial-Seite zu gelangen
-
+    cy.get("button").contains("Fertig").click();
     cy.contains("button", "Tutorial speichern").click();
 
     // Warte auf Erfolgsmeldung
     cy.contains("Tutorial erfolgreich gespeichert!").should("be.visible");
 
-    cy.get("button").contains("Zum Tutorial").click(); // Klicke, um zur Tutorial-Seite zu gelangen
+    cy.get("button").contains("Zum Tutorial").click();
 
     // Optional: Prüfe auch im UI
     cy.contains(updatedTitle).should("be.visible");
