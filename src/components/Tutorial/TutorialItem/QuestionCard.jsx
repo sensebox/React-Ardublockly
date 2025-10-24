@@ -7,6 +7,7 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  Checkbox,
   Button,
   useTheme,
 } from "@mui/material";
@@ -15,7 +16,7 @@ import { CheckCircle, Cancel, HelpOutline } from "@mui/icons-material";
 
 const QuestionCard = ({ questionData, setNextStepDisabled }) => {
   const theme = useTheme();
-  const [selected, setSelected] = useState("");
+  const [selected, setSelected] = useState([]);
   const [submitted, setSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
 
@@ -26,18 +27,40 @@ const QuestionCard = ({ questionData, setNextStepDisabled }) => {
       </Typography>
     );
 
-  const { question, answers = [], type } = questionData;
+  const { question, answers = [], multipleChoice } = questionData;
+
+  const handleSelect = (value) => {
+    if (multipleChoice) {
+      // Toggle für Checkboxen
+      setSelected((prev) =>
+        prev.includes(value)
+          ? prev.filter((v) => v !== value)
+          : [...prev, value],
+      );
+    } else {
+      // Nur eine Antwort für Single Choice
+      setSelected([value]);
+    }
+  };
 
   const handleSubmit = () => {
-    const correctAnswer = answers.find((a) => a.correct);
-    const correct = selected === correctAnswer?.text;
+    const correctAnswers = answers
+      .filter((a) => a.correct)
+      .map((a) => a.text)
+      .sort();
+    const selectedAnswers = [...selected].sort();
+
+    const correct =
+      correctAnswers.length === selectedAnswers.length &&
+      correctAnswers.every((val, i) => val === selectedAnswers[i]);
+
     setIsCorrect(correct);
     if (correct) setNextStepDisabled(false);
     setSubmitted(true);
   };
 
   const resetQuestion = () => {
-    setSelected("");
+    setSelected([]);
     setSubmitted(false);
     setIsCorrect(false);
   };
@@ -55,7 +78,7 @@ const QuestionCard = ({ questionData, setNextStepDisabled }) => {
     >
       <CardContent sx={{ p: 3 }}>
         {/* Header */}
-        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+        <Box sx={{ display: "flex", alignItems: "center", mb: 1.5 }}>
           <HelpOutline
             sx={{
               mr: 1,
@@ -68,27 +91,32 @@ const QuestionCard = ({ questionData, setNextStepDisabled }) => {
           </Typography>
         </Box>
 
+        {multipleChoice && (
+          <Typography
+            variant="body2"
+            sx={{ mb: 2, color: theme.palette.text.secondary }}
+          >
+            (Mehrere Antworten möglich)
+          </Typography>
+        )}
+
         {/* Antwortmöglichkeiten */}
-        <RadioGroup
-          value={selected}
-          onChange={(e) => setSelected(e.target.value)}
-        >
+        <Box>
           {answers.map((a, i) => {
             const isAnswerCorrect = a.correct;
-            const isSelected = selected === a.text;
+            const isSelected = selected.includes(a.text);
 
-            // Farben nach Zustand bestimmen
             let bgColor = "transparent";
             let borderColor = theme.palette.divider;
 
             if (submitted) {
-              if (isSelected && isCorrect) {
+              if (isAnswerCorrect && isSelected) {
                 bgColor = theme.palette.success.light;
                 borderColor = theme.palette.success.main;
-              } else if (isSelected && !isCorrect) {
+              } else if (!isAnswerCorrect && isSelected) {
                 bgColor = theme.palette.error.light;
                 borderColor = theme.palette.error.main;
-              } else if (!isCorrect && isAnswerCorrect) {
+              } else if (isAnswerCorrect) {
                 bgColor = theme.palette.success.light;
                 borderColor = theme.palette.success.main;
               }
@@ -114,8 +142,21 @@ const QuestionCard = ({ questionData, setNextStepDisabled }) => {
                   }}
                 >
                   <FormControlLabel
-                    value={a.text}
-                    control={<Radio disabled={submitted} />}
+                    control={
+                      multipleChoice ? (
+                        <Checkbox
+                          checked={isSelected}
+                          onChange={() => handleSelect(a.text)}
+                          disabled={submitted}
+                        />
+                      ) : (
+                        <Radio
+                          checked={isSelected}
+                          onChange={() => handleSelect(a.text)}
+                          disabled={submitted}
+                        />
+                      )
+                    }
                     label={
                       <Typography
                         sx={{
@@ -131,7 +172,7 @@ const QuestionCard = ({ questionData, setNextStepDisabled }) => {
               </motion.div>
             );
           })}
-        </RadioGroup>
+        </Box>
 
         {/* Feedback Animation */}
         <AnimatePresence>
@@ -165,7 +206,8 @@ const QuestionCard = ({ questionData, setNextStepDisabled }) => {
                       sx={{ color: theme.palette.error.main, fontSize: 28 }}
                     />
                     <Typography color="error.main" fontWeight={600}>
-                      Leider falsch – die richtige Antwort ist grün markiert.
+                      Leider falsch – die richtigen Antworten sind grün
+                      markiert.
                     </Typography>
                   </>
                 )}
@@ -187,7 +229,7 @@ const QuestionCard = ({ questionData, setNextStepDisabled }) => {
             <Button
               variant="contained"
               onClick={handleSubmit}
-              disabled={!selected}
+              disabled={selected.length === 0}
             >
               Antwort bestätigen
             </Button>

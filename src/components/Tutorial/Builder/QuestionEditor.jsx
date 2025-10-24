@@ -7,6 +7,9 @@ import {
   IconButton,
   Button,
   Radio,
+  Checkbox,
+  Switch,
+  FormControlLabel,
   useTheme,
 } from "@mui/material";
 import { AddCircleOutline, Delete } from "@mui/icons-material";
@@ -14,8 +17,11 @@ import { useState } from "react";
 
 const QuestionEditor = ({ questionData, setQuestionData }) => {
   const theme = useTheme();
-  const [tab, setTab] = useState(
-    questionData?.h5pLink ? "h5p" : "normal", // falls vorhanden → gleich H5P auswählen
+  const [tab, setTab] = useState(questionData?.h5pLink ? "h5p" : "normal");
+
+  // 🆕 Ob Multiple Choice erlaubt ist
+  const [isMultipleChoice, setIsMultipleChoice] = useState(
+    questionData?.multipleChoice || false,
   );
 
   const handleAddAnswer = () => {
@@ -38,10 +44,21 @@ const QuestionEditor = ({ questionData, setQuestionData }) => {
   };
 
   const handleCorrectSelect = (index) => {
-    const updated = questionData.answers.map((a, i) => ({
-      ...a,
-      correct: i === index,
-    }));
+    let updated;
+
+    if (isMultipleChoice) {
+      // ✅ Mehrere Antworten dürfen richtig sein
+      updated = questionData.answers.map((a, i) =>
+        i === index ? { ...a, correct: !a.correct } : a,
+      );
+    } else {
+      // ☑️ Nur eine Antwort darf richtig sein
+      updated = questionData.answers.map((a, i) => ({
+        ...a,
+        correct: i === index,
+      }));
+    }
+
     setQuestionData({ ...questionData, answers: updated });
   };
 
@@ -78,6 +95,23 @@ const QuestionEditor = ({ questionData, setQuestionData }) => {
             sx={{ mb: 2 }}
           />
 
+          {/* 🆕 Switch für Multiple Choice */}
+          <FormControlLabel
+            control={
+              <Switch
+                checked={isMultipleChoice}
+                onChange={(e) => {
+                  const value = e.target.checked;
+                  setIsMultipleChoice(value);
+                  setQuestionData({ ...questionData, multipleChoice: value });
+                }}
+                color="primary"
+              />
+            }
+            label="Mehrere richtige Antworten erlauben"
+            sx={{ mb: 2 }}
+          />
+
           <Typography variant="subtitle2" fontWeight={600} gutterBottom>
             Antwortmöglichkeiten
           </Typography>
@@ -92,11 +126,19 @@ const QuestionEditor = ({ questionData, setQuestionData }) => {
                 mb: 1,
               }}
             >
-              <Radio
-                checked={answer.correct}
-                onChange={() => handleCorrectSelect(index)}
-                color="primary"
-              />
+              {isMultipleChoice ? (
+                <Checkbox
+                  checked={answer.correct}
+                  onChange={() => handleCorrectSelect(index)}
+                  color="primary"
+                />
+              ) : (
+                <Radio
+                  checked={answer.correct}
+                  onChange={() => handleCorrectSelect(index)}
+                  color="primary"
+                />
+              )}
               <TextField
                 fullWidth
                 value={answer.text}
