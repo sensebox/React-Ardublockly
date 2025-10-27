@@ -1,10 +1,9 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Tooltip } from "@mui/material";
 import { useTheme } from "@mui/styles";
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { AccessTime, School, Category, Grade } from "@mui/icons-material";
 // /Users/eric/Documents/arbeit/React-Ardublockly/src/components/Tutorial/TutorialOverview.jsx
-
 /**
  * TutorialOverview
  * - reads tutorial data and global variables (e.g. theme) from the store
@@ -103,14 +102,14 @@ export const TutorialOverview = ({ tutorial }) => {
         </Box>
 
         {/* Fach */}
-        <Box sx={{ display: "flex", alignItems: "flex-start" }}>
-          <School
-            sx={{
-              color: theme.palette.primary.main,
-              mr: 0.5,
-              fontSize: "1rem",
-            }}
-          />
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: 1,
+          }}
+        >
           <Typography
             component="span"
             sx={{
@@ -120,13 +119,35 @@ export const TutorialOverview = ({ tutorial }) => {
               minWidth: "100px",
             }}
           >
-            Fach (z.B.):
+            Fach:
           </Typography>
-          <Typography component="span">
-            {Array.isArray(tutorial.subjects) && tutorial.subjects.length > 0
-              ? tutorial.subjects.join(", ")
-              : tutorial.subject || "—"}
-          </Typography>
+
+          {Array.isArray(tutorial.subjects) && tutorial.subjects.length > 0 ? (
+            tutorial.subjects.map((subject, i) => {
+              // Dateiname vorbereiten: z. B. "Informatik" → "informatik.svg"
+              const iconFile =
+                subject.toLowerCase().replace(/ /g, "_") + ".svg";
+              return (
+                <Tooltip key={i} title={subject} arrow>
+                  <Box
+                    component="img"
+                    src={`/media/tutorial/icons/${iconFile}`}
+                    alt={subject}
+                    sx={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: "50%",
+                      cursor: "help",
+                      transition: "transform 0.2s ease",
+                      "&:hover": { transform: "scale(1.1)" },
+                    }}
+                  />
+                </Tooltip>
+              );
+            })
+          ) : (
+            <Typography component="span">—</Typography>
+          )}
         </Box>
 
         {/* Dauer */}
@@ -155,14 +176,15 @@ export const TutorialOverview = ({ tutorial }) => {
         </Box>
 
         {/* Themenbereiche */}
-        <Box sx={{ display: "flex", alignItems: "flex-start" }}>
-          <Category
-            sx={{
-              color: theme.palette.primary.main,
-              mr: 0.5,
-              fontSize: "1rem",
-            }}
-          />
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: 1,
+            mt: 1,
+          }}
+        >
           <Typography
             component="span"
             sx={{
@@ -174,11 +196,42 @@ export const TutorialOverview = ({ tutorial }) => {
           >
             Themenbereiche:
           </Typography>
-          <Typography component="span">
-            {Array.isArray(tutorial.topics) && tutorial.topics.length > 0
-              ? tutorial.topics.join(", ")
-              : "—"}
-          </Typography>
+
+          {Array.isArray(tutorial.topics) && tutorial.topics.length > 0 ? (
+            tutorial.topics.map((topic, i) => {
+              // Dateiname vorbereiten: z. B. "KI / Machine Learning" → "ki_machine_learning.svg"
+              const iconFile =
+                topic
+                  .toLowerCase()
+                  .replace(/ /g, "_")
+                  .replace(/\//g, "")
+                  .replace(/&/g, "und")
+                  .replace(/ä/g, "ae")
+                  .replace(/ö/g, "oe")
+                  .replace(/ü/g, "ue")
+                  .replace(/ß/g, "ss") + ".svg";
+
+              return (
+                <Tooltip key={i} title={topic} arrow>
+                  <Box
+                    component="img"
+                    src={`/media/tutorial/icons/${iconFile}`}
+                    alt={topic}
+                    sx={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: "50%",
+                      cursor: "help",
+                      transition: "transform 0.2s ease",
+                      "&:hover": { transform: "scale(1.1)" },
+                    }}
+                  />
+                </Tooltip>
+              );
+            })
+          ) : (
+            <Typography component="span">—</Typography>
+          )}
         </Box>
 
         {/* Technische Kompetenzen (optional) */}
