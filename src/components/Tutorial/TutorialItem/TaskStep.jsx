@@ -51,7 +51,13 @@ const TaskStep = ({ step, setNextStepDisabled }) => {
     <TutorialSlide stepNumber={activeStep}>
       <div dangerouslySetInnerHTML={{ __html: md.render(step.text) }} />
       {step.type === "question" && step.questionData && (
-        <div>
+        <Box
+          sx={{
+            gap: 4,
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
           {step.questionData.map((q, idx) => {
             return (
               <QuestionCard
@@ -61,7 +67,7 @@ const TaskStep = ({ step, setNextStepDisabled }) => {
               />
             );
           })}
-        </div>
+        </Box>
       )}
       {step.type === "blockly" && step.xml && (
         <Box
