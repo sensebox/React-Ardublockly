@@ -12,9 +12,12 @@ import TutorialFooter from "./TutorialFooter";
 import TutorialFinished from "./TutorialFinished";
 
 import * as Blockly from "blockly";
-import { Box, useTheme } from "@mui/material";
+import { Box, Button, useTheme } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
 import Breadcrumbs from "../ui/Breadcrumbs";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 export default function Tutorial() {
   const { tutorialId } = useParams();
@@ -22,10 +25,12 @@ export default function Tutorial() {
   const theme = useTheme();
 
   const tutorial = useSelector((state) => state.tutorial.tutorials[0]);
+
   const message = useSelector((state) => state.message);
   const activeStep = useSelector((state) => state.tutorial.activeStep);
   const [nextStepDisabled, setNextStepDisabled] = useState(false);
   const [currentStep, setCurrentStep] = useState();
+  const platform = useSelector((state) => state.general.platform);
 
   // Initial load
   useEffect(() => {
@@ -51,6 +56,25 @@ export default function Tutorial() {
       setNextStepDisabled(true);
     }
   }, [currentStep]);
+
+  const changeStep = (step) => {
+    dispatch({
+      type: "TUTORIAL_STEP",
+      payload: step,
+    });
+  };
+
+  const nextStep = () => {
+    if (activeStep < tutorial.steps.length - 1) {
+      changeStep(activeStep + 1);
+    }
+  };
+
+  const previousStep = () => {
+    if (activeStep > 0) {
+      changeStep(activeStep - 1);
+    }
+  };
 
   if (!tutorial) {
     if (message.id === "GET_TUTORIAL_FAIL") {
@@ -112,7 +136,6 @@ export default function Tutorial() {
         >
           <TutorialProgressCard />
         </Box>
-
         {/* Hauptbereich rechts */}
         <Box
           sx={{
@@ -120,40 +143,88 @@ export default function Tutorial() {
             position: "relative",
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            minHeight: "100%",
           }}
         >
-          <AnimatePresence mode="wait">
-            {(() => {
-              const currentStep = tutorial.steps[activeStep];
-              const type = currentStep?.type;
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              minHeight: "100%",
+            }}
+          >
+            <AnimatePresence mode="wait">
+              {(() => {
+                const currentStep = tutorial.steps[activeStep];
+                const type = currentStep?.type;
 
-              if (type === "finish") {
-                return <TutorialFinished key="finished" tutorial={tutorial} />;
-              }
+                if (type === "finish") {
+                  return (
+                    <TutorialFinished key="finished" tutorial={tutorial} />
+                  );
+                }
 
-              if (type === "instruction") {
-                return <Instruction tutorial={tutorial} key={activeStep} />;
-              }
+                if (type === "instruction") {
+                  return <Instruction tutorial={tutorial} key={activeStep} />;
+                }
 
-              return (
-                <TaskStep
-                  setNextStepDisabled={setNextStepDisabled}
-                  step={currentStep}
-                  key={activeStep}
-                />
-              );
-            })()}
-          </AnimatePresence>
+                return (
+                  <TaskStep
+                    setNextStepDisabled={setNextStepDisabled}
+                    step={currentStep}
+                    key={activeStep}
+                  />
+                );
+              })()}
+            </AnimatePresence>
+          </Box>
+          {/* {!platform && (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-around",
+                maxWidth: "960px",
+                p: 2,
+              }}
+            >
+              <Button
+                variant="outlined"
+                disabled={activeStep === 0}
+                startIcon={<ChevronLeftIcon />}
+                onClick={previousStep}
+              >
+                Zurück
+              </Button>
+
+              {activeStep === tutorial.steps.length - 1 ? (
+                <Button
+                  variant="contained"
+                  endIcon={<CheckCircleIcon />}
+                  onClick={() => (window.location.href = "/tutorial")}
+                >
+                  Zurück zur Übersicht
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  endIcon={<ChevronRightIcon />}
+                  disabled={nextStepDisabled}
+                  onClick={nextStep}
+                >
+                  Weiter
+                </Button>
+              )}
+            </Box>
+          )} */}
         </Box>
       </Box>
 
-      {/* Footer – immer am unteren Rand */}
-      <Box sx={{ flexShrink: 0 }}>
-        <TutorialFooter nextStepDisabled={nextStepDisabled} />
-      </Box>
+      {platform && (
+        <Box sx={{ flexShrink: 0 }}>
+          <TutorialFooter nextStepDisabled={nextStepDisabled} />
+        </Box>
+      )}
     </Box>
   );
 }
