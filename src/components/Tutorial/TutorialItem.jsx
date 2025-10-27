@@ -22,6 +22,7 @@ import { CheckCircle, Error as ErrorIcon } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 import Snackbar from "../Snackbar";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import TutorialOverview from "./TutorialOverview";
 
 function getDifficultyLevel(value) {
   if (value <= 1) return 1;
@@ -78,69 +79,23 @@ function TutorialItem({ tutorial, level }) {
         >
           <CardActionArea
             onClick={() => history.push(`/tutorial/${tutorial._id}`)}
-            sx={{ textAlign: "left", flexGrow: 1, p: 1 }}
+            sx={{ textAlign: "left", flexGrow: 1 }}
           >
-            <DifficultyLabel level={getDifficultyLabel(level)} />
-
-            <Box
+            <CardContent
               sx={{
-                height: 160,
+                flexGrow: 1,
                 display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                overflow: "hidden",
+                flexDirection: "column",
+                p: "8px",
               }}
             >
-              <img
-                src={getTutorialImage(tutorial)}
-                alt={tutorial.title}
-                style={{
-                  maxHeight: "100%",
-                  maxWidth: "100%",
-                  objectFit: "contain",
-                  backgroundColor: "#f5f5f5",
-                  padding: "40px",
-                }}
-              />
-            </Box>
-
-            <CardContent
-              sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}
-            >
-              <Typography
-                variant="h6"
-                component="h3"
-                sx={{
-                  fontWeight: 900,
-                  textTransform: "capitalize",
-                  color: theme.palette.primary.main,
-                  textAlign: "center",
-                  lineHeight: 1.2,
-                  mb: 1.5,
-                }}
-              >
-                {tutorial.title}
-              </Typography>
-
-              <hr
-                style={{ color: "#eee", width: "80%", margin: "0 auto 10px" }}
-              />
-
-              {tutorial.description && (
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{ textAlign: "center", mb: "auto" }}
-                >
-                  {tutorial.description}
-                </Typography>
-              )}
+              <TutorialOverview tutorial={tutorial} />
             </CardContent>
           </CardActionArea>
 
-          {/* Buttons */}
-          <Box sx={{ p: 2, pt: 0, gap: 2, display: "flex" }}>
-            <Button
+          {user && tutorial.creator === user.email && (
+            <Box sx={{ p: 2, pt: 0, gap: 2, display: "flex" }}>
+              {/* <Button
               component={Link}
               to={`/tutorial/${tutorial._id}`}
               fullWidth
@@ -160,9 +115,8 @@ function TutorialItem({ tutorial, level }) {
               }}
             >
               Anzeigen
-            </Button>
+            </Button> */}
 
-            {user && tutorial.creator === user.email && (
               <Box
                 sx={{
                   display: "flex",
@@ -216,8 +170,8 @@ function TutorialItem({ tutorial, level }) {
                   Löschen
                 </Button>
               </Box>
-            )}
-          </Box>
+            </Box>
+          )}
         </Card>
       </Grid>
 
@@ -231,10 +185,10 @@ function TutorialItem({ tutorial, level }) {
           dialogState === "confirm"
             ? "Tutorial löschen?"
             : dialogState === "loading"
-            ? "Tutorial wird gelöscht..."
-            : dialogState === "success"
-            ? "Erfolgreich gelöscht!"
-            : "Fehler beim Löschen"
+              ? "Tutorial wird gelöscht..."
+              : dialogState === "success"
+                ? "Erfolgreich gelöscht!"
+                : "Fehler beim Löschen"
         }
         content={
           <Box
