@@ -55,6 +55,10 @@ const buildTutorialPayload = ({
   isPublic,
   review,
   creator,
+  subjects,
+  topics,
+  duration,
+  year,
 }) => ({
   public: isPublic,
   review,
@@ -64,6 +68,11 @@ const buildTutorialPayload = ({
   difficulty,
   learnings,
   hardware: selectedHardware,
+  subjects,
+  topics,
+  duration,
+  year,
+
   steps: steps.map((step) => ({
     id: step.id,
     title: step.title,
@@ -116,7 +125,11 @@ const Builder = () => {
   const [learnings, setLearnings] = useState(
     existingTutorial?.learnings || [{ title: "", description: "" }],
   );
-
+  // Fach und Themenbereich
+  const [subjects, setSubjects] = useState(existingTutorial?.subjects || []); // Array!
+  const [topics, setTopics] = useState(existingTutorial?.topics || []);
+  const [duration, setDuration] = useState(existingTutorial?.duration || "");
+  const [year, setYear] = useState(existingTutorial?.year || "");
   //  UI & Navigation
   const [activeStep, setActiveStep] = useState(0);
 
@@ -244,6 +257,10 @@ const Builder = () => {
         isPublic,
         review,
         creator,
+        subjects,
+        topics,
+        duration,
+        year,
       });
 
       try {
@@ -447,6 +464,14 @@ const Builder = () => {
             setActiveStep={setActiveStep}
             autosaveEnabled={autosaveEnabled}
             setAutosaveEnabled={setAutosaveEnabled}
+            subjects={subjects}
+            setSubjects={setSubjects}
+            topics={topics}
+            setTopics={setTopics}
+            duration={duration}
+            setDuration={setDuration}
+            year={year}
+            setYear={setYear}
           />
 
           <Button
