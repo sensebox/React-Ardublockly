@@ -39,6 +39,8 @@ const TutorialProgressCard = () => {
       sx={{
         borderRadius: 3,
         boxShadow: 3,
+        maxHeight: "80vh",
+        overflow: "scroll",
       }}
     >
       <CardHeader
