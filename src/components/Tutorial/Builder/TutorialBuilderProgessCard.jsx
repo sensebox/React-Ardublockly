@@ -25,6 +25,32 @@ import {
   ExpandCircleDown,
 } from "@mui/icons-material";
 import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
+import { Autocomplete } from "@mui/material";
+const SUBJECTS = [
+  "Informatik",
+  "Physik",
+  "Mathematik",
+  "Biologie",
+  "Chemie",
+  "Technik",
+  "Digitale Bildung",
+  "Sonstiges",
+];
+
+const TOPICS = [
+  "Algorithmen",
+  "Datenstrukturen",
+  "Sensoren",
+  "Microcontroller",
+  "KI / Machine Learning",
+  "Robotik",
+  "Webentwicklung",
+  "Spieleentwicklung",
+  "Datenvisualisierung",
+  "Netzwerke",
+  "Cybersecurity",
+  "Nachhaltigkeit & Technik",
+];
 
 const TutorialBuilderProgressCard = ({
   title,
@@ -41,6 +67,14 @@ const TutorialBuilderProgressCard = ({
   setActiveStep,
   setAutosaveEnabled,
   autosaveEnabled,
+  subjects,
+  topics,
+  setSubjects,
+  setTopics,
+  duration,
+  setDuration,
+  year,
+  setYear,
 }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
@@ -99,7 +133,7 @@ const TutorialBuilderProgressCard = ({
   };
 
   return (
-    <Card sx={{ borderRadius: 3, boxShadow: 3 }}>
+    <Card sx={{ borderRadius: 3, boxShadow: 3, overflow: "scroll" }}>
       <CardHeader
         title={
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -176,9 +210,11 @@ const TutorialBuilderProgressCard = ({
           </AccordionSummary>
 
           <AccordionDetails>
-            {/* 🔥 Difficulty Selection */}
-            <Box sx={{ mb: 2 }}>
-              <Typography sx={{ fontWeight: 600, mb: 1 }}>
+            {/* 🔥 Schwierigkeitsgrad */}
+            <Box sx={{ mb: 1.5 }}>
+              <Typography
+                sx={{ fontWeight: 600, fontSize: "0.875rem", mb: 0.5 }}
+              >
                 Schwierigkeitsgrad
               </Typography>
               <ToggleButtonGroup
@@ -188,12 +224,14 @@ const TutorialBuilderProgressCard = ({
                 sx={{
                   justifyContent: "space-between",
                   flexWrap: "wrap",
-                  gap: 1,
+                  gap: 0.5,
                   "& .MuiToggleButton-root": {
                     border: "1px solid #c4c4c4",
                     borderRadius: "6px",
                     flex: "1 1 30%",
-                    minWidth: "100px",
+                    minWidth: "80px",
+                    padding: "4px 8px",
+                    fontSize: "0.75rem",
                   },
                   "& .MuiToggleButton-root.Mui-selected": {
                     backgroundColor: theme.palette.primary.main,
@@ -207,9 +245,7 @@ const TutorialBuilderProgressCard = ({
                   },
                 }}
               >
-                <ToggleButton size="small" value={1}>
-                  Sehr leicht
-                </ToggleButton>
+                <ToggleButton value={1}>Sehr leicht</ToggleButton>
                 <ToggleButton value={2}>Leicht</ToggleButton>
                 <ToggleButton value={3}>Mittel</ToggleButton>
                 <ToggleButton value={4}>Schwer</ToggleButton>
@@ -217,17 +253,127 @@ const TutorialBuilderProgressCard = ({
               </ToggleButtonGroup>
             </Box>
 
+            {/* 🕒 Dauer */}
+            <Box sx={{ mb: 1 }}>
+              <Typography
+                sx={{ fontWeight: 600, fontSize: "0.875rem", mb: 0.5 }}
+              >
+                Dauer (in Minuten)
+              </Typography>
+              <TextField
+                fullWidth
+                size="small"
+                type="number"
+                inputProps={{ min: 1, step: 5 }}
+                value={duration || ""}
+                onChange={(e) => setDuration(e.target.value)}
+                placeholder="z. B. 45"
+                variant="outlined"
+                sx={{ fontSize: "0.875rem" }}
+              />
+            </Box>
+
+            {/* 📚 Jahrgangsstufe */}
+            <Box sx={{ mb: 1 }}>
+              <Typography
+                sx={{ fontWeight: 600, fontSize: "0.875rem", mb: 0.5 }}
+              >
+                Jahrgangsstufe
+              </Typography>
+              <TextField
+                fullWidth
+                size="small"
+                value={year || ""}
+                onChange={(e) => setYear(e.target.value)}
+                placeholder="z. B. 7–9"
+                variant="outlined"
+                sx={{ fontSize: "0.875rem" }}
+              />
+            </Box>
+
+            {/* 📚 Fächer – Mehrfachauswahl */}
+            <Box sx={{ mb: 1 }}>
+              <Typography
+                sx={{ fontWeight: 600, fontSize: "0.875rem", mb: 0.5 }}
+              >
+                Fächer
+              </Typography>
+              <Autocomplete
+                multiple
+                freeSolo
+                options={SUBJECTS}
+                value={subjects}
+                onChange={(event, newValue) => {
+                  setSubjects(newValue);
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    size="small"
+                    placeholder="Fächer hinzufügen..."
+                    variant="outlined"
+                  />
+                )}
+                ChipProps={{
+                  sx: {
+                    backgroundColor: theme.palette.primary.main,
+                    color: "white",
+                    fontWeight: 600,
+                    "& .MuiChip-deleteIcon": {
+                      color: "white",
+                      "&:hover": {
+                        color: "error.light",
+                      },
+                    },
+                  },
+                }}
+                sx={{ fontSize: "0.875rem" }}
+              />
+            </Box>
+
+            <Autocomplete
+              multiple
+              freeSolo
+              options={TOPICS}
+              value={topics}
+              onChange={(event, newValue) => {
+                setTopics(newValue);
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  size="small"
+                  placeholder="Themen hinzufügen..."
+                  variant="outlined"
+                />
+              )}
+              ChipProps={{
+                sx: {
+                  backgroundColor: theme.palette.primary.main,
+                  color: "white",
+                  fontWeight: 600,
+                  "& .MuiChip-deleteIcon": {
+                    color: "white",
+                    "&:hover": {
+                      color: "error.light",
+                    },
+                  },
+                },
+              }}
+              sx={{ fontSize: "0.875rem" }}
+            />
+
             {/* 🧱 Hardware Selection */}
-            <Box sx={{ mt: 2 }}>
+            <Box sx={{ mt: 1.5 }}>
               <Box
                 sx={{
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
-                  mb: 1,
+                  mb: 0.5,
                 }}
               >
-                <Typography sx={{ fontWeight: 600 }}>
+                <Typography sx={{ fontWeight: 600, fontSize: "0.875rem" }}>
                   Benötigte Hardware
                 </Typography>
                 <HardwareSelectorModal
