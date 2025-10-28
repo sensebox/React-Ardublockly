@@ -57,6 +57,14 @@
     padding: var(--cat-padding-x);
   }
   
+  /* Prevent wrapping of categories */
+  .embedded-mode .blocklyToolboxCategoryGroup {
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    white-space: nowrap !important;
+  }
+  
   /* Apply minimum width to all category containers */
   .embedded-mode .blocklyToolbox .blocklyToolboxCategoryContainer {
     min-width: var(--cat-min-width) !important;
@@ -69,7 +77,6 @@
   .embedded-mode .blocklyToolboxCategoryContainer[aria-level="2"],
   .embedded-mode .blocklyToolboxCategoryContainer[aria-level="3"],
   .embedded-mode .blocklyToolboxCategoryContainer[aria-level="4"] {
-    display: inline-block !important;
     vertical-align: top !important;
   }
   
@@ -96,9 +103,6 @@
   }
   
   /* Ensure expanded categories maintain fixed width but allow subcategories to be visible */
-  .embedded-mode .blocklyToolboxCategoryContainer[aria-expanded="true"] {
-    display: inline-block !important;
-  }
   /* -----------------------------------------------------------------------------
      Chevron Icons for Expandable Categories
      ----------------------------------------------------------------------------- */
