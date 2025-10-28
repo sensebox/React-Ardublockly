@@ -49,7 +49,7 @@ const EmbeddedToolbox = ({ workspace, toolbox }) => {
 
   }, [workspace, toolbox, selectedBoard, language]);
 
-  useEmbeddedToolbox(workspace, true); // Always embedded for this component
+  useEmbeddedToolbox(workspace, true); 
 
   return (
     <xml
