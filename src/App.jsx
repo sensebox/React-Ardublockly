@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { Router } from "react-router-dom";
+import { Router, Route, Switch } from "react-router-dom";
 import { createBrowserHistory } from "history";
 
 import { Provider } from "react-redux";
@@ -17,6 +17,9 @@ import {
 } from "@mui/material/styles";
 
 import Content from "./components/Content";
+import EmbeddedBlockly from "./components/EmbeddedBlockly";
+import RouteHandler from "./components/RouteHandler";
+import EmbeddedRoute from "./components/Route/EmbeddedRoute";
 import { setCompiler } from "./actions/generalActions";
 
 const theme = createTheme({
@@ -44,7 +47,10 @@ const theme = createTheme({
 
 class App extends Component {
   componentDidMount() {
-    store.dispatch(loadUser());
+    // Only call loadUser() if not on embedded route
+    if (window.location.pathname !== '/embedded') {
+      store.dispatch(loadUser());
+    }
     // set initial compiler
     store.dispatch(setCompiler(import.meta.env.VITE_INITIAL_COMPILER_URL));
   }
@@ -56,8 +62,16 @@ class App extends Component {
         <ThemeProvider theme={theme}>
           <Provider store={store}>
             <Router history={customHistory}>
+              <RouteHandler />
               <ErrorBoundary>
-                <Content />
+                <Switch>
+                  <EmbeddedRoute path="/embedded" exact>
+                    <EmbeddedBlockly />
+                  </EmbeddedRoute>
+                  <Route path="/">
+                    <Content />
+                  </Route>
+                </Switch>
               </ErrorBoundary>
             </Router>
           </Provider>

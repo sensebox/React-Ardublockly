@@ -11,7 +11,6 @@ input[type="search"] {
   background-size: 16px;
   background-position: right 8px center;
   outline: none;
-  width: 14vw;
 }
 
 #blockly-y {
@@ -20,10 +19,7 @@ input[type="search"] {
 
 /* Alle Kategorien außer die, die ein Search-Input enthalten */
 .blocklyToolboxCategory:has(input[type="search"]) {
-  height: 30px !important;
   border-radius: 5px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-  background: #fff;
   outline: none;
   padding: 8px;
   margin: 2px;

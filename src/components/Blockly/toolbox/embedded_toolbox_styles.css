@@ -1,0 +1,143 @@
+/* =============================================================================
+   EMBEDDED MODE TOOLBOX STYLES
+   ============================================================================= */
+
+/* -----------------------------------------------------------------------------
+   CSS Variables & Base Configuration
+   ----------------------------------------------------------------------------- */
+   .embedded-mode .blocklyToolbox {
+    --cat-height: 42px;
+    --cat-padding-x: 8px;
+    --cat-min-width: calc(25vw - 9px);
+    
+    /* Chevron constants */
+    --chevron-size: 6px;
+    --chevron-border: 2px;
+    --chevron-transition: transform 120ms ease;
+    --chevron-right-offset: calc(2 * var(--cat-padding-x));
+  }
+  
+  /* -----------------------------------------------------------------------------
+     Category Button Styling
+     ----------------------------------------------------------------------------- */
+  .embedded-mode .blocklyToolbox .blocklyToolboxCategory {
+    height: var(--cat-height) !important;
+    border-radius: 5px;
+    background: #fff;
+    padding: 0 2px 0 0 !important; /* Remove Blockly's default indentation */
+    position: relative;
+    width: var(--cat-width);
+    flex-shrink: 0;
+  }
+  
+  /* Disable focus styling */
+  .embedded-mode .blocklyToolboxCategory:focus,
+  .embedded-mode .blocklyToolboxCategoryContainer:focus,
+  .embedded-mode .blocklyTreeRow:focus,
+  .embedded-mode .blocklyTreeLabel:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+  
+  /* -----------------------------------------------------------------------------
+     Category Layout & Positioning
+     ----------------------------------------------------------------------------- */
+  /* Main toolbox container: natural flow */
+  .embedded-mode .blocklyToolbox {
+    padding: var(--cat-padding-x);
+  }
+  
+  /* Prevent wrapping of main categories (level 1) only */
+  .embedded-mode .blocklyToolboxCategoryGroup {
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    white-space: nowrap !important;
+  }
+  
+  /* Apply minimum width to main category containers only */
+  .embedded-mode .blocklyToolbox .blocklyToolboxCategoryContainer[aria-level="1"] {
+    min-width: var(--cat-min-width) !important;
+  }
+  
+  
+  /* Ensure expanded categories maintain fixed width but allow subcategories to be visible */
+  /* -----------------------------------------------------------------------------
+     Chevron Icons for Expandable Categories
+     ----------------------------------------------------------------------------- */
+  .embedded-mode .blocklyToolbox .blocklyToolboxCategoryIconClosed,
+  .embedded-mode .blocklyToolbox .blocklyToolboxCategoryIconOpen {
+    position: absolute;
+    right: var(--chevron-right-offset);
+    color: var(--cat-accent, currentColor);
+  }
+  
+  .embedded-mode .blocklyToolbox .blocklyToolboxCategoryIconClosed::before,
+  .embedded-mode .blocklyToolbox .blocklyToolboxCategoryIconOpen::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--chevron-size);
+    height: var(--chevron-size);
+    border-right: var(--chevron-border) solid currentColor;
+    border-bottom: var(--chevron-border) solid currentColor;
+    transform-origin: center;
+    transition: var(--chevron-transition);
+  }
+  
+  /* Rotate when the container is expanded */
+  .embedded-mode .blocklyToolbox .blocklyToolboxCategoryContainer[aria-expanded="true"] .blocklyToolboxCategoryIconClosed::before {
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+  
+  /* Rotate when the container is closed */
+  .embedded-mode .blocklyToolbox .blocklyToolboxCategoryContainer[aria-expanded="false"] .blocklyToolboxCategoryIconClosed::before {
+    transform: translate(0%, -50%) rotate(-45deg);
+  }
+  
+  /* -----------------------------------------------------------------------------
+     Category Row Layout & Typography
+     ----------------------------------------------------------------------------- */
+  .embedded-mode .blocklyToolbox .blocklyTreeRowContentContainer {
+    display: flex;
+    align-items: center;
+    min-height: var(--cat-height) !important;
+    padding-right: 24px; /* reserve space for absolute chevron */
+  }
+  
+  /* -----------------------------------------------------------------------------
+     Visual Distinction for Subcategory Levels
+     ----------------------------------------------------------------------------- */
+  .embedded-mode .blocklyToolbox .blocklyToolboxCategoryContainer[aria-level="2"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
+    background: #E8F5E8; /* light green */
+  }
+  
+  .embedded-mode .blocklyToolbox .blocklyToolboxCategoryContainer[aria-level="3"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
+    background: #FFF3E0; /* light orange */
+  }
+  
+  .embedded-mode .blocklyToolbox .blocklyToolboxCategoryContainer[aria-level="4"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
+    background: #F3E5F5; /* light purple */
+  }
+  
+  /* -----------------------------------------------------------------------------
+     Touch Optimizations (iPad) - Using shared .touch-optimized class
+     ----------------------------------------------------------------------------- */
+  .embedded-mode .blocklyToolboxCategory {
+    /* Use shared touch optimizations from shared-styles.css */
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  
+  .embedded-mode .blocklyFlyout .blocklyBlockCanvas > .blocklyDraggable {
+    margin: 8px 0 !important;
+  }
+  
+  .embedded-mode .blocklyScrollbarHandle {
+    width: 12px !important;
+    height: 12px !important;
+  }
+  

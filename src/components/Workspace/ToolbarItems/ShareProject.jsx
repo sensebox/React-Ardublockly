@@ -41,35 +41,37 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import * as Blockly from "blockly/core";
 
-const styles = (theme) => ({
-  iconButton: {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.primary.contrastText,
-    width: "40px",
-    height: "40px",
-    "&:hover": {
+const styles = (theme) => {
+  return {
+    iconButton: {
       backgroundColor: theme.palette.primary.main,
       color: theme.palette.primary.contrastText,
+      width: "40px",
+      height: "40px",
+      "&:hover": {
+        backgroundColor: theme.palette.primary.main,
+        color: theme.palette.primary.contrastText,
+      },
     },
-  },
-  button: {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.primary.contrastText,
-    "&:hover": {
+    button: {
       backgroundColor: theme.palette.primary.main,
       color: theme.palette.primary.contrastText,
+      "&:hover": {
+        backgroundColor: theme.palette.primary.main,
+        color: theme.palette.primary.contrastText,
+      },
+      borderRadius: 20,
     },
-    borderRadius: 20,
-  },
-  link: {
-    color: theme.palette.primary.main,
-    textDecoration: "none",
-    "&:hover": {
+    link: {
       color: theme.palette.primary.main,
-      textDecoration: "underline",
+      textDecoration: "none",
+      "&:hover": {
+        color: theme.palette.primary.main,
+        textDecoration: "underline",
+      },
     },
-  },
-});
+  };
+};
 
 class ShareProject extends Component {
   constructor(props) {
@@ -185,11 +187,11 @@ class ShareProject extends Component {
       <div style={this.props.style}>
         <Tooltip title={Blockly.Msg.tooltip_share_project} arrow>
           <IconButton
-            className={`shareBlocks ${this.props.classes.iconButton}`}
+            className={`shareBlocks ${this.props.isEmbedded ? `${this.props.classes.iconButtonEmbedded} embedded-button embedded-button-primary` : this.props.classes.iconButton}`}
             onClick={() => this.shareBlocks()}
             size="large"
           >
-            <FontAwesomeIcon icon={faShareAlt} size="xs" />
+            <FontAwesomeIcon icon={faShareAlt} size={this.props.isEmbedded ? "sm" : "xs"} />
           </IconButton>
         </Tooltip>
 
@@ -371,11 +373,13 @@ ShareProject.propTypes = {
   clearMessages: PropTypes.func.isRequired,
   name: PropTypes.string,
   message: PropTypes.object.isRequired,
+  isEmbedded: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
   name: state.workspace.name,
   message: state.message,
+  isEmbedded: state.general.embeddedMode,
 });
 
 export default connect(mapStateToProps, { shareProject, clearMessages })(
