@@ -180,12 +180,21 @@ function TutorialHome() {
           gap: 6,
         }}
       >
-        <Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 1,
+          }}
+        >
           <h2>Alle Tutorials</h2>
-          Damit Tutorials in dieser Gallerie angezeigt werden, müssen Sie von
-          uns überprüft werden. Falls dein Tutorial hier erscheinen soll, stelle
-          dein Tutorial auf öffentlich und schreibe uns an auf
-          support@sensebox.de
+          <div>
+            Damit Tutorials in dieser Gallerie angezeigt werden, müssen Sie von
+            uns überprüft werden. Falls dein Tutorial hier erscheinen soll,
+            stelle dein Tutorial auf öffentlich und schreibe uns an auf
+            support@sensebox.de
+          </div>
+
           <Grid container spacing={2}>
             {filteredTutorials.length > 0 ? (
               filteredTutorials.map(
@@ -209,7 +218,7 @@ function TutorialHome() {
 
         {user && (
           <div>
-            <h2>User Tutorials</h2>
+            <h2>Deine Tutorials</h2>
             <Grid container spacing={2}>
               {filteredTutorials.filter((t) => t.creator === user.email)
                 .length > 0 ? (
