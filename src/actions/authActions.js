@@ -241,3 +241,98 @@ export const setupInterceptors = (store) => {
     return config;
   });
 };
+
+// 🔥 Neue Action für Passwort-Reset-Anfrage
+export const requestPasswordReset =
+  ({ email }) =>
+  (dispatch) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    return new Promise((resolve, reject) => {
+      axios
+        .post(
+          `${API_BASE}/user/reset-password/request`,
+          JSON.stringify({ email }),
+          config,
+        )
+        .then((res) => {
+          dispatch({
+            type: "REQUEST_PASSWORD_RESET_SUCCESS",
+            payload: res.data,
+          });
+          dispatch(
+            returnSuccess(
+              res.data.message,
+              res.status,
+              "REQUEST_PASSWORD_RESET_SUCCESS",
+            ),
+          );
+          resolve(res);
+        })
+        .catch((err) => {
+          dispatch({
+            type: "REQUEST_PASSWORD_RESET_FAIL",
+            payload: err.response?.data || { msg: "Netzwerkfehler" },
+          });
+          dispatch(
+            returnErrors(
+              err.response?.data?.message || "Netzwerkfehler",
+              err.response?.status || 500,
+              "REQUEST_PASSWORD_RESET_FAIL",
+            ),
+          );
+          reject(err);
+        });
+    });
+  };
+
+export const resetPassword =
+  ({ token, newPassword }) =>
+  (dispatch) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    return new Promise((resolve, reject) => {
+      axios
+        .post(
+          `${API_BASE}/user/reset-password/reset`,
+          JSON.stringify({ token, newPassword }),
+          config,
+        )
+        .then((res) => {
+          dispatch({
+            type: "RESET_PASSWORD_SUCCESS",
+            payload: res.data,
+          });
+          dispatch(
+            returnSuccess(
+              res.data.message,
+              res.status,
+              "RESET_PASSWORD_SUCCESS",
+            ),
+          );
+          resolve(res);
+        })
+        .catch((err) => {
+          dispatch({
+            type: "RESET_PASSWORD_FAIL",
+            payload: err.response?.data || { msg: "Netzwerkfehler" },
+          });
+          dispatch(
+            returnErrors(
+              err.response?.data?.message || "Netzwerkfehler",
+              err.response?.status || 500,
+              "RESET_PASSWORD_FAIL",
+            ),
+          );
+          reject(err);
+        });
+    });
+  };
