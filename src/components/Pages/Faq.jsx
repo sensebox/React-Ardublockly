@@ -59,8 +59,6 @@ class Faq extends Component {
                   <AccordionDetails>
                     <Typography>
                       <ReactMarkdown
-                        className="news"
-                        allowDangerousHtml="true"
                         children={object.answer}
                         rehypePlugins={[rehypeRaw]}
                       ></ReactMarkdown>
