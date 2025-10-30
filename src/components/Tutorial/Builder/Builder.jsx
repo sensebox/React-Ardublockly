@@ -293,8 +293,6 @@ const Builder = () => {
 
         // 🔥 Aktualisiere den letzten gespeicherten Zustand
         lastSavedState.current = { ...currentState };
-
-        console.log("Autosave erfolgreich");
       } catch (err) {
         console.error("Autosave fehlgeschlagen:", err);
       } finally {

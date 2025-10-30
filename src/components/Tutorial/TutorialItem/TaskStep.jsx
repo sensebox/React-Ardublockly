@@ -8,7 +8,7 @@ import SolutionCheck from "./SolutionCheck";
 import BlocklyWindow from "@/components/Blockly/BlocklyWindow";
 import { Box, Grid, Typography } from "@mui/material";
 
-const md = new MarkdownIt();
+const md = new MarkdownIt({ html: true, linkify: true, typographer: true });
 
 // Image-Renderer anpassen
 const defaultImageRenderer =
