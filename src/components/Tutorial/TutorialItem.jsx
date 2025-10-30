@@ -79,7 +79,12 @@ function TutorialItem({ tutorial, level }) {
         >
           <CardActionArea
             onClick={() => history.push(`/tutorial/${tutorial._id}`)}
-            sx={{ textAlign: "left", flexGrow: 1 }}
+            sx={{
+              textAlign: "left",
+              flexGrow: 1,
+              display: "flex",
+              flexDirection: "column",
+            }}
           >
             <CardContent
               sx={{
