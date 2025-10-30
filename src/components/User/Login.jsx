@@ -23,6 +23,8 @@ import FormLabel from "@mui/material/FormLabel";
 
 import * as Blockly from "blockly";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
+// 🔥 Importiere die neue Komponente
+import PasswordResetRequest from "./PasswordResetRequest";
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -44,6 +46,9 @@ export default function Login() {
     message: "",
   });
   const [showPassword, setShowPassword] = useState(false);
+
+  // 🔥 Zustand für Passwort-Vergessen-View
+  const [showPasswordReset, setShowPasswordReset] = useState(false);
 
   // Fehler bei Mount anzeigen
   useEffect(() => {
@@ -103,6 +108,30 @@ export default function Login() {
   const handleClickShowPassword = () => setShowPassword((v) => !v);
   const handleMouseDownPassword = (e) => e.preventDefault();
 
+  // 🔥 Funktion, um zur Login-Ansicht zurückzukehren
+  const handleBackToLogin = () => {
+    setShowPasswordReset(false);
+  };
+
+  // 🔥 Zeige entweder Login- oder Passwort-Reset-Formular
+  if (showPasswordReset) {
+    return (
+      <div>
+        <Breadcrumbs
+          content={[{ link: "/user/login", title: Blockly.Msg.button_login }]}
+        />
+
+        <div
+          style={{ maxWidth: "500px", marginLeft: "auto", marginRight: "auto" }}
+        >
+          <h1>Passwort vergessen?</h1>
+          <PasswordResetRequest onBackToLogin={handleBackToLogin} />
+        </div>
+      </div>
+    );
+  }
+
+  // 🔥 Ursprüngliche Login-Ansicht
   return (
     <div>
       <Breadcrumbs
@@ -150,7 +179,7 @@ export default function Login() {
               color="primary"
               rel="noreferrer"
               target="_blank"
-              href="https://opensensemap.org/"
+              href="https://opensensemap.org/  "
               underline="hover"
             >
               openSenseMap
@@ -223,13 +252,27 @@ export default function Login() {
           </p>
         </form>
 
+        {/* 🔥 Neuer Link/Button für "Passwort vergessen" */}
+        {authProvider === "native" && (
+          <p style={{ textAlign: "center", fontSize: "0.8rem" }}>
+            <Button
+              variant="text"
+              color="primary"
+              size="small"
+              onClick={() => setShowPasswordReset(true)}
+            >
+              Passwort vergessen?
+            </Button>
+          </p>
+        )}
+
         {authProvider === "opensensemap" && (
           <>
             <p style={{ textAlign: "center", fontSize: "0.8rem" }}>
               <Link
                 rel="noreferrer"
                 target="_blank"
-                href="https://opensensemap.org/"
+                href="https://opensensemap.org/  "
                 color="primary"
                 underline="hover"
               >
@@ -242,7 +285,7 @@ export default function Login() {
               <Link
                 rel="noreferrer"
                 target="_blank"
-                href="https://opensensemap.org/"
+                href="https://opensensemap.org/  "
                 underline="hover"
               >
                 openSenseMap
