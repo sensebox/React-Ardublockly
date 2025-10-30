@@ -143,6 +143,11 @@ export default function Tutorial() {
             position: "relative",
             display: "flex",
             flexDirection: "column",
+            borderRadius: 3,
+            boxShadow: 3,
+            mr: 5,
+
+            overflow: "scroll",
           }}
         >
           <Box
