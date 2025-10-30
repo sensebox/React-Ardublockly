@@ -80,13 +80,6 @@ export const TutorialOverview = ({ tutorial }) => {
       >
         {/* Jahrgangsstufe */}
         <Box sx={{ display: "flex", alignItems: "flex-start" }}>
-          <Grade
-            sx={{
-              color: theme.palette.primary.main,
-              mr: 0.5,
-              fontSize: "1rem",
-            }}
-          />
           <Typography
             component="span"
             sx={{
@@ -152,13 +145,6 @@ export const TutorialOverview = ({ tutorial }) => {
 
         {/* Dauer */}
         <Box sx={{ display: "flex", alignItems: "flex-start" }}>
-          <AccessTime
-            sx={{
-              color: theme.palette.primary.main,
-              mr: 0.5,
-              fontSize: "1rem",
-            }}
-          />
           <Typography
             component="span"
             sx={{
@@ -182,7 +168,6 @@ export const TutorialOverview = ({ tutorial }) => {
             alignItems: "center",
             flexWrap: "wrap",
             gap: 1,
-            mt: 1,
           }}
         >
           <Typography
