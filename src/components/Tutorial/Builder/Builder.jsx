@@ -202,6 +202,10 @@ const Builder = () => {
       setSteps(existingTutorial.steps || createInitialSteps());
       setDifficulty(existingTutorial.difficulty || 3);
       setSelectedHardware(existingTutorial.hardware || []);
+      setTopics(existingTutorial.topics || []);
+      setSubjects(existingTutorial.subjects || []);
+      setDuration(existingTutorial.duration || "");
+      setYear(existingTutorial.year || "");
       setLearnings(
         existingTutorial.learnings || [{ title: "", description: "" }],
       );
@@ -227,6 +231,10 @@ const Builder = () => {
       difficulty,
       learnings,
       selectedHardware,
+      topics,
+      subjects,
+      duration,
+      year,
     };
 
     // 🔥 Prüfe: Hat sich etwas geändert?
@@ -337,6 +345,10 @@ const Builder = () => {
       isPublic,
       review,
       creator,
+      subjects,
+      topics,
+      duration,
+      year,
     });
     setSaveButtonDisabled(true);
     setSavingState("loading");
