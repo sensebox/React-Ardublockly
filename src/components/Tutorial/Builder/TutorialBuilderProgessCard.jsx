@@ -133,7 +133,9 @@ const TutorialBuilderProgressCard = ({
   };
 
   return (
-    <Card sx={{ borderRadius: 3, boxShadow: 3, overflow: "scroll" }}>
+    <Card
+      sx={{ borderRadius: 3, boxShadow: 3, overflow: "scroll", height: "100%" }}
+    >
       <CardHeader
         title={
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -424,7 +426,6 @@ const TutorialBuilderProgressCard = ({
                   {...provided.droppableProps}
                   ref={provided.innerRef}
                   sx={{
-                    maxHeight: "30vh",
                     overflowY: "auto",
                     p: 1,
                     border: "1px solid #e0e0e0",

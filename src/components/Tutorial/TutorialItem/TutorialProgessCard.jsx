@@ -46,7 +46,7 @@ const TutorialProgressCard = () => {
       <CardHeader
         title={
           <Typography variant="h6" fontWeight={600}>
-            {tutorial.title || "Tutorial Titel"}
+            {tutorial.title || ""}
           </Typography>
         }
         subheader={
@@ -129,7 +129,7 @@ const TutorialProgressCard = () => {
                     (index === 0 ? "Einleitung" : `Schritt ${index}`)}
                 </Typography>
                 <Typography variant="caption" sx={{ opacity: 0.75 }} noWrap>
-                  {step.subtitle || "Beschreibung folgt…"}
+                  {step.subtitle || ""}
                 </Typography>
               </Box>
             </Box>

@@ -448,7 +448,6 @@ const Builder = () => {
           height: "80vh",
           p: 2,
           gap: 4,
-          justifyContent: "center",
         }}
       >
         <Box
@@ -513,7 +512,7 @@ const Builder = () => {
         {/* Main Content */}
         <Box
           sx={{
-            flex: "0 0 60%",
+            flex: "0 0 65%",
             position: "relative",
             display: "flex",
             justifyContent: "center",
