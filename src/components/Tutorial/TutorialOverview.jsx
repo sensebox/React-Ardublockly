@@ -31,7 +31,7 @@ export const TutorialOverview = ({ tutorial }) => {
         p: 2,
         bgcolor: "white",
         position: "relative", // 🔑 wichtig für das absolute Tag
-        minHeight: 150, // optional: damit Platz für das Tag bleibt
+        height: "100%",
       }}
     >
       {/* 🟢 Grünes Tag oben links */}
@@ -62,7 +62,8 @@ export const TutorialOverview = ({ tutorial }) => {
           fontWeight: 600,
           mb: 1,
           textAlign: "center",
-          mt: 1, // etwas Abstand zum Tag
+          p: 1, // etwas Abstand zum Tag
+          minHeight: "80px",
         }}
       >
         {tutorial.title}
