@@ -24,7 +24,6 @@ export default function BlocklyWindow(props) {
   const sounds = useSelector((state) => state.general.sounds);
   const language = useSelector((state) => state.general.language);
   const selectedBoard = useSelector((state) => state.board.board);
-
   const {
     svg,
     blockDisabled,
@@ -34,6 +33,8 @@ export default function BlocklyWindow(props) {
     grid,
     move,
     readOnly,
+    tutorial,
+    onWorkspaceChanged,
   } = props;
 
   // One-time workspace setup
@@ -54,6 +55,25 @@ export default function BlocklyWindow(props) {
       }
     };
     ws.addChangeListener(onAnyChange);
+
+    // 🔥 NEU: Listener für Workspace-Änderungen, die ein Speichern auslösen
+    const onWorkspaceChangedListener = (event) => {
+      // 🔥 Reagiere nur auf Events, die eine *beendete* Änderung anzeigen
+      if (
+        // Ziehen beendet
+        // Block erstellt/gelöscht
+        event.type === Blockly.Events.BLOCK_CREATE ||
+        event.type === Blockly.Events.BLOCK_DELETE
+      ) {
+        // 🔥 Rufe das Callback auf
+        if (onWorkspaceChanged) {
+          // Kein setTimeout 0 nötig, da END_DRAG nur einmal am Ende kommt
+          onWorkspaceChanged();
+        }
+      }
+      // Alles andere (z.B. BLOCK_MOVE, SELECT, UI) wird ignoriert
+    };
+    ws.addChangeListener(onWorkspaceChangedListener);
 
     // UI helpers
     Blockly.svgResize(ws);
@@ -167,7 +187,19 @@ export default function BlocklyWindow(props) {
   );
 
   return (
-    <div>
+    <div
+      style={
+        tutorial
+          ? {
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+              height: "100%",
+            }
+          : {}
+      }
+    >
       <BlocklyComponent
         style={svg ? { height: 0 } : blocklyCSS}
         readOnly={readOnly !== undefined ? readOnly : false}
