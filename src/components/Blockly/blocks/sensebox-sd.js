@@ -69,6 +69,7 @@ Blockly.Blocks["sensebox_sd_create_file"] = {
       .appendField(Blockly.Msg.senseBox_output_filename);
 
     // Dropdown für die Endung
+
     this.appendDummyInput()
       .appendField(".")
       .appendField(
