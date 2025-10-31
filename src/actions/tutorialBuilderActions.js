@@ -79,11 +79,11 @@ export const tutorialId = (id) => (dispatch) => {
 };
 
 export const addStep = (index) => (dispatch, getState) => {
-  var steps = getState().builder.steps;
+  var steps = getState().tutorialBuilder.steps;
   var step = {
     id: index + 1,
     type: "instruction",
-    headline: "",
+    title: "",
     text: "",
   };
   steps.splice(index, 0, step);
@@ -96,7 +96,7 @@ export const addStep = (index) => (dispatch, getState) => {
 };
 
 export const addErrorStep = (index) => (dispatch, getState) => {
-  var error = getState().builder.error;
+  var error = getState().tutorialBuilder.error;
   error.steps.splice(index, 0, {});
   dispatch({
     type: BUILDER_ERROR,
@@ -105,7 +105,7 @@ export const addErrorStep = (index) => (dispatch, getState) => {
 };
 
 export const removeStep = (index) => (dispatch, getState) => {
-  var steps = getState().builder.steps;
+  var steps = getState().tutorialBuilder.steps;
   steps.splice(index, 1);
   dispatch({
     type: BUILDER_DELETE_STEP,
@@ -116,7 +116,7 @@ export const removeStep = (index) => (dispatch, getState) => {
 };
 
 export const removeErrorStep = (index) => (dispatch, getState) => {
-  var error = getState().builder.error;
+  var error = getState().tutorialBuilder.error;
   error.steps.splice(index, 1);
   dispatch({
     type: BUILDER_ERROR,
@@ -126,8 +126,16 @@ export const removeErrorStep = (index) => (dispatch, getState) => {
 
 export const changeContent =
   (content, index, property1, property2) => (dispatch, getState) => {
-    var steps = getState().builder.steps;
-    var step = steps[index];
+    const state = getState();
+    let steps = state.tutorialBuilder?.steps || [];
+
+    // Stelle sicher, dass steps[index] existiert
+    if (!steps[index]) {
+      steps[index] = {};
+    }
+
+    const step = steps[index];
+
     if (property2) {
       if (step[property1] && step[property1][property2]) {
         step[property1][property2] = content;
@@ -137,6 +145,7 @@ export const changeContent =
     } else {
       step[property1] = content;
     }
+
     dispatch({
       type: BUILDER_CHANGE_STEP,
       payload: steps,
@@ -146,7 +155,7 @@ export const changeContent =
 
 export const deleteProperty =
   (index, property1, property2) => (dispatch, getState) => {
-    var steps = getState().builder.steps;
+    var steps = getState().tutorialBuilder.steps;
     var step = steps[index];
     if (property2) {
       if (step[property1] && step[property1][property2]) {
@@ -163,7 +172,7 @@ export const deleteProperty =
   };
 
 export const changeStepIndex = (fromIndex, toIndex) => (dispatch, getState) => {
-  var steps = getState().builder.steps;
+  var steps = getState().tutorialBuilder.steps;
   var step = steps[fromIndex];
   steps.splice(fromIndex, 1);
   steps.splice(toIndex, 0, step);
@@ -177,7 +186,7 @@ export const changeStepIndex = (fromIndex, toIndex) => (dispatch, getState) => {
 
 export const changeErrorStepIndex =
   (fromIndex, toIndex) => (dispatch, getState) => {
-    var error = getState().builder.error;
+    var error = getState().tutorialBuilder.error;
     var errorStep = error.steps[fromIndex];
     error.steps.splice(fromIndex, 1);
     error.steps.splice(toIndex, 0, errorStep);
@@ -187,36 +196,41 @@ export const changeErrorStepIndex =
     });
   };
 
-export const setError = (index, property) => (dispatch, getState) => {
-  var error = getState().builder.error;
-  if (index !== undefined) {
-    error.steps[index][property] = true;
-  } else {
-    error[property] = true;
-  }
+export const setError = (index, field) => (dispatch, getState) => {
+  const state = getState();
+  const error = { ...(state.tutorialBuilder.error || {}) };
+
+  // Stelle sicher, dass steps existiert
+  if (!Array.isArray(error.steps)) error.steps = [];
+
+  // Stelle sicher, dass der Eintrag für den Step existiert
+  if (!error.steps[index]) error.steps[index] = {};
+
+  // Fehler markieren
+  error.steps[index][field] = true;
+
   dispatch({
-    type: BUILDER_ERROR,
+    type: "SET_ERROR",
     payload: error,
   });
-  dispatch(changeTutorialBuilder());
 };
 
-export const deleteError = (index, property) => (dispatch, getState) => {
-  var error = getState().builder.error;
-  if (index !== undefined) {
-    delete error.steps[index][property];
-  } else {
-    delete error[property];
+export const deleteError = (index, field) => (dispatch, getState) => {
+  const state = getState();
+  const error = { ...(state.tutorialBuilder.error || {}) };
+
+  if (error.steps && error.steps[index]) {
+    delete error.steps[index][field];
   }
+
   dispatch({
-    type: BUILDER_ERROR,
+    type: "DELETE_ERROR",
     payload: error,
   });
-  dispatch(changeTutorialBuilder());
 };
 
 export const setSubmitError = () => (dispatch, getState) => {
-  var builder = getState().builder;
+  var builder = getState().tutorialBuilder;
   // if(builder.id === undefined || builder.id === ''){
   //   dispatch(setError(undefined, 'id'));
   // }
@@ -271,7 +285,7 @@ export const setSubmitError = () => (dispatch, getState) => {
 
 export const checkError = () => (dispatch, getState) => {
   dispatch(setSubmitError());
-  var error = getState().builder.error;
+  var error = getState().tutorialBuilder.error;
   if (error.id || error.title || error.type) {
     return true;
   }

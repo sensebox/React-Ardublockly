@@ -1,196 +1,235 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { workspaceName } from "../../actions/workspaceActions";
-import { clearMessages } from "../../actions/messageActions";
-import {
-  getTutorial,
-  resetTutorial,
-  tutorialStep,
-  tutorialProgress,
-} from "../../actions/tutorialActions";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
-import { withRouter } from "react-router-dom";
+import { getTutorial } from "../../actions/tutorialActions";
 
-import Breadcrumbs from "../ui/Breadcrumbs";
-import StepperHorizontal from "./StepperHorizontal";
-import StepperVertical from "./StepperVertical";
-import Instruction from "./Instruction";
-import Assessment from "./Assessment";
 import NotFound from "../Pages/NotFound";
+import Instruction from "./TutorialItem/Instruction";
+import TaskStep from "./TutorialItem/TaskStep";
+import TutorialProgressCard from "./TutorialItem/TutorialProgessCard";
+import TutorialFooter from "./TutorialFooter";
+import TutorialFinished from "./TutorialFinished";
+
 import * as Blockly from "blockly";
-import { detectWhitespacesAndReturnReadableResult } from "../../helpers/whitespace";
+import { Box, Button, useTheme } from "@mui/material";
+import { motion, AnimatePresence } from "framer-motion";
+import Breadcrumbs from "../ui/Breadcrumbs";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
-import Card from "@mui/material/Card";
-import Button from "@mui/material/Button";
+export default function Tutorial() {
+  const { tutorialId } = useParams();
+  const dispatch = useDispatch();
+  const theme = useTheme();
 
-class Tutorial extends Component {
-  componentDidMount() {
-    this.props.tutorialProgress();
-    // retrieve tutorial only if a potential user is loaded - authentication
-    // is finished (success or failed)
-    if (!this.props.progress) {
-      this.props.getTutorial(this.props.match.params.tutorialId);
+  const tutorial = useSelector((state) => state.tutorial.tutorials[0]);
+
+  const message = useSelector((state) => state.message);
+  const activeStep = useSelector((state) => state.tutorial.activeStep);
+  const [nextStepDisabled, setNextStepDisabled] = useState(false);
+  const [currentStep, setCurrentStep] = useState();
+  const platform = useSelector((state) => state.general.platform);
+
+  // Initial load
+  useEffect(() => {
+    dispatch(getTutorial(tutorialId));
+    dispatch({ type: "TUTORIAL_STEP", payload: 0 });
+  }, [dispatch, tutorialId]);
+
+  useEffect(() => {
+    if (tutorial?.steps && activeStep < tutorial.steps.length) {
+      setCurrentStep(tutorial.steps[activeStep]);
+    } else {
+      setCurrentStep(null);
     }
-  }
+  }, [activeStep, tutorial]);
 
-  componentDidUpdate(props, state) {
-    if (props.progress !== this.props.progress && !this.props.progress) {
-      // authentication is completed
-      this.props.getTutorial(this.props.match.params.tutorialId);
-    } else if (
-      this.props.tutorial &&
-      !this.props.isLoading &&
-      this.props.tutorial._id !== this.props.match.params.tutorialId
+  useEffect(() => {
+    if (
+      currentStep &&
+      currentStep.questionData &&
+      currentStep.type === "question" &&
+      currentStep.questionData.length > 0
     ) {
-      this.props.getTutorial(this.props.match.params.tutorialId);
+      setNextStepDisabled(true);
     }
-    if (this.props.message.id === "GET_TUTORIAL_FAIL") {
-      alert(this.props.message.msg);
+  }, [currentStep]);
+
+  const changeStep = (step) => {
+    dispatch({
+      type: "TUTORIAL_STEP",
+      payload: step,
+    });
+  };
+
+  const nextStep = () => {
+    if (activeStep < tutorial.steps.length - 1) {
+      changeStep(activeStep + 1);
     }
+  };
+
+  const previousStep = () => {
+    if (activeStep > 0) {
+      changeStep(activeStep - 1);
+    }
+  };
+
+  if (!tutorial) {
+    if (message.id === "GET_TUTORIAL_FAIL") {
+      return (
+        <NotFound
+          button={{
+            title: Blockly.Msg.messages_GET_TUTORIAL_FAIL,
+            link: "/tutorial",
+          }}
+        />
+      );
+    }
+    return null;
   }
 
-  componentWillUnmount() {
-    this.props.resetTutorial();
-    this.props.workspaceName(null);
-    if (this.props.message.msg) {
-      this.props.clearMessages();
-    }
-  }
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "85vh", // 👈 volle Höhe
+        backgroundColor: theme.palette.background.default,
+      }}
+    >
+      {/* Header (Breadcrumbs) */}
+      <Box sx={{ flexShrink: 0 }}>
+        <Breadcrumbs
+          content={[
+            { link: "/tutorial", title: "Tutorials" },
+            {
+              link: `/tutorial/${tutorialId}`,
+              title: tutorial?.title || "Aktuelles Tutorial",
+            },
+          ]}
+        />
+      </Box>
 
-  render() {
-    return (
-      <div>
-        {this.props.isLoading ? null : !this.props.tutorial ? (
-          this.props.message.id === "GET_TUTORIAL_FAIL" ? (
-            <NotFound
-              button={{
-                title: Blockly.Msg.messages_GET_TUTORIAL_FAIL,
-                link: "/tutorial",
+      {/* Hauptinhalt */}
+      <Box
+        sx={{
+          flexGrow: 1, // 👈 nimmt gesamten verfügbaren Platz ein
+          display: "flex",
+          flexDirection: "row",
+          width: "100%",
+          p: 2,
+          gap: 4,
+          justifyContent: "center",
+          alignItems: "stretch", // alles gleiche Höhe
+        }}
+      >
+        {/* ProgressCard links - 20% */}
+        <Box
+          sx={{
+            flex: "0 0 20%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+          }}
+        >
+          <TutorialProgressCard />
+        </Box>
+        {/* Hauptbereich rechts */}
+        <Box
+          sx={{
+            flex: "1 1 auto",
+            position: "relative",
+            display: "flex",
+            flexDirection: "column",
+            borderRadius: 3,
+            boxShadow: 3,
+            mr: 5,
+
+            overflow: "scroll",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              minHeight: "100%",
+            }}
+          >
+            <AnimatePresence mode="wait">
+              {(() => {
+                const currentStep = tutorial.steps[activeStep];
+                const type = currentStep?.type;
+
+                if (type === "finish") {
+                  return (
+                    <TutorialFinished key="finished" tutorial={tutorial} />
+                  );
+                }
+
+                if (type === "instruction") {
+                  return <Instruction tutorial={tutorial} key={activeStep} />;
+                }
+
+                return (
+                  <TaskStep
+                    setNextStepDisabled={setNextStepDisabled}
+                    step={currentStep}
+                    key={activeStep}
+                  />
+                );
+              })()}
+            </AnimatePresence>
+          </Box>
+          {/* {!platform && (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-around",
+                maxWidth: "960px",
+                p: 2,
               }}
-            />
-          ) : null
-        ) : (
-          (() => {
-            var tutorial = this.props.tutorial;
-            var steps = this.props.tutorial.steps;
-            var step = steps[this.props.activeStep];
-            var name = `${detectWhitespacesAndReturnReadableResult(
-              tutorial.title,
-            )}_${detectWhitespacesAndReturnReadableResult(step.headline)}`;
-            return (
-              <div>
-                <Breadcrumbs
-                  content={[
-                    {
-                      link: "/tutorial",
-                      title: "Tutorial",
-                    },
-                    {
-                      link: `/tutorial/${this.props.tutorial._id}`,
-                      title: tutorial.title,
-                    },
-                  ]}
-                />
+            >
+              <Button
+                variant="outlined"
+                disabled={activeStep === 0}
+                startIcon={<ChevronLeftIcon />}
+                onClick={previousStep}
+              >
+                Zurück
+              </Button>
 
-                <StepperHorizontal />
+              {activeStep === tutorial.steps.length - 1 ? (
+                <Button
+                  variant="contained"
+                  endIcon={<CheckCircleIcon />}
+                  onClick={() => (window.location.href = "/tutorial")}
+                >
+                  Zurück zur Übersicht
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  endIcon={<ChevronRightIcon />}
+                  disabled={nextStepDisabled}
+                  onClick={nextStep}
+                >
+                  Weiter
+                </Button>
+              )}
+            </Box>
+          )} */}
+        </Box>
+      </Box>
 
-                <div style={{ display: "flex" }}>
-                  <StepperVertical steps={steps} />
-                  {/* calc(Card-padding: 10px + Button-height: 35px + Button-marginTop: 15px)*/}
-                  <Card
-                    style={{
-                      padding: "10px 10px 60px 10px",
-                      display: "block",
-                      position: "relative",
-                      height: "max-content",
-                      width: "100%",
-                    }}
-                  >
-                    {step ? (
-                      step.type === "instruction" ? (
-                        <Instruction step={step} />
-                      ) : (
-                        <Assessment step={step} name={name} />
-                      ) // if step.type === 'assessment'
-                    ) : null}
-
-                    <div
-                      style={{
-                        marginTop: "20px",
-                        position: "absolute",
-                        bottom: "10px",
-                      }}
-                    >
-                      <Button
-                        style={{
-                          marginRight: "10px",
-                          height: "35px",
-                        }}
-                        variant="contained"
-                        disabled={this.props.activeStep === 0}
-                        onClick={() =>
-                          this.props.tutorialStep(this.props.activeStep - 1)
-                        }
-                      >
-                        Zurück
-                      </Button>
-                      <Button
-                        style={{ height: "35px" }}
-                        variant="contained"
-                        color="primary"
-                        disabled={
-                          this.props.activeStep === tutorial.steps.length - 1
-                        }
-                        onClick={() =>
-                          this.props.tutorialStep(this.props.activeStep + 1)
-                        }
-                      >
-                        Weiter
-                      </Button>
-                    </div>
-                  </Card>
-                </div>
-              </div>
-            );
-          })()
-        )}
-      </div>
-    );
-  }
+      {platform && (
+        <Box sx={{ flexShrink: 0 }}>
+          <TutorialFooter nextStepDisabled={nextStepDisabled} />
+        </Box>
+      )}
+    </Box>
+  );
 }
-
-Tutorial.propTypes = {
-  getTutorial: PropTypes.func.isRequired,
-  resetTutorial: PropTypes.func.isRequired,
-  clearMessages: PropTypes.func.isRequired,
-  tutorialStep: PropTypes.func.isRequired,
-  tutorialProgress: PropTypes.func.isRequired,
-  workspaceName: PropTypes.func.isRequired,
-  status: PropTypes.array.isRequired,
-  change: PropTypes.number.isRequired,
-  activeStep: PropTypes.number.isRequired,
-  tutorial: PropTypes.object.isRequired,
-  isLoading: PropTypes.bool.isRequired,
-  message: PropTypes.object.isRequired,
-  progress: PropTypes.bool.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  change: state.tutorial.change,
-  status: state.tutorial.status,
-  activeStep: state.tutorial.activeStep,
-  tutorial: state.tutorial.tutorials[0],
-  isLoading: state.tutorial.progress,
-  message: state.message,
-  progress: state.auth.progress,
-});
-
-export default connect(mapStateToProps, {
-  getTutorial,
-  resetTutorial,
-  tutorialStep,
-  tutorialProgress,
-  clearMessages,
-  workspaceName,
-})(withRouter(Tutorial));
