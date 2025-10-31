@@ -544,13 +544,6 @@ const Builder = () => {
                   onXmlChange={updateStepXml}
                 />
               )}
-              {currentStep.type === "blocklyExample" && (
-                <BlocklyExample
-                  index={activeStep}
-                  value={currentStep.xml || ""}
-                  onXmlChange={updateStepXml}
-                />
-              )}
 
               {currentStep.type === "question" && (
                 <QuestionList
