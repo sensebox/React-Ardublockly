@@ -58,6 +58,16 @@ export const getPlatform = () => {
   return os;
 };
 
+const initialSessionId = () => {
+  const key = "sessionId";
+  const existing = window.sessionStorage.getItem(key);
+  if (existing) return existing;
+  const id =
+    Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 10);
+  window.sessionStorage.setItem(key, id);
+  return id;
+};
+
 const initialRenderer = () => {
   if (window.localStorage.getItem("renderer")) {
     return window.localStorage.getItem("renderer");
@@ -80,6 +90,7 @@ const initialState = {
   statistics: initialStatistics(),
   platform: initialPlatform(),
   compiler: initialCompiler(),
+  sessionId: initialSessionId(),
 };
 
 export default function foo(state = initialState, action) {
