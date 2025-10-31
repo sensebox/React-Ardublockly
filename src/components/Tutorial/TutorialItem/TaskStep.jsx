@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import MarkdownIt from "markdown-it";
 import { useSelector } from "react-redux";
 import TutorialSlide from "./TutorialSlide";
@@ -39,18 +39,11 @@ md.renderer.rules.image = function (tokens, idx, options, env, self) {
 
 const TaskStep = ({ step, setNextStepDisabled }) => {
   const activeStep = useSelector((state) => state.tutorial.activeStep);
-  const [blocklyReady, setBlocklyReady] = useState(false);
 
-  useEffect(() => {
-    setBlocklyReady(true);
-    return () => {
-      // 👇 Wird beim Unmount ausgeführts
-      setBlocklyReady(false);
-    };
-  }, []);
   useEffect(() => {
     if (step.type === "question" && step.questionData) {
       setNextStepDisabled(true);
+      console.log("disbaling");
     }
   }, [step]);
 
@@ -75,16 +68,6 @@ const TaskStep = ({ step, setNextStepDisabled }) => {
             );
           })}
         </Box>
-      )}
-      {step.type === "blocklyExample" && step.xml && (
-        <div style={{ textAlign: "center" }}>
-          <BlocklyWindow
-            blockDisabled
-            svg={blocklyReady}
-            blocklyCSS={{ height: "65vh" }}
-            initialXml={step.xml}
-          />
-        </div>
       )}
       {step.type === "blockly" && step.xml && (
         <Box
