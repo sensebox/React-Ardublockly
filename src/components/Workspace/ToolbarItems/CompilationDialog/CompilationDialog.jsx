@@ -39,7 +39,7 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform }) {
   const [counter, setCounter] = useState(0);
   const filename = useSelector((state) => state.workspace.name) || "sketch";
   const compilerUrl = useSelector((state) => state.general.compiler);
-
+  const sessionId = useSelector((state) => state.general.sessionId);
   useEffect(() => {
     if (open) {
       handleCompile();
@@ -77,6 +77,7 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform }) {
         body: JSON.stringify({
           sketch: code,
           board,
+          projectId: sessionId,
         }),
       });
       const data = await response.json();
@@ -107,9 +108,8 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform }) {
     const shouldClose =
       error ||
       activeStep === 2 ||
-      (platform && activeStep === 1)(
-        reason !== "backdropClick" && reason !== "escapeKeyDown",
-      );
+      (activeStep === 1 && platform && !error) ||
+      (reason !== "backdropClick" && reason !== "escapeKeyDown");
 
     if (!shouldClose) return;
 

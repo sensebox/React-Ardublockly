@@ -954,7 +954,7 @@ Blockly.Generator.Arduino.forBlock["sensebox_sensor_dps310"] = function () {
   dps.configurePressure(DPS310_64HZ, DPS310_64SAMPLES);
   dps.configureTemperature(DPS310_64HZ, DPS310_64SAMPLES);
   `;
-  Blockly.Generator.Arduino.loopCodeOnce_["dps_events"] =
+  Blockly.Generator.Arduino.definitions_["dps_events"] =
     "sensors_event_t temp_event, pressure_event;";
   Blockly.Generator.Arduino.loopCodeOnce_["dps_getEvents"] =
     "dps.getEvents(&temp_event, &pressure_event);";
