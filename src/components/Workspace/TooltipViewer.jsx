@@ -60,11 +60,7 @@ const TooltipViewer = () => {
           ></span>
         </Typography>
 
-        {tooltip ? (
-          <ReactMarkdown linkTarget="_blank">{tooltip}</ReactMarkdown>
-        ) : (
-          <Typography>{Blockly.Msg.tooltip_hint}</Typography>
-        )}
+        {/* <ReactMarkdown linkTarget="_blank">{tooltip}</ReactMarkdown> */}
 
         {helpurl && (
           <Button
