@@ -9,7 +9,10 @@ import {
   Select,
 } from "@mui/material";
 import { useTheme } from "@mui/styles";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import BlocklySvg from "@/components/Blockly/BlocklySvg";
+import { BlocklyComponent } from "@/components/Blockly/BlocklyComponent";
+import BlocklyWindow from "@/components/Blockly/BlocklyWindow";
 
 const variants = {
   initial: { opacity: 0, x: 100 },
@@ -33,6 +36,22 @@ const BuildSlide = ({
     updated[index][key] = value;
     setSteps(updated);
   };
+  const [blocklyReady, setBlocklyReady] = useState(false);
+  useEffect(() => {
+    setBlocklyReady(true);
+  }, []);
+  const xml = `
+    <xml xmlns="https://developers.google.com/blockly/xml">
+      <block type="arduino_functions" x="10" y="10">
+        <statement name="SETUP_FUNC">
+          <block type="sensebox_wifi">
+            <field name="SSID">Mein WLAN</field>
+            <field name="Password">geheim123</field>
+          </block>
+        </statement>
+      </block>
+    </xml>
+  `;
 
   return (
     <motion.div
@@ -92,12 +111,14 @@ const BuildSlide = ({
                         <MenuItem value="task">Aufgabe</MenuItem>
                         <MenuItem value="question">Fragestellung</MenuItem>
                         <MenuItem value="blockly">Blockly-Aufgabe</MenuItem>
+                        <MenuItem value="blocklyExample">
+                          Blockly-Beispiel
+                        </MenuItem>
                       </Select>
                     </FormControl>
                   )}
                 </Box>
               </Box>
-
               <h2>{title}</h2>
             </div>
           )}
