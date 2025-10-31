@@ -451,4 +451,18 @@ export const UI = {
   // Hilfe-Link
   need_help: "Benötigst du Hilfe?",
   compile_overlay_help_2: "Schau in unserer Dokumentation vorbei!",
+
+  button_register: "registriere dich hier",
+  register_head: "Erstellen Sie Ihr Konto",
+  labels_confirm_password: "Passwort bestätigen",
+  messages_password_mismatch: "Die Passwörter stimmen nicht überein.",
+  messages_password_too_short:
+    "Das Passwort muss mindestens 6 Zeichen lang sein.",
+  messages_register_error: "Bitte füllen Sie alle Felder aus.",
+  already_have_account: "Haben Sie bereits ein Konto?",
+  no_account: "Wenn du keinen Account hast,",
+  register_success_head: "Konto erstellt!",
+  register_success_message: "Dein Konto wurde erfolgreich erstellt.",
+  register_success_login_prompt:
+    "Du kannst dich jetzt mit deinen Zugangsdaten anmelden.",
 };

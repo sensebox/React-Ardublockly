@@ -7,92 +7,129 @@ import {
   LOGIN_FAIL,
   LOGOUT_SUCCESS,
   LOGOUT_FAIL,
-  REFRESH_TOKEN_SUCCESS,
+  REGISTER_SUCCESS,
+  REGISTER_FAIL,
 } from "../actions/types";
 
 import axios from "axios";
 import { returnErrors, returnSuccess } from "./messageActions";
 import { setLanguage } from "./generalActions";
 
-// Check token & load user
+const API_BASE = import.meta.env.VITE_BLOCKLY_API;
+
+// ======================
+// LOAD USER (from token)
+// ======================
 export const loadUser = () => (dispatch) => {
-  // user loading
-  dispatch({
-    type: USER_LOADING,
-  });
-  const config = {
-    success: (res) => {
-      dispatch({
-        type: GET_STATUS,
-        payload: res.data.user.status,
-      });
-      dispatch(setLanguage(res.data.user.language));
-      dispatch({
-        type: USER_LOADED,
-        payload: res.data.user,
-      });
-    },
-    error: (err) => {
-      if (err.response) {
-        dispatch(returnErrors(err.response.data.message, err.response.status));
-      }
-      var status = [];
-      if (window.localStorage.getItem("status")) {
-        status = JSON.parse(window.localStorage.getItem("status"));
-      }
-      dispatch({
-        type: GET_STATUS,
-        payload: status,
-      });
-      dispatch({
-        type: AUTH_ERROR,
-      });
-    },
-  };
+  dispatch({ type: USER_LOADING });
+
+  // Kein async/await auf der äußeren Ebene – stattdessen .then/.catch
   axios
-    .get(
-      `${import.meta.env.VITE_BLOCKLY_API}/user`,
-      config,
-      dispatch(authInterceptor()),
-    )
+    .get(`${API_BASE}/user`, { headers: authHeader() })
     .then((res) => {
-      res.config.success(res);
+      // Erfolg
+      dispatch({ type: USER_LOADED, payload: res.data.user });
+      dispatch({ type: GET_STATUS, payload: res.data.user.status });
+      dispatch(setLanguage(res.data.user.language || "en_US"));
     })
     .catch((err) => {
-      err.config.error(err);
+      // Fehler – aber NICHT werfen!
+      dispatch({ type: AUTH_ERROR });
+      let status = [];
+      try {
+        status = JSON.parse(localStorage.getItem("status")) || [];
+      } catch (e) {
+        /* ignore */
+      }
+      dispatch({ type: GET_STATUS, payload: status });
+      console.warn("Failed to load user:", err.message);
     });
 };
 
-// Login user
-export const login =
+// ======================
+// REGISTER (native)
+// ======================
+export const register =
   ({ email, password }) =>
-  (dispatch) => {
-    dispatch({
-      type: USER_LOADING,
-    });
-    // Headers
+  async (dispatch) => {
+    dispatch({ type: USER_LOADING });
+
     const config = {
       headers: {
         "Content-Type": "application/json",
       },
     };
-    // Request Body
-    const body = JSON.stringify({ email, password });
-    axios
-      .post(`${import.meta.env.VITE_BLOCKLY_API}/user`, body, config)
-      .then((res) => {
-        dispatch(setLanguage(res.data.user.language));
-        dispatch({
-          type: LOGIN_SUCCESS,
-          payload: res.data,
-        });
-        dispatch({
-          type: GET_STATUS,
-          payload: res.data.user.status,
-        });
-        dispatch(returnSuccess(res.data.message, res.status, "LOGIN_SUCCESS"));
-      })
-      .catch((err) => {
+
+    try {
+      const res = await axios.post(
+        `${API_BASE}/user/register`,
+        JSON.stringify({ email, password }),
+        config,
+      );
+
+      dispatch({
+        type: REGISTER_SUCCESS,
+        payload: res.data,
+      });
+      dispatch(returnSuccess(res.data.message, res.status, "REGISTER_SUCCESS"));
+    } catch (err) {
+      dispatch({
+        type: REGISTER_FAIL,
+      });
+      if (err.response) {
+        dispatch(
+          returnErrors(
+            err.response.data.message,
+            err.response.status,
+            "REGISTER_FAIL",
+          ),
+        );
+      }
+    }
+  };
+
+// ======================
+// LOGIN (native)
+// ======================
+export const login =
+  ({ email, password }) =>
+  async (dispatch) => {
+    dispatch({ type: USER_LOADING });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    try {
+      const res = await axios.post(
+        `${API_BASE}/user/login`,
+        JSON.stringify({ email, password }),
+        config,
+      );
+
+      dispatch(setLanguage(res.data.user.language || "en_US"));
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: res.data,
+      });
+      dispatch({
+        type: GET_STATUS,
+        payload: res.data.user.status,
+      });
+      dispatch(returnSuccess(res.data.message, res.status, "LOGIN_SUCCESS"));
+    } catch (err) {
+      dispatch({ type: LOGIN_FAIL });
+      let status = [];
+      try {
+        status = JSON.parse(localStorage.getItem("status")) || [];
+      } catch (e) {
+        /* ignore */
+      }
+      dispatch({ type: GET_STATUS, payload: status });
+
+      if (err.response) {
         dispatch(
           returnErrors(
             err.response.data.message,
@@ -100,152 +137,202 @@ export const login =
             "LOGIN_FAIL",
           ),
         );
-        dispatch({
-          type: LOGIN_FAIL,
-        });
-        var status = [];
-        if (window.localStorage.getItem("status")) {
-          status = JSON.parse(window.localStorage.getItem("status"));
-        }
-        dispatch({
-          type: GET_STATUS,
-          payload: status,
-        });
-      });
+      }
+    }
   };
 
-// Logout User
-export const logout = () => (dispatch) => {
-  const config = {
-    success: (res) => {
-      dispatch({
-        type: LOGOUT_SUCCESS,
-      });
-      var status = [];
-      if (window.localStorage.getItem("status")) {
-        status = JSON.parse(window.localStorage.getItem("status"));
-      }
-      dispatch({
-        type: GET_STATUS,
-        payload: status,
-      });
-      var locale = "en_US";
-      if (window.localStorage.getItem("locale")) {
-        locale = window.localStorage.getItem("locale");
-      } else if (navigator.language === "de-DE") {
-        locale = "de_DE";
-      }
-      dispatch(setLanguage(locale));
-      dispatch(returnSuccess(res.data.message, res.status, "LOGOUT_SUCCESS"));
-    },
-    error: (err) => {
-      dispatch(
-        returnErrors(
-          err.response.data.message,
-          err.response.status,
-          "LOGOUT_FAIL",
-        ),
+// ======================
+// LOGIN via openSenseMap (optional)
+// ======================
+export const loginOpenSenseMap =
+  ({ email, password }) =>
+  async (dispatch) => {
+    dispatch({ type: USER_LOADING });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    try {
+      const res = await axios.post(
+        `${API_BASE}/user/login/opensensemap`,
+        JSON.stringify({ email, password }),
+        config,
       );
+
+      dispatch(setLanguage(res.data.user.language || "en_US"));
       dispatch({
-        type: LOGOUT_FAIL,
+        type: LOGIN_SUCCESS,
+        payload: res.data,
       });
-      var status = [];
-      if (window.localStorage.getItem("status")) {
-        status = JSON.parse(window.localStorage.getItem("status"));
-      }
+
       dispatch({
         type: GET_STATUS,
-        payload: status,
+        payload: res.data.user.status,
       });
-    },
+      dispatch(returnSuccess(res.data.message, res.status, "LOGIN_SUCCESS"));
+    } catch (err) {
+      dispatch({ type: LOGIN_FAIL });
+      let status = [];
+      try {
+        status = JSON.parse(localStorage.getItem("status")) || [];
+      } catch (e) {
+        /* ignore */
+      }
+      dispatch({ type: GET_STATUS, payload: status });
+      if (err.response) {
+        dispatch(
+          returnErrors(
+            err.response.data.message,
+            err.response.status,
+            "LOGIN_FAIL",
+          ),
+        );
+      }
+    }
   };
-  axios
-    .post("https://api.opensensemap.org/users/sign-out", {}, config)
-    .then((res) => {
-      res.config.success(res);
-    })
-    .catch((err) => {
-      if (err.response && err.response.status !== 401) {
-        err.config.error(err);
-      }
+
+// ======================
+// LOGOUT (native)
+// ======================
+export const logout = () => (dispatch) => {
+  // Bei native-Login: nur lokal ausloggen
+  dispatch({ type: LOGOUT_SUCCESS });
+  let status = [];
+  try {
+    status = JSON.parse(localStorage.getItem("status")) || [];
+  } catch (e) {
+    /* ignore */
+  }
+  dispatch({ type: GET_STATUS, payload: status });
+
+  const locale =
+    localStorage.getItem("locale") ||
+    (navigator.language === "de-DE" ? "de_DE" : "en_US");
+  dispatch(setLanguage(locale));
+
+  dispatch(returnSuccess("Successfully logged out.", 200, "LOGOUT_SUCCESS"));
+};
+
+export const authHeader = () => {
+  try {
+    const token = localStorage.getItem("token");
+    if (token && typeof token === "string" && token.trim() !== "") {
+      return { Authorization: `Bearer ${token}` };
+    }
+  } catch (e) {
+    console.warn("Failed to read token from localStorage", e);
+  }
+  return {};
+};
+
+// ======================
+// Auth Interceptor (optional – für Token-basierte API-Aufrufe)
+// ======================
+export const setupInterceptors = (store) => {
+  axios.interceptors.request.use((config) => {
+    const token = store.getState().auth.token;
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    config.headers["Content-Type"] = "application/json";
+    return config;
+  });
+};
+
+// 🔥 Neue Action für Passwort-Reset-Anfrage
+export const requestPasswordReset =
+  ({ email }) =>
+  (dispatch) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    return new Promise((resolve, reject) => {
+      axios
+        .post(
+          `${API_BASE}/user/reset-password/request`,
+          JSON.stringify({ email }),
+          config,
+        )
+        .then((res) => {
+          dispatch({
+            type: "REQUEST_PASSWORD_RESET_SUCCESS",
+            payload: res.data,
+          });
+          dispatch(
+            returnSuccess(
+              res.data.message,
+              res.status,
+              "REQUEST_PASSWORD_RESET_SUCCESS",
+            ),
+          );
+          resolve(res);
+        })
+        .catch((err) => {
+          dispatch({
+            type: "REQUEST_PASSWORD_RESET_FAIL",
+            payload: err.response?.data || { msg: "Netzwerkfehler" },
+          });
+          dispatch(
+            returnErrors(
+              err.response?.data?.message || "Netzwerkfehler",
+              err.response?.status || 500,
+              "REQUEST_PASSWORD_RESET_FAIL",
+            ),
+          );
+          reject(err);
+        });
     });
-};
+  };
 
-export const authInterceptor = () => (dispatch, getState) => {
-  // Add a request interceptor
-  axios.interceptors.request.use(
-    (config) => {
-      config.headers["Content-Type"] = "application/json";
-      const token = getState().auth.token;
-      if (token) {
-        config.headers["Authorization"] = `Bearer ${token}`;
-      }
-      return config;
-    },
-    (error) => {
-      Promise.reject(error);
-    },
-  );
+export const resetPassword =
+  ({ token, newPassword }) =>
+  (dispatch) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
 
-  // Add a response interceptor
-  axios.interceptors.response.use(
-    (response) => {
-      // request was successfull
-      return response;
-    },
-    (error) => {
-      const originalRequest = error.config;
-      const refreshToken = getState().auth.refreshToken;
-      if (refreshToken) {
-        // try to refresh the token failed
-        if (error.response.status === 401 && originalRequest._retry) {
-          // router.push('/login');
-          return Promise.reject(error);
-        }
-        // token was not valid and 1st try to refresh the token
-        if (error.response.status === 401 && !originalRequest._retry) {
-          originalRequest._retry = true;
-          const refreshToken = getState().auth.refreshToken;
-          // request to refresh the token, in request-body is the refreshToken
-          axios
-            .post("https://api.opensensemap.org/users/refresh-auth", {
-              token: refreshToken,
-            })
-            .then((res) => {
-              if (res.status === 200) {
-                dispatch({
-                  type: REFRESH_TOKEN_SUCCESS,
-                  payload: res.data,
-                });
-                axios.defaults.headers.common["Authorization"] =
-                  "Bearer " + getState().auth.token;
-                // request was successfull, new request with the old parameters and the refreshed token
-                return axios(originalRequest)
-                  .then((res) => {
-                    originalRequest.success(res);
-                  })
-                  .catch((err) => {
-                    originalRequest.error(err);
-                  });
-              }
-              return Promise.reject(error);
-            })
-            .catch((err) => {
-              // request failed, token could not be refreshed
-              if (err.response) {
-                dispatch(
-                  returnErrors(err.response.data.message, err.response.status),
-                );
-              }
-              dispatch({
-                type: AUTH_ERROR,
-              });
-              return Promise.reject(error);
-            });
-        }
-      }
-      // request status was unequal to 401, no possibility to refresh the token
-      return Promise.reject(error);
-    },
-  );
-};
+    return new Promise((resolve, reject) => {
+      axios
+        .post(
+          `${API_BASE}/user/reset-password/reset`,
+          JSON.stringify({ token, newPassword }),
+          config,
+        )
+        .then((res) => {
+          dispatch({
+            type: "RESET_PASSWORD_SUCCESS",
+            payload: res.data,
+          });
+          dispatch(
+            returnSuccess(
+              res.data.message,
+              res.status,
+              "RESET_PASSWORD_SUCCESS",
+            ),
+          );
+          resolve(res);
+        })
+        .catch((err) => {
+          dispatch({
+            type: "RESET_PASSWORD_FAIL",
+            payload: err.response?.data || { msg: "Netzwerkfehler" },
+          });
+          dispatch(
+            returnErrors(
+              err.response?.data?.message || "Netzwerkfehler",
+              err.response?.status || 500,
+              "RESET_PASSWORD_FAIL",
+            ),
+          );
+          reject(err);
+        });
+    });
+  };

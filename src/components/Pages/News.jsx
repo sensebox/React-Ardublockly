@@ -121,7 +121,7 @@ class News extends Component {
         />
         <Container fixed>
           <Typography variant="body1">
-            <ReactMarkdown className="news" children={news}></ReactMarkdown>
+            <ReactMarkdown children={news}></ReactMarkdown>
           </Typography>
         </Container>
         {this.props.button ? (
