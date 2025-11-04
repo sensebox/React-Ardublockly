@@ -1,6 +1,6 @@
 import React from "react";
 import { Block, Value, Field, Shadow, Category, Label } from "..";
-import { getColour } from "../helpers/colour";
+import { getColour } from "@/helpers/colour";
 import * as Blockly from "blockly/core";
 import "@blockly/toolbox-search";
 import "./search-category.css";

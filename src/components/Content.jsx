@@ -8,7 +8,7 @@ import Navbar from "./Navbar";
 import Routes from "./Route/Routes";
 import Cookies from "./Cookies";
 import Footer from "./Footer";
-import { setBoardHelper } from "./Blockly/helpers/board";
+import { setBoardHelper } from "@/helpers/board";
 
 const Content = () => {
   const language = useSelector((state) => state.general.language);

@@ -1,6 +1,6 @@
 import * as Blockly from "blockly/core";
-import * as Types from "../helpers/types";
-import { getColour } from "../helpers/colour";
+import * as Types from "@/helpers/types";
+import { getColour } from "@/helpers/colour";
 
 Blockly.Blocks["lists_create_empty"] = {
   /**

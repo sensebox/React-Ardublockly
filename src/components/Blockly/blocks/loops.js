@@ -1,7 +1,7 @@
 import * as Blockly from "blockly";
-import { getColour } from "../helpers/colour";
-import { getCompatibleTypes } from "../helpers/types";
-import * as Types from "../helpers/types";
+import { getColour } from "@/helpers/colour";
+import { getCompatibleTypes } from "@/helpers/types";
+import * as Types from "@/helpers/types";
 
 Blockly.Blocks["controls_whileUntil"] = {
   /**

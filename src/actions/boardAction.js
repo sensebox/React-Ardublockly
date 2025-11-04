@@ -2,7 +2,7 @@ import { BOARD } from "./types";
 import mini_opacity from "../data/mini_opacity.png";
 import mcu_opacity from "../data/mcu_opacity.png";
 import esp_opacity from "../data/esp_opacity.png";
-import { setBoardHelper } from "@/components/Blockly/helpers/board";
+import { setBoardHelper } from "@/helpers/board";
 
 export const setBoard = (board) => (dispatch) => {
   window.sessionStorage.setItem("board", board);

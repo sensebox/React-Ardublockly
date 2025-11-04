@@ -1,7 +1,7 @@
 import * as Blockly from "blockly";
-import { getColour } from "../helpers/colour";
-import * as Types from "../helpers/types";
-import { selectedBoard } from "../helpers/board";
+import { getColour } from "@/helpers/colour";
+import * as Types from "@/helpers/types";
+import { selectedBoard } from "@/helpers/board";
 
 /**
  * Solar Charger (SB-041)

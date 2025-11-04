@@ -4,13 +4,14 @@ import PropTypes from "prop-types";
 
 import * as Blockly from "blockly/core";
 import "./blocks/index";
-import "@/components/Blockly/generator/index";
+import "@/components/Blockly/generator/arduino/index";
+import "@/components/Blockly/generator/basic/index";
 
 import { onChangeWorkspace, clearStats } from "../../actions/workspaceActions";
 import { ZoomToFitControl } from "@blockly/zoom-to-fit";
 import { Backpack } from "@blockly/workspace-backpack";
 import { initialXml } from "./initialXml.js";
-import { getMaxInstances } from "./helpers/maxInstances";
+import { getMaxInstances } from "@/helpers/maxInstances";
 
 import BlocklySvg from "./BlocklySvg";
 

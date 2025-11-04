@@ -11,9 +11,10 @@
  * TODO: maybe change this to a "PIN" BlocklyType
  */
 import * as Blockly from "blockly/core";
-import { selectedBoard } from "../helpers/board";
-import * as Types from "../helpers/types";
-import { getColour } from "../helpers/colour";
+import { selectedBoard } from "@/helpers/board";
+
+import * as Types from "@/helpers/types";
+import { getColour } from "@/helpers/colour";
 
 Blockly.Blocks["io_digitalwrite"] = {
   /**

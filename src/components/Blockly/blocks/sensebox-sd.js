@@ -1,5 +1,5 @@
 import * as Blockly from "blockly/core";
-import { getColour } from "../helpers/colour";
+import { getColour } from "@/helpers/colour";
 
 var checkFileName = function (filename) {
   var length = filename.length;
