@@ -23,6 +23,7 @@ export const onChangeCode = () => (dispatch, getState) => {
   const workspace = Blockly.getMainWorkspace();
   var code = getState().workspace.code;
   code.arduino = Blockly.Generator.Arduino.workspaceToCode(workspace);
+  code.basic = Blockly.Generator.Basic.workspaceToCode(workspace);
   var xmlDom = Blockly.Xml.workspaceToDom(workspace);
   var board = getState().board.board;
   xmlDom.setAttribute("board", board);

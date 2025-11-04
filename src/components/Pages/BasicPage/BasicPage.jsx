@@ -23,8 +23,6 @@ import BlocklyCard from "./BlocklyCard";
 import { ToolboxBasic } from "@/components/Blockly/toolbox/ToolboxBasic";
 import ReactDOMServer from "react-dom/server";
 import { useSelector } from "react-redux";
-import * as Blockly from "blockly";
-import { onChangeCode, onChangeWorkspace } from "@/actions/workspaceActions";
 import "@/components/Blockly/blocks/basic/index"; // registriert Block
 import { ExpandMoreRounded } from "@mui/icons-material";
 import TutorialAccordion from "./TutorialAccordion";

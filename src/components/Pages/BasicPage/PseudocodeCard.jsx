@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Button,
@@ -16,6 +16,10 @@ import { useSelector } from "react-redux";
 const PseudocodeCard = ({ script, setScript, connected, onSend }) => {
   const theme = useTheme();
   const basicCode = useSelector((s) => s.workspace.code.basic);
+
+  useEffect(() => {
+    console.log("basicCode", basicCode);
+  }, [basicCode]);
 
   return (
     <Box

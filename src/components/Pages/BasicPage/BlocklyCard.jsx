@@ -2,7 +2,7 @@
 import React, { useEffect, useRef } from "react";
 import * as Blockly from "blockly";
 import "blockly/blocks";
-import { onChangeWorkspace } from "@/actions/workspaceActions";
+import { onChangeCode, onChangeWorkspace } from "@/actions/workspaceActions";
 import { useDispatch } from "react-redux";
 import { BasicTheme } from "@/components/Blockly/themes/basicTheme";
 const getGeneratorByName = (name) => {
@@ -82,8 +82,7 @@ const BlocklyCard = ({
     ws.addChangeListener(fire);
     ws.addChangeListener((event) => {
       dispatch(onChangeWorkspace(event));
-      const code = Blockly.Generator.Basic.workspaceToCode(ws);
-      console.log(code);
+      dispatch(onChangeCode());
     });
     const ro = new ResizeObserver(() => Blockly.svgResize(ws));
     ro.observe(containerRef.current);

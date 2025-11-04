@@ -9,7 +9,7 @@ import {
   Category,
   Sep,
   Label,
-} from "..";
+} from "../index";
 import * as Blockly from "blockly/core";
 import { getColour } from "@/helpers/colour";
 export const ToolboxBasic = () => {

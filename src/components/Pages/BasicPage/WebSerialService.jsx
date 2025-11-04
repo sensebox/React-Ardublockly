@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import * as Blockly from "blockly";
 
 /**
  * Custom Hook für Web Serial (Chrome/Edge, HTTPS oder localhost).
