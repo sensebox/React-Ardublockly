@@ -10,7 +10,6 @@ import { reservedWords } from "./helpers/reservedWords";
 import Snackbar from "../Snackbar";
 
 import "blockly/blocks";
-import "@blockly/toolbox-search"; // auto-registers
 import {
   ScrollOptions,
   ScrollBlockDragger,
