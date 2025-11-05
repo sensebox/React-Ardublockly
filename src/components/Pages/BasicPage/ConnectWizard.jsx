@@ -5,12 +5,10 @@ import { Box, Button, Typography, useTheme } from "@mui/material";
 import {
   Usb,
   PlayArrow,
-  Autorenew,
   Stop,
   Bluetooth,
   Computer,
   BluetoothDisabled,
-  Code,
 } from "@mui/icons-material";
 
 const ConnectWizard = ({
@@ -23,6 +21,18 @@ const ConnectWizard = ({
 }) => {
   const theme = useTheme();
 
+  const handlePlay = async () => {
+    if (!connected) return;
+    try {
+      // Schritt 1: Code senden
+      await onSend();
+      // Schritt 2: Nach erfolgreichem Senden: Loop starten
+      await onQuick("RUNLOOP");
+    } catch (err) {
+      console.error("Error during play:", err);
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -31,6 +41,7 @@ const ConnectWizard = ({
         p: 2,
       }}
     >
+      {/* Verbindungstatus */}
       <Box
         sx={{
           display: "flex",
@@ -79,14 +90,15 @@ const ConnectWizard = ({
             />
             <style>
               {`
-    @keyframes pulse {
-      0%   { box-shadow: 0 0 6px ${connected ? "#00cc44" : "#ff3333"}; }
-      50%  { box-shadow: 0 0 15px ${connected ? "#00ff55" : "#ff6666"}; }
-      100% { box-shadow: 0 0 6px ${connected ? "#00cc44" : "#ff3333"}; }
-    }
-  `}
+                @keyframes pulse {
+                  0%   { box-shadow: 0 0 6px ${connected ? "#00cc44" : "#ff3333"}; }
+                  50%  { box-shadow: 0 0 15px ${connected ? "#00ff55" : "#ff6666"}; }
+                  100% { box-shadow: 0 0 6px ${connected ? "#00cc44" : "#ff3333"}; }
+                }
+              `}
             </style>
           </Box>
+
           <Box
             sx={{
               display: "flex",
@@ -120,6 +132,7 @@ const ConnectWizard = ({
             </Box>
           </Box>
         </Box>
+
         <Button
           color={connected ? "error" : "primary"}
           variant={connected ? "outlined" : "contained"}
@@ -133,17 +146,7 @@ const ConnectWizard = ({
         </Button>
       </Box>
 
-      {connected && (
-        <Button
-          fullWidth
-          variant="contained"
-          onClick={onSend}
-          startIcon={<Code />}
-        >
-          Send Code{" "}
-        </Button>
-      )}
-
+      {/* Steuerbuttons */}
       <Box
         sx={{
           display: "flex",
@@ -153,7 +156,7 @@ const ConnectWizard = ({
         }}
       >
         <Button
-          onClick={() => onQuick("RUN")}
+          onClick={handlePlay}
           disabled={!connected}
           size="large"
           variant="contained"
@@ -164,18 +167,7 @@ const ConnectWizard = ({
             Start
           </div>
         </Button>
-        <Button
-          onClick={() => onQuick("RUNLOOP")}
-          disabled={!connected}
-          variant="contained"
-          size="large"
-          color="primary"
-        >
-          <div>
-            <Autorenew /> <br />
-            Loop
-          </div>
-        </Button>
+
         <Button
           onClick={() => onQuick("STOP")}
           size="large"

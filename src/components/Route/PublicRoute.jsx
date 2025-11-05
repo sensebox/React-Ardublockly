@@ -16,7 +16,7 @@ class PublicRoute extends Component {
 }
 
 PublicRoute.propTypes = {
-  progress: PropTypes.bool.isRequired,
+  progress: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({

@@ -20,7 +20,6 @@ import PseudocodeCard from "./PseudocodeCard";
 import DeviceLogCard from "./DeviceLogCard";
 import useWebSerial from "./WebSerialService";
 import BlocklyCard from "./BlocklyCard";
-import { ToolboxBasic } from "@/components/Blockly/toolbox/ToolboxBasic";
 import ReactDOMServer from "react-dom/server";
 import { useSelector } from "react-redux";
 import "@/components/Blockly/blocks/basic/index"; // registriert Block
@@ -52,22 +51,6 @@ const BasicPage = () => {
     copyLog,
   } = useWebSerial({ script, setLog, logBoxRef });
 
-  const arduino = useSelector((s) => s.workspace.code.arduino);
-  const [basicCode, setBasicCode] = useState("");
-  // Memoisiert, damit wir nicht bei jedem Render neu parsen
-  const toolboxDom = useMemo(() => {
-    const xmlText = ReactDOMServer.renderToStaticMarkup(
-      <xml
-        xmlns="https://developers.google.com/blockly/xml"
-        style={{ display: "none" }}
-      >
-        <ToolboxBasic />
-      </xml>,
-    );
-    const parser = new DOMParser();
-    return parser.parseFromString(xmlText, "text/xml").documentElement;
-  }, []);
-
   useEffect(() => {
     var head = document.head;
     var link = document.createElement("link");
@@ -98,7 +81,7 @@ const BasicPage = () => {
       <Box sx={{ display: "flex", gap: 2, flex: 1, minHeight: 0 }}>
         {/* Linke Seite */}
         <Box sx={{ flex: " 0 0 70%", minHeight: 0, display: "flex" }}>
-          <BlocklyCard generatorName="Basic" toolboxXml={toolboxDom} />
+          <BlocklyCard generatorName="Basic" />
         </Box>
 
         {/* Rechte Seite */}

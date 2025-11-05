@@ -1,54 +1,45 @@
-// src/components/Blockly/toolbox/ToolboxBasicPseudo.jsx
-import React, { useEffect } from "react";
-import {
-  Block,
-  Value,
-  Field,
-  Statement,
-  Shadow,
-  Category,
-  Sep,
-  Label,
-} from "../index";
+// src/components/Blockly/toolbox/toolboxBasicPseudo.js
 import * as Blockly from "blockly/core";
 import { getColour } from "@/helpers/colour";
-export const ToolboxBasic = () => {
-  return (
-    <>
-      <Category
-        name={Blockly.Msg.toolbox_sensors}
-        colour={getColour().sensebox}
-        css-icon="customIcon fa fa-cloud"
-      >
-        <Block type="sensebox_sensor_temp_hum" />
-      </Category>
-      <Category
-        css-icon="customIcon fa fa-desktop"
-        name="Display"
-        colour={getColour().sensebox}
-      >
-        <Block type="display_print_basic" />
-        <Block type="text" />
-      </Category>
-      <Category
-        name="LED"
-        colour={getColour().sensebox}
-        css-icon="customIcon fa fa-lightbulb"
-      >
-        <Block type="basic_red"></Block>
-        <Block type="basic_blue"></Block>
-        <Block type="basic_yellow"></Block>
-        <Block type="basic_off"></Block>
-      </Category>
-      <Category
-        name="Zeit"
-        colour={getColour().logic}
-        css-icon="customIcon fa fa-clock"
-      >
-        <Block type="time_delay_1s" />
-        <Block type="time_delay_2s" />
-        <Block type="time_delay_5s" />
-      </Category>
-    </>
-  );
+
+export const toolboxBasicObject = {
+  kind: "flyoutToolbox",
+  contents: [
+    // 🟢 Sensoren
+    {
+      kind: "label",
+      text: "Sensoren",
+    },
+    { kind: "block", type: "sensebox_sensor_temp_hum" },
+
+    // 🟦 Display
+    { kind: "sep", gap: "10" },
+    {
+      kind: "label",
+      text: "Display",
+    },
+    { kind: "block", type: "display_print_basic" },
+    { kind: "block", type: "text" },
+
+    // 🟡 LED
+    { kind: "sep", gap: "10" },
+    {
+      kind: "label",
+      text: "LED",
+    },
+    { kind: "block", type: "basic_red" },
+    { kind: "block", type: "basic_blue" },
+    { kind: "block", type: "basic_yellow" },
+    { kind: "block", type: "basic_off" },
+
+    // 🕒 Zeit
+    { kind: "sep", gap: "10" },
+    {
+      kind: "label",
+      text: "Zeit",
+    },
+    { kind: "block", type: "time_delay_1s" },
+    { kind: "block", type: "time_delay_2s" },
+    { kind: "block", type: "time_delay_5s" },
+  ],
 };
