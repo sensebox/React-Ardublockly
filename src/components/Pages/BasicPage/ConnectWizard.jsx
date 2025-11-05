@@ -1,13 +1,12 @@
 "use client";
 
 import React from "react";
-import { Box, Button, Typography, useTheme } from "@mui/material";
+import { Box, Button, Typography, useTheme, Tooltip } from "@mui/material";
 import {
-  Usb,
   PlayArrow,
   Stop,
-  Bluetooth,
   Computer,
+  Bluetooth,
   BluetoothDisabled,
 } from "@mui/icons-material";
 
@@ -24,9 +23,7 @@ const ConnectWizard = ({
   const handlePlay = async () => {
     if (!connected) return;
     try {
-      // Schritt 1: Code senden
       await onSend();
-      // Schritt 2: Nach erfolgreichem Senden: Loop starten
       await onQuick("RUNLOOP");
     } catch (err) {
       console.error("Error during play:", err);
@@ -36,150 +33,93 @@ const ConnectWizard = ({
   return (
     <Box
       sx={{
-        display: "grid",
-        gap: 3,
-        p: 2,
+        position: "absolute",
+        top: 64,
+        left: "50%",
+        transform: "translateX(-50%)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: 2,
+        background: "rgba(255, 255, 255, 0.85)",
+        backdropFilter: "blur(6px)",
+        borderRadius: "12px",
+        boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+        padding: "6px 12px",
+        zIndex: 1000,
       }}
     >
-      {/* Verbindungstatus */}
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-around",
-          gap: 4,
-          backgroundColor: "#f5f5f5",
-          borderRadius: "5px",
-          p: 2,
-        }}
-      >
-        <Box
+      {/* 🔵 Verbindungssymbol */}
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+        {connected ? (
+          <Bluetooth sx={{ color: theme.palette.success.main }} />
+        ) : (
+          <BluetoothDisabled sx={{ color: theme.palette.error.main }} />
+        )}
+        <Typography
+          variant="body2"
           sx={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            gap: 1,
+            color: connected
+              ? theme.palette.success.main
+              : theme.palette.error.main,
+            fontWeight: 600,
           }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              gap: 1,
-              alignItems: "center",
-            }}
-          >
-            {connected ? (
-              <Bluetooth sx={{ color: theme.palette.success.main }} />
-            ) : (
-              <BluetoothDisabled sx={{ color: theme.palette.error.main }} />
-            )}
-
-            <div
-              style={{
-                width: "10px",
-                height: "10px",
-                backgroundColor: connected
-                  ? theme.palette.success.main
-                  : theme.palette.error.main,
-                borderRadius: "50%",
-                boxShadow: connected ? "0 0 8px #00cc44" : "0 0 8px #ff3333",
-                animation: "pulse 2s infinite",
-              }}
-              className="status-dot"
-            />
-            <style>
-              {`
-                @keyframes pulse {
-                  0%   { box-shadow: 0 0 6px ${connected ? "#00cc44" : "#ff3333"}; }
-                  50%  { box-shadow: 0 0 15px ${connected ? "#00ff55" : "#ff6666"}; }
-                  100% { box-shadow: 0 0 6px ${connected ? "#00cc44" : "#ff3333"}; }
-                }
-              `}
-            </style>
-          </Box>
-
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            <Typography
-              sx={{
-                fontWeight: 600,
-                color: "#6b7280",
-              }}
-            >
-              {connected ? "Connected" : "Disconnected"}
-            </Typography>
-
-            <Box
-              sx={{
-                backgroundColor: connected
-                  ? theme.palette.primary.main
-                  : theme.palette.error.main,
-                color: "white",
-                textAlign: "center",
-                display: "inline-block",
-                py: 0.2,
-                px: 0.6,
-                fontSize: 14,
-                borderRadius: 10,
-              }}
-            >
-              {connected ? "senseBox bereit" : "Inactive"}
-            </Box>
-          </Box>
-        </Box>
-
-        <Button
-          color={connected ? "error" : "primary"}
-          variant={connected ? "outlined" : "contained"}
-          onClick={connected ? onDisconnect : onConnect}
-          disabled={!supported}
-          startIcon={<Computer />}
-          size="medium"
-          sx={{ py: 1.5 }}
-        >
-          {connected ? "Disconnect" : "Connect Device"}
-        </Button>
+          {connected ? "Connected" : "Disconnected"}
+        </Typography>
       </Box>
 
-      {/* Steuerbuttons */}
-      <Box
-        sx={{
-          display: "flex",
-          gap: 4,
-          justifyContent: "space-between",
-          width: "100%",
-        }}
-      >
-        <Button
-          onClick={handlePlay}
-          disabled={!connected}
-          size="large"
-          variant="contained"
-          color="primary"
-        >
-          <div>
-            <PlayArrow /> <br />
-            Start
-          </div>
-        </Button>
+      {/* ⚙️ Steuerbuttons */}
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+        <Tooltip title="Connect to senseBox">
+          <Button
+            variant={connected ? "outlined" : "contained"}
+            color={connected ? "error" : "primary"}
+            size="small"
+            startIcon={<Computer />}
+            onClick={connected ? onDisconnect : onConnect}
+            disabled={!supported}
+            sx={{ minWidth: 110 }}
+          >
+            {connected ? "Disconnect" : "Connect"}
+          </Button>
+        </Tooltip>
 
-        <Button
-          onClick={() => onQuick("STOP")}
-          size="large"
-          disabled={!connected}
-          variant="contained"
-          color="error"
-        >
-          <div>
-            <Stop /> <br />
+        <Tooltip title="Send & Start program">
+          <Button
+            onClick={handlePlay}
+            disabled={!connected}
+            variant="contained"
+            color="success"
+            size="small"
+            startIcon={<PlayArrow />}
+            sx={{
+              fontWeight: 600,
+              textTransform: "none",
+              px: 2,
+            }}
+          >
+            Run
+          </Button>
+        </Tooltip>
+
+        <Tooltip title="Stop program">
+          <Button
+            onClick={() => onQuick("STOP")}
+            disabled={!connected}
+            variant="contained"
+            color="error"
+            size="small"
+            startIcon={<Stop />}
+            sx={{
+              fontWeight: 600,
+              textTransform: "none",
+              px: 2,
+            }}
+          >
             Stop
-          </div>
-        </Button>
+          </Button>
+        </Tooltip>
       </Box>
     </Box>
   );

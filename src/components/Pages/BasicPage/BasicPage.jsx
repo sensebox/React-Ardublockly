@@ -52,18 +52,27 @@ const BasicPage = () => {
   } = useWebSerial({ script, setLog, logBoxRef });
 
   useEffect(() => {
-    var head = document.head;
-    var link = document.createElement("link");
-
+    // 📦 Dynamisch CSS hinzufügen
+    const head = document.head;
+    const link = document.createElement("link");
     link.type = "text/css";
     link.rel = "stylesheet";
     link.href = new URL("./toolbox_style.css", import.meta.url).href;
     head.appendChild(link);
 
+    // 🎨 Hintergrund setzen (freundlich, senseBox Basic)
+    const root = document.querySelector(":root");
+    root.style.setProperty(
+      "--url",
+      "linear-gradient(180deg, rgba(250,250,252,0.7) 0%, rgba(242,245,248,0.7) 100%)",
+    );
+
+    // 🧹 Cleanup: CSS entfernen und Hintergrund zurücksetzen
     return () => {
       if (head.contains(link)) {
         head.removeChild(link);
       }
+      root.style.removeProperty("--url");
     };
   }, []);
 
@@ -80,149 +89,19 @@ const BasicPage = () => {
     >
       <Box sx={{ display: "flex", gap: 2, flex: 1, minHeight: 0 }}>
         {/* Linke Seite */}
-        <Box sx={{ flex: " 0 0 70%", minHeight: 0, display: "flex" }}>
+        <Box sx={{ flex: " 0 0 100%", minHeight: 0, display: "flex" }}>
           <BlocklyCard generatorName="Basic" />
-        </Box>
-
-        {/* Rechte Seite */}
-        <Box
-          sx={{
-            flex: 1,
-            minHeight: 0,
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-          }}
-        >
-          <Box
-            sx={{
-              flex: 1,
-              minHeight: 0,
-              display: "flex",
-              flexDirection: "column",
-              gap: 2,
-            }}
-          >
-            <Accordion
-              expanded={expanded === "panel1"}
-              onChange={handleChange("panel1")}
-              sx={{
-                borderRadius: 3,
-                border: (theme) => `1px solid ${theme.palette.divider}`,
-                boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
-                overflow: "hidden",
-                "&:hover": {
-                  boxShadow: "0 6px 16px rgba(0,0,0,0.12)",
-                },
-              }}
-            >
-              <AccordionSummary
-                aria-controls="panel1d-content"
-                id="panel1d-header"
-                expandIcon={<ExpandMoreRounded />}
-                sx={{
-                  borderBottom: `5px ${theme.palette.primary.main} solid`,
-                  borderRadius: "5px",
-                }}
-              >
-                <Typography variant="h6" component="h2">
-                  Verbinden
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <ConnectWizard
-                  supported={supported}
-                  connected={connected}
-                  onSend={() => sendScript(delay)}
-                  status={status}
-                  delay={delay}
-                  setDelay={setDelay}
-                  onConnect={connect}
-                  onDisconnect={disconnect}
-                  onQuick={(cmd) => sendLine(cmd)}
-                />
-              </AccordionDetails>
-            </Accordion>
-            <Accordion
-              expanded={expanded === "panel2"}
-              onChange={handleChange("panel2")}
-              sx={{
-                borderRadius: 3,
-                border: `1px solid ${theme.palette.divider}`,
-                boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
-                overflow: "hidden",
-                "&:hover": {
-                  boxShadow: "0 6px 16px rgba(0,0,0,0.12)",
-                },
-              }}
-            >
-              <AccordionSummary
-                aria-controls="panel2d-content"
-                id="panel2d-header"
-                expandIcon={<ExpandMoreRounded />}
-                sx={{
-                  borderBottom: `5px ${theme.palette.primary.main} solid`,
-                  borderRadius: "5px",
-                }}
-              >
-                <Typography variant="h6" component="h2">
-                  Kurzanleitung
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <TutorialAccordion />
-              </AccordionDetails>
-            </Accordion>
-            <Accordion
-              expanded={expanded === "panel3"}
-              onChange={handleChange("panel3")}
-              sx={{
-                borderRadius: 3,
-                border: (theme) => `1px solid ${theme.palette.divider}`,
-                boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
-                overflow: "hidden",
-                "&:hover": {
-                  boxShadow: "0 6px 16px rgba(0,0,0,0.12)",
-                },
-              }}
-            >
-              <AccordionSummary
-                aria-controls="panel3d-content"
-                id="panel3  d-header"
-                expandIcon={<ExpandMoreRounded />}
-                sx={{
-                  borderBottom: `5px ${theme.palette.primary.main} solid`,
-                  borderRadius: "5px",
-                }}
-              >
-                <Typography variant="h6" component="h2">
-                  Code & Log
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 2,
-                  }}
-                >
-                  <PseudocodeCard
-                    script={script}
-                    setScript={setScript}
-                    connected={connected}
-                    onSend={() => sendScript(delay)}
-                  />
-                  <DeviceLogCard
-                    log={log}
-                    logBoxRef={logBoxRef}
-                    onClear={clearLog}
-                    onCopy={copyLog}
-                  />
-                </Box>
-              </AccordionDetails>
-            </Accordion>
-          </Box>
+          <ConnectWizard
+            supported={supported}
+            connected={connected}
+            onSend={() => sendScript(delay)}
+            status={status}
+            delay={delay}
+            setDelay={setDelay}
+            onConnect={connect}
+            onDisconnect={disconnect}
+            onQuick={(cmd) => sendLine(cmd)}
+          />
         </Box>
       </Box>
     </Box>

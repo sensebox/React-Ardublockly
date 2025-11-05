@@ -6,6 +6,7 @@ import { onChangeCode, onChangeWorkspace } from "@/actions/workspaceActions";
 import { useDispatch } from "react-redux";
 import { BasicTheme } from "@/components/Blockly/themes/basicTheme";
 import { toolboxBasicObject } from "@/components/Blockly/toolbox/ToolboxBasic";
+import { ScrollBlockDragger } from "@blockly/plugin-scroll-options";
 const getGeneratorByName = (name) => {
   if (!name) return Blockly.Basic;
   // bevorzugt den Pfad, den du schon nutzt:
@@ -51,18 +52,31 @@ const BlocklyCard = ({
       trashcan: true,
       collapse: true,
       zoom: {
-        wheel: true,
+        wheel: false,
         startScale: 1,
         maxScale: 3,
         minScale: 0.3,
         scaleSpeed: 1.1,
         pinch: true,
       },
-      grid: { spacing: 20, length: 3, colour: "#ddd", snap: true },
+      plugins: {
+        blockDragger: ScrollBlockDragger,
+      },
       move: { scrollbars: false, drag: true, wheel: true },
       sounds: false,
     });
 
+    // Startblock erzeugen
+    const startBlock = ws.newBlock("sensebox_start"); // <-- dein Blocktyp
+    startBlock.initSvg();
+    startBlock.render();
+
+    // Optional: Block an feste Position setzen
+    startBlock.moveBy(50, 50);
+
+    // Optional: Block fixieren (nicht löschbar)
+    startBlock.setDeletable(false);
+    startBlock.setMovable(false);
     // Initial XML
     if (initialXml) {
       try {

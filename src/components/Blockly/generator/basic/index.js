@@ -186,6 +186,10 @@ Blockly.Generator.Basic.forBlock["time_delay_5s"] = function () {
   return "delay(5000)"; // nichts generieren
 };
 
+Blockly.Generator.Basic.forBlock["sensebox_start"] = function () {
+  return ""; // nichts generieren
+};
+
 // Default-Fallback: Unsupported Block -> Kommentar
 Blockly.Generator.Basic.blockToCode = function (block) {
   const fn = Blockly.Generator.Basic.forBlock?.[block.type];

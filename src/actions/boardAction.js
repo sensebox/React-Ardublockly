@@ -9,6 +9,7 @@ export const setBoard = (board) => (dispatch) => {
   window.sessionStorage.setItem("board", boardTmp);
   setBoardHelper(boardTmp);
   const root = document.querySelector(":root");
+
   switch (boardTmp) {
     case "MCU":
       root.style.setProperty("--url", `url(${mcu_opacity})`);

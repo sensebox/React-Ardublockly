@@ -167,3 +167,22 @@ Blockly.defineBlocksWithJsonArray([
     colour: getColour().sensebox,
   },
 ]);
+
+Blockly.defineBlocksWithJsonArray([
+  {
+    type: "sensebox_start",
+    message0: "Füge hier deine Blöcke ein %1 → Aktionen %2",
+    args0: [
+      {
+        type: "input_dummy",
+      },
+      {
+        type: "input_statement",
+        name: "DO",
+      },
+    ],
+    colour: 240,
+    tooltip: "Startpunkt deines Programms",
+    helpUrl: "",
+  },
+]);

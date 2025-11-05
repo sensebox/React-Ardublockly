@@ -62,3 +62,10 @@ Blockly.Generator.Arduino.forBlock["display_print_basic"] = function (
 ) {
   return ""; // nichts generieren
 };
+
+Blockly.Generator.Arduino.forBlock["sensebox_start"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};
