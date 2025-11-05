@@ -60,38 +60,29 @@ class OpenProject extends Component {
   processXMLFile = () => {
     this.props.setBoard(this.state.xmlFileBoard);
 
-    const workspace = Blockly.getMainWorkspace();
-    var xmlFile = this.state.xmlFileState;
-    var xmlBefore = this.props.xml;
-    workspace.clear();
-    this.props.clearStats();
-    Blockly.Xml.domToWorkspace(xmlFile, workspace);
-    if (workspace.getAllBlocks().length < 1) {
-      Blockly.Xml.domToWorkspace(
-        Blockly.utils.xml.textToDom(xmlBefore),
-        workspace,
-      );
-      this.setState({
-        open: true,
-        title: Blockly.Msg.no_blocks_found_title,
-        content: Blockly.Msg.no_blocks_found_text,
-      });
-    } else {
-      if (!this.props.assessment) {
-        var extensionPosition = this.state.xmlFileName.lastIndexOf(".");
-        this.props.workspaceName(
-          this.state.xmlFileName.substr(0, extensionPosition),
-        );
+    // Delay, damit der neue Blockly-Workspace & Toolbox fertig initialisiert sind
+    setTimeout(() => {
+      const workspace = Blockly.getMainWorkspace();
+      if (!workspace) return;
+
+      const xmlFile = this.state.xmlFileState;
+      workspace.clear();
+      this.props.clearStats();
+
+      try {
+        Blockly.Xml.domToWorkspace(xmlFile, workspace);
+      } catch (e) {
+        console.error("XML konnte nicht geladen werden:", e);
       }
+
       this.setState({
         open2: false,
-        showOldXMLFileWarning: false,
         snackbar: true,
         type: "success",
         key: Date.now(),
         message: Blockly.Msg.xml_loaded,
       });
-    }
+    }, 300); // etwa 300 ms Delay
   };
 
   uploadXmlFile = (xmlFile) => {
@@ -111,15 +102,15 @@ class OpenProject extends Component {
           var boardAttribute = xmlDom.getAttribute("board");
           if (!boardAttribute) {
             this.setState({ showOldXMLFileWarning: true });
-            this.props.setBoard("mcu");
+            this.props.setBoard("MCU");
           }
           // store attributes and open confirmation dialog
           this.setState({
             open2: true,
-            selectedBoard: window.sessionStorage.getItem("board"),
+            selectedBoard: boardAttribute ? boardAttribute : "MCU",
             xmlFileName: xmlFile.name,
             xmlFileState: xmlDom,
-            xmlFileBoard: boardAttribute ? boardAttribute : "mcu",
+            xmlFileBoard: boardAttribute ? boardAttribute : "MCU",
           });
         } catch (err) {
           this.setState({
