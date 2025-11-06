@@ -66,7 +66,7 @@ const Toolbox = ({ workspace, toolbox }) => {
       style={{ display: "none" }}
       ref={toolbox}
     >
-      {selectedBoard === "MCU" || selectedBoard === "MCU:mini" ? (
+      {selectedBoard === "MCU" || selectedBoard === "MCU:MINI" ? (
         <ToolboxMcu />
       ) : (
         <ToolboxEsp />

@@ -14,7 +14,7 @@ export const setBoard = (board) => (dispatch) => {
     case "MCU":
       root.style.setProperty("--url", `url(${mcu_opacity})`);
       break;
-    case "MCU:mini":
+    case "MCU:MINI":
       root.style.setProperty("--url", `url(${mini_opacity})`);
       break;
     case "MCU-S2":
