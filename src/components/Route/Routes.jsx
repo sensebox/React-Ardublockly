@@ -28,6 +28,7 @@ import ProjectHome from "@/components/Pages/Project/ProjectHome";
 import Register from "../User/Register";
 import RegisterSuccess from "../User/RegisterSuccess";
 import PasswordReset from "../User/PasswordReset";
+import BasicPage from "../Pages/BasicPage/BasicPage";
 
 class Routes extends Component {
   componentDidMount() {
@@ -70,6 +71,9 @@ class Routes extends Component {
           <PrivateRoute path="/tutorial/:tutorialId/edit" exact>
             <Builder />
           </PrivateRoute>
+          <PublicRoute path="/basic" exact>
+            <BasicPage />
+          </PublicRoute>
 
           <Route path="/CodeEditor" exact>
             <CodeEditor />

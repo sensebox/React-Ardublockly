@@ -1,9 +1,10 @@
 import * as Blockly from "blockly";
-import { getColour } from "../helpers/colour";
-import * as Types from "../helpers/types";
-import { selectedBoard } from "../helpers/board";
+import { getColour } from "@/helpers/colour";
+import * as Types from "@/helpers/types";
+import { selectedBoard } from "@/helpers/board";
+
 import { FieldSlider } from "@blockly/field-slider";
-import { withBoardParam } from "../helpers/helpUrlBuilder";
+import { withBoardParam } from "@/helpers/helpUrlBuilder";
 
 /**
  * HDC1080 Temperature and Humidity Sensor

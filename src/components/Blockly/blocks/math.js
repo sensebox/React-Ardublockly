@@ -1,6 +1,6 @@
 import * as Blockly from "blockly/core";
-import { getColour } from "../helpers/colour";
-import * as Types from "../helpers/types";
+import { getColour } from "@/helpers/colour";
+import * as Types from "@/helpers/types";
 
 /*
  * NOTE/TODO:

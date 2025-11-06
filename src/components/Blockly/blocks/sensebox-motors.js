@@ -1,6 +1,7 @@
 import * as Blockly from "blockly/core";
-import { getColour } from "../helpers/colour";
-import { selectedBoard } from "../helpers/board";
+import { getColour } from "@/helpers/colour";
+import { selectedBoard } from "@/helpers/board";
+
 import { FieldSlider } from "@blockly/field-slider";
 
 /**

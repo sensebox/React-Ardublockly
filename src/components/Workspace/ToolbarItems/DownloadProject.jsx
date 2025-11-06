@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 
 import { saveAs } from "file-saver";
 
-import { detectWhitespacesAndReturnReadableResult } from "../../../helpers/whitespace";
+import { detectWhitespacesAndReturnReadableResult } from "@/helpers/whitespace";
 
 import withStyles from "@mui/styles/withStyles";
 import IconButton from "@mui/material/IconButton";
