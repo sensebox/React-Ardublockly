@@ -220,13 +220,13 @@ const Navbar = () => {
                     open={Boolean(anchorElBoard)}
                     onClose={handleBoardClose}
                   >
-                    {["MCU", "MCU:mini", "MCU-S2"].map((b) => (
+                    {["MCU", "MCU:MINI", "MCU-S2"].map((b) => (
                       <MenuItem
                         key={b}
                         value={b}
                         onClick={() => changeBoard(b)}
                       >
-                        {b}
+                        {b === "MCU:MINI" ? "MCU:mini" : b}
                       </MenuItem>
                     ))}
                   </Menu>
