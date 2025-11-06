@@ -1,40 +1,15 @@
 import React, { use, useEffect, useMemo, useRef, useState } from "react";
-import {
-  Accordion,
-  accordionClasses,
-  AccordionDetails,
-  accordionDetailsClasses,
-  AccordionSummary,
-  Box,
-  Fade,
-  Typography,
-  useTheme,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-} from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import ConnectWizard from "./ConnectWizard";
-import LeftPlaceholder from "./BlocklyCard";
-import PseudocodeCard from "./PseudocodeCard";
-import DeviceLogCard from "./DeviceLogCard";
 import useWebSerial from "./WebSerialService";
 import BlocklyCard from "./BlocklyCard";
-import ReactDOMServer from "react-dom/server";
-import { useSelector } from "react-redux";
 import "@/components/Blockly/blocks/basic/index"; // registriert Block
-import { ExpandMoreRounded } from "@mui/icons-material";
-import TutorialAccordion from "./TutorialAccordion";
+import senseboxlogo from "@/data/senseBox_Icon_bunt.png";
 
 const BasicPage = () => {
-  const [script, setScript] = useState("");
   const [log, setLog] = useState("");
-  const [code, setCode] = useState("");
-  const [expanded, setExpanded] = React.useState("panel1");
-  const theme = useTheme();
-  const handleChange = (panel) => (event, newExpanded) => {
-    setExpanded(newExpanded ? panel : false);
-  };
+  const [script, setScript] = useState("");
+
   const logBoxRef = useRef(null);
 
   const {
@@ -47,8 +22,6 @@ const BasicPage = () => {
     disconnect,
     sendLine,
     sendScript,
-    clearLog,
-    copyLog,
   } = useWebSerial({ script, setLog, logBoxRef });
 
   useEffect(() => {
@@ -62,10 +35,8 @@ const BasicPage = () => {
 
     // 🎨 Hintergrund setzen (freundlich, senseBox Basic)
     const root = document.querySelector(":root");
-    root.style.setProperty(
-      "--url",
-      "linear-gradient(180deg, rgba(250,250,252,0.7) 0%, rgba(242,245,248,0.7) 100%)",
-    );
+
+    root.style.setProperty("--url", `url(${senseboxlogo})`);
 
     // 🧹 Cleanup: CSS entfernen und Hintergrund zurücksetzen
     return () => {

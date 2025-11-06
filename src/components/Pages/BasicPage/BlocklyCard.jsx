@@ -62,7 +62,7 @@ const BlocklyCard = ({
       plugins: {
         blockDragger: ScrollBlockDragger,
       },
-      move: { scrollbars: false, drag: true, wheel: true },
+      move: { scrollbars: true, drag: true, wheel: true },
       sounds: false,
     });
 
