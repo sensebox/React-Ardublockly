@@ -192,6 +192,7 @@ const Navbar = () => {
               <>
                 <div style={{ padding: "12px" }}>
                   <Button
+                    id="navbar-selected-board" // 👈 eindeutig für Cypress
                     ref={mcuRef}
                     onClick={handleBoardOpen}
                     startIcon={<FontAwesomeIcon icon={faMicrochip} />}
@@ -211,7 +212,7 @@ const Navbar = () => {
                       borderRadius: "25px",
                     }}
                   >
-                    {selectedBoard}
+                    {selectedBoard === "MCU:MINI" ? "MCU:mini" : selectedBoard}
                   </Button>
                   <Menu
                     id="navbarBoardSelect"
