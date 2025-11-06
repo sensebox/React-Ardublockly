@@ -3,12 +3,20 @@ import { getColour } from "@/helpers/colour";
 
 Blockly.defineBlocksWithJsonArray([
   {
-    type: "basic_display",
-    message0: "Zeige auf dem Display %1",
-    args0: [{ type: "field_input", name: "value", text: "Text" }],
-    previousStatement: true,
+    type: "bme_basic",
+    message0: "%1",
+    args0: [
+      {
+        type: "field_image",
+        src: "/media/hardware/icons/Icon_BME680.svg",
+        width: 90,
+        height: 90,
+        alt: "*",
+      },
+    ],
+    previousStatement: null,
     nextStatement: null,
-    colour: 230,
+    colour: getColour().sensebox,
   },
 ]);
 
@@ -20,8 +28,8 @@ Blockly.defineBlocksWithJsonArray([
       {
         type: "field_image",
         src: "./media/blockly/led_red.png",
-        width: 50,
-        height: 50,
+        width: 90,
+        height: 90,
         alt: "*",
       },
     ],
@@ -36,8 +44,8 @@ Blockly.defineBlocksWithJsonArray([
       {
         type: "field_image",
         src: "./media/blockly/led_yellow.png",
-        width: 50,
-        height: 50,
+        width: 90,
+        height: 90,
         alt: "*",
       },
     ],
@@ -52,8 +60,8 @@ Blockly.defineBlocksWithJsonArray([
       {
         type: "field_image",
         src: "./media/blockly/led_blue.png",
-        width: 50,
-        height: 50,
+        width: 90,
+        height: 90,
         alt: "*",
       },
     ],
@@ -68,8 +76,8 @@ Blockly.defineBlocksWithJsonArray([
       {
         type: "field_image",
         src: "./media/blockly/led_off.png",
-        width: 50,
-        height: 50,
+        width: 90,
+        height: 90,
         alt: "*",
       },
     ],
@@ -87,8 +95,8 @@ Blockly.defineBlocksWithJsonArray([
       {
         type: "field_image",
         src: "https://cdn-icons-png.flaticon.com/512/31/31048.png",
-        width: 30,
-        height: 30,
+        width: 60,
+        height: 60,
       },
       {
         type: "field_label",
@@ -108,8 +116,8 @@ Blockly.defineBlocksWithJsonArray([
       {
         type: "field_image",
         src: "https://cdn-icons-png.flaticon.com/512/31/31048.png",
-        width: 30,
-        height: 30,
+        width: 60,
+        height: 60,
       },
       {
         type: "field_label",
@@ -129,8 +137,8 @@ Blockly.defineBlocksWithJsonArray([
       {
         type: "field_image",
         src: "https://cdn-icons-png.flaticon.com/512/31/31048.png",
-        width: 30,
-        height: 30,
+        width: 60,
+        height: 60,
       },
       {
         type: "field_label",
@@ -152,9 +160,9 @@ Blockly.defineBlocksWithJsonArray([
     args0: [
       {
         type: "field_image",
-        src: "https://cdn-icons-png.flaticon.com/512/833/833313.png",
-        width: 30,
-        height: 30,
+        src: "/media/hardware/icons/Icon_OLED-Display.svg",
+        width: 90,
+        height: 90,
       },
       {
         type: "input_value",

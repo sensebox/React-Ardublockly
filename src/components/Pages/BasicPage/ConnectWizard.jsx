@@ -44,8 +44,8 @@ const ConnectWizard = ({
         background: "rgba(255, 255, 255, 0.85)",
         backdropFilter: "blur(6px)",
         borderRadius: "12px",
-        boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-        padding: "6px 12px",
+        boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
+        padding: "12px 24px",
         zIndex: 1000,
       }}
     >
