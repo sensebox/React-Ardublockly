@@ -41,7 +41,7 @@ const CodeEditor = () => {
   const selectedBoard = store.getState().board.board;
   const filename = "sketch";
   const baseCode = `
-${selectedBoard === "MCU" || selectedBoard === "MCU:mini" ? "#include <senseBoxIO.h>" : ""}    
+${selectedBoard === "MCU" || selectedBoard === "MCU:MINI" ? "#include <senseBoxIO.h>" : ""}    
 void setup () {
              
 }
