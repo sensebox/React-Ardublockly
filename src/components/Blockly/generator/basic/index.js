@@ -132,7 +132,7 @@ Blockly.Generator.Basic.forBlock["sensebox_rgb_led"] = function (
   generator,
 ) {
   var color = block.getFieldValue("COLOR");
-  return "led(255,0,0)";
+  return "led(255,0,0)\n";
 };
 
 Blockly.Generator.Basic.forBlock["basic_display"] = function (
@@ -140,7 +140,7 @@ Blockly.Generator.Basic.forBlock["basic_display"] = function (
   generator,
 ) {
   var text = block.getFieldValue("value");
-  return `display(${text})`;
+  return `display(${text})\n`;
 };
 
 Blockly.Generator.Basic.forBlock["time_delay"] = function (block, generator) {
@@ -153,16 +153,16 @@ Blockly.Generator.Basic.forBlock["time_delay"] = function (block, generator) {
 };
 
 Blockly.Generator.Basic.forBlock["basic_red"] = function (block, generator) {
-  return `led(255,0,0)`;
+  return `led(255,0,0)\n`;
 };
 Blockly.Generator.Basic.forBlock["basic_yellow"] = function (block, generator) {
-  return `led(255,255,0)`;
+  return `led(255,255,0)\n`;
 };
 Blockly.Generator.Basic.forBlock["basic_blue"] = function (block, generator) {
-  return `led(0,0,255)`;
+  return `led(0,0,255)\n`;
 };
 Blockly.Generator.Basic.forBlock["basic_off"] = function (block, generator) {
-  return `led(0,0,0)`;
+  return `led(0,0,0)\n`;
 };
 
 Blockly.Generator.Basic.forBlock["display_print_basic"] = function (
@@ -171,7 +171,7 @@ Blockly.Generator.Basic.forBlock["display_print_basic"] = function (
 ) {
   const value =
     generator.valueToCode(block, "inside", generator.ORDER_ATOMIC) || '""';
-  return `display(${value})`;
+  return `display(${value})\n`;
 };
 
 Blockly.Generator.Basic.forBlock["time_delay_1s"] = function () {
@@ -186,18 +186,25 @@ Blockly.Generator.Basic.forBlock["time_delay_5s"] = function () {
   return "delay(5000)"; // nichts generieren
 };
 
-Blockly.Generator.Basic.forBlock["sensebox_start"] = function () {
-  return ""; // nichts generieren
+Blockly.Generator.Basic.forBlock["sensebox_start"] = function (block) {
+  // Hole den Code aller Blöcke im Statement-Feld "DO"
+  const statements_do = Blockly.Generator.Basic.statementToCode(block, "DO");
+
+  // Optional: Füge hier Setup- oder Modul-Code hinzu, falls du willst
+  const code = statements_do;
+
+  // Gib den kombinierten Code zurück
+  return code;
 };
 
 // Default-Fallback: Unsupported Block -> Kommentar
-Blockly.Generator.Basic.blockToCode = function (block) {
-  const fn = Blockly.Generator.Basic.forBlock?.[block.type];
-  if (!fn) {
-    return `REM Unsupported block: ${block.type}\n`;
-  }
-  return fn.call(Blockly.Generator.Basic, block, Blockly.Generator.Basic);
-};
+// Blockly.Generator.Basic.blockToCode = function (block) {
+//   const fn = Blockly.Generator.Basic.forBlock?.[block.type];
+//   if (!fn) {
+//     return `REM Unsupported block: ${block.type}\n`;
+//   }
+//   return fn.call(Blockly.Generator.Basic, block, Blockly.Generator.Basic);
+// };
 
 // Name-DB initialisieren, wenn ein Workspace kompiliert wird
 Blockly.Generator.Basic.init = function (workspace) {

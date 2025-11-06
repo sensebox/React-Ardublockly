@@ -30,6 +30,7 @@ const BlocklyCard = ({
 }) => {
   const containerRef = useRef(null);
   const dispatch = useDispatch();
+
   useEffect(() => {
     if (!containerRef.current) return;
 
