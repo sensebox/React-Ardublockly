@@ -5,6 +5,7 @@ import useWebSerial from "./WebSerialService";
 import BlocklyCard from "./BlocklyCard";
 import "@/components/Blockly/blocks/basic/index"; // registriert Block
 import senseboxlogo from "@/data/senseBox_Icon_bunt.png";
+import DeviceLogCard from "./DeviceLogCard";
 
 const BasicPage = () => {
   const [log, setLog] = useState("");
@@ -73,6 +74,7 @@ const BasicPage = () => {
             onDisconnect={disconnect}
             onQuick={(cmd) => sendLine(cmd)}
           />
+          <DeviceLogCard log={log} onClear={() => setLog("")} />{" "}
         </Box>
       </Box>
     </Box>

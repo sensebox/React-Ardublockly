@@ -36,21 +36,34 @@ export default function useWebSerial({ setLog, logBoxRef }) {
 
   const readLoop = useCallback(
     async (reader) => {
-      while (true) {
-        try {
+      let buffer = [];
+      const flush = () => {
+        if (buffer.length) {
+          setLog((prev) =>
+            prev ? prev + "\n" + buffer.join("\n") : buffer.join("\n"),
+          );
+          buffer = [];
+        }
+      };
+
+      const interval = setInterval(flush, 100); // alle 100ms rendern
+      try {
+        while (true) {
           const { value, done } = await reader.read();
           if (done) break;
           if (value) {
             const lines = value.replace(/\r/g, "").split("\n");
-            for (const ln of lines) if (ln.length) logMessage(ln);
+            buffer.push(...lines.filter(Boolean));
           }
-        } catch (err) {
-          logMessage(`Read error: ${err}`);
-          break;
         }
+      } catch (err) {
+        logMessage(`Read error: ${err}`);
+      } finally {
+        clearInterval(interval);
+        flush();
       }
     },
-    [logMessage],
+    [setLog, logMessage],
   );
 
   const connect = useCallback(async () => {

@@ -5,7 +5,9 @@ import { getColour } from "@/helpers/colour";
 export const toolboxBasicObject = {
   kind: "flyoutToolbox",
   contents: [
-    { kind: "block", type: "bme_basic" },
+    // { kind: "block", type: "bme_basic" },
+    { kind: "block", type: "bme_tmp" },
+    { kind: "block", type: "bme_humi" },
     { kind: "block", type: "display_print_basic" },
     { kind: "block", type: "text" },
     { kind: "block", type: "basic_red" },

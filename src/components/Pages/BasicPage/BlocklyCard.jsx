@@ -73,19 +73,21 @@ const BlocklyCard = ({
     startBlock.render();
 
     // Optional: Block genau in die Mitte setzen
-    try {
-      const metrics = ws.getMetrics();
-      const targetX = metrics.viewLeft + metrics.viewWidth / 2;
-      const targetY = metrics.viewTop + metrics.viewHeight / 2;
-      const current = startBlock.getRelativeToSurfaceXY();
-      startBlock.moveBy(
-        targetX - (current?.x || 0),
-        targetY - (current?.y || 0),
-      );
-    } catch (e) {
-      // fallback: leichte Verschiebung, falls Mitte nicht berechnet werden kann
-      startBlock.moveBy(0, 50);
-    }
+    // try {
+    //   const metrics = ws.getMetrics();
+    //   const targetX = metrics.viewLeft + metrics.viewWidth / 2;
+    //   const targetY = metrics.viewTop + metrics.viewHeight / 2;
+    //   const current = startBlock.getRelativeToSurfaceXY();
+    //   startBlock.moveBy(
+    //     targetX - (current?.x || 0),
+    //     targetY - (current?.y || 0),
+    //   );
+    // } catch (e) {
+    //   // fallback: leichte Verschiebung, falls Mitte nicht berechnet werden kann
+    //   startBlock.moveBy(0, 50);
+    // }
+
+    startBlock.moveBy(50, 100);
 
     // Optional: Block fixieren (nicht löschbar)
     startBlock.setDeletable(false);
