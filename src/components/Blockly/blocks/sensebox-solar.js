@@ -57,7 +57,7 @@ Blockly.Blocks["sensebox_solar_charger_SB041"] = {
         ),
         "MEASUREMENT",
       );
-    if (board === "MCU:mini") {
+    if (board === "MCU:MINI") {
       this.setTooltip(Blockly.Msg.senseBox_solar_charger_SB041_tooltip_mini);
     } else if (board === "MCU-S2") {
       this.setTooltip(Blockly.Msg.senseBox_solar_charger_SB041_tooltip_esp32);
