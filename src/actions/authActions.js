@@ -228,10 +228,22 @@ export const authHeader = () => {
   return {};
 };
 
-// ======================
-// Auth Interceptor (optional – für Token-basierte API-Aufrufe)
-// ======================
+let isRefreshing = false;
+let failedQueue = [];
+
+const processQueue = (error, token = null) => {
+  failedQueue.forEach((prom) => {
+    if (error) {
+      prom.reject(error);
+    } else {
+      prom.resolve(token);
+    }
+  });
+  failedQueue = [];
+};
+
 export const setupInterceptors = (store) => {
+  // Request-Interceptor
   axios.interceptors.request.use((config) => {
     const token = store.getState().auth.token;
     if (token) {
@@ -240,6 +252,89 @@ export const setupInterceptors = (store) => {
     config.headers["Content-Type"] = "application/json";
     return config;
   });
+
+  // Response-Interceptor
+  axios.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+      const originalRequest = error.config;
+
+      if (error.response?.status === 401 && !originalRequest._retry) {
+        if (isRefreshing) {
+          return new Promise((resolve, reject) => {
+            failedQueue.push({ resolve, reject });
+          })
+            .then((newToken) => {
+              originalRequest.headers.Authorization = `Bearer ${newToken}`;
+              return axios(originalRequest);
+            })
+            .catch((err) => {
+              console.error(err.message);
+              return Promise.reject(err);
+            });
+        }
+
+        originalRequest._retry = true;
+        isRefreshing = true;
+
+        const refreshToken = localStorage.getItem("refreshToken");
+        if (!refreshToken) {
+          store.dispatch({ type: "LOGOUT_SUCCESS" });
+          localStorage.removeItem("token");
+          localStorage.removeItem("refreshToken");
+          window.location.href = "/login";
+          return Promise.reject(error);
+        }
+
+        try {
+          const newTokens = await store.dispatch(
+            refreshTokenAction(refreshToken),
+          );
+          const { token: newAccessToken, refreshToken: newRefreshToken } =
+            newTokens;
+
+          localStorage.setItem("token", newAccessToken);
+          localStorage.setItem("refreshToken", newRefreshToken);
+
+          store.dispatch({
+            type: "REFRESH_TOKEN_SUCCESS",
+            payload: { token: newAccessToken, refreshToken: newRefreshToken },
+          });
+
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          processQueue(null, newAccessToken);
+          return axios(originalRequest);
+        } catch (refreshError) {
+          console.error(refreshError.response?.data || refreshError.message);
+          processQueue(refreshError, null);
+          store.dispatch({ type: "LOGOUT_SUCCESS" });
+          localStorage.removeItem("token");
+          localStorage.removeItem("refreshToken");
+          window.location.href = "/login";
+          return Promise.reject(refreshError);
+        } finally {
+          isRefreshing = false;
+        }
+      }
+
+      return Promise.reject(error);
+    },
+  );
+};
+
+export const refreshTokenAction = (refreshToken) => async () => {
+  console.log("[Auth] 📡 Calling /refresh-token endpoint...");
+  const config = {
+    headers: { "Content-Type": "application/json" },
+  };
+
+  const res = await axios.post(
+    `${API_BASE}/user/refresh-token`,
+    JSON.stringify({ refreshToken }),
+    config,
+  );
+  console.log("[Auth] 📥 Received new tokens from server");
+  return res.data; // { token, refreshToken }
 };
 
 // 🔥 Neue Action für Passwort-Reset-Anfrage
