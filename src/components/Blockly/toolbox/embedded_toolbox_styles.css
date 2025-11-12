@@ -26,8 +26,8 @@
     background: #fff;
     padding: 0 2px 0 0 !important; /* Remove Blockly's default indentation */
     position: relative;
-    width: var(--cat-width);
-    flex-shrink: 0;
+    flex: 0 1 auto;
+    min-width: fit-content;
   }
   
   /* Disable focus styling */
@@ -47,17 +47,17 @@
     padding: var(--cat-padding-x);
   }
   
-  /* Prevent wrapping of main categories (level 1) only */
+  /* Allow wrapping of main categories (level 1) */
   .embedded-mode .blocklyToolboxCategoryGroup {
-    flex-wrap: nowrap !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    white-space: nowrap !important;
+    flex-wrap: wrap !important;
+    overflow-x: visible !important;
+    overflow-y: visible !important;
   }
   
-  /* Apply minimum width to main category containers only */
+  /* Set category min-width to 1/4 of screen for wrapping */
   .embedded-mode .blocklyToolbox .blocklyToolboxCategoryContainer[aria-level="1"] {
-    min-width: var(--cat-min-width) !important;
+    min-width: calc(25vw - 9px) !important;
+    flex: 0 1 auto !important;
   }
   
   
@@ -139,5 +139,22 @@
   .embedded-mode .blocklyScrollbarHandle {
     width: 12px !important;
     height: 12px !important;
+  }
+  
+  /* Make search input take full width */
+  .embedded-mode .blocklyToolboxCategoryContainer:has(input[type="search"]) {
+    width: 100% !important;
+    min-width: 100% !important;
+    flex: 1 1 100% !important;
+  }
+  
+  .embedded-mode .blocklyToolboxCategory:has(input[type="search"]) {
+    width: 100% !important;
+    min-width: 100% !important;
+  }
+  
+  .embedded-mode .blocklyToolboxCategory:has(input[type="search"]) input[type="search"] {
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
   
