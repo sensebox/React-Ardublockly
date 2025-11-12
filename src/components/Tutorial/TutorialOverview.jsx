@@ -1,8 +1,7 @@
 import { Box, Typography, Tooltip } from "@mui/material";
 import { useTheme } from "@mui/styles";
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { AccessTime, School, Category, Grade } from "@mui/icons-material";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 // /Users/eric/Documents/arbeit/React-Ardublockly/src/components/Tutorial/TutorialOverview.jsx
 /**
  * TutorialOverview
@@ -14,10 +13,7 @@ import { AccessTime, School, Category, Grade } from "@mui/icons-material";
  */
 export const TutorialOverview = ({ tutorial }) => {
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    console.log("Tutorial data:", tutorial);
-  }, [tutorial]);
+  const user = useSelector((state) => state.auth);
   // example of reading a global variable like theme from the store
   const theme = useTheme();
 
