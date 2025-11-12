@@ -83,13 +83,21 @@ body:has(.blockly-app-container) {
 
 /* Base embedded button styling */
 .embedded-button {
-  width: var(--embedded-touch-min-width) !important;
-  height: var(--embedded-touch-min-height) !important;
-  padding: 12px !important;
   min-width: var(--embedded-touch-min-width) !important;
   min-height: var(--embedded-touch-min-height) !important;
+  height: var(--embedded-touch-min-height) !important;
+  padding: 8px 16px !important;
   transition: transform 120ms ease !important;
   margin: 0 8px !important; /* Even spacing between buttons */
+  white-space: nowrap !important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
+  border-radius: 24px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
 }
 
 .embedded-button:first-child {

@@ -17,11 +17,11 @@ import Snackbar from "../../Snackbar.jsx";
 import withStyles from "@mui/styles/withStyles";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
+import Button from "@mui/material/Button";
 
 import { faShare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Dialog from "../../ui/Dialog.jsx";
-import Button from "@mui/material/Button";
 
 const styles = (theme) => {
   return {
@@ -81,17 +81,29 @@ class ResetWorkspace extends Component {
   };
 
   render() {
+    const tooltipText = Blockly.Msg.tooltip_reset_workspace;
     return (
       <div style={this.props.style}>
-        <Tooltip title={Blockly.Msg.tooltip_reset_workspace} arrow>
-          <IconButton
-            className={this.props.isEmbedded ? `${this.props.classes.buttonEmbedded} embedded-button embedded-button-primary` : this.props.classes.button}
+        {this.props.isEmbedded ? (
+          <Button
+            className={`embedded-button embedded-button-primary`}
             onClick={() => this.openDialog()}
-            size="large"
+            variant="contained"
+            startIcon={<FontAwesomeIcon icon={faShare} size="sm" flip="horizontal" />}
           >
-            <FontAwesomeIcon icon={faShare} size={this.props.isEmbedded ? "sm" : "xs"} flip="horizontal" />
-          </IconButton>
-        </Tooltip>
+            Zurücksetzen
+          </Button>
+        ) : (
+          <Tooltip title={tooltipText} arrow>
+            <IconButton
+              className={this.props.classes.button}
+              onClick={() => this.openDialog()}
+              size="large"
+            >
+              <FontAwesomeIcon icon={faShare} size="xs" flip="horizontal" />
+            </IconButton>
+          </Tooltip>
+        )}
 
         <Snackbar
           open={this.state.snackbar}

@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { useSelector } from "react-redux";
-import { IconButton, Tooltip } from "@mui/material";
+import { IconButton, Tooltip, Button } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { workspaceName } from "../../../actions/workspaceActions";
 import CompilationDialog from "../ToolbarItems/CompilationDialog/CompilationDialog";
 import withStyles from "@mui/styles/withStyles";
+import * as Blockly from "blockly/core";
 const styles = (theme) => {
   return {
     iconButton: {
@@ -43,16 +44,28 @@ const Compile = (props) => {
 
   return (
     <div>
-      <Tooltip title={tooltipText} arrow style={{ marginRight: "5px" }}>
-        <IconButton
-          className={`compileBlocks ${isEmbedded ? `${props.classes.iconButtonEmbedded} embedded-button embedded-button-compile` : props.classes.iconButton}`}
+      {isEmbedded ? (
+        <Button
+          className={`compileBlocks embedded-button embedded-button-compile`}
           onClick={openDialog}
-          size={"large"}
+          variant="contained"
+          startIcon={<FontAwesomeIcon icon={faClipboardCheck} size="sm" />}
           aria-label="Compile code"
         >
-          <FontAwesomeIcon icon={faClipboardCheck} size={isEmbedded ? "sm" : "xs"} />
-        </IconButton>
-      </Tooltip>
+          Kompilieren
+        </Button>
+      ) : (
+        <Tooltip title={tooltipText} arrow style={{ marginRight: "5px" }}>
+          <IconButton
+            className={`compileBlocks ${props.classes.iconButton}`}
+            onClick={openDialog}
+            size={"large"}
+            aria-label="Compile code"
+          >
+            <FontAwesomeIcon icon={faClipboardCheck} size="xs" />
+          </IconButton>
+        </Tooltip>
+      )}
 
       <CompilationDialog
         open={dialogOpen}

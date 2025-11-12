@@ -183,17 +183,29 @@ class ShareProject extends Component {
   };
 
   render() {
+    const tooltipText = Blockly.Msg.tooltip_share_project;
     return (
       <div style={this.props.style}>
-        <Tooltip title={Blockly.Msg.tooltip_share_project} arrow>
-          <IconButton
-            className={`shareBlocks ${this.props.isEmbedded ? `${this.props.classes.iconButtonEmbedded} embedded-button embedded-button-primary` : this.props.classes.iconButton}`}
+        {this.props.isEmbedded ? (
+          <Button
+            className={`shareBlocks embedded-button embedded-button-primary`}
             onClick={() => this.shareBlocks()}
-            size="large"
+            variant="contained"
+            startIcon={<FontAwesomeIcon icon={faShareAlt} size="sm" />}
           >
-            <FontAwesomeIcon icon={faShareAlt} size={this.props.isEmbedded ? "sm" : "xs"} />
-          </IconButton>
-        </Tooltip>
+            {tooltipText}
+          </Button>
+        ) : (
+          <Tooltip title={tooltipText} arrow>
+            <IconButton
+              className={`shareBlocks ${this.props.classes.iconButton}`}
+              onClick={() => this.shareBlocks()}
+              size="large"
+            >
+              <FontAwesomeIcon icon={faShareAlt} size="xs" />
+            </IconButton>
+          </Tooltip>
+        )}
 
         <Snackbar
           open={this.state.snackbar}
