@@ -35,7 +35,7 @@ const DeviceSelection = () => {
       src: "/media/hardware/blockly_esp.png",
     },
     {
-      value: "MCU:mini",
+      value: "MCU:MINI",
       alt: "Sensebox Mini",
       label: "senseBox MCU:mini",
       src: "/media/hardware/blockly_mini.png",

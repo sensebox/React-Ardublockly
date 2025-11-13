@@ -1,39 +1,47 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
+import PropTypes from "prop-types";
 
 import * as Blockly from "blockly/core";
-import "blockly/blocks";
-import "@blockly/toolbox-search"; // search plugin auto-registers here
+import "./blocks/index";
+import "@/components/Blockly/generator/index";
 
 import Toolbox from "./toolbox/Toolbox";
 import { reservedWords } from "./helpers/reservedWords";
 import Snackbar from "../Snackbar";
 
-import { Card } from "@mui/material";
+import "blockly/blocks";
 import {
   ScrollOptions,
   ScrollBlockDragger,
   ScrollMetricsManager,
 } from "@blockly/plugin-scroll-options";
 
-import { PositionedMinimap } from "@blockly/workspace-minimap";
+import { Card } from "@mui/material";
 import { addLog } from "@/reducers/logReducer";
 import { connect } from "react-redux";
 
-class BlocklyComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.blocklyDiv = React.createRef();
-    this.toolbox = React.createRef();
-    this.primaryWorkspace = null;
-    this.state = { workspace: undefined, snackbar: false };
-  }
+export function BlocklyComponent({
+  initialXml,
+  style,
+  addLog,
+  children,
+  ...rest
+}) {
+  const blocklyDivRef = useRef(null);
+  const toolboxRef = useRef(null);
+  const [workspace, setWorkspace] = useState(undefined);
 
-  componentDidMount() {
-    const { initialXml, children, ...rest } = this.props;
-    const { addLog } = this.props; // aus connect
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    type: "info",
+    key: 0,
+  });
 
-    const workspace = Blockly.inject(this.blocklyDiv.current, {
-      toolbox: this.toolbox.current,
+  // Inject Blockly once on mount
+  useEffect(() => {
+    const ws = Blockly.inject(blocklyDivRef.current, {
+      toolbox: toolboxRef.current,
       plugins: {
         blockDragger: ScrollBlockDragger,
         metricsManager: ScrollMetricsManager,
@@ -41,9 +49,9 @@ class BlocklyComponent extends React.Component {
       ...rest,
     });
 
-    this.primaryWorkspace = workspace;
-    this.setState({ workspace });
+    setWorkspace(ws);
 
+    // Change listener for logging
     const onBlocklyChange = (event) => {
       const IGNORED_EVENTS = [
         Blockly.Events.VIEWPORT_CHANGE,
@@ -113,89 +121,82 @@ class BlocklyComponent extends React.Component {
       });
     };
 
-    workspace.addChangeListener(onBlocklyChange);
+    ws.addChangeListener(onBlocklyChange);
 
-    workspace.addChangeListener((event) => {
+    // Variable validation listener
+    const validateVar = (event) => {
       if (
         event.type === Blockly.Events.VAR_CREATE ||
         event.type === Blockly.Events.VAR_RENAME
       ) {
-        const variable = workspace
-          .getVariableMap()
-          .getVariableById(event.varId);
+        const variable = ws.getVariableMap().getVariableById(event.varId);
+        if (!variable) return;
         const newName = variable.name;
         if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(newName)) {
-          // Check if the new name is a valid variable name
-          this.setState({
-            snackbar: true,
+          setSnackbar({
+            open: true,
             key: Date.now(),
             type: "error",
-            message: `${Blockly.Msg.messages_invalid_variable_name}`,
+            message: Blockly.Msg.messages_invalid_variable_name,
           });
-          workspace.getVariableMap().deleteVariableById(event.varId);
-        }
-        if (reservedWords.has(newName)) {
-          // Check if the new name is a reserved word
-          this.setState({
-            snackbar: true,
+          ws.getVariableMap().deleteVariableById(event.varId);
+        } else if (reservedWords.has(newName)) {
+          setSnackbar({
+            open: true,
             key: Date.now(),
             type: "error",
             message: `"${newName}" ${Blockly.Msg.messages_reserve_word}`,
           });
-          workspace.getVariableMap().deleteVariableById(event.varId);
+          ws.getVariableMap().deleteVariableById(event.varId);
         }
       }
-    });
+    };
 
-    this.setState({ workspace: this.primaryWorkspace });
-    const plugin = new ScrollOptions(this.workspace);
-    plugin.init({ enableWheelScroll: true, enableEdgeScroll: false });
+    ws.addChangeListener(validateVar);
 
+    // ScrollOptions plugin
+    const scrollPlugin = new ScrollOptions(ws);
+    scrollPlugin.init({ enableWheelScroll: true, enableEdgeScroll: false });
+
+    // Load initial XML after initialization
     if (initialXml) {
-      Blockly.Xml.domToWorkspace(
-        Blockly.utils.xml.textToDom(initialXml),
-        workspace,
-      );
+      Promise.resolve().then(() => {
+        try {
+          const xmlDom = Blockly.utils.xml.textToDom(initialXml);
+          Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, ws);
+        } catch (e) {
+          console.error("Fehler beim Laden des initialen XMLs:", e);
+        }
+      });
     }
-  }
 
-  // Properly dispose the workspace on unmount
-  componentWillUnmount() {
-    if (this.primaryWorkspace) {
-      this.primaryWorkspace.dispose();
-      this.primaryWorkspace = null;
-    }
-  }
+    // Cleanup on unmount
+    return () => {
+      ws?.removeChangeListener(onBlocklyChange);
+      ws?.removeChangeListener(validateVar);
+      ws?.dispose();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialXml, addLog]);
 
-  get workspace() {
-    return this.primaryWorkspace;
-  }
-
-  setXml(xml) {
-    Blockly.Xml.domToWorkspace(
-      Blockly.utils.xml.textToDom(xml),
-      this.primaryWorkspace,
-    );
-  }
-
-  render() {
-    return (
-      <>
-        <Card
-          ref={this.blocklyDiv}
-          id="blocklyDiv"
-          style={this.props.style ? this.props.style : {}}
-        />
-        <Toolbox toolbox={this.toolbox} workspace={this.state.workspace} />
-        <Snackbar
-          open={this.state.snackbar}
-          message={this.state.message}
-          type={this.state.type}
-          key={this.state.key}
-        />
-      </>
-    );
-  }
+  return (
+    <>
+      <Card ref={blocklyDivRef} id="blocklyDiv" style={style || {}} />
+      <Toolbox toolbox={toolboxRef} workspace={workspace} />
+      <Snackbar
+        open={snackbar.open}
+        message={snackbar.message}
+        type={snackbar.type}
+        key={snackbar.key}
+        onClose={() => setSnackbar((s) => ({ ...s, open: false }))}
+      />
+    </>
+  );
 }
 
-export default connect(null, { addLog })(BlocklyComponent);
+BlocklyComponent.propTypes = {
+  initialXml: PropTypes.string,
+  style: PropTypes.object,
+  addLog: PropTypes.func.isRequired,
+  children: PropTypes.node,
+};

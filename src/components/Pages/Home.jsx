@@ -1,11 +1,11 @@
+"use client";
+
 import React, { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { clearStats, workspaceName } from "@/actions/workspaceActions";
-
 import * as Blockly from "blockly/core";
 import { createNameId } from "mnemonic-id";
 
-// Components
+import { clearStats, workspaceName } from "@/actions/workspaceActions";
 import WorkspaceStats from "../Workspace/WorkspaceStats";
 import WorkspaceToolbar from "../Workspace/WorkspaceToolbar";
 import BlocklyWindow from "../Blockly/BlocklyWindow";
@@ -15,83 +15,61 @@ import DeviceSelection from "../DeviceSelection";
 import TooltipViewer from "@/components/Workspace/TooltipViewer";
 import Dialog from "@/components/ui/Dialog";
 
-// Material UI
-import Grid from "@mui/material/Grid";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import { makeStyles } from "@mui/styles";
-
-// Icons
+import { Grid, IconButton, Tooltip, Box } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCode } from "@fortawesome/free-solid-svg-icons";
-import { Box } from "@mui/material";
 
-const useStyles = makeStyles((theme) => ({
-  codeOn: {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.primary.contrastText,
-    "&:hover": {
-      backgroundColor: theme.palette.primary.contrastText,
-      color: theme.palette.primary.main,
-      border: `1px solid ${theme.palette.secondary.main}`,
-    },
-  },
-  codeOff: {
-    backgroundColor: theme.palette.primary.contrastText,
-    color: theme.palette.primary.main,
-    border: `1px solid ${theme.palette.secondary.main}`,
-    "&:hover": {
-      backgroundColor: theme.palette.primary.main,
-      color: theme.palette.primary.contrastText,
-    },
-  },
-}));
-
-const Home = () => {
-  const classes = useStyles();
+function Home({ project, projectType }) {
   const dispatch = useDispatch();
 
+  const message = useSelector((state) => state.message);
   const statistics = useSelector((state) => state.general.statistics);
   const platform = useSelector((state) => state.general.platform);
-  const project = useSelector((state) => state.workspace.project);
-  const projectType = useSelector((state) => state.workspace.projectType);
-  const message = useSelector((state) => state.message);
 
-  const [codeOn, setCodeOn] = useState(!platform);
-  const [dialogOpen, setDialogOpen] = useState(true);
-  const [initialXml] = useState(localStorage.getItem("autoSaveXML"));
+  const [toolbox, setToolbox] = useState(null);
+  const selectedBoard = useSelector((state) => state.board.board);
 
-  // Mount
+  const [codeOn, setCodeOn] = useState(true);
+  const [open, setOpen] = useState(true);
+  const [initialXml, setInitialXml] = useState(
+    localStorage.getItem("autoSaveXML"),
+  );
+
   useEffect(() => {
+    if (platform) setCodeOn(false);
+
+    const stats = window.localStorage.getItem("stats");
     if (!project) {
       dispatch(workspaceName(createNameId()));
     }
 
-    if (message?.id === "GET_SHARE_FAIL") {
-      // Optional: implement snackbar handling here
-      console.warn(
+    if (message && message.id === "GET_SHARE_FAIL") {
+      console.error(
         "Das angefragte geteilte Projekt konnte nicht gefunden werden.",
       );
     }
 
-    // Unmount
     return () => {
       dispatch(clearStats());
       dispatch(workspaceName(null));
     };
-  }, [dispatch, message, project]);
+  }, [platform, project, message]);
 
-  // Resize Blockly on update
+  useEffect;
+
   useEffect(() => {
+    // Resize Workspace on updates
     const workspace = Blockly.getMainWorkspace();
     Blockly.svgResize(workspace);
   });
 
-  const toggleDialog = useCallback(() => {
-    setDialogOpen((prev) => !prev);
-  }, []);
+  const handleToggleDialog = () => {
+    setOpen((prev) => !prev);
+  };
 
-  const toggleCode = () => {
+  const handleToggleCode = () => {
+    setCodeOn((prev) => !prev);
+
     const workspace = Blockly.getMainWorkspace();
     if (workspace.trashcan?.flyout) {
       workspace.trashcan.flyout.hide();
@@ -139,7 +117,6 @@ const Home = () => {
             }
           ></Tooltip>
 
-          <TrashcanButtons />
           <div className="blocklyWindow">
             <BlocklyWindow
               blocklyCSS={{ height: "80vH" }}
@@ -185,6 +162,6 @@ const Home = () => {
       )}
     </div>
   );
-};
+}
 
 export default Home;

@@ -34,6 +34,7 @@ export const UI = {
   variables_UNDEF: "undefined",
   variables_set: "Schreibe",
   variables_to: "",
+  toolbox_internet_and_comms: "Datenübertragung",
 
   /**
    * Tooltips
@@ -421,7 +422,8 @@ export const UI = {
   compile_overlay_close: "Schließen",
   compile_overlay_head: "Dein Programm wird nun kompiliert und heruntergeladen",
   compile_overlay_text: "Kopiere es anschließend auf deine senseBox ",
-  compile_overlay_help: " Benötigst du mehr Hilfe? Dann schaue hier: ",
+  compile_overlay_help: " Benötigst du Hilfe? ",
+  compile_overlay_help_2: " Schau in unserer Dokumentation vorbei! ",
   compile: "Kompilieren",
   download: "Herunterladen",
   transfer: "Übertragen",
@@ -430,4 +432,40 @@ export const UI = {
   goToApp_text:
     "Der Code wurde erfolgreich kompiliert! Klicke den unteren Button um zur senseBox:connect App zu gelangen und die Übertragung des Sketches fertigzustellen!",
   goToApp_title: "Over-The-Air Übertragung",
+
+  transfer_headline: "Datei übertragen",
+  transfer_subline:
+    "Ziehe die Datei aus deinem Downloads-Ordner auf die senseBox",
+  steps_to_transfer: "Schritte zur Übertragung:",
+
+  step_1: "1. Downloads-Ordner öffnen",
+  file: "2. Datei ",
+  step_2: " finden",
+  mcu_to_learnmode:
+    "3. MCU in den Lernmodus setzen (zweimal schnell den roten Reset-Knopf drücken)",
+  step_3_mcu: "4. {filename}.bin per Drag & Drop auf die senseBox kopieren",
+  step_3_esp32: "3. {filename}.bin per Drag & Drop auf die senseBox kopieren",
+
+  // Labels für die Icons unten (Steps-Row)
+  transfer_label_downloads: "Downloads",
+  transfer_label_file: "{filename}.bin",
+  transfer_label_sensebox: "senseBox",
+
+  // Hilfe-Link
+  need_help: "Benötigst du Hilfe?",
+  compile_overlay_help_2: "Schau in unserer Dokumentation vorbei!",
+
+  button_register: "registriere dich hier",
+  register_head: "Erstellen Sie Ihr Konto",
+  labels_confirm_password: "Passwort bestätigen",
+  messages_password_mismatch: "Die Passwörter stimmen nicht überein.",
+  messages_password_too_short:
+    "Das Passwort muss mindestens 6 Zeichen lang sein.",
+  messages_register_error: "Bitte füllen Sie alle Felder aus.",
+  already_have_account: "Haben Sie bereits ein Konto?",
+  no_account: "Wenn du keinen Account hast,",
+  register_success_head: "Konto erstellt!",
+  register_success_message: "Dein Konto wurde erfolgreich erstellt.",
+  register_success_login_prompt:
+    "Du kannst dich jetzt mit deinen Zugangsdaten anmelden.",
 };

@@ -413,7 +413,7 @@ export const setBoardHelper = (selectedBoard) => {
     case "MCU":
       board = sensebox_mcu;
       break;
-    case "MCU:mini":
+    case "MCU:MINI":
       board = sensebox_mini;
       break;
     case "MCU-S2":

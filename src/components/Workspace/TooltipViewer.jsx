@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import {
   Card,
@@ -98,8 +98,7 @@ const SlidePanel = ({
 // ———————————————————————————————————————
 
 const HelpTab = ({ tooltip, helpurl }) => {
-  // change key when the markdown content changes
-  const markdownKey = `${tooltip ?? ""}`; // or `${helpurl ?? ""}|${tooltip?.length ?? 0}`
+  const markdownKey = `${tooltip ?? ""}`;
 
   return (
     <>
@@ -107,15 +106,19 @@ const HelpTab = ({ tooltip, helpurl }) => {
         {Blockly.Msg.tooltip_moreInformation_02}
       </UnderlinedTitle>
 
-      <Fade in key={markdownKey} timeout={350}>
-        <Box
-          sx={{
-            maxHeight: 230,
-          }}
-        >
-          <ReactMarkdown linkTarget="_blank">{tooltip}</ReactMarkdown>
-        </Box>
-      </Fade>
+      <Box sx={{ maxHeight: 230, overflowY: "auto", mt: 1 }}>
+        {tooltip ? (
+          <Fade in key={markdownKey} timeout={350}>
+            <div>
+              <ReactMarkdown linkTarget="_blank">{tooltip}</ReactMarkdown>
+            </div>
+          </Fade>
+        ) : (
+          <Typography variant="body2" color="textSecondary">
+            Keine Beschreibung verfügbar.
+          </Typography>
+        )}
+      </Box>
 
       {helpurl && (
         <Button
@@ -141,41 +144,39 @@ const DebugTab = () => <DebugViewer />;
 const TooltipViewer = () => {
   const tooltip = useSelector((s) => s.workspace.code.tooltip);
   const helpurl = useSelector((s) => s.workspace.code.helpurl);
-  const [value, setValue] = React.useState("help");
+  const [value, setValue] = useState("help");
 
   return (
     <Card className="helpSection" sx={cardSx}>
-      <CardContent>
+      <CardContent sx={{ display: "flex", flexDirection: "column", p: 0 }}>
         <TabContext value={value}>
-          <TabList
-            onChange={(_, v) => setValue(v)}
-            variant="scrollable"
-            TabIndicatorProps={{ sx: { height: 3, borderRadius: 1 } }}
-            sx={tabListSx}
-          >
-            <Tab label="Help" value="help" disableRipple />
-            <Tab label="Graph" value="graph" disableRipple />
-            <Tab label="Debug" value="debug" disableRipple />
-          </TabList>
+          <Box sx={{ borderBottom: 1, borderColor: "divider", px: 1.5, pt: 1 }}>
+            <TabList
+              onChange={(_, v) => setValue(v)}
+              variant="scrollable"
+              TabIndicatorProps={{ sx: { height: 3, borderRadius: 1 } }}
+              sx={tabListSx}
+            >
+              <Tab label="Help" value="help" disableRipple />
+              <Tab label="Graph" value="graph" disableRipple />
+              <Tab label="Debug" value="debug" disableRipple />
+            </TabList>
+          </Box>
 
           <SlidePanel
             activeValue={value}
             myValue="help"
             direction="left"
-            sx={{ p: 1.5 }}
+            sx={{ p: 1.5, flex: 1 }}
           >
-            <HelpTab
-              tooltip={tooltip}
-              helpurl={helpurl}
-              inProp={value === "help"}
-            />{" "}
+            <HelpTab tooltip={tooltip} helpurl={helpurl} />
           </SlidePanel>
 
           <SlidePanel
             activeValue={value}
             myValue="graph"
             direction="left"
-            sx={{ p: 0 }}
+            sx={{ p: 0, flex: 1 }}
           >
             <GraphTab />
           </SlidePanel>
@@ -184,7 +185,7 @@ const TooltipViewer = () => {
             activeValue={value}
             myValue="debug"
             direction="left"
-            sx={{ p: 2 }}
+            sx={{ p: 2, flex: 1 }}
           >
             <DebugTab />
           </SlidePanel>

@@ -5,25 +5,22 @@ import * as Blockly from "blockly/core";
 import { useSelector } from "react-redux";
 import { ToolboxMcu } from "./ToolboxMcu";
 import { ToolboxEsp } from "./ToolboxEsp";
-import { De } from "@/components/Blockly/msg/de";
-import { En } from "@/components/Blockly/msg/en";
+import "./toolbox_styles.css";
 
 const Toolbox = ({ workspace, toolbox }) => {
   const selectedBoard = useSelector((state) => state.board.board);
   const language = useSelector((state) => state.general.language);
   const previousBoard = useRef(null);
 
-  // Register typed variable flyout on board change or mount
   useEffect(() => {
     if (!workspace || !toolbox?.current) return;
 
-    // Register callback
+    // --- Typed Variable Modal Setup ---
     workspace.registerToolboxCategoryCallback(
       "CREATE_TYPED_VARIABLE",
       createFlyout,
     );
 
-    // Init modal
     const typedVarModal = new TypedVariableModal(workspace, "callbackName", [
       [Blockly.Msg.variable_NUMBER, "int"],
       [Blockly.Msg.variable_LONG, "long"],
@@ -35,12 +32,31 @@ const Toolbox = ({ workspace, toolbox }) => {
     ]);
     typedVarModal.init();
 
-    // Log board change
-    if (previousBoard.current !== selectedBoard) {
-      previousBoard.current = selectedBoard;
-    }
-
+    // --- Toolbox aktualisieren ---
     workspace.updateToolbox(toolbox.current);
+
+    // --- Dynamisch das toolbox-search-Plugin laden, sobald alles bereit ist ---
+    let tries = 0;
+    const waitForToolbox = setInterval(async () => {
+      const tb = workspace.toolbox_;
+      if (tb && tb.getToolboxItems && tb.getToolboxItems().length > 0) {
+        clearInterval(waitForToolbox);
+        try {
+          // Lazy Import -> wird erst hier geladen
+          await import("@blockly/toolbox-search");
+          tb.refreshSelection(); // "nudge" das Plugin
+          console.log("🔍 toolbox-search Plugin erfolgreich initialisiert");
+        } catch (err) {
+          console.warn("⚠️ toolbox-search konnte nicht geladen werden:", err);
+        }
+      } else if (++tries > 50) {
+        clearInterval(waitForToolbox);
+        console.warn("⌛ toolbox-search Init Timeout (Toolbox nie bereit)");
+      }
+    }, 1000);
+
+    // --- Cleanup ---
+    return () => clearInterval(waitForToolbox);
   }, [workspace, toolbox, selectedBoard, language]);
 
   return (
@@ -50,7 +66,7 @@ const Toolbox = ({ workspace, toolbox }) => {
       style={{ display: "none" }}
       ref={toolbox}
     >
-      {selectedBoard === "MCU" || selectedBoard === "MCU:mini" ? (
+      {selectedBoard === "MCU" || selectedBoard === "MCU:MINI" ? (
         <ToolboxMcu />
       ) : (
         <ToolboxEsp />

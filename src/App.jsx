@@ -31,6 +31,7 @@ const theme = createTheme({
     },
     background: {
       white: "#ffffff",
+      grey: "#f9fafb",
     },
     button: {
       compile: "#e27136",
@@ -39,13 +40,22 @@ const theme = createTheme({
       blue: "#3ab0e8",
       green: "#4EAF47",
     },
+    feedback: {
+      success: "#4CAF50", // vorher hartkodiert
+      error: "#E53935",
+      warning: "#FFA000",
+      border: "#DDDDDD",
+    },
   },
 });
 
 class App extends Component {
   componentDidMount() {
-    store.dispatch(loadUser());
-    // set initial compiler
+    // In deiner App.js oder beim App-Start
+    const token = localStorage.getItem("token");
+    if (token) {
+      store.dispatch(loadUser());
+    }
     store.dispatch(setCompiler(import.meta.env.VITE_INITIAL_COMPILER_URL));
     window.dispatchRedux = store.dispatch;
   }

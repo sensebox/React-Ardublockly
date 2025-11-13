@@ -17,7 +17,7 @@ export default combineReducers({
   board: boardReducer,
   workspace: workspaceReducer,
   tutorial: tutorialReducer,
-  builder: tutorialBuilderReducer,
+  tutorialBuilder: tutorialBuilderReducer,
   project: projectReducer,
   general: generalReducer,
   message: messageReducer,

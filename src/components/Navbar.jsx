@@ -191,6 +191,7 @@ const Navbar = () => {
               <>
                 <div style={{ padding: "12px" }}>
                   <Button
+                    id="navbar-selected-board" // 👈 eindeutig für Cypress
                     ref={mcuRef}
                     onClick={handleBoardOpen}
                     startIcon={<FontAwesomeIcon icon={faMicrochip} />}
@@ -210,7 +211,7 @@ const Navbar = () => {
                       borderRadius: "25px",
                     }}
                   >
-                    {selectedBoard}
+                    {selectedBoard === "MCU:MINI" ? "MCU:mini" : selectedBoard}
                   </Button>
                   <Menu
                     id="navbarBoardSelect"
@@ -220,13 +221,13 @@ const Navbar = () => {
                     open={Boolean(anchorElBoard)}
                     onClose={handleBoardClose}
                   >
-                    {["MCU", "MCU:mini", "MCU-S2"].map((b) => (
+                    {["MCU", "MCU:MINI", "MCU-S2"].map((b) => (
                       <MenuItem
                         key={b}
                         value={b}
                         onClick={() => changeBoard(b)}
                       >
-                        {b}
+                        {b === "MCU:MINI" ? "MCU:mini" : b}
                       </MenuItem>
                     ))}
                   </Menu>
@@ -431,8 +432,7 @@ const Navbar = () => {
               text: Blockly.Msg.navbar_tutorialbuilder,
               icon: faTools,
               link: "/tutorial/builder",
-              restriction:
-                user && user.blocklyRole !== "user" && isAuthenticated,
+              restriction: user,
             },
             {
               text: Blockly.Msg.navbar_gallery,
@@ -519,17 +519,6 @@ const Navbar = () => {
           )}
         </List>
       </Drawer>
-
-      {(tutorialIsLoading || projectIsLoading) && (
-        <LinearProgress
-          style={{
-            marginBottom: "30px",
-            boxShadow:
-              "0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12)",
-          }}
-        />
-      )}
-
       <Tour
         steps={isHome ? home() : assessment()}
         isOpen={isTourOpen}

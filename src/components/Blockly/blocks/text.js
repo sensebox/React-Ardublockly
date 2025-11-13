@@ -192,4 +192,25 @@ Blockly.defineBlocksWithJsonArray([
     inputsInline: true,
     mutator: "text_charAt_mutator",
   },
+  {
+    type: "text8",
+    message0: "%1",
+    args0: [
+      {
+        type: "field_input",
+        name: "TEXT",
+        text: "Data",
+        spellcheck: false,
+        // Validator sorgt für max. 8 Zeichen
+        validator: function (newValue) {
+          return newValue.substring(0, 8);
+        },
+      },
+    ],
+    output: Types.TEXT.typeName,
+    style: "text_blocks",
+    tooltip: "Text mit maximal 8 Zeichen",
+    helpUrl: "",
+    extensions: ["text_quotes", "parent_tooltip_when_inline"],
+  },
 ]); // END JSON EXTRACT (Do not delete this comment.)
