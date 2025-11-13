@@ -41,7 +41,6 @@ export default function simulatorReducer(state = initialState, action) {
       ) {
         return state;
       }
-      console.log(initSimulator, action.payload);
       const newInterpreter = new Interpreter(
         action.payload.simulator,
         initSimulator,
@@ -132,7 +131,6 @@ export default function simulatorReducer(state = initialState, action) {
       console.log("START_SIMULATOR");
 
       const abortController = new AbortController();
-      console.log(state);
       runInterpreter(state.interpreter, abortController.signal)
         .then(() => {
           console.log("Interpreter finished running");

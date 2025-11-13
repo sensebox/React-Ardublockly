@@ -3,7 +3,8 @@ import PropTypes from "prop-types";
 
 import * as Blockly from "blockly/core";
 import "./blocks/index";
-import "@/components/Blockly/generator/index";
+import "@/components/Blockly/generator/arduino/index";
+import "@/components/Blockly/generator/javascript/index";
 
 import Toolbox from "./toolbox/Toolbox";
 import { reservedWords } from "./helpers/reservedWords";
@@ -30,7 +31,6 @@ export function BlocklyComponent({
   const blocklyDivRef = useRef(null);
   const toolboxRef = useRef(null);
   const [workspace, setWorkspace] = useState(undefined);
-
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -157,16 +157,12 @@ export function BlocklyComponent({
     // ScrollOptions plugin
     const scrollPlugin = new ScrollOptions(ws);
     scrollPlugin.init({ enableWheelScroll: true, enableEdgeScroll: false });
-
-    // Load initial XML after initialization
     if (initialXml) {
       Promise.resolve().then(() => {
         try {
           const xmlDom = Blockly.utils.xml.textToDom(initialXml);
           Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, ws);
-        } catch (e) {
-          console.error("Fehler beim Laden des initialen XMLs:", e);
-        }
+        } catch (e) {}
       });
     }
 
