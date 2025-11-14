@@ -453,12 +453,10 @@ const TutorialBuilderProgressCard = ({
                               border: "1px solid #e0e0e0", // ✅ dünner Rahmen
                               borderRadius: 2, // ✅ abgerundet
                               boxShadow: "0 2px 6px rgba(0,0,0,0.1)", // ✅ dezenter Shadow
-
                               gap: 2,
                               px: 2,
                               py: 1.5,
                               mb: 1,
-                              borderRadius: 2,
                               bgcolor: isCurrent
                                 ? theme.palette.primary.main
                                 : snapshot.isDragging
@@ -467,9 +465,6 @@ const TutorialBuilderProgressCard = ({
                               color: isCurrent
                                 ? theme.palette.primary.contrastText
                                 : theme.palette.text.primary,
-                              boxShadow: snapshot.isDragging
-                                ? "0 4px 8px rgba(0,0,0,0.2)"
-                                : "none",
                             }}
                           >
                             <RadioButtonUncheckedIcon
