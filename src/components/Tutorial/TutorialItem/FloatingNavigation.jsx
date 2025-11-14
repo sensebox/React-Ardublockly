@@ -20,6 +20,8 @@ const FloatingNavigation = ({
         display: "flex",
         alignItems: "center",
         gap: 3,
+        mt: 5,
+        pr: 2,
         bgcolor: "transparent", // Hintergrundfarbe des Containers
       }}
     >
