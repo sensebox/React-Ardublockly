@@ -28,6 +28,7 @@ const TutorialProgressCard = () => {
   const progress = ((activeStep + 1) / stepsWithFinish.length) * 100;
 
   const changeStep = (step) => {
+    console.log("Changing to step:", tutorial.steps);
     dispatch({
       type: "TUTORIAL_STEP",
       payload: step,
