@@ -34,7 +34,7 @@ const TutorialSlide = ({ children, title, stepNumber }) => {
           boxShadow: 0,
         }}
       >
-        <CardContent>
+        <CardContent sx={{ mb: 10 }}>
           {(title || stepNumber !== undefined) && (
             <Box
               sx={{
