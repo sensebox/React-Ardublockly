@@ -72,3 +72,29 @@ td {
   background-position: center;
   background-repeat: no-repeat;
 }
+
+blockquote {
+  position: relative;
+  background-color: #fff9c4 !important;
+  border-left: 6px solid #4caf50 !important;
+  border-radius: 0 12px 12px 0 !important;
+  padding: 16px 20px 16px 44px !important;
+  margin: 20px 0 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1) !important;
+  font-family: "Comic Neue", "Comic Sans MS", cursive, sans-serif !important;
+  font-size: 1.1rem !important;
+  line-height: 1.5 !important;
+  color: #2e2e2e !important;
+}
+
+.blockquote::before {
+  content: "“";
+  position: absolute;
+  left: 8px;
+  top: 4px;
+  font-size: 28px;
+  color: #4caf50;
+  opacity: 0.7;
+  font-family: serif;
+  font-weight: bold;
+}
