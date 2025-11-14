@@ -43,6 +43,7 @@ const theme = createTheme({
       success: "#4CAF50", // vorher hartkodiert
       error: "#E53935",
       warning: "#FFA000",
+      warningDark: "#b37000",
       border: "#DDDDDD",
     },
   },

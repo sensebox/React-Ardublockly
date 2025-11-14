@@ -1,15 +1,18 @@
-import React from "react";
-import { Box, IconButton, Typography } from "@mui/material";
-import { ChevronLeft, ChevronRight } from "@mui/icons-material";
+import React, { useEffect } from "react";
+import { Box, IconButton, Tooltip, Typography } from "@mui/material";
+import { ChevronLeft, ChevronRight, QuestionMark } from "@mui/icons-material";
 
-const FloatingNavigation = ({
-  currentStep,
-  totalSteps,
-  nextStep,
-  previouStep,
-}) => {
+const FloatingNavigation = ({ currentStep, steps, nextStep, previouStep }) => {
+  const [allStepsFinished, setAllStepsFinished] = React.useState(false);
   const isFirstStep = currentStep === 0;
-  const isLastStep = currentStep === totalSteps - 1;
+  const isLastStep = currentStep === steps.length - 2;
+  useEffect(() => {
+    console.log(steps);
+    const allStepsFinished =
+      steps.length > 0 && steps.every((step) => step?.completed === true);
+    setAllStepsFinished(allStepsFinished, isLastStep);
+    console.log("All steps finished:", allStepsFinished);
+  }, [currentStep]);
   return (
     <Box
       sx={{
@@ -25,31 +28,50 @@ const FloatingNavigation = ({
         bgcolor: "transparent", // Hintergrundfarbe des Containers
       }}
     >
-      {/* Vorheriger Schritt Button */}
-      <IconButton
-        onClick={previouStep}
-        disabled={isFirstStep}
-        aria-label="Vorheriger Schritt"
-        sx={{
-          width: 48, // 12 * 4px
-          height: 48,
-          borderRadius: "50%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          transition: "all 200ms ease-out",
-          bgcolor: isFirstStep ? "grey.300" : "common.white",
-          color: isFirstStep ? "grey.500" : "text.primary",
-          boxShadow: isFirstStep ? "none" : 2, // Leichter Schatten
-          "&:hover": {
-            boxShadow: isFirstStep ? "none" : 3, // Größerer Schatten beim Hover
-            transform: isFirstStep ? "none" : "scale(1.1)", // Skalierung beim Hover
+      <Tooltip
+        title="Zum vorherigen Schritt"
+        placement="top"
+        slotProps={{
+          tooltip: {
+            sx: {
+              backgroundColor: "white",
+              color: "black",
+              fontSize: "0.95rem",
+              fontWeight: "medium",
+              padding: "10px 14px",
+              borderRadius: "8px",
+              boxShadow: "0px 4px 12px rgba(0,0,0,0.15)",
+              maxWidth: "280px",
+              textAlign: "center",
+            },
           },
-          cursor: isFirstStep ? "not-allowed" : "pointer",
         }}
       >
-        <ChevronLeft sx={{ fontSize: 20 }} />
-      </IconButton>
+        <IconButton
+          onClick={previouStep}
+          disabled={isFirstStep}
+          aria-label="Vorheriger Schritt"
+          sx={{
+            width: 48,
+            height: 48,
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            transition: "all 200ms ease-out",
+            bgcolor: isFirstStep ? "grey.300" : "common.white",
+            color: isFirstStep ? "grey.500" : "text.primary",
+            boxShadow: isFirstStep ? "none" : 2,
+            "&:hover": {
+              boxShadow: isFirstStep ? "none" : 3,
+              transform: isFirstStep ? "none" : "scale(1.1)",
+            },
+            cursor: isFirstStep ? "not-allowed" : "pointer",
+          }}
+        >
+          <ChevronLeft sx={{ fontSize: 20 }} />
+        </IconButton>
+      </Tooltip>
 
       {/* Schrittzähler */}
       <Typography
@@ -61,35 +83,71 @@ const FloatingNavigation = ({
           color: "text.primary",
         }}
       >
-        {currentStep + 1} / {totalSteps}
+        {currentStep + 1} / {steps.length}
       </Typography>
 
-      {/* Nächster Schritt Button */}
-      <IconButton
-        onClick={nextStep}
-        disabled={isLastStep}
-        aria-label="Nächster Schritt"
-        sx={{
-          width: 48,
-          height: 48,
-          borderRadius: "50%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          transition: "all 200ms ease-out",
-          bgcolor: isLastStep ? "grey.300" : "primary.main", // Grün wenn aktiv
-          color: isLastStep ? "grey.500" : "common.white",
-          boxShadow: isLastStep ? "none" : 2,
-          "&:hover": {
-            boxShadow: isLastStep ? "none" : 3,
-            transform: isLastStep ? "none" : "scale(1.1)",
-            bgcolor: isLastStep ? "grey.300" : "primary.dark", // Dunkleres Grün beim Hover
+      <Tooltip
+        placement="top"
+        title={
+          isLastStep && !allStepsFinished
+            ? "Bitte schließe alle Schritte ab, bevor du das Tutorial beendest."
+            : "Zum nächsten Schritt"
+        }
+        slotProps={{
+          tooltip: {
+            sx: {
+              backgroundColor: "white",
+              color: "black",
+              fontSize: "0.95rem", // Größer als Standard
+              fontWeight: "medium",
+              padding: "10px 14px",
+              borderRadius: "8px",
+              boxShadow: "0px 4px 12px rgba(0,0,0,0.15)",
+              maxWidth: "280px",
+              textAlign: "center",
+            },
           },
-          cursor: isLastStep ? "not-allowed" : "pointer",
         }}
       >
-        <ChevronRight sx={{ fontSize: 20 }} />
-      </IconButton>
+        <IconButton
+          onClick={
+            isLastStep && !allStepsFinished
+              ? () => console.log("Kein Fortschritt möglich")
+              : nextStep
+          }
+          aria-label="Nächster Schritt"
+          sx={{
+            width: 48,
+            height: 48,
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            transition: "all 200ms ease-out",
+            bgcolor:
+              isLastStep && !allStepsFinished
+                ? "feedback.warning"
+                : "primary.main",
+            color: "white",
+            boxShadow: 2,
+            "&:hover": {
+              boxShadow: 3,
+              transform: "scale(1.1)",
+              bgcolor:
+                isLastStep && !allStepsFinished
+                  ? "feedback.warningDark"
+                  : "primary.dark",
+            },
+            cursor: "pointer",
+          }}
+        >
+          {isLastStep && !allStepsFinished ? (
+            <QuestionMark sx={{ fontSize: 20 }} />
+          ) : (
+            <ChevronRight sx={{ fontSize: 20 }} />
+          )}
+        </IconButton>
+      </Tooltip>
     </Box>
   );
 };
