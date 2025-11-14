@@ -35,6 +35,7 @@ const TutorialProgressCard = () => {
     }
   }, [activeStep]);
   const changeStep = (step) => {
+    console.log("Changing to step:", tutorial.steps);
     dispatch({
       type: "TUTORIAL_STEP",
       payload: step,
