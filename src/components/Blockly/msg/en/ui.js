@@ -309,6 +309,10 @@ export const UI = {
   login_lostpassword: "Lost your password?",
   login_createaccount:
     "If you don't have an openSenseMap account please register on ",
+  login_remember: "Remember me",
+  login_nativeaccount: "Native login",
+  login_with: "Login with",
+  login_lostpassword: "Forgot your password?",
 
   /**
    * Navbar
