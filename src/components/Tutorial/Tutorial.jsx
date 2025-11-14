@@ -185,7 +185,7 @@ export default function Tutorial() {
               })()}
               <FloatingNavigation
                 nextStep={nextStep}
-                totalSteps={tutorial.steps.length}
+                steps={tutorial.steps}
                 previouStep={previousStep}
                 currentStep={activeStep}
               />
