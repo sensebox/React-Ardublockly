@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Box, Card, CardContent } from "@mui/material";
+import FloatingNavigation from "./FloatingNavigation";
 
 const variants = {
   initial: { opacity: 0, x: 100 },
