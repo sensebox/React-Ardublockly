@@ -34,7 +34,7 @@ const TutorialSlide = ({ children, title, stepNumber }) => {
           boxShadow: 0,
         }}
       >
-        <CardContent sx={{ mb: 10 }}>
+        <CardContent>
           {(title || stepNumber !== undefined) && (
             <Box
               sx={{
@@ -51,8 +51,16 @@ const TutorialSlide = ({ children, title, stepNumber }) => {
               {title ? title : `Schritt ${stepNumber}`}
             </Box>
           )}
-
-          {children}
+          <Box
+            sx={{
+              border: "1px solid #ddd",
+              borderRadius: 2,
+              mb: 10,
+              p: 2,
+            }}
+          >
+            {children}
+          </Box>
         </CardContent>
       </Card>
     </motion.div>
