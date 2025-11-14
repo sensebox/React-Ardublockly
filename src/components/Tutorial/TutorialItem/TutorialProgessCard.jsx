@@ -113,7 +113,19 @@ const TutorialProgressCard = () => {
                 },
               }}
             >
-              {isCompleted ? (
+              {step.type === "question" || step.type === "blockly" ? (
+                <QuestionMark
+                  sx={{
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    bgcolor: "feedback.warning",
+                    color: "white",
+                    cursor: "pointer",
+                  }}
+                />
+              ) : isCompleted ? (
                 <CheckCircleIcon
                   sx={{ color: theme.palette.success.main, flexShrink: 0 }}
                 />
