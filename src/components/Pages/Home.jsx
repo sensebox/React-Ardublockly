@@ -13,7 +13,7 @@ import CodeViewer from "../Workspace/CodeViewer";
 import DeviceSelection from "../DeviceSelection";
 import TooltipViewer from "@/components/Workspace/TooltipViewer";
 import Dialog from "@/components/ui/Dialog";
-
+import { FieldButtonBar } from "../Blockly/fields/field_button_bar";
 import { Grid, IconButton, Tooltip, Box } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCode } from "@fortawesome/free-solid-svg-icons";

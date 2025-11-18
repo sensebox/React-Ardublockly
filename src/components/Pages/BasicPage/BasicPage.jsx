@@ -63,7 +63,7 @@ const BasicPage = () => {
         {/* Linke Seite */}
         <Box sx={{ flex: " 0 0 100%", minHeight: 0, display: "flex" }}>
           <BlocklyCard generatorName="Basic" />
-          <ConnectWizard
+          {/* <ConnectWizard
             supported={supported}
             connected={connected}
             onSend={() => sendScript(delay)}
@@ -73,7 +73,7 @@ const BasicPage = () => {
             onConnect={connect}
             onDisconnect={disconnect}
             onQuick={(cmd) => sendLine(cmd)}
-          />
+          /> */}
           <DeviceLogCard log={log} onClear={() => setLog("")} />{" "}
         </Box>
       </Box>

@@ -247,22 +247,26 @@ Blockly.defineBlocksWithJsonArray([
     helpUrl: "",
   },
 ]);
-
 Blockly.defineBlocksWithJsonArray([
   {
     type: "sensebox_start",
-    message0: "Füge hier deine Blöcke ein %1 → Aktionen %2",
-    args0: [
+    message0: "Füge hier deine Blöcke ein %1 → Aktionen",
+    args0: [{ type: "input_dummy" }],
+
+    message1: "%1",
+    args1: [{ type: "input_statement", name: "DO" }],
+
+    message2: "%1",
+    args2: [{ type: "field_button_bar", name: "BUTTON_BAR" }],
+
+    message3: "%1", // ↑ UNSICHTBARER PLATZHALTER
+    args3: [
       {
         type: "input_dummy",
-      },
-      {
-        type: "input_statement",
-        name: "DO",
+        name: "HEIGHT_FIX",
       },
     ],
+
     colour: "#995ba5",
-    tooltip: "Startpunkt deines Programms",
-    helpUrl: "",
   },
 ]);
