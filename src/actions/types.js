@@ -36,6 +36,7 @@ export const TUTORIAL_XML = "TUTORIAL_XML";
 export const TUTORIAL_ID = "TUTORIAL_ID";
 export const TUTORIAL_STEP = "TUTORIAL_STEP";
 export const JSON_STRING = "JSON_STRING";
+export const QUESTION_ANSWERED = "QUESTION_ANSWERED";
 
 export const BUILDER_CHANGE = "BUILDER_CHANGE";
 export const BUILDER_TITLE = "BUILDER_TITLE";

@@ -65,7 +65,6 @@ const TaskStep = ({ step, setNextStepDisabled }) => {
   useEffect(() => {
     if (step.type === "question" && step.questionData) {
       setNextStepDisabled(true);
-      console.log("disbaling");
     }
   }, [step]);
 

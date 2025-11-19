@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Card,
@@ -12,9 +12,12 @@ import {
 } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, Cancel, HelpOutline } from "@mui/icons-material";
+import { useDispatch } from "react-redux";
+import { setQuestionAnswered } from "@/actions/tutorialActions";
 
 const QuestionCard = ({ questionData, setNextStepDisabled }) => {
   const theme = useTheme();
+  const dispatch = useDispatch();
   const [selected, setSelected] = useState([]);
   const [submitted, setSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
@@ -27,6 +30,20 @@ const QuestionCard = ({ questionData, setNextStepDisabled }) => {
     );
 
   const { question, answers = [], multipleChoice } = questionData;
+
+  // Cookie prüfen, ob die Frage schon richtig beantwortet wurde
+  useEffect(() => {
+    const cookieName = `${questionData._id}=true`;
+    const alreadyCorrect = document.cookie.includes(cookieName);
+
+    if (alreadyCorrect) {
+      setIsCorrect(true);
+      setSubmitted(true);
+      setSelected(
+        answers.filter((a) => a.correct).map((a) => a.text), // richtige Antworten automatisch markieren
+      );
+    }
+  }, [questionData, answers]);
 
   const handleSelect = (value) => {
     if (multipleChoice) {
@@ -45,6 +62,7 @@ const QuestionCard = ({ questionData, setNextStepDisabled }) => {
       .filter((a) => a.correct)
       .map((a) => a.text)
       .sort();
+
     const selectedAnswers = [...selected].sort();
 
     const correct =
@@ -52,7 +70,11 @@ const QuestionCard = ({ questionData, setNextStepDisabled }) => {
       correctAnswers.every((val, i) => val === selectedAnswers[i]);
 
     setIsCorrect(correct);
-    if (correct) setNextStepDisabled(false);
+    // set cookie
+    if (correct) {
+      document.cookie = `${questionData._id}=true; path=/; max-age=31536000`;
+    }
+    dispatch(setQuestionAnswered(questionData._id, correct));
     setSubmitted(true);
   };
 
@@ -60,6 +82,12 @@ const QuestionCard = ({ questionData, setNextStepDisabled }) => {
     setSelected([]);
     setSubmitted(false);
     setIsCorrect(false);
+
+    const id = questionData?._id;
+    // reset the cookie also
+    if (id) {
+      document.cookie = `${id}=false; path=/; max-age=31536000`;
+    }
   };
 
   // Sammle Feedbacks der ausgewählten Antworten (falls vorhanden)

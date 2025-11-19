@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect } from "react";
 import {
   Box,
   Card,
@@ -10,39 +10,32 @@ import {
   Button,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
-import { Edit, QuestionMark } from "@mui/icons-material";
+import StepIcon from "./StepIcon";
+import { isStepFinished } from "../useStepStatus";
+import { Edit } from "@mui/icons-material";
 import { useHistory } from "react-router-dom";
 
 const TutorialProgressCard = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const history = useHistory();
+
   const activeStep = useSelector((state) => state.tutorial.activeStep);
   const tutorial = useSelector((state) => state.tutorial.tutorials[0]);
   const user = useSelector((state) => state.auth.user);
-  const [stepWithTask, setStepWithTaks] = useState(false);
-  // künstlich einen "Abschluss"-Step anhängen
-  const stepsWithFinish = [...tutorial.steps];
+  const answeredQuestions = useSelector(
+    (state) => state.tutorial.answeredQuestions,
+  );
+  const steps = tutorial.steps;
+  const progress = ((activeStep + 1) / steps.length) * 100;
 
-  const progress = ((activeStep + 1) / stepsWithFinish.length) * 100;
-  useEffect(() => {
-    const currentStep = tutorial.steps[activeStep];
-    if (
-      currentStep &&
-      (currentStep.type === "question" || currentStep.type === "blockly")
-    ) {
-      console.log("hallo");
-    }
-  }, [activeStep]);
-  const changeStep = (step) => {
-    console.log("Changing to step:", tutorial.steps);
-    dispatch({
-      type: "TUTORIAL_STEP",
-      payload: step,
-    });
+  const changeStep = (index) => {
+    dispatch({ type: "TUTORIAL_STEP", payload: index });
   };
+
+  useEffect(() => {
+    console.log(answeredQuestions);
+  }, [answeredQuestions]);
 
   return (
     <Card
@@ -50,13 +43,13 @@ const TutorialProgressCard = () => {
         borderRadius: 3,
         boxShadow: 3,
         maxHeight: "80vh",
-        overflow: "scroll",
+        overflowY: "auto",
       }}
     >
       <CardHeader
         title={
           <Typography variant="h6" fontWeight={600}>
-            {tutorial.title || ""}
+            {tutorial.title}
           </Typography>
         }
         subheader={
@@ -66,24 +59,20 @@ const TutorialProgressCard = () => {
             <LinearProgress
               variant="determinate"
               value={progress}
-              sx={{
-                height: 6,
-                borderRadius: 3,
-                mb: 1,
-              }}
+              sx={{ height: 6, borderRadius: 3, mb: 1 }}
             />
+
             <Typography variant="body2" color="text.secondary">
-              Schritt {Math.min(activeStep + 1, stepsWithFinish.length)} von{" "}
-              {stepsWithFinish.length}
+              Schritt {activeStep + 1} von {steps.length}
             </Typography>
           </Box>
         }
       />
 
       <CardContent sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-        {stepsWithFinish.map((step, index) => {
+        {steps.map((step, index) => {
           const isCurrent = index === activeStep;
-          const isCompleted = index < activeStep;
+          const finished = isStepFinished(step, index, activeStep);
 
           return (
             <Box
@@ -102,7 +91,7 @@ const TutorialProgressCard = () => {
                 transition: "all 0.2s ease-in-out",
                 bgcolor: isCurrent
                   ? theme.palette.primary.main
-                  : isCompleted
+                  : finished
                     ? theme.palette.action.selected
                     : "transparent",
                 color: isCurrent
@@ -115,40 +104,20 @@ const TutorialProgressCard = () => {
                 },
               }}
             >
-              {step.type === "question" || step.type === "blockly" ? (
-                <QuestionMark
-                  sx={{
-                    borderRadius: "50%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    bgcolor: "feedback.warning",
-                    color: "white",
-                    cursor: "pointer",
-                  }}
-                />
-              ) : isCompleted ? (
-                <CheckCircleIcon
-                  sx={{ color: theme.palette.success.main, flexShrink: 0 }}
-                />
-              ) : (
-                <RadioButtonUncheckedIcon
-                  sx={{
-                    color: isCurrent
-                      ? theme.palette.primary.contrastText
-                      : theme.palette.text.secondary,
-                    flexShrink: 0,
-                  }}
-                />
-              )}
+              <StepIcon
+                step={step}
+                isCompleted={finished}
+                isCurrent={isCurrent}
+                theme={theme}
+              />
+
               <Box sx={{ flex: 1, minWidth: 0 }}>
                 <Typography
                   variant="body2"
                   fontWeight={isCurrent ? 600 : 400}
                   noWrap
                 >
-                  {step.title ||
-                    (index === 0 ? "Einleitung" : `Schritt ${index}`)}
+                  {step.title || `Schritt ${index}`}
                 </Typography>
                 <Typography variant="caption" sx={{ opacity: 0.75 }} noWrap>
                   {step.subtitle || ""}
@@ -157,6 +126,7 @@ const TutorialProgressCard = () => {
             </Box>
           );
         })}
+
         {user && tutorial.creator === user.email && (
           <Button
             variant="outlined"

@@ -9,6 +9,7 @@ import {
   TUTORIAL_CHANGE,
   TUTORIAL_XML,
   TUTORIAL_STEP,
+  QUESTION_ANSWERED,
 } from "../actions/types";
 
 const initialState = {
@@ -18,6 +19,7 @@ const initialState = {
   tutorials: [],
   userTutorials: [],
   progress: false,
+  answeredQuestions: {},
 };
 
 export default function foo(state = initialState, action) {
@@ -67,6 +69,17 @@ export default function foo(state = initialState, action) {
         ...state,
         activeStep: action.payload,
       };
+    case QUESTION_ANSWERED: {
+      const { questionId, correct } = action.payload;
+
+      return {
+        ...state,
+        answeredQuestions: {
+          ...state.answeredQuestions,
+          [questionId]: correct,
+        },
+      };
+    }
     default:
       return state;
   }

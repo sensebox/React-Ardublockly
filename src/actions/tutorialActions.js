@@ -7,6 +7,7 @@ import {
   TUTORIAL_CHANGE,
   TUTORIAL_XML,
   TUTORIAL_STEP,
+  QUESTION_ANSWERED,
 } from "./types";
 
 import axios from "axios";
@@ -355,3 +356,8 @@ const existingTutorial = (tutorial, status) =>
     }
     resolve(status);
   });
+
+export const setQuestionAnswered = (questionId, correct) => ({
+  type: QUESTION_ANSWERED,
+  payload: { questionId, correct },
+});
