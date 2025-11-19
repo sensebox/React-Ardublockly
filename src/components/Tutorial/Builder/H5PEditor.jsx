@@ -1,9 +1,15 @@
 import React, { useState, useMemo, useEffect } from "react";
 
 const H5PEditor = ({ h5psrc, seth5psrc }) => {
-  const [rawEmbed, setRawEmbed] = useState("");
-  const [width, setWidth] = useState("800");
-  const [height, setHeight] = useState("450");
+  const [rawEmbed, setRawEmbed] = useState(h5psrc || "");
+  const [width, setWidth] = useState(() => {
+    const match = h5psrc?.match(/width="([^"]+)"/);
+    return match ? match[1] : "800";
+  });
+  const [height, setHeight] = useState(() => {
+    const match = h5psrc?.match(/height="([^"]+)"/);
+    return match ? match[1] : "450";
+  });
   const [title, setTitle] = useState("H5P Content");
   const [radius, setRadius] = useState("8");
 
