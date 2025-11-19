@@ -7,6 +7,7 @@ import QuestionCard from "./QuestionCard";
 import SolutionCheck from "./SolutionCheck";
 import BlocklyWindow from "@/components/Blockly/BlocklyWindow";
 import { Box, Grid, Typography } from "@mui/material";
+import H5PCard from "./H5PCard";
 
 const md = new MarkdownIt({ html: true, linkify: true, typographer: true });
 
@@ -140,6 +141,7 @@ const TaskStep = ({ step, setNextStepDisabled }) => {
           <SolutionCheck solutionXml={step.xml} activeStep={activeStep} />
         </Box>
       )}
+      {step.type === "h5p" && step.h5psrc && <H5PCard h5psrc={step.h5psrc} />}
     </TutorialSlide>
   );
 };
