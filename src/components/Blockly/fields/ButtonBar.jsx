@@ -1,6 +1,11 @@
 import React, { useRef, useState } from "react";
 import { IconButton, Tooltip } from "@mui/material";
-import { Bluetooth, PlayArrow, Stop } from "@mui/icons-material";
+import {
+  Bluetooth,
+  BluetoothDisabled,
+  PlayArrow,
+  Stop,
+} from "@mui/icons-material";
 import useWebSerial from "@/components/Pages/BasicPage/WebSerialService";
 
 export default function ButtonBar() {
@@ -25,7 +30,6 @@ export default function ButtonBar() {
         marginLeft: "5px",
       }}
     >
-      {/* 🔵 BLUETOOTH BUTTON */}
       <Tooltip
         title={
           supported
@@ -42,32 +46,59 @@ export default function ButtonBar() {
               width: 100,
               height: 36,
               borderRadius: "10px",
-              background: supported ? "#0082FC" : "#BBD3F7",
+
+              // Farbe abhängig von Status
+              background: !supported
+                ? "#BBD3F7" // ❌ nicht supported
+                : connected
+                  ? "#0082FC" // 🔵 verbunden
+                  : "#AFC7E8", // 🌫️ unterstützt, aber nicht verbunden
+
               color: "white",
               transition: "background 0.2s ease",
               cursor: supported ? "pointer" : "not-allowed",
 
-              /* Enabled Shadow */
-              boxShadow: supported
-                ? `
-                inset 2px 2px 4px rgba(255,255,255,0.5),
-                inset -2px -2px 4px rgba(0,0,0,0.25),
-                3px 3px 0px #0060B8
-              `
-                : "none",
+              boxShadow:
+                supported && connected
+                  ? `
+            inset 2px 2px 4px rgba(255,255,255,0.5),
+            inset -2px -2px 4px rgba(0,0,0,0.25),
+            3px 3px 0px #0060B8
+          `
+                  : "none",
 
-              /* 🔥 Disabled look */
+              // leicht ausgegrauter Look, wenn supported aber nicht connected
+              ...(supported &&
+                !connected && {
+                  filter: "grayscale(20%) brightness(95%)",
+                  border: "1px solid rgba(0,0,0,0.15)",
+                }),
+
+              // disabled look
               ...(!supported && {
                 opacity: 0.6,
                 border: "2px solid rgba(0,0,0,0.25)",
                 filter: "grayscale(40%) brightness(95%)",
               }),
 
-              "&:hover": supported ? { background: "#006BD0" } : {},
+              "&:hover":
+                supported && connected
+                  ? { background: "#006BD0" }
+                  : supported && !connected
+                    ? { background: "#9FB8D8" }
+                    : {},
             }}
             onClick={onConnect}
           >
-            <Bluetooth />
+            {supported ? (
+              connected ? (
+                <Bluetooth />
+              ) : (
+                <BluetoothDisabled />
+              )
+            ) : (
+              <Bluetooth />
+            )}
           </IconButton>
         </span>
       </Tooltip>
@@ -132,7 +163,6 @@ export default function ButtonBar() {
               `
                 : "none",
 
-              /* 🔥 Disabled look */
               ...(!connected && {
                 opacity: 0.6,
                 border: "2px solid rgba(0,0,0,0.25)",

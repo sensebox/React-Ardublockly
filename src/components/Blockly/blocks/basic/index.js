@@ -250,17 +250,23 @@ Blockly.defineBlocksWithJsonArray([
 Blockly.defineBlocksWithJsonArray([
   {
     type: "sensebox_start",
-    message0: "Füge hier deine Blöcke ein %1 → Aktionen",
+    message0: "Füge hier deine Blöcke ein %1 ",
     args0: [{ type: "input_dummy" }],
 
     message1: "%1",
     args1: [{ type: "input_statement", name: "DO" }],
 
-    message2: "%1",
-    args2: [{ type: "field_button_bar", name: "BUTTON_BAR" }],
+    // Neue Beschreibung vor der Button Bar
+    message2:
+      "Nutze die folgende Button-Leiste,\n um deine senseBox zu steuern:%1",
+    args2: [{ type: "input_dummy" }],
 
-    message3: "%1", // ↑ UNSICHTBARER PLATZHALTER
-    args3: [
+    // Button Bar kommt JETZT danach
+    message3: "%1",
+    args3: [{ type: "field_button_bar", name: "BUTTON_BAR" }],
+
+    message4: "%1", // Platzhalter
+    args4: [
       {
         type: "input_dummy",
         name: "HEIGHT_FIX",

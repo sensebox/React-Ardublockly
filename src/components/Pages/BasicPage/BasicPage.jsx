@@ -51,7 +51,6 @@ const BasicPage = () => {
   return (
     <Box
       sx={{
-        p: 2,
         display: "flex",
         flexDirection: "column",
         gap: 2,

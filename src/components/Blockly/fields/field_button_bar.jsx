@@ -1,11 +1,3 @@
-import useWebSerial from "@/components/Pages/BasicPage/WebSerialService";
-import {
-  Bluetooth,
-  DesktopWindows,
-  PlayArrow,
-  Stop,
-} from "@mui/icons-material";
-import { IconButton } from "@mui/material";
 import * as Blockly from "blockly/core";
 import React from "react";
 import ReactDOM from "react-dom";
