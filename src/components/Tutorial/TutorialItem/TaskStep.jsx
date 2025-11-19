@@ -7,6 +7,7 @@ import QuestionCard from "./QuestionCard";
 import SolutionCheck from "./SolutionCheck";
 import BlocklyWindow from "@/components/Blockly/BlocklyWindow";
 import { Box, Grid, Typography } from "@mui/material";
+import H5PCard from "./H5PCard";
 
 const md = new MarkdownIt({ html: true, linkify: true, typographer: true });
 
@@ -37,13 +38,34 @@ md.renderer.rules.image = function (tokens, idx, options, env, self) {
   `;
 };
 
+// 🔸 Blockquote mit Klasse
+const defaultBlockquoteRenderer =
+  md.renderer.rules.blockquote_open ||
+  function (tokens, idx, options, env, self) {
+    return self.renderToken(tokens, idx, options);
+  };
+md.renderer.rules.blockquote_open = function (tokens, idx, options, env, self) {
+  tokens[idx].attrSet("class", "tutorial-blockquote");
+  return defaultBlockquoteRenderer(tokens, idx, options, env, self);
+};
+
+// 🔸 Table mit Klasse
+const defaultTableRenderer =
+  md.renderer.rules.table_open ||
+  function (tokens, idx, options, env, self) {
+    return self.renderToken(tokens, idx, options);
+  };
+md.renderer.rules.table_open = function (tokens, idx, options, env, self) {
+  tokens[idx].attrSet("class", "tutorial-table");
+  return defaultTableRenderer(tokens, idx, options, env, self);
+};
+
 const TaskStep = ({ step, setNextStepDisabled }) => {
   const activeStep = useSelector((state) => state.tutorial.activeStep);
 
   useEffect(() => {
     if (step.type === "question" && step.questionData) {
       setNextStepDisabled(true);
-      console.log("disbaling");
     }
   }, [step]);
 
@@ -119,6 +141,7 @@ const TaskStep = ({ step, setNextStepDisabled }) => {
           <SolutionCheck solutionXml={step.xml} activeStep={activeStep} />
         </Box>
       )}
+      {step.type === "h5p" && step.h5psrc && <H5PCard h5psrc={step.h5psrc} />}
     </TutorialSlide>
   );
 };

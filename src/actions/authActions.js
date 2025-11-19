@@ -323,7 +323,6 @@ export const setupInterceptors = (store) => {
 };
 
 export const refreshTokenAction = (refreshToken) => async () => {
-  console.log("[Auth] 📡 Calling /refresh-token endpoint...");
   const config = {
     headers: { "Content-Type": "application/json" },
   };
@@ -333,7 +332,6 @@ export const refreshTokenAction = (refreshToken) => async () => {
     JSON.stringify({ refreshToken }),
     config,
   );
-  console.log("[Auth] 📥 Received new tokens from server");
   return res.data; // { token, refreshToken }
 };
 

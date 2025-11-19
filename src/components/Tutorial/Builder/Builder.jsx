@@ -28,6 +28,7 @@ import "@uiw/react-markdown-preview/markdown.css";
 import MDEditor from "@uiw/react-md-editor";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocation } from "react-router-dom";
+import H5PEditor from "./H5PEditor";
 
 // Hilfsfunktionen
 const createInitialSteps = () => [
@@ -81,6 +82,7 @@ const buildTutorialPayload = ({
     type: step.type,
     questionData: step.questionData || null,
     xml: step.xml || null,
+    h5psrc: step.h5psrc || null,
   })),
 });
 
@@ -91,7 +93,6 @@ const validateRequiredFields = ({ title, subtitle }) => {
   return missing;
 };
 
-// 🔥 HILFSFUNKTION: Tiefer Vergleich (einfach, aber ausreichend für Tutorial-Steps)
 const deepEqual = (obj1, obj2) => JSON.stringify(obj1) === JSON.stringify(obj2);
 
 // Hauptkomponente
@@ -130,6 +131,7 @@ const Builder = () => {
   const [topics, setTopics] = useState(existingTutorial?.topics || []);
   const [duration, setDuration] = useState(existingTutorial?.duration || "");
   const [year, setYear] = useState(existingTutorial?.year || "");
+
   //  UI & Navigation
   const [activeStep, setActiveStep] = useState(0);
 
@@ -417,6 +419,7 @@ const Builder = () => {
   };
 
   const updateStepText = (text) => updateStepField("text", text);
+  const updateH5Psrc = (src) => updateStepField("h5psrc", src);
   const updateStepXml = (xml) => updateStepField("xml", xml);
   const updateStepQuestions = (questionData) =>
     updateStepField("questionData", questionData); // ✅ RICHTIG
@@ -581,6 +584,12 @@ const Builder = () => {
 
               {currentStep.type === "finish" && (
                 <WhatNext learnings={learnings} setLearnings={setLearnings} />
+              )}
+              {currentStep.type === "h5p" && (
+                <H5PEditor
+                  h5psrc={currentStep.h5psrc}
+                  seth5psrc={updateH5Psrc}
+                />
               )}
             </BuildSlide>
           </AnimatePresence>
