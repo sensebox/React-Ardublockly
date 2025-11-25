@@ -28,6 +28,7 @@ import "@uiw/react-markdown-preview/markdown.css";
 import MDEditor from "@uiw/react-md-editor";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocation } from "react-router-dom";
+import H5PEditor from "./H5PEditor";
 
 // Hilfsfunktionen
 const createInitialSteps = () => [
@@ -81,6 +82,7 @@ const buildTutorialPayload = ({
     type: step.type,
     questionData: step.questionData || null,
     xml: step.xml || null,
+    h5psrc: step.h5psrc || null,
   })),
 });
 
@@ -239,9 +241,6 @@ const Builder = () => {
 
     // 🔥 Prüfe: Hat sich etwas geändert?
     if (deepEqual(currentState, lastSavedState.current)) {
-      console.log(
-        "Keine Änderungen seit letztem Autosave – überspringe Request.",
-      );
       return;
     }
 
@@ -334,7 +333,6 @@ const Builder = () => {
       return;
     }
 
-    console.log("savign", steps);
     const payload = buildTutorialPayload({
       title,
       subtitle,
@@ -418,8 +416,9 @@ const Builder = () => {
 
   const updateStepText = (text) => updateStepField("text", text);
   const updateStepXml = (xml) => updateStepField("xml", xml);
+  const updateStepH5P = (h5psrc) => updateStepField("h5psrc", h5psrc);
   const updateStepQuestions = (questionData) =>
-    updateStepField("questionData", questionData); // ✅ RICHTIG
+    updateStepField("questionData", questionData);
 
   // 🎨 Render
   const currentStep = steps[activeStep] || {};
@@ -542,6 +541,12 @@ const Builder = () => {
                   index={activeStep}
                   value={currentStep.xml || ""}
                   onXmlChange={updateStepXml}
+                />
+              )}
+              {currentStep.type === "h5p" && (
+                <H5PEditor
+                  h5psrc={currentStep.h5psrc || ""}
+                  seth5psrc={updateStepH5P}
                 />
               )}
 
