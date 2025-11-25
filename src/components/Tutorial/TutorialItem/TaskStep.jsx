@@ -69,10 +69,6 @@ const TaskStep = ({ step, setNextStepDisabled }) => {
   //   }
   // }, [step]);
 
-  useEffect(() => {
-    console.log("Rendering TaskStep:", step);
-  }, [step]);
-
   return (
     <TutorialSlide stepNumber={activeStep}>
       <div dangerouslySetInnerHTML={{ __html: md.render(step.text) }} />

@@ -45,7 +45,6 @@ const Toolbox = ({ workspace, toolbox }) => {
           // Lazy Import -> wird erst hier geladen
           await import("@blockly/toolbox-search");
           tb.refreshSelection(); // "nudge" das Plugin
-          console.log("🔍 toolbox-search Plugin erfolgreich initialisiert");
         } catch (err) {
           console.warn("⚠️ toolbox-search konnte nicht geladen werden:", err);
         }

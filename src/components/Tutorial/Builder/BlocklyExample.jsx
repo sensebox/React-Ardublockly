@@ -121,8 +121,6 @@ const BlocklyExample = ({ index, task = false, value, onXmlChange }) => {
       const hasBlocks = tempWorkspace.getAllBlocks().length > 0;
       tempWorkspace.dispose();
       setDisabled(!hasBlocks);
-
-      console.log("BlocklyExample: Workspace reset to initial state.");
     } catch (e) {
       console.error("Failed to reset workspace:", e);
       setSnackbar({

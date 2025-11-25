@@ -241,9 +241,6 @@ const Builder = () => {
 
     // 🔥 Prüfe: Hat sich etwas geändert?
     if (deepEqual(currentState, lastSavedState.current)) {
-      console.log(
-        "Keine Änderungen seit letztem Autosave – überspringe Request.",
-      );
       return;
     }
 
@@ -336,7 +333,6 @@ const Builder = () => {
       return;
     }
 
-    console.log("savign", steps);
     const payload = buildTutorialPayload({
       title,
       subtitle,
