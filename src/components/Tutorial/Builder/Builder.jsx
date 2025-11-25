@@ -28,6 +28,7 @@ import "@uiw/react-markdown-preview/markdown.css";
 import MDEditor from "@uiw/react-md-editor";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocation } from "react-router-dom";
+import H5PEditor from "./H5PEditor";
 
 // Hilfsfunktionen
 const createInitialSteps = () => [
@@ -418,6 +419,7 @@ const Builder = () => {
 
   const updateStepText = (text) => updateStepField("text", text);
   const updateStepXml = (xml) => updateStepField("xml", xml);
+  const updateStepH5P = (h5psrc) => updateStepField("h5psrc", h5psrc);
   const updateStepQuestions = (questionData) =>
     updateStepField("questionData", questionData); // ✅ RICHTIG
 
@@ -542,6 +544,12 @@ const Builder = () => {
                   index={activeStep}
                   value={currentStep.xml || ""}
                   onXmlChange={updateStepXml}
+                />
+              )}
+              {currentStep.type === "h5p" && (
+                <H5PEditor
+                  h5psrc={currentStep.h5psrc}
+                  seth5psrc={updateStepH5P}
                 />
               )}
 
