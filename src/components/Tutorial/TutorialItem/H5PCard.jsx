@@ -14,7 +14,6 @@ const extractIframe = (embed) => {
 
 const H5PCard = ({ h5psrc }) => {
   const iframeHtml = useMemo(() => extractIframe(h5psrc), [h5psrc]);
-  console.log("Rendering H5PCard with iframeHtml:", h5psrc);
   return (
     <Card
       sx={{

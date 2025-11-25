@@ -32,11 +32,9 @@ const TutorialProgressCard = () => {
       currentStep &&
       (currentStep.type === "question" || currentStep.type === "blockly")
     ) {
-      console.log("hallo");
     }
   }, [activeStep]);
   const changeStep = (step) => {
-    console.log("Changing to step:", tutorial.steps);
     dispatch({
       type: "TUTORIAL_STEP",
       payload: step,
