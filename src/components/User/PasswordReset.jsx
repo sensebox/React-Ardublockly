@@ -66,8 +66,6 @@ const PasswordReset = () => {
 
     dispatch(resetPassword({ token, newPassword }))
       .then((response) => {
-        console.log("Reset Password Response:", response); // 🔍 Debugging
-
         // ✅ Prüfe explizit auf SUCCESS-Status (z. B. 200)
         if (response?.status === 200 || response?.includes("SUCCESS")) {
           setSnackInfo({

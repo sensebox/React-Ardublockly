@@ -16,9 +16,6 @@ const TooltipViewer = () => {
   const tooltip = useSelector((s) => s.workspace.code.tooltip);
   const helpurl = useSelector((s) => s.workspace.code.helpurl);
 
-  useEffect(() => {
-    console.log("tooltip changed", tooltip);
-  }, [tooltip]);
   return (
     <Card
       className="helpSection"
