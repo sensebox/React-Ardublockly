@@ -82,6 +82,7 @@ const buildTutorialPayload = ({
     type: step.type,
     questionData: step.questionData || null,
     xml: step.xml || null,
+    h5psrc: step.h5psrc || null,
   })),
 });
 
@@ -421,7 +422,7 @@ const Builder = () => {
   const updateStepXml = (xml) => updateStepField("xml", xml);
   const updateStepH5P = (h5psrc) => updateStepField("h5psrc", h5psrc);
   const updateStepQuestions = (questionData) =>
-    updateStepField("questionData", questionData); // ✅ RICHTIG
+    updateStepField("questionData", questionData);
 
   // 🎨 Render
   const currentStep = steps[activeStep] || {};
@@ -548,7 +549,7 @@ const Builder = () => {
               )}
               {currentStep.type === "h5p" && (
                 <H5PEditor
-                  h5psrc={currentStep.h5psrc}
+                  h5psrc={currentStep.h5psrc || ""}
                   seth5psrc={updateStepH5P}
                 />
               )}
