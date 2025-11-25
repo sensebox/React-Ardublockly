@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Box, Card, CardContent } from "@mui/material";
+import FloatingNavigation from "./FloatingNavigation";
 
 const variants = {
   initial: { opacity: 0, x: 100 },
@@ -50,8 +51,16 @@ const TutorialSlide = ({ children, title, stepNumber }) => {
               {title ? title : `Schritt ${stepNumber}`}
             </Box>
           )}
-
-          {children}
+          <Box
+            sx={{
+              border: "1px solid #ddd",
+              borderRadius: 2,
+              mb: 10,
+              p: 2,
+            }}
+          >
+            {children}
+          </Box>
         </CardContent>
       </Card>
     </motion.div>
