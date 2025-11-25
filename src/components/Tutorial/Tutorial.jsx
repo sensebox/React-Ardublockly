@@ -18,6 +18,7 @@ import Breadcrumbs from "../ui/Breadcrumbs";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import FloatingNavigation from "./TutorialItem/FloatingNavigation";
 
 export default function Tutorial() {
   const { tutorialId } = useParams();
@@ -182,6 +183,12 @@ export default function Tutorial() {
                   />
                 );
               })()}
+              <FloatingNavigation
+                nextStep={nextStep}
+                steps={tutorial.steps}
+                previouStep={previousStep}
+                currentStep={activeStep}
+              />
             </AnimatePresence>
           </Box>
           {/* {!platform && (

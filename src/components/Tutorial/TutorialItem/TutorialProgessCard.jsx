@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Card,
@@ -12,7 +12,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
-import { Edit } from "@mui/icons-material";
+import { Edit, QuestionMark } from "@mui/icons-material";
 import { useHistory } from "react-router-dom";
 
 const TutorialProgressCard = () => {
@@ -22,12 +22,22 @@ const TutorialProgressCard = () => {
   const activeStep = useSelector((state) => state.tutorial.activeStep);
   const tutorial = useSelector((state) => state.tutorial.tutorials[0]);
   const user = useSelector((state) => state.auth.user);
+  const [stepWithTask, setStepWithTaks] = useState(false);
   // künstlich einen "Abschluss"-Step anhängen
   const stepsWithFinish = [...tutorial.steps];
 
   const progress = ((activeStep + 1) / stepsWithFinish.length) * 100;
-
+  useEffect(() => {
+    const currentStep = tutorial.steps[activeStep];
+    if (
+      currentStep &&
+      (currentStep.type === "question" || currentStep.type === "blockly")
+    ) {
+      console.log("hallo");
+    }
+  }, [activeStep]);
   const changeStep = (step) => {
+    console.log("Changing to step:", tutorial.steps);
     dispatch({
       type: "TUTORIAL_STEP",
       payload: step,
@@ -105,7 +115,19 @@ const TutorialProgressCard = () => {
                 },
               }}
             >
-              {isCompleted ? (
+              {step.type === "question" || step.type === "blockly" ? (
+                <QuestionMark
+                  sx={{
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    bgcolor: "feedback.warning",
+                    color: "white",
+                    cursor: "pointer",
+                  }}
+                />
+              ) : isCompleted ? (
                 <CheckCircleIcon
                   sx={{ color: theme.palette.success.main, flexShrink: 0 }}
                 />
