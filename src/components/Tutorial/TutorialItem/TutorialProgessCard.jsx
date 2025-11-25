@@ -23,7 +23,6 @@ const TutorialProgressCard = () => {
   const tutorial = useSelector((state) => state.tutorial.tutorials[0]);
   const user = useSelector((state) => state.auth.user);
   const [stepWithTask, setStepWithTaks] = useState(false);
-  // künstlich einen "Abschluss"-Step anhängen
   const stepsWithFinish = [...tutorial.steps];
 
   const progress = ((activeStep + 1) / stepsWithFinish.length) * 100;
@@ -33,11 +32,9 @@ const TutorialProgressCard = () => {
       currentStep &&
       (currentStep.type === "question" || currentStep.type === "blockly")
     ) {
-      console.log("hallo");
     }
   }, [activeStep]);
   const changeStep = (step) => {
-    console.log("Changing to step:", tutorial.steps);
     dispatch({
       type: "TUTORIAL_STEP",
       payload: step,
