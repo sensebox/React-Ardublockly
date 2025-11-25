@@ -7,6 +7,7 @@ import QuestionCard from "./QuestionCard";
 import SolutionCheck from "./SolutionCheck";
 import BlocklyWindow from "@/components/Blockly/BlocklyWindow";
 import { Box, Grid, Typography } from "@mui/material";
+import H5PCard from "./H5PCard";
 
 const md = new MarkdownIt({ html: true, linkify: true, typographer: true });
 
@@ -62,11 +63,14 @@ md.renderer.rules.table_open = function (tokens, idx, options, env, self) {
 const TaskStep = ({ step, setNextStepDisabled }) => {
   const activeStep = useSelector((state) => state.tutorial.activeStep);
 
+  // useEffect(() => {
+  //   if (step.type === "question" && step.questionData) {
+  //     setNextStepDisabled(true);
+  //   }
+  // }, [step]);
+
   useEffect(() => {
-    if (step.type === "question" && step.questionData) {
-      setNextStepDisabled(true);
-      console.log("disbaling");
-    }
+    console.log("Rendering TaskStep:", step);
   }, [step]);
 
   return (
@@ -89,6 +93,19 @@ const TaskStep = ({ step, setNextStepDisabled }) => {
               />
             );
           })}
+        </Box>
+      )}
+      {step.type === "h5p" && step.h5psrc && (
+        <Box
+          className="blocklyWindow"
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 2,
+          }}
+        >
+          <H5PCard h5psrc={step.h5psrc} />
         </Box>
       )}
       {step.type === "blockly" && step.xml && (

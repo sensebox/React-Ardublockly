@@ -49,7 +49,11 @@ const H5PEditor = ({ h5psrc, seth5psrc }) => {
   }, [iframeSrc, width, height, title, radius]);
 
   useEffect(() => {
-    if (fullEmbedString) seth5psrc(fullEmbedString);
+    console.log("H5P Embed updated:", fullEmbedString);
+
+    if (fullEmbedString) {
+      seth5psrc(fullEmbedString);
+    }
   }, [fullEmbedString]);
 
   const previewIframe = useMemo(() => {
