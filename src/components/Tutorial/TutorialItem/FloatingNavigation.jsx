@@ -3,16 +3,10 @@ import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import { ChevronLeft, ChevronRight, QuestionMark } from "@mui/icons-material";
 
 const FloatingNavigation = ({ currentStep, steps, nextStep, previouStep }) => {
-  const [allStepsFinished, setAllStepsFinished] = React.useState(false);
+  const [allStepsFinished, setAllStepsFinished] = React.useState(true);
   const isFirstStep = currentStep === 0;
   const isLastStep = currentStep === steps.length - 2;
-  useEffect(() => {
-    console.log(steps);
-    const allStepsFinished =
-      steps.length > 0 && steps.every((step) => step?.completed === true);
-    setAllStepsFinished(allStepsFinished, isLastStep);
-    console.log("All steps finished:", allStepsFinished);
-  }, [currentStep]);
+
   return (
     <Box
       sx={{
