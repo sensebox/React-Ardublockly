@@ -101,15 +101,36 @@ export default function useWebSerial({ setLog, logBoxRef }) {
 
   const disconnect = useCallback(async () => {
     try {
-      if (readerRef.current) await readerRef.current.cancel();
-      if (writerRef.current) await writerRef.current.close();
-      if (portRef.current) await portRef.current.close();
-    } catch {
-      /* ignore */
+      const port = portRef.current;
+
+      if (readerRef.current) {
+        try {
+          await readerRef.current.cancel();
+        } catch (e) {}
+        try {
+          readerRef.current.releaseLock();
+        } catch (e) {}
+      }
+
+      if (writerRef.current) {
+        try {
+          writerRef.current.releaseLock();
+        } catch (e) {}
+      }
+
+      if (port) {
+        try {
+          await port.close();
+        } catch (e) {}
+      }
+    } catch (e) {
+      console.warn("Disconnect error:", e);
     }
+
     readerRef.current = null;
     writerRef.current = null;
     portRef.current = null;
+
     setConnected(false);
     setStatus("Disconnected");
     logMessage("[Disconnected]");

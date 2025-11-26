@@ -36,11 +36,31 @@ const ConnectWizard = ({
   const handlePlay = async () => {
     if (!connected) return;
     try {
-      await onSend();
       await onQuick("STOP"); // Remove all previously saved lines
+
+      await onSend();
       await onQuick("RUNLOOP"); // Play the new script in a loop
     } catch (err) {
       console.error("Error during play:", err);
+    }
+  };
+
+  const handleStop = async () => {
+    if (!connected) return;
+    try {
+      await onQuick("STOP");
+    } catch (err) {
+      console.error("Error during stop:", err);
+    }
+  };
+
+  const handleDisconnect = async () => {
+    if (!connected) return;
+    try {
+      await onQuick("DISCONNECT");
+      await onDisconnect();
+    } catch (err) {
+      console.error("Error during disconnect:", err);
     }
   };
 
@@ -90,7 +110,7 @@ const ConnectWizard = ({
             variant={connected ? "outlined" : "contained"}
             color={connected ? "error" : "primary"}
             startIcon={<Computer />}
-            onClick={connected ? onDisconnect : onConnect}
+            onClick={connected ? handleDisconnect : onConnect}
             disabled={!supported}
           >
             {connected ? "Disconnect" : "Connect"}
@@ -109,7 +129,7 @@ const ConnectWizard = ({
         </Tooltip>
         <Tooltip title="Stop program">
           <Button
-            onClick={() => onQuick("STOP")}
+            onClick={handleStop}
             disabled={!connected}
             variant="contained"
             color="error"

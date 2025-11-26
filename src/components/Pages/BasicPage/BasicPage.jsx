@@ -26,7 +26,6 @@ const BasicPage = () => {
   } = useWebSerial({ script, setLog, logBoxRef });
 
   useEffect(() => {
-    // 📦 Dynamisch CSS hinzufügen
     const head = document.head;
     const link = document.createElement("link");
     link.type = "text/css";
