@@ -68,7 +68,11 @@ export default function useWebSerial({ setLog, logBoxRef }) {
 
   const connect = useCallback(async () => {
     try {
-      const port = await navigator.serial.requestPort();
+      const port = await navigator.serial.requestPort({
+        filters: [
+          { usbVendorId: 0x303a }, // ESP-32
+        ],
+      });
       await port.open({ baudRate: 115200 });
 
       const textDecoder = new TextDecoderStream();
