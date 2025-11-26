@@ -166,23 +166,23 @@ const HelpModal = ({ onClose }) => {
   const slides = [
     {
       title: "Willkommen!",
-      text: "Hier erfährst du, wie du deine senseBox verbindest.",
-      image: "/images/help/slide1.png",
+      text: "In den folgenden Schritten bereiten wir die senseBox:basic für die Programmierung vor und erklären dir die wichtigsten Funktionen.",
+      image: "/media/basic/tutorial/senseBox_Logo_bunt_schrift_gruen.png",
     },
     {
-      title: "Bluetooth aktivieren",
-      text: "Stelle sicher, dass Bluetooth an deinem Gerät eingeschaltet ist.",
-      image: "/images/help/slide2.png",
+      title: "Den :basic Sketch hochladen",
+      text: "Mit dem Flashtool lädst du jetzt den :basic Sketch auf deine senseBox hoch.",
+      image: "/media/basic/tutorial/flashtool.png",
     },
     {
       title: "Verbinden",
-      text: "Drücke auf „Connect“, um eine Verbindung zur senseBox herzustellen.",
-      image: "/images/help/slide3.png",
+      text: "Starte die senseBox neu und Verbinde dich über den Connect-Button.",
+      image: "/media/basic/tutorial/selectUSB.png",
     },
     {
-      title: "Programm starten",
-      text: "Mit „Run“ sendest du dein aktuelles Programm und startest die Ausführung.",
-      image: "/images/help/slide4.png",
+      title: "Action Bar",
+      text: "Du bist sogut wie fertig, klicke auf 'Run', um dein Programm zu starten! Stop beendet das Programm und mit Disconnect trennst du die senseBox wieder von deinem Browser",
+      image: "/media/basic/tutorial/actionBar.png",
     },
   ];
 
@@ -228,6 +228,13 @@ const HelpModal = ({ onClose }) => {
           <CloseIcon />
         </IconButton>
 
+        {/* 🔵 Slide Titel */}
+        <Typography
+          variant="h5"
+          sx={{ fontWeight: 700, mb: 2, textAlign: "center" }}
+        >
+          {slide.title}
+        </Typography>
         {/* 🔵 Slide Bild */}
         <Box sx={{ textAlign: "center", mb: 3 }}>
           {slide.image && (
@@ -243,14 +250,6 @@ const HelpModal = ({ onClose }) => {
             />
           )}
         </Box>
-
-        {/* 🔵 Slide Titel */}
-        <Typography
-          variant="h5"
-          sx={{ fontWeight: 700, mb: 2, textAlign: "center" }}
-        >
-          {slide.title}
-        </Typography>
 
         {/* 🔵 Slide Text */}
         <Typography
