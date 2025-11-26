@@ -1,13 +1,25 @@
 "use client";
 
-import React from "react";
-import { Box, Button, Typography, useTheme, Tooltip } from "@mui/material";
+import React, { useState } from "react";
+import {
+  Box,
+  Button,
+  Typography,
+  useTheme,
+  Tooltip,
+  Modal,
+  Paper,
+  IconButton,
+} from "@mui/material";
 import {
   PlayArrow,
   Stop,
   Computer,
   Bluetooth,
   BluetoothDisabled,
+  HelpCenter,
+  Close as CloseIcon,
+  HelpOutline,
 } from "@mui/icons-material";
 
 const ConnectWizard = ({
@@ -19,12 +31,14 @@ const ConnectWizard = ({
   onSend,
 }) => {
   const theme = useTheme();
+  const [helpOpen, setHelpOpen] = useState(false);
 
   const handlePlay = async () => {
     if (!connected) return;
     try {
       await onSend();
-      await onQuick("RUNLOOP");
+      await onQuick("STOP"); // Remove all previously saved lines
+      await onQuick("RUNLOOP"); // Play the new script in a loop
     } catch (err) {
       console.error("Error during play:", err);
     }
@@ -75,54 +89,221 @@ const ConnectWizard = ({
           <Button
             variant={connected ? "outlined" : "contained"}
             color={connected ? "error" : "primary"}
-            size="small"
             startIcon={<Computer />}
             onClick={connected ? onDisconnect : onConnect}
             disabled={!supported}
-            sx={{ minWidth: 110 }}
           >
             {connected ? "Disconnect" : "Connect"}
           </Button>
         </Tooltip>
-
         <Tooltip title="Send & Start program">
           <Button
             onClick={handlePlay}
             disabled={!connected}
             variant="contained"
             color="success"
-            size="small"
             startIcon={<PlayArrow />}
-            sx={{
-              fontWeight: 600,
-              textTransform: "none",
-              px: 2,
-            }}
           >
             Run
           </Button>
         </Tooltip>
-
         <Tooltip title="Stop program">
           <Button
             onClick={() => onQuick("STOP")}
             disabled={!connected}
             variant="contained"
             color="error"
-            size="small"
             startIcon={<Stop />}
-            sx={{
-              fontWeight: 600,
-              textTransform: "none",
-              px: 2,
-            }}
           >
             Stop
           </Button>
         </Tooltip>
+        <Tooltip title="Help">
+          <Button
+            onClick={() => setHelpOpen(true)}
+            variant="contained"
+            startIcon={<HelpCenter />}
+            sx={{}}
+          >
+            Hilfe
+          </Button>
+        </Tooltip>
       </Box>
+      <Modal open={helpOpen} onClose={() => setHelpOpen(false)}>
+        <HelpModal onClose={() => setHelpOpen(false)} />
+      </Modal>
     </Box>
   );
 };
 
 export default ConnectWizard;
+
+const HelpModal = ({ onClose }) => {
+  const theme = useTheme();
+  const [activeSlide, setActiveSlide] = React.useState(0);
+
+  const slides = [
+    {
+      title: "Willkommen!",
+      text: "Hier erfährst du, wie du deine senseBox verbindest.",
+      image: "/images/help/slide1.png",
+    },
+    {
+      title: "Bluetooth aktivieren",
+      text: "Stelle sicher, dass Bluetooth an deinem Gerät eingeschaltet ist.",
+      image: "/images/help/slide2.png",
+    },
+    {
+      title: "Verbinden",
+      text: "Drücke auf „Connect“, um eine Verbindung zur senseBox herzustellen.",
+      image: "/images/help/slide3.png",
+    },
+    {
+      title: "Programm starten",
+      text: "Mit „Run“ sendest du dein aktuelles Programm und startest die Ausführung.",
+      image: "/images/help/slide4.png",
+    },
+  ];
+
+  const slide = slides[activeSlide];
+
+  const next = () => {
+    if (activeSlide < slides.length - 1) {
+      setActiveSlide(activeSlide + 1);
+    }
+  };
+
+  const prev = () => {
+    if (activeSlide > 0) {
+      setActiveSlide(activeSlide - 1);
+    }
+  };
+
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        p: 2,
+      }}
+    >
+      <Paper
+        elevation={12}
+        sx={{
+          maxWidth: 500,
+          width: "100%",
+          p: 4,
+          borderRadius: 4,
+          position: "relative",
+        }}
+      >
+        {/* Close Button */}
+        <IconButton
+          onClick={onClose}
+          sx={{ position: "absolute", top: 12, right: 12 }}
+        >
+          <CloseIcon />
+        </IconButton>
+
+        {/* 🔵 Slide Bild */}
+        <Box sx={{ textAlign: "center", mb: 3 }}>
+          {slide.image && (
+            <img
+              src={slide.image}
+              alt={slide.title}
+              style={{
+                width: "100%",
+                maxHeight: 200,
+                objectFit: "contain",
+                borderRadius: 8,
+              }}
+            />
+          )}
+        </Box>
+
+        {/* 🔵 Slide Titel */}
+        <Typography
+          variant="h5"
+          sx={{ fontWeight: 700, mb: 2, textAlign: "center" }}
+        >
+          {slide.title}
+        </Typography>
+
+        {/* 🔵 Slide Text */}
+        <Typography
+          variant="body1"
+          sx={{ mb: 3, textAlign: "center", minHeight: 80 }}
+        >
+          {slide.text}
+        </Typography>
+
+        {/* 🔵 Navigation */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            mb: 2,
+          }}
+        >
+          <Button
+            variant="outlined"
+            onClick={prev}
+            disabled={activeSlide === 0}
+          >
+            Zurück
+          </Button>
+
+          <Typography variant="body2">
+            {activeSlide + 1} / {slides.length}
+          </Typography>
+
+          <Button
+            variant="contained"
+            onClick={next}
+            disabled={activeSlide === slides.length - 1}
+          >
+            Weiter
+          </Button>
+        </Box>
+
+        {/* 🔵 Indicators */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            gap: 1,
+            mb: 2,
+          }}
+        >
+          {slides.map((_, i) => (
+            <Box
+              key={i}
+              sx={{
+                width: 10,
+                height: 10,
+                borderRadius: "50%",
+                background:
+                  i === activeSlide
+                    ? theme.palette.primary.main
+                    : theme.palette.grey[400],
+                transition: "0.3s",
+              }}
+            />
+          ))}
+        </Box>
+
+        {/* 🔵 Modal schließen */}
+        {activeSlide === slides.length - 1 && (
+          <Box textAlign="center" mt={2}>
+            <Button variant="contained" onClick={onClose}>
+              Verstanden
+            </Button>
+          </Box>
+        )}
+      </Paper>
+    </Box>
+  );
+};

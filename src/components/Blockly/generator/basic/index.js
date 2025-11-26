@@ -175,15 +175,15 @@ Blockly.Generator.Basic.forBlock["display_print_basic"] = function (
 };
 
 Blockly.Generator.Basic.forBlock["time_delay_1s"] = function () {
-  return "delay(1000)"; // nichts generieren
+  return "delay(1000)\n"; // nichts generieren
 };
 
 Blockly.Generator.Basic.forBlock["time_delay_2s"] = function () {
-  return "delay(2000)"; // nichts generieren
+  return "delay(2000)\n"; // nichts generieren
 };
 
 Blockly.Generator.Basic.forBlock["time_delay_5s"] = function () {
-  return "delay(5000)"; // nichts generieren
+  return "delay(5000)\n"; // nichts generieren
 };
 
 Blockly.Generator.Basic.forBlock["sensebox_start"] = function (block) {

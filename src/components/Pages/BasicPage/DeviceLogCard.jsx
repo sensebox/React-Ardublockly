@@ -23,38 +23,6 @@ const DeviceLogCard = ({ log, onClear, onCopy }) => {
   const [open, setOpen] = useState(false);
   const logBoxRef = useRef(null);
 
-  useEffect(() => {
-    if (open && logBoxRef.current) {
-      logBoxRef.current.scrollTop = logBoxRef.current.scrollHeight;
-    }
-  }, [log, open]);
-
-  const highlight = (line, theme) => {
-    const rules = [
-      {
-        regex: /\b(ERROR|ERR|FAIL|FAILED)\b/gi,
-        color: theme.palette.error.main,
-      },
-      { regex: /\b(WARN|WARNING)\b/gi, color: "#c99a00" },
-      { regex: /\b(OK|SUCCESS|DONE)\b/gi, color: theme.palette.success.main },
-      { regex: /\b\d+(\.\d+)?\b/g, color: theme.palette.info.main },
-      { regex: /\b[a-zA-Z_]+\(/g, color: theme.palette.primary.dark }, // functionName(
-      { regex: /\[[^\]]+\]/g, color: theme.palette.grey[700] }, // [tags]
-    ];
-
-    let result = line;
-
-    rules.forEach((rule) => {
-      result = result.replace(
-        rule.regex,
-        (match) =>
-          `<span style="color:${rule.color}; font-weight:600;">${match}</span>`,
-      );
-    });
-
-    return result;
-  };
-
   return (
     <Paper
       elevation={5}
@@ -157,33 +125,35 @@ const DeviceLogCard = ({ log, onClear, onCopy }) => {
             p: 1.5,
             fontSize: "0.9rem",
             borderTop: "1px solid #ddd",
-            backgroundColor: "#fafafa",
+            backgroundColor: "white",
             fontFamily:
               "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
             whiteSpace: "pre-wrap",
             wordBreak: "break-word",
             overflow: "scroll",
-            maxHeight: "30vh",
+            height: "30vh",
           }}
         >
           {log
             ? log
                 .split("\n")
-                .reverse()
                 .filter((line) => line.trim() !== "")
+                .reverse()
                 .map((line, i) => {
-                  const timestamp = new Date().toLocaleTimeString();
+                  const match = line.match(/^\[(.*?)\]\s?(.*)$/);
+                  const timestamp = match ? match[1] : "";
+                  const text = match ? match[2] : line;
                   return (
                     <Box
                       key={i}
                       sx={{
-                        mb: 1,
-                        pb: 1,
                         borderBottom: "1px solid rgba(0,0,0,0.08)",
+                        backgroundColor: "#fafafa",
+                        p: 1,
+                        borderRadius: "6px",
                       }}
                     >
                       <Typography
-                        component="span"
                         sx={{
                           color: theme.palette.grey[600],
                           fontSize: "0.75rem",
@@ -194,7 +164,6 @@ const DeviceLogCard = ({ log, onClear, onCopy }) => {
                       </Typography>
 
                       <Typography
-                        component="span"
                         sx={{
                           color: theme.palette.text.primary,
                           fontSize: "0.88rem",
@@ -203,7 +172,7 @@ const DeviceLogCard = ({ log, onClear, onCopy }) => {
                           whiteSpace: "pre-wrap",
                         }}
                       >
-                        {line}
+                        {text}
                       </Typography>
                     </Box>
                   );
