@@ -21,6 +21,8 @@ import {
   Close as CloseIcon,
   HelpOutline,
 } from "@mui/icons-material";
+import FlashToolMini from "./FlashtoolMini";
+import FlashToolMiniWithTutorial from "./FlashtoolMiniWithTutorial";
 
 const ConnectWizard = ({
   supported,
@@ -171,8 +173,7 @@ const HelpModal = ({ onClose }) => {
     },
     {
       title: "Den :basic Sketch hochladen",
-      text: "Mit dem Flashtool lädst du jetzt den :basic Sketch auf deine senseBox hoch.",
-      image: "/media/basic/tutorial/flashtool.png",
+      custom: <FlashToolMiniWithTutorial />,
     },
     {
       title: "Verbinden",
@@ -235,8 +236,10 @@ const HelpModal = ({ onClose }) => {
         >
           {slide.title}
         </Typography>
+
+        {slide.custom ? <Box> {slide.custom}</Box> : null}
         {/* 🔵 Slide Bild */}
-        <Box sx={{ textAlign: "center", mb: 3 }}>
+        <Box sx={{ textAlign: "center" }}>
           {slide.image && (
             <img
               src={slide.image}
@@ -252,10 +255,7 @@ const HelpModal = ({ onClose }) => {
         </Box>
 
         {/* 🔵 Slide Text */}
-        <Typography
-          variant="body1"
-          sx={{ mb: 3, textAlign: "center", minHeight: 80 }}
-        >
+        <Typography variant="body1" sx={{ textAlign: "center", minHeight: 80 }}>
           {slide.text}
         </Typography>
 
