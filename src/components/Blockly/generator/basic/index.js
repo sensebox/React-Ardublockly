@@ -169,9 +169,9 @@ Blockly.Generator.Basic.forBlock["display_print_basic"] = function (
   block,
   generator,
 ) {
-  const value =
-    generator.valueToCode(block, "inside", generator.ORDER_ATOMIC) || '""';
-  return `display(${value})\n`;
+  const raw = generator.valueToCode(block, "TEXT", generator.ORDER_NONE) || "";
+
+  return `display(${raw})\n`;
 };
 
 Blockly.Generator.Basic.forBlock["time_delay_1s"] = function () {

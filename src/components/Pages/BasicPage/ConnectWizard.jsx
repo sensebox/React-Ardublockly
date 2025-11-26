@@ -37,7 +37,8 @@ const ConnectWizard = ({
     if (!connected) return;
     try {
       await onQuick("STOP"); // Remove all previously saved lines
-
+      // small delay to give the Arduino time to process the STOP command
+      await new Promise((resolve) => setTimeout(resolve, 100));
       await onSend();
       await onQuick("RUNLOOP"); // Play the new script in a loop
     } catch (err) {
