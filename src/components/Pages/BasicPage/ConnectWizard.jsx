@@ -23,7 +23,6 @@ import {
   Start,
   Rocket,
 } from "@mui/icons-material";
-import FlashToolMini from "./FlashtoolMini";
 import FlashToolMiniWithTutorial from "./FlashtoolMiniWithTutorial";
 
 const ConnectWizard = ({
