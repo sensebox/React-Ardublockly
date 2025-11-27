@@ -7,18 +7,6 @@ import { useDispatch } from "react-redux";
 import { BasicTheme } from "@/components/Blockly/themes/basicTheme";
 import { toolboxBasicObject } from "@/components/Blockly/toolbox/ToolboxBasic";
 import { ScrollBlockDragger } from "@blockly/plugin-scroll-options";
-const getGeneratorByName = (name) => {
-  if (!name) return Blockly.Basic;
-  // bevorzugt den Pfad, den du schon nutzt:
-  if (
-    Blockly.Generator &&
-    Blockly.Generator[name?.charAt(0).toUpperCase() + name.slice(1)]
-  ) {
-    return Blockly.Generator[name.charAt(0).toUpperCase() + name.slice(1)];
-  }
-  // alternativ: direkt auf Blockly[name]
-  return Blockly[name] || Blockly.JavaScript;
-};
 
 const BlocklyCard = ({
   toolboxXml,
@@ -26,7 +14,7 @@ const BlocklyCard = ({
   onWorkspaceChanged,
   blocklyCSS,
   themeMode = "light",
-  generatorName = "Basic", // ⬅️ NEU
+  generatorName = "Basic",
 }) => {
   const containerRef = useRef(null);
   const dispatch = useDispatch();
@@ -71,21 +59,6 @@ const BlocklyCard = ({
     startBlock.initSvg();
     startBlock.render();
 
-    // Optional: Block genau in die Mitte setzen
-    // try {
-    //   const metrics = ws.getMetrics();
-    //   const targetX = metrics.viewLeft + metrics.viewWidth / 2;
-    //   const targetY = metrics.viewTop + metrics.viewHeight / 2;
-    //   const current = startBlock.getRelativeToSurfaceXY();
-    //   startBlock.moveBy(
-    //     targetX - (current?.x || 0),
-    //     targetY - (current?.y || 0),
-    //   );
-    // } catch (e) {
-    //   // fallback: leichte Verschiebung, falls Mitte nicht berechnet werden kann
-    //   startBlock.moveBy(0, 50);
-    // }
-
     startBlock.moveBy(50, 100);
 
     // Optional: Block fixieren (nicht löschbar)
@@ -98,16 +71,11 @@ const BlocklyCard = ({
         Blockly.Xml.domToWorkspace(xml, ws);
       } catch {}
     }
+    const generator = Blockly.Generator.Basic;
 
-    const generator = getGeneratorByName(generatorName);
     const fire = () => {
-      const code =
-        generator && generator.workspaceToCode
-          ? generator.workspaceToCode(ws)
-          : "";
       onWorkspaceChanged && onWorkspaceChanged(ws, code);
     };
-
     ws.addChangeListener(fire);
     ws.addChangeListener((event) => {
       dispatch(onChangeWorkspace(event));

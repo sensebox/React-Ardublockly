@@ -31,7 +31,9 @@ import { javascriptGenerator } from "blockly/javascript";
  * Arduino code generator.
  * @type !Blockly.Generator
  */
-Blockly.Generator.Basic = javascriptGenerator;
+export const basicGenerator = new Blockly.CodeGenerator("Basic");
+basicGenerator.ORDER_ATOMIC = 0;
+basicGenerator.ORDER_NONE = 99;
 
 /**
  *
@@ -44,187 +46,86 @@ Blockly.Generator.Basic = javascriptGenerator;
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
-Blockly.Generator.Basic.init = function (workspace) {
+basicGenerator.init = function (workspace) {
   // creates a dictionary of modules / components that are used in the code
-  Blockly.Generator.Basic.modules_ = Object.create(null);
+  basicGenerator.modules_ = Object.create(null);
 
   // creates a list of code to be setup before the setup block
-  Blockly.Generator.Basic.setupCode_ = Object.create(null);
+  basicGenerator.setupCode_ = Object.create(null);
 
   // creates a list of code for the loop to be runned once
-  Blockly.Generator.Basic.codeFunctions_ = Object.create(null);
+  basicGenerator.codeFunctions_ = Object.create(null);
 
   // creates a list of code variables
-  Blockly.Generator.Basic.variables_ = Object.create(null);
+  basicGenerator.variables_ = Object.create(null);
 
   // Create a dictionary mapping desired function names in definitions_
   // to actual function names (to avoid collisions with user functions).
-  Blockly.Generator.Basic.functionNames_ = Object.create(null);
+  basicGenerator.functionNames_ = Object.create(null);
 
-  Blockly.Generator.Basic.variablesInitCode_ = "";
+  basicGenerator.variablesInitCode_ = "";
 
-  if (!Blockly.Generator.Basic.nameDB_) {
-    Blockly.Generator.Basic.nameDB_ = new Blockly.Names(
-      Blockly.Generator.Basic.RESERVED_WORDS_,
-    );
+  if (!basicGenerator.nameDB_) {
+    basicGenerator.nameDB_ = new Blockly.Names(basicGenerator.RESERVED_WORDS_);
   } else {
-    Blockly.Generator.Basic.nameDB_.reset();
+    basicGenerator.nameDB_.reset();
   }
 
-  Blockly.Generator.Basic.nameDB_.setVariableMap(workspace.getVariableMap());
+  basicGenerator.nameDB_.setVariableMap(workspace.getVariableMap());
 };
 
 /**
- * Prepend the generated code with the variable definitions.
- * @param {string} code Generated code.
- * @return {string} Completed code.
+ * Fügt Code in den Setup-Bereich ein.
+ *
+ * @param {string} key   – eindeutiger Schlüssel, damit Code nicht doppelt erscheint
+ * @param {string} code  – die konkrete Zeile Setup-Code
  */
-Blockly.Generator.Basic.finish = function (code) {
-  const setupCode =
-    Object.values(Blockly.Generator.Basic.setupCode_).join("\n") || "";
-
-  const modules =
-    Object.values(Blockly.Generator.Basic?.modules_).join(", ") || "";
-
-  const loopCode = `while (true) {
-${code}}`;
-
-  const simCode = `
-// modules: ${modules} #
-${setupCode}
-${loopCode}`;
-
-  console.log(Blockly.Generator.Basic.formatCode(simCode));
-  return Blockly.Generator.Basic.formatCode(simCode);
+basicGenerator.addSetup = function (key, code) {
+  basicGenerator.setupCode_[key] = code;
 };
 
-/**
- * Naked values are top-level blocks with outputs that aren't plugged into
- * anything.  A trailing semicolon is needed to make this legal.
- * @param {string} line Line of generated code.
- * @return {string} Legal line of code.
- */
-Blockly.Generator.Basic.scrubNakedValue = function (line) {
-  return line + ";\n";
-};
+basicGenerator.statementToCode = function (block, name) {
+  const target = block.getInputTargetBlock(name);
+  if (!target) return "";
 
-/**
- * Format the generated Arduino code for better readability.
- * This function adds proper indentation and removes duplicate empty lines.
- * @param {string} code The Arduino code to format.
- * @return {string} Formatted Arduino code.
- */
-Blockly.Generator.Basic.formatCode = function (code) {
-  let formattedCode = "";
-  let indentLevel = 0;
-  const indentSize = 2; // Number of spaces per indentation level
-  let previousLineWasEmpty = false; // Track if the previous line was empty
+  let code = "";
+  let current = target;
 
-  const lines = code.split("\n");
+  while (current) {
+    const line = basicGenerator.blockToCode(current);
 
-  lines.forEach((line) => {
-    line = line.trim();
-
-    // Skip duplicate empty lines
-    if (line === "" && previousLineWasEmpty) {
-      return; // Skip this line if it's an empty line after another empty line
-    }
-
-    // Mark if the current line is empty
-    previousLineWasEmpty = line === "";
-
-    // Adjust indentation for closing braces
-    if (line.startsWith("}")) {
-      indentLevel = Math.max(0, indentLevel - 1);
-    }
-
-    // Special case for 'else if' and 'else' to ensure they align with 'if'
-    if (line.startsWith("else if") || line.startsWith("else")) {
-      formattedCode += " ".repeat(indentLevel * indentSize) + line + "\n";
+    if (Array.isArray(line)) {
+      // Falls ein Valueblock "aus Versehen" hier landet
+      code += line[0] + "\n";
     } else {
-      // Add the appropriate indentation for normal lines
-      formattedCode += " ".repeat(indentLevel * indentSize) + line + "\n";
+      code += line;
     }
 
-    // Increase indentation after opening braces
-    if (line.endsWith("{")) {
-      indentLevel++;
-    }
-  });
-
-  // Remove any trailing empty lines
-  return formattedCode.replace(/\n\s*\n\s*\n/g, "\n\n").trim();
-};
-
-/**
- * Encode a string as a properly escaped Arduino string, complete with
- * quotes.
- * @param {string} string Text to encode.
- * @return {string} Arduino string.
- * @private
- */
-Blockly.Generator.Basic.quote_ = function (string) {
-  // Can't use goog.string.quote since Google's style guide recommends
-  // JS string literals use single quotes.
-  string = string
-    .replace(/\\/g, "\\\\")
-    .replace(/\n/g, "\\\n")
-    .replace(/'/g, "\\'");
-  return '"' + string + '"';
-};
-
-/**
- * Common tasks for generating Arduino from blocks.
- * Handles comments for the specified block and any connected value blocks.
- * Calls any statements following this block.
- * @param {!Blockly.Block} block The current block.
- * @param {string} code The Arduino code created for this block.
- * @param {boolean=} opt_thisOnly True to generate code for only this statement.
- * @return {string} Arduino code with comments and subsequent blocks added.
- * @private
- */
-Blockly.Generator.Basic.scrub_ = function (block, code) {
-  let commentCode = "";
-  // Only collect comments for blocks that aren't inline.
-  if (!block.outputConnection || !block.outputConnection.targetConnection) {
-    // Collect comment for this block.
-    let comment = block.getCommentText();
-    //@ts-ignore
-    comment = comment
-      ? Blockly.utils.string.wrap(
-          comment,
-          Blockly.Generator.Basic.COMMENT_WRAP - 3,
-        )
-      : null;
-    if (comment) {
-      if (block.getProcedureDef) {
-        // Use a comment block for function comments.
-        commentCode +=
-          "/**\n" +
-          Blockly.Generator.Basic.prefixLines(comment + "\n", " * ") +
-          " */\n";
-      } else {
-        commentCode += Blockly.Generator.Basic.prefixLines(
-          comment + "\n",
-          "// ",
-        );
-      }
-    }
-    // Collect comments for all value arguments.
-    // Don't collect comments for nested statements.
-    for (let i = 0; i < block.inputList.length; i++) {
-      if (block.inputList[i].type === Blockly.INPUT_VALUE) {
-        const childBlock = block.inputList[i].connection.targetBlock();
-        if (childBlock) {
-          const comment = Blockly.Generator.Basic.allNestedComments(childBlock);
-          if (comment) {
-            commentCode += Blockly.Generator.Basic.prefixLines(comment, "// ");
-          }
-        }
-      }
-    }
+    current = current.getNextBlock();
   }
-  const nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-  const nextCode = Blockly.Generator.Basic.blockToCode(nextBlock);
-  return commentCode + code + nextCode;
+
+  return code;
+};
+
+/**
+ * finish — wird ausgeführt, nachdem alle Blöcke generiert wurden.
+ * Fügt Setup-Code oben an, dann normalen Code unten.
+ *
+ * @param {string} code – Der generierte Code der Blöcke
+ * @return {string} – finaler Output
+ */
+basicGenerator.finish = function (code) {
+  const setup = Object.values(basicGenerator.setupCode_)
+    .filter(Boolean)
+    .join("\n");
+
+  let finalCode = "";
+
+  if (setup) {
+    finalCode += setup + "\n";
+  }
+
+  finalCode += code;
+
+  return finalCode;
 };

@@ -56,6 +56,13 @@ Blockly.Generator.Arduino.forBlock["time_delay_5s"] = function (
   return ""; // nichts generieren
 };
 
+Blockly.Generator.Arduino.forBlock["hdc_humi"] = function (_block, _generator) {
+  return ""; // nichts generieren
+};
+Blockly.Generator.Arduino.forBlock["hdc_tmp"] = function (_block, _generator) {
+  return ""; // nichts generieren
+};
+
 Blockly.Generator.Arduino.forBlock["display_print_basic"] = function (
   _block,
   _generator,

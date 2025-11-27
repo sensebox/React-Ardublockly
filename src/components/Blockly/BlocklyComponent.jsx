@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import * as Blockly from "blockly/core";
 import "./blocks/index";
 import "@/components/Blockly/generator/arduino/index";
-import "@/components/Blockly/generator/basic/index";
 
 import Toolbox from "./toolbox/Toolbox";
 import { reservedWords } from "@/helpers/reservedWords";
