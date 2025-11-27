@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Box,
   Typography,
   LinearProgress,
   CircularProgress,
+  Alert,
 } from "@mui/material";
 import { ESPLoader, Transport } from "esptool-js";
 
@@ -15,6 +16,7 @@ let transport = null;
 let device = null;
 
 export default function FlashToolMini() {
+  const [supported, setSupported] = useState(true);
   const [connected, setConnected] = useState(false);
   const [connecting, setConnecting] = useState(false);
   const [flashing, setFlashing] = useState(false);
@@ -22,6 +24,12 @@ export default function FlashToolMini() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [sketch, setSketch] = useState("");
+
+  useEffect(() => {
+    if (!("serial" in navigator)) {
+      setSupported(false);
+    }
+  }, []);
 
   const serial = navigator.serial;
 
@@ -53,7 +61,7 @@ export default function FlashToolMini() {
 
       esploader = new ESPLoader(loaderOptions);
 
-      await esploader.main(); // kann einige Sekunden dauern
+      await esploader.main();
       const response = await fetch("/mergedBasic.bin");
       if (!response.ok) throw new Error("Sketch wurde nicht gefunden");
 
@@ -65,7 +73,6 @@ export default function FlashToolMini() {
         setSketch(reader.result);
       };
       reader.onerror = function () {
-        console.error("Fehler beim Lesen der Datei:", reader.error);
         setError("Fehler beim Lesen der Datei.");
       };
 
@@ -92,7 +99,9 @@ export default function FlashToolMini() {
         eraseAll: true,
         compress: true,
         reportProgress: (fileIndex, written, total) => {
-          setProgress((written / total) * 100);
+          const raw = (written / total) * 100;
+          const safeValue = raw >= 100 ? 99 : raw;
+          setProgress(safeValue);
         },
       };
       await esploader.writeFlash(flashOptions);
@@ -118,56 +127,68 @@ export default function FlashToolMini() {
         textAlign: "center",
       }}
     >
-      {/* 🔄 Ladeanimation beim Verbinden */}
-      {connecting && (
-        <Box sx={{ py: 2 }}>
-          <CircularProgress size={36} thickness={4} />
-          <Typography sx={{ mt: 1, opacity: 0.75 }}>
-            Verbinde mit Board …
-          </Typography>
-        </Box>
-      )}
+      {/* Rest des Tools nur anzeigen, wenn WebSerial unterstützt wird */}
+      {supported && (
+        <>
+          {connecting && (
+            <Box sx={{ py: 2 }}>
+              <CircularProgress size={36} thickness={4} />
+              <Typography sx={{ mt: 1, opacity: 0.75 }}>
+                Verbinde mit Board …
+              </Typography>
+            </Box>
+          )}
 
-      {/* 🔘 Verbindung */}
-      {!connected && !connecting && (
-        <Button variant="outlined" fullWidth onClick={connectBoard}>
-          Mit Board verbinden
-        </Button>
-      )}
+          {!connected && !connecting && (
+            <Button variant="outlined" fullWidth onClick={connectBoard}>
+              Mit Board verbinden
+            </Button>
+          )}
 
-      {/* 🚀 Flash Button */}
-      {connected && (
-        <Button
-          variant="contained"
-          color="success"
-          fullWidth
-          disabled={flashing}
-          onClick={flashSketch}
-        >
-          Sketch flashen
-        </Button>
-      )}
+          {connected && (
+            <Button
+              variant="contained"
+              color="success"
+              fullWidth
+              disabled={flashing}
+              onClick={flashSketch}
+            >
+              Sketch flashen
+            </Button>
+          )}
+          {flashing && (
+            <Box sx={{ my: 2 }}>
+              <LinearProgress
+                variant="determinate"
+                value={progress >= 100 ? 99 : progress}
+              />
 
-      {/* 📊 Fortschritt */}
-      {flashing && (
-        <Box sx={{ my: 2 }}>
-          <LinearProgress variant="determinate" value={progress} />
-          <Typography sx={{ mt: 1 }}>{Math.round(progress)}%</Typography>
-        </Box>
-      )}
+              <Typography sx={{ mt: 1 }}>
+                {progress >= 100 ? "99%" : Math.round(progress) + "%"}
+              </Typography>
 
-      {/* ✔ Erfolg */}
-      {success && (
-        <Typography sx={{ mt: 1, color: "green" }}>
-          Upload erfolgreich! Starte die senseBox neu.
-        </Typography>
-      )}
+              <Alert severity="info" sx={{ mt: 1, textAlign: "left" }}>
+                ⚠️ Bitte warten: Der Flash-Vorgang kann bei <strong>0 %</strong>{" "}
+                und
+                <strong> 100 %</strong> für einige Sekunden stehen bleiben. Das
+                ist völlig normal. Warte bis der Vorgang abgeschlossen ist und
+                hier "Upload Erfolgreich!" steht.
+              </Alert>
+            </Box>
+          )}
 
-      {/* ❌ Fehler */}
-      {error && (
-        <Typography sx={{ mt: 1, color: "red", fontWeight: 600 }}>
-          {error}
-        </Typography>
+          {success && (
+            <Typography sx={{ mt: 1, color: "green" }}>
+              Upload erfolgreich! Starte die senseBox neu.
+            </Typography>
+          )}
+
+          {error && (
+            <Typography sx={{ mt: 1, color: "red", fontWeight: 600 }}>
+              {error}
+            </Typography>
+          )}
+        </>
       )}
     </Box>
   );

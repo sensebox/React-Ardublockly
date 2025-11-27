@@ -20,6 +20,8 @@ import {
   HelpCenter,
   Close as CloseIcon,
   HelpOutline,
+  Start,
+  Rocket,
 } from "@mui/icons-material";
 import FlashToolMini from "./FlashtoolMini";
 import FlashToolMiniWithTutorial from "./FlashtoolMiniWithTutorial";
@@ -145,10 +147,10 @@ const ConnectWizard = ({
           <Button
             onClick={() => setHelpOpen(true)}
             variant="contained"
-            startIcon={<HelpCenter />}
+            startIcon={<Rocket />}
             sx={{}}
           >
-            Hilfe
+            Quickstart
           </Button>
         </Tooltip>
       </Box>
@@ -173,17 +175,132 @@ const HelpModal = ({ onClose }) => {
     },
     {
       title: "Den :basic Sketch hochladen",
+      text: " Bevor du mit Blockly Basic programmieren kannst, muss der Grundsketch auf deine senseBox geladen werden. Dieser ermöglicht die Kommunikation zwischen deinem Computer und der senseBox.",
       custom: <FlashToolMiniWithTutorial />,
     },
-    {
-      title: "Verbinden",
-      text: "Starte die senseBox neu und Verbinde dich über den Connect-Button.",
-      image: "/media/basic/tutorial/selectUSB.png",
-    },
+    // {
+    //   title: "Verbinden",
+    //   text: "Resette jetzt deine senseBox !",
+    //   image: "/media/basic/tutorial/resetBtn.png",
+    // },
     {
       title: "Action Bar",
-      text: "Du bist sogut wie fertig, klicke auf 'Run', um dein Programm zu starten! Stop beendet das Programm und mit Disconnect trennst du die senseBox wieder von deinem Browser",
-      image: "/media/basic/tutorial/actionBar.png",
+      text: "Nachdem du die senseBox neu gestartet hast, kannst du Blockly Basic verwenden. Die Action Bar bietet dir Schnellzugriffe auf wichtige Funktionen.",
+      custom: (
+        <ul
+          style={{
+            textAlign: "left",
+            padding: 0,
+            listStyle: "none",
+            display: "flex",
+            flexDirection: "column",
+            gap: "20px",
+          }}
+        >
+          <li
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "16px",
+            }}
+          >
+            <div
+              style={{ display: "flex", gap: "12px", flexDirection: "column" }}
+            >
+              <Tooltip title="Connect to senseBox">
+                <Button
+                  variant={"outlined"}
+                  color={"error"}
+                  startIcon={<Computer />}
+                >
+                  Disconnect
+                </Button>
+              </Tooltip>
+
+              <Tooltip title="Connect to senseBox">
+                <Button
+                  variant={"contained"}
+                  color={"primary"}
+                  startIcon={<Computer />}
+                >
+                  Connect
+                </Button>
+              </Tooltip>
+            </div>
+
+            <div style={{ fontSize: "0.95rem", opacity: 0.85 }}>
+              <strong>Verbindung verwalten: </strong>
+              Mit diesen beiden Schaltflächen kannst du deine senseBox verbinden
+              oder die bestehende Verbindung sauber trennen.
+            </div>
+          </li>
+
+          {/* RUN */}
+          <li
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "16px",
+            }}
+          >
+            <Tooltip title="Send & Start program">
+              <Button
+                variant="contained"
+                color="success"
+                startIcon={<PlayArrow />}
+              >
+                Run
+              </Button>
+            </Tooltip>
+
+            <div style={{ fontSize: "0.95rem", opacity: 0.85 }}>
+              <strong>Programm starten: </strong>
+              Dein Sketch wird hochgeladen und direkt auf der senseBox
+              ausgeführt.
+            </div>
+          </li>
+
+          {/* STOP */}
+          <li
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "16px",
+            }}
+          >
+            <Tooltip title="Stop program">
+              <Button variant="contained" color="error" startIcon={<Stop />}>
+                Stop
+              </Button>
+            </Tooltip>
+
+            <div style={{ fontSize: "0.95rem", opacity: 0.85 }}>
+              <strong>Programm beenden: </strong>
+              Stoppt den aktuell laufenden Code auf der senseBox sofort.
+            </div>
+          </li>
+
+          {/* HELP */}
+          <li
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "16px",
+            }}
+          >
+            <Tooltip title="Help">
+              <Button variant="contained" startIcon={<HelpCenter />}>
+                Hilfe
+              </Button>
+            </Tooltip>
+
+            <div style={{ fontSize: "0.95rem", opacity: 0.85 }}>
+              <strong>Hilfe & Anleitung: </strong>
+              Öffnet diese Erklärung erneut, falls du Unterstützung brauchst.
+            </div>
+          </li>
+        </ul>
+      ),
     },
   ];
 
@@ -214,7 +331,9 @@ const HelpModal = ({ onClose }) => {
       <Paper
         elevation={12}
         sx={{
-          maxWidth: 500,
+          maxWidth: 600,
+          maxHeight: "80vh",
+          overflow: "scroll",
           width: "100%",
           p: 4,
           borderRadius: 4,
@@ -232,12 +351,19 @@ const HelpModal = ({ onClose }) => {
         {/* 🔵 Slide Titel */}
         <Typography
           variant="h5"
-          sx={{ fontWeight: 700, mb: 2, textAlign: "center" }}
+          sx={{ fontWeight: 700, mb: 0, textAlign: "center" }}
         >
           {slide.title}
         </Typography>
 
-        {slide.custom ? <Box> {slide.custom}</Box> : null}
+        {/* 🔵 Slide Text */}
+        <Typography variant="body1" sx={{ textAlign: "center", minHeight: 80 }}>
+          {slide.text}
+        </Typography>
+
+        {slide.custom ? (
+          <Box sx={{ textAlign: "center", my: 1 }}> {slide.custom}</Box>
+        ) : null}
         {/* 🔵 Slide Bild */}
         <Box sx={{ textAlign: "center" }}>
           {slide.image && (
@@ -246,7 +372,7 @@ const HelpModal = ({ onClose }) => {
               alt={slide.title}
               style={{
                 width: "100%",
-                maxHeight: 200,
+                maxHeight: 500,
                 objectFit: "contain",
                 borderRadius: 8,
               }}
@@ -254,18 +380,13 @@ const HelpModal = ({ onClose }) => {
           )}
         </Box>
 
-        {/* 🔵 Slide Text */}
-        <Typography variant="body1" sx={{ textAlign: "center", minHeight: 80 }}>
-          {slide.text}
-        </Typography>
-
         {/* 🔵 Navigation */}
         <Box
           sx={{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            mb: 2,
+            mt: 2,
           }}
         >
           <Button
@@ -276,9 +397,11 @@ const HelpModal = ({ onClose }) => {
             Zurück
           </Button>
 
-          <Typography variant="body2">
-            {activeSlide + 1} / {slides.length}
-          </Typography>
+          <Box>
+            <Typography variant="body2">
+              {activeSlide + 1} / {slides.length}
+            </Typography>
+          </Box>
 
           <Button
             variant="contained"
@@ -294,8 +417,9 @@ const HelpModal = ({ onClose }) => {
           sx={{
             display: "flex",
             justifyContent: "center",
-            gap: 1,
-            mb: 2,
+            alignItems: "center",
+            gap: 4,
+            mb: 1,
           }}
         >
           {slides.map((_, i) => (
