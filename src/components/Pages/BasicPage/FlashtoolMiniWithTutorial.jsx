@@ -1,22 +1,12 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Paper,
-  Button,
-  Collapse,
-  Divider,
-  Alert,
-  Typography,
-} from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import { Paper, Alert, Typography } from "@mui/material";
 
-import FlashToolMini from "./FlashToolMini";
+import FlashtoolMini from "./FlashtoolMini";
 import TutorialCard from "./TutorialCard";
 
-export default function FlashToolMiniWithTutorial() {
+export default function FlashtoolMiniWithTutorial() {
   const [showTutorial, setShowTutorial] = useState(false);
   const [supported, setSupported] = useState(true);
   const serial = navigator.serial;
@@ -41,7 +31,7 @@ export default function FlashToolMiniWithTutorial() {
       {supported && (
         <>
           <TutorialCard />
-          <FlashToolMini />
+          <FlashtoolMini />
         </>
       )}
 

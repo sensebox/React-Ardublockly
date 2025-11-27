@@ -23,7 +23,7 @@ import {
   Start,
   Rocket,
 } from "@mui/icons-material";
-import FlashToolMiniWithTutorial from "./FlashtoolMiniWithTutorial";
+import FlashtoolMiniWithTutorial from "./FlashtoolMiniWithTutorial";
 
 const ConnectWizard = ({
   supported,
@@ -175,7 +175,7 @@ const HelpModal = ({ onClose }) => {
     {
       title: "Den :basic Sketch hochladen",
       text: " Bevor du mit Blockly Basic programmieren kannst, muss der Grundsketch auf deine senseBox geladen werden. Dieser ermöglicht die Kommunikation zwischen deinem Computer und der senseBox.",
-      custom: <FlashToolMiniWithTutorial />,
+      custom: <FlashtoolMiniWithTutorial />,
     },
     // {
     //   title: "Verbinden",

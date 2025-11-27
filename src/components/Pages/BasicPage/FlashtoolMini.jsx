@@ -15,7 +15,7 @@ let esploader = null;
 let transport = null;
 let device = null;
 
-export default function FlashToolMini() {
+export default function FlashtoolMini() {
   const [supported, setSupported] = useState(true);
   const [connected, setConnected] = useState(false);
   const [connecting, setConnecting] = useState(false);
