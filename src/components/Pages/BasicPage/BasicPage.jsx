@@ -6,11 +6,12 @@ import BlocklyCard from "./BlocklyCard";
 import "@/components/Blockly/blocks/basic/index"; // registriert Block
 import senseboxlogo from "@/data/senseBox_Icon_bunt.png";
 import DeviceLogCard from "./DeviceLogCard";
+import { useSelector } from "react-redux";
 
 const BasicPage = () => {
   const [log, setLog] = useState("");
   const [script, setScript] = useState("");
-
+  const basicCode = useSelector((s) => s.workspace.code.basic);
   const logBoxRef = useRef(null);
 
   const {
@@ -24,6 +25,10 @@ const BasicPage = () => {
     sendLine,
     sendScript,
   } = useWebSerial({ script, setLog, logBoxRef });
+
+  useEffect(() => {
+    console.log(basicCode);
+  }, [basicCode]);
 
   useEffect(() => {
     const head = document.head;

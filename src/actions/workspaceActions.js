@@ -10,6 +10,7 @@ import {
 } from "./types";
 
 import * as Blockly from "blockly/core";
+import { basicGenerator } from "@/components/Blockly/generator/basic/generator";
 
 import { storeTutorialXml } from "./tutorialActions";
 
@@ -22,9 +23,8 @@ export const workspaceChange = () => (dispatch) => {
 export const onChangeCode = () => (dispatch, getState) => {
   const workspace = Blockly.getMainWorkspace();
   var code = getState().workspace.code;
-
   code.arduino = Blockly.Generator.Arduino.workspaceToCode(workspace);
-  code.basic = Blockly.Generator.Basic.workspaceToCode(workspace);
+  code.basic = basicGenerator.workspaceToCode(workspace);
   var xmlDom = Blockly.Xml.workspaceToDom(workspace);
   var board = getState().board.board;
   xmlDom.setAttribute("board", board);

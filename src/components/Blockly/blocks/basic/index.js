@@ -77,6 +77,46 @@ Blockly.defineBlocksWithJsonArray([
     output: "String",
     colour: "#62A044  ",
   },
+  {
+    type: "hdc_humi",
+    message0: "%1 \n %2",
+    args0: [
+      {
+        type: "field_image",
+        src: "/media/hardware/icons/Icon_Luftfeuchtigkeit.svg",
+        width: 90,
+        height: 90,
+        alt: "*",
+      },
+      {
+        type: "field_label",
+        text: "Luftfeuchtigkeit",
+        bold: true,
+      },
+    ],
+    output: "String",
+    colour: "#62A044  ",
+  },
+  {
+    type: "hdc_tmp",
+    message0: "%1 \n %2",
+    args0: [
+      {
+        type: "field_image",
+        src: "/media/hardware/icons/Icon_Temperatur.svg",
+        width: 90,
+        height: 90,
+        alt: "*",
+      },
+      {
+        type: "field_label",
+        text: "Temperatur",
+        bold: true,
+      },
+    ],
+    output: "String",
+    colour: "#62A044  ",
+  },
 ]);
 
 Blockly.defineBlocksWithJsonArray([
