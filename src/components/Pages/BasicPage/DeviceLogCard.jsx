@@ -18,10 +18,17 @@ import {
   ExpandMore,
 } from "@mui/icons-material";
 
-const DeviceLogCard = ({ log, onClear, onCopy }) => {
+const DeviceLogCard = ({ log, onClear }) => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const logBoxRef = useRef(null);
+
+  const onCopy = () => {
+    if (logBoxRef.current) {
+      const text = logBoxRef.current.innerText;
+      navigator.clipboard.writeText(text);
+    }
+  };
 
   return (
     <Paper
@@ -76,7 +83,7 @@ const DeviceLogCard = ({ log, onClear, onCopy }) => {
               <span>
                 <IconButton
                   onClick={(e) => {
-                    e.stopPropagation;
+                    e.stopPropagation();
                     onCopy();
                   }}
                   disabled={!log}
