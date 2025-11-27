@@ -170,7 +170,7 @@ export default function FlashToolMini() {
               <Alert severity="info" sx={{ mt: 1, textAlign: "left" }}>
                 ⚠️ Bitte warten: Der Flash-Vorgang kann bei <strong>0 %</strong>{" "}
                 und
-                <strong> 100 %</strong> für einige Sekunden stehen bleiben. Das
+                <strong> 99 %</strong> für einige Sekunden stehen bleiben. Das
                 ist völlig normal. Warte bis der Vorgang abgeschlossen ist und
                 hier "Upload Erfolgreich!" steht.
               </Alert>
