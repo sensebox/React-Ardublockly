@@ -98,6 +98,9 @@ const BuildSlide = ({
                         <MenuItem value="task">Aufgabe</MenuItem>
                         <MenuItem value="question">Fragestellung</MenuItem>
                         <MenuItem value="blockly">Blockly-Aufgabe</MenuItem>
+                        <MenuItem value="blocklyExample">
+                          Blockly-Beispiel
+                        </MenuItem>
                         <MenuItem value="h5p">H5P-Embed</MenuItem>
                       </Select>
                     </FormControl>

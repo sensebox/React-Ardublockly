@@ -35,6 +35,7 @@
     "blockly": "^12.3.0",
     "file-saver": "^2.0.5",
     "framer-motion": "^6.5.1",
+    "html2canvas": "^1.4.1",
     "markdown-it": "^14.1.0",
     "mnemonic-id": "^3.2.7",
     "moment": "^2.29.4",

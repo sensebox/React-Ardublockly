@@ -63,11 +63,13 @@ md.renderer.rules.table_open = function (tokens, idx, options, env, self) {
 const TaskStep = ({ step, setNextStepDisabled }) => {
   const activeStep = useSelector((state) => state.tutorial.activeStep);
 
-  // useEffect(() => {
-  //   if (step.type === "question" && step.questionData) {
-  //     setNextStepDisabled(true);
-  //   }
-  // }, [step]);
+  const svgToDataUrl = (svgString) =>
+    "data:image/svg+xml;base64," +
+    window.btoa(
+      new TextEncoder().encode(svgString).reduce((data, byte) => {
+        return data + String.fromCharCode(byte);
+      }, ""),
+    );
 
   return (
     <TutorialSlide stepNumber={activeStep}>
@@ -152,6 +154,19 @@ const TaskStep = ({ step, setNextStepDisabled }) => {
 
           {/* Lösung prüfen */}
           <SolutionCheck solutionXml={step.xml} activeStep={activeStep} />
+        </Box>
+      )}
+      {step.type === "blocklyExample" && step.svg && (
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <img
+            src={svgToDataUrl(step.svg)}
+            alt="Blockly block"
+            // style={{
+            //   width: "300px", // ← hier kannst du beliebige Größe setzen
+            //   height: "auto",
+            //   display: "block",
+            // }}
+          />
         </Box>
       )}
     </TutorialSlide>

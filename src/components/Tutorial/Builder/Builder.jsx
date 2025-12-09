@@ -81,6 +81,7 @@ const buildTutorialPayload = ({
     text: step.text || "",
     type: step.type,
     questionData: step.questionData || null,
+    svg: step.svg || null,
     xml: step.xml || null,
     h5psrc: step.h5psrc || null,
   })),
@@ -414,9 +415,21 @@ const Builder = () => {
     setSteps(updated);
   };
 
+  const updateStepFields = (fields) => {
+    setSteps((prev) => {
+      const updated = [...prev];
+      updated[activeStep] = {
+        ...updated[activeStep],
+        ...fields, // <--- alles auf einmal
+      };
+      return updated;
+    });
+  };
+
   const updateStepText = (text) => updateStepField("text", text);
   const updateStepXml = (xml) => updateStepField("xml", xml);
   const updateStepH5P = (h5psrc) => updateStepField("h5psrc", h5psrc);
+  const updateStepSVG = (svg) => updateStepField("svg", svg);
   const updateStepQuestions = (questionData) =>
     updateStepField("questionData", questionData);
 
@@ -540,7 +553,7 @@ const Builder = () => {
                 <BlocklyExample
                   index={activeStep}
                   value={currentStep.xml || ""}
-                  onXmlChange={updateStepXml}
+                  updateStepFields={updateStepFields}
                 />
               )}
               {currentStep.type === "h5p" && (
@@ -554,6 +567,14 @@ const Builder = () => {
                 <QuestionList
                   questions={currentStep.questionData || []}
                   setQuestions={updateStepQuestions}
+                />
+              )}
+
+              {currentStep.type === "blocklyExample" && (
+                <BlocklyExample
+                  index={activeStep}
+                  value={currentStep.xml || ""}
+                  updateStepFields={updateStepFields}
                 />
               )}
 
