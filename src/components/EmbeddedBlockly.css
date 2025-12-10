@@ -97,7 +97,6 @@ body:has(.blockly-app-container) {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 8px !important;
 }
 
 .embedded-button:first-child {
@@ -149,7 +148,7 @@ body:has(.blockly-app-container) {
   padding: 0 16px !important; /* Remove top/bottom padding to match button height */
   font-size: 16px !important;
   font-weight: 500 !important;
-  width: calc(30vw - 8px) !important;
+  width: calc(25vw - 8px) !important;
   min-width: 120px !important;
   transition: transform 120ms ease !important;
   overflow: hidden !important; /* Hide overflow text */

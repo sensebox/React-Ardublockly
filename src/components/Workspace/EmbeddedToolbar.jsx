@@ -19,7 +19,8 @@ const EmbeddedToolbar = ({
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
-      width: "100%"
+      width: "100%",
+      flexWrap: "wrap",
     }}>
       <WorkspaceName
         multiple={multiple}
@@ -27,7 +28,7 @@ const EmbeddedToolbar = ({
         projectType={projectType}
       />
       
-      <div style={{ display: "flex", alignItems: "center", gap: "16px", flex: 1, justifyContent: "flex-end" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "16px", flex: 1, justifyContent: "flex-end", flexWrap: "wrap" }}>
         {!multiple && selectedBoard && (
           <Compile 
             iconButton 
