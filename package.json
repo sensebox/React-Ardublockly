@@ -57,7 +57,7 @@
     "redux": "^4.2.0",
     "redux-thunk": "^2.4.1",
     "rehype-raw": "^6.1.1",
-    "remark-gemoji": "^7.0.1",
+    "remark-gemoji": "^8.0.0",
     "remark-gfm": "^3.0.1",
     "styled-components": "^4.4.1",
     "uuid": "^8.3.1",
