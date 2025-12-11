@@ -21,17 +21,16 @@ import {
   setError,
   deleteError,
 } from "../../../actions/tutorialBuilderActions";
-
 // 🔥 Importiere Dialog und Snackbar, falls nicht bereits in BlocklyExample vorhanden
 import Dialog from "@/components/ui/Dialog";
 import Snackbar from "@/components/Snackbar";
 
-const BlocklyExample = ({ index, task = false, value, onXmlChange }) => {
+const BlocklyExample = ({ index, task = false, value, updateStepFields }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const [xmlState, setXmlState] = useState(null);
   const [input, setInput] = useState(null);
-  const [disabled, setDisabled] = useState(true);
+  const [disabled, setDisabled] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
   // 🔥 Zustand für den Reset-Dialog und die Snackbar
@@ -51,6 +50,15 @@ const BlocklyExample = ({ index, task = false, value, onXmlChange }) => {
   useEffect(() => {
     validateXML();
   }, [value]);
+
+  const handleSubmit = () => {
+    const xml = saveCurrentXml();
+    const svg = saveCurrentSvg();
+    console.log("Submitting Blockly Example:", { xml, svg });
+    updateStepFields({ xml, svg });
+
+    setSubmitted(true);
+  };
 
   const validateXML = () => {
     let localXml = value;
@@ -72,7 +80,6 @@ const BlocklyExample = ({ index, task = false, value, onXmlChange }) => {
     setXmlState(localXml);
   };
 
-  // Funktion zum Speichern des aktuellen Workspace-XMLs
   const saveCurrentXml = () => {
     const workspace = Blockly.getMainWorkspace();
     if (!workspace) {
@@ -83,16 +90,71 @@ const BlocklyExample = ({ index, task = false, value, onXmlChange }) => {
       const currentXmlString = Blockly.Xml.domToText(
         Blockly.Xml.workspaceToDom(workspace),
       );
-      dispatch(changeContent(currentXmlString, index, "xml"));
-      setInput(moment().format("LTS"));
       setSubmitted(true);
-
-      if (onXmlChange) onXmlChange(currentXmlString);
-
-      setTimeout(() => setSubmitted(false), 3000);
+      console.log("Current XML saved:", currentXmlString);
+      return currentXmlString;
     } catch (e) {
       console.error("Failed to serialize current workspace XML:", e);
     }
+  };
+  const saveCurrentSvg = () => {
+    const workspace = Blockly.getMainWorkspace();
+    if (!workspace) return;
+
+    // 1. Block ermitteln (z. B. Top-Level Block)
+    const topBlocks = workspace.getTopBlocks(true);
+    if (!topBlocks.length) return;
+
+    const block = topBlocks[0];
+
+    // 2. BoundingBox des Blocks holen
+    const rect = block.getBoundingRectangle();
+    const width = rect.right - rect.left;
+    const height = rect.bottom - rect.top;
+
+    // 3. Canvas klonen
+    const canvas = workspace.svgBlockCanvas_.cloneNode(true);
+
+    // 4. transform entfernen
+    canvas.removeAttribute("transform");
+
+    // 5. Canvas um -left/-top verschieben,
+    //    damit der Block im SVG bei (0,0) beginnt
+    canvas.setAttribute("transform", `translate(${-rect.left}, ${-rect.top})`);
+
+    // 6. CSS einsammeln
+    let cssContent = "";
+    const styles = document.querySelectorAll("style");
+    styles.forEach((style) => {
+      if (style.id?.startsWith("blockly")) cssContent += style.innerText;
+    });
+
+    cssContent += `
+    .blocklyText { fill: #fff !important; }
+  `;
+
+    const css = `
+    <defs>
+      <style><![CDATA[
+        ${cssContent}
+      ]]></style>
+    </defs>
+  `;
+
+    // 7. SVG final erstellen
+    const xmlCanvas = new XMLSerializer().serializeToString(canvas);
+
+    const fullSvg = `
+    <svg xmlns="http://www.w3.org/2000/svg"
+         width="${width}"
+         height="${height}"
+         viewBox="0 0 ${width} ${height}">
+      ${css}
+      ${xmlCanvas}
+    </svg>
+  `;
+
+    return fullSvg;
   };
 
   // 🔥 Funktion zum Zurücksetzen des Workspaces
@@ -130,18 +192,6 @@ const BlocklyExample = ({ index, task = false, value, onXmlChange }) => {
         message: "Fehler beim Zurücksetzen des Workspace.",
       });
     }
-  };
-
-  // Funktion, die aufgerufen wird, wenn sich der Workspace ändert (mit Debouncing)
-  const handleWorkspaceChanged = () => {
-    // console.log("BlocklyExample: Workspace changed, scheduling save..."); // 🔧 Debug-Log
-    // if (debounceTimerRef.current) {
-    //   clearTimeout(debounceTimerRef.current);
-    // }
-    // debounceTimerRef.current = setTimeout(() => {
-    //   console.log("BlocklyExample: Debounced save triggered."); // 🔧 Debug-Log
-    //   saveCurrentXml();
-    // }, 500); // 500ms Verzögerung
   };
 
   // Cleanup: Lösche den Timer beim Entfernen der Komponente
@@ -267,7 +317,6 @@ const BlocklyExample = ({ index, task = false, value, onXmlChange }) => {
                 trashcan={false}
                 initialXml={value}
                 blocklyCSS={{ height: "40vh", width: "100%" }}
-                onWorkspaceChanged={handleWorkspaceChanged}
               />
             </Grid>
           </Grid>
@@ -286,7 +335,7 @@ const BlocklyExample = ({ index, task = false, value, onXmlChange }) => {
             <Button
               variant="contained"
               color="primary"
-              onClick={saveCurrentXml} // Der Button ruft es auch manuell auf (ohne Debounce)
+              onClick={handleSubmit} // Der Button ruft es auch manuell auf (ohne Debounce)
               disabled={disabled}
               sx={{ height: "40px" }}
               startIcon={<FileUpload />}
