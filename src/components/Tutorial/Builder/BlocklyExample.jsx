@@ -24,7 +24,6 @@ import {
 // 🔥 Importiere Dialog und Snackbar, falls nicht bereits in BlocklyExample vorhanden
 import Dialog from "@/components/ui/Dialog";
 import Snackbar from "@/components/Snackbar";
-import { set } from "date-fns";
 
 const BlocklyExample = ({ index, task = false, value, updateStepFields }) => {
   const theme = useTheme();
