@@ -17,7 +17,7 @@ export const EMBEDDED_BLOCKLY_CONFIG = {
   zoom: {
     controls: true,
     wheel: true,
-    startScale: 0.9,
+    startScale: 0.7,
     maxScale: 3,
     minScale: 0.3,
     scaleSpeed: 1.1,
