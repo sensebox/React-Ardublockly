@@ -57,6 +57,11 @@ Blockly.Blocks["sensebox_mqtt_setup"] = {
         break;
 
       case "custom":
+        this.getField("server").setValue("Server");
+        this.getField("port").setValue("Port");
+        this.getField("passwordmsg").setValue(
+          Blockly.Msg.senseBox_mqtt_password,
+        );
         break;
       default:
         break;
