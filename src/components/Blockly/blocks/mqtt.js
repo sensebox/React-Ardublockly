@@ -57,6 +57,15 @@ Blockly.Blocks["sensebox_mqtt_setup"] = {
         break;
 
       case "custom":
+        if (
+          this.getField("server").getValue() === "io.adafruit.com" ||
+          this.getField("server").getValue() === "mqtt.dioty.co"
+        ) {
+          this.getField("server").setValue("Server");
+        }
+        this.getField("passwordmsg").setValue(
+          Blockly.Msg.senseBox_mqtt_password,
+        );
         break;
       default:
         break;

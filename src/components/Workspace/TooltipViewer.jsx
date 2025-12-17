@@ -9,9 +9,11 @@ import {
   useTheme,
 } from "@mui/material";
 import * as Blockly from "blockly";
+import ReactMarkdown from "react-markdown";
 
 const TooltipViewer = () => {
   const theme = useTheme();
+  const tooltip = useSelector((s) => s.workspace.code.tooltip);
   const helpurl = useSelector((s) => s.workspace.code.helpurl);
 
   return (
@@ -55,7 +57,7 @@ const TooltipViewer = () => {
           ></span>
         </Typography>
 
-        {/* <ReactMarkdown linkTarget="_blank">{tooltip}</ReactMarkdown> */}
+        <ReactMarkdown>{tooltip}</ReactMarkdown>
 
         {helpurl && (
           <Button
