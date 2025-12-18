@@ -119,9 +119,9 @@
     line-height: 1.2 !important;
   }
 
-  /* Reduce margins between categories */
+  /* Margins between categories */
   .embedded-mode .blocklyToolboxCategory {
-    margin: 1px !important; /* Reduced from 2px */
+    margin: 2px !important;
   }
 
   /* SOLUTION 3: Limit subcategory expansion height */
