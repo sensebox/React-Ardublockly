@@ -58,6 +58,35 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
 
     const ws = Blockly.inject(blocklyDivRef.current, blocklyOptions);
 
+    if (isEmbedded && ws.trashcan) {
+      const originalGetClientRect = ws.trashcan.getClientRect.bind(ws.trashcan);
+      const originalGetBoundingRectangle = ws.trashcan.getBoundingRectangle.bind(ws.trashcan);
+
+      ws.trashcan.getClientRect = function() {
+        const originalRect = originalGetClientRect();
+        if (!originalRect) return null;
+
+        return new Blockly.utils.Rect(
+          originalRect.top - 80,
+          originalRect.bottom + 80,
+          originalRect.left - 80,
+          originalRect.right + 80
+        );
+      };
+
+      ws.trashcan.getBoundingRectangle = function() {
+        const originalRect = originalGetBoundingRectangle();
+        if (!originalRect) return null;
+
+        return new Blockly.utils.Rect(
+          originalRect.top - 80,
+          originalRect.bottom + 80,
+          originalRect.left - 80,
+          originalRect.right + 80
+        );
+      };
+    }
+
     setWorkspace(ws);
 
     // Variable rename/create validation

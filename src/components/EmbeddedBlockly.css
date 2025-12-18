@@ -200,7 +200,3 @@ body:has(.blockly-app-container) {
   cursor: grabbing;
 }
 
-/* Prevent overscroll/bounce in embedded mode */
-.blocklyMainBackground {
-  touch-action: none;
-}
