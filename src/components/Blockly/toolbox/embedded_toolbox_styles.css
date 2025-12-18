@@ -2,12 +2,19 @@
    EMBEDDED MODE TOOLBOX STYLES
    ============================================================================= */
 
+/* SOLUTION 1: Enable toolbox scrolling to prevent overflow */
+.embedded-mode .blocklyToolboxDiv {
+  max-height: 80vh; /* Limit to 80% of viewport height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  overflow-x: hidden; /* Prevent horizontal overflow */
+}
+
 /* -----------------------------------------------------------------------------
    CSS Variables & Base Configuration
    ----------------------------------------------------------------------------- */
    .embedded-mode .blocklyToolbox {
-    --cat-height: 42px;
-    --cat-padding-x: 8px;
+    --cat-height: 32px; /* SOLUTION 2: Reduced from 42px for more compact layout */
+    --cat-padding-x: 6px; /* Reduced padding */
     --cat-min-width: calc(25vw - 9px);
     
     /* Chevron constants */
@@ -104,6 +111,23 @@
     align-items: center;
     min-height: var(--cat-height) !important;
     padding-right: 24px; /* reserve space for absolute chevron */
+  }
+
+  /* SOLUTION 2: Smaller fonts for more compact toolbox */
+  .embedded-mode .blocklyTreeLabel {
+    font-size: 14px !important; /* Reduced from default 16px */
+    line-height: 1.2 !important;
+  }
+
+  /* Reduce margins between categories */
+  .embedded-mode .blocklyToolboxCategory {
+    margin: 1px !important; /* Reduced from 2px */
+  }
+
+  /* SOLUTION 3: Limit subcategory expansion height */
+  .embedded-mode .blocklyToolboxCategoryContainer[aria-expanded="true"] {
+    max-height: 200px; /* Limit expanded category height */
+    overflow-y: auto; /* Allow scrolling within expanded categories */
   }
   
   /* -----------------------------------------------------------------------------
