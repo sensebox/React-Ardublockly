@@ -5,12 +5,14 @@ import PropTypes from "prop-types";
 import {
   Dialog,
   DialogContent,
+  DialogTitle,
   Box,
   Stepper,
   Step,
   StepLabel,
   Button,
   Typography,
+  IconButton,
 } from "@mui/material";
 import { CodeCompilationIcon } from "./CodeCompilationIcon";
 import DownloadAnimation from "./DownloadAnimation";
@@ -104,6 +106,20 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform, isEmb
   };
 
   const handleClose = (event, reason) => {
+    // In embedded mode, allow closing on all steps except during compilation
+    if (isEmbedded) {
+      if (activeStep === 0 && !error) {
+        return; // Don't allow closing during compilation
+      }
+      // Allow closing on all other steps in embedded mode
+      onClose();
+      setActiveStep(0);
+      setSketchId(null);
+      setError(null);
+      return;
+    }
+
+    // Original logic for non-embedded mode
     const shouldClose =
       error ||
       activeStep === 2 ||
@@ -129,9 +145,24 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform, isEmb
         style: { width: "600px", minHeight: "700px", maxHeight: "600px" },
       }}
     >
+      {isEmbedded && activeStep >= 1 && (
+        <DialogTitle style={{ padding: "8px 16px" }}>
+          <IconButton
+            onClick={() => handleClose(null, "backdropClick")}
+            style={{
+              position: "absolute",
+              right: 8,
+              top: 8,
+              color: "#666"
+            }}
+          >
+            <FontAwesomeIcon icon={faXmark} />
+          </IconButton>
+        </DialogTitle>
+      )}
       <DialogContent
         style={{
-          padding: "2rem",
+          padding: isEmbedded && activeStep >= 1 ? "1rem 2rem 2rem 2rem" : "2rem",
           display: "flex",
           flexDirection: "column",
           height: "100%",
@@ -245,6 +276,7 @@ CompilationDialog.defaultProps = {
   filename: "sketch",
   platform: false,
   onCompileComplete: () => {},
+  isEmbedded: false,
 };
 
 export default CompilationDialog;
