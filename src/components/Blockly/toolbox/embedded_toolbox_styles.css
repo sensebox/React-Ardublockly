@@ -21,7 +21,7 @@
     --chevron-size: 6px;
     --chevron-border: 2px;
     --chevron-transition: transform 120ms ease;
-    --chevron-right-offset: calc(2 * var(--cat-padding-x));
+    --chevron-right-offset: calc(2 * var(--cat-padding-x) + 4px); /* Added 2px more space after chevron */
   }
   
   /* -----------------------------------------------------------------------------
@@ -31,7 +31,7 @@
     height: var(--cat-height) !important;
     border-radius: 5px;
     background: #fff;
-    padding: 0 2px 0 0 !important; /* Remove Blockly's default indentation */
+    padding: 8px 2px 8px 0 !important; /* Vertical padding added */
     position: relative;
     flex: 0 1 auto;
     min-width: fit-content;
@@ -110,7 +110,7 @@
     display: flex;
     align-items: center;
     min-height: var(--cat-height) !important;
-    padding-right: 24px; /* reserve space for absolute chevron */
+    padding: 0px 24px 2px 0 !important; /* Added 2px more padding after chevron */
   }
 
   /* SOLUTION 2: Smaller fonts for more compact toolbox */
@@ -167,18 +167,11 @@
   
   /* Make search input take full width */
   .embedded-mode .blocklyToolboxCategoryContainer:has(input[type="search"]) {
-    width: 100% !important;
-    min-width: 100% !important;
-    flex: 1 1 100% !important;
+    width: calc(98.7%)!important;
   }
   
-  .embedded-mode .blocklyToolboxCategory:has(input[type="search"]) {
+  .embedded-mode .blocklyToolboxCategory:has(input[type="search"]) input[type="search"],
+  .embedded-mode input[type="search"] {
     width: 100% !important;
-    min-width: 100% !important;
-  }
-  
-  .embedded-mode .blocklyToolboxCategory:has(input[type="search"]) input[type="search"] {
-    width: 100% !important;
-    box-sizing: border-box !important;
   }
   
