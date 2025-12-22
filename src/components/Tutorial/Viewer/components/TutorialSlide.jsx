@@ -17,30 +17,33 @@ const TutorialSlide = ({ children, title, stepNumber }) => {
       transition={{ duration: 0.4 }}
       style={{
         width: "100%",
+        height: "100%",
         display: "flex",
-        flex: 1,
         justifyContent: "center",
       }}
     >
       <Card
         sx={{
           width: "100%",
-          overflow: "auto",
-          p: 2,
           boxShadow: 0,
         }}
       >
-        <CardContent>
+        <CardContent
+          sx={{
+            height: "100%",
+            flexDirection: "column",
+          }}
+        >
           {(title || stepNumber !== undefined) && (
             <Box
               sx={{
-                p: 0.5,
                 border: "1px solid #ddd",
                 borderRadius: "10%",
                 display: "inline-flex",
                 textAlign: "center",
                 fontWeight: "600",
                 fontSize: "0.9rem",
+                p: 0.5,
                 mb: 2,
               }}
             >
@@ -51,8 +54,8 @@ const TutorialSlide = ({ children, title, stepNumber }) => {
             sx={{
               border: "1px solid #ddd",
               borderRadius: 2,
-              mb: 10,
               p: 2,
+              overflow: "auto",
             }}
           >
             {children}
