@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import MarkdownIt from "markdown-it";
 import { useSelector } from "react-redux";
-import TutorialSlide from "./TutorialSlide";
+import TutorialSlide from "../components/TutorialSlide";
 import QuestionBlock from "./QuestionCard";
 import QuestionCard from "./QuestionCard";
 import SolutionCheck from "./SolutionCheck";
@@ -60,7 +60,7 @@ md.renderer.rules.table_open = function (tokens, idx, options, env, self) {
   return defaultTableRenderer(tokens, idx, options, env, self);
 };
 
-const TaskStep = ({ step, setNextStepDisabled }) => {
+const TaskCard = ({ step, setNextStepDisabled }) => {
   const activeStep = useSelector((state) => state.tutorial.activeStep);
 
   const svgToDataUrl = (svgString) =>
@@ -165,4 +165,4 @@ const TaskStep = ({ step, setNextStepDisabled }) => {
   );
 };
 
-export default TaskStep;
+export default TaskCard;

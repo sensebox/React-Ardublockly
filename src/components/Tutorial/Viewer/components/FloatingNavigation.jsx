@@ -11,8 +11,8 @@ const FloatingNavigation = ({ currentStep, steps, nextStep, previouStep }) => {
     <Box
       sx={{
         position: "absolute",
-        bottom: 24,
-        right: 16,
+        bottom: "10%",
+        right: "5%",
         zIndex: 50,
         display: "flex",
         alignItems: "center",
