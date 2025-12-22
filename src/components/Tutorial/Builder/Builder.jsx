@@ -3,14 +3,14 @@ import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import TutorialBuilderProgressCard from "./TutorialBuilderProgessCard";
-import BuildSlide from "./BuildSlide";
+import TutorialBuilderProgressCard from "./components/TutorialBuilderProgessCard";
+import BuildSlide from "./components/BuildSlide";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import AppSnackbar from "@/components/Snackbar";
 import Dialog from "@/components/ui/Dialog";
-import HardwareCard from "../TutorialItem/HardwareCard";
-import WhatNext from "./WhatNext";
-import QuestionList from "./QuestionList";
+import HardwareCard from "../Viewer/Cards/HardwareCard";
+import WhatNext from "./components/EditorCards/WhatNext";
+import QuestionList from "./components/EditorCards/QuestionList";
 import BlocklyExample from "./BlocklyExample";
 
 import { Box, Button, Typography, CircularProgress } from "@mui/material";
@@ -28,23 +28,7 @@ import "@uiw/react-markdown-preview/markdown.css";
 import MDEditor from "@uiw/react-md-editor";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocation } from "react-router-dom";
-import H5PEditor from "./H5PEditor";
-
-// Hilfsfunktionen
-const createInitialSteps = () => [
-  {
-    id: "intro",
-    title: "Einleitung",
-    subtitle: "Starte hier!",
-    type: "instruction",
-  },
-  {
-    id: "finish",
-    title: "Abschluss",
-    type: "finish",
-    subtitle: "Übersicht & Zusammenfassung",
-  },
-];
+import H5PEditor from "./components/EditorCards/H5PEditor";
 
 const buildTutorialPayload = ({
   title,
@@ -93,9 +77,6 @@ const validateRequiredFields = ({ title, subtitle }) => {
   if (!subtitle.trim()) missing.push("Untertitel");
   return missing;
 };
-
-// 🔥 HILFSFUNKTION: Tiefer Vergleich (einfach, aber ausreichend für Tutorial-Steps)
-const deepEqual = (obj1, obj2) => JSON.stringify(obj1) === JSON.stringify(obj2);
 
 // Hauptkomponente
 const Builder = () => {
@@ -624,130 +605,6 @@ const Builder = () => {
         theme={theme}
       />
     </Box>
-  );
-};
-
-// 🔲 Dialog-Komponente (extrahiert für Übersicht)
-const SaveStatusDialog = ({
-  savingState,
-  onClose,
-  savedTutorialId,
-  history,
-  theme,
-}) => {
-  const renderContent = () => {
-    switch (savingState) {
-      case "loading":
-        return (
-          <>
-            <CircularProgress color="primary" />
-            <Typography variant="body2" color="text.secondary">
-              Bitte warten, das Tutorial wird gespeichert...
-            </Typography>
-          </>
-        );
-
-      case "missing":
-        return (
-          <>
-            <WarningAmber sx={{ fontSize: 64, color: "warning.main" }} />
-            <Typography variant="body1" fontWeight={600}>
-              Folgende Pflichtfelder fehlen noch:
-            </Typography>
-            <Box sx={{ mt: 1, textAlign: "left" }}>
-              <Typography color="error.main">• Titel</Typography>
-              <Typography color="error.main">• Untertitel</Typography>
-            </Box>
-            <Button variant="contained" sx={{ mt: 2 }} onClick={onClose}>
-              Verstanden
-            </Button>
-          </>
-        );
-
-      case "success":
-        return (
-          <>
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ type: "spring", stiffness: 120 }}
-            >
-              <CheckCircle
-                sx={{ fontSize: 64, color: theme.palette.primary.main }}
-              />
-            </motion.div>
-            <Typography variant="body1" fontWeight={600}>
-              Tutorial erfolgreich gespeichert!
-            </Typography>
-            <Box sx={{ mt: 2, display: "flex", gap: 2 }}>
-              <Button
-                variant="outlined"
-                onClick={() => history.push("/tutorial")}
-              >
-                Zur Übersicht
-              </Button>
-              {savedTutorialId && (
-                <Button
-                  variant="contained"
-                  onClick={() => history.push(`/tutorial/${savedTutorialId}`)}
-                >
-                  Zum Tutorial
-                </Button>
-              )}
-            </Box>
-          </>
-        );
-
-      case "error":
-        return (
-          <>
-            <ErrorIcon sx={{ fontSize: 64, color: "error.main" }} />
-            <Typography variant="body1" fontWeight={600}>
-              Beim Speichern ist ein Fehler aufgetreten.
-            </Typography>
-            <Button variant="contained" color="error" onClick={onClose}>
-              Schließen
-            </Button>
-          </>
-        );
-
-      default:
-        return null;
-    }
-  };
-
-  if (savingState === "idle") return null;
-
-  return (
-    <Dialog
-      open
-      fullWidth
-      maxWidth="xs"
-      title={
-        savingState === "loading"
-          ? "Tutorial wird gespeichert..."
-          : savingState === "success"
-            ? "Gespeichert!"
-            : savingState === "missing"
-              ? "Angaben unvollständig"
-              : "Fehler beim Speichern"
-      }
-      onClose={onClose}
-      content={
-        <Box
-          sx={{
-            textAlign: "center",
-            py: 3,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: 2,
-          }}
-        >
-          {renderContent()}
-        </Box>
-      }
-    />
   );
 };
 

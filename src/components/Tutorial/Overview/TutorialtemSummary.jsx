@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
  * Note: this component dispatches a generic action type 'tutorial/loadRequest'.
  * Adjust the action type or import an action creator if your app uses a different convention.
  */
-export const TutorialOverview = ({ tutorial }) => {
+export const TutorialItemSummary = ({ tutorial }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth);
   // example of reading a global variable like theme from the store
@@ -262,4 +262,4 @@ export const TutorialOverview = ({ tutorial }) => {
     </Box>
   );
 };
-export default TutorialOverview;
+export default TutorialItemSummary;

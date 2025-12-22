@@ -19,7 +19,6 @@ import { motion } from "framer-motion";
 import Dialog from "@/components/ui/Dialog";
 import { CheckCircle, Error as ErrorIcon } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
-import TutorialOverview from "./TutorialOverview";
 
 function getDifficultyLevel(value) {
   if (value <= 1) return 1;
@@ -91,34 +90,12 @@ function TutorialItem({ tutorial, level }) {
                 p: "8px",
               }}
             >
-              <TutorialOverview tutorial={tutorial} />
+              <TutorialItemSummary tutorial={tutorial} />
             </CardContent>
           </CardActionArea>
 
           {user && tutorial.creator === user.email && (
             <Box sx={{ p: 2, pt: 0, gap: 2, display: "flex" }}>
-              {/* <Button
-              component={Link}
-              to={`/tutorial/${tutorial._id}`}
-              fullWidth
-              startIcon={<FontAwesomeIcon icon={faEye} />}
-              sx={{
-                background: theme.palette.background.white,
-                color: theme.palette.primary.main,
-                borderRadius: "5px",
-                fontWeight: "bold",
-                border: "1px solid",
-                borderColor: theme.palette.primary.main,
-                transition: "all 0.2s ease-in-out",
-                "&:hover": {
-                  backgroundColor: theme.palette.primary.main,
-                  color: theme.palette.background.white,
-                },
-              }}
-            >
-              Anzeigen
-            </Button> */}
-
               <Box
                 sx={{
                   display: "flex",

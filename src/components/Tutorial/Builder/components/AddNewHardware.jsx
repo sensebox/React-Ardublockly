@@ -13,34 +13,7 @@ import {
   useTheme,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import COMPONENT_MAP from "../componentMap";
-const hardwareCategories = {
-  sensoren: [
-    {
-      id: "temp-sensor",
-      name: "Temperatursensor",
-      image: "/temperature-sensor-dht22.jpg",
-    },
-    {
-      id: "humidity-sensor",
-      name: "Feuchtigkeitssensor",
-      image: "/humidity-sensor.jpg",
-    },
-    {
-      id: "motion-sensor",
-      name: "Bewegungssensor",
-      image: "/pir-motion-sensor.jpg",
-    },
-  ],
-  accessoire: [
-    { id: "led-strip", name: "LED-Streifen", image: "/placeholder.svg" },
-    { id: "servo-motor", name: "Servo Motor", image: "/placeholder.svg" },
-  ],
-  bauteile: [
-    { id: "arduino-uno", name: "Arduino Uno", image: "/placeholder.svg" },
-    { id: "esp32", name: "ESP32", image: "/placeholder.svg" },
-  ],
-};
+import COMPONENT_MAP from "../utils/componentMap";
 
 export default function HardwareSelectorModal({
   selectedHardware,
@@ -48,13 +21,7 @@ export default function HardwareSelectorModal({
 }) {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("sensoren");
   const [searchValue, setSearchValue] = useState("");
-
-  const getFilteredHardware = (category) =>
-    hardwareCategories[category].filter((item) =>
-      item.name.toLowerCase().includes(searchValue.toLowerCase()),
-    );
 
   const handleHardwareSelect = (hardware) => {
     if (selectedHardware.includes(hardware)) {

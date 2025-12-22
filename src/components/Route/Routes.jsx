@@ -6,13 +6,9 @@ import { Routes, Route, useLocation } from "react-router-dom";
 
 import PublicRoute from "./PublicRoute";
 import PrivateRoute from "./PrivateRoute";
-import PrivateRouteCreator from "./PrivateRouteCreator";
 import IsLoggedRoute from "./IsLoggedRoute";
 
 import Home from "../Pages/Home";
-import Tutorial from "../Tutorial/Tutorial";
-import TutorialHome from "../Tutorial/TutorialHome";
-import Builder from "../Tutorial/Builder/Builder";
 import NotFound from "../Pages/NotFound";
 import Settings from "../Settings/Settings";
 import Impressum from "../Pages/Impressum";
@@ -28,6 +24,9 @@ import ProjectHome from "@/components/Pages/Project/ProjectHome";
 import Register from "../User/Register";
 import RegisterSuccess from "../User/RegisterSuccess";
 import PasswordReset from "../User/PasswordReset";
+import BuilderPage from "../Tutorial/Builder/Builder.page";
+import TutorialPage from "../Tutorial/Viewer/Tutorial.page";
+import TutorialHome from "../Tutorial/Overview/TutorialHome";
 
 function AppRoutes({ platform, visitPage, setPlatform }) {
   const location = useLocation();

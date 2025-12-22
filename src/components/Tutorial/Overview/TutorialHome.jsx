@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useMemo } from "react";
 import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
-import { getTutorials } from "../../actions/tutorialActions";
-import Breadcrumbs from "../ui/Breadcrumbs";
+import { getTutorials } from "../../../actions/tutorialActions";
+import Breadcrumbs from "../../ui/Breadcrumbs";
 import Grid from "@mui/material/Grid";
 import * as Blockly from "blockly";
-import DeviceSelection from "../DeviceSelection";
+import DeviceSelection from "../../DeviceSelection";
 import TutorialItem from "./TutorialItem";
 import {
   Box,
