@@ -217,9 +217,9 @@ function TutorialHome() {
         </Box>
 
         {user && (
-          <div>
+          <Box>
             <h2>Deine Tutorials</h2>
-            <Grid container spacing={2}>
+            <Grid container spacing={2} sx={{ marginBottom: "50px" }}>
               {filteredTutorials.filter((t) => t.creator === user.email)
                 .length > 0 ? (
                 filteredTutorials
@@ -237,7 +237,7 @@ function TutorialHome() {
                 </Typography>
               )}
             </Grid>
-          </div>
+          </Box>
         )}
       </Box>
 
