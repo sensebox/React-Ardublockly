@@ -36,12 +36,6 @@ const TutorialContent = ({
             setNextStepDisabled={setNextStepDisabled}
           />
         )}
-        <FloatingNavigation
-          nextStep={nextStep}
-          previouStep={previousStep}
-          steps={tutorial.steps}
-          currentStep={activeStep}
-        />
       </div>
     </AnimatePresence>
   );
