@@ -1,7 +1,7 @@
 import React from "react";
 import { Box } from "@mui/material";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
-import TutorialFooter from "../../TutorialFooter";
+import TutorialFooter from "./TutorialFooter";
 import TutorialProgressCard from "../Cards/TutorialProgessCard";
 
 const TutorialLayout = ({
