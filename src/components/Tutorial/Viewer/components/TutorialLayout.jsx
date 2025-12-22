@@ -2,7 +2,8 @@ import React from "react";
 import { Box } from "@mui/material";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import TutorialFooter from "./TutorialFooter";
-import TutorialProgressCard from "../Cards/TutorialProgessCard";
+import TutorialProgressCard from "../Cards/Sidebar";
+import Sidebar from "../Cards/Sidebar";
 
 const TutorialLayout = ({
   tutorial,
@@ -38,7 +39,6 @@ const TutorialLayout = ({
           display: "flex",
           flexDirection: "row",
           gap: 4,
-          px: 2,
         }}
       >
         {/* Sidebar */}
@@ -50,7 +50,7 @@ const TutorialLayout = ({
             flexDirection: "column",
           }}
         >
-          <TutorialProgressCard />
+          <Sidebar />
         </Box>
 
         <Box
@@ -61,7 +61,8 @@ const TutorialLayout = ({
             flexDirection: "column",
             borderRadius: 3,
             boxShadow: 3,
-            mr: 5,
+            height: "80vh",
+            overflow: "scroll",
           }}
         >
           {children}

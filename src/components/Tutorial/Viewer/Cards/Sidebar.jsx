@@ -15,7 +15,7 @@ import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import { Edit, QuestionMark } from "@mui/icons-material";
 import { useHistory } from "react-router-dom";
 
-const TutorialProgressCard = () => {
+const Sidebar = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -46,6 +46,9 @@ const TutorialProgressCard = () => {
       sx={{
         borderRadius: 3,
         boxShadow: 3,
+        display: "flex",
+        flexDirection: "column",
+        height: "80vh",
         overflow: "scroll",
       }}
     >
@@ -76,7 +79,13 @@ const TutorialProgressCard = () => {
         }
       />
 
-      <CardContent sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+      <CardContent
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 1,
+        }}
+      >
         {stepsWithFinish.map((step, index) => {
           const isCurrent = index === activeStep;
           const isCompleted = index < activeStep;
@@ -156,4 +165,4 @@ const TutorialProgressCard = () => {
   );
 };
 
-export default TutorialProgressCard;
+export default Sidebar;
