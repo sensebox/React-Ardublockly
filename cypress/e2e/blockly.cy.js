@@ -1,20 +1,41 @@
 /// <reference types="cypress" />
 
 describe("Blockly Editor Page Tests", () => {
+  const boards = [
+    { name: "senseBox ESP", alt: "Sensebox ESP", expected: "MCU-S2" },
+    { name: "senseBox MCU", alt: "Sensebox MCU", expected: "MCU" },
+    { name: "senseBox Mini", alt: "Sensebox Mini", expected: "MCU:MINI" },
+  ];
+
   it("[Blockly] visits the editor page", () => {
     cy.visit("/");
   });
 
   it("[Blockly] visits the tutorial page", () => {
     cy.visit("/tutorial");
+
+    cy.get("h1, h2, h3")
+      .contains(/tutorial/i)
+      .should("be.visible");
   });
 
   it("[Blockly] visits the gallery page", () => {
     cy.visit("/gallery");
+
+    cy.get("h1, h2, h3, h4")
+      .contains(/gallery/i)
+      .should("be.visible");
   });
 
   it("[Blockly] visits the faq page", () => {
     cy.visit("/faq");
+
+    // ✅ Check that a headline exists with the text "FAQ" (non case-sensitive)
+    cy.get("h1, h2, h3")
+      .invoke("text")
+      .then((text) => {
+        expect(text.toLowerCase()).to.include("faq");
+      });
   });
 
   it("[Blockly] visits the settings page", () => {
@@ -29,61 +50,69 @@ describe("Blockly Editor Page Tests", () => {
     cy.visit("/");
     cy.get('img[alt="Sensebox ESP"]').click();
 
-    // get a button that has an SVG with the class "fa-bars" inside it
-    // this is the button that opens the menu
+    // open the sidebar (button with fa-bars icon)
     const menuButton = cy.get("button").find("svg.fa-bars").parents("button");
-
-    // click the button
     menuButton.click();
 
-    // click the a with href "/tutorial"
+    // navigate to tutorial
     cy.get('a[href="/tutorial"]').click();
     cy.wait(1000);
     cy.url().should("include", "/tutorial");
     cy.wait(1000);
 
-    // click the button
+    // navigate back to blockly
     menuButton.click();
-
-    // click the a with href "/" and deep inside it an span containing "Blockly"
     cy.get('a[href="/"]').find("span").contains("Blockly").parents("a").click();
     cy.wait(1000);
     cy.url().should("include", "/");
 
+    // check if compile button exists
     cy.get('button[aria-label="Compile code"]').should("exist");
   });
+  // ✅ Extended board selection test (case-insensitive)
+  boards.forEach((board) => {
+    it(`[Blockly] selects ${board.name}`, () => {
+      cy.visit("/");
 
-  it("[Blockly] selects senseBox ESP", () => {
-    cy.visit("/");
-    cy.get('img[alt="Sensebox ESP"]', { timeout: 8000 }).click();
+      // Click the board image
+      cy.get(`img[alt="${board.alt}"]`, { timeout: 8000 }).click();
+
+      cy.wait(500); // give Redux and UI some time
+
+      // ✅ Check sessionStorage (non case-sensitive)
+      cy.window()
+        .its("sessionStorage")
+        .invoke("getItem", "board")
+        .then((value) => {
+          expect(value?.toLowerCase()).to.eq(board.expected.toLowerCase());
+        });
+
+      // ✅ Check the navbar text (non case-sensitive)
+      cy.get("#navbar-selected-board")
+        .should("be.visible")
+        .invoke("text")
+        .then((text) => {
+          expect(text.trim().toLowerCase()).to.include(
+            board.expected.toLowerCase(),
+          );
+        });
+    });
   });
-
-  it("[Blockly] selects senseBox MCU", () => {
-    cy.visit("/");
-    cy.get('img[alt="Sensebox MCU"]', { timeout: 8000 }).click();
-  });
-
-  it("[Blockly] selects senseBox Mini", () => {
-    cy.visit("/");
-    cy.get('img[alt="Sensebox Mini"]', { timeout: 8000 }).click();
-  }); /// <reference types="cypress" />
 
   it("[Blockly] changes the language in settings and verifies via headline", () => {
     cy.visit("/settings");
 
     cy.get("#language-selector").click();
-
     cy.get('li[data-value="en_US"]').click();
 
     cy.get("#settingsLanguage")
       .should("be.visible")
       .and("contain.text", "Language");
 
-    // jetzt zurückwechseln auf Deutsch
+    // switch back to German
     cy.get("#language-selector").click();
     cy.get('li[data-value="de_DE"]').click();
 
-    // prüfen, ob die Überschrift wieder deutsch ist
     cy.get("#settingsLanguage")
       .should("be.visible")
       .and("contain.text", "Sprache");
@@ -103,7 +132,6 @@ describe("Blockly Editor Page Tests", () => {
     cy.get('img[alt="Sensebox ESP"]').click();
     cy.get('button[aria-label="Compile code"]').click();
 
-    // check if the request was made
     cy.wait("@compile", {
       responseTimeout: 30000,
       requestTimeout: 30000,
@@ -129,7 +157,6 @@ describe("Blockly Editor Page Tests", () => {
     cy.get('img[alt="Sensebox MCU"]').click();
     cy.get('button[aria-label="Compile code"]').click();
 
-    // check if the request was made
     cy.wait("@compile", {
       responseTimeout: 30000,
       requestTimeout: 30000,
@@ -142,19 +169,15 @@ describe("Blockly Editor Page Tests", () => {
   });
 
   it("[Blockly] compiles code", () => {
-    // intercept the request to the compiler
-
     cy.intercept({
       method: "POST",
       pathname: "/compile",
     }).as("compile");
 
     cy.visit("/");
-
     cy.get('img[alt="Sensebox ESP"]').click();
     cy.get('button[aria-label="Compile code"]').click();
 
-    // check if the request was made
     cy.wait("@compile", {
       responseTimeout: 30000,
       requestTimeout: 30000,

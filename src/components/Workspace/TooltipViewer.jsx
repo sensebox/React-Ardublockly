@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import {
   Card,
@@ -8,17 +8,14 @@ import {
   Box,
   useTheme,
 } from "@mui/material";
-import ReactMarkdown from "react-markdown";
 import * as Blockly from "blockly";
+import ReactMarkdown from "react-markdown";
 
 const TooltipViewer = () => {
   const theme = useTheme();
   const tooltip = useSelector((s) => s.workspace.code.tooltip);
   const helpurl = useSelector((s) => s.workspace.code.helpurl);
 
-  useEffect(() => {
-    console.log("tooltip changed", tooltip);
-  }, [tooltip]);
   return (
     <Card
       className="helpSection"
@@ -60,7 +57,7 @@ const TooltipViewer = () => {
           ></span>
         </Typography>
 
-        {/* <ReactMarkdown linkTarget="_blank">{tooltip}</ReactMarkdown> */}
+        <ReactMarkdown>{tooltip}</ReactMarkdown>
 
         {helpurl && (
           <Button

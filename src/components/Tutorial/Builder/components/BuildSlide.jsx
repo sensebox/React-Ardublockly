@@ -42,7 +42,7 @@ const BuildSlide = ({
       exit="exit"
       transition={{ duration: 0.4 }}
       style={{
-        position: "absolute", // wichtig: übereinander stapeln
+        position: "absolute",
         top: 0,
         left: 0,
         width: "100%",
@@ -51,8 +51,14 @@ const BuildSlide = ({
         justifyContent: "center",
       }}
     >
-      <Card sx={{ width: "100%", overflow: "auto", maxHeight: "80vh" }}>
-        <CardContent sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+      <Card sx={{ width: "100%" }}>
+        <CardContent
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 1,
+          }}
+        >
           {" "}
           {(title || stepNumber !== undefined) && (
             <div>
@@ -92,6 +98,11 @@ const BuildSlide = ({
                         <MenuItem value="task">Aufgabe</MenuItem>
                         <MenuItem value="question">Fragestellung</MenuItem>
                         <MenuItem value="blockly">Blockly-Aufgabe</MenuItem>
+                        <MenuItem value="blocklyExample">
+                          Blockly-Beispiel
+                        </MenuItem>
+
+                        <MenuItem value="h5p">H5P-Embed</MenuItem>
                       </Select>
                     </FormControl>
                   )}

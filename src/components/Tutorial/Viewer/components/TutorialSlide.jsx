@@ -16,10 +16,8 @@ const TutorialSlide = ({ children, title, stepNumber }) => {
       exit="exit"
       transition={{ duration: 0.4 }}
       style={{
-        position: "absolute", // wichtig: übereinander stapeln
-        top: 0,
-        left: 0,
         width: "100%",
+        height: "100%",
         display: "flex",
         justifyContent: "center",
       }}
@@ -27,31 +25,42 @@ const TutorialSlide = ({ children, title, stepNumber }) => {
       <Card
         sx={{
           width: "100%",
-          overflow: "auto",
-          maxHeight: "80vh",
-          p: 2,
           boxShadow: 0,
         }}
       >
-        <CardContent>
+        <CardContent
+          sx={{
+            height: "100%",
+            flexDirection: "column",
+          }}
+        >
           {(title || stepNumber !== undefined) && (
             <Box
               sx={{
-                p: 0.5,
                 border: "1px solid #ddd",
                 borderRadius: "10%",
                 display: "inline-flex",
                 textAlign: "center",
                 fontWeight: "600",
                 fontSize: "0.9rem",
+                p: 0.5,
                 mb: 2,
               }}
             >
               {title ? title : `Schritt ${stepNumber}`}
             </Box>
           )}
+          <Box
+            sx={{
+              border: "1px solid #ddd",
+              borderRadius: 2,
+              p: 2,
 
-          {children}
+              overflow: "auto",
+            }}
+          >
+            {children}
+          </Box>
         </CardContent>
       </Card>
     </motion.div>

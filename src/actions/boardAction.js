@@ -5,14 +5,15 @@ import esp_opacity from "../data/esp_opacity.png";
 import { setBoardHelper } from "@/components/Blockly/helpers/board";
 
 export const setBoard = (board) => (dispatch) => {
-  window.sessionStorage.setItem("board", board);
-  setBoardHelper(board);
+  const boardTmp = board.toUpperCase();
+  window.sessionStorage.setItem("board", boardTmp);
+  setBoardHelper(boardTmp);
   const root = document.querySelector(":root");
-  switch (board) {
+  switch (boardTmp) {
     case "MCU":
       root.style.setProperty("--url", `url(${mcu_opacity})`);
       break;
-    case "MCU:mini":
+    case "MCU:MINI":
       root.style.setProperty("--url", `url(${mini_opacity})`);
       break;
     case "MCU-S2":
@@ -24,6 +25,6 @@ export const setBoard = (board) => (dispatch) => {
 
   dispatch({
     type: BOARD,
-    payload: board,
+    payload: boardTmp,
   });
 };

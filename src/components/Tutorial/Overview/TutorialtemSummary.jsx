@@ -1,8 +1,7 @@
 import { Box, Typography, Tooltip } from "@mui/material";
 import { useTheme } from "@mui/styles";
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { AccessTime, School, Category, Grade } from "@mui/icons-material";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 // /Users/eric/Documents/arbeit/React-Ardublockly/src/components/Tutorial/TutorialOverview.jsx
 /**
  * TutorialOverview
@@ -12,12 +11,9 @@ import { AccessTime, School, Category, Grade } from "@mui/icons-material";
  * Note: this component dispatches a generic action type 'tutorial/loadRequest'.
  * Adjust the action type or import an action creator if your app uses a different convention.
  */
-export const TutorialOverview = ({ tutorial }) => {
+export const TutorialItemSummary = ({ tutorial }) => {
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    console.log("Tutorial data:", tutorial);
-  }, [tutorial]);
+  const user = useSelector((state) => state.auth);
   // example of reading a global variable like theme from the store
   const theme = useTheme();
 
@@ -266,4 +262,4 @@ export const TutorialOverview = ({ tutorial }) => {
     </Box>
   );
 };
-export default TutorialOverview;
+export default TutorialItemSummary;

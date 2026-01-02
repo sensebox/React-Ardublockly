@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Card,
@@ -12,21 +12,28 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
-import { Edit } from "@mui/icons-material";
+import { Edit, QuestionMark } from "@mui/icons-material";
 import { useHistory } from "react-router-dom";
 
-const TutorialProgressCard = () => {
+const Sidebar = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const history = useHistory();
   const activeStep = useSelector((state) => state.tutorial.activeStep);
   const tutorial = useSelector((state) => state.tutorial.tutorials[0]);
   const user = useSelector((state) => state.auth.user);
-  // künstlich einen "Abschluss"-Step anhängen
+  const [stepWithTask, setStepWithTaks] = useState(false);
   const stepsWithFinish = [...tutorial.steps];
 
   const progress = ((activeStep + 1) / stepsWithFinish.length) * 100;
-
+  useEffect(() => {
+    const currentStep = tutorial.steps[activeStep];
+    if (
+      currentStep &&
+      (currentStep.type === "question" || currentStep.type === "blockly")
+    ) {
+    }
+  }, [activeStep]);
   const changeStep = (step) => {
     dispatch({
       type: "TUTORIAL_STEP",
@@ -39,7 +46,9 @@ const TutorialProgressCard = () => {
       sx={{
         borderRadius: 3,
         boxShadow: 3,
-        maxHeight: "80vh",
+        display: "flex",
+        flexDirection: "column",
+        height: "80vh",
         overflow: "scroll",
       }}
     >
@@ -70,7 +79,13 @@ const TutorialProgressCard = () => {
         }
       />
 
-      <CardContent sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+      <CardContent
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 1,
+        }}
+      >
         {stepsWithFinish.map((step, index) => {
           const isCurrent = index === activeStep;
           const isCompleted = index < activeStep;
@@ -115,6 +130,7 @@ const TutorialProgressCard = () => {
                     color: isCurrent
                       ? theme.palette.primary.contrastText
                       : theme.palette.text.secondary,
+
                     flexShrink: 0,
                   }}
                 />
@@ -149,4 +165,4 @@ const TutorialProgressCard = () => {
   );
 };
 
-export default TutorialProgressCard;
+export default Sidebar;

@@ -314,6 +314,11 @@ export const UI = {
   login_osem_account_02: "Account um dich einzuloggen",
   login_lostpassword: "Du hast dein Passwort vergessen?",
   login_createaccount: "Falls du noch keinen Account hast erstellen einen auf ",
+  login_remember: "Eingeloggt bleiben",
+  login_nativeaccount: "Eigenes Konto",
+  login_with: "Login mit",
+  login_lostpassword: "Passwort vergessen?",
+
   /**
    * Navbar
    */

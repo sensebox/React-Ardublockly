@@ -9,7 +9,7 @@ export const ToolboxMcu = () => {
   return (
     <>
       {/* ============================== SEARCH ============================== */}
-      <Category name="Suche" kind="search" />
+      {/* <Category name="Suche" kind="search" /> */}
 
       {/* ============================== SENSORS ============================== */}
       <Category

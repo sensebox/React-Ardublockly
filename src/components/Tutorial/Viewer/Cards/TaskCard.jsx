@@ -1,12 +1,13 @@
 import { useEffect } from "react";
 import MarkdownIt from "markdown-it";
 import { useSelector } from "react-redux";
-import TutorialSlide from "./TutorialSlide";
+import TutorialSlide from "../components/TutorialSlide";
 import QuestionBlock from "./QuestionCard";
 import QuestionCard from "./QuestionCard";
 import SolutionCheck from "./SolutionCheck";
 import BlocklyWindow from "@/components/Blockly/BlocklyWindow";
 import { Box, Grid, Typography } from "@mui/material";
+import H5PCard from "./H5PCard";
 
 const md = new MarkdownIt({ html: true, linkify: true, typographer: true });
 
@@ -37,15 +38,38 @@ md.renderer.rules.image = function (tokens, idx, options, env, self) {
   `;
 };
 
-const TaskStep = ({ step, setNextStepDisabled }) => {
+// 🔸 Blockquote mit Klasse
+const defaultBlockquoteRenderer =
+  md.renderer.rules.blockquote_open ||
+  function (tokens, idx, options, env, self) {
+    return self.renderToken(tokens, idx, options);
+  };
+md.renderer.rules.blockquote_open = function (tokens, idx, options, env, self) {
+  tokens[idx].attrSet("class", "tutorial-blockquote");
+  return defaultBlockquoteRenderer(tokens, idx, options, env, self);
+};
+
+// 🔸 Table mit Klasse
+const defaultTableRenderer =
+  md.renderer.rules.table_open ||
+  function (tokens, idx, options, env, self) {
+    return self.renderToken(tokens, idx, options);
+  };
+md.renderer.rules.table_open = function (tokens, idx, options, env, self) {
+  tokens[idx].attrSet("class", "tutorial-table");
+  return defaultTableRenderer(tokens, idx, options, env, self);
+};
+
+const TaskCard = ({ step, setNextStepDisabled }) => {
   const activeStep = useSelector((state) => state.tutorial.activeStep);
 
-  useEffect(() => {
-    if (step.type === "question" && step.questionData) {
-      setNextStepDisabled(true);
-      console.log("disbaling");
-    }
-  }, [step]);
+  const svgToDataUrl = (svgString) =>
+    "data:image/svg+xml;base64," +
+    window.btoa(
+      new TextEncoder().encode(svgString).reduce((data, byte) => {
+        return data + String.fromCharCode(byte);
+      }, ""),
+    );
 
   return (
     <TutorialSlide stepNumber={activeStep}>
@@ -67,6 +91,19 @@ const TaskStep = ({ step, setNextStepDisabled }) => {
               />
             );
           })}
+        </Box>
+      )}
+      {step.type === "h5p" && step.h5psrc && (
+        <Box
+          className="blocklyWindow"
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 2,
+          }}
+        >
+          <H5PCard h5psrc={step.h5psrc} />
         </Box>
       )}
       {step.type === "blockly" && step.xml && (
@@ -119,8 +156,13 @@ const TaskStep = ({ step, setNextStepDisabled }) => {
           <SolutionCheck solutionXml={step.xml} activeStep={activeStep} />
         </Box>
       )}
+      {step.type === "blocklyExample" && step.svg && (
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <img src={svgToDataUrl(step.svg)} alt="Blockly block" />
+        </Box>
+      )}
     </TutorialSlide>
   );
 };
 
-export default TaskStep;
+export default TaskCard;

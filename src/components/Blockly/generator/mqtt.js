@@ -34,9 +34,27 @@ Blockly.Generator.Arduino.forBlock["sensebox_mqtt_publish"] = function (
   block,
   generator,
 ) {
+  function topicToVarName(topic) {
+    topic = String(topic).replace(/^"+|"+$/g, "");
+    const parts = topic.split("/");
+    if (parts.length < 2) return "topicValue";
+
+    const prefix = parts[parts.length - 1];
+    let feed = parts[parts.length - 2];
+
+    // Capitalize first letter
+    feed = feed.charAt(0).toUpperCase() + feed.slice(1);
+
+    // Ensure valid C identifier
+    let varName = prefix + feed;
+    if (!/^[A-Za-z_]/.test(varName)) {
+      varName = "_" + varName;
+    }
+    return varName;
+  }
   var feedname = this.getFieldValue("publishfeed");
-  var res = feedname.split("/");
-  var feed_client = res[res.length - 1];
+  var feed_client = topicToVarName(feedname);
+
   var value =
     Blockly.Generator.Arduino.valueToCode(
       this,

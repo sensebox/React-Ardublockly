@@ -20,6 +20,7 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
+import Checkbox from "@mui/material/Checkbox";
 
 import * as Blockly from "blockly";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
@@ -49,6 +50,9 @@ export default function Login() {
 
   // 🔥 Zustand für Passwort-Vergessen-View
   const [showPasswordReset, setShowPasswordReset] = useState(false);
+
+  // 🔥 Zustand für "Remember me"
+  const [rememberMe, setRememberMe] = useState(false);
 
   // Fehler bei Mount anzeigen
   useEffect(() => {
@@ -99,9 +103,9 @@ export default function Login() {
     }
 
     if (authProvider === "native") {
-      dispatch(login({ email, password })); // ✅ native
+      dispatch(login({ email, password, rememberMe })); // include rememberMe
     } else {
-      dispatch(loginOpenSenseMap({ email, password })); // ✅ openSenseMap
+      dispatch(loginOpenSenseMap({ email, password, rememberMe })); // include rememberMe
     }
   };
 
@@ -145,7 +149,9 @@ export default function Login() {
 
         {/* 🔘 Auth Provider Auswahl */}
         <FormControl component="fieldset" sx={{ mb: 2 }}>
-          <FormLabel component="legend">Login mit</FormLabel>
+          <FormLabel component="legend">
+            {Blockly.Msg.login_with || "Login with"}{" "}
+          </FormLabel>
           <RadioGroup
             row
             value={authProvider}
@@ -154,7 +160,7 @@ export default function Login() {
             <FormControlLabel
               value="native"
               control={<Radio />}
-              label="Eigenes Konto"
+              label={Blockly.Msg.login_nativeaccount || "Native login"}
             />
             <FormControlLabel
               value="opensensemap"
@@ -234,6 +240,22 @@ export default function Login() {
             }}
             style={{ marginBottom: "10px" }}
           />
+
+          {/* Remember me checkbox */}
+          {authProvider === "native" && (
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  color="primary"
+                />
+              }
+              label={Blockly.Msg.login_remember || "Remember me"}
+              style={{ marginBottom: "10px" }}
+            />
+          )}
+
           <p>
             <Button
               color="primary"
@@ -261,7 +283,7 @@ export default function Login() {
               size="small"
               onClick={() => setShowPasswordReset(true)}
             >
-              Passwort vergessen?
+              {Blockly.Msg.login_lostpassword || "Forgot your password?"}
             </Button>
           </p>
         )}

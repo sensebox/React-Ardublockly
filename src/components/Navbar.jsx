@@ -191,6 +191,7 @@ const Navbar = () => {
               <>
                 <div style={{ padding: "12px" }}>
                   <Button
+                    id="navbar-selected-board" // 👈 eindeutig für Cypress
                     ref={mcuRef}
                     onClick={handleBoardOpen}
                     startIcon={<FontAwesomeIcon icon={faMicrochip} />}
@@ -210,7 +211,7 @@ const Navbar = () => {
                       borderRadius: "25px",
                     }}
                   >
-                    {selectedBoard}
+                    {selectedBoard === "MCU:MINI" ? "MCU:mini" : selectedBoard}
                   </Button>
                   <Menu
                     id="navbarBoardSelect"
@@ -220,13 +221,13 @@ const Navbar = () => {
                     open={Boolean(anchorElBoard)}
                     onClose={handleBoardClose}
                   >
-                    {["MCU", "MCU:mini", "MCU-S2"].map((b) => (
+                    {["MCU", "MCU:MINI", "MCU-S2"].map((b) => (
                       <MenuItem
                         key={b}
                         value={b}
                         onClick={() => changeBoard(b)}
                       >
-                        {b}
+                        {b === "MCU:MINI" ? "MCU:mini" : b}
                       </MenuItem>
                     ))}
                   </Menu>
