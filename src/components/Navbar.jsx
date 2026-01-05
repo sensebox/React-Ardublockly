@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
-import { Link, useLocation, withRouter } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { logout } from "../actions/authActions";
 import senseboxLogo from "@/sensebox_logo.svg";
 
@@ -537,4 +537,4 @@ Navbar.propTypes = {
   selectedBoard: PropTypes.string,
 };
 
-export default withRouter(Navbar);
+export default Navbar;

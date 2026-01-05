@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
-import { useHistory, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Box, Button, CircularProgress } from "@mui/material";
 import { Save, Visibility } from "@mui/icons-material";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
@@ -16,7 +16,7 @@ import BuilderMain from "./components/BuilderMain";
 import SaveStatusDialog from "./components/SaveStatusDialog";
 
 const BuilderPage = () => {
-  const history = useHistory();
+  const history = useNavigate();
   const location = useLocation();
 
   const token = useSelector((state) => state.auth.token);
@@ -170,9 +170,7 @@ const BuilderPage = () => {
               startIcon={<Visibility />}
               disabled={saveButtonDisabled}
               onClick={() =>
-                history.push(
-                  `/tutorial/${savedTutorialId || existingTutorialId}`,
-                )
+                navigate(`/tutorial/${savedTutorialId || existingTutorialId}`)
               }
             >
               Tutorial ansehen

@@ -8,15 +8,12 @@ import {
 } from "@mui/material";
 import { useTheme } from "@mui/styles";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 // 🔲 Dialog-Komponente (extrahiert für Übersicht)
-const SaveStatusDialog = ({
-  savingState,
-  onClose,
-  savedTutorialId,
-  history,
-}) => {
+const SaveStatusDialog = ({ savingState, onClose, savedTutorialId }) => {
   const theme = useTheme();
+  const navigate = useNavigate();
   const renderContent = () => {
     switch (savingState) {
       case "loading":
@@ -62,16 +59,13 @@ const SaveStatusDialog = ({
               Tutorial erfolgreich gespeichert!
             </Typography>
             <Box sx={{ mt: 2, display: "flex", gap: 2 }}>
-              <Button
-                variant="outlined"
-                onClick={() => history.push("/tutorial")}
-              >
+              <Button variant="outlined" onClick={() => navigate("/tutorial")}>
                 Zur Übersicht
               </Button>
               {savedTutorialId && (
                 <Button
                   variant="contained"
-                  onClick={() => history.push(`/tutorial/${savedTutorialId}`)}
+                  onClick={() => navigate(`/tutorial/${savedTutorialId}`)}
                 >
                   Zum Tutorial
                 </Button>
