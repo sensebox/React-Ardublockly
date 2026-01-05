@@ -18,6 +18,7 @@ import Typography from "@mui/material/Typography";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import DeviceSelection from "@/components/DeviceSelection";
+import { withRouterV6 } from "@/helpers/withRouter";
 
 const styles = (theme) => ({
   link: {
@@ -240,8 +241,10 @@ const mapStateToProps = (state) => ({
   message: state.message,
 });
 
-export default connect(mapStateToProps, {
-  getProjects,
-  resetProject,
-  clearMessages,
-})(withStyles(styles, { withTheme: true })(ProjectHome));
+export default withRouterV6(
+  connect(mapStateToProps, {
+    getProjects,
+    resetProject,
+    clearMessages,
+  })(withStyles(styles, { withTheme: true })(ProjectHome)),
+);

@@ -7,6 +7,7 @@ import {} from "react-router-dom";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import * as Blockly from "blockly";
+import { withRouterV6 } from "@/helpers/withRouter";
 
 class NotFound extends Component {
   componentDidMount() {
@@ -53,4 +54,4 @@ class NotFound extends Component {
   }
 }
 
-export default NotFound;
+export default withRouterV6(NotFound);

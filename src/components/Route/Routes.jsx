@@ -26,6 +26,7 @@ import BuilderPage from "@/components/Tutorial/Builder/Builder.page";
 import TutorialPage from "@/components/Tutorial/Viewer/Tutorial.page";
 import Project from "@/components/Pages/Project/Project";
 import ProjectHome from "@/components/Pages/Project/ProjectHome";
+import TutorialHome from "../Tutorial/Overview/TutorialHome";
 function AppRoutes({ platform, visitPage, setPlatform }) {
   const location = useLocation();
 
@@ -62,7 +63,7 @@ function AppRoutes({ platform, visitPage, setPlatform }) {
           path="/tutorial"
           element={
             <PublicRoute>
-              <TutorialPage />
+              <TutorialHome />
             </PublicRoute>
           }
         />
@@ -88,7 +89,7 @@ function AppRoutes({ platform, visitPage, setPlatform }) {
         />
 
         {/* Code Editor */}
-        <Route path="/code-editor" element={<CodeEditor />} />
+        <Route path="/codeeditor" element={<CodeEditor />} />
         {/* Sharing */}
         <Route
           path="/share/:shareId"

@@ -12,6 +12,7 @@ import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
+import { withRouterV6 } from "@/helpers/withRouter";
 
 class Project extends Component {
   componentDidMount() {
@@ -43,7 +44,7 @@ class Project extends Component {
           this.props.returnErrors("", 404, "GET_SHARE_FAIL");
         }
       } else if (this.props.message.id === "GET_PROJECT_SUCCESS") {
-        this.props.workspaceName(this.props.project.title);
+        workspaceName(this.props.project.title);
       } else if (
         this.props.message.id === "PROJECT_DELETE_SUCCESS" ||
         this.props.message.id === "GALLERY_DELETE_SUCCESS"
@@ -55,7 +56,7 @@ class Project extends Component {
 
   componentWillUnmount() {
     this.props.resetProject();
-    this.props.workspaceName(null);
+    workspaceName(null);
   }
 
   getProject = () => {
@@ -110,10 +111,10 @@ const mapStateToProps = (state) => ({
   message: state.message,
 });
 
-export default connect(mapStateToProps, {
-  workspaceName,
-  getProject,
-  resetProject,
-  clearMessages,
-  returnErrors,
-})(Project);
+export default withRouterV6(
+  connect(mapStateToProps, {
+    getProject,
+    resetProject,
+    clearMessages,
+  })(Project),
+);

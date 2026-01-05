@@ -14,6 +14,7 @@ import store from "@/store";
 import DeviceSelection from "@/components/DeviceSelection";
 import { useSelector } from "react-redux";
 import CompilationDialog from "@/components/Workspace/ToolbarItems/CompilationDialog/CompilationDialog";
+import { withRouterV6 } from "@/helpers/withRouter";
 
 const CodeEditor = () => {
   //const [filehandle, setFileHandle] = useState();

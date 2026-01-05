@@ -1,8 +1,6 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-
-import {} from "react-router-dom";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import * as Blockly from "blockly/core";
 
@@ -13,79 +11,66 @@ import StatsSelector from "./StatsSelector";
 import TabletMode from "./TabletMode";
 import SoundsSelector from "./SoundsSelector";
 import DeviceSelector from "./DeviceSelector";
+import CompilerSelector from "./CompilerSelector";
 
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
-import CompilerSelector from "./CompilerSelector";
 
-class Settings extends Component {
-  componentDidMount() {
-    // Ensure that Blockly.setLocale is adopted in the component.
-    // Otherwise, the text will not be displayed until the next update of the component.
-    this.forceUpdate();
-  }
+export default function Settings() {
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  render() {
-    return (
-      <div>
-        <Breadcrumbs
-          content={[
-            {
-              link: this.props.location.pathname,
-              title: Blockly.Msg.settings_head,
-            },
-          ]}
-        />
+  const language = useSelector((state) => state.general.language);
+  const pageVisits = useSelector((state) => state.general.pageVisits);
 
-        <h1>{Blockly.Msg.settings_head}</h1>
+  // Blockly locale refresh (ersetzt forceUpdate)
+  useEffect(() => {
+    // bewusst leer – Render reicht aus, damit Blockly.Msg greift
+  }, [language]);
 
-        <Paper style={{ margin: "10px 0px", padding: "10px" }}>
-          <LanguageSelector />
-        </Paper>
-        <Paper style={{ margin: "10px 0px", padding: "10px" }}>
-          <RenderSelector />
-        </Paper>
-        <Paper style={{ margin: "10px 0px", padding: "10px" }}>
-          <StatsSelector />
-        </Paper>
-        <Paper style={{ margin: "10px 0px", padding: "10px" }}>
-          <TabletMode />
-        </Paper>
-        <Paper style={{ margin: "10px 0px", padding: "10px" }}>
-          <SoundsSelector />
-        </Paper>
-        <Paper style={{ margin: "10px 0px", padding: "10px" }}>
-          <DeviceSelector />
-        </Paper>
-        <Paper style={{ margin: "10px 0px", padding: "10px" }}>
-          <CompilerSelector />
-        </Paper>
+  return (
+    <div>
+      <Breadcrumbs
+        content={[
+          {
+            link: location.pathname,
+            title: Blockly.Msg.settings_head,
+          },
+        ]}
+      />
 
-        <Button
-          style={{ marginTop: "10px" }}
-          variant="contained"
-          color="primary"
-          onClick={
-            this.props.pageVisits > 0
-              ? () => this.props.history.goBack()
-              : () => this.props.navigate("/")
-          }
-        >
-          {Blockly.Msg.button_back}
-        </Button>
-      </div>
-    );
-  }
+      <h1>{Blockly.Msg.settings_head}</h1>
+
+      <Paper sx={{ my: 1, p: 1 }}>
+        <LanguageSelector />
+      </Paper>
+      <Paper sx={{ my: 1, p: 1 }}>
+        <RenderSelector />
+      </Paper>
+      <Paper sx={{ my: 1, p: 1 }}>
+        <StatsSelector />
+      </Paper>
+      <Paper sx={{ my: 1, p: 1 }}>
+        <TabletMode />
+      </Paper>
+      <Paper sx={{ my: 1, p: 1 }}>
+        <SoundsSelector />
+      </Paper>
+      <Paper sx={{ my: 1, p: 1 }}>
+        <DeviceSelector />
+      </Paper>
+      <Paper sx={{ my: 1, p: 1 }}>
+        <CompilerSelector />
+      </Paper>
+
+      <Button
+        sx={{ mt: 2 }}
+        variant="contained"
+        color="primary"
+        onClick={() => (pageVisits > 0 ? navigate(-1) : navigate("/"))}
+      >
+        {Blockly.Msg.button_back}
+      </Button>
+    </div>
+  );
 }
-
-Settings.propTypes = {
-  language: PropTypes.string.isRequired,
-  pageVisits: PropTypes.number.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  language: state.general.language,
-  pageVisits: state.general.pageVisits,
-});
-
-export default connect(mapStateToProps, null)(Settings);
