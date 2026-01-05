@@ -274,10 +274,10 @@
   resolved "https://registry.yarnpkg.com/@blockly/field-grid-dropdown/-/field-grid-dropdown-6.0.4.tgz#f5c461f1ca75fac9150e426dcc286d67a2ab4da8"
   integrity sha512-eY51r4j0R7bNotqgRxoviJbkfHxwxYwOtsu8PUih7Hi25eEhtNiFteFAQE8Yob8pFj9Bovq3Z96U4ysoOiz86A==
 
-"@blockly/field-multilineinput@^6.0.1":
-  version "6.0.3"
-  resolved "https://registry.yarnpkg.com/@blockly/field-multilineinput/-/field-multilineinput-6.0.3.tgz#e73d2917e1a2666c6463975d6a95ae1bc65e6226"
-  integrity sha512-xZqPRyFiXB8yoNW3wMDkQ7ZIZajlFGZ/HIo2yjsQ0P6t9vwfEQcG/1X/cZUGRakqGHnE+q5ziEg7VKYvSh+tJQ==
+"@blockly/field-multilineinput@^6.0.5":
+  version "6.0.5"
+  resolved "https://registry.yarnpkg.com/@blockly/field-multilineinput/-/field-multilineinput-6.0.5.tgz#79907f7d9b6bce1abc88b7bde4fb161d2fd22e7f"
+  integrity sha512-E9ZJZxBzI8Cm3SVixPrmHHrnM/GlLc1MeSj2rHl0TSw9NQ5RW6+iQNhVOXp2SOGMZKL/qnFePxWs1GijG+Y+GQ==
 
 "@blockly/field-slider@8.0.2":
   version "8.0.2"
