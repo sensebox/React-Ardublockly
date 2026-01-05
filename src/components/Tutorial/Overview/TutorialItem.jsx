@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Grid,
   Card,
@@ -21,7 +21,6 @@ import Dialog from "@/components/ui/Dialog";
 import { CheckCircle, Error as ErrorIcon } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 import Snackbar from "../../Snackbar";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import TutorialItemSummary from "./TutorialtemSummary";
 
 function getDifficultyLevel(value) {
@@ -35,7 +34,7 @@ function getDifficultyLevel(value) {
 function TutorialItem({ tutorial, level }) {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);
 
   // Modal states
@@ -78,7 +77,7 @@ function TutorialItem({ tutorial, level }) {
           }}
         >
           <CardActionArea
-            onClick={() => history.push(`/tutorial/${tutorial._id}`)}
+            onClick={() => navigate(`/tutorial/${tutorial._id}`)}
             sx={{
               textAlign: "left",
               flexGrow: 1,

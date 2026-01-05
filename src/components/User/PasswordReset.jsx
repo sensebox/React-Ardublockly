@@ -1,6 +1,6 @@
 // In deiner PasswordReset.jsx
 import React, { useState } from "react";
-import { useLocation, useHistory } from "react-router-dom"; // ✅ useLocation statt useSearchParams
+import { useLocation, useNavigate } from "react-router-dom"; // ✅ useLocation statt useSearchParams
 import { useDispatch } from "react-redux";
 import { resetPassword } from "../../actions/authActions";
 import {
@@ -15,7 +15,7 @@ import Snackbar from "../Snackbar";
 
 const PasswordReset = () => {
   const location = useLocation(); // ✅ useLocation holen
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   // 🔥 Token aus der URL parsen (ohne useSearchParams)
@@ -83,7 +83,7 @@ const PasswordReset = () => {
           });
 
           setTimeout(() => {
-            history.push("/user/login");
+            navigate("/user/login");
           }, 3000);
         } else {
           // 🔥 Fehlermeldung vom Server anzeigen
@@ -163,10 +163,7 @@ const PasswordReset = () => {
           required
         />
         <Box sx={{ mt: 2, display: "flex", justifyContent: "space-between" }}>
-          <Button
-            variant="outlined"
-            onClick={() => history.push("/user/login")}
-          >
+          <Button variant="outlined" onClick={() => navigate("/user/login")}>
             Abbrechen
           </Button>
           <Button

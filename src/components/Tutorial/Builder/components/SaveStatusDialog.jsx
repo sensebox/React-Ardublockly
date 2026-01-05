@@ -62,16 +62,13 @@ const SaveStatusDialog = ({
               Tutorial erfolgreich gespeichert!
             </Typography>
             <Box sx={{ mt: 2, display: "flex", gap: 2 }}>
-              <Button
-                variant="outlined"
-                onClick={() => history.push("/tutorial")}
-              >
+              <Button variant="outlined" onClick={() => navigate("/tutorial")}>
                 Zur Übersicht
               </Button>
               {savedTutorialId && (
                 <Button
                   variant="contained"
-                  onClick={() => history.push(`/tutorial/${savedTutorialId}`)}
+                  onClick={() => navigate(`/tutorial/${savedTutorialId}`)}
                 >
                   Zum Tutorial
                 </Button>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { login, loginOpenSenseMap } from "../../actions/authActions"; // ✅ beide Actions
 
 import Snackbar from "../Snackbar";
@@ -21,15 +21,12 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import Checkbox from "@mui/material/Checkbox";
-
 import * as Blockly from "blockly";
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
-// 🔥 Importiere die neue Komponente
 import PasswordResetRequest from "./PasswordResetRequest";
 
 export default function Login() {
   const dispatch = useDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
 
   const message = useSelector((s) => s.message);
@@ -72,7 +69,7 @@ export default function Login() {
   useEffect(() => {
     if (message.id === "LOGIN_SUCCESS") {
       if (redirectPath) {
-        history.push(redirectPath);
+        navigate(redirectPath);
       } else {
         history.goBack();
       }

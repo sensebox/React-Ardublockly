@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useRef } from "react";
 import { default as MonacoEditor } from "@monaco-editor/react";
-import { withRouter } from "react-router-dom";
+import {} from "react-router-dom";
 import { Button, Grid } from "@mui/material";
 import * as Blockly from "blockly/core";
 import Divider from "@mui/material/Divider";
@@ -312,4 +312,4 @@ void loop() {
   );
 };
 
-export default withRouter(CodeEditor);
+export default CodeEditor;

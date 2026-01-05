@@ -5,7 +5,7 @@ import { workspaceName } from "@/actions/workspaceActions";
 import { getProject, resetProject } from "@/actions/projectActions";
 import { clearMessages, returnErrors } from "@/actions/messageActions";
 
-import { withRouter } from "react-router-dom";
+import {} from "react-router-dom";
 
 import Home from "@/components/Pages/Home";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
@@ -37,9 +37,9 @@ class Project extends Component {
       ) {
         if (this.props.type !== "share") {
           this.props.returnErrors("", 404, "GET_PROJECT_FAIL");
-          this.props.history.push(`/${this.props.type}`);
+          this.props.navigate(`/${this.props.type}`);
         } else {
-          this.props.history.push("/");
+          this.props.navigate("/");
           this.props.returnErrors("", 404, "GET_SHARE_FAIL");
         }
       } else if (this.props.message.id === "GET_PROJECT_SUCCESS") {
@@ -48,7 +48,7 @@ class Project extends Component {
         this.props.message.id === "PROJECT_DELETE_SUCCESS" ||
         this.props.message.id === "GALLERY_DELETE_SUCCESS"
       ) {
-        this.props.history.push(`/${this.props.type}`);
+        this.props.navigate(`/${this.props.type}`);
       }
     }
   }
@@ -116,4 +116,4 @@ export default connect(mapStateToProps, {
   resetProject,
   clearMessages,
   returnErrors,
-})(withRouter(Project));
+})(Project);
