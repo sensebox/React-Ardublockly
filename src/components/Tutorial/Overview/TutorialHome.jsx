@@ -23,7 +23,7 @@ import {
 } from "@mui/material";
 import { faPencil, faPlus, faTools } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import { Link } from "react-router-dom";
 
 function getDifficultyLevel(value) {
   if (value <= 1) return 1;

@@ -1,7 +1,7 @@
 // src/components/User/PasswordResetRequest.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { requestPasswordReset } from "../../actions/authActions"; // Stelle sicher, dass du diese Action erstellst
+import { requestPasswordReset } from "../../actions/authActions";
 import Snackbar from "../Snackbar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -26,8 +26,7 @@ const PasswordResetRequest = ({ onBackToLogin }) => {
     message: "",
   });
 
-  // Optional: Zeige Erfolgsmeldung nach erfolgreicher Anfrage
-  React.useEffect(() => {
+  useEffect(() => {
     if (message.id === "REQUEST_PASSWORD_RESET_SUCCESS") {
       setSnackInfo({
         type: "success",
@@ -58,7 +57,6 @@ const PasswordResetRequest = ({ onBackToLogin }) => {
     }
 
     setLoading(true);
-    // 🔥 Dispatche die neue Action
     dispatch(requestPasswordReset({ email }))
       .then(() => {
         setLoading(false);

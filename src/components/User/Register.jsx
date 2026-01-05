@@ -1,6 +1,6 @@
 // src/components/Auth/Register.jsx
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Snackbar from "../Snackbar";
 import Breadcrumbs from "../ui/Breadcrumbs";
 import Button from "@mui/material/Button";
@@ -11,10 +11,9 @@ import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import CircularProgress from "@mui/material/CircularProgress";
 import * as Blockly from "blockly";
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 export default function Register() {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -62,8 +61,7 @@ export default function Register() {
       const data = await res.json();
 
       if (res.ok) {
-        // ✅ Weiterleiten zum Success Screen
-        history.push("/user/register/success");
+        navigate("/user/register/success");
       } else {
         showError(data.message || "Registrierung fehlgeschlagen.");
       }
