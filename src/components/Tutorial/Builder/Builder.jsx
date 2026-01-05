@@ -3,22 +3,18 @@ import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import TutorialBuilderProgressCard from "./components/TutorialBuilderProgessCard";
-import BuildSlide from "./components/BuildSlide";
+import TutorialBuilderProgressCard from "./TutorialBuilderProgessCard";
+import BuildSlide from "./BuildSlide";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
-import AppSnackbar from "@/components/Snackbar";
-import Dialog from "@/components/ui/Dialog";
-import HardwareCard from "../Viewer/Cards/HardwareCard";
-import WhatNext from "./components/EditorCards/WhatNext";
-import QuestionList from "./components/EditorCards/QuestionList";
+import HardwareCard from "../TutorialItem/HardwareCard";
+import WhatNext from "./WhatNext";
+import QuestionList from "./QuestionList";
 import BlocklyExample from "./BlocklyExample";
 
 import { Box, Button, Typography, CircularProgress } from "@mui/material";
 import {
   Info,
   Save,
-  CheckCircle,
-  WarningAmber,
   Error as ErrorIcon,
   Visibility,
 } from "@mui/icons-material";
@@ -29,6 +25,23 @@ import MDEditor from "@uiw/react-md-editor";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocation } from "react-router-dom";
 import H5PEditor from "./components/EditorCards/H5PEditor";
+import SaveStatusDialog from "./components/SaveStatusDialog";
+
+// Hilfsfunktionen
+const createInitialSteps = () => [
+  {
+    id: "intro",
+    title: "Einleitung",
+    subtitle: "Starte hier!",
+    type: "instruction",
+  },
+  {
+    id: "finish",
+    title: "Abschluss",
+    type: "finish",
+    subtitle: "Übersicht & Zusammenfassung",
+  },
+];
 
 const buildTutorialPayload = ({
   title,
@@ -77,6 +90,9 @@ const validateRequiredFields = ({ title, subtitle }) => {
   if (!subtitle.trim()) missing.push("Untertitel");
   return missing;
 };
+
+// 🔥 HILFSFUNKTION: Tiefer Vergleich (einfach, aber ausreichend für Tutorial-Steps)
+const deepEqual = (obj1, obj2) => JSON.stringify(obj1) === JSON.stringify(obj2);
 
 // Hauptkomponente
 const Builder = () => {
@@ -223,6 +239,9 @@ const Builder = () => {
 
     // 🔥 Prüfe: Hat sich etwas geändert?
     if (deepEqual(currentState, lastSavedState.current)) {
+      console.log(
+        "Keine Änderungen seit letztem Autosave – überspringe Request.",
+      );
       return;
     }
 
@@ -544,6 +563,7 @@ const Builder = () => {
                 <H5PEditor
                   h5psrc={currentStep.h5psrc || ""}
                   seth5psrc={updateStepH5P}
+                  onXmlChange={updateStepXml}
                 />
               )}
 
