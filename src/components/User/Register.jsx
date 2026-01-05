@@ -61,7 +61,6 @@ export default function Register() {
       const data = await res.json();
 
       if (res.ok) {
-        // ✅ Weiterleiten zum Success Screen
         navigate("/user/register/success");
       } else {
         showError(data.message || "Registrierung fehlgeschlagen.");

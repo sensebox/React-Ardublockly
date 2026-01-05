@@ -8,15 +8,12 @@ import {
 } from "@mui/material";
 import { useTheme } from "@mui/styles";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 // 🔲 Dialog-Komponente (extrahiert für Übersicht)
-const SaveStatusDialog = ({
-  savingState,
-  onClose,
-  savedTutorialId,
-  history,
-}) => {
+const SaveStatusDialog = ({ savingState, onClose, savedTutorialId }) => {
   const theme = useTheme();
+  const navigate = useNavigate();
   const renderContent = () => {
     switch (savingState) {
       case "loading":

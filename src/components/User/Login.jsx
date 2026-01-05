@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { login, loginOpenSenseMap } from "../../actions/authActions"; // ✅ beide Actions
+import { login, loginOpenSenseMap } from "../../actions/authActions";
 
 import Snackbar from "../Snackbar";
 import Alert from "../ui/Alert";
@@ -36,7 +36,7 @@ export default function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [authProvider, setAuthProvider] = useState("native"); // ✅ Standard: native
+  const [authProvider, setAuthProvider] = useState("native");
   const [snackbar, setSnackbar] = useState(false);
   const [snackInfo, setSnackInfo] = useState({
     type: "",
@@ -100,9 +100,9 @@ export default function Login() {
     }
 
     if (authProvider === "native") {
-      dispatch(login({ email, password, rememberMe })); // include rememberMe
+      dispatch(login({ email, password, rememberMe }));
     } else {
-      dispatch(loginOpenSenseMap({ email, password, rememberMe })); // include rememberMe
+      dispatch(loginOpenSenseMap({ email, password, rememberMe }));
     }
   };
 
@@ -132,7 +132,6 @@ export default function Login() {
     );
   }
 
-  // 🔥 Ursprüngliche Login-Ansicht
   return (
     <div>
       <Breadcrumbs
@@ -144,7 +143,6 @@ export default function Login() {
       >
         <h1>{Blockly.Msg.login_head}</h1>
 
-        {/* 🔘 Auth Provider Auswahl */}
         <FormControl component="fieldset" sx={{ mb: 2 }}>
           <FormLabel component="legend">
             {Blockly.Msg.login_with || "Login with"}{" "}
@@ -271,7 +269,6 @@ export default function Login() {
           </p>
         </form>
 
-        {/* 🔥 Neuer Link/Button für "Passwort vergessen" */}
         {authProvider === "native" && (
           <p style={{ textAlign: "center", fontSize: "0.8rem" }}>
             <Button

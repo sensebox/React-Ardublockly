@@ -1,6 +1,6 @@
 // In deiner PasswordReset.jsx
 import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom"; // ✅ useLocation statt useSearchParams
+import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { resetPassword } from "../../actions/authActions";
 import {
@@ -9,16 +9,15 @@ import {
   Button,
   Typography,
   CircularProgress,
-  Alert, // 🔥 NEU: Für direkte Erfolgs-/Fehlermeldung
+  Alert,
 } from "@mui/material";
 import Snackbar from "../Snackbar";
 
 const PasswordReset = () => {
-  const location = useLocation(); // ✅ useLocation holen
+  const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // 🔥 Token aus der URL parsen (ohne useSearchParams)
   const queryParams = new URLSearchParams(location.search);
   const token = queryParams.get("token");
 
@@ -26,7 +25,6 @@ const PasswordReset = () => {
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // 🔥 NEU: Zustand für direkte Server-Meldung
   const [serverMessage, setServerMessage] = useState({ type: "", message: "" });
 
   const [snackbar, setSnackbar] = useState(false);
@@ -66,7 +64,6 @@ const PasswordReset = () => {
 
     dispatch(resetPassword({ token, newPassword }))
       .then((response) => {
-        // ✅ Prüfe explizit auf SUCCESS-Status (z. B. 200)
         if (response?.status === 200 || response?.includes("SUCCESS")) {
           setSnackInfo({
             type: "success",
@@ -76,7 +73,6 @@ const PasswordReset = () => {
           });
           setSnackbar(true);
 
-          // 🔥 Setze Erfolgsmeldung
           setServerMessage({
             type: "success",
             message: "Passwort erfolgreich zurückgesetzt!",
@@ -86,7 +82,6 @@ const PasswordReset = () => {
             navigate("/user/login");
           }, 3000);
         } else {
-          // 🔥 Fehlermeldung vom Server anzeigen
           const errorMsg =
             response?.payload?.message ||
             "Fehler beim Zurücksetzen des Passworts.";
@@ -97,8 +92,7 @@ const PasswordReset = () => {
         }
       })
       .catch((error) => {
-        console.error("Reset Password Error:", error); // 🔍 Debugging
-        // 🔥 Fehlermeldung anzeigen
+        console.error("Reset Password Error:", error);
         const errorMsg =
           error.response?.data?.message ||
           "Ein unbekannter Fehler ist aufgetreten.";
@@ -131,7 +125,6 @@ const PasswordReset = () => {
         Gib dein neues Passwort ein.
       </Typography>
 
-      {/* 🔥 Direkte Servermeldung anzeigen */}
       {serverMessage.message && (
         <Alert
           severity={serverMessage.type === "success" ? "success" : "error"}
