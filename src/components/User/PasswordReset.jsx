@@ -1,6 +1,6 @@
 // In deiner PasswordReset.jsx
 import React, { useState } from "react";
-import { useLocation, useHistory } from "react-router-dom"; // ✅ useLocation statt useSearchParams
+import { useLocation, useNavigate } from "react-router-dom"; // ✅ useLocation statt useSearchParams
 import { useDispatch } from "react-redux";
 import { resetPassword } from "../../actions/authActions";
 import {
@@ -15,7 +15,7 @@ import Snackbar from "../Snackbar";
 
 const PasswordReset = () => {
   const location = useLocation(); // ✅ useLocation holen
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   // 🔥 Token aus der URL parsen (ohne useSearchParams)

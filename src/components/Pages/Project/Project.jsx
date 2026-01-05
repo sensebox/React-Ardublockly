@@ -5,7 +5,7 @@ import { workspaceName } from "@/actions/workspaceActions";
 import { getProject, resetProject } from "@/actions/projectActions";
 import { clearMessages, returnErrors } from "@/actions/messageActions";
 
-import { withRouter } from "react-router-dom";
+import {} from "react-router-dom";
 
 import Home from "@/components/Pages/Home";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
@@ -116,4 +116,4 @@ export default connect(mapStateToProps, {
   resetProject,
   clearMessages,
   returnErrors,
-})(withRouter(Project));
+})(Project);

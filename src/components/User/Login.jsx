@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useLocation } from "react-router-dom";
-import { login, loginOpenSenseMap } from "../../actions/authActions"; // ✅ beide Actions
+import { useNavigate, useLocation, Link } from "react-router-dom";
+import { login, loginOpenSenseMap } from "../../actions/authActions";
 
 import Snackbar from "../Snackbar";
 import Alert from "../ui/Alert";
@@ -22,13 +22,11 @@ import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 
 import * as Blockly from "blockly";
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
-// 🔥 Importiere die neue Komponente
 import PasswordResetRequest from "./PasswordResetRequest";
 
 export default function Login() {
   const dispatch = useDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
 
   const message = useSelector((s) => s.message);
@@ -38,7 +36,7 @@ export default function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [authProvider, setAuthProvider] = useState("native"); // ✅ Standard: native
+  const [authProvider, setAuthProvider] = useState("native");
   const [snackbar, setSnackbar] = useState(false);
   const [snackInfo, setSnackInfo] = useState({
     type: "",
@@ -46,11 +44,9 @@ export default function Login() {
     message: "",
   });
   const [showPassword, setShowPassword] = useState(false);
-
-  // 🔥 Zustand für Passwort-Vergessen-View
   const [showPasswordReset, setShowPasswordReset] = useState(false);
 
-  // Fehler bei Mount anzeigen
+  // Initialer Fehler
   useEffect(() => {
     if (message.id === "LOGIN_FAIL") {
       setEmail("");
@@ -62,17 +58,19 @@ export default function Login() {
       });
       setSnackbar(true);
     }
-  }, []);
+  }, []); // bewusst nur beim Mount
 
-  // Erfolg/Fehler behandeln
+  // Erfolg / Fehler
   useEffect(() => {
     if (message.id === "LOGIN_SUCCESS") {
       if (redirectPath) {
-        history.push(redirectPath);
+        navigate(redirectPath, { replace: true });
       } else {
-        history.goBack();
+        navigate(-1);
       }
-    } else if (message.id === "LOGIN_FAIL") {
+    }
+
+    if (message.id === "LOGIN_FAIL") {
       setEmail("");
       setPassword("");
       setSnackInfo({
@@ -82,12 +80,11 @@ export default function Login() {
       });
       setSnackbar(true);
     }
-  }, [message, history, redirectPath]);
-
-  const handleChange = (setter) => (e) => setter(e.target.value);
+  }, [message, redirectPath, navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (!email || !password) {
       setSnackInfo({
         type: "error",
@@ -99,53 +96,39 @@ export default function Login() {
     }
 
     if (authProvider === "native") {
-      dispatch(login({ email, password })); // ✅ native
+      dispatch(login({ email, password }));
     } else {
-      dispatch(loginOpenSenseMap({ email, password })); // ✅ openSenseMap
+      dispatch(loginOpenSenseMap({ email, password }));
     }
   };
 
-  const handleClickShowPassword = () => setShowPassword((v) => !v);
-  const handleMouseDownPassword = (e) => e.preventDefault();
-
-  // 🔥 Funktion, um zur Login-Ansicht zurückzukehren
-  const handleBackToLogin = () => {
-    setShowPasswordReset(false);
-  };
-
-  // 🔥 Zeige entweder Login- oder Passwort-Reset-Formular
   if (showPasswordReset) {
     return (
       <div>
         <Breadcrumbs
           content={[{ link: "/user/login", title: Blockly.Msg.button_login }]}
         />
-
-        <div
-          style={{ maxWidth: "500px", marginLeft: "auto", marginRight: "auto" }}
-        >
+        <div style={{ maxWidth: "500px", margin: "0 auto" }}>
           <h1>Passwort vergessen?</h1>
-          <PasswordResetRequest onBackToLogin={handleBackToLogin} />
+          <PasswordResetRequest
+            onBackToLogin={() => setShowPasswordReset(false)}
+          />
         </div>
       </div>
     );
   }
 
-  // 🔥 Ursprüngliche Login-Ansicht
   return (
     <div>
       <Breadcrumbs
         content={[{ link: "/user/login", title: Blockly.Msg.button_login }]}
       />
 
-      <div
-        style={{ maxWidth: "500px", marginLeft: "auto", marginRight: "auto" }}
-      >
+      <div style={{ maxWidth: "500px", margin: "0 auto" }}>
         <h1>{Blockly.Msg.login_head}</h1>
 
-        {/* 🔘 Auth Provider Auswahl */}
         <FormControl component="fieldset" sx={{ mb: 2 }}>
-          <FormLabel component="legend">Login mit</FormLabel>
+          <FormLabel>Login mit</FormLabel>
           <RadioGroup
             row
             value={authProvider}
@@ -163,6 +146,7 @@ export default function Login() {
             />
           </RadioGroup>
         </FormControl>
+
         {authProvider === "native" && (
           <div style={{ textAlign: "center" }}>
             {Blockly.Msg.no_account || "No account yet?"}{" "}
@@ -170,22 +154,6 @@ export default function Login() {
               {Blockly.Msg.button_register || "Register now"}
             </Link>
           </div>
-        )}
-
-        {authProvider === "opensensemap" && (
-          <Alert>
-            {Blockly.Msg.login_osem_account_01}{" "}
-            <Link
-              color="primary"
-              rel="noreferrer"
-              target="_blank"
-              href="https://opensensemap.org/  "
-              underline="hover"
-            >
-              openSenseMap
-            </Link>{" "}
-            {Blockly.Msg.login_osem_account_02}.
-          </Alert>
         )}
 
         <Snackbar
@@ -199,31 +167,23 @@ export default function Login() {
         <form onSubmit={handleSubmit}>
           <TextField
             variant="standard"
-            style={{ marginBottom: "10px" }}
-            type="text"
             label={Blockly.Msg.labels_username}
-            name="email"
             value={email}
-            onChange={handleChange(setEmail)}
+            onChange={(e) => setEmail(e.target.value)}
             fullWidth
           />
+
           <TextField
             variant="standard"
             type={showPassword ? "text" : "password"}
             label={Blockly.Msg.labels_password}
-            name="password"
             value={password}
-            onChange={handleChange(setPassword)}
+            onChange={(e) => setPassword(e.target.value)}
             fullWidth
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                    size="large"
-                  >
+                  <IconButton onClick={() => setShowPassword((v) => !v)}>
                     <FontAwesomeIcon
                       icon={showPassword ? faEyeSlash : faEye}
                       size="xs"
@@ -232,67 +192,27 @@ export default function Login() {
                 </InputAdornment>
               ),
             }}
-            style={{ marginBottom: "10px" }}
           />
-          <p>
-            <Button
-              color="primary"
-              variant="contained"
-              type="submit"
-              style={{ width: "100%" }}
-            >
-              {progress ? (
-                <div style={{ height: "24.5px" }}>
-                  <CircularProgress color="inherit" size={20} />
-                </div>
-              ) : (
-                Blockly.Msg.button_login
-              )}
-            </Button>
-          </p>
+
+          <Button color="primary" variant="contained" type="submit" fullWidth>
+            {progress ? (
+              <CircularProgress color="inherit" size={20} />
+            ) : (
+              Blockly.Msg.button_login
+            )}
+          </Button>
         </form>
 
-        {/* 🔥 Neuer Link/Button für "Passwort vergessen" */}
         {authProvider === "native" && (
           <p style={{ textAlign: "center", fontSize: "0.8rem" }}>
             <Button
               variant="text"
-              color="primary"
               size="small"
               onClick={() => setShowPasswordReset(true)}
             >
               Passwort vergessen?
             </Button>
           </p>
-        )}
-
-        {authProvider === "opensensemap" && (
-          <>
-            <p style={{ textAlign: "center", fontSize: "0.8rem" }}>
-              <Link
-                rel="noreferrer"
-                target="_blank"
-                href="https://opensensemap.org/  "
-                color="primary"
-                underline="hover"
-              >
-                {Blockly.Msg.login_lostpassword}
-              </Link>
-            </p>
-            <Divider variant="fullWidth" />
-            <p style={{ textAlign: "center", padding: "0 34px" }}>
-              {Blockly.Msg.login_createaccount}{" "}
-              <Link
-                rel="noreferrer"
-                target="_blank"
-                href="https://opensensemap.org/  "
-                underline="hover"
-              >
-                openSenseMap
-              </Link>
-              .
-            </p>
-          </>
         )}
       </div>
     </div>

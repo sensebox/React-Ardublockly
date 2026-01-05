@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 
-import { Router } from "react-router-dom";
-import { createBrowserHistory } from "history";
+import { BrowserRouter } from "react-router-dom";
 
 import { Provider } from "react-redux";
 import store from "./store";
@@ -51,25 +50,24 @@ const theme = createTheme({
 
 class App extends Component {
   componentDidMount() {
-    // In deiner App.js oder beim App-Start
     const token = localStorage.getItem("token");
     if (token) {
       store.dispatch(loadUser());
     }
+
     store.dispatch(setCompiler(import.meta.env.VITE_INITIAL_COMPILER_URL));
   }
 
   render() {
-    const customHistory = createBrowserHistory();
     return (
       <StyledEngineProvider injectFirst>
         <ThemeProvider theme={theme}>
           <Provider store={store}>
-            <Router history={customHistory}>
+            <BrowserRouter>
               <ErrorBoundary>
                 <Content />
               </ErrorBoundary>
-            </Router>
+            </BrowserRouter>
           </Provider>
         </ThemeProvider>
       </StyledEngineProvider>

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import Breadcrumbs from "../ui/Breadcrumbs";
 
-import { withRouter } from "react-router-dom";
+import {} from "react-router-dom";
 
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -152,4 +152,4 @@ class News extends Component {
   }
 }
 
-export default withRouter(News);
+export default News;

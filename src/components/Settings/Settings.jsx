@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import { withRouter } from "react-router-dom";
+import {} from "react-router-dom";
 
 import * as Blockly from "blockly/core";
 
@@ -88,4 +88,4 @@ const mapStateToProps = (state) => ({
   pageVisits: state.general.pageVisits,
 });
 
-export default connect(mapStateToProps, null)(withRouter(Settings));
+export default connect(mapStateToProps, null)(Settings);

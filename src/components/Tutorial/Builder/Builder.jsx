@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import TutorialBuilderProgressCard from "./TutorialBuilderProgessCard";
 import BuildSlide from "./BuildSlide";
@@ -108,7 +108,7 @@ const Builder = () => {
   const theme = useTheme();
   const user = useSelector((state) => state.auth.user);
   const token = useSelector((state) => state.auth.token);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   //  Tutorial-Daten
   const [title, setTitle] = useState("");
@@ -496,7 +496,7 @@ const Builder = () => {
               variant="outlined"
               startIcon={<Visibility />}
               onClick={() =>
-                history.push(
+                navigate(
                   existingTutorialId
                     ? `/tutorial/${existingTutorialId}`
                     : "/tutorial",

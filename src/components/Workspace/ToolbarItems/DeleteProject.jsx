@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { deleteProject } from "../../../actions/projectActions";
 
-import { withRouter } from "react-router-dom";
+import {} from "react-router-dom";
 
 import Snackbar from "../../Snackbar";
 
@@ -94,5 +94,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, { deleteProject })(
-  withStyles(styles, { withTheme: true })(withRouter(DeleteProject)),
+  withStyles(styles, { withTheme: true })(DeleteProject),
 );

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
-import { withRouter } from "react-router-dom";
+import {} from "react-router-dom";
 
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -97,4 +97,4 @@ class Faq extends Component {
   }
 }
 
-export default withRouter(Faq);
+export default Faq;

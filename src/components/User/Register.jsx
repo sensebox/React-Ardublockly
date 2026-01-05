@@ -1,6 +1,6 @@
 // src/components/Auth/Register.jsx
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import Snackbar from "../Snackbar";
 import Breadcrumbs from "../ui/Breadcrumbs";
 import Button from "@mui/material/Button";
@@ -10,11 +10,9 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import CircularProgress from "@mui/material/CircularProgress";
-import * as Blockly from "blockly";
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 export default function Register() {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -62,8 +60,8 @@ export default function Register() {
       const data = await res.json();
 
       if (res.ok) {
-        // ✅ Weiterleiten zum Success Screen
-        history.push("/user/register/success");
+        // ✅ v6-konforme Navigation
+        navigate("/user/register/success");
       } else {
         showError(data.message || "Registrierung fehlgeschlagen.");
       }
@@ -105,17 +103,16 @@ export default function Register() {
           <TextField
             variant="standard"
             label="E-Mail"
-            name="email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             fullWidth
             sx={{ mb: 2 }}
           />
+
           <TextField
             variant="standard"
             label="Passwort"
-            name="password"
             type={showPassword ? "text" : "password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -137,10 +134,10 @@ export default function Register() {
             }}
             sx={{ mb: 2 }}
           />
+
           <TextField
             variant="standard"
             label="Passwort bestätigen"
-            name="confirmPassword"
             type={showConfirmPassword ? "text" : "password"}
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}

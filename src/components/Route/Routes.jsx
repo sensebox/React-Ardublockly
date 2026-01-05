@@ -1,8 +1,8 @@
-import React, { Component } from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { visitPage, setPlatform } from "@/actions/generalActions";
-import { Route, Switch, withRouter } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 
 import PublicRoute from "./PublicRoute";
 import PrivateRoute from "./PrivateRoute";
@@ -29,113 +29,226 @@ import Register from "../User/Register";
 import RegisterSuccess from "../User/RegisterSuccess";
 import PasswordReset from "../User/PasswordReset";
 
-class Routes extends Component {
-  componentDidMount() {
-    const { location } = this.props;
-    const query = new URLSearchParams(location.search, [location.search]);
+function AppRoutes({ platform, visitPage, setPlatform }) {
+  const location = useLocation();
+
+  // entspricht componentDidMount
+  useEffect(() => {
+    const query = new URLSearchParams(location.search);
     const mode = query.get("mode");
 
-    if (!this.props.platform && mode) {
-      switch (mode.toLowerCase()) {
-        case "tablet":
-          this.props.setPlatform(true);
-          break;
-        default:
-          break;
-      }
+    if (!platform && mode?.toLowerCase() === "tablet") {
+      setPlatform(true);
     }
-  }
+  }, [location.search, platform, setPlatform]);
 
-  componentDidUpdate() {
-    this.props.visitPage();
-  }
+  // entspricht componentDidUpdate
+  useEffect(() => {
+    visitPage();
+  }, [location.pathname, visitPage]);
 
-  render() {
-    return (
-      <div style={{ margin: "0 22px" }}>
-        <Switch>
-          <PublicRoute path="/" exact>
-            <Home />
-          </PublicRoute>
-          {/* Tutorials */}
-          <PublicRoute path="/tutorial" exact>
-            <TutorialHome />
-          </PublicRoute>
-          <PrivateRoute path="/tutorial/builder" exact>
-            <Builder />
-          </PrivateRoute>
-          <Route path="/tutorial/:tutorialId" exact>
-            <Tutorial />
-          </Route>
-          <PrivateRoute path="/tutorial/:tutorialId/edit" exact>
-            <Builder />
-          </PrivateRoute>
+  return (
+    <div style={{ margin: "0 22px" }}>
+      <Routes>
+        {/* Home */}
+        <Route
+          path="/"
+          element={
+            <PublicRoute>
+              <Home />
+            </PublicRoute>
+          }
+        />
 
-          <Route path="/CodeEditor" exact>
-            <CodeEditor />
-          </Route>
-          {/* Sharing */}
-          <PublicRoute path="/share/:shareId" exact>
-            <Project />
-          </PublicRoute>
-          {/* Gallery-Projects */}
-          <PublicRoute path="/gallery" exact>
-            <GalleryHome />
-          </PublicRoute>
-          <PublicRoute path="/gallery/:galleryId" exact>
-            <Project />
-          </PublicRoute>
-          {/* User-Projects */}
-          <PrivateRoute path="/project" exact>
-            <ProjectHome />
-          </PrivateRoute>
-          <PrivateRoute path="/project/:projectId" exact>
-            <Project />
-          </PrivateRoute>
-          {/* User */}
-          <IsLoggedRoute path="/user/login" exact>
-            <Login />
-          </IsLoggedRoute>
-          <PublicRoute path="/user/register" exact>
-            <Register />
-          </PublicRoute>
-          <PublicRoute path="/user/register/success" exact>
-            <RegisterSuccess />
-          </PublicRoute>
-          <PublicRoute path="/user/reset-password" exact>
-            <PasswordReset />
-          </PublicRoute>
-          <PrivateRoute path="/user" exact>
-            <Account />
-          </PrivateRoute>
-          {/* settings */}
-          <PublicRoute path="/settings" exact>
-            <Settings />
-          </PublicRoute>
-          {/* privacy */}
-          <PublicRoute path="/impressum" exact>
-            <Impressum />
-          </PublicRoute>
-          <PublicRoute path="/privacy" exact>
-            <Privacy />
-          </PublicRoute>
-          <PublicRoute path="/news" exact>
-            <News />
-          </PublicRoute>
-          <PublicRoute path="/faq" exact>
-            <Faq />
-          </PublicRoute>
-          {/* Not Found */}
-          <PublicRoute>
-            <NotFound />
-          </PublicRoute>
-        </Switch>
-      </div>
-    );
-  }
+        {/* Tutorials */}
+        <Route
+          path="/tutorial"
+          element={
+            <PublicRoute>
+              <TutorialHome />
+            </PublicRoute>
+          }
+        />
+
+        <Route
+          path="/tutorial/builder"
+          element={
+            <PrivateRoute>
+              <Builder />
+            </PrivateRoute>
+          }
+        />
+
+        <Route path="/tutorial/:tutorialId" element={<Tutorial />} />
+
+        <Route
+          path="/tutorial/:tutorialId/edit"
+          element={
+            <PrivateRoute>
+              <Builder />
+            </PrivateRoute>
+          }
+        />
+
+        {/* Code Editor */}
+        <Route path="/CodeEditor" element={<CodeEditor />} />
+
+        {/* Sharing */}
+        <Route
+          path="/share/:shareId"
+          element={
+            <PublicRoute>
+              <Project />
+            </PublicRoute>
+          }
+        />
+
+        {/* Gallery */}
+        <Route
+          path="/gallery"
+          element={
+            <PublicRoute>
+              <GalleryHome />
+            </PublicRoute>
+          }
+        />
+
+        <Route
+          path="/gallery/:galleryId"
+          element={
+            <PublicRoute>
+              <Project />
+            </PublicRoute>
+          }
+        />
+
+        {/* User Projects */}
+        <Route
+          path="/project"
+          element={
+            <PrivateRoute>
+              <ProjectHome />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/project/:projectId"
+          element={
+            <PrivateRoute>
+              <Project />
+            </PrivateRoute>
+          }
+        />
+
+        {/* User */}
+        <Route
+          path="/user/login"
+          element={
+            <IsLoggedRoute>
+              <Login />
+            </IsLoggedRoute>
+          }
+        />
+
+        <Route
+          path="/user/register"
+          element={
+            <PublicRoute>
+              <Register />
+            </PublicRoute>
+          }
+        />
+
+        <Route
+          path="/user/register/success"
+          element={
+            <PublicRoute>
+              <RegisterSuccess />
+            </PublicRoute>
+          }
+        />
+
+        <Route
+          path="/user/reset-password"
+          element={
+            <PublicRoute>
+              <PasswordReset />
+            </PublicRoute>
+          }
+        />
+
+        <Route
+          path="/user"
+          element={
+            <PrivateRoute>
+              <Account />
+            </PrivateRoute>
+          }
+        />
+
+        {/* Settings */}
+        <Route
+          path="/settings"
+          element={
+            <PublicRoute>
+              <Settings />
+            </PublicRoute>
+          }
+        />
+
+        {/* Legal */}
+        <Route
+          path="/impressum"
+          element={
+            <PublicRoute>
+              <Impressum />
+            </PublicRoute>
+          }
+        />
+
+        <Route
+          path="/privacy"
+          element={
+            <PublicRoute>
+              <Privacy />
+            </PublicRoute>
+          }
+        />
+
+        <Route
+          path="/news"
+          element={
+            <PublicRoute>
+              <News />
+            </PublicRoute>
+          }
+        />
+
+        <Route
+          path="/faq"
+          element={
+            <PublicRoute>
+              <Faq />
+            </PublicRoute>
+          }
+        />
+
+        {/* Not Found */}
+        <Route
+          path="*"
+          element={
+            <PublicRoute>
+              <NotFound />
+            </PublicRoute>
+          }
+        />
+      </Routes>
+    </div>
+  );
 }
 
-Routes.propTypes = {
+AppRoutes.propTypes = {
   visitPage: PropTypes.func,
   platform: PropTypes.bool.isRequired,
   setPlatform: PropTypes.func.isRequired,
@@ -145,6 +258,4 @@ const mapStateToProps = (state) => ({
   platform: state.general.platform,
 });
 
-export default connect(mapStateToProps, { visitPage, setPlatform })(
-  withRouter(Routes),
-);
+export default connect(mapStateToProps, { visitPage, setPlatform })(AppRoutes);

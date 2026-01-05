@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
 import clsx from "clsx";
-import { withRouter, Link } from "react-router-dom";
+import {  , Link } from "react-router-dom";
 import { alpha } from "@mui/material/styles";
 import withStyles from "@mui/styles/withStyles";
 import Typography from "@mui/material/Typography";
@@ -239,4 +239,4 @@ const mapStateToProps = (state) => ({
 export default connect(
   mapStateToProps,
   null,
-)(withStyles(styles, { withTheme: true })(withRouter(Requirement)));
+)(withStyles(styles, { withTheme: true })( (Requirement)));

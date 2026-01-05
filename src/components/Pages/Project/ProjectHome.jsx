@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { getProjects, resetProject } from "@/actions/projectActions";
 import { clearMessages } from "@/actions/messageActions";
 
-import { Link, withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import Snackbar from "@/components/Snackbar";
@@ -244,4 +244,4 @@ export default connect(mapStateToProps, {
   getProjects,
   resetProject,
   clearMessages,
-})(withStyles(styles, { withTheme: true })(withRouter(ProjectHome)));
+})(withStyles(styles, { withTheme: true })(ProjectHome));

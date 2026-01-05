@@ -13,12 +13,12 @@ import { useDispatch, useSelector } from "react-redux";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import { Edit } from "@mui/icons-material";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const TutorialProgressCard = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
   const activeStep = useSelector((state) => state.tutorial.activeStep);
   const tutorial = useSelector((state) => state.tutorial.tutorials[0]);
   const user = useSelector((state) => state.auth.user);
@@ -139,7 +139,7 @@ const TutorialProgressCard = () => {
           <Button
             variant="outlined"
             startIcon={<Edit />}
-            onClick={() => history.push(`/tutorial/${tutorial._id}/edit`)}
+            onClick={() => navigate(`/tutorial/${tutorial._id}/edit`)}
           >
             Tutorial bearbeiten
           </Button>

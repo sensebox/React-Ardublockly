@@ -1,39 +1,29 @@
-import React, { Component } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { Navigate, useLocation } from "react-router-dom";
 
-import { Route, Redirect, withRouter } from "react-router-dom";
+function PrivateRoute({ children, isAuthenticated, user, progress }) {
+  const location = useLocation();
 
-class PrivateRoute extends Component {
-  render() {
-    return !this.props.progress ? (
-      <Route
-        {...this.props.exact}
-        render={({ location }) =>
-          this.props.isAuthenticated &&
-          this.props.user &&
-          this.props.user.blocklyRole !== "user"
-            ? this.props.children
-            : (() => {
-                return (
-                  <Redirect
-                    to={{
-                      pathname: "/",
-                      state: { from: location },
-                    }}
-                  />
-                );
-              })()
-        }
-      />
-    ) : null;
+  if (progress) {
+    return null; // oder <LoadingSpinner />
   }
+
+  const hasAccess = isAuthenticated && user && user.blocklyRole !== "user";
+
+  if (!hasAccess) {
+    return <Navigate to="/" replace state={{ from: location }} />;
+  }
+
+  return children;
 }
 
 PrivateRoute.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
   user: PropTypes.object,
   progress: PropTypes.bool.isRequired,
+  children: PropTypes.node.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -42,4 +32,4 @@ const mapStateToProps = (state) => ({
   progress: state.auth.progress,
 });
 
-export default connect(mapStateToProps, null)(withRouter(PrivateRoute));
+export default connect(mapStateToProps)(PrivateRoute);
