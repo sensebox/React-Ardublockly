@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchTutorial } from "../services/tutorial.service";
+import { fetchTutorial } from "../../services/tutorial.service";
 
 /**
  * Lädt ein bestehendes Tutorial (falls ID vorhanden)
