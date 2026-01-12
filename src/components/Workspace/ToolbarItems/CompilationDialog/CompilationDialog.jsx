@@ -245,7 +245,7 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform, isEmb
           <Stepper activeStep={activeStep} alternativeLabel>
             <Step key={1}>
               <StepLabel
-                error={error}
+                error={!!error}
                 optional={
                   error && (
                     <Typography variant="caption" color="error">
