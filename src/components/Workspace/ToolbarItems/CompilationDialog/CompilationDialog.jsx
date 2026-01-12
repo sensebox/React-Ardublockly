@@ -66,6 +66,22 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform, isEmb
 
   const handleCompile = async () => {
     try {
+      // In embedded mode, generate fresh code from workspace instead of using stale prop
+      // This ensures we always have the latest code in embedded mode where CodeViewer
+      // doesn't trigger frequent re-renders. Main route uses the prop as it works fine there.
+      let codeToCompile = code;
+      
+      if (isEmbedded) {
+        const workspace = Blockly.getMainWorkspace();
+        if (workspace && Blockly.Generator && Blockly.Generator.Arduino) {
+          try {
+            codeToCompile = Blockly.Generator.Arduino.workspaceToCode(workspace);
+          } catch (err) {
+            console.warn("Failed to generate code from workspace, using prop:", err);
+          }
+        }
+      }
+      console.log("codeToCompile", codeToCompile);
       const board =
         selectedBoard === "MCU" || selectedBoard === "MCU:mini"
           ? "sensebox-mcu"
@@ -77,7 +93,7 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform, isEmb
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          sketch: code,
+          sketch: codeToCompile,
           board,
         }),
       });
