@@ -81,7 +81,7 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform, isEmb
           }
         }
       }
-      console.log("codeToCompile", codeToCompile);
+
       const board =
         selectedBoard === "MCU" || selectedBoard === "MCU:mini"
           ? "sensebox-mcu"
