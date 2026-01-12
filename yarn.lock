@@ -257,10 +257,10 @@
     "@babel/helper-string-parser" "^7.27.1"
     "@babel/helper-validator-identifier" "^7.28.5"
 
-"@blockly/block-plus-minus@^9.0.1":
-  version "9.0.3"
-  resolved "https://registry.yarnpkg.com/@blockly/block-plus-minus/-/block-plus-minus-9.0.3.tgz#0a5439e7d1891c4a060f0650083d433d3815a6d0"
-  integrity sha512-TOEPcYCtnEkxVf8O9E2/mFMUS/Q+h4PRh0kAAR8RChe/Xj4fyA6+hqm9pmZXvNAyhhGjFIA8immYpxeu5Kvgfw==
+"@blockly/block-plus-minus@^9.0.7":
+  version "9.0.7"
+  resolved "https://registry.yarnpkg.com/@blockly/block-plus-minus/-/block-plus-minus-9.0.7.tgz#a1486850f05f624818cf8d82c4e71ac6882416a9"
+  integrity sha512-RnQbnZ6ydQVoa+zxD+XDJUQKHcHACN4he6QcC5ixIj+ImKQmDGQtGT7HcHrn7hf8bSrdyuLBPiMOgITc9w1XOA==
 
 "@blockly/field-colour@^6.0.4":
   version "6.0.6"
