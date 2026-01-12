@@ -60,7 +60,7 @@
     "remark-gemoji": "^8.0.0",
     "remark-gfm": "^3.0.1",
     "styled-components": "^4.4.1",
-    "uuid": "^8.3.1",
+    "uuid": "^13.0.0",
     "watchpack": "^2.3.1"
   },
   "resolutions": {
