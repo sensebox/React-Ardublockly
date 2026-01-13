@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   CardContent,
@@ -9,10 +9,21 @@ import {
 import TutorialSlide from "../components/TutorialSlide";
 import UnlockedContent from "./UnlockedContent";
 import { CheckCircleOutline, LockOutlined } from "@mui/icons-material";
+import { useSelector } from "react-redux";
+import { getTutorialCompletionStatus } from "@/helpers/getTutorialCompletionStatus";
 
-const FinishedCard = ({ tutorial, isUnlocked }) => {
+const FinishedCard = ({ tutorial }) => {
   const theme = useTheme();
+  const tutorialProgress = useSelector(
+    (state) => state.tutorialProgress.byTutorialId[tutorial._id],
+  );
+  const [isUnlocked, setIsUnlocked] = useState(false);
 
+  // is finished?
+  useEffect(() => {
+    const isFinished = getTutorialCompletionStatus(tutorial, tutorialProgress);
+    setIsUnlocked(isFinished.missing.length === 0);
+  }, []);
   const renderOverlay = () => (
     <Box
       sx={{
