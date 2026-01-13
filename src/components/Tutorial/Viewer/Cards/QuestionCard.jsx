@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Card,
@@ -23,6 +23,11 @@ const QuestionCard = ({ questionData, step }) => {
   const [isCorrect, setIsCorrect] = useState(false);
   const token = useSelector((state) => state.auth.token);
   const tutorial = useSelector((state) => state.tutorial.tutorials[0]);
+  const tutorialProgress = useSelector(
+    (state) => state.tutorialProgress.byTutorialId[tutorial._id],
+  );
+  const [isAlreadyAnswered, setIsAlreadyAnswered] = useState(false);
+
   const dispatch = useDispatch();
   if (!questionData)
     return (
@@ -32,6 +37,23 @@ const QuestionCard = ({ questionData, step }) => {
     );
 
   const { question, answers = [], multipleChoice } = questionData;
+
+  useEffect(() => {
+    const alreadyCorrect =
+      tutorialProgress?.steps?.[step._id]?.questions?.[questionData._id]
+        ?.correct === true;
+
+    if (!alreadyCorrect) return;
+
+    const correctAnswerTexts = answers
+      .filter((a) => a.correct)
+      .map((a) => a.text);
+
+    setIsAlreadyAnswered(true);
+    setSelected(correctAnswerTexts);
+    setIsCorrect(true);
+    setSubmitted(true);
+  }, [tutorialProgress, step._id, questionData._id, answers]);
 
   const handleSelect = (value) => {
     if (multipleChoice) {
@@ -46,6 +68,7 @@ const QuestionCard = ({ questionData, step }) => {
   };
 
   const handleSubmit = async () => {
+    if (isAlreadyAnswered) return;
     const correctAnswers = answers
       .filter((a) => a.correct)
       .map((a) => a.text)
@@ -159,13 +182,13 @@ const QuestionCard = ({ questionData, step }) => {
                         <Checkbox
                           checked={isSelected}
                           onChange={() => handleSelect(a.text)}
-                          disabled={submitted}
+                          disabled={submitted || isAlreadyAnswered}
                         />
                       ) : (
                         <Radio
                           checked={isSelected}
                           onChange={() => handleSelect(a.text)}
-                          disabled={submitted}
+                          disabled={submitted || isAlreadyAnswered}
                         />
                       )
                     }
@@ -257,7 +280,7 @@ const QuestionCard = ({ questionData, step }) => {
             mt: 3,
           }}
         >
-          {!submitted ? (
+          {!submitted && !isAlreadyAnswered ? (
             <Button
               variant="contained"
               onClick={handleSubmit}
@@ -265,11 +288,11 @@ const QuestionCard = ({ questionData, step }) => {
             >
               Antwort bestätigen
             </Button>
-          ) : (
+          ) : !isAlreadyAnswered ? (
             <Button variant="outlined" onClick={resetQuestion}>
               Neu versuchen
             </Button>
-          )}
+          ) : null}
         </Box>
       </CardContent>
     </Card>
