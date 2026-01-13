@@ -24,7 +24,7 @@ export const setAllTutorialProgress = (progressArray) => {
 /**
  * Store progress after tutorial start
  */
-export const startTutorialProgress = (tutorialId, progress) => ({
+export const startTutorialProgressLocal = (tutorialId, progress) => ({
   type: TUTORIAL_PROGRESS_START,
   payload: { tutorialId, progress },
 });

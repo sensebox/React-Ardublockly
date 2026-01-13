@@ -90,14 +90,7 @@ export async function markStepSeen({ tutorialId, stepId, token }) {
  * Answer question
  * POST /tutorial/:tutorialId/steps/:stepId/questions/answer
  */
-export async function answerQuestion({
-  tutorialId,
-  stepId,
-  questionId, // wird evtl. später gebraucht
-  answer,
-  correct,
-  token,
-}) {
+export async function answerQuestion(tutorialId, stepId, questionId, token) {
   if (!token) return null;
 
   const res = await fetch(
@@ -108,10 +101,9 @@ export async function answerQuestion({
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ answer, correct }),
+      body: JSON.stringify({ questionId, correct: true }),
     },
   );
-
   if (!res.ok) throw new Error("Answer question failed");
   return res.json();
 }

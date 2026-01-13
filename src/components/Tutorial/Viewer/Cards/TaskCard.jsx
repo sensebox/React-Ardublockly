@@ -83,13 +83,7 @@ const TaskCard = ({ step, setNextStepDisabled }) => {
           }}
         >
           {step.questionData.map((q, idx) => {
-            return (
-              <QuestionCard
-                setNextStepDisabled={setNextStepDisabled}
-                key={idx}
-                questionData={q}
-              />
-            );
+            return <QuestionCard key={idx} questionData={q} step={step} />;
           })}
         </Box>
       )}

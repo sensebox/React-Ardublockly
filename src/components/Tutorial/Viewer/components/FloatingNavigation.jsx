@@ -9,7 +9,7 @@ const FloatingNavigation = ({ tutorialId }) => {
   const { tutorial, currentStep, activeStep, nextStep, previousStep } =
     useTutorialViewer(tutorialId);
   const currentStepIndex = tutorial.steps.findIndex(
-    (step) => step._id === currentStep._id,
+    (step) => step._id === currentStep?._id,
   );
 
   const isFirstStep = currentStepIndex === 0;

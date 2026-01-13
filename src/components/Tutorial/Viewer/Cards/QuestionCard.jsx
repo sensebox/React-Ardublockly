@@ -12,12 +12,16 @@ import {
 } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, Cancel, HelpOutline } from "@mui/icons-material";
+import { answerQuestion } from "../../services/tutorial.service";
+import { useSelector } from "react-redux";
 
-const QuestionCard = ({ questionData, setNextStepDisabled }) => {
+const QuestionCard = ({ questionData, step }) => {
   const theme = useTheme();
-  const [selected, setSelected] = useState([]);
   const [submitted, setSubmitted] = useState(false);
+  const [selected, setSelected] = useState([]);
   const [isCorrect, setIsCorrect] = useState(false);
+  const token = useSelector((state) => state.auth.token);
+  const tutorial = useSelector((state) => state.tutorial.tutorials[0]);
 
   if (!questionData)
     return (
@@ -52,7 +56,9 @@ const QuestionCard = ({ questionData, setNextStepDisabled }) => {
       correctAnswers.every((val, i) => val === selectedAnswers[i]);
 
     setIsCorrect(correct);
-    if (correct) setNextStepDisabled(false);
+    if (correct) {
+      answerQuestion(tutorial._id, step._id, questionData._id, token);
+    }
     setSubmitted(true);
   };
 

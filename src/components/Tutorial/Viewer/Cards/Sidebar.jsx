@@ -22,7 +22,9 @@ const Sidebar = () => {
   const activeStep = useSelector((state) => state.tutorial.activeStep);
   const tutorial = useSelector((state) => state.tutorial.tutorials[0]);
   const user = useSelector((state) => state.auth.user);
-  const [stepWithTask, setStepWithTaks] = useState(false);
+  const tutorialProgress = useSelector(
+    (state) => state.tutorialProgress.byTutorialId[tutorial._id],
+  );
   const stepsWithFinish = [...tutorial.steps];
 
   const progress = ((activeStep + 1) / stepsWithFinish.length) * 100;
@@ -34,6 +36,7 @@ const Sidebar = () => {
     ) {
     }
   }, [activeStep]);
+
   const changeStep = (step) => {
     dispatch({
       type: "TUTORIAL_STEP",
@@ -87,8 +90,17 @@ const Sidebar = () => {
         }}
       >
         {stepsWithFinish.map((step, index) => {
+          const stepProgress = tutorialProgress?.steps?.[step._id];
+
+          const isTask = step.type === "question" || step.type === "blockly";
+          const isSeen = !!stepProgress;
           const isCurrent = index === activeStep;
-          const isCompleted = index < activeStep;
+
+          const isTaskAnswered =
+            stepProgress?.questions?.[step.questionData?.[0]?._id]?.correct ??
+            false;
+
+          const isCompleted = isTask ? isTaskAnswered : isSeen;
 
           return (
             <Box

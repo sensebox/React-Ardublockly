@@ -27,7 +27,10 @@ import {
   startTutorial,
 } from "../services/tutorial.service";
 import TutorialProgressStatus from "./TutorialProgressBar";
-import { resetTutorialProgressLocal } from "@/actions/tutorialProgressActions";
+import {
+  resetTutorialProgressLocal,
+  startTutorialProgressLocal,
+} from "@/actions/tutorialProgressActions";
 
 function getDifficultyLevel(value) {
   if (value <= 1) return 1;
@@ -167,6 +170,7 @@ function TutorialItem({ tutorial, level }) {
   const handleStartTutorial = async () => {
     if (user) {
       try {
+        await dispatch(startTutorialProgressLocal(tutorial._id, { steps: {} }));
         await startTutorial({ tutorialId: tutorial._id, token: token });
       } catch (e) {
         console.error("Failed to start tutorial", e);
