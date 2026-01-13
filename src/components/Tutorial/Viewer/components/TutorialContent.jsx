@@ -37,10 +37,8 @@ const TutorialContent = ({
 
     const alreadySeen = progressForTutorial?.steps?.[stepId]?.seen === true;
     if (alreadySeen) return;
-    console.log("marking step seen local");
     // 🔹 Optimistic Update
     dispatch(markStepSeenLocal(tutorial._id, stepId));
-    console.log("end step seen");
 
     // 🔹 Backend Sync
     markStepSeen({

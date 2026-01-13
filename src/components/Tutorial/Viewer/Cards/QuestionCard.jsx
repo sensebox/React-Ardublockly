@@ -13,7 +13,8 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, Cancel, HelpOutline } from "@mui/icons-material";
 import { answerQuestion } from "../../services/tutorial.service";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { answerQuestionLocal } from "@/actions/tutorialProgressActions";
 
 const QuestionCard = ({ questionData, step }) => {
   const theme = useTheme();
@@ -22,7 +23,7 @@ const QuestionCard = ({ questionData, step }) => {
   const [isCorrect, setIsCorrect] = useState(false);
   const token = useSelector((state) => state.auth.token);
   const tutorial = useSelector((state) => state.tutorial.tutorials[0]);
-
+  const dispatch = useDispatch();
   if (!questionData)
     return (
       <Typography variant="body2" color="text.secondary">
@@ -44,7 +45,7 @@ const QuestionCard = ({ questionData, step }) => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const correctAnswers = answers
       .filter((a) => a.correct)
       .map((a) => a.text)
@@ -57,7 +58,10 @@ const QuestionCard = ({ questionData, step }) => {
 
     setIsCorrect(correct);
     if (correct) {
-      answerQuestion(tutorial._id, step._id, questionData._id, token);
+      await dispatch(
+        answerQuestionLocal(tutorial._id, step._id, questionData._id, true),
+      );
+      await answerQuestion(tutorial._id, step._id, questionData._id, token);
     }
     setSubmitted(true);
   };

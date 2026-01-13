@@ -32,16 +32,13 @@ export default function tutorialProgressReducer(state = initialState, action) {
     case TUTORIAL_PROGRESS_STEP_SEEN: {
       const { tutorialId, stepId } = action.payload;
       const tutorialProgress = state.byTutorialId[tutorialId];
-      console.log(tutorialProgress);
       if (!tutorialProgress) return state;
 
       const stepProgress = tutorialProgress.steps?.[stepId];
-      console.log(tutorialProgress);
       // 🔹 Schon gesehen → nichts tun
       if (stepProgress?.seen === true) {
         return state;
       }
-      console.log("Hallo");
       return {
         ...state,
         byTutorialId: {
@@ -61,8 +58,7 @@ export default function tutorialProgressReducer(state = initialState, action) {
     }
 
     case TUTORIAL_PROGRESS_ANSWER: {
-      const { tutorialId, stepId, questionId, answer, correct } =
-        action.payload;
+      const { tutorialId, stepId, questionId, correct } = action.payload;
 
       const tutorialProgress = state.byTutorialId[tutorialId] || {};
 
@@ -81,7 +77,6 @@ export default function tutorialProgressReducer(state = initialState, action) {
                   [questionId]: {
                     answered: true,
                     correct,
-                    answer,
                   },
                 },
               },

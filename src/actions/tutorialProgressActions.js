@@ -44,11 +44,10 @@ export const answerQuestionLocal = (
   tutorialId,
   stepId,
   questionId,
-  answer,
   correct,
 ) => ({
   type: TUTORIAL_PROGRESS_ANSWER,
-  payload: { tutorialId, stepId, questionId, answer, correct },
+  payload: { tutorialId, stepId, questionId, correct },
 });
 
 /**
