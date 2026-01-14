@@ -10,7 +10,6 @@ export const useEmbeddedMode = () => {
   useEffect(() => {
     // Force Zelos renderer for embedded touch optimization
     dispatch(setRenderer(EMBEDDED_CONFIG.RENDERER));
-    dispatch(setEmbeddedMode(true));
     // Update viewport meta tag for embedded mode
     const viewport = document.querySelector('meta[name="viewport"]');
     const originalContent = viewport?.getAttribute("content");
