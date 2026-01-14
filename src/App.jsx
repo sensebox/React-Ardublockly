@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store";
 import { loadUser } from "./actions/authActions";
@@ -13,8 +13,6 @@ import {
 
 import Content from "./components/Content";
 import EmbeddedBlockly from "./components/EmbeddedBlockly";
-import RouteHandler from "./components/RouteHandler";
-import EmbeddedRoute from "./components/Route/EmbeddedRoute";
 import { setCompiler } from "./actions/generalActions";
 
 const theme = createTheme({
@@ -65,14 +63,10 @@ class App extends Component {
           <Provider store={store}>
             <BrowserRouter>
               <ErrorBoundary>
-                <Switch>
-                  <EmbeddedRoute path="/embedded" exact>
-                    <EmbeddedBlockly />
-                  </EmbeddedRoute>
-                  <Route path="/">
-                    <Content />
-                  </Route>
-                </Switch>
+                <Routes>
+                  <Route path="/embedded" element={<EmbeddedBlockly />} />
+                  <Route path="/*" element={<Content />} />
+                </Routes>
               </ErrorBoundary>
             </BrowserRouter>
           </Provider>
