@@ -13,6 +13,7 @@ import {
 
 import Content from "./components/Content";
 import EmbeddedBlockly from "./components/EmbeddedBlockly";
+import RouteHandler from "./components/RouteHandler";
 import { setCompiler } from "./actions/generalActions";
 
 const theme = createTheme({
@@ -62,6 +63,7 @@ class App extends Component {
         <ThemeProvider theme={theme}>
           <Provider store={store}>
             <BrowserRouter>
+              <RouteHandler />
               <ErrorBoundary>
                 <Routes>
                   <Route path="/embedded" element={<EmbeddedBlockly />} />
