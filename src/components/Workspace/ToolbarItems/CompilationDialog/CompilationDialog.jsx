@@ -58,11 +58,18 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform, isEmb
     if (activeStep === 1 && !platform) {
       handleDownloadURL();
       timeoutId = setTimeout(() => {
-        setActiveStep(2);
+        if (isEmbedded) {
+          onClose();
+          setActiveStep(0);
+          setSketchId(null);
+          setError(null);
+        } else {
+          setActiveStep(2);
+        }
       }, 5000);
     }
     return () => clearTimeout(timeoutId);
-  }, [activeStep]);
+  }, [activeStep, isEmbedded, onClose]);
 
   const handleCompile = async () => {
     try {
@@ -229,6 +236,15 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform, isEmb
                 <Button
                   style={{ color: "white", margin: "1rem" }}
                   variant="contained"
+                  onClick={() => {
+                    if (isEmbedded) {
+                      // Close modal after clicking button in embedded mode
+                      onClose();
+                      setActiveStep(0);
+                      setSketchId(null);
+                      setError(null);
+                    }
+                  }}
                 >
                   <FontAwesomeIcon
                     style={{ marginRight: "5px" }}
