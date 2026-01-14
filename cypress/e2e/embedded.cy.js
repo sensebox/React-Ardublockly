@@ -51,11 +51,12 @@ describe("Embedded Blockly Page Tests", () => {
     cy.get('[role="dialog"]', { timeout: 5000 }).should("exist");
   });
 
-  it("[Embedded] displays toolbox with search", () => {
-    cy.visit("/embedded");
-    cy.get(".blocklyToolbox", { timeout: 10000 }).should("exist");
-    cy.get('input[type="search"]').should("exist");
-  });
+  // Search box is currently disabled in embedded mode
+  // it("[Embedded] displays toolbox with search", () => {
+  //   cy.visit("/embedded");
+  //   cy.get(".blocklyToolbox", { timeout: 10000 }).should("exist");
+  //   cy.get('input[type="search"]').should("exist");
+  // });
 
   it("[Embedded] marks toolbox xml as embedded mode", () => {
     cy.visit("/embedded");
