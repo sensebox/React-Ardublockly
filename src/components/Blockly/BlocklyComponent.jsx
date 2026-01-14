@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 
 import * as Blockly from "blockly/core";
 import "./blocks/index";
@@ -10,6 +11,7 @@ import Toolbox from "./toolbox/Toolbox";
 import EmbeddedToolbox from "./toolbox/EmbeddedToolbox";
 import { reservedWords } from "./helpers/reservedWords";
 import Snackbar from "../Snackbar";
+import { EMBEDDED_CONFIG } from "../../config/embeddedConfig";
 
 import "blockly/blocks";
 import {
@@ -27,7 +29,9 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
   const blocklyDivRef = useRef(null);
   const toolboxRef = useRef(null);
   const [workspace, setWorkspace] = useState(undefined);
-  const isEmbedded = useSelector((state) => state.general.embeddedMode);
+  const location = useLocation();
+  const isEmbeddedRedux = useSelector((state) => state.general.embeddedMode);
+  const isEmbedded = isEmbeddedRedux || location.pathname === EMBEDDED_CONFIG.ROUTE;
 
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -48,11 +52,14 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
     };
 
     // Only apply mobile layout options when in embedded mode
+    // These must override any options from ...rest, so set them after
     if (isEmbedded) {
       blocklyOptions.horizontalLayout = true;
       blocklyOptions.toolboxPosition = 'end';
       // Ensure toolbox icon sprites and other assets load correctly in embedded view
-      blocklyOptions.media = '/media/blockly/';
+      if (!blocklyOptions.media) {
+        blocklyOptions.media = '/media/blockly/';
+      }
     }
 
     const ws = Blockly.inject(blocklyDivRef.current, blocklyOptions);
@@ -138,7 +145,7 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
       ws?.dispose();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isEmbedded]);
+  }, [isEmbedded, location.pathname]);
 
   const cardStyle = useMemo(() => {
     return isEmbedded ?{
