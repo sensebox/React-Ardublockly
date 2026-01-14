@@ -11,120 +11,121 @@ export const useEmbeddedToolbox = (workspace, isEmbedded) => {
 
     originalUpdateToolboxRef.current = workspace.updateToolbox;
 
+    const collapseAllCategories = () => {
+      const toolbox = workspace.getToolbox();
+      const items = toolbox?.getToolboxItems?.();
+      if (!items) return;
+
+      items.forEach((category) => {
+        if (category?.setExpanded) {
+          category.setExpanded(false);
+        } else if (category?.setOpen) {
+          category.setOpen(false);
+        }
+      });
+    };
+
+    const setAccentColors = () => {
+      document.querySelectorAll('.blocklyToolboxCategory').forEach((row) => {
+        const borderColor = window.getComputedStyle(row).getPropertyValue('border-left-color');
+        if (borderColor) {
+          row.style.setProperty('--cat-accent', borderColor.trim());
+        }
+      });
+    };
+
+    const isInputElement = (target) => {
+      return target?.tagName === 'INPUT' || target?.closest?.('input');
+    };
+
     const setupToolboxCollapse = () => {
       setTimeout(() => {
-        const toolboxInstance = workspace.getToolbox();
-        if (!toolboxInstance) return;
+        const toolbox = workspace.getToolbox();
+        if (!toolbox) return;
 
-        const categoryElements = document.querySelectorAll('.blocklyToolboxCategory');
-
-        categoryElements.forEach((element) => {
-          const containsInput = !!element.querySelector('input');
-          const targetElement = containsInput ? element : element.cloneNode(true);
-          if (!containsInput) {
+        document.querySelectorAll('.blocklyToolboxCategory').forEach((element) => {
+          const hasInput = !!element.querySelector('input');
+          const targetElement = hasInput ? element : element.cloneNode(true);
+          
+          if (!hasInput) {
             element.parentNode.replaceChild(targetElement, element);
           }
 
-          targetElement.addEventListener('click', (e) => {
-            // Ignore clicks originating from input elements (e.g., search field)
-            if (e && e.target && (e.target.tagName === 'INPUT' || (e.target.closest && e.target.closest('input')))) {
-              return;
-            }
+          const handleCategoryClick = (e) => {
+            if (isInputElement(e.target)) return;
+
             setTimeout(() => {
-              const toolboxInstance = workspace.getToolbox();
-              if (!toolboxInstance) {
-                return;
-              }
+              const toolbox = workspace.getToolbox();
+              if (!toolbox) return;
 
-              let selectedItem = null;
-              if (toolboxInstance.getSelectedItem) {
-                selectedItem = toolboxInstance.getSelectedItem();
-              } else if (toolboxInstance.getSelectedItemId) {
-                const selectedId = toolboxInstance.getSelectedItemId();
-                if (toolboxInstance.getToolboxItems) {
-                  const items = toolboxInstance.getToolboxItems();
-                  selectedItem = items.find(item => item.id === selectedId);
-                }
-              }
+              const items = toolbox.getToolboxItems?.();
+              if (!items) return;
 
-              if (!selectedItem) {
-                if (toolboxInstance.getToolboxItems) {
-                  const items = toolboxInstance.getToolboxItems();
-                  selectedItem = items.find(item => item.isExpanded && item.isExpanded());
-                }
-                return;
-              }
+              let selectedItem = toolbox.getSelectedItem?.() || 
+                                items.find(item => item.id === toolbox.getSelectedItemId?.()) ||
+                                items.find(item => item.isExpanded?.());
 
-              let allCategories = [];
-              if (toolboxInstance.getToolboxItems) {
-                allCategories = toolboxInstance.getToolboxItems();
-              } else {
-                return;
-              }
+              if (!selectedItem) return;
 
               const selectedHierarchy = [];
               let current = selectedItem;
               while (current) {
                 selectedHierarchy.push(current);
-                current = current.getParent && current.getParent();
+                current = current.getParent?.();
               }
-              allCategories.forEach((category) => {
-                if (!category) return;
-                
-                if (!selectedHierarchy.includes(category)) {
-                  if (category.setExpanded && typeof category.setExpanded === 'function') {
-                    category.setExpanded(false);
-                  } else if (category.setOpen && typeof category.setOpen === 'function') {
-                    category.setOpen(false);
-                  }
+
+              items.forEach((category) => {
+                if (category && !selectedHierarchy.includes(category)) {
+                  category.setExpanded?.(false) || category.setOpen?.(false);
                 }
               });
             }, 100);
-          });
+          };
 
+          targetElement.addEventListener('click', handleCategoryClick);
           targetElement.addEventListener('touchend', (e) => {
-            // Ignore touches originating from input elements (e.g., search field)
-            if (e && e.target && (e.target.tagName === 'INPUT' || (e.target.closest && e.target.closest('input')))) {
-              return;
+            if (!isInputElement(e.target)) {
+              targetElement.click();
             }
-            targetElement.click();
           });
         });
 
-        // Set accent color CSS variable from the category left border
-        const rows = document.querySelectorAll('.blocklyToolboxCategory');
-        rows.forEach((row) => {
-          const styles = window.getComputedStyle(row);
-          const borderLeftColor = styles.getPropertyValue('border-left-color');
-          if (borderLeftColor) {
-            row.style.setProperty('--cat-accent', borderLeftColor.trim());
-          }
-        });
+        setAccentColors();
       }, 500);
     };
 
+    const setupWorkspaceClickCollapse = () => {
+      const svg = workspace.getParentSvg();
+      if (!svg) return () => {};
+
+      const toolboxElement = document.querySelector('.blocklyToolbox');
+      if (!toolboxElement) return () => {};
+
+      const handleWorkspaceClick = (e) => {
+        if (!toolboxElement.contains(e.target)) {
+          collapseAllCategories();
+        }
+      };
+
+      svg.addEventListener('click', handleWorkspaceClick, true);
+      return () => svg.removeEventListener('click', handleWorkspaceClick, true);
+    };
+
     setupToolboxCollapse();
+    const cleanupWorkspaceClick = setupWorkspaceClickCollapse();
 
     workspace.updateToolbox = function(toolboxDef) {
       const result = originalUpdateToolboxRef.current.call(this, toolboxDef);
       setTimeout(setupToolboxCollapse, 300);
-      // Re-apply accent colors after updates
-      setTimeout(() => {
-        const rows = document.querySelectorAll('.blocklyToolboxCategory');
-        rows.forEach((row) => {
-          const styles = window.getComputedStyle(row);
-          const borderLeftColor = styles.getPropertyValue('border-left-color');
-          if (borderLeftColor) {
-            row.style.setProperty('--cat-accent', borderLeftColor.trim());
-          }
-        });
-      }, 350);
+      setTimeout(setAccentColors, 350);
       return result;
     };
+
     return () => {
-      if (workspace && originalUpdateToolboxRef.current) {
+      if (workspace?.updateToolbox && originalUpdateToolboxRef.current) {
         workspace.updateToolbox = originalUpdateToolboxRef.current;
       }
+      cleanupWorkspaceClick?.();
     };
   }, [workspace, isEmbedded]);
 };
