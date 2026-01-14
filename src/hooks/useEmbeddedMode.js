@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setRenderer, setEmbeddedMode } from '../actions/generalActions';
-import { EMBEDDED_CONFIG } from '../config/embeddedConfig';
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setRenderer, setEmbeddedMode } from "../actions/generalActions";
+import { EMBEDDED_CONFIG } from "../config/embeddedConfig";
 
 export const useEmbeddedMode = () => {
   const dispatch = useDispatch();
@@ -10,11 +10,11 @@ export const useEmbeddedMode = () => {
   useEffect(() => {
     // Force Zelos renderer for embedded touch optimization
     dispatch(setRenderer(EMBEDDED_CONFIG.RENDERER));
-
+    dispatch(setEmbeddedMode(true));
     // Update viewport meta tag for embedded mode
     const viewport = document.querySelector('meta[name="viewport"]');
     const originalContent = viewport?.getAttribute("content");
-    
+
     if (viewport) {
       viewport.setAttribute("content", EMBEDDED_CONFIG.VIEWPORT.content);
     }
@@ -29,6 +29,6 @@ export const useEmbeddedMode = () => {
 
   return {
     isEmbedded,
-    setEmbeddedMode: (value) => dispatch(setEmbeddedMode(value))
+    setEmbeddedMode: (value) => dispatch(setEmbeddedMode(value)),
   };
 };
