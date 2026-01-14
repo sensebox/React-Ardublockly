@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { updateProject, setDescription } from "../../../actions/projectActions";
 
 import axios from "axios";
-import { withRouter } from "react-router-dom";
+import {} from "react-router-dom";
 
 import Snackbar from "../../Snackbar";
 import Dialog from "../../ui/Dialog";
@@ -116,7 +116,7 @@ class SaveProject extends Component {
     const config = {
       success: (res) => {
         var project = res.data[this.state.projectType];
-        this.props.history.push(`/${this.state.projectType}/${project._id}`);
+        this.props.navigate(`/${this.state.projectType}/${project._id}`);
       },
       error: (err) => {
         this.setState({
@@ -317,5 +317,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, { updateProject, setDescription })(
-  withStyles(styles, { withTheme: true })(withRouter(SaveProject)),
+  withStyles(styles, { withTheme: true })(SaveProject),
 );

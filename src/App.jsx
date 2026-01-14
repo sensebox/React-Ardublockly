@@ -1,15 +1,10 @@
 import React, { Component } from "react";
-
-import { Router, Route, Switch } from "react-router-dom";
-import { createBrowserHistory } from "history";
-
+import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store";
 import { loadUser } from "./actions/authActions";
 import ErrorBoundary from "./components/ErrorBoundary";
-
 import "./App.css";
-
 import {
   ThemeProvider,
   StyledEngineProvider,
@@ -34,6 +29,7 @@ const theme = createTheme({
     },
     background: {
       white: "#ffffff",
+      grey: "#f9fafb",
     },
     button: {
       compile: "#e27136",
@@ -42,27 +38,32 @@ const theme = createTheme({
       blue: "#3ab0e8",
       green: "#4EAF47",
     },
+    feedback: {
+      success: "#4CAF50", // vorher hartkodiert
+      error: "#E53935",
+      warning: "#FFA000",
+      warningDark: "#b37000",
+      border: "#DDDDDD",
+    },
   },
 });
 
 class App extends Component {
   componentDidMount() {
-    // Only call loadUser() if not on embedded route
-    if (window.location.pathname !== '/embedded') {
+    const token = localStorage.getItem("token");
+    if (token) {
       store.dispatch(loadUser());
     }
-    // set initial compiler
+
     store.dispatch(setCompiler(import.meta.env.VITE_INITIAL_COMPILER_URL));
   }
 
   render() {
-    const customHistory = createBrowserHistory();
     return (
       <StyledEngineProvider injectFirst>
         <ThemeProvider theme={theme}>
           <Provider store={store}>
-            <Router history={customHistory}>
-              <RouteHandler />
+            <BrowserRouter>
               <ErrorBoundary>
                 <Switch>
                   <EmbeddedRoute path="/embedded" exact>
@@ -73,7 +74,7 @@ class App extends Component {
                   </Route>
                 </Switch>
               </ErrorBoundary>
-            </Router>
+            </BrowserRouter>
           </Provider>
         </ThemeProvider>
       </StyledEngineProvider>

@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { getProjects, resetProject } from "@/actions/projectActions";
 import { clearMessages } from "@/actions/messageActions";
 
-import { Link, withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import Snackbar from "@/components/Snackbar";
@@ -18,6 +18,7 @@ import Typography from "@mui/material/Typography";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import DeviceSelection from "@/components/DeviceSelection";
+import { withRouterV6 } from "@/helpers/withRouter";
 
 const styles = (theme) => ({
   link: {
@@ -72,10 +73,7 @@ class ProjectHome extends Component {
   componentDidUpdate(props) {
     if (props.location.pathname !== this.props.location.pathname) {
       this.setState({ snackbar: false });
-      console.log(
-        "Updating projects for type:",
-        this.props.location.pathname.replace("/", ""),
-      );
+
       this.props.getProjects(this.props.location.pathname.replace("/", ""));
     }
     if (props.message !== this.props.message) {
@@ -243,8 +241,10 @@ const mapStateToProps = (state) => ({
   message: state.message,
 });
 
-export default connect(mapStateToProps, {
-  getProjects,
-  resetProject,
-  clearMessages,
-})(withStyles(styles, { withTheme: true })(withRouter(ProjectHome)));
+export default withRouterV6(
+  connect(mapStateToProps, {
+    getProjects,
+    resetProject,
+    clearMessages,
+  })(withStyles(styles, { withTheme: true })(ProjectHome)),
+);

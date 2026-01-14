@@ -28,17 +28,13 @@ export const onChangeCode = () => (dispatch, getState) => {
   xmlDom.setAttribute("board", board);
   code.xml = Blockly.Xml.domToPrettyText(xmlDom);
   var selectedBlock = Blockly.getSelected();
-  if (selectedBlock !== null) {
-    code.helpurl = selectedBlock.helpUrl;
-    code.tooltip = selectedBlock.tooltip;
-    if (selectedBlock.data) {
-      code.data = selectedBlock.data;
-    } else {
-      code.data = null;
-    }
-  } else if (selectedBlock === null) {
-    code.tooltip = Blockly.Msg.tooltip_hint;
-    code.helpurl = "";
+  if (selectedBlock) {
+    code.helpurl = selectedBlock.helpUrl ?? null;
+    code.tooltip = selectedBlock.tooltip ?? null;
+    code.data = selectedBlock.data ?? null;
+  } else {
+    code.helpurl = null;
+    code.tooltip = null;
     code.data = null;
   }
 
