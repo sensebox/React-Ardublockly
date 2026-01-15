@@ -34,4 +34,34 @@
   margin-left: 60px;
 }
 
+/* Toolbox Breite */
+.blocklyToolbox {
+  width: 25vw; /* Increased from 15vw to 25vw to accommodate wider search */
+  min-width: 300px;
+}
 
+/* Always show scrollbar for toolbox contents */
+.blocklyToolboxContents {
+  overflow-y: scroll !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: #ccc #f1f1f1 !important;
+}
+
+/* Webkit scrollbar styling for better appearance */
+.blocklyToolboxContents::-webkit-scrollbar {
+  width: 8px !important;
+}
+
+.blocklyToolboxContents::-webkit-scrollbar-track {
+  background: #f1f1f1 !important;
+  border-radius: 4px !important;
+}
+
+.blocklyToolboxContents::-webkit-scrollbar-thumb {
+  background: #ccc !important;
+  border-radius: 4px !important;
+}
+
+.blocklyToolboxContents::-webkit-scrollbar-thumb:hover {
+  background: #999 !important;
+}

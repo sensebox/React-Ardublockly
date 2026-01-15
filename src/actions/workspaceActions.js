@@ -48,6 +48,7 @@ export const onChangeCode = () => (dispatch, getState) => {
 export const onChangeWorkspace = (event) => (dispatch, getState) => {
   dispatch(workspaceChange());
   var code = dispatch(onChangeCode());
+  
   dispatch(storeTutorialXml(code.xml));
   var stats = getState().workspace.stats;
   if (event.type === Blockly.Events.BLOCK_CREATE) {
