@@ -6,6 +6,7 @@ import {
   STATISTICS,
   PLATFORM,
   COMPILER,
+  EMBEDDED_MODE,
 } from "./types";
 
 export const visitPage = () => (dispatch) => {
@@ -56,5 +57,12 @@ export const setCompiler = (compiler) => (dispatch) => {
   dispatch({
     type: COMPILER,
     payload: compiler,
+  });
+};
+
+export const setEmbeddedMode = (isEmbedded) => (dispatch) => {
+  dispatch({
+    type: EMBEDDED_MODE,
+    payload: isEmbedded,
   });
 };

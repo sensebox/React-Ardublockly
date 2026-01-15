@@ -1,7 +1,7 @@
 import { Info } from "@mui/icons-material";
 import { Box, Typography, useTheme } from "@mui/material";
-import HardwareCard from "./HardwareCard";
-import TutorialSlide from "./TutorialSlide";
+import HardwareCard from "./Cards/HardwareCard";
+import TutorialSlide from "./components/TutorialSlide";
 import MarkdownIt from "markdown-it";
 
 const md = new MarkdownIt();

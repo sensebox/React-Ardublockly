@@ -1,23 +1,29 @@
 import React, { useEffect } from "react";
 import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import { ChevronLeft, ChevronRight, QuestionMark } from "@mui/icons-material";
+import { useTutorialViewer } from "../hooks/useTutorialViewer";
 
-const FloatingNavigation = ({ currentStep, steps, nextStep, previouStep }) => {
+const FloatingNavigation = ({ tutorialId }) => {
   const [allStepsFinished, setAllStepsFinished] = React.useState(true);
+
+  const { tutorial, currentStep, activeStep, nextStep, previousStep } =
+    useTutorialViewer(tutorialId);
+  const currentStepIndex = tutorial.steps.findIndex(
+    (step) => step._id === currentStep._id,
+  );
+  console.log(currentStepIndex);
+
   const isFirstStep = currentStep === 0;
-  const isLastStep = currentStep === steps.length - 2;
+  const isLastStep = currentStep === tutorial.steps.length - 2;
 
   return (
     <Box
       sx={{
-        position: "absolute",
-        bottom: 24,
-        right: 16,
-        zIndex: 50,
         display: "flex",
+        justifyContent: "end",
         alignItems: "center",
-        gap: 3,
-        mt: 5,
+        gap: 2,
+        my: 1,
         pr: 2,
         bgcolor: "transparent", // Hintergrundfarbe des Containers
       }}
@@ -42,7 +48,7 @@ const FloatingNavigation = ({ currentStep, steps, nextStep, previouStep }) => {
         }}
       >
         <IconButton
-          onClick={previouStep}
+          onClick={previousStep}
           disabled={isFirstStep}
           aria-label="Vorheriger Schritt"
           sx={{
@@ -77,7 +83,7 @@ const FloatingNavigation = ({ currentStep, steps, nextStep, previouStep }) => {
           color: "text.primary",
         }}
       >
-        {currentStep + 1} / {steps.length}
+        {currentStepIndex + 1} / {tutorial.steps.length}
       </Typography>
 
       <Tooltip

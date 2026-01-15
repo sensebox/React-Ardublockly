@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useMemo } from "react";
 import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
-import { getTutorials } from "../../actions/tutorialActions";
-import Breadcrumbs from "../ui/Breadcrumbs";
+import { getTutorials } from "../../../actions/tutorialActions";
+import Breadcrumbs from "../../ui/Breadcrumbs";
 import Grid from "@mui/material/Grid";
 import * as Blockly from "blockly";
-import DeviceSelection from "../DeviceSelection";
+import DeviceSelection from "../../DeviceSelection";
 import TutorialItem from "./TutorialItem";
 import {
   Box,
@@ -23,7 +23,7 @@ import {
 } from "@mui/material";
 import { faPencil, faPlus, faTools } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import { Link } from "react-router-dom";
 
 function getDifficultyLevel(value) {
   if (value <= 1) return 1;
@@ -217,9 +217,9 @@ function TutorialHome() {
         </Box>
 
         {user && (
-          <div>
+          <Box>
             <h2>Deine Tutorials</h2>
-            <Grid container spacing={2}>
+            <Grid container spacing={2} sx={{ marginBottom: "50px" }}>
               {filteredTutorials.filter((t) => t.creator === user.email)
                 .length > 0 ? (
                 filteredTutorials
@@ -237,7 +237,7 @@ function TutorialHome() {
                 </Typography>
               )}
             </Grid>
-          </div>
+          </Box>
         )}
       </Box>
 

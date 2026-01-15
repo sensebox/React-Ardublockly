@@ -2,11 +2,12 @@ import React, { Component } from "react";
 
 import Breadcrumbs from "../ui/Breadcrumbs";
 
-import { withRouter } from "react-router-dom";
+import {} from "react-router-dom";
 
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import * as Blockly from "blockly";
+import { withRouterV6 } from "@/helpers/withRouter";
 
 class NotFound extends Component {
   componentDidMount() {
@@ -31,7 +32,7 @@ class NotFound extends Component {
             variant="contained"
             color="primary"
             onClick={() => {
-              this.props.history.push(this.props.button.link);
+              this.props.navigate(this.props.button.link);
             }}
           >
             {this.props.button.title}
@@ -42,7 +43,7 @@ class NotFound extends Component {
             variant="contained"
             color="primary"
             onClick={() => {
-              this.props.history.push("/");
+              this.props.navigate("/");
             }}
           >
             {Blockly.Msg.button_back}
@@ -53,4 +54,4 @@ class NotFound extends Component {
   }
 }
 
-export default withRouter(NotFound);
+export default withRouterV6(NotFound);

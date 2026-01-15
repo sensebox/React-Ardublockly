@@ -4,7 +4,7 @@ import { Box, CardContent, Typography, Button, useTheme } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import HomeIcon from "@mui/icons-material/Home";
 import { ArrowForward, Celebration } from "@mui/icons-material";
-import TutorialSlide from "./TutorialItem/TutorialSlide";
+import TutorialSlide from "../components/TutorialSlide";
 import MarkdownIt from "markdown-it";
 const md = new MarkdownIt();
 
@@ -35,7 +35,7 @@ md.renderer.rules.image = function (tokens, idx, options, env, self) {
   `;
 };
 
-const TutorialFinished = ({ tutorial }) => {
+const FinishedCard = ({ tutorial }) => {
   const theme = useTheme();
 
   // 🧩 Step mit type "finish" finden
@@ -226,4 +226,4 @@ const TutorialFinished = ({ tutorial }) => {
   );
 };
 
-export default TutorialFinished;
+export default FinishedCard;

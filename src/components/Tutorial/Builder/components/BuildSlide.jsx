@@ -51,7 +51,7 @@ const BuildSlide = ({
         justifyContent: "center",
       }}
     >
-      <Card sx={{ width: "100%", overflow: "auto", maxHeight: "80vh" }}>
+      <Card sx={{ width: "100%" }}>
         <CardContent
           sx={{
             display: "flex",

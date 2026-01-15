@@ -1,13 +1,17 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 
 import * as Blockly from "blockly/core";
 import "./blocks/index";
 import "@/components/Blockly/generator/index";
 
 import Toolbox from "./toolbox/Toolbox";
+import EmbeddedToolbox from "./toolbox/EmbeddedToolbox";
 import { reservedWords } from "./helpers/reservedWords";
 import Snackbar from "../Snackbar";
+import { EMBEDDED_CONFIG } from "../../config/embeddedConfig";
 
 import "blockly/blocks";
 import {
@@ -25,6 +29,10 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
   const blocklyDivRef = useRef(null);
   const toolboxRef = useRef(null);
   const [workspace, setWorkspace] = useState(undefined);
+  const location = useLocation();
+  const isEmbeddedRedux = useSelector((state) => state.general.embeddedMode);
+  const isEmbedded = isEmbeddedRedux || location.pathname === EMBEDDED_CONFIG.ROUTE;
+
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -34,14 +42,56 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
 
   // Inject Blockly once on mount
   useEffect(() => {
-    const ws = Blockly.inject(blocklyDivRef.current, {
+    const blocklyOptions = {
       toolbox: toolboxRef.current,
       plugins: {
         blockDragger: ScrollBlockDragger,
         metricsManager: ScrollMetricsManager,
       },
       ...rest,
-    });
+    };
+
+    // Only apply mobile layout options when in embedded mode
+    // These must override any options from ...rest, so set them after
+    if (isEmbedded) {
+      blocklyOptions.horizontalLayout = true;
+      blocklyOptions.toolboxPosition = 'end';
+      // Ensure toolbox icon sprites and other assets load correctly in embedded view
+      if (!blocklyOptions.media) {
+        blocklyOptions.media = '/media/blockly/';
+      }
+    }
+
+    const ws = Blockly.inject(blocklyDivRef.current, blocklyOptions);
+
+    if (isEmbedded && ws.trashcan) {
+      const originalGetClientRect = ws.trashcan.getClientRect.bind(ws.trashcan);
+      const originalGetBoundingRectangle = ws.trashcan.getBoundingRectangle.bind(ws.trashcan);
+
+      ws.trashcan.getClientRect = function() {
+        const originalRect = originalGetClientRect();
+        if (!originalRect) return null;
+
+        return new Blockly.utils.Rect(
+          originalRect.top - 80,
+          originalRect.bottom + 80,
+          originalRect.left - 80,
+          originalRect.right + 80
+        );
+      };
+
+      ws.trashcan.getBoundingRectangle = function() {
+        const originalRect = originalGetBoundingRectangle();
+        if (!originalRect) return null;
+
+        return new Blockly.utils.Rect(
+          originalRect.top - 80,
+          originalRect.bottom + 80,
+          originalRect.left - 80,
+          originalRect.right + 80
+        );
+      };
+    }
 
     setWorkspace(ws);
 
@@ -95,12 +145,28 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
       ws?.dispose();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isEmbedded, location.pathname]);
+
+  const cardStyle = useMemo(() => {
+    return isEmbedded ?{
+      height: "100%",
+      width: "100%",
+    } : {};
+  }, [isEmbedded]);
 
   return (
     <>
-      <Card ref={blocklyDivRef} id="blocklyDiv" style={style ? style : {}} />
-      <Toolbox toolbox={toolboxRef} workspace={workspace} />
+      <Card
+        ref={blocklyDivRef}
+        id="blocklyDiv"
+        style={style ? style : cardStyle}
+        className={isEmbedded ? "embedded-mode" : ""}
+      />
+      {isEmbedded ? (
+        <EmbeddedToolbox toolbox={toolboxRef} workspace={workspace} />
+      ) : (
+        <Toolbox toolbox={toolboxRef} workspace={workspace} />
+      )}
       <Snackbar
         open={snackbar.open}
         message={snackbar.message}

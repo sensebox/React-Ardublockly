@@ -14,13 +14,9 @@ import * as Blockly from "blockly/core";
 import { FileUpload, CheckCircle, RotateLeft } from "@mui/icons-material"; // 🔥 Icon für Reset
 import { motion, AnimatePresence } from "framer-motion";
 
-import BlocklyWindow from "../../Blockly/BlocklyWindow";
-import { initialXml } from "../../Blockly/initialXml.js";
-import {
-  changeContent,
-  setError,
-  deleteError,
-} from "../../../actions/tutorialBuilderActions";
+import BlocklyWindow from "@/components/Blockly/BlocklyWindow.jsx";
+import { initialXml } from "@/components/Blockly/initialXml";
+import { setError, deleteError } from "@/actions/tutorialBuilderActions";
 // 🔥 Importiere Dialog und Snackbar, falls nicht bereits in BlocklyExample vorhanden
 import Dialog from "@/components/ui/Dialog";
 import Snackbar from "@/components/Snackbar";

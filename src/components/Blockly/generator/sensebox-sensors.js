@@ -230,60 +230,27 @@ Blockly.Generator.Arduino.forBlock["sensebox_sensor_bme680_bsec"] =
   function () {
     var dropdown_name = this.getFieldValue("dropdown");
     let code = "";
-    Blockly.Generator.Arduino.libraries_["library_bsec"] =
-      "#include <bsec.h> // http://librarymanager/All#BSEC_Software_Library";
-    Blockly.Generator.Arduino.definitions_["bsec_iaqSensor"] =
-      "Bsec iaqSensor;";
-    Blockly.Generator.Arduino.variables_["bmeTemperatur"] =
-      "float bmeTemperatur;";
-    Blockly.Generator.Arduino.variables_["bmeHumidity"] = "float bmeHumidity;";
-    Blockly.Generator.Arduino.variables_["bmePressure"] = "double bmePressure;";
-    Blockly.Generator.Arduino.variables_["bmeIAQ"] = "float bmeIAQ;";
-    Blockly.Generator.Arduino.variables_["bmeIAQAccuracy"] =
-      "float bmeIAQAccuracy;";
-    Blockly.Generator.Arduino.variables_["bmeCO2"] = "int bmeCO2;";
-    Blockly.Generator.Arduino.variables_["bmeBreathVocEquivalent"] =
-      "float bmeBreathVocEquivalent;";
+    Blockly.Generator.Arduino.libraries_["library_bsec2"] =
+      "#include <bsec2.h> // http://librarymanager/All#BSEC_Software_Library";
+    Blockly.Generator.Arduino.definitions_["bsec2_bme680"] =
+      "Bsec2 bme680;";
+    Blockly.Generator.Arduino.variables_["bmeTemperatur"] =           "float bmeTemperatur;";
+    Blockly.Generator.Arduino.variables_["bmeHumidity"] =             "float bmeHumidity;";
+    Blockly.Generator.Arduino.variables_["bmePressure"] =             "double bmePressure;";
+    Blockly.Generator.Arduino.variables_["bmeIAQ"] =                  "float bmeIAQ;";
+    Blockly.Generator.Arduino.variables_["bmeIAQAccuracy"] =          "float bmeIAQAccuracy;";
+    Blockly.Generator.Arduino.variables_["bmeCO2"] =                  "int bmeCO2;";
+    Blockly.Generator.Arduino.variables_["bmeBreathVocEquivalent"] =  "float bmeBreathVocEquivalent;";
 
-    Blockly.Generator.Arduino.functionNames_["checkIaqSensorStatus"] = `
-    void checkIaqSensorStatus(void)
-  {
-    if (iaqSensor.bsecStatus != BSEC_OK) {
-      if (iaqSensor.bsecStatus < BSEC_OK) {
-        for (;;)
-          errLeds(); /* Halt in case of failure */
-      } 
-    }
-  
-    if (iaqSensor.bme68xStatus != BME68X_OK) {
-      if (iaqSensor.bme68xStatus < BME68X_OK) {
-        for (;;)
-          errLeds(); /* Halt in case of failure */
-      } 
-    }
+    Blockly.Generator.Arduino.functionNames_["BME680begin"] = `
+bool BME680begin() {
+  bme680.begin(BME68X_I2C_ADDR_LOW, Wire);
+  if (bme680.status != BSEC_OK || bme680.sensor.status != BME68X_OK) {
+    return false;
   }
-  `;
-    Blockly.Generator.Arduino.functionNames_["errLeds"] = `
-  void errLeds(void)
-  {
-    pinMode(LED_BUILTIN, OUTPUT);
-    digitalWrite(LED_BUILTIN, HIGH);
-    delay(100);
-    digitalWrite(LED_BUILTIN, LOW);
-    delay(100);
-  }`;
-    //Setup Code
-    Blockly.Generator.Arduino.preSetupCode_["Wire.begin"] = "Wire.begin();";
-    Blockly.Generator.Arduino.setupCode_["iaqSensor.begin"] =
-      "iaqSensor.begin(BME68X_I2C_ADDR_LOW, Wire);";
-    Blockly.Generator.Arduino.setupCode_["checkIaqSensorStatus"] =
-      "checkIaqSensorStatus();";
-    Blockly.Generator.Arduino.setupCode_["bsec_sensorlist"] = `
-bsec_virtual_sensor_t sensorList[13] = {
+
+  bsecSensor sensorList[14] = {
     BSEC_OUTPUT_IAQ,
-    BSEC_OUTPUT_STATIC_IAQ,
-    BSEC_OUTPUT_CO2_EQUIVALENT,
-    BSEC_OUTPUT_BREATH_VOC_EQUIVALENT,
     BSEC_OUTPUT_RAW_TEMPERATURE,
     BSEC_OUTPUT_RAW_PRESSURE,
     BSEC_OUTPUT_RAW_HUMIDITY,
@@ -292,24 +259,35 @@ bsec_virtual_sensor_t sensorList[13] = {
     BSEC_OUTPUT_RUN_IN_STATUS,
     BSEC_OUTPUT_SENSOR_HEAT_COMPENSATED_TEMPERATURE,
     BSEC_OUTPUT_SENSOR_HEAT_COMPENSATED_HUMIDITY,
-    BSEC_OUTPUT_GAS_PERCENTAGE
-};
+    BSEC_OUTPUT_STATIC_IAQ,
+    BSEC_OUTPUT_CO2_EQUIVALENT,
+    BSEC_OUTPUT_BREATH_VOC_EQUIVALENT,
+    BSEC_OUTPUT_GAS_PERCENTAGE,
+    BSEC_OUTPUT_COMPENSATED_GAS
+  };
 
-    `;
-    Blockly.Generator.Arduino.setupCode_["iaqSensorUpdateSubscription"] =
-      "iaqSensor.updateSubscription(sensorList, 13, BSEC_SAMPLE_RATE_LP);\ncheckIaqSensorStatus();";
+  bme680.updateSubscription(sensorList, ARRAY_LEN(sensorList), 1); // 1Hz
+  if (bme680.status != BSEC_OK || bme680.sensor.status != BME68X_OK) {
+    return false;
+  }
+  return true;
+}
+
+    `
+    //Setup Code
+    Blockly.Generator.Arduino.preSetupCode_["Wire.begin"] = "Wire.begin();";
+    Blockly.Generator.Arduino.setupCode_["bme680.begin"] =
+      "BME680begin();";
     //Loop Code
-    Blockly.Generator.Arduino.loopCodeOnce_["iaqloop"] = `
-    if (iaqSensor.run()) {
-      bmeTemperatur = iaqSensor.temperature;
-      bmeHumidity = iaqSensor.humidity;
-      bmePressure = iaqSensor.pressure;
-      bmeIAQ = iaqSensor.iaq;
-      bmeIAQAccuracy = iaqSensor.iaqAccuracy;
-      bmeCO2 = iaqSensor.co2Equivalent;
-      bmeBreathVocEquivalent = iaqSensor.breathVocEquivalent;
-    } else {
-      checkIaqSensorStatus();
+    Blockly.Generator.Arduino.loopCodeOnce_["bme680loop"] = `
+    if (bme680.run()) {
+      bmeTemperatur = bme680.getData(BSEC_OUTPUT_SENSOR_HEAT_COMPENSATED_TEMPERATURE).signal;
+      bmeHumidity = bme680.getData(BSEC_OUTPUT_SENSOR_HEAT_COMPENSATED_HUMIDITY).signal;
+      bmePressure = bme680.getData(BSEC_OUTPUT_RAW_PRESSURE).signal;
+      bmeIAQ = bme680.getData(BSEC_OUTPUT_IAQ).signal;
+      bmeIAQAccuracy = bme680.getData(BSEC_OUTPUT_STATIC_IAQ).signal;
+      bmeCO2 = bme680.getData(BSEC_OUTPUT_CO2_EQUIVALENT).signal;
+      bmeBreathVocEquivalent = bme680.getData(BSEC_OUTPUT_BREATH_VOC_EQUIVALENT).signal;
     }
     `;
     switch (dropdown_name) {
@@ -1257,5 +1235,16 @@ Blockly.Generator.Arduino.forBlock["sensebox_sensor_icm20948"] = function () {
       code = "";
   }
 
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
+};
+
+Blockly.Generator.Arduino.forBlock["sensebox_sensor_max17048"] = function () {
+  var code = "";
+  var dropdown = this.getFieldValue("value");
+  Blockly.Generator.Arduino.libraries_["adafruit_max1704x"] =
+    `#include "Adafruit_MAX1704X.h" // http://librarymanager/All#Adafruit_MAX1704X`;
+  Blockly.Generator.Arduino.definitions_["define_max17048"] =
+    "Adafruit_MAX17048 maxlipo;";
+  Blockly.Generator.Arduino.setupCode_["max17048.begin()"] = "maxlipo.begin();";
   return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
