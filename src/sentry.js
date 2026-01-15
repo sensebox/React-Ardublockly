@@ -1,5 +1,11 @@
 import * as Sentry from "@sentry/react";
-import { browserTracingIntegration } from "@sentry/react";
+import { browserTracingIntegration, reactRouterV6BrowserTracingIntegration } from "@sentry/react";
+import {
+  useLocation,
+  useNavigationType,
+  createRoutesFromChildren,
+  matchRoutes,
+} from "react-router-dom";
 
 const SENTRY_DSN = import.meta.env.VITE_SENTRY_DSN;
 const ENVIRONMENT = import.meta.env.VITE_SENTRY_ENVIRONMENT || import.meta.env.MODE || "development";
@@ -28,7 +34,14 @@ export const initSentry = () => {
     environment: ENVIRONMENT,
     release: RELEASE,
     integrations: [
-      browserTracingIntegration(),
+      browserTracingIntegration({
+        routingInstrumentation: reactRouterV6BrowserTracingIntegration({
+          useLocation,
+          useNavigationType,
+          createRoutesFromChildren,
+          matchRoutes,
+        }),
+      }),
     ],
     tracesSampleRate: getTracesSampleRate(),
     ignoreErrors: [
