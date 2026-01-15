@@ -1,10 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { initSentry } from "./sentry";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import store from "./store";
 import { fetchSensors } from "./actions/sensorwikiActions";
+
+initSentry();
 
 // store.dispatch(fetchSensors());
 

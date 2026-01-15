@@ -72,6 +72,17 @@ The compiler URL can be configured in the `.env` file:
 VITE_COMPILER_URL=https://compiler.sensebox.de
 ```
 
+### Sentry Error Tracking
+
+Sentry is configured for error tracking. Set the following environment variables:
+
+```env
+VITE_SENTRY_DSN=your-sentry-dsn
+VITE_SENTRY_ENVIRONMENT=development
+VITE_APP_VERSION=1.0.0
+VITE_SENTRY_TRACES_SAMPLE_RATE=0.1
+```
+
 ## 📝 Development Guidelines
 
 ### Code Style
