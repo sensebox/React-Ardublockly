@@ -11,7 +11,10 @@ import { ZoomToFitControl } from "@blockly/zoom-to-fit";
 import { Backpack } from "@blockly/workspace-backpack";
 import { initialXml } from "./initialXml.js";
 import { getMaxInstances } from "./helpers/maxInstances";
-import { EMBEDDED_BLOCKLY_CONFIG, DEFAULT_BLOCKLY_CONFIG } from "../../config/embeddedConfig";
+import {
+  EMBEDDED_BLOCKLY_CONFIG,
+  DEFAULT_BLOCKLY_CONFIG,
+} from "../../config/embeddedConfig";
 
 import BlocklySvg from "./BlocklySvg";
 
@@ -81,9 +84,11 @@ export default function BlocklyWindow(props) {
 
     // UI helpers
     Blockly.svgResize(ws);
-    const zoomToFit = new ZoomToFitControl(ws);
-    zoomToFit.init();
 
+    if (!window.location.pathname === "/embedded") {
+      const zoomToFit = new ZoomToFitControl(ws);
+      zoomToFit.init();
+    }
     const backpack = new Backpack(ws);
     backpack.init();
 
@@ -157,50 +162,48 @@ export default function BlocklyWindow(props) {
   }, []);
 
   // Compute zoom/grid/move config with sensible defaults
-  const zoomConfig = useMemo(
-    () => {
-      if (zoom !== undefined) return zoom;
-      
-      // Use embedded config for embedded mode, default config otherwise
-      const baseConfig = isEmbedded ? EMBEDDED_BLOCKLY_CONFIG.zoom : DEFAULT_BLOCKLY_CONFIG.zoom;
-      
-      return {
-        ...baseConfig,
-        controls: zoomControls !== undefined ? zoomControls : baseConfig.controls,
-      };
-    },
-    [zoom, zoomControls, isEmbedded],
-  );
+  const zoomConfig = useMemo(() => {
+    if (zoom !== undefined) return zoom;
 
-  const gridConfig = useMemo(
-    () => {
-      if (grid === undefined || grid === false) return {};
-      
-      if (typeof grid === "object") return grid;
-      
-      return isEmbedded ? EMBEDDED_BLOCKLY_CONFIG.grid : DEFAULT_BLOCKLY_CONFIG.grid;
-    },
-    [grid, isEmbedded],
-  );
+    // Use embedded config for embedded mode, default config otherwise
+    const baseConfig = isEmbedded
+      ? EMBEDDED_BLOCKLY_CONFIG.zoom
+      : DEFAULT_BLOCKLY_CONFIG.zoom;
 
-  const moveConfig = useMemo(
-    () => {
-      if (move === undefined || move === false) return {};
-      
-      if (typeof move === "object") return move;
-      
-      return isEmbedded ? EMBEDDED_BLOCKLY_CONFIG.move : DEFAULT_BLOCKLY_CONFIG.move;
-    },
-    [move, isEmbedded],
-  );
+    return {
+      ...baseConfig,
+      controls: zoomControls !== undefined ? zoomControls : baseConfig.controls,
+    };
+  }, [zoom, zoomControls, isEmbedded]);
 
-  const containerStyles =isEmbedded ? {
-    height: "100%",
-    width: "100%"
-  } : {};
+  const gridConfig = useMemo(() => {
+    if (grid === undefined || grid === false) return {};
+
+    if (typeof grid === "object") return grid;
+
+    return isEmbedded
+      ? EMBEDDED_BLOCKLY_CONFIG.grid
+      : DEFAULT_BLOCKLY_CONFIG.grid;
+  }, [grid, isEmbedded]);
+
+  const moveConfig = useMemo(() => {
+    if (move === undefined || move === false) return {};
+
+    if (typeof move === "object") return move;
+
+    return isEmbedded
+      ? EMBEDDED_BLOCKLY_CONFIG.move
+      : DEFAULT_BLOCKLY_CONFIG.move;
+  }, [move, isEmbedded]);
+
+  const containerStyles = isEmbedded
+    ? {
+        height: "100%",
+        width: "100%",
+      }
+    : {};
 
   return (
-
     <div
       style={
         tutorial
@@ -211,7 +214,7 @@ export default function BlocklyWindow(props) {
               width: "100%",
               height: "100%",
             }
-          : {containerStyles}
+          : { containerStyles }
       }
     >
       <BlocklyComponent
