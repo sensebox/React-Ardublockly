@@ -6,47 +6,51 @@ import Compile from "./ToolbarItems/Compile";
 import ShareProject from "./ToolbarItems/ShareProject";
 import ResetWorkspace from "./ToolbarItems/ResetWorkspace";
 
-const EmbeddedToolbar = ({ 
-  assessment = false, 
-  multiple = false, 
-  project, 
-  projectType 
+const EmbeddedToolbar = ({
+  assessment = false,
+  multiple = false,
+  project,
+  projectType,
 }) => {
   const selectedBoard = useSelector((state) => state.board.board);
   // Embedded-optimized toolbar layout for embedded mode
   return (
-    <div style={{
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      width: "100%",
-      flexWrap: "wrap",
-    }}>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        width: "100%",
+        flexWrap: "wrap",
+      }}
+    >
       <WorkspaceName
         multiple={multiple}
         project={project}
         projectType={projectType}
       />
-      
-      <div style={{ display: "flex", alignItems: "center", gap: "16px", flex: 1, justifyContent: "flex-end", flexWrap: "wrap" }}>
-        {!multiple && selectedBoard && (
-          <Compile 
-            iconButton 
-          />
-        )}
 
-        {projectType !== "gallery" && !assessment && (
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "16px",
+          flex: 1,
+          justifyContent: "flex-end",
+          flexWrap: "wrap",
+        }}
+      >
+        {!multiple && selectedBoard && <Compile iconButton />}
+
+        {/* {projectType !== "gallery" && !assessment && (
           <ShareProject
             multiple={multiple}
             project={project}
             projectType={projectType}
           />
-        )}
+        )} */}
 
-        {!multiple && (
-          <ResetWorkspace
-          />
-        )}
+        {!multiple && <ResetWorkspace />}
       </div>
     </div>
   );

@@ -34,12 +34,6 @@
   margin-left: 60px;
 }
 
-/* Toolbox Breite */
-.blocklyToolbox {
-  width: 25vw; /* Increased from 15vw to 25vw to accommodate wider search */
-  min-width: 300px;
-}
-
 /* Always show scrollbar for toolbox contents */
 .blocklyToolboxContents {
   overflow-y: scroll !important;

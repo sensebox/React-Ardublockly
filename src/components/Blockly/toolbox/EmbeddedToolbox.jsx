@@ -7,11 +7,18 @@ import { ToolboxMcu } from "./ToolboxMcu";
 import { ToolboxEsp } from "./ToolboxEsp";
 import { useEmbeddedToolbox } from "./useEmbeddedToolbox";
 import "./embedded_toolbox_styles.css";
+import { registerBlocklyContextMenu } from "../helpers/blocklyContextMenu";
 
 const EmbeddedToolbox = ({ workspace, toolbox }) => {
   const selectedBoard = useSelector((state) => state.board.board);
   const language = useSelector((state) => state.general.language);
   const previousBoard = useRef(null);
+
+  useEffect(() => {
+    if (!workspace) return;
+
+    registerBlocklyContextMenu(() => selectedBoard);
+  }, [workspace]);
 
   // Register typed variable flyout on board change or mount
   useEffect(() => {
@@ -46,10 +53,9 @@ const EmbeddedToolbox = ({ workspace, toolbox }) => {
     if (workspace.toolbox) {
       workspace.updateToolbox(toolbox.current);
     }
-
   }, [workspace, toolbox, selectedBoard, language]);
 
-  useEmbeddedToolbox(workspace, true); 
+  useEmbeddedToolbox(workspace, true);
 
   return (
     <xml
