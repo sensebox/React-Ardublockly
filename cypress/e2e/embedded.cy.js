@@ -47,8 +47,9 @@ describe("Embedded Blockly Page Tests", () => {
       .should("eq", 200);
   });
 
-  it("[Embedded] opens share dialog and generates app URL", () => {
+  it("[Embedded] opens share dialog and generates short link", () => {
     cy.intercept({ method: "POST", pathname: "/share" }).as("share");
+    cy.intercept({ method: "POST", url: "https://www.snsbx.de/api/shorty" }).as("shorty");
     cy.visit("/embedded");
     cy.get('img[alt="Sensebox ESP"]', { timeout: 8000 }).click();
     
@@ -62,20 +63,19 @@ describe("Embedded Blockly Page Tests", () => {
       .its("response.statusCode")
       .should("eq", 200);
     
+    // Wait for short link creation
+    cy.wait("@shorty", { responseTimeout: 10000 })
+      .its("response.statusCode")
+      .should("eq", 200);
+    
     // Verify dialog opens
     cy.get('[role="dialog"]', { timeout: 5000 }).should("exist");
     
-    // Verify embedded mode specific text
-    cy.get('[role="dialog"]').should(
-      "contain.text",
-      "senseBox Connect App öffnen",
-    );
-    
-    // Verify app URL is generated (not web URL)
+    // Verify share link is generated (short link URL)
     cy.get('[role="dialog"]')
       .find("a")
       .should("have.attr", "href")
-      .and("match", /^blocklyconnect-app:\/\/share\//);
+      .and("include", "snsbx.de");
   });
 
   // Search box is currently disabled in embedded mode
