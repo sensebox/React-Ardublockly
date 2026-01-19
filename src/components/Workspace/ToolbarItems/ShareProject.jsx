@@ -242,10 +242,6 @@ class ShareProject extends Component {
                 <a
                   href={this.state.shortLink}
                   onClick={() => {
-                    if (this.props.isEmbedded) {
-                      // For app URLs, try to open the app
-                      window.location.href = this.state.shortLink;
-                    }
                     this.toggleDialog();
                   }}
                   className={this.props.classes.link}
