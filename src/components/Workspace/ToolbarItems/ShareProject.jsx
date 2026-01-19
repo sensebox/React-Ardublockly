@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { shareProject } from "../../../actions/projectActions";
 import { clearMessages } from "../../../actions/messageActions";
 import QRCode from "qrcode.react";
-import { createShareShortLink } from "../../../helpers/shareUrlBuilder";
+import { createShareShortLink, generateAppShareUrl } from "../../../helpers/shareUrlBuilder";
 
 import moment from "moment";
 
