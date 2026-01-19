@@ -185,3 +185,43 @@ basicGenerator.forBlock["sensebox_start"] = function (block) {
   // Gib den kombinierten Code zurück
   return code;
 };
+
+basicGenerator.forBlock["basic_if_else"] = function (block) {
+  const cond = basicGenerator.valueToCode(
+    block,
+    "COND",
+    basicGenerator.ORDER_NONE,
+  );
+  const body = basicGenerator.statementToCode(block, "DO");
+  const elseCode = basicGenerator.statementToCode(block, "ELSE");
+  return `
+  if(${cond}){
+  ${body}
+  }
+  else{
+    ${elseCode} 
+  }\n`;
+};
+
+basicGenerator.forBlock["basic_repeat_times"] = function (block) {
+  const times = block.getFieldValue("TIMES") || "0";
+  const body = basicGenerator.statementToCode(block, "DO");
+
+  return `forLOOPi = 0\nfor(forLOOPi=0; forLOOPi<${times}; forLOOPi=forLOOPi+1){\n${body}\n}\n\n`;
+};
+
+basicGenerator.forBlock["basic_compare"] = function (block) {
+  const left =
+    basicGenerator.valueToCode(block, "LEFT", basicGenerator.ORDER_NONE) || "0";
+  const right =
+    basicGenerator.valueToCode(block, "RIGHT", basicGenerator.ORDER_NONE) ||
+    "0";
+  const op = block.getFieldValue("OP");
+
+  return [`${left} ${op} ${right}`, basicGenerator.ORDER_NONE];
+};
+
+basicGenerator.forBlock["basic_number"] = function (block) {
+  const num = block.getFieldValue("NUM");
+  return [String(num), basicGenerator.ORDER_NONE];
+};

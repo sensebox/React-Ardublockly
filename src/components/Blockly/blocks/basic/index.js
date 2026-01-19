@@ -306,3 +306,127 @@ Blockly.defineBlocksWithJsonArray([
     helpUrl: "",
   },
 ]);
+
+Blockly.defineBlocksWithJsonArray([
+  {
+    type: "basic_number",
+    message0: "%1",
+    args0: [
+      {
+        type: "field_number",
+        name: "NUM",
+        value: 0,
+        precision: 1,
+      },
+    ],
+    output: "String",
+    colour: "#A6745C",
+    tooltip: "Zahl",
+    helpUrl: "",
+  },
+]);
+Blockly.defineBlocksWithJsonArray([
+  {
+    type: "basic_compare",
+    message0: "%1 %2 %3",
+    args0: [
+      {
+        type: "input_value",
+        name: "LEFT",
+        check: "String",
+      },
+      {
+        type: "field_dropdown",
+        name: "OP",
+        options: [
+          ["größer als", ">"],
+          ["kleiner als", "<"],
+          ["größer oder gleich", ">="],
+          ["kleiner oder gleich", "<="],
+          ["gleich", "=="],
+          ["ungleich", "!="],
+        ],
+      },
+      {
+        type: "input_value",
+        name: "RIGHT",
+        check: "String",
+      },
+    ],
+    output: "String",
+    colour: "#5C81A6",
+    tooltip: "Vergleicht zwei Werte",
+    helpUrl: "",
+  },
+]);
+
+Blockly.Blocks["basic_if_else"] = {
+  init: function () {
+    this.appendValueInput("COND").setCheck("String").appendField("wenn");
+
+    this.appendStatementInput("DO").appendField("dann");
+
+    this.appendStatementInput("ELSE").appendField("sonst");
+
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setColour("#5C81A6");
+    this.setTooltip("Wenn / sonst Verzweigung");
+
+    // ⚠️ NUR initial füllen, wenn COND noch leer ist
+    this.setOnChange(function () {
+      if (!this.workspace || this.isInFlyout) return;
+
+      const input = this.getInput("COND");
+      if (!input || input.connection.targetBlock()) return;
+
+      // Compare erzeugen
+      const compare = this.workspace.newBlock("basic_compare");
+      compare.initSvg();
+      compare.render();
+
+      const left = this.workspace.newBlock("basic_number");
+      left.setFieldValue(0, "NUM");
+      left.initSvg();
+      left.render();
+
+      const right = this.workspace.newBlock("basic_number");
+      right.setFieldValue(1, "NUM");
+      right.initSvg();
+      right.render();
+
+      compare.getInput("LEFT").connection.connect(left.outputConnection);
+      compare.getInput("RIGHT").connection.connect(right.outputConnection);
+
+      input.connection.connect(compare.outputConnection);
+    });
+  },
+};
+
+Blockly.defineBlocksWithJsonArray([
+  {
+    type: "basic_repeat_times",
+    message0: "mache %1 mal",
+    args0: [
+      {
+        type: "field_number",
+        name: "TIMES",
+        value: 2,
+        min: 0,
+        precision: 1,
+      },
+    ],
+    message1: " %1",
+    args1: [
+      {
+        type: "input_statement",
+        name: "DO",
+      },
+    ],
+    previousStatement: null,
+    nextStatement: null,
+    colour: "#5CA65C",
+    tooltip: "Wiederholt die enthaltenen Blöcke eine bestimmte Anzahl an Malen",
+    helpUrl: "",
+  },
+]);

@@ -18,5 +18,9 @@ export const toolboxBasicObject = {
     { kind: "block", type: "time_delay_1s" },
     { kind: "block", type: "time_delay_2s" },
     { kind: "block", type: "time_delay_5s" },
+    { kind: "block", type: "basic_if_else" },
+    { kind: "block", type: "basic_repeat_times" },
+    { kind: "block", type: "basic_compare" },
+    { kind: "block", type: "basic_number" },
   ],
 };
