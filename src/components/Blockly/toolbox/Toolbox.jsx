@@ -35,6 +35,34 @@ const Toolbox = ({ workspace, toolbox }) => {
     // --- Toolbox aktualisieren ---
     workspace.updateToolbox(toolbox.current);
 
+    // --- Prevent flyout from closing when variable is created ---
+    let variableCreatedRecently = false;
+    let flyoutOriginalHide = null;
+
+    // Listen for variable creation and prevent flyout closing
+    const variableCreationListener = (event) => {
+      if (event.type === Blockly.Events.VAR_CREATE) {
+        variableCreatedRecently = true;
+        setTimeout(() => {
+          variableCreatedRecently = false;
+        }, 1000);
+      }
+    };
+    workspace.addChangeListener(variableCreationListener);
+
+    // Override flyout hide method
+    const setupInterval = setInterval(() => {
+      const flyout = workspace.toolbox_?.flyout_;
+      if (flyout && !flyoutOriginalHide) {
+        flyoutOriginalHide = flyout.hide.bind(flyout);
+        flyout.hide = function() {
+          if (variableCreatedRecently) return;
+          flyoutOriginalHide();
+        };
+        clearInterval(setupInterval);
+      }
+    }, 100);
+
     // --- Dynamisch das toolbox-search-Plugin laden, sobald alles bereit ist ---
     let tries = 0;
     const waitForToolbox = setInterval(async () => {
@@ -55,7 +83,15 @@ const Toolbox = ({ workspace, toolbox }) => {
     }, 1000);
 
     // --- Cleanup ---
-    return () => clearInterval(waitForToolbox);
+    return () => {
+      clearInterval(setupInterval);
+      clearInterval(waitForToolbox);
+      workspace.removeChangeListener(variableCreationListener);
+      const flyout = workspace.toolbox_?.flyout_;
+      if (flyout && flyoutOriginalHide) {
+        flyout.hide = flyoutOriginalHide;
+      }
+    };
   }, [workspace, toolbox, selectedBoard, language]);
 
   return (
