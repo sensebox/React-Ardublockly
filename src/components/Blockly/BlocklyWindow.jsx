@@ -85,7 +85,7 @@ export default function BlocklyWindow(props) {
     // UI helpers
     Blockly.svgResize(ws);
 
-    if (!window.location.pathname === "/embedded") {
+    if (!isEmbedded) {
       const zoomToFit = new ZoomToFitControl(ws);
       zoomToFit.init();
     }

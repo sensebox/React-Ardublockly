@@ -47,11 +47,35 @@ describe("Embedded Blockly Page Tests", () => {
       .should("eq", 200);
   });
 
-  it("[Embedded] opens reset dialog", () => {
+  it("[Embedded] opens share dialog and generates app URL", () => {
+    cy.intercept({ method: "POST", pathname: "/share" }).as("share");
     cy.visit("/embedded");
     cy.get('img[alt="Sensebox ESP"]', { timeout: 8000 }).click();
-    cy.get(".embedded-toolbar svg.fa-share").parents("button").click();
+    
+    // Click share button
+    cy.get(".embedded-toolbar svg.fa-share-nodes")
+      .parents("button")
+      .click();
+    
+    // Wait for share API call
+    cy.wait("@share", { responseTimeout: 10000 })
+      .its("response.statusCode")
+      .should("eq", 200);
+    
+    // Verify dialog opens
     cy.get('[role="dialog"]', { timeout: 5000 }).should("exist");
+    
+    // Verify embedded mode specific text
+    cy.get('[role="dialog"]').should(
+      "contain.text",
+      "senseBox Connect App öffnen",
+    );
+    
+    // Verify app URL is generated (not web URL)
+    cy.get('[role="dialog"]')
+      .find("a")
+      .should("have.attr", "href")
+      .and("match", /^blocklyconnect-app:\/\/share\//);
   });
 
   // Search box is currently disabled in embedded mode

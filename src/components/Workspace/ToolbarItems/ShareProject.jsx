@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { shareProject } from "../../../actions/projectActions";
 import { clearMessages } from "../../../actions/messageActions";
 import QRCode from "qrcode.react";
-import { createId } from "mnemonic-id";
+import { createShareShortLink } from "../../../helpers/shareUrlBuilder";
 
 import moment from "moment";
 
@@ -149,23 +149,20 @@ class ShareProject extends Component {
 
   createShortlink(id) {
     this.setState({ isFetching: true, loading: true });
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        slug: `blockly-${createId(5)}`,
-        url: `${window.location.origin}/share/${id}`,
-      }),
-    };
-    fetch("https://www.snsbx.de/api/shorty", requestOptions)
-      .then((response) => response.json())
-      .then((data) =>
+    createShareShortLink(id, this.props.isEmbedded)
+      .then((shortLink) => {
         this.setState({
-          shortLink: data[0].link,
+          shortLink: shortLink,
           isFetching: false,
           loading: false,
-        }),
-      );
+        });
+      })
+      .catch((error) => {
+        this.setState({
+          isFetching: false,
+          loading: false,
+        });
+      });
   }
 
   downloadQRCode = () => {
@@ -237,15 +234,23 @@ class ShareProject extends Component {
           ) : (
             <div style={{ marginTop: "10px" }}>
               <Typography>
-                Über den folgenden Link kannst du dein Programm teilen:
+                {this.props.isEmbedded
+                  ? "Über den folgenden Link kannst du dein Programm in der senseBox Connect App öffnen:"
+                  : "Über den folgenden Link kannst du dein Programm teilen:"}
               </Typography>
               <div style={{ textAlign: "center" }}>
                 <a
                   href={this.state.shortLink}
-                  onClick={() => this.toggleDialog()}
+                  onClick={() => {
+                    if (this.props.isEmbedded) {
+                      // For app URLs, try to open the app
+                      window.location.href = this.state.shortLink;
+                    }
+                    this.toggleDialog();
+                  }}
                   className={this.props.classes.link}
-                  target="_blank"
-                  rel="noreferrer"
+                  target={this.props.isEmbedded ? "_self" : "_blank"}
+                  rel={this.props.isEmbedded ? "" : "noreferrer"}
                 >
                   {this.state.shortLink}
                 </a>

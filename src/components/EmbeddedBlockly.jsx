@@ -1,33 +1,71 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams, useNavigate } from "react-router-dom";
 import * as Blockly from "blockly/core";
 import { createNameId } from "mnemonic-id";
 import { useEmbeddedMode } from "@/hooks/useEmbeddedMode";
 
 import { clearStats, workspaceName } from "@/actions/workspaceActions";
+import { getProject, resetProject } from "@/actions/projectActions";
+import { returnErrors } from "@/actions/messageActions";
 import BlocklyWindow from "./Blockly/BlocklyWindow";
 import DeviceSelection from "./DeviceSelection";
 import EmbeddedToolbar from "./Workspace/EmbeddedToolbar";
 import { EMBEDDED_BLOCKLY_CONFIG } from "@/config/embeddedConfig";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 import "./EmbeddedBlockly.css";
 
-const EmbeddedBlockly = ({ project = null, projectType = null }) => {
+const EmbeddedBlockly = ({ project: propProject = null, projectType: propProjectType = null }) => {
   const dispatch = useDispatch();
-  const [initialXml, setInitialXml] = useState(
-    localStorage.getItem("autoSaveXML"),
-  );
-
-  // Embedded mode setup
+  const navigate = useNavigate();
+  const { shareId } = useParams();
+  const reduxProject = useSelector((state) => state.project.projects[0]);
+  const progress = useSelector((state) => state.project.progress);
+  const message = useSelector((state) => state.message);
+  const project = propProject || reduxProject;
+  const projectType = propProjectType || (shareId ? "share" : null);
+  
+  const [initialXml, setInitialXml] = useState(() => {
+    return project?.xml || localStorage.getItem("autoSaveXML");
+  });
   useEmbeddedMode();
 
   useEffect(() => {
-    dispatch(workspaceName(createNameId()));
+    if (shareId) {
+      dispatch(resetProject());
+      dispatch(getProject("share", shareId));
+    }
+    return () => {
+      if (shareId) {
+        dispatch(resetProject());
+      }
+    };
+  }, [dispatch, shareId]);
+
+  // Handle share loading errors
+  useEffect(() => {
+    if (shareId && (message.id === "PROJECT_EMPTY" || message.id === "GET_PROJECT_FAIL")) {
+      navigate("/embedded");
+      dispatch(returnErrors("", 404, "GET_SHARE_FAIL"));
+    }
+  }, [shareId, message, navigate, dispatch]);
+
+  useEffect(() => {
+    const name = project?.title || createNameId();
+    dispatch(workspaceName(name));
     
     return () => {
       dispatch(clearStats());
       dispatch(workspaceName(null));
     };
-  }, [dispatch]);
+  }, [dispatch, project]);
+
+  useEffect(() => {
+    if (project?.xml) {
+      setInitialXml(project.xml);
+    }
+  }, [project]);
 
   useEffect(() => {
     // Resize Workspace on updates
@@ -37,6 +75,19 @@ const EmbeddedBlockly = ({ project = null, projectType = null }) => {
     }
   });
 
+  // Show loading spinner if loading shared project
+  if (shareId && progress) {
+    return (
+      <Backdrop open invisible>
+        <CircularProgress color="primary" />
+      </Backdrop>
+    );
+  }
+
+  // Don't render if we're waiting for shared project to load
+  if (shareId && !project) {
+    return null;
+  }
 
   return (
     <div className="blockly-app-container">
