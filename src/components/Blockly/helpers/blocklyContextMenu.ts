@@ -41,7 +41,6 @@ export function registerBlocklyContextMenu() {
           : block.helpUrl;
         
         if (helpUrl) {
-          // Use browser:// scheme for Flutter app to open in system browser
           const browserUrl = generateBrowserUrl(helpUrl);
           window.location.href = browserUrl;
         }
