@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { initSentry } from "./sentry";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
@@ -11,6 +12,8 @@ import { De } from "./components/Blockly/msg/de";
 // Set default locale before any components load
 // This prevents undefined Blockly.Msg properties when blocks are registered
 Blockly.setLocale(De);
+
+initSentry();
 
 // store.dispatch(fetchSensors());
 
