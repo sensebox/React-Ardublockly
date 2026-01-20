@@ -64,6 +64,7 @@ const TooltipViewer = () => {
             variant="contained"
             color="primary"
             href={helpurl}
+            target="_blank"
             sx={{
               mt: 2,
               px: 2,
