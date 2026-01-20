@@ -18,7 +18,7 @@ export const createShareShortLink = async (
   shareId, 
   isEmbedded = false
 ) => {
-  const webShareUrl = isEmbedded? generateAppShareUrl(shareId): generateWebShareUrl(shareId); 
+  const webShareUrl = isEmbedded ? generateAppShareUrl(shareId) : generateWebShareUrl(shareId); 
   const requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -31,7 +31,15 @@ export const createShareShortLink = async (
   try {
     const response = await fetch("https://www.snsbx.de/api/shorty", requestOptions);
     const data = await response.json();
-    return data[0].link;
+    
+    // Validate response structure
+    if (Array.isArray(data) && data.length > 0 && data[0]?.link) {
+      return data[0].link;
+    }
+    
+    // Fallback if response structure is unexpected
+    console.warn('Unexpected API response structure:', data);
+    return webShareUrl;
   } catch (error) {
     console.error('Failed to create short link:', error);
     // Fallback to full URL if short link creation fails

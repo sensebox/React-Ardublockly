@@ -50,8 +50,10 @@ const Toolbox = ({ workspace, toolbox }) => {
     };
     workspace.addChangeListener(variableCreationListener);
 
-    // Override flyout hide method
-    const setupInterval = setInterval(() => {
+    const maxAttempts = 100; // 10 seconds max (100 * 100ms)
+    let attempts = 0;
+    
+    const setupFlyoutOverride = () => {
       const flyout = workspace.toolbox_?.flyout_;
       if (flyout && !flyoutOriginalHide) {
         flyoutOriginalHide = flyout.hide.bind(flyout);
@@ -59,9 +61,31 @@ const Toolbox = ({ workspace, toolbox }) => {
           if (variableCreatedRecently) return;
           flyoutOriginalHide();
         };
-        clearInterval(setupInterval);
+        if (setupIntervalRef.current) {
+          clearInterval(setupIntervalRef.current);
+          setupIntervalRef.current = null;
+        }
+        return true; // Success
       }
-    }, 100);
+      return false; // Not ready yet
+    };
+
+    // Try immediately first
+    if (!setupFlyoutOverride()) {
+      // If not ready, poll with interval
+      setupIntervalRef.current = setInterval(() => {
+        attempts++;
+        if (setupFlyoutOverride() || attempts >= maxAttempts) {
+          if (setupIntervalRef.current) {
+            clearInterval(setupIntervalRef.current);
+            setupIntervalRef.current = null;
+          }
+          if (attempts >= maxAttempts) {
+            console.warn('Failed to setup flyout override: timeout after 10 seconds');
+          }
+        }
+      }, 100);
+    }
 
     // --- Dynamisch das toolbox-search-Plugin laden, sobald alles bereit ist ---
     let tries = 0;
@@ -84,9 +108,14 @@ const Toolbox = ({ workspace, toolbox }) => {
 
     // --- Cleanup ---
     return () => {
-      clearInterval(setupInterval);
+      // Clear intervals only if they're still active
+      if (setupIntervalRef.current) {
+        clearInterval(setupIntervalRef.current);
+        setupIntervalRef.current = null;
+      }
       clearInterval(waitForToolbox);
       workspace.removeChangeListener(variableCreationListener);
+      // Restore original flyout hide method if override was applied
       const flyout = workspace.toolbox_?.flyout_;
       if (flyout && flyoutOriginalHide) {
         flyout.hide = flyoutOriginalHide;
