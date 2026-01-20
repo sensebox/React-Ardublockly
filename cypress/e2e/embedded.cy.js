@@ -58,24 +58,44 @@ describe("Embedded Blockly Page Tests", () => {
       .parents("button")
       .click();
     
-    // Wait for share API call
+    // Wait for share API call (201 Created is valid for POST requests)
     cy.wait("@share", { responseTimeout: 10000 })
       .its("response.statusCode")
-      .should("eq", 200);
+      .should("be.oneOf", [200, 201]);
     
-    // Wait for short link creation
+    // Wait for short link creation and verify response structure
     cy.wait("@shorty", { responseTimeout: 10000 })
-      .its("response.statusCode")
-      .should("eq", 200);
+      .then((interception) => {
+        expect(interception.response.statusCode).to.eq(200);
+        // Verify response is an array with at least one element containing a link
+        const responseBody = interception.response.body;
+        expect(responseBody).to.be.an("array");
+        expect(responseBody.length).to.be.greaterThan(0);
+        expect(responseBody[0]).to.have.property("link");
+        expect(responseBody[0].link).to.include("snsbx.de");
+      });
     
     // Verify dialog opens
     cy.get('[role="dialog"]', { timeout: 5000 }).should("exist");
-    cy.get('[role="dialog"]')
+    
+    // Wait for the link to be rendered with the short link URL
+    // The link appears after React state updates (isFetching becomes false)
+    cy.get('[role="dialog"]', { timeout: 10000 })
       .find("a")
       .should("exist")
+      .and("be.visible")
       .and("have.attr", "href")
-      .and("include", "snsbx.de")
-      .and("not.be.empty");
+      .and((href) => {
+        // Verify href is not empty and contains snsbx.de
+        expect(href).to.be.a("string");
+        expect(href.length).to.be.greaterThan(0);
+        expect(href).to.include("snsbx.de");
+      });
+    
+    // Also verify the link text (which should be the same as href)
+    cy.get('[role="dialog"]')
+      .find("a")
+      .should("contain", "snsbx.de");
   });
 
   // Search box is currently disabled in embedded mode
