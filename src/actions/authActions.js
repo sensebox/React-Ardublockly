@@ -14,36 +14,41 @@ import {
 import axios from "axios";
 import { returnErrors, returnSuccess } from "./messageActions";
 import { setLanguage } from "./generalActions";
+import { fetchAllTutorialProgress } from "@/components/Tutorial/services/tutorial.service";
+import { setAllTutorialProgress } from "./tutorialProgressActions";
 
 const API_BASE = import.meta.env.VITE_BLOCKLY_API;
 
 // ======================
 // LOAD USER (from token)
 // ======================
-export const loadUser = () => (dispatch) => {
+export const loadUser = () => async (dispatch) => {
   dispatch({ type: USER_LOADING });
 
-  // Kein async/await auf der äußeren Ebene – stattdessen .then/.catch
-  axios
-    .get(`${API_BASE}/user`, { headers: authHeader() })
-    .then((res) => {
-      // Erfolg
-      dispatch({ type: USER_LOADED, payload: res.data.user });
-      dispatch({ type: GET_STATUS, payload: res.data.user.status });
-      dispatch(setLanguage(res.data.user.language || "en_US"));
-    })
-    .catch((err) => {
-      // Fehler – aber NICHT werfen!
-      dispatch({ type: AUTH_ERROR });
-      let status = [];
-      try {
-        status = JSON.parse(localStorage.getItem("status")) || [];
-      } catch (e) {
-        /* ignore */
-      }
-      dispatch({ type: GET_STATUS, payload: status });
-      console.warn("Failed to load user:", err.message);
+  try {
+    const res = await axios.get(`${API_BASE}/user`, {
+      headers: authHeader(),
     });
+
+    dispatch({ type: USER_LOADED, payload: res.data.user });
+    dispatch({ type: GET_STATUS, payload: res.data.user.status });
+    dispatch(setLanguage(res.data.user.language || "en_US"));
+
+    const progressRes = await fetchAllTutorialProgress({
+      token: localStorage.getItem("token"),
+    });
+    dispatch(setAllTutorialProgress(progressRes.progress));
+  } catch (err) {
+    dispatch({ type: AUTH_ERROR });
+
+    let status = [];
+    try {
+      status = JSON.parse(localStorage.getItem("status")) || [];
+    } catch {}
+
+    dispatch({ type: GET_STATUS, payload: status });
+    console.warn("Failed to load user:", err.message);
+  }
 };
 
 // ======================
@@ -119,6 +124,15 @@ export const login =
         payload: res.data.user.status,
       });
       dispatch(returnSuccess(res.data.message, res.status, "LOGIN_SUCCESS"));
+      console.log("login successss", res.data);
+      try {
+        const resProgress = await fetchAllTutorialProgress({
+          token: res.data.token,
+        });
+        dispatch(setAllTutorialProgress(resProgress.progress));
+      } catch (err) {
+        console.warn("Failed to load tutorial progress:", err.message);
+      }
     } catch (err) {
       dispatch({ type: LOGIN_FAIL });
       let status = [];
@@ -300,6 +314,7 @@ export const setupInterceptors = (store) => {
             type: "REFRESH_TOKEN_SUCCESS",
             payload: { token: newAccessToken, refreshToken: newRefreshToken },
           });
+          store.dispatch(loadUser());
 
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
           processQueue(null, newAccessToken);
@@ -323,7 +338,6 @@ export const setupInterceptors = (store) => {
 };
 
 export const refreshTokenAction = (refreshToken) => async () => {
-  console.log("[Auth] 📡 Calling /refresh-token endpoint...");
   const config = {
     headers: { "Content-Type": "application/json" },
   };
@@ -333,7 +347,6 @@ export const refreshTokenAction = (refreshToken) => async () => {
     JSON.stringify({ refreshToken }),
     config,
   );
-  console.log("[Auth] 📥 Received new tokens from server");
   return res.data; // { token, refreshToken }
 };
 

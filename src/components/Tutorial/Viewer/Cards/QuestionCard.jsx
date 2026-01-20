@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Card,
@@ -12,13 +12,23 @@ import {
 } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, Cancel, HelpOutline } from "@mui/icons-material";
+import { answerQuestion } from "../../services/tutorial.service";
+import { useDispatch, useSelector } from "react-redux";
+import { answerQuestionLocal } from "@/actions/tutorialProgressActions";
 
-const QuestionCard = ({ questionData, setNextStepDisabled }) => {
+const QuestionCard = ({ questionData, step }) => {
   const theme = useTheme();
-  const [selected, setSelected] = useState([]);
   const [submitted, setSubmitted] = useState(false);
+  const [selected, setSelected] = useState([]);
   const [isCorrect, setIsCorrect] = useState(false);
+  const token = useSelector((state) => state.auth.token);
+  const tutorial = useSelector((state) => state.tutorial.tutorials[0]);
+  const tutorialProgress = useSelector(
+    (state) => state.tutorialProgress.byTutorialId[tutorial._id],
+  );
+  const [isAlreadyAnswered, setIsAlreadyAnswered] = useState(false);
 
+  const dispatch = useDispatch();
   if (!questionData)
     return (
       <Typography variant="body2" color="text.secondary">
@@ -27,6 +37,23 @@ const QuestionCard = ({ questionData, setNextStepDisabled }) => {
     );
 
   const { question, answers = [], multipleChoice } = questionData;
+
+  useEffect(() => {
+    const alreadyCorrect =
+      tutorialProgress?.steps?.[step._id]?.questions?.[questionData._id]
+        ?.correct === true;
+
+    if (!alreadyCorrect) return;
+
+    const correctAnswerTexts = answers
+      .filter((a) => a.correct)
+      .map((a) => a.text);
+
+    setIsAlreadyAnswered(true);
+    setSelected(correctAnswerTexts);
+    setIsCorrect(true);
+    setSubmitted(true);
+  }, [tutorialProgress, step._id, questionData._id, answers]);
 
   const handleSelect = (value) => {
     if (multipleChoice) {
@@ -40,7 +67,8 @@ const QuestionCard = ({ questionData, setNextStepDisabled }) => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    if (isAlreadyAnswered) return;
     const correctAnswers = answers
       .filter((a) => a.correct)
       .map((a) => a.text)
@@ -52,7 +80,12 @@ const QuestionCard = ({ questionData, setNextStepDisabled }) => {
       correctAnswers.every((val, i) => val === selectedAnswers[i]);
 
     setIsCorrect(correct);
-    if (correct) setNextStepDisabled(false);
+    if (correct) {
+      await dispatch(
+        answerQuestionLocal(tutorial._id, step._id, questionData._id, true),
+      );
+      await answerQuestion(tutorial._id, step._id, questionData._id, token);
+    }
     setSubmitted(true);
   };
 
@@ -149,13 +182,13 @@ const QuestionCard = ({ questionData, setNextStepDisabled }) => {
                         <Checkbox
                           checked={isSelected}
                           onChange={() => handleSelect(a.text)}
-                          disabled={submitted}
+                          disabled={submitted || isAlreadyAnswered}
                         />
                       ) : (
                         <Radio
                           checked={isSelected}
                           onChange={() => handleSelect(a.text)}
-                          disabled={submitted}
+                          disabled={submitted || isAlreadyAnswered}
                         />
                       )
                     }
@@ -247,7 +280,7 @@ const QuestionCard = ({ questionData, setNextStepDisabled }) => {
             mt: 3,
           }}
         >
-          {!submitted ? (
+          {!submitted && !isAlreadyAnswered ? (
             <Button
               variant="contained"
               onClick={handleSubmit}
@@ -255,11 +288,11 @@ const QuestionCard = ({ questionData, setNextStepDisabled }) => {
             >
               Antwort bestätigen
             </Button>
-          ) : (
+          ) : !isAlreadyAnswered ? (
             <Button variant="outlined" onClick={resetQuestion}>
               Neu versuchen
             </Button>
-          )}
+          ) : null}
         </Box>
       </CardContent>
     </Card>
