@@ -70,12 +70,12 @@ describe("Embedded Blockly Page Tests", () => {
     
     // Verify dialog opens
     cy.get('[role="dialog"]', { timeout: 5000 }).should("exist");
-    
-    // Verify share link is generated (short link URL)
     cy.get('[role="dialog"]')
       .find("a")
-      .should("have.attr", "href")
-      .and("include", "snsbx.de");
+      .should("exist")
+      .and("have.attr", "href")
+      .and("include", "snsbx.de")
+      .and("not.be.empty");
   });
 
   // Search box is currently disabled in embedded mode
