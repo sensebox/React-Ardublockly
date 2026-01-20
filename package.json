@@ -5,7 +5,7 @@
   "type": "module",
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@blockly/block-plus-minus": "^9.0.1",
+    "@blockly/block-plus-minus": "^9.0.7",
     "@blockly/field-colour": "^6.0.4",
     "@blockly/field-multilineinput": "^6.0.5",
     "@blockly/field-grid-dropdown": "^6.0.6",
