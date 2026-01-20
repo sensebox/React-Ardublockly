@@ -10,6 +10,11 @@ export const generateAppShareUrl = (shareId) => {
   return `blocklyconnect-app://share/${shareId}`;
 };
 
+export const generateBrowserUrl = (url) => {
+  const encodedUrl = encodeURIComponent(url);
+  return `browser://${encodedUrl}`;
+};
+
 export const generateWebShareUrl = (shareId) => {
   return `${window.location.origin}/share/${shareId}`;
 };

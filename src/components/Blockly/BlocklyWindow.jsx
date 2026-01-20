@@ -21,6 +21,7 @@ import BlocklySvg from "./BlocklySvg";
 import "blockly/blocks";
 import "@blockly/toolbox-search"; // auto-registers
 import { BlocklyComponent } from "./BlocklyComponent";
+import { registerBlocklyContextMenu } from "./helpers/blocklyContextMenu";
 
 export default function BlocklyWindow(props) {
   const dispatch = useDispatch();
@@ -84,6 +85,10 @@ export default function BlocklyWindow(props) {
 
     // UI helpers
     Blockly.svgResize(ws);
+
+    if (isEmbedded) {
+      registerBlocklyContextMenu();
+    }
 
     if (!isEmbedded) {
       const zoomToFit = new ZoomToFitControl(ws);
