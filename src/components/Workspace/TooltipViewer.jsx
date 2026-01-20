@@ -15,6 +15,7 @@ const TooltipViewer = () => {
   const theme = useTheme();
   const tooltip = useSelector((s) => s.workspace.code.tooltip);
   const helpurl = useSelector((s) => s.workspace.code.helpurl);
+  const isEmbedded = useSelector((s) => s.general.embeddedMode);
 
   return (
     <Card
@@ -64,7 +65,7 @@ const TooltipViewer = () => {
             variant="contained"
             color="primary"
             href={helpurl}
-            target="_blank"
+            {...(isEmbedded && { target: "_blank", rel: "noopener noreferrer" })}
             sx={{
               mt: 2,
               px: 2,
