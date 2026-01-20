@@ -240,7 +240,7 @@ class ShareProject extends Component {
               </Typography>
               <div style={{ textAlign: "center" }}>
                 <a
-                  href={this.props.isEmbedded ? generateAppShareUrl(this.state.id) : this.state.shortLink}
+                  href={this.state.shortLink}
                   onClick={() => {
                     this.toggleDialog();
                   }}
