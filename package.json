@@ -88,6 +88,6 @@
     "eslint-plugin-cypress": "^5.2.0",
     "eslint-plugin-react": "^7.37.4",
     "prettier": "^3.6.2",
-    "vite": "^7.1.5"
+    "vite": "^7.3.1"
   }
 }
