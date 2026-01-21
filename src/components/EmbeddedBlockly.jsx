@@ -67,14 +67,18 @@ const EmbeddedBlockly = ({ project: propProject = null, projectType: propProject
   }, [shareId, message, navigate, dispatch]);
 
   useEffect(() => {
-    const name = project.title || createNameId();
-    dispatch(workspaceName(name));
+    if (projectType === "share") {
+      dispatch(workspaceName(null));
+    } else {
+      const name = project.title || createNameId();
+      dispatch(workspaceName(name));
+    }
     
     return () => {
       dispatch(clearStats());
       dispatch(workspaceName(null));
     };
-  }, [dispatch, project]);
+  }, [dispatch, project, projectType]);
 
   useEffect(() => {
     if (project.xml) {
