@@ -241,16 +241,10 @@ class ShareProject extends Component {
               <div style={{ textAlign: "center" }}>
                 <a
                   href={this.state.shortLink}
-                  onClick={(e) => {
-                    // In embedded mode, prevent navigation to keep dialog open
-                    if (this.props.isEmbedded) {
-                      e.preventDefault();
-                    }
-                    this.toggleDialog();
-                  }}
+                  onClick={() => this.toggleDialog()}
                   className={this.props.classes.link}
-                  target={this.props.isEmbedded ? undefined : "_blank"}
-                  rel={this.props.isEmbedded ? undefined : "noreferrer"}
+                  target="_blank"
+                  rel="noreferrer"
                 >
                   {this.state.shortLink}
                 </a>
