@@ -242,20 +242,14 @@ class ShareProject extends Component {
                 <a
                   href={this.state.shortLink}
                   onClick={(e) => {
-                    if (this.props.isEmbedded && this.state.shortLink.startsWith("blocklyconnect-app://")) {
+                    // In embedded mode, prevent navigation to keep dialog open
+                    if (this.props.isEmbedded) {
                       e.preventDefault();
-                      window.location.href = this.state.shortLink;
                     }
                     this.toggleDialog();
                   }}
                   className={this.props.classes.link}
-                  target={
-                    this.props.isEmbedded && this.state.shortLink.startsWith("blocklyconnect-app://")
-                      ? undefined
-                      : this.props.isEmbedded
-                      ? "_self"
-                      : "_blank"
-                  }
+                  target={this.props.isEmbedded ? undefined : "_blank"}
                   rel={this.props.isEmbedded ? undefined : "noreferrer"}
                 >
                   {this.state.shortLink}
