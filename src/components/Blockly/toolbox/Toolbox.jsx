@@ -10,7 +10,7 @@ import "./toolbox_styles.css";
 const Toolbox = ({ workspace, toolbox }) => {
   const selectedBoard = useSelector((state) => state.board.board);
   const language = useSelector((state) => state.general.language);
-  const previousBoard = useRef(null);
+  const setupIntervalRef = useRef(null);
 
   useEffect(() => {
     if (!workspace || !toolbox?.current) return;
