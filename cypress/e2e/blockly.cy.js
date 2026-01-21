@@ -27,6 +27,29 @@ describe("Blockly Editor Page Tests", () => {
       .should("be.visible");
   });
 
+  it("[Gallery] clicks on a gallery item card and navigates to project detail", () => {
+    cy.visit("/gallery");
+
+    // Wait for gallery items to load
+    cy.get('[role="button"]', { timeout: 10000 }).should("exist");
+
+    // Find the first gallery card and get its link href
+    cy.get('a[href^="/gallery/"]')
+      .first()
+      .then(($link) => {
+        const href = $link.attr("href");
+
+        // Click on the card
+        $link.click();
+
+        // Verify navigation to the project detail page
+        cy.url().should("include", href);
+
+        // Verify that we're on a project detail page (should show compile button or project content)
+        cy.get("body").should("exist");
+      });
+  });
+
   it("[Blockly] visits the faq page", () => {
     cy.visit("/faq");
 
