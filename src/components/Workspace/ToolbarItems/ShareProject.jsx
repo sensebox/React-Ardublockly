@@ -238,16 +238,31 @@ class ShareProject extends Component {
                   ? "Über den folgenden Link kannst du dein Programm in der senseBox Connect App öffnen:"
                   : "Über den folgenden Link kannst du dein Programm teilen:"}
               </Typography>
-              <div style={{ textAlign: "center" }}>
-                <a
-                  href={this.state.shortLink}
-                  onClick={() => this.toggleDialog()}
-                  className={this.props.classes.link}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {this.state.shortLink}
-                </a>
+              <div style={{ textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}>
+                {this.props.isEmbedded ? (
+                  <Typography
+                    style={{
+                      wordBreak: "break-all",
+                      padding: "8px",
+                      backgroundColor: "#f5f5f5",
+                      borderRadius: "4px",
+                      flex: 1,
+                      maxWidth: "100%",
+                    }}
+                  >
+                    {this.state.shortLink}
+                  </Typography>
+                ) : (
+                  <a
+                    href={this.state.shortLink}
+                    onClick={() => this.toggleDialog()}
+                    className={this.props.classes.link}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {this.state.shortLink}
+                  </a>
+                )}
                 <Tooltip
                   title={Blockly.Msg.tooltip_copy_link}
                   arrow
