@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import * as Blockly from "blockly/core";
@@ -23,11 +23,26 @@ const EmbeddedBlockly = ({ project: propProject = null, projectType: propProject
   const reduxProject = useSelector((state) => state.project.projects[0]);
   const progress = useSelector((state) => state.project.progress);
   const message = useSelector((state) => state.message);
-  const project = propProject || reduxProject;
+  const workspaceNameFromState = useSelector((state) => state.workspace.name);
+  
+  const project = useMemo(() => {
+    const actualProject = propProject || reduxProject;
+    if (actualProject) {
+      return actualProject;
+    }
+    const defaultTitle = workspaceNameFromState || createNameId();
+    return {
+      title: defaultTitle,
+      _id: undefined,
+      shared: undefined,
+      xml: localStorage.getItem("autoSaveXML") || undefined,
+    };
+  }, [propProject, reduxProject, workspaceNameFromState]);
+  
   const projectType = propProjectType || (shareId ? "share" : null);
   
   const [initialXml, setInitialXml] = useState(() => {
-    return project?.xml || localStorage.getItem("autoSaveXML");
+    return project.xml || localStorage.getItem("autoSaveXML");
   });
   useEmbeddedMode();
 
@@ -52,7 +67,7 @@ const EmbeddedBlockly = ({ project: propProject = null, projectType: propProject
   }, [shareId, message, navigate, dispatch]);
 
   useEffect(() => {
-    const name = project?.title || createNameId();
+    const name = project.title || createNameId();
     dispatch(workspaceName(name));
     
     return () => {
@@ -62,7 +77,7 @@ const EmbeddedBlockly = ({ project: propProject = null, projectType: propProject
   }, [dispatch, project]);
 
   useEffect(() => {
-    if (project?.xml) {
+    if (project.xml) {
       setInitialXml(project.xml);
     }
   }, [project]);
@@ -85,7 +100,7 @@ const EmbeddedBlockly = ({ project: propProject = null, projectType: propProject
   }
 
   // Don't render if we're waiting for shared project to load
-  if (shareId && !project) {
+  if (shareId && !reduxProject && !propProject) {
     return null;
   }
 
