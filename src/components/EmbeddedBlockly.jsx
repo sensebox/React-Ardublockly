@@ -46,7 +46,7 @@ const EmbeddedBlockly = ({ project: propProject = null, projectType: propProject
   // Handle share loading errors
   useEffect(() => {
     if (shareId && (message.id === "PROJECT_EMPTY" || message.id === "GET_PROJECT_FAIL")) {
-      navigate("/embedded");
+      navigate("/embedded", { replace: true });
       dispatch(returnErrors("", 404, "GET_SHARE_FAIL"));
     }
   }, [shareId, message, navigate, dispatch]);
