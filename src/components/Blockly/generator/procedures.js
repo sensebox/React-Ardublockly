@@ -65,11 +65,13 @@ Blockly.Generator.Arduino.forBlock["procedures_defreturn"] = function (
       Blockly.Generator.Arduino.INDENT + "return " + returnValue + ";\n";
   }
   const args = [];
-  for (let i = 0; i < block.argumentVarModels_.length; i++) {
-    args[i] =
-      translateType(block.argumentVarModels_[i].type) +
-      " " +
-      block.argumentVarModels_[i].name;
+  if (block.argumentVarModels_) {
+    for (let i = 0; i < block.argumentVarModels_.length; i++) {
+      args[i] =
+        translateType(block.argumentVarModels_[i].type) +
+        " " +
+        block.argumentVarModels_[i].name;
+    }
   }
   let code =
     translateType(returnType) +
@@ -117,11 +119,13 @@ Blockly.Generator.Arduino.forBlock["procedures_defnoreturn"] = function (
   const returnType = "void";
 
   const args = [];
-  for (let i = 0; i < block.argumentVarModels_.length; i++) {
-    args[i] =
-      translateType(block.argumentVarModels_[i].type) +
-      " " +
-      block.argumentVarModels_[i].name;
+  if (block.argumentVarModels_) {
+    for (let i = 0; i < block.argumentVarModels_.length; i++) {
+      args[i] =
+        translateType(block.argumentVarModels_[i].type) +
+        " " +
+        block.argumentVarModels_[i].name;
+    }
   }
   let code =
     translateType(returnType) +

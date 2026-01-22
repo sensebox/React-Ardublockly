@@ -631,11 +631,14 @@ export const ToolboxEsp = () => {
         colour={getColour().variables}
         custom="CREATE_TYPED_VARIABLE"
       />
+
       <Category
         name={Blockly.Msg.toolbox_functions}
         colour={getColour().procedures}
-        custom="PROCEDURE"
-      />
+      >
+        <Block type="procedures_defnoreturn" />
+        <Block type="procedures_defreturn" />
+      </Category>
 
       {/* ============================== QOOOL (CUSTOM) ============================== */}
       <Category id="QOOOL" name="QOOOL" colour="#b7b645">
