@@ -639,6 +639,11 @@ export const ToolboxEsp = () => {
         <Block type="procedures_defnoreturn" />
         <Block type="procedures_defreturn" />
       </Category>
+      <Category
+        name="Meine Funktionen"
+        colour={getColour().procedures}
+        custom="CUSTOM_PROCEDURES"
+      />
 
       {/* ============================== QOOOL (CUSTOM) ============================== */}
       <Category id="QOOOL" name="QOOOL" colour="#b7b645">
