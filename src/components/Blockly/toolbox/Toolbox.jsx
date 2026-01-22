@@ -21,6 +21,28 @@ const Toolbox = ({ workspace, toolbox }) => {
       createFlyout,
     );
 
+    workspace.registerToolboxCategoryCallback(
+      "CUSTOM_PROCEDURES",
+      function (workspace) {
+        const xmlList = [];
+
+        const procedures = Blockly.Procedures.allProcedures(workspace)[0];
+
+        for (const proc of procedures) {
+          const block = document.createElement("block");
+          block.setAttribute("type", "procedures_callnoreturn");
+
+          const mutation = document.createElement("mutation");
+          mutation.setAttribute("name", proc[0]);
+          block.appendChild(mutation);
+
+          xmlList.push(block);
+        }
+
+        return xmlList;
+      },
+    );
+
     const typedVarModal = new TypedVariableModal(workspace, "callbackName", [
       [Blockly.Msg.variable_NUMBER, "int"],
       [Blockly.Msg.variable_LONG, "long"],
