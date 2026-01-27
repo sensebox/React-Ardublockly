@@ -80,22 +80,16 @@ describe("Embedded Blockly Page Tests", () => {
     
     // Wait for the link to be rendered with the short link URL
     // The link appears after React state updates (isFetching becomes false)
+    // In embedded mode, the link is displayed as Typography (plain text), not an <a> tag
     cy.get('[role="dialog"]', { timeout: 10000 })
-      .find("a")
-      .should("exist")
-      .and("be.visible")
-      .and("have.attr", "href")
-      .and((href) => {
-        // Verify href is not empty and contains snsbx.de
-        expect(href).to.be.a("string");
-        expect(href.length).to.be.greaterThan(0);
-        expect(href).to.include("snsbx.de");
-      });
-    
-    // Also verify the link text (which should be the same as href)
-    cy.get('[role="dialog"]')
-      .find("a")
       .should("contain", "snsbx.de");
+    
+    // In embedded mode, verify the short link text is displayed (as Typography, not anchor tag)
+    // The Typography component renders as a <p> tag with the short link text
+    cy.get('[role="dialog"]')
+      .contains("snsbx.de")
+      .should("exist")
+      .and("be.visible");
   });
 
   // Search box is currently disabled in embedded mode
