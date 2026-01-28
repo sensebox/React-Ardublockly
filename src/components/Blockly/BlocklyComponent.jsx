@@ -8,8 +8,9 @@ import "@/components/Blockly/generator/basic/index";
 import "@/components/Blockly/generator/arduino/index";
 
 import Toolbox from "./toolbox/Toolbox";
-import EmbeddedToolbox from "./toolbox/EmbeddedToolbox";
-import { reservedWords } from "@/components/Blockly/helpers/reservedWords";
+import HorizontalToolbox from "./toolbox/HorizontalToolbox";
+import { useHorizontalToolbox } from "./toolbox/useHorizontalToolbox";
+import { reservedWords } from "./helpers/reservedWords";
 import Snackbar from "../Snackbar";
 
 import "blockly/blocks";
@@ -29,7 +30,7 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
   const toolboxRef = useRef(null);
   const [workspace, setWorkspace] = useState(undefined);
   const isEmbedded = useSelector((state) => state.general.embeddedMode);
-
+  const { isHorizontalToolbox } = useHorizontalToolbox(workspace);
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -50,7 +51,7 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
 
     // Only apply mobile layout options when in embedded mode
     // These must override any options from ...rest, so set them after
-    if (isEmbedded) {
+    if (isHorizontalToolbox) {
       blocklyOptions.horizontalLayout = true;
       blocklyOptions.toolboxPosition = "end";
       // Ensure toolbox icon sprites and other assets load correctly in embedded view
@@ -143,7 +144,7 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
       ws?.dispose();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isEmbedded]);
+  }, [isHorizontalToolbox, location.pathname]);
 
   const cardStyle = useMemo(() => {
     return isEmbedded
@@ -160,10 +161,10 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
         ref={blocklyDivRef}
         id="blocklyDiv"
         style={style ? style : cardStyle}
-        className={isEmbedded ? "embedded-mode" : ""}
+        className={isHorizontalToolbox ? "embedded-mode" : ""}
       />
-      {isEmbedded ? (
-        <EmbeddedToolbox toolbox={toolboxRef} workspace={workspace} />
+      {isHorizontalToolbox ? (
+        <HorizontalToolbox toolbox={toolboxRef} workspace={workspace} />
       ) : (
         <Toolbox toolbox={toolboxRef} workspace={workspace} />
       )}

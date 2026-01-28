@@ -5,10 +5,10 @@ import * as Blockly from "blockly/core";
 import { useSelector } from "react-redux";
 import { ToolboxMcu } from "./ToolboxMcu";
 import { ToolboxEsp } from "./ToolboxEsp";
-import { useEmbeddedToolbox } from "./useEmbeddedToolbox";
-import "./embedded_toolbox_styles.css";
+import "./horizontal_toolbox_styles.css";
+import { registerBlocklyContextMenu } from "../helpers/blocklyContextMenu";
 
-const EmbeddedToolbox = ({ workspace, toolbox }) => {
+const HorizontalToolbox = ({ workspace, toolbox }) => {
   const selectedBoard = useSelector((state) => state.board.board);
   const language = useSelector((state) => state.general.language);
   const previousBoard = useRef(null);
@@ -48,8 +48,6 @@ const EmbeddedToolbox = ({ workspace, toolbox }) => {
     }
   }, [workspace, toolbox, selectedBoard, language]);
 
-  useEmbeddedToolbox(workspace, true);
-
   return (
     <xml
       xmlns="https://developers.google.com/blockly/xml"
@@ -81,4 +79,4 @@ const createFlyout = (workspace) => {
   return xmlList.concat(blockList);
 };
 
-export default EmbeddedToolbox;
+export default HorizontalToolbox;
