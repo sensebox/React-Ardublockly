@@ -328,6 +328,7 @@ export const UI = {
   navbar_tutorialbuilder: "Tutorial erstellen",
   navbar_gallery: "Galerie",
   navbar_projects: "Projekte",
+  navbar_teachablesensebox: "Teachable senseBox",
 
   navbar_menu: "Menü",
   navbar_login: "Einloggen",

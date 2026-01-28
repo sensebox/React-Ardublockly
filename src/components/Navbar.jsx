@@ -48,6 +48,7 @@ import {
   faEarthEurope,
   faEarthAmericas,
   faCaretDown,
+  faBrain,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -446,6 +447,11 @@ const Navbar = () => {
               restriction: isAuthenticated,
             },
             { text: "Code Editor", icon: faCode, link: "/codeeditor" },
+            {
+              text: Blockly.Msg.navbar_teachablesensebox,
+              icon: faBrain,
+              link: "/teachable-machine",
+            },
           ].map((item, i) =>
             item.restriction || !("restriction" in item) ? (
               <Link
