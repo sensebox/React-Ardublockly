@@ -324,6 +324,7 @@ export const UI = {
   navbar_tutorialbuilder: "Create tutorial",
   navbar_gallery: "Gallery",
   navbar_projects: "Projects",
+  navbar_teachablesensebox: "Teachable senseBox",
 
   navbar_menu: "Menu",
   navbar_login: "Login",

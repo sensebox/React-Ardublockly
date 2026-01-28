@@ -1,0 +1,19 @@
+# TensorFlow Lite Conversion Service Dependencies
+
+# Core TensorFlow and TensorFlow.js conversion
+tensorflow>=2.13.0,<2.16.0
+tensorflowjs>=4.0.0,<5.0.0
+
+# Flask for API endpoint (if needed)
+flask>=2.3.0,<3.0.0
+flask-cors>=4.0.0,<5.0.0
+python-dotenv>=1.0.0,<2.0.0
+
+# Testing dependencies
+pytest>=7.4.0,<8.0.0
+pytest-cov>=4.1.0,<5.0.0
+hypothesis>=6.82.0,<7.0.0
+
+# Utilities
+numpy>=1.23.0,<2.0.0  # TensorFlow requires numpy<2.0
+keras>=2.13.0,<2.16.0  # Match TensorFlow version
