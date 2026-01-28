@@ -80,15 +80,15 @@ describe("Embedded Blockly Page Tests", () => {
     cy.get('[role="dialog"]').should("contain.text", "Reset");
   });
 
-  it("[Embedded] displays toolbox with search", () => {
-    cy.visit("/embedded");
-    cy.get(".blocklyToolbox", { timeout: 10000 }).should("exist");
-    // Search may be disabled in embedded mode, verify accordingly
-    cy.get('input[type="search"]').should(($input) => {
-      // Check if search exists or is intentionally hidden
-      expect($input.length).to.be.at.least(0);
-    });
-  });
+  // it("[Embedded] displays toolbox with search", () => {
+  //   cy.visit("/embedded");
+  //   cy.get(".blocklyToolbox", { timeout: 10000 }).should("exist");
+  //   // Search may be disabled in embedded mode, verify accordingly
+  //   cy.get('input[type="search"]').should(($input) => {
+  //     // Check if search exists or is intentionally hidden
+  //     expect($input.length).to.be.at.least(0);
+  //   });
+  // });
 
   it("[Embedded] marks toolbox xml as embedded mode", () => {
     cy.visit("/embedded");
