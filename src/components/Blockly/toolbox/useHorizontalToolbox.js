@@ -1,11 +1,34 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import * as Blockly from "blockly/core";
 
-export const useEmbeddedToolbox = (workspace, isEmbedded) => {
+export const useHorizontalToolbox = (workspace) => {
+  const isEmbedded = useSelector((state) => state.general.embeddedMode);
   const originalUpdateToolboxRef = useRef(null);
+  const [isHorizontalToolbox, setIsHorizontalToolbox] = useState(() => window.innerHeight > window.innerWidth);
+
+  // Track orientation changes
+  useEffect(() => {
+    if (!isEmbedded) return;
+
+    const updateOrientation = () => {
+      setIsHorizontalToolbox(window.innerHeight > window.innerWidth);
+    };
+
+    window.addEventListener('resize', updateOrientation);
+    window.addEventListener('orientationchange', updateOrientation);
+
+    return () => {
+      window.removeEventListener('resize', updateOrientation);
+      window.removeEventListener('orientationchange', updateOrientation);
+    };
+  }, [isEmbedded]);
 
   useEffect(() => {
-    if (!isEmbedded || !workspace) {
+    // Only apply custom toolbox behavior in embedded mode AND portrait orientation (horizontal toolbox)
+    const shouldApplyCustomBehavior = isEmbedded && isHorizontalToolbox;
+    
+    if (!shouldApplyCustomBehavior || !workspace) {
       return;
     }
 
@@ -127,5 +150,7 @@ export const useEmbeddedToolbox = (workspace, isEmbedded) => {
       }
       cleanupWorkspaceClick?.();
     };
-  }, [workspace, isEmbedded]);
+  }, [workspace, isEmbedded, isHorizontalToolbox]);
+
+  return { isHorizontalToolbox: isEmbedded && isHorizontalToolbox };
 };
