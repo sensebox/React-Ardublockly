@@ -30,7 +30,7 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
   const toolboxRef = useRef(null);
   const [workspace, setWorkspace] = useState(undefined);
   const isEmbedded = useSelector((state) => state.general.embeddedMode);
-  const { isHorizontalToolbox } = useHorizontalToolbox(workspace);
+  const { isHorizontalToolbox } = useHorizontalToolbox();
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -49,7 +49,7 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
       ...rest,
     };
 
-    // Only apply mobile layout options when in embedded mode
+    // Only apply mobile layout options when in embedded portrait mode
     // These must override any options from ...rest, so set them after
     if (isHorizontalToolbox) {
       blocklyOptions.horizontalLayout = true;
@@ -144,7 +144,7 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
       ws?.dispose();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isHorizontalToolbox, location.pathname]);
+  }, [isHorizontalToolbox]);
 
   const cardStyle = useMemo(() => {
     return isEmbedded
@@ -161,9 +161,9 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
         ref={blocklyDivRef}
         id="blocklyDiv"
         style={style ? style : cardStyle}
-        className={isHorizontalToolbox ? "embedded-mode" : ""}
+        className={isEmbedded ? "embedded-mode" : ""}
       />
-      {isHorizontalToolbox ? (
+      {isEmbedded ? (
         <HorizontalToolbox toolbox={toolboxRef} workspace={workspace} />
       ) : (
         <Toolbox toolbox={toolboxRef} workspace={workspace} />
