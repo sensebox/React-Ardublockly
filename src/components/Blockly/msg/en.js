@@ -28,6 +28,7 @@ import { UI } from "./en/ui";
 import { VARIABLES } from "./en/variables";
 import { WEBSERVER } from "./en/webserver";
 import { FLUOROASM } from "./en/fluoroASM";
+import { CUSTOM_FUNCTIONS } from "./en/custom-functions";
 
 export const En = {
   ...AUDIO,
@@ -60,4 +61,5 @@ export const En = {
   ...VARIABLES,
   ...WEBSERVER,
   ...FLUOROASM,
+  ...CUSTOM_FUNCTIONS,
 };

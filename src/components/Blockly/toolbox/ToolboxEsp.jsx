@@ -632,17 +632,11 @@ export const ToolboxEsp = () => {
         custom="CREATE_TYPED_VARIABLE"
       />
 
+      {/* ============================== EIGENE FUNKTIONEN ============================== */}
       <Category
-        name={Blockly.Msg.toolbox_functions}
+        name={Blockly.Msg.toolbox_custom_functions}
         colour={getColour().procedures}
-      >
-        <Block type="procedures_defnoreturn" />
-        <Block type="procedures_defreturn" />
-      </Category>
-      <Category
-        name={Blockly.Msg.my_toolbox_functions}
-        colour={getColour().procedures}
-        custom="CUSTOM_PROCEDURES"
+        custom="CUSTOM_FUNCTIONS_DYNAMIC"
       />
 
       {/* ============================== QOOOL (CUSTOM) ============================== */}
