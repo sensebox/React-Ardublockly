@@ -5,6 +5,7 @@ import * as Blockly from "blockly/core";
 import { useSelector } from "react-redux";
 import { ToolboxMcu } from "./ToolboxMcu";
 import { ToolboxEsp } from "./ToolboxEsp";
+import { getColour } from "../helpers/colour";
 import "./toolbox_styles.css";
 
 const Toolbox = ({ workspace, toolbox }) => {
@@ -37,6 +38,82 @@ const Toolbox = ({ workspace, toolbox }) => {
           block.appendChild(mutation);
 
           xmlList.push(block);
+        }
+
+        return xmlList;
+      },
+    );
+
+    // --- Custom Functions Callback ---
+    workspace.registerToolboxCategoryCallback(
+      "CUSTOM_FUNCTIONS_DYNAMIC",
+      function (workspace) {
+        const xmlList = [];
+
+        // Definition-Blöcke hinzufügen
+        const defineBlock = document.createElement("block");
+        defineBlock.setAttribute("type", "custom_function_define");
+        xmlList.push(defineBlock);
+
+        const callBlock = document.createElement("block");
+        callBlock.setAttribute("type", "custom_function_call");
+        xmlList.push(callBlock);
+
+        // Separator
+        const sep = document.createElement("sep");
+        sep.setAttribute("gap", "24");
+        xmlList.push(sep);
+
+        // Alle custom_function_define Blöcke finden
+        const allBlocks = workspace.getAllBlocks(false);
+        const functionDefs = allBlocks.filter(
+          (block) => block.type === "custom_function_define",
+        );
+
+        // Parameter-Variablen sammeln
+        const paramVars = new Map(); // Map<varName, {type, colour}>
+
+        for (const funcBlock of functionDefs) {
+          for (let i = 1; i <= 3; i++) {
+            const paramName = funcBlock.getFieldValue(`PARAM${i}_NAME`);
+            const paramType = funcBlock.getFieldValue(`PARAM${i}_TYPE`);
+
+            if (
+              paramType &&
+              paramType !== "none" &&
+              paramName &&
+              paramName.trim() !== ""
+            ) {
+              // Variable mit Procedures-Farbe speichern
+              paramVars.set(paramName, {
+                type: paramType,
+                colour: getColour().procedures,
+              });
+            }
+          }
+        }
+
+        // Variable-Getter Blöcke für Parameter erstellen
+        if (paramVars.size > 0) {
+          const label = document.createElement("label");
+          label.setAttribute("text", "Parameter:");
+          xmlList.push(label);
+
+          for (const [varName, info] of paramVars.entries()) {
+            const variable = workspace.getVariable(varName, info.type);
+            if (variable) {
+              const varBlock = document.createElement("block");
+              varBlock.setAttribute("type", "custom_function_parameter_get");
+
+              const field = document.createElement("field");
+              field.setAttribute("name", "VAR");
+              field.setAttribute("variabletype", info.type);
+              field.textContent = varName;
+
+              varBlock.appendChild(field);
+              xmlList.push(varBlock);
+            }
+          }
         }
 
         return xmlList;
