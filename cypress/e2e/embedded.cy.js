@@ -52,7 +52,7 @@ describe("Embedded Blockly Page Tests", () => {
     cy.get('img[alt="Sensebox ESP"]', { timeout: 8000 }).click();
     cy.get(".embedded-toolbar svg.fa-share").parents("button").click();
     cy.get('[role="dialog"]', { timeout: 5000 }).should("exist");
-    cy.get('[role="dialog"]').should("contain.text", "Reset");
+    cy.get('[role="dialog"]').should("contain.text", /zurücksetzen/i);
   });
 
   // it("[Embedded] displays toolbox with search", () => {
@@ -68,6 +68,7 @@ describe("Embedded Blockly Page Tests", () => {
   it("[Embedded] marks toolbox xml as embedded mode in portrait", () => {
     cy.viewport(768, 1024); // Portrait - embedded-mode class only applies in portrait
     cy.visit("/embedded");
+    cy.get('img[alt="Sensebox ESP"]', { timeout: 8000 }).click();
     cy.get("xml#blockly").should("have.class", "embedded-mode");
   });
 
@@ -99,6 +100,8 @@ describe("Embedded Blockly Page Tests", () => {
   it("[Embedded] displays toolbox in landscape orientation with default left vertical layout", () => {
     cy.viewport(1024, 768); // Landscape
     cy.visit("/embedded");
+    // Select device first to dismiss the device selection overlay
+    cy.get('img[alt="Sensebox ESP"]', { timeout: 8000 }).click();
     cy.get(".blocklyToolbox", { timeout: 10000 }).should("exist");
     
     // In landscape, should use default Blockly left vertical toolbox (no custom horizontal styles)
