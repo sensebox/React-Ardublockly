@@ -76,8 +76,11 @@ describe("Embedded Blockly Page Tests", () => {
       });
     
     // Verify dialog opens
+    // Click the reset button (last fa-share icon in toolbar)
+    cy.get(".embedded-toolbar svg.fa-share").last().parents("button").click();
     cy.get('[role="dialog"]', { timeout: 5000 }).should("exist");
-    cy.get('[role="dialog"]').should("contain.text", /zurücksetzen/i);
+    // Check for reset dialog content (German or English)
+    cy.get('[role="dialog"]').should("contain.text", /zurücksetzen|reset/i);
   });
 
   // it("[Embedded] displays toolbox with search", () => {
