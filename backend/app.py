@@ -209,12 +209,33 @@ def convert_to_tflite():
                 'convertedBy': None
             }
             
-            # Add weights manifest if we have weight data
+            # Preserve weights manifest from the original model with weight metadata
             if data.get('weightsData') and len(data['weightsData']) > 0:
+                # Generate paths for weight files
+                weight_paths = [f'{model_dir}/group1-shard{i+1}of{len(data["weightsData"])}.bin' 
+                               for i in range(len(data['weightsData']))]
+                
+                # Prefer weight specs sent explicitly from the client
+                weight_specs = data.get('weightSpecs')
+                
+                # Try to get weights spec from original model if available
+                original_weights_manifest = model_json.get('weightsManifest') if isinstance(model_json, dict) else None
+                original_weight_specs = None
+                if original_weights_manifest and isinstance(original_weights_manifest, list) and len(original_weights_manifest) > 0:
+                    original_weight_specs = original_weights_manifest[0].get('weights', [])
+                
+                # Choose the best available weight specs
+                resolved_weight_specs = None
+                if weight_specs and isinstance(weight_specs, list) and len(weight_specs) > 0:
+                    resolved_weight_specs = weight_specs
+                elif original_weight_specs and len(original_weight_specs) > 0:
+                    resolved_weight_specs = original_weight_specs
+                else:
+                    resolved_weight_specs = []
+                
                 tfjs_model['weightsManifest'] = [{
-                    'paths': [f'group1-shard{i+1}of{len(data["weightsData"])}.bin' 
-                             for i in range(len(data['weightsData']))],
-                    'weights': []  # Will be populated by TensorFlow.js loader
+                    'paths': weight_paths,
+                    'weights': resolved_weight_specs
                 }]
             
             with open(model_json_path, 'w') as f:
