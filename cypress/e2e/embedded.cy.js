@@ -90,7 +90,8 @@ describe("Embedded Blockly Page Tests", () => {
   //   });
   // });
 
-  it("[Embedded] marks toolbox xml as embedded mode", () => {
+  it("[Embedded] marks toolbox xml as embedded mode in portrait", () => {
+    cy.viewport(768, 1024); // Portrait - embedded-mode class only applies in portrait
     cy.visit("/embedded");
     cy.get("xml#blockly").should("have.class", "embedded-mode");
   });
@@ -128,6 +129,8 @@ describe("Embedded Blockly Page Tests", () => {
     // In landscape, should use default Blockly left vertical toolbox (no custom horizontal styles)
     cy.get(".blocklySvg").should("be.visible");
     cy.get(".blocklyWorkspace").should("exist");
+    // Verify embedded-mode class is NOT applied in landscape
+    cy.get("xml#blockly").should("not.have.class", "embedded-mode");
   });
 
   it("[Embedded] displays horizontal toolbox in portrait orientation with custom styles", () => {
