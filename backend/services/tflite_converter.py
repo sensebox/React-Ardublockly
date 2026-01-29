@@ -54,6 +54,14 @@ def convert_tfjs_to_tflite(
     
     # Get the directory containing model.json
     model_dir = os.path.dirname(model_path)
+    print(f"Contents of model_dir ({model_dir}): {os.listdir(model_dir)}")
+    
+    # Print the contents of the model_path file
+    try:
+        with open(model_path, 'r') as f:
+            print(f"\nContents of {model_path}:\n{f.read()}\n")
+    except Exception as e:
+        print(f"Could not read model_path file: {e}")
     
     try:
         # Step 1: Load TensorFlow.js model as Keras model
@@ -94,29 +102,12 @@ def convert_tfjs_to_tflite(
                 
                 # Full integer quantization - most efficient for microcontrollers
                 # This quantizes both weights and activations to int8
-                converter.target_spec.supported_ops = [tf.lite.OpsSet.TFLITE_BUILTINS_INT8]
+                # converter.target_spec.supported_ops = [tf.lite.OpsSet.TFLITE_BUILTINS_INT8]
                 converter.inference_input_type = tf.int8
                 converter.inference_output_type = tf.int8
                 
                 # Infer input shape from the model
                 input_shape = keras_model.input_shape
-                print(f"Model input_shape from Keras: {input_shape}")
-                
-                # Determine the expected shape for representative data
-                # If input_shape is (None, 96, 96, 1), we want (1, 96, 96, 1)
-                # If input_shape is (None, 9216), we want (1, 9216)
-                if len(input_shape) == 2:
-                    # Flattened input
-                    expected_size = input_shape[1]
-                    target_shape = (1, expected_size)
-                    print(f"Detected flattened input. Target shape: {target_shape}")
-                elif len(input_shape) == 4:
-                    # Image input (batch, height, width, channels)
-                    expected_size = input_shape[1] * input_shape[2] * input_shape[3]
-                    target_shape = (1, input_shape[1], input_shape[2], input_shape[3])
-                    print(f"Detected image input. Target shape: {target_shape}")
-                else:
-                    raise ValueError(f"Unexpected input shape: {input_shape}")
                 
                 # Create representative dataset generator
                 def representative_dataset_gen():
@@ -126,24 +117,18 @@ def convert_tfjs_to_tflite(
                         # Sample is a flat list of floats representing 96x96x1 grayscale image
                         sample_array = np.array(sample, dtype=np.float32)
                         
-                        # Reshape based on the model's expected input shape
+                        # Expected shape: (1, 96, 96, 1) for grayscale images
                         if len(sample_array.shape) == 1:
-                            # Flat array - reshape to match model's input
-                            if sample_array.size != expected_size:
-                                print(f"Warning: Sample size {sample_array.size} doesn't match expected {expected_size}")
+                            # Flat array - reshape to (1, 96, 96, 1)
                             try:
-                                sample_array = sample_array.reshape(target_shape)
+                                sample_array = sample_array.reshape(1, 96, 96, 1)
                             except ValueError as e:
                                 print(f"Error reshaping sample: {e}")
-                                print(f"Sample size: {sample_array.size}, target shape: {target_shape}")
+                                print(f"Sample size: {sample_array.size}, expected: {1*96*96*1}")
                                 raise
                         elif len(sample_array.shape) == 3:
                             # Add batch dimension
                             sample_array = np.expand_dims(sample_array, 0)
-                        elif len(sample_array.shape) == 2:
-                            # Already has batch dimension (possibly flattened)
-                            if sample_array.shape != target_shape:
-                                print(f"Warning: Sample shape {sample_array.shape} doesn't match target {target_shape}")
                         
                         yield [sample_array]
                 

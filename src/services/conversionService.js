@@ -188,12 +188,28 @@ class ConversionService {
         classLabels,
       );
 
-      // Create a custom IOHandler to capture model artifacts
-      let capturedArtifacts = null;
+      // Extract model topology and weights directly
+      // This ensures weights are properly captured unlike custom IOHandler
+      let modelTopology = null;
+      let weightsData = null;
+      let weightSpecs = [];
 
+      // Create a custom IOHandler to capture model artifacts
       const customHandler = {
         save: async (artifacts) => {
-          capturedArtifacts = artifacts;
+          modelTopology = artifacts.modelTopology;
+          weightsData = artifacts.weightData;
+          weightSpecs = artifacts.weightSpecs || [];
+
+          console.log("[ConversionService] Captured artifacts:");
+          console.log("  - Has modelTopology:", !!modelTopology);
+          console.log("  - Has weightData:", !!weightsData);
+          console.log(
+            "  - Weight data size:",
+            weightsData ? weightsData.byteLength : 0,
+          );
+          console.log("  - Weight specs count:", weightSpecs.length);
+
           return {
             modelArtifactsInfo: {
               dateSaved: new Date(),
@@ -206,34 +222,42 @@ class ConversionService {
       // Save model using custom handler to capture artifacts
       await model.save(customHandler);
 
-      if (!capturedArtifacts) {
-        throw new Error("Failed to capture model artifacts");
+      if (!modelTopology) {
+        throw new Error("Failed to capture model topology");
+      }
+
+      if (!weightsData) {
+        console.warn("[ConversionService] Warning: No weights data captured");
       }
 
       // Convert model topology to base64
-      const modelJsonStr = JSON.stringify(capturedArtifacts.modelTopology);
+      const modelJsonStr = JSON.stringify(modelTopology);
       const modelJsonBase64 = btoa(modelJsonStr);
 
       // Convert weight data to base64
-      const weightsData = [];
-      if (capturedArtifacts.weightData) {
-        const weightArray = new Uint8Array(capturedArtifacts.weightData);
+      const weightsDataArray = [];
+      if (weightsData && weightsData.byteLength > 0) {
+        const weightArray = new Uint8Array(weightsData);
         const weightBinary = Array.from(weightArray)
           .map((byte) => String.fromCharCode(byte))
           .join("");
-        weightsData.push(btoa(weightBinary));
+        weightsDataArray.push(btoa(weightBinary));
+        console.log(
+          "[ConversionService] Encoded weights to base64, size:",
+          weightsDataArray[0].length,
+        );
       }
 
       return {
         modelData: modelJsonBase64,
-        weightsData: weightsData,
+        weightsData: weightsDataArray,
+        weightSpecs: weightSpecs,
         modelMetadata: {
           inputShape:
-            capturedArtifacts.modelTopology?.config?.layers?.[0]?.config
-              ?.batch_input_shape || [],
+            modelTopology?.config?.layers?.[0]?.config?.batch_input_shape || [],
           outputShape:
-            capturedArtifacts.modelTopology?.config?.layers?.[
-              capturedArtifacts.modelTopology?.config?.layers?.length - 1
+            modelTopology?.config?.layers?.[
+              modelTopology?.config?.layers?.length - 1
             ]?.config?.units || [],
           classes: classLabels || [],
           desiredInputShape: desiredInputShape, // Store the desired input shape if provided

@@ -37,7 +37,7 @@ extern const char* kCategoryLabels[kCategoryCount];
 // ********************************************************
 // ******************* model_settings.cpp ********************
 const char* kCategoryLabels[kCategoryCount] = {
-    "scissors","paper","rock",
+    "wh","bl","hand"
 };
 // ********************************************************
 // ******************* person_detect_model_data.h ********************
@@ -44447,7 +44447,6 @@ const uint8_t FRAME_HEADER[] = {0x46, 0x52, 0x41, 0x4D};
 void setup() {
 
   Serial.begin(115200);
-  delay(1500);
   Wire.begin(PIN_QWIIC_SDA,PIN_QWIIC_SCL);
 
   // Camera config
@@ -44530,9 +44529,6 @@ void setup() {
   Serial.printf("model_input->dims->data[2]: %i \n", model_input->dims->data[2]);
   Serial.printf("model_input->dims->data[3]: %i \n", model_input->dims->data[3]);
   Serial.printf("model_input->type: %i \n", model_input->type);
-  Serial.printf("model_input->params.scale: %f \n", model_input->params.scale);
-  Serial.printf("model_input->params.zero_point: %i \n", model_input->params.zero_point);
-  
   if ((model_input->dims->size != 4) || (model_input->dims->data[1] != 96) ||
       (model_input->dims->data[2] != 96) || 
       (model_input->type != kTfLiteInt8)) {
@@ -44541,18 +44537,11 @@ void setup() {
     Serial.println(model_input->dims->data[2]);
     Serial.println(model_input->type);
     Serial.println("Bad input tensor parameters in model");
-    // return;
+    return;
   }
 
   input_length = model_input->bytes;
   Serial.printf("input_length: %i \n", input_length);
-  
-  // Get output tensor info
-  TfLiteTensor* output = interpreter->output(0);
-  Serial.printf("\nOutput tensor info:\n");
-  Serial.printf("output->type: %i \n", output->type);
-  Serial.printf("output->params.scale: %f \n", output->params.scale);
-  Serial.printf("output->params.zero_point: %i \n", output->params.zero_point);
 }
 
 void feedImageToModel(camera_fb_t* fb, int8_t* model_input_data) {
@@ -44561,31 +44550,10 @@ void feedImageToModel(camera_fb_t* fb, int8_t* model_input_data) {
   const int channels = 1;  // Grayscale
   uint8_t* src = fb->buf;
   int image_size = image_width * image_height * channels;
-  
-  // Get the quantization parameters from the model
-  float input_scale = model_input->params.scale;
-  int input_zero_point = model_input->params.zero_point;
-  
-  // IMPORTANT: This preprocessing MUST match the browser training preprocessing exactly
-  // Browser: pixel / 255.0 -> float in [0, 1] -> fed to model
-  // Device: Must use same normalization, then quantize to int8 using model's parameters
-  //
-  // Quantization formula: quantized = (float_value / scale) + zero_point
-  // Where float_value is the normalized pixel value [0, 1]
-  
   for (int i = 0; i < image_size; i++) {
-    // Step 1: Normalize to [0, 1] to match browser training
-    float normalized = static_cast<float>(src[i]) / 255.0f;
-    
-    // Step 2: Quantize using the model's quantization parameters
-    // quantized_value = (float_value / scale) + zero_point
-    float quantized_float = (normalized / input_scale) + static_cast<float>(input_zero_point);
-    
-    // Step 3: Clamp to int8 range [-128, 127]
-    int16_t val = static_cast<int16_t>(quantized_float + 0.5f);  // Round to nearest
+    int16_t val = static_cast<int16_t>(src[i]) - 128;  // signed offset
     if (val > 127) val = 127;
     if (val < -128) val = -128;
-    
     model_input_data[i] = static_cast<int8_t>(val);
   }
 }
@@ -44645,30 +44613,9 @@ void drawClassification(float class1Percentage, float class2Percentage, float cl
   }
 }
 
-// Dequantize int8 to float using quantization parameters
-float dequantize(int8_t quantized_value, float scale, int zero_point) {
-  return (quantized_value - zero_point) * scale;
-}
-
-// Apply softmax to get probabilities from logits
-void softmax(float* logits, int size) {
-  // Find max for numerical stability
-  float max_val = logits[0];
-  for (int i = 1; i < size; i++) {
-    if (logits[i] > max_val) max_val = logits[i];
-  }
-  
-  // Compute exp and sum
-  float sum = 0.0;
-  for (int i = 0; i < size; i++) {
-    logits[i] = exp(logits[i] - max_val);
-    sum += logits[i];
-  }
-  
-  // Normalize
-  for (int i = 0; i < size; i++) {
-    logits[i] /= sum;
-  }
+float confidenceToFloat(int8_t score) {
+  // Map from range [-127, 128] to [0, 1]
+  return (score + 127.0) / 255.0;
 }
 
 void loop() {
@@ -44676,79 +44623,32 @@ void loop() {
   float class2Percentage = -1;
   float class3Percentage = -1;
   camera_fb_t *fb = esp_camera_fb_get();
-  
-  // DEBUG: Print input statistics
-  uint8_t* src = fb->buf;
-  int sample_count = 10;
-  Serial.println("\n=== INPUT DEBUG ===");
-  Serial.print("First 10 raw pixels (uint8): ");
-  for (int i = 0; i < sample_count; i++) {
-    Serial.print(src[i]);
-    Serial.print(" ");
-  }
-  Serial.println();
-  
   feedImageToModel(fb, model_input->data.int8);
-  
-  // DEBUG: Print preprocessed input
-  Serial.print("First 10 preprocessed (int8): ");
-  for (int i = 0; i < sample_count; i++) {
-    Serial.print(model_input->data.int8[i]);
-    Serial.print(" ");
-  }
-  Serial.println();
-  
+  // Serial.println(7);
   // Run inference, and report any error.
   TfLiteStatus invoke_status = interpreter->Invoke();
-  
+  // Serial.println(8);
   if (invoke_status == kTfLiteOk)
   {
+
       TfLiteTensor* output = interpreter->output(0);
 
-      // Raw quantized outputs
+      // Raw logits
       int8_t class1_logit = output->data.int8[0];
       int8_t class2_logit = output->data.int8[1];
       int8_t class3_logit = output->data.int8[2];
 
-      // DEBUG: Print raw outputs
-      Serial.print("Raw outputs (int8): ");
-      Serial.print(class1_logit); Serial.print(" ");
-      Serial.print(class2_logit); Serial.print(" ");
-      Serial.print(class3_logit); Serial.println();
-      
-      // Dequantize to get actual logits
-      float logits[3];
-      logits[0] = dequantize(class1_logit, output->params.scale, output->params.zero_point);
-      logits[1] = dequantize(class2_logit, output->params.scale, output->params.zero_point);
-      logits[2] = dequantize(class3_logit, output->params.scale, output->params.zero_point);
-      
-      Serial.print("Dequantized logits: ");
-      Serial.print(logits[0], 4); Serial.print(" ");
-      Serial.print(logits[1], 4); Serial.print(" ");
-      Serial.print(logits[2], 4); Serial.println();
-      
-      // Apply softmax to get probabilities
-      softmax(logits, 3);
-      
-      class1Percentage = logits[0];
-      class2Percentage = logits[1];
-      class3Percentage = logits[2];
-      
-      Serial.print("Probabilities: ");
-      Serial.print(class1Percentage, 3); Serial.print(" ");
-      Serial.print(class2Percentage, 3); Serial.print(" ");
-      Serial.print(class3Percentage, 3); Serial.println();
-      Serial.println("==================\n");
-  } else {
-    Serial.println("ERROR: Invoke failed!");
+      // const float *prediction_scores = interpreter->output(0)->data.f;
+      class1Percentage = confidenceToFloat(class1_logit);
+      class2Percentage = confidenceToFloat(class2_logit);
+      class3Percentage = confidenceToFloat(class3_logit);
   }
+  // Serial.println(9);
 
   display.clearDisplay();
   drawClassification(class1Percentage, class2Percentage, class3Percentage);
   drawImage(fb);
   display.display();
-  
-  delay(500); // Add delay to make debug output readable
 
   Serial.write(FRAME_HEADER, 4);
   Serial.write(fb->buf, 96*96);

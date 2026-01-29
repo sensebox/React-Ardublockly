@@ -285,86 +285,146 @@ const ModelTrainer = ({
     onTrainingStart();
 
     try {
-      // Load MobileNet for feature extraction
-      const mobilenet = await tf.loadLayersModel(
-        "https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json",
+      // Load custom base model that accepts 96x96 grayscale images
+      const baseModel = await tf.loadLayersModel(
+        "https://raw.githubusercontent.com/PaulaScharf/teachable_machine_base_model/refs/heads/main/model.json",
       );
 
-      // Get pooled features for more compact, robust representation
-      const layer = mobilenet.getLayer("conv_pw_13_relu");
-      const gap = tf.layers.globalAveragePooling2d({});
-      const gapOutput = gap.apply(layer.output);
-      const featureExtractor = tf.model({
-        inputs: mobilenet.inputs,
-        outputs: gapOutput,
+      console.log("=== BASE MODEL STRUCTURE ===");
+      baseModel.summary();
+      console.log(
+        "Base Model Layers:",
+        baseModel.layers.map((l) => ({ name: l.name, class: l.className })),
+      );
+
+      // ===== FIX: Properly create Sequential feature extractor =====
+      const featureExtractor = tf.sequential();
+
+      // Get all layers EXCEPT the last layer (which is the classification head)
+      const numLayersToInclude = baseModel.layers.length - 1;
+
+      // Add layers directly from the base model (they already have weights)
+      for (let i = 0; i < numLayersToInclude; i++) {
+        const layer = baseModel.layers[i];
+        featureExtractor.add(layer);
+      }
+
+      // Freeze all layers in the feature extractor
+      featureExtractor.layers.forEach((layer) => {
+        layer.trainable = false;
       });
 
+      console.log("=== FEATURE EXTRACTOR STRUCTURE ===");
+      featureExtractor.summary();
+      console.log(
+        "Feature Extractor Output Shape:",
+        featureExtractor.outputShape,
+      );
+
       // Extract features from all samples
-      const trainingData = [];
-      const labels = [];
+      const examples = Array(classes.length)
+        .fill(null)
+        .map(() => []);
 
       for (let classIndex = 0; classIndex < classes.length; classIndex++) {
         const cls = classes[classIndex];
         for (const sample of cls.samples) {
-          // Load image
           const img = new Image();
           img.src = sample.url;
           await new Promise((resolve) => {
             img.onload = resolve;
           });
 
-          // Extract features using MobileNet
-          const features = tf.tidy(() => {
+          const activation = tf.tidy(() => {
             const tensor = tf.browser
               .fromPixels(img)
-              .resizeBilinear([224, 224])
-              .div(127.5)
-              .sub(1.0)
+              .resizeBilinear([96, 96])
+              .mean(-1)
+              .expandDims(-1)
+              .div(255.0)
               .expandDims(0);
-            // GAP output is shape [1, channels]; squeeze to 1D feature vector
-            return featureExtractor.predict(tensor).squeeze();
+
+            const extracted = featureExtractor.predict(tensor);
+            return new Float32Array(extracted.dataSync());
           });
 
-          trainingData.push(features);
-          labels.push(classIndex);
+          examples[classIndex].push(activation);
         }
       }
 
-      // Stack all features and labels
-      const xs = tf.stack(trainingData);
-      const ys = tf.oneHot(tf.tensor1d(labels, "int32"), classes.length);
+      // Prepare training and validation datasets
+      const VALIDATION_FRACTION = 0.15;
+      let trainDataset = [];
+      let validationDataset = [];
 
-      // Dispose individual feature tensors
-      trainingData.forEach((t) => t.dispose());
+      for (let i = 0; i < examples.length; i++) {
+        const y = new Array(classes.length).fill(0);
+        y[i] = 1;
 
-      // Create a simple classifier on top of the features
-      const model = tf.sequential({
+        const classLength = examples[i].length;
+        const numValidation = Math.ceil(VALIDATION_FRACTION * classLength);
+        const numTrain = classLength - numValidation;
+
+        const classTrain = examples[i]
+          .slice(0, numTrain)
+          .map((dataArray) => ({ data: dataArray, label: y }));
+
+        const classValidation = examples[i]
+          .slice(numTrain)
+          .map((dataArray) => ({ data: dataArray, label: y }));
+
+        trainDataset = trainDataset.concat(classTrain);
+        validationDataset = validationDataset.concat(classValidation);
+      }
+
+      const trainTfDataset = tf.data.zip({
+        xs: tf.data.array(trainDataset.map((sample) => sample.data)),
+        ys: tf.data.array(trainDataset.map((sample) => sample.label)),
+      });
+
+      const validationTfDataset = tf.data.zip({
+        xs: tf.data.array(validationDataset.map((sample) => sample.data)),
+        ys: tf.data.array(validationDataset.map((sample) => sample.label)),
+      });
+
+      const featureDimension = examples[0][0].length;
+
+      // Create training model as Sequential
+      const trainingModel = tf.sequential({
         layers: [
           tf.layers.dense({
-            inputShape: [xs.shape[1]],
-            units: 128,
+            inputShape: [featureDimension],
+            units: 100,
             activation: "relu",
-            kernelRegularizer: tf.regularizers.l2({ l2: 1e-4 }),
+            kernelInitializer: "varianceScaling",
+            useBias: true,
           }),
-          tf.layers.dropout({ rate: 0.5 }),
           tf.layers.dense({
-            units: classes.length,
+            kernelInitializer: "varianceScaling",
+            useBias: false,
             activation: "softmax",
+            units: classes.length,
           }),
         ],
       });
 
-      model.compile({
-        optimizer: tf.train.adam(0.001),
+      console.log("=== TRAINING MODEL STRUCTURE ===");
+      trainingModel.summary();
+
+      const optimizer = tf.train.adam(0.0001);
+      trainingModel.compile({
+        optimizer,
         loss: "categoricalCrossentropy",
         metrics: ["accuracy"],
       });
 
-      // Train the model (much faster now!)
-      await model.fit(xs, ys, {
-        epochs: 20,
-        batchSize: 16,
-        shuffle: true,
+      const batchSize = 16;
+      const trainDataBatched = trainTfDataset.batch(batchSize);
+      const validationDataBatched = validationTfDataset.batch(batchSize);
+
+      await trainingModel.fitDataset(trainDataBatched, {
+        epochs: 50,
+        validationData: validationDataBatched,
         callbacks: {
           onEpochEnd: (epoch, logs) => {
             console.log(
@@ -374,54 +434,25 @@ const ModelTrainer = ({
         },
       });
 
-      // Clean up tensors
-      xs.dispose();
-      ys.dispose();
+      // ===== Create combined Sequential model with two Sequential models as layers =====
+      const combinedModel = tf.sequential();
+      combinedModel.add(featureExtractor); // First Sequential model
+      combinedModel.add(trainingModel); // Second Sequential model
 
-      // Create a wrapper that applies preprocessing and calls the models
-      // This approach creates a SavedModel-compatible wrapper
-      class PreprocessingModel {
-        constructor(featureExtractor, classifier) {
-          this.featureExtractor = featureExtractor;
-          this.classifier = classifier;
-        }
-
-        predict(input) {
-          return tf.tidy(() => {
-            // Input should be [batch, 96, 96, 1]
-            // Convert grayscale to RGB by repeating channels
-            const rgb = tf.concat([input, input, input], -1);
-            // Resize to 224x224 for MobileNet
-            const resized = tf.image.resizeBilinear(rgb, [224, 224]);
-            // Normalize to [-1, 1] range
-            const normalized = resized.div(127.5).sub(1.0);
-            // Extract features
-            const features = this.featureExtractor.predict(normalized);
-            // Classify
-            return this.classifier.predict(features);
-          });
-        }
-
-        // Save method for TensorFlow.js compatibility
-        async save(handlerOrURL) {
-          // Create a functional model that wraps the preprocessing
-          const input = tf.input({ shape: [96, 96, 1] });
-
-          // We can't use lambda layers, so we'll save just the classifier
-          // and handle preprocessing in the backend during conversion
-          return await this.classifier.save(handlerOrURL);
-        }
-      }
-
-      const wrappedModel = new PreprocessingModel(featureExtractor, model);
+      console.log("=== COMBINED MODEL STRUCTURE ===");
+      combinedModel.summary();
+      console.log("Combined Model Input Shape:", combinedModel.inputs[0].shape);
+      console.log(
+        "Combined Model Output Shape:",
+        combinedModel.outputs[0].shape,
+      );
 
       const modelData = {
-        model: wrappedModel,
+        model: combinedModel,
         featureExtractor,
-        classifier: model, // Store the classifier separately for serialization
-        inputShape: [96, 96, 1], // Specify expected input shape
+        trainingModel,
+        inputShape: [96, 96, 1],
         classes: classes.map((cls) => ({ id: cls.id, name: cls.name })),
-        // Include a subset of sample URLs for int8 quantization calibration
         representativeSamples: classes.flatMap((cls) =>
           cls.samples
             .slice(0, Math.min(10, cls.samples.length))
@@ -429,6 +460,9 @@ const ModelTrainer = ({
         ),
       };
 
+      await combinedModel.save("downloads://model");
+
+      optimizer.dispose();
       setTrainedModel(modelData);
       onModelTrained(modelData);
     } catch (error) {
@@ -439,7 +473,12 @@ const ModelTrainer = ({
 
   // Prediction function
   const makePrediction = useCallback(async () => {
-    if (!trainedModel || !trainedModel.model) return;
+    if (
+      !trainedModel ||
+      !trainedModel.featureExtractor ||
+      !trainedModel.trainingModel
+    )
+      return;
 
     const previewElement = getPreviewElement();
     if (!previewElement) return;
@@ -456,7 +495,7 @@ const ModelTrainer = ({
     }
 
     try {
-      // Make prediction using the combined model that takes 96x96x1 images
+      // Make prediction using feature extractor + training model
       const prediction = await tf.tidy(() => {
         // Capture the preview element and convert to grayscale 96x96x1
         const tensor = tf.browser
@@ -464,10 +503,12 @@ const ModelTrainer = ({
           .resizeBilinear([96, 96])
           .mean(-1) // Convert to grayscale by averaging RGB channels
           .expandDims(-1) // Add channel dimension: [96, 96] -> [96, 96, 1]
+          .div(255.0) // Normalize to [0, 1] range
           .expandDims(0); // Add batch dimension: [96, 96, 1] -> [1, 96, 96, 1]
 
-        // The combined model handles preprocessing internally
-        return trainedModel.model.predict(tensor);
+        // Extract features then classify
+        const features = trainedModel.featureExtractor.predict(tensor);
+        return trainedModel.trainingModel.predict(features);
       });
 
       const predictionData = await prediction.data();
