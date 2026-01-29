@@ -157,9 +157,9 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
         ref={blocklyDivRef}
         id="blocklyDiv"
         style={style ? style : cardStyle}
-        className={isEmbedded ? "embedded-mode" : ""}
+        className={isHorizontalToolbox ? "embedded-mode" : ""}
       />
-      {isEmbedded ? (
+      {isHorizontalToolbox ? (
         <HorizontalToolbox toolbox={toolboxRef} workspace={workspace} />
       ) : (
         <Toolbox toolbox={toolboxRef} workspace={workspace} />
