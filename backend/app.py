@@ -890,14 +890,15 @@ def compile_camera_capture():
         board = data.get('boardType', 'sensebox_eye')
         
         # Map board type to compiler board string
+        # The compiler expects senseBox-specific identifiers.
         board_mapping = {
-            'sensebox_eye': 'esp32:esp32:esp32s2',
-            'sensebox_mcu_esp32s2': 'esp32:esp32:esp32s2',
-            'esp32': 'esp32:esp32:esp32',
-            'esp32s2': 'esp32:esp32:esp32s2',
-            'esp32s3': 'esp32:esp32:esp32s3'
+            'sensebox_eye': 'sensebox_eye',
+            'sensebox_mcu_esp32s2': 'sensebox-esp32s2',
+            'sensebox-esp32s2': 'sensebox-esp32s2',
+            'sensebox-mcu': 'sensebox-mcu',
+            'sensebox': 'sensebox'
         }
-        compiler_board = board_mapping.get(board, 'esp32:esp32:esp32s2')
+        compiler_board = board_mapping.get(board, 'sensebox_eye')
         
         print(f"[Camera Capture API] Compiling camera_capture.ino for board: {compiler_board}")
         

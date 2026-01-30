@@ -240,7 +240,7 @@ const ModelTrainer = ({
       captureImage(classId);
       const intervalId = setInterval(() => {
         captureImage(classId);
-      }, 200); // Capture every 200ms while holding
+      }, 100); // Capture every 100ms while holding (10 fps)
       return intervalId;
     },
     [captureImage],
@@ -389,7 +389,7 @@ const ModelTrainer = ({
 
       const featureDimension = examples[0][0].length;
 
-      // Create training model as Sequential
+      // Create training model as Sequential with dropout for regularization
       const trainingModel = tf.sequential({
         layers: [
           tf.layers.dense({
@@ -398,6 +398,10 @@ const ModelTrainer = ({
             activation: "relu",
             kernelInitializer: "varianceScaling",
             useBias: true,
+            kernelRegularizer: tf.regularizers.l2({ l2: 0.01 }),
+          }),
+          tf.layers.dropout({
+            rate: 0.5,
           }),
           tf.layers.dense({
             kernelInitializer: "varianceScaling",
@@ -419,17 +423,34 @@ const ModelTrainer = ({
       });
 
       const batchSize = 16;
-      const trainDataBatched = trainTfDataset.batch(batchSize);
+      const trainDataBatched = trainTfDataset.shuffle(100).batch(batchSize);
       const validationDataBatched = validationTfDataset.batch(batchSize);
 
+      // Early stopping to prevent overfitting
+      let bestValLoss = Infinity;
+      let patienceCounter = 0;
+      const patience = 5;
+
       await trainingModel.fitDataset(trainDataBatched, {
-        epochs: 50,
+        epochs: 30, // Reduced from 50 to prevent overfitting
         validationData: validationDataBatched,
         callbacks: {
           onEpochEnd: (epoch, logs) => {
             console.log(
-              `Epoch ${epoch + 1}: loss = ${logs.loss.toFixed(4)}, accuracy = ${logs.acc.toFixed(4)}`,
+              `Epoch ${epoch + 1}: loss = ${logs.loss.toFixed(4)}, accuracy = ${logs.acc.toFixed(4)}, val_loss = ${logs.val_loss.toFixed(4)}, val_acc = ${logs.val_acc.toFixed(4)}`,
             );
+
+            // Early stopping logic
+            if (logs.val_loss < bestValLoss) {
+              bestValLoss = logs.val_loss;
+              patienceCounter = 0;
+            } else {
+              patienceCounter++;
+              if (patienceCounter >= patience) {
+                console.log(`Early stopping at epoch ${epoch + 1}`);
+                trainingModel.stopTraining = true;
+              }
+            }
           },
         },
       });
@@ -459,8 +480,6 @@ const ModelTrainer = ({
             .map((s) => s.url),
         ),
       };
-
-      await combinedModel.save("downloads://model");
 
       optimizer.dispose();
       setTrainedModel(modelData);
@@ -684,8 +703,8 @@ const ModelTrainer = ({
                   ref={previewContainerRef}
                   sx={{
                     width: "100%",
-                    maxWidth: 320,
-                    height: 240,
+                    maxWidth: "400px",
+                    aspectRatio: "1 / 1",
                     border: "2px solid #ccc",
                     borderRadius: "8px",
                     backgroundColor: "#000",
