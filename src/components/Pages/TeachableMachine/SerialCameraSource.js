@@ -121,10 +121,6 @@ class SerialCameraSource {
 
       // Create fresh image element for preview
       this.imageElement = document.createElement("img");
-      this.imageElement.style.width = "320px";
-      this.imageElement.style.height = "240px";
-      this.imageElement.style.objectFit = "cover";
-      this.imageElement.style.backgroundColor = "#000";
       this.imageElement.alt = "Serial camera feed";
 
       // Add a data attribute to indicate it's waiting for frames
