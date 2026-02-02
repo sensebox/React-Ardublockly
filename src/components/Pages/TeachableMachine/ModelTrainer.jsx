@@ -353,6 +353,17 @@ const ModelTrainer = ({
         }
       }
 
+      // Calculate class weights to balance loss by sample count
+      // Classes with fewer samples get higher weights
+      const totalSamples = examples.reduce((sum, cls) => sum + cls.length, 0);
+      const classWeights = {};
+      examples.forEach((classExamples, classIndex) => {
+        const numSamplesInClass = classExamples.length;
+        // Weight inversely proportional to number of samples
+        classWeights[classIndex] =
+          totalSamples / (classes.length * numSamplesInClass);
+      });
+
       // Prepare training and validation datasets
       const VALIDATION_FRACTION = 0.15;
       let trainDataset = [];
@@ -432,6 +443,7 @@ const ModelTrainer = ({
       await trainingModel.fitDataset(trainDataBatched, {
         epochs: 30, // Reduced from 50 to prevent overfitting
         validationData: validationDataBatched,
+        classWeight: classWeights, // Apply class weights to balance loss
         callbacks: {
           onEpochEnd: (epoch, logs) => {
             console.log(
