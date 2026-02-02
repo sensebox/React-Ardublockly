@@ -39,6 +39,8 @@ export const ErrorTypes = {
   INVALID_FORMAT: "INVALID_FORMAT",
   DECODING_ERROR: "DECODING_ERROR",
   READ_LOOP_ERROR: "READ_LOOP_ERROR",
+  CONNECTION_RESTORED: "CONNECTION_RESTORED",
+  RECONNECTING: "RECONNECTING",
 };
 
 // Connection status constants
@@ -146,6 +148,21 @@ const getErrorDetails = (errorType) => {
           "The connection may have been interrupted. Please try reconnecting.",
         action: "reconnect",
         icon: <ErrorIcon />,
+      };
+
+    case ErrorTypes.CONNECTION_RESTORED:
+      // This type should not show an error, but can be used to clear previous errors
+      return null;
+
+    case ErrorTypes.RECONNECTING:
+      return {
+        severity: "info",
+        title: "Reconnecting",
+        message: "Attempting to reconnect to the senseBox Eye camera...",
+        details:
+          "Please wait, or click the button below to select a port manually.",
+        action: "retry",
+        icon: <InfoIcon />,
       };
 
     default:

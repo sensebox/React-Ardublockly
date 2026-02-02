@@ -24,7 +24,7 @@ class SerialCameraService {
     this.consecutiveFailures = 0;
     this.maxConsecutiveFailures = 1000000;
     this.reconnectAttempts = 0;
-    this.maxReconnectAttempts = 5;
+    this.maxReconnectAttempts = 3;
     this.reconnectDelay = 2000; // Start with 2 seconds
     this.reconnectTimeoutId = null;
   }
@@ -87,8 +87,12 @@ class SerialCameraService {
       throw new Error("No serial port selected. Call requestPort() first.");
     }
 
-    // Reset timeout error flag when attempting a new connection
+    // Reset error states and flags when attempting a new connection
     this.hasEmittedTimeoutError = false;
+    this.consecutiveFailures = 0;
+    this.reconnectAttempts = 0;
+    this.frameBuffer = new Uint8Array(0); // Clear any stale data
+    this.lastFrameTime = null;
 
     try {
       // Only open the port if it's not already open
@@ -174,10 +178,6 @@ class SerialCameraService {
    * @returns {Promise<void>}
    */
   async disconnect() {
-    if (!this.isConnected) {
-      return;
-    }
-
     // Store timeout error state before cleanup
     const hadTimeoutError = this.hasEmittedTimeoutError;
 
@@ -192,7 +192,8 @@ class SerialCameraService {
 
     this.readLoopActive = false;
 
-    await this._cleanup();
+    // Fully cleanup including clearing port reference
+    await this._cleanup(false);
 
     this.isConnected = false;
 
@@ -209,8 +210,9 @@ class SerialCameraService {
   /**
    * Internal cleanup method to release resources
    * @private
+   * @param {boolean} keepPort - If true, don't clear the port reference (for reconnection)
    */
-  async _cleanup() {
+  async _cleanup(keepPort = false) {
     try {
       // Release reader
       if (this.reader) {
@@ -236,10 +238,16 @@ class SerialCameraService {
       // Close port
       if (this.port) {
         await this.port.close();
-        this.port = null;
+        if (!keepPort) {
+          this.port = null;
+        }
       }
     } catch (error) {
       console.error("Error closing port:", error);
+      // If close fails, still clear port reference when not keeping it
+      if (!keepPort && this.port) {
+        this.port = null;
+      }
     }
   }
 
@@ -530,11 +538,22 @@ class SerialCameraService {
    * @param {Object} frame - Frame object with data, size, checksum, timestamp
    */
   _emitFrame(frame) {
-    // Track successful frame reception - reset failure counters
+    const hadTimeoutError = this.hasEmittedTimeoutError;
+
+    // Track successful frame reception - reset failure counters and error flags
     this.lastFrameTime = Date.now();
     this.consecutiveFailures = 0;
     this.reconnectAttempts = 0;
     this.hasEmittedTimeoutError = false;
+
+    // Emit a special "CONNECTION_RESTORED" event if we had a timeout error before
+    // This helps the UI clear error messages when frames start flowing again
+    if (hadTimeoutError) {
+      this._emitError({
+        type: "CONNECTION_RESTORED",
+        message: "Connection restored, receiving frames",
+      });
+    }
 
     this.frameCallbacks.forEach((callback) => {
       try {
@@ -640,8 +659,8 @@ class SerialCameraService {
     // Schedule reconnection attempt
     this.reconnectTimeoutId = setTimeout(async () => {
       try {
-        // Clean up existing connection state
-        await this._cleanup();
+        // Clean up existing connection state but keep port reference
+        await this._cleanup(true);
 
         // Try to reconnect using the existing port
         if (this.port) {

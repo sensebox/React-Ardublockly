@@ -136,6 +136,13 @@ const ModelTrainer = ({
   useEffect(() => {
     if (cameraError) {
       if (sourceType === "serial") {
+        // Clear error if connection is restored
+        if (cameraError.type === "CONNECTION_RESTORED") {
+          setSerialError(null);
+          setConnectionStatus(ConnectionStatus.CONNECTED);
+          return;
+        }
+
         const warningTypes = [
           ErrorTypes.FRAME_TIMEOUT,
           ErrorTypes.FRAME_CORRUPTED,
@@ -441,7 +448,7 @@ const ModelTrainer = ({
       const patience = 5;
 
       await trainingModel.fitDataset(trainDataBatched, {
-        epochs: 30, // Reduced from 50 to prevent overfitting
+        epochs: 50,
         validationData: validationDataBatched,
         classWeight: classWeights, // Apply class weights to balance loss
         callbacks: {
