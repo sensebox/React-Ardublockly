@@ -1,5 +1,5 @@
 /**
- * SerialCameraSource - Camera source implementation for ESP32 serial camera
+ * SerialCameraSource - Camera source implementation for senseBox Eye serial camera
  * Implements the CameraSource interface for serial camera access via SerialCameraService
  */
 class SerialCameraSource {
@@ -19,16 +19,8 @@ class SerialCameraSource {
    */
   async start() {
     try {
-      console.log(
-        "[SerialCameraSource] Starting, isConnected:",
-        this.serialService.isConnected,
-        "port.connected:",
-        this.serialService.port?.connected,
-      );
-
       // Clean up any existing image element and frame callback from previous session
       if (this.imageElement) {
-        console.log("[SerialCameraSource] Cleaning up existing image element");
         if (this.imageElement.src) {
           URL.revokeObjectURL(this.imageElement.src);
         }
@@ -36,7 +28,6 @@ class SerialCameraSource {
       }
 
       if (this.frameCallback) {
-        console.log("[SerialCameraSource] Removing existing frame callback");
         this.serialService.offFrame(this.frameCallback);
         this.frameCallback = null;
       }
@@ -50,26 +41,18 @@ class SerialCameraSource {
         this.serialService.readLoopActive
       ) {
         // Port is already connected and active, just reuse it
-        console.log("[SerialCameraSource] Reusing existing active connection");
       } else if (portAlreadyConnected) {
         // Port is connected but we need to check if streams are available
-        console.log(
-          "[SerialCameraSource] Port connected, checking stream availability",
-        );
 
         // Check if streams are available
         if (
           this.serialService.port.readable &&
           this.serialService.port.writable
         ) {
-          console.log("[SerialCameraSource] Streams available, fixing state");
           this.serialService.isConnected = true;
 
           // Ensure reader and writer are available
           if (!this.serialService.reader || !this.serialService.writer) {
-            console.log(
-              "[SerialCameraSource] Re-initializing reader and writer",
-            );
             this.serialService.reader =
               this.serialService.port.readable.getReader();
             this.serialService.writer =
@@ -78,14 +61,10 @@ class SerialCameraSource {
 
           // Restart read loop if not active
           if (!this.serialService.readLoopActive) {
-            console.log("[SerialCameraSource] Restarting read loop");
             this.serialService._startReadLoop();
           }
         } else {
           // Streams not available, need to close and reopen
-          console.log(
-            "[SerialCameraSource] Streams not available, closing and reopening port",
-          );
           try {
             await this.serialService.port.close();
           } catch (e) {
@@ -100,23 +79,16 @@ class SerialCameraSource {
             throw new Error("No serial port selected");
           }
           this.serialService.port = port;
-          console.log("[SerialCameraSource] Port selected, connecting...");
           await this.serialService.connect();
-          console.log("[SerialCameraSource] Connected successfully");
         }
       } else {
         // Need to establish a new connection
-        console.log(
-          "[SerialCameraSource] No active connection, establishing new connection",
-        );
         const port = await this.serialService.requestPort();
         if (!port) {
           throw new Error("No serial port selected");
         }
         this.serialService.port = port;
-        console.log("[SerialCameraSource] Port selected, connecting...");
         await this.serialService.connect();
-        console.log("[SerialCameraSource] Connected successfully");
       }
 
       // Create fresh image element for preview
@@ -128,8 +100,6 @@ class SerialCameraSource {
 
       // Register frame callback to update preview and store latest frame
       this.frameCallback = (frame) => {
-        // console.log('[SerialCameraSource] Frame received, updating preview');
-
         // Convert RGBA data to canvas and then to blob
         const canvas = document.createElement("canvas");
         canvas.width = frame.width;
@@ -193,8 +163,6 @@ class SerialCameraSource {
       // Start frame stream (this is a no-op for Arduino which sends continuously)
       this.frameIntervalId = await this.serialService.startFrameStream(200);
       this._isActive = true;
-
-      console.log("[SerialCameraSource] Started successfully");
     } catch (error) {
       this._isActive = false;
       if (this.errorCallback) {
@@ -209,9 +177,6 @@ class SerialCameraSource {
    * @returns {Promise<void>}
    */
   async stop() {
-    console.log("[SerialCameraSource] stop() called from:");
-    console.trace();
-
     // Stop frame stream
     if (this.frameIntervalId) {
       this.serialService.stopFrameStream(this.frameIntervalId);
@@ -220,7 +185,6 @@ class SerialCameraSource {
 
     // Remove frame callback from service
     if (this.frameCallback) {
-      console.log("[SerialCameraSource] Removing frame callback");
       this.serialService.offFrame(this.frameCallback);
       this.frameCallback = null;
     }
@@ -239,7 +203,6 @@ class SerialCameraSource {
     // other consumers might be using it. The service manages its own lifecycle.
 
     this._isActive = false;
-    console.log("[SerialCameraSource] Stopped");
   }
 
   /**

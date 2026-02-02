@@ -1,12 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
-import {
-  Container,
-  Typography,
-  Box,
-  Paper,
-  Button,
-  Alert,
-} from "@mui/material";
+import { Container, Typography, Box, Paper, Alert } from "@mui/material";
 import * as Blockly from "blockly/core";
 import ModelTrainer from "./ModelTrainer";
 import BlocklyIntegration from "./BlocklyIntegration";
@@ -40,13 +33,6 @@ const TeachableMachine = () => {
     }
   }, []);
 
-  const handleResetModel = useCallback(() => {
-    if (isMountedRef.current) {
-      setTrainedModel(null);
-      setTrainingError(null);
-    }
-  }, []);
-
   // Cleanup on unmount
   useEffect(() => {
     return () => {
@@ -55,7 +41,7 @@ const TeachableMachine = () => {
   }, []);
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Container maxWidth="lg" sx={{ py: 4, pb: 10 }}>
       <Box sx={{ mb: 4 }}>
         <Typography variant="h3" component="h1" gutterBottom>
           {Blockly.Msg.teachableMachine?.title || "Teachable Machine"}
@@ -100,20 +86,6 @@ const TeachableMachine = () => {
             </Typography>
             <BlocklyIntegration model={trainedModel} />
           </Paper>
-        )}
-
-        {/* Reset Button */}
-        {trainedModel && (
-          <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-            <Button
-              variant="outlined"
-              color="secondary"
-              onClick={handleResetModel}
-              size="large"
-            >
-              {Blockly.Msg.teachableMachine?.resetModel || "Reset Model"}
-            </Button>
-          </Box>
         )}
       </Box>
     </Container>

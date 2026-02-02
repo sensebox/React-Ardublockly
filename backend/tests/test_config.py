@@ -32,7 +32,7 @@ class TestConfigLoading:
                 config = Config()
                 
                 assert config.get('COMPILATION_TIMEOUT') == 120
-                assert config.get('DEFAULT_BOARD') == 'esp32:esp32:esp32'
+                assert config.get('DEFAULT_BOARD') == 'esp32:esp32:sensebox_eye'
                 assert config.get('DEFAULT_OPTIMIZATION') == 'default'
                 assert config.get('CONVERSION_TIMEOUT') == 60
                 assert config.get('MAX_CONTENT_LENGTH') == 10 * 1024 * 1024
@@ -42,13 +42,13 @@ class TestConfigLoading:
         with patch.dict(os.environ, {
             'VITE_BLOCKLY_API': 'http://test.com',
             'COMPILATION_TIMEOUT': '180',
-            'DEFAULT_BOARD': 'sensebox:esp32s2',
+            'DEFAULT_BOARD': 'esp32:esp32:sensebox_eye',
             'DEFAULT_OPTIMIZATION': 'size'
         }):
             config = Config()
             
             assert config.get('COMPILATION_TIMEOUT') == 180
-            assert config.get('DEFAULT_BOARD') == 'sensebox:esp32s2'
+            assert config.get('DEFAULT_BOARD') == 'esp32:esp32:sensebox_eye'
             assert config.get('DEFAULT_OPTIMIZATION') == 'size'
     
     def test_boolean_conversion(self):
@@ -101,7 +101,7 @@ class TestConfigLoading:
                 config = Config()
                 
                 # Existing key
-                assert config.get('DEFAULT_BOARD') == 'esp32:esp32:esp32'
+                assert config.get('DEFAULT_BOARD') == 'esp32:esp32:sensebox_eye'
                 
                 # Non-existing key with default
                 assert config.get('NONEXISTENT_KEY', 'custom-default') == 'custom-default'

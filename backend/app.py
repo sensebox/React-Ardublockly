@@ -67,91 +67,56 @@ app.config['MAX_CONTENT_LENGTH'] = config.get('MAX_CONTENT_LENGTH')
 TEMP_DIR_PREFIX = config.get('TEMP_DIR_PREFIX')
 CONVERSION_TIMEOUT = config.get('CONVERSION_TIMEOUT')
 COMPILER_URL = config.get('VITE_BLOCKLY_API')
-DEMO_SCRIPT_PATH = os.path.join(os.path.dirname(__file__), 'demo-tflite-script')
+
+
+def error_response(message: str, details: str, error_type: str, 
+                   suggestions: list = None, retryable: bool = False) -> dict:
+    """Helper function to create standardized error responses."""
+    return {
+        "success": False,
+        "error": {
+            "message": message,
+            "details": details,
+            "type": error_type,
+            "suggestions": suggestions or [],
+            "retryable": retryable
+        }
+    }
 
 
 @app.route('/api/convert-to-tflite', methods=['POST'])
 def convert_to_tflite():
     """
-    POST /api/convert-to-tflite
+    Convert a TensorFlow.js model to TFLite format and return C/C++ byte array.
     
-    Converts a TensorFlow.js model to TFLite format and returns C/C++ byte array.
+    Accepts JSON with modelData (base64), weightsData (array of base64),
+    optional representativeDataset for int8 quantization, and conversion options.
     
-    Request Body (JSON):
-        {
-            "modelData": "base64-encoded model.json content",
-            "weightsData": ["base64-encoded weight file 1", ...],
-            "representativeDataset": ["base64-encoded sample 1", ...],  // Optional, required for int8 quantization
-            "modelMetadata": {
-                "inputShape": [1, 224, 224, 3],
-                "outputShape": [1, 10],
-                "classes": ["class1", "class2", ...]
-            },
-            "options": {
-                "quantize": true,
-                "quantizationType": "int8",  // int8, float16, or dynamic
-                "optimize": true,
-                "arrayName": "model_data",
-                "includeMetadata": true
-            }
-        }
-    
-    Response (JSON):
-        Success:
-        {
-            "success": true,
-            "data": {
-                "cppCode": "const unsigned char model_data[] = {...}",
-                "modelSize": 18432,
-                "modelByteArray": [0x00, 0x01, 0x02, ...],
-                "arrayName": "model_data",
-                "timestamp": "2024-01-15T10:30:00Z"
-            }
-        }
-        
-        Error:
-        {
-            "success": false,
-            "error": {
-                "message": "Conversion failed",
-                "details": "Detailed error message",
-                "type": "CONVERSION_ERROR",
-                "suggestions": ["Try simplifying the model", ...],
-                "retryable": true
-            }
-        }
+    Returns JSON with cppCode, modelSize, modelByteArray, and metadata.
     """
     temp_dir = None
     
     try:
         # Validate request content type
         if not request.is_json:
-            return jsonify({
-                "success": False,
-                "error": {
-                    "message": "Invalid request format",
-                    "details": "Request must be JSON",
-                    "type": "VALIDATION_ERROR",
-                    "suggestions": ["Ensure Content-Type is application/json"],
-                    "retryable": False
-                }
-            }), 400
+            return jsonify(error_response(
+                "Invalid request format",
+                "Request must be JSON",
+                "VALIDATION_ERROR",
+                ["Ensure Content-Type is application/json"]
+            )), 400
         
         # Parse request data
         data = request.get_json()
         
         # Validate required fields
         if 'modelData' not in data:
-            return jsonify({
-                "success": False,
-                "error": {
-                    "message": "Missing required field",
-                    "details": "modelData is required",
-                    "type": "VALIDATION_ERROR",
-                    "suggestions": ["Include modelData in request body"],
-                    "retryable": False
-                }
-            }), 400
+            return jsonify(error_response(
+                "Missing required field",
+                "modelData is required",
+                "VALIDATION_ERROR",
+                ["Include modelData in request body"]
+            )), 400
         
         # Extract options with defaults
         options = data.get('options', {})
@@ -398,12 +363,8 @@ def convert_to_tflite():
             model_metadata = data.get('modelMetadata', {})
             class_labels = model_metadata.get('classes', [])
             
-            print(f"[Convert API] Received class labels: {class_labels}")
-            print(f"[Convert API] Full model metadata: {model_metadata}")
-            
             # Generate model settings based on the actual model
             model_settings_code = generate_model_settings(model_info, class_labels)
-            print(f"[Convert API] Model settings generated, length: {len(model_settings_code) if model_settings_code else 0}")
         except Exception as e:
             # If model settings generation fails, continue without it
             app.logger.warning(f"Failed to generate model settings: {str(e)}")
@@ -427,9 +388,8 @@ def convert_to_tflite():
                 "numCols": model_info.get('num_cols'),
                 "numChannels": model_info.get('num_channels'),
                 "categoryCount": model_info.get('category_count'),
-                "classes": class_labels  # Include the class labels that were passed in
+                "classes": class_labels
             }
-            print(f"[Convert API] Returning response with classes: {class_labels}")
         
         # Include model settings code if available
         if model_settings_code:
@@ -441,34 +401,23 @@ def convert_to_tflite():
         }), 200
         
     except RequestEntityTooLarge:
-        return jsonify({
-            "success": False,
-            "error": {
-                "message": "Model too large",
-                "details": f"Maximum upload size is {app.config['MAX_CONTENT_LENGTH'] // (1024 * 1024)}MB",
-                "type": "SIZE_LIMIT",
-                "suggestions": [
-                    "Reduce model size",
-                    "Use fewer layers",
-                    "Enable quantization"
-                ],
-                "retryable": False
-            }
-        }), 413
+        return jsonify(error_response(
+            "Model too large",
+            f"Maximum upload size is {app.config['MAX_CONTENT_LENGTH'] // (1024 * 1024)}MB",
+            "SIZE_LIMIT",
+            ["Reduce model size", "Use fewer layers", "Enable quantization"]
+        )), 413
         
     except Exception as e:
         # Catch-all for unexpected errors
         app.logger.error(f"Unexpected error in convert_to_tflite: {str(e)}", exc_info=True)
-        return jsonify({
-            "success": False,
-            "error": {
-                "message": "Internal server error",
-                "details": str(e),
-                "type": "UNKNOWN",
-                "suggestions": ["Try again later or contact support"],
-                "retryable": True
-            }
-        }), 500
+        return jsonify(error_response(
+            "Internal server error",
+            str(e),
+            "UNKNOWN",
+            ["Try again later or contact support"],
+            retryable=True
+        )), 500
         
     finally:
         # Clean up temporary directory
@@ -492,56 +441,11 @@ def health_check():
 @app.route('/api/compile-model', methods=['POST'])
 def compile_model():
     """
-    POST /api/compile-model
-    
     Compile a TFLite model into an Arduino binary.
-    Injects the model data into the template sketch and compiles it.
+    Injects model data into template sketch and compiles it.
     
-    Request Body (JSON):
-        {
-            "modelData": "base64-encoded TFLite model bytes",
-            "modelSize": 18432,
-            "boardType": "sensebox_eye",
-            "optimization": "default",
-            "compileOnly": false
-        }
-    
-    Response (JSON):
-        Success (with binary):
-        {
-            "success": true,
-            "data": {
-                "binary": "base64-encoded compiled binary",
-                "modelSize": 18432,
-                "binarySize": 245760,
-                "board": "esp32:esp32:esp32",
-                "optimization": "default",
-                "timestamp": "2024-01-26T10:30:00Z"
-            }
-        }
-        
-        Success (compile check only):
-        {
-            "success": true,
-            "data": {
-                "compiled": true,
-                "modelSize": 18432,
-                "board": "esp32:esp32:esp32",
-                "timestamp": "2024-01-26T10:30:00Z"
-            }
-        }
-        
-        Error:
-        {
-            "success": false,
-            "error": {
-                "message": "Compilation failed",
-                "details": "Detailed error message",
-                "type": "COMPILATION_ERROR",
-                "suggestions": ["Try using a smaller model", ...],
-                "retryable": true
-            }
-        }
+    Accepts JSON with modelData (base64 TFLite), boardType, optimization level.
+    Returns compiled binary as base64 or compilation status.
     """
     try:
         # Validate request content type
@@ -573,16 +477,12 @@ def compile_model():
         
         # Validate required fields
         if 'modelData' not in data:
-            return jsonify({
-                "success": False,
-                "error": {
-                    "message": "Missing model data",
-                    "details": "modelData field is required",
-                    "type": "MISSING_MODEL_DATA",
-                    "suggestions": ["Include base64-encoded TFLite model in modelData field"],
-                    "retryable": False
-                }
-            }), 400
+            return jsonify(error_response(
+                "Missing model data",
+                "modelData field is required",
+                "MISSING_MODEL_DATA",
+                ["Include base64-encoded TFLite model in modelData field"]
+            )), 400
         
         # Decode model data
         try:
@@ -610,10 +510,6 @@ def compile_model():
         
         # Check if pre-generated model settings code is provided
         model_settings_code = data.get('modelSettingsCode', None)
-        
-        print(f"[Compile API] Received model metadata: {model_metadata_input}")
-        print(f"[Compile API] Received class labels: {class_labels}")
-        print(f"[Compile API] Received pre-generated model settings: {bool(model_settings_code)}")
         
         # Validate board type (basic check)
         if not isinstance(board, str) or not board:
@@ -643,14 +539,9 @@ def compile_model():
             }), 400
         
         model_size = len(model_bytes)
-        print(f"\n[Compile Model] Starting compilation")
-        print(f"[Compile Model] Model size: {model_size:,} bytes ({model_size/1024:.2f} KB)")
-        print(f"[Compile Model] Board: {board}")
-        print(f"[Compile Model] Optimization: {optimization}")
         
         # Step 1: Use pre-generated model settings or generate new ones
         if not model_settings_code:
-            print(f"[Compile Model] No pre-generated model settings, will generate new ones")
             try:
                 # Save model bytes to a temp file to extract metadata
                 temp_dir = tempfile.mkdtemp(prefix='compile_model_')
@@ -660,25 +551,15 @@ def compile_model():
                 
                 # Extract model metadata
                 model_info = get_model_info(temp_tflite_path)
-                print(f"[Compile Model] Model metadata extracted:")
-                print(f"[Compile Model]   Input shape: {model_info.get('input_shape')}")
-                print(f"[Compile Model]   Output shape: {model_info.get('output_shape')}")
-                print(f"[Compile Model]   Category count: {model_info.get('category_count')}")
                 
                 # Generate model settings
                 model_settings_code = generate_model_settings(model_info, class_labels)
-                print(f"[Compile API] Generated model settings with class labels: {class_labels}")
-                print(f"[Compile API] Model settings code preview (first 500 chars): {model_settings_code[:500] if model_settings_code else 'None'}")
                 
                 # Clean up temp file
                 shutil.rmtree(temp_dir, ignore_errors=True)
             except Exception as e:
-                print(f"[Compile Model] Warning: Failed to extract model metadata: {str(e)}")
                 # Fall back to injecting only model data without settings
                 model_settings_code = None
-        else:
-            print(f"[Compile Model] Using pre-generated model settings from conversion step")
-            print(f"[Compile Model] Model settings preview (first 500 chars): {model_settings_code[:500]}")
         
         # Step 2: Inject model data and settings into template
         try:
@@ -705,8 +586,6 @@ def compile_model():
                     }
                 }), 500
             
-            print(f"[Compile Model] Model injection successful")
-            print(f"[Compile Model] Sketch size: {len(sketch_content):,} characters")
         except Exception as e:
             return jsonify({
                 "success": False,
@@ -724,16 +603,12 @@ def compile_model():
         
         # Step 3: Compile the sketch
         try:
-            print(f"[Compile Model] Attempting compilation...")
-            print(f"[Compile Model] Compiler URL: {COMPILER_URL}")
             binary_data = compile_sketch(
                 sketch_content=sketch_content,
                 board=board,
                 optimization=optimization
             )
             binary_size = len(binary_data)
-            print(f"[Compile Model] Compilation successful")
-            print(f"[Compile Model] Binary size: {binary_size:,} bytes ({binary_size/1024:.2f} KB)")
         
         except CompilerTimeoutError as e:
             return jsonify({
@@ -848,41 +723,11 @@ def compile_model():
 @app.route('/api/compile-camera-capture', methods=['POST'])
 def compile_camera_capture():
     """
-    POST /api/compile-camera-capture
+    Compile the camera_capture.ino template and return the binary.
+    Used when serial camera connection fails and user needs to flash firmware.
     
-    Compile the camera_capture.ino template and return the compiled binary.
-    This is used when the serial camera connection fails and the user needs
-    to flash the firmware to their senseBox Eye device.
-    
-    Request Body (JSON):
-        {
-            "boardType": "sensebox_mcu_esp32s2"  // Optional, defaults to sensebox board
-        }
-    
-    Response (JSON):
-        Success:
-        {
-            "success": true,
-            "data": {
-                "binary": "base64-encoded compiled binary",
-                "binarySize": 245760,
-                "board": "esp32:esp32:esp32s2",
-                "timestamp": "2024-01-26T10:30:00Z",
-                "filename": "camera_capture.bin"
-            }
-        }
-        
-        Error:
-        {
-            "success": false,
-            "error": {
-                "message": "Compilation failed",
-                "details": "Detailed error message",
-                "type": "COMPILATION_ERROR",
-                "suggestions": ["Check compiler service is running"],
-                "retryable": true
-            }
-        }
+    Accepts optional boardType (defaults to sensebox_eye).
+    Returns compiled binary as base64.
     """
     try:
         # Parse request data (board type is optional)
@@ -895,12 +740,8 @@ def compile_camera_capture():
             'sensebox_eye': 'sensebox_eye',
             'sensebox_mcu_esp32s2': 'sensebox-esp32s2',
             'sensebox-esp32s2': 'sensebox-esp32s2',
-            'sensebox-mcu': 'sensebox-mcu',
-            'sensebox': 'sensebox'
         }
         compiler_board = board_mapping.get(board, 'sensebox_eye')
-        
-        print(f"[Camera Capture API] Compiling camera_capture.ino for board: {compiler_board}")
         
         # Read the camera_capture.ino template
         template_path = os.path.join(os.path.dirname(__file__), 'templates', 'camera_capture.ino')
@@ -919,8 +760,6 @@ def compile_camera_capture():
         
         with open(template_path, 'r', encoding='utf-8') as f:
             sketch_content = f.read()
-        
-        print(f"[Camera Capture API] Template loaded, size: {len(sketch_content)} characters")
         
         # Compile the sketch
         try:
@@ -977,8 +816,6 @@ def compile_camera_capture():
         binary_base64 = base64.b64encode(binary_data).decode('utf-8')
         binary_size = len(binary_data)
         
-        print(f"[Camera Capture API] Compilation successful, binary size: {binary_size:,} bytes")
-        
         # Return success response
         return jsonify({
             "success": True,
@@ -992,9 +829,7 @@ def compile_camera_capture():
         }), 200
         
     except Exception as e:
-        print(f"[Camera Capture API] Unexpected error: {str(e)}")
-        import traceback
-        traceback.print_exc()
+        app.logger.error(f"Camera capture compilation error: {str(e)}")
         return jsonify({
             "success": False,
             "error": {

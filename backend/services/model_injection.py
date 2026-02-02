@@ -17,7 +17,6 @@ TEMPLATE_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'templat
 TEMPLATE_FILE = os.path.join(TEMPLATE_DIR, 'tflite_sketch_template.ino')
 
 # Placeholder patterns for model data injection
-# These patterns identify the sections in the template that need to be replaced
 MODEL_DATA_ARRAY_START = "alignas(8) const unsigned char g_person_detect_model_data[] = {"
 MODEL_DATA_ARRAY_END_PATTERN = r"};\s*const int g_person_detect_model_data_len"
 MODEL_SIZE_PATTERN = r"const\s+int\s+g_person_detect_model_data_len\s*=\s*\d+;"
@@ -63,14 +62,10 @@ def format_byte_array(model_bytes: bytes, bytes_per_line: int = 12) -> str:
     
     Args:
         model_bytes: Raw model bytes to format
-        bytes_per_line: Number of bytes to display per line (default: 12)
+        bytes_per_line: Number of bytes per line
     
     Returns:
-        str: Formatted C++ byte array content
-    
-    Example:
-        >>> format_byte_array(b'\\x01\\x02\\x03', bytes_per_line=2)
-        '  0x01, 0x02,\\n  0x03'
+        Formatted C++ byte array content
     """
     lines = []
     for i in range(0, len(model_bytes), bytes_per_line):
@@ -90,17 +85,11 @@ def validate_cpp_syntax(injected_content: str) -> Tuple[bool, Optional[str]]:
     """
     Validate that the injected code maintains valid C++ syntax.
     
-    This performs basic syntax checks:
-    - Array declaration format is correct
-    - Size constant is properly formatted
-    - Hexadecimal bytes are correctly formatted
-    - Braces and semicolons are balanced
-    
     Args:
         injected_content: The content after model data injection
     
     Returns:
-        Tuple[bool, Optional[str]]: (is_valid, error_message)
+        Tuple of (is_valid, error_message)
     """
     # Check for model data array declaration
     if not re.search(r'alignas\(\d+\)\s+const\s+unsigned\s+char\s+g_person_detect_model_data\[\]\s*=\s*{', 
@@ -235,9 +224,6 @@ def inject_model_settings(template_content: str, model_settings_code: str) -> st
     Returns:
         str: Template content with model settings injected
     """
-    # Pattern to match the entire model_settings section
-    # From "// ******************** model_settings.h ********************"
-    # To the end of "// ********************************************************" after model_settings.cpp
     pattern = re.compile(
         r'// \*+\s*model_settings\.h\s+\*+.*?// \*+\s*model_settings\.cpp\s+\*+.*?// \*+',
         re.DOTALL

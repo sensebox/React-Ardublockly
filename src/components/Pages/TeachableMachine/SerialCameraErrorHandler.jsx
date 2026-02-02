@@ -23,7 +23,7 @@ import {
 /**
  * SerialCameraErrorHandler
  *
- * Comprehensive error handling and status display component for ESP32 serial camera.
+ * Comprehensive error handling and status display component for senseBox Eye serial camera.
  * Handles different error types with appropriate messages, actions, and visual feedback.
  */
 
@@ -61,7 +61,7 @@ const getErrorDetails = (errorType) => {
         severity: "error",
         title: "Browser Not Supported",
         message:
-          "Your browser does not support the Web Serial API required for ESP32 camera connection.",
+          "Your browser does not support the Web Serial API required for senseBox Eye camera connection.",
         details:
           "The Web Serial API is currently supported in Chrome 89+, Edge 89+, and Opera 76+ on desktop platforms.",
         action: "switch-browser",
@@ -73,7 +73,7 @@ const getErrorDetails = (errorType) => {
         severity: "error",
         title: "Permission Denied",
         message:
-          "Serial port access was denied. Please grant permission to connect to your ESP32 camera.",
+          "Serial port access was denied. Please grant permission to connect to your senseBox Eye camera.",
         details:
           "You may need to check your browser settings or try connecting again.",
         action: "retry",
@@ -95,7 +95,7 @@ const getErrorDetails = (errorType) => {
       return {
         severity: "error",
         title: "Device Disconnected",
-        message: "The ESP32 camera was disconnected.",
+        message: "The senseBox Eye camera was disconnected.",
         details: "Please reconnect your device and try again.",
         action: "reconnect",
         icon: <ErrorIcon />,
@@ -106,7 +106,7 @@ const getErrorDetails = (errorType) => {
         severity: "warning",
         title: "Frame Timeout",
         message:
-          "No frames received from the ESP32 camera within the expected time.",
+          "No frames received from the senseBox Eye camera within the expected time.",
         details:
           "The device may be busy or experiencing communication issues. The system will continue waiting for frames.",
         action: "none",
@@ -117,7 +117,7 @@ const getErrorDetails = (errorType) => {
       return {
         severity: "warning",
         title: "Corrupted Frame",
-        message: "Received a corrupted frame from the ESP32 camera.",
+        message: "Received a corrupted frame from the senseBox Eye camera.",
         details:
           "This can happen due to transmission errors. The system will continue processing subsequent frames.",
         action: "none",
@@ -129,7 +129,7 @@ const getErrorDetails = (errorType) => {
       return {
         severity: "warning",
         title: "Frame Decoding Error",
-        message: "Failed to decode frame data from the ESP32 camera.",
+        message: "Failed to decode frame data from the senseBox Eye camera.",
         details:
           "The frame format may be invalid or corrupted. The system will continue processing subsequent frames.",
         action: "none",
@@ -140,7 +140,8 @@ const getErrorDetails = (errorType) => {
       return {
         severity: "error",
         title: "Communication Error",
-        message: "An error occurred while reading data from the ESP32 camera.",
+        message:
+          "An error occurred while reading data from the senseBox Eye camera.",
         details:
           "The connection may have been interrupted. Please try reconnecting.",
         action: "reconnect",
@@ -151,7 +152,7 @@ const getErrorDetails = (errorType) => {
       return {
         severity: "error",
         title: "Unknown Error",
-        message: "An unexpected error occurred with the ESP32 camera.",
+        message: "An unexpected error occurred with the senseBox Eye camera.",
         details: errorType || "No additional details available.",
         action: "retry",
         icon: <ErrorIcon />,
@@ -458,8 +459,8 @@ const SerialCameraErrorHandler = ({
         error?.type === ErrorTypes.FRAME_TIMEOUT && (
           <Alert severity="info" icon={<InfoIcon />} sx={{ mb: 2 }}>
             <Typography variant="body2">
-              Waiting for frames from ESP32 camera... If this persists, check
-              your device connection.
+              Waiting for frames from senseBox Eye camera... If this persists,
+              check your device connection.
             </Typography>
           </Alert>
         )}

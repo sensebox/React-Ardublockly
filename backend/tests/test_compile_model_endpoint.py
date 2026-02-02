@@ -106,19 +106,19 @@ class TestCompileModelEndpoint:
         response = client.post('/api/compile-model', json={
             'modelData': sample_model_data,
             'options': {
-                'board': 'sensebox:esp32s2'
+                'board': 'esp32:esp32:sensebox_eye'
             }
         })
         
         assert response.status_code == 200
         data = json.loads(response.data)
         assert data['success'] is True
-        assert data['data']['board'] == 'sensebox:esp32s2'
+        assert data['data']['board'] == 'esp32:esp32:sensebox_eye'
         
         # Verify compile_sketch was called with correct board
         mock_compile.assert_called_once()
         call_kwargs = mock_compile.call_args[1]
-        assert call_kwargs['board'] == 'sensebox:esp32s2'
+        assert call_kwargs['board'] == 'esp32:esp32:sensebox_eye'
     
     @patch('app.inject_model_data')
     @patch('app.compile_sketch')
@@ -346,7 +346,7 @@ class TestCompileModelIntegration:
         response = client.post('/api/compile-model', json={
             'modelData': sample_model_data,
             'options': {
-                'board': 'esp32:esp32:esp32',
+                'board': 'esp32:esp32:sensebox_eye',
                 'optimization': 'default'
             }
         })
@@ -366,7 +366,7 @@ class TestCompileModelIntegration:
         
         # Verify compile was called with injected sketch
         compile_call_kwargs = mock_compile.call_args[1]
-        assert compile_call_kwargs['board'] == 'esp32:esp32:esp32'
+        assert compile_call_kwargs['board'] == 'esp32:esp32:sensebox_eye'
         assert compile_call_kwargs['optimization'] == 'default'
         
         # Verify binary in response

@@ -189,7 +189,7 @@ class TestCompileSketch:
         mock_post.return_value = mock_response
         
         sketch = "void setup() {} void loop() {}"
-        result = compile_sketch(sketch, board="esp32:esp32:esp32")
+        result = compile_sketch(sketch, board="esp32:esp32:sensebox_eye")
         
         assert result == binary_data
         assert mock_post.called
@@ -198,7 +198,7 @@ class TestCompileSketch:
         call_args = mock_post.call_args
         assert f"{COMPILER_URL}/compile" in call_args[0][0]
         assert call_args[1]['json']['sketch'] == sketch
-        assert call_args[1]['json']['board'] == "esp32:esp32:esp32"
+        assert call_args[1]['json']['board'] == "esp32:esp32:sensebox_eye"
     
     @patch('services.compiler_service.requests.post')
     def test_successful_compilation_base64_response(self, mock_post):
@@ -232,7 +232,7 @@ class TestCompileSketch:
         sketch = "void setup() {} void loop() {}"
         result = compile_sketch(
             sketch,
-            board="sensebox:esp32s2",
+            board="esp32:esp32:sensebox_eye",
             project_id="test-123",
             optimization="size"
         )
@@ -242,7 +242,7 @@ class TestCompileSketch:
         # Verify custom options in request
         call_args = mock_post.call_args
         request_data = call_args[1]['json']
-        assert request_data['board'] == "sensebox:esp32s2"
+        assert request_data['board'] == "esp32:esp32:sensebox_eye"
         assert request_data['projectId'] == "test-123"
         assert request_data['optimization'] == "size"
     
@@ -423,7 +423,7 @@ class TestCompilerIntegration:
         }
         """
         
-        result = compile_sketch(sketch, board="esp32:esp32:esp32")
+        result = compile_sketch(sketch, board="esp32:esp32:sensebox_eye")
         
         assert len(result) > MIN_BINARY_SIZE
         assert len(result) < MAX_BINARY_SIZE

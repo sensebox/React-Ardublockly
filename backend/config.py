@@ -12,11 +12,9 @@ from pathlib import Path
 # Load environment variables from .env file
 try:
     from dotenv import load_dotenv
-    # Load .env file from backend directory
     env_path = Path(__file__).parent / '.env'
     load_dotenv(dotenv_path=env_path)
 except ImportError:
-    # python-dotenv not installed, use system environment only
     pass
 
 
@@ -32,7 +30,7 @@ class Config:
     Environment Variables:
         VITE_BLOCKLY_API: URL of the Blockly compiler service
         COMPILATION_TIMEOUT: Timeout for compilation requests in seconds (default: 120)
-        DEFAULT_BOARD: Default board type for compilation (default: esp32:esp32:esp32)
+        DEFAULT_BOARD: Default board type for compilation (default: esp32:esp32:sensebox_eye)
         DEFAULT_OPTIMIZATION: Default optimization level (default: default)
         MAX_CONTENT_LENGTH: Maximum request size in bytes (default: 10MB)
         CONVERSION_TIMEOUT: Timeout for TFLite conversion in seconds (default: 60)
@@ -46,7 +44,7 @@ class Config:
     # Default values
     DEFAULTS = {
         'COMPILATION_TIMEOUT': 120,
-        'DEFAULT_BOARD': 'esp32:esp32:esp32',
+        'DEFAULT_BOARD': 'esp32:esp32:sensebox_eye',
         'DEFAULT_OPTIMIZATION': 'default',
         'MAX_CONTENT_LENGTH': 10 * 1024 * 1024,  # 10MB
         'CONVERSION_TIMEOUT': 60,
