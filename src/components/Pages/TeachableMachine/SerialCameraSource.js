@@ -11,6 +11,7 @@ class SerialCameraSource {
     this.frameIntervalId = null;
     this._isActive = false;
     this.frameCallback = null;
+    this.currentBlobUrl = null; // Track current blob URL for cleanup
   }
 
   /**
@@ -19,11 +20,13 @@ class SerialCameraSource {
    */
   async start() {
     try {
-      // Clean up any existing image element and frame callback from previous session
+      // Clean up any existing resources from previous session
+      if (this.currentBlobUrl) {
+        URL.revokeObjectURL(this.currentBlobUrl);
+        this.currentBlobUrl = null;
+      }
+
       if (this.imageElement) {
-        if (this.imageElement.src) {
-          URL.revokeObjectURL(this.imageElement.src);
-        }
         this.imageElement = null;
       }
 
@@ -31,6 +34,13 @@ class SerialCameraSource {
         this.serialService.offFrame(this.frameCallback);
         this.frameCallback = null;
       }
+
+      // Clear any latent frame data
+      this.latestFrame = null;
+
+      // Cancel any automatic reconnection attempts that might be in progress
+      // This is critical when user manually selects a new port
+      this.serialService._cancelReconnection();
 
       // Check if port is already connected
       const portAlreadyConnected = this.serialService.port?.connected;
@@ -64,16 +74,13 @@ class SerialCameraSource {
             this.serialService._startReadLoop();
           }
         } else {
-          // Streams not available, need to close and reopen
-          try {
-            await this.serialService.port.close();
-          } catch (e) {
-            console.warn("[SerialCameraSource] Error closing port:", e);
-          }
-          this.serialService.port = null;
-          this.serialService.isConnected = false;
+          // Streams not available, need to fully disconnect and get new port
+          console.log(
+            "[SerialCameraSource] Port exists but streams unavailable, requesting new port",
+          );
+          await this.serialService.disconnect();
 
-          // Establish new connection
+          // Establish new connection with fresh port selection
           const port = await this.serialService.requestPort();
           if (!port) {
             throw new Error("No serial port selected");
@@ -83,6 +90,11 @@ class SerialCameraSource {
         }
       } else {
         // Need to establish a new connection
+        // Ensure we're fully disconnected first
+        if (this.serialService.isConnected) {
+          await this.serialService.disconnect();
+        }
+
         const port = await this.serialService.requestPort();
         if (!port) {
           throw new Error("No serial port selected");
@@ -120,13 +132,15 @@ class SerialCameraSource {
             if (blob) {
               this.latestFrame = blob;
 
+              // Revoke old URL to prevent memory leak
+              if (this.currentBlobUrl) {
+                URL.revokeObjectURL(this.currentBlobUrl);
+                this.currentBlobUrl = null;
+              }
+
               // Update preview image
               const url = URL.createObjectURL(blob);
-
-              // Revoke old URL to prevent memory leak
-              if (this.imageElement && this.imageElement.src) {
-                URL.revokeObjectURL(this.imageElement.src);
-              }
+              this.currentBlobUrl = url;
 
               if (this.imageElement) {
                 this.imageElement.src = url;
@@ -189,11 +203,13 @@ class SerialCameraSource {
       this.frameCallback = null;
     }
 
-    // Clean up image element
-    if (this.imageElement && this.imageElement.src) {
-      URL.revokeObjectURL(this.imageElement.src);
+    // Clean up blob URLs
+    if (this.currentBlobUrl) {
+      URL.revokeObjectURL(this.currentBlobUrl);
+      this.currentBlobUrl = null;
     }
 
+    // Clean up image element
     this.imageElement = null;
 
     // Clear latest frame
