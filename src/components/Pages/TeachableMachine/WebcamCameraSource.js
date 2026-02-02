@@ -18,14 +18,12 @@ class WebcamCameraSource {
     try {
       // Clean up any existing video element from previous session
       if (this.videoElement) {
-        console.log("[WebcamCameraSource] Cleaning up existing video element");
         this.videoElement.srcObject = null;
         this.videoElement = null;
       }
 
       // Clean up any existing stream from previous session
       if (this.stream) {
-        console.log("[WebcamCameraSource] Cleaning up existing stream");
         this.stream.getTracks().forEach((track) => track.stop());
         this.stream = null;
       }

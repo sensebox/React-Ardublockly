@@ -140,13 +140,10 @@ function useCameraSource() {
    * @throws {Error} If no source is selected or start fails
    */
   const startCamera = useCallback(async () => {
-    console.log('[useCameraSource] startCamera called, isActive:', isActive);
-    
     // Lazily create the current source if none exists
     let source = cameraSourceRef.current || cameraSource;
     if (!source) {
       try {
-        console.log('[useCameraSource] Creating new source of type:', sourceType);
         source = createSource(sourceType);
         attachErrorHandler(source);
         cameraSourceRef.current = source;
@@ -159,10 +156,8 @@ function useCameraSource() {
 
     try {
       setError(null);
-      console.log('[useCameraSource] Calling source.start()');
       await source.start();
       setIsActive(true);
-      console.log('[useCameraSource] Camera started successfully, isActive set to true');
     } catch (err) {
       console.error('[useCameraSource] Error starting camera:', err);
       setError(err);

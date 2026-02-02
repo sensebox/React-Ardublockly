@@ -40,9 +40,10 @@ const ModelTrainer = ({
   disabled,
 }) => {
   const [classes, setClasses] = useState([]);
-  const [editingClass, setEditingClass] = useState(null);
   const [newClassName, setNewClassName] = useState("");
   const [showAddDialog, setShowAddDialog] = useState(false);
+  const [editingClassId, setEditingClassId] = useState(null);
+  const [editingClassName, setEditingClassName] = useState("");
   const previewContainerRef = useRef(null);
   const [videoLoading, setVideoLoading] = useState(false);
   const [serialError, setSerialError] = useState(null);
@@ -55,8 +56,6 @@ const ModelTrainer = ({
   const [trainedModel, setTrainedModel] = useState(null);
   const [predictions, setPredictions] = useState([]);
   const predictionIntervalRef = useRef(null);
-
-  // Use the camera source hook (must be before any effects that use sourceType)
   const {
     sourceType,
     selectSource,
@@ -85,25 +84,18 @@ const ModelTrainer = ({
       setVideoLoading(true);
       setSerialError(null);
 
-      // Update connection status for serial camera
       if (sourceType === "serial") {
         setConnectionStatus(ConnectionStatus.CONNECTING);
       }
 
       await startCameraSource();
       setVideoLoading(false);
-
-      // Update connection status for serial camera
       if (sourceType === "serial") {
         setConnectionStatus(ConnectionStatus.CONNECTED);
       }
-
-      // Update preview container with the preview element
       const previewElement = getPreviewElement();
       if (previewElement && previewContainerRef.current) {
-        // Clear existing content
         previewContainerRef.current.innerHTML = "";
-        // Add the preview element
         previewContainerRef.current.appendChild(previewElement);
       }
     } catch (error) {
@@ -129,14 +121,10 @@ const ModelTrainer = ({
     try {
       await stopCameraSource();
       setVideoLoading(false);
-
-      // Update connection status for serial camera
       if (sourceType === "serial") {
         setConnectionStatus(ConnectionStatus.DISCONNECTED);
         // Don't clear serialError here - let it persist so user can download firmware
       }
-
-      // Clear preview container
       if (previewContainerRef.current) {
         previewContainerRef.current.innerHTML = "";
       }
@@ -145,7 +133,6 @@ const ModelTrainer = ({
     }
   }, [stopCameraSource, sourceType]);
 
-  // Handle camera errors
   useEffect(() => {
     if (cameraError) {
       if (sourceType === "serial") {
@@ -170,14 +157,10 @@ const ModelTrainer = ({
       }
     }
   }, [cameraError, onTrainingError, sourceType]);
-
-  // Handle reconnection for serial camera
   const handleReconnect = useCallback(async () => {
     setSerialError(null);
     await startCamera();
   }, [startCamera]);
-
-  // Handle error dismissal
   const handleDismissError = useCallback(() => {
     setSerialError(null);
     if (connectionStatus === ConnectionStatus.ERROR) {
@@ -187,19 +170,63 @@ const ModelTrainer = ({
 
   const addClass = useCallback(() => {
     if (newClassName.trim() && classes.length < 3) {
+      const trimmedName = newClassName.trim();
+      const nameExists = classes.some(
+        (cls) => cls.name.toLowerCase() === trimmedName.toLowerCase(),
+      );
+      if (nameExists) {
+        onTrainingError(
+          `A class with the name "${trimmedName}" already exists.`,
+        );
+        return;
+      }
       const newClass = {
         id: Date.now(),
-        name: newClassName.trim(),
+        name: trimmedName,
         samples: [],
       };
       setClasses((prev) => [...prev, newClass]);
       setNewClassName("");
       setShowAddDialog(false);
     }
-  }, [newClassName, classes.length]);
+  }, [newClassName, classes, onTrainingError]);
 
   const deleteClass = useCallback((classId) => {
     setClasses((prev) => prev.filter((cls) => cls.id !== classId));
+  }, []);
+
+  const startEditingClass = useCallback((classId, currentName) => {
+    setEditingClassId(classId);
+    setEditingClassName(currentName);
+  }, []);
+
+  const saveClassRename = useCallback(() => {
+    if (editingClassName.trim() && editingClassId) {
+      const trimmedName = editingClassName.trim();
+      const nameExists = classes.some(
+        (cls) =>
+          cls.id !== editingClassId &&
+          cls.name.toLowerCase() === trimmedName.toLowerCase(),
+      );
+      if (nameExists) {
+        onTrainingError(
+          `A class with the name "${trimmedName}" already exists.`,
+        );
+        return;
+      }
+      setClasses((prev) =>
+        prev.map((cls) =>
+          cls.id === editingClassId ? { ...cls, name: trimmedName } : cls,
+        ),
+      );
+      setEditingClassId(null);
+      setEditingClassName("");
+    }
+  }, [editingClassName, editingClassId, classes, onTrainingError]);
+
+  const cancelEditingClass = useCallback(() => {
+    setEditingClassId(null);
+    setEditingClassName("");
   }, []);
 
   const captureImage = useCallback(
@@ -251,8 +278,6 @@ const ModelTrainer = ({
       clearInterval(intervalId);
     }
   }, []);
-
-  // Cleanup on component unmount
   useEffect(() => {
     return () => {
       if (isCameraActive) {
@@ -289,39 +314,15 @@ const ModelTrainer = ({
       const baseModel = await tf.loadLayersModel(
         "https://raw.githubusercontent.com/PaulaScharf/teachable_machine_base_model/refs/heads/main/model.json",
       );
-
-      console.log("=== BASE MODEL STRUCTURE ===");
-      baseModel.summary();
-      console.log(
-        "Base Model Layers:",
-        baseModel.layers.map((l) => ({ name: l.name, class: l.className })),
-      );
-
-      // ===== FIX: Properly create Sequential feature extractor =====
       const featureExtractor = tf.sequential();
-
-      // Get all layers EXCEPT the last layer (which is the classification head)
       const numLayersToInclude = baseModel.layers.length - 1;
-
-      // Add layers directly from the base model (they already have weights)
       for (let i = 0; i < numLayersToInclude; i++) {
         const layer = baseModel.layers[i];
         featureExtractor.add(layer);
       }
-
-      // Freeze all layers in the feature extractor
       featureExtractor.layers.forEach((layer) => {
         layer.trainable = false;
       });
-
-      console.log("=== FEATURE EXTRACTOR STRUCTURE ===");
-      featureExtractor.summary();
-      console.log(
-        "Feature Extractor Output Shape:",
-        featureExtractor.outputShape,
-      );
-
-      // Extract features from all samples
       const examples = Array(classes.length)
         .fill(null)
         .map(() => []);
@@ -412,9 +413,6 @@ const ModelTrainer = ({
         ],
       });
 
-      console.log("=== TRAINING MODEL STRUCTURE ===");
-      trainingModel.summary();
-
       const optimizer = tf.train.adam(0.0001);
       trainingModel.compile({
         optimizer,
@@ -454,19 +452,9 @@ const ModelTrainer = ({
           },
         },
       });
-
-      // ===== Create combined Sequential model with two Sequential models as layers =====
       const combinedModel = tf.sequential();
-      combinedModel.add(featureExtractor); // First Sequential model
-      combinedModel.add(trainingModel); // Second Sequential model
-
-      console.log("=== COMBINED MODEL STRUCTURE ===");
-      combinedModel.summary();
-      console.log("Combined Model Input Shape:", combinedModel.inputs[0].shape);
-      console.log(
-        "Combined Model Output Shape:",
-        combinedModel.outputs[0].shape,
-      );
+      combinedModel.add(featureExtractor);
+      combinedModel.add(trainingModel);
 
       const modelData = {
         model: combinedModel,
@@ -489,8 +477,6 @@ const ModelTrainer = ({
       onTrainingError(`Training failed: ${error.message}`);
     }
   }, [classes, onModelTrained, onTrainingStart, onTrainingError]);
-
-  // Prediction function
   const makePrediction = useCallback(async () => {
     if (
       !trainedModel ||
@@ -501,8 +487,6 @@ const ModelTrainer = ({
 
     const previewElement = getPreviewElement();
     if (!previewElement) return;
-
-    // Check if element is ready
     if (previewElement.tagName === "VIDEO") {
       if (previewElement.readyState < 2 || previewElement.paused) {
         return;
@@ -538,8 +522,6 @@ const ModelTrainer = ({
         className: cls.name,
         confidence: predictionData[index],
       }));
-
-      // Find the highest confidence for highlighting
       const maxConfidence = Math.max(...classResults.map((r) => r.confidence));
 
       setPredictions(
@@ -555,16 +537,12 @@ const ModelTrainer = ({
 
   // Automatically start/stop predictions based on camera and model availability
   useEffect(() => {
-    // Start predictions if both camera and model are available
     if (trainedModel && isCameraActive) {
-      // Clear any existing interval
       if (predictionIntervalRef.current) {
         clearInterval(predictionIntervalRef.current);
       }
 
       setPredictions([]);
-
-      // Start prediction loop
       predictionIntervalRef.current = setInterval(async () => {
         await makePrediction();
       }, 500);
@@ -576,8 +554,6 @@ const ModelTrainer = ({
       }
       setPredictions([]);
     }
-
-    // Cleanup on unmount or dependency change
     return () => {
       if (predictionIntervalRef.current) {
         clearInterval(predictionIntervalRef.current);
@@ -745,7 +721,43 @@ const ModelTrainer = ({
                         mb: 2,
                       }}
                     >
-                      <Typography variant="h6">{cls.name}</Typography>
+                      {editingClassId === cls.id ? (
+                        <TextField
+                          autoFocus
+                          size="small"
+                          value={editingClassName}
+                          onChange={(e) => setEditingClassName(e.target.value)}
+                          onBlur={saveClassRename}
+                          onKeyPress={(e) => {
+                            if (e.key === "Enter") {
+                              saveClassRename();
+                            } else if (e.key === "Escape") {
+                              cancelEditingClass();
+                            }
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === "Escape") {
+                              cancelEditingClass();
+                            }
+                          }}
+                          sx={{ flex: 1, mr: 1 }}
+                        />
+                      ) : (
+                        <Typography
+                          variant="h6"
+                          onClick={() => startEditingClass(cls.id, cls.name)}
+                          sx={{
+                            cursor: "pointer",
+                            padding: "4px 8px",
+                            borderRadius: "4px",
+                            "&:hover": {
+                              backgroundColor: "action.hover",
+                            },
+                          }}
+                        >
+                          {cls.name}
+                        </Typography>
+                      )}
                       <Box>
                         <Chip
                           label={`${cls.samples.length} samples`}
@@ -859,9 +871,18 @@ const ModelTrainer = ({
             ))}
           </Grid>
 
-          {/* Add Class Button - Below Classes */}
-          {classes.length < 3 && (
-            <Box sx={{ mb: 3 }}>
+          {/* Add Class + Train Model Buttons - Below Classes */}
+          <Box
+            sx={{
+              mb: 3,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: 2,
+              flexWrap: "wrap",
+            }}
+          >
+            {classes.length < 3 && (
               <Button
                 variant="contained"
                 startIcon={<AddIcon />}
@@ -870,8 +891,21 @@ const ModelTrainer = ({
               >
                 Add Class
               </Button>
-            </Box>
-          )}
+            )}
+            <Button
+              variant="contained"
+              size="large"
+              startIcon={<TrainIcon />}
+              onClick={trainModel}
+              disabled={
+                disabled ||
+                classes.length < 2 ||
+                classes.some((cls) => cls.samples.length === 0)
+              }
+            >
+              Train Model
+            </Button>
+          </Box>
         </Grid>
       </Grid>
 
@@ -883,22 +917,6 @@ const ModelTrainer = ({
           <LinearProgress />
         </Box>
       )}
-
-      <Box sx={{ display: "flex", justifyContent: "center" }}>
-        <Button
-          variant="contained"
-          size="large"
-          startIcon={<TrainIcon />}
-          onClick={trainModel}
-          disabled={
-            disabled ||
-            classes.length < 2 ||
-            classes.some((cls) => cls.samples.length === 0)
-          }
-        >
-          Train Model
-        </Button>
-      </Box>
 
       {/* Predictions Section - Show after training */}
       {trainedModel && (

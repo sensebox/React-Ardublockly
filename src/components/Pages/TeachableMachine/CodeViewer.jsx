@@ -16,32 +16,17 @@ import {
 /**
  * CodeViewer Component
  *
- * Displays C/C++ code with syntax highlighting, line numbers, and copy functionality.
+ * Displays C/C++ code with copy functionality.
  *
  * @param {Object} props
  * @param {string} props.code - The C/C++ code to display
- * @param {string} [props.language='cpp'] - The language for syntax highlighting ('c' or 'cpp')
  * @param {function} [props.onCopy] - Callback function when code is copied
  * @param {number} [props.maxHeight=400] - Maximum height in pixels for the scrollable container
  * @param {boolean} [props.loading=false] - Whether to show loading indicator
  */
-const CodeViewer = ({
-  code,
-  language = "cpp",
-  onCopy,
-  maxHeight = 400,
-  loading = false,
-}) => {
+const CodeViewer = ({ code, onCopy, maxHeight = 400, loading = false }) => {
   const [copied, setCopied] = useState(false);
-  const [renderedCode, setRenderedCode] = useState("");
   const codeRef = useRef(null);
-
-  // Highlight code when it changes
-  useEffect(() => {
-    if (code && !loading) {
-      setRenderedCode(code);
-    }
-  }, [code, language, loading]);
 
   // Handle copy to clipboard
   const handleCopy = async () => {
@@ -200,7 +185,7 @@ const CodeViewer = ({
             }}
           >
             <pre>
-              <code>{renderedCode}</code>
+              <code>{code}</code>
             </pre>
           </Box>
         </Box>

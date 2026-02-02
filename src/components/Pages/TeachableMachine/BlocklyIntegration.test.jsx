@@ -819,7 +819,7 @@ describe("BlocklyIntegration - Integration Tests", () => {
       const boardSelect = screen.getByLabelText(/target board/i);
       fireEvent.mouseDown(boardSelect);
 
-      const esp32Option = await screen.findByText("ESP32");
+      const esp32Option = await screen.findByText("senseBox Eye");
       fireEvent.click(esp32Option);
 
       // Compile with new board type
@@ -833,7 +833,7 @@ describe("BlocklyIntegration - Integration Tests", () => {
         expect(ConversionService.compileModel).toHaveBeenCalledWith(
           expect.any(Object),
           expect.objectContaining({
-            boardType: "esp32:esp32:esp32",
+            boardType: "esp32:esp32:sensebox_eye",
           }),
           expect.any(Function),
         );

@@ -51,7 +51,7 @@ const BlocklyIntegration = ({ model }) => {
     binarySize: null,
   });
 
-  // Fixed board type for ESP32 XIAO S3
+  // Fixed board type for senseBox Eye
   const boardType = "sensebox_eye";
 
   // Combined workflow: Convert -> Compile -> Download
@@ -95,12 +95,6 @@ const BlocklyIntegration = ({ model }) => {
         ? model.classes.map((cls) => cls.name)
         : [];
 
-      console.log(
-        "[BlocklyIntegration] Converting model with class labels:",
-        classLabels,
-      );
-      console.log("[BlocklyIntegration] Model classes object:", model.classes);
-
       const conversionResult = await ConversionService.convertToTFLite(
         model.model,
         {
@@ -140,15 +134,6 @@ const BlocklyIntegration = ({ model }) => {
         });
         return;
       }
-
-      console.log(
-        "[BlocklyIntegration] Conversion successful, received data:",
-        {
-          hasModelSettingsCode: !!conversionResult.data.modelSettingsCode,
-          modelMetadata: conversionResult.data.modelMetadata,
-          classes: conversionResult.data.modelMetadata?.classes,
-        },
-      );
 
       // Update state with conversion results
       setWorkflowState((prev) => ({
@@ -511,7 +496,7 @@ const BlocklyIntegration = ({ model }) => {
               )}
             </Box>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Board: ESP32 XIAO S3
+              Board: senseBox Eye
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
               The binary has been automatically downloaded. If the download

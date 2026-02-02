@@ -1,7 +1,7 @@
 /**
  * SerialCameraService
  *
- * Manages serial communication with ESP32 camera devices using the Web Serial API.
+ * Manages serial communication with senseBox Eye camera devices using the Web Serial API.
  * Handles connection lifecycle, frame requests, and error management.
  */
 
@@ -14,7 +14,6 @@ class SerialCameraService {
     this.frameCallbacks = [];
     this.errorCallbacks = [];
     this.readLoopActive = false;
-    this.frameStreamIntervalId = null;
     this.frameBuffer = new Uint8Array(0);
 
     // Frame reception tracking and retry logic
@@ -80,19 +79,7 @@ class SerialCameraService {
    * @throws {Error} If connection fails or port is already connected
    */
   async connect(baudRate = 115200) {
-    console.log(
-      "[SerialCameraService] connect() called, isConnected:",
-      this.isConnected,
-      "port:",
-      this.port,
-      "port.connected:",
-      this.port?.connected,
-    );
-
     if (this.isConnected && this.readLoopActive) {
-      console.log(
-        "[SerialCameraService] Already connected and active, skipping",
-      );
       return;
     }
 
@@ -106,36 +93,17 @@ class SerialCameraService {
     try {
       // Only open the port if it's not already open
       if (!this.port.connected) {
-        console.log(
-          "[SerialCameraService] Opening port with baudRate:",
-          baudRate,
-        );
         await this.port.open({ baudRate });
       } else {
-        console.log(
-          "[SerialCameraService] Port already open, checking streams...",
-        );
-
         // If port is open but streams aren't available, we need to close and reopen
         if (!this.port.readable || !this.port.writable) {
-          console.log(
-            "[SerialCameraService] Streams not available, closing and reopening port",
-          );
           try {
             await this.port.close();
           } catch (e) {
             console.warn("[SerialCameraService] Error closing port:", e);
           }
           // Now open it fresh
-          console.log(
-            "[SerialCameraService] Opening port with baudRate:",
-            baudRate,
-          );
           await this.port.open({ baudRate });
-        } else {
-          console.log(
-            "[SerialCameraService] Port already open with valid streams, reusing connection",
-          );
         }
       }
 
@@ -149,7 +117,6 @@ class SerialCameraService {
       // Release existing reader/writer if they exist (they might be from a previous session)
       if (this.reader) {
         try {
-          console.log("[SerialCameraService] Releasing existing reader");
           await this.reader.cancel();
           this.reader.releaseLock();
         } catch (e) {
@@ -163,7 +130,6 @@ class SerialCameraService {
 
       if (this.writer) {
         try {
-          console.log("[SerialCameraService] Releasing existing writer");
           this.writer.releaseLock();
         } catch (e) {
           console.warn(
@@ -175,15 +141,10 @@ class SerialCameraService {
       }
 
       // Now get fresh reader and writer
-      console.log("[SerialCameraService] Getting fresh reader and writer");
       this.reader = this.port.readable.getReader();
       this.writer = this.port.writable.getWriter();
 
       this.isConnected = true;
-      console.log(
-        "[SerialCameraService] Port opened successfully, isConnected:",
-        this.isConnected,
-      );
 
       // Start the read loop if not already active
       if (!this.readLoopActive) {
@@ -288,10 +249,6 @@ class SerialCameraService {
    */
   _startReadLoop() {
     this.readLoopActive = true;
-    console.log(
-      "[SerialCamera] Starting read loop, isConnected:",
-      this.isConnected,
-    );
     this._readLoop().catch((error) => {
       console.error("Read loop error:", error);
       this._emitError({
@@ -308,23 +265,18 @@ class SerialCameraService {
    * @private
    */
   async _readLoop() {
-    console.log("[SerialCamera] Read loop started");
     while (this.readLoopActive && this.reader) {
       try {
         const { value, done } = await this.reader.read();
 
         if (done) {
           // Reader has been cancelled or stream ended
-          console.log("[SerialCamera] Read loop ended (done)");
           break;
         }
 
         // Accumulate data into frame buffer
         if (value && value.length > 0) {
-          // console.log(`[SerialCamera] Received ${value.length} bytes. First 20:`, Array.from(value.slice(0, 20)));
-          // console.log(`[SerialCamera] Buffer size before append: ${this.frameBuffer.length}`);
           this._appendToBuffer(value);
-          // console.log(`[SerialCamera] Buffer size after append: ${this.frameBuffer.length}`);
           // Try to parse frames from the buffer
           this._tryParseFrames();
         }
@@ -347,7 +299,6 @@ class SerialCameraService {
         break;
       }
     }
-    console.log("[SerialCamera] Read loop stopped");
   }
 
   /**
@@ -522,61 +473,6 @@ class SerialCameraService {
   }
 
   /**
-   * Skip to the next potential frame header in the buffer
-   * @private
-   */
-  _skipToNextHeader() {
-    // Look for next occurrence of "FRAM" header
-    for (let i = 1; i < this.frameBuffer.length - 3; i++) {
-      if (
-        this.frameBuffer[i] === 0x46 &&
-        this.frameBuffer[i + 1] === 0x52 &&
-        this.frameBuffer[i + 2] === 0x41 &&
-        this.frameBuffer[i + 3] === 0x4d
-      ) {
-        // Found potential header, remove everything before it
-        this.frameBuffer = this.frameBuffer.slice(i);
-        return;
-      }
-    }
-
-    // No header found, clear buffer except last 3 bytes
-    // (in case header is split across reads)
-    if (this.frameBuffer.length > 3) {
-      this.frameBuffer = this.frameBuffer.slice(-3);
-    }
-  }
-
-  /**
-   * Read a 32-bit unsigned integer in little-endian format
-   * @private
-   * @param {Uint8Array} bytes - 4 bytes to read
-   * @returns {number} The uint32 value
-   */
-  _readUint32LE(bytes) {
-    return bytes[0] | (bytes[1] << 8) | (bytes[2] << 16) | (bytes[3] << 24);
-  }
-
-  /**
-   * Calculate CRC32 checksum for data
-   * @private
-   * @param {Uint8Array} data - Data to checksum
-   * @returns {number} CRC32 checksum
-   */
-  _calculateCRC32(data) {
-    let crc = 0xffffffff;
-
-    for (let i = 0; i < data.length; i++) {
-      crc ^= data[i];
-      for (let j = 0; j < 8; j++) {
-        crc = (crc >>> 1) ^ (0xedb88320 & -(crc & 1));
-      }
-    }
-
-    return (crc ^ 0xffffffff) >>> 0;
-  }
-
-  /**
    * Convert a Uint8Array frame buffer to an image Blob
    * Validates JPEG format and handles decoding errors
    * @private
@@ -634,17 +530,6 @@ class SerialCameraService {
    * @param {Object} frame - Frame object with data, size, checksum, timestamp
    */
   _emitFrame(frame) {
-    console.log(
-      "[SerialCamera] Emitting frame to",
-      this.frameCallbacks.length,
-      "callbacks:",
-      frame.width,
-      "x",
-      frame.height,
-      "format:",
-      frame.format,
-    );
-
     // Track successful frame reception - reset failure counters
     this.lastFrameTime = Date.now();
     this.consecutiveFailures = 0;
@@ -661,19 +546,6 @@ class SerialCameraService {
   }
 
   /**
-   * Request a single frame from the ESP32 camera
-   * NOTE: Not used with Arduino that sends frames continuously
-   * @returns {Promise<void>}
-   * @throws {Error} If not connected or write fails
-   */
-  async requestFrame() {
-    // Arduino sends frames continuously, so we don't need to request them
-    console.log(
-      "[SerialCamera] requestFrame() called (not needed for continuous Arduino)",
-    );
-  }
-
-  /**
    * Start continuous frame requests at specified interval
    * NOTE: Not used with Arduino that sends frames continuously
    * @param {number} intervalMs - Interval between frame requests in milliseconds (default: 200ms = 5fps)
@@ -682,10 +554,6 @@ class SerialCameraService {
   startFrameStream(intervalMs = 200) {
     // Arduino sends frames continuously, so we don't need to request them
     // Just return a dummy interval ID for compatibility
-    console.log(
-      "[SerialCamera] Frame stream started (Arduino sends continuously)",
-    );
-
     // The monitor is already started by connect(), nothing to do here
 
     return null;
@@ -697,7 +565,6 @@ class SerialCameraService {
    */
   stopFrameStream(intervalId) {
     // Arduino sends frames continuously, so nothing to stop
-    console.log("[SerialCamera] Frame stream stopped");
   }
 
   /**
@@ -715,21 +582,9 @@ class SerialCameraService {
    * @param {Function} callback - Callback function to remove
    */
   offFrame(callback) {
-    console.log(
-      "[SerialCameraService] offFrame called, callbacks before:",
-      this.frameCallbacks.length,
-    );
     const index = this.frameCallbacks.indexOf(callback);
     if (index > -1) {
       this.frameCallbacks.splice(index, 1);
-      console.log(
-        "[SerialCameraService] Removed callback at index",
-        index,
-        ", callbacks after:",
-        this.frameCallbacks.length,
-      );
-    } else {
-      console.log("[SerialCameraService] Callback not found in array");
     }
   }
 
@@ -774,10 +629,6 @@ class SerialCameraService {
     const delay = this.reconnectDelay * Math.pow(2, this.reconnectAttempts);
     this.reconnectAttempts++;
 
-    console.log(
-      `[SerialCamera] Attempting reconnection ${this.reconnectAttempts}/${this.maxReconnectAttempts} in ${delay}ms`,
-    );
-
     // Emit notification about reconnection attempt
     this._emitError({
       type: "RECONNECTING",
@@ -789,16 +640,12 @@ class SerialCameraService {
     // Schedule reconnection attempt
     this.reconnectTimeoutId = setTimeout(async () => {
       try {
-        console.log("[SerialCamera] Executing reconnection attempt");
-
         // Clean up existing connection state
         await this._cleanup();
 
         // Try to reconnect using the existing port
         if (this.port) {
           await this.connect();
-          console.log("[SerialCamera] Reconnection successful");
-
           // Reset reconnection tracking on success
           this.reconnectAttempts = 0;
 
@@ -837,8 +684,6 @@ class SerialCameraService {
   _startFrameTimeoutMonitor() {
     // Stop existing monitor if any
     this._stopFrameTimeoutMonitor();
-
-    console.log("[SerialCamera] Starting frame timeout monitor");
 
     // Set initial frame time
     this.lastFrameTime = Date.now();
@@ -880,7 +725,6 @@ class SerialCameraService {
    */
   _stopFrameTimeoutMonitor() {
     if (this.frameTimeoutCheckInterval) {
-      console.log("[SerialCamera] Stopping frame timeout monitor");
       clearInterval(this.frameTimeoutCheckInterval);
       this.frameTimeoutCheckInterval = null;
     }
