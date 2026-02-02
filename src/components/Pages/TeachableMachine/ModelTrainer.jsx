@@ -44,6 +44,12 @@ const ModelTrainer = ({
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [editingClassId, setEditingClassId] = useState(null);
   const [editingClassName, setEditingClassName] = useState("");
+  const [trainingProgress, setTrainingProgress] = useState({
+    epoch: 0,
+    totalEpochs: 0,
+    batch: 0,
+    totalBatches: 0,
+  });
   const previewContainerRef = useRef(null);
   const [videoLoading, setVideoLoading] = useState(false);
   const [serialError, setSerialError] = useState(null);
@@ -315,6 +321,12 @@ const ModelTrainer = ({
     }
 
     onTrainingStart();
+    setTrainingProgress({
+      epoch: 0,
+      totalEpochs: 0,
+      batch: 0,
+      totalBatches: 0,
+    });
 
     try {
       // Load custom base model that accepts 96x96 grayscale images
@@ -420,7 +432,7 @@ const ModelTrainer = ({
             kernelRegularizer: tf.regularizers.l2({ l2: 0.01 }),
           }),
           tf.layers.dropout({
-            rate: 0.5,
+            rate: 0.4,
           }),
           tf.layers.dense({
             kernelInitializer: "varianceScaling",
@@ -431,14 +443,35 @@ const ModelTrainer = ({
         ],
       });
 
-      const optimizer = tf.train.adam(0.0001);
+      // Calculate dynamic batch size based on total samples
+      const totalTrainingSamples = trainDataset.length;
+      let batchSize = 16; // Default
+      if (totalTrainingSamples < 20) {
+        batchSize = 4;
+      } else if (totalTrainingSamples < 50) {
+        batchSize = 8;
+      } else if (totalTrainingSamples < 100) {
+        batchSize = 16;
+      } else if (totalTrainingSamples < 200) {
+        batchSize = 32;
+      } else {
+        batchSize = 64;
+      }
+      console.log(
+        `Dynamic batch size: ${batchSize} (total samples: ${totalTrainingSamples})`,
+      );
+
+      // Initial learning rate and adaptive scheduling
+      const initialLearningRate = 0.0001;
+      let currentLearningRate = initialLearningRate;
+      let epochsSinceBestLoss = 0;
+      const optimizer = tf.train.adam(initialLearningRate);
       trainingModel.compile({
         optimizer,
         loss: "categoricalCrossentropy",
         metrics: ["accuracy"],
       });
 
-      const batchSize = 16;
       const trainDataBatched = trainTfDataset.shuffle(100).batch(batchSize);
       const validationDataBatched = validationTfDataset.batch(batchSize);
 
@@ -446,26 +479,74 @@ const ModelTrainer = ({
       let bestValLoss = Infinity;
       let patienceCounter = 0;
       const patience = 5;
+      const lrDecayFactor = 0.5; // Reduce learning rate by 50%
+      const lrDecayPatience = 3; // Decay after 3 epochs without improvement
+
+      let bestWeights = null; // Store best model weights
+      const totalEpochs = 70;
+      const totalBatches = Math.max(
+        1,
+        Math.ceil(totalTrainingSamples / batchSize),
+      );
+      setTrainingProgress({
+        epoch: 0,
+        totalEpochs,
+        batch: 0,
+        totalBatches,
+      });
 
       await trainingModel.fitDataset(trainDataBatched, {
-        epochs: 50,
+        epochs: totalEpochs,
         validationData: validationDataBatched,
         classWeight: classWeights, // Apply class weights to balance loss
         callbacks: {
+          onBatchEnd: (batch) => {
+            setTrainingProgress((prev) => ({
+              ...prev,
+              batch: batch + 1,
+            }));
+          },
           onEpochEnd: (epoch, logs) => {
             console.log(
-              `Epoch ${epoch + 1}: loss = ${logs.loss.toFixed(4)}, accuracy = ${logs.acc.toFixed(4)}, val_loss = ${logs.val_loss.toFixed(4)}, val_acc = ${logs.val_acc.toFixed(4)}`,
+              `Epoch ${epoch + 1}: loss = ${logs.loss.toFixed(4)}, accuracy = ${logs.acc.toFixed(4)}, val_loss = ${logs.val_loss.toFixed(4)}, val_acc = ${logs.val_acc.toFixed(4)}, lr = ${currentLearningRate.toExponential(2)}`,
             );
+
+            setTrainingProgress((prev) => ({
+              ...prev,
+              epoch: epoch + 1,
+              batch: 0,
+            }));
 
             // Early stopping logic
             if (logs.val_loss < bestValLoss) {
               bestValLoss = logs.val_loss;
               patienceCounter = 0;
+              epochsSinceBestLoss = 0;
+              // Save best weights when validation loss improves
+              bestWeights = trainingModel.getWeights().map((w) => w.clone());
             } else {
               patienceCounter++;
-              if (patienceCounter >= patience) {
+              epochsSinceBestLoss++;
+
+              // Adaptive learning rate scheduling (reduce LR if no improvement)
+              if (epochsSinceBestLoss >= lrDecayPatience) {
+                currentLearningRate = currentLearningRate * lrDecayFactor;
+                optimizer.learningRate = currentLearningRate;
+                epochsSinceBestLoss = 0;
+                console.log(
+                  `Reducing learning rate to ${currentLearningRate.toExponential(2)}`,
+                );
+              }
+
+              if (patienceCounter >= patience && epoch >= 10) {
                 console.log(`Early stopping at epoch ${epoch + 1}`);
                 trainingModel.stopTraining = true;
+                // Restore best weights before creating final model
+                if (bestWeights) {
+                  trainingModel.setWeights(bestWeights);
+                  bestWeights.forEach((w) => w.dispose());
+                  console.log(`Restored best model weights`);
+                }
               }
             }
           },
@@ -489,6 +570,11 @@ const ModelTrainer = ({
       };
 
       optimizer.dispose();
+      setTrainingProgress((prev) => ({
+        ...prev,
+        epoch: prev.totalEpochs,
+        batch: prev.totalBatches,
+      }));
       setTrainedModel(modelData);
       onModelTrained(modelData);
     } catch (error) {
@@ -707,10 +793,11 @@ const ModelTrainer = ({
                     alignItems: "center",
                     justifyContent: "center",
                     overflow: "hidden",
-                    "& video, & img": {
+                    "& video, & img, & canvas": {
                       width: "100%",
                       height: "100%",
                       objectFit: "cover",
+                      imageRendering: "pixelated",
                     },
                   }}
                 >
@@ -931,9 +1018,28 @@ const ModelTrainer = ({
       {isTraining && (
         <Box sx={{ mb: 3 }}>
           <Typography variant="body2" gutterBottom>
-            Training in progress...
+            {trainingProgress.totalEpochs > 0
+              ? `Training: epoch ${trainingProgress.epoch}/${trainingProgress.totalEpochs}`
+              : "Training in progress..."}
           </Typography>
-          <LinearProgress />
+          <LinearProgress
+            variant={
+              trainingProgress.totalEpochs > 0 ? "determinate" : "indeterminate"
+            }
+            value={
+              trainingProgress.totalEpochs > 0
+                ? Math.min(
+                    100,
+                    ((trainingProgress.epoch - 1) /
+                      trainingProgress.totalEpochs) *
+                      100 +
+                      (trainingProgress.batch /
+                        Math.max(1, trainingProgress.totalBatches)) *
+                        (100 / trainingProgress.totalEpochs),
+                  )
+                : 0
+            }
+          />
         </Box>
       )}
 

@@ -6,8 +6,10 @@ class WebcamCameraSource {
   constructor() {
     this.stream = null;
     this.videoElement = null;
+    this.canvasElement = null;
     this.errorCallback = null;
     this._isActive = false;
+    this.animationFrameId = null;
   }
 
   /**
@@ -16,13 +18,21 @@ class WebcamCameraSource {
    */
   async start() {
     try {
-      // Clean up any existing video element from previous session
+      // Clean up any existing resources from previous session
+      if (this.animationFrameId) {
+        cancelAnimationFrame(this.animationFrameId);
+        this.animationFrameId = null;
+      }
+
       if (this.videoElement) {
         this.videoElement.srcObject = null;
         this.videoElement = null;
       }
 
-      // Clean up any existing stream from previous session
+      if (this.canvasElement) {
+        this.canvasElement = null;
+      }
+
       if (this.stream) {
         this.stream.getTracks().forEach((track) => track.stop());
         this.stream = null;
@@ -33,12 +43,19 @@ class WebcamCameraSource {
         audio: false,
       });
 
-      // Create fresh video element
+      // Create fresh video element (hidden from user)
       this.videoElement = document.createElement("video");
       this.videoElement.autoplay = true;
       this.videoElement.playsInline = true;
       this.videoElement.muted = true;
       this.videoElement.srcObject = this.stream;
+      this.videoElement.style.display = "none"; // Hide the original video
+
+      // Create canvas element for grayscale 96x96 display
+      this.canvasElement = document.createElement("canvas");
+      this.canvasElement.width = 96;
+      this.canvasElement.height = 96;
+      this.canvasElement.style.imageRendering = "pixelated";
 
       // Wait for video to be ready
       await new Promise((resolve, reject) => {
@@ -46,6 +63,8 @@ class WebcamCameraSource {
           try {
             await this.videoElement.play();
             this._isActive = true;
+            // Start the rendering loop
+            this._renderFrame();
             resolve();
           } catch (error) {
             reject(error);
@@ -76,10 +95,73 @@ class WebcamCameraSource {
   }
 
   /**
+   * Render frame to canvas as 96x96 grayscale
+   * @private
+   */
+  _renderFrame() {
+    if (!this._isActive || !this.videoElement || !this.canvasElement) {
+      return;
+    }
+
+    if (
+      this.videoElement.readyState === this.videoElement.HAVE_ENOUGH_DATA &&
+      !this.videoElement.paused
+    ) {
+      const ctx = this.canvasElement.getContext("2d");
+
+      // Get video dimensions
+      const videoWidth = this.videoElement.videoWidth;
+      const videoHeight = this.videoElement.videoHeight;
+
+      // Calculate center crop dimensions (square)
+      const minDim = Math.min(videoWidth, videoHeight);
+      const sourceX = (videoWidth - minDim) / 2;
+      const sourceY = (videoHeight - minDim) / 2;
+
+      // Draw center-cropped video frame to canvas
+      ctx.drawImage(
+        this.videoElement,
+        sourceX,
+        sourceY,
+        minDim,
+        minDim, // source rectangle (center crop)
+        0,
+        0,
+        96,
+        96, // destination rectangle (96x96)
+      );
+
+      // Convert to grayscale using luminosity method
+      const imageData = ctx.getImageData(0, 0, 96, 96);
+      const data = imageData.data;
+
+      for (let i = 0; i < data.length; i += 4) {
+        // Calculate grayscale using luminosity formula: 0.299*R + 0.587*G + 0.114*B
+        const gray =
+          0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+        data[i] = gray; // Red
+        data[i + 1] = gray; // Green
+        data[i + 2] = gray; // Blue
+        // Alpha (data[i + 3]) remains unchanged
+      }
+
+      ctx.putImageData(imageData, 0, 0);
+    }
+
+    this.animationFrameId = requestAnimationFrame(() => this._renderFrame());
+  }
+
+  /**
    * Stop the webcam stream
    * @returns {Promise<void>}
    */
   async stop() {
+    // Stop animation frame
+    if (this.animationFrameId) {
+      cancelAnimationFrame(this.animationFrameId);
+      this.animationFrameId = null;
+    }
+
     if (this.stream) {
       this.stream.getTracks().forEach((track) => track.stop());
       this.stream = null;
@@ -90,6 +172,10 @@ class WebcamCameraSource {
       this.videoElement = null;
     }
 
+    if (this.canvasElement) {
+      this.canvasElement = null;
+    }
+
     this._isActive = false;
   }
 
@@ -98,50 +184,13 @@ class WebcamCameraSource {
    * @returns {Promise<Blob>} JPEG image blob
    */
   async captureFrame() {
-    if (!this.videoElement || !this._isActive) {
+    if (!this.canvasElement || !this._isActive) {
       throw new Error("Webcam is not active");
     }
 
-    // Check if video has loaded and is playing
-    if (this.videoElement.readyState < 2) {
-      throw new Error("Video not ready");
-    }
-
-    if (this.videoElement.paused) {
-      await this.videoElement.play();
-    }
-
-    const canvas = document.createElement("canvas");
-    const size = 224;
-    canvas.width = size;
-    canvas.height = size;
-    const ctx = canvas.getContext("2d");
-
-    // Get video dimensions
-    const videoWidth = this.videoElement.videoWidth;
-    const videoHeight = this.videoElement.videoHeight;
-
-    // Calculate center crop dimensions
-    const minDim = Math.min(videoWidth, videoHeight);
-    const sourceX = (videoWidth - minDim) / 2;
-    const sourceY = (videoHeight - minDim) / 2;
-
-    // Draw center-cropped video frame to canvas
-    ctx.drawImage(
-      this.videoElement,
-      sourceX,
-      sourceY,
-      minDim,
-      minDim, // source rectangle (center crop)
-      0,
-      0,
-      size,
-      size, // destination rectangle
-    );
-
-    // Convert canvas to blob
+    // The canvas is already 96x96 grayscale from the render loop
     return new Promise((resolve, reject) => {
-      canvas.toBlob(
+      this.canvasElement.toBlob(
         (blob) => {
           if (blob) {
             resolve(blob);
@@ -156,11 +205,11 @@ class WebcamCameraSource {
   }
 
   /**
-   * Get the preview element (video element)
-   * @returns {HTMLVideoElement}
+   * Get the preview element (canvas element with 96x96 grayscale)
+   * @returns {HTMLCanvasElement}
    */
   getPreviewElement() {
-    return this.videoElement;
+    return this.canvasElement;
   }
 
   /**
