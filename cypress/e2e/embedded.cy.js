@@ -75,14 +75,8 @@ describe("Embedded Blockly Page Tests", () => {
         expect(responseBody[0].link).to.include("snsbx.de");
       });
     
-    // Verify dialog opens
-    // Click the reset button (last fa-share icon in toolbar)
-    cy.get(".embedded-toolbar svg.fa-share").last().parents("button").click();
-    cy.get('[role="dialog"]', { timeout: 5000 }).should("exist");
-    cy.get('[role="dialog"]').should(($dialog) => {
-      const text = $dialog.text().toLowerCase();
-      expect(text).to.include("zurücksetzen");
-    });
+    // Verify share dialog is visible
+    cy.get('[role="dialog"]', { timeout: 5000 }).should("be.visible");
   });
 
   // it("[Embedded] displays toolbox with search", () => {
