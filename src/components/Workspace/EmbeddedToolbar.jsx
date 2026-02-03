@@ -42,13 +42,13 @@ const EmbeddedToolbar = ({
       >
         {!multiple && selectedBoard && <Compile iconButton />}
 
-        {/* {projectType !== "gallery" && !assessment && (
+        {projectType !== "gallery" && !assessment && (
           <ShareProject
             multiple={multiple}
             project={project}
             projectType={projectType}
           />
-        )} */}
+        )}
 
         {!multiple && <ResetWorkspace />}
       </div>

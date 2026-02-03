@@ -10,7 +10,7 @@ import "./toolbox_styles.css";
 const Toolbox = ({ workspace, toolbox }) => {
   const selectedBoard = useSelector((state) => state.board.board);
   const language = useSelector((state) => state.general.language);
-  const previousBoard = useRef(null);
+  const setupIntervalRef = useRef(null);
 
   useEffect(() => {
     if (!workspace || !toolbox?.current) return;
@@ -35,6 +35,58 @@ const Toolbox = ({ workspace, toolbox }) => {
     // --- Toolbox aktualisieren ---
     workspace.updateToolbox(toolbox.current);
 
+    // --- Prevent flyout from closing when variable is created ---
+    let variableCreatedRecently = false;
+    let flyoutOriginalHide = null;
+
+    // Listen for variable creation and prevent flyout closing
+    const variableCreationListener = (event) => {
+      if (event.type === Blockly.Events.VAR_CREATE) {
+        variableCreatedRecently = true;
+        setTimeout(() => {
+          variableCreatedRecently = false;
+        }, 1000);
+      }
+    };
+    workspace.addChangeListener(variableCreationListener);
+
+    const maxAttempts = 100; // 10 seconds max (100 * 100ms)
+    let attempts = 0;
+    
+    const setupFlyoutOverride = () => {
+      const flyout = workspace.toolbox_?.flyout_;
+      if (flyout && !flyoutOriginalHide) {
+        flyoutOriginalHide = flyout.hide.bind(flyout);
+        flyout.hide = function() {
+          if (variableCreatedRecently) return;
+          flyoutOriginalHide();
+        };
+        if (setupIntervalRef.current) {
+          clearInterval(setupIntervalRef.current);
+          setupIntervalRef.current = null;
+        }
+        return true; // Success
+      }
+      return false; // Not ready yet
+    };
+
+    // Try immediately first
+    if (!setupFlyoutOverride()) {
+      // If not ready, poll with interval
+      setupIntervalRef.current = setInterval(() => {
+        attempts++;
+        if (setupFlyoutOverride() || attempts >= maxAttempts) {
+          if (setupIntervalRef.current) {
+            clearInterval(setupIntervalRef.current);
+            setupIntervalRef.current = null;
+          }
+          if (attempts >= maxAttempts) {
+            console.warn('Failed to setup flyout override: timeout after 10 seconds');
+          }
+        }
+      }, 100);
+    }
+
     // --- Dynamisch das toolbox-search-Plugin laden, sobald alles bereit ist ---
     let tries = 0;
     const waitForToolbox = setInterval(async () => {
@@ -55,7 +107,20 @@ const Toolbox = ({ workspace, toolbox }) => {
     }, 1000);
 
     // --- Cleanup ---
-    return () => clearInterval(waitForToolbox);
+    return () => {
+      // Clear intervals only if they're still active
+      if (setupIntervalRef.current) {
+        clearInterval(setupIntervalRef.current);
+        setupIntervalRef.current = null;
+      }
+      clearInterval(waitForToolbox);
+      workspace.removeChangeListener(variableCreationListener);
+      // Restore original flyout hide method if override was applied
+      const flyout = workspace.toolbox_?.flyout_;
+      if (flyout && flyoutOriginalHide) {
+        flyout.hide = flyoutOriginalHide;
+      }
+    };
   }, [workspace, toolbox, selectedBoard, language]);
 
   return (
