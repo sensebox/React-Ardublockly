@@ -76,7 +76,7 @@ const HeaderBar = ({
                 },
               }}
             >
-              Connect
+              Verbinden
             </Button>
             <Button
               onClick={onDisconnect}
@@ -95,7 +95,7 @@ const HeaderBar = ({
                 },
               }}
             >
-              Disconnect
+              Verbindung trennen
             </Button>
           </Stack>
         }

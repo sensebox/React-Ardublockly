@@ -103,7 +103,7 @@ const ConnectWizard = ({
             fontWeight: 600,
           }}
         >
-          {connected ? "Connected" : "Disconnected"}
+          {connected ? "Verbunden" : "Nicht verbunden"}
         </Typography>
       </Box>
 
@@ -117,7 +117,7 @@ const ConnectWizard = ({
             onClick={connected ? handleDisconnect : onConnect}
             disabled={!supported}
           >
-            {connected ? "Disconnect" : "Connect"}
+            {connected ? "Verbindung trennen" : "Verbinden"}
           </Button>
         </Tooltip>
         <Tooltip title="Send & Start program">
@@ -128,7 +128,7 @@ const ConnectWizard = ({
             color="success"
             startIcon={<PlayArrow />}
           >
-            Run
+            Starten
           </Button>
         </Tooltip>
         <Tooltip title="Stop program">
@@ -139,7 +139,7 @@ const ConnectWizard = ({
             color="error"
             startIcon={<Stop />}
           >
-            Stop
+            Stopp
           </Button>
         </Tooltip>
         <Tooltip title="Help">
@@ -149,7 +149,7 @@ const ConnectWizard = ({
             startIcon={<Rocket />}
             sx={{}}
           >
-            Quickstart
+            Anleitung
           </Button>
         </Tooltip>
       </Box>

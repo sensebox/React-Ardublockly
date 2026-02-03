@@ -268,7 +268,7 @@ Blockly.defineBlocksWithJsonArray([
       },
       {
         type: "field_label",
-        text: "Display",
+        text: "Zeige : ",
         bold: true,
       },
     ],
