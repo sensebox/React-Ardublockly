@@ -21,6 +21,12 @@ import {
 } from "@mui/icons-material";
 
 /**
+ * API configuration
+ */
+const API_BASE_URL =
+  import.meta.env.VITE_BACKEND_API_URL || "http://localhost:5000";
+
+/**
  * SerialCameraErrorHandler
  *
  * Comprehensive error handling and status display component for senseBox Eye serial camera.
@@ -240,7 +246,7 @@ const SerialCameraErrorHandler = ({
     setIsDownloading(true);
     try {
       const response = await fetch(
-        "http://localhost:5000/api/compile-camera-capture",
+        `${API_BASE_URL}/api/compile-camera-capture`,
         {
           method: "POST",
           headers: {
