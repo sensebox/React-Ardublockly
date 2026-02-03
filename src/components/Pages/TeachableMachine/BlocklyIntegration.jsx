@@ -397,7 +397,7 @@ const BlocklyIntegration = ({ model }) => {
           </Typography>
           <Typography variant="body2">
             Your model has been converted, compiled, and downloaded! The binary
-            file is ready to upload to your ESP32 XIAO S3 board. You can also
+            file is ready to upload to your senseBox Eye board. You can also
             view the generated code below.
           </Typography>
         </Alert>
