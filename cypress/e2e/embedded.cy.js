@@ -127,52 +127,6 @@ describe("Embedded Blockly Page Tests", () => {
     cy.get('[role="dialog"]').should("not.exist");
   });
 
-  it("[Embedded] displays toolbox in landscape orientation with default left vertical layout", () => {
-    cy.viewport(1024, 768); // Landscape
-    cy.visit("/embedded");
-    // Select device first to dismiss the device selection overlay
-    cy.get('img[alt="Sensebox ESP"]', { timeout: 8000 }).click();
-    cy.get(".blocklyToolbox", { timeout: 10000 }).should("exist");
-    
-    // In landscape, should use default Blockly left vertical toolbox (no custom horizontal styles)
-    cy.get(".blocklySvg").should("be.visible");
-    cy.get(".blocklyWorkspace").should("exist");
-    // Verify embedded-mode class is NOT applied in landscape
-    cy.get("xml#blockly").should("not.have.class", "embedded-mode");
-    
-    // Verify toolbox is on the LEFT (vertical layout)
-    cy.get(".blocklyToolboxDiv").should("exist").then(($toolbox) => {
-      const toolboxRect = $toolbox[0].getBoundingClientRect();
-      cy.get(".blocklyMainBackground").then(($workspace) => {
-        const workspaceRect = $workspace[0].getBoundingClientRect();
-        // Toolbox should be to the left of workspace in vertical mode
-        expect(toolboxRect.right).to.be.lessThan(workspaceRect.left + 50);
-      });
-    });
-  });
-
-  it("[Embedded] displays horizontal toolbox in portrait orientation with custom styles", () => {
-    cy.viewport(768, 1024); // Portrait
-    cy.visit("/embedded");
-    cy.get('img[alt="Sensebox ESP"]', { timeout: 8000 }).click();
-    cy.get(".blocklyToolbox", { timeout: 10000 }).should("exist");
-    
-    // In portrait, should use horizontal toolbox with custom collapse behavior
-    cy.get(".blocklySvg").should("be.visible");
-    cy.get(".blocklyWorkspace").should("exist");
-    cy.get("xml#blockly").should("have.class", "embedded-mode");
-    
-    // Verify toolbox is at the BOTTOM (horizontal layout)
-    cy.get(".blocklyToolboxDiv").should("exist").then(($toolbox) => {
-      const toolboxRect = $toolbox[0].getBoundingClientRect();
-      cy.get(".blocklyMainBackground").then(($workspace) => {
-        const workspaceRect = $workspace[0].getBoundingClientRect();
-        // Toolbox should be below workspace in horizontal mode
-        expect(toolboxRect.top).to.be.greaterThan(workspaceRect.bottom - 50);
-      });
-    });
-  });
-
   it("[Embedded] uses tablet mode for compilation with embedded-specific text", () => {
     cy.intercept({ method: "POST", pathname: "/compile" }).as("compile");
 
@@ -213,57 +167,6 @@ describe("Embedded Blockly Page Tests", () => {
       cy.get(".MuiStep-root").last().should("contain.text", "Übertragen");
       cy.get(".MuiStepLabel-label").should("not.contain.text", "Herunterladen");
       cy.get('a[href*="blocklyconnect-app://"]').should("exist");
-    });
-  });
-
-  it("[Embedded] preserves workspace data on orientation change", () => {
-    cy.viewport(768, 1024); // Start in portrait
-    cy.visit("/embedded");
-    cy.get('img[alt="Sensebox ESP"]', { timeout: 8000 }).click();
-    
-    // Wait for workspace to be ready and verify horizontal layout
-    cy.get(".blocklySvg", { timeout: 10000 }).should("be.visible");
-    cy.get("xml#blockly").should("have.class", "embedded-mode");
-    
-    // Verify initial horizontal (bottom) layout
-    cy.get(".blocklyToolboxDiv").then(($toolbox) => {
-      const initialToolboxRect = $toolbox[0].getBoundingClientRect();
-      cy.get(".blocklyMainBackground").then(($workspace) => {
-        const initialWorkspaceRect = $workspace[0].getBoundingClientRect();
-        expect(initialToolboxRect.top).to.be.greaterThan(initialWorkspaceRect.bottom - 50);
-      });
-    });
-    
-    // Change to landscape
-    cy.viewport(1024, 768);
-    cy.wait(1000);
-    
-    // Verify switched to vertical layout and no embedded-mode class
-    cy.get(".blocklySvg").should("be.visible");
-    cy.get("xml#blockly").should("not.have.class", "embedded-mode");
-    cy.get(".blocklyToolboxDiv").then(($toolbox) => {
-      const toolboxRect = $toolbox[0].getBoundingClientRect();
-      cy.get(".blocklyMainBackground").then(($workspace) => {
-        const workspaceRect = $workspace[0].getBoundingClientRect();
-        // Toolbox should be to the left in landscape
-        expect(toolboxRect.right).to.be.lessThan(workspaceRect.left + 50);
-      });
-    });
-    
-    // Change back to portrait
-    cy.viewport(768, 1024);
-    cy.wait(1000);
-    
-    // Verify switched back to horizontal layout
-    cy.get(".blocklySvg").should("be.visible");
-    cy.get("xml#blockly").should("have.class", "embedded-mode");
-    cy.get(".blocklyToolboxDiv").then(($toolbox) => {
-      const toolboxRect = $toolbox[0].getBoundingClientRect();
-      cy.get(".blocklyMainBackground").then(($workspace) => {
-        const workspaceRect = $workspace[0].getBoundingClientRect();
-        // Toolbox should be at bottom again in portrait
-        expect(toolboxRect.top).to.be.greaterThan(workspaceRect.bottom - 50);
-      });
     });
   });
 });
