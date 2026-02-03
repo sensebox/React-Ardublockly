@@ -11,6 +11,9 @@ const Toolbox = ({ workspace, toolbox }) => {
   const selectedBoard = useSelector((state) => state.board.board);
   const language = useSelector((state) => state.general.language);
   const setupIntervalRef = useRef(null);
+  const previousBoard = useRef(null);
+  const previousLanguage = useRef(null);
+  const isInitialMount = useRef(true);
 
   useEffect(() => {
     if (!workspace || !toolbox?.current) return;
@@ -32,8 +35,17 @@ const Toolbox = ({ workspace, toolbox }) => {
     ]);
     typedVarModal.init();
 
-    // --- Toolbox aktualisieren ---
-    workspace.updateToolbox(toolbox.current);
+    // --- Toolbox aktualisieren (nur bei Änderungen, nicht beim initialen Mount) ---
+    const boardChanged = previousBoard.current !== null && previousBoard.current !== selectedBoard;
+    const languageChanged = previousLanguage.current !== null && previousLanguage.current !== language;
+    
+    if (!isInitialMount.current && (boardChanged || languageChanged) && workspace.toolbox) {
+      workspace.updateToolbox(toolbox.current);
+    }
+    
+    previousBoard.current = selectedBoard;
+    previousLanguage.current = language;
+    isInitialMount.current = false;
 
     // --- Prevent flyout from closing when variable is created ---
     let variableCreatedRecently = false;

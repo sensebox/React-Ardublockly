@@ -188,4 +188,42 @@ describe("Blockly Editor Page Tests", () => {
       expect(interception.response.body.data.id).to.be.a("string");
     });
   });
+
+  it("[Blockly] maintains vertical toolbox on orientation change (non-embedded mode)", () => {
+    // Start in portrait orientation
+    cy.viewport(768, 1024);
+    cy.visit("/");
+    cy.get('img[alt="Sensebox ESP"]', { timeout: 8000 }).click();
+    cy.get(".blocklyToolbox", { timeout: 10000 }).should("exist");
+    
+    // Verify vertical (left) toolbox layout in portrait
+    cy.get(".blocklyToolboxDiv").should("exist").then(($toolbox) => {
+      const toolboxRect = $toolbox[0].getBoundingClientRect();
+      cy.get(".blocklyMainBackground").then(($workspace) => {
+        const workspaceRect = $workspace[0].getBoundingClientRect();
+        // Toolbox should be to the left (vertical layout)
+        expect(toolboxRect.right).to.be.lessThan(workspaceRect.left + 50);
+      });
+    });
+    
+    // Verify no embedded-mode class
+    cy.get("xml#blockly").should("not.have.class", "embedded-mode");
+    
+    // Change to landscape
+    cy.viewport(1024, 768);
+    cy.wait(500);
+    
+    // Verify still vertical (left) toolbox layout in landscape
+    cy.get(".blocklyToolboxDiv").should("exist").then(($toolbox) => {
+      const toolboxRect = $toolbox[0].getBoundingClientRect();
+      cy.get(".blocklyMainBackground").then(($workspace) => {
+        const workspaceRect = $workspace[0].getBoundingClientRect();
+        // Toolbox should still be to the left (vertical layout)
+        expect(toolboxRect.right).to.be.lessThan(workspaceRect.left + 50);
+      });
+    });
+    
+    // Verify still no embedded-mode class
+    cy.get("xml#blockly").should("not.have.class", "embedded-mode");
+  });
 });

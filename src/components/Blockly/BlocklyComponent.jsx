@@ -48,7 +48,7 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
       ...rest,
     };
 
-    // Only apply mobile layout options when in embedded portrait mode
+    // Only apply mobile layout options when in embedded mode
     // These must override any options from ...rest, so set them after
     if (isHorizontalToolbox) {
       blocklyOptions.horizontalLayout = true;
@@ -149,7 +149,7 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
       height: "100%",
       width: "100%",
     } : {};
-  }, [isEmbedded]);
+  }, [isHorizontalToolbox]);
 
   return (
     <>
