@@ -1,7 +1,6 @@
 // Embedded mode configuration
 export const EMBEDDED_CONFIG = {
   ROUTE: '/embedded',
-  RENDERER: 'zelos',
   VIEWPORT: {
     content: "width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover"
   },

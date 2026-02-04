@@ -8,9 +8,7 @@ export const useEmbeddedMode = () => {
   const isEmbedded = useSelector((state) => state.general.embeddedMode);
 
   useEffect(() => {
-    // Force Zelos renderer for embedded touch optimization
     dispatch(setRenderer(EMBEDDED_CONFIG.RENDERER));
-    // Update viewport meta tag for embedded mode
     const viewport = document.querySelector('meta[name="viewport"]');
     const originalContent = viewport?.getAttribute("content");
 
