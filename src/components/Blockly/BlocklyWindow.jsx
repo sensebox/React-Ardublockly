@@ -82,7 +82,11 @@ export default function BlocklyWindow(props) {
     // UI helpers
     Blockly.svgResize(ws);
     const zoomToFit = new ZoomToFitControl(ws);
-    zoomToFit.init();
+    // Disable animation in embedded mode for Flutter WebView performance
+    zoomToFit.init({
+      duration: isEmbedded ? 0 : 250,  // Instant zoom in embedded/webview
+      margin: 20
+    });
     const backpack = new Backpack(ws);
     backpack.init();
 

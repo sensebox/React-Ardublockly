@@ -11,11 +11,11 @@ export const EMBEDDED_BLOCKLY_CONFIG = {
   move: {
     scrollbars: true,
     drag: true,
-    wheel: true,
+    wheel: false,  // Disable wheel for touch devices
   },
   zoom: {
     controls: true,
-    wheel: true,
+    wheel: false,  // Disable wheel zoom for touch devices
     startScale: 0.6,
     maxScale: 3,
     minScale: 0.3,
@@ -28,6 +28,12 @@ export const EMBEDDED_BLOCKLY_CONFIG = {
     colour: "#4EAF47",
     snap: true,
   },
+  // Performance optimizations for WebView
+  renderer: 'zelos',  // Zelos is more performant than Geras
+  oneBasedIndex: false,
+  comments: false,  // Disable comments for better performance
+  collapse: false,  // Disable collapse/expand animations
+  sounds: false,  // Disable sounds in WebView
 };
 
 
