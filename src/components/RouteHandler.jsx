@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setEmbeddedMode } from "../actions/generalActions";
-import { EMBEDDED_CONFIG } from "../config/embeddedConfig";
+import { isEmbeddedPath } from "../helpers/shareUrlBuilder";
 
 const RouteHandler = () => {
   const location = useLocation();
@@ -11,7 +11,7 @@ const RouteHandler = () => {
   
   useEffect(() => {
     const currentPathname = location.pathname;
-    const isCurrentEmbedded = currentPathname === EMBEDDED_CONFIG.ROUTE;
+    const isCurrentEmbedded = isEmbeddedPath(currentPathname);
     
     dispatch(setEmbeddedMode(isCurrentEmbedded));
     
