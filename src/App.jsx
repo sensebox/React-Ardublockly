@@ -15,6 +15,7 @@ import Content from "./components/Content";
 import EmbeddedBlockly from "./components/EmbeddedBlockly";
 import RouteHandler from "./components/RouteHandler";
 import { setCompiler } from "./actions/generalActions";
+import BasicEmbedded from "./components/BasicBlockly/BasicEmbedded";
 
 const theme = createTheme({
   palette: {
@@ -66,9 +67,13 @@ class App extends Component {
               <RouteHandler />
               <ErrorBoundary>
                 <Routes>
-                  <Route path="/embedded/share/:shareId" element={<EmbeddedBlockly />} />
+                  <Route
+                    path="/embedded/share/:shareId"
+                    element={<EmbeddedBlockly />}
+                  />
                   <Route path="/embedded" element={<EmbeddedBlockly />} />
                   <Route path="/*" element={<Content />} />
+                  <Route path="/embeddedbasic" element={<BasicEmbedded />} />
                 </Routes>
               </ErrorBoundary>
             </BrowserRouter>
