@@ -1,7 +1,7 @@
 import * as Blockly from "blockly";
-import { getColour } from "../helpers/colour";
-import { selectedBoard } from "../helpers/board";
-import * as Types from "../helpers/types";
+import { getColour } from "@/components/Blockly/helpers/colour";
+import { selectedBoard } from "@/components/Blockly/helpers/board";
+import * as Types from "@/components/Blockly/helpers/types";
 import { FieldSlider } from "@blockly/field-slider";
 import {
   registerFieldMultilineInput,
@@ -107,8 +107,7 @@ Blockly.Blocks["sensebox_ws2818_led"] = {
     this.setTooltip(Blockly.Msg.senseBox_ws2818_rgb_led_tooltip);
     if (selectedBoard().title === "MCU-S2") {
       this.setHelpUrl(Blockly.Msg.senseBox_ws2818_rgb_led_helpurl);
-    }
-    else {
+    } else {
       this.setHelpUrl(Blockly.Msg.senseBox_ws2818_rgb_led_helpurl_2);
     }
   },
@@ -262,8 +261,6 @@ Blockly.Blocks["sensebox_ws2812_matrix_text"] = {
     this.setNextStatement(true, null);
     this.setTooltip(Blockly.Msg.senseBox_ws2812_rgb_matrix_print_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_ws2812_rgb_matrix_helpurl);
-
-    
   },
 };
 
@@ -293,7 +290,6 @@ Blockly.Blocks["sensebox_ws2812_matrix_drawPixel"] = {
     this.setNextStatement(true, null);
     this.setTooltip(Blockly.Msg.senseBox_ws2812_rgb_matrix_draw_pixel_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_ws2812_rgb_matrix_helpurl);
-
   },
 };
 
@@ -311,7 +307,6 @@ Blockly.Blocks["sensebox_ws2812_matrix_clear"] = {
     this.setNextStatement(true, null);
     this.setTooltip(Blockly.Msg.senseBox_ws2812_rgb_matrix_clear_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_ws2812_rgb_matrix_helpurl);
-
   },
 };
 
@@ -332,7 +327,6 @@ Blockly.Blocks["sensebox_ws2812_matrix_showBitmap"] = {
     this.setNextStatement(true, null);
     this.setTooltip(Blockly.Msg.senseBox_ws2812_rgb_matrix_show_bitmap_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_ws2812_rgb_matrix_helpurl);
-
   },
 };
 
@@ -358,7 +352,6 @@ Blockly.Blocks["sensebox_ws2812_matrix_bitmap"] = {
     this.setOutput(true, Types.BITMAP.typeName);
     this.setTooltip(Blockly.Msg.senseBox_ws2812_rgb_matrix_bitmap_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_ws2812_rgb_matrix_helpurl);
-
   },
 };
 
@@ -902,7 +895,6 @@ Blockly.defineBlocksWithJsonArray([
     colour: getColour().sensebox,
     tooltip: Blockly.Msg.senseBox_ws2812_rgb_matrix_draw_bitmap_tooltip,
     helpUrl: Blockly.Msg.senseBox_ws2812_rgb_matrix_helpurl,
-
   },
 ]);
 

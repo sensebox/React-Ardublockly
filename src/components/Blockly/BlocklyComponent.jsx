@@ -4,11 +4,12 @@ import { useSelector } from "react-redux";
 
 import * as Blockly from "blockly/core";
 import "./blocks/index";
-import "@/components/Blockly/generator/index";
+import "@/components/Blockly/generator/basic/index";
+import "@/components/Blockly/generator/arduino/index";
 
 import Toolbox from "./toolbox/Toolbox";
 import EmbeddedToolbox from "./toolbox/EmbeddedToolbox";
-import { reservedWords } from "./helpers/reservedWords";
+import { reservedWords } from "@/components/Blockly/helpers/reservedWords";
 import Snackbar from "../Snackbar";
 
 import "blockly/blocks";
@@ -51,10 +52,10 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
     // These must override any options from ...rest, so set them after
     if (isEmbedded) {
       blocklyOptions.horizontalLayout = true;
-      blocklyOptions.toolboxPosition = 'end';
+      blocklyOptions.toolboxPosition = "end";
       // Ensure toolbox icon sprites and other assets load correctly in embedded view
       if (!blocklyOptions.media) {
-        blocklyOptions.media = '/media/blockly/';
+        blocklyOptions.media = "/media/blockly/";
       }
     }
 
@@ -62,9 +63,10 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
 
     if (isEmbedded && ws.trashcan) {
       const originalGetClientRect = ws.trashcan.getClientRect.bind(ws.trashcan);
-      const originalGetBoundingRectangle = ws.trashcan.getBoundingRectangle.bind(ws.trashcan);
+      const originalGetBoundingRectangle =
+        ws.trashcan.getBoundingRectangle.bind(ws.trashcan);
 
-      ws.trashcan.getClientRect = function() {
+      ws.trashcan.getClientRect = function () {
         const originalRect = originalGetClientRect();
         if (!originalRect) return null;
 
@@ -72,11 +74,11 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
           originalRect.top - 80,
           originalRect.bottom + 80,
           originalRect.left - 80,
-          originalRect.right + 80
+          originalRect.right + 80,
         );
       };
 
-      ws.trashcan.getBoundingRectangle = function() {
+      ws.trashcan.getBoundingRectangle = function () {
         const originalRect = originalGetBoundingRectangle();
         if (!originalRect) return null;
 
@@ -84,7 +86,7 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
           originalRect.top - 80,
           originalRect.bottom + 80,
           originalRect.left - 80,
-          originalRect.right + 80
+          originalRect.right + 80,
         );
       };
     }
@@ -144,10 +146,12 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
   }, [isEmbedded]);
 
   const cardStyle = useMemo(() => {
-    return isEmbedded ?{
-      height: "100%",
-      width: "100%",
-    } : {};
+    return isEmbedded
+      ? {
+          height: "100%",
+          width: "100%",
+        }
+      : {};
   }, [isEmbedded]);
 
   return (

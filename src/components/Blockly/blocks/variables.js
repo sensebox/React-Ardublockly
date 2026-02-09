@@ -1,6 +1,6 @@
 import * as Blockly from "blockly/core";
-import { getColour } from "../helpers/colour";
-import { getCompatibleTypes } from "../helpers/types";
+import { getColour } from "@/components/Blockly/helpers/colour";
+import { getCompatibleTypes } from "@/components/Blockly/helpers/types";
 
 Blockly.Blocks["variables_set_dynamic"] = {
   init: function () {
