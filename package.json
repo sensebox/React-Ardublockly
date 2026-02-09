@@ -8,7 +8,7 @@
     "@blockly/block-plus-minus": "^9.0.7",
     "@blockly/field-colour": "^6.0.4",
     "@blockly/field-multilineinput": "^6.0.5",
-    "@blockly/field-grid-dropdown": "^6.0.6",
+    "@blockly/field-grid-dropdown": "^6.0.9",
     "@blockly/field-slider": "8.0.2",
     "@blockly/plugin-scroll-options": "^7.0.1",
     "@blockly/plugin-typed-variable-modal": "^9.0.2",
