@@ -133,7 +133,7 @@ basicGenerator.forBlock["basic_red"] = function (block, generator) {
   return `led(255,0,0)\n`;
 };
 basicGenerator.forBlock["basic_yellow"] = function (block, generator) {
-  return `led(255,255,0)\n`;
+  return `led(255,240,0)\n`;
 };
 basicGenerator.forBlock["basic_blue"] = function (block, generator) {
   return `led(0,0,255)\n`;
