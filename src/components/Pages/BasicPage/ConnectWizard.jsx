@@ -43,7 +43,7 @@ const ConnectWizard = ({
       // small delay to give the Arduino time to process the STOP command
       await new Promise((resolve) => setTimeout(resolve, 100));
       await onSend();
-      await onQuick("RUNLOOP"); // Play the new script in a loop
+      await onQuick("RUN"); // Play the new script in a loop
     } catch (err) {
       console.error("Error during play:", err);
     }

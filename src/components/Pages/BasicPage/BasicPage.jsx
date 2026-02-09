@@ -1,7 +1,7 @@
-import React, { use, useEffect, useMemo, useRef, useState } from "react";
-import { Box, useTheme } from "@mui/material";
+import React, { useEffect, useRef, useState } from "react";
+import { Box } from "@mui/material";
 import ConnectWizard from "./ConnectWizard";
-import useWebSerial from "./WebSerialService";
+import useWebBluetooth from "./useWebBluetooth";
 import BlocklyCard from "./BlocklyCard";
 import "@/components/Blockly/blocks/basic/index"; // registriert Block
 import senseboxlogo from "@/data/senseBox_Icon_bunt.png";
@@ -10,7 +10,6 @@ import { useSelector } from "react-redux";
 
 const BasicPage = () => {
   const [log, setLog] = useState("");
-  const [script, setScript] = useState("");
   const basicCode = useSelector((s) => s.workspace.code.basic);
   const logBoxRef = useRef(null);
 
@@ -24,7 +23,7 @@ const BasicPage = () => {
     disconnect,
     sendLine,
     sendScript,
-  } = useWebSerial({ script, setLog, logBoxRef });
+  } = useWebBluetooth({ setLog, logBoxRef });
 
   useEffect(() => {
     console.log(basicCode);
