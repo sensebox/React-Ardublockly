@@ -52,8 +52,8 @@ const API_BASE_URL =
   import.meta.env.VITE_BACKEND_API_URL || "http://localhost:5000";
 const API_ENDPOINT = `${API_BASE_URL}/api/convert-to-tflite`;
 const COMPILE_ENDPOINT = `${API_BASE_URL}/api/compile-model`;
-const REQUEST_TIMEOUT = 60000; // 60 seconds
-const COMPILE_TIMEOUT = 120000; // 120 seconds for compilation
+const REQUEST_TIMEOUT = 600000; // 600 seconds
+const COMPILE_TIMEOUT = 600000; // 600 seconds for compilation
 
 /**
  * ConversionService class
