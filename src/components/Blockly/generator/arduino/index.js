@@ -31,3 +31,4 @@ import "./watchdog";
 import "./webserver";
 import "./fluoroASM";
 import "./custom-functions";
+import "./basic_dummies";
