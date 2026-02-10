@@ -16,6 +16,7 @@ import EmbeddedBlockly from "./components/EmbeddedBlockly";
 import RouteHandler from "./components/RouteHandler";
 import { setCompiler } from "./actions/generalActions";
 import BasicEmbedded from "./components/BasicBlockly/BasicEmbedded";
+import BasicPage from "./components/Pages/Basic/BasicPage";
 
 const theme = createTheme({
   palette: {
@@ -73,7 +74,7 @@ class App extends Component {
                   />
                   <Route path="/embedded" element={<EmbeddedBlockly />} />
                   <Route path="/*" element={<Content />} />
-                  <Route path="/embeddedbasic" element={<BasicEmbedded />} />
+                  <Route path="/embeddedbasic" element={<BasicPage />} />
                 </Routes>
               </ErrorBoundary>
             </BrowserRouter>
