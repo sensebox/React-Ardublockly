@@ -2,7 +2,8 @@ import React, { useEffect, useRef } from "react";
 import "@blockly/block-plus-minus";
 import { TypedVariableModal } from "@blockly/plugin-typed-variable-modal";
 import * as Blockly from "blockly/core";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { uploadAiModel } from "../../../actions/generalActions";
 import { ToolboxMcu } from "./ToolboxMcu";
 import { ToolboxEsp } from "./ToolboxEsp";
 import { getColour } from "../helpers/colour";
@@ -10,12 +11,15 @@ import { ToolboxEye } from "./ToolboxEye";
 import "./toolbox_styles.css";
 
 const Toolbox = ({ workspace, toolbox }) => {
+  const dispatch = useDispatch();
   const selectedBoard = useSelector((state) => state.board.board);
   const language = useSelector((state) => state.general.language);
   const setupIntervalRef = useRef(null);
   const previousBoard = useRef(null);
   const previousLanguage = useRef(null);
   const isInitialMount = useRef(true);
+  const fileInputRef = useRef(null);
+  const aiModel = useSelector((state) => state.general.aiModel);
 
   useEffect(() => {
     if (!workspace || !toolbox?.current) return;
@@ -142,16 +146,26 @@ const Toolbox = ({ workspace, toolbox }) => {
     ]);
     typedVarModal.init();
 
+    // --- AI Model Upload Callback ---
+    workspace.registerButtonCallback("uploadAiModel", () => {
+      if (fileInputRef.current) {
+        fileInputRef.current.click();
+      }
+    });
+
     // --- Toolbox aktualisieren (nur bei Änderungen, nicht beim initialen Mount) ---
     const boardChanged =
       previousBoard.current !== null && previousBoard.current !== selectedBoard;
     const languageChanged =
       previousLanguage.current !== null &&
       previousLanguage.current !== language;
+    const aiModelChanged =
+      previousAiModelCode.current !== undefined &&
+      previousAiModelCode.current !== aiModel?.code;
 
     if (
       !isInitialMount.current &&
-      (boardChanged || languageChanged) &&
+      (boardChanged || languageChanged || aiModelChanged) &&
       workspace.toolbox
     ) {
       workspace.updateToolbox(toolbox.current);
@@ -159,6 +173,7 @@ const Toolbox = ({ workspace, toolbox }) => {
 
     previousBoard.current = selectedBoard;
     previousLanguage.current = language;
+    previousAiModelCode.current = aiModel?.code;
     isInitialMount.current = false;
 
     // --- Prevent flyout from closing when variable is created ---
@@ -249,23 +264,54 @@ const Toolbox = ({ workspace, toolbox }) => {
         flyout.hide = flyoutOriginalHide;
       }
     };
-  }, [workspace, toolbox, selectedBoard, language]);
+  }, [workspace, toolbox, selectedBoard, language, dispatch, aiModel?.code]);
+
+  const handleFileSelect = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (!file.name.endsWith(".cpp")) {
+      alert("Please select a .cpp file");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const code = e.target.result;
+      dispatch(uploadAiModel(code, file.name));
+    };
+    reader.readAsText(file);
+
+    // Reset input so same file can be selected again
+    event.target.value = "";
+  };
 
   return React.createElement(
-    "xml",
-    {
-      is: "blockly",
-      xmlns: "https://developers.google.com/blockly/xml",
-      id: "blockly",
+    React.Fragment,
+    null,
+    // file input for AI model upload
+    React.createElement("input", {
+      type: "file",
+      accept: ".cpp",
+      ref: fileInputRef,
       style: { display: "none" },
-      ref: toolbox,
-    },
-    selectedBoard === "MCU" || selectedBoard === "MCU:MINI" ? (
-      <ToolboxMcu />
-    ) : selectedBoard === "MCU-S2" ? (
-      <ToolboxEsp />
-    ) : (
-      <ToolboxEye />
+      onChange: handleFileSelect,
+    }),
+    React.createElement(
+      "xml",
+      {
+        xmlns: "https://developers.google.com/blockly/xml",
+        id: "blockly",
+        style: { display: "none" },
+        ref: toolbox,
+      },
+      selectedBoard === "MCU" || selectedBoard === "MCU:MINI" ? (
+        <ToolboxMcu />
+      ) : selectedBoard === "MCU-S2" ? (
+        <ToolboxEsp />
+      ) : (
+        <ToolboxEye />
+      ),
     ),
   );
 };
