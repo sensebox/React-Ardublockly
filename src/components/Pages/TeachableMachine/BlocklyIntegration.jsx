@@ -9,43 +9,29 @@ import {
   Chip,
   CircularProgress,
   LinearProgress,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
+  Divider,
 } from "@mui/material";
 import {
-  ContentCopy as CopyIcon,
   CheckCircle as CheckIcon,
-  Memory as MemoryIcon,
   Refresh as RefreshIcon,
   Build as BuildIcon,
   Download as DownloadIcon,
-  ExpandMore as ExpandMoreIcon,
   Code as CodeIcon,
+  Transform as TransformIcon,
 } from "@mui/icons-material";
 import ConversionService from "../../../services/conversionService";
-import CodeViewer from "./CodeViewer";
 
 const BlocklyIntegration = ({ model }) => {
-  const [copied, setCopied] = useState(false);
-  const [codeExpanded, setCodeExpanded] = useState(false);
-
-  // Unified state for conversion, compilation, and download
+  // Workflow state for the two-step process
   const [workflowState, setWorkflowState] = useState({
+    // Current step: 'idle', 'converting', 'converted', 'compiling', 'complete'
+    currentStep: "idle",
     isProcessing: false,
-    currentStep: "", // 'conversion', 'compilation', 'download', 'complete'
-    stage: "", // Stage description within current step
-    progress: 0, // Overall progress 0-100
+    progress: 0,
+    stage: "",
     error: null,
-    // Conversion data
-    tfliteCode: null,
-    modelSettingsCode: null,
-    modelSize: null,
-    modelData: null,
+    // Conversion data (stored after successful conversion)
+    conversionData: null,
     // Compilation data
     binaryData: null,
     binarySize: null,
@@ -54,14 +40,14 @@ const BlocklyIntegration = ({ model }) => {
   // Fixed board type for senseBox Eye
   const boardType = "sensebox_eye";
 
-  // Combined workflow: Convert -> Compile -> Download
-  const handleConvertCompileDownload = useCallback(async () => {
+  // Step 1: Convert model only
+  const handleConvertModel = useCallback(async () => {
     if (!model || !model.model) {
       setWorkflowState((prev) => ({
         ...prev,
         error: {
           message: "No model available",
-          details: "Please train a model before processing.",
+          details: "Please train a model before converting.",
           type: "VALIDATION",
           suggestions: ["Train a model first"],
           retryable: false,
@@ -70,24 +56,19 @@ const BlocklyIntegration = ({ model }) => {
       return;
     }
 
-    // Reset state and start processing
+    // Reset state and start conversion
     setWorkflowState({
+      currentStep: "converting",
       isProcessing: true,
-      currentStep: "conversion",
       progress: 0,
       stage: "serializing",
       error: null,
-      tfliteCode: null,
-      modelSettingsCode: null,
-      modelSize: null,
-      modelData: null,
+      conversionData: null,
       binaryData: null,
       binarySize: null,
     });
 
     try {
-      // ==================== STEP 1: MODEL CONVERSION ====================
-
       // Prepare representative dataset for int8 quantization
       const representativeDataset = model.representativeSamples || [];
       // Extract class labels from model
@@ -105,63 +86,143 @@ const BlocklyIntegration = ({ model }) => {
           includeMetadata: true,
           representativeDataset: representativeDataset,
           classLabels: classLabels,
-          inputShape: model.inputShape || null, // Pass the expected input shape
+          inputShape: model.inputShape || null,
         },
         (stage, progress) => {
-          // Progress 0-33% for conversion phase
-          const overallProgress = Math.round(progress / 3);
           setWorkflowState((prev) => ({
             ...prev,
             stage,
-            progress: overallProgress,
+            progress: Math.round(progress),
           }));
         },
       );
 
       if (!conversionResult.success) {
         setWorkflowState({
+          currentStep: "idle",
           isProcessing: false,
-          currentStep: "conversion",
           progress: 0,
           stage: "",
           error: conversionResult.error,
-          tfliteCode: null,
-          modelSettingsCode: null,
-          modelSize: null,
-          modelData: null,
+          conversionData: null,
           binaryData: null,
           binarySize: null,
         });
         return;
       }
 
-      // Update state with conversion results
+      // Conversion successful - store data and show options
+      setWorkflowState({
+        currentStep: "converted",
+        isProcessing: false,
+        progress: 100,
+        stage: "complete",
+        error: null,
+        conversionData: {
+          cppCode: conversionResult.data.cppCode,
+          modelSettingsCode: conversionResult.data.modelSettingsCode || null,
+          modelSize: conversionResult.data.modelSize,
+          modelByteArray: conversionResult.data.modelByteArray,
+          timestamp:
+            conversionResult.data.timestamp || new Date().toISOString(),
+        },
+        binaryData: null,
+        binarySize: null,
+      });
+    } catch (error) {
+      setWorkflowState({
+        currentStep: "idle",
+        isProcessing: false,
+        progress: 0,
+        stage: "",
+        error: {
+          message: "Conversion failed",
+          details: error.message || "An unexpected error occurred",
+          type: "UNKNOWN",
+          suggestions: ["Check your network connection", "Try again later"],
+          retryable: true,
+        },
+        conversionData: null,
+        binaryData: null,
+        binarySize: null,
+      });
+    }
+  }, [model]);
+
+  // Step 2a: Download cpp file
+  const handleDownloadCpp = useCallback(() => {
+    if (!workflowState.conversionData) {
+      return;
+    }
+
+    const classLabels = model.classes
+      ? model.classes.map((cls) => cls.name)
+      : [];
+
+    const metadata = {
+      timestamp: workflowState.conversionData.timestamp,
+      modelSize: workflowState.conversionData.modelSize,
+      inputShape: model.inputShape,
+      classes: classLabels,
+    };
+
+    const success = ConversionService.downloadCppFile(
+      workflowState.conversionData.cppCode,
+      workflowState.conversionData.modelSettingsCode,
+      metadata,
+    );
+
+    if (!success) {
       setWorkflowState((prev) => ({
         ...prev,
-        currentStep: "compilation",
-        progress: 33,
-        stage: "compiling",
-        tfliteCode: conversionResult.data.cppCode,
-        modelSettingsCode: conversionResult.data.modelSettingsCode || null,
-        modelSize: conversionResult.data.modelSize,
-        modelData: conversionResult.data,
+        error: {
+          message: "Failed to download cpp file",
+          details: "Could not trigger download",
+          type: "DOWNLOAD",
+          suggestions: ["Try again or check browser permissions"],
+          retryable: false,
+        },
       }));
+    }
+  }, [workflowState.conversionData, model]);
 
-      // ==================== STEP 2: MODEL COMPILATION ====================
+  // Step 2b: Compile and download binary
+  const handleCompileAndDownload = useCallback(async () => {
+    if (!workflowState.conversionData) {
+      return;
+    }
+
+    const classLabels = model.classes
+      ? model.classes.map((cls) => cls.name)
+      : [];
+
+    // Start compilation
+    setWorkflowState((prev) => ({
+      ...prev,
+      currentStep: "compiling",
+      isProcessing: true,
+      progress: 0,
+      stage: "compiling",
+      error: null,
+    }));
+
+    try {
       const compilationResult = await ConversionService.compileModel(
-        conversionResult.data,
+        {
+          modelByteArray: workflowState.conversionData.modelByteArray,
+          modelSize: workflowState.conversionData.modelSize,
+          modelSettingsCode: workflowState.conversionData.modelSettingsCode,
+        },
         {
           boardType: boardType,
           optimization: "default",
           classLabels: classLabels,
         },
         (stage, progress) => {
-          // Progress 33-66% for compilation phase
-          const overallProgress = Math.round(33 + progress / 3);
           setWorkflowState((prev) => ({
             ...prev,
             stage,
-            progress: overallProgress,
+            progress: Math.round(progress),
           }));
         },
       );
@@ -169,24 +230,14 @@ const BlocklyIntegration = ({ model }) => {
       if (!compilationResult.success) {
         setWorkflowState((prev) => ({
           ...prev,
+          currentStep: "converted",
           isProcessing: false,
-          currentStep: "compilation",
           error: compilationResult.error,
         }));
         return;
       }
 
-      // Update state with compilation results
-      setWorkflowState((prev) => ({
-        ...prev,
-        currentStep: "download",
-        progress: 66,
-        stage: "preparing download",
-        binaryData: compilationResult.data.binaryData,
-        binarySize: compilationResult.data.binarySize,
-      }));
-
-      // ==================== STEP 3: DOWNLOAD BINARY ====================
+      // Download the binary
       const downloadSuccess = ConversionService.downloadBinary(
         compilationResult.data.binaryData,
         `teachable_machine_${boardType.replace(/:/g, "_")}_${Date.now()}.bin`,
@@ -195,8 +246,8 @@ const BlocklyIntegration = ({ model }) => {
       if (!downloadSuccess) {
         setWorkflowState((prev) => ({
           ...prev,
+          currentStep: "converted",
           isProcessing: false,
-          currentStep: "download",
           error: {
             message: "Failed to download binary",
             details: "Could not trigger download",
@@ -208,88 +259,67 @@ const BlocklyIntegration = ({ model }) => {
         return;
       }
 
-      // All steps complete!
+      // Success!
       setWorkflowState((prev) => ({
         ...prev,
-        isProcessing: false,
         currentStep: "complete",
+        isProcessing: false,
         progress: 100,
         stage: "complete",
         error: null,
+        binaryData: compilationResult.data.binaryData,
+        binarySize: compilationResult.data.binarySize,
       }));
-
-      // Auto-expand code viewer on success
-      setCodeExpanded(true);
     } catch (error) {
-      setWorkflowState({
+      setWorkflowState((prev) => ({
+        ...prev,
+        currentStep: "converted",
         isProcessing: false,
-        currentStep: "conversion",
-        progress: 0,
-        stage: "",
         error: {
-          message: "Process failed",
+          message: "Compilation failed",
           details: error.message || "An unexpected error occurred",
           type: "UNKNOWN",
           suggestions: ["Check your network connection", "Try again later"],
           retryable: true,
         },
-        tfliteCode: null,
-        modelSettingsCode: null,
-        modelSize: null,
-        modelData: null,
-        binaryData: null,
-        binarySize: null,
-      });
-    }
-  }, [model, boardType]);
-
-  const handleCopyCode = useCallback(async () => {
-    if (!workflowState.tfliteCode) {
-      return;
-    }
-
-    try {
-      await navigator.clipboard.writeText(workflowState.tfliteCode);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (error) {
-      console.error("Failed to copy code:", error);
-      setWorkflowState((prev) => ({
-        ...prev,
-        error: {
-          message: "Failed to copy to clipboard",
-          details: error.message || "Clipboard API not available",
-          type: "CLIPBOARD",
-          suggestions: ["Try selecting and copying the code manually"],
-          retryable: false,
-        },
       }));
     }
-  }, [workflowState.tfliteCode]);
+  }, [workflowState.conversionData, model, boardType]);
 
-  const handleRetry = useCallback(() => {
+  // Retry conversion
+  const handleRetryConversion = useCallback(() => {
     setWorkflowState((prev) => ({
       ...prev,
       error: null,
     }));
-    handleConvertCompileDownload();
-  }, [handleConvertCompileDownload]);
+    handleConvertModel();
+  }, [handleConvertModel]);
+
+  // Reset to start new conversion
+  const handleReset = useCallback(() => {
+    setWorkflowState({
+      currentStep: "idle",
+      isProcessing: false,
+      progress: 0,
+      stage: "",
+      error: null,
+      conversionData: null,
+      binaryData: null,
+      binarySize: null,
+    });
+  }, []);
 
   // Get descriptive stage text for progress bar
   const getStageText = () => {
     const { currentStep, stage } = workflowState;
-    if (currentStep === "conversion") {
+    if (currentStep === "converting") {
       if (stage === "serializing") return "Serializing model...";
       if (stage === "uploading") return "Uploading to server...";
       if (stage === "converting") return "Converting to TFLite...";
       if (stage === "generating") return "Generating C/C++ code...";
       return "Converting model...";
-    } else if (currentStep === "compilation") {
+    } else if (currentStep === "compiling") {
       return "Compiling model to binary...";
-    } else if (currentStep === "download") {
-      return "Preparing download...";
-    } else if (currentStep === "complete") {
-      return "Process complete!";
     }
     return "";
   };
@@ -297,33 +327,34 @@ const BlocklyIntegration = ({ model }) => {
   return (
     <Box>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-        Convert your trained model to TensorFlow Lite Micro format, compile it
-        to a binary, and download it. You can then drag and drop the downloaded
-        binary onto your senseBox Eye.
+        Convert your trained model to TensorFlow Lite Micro format. After
+        conversion, you can download the model as a cpp file for use in Arduino
+        IDE, or compile it to a binary for direct upload to your senseBox Eye.
       </Typography>
 
-      {/* Combined Convert, Compile & Download Button */}
-      <Button
-        variant="contained"
-        color="primary"
-        size="large"
-        startIcon={
-          workflowState.isProcessing ? (
-            <CircularProgress size={20} color="inherit" />
-          ) : (
-            <DownloadIcon />
-          )
-        }
-        onClick={handleConvertCompileDownload}
-        disabled={!model || !model.model || workflowState.isProcessing}
-        sx={{ mb: 3 }}
-      >
-        {workflowState.isProcessing
-          ? "Processing..."
-          : "Convert, Compile & Download"}
-      </Button>
+      {/* Step 1: Convert Model Button */}
+      {(workflowState.currentStep === "idle" ||
+        workflowState.currentStep === "converting") && (
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          startIcon={
+            workflowState.isProcessing ? (
+              <CircularProgress size={20} color="inherit" />
+            ) : (
+              <TransformIcon />
+            )
+          }
+          onClick={handleConvertModel}
+          disabled={!model || !model.model || workflowState.isProcessing}
+          sx={{ mb: 3 }}
+        >
+          {workflowState.isProcessing ? "Converting..." : "Convert Model"}
+        </Button>
+      )}
 
-      {/* Unified Progress Indicator */}
+      {/* Progress Indicator */}
       {workflowState.isProcessing && (
         <Box sx={{ mb: 3 }}>
           <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
@@ -356,7 +387,7 @@ const BlocklyIntegration = ({ model }) => {
                 color="inherit"
                 size="small"
                 startIcon={<RefreshIcon />}
-                onClick={handleRetry}
+                onClick={handleRetryConversion}
               >
                 Retry
               </Button>
@@ -389,134 +420,142 @@ const BlocklyIntegration = ({ model }) => {
         </Alert>
       )}
 
-      {/* Success Message */}
+      {/* Step 2: Conversion Complete - Show Download Options */}
+      {(workflowState.currentStep === "converted" ||
+        workflowState.currentStep === "compiling" ||
+        workflowState.currentStep === "complete") &&
+        workflowState.conversionData && (
+          <Card variant="outlined" sx={{ mb: 3 }}>
+            <CardContent>
+              {/* Success Header */}
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                  mb: 2,
+                }}
+              >
+                <CheckIcon color="success" />
+                <Typography variant="h6">
+                  Model Successfully Converted
+                </Typography>
+                {workflowState.conversionData.modelSize && (
+                  <Chip
+                    label={`${(workflowState.conversionData.modelSize / 1024).toFixed(2)} KB`}
+                    size="small"
+                    color="primary"
+                    variant="outlined"
+                  />
+                )}
+              </Box>
+
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                Choose one of the following options:
+              </Typography>
+
+              {/* Option A: Download cpp file */}
+              <Box sx={{ mb: 2 }}>
+                <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                  Option A: Download as cpp File
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mb: 1 }}
+                >
+                  Download the model as a single cpp file for use in Arduino IDE
+                  or to upload to Blockly UI later.
+                </Typography>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  startIcon={<CodeIcon />}
+                  onClick={handleDownloadCpp}
+                  disabled={workflowState.isProcessing}
+                >
+                  Download cpp File
+                </Button>
+              </Box>
+
+              <Divider sx={{ my: 2 }} />
+
+              {/* Option B: Compile and download binary */}
+              <Box>
+                <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                  Option B: Compile & Download Binary
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mb: 1 }}
+                >
+                  Compile the model to a binary file that can be directly
+                  uploaded to your senseBox Eye via drag-and-drop.
+                </Typography>
+                <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    startIcon={
+                      workflowState.currentStep === "compiling" ? (
+                        <CircularProgress size={20} color="inherit" />
+                      ) : (
+                        <BuildIcon />
+                      )
+                    }
+                    onClick={handleCompileAndDownload}
+                    disabled={workflowState.isProcessing}
+                  >
+                    {workflowState.currentStep === "compiling"
+                      ? "Compiling..."
+                      : "Compile & Download Binary"}
+                  </Button>
+                  {workflowState.binaryData && (
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      startIcon={<DownloadIcon />}
+                      onClick={() => {
+                        ConversionService.downloadBinary(
+                          workflowState.binaryData,
+                          `teachable_machine_${boardType.replace(/:/g, "_")}_${Date.now()}.bin`,
+                        );
+                      }}
+                    >
+                      Download Binary Again
+                    </Button>
+                  )}
+                </Box>
+              </Box>
+
+              {/* Convert another model button */}
+              <Box sx={{ mt: 3, pt: 2, borderTop: 1, borderColor: "divider" }}>
+                <Button
+                  variant="text"
+                  color="secondary"
+                  size="small"
+                  onClick={handleReset}
+                  disabled={workflowState.isProcessing}
+                >
+                  Convert a Different Model
+                </Button>
+              </Box>
+            </CardContent>
+          </Card>
+        )}
+
+      {/* Success Message after binary download */}
       {workflowState.currentStep === "complete" && workflowState.binaryData && (
         <Alert severity="success" sx={{ mb: 3 }}>
           <Typography variant="subtitle2" gutterBottom>
-            Success! Model Ready for Upload
+            Success! Binary Downloaded
           </Typography>
           <Typography variant="body2">
-            Your model has been converted, compiled, and downloaded! The binary
-            file is ready to upload to your senseBox Eye board. You can also
-            view the generated code below.
+            Your model has been compiled and downloaded! The binary file is
+            ready to upload to your senseBox Eye board via drag-and-drop.
           </Typography>
         </Alert>
-      )}
-
-      {/* Collapsible Code Viewer */}
-      {workflowState.tfliteCode && (
-        <Accordion
-          expanded={codeExpanded}
-          onChange={(e, isExpanded) => setCodeExpanded(isExpanded)}
-          sx={{ mb: 3 }}
-        >
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="generated-code-content"
-            id="generated-code-header"
-          >
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <CodeIcon />
-              <Typography variant="subtitle1">View Generated Code</Typography>
-              {workflowState.modelSize && (
-                <Chip
-                  label={`${(workflowState.modelSize / 1024).toFixed(2)} KB`}
-                  size="small"
-                  color="primary"
-                  variant="outlined"
-                />
-              )}
-            </Box>
-          </AccordionSummary>
-          <AccordionDetails>
-            {/* Model Settings Code */}
-            {workflowState.modelSettingsCode && (
-              <Card variant="outlined" sx={{ mb: 2 }}>
-                <CardContent>
-                  <Typography variant="subtitle2" gutterBottom>
-                    Model Settings (Header & Implementation)
-                  </Typography>
-                  <CodeViewer
-                    code={workflowState.modelSettingsCode}
-                    language="cpp"
-                    maxHeight={300}
-                  />
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Model Data Code */}
-            <Card variant="outlined">
-              <CardContent>
-                <Typography variant="subtitle2" gutterBottom>
-                  Model Data (C/C++ Byte Array)
-                </Typography>
-                <CodeViewer
-                  code={workflowState.tfliteCode}
-                  language="cpp"
-                  onCopy={handleCopyCode}
-                  maxHeight={400}
-                />
-                <Box sx={{ mt: 2, display: "flex", gap: 1 }}>
-                  <Button
-                    variant="outlined"
-                    startIcon={copied ? <CheckIcon /> : <CopyIcon />}
-                    onClick={handleCopyCode}
-                    color={copied ? "success" : "primary"}
-                  >
-                    {copied ? "Copied!" : "Copy to Clipboard"}
-                  </Button>
-                </Box>
-              </CardContent>
-            </Card>
-          </AccordionDetails>
-        </Accordion>
-      )}
-
-      {/* Binary Info Card */}
-      {workflowState.binaryData && (
-        <Card variant="outlined" sx={{ mb: 3 }}>
-          <CardContent>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                mb: 2,
-              }}
-            >
-              <Typography variant="subtitle1">Compiled Binary</Typography>
-              {workflowState.binarySize && (
-                <Chip
-                  label={`Binary Size: ${(workflowState.binarySize / 1024).toFixed(2)} KB`}
-                  size="small"
-                  color="secondary"
-                  variant="outlined"
-                />
-              )}
-            </Box>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Board: senseBox Eye
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              The binary has been automatically downloaded. If the download
-              didn't start, click the button below to download again.
-            </Typography>
-            <Button
-              variant="outlined"
-              color="primary"
-              startIcon={<DownloadIcon />}
-              onClick={() => {
-                ConversionService.downloadBinary(
-                  workflowState.binaryData,
-                  `teachable_machine_${boardType.replace(/:/g, "_")}_${Date.now()}.bin`,
-                );
-              }}
-            >
-              Download Binary Again
-            </Button>
-          </CardContent>
-        </Card>
       )}
     </Box>
   );

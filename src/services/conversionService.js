@@ -648,6 +648,63 @@ class ConversionService {
       return false;
     }
   }
+
+  /**
+   * Downloads the model as a single cpp file combining model data and settings
+   *
+   * @param {string} cppCode - The C++ code containing the model byte array
+   * @param {string} modelSettingsCode - The model settings code (optional)
+   * @param {Object} metadata - Metadata for the file header
+   * @param {string} metadata.timestamp - Timestamp of model generation
+   * @param {number} metadata.modelSize - Size of the model in bytes
+   * @param {Array<number>} metadata.inputShape - Input shape array [height, width, channels]
+   * @param {Array<string>} metadata.classes - Array of class names
+   * @returns {boolean} True if download succeeded, false otherwise
+   */
+  downloadCppFile(cppCode, modelSettingsCode = null, metadata = {}) {
+    if (!cppCode) {
+      console.error("No cpp code to download");
+      return false;
+    }
+
+    try {
+      // Build header with metadata
+      const header = `// ============================================
+// TensorFlow Lite Micro Model - Teachable Machine
+// Generated: ${metadata.timestamp || new Date().toISOString()}
+// Model Size: ${metadata.modelSize ? (metadata.modelSize / 1024).toFixed(2) : "Unknown"} KB
+// Input Shape: ${metadata.inputShape ? metadata.inputShape.join("x") : "Unknown"}
+// Classes: ${metadata.classes ? metadata.classes.join(", ") : "Unknown"}
+// ============================================
+
+`;
+
+      // Combine code sections
+      let combinedCode = header + "// MODEL DATA\n" + cppCode;
+
+      if (modelSettingsCode) {
+        combinedCode += "\n\n// MODEL SETTINGS\n" + modelSettingsCode;
+      }
+
+      // Create blob and download
+      const blob = new Blob([combinedCode], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `teachable_machine_model_${Date.now()}.cpp`;
+      document.body.appendChild(link);
+      link.click();
+
+      // Cleanup
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      return true;
+    } catch (error) {
+      console.error("Failed to download cpp file:", error);
+      return false;
+    }
+  }
 }
 
 // Export singleton instance
