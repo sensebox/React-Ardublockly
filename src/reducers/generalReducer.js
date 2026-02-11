@@ -7,6 +7,8 @@ import {
   PLATFORM,
   COMPILER,
   EMBEDDED_MODE,
+  AI_MODEL_UPLOAD,
+  AI_MODEL_CLEAR,
 } from "../actions/types";
 
 const initialLanguage = () => {
@@ -24,7 +26,9 @@ const initialPlatform = () => {
 };
 
 const initialCompiler = () => {
-  return import.meta.env.VITE_INITIAL_COMPILER_URL || "https://compile.sensebox.de";
+  return (
+    import.meta.env.VITE_INITIAL_COMPILER_URL || "https://compile.sensebox.de"
+  );
 };
 
 const initialSounds = () => {
@@ -83,11 +87,17 @@ const initialStatistics = () => {
   return false;
 };
 
+const initialAiModel = () => {
+  const stored = window.localStorage.getItem("aiModelCode");
+  return stored ? JSON.parse(stored) : { code: null, filename: null };
+};
+
 const initialState = {
   pageVisits: 0, // detect if previous URL was
   language: initialLanguage(),
   renderer: initialRenderer(),
   sounds: initialSounds(),
+  aiModel: initialAiModel(),
   statistics: initialStatistics(),
   platform: initialPlatform(),
   compiler: initialCompiler(),
@@ -140,6 +150,21 @@ export default function foo(state = initialState, action) {
       return {
         ...state,
         embeddedMode: action.payload,
+      };
+    case AI_MODEL_UPLOAD:
+      window.localStorage.setItem(
+        "aiModelCode",
+        JSON.stringify(action.payload),
+      );
+      return {
+        ...state,
+        aiModel: action.payload,
+      };
+    case AI_MODEL_CLEAR:
+      window.localStorage.removeItem("aiModelCode");
+      return {
+        ...state,
+        aiModel: { code: null, filename: null },
       };
     default:
       return state;

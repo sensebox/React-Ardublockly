@@ -1,5 +1,5 @@
 import React from "react";
-import { Block, Value, Field, Shadow, Category, Label } from "..";
+import { Block, Value, Field, Shadow, Category, Label, Button } from "..";
 import { getColour } from "../helpers/colour";
 import * as Blockly from "blockly/core";
 import "@blockly/toolbox-search";
@@ -701,6 +701,19 @@ export const ToolboxEsp = () => {
               </Block>
             </Value>
           </Block>
+        </Category>
+
+        {/* ============================== AI ============================== */}
+        <Category
+          id="sensebox_ai"
+          name={Blockly.Msg.toolbox_ai || "AI"}
+          colour={getColour().ai}
+        >
+          <Button
+            text={Blockly.Msg.ai_upload_model || "Upload Trained Model"}
+            callbackKey="uploadAiModel"
+          />
+          <Block type="sensebox_teachable_output" />
         </Category>
 
         {/* -------- WATCHDOG -------- */}

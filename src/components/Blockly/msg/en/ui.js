@@ -35,6 +35,11 @@ export const UI = {
   variables_set: "set",
   variables_to: "to",
   toolbox_internet_and_comms: "Data transmission",
+  toolbox_ai: "AI",
+  ai_upload_model: "Upload Trained Model",
+  ai_model_output: "AI Model Output",
+  ai_no_model_uploaded: "No model uploaded",
+  ai_model_uploaded: "Model loaded",
 
   /**
    * Tooltips
