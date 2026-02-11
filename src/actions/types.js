@@ -60,6 +60,10 @@ export const STATISTICS = "STATISTICS";
 export const COMPILER = "COMPILER";
 export const EMBEDDED_MODE = "EMBEDDED_MODE";
 
+// AI Model
+export const AI_MODEL_UPLOAD = "AI_MODEL_UPLOAD";
+export const AI_MODEL_CLEAR = "AI_MODEL_CLEAR";
+
 // messages
 export const GET_ERRORS = "GET_ERRORS";
 export const GET_SUCCESS = "GET_SUCCESS";
