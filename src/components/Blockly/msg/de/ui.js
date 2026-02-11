@@ -13,6 +13,7 @@ export const UI = {
   toolbox_rtc: "RTC",
   toolbox_ntp: "NTP",
   toolbox_functions: "Funktionen",
+  my_toolbox_functions: "Meine Funktionen",
   toolbox_variables: "Variablen",
   toolbox_serial: "Seriell",
   toolbox_advanced: "Erweitert",
@@ -327,6 +328,7 @@ export const UI = {
   navbar_tutorialbuilder: "Tutorial erstellen",
   navbar_gallery: "Galerie",
   navbar_projects: "Projekte",
+  navbar_teachablesensebox: "Teachable senseBox",
 
   navbar_menu: "Menü",
   navbar_login: "Einloggen",
