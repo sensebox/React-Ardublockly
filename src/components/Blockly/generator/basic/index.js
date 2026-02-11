@@ -207,7 +207,7 @@ basicGenerator.forBlock["basic_repeat_times"] = function (block) {
   const times = block.getFieldValue("TIMES") || "0";
   const body = basicGenerator.statementToCode(block, "DO");
 
-  return `forLOOPi = 0\nfor(forLOOPi=0; forLOOPi<${times}; forLOOPi=forLOOPi+1){\n${body}\n}\n\n`;
+  return `i=0\n for(i=0; i<${times}; i=i+1){\n${body}}\n\n`;
 };
 
 basicGenerator.forBlock["basic_compare"] = function (block) {
