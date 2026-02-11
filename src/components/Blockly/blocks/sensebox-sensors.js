@@ -839,3 +839,21 @@ Blockly.Blocks["sensebox_sensor_max17048"] = {
     this.data = { name: "max17048" };
   },
 };
+
+Blockly.Blocks["sensebox_soil_sensor"] = {
+  init: function () {
+    this.setColour(getColour().sensebox);
+    this.appendDummyInput()
+      .appendField("senseBox Bodensensor")
+      .appendField("Phänomen:")
+      .appendField(
+        new Blockly.FieldDropdown([
+          ["Bodenfeuchte Kapazität", "CAPACITANCE"],
+          ["Bodentemperatur", "TEMPERATURE"],
+        ]),
+        "PHENOMENON",
+      );
+    this.setOutput(true, "Number");
+    this.setTooltip("Liest die Messwerte des senseBox Bodensensors aus.");
+  },
+};
