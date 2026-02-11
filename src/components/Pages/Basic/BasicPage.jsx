@@ -9,6 +9,10 @@ const BasicPage = () => {
   const basicCode = useSelector((s) => s.workspace.code.basic);
 
   useEffect(() => {
+    console.log("Aktueller Blockly-Code:\n", basicCode);
+  }, [basicCode]);
+
+  useEffect(() => {
     const head = document.head;
     const link = document.createElement("link");
     link.type = "text/css";
@@ -37,7 +41,7 @@ const BasicPage = () => {
         display: "flex",
         flexDirection: "column",
         gap: 2,
-        height: "80vh",
+        height: "100vh",
         boxSizing: "border-box",
       }}
     >
