@@ -269,10 +269,10 @@
   dependencies:
     "@blockly/field-grid-dropdown" "^6.0.4"
 
-"@blockly/field-grid-dropdown@^6.0.4", "@blockly/field-grid-dropdown@^6.0.6":
-  version "6.0.6"
-  resolved "https://registry.yarnpkg.com/@blockly/field-grid-dropdown/-/field-grid-dropdown-6.0.6.tgz#de60981c54c5fd93c185abba2b653c0159b9ffc9"
-  integrity sha512-/aRu+lMU37ZeXKPkn4cJv9U4IdulGoRYgT+qxumRcY/xYI+ApSzzSgGSzlV6Q3KLQJQ7F/TubHj+JUBC/Hq7mQ==
+"@blockly/field-grid-dropdown@^6.0.4", "@blockly/field-grid-dropdown@^6.0.9":
+  version "6.0.9"
+  resolved "https://registry.yarnpkg.com/@blockly/field-grid-dropdown/-/field-grid-dropdown-6.0.9.tgz#e28cb4f1810bcbc209c1944b7fbee499d5fa1714"
+  integrity sha512-YuPdS7ZhJKoVagPxbEwUPr5Gq14SnqNk6XD064mYGiH1OYO7LrtljESXG6cnnvQjhKkitiRjZ1ye20MzG3I6FQ==
 
 "@blockly/field-multilineinput@^6.0.5":
   version "6.0.5"
