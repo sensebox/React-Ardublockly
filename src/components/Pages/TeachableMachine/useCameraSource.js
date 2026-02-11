@@ -159,7 +159,7 @@ function useCameraSource() {
       await source.start();
       setIsActive(true);
     } catch (err) {
-      console.error('[useCameraSource] Error starting camera:', err);
+      console.error("[useCameraSource] Error starting camera:", err);
       setError(err);
       setIsActive(false);
       throw err;
@@ -226,6 +226,50 @@ function useCameraSource() {
     return source.getPreviewElement();
   }, [cameraSource]);
 
+  /**
+   * Switch between front and back camera (webcam source only)
+   * Only works when using webcam source type
+   *
+   * @returns {Promise<void>}
+   */
+  const switchCamera = useCallback(async () => {
+    if (sourceType !== "webcam") {
+      console.warn("Camera switching is only supported for webcam source");
+      return;
+    }
+
+    const source = cameraSourceRef.current || cameraSource;
+    if (!source || !isActive) {
+      console.warn("No active webcam source to switch");
+      return;
+    }
+
+    try {
+      await source.switchCamera();
+    } catch (err) {
+      setError(err);
+      console.error("Error switching camera:", err);
+    }
+  }, [cameraSource, sourceType, isActive]);
+
+  /**
+   * Get current camera facing mode (webcam source only)
+   *
+   * @returns {string|null} 'user' or 'environment', or null if not webcam
+   */
+  const getFacingMode = useCallback(() => {
+    if (sourceType !== "webcam") {
+      return null;
+    }
+
+    const source = cameraSourceRef.current || cameraSource;
+    if (!source || !source.getFacingMode) {
+      return null;
+    }
+
+    return source.getFacingMode();
+  }, [cameraSource, sourceType]);
+
   return {
     sourceType,
     selectSource,
@@ -233,6 +277,8 @@ function useCameraSource() {
     stopCamera,
     captureFrame,
     getPreviewElement,
+    switchCamera,
+    getFacingMode,
     isActive,
     error,
   };
