@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
 
 import * as Blockly from "blockly/core";
 import "./blocks/index";
@@ -11,7 +10,6 @@ import Toolbox from "./toolbox/Toolbox";
 import EmbeddedToolbox from "./toolbox/EmbeddedToolbox";
 import { reservedWords } from "./helpers/reservedWords";
 import Snackbar from "../Snackbar";
-import { EMBEDDED_CONFIG } from "../../config/embeddedConfig";
 
 import "blockly/blocks";
 import {
@@ -29,9 +27,7 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
   const blocklyDivRef = useRef(null);
   const toolboxRef = useRef(null);
   const [workspace, setWorkspace] = useState(undefined);
-  const location = useLocation();
-  const isEmbeddedRedux = useSelector((state) => state.general.embeddedMode);
-  const isEmbedded = isEmbeddedRedux || location.pathname === EMBEDDED_CONFIG.ROUTE;
+  const isEmbedded = useSelector((state) => state.general.embeddedMode);
 
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -145,7 +141,7 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
       ws?.dispose();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isEmbedded, location.pathname]);
+  }, [isEmbedded]);
 
   const cardStyle = useMemo(() => {
     return isEmbedded ?{
