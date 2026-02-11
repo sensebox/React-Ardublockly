@@ -262,14 +262,14 @@
   resolved "https://registry.yarnpkg.com/@blockly/block-plus-minus/-/block-plus-minus-9.0.9.tgz#27dbecac0d1a0a1158ee75b937ac0a7a5cda5a60"
   integrity sha512-g4PBvyq2XpBM0K0lr8s6+98xPckKdtXpiBxcgtwBnI8yoFU7mLjjLdV1GEwI9H/KyQ3g/6egaGhG6l1RX1dkUg==
 
-"@blockly/field-colour@^6.0.4":
-  version "6.0.6"
-  resolved "https://registry.yarnpkg.com/@blockly/field-colour/-/field-colour-6.0.6.tgz#ea7bc1455436b2e39d5c90c5055bf16838cbe934"
-  integrity sha512-Xwtk9DlUcjslAF/ilsmsSdpWzutQKYScnw5jzJYAEOJ7wUwFAD4RO3LMebCmgOUzDZiN53ElbBa//TxxNZfeKA==
+"@blockly/field-colour@^6.0.11":
+  version "6.0.11"
+  resolved "https://registry.yarnpkg.com/@blockly/field-colour/-/field-colour-6.0.11.tgz#b769f6018acb57a4a356ab4c4e23df844b344034"
+  integrity sha512-UUTwH3DMt1RslKWQIGAlN5cvGynoQ9mpWPKJGI4erG92wAQWKsLAh5ldVsv9TxO2EfNwpSmQ0/5JqTdSMMqdfA==
   dependencies:
-    "@blockly/field-grid-dropdown" "^6.0.4"
+    "@blockly/field-grid-dropdown" "^6.0.9"
 
-"@blockly/field-grid-dropdown@^6.0.4", "@blockly/field-grid-dropdown@^6.0.9":
+"@blockly/field-grid-dropdown@^6.0.9":
   version "6.0.9"
   resolved "https://registry.yarnpkg.com/@blockly/field-grid-dropdown/-/field-grid-dropdown-6.0.9.tgz#e28cb4f1810bcbc209c1944b7fbee499d5fa1714"
   integrity sha512-YuPdS7ZhJKoVagPxbEwUPr5Gq14SnqNk6XD064mYGiH1OYO7LrtljESXG6cnnvQjhKkitiRjZ1ye20MzG3I6FQ==
