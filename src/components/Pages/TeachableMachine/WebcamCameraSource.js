@@ -10,14 +10,23 @@ class WebcamCameraSource {
     this.errorCallback = null;
     this._isActive = false;
     this.animationFrameId = null;
+    // 'user' = front camera, 'environment' = back camera
+    this.facingMode = "environment";
   }
 
   /**
    * Start the webcam stream
+   * @param {Object} options - Optional start options
+   * @param {string} options.facingMode - 'user' for front camera, 'environment' for back camera
    * @returns {Promise<void>}
    */
-  async start() {
+  async start(options = {}) {
     try {
+      // Update facing mode if provided
+      if (options.facingMode) {
+        this.facingMode = options.facingMode;
+      }
+
       // Clean up any existing resources from previous session
       if (this.animationFrameId) {
         cancelAnimationFrame(this.animationFrameId);
@@ -39,7 +48,7 @@ class WebcamCameraSource {
       }
 
       this.stream = await navigator.mediaDevices.getUserMedia({
-        video: true,
+        video: { facingMode: this.facingMode },
         audio: false,
       });
 
@@ -226,6 +235,24 @@ class WebcamCameraSource {
    */
   onError(callback) {
     this.errorCallback = callback;
+  }
+
+  /**
+   * Switch between front and back camera
+   * @returns {Promise<void>}
+   */
+  async switchCamera() {
+    const newFacingMode = this.facingMode === "user" ? "environment" : "user";
+    await this.stop();
+    await this.start({ facingMode: newFacingMode });
+  }
+
+  /**
+   * Get current facing mode
+   * @returns {string} 'user' or 'environment'
+   */
+  getFacingMode() {
+    return this.facingMode;
   }
 }
 

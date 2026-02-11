@@ -17,6 +17,8 @@ import {
   TextField,
   Paper,
   Divider,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import {
   Add as AddIcon,
@@ -31,6 +33,7 @@ import SerialCameraErrorHandler, {
   ErrorTypes,
 } from "./SerialCameraErrorHandler";
 import SerialCameraService from "./SerialCameraService";
+import FloatingCameraPreview from "./FloatingCameraPreview";
 
 const ModelTrainer = ({
   onModelTrained,
@@ -58,6 +61,12 @@ const ModelTrainer = ({
   );
   const [browserCompatible, setBrowserCompatible] = useState(true);
 
+  // Mobile detection and floating preview state
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const [isFloatingPreviewCollapsed, setIsFloatingPreviewCollapsed] =
+    useState(false);
+
   // Prediction state
   const [trainedModel, setTrainedModel] = useState(null);
   const [predictions, setPredictions] = useState([]);
@@ -69,6 +78,7 @@ const ModelTrainer = ({
     stopCamera: stopCameraSource,
     captureFrame,
     getPreviewElement,
+    switchCamera,
     isActive: isCameraActive,
     error: cameraError,
   } = useCameraSource();
@@ -769,7 +779,7 @@ const ModelTrainer = ({
               <Box
                 sx={{
                   mb: 3,
-                  display: "flex",
+                  display: { xs: "none", md: "flex" }, // Hide on mobile, show on desktop
                   justifyContent: "center",
                   flexDirection: "column",
                   alignItems: "center",
@@ -1135,6 +1145,19 @@ const ModelTrainer = ({
             )}
           </Box>
         </>
+      )}
+
+      {/* Floating Camera Preview for Mobile */}
+      {isMobile && (isCameraActive || videoLoading) && (
+        <FloatingCameraPreview
+          previewContainerRef={previewContainerRef}
+          isCollapsed={isFloatingPreviewCollapsed}
+          onToggleCollapse={() =>
+            setIsFloatingPreviewCollapsed(!isFloatingPreviewCollapsed)
+          }
+          videoLoading={videoLoading}
+          onSwitchCamera={sourceType === "webcam" ? switchCamera : null}
+        />
       )}
 
       {/* Add Class Dialog */}
