@@ -314,18 +314,10 @@
     "@babel/helper-string-parser" "^7.27.1"
     "@babel/helper-validator-identifier" "^7.28.5"
 
-"@babel/types@^7.28.6", "@babel/types@^7.29.0":
-  version "7.29.0"
-  resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.29.0.tgz#9f5b1e838c446e72cf3cd4b918152b8c605e37c7"
-  integrity sha512-LwdZHpScM4Qz8Xw2iKSzS+cfglZzJGvofQICy7W7v4caru4EaAmyUuO6BGrbyQ2mYV11W0U8j5mBhd14dd3B0A==
-  dependencies:
-    "@babel/helper-string-parser" "^7.27.1"
-    "@babel/helper-validator-identifier" "^7.28.5"
-
-"@blockly/block-plus-minus@^9.0.7":
-  version "9.0.7"
-  resolved "https://registry.yarnpkg.com/@blockly/block-plus-minus/-/block-plus-minus-9.0.7.tgz#a1486850f05f624818cf8d82c4e71ac6882416a9"
-  integrity sha512-RnQbnZ6ydQVoa+zxD+XDJUQKHcHACN4he6QcC5ixIj+ImKQmDGQtGT7HcHrn7hf8bSrdyuLBPiMOgITc9w1XOA==
+"@blockly/block-plus-minus@^9.0.9":
+  version "9.0.9"
+  resolved "https://registry.yarnpkg.com/@blockly/block-plus-minus/-/block-plus-minus-9.0.9.tgz#27dbecac0d1a0a1158ee75b937ac0a7a5cda5a60"
+  integrity sha512-g4PBvyq2XpBM0K0lr8s6+98xPckKdtXpiBxcgtwBnI8yoFU7mLjjLdV1GEwI9H/KyQ3g/6egaGhG6l1RX1dkUg==
 
 "@blockly/field-colour@^6.0.4":
   version "6.0.6"
