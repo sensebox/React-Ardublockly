@@ -190,27 +190,15 @@ class WebcamCameraSource {
 
   /**
    * Capture a single frame from the webcam
-   * @returns {Promise<Blob>} JPEG image blob
+   * @returns {Promise<string>} Data URL of the captured frame
    */
   async captureFrame() {
     if (!this.canvasElement || !this._isActive) {
       throw new Error("Webcam is not active");
     }
 
-    // The canvas is already 96x96 grayscale from the render loop
-    return new Promise((resolve, reject) => {
-      this.canvasElement.toBlob(
-        (blob) => {
-          if (blob) {
-            resolve(blob);
-          } else {
-            reject(new Error("Failed to create blob from canvas"));
-          }
-        },
-        "image/jpeg",
-        0.8,
-      );
-    });
+    const dataUrl = this.canvasElement.toDataURL("image/jpeg", 0.8);
+    return dataUrl;
   }
 
   /**

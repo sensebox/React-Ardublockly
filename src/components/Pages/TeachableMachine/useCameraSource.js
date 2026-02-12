@@ -190,7 +190,7 @@ function useCameraSource() {
   /**
    * Capture a single frame from the current camera source
    *
-   * @returns {Promise<Blob>} JPEG image blob
+   * @returns {Promise<string>} Data URL of the captured image
    * @throws {Error} If no source is active or capture fails
    */
   const captureFrame = useCallback(async () => {
@@ -204,8 +204,8 @@ function useCameraSource() {
 
     try {
       const source = cameraSourceRef.current || cameraSource;
-      const blob = await source.captureFrame();
-      return blob;
+      const dataUrl = await source.captureFrame();
+      return dataUrl;
     } catch (err) {
       setError(err);
       throw err;
