@@ -149,6 +149,21 @@ const ModelTrainer = ({
     }
   }, [stopCameraSource, sourceType]);
 
+  const handleSwitchCamera = useCallback(async () => {
+    try {
+      await switchCamera();
+      // After switching, update the preview container with the new preview element
+      const previewElement = getPreviewElement();
+      if (previewElement && previewContainerRef.current) {
+        previewContainerRef.current.innerHTML = "";
+        previewContainerRef.current.appendChild(previewElement);
+      }
+    } catch (error) {
+      console.error("Error switching camera:", error);
+      onTrainingError(`Error switching camera: ${error.message}`);
+    }
+  }, [switchCamera, getPreviewElement, onTrainingError]);
+
   useEffect(() => {
     if (cameraError) {
       if (sourceType === "serial") {
@@ -1156,7 +1171,7 @@ const ModelTrainer = ({
             setIsFloatingPreviewCollapsed(!isFloatingPreviewCollapsed)
           }
           videoLoading={videoLoading}
-          onSwitchCamera={sourceType === "webcam" ? switchCamera : null}
+          onSwitchCamera={sourceType === "webcam" ? handleSwitchCamera : null}
         />
       )}
 
