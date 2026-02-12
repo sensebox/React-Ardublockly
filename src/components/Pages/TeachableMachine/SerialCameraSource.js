@@ -223,16 +223,22 @@ class SerialCameraSource {
 
   /**
    * Capture a single frame from the serial camera
-   * @returns {Promise<Blob>} JPEG image blob
+   * @returns {Promise<string>} Data URL of the captured frame
    */
   async captureFrame() {
     if (!this._isActive) {
       throw new Error("Serial camera is not active");
     }
 
-    // If we have a latest frame, return it
+    // If we have a latest frame, return it as data URL
     if (this.latestFrame) {
-      return this.latestFrame;
+      // Convert blob to data URL
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(this.latestFrame);
+      });
     }
 
     // Wait for next frame (with timeout)
@@ -244,7 +250,7 @@ class SerialCameraSource {
       const frameHandler = (frame) => {
         clearTimeout(timeout);
 
-        // Convert RGBA to blob
+        // Convert RGBA to data URL
         const canvas = document.createElement("canvas");
         canvas.width = frame.width;
         canvas.height = frame.height;
@@ -257,17 +263,8 @@ class SerialCameraSource {
         );
         ctx.putImageData(imageData, 0, 0);
 
-        canvas.toBlob(
-          (blob) => {
-            if (blob) {
-              resolve(blob);
-            } else {
-              reject(new Error("Failed to create blob from frame"));
-            }
-          },
-          "image/jpeg",
-          0.8,
-        );
+        const dataUrl = canvas.toDataURL("image/jpeg", 0.8);
+        resolve(dataUrl);
       };
 
       this.serialService.onFrame(frameHandler);

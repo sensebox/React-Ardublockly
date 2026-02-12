@@ -275,10 +275,9 @@ const ModelTrainer = ({
 
       try {
         // Capture frame using the camera source
-        const blob = await captureFrame();
+        const imageUrl = await captureFrame();
 
-        if (blob) {
-          const imageUrl = URL.createObjectURL(blob);
+        if (imageUrl) {
           setClasses((prev) =>
             prev.map((cls) =>
               cls.id === classId
@@ -286,7 +285,7 @@ const ModelTrainer = ({
                     ...cls,
                     samples: [
                       ...cls.samples,
-                      { id: Date.now() + Math.random(), url: imageUrl, blob },
+                      { id: Date.now() + Math.random(), url: imageUrl },
                     ],
                   }
                 : cls,
