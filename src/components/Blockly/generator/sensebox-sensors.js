@@ -1263,7 +1263,7 @@ Blockly.Generator.Arduino.forBlock["sensebox_soil_sensor"] = function (
     "I2CSoilMoistureSensor sensor;";
   // Add sensor initialization to the setup code
   Blockly.Generator.Arduino.setupCode_["init_soil_sensor"] =
-    "Wire.begin();\n  sensor.begin();\n  delay(1000) // Give some time to boot up;";
+    "Wire.begin();\n  sensor.begin();\n  delay(1000); // Give some time to boot up;";
 
   // Generate the code for the selected phenomenon
   let code = "";
