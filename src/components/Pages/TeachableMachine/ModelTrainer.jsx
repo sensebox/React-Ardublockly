@@ -337,9 +337,9 @@ const ModelTrainer = ({
   }, []);
 
   const trainModel = useCallback(async () => {
-    if (classes.length < 2 || classes.some((cls) => cls.samples.length === 0)) {
+    if (classes.length < 2 || classes.some((cls) => cls.samples.length < 2)) {
       onTrainingError(
-        "Insufficient data for training. Please add at least 2 classes with at least one sample each.",
+        "Insufficient data for training. Please add at least 2 classes with at least 2 samples each.",
       );
       return;
     }
@@ -1030,7 +1030,7 @@ const ModelTrainer = ({
               disabled={
                 disabled ||
                 classes.length < 2 ||
-                classes.some((cls) => cls.samples.length === 0)
+                classes.some((cls) => cls.samples.length < 2)
               }
             >
               Train Model
