@@ -370,29 +370,58 @@ const ModelTrainer = ({
         .fill(null)
         .map(() => []);
 
+      // Batch feature extraction for better performance on mobile
+      const FEATURE_EXTRACTION_BATCH_SIZE = 16;
+
       for (let classIndex = 0; classIndex < classes.length; classIndex++) {
         const cls = classes[classIndex];
-        for (const sample of cls.samples) {
-          const img = new Image();
-          img.src = sample.url;
-          await new Promise((resolve) => {
-            img.onload = resolve;
+        const samples = cls.samples;
+
+        // Process samples in batches
+        for (
+          let batchStart = 0;
+          batchStart < samples.length;
+          batchStart += FEATURE_EXTRACTION_BATCH_SIZE
+        ) {
+          const batchEnd = Math.min(
+            batchStart + FEATURE_EXTRACTION_BATCH_SIZE,
+            samples.length,
+          );
+          const batchSamples = samples.slice(batchStart, batchEnd);
+
+          // Load all images in this batch
+          const loadedImages = await Promise.all(
+            batchSamples.map((sample) => {
+              return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.src = sample.url;
+              });
+            }),
+          );
+
+          // Process batch through feature extractor
+          const batchActivations = tf.tidy(() => {
+            // Stack all images into a single batch tensor
+            const tensors = loadedImages.map((img) =>
+              tf.browser
+                .fromPixels(img)
+                .resizeBilinear([96, 96])
+                .mean(-1)
+                .expandDims(-1)
+                .div(255.0),
+            );
+            const batchTensor = tf.stack(tensors);
+
+            // Single predict call for entire batch
+            const extracted = featureExtractor.predict(batchTensor);
+            return extracted.arraySync();
           });
 
-          const activation = tf.tidy(() => {
-            const tensor = tf.browser
-              .fromPixels(img)
-              .resizeBilinear([96, 96])
-              .mean(-1)
-              .expandDims(-1)
-              .div(255.0)
-              .expandDims(0);
-
-            const extracted = featureExtractor.predict(tensor);
-            return new Float32Array(extracted.dataSync());
-          });
-
-          examples[classIndex].push(activation);
+          // Add each sample's features to examples
+          for (const activation of batchActivations) {
+            examples[classIndex].push(new Float32Array(activation));
+          }
         }
       }
 
