@@ -323,3 +323,11 @@ basicGenerator.forBlock["basic_button_pressed"] = function (block, generator) {
 basicGenerator.forBlock["basic_box_shaken"] = function (block, generator) {
   return ["boxShaken()", generator.ORDER_ATOMIC];
 };
+
+basicGenerator.forBlock["basic_air_quality"] = function (block, generator) {
+  return ["airQuality()", generator.ORDER_ATOMIC];
+};
+
+basicGenerator.forBlock["basic_brightness"] = function (block, generator) {
+  return ["brightness()", generator.ORDER_ATOMIC];
+};
