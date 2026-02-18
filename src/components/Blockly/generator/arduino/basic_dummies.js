@@ -62,6 +62,18 @@ Blockly.Generator.Arduino.forBlock["hdc_humi"] = function (_block, _generator) {
 Blockly.Generator.Arduino.forBlock["hdc_tmp"] = function (_block, _generator) {
   return ""; // nichts generieren
 };
+Blockly.Generator.Arduino.forBlock["basic_air_quality"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};
+Blockly.Generator.Arduino.forBlock["basic_brightness"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};
 
 Blockly.Generator.Arduino.forBlock["display_print_basic"] = function (
   _block,
