@@ -335,10 +335,70 @@ Blockly.Blocks["display_print_basic"] = {
       if (textInput) {
         let displayText = "";
 
-        if (textInput.type === "text") {
-          displayText = textInput.getFieldValue("TEXT") || "";
-        } else if (textInput.type === "basic_number") {
-          displayText = textInput.getFieldValue("NUM") || "";
+        // Handle different block types
+        switch (textInput.type) {
+          case "text":
+            displayText = textInput.getFieldValue("TEXT") || "";
+            break;
+          case "basic_number":
+            displayText = textInput.getFieldValue("NUM") || "";
+            break;
+          
+          // Sensor blocks
+          case "bme_tmp":
+          case "hdc_tmp":
+            displayText = "Temperatur";
+            break;
+          case "bme_humi":
+          case "hdc_humi":
+            displayText = "Luftfeuchtigkeit";
+            break;
+          case "bme_pressure":
+            displayText = "Luftdruck";
+            break;
+          case "basic_air_quality":
+            displayText = "Luftqualität";
+            break;
+          case "basic_brightness":
+            displayText = "Helligkeit";
+            break;
+          
+          // Math operations
+          case "basic_math":
+            const leftBlock = textInput.getInputTargetBlock("LEFT");
+            const rightBlock = textInput.getInputTargetBlock("RIGHT");
+            const op = textInput.getFieldValue("OP") || "+";
+            
+            const leftVal = leftBlock && leftBlock.type === "basic_number" 
+              ? leftBlock.getFieldValue("NUM") 
+              : "?";
+            const rightVal = rightBlock && rightBlock.type === "basic_number" 
+              ? rightBlock.getFieldValue("NUM") 
+              : "?";
+            
+            displayText = `${leftVal}${op}${rightVal}`;
+            break;
+          
+          case "basic_random":
+            displayText = "Zufallszahl";
+            break;
+          
+          case "basic_compare":
+            displayText = "Vergl.";
+            break;
+          
+          case "basic_button_pressed":
+            displayText = "Knopf?";
+            break;
+          
+          case "basic_box_shaken":
+            displayText = "Schüttel?";
+            break;
+          
+          default:
+            // For any other block, show a generic placeholder
+            displayText = "...";
+            break;
         }
 
         this.updateDisplayImage(displayText);
