@@ -56,6 +56,7 @@ const BlocklyCard = ({
       trashcan: true,
       collapse: true,
       zoom: {
+        controls: true,
         wheel: false,
         startScale: 1,
         maxScale: 3,
