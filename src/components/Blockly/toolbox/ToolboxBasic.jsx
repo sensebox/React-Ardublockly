@@ -1,5 +1,7 @@
 // src/components/Blockly/toolbox/toolboxBasicPseudo.js
 
+import { inputs } from "blockly";
+
 export const toolboxBasicObject = {
   kind: "flyoutToolbox",
   contents: [
@@ -24,9 +26,20 @@ export const toolboxBasicObject = {
       },
     },
     { kind: "block", type: "basic_off" },
-    { kind: "block", type: "time_delay_1s" },
-    { kind: "block", type: "time_delay_2s" },
-    { kind: "block", type: "time_delay_5s" },
+    {
+      kind: "block",
+      type: "basic_delay",
+      inputs: {
+        SECONDS: {
+          block: {
+            type: "basic_number",
+            fields: {
+              NUM: 1,
+            },
+          },
+        },
+      },
+    },
     {
       kind: "block",
       type: "basic_if_else",

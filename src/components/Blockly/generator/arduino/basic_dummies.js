@@ -104,3 +104,17 @@ Blockly.Generator.Arduino.forBlock["basic_if_else"] = function (
 ) {
   return ""; // nichts generieren
 };
+
+Blockly.Generator.Arduino.forBlock["basic_delay"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};
+
+Blockly.Generator.Arduino.forBlock["basic_number"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};
