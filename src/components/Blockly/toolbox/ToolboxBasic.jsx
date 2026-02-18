@@ -27,9 +27,39 @@ export const toolboxBasicObject = {
     { kind: "block", type: "time_delay_1s" },
     { kind: "block", type: "time_delay_2s" },
     { kind: "block", type: "time_delay_5s" },
-    { kind: "block", type: "basic_if_else" },
+    {
+      kind: "block",
+      type: "basic_if_else",
+      inputs: {
+        IF0: {
+          block: {
+            type: "basic_compare",
+            fields: {
+              OP: "==",
+            },
+            inputs: {
+              LEFT: {
+                block: {
+                  type: "basic_number",
+                  fields: {
+                    NUM: 0,
+                  },
+                },
+              },
+              RIGHT: {
+                block: {
+                  type: "basic_number",
+                  fields: {
+                    NUM: 1,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
     { kind: "block", type: "basic_repeat_times" },
-    { kind: "block", type: "basic_compare" },
     { kind: "block", type: "basic_number" },
   ],
 };
