@@ -6,6 +6,13 @@ import { onChangeCode, onChangeWorkspace } from "@/actions/workspaceActions";
 import { useDispatch } from "react-redux";
 import { toolboxBasicObject } from "@/components/Blockly/toolbox/ToolboxBasic";
 import { ScrollBlockDragger } from "@blockly/plugin-scroll-options";
+import { registerContinuousToolbox } from "@blockly/continuous-toolbox";
+
+// Track if continuous toolbox has been registered (use window to persist across HMR)
+if (typeof window !== "undefined" && !window.__continuousToolboxRegistered) {
+  registerContinuousToolbox();
+  window.__continuousToolboxRegistered = true;
+}
 
 const BlocklyCard = ({
   toolboxXml,
@@ -14,6 +21,7 @@ const BlocklyCard = ({
   blocklyCSS,
   themeMode = "light",
   generatorName = "Basic",
+  useContinuousToolbox = true,
 }) => {
   const containerRef = useRef(null);
   const dispatch = useDispatch();
@@ -29,6 +37,18 @@ const BlocklyCard = ({
       ).documentElement;
     }
 
+    // Build plugins config based on whether continuous toolbox is used
+    const plugins = useContinuousToolbox
+      ? {
+          blockDragger: ScrollBlockDragger,
+          toolbox: "ContinuousToolbox",
+          flyoutsVerticalToolbox: "ContinuousFlyout",
+          metricsManager: "ContinuousMetrics",
+        }
+      : {
+          blockDragger: ScrollBlockDragger,
+        };
+
     const ws = Blockly.inject(containerRef.current, {
       toolbox: toolboxBasicObject,
       renderer: "Thrasos",
@@ -43,9 +63,7 @@ const BlocklyCard = ({
         scaleSpeed: 1.1,
         pinch: true,
       },
-      plugins: {
-        blockDragger: ScrollBlockDragger,
-      },
+      plugins,
       move: { scrollbars: true, drag: true, wheel: true },
       sounds: false,
     });
@@ -90,11 +108,19 @@ const BlocklyCard = ({
       } catch {}
       ws.dispose();
     };
-  }, [toolboxXml, themeMode, initialXml, onWorkspaceChanged, generatorName]);
+  }, [
+    toolboxXml,
+    themeMode,
+    initialXml,
+    onWorkspaceChanged,
+    generatorName,
+    useContinuousToolbox,
+  ]);
 
   return (
     <div
       ref={containerRef}
+      className={useContinuousToolbox ? "blockly-continuous-toolbox" : ""}
       style={{
         width: "99%",
         height: "99%",
