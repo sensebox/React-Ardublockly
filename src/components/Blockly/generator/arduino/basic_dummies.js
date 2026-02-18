@@ -76,3 +76,17 @@ Blockly.Generator.Arduino.forBlock["sensebox_start"] = function (
 ) {
   return ""; // nichts generieren
 };
+
+Blockly.Generator.Arduino.forBlock["basic_led_control"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};
+
+Blockly.Generator.Arduino.forBlock["colour_picker"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};
