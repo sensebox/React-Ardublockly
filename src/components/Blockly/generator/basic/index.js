@@ -296,9 +296,20 @@ basicGenerator.forBlock["basic_math"] = function (block, generator) {
 };
 
 basicGenerator.forBlock["basic_random"] = function (block, generator) {
-  const from =
+  const fromCode =
     generator.valueToCode(block, "FROM", generator.ORDER_NONE) || "1";
-  const to = generator.valueToCode(block, "TO", generator.ORDER_NONE) || "100";
+  const toCode = generator.valueToCode(block, "TO", generator.ORDER_NONE) || "100";
 
-  return [`random(${from}, ${to})`, generator.ORDER_ATOMIC];
+  // Try to parse the values as numbers to generate a random number at generation time
+  const fromNum = parseFloat(fromCode);
+  const toNum = parseFloat(toCode);
+
+  if (!isNaN(fromNum) && !isNaN(toNum)) {
+    // Generate random number between fromNum and toNum (inclusive)
+    const randomNum = Math.floor(Math.random() * (toNum - fromNum + 1)) + fromNum;
+    return [String(randomNum), generator.ORDER_ATOMIC];
+  }
+
+  // Fallback if values are not numbers (variables, expressions, etc.)
+  return [`random(${fromCode}, ${toCode})`, generator.ORDER_ATOMIC];
 };
