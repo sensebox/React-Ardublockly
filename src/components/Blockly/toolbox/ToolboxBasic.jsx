@@ -9,9 +9,20 @@ export const toolboxBasicObject = {
     { kind: "block", type: "hdc_humi" },
     { kind: "block", type: "display_print_basic" },
     { kind: "block", type: "text" },
-    { kind: "block", type: "basic_red" },
-    { kind: "block", type: "basic_blue" },
-    { kind: "block", type: "basic_yellow" },
+    {
+      kind: "block",
+      type: "basic_led_control",
+      inputs: {
+        COLOR: {
+          block: {
+            type: "colour_picker",
+            fields: {
+              COLOUR: "#ff0000",
+            },
+          },
+        },
+      },
+    },
     { kind: "block", type: "basic_off" },
     { kind: "block", type: "time_delay_1s" },
     { kind: "block", type: "time_delay_2s" },
