@@ -175,6 +175,13 @@ basicGenerator.forBlock["time_delay_5s"] = function () {
   return "delay(5000)\n"; // nichts generieren
 };
 
+basicGenerator.forBlock["basic_delay"] = function (block, generator) {
+  const seconds =
+    generator.valueToCode(block, "SECONDS", generator.ORDER_NONE) || "1";
+  const milliseconds = `${seconds} * 1000`;
+  return `delay(${milliseconds})\n`;
+};
+
 basicGenerator.forBlock["sensebox_start"] = function (block) {
   // Hole den Code aller Blöcke im Statement-Feld "DO"
   const statements_do = basicGenerator.statementToCode(block, "DO");
