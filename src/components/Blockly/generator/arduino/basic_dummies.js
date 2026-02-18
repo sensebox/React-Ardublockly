@@ -90,3 +90,17 @@ Blockly.Generator.Arduino.forBlock["colour_picker"] = function (
 ) {
   return ""; // nichts generieren
 };
+
+Blockly.Generator.Arduino.forBlock["basic_compare"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};
+
+Blockly.Generator.Arduino.forBlock["basic_if_else"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};
