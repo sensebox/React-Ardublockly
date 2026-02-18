@@ -642,6 +642,98 @@ Blockly.defineBlocksWithJsonArray([
   },
 ]);
 
+// Helper function to generate dynamic timer SVG with seconds display
+function generateTimerSvg(seconds) {
+  const sec = parseInt(seconds) || 1;
+  const displayText = sec.toString();
+
+  // Calculate font size based on number of digits (adjust for better fit)
+  let fontSize = 24;
+  if (displayText.length > 2) {
+    fontSize = 18;
+  } else if (displayText.length > 3) {
+    fontSize = 14;
+  }
+
+  const svgTemplate = `<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Ebene_2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56.69 69.14">
+  <defs>
+    <style>
+      .cls-1 { fill: none; }
+      .cls-2 { fill: #1d1d1b; }
+      .cls-3 { fill: #c6c6c6; }
+      .timer-text { 
+        fill: #1d1d1b; 
+        font-family: Arial, sans-serif; 
+        font-size: ${fontSize}px; 
+        font-weight: bold;
+        text-anchor: middle;
+      }
+    </style>
+  </defs>
+  <g id="Ebene_1-2">
+    <g id="Timer">
+      <path class="cls-2" d="M50.81,23.52l4.05-4.05c.55-.55.55-1.45,0-2l-3.19-3.19c-.55-.55-1.45-.55-2,0l-4.05,4.05c-3.9-3-8.6-5.01-13.73-5.65v-5.59h2.83c.78,0,1.42-.63,1.42-1.42V1.42c0-.78-.63-1.42-1.42-1.42h-12.76c-.78,0-1.42.63-1.42,1.42v4.25c0,.78.63,1.42,1.42,1.42h2.83v5.59C10.82,14.42,0,26.34,0,40.79c0,15.65,12.69,28.35,28.35,28.35s28.35-12.69,28.35-28.35c0-6.5-2.2-12.49-5.88-17.28ZM28.35,64.18c-12.92,0-23.39-10.47-23.39-23.39s10.47-23.39,23.39-23.39,23.39,10.47,23.39,23.39-10.47,23.39-23.39,23.39Z"/>
+      <path class="cls-3" d="M28.35,40.79h19.84c0-10.96-8.88-19.84-19.84-19.84v19.84Z"/>
+      <text class="timer-text" x="28.35" y="48">${displayText}s</text>
+    </g>
+  </g>
+</svg>`;
+
+  return "data:image/svg+xml;base64," + btoa(svgTemplate);
+}
+
+Blockly.Blocks["basic_delay"] = {
+  init: function () {
+    this.appendDummyInput("TIMER_IMAGE").appendField(
+      new Blockly.FieldImage(generateTimerSvg(1), 60, 60, "*"),
+      "TIMER_ICON",
+    );
+
+    this.appendDummyInput().appendField("Warte");
+
+    this.appendValueInput("SECONDS")
+      .setCheck("String")
+      .appendField("Sekunden:");
+
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(getColour().time);
+    this.setTooltip("Warte eine bestimmte Anzahl von Sekunden");
+    this.setHelpUrl("");
+
+    this.setOnChange(this.onSecondsChange.bind(this));
+  },
+
+  onSecondsChange: function (changeEvent) {
+    if (!this.workspace || this.isInFlyout) return;
+
+    if (
+      changeEvent.type === Blockly.Events.BLOCK_CHANGE ||
+      changeEvent.type === Blockly.Events.BLOCK_MOVE
+    ) {
+      const secondsInput = this.getInputTargetBlock("SECONDS");
+
+      if (secondsInput && secondsInput.type === "basic_number") {
+        const seconds = secondsInput.getFieldValue("NUM");
+        if (seconds !== null && seconds !== undefined) {
+          this.updateTimerImage(seconds);
+        }
+      }
+    }
+  },
+
+  updateTimerImage: function (seconds) {
+    const timerImageInput = this.getInput("TIMER_IMAGE");
+    if (timerImageInput) {
+      const field = this.getField("TIMER_ICON");
+      if (field) {
+        field.setValue(generateTimerSvg(seconds));
+      }
+    }
+  },
+};
+
 // Helper function to generate LED SVG with custom color
 function generateLEDSvg(color) {
   const svgTemplate = `<?xml version="1.0" encoding="UTF-8"?>
