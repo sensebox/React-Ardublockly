@@ -96,7 +96,7 @@ Blockly.defineBlocksWithJsonArray([
       },
     ],
     output: "String",
-    colour: "#62A044  ",
+    colour: "#5ba55b",
   },
   {
     type: "hdc_tmp",
@@ -116,7 +116,7 @@ Blockly.defineBlocksWithJsonArray([
       },
     ],
     output: "String",
-    colour: "#62A044  ",
+    colour: "#5ba55b",
   },
 ]);
 
@@ -180,7 +180,7 @@ Blockly.defineBlocksWithJsonArray([
     ],
     previousStatement: null,
     nextStatement: null,
-    colour: "#62A044  ",
+    colour: "#5ba55b",
   },
   {
     type: "basic_off",
@@ -201,7 +201,7 @@ Blockly.defineBlocksWithJsonArray([
     ],
     previousStatement: null,
     nextStatement: null,
-    colour: "#62A044  ",
+    colour: "#5ba55b",
   },
 ]);
 
@@ -283,7 +283,7 @@ Blockly.defineBlocksWithJsonArray([
     ],
     previousStatement: null,
     nextStatement: null,
-    colour: "#62A044  ",
+    colour: "#5ba55b",
     tooltip: "Zeigt einen Text auf dem Display an",
     helpUrl: "",
   },
@@ -316,7 +316,7 @@ Blockly.Blocks["basic_number"] = {
       "NUM",
     );
     this.setOutput(true, "String");
-    this.setColour("#A6745C"); // default color
+    this.setColour("#6b75a6"); // default color
     this.setTooltip("Zahl");
     this.setHelpUrl("");
 
@@ -366,7 +366,7 @@ Blockly.defineBlocksWithJsonArray([
       },
     ],
     output: "String",
-    colour: "#5C81A6",
+    colour: "#a5675b",
     inputsInline: true,
     tooltip: "Vergleicht zwei Werte",
     helpUrl: "",
@@ -384,7 +384,7 @@ Blockly.Blocks["basic_if_else"] = {
 
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-    this.setColour("#5C81A6");
+    this.setColour("#a5675b");
     this.setTooltip("Wenn / sonst Verzweigung");
     this.setInputsInline(false);
 
@@ -642,7 +642,7 @@ Blockly.defineBlocksWithJsonArray([
     ],
     previousStatement: null,
     nextStatement: null,
-    colour: "#5CA65C",
+    colour: "#a5675b",
     tooltip: "Wiederholt die enthaltenen Blöcke eine bestimmte Anzahl an Malen",
     helpUrl: "",
   },
@@ -704,7 +704,7 @@ Blockly.Blocks["basic_delay"] = {
 
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(getColour().time);
+    this.setColour("#a5675b");
     this.setTooltip("Warte eine bestimmte Anzahl von Sekunden");
     this.setHelpUrl("");
 
@@ -783,7 +783,7 @@ Blockly.Blocks["basic_led_control"] = {
 
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour("#62A044");
+    this.setColour("#5ba55b");
     this.setTooltip("Schalte die LED mit der gewählten Farbe ein");
     this.setHelpUrl("");
 
@@ -868,7 +868,7 @@ Blockly.Blocks["basic_rgb_color"] = {
     this.appendValueInput("B").setCheck("String").appendField("Blau:");
 
     this.setOutput(true, "Colour");
-    this.setColour("#62A044");
+    this.setColour("#5ba55b");
     this.setTooltip("Mische eine Farbe aus Rot, Grün und Blau Werten (0-255)");
     this.setHelpUrl("");
 
@@ -971,42 +971,12 @@ Blockly.defineBlocksWithJsonArray([
   },
 ]);
 
-// Helper function to generate button icon SVG
-function generateButtonSvg() {
-  const svgTemplate = `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60">
-  <defs>
-    <style>
-      .button-bg { fill: #e0e0e0; }
-      .button-border { fill: none; stroke: #1d1d1b; stroke-width: 2; }
-      .button-inner { fill: #c0c0c0; }
-    </style>
-  </defs>
-  <circle class="button-bg" cx="30" cy="30" r="25"/>
-  <circle class="button-border" cx="30" cy="30" r="25"/>
-  <circle class="button-inner" cx="30" cy="30" r="15"/>
-</svg>`;
-  return "data:image/svg+xml;base64," + btoa(svgTemplate);
-}
-
-// Helper function to generate shake icon SVG
-function generateShakeSvg() {
-  const svgTemplate = `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60">
-  <defs>
-    <style>
-      .shake-box { fill: #a0d0ff; stroke: #1d1d1b; stroke-width: 2; }
-      .shake-line { fill: none; stroke: #1d1d1b; stroke-width: 2; stroke-linecap: round; }
-    </style>
-  </defs>
-  <rect class="shake-box" x="20" y="20" width="20" height="20" rx="2"/>
-  <path class="shake-line" d="M10,15 L15,10"/>
-  <path class="shake-line" d="M45,15 L50,10"/>
-  <path class="shake-line" d="M10,45 L15,50"/>
-  <path class="shake-line" d="M45,45 L50,50"/>
-</svg>`;
-  return "data:image/svg+xml;base64," + btoa(svgTemplate);
-}
+// Icon paths for basic blocks
+const BUTTON_ICON = "media/basic/finger-click-svgrepo-com.svg";
+const SHAKE_ICON = "media/basic/hand-shake-svgrepo-com.svg";
+const AIR_QUALITY_ICON =
+  "media/basic/smoke-industrial-polution-pollute-svgrepo-com.svg";
+const BRIGHTNESS_ICON = "media/basic/brightness-svgrepo-com.svg";
 
 Blockly.defineBlocksWithJsonArray([
   {
@@ -1015,7 +985,7 @@ Blockly.defineBlocksWithJsonArray([
     args0: [
       {
         type: "field_image",
-        src: generateButtonSvg(),
+        src: BUTTON_ICON,
         width: 60,
         height: 60,
         alt: "*",
@@ -1036,7 +1006,7 @@ Blockly.defineBlocksWithJsonArray([
     args0: [
       {
         type: "field_image",
-        src: generateShakeSvg(),
+        src: SHAKE_ICON,
         width: 60,
         height: 60,
         alt: "*",
@@ -1051,5 +1021,44 @@ Blockly.defineBlocksWithJsonArray([
     tooltip: "Überprüft ob die senseBox geschüttelt wurde",
     helpUrl: "",
   },
+  {
+    type: "basic_air_quality",
+    message0: "%1 \n %2",
+    args0: [
+      {
+        type: "field_image",
+        src: AIR_QUALITY_ICON,
+        width: 90,
+        height: 90,
+        alt: "*",
+      },
+      {
+        type: "field_label",
+        text: "Luftqualität",
+        bold: true,
+      },
+    ],
+    output: "String",
+    colour: "#62A044  ",
+  },
+  {
+    type: "basic_brightness",
+    message0: "%1 \n %2",
+    args0: [
+      {
+        type: "field_image",
+        src: BRIGHTNESS_ICON,
+        width: 90,
+        height: 90,
+        alt: "*",
+      },
+      {
+        type: "field_label",
+        text: "Helligkeit",
+        bold: true,
+      },
+    ],
+    output: "String",
+    colour: "#62A044  ",
+  },
 ]);
-
