@@ -284,3 +284,13 @@ basicGenerator.forBlock["basic_rgb_color"] = function (block, generator) {
   // Return as RGB string (compatible with colour_picker format)
   return [`${r},${g},${b}`, generator.ORDER_ATOMIC];
 };
+
+basicGenerator.forBlock["basic_math"] = function (block, generator) {
+  const left =
+    generator.valueToCode(block, "LEFT", generator.ORDER_NONE) || "0";
+  const right =
+    generator.valueToCode(block, "RIGHT", generator.ORDER_NONE) || "0";
+  const op = block.getFieldValue("OP");
+
+  return [`${left} ${op} ${right}`, generator.ORDER_NONE];
+};

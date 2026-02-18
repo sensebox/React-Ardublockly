@@ -132,3 +132,10 @@ Blockly.Generator.Arduino.forBlock["basic_rgb_color"] = function (
 ) {
   return ""; // nichts generieren
 };
+
+Blockly.Generator.Arduino.forBlock["basic_math"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};

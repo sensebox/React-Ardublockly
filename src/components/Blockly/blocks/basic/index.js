@@ -915,3 +915,37 @@ Blockly.Blocks["basic_rgb_color"] = {
     }
   },
 };
+
+Blockly.defineBlocksWithJsonArray([
+  {
+    type: "basic_math",
+    message0: "%1 %2 %3",
+    args0: [
+      {
+        type: "input_value",
+        name: "LEFT",
+        check: "String",
+      },
+      {
+        type: "field_dropdown",
+        name: "OP",
+        options: [
+          ["+", "+"],
+          ["−", "-"],
+          ["×", "*"],
+          ["÷", "/"],
+        ],
+      },
+      {
+        type: "input_value",
+        name: "RIGHT",
+        check: "String",
+      },
+    ],
+    output: "String",
+    colour: "#5CA65C",
+    inputsInline: true,
+    tooltip: "Rechne mit zwei Zahlen",
+    helpUrl: "",
+  },
+]);
