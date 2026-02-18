@@ -28,6 +28,7 @@ export const toolboxBasicObject = {
             COLOR: {
               block: {
                 type: "colour_picker",
+                args0: [],
                 fields: {
                   COLOUR: "#ff0000",
                 },
