@@ -99,7 +99,7 @@ export const toolboxBasicObject = {
             },
           },
         },
-      ], 
+      ],
     },
     {
       kind: "category",
