@@ -146,3 +146,17 @@ Blockly.Generator.Arduino.forBlock["basic_random"] = function (
 ) {
   return ""; // nichts generieren
 };
+
+Blockly.Generator.Arduino.forBlock["basic_button_pressed"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};
+
+Blockly.Generator.Arduino.forBlock["basic_box_shaken"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};
