@@ -343,7 +343,7 @@ Blockly.Blocks["display_print_basic"] = {
           case "basic_number":
             displayText = textInput.getFieldValue("NUM") || "";
             break;
-          
+
           // Sensor blocks
           case "bme_tmp":
           case "hdc_tmp":
@@ -362,39 +362,41 @@ Blockly.Blocks["display_print_basic"] = {
           case "basic_brightness":
             displayText = "Helligkeit";
             break;
-          
+
           // Math operations
           case "basic_math":
             const leftBlock = textInput.getInputTargetBlock("LEFT");
             const rightBlock = textInput.getInputTargetBlock("RIGHT");
             const op = textInput.getFieldValue("OP") || "+";
-            
-            const leftVal = leftBlock && leftBlock.type === "basic_number" 
-              ? leftBlock.getFieldValue("NUM") 
-              : "?";
-            const rightVal = rightBlock && rightBlock.type === "basic_number" 
-              ? rightBlock.getFieldValue("NUM") 
-              : "?";
-            
+
+            const leftVal =
+              leftBlock && leftBlock.type === "basic_number"
+                ? leftBlock.getFieldValue("NUM")
+                : "?";
+            const rightVal =
+              rightBlock && rightBlock.type === "basic_number"
+                ? rightBlock.getFieldValue("NUM")
+                : "?";
+
             displayText = `${leftVal}${op}${rightVal}`;
             break;
-          
+
           case "basic_random":
             displayText = "Zufallszahl";
             break;
-          
+
           case "basic_compare":
             displayText = "Vergl.";
             break;
-          
+
           case "basic_button_pressed":
             displayText = "Knopf?";
             break;
-          
+
           case "basic_box_shaken":
             displayText = "Schüttel?";
             break;
-          
+
           default:
             // For any other block, show a generic placeholder
             displayText = "...";
@@ -1268,9 +1270,8 @@ Blockly.defineBlocksWithJsonArray([
 // Icon paths for basic blocks
 const BUTTON_ICON = "media/basic/finger-click-svgrepo-com.svg";
 const SHAKE_ICON = "media/basic/hand-shake-svgrepo-com.svg";
-const AIR_QUALITY_ICON =
-  "media/basic/smoke-industrial-polution-pollute-svgrepo-com.svg";
-const BRIGHTNESS_ICON = "media/basic/brightness-svgrepo-com.svg";
+const AIR_QUALITY_ICON = "media/basic/pollution-factory-svgrepo-com.svg";
+const BRIGHTNESS_ICON = "media/basic/flashlight-svgrepo-com.svg";
 
 Blockly.defineBlocksWithJsonArray([
   {
