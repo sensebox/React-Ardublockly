@@ -1,7 +1,5 @@
 // src/components/Blockly/toolbox/toolboxBasicPseudo.js
 
-import { inputs } from "blockly";
-
 export const toolboxBasicObject = {
   kind: "flyoutToolbox",
   contents: [
@@ -20,6 +18,39 @@ export const toolboxBasicObject = {
             type: "colour_picker",
             fields: {
               COLOUR: "#ff0000",
+            },
+          },
+        },
+      },
+    },
+    {
+      kind: "block",
+      type: "basic_rgb_color",
+      inputs: {
+        R: {
+          block: {
+            type: "basic_number",
+            data: "#cc3333",
+            fields: {
+              NUM: 255,
+            },
+          },
+        },
+        G: {
+          block: {
+            type: "basic_number",
+            data: "#33cc33",
+            fields: {
+              NUM: 0,
+            },
+          },
+        },
+        B: {
+          block: {
+            type: "basic_number",
+            data: "#3333cc",
+            fields: {
+              NUM: 0,
             },
           },
         },

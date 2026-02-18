@@ -220,11 +220,18 @@ basicGenerator.forBlock["basic_if_else"] = function (block, generator) {
   return code + "\n";
 };
 
-basicGenerator.forBlock["basic_repeat_times"] = function (block) {
-  const times = block.getFieldValue("TIMES") || "0";
-  const body = basicGenerator.statementToCode(block, "DO");
+basicGenerator.forBlock["basic_repeat_times"] = function (block, generator) {
+  // Try to get times from an input connection first, then fall back to field
+  let times =
+    generator.valueToCode(block, "TIMES", generator.ORDER_ATOMIC) ||
+    block.getFieldValue("TIMES") ||
+    "10";
+  // remove paranthesis from the variable
+  times = times.replace(/^\((.*)\)$/, "$1");
 
-  return `i=0\n for(i=0; i<${times}; i=i+1){\n${body}}\n\n`;
+  const body = generator.statementToCode(block, "DO") || "";
+
+  return `i=0\nfor(i=0; i<${times}; i=i+1){\n${body}}\n\n`;
 };
 
 basicGenerator.forBlock["basic_compare"] = function (block) {
@@ -266,4 +273,14 @@ basicGenerator.forBlock["basic_led_control"] = function (block, generator) {
     // Fallback: rot
     return "led(255,0,0)\n";
   }
+};
+
+basicGenerator.forBlock["basic_rgb_color"] = function (block, generator) {
+  // Get RGB values from inputs
+  const r = generator.valueToCode(block, "R", generator.ORDER_NONE) || "0";
+  const g = generator.valueToCode(block, "G", generator.ORDER_NONE) || "0";
+  const b = generator.valueToCode(block, "B", generator.ORDER_NONE) || "0";
+
+  // Return as RGB string (compatible with colour_picker format)
+  return [`${r},${g},${b}`, generator.ORDER_ATOMIC];
 };

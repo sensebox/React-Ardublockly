@@ -118,3 +118,17 @@ Blockly.Generator.Arduino.forBlock["basic_number"] = function (
 ) {
   return ""; // nichts generieren
 };
+
+Blockly.Generator.Arduino.forBlock["basic_repeat_times"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};
+
+Blockly.Generator.Arduino.forBlock["basic_rgb_color"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};
