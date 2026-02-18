@@ -617,18 +617,13 @@ Blockly.Blocks["basic_if_else2"] = {
 Blockly.defineBlocksWithJsonArray([
   {
     type: "basic_repeat_times",
-    message0: "Wiederhole %1 mal",
+    message0: "Wiederhole %1 mal %2",
     args0: [
       {
-        type: "field_number",
+        type: "input_value",
         name: "TIMES",
-        value: 2,
-        min: 0,
-        precision: 1,
+        check: "String",
       },
-    ],
-    message1: " %1",
-    args1: [
       {
         type: "input_statement",
         name: "DO",

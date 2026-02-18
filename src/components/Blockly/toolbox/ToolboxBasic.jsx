@@ -72,7 +72,20 @@ export const toolboxBasicObject = {
         },
       },
     },
-    { kind: "block", type: "basic_repeat_times" },
+    {
+      kind: "block",
+      type: "basic_repeat_times",
+      inputs: {
+        TIMES: {
+          block: {
+            type: "basic_number",
+            fields: {
+              NUM: 10,
+            },
+          },
+        },
+      },
+    },
     { kind: "block", type: "basic_number" },
   ],
 };
