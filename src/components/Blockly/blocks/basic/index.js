@@ -970,3 +970,86 @@ Blockly.defineBlocksWithJsonArray([
     helpUrl: "",
   },
 ]);
+
+// Helper function to generate button icon SVG
+function generateButtonSvg() {
+  const svgTemplate = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60">
+  <defs>
+    <style>
+      .button-bg { fill: #e0e0e0; }
+      .button-border { fill: none; stroke: #1d1d1b; stroke-width: 2; }
+      .button-inner { fill: #c0c0c0; }
+    </style>
+  </defs>
+  <circle class="button-bg" cx="30" cy="30" r="25"/>
+  <circle class="button-border" cx="30" cy="30" r="25"/>
+  <circle class="button-inner" cx="30" cy="30" r="15"/>
+</svg>`;
+  return "data:image/svg+xml;base64," + btoa(svgTemplate);
+}
+
+// Helper function to generate shake icon SVG
+function generateShakeSvg() {
+  const svgTemplate = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60">
+  <defs>
+    <style>
+      .shake-box { fill: #a0d0ff; stroke: #1d1d1b; stroke-width: 2; }
+      .shake-line { fill: none; stroke: #1d1d1b; stroke-width: 2; stroke-linecap: round; }
+    </style>
+  </defs>
+  <rect class="shake-box" x="20" y="20" width="20" height="20" rx="2"/>
+  <path class="shake-line" d="M10,15 L15,10"/>
+  <path class="shake-line" d="M45,15 L50,10"/>
+  <path class="shake-line" d="M10,45 L15,50"/>
+  <path class="shake-line" d="M45,45 L50,50"/>
+</svg>`;
+  return "data:image/svg+xml;base64," + btoa(svgTemplate);
+}
+
+Blockly.defineBlocksWithJsonArray([
+  {
+    type: "basic_button_pressed",
+    message0: "%1 %2",
+    args0: [
+      {
+        type: "field_image",
+        src: generateButtonSvg(),
+        width: 60,
+        height: 60,
+        alt: "*",
+      },
+      {
+        type: "field_label",
+        text: "Knopf gedrückt?",
+      },
+    ],
+    output: "String",
+    colour: "#5C81A6",
+    tooltip: "Überprüft ob der Knopf gedrückt wurde",
+    helpUrl: "",
+  },
+  {
+    type: "basic_box_shaken",
+    message0: "%1 %2",
+    args0: [
+      {
+        type: "field_image",
+        src: generateShakeSvg(),
+        width: 60,
+        height: 60,
+        alt: "*",
+      },
+      {
+        type: "field_label",
+        text: "senseBox geschüttelt?",
+      },
+    ],
+    output: "String",
+    colour: "#5C81A6",
+    tooltip: "Überprüft ob die senseBox geschüttelt wurde",
+    helpUrl: "",
+  },
+]);
+
