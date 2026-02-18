@@ -118,5 +118,27 @@ export const toolboxBasicObject = {
       },
     },
     { kind: "block", type: "basic_number" },
+    {
+      kind: "block",
+      type: "basic_math",
+      inputs: {
+        LEFT: {
+          block: {
+            type: "basic_number",
+            fields: {
+              NUM: 0,
+            },
+          },
+        },
+        RIGHT: {
+          block: {
+            type: "basic_number",
+            fields: {
+              NUM: 0,
+            },
+          },
+        },
+      },
+    },
   ],
 };
