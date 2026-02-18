@@ -800,10 +800,35 @@ Blockly.Blocks["basic_led_control"] = {
     ) {
       const colorInput = this.getInputTargetBlock("COLOR");
 
-      if (colorInput && colorInput.type === "colour_picker") {
-        const color = colorInput.getFieldValue("COLOUR");
-        if (color) {
-          this.updateLEDImage(color);
+      if (colorInput) {
+        if (colorInput.type === "colour_picker") {
+          const color = colorInput.getFieldValue("COLOUR");
+          if (color) {
+            this.updateLEDImage(color);
+          }
+        } else if (colorInput.type === "basic_rgb_color") {
+          // Get RGB values from connected number blocks
+          const rBlock = colorInput.getInputTargetBlock("R");
+          const gBlock = colorInput.getInputTargetBlock("G");
+          const bBlock = colorInput.getInputTargetBlock("B");
+
+          if (rBlock && gBlock && bBlock) {
+            const r = Math.max(
+              0,
+              Math.min(255, parseInt(rBlock.getFieldValue("NUM")) || 0),
+            );
+            const g = Math.max(
+              0,
+              Math.min(255, parseInt(gBlock.getFieldValue("NUM")) || 0),
+            );
+            const b = Math.max(
+              0,
+              Math.min(255, parseInt(bBlock.getFieldValue("NUM")) || 0),
+            );
+
+            const hexColor = `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
+            this.updateLEDImage(hexColor);
+          }
         }
       }
     }
