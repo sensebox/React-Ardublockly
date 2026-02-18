@@ -1,5 +1,6 @@
 import * as Blockly from "blockly/core";
 import { getColour } from "@/components/Blockly/helpers/colour";
+import * as Types from "@/components/Blockly/helpers/types";
 
 Blockly.defineBlocksWithJsonArray([
   {
@@ -339,12 +340,12 @@ Blockly.defineBlocksWithJsonArray([
         type: "field_dropdown",
         name: "OP",
         options: [
-          ["größer als", ">"],
-          ["kleiner als", "<"],
-          ["größer oder gleich", ">="],
-          ["kleiner oder gleich", "<="],
-          ["gleich", "=="],
-          ["ungleich", "!="],
+          ["=", "=="],
+          ["\u2260", "!="],
+          ["<", "<"],
+          ["\u2264", "<="],
+          [">", ">"],
+          ["\u2265", ">="],
         ],
       },
       {
@@ -355,16 +356,225 @@ Blockly.defineBlocksWithJsonArray([
     ],
     output: "String",
     colour: "#5C81A6",
+    inputsInline: true,
     tooltip: "Vergleicht zwei Werte",
     helpUrl: "",
   },
 ]);
 
 Blockly.Blocks["basic_if_else"] = {
+  /**
+   * Block for if/elseif/else condition.
+   * @this Blockly.Block
+   */
   init: function () {
-    this.appendValueInput("COND").setCheck("String").appendField("wenn");
+    this.appendValueInput("IF0").setCheck("String").appendField("wenn");
+    this.appendStatementInput("DO0").appendField("mache");
 
-    this.appendStatementInput("DO").appendField("dann");
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setColour("#5C81A6");
+    this.setTooltip("Wenn / sonst Verzweigung");
+    this.setInputsInline(false);
+
+    this.setMutator(
+      new Blockly.icons.MutatorIcon(["basic_if_elseif", "basic_else"], this),
+    );
+    this.elseifCount_ = 0;
+    this.elseCount_ = 0;
+  },
+  /**
+   * Create XML to represent the number of else-if and else inputs.
+   * @return {Element} XML storage element.
+   * @this Blockly.Block
+   */
+  mutationToDom: function () {
+    if (!this.elseifCount_ && !this.elseCount_) {
+      return null;
+    }
+    var container = document.createElement("mutation");
+    if (this.elseifCount_) {
+      container.setAttribute("elseif", this.elseifCount_);
+    }
+    if (this.elseCount_) {
+      container.setAttribute("else", 1);
+    }
+    return container;
+  },
+  /**
+   * Parse XML to restore the else-if and else inputs.
+   * @param {!Element} xmlElement XML storage element.
+   * @this Blockly.Block
+   */
+  domToMutation: function (xmlElement) {
+    this.elseifCount_ = parseInt(xmlElement.getAttribute("elseif"), 10) || 0;
+    this.elseCount_ = parseInt(xmlElement.getAttribute("else"), 10) || 0;
+    this.updateShape_();
+  },
+  /**
+   * Populate the mutator's dialog with this block's components.
+   * @param {!Blockly.Workspace} workspace Mutator's workspace.
+   * @return {!Blockly.Block} Root block in mutator.
+   * @this Blockly.Block
+   */
+  decompose: function (workspace) {
+    var containerBlock = workspace.newBlock("basic_if_if");
+    containerBlock.initSvg();
+    var connection = containerBlock.nextConnection;
+    for (var i = 1; i <= this.elseifCount_; i++) {
+      var elseifBlock = workspace.newBlock("basic_if_elseif");
+      elseifBlock.initSvg();
+      connection.connect(elseifBlock.previousConnection);
+      connection = elseifBlock.nextConnection;
+    }
+    if (this.elseCount_) {
+      var elseBlock = workspace.newBlock("basic_else");
+      elseBlock.initSvg();
+      connection.connect(elseBlock.previousConnection);
+    }
+    return containerBlock;
+  },
+  /**
+   * Reconfigure this block based on the mutator dialog's components.
+   * @param {!Blockly.Block} containerBlock Root block in mutator.
+   * @this Blockly.Block
+   */
+  compose: function (containerBlock) {
+    var clauseBlock = containerBlock.nextConnection.targetBlock();
+    // Count number of inputs.
+    this.elseifCount_ = 0;
+    this.elseCount_ = 0;
+    var valueConnections = [null];
+    var statementConnections = [null];
+    var elseStatementConnection = null;
+    while (clauseBlock) {
+      switch (clauseBlock.type) {
+        case "basic_if_elseif":
+          this.elseifCount_++;
+          valueConnections.push(clauseBlock.valueConnection_);
+          statementConnections.push(clauseBlock.statementConnection_);
+          break;
+        case "basic_else":
+          this.elseCount_++;
+          elseStatementConnection = clauseBlock.statementConnection_;
+          break;
+        default:
+          throw new Error("Unknown block type.");
+      }
+      clauseBlock =
+        clauseBlock.nextConnection && clauseBlock.nextConnection.targetBlock();
+    }
+    this.updateShape_();
+    // Reconnect any child blocks.
+    for (var i = 1; i <= this.elseifCount_; i++) {
+      if (valueConnections[i]) {
+        valueConnections[i].reconnect(this, "IF" + i);
+      }
+      if (statementConnections[i]) {
+        statementConnections[i].reconnect(this, "DO" + i);
+      }
+    }
+    if (elseStatementConnection) {
+      elseStatementConnection.reconnect(this, "ELSE");
+    }
+  },
+  /**
+   * Store pointers to any connected child blocks.
+   * @param {!Blockly.Block} containerBlock Root block in mutator.
+   * @this Blockly.Block
+   */
+  saveConnections: function (containerBlock) {
+    var clauseBlock = containerBlock.nextConnection.targetBlock();
+    var i = 1;
+    var inputDo;
+    while (clauseBlock) {
+      switch (clauseBlock.type) {
+        case "basic_if_elseif":
+          var inputIf = this.getInput("IF" + i);
+          inputDo = this.getInput("DO" + i);
+          clauseBlock.valueConnection_ =
+            inputIf && inputIf.connection.targetConnection;
+          clauseBlock.statementConnection_ =
+            inputDo && inputDo.connection.targetConnection;
+          i++;
+          break;
+        case "basic_else":
+          inputDo = this.getInput("ELSE");
+          clauseBlock.statementConnection_ =
+            inputDo && inputDo.connection.targetConnection;
+          break;
+        default:
+          throw new Error("Unknown block type.");
+      }
+      clauseBlock =
+        clauseBlock.nextConnection && clauseBlock.nextConnection.targetBlock();
+    }
+  },
+  /**
+   * Modify this block to have the correct number of inputs.
+   * @private
+   * @this Blockly.Block
+   */
+  updateShape_: function () {
+    // Delete everything.
+    if (this.getInput("ELSE")) {
+      this.removeInput("ELSE");
+    }
+    var j = 1;
+    while (this.getInput("IF" + j)) {
+      this.removeInput("IF" + j);
+      this.removeInput("DO" + j);
+      j++;
+    }
+    // Rebuild block.
+    for (var i = 1; i <= this.elseifCount_; i++) {
+      this.appendValueInput("IF" + i)
+        .setCheck("String")
+        .appendField("sonst wenn");
+      this.appendStatementInput("DO" + i).appendField("mache");
+    }
+    if (this.elseCount_) {
+      this.appendStatementInput("ELSE").appendField("sonst");
+    }
+  },
+};
+
+Blockly.Blocks["basic_if_if"] = {
+  init: function () {
+    this.setColour("#5C81A6");
+    this.appendDummyInput().appendField("wenn");
+    this.setNextStatement(true);
+    this.setTooltip("Wenn-Block");
+    this.contextMenu = false;
+  },
+};
+
+Blockly.Blocks["basic_if_elseif"] = {
+  init: function () {
+    this.setColour("#5C81A6");
+    this.appendDummyInput().appendField("sonst wenn");
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setTooltip("Sonst-wenn Bedingung");
+    this.contextMenu = false;
+  },
+};
+
+Blockly.Blocks["basic_else"] = {
+  init: function () {
+    this.setColour("#5C81A6");
+    this.appendDummyInput().appendField("sonst");
+    this.setPreviousStatement(true);
+    this.setTooltip("Sonst-Bedingung");
+    this.contextMenu = false;
+  },
+};
+
+Blockly.Blocks["basic_if_else2"] = {
+  init: function () {
+    this.appendValueInput("COND").setCheck("String").appendField("Wenn");
+
+    this.appendStatementInput("DO").appendField("mache");
 
     this.appendStatementInput("ELSE").appendField("sonst");
 
@@ -372,6 +582,7 @@ Blockly.Blocks["basic_if_else"] = {
     this.setNextStatement(true);
     this.setColour("#5C81A6");
     this.setTooltip("Wenn / sonst Verzweigung");
+    this.setInputsInline(false);
 
     // ⚠️ NUR initial füllen, wenn COND noch leer ist
     this.setOnChange(function () {
@@ -406,7 +617,7 @@ Blockly.Blocks["basic_if_else"] = {
 Blockly.defineBlocksWithJsonArray([
   {
     type: "basic_repeat_times",
-    message0: "mache %1 mal",
+    message0: "Wiederhole %1 mal",
     args0: [
       {
         type: "field_number",
