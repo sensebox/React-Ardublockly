@@ -978,7 +978,7 @@ Blockly.Blocks["basic_delay"] = {
 
     if (secondsInput && secondsInput.type === "basic_number") {
       const currentValue = parseInt(secondsInput.getFieldValue("NUM")) || 0;
-      const newValue = Math.max(0, currentValue - 1);
+      const newValue = Math.max(1, currentValue - 1);
       secondsInput.setFieldValue(newValue, "NUM");
       this.updateTimerImage(newValue);
     }
