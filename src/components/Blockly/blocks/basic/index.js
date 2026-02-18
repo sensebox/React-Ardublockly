@@ -948,4 +948,25 @@ Blockly.defineBlocksWithJsonArray([
     tooltip: "Rechne mit zwei Zahlen",
     helpUrl: "",
   },
+  {
+    type: "basic_random",
+    message0: "Zufallszahl von %1 bis %2",
+    args0: [
+      {
+        type: "input_value",
+        name: "FROM",
+        check: "String",
+      },
+      {
+        type: "input_value",
+        name: "TO",
+        check: "String",
+      },
+    ],
+    output: "String",
+    colour: "#5CA65C",
+    inputsInline: true,
+    tooltip: "Erzeugt eine Zufallszahl in einem Bereich",
+    helpUrl: "",
+  },
 ]);

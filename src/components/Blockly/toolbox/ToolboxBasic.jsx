@@ -140,5 +140,27 @@ export const toolboxBasicObject = {
         },
       },
     },
+    {
+      kind: "block",
+      type: "basic_random",
+      inputs: {
+        FROM: {
+          block: {
+            type: "basic_number",
+            fields: {
+              NUM: 1,
+            },
+          },
+        },
+        TO: {
+          block: {
+            type: "basic_number",
+            fields: {
+              NUM: 100,
+            },
+          },
+        },
+      },
+    },
   ],
 };
