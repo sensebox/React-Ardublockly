@@ -258,7 +258,19 @@ Blockly.defineBlocksWithJsonArray([
 
 // Helper function to generate dynamic display SVG with text
 function generateDisplaySvg(text = "") {
-  const displayText = text.substring(0, 20); // Limit to 20 characters
+  // Split text by newlines and limit each line
+  const lines = text.split("\n").map((line) => line.substring(0, 20));
+
+  // Limit to 5 lines max to fit in the display
+  const displayLines = lines.slice(0, 5);
+
+  // Generate text elements for each line
+  const textElements = displayLines
+    .map((line, index) => {
+      const yPosition = 20 + index * 10; // Space lines 10px apart
+      return `<text class="display-text" x="15" y="${yPosition}">${line}</text>`;
+    })
+    .join("\n      ");
 
   const svgTemplate = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
@@ -293,7 +305,7 @@ function generateDisplaySvg(text = "") {
          points="41.1,65.2 49.61,65.2 49.61,70.87 77.95,70.87 77.95,65.2 86.46,65.2 99.21,56.69 99.21,14.17 28.35,14.17 28.35,56.69 "
          transform="matrix(1.50884,0,0,1.0616933,-30.839346,-4.3722025)"
          style="fill:#1d1d1b;fill-opacity:1" />
-      <text class="display-text" x="15" y="25">${displayText}</text>
+      ${textElements}
     </g>
   </g>
 </svg>`;
@@ -323,6 +335,82 @@ Blockly.Blocks["display_print_basic"] = {
     this.setOnChange(this.onTextChange.bind(this));
   },
 
+  getTextFromBlock: function (textInput) {
+    if (!textInput) return "";
+
+    let displayText = "";
+
+    // Handle different block types
+    switch (textInput.type) {
+      case "text":
+        displayText = textInput.getFieldValue("TEXT") || "";
+        break;
+      case "basic_number":
+        displayText = textInput.getFieldValue("NUM") || "";
+        break;
+
+      // Sensor blocks
+      case "bme_tmp":
+      case "hdc_tmp":
+        displayText = "Temperatur";
+        break;
+      case "bme_humi":
+      case "hdc_humi":
+        displayText = "Luftfeuchtigkeit";
+        break;
+      case "bme_pressure":
+        displayText = "Luftdruck";
+        break;
+      case "basic_air_quality":
+        displayText = "Luftqualität";
+        break;
+      case "basic_brightness":
+        displayText = "Helligkeit";
+        break;
+
+      // Math operations
+      case "basic_math":
+        const leftBlock = textInput.getInputTargetBlock("LEFT");
+        const rightBlock = textInput.getInputTargetBlock("RIGHT");
+        const op = textInput.getFieldValue("OP") || "+";
+
+        const leftVal =
+          leftBlock && leftBlock.type === "basic_number"
+            ? leftBlock.getFieldValue("NUM")
+            : "?";
+        const rightVal =
+          rightBlock && rightBlock.type === "basic_number"
+            ? rightBlock.getFieldValue("NUM")
+            : "?";
+
+        displayText = `${leftVal}${op}${rightVal}`;
+        break;
+
+      case "basic_random":
+        displayText = "Zufallszahl";
+        break;
+
+      case "basic_compare":
+        displayText = "Vergl.";
+        break;
+
+      case "basic_button_pressed":
+        displayText = "Knopf?";
+        break;
+
+      case "basic_box_shaken":
+        displayText = "Schüttel?";
+        break;
+
+      default:
+        // For any other block, show a generic placeholder
+        displayText = "...";
+        break;
+    }
+
+    return displayText;
+  },
+
   onTextChange: function (changeEvent) {
     if (!this.workspace || this.isInFlyout) return;
 
@@ -330,84 +418,47 @@ Blockly.Blocks["display_print_basic"] = {
       changeEvent.type === Blockly.Events.BLOCK_CHANGE ||
       changeEvent.type === Blockly.Events.BLOCK_MOVE
     ) {
-      const textInput = this.getInputTargetBlock("TEXT");
+      // Update this block
+      this.updateAccumulatedDisplay();
 
-      if (textInput) {
-        let displayText = "";
-
-        // Handle different block types
-        switch (textInput.type) {
-          case "text":
-            displayText = textInput.getFieldValue("TEXT") || "";
-            break;
-          case "basic_number":
-            displayText = textInput.getFieldValue("NUM") || "";
-            break;
-
-          // Sensor blocks
-          case "bme_tmp":
-          case "hdc_tmp":
-            displayText = "Temperatur";
-            break;
-          case "bme_humi":
-          case "hdc_humi":
-            displayText = "Luftfeuchtigkeit";
-            break;
-          case "bme_pressure":
-            displayText = "Luftdruck";
-            break;
-          case "basic_air_quality":
-            displayText = "Luftqualität";
-            break;
-          case "basic_brightness":
-            displayText = "Helligkeit";
-            break;
-
-          // Math operations
-          case "basic_math":
-            const leftBlock = textInput.getInputTargetBlock("LEFT");
-            const rightBlock = textInput.getInputTargetBlock("RIGHT");
-            const op = textInput.getFieldValue("OP") || "+";
-
-            const leftVal =
-              leftBlock && leftBlock.type === "basic_number"
-                ? leftBlock.getFieldValue("NUM")
-                : "?";
-            const rightVal =
-              rightBlock && rightBlock.type === "basic_number"
-                ? rightBlock.getFieldValue("NUM")
-                : "?";
-
-            displayText = `${leftVal}${op}${rightVal}`;
-            break;
-
-          case "basic_random":
-            displayText = "Zufallszahl";
-            break;
-
-          case "basic_compare":
-            displayText = "Vergl.";
-            break;
-
-          case "basic_button_pressed":
-            displayText = "Knopf?";
-            break;
-
-          case "basic_box_shaken":
-            displayText = "Schüttel?";
-            break;
-
-          default:
-            // For any other block, show a generic placeholder
-            displayText = "...";
-            break;
+      // Also update all subsequent display blocks
+      let nextBlock = this.getNextBlock();
+      while (nextBlock) {
+        if (nextBlock.type === "display_print_basic") {
+          nextBlock.updateAccumulatedDisplay();
         }
-
-        this.updateDisplayImage(displayText);
-      } else {
-        this.updateDisplayImage("");
+        nextBlock = nextBlock.getNextBlock();
       }
     }
+  },
+
+  updateAccumulatedDisplay: function () {
+    // Collect all text from previous display blocks
+    const allTexts = [];
+
+    // Walk up the chain of previous blocks
+    let currentBlock = this.getPreviousBlock();
+    while (currentBlock) {
+      if (currentBlock.type === "display_print_basic") {
+        const textInput = currentBlock.getInputTargetBlock("TEXT");
+        const text = this.getTextFromBlock(textInput);
+        if (text) {
+          allTexts.unshift(text); // Add to beginning to maintain order
+        }
+      }
+      currentBlock = currentBlock.getPreviousBlock();
+    }
+
+    // Add current block's text
+    const textInput = this.getInputTargetBlock("TEXT");
+    const currentText = this.getTextFromBlock(textInput);
+    if (currentText) {
+      allTexts.push(currentText);
+    }
+
+    // Join all texts with newlines
+    const displayText = allTexts.join("\n");
+    this.updateDisplayImage(displayText);
   },
 
   updateDisplayImage: function (text) {
