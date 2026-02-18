@@ -23,39 +23,7 @@ export const toolboxBasicObject = {
         },
       },
     },
-    {
-      kind: "block",
-      type: "basic_rgb_color",
-      inputs: {
-        R: {
-          block: {
-            type: "basic_number",
-            data: "#cc3333",
-            fields: {
-              NUM: 255,
-            },
-          },
-        },
-        G: {
-          block: {
-            type: "basic_number",
-            data: "#33cc33",
-            fields: {
-              NUM: 0,
-            },
-          },
-        },
-        B: {
-          block: {
-            type: "basic_number",
-            data: "#3333cc",
-            fields: {
-              NUM: 0,
-            },
-          },
-        },
-      },
-    },
+
     { kind: "block", type: "basic_off" },
     {
       kind: "block",
@@ -162,5 +130,40 @@ export const toolboxBasicObject = {
         },
       },
     },
+    {
+      kind: "block",
+      type: "basic_rgb_color",
+      inputs: {
+        R: {
+          block: {
+            type: "basic_number",
+            data: "#cc3333",
+            fields: {
+              NUM: 255,
+            },
+          },
+        },
+        G: {
+          block: {
+            type: "basic_number",
+            data: "#33cc33",
+            fields: {
+              NUM: 0,
+            },
+          },
+        },
+        B: {
+          block: {
+            type: "basic_number",
+            data: "#3333cc",
+            fields: {
+              NUM: 0,
+            },
+          },
+        },
+      },
+    },
+    { kind: "block", type: "basic_button_pressed" },
+    { kind: "block", type: "basic_box_shaken" },
   ],
 };

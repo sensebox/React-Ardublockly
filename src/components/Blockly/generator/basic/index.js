@@ -315,3 +315,11 @@ basicGenerator.forBlock["basic_random"] = function (block, generator) {
   // Fallback if values are not numbers (variables, expressions, etc.)
   return [`random(${fromCode}, ${toCode})`, generator.ORDER_ATOMIC];
 };
+
+basicGenerator.forBlock["basic_button_pressed"] = function (block, generator) {
+  return ["buttonPressed()", generator.ORDER_ATOMIC];
+};
+
+basicGenerator.forBlock["basic_box_shaken"] = function (block, generator) {
+  return ["boxShaken()", generator.ORDER_ATOMIC];
+};
