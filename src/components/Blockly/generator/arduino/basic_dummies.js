@@ -139,3 +139,10 @@ Blockly.Generator.Arduino.forBlock["basic_math"] = function (
 ) {
   return ""; // nichts generieren
 };
+
+Blockly.Generator.Arduino.forBlock["basic_random"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};
