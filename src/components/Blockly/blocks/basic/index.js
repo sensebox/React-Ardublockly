@@ -430,3 +430,83 @@ Blockly.defineBlocksWithJsonArray([
     helpUrl: "",
   },
 ]);
+
+// Helper function to generate LED SVG with custom color
+function generateLEDSvg(color) {
+  const svgTemplate = `<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Ebene_2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 88.04 105.95">
+  <defs>
+    <style>
+      .cls-1 { fill: #fff; }
+      .cls-2 { fill: #1d1d1b; }
+      .led-fill { fill: ${color}; }
+    </style>
+  </defs>
+  <g id="Ebene_1-2">
+    <g id="LED">
+      <path class="led-fill" d="M62.44,63.86h-1.51v-18.22c0-10.29-7.61-18.63-17.01-18.63s-17.01,8.34-17.01,18.63v18.22h-1.32c-1.57,0-2.83,1.27-2.83,2.83v4.25c0,1.57,1.27,2.83,2.83,2.83h36.85c1.57,0,2.83-1.27,2.83-2.83v-4.25c0-1.57-1.27-2.83-2.83-2.83Z"/>
+      <path class="cls-2" d="M62.44,62.61h-.26v-18.59c0-10.07-8.19-18.26-18.26-18.26s-18.26,8.19-18.26,18.26v18.59h-.07c-2.25,0-4.08,1.83-4.08,4.08v4.25c0,2.25,1.83,4.08,4.08,4.08h8.23v20.92c0,.83.67,1.5,1.5,1.5s1.5-.67,1.5-1.5v-20.92h14.01v29.42c0,.83.67,1.5,1.5,1.5s1.5-.67,1.5-1.5v-29.42h8.62c2.25,0,4.08-1.83,4.08-4.08v-4.25c0-2.25-1.83-4.08-4.08-4.08ZM28.17,44.02c0-8.69,7.07-15.76,15.76-15.76s15.76,7.07,15.76,15.76v18.59h-31.52v-18.59ZM64.03,70.95c0,.87-.71,1.58-1.58,1.58H25.59c-.87,0-1.58-.71-1.58-1.58v-4.25c0-.87.71-1.58,1.58-1.58h36.85c.87,0,1.58.71,1.58,1.58v4.25Z"/>
+      <g>
+        <path class="cls-2" d="M44.02,17.17c-.83,0-1.5-.67-1.5-1.5V1.5c0-.83.67-1.5,1.5-1.5s1.5.67,1.5,1.5v14.17c0,.83-.67,1.5-1.5,1.5Z"/>
+        <path class="cls-2" d="M15.67,45.52H1.5c-.83,0-1.5-.67-1.5-1.5s.67-1.5,1.5-1.5h14.17c.83,0,1.5.67,1.5,1.5s-.67,1.5-1.5,1.5Z"/>
+        <path class="cls-2" d="M86.54,45.52h-14.17c-.83,0-1.5-.67-1.5-1.5s.67-1.5,1.5-1.5h14.17c.83,0,1.5.67,1.5,1.5s-.67,1.5-1.5,1.5Z"/>
+        <path class="cls-2" d="M23.98,25.48c-.38,0-.77-.15-1.06-.44l-10.02-10.02c-.59-.59-.59-1.54,0-2.12.59-.59,1.54-.59,2.12,0l10.02,10.02c.59.59.59,1.54,0,2.12-.29.29-.68.44-1.06.44Z"/>
+        <path class="cls-2" d="M64.06,25.48c-.38,0-.77-.15-1.06-.44-.59-.59-.59-1.54,0-2.12l10.02-10.02c.59-.59,1.54-.59,2.12,0,.59.59.59,1.54,0,2.12l-10.02,10.02c-.29.29-.68.44-1.06.44Z"/>
+      </g>
+      <ellipse class="cls-1" cx="36.07" cy="38.12" rx="6.38" ry="2.13" transform="translate(-15.84 45.8) rotate(-55)"/>
+    </g>
+  </g>
+</svg>`;
+
+  return "data:image/svg+xml;base64," + btoa(svgTemplate);
+}
+
+Blockly.Blocks["basic_led_control"] = {
+  init: function () {
+    this.appendDummyInput("LED_IMAGE").appendField(
+      new Blockly.FieldImage(generateLEDSvg("#ff0000"), 90, 90, "*"),
+      "LED_ICON",
+    );
+
+    this.appendDummyInput().appendField("LED einschalten");
+
+    this.appendValueInput("COLOR").setCheck("Colour").appendField("Farbe:");
+
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour("#62A044");
+    this.setTooltip("Schalte die LED mit der gewählten Farbe ein");
+    this.setHelpUrl("");
+
+    this.setOnChange(this.onColorChange.bind(this));
+  },
+
+  onColorChange: function (changeEvent) {
+    if (!this.workspace || this.isInFlyout) return;
+
+    // Only react to changes on connected blocks
+    if (
+      changeEvent.type === Blockly.Events.BLOCK_CHANGE ||
+      changeEvent.type === Blockly.Events.BLOCK_MOVE
+    ) {
+      const colorInput = this.getInputTargetBlock("COLOR");
+
+      if (colorInput && colorInput.type === "colour_picker") {
+        const color = colorInput.getFieldValue("COLOUR");
+        if (color) {
+          this.updateLEDImage(color);
+        }
+      }
+    }
+  },
+
+  updateLEDImage: function (color) {
+    const ledImageInput = this.getInput("LED_IMAGE");
+    if (ledImageInput) {
+      const field = this.getField("LED_ICON");
+      if (field) {
+        field.setValue(generateLEDSvg(color));
+      }
+    }
+  },
+};
