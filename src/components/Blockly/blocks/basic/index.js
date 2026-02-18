@@ -511,7 +511,9 @@ Blockly.Blocks["basic_if_else"] = {
    * @this Blockly.Block
    */
   init: function () {
-    this.appendValueInput("IF0").setCheck(["String", "Boolean"]).appendField("wenn");
+    this.appendValueInput("IF0")
+      .setCheck(["String", "Boolean"])
+      .appendField("wenn");
     this.appendStatementInput("DO0").appendField("mache");
 
     this.setPreviousStatement(true);
