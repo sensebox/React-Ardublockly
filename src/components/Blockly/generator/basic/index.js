@@ -185,22 +185,32 @@ basicGenerator.forBlock["sensebox_start"] = function (block) {
   // Gib den kombinierten Code zurück
   return code;
 };
+basicGenerator.forBlock["basic_if_else"] = function (block, generator) {
+  // If/elseif/else condition.
+  let n = 0;
+  let code = "",
+    branchCode,
+    conditionCode;
+  do {
+    conditionCode =
+      generator.valueToCode(block, "IF" + n, generator.ORDER_NONE) || "false";
+    branchCode = generator.statementToCode(block, "DO" + n);
+    code +=
+      (n > 0 ? "else " : "") +
+      "if (" +
+      conditionCode +
+      ") {\n" +
+      branchCode +
+      "}\n";
 
-basicGenerator.forBlock["basic_if_else"] = function (block) {
-  const cond = basicGenerator.valueToCode(
-    block,
-    "COND",
-    basicGenerator.ORDER_NONE,
-  );
-  const body = basicGenerator.statementToCode(block, "DO");
-  const elseCode = basicGenerator.statementToCode(block, "ELSE");
-  return `
-  if(${cond}){
-  ${body}
+    ++n;
+  } while (block.getInput("IF" + n));
+
+  if (block.getInput("ELSE")) {
+    branchCode = generator.statementToCode(block, "ELSE");
+    code += "else {\n" + branchCode + "}\n";
   }
-  else{
-    ${elseCode} 
-  }\n`;
+  return code + "\n";
 };
 
 basicGenerator.forBlock["basic_repeat_times"] = function (block) {
