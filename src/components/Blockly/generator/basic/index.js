@@ -292,5 +292,5 @@ basicGenerator.forBlock["basic_math"] = function (block, generator) {
     generator.valueToCode(block, "RIGHT", generator.ORDER_NONE) || "0";
   const op = block.getFieldValue("OP");
 
-  return [`${left} ${op} ${right}`, generator.ORDER_NONE];
+  return [`(${left} ${op} ${right})`, generator.ORDER_NONE];
 };
