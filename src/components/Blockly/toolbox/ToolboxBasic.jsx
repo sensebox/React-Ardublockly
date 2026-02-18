@@ -77,9 +77,29 @@ export const toolboxBasicObject = {
       name: "Zustände",
       colour: "#5C81A6",
       contents: [
-        { kind: "block", type: "basic_button_pressed" },
-        { kind: "block", type: "basic_box_shaken" },
-      ],
+        {
+          kind: "block",
+          type: "basic_if_else",
+          inputs: {
+            IF0: {
+              block: {
+                type: "basic_button_pressed",
+              },
+            },
+          },
+        },
+        {
+          kind: "block",
+          type: "basic_if_else",
+          inputs: {
+            IF0: {
+              block: {
+                type: "basic_box_shaken",
+              },
+            },
+          },
+        },
+      ], 
     },
     {
       kind: "category",

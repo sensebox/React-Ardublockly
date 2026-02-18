@@ -511,7 +511,7 @@ Blockly.Blocks["basic_if_else"] = {
    * @this Blockly.Block
    */
   init: function () {
-    this.appendValueInput("IF0").setCheck("String").appendField("wenn");
+    this.appendValueInput("IF0").setCheck(["String", "Boolean"]).appendField("wenn");
     this.appendStatementInput("DO0").appendField("mache");
 
     this.setPreviousStatement(true);
@@ -672,7 +672,7 @@ Blockly.Blocks["basic_if_else"] = {
     // Rebuild block.
     for (var i = 1; i <= this.elseifCount_; i++) {
       this.appendValueInput("IF" + i)
-        .setCheck("String")
+        .setCheck(["String", "Boolean"])
         .appendField("sonst wenn");
       this.appendStatementInput("DO" + i).appendField("mache");
     }
@@ -1290,7 +1290,7 @@ Blockly.defineBlocksWithJsonArray([
         text: "Knopf gedrückt?",
       },
     ],
-    output: "String",
+    output: "Boolean",
     colour: "#5C81A6",
     tooltip: "Überprüft ob der Knopf gedrückt wurde",
     helpUrl: "",
@@ -1311,7 +1311,7 @@ Blockly.defineBlocksWithJsonArray([
         text: "senseBox geschüttelt?",
       },
     ],
-    output: "String",
+    output: "Boolean",
     colour: "#5C81A6",
     tooltip: "Überprüft ob die senseBox geschüttelt wurde",
     helpUrl: "",
