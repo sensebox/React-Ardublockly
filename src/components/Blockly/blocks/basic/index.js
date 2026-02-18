@@ -308,24 +308,35 @@ Blockly.defineBlocksWithJsonArray([
   },
 ]);
 
-Blockly.defineBlocksWithJsonArray([
-  {
-    type: "basic_number",
-    message0: "%1",
-    args0: [
-      {
-        type: "field_number",
-        name: "NUM",
-        value: 0,
-        precision: 1,
-      },
-    ],
-    output: "String",
-    colour: "#A6745C",
-    tooltip: "Zahl",
-    helpUrl: "",
+// Number block with configurable color via toolbox data attribute
+Blockly.Blocks["basic_number"] = {
+  init: function () {
+    this.appendDummyInput().appendField(
+      new Blockly.FieldNumber(0, null, null, 1),
+      "NUM",
+    );
+    this.setOutput(true, "String");
+    this.setColour("#A6745C"); // default color
+    this.setTooltip("Zahl");
+    this.setHelpUrl("");
+
+    // Apply custom color from toolbox data if provided
+    this.colorApplied_ = false;
+    this.setOnChange(this.applyCustomColor_.bind(this));
   },
-]);
+
+  applyCustomColor_: function () {
+    if (
+      !this.colorApplied_ &&
+      this.data &&
+      /^#[0-9A-Fa-f]{6}$/.test(this.data)
+    ) {
+      this.setColour(this.data);
+      this.colorApplied_ = true;
+    }
+  },
+};
+
 Blockly.defineBlocksWithJsonArray([
   {
     type: "basic_compare",
@@ -804,6 +815,102 @@ Blockly.Blocks["basic_led_control"] = {
       const field = this.getField("LED_ICON");
       if (field) {
         field.setValue(generateLEDSvg(color));
+      }
+    }
+  },
+};
+
+// Helper function to generate RGB color preview SVG
+function generateRGBSvg(r, g, b) {
+  // Clamp values between 0 and 255
+  const red = Math.max(0, Math.min(255, parseInt(r) || 0));
+  const green = Math.max(0, Math.min(255, parseInt(g) || 0));
+  const blue = Math.max(0, Math.min(255, parseInt(b) || 0));
+
+  // Convert to hex color
+  const hexColor = `#${red.toString(16).padStart(2, "0")}${green.toString(16).padStart(2, "0")}${blue.toString(16).padStart(2, "0")}`;
+
+  const svgTemplate = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80">
+  <defs>
+    <style>
+      .rgb-color-fill { fill: ${hexColor}; }
+      .rgb-border { fill: none; stroke: #1d1d1b; stroke-width: 2; }
+      .rgb-text { 
+        fill: #1d1d1b; 
+        font-family: Arial, sans-serif; 
+        font-size: 8px; 
+        font-weight: bold;
+        text-anchor: middle;
+      }
+    </style>
+  </defs>
+  <rect class="rgb-color-fill" x="5" y="5" width="70" height="50" rx="5"/>
+  <rect class="rgb-border" x="5" y="5" width="70" height="50" rx="5"/>
+  <text class="rgb-text" x="40" y="68">R:${red} G:${green} B:${blue}</text>
+</svg>`;
+
+  return "data:image/svg+xml;base64," + btoa(svgTemplate);
+}
+
+Blockly.Blocks["basic_rgb_color"] = {
+  init: function () {
+    this.appendDummyInput("RGB_IMAGE").appendField(
+      new Blockly.FieldImage(generateRGBSvg(255, 0, 0), 80, 80, "*"),
+      "RGB_ICON",
+    );
+
+    this.appendDummyInput().appendField("RGB Farbe");
+    this.appendValueInput("R").setCheck("String").appendField("Rot:");
+
+    this.appendValueInput("G").setCheck("String").appendField("Grün:");
+
+    this.appendValueInput("B").setCheck("String").appendField("Blau:");
+
+    this.setOutput(true, "Colour");
+    this.setColour("#62A044");
+    this.setTooltip("Mische eine Farbe aus Rot, Grün und Blau Werten (0-255)");
+    this.setHelpUrl("");
+
+    this.setOnChange(this.onRGBChange.bind(this));
+  },
+
+  onRGBChange: function (changeEvent) {
+    if (!this.workspace || this.isInFlyout) return;
+
+    if (
+      changeEvent.type === Blockly.Events.BLOCK_CHANGE ||
+      changeEvent.type === Blockly.Events.BLOCK_MOVE
+    ) {
+      const rInput = this.getInputTargetBlock("R");
+      const gInput = this.getInputTargetBlock("G");
+      const bInput = this.getInputTargetBlock("B");
+
+      if (
+        rInput &&
+        rInput.type === "basic_number" &&
+        gInput &&
+        gInput.type === "basic_number" &&
+        bInput &&
+        bInput.type === "basic_number"
+      ) {
+        const r = rInput.getFieldValue("NUM");
+        const g = gInput.getFieldValue("NUM");
+        const b = bInput.getFieldValue("NUM");
+
+        if (r !== null && g !== null && b !== null) {
+          this.updateRGBImage(r, g, b);
+        }
+      }
+    }
+  },
+
+  updateRGBImage: function (r, g, b) {
+    const rgbImageInput = this.getInput("RGB_IMAGE");
+    if (rgbImageInput) {
+      const field = this.getField("RGB_ICON");
+      if (field) {
+        field.setValue(generateRGBSvg(r, g, b));
       }
     }
   },
