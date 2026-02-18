@@ -294,3 +294,11 @@ basicGenerator.forBlock["basic_math"] = function (block, generator) {
 
   return [`(${left} ${op} ${right})`, generator.ORDER_NONE];
 };
+
+basicGenerator.forBlock["basic_random"] = function (block, generator) {
+  const from =
+    generator.valueToCode(block, "FROM", generator.ORDER_NONE) || "1";
+  const to = generator.valueToCode(block, "TO", generator.ORDER_NONE) || "100";
+
+  return [`random(${from}, ${to})`, generator.ORDER_ATOMIC];
+};
