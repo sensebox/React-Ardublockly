@@ -256,38 +256,108 @@ Blockly.defineBlocksWithJsonArray([
   },
 ]);
 
-Blockly.defineBlocksWithJsonArray([
-  {
-    type: "display_print_basic",
-    message0: "%1 \n %2", // Icon und Label untereinander
-    args0: [
-      {
-        type: "field_image",
-        src: "/media/hardware/icons/Icon_OLED-Display.svg",
-        width: 160,
-        height: 90,
-      },
-      {
-        type: "field_label",
-        text: "Zeige : ",
-        bold: true,
-      },
-    ],
-    message1: "%1", // Text-Eingang auf der rechten Seite
-    args1: [
-      {
-        type: "input_value",
-        name: "TEXT", // Name des Eingangs
-        check: "String", // akzeptiert nur Textblöcke
-      },
-    ],
-    previousStatement: null,
-    nextStatement: null,
-    colour: "#5ba55b",
-    tooltip: "Zeigt einen Text auf dem Display an",
-    helpUrl: "",
+// Helper function to generate dynamic display SVG with text
+function generateDisplaySvg(text = "") {
+  const displayText = text.substring(0, 20); // Limit to 20 characters
+
+  const svgTemplate = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="Ebene_2"
+   data-name="Ebene 2"
+   viewBox="0 0 127.56 70.87"
+   version="1.1"
+   xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #063;
+      }
+      .cls-2 {
+        fill: #1d1d1b;
+      }
+      .display-text {
+        fill: #ffffff;
+        font-family: Arial, sans-serif;
+        font-size: 8px;
+        font-weight: bold;
+      }
+    </style>
+  </defs>
+  <g id="Ebene_1-2" data-name="Ebene 1">
+    <g>
+      <path
+         class="cls-1"
+         d="M119.06,0H8.5C3.81,0,0,3.81,0,8.5v53.86c0,4.7,3.81,8.5,8.5,8.5h110.55c4.7,0,8.5-3.81,8.5-8.5V8.5c0-4.7-3.81-8.5-8.5-8.5ZM7.09,68.03c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25ZM7.09,11.34c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25ZM120.47,68.03c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25ZM120.47,11.34c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25Z" />
+      <polygon
+         class="cls-2"
+         points="41.1,65.2 49.61,65.2 49.61,70.87 77.95,70.87 77.95,65.2 86.46,65.2 99.21,56.69 99.21,14.17 28.35,14.17 28.35,56.69 "
+         transform="matrix(1.50884,0,0,1.0616933,-30.839346,-4.3722025)"
+         style="fill:#1d1d1b;fill-opacity:1" />
+      <text class="display-text" x="15" y="25">${displayText}</text>
+    </g>
+  </g>
+</svg>`;
+
+  return "data:image/svg+xml;base64," + btoa(svgTemplate);
+}
+
+Blockly.Blocks["display_print_basic"] = {
+  init: function () {
+    this.appendDummyInput("DISPLAY_IMAGE").appendField(
+      new Blockly.FieldImage(generateDisplaySvg(""), 160, 90, "*"),
+      "DISPLAY_ICON",
+    );
+
+    this.appendValueInput("TEXT")
+      .setCheck("String")
+      .appendField(
+        new Blockly.FieldLabel("Zeige :", undefined, { bold: true }),
+      );
+
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour("#5ba55b");
+    this.setTooltip("Zeigt einen Text auf dem Display an");
+    this.setHelpUrl("");
+
+    this.setOnChange(this.onTextChange.bind(this));
   },
-]);
+
+  onTextChange: function (changeEvent) {
+    if (!this.workspace || this.isInFlyout) return;
+
+    if (
+      changeEvent.type === Blockly.Events.BLOCK_CHANGE ||
+      changeEvent.type === Blockly.Events.BLOCK_MOVE
+    ) {
+      const textInput = this.getInputTargetBlock("TEXT");
+
+      if (textInput) {
+        let displayText = "";
+
+        if (textInput.type === "text") {
+          displayText = textInput.getFieldValue("TEXT") || "";
+        } else if (textInput.type === "basic_number") {
+          displayText = textInput.getFieldValue("NUM") || "";
+        }
+
+        this.updateDisplayImage(displayText);
+      } else {
+        this.updateDisplayImage("");
+      }
+    }
+  },
+
+  updateDisplayImage: function (text) {
+    const displayImageInput = this.getInput("DISPLAY_IMAGE");
+    if (displayImageInput) {
+      const field = this.getField("DISPLAY_ICON");
+      if (field) {
+        field.setValue(generateDisplaySvg(text));
+      }
+    }
+  },
+};
 
 Blockly.defineBlocksWithJsonArray([
   {
