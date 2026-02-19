@@ -550,33 +550,123 @@ Blockly.Blocks["basic_number_slider"] = {
 // Red slider block (only connects to R input)
 Blockly.Blocks["basic_number_slider_red"] = {
   init: function () {
-    this.appendDummyInput().appendField(new FieldSlider(0, 0, 255), "NUM");
+    const slider = new FieldSlider(0, 0, 255);
+    this.appendDummyInput().appendField(slider, "NUM");
     this.setOutput(true, "RGB_RED");
     this.setColour("#cc3333");
     this.setTooltip("Rot-Wert (0-255)");
     this.setHelpUrl("");
+    
+    // Update parent RGB block on slider change
+    this.setOnChange(this.updateParentRGB_.bind(this));
+  },
+  
+  updateParentRGB_: function (changeEvent) {
+    if (!this.workspace || this.isInFlyout) return;
+    
+    // Find parent RGB block
+    const parentConnection = this.outputConnection?.targetConnection;
+    if (parentConnection) {
+      const parentBlock = parentConnection.getSourceBlock();
+      if (parentBlock && parentBlock.type === "basic_rgb_color") {
+        // Trigger update on parent
+        const rInput = parentBlock.getInputTargetBlock("R");
+        const gInput = parentBlock.getInputTargetBlock("G");
+        const bInput = parentBlock.getInputTargetBlock("B");
+        
+        if (rInput && gInput && bInput) {
+          const r = rInput.getFieldValue("NUM");
+          const g = gInput.getFieldValue("NUM");
+          const b = bInput.getFieldValue("NUM");
+          
+          if (r !== null && g !== null && b !== null) {
+            parentBlock.updateRGBImage(r, g, b);
+          }
+        }
+      }
+    }
   },
 };
 
 // Green slider block (only connects to G input)
 Blockly.Blocks["basic_number_slider_green"] = {
   init: function () {
-    this.appendDummyInput().appendField(new FieldSlider(0, 0, 255), "NUM");
+    const slider = new FieldSlider(0, 0, 255);
+    this.appendDummyInput().appendField(slider, "NUM");
     this.setOutput(true, "RGB_GREEN");
     this.setColour("#33cc33");
     this.setTooltip("Grün-Wert (0-255)");
     this.setHelpUrl("");
+    
+    // Update parent RGB block on slider change
+    this.setOnChange(this.updateParentRGB_.bind(this));
+  },
+  
+  updateParentRGB_: function (changeEvent) {
+    if (!this.workspace || this.isInFlyout) return;
+    
+    // Find parent RGB block
+    const parentConnection = this.outputConnection?.targetConnection;
+    if (parentConnection) {
+      const parentBlock = parentConnection.getSourceBlock();
+      if (parentBlock && parentBlock.type === "basic_rgb_color") {
+        // Trigger update on parent
+        const rInput = parentBlock.getInputTargetBlock("R");
+        const gInput = parentBlock.getInputTargetBlock("G");
+        const bInput = parentBlock.getInputTargetBlock("B");
+        
+        if (rInput && gInput && bInput) {
+          const r = rInput.getFieldValue("NUM");
+          const g = gInput.getFieldValue("NUM");
+          const b = bInput.getFieldValue("NUM");
+          
+          if (r !== null && g !== null && b !== null) {
+            parentBlock.updateRGBImage(r, g, b);
+          }
+        }
+      }
+    }
   },
 };
 
 // Blue slider block (only connects to B input)
 Blockly.Blocks["basic_number_slider_blue"] = {
   init: function () {
-    this.appendDummyInput().appendField(new FieldSlider(0, 0, 255), "NUM");
+    const slider = new FieldSlider(0, 0, 255);
+    this.appendDummyInput().appendField(slider, "NUM");
     this.setOutput(true, "RGB_BLUE");
     this.setColour("#3333cc");
     this.setTooltip("Blau-Wert (0-255)");
     this.setHelpUrl("");
+    
+    // Update parent RGB block on slider change
+    this.setOnChange(this.updateParentRGB_.bind(this));
+  },
+  
+  updateParentRGB_: function (changeEvent) {
+    if (!this.workspace || this.isInFlyout) return;
+    
+    // Find parent RGB block
+    const parentConnection = this.outputConnection?.targetConnection;
+    if (parentConnection) {
+      const parentBlock = parentConnection.getSourceBlock();
+      if (parentBlock && parentBlock.type === "basic_rgb_color") {
+        // Trigger update on parent
+        const rInput = parentBlock.getInputTargetBlock("R");
+        const gInput = parentBlock.getInputTargetBlock("G");
+        const bInput = parentBlock.getInputTargetBlock("B");
+        
+        if (rInput && gInput && bInput) {
+          const r = rInput.getFieldValue("NUM");
+          const g = gInput.getFieldValue("NUM");
+          const b = bInput.getFieldValue("NUM");
+          
+          if (r !== null && g !== null && b !== null) {
+            parentBlock.updateRGBImage(r, g, b);
+          }
+        }
+      }
+    }
   },
 };
 
