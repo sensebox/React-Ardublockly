@@ -7,7 +7,6 @@ import { useDispatch } from "react-redux";
 import { toolboxBasicObject } from "@/components/Blockly/toolbox/ToolboxBasic";
 import { ScrollBlockDragger } from "@blockly/plugin-scroll-options";
 import { registerContinuousToolbox } from "@blockly/continuous-toolbox";
-import "@/components/Blockly/renderers/CompactRenderer";
 
 // Track if continuous toolbox has been registered (use window to persist across HMR)
 if (typeof window !== "undefined" && !window.__continuousToolboxRegistered) {
@@ -52,14 +51,14 @@ const BlocklyCard = ({
 
     const ws = Blockly.inject(containerRef.current, {
       toolbox: toolboxBasicObject,
-      renderer: "compact",
+      renderer: "Thrasos",
       theme: "light",
       trashcan: true,
       collapse: true,
       zoom: {
         controls: true,
         wheel: false,
-        startScale: 0.8,
+        startScale: 1,
         maxScale: 3,
         minScale: 0.3,
         scaleSpeed: 1.1,
