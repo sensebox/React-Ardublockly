@@ -1296,9 +1296,21 @@ Blockly.Blocks["basic_rgb_color"] = {
       const bInput = this.getInputTargetBlock("B");
 
       // Check for both basic_number and the new slider types
-      const validRTypes = ["basic_number", "basic_number_slider", "basic_number_slider_red"];
-      const validGTypes = ["basic_number", "basic_number_slider", "basic_number_slider_green"];
-      const validBTypes = ["basic_number", "basic_number_slider", "basic_number_slider_blue"];
+      const validRTypes = [
+        "basic_number",
+        "basic_number_slider",
+        "basic_number_slider_red",
+      ];
+      const validGTypes = [
+        "basic_number",
+        "basic_number_slider",
+        "basic_number_slider_green",
+      ];
+      const validBTypes = [
+        "basic_number",
+        "basic_number_slider",
+        "basic_number_slider_blue",
+      ];
 
       if (
         rInput &&
