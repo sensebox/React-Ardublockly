@@ -37,20 +37,13 @@ const BasicPage = () => {
   return (
     <Box
       sx={{
-        p: 2,
         display: "flex",
         flexDirection: "column",
-        gap: 2,
         height: "100vh",
-        boxSizing: "border-box",
       }}
     >
-      <Box sx={{ display: "flex", gap: 2, flex: 1, minHeight: 0 }}>
-        {/* Linke Seite */}
-        <Box sx={{ flex: " 0 0 100%", minHeight: 0, display: "flex" }}>
-          <BlocklyCard />
-        </Box>
-      </Box>
+      {/* Linke Seite */}
+      <BlocklyCard />
     </Box>
   );
 };
