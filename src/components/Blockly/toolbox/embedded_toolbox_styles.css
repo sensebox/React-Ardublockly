@@ -194,3 +194,7 @@
 .embedded-mode input[type="search"] {
   width: 100% !important;
 }
+
+.embedded-mode .blocklyScrollbarHandle {
+  display: none !important; /* Hide scrollbar handles for cleaner look */
+}
