@@ -22,9 +22,9 @@ class CompactRenderer extends Blockly.geras.Renderer {
       constants.FIELD_BORDER_RECT_HEIGHT * 0.85;
 
     // Reduce spacing
-    constants.MEDIUM_PADDING = constants.MEDIUM_PADDING * 0.45;
-    constants.SMALL_PADDING = constants.SMALL_PADDING * 0.45;
-    constants.LARGE_PADDING = constants.LARGE_PADDING * 0.45;
+    constants.MEDIUM_PADDING = constants.MEDIUM_PADDING * 0.85;
+    constants.SMALL_PADDING = constants.SMALL_PADDING * 0.85;
+    constants.LARGE_PADDING = constants.LARGE_PADDING * 0.85;
 
     // Reduce corner radius slightly
     constants.CORNER_RADIUS = constants.CORNER_RADIUS * 0.9;
