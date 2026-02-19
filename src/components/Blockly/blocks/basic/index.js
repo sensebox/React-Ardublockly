@@ -556,14 +556,14 @@ Blockly.Blocks["basic_number_slider_red"] = {
     this.setColour("#cc3333");
     this.setTooltip("Rot-Wert (0-255)");
     this.setHelpUrl("");
-    
+
     // Update parent RGB block on slider change
     this.setOnChange(this.updateParentRGB_.bind(this));
   },
-  
+
   updateParentRGB_: function (changeEvent) {
     if (!this.workspace || this.isInFlyout) return;
-    
+
     // Find parent RGB block
     const parentConnection = this.outputConnection?.targetConnection;
     if (parentConnection) {
@@ -573,12 +573,12 @@ Blockly.Blocks["basic_number_slider_red"] = {
         const rInput = parentBlock.getInputTargetBlock("R");
         const gInput = parentBlock.getInputTargetBlock("G");
         const bInput = parentBlock.getInputTargetBlock("B");
-        
+
         if (rInput && gInput && bInput) {
           const r = rInput.getFieldValue("NUM");
           const g = gInput.getFieldValue("NUM");
           const b = bInput.getFieldValue("NUM");
-          
+
           if (r !== null && g !== null && b !== null) {
             parentBlock.updateRGBImage(r, g, b);
           }
@@ -597,14 +597,14 @@ Blockly.Blocks["basic_number_slider_green"] = {
     this.setColour("#33cc33");
     this.setTooltip("Grün-Wert (0-255)");
     this.setHelpUrl("");
-    
+
     // Update parent RGB block on slider change
     this.setOnChange(this.updateParentRGB_.bind(this));
   },
-  
+
   updateParentRGB_: function (changeEvent) {
     if (!this.workspace || this.isInFlyout) return;
-    
+
     // Find parent RGB block
     const parentConnection = this.outputConnection?.targetConnection;
     if (parentConnection) {
@@ -614,12 +614,12 @@ Blockly.Blocks["basic_number_slider_green"] = {
         const rInput = parentBlock.getInputTargetBlock("R");
         const gInput = parentBlock.getInputTargetBlock("G");
         const bInput = parentBlock.getInputTargetBlock("B");
-        
+
         if (rInput && gInput && bInput) {
           const r = rInput.getFieldValue("NUM");
           const g = gInput.getFieldValue("NUM");
           const b = bInput.getFieldValue("NUM");
-          
+
           if (r !== null && g !== null && b !== null) {
             parentBlock.updateRGBImage(r, g, b);
           }
@@ -638,14 +638,14 @@ Blockly.Blocks["basic_number_slider_blue"] = {
     this.setColour("#3333cc");
     this.setTooltip("Blau-Wert (0-255)");
     this.setHelpUrl("");
-    
+
     // Update parent RGB block on slider change
     this.setOnChange(this.updateParentRGB_.bind(this));
   },
-  
+
   updateParentRGB_: function (changeEvent) {
     if (!this.workspace || this.isInFlyout) return;
-    
+
     // Find parent RGB block
     const parentConnection = this.outputConnection?.targetConnection;
     if (parentConnection) {
@@ -655,12 +655,12 @@ Blockly.Blocks["basic_number_slider_blue"] = {
         const rInput = parentBlock.getInputTargetBlock("R");
         const gInput = parentBlock.getInputTargetBlock("G");
         const bInput = parentBlock.getInputTargetBlock("B");
-        
+
         if (rInput && gInput && bInput) {
           const r = rInput.getFieldValue("NUM");
           const g = gInput.getFieldValue("NUM");
           const b = bInput.getFieldValue("NUM");
-          
+
           if (r !== null && g !== null && b !== null) {
             parentBlock.updateRGBImage(r, g, b);
           }
