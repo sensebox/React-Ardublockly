@@ -250,6 +250,26 @@ basicGenerator.forBlock["basic_number"] = function (block) {
   return [String(num), basicGenerator.ORDER_NONE];
 };
 
+basicGenerator.forBlock["basic_number_slider"] = function (block) {
+  const num = block.getFieldValue("NUM");
+  return [String(num), basicGenerator.ORDER_NONE];
+};
+
+basicGenerator.forBlock["basic_number_slider_red"] = function (block) {
+  const num = block.getFieldValue("NUM");
+  return [String(num), basicGenerator.ORDER_NONE];
+};
+
+basicGenerator.forBlock["basic_number_slider_green"] = function (block) {
+  const num = block.getFieldValue("NUM");
+  return [String(num), basicGenerator.ORDER_NONE];
+};
+
+basicGenerator.forBlock["basic_number_slider_blue"] = function (block) {
+  const num = block.getFieldValue("NUM");
+  return [String(num), basicGenerator.ORDER_NONE];
+};
+
 basicGenerator.forBlock["colour_picker"] = function (block, generator) {
   const color = block.getFieldValue("COLOUR") || "#ffffff";
 
