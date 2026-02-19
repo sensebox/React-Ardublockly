@@ -131,6 +131,34 @@ Blockly.Generator.Arduino.forBlock["basic_number"] = function (
   return ""; // nichts generieren
 };
 
+Blockly.Generator.Arduino.forBlock["basic_number_slider"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};
+
+Blockly.Generator.Arduino.forBlock["basic_number_slider_red"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};
+
+Blockly.Generator.Arduino.forBlock["basic_number_slider_green"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};
+
+Blockly.Generator.Arduino.forBlock["basic_number_slider_blue"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};
+
 Blockly.Generator.Arduino.forBlock["basic_repeat_times"] = function (
   _block,
   _generator,
