@@ -43,8 +43,7 @@ export const toolboxBasicObject = {
           inputs: {
             R: {
               block: {
-                type: "basic_number",
-                data: "#cc3333",
+                type: "basic_number_slider_red",
                 fields: {
                   NUM: 255,
                 },
@@ -52,8 +51,7 @@ export const toolboxBasicObject = {
             },
             G: {
               block: {
-                type: "basic_number",
-                data: "#33cc33",
+                type: "basic_number_slider_green",
                 fields: {
                   NUM: 0,
                 },
@@ -61,8 +59,7 @@ export const toolboxBasicObject = {
             },
             B: {
               block: {
-                type: "basic_number",
-                data: "#3333cc",
+                type: "basic_number_slider_blue",
                 fields: {
                   NUM: 0,
                 },

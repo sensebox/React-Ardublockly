@@ -1,6 +1,7 @@
 import * as Blockly from "blockly/core";
 import { getColour } from "@/components/Blockly/helpers/colour";
 import * as Types from "@/components/Blockly/helpers/types";
+import { FieldSlider } from "@blockly/field-slider";
 
 Blockly.defineBlocksWithJsonArray([
   {
@@ -517,6 +518,65 @@ Blockly.Blocks["basic_number"] = {
       this.setColour(this.data);
       this.colorApplied_ = true;
     }
+  },
+};
+
+// Number block with slider and configurable color via toolbox data attribute
+Blockly.Blocks["basic_number_slider"] = {
+  init: function () {
+    this.appendDummyInput().appendField(new FieldSlider(0, 0, 255), "NUM");
+    this.setOutput(true, "String");
+    this.setColour("#6b75a6"); // default color
+    this.setTooltip("Zahl (0-255)");
+    this.setHelpUrl("");
+
+    // Apply custom color from toolbox data if provided
+    this.colorApplied_ = false;
+    this.setOnChange(this.applyCustomColor_.bind(this));
+  },
+
+  applyCustomColor_: function () {
+    if (
+      !this.colorApplied_ &&
+      this.data &&
+      /^#[0-9A-Fa-f]{6}$/.test(this.data)
+    ) {
+      this.setColour(this.data);
+      this.colorApplied_ = true;
+    }
+  },
+};
+
+// Red slider block (only connects to R input)
+Blockly.Blocks["basic_number_slider_red"] = {
+  init: function () {
+    this.appendDummyInput().appendField(new FieldSlider(0, 0, 255), "NUM");
+    this.setOutput(true, "RGB_RED");
+    this.setColour("#cc3333");
+    this.setTooltip("Rot-Wert (0-255)");
+    this.setHelpUrl("");
+  },
+};
+
+// Green slider block (only connects to G input)
+Blockly.Blocks["basic_number_slider_green"] = {
+  init: function () {
+    this.appendDummyInput().appendField(new FieldSlider(0, 0, 255), "NUM");
+    this.setOutput(true, "RGB_GREEN");
+    this.setColour("#33cc33");
+    this.setTooltip("Grün-Wert (0-255)");
+    this.setHelpUrl("");
+  },
+};
+
+// Blue slider block (only connects to B input)
+Blockly.Blocks["basic_number_slider_blue"] = {
+  init: function () {
+    this.appendDummyInput().appendField(new FieldSlider(0, 0, 255), "NUM");
+    this.setOutput(true, "RGB_BLUE");
+    this.setColour("#3333cc");
+    this.setTooltip("Blau-Wert (0-255)");
+    this.setHelpUrl("");
   },
 };
 
@@ -1210,11 +1270,11 @@ Blockly.Blocks["basic_rgb_color"] = {
     );
 
     this.appendDummyInput().appendField("RGB Farbe");
-    this.appendValueInput("R").setCheck("String").appendField("Rot:");
+    this.appendValueInput("R").setCheck("RGB_RED").appendField("Rot:");
 
-    this.appendValueInput("G").setCheck("String").appendField("Grün:");
+    this.appendValueInput("G").setCheck("RGB_GREEN").appendField("Grün:");
 
-    this.appendValueInput("B").setCheck("String").appendField("Blau:");
+    this.appendValueInput("B").setCheck("RGB_BLUE").appendField("Blau:");
 
     this.setOutput(true, "Colour");
     this.setColour("#5ba55b");
@@ -1235,13 +1295,18 @@ Blockly.Blocks["basic_rgb_color"] = {
       const gInput = this.getInputTargetBlock("G");
       const bInput = this.getInputTargetBlock("B");
 
+      // Check for both basic_number and the new slider types
+      const validRTypes = ["basic_number", "basic_number_slider", "basic_number_slider_red"];
+      const validGTypes = ["basic_number", "basic_number_slider", "basic_number_slider_green"];
+      const validBTypes = ["basic_number", "basic_number_slider", "basic_number_slider_blue"];
+
       if (
         rInput &&
-        rInput.type === "basic_number" &&
+        validRTypes.includes(rInput.type) &&
         gInput &&
-        gInput.type === "basic_number" &&
+        validGTypes.includes(gInput.type) &&
         bInput &&
-        bInput.type === "basic_number"
+        validBTypes.includes(bInput.type)
       ) {
         const r = rInput.getFieldValue("NUM");
         const g = gInput.getFieldValue("NUM");
