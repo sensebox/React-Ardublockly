@@ -52,7 +52,7 @@ const BlocklyCard = ({
     startBlock.initSvg();
     startBlock.render();
 
-    startBlock.moveBy(50, 100);
+    startBlock.moveBy(400, 100);
 
     // Optional: Block fixieren (nicht löschbar)
     startBlock.setDeletable(false);
