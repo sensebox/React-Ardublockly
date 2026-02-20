@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import BlocklyCard from "./BlocklyCard";
 import "@/components/Blockly/blocks/basic/index"; // registriert Block
@@ -34,6 +34,7 @@ const BasicPage = () => {
     };
   }, []);
 
+  // Toolbox toggle state (logic remains, UI removed)
   return (
     <Box
       sx={{
@@ -42,7 +43,6 @@ const BasicPage = () => {
         height: "100vh",
       }}
     >
-      {/* Linke Seite */}
       <BlocklyCard />
     </Box>
   );
