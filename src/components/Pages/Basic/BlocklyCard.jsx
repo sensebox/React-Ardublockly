@@ -37,7 +37,7 @@ const BlocklyCard = ({
       zoom: {
         controls: true,
         wheel: false,
-        startScale: 0.8,
+        startScale: 1.2,
         maxScale: 3,
         minScale: 0.3,
         scaleSpeed: 1.1,
