@@ -34,7 +34,14 @@ const headerStyle = {
   fontWeight: "bold",
 };
 
-function CompilationDialog({ open, code, selectedBoard, onClose, platform, isEmbedded = false }) {
+function CompilationDialog({
+  open,
+  code,
+  selectedBoard,
+  onClose,
+  platform,
+  isEmbedded = false,
+}) {
   const [activeStep, setActiveStep] = useState(0);
   const [sketchId, setSketchId] = useState(null);
   const [error, setError] = useState(null);
@@ -77,14 +84,18 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform, isEmb
       // This ensures we always have the latest code in embedded mode where CodeViewer
       // doesn't trigger frequent re-renders. Main route uses the prop as it works fine there.
       let codeToCompile = code;
-      
+
       if (isEmbedded) {
         const workspace = Blockly.getMainWorkspace();
         if (workspace && Blockly.Generator && Blockly.Generator.Arduino) {
           try {
-            codeToCompile = Blockly.Generator.Arduino.workspaceToCode(workspace);
+            codeToCompile =
+              Blockly.Generator.Arduino.workspaceToCode(workspace);
           } catch (err) {
-            console.warn("Failed to generate code from workspace, using prop:", err);
+            console.warn(
+              "Failed to generate code from workspace, using prop:",
+              err,
+            );
           }
         }
       }
@@ -93,8 +104,8 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform, isEmb
         selectedBoard === "MCU" || selectedBoard === "MCU:MINI"
           ? "sensebox-mcu"
           : selectedBoard === "MCU-S2"
-          ? "sensebox-esp32s2"
-          : "sensebox-eye";
+            ? "sensebox-esp32s2"
+            : "sensebox_eye";
       const response = await fetch(`${compilerUrl}/compile`, {
         method: "POST",
         headers: {
@@ -177,7 +188,7 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform, isEmb
               position: "absolute",
               right: 8,
               top: 8,
-              color: "#666"
+              color: "#666",
             }}
           >
             <FontAwesomeIcon icon={faXmark} />
@@ -186,7 +197,8 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform, isEmb
       )}
       <DialogContent
         style={{
-          padding: isEmbedded && activeStep >= 1 ? "1rem 2rem 2rem 2rem" : "2rem",
+          padding:
+            isEmbedded && activeStep >= 1 ? "1rem 2rem 2rem 2rem" : "2rem",
           display: "flex",
           flexDirection: "column",
           height: "100%",
@@ -225,11 +237,11 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform, isEmb
             <div
               style={{ display: "flex", flexDirection: "column", gap: "12px" }}
             >
-              <span style={headerStyle}> 
-                {Blockly.Msg.goToApp_title} 
-              </span>
+              <span style={headerStyle}>{Blockly.Msg.goToApp_title}</span>
               <span style={{ margin: "1rem" }}>
-                {isEmbedded ? Blockly.Msg.goToApp_text_embedded : Blockly.Msg.goToApp_text}
+                {isEmbedded
+                  ? Blockly.Msg.goToApp_text_embedded
+                  : Blockly.Msg.goToApp_text}
               </span>
               <a
                 href={`blocklyconnect-app://sketch/${filename}/${sketchId}/${selectedBoard}`}
@@ -251,7 +263,9 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform, isEmb
                     style={{ marginRight: "5px" }}
                     icon={faLink}
                   />
-                  {isEmbedded ? Blockly.Msg.goToApp_embedded : Blockly.Msg.goToApp}
+                  {isEmbedded
+                    ? Blockly.Msg.goToApp_embedded
+                    : Blockly.Msg.goToApp}
                 </Button>
               </a>
             </div>
