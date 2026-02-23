@@ -21,6 +21,12 @@ export const BITMAP = {
   typeMsgName: "ARD_TYPE_BITMAP",
 };
 
+export const IMAGE = {
+  typeId: "Image",
+  typeName: "image",
+  typeMsgName: "ARD_TYPE_IMAGE",
+};
+
 export const BOOLEAN = {
   typeId: "Boolean",
   typeName: "boolean",

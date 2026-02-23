@@ -7,6 +7,8 @@ import { ToolboxMcu } from "./ToolboxMcu";
 import { ToolboxEsp } from "./ToolboxEsp";
 import "./horizontal_toolbox_styles.css";
 import { registerBlocklyContextMenu } from "../helpers/blocklyContextMenu";
+import { ToolboxEye } from "./ToolboxEye";
+mbeddedToolbox.jsx;
 
 const HorizontalToolbox = ({ workspace, toolbox }) => {
   const selectedBoard = useSelector((state) => state.board.board);
@@ -73,9 +75,12 @@ const HorizontalToolbox = ({ workspace, toolbox }) => {
     },
     selectedBoard === "MCU" || selectedBoard === "MCU:mini" ? (
       <ToolboxMcu />
-    ) : (
+    ) : selectedBoard === "MCU-S2" ? (
       <ToolboxEsp />
+    ) : (
+      <ToolboxEye />
     ),
+    y / toolbox / EmbeddedToolbox.jsx,
   );
 };
 

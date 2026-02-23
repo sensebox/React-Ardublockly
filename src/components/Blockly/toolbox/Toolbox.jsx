@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { ToolboxMcu } from "./ToolboxMcu";
 import { ToolboxEsp } from "./ToolboxEsp";
 import { getColour } from "../helpers/colour";
+import { ToolboxEye } from "./ToolboxEye";
 import "./toolbox_styles.css";
 
 const Toolbox = ({ workspace, toolbox }) => {
@@ -261,8 +262,10 @@ const Toolbox = ({ workspace, toolbox }) => {
     },
     selectedBoard === "MCU" || selectedBoard === "MCU:MINI" ? (
       <ToolboxMcu />
-    ) : (
+    ) : selectedBoard === "MCU-S2" ? (
       <ToolboxEsp />
+    ) : (
+      <ToolboxEye />
     ),
   );
 };
