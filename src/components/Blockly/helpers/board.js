@@ -410,7 +410,7 @@ const sensebox_esp32 = {
 const sensebox_eye = {
   title: "Eye",
   description: "senseBox Eye",
-  compilerFlag: "esp32:esp32:esp32", // TODO: Paula?
+  compilerFlag: "esp32:esp32:sensebox_eye",
   digitalPins: [
     ["IO14", "14"],
     ["IO48", "48"],
