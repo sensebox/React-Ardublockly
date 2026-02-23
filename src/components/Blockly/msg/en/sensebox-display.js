@@ -69,7 +69,6 @@ export const DISPLAY = {
   sensebox_display_fastPrint_tooltip:
     "Show two measurements with title and dimension on the display",
   senseBox_display_image: "Draw Image",
-  senseBox_display_image_value: "Image",
   senseBox_display_image_tooltip:
     "With this block you can draw a camera image on the display.",
   senseBox_display_helpurl:

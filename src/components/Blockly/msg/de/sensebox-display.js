@@ -74,7 +74,6 @@ export const DISPLAY = {
   sensebox_display_fastPrint_tooltip:
     "Zeigt zwei Messwerte auf dem Display an. Wähle eine Überschrift für jeden Messwert und gib die Einheit an.",
   senseBox_display_image: "Zeichne Bild",
-  senseBox_display_image_value: "Bild",
   senseBox_display_image_tooltip:
     "Mit diesem Block kannst du ein Kamerabild auf dem Display anzeigen.",
   senseBox_display_helpurl: "https://docs.sensebox.de/blockly/blockly-display/",

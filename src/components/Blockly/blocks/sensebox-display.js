@@ -383,9 +383,8 @@ Blockly.Blocks["sensebox_display_drawRectangle"] = {
 Blockly.Blocks["sensebox_display_image"] = {
   init: function (block) {
     this.setColour(getColour().sensebox);
-    this.appendDummyInput().appendField(Blockly.Msg.senseBox_display_image);
     this.appendValueInput("drawImage")
-      .appendField(Blockly.Msg.senseBox_display_image_value)
+      .appendField(Blockly.Msg.senseBox_display_image)
       .setCheck(Types.IMAGE.typeName);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
