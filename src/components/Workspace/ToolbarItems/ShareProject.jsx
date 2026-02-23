@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { shareProject } from "../../../actions/projectActions";
 import { clearMessages } from "../../../actions/messageActions";
 import QRCode from "qrcode.react";
-import { createId } from "mnemonic-id";
+import { createShareShortLink } from "../../../helpers/shareUrlBuilder";
 
 import moment from "moment";
 
@@ -41,37 +41,39 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import * as Blockly from "blockly/core";
 
-const styles = (theme) => ({
-  iconButton: {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.primary.contrastText,
-    width: "40px",
-    height: "40px",
-    "&:hover": {
+const styles = (theme) => {
+  return {
+    iconButton: {
       backgroundColor: theme.palette.primary.main,
       color: theme.palette.primary.contrastText,
+      width: "40px",
+      height: "40px",
+      "&:hover": {
+        backgroundColor: theme.palette.primary.main,
+        color: theme.palette.primary.contrastText,
+      },
     },
-  },
-  button: {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.primary.contrastText,
-    "&:hover": {
+    button: {
       backgroundColor: theme.palette.primary.main,
       color: theme.palette.primary.contrastText,
+      "&:hover": {
+        backgroundColor: theme.palette.primary.main,
+        color: theme.palette.primary.contrastText,
+      },
+      borderRadius: 20,
     },
-    borderRadius: 20,
-  },
-  link: {
-    color: theme.palette.primary.main,
-    textDecoration: "none",
-    "&:hover": {
+    link: {
       color: theme.palette.primary.main,
-      textDecoration: "underline",
+      textDecoration: "none",
+      "&:hover": {
+        color: theme.palette.primary.main,
+        textDecoration: "underline",
+      },
     },
-  },
-});
+  };
+};
 
-class WorkspaceFunc extends Component {
+class ShareProject extends Component {
   constructor(props) {
     super(props);
     this.inputRef = React.createRef();
@@ -147,23 +149,20 @@ class WorkspaceFunc extends Component {
 
   createShortlink(id) {
     this.setState({ isFetching: true, loading: true });
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        slug: `blockly-${createId(5)}`,
-        url: `${window.location.origin}/share/${id}`,
-      }),
-    };
-    fetch("https://www.snsbx.de/api/shorty", requestOptions)
-      .then((response) => response.json())
-      .then((data) =>
+    createShareShortLink(id, this.props.isEmbedded)
+      .then((shortLink) => {
         this.setState({
-          shortLink: data[0].link,
+          shortLink: shortLink,
           isFetching: false,
           loading: false,
-        }),
-      );
+        });
+      })
+      .catch((error) => {
+        this.setState({
+          isFetching: false,
+          loading: false,
+        });
+      });
   }
 
   downloadQRCode = () => {
@@ -181,17 +180,29 @@ class WorkspaceFunc extends Component {
   };
 
   render() {
+    const tooltipText = Blockly.Msg.tooltip_share_project;
     return (
       <div style={this.props.style}>
-        <Tooltip title={Blockly.Msg.tooltip_share_project} arrow>
-          <IconButton
-            className={`shareBlocks ${this.props.classes.iconButton}`}
+        {this.props.isEmbedded ? (
+          <Button
+            className={`shareBlocks embedded-button embedded-button-primary`}
             onClick={() => this.shareBlocks()}
-            size="large"
+            variant="contained"
+            startIcon={<FontAwesomeIcon icon={faShareAlt} size="sm" />}
           >
-            <FontAwesomeIcon icon={faShareAlt} size="xs" />
-          </IconButton>
-        </Tooltip>
+            {tooltipText}
+          </Button>
+        ) : (
+          <Tooltip title={tooltipText} arrow>
+            <IconButton
+              className={`shareBlocks ${this.props.classes.iconButton}`}
+              onClick={() => this.shareBlocks()}
+              size="large"
+            >
+              <FontAwesomeIcon icon={faShareAlt} size="xs" />
+            </IconButton>
+          </Tooltip>
+        )}
 
         <Snackbar
           open={this.state.snackbar}
@@ -223,18 +234,35 @@ class WorkspaceFunc extends Component {
           ) : (
             <div style={{ marginTop: "10px" }}>
               <Typography>
-                Über den folgenden Link kannst du dein Programm teilen:
+                {this.props.isEmbedded
+                  ? "Über den folgenden Link kannst du dein Programm in der senseBox Connect App öffnen:"
+                  : "Über den folgenden Link kannst du dein Programm teilen:"}
               </Typography>
-              <div style={{ textAlign: "center" }}>
-                <a
-                  href={this.state.shortLink}
-                  onClick={() => this.toggleDialog()}
-                  className={this.props.classes.link}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {this.state.shortLink}
-                </a>
+              <div style={{ textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}>
+                {this.props.isEmbedded ? (
+                  <Typography
+                    style={{
+                      wordBreak: "break-all",
+                      padding: "8px",
+                      backgroundColor: "#f5f5f5",
+                      borderRadius: "4px",
+                      flex: 1,
+                      maxWidth: "100%",
+                    }}
+                  >
+                    {this.state.shortLink}
+                  </Typography>
+                ) : (
+                  <a
+                    href={this.state.shortLink}
+                    onClick={() => this.toggleDialog()}
+                    className={this.props.classes.link}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {this.state.shortLink}
+                  </a>
+                )}
                 <Tooltip
                   title={Blockly.Msg.tooltip_copy_link}
                   arrow
@@ -287,45 +315,47 @@ class WorkspaceFunc extends Component {
                   Download QR code
                 </Button>
               </div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  marginTop: "20px",
-                }}
-              >
-                <FacebookShareButton
-                  url={this.state.shortLink}
-                  quote={"I created this sketch for my senseBox. Have a look!"}
-                  hashtag={"#senseBox"}
+              {!this.props.isEmbedded && (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "20px",
+                  }}
                 >
-                  <FacebookIcon size={32} round />
-                </FacebookShareButton>
-                <TwitterShareButton
-                  url={this.state.shortLink}
-                  title={"I created this sketch for my senseBox. Have a look!"}
-                  hashtags={["senseBox", "Blockly", "citizenScience"]}
-                >
-                  <TwitterIcon size={32} round />
-                </TwitterShareButton>
-                <WhatsappShareButton
-                  url={this.state.shortLink}
-                  title={
-                    "Look at my SenseBox sketch that I created with Blockly!"
-                  }
-                  separator={": "}
-                >
-                  <WhatsappIcon size={32} round />
-                </WhatsappShareButton>
-                <EmailShareButton
-                  url={this.state.shortLink}
-                  subject={"SenseBox Blockly Sketch"}
-                  body={"I created this sketch for my senseBox. Have a look!"}
-                  separator={": "}
-                >
-                  <EmailIcon size={32} round />
-                </EmailShareButton>
-              </div>
+                  <FacebookShareButton
+                    url={this.state.shortLink}
+                    quote={"I created this sketch for my senseBox. Have a look!"}
+                    hashtag={"#senseBox"}
+                  >
+                    <FacebookIcon size={32} round />
+                  </FacebookShareButton>
+                  <TwitterShareButton
+                    url={this.state.shortLink}
+                    title={"I created this sketch for my senseBox. Have a look!"}
+                    hashtags={["senseBox", "Blockly", "citizenScience"]}
+                  >
+                    <TwitterIcon size={32} round />
+                  </TwitterShareButton>
+                  <WhatsappShareButton
+                    url={this.state.shortLink}
+                    title={
+                      "Look at my SenseBox sketch that I created with Blockly!"
+                    }
+                    separator={": "}
+                  >
+                    <WhatsappIcon size={32} round />
+                  </WhatsappShareButton>
+                  <EmailShareButton
+                    url={this.state.shortLink}
+                    subject={"SenseBox Blockly Sketch"}
+                    body={"I created this sketch for my senseBox. Have a look!"}
+                    separator={": "}
+                  >
+                    <EmailIcon size={32} round />
+                  </EmailShareButton>
+                </div>
+              )}
               {this.props.project &&
               this.props.project.shared &&
               this.props.message.id !== "SHARE_SUCCESS" ? (
@@ -366,11 +396,12 @@ class WorkspaceFunc extends Component {
   }
 }
 
-WorkspaceFunc.propTypes = {
+ShareProject.propTypes = {
   shareProject: PropTypes.func.isRequired,
   clearMessages: PropTypes.func.isRequired,
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   message: PropTypes.object.isRequired,
+  isEmbedded: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
@@ -378,6 +409,14 @@ const mapStateToProps = (state) => ({
   message: state.message,
 });
 
-export default connect(mapStateToProps, { shareProject, clearMessages })(
-  withStyles(styles, { withTheme: true })(WorkspaceFunc),
+const ShareProjectWithStyles = connect(mapStateToProps, { shareProject, clearMessages })(
+  withStyles(styles, { withTheme: true })(ShareProject),
 );
+
+// Wrapper component to get isEmbedded from hook
+const ShareProjectWrapper = (props) => {
+  const isEmbedded = useSelector((state) => state.general.embeddedMode);
+  return <ShareProjectWithStyles {...props} isEmbedded={isEmbedded} />;
+};
+
+export default ShareProjectWrapper;

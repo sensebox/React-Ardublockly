@@ -1,28 +1,32 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { IconButton, Tooltip } from "@mui/material";
+import { useSelector } from "react-redux";
+import { IconButton, Tooltip, Button } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { workspaceName } from "../../../actions/workspaceActions";
 import CompilationDialog from "../ToolbarItems/CompilationDialog/CompilationDialog";
 import withStyles from "@mui/styles/withStyles";
-
-const styles = (theme) => ({
-  iconButton: {
-    backgroundColor: theme.palette.button.compile,
-    color: theme.palette.primary.contrastText,
-    width: "40px",
-    height: "40px",
-    "&:hover": {
+import * as Blockly from "blockly/core";
+const styles = (theme) => {
+  return {
+    iconButton: {
       backgroundColor: theme.palette.button.compile,
       color: theme.palette.primary.contrastText,
+      width: "40px",
+      height: "40px",
+      "&:hover": {
+        backgroundColor: theme.palette.button.compile,
+        color: theme.palette.primary.contrastText,
+      },
     },
-  },
-});
+  };
+};
 
 const Compile = (props) => {
   const [dialogOpen, setDialogOpen] = useState(false);
+  const isEmbedded = useSelector((state) => state.general.embeddedMode);
 
   const fallbackTexts = {
     de_DE: "Code kompilieren",
@@ -36,21 +40,32 @@ const Compile = (props) => {
     fallbackTexts.en_US; // Englisch als letzter Fallback
   const openDialog = () => {
     setDialogOpen(true);
-    console.log(props.platform);
   };
 
   return (
     <div>
-      <Tooltip title={tooltipText} arrow style={{ marginRight: "5px" }}>
-        <IconButton
-          className={`compileBlocks ${props.classes.iconButton}`}
+      {isEmbedded ? (
+        <Button
+          className={`compileBlocks embedded-button embedded-button-compile`}
           onClick={openDialog}
-          size="large"
+          variant="contained"
+          startIcon={<FontAwesomeIcon icon={faClipboardCheck} size="sm" />}
           aria-label="Compile code"
         >
-          <FontAwesomeIcon icon={faClipboardCheck} size="xs" />
-        </IconButton>
-      </Tooltip>
+          Kompilieren
+        </Button>
+      ) : (
+        <Tooltip title={tooltipText} arrow style={{ marginRight: "5px" }}>
+          <IconButton
+            className={`compileBlocks ${props.classes.iconButton}`}
+            onClick={openDialog}
+            size={"large"}
+            aria-label="Compile code"
+          >
+            <FontAwesomeIcon icon={faClipboardCheck} size="xs" />
+          </IconButton>
+        </Tooltip>
+      )}
 
       <CompilationDialog
         open={dialogOpen}
@@ -58,9 +73,10 @@ const Compile = (props) => {
         selectedBoard={props.selectedBoard}
         compiler={props.compiler}
         code={props.arduino}
-        filename={props.name}
-        platform={props.platform}
+        filename={props.name || "sketch"}
+        platform={isEmbedded ? true : props.platform}
         appLink={props.appLink || ""}
+        isEmbedded={isEmbedded}
       />
     </div>
   );

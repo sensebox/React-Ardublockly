@@ -1,125 +1,180 @@
-import React from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
 
 import * as Blockly from "blockly/core";
-import "blockly/blocks";
-import "@blockly/toolbox-search"; // search plugin auto-registers here
+import "./blocks/index";
+import "@/components/Blockly/generator/index";
 
 import Toolbox from "./toolbox/Toolbox";
+import EmbeddedToolbox from "./toolbox/EmbeddedToolbox";
 import { reservedWords } from "./helpers/reservedWords";
 import Snackbar from "../Snackbar";
 
-import { Card } from "@mui/material";
+import "blockly/blocks";
 import {
   ScrollOptions,
   ScrollBlockDragger,
   ScrollMetricsManager,
 } from "@blockly/plugin-scroll-options";
 
-import { PositionedMinimap } from "@blockly/workspace-minimap";
+import { Card } from "@mui/material";
 
-class BlocklyComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.blocklyDiv = React.createRef();
-    this.toolbox = React.createRef();
-    this.primaryWorkspace = null;
-    this.state = { workspace: undefined, snackbar: false };
-  }
+// -------------------------------
+// BlocklyComponent (Hooks)
+// -------------------------------
+export function BlocklyComponent({ initialXml, style, ...rest }) {
+  const blocklyDivRef = useRef(null);
+  const toolboxRef = useRef(null);
+  const [workspace, setWorkspace] = useState(undefined);
+  const isEmbedded = useSelector((state) => state.general.embeddedMode);
 
-  componentDidMount() {
-    const { initialXml, children, ...rest } = this.props;
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    type: "info",
+    key: 0,
+  });
 
-    const workspace = Blockly.inject(this.blocklyDiv.current, {
-      toolbox: this.toolbox.current,
+  // Inject Blockly once on mount
+  useEffect(() => {
+    const blocklyOptions = {
+      toolbox: toolboxRef.current,
       plugins: {
         blockDragger: ScrollBlockDragger,
         metricsManager: ScrollMetricsManager,
       },
       ...rest,
-    });
+    };
 
-    this.primaryWorkspace = workspace;
-    this.setState({ workspace });
+    // Only apply mobile layout options when in embedded mode
+    // These must override any options from ...rest, so set them after
+    if (isEmbedded) {
+      blocklyOptions.horizontalLayout = true;
+      blocklyOptions.toolboxPosition = 'end';
+      // Ensure toolbox icon sprites and other assets load correctly in embedded view
+      if (!blocklyOptions.media) {
+        blocklyOptions.media = '/media/blockly/';
+      }
+    }
 
-    workspace.addChangeListener((event) => {
+    const ws = Blockly.inject(blocklyDivRef.current, blocklyOptions);
+
+    if (isEmbedded && ws.trashcan) {
+      const originalGetClientRect = ws.trashcan.getClientRect.bind(ws.trashcan);
+      const originalGetBoundingRectangle = ws.trashcan.getBoundingRectangle.bind(ws.trashcan);
+
+      ws.trashcan.getClientRect = function() {
+        const originalRect = originalGetClientRect();
+        if (!originalRect) return null;
+
+        return new Blockly.utils.Rect(
+          originalRect.top - 80,
+          originalRect.bottom + 80,
+          originalRect.left - 80,
+          originalRect.right + 80
+        );
+      };
+
+      ws.trashcan.getBoundingRectangle = function() {
+        const originalRect = originalGetBoundingRectangle();
+        if (!originalRect) return null;
+
+        return new Blockly.utils.Rect(
+          originalRect.top - 80,
+          originalRect.bottom + 80,
+          originalRect.left - 80,
+          originalRect.right + 80
+        );
+      };
+    }
+
+    setWorkspace(ws);
+
+    // Variable rename/create validation
+    const validateVar = (event) => {
       if (
         event.type === Blockly.Events.VAR_CREATE ||
         event.type === Blockly.Events.VAR_RENAME
       ) {
-        const variable = workspace.getVariableById(event.varId);
+        const variable = ws.getVariableMap().getVariableById(event.varId);
+        if (!variable) return;
         const newName = variable.name;
         if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(newName)) {
-          // Check if the new name is a valid variable name
-          this.setState({
-            snackbar: true,
+          setSnackbar({
+            open: true,
             key: Date.now(),
             type: "error",
             message: `${Blockly.Msg.messages_invalid_variable_name}`,
           });
-          workspace.deleteVariableById(event.varId);
-        }
-        if (reservedWords.has(newName)) {
-          // Check if the new name is a reserved word
-          this.setState({
-            snackbar: true,
+          ws.getVariableMap().deleteVariableById(event.varId);
+        } else if (reservedWords.has(newName)) {
+          setSnackbar({
+            open: true,
             key: Date.now(),
             type: "error",
             message: `"${newName}" ${Blockly.Msg.messages_reserve_word}`,
           });
-          workspace.deleteVariableById(event.varId);
+          ws.getVariableMap().deleteVariableById(event.varId);
         }
       }
-    });
+    };
+    ws.addChangeListener(validateVar);
 
-    this.setState({ workspace: this.primaryWorkspace });
-    const plugin = new ScrollOptions(this.workspace);
-    plugin.init({ enableWheelScroll: true, enableEdgeScroll: false });
-
+    // ScrollOptions plugin
+    const scrollPlugin = new ScrollOptions(ws);
+    scrollPlugin.init({ enableWheelScroll: true, enableEdgeScroll: false });
+    // 🔥 SAUBERE LÖSUNG: Nutze Promise.resolve().then, um nach der Initialisierung zu laden
     if (initialXml) {
-      Blockly.Xml.domToWorkspace(
-        Blockly.utils.xml.textToDom(initialXml),
-        workspace,
-      );
+      Promise.resolve().then(() => {
+        try {
+          const xmlDom = Blockly.utils.xml.textToDom(initialXml);
+          Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, ws);
+        } catch (e) {}
+      });
     }
-  }
 
-  // Properly dispose the workspace on unmount
-  componentWillUnmount() {
-    if (this.primaryWorkspace) {
-      this.primaryWorkspace.dispose();
-      this.primaryWorkspace = null;
-    }
-  }
+    // Cleanup on unmount
+    return () => {
+      if (ws && validateVar) ws.removeChangeListener(validateVar);
+      // dispose workspace (plugins tied to workspace are disposed automatically)
+      ws?.dispose();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEmbedded]);
 
-  get workspace() {
-    return this.primaryWorkspace;
-  }
+  const cardStyle = useMemo(() => {
+    return isEmbedded ?{
+      height: "100%",
+      width: "100%",
+    } : {};
+  }, [isEmbedded]);
 
-  setXml(xml) {
-    Blockly.Xml.domToWorkspace(
-      Blockly.utils.xml.textToDom(xml),
-      this.primaryWorkspace,
-    );
-  }
-
-  render() {
-    return (
-      <>
-        <Card
-          ref={this.blocklyDiv}
-          id="blocklyDiv"
-          style={this.props.style ? this.props.style : {}}
-        />
-        <Toolbox toolbox={this.toolbox} workspace={this.state.workspace} />
-        <Snackbar
-          open={this.state.snackbar}
-          message={this.state.message}
-          type={this.state.type}
-          key={this.state.key}
-        />
-      </>
-    );
-  }
+  return (
+    <>
+      <Card
+        ref={blocklyDivRef}
+        id="blocklyDiv"
+        style={style ? style : cardStyle}
+        className={isEmbedded ? "embedded-mode" : ""}
+      />
+      {isEmbedded ? (
+        <EmbeddedToolbox toolbox={toolboxRef} workspace={workspace} />
+      ) : (
+        <Toolbox toolbox={toolboxRef} workspace={workspace} />
+      )}
+      <Snackbar
+        open={snackbar.open}
+        message={snackbar.message}
+        type={snackbar.type}
+        key={snackbar.key}
+        onClose={() => setSnackbar((s) => ({ ...s, open: false }))}
+      />
+    </>
+  );
 }
 
-export default BlocklyComponent;
+BlocklyComponent.propTypes = {
+  initialXml: PropTypes.string,
+  style: PropTypes.object,
+};

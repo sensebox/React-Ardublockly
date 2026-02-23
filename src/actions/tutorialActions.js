@@ -174,23 +174,43 @@ export const updateStatus = (status) => (dispatch, getState) => {
   }
 };
 
-export const deleteTutorial = (id) => (dispatch, getState) => {
-  var tutorial = getState().tutorial;
-  var id = getState().builder.id;
+export const deleteTutorial = (id) => async (dispatch, getState) => {
+  const token = getState().auth.token; // 🔥 Dein JWT aus Redux holen
+  const tutorialState = getState().tutorial;
+
+  if (!token) {
+    dispatch(returnErrors("Not authenticated", 401, "NO_TOKEN"));
+    return;
+  }
+
   const config = {
-    success: (res) => {
-      var tutorials = tutorial.tutorials;
-      var index = tutorials.findIndex((res) => res._id === id);
-      tutorials.splice(index, 1);
-      dispatch({
-        type: GET_TUTORIALS,
-        payload: tutorials,
-      });
-      dispatch(
-        returnSuccess(res.data.message, res.status, "TUTORIAL_DELETE_SUCCESS"),
-      );
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`, // ✅ WICHTIG
     },
-    error: (err) => {
+  };
+
+  try {
+    const res = await axios.delete(
+      `${import.meta.env.VITE_BLOCKLY_API}/tutorial/${id}`,
+      config,
+    );
+
+    // Erfolgreich gelöscht
+    const updatedTutorials = tutorialState.tutorials.filter(
+      (t) => t._id !== id,
+    );
+
+    dispatch({
+      type: GET_TUTORIALS,
+      payload: updatedTutorials,
+    });
+
+    dispatch(
+      returnSuccess(res.data.message, res.status, "TUTORIAL_DELETE_SUCCESS"),
+    );
+  } catch (err) {
+    if (err.response) {
       dispatch(
         returnErrors(
           err.response.data.message,
@@ -198,18 +218,10 @@ export const deleteTutorial = (id) => (dispatch, getState) => {
           "TUTORIAL_DELETE_FAIL",
         ),
       );
-    },
-  };
-  axios
-    .delete(`${import.meta.env.VITE_BLOCKLY_API}/tutorial/${id}`, config)
-    .then((res) => {
-      res.config.success(res);
-    })
-    .catch((err) => {
-      if (err.response && err.response.status !== 401) {
-        err.config.error(err);
-      }
-    });
+    } else {
+      dispatch(returnErrors("Server error", 500, "TUTORIAL_DELETE_FAIL"));
+    }
+  }
 };
 
 export const resetTutorial = () => (dispatch) => {

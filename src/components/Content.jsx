@@ -8,7 +8,7 @@ import Navbar from "./Navbar";
 import Routes from "./Route/Routes";
 import Cookies from "./Cookies";
 import Footer from "./Footer";
-import { setBoard } from "./Blockly/helpers/board";
+import { setBoardHelper } from "./Blockly/helpers/board";
 
 const Content = () => {
   const language = useSelector((state) => state.general.language);
@@ -22,11 +22,11 @@ const Content = () => {
       Blockly.setLocale(En);
     }
     // Board initialisieren
-    setBoard(board);
+    setBoardHelper(board);
   }, [language, board]);
 
   return (
-    <div className="wrapper">
+    <div style={{ minHeight: "100vh", position: "relative" }}>
       <Navbar />
       <Routes />
       <Cookies />

@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useRef } from "react";
 import { default as MonacoEditor } from "@monaco-editor/react";
-import { withRouter } from "react-router-dom";
+import {} from "react-router-dom";
 import { Button, Grid } from "@mui/material";
 import * as Blockly from "blockly/core";
 import Divider from "@mui/material/Divider";
@@ -14,6 +14,7 @@ import store from "@/store";
 import DeviceSelection from "@/components/DeviceSelection";
 import { useSelector } from "react-redux";
 import CompilationDialog from "@/components/Workspace/ToolbarItems/CompilationDialog/CompilationDialog";
+import { withRouterV6 } from "@/helpers/withRouter";
 
 const CodeEditor = () => {
   //const [filehandle, setFileHandle] = useState();
@@ -41,7 +42,7 @@ const CodeEditor = () => {
   const selectedBoard = store.getState().board.board;
   const filename = "sketch";
   const baseCode = `
-${selectedBoard === "mcu" || selectedBoard === "mini" ? "#include <senseBoxIO.h>" : ""}    
+${selectedBoard === "MCU" || selectedBoard === "MCU:MINI" ? "#include <senseBoxIO.h>" : ""}    
 void setup () {
              
 }
@@ -312,4 +313,4 @@ void loop() {
   );
 };
 
-export default withRouter(CodeEditor);
+export default CodeEditor;

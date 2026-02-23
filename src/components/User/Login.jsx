@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useLocation } from "react-router-dom";
-import { login } from "../../actions/authActions";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { login, loginOpenSenseMap } from "../../actions/authActions";
 
 import Snackbar from "../Snackbar";
 import Alert from "../ui/Alert";
@@ -15,12 +15,18 @@ import TextField from "@mui/material/TextField";
 import Divider from "@mui/material/Divider";
 import InputAdornment from "@mui/material/InputAdornment";
 import CircularProgress from "@mui/material/CircularProgress";
-import Link from "@mui/material/Link";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
+import Checkbox from "@mui/material/Checkbox";
 import * as Blockly from "blockly";
+import PasswordResetRequest from "./PasswordResetRequest";
 
 export default function Login() {
   const dispatch = useDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
 
   const message = useSelector((s) => s.message);
@@ -30,6 +36,7 @@ export default function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [authProvider, setAuthProvider] = useState("native");
   const [snackbar, setSnackbar] = useState(false);
   const [snackInfo, setSnackInfo] = useState({
     type: "",
@@ -38,7 +45,13 @@ export default function Login() {
   });
   const [showPassword, setShowPassword] = useState(false);
 
-  // on mount, if previous login failed, show error
+  // 🔥 Zustand für Passwort-Vergessen-View
+  const [showPasswordReset, setShowPasswordReset] = useState(false);
+
+  // 🔥 Zustand für "Remember me"
+  const [rememberMe, setRememberMe] = useState(false);
+
+  // Fehler bei Mount anzeigen
   useEffect(() => {
     if (message.id === "LOGIN_FAIL") {
       setEmail("");
@@ -50,13 +63,13 @@ export default function Login() {
       });
       setSnackbar(true);
     }
-  }, []); // run once on mount
+  }, []);
 
-  // on message change, handle success or failure
+  // Erfolg/Fehler behandeln
   useEffect(() => {
     if (message.id === "LOGIN_SUCCESS") {
       if (redirectPath) {
-        history.push(redirectPath);
+        navigate(redirectPath);
       } else {
         history.goBack();
       }
@@ -70,26 +83,54 @@ export default function Login() {
       });
       setSnackbar(true);
     }
-  }, [message]); // re-run when message changes
+  }, [message, history, redirectPath]);
 
   const handleChange = (setter) => (e) => setter(e.target.value);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (email && password) {
-      dispatch(login({ email, password }));
-    } else {
+    if (!email || !password) {
       setSnackInfo({
         type: "error",
         key: Date.now(),
         message: Blockly.Msg.messages_login_error,
       });
       setSnackbar(true);
+      return;
+    }
+
+    if (authProvider === "native") {
+      dispatch(login({ email, password, rememberMe }));
+    } else {
+      dispatch(loginOpenSenseMap({ email, password, rememberMe }));
     }
   };
 
   const handleClickShowPassword = () => setShowPassword((v) => !v);
   const handleMouseDownPassword = (e) => e.preventDefault();
+
+  // 🔥 Funktion, um zur Login-Ansicht zurückzukehren
+  const handleBackToLogin = () => {
+    setShowPasswordReset(false);
+  };
+
+  // 🔥 Zeige entweder Login- oder Passwort-Reset-Formular
+  if (showPasswordReset) {
+    return (
+      <div>
+        <Breadcrumbs
+          content={[{ link: "/user/login", title: Blockly.Msg.button_login }]}
+        />
+
+        <div
+          style={{ maxWidth: "500px", marginLeft: "auto", marginRight: "auto" }}
+        >
+          <h1>Passwort vergessen?</h1>
+          <PasswordResetRequest onBackToLogin={handleBackToLogin} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -101,25 +142,59 @@ export default function Login() {
         style={{ maxWidth: "500px", marginLeft: "auto", marginRight: "auto" }}
       >
         <h1>{Blockly.Msg.login_head}</h1>
-        <Alert>
-          {Blockly.Msg.login_osem_account_01}{" "}
-          <Link
-            color="primary"
-            rel="noreferrer"
-            target="_blank"
-            href="https://opensensemap.org/"
-            underline="hover"
+
+        <FormControl component="fieldset" sx={{ mb: 2 }}>
+          <FormLabel component="legend">
+            {Blockly.Msg.login_with || "Login with"}{" "}
+          </FormLabel>
+          <RadioGroup
+            row
+            value={authProvider}
+            onChange={(e) => setAuthProvider(e.target.value)}
           >
-            openSenseMap
-          </Link>{" "}
-          {Blockly.Msg.login_osem_account_02}.
-        </Alert>
+            <FormControlLabel
+              value="native"
+              control={<Radio />}
+              label={Blockly.Msg.login_nativeaccount || "Native login"}
+            />
+            <FormControlLabel
+              value="opensensemap"
+              control={<Radio />}
+              label="openSenseMap"
+            />
+          </RadioGroup>
+        </FormControl>
+        {authProvider === "native" && (
+          <div style={{ textAlign: "center" }}>
+            {Blockly.Msg.no_account || "No account yet?"}{" "}
+            <Link to="/user/register">
+              {Blockly.Msg.button_register || "Register now"}
+            </Link>
+          </div>
+        )}
+
+        {authProvider === "opensensemap" && (
+          <Alert>
+            {Blockly.Msg.login_osem_account_01}{" "}
+            <Link
+              color="primary"
+              rel="noreferrer"
+              target="_blank"
+              href="https://opensensemap.org/  "
+              underline="hover"
+            >
+              openSenseMap
+            </Link>{" "}
+            {Blockly.Msg.login_osem_account_02}.
+          </Alert>
+        )}
 
         <Snackbar
           open={snackbar}
           message={snackInfo.message}
           type={snackInfo.type}
           key={snackInfo.key}
+          onClose={() => setSnackbar(false)}
         />
 
         <form onSubmit={handleSubmit}>
@@ -160,6 +235,22 @@ export default function Login() {
             }}
             style={{ marginBottom: "10px" }}
           />
+
+          {/* Remember me checkbox */}
+          {authProvider === "native" && (
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  color="primary"
+                />
+              }
+              label={Blockly.Msg.login_remember || "Remember me"}
+              style={{ marginBottom: "10px" }}
+            />
+          )}
+
           <p>
             <Button
               color="primary"
@@ -178,30 +269,47 @@ export default function Login() {
           </p>
         </form>
 
-        <p style={{ textAlign: "center", fontSize: "0.8rem" }}>
-          <Link
-            rel="noreferrer"
-            target="_blank"
-            href="https://opensensemap.org/"
-            color="primary"
-            underline="hover"
-          >
-            {Blockly.Msg.login_lostpassword}
-          </Link>
-        </p>
-        <Divider variant="fullWidth" />
-        <p style={{ textAlign: "center", padding: "0 34px" }}>
-          {Blockly.Msg.login_createaccount}{" "}
-          <Link
-            rel="noreferrer"
-            target="_blank"
-            href="https://opensensemap.org/"
-            underline="hover"
-          >
-            openSenseMap
-          </Link>
-          .
-        </p>
+        {authProvider === "native" && (
+          <p style={{ textAlign: "center", fontSize: "0.8rem" }}>
+            <Button
+              variant="text"
+              color="primary"
+              size="small"
+              onClick={() => setShowPasswordReset(true)}
+            >
+              {Blockly.Msg.login_lostpassword || "Forgot your password?"}
+            </Button>
+          </p>
+        )}
+
+        {authProvider === "opensensemap" && (
+          <>
+            <p style={{ textAlign: "center", fontSize: "0.8rem" }}>
+              <Link
+                rel="noreferrer"
+                target="_blank"
+                href="https://opensensemap.org/  "
+                color="primary"
+                underline="hover"
+              >
+                {Blockly.Msg.login_lostpassword}
+              </Link>
+            </p>
+            <Divider variant="fullWidth" />
+            <p style={{ textAlign: "center", padding: "0 34px" }}>
+              {Blockly.Msg.login_createaccount}{" "}
+              <Link
+                rel="noreferrer"
+                target="_blank"
+                href="https://opensensemap.org/  "
+                underline="hover"
+              >
+                openSenseMap
+              </Link>
+              .
+            </p>
+          </>
+        )}
       </div>
     </div>
   );

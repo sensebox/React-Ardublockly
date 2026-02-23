@@ -513,17 +513,17 @@ const sensebox_eye = {
   parseKey: "_*_",
 };
 
-var board = sensebox_mcu;
+var board = sensebox_esp32;
 
-export const setBoard = (selectedBoard) => {
+export const setBoardHelper = (selectedBoard) => {
   switch (selectedBoard) {
-    case "mcu":
+    case "MCU":
       board = sensebox_mcu;
       break;
-    case "mini":
+    case "MCU:MINI":
       board = sensebox_mini;
       break;
-    case "esp32":
+    case "MCU-S2":
       board = sensebox_esp32;
       break;
     case "eye":

@@ -33,6 +33,7 @@ export const UI = {
   variables_UNDEF: "undefined",
   variables_set: "set",
   variables_to: "to",
+  toolbox_internet_and_comms: "Data transmission",
 
   /**
    * Tooltips
@@ -287,6 +288,17 @@ export const UI = {
   builder_review_text:
     "You can share your tutorial with other people directly from the link. If you want to publish your tutorial for all users in the overview you can activate it here. An administrator will view your tutorial and then activate it.",
 
+  // Gallery
+
+  gallery_home_head: "Gallery",
+  show_in_blockly: "Show",
+  searchQuery_placeholder: "Search for project title",
+  my_projects: "Show only my projects",
+  no_projects_found: "No projects found.",
+  delete_project: "Are you sure you want to delete this project?",
+  delete: "Delete",
+  edit_project: "Edit project",
+  confirm: "Confirm",
   /**
    * Login
    */
@@ -297,6 +309,10 @@ export const UI = {
   login_lostpassword: "Lost your password?",
   login_createaccount:
     "If you don't have an openSenseMap account please register on ",
+  login_remember: "Remember me",
+  login_nativeaccount: "Native login",
+  login_with: "Login with",
+  login_lostpassword: "Forgot your password?",
 
   /**
    * Navbar
@@ -412,4 +428,40 @@ export const UI = {
   goToApp_text:
     "The code has been compiled successfully. Start with the transfer by clicking on the button below, redirecting you to the senseBox:connect App ! ",
   goToApp_title: "Over-The-Air Transfer",
+  goToApp_embedded: "Go to Transfer Tab",
+  goToApp_text_embedded:
+    "The code has been compiled successfully. Click the button below to go to the transfer tab and complete the sketch transfer!",
+
+  transfer_headline: "Transfer file",
+  transfer_subline: "Drag the file from your downloads folder to the senseBox",
+  steps_to_transfer: "Steps for transfer:",
+
+  step_1: "1. Open the Downloads folder",
+  file: "2. Find the file ",
+  step_2: "",
+  mcu_to_learnmode:
+    "3. Set the MCU to learning mode (press the red reset button twice quickly)",
+  step_3_mcu: "4. Drag and drop {filename}.bin onto the senseBox",
+  step_3_esp32: "3. Drag and drop {filename}.bin onto the senseBox",
+
+  // Labels for the icons below (Steps row)
+  transfer_label_downloads: "Downloads",
+  transfer_label_file: "{filename}.bin",
+  transfer_label_sensebox: "senseBox",
+
+  // Help link
+  need_help: "Need help?",
+  compile_overlay_help_2: "Check out our documentation!",
+
+  button_register: "Register now",
+  register_head: "Create your account",
+  labels_confirm_password: "Confirm password",
+  messages_password_mismatch: "Passwords do not match.",
+  messages_password_too_short: "Password must be at least 6 characters.",
+  messages_register_error: "Please fill in all fields.",
+  already_have_account: "Already have an account?",
+  no_account: "If you don't have an account ",
+  register_success_head: "Account created!",
+  register_success_message: "Your account has been successfully created.",
+  register_success_login_prompt: "You can now log in with your credentials.",
 };

@@ -1,156 +1,249 @@
-import React, { Component } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { onChangeWorkspace, clearStats } from "../../actions/workspaceActions";
-
-import BlocklyComponent from "./BlocklyComponent";
-import BlocklySvg from "./BlocklySvg";
 
 import * as Blockly from "blockly/core";
 import "./blocks/index";
-import "./generator/index";
+import "@/components/Blockly/generator/index";
+
+import { onChangeWorkspace, clearStats } from "../../actions/workspaceActions";
 import { ZoomToFitControl } from "@blockly/zoom-to-fit";
+import { Backpack } from "@blockly/workspace-backpack";
 import { initialXml } from "./initialXml.js";
 import { getMaxInstances } from "./helpers/maxInstances";
-import { Backpack } from "@blockly/workspace-backpack";
+import {
+  EMBEDDED_BLOCKLY_CONFIG,
+  DEFAULT_BLOCKLY_CONFIG,
+} from "../../config/embeddedConfig";
 
-class BlocklyWindow extends Component {
-  constructor(props) {
-    super(props);
-    this.simpleWorkspace = React.createRef();
-  }
+import BlocklySvg from "./BlocklySvg";
 
-  componentDidMount() {
-    const workspace = Blockly.getMainWorkspace();
-    this.props.onChangeWorkspace({});
-    this.props.clearStats();
-    workspace.addChangeListener(Blockly.Events.disableOrphans);
-    workspace.addChangeListener((event) => {
-      this.props.onChangeWorkspace(event);
+import "blockly/blocks";
+import "@blockly/toolbox-search"; // auto-registers
+import { BlocklyComponent } from "./BlocklyComponent";
 
-      // switch on that a block is displayed disabled or not depending on whether it is correctly connected
-      // for SVG display, a deactivated block in the display is undesirable
-      if (this.props.blockDisabled) {
+export default function BlocklyWindow(props) {
+  const dispatch = useDispatch();
+  const renderer = useSelector((state) => state.general.renderer);
+  const sounds = useSelector((state) => state.general.sounds);
+  const language = useSelector((state) => state.general.language);
+  const selectedBoard = useSelector((state) => state.board.board);
+  const isEmbedded = useSelector((state) => state.general.embeddedMode);
+
+  const {
+    svg,
+    blockDisabled,
+    blocklyCSS,
+    initialXml: initialXmlProp,
+    zoomControls,
+    zoom,
+    grid,
+    move,
+    readOnly,
+    tutorial,
+    onWorkspaceChanged,
+  } = props;
+
+  // One-time workspace setup
+  useEffect(() => {
+    const ws = Blockly.getMainWorkspace();
+    if (!ws) return;
+
+    dispatch(onChangeWorkspace({}));
+    dispatch(clearStats());
+
+    const orphanDisabler = Blockly.Events.disableOrphans;
+    ws.addChangeListener(orphanDisabler);
+
+    const onAnyChange = (event) => {
+      dispatch(onChangeWorkspace(event));
+      if (blockDisabled) {
         Blockly.Events.disableOrphans(event);
       }
-    });
-    Blockly.svgResize(workspace);
-    const zoomToFit = new ZoomToFitControl(workspace);
-    zoomToFit.init();
+    };
+    ws.addChangeListener(onAnyChange);
 
-    // Initialize plugin.
-    const backpack = new Backpack(workspace);
+    // 🔥 NEU: Listener für Workspace-Änderungen, die ein Speichern auslösen
+    const onWorkspaceChangedListener = (event) => {
+      // 🔥 Reagiere nur auf Events, die eine *beendete* Änderung anzeigen
+      if (
+        // Ziehen beendet
+        // Block erstellt/gelöscht
+        event.type === Blockly.Events.BLOCK_CREATE ||
+        event.type === Blockly.Events.BLOCK_DELETE
+      ) {
+        // 🔥 Rufe das Callback auf
+        if (onWorkspaceChanged) {
+          // Kein setTimeout 0 nötig, da END_DRAG nur einmal am Ende kommt
+          onWorkspaceChanged();
+        }
+      }
+      // Alles andere (z.B. BLOCK_MOVE, SELECT, UI) wird ignoriert
+    };
+    ws.addChangeListener(onWorkspaceChangedListener);
 
+    // UI helpers
+    Blockly.svgResize(ws);
+
+    if (!isEmbedded) {
+      const zoomToFit = new ZoomToFitControl(ws);
+      zoomToFit.init();
+    }
+    const backpack = new Backpack(ws);
     backpack.init();
-  }
 
-  componentDidUpdate(props) {
-    const workspace = Blockly.getMainWorkspace();
-    var xml = this.props.initialXml;
-    if (props.selectedBoard !== this.props.selectedBoard) {
-      xml = localStorage.getItem("autoSaveXML");
-      // change board
-      if (!xml) xml = initialXml;
-      var xmlDom = Blockly.utils.xml.textToDom(xml);
-      Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, workspace);
-    }
+    // Cleanup: remove listeners
+    return () => {
+      if (ws && onAnyChange) ws.removeChangeListener(onAnyChange);
+      if (ws && orphanDisabler) ws.removeChangeListener(orphanDisabler);
+      // zoomToFit/backpack are tied to workspace; disposed with ws
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-    // if svg is true, then the update process is done in the BlocklySvg component
-    if (props.initialXml !== xml && !this.props.svg) {
-      // guarantees that the current xml-code (this.props.initialXml) is rendered
-      workspace.clear();
-      if (!xml) xml = initialXml;
-      Blockly.Xml.domToWorkspace(Blockly.utils.xml.textToDom(xml), workspace);
+  // Handle board change → reload XML (from localStorage or fallback)
+  useEffect(() => {
+    const ws = Blockly.getMainWorkspace();
+    if (!ws) return;
+    let xml = localStorage.getItem("autoSaveXML");
+    if (!xml) xml = initialXml;
+    try {
+      const xmlDom = Blockly.utils.xml.textToDom(xml);
+      Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, ws);
+    } catch (e) {
+      console.warn("Failed to load XML on board change:", e);
+      ws.clear();
     }
-    if (props.language !== this.props.language) {
-      // change language
-      xml = localStorage.getItem("autoSaveXML");
-      if (!xml) xml = initialXml;
-      xmlDom = Blockly.utils.xml.textToDom(xml);
-      Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, workspace);
-      // var toolbox = workspace.getToolbox();
-      // workspace.updateToolbox(toolbox.toolboxDef_);
-    }
-    Blockly.svgResize(workspace);
-  }
+    Blockly.svgResize(ws);
+  }, [selectedBoard]);
 
-  render() {
-    return (
-      <div>
-        <BlocklyComponent
-          ref={this.simpleWorkspace}
-          style={this.props.svg ? { height: 0 } : this.props.blocklyCSS}
-          readOnly={
-            this.props.readOnly !== undefined ? this.props.readOnly : false
-          }
-          trashcan={
-            this.props.trashcan !== undefined ? this.props.trashcan : true
-          }
-          renderer={this.props.renderer}
-          sounds={this.props.sounds}
-          maxInstances={getMaxInstances()}
-          zoom={{
-            // https://developers.google.com/blockly/guides/configure/web/zoom
-            controls:
-              this.props.zoomControls !== undefined
-                ? this.props.zoomControls
-                : true,
-            wheel: false,
-            startScale: 1,
-            maxScale: 3,
-            minScale: 0.3,
-            scaleSpeed: 1.2,
-          }}
-          grid={
-            this.props.grid !== undefined && !this.props.grid
-              ? {}
-              : {
-                  // https://developers.google.com/blockly/guides/configure/web/grid
-                  spacing: 20,
-                  length: 1,
-                  colour: "#4EAF47", // senseBox-green
-                  snap: false,
-                }
-          }
-          media={"/media/blockly/"}
-          move={
-            this.props.move !== undefined && !this.props.move
-              ? {}
-              : {
-                  // https://developers.google.com/blockly/guides/configure/web/move
-                  scrollbars: true,
-                  drag: true,
-                  wheel: true,
-                }
-          }
-          initialXml={
-            this.props.initialXml ? this.props.initialXml : initialXml
-          }
-        ></BlocklyComponent>
-        {this.props.svg && this.props.initialXml ? (
-          <BlocklySvg initialXml={this.props.initialXml} />
-        ) : null}
-      </div>
-    );
-  }
+  // Ensure current XML is rendered when initialXml changes and SVG mode is off
+  useEffect(() => {
+    if (svg) return; // in SVG mode, BlocklySvg übernimmt Render-Update
+    const ws = Blockly.getMainWorkspace();
+    if (!ws) return;
+    const xml = initialXmlProp || initialXml;
+    try {
+      ws.clear();
+      Blockly.Xml.domToWorkspace(Blockly.utils.xml.textToDom(xml), ws);
+    } catch (e) {
+      console.warn("Failed to apply initialXml:", e);
+    }
+    Blockly.svgResize(ws);
+  }, [initialXmlProp, svg]);
+
+  // Language change → rehydrate XML (preserve current or autosave)
+  useEffect(() => {
+    const ws = Blockly.getMainWorkspace();
+    if (!ws) return;
+    let xml = localStorage.getItem("autoSaveXML");
+    if (!xml) xml = initialXml;
+    try {
+      const xmlDom = Blockly.utils.xml.textToDom(xml);
+      Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, ws);
+    } catch (e) {
+      console.warn("Failed to reload on language change:", e);
+      ws.clear();
+    }
+    Blockly.svgResize(ws);
+  }, [language]);
+
+  // Debounced window resize → svgResize
+  useEffect(() => {
+    const ws = Blockly.getMainWorkspace();
+    if (!ws) return;
+    let t;
+    const onResize = () => {
+      clearTimeout(t);
+      t = setTimeout(() => Blockly.svgResize(ws), 150);
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  // Compute zoom/grid/move config with sensible defaults
+  const zoomConfig = useMemo(() => {
+    if (zoom !== undefined) return zoom;
+
+    // Use embedded config for embedded mode, default config otherwise
+    const baseConfig = isEmbedded
+      ? EMBEDDED_BLOCKLY_CONFIG.zoom
+      : DEFAULT_BLOCKLY_CONFIG.zoom;
+
+    return {
+      ...baseConfig,
+      controls: zoomControls !== undefined ? zoomControls : baseConfig.controls,
+    };
+  }, [zoom, zoomControls, isEmbedded]);
+
+  const gridConfig = useMemo(() => {
+    if (grid === undefined || grid === false) return {};
+
+    if (typeof grid === "object") return grid;
+
+    return isEmbedded
+      ? EMBEDDED_BLOCKLY_CONFIG.grid
+      : DEFAULT_BLOCKLY_CONFIG.grid;
+  }, [grid, isEmbedded]);
+
+  const moveConfig = useMemo(() => {
+    if (move === undefined || move === false) return {};
+
+    if (typeof move === "object") return move;
+
+    return isEmbedded
+      ? EMBEDDED_BLOCKLY_CONFIG.move
+      : DEFAULT_BLOCKLY_CONFIG.move;
+  }, [move, isEmbedded]);
+
+  const containerStyles = isEmbedded
+    ? {
+        height: "100%",
+        width: "100%",
+      }
+    : {};
+
+  return (
+    <div
+      style={
+        tutorial
+          ? {
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+              height: "100%",
+            }
+          : { containerStyles }
+      }
+    >
+      <BlocklyComponent
+        style={svg ? { height: 0 } : blocklyCSS}
+        readOnly={readOnly !== undefined ? readOnly : false}
+        renderer={renderer}
+        sounds={sounds}
+        maxInstances={getMaxInstances()}
+        zoom={zoomConfig}
+        grid={gridConfig}
+        media={"/media/blockly/"}
+        move={moveConfig}
+        initialXml={initialXmlProp ? initialXmlProp : initialXml}
+      />
+      {svg && initialXmlProp ? (
+        <BlocklySvg initialXml={initialXmlProp} />
+      ) : null}
+    </div>
+  );
 }
 
 BlocklyWindow.propTypes = {
-  onChangeWorkspace: PropTypes.func.isRequired,
-  clearStats: PropTypes.func.isRequired,
-  renderer: PropTypes.string.isRequired,
-  sounds: PropTypes.bool.isRequired,
-  language: PropTypes.string.isRequired,
-  selectedBoard: PropTypes.string.isRequired,
+  svg: PropTypes.bool,
+  blockDisabled: PropTypes.bool,
+  blocklyCSS: PropTypes.object,
+  initialXml: PropTypes.string,
+  zoomControls: PropTypes.bool,
+  zoom: PropTypes.object,
+  grid: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
+  move: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
+  readOnly: PropTypes.bool,
 };
-
-const mapStateToProps = (state) => ({
-  renderer: state.general.renderer,
-  sounds: state.general.sounds,
-  language: state.general.language,
-  selectedBoard: state.board.board,
-});
-
-export default connect(mapStateToProps, { onChangeWorkspace, clearStats })(
-  BlocklyWindow,
-);

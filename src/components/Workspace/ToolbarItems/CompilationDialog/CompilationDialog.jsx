@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import {
   Dialog,
   DialogContent,
+  DialogTitle,
   Box,
   Stepper,
   Step,
@@ -21,6 +22,10 @@ import * as Blockly from "blockly/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { ErrorView } from "../../../ui/ErrorView.jsx";
+import FolderIcon from "@mui/icons-material/Folder";
+import UsbIcon from "@mui/icons-material/Usb";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import TransferStep from "./TransferStep";
 
 const headerStyle = {
   fontSize: "1.5rem",
@@ -29,20 +34,14 @@ const headerStyle = {
   fontWeight: "bold",
 };
 
-function CompilationDialog({
-  open,
-  code,
-  selectedBoard,
-  filename,
-  onClose,
-  platform,
-}) {
+function CompilationDialog({ open, code, selectedBoard, onClose, platform, isEmbedded = false }) {
   const [activeStep, setActiveStep] = useState(0);
   const [sketchId, setSketchId] = useState(null);
   const [error, setError] = useState(null);
   const [counter, setCounter] = useState(0);
+  const filename = useSelector((state) => state.workspace.name) || "sketch";
   const compilerUrl = useSelector((state) => state.general.compiler);
-
+  const sessionId = useSelector((state) => state.general.sessionId);
   useEffect(() => {
     if (open) {
       handleCompile();
@@ -52,7 +51,6 @@ function CompilationDialog({
       setSketchId(null);
       setError(null);
     }
-    console.log("selected board:", selectedBoard);
   }, [open]);
 
   useEffect(() => {
@@ -60,36 +58,52 @@ function CompilationDialog({
     if (activeStep === 1 && !platform) {
       handleDownloadURL();
       timeoutId = setTimeout(() => {
-        setActiveStep(2);
+        if (isEmbedded) {
+          onClose();
+          setActiveStep(0);
+          setSketchId(null);
+          setError(null);
+        } else {
+          setActiveStep(2);
+        }
       }, 5000);
     }
     return () => clearTimeout(timeoutId);
-  }, [activeStep]);
+  }, [activeStep, isEmbedded, onClose]);
 
   const handleCompile = async () => {
     try {
-      let board;
-      switch (selectedBoard) {
-        case "mcu":
-          board = "sensebox-mcu";
-          break;
-        case "mini":
-          board = "sensebox-mini";
-          break;
-        case "eye":
-          board = "sensebox-eye";
-          break;
-        default:
-          board = "sensebox-esp32s2";
+      // In embedded mode, generate fresh code from workspace instead of using stale prop
+      // This ensures we always have the latest code in embedded mode where CodeViewer
+      // doesn't trigger frequent re-renders. Main route uses the prop as it works fine there.
+      let codeToCompile = code;
+      
+      if (isEmbedded) {
+        const workspace = Blockly.getMainWorkspace();
+        if (workspace && Blockly.Generator && Blockly.Generator.Arduino) {
+          try {
+            codeToCompile = Blockly.Generator.Arduino.workspaceToCode(workspace);
+          } catch (err) {
+            console.warn("Failed to generate code from workspace, using prop:", err);
+          }
+        }
       }
+
+      const board =
+        selectedBoard === "MCU" || selectedBoard === "MCU:MINI"
+          ? "sensebox-mcu"
+          : selectedBoard === "MCU-S2"
+          ? "sensebox-esp32s2"
+          : "sensebox-eye";
       const response = await fetch(`${compilerUrl}/compile`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          sketch: code,
+          sketch: codeToCompile,
           board,
+          projectId: sessionId,
         }),
       });
       const data = await response.json();
@@ -117,12 +131,25 @@ function CompilationDialog({
   };
 
   const handleClose = (event, reason) => {
+    // In embedded mode, allow closing on all steps except during compilation
+    if (isEmbedded) {
+      if (activeStep === 0 && !error) {
+        return; // Don't allow closing during compilation
+      }
+      // Allow closing on all other steps in embedded mode
+      onClose();
+      setActiveStep(0);
+      setSketchId(null);
+      setError(null);
+      return;
+    }
+
+    // Original logic for non-embedded mode
     const shouldClose =
       error ||
       activeStep === 2 ||
-      (platform && activeStep === 1)(
-        reason !== "backdropClick" && reason !== "escapeKeyDown",
-      );
+      (activeStep === 1 && platform && !error) ||
+      (reason !== "backdropClick" && reason !== "escapeKeyDown");
 
     if (!shouldClose) return;
 
@@ -139,12 +166,27 @@ function CompilationDialog({
       disableEscapeKeyDown={activeStep !== 2 || !error}
       // Feste Größe über PaperProps: Breite und Höhe passen für alle Steps
       PaperProps={{
-        style: { width: "600px", minHeight: "600px", maxHeight: "600px" },
+        style: { width: "600px", minHeight: "700px", maxHeight: "600px" },
       }}
     >
+      {isEmbedded && activeStep >= 1 && (
+        <DialogTitle style={{ padding: "8px 16px" }}>
+          <IconButton
+            onClick={() => handleClose(null, "backdropClick")}
+            style={{
+              position: "absolute",
+              right: 8,
+              top: 8,
+              color: "#666"
+            }}
+          >
+            <FontAwesomeIcon icon={faXmark} />
+          </IconButton>
+        </DialogTitle>
+      )}
       <DialogContent
         style={{
-          padding: "2rem",
+          padding: isEmbedded && activeStep >= 1 ? "1rem 2rem 2rem 2rem" : "2rem",
           display: "flex",
           flexDirection: "column",
           height: "100%",
@@ -183,68 +225,44 @@ function CompilationDialog({
             <div
               style={{ display: "flex", flexDirection: "column", gap: "12px" }}
             >
-              <span style={headerStyle}> {Blockly.Msg.goToApp_title} </span>
-              <span style={{ margin: "1rem" }}>{Blockly.Msg.goToApp_text}</span>
+              <span style={headerStyle}> 
+                {Blockly.Msg.goToApp_title} 
+              </span>
+              <span style={{ margin: "1rem" }}>
+                {isEmbedded ? Blockly.Msg.goToApp_text_embedded : Blockly.Msg.goToApp_text}
+              </span>
               <a
                 href={`blocklyconnect-app://sketch/${filename}/${sketchId}/${selectedBoard}`}
               >
                 <Button
                   style={{ color: "white", margin: "1rem" }}
                   variant="contained"
+                  onClick={() => {
+                    if (isEmbedded) {
+                      // Close modal after clicking button in embedded mode
+                      onClose();
+                      setActiveStep(0);
+                      setSketchId(null);
+                      setError(null);
+                    }
+                  }}
                 >
                   <FontAwesomeIcon
                     style={{ marginRight: "5px" }}
                     icon={faLink}
                   />
-                  {Blockly.Msg.goToApp}
+                  {isEmbedded ? Blockly.Msg.goToApp_embedded : Blockly.Msg.goToApp}
                 </Button>
               </a>
             </div>
           )}
-          {activeStep === 2 && !error && (
-            <div style={{ position: "relative" }}>
-              <IconButton
-                onClick={handleClose}
-                style={{
-                  position: "absolute",
-                  top: "-31px",
-                  right: "-50px",
-                  fontSize: "2rem",
-                  color: "#4EAF47",
-                  fontWeight: "bold",
-                  cursor: "pointer",
-                  borderRadius: "50%",
-                  width: "40px",
-                  height: "40px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <FontAwesomeIcon icon={faXmark} />
-              </IconButton>
-
-              <div style={{ textAlign: "center" }}>
-                <span style={headerStyle}>
-                  {Blockly.Msg.compile_overlay_transfer}
-                </span>
-                <DragDropIcon />
-                <div style={{ marginTop: "1rem" }}>
-                  Übertrage den Sketch per Drag & Drop auf deine MCU.
-                </div>
-                <span>
-                  Benötigst du mehr Hilfe, dann schau in{" "}
-                  <a href="https://blockly.sensebox.de/faq">unser FAQ</a>
-                </span>
-              </div>
-            </div>
-          )}
+          {activeStep === 2 && !error && <TransferStep />}
         </Box>
         <Box style={{ flexShrink: 0, paddingTop: "1rem", marginTop: "1rem" }}>
           <Stepper activeStep={activeStep} alternativeLabel>
             <Step key={1}>
               <StepLabel
-                error={error}
+                error={!!error}
                 optional={
                   error && (
                     <Typography variant="caption" color="error">
@@ -282,6 +300,7 @@ CompilationDialog.propTypes = {
   filename: PropTypes.string.isRequired,
   platform: PropTypes.bool.isRequired,
   appLink: PropTypes.string,
+  isEmbedded: PropTypes.bool,
 };
 
 CompilationDialog.defaultProps = {
@@ -290,6 +309,7 @@ CompilationDialog.defaultProps = {
   filename: "sketch",
   platform: false,
   onCompileComplete: () => {},
+  isEmbedded: false,
 };
 
 export default CompilationDialog;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
-import { Link, useLocation, withRouter } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { logout } from "../actions/authActions";
 import senseboxLogo from "@/sensebox_logo.svg";
 
@@ -53,6 +53,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { setLanguage } from "../actions/generalActions";
 import { setBoard } from "../actions/boardAction";
+import { De } from "./Blockly/msg/de";
+import { En } from "./Blockly/msg/en";
 
 const useStyles = makeStyles((theme) => ({
   drawerWidth: {
@@ -111,28 +113,15 @@ const Navbar = () => {
 
   const changeLanguage = (val) => {
     dispatch(setLanguage(val));
+    if (val === "de_DE") {
+      Blockly.setLocale(De);
+    } else if (val === "en_US") {
+      Blockly.setLocale(En);
+    }
     handleLangClose();
   };
   const changeBoard = (val) => {
-    let board;
-    switch (val) {
-      case "MCU":
-        board = "mcu";
-        break;
-      case "MCU:mini":
-        board = "mini";
-        break;
-      case "MCU-S2":
-        board = "esp32";
-        break;
-      case "Eye":
-        board = "eye";
-        break;
-      default:
-        board = "mcu";
-    }
-    dispatch(setBoard(board));
-
+    dispatch(setBoard(val));
     handleBoardClose();
   };
   const handleLogout = () => {
@@ -202,6 +191,7 @@ const Navbar = () => {
               <>
                 <div style={{ padding: "12px" }}>
                   <Button
+                    id="navbar-selected-board" // 👈 eindeutig für Cypress
                     ref={mcuRef}
                     onClick={handleBoardOpen}
                     startIcon={<FontAwesomeIcon icon={faMicrochip} />}
@@ -221,15 +211,10 @@ const Navbar = () => {
                       borderRadius: "25px",
                     }}
                   >
-                    {selectedBoard === "mcu"
-                      ? "MCU"
-                      : selectedBoard === "mini"
-                        ? "MCU:mini"
-                        : selectedBoard === "esp32"
-                          ? "MCU-S2"
-                          : "Eye"}
+                    {selectedBoard === "MCU:MINI" ? "MCU:mini" : selectedBoard}
                   </Button>
                   <Menu
+                    id="navbarBoardSelect"
                     anchorEl={anchorElBoard}
                     anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
                     transformOrigin={{ vertical: "top", horizontal: "center" }}
@@ -242,7 +227,7 @@ const Navbar = () => {
                         value={b}
                         onClick={() => changeBoard(b)}
                       >
-                        {b}
+                        {b === "MCU:MINI" ? "MCU:mini" : b}
                       </MenuItem>
                     ))}
                   </Menu>
@@ -252,6 +237,7 @@ const Navbar = () => {
                   <Button
                     ref={langRef}
                     onClick={handleLangOpen}
+                    id="navbar-language-select"
                     startIcon={
                       <FontAwesomeIcon
                         icon={
@@ -284,10 +270,16 @@ const Navbar = () => {
                     open={Boolean(anchorElLang)}
                     onClose={handleLangClose}
                   >
-                    <MenuItem onClick={() => changeLanguage("de_DE")}>
+                    <MenuItem
+                      id="navbar-language-select-de"
+                      onClick={() => changeLanguage("de_DE")}
+                    >
                       Deutsch
                     </MenuItem>
-                    <MenuItem onClick={() => changeLanguage("en_US")}>
+                    <MenuItem
+                      id="navbar-language-select-en"
+                      onClick={() => changeLanguage("en_US")}
+                    >
                       English
                     </MenuItem>
                   </Menu>
@@ -440,8 +432,7 @@ const Navbar = () => {
               text: Blockly.Msg.navbar_tutorialbuilder,
               icon: faTools,
               link: "/tutorial/builder",
-              restriction:
-                user && user.blocklyRole !== "user" && isAuthenticated,
+              restriction: user,
             },
             {
               text: Blockly.Msg.navbar_gallery,
@@ -528,17 +519,6 @@ const Navbar = () => {
           )}
         </List>
       </Drawer>
-
-      {(tutorialIsLoading || projectIsLoading) && (
-        <LinearProgress
-          style={{
-            marginBottom: "30px",
-            boxShadow:
-              "0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12)",
-          }}
-        />
-      )}
-
       <Tour
         steps={isHome ? home() : assessment()}
         isOpen={isTourOpen}
@@ -557,4 +537,4 @@ Navbar.propTypes = {
   selectedBoard: PropTypes.string,
 };
 
-export default withRouter(Navbar);
+export default Navbar;

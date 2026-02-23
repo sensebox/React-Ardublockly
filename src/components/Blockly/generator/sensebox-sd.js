@@ -7,36 +7,57 @@ import * as Blockly from "blockly";
  * @param {Blockly.Block} block Block to generate the code from.
  * @return {array} Completed code with order of operation.
  */
-
+// -------- GENERATOR ----------
 Blockly.Generator.Arduino.forBlock["sensebox_sd_create_file"] = function (
   block,
   generator,
 ) {
-  var filename = this.getFieldValue("Filename");
-  var extension = this.getFieldValue("extension");
-  var newFileName = filename.concat(".", extension);
+  var filenameCode =
+    generator
+      .valueToCode(block, "FILENAME", generator.ORDER_ATOMIC)
+      .replace(/"/g, "") || '"Data"';
+
+  var extension = block.getFieldValue("extension");
+  var newfilenamecode = filenameCode.replace(/"/g, "");
+  var newFileName = `"${filenameCode + "." + extension}"`;
+
   Blockly.Generator.Arduino.libraries_["library_spi"] = "#include <SPI.h>";
   Blockly.Generator.Arduino.libraries_["library_sd"] = "#include <SD.h>";
-  Blockly.Generator.Arduino.definitions_["define_" + filename] =
-    `File ${filename};`;
+
   Blockly.Generator.Arduino.setupCode_["sensebox_sd"] = "SD.begin(28);\n";
-  Blockly.Generator.Arduino.setupCode_["sensebox_sd" + filename] =
-    `${filename} = SD.open("${newFileName}", FILE_WRITE);\n${filename}.close();\n`;
-  var code = "";
-  return code;
+
+  Blockly.Generator.Arduino.setupCode_[`sensebox_sd_create${newfilenamecode}`] =
+    `sdFile= SD.open(${newFileName}, FILE_WRITE);\n sdFile.close();\n`;
+
+  return "";
 };
 
 Blockly.Generator.Arduino.forBlock["sensebox_sd_open_file"] = function (
   block,
   generator,
 ) {
-  var filename = this.getFieldValue("Filename");
-  var extension = this.getFieldValue("extension");
-  var newFileName = filename.concat(".", extension);
-  var branch = Blockly.Generator.Arduino.statementToCode(block, "SD");
-  var code = `${filename} = SD.open("${newFileName}", FILE_WRITE);\n`;
+  // input from block fields
+  var filenameCode =
+    generator
+      .valueToCode(block, "FILENAME", generator.ORDER_ATOMIC)
+      .replace(/"/g, "") || "Data";
+  var extension = block.getFieldValue("extension");
+
+  var newFileName = `"${filenameCode + "." + extension}"`;
+
+  var branch = generator.statementToCode(block, "SD");
+
+  var code = `sdFile = SD.open(${newFileName}, FILE_WRITE);\n`;
   code += branch;
-  code += `${filename}.close();\n`;
+  code += "sdFile.close();\n";
+
+  Blockly.Generator.Arduino.libraries_["library_spi"] = "#include <SPI.h>";
+  Blockly.Generator.Arduino.libraries_["library_sd"] = "#include <SD.h>";
+
+  Blockly.Generator.Arduino.definitions_["define_sdFile"] = "File sdFile;";
+
+  Blockly.Generator.Arduino.setupCode_["sensebox_sd"] = "SD.begin(28);\n";
+
   return code;
 };
 
@@ -61,9 +82,9 @@ Blockly.Generator.Arduino.forBlock["sensebox_sd_write_file"] = function (
   }
   var code = "";
   if (branch === "gps.getLongitude()" || branch === "gps.getLatitude()") {
-    code = `${filename}.print${linebreak}(${branch},5);\n`;
+    code = `sdFile.print${linebreak}(${branch},5);\n`;
   } else {
-    code = `${filename}.print${linebreak}(${branch});\n`;
+    code = `sdFile.print${linebreak}(${branch});\n`;
   }
   return code;
 };
@@ -231,37 +252,86 @@ Blockly.Generator.Arduino.forBlock["sensebox_sd_save_for_osem"] = function (
 
 Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_sd_create_file"] =
   function (block, generator) {
-    var filename = this.getFieldValue("Filename");
-    var extension = this.getFieldValue("extension");
-    var newFileName = filename.concat(".", extension);
-
+    // Bibliotheken
     Blockly.Generator.Arduino.libraries_["library_sd"] = `#include <SD.h>`;
     Blockly.Generator.Arduino.libraries_["library_spi"] = `#include <SPI.h>`;
     Blockly.Generator.Arduino.libraries_["library_fs"] = `#include "FS.h"`;
 
-    Blockly.Generator.Arduino.definitions_["define_" + filename] =
-      `File ${filename};`;
+    // Globale File-Variable
+    Blockly.Generator.Arduino.definitions_["define_sdFile"] = "File sdFile;";
+
+    // SPIClass für SD
     Blockly.Generator.Arduino.definitions_["define_sdspi"] =
       `SPIClass sdspi = SPIClass();`;
+
+    // input from block fields
+    var filenameCode =
+      generator
+        .valueToCode(block, "FILENAME", generator.ORDER_ATOMIC)
+        .replace(/"/g, "") || "Data";
+    var extension = block.getFieldValue("extension");
+
+    // Setup: SD initialisieren
     Blockly.Generator.Arduino.setupCode_["sensebox_esp32s2_sd"] =
-      "//Init SD\n pinMode(SD_ENABLE,OUTPUT);\n digitalWrite(SD_ENABLE,LOW);\nsdspi.begin(VSPI_SCLK,VSPI_MISO,VSPI_MOSI,VSPI_SS);\n SD.begin(VSPI_SS,sdspi);";
-    Blockly.Generator.Arduino.setupCode_["sensebox_esp32s2_sd" + filename] =
-      ` ${filename} = SD.open("/${newFileName}", FILE_WRITE);\n ${filename}.close();\n `;
-    var code = "";
-    return code;
+      "// Init SD\n" +
+      "pinMode(SD_ENABLE, OUTPUT);\n" +
+      "digitalWrite(SD_ENABLE, LOW);\n" +
+      "sdspi.begin(VSPI_SCLK, VSPI_MISO, VSPI_MOSI, VSPI_SS);\n" +
+      "SD.begin(VSPI_SS, sdspi);";
+
+    // Setup: Datei anlegen
+    Blockly.Generator.Arduino.setupCode_[
+      `sensebox_esp32s2_sd_create${filenameCode}`
+    ] = `sdFile = SD.open("/${filenameCode + "." + extension}" , FILE_WRITE);\n
+      sdFile.close();`;
+
+    return "";
   };
 
 Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_sd_open_file"] = function (
   block,
   generator,
 ) {
-  var filename = this.getFieldValue("Filename");
-  var extension = this.getFieldValue("extension");
-  var newFileName = filename.concat(".", extension);
-  var branch = Blockly.Generator.Arduino.statementToCode(block, "SD");
-  var code = ` ${filename} = SD.open("/${newFileName}", FILE_APPEND);\n`;
+  // Dateiname (Variable oder String literal)
+  var filenameCode =
+    generator
+      .valueToCode(block, "FILENAME", generator.ORDER_ATOMIC)
+      .replace(/"/g, "") || '"Data"';
+
+  // Endung aus Dropdown
+  var extension = block.getFieldValue("extension");
+
+  // Gesamter Dateiname
+  var newFileName = `${filenameCode}.${extension}`;
+
+  // Statements innerhalb des Blocks
+  var branch = generator.statementToCode(block, "SD");
+
+  // Arduino-Code für Datei öffnen → Inhalte → schließen
+  var code = `sdFile = SD.open("/${newFileName}", FILE_APPEND);\n`;
   code += branch;
-  code += ` ${filename}.close();\n`;
+  code += "sdFile.close();\n";
+
+  // Globale File-Variable definieren
+  Blockly.Generator.Arduino.definitions_["define_sdFile"] = "File sdFile;";
+
+  // Bibliotheken für SD
+  Blockly.Generator.Arduino.libraries_["library_sd"] = `#include <SD.h>`;
+  Blockly.Generator.Arduino.libraries_["library_spi"] = `#include <SPI.h>`;
+  Blockly.Generator.Arduino.libraries_["library_fs"] = `#include "FS.h"`;
+
+  // SPI-Objekt sicherstellen
+  Blockly.Generator.Arduino.definitions_["define_sdspi"] =
+    `SPIClass sdspi = SPIClass();`;
+
+  // SD-Init im Setup (nur einmal)
+  Blockly.Generator.Arduino.setupCode_["sensebox_esp32s2_sd"] =
+    "// Init SD\n" +
+    "pinMode(SD_ENABLE, OUTPUT);\n" +
+    "digitalWrite(SD_ENABLE, LOW);\n" +
+    "sdspi.begin(VSPI_SCLK, VSPI_MISO, VSPI_MOSI, VSPI_SS);\n" +
+    "SD.begin(VSPI_SS, sdspi);";
+
   return code;
 };
 
@@ -285,6 +355,25 @@ Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_sd_write_file"] =
       linebreak = "";
     }
 
-    var code = `${filename}.print${linebreak}(${branch});\n`;
+    var code = `sdFile.print${linebreak}(${branch});\n`;
     return code;
   };
+
+Blockly.Generator.Arduino.forBlock["sensebox_sd_exists"] = function (
+  block,
+  generator,
+) {
+  // var filename = this.getFieldValue("FILENAME");
+  var filename = Blockly.Generator.Arduino.valueToCode(
+    this,
+    "FILENAME",
+    Blockly.Generator.Arduino.ORDER_ATOMIC,
+  );
+
+  Blockly.Generator.Arduino.libraries_["library_spi"] = "#include <SPI.h>";
+  Blockly.Generator.Arduino.libraries_["library_sd"] = "#include <SD.h>";
+  Blockly.Generator.Arduino.setupCode_["sensebox_sd"] = "SD.begin(28);\n";
+
+  var code = `SD.exists(${filename})`;
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
+};

@@ -1,80 +1,156 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import "@blockly/block-plus-minus";
 import { TypedVariableModal } from "@blockly/plugin-typed-variable-modal";
 import * as Blockly from "blockly/core";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 import { ToolboxMcu } from "./ToolboxMcu";
 import { ToolboxEsp } from "./ToolboxEsp";
+import "./toolbox_styles.css";
 
-class Toolbox extends React.Component {
-  componentDidUpdate(props) {
-    this.props.workspace.registerToolboxCategoryCallback(
+const Toolbox = ({ workspace, toolbox }) => {
+  const selectedBoard = useSelector((state) => state.board.board);
+  const language = useSelector((state) => state.general.language);
+  const setupIntervalRef = useRef(null);
+
+  useEffect(() => {
+    if (!workspace || !toolbox?.current) return;
+
+    // --- Typed Variable Modal Setup ---
+    workspace.registerToolboxCategoryCallback(
       "CREATE_TYPED_VARIABLE",
-      this.createFlyout,
+      createFlyout,
     );
 
-    const typedVarModal = new TypedVariableModal(
-      this.props.workspace,
-      "callbackName",
-      [
-        [`${Blockly.Msg.variable_NUMBER}`, "int"],
-        [`${Blockly.Msg.variable_LONG}`, "long"],
-        [`${Blockly.Msg.variable_DECIMAL}`, "float"],
-        [`${Blockly.Msg.variables_TEXT}`, "String"],
-        [`${Blockly.Msg.variables_CHARACTER}`, "char"],
-        [`${Blockly.Msg.variables_BOOLEAN}`, "boolean"],
-        [`${Blockly.Msg.variable_BITMAP}`, "bitmap"],
-      ],
-    );
+    const typedVarModal = new TypedVariableModal(workspace, "callbackName", [
+      [Blockly.Msg.variable_NUMBER, "int"],
+      [Blockly.Msg.variable_LONG, "long"],
+      [Blockly.Msg.variable_DECIMAL, "float"],
+      [Blockly.Msg.variables_TEXT, "String"],
+      [Blockly.Msg.variables_CHARACTER, "char"],
+      [Blockly.Msg.variables_BOOLEAN, "boolean"],
+      [Blockly.Msg.variable_BITMAP, "bitmap"],
+    ]);
     typedVarModal.init();
-    if (props.selectedBoard !== this.props.selectedBoard) {
-      console.log("change board");
-      console.log(this.props.selectedBoard);
-      this.setState({ board: this.props.selectedBoard });
+
+    // --- Toolbox aktualisieren ---
+    workspace.updateToolbox(toolbox.current);
+
+    // --- Prevent flyout from closing when variable is created ---
+    let variableCreatedRecently = false;
+    let flyoutOriginalHide = null;
+
+    // Listen for variable creation and prevent flyout closing
+    const variableCreationListener = (event) => {
+      if (event.type === Blockly.Events.VAR_CREATE) {
+        variableCreatedRecently = true;
+        setTimeout(() => {
+          variableCreatedRecently = false;
+        }, 1000);
+      }
+    };
+    workspace.addChangeListener(variableCreationListener);
+
+    const maxAttempts = 100; // 10 seconds max (100 * 100ms)
+    let attempts = 0;
+    
+    const setupFlyoutOverride = () => {
+      const flyout = workspace.toolbox_?.flyout_;
+      if (flyout && !flyoutOriginalHide) {
+        flyoutOriginalHide = flyout.hide.bind(flyout);
+        flyout.hide = function() {
+          if (variableCreatedRecently) return;
+          flyoutOriginalHide();
+        };
+        if (setupIntervalRef.current) {
+          clearInterval(setupIntervalRef.current);
+          setupIntervalRef.current = null;
+        }
+        return true; // Success
+      }
+      return false; // Not ready yet
+    };
+
+    // Try immediately first
+    if (!setupFlyoutOverride()) {
+      // If not ready, poll with interval
+      setupIntervalRef.current = setInterval(() => {
+        attempts++;
+        if (setupFlyoutOverride() || attempts >= maxAttempts) {
+          if (setupIntervalRef.current) {
+            clearInterval(setupIntervalRef.current);
+            setupIntervalRef.current = null;
+          }
+          if (attempts >= maxAttempts) {
+            console.warn('Failed to setup flyout override: timeout after 10 seconds');
+          }
+        }
+      }, 100);
     }
-    this.props.workspace.updateToolbox(this.props.toolbox.current);
-  }
 
-  createFlyout(workspace) {
-    let xmlList = [];
+    // --- Dynamisch das toolbox-search-Plugin laden, sobald alles bereit ist ---
+    let tries = 0;
+    const waitForToolbox = setInterval(async () => {
+      const tb = workspace.toolbox_;
+      if (tb && tb.getToolboxItems && tb.getToolboxItems().length > 0) {
+        clearInterval(waitForToolbox);
+        try {
+          // Lazy Import -> wird erst hier geladen
+          await import("@blockly/toolbox-search");
+          tb.refreshSelection(); // "nudge" das Plugin
+        } catch (err) {
+          console.warn("⚠️ toolbox-search konnte nicht geladen werden:", err);
+        }
+      } else if (++tries > 50) {
+        clearInterval(waitForToolbox);
+        console.warn("⌛ toolbox-search Init Timeout (Toolbox nie bereit)");
+      }
+    }, 1000);
 
-    // Add your button and give it a callback name.
-    const button = document.createElement("button");
-    button.setAttribute("text", Blockly.Msg.button_createVariable);
-    button.setAttribute("callbackKey", "callbackName");
+    // --- Cleanup ---
+    return () => {
+      // Clear intervals only if they're still active
+      if (setupIntervalRef.current) {
+        clearInterval(setupIntervalRef.current);
+        setupIntervalRef.current = null;
+      }
+      clearInterval(waitForToolbox);
+      workspace.removeChangeListener(variableCreationListener);
+      // Restore original flyout hide method if override was applied
+      const flyout = workspace.toolbox_?.flyout_;
+      if (flyout && flyoutOriginalHide) {
+        flyout.hide = flyoutOriginalHide;
+      }
+    };
+  }, [workspace, toolbox, selectedBoard, language]);
 
-    xmlList.push(button);
+  return (
+    <xml
+      xmlns="https://developers.google.com/blockly/xml"
+      id="blockly"
+      style={{ display: "none" }}
+      ref={toolbox}
+    >
+      {selectedBoard === "MCU" || selectedBoard === "MCU:MINI" ? (
+        <ToolboxMcu />
+      ) : (
+        <ToolboxEsp />
+      )}
+    </xml>
+  );
+};
 
-    // This gets all the variables that the user creates and adds them to the
-    // flyout.
-    const blockList = Blockly.VariablesDynamic.flyoutCategoryBlocks(workspace);
-    console.log(blockList);
-    xmlList = xmlList.concat(blockList);
-    return xmlList;
-  }
+// --- Static helper for flyout ---
+const createFlyout = (workspace) => {
+  let xmlList = [];
 
-  render() {
-    return (
-      <xml
-        xmlns="https://developers.google.com/blockly/xml"
-        id="blockly"
-        style={{ display: "none" }}
-        ref={this.props.toolbox}
-      >
-        {this.props.selectedBoard === "mcu" ||
-        this.props.selectedBoard === "mini" ? (
-          <ToolboxMcu />
-        ) : (
-          <ToolboxEsp />
-        )}
-      </xml>
-    );
-  }
-}
+  const button = document.createElement("button");
+  button.setAttribute("text", Blockly.Msg.button_createVariable);
+  button.setAttribute("callbackKey", "callbackName");
 
-const mapStateToProps = (state) => ({
-  language: state.general.language,
-  selectedBoard: state.board.board,
-});
+  xmlList.push(button);
 
-export default connect(mapStateToProps)(Toolbox);
+  const blockList = Blockly.VariablesDynamic.flyoutCategoryBlocks(workspace);
+  return xmlList.concat(blockList);
+};
+
+export default Toolbox;

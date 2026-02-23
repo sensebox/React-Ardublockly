@@ -2,7 +2,6 @@ import * as Blockly from "blockly";
 import { getColour } from "../helpers/colour";
 import * as Types from "../helpers/types";
 import { selectedBoard } from "../helpers/board";
-import { FieldGridDropdown } from "@blockly/field-grid-dropdown";
 import { FieldSlider } from "@blockly/field-slider";
 import { withBoardParam } from "../helpers/helpUrlBuilder";
 
@@ -219,7 +218,15 @@ Blockly.Blocks["sensebox_sensor_bme680_bsec"] = {
 
 Blockly.Blocks["sensebox_sensor_ultrasonic_ranger"] = {
   init: function () {
-    var dropdown = new FieldGridDropdown(
+    // var dropdown = new FieldGridDropdown(
+    //   selectedBoard().digitalPorts,
+    //   function (option) {
+    //     var input = option === "A" || option === "B" || option === "C";
+    //     this.sourceBlock_.updateShape_(input);
+    //   },
+    // );
+
+    var dropdown2 = new Blockly.FieldDropdown(
       selectedBoard().digitalPorts,
       function (option) {
         var input = option === "A" || option === "B" || option === "C";
@@ -230,7 +237,7 @@ Blockly.Blocks["sensebox_sensor_ultrasonic_ranger"] = {
     this.setColour(getColour().sensebox);
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_ultrasonic)
-      .appendField(dropdown, "port");
+      .appendField(dropdown2, "port");
     this.appendDummyInput("TrigEcho")
       .setAlign(Blockly.inputs.Align.RIGHT)
       .appendField(Blockly.Msg.senseBox_ultrasonic_trigger)
@@ -808,5 +815,27 @@ Blockly.Blocks["sensebox_sensor_icm20948"] = {
     this.setTooltip(Blockly.Msg.senseBox_accelerometer_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_accelerometer_helpurl);
     this.data = { name: "icm20948" };
+  },
+};
+
+Blockly.Blocks["sensebox_sensor_max17048"] = {
+  init: function () {
+    this.appendDummyInput().appendField(Blockly.Msg.senseBox_max17048);
+    this.appendDummyInput()
+      .setAlign(Blockly.inputs.Align.LEFT)
+      .appendField(Blockly.Msg.senseBox_max17048_value)
+      .appendField(
+        new Blockly.FieldDropdown([
+          [Blockly.Msg.senseBox_max17048_value_voltage, "voltage"],
+          [Blockly.Msg.senseBox_max17048_value_, "soc"],
+          [Blockly.Msg.senseBox_max17048_value, ""],
+        ]),
+        "value",
+      );
+    this.setOutput(true, Types.DECIMAL.typeName);
+    this.setColour(getColour().sensebox);
+    this.setTooltip(Blockly.Msg.senseBox_accelerometer_tooltip);
+    this.setHelpUrl(Blockly.Msg.senseBox_accelerometer_helpurl);
+    this.data = { name: "max17048" };
   },
 };

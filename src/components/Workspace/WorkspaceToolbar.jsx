@@ -13,7 +13,7 @@ import ResetWorkspace from "./ToolbarItems/ResetWorkspace";
 import DeleteProject from "./ToolbarItems/DeleteProject";
 import CopyCode from "./ToolbarItems/CopyCode";
 import AutoSave from "./ToolbarItems/AutoSave";
-import SolutionCheck from "../Tutorial/SolutionCheck";
+import SolutionCheck from "../Tutorial/Viewer/Cards/SolutionCheck";
 
 const containerStyle = {
   width: "max-content",
@@ -89,8 +89,8 @@ const WorkspaceToolbar = ({
 WorkspaceToolbar.propTypes = {
   assessment: PropTypes.bool,
   multiple: PropTypes.bool,
-  project: PropTypes.object.isRequired,
-  projectType: PropTypes.string.isRequired,
+  project: PropTypes.object,
+  projectType: PropTypes.string,
 };
 
 export default memo(WorkspaceToolbar);

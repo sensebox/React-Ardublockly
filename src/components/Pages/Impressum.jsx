@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
+import {} from "react-router-dom";
 import Container from "@mui/material/Container";
 class Impressum extends Component {
   render() {
@@ -89,4 +89,4 @@ class Impressum extends Component {
   }
 }
 
-export default withRouter(Impressum);
+export default Impressum;
