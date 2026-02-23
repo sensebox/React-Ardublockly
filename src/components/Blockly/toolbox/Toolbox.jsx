@@ -5,6 +5,7 @@ import * as Blockly from "blockly/core";
 import { useSelector } from "react-redux";
 import { ToolboxMcu } from "./ToolboxMcu";
 import { ToolboxEsp } from "./ToolboxEsp";
+import { ToolboxEye } from "./ToolboxEye";
 import "./toolbox_styles.css";
 
 const Toolbox = ({ workspace, toolbox }) => {
@@ -52,12 +53,12 @@ const Toolbox = ({ workspace, toolbox }) => {
 
     const maxAttempts = 100; // 10 seconds max (100 * 100ms)
     let attempts = 0;
-    
+
     const setupFlyoutOverride = () => {
       const flyout = workspace.toolbox_?.flyout_;
       if (flyout && !flyoutOriginalHide) {
         flyoutOriginalHide = flyout.hide.bind(flyout);
-        flyout.hide = function() {
+        flyout.hide = function () {
           if (variableCreatedRecently) return;
           flyoutOriginalHide();
         };
@@ -81,7 +82,9 @@ const Toolbox = ({ workspace, toolbox }) => {
             setupIntervalRef.current = null;
           }
           if (attempts >= maxAttempts) {
-            console.warn('Failed to setup flyout override: timeout after 10 seconds');
+            console.warn(
+              "Failed to setup flyout override: timeout after 10 seconds",
+            );
           }
         }
       }, 100);
@@ -132,8 +135,10 @@ const Toolbox = ({ workspace, toolbox }) => {
     >
       {selectedBoard === "MCU" || selectedBoard === "MCU:MINI" ? (
         <ToolboxMcu />
-      ) : (
+      ) : selectedBoard === "MCU-S2" ? (
         <ToolboxEsp />
+      ) : (
+        <ToolboxEye />
       )}
     </xml>
   );

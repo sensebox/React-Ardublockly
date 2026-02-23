@@ -5,6 +5,7 @@ import * as Blockly from "blockly/core";
 import { useSelector } from "react-redux";
 import { ToolboxMcu } from "./ToolboxMcu";
 import { ToolboxEsp } from "./ToolboxEsp";
+import { ToolboxEye } from "./ToolboxEye";
 import { useEmbeddedToolbox } from "./useEmbeddedToolbox";
 import "./embedded_toolbox_styles.css";
 
@@ -58,10 +59,12 @@ const EmbeddedToolbox = ({ workspace, toolbox }) => {
       ref={toolbox}
       className="embedded-mode"
     >
-      {selectedBoard === "MCU" || selectedBoard === "MCU:mini" ? (
+      {selectedBoard === "MCU" || selectedBoard === "MCU:MINI" ? (
         <ToolboxMcu />
-      ) : (
+      ) : selectedBoard === "MCU-S2" ? (
         <ToolboxEsp />
+      ) : (
+        <ToolboxEye />
       )}
     </xml>
   );
