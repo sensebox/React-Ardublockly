@@ -269,6 +269,9 @@ Blockly.Blocks["sensebox_display_roboeyes"] = {
         ]),
         "EMOTION",
       );
+    this.appendDummyInput("BLINK")
+      .appendField(Blockly.Msg.sensebox_display_roboeyes_blink)
+      .appendField(new Blockly.FieldCheckbox("TRUE"), "BLINK");
     this.setInputsInline(false);
     this.setTooltip(Blockly.Msg.sensebox_display_roboeyes_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_display_helpurl);
