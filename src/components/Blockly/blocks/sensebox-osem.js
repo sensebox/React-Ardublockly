@@ -34,15 +34,21 @@ Blockly.Blocks["sensebox_osem_connection"] = {
         ]),
         "type",
       );
-    if (!boxes) {
+    if (!boxes || boxes.length === 0) {
       this.appendDummyInput()
         .setAlign(Blockly.inputs.Align.LEFT)
         .appendField("senseBox ID")
-        .appendField(new Blockly.FieldTextInput("senseBox ID"), "BoxID");
+        .appendField(
+          new Blockly.FieldDropdown([["Bitte auswählen", ""]]),
+          "BoxID",
+        );
     } else {
       var dropdown = [];
       for (var i = 0; i < boxes.length; i++) {
         dropdown.push([boxes[i].name, boxes[i]._id]);
+      }
+      if (dropdown.length === 0) {
+        dropdown = [["Bitte auswählen", ""]];
       }
       this.appendDummyInput()
         .setAlign(Blockly.inputs.Align.LEFT)
@@ -130,7 +136,7 @@ Blockly.Blocks["sensebox_send_to_osem"] = {
     this.setHelpUrl(Blockly.Msg.senseBox_osem_connection_helpurl);
     this.setColour(getColour().sensebox);
     this.appendDummyInput().appendField(Blockly.Msg.senseBox_send_to_osem);
-    if (boxes) {
+    if (boxes && boxes.length > 0) {
       this.appendValueInput("Value")
         .appendField("Phänomen")
         .appendField(
@@ -141,7 +147,10 @@ Blockly.Blocks["sensebox_send_to_osem"] = {
       this.appendValueInput("Value")
         .setAlign(Blockly.inputs.Align.LEFT)
         .appendField("Phänomen")
-        .appendField(new Blockly.FieldTextInput("sensorID"), "SensorID");
+        .appendField(
+          new Blockly.FieldDropdown([["Bitte auswählen", ""]]),
+          "SensorID",
+        );
     }
 
     this.setPreviousStatement(true, null);
@@ -149,21 +158,18 @@ Blockly.Blocks["sensebox_send_to_osem"] = {
   },
 
   generateOptions: function () {
-    var dropdown = [["", ""]];
+    var dropdown = [];
     var boxID = selectedBox;
     if (boxID !== "" && boxes) {
       let box = boxes.find((el) => el._id === boxID);
-      if (box !== undefined) {
+      if (box !== undefined && box.sensors && box.sensors.length > 0) {
         for (var i = 0; i < box.sensors.length; i++) {
           dropdown.push([box.sensors[i].title, box.sensors[i]._id]);
         }
       }
-      if (dropdown.length > 1) {
-        var options = dropdown.slice(1);
-        return options;
-      } else {
-        return dropdown;
-      }
+    }
+    if (dropdown.length === 0) {
+      dropdown = [["Bitte auswählen", ""]];
     }
     return dropdown;
   },
@@ -218,7 +224,7 @@ Blockly.Blocks["sensebox_esp32s2_osem_connection"] = {
         ]),
         "type",
       );
-    if (!boxes) {
+    if (!boxes || boxes.length === 0) {
       this.appendDummyInput()
         .setAlign(Blockly.inputs.Align.LEFT)
         .appendField("senseBox ID")
@@ -271,7 +277,7 @@ Blockly.Blocks["sensebox_esp32s2_osem_connection"] = {
      * Blockly.Blocks['controls_flow_statements'].LOOP_TYPES.push('custom_loop');
      */
     selectedBox = this.getFieldValue("BoxID");
-    if (selectedBox !== "" && boxes) {
+    if (selectedBox !== "" && boxes && boxes.length > 0) {
       var accessToken = boxes.find(
         (element) => element._id === selectedBox,
       ).access_token;
