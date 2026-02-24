@@ -12,6 +12,7 @@ export const UI = {
   toolbox_rtc: "RTC",
   toolbox_ntp: "NTP",
   toolbox_functions: "Functions",
+  my_toolbox_functions: "My functions",
   toolbox_variables: "Variables",
   toolbox_serial: "Serial",
   toolbox_advanced: "Advanced",

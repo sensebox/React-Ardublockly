@@ -413,11 +413,13 @@ Blockly.Blocks["procedures_defnoreturn"] = {
     option.text = Blockly.Msg["PROCEDURES_CREATE_DO"].replace("%1", name);
     const xmlMutation = document.createElement("mutation");
     xmlMutation.setAttribute("name", name);
-    for (let i = 0; i < this.arguments_.length; i++) {
-      const xmlArg = document.createElement("arg");
-      xmlArg.setAttribute("name", this.arguments_[i]);
-      xmlArg.setAttribute("type", this.argumentVarModels_[i].type); // TYPE FIGURED OUT
-      xmlMutation.appendChild(xmlArg);
+    if (this.arguments_) {
+      for (let i = 0; i < this.arguments_.length; i++) {
+        const xmlArg = document.createElement("arg");
+        xmlArg.setAttribute("name", this.arguments_[i]);
+        xmlArg.setAttribute("type", this.argumentVarModels_[i].type); // TYPE FIGURED OUT
+        xmlMutation.appendChild(xmlArg);
+      }
     }
     const xmlBlock = document.createElement("block");
     xmlBlock.setAttribute("type", this.callType_);
@@ -426,7 +428,7 @@ Blockly.Blocks["procedures_defnoreturn"] = {
     options.push(option);
 
     // Add options to create getters for each parameter.
-    if (!this.isCollapsed()) {
+    if (!this.isCollapsed() && this.argumentVarModels_) {
       for (let i = 0; i < this.argumentVarModels_.length; i++) {
         const option = { enabled: true };
         const argVar = this.argumentVarModels_[i];
@@ -1226,3 +1228,26 @@ Blockly.Blocks["procedures_callreturn"] = {
     Blockly.Blocks["procedures_callnoreturn"].customContextMenu,
   defType_: "procedures_defreturn",
 };
+
+Blockly.registry.register(
+  Blockly.registry.Type.FLYOUTS_VERTICAL_TOOLBOX,
+  "CUSTOM_PROCEDURES",
+  function (workspace) {
+    const xmlList = [];
+
+    const procedures = Blockly.Procedures.allProcedures(workspace)[0];
+
+    for (const proc of procedures) {
+      const block = document.createElement("block");
+      block.setAttribute("type", "procedures_callnoreturn");
+
+      const mutation = document.createElement("mutation");
+      mutation.setAttribute("name", proc[0]);
+      block.appendChild(mutation);
+
+      xmlList.push(block);
+    }
+
+    return xmlList;
+  },
+);
