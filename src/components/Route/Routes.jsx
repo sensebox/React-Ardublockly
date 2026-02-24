@@ -27,6 +27,7 @@ import TutorialPage from "@/components/Tutorial/Viewer/Tutorial.page";
 import Project from "@/components/Pages/Project/Project";
 import ProjectHome from "@/components/Pages/Project/ProjectHome";
 import TutorialHome from "../Tutorial/Overview/TutorialHome";
+import TeachableMachine from "@/components/Pages/TeachableMachine/TeachableMachine";
 function AppRoutes({ platform, visitPage, setPlatform }) {
   const location = useLocation();
 
@@ -90,6 +91,17 @@ function AppRoutes({ platform, visitPage, setPlatform }) {
 
         {/* Code Editor */}
         <Route path="/codeeditor" element={<CodeEditor />} />
+        
+        {/* Teachable Machine */}
+        <Route
+          path="/teachable-machine"
+          element={
+            <PublicRoute>
+              <TeachableMachine />
+            </PublicRoute>
+          }
+        />
+        
         {/* Sharing */}
         <Route
           path="/share/:shareId"

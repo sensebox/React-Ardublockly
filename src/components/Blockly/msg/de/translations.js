@@ -264,4 +264,77 @@ export const TRANSLATIONS = {
   senseBox_watertemperature: "Wassertemperatur",
   senseBox_watertemperature_tooltip:
     "Das Wasserthermometer gibt Temperatur in Grad Celsius aus. Schließe den Sensor an einen der 6 Anschlüsse des One-Wire Adapters an und schließe dann den One-Wire Adapter an einen der 3 digital/analog Ports der senseBox an und wähle den Port im Block aus. Wenn du nur ein Thermometer am One-Wire Adapter angeschlossen hast, dann belasse den Index bei 0. Jedes weitere angeschlossene Thermometer kann entsprechend mit einem um 1 erhöhten Index angesprochen werden. Es kommt dabei nicht darauf an, an welchem Anschluss des Adapters die Thermometer angeschlossen werden.",
+
+  // Teachable Machine translations
+  teachableMachine: {
+    title: "Teachable senseBox",
+    description:
+      "Trainiere dein eigenes Bildklassifizierungsmodell und lade es auf deine senseBox Eye.",
+    addClass: "Klasse hinzufügen",
+    startCamera: "Kamera starten",
+    stopCamera: "Kamera stoppen",
+    captureImage: "Bild aufnehmen",
+    trainModel: "Modell trainieren",
+    resetModel: "Modell zurücksetzen",
+    samples: "Beispiele",
+    training: {
+      title: "Modell Training",
+      inProgress: "Training läuft...",
+    },
+    testing: {
+      title: "Modell Testen",
+      description: "Teste dein trainiertes Modell mit der Kamera.",
+      start: "Test starten",
+      stop: "Test stoppen",
+      capture: "Vorhersage machen",
+      videoFeed: "Kamera-Feed",
+      predictions: "Vorhersagen",
+      analyzing: "Analysiere...",
+      noPredictions: "Keine Vorhersagen verfügbar",
+      noVideo: "Kein Video verfügbar",
+    },
+    integration: {
+      title: "Lade es auf deine senseBox Eye",
+      description:
+        "Integriere dein trainiertes Modell in deine Blockly Projekte.",
+      saveModel: "Modell speichern",
+      addToWorkspace: "Zu Workspace hinzufügen",
+      availableBlocks: "Verfügbare Blöcke:",
+      blocklyXml: "Blockly XML Code:",
+      success:
+        "Modell erfolgreich integriert! Du kannst jetzt die Teachable Machine Blöcke in deinen Projekten verwenden.",
+      nextSteps: "Nächste Schritte",
+      nextStepsDesc:
+        "Verwende die Teachable Machine Blöcke in deinem Blockly Workspace, um Vorhersagen mit deinem trainierten Modell zu machen.",
+      steps: {
+        saveModel: "Modell speichern",
+        saveModelDesc:
+          "Speichere dein trainiertes Modell für die Verwendung in Blockly.",
+        generateBlocks: "Blöcke generieren",
+        generateBlocksDesc:
+          "Generiere die entsprechenden Blockly Blöcke für dein Modell.",
+        useInProject: "In Projekt verwenden",
+        useInProjectDesc:
+          "Verwende die generierten Blöcke in deinen senseBox Projekten.",
+      },
+    },
+    addClassDialog: {
+      title: "Neue Klasse hinzufügen",
+      nameLabel: "Klassenname",
+    },
+    errors: {
+      cameraAccess:
+        "Fehler beim Zugriff auf die Kamera. Bitte stelle sicher, dass du die Kamera-Berechtigung erteilt hast.",
+      insufficientData:
+        "Nicht genügend Daten zum Trainieren. Bitte füge mindestens 2 Klassen mit jeweils mindestens einem Beispiel hinzu.",
+      trainingFailed: "Training fehlgeschlagen. Bitte versuche es erneut.",
+    },
+  },
+
+  common: {
+    cancel: "Abbrechen",
+    add: "Hinzufügen",
+    copy: "Kopieren",
+    copied: "Kopiert!",
+  },
 };

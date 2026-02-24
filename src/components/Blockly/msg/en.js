@@ -7,6 +7,7 @@ import { LOOPS } from "./en/loops";
 import { MATH } from "./en/math";
 import { MQTT } from "./en/mqtt";
 import { SENSEBOX } from "./en/sensebox";
+import { SENSEBOX_TEACHABLE_MACHINE } from "./en/sensebox-teachable-machine";
 import { DISPLAY } from "./en/sensebox-display";
 import { MOTORS } from "./en/sensebox-motors";
 import { LED } from "./en/sensebox-led";
@@ -49,6 +50,7 @@ export const En = {
   ...SENSORS,
   ...SOLAR,
   ...SENSEBOX,
+  ...SENSEBOX_TEACHABLE_MACHINE,
   ...TELEGRAM,
   ...WEB,
   ...ESP_NOW,
