@@ -66,6 +66,7 @@ class App extends Component {
               <RouteHandler />
               <ErrorBoundary>
                 <Routes>
+                  <Route path="/embedded/share/:shareId" element={<EmbeddedBlockly />} />
                   <Route path="/embedded" element={<EmbeddedBlockly />} />
                   <Route path="/*" element={<Content />} />
                 </Routes>
