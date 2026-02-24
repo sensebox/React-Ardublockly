@@ -222,7 +222,7 @@ const Navbar = () => {
                     open={Boolean(anchorElBoard)}
                     onClose={handleBoardClose}
                   >
-                    {["MCU", "MCU:MINI", "MCU-S2"].map((b) => (
+                    {["MCU", "MCU:mini", "MCU-S2", "Eye"].map((b) => (
                       <MenuItem
                         key={b}
                         value={b}

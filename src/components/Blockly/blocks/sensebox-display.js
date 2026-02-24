@@ -379,3 +379,40 @@ Blockly.Blocks["sensebox_display_drawRectangle"] = {
   },
   LOOP_TYPES: ["sensebox_display_show"],
 };
+
+Blockly.Blocks["sensebox_display_image"] = {
+  init: function (block) {
+    this.setColour(getColour().sensebox);
+    this.appendValueInput("drawImage")
+      .appendField(Blockly.Msg.senseBox_display_image)
+      .setCheck(Types.IMAGE.typeName);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip(Blockly.Msg.senseBox_display_image_tooltip);
+    this.setHelpUrl(Blockly.Msg.senseBox_display_helpurl);
+  },
+  /**
+   * Called whenever anything on the workspace changes.
+   * Add warning if block is not nested inside a the correct loop.
+   * @param {!Blockly.Events.Abstract} e Change event.
+   * @this Blockly.Block
+   */
+  onchange: function (e) {
+    var legal = false;
+    // Is the block nested in a loop?
+    var block = this;
+    do {
+      if (this.LOOP_TYPES.indexOf(block.type) !== -1) {
+        legal = true;
+        break;
+      }
+      block = block.getSurroundParent();
+    } while (block);
+    if (legal) {
+      this.setWarningText(null);
+    } else {
+      this.setWarningText(Blockly.Msg.CONTROLS_FLOW_STATEMENTS_WARNING);
+    }
+  },
+  LOOP_TYPES: ["sensebox_display_show"],
+};

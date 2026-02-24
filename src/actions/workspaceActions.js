@@ -30,7 +30,9 @@ export const onChangeCode = () => (dispatch, getState) => {
   var selectedBlock = Blockly.getSelected();
   if (selectedBlock) {
     code.helpurl = selectedBlock.helpUrl ?? null;
-    code.tooltip = selectedBlock.tooltip ?? null;
+    const tooltip = selectedBlock.tooltip;
+    code.tooltip =
+      typeof tooltip === "function" ? tooltip() : (tooltip ?? null);
     code.data = selectedBlock.data ?? null;
   } else {
     code.helpurl = null;
@@ -48,7 +50,7 @@ export const onChangeCode = () => (dispatch, getState) => {
 export const onChangeWorkspace = (event) => (dispatch, getState) => {
   dispatch(workspaceChange());
   var code = dispatch(onChangeCode());
-  
+
   dispatch(storeTutorialXml(code.xml));
   var stats = getState().workspace.stats;
   if (event.type === Blockly.Events.BLOCK_CREATE) {

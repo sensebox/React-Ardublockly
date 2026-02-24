@@ -839,3 +839,19 @@ Blockly.Blocks["sensebox_sensor_max17048"] = {
     this.data = { name: "max17048" };
   },
 };
+
+/**
+ * senseBox Eye onboard camera
+ *
+ */
+
+Blockly.Blocks["sensebox_camera"] = {
+  init: function () {
+    this.appendDummyInput().appendField(Blockly.Msg.senseBox_camera);
+    this.setOutput(true, Types.IMAGE.typeName);
+    this.setColour(getColour().sensebox);
+    this.setTooltip(Blockly.Msg.senseBox_camera_tooltip);
+    this.setHelpUrl(withBoardParam(Blockly.Msg.senseBox_camera_helpurl));
+    this.data = { name: "camera" };
+  },
+};

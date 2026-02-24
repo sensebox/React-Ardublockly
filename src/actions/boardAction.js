@@ -1,6 +1,7 @@
 import { BOARD } from "./types";
 import mini_opacity from "../data/mini_opacity.png";
 import mcu_opacity from "../data/mcu_opacity.png";
+import eye_opacity from "../data/eye_opacity.png";
 import esp_opacity from "../data/esp_opacity.png";
 import { setBoardHelper } from "@/components/Blockly/helpers/board";
 
@@ -18,6 +19,9 @@ export const setBoard = (board) => (dispatch) => {
       break;
     case "MCU-S2":
       root.style.setProperty("--url", `url(${esp_opacity})`);
+      break;
+    case "eye":
+      root.style.setProperty("--url", `url(${eye_opacity})`);
       break;
     default:
       break;

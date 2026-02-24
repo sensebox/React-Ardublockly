@@ -102,6 +102,7 @@ export const IO = {
   ARD_TYPE_ARRAY: "Array",
   ARD_TYPE_BOOL: "Boolean",
   ARD_TYPE_BITMAP: "Bitmap",
+  ARD_TYPE_IMAGE: "Bild",
   ARD_TYPE_CHAR: "Zeichen",
   ARD_TYPE_CHILDBLOCKMISSING: "ChildBlockMissing", // untranslated
   ARD_TYPE_DECIMAL: "Dezimalzahl",
