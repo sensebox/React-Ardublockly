@@ -345,7 +345,7 @@ basicGenerator.forBlock["basic_box_shaken"] = function (block, generator) {
 };
 
 basicGenerator.forBlock["display_clear_basic"] = function (block, generator) {
-  return "clearDisplay();\n";
+  return "clearDisplay()\n";
 };
 
 basicGenerator.forBlock["basic_air_quality"] = function (block) {
