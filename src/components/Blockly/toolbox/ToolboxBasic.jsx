@@ -224,6 +224,7 @@ export const toolboxBasicObject = {
       },
       contents: [
         { kind: "block", type: "display_print_basic" },
+        { kind: "block", type: "display_clear_basic" },
         { kind: "block", type: "text" },
         {
           kind: "block",
