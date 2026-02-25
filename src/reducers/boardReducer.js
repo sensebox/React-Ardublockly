@@ -24,7 +24,7 @@ const setBackgroundImage = (board) => {
     case "MCU-S2":
       root.style.setProperty("--url", `url(${esp_opacity})`);
       break;
-    case "eye":
+    case "EYE":
       root.style.setProperty("--url", `url(${eye_opacity})`);
       break;
     default:
