@@ -200,3 +200,10 @@ Blockly.Generator.Arduino.forBlock["basic_box_shaken"] = function (
 ) {
   return ""; // nichts generieren
 };
+
+Blockly.Generator.Arduino.forBlock["display_clear_basic"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};

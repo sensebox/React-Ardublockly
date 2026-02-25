@@ -97,7 +97,7 @@ Blockly.defineBlocksWithJsonArray([
       },
     ],
     output: "String",
-    colour: "#5ba55b",
+    colour: "#62A044",
   },
   {
     type: "hdc_tmp",
@@ -117,7 +117,7 @@ Blockly.defineBlocksWithJsonArray([
       },
     ],
     output: "String",
-    colour: "#5ba55b",
+    colour: "#62A044",
   },
 ]);
 
@@ -181,7 +181,7 @@ Blockly.defineBlocksWithJsonArray([
     ],
     previousStatement: null,
     nextStatement: null,
-    colour: "#5ba55b",
+    colour: "#62A044",
   },
   {
     type: "basic_off",
@@ -202,7 +202,7 @@ Blockly.defineBlocksWithJsonArray([
     ],
     previousStatement: null,
     nextStatement: null,
-    colour: "#5ba55b",
+    colour: "#62A044",
   },
 ]);
 
@@ -329,7 +329,7 @@ Blockly.Blocks["display_print_basic"] = {
 
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour("#5ba55b");
+    this.setColour("#62A044");
     this.setTooltip("Zeigt einen Text auf dem Display an");
     this.setHelpUrl("");
 
@@ -363,7 +363,7 @@ Blockly.Blocks["display_print_basic"] = {
         displayText = "Luftdruck";
         break;
       case "basic_air_quality":
-        displayText = "Luftqualität";
+        displayText = "Luftqualitaet";
         break;
       case "basic_brightness":
         displayText = "Helligkeit";
@@ -1063,7 +1063,7 @@ function generateTimerSvg(seconds) {
 }
 
 // Helper function to generate a simple button SVG
-function generateButtonSvg(text, color = "#5ba55b") {
+function generateButtonSvg(text, color = "#62A044") {
   const svgTemplate = `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 30">
   <defs>
@@ -1090,7 +1090,7 @@ function generateStackedButtonsSvg() {
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 65">
   <defs>
     <style>
-      .btn-plus-bg { fill: #5ba55b; cursor: pointer; }
+      .btn-plus-bg { fill: #62A044; cursor: pointer; }
       .btn-minus-bg { fill: #c93939; cursor: pointer; }
       .btn-text { 
         fill: #ffffff; 
@@ -1257,7 +1257,7 @@ Blockly.Blocks["basic_led_control"] = {
 
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour("#5ba55b");
+    this.setColour("#62A044");
     this.setTooltip("Schalte die LED mit der gewählten Farbe ein");
     this.setHelpUrl("");
 
@@ -1367,7 +1367,7 @@ Blockly.Blocks["basic_rgb_color"] = {
     this.appendValueInput("B").setCheck("RGB_BLUE").appendField("Blau:");
 
     this.setOutput(true, "Colour");
-    this.setColour("#5ba55b");
+    this.setColour("#62A044");
     this.setTooltip("Mische eine Farbe aus Rot, Grün und Blau Werten (0-255)");
     this.setHelpUrl("");
 
@@ -1488,10 +1488,10 @@ Blockly.defineBlocksWithJsonArray([
 ]);
 
 // Icon paths for basic blocks
-const BUTTON_ICON = "media/basic/finger-click-svgrepo-com.svg";
-const SHAKE_ICON = "media/basic/hand-shake-svgrepo-com.svg";
-const AIR_QUALITY_ICON = "media/basic/pollution-factory-svgrepo-com.svg";
-const BRIGHTNESS_ICON = "media/basic/flashlight-svgrepo-com.svg";
+const BUTTON_ICON = "media/hardware/icons/Icon_Button.svg";
+const SHAKE_ICON = "media/hardware/icons/Icon_Schuetteln.svg";
+const AIR_QUALITY_ICON = "media/hardware/icons/Icon_Luftqualitaet.svg";
+const BRIGHTNESS_ICON = "media/hardware/icons/Icon_Helligkeit.svg";
 
 Blockly.defineBlocksWithJsonArray([
   {
@@ -1575,5 +1575,14 @@ Blockly.defineBlocksWithJsonArray([
     ],
     output: "String",
     colour: "#62A044  ",
+  },
+  {
+    type: "display_clear_basic",
+    message0: "Display löschen",
+    previousStatement: null,
+    nextStatement: null,
+    colour: "#62A044  ",
+    tooltip: "Löscht alle Inhalte auf dem Display",
+    helpUrl: "",
   },
 ]);
