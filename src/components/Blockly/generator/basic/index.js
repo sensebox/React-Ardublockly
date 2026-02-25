@@ -344,8 +344,19 @@ basicGenerator.forBlock["basic_box_shaken"] = function (block, generator) {
   return ["boxShaken()", generator.ORDER_ATOMIC];
 };
 
-basicGenerator.forBlock["basic_air_quality"] = function (block, generator) {
-  return ["airQuality()", generator.ORDER_ATOMIC];
+basicGenerator.forBlock["display_clear_basic"] = function (block, generator) {
+  return "clearDisplay();\n";
+};
+
+basicGenerator.forBlock["basic_air_quality"] = function (block) {
+  // Setup-Code hinzufügen (einmalig)
+  basicGenerator.addSetup(
+    "basic_air_quality_setup",
+    "airQuality = sensor:bme680:aiq",
+  );
+
+  // Der Block selbst liefert nur den Variablennamen zurück
+  return ["airQuality", basicGenerator.ORDER_ATOMIC];
 };
 
 basicGenerator.forBlock["basic_brightness"] = function (block) {
