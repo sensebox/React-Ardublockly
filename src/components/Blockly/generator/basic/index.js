@@ -115,11 +115,6 @@ basicGenerator.forBlock["sensebox_rgb_led"] = function (block, generator) {
   return "led(255,0,0)\n";
 };
 
-basicGenerator.forBlock["basic_display"] = function (block, generator) {
-  var text = block.getFieldValue("value");
-  return `display(${text})\n`;
-};
-
 basicGenerator.forBlock["time_delay"] = function (block, generator) {
   const value = generator.valueToCode(
     block,
@@ -144,7 +139,9 @@ basicGenerator.forBlock["basic_off"] = function (block, generator) {
 
 basicGenerator.forBlock["display_print_basic"] = function (block, generator) {
   const raw = generator.valueToCode(block, "TEXT", generator.ORDER_NONE) || "";
-
+  if (!raw || /^\s*$/.test(raw)) {
+    return ""; // nichts generieren
+  }
   return `display(${raw})\n`;
 };
 
