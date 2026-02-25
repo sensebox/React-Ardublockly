@@ -348,6 +348,13 @@ basicGenerator.forBlock["basic_air_quality"] = function (block, generator) {
   return ["airQuality()", generator.ORDER_ATOMIC];
 };
 
-basicGenerator.forBlock["basic_brightness"] = function (block, generator) {
-  return ["brightness()", generator.ORDER_ATOMIC];
+basicGenerator.forBlock["basic_brightness"] = function (block) {
+  // Setup-Code hinzufügen (einmalig)
+  basicGenerator.addSetup(
+    "board_light_setup",
+    "lightBoard = sensor:board:light",
+  );
+
+  // Der Block selbst liefert nur den Variablennamen zurück
+  return ["lightBoard", basicGenerator.ORDER_ATOMIC];
 };
