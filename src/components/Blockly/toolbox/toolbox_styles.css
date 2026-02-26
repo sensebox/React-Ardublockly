@@ -11,12 +11,6 @@
   outline: none; /* Fokus-Ring weg */
 }
 
-/* Höhere Kategorien für Continuous Toolbox */
-.blockly-continuous-toolbox
-  .blocklyToolboxCategory:not(:has(input[type="search"])) {
-  height: 40px !important;
-}
-
 /* Fokus generell bei Toolbox-Elementen deaktivieren */
 .blocklyToolboxCategory:focus,
 .blocklyToolboxCategoryContainer:focus,

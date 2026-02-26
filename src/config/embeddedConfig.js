@@ -1,10 +1,9 @@
 // Embedded mode configuration
 export const EMBEDDED_CONFIG = {
-  ROUTE: ["/embedded", "/embeddedbasic"],
-  RENDERER: "zelos",
+  ROUTE: '/embedded',
+  RENDERER: 'zelos',
   VIEWPORT: {
-    content:
-      "width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover",
+    content: "width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover"
   },
 };
 
@@ -31,6 +30,7 @@ export const EMBEDDED_BLOCKLY_CONFIG = {
     snap: true,
   },
 };
+
 
 // Default Blockly configurations (used when not in embedded mode)
 export const DEFAULT_BLOCKLY_CONFIG = {

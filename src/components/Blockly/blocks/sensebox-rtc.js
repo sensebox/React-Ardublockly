@@ -1,6 +1,6 @@
 import * as Blockly from "blockly";
-import { getColour } from "@/components/Blockly/helpers/colour";
-import * as Types from "@/components/Blockly/helpers/types";
+import { getColour } from "../helpers/colour";
+import * as Types from "../helpers/types";
 
 Blockly.Blocks["sensebox_rtc_init"] = {
   init: function () {
