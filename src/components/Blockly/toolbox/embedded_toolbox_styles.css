@@ -12,166 +12,189 @@
 /* -----------------------------------------------------------------------------
    CSS Variables & Base Configuration
    ----------------------------------------------------------------------------- */
-   .embedded-mode .blocklyToolbox {
-    --cat-height: 32px; /* SOLUTION 2: Reduced from 42px for more compact layout */
-    --cat-padding-x: 6px; /* Reduced padding */
-    --cat-min-width: calc(25vw - 9px);
-    
-    /* Chevron constants */
-    --chevron-size: 6px;
-    --chevron-border: 2px;
-    --chevron-transition: transform 120ms ease;
-    --chevron-right-offset: calc(2 * var(--cat-padding-x) + 4px); /* Added 2px more space after chevron */
-  }
-  
-  /* -----------------------------------------------------------------------------
+.embedded-mode .blocklyToolbox {
+  --cat-height: 32px; /* SOLUTION 2: Reduced from 42px for more compact layout */
+  --cat-padding-x: 6px; /* Reduced padding */
+  --cat-min-width: calc(25vw - 9px);
+
+  /* Chevron constants */
+  --chevron-size: 6px;
+  --chevron-border: 2px;
+  --chevron-transition: transform 120ms ease;
+  --chevron-right-offset: calc(
+    2 * var(--cat-padding-x) + 4px
+  ); /* Added 2px more space after chevron */
+}
+
+/* -----------------------------------------------------------------------------
      Category Button Styling
      ----------------------------------------------------------------------------- */
-  .embedded-mode .blocklyToolbox .blocklyToolboxCategory {
-    height: var(--cat-height) !important;
-    border-radius: 5px;
-    background: #fff;
-    padding: 8px 2px 8px 0 !important; /* Vertical padding added */
-    position: relative;
-    flex: 0 1 auto;
-    min-width: fit-content;
-  }
-  
-  /* Disable focus styling */
-  .embedded-mode .blocklyToolboxCategory:focus,
-  .embedded-mode .blocklyToolboxCategoryContainer:focus,
-  .embedded-mode .blocklyTreeRow:focus,
-  .embedded-mode .blocklyTreeLabel:focus {
-    outline: none !important;
-    box-shadow: none !important;
-  }
-  
-  /* -----------------------------------------------------------------------------
+.embedded-mode .blocklyToolbox .blocklyToolboxCategory {
+  height: var(--cat-height) !important;
+  border-radius: 5px;
+  background: #fff;
+  padding: 8px 2px 8px 0 !important; /* Vertical padding added */
+  position: relative;
+  flex: 0 1 auto;
+  min-width: fit-content;
+}
+
+/* Disable focus styling */
+.embedded-mode .blocklyToolboxCategory:focus,
+.embedded-mode .blocklyToolboxCategoryContainer:focus,
+.embedded-mode .blocklyTreeRow:focus,
+.embedded-mode .blocklyTreeLabel:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* -----------------------------------------------------------------------------
      Category Layout & Positioning
      ----------------------------------------------------------------------------- */
-  /* Main toolbox container: natural flow */
-  .embedded-mode .blocklyToolbox {
-    padding: var(--cat-padding-x);
-  }
-  
-  /* Allow wrapping of main categories (level 1) */
-  .embedded-mode .blocklyToolboxCategoryGroup {
-    flex-wrap: wrap !important;
-    overflow-x: visible !important;
-    overflow-y: visible !important;
-  }
-  
-  /* Set category min-width to 1/4 of screen for wrapping */
-  .embedded-mode .blocklyToolbox .blocklyToolboxCategoryContainer[aria-level="1"] {
-    min-width: calc(25vw - 9px) !important;
-    flex: 0 1 auto !important;
-  }
-  
-  
-  /* Ensure expanded categories maintain fixed width but allow subcategories to be visible */
-  /* -----------------------------------------------------------------------------
+/* Main toolbox container: natural flow */
+.embedded-mode .blocklyToolbox {
+  padding: var(--cat-padding-x);
+}
+
+/* Allow wrapping of main categories (level 1) */
+.embedded-mode .blocklyToolboxCategoryGroup {
+  flex-wrap: wrap !important;
+  overflow-x: visible !important;
+  overflow-y: visible !important;
+}
+
+/* Set category min-width to 1/4 of screen for wrapping */
+.embedded-mode
+  .blocklyToolbox
+  .blocklyToolboxCategoryContainer[aria-level="1"] {
+  min-width: calc(25vw - 9px) !important;
+  flex: 0 1 auto !important;
+}
+
+/* Ensure expanded categories maintain fixed width but allow subcategories to be visible */
+/* -----------------------------------------------------------------------------
      Chevron Icons for Expandable Categories
      ----------------------------------------------------------------------------- */
-  .embedded-mode .blocklyToolbox .blocklyToolboxCategoryIconClosed,
-  .embedded-mode .blocklyToolbox .blocklyToolboxCategoryIconOpen {
-    position: absolute;
-    right: var(--chevron-right-offset);
-    color: var(--cat-accent, currentColor);
-  }
-  
-  .embedded-mode .blocklyToolbox .blocklyToolboxCategoryIconClosed::before,
-  .embedded-mode .blocklyToolbox .blocklyToolboxCategoryIconOpen::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: var(--chevron-size);
-    height: var(--chevron-size);
-    border-right: var(--chevron-border) solid currentColor;
-    border-bottom: var(--chevron-border) solid currentColor;
-    transform-origin: center;
-    transition: var(--chevron-transition);
-  }
-  
-  /* Rotate when the container is expanded */
-  .embedded-mode .blocklyToolbox .blocklyToolboxCategoryContainer[aria-expanded="true"] .blocklyToolboxCategoryIconClosed::before {
-    transform: translate(-50%, -50%) rotate(45deg);
-  }
-  
-  /* Rotate when the container is closed */
-  .embedded-mode .blocklyToolbox .blocklyToolboxCategoryContainer[aria-expanded="false"] .blocklyToolboxCategoryIconClosed::before {
-    transform: translate(0%, -50%) rotate(-45deg);
-  }
-  
-  /* -----------------------------------------------------------------------------
+.embedded-mode .blocklyToolbox .blocklyToolboxCategoryIconClosed,
+.embedded-mode .blocklyToolbox .blocklyToolboxCategoryIconOpen {
+  position: absolute;
+  right: var(--chevron-right-offset);
+  color: var(--cat-accent, currentColor);
+}
+
+.embedded-mode .blocklyToolbox .blocklyToolboxCategoryIconClosed::before,
+.embedded-mode .blocklyToolbox .blocklyToolboxCategoryIconOpen::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--chevron-size);
+  height: var(--chevron-size);
+  border-right: var(--chevron-border) solid currentColor;
+  border-bottom: var(--chevron-border) solid currentColor;
+  transform-origin: center;
+  transition: var(--chevron-transition);
+}
+
+/* Rotate when the container is expanded */
+.embedded-mode
+  .blocklyToolbox
+  .blocklyToolboxCategoryContainer[aria-expanded="true"]
+  .blocklyToolboxCategoryIconClosed::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+/* Rotate when the container is closed */
+.embedded-mode
+  .blocklyToolbox
+  .blocklyToolboxCategoryContainer[aria-expanded="false"]
+  .blocklyToolboxCategoryIconClosed::before {
+  transform: translate(0%, -50%) rotate(-45deg);
+}
+
+/* -----------------------------------------------------------------------------
      Category Row Layout & Typography
      ----------------------------------------------------------------------------- */
-  .embedded-mode .blocklyToolbox .blocklyTreeRowContentContainer {
-    display: flex;
-    align-items: center;
-    min-height: var(--cat-height) !important;
-    padding: 0px 24px 2px 0 !important; /* Added 2px more padding after chevron */
-  }
+.embedded-mode .blocklyToolbox .blocklyTreeRowContentContainer {
+  display: flex;
+  align-items: center;
+  min-height: var(--cat-height) !important;
+  padding: 0px 24px 2px 0 !important; /* Added 2px more padding after chevron */
+}
 
-  /* SOLUTION 2: Smaller fonts for more compact toolbox */
-  .embedded-mode .blocklyTreeLabel {
-    font-size: 14px !important; /* Reduced from default 16px */
-    line-height: 1.2 !important;
-  }
+/* SOLUTION 2: Smaller fonts for more compact toolbox */
+.embedded-mode .blocklyTreeLabel {
+  font-size: 14px !important; /* Reduced from default 16px */
+  line-height: 1.2 !important;
+}
 
-  /* Margins between categories */
-  .embedded-mode .blocklyToolboxCategory {
-    margin: 2px !important;
-  }
+/* Margins between categories */
+.embedded-mode .blocklyToolboxCategory {
+  margin: 2px !important;
+}
 
-  /* SOLUTION 3: Limit subcategory expansion height */
-  .embedded-mode .blocklyToolboxCategoryContainer[aria-expanded="true"] {
-    max-height: 200px; /* Limit expanded category height */
-    overflow-y: auto; /* Allow scrolling within expanded categories */
-  }
-  
-  /* -----------------------------------------------------------------------------
+/* SOLUTION 3: Limit subcategory expansion height */
+.embedded-mode .blocklyToolboxCategoryContainer[aria-expanded="true"] {
+  max-height: 200px; /* Limit expanded category height */
+  overflow-y: auto; /* Allow scrolling within expanded categories */
+}
+
+/* -----------------------------------------------------------------------------
      Visual Distinction for Subcategory Levels
      ----------------------------------------------------------------------------- */
-  .embedded-mode .blocklyToolbox .blocklyToolboxCategoryContainer[aria-level="2"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
-    background: #E8F5E8; /* light green */
-  }
-  
-  .embedded-mode .blocklyToolbox .blocklyToolboxCategoryContainer[aria-level="3"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
-    background: #FFF3E0; /* light orange */
-  }
-  
-  .embedded-mode .blocklyToolbox .blocklyToolboxCategoryContainer[aria-level="4"] .blocklyToolboxCategory:not(:has(input[type="search"])) {
-    background: #F3E5F5; /* light purple */
-  }
-  
-  /* -----------------------------------------------------------------------------
+.embedded-mode
+  .blocklyToolbox
+  .blocklyToolboxCategoryContainer[aria-level="2"]
+  .blocklyToolboxCategory:not(:has(input[type="search"])) {
+  background: #e8f5e8; /* light green */
+}
+
+.embedded-mode
+  .blocklyToolbox
+  .blocklyToolboxCategoryContainer[aria-level="3"]
+  .blocklyToolboxCategory:not(:has(input[type="search"])) {
+  background: #fff3e0; /* light orange */
+}
+
+.embedded-mode
+  .blocklyToolbox
+  .blocklyToolboxCategoryContainer[aria-level="4"]
+  .blocklyToolboxCategory:not(:has(input[type="search"])) {
+  background: #f3e5f5; /* light purple */
+}
+
+/* -----------------------------------------------------------------------------
      Touch Optimizations (iPad) - Using shared .touch-optimized class
      ----------------------------------------------------------------------------- */
-  .embedded-mode .blocklyToolboxCategory {
-    /* Use shared touch optimizations from shared-styles.css */
-    -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    user-select: none;
-  }
-  
-  .embedded-mode .blocklyFlyout .blocklyBlockCanvas > .blocklyDraggable {
-    margin: 8px 0 !important;
-  }
-  
-  .embedded-mode .blocklyScrollbarHandle {
-    width: 12px !important;
-    height: 12px !important;
-  }
-  
-  /* Make search input take full width */
-  .embedded-mode .blocklyToolboxCategoryContainer:has(input[type="search"]) {
-    width: calc(98.7%)!important;
-  }
-  
-  .embedded-mode .blocklyToolboxCategory:has(input[type="search"]) input[type="search"],
-  .embedded-mode input[type="search"] {
-    width: 100% !important;
-  }
-  
+.embedded-mode .blocklyToolboxCategory {
+  /* Use shared touch optimizations from shared-styles.css */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.embedded-mode .blocklyFlyout .blocklyBlockCanvas > .blocklyDraggable {
+  margin: 8px 0 !important;
+}
+
+.embedded-mode .blocklyScrollbarHandle {
+  width: 12px !important;
+  height: 12px !important;
+}
+
+/* Make search input take full width */
+.embedded-mode .blocklyToolboxCategoryContainer:has(input[type="search"]) {
+  width: calc(98.7%) !important;
+}
+
+.embedded-mode
+  .blocklyToolboxCategory:has(input[type="search"])
+  input[type="search"],
+.embedded-mode input[type="search"] {
+  width: 100% !important;
+}
+
+.embedded-mode .blocklyScrollbarHandle {
+  display: none !important; /* Hide scrollbar handles for cleaner look */
+}

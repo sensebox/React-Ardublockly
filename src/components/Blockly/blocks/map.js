@@ -12,8 +12,8 @@
  */
 
 import * as Blockly from "blockly/core";
-import { getColour } from "../helpers/colour";
-import * as Types from "../helpers/types";
+import { getColour } from "@/components/Blockly/helpers/colour";
+import * as Types from "@/components/Blockly/helpers/types";
 
 Blockly.Blocks["base_map"] = {
   /**
