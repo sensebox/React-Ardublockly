@@ -46,7 +46,7 @@ const FloatingSerial = () => {
 
   const theme = useTheme();
   const [helpOpen, setHelpOpen] = useState(false);
-  const [loop, setLoop] = useState(false);
+  const [loop, setLoop] = useState(true);
   const handlePlay = async () => {
     if (!connected) return;
     try {
@@ -154,17 +154,6 @@ const FloatingSerial = () => {
             >
               Stopp
             </Button>
-          </Tooltip>
-
-          <Tooltip title="Loop">
-            <IconButton
-              color={loop ? "primary" : "default"}
-              onClick={() => {
-                setLoop((l) => !l);
-              }}
-            >
-              <Loop />
-            </IconButton>
           </Tooltip>
 
           <Tooltip title="Help">
