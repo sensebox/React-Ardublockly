@@ -16,10 +16,14 @@ export default function useWebSerial({ setLog, logBoxRef }) {
   const [connected, setConnected] = useState(false);
   const [status, setStatus] = useState("Disconnected");
   const [delay, setDelay] = useState(30);
+  const [isSending, setIsSending] = useState(false);
+  const [loop, setLoop] = useState(false);
 
   const portRef = useRef(null);
   const readerRef = useRef(null);
   const writerRef = useRef(null);
+  const isSendingRef = useRef(false);
+  const loopRef = useRef(false);
   const script = useSelector((s) => s.workspace.code.basic);
 
   const logMessage = useCallback(
@@ -143,18 +147,47 @@ export default function useWebSerial({ setLog, logBoxRef }) {
 
   const sendScript = useCallback(
     async (d = delay) => {
-      const lines = script.split(/\r?\n/);
-      for (let line of lines) {
-        const trimmed = line.trimEnd();
-        if (trimmed) {
-          await sendLine(trimmed);
-          const ms = Math.max(0, Number.isFinite(d) ? d : 0);
-          if (ms > 0) await new Promise((r) => setTimeout(r, ms));
+      if (!writerRef.current) return;
+      isSendingRef.current = true;
+      setIsSending(true);
+      try {
+        const lines = script.split(/\r?\n/);
+        for (let line of lines) {
+          if (!isSendingRef.current) break;
+          const trimmed = line.trimEnd();
+          if (trimmed) {
+            await sendLine(trimmed);
+            const ms = Math.max(0, Number.isFinite(d) ? d : 0);
+            if (ms > 0) await new Promise((r) => setTimeout(r, ms));
+          }
         }
+      } finally {
+        isSendingRef.current = false;
+        setIsSending(false);
       }
     },
     [script, sendLine, delay],
   );
+
+  const stopSend = useCallback(() => {
+    isSendingRef.current = false;
+    setIsSending(false);
+  }, []);
+
+  const toggleLoop = useCallback(() => {
+    loopRef.current = !loopRef.current;
+    setLoop(loopRef.current);
+    // If enabling loop and connected, start loop
+    if (loopRef.current && connected) {
+      (async function runLoop() {
+        while (loopRef.current && connected) {
+          await sendScript();
+          // small pause between iterations
+          await new Promise((r) => setTimeout(r, 50));
+        }
+      })();
+    }
+  }, [connected, sendScript]);
 
   const clearLog = useCallback(() => setLog(""), [setLog]);
   const copyLog = useCallback(async () => {
@@ -202,6 +235,10 @@ export default function useWebSerial({ setLog, logBoxRef }) {
     disconnect,
     sendLine,
     sendScript,
+    stopSend,
+    isSending,
+    loop,
+    toggleLoop,
     clearLog,
     copyLog,
   };
