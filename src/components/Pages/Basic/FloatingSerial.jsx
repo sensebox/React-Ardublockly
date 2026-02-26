@@ -6,15 +6,21 @@ import {
   TextField,
   Paper,
   Typography,
+  useTheme,
+  Tooltip,
+  Modal,
 } from "@mui/material";
 import {
-  ConnectWithoutContact,
-  Send,
-  Delete,
-  ContentCopy,
   PlayArrow,
   Stop,
+  Computer,
+  Bluetooth,
+  BluetoothDisabled,
+  Rocket,
+  Delete,
+  ContentCopy,
   Loop,
+  Close as CloseIcon,
 } from "@mui/icons-material";
 import useWebSerial from "@/hooks/WebSerialService";
 
@@ -40,74 +46,147 @@ const FloatingSerial = () => {
     copyLog,
   } = useWebSerial({ setLog, logBoxRef: logRef });
 
+  const theme = useTheme();
+  const [helpOpen, setHelpOpen] = useState(false);
+
+  const handlePlay = async () => {
+    if (!connected) return;
+    try {
+      await sendLine("STOP");
+      await new Promise((r) => setTimeout(r, 100));
+      await sendScript();
+      await sendLine("RUN");
+    } catch (err) {
+      console.error("Error during play:", err);
+    }
+  };
+
+  const handleStop = async () => {
+    if (!connected) return;
+    try {
+      await sendLine("STOP");
+      stopSend();
+    } catch (err) {
+      console.error("Error during stop:", err);
+    }
+  };
+
+  const handleDisconnect = async () => {
+    if (!connected) return;
+    try {
+      await sendLine("DISCONNECT");
+      await disconnect();
+    } catch (err) {
+      console.error("Error during disconnect:", err);
+    }
+  };
+
   return (
     <>
       <Box
         sx={{
-          position: "fixed",
-          right: 16,
-          top: 16,
-          zIndex: 1400,
+          position: "absolute",
+          top: 26,
+          left: "50%",
+          transform: "translateX(-50%)",
           display: "flex",
-          gap: 1,
           alignItems: "center",
+          justifyContent: "space-between",
+          gap: 2,
+          background: "rgba(255, 255, 255, 0.85)",
+          backdropFilter: "blur(6px)",
+          borderRadius: "12px",
+          boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
+          padding: "12px 24px",
+          zIndex: 1400,
         }}
       >
-        <Button
-          variant={connected ? "contained" : "outlined"}
-          color={connected ? "primary" : "inherit"}
-          startIcon={<ConnectWithoutContact />}
-          onClick={() => (connected ? disconnect() : connect())}
-        >
-          {connected ? "Disconnect" : "Connect"}
-        </Button>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          {connected ? (
+            <Bluetooth sx={{ color: theme.palette.success.main }} />
+          ) : (
+            <BluetoothDisabled sx={{ color: theme.palette.error.main }} />
+          )}
+          <Typography
+            variant="body2"
+            sx={{
+              color: connected
+                ? theme.palette.success.main
+                : theme.palette.error.main,
+              fontWeight: 600,
+            }}
+          >
+            {connected ? "Verbunden" : "Nicht verbunden"}
+          </Typography>
+        </Box>
 
-        <IconButton
-          color={isSending ? "secondary" : "default"}
-          onClick={() => sendScript()}
-          disabled={!connected}
-          aria-label="send"
-          title="Send"
-        >
-          <Send />
-        </IconButton>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+          <Tooltip title="Connect to senseBox">
+            <Button
+              variant={connected ? "outlined" : "contained"}
+              color={connected ? "error" : "primary"}
+              startIcon={<Computer />}
+              onClick={connected ? handleDisconnect : connect}
+              disabled={!supported}
+            >
+              {connected ? "Verbindung trennen" : "Verbinden"}
+            </Button>
+          </Tooltip>
 
-        <IconButton
-          color="primary"
-          onClick={() => {
-            // Play sends a RUN command
-            if (connected) sendLine("RUN");
-          }}
-          disabled={!connected}
-          aria-label="play"
-          title="Play"
-        >
-          <PlayArrow />
-        </IconButton>
+          <Tooltip title="Send & Start program">
+            <Button
+              onClick={handlePlay}
+              disabled={!connected}
+              variant="contained"
+              color="success"
+              startIcon={<PlayArrow />}
+            >
+              Starten
+            </Button>
+          </Tooltip>
 
-        <IconButton
-          color={loop ? "primary" : "default"}
-          onClick={() => {
-            const willEnable = !loop;
-            toggleLoop();
-            if (willEnable && connected) sendLine("LOOP");
-          }}
-          aria-label="loop"
-          title="Loop"
-        >
-          <Loop />
-        </IconButton>
+          <Tooltip title="Stop program">
+            <Button
+              onClick={handleStop}
+              disabled={!connected}
+              variant="contained"
+              color="error"
+              startIcon={<Stop />}
+            >
+              Stopp
+            </Button>
+          </Tooltip>
 
-        <TextField
-          size="small"
-          label="Delay ms"
-          type="number"
-          value={delay}
-          onChange={(e) => setDelay(Number(e.target.value || 0))}
-          sx={{ width: 110 }}
-        />
+          <Tooltip title="Loop">
+            <IconButton
+              color={loop ? "primary" : "default"}
+              onClick={() => {
+                const willEnable = !loop;
+                toggleLoop();
+                if (willEnable && connected) sendLine("LOOP");
+              }}
+            >
+              <Loop />
+            </IconButton>
+          </Tooltip>
+
+          <Tooltip title="Help">
+            <Button
+              onClick={() => setHelpOpen(true)}
+              variant="contained"
+              startIcon={<Rocket />}
+            >
+              Anleitung
+            </Button>
+          </Tooltip>
+        </Box>
+
+        <Modal open={helpOpen} onClose={() => setHelpOpen(false)}>
+          <HelpModal onClose={() => setHelpOpen(false)} />
+        </Modal>
       </Box>
 
+      {/* Log panel bottom-right */}
       <Paper
         elevation={6}
         sx={{
@@ -134,17 +213,12 @@ const FloatingSerial = () => {
           >
             <Delete fontSize="small" />
           </IconButton>
-          <IconButton
-            color="inherit"
-            onClick={() => {
-              if (connected) sendLine("STOP");
-              stopSend();
-            }}
-            disabled={!isSending}
-            title="Stop"
-          >
-            <Stop />
+          <IconButton size="small" onClick={() => copyLog()}>
+            <ContentCopy fontSize="small" />
           </IconButton>
+        </Box>
+
+        <Box sx={{ p: 1, overflow: "auto" }}>
           <pre
             ref={logRef}
             style={{
@@ -164,3 +238,72 @@ const FloatingSerial = () => {
 };
 
 export default FloatingSerial;
+
+function HelpModal({ onClose }) {
+  const [activeSlide, setActiveSlide] = useState(0);
+  const slides = [
+    {
+      title: "Willkommen!",
+      text: "Mit dieser Leiste kannst du die senseBox verbinden, Programm starten, stoppen und in den Loop-Modus versetzen.",
+    },
+    {
+      title: "Run / Stop / Loop",
+      text: "Play (Starten) sendet RUN, Stop sendet STOP. Loop aktiviert wiederholtes Ausführen (sendet LOOP).",
+    },
+  ];
+
+  const next = () => setActiveSlide((s) => Math.min(s + 1, slides.length - 1));
+  const prev = () => setActiveSlide((s) => Math.max(s - 1, 0));
+
+  const slide = slides[activeSlide];
+
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        p: 2,
+      }}
+    >
+      <Paper
+        elevation={12}
+        sx={{ maxWidth: 600, width: "100%", p: 4, position: "relative" }}
+      >
+        <IconButton
+          onClick={onClose}
+          sx={{ position: "absolute", top: 12, right: 12 }}
+        >
+          <CloseIcon />
+        </IconButton>
+        <Typography
+          variant="h5"
+          sx={{ fontWeight: 700, mb: 2, textAlign: "center" }}
+        >
+          {slide.title}
+        </Typography>
+        <Typography variant="body1" sx={{ textAlign: "center", mb: 2 }}>
+          {slide.text}
+        </Typography>
+
+        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
+          <Button
+            variant="outlined"
+            onClick={prev}
+            disabled={activeSlide === 0}
+          >
+            Zurück
+          </Button>
+          <Button
+            variant="contained"
+            onClick={next}
+            disabled={activeSlide === slides.length - 1}
+          >
+            Weiter
+          </Button>
+        </Box>
+      </Paper>
+    </Box>
+  );
+}
