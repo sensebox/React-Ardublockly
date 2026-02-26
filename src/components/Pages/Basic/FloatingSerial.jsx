@@ -40,22 +40,21 @@ const FloatingSerial = () => {
     sendScript,
     stopSend,
     isSending,
-    loop,
-    toggleLoop,
     clearLog,
     copyLog,
   } = useWebSerial({ setLog, logBoxRef: logRef });
 
   const theme = useTheme();
   const [helpOpen, setHelpOpen] = useState(false);
-
+  const [loop, setLoop] = useState(false);
   const handlePlay = async () => {
     if (!connected) return;
     try {
       await sendLine("STOP");
       await new Promise((r) => setTimeout(r, 100));
       await sendScript();
-      await sendLine("RUN");
+      // If loop mode is active, send LOOP once; otherwise send RUN
+      await sendLine(loop ? "LOOP" : "RUN");
     } catch (err) {
       console.error("Error during play:", err);
     }
@@ -161,9 +160,7 @@ const FloatingSerial = () => {
             <IconButton
               color={loop ? "primary" : "default"}
               onClick={() => {
-                const willEnable = !loop;
-                toggleLoop();
-                if (willEnable && connected) sendLine("LOOP");
+                setLoop((l) => !l);
               }}
             >
               <Loop />
