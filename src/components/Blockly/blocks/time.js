@@ -9,8 +9,8 @@
  *     http://arduino.cc/en/Reference/HomePage
  */
 import * as Blockly from "blockly";
-import { getColour } from "@/components/Blockly/helpers/colour";
-import * as Types from "@/components/Blockly/helpers/types";
+import { getColour } from "../helpers/colour";
+import * as Types from "../helpers/types";
 
 Blockly.Blocks["time_delay"] = {
   /**

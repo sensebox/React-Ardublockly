@@ -1,5 +1,5 @@
 import * as Blockly from "blockly";
-import { getColour } from "@/components/Blockly/helpers/colour";
+import { getColour } from "../helpers/colour";
 
 Blockly.Blocks["sensebox_telegram"] = {
   init: function () {

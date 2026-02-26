@@ -1,7 +1,6 @@
 import * as Blockly from "blockly";
-import { getColour } from "@/components/Blockly/helpers/colour";
-import { selectedBoard } from "@/components/Blockly/helpers/board";
-
+import { getColour } from "../helpers/colour";
+import { selectedBoard } from "../helpers/board";
 import { FieldSlider } from "@blockly/field-slider";
 
 Blockly.Blocks["sensebox_fluoroASM_init"] = {

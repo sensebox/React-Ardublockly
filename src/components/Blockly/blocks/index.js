@@ -29,4 +29,5 @@ import "./lists";
 import "./watchdog";
 import "./webserver";
 import "./fluoroASM";
-import "@/components/Blockly/helpers/types";
+import "./custom-functions";
+import "../helpers/types";

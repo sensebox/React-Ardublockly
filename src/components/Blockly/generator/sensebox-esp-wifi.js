@@ -1,5 +1,5 @@
 import * as Blockly from "blockly";
-//import store from "@/store";
+//import store from "../../../store";
 
 // preperations for the esp board
 // var selectedBoard = store.getState().board.board;

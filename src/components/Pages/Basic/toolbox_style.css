@@ -1,4 +1,0 @@
-/* Hide scrollbar handles on Basic Blockly page */
-.blocklyScrollbarHandle {
-  display: none !important;
-}

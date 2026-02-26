@@ -10,7 +10,7 @@ import {
 } from "./types";
 
 import * as Blockly from "blockly/core";
-import { basicGenerator } from "@/components/Blockly/generator/basic/generator";
+
 import { storeTutorialXml } from "./tutorialActions";
 
 export const workspaceChange = () => (dispatch) => {
@@ -23,7 +23,6 @@ export const onChangeCode = () => (dispatch, getState) => {
   const workspace = Blockly.getMainWorkspace();
   var code = getState().workspace.code;
   code.arduino = Blockly.Generator.Arduino.workspaceToCode(workspace);
-  code.basic = basicGenerator.workspaceToCode(workspace);
   var xmlDom = Blockly.Xml.workspaceToDom(workspace);
   var board = getState().board.board;
   xmlDom.setAttribute("board", board);
@@ -49,7 +48,7 @@ export const onChangeCode = () => (dispatch, getState) => {
 export const onChangeWorkspace = (event) => (dispatch, getState) => {
   dispatch(workspaceChange());
   var code = dispatch(onChangeCode());
-
+  
   dispatch(storeTutorialXml(code.xml));
   var stats = getState().workspace.stats;
   if (event.type === Blockly.Events.BLOCK_CREATE) {

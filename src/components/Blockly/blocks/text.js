@@ -1,6 +1,6 @@
 import * as Blockly from "blockly/core";
-import { getColour } from "@/components/Blockly/helpers/colour";
-import * as Types from "@/components/Blockly/helpers/types";
+import { getColour } from "../helpers/colour";
+import * as Types from "../helpers/types";
 
 Blockly.defineBlocksWithJsonArray([
   // BEGIN JSON EXTRACT

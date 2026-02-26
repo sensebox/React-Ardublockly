@@ -1,5 +1,5 @@
 import * as Blockly from "blockly/core";
-import { getColour } from "@/components/Blockly/helpers/colour";
+import { getColour } from "../helpers/colour";
 
 Blockly.Blocks["watchdog_enable"] = {
   init: function () {
