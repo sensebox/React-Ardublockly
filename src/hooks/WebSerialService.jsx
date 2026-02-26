@@ -174,21 +174,6 @@ export default function useWebSerial({ setLog, logBoxRef }) {
     setIsSending(false);
   }, []);
 
-  const toggleLoop = useCallback(() => {
-    loopRef.current = !loopRef.current;
-    setLoop(loopRef.current);
-    // If enabling loop and connected, start loop
-    if (loopRef.current && connected) {
-      (async function runLoop() {
-        while (loopRef.current && connected) {
-          await sendScript();
-          // small pause between iterations
-          await new Promise((r) => setTimeout(r, 50));
-        }
-      })();
-    }
-  }, [connected, sendScript]);
-
   const clearLog = useCallback(() => setLog(""), [setLog]);
   const copyLog = useCallback(async () => {
     try {
@@ -238,7 +223,6 @@ export default function useWebSerial({ setLog, logBoxRef }) {
     stopSend,
     isSending,
     loop,
-    toggleLoop,
     clearLog,
     copyLog,
   };
