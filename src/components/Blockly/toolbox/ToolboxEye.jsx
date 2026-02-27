@@ -1,11 +1,13 @@
 import React from "react";
-import { Block, Value, Field, Shadow, Category, Label } from "..";
+import { useSelector } from "react-redux";
+import { Block, Value, Field, Shadow, Category, Label, Button } from "..";
 import { getColour } from "../helpers/colour";
 import * as Blockly from "blockly/core";
 import "@blockly/toolbox-search";
 import "./search-category.css";
 
 export const ToolboxEye = () => {
+  const aiModel = useSelector((state) => state.general.aiModel);
   return (
     <>
       {/* ============================== SEARCH ============================== */}
@@ -696,6 +698,19 @@ export const ToolboxEye = () => {
               </Block>
             </Value>
           </Block>
+        </Category>
+
+        {/* ============================== AI ============================== */}
+        <Category
+          id="sensebox_ai"
+          name={Blockly.Msg.toolbox_ai || "AI"}
+          colour={getColour().ai}
+        >
+          <Button
+            text={Blockly.Msg.ai_upload_model || "Upload Trained Model"}
+            callbackKey="uploadAiModel"
+          />
+          {aiModel?.code && <Block type="sensebox_teachable_classify" />}
         </Category>
 
         {/* -------- WATCHDOG -------- */}

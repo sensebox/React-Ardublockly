@@ -442,19 +442,12 @@ const sensebox_eye = {
     ["IO14", "14"],
     ["IO48", "48"],
   ],
-  serial: [
-    ["Serial", "Serial"],
-    ["Serial0", "Serial0"],
-  ],
+  serial: [["Serial", "Serial"]],
   serialSensors: [["Serial0", "Serial0"]],
   serialPins: {
-    SerialUSB: [
+    Serial: [
       ["RX", ""],
       ["TX", ""],
-    ],
-    Serial0: [
-      ["RX", "1"],
-      ["TX", "2"],
     ],
   },
   serialSpeed: [
@@ -527,6 +520,7 @@ export const setBoardHelper = (selectedBoard) => {
       board = sensebox_esp32;
       break;
     case "eye":
+    case "EYE":
       board = sensebox_eye;
       break;
     default:

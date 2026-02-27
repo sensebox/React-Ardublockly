@@ -7,15 +7,15 @@ import store from "../../../store";
  * AI Model Output Block
  * Returns prediction output from uploaded TensorFlow Lite model
  */
-Blockly.Blocks["sensebox_teachable_output"] = {
+Blockly.Blocks["sensebox_teachable_classify"] = {
   init: function () {
-    this.appendDummyInput().appendField(
-      Blockly.Msg.sensebox_teachable_output || "AI Model Output",
-    );
+    this.appendValueInput("image")
+      .appendField(Blockly.Msg.sensebox_teachable_classify || "AI Model Output")
+      .setCheck(Types.IMAGE.typeName);
     this.setOutput(true, Types.TEXT.typeName);
     this.setColour(getColour().ai);
     this.setTooltip(
-      Blockly.Msg.sensebox_teachable_output_tooltip ||
+      Blockly.Msg.sensebox_teachable_classify_tooltip ||
         "Get output from the uploaded AI model",
     );
     this.setHelpUrl("");
