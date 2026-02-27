@@ -38,7 +38,7 @@ export const UI = {
   toolbox_internet_and_comms: "Datenübertragung",
   toolbox_ai: "KI",
   ai_upload_model: "Trainiertes Modell hochladen",
-  ai_model_output: "KI Modell Ausgabe",
+  ai_classify: "Klassifiziere",
   ai_no_model_uploaded: "Kein Modell hochgeladen",
   ai_model_uploaded: "Modell geladen",
 

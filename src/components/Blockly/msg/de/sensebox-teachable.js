@@ -1,5 +1,5 @@
 export const SENSEBOX_TEACHABLE = {
-  sensebox_teachable_output: "KI Modell Ausgabe",
-  sensebox_teachable_output_tooltip:
-    "Ausgabe des hochgeladenen KI-Modells abrufen",
+  sensebox_teachable_classify: "Klassifiziere Bild",
+  sensebox_teachable_classify_tooltip:
+    "Klassifiziere ein Bild mit dem hochgeladenen KI-Modell",
 };

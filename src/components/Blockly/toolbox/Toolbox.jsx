@@ -15,6 +15,7 @@ const Toolbox = ({ workspace, toolbox }) => {
   const language = useSelector((state) => state.general.language);
   const setupIntervalRef = useRef(null);
   const fileInputRef = useRef(null);
+  const aiModel = useSelector((state) => state.general.aiModel);
 
   useEffect(() => {
     if (!workspace || !toolbox?.current) return;
@@ -156,7 +157,7 @@ const Toolbox = ({ workspace, toolbox }) => {
         flyout.hide = flyoutOriginalHide;
       }
     };
-  }, [workspace, toolbox, selectedBoard, language, dispatch]);
+  }, [workspace, toolbox, selectedBoard, language, dispatch, aiModel?.code]);
 
   const handleFileSelect = (event) => {
     const file = event.target.files[0];
@@ -179,20 +180,30 @@ const Toolbox = ({ workspace, toolbox }) => {
   };
 
   return (
-    <xml
-      xmlns="https://developers.google.com/blockly/xml"
-      id="blockly"
-      style={{ display: "none" }}
-      ref={toolbox}
-    >
-      {selectedBoard === "MCU" || selectedBoard === "MCU:MINI" ? (
-        <ToolboxMcu />
-      ) : selectedBoard === "MCU-S2" ? (
-        <ToolboxEsp />
-      ) : (
-        <ToolboxEye />
-      )}
-    </xml>
+    <>
+      {/* file input for AI model upload */}
+      <input
+        type="file"
+        accept=".cpp"
+        ref={fileInputRef}
+        style={{ display: "none" }}
+        onChange={handleFileSelect}
+      />
+      <xml
+        xmlns="https://developers.google.com/blockly/xml"
+        id="blockly"
+        style={{ display: "none" }}
+        ref={toolbox}
+      >
+        {selectedBoard === "MCU" || selectedBoard === "MCU:MINI" ? (
+          <ToolboxMcu />
+        ) : selectedBoard === "MCU-S2" ? (
+          <ToolboxEsp />
+        ) : (
+          <ToolboxEye />
+        )}
+      </xml>
+    </>
   );
 };
 

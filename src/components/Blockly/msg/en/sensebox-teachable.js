@@ -1,4 +1,5 @@
 export const SENSEBOX_TEACHABLE = {
-  sensebox_teachable_output: "AI Model Output",
-  sensebox_teachable_output_tooltip: "Get output from the uploaded AI model",
+  sensebox_teachable_classify: "Classify image",
+  sensebox_teachable_classify_tooltip:
+    "Classify an image using the uploaded AI model",
 };

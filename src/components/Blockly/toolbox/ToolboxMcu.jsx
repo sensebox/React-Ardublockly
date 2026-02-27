@@ -720,19 +720,6 @@ export const ToolboxMcu = () => {
           </Block>
         </Category>
 
-        {/* ============================== AI ============================== */}
-        <Category
-          id="sensebox_ai"
-          name={Blockly.Msg.toolbox_ai || "AI"}
-          colour={getColour().ai}
-        >
-          <Button
-            text={Blockly.Msg.ai_upload_model || "Upload Trained Model"}
-            callbackKey="uploadAiModel"
-          />
-          <Block type="sensebox_teachable_output" />
-        </Category>
-
         {/* -------- WATCHDOG -------- */}
         <Category name="Watchdog" colour={getColour().io}>
           <Block type="watchdog_enable" />
