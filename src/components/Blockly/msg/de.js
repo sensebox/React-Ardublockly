@@ -30,6 +30,7 @@ import { UI } from "./de/ui";
 import { VARIABLES } from "./de/variables";
 import { WEBSERVER } from "./de/webserver";
 import { FLUOROASM } from "./de/fluoroASM";
+import { CUSTOM_FUNCTIONS } from "./de/custom-functions";
 
 export const De = {
   ...AUDIO,
@@ -64,4 +65,5 @@ export const De = {
   ...VARIABLES,
   ...WEBSERVER,
   ...FLUOROASM,
+  ...CUSTOM_FUNCTIONS,
 };
