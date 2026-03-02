@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { buildTutorialPayload } from "../utils/tutorialPayload";
-import { saveTutorial } from "../services/tutorial.service";
+import { saveTutorial } from "../../services/tutorial.service";
 
 const deepEqual = (obj1, obj2) => JSON.stringify(obj1) === JSON.stringify(obj2);
 

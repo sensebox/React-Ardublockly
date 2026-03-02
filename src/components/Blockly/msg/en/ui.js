@@ -269,7 +269,7 @@ export const UI = {
   /**
    * Tutorial Builder
    */
-  uilder_createNew: "create new Tutorial",
+  builder_createNew: "Create new Tutorial",
   builder_changeExisting: "change existing Tutorial",
   builder_deleteExisting: "remove existing Tutorial",
   builder_solution: "Solution",
