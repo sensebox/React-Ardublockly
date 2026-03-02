@@ -91,7 +91,11 @@ const GalleryItem = ({ project }) => {
           "&:hover": { boxShadow: 6 },
         }}
       >
-        <CardActionArea sx={{ textAlign: "left", cursor: "default" }}>
+        <CardActionArea
+          component={Link}
+          to={`/gallery/${project._id}`}
+          sx={{ textAlign: "left" }}
+        >
           <Box
             sx={{
               height: 160,
@@ -141,7 +145,10 @@ const GalleryItem = ({ project }) => {
 
               {user && user.email === project.creator && (
                 <IconButton
-                  onClick={handleOpenRename}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleOpenRename();
+                  }}
                   aria-label="Titel und Beschreibung bearbeiten"
                   sx={{
                     backgroundColor: "#f0f0f0",
@@ -207,7 +214,10 @@ const GalleryItem = ({ project }) => {
 
           {user && user.email === project.creator && (
             <Button
-              onClick={() => setOpenDelete(true)}
+              onClick={(e) => {
+                e.preventDefault();
+                setOpenDelete(true);
+              }}
               fullWidth
               color="error"
               startIcon={<FontAwesomeIcon icon={faTrash} />}
