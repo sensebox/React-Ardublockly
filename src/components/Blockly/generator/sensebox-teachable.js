@@ -125,8 +125,7 @@ void feedImageToModel(camera_fb_t* fb, int8_t* model_input_data) {
     classPercentages[i] = -1;
   }
   
-  camera_fb_t *fb = esp_camera_fb_get();
-  feedImageToModel(fb, model_input->data.int8);
+  feedImageToModel(image_data, model_input->data.int8);
   // Run inference, and report any error.
   TfLiteStatus invoke_status = interpreter->Invoke();
   if (invoke_status == kTfLiteOk)
@@ -153,7 +152,6 @@ void feedImageToModel(camera_fb_t* fb, int8_t* model_input_data) {
     result = kCategoryLabels[maxIndex];
   }
   
-  esp_camera_fb_return(fb);
   return result;
   }`;
 
