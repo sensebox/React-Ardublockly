@@ -274,4 +274,12 @@ The measured values for temperature, humidity and air pressure can be used direc
    * ICM Accel/Gyro
    */
   senseBox_icm20948: "Accelerometer/Gyroscope (ICM20948)",
+  /**
+   * Camera
+   */
+  senseBox_camera: "Camera",
+  senseBox_camera_tooltip:
+    "Take pictures with the camera of the senseBox Eye. The taken pictures are black and white with a resolution of 94x94 pixels.",
+  senseBox_camera_helpurl:
+    "https://docs.sensebox.de/docs/hardware/sensors/camera", //TODO
 };

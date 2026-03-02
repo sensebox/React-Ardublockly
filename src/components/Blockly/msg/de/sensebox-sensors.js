@@ -267,4 +267,12 @@ Die Messwerte für Temperatur, Luftfeuchtigkeit und Luftdruck können direkt ver
    * ICM Accel/Gyro
    */
   senseBox_icm20948: "Beschleunigungs-/Gyroskopsensor (ICM20948)",
+  /**
+   * Camera
+   */
+  senseBox_camera: "Kamera",
+  senseBox_camera_tooltip:
+    "Nehme Bilder mit der Kamera der senseBox Eye auf. Die aufgenommenen Bilder sind schwarz-weiß mit einer Auflösung von 94x94 Pixeln.",
+  senseBox_camera_helpurl:
+    "https://docs.sensebox.de/docs/hardware/sensors/camera", //TODO
 };

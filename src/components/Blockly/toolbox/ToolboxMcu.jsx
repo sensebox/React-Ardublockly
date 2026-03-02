@@ -1,5 +1,5 @@
 import React from "react";
-import { Block, Value, Field, Shadow, Category, Sep, Label } from "..";
+import { Block, Value, Field, Shadow, Category, Sep, Label, Button } from "..";
 import { getColour } from "../helpers/colour";
 import * as Blockly from "blockly/core";
 import "@blockly/toolbox-search";
@@ -658,6 +658,9 @@ export const ToolboxMcu = () => {
       <Category
         name={Blockly.Msg.toolbox_custom_functions}
         colour={getColour().procedures}
+      >
+        <Block type="procedures_defnoreturn" />
+        <Block type="procedures_defreturn" />
         custom="CUSTOM_FUNCTIONS_DYNAMIC"
       />
 

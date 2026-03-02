@@ -71,4 +71,10 @@ const Label = (p) => {
   return React.createElement("label", props, children);
 };
 
-export { Block, Category, Value, Statement, Field, Shadow, Sep, Label };
+const Button = (p) => {
+  const { children, ...props } = p;
+  props.is = "blockly";
+  return React.createElement("button", props, children);
+};
+
+export { Block, Category, Value, Statement, Field, Shadow, Sep, Label, Button };

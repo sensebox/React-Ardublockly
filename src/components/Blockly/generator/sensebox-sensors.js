@@ -232,15 +232,17 @@ Blockly.Generator.Arduino.forBlock["sensebox_sensor_bme680_bsec"] =
     let code = "";
     Blockly.Generator.Arduino.libraries_["library_bsec2"] =
       "#include <bsec2.h> // http://librarymanager/All#BSEC_Software_Library";
-    Blockly.Generator.Arduino.definitions_["bsec2_bme680"] =
-      "Bsec2 bme680;";
-    Blockly.Generator.Arduino.variables_["bmeTemperatur"] =           "float bmeTemperatur;";
-    Blockly.Generator.Arduino.variables_["bmeHumidity"] =             "float bmeHumidity;";
-    Blockly.Generator.Arduino.variables_["bmePressure"] =             "double bmePressure;";
-    Blockly.Generator.Arduino.variables_["bmeIAQ"] =                  "float bmeIAQ;";
-    Blockly.Generator.Arduino.variables_["bmeIAQAccuracy"] =          "float bmeIAQAccuracy;";
-    Blockly.Generator.Arduino.variables_["bmeCO2"] =                  "int bmeCO2;";
-    Blockly.Generator.Arduino.variables_["bmeBreathVocEquivalent"] =  "float bmeBreathVocEquivalent;";
+    Blockly.Generator.Arduino.definitions_["bsec2_bme680"] = "Bsec2 bme680;";
+    Blockly.Generator.Arduino.variables_["bmeTemperatur"] =
+      "float bmeTemperatur;";
+    Blockly.Generator.Arduino.variables_["bmeHumidity"] = "float bmeHumidity;";
+    Blockly.Generator.Arduino.variables_["bmePressure"] = "double bmePressure;";
+    Blockly.Generator.Arduino.variables_["bmeIAQ"] = "float bmeIAQ;";
+    Blockly.Generator.Arduino.variables_["bmeIAQAccuracy"] =
+      "float bmeIAQAccuracy;";
+    Blockly.Generator.Arduino.variables_["bmeCO2"] = "int bmeCO2;";
+    Blockly.Generator.Arduino.variables_["bmeBreathVocEquivalent"] =
+      "float bmeBreathVocEquivalent;";
 
     Blockly.Generator.Arduino.functionNames_["BME680begin"] = `
 bool BME680begin() {
@@ -273,11 +275,10 @@ bool BME680begin() {
   return true;
 }
 
-    `
+    `;
     //Setup Code
     Blockly.Generator.Arduino.preSetupCode_["Wire.begin"] = "Wire.begin();";
-    Blockly.Generator.Arduino.setupCode_["bme680.begin"] =
-      "BME680begin();";
+    Blockly.Generator.Arduino.setupCode_["bme680.begin"] = "BME680begin();";
     //Loop Code
     Blockly.Generator.Arduino.loopCodeOnce_["bme680loop"] = `
     if (bme680.run()) {
@@ -1246,5 +1247,61 @@ Blockly.Generator.Arduino.forBlock["sensebox_sensor_max17048"] = function () {
   Blockly.Generator.Arduino.definitions_["define_max17048"] =
     "Adafruit_MAX17048 maxlipo;";
   Blockly.Generator.Arduino.setupCode_["max17048.begin()"] = "maxlipo.begin();";
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
+};
+
+Blockly.Generator.Arduino.forBlock["sensebox_camera"] = function () {
+  var code = "";
+
+  Blockly.Generator.Arduino.libraries_["esp_camera"] =
+    `#include "esp_camera.h"`;
+  Blockly.Generator.Arduino.setupCode_["camera_config"] =
+    "camera_config_t config;\n" +
+    "config.ledc_channel = LEDC_CHANNEL_0;\n" +
+    "config.ledc_timer = LEDC_TIMER_0;\n" +
+    "config.pin_d0 = Y2_GPIO_NUM;\n" +
+    "config.pin_d1 = Y3_GPIO_NUM;\n" +
+    "config.pin_d2 = Y4_GPIO_NUM;\n" +
+    "config.pin_d3 = Y5_GPIO_NUM;\n" +
+    "config.pin_d4 = Y6_GPIO_NUM;\n" +
+    "config.pin_d5 = Y7_GPIO_NUM;\n" +
+    "config.pin_d6 = Y8_GPIO_NUM;\n" +
+    "config.pin_d7 = Y9_GPIO_NUM;\n" +
+    "config.pin_xclk = XCLK_GPIO_NUM;\n" +
+    "config.pin_pclk = PCLK_GPIO_NUM;\n" +
+    "config.pin_vsync = VSYNC_GPIO_NUM;\n" +
+    "config.pin_href = HREF_GPIO_NUM;\n" +
+    "config.pin_sccb_sda = SIOD_GPIO_NUM;\n" +
+    "config.pin_sccb_scl = SIOC_GPIO_NUM;\n" +
+    "config.pin_pwdn = PWDN_GPIO_NUM;\n" +
+    "config.pin_reset = RESET_GPIO_NUM;\n" +
+    "config.xclk_freq_hz = 20000000;\n" +
+    "config.pixel_format = PIXFORMAT_GRAYSCALE;\n" +
+    "config.frame_size = FRAMESIZE_96X96; // Small grayscale image\n" +
+    "config.jpeg_quality = 12;\n" +
+    "config.fb_count = 1;\n" +
+    "config.fb_location = CAMERA_FB_IN_DRAM;\n" +
+    "config.grab_mode = CAMERA_GRAB_WHEN_EMPTY;";
+  Blockly.Generator.Arduino.setupCode_["camera_init"] =
+    "esp_err_t err = esp_camera_init(&config);";
+
+  // Add helper function for scoped camera access
+  Blockly.Generator.Arduino.codeFunctions_["camera_scoped_helper"] = `
+// Helper class for automatic framebuffer management
+class ScopedCamera {
+private:
+  camera_fb_t *fb;
+public:
+  ScopedCamera() : fb(esp_camera_fb_get()) {}
+  ~ScopedCamera() { 
+    if (fb) esp_camera_fb_return(fb); 
+  }
+  camera_fb_t* get() { return fb; }
+  operator bool() const { return fb != nullptr; }
+};`;
+
+  // Use ScopedCamera for automatic cleanup
+  code = "ScopedCamera().get()";
+
   return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };

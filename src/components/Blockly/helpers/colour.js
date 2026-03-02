@@ -17,6 +17,7 @@ const colours = {
   phyphox: 25,
   motors: 190,
   solar: 0,
+  ai: 280,
 };
 
 export const getColour = () => {
