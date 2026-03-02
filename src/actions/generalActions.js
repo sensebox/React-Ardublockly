@@ -7,6 +7,8 @@ import {
   PLATFORM,
   COMPILER,
   EMBEDDED_MODE,
+  AI_MODEL_UPLOAD,
+  AI_MODEL_CLEAR,
 } from "./types";
 
 export const visitPage = () => (dispatch) => {
@@ -64,5 +66,18 @@ export const setEmbeddedMode = (isEmbedded) => (dispatch) => {
   dispatch({
     type: EMBEDDED_MODE,
     payload: isEmbedded,
+  });
+};
+
+export const uploadAiModel = (code, filename) => (dispatch) => {
+  dispatch({
+    type: AI_MODEL_UPLOAD,
+    payload: { code, filename },
+  });
+};
+
+export const clearAiModel = () => (dispatch) => {
+  dispatch({
+    type: AI_MODEL_CLEAR,
   });
 };
