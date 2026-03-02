@@ -267,4 +267,11 @@ Die Messwerte für Temperatur, Luftfeuchtigkeit und Luftdruck können direkt ver
    * ICM Accel/Gyro
    */
   senseBox_icm20948: "Beschleunigungs-/Gyroskopsensor (ICM20948)",
+
+  // senseBox_soil_sensor
+  senseBox_soil_name: "senseBox Bodensensor",
+  senseBox_soil_capacity: "Bodenfeuchte Kapazität",
+  senseBox_soil_temperature: "Bodentemperatur",
+  senseBox_soil_tooltip:
+    "Mit diesem Block kannst du die Bodenfeuchte und Bodentemperatur mit einem Bodensensor messen. Schließe den Sensor an einen der Digital/Analog Ports an und wähle den Port im Block aus. Die Bodenfeuchte wird als Kapazität ausgegeben, die Bodentemperatur in °C.",
 };

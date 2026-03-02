@@ -232,15 +232,17 @@ Blockly.Generator.Arduino.forBlock["sensebox_sensor_bme680_bsec"] =
     let code = "";
     Blockly.Generator.Arduino.libraries_["library_bsec2"] =
       "#include <bsec2.h> // http://librarymanager/All#BSEC_Software_Library";
-    Blockly.Generator.Arduino.definitions_["bsec2_bme680"] =
-      "Bsec2 bme680;";
-    Blockly.Generator.Arduino.variables_["bmeTemperatur"] =           "float bmeTemperatur;";
-    Blockly.Generator.Arduino.variables_["bmeHumidity"] =             "float bmeHumidity;";
-    Blockly.Generator.Arduino.variables_["bmePressure"] =             "double bmePressure;";
-    Blockly.Generator.Arduino.variables_["bmeIAQ"] =                  "float bmeIAQ;";
-    Blockly.Generator.Arduino.variables_["bmeIAQAccuracy"] =          "float bmeIAQAccuracy;";
-    Blockly.Generator.Arduino.variables_["bmeCO2"] =                  "int bmeCO2;";
-    Blockly.Generator.Arduino.variables_["bmeBreathVocEquivalent"] =  "float bmeBreathVocEquivalent;";
+    Blockly.Generator.Arduino.definitions_["bsec2_bme680"] = "Bsec2 bme680;";
+    Blockly.Generator.Arduino.variables_["bmeTemperatur"] =
+      "float bmeTemperatur;";
+    Blockly.Generator.Arduino.variables_["bmeHumidity"] = "float bmeHumidity;";
+    Blockly.Generator.Arduino.variables_["bmePressure"] = "double bmePressure;";
+    Blockly.Generator.Arduino.variables_["bmeIAQ"] = "float bmeIAQ;";
+    Blockly.Generator.Arduino.variables_["bmeIAQAccuracy"] =
+      "float bmeIAQAccuracy;";
+    Blockly.Generator.Arduino.variables_["bmeCO2"] = "int bmeCO2;";
+    Blockly.Generator.Arduino.variables_["bmeBreathVocEquivalent"] =
+      "float bmeBreathVocEquivalent;";
 
     Blockly.Generator.Arduino.functionNames_["BME680begin"] = `
 bool BME680begin() {
@@ -273,11 +275,10 @@ bool BME680begin() {
   return true;
 }
 
-    `
+    `;
     //Setup Code
     Blockly.Generator.Arduino.preSetupCode_["Wire.begin"] = "Wire.begin();";
-    Blockly.Generator.Arduino.setupCode_["bme680.begin"] =
-      "BME680begin();";
+    Blockly.Generator.Arduino.setupCode_["bme680.begin"] = "BME680begin();";
     //Loop Code
     Blockly.Generator.Arduino.loopCodeOnce_["bme680loop"] = `
     if (bme680.run()) {
@@ -1246,5 +1247,31 @@ Blockly.Generator.Arduino.forBlock["sensebox_sensor_max17048"] = function () {
   Blockly.Generator.Arduino.definitions_["define_max17048"] =
     "Adafruit_MAX17048 maxlipo;";
   Blockly.Generator.Arduino.setupCode_["max17048.begin()"] = "maxlipo.begin();";
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
+};
+
+Blockly.Generator.Arduino.forBlock["sensebox_soil_sensor"] = function (
+  block,
+  generator,
+) {
+  const phenomenon = block.getFieldValue("PHENOMENON");
+
+  // Add necessary library imports to the setup code
+  Blockly.Generator.Arduino.libraries_["I2CSoilMoistureSensor"] =
+    "#include <I2CSoilMoistureSensor.h>\n#include <Wire.h>";
+  Blockly.Generator.Arduino.definitions_["define_i2csoilmoisturesensor"] =
+    "I2CSoilMoistureSensor sensor;";
+  // Add sensor initialization to the setup code
+  Blockly.Generator.Arduino.setupCode_["init_soil_sensor"] =
+    "Wire.begin();\n  sensor.begin();\n  delay(1000); // Give some time to boot up;";
+
+  // Generate the code for the selected phenomenon
+  let code = "";
+  if (phenomenon === "CAPACITANCE") {
+    code = "sensor.getCapacitance()";
+  } else if (phenomenon === "TEMPERATURE") {
+    code = "sensor.getTemperature() / 10.0";
+  }
+
   return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
