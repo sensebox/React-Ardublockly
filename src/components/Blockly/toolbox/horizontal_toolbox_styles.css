@@ -2,7 +2,7 @@
    EMBEDDED MODE TOOLBOX STYLES
    ============================================================================= */
 
-/* SOLUTION 1: Enable toolbox scrolling to prevent overflow */
+@media (orientation: portrait) {
 .embedded-mode .blocklyToolboxDiv {
   max-height: 80vh; /* Limit to 80% of viewport height */
   overflow-y: auto; /* Enable vertical scrolling */
@@ -174,4 +174,5 @@
   .embedded-mode input[type="search"] {
     width: 100% !important;
   }
+}
   
