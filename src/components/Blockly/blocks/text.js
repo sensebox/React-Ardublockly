@@ -7,7 +7,7 @@ Blockly.defineBlocksWithJsonArray([
   // Block for text value
   {
     type: "text",
-    message0: "%1",
+    message0: "Text: %1",
     args0: [
       {
         type: "field_input",
