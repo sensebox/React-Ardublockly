@@ -257,19 +257,61 @@ Blockly.defineBlocksWithJsonArray([
   },
 ]);
 
+// Font size configurations for display
+const FONT_SIZE_CONFIG = {
+  small: { size: 6, lineHeight: 8, maxLines: 6 },
+  medium: { size: 8, lineHeight: 10, maxLines: 5 },
+  large: { size: 12, lineHeight: 14, maxLines: 3 },
+};
+
+// Helper function to generate font size toggle buttons SVG
+function generateFontSizeToggleSvg(selectedSize = "medium") {
+  const sizes = ["small", "medium", "large"];
+  const labels = ["S", "M", "L"];
+  const buttonWidth = 28;
+  const buttonHeight = 22;
+  const gap = 4;
+  const totalWidth = sizes.length * buttonWidth + (sizes.length - 1) * gap;
+
+  const buttons = sizes
+    .map((size, index) => {
+      const x = index * (buttonWidth + gap);
+      const isSelected = size === selectedSize;
+      const bgColor = isSelected ? "#00b4e4" : "#cccccc"; // Updated selected color to #00b4e4
+      const textColor = isSelected ? "#ffffff" : "#333333";
+      return `
+      <rect x="${x}" y="0" width="${buttonWidth}" height="${buttonHeight}" rx="4" fill="${bgColor}" stroke="#888888" stroke-width="1" style="cursor: pointer;"/>
+      <text x="${x + buttonWidth / 2}" y="${buttonHeight / 2 + 5}" fill="${textColor}" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle">${labels[index]}</text>
+    `;
+    })
+    .join("");
+
+  const svgTemplate = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalWidth} ${buttonHeight}">
+  ${buttons}
+</svg>`;
+
+  return "data:image/svg+xml;base64," + btoa(svgTemplate);
+}
+
 // Helper function to generate dynamic display SVG with text
-function generateDisplaySvg(text = "") {
+function generateDisplaySvg(text = "", fontSize = "medium") {
+  const config = FONT_SIZE_CONFIG[fontSize] || FONT_SIZE_CONFIG.medium;
+
   // Split text by newlines and limit each line
   const lines = text.split("\n").map((line) => line.substring(0, 20));
 
-  // Limit to 5 lines max to fit in the display
-  const displayLines = lines.slice(0, 5);
+  // Limit lines based on font size
+  const displayLines = lines.slice(0, config.maxLines);
+
+  // Start Y position fixed at the top
+  const startY = config.lineHeight + 12;
 
   // Generate text elements for each line
   const textElements = displayLines
     .map((line, index) => {
-      const yPosition = 20 + index * 10; // Space lines 10px apart
-      return `<text class="display-text" x="15" y="${yPosition}">${line}</text>`;
+      const yPosition = startY + index * config.lineHeight;
+      return `<text class="display-text" x="15" y="${yPosition}" font-size="${config.size}px">${line}</text>`;
     })
     .join("\n      ");
 
@@ -291,7 +333,6 @@ function generateDisplaySvg(text = "") {
       .display-text {
         fill: #ffffff;
         font-family: Arial, sans-serif;
-        font-size: 8px;
         font-weight: bold;
       }
     </style>
@@ -316,10 +357,27 @@ function generateDisplaySvg(text = "") {
 
 Blockly.Blocks["display_print_basic"] = {
   init: function () {
+    // Store current font size
+    this.fontSize_ = "medium";
+
     this.appendDummyInput("DISPLAY_IMAGE").appendField(
-      new Blockly.FieldImage(generateDisplaySvg(""), 160, 90, "*"),
+      new Blockly.FieldImage(generateDisplaySvg("", "medium"), 160, 90, "*"),
       "DISPLAY_ICON",
     );
+
+    // Add font size toggle buttons on a new line
+    this.appendDummyInput("FONT_SIZE")
+      .appendField("Größe:")
+      .appendField(
+        new Blockly.FieldImage(
+          generateFontSizeToggleSvg("medium"),
+          96,
+          22,
+          "font size",
+          this.handleFontSizeClick.bind(this),
+        ),
+        "FONT_SIZE_BUTTONS",
+      );
 
     this.appendValueInput("TEXT")
       .setCheck("String")
@@ -336,139 +394,93 @@ Blockly.Blocks["display_print_basic"] = {
     this.setOnChange(this.onTextChange.bind(this));
   },
 
-  getTextFromBlock: function (textInput) {
-    if (!textInput) return "";
+  handleFontSizeClick: function (field) {
+    const clickEvent = window.event;
+    if (!clickEvent) return;
 
-    let displayText = "";
+    const rect = clickEvent.target.getBoundingClientRect();
+    const x = clickEvent.clientX - rect.left;
+    const buttonWidth = rect.width / 3;
 
-    // Handle different block types
-    switch (textInput.type) {
-      case "text":
-        displayText = textInput.getFieldValue("TEXT") || "";
-        break;
-      case "basic_number":
-        displayText = textInput.getFieldValue("NUM") || "";
-        break;
-
-      // Sensor blocks
-      case "bme_tmp":
-      case "hdc_tmp":
-        displayText = "Temperatur";
-        break;
-      case "bme_humi":
-      case "hdc_humi":
-        displayText = "Luftfeuchtigkeit";
-        break;
-      case "bme_pressure":
-        displayText = "Luftdruck";
-        break;
-      case "basic_air_quality":
-        displayText = "Luftqualitaet";
-        break;
-      case "basic_brightness":
-        displayText = "Helligkeit";
-        break;
-
-      // Math operations
-      case "basic_math":
-        const leftBlock = textInput.getInputTargetBlock("LEFT");
-        const rightBlock = textInput.getInputTargetBlock("RIGHT");
-        const op = textInput.getFieldValue("OP") || "+";
-
-        const leftVal =
-          leftBlock && leftBlock.type === "basic_number"
-            ? leftBlock.getFieldValue("NUM")
-            : "?";
-        const rightVal =
-          rightBlock && rightBlock.type === "basic_number"
-            ? rightBlock.getFieldValue("NUM")
-            : "?";
-
-        displayText = `${leftVal}${op}${rightVal}`;
-        break;
-
-      case "basic_random":
-        displayText = "Zufallszahl";
-        break;
-
-      case "basic_compare":
-        displayText = "Vergl.";
-        break;
-
-      case "basic_button_pressed":
-        displayText = "Knopf?";
-        break;
-
-      case "basic_box_shaken":
-        displayText = "Schüttel?";
-        break;
-
-      default:
-        // For any other block, show a generic placeholder
-        displayText = "...";
-        break;
+    // Determine which button was clicked based on X position
+    let newSize;
+    if (x < buttonWidth) {
+      newSize = "small";
+    } else if (x < buttonWidth * 2) {
+      newSize = "medium";
+    } else {
+      newSize = "large";
     }
 
-    return displayText;
+    this.fontSize_ = newSize;
+    this.updateDisplay();
   },
 
-  onTextChange: function (changeEvent) {
+  onTextChange: function (event) {
     if (!this.workspace || this.isInFlyout) return;
 
     if (
-      changeEvent.type === Blockly.Events.BLOCK_CHANGE ||
-      changeEvent.type === Blockly.Events.BLOCK_MOVE
+      event &&
+      (event.type === Blockly.Events.BLOCK_CHANGE ||
+        event.type === Blockly.Events.BLOCK_MOVE)
     ) {
-      // Update this block
-      this.updateAccumulatedDisplay();
-
-      // Also update all subsequent display blocks
-      let nextBlock = this.getNextBlock();
-      while (nextBlock) {
-        if (nextBlock.type === "display_print_basic") {
-          nextBlock.updateAccumulatedDisplay();
-        }
-        nextBlock = nextBlock.getNextBlock();
-      }
+      this.updateDisplay();
     }
   },
 
-  updateAccumulatedDisplay: function () {
-    // Collect all text from previous display blocks
-    const allTexts = [];
+  updateDisplay: function () {
+    // Update font size buttons
+    const fontSizeField = this.getField("FONT_SIZE_BUTTONS");
+    if (fontSizeField) {
+      fontSizeField.setValue(generateFontSizeToggleSvg(this.fontSize_));
+    }
 
-    // Walk up the chain of previous blocks
-    let currentBlock = this.getPreviousBlock();
+    // Collect all text from previous display blocks in sequence
+    const allTexts = [];
+    let currentBlock = this;
+
+    // Walk backwards through the chain to collect all display texts
     while (currentBlock) {
       if (currentBlock.type === "display_print_basic") {
         const textInput = currentBlock.getInputTargetBlock("TEXT");
-        const text = this.getTextFromBlock(textInput);
-        if (text) {
-          allTexts.unshift(text); // Add to beginning to maintain order
+        if (textInput) {
+          const textField = textInput.getFieldValue("TEXT");
+          if (textField !== null && textField !== undefined) {
+            allTexts.unshift(textField); // Add to beginning to maintain order
+          }
         }
       }
-      currentBlock = currentBlock.getPreviousBlock();
+
+      // Move to previous block in the stack
+      const previousConnection = currentBlock.previousConnection;
+      if (previousConnection && previousConnection.targetConnection) {
+        currentBlock = previousConnection.targetConnection.getSourceBlock();
+      } else {
+        break;
+      }
     }
 
-    // Add current block's text
-    const textInput = this.getInputTargetBlock("TEXT");
-    const currentText = this.getTextFromBlock(textInput);
-    if (currentText) {
-      allTexts.push(currentText);
+    // Combine all texts with newlines
+    const combinedText = allTexts.join("\n");
+
+    // Update display preview
+    const displayField = this.getField("DISPLAY_ICON");
+    if (displayField) {
+      displayField.setValue(generateDisplaySvg(combinedText, this.fontSize_));
     }
 
-    // Join all texts with newlines
-    const displayText = allTexts.join("\n");
-    this.updateDisplayImage(displayText);
+    // Update all following display blocks too
+    this.updateFollowingDisplays();
   },
 
-  updateDisplayImage: function (text) {
-    const displayImageInput = this.getInput("DISPLAY_IMAGE");
-    if (displayImageInput) {
-      const field = this.getField("DISPLAY_ICON");
-      if (field) {
-        field.setValue(generateDisplaySvg(text));
+  updateFollowingDisplays: function () {
+    // Update all display blocks that come after this one
+    let nextBlock = this.nextConnection?.targetBlock();
+    while (nextBlock) {
+      if (nextBlock.type === "display_print_basic" && nextBlock.updateDisplay) {
+        nextBlock.updateDisplay();
       }
+      nextBlock = nextBlock.nextConnection?.targetBlock();
     }
   },
 };
