@@ -98,6 +98,10 @@ Blockly.defineBlocksWithJsonArray([
     ],
     output: "String",
     colour: "#62A044",
+    data: {
+      unit: "%",
+      title: "Luftfeuchtigkeit",
+    },
   },
   {
     type: "hdc_tmp",
@@ -118,6 +122,10 @@ Blockly.defineBlocksWithJsonArray([
     ],
     output: "String",
     colour: "#62A044",
+    data: {
+      unit: "°C",
+      title: "Temperatur",
+    },
   },
 ]);
 
@@ -348,6 +356,73 @@ function generateDisplaySvg(text = "", fontSize = "medium") {
          transform="matrix(1.50884,0,0,1.0616933,-30.839346,-4.3722025)"
          style="fill:#1d1d1b;fill-opacity:1" />
       ${textElements}
+    </g>
+  </g>
+</svg>`;
+
+  return "data:image/svg+xml;base64," + btoa(svgTemplate);
+}
+
+// Helper function to generate measurement display SVG
+function generateMeasurementDisplaySvg(value = "0", title = "", unit = "") {
+  // Format value display
+  const displayValue = value.toString().substring(0, 10);
+  const displayTitle = title.toString().substring(0, 15);
+  const displayUnit = unit.toString().replace(/°/g, "&#176;").substring(0, 8);
+
+  const svgTemplate = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="Ebene_2"
+   data-name="Ebene 2"
+   viewBox="0 0 127.56 70.87"
+   version="1.1"
+   xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #063;
+      }
+      .cls-2 {
+        fill: #1d1d1b;
+      }
+      .display-text {
+        fill: #ffffff;
+        font-family: Arial, sans-serif;
+        font-weight: bold;
+      }
+      .display-value {
+        fill: #ffffff;
+        font-family: Arial, sans-serif;
+        font-weight: bold;
+        font-size: 20px;
+      }
+      .display-unit {
+        fill: #ffffff;
+        font-family: Arial, sans-serif;
+        font-weight: normal;
+        font-size: 10px;
+      }
+      .display-title {
+        fill: #ffffff;
+        font-family: Arial, sans-serif;
+        font-weight: normal;
+        font-size: 8px;
+      }
+    </style>
+  </defs>
+  <g id="Ebene_1-2" data-name="Ebene 1">
+    <g>
+      <path
+         class="cls-1"
+         d="M119.06,0H8.5C3.81,0,0,3.81,0,8.5v53.86c0,4.7,3.81,8.5,8.5,8.5h110.55c4.7,0,8.5-3.81,8.5-8.5V8.5c0-4.7-3.81-8.5-8.5-8.5ZM7.09,68.03c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25ZM7.09,11.34c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25ZM120.47,68.03c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25ZM120.47,11.34c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25Z" />
+      <polygon
+         class="cls-2"
+         points="41.1,65.2 49.61,65.2 49.61,70.87 77.95,70.87 77.95,65.2 86.46,65.2 99.21,56.69 99.21,14.17 28.35,14.17 28.35,56.69 "
+         transform="matrix(1.50884,0,0,1.0616933,-30.839346,-4.3722025)"
+         style="fill:#1d1d1b;fill-opacity:1" />
+      <text class="display-value" x="30" y="37">${displayValue}</text>
+      <text class="display-unit" x="85" y="35">${displayUnit}</text>
+      <text class="display-title" x="30" y="50">${displayTitle}</text>
     </g>
   </g>
 </svg>`;
@@ -1598,3 +1673,82 @@ Blockly.defineBlocksWithJsonArray([
     helpUrl: "",
   },
 ]);
+
+Blockly.Blocks["display_show_measurement"] = {
+  init: function () {
+    this.appendDummyInput("DISPLAY_IMAGE").appendField(
+      new Blockly.FieldImage(
+        generateMeasurementDisplaySvg("0", "", ""),
+        160,
+        90,
+        "*",
+      ),
+      "DISPLAY_ICON",
+    );
+
+    this.appendValueInput("VALUE")
+      .setCheck(null)
+      .appendField(
+        new Blockly.FieldLabel("Messwert anzeigen", undefined, { bold: true }),
+      )
+      .appendField("Wert:");
+
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour("#62A044");
+    this.setTooltip(
+      "Zeigt einen Messwert mit Titel und Einheit formatiert auf dem Display an",
+    );
+    this.setHelpUrl("");
+
+    this.setOnChange(this.onInputChange.bind(this));
+  },
+
+  onInputChange: function (event) {
+    if (!this.workspace || this.isInFlyout) return;
+
+    if (
+      event &&
+      (event.type === Blockly.Events.BLOCK_CHANGE ||
+        event.type === Blockly.Events.BLOCK_MOVE)
+    ) {
+      this.updateDisplay();
+    }
+  },
+
+  updateDisplay: function () {
+    let value = "0";
+    let title = "";
+    let unit = "";
+
+    // Get value input
+    const valueInput = this.getInputTargetBlock("VALUE");
+
+    if (valueInput) {
+      // Sensor metadata lookup table with sample values for preview
+      const sensorMetadata = {
+        hdc_tmp: { title: "Temperatur", unit: "°C", sample: "23.5" },
+        hdc_humi: { title: "Luftfeuchtigkeit", unit: "%", sample: "80" },
+        bme_pressure: { title: "Luftdruck", unit: "hPa", sample: "1024" },
+        basic_air_quality: { title: "Luftqualität", unit: "", sample: "8" },
+        basic_brightness: { title: "Helligkeit", unit: "lx", sample: "200" },
+      };
+
+      const metadata = sensorMetadata[valueInput.type];
+      if (metadata) {
+        // Use the sample value for preview when a sensor block is connected
+        value = metadata.sample;
+        title = metadata.title;
+        unit = metadata.unit;
+      } else if (valueInput.type === "basic_number") {
+        value = valueInput.getFieldValue("NUM") || "0";
+      }
+    }
+
+    // Update display preview
+    const displayField = this.getField("DISPLAY_ICON");
+    if (displayField) {
+      displayField.setValue(generateMeasurementDisplaySvg(value, title, unit));
+    }
+  },
+};

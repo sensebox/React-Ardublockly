@@ -9,6 +9,8 @@ const allBlocks = [
   { kind: "block", type: "basic_brightness" },
   // Ausgabe
   { kind: "block", type: "display_print_basic" },
+  { kind: "block", type: "display_clear_basic" },
+  { kind: "block", type: "display_show_measurement" },
   {
     kind: "block",
     type: "text",
@@ -229,6 +231,10 @@ export const toolboxBasicObject = {
       contents: [
         { kind: "block", type: "display_print_basic" },
         { kind: "block", type: "display_clear_basic" },
+        {
+          kind: "block",
+          type: "display_show_measurement",
+        },
         {
           kind: "block",
           type: "text",
