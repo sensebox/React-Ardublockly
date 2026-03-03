@@ -306,7 +306,7 @@ export const toolboxBasicObject = {
     {
       kind: "category",
       name: "Mathematik",
-      colour: "#5CA65C",
+      colour: "#5b67a5",
       contents: [
         { kind: "block", type: "basic_number" },
         {
@@ -358,7 +358,7 @@ export const toolboxBasicObject = {
     {
       kind: "category",
       name: "Kontrolle",
-      colour: "#a5675b",
+      colour: "#5ba574",
       contents: [
         {
           kind: "block",

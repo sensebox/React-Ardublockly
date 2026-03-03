@@ -699,7 +699,7 @@ Blockly.defineBlocksWithJsonArray([
       },
     ],
     output: "String",
-    colour: "#a5675b",
+    colour: "#5b67a5",
     inputsInline: true,
     tooltip: "Vergleicht zwei Werte",
     helpUrl: "",
@@ -719,7 +719,7 @@ Blockly.Blocks["basic_if_else"] = {
 
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-    this.setColour("#a5675b");
+    this.setColour("#5b67a5");
     this.setTooltip("Wenn / sonst Verzweigung");
     this.setInputsInline(false);
 
@@ -1138,8 +1138,8 @@ Blockly.Blocks["basic_delay"] = {
 
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour("#a5675b");
     this.setTooltip("Warte eine bestimmte Anzahl von Sekunden");
+    this.setColour("#5ba574");
     this.setHelpUrl("");
 
     this.setOnChange(this.onSecondsChange.bind(this));
@@ -1459,7 +1459,7 @@ Blockly.defineBlocksWithJsonArray([
       },
     ],
     output: "String",
-    colour: "#5CA65C",
+    colour: "#5b67a5",
     inputsInline: true,
     tooltip: "Rechne mit zwei Zahlen",
     helpUrl: "",
@@ -1480,7 +1480,7 @@ Blockly.defineBlocksWithJsonArray([
       },
     ],
     output: "String",
-    colour: "#5CA65C",
+    colour: "#5b67a5",
     inputsInline: true,
     tooltip: "Erzeugt eine Zufallszahl in einem Bereich",
     helpUrl: "",
@@ -1511,7 +1511,7 @@ Blockly.defineBlocksWithJsonArray([
       },
     ],
     output: "Boolean",
-    colour: "#5C81A6",
+    colour: "#62A044",
     tooltip: "Überprüft ob der Knopf gedrückt wurde",
     helpUrl: "",
   },
@@ -1532,7 +1532,7 @@ Blockly.defineBlocksWithJsonArray([
       },
     ],
     output: "Boolean",
-    colour: "#5C81A6",
+    colour: "#62A044",
     tooltip: "Überprüft ob die senseBox geschüttelt wurde",
     helpUrl: "",
   },
@@ -1554,7 +1554,7 @@ Blockly.defineBlocksWithJsonArray([
       },
     ],
     output: "String",
-    colour: "#62A044  ",
+    colour: "#62A044",
   },
   {
     type: "basic_brightness",
