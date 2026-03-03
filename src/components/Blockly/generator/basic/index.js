@@ -145,6 +145,32 @@ basicGenerator.forBlock["display_print_basic"] = function (block, generator) {
   return `display(${raw})\n`;
 };
 
+basicGenerator.forBlock["display_show_measurement"] = function (
+  block,
+  generator,
+) {
+  const value =
+    generator.valueToCode(block, "VALUE", generator.ORDER_NONE) || "0";
+
+  // Extract title and unit from the connected sensor block
+  const sensorBlock = block.getInputTargetBlock("VALUE");
+
+  // Sensor metadata lookup table
+  const sensorMetadata = {
+    hdc_tmp: { title: "Temperatur", unit: "°C" },
+    hdc_humi: { title: "Luftfeuchtigkeit", unit: "%" },
+    bme_pressure: { title: "Luftdruck", unit: "hPa" },
+    basic_air_quality: { title: "Luftqualität", unit: "" },
+    basic_brightness: { title: "Helligkeit", unit: "lx" },
+  };
+
+  const metadata = sensorBlock ? sensorMetadata[sensorBlock.type] : null;
+  const title = metadata ? `"${metadata.title}"` : '""';
+  const unit = metadata ? `"${metadata.unit}"` : '""';
+
+  return `displayMeasurement(${value}, ${title}, ${unit})\n`;
+};
+
 basicGenerator.forBlock["time_delay_1s"] = function () {
   return "delay(1000)\n"; // nichts generieren
 };
