@@ -9,7 +9,11 @@ const allBlocks = [
   { kind: "block", type: "basic_brightness" },
   // Ausgabe
   { kind: "block", type: "display_print_basic" },
-  { kind: "block", type: "text", tooltip: "Use this block to add text to your display." },
+  {
+    kind: "block",
+    type: "text",
+    tooltip: "Use this block to add text to your display.",
+  },
   {
     kind: "block",
     type: "basic_led_control",
@@ -225,7 +229,11 @@ export const toolboxBasicObject = {
       contents: [
         { kind: "block", type: "display_print_basic" },
         { kind: "block", type: "display_clear_basic" },
-        { kind: "block", type: "text", tooltip: "Use this block to add text to your display." },
+        {
+          kind: "block",
+          type: "text",
+          tooltip: "Use this block to add text to your display.",
+        },
         {
           kind: "block",
           type: "basic_led_control",
