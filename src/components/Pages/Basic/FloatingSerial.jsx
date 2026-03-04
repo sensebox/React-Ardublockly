@@ -172,10 +172,7 @@ const FloatingSerial = () => {
           <HelpModal onClose={() => setHelpOpen(false)} />
         </Modal>
 
-        <Modal 
-          open={unsupportedOpen} 
-          onClose={() => setUnsupportedOpen(false)}
-        >
+        <Modal open={unsupportedOpen} onClose={() => setUnsupportedOpen(false)}>
           <UnsupportedBrowserModal onClose={() => setUnsupportedOpen(false)} />
         </Modal>
       </Box>
@@ -325,15 +322,13 @@ function UnsupportedBrowserModal({ onClose }) {
         </IconButton>
         <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
           <BluetoothDisabled sx={{ fontSize: 48, color: "error.main" }} />
-          <Typography
-            variant="h5"
-            sx={{ fontWeight: 700, textAlign: "left" }}
-          >
+          <Typography variant="h5" sx={{ fontWeight: 700, textAlign: "left" }}>
             Browser nicht unterstützt
           </Typography>
         </Box>
         <Typography variant="body1" sx={{ mb: 2 }}>
-          Dein Browser unterstützt die <strong>Web Serial API</strong> nicht, die für die Verbindung mit der senseBox benötigt wird.
+          Dein Browser unterstützt die <strong>Web Serial API</strong> nicht,
+          die für die Verbindung mit der senseBox benötigt wird.
         </Typography>
         <Typography variant="body1" sx={{ mb: 2 }}>
           Bitte verwende einen der folgenden Browser:
@@ -356,7 +351,9 @@ function UnsupportedBrowserModal({ onClose }) {
           </li>
         </Box>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-          Hinweis: Die Web Serial API funktioniert derzeit nur auf Desktop-Browsern, nicht auf mobilen Geräten.
+          Hinweis: Die Web Serial API funktioniert derzeit nur auf
+          Desktop-Browsern, nicht auf mobilen Geräten. Benutze dafür die
+          senseBox Basic App!
         </Typography>
         <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
           <Button variant="contained" onClick={onClose}>
