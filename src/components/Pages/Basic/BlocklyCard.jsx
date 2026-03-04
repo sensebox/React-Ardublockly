@@ -2,7 +2,7 @@
 import React, { useEffect, useRef } from "react";
 import * as Blockly from "blockly";
 import "blockly/blocks";
-import { onChangeCode, onChangeWorkspace } from "@/actions/workspaceActions";
+import { onChangeWorkspace } from "@/actions/workspaceActions";
 import { useDispatch } from "react-redux";
 import { toolboxBasicObject } from "@/components/Blockly/toolbox/ToolboxBasic";
 
@@ -60,8 +60,8 @@ const BlocklyCard = ({
     // Initial XML
     if (initialXml) {
       try {
-        const xml = Blockly.Xml.textToDom(initialXml);
-        Blockly.Xml.domToWorkspace(xml, ws);
+        const xmlDom = Blockly.utils.xml.textToDom(initialXml);
+        Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, ws);
       } catch {}
     }
     const generator = Blockly.Generator.Basic;
@@ -72,7 +72,6 @@ const BlocklyCard = ({
     ws.addChangeListener(fire);
     ws.addChangeListener((event) => {
       dispatch(onChangeWorkspace(event));
-      dispatch(onChangeCode());
     });
     const ro = new ResizeObserver(() => Blockly.svgResize(ws));
     ro.observe(containerRef.current);
