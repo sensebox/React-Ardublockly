@@ -27,6 +27,7 @@ import TutorialPage from "@/components/Tutorial/Viewer/Tutorial.page";
 import Project from "@/components/Pages/Project/Project";
 import ProjectHome from "@/components/Pages/Project/ProjectHome";
 import TutorialHome from "../Tutorial/Overview/TutorialHome";
+import BasicWithSerial from "../Pages/Basic/BasicWithSerial";
 function AppRoutes({ platform, visitPage, setPlatform }) {
   const location = useLocation();
 
@@ -54,6 +55,14 @@ function AppRoutes({ platform, visitPage, setPlatform }) {
           element={
             <PublicRoute>
               <Home />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/basic"
+          element={
+            <PublicRoute>
+              <BasicWithSerial />
             </PublicRoute>
           }
         />
