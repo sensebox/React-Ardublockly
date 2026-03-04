@@ -28,10 +28,15 @@ const BasicProject = () => {
     dispatch(getProjects("gallery"))
       .then((projects) => {
         const found = projects.find((p) => p._id === id);
+        if (!found) {
+          throw new Error(`Project with id ${id} not found`);
+        }
         setProject(found);
+        console.log("Fetched project:", found, id);
       })
       .catch((err) => {
         console.error("Error fetching projects:", err);
+        navigate("/basic");
       });
 
     return () => {
@@ -39,17 +44,6 @@ const BasicProject = () => {
       workspaceName(null);
     };
   }, [id]);
-
-  //   useEffect(() => {
-  //     if (message.id === "PROJECT_EMPTY" || message.id === "GET_PROJECT_FAIL") {
-  //       dispatch(returnErrors("", 404, "GET_PROJECT_FAIL"));
-  //       navigate("/basic");
-  //     } else if (message.id === "GET_PROJECT_SUCCESS" && project) {
-  //       workspaceName(project.title);
-  //     } else if (message.id === "PROJECT_DELETE_SUCCESS") {
-  //       navigate("/basic");
-  //     }
-  //   }, [message, project, navigate, dispatch]);
 
   if (progress) {
     return (
