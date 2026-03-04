@@ -136,7 +136,7 @@ Blockly.defineBlocksWithJsonArray([
     args0: [
       {
         type: "field_image",
-        src: "./media/hardware/icons/Icon_LED_Rot.svg",
+        src: "/media/hardware/icons/Icon_LED_Rot.svg",
         width: 90,
         height: 90,
         alt: "*",
@@ -156,7 +156,7 @@ Blockly.defineBlocksWithJsonArray([
     args0: [
       {
         type: "field_image",
-        src: "./media/hardware/icons/Icon_LED_Gelb.svg",
+        src: "/media/hardware/icons/Icon_LED_Gelb.svg",
         width: 90,
         height: 90,
         alt: "*",
@@ -176,7 +176,7 @@ Blockly.defineBlocksWithJsonArray([
     args0: [
       {
         type: "field_image",
-        src: "./media/hardware/icons/Icon_LED_Blau.svg",
+        src: "/media/hardware/icons/Icon_LED_Blau.svg",
         width: 90,
         height: 90,
         alt: "*",
@@ -197,7 +197,7 @@ Blockly.defineBlocksWithJsonArray([
     args0: [
       {
         type: "field_image",
-        src: "./media/hardware/icons/Icon_LED_OFF.svg",
+        src: "/media/hardware/icons/Icon_LED_OFF.svg",
         width: 90,
         height: 90,
         alt: "*",
@@ -221,7 +221,7 @@ Blockly.defineBlocksWithJsonArray([
     args0: [
       {
         type: "field_image",
-        src: "media/hardware/icons/Icon_Timer_1s.svg",
+        src: "/media/hardware/icons/Icon_Timer_1s.svg",
         width: 60,
         height: 60,
       },
@@ -237,7 +237,7 @@ Blockly.defineBlocksWithJsonArray([
     args0: [
       {
         type: "field_image",
-        src: "media/hardware/icons/Icon_Timer_2s.svg",
+        src: "/media/hardware/icons/Icon_Timer_2s.svg",
         width: 60,
         height: 60,
       },
@@ -253,7 +253,7 @@ Blockly.defineBlocksWithJsonArray([
     args0: [
       {
         type: "field_image",
-        src: "media/hardware/icons/Icon_Timer_5s.svg",
+        src: "/media/hardware/icons/Icon_Timer_5s.svg",
         width: 60,
         height: 60,
       },
@@ -1575,10 +1575,10 @@ Blockly.defineBlocksWithJsonArray([
 ]);
 
 // Icon paths for basic blocks
-const BUTTON_ICON = "media/hardware/icons/Icon_Button.svg";
-const SHAKE_ICON = "media/hardware/icons/Icon_Schuetteln.svg";
-const AIR_QUALITY_ICON = "media/hardware/icons/Icon_Luftqualitaet.svg";
-const BRIGHTNESS_ICON = "media/hardware/icons/Icon_Helligkeit.svg";
+const BUTTON_ICON = "/media/hardware/icons/Icon_Button.svg";
+const SHAKE_ICON = "/media/hardware/icons/Icon_Schuetteln.svg";
+const AIR_QUALITY_ICON = "/media/hardware/icons/Icon_Luftqualitaet.svg";
+const BRIGHTNESS_ICON = "/media/hardware/icons/Icon_Helligkeit.svg";
 
 Blockly.defineBlocksWithJsonArray([
   {
