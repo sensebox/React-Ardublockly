@@ -58,7 +58,7 @@
     "redux-thunk": "^2.4.1",
     "rehype-raw": "^7.0.0",
     "remark-gemoji": "^8.0.0",
-    "remark-gfm": "^3.0.1",
+    "remark-gfm": "^4.0.1",
     "styled-components": "^4.4.1",
     "watchpack": "^2.3.1"
   },
