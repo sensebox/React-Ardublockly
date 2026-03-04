@@ -46,6 +46,7 @@ const FloatingSerial = () => {
 
   const theme = useTheme();
   const [helpOpen, setHelpOpen] = useState(false);
+  const [unsupportedOpen, setUnsupportedOpen] = useState(!supported);
   const [loop, setLoop] = useState(true);
   const handlePlay = async () => {
     if (!connected) return;
@@ -170,6 +171,13 @@ const FloatingSerial = () => {
         <Modal open={helpOpen} onClose={() => setHelpOpen(false)}>
           <HelpModal onClose={() => setHelpOpen(false)} />
         </Modal>
+
+        <Modal 
+          open={unsupportedOpen} 
+          onClose={() => setUnsupportedOpen(false)}
+        >
+          <UnsupportedBrowserModal onClose={() => setUnsupportedOpen(false)} />
+        </Modal>
       </Box>
 
       {/* Log panel bottom-right */}
@@ -287,6 +295,72 @@ function HelpModal({ onClose }) {
             disabled={activeSlide === slides.length - 1}
           >
             Weiter
+          </Button>
+        </Box>
+      </Paper>
+    </Box>
+  );
+}
+
+function UnsupportedBrowserModal({ onClose }) {
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        p: 2,
+      }}
+    >
+      <Paper
+        elevation={12}
+        sx={{ maxWidth: 600, width: "100%", p: 4, position: "relative" }}
+      >
+        <IconButton
+          onClick={onClose}
+          sx={{ position: "absolute", top: 12, right: 12 }}
+        >
+          <CloseIcon />
+        </IconButton>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
+          <BluetoothDisabled sx={{ fontSize: 48, color: "error.main" }} />
+          <Typography
+            variant="h5"
+            sx={{ fontWeight: 700, textAlign: "left" }}
+          >
+            Browser nicht unterstützt
+          </Typography>
+        </Box>
+        <Typography variant="body1" sx={{ mb: 2 }}>
+          Dein Browser unterstützt die <strong>Web Serial API</strong> nicht, die für die Verbindung mit der senseBox benötigt wird.
+        </Typography>
+        <Typography variant="body1" sx={{ mb: 2 }}>
+          Bitte verwende einen der folgenden Browser:
+        </Typography>
+        <Box component="ul" sx={{ mb: 2, pl: 3 }}>
+          <li>
+            <Typography variant="body1">
+              <strong>Google Chrome</strong> (Version 89 oder höher)
+            </Typography>
+          </li>
+          <li>
+            <Typography variant="body1">
+              <strong>Microsoft Edge</strong> (Version 89 oder höher)
+            </Typography>
+          </li>
+          <li>
+            <Typography variant="body1">
+              <strong>Opera</strong> (Version 75 oder höher)
+            </Typography>
+          </li>
+        </Box>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+          Hinweis: Die Web Serial API funktioniert derzeit nur auf Desktop-Browsern, nicht auf mobilen Geräten.
+        </Typography>
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <Button variant="contained" onClick={onClose}>
+            Verstanden
           </Button>
         </Box>
       </Paper>
