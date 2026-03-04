@@ -62,6 +62,8 @@ const BlocklyCard = ({
       try {
         const xmlDom = Blockly.utils.xml.textToDom(initialXml);
         Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, ws);
+        ws.setScale(1.2);
+        ws.scrollCenter();
       } catch {}
     }
     const generator = Blockly.Generator.Basic;
