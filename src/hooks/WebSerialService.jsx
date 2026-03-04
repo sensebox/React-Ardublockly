@@ -91,6 +91,9 @@ export default function useWebSerial({ setLog, logBoxRef }) {
 
       setConnected(true);
       setStatus("Connected");
+      sendLine("STOP");
+      sendLine("clearDisplay()");
+      sendLine("RUN");
       logMessage("[Connected]");
     } catch (err) {
       logMessage(`Connection failed: ${err}`);
