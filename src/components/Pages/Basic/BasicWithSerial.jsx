@@ -2,10 +2,10 @@ import React from "react";
 import BasicPage from "./BasicPage";
 import FloatingSerial from "./FloatingSerial";
 
-const BasicWithSerial = () => {
+const BasicWithSerial = ({ initialXml }) => {
   return (
     <>
-      <BasicPage />
+      <BasicPage initialXml={initialXml} />
       <FloatingSerial />
     </>
   );

@@ -4,12 +4,13 @@ import BlocklyCard from "./BlocklyCard";
 import "@/components/Blockly/blocks/basic/index"; // registriert Block
 import senseboxlogo from "@/data/senseBox_Icon_bunt.png";
 import { useSelector } from "react-redux";
+import * as Blockly from "blockly/core";
 
-const BasicPage = () => {
+const BasicPage = ({ initialXml }) => {
   const basicCode = useSelector((s) => s.workspace.code.basic);
   // DONT DELETE THIS !!
   useEffect(() => {
-    console.log("Aktueller Blockly-Code:\n", basicCode);
+    console.log("Basic Code Updated:", basicCode);
   }, [basicCode]);
 
   useEffect(() => {
@@ -35,16 +36,18 @@ const BasicPage = () => {
   }, []);
 
   // Toolbox toggle state (logic remains, UI removed)
+  const isEmbeddedBasic =
+    window.location.pathname.startsWith("/embeddedbasic");
+
   return (
     <Box
       sx={{
         display: "flex",
         flexDirection: "column",
-        height:
-          window.location.pathname === "/embeddedbasic" ? "100vh" : "85vh",
+        height: isEmbeddedBasic ? "100vh" : "85vh",
       }}
     >
-      <BlocklyCard />
+      <BlocklyCard initialXml={initialXml} />
     </Box>
   );
 };

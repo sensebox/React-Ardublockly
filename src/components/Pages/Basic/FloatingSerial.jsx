@@ -9,6 +9,10 @@ import {
   useTheme,
   Tooltip,
   Modal,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
 } from "@mui/material";
 import {
   PlayArrow,
@@ -21,8 +25,12 @@ import {
   ContentCopy,
   Loop,
   Close as CloseIcon,
+  Save as SaveIcon,
 } from "@mui/icons-material";
 import useWebSerial from "@/hooks/WebSerialService";
+import { useSelector } from "react-redux";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const FloatingSerial = () => {
   const [log, setLog] = useState("");
@@ -48,6 +56,17 @@ const FloatingSerial = () => {
   const [helpOpen, setHelpOpen] = useState(false);
   const [unsupportedOpen, setUnsupportedOpen] = useState(!supported);
   const [loop, setLoop] = useState(true);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+  const [saveError, setSaveError] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [projectTitle, setProjectTitle] = useState("");
+  const [projectDescription, setProjectDescription] = useState("");
+
+  // Redux state
+  const user = useSelector((s) => s.auth.user);
+  const xml = useSelector((s) => s.workspace.code.xml);
+  const workspaceName = useSelector((s) => s.workspace.name);
+  const navigate = useNavigate();
   const handlePlay = async () => {
     if (!connected) return;
     try {
@@ -79,6 +98,41 @@ const FloatingSerial = () => {
     } catch (err) {
       console.error("Error during disconnect:", err);
     }
+  };
+
+  const handleSaveProject = async () => {
+    try {
+      const body = {
+        xml: xml,
+        title: projectTitle || workspaceName || "Unbenanntes Projekt",
+        description: projectDescription,
+        generator: "basic",
+      };
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_BLOCKLY_API}/gallery`,
+        body,
+      );
+
+      if (response.data && response.data.project) {
+        setSaveSuccess(true);
+        setTimeout(() => setSaveSuccess(false), 3000);
+      }
+    } catch (err) {
+      console.error("Error saving project:", err);
+      setSaveError(true);
+      setTimeout(() => setSaveError(false), 3000);
+    } finally {
+      setDialogOpen(false);
+    }
+  };
+
+  const handleOpenDialog = () => {
+    setDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
   };
 
   return (
@@ -166,6 +220,21 @@ const FloatingSerial = () => {
               Anleitung
             </Button>
           </Tooltip>
+
+          {user && (
+            <Tooltip title="Projekt speichern">
+              <Button
+                onClick={handleOpenDialog}
+                variant="contained"
+                color={
+                  saveSuccess ? "success" : saveError ? "error" : "primary"
+                }
+                startIcon={<SaveIcon />}
+              >
+                Speichern
+              </Button>
+            </Tooltip>
+          )}
         </Box>
 
         <Modal open={helpOpen} onClose={() => setHelpOpen(false)}>
@@ -224,6 +293,39 @@ const FloatingSerial = () => {
           </pre>
         </Box>
       </Paper>
+
+      <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+        <DialogTitle>Projekt speichern</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Titel"
+            type="text"
+            fullWidth
+            value={projectTitle}
+            onChange={(e) => setProjectTitle(e.target.value)}
+          />
+          <TextField
+            margin="dense"
+            label="Beschreibung"
+            type="text"
+            fullWidth
+            multiline
+            rows={4}
+            value={projectDescription}
+            onChange={(e) => setProjectDescription(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="secondary">
+            Abbrechen
+          </Button>
+          <Button onClick={handleSaveProject} color="primary">
+            Speichern
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };
