@@ -74,7 +74,6 @@ class App extends Component {
                     element={<EmbeddedBlockly />}
                   />
                   <Route path="/embedded" element={<EmbeddedBlockly />} />
-                  <Route path="/basic" element={<BasicWithSerial />} />
                   <Route path="/embeddedbasic" element={<BasicPage />} />
                   <Route path="/*" element={<Content />} />
                 </Routes>

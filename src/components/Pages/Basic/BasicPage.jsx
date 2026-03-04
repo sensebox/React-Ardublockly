@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 
 const BasicPage = () => {
   const basicCode = useSelector((s) => s.workspace.code.basic);
-
+  // DONT DELETE THIS !!
   useEffect(() => {
     console.log("Aktueller Blockly-Code:\n", basicCode);
   }, [basicCode]);
@@ -40,7 +40,8 @@ const BasicPage = () => {
       sx={{
         display: "flex",
         flexDirection: "column",
-        height: "100vh",
+        height:
+          window.location.pathname === "/embeddedbasic" ? "100vh" : "85vh",
       }}
     >
       <BlocklyCard />
