@@ -3,9 +3,9 @@
 // --- Compose all blocks for the "All" category ---
 const allBlocks = [
   // Sensoren
-  { kind: "block", type: "hdc_tmp" },
-  { kind: "block", type: "hdc_humi" },
-  { kind: "block", type: "basic_air_quality" },
+  { kind: "block", type: "bme_tmp" },
+  { kind: "block", type: "bme_humi" },
+  { kind: "block", type: "bme_air_quality" },
   { kind: "block", type: "basic_brightness" },
   // Ausgabe
   { kind: "block", type: "display_print_basic" },
@@ -210,9 +210,9 @@ export const toolboxBasicObject = {
       name: "Sensoren",
       colour: "#5ba55b",
       contents: [
-        { kind: "block", type: "hdc_tmp" },
-        { kind: "block", type: "hdc_humi" },
-        { kind: "block", type: "basic_air_quality" },
+        { kind: "block", type: "bme_tmp" },
+        { kind: "block", type: "bme_humi" },
+        { kind: "block", type: "bme_air_quality" },
         { kind: "block", type: "basic_brightness" },
       ],
     },
