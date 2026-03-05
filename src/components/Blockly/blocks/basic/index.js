@@ -37,7 +37,7 @@ Blockly.defineBlocksWithJsonArray([
       },
     ],
     output: "String",
-    colour: "#62A044  ",
+    colour: getColour().sensebox,
   },
   {
     type: "bme_humi",
@@ -1624,7 +1624,7 @@ Blockly.defineBlocksWithJsonArray([
     helpUrl: "",
   },
   {
-    type: "basic_air_quality",
+    type: "bme_air_quality",
     message0: "%1 \n %2",
     args0: [
       {
@@ -1636,7 +1636,7 @@ Blockly.defineBlocksWithJsonArray([
       },
       {
         type: "field_label",
-        text: "Luftqualität",
+        text: "Luftqualitaet",
         bold: true,
       },
     ],
@@ -1712,6 +1712,37 @@ Blockly.Blocks["display_show_measurement"] = {
       (event.type === Blockly.Events.BLOCK_CHANGE ||
         event.type === Blockly.Events.BLOCK_MOVE)
     ) {
+      // Enforce allowed sensor blocks for the VALUE input
+      const allowedSensors = [
+        "hdc_tmp",
+        "bme_tmp",
+        "hdc_humi",
+        "bme_humi",
+        "bme_pressure",
+        "bme_air_quality",
+        "basic_brightness",
+      ];
+
+      const valueBlock = this.getInputTargetBlock("VALUE");
+
+      if (valueBlock) {
+        // Allow numeric input blocks as before
+        if (valueBlock.type === "basic_number") {
+          this.setWarningText(null);
+        } else if (!allowedSensors.includes(valueBlock.type)) {
+          // Disconnect disallowed blocks and show a warning
+          const input = this.getInput("VALUE");
+          if (input && input.connection && input.connection.targetConnection) {
+            input.connection.disconnect();
+          }
+          this.setWarningText("Nur Sensorblöcke dürfen hier verbunden werden.");
+        } else {
+          this.setWarningText(null);
+        }
+      } else {
+        this.setWarningText(null);
+      }
+
       this.updateDisplay();
     }
   },
@@ -1728,9 +1759,11 @@ Blockly.Blocks["display_show_measurement"] = {
       // Sensor metadata lookup table with sample values for preview
       const sensorMetadata = {
         hdc_tmp: { title: "Temperatur", unit: "°C", sample: "23.5" },
+        bme_tmp: { title: "Temperatur", unit: "°C", sample: "23.5" },
         hdc_humi: { title: "Luftfeuchtigkeit", unit: "%", sample: "80" },
+        bme_humi: { title: "Luftfeuchtigkeit", unit: "%", sample: "80" },
         bme_pressure: { title: "Luftdruck", unit: "hPa", sample: "1024" },
-        basic_air_quality: { title: "Luftqualität", unit: "", sample: "8" },
+        bme_air_quality: { title: "Luftqualitaet", unit: "", sample: "74" },
         basic_brightness: { title: "Helligkeit", unit: "lx", sample: "200" },
       };
 

@@ -158,10 +158,12 @@ basicGenerator.forBlock["display_show_measurement"] = function (
   // Sensor metadata lookup table
   const sensorMetadata = {
     hdc_tmp: { title: "Temperatur", unit: "°C" },
+    bme_tmp: { title: "Temperatur", unit: "°C" },
     hdc_humi: { title: "Luftfeuchtigkeit", unit: "%" },
+    bme_humi: { title: "Luftfeuchtigkeit", unit: "%" },
     bme_pressure: { title: "Luftdruck", unit: "hPa" },
-    basic_air_quality: { title: "Luftqualität", unit: "" },
-    basic_brightness: { title: "Helligkeit", unit: "lx" },
+    bme_air_quality: { title: "Luftqualitaet", unit: "" },
+    basic_brightness: { title: "Helligkeit", unit: "lux" },
   };
 
   const metadata = sensorBlock ? sensorMetadata[sensorBlock.type] : null;
@@ -177,17 +179,28 @@ basicGenerator.forBlock["time_delay_1s"] = function () {
 
 basicGenerator.forBlock["hdc_tmp"] = function (block) {
   // Setup-Code hinzufügen (einmalig)
-  basicGenerator.addSetup("hdc_tmp_read", "temperature = readSensor");
 
   // Der Block selbst liefert nur den Variablennamen zurück
   return ["sensor:hdc1080:temperature", basicGenerator.ORDER_ATOMIC];
 };
 basicGenerator.forBlock["hdc_humi"] = function (block) {
   // Setup-Code hinzufügen (einmalig)
-  basicGenerator.addSetup("hdc_humi_read", "humi = readSensor");
 
   // Der Block selbst liefert nur den Variablennamen zurück
   return ["sensor:hdc1080:humidity", basicGenerator.ORDER_ATOMIC];
+};
+
+basicGenerator.forBlock["bme_tmp"] = function (block) {
+  // Setup-Code hinzufügen (einmalig)
+
+  // Der Block selbst liefert nur den Variablennamen zurück
+  return ["sensor:bme680:temperature", basicGenerator.ORDER_ATOMIC];
+};
+basicGenerator.forBlock["bme_humi"] = function (block) {
+  // Setup-Code hinzufügen (einmalig)
+
+  // Der Block selbst liefert nur den Variablennamen zurück
+  return ["sensor:bme680:humidity", basicGenerator.ORDER_ATOMIC];
 };
 
 basicGenerator.forBlock["time_delay_2s"] = function () {
@@ -371,15 +384,9 @@ basicGenerator.forBlock["display_clear_basic"] = function (block, generator) {
   return "clearDisplay()\n";
 };
 
-basicGenerator.forBlock["basic_air_quality"] = function (block) {
-  // Setup-Code hinzufügen (einmalig)
-  basicGenerator.addSetup(
-    "basic_air_quality_setup",
-    "airQuality = sensor:bme680:aiq",
-  );
-
+basicGenerator.forBlock["bme_air_quality"] = function (block) {
   // Der Block selbst liefert nur den Variablennamen zurück
-  return ["airQuality", basicGenerator.ORDER_ATOMIC];
+  return ["sensor:bme680:iaq", basicGenerator.ORDER_ATOMIC];
 };
 
 basicGenerator.forBlock["basic_brightness"] = function (block) {
