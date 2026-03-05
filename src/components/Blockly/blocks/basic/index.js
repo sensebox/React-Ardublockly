@@ -441,10 +441,9 @@ Blockly.Blocks["display_print_basic"] = {
     );
 
     // Checkbox: clear display before printing
-    this.appendDummyInput("CLEAR_OPTION").appendField(
-      new Blockly.FieldCheckbox("FALSE"),
-      "CLEAR",
-    ).appendField("Display vor Anzeige löschen");
+    this.appendDummyInput("CLEAR_OPTION")
+      .appendField(new Blockly.FieldCheckbox("FALSE"), "CLEAR")
+      .appendField("Display vor Anzeige löschen");
 
     // Add font size toggle buttons on a new line
     this.appendDummyInput("FONT_SIZE")
@@ -536,7 +535,8 @@ Blockly.Blocks["display_print_basic"] = {
         // stop collecting older texts — CLEAR clears everything before it.
         try {
           const isClear =
-            currentBlock.getFieldValue && currentBlock.getFieldValue("CLEAR") === "TRUE";
+            currentBlock.getFieldValue &&
+            currentBlock.getFieldValue("CLEAR") === "TRUE";
           if (isClear) {
             break;
           }
