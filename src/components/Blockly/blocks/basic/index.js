@@ -440,6 +440,12 @@ Blockly.Blocks["display_print_basic"] = {
       "DISPLAY_ICON",
     );
 
+    // Checkbox: clear display before printing
+    this.appendDummyInput("CLEAR_OPTION").appendField(
+      new Blockly.FieldCheckbox("FALSE"),
+      "CLEAR",
+    ).appendField("Display vor Anzeige löschen");
+
     // Add font size toggle buttons on a new line
     this.appendDummyInput("FONT_SIZE")
       .appendField("Größe:")
@@ -514,15 +520,28 @@ Blockly.Blocks["display_print_basic"] = {
     const allTexts = [];
     let currentBlock = this;
 
-    // Walk backwards through the chain to collect all display texts
+    // Walk backwards through the chain to collect all display texts,
+    // but stop at the nearest preceding block that has CLEAR checked.
     while (currentBlock) {
       if (currentBlock.type === "display_print_basic") {
         const textInput = currentBlock.getInputTargetBlock("TEXT");
         if (textInput) {
           const textField = textInput.getFieldValue("TEXT");
           if (textField !== null && textField !== undefined) {
-            allTexts.unshift(textField); // Add to beginning to maintain order
+            allTexts.unshift(textField);
           }
+        }
+
+        // If this block (the one we just included) has CLEAR checked,
+        // stop collecting older texts — CLEAR clears everything before it.
+        try {
+          const isClear =
+            currentBlock.getFieldValue && currentBlock.getFieldValue("CLEAR") === "TRUE";
+          if (isClear) {
+            break;
+          }
+        } catch (e) {
+          // ignore if field missing
         }
       }
 
@@ -1685,6 +1704,8 @@ Blockly.Blocks["display_show_measurement"] = {
       ),
       "DISPLAY_ICON",
     );
+
+    // (No checkbox here — display_show_measurement always clears by generator)
 
     this.appendValueInput("VALUE")
       .setCheck(null)

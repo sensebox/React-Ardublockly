@@ -142,7 +142,9 @@ basicGenerator.forBlock["display_print_basic"] = function (block, generator) {
   if (!raw || /^\s*$/.test(raw)) {
     return ""; // nichts generieren
   }
-  return `display(${raw})\n`;
+  const clear = block.getFieldValue && block.getFieldValue("CLEAR") === "TRUE";
+  const clearCode = clear ? "clearDisplay()\n" : "";
+  return `${clearCode}display(${raw})\n`;
 };
 
 basicGenerator.forBlock["display_show_measurement"] = function (
@@ -170,7 +172,8 @@ basicGenerator.forBlock["display_show_measurement"] = function (
   const title = metadata ? `"${metadata.title}"` : '""';
   const unit = metadata ? `"${metadata.unit}"` : '""';
 
-  return `displayMeasurement(${value}, ${title}, ${unit})\n`;
+  // Always clear the display before showing a measurement
+  return `clearDisplay()\ndisplayMeasurement(${value}, ${title}, ${unit})\n`;
 };
 
 basicGenerator.forBlock["time_delay_1s"] = function () {
