@@ -136,7 +136,6 @@ basicGenerator.forBlock["basic_blue"] = function (block, generator) {
 basicGenerator.forBlock["basic_off"] = function (block, generator) {
   return `led(0,0,0)\n`;
 };
-
 basicGenerator.forBlock["display_print_basic"] = function (block, generator) {
   const raw = generator.valueToCode(block, "TEXT", generator.ORDER_NONE) || "";
   if (!raw || /^\s*$/.test(raw)) {
@@ -159,8 +158,8 @@ basicGenerator.forBlock["display_show_measurement"] = function (
 
   // Sensor metadata lookup table
   const sensorMetadata = {
-    hdc_tmp: { title: "Temperatur", unit: "°C" },
-    bme_tmp: { title: "Temperatur", unit: "°C" },
+    hdc_tmp: { title: "Temperatur", unit: "C" },
+    bme_tmp: { title: "Temperatur", unit: "C" },
     hdc_humi: { title: "Luftfeuchtigkeit", unit: "%" },
     bme_humi: { title: "Luftfeuchtigkeit", unit: "%" },
     bme_pressure: { title: "Luftdruck", unit: "hPa" },
@@ -173,7 +172,7 @@ basicGenerator.forBlock["display_show_measurement"] = function (
   const unit = metadata ? `"${metadata.unit}"` : '""';
 
   // Always clear the display before showing a measurement
-  return `clearDisplay()\ndisplayMeasurement(${value}, ${title}, ${unit})\n`;
+  return `displayMeasurement(${value}, ${title}, ${unit})\n`;
 };
 
 basicGenerator.forBlock["time_delay_1s"] = function () {
@@ -393,12 +392,6 @@ basicGenerator.forBlock["bme_air_quality"] = function (block) {
 };
 
 basicGenerator.forBlock["basic_brightness"] = function (block) {
-  // Setup-Code hinzufügen (einmalig)
-  basicGenerator.addSetup(
-    "board_light_setup",
-    "lightBoard = sensor:board:light",
-  );
-
   // Der Block selbst liefert nur den Variablennamen zurück
-  return ["lightBoard", basicGenerator.ORDER_ATOMIC];
+  return ["sensor:board:light", basicGenerator.ORDER_ATOMIC];
 };
