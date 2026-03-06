@@ -333,6 +333,11 @@ basicGenerator.forBlock["basic_led_control"] = function (block, generator) {
   }
 };
 
+// Generator für 'Zufällige Farbe' Block -> erzeugt basic-Code: randomLed()
+basicGenerator.forBlock["basic_random_color"] = function (block, generator) {
+  return "randomLed()\n";
+};
+
 basicGenerator.forBlock["basic_rgb_color"] = function (block, generator) {
   // Get RGB values from inputs
   const r = generator.valueToCode(block, "R", generator.ORDER_NONE) || "0";

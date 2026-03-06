@@ -272,6 +272,11 @@ const FONT_SIZE_CONFIG = {
   large: { size: 12, lineHeight: 14, maxLines: 3 },
 };
 
+// Helper: encode SVG (UTF-8) to data URI safely (handles umlauts / unicode)
+function svgToDataUri(svg) {
+  return "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svg)));
+}
+
 // Helper function to generate font size toggle buttons SVG
 function generateFontSizeToggleSvg(selectedSize = "medium") {
   const sizes = ["small", "medium", "large"];
@@ -299,7 +304,7 @@ function generateFontSizeToggleSvg(selectedSize = "medium") {
   ${buttons}
 </svg>`;
 
-  return "data:image/svg+xml;base64," + btoa(svgTemplate);
+  return svgToDataUri(svgTemplate);
 }
 
 // Helper function to generate dynamic display SVG with text
@@ -360,7 +365,7 @@ function generateDisplaySvg(text = "", fontSize = "medium") {
   </g>
 </svg>`;
 
-  return "data:image/svg+xml;base64," + btoa(svgTemplate);
+  return svgToDataUri(svgTemplate);
 }
 
 // Helper function to generate measurement display SVG
@@ -427,7 +432,7 @@ function generateMeasurementDisplaySvg(value = "0", title = "", unit = "") {
   </g>
 </svg>`;
 
-  return "data:image/svg+xml;base64," + btoa(svgTemplate);
+  return svgToDataUri(svgTemplate);
 }
 
 Blockly.Blocks["display_print_basic"] = {
@@ -1165,7 +1170,7 @@ function generateTimerSvg(seconds) {
   </g>
 </svg>`;
 
-  return "data:image/svg+xml;base64," + btoa(svgTemplate);
+  return svgToDataUri(svgTemplate);
 }
 
 // Helper function to generate a simple button SVG
@@ -1187,7 +1192,7 @@ function generateButtonSvg(text, color = "#62A044") {
   <rect class="btn-bg" x="1" y="1" width="48" height="28" rx="5" stroke="#4a8a4a" stroke-width="2"/>
   <text class="btn-text" x="25" y="20">${text}</text>
 </svg>`;
-  return "data:image/svg+xml;base64," + btoa(svgTemplate);
+  return svgToDataUri(svgTemplate);
 }
 
 // Helper function to generate stacked buttons SVG (plus and minus)
@@ -1216,7 +1221,7 @@ function generateStackedButtonsSvg() {
     <text class="btn-text" x="25" y="53">-1s</text>
   </g>
 </svg>`;
-  return "data:image/svg+xml;base64," + btoa(svgTemplate);
+  return svgToDataUri(svgTemplate);
 }
 
 Blockly.Blocks["basic_delay"] = {
@@ -1347,7 +1352,7 @@ function generateLEDSvg(color) {
   </g>
 </svg>`;
 
-  return "data:image/svg+xml;base64," + btoa(svgTemplate);
+  return svgToDataUri(svgTemplate);
 }
 
 Blockly.Blocks["basic_led_control"] = {
@@ -1424,6 +1429,33 @@ Blockly.Blocks["basic_led_control"] = {
     }
   },
 };
+
+// Zufällige Farbe: erzeugt einen zufälligen LED-Farbaufruf
+Blockly.defineBlocksWithJsonArray([
+  {
+    type: "basic_random_color",
+    message0: "%1 \n %2",
+    args0: [
+      {
+        type: "field_image",
+        src: "/media/hardware/icons/Icon_LED_OFF.svg",
+        width: 90,
+        height: 90,
+        alt: "*",
+      },
+      {
+        type: "field_label",
+        text: "Zufällige Farbe",
+        bold: true,
+      },
+    ],
+    previousStatement: null,
+    nextStatement: null,
+    colour: "#62A044",
+    tooltip: "Schaltet die LED auf eine zufällige Farbe",
+    helpUrl: "",
+  },
+]);
 
 // Helper function to generate RGB color preview SVG
 function generateRGBSvg(r, g, b) {
