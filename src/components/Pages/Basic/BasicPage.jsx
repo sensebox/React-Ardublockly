@@ -10,7 +10,7 @@ const BasicPage = ({ initialXml }) => {
   const basicCode = useSelector((s) => s.workspace.code.basic);
   // DONT DELETE THIS !!
   useEffect(() => {
-    console.log("Basic Code Updated:", basicCode);
+    console.log("Aktueller Blockly-Code:", basicCode);
   }, [basicCode]);
 
   useEffect(() => {
@@ -36,8 +36,7 @@ const BasicPage = ({ initialXml }) => {
   }, []);
 
   // Toolbox toggle state (logic remains, UI removed)
-  const isEmbeddedBasic =
-    window.location.pathname.startsWith("/embeddedbasic");
+  const isEmbeddedBasic = window.location.pathname.startsWith("/embeddedbasic");
 
   return (
     <Box
