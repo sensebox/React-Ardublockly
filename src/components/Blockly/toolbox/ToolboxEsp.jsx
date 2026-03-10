@@ -643,7 +643,6 @@ export const ToolboxEsp = () => {
       <Category
         name={Blockly.Msg.my_toolbox_functions}
         colour={getColour().procedures}
-        custom="CUSTOM_PROCEDURES"
         custom="CUSTOM_FUNCTIONS_DYNAMIC"
       />
 

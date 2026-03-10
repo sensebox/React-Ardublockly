@@ -658,11 +658,11 @@ export const ToolboxMcu = () => {
       <Category
         name={Blockly.Msg.toolbox_custom_functions}
         colour={getColour().procedures}
+        custom="CUSTOM_FUNCTIONS_DYNAMIC"
       >
         <Block type="procedures_defnoreturn" />
         <Block type="procedures_defreturn" />
-        custom="CUSTOM_FUNCTIONS_DYNAMIC"
-      />
+      </Category>
 
       {/* ============================== ADVANCED ============================== */}
       <Category name={Blockly.Msg.toolbox_advanced} colour={getColour().io}>
