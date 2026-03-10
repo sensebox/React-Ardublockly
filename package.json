@@ -9,6 +9,7 @@
     "@blockly/field-colour": "^6.0.11",
     "@blockly/field-multilineinput": "^6.0.5",
     "@blockly/field-grid-dropdown": "^6.0.9",
+    "@blockly/continuous-toolbox": "^7.0.8",
     "@blockly/field-slider": "8.0.2",
     "@blockly/plugin-scroll-options": "^7.0.1",
     "@blockly/plugin-typed-variable-modal": "^9.0.2",
@@ -30,7 +31,7 @@
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^7.2.1",
     "@uiw/react-markdown-preview": "^5.1.5",
-    "axios": "^1.13.5",
+    "axios": "^1.13.6",
     "@uiw/react-md-editor": "^4.0.11",
     "blockly": "^12.3.0",
     "file-saver": "^2.0.5",
@@ -60,7 +61,7 @@
     "remark-gemoji": "^8.0.0",
     "remark-gfm": "^4.0.1",
     "styled-components": "^4.4.1",
-    "watchpack": "^2.3.1"
+    "watchpack": "^2.5.1"
   },
   "resolutions": {
     "//": "See https://github.com/facebook/create-react-app/issues/11773",

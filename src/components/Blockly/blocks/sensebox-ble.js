@@ -1,5 +1,5 @@
 import * as Blockly from "blockly";
-import { getColour } from "../helpers/colour";
+import { getColour } from "@/components/Blockly/helpers/colour";
 
 var checkUnitLength = function (unit) {
   var length = unit.length;
