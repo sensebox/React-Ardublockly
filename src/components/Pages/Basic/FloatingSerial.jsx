@@ -177,6 +177,7 @@ const FloatingSerial = () => {
         <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
           <Tooltip title="Connect to senseBox">
             <Button
+              data-testid="serial-connect-button"
               variant={connected ? "outlined" : "contained"}
               color={connected ? "error" : "primary"}
               startIcon={<Computer />}
@@ -189,6 +190,7 @@ const FloatingSerial = () => {
 
           <Tooltip title="Send & Start program">
             <Button
+              data-testid="serial-play-button"
               onClick={handlePlay}
               disabled={!connected}
               variant="contained"
@@ -201,6 +203,7 @@ const FloatingSerial = () => {
 
           <Tooltip title="Stop program">
             <Button
+              data-testid="serial-stop-button"
               onClick={handleStop}
               disabled={!connected}
               variant="contained"
@@ -213,6 +216,7 @@ const FloatingSerial = () => {
 
           <Tooltip title="Help">
             <Button
+              data-testid="serial-help-button"
               onClick={() => setHelpOpen(true)}
               variant="contained"
               startIcon={<Rocket />}
@@ -224,6 +228,7 @@ const FloatingSerial = () => {
           {user && (
             <Tooltip title="Projekt speichern">
               <Button
+                data-testid="serial-save-button"
                 onClick={handleOpenDialog}
                 variant="contained"
                 color={
