@@ -87,9 +87,24 @@ const initialStatistics = () => {
   return false;
 };
 
+const parseCategoryLabels = (code) => {
+  if (!code) return [];
+  const match = code.match(
+    /const\s+char\s*\*\s*kCategoryLabels\s*\[.*?\]\s*=\s*\{([^}]+)\}/,
+  );
+  if (!match) return [];
+  return [...match[1].matchAll(/"([^"]+)"/g)].map((m) => m[1]);
+};
+
 const initialAiModel = () => {
   const stored = window.localStorage.getItem("aiModelCode");
-  return stored ? JSON.parse(stored) : { code: null, filename: null };
+  if (!stored) return { code: null, filename: null, labels: [] };
+  const parsed = JSON.parse(stored);
+  // Re-parse labels in case they were not stored (e.g. uploaded before this change)
+  if (!parsed.labels || !parsed.labels.length) {
+    parsed.labels = parseCategoryLabels(parsed.code);
+  }
+  return parsed;
 };
 
 const initialState = {
