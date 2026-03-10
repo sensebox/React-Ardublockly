@@ -16,7 +16,6 @@ import "./sensebox-ntp";
 import "./sensebox-ble";
 import "./sensebox-sd";
 import "./sensebox-solar";
-import "./sensebox-teachable-machine";
 import "./sensebox-teachable";
 import "./mqtt";
 import "./logic";

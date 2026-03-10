@@ -1,5 +1,6 @@
 export const SENSEBOX_TEACHABLE = {
-  sensebox_teachable_classify: "Klassifiziere Bild",
+  sensebox_teachable_classify: "ist",
+  sensebox_teachable_classify_class: "Klasse",
   sensebox_teachable_classify_tooltip:
-    "Klassifiziere ein Bild mit dem hochgeladenen KI-Modell",
+    "Prüft, ob die wahrscheinlichste Klasse des hochgeladenen KI-Modells der ausgewählten Klasse entspricht.",
 };

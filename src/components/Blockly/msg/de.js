@@ -17,7 +17,6 @@ import { SD } from "./de/sensebox-sd";
 import { SENSORS } from "./de/sensebox-sensors";
 import { SOLAR } from "./de/sensebox-solar";
 import { SENSEBOX } from "./de/sensebox";
-import { SENSEBOX_TEACHABLE_MACHINE } from "./de/sensebox-teachable-machine";
 import { SENSEBOX_TEACHABLE } from "./de/sensebox-teachable";
 import { TELEGRAM } from "./de/sensebox-telegram";
 import { WEB } from "./de/sensebox-web";
@@ -52,7 +51,6 @@ export const De = {
   ...SENSORS,
   ...SOLAR,
   ...SENSEBOX,
-  ...SENSEBOX_TEACHABLE_MACHINE,
   ...SENSEBOX_TEACHABLE,
   ...TELEGRAM,
   ...WEB,

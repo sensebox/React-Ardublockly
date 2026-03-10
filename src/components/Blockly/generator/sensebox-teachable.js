@@ -155,15 +155,14 @@ void feedImageToModel(camera_fb_t* fb, int8_t* model_input_data) {
   return result;
   }`;
 
-    // For now, return a simple string output
-    // This can be extended later to return actual prediction results
-    const code =
-      "classifyImage(" +
-      Blockly.Generator.Arduino.valueToCode(
-        this,
-        "image",
-        Blockly.Generator.Arduino.ORDER_ATOMIC,
-      ) +
-      ")";
+    // Generate code to check if the most likely class matches the selected class
+    const imageCode = Blockly.Generator.Arduino.valueToCode(
+      this,
+      "image",
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
+    );
+    const selectedClass = this.getFieldValue("CLASS_NAME");
+    // Compare the result of classifyImage to the selected class
+    const code = `(classifyImage(${imageCode}) == String("${selectedClass}"))`;
     return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
   };
