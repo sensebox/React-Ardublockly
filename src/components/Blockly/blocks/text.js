@@ -1,13 +1,13 @@
 import * as Blockly from "blockly/core";
-import { getColour } from "../helpers/colour";
-import * as Types from "../helpers/types";
+import { getColour } from "@/components/Blockly/helpers/colour";
+import * as Types from "@/components/Blockly/helpers/types";
 
 Blockly.defineBlocksWithJsonArray([
   // BEGIN JSON EXTRACT
   // Block for text value
   {
     type: "text",
-    message0: "%1",
+    message0: "Text: %1",
     args0: [
       {
         type: "field_input",

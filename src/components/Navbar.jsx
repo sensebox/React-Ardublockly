@@ -158,6 +158,7 @@ const Navbar = () => {
           }}
         >
           <IconButton
+            data-testid="navbar-menu-button"
             color="inherit"
             onClick={toggleDrawer}
             style={{ margin: "0 10px" }}

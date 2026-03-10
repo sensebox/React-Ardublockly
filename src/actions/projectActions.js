@@ -72,39 +72,43 @@ export const getProject = (type, id) => (dispatch) => {
 };
 
 export const getProjects = (type) => (dispatch) => {
-  dispatch({ type: PROJECT_PROGRESS });
-  const config = {
-    success: (res) => {
-      var data = type === "project" ? "projects" : "galleries";
-      var projects = res.data[data];
-      dispatch({
-        type: GET_PROJECTS,
-        payload: projects,
+  return new Promise((resolve, reject) => {
+    dispatch({ type: PROJECT_PROGRESS });
+    const config = {
+      success: (res) => {
+        var data = type === "project" ? "projects" : "galleries";
+        var projects = res.data[data];
+        dispatch({
+          type: GET_PROJECTS,
+          payload: projects,
+        });
+        dispatch({ type: PROJECT_PROGRESS });
+        dispatch(returnSuccess(res.data.message, res.status));
+        resolve(projects);
+      },
+      error: (err) => {
+        if (err.response) {
+          dispatch(
+            returnErrors(
+              err.response.data.message,
+              err.response.status,
+              "GET_PROJECTS_FAIL",
+            ),
+          );
+        }
+        dispatch({ type: PROJECT_PROGRESS });
+        reject(err);
+      },
+    };
+    axios
+      .get(`${import.meta.env.VITE_BLOCKLY_API}/${type}`, config)
+      .then((res) => {
+        res.config.success(res);
+      })
+      .catch((err) => {
+        err.config.error(err);
       });
-      dispatch({ type: PROJECT_PROGRESS });
-      dispatch(returnSuccess(res.data.message, res.status));
-    },
-    error: (err) => {
-      if (err.response) {
-        dispatch(
-          returnErrors(
-            err.response.data.message,
-            err.response.status,
-            "GET_PROJECTS_FAIL",
-          ),
-        );
-      }
-      dispatch({ type: PROJECT_PROGRESS });
-    },
-  };
-  axios
-    .get(`${import.meta.env.VITE_BLOCKLY_API}/${type}`, config)
-    .then((res) => {
-      res.config.success(res);
-    })
-    .catch((err) => {
-      err.config.error(err);
-    });
+  });
 };
 
 export const updateProject = (type, id) => (dispatch, getState) => {
