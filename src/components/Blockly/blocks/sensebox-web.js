@@ -1,6 +1,6 @@
 import * as Blockly from "blockly";
-import { getColour } from "../helpers/colour";
-import * as Types from "../helpers/types";
+import { getColour } from "@/components/Blockly/helpers/colour";
+import * as Types from "@/components/Blockly/helpers/types";
 
 Blockly.Blocks["sensebox_wifi"] = {
   init: function () {
