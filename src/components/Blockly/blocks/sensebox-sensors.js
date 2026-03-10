@@ -839,3 +839,21 @@ Blockly.Blocks["sensebox_sensor_max17048"] = {
     this.data = { name: "max17048" };
   },
 };
+
+Blockly.Blocks["sensebox_soil_sensor"] = {
+  init: function () {
+    this.setColour(getColour().sensebox);
+    this.appendDummyInput().appendField(Blockly.Msg.senseBox_soil_name);
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.senseBox_value)
+      .appendField(
+        new Blockly.FieldDropdown([
+          [Blockly.Msg.senseBox_soil_capacity, "CAPACITANCE"],
+          [Blockly.Msg.senseBox_soil_temperature, "TEMPERATURE"],
+        ]),
+        "PHENOMENON",
+      );
+    this.setOutput(true, "Number");
+    this.setTooltip(Blockly.Msg.senseBox_soil_tooltip);
+  },
+};
