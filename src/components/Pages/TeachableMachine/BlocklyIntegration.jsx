@@ -1,4 +1,7 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { getTeachableMachineTranslations } from "./translations";
+import * as Blockly from "blockly/core";
 import {
   Box,
   Button,
@@ -18,10 +21,14 @@ import {
   Download as DownloadIcon,
   Code as CodeIcon,
   Transform as TransformIcon,
+  Autorenew as ReconvertIcon,
 } from "@mui/icons-material";
 import ConversionService from "../../../services/conversionService";
 
 const BlocklyIntegration = ({ model }) => {
+  const language = useSelector((s) => s.general.language);
+  const t = getTeachableMachineTranslations();
+
   // Workflow state for the two-step process
   const [workflowState, setWorkflowState] = useState({
     // Current step: 'idle', 'converting', 'converted', 'compiling', 'complete'
@@ -39,6 +46,24 @@ const BlocklyIntegration = ({ model }) => {
 
   // Fixed board type for senseBox Eye
   const boardType = "sensebox_eye";
+
+  // Track the model that was converted to detect retraining
+  const convertedModelRef = useRef(null);
+  const [modelWasRetrained, setModelWasRetrained] = useState(false);
+
+  // Detect when model changes after conversion
+  useEffect(() => {
+    if (
+      convertedModelRef.current &&
+      model?.model &&
+      workflowState.currentStep !== "idle"
+    ) {
+      // Check if the model has changed since we converted
+      if (convertedModelRef.current !== model.model) {
+        setModelWasRetrained(true);
+      }
+    }
+  }, [model, workflowState.currentStep]);
 
   // Step 1: Convert model only
   const handleConvertModel = useCallback(async () => {
@@ -67,6 +92,10 @@ const BlocklyIntegration = ({ model }) => {
       binaryData: null,
       binarySize: null,
     });
+
+    // Store reference to the model being converted
+    convertedModelRef.current = model.model;
+    setModelWasRetrained(false);
 
     try {
       // Prepare representative dataset for int8 quantization
@@ -307,30 +336,49 @@ const BlocklyIntegration = ({ model }) => {
       binaryData: null,
       binarySize: null,
     });
+    convertedModelRef.current = null;
+    setModelWasRetrained(false);
   }, []);
 
   // Get descriptive stage text for progress bar
   const getStageText = () => {
     const { currentStep, stage } = workflowState;
     if (currentStep === "converting") {
-      if (stage === "serializing") return "Serializing model...";
-      if (stage === "uploading") return "Uploading to server...";
-      if (stage === "converting") return "Converting to TFLite...";
-      if (stage === "generating") return "Generating C/C++ code...";
-      return "Converting model...";
+      if (stage === "serializing") return t.integration.serializingModel;
+      if (stage === "uploading") return t.integration.uploadingToServer;
+      if (stage === "converting") return t.integration.convertingToTFLite;
+      if (stage === "generating") return t.integration.generatingCode;
+      return t.integration.convertingModel;
     } else if (currentStep === "compiling") {
-      return "Compiling model to binary...";
+      return t.integration.compilingToBinary;
     }
     return "";
   };
 
   return (
     <Box>
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-        Convert your trained model to TensorFlow Lite Micro format. After
-        conversion, you can download the model as a cpp file for use in Arduino
-        IDE, or compile it to a binary for direct upload to your senseBox Eye.
-      </Typography>
+      {/* Description - only show when not converted yet */}
+      {workflowState.currentStep === "idle" && (
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+          {t.integration.description}
+        </Typography>
+      )}
+
+      {/* Reconvert Button - show when model was retrained after conversion */}
+      {modelWasRetrained && workflowState.currentStep !== "idle" && (
+        <Box sx={{ mb: 3 }}>
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            startIcon={<ReconvertIcon />}
+            onClick={handleConvertModel}
+            disabled={workflowState.isProcessing}
+          >
+            {t.integration.reconvertModel}
+          </Button>
+        </Box>
+      )}
 
       {/* Step 1: Convert Model Button */}
       {(workflowState.currentStep === "idle" ||
@@ -350,7 +398,9 @@ const BlocklyIntegration = ({ model }) => {
           disabled={!model || !model.model || workflowState.isProcessing}
           sx={{ mb: 3 }}
         >
-          {workflowState.isProcessing ? "Converting..." : "Convert Model"}
+          {workflowState.isProcessing
+            ? t.integration.converting
+            : t.integration.convertModel}
         </Button>
       )}
 
@@ -389,7 +439,7 @@ const BlocklyIntegration = ({ model }) => {
                 startIcon={<RefreshIcon />}
                 onClick={handleRetryConversion}
               >
-                Retry
+                {t.integration.retry}
               </Button>
             )
           }
@@ -406,7 +456,7 @@ const BlocklyIntegration = ({ model }) => {
             workflowState.error.suggestions.length > 0 && (
               <Box sx={{ mt: 1 }}>
                 <Typography variant="body2" fontWeight="bold">
-                  Suggestions:
+                  {t.integration.suggestions}
                 </Typography>
                 <ul style={{ margin: "4px 0", paddingLeft: "20px" }}>
                   {workflowState.error.suggestions.map((suggestion, idx) => (
@@ -438,7 +488,7 @@ const BlocklyIntegration = ({ model }) => {
               >
                 <CheckIcon color="success" />
                 <Typography variant="h6">
-                  Model Successfully Converted
+                  {t.integration.modelConvertedSuccess}
                 </Typography>
                 {workflowState.conversionData.modelSize && (
                   <Chip
@@ -451,21 +501,20 @@ const BlocklyIntegration = ({ model }) => {
               </Box>
 
               <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                Choose one of the following options:
+                {t.integration.chooseOptions}
               </Typography>
 
               {/* Option A: Download cpp file */}
               <Box sx={{ mb: 2 }}>
                 <Typography variant="subtitle2" sx={{ mb: 1 }}>
-                  Option A: Download as cpp File
+                  {t.integration.optionA}
                 </Typography>
                 <Typography
                   variant="body2"
                   color="text.secondary"
                   sx={{ mb: 1 }}
                 >
-                  Download the model as a single cpp file for use in Arduino IDE
-                  or to upload to Blockly UI later.
+                  {t.integration.optionADescription}
                 </Typography>
                 <Button
                   variant="contained"
@@ -474,7 +523,7 @@ const BlocklyIntegration = ({ model }) => {
                   onClick={handleDownloadCpp}
                   disabled={workflowState.isProcessing}
                 >
-                  Download cpp File
+                  {t.integration.downloadCppFile}
                 </Button>
               </Box>
 
@@ -483,15 +532,14 @@ const BlocklyIntegration = ({ model }) => {
               {/* Option B: Compile and download binary */}
               <Box>
                 <Typography variant="subtitle2" sx={{ mb: 1 }}>
-                  Option B: Compile & Download Binary
+                  {t.integration.optionB}
                 </Typography>
                 <Typography
                   variant="body2"
                   color="text.secondary"
                   sx={{ mb: 1 }}
                 >
-                  Compile the model to a binary file that can be directly
-                  uploaded to your senseBox Eye via drag-and-drop.
+                  {t.integration.optionBDescription}
                 </Typography>
                 <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
                   <Button
@@ -508,8 +556,8 @@ const BlocklyIntegration = ({ model }) => {
                     disabled={workflowState.isProcessing}
                   >
                     {workflowState.currentStep === "compiling"
-                      ? "Compiling..."
-                      : "Compile & Download Binary"}
+                      ? t.integration.compiling
+                      : t.integration.compileAndDownload}
                   </Button>
                   {workflowState.binaryData && (
                     <Button
@@ -523,23 +571,10 @@ const BlocklyIntegration = ({ model }) => {
                         );
                       }}
                     >
-                      Download Binary Again
+                      {t.integration.downloadBinaryAgain}
                     </Button>
                   )}
                 </Box>
-              </Box>
-
-              {/* Convert another model button */}
-              <Box sx={{ mt: 3, pt: 2, borderTop: 1, borderColor: "divider" }}>
-                <Button
-                  variant="text"
-                  color="secondary"
-                  size="small"
-                  onClick={handleReset}
-                  disabled={workflowState.isProcessing}
-                >
-                  Convert a Different Model
-                </Button>
               </Box>
             </CardContent>
           </Card>
@@ -549,11 +584,10 @@ const BlocklyIntegration = ({ model }) => {
       {workflowState.currentStep === "complete" && workflowState.binaryData && (
         <Alert severity="success" sx={{ mb: 3 }}>
           <Typography variant="subtitle2" gutterBottom>
-            Success! Binary Downloaded
+            {t.integration.successBinaryDownloaded}
           </Typography>
           <Typography variant="body2">
-            Your model has been compiled and downloaded! The binary file is
-            ready to upload to your senseBox Eye board via drag-and-drop.
+            {t.integration.successBinaryDescription}
           </Typography>
         </Alert>
       )}

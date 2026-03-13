@@ -1,6 +1,7 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
-import { Container, Typography, Box, Paper, Alert } from "@mui/material";
-import * as Blockly from "blockly/core";
+import { Container, Typography, Box, Paper } from "@mui/material";
+import { useSelector } from "react-redux";
+import { getTeachableMachineTranslations } from "./translations";
 import ModelTrainer from "./ModelTrainer";
 import BlocklyIntegration from "./BlocklyIntegration";
 import "./TeachableMachine.css";
@@ -10,6 +11,8 @@ const TeachableMachine = () => {
   const [isTraining, setIsTraining] = useState(false);
   const [trainingError, setTrainingError] = useState(null);
   const isMountedRef = useRef(true);
+  const language = useSelector((s) => s.general.language);
+  const t = getTeachableMachineTranslations();
 
   const handleModelTrained = useCallback((model) => {
     if (isMountedRef.current) {
@@ -41,32 +44,21 @@ const TeachableMachine = () => {
   }, []);
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4, pb: 10 }}>
+    <Container maxWidth="lg" sx={{ py: 4, pb: 10 }} key={language}>
       <Box sx={{ mb: 4 }}>
         <Typography variant="h3" component="h1" gutterBottom>
-          {Blockly.Msg.teachableMachine?.title || "Teachable Machine"}
+          {t.title}
         </Typography>
         <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-          {Blockly.Msg.teachableMachine?.description ||
-            "Train your own machine learning model using the camera and deploy it on your senseBox Eye."}
+          {t.description}
         </Typography>
       </Box>
-
-      {trainingError && (
-        <Alert
-          severity="error"
-          sx={{ mb: 3 }}
-          onClose={() => setTrainingError(null)}
-        >
-          {trainingError}
-        </Alert>
-      )}
 
       <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
         {/* Model Training Section */}
         <Paper elevation={2} sx={{ p: 3 }}>
           <Typography variant="h5" gutterBottom>
-            {Blockly.Msg.teachableMachine?.training?.title || "Model Training"}
+            {t.training.title}
           </Typography>
           <ModelTrainer
             onModelTrained={handleModelTrained}
@@ -81,8 +73,7 @@ const TeachableMachine = () => {
         {trainedModel && (
           <Paper elevation={2} sx={{ p: 3 }}>
             <Typography variant="h5" gutterBottom>
-              {Blockly.Msg.teachableMachine?.integration?.title ||
-                "Blockly Integration"}
+              {t.integration.title}
             </Typography>
             <BlocklyIntegration model={trainedModel} />
           </Paper>

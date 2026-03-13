@@ -1,4 +1,7 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { getTeachableMachineTranslations } from "./translations";
+import * as Blockly from "blockly/core";
 import {
   Alert,
   AlertTitle,
@@ -63,15 +66,15 @@ export const ConnectionStatus = {
  * @returns {Object} Error details with severity, title, message, and actions
  */
 const getErrorDetails = (errorType) => {
+  const t = getTeachableMachineTranslations();
+
   switch (errorType) {
     case ErrorTypes.UNSUPPORTED_BROWSER:
       return {
         severity: "error",
-        title: "Browser Not Supported",
-        message:
-          "Your browser does not support the Web Serial API required for senseBox Eye camera connection.",
-        details:
-          "The Web Serial API is currently supported in Chrome 89+, Edge 89+, and Opera 76+ on desktop platforms.",
+        title: t.errors.browserNotSupported,
+        message: t.errors.browserNotSupportedMessage,
+        details: t.errors.browserNotSupportedDetails,
         action: "switch-browser",
         icon: <ErrorIcon />,
       };
@@ -79,11 +82,9 @@ const getErrorDetails = (errorType) => {
     case ErrorTypes.PERMISSION_DENIED:
       return {
         severity: "error",
-        title: "Permission Denied",
-        message:
-          "Serial port access was denied. Please grant permission to connect to your senseBox Eye camera.",
-        details:
-          "You may need to check your browser settings or try connecting again.",
+        title: t.errors.permissionDenied,
+        message: t.errors.permissionDeniedMessage,
+        details: t.errors.permissionDeniedDetails,
         action: "retry",
         icon: <CancelIcon />,
       };
@@ -91,10 +92,9 @@ const getErrorDetails = (errorType) => {
     case ErrorTypes.CONNECTION_FAILED:
       return {
         severity: "error",
-        title: "Connection Failed",
-        message: "Connection to senseBox Eye camera could not be established.",
-        details:
-          "Please check that your device is properly connected and the correct port is selected. You can download and flash the camera capture firmware to your device.",
+        title: t.errors.connectionFailed,
+        message: t.errors.connectionFailedMessage,
+        details: t.errors.connectionFailedDetails,
         action: "retry-with-download",
         icon: <ErrorIcon />,
       };
@@ -102,9 +102,9 @@ const getErrorDetails = (errorType) => {
     case ErrorTypes.DEVICE_DISCONNECTED:
       return {
         severity: "error",
-        title: "Device Disconnected",
-        message: "The senseBox Eye camera was disconnected.",
-        details: "Please reconnect your device and try again.",
+        title: t.errors.deviceDisconnected,
+        message: t.errors.deviceDisconnectedMessage,
+        details: t.errors.deviceDisconnectedDetails,
         action: "reconnect",
         icon: <ErrorIcon />,
       };
@@ -112,11 +112,9 @@ const getErrorDetails = (errorType) => {
     case ErrorTypes.FRAME_TIMEOUT:
       return {
         severity: "warning",
-        title: "Frame Timeout",
-        message:
-          "No frames received from the senseBox Eye camera within the expected time.",
-        details:
-          "The device may be busy or experiencing communication issues. The system will continue waiting for frames.",
+        title: t.errors.frameTimeout,
+        message: t.errors.frameTimeoutMessage,
+        details: t.errors.frameTimeoutDetails,
         action: "none",
         icon: <WarningIcon />,
       };
@@ -124,10 +122,9 @@ const getErrorDetails = (errorType) => {
     case ErrorTypes.FRAME_CORRUPTED:
       return {
         severity: "warning",
-        title: "Corrupted Frame",
-        message: "Received a corrupted frame from the senseBox Eye camera.",
-        details:
-          "This can happen due to transmission errors. The system will continue processing subsequent frames.",
+        title: t.errors.frameCorrupted,
+        message: t.errors.frameCorruptedMessage,
+        details: t.errors.frameCorruptedDetails,
         action: "none",
         icon: <WarningIcon />,
       };
@@ -136,10 +133,9 @@ const getErrorDetails = (errorType) => {
     case ErrorTypes.DECODING_ERROR:
       return {
         severity: "warning",
-        title: "Frame Decoding Error",
-        message: "Failed to decode frame data from the senseBox Eye camera.",
-        details:
-          "The frame format may be invalid or corrupted. The system will continue processing subsequent frames.",
+        title: t.errors.frameDecodingError,
+        message: t.errors.frameDecodingErrorMessage,
+        details: t.errors.frameDecodingErrorDetails,
         action: "none",
         icon: <WarningIcon />,
       };
@@ -147,11 +143,9 @@ const getErrorDetails = (errorType) => {
     case ErrorTypes.READ_LOOP_ERROR:
       return {
         severity: "error",
-        title: "Communication Error",
-        message:
-          "An error occurred while reading data from the senseBox Eye camera.",
-        details:
-          "The connection may have been interrupted. Please try reconnecting.",
+        title: t.errors.communicationError,
+        message: t.errors.communicationErrorMessage,
+        details: t.errors.communicationErrorDetails,
         action: "reconnect",
         icon: <ErrorIcon />,
       };
@@ -163,10 +157,9 @@ const getErrorDetails = (errorType) => {
     case ErrorTypes.RECONNECTING:
       return {
         severity: "info",
-        title: "Reconnecting",
-        message: "Attempting to reconnect to the senseBox Eye camera...",
-        details:
-          "Please wait, or click the button below to select a port manually.",
+        title: t.errors.reconnecting,
+        message: t.errors.reconnectingMessage,
+        details: t.errors.reconnectingDetails,
         action: "retry",
         icon: <InfoIcon />,
       };
@@ -174,9 +167,9 @@ const getErrorDetails = (errorType) => {
     default:
       return {
         severity: "error",
-        title: "Unknown Error",
-        message: "An unexpected error occurred with the senseBox Eye camera.",
-        details: errorType || "No additional details available.",
+        title: t.errors.unknownError,
+        message: t.errors.unknownErrorMessage,
+        details: errorType || t.errors.unknownErrorDetails,
         action: "retry",
         icon: <ErrorIcon />,
       };
@@ -189,31 +182,33 @@ const getErrorDetails = (errorType) => {
  * @returns {Object} Status display details
  */
 const getStatusDetails = (status) => {
+  const t = getTeachableMachineTranslations();
+
   switch (status) {
     case ConnectionStatus.CONNECTED:
       return {
         color: "success",
         icon: <CheckCircleIcon />,
-        label: "Connected",
+        label: t.errors.connected,
       };
     case ConnectionStatus.CONNECTING:
       return {
         color: "info",
         icon: <InfoIcon />,
-        label: "Connecting...",
+        label: t.errors.connecting,
       };
     case ConnectionStatus.ERROR:
       return {
         color: "error",
         icon: <ErrorIcon />,
-        label: "Error",
+        label: t.errors.error,
       };
     case ConnectionStatus.DISCONNECTED:
     default:
       return {
         color: "default",
         icon: <CancelIcon />,
-        label: "Disconnected",
+        label: t.errors.disconnected,
       };
   }
 };
@@ -232,6 +227,7 @@ const SerialCameraErrorHandler = ({
 }) => {
   const [detailsExpanded, setDetailsExpanded] = React.useState(showDetails);
   const [isDownloading, setIsDownloading] = React.useState(false);
+  const t = getTeachableMachineTranslations();
 
   // Get error details if error exists
   const errorDetails = error
@@ -319,7 +315,7 @@ const SerialCameraErrorHandler = ({
       {showStatus && (
         <Box sx={{ mb: 2, display: "flex", alignItems: "center", gap: 1 }}>
           <Typography variant="body2" color="text.secondary">
-            Serial Camera Status:
+            {t.errors.serialCameraStatus}
           </Typography>
           <Chip
             icon={statusDetails.icon}
@@ -344,23 +340,23 @@ const SerialCameraErrorHandler = ({
             {errorDetails.message}
           </Typography>
 
-          {/* Error Details (Expandable) */}
-          {errorDetails.details && (
+          {/* Error Details (Expandable) - shows actual error message */}
+          {error.message && (
             <>
               <Button
                 size="small"
                 onClick={() => setDetailsExpanded(!detailsExpanded)}
                 sx={{ mb: detailsExpanded ? 1 : 0, p: 0, minWidth: "auto" }}
               >
-                {detailsExpanded ? "Hide Details" : "Show Details"}
+                {detailsExpanded ? t.errors.hideDetails : t.errors.showDetails}
               </Button>
               <Collapse in={detailsExpanded}>
                 <Typography
                   variant="body2"
                   color="text.secondary"
-                  sx={{ mt: 1 }}
+                  sx={{ mt: 1, fontFamily: "monospace", fontSize: "0.85rem" }}
                 >
-                  {errorDetails.details}
+                  {error.message}
                 </Typography>
               </Collapse>
             </>
@@ -370,16 +366,15 @@ const SerialCameraErrorHandler = ({
           {error.type === ErrorTypes.UNSUPPORTED_BROWSER && (
             <Box sx={{ mt: 2 }}>
               <Typography variant="body2" fontWeight="bold" gutterBottom>
-                Supported Browsers:
+                {t.errors.supportedBrowsers}
               </Typography>
               <Typography variant="body2" component="ul" sx={{ pl: 2, mb: 1 }}>
-                <li>Google Chrome 89 or later</li>
-                <li>Microsoft Edge 89 or later</li>
-                <li>Opera 76 or later</li>
+                <li>Google Chrome 89+</li>
+                <li>Microsoft Edge 89+</li>
+                <li>Opera 76+</li>
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Note: Web Serial API is not supported on mobile browsers or
-                Firefox/Safari.
+                {t.errors.supportedBrowsersNote}
               </Typography>
             </Box>
           )}
@@ -388,13 +383,13 @@ const SerialCameraErrorHandler = ({
           {error.type === ErrorTypes.PERMISSION_DENIED && (
             <Box sx={{ mt: 2 }}>
               <Typography variant="body2" fontWeight="bold" gutterBottom>
-                How to grant permission:
+                {t.errors.howToGrantPermission}
               </Typography>
               <Typography variant="body2" component="ol" sx={{ pl: 2 }}>
-                <li>Click the lock icon in your browser's address bar</li>
-                <li>Find "Serial ports" in the permissions list</li>
-                <li>Change the setting to "Allow"</li>
-                <li>Refresh the page and try connecting again</li>
+                <li>{t.errors.permissionStep1}</li>
+                <li>{t.errors.permissionStep2}</li>
+                <li>{t.errors.permissionStep3}</li>
+                <li>{t.errors.permissionStep4}</li>
               </Typography>
             </Box>
           )}
@@ -404,16 +399,13 @@ const SerialCameraErrorHandler = ({
             error.type === ErrorTypes.DEVICE_DISCONNECTED) && (
             <Box sx={{ mt: 2 }}>
               <Typography variant="body2" fontWeight="bold" gutterBottom>
-                Troubleshooting:
+                {t.errors.troubleshooting}
               </Typography>
               <Typography variant="body2" component="ul" sx={{ pl: 2 }}>
-                <li>Ensure the senseBox Eye is properly connected via USB</li>
-                <li>Check that the correct serial port is selected</li>
-                <li>
-                  Verify the senseBox Eye is running the firmware to stream
-                  camera images. You can download it with the button below.
-                </li>
-                <li>Try unplugging and reconnecting the device</li>
+                <li>{t.errors.troubleshootingUsb}</li>
+                <li>{t.errors.troubleshootingPort}</li>
+                <li>{t.errors.troubleshootingFirmware}</li>
+                <li>{t.errors.troubleshootingReconnect}</li>
               </Typography>
             </Box>
           )}
@@ -435,7 +427,9 @@ const SerialCameraErrorHandler = ({
                   onClick={handleDownloadFirmware}
                   disabled={isDownloading}
                 >
-                  {isDownloading ? "Compiling..." : "Download Firmware"}
+                  {isDownloading
+                    ? t.errors.compilingFirmware
+                    : t.errors.downloadFirmware}
                 </Button>
               )}
               {(errorDetails.action === "retry" ||
@@ -447,7 +441,7 @@ const SerialCameraErrorHandler = ({
                     startIcon={<RefreshIcon />}
                     onClick={handleAction}
                   >
-                    Try Again
+                    {t.errors.tryAgain}
                   </Button>
                 )}
               {errorDetails.action === "reconnect" && onReconnect && (
@@ -457,7 +451,7 @@ const SerialCameraErrorHandler = ({
                   startIcon={<RefreshIcon />}
                   onClick={handleAction}
                 >
-                  Reconnect
+                  {t.errors.reconnect}
                 </Button>
               )}
               {errorDetails.action === "switch-browser" && (
@@ -469,7 +463,7 @@ const SerialCameraErrorHandler = ({
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Download Chrome
+                  {t.errors.downloadChrome}
                 </Button>
               )}
             </Box>
@@ -481,10 +475,7 @@ const SerialCameraErrorHandler = ({
       {connectionStatus === ConnectionStatus.CONNECTED &&
         error?.type === ErrorTypes.FRAME_TIMEOUT && (
           <Alert severity="info" icon={<InfoIcon />} sx={{ mb: 2 }}>
-            <Typography variant="body2">
-              Waiting for frames from senseBox Eye camera... If this persists,
-              check your device connection.
-            </Typography>
+            <Typography variant="body2">{t.errors.waitingForFrames}</Typography>
           </Alert>
         )}
     </Box>
