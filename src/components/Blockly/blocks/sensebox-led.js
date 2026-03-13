@@ -1,7 +1,7 @@
 import * as Blockly from "blockly";
-import { getColour } from "../helpers/colour";
-import { selectedBoard } from "../helpers/board";
-import * as Types from "../helpers/types";
+import { getColour } from "@/components/Blockly/helpers/colour";
+import { selectedBoard } from "@/components/Blockly/helpers/board";
+import * as Types from "@/components/Blockly/helpers/types";
 import { FieldSlider } from "@blockly/field-slider";
 import {
   registerFieldMultilineInput,
@@ -123,7 +123,30 @@ Blockly.defineBlocksWithJsonArray([
       {
         type: "field_colour",
         name: "COLOUR",
-        colour: "#ff0000",
+        colour: "#ff595e",
+        colourOptions: [
+          "#ff595e",
+          "#ff924c",
+          "#ffca3a",
+          "#8ac926",
+          "#52b788",
+          "#1982c4",
+          "#4267ac",
+          "#6a4c93",
+          "#ffffff",
+        ],
+        colourTitles: [
+          "red",
+          "orange",
+          "yellow",
+          "green",
+          "teal",
+          "blue",
+          "indigo",
+          "violet",
+          "white",
+        ],
+        columns: 1,
       },
     ],
     output: "Colour",

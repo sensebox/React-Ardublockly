@@ -28,6 +28,8 @@ import Project from "@/components/Pages/Project/Project";
 import ProjectHome from "@/components/Pages/Project/ProjectHome";
 import TutorialHome from "../Tutorial/Overview/TutorialHome";
 import TeachableMachine from "@/components/Pages/TeachableMachine/TeachableMachine";
+import BasicWithSerial from "../Pages/Basic/BasicWithSerial";
+import BasicProject from "../Pages/Basic/BasicProject";
 function AppRoutes({ platform, visitPage, setPlatform }) {
   const location = useLocation();
 
@@ -55,6 +57,23 @@ function AppRoutes({ platform, visitPage, setPlatform }) {
           element={
             <PublicRoute>
               <Home />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/basic"
+          element={
+            <PublicRoute>
+              <BasicWithSerial />
+            </PublicRoute>
+          }
+        />
+
+        <Route
+          path="/basic/:id"
+          element={
+            <PublicRoute>
+              <BasicProject />
             </PublicRoute>
           }
         />
@@ -91,7 +110,7 @@ function AppRoutes({ platform, visitPage, setPlatform }) {
 
         {/* Code Editor */}
         <Route path="/codeeditor" element={<CodeEditor />} />
-        
+
         {/* Teachable Machine */}
         <Route
           path="/teachable-machine"
@@ -101,7 +120,7 @@ function AppRoutes({ platform, visitPage, setPlatform }) {
             </PublicRoute>
           }
         />
-        
+
         {/* Sharing */}
         <Route
           path="/share/:shareId"
