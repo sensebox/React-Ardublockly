@@ -37,10 +37,12 @@ Blockly.Blocks["sensebox_osem_connection"] = {
       this.appendDummyInput()
         .setAlign(Blockly.inputs.Align.LEFT)
         .appendField("senseBox ID")
-        .appendField(
-          new Blockly.FieldDropdown([["Bitte auswählen", ""]]),
-          "BoxID",
-        );
+        .appendField(new Blockly.FieldTextInput("senseBox ID"), "BoxID");
+
+      // .appendField(
+      //   new Blockly.FieldDropdown([["Bitte auswählen", ""]]),
+      //   "BoxID",
+      // );
     } else {
       var dropdown = [];
       for (var i = 0; i < boxes.length; i++) {
@@ -146,10 +148,12 @@ Blockly.Blocks["sensebox_send_to_osem"] = {
       this.appendValueInput("Value")
         .setAlign(Blockly.inputs.Align.LEFT)
         .appendField("Phänomen")
-        .appendField(
-          new Blockly.FieldDropdown([["Bitte auswählen", ""]]),
-          "SensorID",
-        );
+        .appendField(new Blockly.FieldTextInput("Sensor Id"), "SensorID");
+
+      // .appendField(
+      //   new Blockly.FieldDropdown([["Bitte auswählen", ""]]),
+      //   "SensorID",
+      // );
     }
 
     this.setPreviousStatement(true, null);
@@ -236,7 +240,8 @@ Blockly.Blocks["sensebox_esp32s2_osem_connection"] = {
       this.appendDummyInput()
         .setAlign(Blockly.inputs.Align.LEFT)
         .appendField("senseBox ID")
-        .appendField(new Blockly.FieldDropdown(dropdown), "BoxID");
+        .appendValueInput("BoxID");
+      // .appendField(new Blockly.FieldDropdown(dropdown), "BoxID");
     }
     this.appendDummyInput()
       .setAlign(Blockly.inputs.Align.LEFT)
