@@ -16,6 +16,22 @@
     "description": ""
   },
   {
+    "id": "senseboxmcuesp32",
+    "name": "senseBox MCU:ESP32",
+    "src": "senseboxmcuesp32.png",
+    "url": "https://docs.sensebox.de/hardware/allgemein-sensebox-mcu-esp32/",
+    "category": "boards",
+    "description": ""
+  },
+  {
+    "id": "senseboxeye",
+    "name": "senseBox Eye",
+    "src": "senseboxeye.png",
+    "url": "https://docs.sensebox.de/hardware/allgemein-sensebox-eye/",
+    "category": "boards",
+    "description": ""
+  },
+  {
     "id": "breadboard",
     "name": "Breadboard",
     "src": "breadboard.png",
