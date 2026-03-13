@@ -1,4 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { getTeachableMachineTranslations } from "./translations";
 import {
   Box,
   Button,
@@ -60,6 +62,9 @@ const ModelTrainer = ({
     ConnectionStatus.DISCONNECTED,
   );
   const [browserCompatible, setBrowserCompatible] = useState(true);
+
+  const language = useSelector((s) => s.general.language);
+  const t = getTeachableMachineTranslations();
 
   // Mobile detection and floating preview state
   const theme = useTheme();
@@ -127,7 +132,7 @@ const ModelTrainer = ({
         });
       } else {
         onTrainingError(
-          `Error accessing camera: ${error.message}. Please make sure you have granted camera permissions.`,
+          t.training.errorCameraAccess.replace("{message}", error.message),
         );
       }
     }
@@ -160,9 +165,11 @@ const ModelTrainer = ({
       }
     } catch (error) {
       console.error("Error switching camera:", error);
-      onTrainingError(`Error switching camera: ${error.message}`);
+      onTrainingError(
+        t.training.errorCameraSwitch.replace("{message}", error.message),
+      );
     }
-  }, [switchCamera, getPreviewElement, onTrainingError]);
+  }, [switchCamera, getPreviewElement, onTrainingError, t]);
 
   useEffect(() => {
     if (cameraError) {
@@ -214,7 +221,7 @@ const ModelTrainer = ({
       );
       if (nameExists) {
         onTrainingError(
-          `A class with the name "${trimmedName}" already exists.`,
+          t.training.errorClassExists.replace("{name}", trimmedName),
         );
         return;
       }
@@ -248,7 +255,7 @@ const ModelTrainer = ({
       );
       if (nameExists) {
         onTrainingError(
-          `A class with the name "${trimmedName}" already exists.`,
+          t.training.errorClassExists.replace("{name}", trimmedName),
         );
         return;
       }
@@ -338,9 +345,7 @@ const ModelTrainer = ({
 
   const trainModel = useCallback(async () => {
     if (classes.length < 2 || classes.some((cls) => cls.samples.length < 2)) {
-      onTrainingError(
-        "Insufficient data for training. Please add at least 2 classes with at least 2 samples each.",
-      );
+      onTrainingError(t.training.errorInsufficientData);
       return;
     }
 
@@ -628,6 +633,7 @@ const ModelTrainer = ({
         epoch: prev.totalEpochs,
         batch: prev.totalBatches,
       }));
+
       setTrainedModel(modelData);
       onModelTrained(modelData);
     } catch (error) {
@@ -768,8 +774,8 @@ const ModelTrainer = ({
                 }
               >
                 {sourceType === "webcam" && isCameraActive
-                  ? "Stop Webcam"
-                  : "Start Webcam"}
+                  ? t.training.stopWebcam
+                  : t.training.startWebcam}
               </Button>
 
               {/* Serial Button */}
@@ -799,8 +805,8 @@ const ModelTrainer = ({
                 }
               >
                 {sourceType === "serial" && isCameraActive
-                  ? "Stop senseBox Eye Camera"
-                  : "Start senseBox Eye Camera"}
+                  ? t.training.stopSenseBoxCamera
+                  : t.training.startSenseBoxCamera}
               </Button>
             </Box>
 
@@ -830,7 +836,7 @@ const ModelTrainer = ({
               >
                 {videoLoading && (
                   <Typography variant="body2" sx={{ mb: 2 }}>
-                    Loading camera...
+                    {t.training.loadingCamera}
                   </Typography>
                 )}
                 <Box
@@ -856,7 +862,7 @@ const ModelTrainer = ({
                 >
                   {videoLoading && (
                     <Typography color="text.secondary" sx={{ color: "white" }}>
-                      Initializing camera...
+                      {t.training.initializingCamera}
                     </Typography>
                   )}
                 </Box>
@@ -919,7 +925,7 @@ const ModelTrainer = ({
                       )}
                       <Box>
                         <Chip
-                          label={`${cls.samples.length} samples`}
+                          label={`${cls.samples.length} ${t.training.samples}`}
                           size="small"
                           color={cls.samples.length > 0 ? "success" : "default"}
                         />
@@ -1022,7 +1028,7 @@ const ModelTrainer = ({
                       }}
                       disabled={!isCameraActive || disabled}
                     >
-                      Hold to Capture
+                      {t.training.holdToCapture}
                     </Button>
                   </CardActions>
                 </Card>
@@ -1048,7 +1054,7 @@ const ModelTrainer = ({
                 onClick={() => setShowAddDialog(true)}
                 disabled={disabled}
               >
-                Add Class
+                {t.training.addClass}
               </Button>
             )}
             <Button
@@ -1062,18 +1068,20 @@ const ModelTrainer = ({
                 classes.some((cls) => cls.samples.length < 2)
               }
             >
-              Train Model
+              {t.training.trainModel}
             </Button>
           </Box>
         </Grid>
       </Grid>
 
       {isTraining && (
-        <Box sx={{ mb: 3 }}>
+        <Box sx={{ my: 4 }}>
           <Typography variant="body2" gutterBottom>
             {trainingProgress.totalEpochs > 0
-              ? `Training: epoch ${trainingProgress.epoch}/${trainingProgress.totalEpochs}`
-              : "Training in progress..."}
+              ? t.training.trainingEpoch
+                  .replace("{epoch}", trainingProgress.epoch)
+                  .replace("{totalEpochs}", trainingProgress.totalEpochs)
+              : t.training.trainingInProgress}
           </Typography>
           <LinearProgress
             variant={
@@ -1096,26 +1104,18 @@ const ModelTrainer = ({
         </Box>
       )}
 
-      {/* Predictions Section - Show after training */}
+      {/* Live Predictions Section - only show when model is trained */}
       {trainedModel && (
         <>
           <Divider sx={{ my: 4 }} />
 
           <Box sx={{ mt: 4 }}>
             <Typography variant="h6" gutterBottom>
-              Live Predictions
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-              {isCameraActive
-                ? "Real-time predictions from your trained model."
-                : "Start the camera to see predictions."}
+              {t.training.livePredictions}
             </Typography>
 
             {predictions.length > 0 && (
               <Paper sx={{ p: 2, bgcolor: "grey.50" }}>
-                <Typography variant="subtitle2" gutterBottom>
-                  Live Predictions
-                </Typography>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                   {predictions.map((pred, index) => (
                     <Card
@@ -1183,34 +1183,38 @@ const ModelTrainer = ({
                   bgcolor: "grey.50",
                 }}
               >
-                <Typography color="text.secondary">Analyzing...</Typography>
+                <Typography color="text.secondary">
+                  {t.training.analyzing}
+                </Typography>
+              </Paper>
+            )}
+
+            {!isCameraActive && predictions.length === 0 && (
+              <Paper
+                sx={{
+                  p: 3,
+                  textAlign: "center",
+                  border: "2px dashed #ccc",
+                  bgcolor: "grey.50",
+                }}
+              >
+                <Typography color="text.secondary">
+                  {t.training.startCameraForPredictions}
+                </Typography>
               </Paper>
             )}
           </Box>
         </>
       )}
 
-      {/* Floating Camera Preview for Mobile */}
-      {isMobile && (isCameraActive || videoLoading) && (
-        <FloatingCameraPreview
-          previewContainerRef={previewContainerRef}
-          isCollapsed={isFloatingPreviewCollapsed}
-          onToggleCollapse={() =>
-            setIsFloatingPreviewCollapsed(!isFloatingPreviewCollapsed)
-          }
-          videoLoading={videoLoading}
-          onSwitchCamera={sourceType === "webcam" ? handleSwitchCamera : null}
-        />
-      )}
-
       {/* Add Class Dialog */}
       <Dialog open={showAddDialog} onClose={() => setShowAddDialog(false)}>
-        <DialogTitle>Add New Class</DialogTitle>
+        <DialogTitle>{t.training.addNewClass}</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
             margin="dense"
-            label="Class Name"
+            label={t.training.className}
             fullWidth
             variant="outlined"
             value={newClassName}
@@ -1219,9 +1223,11 @@ const ModelTrainer = ({
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setShowAddDialog(false)}>Cancel</Button>
+          <Button onClick={() => setShowAddDialog(false)}>
+            {t.training.cancel}
+          </Button>
           <Button onClick={addClass} variant="contained">
-            Add
+            {t.training.add}
           </Button>
         </DialogActions>
       </Dialog>
