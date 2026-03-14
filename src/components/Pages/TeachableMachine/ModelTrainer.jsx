@@ -824,11 +824,11 @@ const ModelTrainer = ({
               </Box>
             )}
 
-            {(isCameraActive || videoLoading) && (
+            {(isCameraActive || videoLoading) && !isMobile && (
               <Box
                 sx={{
                   mb: 3,
-                  display: { xs: "none", md: "flex" }, // Hide on mobile, show on desktop
+                  display: "flex",
                   justifyContent: "center",
                   flexDirection: "column",
                   alignItems: "center",
@@ -1205,6 +1205,21 @@ const ModelTrainer = ({
             )}
           </Box>
         </>
+      )}
+
+      {/* Floating Camera Preview for Mobile */}
+      {(isCameraActive || videoLoading) && isMobile && (
+        <FloatingCameraPreview
+          previewContainerRef={previewContainerRef}
+          isCollapsed={isFloatingPreviewCollapsed}
+          onToggleCollapse={() =>
+            setIsFloatingPreviewCollapsed(!isFloatingPreviewCollapsed)
+          }
+          videoLoading={videoLoading}
+          onSwitchCamera={
+            sourceType === "webcam" ? handleSwitchCamera : undefined
+          }
+        />
       )}
 
       {/* Add Class Dialog */}
