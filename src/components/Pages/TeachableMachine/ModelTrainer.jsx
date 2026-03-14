@@ -18,7 +18,6 @@ import {
   DialogActions,
   TextField,
   Paper,
-  Divider,
   useTheme,
   useMediaQuery,
 } from "@mui/material";
@@ -36,6 +35,7 @@ import SerialCameraErrorHandler, {
 } from "./SerialCameraErrorHandler";
 import SerialCameraService from "./SerialCameraService";
 import FloatingCameraPreview from "./FloatingCameraPreview";
+import TrainingResultsSection from "./TrainingResultsSection";
 
 const ModelTrainer = ({
   onModelTrained,
@@ -76,6 +76,13 @@ const ModelTrainer = ({
   const [trainedModel, setTrainedModel] = useState(null);
   const [predictions, setPredictions] = useState([]);
   const predictionIntervalRef = useRef(null);
+
+  // Training metrics state
+  const [trainingMetrics, setTrainingMetrics] = useState([]);
+  const [testResults, setTestResults] = useState([]);
+  const [finalAccuracy, setFinalAccuracy] = useState(null);
+  const [trainedWithEnoughSamples, setTrainedWithEnoughSamples] =
+    useState(false);
   const {
     sourceType,
     selectSource,
@@ -349,13 +356,23 @@ const ModelTrainer = ({
       return;
     }
 
-    onTrainingStart();
+    // Reset all training state before starting
     setTrainingProgress({
       epoch: 0,
       totalEpochs: 0,
       batch: 0,
       totalBatches: 0,
     });
+    setTrainingMetrics([]);
+    setTestResults([]);
+    setFinalAccuracy(null);
+    
+    // Track if this training has enough samples for test results
+    const hasEnoughSamples = classes.every((cls) => cls.samples.length >= 10);
+    setTrainedWithEnoughSamples(hasEnoughSamples);
+
+    // Call onTrainingStart after resetting state to ensure UI updates properly
+    onTrainingStart();
 
     try {
       // Load custom base model that accepts 96x96 grayscale images
@@ -575,6 +592,18 @@ const ModelTrainer = ({
               batch: 0,
             }));
 
+            // Track training metrics for visualization
+            setTrainingMetrics((prev) => [
+              ...prev,
+              {
+                epoch: epoch + 1,
+                accuracy: logs.acc,
+                val_accuracy: logs.val_acc,
+                loss: logs.loss,
+                val_loss: logs.val_loss,
+              },
+            ]);
+
             // Early stopping logic
             if (logs.val_loss < bestValLoss) {
               bestValLoss = logs.val_loss;
@@ -613,6 +642,45 @@ const ModelTrainer = ({
       const combinedModel = tf.sequential();
       combinedModel.add(featureExtractor);
       combinedModel.add(trainingModel);
+
+      // Generate confusion matrix using validation data
+      const confMatrix = Array(classes.length)
+        .fill(null)
+        .map(() => Array(classes.length).fill(0));
+
+      let totalCorrectPredictions = 0;
+      let totalValidationSamples = 0;
+
+      for (const sample of validationDataset) {
+        const prediction = tf.tidy(() => {
+          const input = tf.tensor2d(
+            [Array.from(sample.data)],
+            [1, featureDimension],
+          );
+          return trainingModel.predict(input);
+        });
+        const predData = await prediction.data();
+        prediction.dispose();
+
+        const predictedClass = predData.indexOf(Math.max(...predData));
+        const actualClass = sample.label.indexOf(1);
+
+        confMatrix[actualClass][predictedClass]++;
+        totalValidationSamples++;
+        if (predictedClass === actualClass) {
+          totalCorrectPredictions++;
+        }
+      }
+
+      // Only set test results if we have enough samples
+      if (hasEnoughSamples) {
+        setTestResults(confMatrix);
+        const calculatedAccuracy =
+          totalValidationSamples > 0
+            ? totalCorrectPredictions / totalValidationSamples
+            : 0;
+        setFinalAccuracy(calculatedAccuracy);
+      }
 
       const modelData = {
         model: combinedModel,
@@ -866,6 +934,95 @@ const ModelTrainer = ({
                     </Typography>
                   )}
                 </Box>
+
+                {/* Live Predictions Section - below camera preview */}
+                {trainedModel && (
+                  <Box sx={{ mt: 2, width: "100%", maxWidth: "400px" }}>
+                    {predictions.length > 0 && (
+                      <Paper sx={{ p: 1.5, bgcolor: "grey.50" }}>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 1,
+                          }}
+                        >
+                          {predictions.map((pred, index) => (
+                            <Box
+                              key={index}
+                              sx={{
+                                p: 1,
+                                borderRadius: 1,
+                                bgcolor: pred.isTopPrediction
+                                  ? "primary.light"
+                                  : "background.paper",
+                                color: pred.isTopPrediction
+                                  ? "primary.contrastText"
+                                  : "text.primary",
+                                border: pred.isTopPrediction
+                                  ? "none"
+                                  : "1px solid",
+                                borderColor: "divider",
+                              }}
+                            >
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  alignItems: "center",
+                                  mb: 0.5,
+                                }}
+                              >
+                                <Typography
+                                  variant="subtitle1"
+                                  fontWeight={
+                                    pred.isTopPrediction ? "bold" : "normal"
+                                  }
+                                >
+                                  {pred.className}
+                                </Typography>
+                                <Typography variant="body2">
+                                  {(pred.confidence * 100).toFixed(1)}%
+                                </Typography>
+                              </Box>
+                              <LinearProgress
+                                variant="determinate"
+                                value={pred.confidence * 100}
+                                sx={{
+                                  height: 4,
+                                  borderRadius: 2,
+                                  bgcolor: pred.isTopPrediction
+                                    ? "rgba(255,255,255,0.3)"
+                                    : "grey.300",
+                                  "& .MuiLinearProgress-bar": {
+                                    bgcolor: pred.isTopPrediction
+                                      ? "white"
+                                      : "primary.main",
+                                  },
+                                }}
+                              />
+                            </Box>
+                          ))}
+                        </Box>
+                      </Paper>
+                    )}
+
+                    {isCameraActive && predictions.length === 0 && (
+                      <Paper
+                        sx={{
+                          p: 2,
+                          textAlign: "center",
+                          border: "1px dashed #ccc",
+                          bgcolor: "grey.50",
+                        }}
+                      >
+                        <Typography variant="body2" color="text.secondary">
+                          {t.training.analyzing}
+                        </Typography>
+                      </Paper>
+                    )}
+                  </Box>
+                )}
               </Box>
             )}
           </Box>
@@ -1071,141 +1228,60 @@ const ModelTrainer = ({
               {t.training.trainModel}
             </Button>
           </Box>
+
+          {isTraining && (
+            <Box sx={{ my: 4 }}>
+              <Typography variant="body2" gutterBottom>
+                {trainingProgress.totalEpochs > 0
+                  ? t.training.trainingEpoch
+                      .replace("{epoch}", trainingProgress.epoch)
+                      .replace("{totalEpochs}", trainingProgress.totalEpochs)
+                  : t.training.trainingInProgress}
+              </Typography>
+              <LinearProgress
+                variant={
+                  trainingProgress.totalEpochs > 0
+                    ? "determinate"
+                    : "indeterminate"
+                }
+                value={
+                  trainingProgress.totalEpochs > 0
+                    ? Math.min(
+                        100,
+                        ((trainingProgress.epoch - 1) /
+                          trainingProgress.totalEpochs) *
+                          100 +
+                          (trainingProgress.batch /
+                            Math.max(1, trainingProgress.totalBatches)) *
+                            (100 / trainingProgress.totalEpochs),
+                      )
+                    : 0
+                }
+              />
+            </Box>
+          )}
+
+          {/* Training Results Section */}
+          <TrainingResultsSection
+            trainingMetrics={trainingMetrics}
+            testResults={testResults}
+            classNames={classes.map((cls) => cls.name)}
+            finalAccuracy={finalAccuracy}
+            isTraining={isTraining}
+            hasEnoughSamples={trainedWithEnoughSamples}
+            translations={{
+              title: t.training.resultsTitle || "Training Results",
+              metricsChart: t.training.metricsChart || "Training Progress",
+              testResults: t.training.testResultsTitle || "Confusion Matrix",
+              finalAccuracy: t.training.finalAccuracy || "Final Accuracy",
+              trainingInProgress: t.training.trainingInProgress,
+              noDataYet:
+                t.training.noDataYet || "Complete training to see results",
+              needMoreImages: t.training.needMoreImages,
+            }}
+          />
         </Grid>
       </Grid>
-
-      {isTraining && (
-        <Box sx={{ my: 4 }}>
-          <Typography variant="body2" gutterBottom>
-            {trainingProgress.totalEpochs > 0
-              ? t.training.trainingEpoch
-                  .replace("{epoch}", trainingProgress.epoch)
-                  .replace("{totalEpochs}", trainingProgress.totalEpochs)
-              : t.training.trainingInProgress}
-          </Typography>
-          <LinearProgress
-            variant={
-              trainingProgress.totalEpochs > 0 ? "determinate" : "indeterminate"
-            }
-            value={
-              trainingProgress.totalEpochs > 0
-                ? Math.min(
-                    100,
-                    ((trainingProgress.epoch - 1) /
-                      trainingProgress.totalEpochs) *
-                      100 +
-                      (trainingProgress.batch /
-                        Math.max(1, trainingProgress.totalBatches)) *
-                        (100 / trainingProgress.totalEpochs),
-                  )
-                : 0
-            }
-          />
-        </Box>
-      )}
-
-      {/* Live Predictions Section - only show when model is trained */}
-      {trainedModel && (
-        <>
-          <Divider sx={{ my: 4 }} />
-
-          <Box sx={{ mt: 4 }}>
-            <Typography variant="h6" gutterBottom>
-              {t.training.livePredictions}
-            </Typography>
-
-            {predictions.length > 0 && (
-              <Paper sx={{ p: 2, bgcolor: "grey.50" }}>
-                <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                  {predictions.map((pred, index) => (
-                    <Card
-                      key={index}
-                      variant={pred.isTopPrediction ? "elevation" : "outlined"}
-                      sx={{
-                        bgcolor: pred.isTopPrediction
-                          ? "primary.light"
-                          : "background.paper",
-                        color: pred.isTopPrediction
-                          ? "primary.contrastText"
-                          : "text.primary",
-                      }}
-                    >
-                      <CardContent
-                        sx={{ py: 1.5, "&:last-child": { pb: 1.5 } }}
-                      >
-                        <Box
-                          sx={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                          }}
-                        >
-                          <Typography
-                            variant="body1"
-                            fontWeight={
-                              pred.isTopPrediction ? "bold" : "normal"
-                            }
-                          >
-                            {pred.className}
-                          </Typography>
-                          <Typography variant="body2">
-                            {(pred.confidence * 100).toFixed(1)}%
-                          </Typography>
-                        </Box>
-                        <LinearProgress
-                          variant="determinate"
-                          value={pred.confidence * 100}
-                          sx={{
-                            mt: 1,
-                            bgcolor: pred.isTopPrediction
-                              ? "rgba(255,255,255,0.3)"
-                              : "grey.300",
-                            "& .MuiLinearProgress-bar": {
-                              bgcolor: pred.isTopPrediction
-                                ? "white"
-                                : "primary.main",
-                            },
-                          }}
-                        />
-                      </CardContent>
-                    </Card>
-                  ))}
-                </Box>
-              </Paper>
-            )}
-
-            {isCameraActive && predictions.length === 0 && (
-              <Paper
-                sx={{
-                  p: 3,
-                  textAlign: "center",
-                  border: "2px dashed #ccc",
-                  bgcolor: "grey.50",
-                }}
-              >
-                <Typography color="text.secondary">
-                  {t.training.analyzing}
-                </Typography>
-              </Paper>
-            )}
-
-            {!isCameraActive && predictions.length === 0 && (
-              <Paper
-                sx={{
-                  p: 3,
-                  textAlign: "center",
-                  border: "2px dashed #ccc",
-                  bgcolor: "grey.50",
-                }}
-              >
-                <Typography color="text.secondary">
-                  {t.training.startCameraForPredictions}
-                </Typography>
-              </Paper>
-            )}
-          </Box>
-        </>
-      )}
 
       {/* Floating Camera Preview for Mobile */}
       {(isCameraActive || videoLoading) && isMobile && (
@@ -1219,6 +1295,8 @@ const ModelTrainer = ({
           onSwitchCamera={
             sourceType === "webcam" ? handleSwitchCamera : undefined
           }
+          predictions={predictions}
+          trainedModel={trainedModel}
         />
       )}
 
