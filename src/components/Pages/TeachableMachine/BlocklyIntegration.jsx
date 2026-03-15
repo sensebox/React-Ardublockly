@@ -340,21 +340,6 @@ const BlocklyIntegration = ({ model }) => {
     setModelWasRetrained(false);
   }, []);
 
-  // Get descriptive stage text for progress bar
-  const getStageText = () => {
-    const { currentStep, stage } = workflowState;
-    if (currentStep === "converting") {
-      if (stage === "serializing") return t.integration.serializingModel;
-      if (stage === "uploading") return t.integration.uploadingToServer;
-      if (stage === "converting") return t.integration.convertingToTFLite;
-      if (stage === "generating") return t.integration.generatingCode;
-      return t.integration.convertingModel;
-    } else if (currentStep === "compiling") {
-      return t.integration.compilingToBinary;
-    }
-    return "";
-  };
-
   return (
     <Box>
       {/* Description - only show when not converted yet */}
@@ -402,28 +387,6 @@ const BlocklyIntegration = ({ model }) => {
             ? t.integration.converting
             : t.integration.convertModel}
         </Button>
-      )}
-
-      {/* Progress Indicator */}
-      {workflowState.isProcessing && (
-        <Box sx={{ mb: 3 }}>
-          <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-            <Typography
-              variant="body2"
-              color="text.secondary"
-              sx={{ flexGrow: 1 }}
-            >
-              {getStageText()}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {workflowState.progress}%
-            </Typography>
-          </Box>
-          <LinearProgress
-            variant="determinate"
-            value={workflowState.progress}
-          />
-        </Box>
       )}
 
       {/* Error Display */}
