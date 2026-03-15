@@ -366,7 +366,7 @@ const ModelTrainer = ({
     setTrainingMetrics([]);
     setTestResults([]);
     setFinalAccuracy(null);
-    
+
     // Track if this training has enough samples for test results
     const hasEnoughSamples = classes.every((cls) => cls.samples.length >= 10);
     setTrainedWithEnoughSamples(hasEnoughSamples);
