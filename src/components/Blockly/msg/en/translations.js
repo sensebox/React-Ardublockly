@@ -241,4 +241,74 @@ export const TRANSLATIONS = {
   senseBox_serial_tip:
     "prints the values to the serial monitor in the arduino IDE. Good way to have a fast and easy feedback for your programm",
   senseBox_soil: "Soil Moisture",
+
+  // Teachable Machine translations
+  teachableMachine: {
+    title: "Teachable senseBox",
+    description:
+      "Train your own image classification model and deploy it on your senseBox Eye.",
+    addClass: "Add Class",
+    startCamera: "Start Camera",
+    stopCamera: "Stop Camera",
+    captureImage: "Capture Image",
+    trainModel: "Train Model",
+    resetModel: "Reset Model",
+    samples: "samples",
+    training: {
+      title: "Model Training",
+      inProgress: "Training in progress...",
+    },
+    testing: {
+      title: "Model Testing",
+      description: "Test your trained model with the camera.",
+      start: "Start Testing",
+      stop: "Stop Testing",
+      capture: "Make Prediction",
+      videoFeed: "Video Feed",
+      predictions: "Predictions",
+      analyzing: "Analyzing...",
+      noPredictions: "No predictions available",
+      noVideo: "No video available",
+    },
+    integration: {
+      title: "Deploy to your senseBox Eye",
+      description: "Integrate your trained model into your Blockly projects.",
+      saveModel: "Save Model",
+      addToWorkspace: "Add to Workspace",
+      availableBlocks: "Available Blocks:",
+      blocklyXml: "Blockly XML Code:",
+      success:
+        "Model successfully integrated! You can now use the Teachable Machine blocks in your projects.",
+      nextSteps: "Next Steps",
+      nextStepsDesc:
+        "Use the Teachable Machine blocks in your Blockly workspace to make predictions with your trained model.",
+      steps: {
+        saveModel: "Save Model",
+        saveModelDesc: "Save your trained model for use in Blockly.",
+        generateBlocks: "Generate Blocks",
+        generateBlocksDesc:
+          "Generate the corresponding Blockly blocks for your model.",
+        useInProject: "Use in Project",
+        useInProjectDesc: "Use the generated blocks in your senseBox projects.",
+      },
+    },
+    addClassDialog: {
+      title: "Add New Class",
+      nameLabel: "Class Name",
+    },
+    errors: {
+      cameraAccess:
+        "Error accessing camera. Please make sure you have granted camera permissions.",
+      insufficientData:
+        "Insufficient data for training. Please add at least 2 classes with at least one sample each.",
+      trainingFailed: "Training failed. Please try again.",
+    },
+  },
+
+  common: {
+    cancel: "Cancel",
+    add: "Add",
+    copy: "Copy",
+    copied: "Copied!",
+  },
 };
