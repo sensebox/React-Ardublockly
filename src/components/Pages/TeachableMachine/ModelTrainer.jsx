@@ -20,6 +20,7 @@ import {
   Paper,
   useTheme,
   useMediaQuery,
+  Divider,
 } from "@mui/material";
 import {
   Add as AddIcon,
@@ -1125,6 +1126,7 @@ const ModelTrainer = ({
                               height: 60,
                               objectFit: "cover",
                               borderRadius: 4,
+                              transform: "scale(-1, -1)",
                             }}
                           />
                           <IconButton
@@ -1198,10 +1200,9 @@ const ModelTrainer = ({
             sx={{
               mb: 3,
               display: "flex",
-              justifyContent: "center",
+              flexDirection: "column",
               alignItems: "center",
               gap: 2,
-              flexWrap: "wrap",
             }}
           >
             {classes.length < 3 && (
@@ -1214,19 +1215,27 @@ const ModelTrainer = ({
                 {t.training.addClass}
               </Button>
             )}
-            <Button
-              variant="contained"
-              size="large"
-              startIcon={<TrainIcon />}
-              onClick={trainModel}
-              disabled={
-                disabled ||
-                classes.length < 2 ||
-                classes.some((cls) => cls.samples.length < 2)
-              }
+            <Divider sx={{ width: "100%", my: 1 }} />
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 2,
+              }}
             >
-              {t.training.trainModel}
-            </Button>
+              <Button
+                variant="contained"
+                size="large"
+                onClick={trainModel}
+                disabled={
+                  disabled ||
+                  classes.length < 2 ||
+                  classes.some((cls) => cls.samples.length < 2)
+                }
+              >
+                {t.training.trainModel}
+              </Button>
+            </Box>
           </Box>
 
           {isTraining && (

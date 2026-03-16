@@ -69,7 +69,11 @@ const TrainingResultsSection = ({
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
         sx={{
-          bgcolor: hasData ? "primary.light" : "grey.100",
+          bgcolor: expanded
+            ? hasData
+              ? "primary.light"
+              : "grey.100"
+            : "transparent",
           borderRadius: expanded ? "8px 8px 0 0" : 2,
           "& .MuiAccordionSummary-content": {
             alignItems: "center",
@@ -79,14 +83,22 @@ const TrainingResultsSection = ({
       >
         <AnalyticsIcon
           sx={{
-            color: hasData ? "primary.contrastText" : "text.secondary",
+            color: expanded
+              ? hasData
+                ? "primary.contrastText"
+                : "text.primary"
+              : "text.secondary",
             fontSize: { xs: "1.25rem", sm: "1.5rem" },
           }}
         />
         <Typography
           variant="h6"
           sx={{
-            color: hasData ? "primary.contrastText" : "text.primary",
+            color: expanded
+              ? hasData
+                ? "primary.contrastText"
+                : "text.primary"
+              : "text.secondary",
             flex: 1,
             fontSize: { xs: "1rem", sm: "1.25rem" },
           }}
@@ -146,12 +158,6 @@ const TrainingResultsSection = ({
               flexItem
               sx={{
                 display: { xs: "none", md: "block" },
-              }}
-            />
-            <Divider
-              sx={{
-                display: { xs: "block", md: "none" },
-                width: "100%",
               }}
             />
 
