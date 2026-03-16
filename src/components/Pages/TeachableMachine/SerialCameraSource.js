@@ -107,6 +107,9 @@ class SerialCameraSource {
       this.imageElement = document.createElement("img");
       this.imageElement.alt = "Serial camera feed";
 
+      // Apply CSS transform to flip preview horizontally and vertically
+      this.imageElement.style.transform = "scale(-1, -1)";
+
       // Add a data attribute to indicate it's waiting for frames
       this.imageElement.dataset.waiting = "true";
 

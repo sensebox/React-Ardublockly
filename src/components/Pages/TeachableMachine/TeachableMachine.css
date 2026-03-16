@@ -30,6 +30,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transform: scale(-1, -1);
 }
 
 .sample-delete-btn {
@@ -72,7 +73,7 @@
   border: 1px solid #ddd;
   border-radius: 4px;
   padding: 1rem;
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
   font-size: 0.875rem;
   max-height: 200px;
   overflow: auto;
@@ -118,11 +119,11 @@
   .teachable-machine-container {
     padding: 1rem;
   }
-  
+
   .class-samples-grid {
     justify-content: center;
   }
-  
+
   .video-feed {
     max-width: 100%;
   }
