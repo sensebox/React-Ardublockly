@@ -38,7 +38,15 @@ export const onChangeCode = () => (dispatch, getState) => {
   var selectedBlock = Blockly.getSelected();
   if (selectedBlock) {
     code.helpurl = selectedBlock.helpUrl ?? null;
-    code.tooltip = selectedBlock.tooltip ?? null;
+    if (typeof selectedBlock.tooltip === "function") {
+      try {
+        code.tooltip = selectedBlock.tooltip.call(selectedBlock) ?? null;
+      } catch (e) {
+        code.tooltip = null;
+      }
+    } else {
+      code.tooltip = selectedBlock.tooltip ?? null;
+    }
     code.data = selectedBlock.data ?? null;
   } else {
     code.helpurl = null;
