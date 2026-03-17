@@ -62,11 +62,11 @@ export const teachableMachineTranslations_de = {
     suggestions: "Vorschläge:",
     modelConvertedSuccess: "Modell erfolgreich konvertiert",
     chooseOptions: "Wähle eine der folgenden Optionen:",
-    optionA: "Option A: Als cpp-Datei herunterladen",
+    optionA: "Option A: Modell herunterladen",
     optionADescription:
       "Lade das Modell als einzelne cpp-Datei herunter zur Verwendung in der Arduino IDE oder zum späteren Hochladen in die Blockly UI.",
-    downloadCppFile: "cpp-Datei herunterladen",
-    optionB: "Option B: Vorgefertigten Sketch kompilieren & herunterladen",
+    downloadCppFile: "Modell herunterladen",
+    optionB: "Option B: Modell in vorgefertigten Sketch integrieren",
     optionBDescription:
       "Integriere das Modell in einen vorgefertigten Sketch. Dieser zeigt dir das Kamerabild und die Vorhersage auf dem OLED-Display an. Das Kompilieren des Sketches wird einige Zeit in Anspruch nehmen. Sobald du ihn heruntergeladen hast, kannst du ihn direkt per Drag-and-Drop auf deine senseBox Eye hochladen.",
     compiling: "Kompiliere...",
