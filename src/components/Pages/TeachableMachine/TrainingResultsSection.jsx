@@ -16,6 +16,7 @@ import {
 } from "@mui/icons-material";
 import TrainingMetricsChart from "./TrainingMetricsChart";
 import ConfusionMatrix from "./ConfusionMatrix";
+import HelpButton from "./HelpButton";
 
 /**
  * Training Results Section - collapsible panel showing training metrics and confusion matrix
@@ -27,6 +28,7 @@ const TrainingResultsSection = ({
   finalAccuracy,
   isTraining,
   hasEnoughSamples,
+  onOpenHelp,
   translations,
 }) => {
   const [expanded, setExpanded] = useState(true);
@@ -139,16 +141,25 @@ const TrainingResultsSection = ({
                 minWidth: 0,
               }}
             >
-              <Typography
-                variant="subtitle1"
-                fontWeight="bold"
-                gutterBottom
-                sx={{
-                  fontSize: { xs: "0.875rem", sm: "1rem" },
-                }}
-              >
-                {t.metricsChart}
-              </Typography>
+              <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+                <Typography
+                  variant="subtitle1"
+                  fontWeight="bold"
+                  sx={{
+                    fontSize: { xs: "0.875rem", sm: "1rem" },
+                  }}
+                >
+                  {t.metricsChart}
+                </Typography>
+                <HelpButton
+                  onClick={() => onOpenHelp && onOpenHelp("trainingProgress")}
+                  tooltip={
+                    t.training?.tooltip?.helpTrainingProgress ||
+                    "Hilfe zum Trainingsverlauf"
+                  }
+                  size="small"
+                />
+              </Box>
               <TrainingMetricsChart metrics={trainingMetrics} />
             </Box>
 
@@ -175,16 +186,25 @@ const TrainingResultsSection = ({
                 }}
               >
                 {/* Section Title */}
-                <Typography
-                  variant="subtitle1"
-                  fontWeight="bold"
-                  gutterBottom
-                  sx={{
-                    fontSize: { xs: "0.875rem", sm: "1rem" },
-                  }}
-                >
-                  {t.testResults}
-                </Typography>
+                <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+                  <Typography
+                    variant="subtitle1"
+                    fontWeight="bold"
+                    sx={{
+                      fontSize: { xs: "0.875rem", sm: "1rem" },
+                    }}
+                  >
+                    {t.testResults}
+                  </Typography>
+                  <HelpButton
+                    onClick={() => onOpenHelp && onOpenHelp("testResults")}
+                    tooltip={
+                      t.training?.tooltip?.helpTestResults ||
+                      "Hilfe zum Testergebnis"
+                    }
+                    size="small"
+                  />
+                </Box>
 
                 {/* Final Accuracy */}
                 {finalAccuracy !== null && finalAccuracy !== undefined && (
@@ -237,16 +257,25 @@ const TrainingResultsSection = ({
                   borderRadius: 1,
                 }}
               >
-                <Typography
-                  variant="subtitle1"
-                  fontWeight="bold"
-                  gutterBottom
-                  sx={{
-                    fontSize: { xs: "0.875rem", sm: "1rem" },
-                  }}
-                >
-                  {t.testResults}
-                </Typography>
+                <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+                  <Typography
+                    variant="subtitle1"
+                    fontWeight="bold"
+                    sx={{
+                      fontSize: { xs: "0.875rem", sm: "1rem" },
+                    }}
+                  >
+                    {t.testResults}
+                  </Typography>
+                  <HelpButton
+                    onClick={() => onOpenHelp && onOpenHelp("testResults")}
+                    tooltip={
+                      t.training?.tooltip?.helpTestResults ||
+                      "Hilfe zum Testergebnis"
+                    }
+                    size="small"
+                  />
+                </Box>
                 <Typography
                   color="text.secondary"
                   sx={{

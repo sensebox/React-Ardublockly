@@ -47,14 +47,23 @@ export const teachableMachineTranslations_en = {
     predicted: "Predicted",
     actual: "Actual",
     noTestResultsData: "No confusion matrix data",
-    tooltipActual: "Actual",
-    tooltipPredicted: "Predicted",
-    tooltipCount: "Count",
+    tooltip: {
+      helpMain: "What is Teachable senseBox?",
+      browserCompatible:
+        "This browser does not support the required features for connecting to the senseBox Eye. Please use a compatible browser like Chrome or Edge.",
+      helpClasses: "Help with classes",
+      startCamera: "Start the camera to capture images",
+      helpCamera: "Help with the camera",
+      moreClasses: "Add at least 2 classes to train",
+      moreSamples: "Add at least 2 samples per class to train",
+      helpTraining: "Help with model training",
+      helpTrainingProgress: "Help for training progress",
+      helpTestResults: "Help for test results",
+      helpDeployModel: "Help for deploying the model",
+    },
   },
   integration: {
     title: "Deploy on your senseBox Eye",
-    description:
-      "To run your trained model on the senseBox Eye, it must first be converted to an Arduino-compatible format. After conversion, you can download the model as a cpp file to use it in Blockly or the Arduino IDE. Alternatively, you can integrate it into a prebuilt sketch, have it compiled, and copy the finished .bin file to your senseBox Eye.",
     converting: "Converting...",
     convertModel: "Convert Model",
     retry: "Retry",
@@ -152,5 +161,37 @@ export const teachableMachineTranslations_en = {
     serialCameraStatus: "Serial Camera Status:",
     waitingForFrames:
       "Waiting for frames from senseBox Eye camera... If this persists, check your device connection.",
+  },
+  help: {
+    pageTitle: {
+      title: "Teachable senseBox",
+      content: "This explains what the Teachable senseBox is and how it works.",
+    },
+    webcam: {
+      title: "Webcam / Camera",
+      content: "This explains how to use the webcam or senseBox Eye camera.",
+    },
+    addClass: {
+      title: "Add Class",
+      content: "This explains how to add a new class and what to consider.",
+    },
+    trainModel: {
+      title: "Train Model",
+      content:
+        "This explains how the model is trained and what happens during training.",
+    },
+    trainingProgress: {
+      title: "Training Progress",
+      content: "This explains the training progress and what the metrics mean.",
+    },
+    testResults: {
+      title: "Test Results",
+      content: "This explains what the test results and confusion matrix mean.",
+    },
+    deployModel: {
+      title: "Deploy Model",
+      content:
+        "This explains how to deploy the trained model to the senseBox Eye.",
+    },
   },
 };

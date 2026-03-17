@@ -343,11 +343,6 @@ const BlocklyIntegration = ({ model }) => {
   return (
     <Box>
       {/* Description - only show when not converted yet */}
-      {workflowState.currentStep === "idle" && (
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-          {t.integration.description}
-        </Typography>
-      )}
 
       {/* Reconvert Button - show when model was retrained after conversion */}
       {modelWasRetrained && workflowState.currentStep !== "idle" && (
