@@ -308,7 +308,7 @@ basicGenerator.forBlock["basic_number_slider_blue"] = function (block) {
   return [String(num), basicGenerator.ORDER_NONE];
 };
 
-basicGenerator.forBlock["colour_picker"] = function (block, generator) {
+basicGenerator.forBlock["colour_picker_basic"] = function (block, generator) {
   const color = block.getFieldValue("COLOUR") || "#ffffff";
 
   // Convert hex color to RGB
