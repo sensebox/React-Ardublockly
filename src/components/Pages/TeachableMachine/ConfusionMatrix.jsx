@@ -241,7 +241,7 @@ const ConfusionMatrix = ({ matrix, classNames, title }) => {
                     return (
                       <Tooltip
                         key={colIndex}
-                        title={`${t.training.tooltipActual}: ${stats.validClassNames[rowIndex]}, ${t.training.tooltipPredicted}: ${stats.validClassNames[colIndex]}, ${t.training.tooltipCount}: ${value}`}
+                        title={`${t.training.actual}: ${stats.validClassNames[rowIndex]}, ${t.training.predicted}: ${stats.validClassNames[colIndex]}, ${t.training.count}: ${value}`}
                       >
                         <Box
                           sx={{

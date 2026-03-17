@@ -1,3 +1,5 @@
+import { help } from "@uiw/react-md-editor";
+
 // src/components/Pages/TeachableMachine/translations/de.js
 export const teachableMachineTranslations_de = {
   title: "Teachable senseBox",
@@ -48,14 +50,62 @@ export const teachableMachineTranslations_de = {
     predicted: "Vorhergesagt",
     actual: "Tatsächlich",
     noTestResultsData: "Keine Konfusionsmatrix-Daten",
-    tooltipActual: "Tatsächlich",
-    tooltipPredicted: "Vorhergesagt",
-    tooltipCount: "Anzahl",
+    tooltip: {
+      helpMain: "Was ist Teachable senseBox?",
+      browserCompatible:
+        "Dieser Browser unterstützt die benötigten Funktionen für die Verbindung mit der SenseBox Eye nicht. Bitte verwenden Sie einen kompatiblen Browser wie Chrome oder Edge.",
+      helpClasses: "Hilfe zu den Klassen",
+      startCamera: "Starte die Kamera, um Bilder aufzunehmen",
+      helpCamera: "Hilfe zur Kamera",
+      moreClasses: "Füge mindestens 2 Klassen hinzu, um zu trainieren",
+      moreSamples:
+        "Füge jeder Klasse mindestens 2 Bilder hinzu, um zu trainieren",
+      helpTraining: "Hilfe zum Modell-Training",
+      helpTrainingProgress: "Hilfe zum Trainingsverlauf",
+      helpTestResults: "Hilfe zum Testergebnis",
+      helpDeployModel: "Hilfe zum Ausführen auf der senseBox Eye",
+    },
+  },
+  help: {
+    help: "Hilfe",
+    pageTitle: {
+      title: "Teachable senseBox",
+      content:
+        "Hier wird erklärt, was die Teachable senseBox ist und wie sie funktioniert.",
+    },
+    webcam: {
+      title: "Webcam / Kamera",
+      content:
+        "Hier wird erklärt, wie die Webcam oder senseBox Eye Kamera verwendet wird.",
+    },
+    addClass: {
+      title: "Klasse hinzufügen",
+      content:
+        "Hier wird erklärt, wie eine neue Klasse hinzugefügt wird und was dabei zu beachten ist.",
+    },
+    trainModel: {
+      title: "Modell trainieren",
+      content:
+        "Hier wird erklärt, wie das Modell trainiert wird und was dabei passiert.",
+    },
+    trainingProgress: {
+      title: "Trainingsverlauf",
+      content:
+        "Hier wird der Trainingsverlauf erklärt und was die Metriken bedeuten.",
+    },
+    testResults: {
+      title: "Testergebnis",
+      content:
+        "Hier wird erklärt, was die Testergebnisse und die Konfusionsmatrix bedeuten.",
+    },
+    deployModel: {
+      title: "Ausführen auf der senseBox Eye",
+      content:
+        "Um dein trainiertes Modell auf der senseBox Eye auszuführen muss es erst in ein Arduino-kompatibles Format konvertiert werden. Nach der Konvertierung kannst du das Modell als cpp-Datei herunterladen, um es in Blockly oder der Arduino IDE zu nutzen. Alternativ kannst du es in einen vorgefertigten Sketch einfügen, kompilieren lassen und die fertige .bin-Datei auf die senseBox Eye kopieren.",
+    },
   },
   integration: {
     title: "Ausführen auf der senseBox Eye",
-    description:
-      "Um dein trainiertes Modell auf der senseBox Eye auszuführen muss es erst in ein Arduino-kompatibles Format konvertiert werden. Nach der Konvertierung kannst du das Modell als cpp-Datei herunterladen, um es in Blockly oder der Arduino IDE zu nutzen. Alternativ kannst du es in einen vorgefertigten Sketch einfügen, kompilieren lassen und die fertige .bin-Datei auf die senseBox Eye kopieren.",
     converting: "Konvertiere...",
     convertModel: "Modell konvertieren",
     retry: "Erneut versuchen",

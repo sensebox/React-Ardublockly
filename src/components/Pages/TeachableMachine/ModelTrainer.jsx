@@ -21,6 +21,7 @@ import {
   useTheme,
   useMediaQuery,
   Divider,
+  Tooltip,
 } from "@mui/material";
 import {
   Add as AddIcon,
@@ -37,6 +38,7 @@ import SerialCameraErrorHandler, {
 import SerialCameraService from "./SerialCameraService";
 import FloatingCameraPreview from "./FloatingCameraPreview";
 import TrainingResultsSection from "./TrainingResultsSection";
+import HelpButton from "./HelpButton";
 
 const ModelTrainer = ({
   onModelTrained,
@@ -44,6 +46,7 @@ const ModelTrainer = ({
   onTrainingError,
   isTraining,
   disabled,
+  onOpenHelp,
 }) => {
   const [classes, setClasses] = useState([]);
   const [newClassName, setNewClassName] = useState("");
@@ -798,7 +801,6 @@ const ModelTrainer = ({
   return (
     <Box>
       <Grid container spacing={3}>
-        {/* Left Column: Camera */}
         <Grid item xs={12} md={5}>
           <Box
             sx={{
@@ -811,12 +813,11 @@ const ModelTrainer = ({
               sx={{
                 mb: 2,
                 display: "flex",
-                gap: 2,
+                gap: 1,
                 alignItems: "center",
                 flexWrap: "wrap",
               }}
             >
-              {/* Webcam Button */}
               <Button
                 variant={
                   sourceType === "webcam" && isCameraActive
@@ -847,39 +848,52 @@ const ModelTrainer = ({
                   : t.training.startWebcam}
               </Button>
 
-              {/* Serial Button */}
-              <Button
-                variant={
-                  sourceType === "serial" && isCameraActive
-                    ? "contained"
-                    : "outlined"
+              <Tooltip
+                title={
+                  !browserCompatible ? t.training.tooltip.browserCompatible : ""
                 }
-                startIcon={<CameraIcon />}
-                onClick={() => {
-                  if (sourceType === "serial" && isCameraActive) {
-                    stopCamera();
-                  } else {
-                    if (isCameraActive) {
-                      stopCamera();
-                    }
-                    selectSource("serial");
-                    setTimeout(() => startCamera(), 100);
-                  }
-                }}
-                disabled={disabled || !browserCompatible}
-                color={
-                  sourceType === "serial" && isCameraActive
-                    ? "secondary"
-                    : "primary"
-                }
+                arrow
+                disableHoverListener={!(disabled || !browserCompatible)}
               >
-                {sourceType === "serial" && isCameraActive
-                  ? t.training.stopSenseBoxCamera
-                  : t.training.startSenseBoxCamera}
-              </Button>
+                <span>
+                  <Button
+                    variant={
+                      sourceType === "serial" && isCameraActive
+                        ? "contained"
+                        : "outlined"
+                    }
+                    startIcon={<CameraIcon />}
+                    onClick={() => {
+                      if (sourceType === "serial" && isCameraActive) {
+                        stopCamera();
+                      } else {
+                        if (isCameraActive) {
+                          stopCamera();
+                        }
+                        selectSource("serial");
+                        setTimeout(() => startCamera(), 100);
+                      }
+                    }}
+                    disabled={disabled || !browserCompatible}
+                    color={
+                      sourceType === "serial" && isCameraActive
+                        ? "secondary"
+                        : "primary"
+                    }
+                  >
+                    {sourceType === "serial" && isCameraActive
+                      ? t.training.stopSenseBoxCamera
+                      : t.training.startSenseBoxCamera}
+                  </Button>
+                </span>
+              </Tooltip>
+
+              <HelpButton
+                onClick={() => onOpenHelp && onOpenHelp("webcam")}
+                tooltip={t.training.tooltip.helpCamera}
+              />
             </Box>
 
-            {/* Serial Camera Error Handler */}
             {sourceType === "serial" && serialError && (
               <Box sx={{ mb: 3 }}>
                 <SerialCameraErrorHandler
@@ -1029,7 +1043,6 @@ const ModelTrainer = ({
           </Box>
         </Grid>
 
-        {/* Right Column: Classes */}
         <Grid item xs={12} md={7}>
           <Grid container spacing={2} sx={{ mb: 3 }}>
             {classes.map((cls) => (
@@ -1155,43 +1168,53 @@ const ModelTrainer = ({
                   </CardContent>
 
                   <CardActions>
-                    <Button
-                      size="small"
-                      startIcon={<CameraIcon />}
-                      onMouseDown={(e) => {
-                        e.preventDefault();
-                        const intervalId = startCapturing(cls.id);
-                        e.currentTarget.dataset.intervalId = intervalId;
-                      }}
-                      onMouseUp={(e) => {
-                        e.preventDefault();
-                        stopCapturing(
-                          parseInt(e.currentTarget.dataset.intervalId),
-                        );
-                      }}
-                      onMouseLeave={(e) => {
-                        e.preventDefault();
-                        if (e.currentTarget.dataset.intervalId) {
-                          stopCapturing(
-                            parseInt(e.currentTarget.dataset.intervalId),
-                          );
-                        }
-                      }}
-                      onTouchStart={(e) => {
-                        e.preventDefault();
-                        const intervalId = startCapturing(cls.id);
-                        e.currentTarget.dataset.intervalId = intervalId;
-                      }}
-                      onTouchEnd={(e) => {
-                        e.preventDefault();
-                        stopCapturing(
-                          parseInt(e.currentTarget.dataset.intervalId),
-                        );
-                      }}
-                      disabled={!isCameraActive || disabled}
+                    <Tooltip
+                      title={
+                        !isCameraActive ? t.training.tooltip.startCamera : ""
+                      }
+                      arrow
+                      disableHoverListener={!(disabled || !isCameraActive)}
                     >
-                      {t.training.holdToCapture}
-                    </Button>
+                      <span>
+                        <Button
+                          size="small"
+                          startIcon={<CameraIcon />}
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                            const intervalId = startCapturing(cls.id);
+                            e.currentTarget.dataset.intervalId = intervalId;
+                          }}
+                          onMouseUp={(e) => {
+                            e.preventDefault();
+                            stopCapturing(
+                              parseInt(e.currentTarget.dataset.intervalId),
+                            );
+                          }}
+                          onMouseLeave={(e) => {
+                            e.preventDefault();
+                            if (e.currentTarget.dataset.intervalId) {
+                              stopCapturing(
+                                parseInt(e.currentTarget.dataset.intervalId),
+                              );
+                            }
+                          }}
+                          onTouchStart={(e) => {
+                            e.preventDefault();
+                            const intervalId = startCapturing(cls.id);
+                            e.currentTarget.dataset.intervalId = intervalId;
+                          }}
+                          onTouchEnd={(e) => {
+                            e.preventDefault();
+                            stopCapturing(
+                              parseInt(e.currentTarget.dataset.intervalId),
+                            );
+                          }}
+                          disabled={!isCameraActive || disabled}
+                        >
+                          {t.training.holdToCapture}
+                        </Button>
+                      </span>
+                    </Tooltip>
                   </CardActions>
                 </Card>
               </Grid>
@@ -1209,35 +1232,72 @@ const ModelTrainer = ({
             }}
           >
             {classes.length < 3 && (
-              <Button
-                variant="contained"
-                startIcon={<AddIcon />}
-                onClick={() => setShowAddDialog(true)}
-                disabled={disabled}
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                }}
               >
-                {t.training.addClass}
-              </Button>
+                <Button
+                  variant="contained"
+                  startIcon={<AddIcon />}
+                  onClick={() => setShowAddDialog(true)}
+                  disabled={disabled}
+                >
+                  {t.training.addClass}
+                </Button>
+                <HelpButton
+                  onClick={() => onOpenHelp && onOpenHelp("addClass")}
+                  tooltip={t.training.tooltip.helpClasses}
+                />
+              </Box>
             )}
             <Divider sx={{ width: "100%", my: 1 }} />
             <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
-                gap: 2,
+                gap: 1,
               }}
             >
-              <Button
-                variant="contained"
-                size="large"
-                onClick={trainModel}
-                disabled={
-                  disabled ||
-                  classes.length < 2 ||
-                  classes.some((cls) => cls.samples.length < 2)
+              <Tooltip
+                title={
+                  classes.length < 2
+                    ? t.training.tooltip.moreClasses
+                    : classes.some((cls) => cls.samples.length < 2)
+                      ? t.training.tooltip.moreSamples
+                      : ""
+                }
+                arrow
+                disableHoverListener={
+                  !(
+                    disabled ||
+                    classes.length < 2 ||
+                    classes.some((cls) => cls.samples.length < 2)
+                  )
                 }
               >
-                {t.training.trainModel}
-              </Button>
+                <span>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    onClick={trainModel}
+                    disabled={
+                      disabled ||
+                      classes.length < 2 ||
+                      classes.some((cls) => cls.samples.length < 2)
+                    }
+                  >
+                    {t.training.trainModel}
+                  </Button>
+                </span>
+              </Tooltip>
+
+              <HelpButton
+                onClick={() => onOpenHelp && onOpenHelp("trainModel")}
+                tooltip={t.training.tooltip.helpTraining}
+              />
             </Box>
           </Box>
 
@@ -1281,6 +1341,7 @@ const ModelTrainer = ({
             finalAccuracy={finalAccuracy}
             isTraining={isTraining}
             hasEnoughSamples={trainedWithEnoughSamples}
+            onOpenHelp={onOpenHelp}
             translations={{
               title: t.training.resultsTitle || "Training Results",
               metricsChart: t.training.metricsChart || "Training Progress",
