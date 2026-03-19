@@ -44,7 +44,6 @@ store.subscribe(() => {
   isEmbedded = store.getState().general.embeddedMode
     ? store.getState().general.embeddedMode
     : false;
-  console.log("store updated: ", { ota, board, isEmbedded });
 });
 
 /**
