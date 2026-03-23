@@ -4,16 +4,21 @@ import {
   Box,
   Typography,
   IconButton,
-  Divider,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import {
-  Close as CloseIcon,
-  ChevronRight as ChevronRightIcon,
-} from "@mui/icons-material";
+import { ChevronRight as ChevronRightIcon } from "@mui/icons-material";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 import { getTeachableMachineTranslations } from "./translations";
+
+// Load all help markdown files eagerly (Vite requires a static glob pattern)
+const markdownFiles = import.meta.glob("./translations/help/**/*.md", {
+  eager: true,
+  query: "?raw",
+  import: "default",
+});
 
 // Width of the sidebar
 const SIDEBAR_WIDTH = 320;
@@ -49,10 +54,20 @@ const HelpSidebar = ({ open, onClose, helpTopic }) => {
 
   const t = getTeachableMachineTranslations();
   const helpTranslations = t.help || {};
-  const content = helpTranslations[helpTopic] || {
-    title: helpTranslations.help || "Help",
-    content: t.help?.defaultContent || "Select a help topic.",
-  };
+
+  // Determine language for markdown file lookup
+  const locale = window.localStorage.getItem("locale") || "de_DE";
+  const language = locale.split("_")[0];
+
+  // Resolve markdown content: prefer current language, fall back to "de"
+  const mdKey = `./translations/help/${language}/${helpTopic}.md`;
+  const mdFallbackKey = `./translations/help/de/${helpTopic}.md`;
+  const markdownContent =
+    markdownFiles[mdKey] ?? markdownFiles[mdFallbackKey] ?? null;
+
+  // Title from translations (keep as localised string)
+  const topicTranslation = helpTranslations[helpTopic];
+  const title = topicTranslation?.title ?? helpTranslations.help ?? "Help";
 
   // Calculate dynamic top position: starts at navbar height, reduces to 0 as we scroll
   const topPosition = Math.max(0, NAVBAR_HEIGHT - scrollOffset);
@@ -104,7 +119,7 @@ const HelpSidebar = ({ open, onClose, helpTopic }) => {
           <ChevronRightIcon />
         </IconButton>
         <Typography variant="h6" fontWeight="bold" paddingLeft={1}>
-          {content.title}
+          {title}
         </Typography>
       </Box>
 
@@ -114,28 +129,47 @@ const HelpSidebar = ({ open, onClose, helpTopic }) => {
           p: 2,
           overflowY: "auto",
           flex: 1,
+          "& h1": { fontSize: "1.25rem", fontWeight: "bold", mt: 0, mb: 1 },
+          "& h2": { fontSize: "1.05rem", fontWeight: "bold", mt: 2, mb: 0.5 },
+          "& h3": { fontSize: "1rem", fontWeight: "bold", mt: 1.5, mb: 0.5 },
+          "& p": { mt: 0, mb: 1, color: "text.secondary" },
+          "& ul, & ol": { pl: 2.5, mb: 1, color: "text.secondary" },
+          "& li": { mb: 0.5 },
+          "& table": { borderCollapse: "collapse", width: "100%", mb: 1 },
+          "& th, & td": {
+            border: "1px solid",
+            borderColor: "divider",
+            px: 1,
+            py: 0.5,
+            fontSize: "0.875rem",
+          },
+          "& blockquote": {
+            borderLeft: "3px solid",
+            borderColor: "primary.main",
+            pl: 1.5,
+            ml: 0,
+            color: "text.secondary",
+            fontStyle: "italic",
+          },
+          "& code": {
+            backgroundColor: "grey.100",
+            px: 0.5,
+            borderRadius: 0.5,
+            fontSize: "0.8rem",
+            fontFamily: "monospace",
+          },
+          "& strong": { color: "text.primary" },
         }}
       >
-        <Typography variant="body1" color="text.secondary">
-          {content.content}
-        </Typography>
-
-        {/* Placeholder for future content */}
-        <Box
-          sx={{
-            mt: 3,
-            p: 2,
-            backgroundColor: "grey.100",
-            borderRadius: 1,
-            border: "1px dashed",
-            borderColor: "grey.400",
-          }}
-        >
-          <Typography variant="body2" color="text.secondary" fontStyle="italic">
-            {t.help?.futureContent ||
-              "Weitere Inhalte werden hier hinzugefügt..."}
+        {markdownContent ? (
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            {markdownContent}
+          </ReactMarkdown>
+        ) : (
+          <Typography variant="body1" color="text.secondary">
+            {helpTranslations.defaultContent || "Select a help topic."}
           </Typography>
-        </Box>
+        )}
       </Box>
     </Drawer>
   );
