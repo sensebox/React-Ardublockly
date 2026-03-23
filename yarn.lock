@@ -1813,7 +1813,7 @@ blob-util@^2.0.2:
   resolved "https://registry.yarnpkg.com/blob-util/-/blob-util-2.0.2.tgz#3b4e3c281111bb7f11128518006cdc60b403a1eb"
   integrity sha512-T7JQa+zsXXEa6/8ZhHcQEW1UFfVM49Ts65uBkFL6fz2QmrElqmbajIDJvuA0tEhRe5eIjpV9ZF+0RfZR9voJFQ==
 
-blockly@^12.3.0:
+blockly@^12.4.1:
   version "12.4.1"
   resolved "https://registry.yarnpkg.com/blockly/-/blockly-12.4.1.tgz#30b94051184b170661637cef74c389b3866fc953"
   integrity sha512-OEF0r8cFMGDkQbX+PWTjifWTe9xi2QzpZS4rO2lYeQhZDWW3/eInklLSdoxAyEQCdfJhQqMTpBct13oDoc0GVQ==

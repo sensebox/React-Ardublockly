@@ -33,7 +33,7 @@
     "@uiw/react-markdown-preview": "^5.1.5",
     "axios": "^1.13.6",
     "@uiw/react-md-editor": "^4.0.11",
-    "blockly": "^12.3.0",
+    "blockly": "^12.4.1",
     "file-saver": "^2.0.5",
     "framer-motion": "^6.5.1",
     "markdown-it": "^14.1.1",
