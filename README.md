@@ -46,13 +46,13 @@ A modern, React-based version of the [senseBox](https://sensebox.de) Ardublockly
 3. Install dependencies:
 
    ```bash
-   npm install   # Alternative
+   yarn   
    ```
 
 4. Start development server:
 
    ```bash
-   npm start
+   yarn dev
    ```
 
 5. Open browser and navigate to [http://localhost:3000](http://localhost:3000)

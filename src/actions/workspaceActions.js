@@ -10,7 +10,7 @@ import {
 } from "./types";
 
 import * as Blockly from "blockly/core";
-
+import { basicGenerator } from "@/components/Blockly/generator/basic/generator";
 import { storeTutorialXml } from "./tutorialActions";
 
 export const workspaceChange = () => (dispatch) => {
@@ -23,6 +23,14 @@ export const onChangeCode = () => (dispatch, getState) => {
   const workspace = Blockly.getMainWorkspace();
   var code = getState().workspace.code;
   code.arduino = Blockly.Generator.Arduino.workspaceToCode(workspace);
+
+  // Basic-Code-Generierung mit try-catch, da nicht alle Blöcke unterstützt werden
+  try {
+    code.basic = basicGenerator.workspaceToCode(workspace);
+  } catch (error) {
+    code.basic = ""; // Leeren String setzen, wenn Generierung fehlschlägt
+  }
+
   var xmlDom = Blockly.Xml.workspaceToDom(workspace);
   var board = getState().board.board;
   xmlDom.setAttribute("board", board);
@@ -30,7 +38,15 @@ export const onChangeCode = () => (dispatch, getState) => {
   var selectedBlock = Blockly.getSelected();
   if (selectedBlock) {
     code.helpurl = selectedBlock.helpUrl ?? null;
-    code.tooltip = selectedBlock.tooltip ?? null;
+    if (typeof selectedBlock.tooltip === "function") {
+      try {
+        code.tooltip = selectedBlock.tooltip.call(selectedBlock) ?? null;
+      } catch (e) {
+        code.tooltip = null;
+      }
+    } else {
+      code.tooltip = selectedBlock.tooltip ?? null;
+    }
     code.data = selectedBlock.data ?? null;
   } else {
     code.helpurl = null;
@@ -48,6 +64,7 @@ export const onChangeCode = () => (dispatch, getState) => {
 export const onChangeWorkspace = (event) => (dispatch, getState) => {
   dispatch(workspaceChange());
   var code = dispatch(onChangeCode());
+
   dispatch(storeTutorialXml(code.xml));
   var stats = getState().workspace.stats;
   if (event.type === Blockly.Events.BLOCK_CREATE) {

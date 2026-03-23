@@ -1,12 +1,11 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
 import { Button, Typography, Box } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 
 export default function RegisterSuccess() {
-  const history = useHistory();
-
+  const navigate = useNavigate();
   return (
     <Box sx={{ textAlign: "center", mt: 8 }}>
       <FontAwesomeIcon icon={faCheckCircle} color="#4CAF50" size="4x" />
@@ -21,7 +20,7 @@ export default function RegisterSuccess() {
         variant="contained"
         color="primary"
         sx={{ mt: 3 }}
-        onClick={() => history.push("/user/login")}
+        onClick={() => navigate("/user/login")}
       >
         Zum Login
       </Button>

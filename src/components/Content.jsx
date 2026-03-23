@@ -26,7 +26,7 @@ const Content = () => {
   }, [language, board]);
 
   return (
-    <div className="wrapper">
+    <div style={{ minHeight: "100vh", position: "relative" }}>
       <Navbar />
       <Routes />
       <Cookies />

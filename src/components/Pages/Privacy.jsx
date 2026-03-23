@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
+import {} from "react-router-dom";
 import Container from "@mui/material/Container";
 class Privay extends Component {
   render() {
@@ -278,4 +278,4 @@ Wenn Sie mit der Speicherung und Nutzung Ihrer Daten nicht einverstanden sind, k
   }
 }
 
-export default withRouter(Privay);
+export default Privay;

@@ -5,12 +5,14 @@ import PropTypes from "prop-types";
 import {
   Dialog,
   DialogContent,
+  DialogTitle,
   Box,
   Stepper,
   Step,
   StepLabel,
   Button,
   Typography,
+  IconButton,
 } from "@mui/material";
 import { CodeCompilationIcon } from "./CodeCompilationIcon";
 import DownloadAnimation from "./DownloadAnimation";
@@ -32,7 +34,7 @@ const headerStyle = {
   fontWeight: "bold",
 };
 
-function CompilationDialog({ open, code, selectedBoard, onClose, platform }) {
+function CompilationDialog({ open, code, selectedBoard, onClose, platform, isEmbedded = false }) {
   const [activeStep, setActiveStep] = useState(0);
   const [sketchId, setSketchId] = useState(null);
   const [error, setError] = useState(null);
@@ -56,14 +58,37 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform }) {
     if (activeStep === 1 && !platform) {
       handleDownloadURL();
       timeoutId = setTimeout(() => {
-        setActiveStep(2);
+        if (isEmbedded) {
+          onClose();
+          setActiveStep(0);
+          setSketchId(null);
+          setError(null);
+        } else {
+          setActiveStep(2);
+        }
       }, 5000);
     }
     return () => clearTimeout(timeoutId);
-  }, [activeStep]);
+  }, [activeStep, isEmbedded, onClose]);
 
   const handleCompile = async () => {
     try {
+      // In embedded mode, generate fresh code from workspace instead of using stale prop
+      // This ensures we always have the latest code in embedded mode where CodeViewer
+      // doesn't trigger frequent re-renders. Main route uses the prop as it works fine there.
+      let codeToCompile = code;
+      
+      if (isEmbedded) {
+        const workspace = Blockly.getMainWorkspace();
+        if (workspace && Blockly.Generator && Blockly.Generator.Arduino) {
+          try {
+            codeToCompile = Blockly.Generator.Arduino.workspaceToCode(workspace);
+          } catch (err) {
+            console.warn("Failed to generate code from workspace, using prop:", err);
+          }
+        }
+      }
+
       const board =
         selectedBoard === "MCU" || selectedBoard === "MCU:MINI"
           ? "sensebox-mcu"
@@ -74,7 +99,7 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          sketch: code,
+          sketch: codeToCompile,
           board,
           projectId: sessionId,
         }),
@@ -104,6 +129,20 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform }) {
   };
 
   const handleClose = (event, reason) => {
+    // In embedded mode, allow closing on all steps except during compilation
+    if (isEmbedded) {
+      if (activeStep === 0 && !error) {
+        return; // Don't allow closing during compilation
+      }
+      // Allow closing on all other steps in embedded mode
+      onClose();
+      setActiveStep(0);
+      setSketchId(null);
+      setError(null);
+      return;
+    }
+
+    // Original logic for non-embedded mode
     const shouldClose =
       error ||
       activeStep === 2 ||
@@ -128,9 +167,24 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform }) {
         style: { width: "600px", minHeight: "700px", maxHeight: "600px" },
       }}
     >
+      {isEmbedded && activeStep >= 1 && (
+        <DialogTitle style={{ padding: "8px 16px" }}>
+          <IconButton
+            onClick={() => handleClose(null, "backdropClick")}
+            style={{
+              position: "absolute",
+              right: 8,
+              top: 8,
+              color: "#666"
+            }}
+          >
+            <FontAwesomeIcon icon={faXmark} />
+          </IconButton>
+        </DialogTitle>
+      )}
       <DialogContent
         style={{
-          padding: "2rem",
+          padding: isEmbedded && activeStep >= 1 ? "1rem 2rem 2rem 2rem" : "2rem",
           display: "flex",
           flexDirection: "column",
           height: "100%",
@@ -169,20 +223,33 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform }) {
             <div
               style={{ display: "flex", flexDirection: "column", gap: "12px" }}
             >
-              <span style={headerStyle}> {Blockly.Msg.goToApp_title} </span>
-              <span style={{ margin: "1rem" }}>{Blockly.Msg.goToApp_text}</span>
+              <span style={headerStyle}> 
+                {Blockly.Msg.goToApp_title} 
+              </span>
+              <span style={{ margin: "1rem" }}>
+                {isEmbedded ? Blockly.Msg.goToApp_text_embedded : Blockly.Msg.goToApp_text}
+              </span>
               <a
                 href={`blocklyconnect-app://sketch/${filename}/${sketchId}/${selectedBoard}`}
               >
                 <Button
                   style={{ color: "white", margin: "1rem" }}
                   variant="contained"
+                  onClick={() => {
+                    if (isEmbedded) {
+                      // Close modal after clicking button in embedded mode
+                      onClose();
+                      setActiveStep(0);
+                      setSketchId(null);
+                      setError(null);
+                    }
+                  }}
                 >
                   <FontAwesomeIcon
                     style={{ marginRight: "5px" }}
                     icon={faLink}
                   />
-                  {Blockly.Msg.goToApp}
+                  {isEmbedded ? Blockly.Msg.goToApp_embedded : Blockly.Msg.goToApp}
                 </Button>
               </a>
             </div>
@@ -193,7 +260,7 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform }) {
           <Stepper activeStep={activeStep} alternativeLabel>
             <Step key={1}>
               <StepLabel
-                error={error}
+                error={!!error}
                 optional={
                   error && (
                     <Typography variant="caption" color="error">
@@ -231,6 +298,7 @@ CompilationDialog.propTypes = {
   filename: PropTypes.string.isRequired,
   platform: PropTypes.bool.isRequired,
   appLink: PropTypes.string,
+  isEmbedded: PropTypes.bool,
 };
 
 CompilationDialog.defaultProps = {
@@ -239,6 +307,7 @@ CompilationDialog.defaultProps = {
   filename: "sketch",
   platform: false,
   onCompileComplete: () => {},
+  isEmbedded: false,
 };
 
 export default CompilationDialog;

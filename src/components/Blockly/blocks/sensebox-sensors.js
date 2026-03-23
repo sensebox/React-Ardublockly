@@ -1,9 +1,10 @@
 import * as Blockly from "blockly";
-import { getColour } from "../helpers/colour";
-import * as Types from "../helpers/types";
-import { selectedBoard } from "../helpers/board";
+import { getColour } from "@/components/Blockly/helpers/colour";
+import * as Types from "@/components/Blockly/helpers/types";
+import { selectedBoard } from "@/components/Blockly/helpers/board";
+
 import { FieldSlider } from "@blockly/field-slider";
-import { withBoardParam } from "../helpers/helpUrlBuilder";
+import { withBoardParam } from "@/components/Blockly/helpers/helpUrlBuilder";
 
 /**
  * HDC1080 Temperature and Humidity Sensor
@@ -815,5 +816,27 @@ Blockly.Blocks["sensebox_sensor_icm20948"] = {
     this.setTooltip(Blockly.Msg.senseBox_accelerometer_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_accelerometer_helpurl);
     this.data = { name: "icm20948" };
+  },
+};
+
+Blockly.Blocks["sensebox_sensor_max17048"] = {
+  init: function () {
+    this.appendDummyInput().appendField(Blockly.Msg.senseBox_max17048);
+    this.appendDummyInput()
+      .setAlign(Blockly.inputs.Align.LEFT)
+      .appendField(Blockly.Msg.senseBox_max17048_value)
+      .appendField(
+        new Blockly.FieldDropdown([
+          [Blockly.Msg.senseBox_max17048_value_voltage, "voltage"],
+          [Blockly.Msg.senseBox_max17048_value_, "soc"],
+          [Blockly.Msg.senseBox_max17048_value, ""],
+        ]),
+        "value",
+      );
+    this.setOutput(true, Types.DECIMAL.typeName);
+    this.setColour(getColour().sensebox);
+    this.setTooltip(Blockly.Msg.senseBox_accelerometer_tooltip);
+    this.setHelpUrl(Blockly.Msg.senseBox_accelerometer_helpurl);
+    this.data = { name: "max17048" };
   },
 };

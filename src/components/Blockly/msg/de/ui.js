@@ -13,6 +13,7 @@ export const UI = {
   toolbox_rtc: "RTC",
   toolbox_ntp: "NTP",
   toolbox_functions: "Funktionen",
+  my_toolbox_functions: "Meine Funktionen",
   toolbox_variables: "Variablen",
   toolbox_serial: "Seriell",
   toolbox_advanced: "Erweitert",
@@ -434,6 +435,9 @@ export const UI = {
   goToApp_text:
     "Der Code wurde erfolgreich kompiliert! Klicke den unteren Button um zur senseBox:connect App zu gelangen und die Übertragung des Sketches fertigzustellen!",
   goToApp_title: "Over-The-Air Übertragung",
+  goToApp_embedded: "Gehe zum Übertragungs-Tab",
+  goToApp_text_embedded:
+    "Der Code wurde erfolgreich kompiliert! Klicke den unteren Button um zum Übertragungs-Tab zu gelangen und die Übertragung des Sketches fertigzustellen!",
 
   transfer_headline: "Datei übertragen",
   transfer_subline:

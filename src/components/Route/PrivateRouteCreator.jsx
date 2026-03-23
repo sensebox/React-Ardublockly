@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import { Route, Redirect, withRouter } from "react-router-dom";
+import { Route, Redirect } from "react-router-dom";
 
 class PrivateRoute extends Component {
   render() {
@@ -42,4 +42,4 @@ const mapStateToProps = (state) => ({
   progress: state.auth.progress,
 });
 
-export default connect(mapStateToProps, null)(withRouter(PrivateRoute));
+export default connect(mapStateToProps, null)(PrivateRoute);

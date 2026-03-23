@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useLocation } from "react-router-dom";
-import { login, loginOpenSenseMap } from "../../actions/authActions"; // ✅ beide Actions
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { login, loginOpenSenseMap } from "../../actions/authActions";
 
 import Snackbar from "../Snackbar";
 import Alert from "../ui/Alert";
@@ -21,15 +21,12 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import Checkbox from "@mui/material/Checkbox";
-
 import * as Blockly from "blockly";
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
-// 🔥 Importiere die neue Komponente
 import PasswordResetRequest from "./PasswordResetRequest";
 
 export default function Login() {
   const dispatch = useDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
 
   const message = useSelector((s) => s.message);
@@ -39,7 +36,7 @@ export default function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [authProvider, setAuthProvider] = useState("native"); // ✅ Standard: native
+  const [authProvider, setAuthProvider] = useState("native");
   const [snackbar, setSnackbar] = useState(false);
   const [snackInfo, setSnackInfo] = useState({
     type: "",
@@ -72,7 +69,7 @@ export default function Login() {
   useEffect(() => {
     if (message.id === "LOGIN_SUCCESS") {
       if (redirectPath) {
-        history.push(redirectPath);
+        navigate(redirectPath);
       } else {
         history.goBack();
       }
@@ -103,9 +100,9 @@ export default function Login() {
     }
 
     if (authProvider === "native") {
-      dispatch(login({ email, password, rememberMe })); // include rememberMe
+      dispatch(login({ email, password, rememberMe }));
     } else {
-      dispatch(loginOpenSenseMap({ email, password, rememberMe })); // include rememberMe
+      dispatch(loginOpenSenseMap({ email, password, rememberMe }));
     }
   };
 
@@ -135,7 +132,6 @@ export default function Login() {
     );
   }
 
-  // 🔥 Ursprüngliche Login-Ansicht
   return (
     <div>
       <Breadcrumbs
@@ -147,7 +143,6 @@ export default function Login() {
       >
         <h1>{Blockly.Msg.login_head}</h1>
 
-        {/* 🔘 Auth Provider Auswahl */}
         <FormControl component="fieldset" sx={{ mb: 2 }}>
           <FormLabel component="legend">
             {Blockly.Msg.login_with || "Login with"}{" "}
@@ -274,7 +269,6 @@ export default function Login() {
           </p>
         </form>
 
-        {/* 🔥 Neuer Link/Button für "Passwort vergessen" */}
         {authProvider === "native" && (
           <p style={{ textAlign: "center", fontSize: "0.8rem" }}>
             <Button

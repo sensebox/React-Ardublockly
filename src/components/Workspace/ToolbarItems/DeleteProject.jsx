@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { deleteProject } from "../../../actions/projectActions";
 
-import { withRouter } from "react-router-dom";
+import {} from "react-router-dom";
 
 import Snackbar from "../../Snackbar";
 
@@ -43,7 +43,7 @@ class DeleteProject extends Component {
   componentDidUpdate(props) {
     if (this.props.message !== props.message) {
       if (this.props.message.id === "PROJECT_DELETE_SUCCESS") {
-        this.props.history.push(`/${this.props.projectType}`);
+        this.props.navigate(`/${this.props.projectType}`);
       } else if (this.props.message.id === "PROJECT_DELETE_FAIL") {
         this.setState({
           snackbar: true,
@@ -94,5 +94,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, { deleteProject })(
-  withStyles(styles, { withTheme: true })(withRouter(DeleteProject)),
+  withStyles(styles, { withTheme: true })(DeleteProject),
 );

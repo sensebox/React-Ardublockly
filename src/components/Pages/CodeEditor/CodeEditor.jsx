@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useRef } from "react";
 import { default as MonacoEditor } from "@monaco-editor/react";
-import { withRouter } from "react-router-dom";
+import {} from "react-router-dom";
 import { Button, Grid } from "@mui/material";
 import * as Blockly from "blockly/core";
 import Divider from "@mui/material/Divider";
@@ -14,6 +14,7 @@ import store from "@/store";
 import DeviceSelection from "@/components/DeviceSelection";
 import { useSelector } from "react-redux";
 import CompilationDialog from "@/components/Workspace/ToolbarItems/CompilationDialog/CompilationDialog";
+import { withRouterV6 } from "@/helpers/withRouter";
 
 const CodeEditor = () => {
   //const [filehandle, setFileHandle] = useState();
@@ -312,4 +313,4 @@ void loop() {
   );
 };
 
-export default withRouter(CodeEditor);
+export default CodeEditor;

@@ -1,15 +1,10 @@
 import React, { Component } from "react";
-
-import { Router } from "react-router-dom";
-import { createBrowserHistory } from "history";
-
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store";
 import { loadUser } from "./actions/authActions";
 import ErrorBoundary from "./components/ErrorBoundary";
-
 import "./App.css";
-
 import {
   ThemeProvider,
   StyledEngineProvider,
@@ -17,7 +12,13 @@ import {
 } from "@mui/material/styles";
 
 import Content from "./components/Content";
+import EmbeddedBlockly from "./components/EmbeddedBlockly";
+import RouteHandler from "./components/RouteHandler";
 import { setCompiler } from "./actions/generalActions";
+import BasicEmbedded from "./components/BasicBlockly/BasicEmbedded";
+import BasicPage from "./components/Pages/Basic/BasicPage";
+import BasicWithSerial from "./components/Pages/Basic/BasicWithSerial";
+import BasicEmbeddedProject from "./components/Pages/Basic/BasicEmbeddedProject";
 
 const theme = createTheme({
   palette: {
@@ -52,25 +53,37 @@ const theme = createTheme({
 
 class App extends Component {
   componentDidMount() {
-    // In deiner App.js oder beim App-Start
     const token = localStorage.getItem("token");
     if (token) {
       store.dispatch(loadUser());
     }
+
     store.dispatch(setCompiler(import.meta.env.VITE_INITIAL_COMPILER_URL));
   }
 
   render() {
-    const customHistory = createBrowserHistory();
     return (
       <StyledEngineProvider injectFirst>
         <ThemeProvider theme={theme}>
           <Provider store={store}>
-            <Router history={customHistory}>
+            <BrowserRouter>
+              <RouteHandler />
               <ErrorBoundary>
-                <Content />
+                <Routes>
+                  <Route
+                    path="/embedded/share/:shareId"
+                    element={<EmbeddedBlockly />}
+                  />
+                  <Route path="/embedded" element={<EmbeddedBlockly />} />
+                  <Route path="/embeddedbasic" element={<BasicPage />} />
+                  <Route
+                    path="/embeddedbasic/:id"
+                    element={<BasicEmbeddedProject />}
+                  />
+                  <Route path="/*" element={<Content />} />
+                </Routes>
               </ErrorBoundary>
-            </Router>
+            </BrowserRouter>
           </Provider>
         </ThemeProvider>
       </StyledEngineProvider>

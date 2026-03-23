@@ -1,26 +1,23 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+// src/components/Route/PublicRoute.jsx
+import React from "react";
 import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
-import { Route } from "react-router-dom";
-
-class PublicRoute extends Component {
-  render() {
-    return !this.props.progress ? (
-      <Route
-        {...this.props.exact}
-        render={({ location }) => this.props.children}
-      />
-    ) : null;
+function PublicRoute({ children, progress }) {
+  if (progress) {
+    return null; // oder Loader
   }
+
+  return children;
 }
 
 PublicRoute.propTypes = {
   progress: PropTypes.bool.isRequired,
+  children: PropTypes.node.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   progress: state.auth.progress,
 });
 
-export default connect(mapStateToProps, null)(PublicRoute);
+export default connect(mapStateToProps)(PublicRoute);

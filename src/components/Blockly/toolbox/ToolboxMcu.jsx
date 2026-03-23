@@ -380,7 +380,6 @@ export const ToolboxMcu = () => {
             <Block type="sensebox_lora_cayenne_humidity" />
             <Block type="sensebox_lora_cayenne_pressure" />
             <Block type="sensebox_lora_cayenne_luminosity" />
-            <Block type="sensebox_lora_cayenne_concentration" />
             <Block type="sensebox_lora_cayenne_sensor" />
             <Block type="sensebox_lora_cayenne_accelerometer" />
             <Block type="sensebox_lora_cayenne_gps" />
@@ -654,10 +653,12 @@ export const ToolboxMcu = () => {
         colour={getColour().variables}
         custom="CREATE_TYPED_VARIABLE"
       />
+
+      {/* ============================== EIGENE FUNKTIONEN ============================== */}
       <Category
-        name={Blockly.Msg.toolbox_functions}
+        name={Blockly.Msg.toolbox_custom_functions}
         colour={getColour().procedures}
-        custom="PROCEDURE"
+        custom="CUSTOM_FUNCTIONS_DYNAMIC"
       />
 
       {/* ============================== ADVANCED ============================== */}

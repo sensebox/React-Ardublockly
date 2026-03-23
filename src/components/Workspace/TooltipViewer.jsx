@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import {
   Card,
@@ -20,8 +20,8 @@ const TooltipViewer = () => {
     <Card
       className="helpSection"
       sx={{
-        height: "25vh",
         overflowY: "auto",
+        maxHeight: "23vh",
         mt: 2,
         p: 2,
         borderRadius: 1,
