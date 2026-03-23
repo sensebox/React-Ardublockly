@@ -165,33 +165,24 @@ export const teachableMachineTranslations_en = {
   help: {
     pageTitle: {
       title: "Teachable senseBox",
-      content: "This explains what the Teachable senseBox is and how it works.",
     },
     webcam: {
-      title: "Webcam / Camera",
-      content: "This explains how to use the webcam or senseBox Eye camera.",
+      title: "Camera",
     },
     addClass: {
       title: "Add Class",
-      content: "This explains how to add a new class and what to consider.",
     },
     trainModel: {
       title: "Train Model",
-      content:
-        "This explains how the model is trained and what happens during training.",
     },
     trainingProgress: {
       title: "Training Progress",
-      content: "This explains the training progress and what the metrics mean.",
     },
     testResults: {
       title: "Test Results",
-      content: "This explains what the test results and confusion matrix mean.",
     },
     deployModel: {
       title: "Deploy Model",
-      content:
-        "This explains how to deploy the trained model to the senseBox Eye.",
     },
   },
 };

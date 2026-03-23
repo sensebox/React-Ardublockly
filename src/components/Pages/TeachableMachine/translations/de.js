@@ -1,5 +1,3 @@
-import { help } from "@uiw/react-md-editor";
-
 // src/components/Pages/TeachableMachine/translations/de.js
 export const teachableMachineTranslations_de = {
   title: "Teachable senseBox",
@@ -70,38 +68,24 @@ export const teachableMachineTranslations_de = {
     help: "Hilfe",
     pageTitle: {
       title: "Teachable senseBox",
-      content:
-        "Hier wird erklärt, was die Teachable senseBox ist und wie sie funktioniert.",
     },
     webcam: {
-      title: "Webcam / Kamera",
-      content:
-        "Hier wird erklärt, wie die Webcam oder senseBox Eye Kamera verwendet wird.",
+      title: "Kamera",
     },
     addClass: {
       title: "Klasse hinzufügen",
-      content:
-        "Hier wird erklärt, wie eine neue Klasse hinzugefügt wird und was dabei zu beachten ist.",
     },
     trainModel: {
       title: "Modell trainieren",
-      content:
-        "Hier wird erklärt, wie das Modell trainiert wird und was dabei passiert.",
     },
     trainingProgress: {
       title: "Trainingsverlauf",
-      content:
-        "Hier wird der Trainingsverlauf erklärt und was die Metriken bedeuten.",
     },
     testResults: {
       title: "Testergebnis",
-      content:
-        "Hier wird erklärt, was die Testergebnisse und die Konfusionsmatrix bedeuten.",
     },
     deployModel: {
       title: "Ausführen auf der senseBox Eye",
-      content:
-        "Um dein trainiertes Modell auf der senseBox Eye auszuführen muss es erst in ein Arduino-kompatibles Format konvertiert werden. Nach der Konvertierung kannst du das Modell als cpp-Datei herunterladen, um es in Blockly oder der Arduino IDE zu nutzen. Alternativ kannst du es in einen vorgefertigten Sketch einfügen, kompilieren lassen und die fertige .bin-Datei auf die senseBox Eye kopieren.",
     },
   },
   integration: {
