@@ -33,6 +33,8 @@ import {
   faBars,
   faChevronLeft,
   faLayerGroup,
+  faPoop,
+  faSchoolCircleExclamation,
   faSignInAlt,
   faSignOutAlt,
   faUserCircle,
@@ -434,7 +436,7 @@ const Navbar = () => {
               link: "/tutorial/builder",
               restriction: user,
             },
-            {
+             {
               text: Blockly.Msg.navbar_gallery,
               icon: faLightbulb,
               link: "/gallery",
@@ -444,6 +446,11 @@ const Navbar = () => {
               icon: faLayerGroup,
               link: "/project",
               restriction: isAuthenticated,
+            },
+            {
+              text: "Group",
+              icon: faPoop,
+              link: "/group",
             },
             { text: "Code Editor", icon: faCode, link: "/codeeditor" },
           ].map((item, i) =>

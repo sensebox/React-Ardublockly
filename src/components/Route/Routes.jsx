@@ -28,6 +28,9 @@ import ProjectHome from "@/components/Pages/Project/ProjectHome";
 import Register from "../User/Register";
 import RegisterSuccess from "../User/RegisterSuccess";
 import PasswordReset from "../User/PasswordReset";
+import Group from "../Pages/Group/Group";
+import ArchiveGroup from "../Pages/Group/ArchiveGroup";
+import GroupDashboard from "../Pages/Group/GroupDashboard";
 
 class Routes extends Component {
   componentDidMount() {
@@ -70,7 +73,15 @@ class Routes extends Component {
           <PrivateRoute path="/tutorial/:tutorialId/edit" exact>
             <Builder />
           </PrivateRoute>
-
+             <PrivateRoute path="/group/:groupId" exact>
+            <GroupDashboard/>
+          </PrivateRoute>
+          <PrivateRoute path="/group" exact>
+            <Group />
+          </PrivateRoute>
+          <PrivateRoute path="/archiveGroup" exact>
+            <ArchiveGroup/>
+          </PrivateRoute>
           <Route path="/CodeEditor" exact>
             <CodeEditor />
           </Route>
