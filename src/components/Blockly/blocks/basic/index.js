@@ -1386,7 +1386,10 @@ Blockly.Blocks["basic_led_control"] = {
       const colorInput = this.getInputTargetBlock("COLOR");
 
       if (colorInput) {
-        if (colorInput.type === "colour_picker") {
+        if (
+          colorInput.type === "colour_picker" ||
+          colorInput.type === "colour_picker_basic"
+        ) {
           const color = colorInput.getFieldValue("COLOUR");
           if (color) {
             this.updateLEDImage(color);
@@ -1489,6 +1492,47 @@ function generateRGBSvg(r, g, b) {
 
   return "data:image/svg+xml;base64," + btoa(svgTemplate);
 }
+
+// Color picker block for basic mode
+Blockly.defineBlocksWithJsonArray([
+  {
+    type: "colour_picker_basic",
+    message0: "%1",
+    args0: [
+      {
+        type: "field_colour",
+        name: "COLOUR",
+        colour: "#ff595e",
+        colourOptions: [
+          "#ff595e",
+          "#ff924c",
+          "#ffca3a",
+          "#8ac926",
+          "#52b788",
+          "#1982c4",
+          "#4267ac",
+          "#6a4c93",
+          "#ffffff",
+        ],
+        colourTitles: [
+          "Rot",
+          "Orange",
+          "Gelb",
+          "Grün",
+          "Türkis",
+          "Blau",
+          "Indigo",
+          "Violett",
+          "Weiß",
+        ],
+        columns: 1,
+      },
+    ],
+    output: "Colour",
+    colour: "#62A044",
+    tooltip: "Wähle eine Farbe aus der Palette",
+  },
+]);
 
 Blockly.Blocks["basic_rgb_color"] = {
   init: function () {
