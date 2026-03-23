@@ -279,7 +279,7 @@
   resolved "https://registry.yarnpkg.com/@blockly/field-grid-dropdown/-/field-grid-dropdown-6.0.9.tgz#e28cb4f1810bcbc209c1944b7fbee499d5fa1714"
   integrity sha512-YuPdS7ZhJKoVagPxbEwUPr5Gq14SnqNk6XD064mYGiH1OYO7LrtljESXG6cnnvQjhKkitiRjZ1ye20MzG3I6FQ==
 
-"@blockly/field-multilineinput@^6.0.5":
+"@blockly/field-multilineinput@^6.0.8":
   version "6.0.8"
   resolved "https://registry.yarnpkg.com/@blockly/field-multilineinput/-/field-multilineinput-6.0.8.tgz#0ca4f0b7bbea94425f748b017d31336bce3a94f4"
   integrity sha512-jja+WdUztWxZxKFr0TVsVzG3QzrnddGfhaPFr7sly02CSB1sKpjPs82adjNbGcyfzC7uxY244GtBSe1MV6o5dQ==
