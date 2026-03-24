@@ -1139,10 +1139,6 @@ const ModelTrainer = ({
                               height: 60,
                               objectFit: "cover",
                               borderRadius: 4,
-                              transform:
-                                sourceType === "serial"
-                                  ? "scale(-1, -1)"
-                                  : undefined,
                             }}
                           />
                           <IconButton
