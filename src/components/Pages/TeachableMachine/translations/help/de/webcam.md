@@ -1,8 +1,4 @@
-Nutze deine Handykamera, die Webcam deines Computers oder die Kamera der senseBox Eye, um Bilder für das Training deines Modells aufzunehmen.
-
-# Webcam / Handykamera
-
-Gib dem Browserfenster die nötigen Berechtigungen und stelle sicher, dass keine andere Applikation momentan die Webcam nutzt.
+Nutze eine Webcam, Handykamera oder die Kamera der senseBox Eye, um Bilder für das Training deines Modells aufzunehmen. Achte darauf, dass die Kamera nicht gleichzeitig von einer anderen Applikation oder in einem anderen Browserfenster verwendet wird.
 
 # senseBox Eye Kamera
 
