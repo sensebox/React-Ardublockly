@@ -1,6 +1,6 @@
 # What kind of _model_ is being trained here?
 
-Here, an **image classification** model is being trained – a model that looks at an image and decides which class it belongs to.
+An **image classification** model is being trained – a model that looks at an image and decides which class it belongs to.
 
 Under the hood is a so-called **neural network**, loosely inspired by the human brain. It consists of many layers that analyze the image step by step. Particularly important are Convolutional Layers, which specifically look for edges, shapes, and patterns in the image.
 
