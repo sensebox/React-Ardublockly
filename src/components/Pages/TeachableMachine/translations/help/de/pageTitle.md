@@ -4,7 +4,7 @@ Hier wird ein **Bildklassifizierungsmodell** trainiert – ein Modell, das ein B
 
 Unter der Haube steckt ein sogenanntes **Neuronales Netz**, das grob vom menschlichen Gehirn inspiriert ist. Es besteht aus vielen Schichten, die das Bild schrittweise analysieren.
 
-![Brain Neural Network](public/media/teachable/neural-network-brain.drawio.png)
+![Brain Neural Network](../../../../../../../public/media/teachable/neural-network-brain.drawio.png)
 
 Besonders wichtig sind dabei Convolutional Layer, die gezielt nach Kanten, Formen und Mustern im Bild suchen.
 
@@ -20,4 +20,4 @@ Das Training ist genau dieser Lernprozess: Du zeigst dem Modell Hunderte von Bei
 
 Für den Computer ist ein Bild nur eine Sammlung von Farbwerten, genauer gesagt ein Raster aus Pixeln. Das Modell „sieht" also keine Katze oder ein Stoppschild, sondern verarbeitet eine Matrix aus Zahlen.
 
-![Computer Vision](public/media/teachable/computer-vision.drawio.png)
+![Computer Vision](../../../../../../../public/media/teachable/computer-vision.drawio.png)
