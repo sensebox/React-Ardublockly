@@ -1,4 +1,6 @@
-Use a webcam, smartphone camera or the senseBox Eye camera to capture images for training your model. Make sure no other application or browser tab is currently using the camera.
+Use a webcam, smartphone camera or the senseBox Eye camera to capture images for training your model.
+
+Make sure no other application or browser tab is currently using the camera.
 
 # senseBox Eye Camera
 

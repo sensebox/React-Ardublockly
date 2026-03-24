@@ -8,6 +8,6 @@ Als Basis dient MobileNet – ein schlankes, **vortrainiertes Modell**, das bere
 
 # Was bedeutet es ein Modell zu _trainieren_?
 
-Beim maschinellen Lernen (**Machine Learning**) bringt man einem Computer bei, Muster zu erkennen – nicht durch feste Regeln, sondern durch Beispiele. Ähnlich wie ein Mensch lernt, eine Katze zu erkennen, indem er viele Katzen sieht, lernt ein KI-Modell durch das Analysieren vieler Bilder.
+Beim maschinellen Lernen (**Machine Learning**) bringt man einem Computer bei, Muster zu erkennen – nicht durch feste Regeln, sondern durch Beispiele. Ähnlich wie ein Mensch lernt, eine Katze zu erkennen, indem er viele Katzen sieht, lernt ein Bildklassifizierungsmodell durch das Analysieren vieler Bilder.
 
 Das Training ist genau dieser Lernprozess: Du zeigst dem Modell Hunderte von Beispielbildern, es passt seine internen Parameter an, und mit der Zeit wird es immer besser darin, neue, unbekannte Bilder richtig einzuordnen.
