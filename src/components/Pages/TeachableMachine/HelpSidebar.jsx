@@ -159,6 +159,12 @@ const HelpSidebar = ({ open, onClose, helpTopic }) => {
             fontFamily: "monospace",
           },
           "& strong": { color: "text.primary" },
+          "& img": {
+            maxWidth: "100%",
+            height: "auto",
+            display: "block",
+            my: 1,
+          },
         }}
       >
         {markdownContent ? (
