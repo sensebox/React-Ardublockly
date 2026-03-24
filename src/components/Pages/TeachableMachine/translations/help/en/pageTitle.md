@@ -4,7 +4,7 @@ An **image classification** model is being trained – a model that looks at an 
 
 Under the hood is a so-called **neural network**, loosely inspired by the human brain. It consists of many layers that analyze the image step by step.
 
-![Brain Neural Network](../../../../../../../public/media/teachable/neural-network-brain.drawio.png)
+![Brain Neural Network](/media/teachable/neural-network-brain.drawio.png)
 
 Particularly important are Convolutional Layers, which specifically look for edges, shapes, and patterns in the image.
 
@@ -20,4 +20,4 @@ Training is exactly this learning process: you show the model hundreds of exampl
 
 To a computer, an image is simply a collection of color values, more precisely, a grid of pixels. The model doesn't "see" a cat or a stop sign – it processes a matrix of numbers.
 
-![Computer Vision](../../../../../../../public/media/teachable/computer-vision.drawio.png)
+![Computer Vision](/media/teachable/computer-vision.drawio.png)
