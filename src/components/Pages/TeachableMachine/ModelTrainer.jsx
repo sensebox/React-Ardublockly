@@ -22,12 +22,14 @@ import {
   useMediaQuery,
   Divider,
   Tooltip,
+  CircularProgress,
 } from "@mui/material";
 import {
   Add as AddIcon,
   Delete as DeleteIcon,
   PhotoCamera as CameraIcon,
   Train as TrainIcon,
+  Download as DownloadIcon,
 } from "@mui/icons-material";
 import * as tf from "@tensorflow/tfjs";
 import useCameraSource from "./useCameraSource";
@@ -39,6 +41,12 @@ import SerialCameraService from "./SerialCameraService";
 import FloatingCameraPreview from "./FloatingCameraPreview";
 import TrainingResultsSection from "./TrainingResultsSection";
 import HelpButton from "./HelpButton";
+
+/**
+ * API configuration
+ */
+const API_BASE_URL =
+  import.meta.env.VITE_BACKEND_API_URL || "http://localhost:5000";
 
 const ModelTrainer = ({
   onModelTrained,
@@ -66,6 +74,7 @@ const ModelTrainer = ({
     ConnectionStatus.DISCONNECTED,
   );
   const [browserCompatible, setBrowserCompatible] = useState(true);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   const language = useSelector((s) => s.general.language);
   const t = getTeachableMachineTranslations();
@@ -223,6 +232,61 @@ const ModelTrainer = ({
       setConnectionStatus(ConnectionStatus.DISCONNECTED);
     }
   }, [connectionStatus]);
+
+  // Handle download camera capture firmware
+  const handleDownloadFirmware = async () => {
+    setIsDownloading(true);
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/compile-camera-capture`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            boardType: "sensebox_eye",
+          }),
+        },
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(
+          errorData.error?.message || "Failed to compile firmware",
+        );
+      }
+
+      const result = await response.json();
+
+      if (result.success && result.data?.binary) {
+        // Decode base64 binary
+        const binaryStr = atob(result.data.binary);
+        const bytes = new Uint8Array(binaryStr.length);
+        for (let i = 0; i < binaryStr.length; i++) {
+          bytes[i] = binaryStr.charCodeAt(i);
+        }
+
+        // Create download link
+        const blob = new Blob([bytes], { type: "application/octet-stream" });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "camera_capture.bin";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      } else {
+        throw new Error("Invalid response from server");
+      }
+    } catch (err) {
+      console.error("Failed to download firmware:", err);
+      alert(`Failed to download firmware: ${err.message}`);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
 
   const addClass = useCallback(() => {
     if (newClassName.trim() && classes.length < 3) {
@@ -819,11 +883,7 @@ const ModelTrainer = ({
               }}
             >
               <Button
-                variant={
-                  sourceType === "webcam" && isCameraActive
-                    ? "contained"
-                    : "outlined"
-                }
+                variant="contained"
                 startIcon={<CameraIcon />}
                 onClick={() => {
                   if (sourceType === "webcam" && isCameraActive) {
@@ -848,6 +908,11 @@ const ModelTrainer = ({
                   : t.training.startWebcam}
               </Button>
 
+              <HelpButton
+                onClick={() => onOpenHelp && onOpenHelp("webcam")}
+                tooltip={t.training.tooltip.helpCamera}
+              />
+
               <Tooltip
                 title={
                   !browserCompatible ? t.training.tooltip.browserCompatible : ""
@@ -857,11 +922,7 @@ const ModelTrainer = ({
               >
                 <span>
                   <Button
-                    variant={
-                      sourceType === "serial" && isCameraActive
-                        ? "contained"
-                        : "outlined"
-                    }
+                    variant="contained"
                     startIcon={<CameraIcon />}
                     onClick={() => {
                       if (sourceType === "serial" && isCameraActive) {
@@ -888,10 +949,25 @@ const ModelTrainer = ({
                 </span>
               </Tooltip>
 
-              <HelpButton
-                onClick={() => onOpenHelp && onOpenHelp("webcam")}
-                tooltip={t.training.tooltip.helpCamera}
-              />
+              {/* Download Firmware Button - shown initially and hidden once camera preview is shown */}
+              {!isCameraActive && !serialError && browserCompatible && (
+                <Button
+                  variant="outlined"
+                  startIcon={
+                    isDownloading ? (
+                      <CircularProgress size={16} />
+                    ) : (
+                      <DownloadIcon />
+                    )
+                  }
+                  onClick={handleDownloadFirmware}
+                  disabled={isDownloading || disabled || !browserCompatible}
+                >
+                  {isDownloading
+                    ? t.errors.compilingFirmware
+                    : t.errors.downloadFirmware}
+                </Button>
+              )}
             </Box>
 
             {sourceType === "serial" && serialError && (

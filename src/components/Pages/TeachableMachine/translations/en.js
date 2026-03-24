@@ -153,11 +153,10 @@ export const teachableMachineTranslations_en = {
     permissionStep2: 'Find "Serial ports" in the permissions list',
     permissionStep3: 'Change the setting to "Allow"',
     permissionStep4: "Refresh the page and try connecting again",
-    downloadFirmware: "Download Firmware",
+    downloadFirmware: "Download Camera Sketch",
     compilingFirmware: "Compiling...",
     tryAgain: "Try Again",
     reconnect: "Reconnect",
-    downloadChrome: "Download Chrome",
     serialCameraStatus: "Serial Camera Status:",
     waitingForFrames:
       "Waiting for frames from senseBox Eye camera... If this persists, check your device connection.",

@@ -185,11 +185,10 @@ export const teachableMachineTranslations_de = {
     permissionStep3: 'Ändere die Einstellung auf "Zulassen"',
     permissionStep4:
       "Aktualisiere die Seite und versuche erneut, dich zu verbinden",
-    downloadFirmware: "Sketch herunterladen",
+    downloadFirmware: "Kamera Sketch herunterladen",
     compilingFirmware: "Kompiliere...",
     tryAgain: "Erneut versuchen",
     reconnect: "Erneut verbinden",
-    downloadChrome: "Chrome herunterladen",
     serialCameraStatus: "Serieller Kamera-Status:",
     waitingForFrames:
       "Warte auf Frames von der senseBox Eye Kamera... Falls dies andauert, überprüfe die Geräteverbindung.",

@@ -1,4 +1,4 @@
-A class represents a category that your model should recognize. For example, animals, colours, objects, people, gestures. You need at least **2 classes** to train a model.
+A class represents a category that your model should recognize. For example, animals, colours, objects, people, gestures. Define at least **2 classes** for your model to learn.
 
 # Tips
 
