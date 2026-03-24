@@ -90,8 +90,8 @@ export const teachableMachineTranslations_de = {
   },
   integration: {
     title: "Ausführen auf der senseBox Eye",
-    converting: "Konvertiere...",
-    convertModel: "Modell konvertieren",
+    converting: "Kompiliere & konvertiere...",
+    convertModel: "Modell kompilieren & konvertieren",
     retry: "Erneut versuchen",
     suggestions: "Vorschläge:",
     modelConvertedSuccess: "Modell erfolgreich konvertiert",
