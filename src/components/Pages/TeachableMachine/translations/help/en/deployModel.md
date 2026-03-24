@@ -1,4 +1,4 @@
-Your computer and smartphone (hopefully) have more than enough computing power and available memory to run the trained model in real-time. The senseBox Eye, on the other hand, has significantly fewer resources. It is however also much **smaller** and requires considerably **less power**. For the model to still fit on the Eye and be able to run there, it must first be compressed, then converted, and finally compiled.
+Your computer or smartphone (hopefully) have more than enough computing power and available memory to run the trained model in real-time. The senseBox Eye, on the other hand, has significantly fewer resources. It is however also much **smaller** and requires considerably **less power**. For the model to still fit on the Eye and be able to run there, it must first be compressed, then converted, and finally compiled.
 
 # Compression
 

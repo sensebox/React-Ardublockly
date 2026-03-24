@@ -1,4 +1,4 @@
-Dein Computer und dein Smartphone verfügen hoffentlich über mehr als genug **Rechenleistung** und **Speicher**, um das trainierte Modell in Echtzeit auszuführen. Die senseBox Eye hat dagegen deutlich weniger Ressourcen. Sie ist dafür aber auch viel **kleiner** und benötigt wesentlich **weniger Strom**. Damit das Modell trotzdem auf die Eye passt und dort ausgeführt werden kann, muss es zunächst komprimiert, anschließend konvertiert und abschließend kompiliert werden.
+Dein Computer oder dein Smartphone verfügen (hoffentlich) über mehr als genug **Rechenleistung** und **Speicher**, um das trainierte Modell in Echtzeit auszuführen. Die senseBox Eye hat dagegen deutlich weniger Ressourcen. Sie ist dafür aber auch viel **kleiner** und benötigt wesentlich **weniger Strom**. Damit das Modell trotzdem auf die Eye passt und dort ausgeführt werden kann, muss es zunächst komprimiert, anschließend konvertiert und abschließend kompiliert werden.
 
 # Komprimierung
 
