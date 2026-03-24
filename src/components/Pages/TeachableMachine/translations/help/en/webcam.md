@@ -4,7 +4,9 @@ Make sure no other application or browser tab is currently using the camera.
 
 # senseBox Eye Camera
 
-This feature is not available in all browsers (e.g. not in Firefox). First connect the Eye via USB to your computer, then select the Eye's port in the browser (on Linux or macOS the ports are often called "ttyACM0", on Windows "COM3" or similar). If you have already loaded the required image capture sketch onto the Eye, you should now see the camera image of the Eye.
+This feature is not available in all browsers (e.g. not in Firefox). First download the necessary camera sketch. Then connect the Eye via USB to your computer and drag-and-drop the sketch onto the device. Next, click "Start senseBox Eye camera" and select the Eye's port in the browser. On Linux or macOS the ports are often called "ttyACM0", on Windows "COM3" or similar.
+
+Sometimes it helps to restart your Eye if its not working.
 
 # Why is the camera image black-and-white and pixelated?
 

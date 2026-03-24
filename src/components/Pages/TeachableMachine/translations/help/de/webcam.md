@@ -4,7 +4,9 @@ Achte darauf, dass die Kamera nicht gleichzeitig von einer anderen Applikation o
 
 # senseBox Eye Kamera
 
-Diese Funktion ist nicht in allen Browsern möglich (in Firefox z.B. nicht). Schließe zuerst die Eye per USB an dein Notebooke und wähle dann im Browser den Port der Eye (In Linux oder MAC heißen die Ports oft "ttyACM0" und in Windows z.B. "COM3"). Wenn du bereits das notwendige Skript zur Bildaufnahme auf die Eye geladen hast solltest du nun das Kamerabild der Eye sehen. ....
+Diese Funktion ist nicht in allen Browsern möglich (in Firefox z.B. nicht). Lade zuerst den Kamera Sketch herunter. Schließe die Eye per USB an dein Notebook und lade den sketch per drag-und-drop auf die Eye. Klicke anschließend auf den Button zum starten der senseBox Eye Kamera und wähle dann im Browser den Port der Eye. In Linux oder MAC heißen die Ports oft "ttyACM0" und in Windows z.B. "COM3".
+
+Es kann manchmal helfen die Eye noch einmal neu zu starten wenn es nicht direkt funktioniert.
 
 # Warum ist das Kamerabild verpixelt und schwarz-weiß?
 
