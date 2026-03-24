@@ -1,7 +1,7 @@
 import React from "react";
 import { IconButton, Tooltip, useMediaQuery, useTheme } from "@mui/material";
-import { HelpOutline as HelpIcon } from "@mui/icons-material";
-
+import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 /**
  * HelpButton - A grey question mark button that triggers help sidebar
  * Only visible on wide screens (lg breakpoint and above)
@@ -22,20 +22,18 @@ const HelpButton = ({ onClick, tooltip = t.help.help, size = "small" }) => {
         size={size}
         aria-label={tooltip}
         sx={{
-          color: "grey.500",
-          backgroundColor: "grey.100",
-          border: "1px solid",
-          borderColor: "grey.300",
+          color: "grey.600",
+          backgroundColor: "white",
           "&:hover": {
-            backgroundColor: "grey.200",
-            color: "grey.700",
+            backgroundColor: "grey.600",
+            color: "white",
           },
           ml: 1,
           width: size === "small" ? 28 : 36,
           height: size === "small" ? 28 : 36,
         }}
       >
-        <HelpIcon fontSize={size === "small" ? "small" : "medium"} />
+        <FontAwesomeIcon icon={faQuestionCircle} />
       </IconButton>
     </Tooltip>
   );
