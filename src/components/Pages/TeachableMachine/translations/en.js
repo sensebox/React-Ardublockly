@@ -64,8 +64,8 @@ export const teachableMachineTranslations_en = {
   },
   integration: {
     title: "Deploy on your senseBox Eye",
-    converting: "Converting...",
-    convertModel: "Convert Model",
+    converting: "Compressing & Converting...",
+    convertModel: "Compress & Convert Model",
     retry: "Retry",
     suggestions: "Suggestions:",
     modelConvertedSuccess: "Model Successfully Converted",
