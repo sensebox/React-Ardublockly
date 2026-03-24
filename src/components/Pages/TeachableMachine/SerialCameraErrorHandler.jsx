@@ -454,18 +454,6 @@ const SerialCameraErrorHandler = ({
                   {t.errors.reconnect}
                 </Button>
               )}
-              {errorDetails.action === "switch-browser" && (
-                <Button
-                  size="small"
-                  variant="outlined"
-                  component={Link}
-                  href="https://www.google.com/chrome/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {t.errors.downloadChrome}
-                </Button>
-              )}
             </Box>
           )}
         </Alert>

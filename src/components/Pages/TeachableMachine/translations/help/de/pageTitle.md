@@ -2,7 +2,7 @@
 
 Hier wird ein **Bildklassifizierungsmodell** trainiert – ein Modell, das ein Bild ansieht und entscheidet, zu welcher Klasse es gehört.
 
-Unter der Haube steckt ein sogenanntes **Neuronales Netz**, das grob vom menschlichen Gehirn inspiriert ist. Es besteht aus vielen Schichten, die das Bild schrittweise analysieren. Besonders wichtig sind dabei Convolutional Layer (dt. Faltungsschichten), die gezielt nach Kanten, Formen und Mustern im Bild suchen.
+Unter der Haube steckt ein sogenanntes **Neuronales Netz**, das grob vom menschlichen Gehirn inspiriert ist. Es besteht aus vielen Schichten, die das Bild schrittweise analysieren. Besonders wichtig sind dabei Convolutional Layer, die gezielt nach Kanten, Formen und Mustern im Bild suchen.
 
 Als Basis dient MobileNet – ein schlankes, **vortrainiertes Modell**, das bereits „weiß", wie Bilder grundsätzlich aussehen. Du trainierst es nur noch auf deine eigenen Kategorien um. Das spart Zeit und funktioniert auch mit wenigen Beispielbildern gut.
 
