@@ -6,7 +6,9 @@ Under the hood is a so-called **neural network**, loosely inspired by the human 
 
 ![Brain Neural Network](/media/teachable/neural-network-brain.drawio.png)
 
-Particularly important are Convolutional Layers, which specifically look for edges, shapes, and patterns in the image.
+Formally, you can think of the neural network as a very complex **mathematical function** with many unknown values. Depending on which values we assign to the unknowns, the model behaves differently.
+
+For image processing specifically, we use a neural network with **Convolutional Layers**. These layers actively look for edges, shapes, and patterns in the image.
 
 The foundation is MobileNet – a lightweight, **pre-trained** model that already "knows" what images generally look like. You only need to fine-tune it for your own categories. This saves time and works well even with only a few example images.
 
@@ -15,6 +17,8 @@ The foundation is MobileNet – a lightweight, **pre-trained** model that alread
 In **machine learning**, a computer is taught to recognize patterns – not through fixed rules, but through examples. Just like a person learns to recognize a cat by seeing many cats, an AI model learns by analyzing many images.
 
 Training is exactly this learning process: you show the model hundreds of example images, it adjusts its internal parameters, and over time it gets better and better at correctly classifying new, unseen images.
+
+Formally speaking, training means searching for the most suitable values for the unknowns in the neural network.
 
 # How can the model _see_ an image?
 
