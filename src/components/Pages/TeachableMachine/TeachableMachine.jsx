@@ -13,7 +13,6 @@ import ModelTrainer from "./ModelTrainer";
 import ConvertDeploy from "./convertDeploy";
 import HelpSidebar, { SIDEBAR_WIDTH } from "./HelpSidebar";
 import HelpButton from "./HelpButton";
-import "./TeachableMachine.css";
 
 const TeachableMachine = () => {
   const [trainedModel, setTrainedModel] = useState(null);
