@@ -10,7 +10,7 @@ import {
 import { useSelector } from "react-redux";
 import { getTeachableMachineTranslations } from "./translations";
 import ModelTrainer from "./ModelTrainer";
-import BlocklyIntegration from "./BlocklyIntegration";
+import ConvertDeploy from "./convertDeploy";
 import HelpSidebar, { SIDEBAR_WIDTH } from "./HelpSidebar";
 import HelpButton from "./HelpButton";
 import "./TeachableMachine.css";
@@ -130,7 +130,7 @@ const TeachableMachine = () => {
                   }
                 />
               </Typography>
-              <BlocklyIntegration model={trainedModel} />
+              <ConvertDeploy model={trainedModel} />
             </Paper>
           )}
         </Box>

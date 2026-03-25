@@ -1,7 +1,5 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import { getTeachableMachineTranslations } from "./translations";
-import * as Blockly from "blockly/core";
 import {
   Alert,
   AlertTitle,
@@ -22,12 +20,7 @@ import {
   Cancel as CancelIcon,
   Download as DownloadIcon,
 } from "@mui/icons-material";
-
-/**
- * API configuration
- */
-const API_BASE_URL =
-  import.meta.env.VITE_BACKEND_API_URL || "http://localhost:5000";
+import { downloadCameraFirmware } from "./utils/firmwareDownload";
 
 /**
  * SerialCameraErrorHandler
@@ -229,70 +222,20 @@ const SerialCameraErrorHandler = ({
   const [isDownloading, setIsDownloading] = React.useState(false);
   const t = getTeachableMachineTranslations();
 
-  // Get error details if error exists
   const errorDetails = error
     ? getErrorDetails(error.type || error.message)
     : null;
-
-  // Get status details
   const statusDetails = getStatusDetails(connectionStatus);
 
-  // Handle download camera capture firmware
   const handleDownloadFirmware = async () => {
     setIsDownloading(true);
-    try {
-      const response = await fetch(
-        `${API_BASE_URL}/api/compile-camera-capture`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            boardType: "sensebox_eye",
-          }),
-        },
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(
-          errorData.error?.message || "Failed to compile firmware",
-        );
-      }
-
-      const result = await response.json();
-
-      if (result.success && result.data?.binary) {
-        // Decode base64 binary
-        const binaryStr = atob(result.data.binary);
-        const bytes = new Uint8Array(binaryStr.length);
-        for (let i = 0; i < binaryStr.length; i++) {
-          bytes[i] = binaryStr.charCodeAt(i);
-        }
-
-        // Create download link
-        const blob = new Blob([bytes], { type: "application/octet-stream" });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "camera_capture.bin";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-      } else {
-        throw new Error("Invalid response from server");
-      }
-    } catch (err) {
-      console.error("Failed to download firmware:", err);
-      alert(`Failed to download firmware: ${err.message}`);
-    } finally {
-      setIsDownloading(false);
+    const result = await downloadCameraFirmware();
+    if (!result.success) {
+      alert(`Failed to download firmware: ${result.error}`);
     }
+    setIsDownloading(false);
   };
 
-  // Handle action button click
   const handleAction = () => {
     if (!errorDetails) return;
 

@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { getTeachableMachineTranslations } from "./translations";
-import * as Blockly from "blockly/core";
 import {
   Box,
   Button,
@@ -11,7 +10,6 @@ import {
   CardContent,
   Chip,
   CircularProgress,
-  LinearProgress,
   Divider,
 } from "@mui/material";
 import {
@@ -23,13 +21,12 @@ import {
   Transform as TransformIcon,
   Autorenew as ReconvertIcon,
 } from "@mui/icons-material";
-import ConversionService from "../../../services/conversionService";
+import ConversionService from "./utils/conversionService";
 
-const BlocklyIntegration = ({ model }) => {
+const ConvertDeploy = ({ model }) => {
   const language = useSelector((s) => s.general.language);
   const t = getTeachableMachineTranslations();
 
-  // Workflow state for the two-step process
   const [workflowState, setWorkflowState] = useState({
     // Current step: 'idle', 'converting', 'converted', 'compiling', 'complete'
     currentStep: "idle",
@@ -37,35 +34,30 @@ const BlocklyIntegration = ({ model }) => {
     progress: 0,
     stage: "",
     error: null,
-    // Conversion data (stored after successful conversion)
     conversionData: null,
-    // Compilation data
     binaryData: null,
     binarySize: null,
   });
 
-  // Fixed board type for senseBox Eye
   const boardType = "sensebox_eye";
 
   // Track the model that was converted to detect retraining
   const convertedModelRef = useRef(null);
   const [modelWasRetrained, setModelWasRetrained] = useState(false);
 
-  // Detect when model changes after conversion
+  // Detect when model is retrained after conversion
   useEffect(() => {
     if (
       convertedModelRef.current &&
       model?.model &&
       workflowState.currentStep !== "idle"
     ) {
-      // Check if the model has changed since we converted
       if (convertedModelRef.current !== model.model) {
         setModelWasRetrained(true);
       }
     }
   }, [model, workflowState.currentStep]);
 
-  // Step 1: Convert model only
   const handleConvertModel = useCallback(async () => {
     if (!model || !model.model) {
       setWorkflowState((prev) => ({
@@ -81,7 +73,6 @@ const BlocklyIntegration = ({ model }) => {
       return;
     }
 
-    // Reset state and start conversion
     setWorkflowState({
       currentStep: "converting",
       isProcessing: true,
@@ -100,7 +91,6 @@ const BlocklyIntegration = ({ model }) => {
     try {
       // Prepare representative dataset for int8 quantization
       const representativeDataset = model.representativeSamples || [];
-      // Extract class labels from model
       const classLabels = model.classes
         ? model.classes.map((cls) => cls.name)
         : [];
@@ -140,7 +130,6 @@ const BlocklyIntegration = ({ model }) => {
         return;
       }
 
-      // Conversion successful - store data and show options
       setWorkflowState({
         currentStep: "converted",
         isProcessing: false,
@@ -178,7 +167,6 @@ const BlocklyIntegration = ({ model }) => {
     }
   }, [model]);
 
-  // Step 2a: Download cpp file
   const handleDownloadCpp = useCallback(() => {
     if (!workflowState.conversionData) {
       return;
@@ -215,7 +203,6 @@ const BlocklyIntegration = ({ model }) => {
     }
   }, [workflowState.conversionData, model]);
 
-  // Step 2b: Compile and download binary
   const handleCompileAndDownload = useCallback(async () => {
     if (!workflowState.conversionData) {
       return;
@@ -225,7 +212,6 @@ const BlocklyIntegration = ({ model }) => {
       ? model.classes.map((cls) => cls.name)
       : [];
 
-    // Start compilation
     setWorkflowState((prev) => ({
       ...prev,
       currentStep: "compiling",
@@ -266,7 +252,6 @@ const BlocklyIntegration = ({ model }) => {
         return;
       }
 
-      // Download the binary
       const downloadSuccess = ConversionService.downloadBinary(
         compilationResult.data.binaryData,
         `teachable_machine_${boardType.replace(/:/g, "_")}_${Date.now()}.bin`,
@@ -288,7 +273,6 @@ const BlocklyIntegration = ({ model }) => {
         return;
       }
 
-      // Success!
       setWorkflowState((prev) => ({
         ...prev,
         currentStep: "complete",
@@ -315,7 +299,6 @@ const BlocklyIntegration = ({ model }) => {
     }
   }, [workflowState.conversionData, model, boardType]);
 
-  // Retry conversion
   const handleRetryConversion = useCallback(() => {
     setWorkflowState((prev) => ({
       ...prev,
@@ -324,7 +307,6 @@ const BlocklyIntegration = ({ model }) => {
     handleConvertModel();
   }, [handleConvertModel]);
 
-  // Reset to start new conversion
   const handleReset = useCallback(() => {
     setWorkflowState({
       currentStep: "idle",
@@ -342,9 +324,6 @@ const BlocklyIntegration = ({ model }) => {
 
   return (
     <Box>
-      {/* Description - only show when not converted yet */}
-
-      {/* Reconvert Button - show when model was retrained after conversion */}
       {modelWasRetrained && workflowState.currentStep !== "idle" && (
         <Box sx={{ mb: 3 }}>
           <Button
@@ -553,4 +532,4 @@ const BlocklyIntegration = ({ model }) => {
   );
 };
 
-export default BlocklyIntegration;
+export default ConvertDeploy;
