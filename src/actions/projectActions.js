@@ -173,6 +173,30 @@ export const updateProject = (type, id) => (dispatch, getState) => {
     });
 };
 
+// Silent create-or-update for autosave flows (no success snackbars/messages)
+// - If id is provided: PUT /project/:id
+// - Else: POST /project
+// Dispatches GET_PROJECT so state.project.projects[0] stays in sync.
+export const autosaveProject =
+  ({ id, xml, title }) =>
+  async (dispatch) => {
+    const body = { xml, title };
+    try {
+      const res = id
+        ? await axios.put(`${import.meta.env.VITE_BLOCKLY_API}/project/${id}`, body)
+        : await axios.post(`${import.meta.env.VITE_BLOCKLY_API}/project`, body);
+
+      const project = res?.data?.project;
+      if (project) {
+        dispatch({ type: GET_PROJECT, payload: project });
+      }
+      return project;
+    } catch (err) {
+      // no UI messaging for autosave; just propagate if caller wants to react
+      throw err;
+    }
+  };
+
 export const deleteProject = (type, id) => (dispatch, getState) => {
   const config = {
     success: (res) => {
