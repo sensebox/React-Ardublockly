@@ -28,11 +28,9 @@ import {
   Add as AddIcon,
   Delete as DeleteIcon,
   PhotoCamera as CameraIcon,
-  Train as TrainIcon,
   Download as DownloadIcon,
 } from "@mui/icons-material";
-import * as tf from "@tensorflow/tfjs";
-import useCameraSource from "./useCameraSource";
+import useCameraSource from "./hooks/useCameraSource";
 import SerialCameraErrorHandler, {
   ConnectionStatus,
   ErrorTypes,
@@ -41,12 +39,9 @@ import SerialCameraService from "./SerialCameraService";
 import FloatingCameraPreview from "./FloatingCameraPreview";
 import TrainingResultsSection from "./TrainingResultsSection";
 import HelpButton from "./HelpButton";
-
-/**
- * API configuration
- */
-const API_BASE_URL =
-  import.meta.env.VITE_BACKEND_API_URL || "http://localhost:5000";
+import useModelTraining from "./hooks/useModelTraining";
+import useModelPrediction from "./hooks/useModelPrediction";
+import { downloadCameraFirmware } from "./utils/firmwareDownload";
 
 const ModelTrainer = ({
   onModelTrained,
@@ -56,17 +51,14 @@ const ModelTrainer = ({
   disabled,
   onOpenHelp,
 }) => {
+  // Class management state
   const [classes, setClasses] = useState([]);
   const [newClassName, setNewClassName] = useState("");
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [editingClassId, setEditingClassId] = useState(null);
   const [editingClassName, setEditingClassName] = useState("");
-  const [trainingProgress, setTrainingProgress] = useState({
-    epoch: 0,
-    totalEpochs: 0,
-    batch: 0,
-    totalBatches: 0,
-  });
+
+  // Camera state
   const previewContainerRef = useRef(null);
   const [videoLoading, setVideoLoading] = useState(false);
   const [serialError, setSerialError] = useState(null);
@@ -75,27 +67,16 @@ const ModelTrainer = ({
   );
   const [browserCompatible, setBrowserCompatible] = useState(true);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [isFloatingPreviewCollapsed, setIsFloatingPreviewCollapsed] =
+    useState(false);
+  const [trainedWithEnoughSamples, setTrainedWithEnoughSamples] =
+    useState(false);
 
   const language = useSelector((s) => s.general.language);
   const t = getTeachableMachineTranslations();
-
-  // Mobile detection and floating preview state
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const [isFloatingPreviewCollapsed, setIsFloatingPreviewCollapsed] =
-    useState(false);
 
-  // Prediction state
-  const [trainedModel, setTrainedModel] = useState(null);
-  const [predictions, setPredictions] = useState([]);
-  const predictionIntervalRef = useRef(null);
-
-  // Training metrics state
-  const [trainingMetrics, setTrainingMetrics] = useState([]);
-  const [testResults, setTestResults] = useState([]);
-  const [finalAccuracy, setFinalAccuracy] = useState(null);
-  const [trainedWithEnoughSamples, setTrainedWithEnoughSamples] =
-    useState(false);
   const {
     sourceType,
     selectSource,
@@ -108,7 +89,21 @@ const ModelTrainer = ({
     error: cameraError,
   } = useCameraSource();
 
-  // Check browser compatibility on mount
+  const {
+    trainModel: executeTraining,
+    trainingProgress,
+    trainingMetrics,
+    testResults,
+    finalAccuracy,
+    trainedModel,
+  } = useModelTraining();
+
+  const { predictions } = useModelPrediction(
+    trainedModel,
+    getPreviewElement,
+    isCameraActive,
+  );
+
   useEffect(() => {
     const isCompatible = SerialCameraService.isSupported();
     setBrowserCompatible(isCompatible);
@@ -143,7 +138,6 @@ const ModelTrainer = ({
       console.error("Camera error:", error);
       setVideoLoading(false);
 
-      // Handle serial camera errors differently
       if (sourceType === "serial") {
         setConnectionStatus(ConnectionStatus.ERROR);
         setSerialError({
@@ -156,7 +150,7 @@ const ModelTrainer = ({
         );
       }
     }
-  }, [startCameraSource, onTrainingError, getPreviewElement, sourceType]);
+  }, [startCameraSource, onTrainingError, getPreviewElement, sourceType, t]);
 
   const stopCamera = useCallback(async () => {
     try {
@@ -164,7 +158,6 @@ const ModelTrainer = ({
       setVideoLoading(false);
       if (sourceType === "serial") {
         setConnectionStatus(ConnectionStatus.DISCONNECTED);
-        // Don't clear serialError here - let it persist so user can download firmware
       }
       if (previewContainerRef.current) {
         previewContainerRef.current.innerHTML = "";
@@ -177,7 +170,6 @@ const ModelTrainer = ({
   const handleSwitchCamera = useCallback(async () => {
     try {
       await switchCamera();
-      // After switching, update the preview container with the new preview element
       const previewElement = getPreviewElement();
       if (previewElement && previewContainerRef.current) {
         previewContainerRef.current.innerHTML = "";
@@ -194,7 +186,6 @@ const ModelTrainer = ({
   useEffect(() => {
     if (cameraError) {
       if (sourceType === "serial") {
-        // Clear error if connection is restored
         if (cameraError.type === "CONNECTION_RESTORED") {
           setSerialError(null);
           setConnectionStatus(ConnectionStatus.CONNECTED);
@@ -222,10 +213,12 @@ const ModelTrainer = ({
       }
     }
   }, [cameraError, onTrainingError, sourceType]);
+
   const handleReconnect = useCallback(async () => {
     setSerialError(null);
     await startCamera();
   }, [startCamera]);
+
   const handleDismissError = useCallback(() => {
     setSerialError(null);
     if (connectionStatus === ConnectionStatus.ERROR) {
@@ -233,59 +226,13 @@ const ModelTrainer = ({
     }
   }, [connectionStatus]);
 
-  // Handle download camera capture firmware
   const handleDownloadFirmware = async () => {
     setIsDownloading(true);
-    try {
-      const response = await fetch(
-        `${API_BASE_URL}/api/compile-camera-capture`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            boardType: "sensebox_eye",
-          }),
-        },
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(
-          errorData.error?.message || "Failed to compile firmware",
-        );
-      }
-
-      const result = await response.json();
-
-      if (result.success && result.data?.binary) {
-        // Decode base64 binary
-        const binaryStr = atob(result.data.binary);
-        const bytes = new Uint8Array(binaryStr.length);
-        for (let i = 0; i < binaryStr.length; i++) {
-          bytes[i] = binaryStr.charCodeAt(i);
-        }
-
-        // Create download link
-        const blob = new Blob([bytes], { type: "application/octet-stream" });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "camera_capture.bin";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-      } else {
-        throw new Error("Invalid response from server");
-      }
-    } catch (err) {
-      console.error("Failed to download firmware:", err);
-      alert(`Failed to download firmware: ${err.message}`);
-    } finally {
-      setIsDownloading(false);
+    const result = await downloadCameraFirmware();
+    if (!result.success) {
+      alert(`Failed to download firmware: ${result.error}`);
     }
+    setIsDownloading(false);
   };
 
   const addClass = useCallback(() => {
@@ -309,7 +256,7 @@ const ModelTrainer = ({
       setNewClassName("");
       setShowAddDialog(false);
     }
-  }, [newClassName, classes, onTrainingError]);
+  }, [newClassName, classes, onTrainingError, t]);
 
   const deleteClass = useCallback((classId) => {
     setClasses((prev) => prev.filter((cls) => cls.id !== classId));
@@ -342,7 +289,7 @@ const ModelTrainer = ({
       setEditingClassId(null);
       setEditingClassName("");
     }
-  }, [editingClassName, editingClassId, classes, onTrainingError]);
+  }, [editingClassName, editingClassId, classes, onTrainingError, t]);
 
   const cancelEditingClass = useCallback(() => {
     setEditingClassId(null);
@@ -351,14 +298,10 @@ const ModelTrainer = ({
 
   const captureImage = useCallback(
     async (classId) => {
-      if (!isCameraActive) {
-        return;
-      }
+      if (!isCameraActive) return;
 
       try {
-        // Capture frame using the camera source
         const imageUrl = await captureFrame();
-
         if (imageUrl) {
           setClasses((prev) =>
             prev.map((cls) =>
@@ -384,24 +327,19 @@ const ModelTrainer = ({
   const startCapturing = useCallback(
     (classId) => {
       captureImage(classId);
-      const intervalId = setInterval(() => {
-        captureImage(classId);
-      }, 100); // Capture every 100ms while holding (10 fps)
+      const intervalId = setInterval(() => captureImage(classId), 100);
       return intervalId;
     },
     [captureImage],
   );
 
   const stopCapturing = useCallback((intervalId) => {
-    if (intervalId) {
-      clearInterval(intervalId);
-    }
+    if (intervalId) clearInterval(intervalId);
   }, []);
+
   useEffect(() => {
     return () => {
-      if (isCameraActive) {
-        stopCamera();
-      }
+      if (isCameraActive) stopCamera();
     };
   }, [isCameraActive, stopCamera]);
 
@@ -424,443 +362,24 @@ const ModelTrainer = ({
       return;
     }
 
-    // Reset all training state before starting
-    setTrainingProgress({
-      epoch: 0,
-      totalEpochs: 0,
-      batch: 0,
-      totalBatches: 0,
-    });
-    setTrainingMetrics([]);
-    setTestResults([]);
-    setFinalAccuracy(null);
-
     // Track if this training has enough samples for test results
     const hasEnoughSamples = classes.every((cls) => cls.samples.length >= 10);
     setTrainedWithEnoughSamples(hasEnoughSamples);
 
-    // Call onTrainingStart after resetting state to ensure UI updates properly
-    onTrainingStart();
-
-    try {
-      // Load custom base model that accepts 96x96 grayscale images
-      const baseModel = await tf.loadLayersModel(
-        "https://raw.githubusercontent.com/PaulaScharf/teachable_machine_base_model/refs/heads/main/model.json",
-      );
-      const featureExtractor = tf.sequential();
-      const numLayersToInclude = baseModel.layers.length - 1;
-      for (let i = 0; i < numLayersToInclude; i++) {
-        const layer = baseModel.layers[i];
-        featureExtractor.add(layer);
-      }
-      featureExtractor.layers.forEach((layer) => {
-        layer.trainable = false;
-      });
-      const examples = Array(classes.length)
-        .fill(null)
-        .map(() => []);
-
-      // Batch feature extraction for better performance on mobile
-      const FEATURE_EXTRACTION_BATCH_SIZE = 16;
-
-      for (let classIndex = 0; classIndex < classes.length; classIndex++) {
-        const cls = classes[classIndex];
-        const samples = cls.samples;
-
-        // Process samples in batches
-        for (
-          let batchStart = 0;
-          batchStart < samples.length;
-          batchStart += FEATURE_EXTRACTION_BATCH_SIZE
-        ) {
-          const batchEnd = Math.min(
-            batchStart + FEATURE_EXTRACTION_BATCH_SIZE,
-            samples.length,
-          );
-          const batchSamples = samples.slice(batchStart, batchEnd);
-
-          // Load all images in this batch
-          const loadedImages = await Promise.all(
-            batchSamples.map((sample) => {
-              return new Promise((resolve) => {
-                const img = new Image();
-                img.onload = () => resolve(img);
-                img.src = sample.url;
-              });
-            }),
-          );
-
-          // Process batch through feature extractor
-          const batchActivations = tf.tidy(() => {
-            // Stack all images into a single batch tensor
-            const tensors = loadedImages.map((img) =>
-              tf.browser
-                .fromPixels(img)
-                .resizeBilinear([96, 96])
-                .mean(-1)
-                .expandDims(-1)
-                .div(255.0),
-            );
-            const batchTensor = tf.stack(tensors);
-
-            // Single predict call for entire batch
-            const extracted = featureExtractor.predict(batchTensor);
-            return extracted.arraySync();
-          });
-
-          // Add each sample's features to examples
-          for (const activation of batchActivations) {
-            examples[classIndex].push(new Float32Array(activation));
-          }
-        }
-      }
-
-      // Calculate class weights to balance loss by sample count
-      // Classes with fewer samples get higher weights
-      const totalSamples = examples.reduce((sum, cls) => sum + cls.length, 0);
-      const classWeights = {};
-      examples.forEach((classExamples, classIndex) => {
-        const numSamplesInClass = classExamples.length;
-        // Weight inversely proportional to number of samples
-        classWeights[classIndex] =
-          totalSamples / (classes.length * numSamplesInClass);
-      });
-
-      // Prepare training and validation datasets
-      const VALIDATION_FRACTION = 0.15;
-      let trainDataset = [];
-      let validationDataset = [];
-
-      for (let i = 0; i < examples.length; i++) {
-        const y = new Array(classes.length).fill(0);
-        y[i] = 1;
-
-        const classLength = examples[i].length;
-        const numValidation = Math.ceil(VALIDATION_FRACTION * classLength);
-        const numTrain = classLength - numValidation;
-
-        const classTrain = examples[i]
-          .slice(0, numTrain)
-          .map((dataArray) => ({ data: dataArray, label: y }));
-
-        const classValidation = examples[i]
-          .slice(numTrain)
-          .map((dataArray) => ({ data: dataArray, label: y }));
-
-        trainDataset = trainDataset.concat(classTrain);
-        validationDataset = validationDataset.concat(classValidation);
-      }
-
-      const trainTfDataset = tf.data.zip({
-        xs: tf.data.array(trainDataset.map((sample) => sample.data)),
-        ys: tf.data.array(trainDataset.map((sample) => sample.label)),
-      });
-
-      const validationTfDataset = tf.data.zip({
-        xs: tf.data.array(validationDataset.map((sample) => sample.data)),
-        ys: tf.data.array(validationDataset.map((sample) => sample.label)),
-      });
-
-      const featureDimension = examples[0][0].length;
-
-      // Create training model as Sequential with dropout for regularization
-      const trainingModel = tf.sequential({
-        layers: [
-          tf.layers.dense({
-            inputShape: [featureDimension],
-            units: 100,
-            activation: "relu",
-            kernelInitializer: "varianceScaling",
-            useBias: true,
-            kernelRegularizer: tf.regularizers.l2({ l2: 0.01 }),
-          }),
-          tf.layers.dropout({
-            rate: 0.4,
-          }),
-          tf.layers.dense({
-            kernelInitializer: "varianceScaling",
-            useBias: false,
-            activation: "softmax",
-            units: classes.length,
-          }),
-        ],
-      });
-
-      // Calculate dynamic batch size based on total samples
-      const totalTrainingSamples = trainDataset.length;
-      let batchSize = 16; // Default
-      if (totalTrainingSamples < 20) {
-        batchSize = 4;
-      } else if (totalTrainingSamples < 50) {
-        batchSize = 8;
-      } else if (totalTrainingSamples < 100) {
-        batchSize = 16;
-      } else if (totalTrainingSamples < 200) {
-        batchSize = 32;
-      } else {
-        batchSize = 64;
-      }
-      console.log(
-        `Dynamic batch size: ${batchSize} (total samples: ${totalTrainingSamples})`,
-      );
-
-      // Initial learning rate and adaptive scheduling
-      const initialLearningRate = 0.0001;
-      let currentLearningRate = initialLearningRate;
-      let epochsSinceBestLoss = 0;
-      const optimizer = tf.train.adam(initialLearningRate);
-      trainingModel.compile({
-        optimizer,
-        loss: "categoricalCrossentropy",
-        metrics: ["accuracy"],
-      });
-
-      const trainDataBatched = trainTfDataset.shuffle(100).batch(batchSize);
-      const validationDataBatched = validationTfDataset.batch(batchSize);
-
-      // Early stopping to prevent overfitting
-      let bestValLoss = Infinity;
-      let patienceCounter = 0;
-      const patience = 5;
-      const lrDecayFactor = 0.5; // Reduce learning rate by 50%
-      const lrDecayPatience = 3; // Decay after 3 epochs without improvement
-
-      let bestWeights = null; // Store best model weights
-      const totalEpochs = 70;
-      const totalBatches = Math.max(
-        1,
-        Math.ceil(totalTrainingSamples / batchSize),
-      );
-      setTrainingProgress({
-        epoch: 0,
-        totalEpochs,
-        batch: 0,
-        totalBatches,
-      });
-
-      await trainingModel.fitDataset(trainDataBatched, {
-        epochs: totalEpochs,
-        validationData: validationDataBatched,
-        classWeight: classWeights, // Apply class weights to balance loss
-        callbacks: {
-          onBatchEnd: (batch) => {
-            setTrainingProgress((prev) => ({
-              ...prev,
-              batch: batch + 1,
-            }));
-          },
-          onEpochEnd: (epoch, logs) => {
-            console.log(
-              `Epoch ${epoch + 1}: loss = ${logs.loss.toFixed(4)}, accuracy = ${logs.acc.toFixed(4)}, val_loss = ${logs.val_loss.toFixed(4)}, val_acc = ${logs.val_acc.toFixed(4)}, lr = ${currentLearningRate.toExponential(2)}`,
-            );
-
-            setTrainingProgress((prev) => ({
-              ...prev,
-              epoch: epoch + 1,
-              batch: 0,
-            }));
-
-            // Track training metrics for visualization
-            setTrainingMetrics((prev) => [
-              ...prev,
-              {
-                epoch: epoch + 1,
-                accuracy: logs.acc,
-                val_accuracy: logs.val_acc,
-                loss: logs.loss,
-                val_loss: logs.val_loss,
-              },
-            ]);
-
-            // Early stopping logic
-            if (logs.val_loss < bestValLoss) {
-              bestValLoss = logs.val_loss;
-              patienceCounter = 0;
-              epochsSinceBestLoss = 0;
-              // Save best weights when validation loss improves
-              bestWeights = trainingModel.getWeights().map((w) => w.clone());
-            } else {
-              patienceCounter++;
-              epochsSinceBestLoss++;
-
-              // Adaptive learning rate scheduling (reduce LR if no improvement)
-              if (epochsSinceBestLoss >= lrDecayPatience) {
-                currentLearningRate = currentLearningRate * lrDecayFactor;
-                optimizer.learningRate = currentLearningRate;
-                epochsSinceBestLoss = 0;
-                console.log(
-                  `Reducing learning rate to ${currentLearningRate.toExponential(2)}`,
-                );
-              }
-
-              if (patienceCounter >= patience && epoch >= 10) {
-                console.log(`Early stopping at epoch ${epoch + 1}`);
-                trainingModel.stopTraining = true;
-                // Restore best weights before creating final model
-                if (bestWeights) {
-                  trainingModel.setWeights(bestWeights);
-                  bestWeights.forEach((w) => w.dispose());
-                  console.log(`Restored best model weights`);
-                }
-              }
-            }
-          },
-        },
-      });
-      const combinedModel = tf.sequential();
-      combinedModel.add(featureExtractor);
-      combinedModel.add(trainingModel);
-
-      // Generate confusion matrix using validation data
-      const confMatrix = Array(classes.length)
-        .fill(null)
-        .map(() => Array(classes.length).fill(0));
-
-      let totalCorrectPredictions = 0;
-      let totalValidationSamples = 0;
-
-      for (const sample of validationDataset) {
-        const prediction = tf.tidy(() => {
-          const input = tf.tensor2d(
-            [Array.from(sample.data)],
-            [1, featureDimension],
-          );
-          return trainingModel.predict(input);
-        });
-        const predData = await prediction.data();
-        prediction.dispose();
-
-        const predictedClass = predData.indexOf(Math.max(...predData));
-        const actualClass = sample.label.indexOf(1);
-
-        confMatrix[actualClass][predictedClass]++;
-        totalValidationSamples++;
-        if (predictedClass === actualClass) {
-          totalCorrectPredictions++;
-        }
-      }
-
-      // Only set test results if we have enough samples
-      if (hasEnoughSamples) {
-        setTestResults(confMatrix);
-        const calculatedAccuracy =
-          totalValidationSamples > 0
-            ? totalCorrectPredictions / totalValidationSamples
-            : 0;
-        setFinalAccuracy(calculatedAccuracy);
-      }
-
-      const modelData = {
-        model: combinedModel,
-        featureExtractor,
-        trainingModel,
-        inputShape: [96, 96, 1],
-        classes: classes.map((cls) => ({ id: cls.id, name: cls.name })),
-        representativeSamples: classes.flatMap((cls) =>
-          cls.samples
-            .slice(0, Math.min(10, cls.samples.length))
-            .map((s) => s.url),
-        ),
-      };
-
-      optimizer.dispose();
-      setTrainingProgress((prev) => ({
-        ...prev,
-        epoch: prev.totalEpochs,
-        batch: prev.totalBatches,
-      }));
-
-      setTrainedModel(modelData);
-      onModelTrained(modelData);
-    } catch (error) {
-      console.error("Training error:", error);
-      onTrainingError(`Training failed: ${error.message}`);
-    }
-  }, [classes, onModelTrained, onTrainingStart, onTrainingError]);
-  const makePrediction = useCallback(async () => {
-    if (
-      !trainedModel ||
-      !trainedModel.featureExtractor ||
-      !trainedModel.trainingModel
-    )
-      return;
-
-    const previewElement = getPreviewElement();
-    if (!previewElement) return;
-    if (previewElement.tagName === "VIDEO") {
-      if (previewElement.readyState < 2 || previewElement.paused) {
-        return;
-      }
-    } else if (previewElement.tagName === "IMG") {
-      if (!previewElement.complete || !previewElement.naturalWidth) {
-        return;
-      }
-    }
-
-    try {
-      // Make prediction using feature extractor + training model
-      const prediction = await tf.tidy(() => {
-        // Capture the preview element and convert to grayscale 96x96x1
-        const tensor = tf.browser
-          .fromPixels(previewElement)
-          .resizeBilinear([96, 96])
-          .mean(-1) // Convert to grayscale by averaging RGB channels
-          .expandDims(-1) // Add channel dimension: [96, 96] -> [96, 96, 1]
-          .div(255.0) // Normalize to [0, 1] range
-          .expandDims(0); // Add batch dimension: [96, 96, 1] -> [1, 96, 96, 1]
-
-        // Extract features then classify
-        const features = trainedModel.featureExtractor.predict(tensor);
-        return trainedModel.trainingModel.predict(features);
-      });
-
-      const predictionData = await prediction.data();
-      prediction.dispose();
-
-      // Convert to class probabilities
-      const classResults = trainedModel.classes.map((cls, index) => ({
-        className: cls.name,
-        confidence: predictionData[index],
-      }));
-      const maxConfidence = Math.max(...classResults.map((r) => r.confidence));
-
-      setPredictions(
-        classResults.map((r) => ({
-          ...r,
-          isTopPrediction: r.confidence === maxConfidence,
-        })),
-      );
-    } catch (error) {
-      console.error("Prediction error:", error);
-    }
-  }, [trainedModel, getPreviewElement]);
-
-  // Automatically start/stop predictions based on camera and model availability
-  useEffect(() => {
-    if (trainedModel && isCameraActive) {
-      if (predictionIntervalRef.current) {
-        clearInterval(predictionIntervalRef.current);
-      }
-
-      setPredictions([]);
-      predictionIntervalRef.current = setInterval(async () => {
-        await makePrediction();
-      }, 500);
-    } else {
-      // Stop predictions if camera is stopped or no model
-      if (predictionIntervalRef.current) {
-        clearInterval(predictionIntervalRef.current);
-        predictionIntervalRef.current = null;
-      }
-      setPredictions([]);
-    }
-    return () => {
-      if (predictionIntervalRef.current) {
-        clearInterval(predictionIntervalRef.current);
-        predictionIntervalRef.current = null;
-      }
-    };
-  }, [trainedModel, isCameraActive, makePrediction]);
+    await executeTraining(
+      classes,
+      onTrainingStart,
+      onTrainingError,
+      onModelTrained,
+    );
+  }, [
+    classes,
+    onTrainingStart,
+    onTrainingError,
+    onModelTrained,
+    executeTraining,
+    t,
+  ]);
 
   return (
     <Box>
@@ -889,9 +408,7 @@ const ModelTrainer = ({
                   if (sourceType === "webcam" && isCameraActive) {
                     stopCamera();
                   } else {
-                    if (isCameraActive) {
-                      stopCamera();
-                    }
+                    if (isCameraActive) stopCamera();
                     selectSource("webcam");
                     setTimeout(() => startCamera(), 100);
                   }
@@ -928,9 +445,7 @@ const ModelTrainer = ({
                       if (sourceType === "serial" && isCameraActive) {
                         stopCamera();
                       } else {
-                        if (isCameraActive) {
-                          stopCamera();
-                        }
+                        if (isCameraActive) stopCamera();
                         selectSource("serial");
                         setTimeout(() => startCamera(), 100);
                       }
@@ -949,7 +464,6 @@ const ModelTrainer = ({
                 </span>
               </Tooltip>
 
-              {/* Download Firmware Button - shown initially and hidden once camera preview is shown */}
               {!isCameraActive && !serialError && browserCompatible && (
                 <Button
                   variant="outlined"
@@ -1026,7 +540,6 @@ const ModelTrainer = ({
                   )}
                 </Box>
 
-                {/* Live Predictions Section - below camera preview */}
                 {trainedModel && (
                   <Box sx={{ mt: 2, width: "100%", maxWidth: "400px" }}>
                     {predictions.length > 0 && (
@@ -1141,16 +654,11 @@ const ModelTrainer = ({
                           onChange={(e) => setEditingClassName(e.target.value)}
                           onBlur={saveClassRename}
                           onKeyPress={(e) => {
-                            if (e.key === "Enter") {
-                              saveClassRename();
-                            } else if (e.key === "Escape") {
-                              cancelEditingClass();
-                            }
+                            if (e.key === "Enter") saveClassRename();
+                            else if (e.key === "Escape") cancelEditingClass();
                           }}
                           onKeyDown={(e) => {
-                            if (e.key === "Escape") {
-                              cancelEditingClass();
-                            }
+                            if (e.key === "Escape") cancelEditingClass();
                           }}
                           sx={{ flex: 1, mr: 1 }}
                         />
@@ -1162,9 +670,7 @@ const ModelTrainer = ({
                             cursor: "pointer",
                             padding: "4px 8px",
                             borderRadius: "4px",
-                            "&:hover": {
-                              backgroundColor: "action.hover",
-                            },
+                            "&:hover": { backgroundColor: "action.hover" },
                           }}
                         >
                           {cls.name}
@@ -1293,7 +799,6 @@ const ModelTrainer = ({
             ))}
           </Grid>
 
-          {/* Add Class + Train Model Buttons - Below Classes */}
           <Box
             sx={{
               mb: 3,
@@ -1304,13 +809,7 @@ const ModelTrainer = ({
             }}
           >
             {classes.length < 3 && (
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1,
-                }}
-              >
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                 <Button
                   variant="contained"
                   startIcon={<AddIcon />}
@@ -1326,13 +825,7 @@ const ModelTrainer = ({
               </Box>
             )}
             <Divider sx={{ width: "100%", my: 1 }} />
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 1,
-              }}
-            >
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               <Tooltip
                 title={
                   classes.length < 2
@@ -1405,7 +898,6 @@ const ModelTrainer = ({
             </Box>
           )}
 
-          {/* Training Results Section */}
           <TrainingResultsSection
             trainingMetrics={trainingMetrics}
             testResults={testResults}
@@ -1428,7 +920,6 @@ const ModelTrainer = ({
         </Grid>
       </Grid>
 
-      {/* Floating Camera Preview for Mobile */}
       {(isCameraActive || videoLoading) && isMobile && (
         <FloatingCameraPreview
           previewContainerRef={previewContainerRef}
@@ -1445,7 +936,6 @@ const ModelTrainer = ({
         />
       )}
 
-      {/* Add Class Dialog */}
       <Dialog open={showAddDialog} onClose={() => setShowAddDialog(false)}>
         <DialogTitle>{t.training.addNewClass}</DialogTitle>
         <DialogContent>
