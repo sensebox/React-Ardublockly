@@ -19,7 +19,7 @@ import "./EmbeddedBlockly.css";
 const EmbeddedBlockly = ({ project: propProject = null, projectType: propProjectType = null }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { shareId } = useParams();
+  const { shareId, projectId } = useParams();
   const reduxProject = useSelector((state) => state.project.projects[0]);
   const progress = useSelector((state) => state.project.progress);
   const message = useSelector((state) => state.message);
@@ -39,7 +39,8 @@ const EmbeddedBlockly = ({ project: propProject = null, projectType: propProject
     };
   }, [propProject, reduxProject, workspaceNameFromState]);
   
-  const projectType = propProjectType || (shareId ? "share" : null);
+  const projectType =
+    propProjectType || (shareId ? "share" : projectId ? "project" : null);
   
   const [initialXml, setInitialXml] = useState(() => {
     return project.xml || localStorage.getItem("autoSaveXML");
@@ -50,21 +51,34 @@ const EmbeddedBlockly = ({ project: propProject = null, projectType: propProject
     if (shareId) {
       dispatch(resetProject());
       dispatch(getProject("share", shareId));
+    } else if (projectId) {
+      dispatch(resetProject());
+      dispatch(getProject("project", projectId));
     }
     return () => {
-      if (shareId) {
+      if (shareId || projectId) {
         dispatch(resetProject());
       }
     };
-  }, [dispatch, shareId]);
+  }, [dispatch, shareId, projectId]);
 
   // Handle share loading errors
   useEffect(() => {
-    if (shareId && (message.id === "PROJECT_EMPTY" || message.id === "GET_PROJECT_FAIL")) {
+    const routeType = shareId ? "share" : projectId ? "project" : null;
+    if (
+      routeType &&
+      (message.id === "PROJECT_EMPTY" || message.id === "GET_PROJECT_FAIL")
+    ) {
       navigate("/embedded", { replace: true });
-      dispatch(returnErrors("", 404, "GET_SHARE_FAIL"));
+      dispatch(
+        returnErrors(
+          "",
+          404,
+          routeType === "share" ? "GET_SHARE_FAIL" : "GET_PROJECT_FAIL",
+        ),
+      );
     }
-  }, [shareId, message, navigate, dispatch]);
+  }, [shareId, projectId, message, navigate, dispatch]);
 
   useEffect(() => {
     if (projectType === "share") {
@@ -94,8 +108,9 @@ const EmbeddedBlockly = ({ project: propProject = null, projectType: propProject
     }
   });
 
-  // Show loading spinner if loading shared project
-  if (shareId && progress) {
+  const isLoadingProjectRoute = (shareId || projectId) && progress;
+  // Show loading spinner if loading shared/project route
+  if (isLoadingProjectRoute) {
     return (
       <Backdrop open invisible>
         <CircularProgress color="primary" />
@@ -103,8 +118,8 @@ const EmbeddedBlockly = ({ project: propProject = null, projectType: propProject
     );
   }
 
-  // Don't render if we're waiting for shared project to load
-  if (shareId && !reduxProject && !propProject) {
+  // Don't render if we're waiting for project to load
+  if ((shareId || projectId) && !reduxProject && !propProject) {
     return null;
   }
 

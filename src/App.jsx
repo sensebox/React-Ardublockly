@@ -74,6 +74,10 @@ class App extends Component {
                     path="/embedded/share/:shareId"
                     element={<EmbeddedBlockly />}
                   />
+                  <Route
+                    path="/embedded/project/:projectId"
+                    element={<EmbeddedBlockly />}
+                  />
                   <Route path="/embedded" element={<EmbeddedBlockly />} />
                   <Route path="/embeddedbasic" element={<BasicPage />} />
                   <Route
