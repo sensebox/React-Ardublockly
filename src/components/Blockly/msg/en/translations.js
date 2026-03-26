@@ -243,7 +243,7 @@ export const TRANSLATIONS = {
   senseBox_soil: "Soil Moisture",
 
   // Teachable Machine translations
-  teachableMachine: {
+  teachableSensebox: {
     title: "Teachable senseBox",
     description:
       "Train your own image classification model and deploy it on your senseBox Eye.",

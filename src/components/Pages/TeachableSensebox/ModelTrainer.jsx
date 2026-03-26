@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { getTeachableMachineTranslations } from "./translations";
+import { getTeachableSenseboxTranslations } from "./translations";
 import {
   Box,
   Button,
@@ -73,7 +73,7 @@ const ModelTrainer = ({
     useState(false);
 
   const language = useSelector((s) => s.general.language);
-  const t = getTeachableMachineTranslations();
+  const t = getTeachableSenseboxTranslations();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { getTeachableMachineTranslations } from "./translations";
+import { getTeachableSenseboxTranslations } from "./translations";
 import {
   Alert,
   AlertTitle,
@@ -59,7 +59,7 @@ export const ConnectionStatus = {
  * @returns {Object} Error details with severity, title, message, and actions
  */
 const getErrorDetails = (errorType) => {
-  const t = getTeachableMachineTranslations();
+  const t = getTeachableSenseboxTranslations();
 
   switch (errorType) {
     case ErrorTypes.UNSUPPORTED_BROWSER:
@@ -175,7 +175,7 @@ const getErrorDetails = (errorType) => {
  * @returns {Object} Status display details
  */
 const getStatusDetails = (status) => {
-  const t = getTeachableMachineTranslations();
+  const t = getTeachableSenseboxTranslations();
 
   switch (status) {
     case ConnectionStatus.CONNECTED:
@@ -220,7 +220,7 @@ const SerialCameraErrorHandler = ({
 }) => {
   const [detailsExpanded, setDetailsExpanded] = React.useState(showDetails);
   const [isDownloading, setIsDownloading] = React.useState(false);
-  const t = getTeachableMachineTranslations();
+  const t = getTeachableSenseboxTranslations();
 
   const errorDetails = error
     ? getErrorDetails(error.type || error.message)

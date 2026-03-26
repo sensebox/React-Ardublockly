@@ -27,7 +27,7 @@ import TutorialPage from "@/components/Tutorial/Viewer/Tutorial.page";
 import Project from "@/components/Pages/Project/Project";
 import ProjectHome from "@/components/Pages/Project/ProjectHome";
 import TutorialHome from "../Tutorial/Overview/TutorialHome";
-import TeachableMachine from "@/components/Pages/TeachableMachine/TeachableMachine";
+import TeachableSensebox from "@/components/Pages/TeachableSensebox/TeachableSensebox";
 import BasicWithSerial from "../Pages/Basic/BasicWithSerial";
 import BasicProject from "../Pages/Basic/BasicProject";
 function AppRoutes({ platform, visitPage, setPlatform }) {
@@ -116,7 +116,7 @@ function AppRoutes({ platform, visitPage, setPlatform }) {
           path="/teachable-machine"
           element={
             <PublicRoute>
-              <TeachableMachine />
+              <TeachableSensebox />
             </PublicRoute>
           }
         />

@@ -1,5 +1,5 @@
-// src/components/Pages/TeachableMachine/translations/en.js
-export const teachableMachineTranslations_en = {
+// src/components/Pages/TeachableSensebox/translations/en.js
+export const teachableSenseboxTranslations_en = {
   title: "Teachable senseBox",
   description:
     "Train your own image classification model and deploy it on your senseBox Eye.",

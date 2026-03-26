@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { getTeachableMachineTranslations } from "./translations";
+import { getTeachableSenseboxTranslations } from "./translations";
 import {
   Box,
   Button,
@@ -25,7 +25,7 @@ import ConversionService from "./utils/conversionService";
 
 const ConvertDeploy = ({ model }) => {
   const language = useSelector((s) => s.general.language);
-  const t = getTeachableMachineTranslations();
+  const t = getTeachableSenseboxTranslations();
 
   const [workflowState, setWorkflowState] = useState({
     // Current step: 'idle', 'converting', 'converted', 'compiling', 'complete'
