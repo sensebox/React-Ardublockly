@@ -11,7 +11,7 @@ import { ChevronRight as ChevronRightIcon } from "@mui/icons-material";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-import { getTeachableMachineTranslations } from "./translations";
+import { getTeachableSenseboxTranslations } from "./translations";
 
 // Load all help markdown files eagerly (Vite requires a static glob pattern)
 const markdownFiles = import.meta.glob("./translations/help/**/*.md", {
@@ -52,7 +52,7 @@ const HelpSidebar = ({ open, onClose, helpTopic }) => {
     return null;
   }
 
-  const t = getTeachableMachineTranslations();
+  const t = getTeachableSenseboxTranslations();
   const helpTranslations = t.help || {};
 
   // Determine language for markdown file lookup

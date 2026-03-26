@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState, useEffect } from "react";
 import { Box, Typography, useTheme, Tooltip } from "@mui/material";
-import { getTeachableMachineTranslations } from "./translations";
+import { getTeachableSenseboxTranslations } from "./translations";
 
 /**
  * Confusion Matrix visualization component
@@ -8,7 +8,7 @@ import { getTeachableMachineTranslations } from "./translations";
  */
 const ConfusionMatrix = ({ matrix, classNames, title }) => {
   const theme = useTheme();
-  const t = getTeachableMachineTranslations();
+  const t = getTeachableSenseboxTranslations();
   const containerRef = useRef(null);
   const [containerWidth, setContainerWidth] = useState(0);
 

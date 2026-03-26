@@ -8,19 +8,19 @@ import {
   useTheme,
 } from "@mui/material";
 import { useSelector } from "react-redux";
-import { getTeachableMachineTranslations } from "./translations";
+import { getTeachableSenseboxTranslations } from "./translations";
 import ModelTrainer from "./ModelTrainer";
 import ConvertDeploy from "./convertDeploy";
 import HelpSidebar, { SIDEBAR_WIDTH } from "./HelpSidebar";
 import HelpButton from "./HelpButton";
 
-const TeachableMachine = () => {
+const TeachableSensebox = () => {
   const [trainedModel, setTrainedModel] = useState(null);
   const [isTraining, setIsTraining] = useState(false);
   const [trainingError, setTrainingError] = useState(null);
   const isMountedRef = useRef(true);
   const language = useSelector((s) => s.general.language);
-  const t = getTeachableMachineTranslations();
+  const t = getTeachableSenseboxTranslations();
 
   // Help sidebar state
   const [helpSidebarOpen, setHelpSidebarOpen] = useState(false);
@@ -138,4 +138,4 @@ const TeachableMachine = () => {
   );
 };
 
-export default TeachableMachine;
+export default TeachableSensebox;

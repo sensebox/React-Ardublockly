@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { Box, Typography, useTheme } from "@mui/material";
-import { getTeachableMachineTranslations } from "./translations";
+import { getTeachableSenseboxTranslations } from "./translations";
 
 /**
  * Simple SVG-based line chart for training metrics visualization
@@ -13,7 +13,7 @@ const TrainingMetricsChart = ({
   title,
 }) => {
   const theme = useTheme();
-  const t = getTeachableMachineTranslations();
+  const t = getTeachableSenseboxTranslations();
 
   // Fixed colors: greens for accuracy, reds for loss
   const colors = {
