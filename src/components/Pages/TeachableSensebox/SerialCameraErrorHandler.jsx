@@ -208,6 +208,20 @@ const getStatusDetails = (status) => {
 
 /**
  * SerialCameraErrorHandler Component
+ *
+ * @param {Object}   error              - Error object with `.type` and `.message`
+ * @param {string}   connectionStatus   - One of ConnectionStatus values
+ * @param {Function} onRetry            - Called on "Try Again"
+ * @param {Function} onReconnect        - Called on "Reconnect"
+ * @param {Function} onDismiss          - Called when the alert is closed
+ * @param {boolean}  showStatus         - Whether to show the status chip above the alert
+ * @param {boolean}  showDetails        - Whether the detail panel starts expanded
+ * @param {Object}   overrides          - Optional text / behaviour overrides
+ *   @param {string}   overrides.errorTitle             - Replaces the alert title
+ *   @param {string}   overrides.errorMessage           - Replaces the alert body message
+ *   @param {string}   overrides.troubleshootingFirmware - Replaces the firmware troubleshooting bullet
+ *   @param {string}   overrides.downloadFirmwareLabel   - Replaces the download-button label
+ *   @param {Function} overrides.downloadFirmwareFn      - Replaces the download function
  */
 const SerialCameraErrorHandler = ({
   error,
@@ -217,6 +231,7 @@ const SerialCameraErrorHandler = ({
   onDismiss,
   showStatus = true,
   showDetails = false,
+  overrides = {},
 }) => {
   const [detailsExpanded, setDetailsExpanded] = React.useState(showDetails);
   const [isDownloading, setIsDownloading] = React.useState(false);
@@ -229,7 +244,8 @@ const SerialCameraErrorHandler = ({
 
   const handleDownloadFirmware = async () => {
     setIsDownloading(true);
-    const result = await downloadCameraFirmware();
+    const fn = overrides.downloadFirmwareFn || downloadCameraFirmware;
+    const result = await fn();
     if (!result.success) {
       alert(`Failed to download firmware: ${result.error}`);
     }
@@ -278,9 +294,9 @@ const SerialCameraErrorHandler = ({
           icon={errorDetails.icon}
           sx={{ mb: 2 }}
         >
-          <AlertTitle>{errorDetails.title}</AlertTitle>
+          <AlertTitle>{overrides.errorTitle || errorDetails.title}</AlertTitle>
           <Typography variant="body2" sx={{ mb: 1 }}>
-            {errorDetails.message}
+            {overrides.errorMessage || errorDetails.message}
           </Typography>
 
           {/* Error Details (Expandable) - shows actual error message */}
@@ -347,7 +363,10 @@ const SerialCameraErrorHandler = ({
               <Typography variant="body2" component="ul" sx={{ pl: 2 }}>
                 <li>{t.errors.troubleshootingUsb}</li>
                 <li>{t.errors.troubleshootingPort}</li>
-                <li>{t.errors.troubleshootingFirmware}</li>
+                <li>
+                  {overrides.troubleshootingFirmware ||
+                    t.errors.troubleshootingFirmware}
+                </li>
                 <li>{t.errors.troubleshootingReconnect}</li>
               </Typography>
             </Box>
@@ -372,7 +391,8 @@ const SerialCameraErrorHandler = ({
                 >
                   {isDownloading
                     ? t.errors.compilingFirmware
-                    : t.errors.downloadFirmware}
+                    : overrides.downloadFirmwareLabel ||
+                      t.errors.downloadFirmware}
                 </Button>
               )}
               {(errorDetails.action === "retry" ||

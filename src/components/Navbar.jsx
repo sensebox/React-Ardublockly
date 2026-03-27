@@ -131,7 +131,10 @@ const Navbar = () => {
   };
 
   const isHome = location.pathname === "/";
-  const isTeachable = location.pathname === "/teachable-machine";
+  const isTeachable =
+    location.pathname === "/teachable" ||
+    location.pathname === "/teachable/image" ||
+    location.pathname === "/teachable/acceleration";
   const isAssessment =
     /^\/tutorial\/.{1,}$/.test(location.pathname) &&
     !tutorialIsLoading &&
@@ -448,7 +451,7 @@ const Navbar = () => {
             {
               text: Blockly.Msg.navbar_teachablesensebox,
               icon: faBrain,
-              link: "/teachable-machine",
+              link: "/teachable",
             },
           ].map((item, i) =>
             item.restriction || !("restriction" in item) ? (

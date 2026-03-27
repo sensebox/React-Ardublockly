@@ -11,22 +11,31 @@ import {
 } from "@mui/material";
 import { ArrowBack as ArrowBackIcon } from "@mui/icons-material";
 import { useSelector } from "react-redux";
-import { getTeachableSenseboxTranslations } from "./translations";
-import ModelTrainer from "./ModelTrainer";
-import ConvertDeploy from "./convertDeploy";
-import HelpSidebar, { SIDEBAR_WIDTH } from "./HelpSidebar";
-import HelpButton from "./HelpButton";
+import { getAccelerationTranslations } from "./translations";
+import AccelerationModelTrainer from "./AccelerationModelTrainer";
+import AccelerationModelVisualizer, {
+  DEFAULT_MODEL_CONFIG,
+  DEFAULT_ACTIVE_GROUP_KEYS,
+} from "./AccelerationModelVisualizer";
+import AccelerationHelpSidebar, {
+  SIDEBAR_WIDTH,
+} from "./AccelerationHelpSidebar";
+import HelpButton from "../HelpButton";
 
-const TeachableSensebox = () => {
+const AccelerationClassification = () => {
   const navigate = useNavigate();
   const [trainedModel, setTrainedModel] = useState(null);
   const [isTraining, setIsTraining] = useState(false);
   const [trainingError, setTrainingError] = useState(null);
+  const [classes, setClasses] = useState([]);
+  const [modelConfig, setModelConfig] = useState(DEFAULT_MODEL_CONFIG);
+  const [activeGroupKeys, setActiveGroupKeys] = useState(
+    DEFAULT_ACTIVE_GROUP_KEYS,
+  );
   const isMountedRef = useRef(true);
   const language = useSelector((s) => s.general.language);
-  const t = getTeachableSenseboxTranslations();
+  const t = getAccelerationTranslations();
 
-  // Help sidebar state
   const [helpSidebarOpen, setHelpSidebarOpen] = useState(false);
   const [currentHelpTopic, setCurrentHelpTopic] = useState(null);
   const theme = useTheme();
@@ -63,7 +72,6 @@ const TeachableSensebox = () => {
     }
   }, []);
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       isMountedRef.current = false;
@@ -72,8 +80,7 @@ const TeachableSensebox = () => {
 
   return (
     <>
-      {/* Help Sidebar */}
-      <HelpSidebar
+      <AccelerationHelpSidebar
         open={helpSidebarOpen}
         onClose={handleCloseHelp}
         helpTopic={currentHelpTopic}
@@ -95,7 +102,7 @@ const TeachableSensebox = () => {
             onClick={() => navigate("/teachable")}
             sx={{ mb: 2 }}
           >
-            {t.landing?.title || "Teachable senseBox"}
+            Teachable senseBox
           </Button>
           <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
             <Typography variant="h3" component="h1">
@@ -103,7 +110,10 @@ const TeachableSensebox = () => {
             </Typography>
             <HelpButton
               onClick={() => handleOpenHelp("pageTitle")}
-              tooltip={t.training?.helpMain || "Was ist Teachable senseBox?"}
+              tooltip={
+                t.training?.tooltip?.helpMain ||
+                "Was ist Bewegungsklassifizierung?"
+              }
             />
           </Box>
           <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
@@ -111,42 +121,55 @@ const TeachableSensebox = () => {
           </Typography>
         </Box>
 
+        {trainingError && (
+          <Box sx={{ mb: 2, p: 2, bgcolor: "error.light", borderRadius: 1 }}>
+            <Typography variant="body2" color="error.contrastText">
+              {trainingError}
+            </Typography>
+          </Box>
+        )}
+
         <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+          {/* Model Architecture Visualizer Section */}
+          <Paper elevation={2} sx={{ p: 3 }}>
+            <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+              <Typography variant="h5">{t.modelVisualizer.title}</Typography>
+              <HelpButton
+                onClick={() => handleOpenHelp("architecture")}
+                tooltip={t.training.tooltip.helpArchitecture}
+              />
+            </Box>
+            <AccelerationModelVisualizer
+              classNames={classes.map((c) => c.name)}
+              modelConfig={modelConfig}
+              activeGroupKeys={activeGroupKeys}
+              onModelConfigChange={setModelConfig}
+              onActiveGroupsChange={setActiveGroupKeys}
+            />
+          </Paper>
+
           {/* Model Training Section */}
           <Paper elevation={2} sx={{ p: 3 }}>
             <Typography variant="h5" gutterBottom>
               {t.training.title}
             </Typography>
-            <ModelTrainer
+            <AccelerationModelTrainer
+              classes={classes}
+              onClassesChange={setClasses}
               onModelTrained={handleModelTrained}
               onTrainingStart={handleTrainingStart}
               onTrainingError={handleTrainingError}
               isTraining={isTraining}
               disabled={isTraining}
               onOpenHelp={handleOpenHelp}
+              modelConfig={modelConfig}
+              activeGroupKeys={activeGroupKeys}
             />
           </Paper>
-
-          {/* Blockly Integration Section */}
-          {trainedModel && (
-            <Paper elevation={2} sx={{ p: 3 }}>
-              <Typography variant="h5" gutterBottom>
-                {t.integration.title}
-                <HelpButton
-                  onClick={() => handleOpenHelp("deployModel")}
-                  tooltip={
-                    t.training?.tooltip?.helpDeployModel ||
-                    "Help with deploying the model"
-                  }
-                />
-              </Typography>
-              <ConvertDeploy model={trainedModel} />
-            </Paper>
-          )}
         </Box>
       </Container>
     </>
   );
 };
 
-export default TeachableSensebox;
+export default AccelerationClassification;

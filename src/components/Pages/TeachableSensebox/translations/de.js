@@ -1,8 +1,23 @@
 // src/components/Pages/TeachableSensebox/translations/de.js
 export const teachableSenseboxTranslations_de = {
-  title: "Teachable senseBox",
+  title: "Bildklassifizierung",
   description:
     "Trainiere dein eigenes Modell zur Klassizierung von Bildern und lade es auf die senseBox Eye.",
+  landing: {
+    title: "Teachable senseBox",
+    imageCard: {
+      title: "Bildklassifizierung",
+      description:
+        "Trainiere ein Modell, um Objekte oder Szenen mit der senseBox Eye Kamera zu erkennen.",
+      button: "Starten",
+    },
+    accelerationCard: {
+      title: "Bewegungsklassifizierung",
+      description:
+        "Trainiere ein Modell, um Bewegungen mit dem senseBox Eye Beschleunigungssensor zu erkennen.",
+      button: "Starten",
+    },
+  },
   training: {
     title: "Modell Training",
     stopWebcam: "Webcam stoppen",
@@ -186,7 +201,6 @@ export const teachableSenseboxTranslations_de = {
     permissionStep4:
       "Aktualisiere die Seite und versuche erneut, dich zu verbinden",
     downloadFirmware: "Kamera Sketch herunterladen",
-    compilingFirmware: "Kompiliere...",
     tryAgain: "Erneut versuchen",
     reconnect: "Erneut verbinden",
     serialCameraStatus: "Serieller Kamera-Status:",

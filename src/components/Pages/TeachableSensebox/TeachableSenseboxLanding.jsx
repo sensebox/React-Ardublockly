@@ -1,0 +1,107 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  Container,
+  Typography,
+  Box,
+  Card,
+  CardContent,
+  CardActions,
+  Button,
+  useTheme,
+} from "@mui/material";
+import {
+  PhotoCamera as CameraIcon,
+  Speed as AccelerationIcon,
+} from "@mui/icons-material";
+import { useSelector } from "react-redux";
+import { getTeachableSenseboxTranslations } from "./translations";
+
+const TeachableSenseboxLanding = () => {
+  const navigate = useNavigate();
+  const language = useSelector((s) => s.general.language);
+  const t = getTeachableSenseboxTranslations();
+  const theme = useTheme();
+
+  return (
+    <Container maxWidth="md" sx={{ py: 6 }} key={language}>
+      <Box sx={{ mb: 6, textAlign: "center" }}>
+        <Typography variant="h3" component="h1" gutterBottom>
+          {t.landing.title}
+        </Typography>
+      </Box>
+
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
+          gap: 4,
+        }}
+      >
+        {/* Image Classification Card */}
+        <Card
+          elevation={3}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            transition: "box-shadow 0.2s",
+            "&:hover": { boxShadow: theme.shadows[8] },
+          }}
+        >
+          <CardContent sx={{ flexGrow: 1, textAlign: "center", pt: 4 }}>
+            <CameraIcon sx={{ fontSize: 64, color: "primary.main", mb: 2 }} />
+            <Typography variant="h5" gutterBottom>
+              {t.landing.imageCard.title}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {t.landing.imageCard.description}
+            </Typography>
+          </CardContent>
+          <CardActions sx={{ justifyContent: "center", pb: 3 }}>
+            <Button
+              variant="contained"
+              size="large"
+              onClick={() => navigate("/teachable/image")}
+            >
+              {t.landing.imageCard.button}
+            </Button>
+          </CardActions>
+        </Card>
+
+        {/* Acceleration Classification Card */}
+        <Card
+          elevation={3}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            transition: "box-shadow 0.2s",
+            "&:hover": { boxShadow: theme.shadows[8] },
+          }}
+        >
+          <CardContent sx={{ flexGrow: 1, textAlign: "center", pt: 4 }}>
+            <AccelerationIcon
+              sx={{ fontSize: 64, color: "primary.main", mb: 2 }}
+            />
+            <Typography variant="h5" gutterBottom>
+              {t.landing.accelerationCard.title}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {t.landing.accelerationCard.description}
+            </Typography>
+          </CardContent>
+          <CardActions sx={{ justifyContent: "center", pb: 3 }}>
+            <Button
+              variant="contained"
+              size="large"
+              onClick={() => navigate("/teachable/acceleration")}
+            >
+              {t.landing.accelerationCard.button}
+            </Button>
+          </CardActions>
+        </Card>
+      </Box>
+    </Container>
+  );
+};
+
+export default TeachableSenseboxLanding;
