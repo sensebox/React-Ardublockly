@@ -20,7 +20,7 @@ export default {
     { text: "Gallery", icon: faLightbulb, link: "/gallery" },
     { text: "Projects", icon: faLayerGroup, link: "/project", auth: true },
     { text: "Code Editor", icon: faCode, link: "/codeeditor" },
-    { text: "Teachable Machine", icon: faBrain, link: "/teachable-machine" },
+    { text: "Teachable Machine", icon: faBrain, link: "/teachable" },
     {
       text: "Builder",
       icon: faTools,

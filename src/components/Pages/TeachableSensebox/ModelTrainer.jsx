@@ -477,9 +477,7 @@ const ModelTrainer = ({
                   onClick={handleDownloadFirmware}
                   disabled={isDownloading || disabled || !browserCompatible}
                 >
-                  {isDownloading
-                    ? t.errors.compilingFirmware
-                    : t.errors.downloadFirmware}
+                  {t.errors.downloadFirmware}
                 </Button>
               )}
             </Box>

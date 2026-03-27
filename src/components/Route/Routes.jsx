@@ -28,6 +28,8 @@ import Project from "@/components/Pages/Project/Project";
 import ProjectHome from "@/components/Pages/Project/ProjectHome";
 import TutorialHome from "../Tutorial/Overview/TutorialHome";
 import TeachableSensebox from "@/components/Pages/TeachableSensebox/TeachableSensebox";
+import TeachableSenseboxLanding from "@/components/Pages/TeachableSensebox/TeachableSenseboxLanding";
+import AccelerationClassification from "@/components/Pages/TeachableSensebox/acceleration/AccelerationClassification";
 import BasicWithSerial from "../Pages/Basic/BasicWithSerial";
 import BasicProject from "../Pages/Basic/BasicProject";
 function AppRoutes({ platform, visitPage, setPlatform }) {
@@ -113,10 +115,26 @@ function AppRoutes({ platform, visitPage, setPlatform }) {
 
         {/* Teachable Machine */}
         <Route
-          path="/teachable-machine"
+          path="/teachable"
+          element={
+            <PublicRoute>
+              <TeachableSenseboxLanding />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/teachable/image"
           element={
             <PublicRoute>
               <TeachableSensebox />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/teachable/acceleration"
+          element={
+            <PublicRoute>
+              <AccelerationClassification />
             </PublicRoute>
           }
         />

@@ -109,13 +109,6 @@ Blockly.Generator.Arduino.forBlock["basic_led_control"] = function (
   return ""; // nichts generieren
 };
 
-Blockly.Generator.Arduino.forBlock["colour_picker"] = function (
-  _block,
-  _generator,
-) {
-  return ""; // nichts generieren
-};
-
 Blockly.Generator.Arduino.forBlock["basic_compare"] = function (
   _block,
   _generator,
