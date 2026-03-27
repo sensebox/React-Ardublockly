@@ -271,7 +271,6 @@ const AccelerationModelTrainer = ({
   const t = getAccelerationTranslations();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const [browserCompatible, setBrowserCompatible] = useState(true);
   const [isDownloading, setIsDownloading] = useState(false);
 
   const {
@@ -300,17 +299,6 @@ const AccelerationModelTrainer = ({
     latestSample,
     isConnected,
   );
-
-  useEffect(() => {
-    const isCompatible = AccelerometerService.isSupported();
-    setBrowserCompatible(isCompatible);
-    if (!isCompatible) {
-      setSerialError({
-        type: ErrorTypes.UNSUPPORTED_BROWSER,
-        message: "Web Serial API is not supported in this browser",
-      });
-    }
-  }, []);
 
   const handleDownloadFirmware = async () => {
     setIsDownloading(true);
@@ -541,25 +529,18 @@ const AccelerationModelTrainer = ({
           </span>
         </Tooltip>
 
-        {!isConnected &&
-          !dataTimeoutError &&
-          !sensorError &&
-          browserCompatible && (
-            <Button
-              variant="outlined"
-              startIcon={
-                isDownloading ? (
-                  <CircularProgress size={16} />
-                ) : (
-                  <DownloadIcon />
-                )
-              }
-              onClick={handleDownloadFirmware}
-              disabled={isDownloading || disabled || !browserCompatible}
-            >
-              {t.errors.downloadFirmware}
-            </Button>
-          )}
+        {!isConnected && !dataTimeoutError && !sensorError && isSupported && (
+          <Button
+            variant="outlined"
+            startIcon={
+              isDownloading ? <CircularProgress size={16} /> : <DownloadIcon />
+            }
+            onClick={handleDownloadFirmware}
+            disabled={isDownloading || disabled || !isSupported}
+          >
+            {t.errors.downloadFirmware}
+          </Button>
+        )}
       </Box>
 
       {/* serial connection error */}
