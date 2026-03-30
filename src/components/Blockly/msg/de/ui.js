@@ -17,7 +17,7 @@ export const UI = {
   toolbox_variables: "Variablen",
   toolbox_serial: "Seriell",
   toolbox_advanced: "Erweitert",
-  toolbox_motors: "Motoren",
+  toolbox_motors: "Pumpe",
   toolbox_label_externalRTC: "Externe RTC",
   toolbox_label_internalRTC: "Interne RTC",
   toolbox_label_led_matrix: "LED-Matrix",
