@@ -245,7 +245,7 @@ const InlineAccelerometerGraph = ({ latestSample, label }) => {
 // ─────────────────────────────────────────────────────────────────────────────
 
 const GESTURE_DURATION_MS = 2000;
-const RECORDING_COUNTDOWN_STEPS = 3; // seconds before recording starts
+const RECORDING_COUNTDOWN_STEPS = 2; // seconds before recording starts
 
 const AccelerationModelTrainer = ({
   classes,
@@ -265,6 +265,7 @@ const AccelerationModelTrainer = ({
   const [editingClassName, setEditingClassName] = useState("");
   const [recordingClassId, setRecordingClassId] = useState(null);
   const [countdown, setCountdown] = useState(null);
+  const [bulkProgress, setBulkProgress] = useState(null);
   const [trainedWithEnoughSamples, setTrainedWithEnoughSamples] =
     useState(false);
   const countdownRef = useRef(null);
@@ -466,6 +467,63 @@ const AccelerationModelTrainer = ({
         setRecordingClassId(null);
         setCountdown(null);
       }
+    },
+    [isConnected, recordingClassId, recordGesture, onClassesChange],
+  );
+
+  const startBulkRecording = useCallback(
+    async (classId, count = 10) => {
+      if (!isConnected || recordingClassId !== null) return;
+
+      setRecordingClassId(classId);
+      setBulkProgress({ current: 0, total: count });
+      setCountdown(RECORDING_COUNTDOWN_STEPS);
+
+      let remaining = RECORDING_COUNTDOWN_STEPS;
+      await new Promise((resolve) => {
+        countdownRef.current = setInterval(() => {
+          remaining -= 1;
+          setCountdown(remaining);
+          if (remaining <= 0) {
+            clearInterval(countdownRef.current);
+            resolve();
+          }
+        }, 1000);
+      });
+
+      for (let i = 0; i < count; i++) {
+        setBulkProgress({ current: i + 1, total: count });
+        setCountdown(0);
+        try {
+          const readings = await recordGesture(GESTURE_DURATION_MS);
+          if (readings.length > 0) {
+            onClassesChange((prev) =>
+              prev.map((cls) =>
+                cls.id === classId
+                  ? {
+                      ...cls,
+                      samples: [
+                        ...cls.samples,
+                        {
+                          id: Date.now() + Math.random(),
+                          readings,
+                          recordedAt: Date.now(),
+                        },
+                      ],
+                    }
+                  : cls,
+              ),
+            );
+          }
+        } catch (err) {
+          console.error("Error recording gesture in bulk:", err);
+          break;
+        }
+      }
+
+      setRecordingClassId(null);
+      setCountdown(null);
+      setBulkProgress(null);
     },
     [isConnected, recordingClassId, recordGesture, onClassesChange],
   );
@@ -825,20 +883,32 @@ const AccelerationModelTrainer = ({
                         color="error"
                         sx={{ mb: 0.5 }}
                       >
-                        {t.training.recording}
+                        {bulkProgress
+                          ? t.training.recordingBulk
+                              .replace("{current}", bulkProgress.current)
+                              .replace("{total}", bulkProgress.total)
+                          : t.training.recording}
                       </Typography>
-                      <LinearProgress color="error" />
+                      <LinearProgress
+                        color="error"
+                        variant={bulkProgress ? "determinate" : "indeterminate"}
+                        value={
+                          bulkProgress
+                            ? (bulkProgress.current / bulkProgress.total) * 100
+                            : undefined
+                        }
+                      />
                     </Box>
                   )}
                 </CardContent>
-                <CardActions>
+                <CardActions sx={{ gap: 0.5, p: 1 }}>
                   <Tooltip
                     title={
                       !isConnected ? t.training.tooltip.startConnection : ""
                     }
                     arrow
                   >
-                    <span style={{ width: "100%" }}>
+                    <span style={{ flex: 1 }}>
                       <Button
                         variant="contained"
                         color="error"
@@ -853,6 +923,29 @@ const AccelerationModelTrainer = ({
                         }
                       >
                         {t.training.record}
+                      </Button>
+                    </span>
+                  </Tooltip>
+                  <Tooltip
+                    title={
+                      !isConnected ? t.training.tooltip.startConnection : ""
+                    }
+                    arrow
+                  >
+                    <span>
+                      <Button
+                        variant="outlined"
+                        color="error"
+                        size="small"
+                        onClick={() => startBulkRecording(cls.id, 10)}
+                        disabled={
+                          !isConnected ||
+                          dataTimeoutError ||
+                          recordingClassId !== null
+                        }
+                        sx={{ minWidth: 0, px: 1.5 }}
+                      >
+                        {t.training.recordBulk}
                       </Button>
                     </span>
                   </Tooltip>
