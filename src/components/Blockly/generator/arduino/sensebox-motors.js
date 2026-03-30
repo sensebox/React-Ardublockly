@@ -97,3 +97,53 @@ Blockly.Generator.Arduino.forBlock["sensebox_motors_moveStepperMotor"] =
     var code = `stepper_motor.step(${steps});  // 2048 steps correspond to one rotation\n`;
     return code;
   };
+
+/**
+ *  ESP DC Motors
+ */
+Blockly.Generator.Arduino.forBlock["sensebox_motors_esp_init"] =
+  function () {
+    var port = this.getFieldValue("port");
+    var duty =
+      Blockly.Generator.Arduino.valueToCode(
+        this,
+        "duty",
+        Blockly.Generator.Arduino.ORDER_ATOMIC,
+      ) || "50";
+    // TODO: Add library includes and initialization code
+    var code = `// Initialize  ESP Motor ${port} with duty cycle ${duty}%\n`;
+    return code;
+  };
+
+Blockly.Generator.Arduino.forBlock["sensebox_motors_esp_forward"] =
+  function () {
+    var port = this.getFieldValue("port");
+    var duty =
+      Blockly.Generator.Arduino.valueToCode(
+        this,
+        "duty",
+        Blockly.Generator.Arduino.ORDER_ATOMIC,
+      ) || "50";
+    var code = `// Move  ESP Motor ${port} forward with duty cycle ${duty}%\n`;
+    return code;
+  };
+
+Blockly.Generator.Arduino.forBlock["sensebox_motors_esp_backward"] =
+  function () {
+    var port = this.getFieldValue("port");
+    var duty =
+      Blockly.Generator.Arduino.valueToCode(
+        this,
+        "duty",
+        Blockly.Generator.Arduino.ORDER_ATOMIC,
+      ) || "50";
+    var code = `// Move  ESP Motor ${port} backward with duty cycle ${duty}%\n`;
+    return code;
+  };
+
+Blockly.Generator.Arduino.forBlock["sensebox_motors_esp_stop"] =
+  function () {
+    var port = this.getFieldValue("port");
+    var code = `// Stop  ESP Motor ${port}\n`;
+    return code;
+  };
