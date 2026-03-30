@@ -11,6 +11,8 @@ import {
   CardActions,
   Chip,
   IconButton,
+  Tabs,
+  Tab,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -40,6 +42,8 @@ import SerialCameraErrorHandler, {
   ConnectionStatus,
 } from "../SerialCameraErrorHandler";
 import { downloadAccelerometerFirmware } from "../utils/firmwareDownload";
+import PrebuiltDatasetSelector from "./PrebuiltDatasetSelector";
+import { loadSelectedClasses } from "../../../../data/acceleration-datasets";
 
 // ─── SampleThumbnail ─────────────────────────────────────────────────────────
 // A small square canvas showing the X/Y/Z graph of a recorded gesture sample.
@@ -266,6 +270,8 @@ const AccelerationModelTrainer = ({
   const countdownRef = useRef(null);
   const [isFloatingGraphCollapsed, setIsFloatingGraphCollapsed] =
     useState(false);
+  const [trainingTab, setTrainingTab] = useState(0);
+  const [prebuiltSelections, setPrebuiltSelections] = useState([]);
 
   const language = useSelector((s) => s.general.language);
   const t = getAccelerationTranslations();
@@ -393,6 +399,23 @@ const AccelerationModelTrainer = ({
     [onClassesChange],
   );
 
+  // ─── Prebuilt dataset loading ────────────────────────────────────────────
+
+  const buildPrebuiltClasses = useCallback((selections) => {
+    const language = (window.localStorage.getItem("locale") || "de_DE").split(
+      "_",
+    )[0];
+    return loadSelectedClasses(selections).map((cls) => ({
+      id: cls.id,
+      name:
+        typeof cls.name === "object"
+          ? cls.name[language] || cls.name.en
+          : cls.name,
+      samples: cls.samples,
+      isPrebuilt: true,
+    }));
+  }, []);
+
   // ─── Gesture recording ───────────────────────────────────────────────────
 
   const startRecording = useCallback(
@@ -456,16 +479,31 @@ const AccelerationModelTrainer = ({
   // ─── Training ────────────────────────────────────────────────────────────
 
   const trainModel = useCallback(async () => {
-    if (classes.length < 2 || classes.some((cls) => cls.samples.length < 2)) {
-      onTrainingError(t.training.errorInsufficientData);
-      return;
+    let classesToTrain = classes;
+
+    if (trainingTab === 0) {
+      // Load prebuilt classes at train-time
+      classesToTrain = buildPrebuiltClasses(prebuiltSelections);
+      if (classesToTrain.length < 2) {
+        onTrainingError(t.training.errorInsufficientData);
+        return;
+      }
+      // Sync into parent state so the rest of the UI reflects the loaded classes
+      onClassesChange(classesToTrain);
+    } else {
+      if (classes.length < 2 || classes.some((cls) => cls.samples.length < 2)) {
+        onTrainingError(t.training.errorInsufficientData);
+        return;
+      }
     }
 
-    const hasEnoughSamples = classes.every((cls) => cls.samples.length >= 10);
+    const hasEnoughSamples = classesToTrain.every(
+      (cls) => cls.samples.length >= 10,
+    );
     setTrainedWithEnoughSamples(hasEnoughSamples);
 
     await executeTraining(
-      classes,
+      classesToTrain,
       onTrainingStart,
       onTrainingError,
       onModelTrained,
@@ -474,6 +512,10 @@ const AccelerationModelTrainer = ({
     );
   }, [
     classes,
+    trainingTab,
+    prebuiltSelections,
+    buildPrebuiltClasses,
+    onClassesChange,
     onTrainingStart,
     onTrainingError,
     onModelTrained,
@@ -487,7 +529,9 @@ const AccelerationModelTrainer = ({
 
   const canAddClass = classes.length < 5;
   const canTrain =
-    classes.length >= 2 && classes.every((cls) => cls.samples.length >= 2);
+    trainingTab === 0
+      ? prebuiltSelections.length >= 2
+      : classes.length >= 2 && classes.every((cls) => cls.samples.length >= 2);
 
   return (
     <Box>
@@ -672,222 +716,257 @@ const AccelerationModelTrainer = ({
         </Box>
       )}
 
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          {/* Classes */}
-          <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
-            {classes.map((cls) => {
-              const isRecording = recordingClassId === cls.id;
-              return (
-                <Card
-                  key={cls.id}
-                  variant="outlined"
-                  sx={{ minWidth: 200, flex: "1 1 200px", maxWidth: 320 }}
-                >
-                  <CardContent>
-                    {editingClassId === cls.id ? (
-                      <Box sx={{ display: "flex", gap: 1, mb: 1 }}>
-                        <TextField
-                          size="small"
-                          value={editingClassName}
-                          onChange={(e) => setEditingClassName(e.target.value)}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter") saveClassRename();
-                            if (e.key === "Escape") cancelEditingClass();
-                          }}
-                          autoFocus
-                        />
-                        <Button size="small" onClick={saveClassRename}>
-                          OK
-                        </Button>
-                        <Button size="small" onClick={cancelEditingClass}>
-                          {t.training.cancel}
-                        </Button>
-                      </Box>
-                    ) : (
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          mb: 1,
-                        }}
-                      >
-                        <Typography
-                          variant="subtitle1"
-                          sx={{ cursor: "pointer", fontWeight: "medium" }}
-                          onClick={() => startEditingClass(cls.id, cls.name)}
-                        >
-                          {cls.name}
-                        </Typography>
-                        <IconButton
-                          size="small"
-                          onClick={() => deleteClass(cls.id)}
-                        >
-                          <DeleteIcon fontSize="small" />
-                        </IconButton>
-                      </Box>
-                    )}
+      {/* ─── Training Tabs ───────────────────────────────────────────────── */}
+      <Box sx={{ borderBottom: 1, borderColor: "divider", mt: 3 }}>
+        <Tabs value={trainingTab} onChange={(_, v) => setTrainingTab(v)}>
+          <Tab label={t.training.tabPrebuilt || "Pre-built Datasets"} />
+          <Tab label={t.training.tabCustom || "Record Your Own"} />
+        </Tabs>
+      </Box>
 
-                    {/* Sample thumbnails */}
+      {/* Tab 0: Pre-built Datasets */}
+      {trainingTab === 0 && (
+        <Box sx={{ pt: 2 }}>
+          <PrebuiltDatasetSelector
+            onSelectionsChange={setPrebuiltSelections}
+            disabled={disabled || isTraining}
+          />
+        </Box>
+      )}
+
+      {/* Tab 1: Record Your Own */}
+      {trainingTab === 1 && (
+        <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", pt: 2 }}>
+          {classes.map((cls) => {
+            const isRecording = recordingClassId === cls.id;
+            return (
+              <Card
+                key={cls.id}
+                variant="outlined"
+                sx={{ minWidth: 200, flex: "1 1 200px", maxWidth: 320 }}
+              >
+                <CardContent>
+                  {editingClassId === cls.id ? (
+                    <Box sx={{ display: "flex", gap: 1, mb: 1 }}>
+                      <TextField
+                        size="small"
+                        value={editingClassName}
+                        onChange={(e) => setEditingClassName(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") saveClassRename();
+                          if (e.key === "Escape") cancelEditingClass();
+                        }}
+                        autoFocus
+                      />
+                      <Button size="small" onClick={saveClassRename}>
+                        OK
+                      </Button>
+                      <Button size="small" onClick={cancelEditingClass}>
+                        {t.training.cancel}
+                      </Button>
+                    </Box>
+                  ) : (
                     <Box
                       sx={{
                         display: "flex",
-                        flexWrap: "wrap",
-                        gap: 0.75,
-                        mt: 1,
+                        justifyContent: "space-between",
+                        alignItems: "center",
                         mb: 1,
                       }}
                     >
-                      {cls.samples.map((sample) => (
-                        <SampleThumbnail
-                          key={sample.id}
-                          sample={sample}
-                          onDelete={(id) => removeSample(cls.id, id)}
-                        />
-                      ))}
-                    </Box>
-
-                    {/* Recording state */}
-                    {isRecording && countdown !== null && countdown > 0 && (
-                      <Typography variant="body2" color="primary">
-                        {t.training.recordingCountdown.replace(
-                          "{seconds}",
-                          countdown,
-                        )}
+                      <Typography
+                        variant="subtitle1"
+                        sx={{ cursor: "pointer", fontWeight: "medium" }}
+                        onClick={() => startEditingClass(cls.id, cls.name)}
+                      >
+                        {cls.name}
                       </Typography>
-                    )}
-                    {isRecording && countdown === 0 && (
-                      <Box sx={{ mt: 1 }}>
-                        <Typography
-                          variant="body2"
-                          color="error"
-                          sx={{ mb: 0.5 }}
-                        >
-                          {t.training.recording}
-                        </Typography>
-                        <LinearProgress color="error" />
-                      </Box>
-                    )}
-                  </CardContent>
-                  <CardActions>
-                    <Tooltip
-                      title={
-                        !isConnected ? t.training.tooltip.startConnection : ""
-                      }
-                      arrow
-                    >
-                      <span style={{ width: "100%" }}>
-                        <Button
-                          variant="contained"
-                          color="error"
-                          size="small"
-                          fullWidth
-                          startIcon={<RecordIcon />}
-                          onClick={() => startRecording(cls.id)}
-                          disabled={
-                            !isConnected ||
-                            dataTimeoutError ||
-                            recordingClassId !== null
-                          }
-                        >
-                          {t.training.record}
-                        </Button>
-                      </span>
-                    </Tooltip>
-                  </CardActions>
-                </Card>
-              );
-            })}
+                      <IconButton
+                        size="small"
+                        onClick={() => deleteClass(cls.id)}
+                      >
+                        <DeleteIcon fontSize="small" />
+                      </IconButton>
+                    </Box>
+                  )}
 
-            {/* Add Class button */}
-            {canAddClass && (
-              <Box sx={{ display: "flex", alignItems: "flex-start" }}>
-                <Card
-                  variant="outlined"
-                  sx={{
-                    minWidth: 200,
-                    flex: "1 1 200px",
-                    maxWidth: 320,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    cursor: "pointer",
-                    border: "2px dashed",
-                    borderColor: "grey.400",
-                    "&:hover": { borderColor: "primary.main" },
-                  }}
-                  onClick={() => setShowAddDialog(true)}
-                >
-                  <Box sx={{ textAlign: "center", p: 3 }}>
-                    <AddIcon sx={{ fontSize: 32, color: "grey.500" }} />
-                    <Typography variant="body2" color="text.secondary">
-                      {t.training.addClass}
-                    </Typography>
+                  {/* Sample thumbnails */}
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: 0.75,
+                      mt: 1,
+                      mb: 1,
+                    }}
+                  >
+                    {cls.samples.map((sample) => (
+                      <SampleThumbnail
+                        key={sample.id}
+                        sample={sample}
+                        onDelete={(id) => removeSample(cls.id, id)}
+                      />
+                    ))}
                   </Box>
-                </Card>
 
-                <HelpButton
-                  onClick={() => onOpenHelp && onOpenHelp("addClass")}
-                  tooltip={t.training.tooltip.helpAddClass}
-                />
-              </Box>
-            )}
-          </Box>
+                  {/* Recording state */}
+                  {isRecording && countdown !== null && countdown > 0 && (
+                    <Typography variant="body2" color="primary">
+                      {t.training.recordingCountdown.replace(
+                        "{seconds}",
+                        countdown,
+                      )}
+                    </Typography>
+                  )}
+                  {isRecording && countdown === 0 && (
+                    <Box sx={{ mt: 1 }}>
+                      <Typography
+                        variant="body2"
+                        color="error"
+                        sx={{ mb: 0.5 }}
+                      >
+                        {t.training.recording}
+                      </Typography>
+                      <LinearProgress color="error" />
+                    </Box>
+                  )}
+                </CardContent>
+                <CardActions>
+                  <Tooltip
+                    title={
+                      !isConnected ? t.training.tooltip.startConnection : ""
+                    }
+                    arrow
+                  >
+                    <span style={{ width: "100%" }}>
+                      <Button
+                        variant="contained"
+                        color="error"
+                        size="small"
+                        fullWidth
+                        startIcon={<RecordIcon />}
+                        onClick={() => startRecording(cls.id)}
+                        disabled={
+                          !isConnected ||
+                          dataTimeoutError ||
+                          recordingClassId !== null
+                        }
+                      >
+                        {t.training.record}
+                      </Button>
+                    </span>
+                  </Tooltip>
+                </CardActions>
+              </Card>
+            );
+          })}
 
-          {/* Train button */}
-          <Box sx={{ mt: 3, display: "flex", gap: 1, alignItems: "center" }}>
-            <Tooltip
-              title={
-                !canTrain
-                  ? classes.length < 2
-                    ? t.training.tooltip.moreClasses
-                    : t.training.tooltip.moreSamples
-                  : ""
-              }
-              arrow
-            >
-              <span>
-                <Button
-                  variant="contained"
-                  onClick={trainModel}
-                  disabled={!canTrain || isTraining}
-                  size="large"
-                >
-                  {isTraining
-                    ? t.training.trainingInProgress
-                    : t.training.trainModel}
-                </Button>
-              </span>
-            </Tooltip>
-            <HelpButton
-              onClick={() => onOpenHelp && onOpenHelp("trainModel")}
-              tooltip={t.training.tooltip.helpTraining}
-            />
-          </Box>
+          {/* Add Class button */}
+          {canAddClass && (
+            <Box sx={{ display: "flex", alignItems: "flex-start" }}>
+              <Card
+                variant="outlined"
+                sx={{
+                  minWidth: 200,
+                  flex: "1 1 200px",
+                  maxWidth: 320,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                  border: "2px dashed",
+                  borderColor: "grey.400",
+                  "&:hover": { borderColor: "primary.main" },
+                }}
+                onClick={() => setShowAddDialog(true)}
+              >
+                <Box sx={{ textAlign: "center", p: 3 }}>
+                  <AddIcon sx={{ fontSize: 32, color: "grey.500" }} />
+                  <Typography variant="body2" color="text.secondary">
+                    {t.training.addClass}
+                  </Typography>
+                </Box>
+              </Card>
 
-          {/* Training progress */}
-          {isTraining && (
-            <Box sx={{ mt: 2 }}>
-              <Typography variant="body2" color="text.secondary">
-                {t.training.trainingEpoch
-                  .replace("{epoch}", trainingProgress.epoch)
-                  .replace("{totalEpochs}", trainingProgress.totalEpochs)}
-              </Typography>
-              <LinearProgress
-                variant="determinate"
-                value={
-                  trainingProgress.totalEpochs
-                    ? (trainingProgress.epoch / trainingProgress.totalEpochs) *
-                      100
-                    : 0
-                }
-                sx={{ mt: 1 }}
+              <HelpButton
+                onClick={() => onOpenHelp && onOpenHelp("addClass")}
+                tooltip={t.training.tooltip.helpAddClass}
               />
             </Box>
           )}
-        </Grid>
-      </Grid>
+        </Box>
+      )}
+
+      {/* Train button */}
+      <Box sx={{ mt: 3, display: "flex", gap: 1, alignItems: "center" }}>
+        <Tooltip
+          title={
+            !canTrain
+              ? classes.length < 2
+                ? t.training.tooltip.moreClasses
+                : t.training.tooltip.moreSamples
+              : ""
+          }
+          arrow
+        >
+          <span>
+            <Button
+              variant="contained"
+              onClick={trainModel}
+              disabled={!canTrain || isTraining}
+              size="large"
+            >
+              {isTraining
+                ? t.training.trainingInProgress
+                : t.training.trainModel}
+            </Button>
+          </span>
+        </Tooltip>
+        <HelpButton
+          onClick={() => onOpenHelp && onOpenHelp("trainModel")}
+          tooltip={t.training.tooltip.helpTraining}
+        />
+      </Box>
+
+      {/* Training progress */}
+      {isTraining && (
+        <Box sx={{ mt: 2 }}>
+          <Typography variant="body2" color="text.secondary">
+            {t.training.trainingEpoch
+              .replace("{epoch}", trainingProgress.epoch)
+              .replace("{totalEpochs}", trainingProgress.totalEpochs)}
+          </Typography>
+          <LinearProgress
+            variant="determinate"
+            value={
+              trainingProgress.totalEpochs
+                ? (trainingProgress.epoch / trainingProgress.totalEpochs) * 100
+                : 0
+            }
+            sx={{ mt: 1 }}
+          />
+        </Box>
+      )}
+
+      {/* Final accuracy after training */}
+      {!isTraining && finalAccuracy !== null && finalAccuracy !== undefined && (
+        <Box sx={{ mt: 2, display: "flex", alignItems: "center", gap: 1 }}>
+          <Typography variant="body2" color="text.secondary">
+            {t.training.testResultsTitle}:
+          </Typography>
+          <Chip
+            label={`${t.training.finalAccuracy}: ${(finalAccuracy * 100).toFixed(1)}%`}
+            color={
+              finalAccuracy >= 0.8
+                ? "success"
+                : finalAccuracy >= 0.6
+                  ? "warning"
+                  : "error"
+            }
+            size="small"
+          />
+        </Box>
+      )}
 
       {/* Add Class Dialog */}
       <Dialog

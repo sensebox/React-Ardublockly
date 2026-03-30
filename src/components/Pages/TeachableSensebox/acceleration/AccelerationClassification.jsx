@@ -145,6 +145,7 @@ const AccelerationClassification = () => {
               activeGroupKeys={activeGroupKeys}
               onModelConfigChange={setModelConfig}
               onActiveGroupsChange={setActiveGroupKeys}
+              trainedModel={trainedModel}
             />
           </Paper>
 

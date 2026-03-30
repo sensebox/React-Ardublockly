@@ -70,6 +70,8 @@ export const accelerationTranslations_de = {
     axisY: "Y",
     axisZ: "Z",
     gestureDuration: "Aufnahmedauer: {seconds}s",
+    tabPrebuilt: "Vorgefertigte Datens\u00e4tze",
+    tabCustom: "Selbst aufnehmen",
     tooltip: {
       helpMain: "Was ist Bewegungsklassifizierung?",
       browserCompatible:
@@ -156,5 +158,15 @@ export const accelerationTranslations_de = {
     architecture: {
       title: "Modell-Architektur",
     },
+  },
+  prebuiltDatasets: {
+    title: "Vorgefertigte Datens\u00e4tze",
+    selectAll: "Alle ausw\u00e4hlen",
+    deselectAll: "Alle abw\u00e4hlen",
+    selected: "ausgew\u00e4hlt",
+    minClassesWarning:
+      "W\u00e4hle mindestens 2 Klassen aus, um ein Modell zu trainieren.",
+    loadAndTrain: "Klassen laden & trainieren",
+    samples: "Aufnahmen",
   },
 };
