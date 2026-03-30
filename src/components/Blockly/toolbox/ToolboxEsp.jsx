@@ -432,7 +432,7 @@ export const ToolboxEsp = () => {
       </Category>
 
       {/* ============================== MOTORS ============================== */}
-      <Category name={Blockly.Msg.toolbox_motors} colour={getColour().motors}>
+      <Category name={Blockly.Msg.toolbox_motors} colour={getColour().sensebox}>
         <Block type="sensebox_motors_esp_init">
           <Value name="duty">
             <Block type="math_number">
@@ -713,7 +713,7 @@ export const ToolboxEsp = () => {
         </Category>
 
         {/* -------- MOTORS -------- */}
-        <Category name={Blockly.Msg.toolbox_motors} colour={getColour().motors}>
+        <Category name={Blockly.Msg.toolbox_motors} colour={getColour().sensebox}>
           <Block type="sensebox_motors_esp_init" />
           <Block type="sensebox_motors_esp_forward" />
           <Block type="sensebox_motors_esp_backward" />
