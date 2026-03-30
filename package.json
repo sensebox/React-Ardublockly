@@ -16,7 +16,7 @@
     "@blockly/toolbox-search": "^3.1.8",
     "@blockly/workspace-backpack": "^7.0.2",
     "@blockly/workspace-minimap": "^0.3.2",
-    "@blockly/zoom-to-fit": "^7.0.1",
+    "@blockly/zoom-to-fit": "^7.0.8",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@fortawesome/fontawesome-svg-core": "^6.2.1",

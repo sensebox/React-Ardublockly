@@ -321,7 +321,7 @@
   resolved "https://registry.yarnpkg.com/@blockly/workspace-minimap/-/workspace-minimap-0.3.8.tgz#c0017a0f8289550d75b9a8430a57191c25cfd960"
   integrity sha512-vXijgYfaUJY9BES8tz/+VQ12rCUqWOhyZwRBXD/ZbAsNi7y88dTfoxo34qHTG/KbkOer4SoyxPoFKBEE3H85bg==
 
-"@blockly/zoom-to-fit@^7.0.1":
+"@blockly/zoom-to-fit@^7.0.8":
   version "7.0.8"
   resolved "https://registry.yarnpkg.com/@blockly/zoom-to-fit/-/zoom-to-fit-7.0.8.tgz#6171ff74ec91a80f7679a2d5ab5fd26d185ca036"
   integrity sha512-ut9XlVt4Z0U9D9kvsRaQaRF3VtfEL8IR61ySI+9iQyoN0mpRz+BmwcSe2oTDohKMm1zDZxc1DzBc5l2P9YPlng==
