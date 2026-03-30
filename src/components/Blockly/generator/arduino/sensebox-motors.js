@@ -104,9 +104,8 @@ Blockly.Generator.Arduino.forBlock["sensebox_motors_moveStepperMotor"] =
 Blockly.Generator.Arduino.forBlock["sensebox_motors_esp_init"] =
   function () {
     var port = this.getFieldValue("port");
-    var duty = this.getFieldValue("duty");
     // TODO: Add library includes and initialization code
-    var code = `// Initialize ESP Pump ${port} with duty cycle ${duty}%\n`;
+    var code = `// Initialize ESP Pump ${port}\n`;
     return code;
   };
 
@@ -114,7 +113,7 @@ Blockly.Generator.Arduino.forBlock["sensebox_motors_esp_forward"] =
   function () {
     var port = this.getFieldValue("port");
     var duty = this.getFieldValue("duty");
-    var code = `// Speed up ESP Pump ${port} with duty cycle ${duty}%\n`;
+    var code = `// Start ESP Pump ${port} with power ${duty}%\n`;
     return code;
   };
 
@@ -122,7 +121,7 @@ Blockly.Generator.Arduino.forBlock["sensebox_motors_esp_backward"] =
   function () {
     var port = this.getFieldValue("port");
     var duty = this.getFieldValue("duty");
-    var code = `// Slow down ESP Pump ${port} with duty cycle ${duty}%\n`;
+    var code = `// Set ESP Pump ${port} power to ${duty}%\n`;
     return code;
   };
 

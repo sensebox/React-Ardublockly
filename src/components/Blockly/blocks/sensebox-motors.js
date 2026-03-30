@@ -196,10 +196,6 @@ Blockly.Blocks["sensebox_motors_esp_init"] = {
       .appendField(Blockly.Msg.sensebox_motors_esp_port)
       .appendField(new Blockly.FieldDropdown(portOptions), "port")
       .setAlign(Blockly.inputs.Align.RIGHT);
-    this.appendDummyInput()
-      .appendField(Blockly.Msg.sensebox_motors_esp_duty)
-      .appendField(new FieldSlider(50, 0, 100), "duty")
-      .setAlign(Blockly.inputs.Align.RIGHT);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(getColour().sensebox);
