@@ -18,11 +18,10 @@ export async function downloadCameraFirmware(
 ) {
   try {
     const response = await fetch(`${API_BASE_URL}/api/compile-capture/camera`, {
-      method: "POST",
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ boardType }),
     });
 
     if (!response.ok) {
@@ -76,11 +75,10 @@ export async function downloadAccelerometerFirmware(
     const response = await fetch(
       `${API_BASE_URL}/api/compile-capture/acceleration`,
       {
-        method: "POST",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ boardType }),
       },
     );
 
