@@ -299,7 +299,7 @@
   resolved "https://registry.yarnpkg.com/@blockly/plugin-scroll-options/-/plugin-scroll-options-7.0.8.tgz#ad2c184d585500fd7948658e2acef3ae3d2da32d"
   integrity sha512-swF5iF+AVG6CXHp/ebR0hGIZDKhOu+I2pWdUgdSXBcRZx/PeO94LNQrBtuDX4Z5KyapfzTnNfwwR6z/uk3xeaA==
 
-"@blockly/plugin-typed-variable-modal@^9.0.2":
+"@blockly/plugin-typed-variable-modal@^9.0.8":
   version "9.0.8"
   resolved "https://registry.yarnpkg.com/@blockly/plugin-typed-variable-modal/-/plugin-typed-variable-modal-9.0.8.tgz#857a8753ecf18c624d55ef40f57f228dd266c59b"
   integrity sha512-ZA5+VFFPmHdP2m0OkNwDIm0XNT4I/QgM2WNHNH57/Sjpwy98DqvhRylavvqKZ1Wivz0b8i1T4WuO7O0rIz/xIw==
