@@ -1,4 +1,10 @@
-import React, { useRef, useState, useLayoutEffect, useCallback } from "react";
+import React, {
+  useRef,
+  useState,
+  useLayoutEffect,
+  useCallback,
+  useMemo,
+} from "react";
 import {
   Box,
   Typography,
@@ -15,7 +21,7 @@ import { Add as AddIcon, Remove as RemoveIcon } from "@mui/icons-material";
 const MAX_VISIBLE_NODES = 7;
 
 /** Diameter of each node circle in pixels. */
-const NODE_SIZE = 14;
+const NODE_SIZE = 25;
 
 /**
  * Height (px) of the "Hidden Layers [− N +]" banner + the downward bracket.
@@ -47,8 +53,8 @@ export const DEFAULT_FEATURE_GROUPS = [
  */
 export const DEFAULT_MODEL_CONFIG = {
   hiddenLayers: [
-    { units: 8, activation: "relu" },
-    { units: 8, activation: "relu" },
+    { units: 4, activation: "relu" },
+    { units: 2, activation: "relu" },
   ],
 };
 
@@ -56,6 +62,35 @@ export const DEFAULT_MODEL_CONFIG = {
 export const DEFAULT_ACTIVE_GROUP_KEYS = DEFAULT_FEATURE_GROUPS.map(
   (g) => g.key,
 );
+
+// ─── Weight-visualization helpers ────────────────────────────────────────────
+
+/** Maximum absolute value in a 2-D weight kernel [inSize][outSize]. */
+function maxAbsInMatrix(matrix) {
+  let max = 0;
+  for (const row of matrix) {
+    for (const v of row) {
+      const a = Math.abs(v);
+      if (a > max) max = a;
+    }
+  }
+  return max || 1;
+}
+
+/**
+ * Convert a normalised weight magnitude to SVG stroke properties.
+ * @param {number} norm        weight / maxAbs (sign ignored — only magnitude matters)
+ * @param {string} baseColor   hex colour string, e.g. "#4EAF47"
+ */
+function weightToStrokeProps(norm, baseColor) {
+  const abs = Math.min(1, Math.abs(norm));
+  return {
+    color: baseColor,
+    strokeWidth: 0.5 + 3.5 * abs,
+    opacity: Math.max(0.08, 0.12 + 0.78 * abs),
+    strokeDasharray: "4,3",
+  };
+}
 
 // ─── useDiagramConnections ────────────────────────────────────────────────────
 
@@ -80,6 +115,8 @@ function useDiagramConnections(
   hiddenLayers,
   classNames,
   activeGroupKeys,
+  extractedWeights,
+  primaryColor,
 ) {
   const [connections, setConnections] = useState([]);
 
@@ -103,20 +140,79 @@ function useDiagramConnections(
     const activeSet = activeGroupKeys ? new Set(activeGroupKeys) : null;
     const newConnections = [];
 
+    // ── Weight helpers (active only when a model has been trained) ────────
+    const hasWeights = Boolean(extractedWeights?.kernels?.length);
+
+    // Map each active feature group key → its sequential index in the
+    // feature vector (same ordering as DEFAULT_FEATURE_GROUPS).
+    const groupActiveIdx = {};
+    if (hasWeights) {
+      let ai = 0;
+      featureGroups.forEach((g) => {
+        if (!activeSet || activeSet.has(g.key)) {
+          groupActiveIdx[g.key] = ai++;
+        }
+      });
+    }
+
     // ── Input → Hidden Layer 1 ────────────────────────────────────────────
-    // Each active input group fans out to every visible node in layer 1.
     const layer1Refs = layerNodeRefs[0];
     if (layer1Refs && inputGroupRefs.length > 0) {
       const layer1Positions = layer1Refs
         .map((r) => toLocal(r.current))
         .filter(Boolean);
       if (layer1Positions.length > 0) {
+        // Pre-compute max L2-norm magnitude across all (group, neuron) pairs
+        const kernel0 = hasWeights ? extractedWeights.kernels[0] : null;
+        let maxAbs0 = 1;
+        if (kernel0) {
+          featureGroups.forEach((group) => {
+            if (activeSet && !activeSet.has(group.key)) return;
+            const ai = groupActiveIdx[group.key];
+            if (ai === undefined) return;
+            layer1Positions.forEach((_, nj) => {
+              let sumSq = 0;
+              for (let f = 0; f < 3; f++) {
+                const v = kernel0[ai * 3 + f]?.[nj] ?? 0;
+                sumSq += v * v;
+              }
+              maxAbs0 = Math.max(maxAbs0, Math.sqrt(sumSq));
+            });
+          });
+        }
+
         featureGroups.forEach((group, gi) => {
           if (activeSet && !activeSet.has(group.key)) return;
           const src = toLocal(inputGroupRefs[gi]?.current);
           if (!src) return;
-          layer1Positions.forEach((dst) => {
+          layer1Positions.forEach((dst, nj) => {
             const midX = (src.right + dst.left) / 2;
+
+            let strokeProps;
+            if (kernel0) {
+              const ai = groupActiveIdx[group.key];
+              let mag = 0,
+                signSum = 0;
+              if (ai !== undefined) {
+                let sumSq = 0;
+                for (let f = 0; f < 3; f++) {
+                  const v = kernel0[ai * 3 + f]?.[nj] ?? 0;
+                  sumSq += v * v;
+                  signSum += v;
+                }
+                mag = Math.sqrt(sumSq);
+              }
+              const norm = (signSum >= 0 ? 1 : -1) * (mag / maxAbs0);
+              strokeProps = weightToStrokeProps(norm, group.color);
+            } else {
+              strokeProps = {
+                color: group.color,
+                strokeWidth: 2,
+                opacity: 0.3,
+                strokeDasharray: "4,3",
+              };
+            }
+
             newConnections.push({
               x1: src.right,
               y1: src.cy,
@@ -126,9 +222,7 @@ function useDiagramConnections(
               cy1: src.cy,
               cx2: midX,
               cy2: dst.cy,
-              color: group.color,
-              strokeWidth: 0.7,
-              opacity: 0.3,
+              ...strokeProps,
             });
           });
         });
@@ -136,19 +230,35 @@ function useDiagramConnections(
     }
 
     // ── Hidden Layer i → Hidden Layer i+1 ────────────────────────────────
-    // All-to-all between visible node circles (7×7 = 49 thin grey lines).
     for (let li = 0; li < hiddenLayers.length - 1; li++) {
       const srcRefs = layerNodeRefs[li];
       const dstRefs = layerNodeRefs[li + 1];
       if (!srcRefs || !dstRefs) continue;
 
-      srcRefs.forEach((srcRef) => {
+      const kernelHH = hasWeights ? extractedWeights.kernels[li + 1] : null;
+      const maxAbsHH = kernelHH ? maxAbsInMatrix(kernelHH) : 1;
+
+      srcRefs.forEach((srcRef, ni) => {
         const src = toLocal(srcRef.current);
         if (!src) return;
-        dstRefs.forEach((dstRef) => {
+        dstRefs.forEach((dstRef, nj) => {
           const dst = toLocal(dstRef.current);
           if (!dst) return;
           const midX = (src.right + dst.left) / 2;
+
+          let strokeProps;
+          if (kernelHH) {
+            const w = kernelHH[ni]?.[nj] ?? 0;
+            strokeProps = weightToStrokeProps(w / maxAbsHH, primaryColor);
+          } else {
+            strokeProps = {
+              color: primaryColor,
+              strokeWidth: 1.5,
+              opacity: 0.25,
+              strokeDasharray: "4,3",
+            };
+          }
+
           newConnections.push({
             x1: src.right,
             y1: src.cy,
@@ -158,27 +268,51 @@ function useDiagramConnections(
             cy1: src.cy,
             cx2: midX,
             cy2: dst.cy,
-            color: "#888",
-            strokeWidth: 0.6,
-            opacity: 0.18,
+            ...strokeProps,
           });
         });
       });
     }
 
     // ── Last Hidden Layer → Output ────────────────────────────────────────
-    // Every visible node in the last layer connects to every output class chip.
     const lastLayerRefs = layerNodeRefs[layerNodeRefs.length - 1];
     if (lastLayerRefs && outputNodeRefs.length > 0) {
       const lastPositions = lastLayerRefs
         .map((r) => toLocal(r.current))
         .filter(Boolean);
       if (lastPositions.length > 0) {
-        lastPositions.forEach((src) => {
+        const kernelOut = hasWeights
+          ? extractedWeights.kernels[hiddenLayers.length]
+          : null;
+        const maxAbsOut = kernelOut ? maxAbsInMatrix(kernelOut) : 1;
+
+        lastPositions.forEach((src, ni) => {
           outputNodeRefs.forEach((outRef, oi) => {
             const dst = toLocal(outRef?.current);
             if (!dst) return;
             const midX = (src.right + dst.left) / 2;
+
+            const classColor = CLASS_COLORS[oi % CLASS_COLORS.length];
+            let strokeProps;
+            if (kernelOut) {
+              const w = kernelOut[ni]?.[oi] ?? 0;
+              const norm = w / maxAbsOut;
+              const abs = Math.min(1, Math.abs(norm));
+              strokeProps = {
+                color: classColor,
+                strokeWidth: 0.5 + 3.5 * abs,
+                opacity: Math.max(0.08, 0.1 + 0.78 * abs),
+                strokeDasharray: "4,3",
+              };
+            } else {
+              strokeProps = {
+                color: classColor,
+                strokeWidth: 2,
+                opacity: 0.3,
+                strokeDasharray: "4,3",
+              };
+            }
+
             newConnections.push({
               x1: src.right,
               y1: src.cy,
@@ -188,9 +322,7 @@ function useDiagramConnections(
               cy1: src.cy,
               cx2: midX,
               cy2: dst.cy,
-              color: CLASS_COLORS[oi % CLASS_COLORS.length],
-              strokeWidth: 0.7,
-              opacity: 0.3,
+              ...strokeProps,
             });
           });
         });
@@ -207,6 +339,8 @@ function useDiagramConnections(
     hiddenLayers,
     classNames,
     activeGroupKeys,
+    extractedWeights,
+    primaryColor,
   ]);
 
   useLayoutEffect(() => {
@@ -244,12 +378,49 @@ const AccelerationModelVisualizer = ({
   activeGroupKeys = DEFAULT_ACTIVE_GROUP_KEYS,
   onModelConfigChange,
   onActiveGroupsChange,
+  trainedModel = null,
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const containerRef = useRef(null);
 
   const { hiddenLayers } = modelConfig;
+
+  // ── Trained-weight extraction ────────────────────────────────────
+  // Synchronously read kernel and bias arrays from the TF.js model.
+  const extractedWeights = useMemo(() => {
+    if (!trainedModel?.model) return null;
+    try {
+      const tfModel = trainedModel.model;
+      const kernels = [];
+      const biases = [];
+      for (const layer of tfModel.layers) {
+        const ws = layer.getWeights();
+        if (ws.length >= 2) {
+          kernels.push(ws[0].arraySync()); // shape [inSize, outSize]
+          biases.push(ws[1].arraySync()); // shape [outSize]
+        }
+      }
+      return { kernels, biases };
+    } catch {
+      return null;
+    }
+  }, [trainedModel]);
+
+  // Max |bias| across hidden layers — used to normalise neuron fill colours.
+  const biasMax = useMemo(() => {
+    if (!extractedWeights) return 1;
+    let max = 0;
+    // Exclude the last entry (output-layer biases).
+    const hiddenBiases = extractedWeights.biases.slice(0, -1);
+    for (const arr of hiddenBiases) {
+      for (const v of arr) {
+        const a = Math.abs(v);
+        if (a > max) max = a;
+      }
+    }
+    return max || 1;
+  }, [extractedWeights]);
 
   // ── Callbacks for architecture changes ─────────────────────────────────
 
@@ -267,7 +438,7 @@ const AccelerationModelVisualizer = ({
   );
 
   const addLayer = useCallback(() => {
-    if (!onModelConfigChange || hiddenLayers.length >= 5) return;
+    if (!onModelConfigChange || hiddenLayers.length >= 4) return;
     onModelConfigChange({
       ...modelConfig,
       hiddenLayers: [...hiddenLayers, { units: 8, activation: "relu" }],
@@ -340,6 +511,8 @@ const AccelerationModelVisualizer = ({
     hiddenLayers,
     classNames,
     activeGroupKeys,
+    extractedWeights,
+    theme.palette.primary.main,
   );
 
   // ── Mobile fallback ─────────────────────────────────────────────────────
@@ -399,6 +572,7 @@ const AccelerationModelVisualizer = ({
             stroke={c.color}
             strokeWidth={c.strokeWidth}
             strokeOpacity={c.opacity}
+            strokeDasharray={c.strokeDasharray}
             fill="none"
           />
         ))}
@@ -543,7 +717,7 @@ const AccelerationModelVisualizer = ({
             <IconButton
               size="small"
               onClick={addLayer}
-              disabled={hiddenLayers.length >= 5}
+              disabled={hiddenLayers.length >= 4}
               sx={{ p: 0.25 }}
             >
               <AddIcon sx={{ fontSize: 20 }} />
@@ -625,23 +799,39 @@ const AccelerationModelVisualizer = ({
                   </Box>
 
                   {/* All node circles */}
-                  {Array.from({ length: count }).map((_, ni) => (
-                    <Box
-                      key={ni}
-                      ref={(el) => {
-                        if (layerNodeRefs[li])
-                          layerNodeRefs[li][ni].current = el;
-                      }}
-                      sx={{
-                        width: NODE_SIZE,
-                        height: NODE_SIZE,
-                        borderRadius: "50%",
-                        border: `2px solid ${theme.palette.primary.main}`,
-                        bgcolor: "background.paper",
-                        flexShrink: 0,
-                      }}
-                    />
-                  ))}
+                  {Array.from({ length: count }).map((_, ni) => {
+                    const bias = extractedWeights?.biases?.[li]?.[ni];
+                    const normBias = bias !== undefined ? bias / biasMax : null;
+                    const absNorm =
+                      normBias !== null ? Math.min(1, Math.abs(normBias)) : 0;
+                    // Parse primary color to build rgba fill
+                    const pc = theme.palette.primary.main;
+                    const pr = parseInt(pc.slice(1, 3), 16);
+                    const pg = parseInt(pc.slice(3, 5), 16);
+                    const pb = parseInt(pc.slice(5, 7), 16);
+                    const neuronBg =
+                      normBias !== null
+                        ? `rgba(${pr},${pg},${pb},${(0.1 + 0.65 * absNorm).toFixed(2)})`
+                        : undefined;
+                    return (
+                      <Box
+                        key={ni}
+                        ref={(el) => {
+                          if (layerNodeRefs[li])
+                            layerNodeRefs[li][ni].current = el;
+                        }}
+                        sx={{
+                          width: NODE_SIZE,
+                          height: NODE_SIZE,
+                          borderRadius: "50%",
+                          border: `2px solid ${theme.palette.primary.main}`,
+                          bgcolor: neuronBg ?? "background.paper",
+                          flexShrink: 0,
+                          transition: "background-color 0.4s ease",
+                        }}
+                      />
+                    );
+                  })}
                 </Box>
 
                 {/* Fixed spacer between adjacent layers */}

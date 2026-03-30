@@ -72,6 +72,8 @@ export const accelerationTranslations_en = {
     axisY: "Y",
     axisZ: "Z",
     gestureDuration: "Recording duration: {seconds}s",
+    tabPrebuilt: "Pre-built Datasets",
+    tabCustom: "Record Your Own",
     tooltip: {
       helpMain: "What is Motion Classification?",
       browserCompatible:
@@ -157,5 +159,14 @@ export const accelerationTranslations_en = {
     architecture: {
       title: "Model Architecture",
     },
+  },
+  prebuiltDatasets: {
+    title: "Pre-built Datasets",
+    selectAll: "Select All",
+    deselectAll: "Deselect All",
+    selected: "selected",
+    minClassesWarning: "Select at least 2 classes to train a model.",
+    loadAndTrain: "Load Classes & Train",
+    samples: "samples",
   },
 };
