@@ -54,26 +54,26 @@ export const MOTORS = {
     "Move stepper motor. 2048 steps equal a full rotation.",
   sensebox_motors_moveStepperMotor_helpurl: "TODO",
 
-  //  ESP DC Motors
-  sensebox_motors_esp_init: "Initialize  ESP Motor",
+  //  ESP DC Pumps
+  sensebox_motors_esp_init: "Initialize ESP Pump",
   sensebox_motors_esp_port: "Port:",
   sensebox_motors_esp_duty: "Duty Cycle (%):",
   sensebox_motors_esp_init_tooltip:
-    "Initialize the DC motor on the  ESP board. Select port M1 or M2 and set the duty cycle (0-100%).",
+    "Initialize the DC pump on the ESP board. Select port M1 or M2 and set the duty cycle (0-100%).",
   sensebox_motors_esp_init_helpurl: "TODO",
 
-  sensebox_motors_esp_forward: "Move Motor Forward",
+  sensebox_motors_esp_forward: "Speed Up Pump",
   sensebox_motors_esp_forward_tooltip:
-    "Move the DC motor forward. Select port M1 or M2 and set the duty cycle (0-100%).",
+    "Speed up the DC pump. Select port M1 or M2 and set the duty cycle (0-100%).",
   sensebox_motors_esp_forward_helpurl: "TODO",
 
-  sensebox_motors_esp_backward: "Move Motor Backward",
+  sensebox_motors_esp_backward: "Slow Down Pump",
   sensebox_motors_esp_backward_tooltip:
-    "Move the DC motor backward. Select port M1 or M2 and set the duty cycle (0-100%).",
+    "Slow down the DC pump. Select port M1 or M2 and set the duty cycle (0-100%).",
   sensebox_motors_esp_backward_helpurl: "TODO",
 
-  sensebox_motors_esp_stop: "Stop Motor",
+  sensebox_motors_esp_stop: "Stop Pump",
   sensebox_motors_esp_stop_tooltip:
-    "Stop the DC motor. Select port M1 or M2.",
+    "Stop the DC pump. Select port M1 or M2.",
   sensebox_motors_esp_stop_helpurl: "TODO",
 };

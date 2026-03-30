@@ -714,6 +714,10 @@ export const ToolboxEsp = () => {
 
         {/* -------- MOTORS -------- */}
         <Category name={Blockly.Msg.toolbox_motors} colour={getColour().motors}>
+          <Block type="sensebox_motors_esp_init" />
+          <Block type="sensebox_motors_esp_forward" />
+          <Block type="sensebox_motors_esp_backward" />
+          <Block type="sensebox_motors_esp_stop" />
           <Block type="sensebox_motors_beginServoMotor" />
           <Block type="sensebox_motors_moveServoMotor">
             <Value name="degrees">

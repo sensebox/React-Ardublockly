@@ -179,7 +179,7 @@ Blockly.Blocks["sensebox_motors_moveStepperMotor"] = {
 };
 
 /**
- *  ESP DC Motors
+ *  ESP DC Pumps
  *
  */
 Blockly.Blocks["sensebox_motors_esp_init"] = {
@@ -196,12 +196,13 @@ Blockly.Blocks["sensebox_motors_esp_init"] = {
       .appendField(Blockly.Msg.sensebox_motors_esp_port)
       .appendField(new Blockly.FieldDropdown(portOptions), "port")
       .setAlign(Blockly.inputs.Align.RIGHT);
-    this.appendValueInput("duty", "Number")
+    this.appendDummyInput()
       .appendField(Blockly.Msg.sensebox_motors_esp_duty)
+      .appendField(new FieldSlider(50, 0, 100), "duty")
       .setAlign(Blockly.inputs.Align.RIGHT);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(getColour().motors);
+    this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.sensebox_motors_esp_init_tooltip);
     this.setHelpUrl(Blockly.Msg.sensebox_motors_esp_init_helpurl);
   },
@@ -221,12 +222,13 @@ Blockly.Blocks["sensebox_motors_esp_forward"] = {
       .appendField(Blockly.Msg.sensebox_motors_esp_port)
       .appendField(new Blockly.FieldDropdown(portOptions), "port")
       .setAlign(Blockly.inputs.Align.RIGHT);
-    this.appendValueInput("duty", "Number")
+    this.appendDummyInput()
       .appendField(Blockly.Msg.sensebox_motors_esp_duty)
+      .appendField(new FieldSlider(50, 0, 100), "duty")
       .setAlign(Blockly.inputs.Align.RIGHT);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(getColour().motors);
+    this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.sensebox_motors_esp_forward_tooltip);
     this.setHelpUrl(Blockly.Msg.sensebox_motors_esp_forward_helpurl);
   },
@@ -246,12 +248,13 @@ Blockly.Blocks["sensebox_motors_esp_backward"] = {
       .appendField(Blockly.Msg.sensebox_motors_esp_port)
       .appendField(new Blockly.FieldDropdown(portOptions), "port")
       .setAlign(Blockly.inputs.Align.RIGHT);
-    this.appendValueInput("duty", "Number")
+    this.appendDummyInput()
       .appendField(Blockly.Msg.sensebox_motors_esp_duty)
+      .appendField(new FieldSlider(50, 0, 100), "duty")
       .setAlign(Blockly.inputs.Align.RIGHT);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(getColour().motors);
+    this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.sensebox_motors_esp_backward_tooltip);
     this.setHelpUrl(Blockly.Msg.sensebox_motors_esp_backward_helpurl);
   },
@@ -273,7 +276,7 @@ Blockly.Blocks["sensebox_motors_esp_stop"] = {
       .setAlign(Blockly.inputs.Align.RIGHT);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(getColour().motors);
+    this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.sensebox_motors_esp_stop_tooltip);
     this.setHelpUrl(Blockly.Msg.sensebox_motors_esp_stop_helpurl);
   },

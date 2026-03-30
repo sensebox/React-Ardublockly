@@ -9,7 +9,78 @@ import {
   useTheme,
 } from "@mui/material";
 import * as Blockly from "blockly";
-import ReactMarkdown from "react-markdown";
+
+// Funktion zum Parsen von Markdown-Formatierung in React-Elemente
+const parseMarkdownText = (text) => {
+  // Safeguards
+  if (!text) return null;
+  if (typeof text !== 'string') return String(text);
+  if (text.trim() === '') return text;
+  
+  const parts = [];
+  let currentIndex = 0;
+  let key = 0;
+  
+  // Pattern für **bold** und *italic*
+  const boldPattern = /\*\*(.+?)\*\*/g;
+  const italicPattern = /\*(.+?)\*/g;
+  
+  // Erst bold matchen, dann italic
+  let match;
+  const segments = [];
+  let lastIndex = 0;
+  
+  try {
+    // Bold Patterns finden
+    const boldMatches = [...text.matchAll(/\*\*(.+?)\*\*/g)];
+    const italicMatches = [...text.matchAll(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g)];
+  
+  // Alle Matches sammeln und sortieren
+  const allMatches = [
+    ...boldMatches.map(m => ({ start: m.index, end: m.index + m[0].length, text: m[1], type: 'bold' })),
+    ...italicMatches.map(m => ({ start: m.index, end: m.index + m[0].length, text: m[1], type: 'italic' }))
+  ].sort((a, b) => a.start - b.start);
+  
+  // Overlaps entfernen (bold hat Vorrang)
+  const filteredMatches = [];
+  let lastEnd = 0;
+  for (const match of allMatches) {
+    if (match.start >= lastEnd) {
+      filteredMatches.push(match);
+      lastEnd = match.end;
+    }
+  }
+  
+  // Text zusammenbauen
+  lastIndex = 0;
+  for (const match of filteredMatches) {
+    // Text vor dem Match
+    if (match.start > lastIndex) {
+      parts.push(<span key={key++}>{text.substring(lastIndex, match.start)}</span>);
+    }
+    
+    // Formatierter Text
+    if (match.type === 'bold') {
+      parts.push(<strong key={key++}>{match.text}</strong>);
+    } else if (match.type === 'italic') {
+      parts.push(<em key={key++}>{match.text}</em>);
+    }
+    
+    lastIndex = match.end;
+  }
+  
+  // Rest des Textes
+  if (lastIndex < text.length) {
+    parts.push(<span key={key++}>{text.substring(lastIndex)}</span>);
+  }
+  
+  return parts.length > 0 ? parts : text;
+  
+  } catch (error) {
+    console.error('Error parsing markdown text:', error);
+    return text;
+  }
+};
 
 const TooltipViewer = () => {
   const theme = useTheme();
@@ -57,7 +128,9 @@ const TooltipViewer = () => {
           ></span>
         </Typography>
 
-        <ReactMarkdown>{tooltip}</ReactMarkdown>
+        <Typography variant="body1" component="div" sx={{ whiteSpace: 'pre-wrap' }}>
+          {parseMarkdownText(tooltip)}
+        </Typography>
 
         {helpurl && (
           <Button

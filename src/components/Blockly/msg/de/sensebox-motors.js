@@ -54,26 +54,26 @@ export const MOTORS = {
     "Move stepper motor. 2048 steps equal a full rotation.",
   sensebox_motors_moveStepperMotor_helpurl: "TODO",
 
-  //  ESP DC Motoren
-  sensebox_motors_esp_init: "Initialisiere  ESP Motor",
-  sensebox_motors_esp_port: "Port:",
-  sensebox_motors_esp_duty: "Duty Cycle (%):",
+  //  ESP DC Pumpen
+  sensebox_motors_esp_init: "Initialisiere ESP Pumpe",
+  sensebox_motors_esp_port: "Pin:",
+  sensebox_motors_esp_duty: "Duty (%):",
   sensebox_motors_esp_init_tooltip:
-    "Initialisiere den DC-Motor am  ESP Board. Wähle Port M1 oder M2 und setze den Duty Cycle (0-100%).",
+    "Initialisiere die DC-Pumpe am ESP Board. Wähle Pin M1 oder M2 und setze den Duty (0-100%).",
   sensebox_motors_esp_init_helpurl: "TODO",
 
-  sensebox_motors_esp_forward: "Motor beschleunigen",
+  sensebox_motors_esp_forward: "Pumpe vorwärts",
   sensebox_motors_esp_forward_tooltip:
-    "Beschleunige den Motor. Wähle Port M1 oder M2 und setze den Duty Cycle (0-100%).",
+    "Lass die Pumpe vorwärts laufen. Wähle Port M1 oder M2 und setze den Duty (0-100%).",
   sensebox_motors_esp_forward_helpurl: "TODO",
 
-  sensebox_motors_esp_backward: "Motor abbremsen",
+  sensebox_motors_esp_backward: "Pumpe rückwärts",
   sensebox_motors_esp_backward_tooltip:
-    "Bremsen den Motor. Wähle Port M1 oder M2 und setze den Duty Cycle (0-100%).",
+    "Lass die Pumpe rückwärts laufen. Wähle Port M1 oder M2 und setze den Duty (0-100%).",
   sensebox_motors_esp_backward_helpurl: "TODO",
 
-  sensebox_motors_esp_stop: "Stoppe Motor",
+  sensebox_motors_esp_stop: "Stoppe Pumpe",
   sensebox_motors_esp_stop_tooltip:
-    "Stoppe den DC-Motor. Wähle Port M1 oder M2.",
+    "Stoppe die DC-Pumpe. Wähle Port M1 oder M2.",
   sensebox_motors_esp_stop_helpurl: "TODO",
 };
