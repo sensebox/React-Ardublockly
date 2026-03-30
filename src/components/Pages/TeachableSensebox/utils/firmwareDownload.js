@@ -17,7 +17,7 @@ export async function downloadCameraFirmware(
   filename = "camera_capture.bin",
 ) {
   try {
-    const response = await fetch(`${API_BASE_URL}api/compile-capture/camera`, {
+    const response = await fetch(`${API_BASE_URL}/api/compile-capture/camera`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -74,7 +74,7 @@ export async function downloadAccelerometerFirmware(
 ) {
   try {
     const response = await fetch(
-      `${API_BASE_URL}api/compile-capture/acceleration`,
+      `${API_BASE_URL}/api/compile-capture/acceleration`,
       {
         method: "POST",
         headers: {
