@@ -26,23 +26,12 @@ export async function downloadCameraFirmware(
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.error?.message || "Failed to compile firmware");
+      throw new Error(
+        errorData.error?.message || "Failed to download firmware",
+      );
     }
 
-    const result = await response.json();
-
-    if (!result.success || !result.data?.binary) {
-      throw new Error("Invalid response from server");
-    }
-
-    // Decode base64 binary and trigger download
-    const binaryStr = atob(result.data.binary);
-    const bytes = new Uint8Array(binaryStr.length);
-    for (let i = 0; i < binaryStr.length; i++) {
-      bytes[i] = binaryStr.charCodeAt(i);
-    }
-
-    const blob = new Blob([bytes], { type: "application/octet-stream" });
+    const blob = await response.blob();
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -69,7 +58,7 @@ export default downloadCameraFirmware;
  */
 export async function downloadAccelerometerFirmware(
   boardType = "sensebox_eye",
-  filename = "accelerometer.bin",
+  filename = "accelerometer_capture.bin",
 ) {
   try {
     const response = await fetch(
@@ -84,22 +73,12 @@ export async function downloadAccelerometerFirmware(
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.error?.message || "Failed to compile firmware");
+      throw new Error(
+        errorData.error?.message || "Failed to download firmware",
+      );
     }
 
-    const result = await response.json();
-
-    if (!result.success || !result.data?.binary) {
-      throw new Error("Invalid response from server");
-    }
-
-    const binaryStr = atob(result.data.binary);
-    const bytes = new Uint8Array(binaryStr.length);
-    for (let i = 0; i < binaryStr.length; i++) {
-      bytes[i] = binaryStr.charCodeAt(i);
-    }
-
-    const blob = new Blob([bytes], { type: "application/octet-stream" });
+    const blob = await response.blob();
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
