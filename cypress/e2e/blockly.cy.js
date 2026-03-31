@@ -30,22 +30,20 @@ describe("Blockly Editor Page Tests", () => {
   it("[Gallery] clicks on a gallery item card and navigates to project detail", () => {
     cy.visit("/gallery");
 
-    // Wait for gallery items to load
-    cy.get('[role="button"]', { timeout: 10000 }).should("exist");
-
-    // Find the first gallery card and get its link href
-    cy.get('a[href^="/gallery/"]')
+    // Wait for gallery links to load and be visible
+    cy.get('a[href^="/gallery/"]', { timeout: 10000 })
+      .should("exist")
+      .and("be.visible")
       .first()
-      .then(($link) => {
-        const href = $link.attr("href");
+      .invoke("attr", "href")
+      .then((href) => {
+        // Click on the first gallery link
+        cy.get('a[href^="/gallery/"]').first().click();
 
-        // Click on the card
-        $link.click();
+        // Wait for navigation and verify we're on the project detail page
+        cy.url({ timeout: 10000 }).should("include", href);
 
-        // Verify navigation to the project detail page
-        cy.url().should("include", href);
-
-        // Verify that we're on a project detail page (should show compile button or project content)
+        // Verify that we're on a project detail page
         cy.get("body").should("exist");
       });
   });
@@ -163,6 +161,16 @@ describe("Blockly Editor Page Tests", () => {
       expect(interception.response.body).to.have.property("data");
       expect(interception.response.body.data).to.have.property("id");
       expect(interception.response.body.data.id).to.be.a("string");
+
+      // Verify modal appears with blocklyconnect-app link
+      cy.get('a[href*="blocklyconnect-app://sketch/"]', { timeout: 10000 })
+        .should("be.visible")
+        .and("have.attr", "href")
+        .then((href) => {
+          expect(href).to.match(
+            /^blocklyconnect-app:\/\/sketch\/.+\/.+\/MCU-S2$/,
+          );
+        });
     });
   });
 
