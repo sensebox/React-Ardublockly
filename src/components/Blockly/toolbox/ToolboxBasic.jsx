@@ -66,6 +66,10 @@ const allBlocks = [
   // Zustände
   {
     kind: "block",
+    type: "basic_if_else2",
+  },
+  {
+    kind: "block",
     type: "basic_if_else",
     inputs: {
       IF0: {
@@ -147,6 +151,7 @@ const allBlocks = [
       },
     },
   },
+
   {
     kind: "block",
     type: "basic_if_else",
@@ -316,6 +321,14 @@ export const toolboxBasicObject = {
             },
           },
         },
+        {
+          kind: "block",
+          type: "basic_if_else",
+        },
+        {
+          kind: "block",
+          type: "basic_if_else2",
+        },
       ],
     },
     {
@@ -388,6 +401,10 @@ export const toolboxBasicObject = {
               },
             },
           },
+        },
+        {
+          kind: "block",
+          type: "basic_if_else2",
         },
         {
           kind: "block",

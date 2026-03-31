@@ -1037,37 +1037,9 @@ Blockly.Blocks["basic_if_else2"] = {
 
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-    this.setColour("#5C81A6");
+    this.setColour("#5b67a5");
     this.setTooltip("Wenn / sonst Verzweigung");
     this.setInputsInline(false);
-
-    // ⚠️ NUR initial füllen, wenn COND noch leer ist
-    this.setOnChange(function () {
-      if (!this.workspace || this.isInFlyout) return;
-
-      const input = this.getInput("COND");
-      if (!input || input.connection.targetBlock()) return;
-
-      // Compare erzeugen
-      const compare = this.workspace.newBlock("basic_compare");
-      compare.initSvg();
-      compare.render();
-
-      const left = this.workspace.newBlock("basic_number");
-      left.setFieldValue(0, "NUM");
-      left.initSvg();
-      left.render();
-
-      const right = this.workspace.newBlock("basic_number");
-      right.setFieldValue(1, "NUM");
-      right.initSvg();
-      right.render();
-
-      compare.getInput("LEFT").connection.connect(left.outputConnection);
-      compare.getInput("RIGHT").connection.connect(right.outputConnection);
-
-      input.connection.connect(compare.outputConnection);
-    });
   },
 };
 

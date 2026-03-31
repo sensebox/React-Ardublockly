@@ -258,6 +258,26 @@ basicGenerator.forBlock["basic_if_else"] = function (block, generator) {
   return code + "\n";
 };
 
+basicGenerator.forBlock["basic_if_else2"] = function (block, generator) {
+  // Simple if/else condition without mutator
+  const conditionCode =
+    generator.valueToCode(block, "COND", generator.ORDER_NONE) || "false";
+  const doCode = generator.statementToCode(block, "DO");
+  const elseCode = generator.statementToCode(block, "ELSE");
+
+  const code =
+    "if(" +
+    conditionCode +
+    ") {\n" +
+    doCode +
+    "}\n" +
+    "else {\n" +
+    elseCode +
+    "}\n";
+
+  return code;
+};
+
 basicGenerator.forBlock["basic_repeat_times"] = function (block, generator) {
   // Try to get times from an input connection first, then fall back to field
   let times =
