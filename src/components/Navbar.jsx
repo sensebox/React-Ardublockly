@@ -134,7 +134,8 @@ const Navbar = () => {
   const isTeachable =
     location.pathname === "/teachable" ||
     location.pathname === "/teachable/image" ||
-    location.pathname === "/teachable/acceleration";
+    location.pathname === "/teachable/acceleration" ||
+    location.pathname === "/teachable/playground";
   const isAssessment =
     /^\/tutorial\/.{1,}$/.test(location.pathname) &&
     !tutorialIsLoading &&

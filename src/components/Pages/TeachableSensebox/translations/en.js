@@ -17,6 +17,13 @@ export const teachableSenseboxTranslations_en = {
         "Train a model to recognize movements using the senseBox Eye accelerometer.",
       button: "Get Started",
     },
+    playgroundCard: {
+      title: "Neural Network Playground",
+      description:
+        "Interactively visualize and experiment with neural networks — choose datasets, adjust layers and watch the network learn in real time.",
+      button: "Open Playground",
+      credit: "Based on",
+    },
   },
   training: {
     title: "Model Training",

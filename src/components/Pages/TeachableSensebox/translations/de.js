@@ -17,6 +17,13 @@ export const teachableSenseboxTranslations_de = {
         "Trainiere ein Modell, um Bewegungen mit dem senseBox Eye Beschleunigungssensor zu erkennen.",
       button: "Starten",
     },
+    playgroundCard: {
+      title: "Neuronales-Netz-Playground",
+      description:
+        "Visualisiere und experimentiere interaktiv mit neuronalen Netzwerken – wähle Datensätze, passe Schichten an und beobachte, wie das Netz in Echtzeit lernt.",
+      button: "Playground öffnen",
+      credit: "Basiert auf",
+    },
   },
   training: {
     title: "Modell Training",
