@@ -31,6 +31,7 @@ import useWebSerial from "@/hooks/WebSerialService";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import * as Blockly from "blockly/core";
 
 const FloatingSerial = () => {
   const [log, setLog] = useState("");
@@ -170,7 +171,9 @@ const FloatingSerial = () => {
               fontWeight: 600,
             }}
           >
-            {connected ? "Verbunden" : "Nicht verbunden"}
+            {connected
+              ? Blockly.Msg.serial_connected
+              : Blockly.Msg.serial_not_connected}
           </Typography>
         </Box>
 
@@ -184,7 +187,9 @@ const FloatingSerial = () => {
               onClick={connected ? handleDisconnect : connect}
               disabled={!supported}
             >
-              {connected ? "Verbindung trennen" : "Verbinden"}
+              {connected
+                ? Blockly.Msg.serial_disconnect
+                : Blockly.Msg.serial_connect}
             </Button>
           </Tooltip>
 
@@ -197,7 +202,7 @@ const FloatingSerial = () => {
               color="success"
               startIcon={<PlayArrow />}
             >
-              Starten
+              {Blockly.Msg.serial_play}
             </Button>
           </Tooltip>
 
@@ -210,7 +215,19 @@ const FloatingSerial = () => {
               color="error"
               startIcon={<Stop />}
             >
-              Stopp
+              {Blockly.Msg.serial_stop}
+            </Button>
+          </Tooltip>
+
+          <Tooltip title={Blockly.Msg.serial_loop_tooltip}>
+            <Button
+              data-testid="serial-loop-button"
+              onClick={() => setLoop(!loop)}
+              variant={loop ? "contained" : "outlined"}
+              color="info"
+              startIcon={<Loop />}
+            >
+              {Blockly.Msg.serial_loop}
             </Button>
           </Tooltip>
 
@@ -221,12 +238,12 @@ const FloatingSerial = () => {
               variant="contained"
               startIcon={<Rocket />}
             >
-              Anleitung
+              {Blockly.Msg.serial_help}
             </Button>
           </Tooltip>
 
           {user && (
-            <Tooltip title="Projekt speichern">
+            <Tooltip title={Blockly.Msg.serial_save_project}>
               <Button
                 data-testid="serial-save-button"
                 onClick={handleOpenDialog}
@@ -236,7 +253,7 @@ const FloatingSerial = () => {
                 }
                 startIcon={<SaveIcon />}
               >
-                Speichern
+                {Blockly.Msg.serial_save}
               </Button>
             </Tooltip>
           )}
@@ -267,7 +284,7 @@ const FloatingSerial = () => {
       >
         <Box sx={{ display: "flex", alignItems: "center", p: 1, gap: 1 }}>
           <Typography variant="subtitle2" sx={{ flex: 1 }}>
-            Web Serial — {status}
+            {Blockly.Msg.serial_status_prefix} {status}
           </Typography>
           <IconButton
             size="small"
@@ -300,12 +317,12 @@ const FloatingSerial = () => {
       </Paper>
 
       <Dialog open={dialogOpen} onClose={handleCloseDialog}>
-        <DialogTitle>Projekt speichern</DialogTitle>
+        <DialogTitle>{Blockly.Msg.serial_save_dialog_title}</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
             margin="dense"
-            label="Titel"
+            label={Blockly.Msg.serial_save_dialog_title_field}
             type="text"
             fullWidth
             value={projectTitle}
@@ -313,7 +330,7 @@ const FloatingSerial = () => {
           />
           <TextField
             margin="dense"
-            label="Beschreibung"
+            label={Blockly.Msg.serial_save_dialog_description_field}
             type="text"
             fullWidth
             multiline
@@ -324,10 +341,10 @@ const FloatingSerial = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog} color="secondary">
-            Abbrechen
+            {Blockly.Msg.button_cancel}
           </Button>
           <Button onClick={handleSaveProject} color="primary">
-            Speichern
+            {Blockly.Msg.serial_save}
           </Button>
         </DialogActions>
       </Dialog>
@@ -341,12 +358,12 @@ function HelpModal({ onClose }) {
   const [activeSlide, setActiveSlide] = useState(0);
   const slides = [
     {
-      title: "Willkommen!",
-      text: "Mit dieser Leiste kannst du die senseBox verbinden, Programm starten, stoppen und in den Loop-Modus versetzen.",
+      title: Blockly.Msg.serial_help_welcome_title,
+      text: Blockly.Msg.serial_help_welcome_text,
     },
     {
-      title: "Run / Stop / Loop",
-      text: "Play (Starten) sendet RUN, Stop sendet STOP. Loop aktiviert wiederholtes Ausführen (sendet LOOP).",
+      title: Blockly.Msg.serial_help_controls_title,
+      text: Blockly.Msg.serial_help_controls_text,
     },
   ];
 
@@ -391,14 +408,14 @@ function HelpModal({ onClose }) {
             onClick={prev}
             disabled={activeSlide === 0}
           >
-            Zurück
+            {Blockly.Msg.serial_help_back}
           </Button>
           <Button
             variant="contained"
             onClick={next}
             disabled={activeSlide === slides.length - 1}
           >
-            Weiter
+            {Blockly.Msg.serial_help_next}
           </Button>
         </Box>
       </Paper>
@@ -430,41 +447,38 @@ function UnsupportedBrowserModal({ onClose }) {
         <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
           <BluetoothDisabled sx={{ fontSize: 48, color: "error.main" }} />
           <Typography variant="h5" sx={{ fontWeight: 700, textAlign: "left" }}>
-            Browser nicht unterstützt
+            {Blockly.Msg.serial_unsupported_title}
           </Typography>
         </Box>
         <Typography variant="body1" sx={{ mb: 2 }}>
-          Dein Browser unterstützt die <strong>Web Serial API</strong> nicht,
-          die für die Verbindung mit der senseBox benötigt wird.
+          {Blockly.Msg.serial_unsupported_description}
         </Typography>
         <Typography variant="body1" sx={{ mb: 2 }}>
-          Bitte verwende einen der folgenden Browser:
+          {Blockly.Msg.serial_unsupported_use_browser}
         </Typography>
         <Box component="ul" sx={{ mb: 2, pl: 3 }}>
           <li>
             <Typography variant="body1">
-              <strong>Google Chrome</strong> (Version 89 oder höher)
+              {Blockly.Msg.serial_unsupported_chrome}
             </Typography>
           </li>
           <li>
             <Typography variant="body1">
-              <strong>Microsoft Edge</strong> (Version 89 oder höher)
+              {Blockly.Msg.serial_unsupported_edge}
             </Typography>
           </li>
           <li>
             <Typography variant="body1">
-              <strong>Opera</strong> (Version 75 oder höher)
+              {Blockly.Msg.serial_unsupported_opera}
             </Typography>
           </li>
         </Box>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-          Hinweis: Die Web Serial API funktioniert derzeit nur auf
-          Desktop-Browsern, nicht auf mobilen Geräten. Benutze dafür die
-          senseBox Basic App!
+          {Blockly.Msg.serial_unsupported_note}
         </Typography>
         <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
           <Button variant="contained" onClick={onClose}>
-            Verstanden
+            {Blockly.Msg.serial_unsupported_understood}
           </Button>
         </Box>
       </Paper>
