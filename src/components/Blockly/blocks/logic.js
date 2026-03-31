@@ -444,18 +444,16 @@ Blockly.Blocks["logic_compare"] = {
     this.setInputsInline(true);
     // Assign 'this' to a variable for use in the tooltip closure below.
     var thisBlock = this;
-    this.setTooltip(function () {
-      var op = thisBlock.getFieldValue("OP");
-      var TOOLTIPS = {
-        EQ: Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ,
-        NEQ: Blockly.Msg.LOGIC_COMPARE_TOOLTIP_NEQ,
-        LT: Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LT,
-        LTE: Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LTE,
-        GT: Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT,
-        GTE: Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GTE,
-      };
-      return TOOLTIPS[op];
-    });
+    var op = thisBlock.getFieldValue("OP");
+    var TOOLTIPS = {
+      EQ: Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ,
+      NEQ: Blockly.Msg.LOGIC_COMPARE_TOOLTIP_NEQ,
+      LT: Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LT,
+      LTE: Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LTE,
+      GT: Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT,
+      GTE: Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GTE,
+    };
+    this.setTooltip(TOOLTIPS[op]);
   },
   /**
    * Called whenever anything on the workspace changes.
@@ -464,6 +462,16 @@ Blockly.Blocks["logic_compare"] = {
    * @this Blockly.Block
    */
   onchange: function (e) {
+    var op = this.getFieldValue("OP");
+    var TOOLTIPS = {
+      EQ: Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ,
+      NEQ: Blockly.Msg.LOGIC_COMPARE_TOOLTIP_NEQ,
+      LT: Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LT,
+      LTE: Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LTE,
+      GT: Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT,
+      GTE: Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GTE,
+    };
+    this.setTooltip(TOOLTIPS[op]);
     var blockA = this.getInputTargetBlock("A");
     var blockB = this.getInputTargetBlock("B");
     if (blockA === null && blockB === null) {

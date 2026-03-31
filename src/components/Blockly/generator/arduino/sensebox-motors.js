@@ -97,3 +97,37 @@ Blockly.Generator.Arduino.forBlock["sensebox_motors_moveStepperMotor"] =
     var code = `stepper_motor.step(${steps});  // 2048 steps correspond to one rotation\n`;
     return code;
   };
+
+/**
+ *  ESP DC Pumps
+ */
+Blockly.Generator.Arduino.forBlock["sensebox_motors_esp_init"] =
+  function () {
+    var port = this.getFieldValue("port");
+    // TODO: Add library includes and initialization code
+    var code = `// Initialize ESP Pump ${port}\n`;
+    return code;
+  };
+
+Blockly.Generator.Arduino.forBlock["sensebox_motors_esp_forward"] =
+  function () {
+    var port = this.getFieldValue("port");
+    var duty = this.getFieldValue("duty");
+    var code = `// Start ESP Pump ${port} with power ${duty}%\n`;
+    return code;
+  };
+
+Blockly.Generator.Arduino.forBlock["sensebox_motors_esp_backward"] =
+  function () {
+    var port = this.getFieldValue("port");
+    var duty = this.getFieldValue("duty");
+    var code = `// Set ESP Pump ${port} power to ${duty}%\n`;
+    return code;
+  };
+
+Blockly.Generator.Arduino.forBlock["sensebox_motors_esp_stop"] =
+  function () {
+    var port = this.getFieldValue("port");
+    var code = `// Stop ESP Pump ${port}\n`;
+    return code;
+  };

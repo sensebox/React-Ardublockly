@@ -177,3 +177,103 @@ Blockly.Blocks["sensebox_motors_moveStepperMotor"] = {
     this.setHelpUrl(Blockly.Msg.sensebox_motors_moveStepperMotor_helpurl);
   },
 };
+
+/**
+ *  ESP DC Pumps
+ *
+ */
+Blockly.Blocks["sensebox_motors_esp_init"] = {
+  init: function () {
+    var portOptions = [
+      ["M1", "M1"],
+      ["M2", "M2"],
+    ];
+
+    this.appendDummyInput().appendField(
+      Blockly.Msg.sensebox_motors_esp_init,
+    );
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.sensebox_motors_esp_port)
+      .appendField(new Blockly.FieldDropdown(portOptions), "port")
+      .setAlign(Blockly.inputs.Align.RIGHT);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(getColour().sensebox);
+    this.setTooltip(Blockly.Msg.sensebox_motors_esp_init_tooltip);
+    this.setHelpUrl(Blockly.Msg.sensebox_motors_esp_init_helpurl);
+  },
+};
+
+Blockly.Blocks["sensebox_motors_esp_forward"] = {
+  init: function () {
+    var portOptions = [
+      ["M1", "M1"],
+      ["M2", "M2"],
+    ];
+
+    this.appendDummyInput().appendField(
+      Blockly.Msg.sensebox_motors_esp_forward,
+    );
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.sensebox_motors_esp_port)
+      .appendField(new Blockly.FieldDropdown(portOptions), "port")
+      .setAlign(Blockly.inputs.Align.RIGHT);
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.sensebox_motors_esp_duty)
+      .appendField(new FieldSlider(50, 0, 100), "duty")
+      .setAlign(Blockly.inputs.Align.RIGHT);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(getColour().sensebox);
+    this.setTooltip(Blockly.Msg.sensebox_motors_esp_forward_tooltip);
+    this.setHelpUrl(Blockly.Msg.sensebox_motors_esp_forward_helpurl);
+  },
+};
+
+Blockly.Blocks["sensebox_motors_esp_backward"] = {
+  init: function () {
+    var portOptions = [
+      ["M1", "M1"],
+      ["M2", "M2"],
+    ];
+
+    this.appendDummyInput().appendField(
+      Blockly.Msg.sensebox_motors_esp_backward,
+    );
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.sensebox_motors_esp_port)
+      .appendField(new Blockly.FieldDropdown(portOptions), "port")
+      .setAlign(Blockly.inputs.Align.RIGHT);
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.sensebox_motors_esp_duty)
+      .appendField(new FieldSlider(50, 0, 100), "duty")
+      .setAlign(Blockly.inputs.Align.RIGHT);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(getColour().sensebox);
+    this.setTooltip(Blockly.Msg.sensebox_motors_esp_backward_tooltip);
+    this.setHelpUrl(Blockly.Msg.sensebox_motors_esp_backward_helpurl);
+  },
+};
+
+Blockly.Blocks["sensebox_motors_esp_stop"] = {
+  init: function () {
+    var portOptions = [
+      ["M1", "M1"],
+      ["M2", "M2"],
+    ];
+
+    this.appendDummyInput().appendField(
+      Blockly.Msg.sensebox_motors_esp_stop,
+    );
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.sensebox_motors_esp_port)
+      .appendField(new Blockly.FieldDropdown(portOptions), "port")
+      .setAlign(Blockly.inputs.Align.RIGHT);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(getColour().sensebox);
+    this.setTooltip(Blockly.Msg.sensebox_motors_esp_stop_tooltip);
+    this.setHelpUrl(Blockly.Msg.sensebox_motors_esp_stop_helpurl);
+  },
+};

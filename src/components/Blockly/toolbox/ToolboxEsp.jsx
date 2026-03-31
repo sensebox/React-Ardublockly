@@ -31,6 +31,7 @@ export const ToolboxEsp = () => {
         <Block type="sensebox_sensor_truebner_smt50_esp32" />
         <Block type="sensebox_sensor_watertemperature" />
         <Block type="sensebox_rg15_rainsensor" />
+        <Block type="sensebox_soil_sensor" />
         <Block type="sensebox_soundsensor_dfrobot" />
         <Block type="sensebox_multiplexer_init">
           <Value name="nrChannels">
@@ -430,6 +431,14 @@ export const ToolboxEsp = () => {
         </Block>
       </Category>
 
+      {/* ============================== MOTORS ============================== */}
+      <Category name={Blockly.Msg.toolbox_motors} colour={getColour().sensebox}>
+        <Block type="sensebox_motors_esp_init" />
+        <Block type="sensebox_motors_esp_forward" />
+        <Block type="sensebox_motors_esp_backward" />
+        <Block type="sensebox_motors_esp_stop" />
+      </Category>
+
       {/* ============================== TEXT ============================== */}
       <Category id="text" name="Text" colour={getColour().text}>
         <Block type="text" />
@@ -686,7 +695,11 @@ export const ToolboxEsp = () => {
         </Category>
 
         {/* -------- MOTORS -------- */}
-        <Category name={Blockly.Msg.toolbox_motors} colour={getColour().motors}>
+        <Category name={Blockly.Msg.toolbox_motors} colour={getColour().sensebox}>
+          <Block type="sensebox_motors_esp_init" />
+          <Block type="sensebox_motors_esp_forward" />
+          <Block type="sensebox_motors_esp_backward" />
+          <Block type="sensebox_motors_esp_stop" />
           <Block type="sensebox_motors_beginServoMotor" />
           <Block type="sensebox_motors_moveServoMotor">
             <Value name="degrees">

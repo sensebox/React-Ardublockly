@@ -53,4 +53,27 @@ export const MOTORS = {
   sensebox_motors_moveStepperMotor_tooltip:
     "Move stepper motor. 2048 steps equal a full rotation.",
   sensebox_motors_moveStepperMotor_helpurl: "TODO",
+
+  //  ESP DC Pumps
+  sensebox_motors_esp_init: "Initialize Pump",
+  sensebox_motors_esp_port: "Port:",
+  sensebox_motors_esp_duty: "Power (%):",
+  sensebox_motors_esp_init_tooltip:
+    "Initialize the DC pump on the ESP board. Select port M1 or M2.",
+  sensebox_motors_esp_init_helpurl: "TODO",
+
+  sensebox_motors_esp_forward: "Start Pump with Power",
+  sensebox_motors_esp_forward_tooltip:
+    "Start the pump with a specific power level. Select port M1 or M2 and set the power (0-100%).",
+  sensebox_motors_esp_forward_helpurl: "TODO",
+
+  sensebox_motors_esp_backward: "Set Pump Power to",
+  sensebox_motors_esp_backward_tooltip:
+    "Set the pump power to a new value. Select port M1 or M2 and set the power (0-100%).",
+  sensebox_motors_esp_backward_helpurl: "TODO",
+
+  sensebox_motors_esp_stop: "Stop Pump",
+  sensebox_motors_esp_stop_tooltip:
+    "Stop the DC pump. Select port M1 or M2.",
+  sensebox_motors_esp_stop_helpurl: "TODO",
 };

@@ -274,4 +274,11 @@ The measured values for temperature, humidity and air pressure can be used direc
    * ICM Accel/Gyro
    */
   senseBox_icm20948: "Accelerometer/Gyroscope (ICM20948)",
+
+  // senseBox_soil_sensor
+  senseBox_soil_name: "senseBox Soil Sensor",
+  senseBox_soil_capacity: "Soil Moisture Capacitance",
+  senseBox_soil_temperature: "Soil Temperature",
+  senseBox_soil_tooltip:
+    "This block allows you to measure soil moisture and soil temperature using a soil sensor. Connect the sensor to one of the digital/analog ports and select the port in the block. Soil moisture is output as capacitance, and soil temperature in °C.",
 };
