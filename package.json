@@ -32,7 +32,7 @@
     "@testing-library/user-event": "^7.2.1",
     "@uiw/react-markdown-preview": "^5.2.0",
     "axios": "^1.13.6",
-    "@uiw/react-md-editor": "^4.0.11",
+    "@uiw/react-md-editor": "^4.1.0",
     "blockly": "^12.4.1",
     "file-saver": "^2.0.5",
     "framer-motion": "^6.5.1",
