@@ -30,7 +30,7 @@ import TutorialHome from "../Tutorial/Overview/TutorialHome";
 import TeachableSensebox from "@/components/Pages/TeachableSensebox/TeachableSensebox";
 import TeachableSenseboxLanding from "@/components/Pages/TeachableSensebox/TeachableSenseboxLanding";
 import AccelerationClassification from "@/components/Pages/TeachableSensebox/acceleration/AccelerationClassification";
-import NeuralNetworkPlayground from "@/components/Pages/TeachableSensebox/playground/NeuralNetworkPlayground";
+import OrientationClassification from "@/components/Pages/TeachableSensebox/orientation/OrientationClassification";
 import BasicWithSerial from "../Pages/Basic/BasicWithSerial";
 import BasicProject from "../Pages/Basic/BasicProject";
 function AppRoutes({ platform, visitPage, setPlatform }) {
@@ -140,10 +140,10 @@ function AppRoutes({ platform, visitPage, setPlatform }) {
           }
         />
         <Route
-          path="/teachable/playground"
+          path="/teachable/orientation"
           element={
             <PublicRoute>
-              <NeuralNetworkPlayground />
+              <OrientationClassification />
             </PublicRoute>
           }
         />

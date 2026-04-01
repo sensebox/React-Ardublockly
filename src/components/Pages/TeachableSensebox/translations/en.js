@@ -17,12 +17,11 @@ export const teachableSenseboxTranslations_en = {
         "Train a model to recognize movements using the senseBox Eye accelerometer.",
       button: "Get Started",
     },
-    playgroundCard: {
-      title: "Neural Network Playground",
+    orientationCard: {
+      title: "Orientation Classification",
       description:
-        "Interactively visualize and experiment with neural networks — choose datasets, adjust layers and watch the network learn in real time.",
-      button: "Open Playground",
-      credit: "Based on",
+        "Train a decision tree to recognise device orientation from single x, y, z snapshots using the senseBox Eye accelerometer.",
+      button: "Get Started",
     },
   },
   training: {
