@@ -5,6 +5,8 @@ import WorkspaceName from "./ToolbarItems/WorkspaceName";
 import Compile from "./ToolbarItems/Compile";
 import ShareProject from "./ToolbarItems/ShareProject";
 import ResetWorkspace from "./ToolbarItems/ResetWorkspace";
+import ReloadWorkspace from "./ToolbarItems/ReloadWorkspace";
+import AutoSave from "./ToolbarItems/AutoSave";
 
 const EmbeddedToolbar = ({
   assessment = false,
@@ -13,6 +15,7 @@ const EmbeddedToolbar = ({
   projectType,
 }) => {
   const selectedBoard = useSelector((state) => state.board.board);
+  
   // Embedded-optimized toolbar layout for embedded mode
   return (
     <div
@@ -24,11 +27,14 @@ const EmbeddedToolbar = ({
         flexWrap: "wrap",
       }}
     >
-      <WorkspaceName
-        multiple={multiple}
-        project={project}
-        projectType={projectType}
-      />
+      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+        {!assessment && !multiple && <AutoSave />}
+        <WorkspaceName
+          multiple={multiple}
+          project={project}
+          projectType={projectType}
+        />
+      </div>
 
       <div
         style={{
@@ -49,8 +55,8 @@ const EmbeddedToolbar = ({
             projectType={projectType}
           />
         )}
-
         {!multiple && <ResetWorkspace />}
+        {!multiple && <ReloadWorkspace />}
       </div>
     </div>
   );

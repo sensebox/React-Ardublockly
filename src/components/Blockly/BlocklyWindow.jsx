@@ -97,10 +97,11 @@ export default function BlocklyWindow(props) {
     return () => {
       if (ws && onAnyChange) ws.removeChangeListener(onAnyChange);
       if (ws && orphanDisabler) ws.removeChangeListener(orphanDisabler);
+      if (ws && onWorkspaceChangedListener) ws.removeChangeListener(onWorkspaceChangedListener);
       // zoomToFit/backpack are tied to workspace; disposed with ws
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isEmbedded]);
 
   // Handle board change → reload XML (from localStorage or fallback)
   useEffect(() => {
