@@ -25,6 +25,7 @@ const OrientationClassification = () => {
   const [isTraining, setIsTraining] = useState(false);
   const [trainingError, setTrainingError] = useState(null);
   const [classes, setClasses] = useState([]);
+  const [latestSample, setLatestSample] = useState(null);
   const isMountedRef = useRef(true);
   const language = useSelector((s) => s.general.language);
   const t = getOrientationTranslations();
@@ -132,7 +133,10 @@ const OrientationClassification = () => {
                 tooltip={t.training.tooltip.helpDecisionTree}
               />
             </Box>
-            <OrientationDecisionTreeVisualizer trainedModel={trainedModel} />
+            <OrientationDecisionTreeVisualizer
+              trainedModel={trainedModel}
+              latestSample={latestSample}
+            />
           </Paper>
 
           {/* Model Training Section */}
@@ -149,6 +153,7 @@ const OrientationClassification = () => {
               isTraining={isTraining}
               disabled={isTraining}
               onOpenHelp={handleOpenHelp}
+              onLatestSample={setLatestSample}
             />
           </Paper>
         </Box>
