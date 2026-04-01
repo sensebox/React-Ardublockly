@@ -96,6 +96,24 @@ describe("Embedded Blockly Page Tests", () => {
     cy.get("xml#blockly").should("have.class", "embedded-mode");
   });
 
+  it("[Embedded] displays Blockly workspace on large screens (landscape)", () => {
+    // Test for the bug where Blockly doesn't load on large screens
+    cy.viewport(1920, 1080); // Large desktop screen in landscape
+    cy.visit("/embedded");
+    
+    // Verify Blockly workspace loads
+    cy.get(".blocklySvg", { timeout: 10000 }).should("exist");
+    cy.get(".blocklySvg").should("be.visible");
+    
+    // Verify workspace is functional
+    cy.get('img[alt="Sensebox ESP"]', { timeout: 8000 }).click();
+    cy.get(".blocklyToolbox", { timeout: 10000 }).should("exist");
+    cy.get(".blocklyWorkspace").should("exist");
+    
+    // Verify toolbox is present (may be vertical on large screens)
+    cy.get("xml#blockly").should("exist");
+  });
+
   it("[Embedded] can drag and drop blocks", () => {
     cy.visit("/embedded");
     cy.get('img[alt="Sensebox ESP"]', { timeout: 8000 }).click();
