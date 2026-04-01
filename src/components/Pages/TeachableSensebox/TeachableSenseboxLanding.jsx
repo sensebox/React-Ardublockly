@@ -13,7 +13,7 @@ import {
 import {
   PhotoCamera as CameraIcon,
   Speed as AccelerationIcon,
-  Hub as PlaygroundIcon,
+  Explore as OrientationIcon,
 } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import { getTeachableSenseboxTranslations } from "./translations";
@@ -35,7 +35,11 @@ const TeachableSenseboxLanding = () => {
       <Box
         sx={{
           display: "grid",
-          gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr", md: "1fr 1fr 1fr" },
+          gridTemplateColumns: {
+            xs: "1fr",
+            sm: "1fr 1fr",
+            md: "1fr 1fr 1fr",
+          },
           gap: 4,
         }}
       >
@@ -101,7 +105,7 @@ const TeachableSenseboxLanding = () => {
           </CardActions>
         </Card>
 
-        {/* Neural Network Playground Card */}
+        {/* Orientation Classification Card */}
         <Card
           elevation={3}
           sx={{
@@ -112,23 +116,23 @@ const TeachableSenseboxLanding = () => {
           }}
         >
           <CardContent sx={{ flexGrow: 1, textAlign: "center", pt: 4 }}>
-            <PlaygroundIcon
+            <OrientationIcon
               sx={{ fontSize: 64, color: "primary.main", mb: 2 }}
             />
             <Typography variant="h5" gutterBottom>
-              {t.landing.playgroundCard.title}
+              {t.landing.orientationCard.title}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              {t.landing.playgroundCard.description}
+              {t.landing.orientationCard.description}
             </Typography>
           </CardContent>
           <CardActions sx={{ justifyContent: "center", pb: 3 }}>
             <Button
               variant="contained"
               size="large"
-              onClick={() => navigate("/teachable/playground")}
+              onClick={() => navigate("/teachable/orientation")}
             >
-              {t.landing.playgroundCard.button}
+              {t.landing.orientationCard.button}
             </Button>
           </CardActions>
         </Card>
