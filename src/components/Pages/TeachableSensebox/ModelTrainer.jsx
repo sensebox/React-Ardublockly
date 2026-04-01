@@ -511,28 +511,43 @@ const ModelTrainer = ({
                   </Typography>
                 )}
                 <Box
-                  ref={previewContainerRef}
                   sx={{
+                    position: "relative",
                     width: "100%",
                     maxWidth: "400px",
                     aspectRatio: "1 / 1",
-                    border: "2px solid #ccc",
-                    borderRadius: "8px",
-                    backgroundColor: "#000",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    overflow: "hidden",
-                    "& video, & img, & canvas": {
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      imageRendering: "pixelated",
-                    },
                   }}
                 >
+                  <Box
+                    ref={previewContainerRef}
+                    sx={{
+                      width: "100%",
+                      height: "100%",
+                      border: "2px solid #ccc",
+                      borderRadius: "8px",
+                      backgroundColor: "#000",
+                      overflow: "hidden",
+                      "& video, & img, & canvas": {
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        imageRendering: "pixelated",
+                      },
+                    }}
+                  />
                   {videoLoading && (
-                    <Typography color="text.secondary" sx={{ color: "white" }}>
+                    <Typography
+                      color="text.secondary"
+                      sx={{
+                        position: "absolute",
+                        inset: 0,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: "white",
+                        pointerEvents: "none",
+                      }}
+                    >
                       {t.training.initializingCamera}
                     </Typography>
                   )}
