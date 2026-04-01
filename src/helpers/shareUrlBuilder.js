@@ -2,9 +2,8 @@ import { EMBEDDED_CONFIG } from "@/config/embeddedConfig";
 import { createId } from "mnemonic-id";
 
 export const isEmbeddedPath = (pathname) => {
-  return (
-    EMBEDDED_CONFIG.ROUTE.includes(pathname) ||
-    pathname.startsWith(`${EMBEDDED_CONFIG.ROUTE}/`)
+  return EMBEDDED_CONFIG.ROUTE.some(
+    (route) => pathname === route || pathname.startsWith(`${route}/`)
   );
 };
 

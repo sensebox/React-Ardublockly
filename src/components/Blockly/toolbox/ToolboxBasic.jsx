@@ -22,7 +22,7 @@ const allBlocks = [
     inputs: {
       COLOR: {
         block: {
-          type: "colour_picker",
+          type: "colour_picker_basic",
           args0: [],
           fields: {
             COLOUR: "#ff0000",
@@ -247,7 +247,7 @@ export const toolboxBasicObject = {
           inputs: {
             COLOR: {
               block: {
-                type: "colour_picker",
+                type: "colour_picker_basic",
                 args0: [],
                 fields: {
                   COLOUR: "#ff0000",

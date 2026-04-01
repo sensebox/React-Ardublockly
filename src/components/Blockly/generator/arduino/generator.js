@@ -33,11 +33,17 @@ var ota = store.getState().general.platform
   ? store.getState().general.platform
   : null;
 var board = store.getState().board.board ? store.getState().board.board : null;
+var isEmbedded = store.getState().general.embeddedMode
+  ? store.getState().general.embeddedMode
+  : false;
 store.subscribe(() => {
   ota = store.getState().general.platform
     ? store.getState().general.platform
     : null;
   board = store.getState().board.board ? store.getState().board.board : null;
+  isEmbedded = store.getState().general.embeddedMode
+    ? store.getState().general.embeddedMode
+    : false;
 });
 
 /**
@@ -223,7 +229,7 @@ Blockly.Generator.Arduino.finish = function (code) {
 
   let loopCode = "\nvoid loop() { \n" + loopCodeOnce + code + "\n}\n";
   // only add OTA code if tablet mode is enabled
-  if (ota === true && board !== "MCU-S2") {
+  if ((ota === true || isEmbedded === true) && board !== "MCU-S2") {
     code =
       commentCode +
       "\n" +

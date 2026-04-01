@@ -18,6 +18,11 @@ const Toolbox = ({ workspace, toolbox }) => {
   const setupIntervalRef = useRef(null);
   const fileInputRef = useRef(null);
   const aiModel = useSelector((state) => state.general.aiModel);
+  const previousBoard = useRef(null);
+  const previousLanguage = useRef(null);
+  const isInitialMount = useRef(true);
+  const fileInputRef = useRef(null);
+  const aiModel = useSelector((state) => state.general.aiModel);
 
   useEffect(() => {
     if (!workspace || !toolbox?.current) return;
@@ -144,8 +149,24 @@ const Toolbox = ({ workspace, toolbox }) => {
       }
     });
 
-    // --- Toolbox aktualisieren ---
-    workspace.updateToolbox(toolbox.current);
+    // --- Toolbox aktualisieren (nur bei Änderungen, nicht beim initialen Mount) ---
+    const boardChanged =
+      previousBoard.current !== null && previousBoard.current !== selectedBoard;
+    const languageChanged =
+      previousLanguage.current !== null &&
+      previousLanguage.current !== language;
+
+    if (
+      !isInitialMount.current &&
+      (boardChanged || languageChanged) &&
+      workspace.toolbox
+    ) {
+      workspace.updateToolbox(toolbox.current);
+    }
+
+    previousBoard.current = selectedBoard;
+    previousLanguage.current = language;
+    isInitialMount.current = false;
 
     // --- Prevent flyout from closing when variable is created ---
     let variableCreatedRecently = false;

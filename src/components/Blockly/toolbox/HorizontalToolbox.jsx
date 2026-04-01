@@ -6,13 +6,15 @@ import { useSelector } from "react-redux";
 import { ToolboxMcu } from "./ToolboxMcu";
 import { ToolboxEsp } from "./ToolboxEsp";
 import { ToolboxEye } from "./ToolboxEye";
-import { useEmbeddedToolbox } from "./useEmbeddedToolbox";
-import "./embedded_toolbox_styles.css";
+import "./horizontal_toolbox_styles.css";
+import { registerBlocklyContextMenu } from "../helpers/blocklyContextMenu";
 
-const EmbeddedToolbox = ({ workspace, toolbox }) => {
+const HorizontalToolbox = ({ workspace, toolbox }) => {
   const selectedBoard = useSelector((state) => state.board.board);
   const language = useSelector((state) => state.general.language);
   const previousBoard = useRef(null);
+  const previousLanguage = useRef(null);
+  const isInitialMount = useRef(true);
 
   // Register typed variable flyout on board change or mount
   useEffect(() => {
@@ -40,16 +42,25 @@ const EmbeddedToolbox = ({ workspace, toolbox }) => {
     ]);
     typedVarModal.init();
 
-    // Log board change
-    if (previousBoard.current !== selectedBoard) {
-      previousBoard.current = selectedBoard;
-    }
-    if (workspace.toolbox) {
+    // Update toolbox only when board or language actually changes, not on initial mount
+    const boardChanged =
+      previousBoard.current !== null && previousBoard.current !== selectedBoard;
+    const languageChanged =
+      previousLanguage.current !== null &&
+      previousLanguage.current !== language;
+
+    if (
+      !isInitialMount.current &&
+      (boardChanged || languageChanged) &&
+      workspace.toolbox
+    ) {
       workspace.updateToolbox(toolbox.current);
     }
-  }, [workspace, toolbox, selectedBoard, language]);
 
-  useEmbeddedToolbox(workspace, true);
+    previousBoard.current = selectedBoard;
+    previousLanguage.current = language;
+    isInitialMount.current = false;
+  }, [workspace, toolbox, selectedBoard, language]);
 
   return (
     <xml
@@ -84,4 +95,4 @@ const createFlyout = (workspace) => {
   return xmlList.concat(blockList);
 };
 
-export default EmbeddedToolbox;
+export default HorizontalToolbox;
