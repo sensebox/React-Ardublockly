@@ -86,19 +86,28 @@ export default function BlocklyWindow(props) {
     // UI helpers
     Blockly.svgResize(ws);
 
+    let zoomToFit = null;
     if (!isEmbedded) {
-      const zoomToFit = new ZoomToFitControl(ws);
+      zoomToFit = new ZoomToFitControl(ws);
       zoomToFit.init();
     }
-    const backpack = new Backpack(ws);
-    backpack.init();
 
-    // Cleanup: remove listeners
+    // Only initialize backpack if not already present
+    let backpack = null;
+    const componentManager = ws.getComponentManager();
+    if (!componentManager.getComponent("backpack")) {
+      backpack = new Backpack(ws);
+      backpack.init();
+    }
+
+    // Cleanup: remove listeners and dispose plugins
     return () => {
       if (ws && onAnyChange) ws.removeChangeListener(onAnyChange);
       if (ws && orphanDisabler) ws.removeChangeListener(orphanDisabler);
-      if (ws && onWorkspaceChangedListener) ws.removeChangeListener(onWorkspaceChangedListener);
-      // zoomToFit/backpack are tied to workspace; disposed with ws
+      if (ws && onWorkspaceChangedListener)
+        ws.removeChangeListener(onWorkspaceChangedListener);
+      if (zoomToFit) zoomToFit.dispose();
+      if (backpack) backpack.dispose();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEmbedded]);
