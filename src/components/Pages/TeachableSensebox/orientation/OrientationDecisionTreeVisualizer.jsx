@@ -1,7 +1,6 @@
 import React, { useMemo, useRef, useState, useEffect } from "react";
 import { Box, Typography, useTheme } from "@mui/material";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
-import * as d3 from "d3";
 import { getOrientationTranslations } from "./translations";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -142,15 +141,12 @@ const NodeBox = ({ node, classNames, x, y }) => {
 // ─── Edge ─────────────────────────────────────────────────────────────────────
 
 const Edge = ({ source, target, theme }) => {
-  const linkGen = d3
-    .linkHorizontal()
-    .x((d) => d.x)
-    .y((d) => d.y);
-
-  const path = linkGen({
-    source: { x: source.x + NODE_W / 2, y: source.y },
-    target: { x: target.x - NODE_W / 2, y: target.y },
-  });
+  const sx = source.x + NODE_W / 2;
+  const sy = source.y;
+  const tx = target.x - NODE_W / 2;
+  const ty = target.y;
+  const mx = (sx + tx) / 2;
+  const path = `M ${sx} ${sy} C ${mx} ${sy}, ${mx} ${ty}, ${tx} ${ty}`;
 
   return (
     <path
@@ -186,24 +182,50 @@ const OrientationDecisionTreeVisualizer = ({ trainedModel }) => {
       return { nodes: [], edges: [], svgWidth: 0, svgHeight: 0 };
     }
 
-    const hierarchy = d3.hierarchy(trainedModel.tree, (node) =>
-      node.isLeaf ? null : [node.left, node.right],
-    );
+    // Build a wrapped node tree with depth/parent info
+    function buildNode(data, depth = 0, parent = null) {
+      const node = { data, depth, parent, children: [] };
+      if (!data.isLeaf) {
+        node.children = [
+          buildNode(data.left, depth + 1, node),
+          buildNode(data.right, depth + 1, node),
+        ];
+      }
+      return node;
+    }
 
-    const treeLayout = d3
-      .tree()
-      // nodeSize([x-spread, y-spread]) in d3 coords:
-      //   x-spread (NODE_SEP) becomes screen-y (vertical sibling separation)
-      //   y-spread (LEVEL_WIDTH) becomes screen-x (horizontal level distance)
-      .nodeSize([NODE_SEP, LEVEL_WIDTH])
-      .separation((a, b) => (a.parent === b.parent ? 1 : 1.2));
+    const root = buildNode(trainedModel.tree);
 
-    treeLayout(hierarchy);
+    // Assign vertical positions via leaf-index traversal
+    let leafIndex = 0;
+    function assignLayoutY(node) {
+      if (node.children.length === 0) {
+        node.layoutY = leafIndex * NODE_SEP;
+        leafIndex++;
+      } else {
+        node.children.forEach(assignLayoutY);
+        node.layoutY =
+          (node.children[0].layoutY +
+            node.children[node.children.length - 1].layoutY) /
+          2;
+      }
+    }
+    assignLayoutY(root);
 
-    const descendants = hierarchy.descendants();
+    function getDescendants(node) {
+      return [node, ...node.children.flatMap(getDescendants)];
+    }
+    function getLinks(node) {
+      return node.children.flatMap((child) => [
+        { source: node, target: child },
+        ...getLinks(child),
+      ]);
+    }
 
-    // For horizontal layout: d3's y (depth) → screen x, d3's x (sibling) → screen y
-    const siblingPositions = descendants.map((d) => d.x);
+    const descendants = getDescendants(root);
+    const links = getLinks(root);
+
+    const siblingPositions = descendants.map((d) => d.layoutY);
     const minSib = Math.min(...siblingPositions);
     const maxSib = Math.max(...siblingPositions);
     const treeHeight = maxSib - minSib + NODE_H + 40;
@@ -215,18 +237,18 @@ const OrientationDecisionTreeVisualizer = ({ trainedModel }) => {
     const nodeElements = descendants.map((d) => ({
       id: d.data,
       node: d,
-      x: d.y + NODE_W / 2 + 20, // depth → screen x
-      y: d.x + offsetY, // sibling position → screen y
+      x: d.depth * LEVEL_WIDTH + NODE_W / 2 + 20,
+      y: d.layoutY + offsetY,
     }));
 
-    const edgeElements = hierarchy.links().map((link) => ({
+    const edgeElements = links.map(({ source, target }) => ({
       source: {
-        x: link.source.y + NODE_W / 2 + 20,
-        y: link.source.x + offsetY,
+        x: source.depth * LEVEL_WIDTH + NODE_W / 2 + 20,
+        y: source.layoutY + offsetY,
       },
       target: {
-        x: link.target.y + NODE_W / 2 + 20,
-        y: link.target.x + offsetY,
+        x: target.depth * LEVEL_WIDTH + NODE_W / 2 + 20,
+        y: target.layoutY + offsetY,
       },
     }));
 

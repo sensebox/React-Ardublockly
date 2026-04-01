@@ -16,8 +16,6 @@ const Toolbox = ({ workspace, toolbox }) => {
   const selectedBoard = useSelector((state) => state.board.board);
   const language = useSelector((state) => state.general.language);
   const setupIntervalRef = useRef(null);
-  const fileInputRef = useRef(null);
-  const aiModel = useSelector((state) => state.general.aiModel);
   const previousBoard = useRef(null);
   const previousLanguage = useRef(null);
   const isInitialMount = useRef(true);
