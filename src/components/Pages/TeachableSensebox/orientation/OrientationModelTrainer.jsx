@@ -30,7 +30,6 @@ import {
 } from "@mui/icons-material";
 import useOrientationSource from "./hooks/useOrientationSource";
 import useOrientationModelTraining from "./hooks/useOrientationModelTraining";
-import useOrientationModelPrediction from "./hooks/useOrientationModelPrediction";
 import HelpButton from "../HelpButton";
 import SerialCameraErrorHandler, {
   ErrorTypes,
@@ -241,95 +240,107 @@ const ClassCardItem = memo(
 );
 
 // ─── InlineGraph ──────────────────────────────────────────────────────────────
-// Scrolling canvas graph for the desktop layout.
+// Live column (bar) chart for the desktop layout.
+// Y-axis is fixed at -10 … 10; values outside that range are clamped visually.
+// Numeric values are shown at a fixed position at the top, independent of bar height.
 
 const INLINE_WIDTH = 480;
-const INLINE_HEIGHT = 120;
-const INLINE_HISTORY = 120;
+const INLINE_HEIGHT = 320;
 
 const InlineGraph = ({ latestSample, label }) => {
   const canvasRef = useRef(null);
-  const historyRef = useRef([]);
+  const theme = useTheme();
 
   useEffect(() => {
-    if (!latestSample) return;
-    historyRef.current.push(latestSample);
-    if (historyRef.current.length > INLINE_HISTORY) historyRef.current.shift();
-
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
-    const history = historyRef.current;
     const W = canvas.width;
     const H = canvas.height;
 
-    ctx.fillStyle = "#111";
-    ctx.fillRect(0, 0, W, H);
+    // mTop leaves room for the fixed value labels row
+    const mLeft = 42,
+      mRight = 10,
+      mTop = 44,
+      mBottom = 34;
+    const drawW = W - mLeft - mRight;
+    const drawH = H - mTop - mBottom;
+    const zeroY = mTop + drawH / 2; // pixel position of value 0
 
-    ctx.strokeStyle = "rgba(255,255,255,0.12)";
+    const textColor = theme.palette.text.secondary;
+    const dividerColor = theme.palette.divider;
+
+    // Clear — transparent so page background shows through
+    ctx.clearRect(0, 0, W, H);
+
+    const axes = ["x", "y", "z"];
+    const sectionW = drawW / axes.length;
+    const barW = sectionW * 0.55;
+
+    // ── Fixed value labels at the very top ───────────────────────────────────
+    ctx.font = "bold 16px monospace";
+    ctx.textAlign = "center";
+    for (let i = 0; i < axes.length; i++) {
+      const axis = axes[i];
+      ctx.fillStyle = latestSample ? AXIS_COLORS[axis] : textColor;
+      const label = latestSample ? latestSample[axis].toFixed(2) : "–";
+      ctx.fillText(label, mLeft + i * sectionW + sectionW / 2, 22);
+    }
+
+    // ── Horizontal grid lines at +10, 0, -10 ────────────────────────────────
     ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(0, H / 2);
-    ctx.lineTo(W, H / 2);
-    ctx.stroke();
-
-    if (history.length < 2) return;
-
-    let minVal = Infinity;
-    let maxVal = -Infinity;
-    for (const s of history) {
-      minVal = Math.min(minVal, s.x, s.y, s.z);
-      maxVal = Math.max(maxVal, s.x, s.y, s.z);
-    }
-    const range = maxVal - minVal || 1;
-    const pad = range * 0.1;
-    const lo = minVal - pad;
-    const hi = maxVal + pad;
-    const toY = (v) => H - ((v - lo) / (hi - lo)) * H;
-
-    for (const axis of ["x", "y", "z"]) {
-      ctx.strokeStyle = AXIS_COLORS[axis];
-      ctx.lineWidth = 1.5;
+    for (const [val, gridLabel] of [
+      [10, "10"],
+      [0, "0"],
+      [-10, "-10"],
+    ]) {
+      const y = zeroY - (val / 10) * (drawH / 2);
+      ctx.strokeStyle = val === 0 ? textColor : dividerColor;
+      ctx.globalAlpha = val === 0 ? 0.4 : 0.25;
       ctx.beginPath();
-      history.forEach((s, i) => {
-        const px = (i / (INLINE_HISTORY - 1)) * W;
-        const py = toY(s[axis]);
-        if (i === 0) ctx.moveTo(px, py);
-        else ctx.lineTo(px, py);
-      });
+      ctx.moveTo(mLeft, y);
+      ctx.lineTo(W - mRight, y);
       ctx.stroke();
+      ctx.globalAlpha = 1;
+
+      ctx.fillStyle = textColor;
+      ctx.font = "13px monospace";
+      ctx.textAlign = "right";
+      ctx.fillText(gridLabel, mLeft - 4, y + 5);
     }
 
-    // Legend
-    const latest = history[history.length - 1];
-    let ly = 14;
-    for (const axis of ["x", "y", "z"]) {
+    if (!latestSample) return;
+
+    // ── Bars ─────────────────────────────────────────────────────────────────
+    for (let i = 0; i < axes.length; i++) {
+      const axis = axes[i];
+      const clamped = Math.max(-10, Math.min(10, latestSample[axis]));
+      const barHeight = (Math.abs(clamped) / 10) * (drawH / 2);
+      const barX = mLeft + i * sectionW + (sectionW - barW) / 2;
+      const barY = clamped >= 0 ? zeroY - barHeight : zeroY;
+
       ctx.fillStyle = AXIS_COLORS[axis];
-      ctx.font = "bold 10px monospace";
-      ctx.fillText(`${axis.toUpperCase()} ${latest[axis].toFixed(2)}`, 6, ly);
-      ly += 14;
+      ctx.fillRect(barX, barY, barW, Math.max(barHeight, 1));
+
+      // Axis letter below the chart area
+      ctx.font = "bold 16px monospace";
+      ctx.textAlign = "center";
+      ctx.fillStyle = AXIS_COLORS[axis];
+      ctx.fillText(
+        axis.toUpperCase(),
+        mLeft + i * sectionW + sectionW / 2,
+        H - 6,
+      );
     }
-  }, [latestSample]);
+  }, [latestSample, theme]);
 
   return (
-    <Box
-      sx={{
-        borderRadius: 1,
-        overflow: "hidden",
-        bgcolor: "#111",
-        display: "inline-block",
-      }}
-    >
+    <Box sx={{ display: "inline-block" }}>
       {label && (
         <Typography
           variant="caption"
-          sx={{
-            color: "grey.400",
-            px: 1,
-            py: 0.5,
-            display: "block",
-            bgcolor: "grey.900",
-          }}
+          color="text.secondary"
+          sx={{ display: "block", mb: 0.5 }}
         >
           {label}
         </Typography>
@@ -359,6 +370,7 @@ const OrientationModelTrainer = ({
   isTraining,
   disabled,
   onOpenHelp,
+  onLatestSample,
 }) => {
   const [newClassName, setNewClassName] = useState("");
   const [showAddDialog, setShowAddDialog] = useState(false);
@@ -387,12 +399,10 @@ const OrientationModelTrainer = ({
 
   const { trainModel: executeTraining } = useOrientationModelTraining();
 
-  const [localTrainedModel, setLocalTrainedModel] = useState(null);
-  const { predictions: livePredictions } = useOrientationModelPrediction(
-    localTrainedModel,
-    latestSample,
-    isConnected,
-  );
+  useEffect(() => {
+    if (!onLatestSample) return;
+    onLatestSample(isConnected ? latestSample : null);
+  }, [latestSample, isConnected, onLatestSample]);
 
   const handleDownloadFirmware = async () => {
     setIsDownloading(true);
@@ -563,7 +573,6 @@ const OrientationModelTrainer = ({
   useEffect(() => {
     if (!canAutoTrain) return;
     executeTraining(classes, onTrainingStart, onTrainingError, (modelInfo) => {
-      setLocalTrainedModel(modelInfo);
       onModelTrained(modelInfo);
     });
     // classes is the only trigger; other callbacks are stable
@@ -661,157 +670,13 @@ const OrientationModelTrainer = ({
         </Box>
       )}
 
-      {/* Desktop: inline graph + live predictions side by side */}
+      {/* Desktop: inline sensor graph */}
       {isConnected && !dataTimeoutError && !isMobile && (
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            gap: 2,
-            mb: 3,
-            alignItems: "flex-start",
-          }}
-        >
+        <Box sx={{ mb: 3 }}>
           <InlineGraph
             latestSample={latestSample}
             label={t.training.liveAccelerometer}
           />
-          {localTrainedModel && (
-            <Box sx={{ flex: 1, p: 2, bgcolor: "grey.50", borderRadius: 1 }}>
-              <Typography variant="subtitle1" gutterBottom>
-                {t.training.livePredictions}
-              </Typography>
-              {livePredictions.length === 0 ? (
-                <Typography variant="body2" color="text.secondary">
-                  {t.training.analyzing}
-                </Typography>
-              ) : (
-                <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-                  {livePredictions.map((pred) => (
-                    <Box
-                      key={pred.className}
-                      sx={{
-                        p: 1,
-                        borderRadius: 1,
-                        bgcolor: pred.isTopPrediction
-                          ? "primary.light"
-                          : "background.paper",
-                        color: pred.isTopPrediction
-                          ? "primary.contrastText"
-                          : "text.primary",
-                        border: pred.isTopPrediction ? "none" : "1px solid",
-                        borderColor: "divider",
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          mb: 0.5,
-                        }}
-                      >
-                        <Typography
-                          variant="subtitle1"
-                          fontWeight={pred.isTopPrediction ? "bold" : "normal"}
-                        >
-                          {pred.className}
-                        </Typography>
-                        <Typography variant="body2">
-                          {(pred.probability * 100).toFixed(1)}%
-                        </Typography>
-                      </Box>
-                      <LinearProgress
-                        variant="determinate"
-                        value={pred.probability * 100}
-                        sx={{
-                          height: 4,
-                          borderRadius: 2,
-                          bgcolor: pred.isTopPrediction
-                            ? "rgba(255,255,255,0.3)"
-                            : "grey.300",
-                          "& .MuiLinearProgress-bar": {
-                            bgcolor: pred.isTopPrediction
-                              ? "white"
-                              : "primary.main",
-                          },
-                        }}
-                      />
-                    </Box>
-                  ))}
-                </Box>
-              )}
-            </Box>
-          )}
-        </Box>
-      )}
-
-      {/* Mobile: live predictions below graph */}
-      {isConnected && !dataTimeoutError && isMobile && localTrainedModel && (
-        <Box sx={{ mb: 3, p: 2, bgcolor: "grey.50", borderRadius: 1 }}>
-          <Typography variant="subtitle1" gutterBottom>
-            {t.training.livePredictions}
-          </Typography>
-          {livePredictions.length === 0 ? (
-            <Typography variant="body2" color="text.secondary">
-              {t.training.analyzing}
-            </Typography>
-          ) : (
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-              {livePredictions.map((pred) => (
-                <Box
-                  key={pred.className}
-                  sx={{
-                    p: 1,
-                    borderRadius: 1,
-                    bgcolor: pred.isTopPrediction
-                      ? "primary.light"
-                      : "background.paper",
-                    color: pred.isTopPrediction
-                      ? "primary.contrastText"
-                      : "text.primary",
-                    border: pred.isTopPrediction ? "none" : "1px solid",
-                    borderColor: "divider",
-                  }}
-                >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      mb: 0.5,
-                    }}
-                  >
-                    <Typography
-                      variant="subtitle1"
-                      fontWeight={pred.isTopPrediction ? "bold" : "normal"}
-                    >
-                      {pred.className}
-                    </Typography>
-                    <Typography variant="body2">
-                      {(pred.probability * 100).toFixed(1)}%
-                    </Typography>
-                  </Box>
-                  <LinearProgress
-                    variant="determinate"
-                    value={pred.probability * 100}
-                    sx={{
-                      height: 4,
-                      borderRadius: 2,
-                      bgcolor: pred.isTopPrediction
-                        ? "rgba(255,255,255,0.3)"
-                        : "grey.300",
-                      "& .MuiLinearProgress-bar": {
-                        bgcolor: pred.isTopPrediction
-                          ? "white"
-                          : "primary.main",
-                      },
-                    }}
-                  />
-                </Box>
-              ))}
-            </Box>
-          )}
         </Box>
       )}
 

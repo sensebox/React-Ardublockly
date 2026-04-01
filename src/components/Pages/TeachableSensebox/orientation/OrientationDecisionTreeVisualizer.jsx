@@ -23,14 +23,21 @@ const CLASS_COLORS = ["#e53935", "#43a047", "#1e88e5", "#fb8c00", "#8e24aa"];
 
 // ─── NodeBox ──────────────────────────────────────────────────────────────────
 
-const NodeBox = ({ node, classNames, x, y }) => {
+const NodeBox = ({ node, classNames, x, y, activePathSet }) => {
   const theme = useTheme();
   const [hovered, setHovered] = useState(false);
 
+  const isPredicting = activePathSet != null;
+  const isOnPath = isPredicting && activePathSet.has(node.data);
+
   if (node.data.isLeaf) {
-    const classIdx = classNames.indexOf(node.data.prediction);
-    const color =
-      CLASS_COLORS[Math.max(0, classIdx)] ?? theme.palette.primary.main;
+    let color;
+    if (isPredicting) {
+      color = isOnPath ? "#43a047" : "#9e9e9e";
+    } else {
+      const classIdx = classNames.indexOf(node.data.prediction);
+      color = CLASS_COLORS[Math.max(0, classIdx)] ?? theme.palette.primary.main;
+    }
     const total = node.data.samplesCount;
 
     return (
@@ -48,9 +55,9 @@ const NodeBox = ({ node, classNames, x, y }) => {
           rx={NODE_R}
           ry={NODE_R}
           fill={color}
-          stroke={hovered ? "#fff" : "none"}
-          strokeWidth={hovered ? 2 : 0}
-          opacity={0.9}
+          stroke={isOnPath ? "#2e7d32" : hovered ? "#fff" : "none"}
+          strokeWidth={isOnPath ? 2.5 : hovered ? 2 : 0}
+          opacity={isOnPath || !isPredicting ? 1 : 0.55}
         />
         <text
           textAnchor="middle"
@@ -93,9 +100,21 @@ const NodeBox = ({ node, classNames, x, y }) => {
         height={NODE_H}
         rx={NODE_R}
         ry={NODE_R}
-        fill={hovered ? theme.palette.grey[200] : theme.palette.grey[100]}
-        stroke={theme.palette.divider}
-        strokeWidth={1.5}
+        fill={
+          isPredicting
+            ? isOnPath
+              ? hovered
+                ? "#a5d6a7"
+                : "#c8e6c9"
+              : hovered
+                ? theme.palette.grey[300]
+                : theme.palette.grey[200]
+            : hovered
+              ? theme.palette.grey[200]
+              : theme.palette.grey[100]
+        }
+        stroke={isPredicting && isOnPath ? "#43a047" : theme.palette.divider}
+        strokeWidth={isPredicting && isOnPath ? 2 : 1.5}
       />
       <text
         textAnchor="middle"
@@ -160,7 +179,7 @@ const Edge = ({ source, target, theme }) => {
 
 // ─── OrientationDecisionTreeVisualizer ───────────────────────────────────────
 
-const OrientationDecisionTreeVisualizer = ({ trainedModel }) => {
+const OrientationDecisionTreeVisualizer = ({ trainedModel, latestSample }) => {
   const theme = useTheme();
   const t = getOrientationTranslations();
   const containerRef = useRef(null);
@@ -176,6 +195,21 @@ const OrientationDecisionTreeVisualizer = ({ trainedModel }) => {
     ro.observe(containerRef.current);
     return () => ro.disconnect();
   }, []);
+
+  const activePathSet = useMemo(() => {
+    if (!trainedModel?.tree || !latestSample) return null;
+    const path = new Set();
+    let current = trainedModel.tree;
+    while (current) {
+      path.add(current);
+      if (current.isLeaf) break;
+      current =
+        latestSample[current.feature] <= current.threshold
+          ? current.left
+          : current.right;
+    }
+    return path;
+  }, [trainedModel, latestSample]);
 
   const { nodes, edges, svgWidth, svgHeight } = useMemo(() => {
     if (!trainedModel?.tree) {
@@ -318,6 +352,7 @@ const OrientationDecisionTreeVisualizer = ({ trainedModel }) => {
               classNames={trainedModel.classes ?? []}
               x={item.x}
               y={item.y}
+              activePathSet={activePathSet}
             />
           ))}
         </g>
