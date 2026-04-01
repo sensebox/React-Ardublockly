@@ -97,24 +97,22 @@ describe("Embedded Blockly Page Tests", () => {
   });
 
   it("[Embedded] displays Blockly workspace on large screens (landscape)", () => {
-    // Test for the bug where Blockly doesn't load on large screens
-    cy.viewport(1920, 1080); // Large desktop screen in landscape
+    cy.viewport(1920, 1080);
     cy.visit("/embedded");
     
-    // Verify Blockly workspace loads
-    cy.get(".blocklySvg", { timeout: 10000 }).should("exist");
-    cy.get(".blocklySvg").should("be.visible");
-    
-    // Verify workspace is functional
     cy.get('img[alt="Sensebox ESP"]', { timeout: 8000 }).click();
-    cy.get(".blocklyToolbox", { timeout: 10000 }).should("exist");
-    cy.get(".blocklyWorkspace").should("exist");
     
-    // Verify toolbox is present (may be vertical on large screens)
-    cy.get("xml#blockly").should("exist");
+    cy.get(".blocklySvg", { timeout: 10000 }).should("exist").and("be.visible");
+    cy.get(".blocklyToolboxDiv", { timeout: 10000 }).should("exist");
+    cy.get(".blocklyTreeRoot", { timeout: 10000 }).should("exist");
+    cy.get(".blocklyTreeRow").should("have.length.greaterThan", 0);
+    cy.get(".blocklyTreeRow").first().click();
+    cy.get(".blocklyFlyout", { timeout: 5000 }).should("be.visible");
+    cy.get(".blocklyFlyout .blocklyBlockCanvas > .blocklyDraggable", { timeout: 5000 })
+      .should("have.length.greaterThan", 0);
+    cy.get(".blocklyFlyout .blocklyPath").should("exist");
     
-    // Reset viewport to avoid affecting subsequent tests
-    cy.viewport(1000, 660); // Cypress default
+    cy.viewport(1000, 660);
   });
 
   it("[Embedded] can drag and drop blocks", () => {
