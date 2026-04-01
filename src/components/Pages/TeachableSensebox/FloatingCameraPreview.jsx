@@ -196,9 +196,6 @@ const FloatingCameraPreview = ({
               width: "100%",
               height: "100%",
               backgroundColor: "#000",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
               overflow: "hidden",
               "& video, & img, & canvas": {
                 width: "100%",
@@ -207,20 +204,26 @@ const FloatingCameraPreview = ({
                 imageRendering: "pixelated",
               },
             }}
-          >
-            {videoLoading && (
-              <Box
-                sx={{
-                  color: "white",
-                  textAlign: "center",
-                  fontSize: "0.75rem",
-                  padding: 1,
-                }}
-              >
-                Loading...
-              </Box>
-            )}
-          </Box>
+          />
+
+          {videoLoading && (
+            <Box
+              sx={{
+                position: "absolute",
+                inset: 0,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "white",
+                textAlign: "center",
+                fontSize: "0.75rem",
+                padding: 1,
+                pointerEvents: "none",
+              }}
+            >
+              Loading...
+            </Box>
+          )}
 
           {/* Collapse button overlay - outside previewContainerRef to avoid being wiped */}
           <IconButton

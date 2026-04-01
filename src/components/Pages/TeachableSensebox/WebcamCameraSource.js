@@ -86,9 +86,11 @@ class WebcamCameraSource {
           this.videoElement.addEventListener("loadedmetadata", playVideo, {
             once: true,
           });
-          // Fallback timeout
+          // Capture element reference so the timeout is safe even if
+          // this.videoElement is nulled out by a subsequent start() call.
+          const videoEl = this.videoElement;
           setTimeout(() => {
-            if (this.videoElement.paused) {
+            if (videoEl && videoEl === this.videoElement && videoEl.paused) {
               playVideo();
             }
           }, 1000);
