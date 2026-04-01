@@ -49,7 +49,8 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
       ...rest,
     };
 
-    // Apply horizontal layout options when in portrait/mobile orientation
+    // Apply horizontal layout options for embedded mode in portrait orientation
+    // (isHorizontalToolbox is only true when isEmbedded && window.innerHeight > window.innerWidth)
     if (isHorizontalToolbox) {
       blocklyOptions.horizontalLayout = true;
       blocklyOptions.toolboxPosition = "end";

@@ -112,6 +112,9 @@ describe("Embedded Blockly Page Tests", () => {
     
     // Verify toolbox is present (may be vertical on large screens)
     cy.get("xml#blockly").should("exist");
+    
+    // Reset viewport to avoid affecting subsequent tests
+    cy.viewport(1000, 660); // Cypress default
   });
 
   it("[Embedded] can drag and drop blocks", () => {
