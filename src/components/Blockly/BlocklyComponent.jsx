@@ -56,8 +56,8 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
       blocklyOptions.toolboxPosition = "end";
     }
 
-    // Ensure toolbox assets load correctly in embedded mode
-    if (isEmbedded && !blocklyOptions.media) {
+    // Ensure toolbox assets load correctly
+    if (!blocklyOptions.media) {
       blocklyOptions.media = "/media/blockly/";
     }
 

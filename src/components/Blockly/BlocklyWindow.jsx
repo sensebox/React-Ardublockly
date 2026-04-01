@@ -225,7 +225,7 @@ export default function BlocklyWindow(props) {
               width: "100%",
               height: "100%",
             }
-          : { containerStyles }
+          : containerStyles
       }
     >
       <BlocklyComponent
@@ -236,7 +236,6 @@ export default function BlocklyWindow(props) {
         maxInstances={getMaxInstances()}
         zoom={zoomConfig}
         grid={gridConfig}
-        media={"/media/blockly/"}
         move={moveConfig}
         initialXml={initialXmlProp ? initialXmlProp : initialXml}
       />
