@@ -236,6 +236,7 @@ export default function BlocklyWindow(props) {
         maxInstances={getMaxInstances()}
         zoom={zoomConfig}
         grid={gridConfig}
+        media={"/media/blockly/"}
         move={moveConfig}
         initialXml={initialXmlProp ? initialXmlProp : initialXml}
       />
