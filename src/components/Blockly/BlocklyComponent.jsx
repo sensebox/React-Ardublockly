@@ -49,15 +49,15 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
       ...rest,
     };
 
-    // Only apply mobile layout options when in embedded mode
-    // These must override any options from ...rest, so set them after
+    // Apply horizontal layout options when in portrait/mobile orientation
     if (isHorizontalToolbox) {
       blocklyOptions.horizontalLayout = true;
       blocklyOptions.toolboxPosition = "end";
-      // Ensure toolbox icon sprites and other assets load correctly in embedded view
-      if (!blocklyOptions.media) {
-        blocklyOptions.media = "/media/blockly/";
-      }
+    }
+
+    // Ensure toolbox assets load correctly in embedded mode
+    if (isEmbedded && !blocklyOptions.media) {
+      blocklyOptions.media = "/media/blockly/";
     }
 
     const ws = Blockly.inject(blocklyDivRef.current, blocklyOptions);
