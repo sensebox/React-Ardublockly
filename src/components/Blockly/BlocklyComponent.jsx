@@ -145,7 +145,7 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
       ws?.dispose();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isHorizontalToolbox]);
+  }, [isEmbedded, isHorizontalToolbox]);
 
   const cardStyle = useMemo(() => {
     return isEmbedded
