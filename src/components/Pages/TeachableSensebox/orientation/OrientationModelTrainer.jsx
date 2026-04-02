@@ -153,7 +153,6 @@ const ClassCardItem = memo(
     isEditing,
     editingClassName,
     isRecording,
-    countdown,
     isConnected,
     dataTimeoutError,
     recordingInProgress,
@@ -264,12 +263,7 @@ const ClassCardItem = memo(
           </Box>
 
           {/* Recording state */}
-          {isRecording && countdown !== null && countdown > 0 && (
-            <Typography variant="body2" color="primary">
-              {t.training.recordingCountdown.replace("{seconds}", countdown)}
-            </Typography>
-          )}
-          {isRecording && countdown === 0 && (
+          {isRecording && (
             <Box sx={{ mt: 1 }}>
               <Typography variant="body2" color="error" sx={{ mb: 0.5 }}>
                 {t.training.recorded}
@@ -431,10 +425,6 @@ const InlineGraph = ({ latestSample, label }) => {
   );
 };
 
-// ─── Constants ────────────────────────────────────────────────────────────────
-
-const RECORDING_COUNTDOWN_STEPS = 2; // seconds
-
 // ─── OrientationModelTrainer ──────────────────────────────────────────────────
 
 const OrientationModelTrainer = ({
@@ -453,8 +443,6 @@ const OrientationModelTrainer = ({
   const [editingClassId, setEditingClassId] = useState(null);
   const [editingClassName, setEditingClassName] = useState("");
   const [recordingClassId, setRecordingClassId] = useState(null);
-  const [countdown, setCountdown] = useState(null);
-  const countdownRef = useRef(null);
 
   const language = useSelector((s) => s.general.language);
   const t = getOrientationTranslations();
@@ -580,21 +568,6 @@ const OrientationModelTrainer = ({
       if (!isConnected || recordingClassId !== null) return;
 
       setRecordingClassId(classId);
-      setCountdown(RECORDING_COUNTDOWN_STEPS);
-
-      let remaining = RECORDING_COUNTDOWN_STEPS;
-      await new Promise((resolve) => {
-        countdownRef.current = setInterval(() => {
-          remaining -= 1;
-          setCountdown(remaining);
-          if (remaining <= 0) {
-            clearInterval(countdownRef.current);
-            resolve();
-          }
-        }, 1000);
-      });
-
-      setCountdown(0);
 
       // Capture the current latestSample at this moment
       // (latestSample is a ref-like value via closure — use a ref to get current)
@@ -622,7 +595,6 @@ const OrientationModelTrainer = ({
       }
 
       setRecordingClassId(null);
-      setCountdown(null);
     },
     [isConnected, recordingClassId, onClassesChange],
   );
@@ -632,12 +604,6 @@ const OrientationModelTrainer = ({
   useEffect(() => {
     latestSampleRef.current = latestSample;
   }, [latestSample]);
-
-  useEffect(() => {
-    return () => {
-      if (countdownRef.current) clearInterval(countdownRef.current);
-    };
-  }, []);
 
   // ─── Auto-training ─────────────────────────────────────────────────────────
   // Re-train whenever classes change, as long as there are ≥2 classes
@@ -774,7 +740,6 @@ const OrientationModelTrainer = ({
               isEditing={editingClassId === cls.id}
               editingClassName={editingClassName}
               isRecording={recordingClassId === cls.id}
-              countdown={countdown}
               isConnected={isConnected}
               dataTimeoutError={dataTimeoutError}
               recordingInProgress={recordingClassId !== null}
