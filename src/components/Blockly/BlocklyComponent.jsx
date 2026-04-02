@@ -49,16 +49,15 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
       ...rest,
     };
 
-    // Apply horizontal layout options for embedded mode in portrait orientation
-    // (isHorizontalToolbox is only true when isEmbedded && window.innerHeight > window.innerWidth)
+    // Only apply mobile layout options when in embedded mode
+    // These must override any options from ...rest, so set them after
     if (isHorizontalToolbox) {
       blocklyOptions.horizontalLayout = true;
       blocklyOptions.toolboxPosition = "end";
-    }
-
-    // Ensure toolbox assets load correctly
-    if (!blocklyOptions.media) {
-      blocklyOptions.media = "/media/blockly/";
+      // Ensure toolbox icon sprites and other assets load correctly in embedded view
+      if (!blocklyOptions.media) {
+        blocklyOptions.media = "/media/blockly/";
+      }
     }
 
     const ws = Blockly.inject(blocklyDivRef.current, blocklyOptions);
@@ -145,7 +144,7 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
       ws?.dispose();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isEmbedded, isHorizontalToolbox]);
+  }, [isHorizontalToolbox]);
 
   const cardStyle = useMemo(() => {
     return isEmbedded

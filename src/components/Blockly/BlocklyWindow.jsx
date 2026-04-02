@@ -225,7 +225,7 @@ export default function BlocklyWindow(props) {
               width: "100%",
               height: "100%",
             }
-          : containerStyles
+          : { containerStyles }
       }
     >
       <BlocklyComponent
