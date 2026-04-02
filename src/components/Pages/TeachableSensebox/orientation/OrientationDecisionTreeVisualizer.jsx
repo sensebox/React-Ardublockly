@@ -33,7 +33,7 @@ const NodeBox = ({ node, classNames, x, y, activePathSet }) => {
   if (node.data.isLeaf) {
     let color;
     if (isPredicting) {
-      color = isOnPath ? "#43a047" : "#9e9e9e";
+      color = isOnPath ? "#43a047" : "#686868";
     } else {
       const classIdx = classNames.indexOf(node.data.prediction);
       color = CLASS_COLORS[Math.max(0, classIdx)] ?? theme.palette.primary.main;
@@ -83,7 +83,7 @@ const NodeBox = ({ node, classNames, x, y, activePathSet }) => {
   }
 
   // Internal node
-  const label = `${node.data.feature} ≤ ${node.data.threshold.toFixed(3)}`;
+  const label = `${node.data.feature} ≤ ${node.data.threshold.toFixed(1)}`;
   const total = node.data.samplesCount;
 
   return (
@@ -266,7 +266,7 @@ const OrientationDecisionTreeVisualizer = ({ trainedModel, latestSample }) => {
     const offsetY = -minSib + NODE_H / 2 + 20;
 
     const maxDepth = Math.max(...descendants.map((d) => d.depth));
-    const treeWidth = (maxDepth + 1) * LEVEL_WIDTH + NODE_W + 40;
+    const treeWidth = (maxDepth + 1) * LEVEL_WIDTH;
 
     const nodeElements = descendants.map((d) => ({
       id: d.data,

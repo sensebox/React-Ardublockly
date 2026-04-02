@@ -124,21 +124,6 @@ const OrientationClassification = () => {
         )}
 
         <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-          {/* Decision Tree Visualizer Section */}
-          <Paper elevation={2} sx={{ p: 3 }}>
-            <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-              <Typography variant="h5">{t.modelVisualizer.title}</Typography>
-              <HelpButton
-                onClick={() => handleOpenHelp("decisionTree")}
-                tooltip={t.training.tooltip.helpDecisionTree}
-              />
-            </Box>
-            <OrientationDecisionTreeVisualizer
-              trainedModel={trainedModel}
-              latestSample={latestSample}
-            />
-          </Paper>
-
           {/* Model Training Section */}
           <Paper elevation={2} sx={{ p: 3 }}>
             <Typography variant="h5" gutterBottom>
@@ -157,6 +142,21 @@ const OrientationClassification = () => {
             />
           </Paper>
         </Box>
+
+        {/* Decision Tree Visualizer Section */}
+        <Paper elevation={2} sx={{ p: 3 }}>
+          <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+            <Typography variant="h5">{t.modelVisualizer.title}</Typography>
+            <HelpButton
+              onClick={() => handleOpenHelp("decisionTree")}
+              tooltip={t.training.tooltip.helpDecisionTree}
+            />
+          </Box>
+          <OrientationDecisionTreeVisualizer
+            trainedModel={trainedModel}
+            latestSample={latestSample}
+          />
+        </Paper>
       </Container>
     </>
   );
