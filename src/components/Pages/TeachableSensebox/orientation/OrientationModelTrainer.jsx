@@ -8,7 +8,6 @@ import {
   Card,
   CardContent,
   CardActions,
-  Chip,
   IconButton,
   Dialog,
   DialogTitle,
@@ -41,49 +40,108 @@ import { downloadAccelerometerFirmware } from "../utils/firmwareDownload";
 
 const AXIS_COLORS = { x: "#e53935", y: "#43a047", z: "#1e88e5" };
 
-// ─── SampleChip ───────────────────────────────────────────────────────────────
-// Displays a single x/y/z snapshot as a row of coloured chips.
-// Memoized: only re-renders when the sample value or onDelete changes.
+// ─── SampleMiniChart ─────────────────────────────────────────────────────────
+// Tiny horizontal bar chart for a single x/y/z sample.
+// Bars go left (negative) / right (positive) of centre, range -10…10.
 
-const SampleChip = memo(({ sample, onDelete }) => (
-  <Box
-    sx={{
-      display: "flex",
-      alignItems: "center",
-      gap: 0.5,
-      flexWrap: "nowrap",
-      "&:hover .delete-btn": { opacity: 1 },
-    }}
-  >
-    {["x", "y", "z"].map((axis) => (
-      <Chip
-        key={axis}
-        size="small"
-        label={`${axis.toUpperCase()}: ${sample[axis].toFixed(2)}`}
-        sx={{
-          bgcolor: AXIS_COLORS[axis],
-          color: "white",
-          fontFamily: "monospace",
-          fontSize: "0.7rem",
-          height: 22,
-        }}
-      />
-    ))}
-    <IconButton
-      className="delete-btn"
-      size="small"
-      onClick={() => onDelete(sample.id)}
+const MINI_W = 120;
+const MINI_H = 36;
+
+const SampleMiniChart = memo(({ sample, onDelete }) => {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    const W = canvas.width;
+    const H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+
+    const axes = ["x", "y", "z"];
+    const sectionH = H / axes.length;
+    const barH = sectionH * 0.55;
+    const zeroX = W / 2;
+
+    // faint centre line
+    ctx.strokeStyle = "rgba(128,128,128,0.3)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(zeroX, 0);
+    ctx.lineTo(zeroX, H);
+    ctx.stroke();
+
+    for (let i = 0; i < axes.length; i++) {
+      const axis = axes[i];
+      const clamped = Math.max(-10, Math.min(10, sample[axis]));
+      const barLen = (Math.abs(clamped) / 10) * (W / 2);
+      const barY = i * sectionH + (sectionH - barH) / 2;
+      const barX = clamped >= 0 ? zeroX : zeroX - barLen;
+      ctx.fillStyle = AXIS_COLORS[axis];
+      ctx.fillRect(barX, barY, Math.max(barLen, 1), barH);
+    }
+  }, [sample]);
+
+  return (
+    <Box
       sx={{
-        opacity: 0,
-        transition: "opacity 0.15s",
-        p: 0.25,
-        ml: 0.25,
+        display: "flex",
+        alignItems: "center",
+        gap: 0.75,
+        border: 1,
+        borderColor: "grey.400",
+        borderRadius: 1,
+        px: 0.5,
+        py: 0.25,
+        bgcolor: "background.paper",
+        boxShadow: 0,
+        "&:hover .delete-btn": { opacity: 1 },
       }}
     >
-      <DeleteIcon sx={{ fontSize: 14 }} />
-    </IconButton>
-  </Box>
-));
+      <canvas
+        ref={canvasRef}
+        width={MINI_W}
+        height={MINI_H}
+        style={{
+          display: "block",
+          width: MINI_W,
+          height: MINI_H,
+          flexShrink: 0,
+        }}
+      />
+      {/* Numeric values */}
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 0 }}>
+        {["x", "y", "z"].map((axis) => (
+          <Typography
+            key={axis}
+            variant="caption"
+            sx={{
+              fontFamily: "monospace",
+              fontSize: "0.62rem",
+              lineHeight: 1.35,
+              color: AXIS_COLORS[axis],
+            }}
+          >
+            {axis.toUpperCase()}: {sample[axis].toFixed(1)}
+          </Typography>
+        ))}
+      </Box>
+      <IconButton
+        className="delete-btn"
+        size="small"
+        onClick={() => onDelete(sample.id)}
+        sx={{
+          opacity: 0,
+          transition: "opacity 0.15s",
+          p: 0.25,
+          ml: "auto",
+        }}
+      >
+        <DeleteIcon sx={{ fontSize: 13 }} />
+      </IconButton>
+    </Box>
+  );
+});
 
 // ─── ClassCardItem ────────────────────────────────────────────────────────────
 // Memoized per-class card. Its props never include latestSample, so it does
@@ -129,7 +187,13 @@ const ClassCardItem = memo(
     return (
       <Card
         variant="outlined"
-        sx={{ minWidth: 220, flex: "1 1 220px", maxWidth: 360 }}
+        sx={{
+          minWidth: 220,
+          flex: "1 1 220px",
+          maxWidth: 360,
+          display: "flex",
+          flexDirection: "column",
+        }}
       >
         <CardContent>
           {isEditing ? (
@@ -177,7 +241,7 @@ const ClassCardItem = memo(
             {cls.samples.length} {t.training.samples}
           </Typography>
 
-          {/* Sample chips */}
+          {/* Sample mini-charts — scrollable area */}
           <Box
             sx={{
               display: "flex",
@@ -185,10 +249,13 @@ const ClassCardItem = memo(
               gap: 0.5,
               mt: 1,
               mb: 1,
+              maxHeight: 240,
+              overflowY: "auto",
+              pr: 0.5,
             }}
           >
             {cls.samples.map((sample) => (
-              <SampleChip
+              <SampleMiniChart
                 key={sample.id}
                 sample={sample}
                 onDelete={handleRemoveSample}
@@ -240,12 +307,12 @@ const ClassCardItem = memo(
 );
 
 // ─── InlineGraph ──────────────────────────────────────────────────────────────
-// Live column (bar) chart for the desktop layout.
-// Y-axis is fixed at -10 … 10; values outside that range are clamped visually.
-// Numeric values are shown at a fixed position at the top, independent of bar height.
+// Live horizontal bar chart for the desktop layout.
+// X-axis is fixed at -10 … 10; values outside that range are clamped visually.
+// Axis labels and numeric values sit at fixed positions on the left / right.
 
 const INLINE_WIDTH = 480;
-const INLINE_HEIGHT = 320;
+const INLINE_HEIGHT = 160;
 
 const InlineGraph = ({ latestSample, label }) => {
   const canvasRef = useRef(null);
@@ -258,14 +325,19 @@ const InlineGraph = ({ latestSample, label }) => {
     const W = canvas.width;
     const H = canvas.height;
 
-    // mTop leaves room for the fixed value labels row
-    const mLeft = 42,
-      mRight = 10,
-      mTop = 44,
-      mBottom = 34;
+    // mLeft: space for axis letter + value label on the left of zero
+    // mRight: space for value label on the right of zero
+    const mLeft = 52,
+      mRight = 52,
+      mTop = 10,
+      mBottom = 10;
     const drawW = W - mLeft - mRight;
     const drawH = H - mTop - mBottom;
-    const zeroY = mTop + drawH / 2; // pixel position of value 0
+    const zeroX = mLeft + drawW / 2; // pixel position of value 0
+
+    const axes = ["x", "y", "z"];
+    const sectionH = drawH / axes.length;
+    const barH = sectionH * 0.55;
 
     const textColor = theme.palette.text.secondary;
     const dividerColor = theme.palette.divider;
@@ -273,63 +345,67 @@ const InlineGraph = ({ latestSample, label }) => {
     // Clear — transparent so page background shows through
     ctx.clearRect(0, 0, W, H);
 
-    const axes = ["x", "y", "z"];
-    const sectionW = drawW / axes.length;
-    const barW = sectionW * 0.55;
-
-    // ── Fixed value labels at the very top ───────────────────────────────────
-    ctx.font = "bold 16px monospace";
-    ctx.textAlign = "center";
-    for (let i = 0; i < axes.length; i++) {
-      const axis = axes[i];
-      ctx.fillStyle = latestSample ? AXIS_COLORS[axis] : textColor;
-      const label = latestSample ? latestSample[axis].toFixed(2) : "–";
-      ctx.fillText(label, mLeft + i * sectionW + sectionW / 2, 22);
-    }
-
-    // ── Horizontal grid lines at +10, 0, -10 ────────────────────────────────
+    // ── Vertical grid lines at -10…10 ───────────────────────────────────────
     ctx.lineWidth = 1;
     for (const [val, gridLabel] of [
-      [10, "10"],
-      [0, "0"],
       [-10, "-10"],
+      [-8, "-8"],
+      [-6, "-6"],
+      [-4, "-4"],
+      [-2, "-2"],
+      [0, "0"],
+      [2, "2"],
+      [4, "4"],
+      [6, "6"],
+      [8, "8"],
+      [10, "10"],
     ]) {
-      const y = zeroY - (val / 10) * (drawH / 2);
-      ctx.strokeStyle = val === 0 ? textColor : dividerColor;
-      ctx.globalAlpha = val === 0 ? 0.4 : 0.25;
+      const x = zeroX + (val / 10) * (drawW / 2);
+      const isMajor = val === 0 || Math.abs(val) === 10;
+      ctx.strokeStyle = isMajor ? textColor : dividerColor;
+      ctx.globalAlpha = isMajor ? 0.4 : 0.18;
       ctx.beginPath();
-      ctx.moveTo(mLeft, y);
-      ctx.lineTo(W - mRight, y);
+      ctx.moveTo(x, mTop);
+      ctx.lineTo(x, H - mBottom);
       ctx.stroke();
       ctx.globalAlpha = 1;
 
       ctx.fillStyle = textColor;
-      ctx.font = "13px monospace";
-      ctx.textAlign = "right";
-      ctx.fillText(gridLabel, mLeft - 4, y + 5);
+      ctx.font = "12px monospace";
+      ctx.textAlign = "center";
+      ctx.fillText(gridLabel, x, H - 1);
     }
-
-    if (!latestSample) return;
 
     // ── Bars ─────────────────────────────────────────────────────────────────
     for (let i = 0; i < axes.length; i++) {
       const axis = axes[i];
-      const clamped = Math.max(-10, Math.min(10, latestSample[axis]));
-      const barHeight = (Math.abs(clamped) / 10) * (drawH / 2);
-      const barX = mLeft + i * sectionW + (sectionW - barW) / 2;
-      const barY = clamped >= 0 ? zeroY - barHeight : zeroY;
+      const rawVal = latestSample ? latestSample[axis] : 0;
+      const clamped = Math.max(-10, Math.min(10, rawVal));
+      const barLen = (Math.abs(clamped) / 10) * (drawW / 2);
+      const barY = mTop + i * sectionH + (sectionH - barH) / 2;
+      const barX = clamped >= 0 ? zeroX : zeroX - barLen;
 
-      ctx.fillStyle = AXIS_COLORS[axis];
-      ctx.fillRect(barX, barY, barW, Math.max(barHeight, 1));
+      if (latestSample) {
+        ctx.fillStyle = AXIS_COLORS[axis];
+        ctx.fillRect(barX, barY, Math.max(barLen, 1), barH);
+      }
 
-      // Axis letter below the chart area
+      const barCenterY = barY + barH / 2 + 5; // +5 for text baseline alignment
+
+      // Axis letter — fixed on the far left
       ctx.font = "bold 16px monospace";
-      ctx.textAlign = "center";
+      ctx.textAlign = "right";
       ctx.fillStyle = AXIS_COLORS[axis];
+      ctx.fillText(axis.toUpperCase(), mLeft - 8, barCenterY);
+
+      // Numeric value — fixed on the far right
+      ctx.font = "bold 14px monospace";
+      ctx.textAlign = "left";
+      ctx.fillStyle = latestSample ? AXIS_COLORS[axis] : textColor;
       ctx.fillText(
-        axis.toUpperCase(),
-        mLeft + i * sectionW + sectionW / 2,
-        H - 6,
+        latestSample ? rawVal.toFixed(1) : "–",
+        W - mRight + 6,
+        barCenterY,
       );
     }
   }, [latestSample, theme]);
@@ -670,83 +746,83 @@ const OrientationModelTrainer = ({
         </Box>
       )}
 
-      {/* Desktop: inline sensor graph */}
-      {isConnected && !dataTimeoutError && !isMobile && (
-        <Box sx={{ mb: 3 }}>
-          <InlineGraph
-            latestSample={latestSample}
-            label={t.training.liveAccelerometer}
-          />
-        </Box>
-      )}
-
-      {/* Class cards */}
-      <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
-        {classes.map((cls) => (
-          <ClassCardItem
-            key={cls.id}
-            cls={cls}
-            isEditing={editingClassId === cls.id}
-            editingClassName={editingClassName}
-            isRecording={recordingClassId === cls.id}
-            countdown={countdown}
-            isConnected={isConnected}
-            dataTimeoutError={dataTimeoutError}
-            recordingInProgress={recordingClassId !== null}
-            onStartRecording={startRecording}
-            onDeleteClass={deleteClass}
-            onStartEditingClass={startEditingClass}
-            onSaveClassRename={saveClassRename}
-            onCancelEditingClass={cancelEditingClass}
-            onRemoveSample={removeSample}
-            onEditNameChange={setEditingClassName}
-            t={t}
-          />
-        ))}
-
-        {/* Add Class card */}
-        {canAddClass && (
-          <Box sx={{ display: "flex", alignItems: "flex-start" }}>
-            <Card
-              variant="outlined"
-              sx={{
-                minWidth: 220,
-                flex: "1 1 220px",
-                maxWidth: 360,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-                border: "2px dashed",
-                borderColor: "grey.400",
-                "&:hover": { borderColor: "primary.main" },
-              }}
-              onClick={() => setShowAddDialog(true)}
-            >
-              <Box sx={{ textAlign: "center", p: 3 }}>
-                <AddIcon sx={{ fontSize: 32, color: "grey.500" }} />
-                <Typography variant="body2" color="text.secondary">
-                  {t.training.addClass}
-                </Typography>
-              </Box>
-            </Card>
-            <HelpButton
-              onClick={() => onOpenHelp && onOpenHelp("addClass")}
-              tooltip={t.training.tooltip.helpAddClass}
+      {/* Desktop: graph left, class cards right — mobile: stacked */}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: isMobile ? "column" : "row",
+          gap: 3,
+          alignItems: "flex-start",
+        }}
+      >
+        {/* Live sensor graph (desktop only) */}
+        {isConnected && !dataTimeoutError && !isMobile && (
+          <Box sx={{ flexShrink: 0, position: "sticky", top: 32, zIndex: 1 }}>
+            <InlineGraph
+              latestSample={latestSample}
+              label={t.training.liveAccelerometer}
             />
           </Box>
         )}
-      </Box>
 
-      {/* Training progress */}
-      {isTraining && (
-        <Box sx={{ mt: 2 }}>
-          <Typography variant="body2" color="text.secondary">
-            {t.training.trainingInProgress}
-          </Typography>
-          <LinearProgress sx={{ mt: 1 }} />
+        {/* Class cards */}
+        <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", flex: 1 }}>
+          {classes.map((cls) => (
+            <ClassCardItem
+              key={cls.id}
+              cls={cls}
+              isEditing={editingClassId === cls.id}
+              editingClassName={editingClassName}
+              isRecording={recordingClassId === cls.id}
+              countdown={countdown}
+              isConnected={isConnected}
+              dataTimeoutError={dataTimeoutError}
+              recordingInProgress={recordingClassId !== null}
+              onStartRecording={startRecording}
+              onDeleteClass={deleteClass}
+              onStartEditingClass={startEditingClass}
+              onSaveClassRename={saveClassRename}
+              onCancelEditingClass={cancelEditingClass}
+              onRemoveSample={removeSample}
+              onEditNameChange={setEditingClassName}
+              t={t}
+            />
+          ))}
+
+          {/* Add Class card */}
+          {canAddClass && (
+            <Box sx={{ display: "flex", alignItems: "flex-start" }}>
+              <Card
+                variant="outlined"
+                sx={{
+                  minWidth: 220,
+                  flex: "1 1 220px",
+                  maxWidth: 360,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                  border: "2px dashed",
+                  borderColor: "grey.400",
+                  "&:hover": { borderColor: "primary.main" },
+                }}
+                onClick={() => setShowAddDialog(true)}
+              >
+                <Box sx={{ textAlign: "center", p: 3 }}>
+                  <AddIcon sx={{ fontSize: 32, color: "grey.500" }} />
+                  <Typography variant="body2" color="text.secondary">
+                    {t.training.addClass}
+                  </Typography>
+                </Box>
+              </Card>
+              <HelpButton
+                onClick={() => onOpenHelp && onOpenHelp("addClass")}
+                tooltip={t.training.tooltip.helpAddClass}
+              />
+            </Box>
+          )}
         </Box>
-      )}
+      </Box>
 
       {/* Add Class Dialog */}
       <Dialog
