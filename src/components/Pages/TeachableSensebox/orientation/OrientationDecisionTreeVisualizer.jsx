@@ -19,6 +19,9 @@ const NODE_R = 8; // border-radius
 /** Colours per class index (matches the class-card palette) */
 const CLASS_COLORS = ["#e53935", "#43a047", "#1e88e5", "#fb8c00", "#8e24aa"];
 
+/** Seconds of delay added per depth level for the appear animation */
+const ANIM_DELAY = 0.2;
+
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 // ─── NodeBox ──────────────────────────────────────────────────────────────────
@@ -185,6 +188,17 @@ const OrientationDecisionTreeVisualizer = ({ trainedModel, latestSample }) => {
   const containerRef = useRef(null);
   const [containerWidth, setContainerWidth] = useState(600);
 
+  // Increment animKey every time a NEW model is produced so the SVG subtree
+  // remounts and all depth-delayed CSS animations replay from scratch.
+  const prevModelRef = useRef(trainedModel);
+  const [animKey, setAnimKey] = useState(1);
+  useEffect(() => {
+    if (trainedModel !== prevModelRef.current) {
+      prevModelRef.current = trainedModel;
+      setAnimKey((k) => k + 1);
+    }
+  }, [trainedModel]);
+
   useEffect(() => {
     if (!containerRef.current) return;
     const ro = new ResizeObserver((entries) => {
@@ -284,6 +298,7 @@ const OrientationDecisionTreeVisualizer = ({ trainedModel, latestSample }) => {
         x: target.depth * LEVEL_WIDTH + NODE_W / 2 + 20,
         y: target.layoutY + offsetY,
       },
+      sourceDepth: source.depth,
     }));
 
     return {
@@ -336,24 +351,44 @@ const OrientationDecisionTreeVisualizer = ({ trainedModel, latestSample }) => {
         height={svgHeight}
         style={{ display: "block", minWidth: svgWidth }}
       >
-        <g>
+        <defs>
+          <style>{`
+            @keyframes dtNodeAppear {
+              from { opacity: 0; transform: translateX(-14px); }
+              to   { opacity: 1; transform: translateX(0);     }
+            }
+          `}</style>
+        </defs>
+        <g key={animKey}>
           {edges.map((edge, i) => (
-            <Edge
+            <g
               key={i}
-              source={edge.source}
-              target={edge.target}
-              theme={theme}
-            />
+              style={{
+                animation: `dtNodeAppear 0.28s ease-out ${
+                  (edge.sourceDepth + 0.65) * ANIM_DELAY
+                }s both`,
+              }}
+            >
+              <Edge source={edge.source} target={edge.target} theme={theme} />
+            </g>
           ))}
           {nodes.map((item, i) => (
-            <NodeBox
+            <g
               key={i}
-              node={item.node}
-              classNames={trainedModel.classes ?? []}
-              x={item.x}
-              y={item.y}
-              activePathSet={activePathSet}
-            />
+              style={{
+                animation: `dtNodeAppear 0.35s ease-out ${
+                  item.node.depth * ANIM_DELAY
+                }s both`,
+              }}
+            >
+              <NodeBox
+                node={item.node}
+                classNames={trainedModel.classes ?? []}
+                x={item.x}
+                y={item.y}
+                activePathSet={activePathSet}
+              />
+            </g>
           ))}
         </g>
       </svg>
