@@ -162,9 +162,8 @@ function CompilationDialog({ open, code, selectedBoard, onClose, platform, isEmb
       open={open}
       onClose={handleClose}
       disableEscapeKeyDown={activeStep !== 2 || !error}
-      // Feste Größe über PaperProps: Breite und Höhe passen für alle Steps
       PaperProps={{
-        style: { width: "600px", minHeight: "700px", maxHeight: "600px" },
+        style: { width: "600px", minHeight: "60vh", maxHeight: "70vh" },
       }}
     >
       {isEmbedded && activeStep >= 1 && (
