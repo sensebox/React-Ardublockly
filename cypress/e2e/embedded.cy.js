@@ -96,6 +96,25 @@ describe("Embedded Blockly Page Tests", () => {
     cy.get("xml#blockly").should("have.class", "embedded-mode");
   });
 
+  it("[Embedded] displays Blockly workspace on large screens (landscape)", () => {
+    cy.viewport(1920, 1080);
+    cy.visit("/embedded");
+    
+    cy.get('img[alt="Sensebox ESP"]', { timeout: 8000 }).click();
+    
+    cy.get(".blocklySvg", { timeout: 10000 }).should("exist").and("be.visible");
+    cy.get(".blocklyToolbox", { timeout: 10000 }).should("exist");
+    cy.get(".blocklyToolboxCategoryContainer", { timeout: 10000 }).should("exist");
+    cy.get(".blocklyToolboxCategory").should("have.length.greaterThan", 0);
+    cy.get(".blocklyToolboxCategory").first().click();
+    cy.get(".blocklyFlyout", { timeout: 5000 }).should("be.visible");
+    cy.get(".blocklyFlyout .blocklyBlockCanvas > .blocklyDraggable", { timeout: 5000 })
+      .should("have.length.greaterThan", 0);
+    cy.get(".blocklyFlyout .blocklyPath").should("exist");
+    
+    cy.viewport(1000, 660);
+  });
+
   it("[Embedded] can drag and drop blocks", () => {
     cy.visit("/embedded");
     cy.get('img[alt="Sensebox ESP"]', { timeout: 8000 }).click();
