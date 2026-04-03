@@ -35,6 +35,7 @@ function getDifficultyLevel(value) {
 
 function TutorialHome() {
   const dispatch = useDispatch();
+
   const theme = useTheme();
 
   const { tutorials, user } = useSelector((state) => ({
@@ -45,6 +46,7 @@ function TutorialHome() {
   const [searchQuery, setSearchQuery] = useState("");
   const [difficulty, setDifficulty] = useState(""); // "" = alle Stufen
 
+  useEffect(() => {}, []);
   useEffect(() => {
     dispatch(getTutorials());
   }, [dispatch]);
@@ -167,7 +169,7 @@ function TutorialHome() {
                   },
                 }}
               >
-                Tutorial erstellen
+                {Blockly.Msg.builder_createNew}
               </Button>
             </Link>
           </Box>

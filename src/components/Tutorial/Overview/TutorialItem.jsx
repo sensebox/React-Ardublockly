@@ -22,6 +22,15 @@ import { CheckCircle, Error as ErrorIcon } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 import Snackbar from "../../Snackbar";
 import TutorialItemSummary from "./TutorialtemSummary";
+import {
+  resetTutorialProgress,
+  startTutorial,
+} from "../services/tutorial.service";
+import TutorialProgressStatus from "./TutorialProgressBar";
+import {
+  resetTutorialProgressLocal,
+  startTutorialProgressLocal,
+} from "@/actions/tutorialProgressActions";
 
 function getDifficultyLevel(value) {
   if (value <= 1) return 1;
@@ -35,8 +44,24 @@ function TutorialItem({ tutorial, level }) {
   const theme = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const tutorialProgress = useSelector(
+    (state) => state.tutorialProgress.byTutorialId[tutorial._id],
+  );
+  const tutorialProgressById = useSelector(
+    (state) => state.tutorialProgress.byTutorialId,
+  );
+  const progressInfo = getTutorialProgressStatus(
+    tutorial,
+    tutorialProgressById,
+  );
   const user = useSelector((state) => state.auth.user);
-
+  const token = useSelector((state) => state.auth.token);
+  const [snackbar, setSnackbar] = useState(false);
+  const [snackInfo, setSnackInfo] = useState({
+    type: "success",
+    key: 0,
+    message: "",
+  });
   // Modal states
   const [dialogState, setDialogState] = useState("idle");
   // idle | confirm | loading | success | error
@@ -51,6 +76,85 @@ function TutorialItem({ tutorial, level }) {
     return labels[idx].toLocaleUpperCase();
   };
 
+  function getTutorialProgressStatus(tutorial, progressById) {
+    const progress = progressById?.[tutorial._id];
+    const steps = tutorial.steps ?? [];
+    const totalSteps = steps.length;
+
+    // 🔹 Kein Progress
+    if (!progress || totalSteps === 0) {
+      return {
+        status: "not_started",
+        completedSteps: 0,
+        totalSteps,
+        progressText: `0 / ${totalSteps}`,
+        progressRatio: 0,
+      };
+    }
+
+    const progressSteps = progress.steps ?? {};
+
+    let completedSteps = 0;
+
+    steps.forEach((step) => {
+      const stepId = step._id;
+      const progressStep = progressSteps[stepId];
+
+      // 🔹 Step nie gesehen
+      if (!progressStep?.seen) return;
+
+      // 🔹 Kein Question-Step → gesehen reicht
+      if (step.type !== "question") {
+        completedSteps++;
+        return;
+      }
+
+      // 🔹 Question-Step → alle Fragen korrekt?
+      const questions = step.questionData ?? [];
+      const answeredQuestions = progressStep.questions ?? {};
+
+      const allCorrect = questions.every((q) => {
+        const result = answeredQuestions[q._id];
+        return result?.correct === true;
+      });
+
+      if (allCorrect) {
+        completedSteps++;
+      }
+    });
+
+    let status = "in_progress";
+    if (completedSteps === 0) status = "not_started";
+    if (completedSteps === totalSteps) status = "completed";
+
+    return {
+      status,
+      completedSteps,
+      totalSteps,
+      progressText: `${completedSteps} / ${totalSteps}`,
+      progressRatio: totalSteps > 0 ? completedSteps / totalSteps : 0,
+    };
+  }
+
+  const handleResetProgress = async () => {
+    dispatch(resetTutorialProgressLocal(tutorial._id));
+
+    try {
+      await resetTutorialProgress({
+        tutorialId: tutorial._id,
+        token,
+      });
+      setSnackInfo({
+        type: "success",
+        key: Date.now(),
+        message: "Fortschritt erfolgreich zurückgesetzt!",
+      });
+      setSnackbar(true);
+    } catch (err) {
+      console.error("Failed to reset progress", err);
+    }
+  };
+
   const handleDelete = async () => {
     setDialogState("loading");
     try {
@@ -62,6 +166,19 @@ function TutorialItem({ tutorial, level }) {
   };
 
   const handleCloseModal = () => setDialogState("idle");
+
+  const handleStartTutorial = async () => {
+    if (user) {
+      try {
+        await dispatch(startTutorialProgressLocal(tutorial._id, { steps: {} }));
+        await startTutorial({ tutorialId: tutorial._id, token: token });
+      } catch (e) {
+        console.error("Failed to start tutorial", e);
+      }
+    }
+
+    navigate(`/tutorial/${tutorial._id}`);
+  };
 
   return (
     <>
@@ -77,7 +194,7 @@ function TutorialItem({ tutorial, level }) {
           }}
         >
           <CardActionArea
-            onClick={() => navigate(`/tutorial/${tutorial._id}`)}
+            onClick={handleStartTutorial}
             sx={{
               textAlign: "left",
               flexGrow: 1,
@@ -94,6 +211,13 @@ function TutorialItem({ tutorial, level }) {
               }}
             >
               <TutorialItemSummary tutorial={tutorial} />
+              {progressInfo && user && (
+                <TutorialProgressStatus
+                  progressInfo={progressInfo}
+                  canReset={!!user}
+                  onReset={handleResetProgress}
+                />
+              )}
             </CardContent>
           </CardActionArea>
 
@@ -156,7 +280,6 @@ function TutorialItem({ tutorial, level }) {
           )}
         </Card>
       </Grid>
-
       {/* 🧱 Modal für alle Zustände */}
       <Dialog
         open={dialogState !== "idle"}
@@ -259,6 +382,13 @@ function TutorialItem({ tutorial, level }) {
         }
         button={null}
       />
+      <Snackbar
+        open={snackbar}
+        message={snackInfo.message}
+        type={snackInfo.type}
+        key={snackInfo.key}
+        onClose={() => setSnackbar(false)}
+      />{" "}
     </>
   );
 }
