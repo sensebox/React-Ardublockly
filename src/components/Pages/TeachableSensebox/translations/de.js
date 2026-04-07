@@ -20,7 +20,7 @@ export const teachableSenseboxTranslations_de = {
     orientationCard: {
       title: "Orientierungsklassifizierung",
       description:
-        "Trainiere einen Entscheidungsbaum zur Erkennung der Geräteausrichtung anhand einzelner x-, y-, z-Messwerte mit dem senseBox Eye Beschleunigungssensor.",
+        "Trainiere ein kleines Modell, um Geräteausrichtungen mit dem senseBox Eye Beschleunigungssensor zu erkennen.",
       button: "Starten",
     },
   },

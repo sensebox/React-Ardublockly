@@ -6,6 +6,9 @@ import {
   Box,
   Paper,
   Button,
+  Tabs,
+  Tab,
+  LinearProgress,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
@@ -14,6 +17,10 @@ import { useSelector } from "react-redux";
 import { getOrientationTranslations } from "./translations";
 import OrientationModelTrainer from "./OrientationModelTrainer";
 import OrientationDecisionTreeVisualizer from "./OrientationDecisionTreeVisualizer";
+import OrientationNNVisualizer, {
+  DEFAULT_NN_CONFIG,
+} from "./OrientationNNVisualizer";
+import useOrientationNNTraining from "./hooks/useOrientationNNTraining";
 import OrientationHelpSidebar, {
   SIDEBAR_WIDTH,
 } from "./OrientationHelpSidebar";
@@ -26,9 +33,18 @@ const OrientationClassification = () => {
   const [trainingError, setTrainingError] = useState(null);
   const [classes, setClasses] = useState([]);
   const [latestSample, setLatestSample] = useState(null);
+  const [vizTab, setVizTab] = useState(0); // 0 = Decision Tree, 1 = Neural Network
+  const [nnConfig, setNNConfig] = useState(DEFAULT_NN_CONFIG);
+  const [trainedNNModel, setTrainedNNModel] = useState(null);
   const isMountedRef = useRef(true);
   const language = useSelector((s) => s.general.language);
   const t = getOrientationTranslations();
+
+  const {
+    trainModel: trainNNModel,
+    trainingProgress: nnProgress,
+    isTraining: isNNTraining,
+  } = useOrientationNNTraining();
 
   const [helpSidebarOpen, setHelpSidebarOpen] = useState(false);
   const [currentHelpTopic, setCurrentHelpTopic] = useState(null);
@@ -65,6 +81,27 @@ const OrientationClassification = () => {
       setIsTraining(false);
     }
   }, []);
+
+  // ── NN re-training whenever classes change (mirrors decision tree logic) ──
+  useEffect(() => {
+    const canTrain =
+      classes.length >= 2 && classes.every((cls) => cls.samples.length >= 1);
+    if (!canTrain) return;
+
+    trainNNModel(
+      classes,
+      () => {},
+      (err) => {
+        console.error("NN training error:", err);
+      },
+      (modelInfo) => {
+        if (isMountedRef.current) {
+          setTrainedNNModel(modelInfo);
+        }
+      },
+      nnConfig,
+    );
+  }, [classes, nnConfig, trainNNModel]);
 
   useEffect(() => {
     return () => {
@@ -143,19 +180,103 @@ const OrientationClassification = () => {
           </Paper>
         </Box>
 
-        {/* Decision Tree Visualizer Section */}
-        <Paper elevation={2} sx={{ p: 3 }}>
-          <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-            <Typography variant="h5">{t.modelVisualizer.title}</Typography>
-            <HelpButton
-              onClick={() => handleOpenHelp("decisionTree")}
-              tooltip={t.training.tooltip.helpDecisionTree}
+        {/* Tabbed visualizer: Decision Tree | Neural Network */}
+        <Paper elevation={2} sx={{ p: 3, mt: 3 }}>
+          <Tabs
+            value={vizTab}
+            onChange={(_, v) => setVizTab(v)}
+            sx={{ mb: 2, borderBottom: 1, borderColor: "divider" }}
+          >
+            <Tab
+              label={t.decisionTree?.tabLabel ?? "Decision Tree"}
+              id="viz-tab-0"
+              aria-controls="viz-panel-0"
             />
+            <Tab
+              label={t.neuralNetwork?.tabLabel ?? "Neural Network"}
+              id="viz-tab-1"
+              aria-controls="viz-panel-1"
+            />
+          </Tabs>
+
+          {/* ── Tab 0: Decision Tree ─────────────────────────────────── */}
+          <Box
+            role="tabpanel"
+            id="viz-panel-0"
+            aria-labelledby="viz-tab-0"
+            hidden={vizTab !== 0}
+          >
+            {vizTab === 0 && (
+              <>
+                <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+                  <Typography variant="h5">
+                    {t.modelVisualizer.title}
+                  </Typography>
+                  <HelpButton
+                    onClick={() => handleOpenHelp("decisionTree")}
+                    tooltip={t.training.tooltip.helpDecisionTree}
+                  />
+                </Box>
+                <OrientationDecisionTreeVisualizer
+                  trainedModel={trainedModel}
+                  latestSample={latestSample}
+                />
+              </>
+            )}
           </Box>
-          <OrientationDecisionTreeVisualizer
-            trainedModel={trainedModel}
-            latestSample={latestSample}
-          />
+
+          {/* ── Tab 1: Neural Network ─────────────────────────────────── */}
+          <Box
+            role="tabpanel"
+            id="viz-panel-1"
+            aria-labelledby="viz-tab-1"
+            hidden={vizTab !== 1}
+          >
+            {vizTab === 1 && (
+              <>
+                <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+                  <Typography variant="h5">
+                    {t.neuralNetwork?.title ?? "Neural Network"}
+                  </Typography>
+                </Box>
+
+                <OrientationNNVisualizer
+                  classNames={classes.map((c) => c.name)}
+                  nnConfig={nnConfig}
+                  onNNConfigChange={setNNConfig}
+                  trainedModel={trainedNNModel}
+                  latestSample={latestSample}
+                />
+
+                {isNNTraining && (
+                  <Box sx={{ mb: 2 }}>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{ mb: 0.5 }}
+                    >
+                      {t.neuralNetwork?.training ?? "Training…"}{" "}
+                      {nnProgress.totalEpochs > 0
+                        ? `(${nnProgress.epoch}/${nnProgress.totalEpochs})`
+                        : ""}
+                    </Typography>
+                    <LinearProgress
+                      variant={
+                        nnProgress.totalEpochs > 0
+                          ? "determinate"
+                          : "indeterminate"
+                      }
+                      value={
+                        nnProgress.totalEpochs > 0
+                          ? (nnProgress.epoch / nnProgress.totalEpochs) * 100
+                          : undefined
+                      }
+                    />
+                  </Box>
+                )}
+              </>
+            )}
+          </Box>
         </Paper>
       </Container>
     </>

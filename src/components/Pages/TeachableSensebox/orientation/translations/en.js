@@ -60,7 +60,20 @@ export const orientationTranslations_en = {
       helpTraining: "Help with model training",
       helpAddClass: "Help with adding classes",
       helpDecisionTree: "Help with the decision tree",
+      helpNeuralNetwork: "Help with the neural network",
     },
+  },
+  neuralNetwork: {
+    tabLabel: "Neural Network",
+    title: "Neural Network",
+    placeholder: "Train a model to see the neural network here.",
+    placeholderSub:
+      "Once trained, the network architecture with learned weights will be shown.",
+    accuracy: "Validation Accuracy",
+    training: "Training…",
+  },
+  decisionTree: {
+    tabLabel: "Decision Tree",
   },
   errors: {
     browserNotSupported: "Browser Not Supported",
