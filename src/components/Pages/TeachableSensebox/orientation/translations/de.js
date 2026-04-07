@@ -63,7 +63,20 @@ export const orientationTranslations_de = {
       helpTraining: "Hilfe zum Modelltraining",
       helpAddClass: "Hilfe zum Hinzufügen von Klassen",
       helpDecisionTree: "Hilfe zum Entscheidungsbaum",
+      helpNeuralNetwork: "Hilfe zum neuronalen Netz",
     },
+  },
+  neuralNetwork: {
+    tabLabel: "Neuronales Netz",
+    title: "Neuronales Netz",
+    placeholder: "Trainiere ein Modell, um das neuronale Netz hier zu sehen.",
+    placeholderSub:
+      "Nach dem Training wird die Netzstruktur mit gelernten Gewichten angezeigt.",
+    accuracy: "Validierungsgenauigkeit",
+    training: "Trainiere…",
+  },
+  decisionTree: {
+    tabLabel: "Entscheidungsbaum",
   },
   errors: {
     browserNotSupported: "Browser nicht unterstützt",
