@@ -3,17 +3,6 @@ export const orientationTranslations_de = {
   title: "Orientierungsklassifizierung",
   description:
     "Trainiere dein eigenes Modell zur Erkennung von Orientierungen mit dem senseBox Eye Beschleunigungssensor. Jede Aufnahme ist ein einzelner Messwert für x, y und z.",
-  modelVisualizer: {
-    title: "Entscheidungsbaum",
-    placeholder:
-      "Trainiere ein Modell, um den Entscheidungsbaum hier zu sehen.",
-    placeholderSub:
-      "Nach dem Training wird der Entscheidungsbaum als schreibgeschütztes Diagramm angezeigt.",
-    internalNode: "{feature} ≤ {threshold}",
-    leafNode: "{prediction}",
-    samplesLabel: "{count} Aufnahmen",
-    depth: "Tiefe",
-  },
   training: {
     title: "Trainingsdaten",
     connectSenseBox: "senseBox Eye verbinden",
@@ -62,21 +51,34 @@ export const orientationTranslations_de = {
         "Füge mindestens 2 Aufnahmen pro Klasse hinzu, um zu trainieren",
       helpTraining: "Hilfe zum Modelltraining",
       helpAddClass: "Hilfe zum Hinzufügen von Klassen",
-      helpDecisionTree: "Hilfe zum Entscheidungsbaum",
-      helpNeuralNetwork: "Hilfe zum neuronalen Netz",
+      helpDecisionTree: "Was ist ein Entscheidungsbaum?",
+      helpNeuralNetwork: "Was ist ein neuronales Netz?",
     },
   },
   neuralNetwork: {
     tabLabel: "Neuronales Netz",
     title: "Neuronales Netz",
-    placeholder: "Trainiere ein Modell, um das neuronale Netz hier zu sehen.",
-    placeholderSub:
-      "Nach dem Training wird die Netzstruktur mit gelernten Gewichten angezeigt.",
     accuracy: "Validierungsgenauigkeit",
     training: "Trainiere…",
+    inputs: "Eingabe",
+    outputs: "Ergebnis",
+    layers: "Schichten",
+    neurons: "{count} Neuronen",
+    placeholder:
+      "Definiere mindestens 2 Klassen und sammle mindestens eine Aufnahme für jede Klasse.",
   },
   decisionTree: {
     tabLabel: "Entscheidungsbaum",
+    title: "Entscheidungsbaum",
+    placeholder:
+      "Definiere mindestens 2 Klassen und sammle mindestens eine Aufnahme für jede Klasse.",
+    internalNode: "{feature} ≤ {threshold}",
+    leafNode: "{prediction}",
+    samplesLabel: "{count} Aufnahmen",
+    depth: "Tiefe",
+    yes: "Ja",
+    no: "Nein",
+    samplesLabel: "{count} Aufnahmen",
   },
   errors: {
     browserNotSupported: "Browser nicht unterstützt",

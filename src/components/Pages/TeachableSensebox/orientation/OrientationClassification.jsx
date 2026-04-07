@@ -209,9 +209,7 @@ const OrientationClassification = () => {
             {vizTab === 0 && (
               <>
                 <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-                  <Typography variant="h5">
-                    {t.modelVisualizer.title}
-                  </Typography>
+                  <Typography variant="h5">{t.decisionTree.title}</Typography>
                   <HelpButton
                     onClick={() => handleOpenHelp("decisionTree")}
                     tooltip={t.training.tooltip.helpDecisionTree}
@@ -238,6 +236,10 @@ const OrientationClassification = () => {
                   <Typography variant="h5">
                     {t.neuralNetwork?.title ?? "Neural Network"}
                   </Typography>
+                  <HelpButton
+                    onClick={() => handleOpenHelp("neuralNetwork")}
+                    tooltip={t.training.tooltip.helpNeuralNetwork}
+                  />
                 </Box>
 
                 <OrientationNNVisualizer

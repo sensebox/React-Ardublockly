@@ -24,9 +24,13 @@ const ANIM_DELAY = 0.2;
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
+/** Truncate a string to `max` characters, appending "…" if needed */
+const truncate = (text, max = 20) =>
+  text && text.length > max ? text.slice(0, max - 1) + "\u2026" : text;
+
 // ─── NodeBox ──────────────────────────────────────────────────────────────────
 
-const NodeBox = ({ node, classNames, x, y, activePathSet }) => {
+const NodeBox = ({ node, classNames, x, y, activePathSet, t }) => {
   const theme = useTheme();
   const [hovered, setHovered] = useState(false);
 
@@ -50,13 +54,12 @@ const NodeBox = ({ node, classNames, x, y, activePathSet }) => {
         onMouseLeave={() => setHovered(false)}
         style={{ cursor: "default" }}
       >
-        <rect
-          x={-NODE_W / 2}
-          y={-NODE_H / 2}
-          width={NODE_W}
-          height={NODE_H}
-          rx={NODE_R}
-          ry={NODE_R}
+        <title>{t.decisionTree.samplesLabel.replace("{count}", total)}</title>
+        <ellipse
+          cx={0}
+          cy={0}
+          rx={NODE_W / 2}
+          ry={NODE_H / 2}
           fill={color}
           stroke={isOnPath ? "#2e7d32" : hovered ? "#fff" : "none"}
           strokeWidth={isOnPath ? 2.5 : hovered ? 2 : 0}
@@ -67,20 +70,10 @@ const NodeBox = ({ node, classNames, x, y, activePathSet }) => {
           fill="white"
           fontWeight="bold"
           fontSize={13}
-          dy={total > 0 ? -6 : 5}
+          dy={5}
         >
-          {node.data.prediction}
+          {truncate(node.data.prediction)}
         </text>
-        {total > 0 && (
-          <text
-            textAnchor="middle"
-            fill="rgba(255,255,255,0.8)"
-            fontSize={10}
-            dy={10}
-          >
-            {total} samples
-          </text>
-        )}
       </g>
     );
   }
@@ -96,6 +89,7 @@ const NodeBox = ({ node, classNames, x, y, activePathSet }) => {
       onMouseLeave={() => setHovered(false)}
       style={{ cursor: "default" }}
     >
+      <title>{t.decisionTree.samplesLabel.replace("{count}", total)}</title>
       <rect
         x={-NODE_W / 2}
         y={-NODE_H / 2}
@@ -124,37 +118,27 @@ const NodeBox = ({ node, classNames, x, y, activePathSet }) => {
         fill={theme.palette.text.primary}
         fontWeight="600"
         fontSize={13}
-        dy={total > 0 ? -6 : 5}
+        dy={5}
         fontFamily="monospace"
       >
         {label}
       </text>
-      {total > 0 && (
-        <text
-          textAnchor="middle"
-          fill={theme.palette.text.secondary}
-          fontSize={10}
-          dy={10}
-        >
-          {total} samples
-        </text>
-      )}
       {/* yes / no branch labels (to the right, for horizontal layout) */}
       <text
-        x={NODE_W / 2 + 6}
-        y={-6}
+        x={NODE_W / 2 + 4}
+        y={-13}
         fill={theme.palette.text.disabled}
         fontSize={9}
       >
-        yes
+        {t.decisionTree.yes}
       </text>
       <text
-        x={NODE_W / 2 + 6}
-        y={14}
+        x={NODE_W / 2 + 4}
+        y={21}
         fill={theme.palette.text.disabled}
         fontSize={9}
       >
-        no
+        {t.decisionTree.no}
       </text>
     </g>
   );
@@ -162,7 +146,7 @@ const NodeBox = ({ node, classNames, x, y, activePathSet }) => {
 
 // ─── Edge ─────────────────────────────────────────────────────────────────────
 
-const Edge = ({ source, target, theme }) => {
+const Edge = ({ source, target, theme, isOnPath }) => {
   const sx = source.x + NODE_W / 2;
   const sy = source.y;
   const tx = target.x - NODE_W / 2;
@@ -174,8 +158,8 @@ const Edge = ({ source, target, theme }) => {
     <path
       d={path}
       fill="none"
-      stroke={theme.palette.divider}
-      strokeWidth={1.5}
+      stroke={isOnPath ? "#43a047" : theme.palette.divider}
+      strokeWidth={isOnPath ? 2.5 : 1.5}
     />
   );
 };
@@ -299,6 +283,8 @@ const OrientationDecisionTreeVisualizer = ({ trainedModel, latestSample }) => {
         y: target.layoutY + offsetY,
       },
       sourceDepth: source.depth,
+      sourceData: source.data,
+      targetData: target.data,
     }));
 
     return {
@@ -327,10 +313,7 @@ const OrientationDecisionTreeVisualizer = ({ trainedModel, latestSample }) => {
       >
         <AccountTreeIcon sx={{ fontSize: 48, color: "grey.400" }} />
         <Typography variant="body1" color="text.secondary" textAlign="center">
-          {t.modelVisualizer.placeholder}
-        </Typography>
-        <Typography variant="body2" color="text.disabled" textAlign="center">
-          {t.modelVisualizer.placeholderSub}
+          {t.decisionTree.placeholder}
         </Typography>
       </Box>
     );
@@ -369,7 +352,16 @@ const OrientationDecisionTreeVisualizer = ({ trainedModel, latestSample }) => {
                 }s both`,
               }}
             >
-              <Edge source={edge.source} target={edge.target} theme={theme} />
+              <Edge
+                source={edge.source}
+                target={edge.target}
+                theme={theme}
+                isOnPath={
+                  activePathSet != null &&
+                  activePathSet.has(edge.sourceData) &&
+                  activePathSet.has(edge.targetData)
+                }
+              />
             </g>
           ))}
           {nodes.map((item, i) => (
@@ -387,6 +379,7 @@ const OrientationDecisionTreeVisualizer = ({ trainedModel, latestSample }) => {
                 x={item.x}
                 y={item.y}
                 activePathSet={activePathSet}
+                t={t}
               />
             </g>
           ))}
