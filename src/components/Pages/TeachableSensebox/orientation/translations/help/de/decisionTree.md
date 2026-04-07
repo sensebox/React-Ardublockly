@@ -2,15 +2,17 @@
 
 Basierend auf den aufgenommenen Trainingsdaten wird ein **Entscheidungsbaum** generiert. Mit diesem Baum kann entschieden werden zu welcher Klasse eine aufgenommene Orientierung gehört.
 
-![node](/media/teachable/node.png)
+![decision tree tree](/media/teachable/decision_tree.drawio.png)
 
 **Interne Knoten** zeigen eine Bedingung. In unserem Fall ist eine Bedingung ein überschrittener Zahlenwert (_Schwellwert_). Aufnahmen, die die Bedingung erfüllen, gehen nach rechts zum **oberen** Knoten; Andere zum **Unteren**.
 
+![node](/media/teachable/node.png)
+
 Den ersten Knoten (also ganz links) nennt man auch einen **Wurzelknoten** und die Verbindungen zwischen den Knoten **Äste/Zweige**.
 
-![leaf](/media/teachable/leaf.png)
-
 **Blattknoten** (Endknoten) zeigen die vorhergesagte Klasse und die Anzahl der Trainingsaufnahmen, die dort gelandet sind.
+
+![leaf](/media/teachable/leaf.png)
 
 # Wie wird der Entscheidungsbaum generiert?
 
