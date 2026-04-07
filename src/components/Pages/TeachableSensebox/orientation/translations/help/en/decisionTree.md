@@ -2,15 +2,17 @@
 
 Based on the recorded training data, a **decision tree** is generated. This tree can be used to determine which class a recorded orientation belongs to.
 
-![node](/media/teachable/node.png)
+![decision tree tree](/media/teachable/decision_tree.drawio.png)
 
 Internal nodes show a condition. In our case, a condition is whether a numerical value exceeds a certain numerical value (_threshold_). Recordings that satisfy the condition go to the right, to the upper node; the others go to the lower node.
 
+![node](/media/teachable/node.png)
+
 The first node (to the far left) is also called the **root node** and connections between nodes are called **branches**.
 
-![leaf](/media/teachable/leaf.png)
-
 Leaf nodes show the predicted class and the number of training recordings that ended up there.
+
+![leaf](/media/teachable/leaf.png)
 
 # How is the decision tree generated?
 
