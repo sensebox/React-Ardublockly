@@ -111,6 +111,12 @@ const OrientationHelpSidebar = ({ open, onClose, helpTopic }) => {
             fontFamily: "monospace",
             fontSize: "0.8rem",
           },
+          "& img": {
+            maxWidth: "100%",
+            height: "auto",
+            display: "block",
+            my: 1,
+          },
         }}
       >
         {markdownContent ? (

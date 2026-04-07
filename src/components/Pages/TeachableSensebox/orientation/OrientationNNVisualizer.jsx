@@ -16,6 +16,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { Add as AddIcon, Remove as RemoveIcon } from "@mui/icons-material";
+import { getOrientationTranslations } from "./translations";
 
 // ─── Constants ─────────────────────────────────────────────────────────────────
 
@@ -346,6 +347,7 @@ const OrientationNNVisualizer = ({
   trainedModel = null,
   latestSample = null,
 }) => {
+  const t = getOrientationTranslations();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const containerRef = useRef(null);
@@ -441,7 +443,7 @@ const OrientationNNVisualizer = ({
           ? INPUT_NODES.map((n) => n.label)
           : (neuronNames[layerIdx - 1] ?? []);
     } else {
-      varName = `out_${neuronIdx + 1}`;
+      varName = classNames?.[neuronIdx] ?? `out_${neuronIdx + 1}`;
       kernelIdx = hiddenLayers.length;
       activation = "softmax";
       bias = extractedWeights?.biases?.[hiddenLayers.length]?.[neuronIdx];
@@ -675,7 +677,7 @@ const OrientationNNVisualizer = ({
             letterSpacing: 0.5,
           }}
         >
-          Inputs
+          {t.neuralNetwork.inputs}
         </Typography>
 
         {INPUT_NODES.map((node, ii) => (
@@ -749,7 +751,7 @@ const OrientationNNVisualizer = ({
               color="text.secondary"
               sx={{ fontWeight: 600 }}
             >
-              Layers:
+              {t.neuralNetwork.layers}:
             </Typography>
             <IconButton
               size="small"
@@ -795,6 +797,7 @@ const OrientationNNVisualizer = ({
             display: "flex",
             flexDirection: "row",
             alignItems: "flex-start",
+            justifyContent: "center",
           }}
         >
           {hiddenLayers.map((layer, li) => {
@@ -837,7 +840,7 @@ const OrientationNNVisualizer = ({
                         textAlign: "center",
                       }}
                     >
-                      {layer.units} neurons
+                      {t.neuralNetwork.neurons.replace("{count}", layer.units)}
                     </Typography>
                     <IconButton
                       size="small"
@@ -954,16 +957,16 @@ const OrientationNNVisualizer = ({
             letterSpacing: 0.5,
           }}
         >
-          Outputs
+          {t.neuralNetwork.outputs}
         </Typography>
 
         {classNames.length === 0 ? (
           <Typography
             variant="body2"
             color="text.disabled"
-            sx={{ fontStyle: "italic" }}
+            sx={{ fontStyle: "italic", width: "180px" }}
           >
-            Add classes…
+            {t.neuralNetwork.placeholder}
           </Typography>
         ) : (
           classNames.map((name, oi) => {

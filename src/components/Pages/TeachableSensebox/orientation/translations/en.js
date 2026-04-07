@@ -3,16 +3,6 @@ export const orientationTranslations_en = {
   title: "Orientation Classification",
   description:
     "Train your own orientation recognition model using the senseBox Eye accelerometer. Each sample is a single snapshot of x, y, z values.",
-  modelVisualizer: {
-    title: "Decision Tree",
-    placeholder: "Train a model to see the decision tree here.",
-    placeholderSub:
-      "Once trained, the decision tree will be shown as a read-only diagram.",
-    internalNode: "{feature} ≤ {threshold}",
-    leafNode: "{prediction}",
-    samplesLabel: "{count} samples",
-    depth: "Depth",
-  },
   training: {
     title: "Training Data",
     connectSenseBox: "Connect senseBox Eye",
@@ -59,21 +49,34 @@ export const orientationTranslations_en = {
       moreSamples: "Add at least 2 samples per class to train",
       helpTraining: "Help with model training",
       helpAddClass: "Help with adding classes",
-      helpDecisionTree: "Help with the decision tree",
-      helpNeuralNetwork: "Help with the neural network",
+      helpDecisionTree: "What is a decision tree?",
+      helpNeuralNetwork: "What is a neural network?",
     },
   },
   neuralNetwork: {
     tabLabel: "Neural Network",
     title: "Neural Network",
-    placeholder: "Train a model to see the neural network here.",
-    placeholderSub:
-      "Once trained, the network architecture with learned weights will be shown.",
     accuracy: "Validation Accuracy",
     training: "Training…",
+    inputs: "Inputs",
+    outputs: "Outputs",
+    layers: "Layers",
+    neurons: "{count} Neurons",
+    placeholder:
+      "Define at least 2 classes and collect at least one sample for each class.",
   },
   decisionTree: {
     tabLabel: "Decision Tree",
+    title: "Decision Tree",
+    placeholder:
+      "Define at least 2 classes and collect at least one sample for each class.",
+    internalNode: "{feature} ≤ {threshold}",
+    leafNode: "{prediction}",
+    samplesLabel: "{count} samples",
+    depth: "Depth",
+    yes: "Yes",
+    no: "No",
+    samplesLabel: "{count} samples",
   },
   errors: {
     browserNotSupported: "Browser Not Supported",
