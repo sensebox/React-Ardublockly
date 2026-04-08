@@ -1,5 +1,3 @@
-# Klasse hinzufügen
-
 Eine **Klasse** steht für eine Orientierung, die du erkennen möchtest — zum Beispiel „flach", „aufrecht links" oder „45° gekippt".
 
 ## Tipps

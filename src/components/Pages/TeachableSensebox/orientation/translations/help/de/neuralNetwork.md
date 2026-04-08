@@ -1,5 +1,3 @@
-# Neuronales Netz
-
 Ein **neuronales Netz** ist ein Modell, das sich grob am menschlichen Gehirn orientiert. Es besteht aus vielen kleinen Recheneinheiten, den **_Neuronen_**, die schichtweise miteinander verbunden sind.
 
 ![Brain Neural Network](/media/teachable/neural-network-brain.drawio.png)

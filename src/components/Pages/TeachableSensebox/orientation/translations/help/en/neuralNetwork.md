@@ -1,5 +1,3 @@
-# Neural Network
-
 A **neural network** is a model that is loosely inspired by the human brain. It consists of many small computational units called **_neurons_**, which are connected to one another in layers.
 
 ![Brain Neural Network](/media/teachable/neural-network-brain.drawio.png)
