@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import { Add as AddIcon, Remove as RemoveIcon } from "@mui/icons-material";
 import { getOrientationTranslations } from "./translations";
+import HelpButton from "../HelpButton";
 
 // ─── Constants ─────────────────────────────────────────────────────────────────
 
@@ -346,6 +347,7 @@ const OrientationNNVisualizer = ({
   onNNConfigChange,
   trainedModel = null,
   latestSample = null,
+  onOpenHelp,
 }) => {
   const t = getOrientationTranslations();
   const theme = useTheme();
@@ -374,18 +376,32 @@ const OrientationNNVisualizer = ({
     }
   }, [trainedModel]);
 
-  const biasMax = useMemo(() => {
-    if (!extractedWeights) return 1;
-    let max = 0;
-    const hiddenBiases = extractedWeights.biases.slice(0, -1);
-    for (const arr of hiddenBiases) {
-      for (const v of arr) {
-        const a = Math.abs(v);
-        if (a > max) max = a;
+  const layerActivations = useMemo(() => {
+    if (!trainedModel?.model || !latestSample) return null;
+    try {
+      const tfModel = trainedModel.model;
+      const allTensors = [];
+      const input = tf.tensor2d([
+        [latestSample.x, latestSample.y, latestSample.z],
+      ]);
+      allTensors.push(input);
+      const activations = [];
+      let current = input;
+      for (const layer of tfModel.layers) {
+        if (layer.getWeights().length >= 2) {
+          const output = layer.apply(current);
+          allTensors.push(output);
+          activations.push(output.arraySync()[0]);
+          current = output;
+        }
       }
+      tf.dispose(allTensors);
+      // Exclude the last (output/softmax) layer — only hidden activations
+      return activations.slice(0, -1);
+    } catch {
+      return null;
     }
-    return max || 1;
-  }, [extractedWeights]);
+  }, [trainedModel, latestSample]);
 
   // ── Live output prediction (which class is most likely right now) ─────────
   const liveProbs = useMemo(() => {
@@ -636,8 +652,8 @@ const OrientationNNVisualizer = ({
           connections.map((c, i) => {
             if (!isConnectionHighlighted(c) || c.rawWeight === null)
               return null;
-            const labelX = c.cx1;
-            const labelY = (c.y1 + c.y2) / 2 - 8;
+            const labelX = c.x1 + 16;
+            const labelY = c.y1 - 8;
             return (
               <text
                 key={`wl-${i}`}
@@ -745,7 +761,14 @@ const OrientationNNVisualizer = ({
             flexShrink: 0,
           }}
         >
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1, flex: 1 }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              flex: 1,
+            }}
+          >
             <Typography
               variant="body2"
               color="text.secondary"
@@ -854,21 +877,29 @@ const OrientationNNVisualizer = ({
 
                   {/* Neuron circles */}
                   {Array.from({ length: count }).map((_, ni) => {
-                    const bias = extractedWeights?.biases?.[li]?.[ni];
-                    const normBias = bias !== undefined ? bias / biasMax : null;
-                    const absNorm =
-                      normBias !== null ? Math.min(1, Math.abs(normBias)) : 0;
-                    // Grey shading: light grey (no weights) → dark grey (high bias)
-                    const greyVal = Math.round(210 - 120 * absNorm);
+                    const activation = layerActivations?.[li]?.[ni];
+                    const hasLiveActivation =
+                      activation !== undefined && activation !== null;
+                    // tanh squashes relu output [0,∞) → [0,1); 0=white, high=black
+                    const norm = hasLiveActivation
+                      ? Math.tanh(activation)
+                      : null;
+                    const greyVal =
+                      norm !== null ? Math.round(255 * (1 - norm)) : null;
                     const neuronBg =
-                      normBias !== null
+                      greyVal !== null
                         ? `rgb(${greyVal},${greyVal},${greyVal})`
-                        : undefined;
+                        : "#bdbdbd";
                     const label = neuronNames[li]?.[ni] ?? "";
                     const isHovered =
                       hoveredNode?.type === "hidden" &&
                       hoveredNode?.layerIdx === li &&
                       hoveredNode?.neuronIdx === ni;
+                    const neuronTextColor = isHovered
+                      ? HOVER_YELLOW
+                      : greyVal !== null && greyVal < 128
+                        ? "#ffffff"
+                        : "#424242";
                     return (
                       <Tooltip
                         key={ni}
@@ -894,7 +925,7 @@ const OrientationNNVisualizer = ({
                             height: NODE_SIZE,
                             borderRadius: "50%",
                             border: `2px solid ${isHovered ? HOVER_YELLOW : CONN_GREY}`,
-                            bgcolor: neuronBg ?? "background.paper",
+                            bgcolor: neuronBg,
                             flexShrink: 0,
                             display: "flex",
                             alignItems: "center",
@@ -909,7 +940,7 @@ const OrientationNNVisualizer = ({
                             sx={{
                               fontSize: "0.52rem",
                               fontWeight: 700,
-                              color: isHovered ? HOVER_YELLOW : CONN_GREY,
+                              color: neuronTextColor,
                               lineHeight: 1,
                               userSelect: "none",
                               transition: "color 0.2s ease",
@@ -931,6 +962,12 @@ const OrientationNNVisualizer = ({
             );
           })}
         </Box>
+      </Box>
+      <Box sx={{ mt: 4 }}>
+        <HelpButton
+          onClick={() => onOpenHelp && onOpenHelp("modelDesign")}
+          tooltip={t.training.tooltip.helpAddClass}
+        />
       </Box>
 
       {/* Spacer */}

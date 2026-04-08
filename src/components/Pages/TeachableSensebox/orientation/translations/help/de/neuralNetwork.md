@@ -30,4 +30,4 @@ Im Gegensatz zum Entscheidungsbaum legen wir für das neuronale Netz vorher eine
 
 Während dem Training werden dem Modell dann immer wieder die Trainingsdaten gezeigt und es versucht diese zu klassifizieren. Wenn es nicht gut klassifiziert, passt es seine Gewichte ein wenig an.
 
-Dieser Vorgang wird sehr oft wiederholt. So lernt das neuronale Netz nach und nach, welche Einstellungen gut funktionieren.
+Dieser Vorgang wird sehr oft wiederholt. So lernen die einzelnen Neuronen nach und nach, bestimmte Muster in den Eingabedaten, und gemeinsam kann das Netzwerk daraus die Daten klassifizieren.
