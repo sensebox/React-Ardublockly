@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import * as tf from "@tensorflow/tfjs";
 
 const TOTAL_EPOCHS = 100;
@@ -14,6 +14,7 @@ const INITIAL_LEARNING_RATE = 0.01;
 function useOrientationNNTraining() {
   const [trainedModel, setTrainedModel] = useState(null);
   const [isTraining, setIsTraining] = useState(false);
+  const trainingGenerationRef = useRef(0);
   const [trainingProgress, setTrainingProgress] = useState({
     epoch: 0,
     totalEpochs: 0,
@@ -66,6 +67,7 @@ function useOrientationNNTraining() {
    */
   const trainModel = useCallback(
     async (classes, onStart, onError, onTrained, modelConfig) => {
+      const trainingId = ++trainingGenerationRef.current;
       onStart();
       setIsTraining(true);
       setTrainingProgress({ epoch: 0, totalEpochs: TOTAL_EPOCHS });
@@ -109,6 +111,10 @@ function useOrientationNNTraining() {
           classWeight: classWeights,
           callbacks: {
             onEpochEnd: async (epoch, logs) => {
+              if (trainingId !== trainingGenerationRef.current) {
+                model.stopTraining = true;
+                return;
+              }
               setTrainingProgress({
                 epoch: epoch + 1,
                 totalEpochs: TOTAL_EPOCHS,
@@ -138,6 +144,11 @@ function useOrientationNNTraining() {
         });
 
         tf.dispose([xTensor, yTensor]);
+
+        // A newer training superseded this one — don't update any state.
+        if (trainingId !== trainingGenerationRef.current) {
+          return;
+        }
 
         const modelInfo = {
           model,

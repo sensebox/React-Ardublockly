@@ -248,6 +248,7 @@ const OrientationClassification = () => {
                   onNNConfigChange={setNNConfig}
                   trainedModel={trainedNNModel}
                   latestSample={latestSample}
+                  onOpenHelp={handleOpenHelp}
                 />
 
                 {isNNTraining && (

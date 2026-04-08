@@ -4,7 +4,7 @@ Eine **Klasse** steht für eine Orientierung, die du erkennen möchtest — zum 
 
 ## Tipps
 
-- Verwende **beschreibende Namen**, die an die physische Position erinnern (z. B. „Bildschirm oben", „Bildschirm unten").
 - Du brauchst **mindestens 2 Klassen**, um ein Modell zu trainieren.
 - Du kannst bis zu **5 Klassen** pro Modell hinzufügen.
 - Klicke auf den Klassennamen, um ihn jederzeit umzubenennen.
+- Für neuronale Netze: Versuche für jede Klasse mehr Trainingsaufnahmen zu erstellen als die Anzahl der Neuronen in deinem Netz
