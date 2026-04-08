@@ -4,10 +4,10 @@ Bevor ein neuronales Netz trainiert werden kann, muss man zuerst festlegen, wie 
 
 # Breite und Tiefe eines Modells
 
-Beim Aufbau eines neuronalen Netzes sind vor allem zwei Eigenschaften wichtig: Tiefe und Breite.
+Beim Aufbau eines neuronalen Netzes sind vor allem zwei Eigenschaften wichtig: **Tiefe** und **Breite**.
 
-- Die "Tiefe" beschreibt, aus wie vielen "Schichten" das neuronale Netz besteht.
-- Die "Breite" beschreibt, wie viele "Neuronen" sich in einer einzelnen Schicht befinden.
+- Die **Tiefe** beschreibt, aus wie vielen **Schichten** das neuronale Netz besteht.
+- Die **Breite** beschreibt, wie viele **Neuronen** sich in einer einzelnen Schicht befinden.
 
 # Wann braucht man mehr Neuronen?
 
