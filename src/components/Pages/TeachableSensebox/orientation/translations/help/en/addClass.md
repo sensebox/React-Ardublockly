@@ -1,5 +1,3 @@
-# Add Class
-
 A **class** represents one orientation you want to recognise — for example "flat", "upright left", or "tilted 45°".
 
 ## Tips

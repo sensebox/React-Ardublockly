@@ -53,6 +53,7 @@ export const orientationTranslations_de = {
       helpAddClass: "Hilfe zum Hinzufügen von Klassen",
       helpDecisionTree: "Was ist ein Entscheidungsbaum?",
       helpNeuralNetwork: "Was ist ein neuronales Netz?",
+      helpModelDesign: "Wie sollte ein neuronales Netz aufgebaut sein?",
     },
   },
   neuralNetwork: {
@@ -128,6 +129,9 @@ export const orientationTranslations_de = {
     },
     decisionTree: {
       title: "Entscheidungsbaum",
+    },
+    modelDesign: {
+      title: "Aufbau eines neuronalen Netzes",
     },
   },
 };

@@ -1,5 +1,3 @@
-# Decision Tree
-
 Based on the recorded training data, a **decision tree** is generated. This tree can be used to determine which class a recorded orientation belongs to.
 
 ![decision tree tree](/media/teachable/decision_tree.drawio.png)

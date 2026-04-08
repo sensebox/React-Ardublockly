@@ -51,6 +51,7 @@ export const orientationTranslations_en = {
       helpAddClass: "Help with adding classes",
       helpDecisionTree: "What is a decision tree?",
       helpNeuralNetwork: "What is a neural network?",
+      helpModelDesign: "How is a neural network structured?",
     },
   },
   neuralNetwork: {
@@ -124,6 +125,9 @@ export const orientationTranslations_en = {
     },
     decisionTree: {
       title: "Decision Tree",
+    },
+    modelDesign: {
+      title: "Structure of a Neural Network",
     },
   },
 };

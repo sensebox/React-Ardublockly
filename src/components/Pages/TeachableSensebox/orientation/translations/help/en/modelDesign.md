@@ -1,8 +1,6 @@
-# Model Design
-
 Before training a neural network, we first have to decide how it is structured.
 
-# Model Width vs Depth
+# Width vs Depth
 
 Two important design choices are **depth** and **width**.
 

@@ -1,5 +1,3 @@
-# Entscheidungsbaum
-
 Basierend auf den aufgenommenen Trainingsdaten wird ein **Entscheidungsbaum** generiert. Mit diesem Baum kann entschieden werden zu welcher Klasse eine aufgenommene Orientierung gehört.
 
 ![decision tree tree](/media/teachable/decision_tree.drawio.png)

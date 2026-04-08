@@ -1,8 +1,6 @@
-# Modellaufbau
-
 Bevor ein neuronales Netz trainiert werden kann, muss man zuerst festlegen, wie es aufgebaut ist.
 
-# Breite und Tiefe eines Modells
+# Breite oder Tiefe
 
 Beim Aufbau eines neuronalen Netzes sind vor allem zwei Eigenschaften wichtig: **Tiefe** und **Breite**.
 
