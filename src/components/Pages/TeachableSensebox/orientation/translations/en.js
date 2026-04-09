@@ -1,3 +1,5 @@
+import { help } from "@uiw/react-md-editor";
+
 // src/components/Pages/TeachableSensebox/orientation/translations/en.js
 export const orientationTranslations_en = {
   title: "Orientation Classification",
@@ -47,11 +49,11 @@ export const orientationTranslations_en = {
       helpRecord: "Help with recording samples",
       moreClasses: "Add at least 2 classes to train",
       moreSamples: "Add at least 2 samples per class to train",
-      helpTraining: "Help with model training",
       helpAddClass: "Help with adding classes",
       helpDecisionTree: "What is a decision tree?",
       helpNeuralNetwork: "What is a neural network?",
       helpModelDesign: "How is a neural network structured?",
+      helpAccelerationSensor: "How does the accelerometer work?",
     },
   },
   neuralNetwork: {
@@ -128,6 +130,9 @@ export const orientationTranslations_en = {
     },
     modelDesign: {
       title: "Structure of a Neural Network",
+    },
+    accelerationSensor: {
+      title: "Accelerometer",
     },
   },
 };
