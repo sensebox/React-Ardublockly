@@ -12,6 +12,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 import { getTeachableSenseboxTranslations } from "./translations";
+import { getOrientationTranslations } from "./orientation/translations";
 
 // Load all help markdown files eagerly (Vite requires a static glob pattern)
 const markdownFiles = import.meta.glob("./translations/help/**/*.md", {
@@ -52,7 +53,10 @@ const HelpSidebar = ({ open, onClose, helpTopic }) => {
     return null;
   }
 
-  const t = getTeachableSenseboxTranslations();
+  const isOrientationTopic = helpTopic?.startsWith("orientation/");
+  const t = isOrientationTopic
+    ? getOrientationTranslations()
+    : getTeachableSenseboxTranslations();
   const helpTranslations = t.help || {};
 
   // Determine language for markdown file lookup
@@ -66,7 +70,10 @@ const HelpSidebar = ({ open, onClose, helpTopic }) => {
     markdownFiles[mdKey] ?? markdownFiles[mdFallbackKey] ?? null;
 
   // Title from translations (keep as localised string)
-  const topicTranslation = helpTranslations[helpTopic];
+  const lookupKey = isOrientationTopic
+    ? helpTopic.replace("orientation/", "")
+    : helpTopic;
+  const topicTranslation = helpTranslations[lookupKey];
   const title = topicTranslation?.title ?? helpTranslations.help ?? "Help";
 
   // Calculate dynamic top position: starts at navbar height, reduces to 0 as we scroll
