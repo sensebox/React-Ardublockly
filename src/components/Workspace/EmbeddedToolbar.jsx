@@ -5,7 +5,6 @@ import WorkspaceName from "./ToolbarItems/WorkspaceName";
 import Compile from "./ToolbarItems/Compile";
 import ShareProject from "./ToolbarItems/ShareProject";
 import ResetWorkspace from "./ToolbarItems/ResetWorkspace";
-import ReloadWorkspace from "./ToolbarItems/ReloadWorkspace";
 import AutoSave from "./ToolbarItems/AutoSave";
 
 const EmbeddedToolbar = ({
@@ -56,7 +55,6 @@ const EmbeddedToolbar = ({
           />
         )}
         {!multiple && <ResetWorkspace />}
-        {!multiple && <ReloadWorkspace />}
       </div>
     </div>
   );
