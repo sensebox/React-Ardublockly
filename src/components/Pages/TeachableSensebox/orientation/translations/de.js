@@ -121,17 +121,8 @@ export const orientationTranslations_de = {
     orientationClassification: {
       title: "Orientierungsklassifizierung",
     },
-    connection: {
-      title: "senseBox Eye verbinden",
-    },
     addClass: {
       title: "Klasse hinzufügen",
-    },
-    recordSample: {
-      title: "Aufnahme",
-    },
-    trainModel: {
-      title: "Modell trainieren",
     },
     decisionTree: {
       title: "Entscheidungsbaum",
