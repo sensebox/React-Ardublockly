@@ -12,6 +12,8 @@ Formally, you can think of a neural network as a very complicated mathematical f
 
 A **neuron** is a small computational unit. It receives numbers as input, combines them, and outputs another number as a result. These results are then passed on as inputs to other neurons.
 
+![Neuron](/media/teachable/neuron.drawio.png)
+
 The connections between neurons have \*\*weights. A weight determines how important a particular input is for the next neuron.
 
 - A **large weight** means: this input is important.

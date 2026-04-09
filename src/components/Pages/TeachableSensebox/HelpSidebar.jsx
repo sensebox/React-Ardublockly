@@ -80,10 +80,12 @@ const HelpSidebar = ({ open, onClose, helpTopic }) => {
       onClose={onClose}
       variant="persistent"
       sx={{
-        width: open ? SIDEBAR_WIDTH : 0,
+        minWidth: open ? SIDEBAR_WIDTH : 0,
+        width: open ? "20%" : 0,
         flexShrink: 0,
         "& .MuiDrawer-paper": {
-          width: SIDEBAR_WIDTH,
+          minWidth: SIDEBAR_WIDTH,
+          width: "20%",
           boxSizing: "border-box",
           top: topPosition,
           height: sidebarHeight,

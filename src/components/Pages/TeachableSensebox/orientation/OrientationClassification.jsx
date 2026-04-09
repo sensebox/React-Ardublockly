@@ -21,9 +21,7 @@ import OrientationNNVisualizer, {
   DEFAULT_NN_CONFIG,
 } from "./OrientationNNVisualizer";
 import useOrientationNNTraining from "./hooks/useOrientationNNTraining";
-import OrientationHelpSidebar, {
-  SIDEBAR_WIDTH,
-} from "./OrientationHelpSidebar";
+import HelpSidebar, { SIDEBAR_WIDTH } from "../HelpSidebar";
 import HelpButton from "../HelpButton";
 
 const OrientationClassification = () => {
@@ -52,7 +50,7 @@ const OrientationClassification = () => {
   const isWideScreen = useMediaQuery(theme.breakpoints.up("lg"));
 
   const handleOpenHelp = useCallback((topic) => {
-    setCurrentHelpTopic(topic);
+    setCurrentHelpTopic("orientation/" + topic);
     setHelpSidebarOpen(true);
   }, []);
 
@@ -111,7 +109,7 @@ const OrientationClassification = () => {
 
   return (
     <>
-      <OrientationHelpSidebar
+      <HelpSidebar
         open={helpSidebarOpen}
         onClose={handleCloseHelp}
         helpTopic={currentHelpTopic}
@@ -140,7 +138,7 @@ const OrientationClassification = () => {
               {t.title}
             </Typography>
             <HelpButton
-              onClick={() => handleOpenHelp("pageTitle")}
+              onClick={() => handleOpenHelp("orientationClassification")}
               tooltip={
                 t.training?.tooltip?.helpMain ||
                 "Was ist Orientierungsklassifizierung?"

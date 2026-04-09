@@ -182,8 +182,8 @@ export const teachableSenseboxTranslations_en = {
       "Waiting for frames from senseBox Eye camera... If this persists, check your device connection.",
   },
   help: {
-    pageTitle: {
-      title: "Teachable senseBox",
+    imageClassification: {
+      title: "Image Classification",
     },
     webcam: {
       title: "Camera",
