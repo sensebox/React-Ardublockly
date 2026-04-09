@@ -27,6 +27,9 @@ export const orientationTranslations_de = {
     className: "Klassenname",
     cancel: "Abbrechen",
     add: "Hinzufügen",
+    loadDataset: "Beispieldatensatz laden",
+    errorTooManyClasses:
+      "Das Laden dieses Datensatzes würde das Limit von 5 Klassen überschreiten. Bitte entferne zuerst einige Klassen.",
     errorClassExists: 'Eine Klasse mit dem Namen "{name}" existiert bereits.',
     errorInsufficientData:
       "Unzureichende Daten für das Training. Bitte füge mindestens 2 Klassen mit mindestens 2 Aufnahmen hinzu.",

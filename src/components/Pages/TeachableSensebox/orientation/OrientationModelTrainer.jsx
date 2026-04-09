@@ -5,6 +5,7 @@ import {
   Box,
   Button,
   Typography,
+  Grid,
   Card,
   CardContent,
   CardActions,
@@ -17,6 +18,8 @@ import {
   LinearProgress,
   Tooltip,
   CircularProgress,
+  Menu,
+  MenuItem,
   useTheme,
   useMediaQuery,
 } from "@mui/material";
@@ -26,7 +29,9 @@ import {
   FiberManualRecord as RecordIcon,
   Speed as SensorIcon,
   Download as DownloadIcon,
+  ArrowDropDown as ArrowDropDownIcon,
 } from "@mui/icons-material";
+import { ORIENTATION_DATASETS } from "../../../../data/orientation-datasets";
 import useOrientationSource from "./hooks/useOrientationSource";
 import useOrientationModelTraining from "./hooks/useOrientationModelTraining";
 import HelpButton from "../HelpButton";
@@ -443,6 +448,7 @@ const OrientationModelTrainer = ({
   const [editingClassId, setEditingClassId] = useState(null);
   const [editingClassName, setEditingClassName] = useState("");
   const [recordingClassId, setRecordingClassId] = useState(null);
+  const [datasetMenuAnchor, setDatasetMenuAnchor] = useState(null);
 
   const language = useSelector((s) => s.general.language);
   const t = getOrientationTranslations();
@@ -561,6 +567,57 @@ const OrientationModelTrainer = ({
     [onClassesChange],
   );
 
+  const loadDataset = useCallback(
+    (dataset) => {
+      const now = Date.now();
+      const newClasses = dataset.data.classes.filter(
+        (cls) =>
+          !classes.some(
+            (existing) =>
+              existing.name.toLowerCase() === cls.labelDE?.toLowerCase() ||
+              existing.name.toLowerCase() === cls.id?.toLowerCase(),
+          ),
+      );
+      if (classes.length + newClasses.length > 5) {
+        onTrainingError(t.training.errorTooManyClasses);
+        return;
+      }
+      onClassesChange((prev) => {
+        const updated = prev.map((existing) => {
+          const match = dataset.data.classes.find(
+            (cls) =>
+              existing.name.toLowerCase() === cls.labelDE?.toLowerCase() ||
+              existing.name.toLowerCase() === cls.id?.toLowerCase(),
+          );
+          if (!match) return existing;
+          return {
+            ...existing,
+            samples: match.readings.map((reading, j) => ({
+              id: now + j,
+              x: reading.x,
+              y: reading.y,
+              z: reading.z,
+              recordedAt: now,
+            })),
+          };
+        });
+        const added = newClasses.map((cls, i) => ({
+          id: now + 100000 + i,
+          name: cls.labelDE ?? cls.id,
+          samples: cls.readings.map((reading, j) => ({
+            id: now + i * 10000 + j,
+            x: reading.x,
+            y: reading.y,
+            z: reading.z,
+            recordedAt: now,
+          })),
+        }));
+        return [...updated, ...added];
+      });
+    },
+    [classes, onClassesChange, onTrainingError, t],
+  );
+
   // ─── Single-snapshot recording ─────────────────────────────────────────────
 
   const startRecording = useCallback(
@@ -627,171 +684,222 @@ const OrientationModelTrainer = ({
 
   return (
     <Box>
-      {/* Connection Controls */}
-      <Box
-        sx={{
-          mb: 3,
-          display: "flex",
-          gap: 1,
-          alignItems: "center",
-          flexWrap: "wrap",
-        }}
-      >
-        <Tooltip
-          title={!isSupported ? t.training.tooltip.browserCompatible : ""}
-          arrow
-          disableHoverListener={isSupported}
-        >
-          <span>
-            <Button
-              variant="contained"
-              startIcon={
-                isConnecting ? (
-                  <CircularProgress size={16} color="inherit" />
-                ) : (
-                  <SensorIcon />
-                )
-              }
-              onClick={isConnected ? disconnect : connect}
-              disabled={disabled || isConnecting || !isSupported}
-              color={isConnected ? "secondary" : "primary"}
-            >
-              {isConnecting
-                ? t.training.connecting
-                : isConnected
-                  ? t.training.disconnectSenseBox
-                  : t.training.connectSenseBox}
-            </Button>
-          </span>
-        </Tooltip>
-
-        {!isConnected && !dataTimeoutError && !sensorError && isSupported && (
-          <Button
-            variant="outlined"
-            startIcon={
-              isDownloading ? <CircularProgress size={16} /> : <DownloadIcon />
-            }
-            onClick={handleDownloadFirmware}
-            disabled={isDownloading || disabled || !isSupported}
+      <Grid container spacing={3}>
+        {/* ── Left column: connection controls + live graph ─────────── */}
+        <Grid item xs={12} md={5}>
+          <Box
+            sx={{
+              position: { md: "sticky" },
+              top: { md: 16 },
+              alignSelf: "flex-start",
+            }}
           >
-            {t.errors.downloadFirmware}
-          </Button>
-        )}
-        <HelpButton
-          onClick={() => onOpenHelp && onOpenHelp("accelerationSensor")}
-          tooltip={t.training?.tooltip?.helpAccelerationSensor}
-        />
-      </Box>
-
-      {/* Serial connection error */}
-      {((isConnected && dataTimeoutError) || (!isConnected && sensorError)) && (
-        <Box sx={{ mb: 3 }}>
-          <SerialCameraErrorHandler
-            error={
-              !isConnected && sensorError
-                ? {
-                    type: sensorError.type || ErrorTypes.CONNECTION_FAILED,
-                    message: sensorError.message,
-                  }
-                : {
-                    type: ErrorTypes.CONNECTION_FAILED,
-                    message: t.errors.dataTimeoutMessage,
-                  }
-            }
-            connectionStatus={ConnectionStatus.CONNECTED}
-            onRetry={async () => {
-              await disconnect();
-              await connect();
-            }}
-            onDismiss={() => disconnect()}
-            showStatus={false}
-            overrides={{
-              errorTitle: t.errors.connectionFailed,
-              errorMessage: t.errors.connectionFailedMessage,
-              troubleshootingFirmware: t.errors.troubleshootingFirmware,
-              downloadFirmwareLabel: t.errors.downloadFirmware,
-              downloadFirmwareFn: downloadAccelerometerFirmware,
-            }}
-          />
-        </Box>
-      )}
-
-      {/* Desktop: graph left, class cards right — mobile: stacked */}
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: isMobile ? "column" : "row",
-          gap: 3,
-          alignItems: "flex-start",
-        }}
-      >
-        {/* Live sensor graph (desktop only) */}
-        {isConnected && !dataTimeoutError && !isMobile && (
-          <Box sx={{ flexShrink: 0, position: "sticky", top: 32, zIndex: 1 }}>
-            <InlineGraph
-              latestSample={latestSample}
-              label={t.training.liveAccelerometer}
-            />
-          </Box>
-        )}
-
-        {/* Class cards */}
-        <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", flex: 1 }}>
-          {classes.map((cls) => (
-            <ClassCardItem
-              key={cls.id}
-              cls={cls}
-              isEditing={editingClassId === cls.id}
-              editingClassName={editingClassName}
-              isRecording={recordingClassId === cls.id}
-              isConnected={isConnected}
-              dataTimeoutError={dataTimeoutError}
-              recordingInProgress={recordingClassId !== null}
-              onStartRecording={startRecording}
-              onDeleteClass={deleteClass}
-              onStartEditingClass={startEditingClass}
-              onSaveClassRename={saveClassRename}
-              onCancelEditingClass={cancelEditingClass}
-              onRemoveSample={removeSample}
-              onEditNameChange={setEditingClassName}
-              t={t}
-            />
-          ))}
-
-          {/* Add Class card */}
-          {canAddClass && (
-            <Box sx={{ display: "flex", alignItems: "flex-start" }}>
-              <Card
-                variant="outlined"
-                sx={{
-                  minWidth: 220,
-                  flex: "1 1 220px",
-                  maxWidth: 360,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  cursor: "pointer",
-                  border: "2px dashed",
-                  borderColor: "grey.400",
-                  "&:hover": { borderColor: "primary.main" },
-                }}
-                onClick={() => setShowAddDialog(true)}
+            {/* Connection Controls */}
+            <Box
+              sx={{
+                mb: 3,
+                display: "flex",
+                gap: 1,
+                alignItems: "center",
+                flexWrap: "wrap",
+              }}
+            >
+              <Tooltip
+                title={!isSupported ? t.training.tooltip.browserCompatible : ""}
+                arrow
+                disableHoverListener={isSupported}
               >
-                <Box sx={{ textAlign: "center", p: 3 }}>
-                  <AddIcon sx={{ fontSize: 32, color: "grey.500" }} />
-                  <Typography variant="body2" color="text.secondary">
-                    {t.training.addClass}
-                  </Typography>
-                </Box>
-              </Card>
-              <HelpButton
-                onClick={() => onOpenHelp && onOpenHelp("addClass")}
-                tooltip={t.training.tooltip.helpAddClass}
-              />
+                <span>
+                  <Button
+                    variant="contained"
+                    startIcon={
+                      isConnecting ? (
+                        <CircularProgress size={16} color="inherit" />
+                      ) : (
+                        <SensorIcon />
+                      )
+                    }
+                    onClick={isConnected ? disconnect : connect}
+                    disabled={disabled || isConnecting || !isSupported}
+                    color={isConnected ? "secondary" : "primary"}
+                  >
+                    {isConnecting
+                      ? t.training.connecting
+                      : isConnected
+                        ? t.training.disconnectSenseBox
+                        : t.training.connectSenseBox}
+                  </Button>
+
+                  <HelpButton
+                    onClick={() =>
+                      onOpenHelp && onOpenHelp("accelerationSensor")
+                    }
+                    tooltip={t.training?.tooltip?.helpAccelerationSensor}
+                  />
+                </span>
+              </Tooltip>
+
+              <Button
+                variant="outlined"
+                startIcon={
+                  isDownloading ? (
+                    <CircularProgress size={16} />
+                  ) : (
+                    <DownloadIcon />
+                  )
+                }
+                onClick={handleDownloadFirmware}
+                disabled={isDownloading || disabled || !isSupported}
+              >
+                {t.errors.downloadFirmware}
+              </Button>
+            </Box>
+
+            {/* Serial connection error */}
+            {((isConnected && dataTimeoutError) ||
+              (!isConnected && sensorError)) && (
+              <Box sx={{ mb: 3 }}>
+                <SerialCameraErrorHandler
+                  error={
+                    !isConnected && sensorError
+                      ? {
+                          type:
+                            sensorError.type || ErrorTypes.CONNECTION_FAILED,
+                          message: sensorError.message,
+                        }
+                      : {
+                          type: ErrorTypes.CONNECTION_FAILED,
+                          message: t.errors.dataTimeoutMessage,
+                        }
+                  }
+                  connectionStatus={ConnectionStatus.CONNECTED}
+                  onRetry={async () => {
+                    await disconnect();
+                    await connect();
+                  }}
+                  onDismiss={() => disconnect()}
+                  showStatus={false}
+                  overrides={{
+                    errorTitle: t.errors.connectionFailed,
+                    errorMessage: t.errors.connectionFailedMessage,
+                    troubleshootingFirmware: t.errors.troubleshootingFirmware,
+                    downloadFirmwareLabel: t.errors.downloadFirmware,
+                    downloadFirmwareFn: downloadAccelerometerFirmware,
+                  }}
+                />
+              </Box>
+            )}
+
+            {/* Live sensor graph (desktop only, when connected) */}
+            {isConnected && !dataTimeoutError && !isMobile && (
+              <Box sx={{ mt: 1 }}>
+                <InlineGraph
+                  latestSample={latestSample}
+                  label={t.training.liveAccelerometer}
+                />
+              </Box>
+            )}
+          </Box>
+        </Grid>
+
+        {/* ── Right column: dataset loader + class cards ────────────── */}
+        <Grid item xs={12} md={7}>
+          {/* Load example dataset dropdown */}
+          {ORIENTATION_DATASETS.length > 0 && (
+            <Box sx={{ mb: 2 }}>
+              <Button
+                variant="outlined"
+                size="small"
+                endIcon={<ArrowDropDownIcon />}
+                onClick={(e) => setDatasetMenuAnchor(e.currentTarget)}
+              >
+                {t.training.loadDataset}
+              </Button>
+              <Menu
+                anchorEl={datasetMenuAnchor}
+                open={Boolean(datasetMenuAnchor)}
+                onClose={() => setDatasetMenuAnchor(null)}
+              >
+                {ORIENTATION_DATASETS.map((dataset) => {
+                  const locale =
+                    window.localStorage.getItem("locale") || "de_DE";
+                  const lang = locale.split("_")[0];
+                  const label =
+                    lang === "en" ? dataset.labelEn : dataset.labelDe;
+                  return (
+                    <MenuItem
+                      key={dataset.id}
+                      onClick={() => {
+                        loadDataset(dataset);
+                        setDatasetMenuAnchor(null);
+                      }}
+                    >
+                      {label}
+                    </MenuItem>
+                  );
+                })}
+              </Menu>
             </Box>
           )}
-        </Box>
-      </Box>
+
+          {/* Class cards */}
+          <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+            {classes.map((cls) => (
+              <ClassCardItem
+                key={cls.id}
+                cls={cls}
+                isEditing={editingClassId === cls.id}
+                editingClassName={editingClassName}
+                isRecording={recordingClassId === cls.id}
+                isConnected={isConnected}
+                dataTimeoutError={dataTimeoutError}
+                recordingInProgress={recordingClassId !== null}
+                onStartRecording={startRecording}
+                onDeleteClass={deleteClass}
+                onStartEditingClass={startEditingClass}
+                onSaveClassRename={saveClassRename}
+                onCancelEditingClass={cancelEditingClass}
+                onRemoveSample={removeSample}
+                onEditNameChange={setEditingClassName}
+                t={t}
+              />
+            ))}
+
+            {/* Add Class card */}
+            {canAddClass && (
+              <Box sx={{ display: "flex", alignItems: "flex-start" }}>
+                <Card
+                  variant="outlined"
+                  sx={{
+                    minWidth: 220,
+                    flex: "1 1 220px",
+                    maxWidth: 360,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    cursor: "pointer",
+                    border: "2px dashed",
+                    borderColor: "grey.400",
+                    "&:hover": { borderColor: "primary.main" },
+                  }}
+                  onClick={() => setShowAddDialog(true)}
+                >
+                  <Box sx={{ textAlign: "center", p: 3 }}>
+                    <AddIcon sx={{ fontSize: 32, color: "grey.500" }} />
+                    <Typography variant="body2" color="text.secondary">
+                      {t.training.addClass}
+                    </Typography>
+                  </Box>
+                </Card>
+                <HelpButton
+                  onClick={() => onOpenHelp && onOpenHelp("addClass")}
+                  tooltip={t.training.tooltip.helpAddClass}
+                />
+              </Box>
+            )}
+          </Box>
+        </Grid>
+      </Grid>
 
       {/* Add Class Dialog */}
       <Dialog
