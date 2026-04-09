@@ -4,8 +4,10 @@ Bevor ein neuronales Netz trainiert werden kann, muss man zuerst festlegen, wie 
 
 Beim Aufbau eines neuronalen Netzes sind vor allem zwei Eigenschaften wichtig: **Tiefe** und **Breite**.
 
-- Die **Tiefe** beschreibt, aus wie vielen **Schichten** das neuronale Netz besteht.
-- Die **Breite** beschreibt, wie viele **Neuronen** sich in einer einzelnen Schicht befinden.
+- Die **Tiefe** gibt an, aus wie vielen **Schichten** das neuronale Netz besteht.
+- Die **Breite** gibt an, wie viele **Neuronen** sich in einer einzelnen Schicht befinden.
+
+![depth width](/media/teachable/depth_width.drawio.png)
 
 # Wann braucht man mehr Neuronen?
 
@@ -13,11 +15,15 @@ Ein einzelnes Neuron kann lernen, bestimmte Muster in den Eingabedaten zu erkenn
 
 Breite neuronale Netze, also Netze mit vielen Neuronen pro Schicht, sind oft besonders gut darin, sich die **Trainingsdaten haargenau einzuprägen**. Wenn deine Trainingsaufnahmen allerdings nicht alle möglichen Orientierungen abdecken, kann dies ein Nachteil sein.
 
+![wide brain](/media/teachable/wide_brain.png)
+
 # Wann braucht man mehr Schichten?
 
 Wenn man mehr Schichten hinzufügt, kann das Modell zunehmend **abstraktere Muster** lernen. Die zweite Schicht erkennt quasi Muster in den Mustern, die von der ersten Schicht erkannt wurden
 
 Tiefe neuronale Netze, also Netze mit vielen Schichten, sind oft besonders gut darin, aus den Trainingsdaten **allgemeinere Regeln** abzuleiten. Diese müssen aber nicht unbedingt mit dem Verhalten übereinstimmen, was du dir vorgestellt hast.
+
+![deep brain](/media/teachable/deep_brain.png)
 
 # Tipp
 
