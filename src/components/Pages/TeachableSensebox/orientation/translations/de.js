@@ -1,4 +1,5 @@
 import { help } from "@uiw/react-md-editor";
+import OrientationClassification from "../OrientationClassification";
 
 // src/components/Pages/TeachableSensebox/orientation/translations/de.js
 export const orientationTranslations_de = {
@@ -114,7 +115,7 @@ export const orientationTranslations_de = {
   },
   help: {
     help: "Hilfe",
-    pageTitle: {
+    orientationClassification: {
       title: "Orientierungsklassifizierung",
     },
     connection: {

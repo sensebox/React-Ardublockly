@@ -12,6 +12,8 @@ Formal betrachtet kannst du dir ein neuronales Netz wie eine sehr komplizierte m
 
 Ein **Neuron** ist eine kleine Recheneinheit. Es bekommt Zahlen als Eingabe, verrechnet sie und gibt wieder eine Zahl als Ergebnis weiter. Diese Ergebnisse werden als Eingaben an andere Neuronen weitergeben.
 
+![Neuron](/media/teachable/neuron.drawio.png)
+
 Die Verbindungen zwischen den Neuronen haben **Gewichte**. Ein Gewicht legt fest, wie wichtig eine bestimmte Eingabe für das nächste Neuron ist.
 
 - Ein **großes Gewicht** bedeutet: Diese Eingabe ist wichtig.

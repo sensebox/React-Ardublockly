@@ -110,7 +110,7 @@ export const orientationTranslations_en = {
   },
   help: {
     help: "Help",
-    pageTitle: {
+    orientationClassification: {
       title: "Orientation Classification",
     },
     connection: {

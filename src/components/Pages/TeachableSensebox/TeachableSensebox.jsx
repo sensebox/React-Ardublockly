@@ -102,7 +102,7 @@ const TeachableSensebox = () => {
               {t.title}
             </Typography>
             <HelpButton
-              onClick={() => handleOpenHelp("pageTitle")}
+              onClick={() => handleOpenHelp("imageClassification")}
               tooltip={t.training?.helpMain || "Was ist Teachable senseBox?"}
             />
           </Box>

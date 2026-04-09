@@ -87,8 +87,8 @@ export const teachableSenseboxTranslations_de = {
   },
   help: {
     help: "Hilfe",
-    pageTitle: {
-      title: "Teachable senseBox",
+    imageClassification: {
+      title: "Bildklassifizierung",
     },
     webcam: {
       title: "Kamera",
