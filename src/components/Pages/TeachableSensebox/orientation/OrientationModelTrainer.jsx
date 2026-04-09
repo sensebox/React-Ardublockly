@@ -210,14 +210,10 @@ const ClassCardItem = memo(
                   if (e.key === "Enter") onSaveClassRename();
                   if (e.key === "Escape") onCancelEditingClass();
                 }}
+                onBlur={onSaveClassRename}
                 autoFocus
+                fullWidth
               />
-              <Button size="small" onClick={onSaveClassRename}>
-                OK
-              </Button>
-              <Button size="small" onClick={onCancelEditingClass}>
-                {t.training.cancel}
-              </Button>
             </Box>
           ) : (
             <Box
@@ -530,6 +526,8 @@ const OrientationModelTrainer = ({
         onTrainingError(
           t.training.errorClassExists.replace("{name}", trimmedName),
         );
+        setEditingClassId(null);
+        setEditingClassName("");
         return;
       }
       onClassesChange((prev) =>
@@ -537,6 +535,9 @@ const OrientationModelTrainer = ({
           cls.id === editingClassId ? { ...cls, name: trimmedName } : cls,
         ),
       );
+      setEditingClassId(null);
+      setEditingClassName("");
+    } else {
       setEditingClassId(null);
       setEditingClassName("");
     }
