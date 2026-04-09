@@ -677,6 +677,10 @@ const OrientationModelTrainer = ({
             {t.errors.downloadFirmware}
           </Button>
         )}
+        <HelpButton
+          onClick={() => onOpenHelp && onOpenHelp("accelerationSensor")}
+          tooltip={t.training?.tooltip?.helpAccelerationSensor}
+        />
       </Box>
 
       {/* Serial connection error */}

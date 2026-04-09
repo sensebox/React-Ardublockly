@@ -16,9 +16,6 @@ const NODE_W = 140;
 const NODE_H = 50;
 const NODE_R = 8; // border-radius
 
-/** Colours per class index (matches the class-card palette) */
-const CLASS_COLORS = ["#e53935", "#43a047", "#1e88e5", "#fb8c00", "#8e24aa"];
-
 /** Seconds of delay added per depth level for the appear animation */
 const ANIM_DELAY = 0.2;
 
@@ -34,17 +31,11 @@ const NodeBox = ({ node, classNames, x, y, activePathSet, t }) => {
   const theme = useTheme();
   const [hovered, setHovered] = useState(false);
 
-  const isPredicting = activePathSet != null;
-  const isOnPath = isPredicting && activePathSet.has(node.data);
+  const isOnPath = activePathSet != null && activePathSet.has(node.data);
 
   if (node.data.isLeaf) {
     let color;
-    if (isPredicting) {
-      color = isOnPath ? "#43a047" : "#686868";
-    } else {
-      const classIdx = classNames.indexOf(node.data.prediction);
-      color = CLASS_COLORS[Math.max(0, classIdx)] ?? theme.palette.primary.main;
-    }
+    color = isOnPath ? "#43a047" : "#686868";
     const total = node.data.samplesCount;
 
     return (
@@ -63,7 +54,7 @@ const NodeBox = ({ node, classNames, x, y, activePathSet, t }) => {
           fill={color}
           stroke={isOnPath ? "#2e7d32" : hovered ? "#fff" : "none"}
           strokeWidth={isOnPath ? 2.5 : hovered ? 2 : 0}
-          opacity={isOnPath || !isPredicting ? 1 : 0.55}
+          opacity={isOnPath ? 1 : 0.55}
         />
         <text
           textAnchor="middle"
@@ -98,20 +89,16 @@ const NodeBox = ({ node, classNames, x, y, activePathSet, t }) => {
         rx={NODE_R}
         ry={NODE_R}
         fill={
-          isPredicting
-            ? isOnPath
-              ? hovered
-                ? "#a5d6a7"
-                : "#c8e6c9"
-              : hovered
-                ? theme.palette.grey[300]
-                : theme.palette.grey[200]
+          isOnPath
+            ? hovered
+              ? "#a5d6a7"
+              : "#c8e6c9"
             : hovered
-              ? theme.palette.grey[200]
-              : theme.palette.grey[100]
+              ? theme.palette.grey[300]
+              : theme.palette.grey[200]
         }
-        stroke={isPredicting && isOnPath ? "#43a047" : theme.palette.divider}
-        strokeWidth={isPredicting && isOnPath ? 2 : 1.5}
+        stroke={isOnPath ? "#43a047" : theme.palette.divider}
+        strokeWidth={isOnPath ? 2 : 1.5}
       />
       <text
         textAnchor="middle"
