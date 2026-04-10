@@ -7,8 +7,10 @@ export const orientationTranslations_en = {
     "Train your own orientation recognition model using the senseBox Eye accelerometer. Each sample is a single snapshot of x, y, z values.",
   training: {
     title: "Training Data",
-    connectSenseBox: "Connect senseBox Eye",
+    connectSenseBox: "Connect senseBox Eye (Serial)",
     disconnectSenseBox: "Disconnect senseBox Eye",
+    connectSenseBoxBLE: "Connect senseBox Eye (Bluetooth)",
+    disconnectSenseBoxBLE: "Disconnect Bluetooth",
     connecting: "Connecting...",
     connected: "Connected",
     disconnected: "Disconnected",
@@ -47,6 +49,8 @@ export const orientationTranslations_en = {
       helpMain: "What is Orientation Classification?",
       browserCompatible:
         "This browser does not support the required features for connecting to the senseBox Eye. Please use a compatible browser like Chrome or Edge.",
+      bluetoothNotSupported:
+        "This browser does not support Web Bluetooth. Please use Chrome or Edge.",
       helpClasses: "Help with classes",
       startConnection: "Connect to the senseBox Eye to start recording samples",
       helpRecord: "Help with recording samples",

@@ -8,8 +8,10 @@ export const orientationTranslations_de = {
     "Trainiere dein eigenes Modell zur Erkennung von Orientierungen mit dem senseBox Eye Beschleunigungssensor. Jede Aufnahme ist ein einzelner Messwert für x, y und z.",
   training: {
     title: "Trainingsdaten",
-    connectSenseBox: "senseBox Eye verbinden",
+    connectSenseBox: "senseBox Eye verbinden (Seriell)",
     disconnectSenseBox: "senseBox Eye trennen",
+    connectSenseBoxBLE: "senseBox Eye verbinden (Bluetooth)",
+    disconnectSenseBoxBLE: "Bluetooth trennen",
     connecting: "Verbinde...",
     connected: "Verbunden",
     disconnected: "Getrennt",
@@ -49,6 +51,8 @@ export const orientationTranslations_de = {
       helpMain: "Was ist Orientierungsklassifizierung?",
       browserCompatible:
         "Dieser Browser unterstützt die benötigten Funktionen für die Verbindung mit der senseBox Eye nicht. Bitte verwende einen kompatiblen Browser wie Chrome oder Edge.",
+      bluetoothNotSupported:
+        "Dieser Browser unterstützt kein Web Bluetooth. Bitte verwende Chrome oder Edge.",
       helpClasses: "Hilfe zu Klassen",
       startConnection: "Verbinde die senseBox Eye, um Aufnahmen zu starten",
       helpRecord: "Hilfe zur Aufnahme",
