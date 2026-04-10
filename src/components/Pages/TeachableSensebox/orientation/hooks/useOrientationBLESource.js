@@ -1,22 +1,22 @@
 import { useState, useCallback, useRef, useEffect } from "react";
-import OrientationService from "../OrientationService";
+import OrientationBLEService from "../OrientationBLEService";
 
-// Share a single OrientationService across hook instances to avoid
-// multiple Web Serial connections to the same port.
+// Share a single OrientationBLEService across hook instances to avoid
+// multiple simultaneous BLE connections to the same device.
 let sharedService = null;
 let sharedServiceUsers = 0;
 
-/**
- * useOrientationSource
- *
- * Provides a unified interface for connecting to the senseBox Eye
- * accelerometer via Web Serial and streaming X/Y/Z data.
- *
- * @returns {Object} Orientation source management interface
- */
 const DATA_TIMEOUT_MS = 5000;
 
-function useOrientationSource() {
+/**
+ * useOrientationBLESource
+ *
+ * Provides a unified interface for connecting to the senseBox Eye
+ * accelerometer via Web Bluetooth and streaming X/Y/Z data.
+ *
+ * @returns {Object} Accelerometer BLE source management interface
+ */
+function useOrientationBLESource() {
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [error, setError] = useState(null);
@@ -30,7 +30,7 @@ function useOrientationSource() {
 
   useEffect(() => {
     if (!sharedService) {
-      sharedService = new OrientationService();
+      sharedService = new OrientationBLEService();
     }
     sharedServiceUsers += 1;
     serviceRef.current = sharedService;
@@ -50,7 +50,10 @@ function useOrientationSource() {
       if (sharedServiceUsers === 0 && serviceRef.current) {
         if (serviceRef.current.isConnected) {
           serviceRef.current.disconnect().catch((err) => {
-            console.error("Error disconnecting accelerometer on unmount:", err);
+            console.error(
+              "Error disconnecting BLE accelerometer on unmount:",
+              err,
+            );
           });
         }
         serviceRef.current = null;
@@ -66,6 +69,12 @@ function useOrientationSource() {
 
     try {
       await serviceRef.current.connect();
+
+      // User may have cancelled the picker — service won't be connected
+      if (!serviceRef.current.isConnected) {
+        setIsConnecting(false);
+        return;
+      }
 
       lastDataTimeRef.current = Date.now();
       setDataTimeoutError(false);
@@ -105,7 +114,7 @@ function useOrientationSource() {
     try {
       await serviceRef.current.disconnect();
     } catch (err) {
-      console.error("Error disconnecting accelerometer:", err);
+      console.error("Error disconnecting BLE accelerometer:", err);
     }
 
     setIsConnected(false);
@@ -115,37 +124,7 @@ function useOrientationSource() {
     lastDataTimeRef.current = null;
   }, []);
 
-  /**
-   * Record a gesture for a fixed duration.
-   * @param {number} durationMs - how long to record in milliseconds
-   * @returns {Promise<Array<{x,y,z,timestamp}>>} array of samples
-   */
-  const recordGesture = useCallback(
-    (durationMs = 2000) => {
-      return new Promise((resolve, reject) => {
-        if (!serviceRef.current || !isConnected) {
-          reject(new Error("Not connected"));
-          return;
-        }
-
-        const samples = [];
-
-        const unsubscribe = serviceRef.current.onData((sample) => {
-          samples.push(sample);
-        });
-
-        setTimeout(() => {
-          unsubscribe();
-          resolve(samples);
-        }, durationMs);
-      });
-    },
-    [isConnected],
-  );
-
   // ─── Data-timeout watchdog ────────────────────────────────────────────────
-  // While connected, check every second whether a sample arrived in the last
-  // DATA_TIMEOUT_MS milliseconds. If not, surface a warning to the UI.
   useEffect(() => {
     if (!isConnected) {
       setDataTimeoutError(false);
@@ -172,9 +151,8 @@ function useOrientationSource() {
     dataTimeoutError,
     connect,
     disconnect,
-    recordGesture,
-    isSupported: OrientationService.isSupported(),
+    isSupported: OrientationBLEService.isSupported(),
   };
 }
 
-export default useOrientationSource;
+export default useOrientationBLESource;

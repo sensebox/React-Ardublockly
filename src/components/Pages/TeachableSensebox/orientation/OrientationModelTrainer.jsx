@@ -30,9 +30,11 @@ import {
   Speed as SensorIcon,
   Download as DownloadIcon,
   ArrowDropDown as ArrowDropDownIcon,
+  Bluetooth as BluetoothIcon,
 } from "@mui/icons-material";
 import { ORIENTATION_DATASETS } from "../../../../data/orientation-datasets";
 import useOrientationSource from "./hooks/useOrientationSource";
+import useOrientationBLESource from "./hooks/useOrientationBLESource";
 import useOrientationModelTraining from "./hooks/useOrientationModelTraining";
 import HelpButton from "../HelpButton";
 import SerialCameraErrorHandler, {
@@ -249,7 +251,7 @@ const ClassCardItem = memo(
               gap: 0.5,
               mt: 1,
               mb: 1,
-              maxHeight: 240,
+              maxHeight: 130,
               overflowY: "auto",
               pr: 0.5,
             }}
@@ -452,16 +454,16 @@ const OrientationModelTrainer = ({
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [isDownloading, setIsDownloading] = useState(false);
 
-  const {
-    isConnected,
-    isConnecting,
-    error: sensorError,
-    latestSample,
-    dataTimeoutError,
-    connect,
-    disconnect,
-    isSupported,
-  } = useOrientationSource();
+  const serialSource = useOrientationSource();
+  const bleSource = useOrientationBLESource();
+
+  // Derive active source — Serial takes priority if both somehow connected
+  const activeSource = serialSource.isConnected ? serialSource : bleSource;
+  const isConnected = serialSource.isConnected || bleSource.isConnected;
+  const isConnecting = serialSource.isConnecting || bleSource.isConnecting;
+  const latestSample = activeSource.latestSample;
+  const dataTimeoutError = activeSource.dataTimeoutError;
+  const sensorError = activeSource.error;
 
   const { trainModel: executeTraining } = useOrientationModelTraining();
 
@@ -705,28 +707,43 @@ const OrientationModelTrainer = ({
                 flexWrap: "wrap",
               }}
             >
+              {/* Serial connect button */}
               <Tooltip
-                title={!isSupported ? t.training.tooltip.browserCompatible : ""}
+                title={
+                  !serialSource.isSupported
+                    ? t.training.tooltip.browserCompatible
+                    : ""
+                }
                 arrow
-                disableHoverListener={isSupported}
+                disableHoverListener={serialSource.isSupported}
               >
                 <span>
                   <Button
                     variant="contained"
                     startIcon={
-                      isConnecting ? (
+                      serialSource.isConnecting ? (
                         <CircularProgress size={16} color="inherit" />
                       ) : (
                         <SensorIcon />
                       )
                     }
-                    onClick={isConnected ? disconnect : connect}
-                    disabled={disabled || isConnecting || !isSupported}
-                    color={isConnected ? "secondary" : "primary"}
+                    onClick={
+                      serialSource.isConnected
+                        ? serialSource.disconnect
+                        : serialSource.connect
+                    }
+                    disabled={
+                      disabled ||
+                      serialSource.isConnecting ||
+                      !serialSource.isSupported ||
+                      bleSource.isConnected ||
+                      bleSource.isConnecting
+                    }
+                    color={serialSource.isConnected ? "secondary" : "primary"}
                   >
-                    {isConnecting
+                    {serialSource.isConnecting
                       ? t.training.connecting
-                      : isConnected
+                      : serialSource.isConnected
                         ? t.training.disconnectSenseBox
                         : t.training.connectSenseBox}
                   </Button>
@@ -740,6 +757,49 @@ const OrientationModelTrainer = ({
                 </span>
               </Tooltip>
 
+              {/* BLE connect button */}
+              <Tooltip
+                title={
+                  !bleSource.isSupported
+                    ? t.training.tooltip.bluetoothNotSupported
+                    : ""
+                }
+                arrow
+                disableHoverListener={bleSource.isSupported}
+              >
+                <span>
+                  <Button
+                    variant="contained"
+                    startIcon={
+                      bleSource.isConnecting ? (
+                        <CircularProgress size={16} color="inherit" />
+                      ) : (
+                        <BluetoothIcon />
+                      )
+                    }
+                    onClick={
+                      bleSource.isConnected
+                        ? bleSource.disconnect
+                        : bleSource.connect
+                    }
+                    disabled={
+                      disabled ||
+                      bleSource.isConnecting ||
+                      !bleSource.isSupported ||
+                      serialSource.isConnected ||
+                      serialSource.isConnecting
+                    }
+                    color={bleSource.isConnected ? "secondary" : "primary"}
+                  >
+                    {bleSource.isConnecting
+                      ? t.training.connecting
+                      : bleSource.isConnected
+                        ? t.training.disconnectSenseBoxBLE
+                        : t.training.connectSenseBoxBLE}
+                  </Button>
+                </span>
+              </Tooltip>
+
               <Button
                 variant="outlined"
                 startIcon={
@@ -750,7 +810,11 @@ const OrientationModelTrainer = ({
                   )
                 }
                 onClick={handleDownloadFirmware}
-                disabled={isDownloading || disabled || !isSupported}
+                disabled={
+                  isDownloading ||
+                  disabled ||
+                  (!serialSource.isSupported && !bleSource.isSupported)
+                }
               >
                 {t.errors.downloadFirmware}
               </Button>
@@ -775,10 +839,10 @@ const OrientationModelTrainer = ({
                   }
                   connectionStatus={ConnectionStatus.CONNECTED}
                   onRetry={async () => {
-                    await disconnect();
-                    await connect();
+                    await activeSource.disconnect();
+                    await activeSource.connect();
                   }}
-                  onDismiss={() => disconnect()}
+                  onDismiss={() => activeSource.disconnect()}
                   showStatus={false}
                   overrides={{
                     errorTitle: t.errors.connectionFailed,
@@ -805,44 +869,6 @@ const OrientationModelTrainer = ({
 
         {/* ── Right column: dataset loader + class cards ────────────── */}
         <Grid item xs={12} md={7}>
-          {/* Load example dataset dropdown */}
-          {ORIENTATION_DATASETS.length > 0 && (
-            <Box sx={{ mb: 2 }}>
-              <Button
-                variant="outlined"
-                size="small"
-                endIcon={<ArrowDropDownIcon />}
-                onClick={(e) => setDatasetMenuAnchor(e.currentTarget)}
-              >
-                {t.training.loadDataset}
-              </Button>
-              <Menu
-                anchorEl={datasetMenuAnchor}
-                open={Boolean(datasetMenuAnchor)}
-                onClose={() => setDatasetMenuAnchor(null)}
-              >
-                {ORIENTATION_DATASETS.map((dataset) => {
-                  const locale =
-                    window.localStorage.getItem("locale") || "de_DE";
-                  const lang = locale.split("_")[0];
-                  const label =
-                    lang === "en" ? dataset.labelEn : dataset.labelDe;
-                  return (
-                    <MenuItem
-                      key={dataset.id}
-                      onClick={() => {
-                        loadDataset(dataset);
-                        setDatasetMenuAnchor(null);
-                      }}
-                    >
-                      {label}
-                    </MenuItem>
-                  );
-                })}
-              </Menu>
-            </Box>
-          )}
-
           {/* Class cards */}
           <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
             {classes.map((cls) => (
@@ -868,33 +894,54 @@ const OrientationModelTrainer = ({
 
             {/* Add Class card */}
             {canAddClass && (
-              <Box sx={{ display: "flex", alignItems: "flex-start" }}>
-                <Card
-                  variant="outlined"
-                  sx={{
-                    minWidth: 220,
-                    flex: "1 1 220px",
-                    maxWidth: 360,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    cursor: "pointer",
-                    border: "2px dashed",
-                    borderColor: "grey.400",
-                    "&:hover": { borderColor: "primary.main" },
-                  }}
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <Button
+                  variant="contained"
+                  startIcon={<AddIcon />}
                   onClick={() => setShowAddDialog(true)}
+                  disabled={disabled}
                 >
-                  <Box sx={{ textAlign: "center", p: 3 }}>
-                    <AddIcon sx={{ fontSize: 32, color: "grey.500" }} />
-                    <Typography variant="body2" color="text.secondary">
-                      {t.training.addClass}
-                    </Typography>
+                  {t.training.addClass}
+                </Button>
+                {ORIENTATION_DATASETS.length > 0 && (
+                  <Box>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      endIcon={<ArrowDropDownIcon />}
+                      onClick={(e) => setDatasetMenuAnchor(e.currentTarget)}
+                    >
+                      {t.training.loadDataset}
+                    </Button>
+                    <Menu
+                      anchorEl={datasetMenuAnchor}
+                      open={Boolean(datasetMenuAnchor)}
+                      onClose={() => setDatasetMenuAnchor(null)}
+                    >
+                      {ORIENTATION_DATASETS.map((dataset) => {
+                        const locale =
+                          window.localStorage.getItem("locale") || "de_DE";
+                        const lang = locale.split("_")[0];
+                        const label =
+                          lang === "en" ? dataset.labelEn : dataset.labelDe;
+                        return (
+                          <MenuItem
+                            key={dataset.id}
+                            onClick={() => {
+                              loadDataset(dataset);
+                              setDatasetMenuAnchor(null);
+                            }}
+                          >
+                            {label}
+                          </MenuItem>
+                        );
+                      })}
+                    </Menu>
                   </Box>
-                </Card>
+                )}
                 <HelpButton
                   onClick={() => onOpenHelp && onOpenHelp("addClass")}
-                  tooltip={t.training.tooltip.helpAddClass}
+                  tooltip={t.training.tooltip.helpClasses}
                 />
               </Box>
             )}
