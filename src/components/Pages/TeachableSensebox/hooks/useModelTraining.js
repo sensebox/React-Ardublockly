@@ -3,7 +3,7 @@ import * as tf from "@tensorflow/tfjs";
 
 // TODO: host somewhere else
 const BASE_MODEL_URL =
-  "https://raw.githubusercontent.com/PaulaScharf/teachable_machine_base_model/refs/heads/main/model.json";
+  "https://raw.githubusercontent.com/PaulaScharf/teachable_machine_base_model/refs/heads/main/image_classification/model.json";
 const FEATURE_EXTRACTION_BATCH_SIZE = 16;
 const VALIDATION_FRACTION = 0.15;
 const TOTAL_EPOCHS = 70;
