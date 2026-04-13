@@ -12,7 +12,7 @@ Formal betrachtet kannst du dir das neuronale Netz als eine sehr schwierige math
 
 Speziell für die Bildverarbeitung nutzen wir ein Neuronales Netz mit **Convolutional Layern**. Diese Schichten suchen gezielt nach Kanten, Formen und Mustern im Bild.
 
-![features](/media/teachable/feature.drawio.png)
+![features](/media/teachable/feature_cat.drawio.png)
 
 Als Basis dient MobileNet – ein schlankes, **vortrainiertes Modell**, das bereits „weiß", wie Bilder grundsätzlich aussehen. Du trainierst es nur noch auf deine eigenen Kategorien um. Das spart Zeit und funktioniert auch mit wenigen Beispielbildern gut.
 
