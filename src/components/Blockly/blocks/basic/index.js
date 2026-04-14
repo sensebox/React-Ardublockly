@@ -440,7 +440,11 @@ Blockly.Blocks["display_print_basic"] = {
     // Store current font size
     this.fontSize_ = "small";
 
-    this.appendDummyInput("DISPLAY_IMAGE").appendField(
+    this.appendDummyInput("ZEIGE").appendField(
+      new Blockly.FieldLabel("Zeige :", undefined, { bold: true }),
+    );
+
+    this.appendValueInput("TEXT").appendField(
       new Blockly.FieldImage(generateDisplaySvg("", "small"), 160, 90, "*"),
       "DISPLAY_ICON",
     );
@@ -462,12 +466,6 @@ Blockly.Blocks["display_print_basic"] = {
           this.handleFontSizeClick.bind(this),
         ),
         "FONT_SIZE_BUTTONS",
-      );
-
-    this.appendValueInput("TEXT")
-      .setCheck("String")
-      .appendField(
-        new Blockly.FieldLabel("Zeige :", undefined, { bold: true }),
       );
 
     this.setPreviousStatement(true, null);
