@@ -211,6 +211,8 @@ export const toolboxBasicObject = {
       name: "Sensoren",
       colour: "#5ba55b",
       contents: [
+        { kind: "block", type: "display_show_measurement" },
+
         { kind: "block", type: "bme_tmp" },
         { kind: "block", type: "bme_humi" },
         { kind: "block", type: "bme_air_quality" },
