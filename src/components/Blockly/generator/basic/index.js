@@ -232,30 +232,31 @@ basicGenerator.forBlock["sensebox_start"] = function (block) {
 };
 basicGenerator.forBlock["basic_if_else"] = function (block, generator) {
   // If/elseif/else condition.
-  let n = 0;
-  let code = "",
-    branchCode,
-    conditionCode;
-  do {
-    conditionCode =
-      generator.valueToCode(block, "IF" + n, generator.ORDER_NONE) || "false";
-    branchCode = generator.statementToCode(block, "DO" + n);
-    code +=
-      (n > 0 ? "else " : "") +
-      "if (" +
-      conditionCode +
-      ") {\n" +
-      branchCode +
-      "}\n";
 
-    ++n;
-  } while (block.getInput("IF" + n));
+  const condition = block.getInputTargetBlock("IF");
+  const conditionCode = basicGenerator.statementToCode(block, "IF") || "FALSE";
 
-  if (block.getInput("ELSE")) {
-    branchCode = generator.statementToCode(block, "ELSE");
-    code += "else {\n" + branchCode + "}\n";
-  }
-  return code + "\n";
+  const doBranch = block.getInputTargetBlock("DO");
+  const doBranchCode = basicGenerator.statementToCode(block, "DO") || "";
+
+  const elseBranch = block.getInputTargetBlock("ELSE");
+  const elseBranchCode = basicGenerator.statementToCode(block, "ELSE") || "";
+
+  let fullCode = `if ( ${conditionCode.trim()}) {\n${doBranchCode}}\nelse {\n${elseBranchCode}}\n`;
+  return fullCode;
+};
+
+basicGenerator.forBlock["basic_if"] = function (block, generator) {
+  // If/elseif/else condition.
+
+  const condition = block.getInputTargetBlock("IF");
+  const conditionCode = basicGenerator.statementToCode(block, "IF") || "FALSE";
+
+  const doBranch = block.getInputTargetBlock("DO");
+  const doBranchCode = basicGenerator.statementToCode(block, "DO") || "";
+
+  let fullCode = `if ( ${conditionCode.trim()}) {\n${doBranchCode}}\n`;
+  return fullCode;
 };
 
 basicGenerator.forBlock["basic_repeat_times"] = function (block, generator) {

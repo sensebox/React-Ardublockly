@@ -302,7 +302,7 @@ export const toolboxBasicObject = {
           kind: "block",
           type: "basic_if_else",
           inputs: {
-            IF0: {
+            IF: {
               block: {
                 type: "basic_button_pressed",
               },
@@ -313,13 +313,17 @@ export const toolboxBasicObject = {
           kind: "block",
           type: "basic_if_else",
           inputs: {
-            IF0: {
+            IF: {
               block: {
                 type: "basic_box_shaken",
               },
             },
           },
         },
+        { kind: "block", type: "basic_if_else" },
+        { kind: "block", type: "basic_if" },
+        { kind: "block", type: "basic_button_pressed" },
+        { kind: "block", type: "basic_box_shaken" },
       ],
     },
     {
