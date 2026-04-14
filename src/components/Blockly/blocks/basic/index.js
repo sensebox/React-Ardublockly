@@ -37,7 +37,7 @@ Blockly.defineBlocksWithJsonArray([
       },
     ],
     output: "String",
-    colour: getColour().sensebox,
+    colour: "#62A044  ",
   },
   {
     type: "bme_humi",
@@ -1556,23 +1556,23 @@ Blockly.defineBlocksWithJsonArray([
 
 Blockly.Blocks["display_show_measurement"] = {
   init: function () {
-    this.appendDummyInput("DISPLAY_IMAGE").appendField(
-      new Blockly.FieldImage(
-        generateMeasurementDisplaySvg("0", "", ""),
-        160,
-        90,
-        "*",
-      ),
-      "DISPLAY_ICON",
+    this.appendDummyInput().appendField(
+      new Blockly.FieldLabel("Zeige Messwert", undefined),
     );
-
-    // (No checkbox here — display_show_measurement always clears by generator)
 
     this.appendValueInput("VALUE")
       .setCheck(null)
       .appendField(
-        new Blockly.FieldLabel("Zeige Messwert", undefined, { bold: true }),
+        new Blockly.FieldImage(
+          generateMeasurementDisplaySvg("0", "", ""),
+          160,
+          90,
+          "*",
+        ),
+        "DISPLAY_ICON",
       );
+
+    // (No checkbox here — display_show_measurement always clears by generator)
 
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
