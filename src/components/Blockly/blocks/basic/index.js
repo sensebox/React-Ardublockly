@@ -1731,7 +1731,7 @@ Blockly.defineBlocksWithJsonArray([
       },
       {
         type: "field_label",
-        text: "Luftqualitaet",
+        text: "Luftqualität",
         bold: true,
       },
     ],
@@ -1859,7 +1859,7 @@ Blockly.Blocks["display_show_measurement"] = {
         hdc_humi: { title: "Luftfeuchtigkeit", unit: "%", sample: "80" },
         bme_humi: { title: "Luftfeuchtigkeit", unit: "%", sample: "80" },
         bme_pressure: { title: "Luftdruck", unit: "hPa", sample: "1024" },
-        bme_air_quality: { title: "Luftqualitaet", unit: "", sample: "74" },
+        bme_air_quality: { title: "Luftqualität", unit: "", sample: "74" },
         basic_brightness: { title: "Helligkeit", unit: "lx", sample: "200" },
       };
 
