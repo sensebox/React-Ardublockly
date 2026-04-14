@@ -12,14 +12,8 @@ import {
 import { ArrowBack as ArrowBackIcon } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import { getAccelerationTranslations } from "./translations";
-import AccelerationModelTrainer from "./AccelerationModelTrainer";
-import AccelerationModelVisualizer, {
-  DEFAULT_MODEL_CONFIG,
-  DEFAULT_ACTIVE_GROUP_KEYS,
-} from "./AccelerationModelVisualizer";
-import AccelerationHelpSidebar, {
-  SIDEBAR_WIDTH,
-} from "./AccelerationHelpSidebar";
+import GestureModelTrainer from "./GestureModelTrainer";
+import HelpSidebar, { SIDEBAR_WIDTH } from "../HelpSidebar";
 import HelpButton from "../HelpButton";
 
 const AccelerationClassification = () => {
@@ -28,21 +22,18 @@ const AccelerationClassification = () => {
   const [isTraining, setIsTraining] = useState(false);
   const [trainingError, setTrainingError] = useState(null);
   const [classes, setClasses] = useState([]);
-  const [modelConfig, setModelConfig] = useState(DEFAULT_MODEL_CONFIG);
-  const [activeGroupKeys, setActiveGroupKeys] = useState(
-    DEFAULT_ACTIVE_GROUP_KEYS,
-  );
   const isMountedRef = useRef(true);
   const language = useSelector((s) => s.general.language);
   const t = getAccelerationTranslations();
 
+  // Help sidebar state
   const [helpSidebarOpen, setHelpSidebarOpen] = useState(false);
   const [currentHelpTopic, setCurrentHelpTopic] = useState(null);
   const theme = useTheme();
   const isWideScreen = useMediaQuery(theme.breakpoints.up("lg"));
 
   const handleOpenHelp = useCallback((topic) => {
-    setCurrentHelpTopic(topic);
+    setCurrentHelpTopic("acceleration/" + topic);
     setHelpSidebarOpen(true);
   }, []);
 
@@ -72,6 +63,7 @@ const AccelerationClassification = () => {
     }
   }, []);
 
+  // Cleanup on unmount
   useEffect(() => {
     return () => {
       isMountedRef.current = false;
@@ -80,7 +72,8 @@ const AccelerationClassification = () => {
 
   return (
     <>
-      <AccelerationHelpSidebar
+      {/* Help Sidebar */}
+      <HelpSidebar
         open={helpSidebarOpen}
         onClose={handleCloseHelp}
         helpTopic={currentHelpTopic}
@@ -109,10 +102,10 @@ const AccelerationClassification = () => {
               {t.title}
             </Typography>
             <HelpButton
-              onClick={() => handleOpenHelp("pageTitle")}
+              onClick={() => handleOpenHelp("gestureClassification")}
               tooltip={
                 t.training?.tooltip?.helpMain ||
-                "Was ist Bewegungsklassifizierung?"
+                "What is gesture classification?"
               }
             />
           </Box>
@@ -121,40 +114,27 @@ const AccelerationClassification = () => {
           </Typography>
         </Box>
 
+        {/* Error display */}
         {trainingError && (
-          <Box sx={{ mb: 2, p: 2, bgcolor: "error.light", borderRadius: 1 }}>
-            <Typography variant="body2" color="error.contrastText">
-              {trainingError}
-            </Typography>
-          </Box>
+          <Paper
+            sx={{
+              p: 2,
+              mb: 3,
+              bgcolor: "error.light",
+              color: "error.contrastText",
+            }}
+          >
+            <Typography>{trainingError}</Typography>
+          </Paper>
         )}
 
         <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-          {/* Model Architecture Visualizer Section */}
-          <Paper elevation={2} sx={{ p: 3 }}>
-            <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-              <Typography variant="h5">{t.modelVisualizer.title}</Typography>
-              <HelpButton
-                onClick={() => handleOpenHelp("architecture")}
-                tooltip={t.training.tooltip.helpArchitecture}
-              />
-            </Box>
-            <AccelerationModelVisualizer
-              classNames={classes.map((c) => c.name)}
-              modelConfig={modelConfig}
-              activeGroupKeys={activeGroupKeys}
-              onModelConfigChange={setModelConfig}
-              onActiveGroupsChange={setActiveGroupKeys}
-              trainedModel={trainedModel}
-            />
-          </Paper>
-
           {/* Model Training Section */}
           <Paper elevation={2} sx={{ p: 3 }}>
             <Typography variant="h5" gutterBottom>
-              {t.training.title}
+              {t.training?.title || "Gesture Training"}
             </Typography>
-            <AccelerationModelTrainer
+            <GestureModelTrainer
               classes={classes}
               onClassesChange={setClasses}
               onModelTrained={handleModelTrained}
@@ -163,8 +143,7 @@ const AccelerationClassification = () => {
               isTraining={isTraining}
               disabled={isTraining}
               onOpenHelp={handleOpenHelp}
-              modelConfig={modelConfig}
-              activeGroupKeys={activeGroupKeys}
+              trainedModel={trainedModel}
             />
           </Paper>
         </Box>

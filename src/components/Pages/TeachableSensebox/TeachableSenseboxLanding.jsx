@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import {
   PhotoCamera as CameraIcon,
-  Speed as AccelerationIcon,
+  Gesture as GestureIcon,
   Explore as OrientationIcon,
 } from "@mui/icons-material";
 import { useSelector } from "react-redux";
@@ -84,9 +84,7 @@ const TeachableSenseboxLanding = () => {
           }}
         >
           <CardContent sx={{ flexGrow: 1, textAlign: "center", pt: 4 }}>
-            <AccelerationIcon
-              sx={{ fontSize: 64, color: "primary.main", mb: 2 }}
-            />
+            <GestureIcon sx={{ fontSize: 64, color: "primary.main", mb: 2 }} />
             <Typography variant="h5" gutterBottom>
               {t.landing.accelerationCard.title}
             </Typography>

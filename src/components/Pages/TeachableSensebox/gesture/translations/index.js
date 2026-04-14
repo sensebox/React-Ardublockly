@@ -3,7 +3,7 @@ import { accelerationTranslations_de } from "./de";
 import { accelerationTranslations_en } from "./en";
 
 /**
- * Get acceleration classification translations based on current language from localStorage
+ * Get acceleration/gesture classification translations based on current language from localStorage
  * @returns {Object} Translations object
  */
 export const getAccelerationTranslations = () => {
