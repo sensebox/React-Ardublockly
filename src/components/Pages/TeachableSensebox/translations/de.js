@@ -12,9 +12,9 @@ export const teachableSenseboxTranslations_de = {
       button: "Starten",
     },
     accelerationCard: {
-      title: "Bewegungsklassifizierung",
+      title: "Gesten-Klassifizierung",
       description:
-        "Trainiere ein Modell, um Bewegungen mit dem senseBox Eye Beschleunigungssensor zu erkennen.",
+        "Trainiere ein Modell zur Erkennung von Zauberstab-Gesten. Nutze deine senseBox wie einen Zauberstab, um Muster in die Luft zu zeichnen.",
       button: "Starten",
     },
     orientationCard: {

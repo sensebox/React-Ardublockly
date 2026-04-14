@@ -1,23 +1,35 @@
 /**
- * AccelerometerService
+ * GestureSerialService
  *
- * Manages serial communication with senseBox Eye for accelerometer data
- * using the Web Serial API. Reads X, Y, Z acceleration values streamed
- * from the device firmware.
+ * Manages serial communication with senseBox for magic wand gesture data
+ * using the Web Serial API. Reads stroke point data streamed from the
+ * device firmware.
  *
- * Expected firmware output format: comma-separated values per line:
- *   "<x>,<y>,<z>\n"
- * where x, y, z are floating-point acceleration values in m/s².
+ * Expected firmware output format (text-based, line-by-line):
+ *   "<x1>,<y1>,<x2>,<y2>,..."
+ *
+ * Where:
+ *   x,y: normalized coordinates as floats (-1.0 to 1.0)
+ *
+ * Each line represents one complete stroke.
  */
 
-class AccelerometerService {
+// Stroke states
+export const StrokeState = {
+  WAITING: 0,
+  DRAWING: 1,
+  DONE: 2,
+};
+
+const STROKE_POINT_COUNT = 160;
+
+class GestureSerialService {
   constructor() {
     this.port = null;
     this.reader = null;
-    this.writer = null;
     this.isConnected = false;
     this.readLoopActive = false;
-    this.dataCallbacks = [];
+    this.strokeCallbacks = [];
     this.errorCallbacks = [];
     this.lineBuffer = "";
   }
@@ -35,7 +47,7 @@ class AccelerometerService {
    * @returns {Promise<SerialPort|null>}
    */
   async requestPort() {
-    if (!AccelerometerService.isSupported()) {
+    if (!GestureSerialService.isSupported()) {
       const error = new Error(
         "Web Serial API is not supported in this browser",
       );
@@ -61,7 +73,7 @@ class AccelerometerService {
   }
 
   /**
-   * Connect to the serial port and start reading accelerometer data
+   * Connect to the serial port and start reading gesture data
    * @param {number} baudRate - default 115200
    */
   async connect(baudRate = 115200) {
@@ -112,19 +124,23 @@ class AccelerometerService {
   }
 
   /**
-   * Register a callback for incoming accelerometer data
-   * @param {Function} callback - called with { x, y, z } on each sample
+   * Register a callback for incoming stroke data
+   * @param {Function} callback - called with { state, length, strokePoints, timestamp, isCompleted } on each stroke
+   * @returns {Function} unsubscribe function
    */
-  onData(callback) {
-    this.dataCallbacks.push(callback);
+  onStroke(callback) {
+    this.strokeCallbacks.push(callback);
     return () => {
-      this.dataCallbacks = this.dataCallbacks.filter((cb) => cb !== callback);
+      this.strokeCallbacks = this.strokeCallbacks.filter(
+        (cb) => cb !== callback,
+      );
     };
   }
 
   /**
    * Register a callback for errors
    * @param {Function} callback - called with error object
+   * @returns {Function} unsubscribe function
    */
   onError(callback) {
     this.errorCallbacks.push(callback);
@@ -135,12 +151,12 @@ class AccelerometerService {
 
   // ─── Private ──────────────────────────────────────────────────────────────
 
-  _emitData(sample) {
-    for (const cb of this.dataCallbacks) {
+  _emitStroke(strokeData) {
+    for (const cb of this.strokeCallbacks) {
       try {
-        cb(sample);
+        cb(strokeData);
       } catch (e) {
-        console.error("AccelerometerService data callback error:", e);
+        console.error("GestureSerialService stroke callback error:", e);
       }
     }
   }
@@ -150,7 +166,7 @@ class AccelerometerService {
       try {
         cb(error);
       } catch (e) {
-        console.error("AccelerometerService error callback error:", e);
+        console.error("GestureSerialService error callback error:", e);
       }
     }
   }
@@ -197,30 +213,39 @@ class AccelerometerService {
   _parseLine(line) {
     if (!line) return;
 
-    // Labeled format: "x:-4.27,y:7.43,z:2.93"
-    const labeled = line.match(
-      /x:\s*([-\d.]+)[,\s]+y:\s*([-\d.]+)[,\s]+z:\s*([-\d.]+)/i,
-    );
-    if (labeled) {
-      const x = parseFloat(labeled[1]);
-      const y = parseFloat(labeled[2]);
-      const z = parseFloat(labeled[3]);
-      if (!isNaN(x) && !isNaN(y) && !isNaN(z)) {
-        this._emitData({ x, y, z, timestamp: Date.now() });
-      }
-      return;
-    }
+    // Expected format: "<x1>,<y1>,<x2>,<y2>,..."
+    // Each line is a complete stroke of coordinate pairs.
 
-    // Fallback: plain "x,y,z" — e.g. "0.12,-9.81,0.34"
-    const parts = line.split(",");
-    if (parts.length !== 3) return;
-    const x = parseFloat(parts[0]);
-    const y = parseFloat(parts[1]);
-    const z = parseFloat(parts[2]);
-    if (!isNaN(x) && !isNaN(y) && !isNaN(z)) {
-      this._emitData({ x, y, z, timestamp: Date.now() });
+    try {
+      const coords = line.split(",").map((s) => parseFloat(s.trim()));
+      if (coords.length < 2) return;
+
+      const strokePoints = [];
+      for (let i = 0; i + 1 < coords.length; i += 2) {
+        if (!isNaN(coords[i]) && !isNaN(coords[i + 1])) {
+          strokePoints.push({
+            x: coords[i],
+            y: coords[i + 1],
+          });
+        }
+      }
+
+      if (strokePoints.length === 0) return;
+
+      const strokeData = {
+        state: StrokeState.DONE,
+        length: strokePoints.length,
+        strokePoints,
+        timestamp: Date.now(),
+        isCompleted: true,
+      };
+
+      this._emitStroke(strokeData);
+    } catch (e) {
+      // Ignore parse errors for malformed lines
+      console.warn("Failed to parse gesture line:", line, e);
     }
   }
 }
 
-export default AccelerometerService;
+export default GestureSerialService;

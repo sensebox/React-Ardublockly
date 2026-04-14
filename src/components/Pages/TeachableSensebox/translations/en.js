@@ -12,9 +12,9 @@ export const teachableSenseboxTranslations_en = {
       button: "Get Started",
     },
     accelerationCard: {
-      title: "Motion Classification",
+      title: "Gesture Classification",
       description:
-        "Train a model to recognize movements using the senseBox Eye accelerometer.",
+        "Train a model to recognize magic wand gestures. Use your senseBox like a wand to draw patterns in the air and teach the model to recognize them.",
       button: "Get Started",
     },
     orientationCard: {
