@@ -438,10 +438,10 @@ function generateMeasurementDisplaySvg(value = "0", title = "", unit = "") {
 Blockly.Blocks["display_print_basic"] = {
   init: function () {
     // Store current font size
-    this.fontSize_ = "medium";
+    this.fontSize_ = "small";
 
     this.appendDummyInput("DISPLAY_IMAGE").appendField(
-      new Blockly.FieldImage(generateDisplaySvg("", "medium"), 160, 90, "*"),
+      new Blockly.FieldImage(generateDisplaySvg("", "small"), 160, 90, "*"),
       "DISPLAY_ICON",
     );
 
@@ -455,7 +455,7 @@ Blockly.Blocks["display_print_basic"] = {
       .appendField("Größe:")
       .appendField(
         new Blockly.FieldImage(
-          generateFontSizeToggleSvg("medium"),
+          generateFontSizeToggleSvg("small"),
           96,
           22,
           "font size",
@@ -490,11 +490,11 @@ Blockly.Blocks["display_print_basic"] = {
     // Determine which button was clicked based on X position
     let newSize;
     if (x < buttonWidth) {
-      newSize = "small";
+      newSize = "s";
     } else if (x < buttonWidth * 2) {
-      newSize = "medium";
+      newSize = "m";
     } else {
-      newSize = "large";
+      newSize = "l";
     }
 
     this.fontSize_ = newSize;

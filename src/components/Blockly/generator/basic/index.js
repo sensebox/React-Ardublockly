@@ -141,9 +141,12 @@ basicGenerator.forBlock["display_print_basic"] = function (block, generator) {
   if (!raw || /^\s*$/.test(raw)) {
     return ""; // nichts generieren
   }
+  const fontSizeMap = { small: "S", medium: "M", large: "L" };
+  const size = fontSizeMap[block.fontSize_] || "s";
+
   const clear = block.getFieldValue && block.getFieldValue("CLEAR") === "TRUE";
   const clearCode = clear ? "clearDisplay()\n" : "";
-  return `${clearCode}display(${raw})\n`;
+  return `${clearCode}display(${raw}, ${size})\n`;
 };
 
 basicGenerator.forBlock["display_show_measurement"] = function (
