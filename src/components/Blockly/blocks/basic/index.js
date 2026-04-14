@@ -1786,9 +1786,8 @@ Blockly.Blocks["display_show_measurement"] = {
     this.appendValueInput("VALUE")
       .setCheck(null)
       .appendField(
-        new Blockly.FieldLabel("Messwert anzeigen", undefined, { bold: true }),
-      )
-      .appendField("Wert:");
+        new Blockly.FieldLabel("Zeige Messwert", undefined, { bold: true }),
+      );
 
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
