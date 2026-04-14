@@ -326,6 +326,7 @@ export const toolboxBasicObject = {
       colour: "#5b67a5",
       contents: [
         { kind: "block", type: "basic_number" },
+        { kind: "block", type: "basic_math" },
         {
           kind: "block",
           type: "basic_math",
