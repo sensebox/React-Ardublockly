@@ -257,6 +257,8 @@ export const toolboxBasicObject = {
           },
         },
         { kind: "block", type: "basic_off" },
+        { kind: "block", type: "basic_random_color" },
+
         {
           kind: "block",
           type: "basic_rgb_color",
