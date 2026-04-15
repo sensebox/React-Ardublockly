@@ -170,7 +170,7 @@ basicGenerator.forBlock["display_show_measurement"] = function (
     hdc_humi: { title: "Luftfeuchtigkeit", unit: "%" },
     bme_humi: { title: "Luftfeuchtigkeit", unit: "%" },
     bme_pressure: { title: "Luftdruck", unit: "hPa" },
-    bme_air_quality: { title: "Luftqualität", unit: "" },
+    bme_air_quality: { title: "Luftqualitaet", unit: "" },
     basic_brightness: { title: "Helligkeit", unit: "lux" },
   };
 

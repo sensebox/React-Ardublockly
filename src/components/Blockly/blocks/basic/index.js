@@ -1629,7 +1629,7 @@ Blockly.Blocks["display_show_measurement"] = {
         hdc_humi: { title: "Luftfeuchtigkeit", unit: "%", sample: "??" },
         bme_humi: { title: "Luftfeuchtigkeit", unit: "%", sample: "??" },
         bme_pressure: { title: "Luftdruck", unit: "hPa", sample: "????" },
-        bme_air_quality: { title: "Luftqualität", unit: "", sample: "??" },
+        bme_air_quality: { title: "Luftqualitaet", unit: "", sample: "??" },
         basic_brightness: { title: "Helligkeit", unit: "lx", sample: "200" },
       };
 
