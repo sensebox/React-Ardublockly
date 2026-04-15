@@ -15,10 +15,10 @@ export const accelerationTranslations_en = {
 
     // Connection
     connecting: "Connecting...",
-    connectSenseBox: "Connect Serial",
-    disconnectSenseBox: "Disconnect Serial",
-    connectBLE: "Connect Bluetooth",
-    disconnectBLE: "Disconnect Bluetooth",
+    connectSenseBox: "connect senseBox Eye (serial)",
+    disconnectSenseBox: "disconnect senseBox Eye (serial)",
+    connectBLE: "connect senseBox Eye (Bluetooth)",
+    downloadFirmware: "Download Gesture-Sketch",
 
     // Recording
     startRecording: "Start Recording",

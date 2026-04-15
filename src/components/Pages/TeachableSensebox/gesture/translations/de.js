@@ -15,10 +15,10 @@ export const accelerationTranslations_de = {
 
     // Connection
     connecting: "Verbinde...",
-    connectSenseBox: "Serial verbinden",
-    disconnectSenseBox: "Serial trennen",
-    connectBLE: "Bluetooth verbinden",
-    disconnectBLE: "Bluetooth trennen",
+    connectSenseBox: "senseBox Eye verbinden (seriell)",
+    disconnectSenseBox: "senseBox Eye trennen",
+    connectBLE: "senseBox Eye verbinden (Bluetooth)",
+    downloadFirmware: "Gesten-Sketch herunterladen",
 
     // Recording
     startRecording: "Aufnahme starten",
