@@ -1,22 +1,22 @@
 import { useState, useCallback, useRef, useEffect } from "react";
-import GestureBLEService, { StrokeState } from "../GestureBLEService";
+import SpellSerialService, { StrokeState } from "../SpellSerialService";
 
-// Share a single GestureBLEService across hook instances to avoid
-// multiple simultaneous BLE connections to the same device.
+// Share a single SpellSerialService across hook instances to avoid
+// multiple Web Serial connections to the same port.
 let sharedService = null;
 let sharedServiceUsers = 0;
 
 const DATA_TIMEOUT_MS = 5000;
 
 /**
- * useGestureBLESource
+ * useSpellSource
  *
  * Provides a unified interface for connecting to the senseBox
- * magic wand gesture sensor via Web Bluetooth and streaming stroke data.
+ * magic wand spell sensor via Web Serial and streaming stroke data.
  *
- * @returns {Object} Gesture BLE source management interface
+ * @returns {Object} Spell source management interface
  */
-function useGestureBLESource() {
+function useSpellSource() {
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [error, setError] = useState(null);
@@ -31,7 +31,7 @@ function useGestureBLESource() {
 
   useEffect(() => {
     if (!sharedService) {
-      sharedService = new GestureBLEService();
+      sharedService = new SpellSerialService();
     }
     sharedServiceUsers += 1;
     serviceRef.current = sharedService;
@@ -51,7 +51,7 @@ function useGestureBLESource() {
       if (sharedServiceUsers === 0 && serviceRef.current) {
         if (serviceRef.current.isConnected) {
           serviceRef.current.disconnect().catch((err) => {
-            console.error("Error disconnecting BLE gesture on unmount:", err);
+            console.error("Error disconnecting spell service on unmount:", err);
           });
         }
         serviceRef.current = null;
@@ -62,7 +62,7 @@ function useGestureBLESource() {
 
   /**
    * Set a callback to be called when a complete stroke is received
-   * @param {Function} callback - called with strokeData when a gesture is completed
+   * @param {Function} callback - called with strokeData when a spell is completed
    */
   const setOnCompletedStroke = useCallback((callback) => {
     completedStrokeCallbackRef.current = callback;
@@ -76,7 +76,7 @@ function useGestureBLESource() {
     try {
       await serviceRef.current.connect();
 
-      // User may have cancelled the picker — service won't be connected
+      // User may have cancelled — service won't be connected
       if (!serviceRef.current.isConnected) {
         setIsConnecting(false);
         return;
@@ -91,7 +91,7 @@ function useGestureBLESource() {
           setDataTimeoutError(false);
           setLatestStroke(strokeData);
 
-          // Call the completed stroke callback if this is a finished gesture
+          // Call the completed stroke callback if this is a finished spell
           if (strokeData.isCompleted && completedStrokeCallbackRef.current) {
             completedStrokeCallbackRef.current(strokeData);
           }
@@ -127,7 +127,7 @@ function useGestureBLESource() {
     try {
       await serviceRef.current.disconnect();
     } catch (err) {
-      console.error("Error disconnecting BLE gesture:", err);
+      console.error("Error disconnecting spell service:", err);
     }
 
     setIsConnected(false);
@@ -165,10 +165,10 @@ function useGestureBLESource() {
     connect,
     disconnect,
     setOnCompletedStroke,
-    isSupported: GestureBLEService.isSupported(),
+    isSupported: SpellSerialService.isSupported(),
     StrokeState,
   };
 }
 
-export default useGestureBLESource;
+export default useSpellSource;
 export { StrokeState };

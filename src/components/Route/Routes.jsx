@@ -29,7 +29,7 @@ import ProjectHome from "@/components/Pages/Project/ProjectHome";
 import TutorialHome from "../Tutorial/Overview/TutorialHome";
 import TeachableSensebox from "@/components/Pages/TeachableSensebox/TeachableSensebox";
 import TeachableSenseboxLanding from "@/components/Pages/TeachableSensebox/TeachableSenseboxLanding";
-import AccelerationClassification from "@/components/Pages/TeachableSensebox/gesture/AccelerationClassification";
+import SpellClassification from "@/components/Pages/TeachableSensebox/spell/SpellClassification";
 import OrientationClassification from "@/components/Pages/TeachableSensebox/orientation/OrientationClassification";
 import BasicWithSerial from "../Pages/Basic/BasicWithSerial";
 import BasicProject from "../Pages/Basic/BasicProject";
@@ -132,10 +132,10 @@ function AppRoutes({ platform, visitPage, setPlatform }) {
           }
         />
         <Route
-          path="/teachable/acceleration"
+          path="/teachable/spell"
           element={
             <PublicRoute>
-              <AccelerationClassification />
+              <SpellClassification />
             </PublicRoute>
           }
         />

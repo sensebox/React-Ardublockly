@@ -1,7 +1,7 @@
 /**
- * GestureSerialService
+ * SpellSerialService
  *
- * Manages serial communication with senseBox for magic wand gesture data
+ * Manages serial communication with senseBox for magic wand spell data
  * using the Web Serial API. Reads stroke point data streamed from the
  * device firmware.
  *
@@ -23,7 +23,7 @@ export const StrokeState = {
 
 const STROKE_POINT_COUNT = 160;
 
-class GestureSerialService {
+class SpellSerialService {
   constructor() {
     this.port = null;
     this.reader = null;
@@ -48,7 +48,7 @@ class GestureSerialService {
    * @returns {Promise<SerialPort|null>}
    */
   async requestPort() {
-    if (!GestureSerialService.isSupported()) {
+    if (!SpellSerialService.isSupported()) {
       const error = new Error(
         "Web Serial API is not supported in this browser",
       );
@@ -74,7 +74,7 @@ class GestureSerialService {
   }
 
   /**
-   * Connect to the serial port and start reading gesture data
+   * Connect to the serial port and start reading spell data
    * @param {number} baudRate - default 115200
    */
   async connect(baudRate = 115200) {
@@ -158,7 +158,7 @@ class GestureSerialService {
       try {
         cb(strokeData);
       } catch (e) {
-        console.error("GestureSerialService stroke callback error:", e);
+        console.error("SpellSerialService stroke callback error:", e);
       }
     }
   }
@@ -168,7 +168,7 @@ class GestureSerialService {
       try {
         cb(error);
       } catch (e) {
-        console.error("GestureSerialService error callback error:", e);
+        console.error("SpellSerialService error callback error:", e);
       }
     }
   }
@@ -254,9 +254,9 @@ class GestureSerialService {
       this._emitStroke(strokeData);
     } catch (e) {
       // Ignore parse errors for malformed lines
-      console.warn("Failed to parse gesture line:", line, e);
+      console.warn("Failed to parse spell line:", line, e);
     }
   }
 }
 
-export default GestureSerialService;
+export default SpellSerialService;

@@ -8,19 +8,19 @@ export const teachableSenseboxTranslations_en = {
     imageCard: {
       title: "Image Classification",
       description:
-        "Train a model to recognize objects or scenes using the senseBox Eye camera.",
+        "Train a big model to recognize objects or scenes using the senseBox Eye camera.",
       button: "Get Started",
     },
     accelerationCard: {
-      title: "Gesture Classification",
+      title: "Spell Classification",
       description:
-        "Train a model to recognize magic wand gestures. Use your senseBox like a wand to draw patterns in the air and teach the model to recognize them.",
+        "Train a model to recognize magic wand spells using the senseBox Eye accelerometer.",
       button: "Get Started",
     },
     orientationCard: {
       title: "Orientation Classification",
       description:
-        "Train a decision tree to recognise device orientation from single x, y, z snapshots using the senseBox Eye accelerometer.",
+        "Train a small model to detect device orientations using the senseBox Eye accelerometer.",
       button: "Get Started",
     },
   },

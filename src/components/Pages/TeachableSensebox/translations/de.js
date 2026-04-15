@@ -8,13 +8,13 @@ export const teachableSenseboxTranslations_de = {
     imageCard: {
       title: "Bildklassifizierung",
       description:
-        "Trainiere ein Modell, um Objekte oder Szenen mit der senseBox Eye Kamera zu erkennen.",
+        "Trainiere ein großes Modell, um Objekte oder Szenen mit der senseBox Eye Kamera zu erkennen.",
       button: "Starten",
     },
     accelerationCard: {
-      title: "Gesten-Klassifizierung",
+      title: "Zauberspruch Klassifizierung",
       description:
-        "Trainiere ein Modell zur Erkennung von Zauberstab-Gesten. Nutze deine senseBox wie einen Zauberstab, um Muster in die Luft zu zeichnen.",
+        "Trainiere ein Modell zur Erkennung von Zaubersprüchen mit dem senseBox Eye Beschleunigungssensor.",
       button: "Starten",
     },
     orientationCard: {
