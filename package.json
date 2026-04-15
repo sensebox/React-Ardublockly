@@ -72,8 +72,6 @@
     "start": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "test": "vitest",
-    "test:run": "vitest --run",
     "e2e": "cypress run"
   },
   "browserslist": [
