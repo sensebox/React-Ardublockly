@@ -193,7 +193,7 @@ Blockly.defineBlocksWithJsonArray([
   },
   {
     type: "basic_off",
-    message0: "%1 \n %2",
+    message0: "%2 \n %1",
     args0: [
       {
         type: "field_image",
@@ -328,22 +328,18 @@ function generateDisplaySvg(text = "", fontSize = "medium") {
     })
     .join("\n      ");
 
-  const svgTemplate = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   id="Ebene_2"
-   data-name="Ebene 2"
-   viewBox="0 0 127.56 70.87"
-   version="1.1"
-   xmlns="http://www.w3.org/2000/svg">
+  const svgTemplate = `<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Ebene_2" data-name="Ebene 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.56 70.87">
   <defs>
     <style>
       .cls-1 {
         fill: #063;
       }
+
       .cls-2 {
         fill: #1d1d1b;
       }
-      .display-text {
+              .display-text {
         fill: #ffffff;
         font-family: Arial, sans-serif;
         font-weight: bold;
@@ -351,17 +347,13 @@ function generateDisplaySvg(text = "", fontSize = "medium") {
     </style>
   </defs>
   <g id="Ebene_1-2" data-name="Ebene 1">
-    <g>
-      <path
-         class="cls-1"
-         d="M119.06,0H8.5C3.81,0,0,3.81,0,8.5v53.86c0,4.7,3.81,8.5,8.5,8.5h110.55c4.7,0,8.5-3.81,8.5-8.5V8.5c0-4.7-3.81-8.5-8.5-8.5ZM7.09,68.03c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25ZM7.09,11.34c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25ZM120.47,68.03c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25ZM120.47,11.34c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25Z" />
-      <polygon
-         class="cls-2"
-         points="41.1,65.2 49.61,65.2 49.61,70.87 77.95,70.87 77.95,65.2 86.46,65.2 99.21,56.69 99.21,14.17 28.35,14.17 28.35,56.69 "
-         transform="matrix(1.50884,0,0,1.0616933,-30.839346,-4.3722025)"
-         style="fill:#1d1d1b;fill-opacity:1" />
-      ${textElements}
+    <g id="OLED">
+      <path class="cls-1" d="M119.06,0H8.5C3.81,0,0,3.81,0,8.5v53.86c0,4.7,3.81,8.5,8.5,8.5h110.55c4.7,0,8.5-3.81,8.5-8.5V8.5c0-4.7-3.81-8.5-8.5-8.5ZM7.09,68.03c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25ZM7.09,11.34c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25ZM120.47,68.03c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25ZM120.47,11.34c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25Z"/>
+      <polygon class="cls-2" points="14.17 11.34 14.17 55.98 32.03 64.91 43.94 64.91 43.94 70.87 83.62 70.87 83.62 64.91 95.53 64.91 113.39 55.98 113.39 11.34 14.17 11.34"/>
+            ${textElements}
+
     </g>
+  
   </g>
 </svg>`;
 
@@ -417,14 +409,8 @@ function generateMeasurementDisplaySvg(value = "0", title = "", unit = "") {
   </defs>
   <g id="Ebene_1-2" data-name="Ebene 1">
     <g>
-      <path
-         class="cls-1"
-         d="M119.06,0H8.5C3.81,0,0,3.81,0,8.5v53.86c0,4.7,3.81,8.5,8.5,8.5h110.55c4.7,0,8.5-3.81,8.5-8.5V8.5c0-4.7-3.81-8.5-8.5-8.5ZM7.09,68.03c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25ZM7.09,11.34c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25ZM120.47,68.03c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25ZM120.47,11.34c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25Z" />
-      <polygon
-         class="cls-2"
-         points="41.1,65.2 49.61,65.2 49.61,70.87 77.95,70.87 77.95,65.2 86.46,65.2 99.21,56.69 99.21,14.17 28.35,14.17 28.35,56.69 "
-         transform="matrix(1.50884,0,0,1.0616933,-30.839346,-4.3722025)"
-         style="fill:#1d1d1b;fill-opacity:1" />
+      <path class="cls-1" d="M119.06,0H8.5C3.81,0,0,3.81,0,8.5v53.86c0,4.7,3.81,8.5,8.5,8.5h110.55c4.7,0,8.5-3.81,8.5-8.5V8.5c0-4.7-3.81-8.5-8.5-8.5ZM7.09,68.03c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25ZM7.09,11.34c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25ZM120.47,68.03c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25ZM120.47,11.34c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25Z"/>
+      <polygon class="cls-2" points="14.17 11.34 14.17 55.98 32.03 64.91 43.94 64.91 43.94 70.87 83.62 70.87 83.62 64.91 95.53 64.91 113.39 55.98 113.39 11.34 14.17 11.34"/>
       <text class="display-value" x="30" y="37">${displayValue}</text>
       <text class="display-unit" x="85" y="35">${displayUnit}</text>
       <text class="display-title" x="30" y="50">${displayTitle}</text>
@@ -1140,12 +1126,12 @@ function generateLEDSvg(color) {
 
 Blockly.Blocks["basic_led_control"] = {
   init: function () {
+    this.appendDummyInput().appendField("LED einschalten");
+
     this.appendDummyInput("LED_IMAGE").appendField(
       new Blockly.FieldImage(generateLEDSvg("#ff0000"), 90, 90, "*"),
       "LED_ICON",
     );
-
-    this.appendDummyInput().appendField("LED einschalten");
 
     this.appendValueInput("COLOR").setCheck("Colour").appendField("Farbe:");
 
@@ -1220,11 +1206,11 @@ Blockly.Blocks["basic_led_control"] = {
 Blockly.defineBlocksWithJsonArray([
   {
     type: "basic_random_color",
-    message0: "%1 \n %2",
+    message0: "%2 \n %1",
     args0: [
       {
         type: "field_image",
-        src: "/media/hardware/icons/Icon_LED_OFF.svg",
+        src: "/media/hardware/icons/Icon_LED_zufaellig.svg",
         width: 90,
         height: 90,
         alt: "*",
@@ -1319,12 +1305,13 @@ Blockly.defineBlocksWithJsonArray([
 
 Blockly.Blocks["basic_rgb_color"] = {
   init: function () {
+    this.appendDummyInput().appendField("RGB Farbe");
+
     this.appendDummyInput("RGB_IMAGE").appendField(
       new Blockly.FieldImage(generateRGBSvg(255, 0, 0), 80, 80, "*"),
       "RGB_ICON",
     );
 
-    this.appendDummyInput().appendField("RGB Farbe");
     this.appendValueInput("R").setCheck("RGB_RED").appendField("Rot:");
 
     this.appendValueInput("G").setCheck("RGB_GREEN").appendField("Grün:");
@@ -1637,12 +1624,12 @@ Blockly.Blocks["display_show_measurement"] = {
     if (valueInput) {
       // Sensor metadata lookup table with sample values for preview
       const sensorMetadata = {
-        hdc_tmp: { title: "Temperatur", unit: "°C", sample: "23.5" },
-        bme_tmp: { title: "Temperatur", unit: "°C", sample: "23.5" },
-        hdc_humi: { title: "Luftfeuchtigkeit", unit: "%", sample: "80" },
-        bme_humi: { title: "Luftfeuchtigkeit", unit: "%", sample: "80" },
-        bme_pressure: { title: "Luftdruck", unit: "hPa", sample: "1024" },
-        bme_air_quality: { title: "Luftqualität", unit: "", sample: "74" },
+        hdc_tmp: { title: "Temperatur", unit: "°C", sample: "??.?" },
+        bme_tmp: { title: "Temperatur", unit: "°C", sample: "??.?" },
+        hdc_humi: { title: "Luftfeuchtigkeit", unit: "%", sample: "??" },
+        bme_humi: { title: "Luftfeuchtigkeit", unit: "%", sample: "??" },
+        bme_pressure: { title: "Luftdruck", unit: "hPa", sample: "????" },
+        bme_air_quality: { title: "Luftqualität", unit: "", sample: "??" },
         basic_brightness: { title: "Helligkeit", unit: "lx", sample: "200" },
       };
 

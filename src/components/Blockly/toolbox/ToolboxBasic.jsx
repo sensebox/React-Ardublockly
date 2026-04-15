@@ -402,7 +402,7 @@ export const toolboxBasicObject = {
           kind: "block",
           type: "basic_if_else",
           inputs: {
-            IF0: {
+            IF: {
               block: {
                 type: "basic_compare",
                 fields: {
