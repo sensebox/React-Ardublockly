@@ -67,6 +67,13 @@ export const spellTranslations_de = {
     },
   },
 
+  network: {
+    title: "Im Innern des Modells",
+    tooltip: {
+      helpCNN: "Was ist ein Convolutional Neural Network?",
+    },
+  },
+
   errors: {
     downloadFirmware: "Zauberspruch-Sketch herunterladen",
     connectionFailed: "Verbindung zur senseBox fehlgeschlagen",

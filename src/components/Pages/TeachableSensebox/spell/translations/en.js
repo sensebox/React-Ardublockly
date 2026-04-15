@@ -1,3 +1,5 @@
+import { help } from "@uiw/react-md-editor";
+
 export const spellTranslations_en = {
   title: "Spell Classification",
   description:
@@ -62,6 +64,13 @@ export const spellTranslations_en = {
       browserCompatible:
         "This browser does not support the required features for connecting to the senseBox. Please use Chrome or Edge.",
       startConnection: "Connect your senseBox first to record spells",
+    },
+  },
+
+  network: {
+    title: "Inside of the Model",
+    tooltip: {
+      helpCNN: "What is a convolutional neural network?",
     },
   },
 

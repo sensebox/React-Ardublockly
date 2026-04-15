@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef, memo } from "react";
 import { useSelector } from "react-redux";
-import { getAccelerationTranslations } from "./translations";
+import { getSpellTranslations } from "./translations";
 import {
   Box,
   Button,
@@ -314,28 +314,10 @@ const LiveStrokeCanvas = memo(({ latestStroke, size = STROKE_CANVAS_SIZE }) => {
     }
   }, [latestStroke]);
 
-  // Get status label
-  const getStatusLabel = () => {
-    if (!latestStroke) return "Waiting for spell...";
-    switch (latestStroke.state) {
-      case StrokeState.WAITING:
-        return "Waiting for spell...";
-      case StrokeState.DRAWING:
-        return "Drawing...";
-      case StrokeState.DONE:
-        return "Spell complete!";
-      default:
-        return "Ready";
-    }
-  };
-
   return (
     <Box
       sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
-      <Typography variant="caption" color="text.secondary" sx={{ mb: 1 }}>
-        {getStatusLabel()}
-      </Typography>
       <Paper
         elevation={2}
         sx={{
@@ -385,7 +367,7 @@ const SpellModelTrainer = ({
   const [recordingClassId, setRecordingClassId] = useState(null);
 
   const language = useSelector((s) => s.general.language);
-  const t = getAccelerationTranslations();
+  const t = getSpellTranslations();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [isDownloading, setIsDownloading] = useState(false);
@@ -706,7 +688,7 @@ const SpellModelTrainer = ({
 
               {onOpenHelp && (
                 <HelpButton
-                  onClick={() => onOpenHelp("connection")}
+                  onClick={() => onOpenHelp("spellCasting")}
                   tooltip={
                     t.training?.tooltip?.helpConnection || "Connection help"
                   }
@@ -954,7 +936,7 @@ const SpellModelTrainer = ({
               trainedModel={trainedModel}
               strokePoints={latestStroke?.strokePoints}
               classNames={classes.map((cls) => cls.name)}
-              classes={classes}
+              onOpenHelp={onOpenHelp}
             />
           )}
         </Grid>
