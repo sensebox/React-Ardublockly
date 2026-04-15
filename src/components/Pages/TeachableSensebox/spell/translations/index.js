@@ -2,10 +2,10 @@ import { spellTranslations_de } from "./de";
 import { spellTranslations_en } from "./en";
 
 /**
- * Get acceleration/spell classification translations based on current language from localStorage
+ * Get spell classification translations based on current language from localStorage
  * @returns {Object} Translations object
  */
-export const getAccelerationTranslations = () => {
+export const getSpellTranslations = () => {
   const locale = window.localStorage.getItem("locale") || "de_DE";
   const language = locale.split("_")[0];
 

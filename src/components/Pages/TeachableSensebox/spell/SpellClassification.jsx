@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { ArrowBack as ArrowBackIcon } from "@mui/icons-material";
 import { useSelector } from "react-redux";
-import { getAccelerationTranslations } from "./translations";
+import { getSpellTranslations } from "./translations";
 import SpellModelTrainer from "./SpellModelTrainer";
 import HelpSidebar, { SIDEBAR_WIDTH } from "../HelpSidebar";
 import HelpButton from "../HelpButton";
@@ -24,7 +24,7 @@ const SpellClassification = () => {
   const [classes, setClasses] = useState([]);
   const isMountedRef = useRef(true);
   const language = useSelector((s) => s.general.language);
-  const t = getAccelerationTranslations();
+  const t = getSpellTranslations();
 
   // Help sidebar state
   const [helpSidebarOpen, setHelpSidebarOpen] = useState(false);
@@ -33,7 +33,8 @@ const SpellClassification = () => {
   const isWideScreen = useMediaQuery(theme.breakpoints.up("lg"));
 
   const handleOpenHelp = useCallback((topic) => {
-    setCurrentHelpTopic("acceleration/" + topic);
+    console.log("Opening help for topic:", topic);
+    setCurrentHelpTopic("spells/" + topic);
     setHelpSidebarOpen(true);
   }, []);
 

@@ -18,6 +18,8 @@ import {
   Stack,
 } from "@mui/material";
 import { renderStrokeToImage } from "./hooks/useSpellModelTraining";
+import { getSpellTranslations } from "./translations";
+import HelpButton from "../HelpButton";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const STROKE_IMAGE_SIZE = 32;
@@ -652,7 +654,7 @@ const NeuralNetworkVisualization = ({
   strokePoints,
   samplePixelData,
   classNames,
-  classes, // Array of {name, samples: [{strokePoints, pixelData}]}
+  onOpenHelp,
 }) => {
   const theme = useTheme();
   const containerRef = useRef(null);
@@ -662,6 +664,7 @@ const NeuralNetworkVisualization = ({
   const [highlightedCells, setHighlightedCells] = useState([]);
   const [selectedSample, setSelectedSample] = useState(null);
   const intermediateModelsRef = useRef(null);
+  const t = getSpellTranslations();
 
   // Get pixel data from selected sample, stroke points, or provided data
   const pixelData = useMemo(() => {
@@ -949,6 +952,18 @@ const NeuralNetworkVisualization = ({
         borderRadius: 2,
       }}
     >
+      <Typography variant="h5" gutterBottom>
+        {t.network?.title || "Visualization of the Model"}
+        {onOpenHelp && (
+          <HelpButton
+            onClick={() => onOpenHelp("cnn")}
+            tooltip={
+              t.network?.tooltip?.helpCNN ||
+              "What is a convolutional neural network?"
+            }
+          />
+        )}
+      </Typography>
       {!pixelData ? (
         <Box sx={{ textAlign: "center", py: 4 }}>
           <Typography variant="body2" color="grey.500">

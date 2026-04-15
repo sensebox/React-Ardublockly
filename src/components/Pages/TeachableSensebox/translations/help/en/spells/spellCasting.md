@@ -1,0 +1,3 @@
+# The acceleration sensor
+
+# Strokes
