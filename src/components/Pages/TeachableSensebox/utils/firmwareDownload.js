@@ -17,7 +17,7 @@ export async function downloadCameraFirmware(
   filename = "camera_capture.bin",
 ) {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/compile-capture/camera`, {
+    const response = await fetch(`${API_BASE_URL}/api/capture/camera`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -61,15 +61,12 @@ export async function downloadAccelerometerFirmware(
   filename = "accelerometer_capture.bin",
 ) {
   try {
-    const response = await fetch(
-      `${API_BASE_URL}/api/compile-capture/acceleration`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+    const response = await fetch(`${API_BASE_URL}/api/capture/acceleration`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+    });
 
     if (!response.ok) {
       const errorData = await response.json();
