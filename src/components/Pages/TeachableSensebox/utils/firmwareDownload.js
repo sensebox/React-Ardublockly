@@ -91,3 +91,45 @@ export async function downloadAccelerometerFirmware(
     return { success: false, error: err.message };
   }
 }
+
+/**
+ * Downloads gesture streaming firmware for senseBox Eye
+ * @param {string} boardType - Board type (default: "sensebox_eye")
+ * @param {string} filename - Name for downloaded file (default: "gesture_capture.bin")
+ * @returns {Promise<{success: boolean, error?: string}>}
+ */
+export async function downloadGestureFirmware(
+  boardType = "sensebox_eye",
+  filename = "gesture_capture.bin",
+) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/capture/gesture`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(
+        errorData.error?.message || "Failed to download firmware",
+      );
+    }
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+
+    return { success: true };
+  } catch (err) {
+    console.error("Failed to download gesture firmware:", err);
+    return { success: false, error: err.message };
+  }
+}
