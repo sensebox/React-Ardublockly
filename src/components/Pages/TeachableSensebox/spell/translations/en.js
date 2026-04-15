@@ -1,4 +1,4 @@
-export const accelerationTranslations_en = {
+export const spellTranslations_en = {
   title: "Spell Classification",
   description:
     "Train a model to recognize spells using senseBox acceleration data. Draw patterns in the air with your senseBox to cast spells.",

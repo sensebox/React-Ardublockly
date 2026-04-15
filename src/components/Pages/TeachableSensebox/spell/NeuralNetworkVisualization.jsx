@@ -394,7 +394,6 @@ const OutputLayerVisualization = memo(
           bgcolor: alpha(theme.palette.grey[500], 0.4),
           borderRadius: 1,
           p: 1,
-          display: "flex",
           flexWrap: "wrap",
           gap: 1,
           display: "flex",

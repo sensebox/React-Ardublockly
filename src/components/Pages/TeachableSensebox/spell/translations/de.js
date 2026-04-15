@@ -1,4 +1,4 @@
-export const accelerationTranslations_de = {
+export const spellTranslations_de = {
   title: "Zauberspruch Klassifizierung",
   description:
     "Trainiere ein Modell zur Erkennung von Zaubersprüchen mit Daten vom Beschleunigungssensor. Zeichne mit deiner senseBox Eye Muster in die Luft, um Zaubersprüche zu erstellen.",
