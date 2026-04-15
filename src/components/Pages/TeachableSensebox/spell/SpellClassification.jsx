@@ -12,11 +12,11 @@ import {
 import { ArrowBack as ArrowBackIcon } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import { getAccelerationTranslations } from "./translations";
-import GestureModelTrainer from "./GestureModelTrainer";
+import SpellModelTrainer from "./SpellModelTrainer";
 import HelpSidebar, { SIDEBAR_WIDTH } from "../HelpSidebar";
 import HelpButton from "../HelpButton";
 
-const AccelerationClassification = () => {
+const SpellClassification = () => {
   const navigate = useNavigate();
   const [trainedModel, setTrainedModel] = useState(null);
   const [isTraining, setIsTraining] = useState(false);
@@ -102,10 +102,9 @@ const AccelerationClassification = () => {
               {t.title}
             </Typography>
             <HelpButton
-              onClick={() => handleOpenHelp("gestureClassification")}
+              onClick={() => handleOpenHelp("spellClassification")}
               tooltip={
-                t.training?.tooltip?.helpMain ||
-                "What is gesture classification?"
+                t.training?.tooltip?.helpMain || "What is spell classification?"
               }
             />
           </Box>
@@ -132,9 +131,9 @@ const AccelerationClassification = () => {
           {/* Model Training Section */}
           <Paper elevation={2} sx={{ p: 3 }}>
             <Typography variant="h5" gutterBottom>
-              {t.training?.title || "Gesture Training"}
+              {t.training?.title || "Spell Training"}
             </Typography>
-            <GestureModelTrainer
+            <SpellModelTrainer
               classes={classes}
               onClassesChange={setClasses}
               onModelTrained={handleModelTrained}
@@ -152,4 +151,4 @@ const AccelerationClassification = () => {
   );
 };
 
-export default AccelerationClassification;
+export default SpellClassification;

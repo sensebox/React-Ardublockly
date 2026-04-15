@@ -17,15 +17,13 @@ import {
   Chip,
   Stack,
 } from "@mui/material";
-import { renderStrokeToImage } from "./hooks/useGestureModelTraining";
+import { renderStrokeToImage } from "./hooks/useSpellModelTraining";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const STROKE_IMAGE_SIZE = 32;
 const CELL_SIZE = 6; // Base size for activation cells
 const LAYER_GAP = 40; // Vertical gap between layers
 const MATRIX_GAP = 4; // Gap between filter matrices in conv layers
-const CONNECTION_COLOR = "rgba(59, 130, 246, 0.6)";
-const CONNECTION_HIGHLIGHT_COLOR = "rgba(59, 130, 246, 1)";
 
 // ─── Color mapping for activation values ──────────────────────────────────────
 // Inferno-like palette: black(0) → dark-purple → orange → bright-yellow(1)
@@ -103,8 +101,8 @@ const SamplePreviewMini = memo(({ pixelData, strokePoints, size = 24 }) => {
   );
 });
 
-// ─── Input Gesture Display ────────────────────────────────────────────────────
-const InputGestureDisplay = memo(({ pixelData, size = 96 }) => {
+// ─── Input Spell Display ────────────────────────────────────────────────────
+const InputSpellDisplay = memo(({ pixelData, size = 96 }) => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -126,7 +124,7 @@ const InputGestureDisplay = memo(({ pixelData, size = 96 }) => {
         display="block"
         mb={0.5}
       >
-        Input Gesture (32×32)
+        Input Spell (32×32)
       </Typography>
       <Box
         sx={{
@@ -232,6 +230,7 @@ const ConvLayerVisualization = memo(
     onCellLeave,
     highlightedCells,
     containerRef,
+    numColumns = 1,
   }) => {
     const theme = useTheme();
     const layerRef = useRef(null);
@@ -288,18 +287,21 @@ const ConvLayerVisualization = memo(
     return (
       <Box
         ref={layerRef}
-        sx={{ textAlign: "center", mb: 2 }}
+        sx={{
+          textAlign: "center",
+          display: "flex",
+          alignItems: "center",
+          alignSelf: "center",
+        }}
         data-layer-index={layerIndex}
       >
         <Box
           sx={{
-            display: "inline-flex",
-            flexWrap: "wrap",
+            display: "inline-grid",
+            gridTemplateColumns: `repeat(${numColumns}, max-content)`,
             gap: `${MATRIX_GAP}px`,
-            justifyContent: "center",
-            maxWidth: "100%",
             p: 1,
-            bgcolor: alpha(theme.palette.background.paper, 0.5),
+            bgcolor: alpha(theme.palette.grey[500], 0.4),
             borderRadius: 1,
           }}
         >
@@ -371,6 +373,120 @@ const ConvLayerVisualization = memo(
   },
 );
 
+// ─── Output Layer Prediction Visualization ──────────────────────────────────
+const OutputLayerVisualization = memo(
+  ({ activations, layerIndex, classNames, onCellHover, onCellLeave }) => {
+    const theme = useTheme();
+
+    if (!activations || activations.length === 0) return null;
+
+    const numClasses = activations.length;
+    const predictedIdx = activations.indexOf(Math.max(...activations));
+    const predictedName =
+      classNames?.[predictedIdx] ?? `Class ${predictedIdx + 1}`;
+    const predictedColor = activationToColor(activations[predictedIdx], 0, 1);
+
+    return (
+      <Box
+        sx={{
+          flex: 1,
+          minWidth: 0,
+          bgcolor: alpha(theme.palette.grey[500], 0.4),
+          borderRadius: 1,
+          p: 1,
+          display: "flex",
+          flexWrap: "wrap",
+          gap: 1,
+          display: "flex",
+          alignItems: "center",
+          alignSelf: "center",
+        }}
+      >
+        {Array.from({ length: numClasses }, (_, idx) => {
+          const value = activations[idx];
+          const pct = (value * 100).toFixed(1);
+          const name = classNames?.[idx] ?? `Class ${idx + 1}`;
+          const color = activationToColor(value, 0, 1);
+          const isPredicted = idx === predictedIdx;
+
+          return (
+            <Box
+              key={idx}
+              onMouseEnter={() =>
+                onCellHover?.({ layerIndex, neuronIndex: idx, value })
+              }
+              onMouseLeave={onCellLeave}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 0.25,
+                px: 0.75,
+                py: 0.5,
+                borderRadius: 1,
+                border: "1px solid",
+                borderColor: isPredicted
+                  ? "rgba(255,255,255,0.4)"
+                  : "transparent",
+                bgcolor: isPredicted
+                  ? alpha(theme.palette.grey[100], 0.06)
+                  : "transparent",
+                transition: "all 0.2s",
+                minWidth: 0,
+                width: 60,
+              }}
+            >
+              {/* Activation square */}
+              <Box
+                sx={{
+                  width: 16,
+                  height: 16,
+                  borderRadius: 0.5,
+                  flexShrink: 0,
+                  bgcolor: color,
+                  border: isPredicted
+                    ? "1px solid rgba(255,255,255,0.9)"
+                    : "1px solid rgba(255,255,255,0.2)",
+                  boxShadow: isPredicted
+                    ? "0 0 6px rgba(255,255,255,0.8)"
+                    : "none",
+                }}
+              />
+              {/* Class name */}
+              <Typography
+                variant="caption"
+                sx={{
+                  width: "100%",
+                  fontWeight: isPredicted ? "bold" : "normal",
+                  color: isPredicted ? "text.primary" : "text.secondary",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  textAlign: "center",
+                  fontSize: "0.6rem",
+                }}
+              >
+                {name}
+              </Typography>
+              {/* Percentage */}
+              <Typography
+                variant="caption"
+                sx={{
+                  fontWeight: isPredicted ? "bold" : "normal",
+                  color: isPredicted ? "text.primary" : "text.secondary",
+                  fontSize: "0.6rem",
+                }}
+              >
+                {pct}%
+              </Typography>
+            </Box>
+          );
+        })}
+      </Box>
+    );
+  },
+);
+
 // ─── Dense Layer Visualization ────────────────────────────────────────────────
 const DenseLayerVisualization = memo(
   ({
@@ -400,16 +516,23 @@ const DenseLayerVisualization = memo(
     const maxNeuronsToShow = Math.min(numNeurons, 64);
 
     return (
-      <Box sx={{ textAlign: "center", mb: 2 }}>
+      <Box
+        sx={{
+          textAlign: "center",
+          display: "flex",
+          alignItems: "center",
+          alignSelf: "center",
+        }}
+      >
         <Box
           sx={{
             display: "inline-flex",
-            flexWrap: "wrap",
+            flexDirection: "column",
+            flexWrap: "nowrap",
             gap: isOutput ? "8px" : "2px",
-            justifyContent: "center",
-            maxWidth: "100%",
+            justifyContent: "flex-start",
             p: 1,
-            bgcolor: alpha(theme.palette.background.paper, 0.5),
+            bgcolor: alpha(theme.palette.grey[500], 0.4),
             borderRadius: 1,
           }}
         >
@@ -524,55 +647,6 @@ function getReceptiveField(layerConfig, rowIndex, colIndex) {
   return cells;
 }
 
-// ─── Connection Lines SVG Overlay ─────────────────────────────────────────────
-const ConnectionLines = memo(({ connections, containerRef }) => {
-  if (!connections || connections.length === 0 || !containerRef.current) {
-    return null;
-  }
-
-  const containerRect = containerRef.current.getBoundingClientRect();
-
-  return (
-    <svg
-      style={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        pointerEvents: "none",
-        zIndex: 10,
-      }}
-    >
-      <defs>
-        <linearGradient
-          id="connectionGradient"
-          x1="0%"
-          y1="0%"
-          x2="0%"
-          y2="100%"
-        >
-          <stop offset="0%" stopColor="rgba(59, 130, 246, 0.3)" />
-          <stop offset="50%" stopColor="rgba(59, 130, 246, 0.8)" />
-          <stop offset="100%" stopColor="rgba(59, 130, 246, 0.3)" />
-        </linearGradient>
-      </defs>
-      {connections.map((conn, idx) => (
-        <line
-          key={idx}
-          x1={conn.x1}
-          y1={conn.y1}
-          x2={conn.x2}
-          y2={conn.y2}
-          stroke="url(#connectionGradient)"
-          strokeWidth={2}
-          strokeOpacity={0.8}
-        />
-      ))}
-    </svg>
-  );
-});
-
 // ─── Main Neural Network Visualization Component ──────────────────────────────
 const NeuralNetworkVisualization = ({
   trainedModel,
@@ -587,7 +661,6 @@ const NeuralNetworkVisualization = ({
   const [layerMeta, setLayerMeta] = useState([]); // [{name, className, config}]
   const [hoveredCell, setHoveredCell] = useState(null);
   const [highlightedCells, setHighlightedCells] = useState([]);
-  const [connections, setConnections] = useState([]);
   const [selectedSample, setSelectedSample] = useState(null);
   const intermediateModelsRef = useRef(null);
 
@@ -696,7 +769,7 @@ const NeuralNetworkVisualization = ({
     };
   }, [pixelData, trainedModel]);
 
-  // Handle cell hover - calculate receptive field connections
+  // Handle cell hover - highlight receptive field in previous layer
   const handleCellHover = useCallback((cellInfo) => {
     setHoveredCell(cellInfo);
 
@@ -710,26 +783,17 @@ const NeuralNetworkVisualization = ({
         cellInfo.colIndex,
       );
 
-      // Add receptive field cells to highlights (for the previous layer)
       const prevLayerIndex = cellInfo.layerIndex - 1;
       receptiveField.forEach(({ row, col }) => {
-        // Only add if within bounds (padding would extend beyond)
         if (row >= 0 && col >= 0) {
-          // For conv layers, highlight all filters at this position
           highlighted.push({
             layerIndex: prevLayerIndex,
             rowIndex: row,
             colIndex: col,
-            filterIndex: "all", // Special marker to highlight all filters
+            filterIndex: "all",
           });
         }
       });
-    }
-
-    // For dense/pooling layers, show connections to all previous neurons
-    if (cellInfo.neuronIndex !== undefined) {
-      // Dense layers are fully connected - highlighting all connections
-      // would be too busy, so we just highlight the hovered neuron
     }
 
     setHighlightedCells(highlighted);
@@ -738,7 +802,6 @@ const NeuralNetworkVisualization = ({
   const handleCellLeave = useCallback(() => {
     setHoveredCell(null);
     setHighlightedCells([]);
-    setConnections([]);
   }, []);
 
   // Build layer visualization elements
@@ -762,25 +825,34 @@ const NeuralNetworkVisualization = ({
       };
     });
 
+    const lastLayerName = layerOrder[layerOrder.length - 1];
+    let convLayerCount = 0;
+
     for (const layerName of layerOrder) {
       const { data, className } = layerActivations[layerName];
       const config = layerConfigs[layerName];
+      const isLastLayer = layerName === lastLayerName;
+
+      if (elements.length > 0) {
+        elements.push(
+          <Box
+            key={`arrow-${layerIndex}`}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              alignSelf: "center",
+              px: 0.5,
+            }}
+          >
+            <Typography color="text.secondary" sx={{ fontSize: "1.2rem" }}>
+              →
+            </Typography>
+          </Box>,
+        );
+      }
 
       if (className === "Conv2D") {
-        // Add connector line before conv layers (except the first one)
-        if (layerIndex > 0) {
-          elements.push(
-            <Box
-              key={`connector-${layerName}`}
-              sx={{
-                width: 2,
-                height: 20,
-                bgcolor: "grey.600",
-                my: 0.5,
-              }}
-            />,
-          );
-        }
+        const convIdx = convLayerCount++;
         elements.push(
           <ConvLayerVisualization
             key={layerName}
@@ -792,24 +864,13 @@ const NeuralNetworkVisualization = ({
             onCellLeave={handleCellLeave}
             highlightedCells={highlightedCells}
             containerRef={containerRef}
+            numColumns={convIdx >= 1 ? 2 : 1}
           />,
         );
       } else if (
         className === "GlobalAveragePooling2D" ||
         className === "Flatten"
       ) {
-        // Add connector line
-        elements.push(
-          <Box
-            key={`connector-${layerName}`}
-            sx={{
-              width: 2,
-              height: 20,
-              bgcolor: "grey.600",
-              my: 0.5,
-            }}
-          />,
-        );
         // 1D array after pooling
         const flatData = Array.isArray(data[0]) ? data.flat(Infinity) : data;
         elements.push(
@@ -824,53 +885,39 @@ const NeuralNetworkVisualization = ({
           />,
         );
       } else if (className === "Dense") {
-        // Add connector line
-        elements.push(
-          <Box
-            key={`connector-${layerName}`}
-            sx={{
-              width: 2,
-              height: 20,
-              bgcolor: "grey.600",
-              my: 0.5,
-            }}
-          />,
-        );
-        elements.push(
-          <DenseLayerVisualization
-            key={layerName}
-            activations={data}
-            layerName={layerName.replace(/_/g, " ")}
-            layerIndex={layerIndex}
-            onCellHover={handleCellHover}
-            onCellLeave={handleCellLeave}
-            highlightedCells={highlightedCells}
-          />,
-        );
+        if (isLastLayer) {
+          elements.push(
+            <OutputLayerVisualization
+              key={layerName}
+              activations={data}
+              layerIndex={layerIndex}
+              classNames={classNames}
+              onCellHover={handleCellHover}
+              onCellLeave={handleCellLeave}
+            />,
+          );
+        } else {
+          elements.push(
+            <DenseLayerVisualization
+              key={layerName}
+              activations={data}
+              layerName={layerName.replace(/_/g, " ")}
+              layerIndex={layerIndex}
+              onCellHover={handleCellHover}
+              onCellLeave={handleCellLeave}
+              highlightedCells={highlightedCells}
+            />,
+          );
+        }
       } else if (className === "Softmax") {
-        // Add connector line
         elements.push(
-          <Box
-            key={`connector-${layerName}`}
-            sx={{
-              width: 2,
-              height: 20,
-              bgcolor: "grey.600",
-              my: 0.5,
-            }}
-          />,
-        );
-        elements.push(
-          <DenseLayerVisualization
+          <OutputLayerVisualization
             key={layerName}
             activations={data}
-            layerName="Output (Softmax)"
             layerIndex={layerIndex}
             classNames={classNames}
             onCellHover={handleCellHover}
             onCellLeave={handleCellLeave}
-            highlightedCells={highlightedCells}
-            isOutput
           />,
         );
       }
@@ -900,42 +947,25 @@ const NeuralNetworkVisualization = ({
         p: 2,
         mt: 2,
         position: "relative",
-        bgcolor: alpha(theme.palette.grey[900], 0.95),
         borderRadius: 2,
-        overflow: "auto",
       }}
     >
       {!pixelData ? (
         <Box sx={{ textAlign: "center", py: 4 }}>
           <Typography variant="body2" color="grey.500">
-            Draw a gesture to visualize network activations
+            Draw a spell to visualize network activations
           </Typography>
         </Box>
       ) : (
         <Box
           sx={{
             display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
+            flexDirection: "row",
+            alignItems: "flex-start",
             gap: 1,
           }}
         >
-          {/* Vertical connector */}
-          <Box
-            sx={{
-              width: 2,
-              height: 20,
-              bgcolor: "grey.600",
-            }}
-          />
-
           {layerElements}
-
-          {/* Connection lines overlay */}
-          <ConnectionLines
-            connections={connections}
-            containerRef={containerRef}
-          />
 
           {/* Hover info panel */}
           {hoveredCell && (
@@ -1014,33 +1044,6 @@ const NeuralNetworkVisualization = ({
           )}
         </Box>
       )}
-
-      {/* Legend */}
-      <Box
-        sx={{
-          mt: 2,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 1,
-        }}
-      >
-        <Typography variant="caption" color="grey.500">
-          Low activation
-        </Typography>
-        <Box
-          sx={{
-            width: 100,
-            height: 10,
-            borderRadius: 1,
-            background:
-              "linear-gradient(to right, rgb(8,4,18), rgb(110,0,100), rgb(255,55,60), rgb(255,195,0), rgb(255,255,0))",
-          }}
-        />
-        <Typography variant="caption" color="grey.500">
-          High activation
-        </Typography>
-      </Box>
     </Paper>
   );
 };

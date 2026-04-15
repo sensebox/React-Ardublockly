@@ -93,14 +93,14 @@ export async function downloadAccelerometerFirmware(
 }
 
 /**
- * Downloads gesture streaming firmware for senseBox Eye
+ * Downloads spell streaming firmware for senseBox Eye
  * @param {string} boardType - Board type (default: "sensebox_eye")
- * @param {string} filename - Name for downloaded file (default: "gesture_capture.bin")
+ * @param {string} filename - Name for downloaded file (default: "spell_capture.bin")
  * @returns {Promise<{success: boolean, error?: string}>}
  */
-export async function downloadGestureFirmware(
+export async function downloadSpellFirmware(
   boardType = "sensebox_eye",
-  filename = "gesture_capture.bin",
+  filename = "spell_capture.bin",
 ) {
   try {
     const response = await fetch(`${API_BASE_URL}/api/capture/gesture`, {
@@ -129,7 +129,7 @@ export async function downloadGestureFirmware(
 
     return { success: true };
   } catch (err) {
-    console.error("Failed to download gesture firmware:", err);
+    console.error("Failed to download spell firmware:", err);
     return { success: false, error: err.message };
   }
 }

@@ -31,12 +31,12 @@ import {
   Download as DownloadIcon,
   Bluetooth as BluetoothIcon,
 } from "@mui/icons-material";
-import useGestureSource from "./hooks/useGestureSource";
-import useGestureBLESource, { StrokeState } from "./hooks/useGestureBLESource";
-import useGestureModelTraining, {
+import useSpellSource from "./hooks/useSpellSource";
+import useSpellBLESource, { StrokeState } from "./hooks/useSpellBLESource";
+import useSpellModelTraining, {
   renderStrokeToImage,
-} from "./hooks/useGestureModelTraining";
-import useGestureModelPrediction from "./hooks/useGestureModelPrediction";
+} from "./hooks/useSpellModelTraining";
+import useSpellModelPrediction from "./hooks/useSpellModelPrediction";
 import NeuralNetworkVisualization from "./NeuralNetworkVisualization";
 import HelpButton from "../HelpButton";
 import SerialCameraErrorHandler, {
@@ -44,13 +44,13 @@ import SerialCameraErrorHandler, {
   ConnectionStatus,
 } from "../SerialCameraErrorHandler";
 import TrainingResultsSection from "../TrainingResultsSection";
-import { downloadGestureFirmware } from "../utils/firmwareDownload";
+import { downloadSpellFirmware } from "../utils/firmwareDownload";
 
 // ─── Dimensions for stroke visualization ─────────────────────────────────────
 const STROKE_CANVAS_SIZE = 320;
 
 // ─── StrokeMiniPreview ───────────────────────────────────────────────────────
-// Small preview of a stored gesture sample — rendered at 32×32 matching training
+// Small preview of a stored spell sample — rendered at 32×32 matching training
 const MINI_SIZE = 80;
 const MINI_RENDER_SIZE = 32;
 
@@ -98,21 +98,6 @@ const StrokeMiniPreview = memo(({ strokePoints, onDelete }) => {
       ctx.moveTo(halfSize + x0 * halfSize, halfSize - y0 * halfSize);
       ctx.lineTo(halfSize + x1 * halfSize, halfSize - y1 * halfSize);
       ctx.stroke();
-    }
-
-    // Small green start marker — identical to training
-    {
-      const { x, y } = strokePoints[0];
-      ctx.fillStyle = "#00FF00";
-      ctx.beginPath();
-      ctx.arc(
-        halfSize + x * halfSize,
-        halfSize - y * halfSize,
-        1.5,
-        0,
-        Math.PI * 2,
-      );
-      ctx.fill();
     }
   }, [strokePoints]);
 
@@ -327,33 +312,18 @@ const LiveStrokeCanvas = memo(({ latestStroke, size = STROKE_CANVAS_SIZE }) => {
       ctx.lineTo(halfSize + x1 * halfSize, halfSize - y1 * halfSize);
       ctx.stroke();
     }
-
-    // Small green start marker (1.5 px radius) — identical to training
-    {
-      const { x, y } = strokePoints[0];
-      ctx.fillStyle = "#00FF00";
-      ctx.beginPath();
-      ctx.arc(
-        halfSize + x * halfSize,
-        halfSize - y * halfSize,
-        1.5,
-        0,
-        Math.PI * 2,
-      );
-      ctx.fill();
-    }
   }, [latestStroke]);
 
   // Get status label
   const getStatusLabel = () => {
-    if (!latestStroke) return "Waiting for gesture...";
+    if (!latestStroke) return "Waiting for spell...";
     switch (latestStroke.state) {
       case StrokeState.WAITING:
-        return "Waiting for gesture...";
+        return "Waiting for spell...";
       case StrokeState.DRAWING:
         return "Drawing...";
       case StrokeState.DONE:
-        return "Gesture complete!";
+        return "Spell complete!";
       default:
         return "Ready";
     }
@@ -396,8 +366,8 @@ const LiveStrokeCanvas = memo(({ latestStroke, size = STROKE_CANVAS_SIZE }) => {
   );
 });
 
-// ─── GestureModelTrainer ──────────────────────────────────────────────────────
-const GestureModelTrainer = ({
+// ─── SpellModelTrainer ──────────────────────────────────────────────────────
+const SpellModelTrainer = ({
   classes,
   onClassesChange,
   onModelTrained,
@@ -420,8 +390,8 @@ const GestureModelTrainer = ({
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [isDownloading, setIsDownloading] = useState(false);
 
-  const serialSource = useGestureSource();
-  const bleSource = useGestureBLESource();
+  const serialSource = useSpellSource();
+  const bleSource = useSpellBLESource();
 
   // Derive active source — Serial takes priority if both somehow connected
   const activeSource = serialSource.isConnected ? serialSource : bleSource;
@@ -433,7 +403,7 @@ const GestureModelTrainer = ({
 
   const handleDownloadFirmware = async () => {
     setIsDownloading(true);
-    const result = await downloadGestureFirmware();
+    const result = await downloadSpellFirmware();
     if (!result.success) {
       alert(`Failed to download firmware: ${result.error}`);
     }
@@ -446,15 +416,15 @@ const GestureModelTrainer = ({
     trainingMetrics,
     testResults,
     finalAccuracy,
-  } = useGestureModelTraining();
+  } = useSpellModelTraining();
 
-  const { predictions, predictStroke } = useGestureModelPrediction(
+  const { predictions, predictStroke } = useSpellModelPrediction(
     trainedModel,
     latestStroke,
     isConnected,
   );
 
-  // ─── Auto-capture completed gestures ──────────────────────────────────────
+  // ─── Auto-capture completed spells ──────────────────────────────────────
   // When a stroke is completed, add it to the currently recording class
   const previousStrokeRef = useRef(null);
 
@@ -795,16 +765,6 @@ const GestureModelTrainer = ({
                 <LiveStrokeCanvas latestStroke={latestStroke} />
               </Box>
             )}
-
-            {/* Neural Network Visualization */}
-            {trainedModel && (
-              <NeuralNetworkVisualization
-                trainedModel={trainedModel}
-                strokePoints={latestStroke?.strokePoints}
-                classNames={classes.map((cls) => cls.name)}
-                classes={classes}
-              />
-            )}
           </Box>
         </Grid>
 
@@ -891,7 +851,7 @@ const GestureModelTrainer = ({
                 <HelpButton
                   onClick={() => onOpenHelp && onOpenHelp("addClass")}
                   tooltip={
-                    t.training?.tooltip?.helpClasses || "About gesture classes"
+                    t.training?.tooltip?.helpClasses || "About spell classes"
                   }
                 />
               </Box>
@@ -974,7 +934,7 @@ const GestureModelTrainer = ({
             </Box>
           )}
 
-          {/* Training results */}
+          {/* Training results for debugging
           {trainedModel && (
             <TrainingResultsSection
               trainingMetrics={trainingMetrics}
@@ -985,6 +945,16 @@ const GestureModelTrainer = ({
                 (cls) => cls.samples.length >= 10,
               )}
               onOpenHelp={onOpenHelp}
+            />
+          )} */}
+
+          {/* Neural Network Visualization */}
+          {trainedModel && (
+            <NeuralNetworkVisualization
+              trainedModel={trainedModel}
+              strokePoints={latestStroke?.strokePoints}
+              classNames={classes.map((cls) => cls.name)}
+              classes={classes}
             />
           )}
         </Grid>
@@ -1010,6 +980,7 @@ const GestureModelTrainer = ({
             onKeyDown={(e) => {
               if (e.key === "Enter" && newClassName.trim()) {
                 addClass();
+                setShowAddDialog(false);
               }
             }}
           />
@@ -1031,4 +1002,4 @@ const GestureModelTrainer = ({
   );
 };
 
-export default GestureModelTrainer;
+export default SpellModelTrainer;

@@ -1,11 +1,6 @@
 import { useState, useCallback } from "react";
 import * as tf from "@tensorflow/tfjs";
 
-// For now, use the same base model as image classification
-// This renders strokes to images and uses the same feature extractor
-const BASE_MODEL_URL =
-  "https://raw.githubusercontent.com/PaulaScharf/teachable_machine_base_model/refs/heads/main/gesture_classification/model.json";
-
 const STROKE_IMAGE_SIZE = 32;
 const VALIDATION_FRACTION = 0.15;
 const TOTAL_EPOCHS = 50;
@@ -51,7 +46,7 @@ export function renderStrokeToImage(strokePoints) {
   ctx.lineJoin = "round";
 
   // Encode temporal direction across all three RGB channels so that the
-  // model can distinguish forward vs. reversed gestures even when they
+  // model can distinguish forward vs. reversed spells even when they
   // share the same spatial path:
   //   R = 255 at the start, fades to 0 at the end  ("where it began")
   //   G = 128 throughout                            (constant visibility)
@@ -69,30 +64,14 @@ export function renderStrokeToImage(strokePoints) {
     ctx.stroke();
   }
 
-  // Small start marker (1.5 px radius) so the model can locate the
-  // beginning of the stroke without it dominating the 32×32 image.
-  {
-    const { x, y } = strokePoints[0];
-    ctx.fillStyle = "#00FF00";
-    ctx.beginPath();
-    ctx.arc(
-      halfSize + x * halfSize,
-      halfSize - y * halfSize,
-      1.5,
-      0,
-      Math.PI * 2,
-    );
-    ctx.fill();
-  }
-
   return ctx.getImageData(0, 0, STROKE_IMAGE_SIZE, STROKE_IMAGE_SIZE).data;
 }
 
 /**
- * Custom hook for gesture model training logic
+ * Custom hook for spell model training logic
  * Renders stroke points to images and uses the same CNN approach as image classification
  */
-function useGestureModelTraining() {
+function useSpellModelTraining() {
   const [trainingProgress, setTrainingProgress] = useState({
     epoch: 0,
     totalEpochs: 0,
@@ -269,22 +248,47 @@ function useGestureModelTraining() {
       onTrainingStart();
 
       try {
-        // Load base model and build end-to-end training model
-        const baseModel = await tf.loadLayersModel(BASE_MODEL_URL);
+        // Build the spell CNN from scratch (8 → 16 → 32 filters).
+        // All layers are trained from random initialisation — no remote model
+        // dependency, and the filter count is small enough to avoid dead-ReLU
+        // saturation that plagued the larger 16→32→64 base model.
         const numClasses = classes.length;
-        const model = tf.sequential();
-        for (let i = 0; i < baseModel.layers.length - 1; i++) {
-          baseModel.layers[i].trainable = true;
-          model.add(baseModel.layers[i]);
-        }
-        model.add(
-          tf.layers.dense({
-            units: numClasses,
-            activation: "softmax",
-            kernelInitializer: "varianceScaling",
-            useBias: false,
-          }),
-        );
+        const model = tf.sequential({
+          layers: [
+            tf.layers.conv2d({
+              inputShape: [STROKE_IMAGE_SIZE, STROKE_IMAGE_SIZE, 3],
+              filters: 8,
+              kernelSize: 3,
+              strides: [2, 2],
+              padding: "same",
+              activation: "relu",
+              kernelInitializer: "glorotUniform",
+            }),
+            tf.layers.conv2d({
+              filters: 16,
+              kernelSize: 3,
+              strides: [2, 2],
+              padding: "same",
+              activation: "relu",
+              kernelInitializer: "glorotUniform",
+            }),
+            tf.layers.conv2d({
+              filters: 32,
+              kernelSize: 3,
+              strides: [2, 2],
+              padding: "same",
+              activation: "relu",
+              kernelInitializer: "glorotUniform",
+            }),
+            tf.layers.globalAveragePooling2d({}),
+            tf.layers.dense({
+              units: numClasses,
+              activation: "softmax",
+              kernelInitializer: "varianceScaling",
+              useBias: false,
+            }),
+          ],
+        });
 
         const classWeights = calculateClassWeights(classes);
         const { trainDataset, validationDataset } = prepareDatasets(classes);
@@ -315,7 +319,7 @@ function useGestureModelTraining() {
         const totalTrainingSamples = trainDataset.length;
         const batchSize = calculateBatchSize(totalTrainingSamples);
         console.log(
-          `Gesture training - batch size: ${batchSize} (total samples: ${totalTrainingSamples})`,
+          `Spell training - batch size: ${batchSize} (total samples: ${totalTrainingSamples})`,
         );
 
         let currentLearningRate = INITIAL_LEARNING_RATE;
@@ -355,7 +359,7 @@ function useGestureModelTraining() {
             },
             onEpochEnd: (epoch, logs) => {
               console.log(
-                `Gesture Epoch ${epoch + 1}: loss = ${logs.loss.toFixed(4)}, accuracy = ${logs.acc.toFixed(4)}, val_loss = ${logs.val_loss.toFixed(4)}, val_acc = ${logs.val_acc.toFixed(4)}`,
+                `Spell Epoch ${epoch + 1}: loss = ${logs.loss.toFixed(4)}, accuracy = ${logs.acc.toFixed(4)}, val_loss = ${logs.val_loss.toFixed(4)}, val_acc = ${logs.val_acc.toFixed(4)}`,
               );
 
               setTrainingProgress((prev) => ({
@@ -392,7 +396,7 @@ function useGestureModelTraining() {
                 }
 
                 if (patienceCounter >= EARLY_STOPPING_PATIENCE && epoch >= 10) {
-                  console.log(`Gesture early stopping at epoch ${epoch + 1}`);
+                  console.log(`Spell early stopping at epoch ${epoch + 1}`);
                   model.stopTraining = true;
                   if (bestWeights) {
                     model.setWeights(bestWeights);
@@ -437,7 +441,7 @@ function useGestureModelTraining() {
         onModelTrained(modelData);
         return true;
       } catch (error) {
-        console.error("Gesture training error:", error);
+        console.error("Spell training error:", error);
         onTrainingError(`Training failed: ${error.message}`);
         return false;
       }
@@ -456,4 +460,4 @@ function useGestureModelTraining() {
   };
 }
 
-export default useGestureModelTraining;
+export default useSpellModelTraining;

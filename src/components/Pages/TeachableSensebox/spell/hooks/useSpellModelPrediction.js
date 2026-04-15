@@ -4,10 +4,10 @@ import * as tf from "@tensorflow/tfjs";
 const STROKE_IMAGE_SIZE = 32;
 
 /**
- * Custom hook for gesture model prediction logic
- * Handles live predictions from completed gesture strokes
+ * Custom hook for spell model prediction logic
+ * Handles live predictions from completed spell strokes
  */
-function useGestureModelPrediction(trainedModel, latestStroke, isConnected) {
+function useSpellModelPrediction(trainedModel, latestStroke, isConnected) {
   const [predictions, setPredictions] = useState([]);
   const [lastPredictedStroke, setLastPredictedStroke] = useState(null);
   const predictionInProgressRef = useRef(false);
@@ -121,7 +121,7 @@ function useGestureModelPrediction(trainedModel, latestStroke, isConnected) {
           })),
         );
       } catch (error) {
-        console.error("Gesture prediction error:", error);
+        console.error("Spell prediction error:", error);
       } finally {
         predictionInProgressRef.current = false;
       }
@@ -181,4 +181,4 @@ function useGestureModelPrediction(trainedModel, latestStroke, isConnected) {
   };
 }
 
-export default useGestureModelPrediction;
+export default useSpellModelPrediction;

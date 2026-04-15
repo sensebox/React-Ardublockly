@@ -1,8 +1,8 @@
 /**
- * GestureBLEService
+ * SpellBLEService
  *
  * Manages Bluetooth Low Energy communication with senseBox for
- * magic wand gesture data using the Web Bluetooth API.
+ * magic wand spell data using the Web Bluetooth API.
  * Receives stroke point data via BLE polling (read) since the
  * stroke data exceeds the 20-byte BLE notification limit.
  *
@@ -24,7 +24,7 @@ export const StrokeState = {
   DONE: 2,
 };
 
-class GestureBLEService {
+class SpellBLEService {
   constructor() {
     this.device = null;
     this.server = null;
@@ -46,12 +46,12 @@ class GestureBLEService {
   }
 
   /**
-   * Connect to the senseBox via BLE and start receiving gesture data
+   * Connect to the senseBox via BLE and start receiving spell data
    */
   async connect() {
     if (this.isConnected) return;
 
-    if (!GestureBLEService.isSupported()) {
+    if (!SpellBLEService.isSupported()) {
       const error = new Error(
         "Web Bluetooth API is not supported in this browser",
       );
@@ -64,7 +64,7 @@ class GestureBLEService {
         filters: [
           { namePrefix: "senseBox" },
           { name: "senseBox-MagicWand" },
-          { name: "senseBox-Gesture" },
+          { name: "senseBox-Spell" },
         ],
         optionalServices: [BLE_SERVICE_UUID],
       });
@@ -224,7 +224,7 @@ class GestureBLEService {
       state === StrokeState.DONE &&
       this._previousStrokeState !== StrokeState.DONE
     ) {
-      // Emit completed stroke event - this is when we want to store the gesture
+      // Emit completed stroke event - this is when we want to store the spell
       strokeData.isCompleted = true;
     }
     this._previousStrokeState = state;
@@ -235,7 +235,7 @@ class GestureBLEService {
       try {
         cb(strokeData);
       } catch (e) {
-        console.error("GestureBLEService stroke callback error:", e);
+        console.error("SpellBLEService stroke callback error:", e);
       }
     }
   }
@@ -245,10 +245,10 @@ class GestureBLEService {
       try {
         cb(error);
       } catch (e) {
-        console.error("GestureBLEService error callback error:", e);
+        console.error("SpellBLEService error callback error:", e);
       }
     }
   }
 }
 
-export default GestureBLEService;
+export default SpellBLEService;
