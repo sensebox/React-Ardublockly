@@ -267,9 +267,9 @@ Blockly.defineBlocksWithJsonArray([
 
 // Font size configurations for display
 const FONT_SIZE_CONFIG = {
-  small: { size: 6, lineHeight: 8, maxLines: 6 },
-  medium: { size: 8, lineHeight: 10, maxLines: 5 },
-  large: { size: 12, lineHeight: 14, maxLines: 3 },
+  s: { size: 6, lineHeight: 8, maxLines: 6 },
+  m: { size: 8, lineHeight: 10, maxLines: 5 },
+  l: { size: 12, lineHeight: 14, maxLines: 3 },
 };
 
 // Helper: encode SVG (UTF-8) to data URI safely (handles umlauts / unicode)
@@ -278,8 +278,8 @@ function svgToDataUri(svg) {
 }
 
 // Helper function to generate font size toggle buttons SVG
-function generateFontSizeToggleSvg(selectedSize = "medium") {
-  const sizes = ["small", "medium", "large"];
+function generateFontSizeToggleSvg(selectedSize = "s") {
+  const sizes = ["s", "m", "l"];
   const labels = ["S", "M", "L"];
   const buttonWidth = 28;
   const buttonHeight = 22;
@@ -308,8 +308,8 @@ function generateFontSizeToggleSvg(selectedSize = "medium") {
 }
 
 // Helper function to generate dynamic display SVG with text
-function generateDisplaySvg(text = "", fontSize = "medium") {
-  const config = FONT_SIZE_CONFIG[fontSize] || FONT_SIZE_CONFIG.medium;
+function generateDisplaySvg(text = "", fontSize = "s") {
+  const config = FONT_SIZE_CONFIG[fontSize] || FONT_SIZE_CONFIG.s;
 
   // Split text by newlines and limit each line
   const lines = text.split("\n").map((line) => line.substring(0, 20));
@@ -424,14 +424,14 @@ function generateMeasurementDisplaySvg(value = "0", title = "", unit = "") {
 Blockly.Blocks["display_print_basic"] = {
   init: function () {
     // Store current font size
-    this.fontSize_ = "small";
+    this.fontSize_ = "s";
 
     this.appendDummyInput("ZEIGE").appendField(
       new Blockly.FieldLabel("Zeige :", undefined, { bold: true }),
     );
 
     this.appendValueInput("TEXT").appendField(
-      new Blockly.FieldImage(generateDisplaySvg("", "small"), 160, 90, "*"),
+      new Blockly.FieldImage(generateDisplaySvg("", "s"), 160, 90, "*"),
       "DISPLAY_ICON",
     );
 
@@ -445,7 +445,7 @@ Blockly.Blocks["display_print_basic"] = {
       .appendField("Größe:")
       .appendField(
         new Blockly.FieldImage(
-          generateFontSizeToggleSvg("small"),
+          generateFontSizeToggleSvg("s"),
           96,
           22,
           "font size",
