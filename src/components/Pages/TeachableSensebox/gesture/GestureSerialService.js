@@ -32,6 +32,7 @@ class GestureSerialService {
     this.strokeCallbacks = [];
     this.errorCallbacks = [];
     this.lineBuffer = "";
+    this._previousStrokeState = StrokeState.WAITING;
   }
 
   /**
@@ -121,6 +122,7 @@ class GestureSerialService {
 
     this.port = null;
     this.lineBuffer = "";
+    this._previousStrokeState = StrokeState.WAITING;
   }
 
   /**
@@ -213,33 +215,42 @@ class GestureSerialService {
   _parseLine(line) {
     if (!line) return;
 
-    // Expected format: "<x1>,<y1>,<x2>,<y2>,..."
-    // Each line is a complete stroke of coordinate pairs.
+    // Expected format: "<state>,<length>,<x1>,<y1>,<x2>,<y2>,..."
+    // state: 0=waiting, 1=drawing, 2=done
+    // length: number of stroke points that follow
+    // x,y: normalized coordinates as floats (-1.0 to 1.0)
 
     try {
-      const coords = line.split(",").map((s) => parseFloat(s.trim()));
-      if (coords.length < 2) return;
+      const values = line.split(",").map((s) => parseFloat(s.trim()));
+      if (values.length < 4) return;
+
+      const state = values[0];
+      const length = values[1];
+
+      if (isNaN(state) || isNaN(length)) return;
 
       const strokePoints = [];
-      for (let i = 0; i + 1 < coords.length; i += 2) {
-        if (!isNaN(coords[i]) && !isNaN(coords[i + 1])) {
-          strokePoints.push({
-            x: coords[i],
-            y: coords[i + 1],
-          });
+      for (let i = 2; i + 1 < values.length; i += 2) {
+        if (!isNaN(values[i]) && !isNaN(values[i + 1])) {
+          strokePoints.push({ x: values[i], y: values[i + 1] });
         }
       }
 
       if (strokePoints.length === 0) return;
 
+      const isCompleted =
+        state === StrokeState.DONE &&
+        this._previousStrokeState !== StrokeState.DONE;
+
       const strokeData = {
-        state: StrokeState.DONE,
+        state,
         length: strokePoints.length,
         strokePoints,
         timestamp: Date.now(),
-        isCompleted: true,
+        isCompleted,
       };
 
+      this._previousStrokeState = state;
       this._emitStroke(strokeData);
     } catch (e) {
       // Ignore parse errors for malformed lines
