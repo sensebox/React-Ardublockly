@@ -579,7 +579,7 @@ const SpellModelTrainer = ({
           <Box
             sx={{
               position: { md: "sticky" },
-              top: { md: 16 },
+              top: { md: "30%" },
               alignSelf: "flex-start",
             }}
           >
