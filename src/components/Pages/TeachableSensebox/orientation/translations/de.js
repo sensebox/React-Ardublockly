@@ -115,10 +115,10 @@ export const orientationTranslations_de = {
     troubleshootingUsb:
       "Stelle sicher, dass die senseBox Eye per USB verbunden ist",
     troubleshootingFirmware:
-      "Überprüfe, ob die senseBox Eye die Firmware zum Streamen der Beschleunigungsdaten ausführt.",
+      "Überprüfe, ob die senseBox Eye den Sketch zum Streamen der Beschleunigungsdaten ausführt.",
     dataTimeout: "Keine Daten empfangen",
     dataTimeoutMessage:
-      "Die senseBox Eye scheint verbunden zu sein, sendet aber keine Daten. Bitte überprüfe, ob die richtige Firmware auf dem Gerät läuft.",
+      "Die senseBox Eye scheint verbunden zu sein, sendet aber keine Daten. Bitte überprüfe, ob der richtige Sketch auf dem Gerät läuft.",
   },
   help: {
     help: "Hilfe",

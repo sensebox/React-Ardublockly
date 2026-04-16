@@ -76,9 +76,12 @@ export const spellTranslations_de = {
 
   errors: {
     downloadFirmware: "Zauberspruch-Sketch herunterladen",
-    connectionFailed: "Verbindung zur senseBox fehlgeschlagen",
+    connectionFailed: "Verbindung fehlgeschlagen",
+    connectionFailedMessage:
+      "Die Verbindung zur senseBox Eye konnte nicht hergestellt werden.",
+    troubleshootingFirmware:
+      "Überprüfe, ob die senseBox Eye den Sketch zum Streamen der Zaubersprüche ausführt.",
     deviceDisconnected: "senseBox unerwartet getrennt",
-    dataTimeout:
-      "Keinen Zauberspruch empfangen - überprüfe deine senseBox-Firmware",
+    dataTimeout: "Keinen Zauberspruch empfangen",
   },
 };
