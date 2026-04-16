@@ -23,3 +23,9 @@ Formal betrachtet kannst du dir das neuronale Netz als eine sehr schwierige math
 Speziell für die Bildverarbeitung nutzen wir ein Neuronales Netz mit **Convolutional Layern**. Diese Schichten suchen gezielt nach Kanten, Formen und Mustern im Bild.
 
 ![features](/media/teachable/feature_cat.drawio.png)
+
+---
+
+# Achtung!
+
+Wenn du diese Seite neu lädst verschwinden deine aufgenommenen Daten und dein trainiertes Modell!

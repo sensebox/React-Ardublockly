@@ -29,3 +29,9 @@ Formally speaking, training means searching for the most suitable values for the
 To a computer, an image is a grid of pixels, with each pixel defined by several numbers. For example, one number each for the colors red, green and blue. The higher the number, the redder, greener or bluer the pixel is. So when the model ‘looks at’ an image, it actually processes and interprets a matrix of numbers.
 
 ![Computer Vision](/media/teachable/computer-vision.drawio.png)
+
+---
+
+# Warning!
+
+If you reload this page you will lose your recorded data and trained model.
