@@ -29,3 +29,9 @@ Formal gesehen, bedeutet das Trainieren, dass wir möglichst passende Werte für
 Für den Computer ist ein Bild ein Raster an Pixeln, wobei jedes Pixel durch mehrere Zahlen definiert wird. Zum Beispiel jeweils eine Zahl für die Farben rot, grün und blau. Je höher die Zahl, desto roter, grüner oder blauer ist das Pixel. Wenn das Modell ein Bild "anschaut", verarbeitet und interpretiret es also eine Matrix aus Zahlen.
 
 ![Computer Vision](/media/teachable/computer-vision.drawio.png)
+
+---
+
+# Achtung!
+
+Wenn du diese Seite neu lädst verschwinden deine aufgenommenen Daten und dein trainiertes Modell!

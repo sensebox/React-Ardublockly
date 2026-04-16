@@ -23,3 +23,9 @@ Formally, you can think of the neural network as a very complex **mathematical f
 For image processing specifically, we use a neural network with **Convolutional Layers**. These layers actively look for edges, shapes, and patterns in the image.
 
 ![features](/media/teachable/feature_cat.drawio.png)
+
+---
+
+# Warning!
+
+If you reload this page you will lose your recorded data and trained model.
