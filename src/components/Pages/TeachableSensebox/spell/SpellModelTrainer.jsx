@@ -154,7 +154,9 @@ const ClassCardItem = memo(
     editingClassName,
     isConnected,
     dataTimeoutError,
-    latestStroke,
+    isRecording,
+    recordingInProgress,
+    onToggleRecording,
     onDeleteClass,
     onStartEditingClass,
     onSaveClassRename,
@@ -163,6 +165,10 @@ const ClassCardItem = memo(
     onEditNameChange,
     t,
   }) => {
+    const handleRecord = useCallback(
+      () => onToggleRecording(cls.id),
+      [cls.id, onToggleRecording],
+    );
     const handleDelete = useCallback(
       () => onDeleteClass(cls.id),
       [cls.id, onDeleteClass],
@@ -250,7 +256,49 @@ const ClassCardItem = memo(
               />
             ))}
           </Box>
+
+          {/* Recording state */}
+          {isRecording && (
+            <Box sx={{ mt: 1 }}>
+              <Typography variant="body2" color="error" sx={{ mb: 0.5 }}>
+                {t.training?.recording || "Recording..."}
+              </Typography>
+              <LinearProgress color="primary" />
+            </Box>
+          )}
         </CardContent>
+
+        <CardActions sx={{ gap: 0.5, p: 1 }}>
+          <Tooltip
+            title={
+              !isConnected
+                ? t.training?.tooltip?.startConnection ||
+                  "Connect senseBox first"
+                : ""
+            }
+            arrow
+          >
+            <span style={{ flex: 1 }}>
+              <Button
+                variant="contained"
+                color={isRecording ? "secondary" : "error"}
+                size="small"
+                fullWidth
+                startIcon={<RecordIcon />}
+                onClick={handleRecord}
+                disabled={
+                  !isConnected ||
+                  dataTimeoutError ||
+                  (!isRecording && recordingInProgress)
+                }
+              >
+                {isRecording
+                  ? t.training?.stopRecording || "Stop Recording"
+                  : t.training?.startRecording || "Start Recording"}
+              </Button>
+            </span>
+          </Tooltip>
+        </CardActions>
       </Card>
     );
   },
@@ -721,28 +769,41 @@ const SpellModelTrainer = ({
             </Box>
 
             {/* Error display */}
-            {sensorError && (
+            {((isConnected && dataTimeoutError) ||
+              (!isConnected && sensorError)) && (
               <Box sx={{ mb: 3 }}>
                 <SerialCameraErrorHandler
-                  error={sensorError}
-                  connectionStatus={
-                    isConnected
-                      ? ConnectionStatus.CONNECTED
-                      : ConnectionStatus.ERROR
+                  error={
+                    !isConnected && sensorError
+                      ? {
+                          type:
+                            sensorError.type || ErrorTypes.CONNECTION_FAILED,
+                          message: sensorError.message,
+                        }
+                      : {
+                          type: ErrorTypes.CONNECTION_FAILED,
+                          message: t.errors.dataTimeoutMessage,
+                        }
                   }
-                  onRetry={
-                    serialSource.isConnected
-                      ? serialSource.disconnect
-                      : bleSource.disconnect
-                  }
-                  onDismiss={() => {}}
+                  connectionStatus={ConnectionStatus.CONNECTED}
+                  onRetry={async () => {
+                    await activeSource.disconnect();
+                    await activeSource.connect();
+                  }}
+                  onDismiss={() => activeSource.disconnect()}
                   showStatus={false}
+                  overrides={{
+                    errorTitle: t.errors.connectionFailed,
+                    errorMessage: t.errors.connectionFailedMessage,
+                    troubleshootingFirmware: t.errors.troubleshootingFirmware,
+                    downloadFirmwareLabel: t.errors.downloadFirmware,
+                    downloadFirmwareFn: downloadSpellFirmware,
+                  }}
                 />
               </Box>
             )}
-
             {/* Live stroke visualization */}
-            {isConnected && (
+            {isConnected && !dataTimeoutError && (
               <Box sx={{ mb: 3 }}>
                 <LiveStrokeCanvas latestStroke={latestStroke} />
               </Box>
@@ -753,62 +814,28 @@ const SpellModelTrainer = ({
         {/* ── Right column: classes ─────────────────────────────────────────── */}
         <Grid item xs={12} md={7}>
           {/* Class cards */}
-          <Grid container spacing={2} sx={{ mb: 3 }}>
+          <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", mb: 3 }}>
             {classes.map((cls) => (
-              <Grid item xs={12} sm={6} key={cls.id}>
-                <Box sx={{ height: "100%" }}>
-                  <ClassCardItem
-                    cls={cls}
-                    isEditing={editingClassId === cls.id}
-                    editingClassName={editingClassName}
-                    isConnected={isConnected}
-                    dataTimeoutError={dataTimeoutError}
-                    latestStroke={latestStroke}
-                    onDeleteClass={deleteClass}
-                    onStartEditingClass={startEditingClass}
-                    onSaveClassRename={saveClassRename}
-                    onCancelEditingClass={cancelEditingClass}
-                    onRemoveSample={removeSample}
-                    onEditNameChange={setEditingClassName}
-                    t={t}
-                  />
-                  <CardActions sx={{ p: 1, pt: 0 }}>
-                    <Tooltip
-                      title={
-                        !isConnected
-                          ? t.training?.tooltip?.startConnection ||
-                            "Connect senseBox first"
-                          : ""
-                      }
-                      arrow
-                    >
-                      <span style={{ width: "100%" }}>
-                        <Button
-                          variant={
-                            recordingClassId === cls.id
-                              ? "contained"
-                              : "outlined"
-                          }
-                          color={
-                            recordingClassId === cls.id ? "error" : "primary"
-                          }
-                          size="small"
-                          fullWidth
-                          startIcon={<RecordIcon />}
-                          onClick={() => toggleRecording(cls.id)}
-                          disabled={!isConnected || dataTimeoutError}
-                        >
-                          {recordingClassId === cls.id
-                            ? t.training?.stopRecording || "Stop Recording"
-                            : t.training?.startRecording || "Start Recording"}
-                        </Button>
-                      </span>
-                    </Tooltip>
-                  </CardActions>
-                </Box>
-              </Grid>
+              <ClassCardItem
+                key={cls.id}
+                cls={cls}
+                isEditing={editingClassId === cls.id}
+                editingClassName={editingClassName}
+                isConnected={isConnected}
+                dataTimeoutError={dataTimeoutError}
+                isRecording={recordingClassId === cls.id}
+                recordingInProgress={recordingClassId !== null}
+                onToggleRecording={toggleRecording}
+                onDeleteClass={deleteClass}
+                onStartEditingClass={startEditingClass}
+                onSaveClassRename={saveClassRename}
+                onCancelEditingClass={cancelEditingClass}
+                onRemoveSample={removeSample}
+                onEditNameChange={setEditingClassName}
+                t={t}
+              />
             ))}
-          </Grid>
+          </Box>
 
           {/* Add class + train model buttons */}
           <Box
@@ -916,7 +943,7 @@ const SpellModelTrainer = ({
             </Box>
           )}
 
-          {/* Training results for debugging
+          {/* Training results for debugging */}
           {trainedModel && (
             <TrainingResultsSection
               trainingMetrics={trainingMetrics}
@@ -928,7 +955,7 @@ const SpellModelTrainer = ({
               )}
               onOpenHelp={onOpenHelp}
             />
-          )} */}
+          )}
 
           {/* Neural Network Visualization */}
           {trainedModel && (

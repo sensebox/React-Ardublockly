@@ -110,10 +110,10 @@ export const orientationTranslations_en = {
     reconnect: "Reconnect",
     troubleshootingUsb: "Ensure the senseBox Eye is connected via USB",
     troubleshootingFirmware:
-      "Verify the senseBox Eye is running the firmware to stream accelerometer data.",
+      "Verify the senseBox Eye is running the sketch to stream accelerometer data.",
     dataTimeout: "No Data Received",
     dataTimeoutMessage:
-      "The senseBox Eye appears to be connected but is not sending any data. Please verify that the correct firmware is running on the device.",
+      "The senseBox Eye appears to be connected but is not sending any data. Please verify that the correct sketch is running on the device.",
   },
   help: {
     help: "Help",

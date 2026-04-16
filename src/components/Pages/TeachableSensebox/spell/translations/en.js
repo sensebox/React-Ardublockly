@@ -76,8 +76,12 @@ export const spellTranslations_en = {
 
   errors: {
     downloadFirmware: "Download Spell-Sketch",
-    connectionFailed: "Failed to connect to senseBox",
+    connectionFailed: "Connection Failed",
+    connectionFailedMessage:
+      "Connection to senseBox Eye could not be established.",
+    troubleshootingFirmware:
+      "Check if the senseBox Eye is running the sketch for streaming spells.",
     deviceDisconnected: "senseBox disconnected unexpectedly",
-    dataTimeout: "No spell data received - check your senseBox firmware",
+    dataTimeout: "No spell data received",
   },
 };

@@ -4,7 +4,7 @@ import * as tf from "@tensorflow/tfjs";
 const STROKE_IMAGE_SIZE = 32;
 const VALIDATION_FRACTION = 0.15;
 const TOTAL_EPOCHS = 50;
-const INITIAL_LEARNING_RATE = 0.0008;
+const INITIAL_LEARNING_RATE = 0.001;
 const EARLY_STOPPING_PATIENCE = 5;
 const LR_DECAY_FACTOR = 0.5;
 const LR_DECAY_PATIENCE = 7;
@@ -244,7 +244,7 @@ function useSpellModelTraining() {
       }
 
       resetTrainingState();
-      const hasEnoughSamples = classes.every((cls) => cls.samples.length >= 10);
+      const hasEnoughSamples = classes.every((cls) => cls.samples.length >= 50);
       onTrainingStart();
 
       try {
@@ -395,7 +395,7 @@ function useSpellModelTraining() {
                   epochsSinceBestLoss = 0;
                 }
 
-                if (patienceCounter >= EARLY_STOPPING_PATIENCE && epoch >= 10) {
+                if (patienceCounter >= EARLY_STOPPING_PATIENCE && epoch >= 20) {
                   console.log(`Spell early stopping at epoch ${epoch + 1}`);
                   model.stopTraining = true;
                   if (bestWeights) {
