@@ -53,7 +53,7 @@ export const spellTranslations_de = {
     errorTooManyClasses: "Maximal 5 Zaubersprüche erlaubt.",
 
     tooltip: {
-      helpMain: "Was ist Gesten-Klassifizierung?",
+      helpMain: "Was ist Zauberspruch-Klassifizierung?",
       helpConnection: "Wie verbinde ich meine senseBox?",
       helpClasses: "Über Zaubersprüche",
       helpTraining: "Wie funktioniert das Training?",
@@ -73,7 +73,6 @@ export const spellTranslations_de = {
       helpCNN: "Was ist ein Convolutional Neural Network?",
     },
   },
-
   errors: {
     downloadFirmware: "Zauberspruch-Sketch herunterladen",
     connectionFailed: "Verbindung fehlgeschlagen",
@@ -83,5 +82,23 @@ export const spellTranslations_de = {
       "Überprüfe, ob die senseBox Eye den Sketch zum Streamen der Zaubersprüche ausführt.",
     deviceDisconnected: "senseBox unerwartet getrennt",
     dataTimeout: "Keinen Zauberspruch empfangen",
+  },
+  help: {
+    help: "Hilfe",
+    spellClassification: {
+      title: "Zauberspruch Klassifizierung",
+    },
+    addClass: {
+      title: "Zauberspruch hinzufügen",
+    },
+    spellCasting: {
+      title: "Zauberspruch aufnehmen",
+    },
+    trainModel: {
+      title: "Modell trainieren",
+    },
+    cnn: {
+      title: "Convolutional Neural Network",
+    },
   },
 };

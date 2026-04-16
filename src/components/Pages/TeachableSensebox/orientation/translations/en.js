@@ -126,6 +126,9 @@ export const orientationTranslations_en = {
     decisionTree: {
       title: "Decision Tree",
     },
+    neuralNetwork: {
+      title: "Neural Network",
+    },
     modelDesign: {
       title: "Structure of a Neural Network",
     },
