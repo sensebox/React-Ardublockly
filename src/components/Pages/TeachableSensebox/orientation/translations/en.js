@@ -60,7 +60,7 @@ export const orientationTranslations_en = {
       helpDecisionTree: "What is a decision tree?",
       helpNeuralNetwork: "What is a neural network?",
       helpModelDesign: "How is a neural network structured?",
-      helpAccelerationSensor: "How does the accelerometer work?",
+      helpAccelerationSensor: "How do I record an orientation?",
     },
   },
   neuralNetwork: {
@@ -133,7 +133,7 @@ export const orientationTranslations_en = {
       title: "Structure of a Neural Network",
     },
     accelerationSensor: {
-      title: "Accelerometer",
+      title: "Recording an orientation",
     },
   },
 };

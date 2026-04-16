@@ -94,7 +94,7 @@ export const spellTranslations_en = {
       title: "Add Spell Class",
     },
     spellCasting: {
-      title: "Record Spell",
+      title: "Recording a Spell",
     },
     trainModel: {
       title: "Model Training",

@@ -1,3 +1,11 @@
+# Wie verbinde ich mich mit der senseBox Eye
+
+Diese Funktion ist nicht in allen Browsern möglich (in Firefox z.B. nicht). Lade zuerst den Beschleunigungssensor-Sketch herunter. Schließe die Eye per USB an dein Notebook und lade den sketch per drag-und-drop auf die Eye. Klicke anschließend auf den Button zur Verbindung mit der senseBox Eye und wähle dann im Browser den Port der Eye. In Linux oder MAC heißen die Ports oft "ttyACM0" und in Windows z.B. "COM3".
+
+Es kann manchmal helfen die Eye noch einmal neu zu starten wenn es nicht direkt funktioniert.
+
+# Der Beschleunigungssensor
+
 Auf der senseBox Eye befindet sich oben neben der Kamera ein Beschleunigungssensor.
 
 ![eye acceleration sensor](/media/teachable/eye_acceleration_sensor_circle.png)

@@ -63,7 +63,7 @@ export const orientationTranslations_de = {
       helpDecisionTree: "Was ist ein Entscheidungsbaum?",
       helpNeuralNetwork: "Was ist ein neuronales Netz?",
       helpModelDesign: "Wie sollte ein neuronales Netz aufgebaut sein?",
-      helpAccelerationSensor: "Wie funktioniert der Beschleunigungssensor?",
+      helpAccelerationSensor: "Wie nehme ich eine Orientierung auf?",
     },
   },
   neuralNetwork: {
@@ -138,7 +138,7 @@ export const orientationTranslations_de = {
       title: "Aufbau eines neuronalen Netzes",
     },
     accelerationSensor: {
-      title: "Beschleunigungssensor",
+      title: "Eine Orientierung aufnehmen",
     },
   },
 };
