@@ -13,6 +13,7 @@ import remarkGfm from "remark-gfm";
 
 import { getTeachableSenseboxTranslations } from "./translations";
 import { getOrientationTranslations } from "./orientation/translations";
+import { getSpellTranslations } from "./spell/translations";
 
 // Load all help markdown files eagerly (Vite requires a static glob pattern)
 const markdownFiles = import.meta.glob("./translations/help/**/*.md", {
@@ -54,9 +55,12 @@ const HelpSidebar = ({ open, onClose, helpTopic }) => {
   }
 
   const isOrientationTopic = helpTopic?.startsWith("orientation/");
+  const isSpellTopic = helpTopic?.startsWith("spells/");
   const t = isOrientationTopic
     ? getOrientationTranslations()
-    : getTeachableSenseboxTranslations();
+    : isSpellTopic
+      ? getSpellTranslations()
+      : getTeachableSenseboxTranslations();
   const helpTranslations = t.help || {};
 
   // Determine language for markdown file lookup
@@ -72,7 +76,9 @@ const HelpSidebar = ({ open, onClose, helpTopic }) => {
   // Title from translations (keep as localised string)
   const lookupKey = isOrientationTopic
     ? helpTopic.replace("orientation/", "")
-    : helpTopic;
+    : isSpellTopic
+      ? helpTopic.replace("spells/", "")
+      : helpTopic;
   const topicTranslation = helpTranslations[lookupKey];
   const title = topicTranslation?.title ?? helpTranslations.help ?? "Help";
 

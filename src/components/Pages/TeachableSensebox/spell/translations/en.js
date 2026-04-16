@@ -84,4 +84,23 @@ export const spellTranslations_en = {
     deviceDisconnected: "senseBox disconnected unexpectedly",
     dataTimeout: "No spell data received",
   },
+
+  help: {
+    help: "Help",
+    spellClassification: {
+      title: "Spell Classification",
+    },
+    addClass: {
+      title: "Add Spell Class",
+    },
+    spellCasting: {
+      title: "Record Spell",
+    },
+    trainModel: {
+      title: "Model Training",
+    },
+    cnn: {
+      title: "Convolutional Neural Network",
+    },
+  },
 };

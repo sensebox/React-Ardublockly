@@ -128,6 +128,9 @@ export const orientationTranslations_de = {
     addClass: {
       title: "Klasse hinzufügen",
     },
+    neuralNetwork: {
+      title: "Neuronales Netz",
+    },
     decisionTree: {
       title: "Entscheidungsbaum",
     },
