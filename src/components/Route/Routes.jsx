@@ -27,7 +27,7 @@ import TutorialPage from "@/components/Tutorial/Viewer/Tutorial.page";
 import Project from "@/components/Pages/Project/Project";
 import ProjectHome from "@/components/Pages/Project/ProjectHome";
 import TutorialHome from "../Tutorial/Overview/TutorialHome";
-import TeachableSensebox from "@/components/Pages/TeachableSensebox/TeachableSensebox";
+import ImageClassification from "@/components/Pages/TeachableSensebox/image/ImageClassification";
 import TeachableSenseboxLanding from "@/components/Pages/TeachableSensebox/TeachableSenseboxLanding";
 import SpellClassification from "@/components/Pages/TeachableSensebox/spell/SpellClassification";
 import OrientationClassification from "@/components/Pages/TeachableSensebox/orientation/OrientationClassification";
@@ -127,7 +127,7 @@ function AppRoutes({ platform, visitPage, setPlatform }) {
           path="/teachable/image"
           element={
             <PublicRoute>
-              <TeachableSensebox />
+              <ImageClassification />
             </PublicRoute>
           }
         />

@@ -37,10 +37,10 @@ import useOrientationSource from "./hooks/useOrientationSource";
 import useOrientationBLESource from "./hooks/useOrientationBLESource";
 import useOrientationModelTraining from "./hooks/useOrientationModelTraining";
 import HelpButton from "../HelpButton";
-import SerialCameraErrorHandler, {
+import SerialErrorHandler, {
   ErrorTypes,
   ConnectionStatus,
-} from "../SerialCameraErrorHandler";
+} from "../SerialErrorHandler";
 import { downloadAccelerometerFirmware } from "../utils/firmwareDownload";
 
 // ─── Axis colours (shared with the graph) ─────────────────────────────────────
@@ -824,7 +824,7 @@ const OrientationModelTrainer = ({
             {((isConnected && dataTimeoutError) ||
               (!isConnected && sensorError)) && (
               <Box sx={{ mb: 3 }}>
-                <SerialCameraErrorHandler
+                <SerialErrorHandler
                   error={
                     !isConnected && sensorError
                       ? {

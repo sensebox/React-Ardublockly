@@ -1,5 +1,5 @@
 import React from "react";
-import { getTeachableSenseboxTranslations } from "./translations";
+import { getImageTranslations } from "./image/translations";
 import {
   Alert,
   AlertTitle,
@@ -23,7 +23,7 @@ import {
 import { downloadCameraFirmware } from "./utils/firmwareDownload";
 
 /**
- * SerialCameraErrorHandler
+ * SerialErrorHandler
  *
  * Comprehensive error handling and status display component for senseBox Eye serial camera.
  * Handles different error types with appropriate messages, actions, and visual feedback.
@@ -59,7 +59,7 @@ export const ConnectionStatus = {
  * @returns {Object} Error details with severity, title, message, and actions
  */
 const getErrorDetails = (errorType) => {
-  const t = getTeachableSenseboxTranslations();
+  const t = getImageTranslations();
 
   switch (errorType) {
     case ErrorTypes.UNSUPPORTED_BROWSER:
@@ -175,7 +175,7 @@ const getErrorDetails = (errorType) => {
  * @returns {Object} Status display details
  */
 const getStatusDetails = (status) => {
-  const t = getTeachableSenseboxTranslations();
+  const t = getImageTranslations();
 
   switch (status) {
     case ConnectionStatus.CONNECTED:
@@ -207,7 +207,7 @@ const getStatusDetails = (status) => {
 };
 
 /**
- * SerialCameraErrorHandler Component
+ * SerialErrorHandler Component
  *
  * @param {Object}   error              - Error object with `.type` and `.message`
  * @param {string}   connectionStatus   - One of ConnectionStatus values
@@ -223,7 +223,7 @@ const getStatusDetails = (status) => {
  *   @param {string}   overrides.downloadFirmwareLabel   - Replaces the download-button label
  *   @param {Function} overrides.downloadFirmwareFn      - Replaces the download function
  */
-const SerialCameraErrorHandler = ({
+const SerialErrorHandler = ({
   error,
   connectionStatus = ConnectionStatus.DISCONNECTED,
   onRetry,
@@ -235,7 +235,7 @@ const SerialCameraErrorHandler = ({
 }) => {
   const [detailsExpanded, setDetailsExpanded] = React.useState(showDetails);
   const [isDownloading, setIsDownloading] = React.useState(false);
-  const t = getTeachableSenseboxTranslations();
+  const t = getImageTranslations();
 
   const errorDetails = error
     ? getErrorDetails(error.type || error.message)
@@ -433,4 +433,4 @@ const SerialCameraErrorHandler = ({
   );
 };
 
-export default SerialCameraErrorHandler;
+export default SerialErrorHandler;

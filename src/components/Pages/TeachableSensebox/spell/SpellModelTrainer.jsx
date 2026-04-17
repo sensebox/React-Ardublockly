@@ -39,11 +39,11 @@ import useSpellModelTraining, {
 import useSpellModelPrediction from "./hooks/useSpellModelPrediction";
 import NeuralNetworkVisualization from "./NeuralNetworkVisualization";
 import HelpButton from "../HelpButton";
-import SerialCameraErrorHandler, {
+import SerialErrorHandler, {
   ErrorTypes,
   ConnectionStatus,
-} from "../SerialCameraErrorHandler";
-import TrainingResultsSection from "../TrainingResultsSection";
+} from "../SerialErrorHandler";
+import TrainingResultsSection from "../image/TrainingResultsSection";
 import { downloadSpellFirmware } from "../utils/firmwareDownload";
 
 // ─── Dimensions for stroke visualization ─────────────────────────────────────
@@ -768,7 +768,7 @@ const SpellModelTrainer = ({
             {((isConnected && dataTimeoutError) ||
               (!isConnected && sensorError)) && (
               <Box sx={{ mb: 3 }}>
-                <SerialCameraErrorHandler
+                <SerialErrorHandler
                   error={
                     !isConnected && sensorError
                       ? {
