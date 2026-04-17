@@ -4,4 +4,4 @@ Eine Zauberspruchbewegung kann zum Beispiel eine **Form** sein ("Kreis", "Quadra
 
 ![senseBox wand](/media/teachable/spell.gif)
 
-**Tipp:** Versuche, einfache und visuall unterscheidbare Zaubersprüche zu verwenden. Je komplexer oder ähnlicher sich die Zaubersprüche sind, desto schwieriger wird es für das Modell, sie korrekt zu klassifizieren.
+**Tipp:** Versuche, einfache und visuell unterscheidbare Zaubersprüche zu verwenden. Je komplexer oder ähnlicher sich die Zaubersprüche sind, desto schwieriger wird es für das Modell, sie korrekt zu klassifizieren.
