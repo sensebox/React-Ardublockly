@@ -911,7 +911,7 @@ const SpellModelTrainer = ({
           </Box>
 
           {/* Training progress */}
-          {isTraining && (
+          {/* {isTraining && (
             <Box sx={{ my: 4 }}>
               <Typography variant="body2" gutterBottom>
                 {trainingProgress.totalEpochs > 0
@@ -941,7 +941,7 @@ const SpellModelTrainer = ({
                 }
               />
             </Box>
-          )}
+          )} */}
 
           {/* Training results for debugging */}
           {trainedModel && (
