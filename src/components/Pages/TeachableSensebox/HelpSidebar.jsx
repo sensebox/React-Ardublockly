@@ -11,7 +11,7 @@ import { ChevronRight as ChevronRightIcon } from "@mui/icons-material";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-import { getTeachableSenseboxTranslations } from "./translations";
+import { getImageTranslations } from "./image/translations";
 import { getOrientationTranslations } from "./orientation/translations";
 import { getSpellTranslations } from "./spell/translations";
 
@@ -56,11 +56,12 @@ const HelpSidebar = ({ open, onClose, helpTopic }) => {
 
   const isOrientationTopic = helpTopic?.startsWith("orientation/");
   const isSpellTopic = helpTopic?.startsWith("spells/");
+  const isImageTopic = helpTopic?.startsWith("image/");
   const t = isOrientationTopic
     ? getOrientationTranslations()
     : isSpellTopic
       ? getSpellTranslations()
-      : getTeachableSenseboxTranslations();
+      : getImageTranslations();
   const helpTranslations = t.help || {};
 
   // Determine language for markdown file lookup
@@ -78,7 +79,9 @@ const HelpSidebar = ({ open, onClose, helpTopic }) => {
     ? helpTopic.replace("orientation/", "")
     : isSpellTopic
       ? helpTopic.replace("spells/", "")
-      : helpTopic;
+      : isImageTopic
+        ? helpTopic.replace("image/", "")
+        : helpTopic;
   const topicTranslation = helpTranslations[lookupKey];
   const title = topicTranslation?.title ?? helpTranslations.help ?? "Help";
 

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { getTeachableSenseboxTranslations } from "./translations";
+import { getImageTranslations } from "./translations";
 import {
   Box,
   Button,
@@ -34,14 +34,14 @@ import useCameraSource from "./hooks/useCameraSource";
 import SerialErrorHandler, {
   ConnectionStatus,
   ErrorTypes,
-} from "./SerialErrorHandler";
+} from "../SerialErrorHandler";
 import SerialCameraService from "./SerialCameraService";
 import FloatingCameraPreview from "./FloatingCameraPreview";
 import TrainingResultsSection from "./TrainingResultsSection";
-import HelpButton from "./HelpButton";
+import HelpButton from "../HelpButton";
 import useModelTraining from "./hooks/useModelTraining";
 import useModelPrediction from "./hooks/useModelPrediction";
-import { downloadCameraFirmware } from "./utils/firmwareDownload";
+import { downloadCameraFirmware } from "../utils/firmwareDownload";
 
 const ModelTrainer = ({
   onModelTrained,
@@ -73,7 +73,7 @@ const ModelTrainer = ({
     useState(false);
 
   const language = useSelector((s) => s.general.language);
-  const t = getTeachableSenseboxTranslations();
+  const t = getImageTranslations();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -426,7 +426,7 @@ const ModelTrainer = ({
               </Button>
 
               <HelpButton
-                onClick={() => onOpenHelp && onOpenHelp("webcam")}
+                onClick={() => onOpenHelp && onOpenHelp("image/webcam")}
                 tooltip={t.training.tooltip.helpCamera}
               />
 
@@ -832,7 +832,7 @@ const ModelTrainer = ({
                   {t.training.addClass}
                 </Button>
                 <HelpButton
-                  onClick={() => onOpenHelp && onOpenHelp("addClass")}
+                  onClick={() => onOpenHelp && onOpenHelp("image/addClass")}
                   tooltip={t.training.tooltip.helpClasses}
                 />
               </Box>
@@ -873,7 +873,7 @@ const ModelTrainer = ({
               </Tooltip>
 
               <HelpButton
-                onClick={() => onOpenHelp && onOpenHelp("trainModel")}
+                onClick={() => onOpenHelp && onOpenHelp("image/trainModel")}
                 tooltip={t.training.tooltip.helpTraining}
               />
             </Box>

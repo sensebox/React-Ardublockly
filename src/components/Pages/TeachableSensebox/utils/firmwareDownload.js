@@ -1,6 +1,6 @@
 /**
  * Downloads capture firmware for senseBox Eye
- * Shared utility used by ModelTrainer and SerialCameraErrorHandler
+ * Shared utility used by ModelTrainer and SerialErrorHandler
  */
 
 const API_BASE_URL =

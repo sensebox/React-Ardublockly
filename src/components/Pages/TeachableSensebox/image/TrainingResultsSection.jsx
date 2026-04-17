@@ -16,7 +16,7 @@ import {
 } from "@mui/icons-material";
 import TrainingMetricsChart from "./TrainingMetricsChart";
 import ConfusionMatrix from "./ConfusionMatrix";
-import HelpButton from "./HelpButton";
+import HelpButton from "../HelpButton";
 
 /**
  * Training Results Section - collapsible panel showing training metrics and confusion matrix

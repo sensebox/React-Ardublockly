@@ -2,7 +2,7 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import SerialCameraService from "../SerialCameraService";
 import WebcamCameraSource from "../WebcamCameraSource";
 import SerialCameraSource from "../SerialCameraSource";
-import { ErrorTypes } from "../SerialCameraErrorHandler";
+import { ErrorTypes } from "../../SerialErrorHandler";
 
 // Share a single SerialCameraService across all hook instances to avoid
 // Web Serial streams being locked by multiple readers/writers.

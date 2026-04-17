@@ -11,11 +11,11 @@ import {
 } from "@mui/material";
 import { ArrowBack as ArrowBackIcon } from "@mui/icons-material";
 import { useSelector } from "react-redux";
-import { getTeachableSenseboxTranslations } from "./translations";
+import { getImageTranslations } from "./translations";
 import ModelTrainer from "./ModelTrainer";
-import ConvertDeploy from "./convertDeploy";
-import HelpSidebar, { SIDEBAR_WIDTH } from "./HelpSidebar";
-import HelpButton from "./HelpButton";
+import ConvertDeploy from "./ConvertDeploy";
+import HelpSidebar, { SIDEBAR_WIDTH } from "../HelpSidebar";
+import HelpButton from "../HelpButton";
 
 const TeachableSensebox = () => {
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ const TeachableSensebox = () => {
   const [trainingError, setTrainingError] = useState(null);
   const isMountedRef = useRef(true);
   const language = useSelector((s) => s.general.language);
-  const t = getTeachableSenseboxTranslations();
+  const t = getImageTranslations();
 
   // Help sidebar state
   const [helpSidebarOpen, setHelpSidebarOpen] = useState(false);
@@ -102,7 +102,7 @@ const TeachableSensebox = () => {
               {t.title}
             </Typography>
             <HelpButton
-              onClick={() => handleOpenHelp("imageClassification")}
+              onClick={() => handleOpenHelp("image/imageClassification")}
               tooltip={t.training?.helpMain || "Was ist Teachable senseBox?"}
             />
           </Box>
@@ -133,7 +133,7 @@ const TeachableSensebox = () => {
               <Typography variant="h5" gutterBottom>
                 {t.integration.title}
                 <HelpButton
-                  onClick={() => handleOpenHelp("deployModel")}
+                  onClick={() => handleOpenHelp("image/deployModel")}
                   tooltip={
                     t.training?.tooltip?.helpDeployModel ||
                     "Help with deploying the model"
