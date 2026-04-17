@@ -131,9 +131,6 @@ const SpellClassification = () => {
         <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
           {/* Model Training Section */}
           <Paper elevation={2} sx={{ p: 3 }}>
-            <Typography variant="h5" gutterBottom>
-              {t.training?.title || "Spell Training"}
-            </Typography>
             <SpellModelTrainer
               classes={classes}
               onClassesChange={setClasses}

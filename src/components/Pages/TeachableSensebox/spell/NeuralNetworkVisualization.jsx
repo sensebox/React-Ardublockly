@@ -434,7 +434,7 @@ const OutputLayerVisualization = memo(
                   : "transparent",
                 transition: "all 0.2s",
                 minWidth: 0,
-                width: 60,
+                width: "100%",
               }}
             >
               {/* Activation square */}
