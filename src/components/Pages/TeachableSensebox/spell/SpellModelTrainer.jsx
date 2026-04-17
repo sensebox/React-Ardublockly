@@ -286,11 +286,7 @@ const ClassCardItem = memo(
                 fullWidth
                 startIcon={<RecordIcon />}
                 onClick={handleRecord}
-                disabled={
-                  !isConnected ||
-                  dataTimeoutError ||
-                  (!isRecording && recordingInProgress)
-                }
+                disabled={!isConnected || dataTimeoutError}
               >
                 {isRecording
                   ? t.training?.stopRecording || "Stop Recording"
@@ -911,7 +907,7 @@ const SpellModelTrainer = ({
           </Box>
 
           {/* Training progress */}
-          {/* {isTraining && (
+          {isTraining && (
             <Box sx={{ my: 4 }}>
               <Typography variant="body2" gutterBottom>
                 {trainingProgress.totalEpochs > 0
@@ -941,10 +937,10 @@ const SpellModelTrainer = ({
                 }
               />
             </Box>
-          )} */}
+          )}
 
           {/* Training results for debugging */}
-          {trainedModel && (
+          {/* {trainedModel && (
             <TrainingResultsSection
               trainingMetrics={trainingMetrics}
               testResults={testResults}
@@ -955,7 +951,7 @@ const SpellModelTrainer = ({
               )}
               onOpenHelp={onOpenHelp}
             />
-          )}
+          )} */}
 
           {/* Neural Network Visualization */}
           {trainedModel && (
@@ -977,35 +973,36 @@ const SpellModelTrainer = ({
         fullWidth
       >
         <DialogTitle>{t.training?.addNewClass || "Add New Class"}</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            label={t.training?.className || "Class Name"}
-            fullWidth
-            variant="outlined"
-            value={newClassName}
-            onChange={(e) => setNewClassName(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && newClassName.trim()) {
-                addClass();
-                setShowAddDialog(false);
-              }
-            }}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setShowAddDialog(false)}>
-            {t.training?.cancel || "Cancel"}
-          </Button>
-          <Button
-            onClick={addClass}
-            variant="contained"
-            disabled={!newClassName.trim()}
-          >
-            {t.training?.add || "Add"}
-          </Button>
-        </DialogActions>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            addClass();
+          }}
+        >
+          <DialogContent>
+            <TextField
+              autoFocus
+              margin="dense"
+              label={t.training?.className || "Class Name"}
+              fullWidth
+              variant="outlined"
+              value={newClassName}
+              onChange={(e) => setNewClassName(e.target.value)}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button type="button" onClick={() => setShowAddDialog(false)}>
+              {t.training?.cancel || "Cancel"}
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={!newClassName.trim()}
+            >
+              {t.training?.add || "Add"}
+            </Button>
+          </DialogActions>
+        </form>
       </Dialog>
     </Box>
   );

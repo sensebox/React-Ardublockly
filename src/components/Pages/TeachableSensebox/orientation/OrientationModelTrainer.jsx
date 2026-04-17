@@ -957,32 +957,35 @@ const OrientationModelTrainer = ({
         fullWidth
       >
         <DialogTitle>{t.training.addNewClass}</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            label={t.training.className}
-            fullWidth
-            value={newClassName}
-            onChange={(e) => setNewClassName(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") addClass();
-              if (e.key === "Escape") setShowAddDialog(false);
-            }}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setShowAddDialog(false)}>
-            {t.training.cancel}
-          </Button>
-          <Button
-            onClick={addClass}
-            variant="contained"
-            disabled={!newClassName.trim()}
-          >
-            {t.training.add}
-          </Button>
-        </DialogActions>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            addClass();
+          }}
+        >
+          <DialogContent>
+            <TextField
+              autoFocus
+              margin="dense"
+              label={t.training.className}
+              fullWidth
+              value={newClassName}
+              onChange={(e) => setNewClassName(e.target.value)}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button type="button" onClick={() => setShowAddDialog(false)}>
+              {t.training.cancel}
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={!newClassName.trim()}
+            >
+              {t.training.add}
+            </Button>
+          </DialogActions>
+        </form>
       </Dialog>
     </Box>
   );
