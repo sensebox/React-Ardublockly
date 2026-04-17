@@ -64,6 +64,7 @@ export const spellTranslations_de = {
         "Dieser Browser unterstützt die erforderlichen Funktionen nicht. Bitte verwende Chrome oder Edge.",
       startConnection:
         "Verbinde zuerst deine senseBox, um Zaubersprüche aufzuzeichnen",
+      classNameExists: "Ein Zauberspruch mit diesem Namen existiert bereits",
     },
   },
 

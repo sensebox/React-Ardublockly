@@ -83,6 +83,7 @@ export const teachableSenseboxTranslations_de = {
       helpTrainingProgress: "Hilfe zum Trainingsverlauf",
       helpTestResults: "Hilfe zum Testergebnis",
       helpDeployModel: "Hilfe zum Ausführen auf der senseBox Eye",
+      classNameExists: "Eine Klasse mit diesem Namen existiert bereits",
     },
   },
   help: {

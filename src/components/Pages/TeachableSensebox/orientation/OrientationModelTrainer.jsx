@@ -957,35 +957,57 @@ const OrientationModelTrainer = ({
         fullWidth
       >
         <DialogTitle>{t.training.addNewClass}</DialogTitle>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            addClass();
-          }}
-        >
-          <DialogContent>
-            <TextField
-              autoFocus
-              margin="dense"
-              label={t.training.className}
-              fullWidth
-              value={newClassName}
-              onChange={(e) => setNewClassName(e.target.value)}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button type="button" onClick={() => setShowAddDialog(false)}>
-              {t.training.cancel}
-            </Button>
-            <Button
-              type="submit"
-              variant="contained"
-              disabled={!newClassName.trim()}
-            >
-              {t.training.add}
-            </Button>
-          </DialogActions>
-        </form>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label={t.training.className}
+            fullWidth
+            variant="outlined"
+            value={newClassName}
+            onChange={(e) => setNewClassName(e.target.value)}
+            onKeyPress={(e) => e.key === "Enter" && addClass()}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowAddDialog(false)}>
+            {t.training.cancel}
+          </Button>
+          <Tooltip
+            title={
+              classes.some(
+                (cls) =>
+                  cls.name.toLowerCase() === newClassName.trim().toLowerCase(),
+              )
+                ? t.training.tooltip.classNameExists
+                : ""
+            }
+            arrow
+            disableHoverListener={
+              !classes.some(
+                (cls) =>
+                  cls.name.toLowerCase() === newClassName.trim().toLowerCase(),
+              )
+            }
+          >
+            <span>
+              <Button
+                onClick={addClass}
+                variant="contained"
+                disabled={
+                  !newClassName.trim() ||
+                  classes.some(
+                    (cls) =>
+                      cls.name.toLowerCase() ===
+                      newClassName.trim().toLowerCase(),
+                  )
+                }
+              >
+                {t.training.add}
+              </Button>
+            </span>
+          </Tooltip>
+        </DialogActions>
       </Dialog>
     </Box>
   );

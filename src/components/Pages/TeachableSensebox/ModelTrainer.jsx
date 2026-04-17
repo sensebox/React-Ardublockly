@@ -967,9 +967,40 @@ const ModelTrainer = ({
           <Button onClick={() => setShowAddDialog(false)}>
             {t.training.cancel}
           </Button>
-          <Button onClick={addClass} variant="contained">
-            {t.training.add}
-          </Button>
+          <Tooltip
+            title={
+              classes.some(
+                (cls) =>
+                  cls.name.toLowerCase() === newClassName.trim().toLowerCase(),
+              )
+                ? t.training.tooltip.classNameExists
+                : ""
+            }
+            arrow
+            disableHoverListener={
+              !classes.some(
+                (cls) =>
+                  cls.name.toLowerCase() === newClassName.trim().toLowerCase(),
+              )
+            }
+          >
+            <span>
+              <Button
+                onClick={addClass}
+                variant="contained"
+                disabled={
+                  !newClassName.trim() ||
+                  classes.some(
+                    (cls) =>
+                      cls.name.toLowerCase() ===
+                      newClassName.trim().toLowerCase(),
+                  )
+                }
+              >
+                {t.training.add}
+              </Button>
+            </span>
+          </Tooltip>
         </DialogActions>
       </Dialog>
     </Box>
