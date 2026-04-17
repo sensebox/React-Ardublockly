@@ -61,6 +61,7 @@ export const orientationTranslations_en = {
       helpNeuralNetwork: "What is a neural network?",
       helpModelDesign: "How is a neural network structured?",
       helpAccelerationSensor: "How do I record an orientation?",
+      classNameExists: "A class with this name already exists",
     },
   },
   neuralNetwork: {

@@ -81,6 +81,7 @@ export const teachableSenseboxTranslations_en = {
       helpTrainingProgress: "Help for training progress",
       helpTestResults: "Help for test results",
       helpDeployModel: "Help for deploying the model",
+      classNameExists: "A class with this name already exists",
     },
   },
   integration: {
