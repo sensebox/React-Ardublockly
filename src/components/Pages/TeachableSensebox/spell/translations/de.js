@@ -1,7 +1,7 @@
 export const spellTranslations_de = {
   title: "Zauberspruch Klassifizierung",
   description:
-    "Trainiere ein Modell zur Erkennung von Zaubersprüchen mit Daten vom Beschleunigungssensor. Zeichne mit deiner senseBox Eye Muster in die Luft, um Zaubersprüche zu erstellen.",
+    "Trainiere ein Modell zur Erkennung von Zaubersprüchen mit Hilfe des Beschleunigungssensor. Zeichne mit deiner senseBox Eye Muster in die Luft, um Zaubersprüche zu erstellen.",
 
   training: {
     title: "Training",
@@ -14,7 +14,7 @@ export const spellTranslations_de = {
 
     // Connection
     connecting: "Verbinde...",
-    connectSenseBox: "senseBox Eye verbinden (seriell)",
+    connectSenseBox: "senseBox Eye verbinden (USB)",
     disconnectSenseBox: "senseBox Eye trennen",
     connectBLE: "senseBox Eye verbinden (Bluetooth)",
     downloadFirmware: "Zauberspruch-Sketch herunterladen",

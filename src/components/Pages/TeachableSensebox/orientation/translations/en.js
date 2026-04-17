@@ -7,7 +7,7 @@ export const orientationTranslations_en = {
     "Train your own orientation recognition model using the senseBox Eye accelerometer. Each sample is a single snapshot of x, y, z values.",
   training: {
     title: "Training Data",
-    connectSenseBox: "Connect senseBox Eye (Serial)",
+    connectSenseBox: "Connect senseBox Eye (USB)",
     disconnectSenseBox: "Disconnect senseBox Eye",
     connectSenseBoxBLE: "Connect senseBox Eye (Bluetooth)",
     disconnectSenseBoxBLE: "Disconnect Bluetooth",
