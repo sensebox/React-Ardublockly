@@ -8,7 +8,7 @@ export const orientationTranslations_de = {
     "Trainiere dein eigenes Modell zur Erkennung von Orientierungen mit dem senseBox Eye Beschleunigungssensor. Jede Aufnahme ist ein einzelner Messwert für x, y und z.",
   training: {
     title: "Trainingsdaten",
-    connectSenseBox: "senseBox Eye verbinden (Seriell)",
+    connectSenseBox: "senseBox Eye verbinden (USB)",
     disconnectSenseBox: "senseBox Eye trennen",
     connectSenseBoxBLE: "senseBox Eye verbinden (Bluetooth)",
     disconnectSenseBoxBLE: "Bluetooth trennen",

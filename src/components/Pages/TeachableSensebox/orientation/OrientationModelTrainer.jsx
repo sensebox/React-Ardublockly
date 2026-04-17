@@ -708,116 +708,125 @@ const OrientationModelTrainer = ({
               }}
             >
               {/* Serial connect button */}
-              <Tooltip
-                title={
-                  !serialSource.isSupported
-                    ? t.training.tooltip.browserCompatible
-                    : ""
-                }
-                arrow
-                disableHoverListener={serialSource.isSupported}
-              >
-                <span>
-                  <Button
-                    variant="contained"
-                    startIcon={
-                      serialSource.isConnecting ? (
-                        <CircularProgress size={16} color="inherit" />
-                      ) : (
-                        <SensorIcon />
-                      )
-                    }
-                    onClick={
-                      serialSource.isConnected
-                        ? serialSource.disconnect
-                        : serialSource.connect
-                    }
-                    disabled={
-                      disabled ||
-                      serialSource.isConnecting ||
-                      !serialSource.isSupported ||
-                      bleSource.isConnected ||
-                      bleSource.isConnecting
-                    }
-                    color={serialSource.isConnected ? "secondary" : "primary"}
-                  >
-                    {serialSource.isConnecting
-                      ? t.training.connecting
-                      : serialSource.isConnected
-                        ? t.training.disconnectSenseBox
-                        : t.training.connectSenseBox}
-                  </Button>
+              {!bleSource.isConnected && !bleSource.isConnecting && (
+                <Tooltip
+                  title={
+                    !serialSource.isSupported
+                      ? t.training.tooltip.browserCompatible
+                      : ""
+                  }
+                  arrow
+                  disableHoverListener={serialSource.isSupported}
+                >
+                  <span>
+                    <Button
+                      variant="contained"
+                      startIcon={
+                        serialSource.isConnecting ? (
+                          <CircularProgress size={16} color="inherit" />
+                        ) : (
+                          <SensorIcon />
+                        )
+                      }
+                      onClick={
+                        serialSource.isConnected
+                          ? serialSource.disconnect
+                          : serialSource.connect
+                      }
+                      disabled={
+                        disabled ||
+                        serialSource.isConnecting ||
+                        !serialSource.isSupported ||
+                        bleSource.isConnected ||
+                        bleSource.isConnecting
+                      }
+                      color={serialSource.isConnected ? "secondary" : "primary"}
+                    >
+                      {serialSource.isConnecting
+                        ? t.training.connecting
+                        : serialSource.isConnected
+                          ? t.training.disconnectSenseBox
+                          : t.training.connectSenseBox}
+                    </Button>
 
-                  <HelpButton
-                    onClick={() =>
-                      onOpenHelp && onOpenHelp("accelerationSensor")
-                    }
-                    tooltip={t.training?.tooltip?.helpAccelerationSensor}
-                  />
-                </span>
-              </Tooltip>
+                    <HelpButton
+                      onClick={() =>
+                        onOpenHelp && onOpenHelp("accelerationSensor")
+                      }
+                      tooltip={t.training?.tooltip?.helpAccelerationSensor}
+                    />
+                  </span>
+                </Tooltip>
+              )}
 
               {/* BLE connect button */}
-              <Tooltip
-                title={
-                  !bleSource.isSupported
-                    ? t.training.tooltip.bluetoothNotSupported
-                    : ""
-                }
-                arrow
-                disableHoverListener={bleSource.isSupported}
-              >
-                <span>
+              {!serialSource.isConnected && !serialSource.isConnecting && (
+                <Tooltip
+                  title={
+                    !bleSource.isSupported
+                      ? t.training.tooltip.bluetoothNotSupported
+                      : ""
+                  }
+                  arrow
+                  disableHoverListener={bleSource.isSupported}
+                >
+                  <span>
+                    <Button
+                      variant="contained"
+                      startIcon={
+                        bleSource.isConnecting ? (
+                          <CircularProgress size={16} color="inherit" />
+                        ) : (
+                          <BluetoothIcon />
+                        )
+                      }
+                      onClick={
+                        bleSource.isConnected
+                          ? bleSource.disconnect
+                          : bleSource.connect
+                      }
+                      disabled={
+                        disabled ||
+                        bleSource.isConnecting ||
+                        !bleSource.isSupported ||
+                        serialSource.isConnected ||
+                        serialSource.isConnecting
+                      }
+                      color={bleSource.isConnected ? "secondary" : "primary"}
+                    >
+                      {bleSource.isConnecting
+                        ? t.training.connecting
+                        : bleSource.isConnected
+                          ? t.training.disconnectSenseBoxBLE
+                          : t.training.connectSenseBoxBLE}
+                    </Button>
+                  </span>
+                </Tooltip>
+              )}
+
+              {!bleSource.isConnected &&
+                !bleSource.isConnecting &&
+                !serialSource.isConnected &&
+                !serialSource.isConnecting && (
                   <Button
-                    variant="contained"
+                    variant="outlined"
                     startIcon={
-                      bleSource.isConnecting ? (
-                        <CircularProgress size={16} color="inherit" />
+                      isDownloading ? (
+                        <CircularProgress size={16} />
                       ) : (
-                        <BluetoothIcon />
+                        <DownloadIcon />
                       )
                     }
-                    onClick={
-                      bleSource.isConnected
-                        ? bleSource.disconnect
-                        : bleSource.connect
-                    }
+                    onClick={handleDownloadFirmware}
                     disabled={
+                      isDownloading ||
                       disabled ||
-                      bleSource.isConnecting ||
-                      !bleSource.isSupported ||
-                      serialSource.isConnected ||
-                      serialSource.isConnecting
+                      (!serialSource.isSupported && !bleSource.isSupported)
                     }
-                    color={bleSource.isConnected ? "secondary" : "primary"}
                   >
-                    {bleSource.isConnecting
-                      ? t.training.connecting
-                      : bleSource.isConnected
-                        ? t.training.disconnectSenseBoxBLE
-                        : t.training.connectSenseBoxBLE}
+                    {t.errors.downloadFirmware}
                   </Button>
-                </span>
-              </Tooltip>
-
-              <Button
-                variant="outlined"
-                startIcon={
-                  isDownloading ? (
-                    <CircularProgress size={16} />
-                  ) : (
-                    <DownloadIcon />
-                  )
-                }
-                onClick={handleDownloadFirmware}
-                disabled={
-                  isDownloading ||
-                  disabled ||
-                  (!serialSource.isSupported && !bleSource.isSupported)
-                }
-              >
-                {t.errors.downloadFirmware}
-              </Button>
+                )}
             </Box>
 
             {/* Serial connection error */}

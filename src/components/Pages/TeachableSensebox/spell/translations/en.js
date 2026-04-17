@@ -3,7 +3,7 @@ import { help } from "@uiw/react-md-editor";
 export const spellTranslations_en = {
   title: "Spell Classification",
   description:
-    "Train a model to recognize spells using senseBox acceleration data. Draw patterns in the air with your senseBox to cast spells.",
+    "Train a model to recognize spells using the acceleration sensor. Draw patterns in the air with your senseBox Eye to cast spells.",
 
   training: {
     title: "Training",
@@ -16,8 +16,8 @@ export const spellTranslations_en = {
 
     // Connection
     connecting: "Connecting...",
-    connectSenseBox: "connect senseBox Eye (serial)",
-    disconnectSenseBox: "disconnect senseBox Eye (serial)",
+    connectSenseBox: "connect senseBox Eye (USB)",
+    disconnectSenseBox: "disconnect senseBox Eye (USB)",
     connectBLE: "connect senseBox Eye (Bluetooth)",
     downloadFirmware: "Download Spell-Sketch",
 
