@@ -152,7 +152,9 @@ const TrainingResultsSection = ({
                   {t.metricsChart}
                 </Typography>
                 <HelpButton
-                  onClick={() => onOpenHelp && onOpenHelp("trainingProgress")}
+                  onClick={() =>
+                    onOpenHelp && onOpenHelp("image/trainingProgress")
+                  }
                   tooltip={
                     t.training?.tooltip?.helpTrainingProgress ||
                     "Hilfe zum Trainingsverlauf"
@@ -268,7 +270,9 @@ const TrainingResultsSection = ({
                     {t.testResults}
                   </Typography>
                   <HelpButton
-                    onClick={() => onOpenHelp && onOpenHelp("testResults")}
+                    onClick={() =>
+                      onOpenHelp && onOpenHelp("image/testResults")
+                    }
                     tooltip={
                       t.training?.tooltip?.helpTestResults ||
                       "Hilfe zum Testergebnis"
