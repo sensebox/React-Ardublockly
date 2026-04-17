@@ -3,3 +3,5 @@ You can define between **two** and **five** spells yourself. To do this, add a n
 A spell movement can, for example, be a **shape** (“circle”, “square”, etc.), a **direction** (“left to right”, “top to bottom”, etc.) or **numbers** and **letters**.
 
 ![senseBox wand](/media/teachable/spell.gif)
+
+**Tip:** Try to use simple and distinct spells. The more complex or similar the spells the harder it will be for the model to correctly classify them.

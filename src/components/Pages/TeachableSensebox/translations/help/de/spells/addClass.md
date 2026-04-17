@@ -3,3 +3,5 @@ Du kannst zwischen **zwei** und **fünf** Zaubersprüche selber definieren. Füg
 Eine Zauberspruchbewegung kann zum Beispiel eine **Form** sein ("Kreis", "Quadrat" etc.), eine **Richtung** ("links nach rechts", "oben nach unten", etc.) oder **Zahlen** und **Buchstaben**.
 
 ![senseBox wand](/media/teachable/spell.gif)
+
+**Tipp:** Versuche, einfache und visuall unterscheidbare Zaubersprüche zu verwenden. Je komplexer oder ähnlicher sich die Zaubersprüche sind, desto schwieriger wird es für das Modell, sie korrekt zu klassifizieren.
