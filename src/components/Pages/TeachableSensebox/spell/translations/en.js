@@ -8,8 +8,8 @@ export const spellTranslations_en = {
   training: {
     title: "Training",
     samples: "samples",
-    addClass: "Add Spell Class",
-    addNewClass: "Add New Spell Class",
+    addClass: "Add Spell",
+    addNewClass: "Add New Spell",
     className: "Spell Name",
     cancel: "Cancel",
     add: "Add",
@@ -57,7 +57,7 @@ export const spellTranslations_en = {
     tooltip: {
       helpMain: "What is spell classification?",
       helpConnection: "How to connect your senseBox",
-      helpClasses: "About spells",
+      helpClasses: "How to define a spell",
       helpTraining: "How training works",
       moreClasses: "Add at least 2 spells to train",
       moreSamples: "Add at least 2 recordings per spell to train",
@@ -91,7 +91,7 @@ export const spellTranslations_en = {
       title: "Spell Classification",
     },
     addClass: {
-      title: "Add Spell Class",
+      title: "Defining a Spell",
     },
     spellCasting: {
       title: "Recording a Spell",
