@@ -89,7 +89,7 @@ export const spellTranslations_de = {
       title: "Zauberspruch Klassifizierung",
     },
     addClass: {
-      title: "Zauberspruch hinzufügen",
+      title: "Einen Zauberspruch definieren",
     },
     spellCasting: {
       title: "Zauberspruch aufnehmen",
