@@ -10,7 +10,7 @@ Deine Bewegungen werden mit dem **Beschleunigungssensor** der senseBox Eye aufge
 
 # Mit welchem _Model_ wird dein Zauberspruch klassifiziert?
 
-Hier wird ein **Bildklassifizierungsmodell** trainiert – ein Modell, das ein Bild ansieht und entscheidet, zu welcher Klasse es gehört.
+Um die Zaubersprüche zu klassifizieren nutzen wir ein **Bildklassifizierungsmodell** – ein Modell, das ein Bild ansieht und entscheidet, zu welcher Klasse es gehört.
 
 Unter der Haube steckt ein sogenanntes **Neuronales Netz**, das grob vom menschlichen Gehirn inspiriert ist. Es besteht aus vielen Schichten, die das Bild schrittweise analysieren.
 

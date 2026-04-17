@@ -10,7 +10,7 @@ Your movements will be recorded with the **acceleration sensor** onboard the sen
 
 # With what kind of _model_ do we classify the spells?
 
-An **image classification** model is being trained – a model that looks at an image and decides which class it belongs to.
+To classify the spells we are using an **image classification** model – a model that looks at an image and decides which class it belongs to.
 
 Under the hood is a so-called **neural network**, loosely inspired by the human brain. It consists of many layers that analyze the image step by step.
 
