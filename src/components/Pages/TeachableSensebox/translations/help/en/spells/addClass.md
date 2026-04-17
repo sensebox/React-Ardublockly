@@ -4,4 +4,4 @@ A spell movement can, for example, be a **shape** (“circle”, “square”, e
 
 ![senseBox wand](/media/teachable/spell.gif)
 
-**Tip:** Try to use simple and distinct spells. The more complex or similar the spells the harder it will be for the model to correctly classify them.
+**Tip:** Try to create simple and distinct spells. The more complex or similar the spells the harder it will be for the model to correctly classify them.
