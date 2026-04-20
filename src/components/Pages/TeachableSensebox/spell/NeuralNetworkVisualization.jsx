@@ -103,56 +103,6 @@ const SamplePreviewMini = memo(({ pixelData, strokePoints, size = 24 }) => {
   );
 });
 
-// ─── Input Spell Display ────────────────────────────────────────────────────
-const InputSpellDisplay = memo(({ pixelData, size = 96 }) => {
-  const canvasRef = useRef(null);
-
-  useEffect(() => {
-    if (!canvasRef.current || !pixelData) return;
-    const ctx = canvasRef.current.getContext("2d");
-    const imageData = new ImageData(
-      new Uint8ClampedArray(pixelData),
-      STROKE_IMAGE_SIZE,
-      STROKE_IMAGE_SIZE,
-    );
-    ctx.putImageData(imageData, 0, 0);
-  }, [pixelData]);
-
-  return (
-    <Box sx={{ textAlign: "center", mb: 2 }}>
-      <Typography
-        variant="caption"
-        color="text.secondary"
-        display="block"
-        mb={0.5}
-      >
-        Input Spell (32×32)
-      </Typography>
-      <Box
-        sx={{
-          display: "inline-block",
-          border: "2px solid",
-          borderColor: "grey.400",
-          borderRadius: 1,
-          overflow: "hidden",
-        }}
-      >
-        <canvas
-          ref={canvasRef}
-          width={STROKE_IMAGE_SIZE}
-          height={STROKE_IMAGE_SIZE}
-          style={{
-            display: "block",
-            width: size,
-            height: size,
-            imageRendering: "pixelated",
-          }}
-        />
-      </Box>
-    </Box>
-  );
-});
-
 // ─── Activation Cell ──────────────────────────────────────────────────────────
 const ActivationCell = memo(
   ({
@@ -164,56 +114,28 @@ const ActivationCell = memo(
     filterIndex,
     rowIndex,
     colIndex,
-    onHover,
-    onLeave,
     isHighlighted,
-    cellRef,
   }) => {
-    const elementRef = useRef(null);
-
-    const handleMouseEnter = useCallback(
-      (e) => {
-        const rect = e.target.getBoundingClientRect();
-        onHover?.({
-          layerIndex,
-          filterIndex,
-          rowIndex,
-          colIndex,
-          value,
-          rect, // Pass the element's position
-        });
-      },
-      [layerIndex, filterIndex, rowIndex, colIndex, value, onHover],
-    );
-
     const color = activationToColor(value, minVal, maxVal);
-
-    // Register cell ref for connection drawing
-    useEffect(() => {
-      if (cellRef) {
-        cellRef.current = elementRef.current;
-      }
-    }, [cellRef]);
 
     return (
       <div
-        ref={elementRef}
         data-layer={layerIndex}
         data-filter={filterIndex}
         data-row={rowIndex}
         data-col={colIndex}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={onLeave}
+        data-value={value}
         style={{
           width: cellSize,
           height: cellSize,
+          boxSizing: "border-box",
           backgroundColor: color,
-          border: isHighlighted ? "1px solid rgba(255,255,255,0.9)" : "none",
+          outline: isHighlighted ? "1px solid rgba(255,255,255,0.9)" : "none",
+          outlineOffset: "-1px",
           boxShadow: isHighlighted
             ? "0 0 6px rgba(255,255,255,0.8), inset 0 0 2px rgba(255,255,255,0.5)"
             : "none",
           cursor: "pointer",
-          transition: "box-shadow 0.1s, border 0.1s",
         }}
         title={`Value: ${value.toFixed(4)}`}
       />
@@ -266,17 +188,33 @@ const ConvLayerVisualization = memo(
       return stats;
     }, [activations, height, width, numFilters]);
 
-    // Enhanced hover handler that includes layer config
-    const handleCellHover = useCallback(
-      (cellInfo) => {
+    // Event delegation handler for mouse events on cells
+    const handleMouseOver = useCallback(
+      (e) => {
+        const cell = e.target.closest("[data-layer]");
+        if (!cell) return;
+        const layer = parseInt(cell.dataset.layer, 10);
+        const filter = parseInt(cell.dataset.filter, 10);
+        const row = parseInt(cell.dataset.row, 10);
+        const col = parseInt(cell.dataset.col, 10);
+        const value = parseFloat(cell.dataset.value);
+        if (isNaN(layer) || isNaN(value)) return;
         onCellHover?.({
-          ...cellInfo,
+          layerIndex: layer,
+          filterIndex: filter,
+          rowIndex: row,
+          colIndex: col,
+          value,
           layerConfig,
           prevLayerSize: layerConfig?.prevLayerSize,
         });
       },
       [onCellHover, layerConfig],
     );
+
+    const handleMouseLeave = useCallback(() => {
+      onCellLeave?.();
+    }, [onCellLeave]);
 
     if (!activations || activations.length === 0) return null;
 
@@ -289,6 +227,8 @@ const ConvLayerVisualization = memo(
     return (
       <Box
         ref={layerRef}
+        onMouseOver={handleMouseOver}
+        onMouseLeave={handleMouseLeave}
         sx={{
           textAlign: "center",
           display: "flex",
@@ -310,54 +250,45 @@ const ConvLayerVisualization = memo(
           {Array.from({ length: maxFiltersToShow }, (_, filterIdx) => {
             const { minVal, maxVal } = filterStats[filterIdx];
             return (
-              <Tooltip
-                key={filterIdx}
-                title={`Filter ${filterIdx + 1}`}
-                placement="top"
-                arrow
+              <Box
+                sx={{
+                  display: "grid",
+                  gridTemplateColumns: `repeat(${width}, ${cellSize}px)`,
+                  gridTemplateRows: `repeat(${height}, ${cellSize}px)`,
+                  gap: 0,
+                  border: "1px solid",
+                  borderColor: "grey.600",
+                  borderRadius: 0.5, // Ensure the grid border shows on all sides
+                  boxSizing: "content-box",
+                }}
               >
-                <Box
-                  sx={{
-                    display: "grid",
-                    gridTemplateColumns: `repeat(${width}, ${cellSize}px)`,
-                    gridTemplateRows: `repeat(${height}, ${cellSize}px)`,
-                    gap: 0,
-                    border: "1px solid",
-                    borderColor: "grey.600",
-                    borderRadius: 0.5,
-                    overflow: "hidden",
-                  }}
-                >
-                  {Array.from({ length: height }, (_, h) =>
-                    Array.from({ length: width }, (_, w) => {
-                      const isHighlighted = highlightedCells?.some(
-                        (c) =>
-                          c.layerIndex === layerIndex &&
-                          (c.filterIndex === filterIdx ||
-                            c.filterIndex === "all") &&
-                          c.rowIndex === h &&
-                          c.colIndex === w,
-                      );
-                      return (
-                        <ActivationCell
-                          key={`${h}-${w}`}
-                          value={activations[h][w][filterIdx]}
-                          minVal={minVal}
-                          maxVal={maxVal}
-                          cellSize={cellSize}
-                          layerIndex={layerIndex}
-                          filterIndex={filterIdx}
-                          rowIndex={h}
-                          colIndex={w}
-                          onHover={handleCellHover}
-                          onLeave={onCellLeave}
-                          isHighlighted={isHighlighted}
-                        />
-                      );
-                    }),
-                  )}
-                </Box>
-              </Tooltip>
+                {Array.from({ length: height }, (_, h) =>
+                  Array.from({ length: width }, (_, w) => {
+                    const isHighlighted = highlightedCells?.some(
+                      (c) =>
+                        c.layerIndex === layerIndex &&
+                        (c.filterIndex === filterIdx ||
+                          c.filterIndex === "all") &&
+                        c.rowIndex === h &&
+                        c.colIndex === w,
+                    );
+                    return (
+                      <ActivationCell
+                        key={`${h}-${w}`}
+                        value={activations[h][w][filterIdx]}
+                        minVal={minVal}
+                        maxVal={maxVal}
+                        cellSize={cellSize}
+                        layerIndex={layerIndex}
+                        filterIndex={filterIdx}
+                        rowIndex={h}
+                        colIndex={w}
+                        isHighlighted={isHighlighted}
+                      />
+                    );
+                  }),
+                )}
+              </Box>
             );
           })}
           {numFilters > maxFiltersToShow && (
@@ -388,10 +319,29 @@ const OutputLayerVisualization = memo(
       classNames?.[predictedIdx] ?? `Class ${predictedIdx + 1}`;
     const predictedColor = activationToColor(activations[predictedIdx], 0, 1);
 
+    // Event delegation for hover
+    const handleMouseOver = useCallback(
+      (e) => {
+        const cell = e.target.closest("[data-neuron-idx]");
+        if (!cell) return;
+        const idx = parseInt(cell.dataset.neuronIdx, 10);
+        const value = parseFloat(cell.dataset.value);
+        if (isNaN(idx)) return;
+        onCellHover?.({ layerIndex, neuronIndex: idx, value });
+      },
+      [onCellHover, layerIndex],
+    );
+
+    const handleMouseLeave = useCallback(() => {
+      onCellLeave?.();
+    }, [onCellLeave]);
+
     return (
       <Box
+        onMouseOver={handleMouseOver}
+        onMouseLeave={handleMouseLeave}
         sx={{
-          flex: 1,
+          flex: "0 0 auto",
           minWidth: 0,
           bgcolor: alpha(theme.palette.grey[500], 0.4),
           borderRadius: 1,
@@ -413,10 +363,8 @@ const OutputLayerVisualization = memo(
           return (
             <Box
               key={idx}
-              onMouseEnter={() =>
-                onCellHover?.({ layerIndex, neuronIndex: idx, value })
-              }
-              onMouseLeave={onCellLeave}
+              data-neuron-idx={idx}
+              data-value={value}
               sx={{
                 display: "flex",
                 flexDirection: "column",
@@ -425,14 +373,14 @@ const OutputLayerVisualization = memo(
                 px: 0.75,
                 py: 0.5,
                 borderRadius: 1,
-                border: "1px solid",
-                borderColor: isPredicted
-                  ? "rgba(255,255,255,0.4)"
-                  : "transparent",
+                boxSizing: "border-box",
+                outline: isPredicted
+                  ? "1px solid rgba(255,255,255,0.4)"
+                  : "none",
+                outlineOffset: "-1px",
                 bgcolor: isPredicted
                   ? alpha(theme.palette.grey[100], 0.06)
                   : "transparent",
-                transition: "all 0.2s",
                 minWidth: 0,
                 width: "100%",
               }}
@@ -444,12 +392,14 @@ const OutputLayerVisualization = memo(
                   height: 16,
                   borderRadius: 0.5,
                   flexShrink: 0,
+                  boxSizing: "border-box",
                   bgcolor: color,
-                  border: isPredicted
+                  outline: isPredicted
                     ? "1px solid rgba(255,255,255,0.9)"
                     : "1px solid rgba(255,255,255,0.2)",
+                  outlineOffset: "-1px",
                   boxShadow: isPredicted
-                    ? "0 0 6px rgba(255,255,255,0.8)"
+                    ? "0 0 6px rgba(255,255,255,0.6)"
                     : "none",
                 }}
               />
@@ -516,8 +466,27 @@ const DenseLayerVisualization = memo(
       : Math.max(8, Math.min(16, 400 / numNeurons));
     const maxNeuronsToShow = Math.min(numNeurons, 64);
 
+    // Event delegation for hover
+    const handleMouseOver = useCallback(
+      (e) => {
+        const cell = e.target.closest("[data-neuron-idx]");
+        if (!cell) return;
+        const idx = parseInt(cell.dataset.neuronIdx, 10);
+        const value = parseFloat(cell.dataset.value);
+        if (isNaN(idx)) return;
+        onCellHover?.({ layerIndex, neuronIndex: idx, value });
+      },
+      [onCellHover, layerIndex],
+    );
+
+    const handleMouseLeave = useCallback(() => {
+      onCellLeave?.();
+    }, [onCellLeave]);
+
     return (
       <Box
+        onMouseOver={handleMouseOver}
+        onMouseLeave={handleMouseLeave}
         sx={{
           textAlign: "center",
           display: "flex",
@@ -547,59 +516,48 @@ const DenseLayerVisualization = memo(
               isOutput && classNames?.[idx] ? classNames[idx] : null;
 
             return (
-              <Tooltip
-                key={idx}
-                title={
-                  label
-                    ? `${label}: ${(value * 100).toFixed(1)}%`
-                    : `Neuron ${idx + 1}: ${value.toFixed(4)}`
-                }
-                placement="top"
-                arrow
+              <Box
+                data-neuron-idx={idx}
+                data-value={value}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: 0.5,
+                }}
               >
                 <Box
-                  onMouseEnter={() =>
-                    onCellHover?.({ layerIndex, neuronIndex: idx, value })
-                  }
-                  onMouseLeave={onCellLeave}
                   sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: 0.5,
+                    width: cellSize,
+                    height: cellSize,
+                    boxSizing: "border-box",
+                    bgcolor: color,
+                    borderRadius: isOutput ? "50%" : 0.5,
+                    border: "1px solid",
+                    borderColor: "grey.600",
+                    outline: isHighlighted ? "2px solid #fff" : "none",
+                    outlineOffset: "-1px",
+                    boxShadow: isHighlighted
+                      ? "0 0 8px rgba(255,255,255,0.8)"
+                      : "none",
+                    cursor: "pointer",
                   }}
-                >
-                  <Box
+                />
+                {isOutput && label && (
+                  <Typography
+                    variant="caption"
                     sx={{
-                      width: cellSize,
-                      height: cellSize,
-                      bgcolor: color,
-                      borderRadius: isOutput ? "50%" : 0.5,
-                      border: isHighlighted ? "2px solid #fff" : "1px solid",
-                      borderColor: isHighlighted ? "#fff" : "grey.600",
-                      boxShadow: isHighlighted
-                        ? "0 0 8px rgba(255,255,255,0.8)"
-                        : "none",
-                      cursor: "pointer",
-                      transition: "all 0.1s",
+                      fontSize: "0.65rem",
+                      maxWidth: 60,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
                     }}
-                  />
-                  {isOutput && label && (
-                    <Typography
-                      variant="caption"
-                      sx={{
-                        fontSize: "0.65rem",
-                        maxWidth: 60,
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      {label}
-                    </Typography>
-                  )}
-                </Box>
-              </Tooltip>
+                  >
+                    {label}
+                  </Typography>
+                )}
+              </Box>
             );
           })}
           {numNeurons > maxNeuronsToShow && (
@@ -648,6 +606,87 @@ function getReceptiveField(layerConfig, rowIndex, colIndex) {
   return cells;
 }
 
+// ─── Input-Space Receptive Field Calculator ───────────────────────────────────
+// Traces the receptive field of a cell all the way back to original input pixels.
+// Returns { minRow, maxRow, minCol, maxCol } in 0..STROKE_IMAGE_SIZE-1 space.
+// Returns null for non-spatial cells (dense, output) which see the entire image.
+function computeInputReceptiveField(
+  layerMeta,
+  targetLayerIndex,
+  rowIndex,
+  colIndex,
+) {
+  const S = STROKE_IMAGE_SIZE;
+
+  // Non-spatial cells (dense, output, flatten result, etc.) — entire image
+  if (
+    rowIndex === undefined ||
+    rowIndex === null ||
+    colIndex === undefined ||
+    colIndex === null
+  ) {
+    return { minRow: 0, maxRow: S - 1, minCol: 0, maxCol: S - 1 };
+  }
+
+  let minRow = rowIndex,
+    maxRow = rowIndex;
+  let minCol = colIndex,
+    maxCol = colIndex;
+
+  // Walk backwards through layers, expanding bounds at each spatial layer
+  for (let i = targetLayerIndex; i >= 0; i--) {
+    const meta = layerMeta[i];
+    if (!meta) continue;
+    const config = meta.config || {};
+    const cls = meta.className;
+
+    if (cls === "Conv2D" || cls === "DepthwiseConv2D") {
+      const kH = Array.isArray(config.kernel_size)
+        ? config.kernel_size[0]
+        : (config.kernel_size ?? 3);
+      const kW = Array.isArray(config.kernel_size)
+        ? config.kernel_size[1]
+        : (config.kernel_size ?? 3);
+      const sH = Array.isArray(config.strides)
+        ? config.strides[0]
+        : (config.strides ?? 1);
+      const sW = Array.isArray(config.strides)
+        ? config.strides[1]
+        : (config.strides ?? 1);
+      minRow = minRow * sH - Math.floor(kH / 2);
+      maxRow = maxRow * sH + Math.floor(kH / 2);
+      minCol = minCol * sW - Math.floor(kW / 2);
+      maxCol = maxCol * sW + Math.floor(kW / 2);
+    } else if (cls === "MaxPooling2D" || cls === "AveragePooling2D") {
+      const pSize = config.pool_size || [2, 2];
+      const pH = Array.isArray(pSize) ? pSize[0] : pSize;
+      const pW = Array.isArray(pSize) ? pSize[1] : pSize;
+      const rawStrides = config.strides || config.pool_size || [2, 2];
+      const sH = Array.isArray(rawStrides) ? rawStrides[0] : rawStrides;
+      const sW = Array.isArray(rawStrides) ? rawStrides[1] : rawStrides;
+      minRow = minRow * sH;
+      maxRow = maxRow * sH + pH - 1;
+      minCol = minCol * sW;
+      maxCol = maxCol * sW + pW - 1;
+    } else if (
+      cls === "GlobalAveragePooling2D" ||
+      cls === "GlobalMaxPooling2D" ||
+      cls === "Flatten"
+    ) {
+      // Global operation found while tracing back — entire image contributes
+      return { minRow: 0, maxRow: S - 1, minCol: 0, maxCol: S - 1 };
+    }
+    // BatchNormalization, Activation, Dropout, etc.: 1:1 spatial mapping, skip
+  }
+
+  return {
+    minRow: Math.max(0, minRow),
+    maxRow: Math.min(S - 1, maxRow),
+    minCol: Math.max(0, minCol),
+    maxCol: Math.min(S - 1, maxCol),
+  };
+}
+
 // ─── Main Neural Network Visualization Component ──────────────────────────────
 const NeuralNetworkVisualization = ({
   trainedModel,
@@ -655,6 +694,7 @@ const NeuralNetworkVisualization = ({
   samplePixelData,
   classNames,
   onOpenHelp,
+  onReceptiveField,
 }) => {
   const theme = useTheme();
   const containerRef = useRef(null);
@@ -664,6 +704,12 @@ const NeuralNetworkVisualization = ({
   const [highlightedCells, setHighlightedCells] = useState([]);
   const [selectedSample, setSelectedSample] = useState(null);
   const intermediateModelsRef = useRef(null);
+  const hoverIdRef = useRef(0);
+  // Keep a stable ref to the onReceptiveField callback to avoid stale closures
+  const onReceptiveFieldRef = useRef(onReceptiveField);
+  useEffect(() => {
+    onReceptiveFieldRef.current = onReceptiveField;
+  }, [onReceptiveField]);
   const t = getSpellTranslations();
 
   // Get pixel data from selected sample, stroke points, or provided data
@@ -771,39 +817,59 @@ const NeuralNetworkVisualization = ({
     };
   }, [pixelData, trainedModel]);
 
-  // Handle cell hover - highlight receptive field in previous layer
+  // Handle cell hover - highlight receptive field in previous layer and on input image
   const handleCellHover = useCallback((cellInfo) => {
-    setHoveredCell(cellInfo);
+    const currentHoverId = ++hoverIdRef.current;
 
-    const highlighted = [cellInfo];
+    // Use requestAnimationFrame to batch updates and reduce jank
+    requestAnimationFrame(() => {
+      // Check if this is still the latest hover event
+      if (currentHoverId !== hoverIdRef.current) return;
 
-    // If this is a conv layer cell, calculate receptive field in previous layer
-    if (cellInfo.layerConfig && cellInfo.rowIndex !== undefined) {
-      const receptiveField = getReceptiveField(
-        cellInfo.layerConfig,
-        cellInfo.rowIndex,
-        cellInfo.colIndex,
+      setHoveredCell(cellInfo);
+
+      const highlighted = [cellInfo];
+
+      // If this is a conv layer cell, calculate receptive field in previous layer
+      if (cellInfo.layerConfig && cellInfo.rowIndex !== undefined) {
+        const receptiveField = getReceptiveField(
+          cellInfo.layerConfig,
+          cellInfo.rowIndex,
+          cellInfo.colIndex,
+        );
+
+        const prevLayerIndex = cellInfo.layerIndex - 1;
+        receptiveField.forEach(({ row, col }) => {
+          if (row >= 0 && col >= 0) {
+            highlighted.push({
+              layerIndex: prevLayerIndex,
+              rowIndex: row,
+              colIndex: col,
+              filterIndex: "all",
+            });
+          }
+        });
+      }
+
+      setHighlightedCells(highlighted);
+
+      // Compute and report the input-space receptive field for the live canvas overlay
+      onReceptiveFieldRef.current?.(
+        computeInputReceptiveField(
+          intermediateModelsRef.current ?? [],
+          cellInfo.layerIndex,
+          cellInfo.rowIndex,
+          cellInfo.colIndex,
+        ),
       );
-
-      const prevLayerIndex = cellInfo.layerIndex - 1;
-      receptiveField.forEach(({ row, col }) => {
-        if (row >= 0 && col >= 0) {
-          highlighted.push({
-            layerIndex: prevLayerIndex,
-            rowIndex: row,
-            colIndex: col,
-            filterIndex: "all",
-          });
-        }
-      });
-    }
-
-    setHighlightedCells(highlighted);
+    });
   }, []);
 
   const handleCellLeave = useCallback(() => {
+    ++hoverIdRef.current;
     setHoveredCell(null);
     setHighlightedCells([]);
+    onReceptiveFieldRef.current?.(null);
   }, []);
 
   // Build layer visualization elements

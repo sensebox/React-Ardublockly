@@ -305,92 +305,120 @@ const ClassCardItem = memo(
 // up via CSS so the user sees precisely what the model is fed.
 const LIVE_RENDER_SIZE = 32;
 
-const LiveStrokeCanvas = memo(({ latestStroke, size = STROKE_CANVAS_SIZE }) => {
-  const canvasRef = useRef(null);
+const LiveStrokeCanvas = memo(
+  ({ latestStroke, size = STROKE_CANVAS_SIZE, receptiveField }) => {
+    const canvasRef = useRef(null);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    const S = LIVE_RENDER_SIZE;
-    const halfSize = S / 2;
+    useEffect(() => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      const S = LIVE_RENDER_SIZE;
+      const halfSize = S / 2;
 
-    // Black background — identical to training
-    ctx.fillStyle = "#000000";
-    ctx.fillRect(0, 0, S, S);
+      // Black background — identical to training
+      ctx.fillStyle = "#000000";
+      ctx.fillRect(0, 0, S, S);
 
-    if (!latestStroke || latestStroke.strokePoints?.length === 0) {
-      return;
-    }
+      if (!latestStroke || latestStroke.strokePoints?.length === 0) {
+        return;
+      }
 
-    const { strokePoints } = latestStroke;
-    const n = strokePoints.length;
+      const { strokePoints } = latestStroke;
+      const n = strokePoints.length;
 
-    if (n === 1) {
-      const px = halfSize + strokePoints[0].x * halfSize;
-      const py = halfSize - strokePoints[0].y * halfSize;
-      ctx.fillStyle = "rgb(128,128,128)";
-      ctx.beginPath();
-      ctx.arc(px, py, 2, 0, Math.PI * 2);
-      ctx.fill();
-      return;
-    }
+      if (n === 1) {
+        const px = halfSize + strokePoints[0].x * halfSize;
+        const py = halfSize - strokePoints[0].y * halfSize;
+        ctx.fillStyle = "rgb(128,128,128)";
+        ctx.beginPath();
+        ctx.arc(px, py, 2, 0, Math.PI * 2);
+        ctx.fill();
+        return;
+      }
 
-    ctx.lineWidth = 2.5;
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
+      ctx.lineWidth = 2.5;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
 
-    // RGB temporal gradient — same as renderStrokeToImage in training:
-    //   R = 255 at start → 0 at end  ("where it began")
-    //   G = 128 throughout            (constant visibility)
-    //   B = 0   at start → 255 at end ("where it ended")
-    for (let i = 1; i < n; i++) {
-      const t = n > 2 ? (i - 1) / (n - 2) : 0;
-      const r = Math.round(255 * (1 - t));
-      const b = Math.round(255 * t);
-      const { x: x0, y: y0 } = strokePoints[i - 1];
-      const { x: x1, y: y1 } = strokePoints[i];
-      ctx.strokeStyle = `rgb(${r},128,${b})`;
-      ctx.beginPath();
-      ctx.moveTo(halfSize + x0 * halfSize, halfSize - y0 * halfSize);
-      ctx.lineTo(halfSize + x1 * halfSize, halfSize - y1 * halfSize);
-      ctx.stroke();
-    }
-  }, [latestStroke]);
+      // RGB temporal gradient — same as renderStrokeToImage in training:
+      //   R = 255 at start → 0 at end  ("where it began")
+      //   G = 128 throughout            (constant visibility)
+      //   B = 0   at start → 255 at end ("where it ended")
+      for (let i = 1; i < n; i++) {
+        const t = n > 2 ? (i - 1) / (n - 2) : 0;
+        const r = Math.round(255 * (1 - t));
+        const b = Math.round(255 * t);
+        const { x: x0, y: y0 } = strokePoints[i - 1];
+        const { x: x1, y: y1 } = strokePoints[i];
+        ctx.strokeStyle = `rgb(${r},128,${b})`;
+        ctx.beginPath();
+        ctx.moveTo(halfSize + x0 * halfSize, halfSize - y0 * halfSize);
+        ctx.lineTo(halfSize + x1 * halfSize, halfSize - y1 * halfSize);
+        ctx.stroke();
+      }
+    }, [latestStroke]);
 
-  return (
-    <Box
-      sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-    >
-      <Paper
-        elevation={2}
-        sx={{
-          borderRadius: 2,
-          overflow: "hidden",
-          border: "2px solid",
-          borderColor:
-            latestStroke?.state === StrokeState.DRAWING
-              ? "warning.main"
-              : latestStroke?.state === StrokeState.DONE
-                ? "success.main"
-                : "grey.700",
-        }}
+    return (
+      <Box
+        sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
       >
-        <canvas
-          ref={canvasRef}
-          width={LIVE_RENDER_SIZE}
-          height={LIVE_RENDER_SIZE}
-          style={{
-            display: "block",
-            width: size,
-            height: size,
-            imageRendering: "pixelated",
+        <Paper
+          elevation={2}
+          sx={{
+            borderRadius: 2,
+            overflow: "hidden",
+            border: "2px solid",
+            borderColor:
+              latestStroke?.state === StrokeState.DRAWING
+                ? "warning.main"
+                : latestStroke?.state === StrokeState.DONE
+                  ? "success.main"
+                  : "grey.700",
           }}
-        />
-      </Paper>
-    </Box>
-  );
-});
+        >
+          {/* Wrapper for canvas layering */}
+          <Box sx={{ position: "relative", width: size, height: size }}>
+            <canvas
+              ref={canvasRef}
+              width={LIVE_RENDER_SIZE}
+              height={LIVE_RENDER_SIZE}
+              style={{
+                display: "block",
+                width: size,
+                height: size,
+                imageRendering: "pixelated",
+              }}
+            />
+            {/* Overlay div for receptive field highlight — CSS outline + grid */}
+            {receptiveField &&
+              (() => {
+                const scale = size / LIVE_RENDER_SIZE;
+                const { minRow, maxRow, minCol, maxCol } = receptiveField;
+                return (
+                  <div
+                    style={{
+                      position: "absolute",
+                      left: minCol * scale,
+                      top: minRow * scale,
+                      width: (maxCol - minCol + 1) * scale,
+                      height: (maxRow - minRow + 1) * scale,
+                      outline: "1px solid rgba(255,255,255,0.9)",
+                      backgroundImage:
+                        "linear-gradient(rgba(255,255,255,0.9) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.9) 1px, transparent 1px)",
+                      backgroundSize: `${scale}px ${scale}px`,
+                      pointerEvents: "none",
+                      boxSizing: "border-box",
+                    }}
+                  />
+                );
+              })()}
+          </Box>
+        </Paper>
+      </Box>
+    );
+  },
+);
 
 // ─── SpellModelTrainer ──────────────────────────────────────────────────────
 const SpellModelTrainer = ({
@@ -409,6 +437,8 @@ const SpellModelTrainer = ({
   const [editingClassId, setEditingClassId] = useState(null);
   const [editingClassName, setEditingClassName] = useState("");
   const [recordingClassId, setRecordingClassId] = useState(null);
+  // Receptive field overlay for the live stroke canvas (set by NeuralNetworkVisualization hover)
+  const [receptiveField, setReceptiveField] = useState(null);
 
   const language = useSelector((s) => s.general.language);
   const t = getSpellTranslations();
@@ -801,7 +831,10 @@ const SpellModelTrainer = ({
             {/* Live stroke visualization */}
             {isConnected && !dataTimeoutError && (
               <Box sx={{ mb: 3 }}>
-                <LiveStrokeCanvas latestStroke={latestStroke} />
+                <LiveStrokeCanvas
+                  latestStroke={latestStroke}
+                  receptiveField={receptiveField}
+                />
               </Box>
             )}
           </Box>
@@ -960,6 +993,7 @@ const SpellModelTrainer = ({
               strokePoints={latestStroke?.strokePoints}
               classNames={classes.map((cls) => cls.name)}
               onOpenHelp={onOpenHelp}
+              onReceptiveField={setReceptiveField}
             />
           )}
         </Grid>
