@@ -53,10 +53,7 @@ class OrientationBLEService {
 
     try {
       this.device = await navigator.bluetooth.requestDevice({
-        filters: [
-          { namePrefix: "senseBox" },
-          { name: "senseBox-Accelerometer" },
-        ],
+        filters: [{ name: "senseBox-Accelerometer" }],
         optionalServices: [BLE_SERVICE_UUID],
       });
     } catch (err) {

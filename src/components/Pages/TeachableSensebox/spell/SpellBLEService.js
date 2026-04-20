@@ -61,11 +61,7 @@ class SpellBLEService {
 
     try {
       this.device = await navigator.bluetooth.requestDevice({
-        filters: [
-          { namePrefix: "senseBox" },
-          { name: "senseBox-MagicWand" },
-          { name: "senseBox-Spell" },
-        ],
+        filters: [{ name: "senseBox-wand" }],
         optionalServices: [BLE_SERVICE_UUID],
       });
     } catch (err) {
