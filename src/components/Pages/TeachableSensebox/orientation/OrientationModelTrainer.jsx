@@ -748,13 +748,6 @@ const OrientationModelTrainer = ({
                           ? t.training.disconnectSenseBox
                           : t.training.connectSenseBox}
                     </Button>
-
-                    <HelpButton
-                      onClick={() =>
-                        onOpenHelp && onOpenHelp("accelerationSensor")
-                      }
-                      tooltip={t.training?.tooltip?.helpAccelerationSensor}
-                    />
                   </span>
                 </Tooltip>
               )}
@@ -803,6 +796,11 @@ const OrientationModelTrainer = ({
                   </span>
                 </Tooltip>
               )}
+
+              <HelpButton
+                onClick={() => onOpenHelp && onOpenHelp("accelerationSensor")}
+                tooltip={t.training?.tooltip?.helpAccelerationSensor}
+              />
 
               {!bleSource.isConnected &&
                 !bleSource.isConnecting &&
