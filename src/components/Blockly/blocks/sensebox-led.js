@@ -134,6 +134,7 @@ Blockly.defineBlocksWithJsonArray([
           "#4267ac",
           "#6a4c93",
           "#ffffff",
+          "#000000",
         ],
         colourTitles: [
           "red",
@@ -145,6 +146,7 @@ Blockly.defineBlocksWithJsonArray([
           "indigo",
           "violet",
           "white",
+          "black",
         ],
         columns: 1,
       },
