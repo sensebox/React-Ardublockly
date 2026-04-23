@@ -32,7 +32,6 @@ export const ToolboxEye = () => {
         <Block type="sensebox_button" />
         <Block type="sensebox_sensor_truebner_smt50_esp32" />
         <Block type="sensebox_sensor_watertemperature" />
-        <Block type="sensebox_rg15_rainsensor" />
         <Block type="sensebox_soundsensor_dfrobot" />
         <Block type="sensebox_multiplexer_init">
           <Value name="nrChannels">
@@ -743,12 +742,6 @@ export const ToolboxEye = () => {
         <Category id="mqtt" name="MQTT" colour={getColour().mqtt}>
           <Block type="sensebox_mqtt_setup" />
           <Block type="sensebox_mqtt_publish" />
-        </Category>
-
-        {/* -------- ETHERNET -------- */}
-        <Category name="Ethernet" colour={getColour().sensebox}>
-          <Block type="sensebox_ethernet" />
-          <Block type="sensebox_ethernetIp" />
         </Category>
 
         {/* -------- AUDIO -------- */}

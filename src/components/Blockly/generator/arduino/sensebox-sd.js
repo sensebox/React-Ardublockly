@@ -1,4 +1,5 @@
 import * as Blockly from "blockly";
+import { selectedBoard } from "../../helpers/board";
 
 /* SD-Card Blocks using the Standard SD Library*/
 /**
@@ -272,12 +273,16 @@ Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_sd_create_file"] =
     var extension = block.getFieldValue("extension");
 
     // Setup: SD initialisieren
+    const isEye = selectedBoard().title === "Eye";
     Blockly.Generator.Arduino.setupCode_["sensebox_esp32s2_sd"] =
       "// Init SD\n" +
       "pinMode(SD_ENABLE, OUTPUT);\n" +
       "digitalWrite(SD_ENABLE, LOW);\n" +
-      "sdspi.begin(VSPI_SCLK, VSPI_MISO, VSPI_MOSI, VSPI_SS);\n" +
-      "SD.begin(VSPI_SS, sdspi);";
+      (isEye
+        ? "sdspi.begin(PIN_SPI_SCK, PIN_SPI_MISO, PIN_SPI_MOSI, PIN_SD_CS);\n" +
+          "SD.begin(PIN_SD_CS, sdspi);"
+        : "sdspi.begin(VSPI_SCLK, VSPI_MISO, VSPI_MOSI, VSPI_SS);\n" +
+          "SD.begin(VSPI_SS, sdspi);");
 
     // Setup: Datei anlegen
     Blockly.Generator.Arduino.setupCode_[
@@ -325,12 +330,16 @@ Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_sd_open_file"] = function (
     `SPIClass sdspi = SPIClass();`;
 
   // SD-Init im Setup (nur einmal)
+  const isEye = selectedBoard().title === "Eye";
   Blockly.Generator.Arduino.setupCode_["sensebox_esp32s2_sd"] =
     "// Init SD\n" +
     "pinMode(SD_ENABLE, OUTPUT);\n" +
     "digitalWrite(SD_ENABLE, LOW);\n" +
-    "sdspi.begin(VSPI_SCLK, VSPI_MISO, VSPI_MOSI, VSPI_SS);\n" +
-    "SD.begin(VSPI_SS, sdspi);";
+    (isEye
+      ? "sdspi.begin(PIN_SPI_SCK, PIN_SPI_MISO, PIN_SPI_MOSI, PIN_SD_CS);\n" +
+        "SD.begin(PIN_SD_CS, sdspi);"
+      : "sdspi.begin(VSPI_SCLK, VSPI_MISO, VSPI_MOSI, VSPI_SS);\n" +
+        "SD.begin(VSPI_SS, sdspi);");
 
   return code;
 };
