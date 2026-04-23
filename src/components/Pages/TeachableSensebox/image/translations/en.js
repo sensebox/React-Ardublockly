@@ -47,6 +47,13 @@ export const imageClassificationTranslations_en = {
     predicted: "Predicted",
     actual: "Actual",
     noTestResultsData: "No confusion matrix data",
+    settings: {
+      title: "Training Settings",
+      epochs: "Max Epochs",
+      learningRate: "Learning Rate",
+      earlyStopping: "Early Stopping",
+      reset: "Reset to Defaults",
+    },
     tooltip: {
       helpMain: "What is Teachable senseBox?",
       browserCompatible:
@@ -61,6 +68,7 @@ export const imageClassificationTranslations_en = {
       helpTestResults: "Help for test results",
       helpDeployModel: "Help for deploying the model",
       classNameExists: "A class with this name already exists",
+      trainingSettings: "Help for training settings",
     },
   },
   integration: {
@@ -180,6 +188,9 @@ export const imageClassificationTranslations_en = {
     },
     testResults: {
       title: "Test Results",
+    },
+    trainingSettings: {
+      title: "Training Settings",
     },
     deployModel: {
       title: "Deploy Model",

@@ -23,12 +23,16 @@ import {
   Divider,
   Tooltip,
   CircularProgress,
+  Switch,
+  FormControlLabel,
+  Collapse,
 } from "@mui/material";
 import {
   Add as AddIcon,
   Delete as DeleteIcon,
   PhotoCamera as CameraIcon,
   Download as DownloadIcon,
+  MoreVert as MoreVertIcon,
 } from "@mui/icons-material";
 import useCameraSource from "./hooks/useCameraSource";
 import SerialErrorHandler, {
@@ -40,6 +44,7 @@ import FloatingCameraPreview from "./FloatingCameraPreview";
 import TrainingResultsSection from "./TrainingResultsSection";
 import HelpButton from "../HelpButton";
 import useModelTraining from "./hooks/useModelTraining";
+import { DEFAULT_TRAINING_SETTINGS } from "./hooks/useModelTraining";
 import useModelPrediction from "./hooks/useModelPrediction";
 import { downloadCameraFirmware } from "../utils/firmwareDownload";
 
@@ -71,6 +76,12 @@ const ModelTrainer = ({
     useState(false);
   const [trainedWithEnoughSamples, setTrainedWithEnoughSamples] =
     useState(false);
+
+  // Training settings state
+  const [showSettingsPanel, setShowSettingsPanel] = useState(false);
+  const [trainingSettings, setTrainingSettings] = useState(
+    DEFAULT_TRAINING_SETTINGS,
+  );
 
   const language = useSelector((s) => s.general.language);
   const t = getImageTranslations();
@@ -371,6 +382,7 @@ const ModelTrainer = ({
       onTrainingStart,
       onTrainingError,
       onModelTrained,
+      trainingSettings,
     );
   }, [
     classes,
@@ -378,8 +390,13 @@ const ModelTrainer = ({
     onTrainingError,
     onModelTrained,
     executeTraining,
+    trainingSettings,
     t,
   ]);
+
+  const resetSettings = useCallback(() => {
+    setTrainingSettings(DEFAULT_TRAINING_SETTINGS);
+  }, []);
 
   return (
     <Box>
@@ -872,11 +889,111 @@ const ModelTrainer = ({
                 </span>
               </Tooltip>
 
+              <Tooltip title={t.training.tooltip.trainingSettings} arrow>
+                <IconButton
+                  onClick={() => setShowSettingsPanel((prev) => !prev)}
+                  disabled={disabled || isTraining}
+                  size="small"
+                  color={showSettingsPanel ? "primary" : "default"}
+                >
+                  <MoreVertIcon />
+                </IconButton>
+              </Tooltip>
+
               <HelpButton
                 onClick={() => onOpenHelp && onOpenHelp("image/trainModel")}
                 tooltip={t.training.tooltip.helpTraining}
               />
             </Box>
+
+            <Collapse in={showSettingsPanel} sx={{ width: "100%" }}>
+              <Paper variant="outlined" sx={{ p: 2, mt: 1 }}>
+                <Box
+                  sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}
+                >
+                  <Typography variant="subtitle1" fontWeight="bold">
+                    {t.training.settings?.title || "Training Settings"}
+                  </Typography>
+                  <HelpButton
+                    onClick={() =>
+                      onOpenHelp && onOpenHelp("image/trainingSettings")
+                    }
+                    tooltip={t.training.tooltip.trainingSettings}
+                  />
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: 2,
+                    alignItems: "center",
+                  }}
+                >
+                  <TextField
+                    label={t.training.settings?.epochs || "Max Epochs"}
+                    type="number"
+                    size="small"
+                    value={trainingSettings.epochs}
+                    onChange={(e) => {
+                      const value = Math.max(
+                        1,
+                        Math.min(200, parseInt(e.target.value) || 1),
+                      );
+                      setTrainingSettings((prev) => ({
+                        ...prev,
+                        epochs: value,
+                      }));
+                    }}
+                    inputProps={{ min: 1, max: 200 }}
+                    sx={{ flex: 1, minWidth: 100 }}
+                  />
+                  <TextField
+                    label={t.training.settings?.learningRate || "Learning Rate"}
+                    type="number"
+                    size="small"
+                    value={trainingSettings.learningRate}
+                    onChange={(e) => {
+                      const value = Math.max(
+                        0.000001,
+                        Math.min(0.1, parseFloat(e.target.value) || 0.0001),
+                      );
+                      setTrainingSettings((prev) => ({
+                        ...prev,
+                        learningRate: value,
+                      }));
+                    }}
+                    inputProps={{ min: 0.000001, max: 0.1, step: 0.0001 }}
+                    sx={{ flex: 1, minWidth: 120 }}
+                  />
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={trainingSettings.earlyStopping}
+                        onChange={(e) =>
+                          setTrainingSettings((prev) => ({
+                            ...prev,
+                            earlyStopping: e.target.checked,
+                          }))
+                        }
+                        size="small"
+                      />
+                    }
+                    label={
+                      t.training.settings?.earlyStopping || "Early Stopping"
+                    }
+                    sx={{ flex: "none" }}
+                  />
+                  <Button
+                    size="small"
+                    onClick={resetSettings}
+                    color="secondary"
+                    sx={{ flex: "none" }}
+                  >
+                    {t.training.settings?.reset || "Reset"}
+                  </Button>
+                </Box>
+              </Paper>
+            </Collapse>
           </Box>
 
           {isTraining && (
