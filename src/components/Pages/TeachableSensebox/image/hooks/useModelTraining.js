@@ -6,8 +6,14 @@ const BASE_MODEL_URL =
   "https://raw.githubusercontent.com/PaulaScharf/teachable_machine_base_model/refs/heads/main/image_classification/model.json";
 const FEATURE_EXTRACTION_BATCH_SIZE = 16;
 const VALIDATION_FRACTION = 0.15;
-const TOTAL_EPOCHS = 70;
-const INITIAL_LEARNING_RATE = 0.0001;
+
+// Default training settings (exported for use in UI)
+export const DEFAULT_TRAINING_SETTINGS = {
+  epochs: 70,
+  learningRate: 0.0001,
+  earlyStopping: true,
+};
+
 const EARLY_STOPPING_PATIENCE = 5;
 const LR_DECAY_FACTOR = 0.5;
 const LR_DECAY_PATIENCE = 3;
@@ -204,10 +210,26 @@ function useModelTraining() {
   };
 
   const trainModel = useCallback(
-    async (classes, onTrainingStart, onTrainingError, onModelTrained) => {
+    async (
+      classes,
+      onTrainingStart,
+      onTrainingError,
+      onModelTrained,
+      trainingSettings = {},
+    ) => {
       if (classes.length < 2 || classes.some((cls) => cls.samples.length < 2)) {
         return false;
       }
+
+      // Merge user settings with defaults
+      const settings = {
+        ...DEFAULT_TRAINING_SETTINGS,
+        ...trainingSettings,
+      };
+
+      const TOTAL_EPOCHS = settings.epochs;
+      const INITIAL_LEARNING_RATE = settings.learningRate;
+      const useEarlyStopping = settings.earlyStopping;
 
       resetTrainingState();
       const hasEnoughSamples = classes.every((cls) => cls.samples.length >= 10);
@@ -267,6 +289,7 @@ function useModelTraining() {
         const validationDataBatched = validationTfDataset.batch(batchSize);
 
         let bestValLoss = Infinity;
+        let bestValAcc = -Infinity;
         let patienceCounter = 0;
         let bestWeights = null;
 
@@ -312,8 +335,12 @@ function useModelTraining() {
               ]);
 
               // Early stopping logic
-              if (logs.val_loss < bestValLoss) {
-                bestValLoss = logs.val_loss;
+              const valLossImproved = logs.val_loss < bestValLoss;
+              const valAccImproved = logs.val_acc > bestValAcc;
+
+              if (valLossImproved && valAccImproved) {
+                if (valLossImproved) bestValLoss = logs.val_loss;
+                if (valAccImproved) bestValAcc = logs.val_acc;
                 patienceCounter = 0;
                 epochsSinceBestLoss = 0;
                 bestWeights = trainingModel.getWeights().map((w) => w.clone());
@@ -331,7 +358,11 @@ function useModelTraining() {
                   );
                 }
 
-                if (patienceCounter >= EARLY_STOPPING_PATIENCE && epoch >= 10) {
+                if (
+                  useEarlyStopping &&
+                  patienceCounter >= EARLY_STOPPING_PATIENCE &&
+                  epoch >= 10
+                ) {
                   console.log(`Early stopping at epoch ${epoch + 1}`);
                   trainingModel.stopTraining = true;
                   if (bestWeights) {
