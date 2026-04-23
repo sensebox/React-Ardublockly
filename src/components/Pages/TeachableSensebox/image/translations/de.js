@@ -103,7 +103,7 @@ export const imageClassificationTranslations_de = {
   integration: {
     title: "Ausführen auf der senseBox Eye",
     converting: "Kompiliere & konvertiere...",
-    convertModel: "Modell kompilieren & konvertieren",
+    convertModel: "Modell komprimieren & konvertieren",
     retry: "Erneut versuchen",
     suggestions: "Vorschläge:",
     modelConvertedSuccess: "Modell erfolgreich konvertiert",
