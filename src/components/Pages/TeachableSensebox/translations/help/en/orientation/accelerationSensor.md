@@ -14,7 +14,7 @@ It can measure acceleration in three directions: along the **X, Y, and Z axes**.
 
 You can imagine this as an invisible coordinate system inside the sensor. Each axis points in a different direction. This allows the sensor to detect whether the device is moving left or right, forward or backward, or up and down.
 
-![coordinates](/media/teachable/coordinates.drawio.png)
+![coordinates](/media/teachable/coordinates.png)
 
 When the senseBox Eye is lying still on a table, it is not actually moving at all. Nonetheless, the sensor still measures something — **_gravity_**.
 

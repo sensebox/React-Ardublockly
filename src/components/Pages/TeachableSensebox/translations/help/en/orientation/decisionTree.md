@@ -1,6 +1,6 @@
 Based on the recorded training data, a **decision tree** is generated. This tree can be used to determine which class a recorded orientation belongs to.
 
-![decision tree tree](/media/teachable/decision_tree.drawio.png)
+![decision tree tree](/media/teachable/decision_tree.png)
 
 Internal nodes show a condition. In our case, a condition is whether a numerical value exceeds a certain numerical value (_threshold_). Recordings that satisfy the condition go to the right, to the upper node; the others go to the lower node.
 

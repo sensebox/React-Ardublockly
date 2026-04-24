@@ -1,6 +1,6 @@
 Stell dir das Modell als eine komplexe mathematische Funktion mit vielen **unbekannten Werten** vor. Vor dem Training geben wir diesen Unbekannten zufällige Werte.
 
-![Math Neural Network](/media/teachable/math.drawio.png)
+![Math Neural Network](/media/teachable/math.png)
 
 Während dem Training werden dem Modell dann immer wieder die Trainingsdaten gezeigt und es versucht diese zu klassifizieren. Wenn es nicht gut klassifiziert, passt es seine Werte ein wenig an.
 

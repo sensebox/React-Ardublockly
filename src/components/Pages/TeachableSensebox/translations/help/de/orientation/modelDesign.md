@@ -7,7 +7,7 @@ Beim Aufbau eines neuronalen Netzes sind vor allem zwei Eigenschaften wichtig: *
 - Die **Tiefe** gibt an, aus wie vielen **Schichten** das neuronale Netz besteht.
 - Die **Breite** gibt an, wie viele **Neuronen** sich in einer einzelnen Schicht befinden.
 
-![depth width](/media/teachable/depth_width.drawio.png)
+![depth width](/media/teachable/depth_width.png)
 
 # Wann braucht man mehr Neuronen?
 
