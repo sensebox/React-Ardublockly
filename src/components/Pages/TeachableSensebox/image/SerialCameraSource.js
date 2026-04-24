@@ -215,8 +215,10 @@ class SerialCameraSource {
     // Clear latest frame
     this.latestFrame = null;
 
-    // Note: We don't disconnect the serial service here because
-    // other consumers might be using it. The service manages its own lifecycle.
+    // Disconnect the serial service to release the port
+    if (this.serialService.isConnected || this.serialService.port) {
+      await this.serialService.disconnect();
+    }
 
     this._isActive = false;
   }
