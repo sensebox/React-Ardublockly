@@ -100,12 +100,18 @@ function CompilationDialog({
         }
       }
 
-      const board =
-        selectedBoard === "MCU" || selectedBoard === "MCU:MINI"
-          ? "sensebox-mcu"
-          : selectedBoard === "MCU-S2"
-            ? "sensebox-esp32s2"
-            : "sensebox_eye";
+      let board;
+      switch (selectedBoard) {
+        case "MCU":
+        case "MCU:MINI":
+          board = "sensebox-mcu";
+          break;
+        case "MCU-S2":
+          board = "sensebox-esp32s2";
+          break;
+        default:
+          board = "sensebox_eye";
+      }
       const response = await fetch(`${compilerUrl}/compile`, {
         method: "POST",
         headers: {
