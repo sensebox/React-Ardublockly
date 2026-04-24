@@ -85,7 +85,7 @@
     "cypress": "^15.10.0",
     "cypress-ctrf-json-reporter": "^0.0.13",
     "eslint": "^9.20.1",
-    "eslint-plugin-cypress": "^5.2.0",
+    "eslint-plugin-cypress": "^6.2.2",
     "eslint-plugin-react": "^7.37.4",
     "prettier": "^3.8.1",
     "vite": "^7.3.1"
