@@ -1,7 +1,19 @@
 version: 2
+
 updates:
   - package-ecosystem: npm
     directory: "/"
     schedule:
       interval: weekly
+      day: monday
+      time: "08:00"
+      timezone: Europe/Berlin
     target-branch: development
+
+    groups:
+      minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
