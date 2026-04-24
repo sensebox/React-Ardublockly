@@ -32,7 +32,7 @@ import {
   ArrowDropDown as ArrowDropDownIcon,
   Bluetooth as BluetoothIcon,
 } from "@mui/icons-material";
-import { ORIENTATION_DATASETS } from "../../../../data/teachableSensebox/orientation-datasets";
+import { ORIENTATION_DATASETS } from "../../../../data/teachableSensebox/orientationDatasets";
 import useOrientationSource from "./hooks/useOrientationSource";
 import useOrientationBLESource from "./hooks/useOrientationBLESource";
 import useOrientationModelTraining from "./hooks/useOrientationModelTraining";
