@@ -8,7 +8,7 @@ export const ORIENTATION_DATASETS = [
   {
     id: "mail",
     labelDe: "Paket",
-    labelEn: "Box",
+    labelEn: "Parcel",
     data: mailDataset,
   },
 ];
