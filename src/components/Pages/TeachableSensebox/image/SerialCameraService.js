@@ -122,10 +122,17 @@ class SerialCameraService {
       if (this.reader) {
         try {
           await this.reader.cancel();
+        } catch (e) {
+          console.warn(
+            "[SerialCameraService] Error cancelling existing reader:",
+            e,
+          );
+        }
+        try {
           this.reader.releaseLock();
         } catch (e) {
           console.warn(
-            "[SerialCameraService] Error releasing existing reader:",
+            "[SerialCameraService] Error releasing existing reader lock:",
             e,
           );
         }
@@ -134,10 +141,18 @@ class SerialCameraService {
 
       if (this.writer) {
         try {
+          await this.writer.close();
+        } catch (e) {
+          console.warn(
+            "[SerialCameraService] Error closing existing writer:",
+            e,
+          );
+        }
+        try {
           this.writer.releaseLock();
         } catch (e) {
           console.warn(
-            "[SerialCameraService] Error releasing existing writer:",
+            "[SerialCameraService] Error releasing existing writer lock:",
             e,
           );
         }
@@ -213,39 +228,41 @@ class SerialCameraService {
    * @param {boolean} keepPort - If true, don't clear the port reference (for reconnection)
    */
   async _cleanup(keepPort = false) {
-    try {
-      // Release reader
-      if (this.reader) {
+    if (this.reader) {
+      try {
         await this.reader.cancel();
+      } catch (error) {
+        console.error("Error cancelling reader:", error);
+      }
+      try {
         this.reader.releaseLock();
-        this.reader = null;
+      } catch (error) {
+        console.error("Error releasing reader lock:", error);
       }
-    } catch (error) {
-      console.error("Error releasing reader:", error);
+      this.reader = null;
     }
 
-    try {
-      // Release writer
-      if (this.writer) {
+    if (this.writer) {
+      try {
+        await this.writer.close();
+      } catch (error) {
+        console.error("Error closing writer:", error);
+      }
+      try {
         this.writer.releaseLock();
-        this.writer = null;
+      } catch (error) {
+        console.error("Error releasing writer lock:", error);
       }
-    } catch (error) {
-      console.error("Error releasing writer:", error);
+      this.writer = null;
     }
 
-    try {
-      // Close port
-      if (this.port) {
+    if (this.port) {
+      try {
         await this.port.close();
-        if (!keepPort) {
-          this.port = null;
-        }
+      } catch (error) {
+        console.error("Error closing port:", error);
       }
-    } catch (error) {
-      console.error("Error closing port:", error);
-      // If close fails, still clear port reference when not keeping it
-      if (!keepPort && this.port) {
+      if (!keepPort) {
         this.port = null;
       }
     }
