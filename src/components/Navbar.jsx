@@ -48,7 +48,7 @@ import {
   faEarthEurope,
   faEarthAmericas,
   faCaretDown,
-  faBrain,
+  faEye,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -451,7 +451,7 @@ const Navbar = () => {
             { text: "Code Editor", icon: faCode, link: "/codeeditor" },
             {
               text: Blockly.Msg.navbar_teachablesensebox,
-              icon: faBrain,
+              icon: faEye,
               link: "/teachable",
             },
           ].map((item, i) =>
