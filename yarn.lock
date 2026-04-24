@@ -4636,10 +4636,10 @@ minimist@^1.2.8:
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.8.tgz#c1a464e7693302e082a075cee0c057741ac4772c"
   integrity sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==
 
-mnemonic-id@^3.2.7:
-  version "3.2.7"
-  resolved "https://registry.yarnpkg.com/mnemonic-id/-/mnemonic-id-3.2.7.tgz#f7d77d8b39e009ad068117cbafc458a6c6f8cddf"
-  integrity sha512-kysx9gAGbvrzuFYxKkcRjnsg/NK61ovJOV4F1cHTRl9T5leg+bo6WI0pWIvOFh1Z/yDL0cjA5R3EEGPPLDv/XA==
+mnemonic-id@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/mnemonic-id/-/mnemonic-id-4.1.0.tgz#5d91341f1499b19e270f9dae263353c919f90e73"
+  integrity sha512-6cKVykBrnnOiY/p1U9mkZ/ZP4O9m00IlDw0eVAuVhRC5ClySm9ILzTHqhhTvtpA6ZokpCWBjY21phPYQJMn4JA==
 
 moment@^2.29.4:
   version "2.30.1"

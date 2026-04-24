@@ -37,7 +37,7 @@
     "file-saver": "^2.0.5",
     "framer-motion": "^6.5.1",
     "markdown-it": "^14.1.1",
-    "mnemonic-id": "^3.2.7",
+    "mnemonic-id": "^4.1.0",
     "moment": "^2.29.4",
     "prismjs": "^1.27.0",
     "qrcode.react": "^3.1.0",
