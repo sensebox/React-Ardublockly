@@ -198,3 +198,5 @@
 .embedded-mode .blocklyScrollbarHandle {
   display: none !important; /* Hide scrollbar handles for cleaner look */
 }
+
+} /* end @media (orientation: portrait) */
