@@ -15,7 +15,7 @@ A neuron can learn a pattern in its given input. If there are many patterns in t
 
 Generally, wide neural networks (with many neurons) are better at **memorizing** the given trainingsdata. However, if your training recordings do not cover all possible orientations, this can be a disadvantage.
 
-<img src="/media/teachable/wide_brain.png" alt="wide brain" style="height:50px;"/>
+![wide brain](/media/teachable/wide_brain.png)
 
 # When do we need more layers?
 
