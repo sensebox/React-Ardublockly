@@ -1,6 +1,6 @@
 Think of the model as a complex mathematical function. Before the model is trained it still has many **unknown values**, which are given random values initially.
 
-![Math Neural Network](/media/teachable/math.drawio.png)
+![Math Neural Network](/media/teachable/math.png)
 
 During training, the model is shown the training data again and again, and it tries to classify it. If it does not classify well, it adjusts its values a little.
 

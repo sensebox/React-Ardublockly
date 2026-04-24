@@ -14,7 +14,7 @@ Dieser kann in drei Richtungen Beschleunigung messen: entlang der **X-, Y- und Z
 
 Man kann sich das wie ein unsichtbares Koordinatensystem im Inneren des Sensors vorstellen. Jede Achse zeigt in eine andere Richtung. So erkennt der Sensor, ob sich das Gerät nach links oder rechts, nach vorne oder hinten oder nach oben und unten bewegt.
 
-![coordinates](/media/teachable/coordinates.drawio.png)
+![coordinates](/media/teachable/coordinates.png)
 
 Wenn die senseBox Eye ruhig auf einem Tisch liegt, bewegt sie sich eigentlich gar nicht. Trotzdem misst der Sensor dann etwas — und zwar die **_Schwerkraft_**.
 

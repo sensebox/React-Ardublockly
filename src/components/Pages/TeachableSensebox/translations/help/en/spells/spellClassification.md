@@ -14,15 +14,15 @@ To classify the spells we are using an **image classification** model – a mode
 
 Under the hood is a so-called **neural network**, loosely inspired by the human brain. It consists of many layers that analyze the image step by step.
 
-![Brain Neural Network](/media/teachable/neural-network-brain.drawio.png)
+![Brain Neural Network](/media/teachable/neural-network-brain.png)
 
 Formally, you can think of the neural network as a very complex **mathematical function** with many unknown values. Depending on which values we assign to the unknowns, the model behaves differently.
 
-![Math Neural Network](/media/teachable/math.drawio.png)
+![Math Neural Network](/media/teachable/math.png)
 
 For image processing specifically, we use a neural network with **Convolutional Layers**. These layers actively look for edges, shapes, and patterns in the image.
 
-![features](/media/teachable/feature_cat.drawio.png)
+![features](/media/teachable/feature_cat.png)
 
 ---
 

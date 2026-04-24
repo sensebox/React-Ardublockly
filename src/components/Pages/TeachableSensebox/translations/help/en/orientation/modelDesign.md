@@ -7,7 +7,7 @@ Two important design choices are **depth** and **width**.
 - **Depth** means how many **layers** the neural network has.
 - **Width** means how many **neurons** are in one layer.
 
-![depth width](/media/teachable/depth_width.drawio.png)
+![depth width](/media/teachable/depth_width.png)
 
 # When do we need more neurons?
 

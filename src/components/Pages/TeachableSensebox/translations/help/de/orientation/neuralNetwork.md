@@ -1,18 +1,18 @@
 Ein **neuronales Netz** ist ein Modell, das sich grob am menschlichen Gehirn orientiert. Es besteht aus vielen kleinen Recheneinheiten, den **_Neuronen_**, die schichtweise miteinander verbunden sind.
 
-![Brain Neural Network](/media/teachable/neural-network-brain.drawio.png)
+![Brain Neural Network](/media/teachable/neural-network-brain.png)
 
 Ein neuronales Netz kann lernen, Zusammenhänge in Daten zu erkennen. So kann es zum Beispiel entscheiden, zu welcher Klasse eine Aufnahme gehört.
 
 Formal betrachtet kannst du dir ein neuronales Netz wie eine sehr komplizierte mathematische Funktion vorstellen. Diese Funktion hat viele unbekannte Werte, die sogenannten **_Gewichte_**. Je nachdem, welche Werte eingesetzt werden, verhält sich das Modell anders und trifft andere Entscheidungen.
 
-![Math Neural Network](/media/teachable/math.drawio.png)
+![Math Neural Network](/media/teachable/math.png)
 
 # Was sind _Neuronen_ und _Gewichte_?
 
 Ein **Neuron** ist eine kleine Recheneinheit. Es bekommt Zahlen als Eingabe, verrechnet sie und gibt wieder eine Zahl als Ergebnis weiter. Diese Ergebnisse werden als Eingaben an andere Neuronen weitergeben.
 
-![Neuron](/media/teachable/neuron.drawio.png)
+![Neuron](/media/teachable/neuron.png)
 
 Die Verbindungen zwischen den Neuronen haben **Gewichte**. Ein Gewicht legt fest, wie wichtig eine bestimmte Eingabe für das nächste Neuron ist.
 
