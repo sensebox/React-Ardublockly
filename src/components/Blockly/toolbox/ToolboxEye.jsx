@@ -47,7 +47,7 @@ export const ToolboxEye = () => {
             </Block>
           </Value>
         </Block>
-        <Block type="sensebox_camera" />
+        <Block type="sensebox_eye_camera" />
       </Category>
 
       {/* ============================== LEDS & COLORS ============================== */}
