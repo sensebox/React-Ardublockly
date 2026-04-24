@@ -123,14 +123,14 @@ Blockly.defineBlocksWithJsonArray([
       {
         type: "field_colour",
         name: "COLOUR",
-        colour: "#ff595e",
+        colour: "#ff0000",
         colourOptions: [
-          "#ff595e",
+          "#ff0000",
           "#ff924c",
           "#ffca3a",
-          "#8ac926",
+          "#00ff00",
           "#52b788",
-          "#1982c4",
+          "#0000ff",
           "#4267ac",
           "#6a4c93",
           "#ffffff",
