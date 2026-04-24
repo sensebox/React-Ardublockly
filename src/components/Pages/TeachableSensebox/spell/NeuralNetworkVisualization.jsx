@@ -207,6 +207,7 @@ const ConvLayerVisualization = memo(
           value,
           layerConfig,
           prevLayerSize: layerConfig?.prevLayerSize,
+          isConvLayer: true,
         });
       },
       [onCellHover, layerConfig],
@@ -688,6 +689,85 @@ function computeInputReceptiveField(
 }
 
 // ─── Main Neural Network Visualization Component ──────────────────────────────
+// ─── Filter Visualization Mini Component ──────────────────────────────────────
+const FilterVisualization = memo(({ filterWeights, filterIndex }) => {
+  if (!filterWeights || filterIndex === undefined) return null;
+
+  const kernel = filterWeights;
+  const kH = kernel.length;
+  const kW = kernel[0]?.length ?? 0;
+  const numInputChannels = kernel[0]?.[0]?.length ?? 0;
+  const numFilters = kernel[0]?.[0]?.[0]?.length ?? 0;
+
+  if (filterIndex >= numFilters) return null;
+
+  // Calculate min/max across all input channels for this filter for normalization
+  let minVal = Infinity,
+    maxVal = -Infinity;
+  for (let h = 0; h < kH; h++) {
+    for (let w = 0; w < kW; w++) {
+      for (let c = 0; c < numInputChannels; c++) {
+        const val = kernel[h][w][c][filterIndex];
+        if (val < minVal) minVal = val;
+        if (val > maxVal) maxVal = val;
+      }
+    }
+  }
+
+  const cellSize = 12;
+
+  return (
+    <Box sx={{ mt: 1 }}>
+      <Typography variant="caption" display="block" color="grey.400" mb={0.5}>
+        Filter weights:
+      </Typography>
+      <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
+        {Array.from({ length: Math.min(numInputChannels, 3) }, (_, c) => (
+          <Box
+            key={c}
+            sx={{
+              display: "grid",
+              gridTemplateColumns: `repeat(${kW}, ${cellSize}px)`,
+              gridTemplateRows: `repeat(${kH}, ${cellSize}px)`,
+              gap: 0,
+              border: "1px solid",
+              borderColor: "grey.600",
+              borderRadius: 0.5,
+            }}
+          >
+            {Array.from({ length: kH }, (_, h) =>
+              Array.from({ length: kW }, (_, w) => {
+                const val = kernel[h][w][c][filterIndex];
+                const color = activationToColor(val, minVal, maxVal);
+                return (
+                  <div
+                    key={`${h}-${w}`}
+                    style={{
+                      width: cellSize,
+                      height: cellSize,
+                      backgroundColor: color,
+                    }}
+                    title={`Weight: ${val.toFixed(4)}`}
+                  />
+                );
+              }),
+            )}
+          </Box>
+        ))}
+        {numInputChannels > 3 && (
+          <Typography
+            variant="caption"
+            color="grey.500"
+            sx={{ alignSelf: "center" }}
+          >
+            +{numInputChannels - 3}
+          </Typography>
+        )}
+      </Box>
+    </Box>
+  );
+});
+
 const NeuralNetworkVisualization = ({
   trainedModel,
   strokePoints,
@@ -702,6 +782,7 @@ const NeuralNetworkVisualization = ({
   const [layerMeta, setLayerMeta] = useState([]); // [{name, className, config}]
   const [hoveredCell, setHoveredCell] = useState(null);
   const [highlightedCells, setHighlightedCells] = useState([]);
+  const [convFilterWeights, setConvFilterWeights] = useState({}); // Cache conv layer weights
   const [selectedSample, setSelectedSample] = useState(null);
   const intermediateModelsRef = useRef(null);
   const hoverIdRef = useRef(0);
@@ -804,6 +885,26 @@ const NeuralNetworkVisualization = ({
         intermediateModelsRef.current = layerMeta;
         setLayerMeta(layerMeta);
         setLayerActivations(activations);
+
+        // Extract conv layer filter weights for visualization
+        const filterWeights = {};
+        for (const layer of model.layers) {
+          if (layer.getClassName() === "Conv2D") {
+            try {
+              const weights = layer.getWeights();
+              if (weights && weights[0]) {
+                const kernelData = await weights[0].array();
+                filterWeights[layer.name] = kernelData;
+              }
+            } catch (e) {
+              console.warn(
+                `Could not extract weights for ${layer.name}:`,
+                e.message,
+              );
+            }
+          }
+        }
+        setConvFilterWeights(filterWeights);
       } catch (e) {
         console.error("Error extracting activations:", e);
       }
@@ -1060,7 +1161,7 @@ const NeuralNetworkVisualization = ({
                 color: "white",
                 zIndex: 1000,
                 minWidth: 180,
-                maxWidth: 250,
+                maxWidth: 280,
               }}
             >
               <Typography
@@ -1074,52 +1175,29 @@ const NeuralNetworkVisualization = ({
               <Typography variant="caption" display="block">
                 <strong>Activation:</strong> {hoveredCell.value?.toFixed(6)}
               </Typography>
-              {hoveredCell.filterIndex !== undefined && (
-                <Typography variant="caption" display="block">
-                  <strong>Filter:</strong> {hoveredCell.filterIndex + 1}
-                </Typography>
-              )}
-              {hoveredCell.rowIndex !== undefined && (
-                <Typography variant="caption" display="block">
-                  <strong>Position:</strong> ({hoveredCell.rowIndex},{" "}
-                  {hoveredCell.colIndex})
-                </Typography>
-              )}
-              {hoveredCell.neuronIndex !== undefined && (
-                <Typography variant="caption" display="block">
-                  <strong>Neuron:</strong> {hoveredCell.neuronIndex + 1}
-                </Typography>
-              )}
-              {hoveredCell.layerConfig && (
-                <>
-                  <Typography
-                    variant="caption"
-                    display="block"
-                    color="grey.400"
-                    mt={0.5}
-                  >
-                    Kernel:{" "}
-                    {hoveredCell.layerConfig.kernel_size?.join("×") || "3×3"}
-                  </Typography>
-                  <Typography
-                    variant="caption"
-                    display="block"
-                    color="grey.400"
-                  >
-                    Stride:{" "}
-                    {hoveredCell.layerConfig.strides?.join("×") || "1×1"}
-                  </Typography>
-                  <Typography
-                    variant="caption"
-                    display="block"
-                    color="primary.light"
-                    fontStyle="italic"
-                    mt={0.5}
-                  >
-                    Highlighted cells show receptive field
-                  </Typography>
-                </>
-              )}
+              {hoveredCell.isConvLayer &&
+                hoveredCell.filterIndex !== undefined &&
+                (() => {
+                  // Find the conv layer name for this layer index
+                  const convLayerName = layerMeta.find(
+                    (m, idx) =>
+                      m.className === "Conv2D" &&
+                      layerMeta
+                        .slice(0, idx + 1)
+                        .filter((l) => l.className !== "InputLayer").length -
+                        1 ===
+                        hoveredCell.layerIndex,
+                  )?.name;
+                  const weights = convLayerName
+                    ? convFilterWeights[convLayerName]
+                    : null;
+                  return weights ? (
+                    <FilterVisualization
+                      filterWeights={weights}
+                      filterIndex={hoveredCell.filterIndex}
+                    />
+                  ) : null;
+                })()}
             </Paper>
           )}
         </Box>
