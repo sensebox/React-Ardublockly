@@ -68,7 +68,7 @@ const allBlocks = [
     kind: "block",
     type: "basic_if_else",
     inputs: {
-      IF0: {
+      IF: {
         block: {
           type: "basic_button_pressed",
         },
@@ -79,7 +79,7 @@ const allBlocks = [
     kind: "block",
     type: "basic_if_else",
     inputs: {
-      IF0: {
+      IF: {
         block: {
           type: "basic_box_shaken",
         },
@@ -151,7 +151,7 @@ const allBlocks = [
     kind: "block",
     type: "basic_if_else",
     inputs: {
-      IF0: {
+      IF: {
         block: {
           type: "basic_compare",
           fields: {
@@ -211,6 +211,8 @@ export const toolboxBasicObject = {
       name: "Sensoren",
       colour: "#5ba55b",
       contents: [
+        { kind: "block", type: "display_show_measurement" },
+
         { kind: "block", type: "bme_tmp" },
         { kind: "block", type: "bme_humi" },
         { kind: "block", type: "bme_air_quality" },
@@ -257,6 +259,8 @@ export const toolboxBasicObject = {
           },
         },
         { kind: "block", type: "basic_off" },
+        { kind: "block", type: "basic_random_color" },
+
         {
           kind: "block",
           type: "basic_rgb_color",
@@ -298,7 +302,7 @@ export const toolboxBasicObject = {
           kind: "block",
           type: "basic_if_else",
           inputs: {
-            IF0: {
+            IF: {
               block: {
                 type: "basic_button_pressed",
               },
@@ -309,13 +313,17 @@ export const toolboxBasicObject = {
           kind: "block",
           type: "basic_if_else",
           inputs: {
-            IF0: {
+            IF: {
               block: {
                 type: "basic_box_shaken",
               },
             },
           },
         },
+        { kind: "block", type: "basic_if_else" },
+        { kind: "block", type: "basic_if" },
+        { kind: "block", type: "basic_button_pressed" },
+        { kind: "block", type: "basic_box_shaken" },
       ],
     },
     {
@@ -324,6 +332,7 @@ export const toolboxBasicObject = {
       colour: "#5b67a5",
       contents: [
         { kind: "block", type: "basic_number" },
+        { kind: "block", type: "basic_math" },
         {
           kind: "block",
           type: "basic_math",
@@ -393,7 +402,7 @@ export const toolboxBasicObject = {
           kind: "block",
           type: "basic_if_else",
           inputs: {
-            IF0: {
+            IF: {
               block: {
                 type: "basic_compare",
                 fields: {
