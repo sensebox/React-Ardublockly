@@ -1256,7 +1256,7 @@ Blockly.Generator.Arduino.forBlock["sensebox_sensor_max17048"] = function () {
   return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
 
-Blockly.Generator.Arduino.forBlock["sensebox_camera"] = function () {
+Blockly.Generator.Arduino.forBlock["sensebox_eye_camera"] = function () {
   var code = "";
 
   Blockly.Generator.Arduino.libraries_["esp_camera"] =
