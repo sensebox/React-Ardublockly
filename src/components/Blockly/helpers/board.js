@@ -325,8 +325,12 @@ const sensebox_esp32 = {
     ["5", "5"],
   ],
   pwmPins: [
-    ["IO1", "1"], // TODO: is this correct?
     ["IO2", "2"],
+    ["IO3", "3"],
+    ["IO4", "4"],
+    ["IO5", "5"],
+    ["IO6", "6"],
+    ["IO7", "7"],
   ],
   serial: [
     ["Serial", "Serial"],
