@@ -71,6 +71,7 @@ export const imageClassificationTranslations_de = {
       helpDeployModel: "Hilfe zum Ausführen auf der senseBox Eye",
       classNameExists: "Eine Klasse mit diesem Namen existiert bereits",
       trainingSettings: "Hilfe zu den Trainingseinstellungen",
+      desirableNumberSamples: "Empfehlung: Mindestens 100 Bilder pro Klasse",
     },
   },
   help: {

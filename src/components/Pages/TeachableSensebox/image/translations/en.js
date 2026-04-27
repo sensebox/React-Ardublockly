@@ -69,6 +69,7 @@ export const imageClassificationTranslations_en = {
       helpDeployModel: "Help for deploying the model",
       classNameExists: "A class with this name already exists",
       trainingSettings: "Help for training settings",
+      desirableNumberSamples: "Recommendation: At least 100 images per class",
     },
   },
   integration: {

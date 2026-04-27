@@ -707,11 +707,24 @@ const ModelTrainer = ({
                         </Typography>
                       )}
                       <Box>
-                        <Chip
-                          label={`${cls.samples.length} ${t.training.samples}`}
-                          size="small"
-                          color={cls.samples.length > 0 ? "success" : "default"}
-                        />
+                        <Tooltip
+                          title={t.training.tooltip.desirableNumberSamples}
+                          arrow
+                        >
+                          <Chip
+                            label={`${cls.samples.length} ${t.training.samples}`}
+                            size="small"
+                            color={
+                              cls.samples.length >= 100
+                                ? "success"
+                                : cls.samples.length >= 10
+                                  ? "warning"
+                                  : cls.samples.length > 0
+                                    ? "error"
+                                    : "default"
+                            }
+                          />
+                        </Tooltip>
                         <IconButton
                           size="small"
                           onClick={() => deleteClass(cls.id)}
