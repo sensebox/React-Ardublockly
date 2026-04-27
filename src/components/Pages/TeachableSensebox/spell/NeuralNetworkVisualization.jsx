@@ -775,6 +775,8 @@ const NeuralNetworkVisualization = ({
   classNames,
   onOpenHelp,
   onReceptiveField,
+  isBlinking = false,
+  markSeen,
 }) => {
   const theme = useTheme();
   const containerRef = useRef(null);
@@ -1123,7 +1125,11 @@ const NeuralNetworkVisualization = ({
         {t.network?.title || "Visualization of the Model"}
         {onOpenHelp && (
           <HelpButton
-            onClick={() => onOpenHelp("cnn")}
+            onClick={() => {
+              markSeen?.();
+              onOpenHelp("cnn");
+            }}
+            isBlinking={isBlinking}
             tooltip={
               t.network?.tooltip?.helpCNN ||
               "What is a convolutional neural network?"

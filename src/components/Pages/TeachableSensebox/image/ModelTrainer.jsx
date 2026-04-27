@@ -42,7 +42,7 @@ import SerialErrorHandler, {
 import SerialCameraService from "./SerialCameraService";
 import FloatingCameraPreview from "./FloatingCameraPreview";
 import TrainingResultsSection from "./TrainingResultsSection";
-import HelpButton from "../HelpButton";
+import HelpButton, { useHelpBlink } from "../HelpButton";
 import useModelTraining from "./hooks/useModelTraining";
 import { DEFAULT_TRAINING_SETTINGS } from "./hooks/useModelTraining";
 import useModelPrediction from "./hooks/useModelPrediction";
@@ -114,6 +114,66 @@ const ModelTrainer = ({
     getPreviewElement,
     isCameraActive,
   );
+
+  const {
+    isBlinking: webcamBlinking,
+    trigger: triggerWebcam,
+    markSeen: markWebcamSeen,
+  } = useHelpBlink("image/webcam");
+  const {
+    isBlinking: addClassBlinking,
+    trigger: triggerAddClass,
+    markSeen: markAddClassSeen,
+  } = useHelpBlink("image/addClass");
+  const {
+    isBlinking: trainModelBlinking,
+    trigger: triggerTrainModel,
+    markSeen: markTrainModelSeen,
+  } = useHelpBlink("image/trainModel");
+  const {
+    isBlinking: settingsBlinking,
+    trigger: triggerSettings,
+    markSeen: markSettingsSeen,
+  } = useHelpBlink("image/trainingSettings");
+
+  useEffect(() => {
+    if (serialError) triggerWebcam();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [serialError]);
+
+  const dialogWasOpenRef = useRef(false);
+  useEffect(() => {
+    if (showAddDialog) {
+      dialogWasOpenRef.current = true;
+    } else if (dialogWasOpenRef.current) {
+      dialogWasOpenRef.current = false;
+      triggerAddClass();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showAddDialog]);
+
+  const firstEpochTriggeredRef = useRef(false);
+  useEffect(() => {
+    if (isTraining) {
+      firstEpochTriggeredRef.current = false;
+    }
+  }, [isTraining]);
+  useEffect(() => {
+    if (
+      isTraining &&
+      trainingProgress.batch >= 1 &&
+      !firstEpochTriggeredRef.current
+    ) {
+      firstEpochTriggeredRef.current = true;
+      triggerTrainModel();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [trainingProgress.batch]);
+
+  useEffect(() => {
+    if (showSettingsPanel) triggerSettings();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showSettingsPanel]);
 
   useEffect(() => {
     const isCompatible = SerialCameraService.isSupported();
@@ -421,13 +481,14 @@ const ModelTrainer = ({
               <Button
                 variant="contained"
                 startIcon={<CameraIcon />}
-                onClick={() => {
+                onClick={async () => {
                   if (sourceType === "webcam" && isCameraActive) {
                     stopCamera();
                   } else {
                     if (isCameraActive) stopCamera();
-                    selectSource("webcam");
-                    setTimeout(() => startCamera(), 100);
+                    await selectSource("webcam");
+                    await startCamera();
+                    triggerWebcam();
                   }
                 }}
                 disabled={disabled}
@@ -443,7 +504,11 @@ const ModelTrainer = ({
               </Button>
 
               <HelpButton
-                onClick={() => onOpenHelp && onOpenHelp("image/webcam")}
+                onClick={() => {
+                  markWebcamSeen();
+                  onOpenHelp && onOpenHelp("image/webcam");
+                }}
+                isBlinking={webcamBlinking}
                 tooltip={t.training.tooltip.helpCamera}
               />
 
@@ -458,13 +523,14 @@ const ModelTrainer = ({
                   <Button
                     variant="contained"
                     startIcon={<CameraIcon />}
-                    onClick={() => {
+                    onClick={async () => {
                       if (sourceType === "serial" && isCameraActive) {
                         stopCamera();
                       } else {
                         if (isCameraActive) stopCamera();
-                        selectSource("serial");
-                        setTimeout(() => startCamera(), 100);
+                        await selectSource("serial");
+                        await startCamera();
+                        triggerWebcam();
                       }
                     }}
                     disabled={disabled || !browserCompatible}
@@ -862,7 +928,11 @@ const ModelTrainer = ({
                   {t.training.addClass}
                 </Button>
                 <HelpButton
-                  onClick={() => onOpenHelp && onOpenHelp("image/addClass")}
+                  onClick={() => {
+                    markAddClassSeen();
+                    onOpenHelp && onOpenHelp("image/addClass");
+                  }}
+                  isBlinking={addClassBlinking}
                   tooltip={t.training.tooltip.helpClasses}
                 />
               </Box>
@@ -890,7 +960,9 @@ const ModelTrainer = ({
                   <Button
                     variant="contained"
                     size="large"
-                    onClick={trainModel}
+                    onClick={() => {
+                      trainModel();
+                    }}
                     disabled={
                       disabled ||
                       classes.length < 2 ||
@@ -914,7 +986,11 @@ const ModelTrainer = ({
               </Tooltip>
 
               <HelpButton
-                onClick={() => onOpenHelp && onOpenHelp("image/trainModel")}
+                onClick={() => {
+                  markTrainModelSeen();
+                  onOpenHelp && onOpenHelp("image/trainModel");
+                }}
+                isBlinking={trainModelBlinking}
                 tooltip={t.training.tooltip.helpTraining}
               />
             </Box>
@@ -928,9 +1004,11 @@ const ModelTrainer = ({
                     {t.training.settings?.title || "Training Settings"}
                   </Typography>
                   <HelpButton
-                    onClick={() =>
-                      onOpenHelp && onOpenHelp("image/trainingSettings")
-                    }
+                    onClick={() => {
+                      markSettingsSeen();
+                      onOpenHelp && onOpenHelp("image/trainingSettings");
+                    }}
+                    isBlinking={settingsBlinking}
                     tooltip={t.training.tooltip.trainingSettings}
                   />
                 </Box>

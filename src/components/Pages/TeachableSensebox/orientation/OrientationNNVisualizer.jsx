@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import { Add as AddIcon, Remove as RemoveIcon } from "@mui/icons-material";
 import { getOrientationTranslations } from "./translations";
-import HelpButton from "../HelpButton";
+import HelpButton, { useHelpBlink } from "../HelpButton";
 
 // ─── Constants ─────────────────────────────────────────────────────────────────
 
@@ -515,9 +515,17 @@ const OrientationNNVisualizer = ({
     );
   };
 
+  // ── Help blink for modelDesign ───────────────────────────────────────────────
+  const {
+    isBlinking: modelDesignBlinking,
+    trigger: triggerModelDesign,
+    markSeen: markModelDesignSeen,
+  } = useHelpBlink("orientation/modelDesign");
+
   // ── Architecture controls ────────────────────────────────────────────────
   const addLayer = useCallback(() => {
     if (!onNNConfigChange || hiddenLayers.length >= 3) return;
+    triggerModelDesign();
     onNNConfigChange({
       ...nnConfig,
       hiddenLayers: [...hiddenLayers, { units: 2, activation: "relu" }],
@@ -526,6 +534,7 @@ const OrientationNNVisualizer = ({
 
   const removeLayer = useCallback(() => {
     if (!onNNConfigChange || hiddenLayers.length <= 0) return;
+    triggerModelDesign();
     onNNConfigChange({
       ...nnConfig,
       hiddenLayers: hiddenLayers.slice(0, -1),
@@ -535,6 +544,7 @@ const OrientationNNVisualizer = ({
   const changeNeurons = useCallback(
     (layerIndex, delta) => {
       if (!onNNConfigChange) return;
+      triggerModelDesign();
       const newUnits = Math.max(
         1,
         Math.min(8, hiddenLayers[layerIndex].units + delta),
@@ -965,7 +975,11 @@ const OrientationNNVisualizer = ({
       </Box>
       <Box sx={{ mt: 4 }}>
         <HelpButton
-          onClick={() => onOpenHelp && onOpenHelp("modelDesign")}
+          onClick={() => {
+            markModelDesignSeen();
+            onOpenHelp && onOpenHelp("modelDesign");
+          }}
+          isBlinking={modelDesignBlinking}
           tooltip={t.training.tooltip.helpAddClass}
         />
       </Box>

@@ -36,7 +36,7 @@ import { ORIENTATION_DATASETS } from "../../../../data/teachableSensebox/orienta
 import useOrientationSource from "./hooks/useOrientationSource";
 import useOrientationBLESource from "./hooks/useOrientationBLESource";
 import useOrientationModelTraining from "./hooks/useOrientationModelTraining";
-import HelpButton from "../HelpButton";
+import HelpButton, { useHelpBlink } from "../HelpButton";
 import SerialErrorHandler, {
   ErrorTypes,
   ConnectionStatus,
@@ -467,6 +467,29 @@ const OrientationModelTrainer = ({
 
   const { trainModel: executeTraining } = useOrientationModelTraining();
 
+  const {
+    isBlinking: accelerationSensorBlinking,
+    trigger: triggerAccelerationSensor,
+    markSeen: markAccelerationSensorSeen,
+  } = useHelpBlink("orientation/accelerationSensor");
+
+  const {
+    isBlinking: addClassBlinking,
+    trigger: triggerAddClass,
+    markSeen: markAddClassSeen,
+  } = useHelpBlink("orientation/addClass");
+
+  const dialogWasOpenRef = useRef(false);
+  useEffect(() => {
+    if (showAddDialog) {
+      dialogWasOpenRef.current = true;
+    } else if (dialogWasOpenRef.current) {
+      dialogWasOpenRef.current = false;
+      triggerAddClass();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showAddDialog]);
+
   useEffect(() => {
     if (!onLatestSample) return;
     onLatestSample(isConnected ? latestSample : null);
@@ -731,7 +754,10 @@ const OrientationModelTrainer = ({
                       onClick={
                         serialSource.isConnected
                           ? serialSource.disconnect
-                          : serialSource.connect
+                          : async () => {
+                              await serialSource.connect();
+                              triggerAccelerationSensor();
+                            }
                       }
                       disabled={
                         disabled ||
@@ -776,7 +802,10 @@ const OrientationModelTrainer = ({
                       onClick={
                         bleSource.isConnected
                           ? bleSource.disconnect
-                          : bleSource.connect
+                          : async () => {
+                              await bleSource.connect();
+                              triggerAccelerationSensor();
+                            }
                       }
                       disabled={
                         disabled ||
@@ -798,7 +827,11 @@ const OrientationModelTrainer = ({
               )}
 
               <HelpButton
-                onClick={() => onOpenHelp && onOpenHelp("accelerationSensor")}
+                onClick={() => {
+                  markAccelerationSensorSeen();
+                  onOpenHelp && onOpenHelp("accelerationSensor");
+                }}
+                isBlinking={accelerationSensorBlinking}
                 tooltip={t.training?.tooltip?.helpAccelerationSensor}
               />
 
@@ -916,7 +949,10 @@ const OrientationModelTrainer = ({
                       variant="outlined"
                       size="small"
                       endIcon={<ArrowDropDownIcon />}
-                      onClick={(e) => setDatasetMenuAnchor(e.currentTarget)}
+                      onClick={(e) => {
+                        setDatasetMenuAnchor(e.currentTarget);
+                        triggerAddClass();
+                      }}
                     >
                       {t.training.loadDataset}
                     </Button>
@@ -947,7 +983,11 @@ const OrientationModelTrainer = ({
                   </Box>
                 )}
                 <HelpButton
-                  onClick={() => onOpenHelp && onOpenHelp("addClass")}
+                  onClick={() => {
+                    markAddClassSeen();
+                    onOpenHelp && onOpenHelp("addClass");
+                  }}
+                  isBlinking={addClassBlinking}
                   tooltip={t.training.tooltip.helpClasses}
                 />
               </Box>

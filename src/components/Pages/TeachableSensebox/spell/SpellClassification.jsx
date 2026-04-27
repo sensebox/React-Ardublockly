@@ -14,7 +14,7 @@ import { useSelector } from "react-redux";
 import { getSpellTranslations } from "./translations";
 import SpellModelTrainer from "./SpellModelTrainer";
 import HelpSidebar, { SIDEBAR_WIDTH } from "../HelpSidebar";
-import HelpButton from "../HelpButton";
+import HelpButton, { useHelpBlink } from "../HelpButton";
 
 const SpellClassification = () => {
   const navigate = useNavigate();
@@ -33,9 +33,20 @@ const SpellClassification = () => {
   const isWideScreen = useMediaQuery(theme.breakpoints.up("lg"));
 
   const handleOpenHelp = useCallback((topic) => {
-    console.log("Opening help for topic:", topic);
     setCurrentHelpTopic("spells/" + topic);
     setHelpSidebarOpen(true);
+  }, []);
+
+  // ── Help blink hooks ──────────────────────────────────────────────────────
+  const {
+    isBlinking: spellClassBlinking,
+    trigger: triggerSpellClass,
+    markSeen: markSpellClassSeen,
+  } = useHelpBlink("spell/spellClassification");
+
+  useEffect(() => {
+    triggerSpellClass();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleCloseHelp = useCallback(() => {
@@ -103,7 +114,11 @@ const SpellClassification = () => {
               {t.title}
             </Typography>
             <HelpButton
-              onClick={() => handleOpenHelp("spellClassification")}
+              onClick={() => {
+                markSpellClassSeen();
+                handleOpenHelp("spellClassification");
+              }}
+              isBlinking={spellClassBlinking}
               tooltip={
                 t.training?.tooltip?.helpMain || "What is spell classification?"
               }
