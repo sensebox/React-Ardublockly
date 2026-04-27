@@ -166,10 +166,13 @@ const ClassCardItem = memo(
     onEditNameChange,
     t,
   }) => {
-    const handleRecord = useCallback(
-      () => onToggleRecording(cls.id),
-      [cls.id, onToggleRecording],
-    );
+    const scrollRef = useRef(null);
+    useEffect(() => {
+      if (scrollRef.current)
+        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }, [cls.samples.length]);
+
+    const handleRecord = useCallback([cls.id, onToggleRecording]);
     const handleDelete = useCallback(
       () => onDeleteClass(cls.id),
       [cls.id, onDeleteClass],
@@ -254,6 +257,7 @@ const ClassCardItem = memo(
 
           {/* Sample preview grid */}
           <Box
+            ref={scrollRef}
             sx={{
               display: "flex",
               flexWrap: "wrap",
