@@ -289,22 +289,22 @@
   resolved "https://registry.yarnpkg.com/@blockly/field-slider/-/field-slider-8.0.2.tgz#ff655e0ad99ceb90016d135e58ad7b125f554753"
   integrity sha512-7CZsayIUcgFSAYnYWn6itkjo7WNIt+XOkp9bwzZA6Jhr9WfeJEZsUcXN/9tjKwJYD5rSUiFe2cARnuMlKCr15g==
 
-"@blockly/plugin-modal@^8.0.8":
-  version "8.0.8"
-  resolved "https://registry.yarnpkg.com/@blockly/plugin-modal/-/plugin-modal-8.0.8.tgz#4b099fdea842f25504326fb51949c190e68a8530"
-  integrity sha512-Rqmj1UbRoXt76ST1eImcZPwOD5G2pWgYIofgRQqTJq2gM3LKnFPFOAI5TliT67mUrRnofHyjkUr6C2GEgSH1mQ==
+"@blockly/plugin-modal@^8.0.9":
+  version "8.0.9"
+  resolved "https://registry.yarnpkg.com/@blockly/plugin-modal/-/plugin-modal-8.0.9.tgz#fd633ac78877d8c016e6ca7f3d021ba9945f86b4"
+  integrity sha512-3H+b6zAWycrBRqhDfO9+OXjbZ1mLt3EU/47kNqkqN3zJ+YflDP7BZDocMId1CCB7rrZNpi3ljoKgAHcGLzNF6g==
 
 "@blockly/plugin-scroll-options@^7.0.1":
   version "7.0.8"
   resolved "https://registry.yarnpkg.com/@blockly/plugin-scroll-options/-/plugin-scroll-options-7.0.8.tgz#ad2c184d585500fd7948658e2acef3ae3d2da32d"
   integrity sha512-swF5iF+AVG6CXHp/ebR0hGIZDKhOu+I2pWdUgdSXBcRZx/PeO94LNQrBtuDX4Z5KyapfzTnNfwwR6z/uk3xeaA==
 
-"@blockly/plugin-typed-variable-modal@^9.0.2":
-  version "9.0.8"
-  resolved "https://registry.yarnpkg.com/@blockly/plugin-typed-variable-modal/-/plugin-typed-variable-modal-9.0.8.tgz#857a8753ecf18c624d55ef40f57f228dd266c59b"
-  integrity sha512-ZA5+VFFPmHdP2m0OkNwDIm0XNT4I/QgM2WNHNH57/Sjpwy98DqvhRylavvqKZ1Wivz0b8i1T4WuO7O0rIz/xIw==
+"@blockly/plugin-typed-variable-modal@^9.0.9":
+  version "9.0.9"
+  resolved "https://registry.yarnpkg.com/@blockly/plugin-typed-variable-modal/-/plugin-typed-variable-modal-9.0.9.tgz#87eb5e5dd9cb44b54edbbf3f3e419fe37b3f417f"
+  integrity sha512-48kBrxqNzbbJmQp1gsX4RunYODF5N4YKztMmiNPU8wPd9dygvBKx0uGu7bY14V6JINCVJf+z2MXCABLV+Ies+A==
   dependencies:
-    "@blockly/plugin-modal" "^8.0.8"
+    "@blockly/plugin-modal" "^8.0.9"
 
 "@blockly/toolbox-search@^3.1.8":
   version "3.1.8"
