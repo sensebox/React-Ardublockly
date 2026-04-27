@@ -1,4 +1,5 @@
 import * as Blockly from "blockly/core";
+import { selectedBoard } from "../../helpers/board";
 
 Blockly.Generator.Arduino.forBlock["sensebox_lora_initialize_otaa"] = function (
   block,
@@ -12,6 +13,9 @@ Blockly.Generator.Arduino.forBlock["sensebox_lora_initialize_otaa"] = function (
   Blockly.Generator.Arduino.libraries_["library_lmic"] =
     "#include <lmic.h> // http://librarymanager/All#IBM_LMIC_framework";
   Blockly.Generator.Arduino.libraries_["library_hal"] = "#include <hal/hal.h>";
+  const isEye = selectedBoard().title === "Eye";
+  const loraCS = isEye ? "LORA_CS" : "PIN_XB1_CS";
+  const loraInt = isEye ? "LORA_INT" : "PIN_XB1_INT";
   Blockly.Generator.Arduino.definitions_["define_LoRaVariablesOTAA"] = `
     static const u1_t PROGMEM APPEUI[8]= {${appID}};
     void os_getArtEui (u1_t* buf) { memcpy_P(buf, APPEUI , 8);}
@@ -34,10 +38,10 @@ Blockly.Generator.Arduino.forBlock["sensebox_lora_initialize_otaa"] = function (
   
     // Pin mapping
     const lmic_pinmap lmic_pins = {
-        .nss = PIN_XB1_CS,
+        .nss = ${loraCS},
         .rxtx = LMIC_UNUSED_PIN,
         .rst = LMIC_UNUSED_PIN,
-        .dio = {PIN_XB1_INT, PIN_XB1_INT, LMIC_UNUSED_PIN},
+        .dio = {${loraInt}, ${loraInt}, LMIC_UNUSED_PIN},
     };`;
 
   Blockly.Generator.Arduino.codeFunctions_["functions_initLora"] = `
@@ -307,6 +311,9 @@ Blockly.Generator.Arduino.forBlock["sensebox_lora_initialize_abp"] = function (
   Blockly.Generator.Arduino.libraries_["library_spi"] = "#include <SPI.h>";
   Blockly.Generator.Arduino.libraries_["library_lmic"] = "#include <lmic.h>";
   Blockly.Generator.Arduino.libraries_["library_hal"] = "#include <hal/hal.h>";
+  const isEye = selectedBoard().title === "Eye";
+  const loraCS = isEye ? "LORA_CS" : "PIN_XB1_CS";
+  const loraInt = isEye ? "LORA_INT" : "PIN_XB1_INT";
   Blockly.Generator.Arduino.definitions_["define_LoRaVariablesABP"] = `
     // LoRaWAN NwkSKey, network session key
     // This is the default Semtech key, which is used by the early prototype TTN
@@ -336,10 +343,10 @@ Blockly.Generator.Arduino.forBlock["sensebox_lora_initialize_abp"] = function (
     
     // Pin mapping
     const lmic_pinmap lmic_pins = {
-        .nss = PIN_XB1_CS,
+        .nss = ${loraCS},
         .rxtx = LMIC_UNUSED_PIN,
         .rst = LMIC_UNUSED_PIN,
-        .dio = {PIN_XB1_INT, PIN_XB1_INT, LMIC_UNUSED_PIN},
+        .dio = {${loraInt}, ${loraInt}, LMIC_UNUSED_PIN},
     };`;
 
   Blockly.Generator.Arduino.codeFunctions_["functions_initLora"] = `

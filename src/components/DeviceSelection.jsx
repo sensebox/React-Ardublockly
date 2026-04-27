@@ -40,6 +40,12 @@ const DeviceSelection = () => {
       label: "senseBox MCU:mini",
       src: "/media/hardware/blockly_mini.png",
     },
+    {
+      value: "eye",
+      alt: "Sensebox ESP32S3",
+      label: "senseBox Eye",
+      src: "/media/hardware/blockly_eye.png",
+    },
   ];
 
   const handleBoardSelect = (value) => {
@@ -52,7 +58,7 @@ const DeviceSelection = () => {
     <Dialog
       open={open}
       fullWidth
-      maxWidth="xl"
+      maxWidth="sm"
       title={Blockly.Msg.deviceselection_head}
       onClick={() => dispatch(setBoard(selectedBoard))}
       disabled={!selectedBoard}
@@ -60,7 +66,7 @@ const DeviceSelection = () => {
     >
       <Grid container spacing={2} sx={{ textAlign: "center" }}>
         {boards.map(({ value, alt, label, src }) => (
-          <Grid item xs={4} key={value}>
+          <Grid item xs={6} key={value}>
             <IconButton size="large" onClick={() => handleBoardSelect(value)}>
               <Avatar
                 alt={alt}

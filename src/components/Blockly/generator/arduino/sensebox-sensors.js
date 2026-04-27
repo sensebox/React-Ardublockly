@@ -1024,6 +1024,8 @@ Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_accelerometer"] =
   function () {
     var code = "";
     var dropdown = this.getFieldValue("value");
+    const isEye = selectedBoard().title === "Eye";
+    const wire = isEye ? "Wire" : "Wire1";
     Blockly.Generator.Arduino.libraries_["esp32s2_mpu6050"] =
       `#include <Adafruit_MPU6050.h>`;
     Blockly.Generator.Arduino.libraries_["esp32s2_icm42670"] =
@@ -1036,14 +1038,18 @@ Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_accelerometer"] =
     Blockly.Generator.Arduino.definitions_["define_Adafruit_mpu6050"] =
       "Adafruit_MPU6050 mpu;";
     Blockly.Generator.Arduino.definitions_["define_ICM42670P"] =
-      "ICM42670 icm = ICM42670(Wire1, 0);";
+      `ICM42670 icm = ICM42670(${wire}, 0);`;
     Blockly.Generator.Arduino.definitions_["define_ICM20948"] =
       "Adafruit_ICM20948 icm2;";
     Blockly.Generator.Arduino.definitions_["define_acceleration_switch"] =
       "int sensorActive = 0; // 0: none, 1: MPU6050, 2: ICM42670P, 3: ICM20948";
-    Blockly.Generator.Arduino.setupCode_["Wire1.begin()"] = "Wire1.begin();";
+    if (isEye) {
+      Blockly.Generator.Arduino.preSetupCode_["Wire.begin"] = "Wire.begin();";
+    } else {
+      Blockly.Generator.Arduino.setupCode_["Wire1.begin()"] = "Wire1.begin();";
+    }
     Blockly.Generator.Arduino.setupCode_["begin_acceleration"] =
-      "if (mpu.begin(0x68, &Wire1)) // Try MPU6050 first\n" +
+      `if (mpu.begin(0x68, &${wire})) // Try MPU6050 first\n` +
       "  {\n" +
       "    mpu.setAccelerometerRange(MPU6050_RANGE_8_G);\n" +
       "    mpu.setFilterBandwidth(MPU6050_BAND_21_HZ);\n" +
@@ -1054,7 +1060,7 @@ Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_accelerometer"] =
       "    icm.startAccel(21, 8); // Accel ODR = 100 Hz, Range = 8G\n" +
       "    sensorActive = 2;\n" +
       "  }\n" +
-      "  else if (icm2.begin_I2C(0x68, &Wire1))\n" +
+      `  else if (icm2.begin_I2C(0x68, &${wire}))\n` +
       "  {\n" +
       "    icm2.setAccelRange(ICM20948_ACCEL_RANGE_8_G);\n" +
       "    icm2.setAccelRateDivisor(10.25); // 100 Hz sample rate\n" +
@@ -1247,5 +1253,61 @@ Blockly.Generator.Arduino.forBlock["sensebox_sensor_max17048"] = function () {
   Blockly.Generator.Arduino.definitions_["define_max17048"] =
     "Adafruit_MAX17048 maxlipo;";
   Blockly.Generator.Arduino.setupCode_["max17048.begin()"] = "maxlipo.begin();";
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
+};
+
+Blockly.Generator.Arduino.forBlock["sensebox_eye_camera"] = function () {
+  var code = "";
+
+  Blockly.Generator.Arduino.libraries_["esp_camera"] =
+    `#include "esp_camera.h"`;
+  Blockly.Generator.Arduino.setupCode_["camera_config"] =
+    "camera_config_t config;\n" +
+    "config.ledc_channel = LEDC_CHANNEL_0;\n" +
+    "config.ledc_timer = LEDC_TIMER_0;\n" +
+    "config.pin_d0 = Y2_GPIO_NUM;\n" +
+    "config.pin_d1 = Y3_GPIO_NUM;\n" +
+    "config.pin_d2 = Y4_GPIO_NUM;\n" +
+    "config.pin_d3 = Y5_GPIO_NUM;\n" +
+    "config.pin_d4 = Y6_GPIO_NUM;\n" +
+    "config.pin_d5 = Y7_GPIO_NUM;\n" +
+    "config.pin_d6 = Y8_GPIO_NUM;\n" +
+    "config.pin_d7 = Y9_GPIO_NUM;\n" +
+    "config.pin_xclk = XCLK_GPIO_NUM;\n" +
+    "config.pin_pclk = PCLK_GPIO_NUM;\n" +
+    "config.pin_vsync = VSYNC_GPIO_NUM;\n" +
+    "config.pin_href = HREF_GPIO_NUM;\n" +
+    "config.pin_sccb_sda = SIOD_GPIO_NUM;\n" +
+    "config.pin_sccb_scl = SIOC_GPIO_NUM;\n" +
+    "config.pin_pwdn = PWDN_GPIO_NUM;\n" +
+    "config.pin_reset = RESET_GPIO_NUM;\n" +
+    "config.xclk_freq_hz = 20000000;\n" +
+    "config.pixel_format = PIXFORMAT_GRAYSCALE;\n" +
+    "config.frame_size = FRAMESIZE_96X96; // Small grayscale image\n" +
+    "config.jpeg_quality = 12;\n" +
+    "config.fb_count = 1;\n" +
+    "config.fb_location = CAMERA_FB_IN_DRAM;\n" +
+    "config.grab_mode = CAMERA_GRAB_WHEN_EMPTY;";
+  Blockly.Generator.Arduino.setupCode_["camera_init"] =
+    "esp_err_t err = esp_camera_init(&config);";
+
+  // Add helper function for scoped camera access
+  Blockly.Generator.Arduino.codeFunctions_["camera_scoped_helper"] = `
+// Helper class for automatic framebuffer management
+class ScopedCamera {
+private:
+  camera_fb_t *fb;
+public:
+  ScopedCamera() : fb(esp_camera_fb_get()) {}
+  ~ScopedCamera() { 
+    if (fb) esp_camera_fb_return(fb); 
+  }
+  camera_fb_t* get() { return fb; }
+  operator bool() const { return fb != nullptr; }
+};`;
+
+  // Use ScopedCamera for automatic cleanup
+  code = "ScopedCamera().get()";
+
   return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
