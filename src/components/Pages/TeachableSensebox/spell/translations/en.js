@@ -65,6 +65,7 @@ export const spellTranslations_en = {
         "This browser does not support the required features for connecting to the senseBox. Please use Chrome or Edge.",
       startConnection: "Connect your senseBox first to record spells",
       classNameExists: "A spell with this name already exists",
+      desirableNumberSamples: "Recommendation: At least 8 recordings per spell",
     },
   },
 

@@ -20,6 +20,7 @@ import {
   CircularProgress,
   Menu,
   MenuItem,
+  Chip,
   useTheme,
   useMediaQuery,
 } from "@mui/material";
@@ -233,15 +234,18 @@ const ClassCardItem = memo(
               >
                 {cls.name}
               </Typography>
-              <IconButton size="small" onClick={handleDelete}>
-                <DeleteIcon fontSize="small" />
-              </IconButton>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+                <Chip
+                  label={`${cls.samples.length} ${t.training.samples}`}
+                  size="small"
+                  color={cls.samples.length > 0 ? "success" : "default"}
+                />
+                <IconButton size="small" onClick={handleDelete}>
+                  <DeleteIcon fontSize="small" />
+                </IconButton>
+              </Box>
             </Box>
           )}
-
-          <Typography variant="caption" color="text.secondary">
-            {cls.samples.length} {t.training.samples}
-          </Typography>
 
           {/* Sample mini-charts — scrollable area */}
           <Box
@@ -251,9 +255,13 @@ const ClassCardItem = memo(
               gap: 0.5,
               mt: 1,
               mb: 1,
-              maxHeight: 130,
+              height: 130,
               overflowY: "auto",
-              pr: 0.5,
+              p: 1,
+              border: "1px solid",
+              borderColor: "divider",
+              borderRadius: 1,
+              bgcolor: "grey.50",
             }}
           >
             {cls.samples.map((sample) => (
