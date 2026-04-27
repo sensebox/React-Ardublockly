@@ -65,6 +65,8 @@ export const spellTranslations_de = {
       startConnection:
         "Verbinde zuerst deine senseBox, um Zaubersprüche aufzuzeichnen",
       classNameExists: "Ein Zauberspruch mit diesem Namen existiert bereits",
+      desirableNumberSamples:
+        "Empfehlung: Mindestens 8 Aufnahmen pro Zauberspruch",
     },
   },
 

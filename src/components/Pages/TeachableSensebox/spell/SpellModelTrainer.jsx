@@ -18,6 +18,7 @@ import {
   LinearProgress,
   Tooltip,
   CircularProgress,
+  Chip,
   useTheme,
   useMediaQuery,
   Paper,
@@ -225,27 +226,48 @@ const ClassCardItem = memo(
               >
                 {cls.name}
               </Typography>
-              <IconButton size="small" onClick={handleDelete}>
-                <DeleteIcon fontSize="small" />
-              </IconButton>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+                <Tooltip
+                  title={t.training.tooltip.desirableNumberSamples}
+                  arrow
+                >
+                  <Chip
+                    label={`${cls.samples.length} ${t.training?.samples || "samples"}`}
+                    size="small"
+                    color={
+                      cls.samples.length >= 8
+                        ? "success"
+                        : cls.samples.length >= 3
+                          ? "warning"
+                          : cls.samples.length > 0
+                            ? "error"
+                            : "default"
+                    }
+                  />
+                </Tooltip>
+                <IconButton size="small" onClick={handleDelete}>
+                  <DeleteIcon fontSize="small" />
+                </IconButton>
+              </Box>
             </Box>
           )}
-
-          <Typography variant="caption" color="text.secondary">
-            {cls.samples.length} {t.training?.samples || "samples"}
-          </Typography>
 
           {/* Sample preview grid */}
           <Box
             sx={{
               display: "flex",
               flexWrap: "wrap",
+              alignContent: "flex-start",
               gap: 0.5,
               mt: 1,
               mb: 1,
-              maxHeight: 180,
+              height: 180,
               overflowY: "auto",
-              pr: 0.5,
+              p: 1,
+              border: "1px solid",
+              borderColor: "divider",
+              borderRadius: 1,
+              bgcolor: "grey.50",
             }}
           >
             {cls.samples.map((sample) => (
@@ -256,16 +278,6 @@ const ClassCardItem = memo(
               />
             ))}
           </Box>
-
-          {/* Recording state */}
-          {isRecording && (
-            <Box sx={{ mt: 1 }}>
-              <Typography variant="body2" color="error" sx={{ mb: 0.5 }}>
-                {t.training?.recording || "Recording..."}
-              </Typography>
-              <LinearProgress color="primary" />
-            </Box>
-          )}
         </CardContent>
 
         <CardActions sx={{ gap: 0.5, p: 1 }}>
