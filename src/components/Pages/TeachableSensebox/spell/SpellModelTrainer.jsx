@@ -38,7 +38,7 @@ import useSpellModelTraining, {
 } from "./hooks/useSpellModelTraining";
 import useSpellModelPrediction from "./hooks/useSpellModelPrediction";
 import NeuralNetworkVisualization from "./NeuralNetworkVisualization";
-import HelpButton from "../HelpButton";
+import HelpButton, { useHelpBlink } from "../HelpButton";
 import SerialErrorHandler, {
   ErrorTypes,
   ConnectionStatus,
@@ -480,6 +480,67 @@ const SpellModelTrainer = ({
     isConnected,
   );
 
+  // ─── Help blink hooks ──────────────────────────────────────────────────
+  const {
+    isBlinking: spellCastingBlinking,
+    trigger: triggerSpellCasting,
+    markSeen: markSpellCastingSeen,
+  } = useHelpBlink("spell/spellCasting");
+
+  const {
+    isBlinking: addClassBlinking,
+    trigger: triggerAddClass,
+    markSeen: markAddClassSeen,
+  } = useHelpBlink("spell/addClass");
+
+  const {
+    isBlinking: trainModelBlinking,
+    trigger: triggerTrainModel,
+    markSeen: markTrainModelSeen,
+  } = useHelpBlink("spell/trainModel");
+
+  const {
+    isBlinking: cnnBlinking,
+    trigger: triggerCnn,
+    markSeen: markCnnSeen,
+  } = useHelpBlink("spell/cnn");
+
+  const dialogWasOpenRef = useRef(false);
+  useEffect(() => {
+    if (showAddDialog) {
+      dialogWasOpenRef.current = true;
+    } else if (dialogWasOpenRef.current) {
+      dialogWasOpenRef.current = false;
+      triggerAddClass();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showAddDialog]);
+
+  const firstEpochTriggeredRef = useRef(false);
+  useEffect(() => {
+    if (isTraining) {
+      firstEpochTriggeredRef.current = false;
+    }
+  }, [isTraining]);
+  useEffect(() => {
+    if (
+      isTraining &&
+      trainingProgress.epoch >= 1 &&
+      !firstEpochTriggeredRef.current
+    ) {
+      firstEpochTriggeredRef.current = true;
+      triggerTrainModel();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [trainingProgress.epoch]);
+
+  useEffect(() => {
+    if (trainedModel) {
+      triggerCnn();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [trainedModel]);
+
   // ─── Auto-capture completed spells ──────────────────────────────────────
   // When a stroke is completed, add it to the currently recording class
   const previousStrokeRef = useRef(null);
@@ -692,7 +753,10 @@ const SpellModelTrainer = ({
                       onClick={
                         serialSource.isConnected
                           ? serialSource.disconnect
-                          : serialSource.connect
+                          : async () => {
+                              await serialSource.connect();
+                              triggerSpellCasting();
+                            }
                       }
                       disabled={
                         disabled ||
@@ -739,7 +803,10 @@ const SpellModelTrainer = ({
                       onClick={
                         bleSource.isConnected
                           ? bleSource.disconnect
-                          : bleSource.connect
+                          : async () => {
+                              await bleSource.connect();
+                              triggerSpellCasting();
+                            }
                       }
                       disabled={
                         disabled ||
@@ -762,7 +829,11 @@ const SpellModelTrainer = ({
 
               {onOpenHelp && (
                 <HelpButton
-                  onClick={() => onOpenHelp("spellCasting")}
+                  onClick={() => {
+                    markSpellCastingSeen();
+                    onOpenHelp("spellCasting");
+                  }}
+                  isBlinking={spellCastingBlinking}
                   tooltip={
                     t.training?.tooltip?.helpConnection || "Connection help"
                   }
@@ -887,7 +958,11 @@ const SpellModelTrainer = ({
                   {t.training?.addClass || "Add Class"}
                 </Button>
                 <HelpButton
-                  onClick={() => onOpenHelp && onOpenHelp("addClass")}
+                  onClick={() => {
+                    markAddClassSeen();
+                    onOpenHelp && onOpenHelp("addClass");
+                  }}
+                  isBlinking={addClassBlinking}
                   tooltip={
                     t.training?.tooltip?.helpClasses || "About spell classes"
                   }
@@ -931,7 +1006,11 @@ const SpellModelTrainer = ({
                 </span>
               </Tooltip>
               <HelpButton
-                onClick={() => onOpenHelp && onOpenHelp("trainModel")}
+                onClick={() => {
+                  markTrainModelSeen();
+                  onOpenHelp && onOpenHelp("trainModel");
+                }}
+                isBlinking={trainModelBlinking}
                 tooltip={
                   t.training?.tooltip?.helpTraining || "How training works"
                 }
@@ -994,6 +1073,8 @@ const SpellModelTrainer = ({
               classNames={classes.map((cls) => cls.name)}
               onOpenHelp={onOpenHelp}
               onReceptiveField={setReceptiveField}
+              isBlinking={cnnBlinking}
+              markSeen={markCnnSeen}
             />
           )}
         </Grid>

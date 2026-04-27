@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Accordion,
   AccordionSummary,
@@ -16,7 +16,7 @@ import {
 } from "@mui/icons-material";
 import TrainingMetricsChart from "./TrainingMetricsChart";
 import ConfusionMatrix from "./ConfusionMatrix";
-import HelpButton from "../HelpButton";
+import HelpButton, { useHelpBlink } from "../HelpButton";
 
 /**
  * Training Results Section - collapsible panel showing training metrics and confusion matrix
@@ -34,6 +34,32 @@ const TrainingResultsSection = ({
   const [expanded, setExpanded] = useState(true);
   const theme = useTheme();
 
+  const hasData = trainingMetrics && trainingMetrics.length > 0;
+
+  const {
+    isBlinking: progressBlinking,
+    trigger: triggerProgress,
+    markSeen: markProgressSeen,
+  } = useHelpBlink("image/trainingProgress");
+
+  const {
+    isBlinking: testResultsBlinking,
+    trigger: triggerTestResults,
+    markSeen: markTestResultsSeen,
+  } = useHelpBlink("image/testResults");
+
+  const wasTrainingRef = useRef(false);
+  useEffect(() => {
+    if (isTraining) {
+      wasTrainingRef.current = true;
+    } else if (wasTrainingRef.current && hasData) {
+      wasTrainingRef.current = false;
+      triggerProgress();
+      triggerTestResults();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isTraining, hasData]);
+
   const t = translations || {
     title: "Training Results",
     metricsChart: "Training Progress",
@@ -44,7 +70,6 @@ const TrainingResultsSection = ({
     needMoreImages: "Collect at least 10 images per class to see test results.",
   };
 
-  const hasData = trainingMetrics && trainingMetrics.length > 0;
   const hasTestResults =
     hasEnoughSamples &&
     testResults &&
@@ -152,9 +177,11 @@ const TrainingResultsSection = ({
                   {t.metricsChart}
                 </Typography>
                 <HelpButton
-                  onClick={() =>
-                    onOpenHelp && onOpenHelp("image/trainingProgress")
-                  }
+                  onClick={() => {
+                    markProgressSeen();
+                    onOpenHelp && onOpenHelp("image/trainingProgress");
+                  }}
+                  isBlinking={progressBlinking}
                   tooltip={
                     t.training?.tooltip?.helpTrainingProgress ||
                     "Hilfe zum Trainingsverlauf"
@@ -199,9 +226,11 @@ const TrainingResultsSection = ({
                     {t.testResults}
                   </Typography>
                   <HelpButton
-                    onClick={() =>
-                      onOpenHelp && onOpenHelp("image/testResults")
-                    }
+                    onClick={() => {
+                      markTestResultsSeen();
+                      onOpenHelp && onOpenHelp("image/testResults");
+                    }}
+                    isBlinking={testResultsBlinking}
                     tooltip={
                       t.training?.tooltip?.helpTestResults ||
                       "Hilfe zum Testergebnis"
@@ -272,9 +301,11 @@ const TrainingResultsSection = ({
                     {t.testResults}
                   </Typography>
                   <HelpButton
-                    onClick={() =>
-                      onOpenHelp && onOpenHelp("image/testResults")
-                    }
+                    onClick={() => {
+                      markTestResultsSeen();
+                      onOpenHelp && onOpenHelp("image/testResults");
+                    }}
+                    isBlinking={testResultsBlinking}
                     tooltip={
                       t.training?.tooltip?.helpTestResults ||
                       "Hilfe zum Testergebnis"

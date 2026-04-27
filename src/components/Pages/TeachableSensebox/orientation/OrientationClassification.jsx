@@ -22,7 +22,7 @@ import OrientationNNVisualizer, {
 } from "./OrientationNNVisualizer";
 import useOrientationNNTraining from "./hooks/useOrientationNNTraining";
 import HelpSidebar, { SIDEBAR_WIDTH } from "../HelpSidebar";
-import HelpButton from "../HelpButton";
+import HelpButton, { useHelpBlink, useHelpBlinkCooldown } from "../HelpButton";
 
 const OrientationClassification = () => {
   const navigate = useNavigate();
@@ -53,6 +53,44 @@ const OrientationClassification = () => {
     setCurrentHelpTopic("orientation/" + topic);
     setHelpSidebarOpen(true);
   }, []);
+
+  // ── Help blink hooks ──────────────────────────────────────────────────────
+  const {
+    isBlinking: orientationClassBlinking,
+    trigger: triggerOrientationClass,
+    markSeen: markOrientationClassSeen,
+  } = useHelpBlink("orientation/orientationClassification");
+
+  const {
+    isBlinking: decisionTreeBlinking,
+    trigger: triggerDecisionTree,
+    markSeen: markDecisionTreeSeen,
+  } = useHelpBlinkCooldown(3000);
+
+  const {
+    isBlinking: neuralNetworkBlinking,
+    trigger: triggerNeuralNetwork,
+    markSeen: markNeuralNetworkSeen,
+  } = useHelpBlinkCooldown(3000);
+
+  useEffect(() => {
+    triggerOrientationClass();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (trainedModel) {
+      triggerDecisionTree();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [trainedModel]);
+
+  useEffect(() => {
+    if (trainedNNModel) {
+      triggerNeuralNetwork();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [trainedNNModel]);
 
   const handleCloseHelp = useCallback(() => {
     setHelpSidebarOpen(false);
@@ -138,7 +176,11 @@ const OrientationClassification = () => {
               {t.title}
             </Typography>
             <HelpButton
-              onClick={() => handleOpenHelp("orientationClassification")}
+              onClick={() => {
+                markOrientationClassSeen();
+                handleOpenHelp("orientationClassification");
+              }}
+              isBlinking={orientationClassBlinking}
               tooltip={
                 t.training?.tooltip?.helpMain ||
                 "Was ist Orientierungsklassifizierung?"
@@ -209,7 +251,11 @@ const OrientationClassification = () => {
                 <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
                   <Typography variant="h5">{t.decisionTree.title}</Typography>
                   <HelpButton
-                    onClick={() => handleOpenHelp("decisionTree")}
+                    onClick={() => {
+                      markDecisionTreeSeen();
+                      handleOpenHelp("decisionTree");
+                    }}
+                    isBlinking={decisionTreeBlinking}
                     tooltip={t.training.tooltip.helpDecisionTree}
                   />
                 </Box>
@@ -235,7 +281,11 @@ const OrientationClassification = () => {
                     {t.neuralNetwork?.title ?? "Neural Network"}
                   </Typography>
                   <HelpButton
-                    onClick={() => handleOpenHelp("neuralNetwork")}
+                    onClick={() => {
+                      markNeuralNetworkSeen();
+                      handleOpenHelp("neuralNetwork");
+                    }}
+                    isBlinking={neuralNetworkBlinking}
                     tooltip={t.training.tooltip.helpNeuralNetwork}
                   />
                 </Box>

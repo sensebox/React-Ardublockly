@@ -15,7 +15,7 @@ import { getImageTranslations } from "./translations";
 import ModelTrainer from "./ModelTrainer";
 import ConvertDeploy from "./ConvertDeploy";
 import HelpSidebar, { SIDEBAR_WIDTH } from "../HelpSidebar";
-import HelpButton from "../HelpButton";
+import HelpButton, { useHelpBlink, markHelpSeen } from "../HelpButton";
 
 const TeachableSensebox = () => {
   const navigate = useNavigate();
@@ -33,9 +33,34 @@ const TeachableSensebox = () => {
   const isWideScreen = useMediaQuery(theme.breakpoints.up("lg"));
 
   const handleOpenHelp = useCallback((topic) => {
+    markHelpSeen(topic);
     setCurrentHelpTopic(topic);
     setHelpSidebarOpen(true);
   }, []);
+
+  const {
+    isBlinking: imageClassBlinking,
+    trigger: triggerImageClass,
+    markSeen: markImageClassSeen,
+  } = useHelpBlink("image/imageClassification");
+
+  const {
+    isBlinking: deployBlinking,
+    trigger: triggerDeploy,
+    markSeen: markDeploySeen,
+  } = useHelpBlink("image/deployModel");
+
+  useEffect(() => {
+    triggerImageClass();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (trainedModel) {
+      triggerDeploy();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [trainedModel]);
 
   const handleCloseHelp = useCallback(() => {
     setHelpSidebarOpen(false);
@@ -102,7 +127,11 @@ const TeachableSensebox = () => {
               {t.title}
             </Typography>
             <HelpButton
-              onClick={() => handleOpenHelp("image/imageClassification")}
+              onClick={() => {
+                markImageClassSeen();
+                handleOpenHelp("image/imageClassification");
+              }}
+              isBlinking={imageClassBlinking}
               tooltip={t.training?.helpMain || "Was ist Teachable senseBox?"}
             />
           </Box>
@@ -133,7 +162,11 @@ const TeachableSensebox = () => {
               <Typography variant="h5" gutterBottom>
                 {t.integration.title}
                 <HelpButton
-                  onClick={() => handleOpenHelp("image/deployModel")}
+                  onClick={() => {
+                    markDeploySeen();
+                    handleOpenHelp("image/deployModel");
+                  }}
+                  isBlinking={deployBlinking}
                   tooltip={
                     t.training?.tooltip?.helpDeployModel ||
                     "Help with deploying the model"
