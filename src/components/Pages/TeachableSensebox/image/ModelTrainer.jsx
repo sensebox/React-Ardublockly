@@ -65,6 +65,14 @@ const ModelTrainer = ({
 
   // Camera state
   const previewContainerRef = useRef(null);
+  const sampleScrollRefs = useRef({});
+
+  useEffect(() => {
+    classes.forEach((cls) => {
+      const el = sampleScrollRefs.current[cls.id];
+      if (el) el.scrollTop = el.scrollHeight;
+    });
+  }, [classes]);
   const [videoLoading, setVideoLoading] = useState(false);
   const [serialError, setSerialError] = useState(null);
   const [connectionStatus, setConnectionStatus] = useState(
@@ -802,6 +810,9 @@ const ModelTrainer = ({
                     </Box>
 
                     <Box
+                      ref={(el) => {
+                        sampleScrollRefs.current[cls.id] = el;
+                      }}
                       sx={{
                         display: "flex",
                         flexWrap: "wrap",

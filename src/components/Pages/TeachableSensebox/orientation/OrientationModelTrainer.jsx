@@ -173,6 +173,12 @@ const ClassCardItem = memo(
     onEditNameChange,
     t,
   }) => {
+    const scrollRef = useRef(null);
+    useEffect(() => {
+      if (scrollRef.current)
+        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }, [cls.samples.length]);
+
     // Stable per-card callbacks so SampleChip children are also stable
     const handleRecord = useCallback(
       () => onStartRecording(cls.id),
@@ -249,6 +255,7 @@ const ClassCardItem = memo(
 
           {/* Sample mini-charts — scrollable area */}
           <Box
+            ref={scrollRef}
             sx={{
               display: "flex",
               flexDirection: "column",
