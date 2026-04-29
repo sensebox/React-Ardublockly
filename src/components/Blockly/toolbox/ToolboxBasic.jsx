@@ -199,12 +199,12 @@ const allBlocks = [
 export const toolboxBasicObject = {
   kind: "categoryToolbox",
   contents: [
-    {
-      kind: "category",
-      name: "Alle Blöcke",
-      colour: "#5ba55b",
-      contents: allBlocks,
-    },
+    // {
+    //   kind: "category",
+    //   name: "Alle Blöcke",
+    //   colour: "#5ba55b",
+    //   contents: allBlocks,
+    // },
     // ...existing categories...
     {
       kind: "category",
@@ -221,7 +221,7 @@ export const toolboxBasicObject = {
     },
     {
       kind: "category",
-      name: "Ausgabe",
+      name: "Display / Anzeige",
       colour: "#5ba55b",
       categorystyle: undefined,
       cssconfig: undefined,
@@ -243,6 +243,13 @@ export const toolboxBasicObject = {
           type: "text",
           tooltip: "Use this block to add text to your display.",
         },
+      ],
+    },
+    {
+      kind: "category",
+      name: "LEDs",
+      colour: "#5C81A6",
+      contents: [
         {
           kind: "block",
           type: "basic_led_control",
@@ -295,7 +302,7 @@ export const toolboxBasicObject = {
     },
     {
       kind: "category",
-      name: "Zustände",
+      name: "Bedingungen",
       colour: "#5C81A6",
       contents: [
         {
@@ -316,84 +323,6 @@ export const toolboxBasicObject = {
             IF: {
               block: {
                 type: "basic_box_shaken",
-              },
-            },
-          },
-        },
-        { kind: "block", type: "basic_if_else" },
-        { kind: "block", type: "basic_if" },
-        { kind: "block", type: "basic_button_pressed" },
-        { kind: "block", type: "basic_box_shaken" },
-      ],
-    },
-    {
-      kind: "category",
-      name: "Mathematik",
-      colour: "#5b67a5",
-      contents: [
-        { kind: "block", type: "basic_number" },
-        { kind: "block", type: "basic_math" },
-        {
-          kind: "block",
-          type: "basic_math",
-          inputs: {
-            LEFT: {
-              block: {
-                type: "basic_number",
-                fields: {
-                  NUM: 6,
-                },
-              },
-            },
-            RIGHT: {
-              block: {
-                type: "basic_number",
-                fields: {
-                  NUM: 7,
-                },
-              },
-            },
-          },
-        },
-        {
-          kind: "block",
-          type: "basic_random",
-          inputs: {
-            FROM: {
-              block: {
-                type: "basic_number",
-                fields: {
-                  NUM: 1,
-                },
-              },
-            },
-            TO: {
-              block: {
-                type: "basic_number",
-                fields: {
-                  NUM: 100,
-                },
-              },
-            },
-          },
-        },
-      ],
-    },
-    {
-      kind: "category",
-      name: "Kontrolle",
-      colour: "#5ba574",
-      contents: [
-        {
-          kind: "block",
-          type: "basic_delay",
-          inputs: {
-            SECONDS: {
-              block: {
-                type: "basic_number",
-                fields: {
-                  NUM: 1,
-                },
               },
             },
           },
@@ -430,6 +359,86 @@ export const toolboxBasicObject = {
             },
           },
         },
+        { kind: "block", type: "basic_if_else" },
+        { kind: "block", type: "basic_if" },
+        { kind: "block", type: "basic_button_pressed" },
+        { kind: "block", type: "basic_box_shaken" },
+      ],
+    },
+    {
+      kind: "category",
+      name: "Zahlen",
+      colour: "#5b67a5",
+      contents: [
+        {
+          kind: "block",
+          type: "basic_random",
+          inputs: {
+            FROM: {
+              block: {
+                type: "basic_number",
+                fields: {
+                  NUM: 1,
+                },
+              },
+            },
+            TO: {
+              block: {
+                type: "basic_number",
+                fields: {
+                  NUM: 100,
+                },
+              },
+            },
+          },
+        },
+        {
+          kind: "block",
+          type: "basic_math",
+          inputs: {
+            LEFT: {
+              block: {
+                type: "basic_number",
+                fields: {
+                  NUM: 6,
+                },
+              },
+            },
+            RIGHT: {
+              block: {
+                type: "basic_number",
+                fields: {
+                  NUM: 7,
+                },
+              },
+            },
+          },
+        },
+        { kind: "block", type: "basic_math" },
+
+        { kind: "block", type: "basic_number" },
+      ],
+    },
+    {
+      kind: "category",
+      name: "Zeit / Wiederholung",
+      colour: "#5C81A6",
+      contents: [
+        {
+          kind: "block",
+          type: "basic_delay",
+          inputs: {
+            SECONDS: {
+              block: {
+                type: "basic_number",
+                fields: {
+                  NUM: 1,
+                },
+              },
+            },
+          },
+        },
+
         {
           kind: "block",
           type: "basic_repeat_times",
@@ -444,7 +453,6 @@ export const toolboxBasicObject = {
             },
           },
         },
-        { kind: "block", type: "basic_compare" },
       ],
     },
   ],
