@@ -172,7 +172,10 @@ const ClassCardItem = memo(
         scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }, [cls.samples.length]);
 
-    const handleRecord = useCallback([cls.id, onToggleRecording]);
+    const handleRecord = useCallback(
+      () => onToggleRecording(cls.id),
+      [cls.id, onToggleRecording],
+    );
     const handleDelete = useCallback(
       () => onDeleteClass(cls.id),
       [cls.id, onDeleteClass],
