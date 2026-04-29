@@ -342,8 +342,10 @@ const OutputLayerVisualization = memo(
         onMouseOver={handleMouseOver}
         onMouseLeave={handleMouseLeave}
         sx={{
-          flex: "0 0 auto",
+          flex: "1 1 auto",
           minWidth: 0,
+          maxWidth: "100%",
+          overflow: "hidden",
           bgcolor: alpha(theme.palette.grey[500], 0.4),
           borderRadius: 1,
           p: 1,
@@ -382,8 +384,8 @@ const OutputLayerVisualization = memo(
                 bgcolor: isPredicted
                   ? alpha(theme.palette.grey[100], 0.06)
                   : "transparent",
-                minWidth: 0,
-                width: "100%",
+                minWidth: 60,
+                flex: "1 1 auto",
               }}
             >
               {/* Activation square */}
@@ -415,7 +417,7 @@ const OutputLayerVisualization = memo(
                   textOverflow: "ellipsis",
                   whiteSpace: "nowrap",
                   textAlign: "center",
-                  fontSize: "0.6rem",
+                  fontSize: "0.85rem",
                 }}
               >
                 {name}
@@ -426,7 +428,7 @@ const OutputLayerVisualization = memo(
                 sx={{
                   fontWeight: isPredicted ? "bold" : "normal",
                   color: isPredicted ? "text.primary" : "text.secondary",
-                  fontSize: "0.6rem",
+                  fontSize: "0.8rem",
                 }}
               >
                 {pct}%
