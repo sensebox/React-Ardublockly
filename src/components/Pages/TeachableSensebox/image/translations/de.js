@@ -20,6 +20,8 @@ export const imageClassificationTranslations_de = {
     livePredictions: "Live Klassifizierung",
     startCameraForPredictions: "Bitte starte die Kamera.",
     analyzing: "Analysiere...",
+    dataChangedWarning:
+      "Trainingsdaten wurden verändert. Trainiere das Modell neu, um die Vorhersagen zu aktualisieren.",
     addNewClass: "Neue Klasse hinzufügen",
     className: "Klassenname",
     cancel: "Abbrechen",
