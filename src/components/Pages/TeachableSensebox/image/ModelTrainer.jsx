@@ -1,4 +1,10 @@
-import React, { useState, useRef, useCallback, useEffect } from "react";
+import React, {
+  useState,
+  useRef,
+  useCallback,
+  useEffect,
+  useMemo,
+} from "react";
 import { useSelector } from "react-redux";
 import { getImageTranslations } from "./translations";
 import {
@@ -33,6 +39,7 @@ import {
   PhotoCamera as CameraIcon,
   Download as DownloadIcon,
   MoreVert as MoreVertIcon,
+  Warning as WarningIcon,
 } from "@mui/icons-material";
 import useCameraSource from "./hooks/useCameraSource";
 import SerialErrorHandler, {
@@ -122,6 +129,22 @@ const ModelTrainer = ({
     getPreviewElement,
     isCameraActive,
   );
+
+  const trainedClassesSnapshotRef = useRef(null);
+
+  const getClassesSnapshot = useCallback(
+    (cls) =>
+      JSON.stringify(
+        cls.map((c) => ({ id: c.id, name: c.name, count: c.samples.length })),
+      ),
+    [],
+  );
+
+  const isDataStale = useMemo(() => {
+    if (!trainedModel || trainedClassesSnapshotRef.current === null)
+      return false;
+    return getClassesSnapshot(classes) !== trainedClassesSnapshotRef.current;
+  }, [classes, trainedModel, getClassesSnapshot]);
 
   const {
     isBlinking: webcamBlinking,
@@ -452,6 +475,7 @@ const ModelTrainer = ({
       onModelTrained,
       trainingSettings,
     );
+    trainedClassesSnapshotRef.current = getClassesSnapshot(classes);
   }, [
     classes,
     onTrainingStart,
@@ -459,6 +483,7 @@ const ModelTrainer = ({
     onModelTrained,
     executeTraining,
     trainingSettings,
+    getClassesSnapshot,
     t,
   ]);
 
@@ -728,6 +753,23 @@ const ModelTrainer = ({
                           {t.training.analyzing}
                         </Typography>
                       </Paper>
+                    )}
+
+                    {isDataStale && (
+                      <Box
+                        sx={{
+                          mt: 1,
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 1,
+                          color: "warning.main",
+                        }}
+                      >
+                        <WarningIcon fontSize="small" />
+                        <Typography variant="caption">
+                          {t.training.dataChangedWarning}
+                        </Typography>
+                      </Box>
                     )}
                   </Box>
                 )}
