@@ -7,3 +7,5 @@ During training, the model is shown the training data and tries to classify it. 
 ![training process](/media/teachable/training.png)
 
 This process is repeated many times. In this way, the individual neurons gradually learn certain **patterns** in the input and together form a model that can make useful predictions.
+
+![trained](/media/teachable/trained.png)
