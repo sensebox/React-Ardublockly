@@ -7,3 +7,5 @@ Während dem Training werden dem Modell dann immer wieder die Trainingsdaten gez
 ![training process](/media/teachable/training.png)
 
 Dieser Vorgang wird sehr oft wiederholt. So lernen die einzelnen Neuronen nach und nach, bestimmte **Muster** in den Eingabedaten, und gemeinsam kann das Netzwerk daraus die Daten klassifizieren.
+
+![trained](/media/teachable/trained.png)
