@@ -30,4 +30,8 @@ Unlike a decision tree, for a neural network we define a **structure** in advanc
 
 During training, the model is shown the training data again and again, and it tries to classify it. If it does not classify well, it adjusts its weights a little.
 
+![training process](/media/teachable/training.png)
+
 This process is repeated many times. In this way, the individual neurons gradually learn certain **patterns** in the input and together form a model that can make useful predictions.
+
+![trained](/media/teachable/trained.png)

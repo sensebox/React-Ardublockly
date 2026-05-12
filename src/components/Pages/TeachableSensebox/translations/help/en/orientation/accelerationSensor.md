@@ -31,7 +31,3 @@ For example:
 - If the senseBox Eye is lying flat on a table, the Z-axis measures approximately 9.81.
 - If you place the device on its side, the X- or Y-axis measures approximately 9.81 instead.
 - If you tilt the sensor diagonally, gravity is distributed across multiple axes.
-
-# Note
-
-It is not possible to connect to the senseBox Eye and its acceleration sensor in all browsers (for example, not in Firefox). Use Chrome or Safari instead.
