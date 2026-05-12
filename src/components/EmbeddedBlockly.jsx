@@ -5,6 +5,15 @@ import * as Blockly from "blockly/core";
 import { createNameId } from "mnemonic-id";
 import { useEmbeddedMode } from "@/hooks/useEmbeddedMode";
 
+// Utility to set container size in px after orientation change
+function setEmbeddedContainerSize() {
+  const container = document.querySelector('.blockly-app-container');
+  if (container) {
+    container.style.height = window.innerHeight + 'px';
+    container.style.width = window.innerWidth + 'px';
+  }
+}
+
 import { clearStats, workspaceName } from "@/actions/workspaceActions";
 import { getProject, resetProject } from "@/actions/projectActions";
 import { returnErrors } from "@/actions/messageActions";
@@ -93,6 +102,24 @@ const EmbeddedBlockly = ({ project: propProject = null, projectType: propProject
       Blockly.svgResize(workspace);
     }
   });
+
+    // Handle iPad orientation change for /embedded path
+    useEffect(() => {
+      function handleOrientationChange() {
+        // Wait for viewport to settle
+        setTimeout(() => {
+          setEmbeddedContainerSize();
+          const ws = Blockly.getMainWorkspace();
+          if (ws) Blockly.svgResize(ws);
+        }, 10);
+      }
+      window.addEventListener('orientationchange', handleOrientationChange);
+      // Initial set on mount (for iPad Safari quirks)
+      setEmbeddedContainerSize();
+      return () => {
+        window.removeEventListener('orientationchange', handleOrientationChange);
+      };
+    }, []);
 
   // Show loading spinner if loading shared project
   if (shareId && progress) {

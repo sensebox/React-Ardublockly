@@ -1090,7 +1090,7 @@ Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_accelerometer"] =
       "} else {\n" +
       "return 0.0;\n" +
       "}\n" +
-      "} else if (sensorActive == 2) {\n" +
+      "} else if (sensorActive == 3) {\n" +
       "sensors_event_t a, g, m, temp;\n" +
       "icm2.getEvent(&a, &g, &m, &temp);\n" +
       'if (sensorValueType == "accelerationX") {\n' +
