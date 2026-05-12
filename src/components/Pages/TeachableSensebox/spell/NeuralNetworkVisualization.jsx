@@ -64,45 +64,6 @@ function activationToColor(value, minVal = 0, maxVal = 1) {
   return `rgb(${r}, ${g}, ${b})`;
 }
 
-// ─── Sample Preview Mini Canvas ───────────────────────────────────────────────
-const SamplePreviewMini = memo(({ pixelData, strokePoints, size = 24 }) => {
-  const canvasRef = useRef(null);
-
-  useEffect(() => {
-    if (!canvasRef.current) return;
-    const ctx = canvasRef.current.getContext("2d");
-
-    const data =
-      pixelData || (strokePoints ? renderStrokeToImage(strokePoints) : null);
-    if (!data) {
-      ctx.fillStyle = "#333";
-      ctx.fillRect(0, 0, STROKE_IMAGE_SIZE, STROKE_IMAGE_SIZE);
-      return;
-    }
-
-    const imageData = new ImageData(
-      new Uint8ClampedArray(data),
-      STROKE_IMAGE_SIZE,
-      STROKE_IMAGE_SIZE,
-    );
-    ctx.putImageData(imageData, 0, 0);
-  }, [pixelData, strokePoints]);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      width={STROKE_IMAGE_SIZE}
-      height={STROKE_IMAGE_SIZE}
-      style={{
-        width: size,
-        height: size,
-        borderRadius: 2,
-        imageRendering: "pixelated",
-      }}
-    />
-  );
-});
-
 // ─── Activation Cell ──────────────────────────────────────────────────────────
 const ActivationCell = memo(
   ({
