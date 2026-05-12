@@ -10,11 +10,18 @@ Das Netz besteht aus vielen **Schichten** von **Neuronen**. In unserem Gehirn is
 
 Speziell für die Bildverarbeitung nutzen wir eine Art Neuron, das einen Bildausschnitt (also eine Gruppe an Pixeln) verarbeiten kann. Das Neuron nutzt einen **Filter** um sich seinen jeweilige Ausschnitt anzuschauen und berechnet daraus einen Ausgabewert. Wenn wir diese Neuronen zu einer Schicht zusammen setzen, ist jedes Neuron für jeweils einen anderen Bildausschnitt zuständig. Diese Art von Schicht nennen wir dann einen **Convolutional Layer**.
 
-![convolution](/media/teachable/padding_strides.gif)
-([Bildquelle](https://github.com/vdumoulin/conv_arithmetic]))
+![convolution](/media/teachable/conv.gif)
 
 Wenn wir ein Eingabebild mit einem Convolutional Layer verarbeiten, entsteht Ende quasi ein neues Bild, in dem wir sehen können, wie stark die einzelnen Neuronen auf ihre jeweiligen Pixelgruppen reagiert haben.
 
 Letztendlich erkennen die jeweiligen Convolutional Layer im Neuronalen Netz jeweils bestimmte Bild**merkmale**, wie Kanten, Formen und Muster.
 
-<Erklärbild>
+![trained](/media/teachable/trained.png)
+
+---
+
+# Der Covolutional Layer als Metapher
+
+Stell dir vor die Neuronen des Convolutional Layers als Besucher in einem Kino vor. Wir können den Neuronen nun bestimmte "Brillen" geben (sogenannte **Filter**), die beeinflussen, wie die Neuronen den Film warnehmen. Mit einer Lesebrille sehen die Neuronen alles unscharf, mit einer Lupe sieht der Film ganz klein oder mit einem Fernglas ganz groß aus.
+
+![cinema metaphor](/media/teachable/cinema.png)
