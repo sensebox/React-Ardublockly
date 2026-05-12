@@ -7,6 +7,8 @@ import {
   PLATFORM,
   COMPILER,
   EMBEDDED_MODE,
+  AI_MODEL_UPLOAD,
+  AI_MODEL_CLEAR,
 } from "../actions/types";
 
 const initialLanguage = () => {
@@ -24,7 +26,9 @@ const initialPlatform = () => {
 };
 
 const initialCompiler = () => {
-  return import.meta.env.VITE_INITIAL_COMPILER_URL || "https://compile.sensebox.de";
+  return (
+    import.meta.env.VITE_INITIAL_COMPILER_URL || "https://compile.sensebox.de"
+  );
 };
 
 const initialSounds = () => {
@@ -83,11 +87,32 @@ const initialStatistics = () => {
   return false;
 };
 
+const parseCategoryLabels = (code) => {
+  if (!code) return [];
+  const match = code.match(
+    /const\s+char\s*\*\s*kCategoryLabels\s*\[.*?\]\s*=\s*\{([^}]+)\}/,
+  );
+  if (!match) return [];
+  return [...match[1].matchAll(/"([^"]+)"/g)].map((m) => m[1]);
+};
+
+const initialAiModel = () => {
+  const stored = window.localStorage.getItem("aiModelCode");
+  if (!stored) return { code: null, filename: null, labels: [] };
+  const parsed = JSON.parse(stored);
+  // Re-parse labels in case they were not stored (e.g. uploaded before this change)
+  if (!parsed.labels || !parsed.labels.length) {
+    parsed.labels = parseCategoryLabels(parsed.code);
+  }
+  return parsed;
+};
+
 const initialState = {
   pageVisits: 0, // detect if previous URL was
   language: initialLanguage(),
   renderer: initialRenderer(),
   sounds: initialSounds(),
+  aiModel: initialAiModel(),
   statistics: initialStatistics(),
   platform: initialPlatform(),
   compiler: initialCompiler(),
@@ -140,6 +165,21 @@ export default function foo(state = initialState, action) {
       return {
         ...state,
         embeddedMode: action.payload,
+      };
+    case AI_MODEL_UPLOAD:
+      window.localStorage.setItem(
+        "aiModelCode",
+        JSON.stringify(action.payload),
+      );
+      return {
+        ...state,
+        aiModel: action.payload,
+      };
+    case AI_MODEL_CLEAR:
+      window.localStorage.removeItem("aiModelCode");
+      return {
+        ...state,
+        aiModel: { code: null, filename: null },
       };
     default:
       return state;

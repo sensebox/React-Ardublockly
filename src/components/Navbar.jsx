@@ -48,6 +48,7 @@ import {
   faEarthEurope,
   faEarthAmericas,
   faCaretDown,
+  faEye,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -130,6 +131,11 @@ const Navbar = () => {
   };
 
   const isHome = location.pathname === "/";
+  const isTeachable =
+    location.pathname === "/teachable" ||
+    location.pathname === "/teachable/image" ||
+    location.pathname === "/teachable/spell" ||
+    location.pathname === "/teachable/orientation";
   const isAssessment =
     /^\/tutorial\/.{1,}$/.test(location.pathname) &&
     !tutorialIsLoading &&
@@ -189,103 +195,99 @@ const Navbar = () => {
             }}
           >
             {isHome && (
-              <>
-                <div style={{ padding: "12px" }}>
-                  <Button
-                    id="navbar-selected-board" // 👈 eindeutig für Cypress
-                    ref={mcuRef}
-                    onClick={handleBoardOpen}
-                    startIcon={<FontAwesomeIcon icon={faMicrochip} />}
-                    endIcon={<FontAwesomeIcon icon={faCaretDown} />}
-                    sx={{
-                      display: { xs: "none", sm: "none", md: "flex" },
-                    }}
-                    style={{
-                      textTransform: "none",
-                      cursor: "pointer",
-                      alignItems: "center",
-                      alignContent: "center",
-                      background: "transparent",
-                      color: "inherit",
-                      fontWeight: "bold",
-                      border: "2px solid white",
-                      borderRadius: "25px",
-                    }}
-                  >
-                    {selectedBoard === "MCU:MINI" ? "MCU:mini" : selectedBoard}
-                  </Button>
-                  <Menu
-                    id="navbarBoardSelect"
-                    anchorEl={anchorElBoard}
-                    anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-                    transformOrigin={{ vertical: "top", horizontal: "center" }}
-                    open={Boolean(anchorElBoard)}
-                    onClose={handleBoardClose}
-                  >
-                    {["MCU", "MCU:MINI", "MCU-S2"].map((b) => (
-                      <MenuItem
-                        key={b}
-                        value={b}
-                        onClick={() => changeBoard(b)}
-                      >
-                        {b === "MCU:MINI" ? "MCU:mini" : b}
-                      </MenuItem>
-                    ))}
-                  </Menu>
-                </div>
+              <div style={{ padding: "12px" }}>
+                <Button
+                  id="navbar-selected-board" // 👈 eindeutig für Cypress
+                  ref={mcuRef}
+                  onClick={handleBoardOpen}
+                  startIcon={<FontAwesomeIcon icon={faMicrochip} />}
+                  endIcon={<FontAwesomeIcon icon={faCaretDown} />}
+                  sx={{
+                    display: { xs: "none", sm: "none", md: "flex" },
+                  }}
+                  style={{
+                    textTransform: "none",
+                    cursor: "pointer",
+                    alignItems: "center",
+                    alignContent: "center",
+                    background: "transparent",
+                    color: "inherit",
+                    fontWeight: "bold",
+                    border: "2px solid white",
+                    borderRadius: "25px",
+                  }}
+                >
+                  {selectedBoard === "MCU:MINI" ? "MCU:mini" : selectedBoard}
+                </Button>
+                <Menu
+                  id="navbarBoardSelect"
+                  anchorEl={anchorElBoard}
+                  anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                  transformOrigin={{ vertical: "top", horizontal: "center" }}
+                  open={Boolean(anchorElBoard)}
+                  onClose={handleBoardClose}
+                >
+                  {["MCU", "MCU:mini", "MCU-S2", "Eye"].map((b) => (
+                    <MenuItem key={b} value={b} onClick={() => changeBoard(b)}>
+                      {b === "MCU:MINI" ? "MCU:mini" : b}
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </div>
+            )}
 
-                <div style={{ padding: "12px" }}>
-                  <Button
-                    ref={langRef}
-                    onClick={handleLangOpen}
-                    id="navbar-language-select"
-                    startIcon={
-                      <FontAwesomeIcon
-                        icon={
-                          language === "en_US" ? faEarthAmericas : faEarthEurope
-                        }
-                      />
-                    }
-                    endIcon={<FontAwesomeIcon icon={faCaretDown} />}
-                    sx={{
-                      display: { xs: "none", sm: "none", md: "flex" },
-                    }}
-                    style={{
-                      textTransform: "none",
-                      cursor: "pointer",
-                      alignItems: "center",
-                      alignContent: "center",
-                      background: "transparent",
-                      color: "inherit",
-                      fontWeight: "bold",
-                      border: "2px solid white",
-                      borderRadius: "25px",
-                    }}
+            {(isHome || isTeachable) && (
+              <div style={{ padding: "12px" }}>
+                <Button
+                  ref={langRef}
+                  onClick={handleLangOpen}
+                  id="navbar-language-select"
+                  startIcon={
+                    <FontAwesomeIcon
+                      icon={
+                        language === "en_US" ? faEarthAmericas : faEarthEurope
+                      }
+                    />
+                  }
+                  endIcon={<FontAwesomeIcon icon={faCaretDown} />}
+                  sx={{
+                    display: { xs: "none", sm: "none", md: "flex" },
+                  }}
+                  style={{
+                    textTransform: "none",
+                    cursor: "pointer",
+                    alignItems: "center",
+                    alignContent: "center",
+                    background: "transparent",
+                    color: "inherit",
+                    fontWeight: "bold",
+                    border: "2px solid white",
+                    borderRadius: "25px",
+                  }}
+                >
+                  {language === "en_US" ? "English" : "Deutsch"}
+                </Button>
+                <Menu
+                  anchorEl={anchorElLang}
+                  anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                  transformOrigin={{ vertical: "top", horizontal: "center" }}
+                  open={Boolean(anchorElLang)}
+                  onClose={handleLangClose}
+                >
+                  <MenuItem
+                    id="navbar-language-select-de"
+                    onClick={() => changeLanguage("de_DE")}
                   >
-                    {language === "en_US" ? "English" : "Deutsch"}
-                  </Button>
-                  <Menu
-                    anchorEl={anchorElLang}
-                    anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-                    transformOrigin={{ vertical: "top", horizontal: "center" }}
-                    open={Boolean(anchorElLang)}
-                    onClose={handleLangClose}
+                    Deutsch
+                  </MenuItem>
+                  <MenuItem
+                    id="navbar-language-select-en"
+                    onClick={() => changeLanguage("en_US")}
                   >
-                    <MenuItem
-                      id="navbar-language-select-de"
-                      onClick={() => changeLanguage("de_DE")}
-                    >
-                      Deutsch
-                    </MenuItem>
-                    <MenuItem
-                      id="navbar-language-select-en"
-                      onClick={() => changeLanguage("en_US")}
-                    >
-                      English
-                    </MenuItem>
-                  </Menu>
-                </div>
-              </>
+                    English
+                  </MenuItem>
+                </Menu>
+              </div>
             )}
 
             {(isHome || isAssessment) && (
@@ -447,6 +449,11 @@ const Navbar = () => {
               restriction: isAuthenticated,
             },
             { text: "Code Editor", icon: faCode, link: "/codeeditor" },
+            {
+              text: Blockly.Msg.navbar_teachablesensebox,
+              icon: faEye,
+              link: "/teachable",
+            },
           ].map((item, i) =>
             item.restriction || !("restriction" in item) ? (
               <Link

@@ -36,6 +36,11 @@ export const UI = {
   variables_set: "Schreibe",
   variables_to: "",
   toolbox_internet_and_comms: "Datenübertragung",
+  toolbox_ai: "KI",
+  ai_upload_model: "Trainiertes Modell hochladen",
+  ai_classify: "Klassifiziere",
+  ai_no_model_uploaded: "Kein Modell hochgeladen",
+  ai_model_uploaded: "Modell geladen",
 
   /**
    * Tooltips
@@ -328,6 +333,7 @@ export const UI = {
   navbar_tutorialbuilder: "Tutorial erstellen",
   navbar_gallery: "Galerie",
   navbar_projects: "Projekte",
+  navbar_teachablesensebox: "Teachable senseBox",
 
   navbar_menu: "Menü",
   navbar_login: "Einloggen",

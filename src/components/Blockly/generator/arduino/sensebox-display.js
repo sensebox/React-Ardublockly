@@ -220,24 +220,23 @@ Blockly.Generator.Arduino.forBlock["sensebox_display_plotDisplay"] =
     return code;
   };
 
-  Blockly.Generator.Arduino.forBlock["sensebox_display_roboeyes"] =
-  function () {
-    Blockly.Generator.Arduino.definitions_["define_roboeyes"] = 
-    "#include <FluxGarage_RoboEyes.h>\n" +
-    "roboEyes roboEyes;\n";
-    Blockly.Generator.Arduino.setupCode_["sensebox_roboeye_setup"] = 
+Blockly.Generator.Arduino.forBlock["sensebox_display_roboeyes"] = function () {
+  Blockly.Generator.Arduino.definitions_["define_roboeyes"] =
+    "#include <FluxGarage_RoboEyes.h>\n" + "roboEyes roboEyes;\n";
+  Blockly.Generator.Arduino.setupCode_["sensebox_roboeye_setup"] =
     "roboEyes.begin(SCREEN_WIDTH, SCREEN_HEIGHT, 100);\n";
-    let code = "";
-    var position = this.getFieldValue("POSITION") || "DEFAULT";
-    code += "roboEyes.setPosition(" + position + ");\n";
-    var emotion = this.getFieldValue("EMOTION") || "DEFAULT";
-    code += "roboEyes.setMood(" + emotion + ");\n";
-    code += "roboEyes.drawEyes();\n" +
+  let code = "";
+  var position = this.getFieldValue("POSITION") || "DEFAULT";
+  code += "roboEyes.setPosition(" + position + ");\n";
+  var emotion = this.getFieldValue("EMOTION") || "DEFAULT";
+  code += "roboEyes.setMood(" + emotion + ");\n";
+  code +=
+    "roboEyes.drawEyes();\n" +
     "roboEyes.drawEyes();\n" +
     "roboEyes.drawEyes();\n" +
     "roboEyes.drawEyes();\n";
-    return code;
-  };
+  return code;
+};
 
 Blockly.Generator.Arduino.forBlock["sensebox_display_fillCircle"] =
   function () {
@@ -322,3 +321,36 @@ Blockly.Generator.Arduino.forBlock["sensebox_display_drawRectangle"] =
     }
     return code;
   };
+
+Blockly.Generator.Arduino.forBlock["sensebox_display_image"] = function () {
+  var cameraImage =
+    Blockly.Generator.Arduino.valueToCode(
+      this,
+      "drawImage",
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
+    ) || '"Keine Eingabe"';
+  let code =
+    "const int srcWidth = 96;\n" +
+    "const int srcHeight = 96;\n" +
+    "const int targetHeight = 64;\n" +
+    "const int targetWidth = 64;\n" +
+    "const int xOffset = (SCREEN_WIDTH - targetWidth) / 2;  // 32\n" +
+    "camera_fb_t *fb = " +
+    cameraImage +
+    ";\n" +
+    "// Simple nearest-neighbor downscaling from 96x96 -> 64x64\n" +
+    "for (int y = 0; y < targetHeight; y++) {\n" +
+    "  for (int x = 0; x < targetWidth; x++) {\n" +
+    "    // Map target (x, y) to source (sx, sy)\n" +
+    "    int sx = x * srcWidth / targetWidth;\n" +
+    "    int sy = y * srcHeight / targetHeight;\n" +
+    "    uint8_t pixel = fb->buf[sy * srcWidth + sx];\n\n" +
+    "    if (pixel > 128) {\n" +
+    "      display.drawPixel(x + xOffset, y, WHITE);\n" +
+    "    } else {\n" +
+    "      display.drawPixel(x + xOffset, y, BLACK);\n" +
+    "    }\n" +
+    "  }\n" +
+    "}\n";
+  return code;
+};

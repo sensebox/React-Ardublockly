@@ -2,19 +2,25 @@ import React, { useEffect, useRef } from "react";
 import "@blockly/block-plus-minus";
 import { TypedVariableModal } from "@blockly/plugin-typed-variable-modal";
 import * as Blockly from "blockly/core";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { uploadAiModel } from "../../../actions/generalActions";
 import { ToolboxMcu } from "./ToolboxMcu";
 import { ToolboxEsp } from "./ToolboxEsp";
+
+import { ToolboxEye } from "./ToolboxEye";
 import { getColour } from "../helpers/colour";
 import "./toolbox_styles.css";
 
 const Toolbox = ({ workspace, toolbox }) => {
+  const dispatch = useDispatch();
   const selectedBoard = useSelector((state) => state.board.board);
   const language = useSelector((state) => state.general.language);
   const setupIntervalRef = useRef(null);
   const previousBoard = useRef(null);
   const previousLanguage = useRef(null);
   const isInitialMount = useRef(true);
+  const fileInputRef = useRef(null);
+  const aiModel = useSelector((state) => state.general.aiModel);
 
   useEffect(() => {
     if (!workspace || !toolbox?.current) return;
@@ -134,14 +140,28 @@ const Toolbox = ({ workspace, toolbox }) => {
     ]);
     typedVarModal.init();
 
+    // --- AI Model Upload Callback ---
+    workspace.registerButtonCallback("uploadAiModel", () => {
+      if (fileInputRef.current) {
+        fileInputRef.current.click();
+      }
+    });
+
     // --- Toolbox aktualisieren (nur bei Änderungen, nicht beim initialen Mount) ---
-    const boardChanged = previousBoard.current !== null && previousBoard.current !== selectedBoard;
-    const languageChanged = previousLanguage.current !== null && previousLanguage.current !== language;
-    
-    if (!isInitialMount.current && (boardChanged || languageChanged) && workspace.toolbox) {
+    const boardChanged =
+      previousBoard.current !== null && previousBoard.current !== selectedBoard;
+    const languageChanged =
+      previousLanguage.current !== null &&
+      previousLanguage.current !== language;
+
+    if (
+      !isInitialMount.current &&
+      (boardChanged || languageChanged) &&
+      workspace.toolbox
+    ) {
       workspace.updateToolbox(toolbox.current);
     }
-    
+
     previousBoard.current = selectedBoard;
     previousLanguage.current = language;
     isInitialMount.current = false;
@@ -163,12 +183,12 @@ const Toolbox = ({ workspace, toolbox }) => {
 
     const maxAttempts = 100; // 10 seconds max (100 * 100ms)
     let attempts = 0;
-    
+
     const setupFlyoutOverride = () => {
       const flyout = workspace.toolbox_?.flyout_;
       if (flyout && !flyoutOriginalHide) {
         flyoutOriginalHide = flyout.hide.bind(flyout);
-        flyout.hide = function() {
+        flyout.hide = function () {
           if (variableCreatedRecently) return;
           flyoutOriginalHide();
         };
@@ -192,7 +212,9 @@ const Toolbox = ({ workspace, toolbox }) => {
             setupIntervalRef.current = null;
           }
           if (attempts >= maxAttempts) {
-            console.warn('Failed to setup flyout override: timeout after 10 seconds');
+            console.warn(
+              "Failed to setup flyout override: timeout after 10 seconds",
+            );
           }
         }
       }, 100);
@@ -232,21 +254,53 @@ const Toolbox = ({ workspace, toolbox }) => {
         flyout.hide = flyoutOriginalHide;
       }
     };
-  }, [workspace, toolbox, selectedBoard, language]);
+  }, [workspace, toolbox, selectedBoard, language, dispatch, aiModel?.code]);
+
+  const handleFileSelect = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (!file.name.endsWith(".cpp")) {
+      alert("Please select a .cpp file");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const code = e.target.result;
+      dispatch(uploadAiModel(code, file.name));
+    };
+    reader.readAsText(file);
+
+    // Reset input so same file can be selected again
+    event.target.value = "";
+  };
 
   return (
-    <xml
-      xmlns="https://developers.google.com/blockly/xml"
-      id="blockly"
-      style={{ display: "none" }}
-      ref={toolbox}
-    >
-      {selectedBoard === "MCU" || selectedBoard === "MCU:MINI" ? (
-        <ToolboxMcu />
-      ) : (
-        <ToolboxEsp />
-      )}
-    </xml>
+    <>
+      {/* file input for AI model upload */}
+      <input
+        type="file"
+        accept=".cpp"
+        ref={fileInputRef}
+        style={{ display: "none" }}
+        onChange={handleFileSelect}
+      />
+      <xml
+        xmlns="https://developers.google.com/blockly/xml"
+        id="blockly"
+        style={{ display: "none" }}
+        ref={toolbox}
+      >
+        {selectedBoard === "MCU" || selectedBoard === "MCU:MINI" ? (
+          <ToolboxMcu />
+        ) : selectedBoard === "MCU-S2" ? (
+          <ToolboxEsp />
+        ) : (
+          <ToolboxEye />
+        )}
+      </xml>
+    </>
   );
 };
 
