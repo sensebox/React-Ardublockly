@@ -31,7 +31,3 @@ Am Beispiel:
 - Liegt die senseBox Eye flach auf dem Tisch, misst die Z-Achse ungefähr 9,81.
 - Stellt man das Gerät auf die Seite, messen stattdessen die X- oder Y-Achse ungefähr 9,81.
 - Kippt man den Sensor schräg, verteilt sich die Schwerkraft auf mehrere Achsen.
-
-# Hinweis
-
-Es ist nicht in allen Browsern möglich sich mit der senseBox Eye und ihrem Beschleunigungssensor zu verbinden (in Firefox z.B. nicht). Nutze Bespielsweise Chrome oder Safari.
