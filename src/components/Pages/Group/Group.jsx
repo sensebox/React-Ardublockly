@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Box, Button, TextField, useTheme } from "@mui/material";
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 export default function Group() {
   const theme = useTheme();
-  
+
   const [gruppenname, setGruppenname] = useState("");
   const [error, setError] = useState("");
 
@@ -13,16 +13,18 @@ export default function Group() {
     e.preventDefault();
     setError("");
 
-   axios.post(`${import.meta.env.VITE_BLOCKLY_API}/group`, { name: gruppenname })
-     .then((response) => {
-       console.log("Gruppe erstellt:", response.data);
-       window.location.href = "/group/" + response.data.group._id;
-     })
-     .catch((err) => {
-       setError("Fehler beim Erstellen der Gruppe." + err.message);
-     });
-
-  }
+    axios
+      .post(`${import.meta.env.VITE_BLOCKLY_API}/group`, { name: gruppenname })
+      .then((response) => {
+        console.log("Gruppe erstellt:", response.data);
+        localStorage.setItem("lastGroupId", response.data.group._id);
+        console.log("lastGroupId gespeichert:", response.data.group._id);
+        window.location.href = "/group/" + response.data.group._id;
+      })
+      .catch((err) => {
+        setError("Fehler beim Erstellen der Gruppe." + err.message);
+      });
+  };
 
   return (
     <Box

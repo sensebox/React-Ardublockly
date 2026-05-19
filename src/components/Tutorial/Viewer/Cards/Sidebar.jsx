@@ -14,6 +14,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import { Edit, QuestionMark } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Sidebar = () => {
   const theme = useTheme();
@@ -40,6 +41,51 @@ const Sidebar = () => {
       payload: step,
     });
   };
+
+  useEffect(() => {
+    const groupId = localStorage.getItem("lastGroupId");
+    const memberId = localStorage.getItem("lastMemberId");
+    const tutorialId = tutorial?._id || localStorage.getItem("lastTutorialId");
+    const tutorialTitle =
+      tutorial?.title || localStorage.getItem("lastTutorialTitle");
+
+    if (groupId && memberId && tutorialId) {
+      // Send step progress update whenever the current tutorial slide changes.
+      axios
+        .put(
+          `${import.meta.env.VITE_BLOCKLY_API}/group/${groupId}/progress/patchTutorialProgress/${memberId}`,
+          {
+            tutorialId,
+            tutorialTitle,
+            currentStep: activeStep + 1,
+            totalSteps: stepsWithFinish.length,
+          },
+        )
+        .then(() => {
+          console.log("Tutorial progress updated:", {
+            tutorialId,
+            tutorialTitle,
+            currentStep: activeStep + 1,
+            totalSteps: stepsWithFinish.length,
+          });
+        })
+        .catch((err) =>
+          console.error("Fortschritt konnte nicht gesendet werden:", err),
+        );
+    }
+
+    if (groupId && memberId) {
+      axios
+        .post(
+          `${import.meta.env.VITE_BLOCKLY_API}/group/${groupId}/member/heartbeat/${memberId}`,
+          {
+            groupMember: memberId,
+            groupId,
+          },
+        )
+        .catch((err) => console.error("Heartbeat fehlgeschlagen:", err));
+    }
+  }, [activeStep, stepsWithFinish.length, tutorial]);
 
   return (
     <Card

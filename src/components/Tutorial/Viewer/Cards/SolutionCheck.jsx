@@ -24,6 +24,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import * as Blockly from "blockly";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
+import axios from "axios";
 import { checkXml } from "@/helpers/compareXml";
 import CompilationDialog from "@/components/Workspace/ToolbarItems/CompilationDialog/CompilationDialog";
 
@@ -43,6 +45,18 @@ export default function SolutionCheck({
   const arduino = useSelector((s) => s.workspace.code.arduino);
   const selectedBoard = useSelector((state) => state.board.board);
   const theme = useTheme();
+  const location = useLocation();
+
+  const groupState = location.state;
+  const isFromGroupState = Boolean(groupState?.fromGroupTutorial);
+  const localGroupId = localStorage.getItem("lastGroupId");
+  const localMemberId = localStorage.getItem("lastMemberId");
+  const localTutorialId = localStorage.getItem("lastTutorialId");
+  const isFromGroupLocal =
+    Boolean(localGroupId && localMemberId) &&
+    Boolean(tutorial?._id) &&
+    localTutorialId === tutorial._id;
+  const isGroupContext = isFromGroupState || isFromGroupLocal;
 
   const handleClose = () => {
     setOpen(false);
@@ -50,7 +64,76 @@ export default function SolutionCheck({
     setExpanded(false);
   };
 
-  const check = () => {
+  const postGroupSolution = async () => {
+    const groupId = groupState?.groupId || localGroupId;
+    const memberId = groupState?.memberId || localMemberId;
+    const tutorialId = tutorial?._id || localTutorialId;
+
+    if (!groupId || !memberId || !tutorialId || !xml) {
+      console.warn("[SolutionCheck] Missing data for solution post", {
+        groupId,
+        memberId,
+        tutorialId,
+        hasXml: Boolean(xml),
+      });
+      return;
+    }
+
+    const payload = {
+      userId: memberId,
+      groupId,
+      tutorialId,
+      blocklyXml: xml,
+    };
+
+    const primaryUrl = `${import.meta.env.VITE_BLOCKLY_API}/group/${groupId}/solutions/postSolution/${memberId}`;
+    const fallbackUrl = `${import.meta.env.VITE_BLOCKLY_API}/group/${groupId}/solutions/postSolution`;
+
+    console.log("[SolutionCheck] Try POST solution (primary)", {
+      url: primaryUrl,
+      payloadPreview: {
+        ...payload,
+        blocklyXmlLength: payload.blocklyXml?.length,
+      },
+    });
+
+    try {
+      const response = await axios.post(primaryUrl, payload);
+      console.log("[SolutionCheck] Solution saved (primary)", {
+        status: response.status,
+        data: response.data,
+      });
+    } catch (firstError) {
+      console.error("[SolutionCheck] Primary POST failed", {
+        message: firstError?.message,
+        status: firstError?.response?.status,
+        data: firstError?.response?.data,
+        url: primaryUrl,
+      });
+
+      console.log("[SolutionCheck] Try POST solution (fallback)", {
+        url: fallbackUrl,
+      });
+
+      try {
+        const response = await axios.post(fallbackUrl, payload);
+        console.log("[SolutionCheck] Solution saved (fallback)", {
+          status: response.status,
+          data: response.data,
+        });
+      } catch (secondError) {
+        console.error("[SolutionCheck] Fallback POST failed", {
+          message: secondError?.message,
+          status: secondError?.response?.status,
+          data: secondError?.response?.data,
+          url: fallbackUrl,
+          payload,
+        });
+      }
+    }
+  };
+
+  const check = async () => {
     if (!xml || !solutionXml) {
       setMsg({
         type: "error",
@@ -63,6 +146,10 @@ export default function SolutionCheck({
     const result = checkXml(solutionXml, xml);
     setMsg(result);
     setOpen(true);
+
+    if (isGroupContext && result.type === "success") {
+      await postGroupSolution();
+    }
   };
 
   const changeStep = (step) => {
@@ -99,7 +186,9 @@ export default function SolutionCheck({
             fontSize: "1rem",
           }}
         >
-          Lösung einreichen
+          {isGroupContext
+            ? "In Lösungsgallerie einreichen"
+            : "Lösung einreichen"}
         </Button>
       </Box>
 

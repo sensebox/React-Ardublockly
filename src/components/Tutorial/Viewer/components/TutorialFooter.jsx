@@ -10,6 +10,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 
 const TutorialFooter = ({ nextStepDisabled }) => {
   const theme = useTheme();
@@ -21,6 +22,12 @@ const TutorialFooter = ({ nextStepDisabled }) => {
   const allSteps = [...tutorial.steps];
 
   const progress = ((activeStep + 1) / allSteps.length) * 100;
+  console.log("TutorialFOOOOTERRR:", {
+    activeStep,
+    totalSteps: allSteps.length,
+    progress,
+    nextStepDisabled,
+  });
 
   const changeStep = (step) => {
     dispatch({
@@ -40,15 +47,6 @@ const TutorialFooter = ({ nextStepDisabled }) => {
       changeStep(activeStep - 1);
     }
   };
-
-  useEffect(() => {
-    const step = tutorial.steps[activeStep];
-    if (step.type === "blockly") {
-      setDisabled(true);
-    } else {
-      setDisabled(false);
-    }
-  }, [activeStep]);
 
   return (
     <Box

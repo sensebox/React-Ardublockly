@@ -53,6 +53,7 @@ export const getTutorials = () => (dispatch, getState) => {
   axios
     .get(`${import.meta.env.VITE_BLOCKLY_API}/tutorial`)
     .then((res) => {
+      console.log("All tutorials from Redux:", getState().tutorial.tutorials);
       var tutorials = res.data.tutorials;
       existingTutorials(tutorials, getState().tutorial.status).then(
         (status) => {
@@ -89,6 +90,7 @@ export const getAllTutorials = () => (dispatch, getState) => {
     .get(`${import.meta.env.VITE_BLOCKLY_API}/tutorial/getAllTutorials`)
     .then((res) => {
       var tutorials = res.data.tutorials;
+      console.log("All tutorials from Redux:", getState().tutorial.tutorials);
       existingTutorials(tutorials, getState().tutorial.status).then(
         (status) => {
           dispatch({
