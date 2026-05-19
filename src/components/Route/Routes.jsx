@@ -26,9 +26,20 @@ import BuilderPage from "@/components/Tutorial/Builder/Builder.page";
 import TutorialPage from "@/components/Tutorial/Viewer/Tutorial.page";
 import Project from "@/components/Pages/Project/Project";
 import ProjectHome from "@/components/Pages/Project/ProjectHome";
+import Group from "../Pages/Group/Group";
+import ArchiveGroup from "../Pages/Group/ArchiveGroup";
+import GroupDashboard from "../Pages/Group/GroupDashboard";
+import CreateStudent from "../Pages/GroupMember/CreateStudent";
 import TutorialHome from "../Tutorial/Overview/TutorialHome";
 import BasicWithSerial from "../Pages/Basic/BasicWithSerial";
 import BasicProject from "../Pages/Basic/BasicProject";
+import GroupTutorials from "../Pages/Group/GroupTutorials";
+import GroupSolutions from "../Pages/Group/GroupSolutions";
+import JoinGroup from "../Pages/Group/JoinGroup";
+import MemberDashboard from "../Pages/GroupMember/MemberDashboard";
+import MemberTutorial from "../Pages/GroupMember/MemberTutorial";
+import MemberSolution from "../Pages/GroupMember/MemberSolution";
+import MemberArchivedAutoLeave from "./MemberArchivedAutoLeave";
 function AppRoutes({ platform, visitPage, setPlatform }) {
   const location = useLocation();
 
@@ -134,6 +145,102 @@ function AppRoutes({ platform, visitPage, setPlatform }) {
           element={
             <PublicRoute>
               <Project />
+            </PublicRoute>
+          }
+        />
+
+        {/* Groups */}
+        <Route
+          path="/group"
+          element={
+            <PrivateRoute>
+              <Group />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/group/:groupId"
+          element={
+            <PrivateRoute>
+              <GroupDashboard />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/archiveGroup"
+          element={
+            <PrivateRoute>
+              <ArchiveGroup />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/groups/:groupId/solutions"
+          element={
+            <PrivateRoute>
+              <GroupSolutions />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/group/:groupId/member/solutions/:memberId"
+          element={
+            <PublicRoute>
+              <MemberArchivedAutoLeave>
+                <MemberSolution />
+              </MemberArchivedAutoLeave>
+            </PublicRoute>
+          }
+        />
+
+        <Route
+          path="/groups/:groupId/tutorials"
+          element={
+            <PrivateRoute>
+              <GroupTutorials />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/group/:groupId/member/tutorials/:memberId"
+          element={
+            <PublicRoute>
+              <MemberArchivedAutoLeave>
+                <MemberTutorial />
+              </MemberArchivedAutoLeave>
+            </PublicRoute>
+          }
+        />
+
+        <Route
+          path="/createStudent/:groupId"
+          element={
+            <PrivateRoute>
+              <CreateStudent />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/joinGroup"
+          element={
+            <PublicRoute>
+              <JoinGroup />
+            </PublicRoute>
+          }
+        />
+
+        <Route
+          path="/group/:groupId/member/dashboard/:memberId"
+          element={
+            <PublicRoute>
+              <MemberArchivedAutoLeave>
+                <MemberDashboard />
+              </MemberArchivedAutoLeave>
             </PublicRoute>
           }
         />

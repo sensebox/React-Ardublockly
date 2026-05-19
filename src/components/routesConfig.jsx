@@ -7,6 +7,7 @@ import {
   faCode,
   faTools,
   faQuestionCircle,
+  faPoop,
   faCog,
   faSignInAlt,
   faSignOutAlt,
@@ -19,6 +20,9 @@ export default {
     { text: "Gallery", icon: faLightbulb, link: "/gallery" },
     { text: "Projects", icon: faLayerGroup, link: "/project", auth: true },
     { text: "Code Editor", icon: faCode, link: "/codeeditor" },
+    { text: "Group", icon: faPoop, link: "/group" },
+    { text: "Archive Group", icon: faPoop, link: "/archiveGroup" },
+    { text: "Groupdashboard", icon: faPoop, link: "/dashboard/:groupId" },
     {
       text: "Builder",
       icon: faTools,

@@ -1,0 +1,63 @@
+{
+  "results": {
+    "tool": {
+      "name": "cypress"
+    },
+    "summary": {
+      "tests": 4,
+      "failed": 0,
+      "passed": 4,
+      "skipped": 0,
+      "pending": 0,
+      "other": 0,
+      "start": 1779186937423,
+      "stop": 1779186946831
+    },
+    "tests": [
+      {
+        "name": "Group Teacher POV Flow [Teacher] creates a group and lands on group dashboard",
+        "status": "passed",
+        "duration": 3702,
+        "rawStatus": "passed",
+        "type": "e2e",
+        "filePath": "cypress/e2e/group-teacher-flow.cy.js",
+        "retries": 0,
+        "flaky": false,
+        "browser": "electron 138.0.7204.251"
+      },
+      {
+        "name": "Group Teacher POV Flow [Teacher] sees access code dialog on dashboard",
+        "status": "passed",
+        "duration": 1374,
+        "rawStatus": "passed",
+        "type": "e2e",
+        "filePath": "cypress/e2e/group-teacher-flow.cy.js",
+        "retries": 0,
+        "flaky": false,
+        "browser": "electron 138.0.7204.251"
+      },
+      {
+        "name": "Group Teacher POV Flow [Teacher] can open create-student page and add a student",
+        "status": "passed",
+        "duration": 1680,
+        "rawStatus": "passed",
+        "type": "e2e",
+        "filePath": "cypress/e2e/group-teacher-flow.cy.js",
+        "retries": 0,
+        "flaky": false,
+        "browser": "electron 138.0.7204.251"
+      },
+      {
+        "name": "Group Teacher POV Flow [Teacher] can access archive page and delete group via icon",
+        "status": "passed",
+        "duration": 1028,
+        "rawStatus": "passed",
+        "type": "e2e",
+        "filePath": "cypress/e2e/group-teacher-flow.cy.js",
+        "retries": 0,
+        "flaky": false,
+        "browser": "electron 138.0.7204.251"
+      }
+    ]
+  }
+}
