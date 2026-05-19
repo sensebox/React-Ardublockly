@@ -188,11 +188,11 @@ function AppRoutes({ platform, visitPage, setPlatform }) {
         <Route
           path="/group/:groupId/member/solutions/:memberId"
           element={
-            <PrivateRoute>
+            <PublicRoute>
               <MemberArchivedAutoLeave>
                 <MemberSolution />
               </MemberArchivedAutoLeave>
-            </PrivateRoute>
+            </PublicRoute>
           }
         />
 
@@ -208,11 +208,11 @@ function AppRoutes({ platform, visitPage, setPlatform }) {
         <Route
           path="/group/:groupId/member/tutorials/:memberId"
           element={
-            <PrivateRoute>
+            <PublicRoute>
               <MemberArchivedAutoLeave>
                 <MemberTutorial />
               </MemberArchivedAutoLeave>
-            </PrivateRoute>
+            </PublicRoute>
           }
         />
 
@@ -237,11 +237,11 @@ function AppRoutes({ platform, visitPage, setPlatform }) {
         <Route
           path="/group/:groupId/member/dashboard/:memberId"
           element={
-            <PrivateRoute>
+            <PublicRoute>
               <MemberArchivedAutoLeave>
                 <MemberDashboard />
               </MemberArchivedAutoLeave>
-            </PrivateRoute>
+            </PublicRoute>
           }
         />
 
