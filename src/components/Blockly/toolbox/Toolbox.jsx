@@ -18,6 +18,7 @@ const Toolbox = ({ workspace, toolbox }) => {
   const setupIntervalRef = useRef(null);
   const previousBoard = useRef(null);
   const previousLanguage = useRef(null);
+  const previousAiModelCode = useRef(undefined);
   const isInitialMount = useRef(true);
   const fileInputRef = useRef(null);
   const aiModel = useSelector((state) => state.general.aiModel);
@@ -153,10 +154,13 @@ const Toolbox = ({ workspace, toolbox }) => {
     const languageChanged =
       previousLanguage.current !== null &&
       previousLanguage.current !== language;
+    const aiModelChanged =
+      previousAiModelCode.current !== undefined &&
+      previousAiModelCode.current !== aiModel?.code;
 
     if (
       !isInitialMount.current &&
-      (boardChanged || languageChanged) &&
+      (boardChanged || languageChanged || aiModelChanged) &&
       workspace.toolbox
     ) {
       workspace.updateToolbox(toolbox.current);
@@ -164,6 +168,7 @@ const Toolbox = ({ workspace, toolbox }) => {
 
     previousBoard.current = selectedBoard;
     previousLanguage.current = language;
+    previousAiModelCode.current = aiModel?.code;
     isInitialMount.current = false;
 
     // --- Prevent flyout from closing when variable is created ---

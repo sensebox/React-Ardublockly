@@ -12,8 +12,10 @@ import { registerBlocklyContextMenu } from "../helpers/blocklyContextMenu";
 const HorizontalToolbox = ({ workspace, toolbox }) => {
   const selectedBoard = useSelector((state) => state.board.board);
   const language = useSelector((state) => state.general.language);
+  const aiModel = useSelector((state) => state.general.aiModel);
   const previousBoard = useRef(null);
   const previousLanguage = useRef(null);
+  const previousAiModelCode = useRef(undefined);
   const isInitialMount = useRef(true);
 
   // Register typed variable flyout on board change or mount
@@ -48,10 +50,13 @@ const HorizontalToolbox = ({ workspace, toolbox }) => {
     const languageChanged =
       previousLanguage.current !== null &&
       previousLanguage.current !== language;
+    const aiModelChanged =
+      previousAiModelCode.current !== undefined &&
+      previousAiModelCode.current !== aiModel?.code;
 
     if (
       !isInitialMount.current &&
-      (boardChanged || languageChanged) &&
+      (boardChanged || languageChanged || aiModelChanged) &&
       workspace.toolbox
     ) {
       workspace.updateToolbox(toolbox.current);
@@ -59,8 +64,9 @@ const HorizontalToolbox = ({ workspace, toolbox }) => {
 
     previousBoard.current = selectedBoard;
     previousLanguage.current = language;
+    previousAiModelCode.current = aiModel?.code;
     isInitialMount.current = false;
-  }, [workspace, toolbox, selectedBoard, language]);
+  }, [workspace, toolbox, selectedBoard, language, aiModel?.code]);
 
   return (
     <xml
