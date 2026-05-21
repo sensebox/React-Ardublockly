@@ -17,6 +17,7 @@ export const ToolboxEye = () => {
         name={Blockly.Msg.toolbox_sensors}
         colour={getColour().sensebox}
       >
+        <Block type="sensebox_eye_camera" />
         <Block type="sensebox_sensor_temp_hum" />
         <Block type="sensebox_sensor_uv_light" />
         <Block type="sensebox_esp32s2_light" />
@@ -47,7 +48,6 @@ export const ToolboxEye = () => {
             </Block>
           </Value>
         </Block>
-        <Block type="sensebox_eye_camera" />
       </Category>
 
       {/* ============================== LEDS & COLORS ============================== */}
