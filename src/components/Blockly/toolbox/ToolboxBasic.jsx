@@ -211,12 +211,12 @@ export const toolboxBasicObject = {
       name: "Sensoren",
       colour: "#5ba55b",
       contents: [
-        { kind: "block", type: "display_show_measurement" },
-
         { kind: "block", type: "bme_tmp" },
         { kind: "block", type: "bme_humi" },
         { kind: "block", type: "bme_air_quality" },
         { kind: "block", type: "basic_brightness" },
+        { kind: "block", type: "basic_button_pressed" },
+        { kind: "block", type: "basic_box_shaken" },
       ],
     },
     {
@@ -311,28 +311,6 @@ export const toolboxBasicObject = {
           inputs: {
             IF: {
               block: {
-                type: "basic_button_pressed",
-              },
-            },
-          },
-        },
-        {
-          kind: "block",
-          type: "basic_if_else",
-          inputs: {
-            IF: {
-              block: {
-                type: "basic_box_shaken",
-              },
-            },
-          },
-        },
-        {
-          kind: "block",
-          type: "basic_if_else",
-          inputs: {
-            IF: {
-              block: {
                 type: "basic_compare",
                 fields: {
                   OP: "==",
@@ -361,8 +339,6 @@ export const toolboxBasicObject = {
         },
         { kind: "block", type: "basic_if_else" },
         { kind: "block", type: "basic_if" },
-        { kind: "block", type: "basic_button_pressed" },
-        { kind: "block", type: "basic_box_shaken" },
       ],
     },
     {
