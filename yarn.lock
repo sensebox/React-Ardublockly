@@ -321,10 +321,10 @@
   resolved "https://registry.yarnpkg.com/@blockly/workspace-minimap/-/workspace-minimap-0.3.9.tgz#6505bddc646258ba2f995079ccff9552692bd79f"
   integrity sha512-e0up4j4F+oReax7Wqw71o5LBaxL8prSXZ08d0SKUXf+ZmHbLnu1qzitgdYVRMJkIrzytQNbniC4uDeHZqMg6Bw==
 
-"@blockly/zoom-to-fit@^7.0.1":
-  version "7.0.8"
-  resolved "https://registry.yarnpkg.com/@blockly/zoom-to-fit/-/zoom-to-fit-7.0.8.tgz#6171ff74ec91a80f7679a2d5ab5fd26d185ca036"
-  integrity sha512-ut9XlVt4Z0U9D9kvsRaQaRF3VtfEL8IR61ySI+9iQyoN0mpRz+BmwcSe2oTDohKMm1zDZxc1DzBc5l2P9YPlng==
+"@blockly/zoom-to-fit@^7.0.9":
+  version "7.0.9"
+  resolved "https://registry.yarnpkg.com/@blockly/zoom-to-fit/-/zoom-to-fit-7.0.9.tgz#5d8aa1c0847a6d9722f895e8a445dd6250d90475"
+  integrity sha512-BtYCAe1zPyMU1zuBP99W/DveX/UdTDkh3YXFdM2p/Ullro5eTbzcPMEibMVpRZkg3rjPkgMOqhelO+wrxFXOFg==
 
 "@csstools/color-helpers@^5.1.0":
   version "5.1.0"
