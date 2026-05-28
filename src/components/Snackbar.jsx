@@ -18,24 +18,31 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function AppSnackbar(props) {
-  const { open: initialOpen, message, type, key: snackKey } = props;
+  const { open: initialOpen, message, type, key: snackKey, onClose } = props;
   const classes = useStyles();
   const [open, setOpen] = useState(initialOpen);
+
+  // Sync open state with prop changes
+  useEffect(() => {
+    setOpen(initialOpen);
+  }, [initialOpen]);
 
   useEffect(() => {
     let timeout;
     if (open) {
       timeout = setTimeout(() => {
         setOpen(false);
+        if (onClose) onClose();
       }, 5000);
     }
     return () => {
       clearTimeout(timeout);
     };
-  }, [open]);
+  }, [open, onClose]);
 
   const handleClose = () => {
     setOpen(false);
+    if (onClose) onClose();
   };
 
   return (
