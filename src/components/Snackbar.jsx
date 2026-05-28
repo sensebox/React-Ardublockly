@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function AppSnackbar(props) {
-  const { open: initialOpen, message, type, key: snackKey, onClose } = props;
+  const { open: initialOpen, message, type, snackbarKey, onClose } = props;
   const classes = useStyles();
   const [open, setOpen] = useState(initialOpen);
 
@@ -49,7 +49,7 @@ export default function AppSnackbar(props) {
     <Snackbar
       anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
       open={open}
-      key={snackKey}
+      key={snackbarKey}
       style={{
         left: "22px",
         bottom: "40px",

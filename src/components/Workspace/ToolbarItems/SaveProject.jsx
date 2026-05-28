@@ -272,7 +272,7 @@ class SaveProject extends Component {
           open={this.state.snackbar}
           message={this.state.message}
           type={this.state.type}
-          key={this.state.key}
+          snackbarKey={this.state.key}
         />
         <Dialog
           open={this.state.open}
@@ -337,7 +337,7 @@ class SaveProject extends Component {
 SaveProject.propTypes = {
   updateProject: PropTypes.func.isRequired,
   setDescription: PropTypes.func.isRequired,
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   description: PropTypes.string.isRequired,
   xml: PropTypes.string.isRequired,
   message: PropTypes.object.isRequired,

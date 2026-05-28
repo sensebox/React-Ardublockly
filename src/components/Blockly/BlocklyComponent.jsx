@@ -188,7 +188,7 @@ export function BlocklyComponent({ initialXml, style, maxInstances, ...rest }) {
         open={snackbar.open}
         message={snackbar.message}
         type={snackbar.type}
-        key={snackbar.key}
+        snackbarKey={snackbar.key}
         onClose={() => setSnackbar((s) => ({ ...s, open: false }))}
       />
     </>

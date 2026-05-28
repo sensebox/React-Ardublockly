@@ -54,20 +54,21 @@ const HorizontalToolbox = ({ workspace, toolbox }) => {
     isInitialMount.current = false;
   }, [workspace, toolbox, selectedBoard, language]);
 
-  return (
-    <xml
-      xmlns="https://developers.google.com/blockly/xml"
-      id="blockly"
-      style={{ display: "none" }}
-      ref={toolbox}
-      className="embedded-mode"
-    >
-      {selectedBoard === "MCU" || selectedBoard === "MCU:mini" ? (
-        <ToolboxMcu />
-      ) : (
-        <ToolboxEsp />
-      )}
-    </xml>
+  return React.createElement(
+    "xml",
+    {
+      is: "blockly",
+      xmlns: "https://developers.google.com/blockly/xml",
+      id: "blockly",
+      style: { display: "none" },
+      ref: toolbox,
+      className: "embedded-mode",
+    },
+    selectedBoard === "MCU" || selectedBoard === "MCU:mini" ? (
+      <ToolboxMcu />
+    ) : (
+      <ToolboxEsp />
+    ),
   );
 };
 

@@ -228,7 +228,7 @@ class OpenProject extends Component {
           open={this.state.snackbar}
           message={this.state.message}
           type={this.state.type}
-          key={this.state.key}
+          snackbarKey={this.state.key}
         />
       </div>
     );
