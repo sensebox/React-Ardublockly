@@ -117,6 +117,12 @@ class SaveProject extends Component {
     const config = {
       success: (res) => {
         var project = res.data[this.state.projectType];
+        this.setState({
+          snackbar: true,
+          key: Date.now(),
+          message: Blockly.Msg.messages_PROJECT_SAVE_SUCCESS,
+          type: "success",
+        });
         this.props.navigate(`/${this.state.projectType}/${project._id}`);
       },
       error: (err) => {
