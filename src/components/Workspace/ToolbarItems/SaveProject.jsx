@@ -109,7 +109,7 @@ class SaveProject extends Component {
   saveProject = () => {
     var body = {
       xml: this.props.xml,
-      title: this.props.name,
+      title: this.props.project?.title || this.props.name,
     };
     if (this.state.projectType === "gallery") {
       body.description = this.state.description;
@@ -336,6 +336,7 @@ SaveProject.propTypes = {
   xml: PropTypes.string.isRequired,
   message: PropTypes.object.isRequired,
   user: PropTypes.object,
+  project: PropTypes.object,
 };
 
 const mapStateToProps = (state) => ({
