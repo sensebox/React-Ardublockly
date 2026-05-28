@@ -63,7 +63,10 @@ const Toolbox = ({ workspace, toolbox }) => {
         xmlList.push(callBlock);
 
         const callExpressionBlock = document.createElement("block");
-        callExpressionBlock.setAttribute("type", "custom_function_call_expression");
+        callExpressionBlock.setAttribute(
+          "type",
+          "custom_function_call_expression",
+        );
         xmlList.push(callExpressionBlock);
 
         // Separator
@@ -139,13 +142,20 @@ const Toolbox = ({ workspace, toolbox }) => {
     typedVarModal.init();
 
     // --- Toolbox aktualisieren (nur bei Änderungen, nicht beim initialen Mount) ---
-    const boardChanged = previousBoard.current !== null && previousBoard.current !== selectedBoard;
-    const languageChanged = previousLanguage.current !== null && previousLanguage.current !== language;
-    
-    if (!isInitialMount.current && (boardChanged || languageChanged) && workspace.toolbox) {
+    const boardChanged =
+      previousBoard.current !== null && previousBoard.current !== selectedBoard;
+    const languageChanged =
+      previousLanguage.current !== null &&
+      previousLanguage.current !== language;
+
+    if (
+      !isInitialMount.current &&
+      (boardChanged || languageChanged) &&
+      workspace.toolbox
+    ) {
       workspace.updateToolbox(toolbox.current);
     }
-    
+
     previousBoard.current = selectedBoard;
     previousLanguage.current = language;
     isInitialMount.current = false;
@@ -167,12 +177,12 @@ const Toolbox = ({ workspace, toolbox }) => {
 
     const maxAttempts = 100; // 10 seconds max (100 * 100ms)
     let attempts = 0;
-    
+
     const setupFlyoutOverride = () => {
       const flyout = workspace.toolbox_?.flyout_;
       if (flyout && !flyoutOriginalHide) {
         flyoutOriginalHide = flyout.hide.bind(flyout);
-        flyout.hide = function() {
+        flyout.hide = function () {
           if (variableCreatedRecently) return;
           flyoutOriginalHide();
         };
@@ -196,7 +206,9 @@ const Toolbox = ({ workspace, toolbox }) => {
             setupIntervalRef.current = null;
           }
           if (attempts >= maxAttempts) {
-            console.warn('Failed to setup flyout override: timeout after 10 seconds');
+            console.warn(
+              "Failed to setup flyout override: timeout after 10 seconds",
+            );
           }
         }
       }, 100);
