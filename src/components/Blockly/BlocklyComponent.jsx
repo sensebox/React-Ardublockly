@@ -26,7 +26,7 @@ import { Card } from "@mui/material";
 // -------------------------------
 // BlocklyComponent (Hooks)
 // -------------------------------
-export function BlocklyComponent({ initialXml, style, ...rest }) {
+export function BlocklyComponent({ initialXml, style, maxInstances, ...rest }) {
   const blocklyDivRef = useRef(null);
   const toolboxRef = useRef(null);
   const [workspace, setWorkspace] = useState(undefined);
@@ -47,6 +47,7 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
         blockDragger: ScrollBlockDragger,
         metricsManager: ScrollMetricsManager,
       },
+      maxInstances,
       ...rest,
     };
 
@@ -153,6 +154,13 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isHorizontalToolbox]);
+
+  // Update maxInstances when board changes
+  useEffect(() => {
+    if (workspace && maxInstances) {
+      workspace.options.maxInstances = maxInstances;
+    }
+  }, [workspace, maxInstances]);
 
   const cardStyle = useMemo(() => {
     return isEmbedded
