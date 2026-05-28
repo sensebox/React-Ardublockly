@@ -166,26 +166,32 @@ class SaveProject extends Component {
           <IconButton
             className={this.props.classes.button}
             onClick={
-              this.props.user.blocklyRole !== "user" &&
-              (!this.props.project ||
-                this.props.user.email === this.props.project.creator)
-                ? (e) => this.toggleMenu(e)
-                : this.props.project &&
-                    this.props.user.email !== this.props.project.creator
-                  ? () => {
-                      this.setState({
-                        open: true,
-                        dialogType: "saveAsOwn",
-                        title: "Projekt als eigenes Projekt speichern",
-                        content:
-                          "Du bist nicht der Ersteller dieses Projekts. Möchtest du es als dein eigenes Projekt speichern?",
-                      });
-                    }
-                  : () =>
-                      this.props.updateProject(
-                        this.state.projectType,
-                        this.props.project._id,
-                      )
+              this.props.project &&
+              this.props.user.email !== this.props.project.creator
+                ? () => {
+                    this.setState({
+                      open: true,
+                      dialogType: "saveAsOwn",
+                      title: "Projekt als eigenes Projekt speichern",
+                      content:
+                        "Du bist nicht der Ersteller dieses Projekts. Möchtest du es als dein eigenes Projekt speichern?",
+                    });
+                  }
+                : this.props.user.blocklyRole !== "user" &&
+                    (!this.props.project ||
+                      this.props.user.email === this.props.project.creator)
+                  ? (e) => this.toggleMenu(e)
+                  : this.props.project
+                    ? () =>
+                        this.props.updateProject(
+                          this.state.projectType,
+                          this.props.project._id,
+                        )
+                    : () => {
+                        this.setState({ projectType: "project" }, () =>
+                          this.saveProject(),
+                        );
+                      }
             }
             size="large"
           >
