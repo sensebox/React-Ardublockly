@@ -51,6 +51,7 @@ class SaveProject extends Component {
       menuOpen: false,
       anchor: "",
       projectType: props.projectType,
+      dialogType: "description", // "description" or "saveAsOwn"
     };
   }
 
@@ -108,7 +109,7 @@ class SaveProject extends Component {
   saveProject = () => {
     var body = {
       xml: this.props.xml,
-      title: this.props.name,
+      title: this.props.project?.title || this.props.name,
     };
     if (this.state.projectType === "gallery") {
       body.description = this.state.description;
@@ -116,6 +117,12 @@ class SaveProject extends Component {
     const config = {
       success: (res) => {
         var project = res.data[this.state.projectType];
+        this.setState({
+          snackbar: true,
+          key: Date.now(),
+          message: Blockly.Msg.messages_PROJECT_SAVE_SUCCESS,
+          type: "success",
+        });
         this.props.navigate(`/${this.state.projectType}/${project._id}`);
       },
       error: (err) => {
@@ -165,21 +172,32 @@ class SaveProject extends Component {
           <IconButton
             className={this.props.classes.button}
             onClick={
-              this.props.user.blocklyRole !== "user" &&
-              (!this.props.project ||
-                this.props.user.email === this.props.project.creator)
-                ? (e) => this.toggleMenu(e)
-                : this.state.projectType === "project"
-                  ? () =>
-                      this.props.updateProject(
-                        this.state.projectType,
-                        this.props.project._id,
-                      )
-                  : () => {
-                      this.setState({ projectType: "project" }, () =>
-                        this.saveProject(),
-                      );
-                    }
+              this.props.project &&
+              this.props.user.email !== this.props.project.creator
+                ? () => {
+                    this.setState({
+                      open: true,
+                      dialogType: "saveAsOwn",
+                      title: "Projekt als eigenes Projekt speichern",
+                      content:
+                        "Du bist nicht der Ersteller dieses Projekts. Möchtest du es als dein eigenes Projekt speichern?",
+                    });
+                  }
+                : this.props.user.blocklyRole !== "user" &&
+                    (!this.props.project ||
+                      this.props.user.email === this.props.project.creator)
+                  ? (e) => this.toggleMenu(e)
+                  : this.props.project
+                    ? () =>
+                        this.props.updateProject(
+                          this.state.projectType,
+                          this.props.project._id,
+                        )
+                    : () => {
+                        this.setState({ projectType: "project" }, () =>
+                          this.saveProject(),
+                        );
+                      }
             }
             size="large"
           >
@@ -236,7 +254,8 @@ class SaveProject extends Component {
                     this.toggleMenu(e);
                     this.setState({
                       open: true,
-                      title: "Projekbeschreibung ergänzen",
+                      dialogType: "description",
+                      title: "Projektbeschreibung ergänzen",
                       content:
                         "Bitte gib eine Beschreibung für das Galerie-Projekt ein und bestätige deine Angabe mit einem Klick auf 'Eingabe'.",
                     });
@@ -269,29 +288,46 @@ class SaveProject extends Component {
           }}
           button={"Abbrechen"}
         >
-          <div style={{ marginTop: "10px" }}>
-            <TextField
-              variant="standard"
-              autoFocus
-              fullWidth
-              multiline
-              placeholder={"Projektbeschreibung"}
-              value={this.state.description}
-              onChange={this.setDescription}
-              style={{ marginBottom: "10px" }}
-            />
-            <Button
-              disabled={!this.state.description}
-              variant="contained"
-              color="primary"
-              onClick={() => {
-                this.workspaceDescription();
-                this.toggleDialog();
-              }}
-            >
-              Eingabe
-            </Button>
-          </div>
+          {this.state.dialogType === "description" ? (
+            <div style={{ marginTop: "10px" }}>
+              <TextField
+                variant="standard"
+                autoFocus
+                fullWidth
+                multiline
+                placeholder={"Projektbeschreibung"}
+                value={this.state.description}
+                onChange={this.setDescription}
+                style={{ marginBottom: "10px" }}
+              />
+              <Button
+                disabled={!this.state.description}
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                  this.workspaceDescription();
+                  this.toggleDialog();
+                }}
+              >
+                Eingabe
+              </Button>
+            </div>
+          ) : (
+            <div style={{ marginTop: "10px" }}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                  this.setState({ projectType: "project" }, () =>
+                    this.saveProject(),
+                  );
+                  this.toggleDialog();
+                }}
+              >
+                Als eigenes Projekt speichern
+              </Button>
+            </div>
+          )}
         </Dialog>
       </div>
     );
@@ -306,6 +342,7 @@ SaveProject.propTypes = {
   xml: PropTypes.string.isRequired,
   message: PropTypes.object.isRequired,
   user: PropTypes.object,
+  project: PropTypes.object,
 };
 
 const mapStateToProps = (state) => ({
