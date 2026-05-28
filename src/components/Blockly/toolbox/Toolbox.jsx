@@ -62,6 +62,10 @@ const Toolbox = ({ workspace, toolbox }) => {
         callBlock.setAttribute("type", "custom_function_call");
         xmlList.push(callBlock);
 
+        const callExpressionBlock = document.createElement("block");
+        callExpressionBlock.setAttribute("type", "custom_function_call_expression");
+        xmlList.push(callExpressionBlock);
+
         // Separator
         const sep = document.createElement("sep");
         sep.setAttribute("gap", "24");

@@ -62,7 +62,7 @@ Blockly.Generator.Arduino.forBlock["custom_function_define"] = function (
 };
 
 /**
- * GENERATOR FÜR FUNKTIONSAUFRUF
+ * GENERATOR FÜR FUNKTIONSAUFRUF (Statement)
  *
  * Generiert Arduino-Code für einen Funktionsaufruf mit Argumenten
  */
@@ -86,17 +86,37 @@ Blockly.Generator.Arduino.forBlock["custom_function_call"] = function (
     }
   }
 
-  // Funktionsaufruf generieren
-  const functionCall = `${funcName}(${args.join(", ")})`;
-
-  // Wenn die Funktion einen Rückgabewert hat, als Expression zurückgeben
-  if (block.outputConnection) {
-    return [functionCall, Blockly.Generator.Arduino.ORDER_ATOMIC];
-  } else {
-    // Sonst als Statement mit Semikolon
-    return `${functionCall};\n`;
-  }
+  // Funktionsaufruf als Statement mit Semikolon
+  return `${funcName}(${args.join(", ")});\n`;
 };
+
+/**
+ * GENERATOR FÜR FUNKTIONSAUFRUF ALS AUSDRUCK (Expression)
+ *
+ * Generiert Arduino-Code für einen Funktionsaufruf, der als Wert verwendet wird
+ */
+Blockly.Generator.Arduino.forBlock["custom_function_call_expression"] =
+  function (block, generator) {
+    const funcName = block.getFieldValue("FUNC_NAME");
+
+    // Argumente sammeln
+    const args = [];
+    for (let i = 1; i <= 3; i++) {
+      const argInput = block.getInput(`ARG${i}`);
+      if (argInput && argInput.isVisible()) {
+        const argValue = Blockly.Generator.Arduino.valueToCode(
+          block,
+          `ARG${i}`,
+          Blockly.Generator.Arduino.ORDER_NONE,
+        );
+        args.push(argValue || "");
+      }
+    }
+
+    // Funktionsaufruf als Expression zurückgeben (ohne Semikolon)
+    const functionCall = `${funcName}(${args.join(", ")})`;
+    return [functionCall, Blockly.Generator.Arduino.ORDER_ATOMIC];
+  };
 
 /**
  * GENERATOR FÜR PARAMETER-VARIABLE
