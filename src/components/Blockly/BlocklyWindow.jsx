@@ -122,19 +122,13 @@ export default function BlocklyWindow(props) {
     // Only initialize backpack if not already present
     let backpack = null;
     const existingBackpack = componentManager.getComponent("backpack");
-    console.log("Backpack init check:", {
-      existingBackpack: !!existingBackpack,
-    });
     if (!existingBackpack) {
-      console.log("Creating new BackpackWithFeedback");
       backpack = new BackpackWithFeedback(ws, {
         onAdd: () => {
-          console.log("onAdd callback triggered!");
           showBackpackFeedback();
         },
       });
       backpack.init();
-      console.log("BackpackWithFeedback initialized");
     }
 
     // Cleanup: remove listeners and dispose plugins
