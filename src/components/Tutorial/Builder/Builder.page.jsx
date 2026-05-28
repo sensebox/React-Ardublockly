@@ -141,7 +141,7 @@ const BuilderPage = () => {
           display: "flex",
           flexDirection: "row",
           width: "100%",
-          height: "80vh",
+          height: "calc(100vh - 200px)",
           p: 2,
           gap: 4,
         }}
