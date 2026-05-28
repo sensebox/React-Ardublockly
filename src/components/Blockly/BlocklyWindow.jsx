@@ -12,6 +12,7 @@ import { ZoomToFitControl } from "@blockly/zoom-to-fit";
 import { Backpack } from "@blockly/workspace-backpack";
 import { initialXml } from "./initialXml.js";
 import { getMaxInstances } from "./helpers/maxInstances";
+import { ensureStartBlock } from "./helpers/ensureStartBlock";
 import {
   EMBEDDED_BLOCKLY_CONFIG,
   DEFAULT_BLOCKLY_CONFIG,
@@ -124,6 +125,7 @@ export default function BlocklyWindow(props) {
     } catch (e) {
       console.warn("Failed to load XML on board change:", e);
       ws.clear();
+      ensureStartBlock(ws);
     }
     Blockly.svgResize(ws);
   }, [selectedBoard]);
@@ -139,7 +141,9 @@ export default function BlocklyWindow(props) {
       Blockly.Xml.domToWorkspace(Blockly.utils.xml.textToDom(xml), ws);
     } catch (e) {
       console.warn("Failed to apply initialXml:", e);
+      ensureStartBlock(ws);
     }
+    ensureStartBlock(ws);
     Blockly.svgResize(ws);
   }, [initialXmlProp, svg]);
 
@@ -155,6 +159,7 @@ export default function BlocklyWindow(props) {
     } catch (e) {
       console.warn("Failed to reload on language change:", e);
       ws.clear();
+      ensureStartBlock(ws);
     }
     Blockly.svgResize(ws);
   }, [language]);

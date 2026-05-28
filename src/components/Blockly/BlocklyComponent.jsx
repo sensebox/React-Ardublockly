@@ -19,6 +19,7 @@ import {
   ScrollBlockDragger,
   ScrollMetricsManager,
 } from "@blockly/plugin-scroll-options";
+import { ensureStartBlock } from "./helpers/ensureStartBlock";
 
 import { Card } from "@mui/material";
 
@@ -133,8 +134,15 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
         try {
           const xmlDom = Blockly.utils.xml.textToDom(initialXml);
           Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, ws);
-        } catch (e) {}
+        } catch (e) {
+          console.warn("Failed to load initialXml in BlocklyComponent:", e);
+          ensureStartBlock(ws);
+        }
+        ensureStartBlock(ws);
       });
+    } else {
+      // No initialXml provided, ensure start block exists
+      Promise.resolve().then(() => ensureStartBlock(ws));
     }
 
     // Cleanup on unmount
