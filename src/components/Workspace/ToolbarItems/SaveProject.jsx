@@ -171,13 +171,8 @@ class SaveProject extends Component {
                 this.props.user.email === this.props.project.creator)
                 ? (e) => this.toggleMenu(e)
                 : this.props.project &&
-                    this.props.user.email === this.props.project.creator
-                  ? () =>
-                      this.props.updateProject(
-                        this.state.projectType,
-                        this.props.project._id,
-                      )
-                  : () => {
+                    this.props.user.email !== this.props.project.creator
+                  ? () => {
                       this.setState({
                         open: true,
                         dialogType: "saveAsOwn",
@@ -186,6 +181,11 @@ class SaveProject extends Component {
                           "Du bist nicht der Ersteller dieses Projekts. Möchtest du es als dein eigenes Projekt speichern?",
                       });
                     }
+                  : () =>
+                      this.props.updateProject(
+                        this.state.projectType,
+                        this.props.project._id,
+                      )
             }
             size="large"
           >
@@ -243,7 +243,7 @@ class SaveProject extends Component {
                     this.setState({
                       open: true,
                       dialogType: "description",
-                      title: "Projekbeschreibung ergänzen",
+                      title: "Projektbeschreibung ergänzen",
                       content:
                         "Bitte gib eine Beschreibung für das Galerie-Projekt ein und bestätige deine Angabe mit einem Klick auf 'Eingabe'.",
                     });
