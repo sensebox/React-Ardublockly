@@ -42,13 +42,20 @@ const HorizontalToolbox = ({ workspace, toolbox }) => {
     typedVarModal.init();
 
     // Update toolbox only when board or language actually changes, not on initial mount
-    const boardChanged = previousBoard.current !== null && previousBoard.current !== selectedBoard;
-    const languageChanged = previousLanguage.current !== null && previousLanguage.current !== language;
-    
-    if (!isInitialMount.current && (boardChanged || languageChanged) && workspace.toolbox) {
+    const boardChanged =
+      previousBoard.current !== null && previousBoard.current !== selectedBoard;
+    const languageChanged =
+      previousLanguage.current !== null &&
+      previousLanguage.current !== language;
+
+    if (
+      !isInitialMount.current &&
+      (boardChanged || languageChanged) &&
+      workspace.toolbox
+    ) {
       workspace.updateToolbox(toolbox.current);
     }
-    
+
     previousBoard.current = selectedBoard;
     previousLanguage.current = language;
     isInitialMount.current = false;

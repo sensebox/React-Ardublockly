@@ -89,7 +89,9 @@ class ResetWorkspace extends Component {
             className={`embedded-button embedded-button-primary`}
             onClick={() => this.openDialog()}
             variant="contained"
-            startIcon={<FontAwesomeIcon icon={faShare} size="sm" flip="horizontal" />}
+            startIcon={
+              <FontAwesomeIcon icon={faShare} size="sm" flip="horizontal" />
+            }
           >
             Zurücksetzen
           </Button>
@@ -153,6 +155,8 @@ const mapStateToProps = (state) => ({
   isEmbedded: state.general.embeddedMode,
 });
 
-export default connect(mapStateToProps, { clearStats, onChangeCode, workspaceName })(
-  withStyles(styles, { withTheme: true })(ResetWorkspace),
-);
+export default connect(mapStateToProps, {
+  clearStats,
+  onChangeCode,
+  workspaceName,
+})(withStyles(styles, { withTheme: true })(ResetWorkspace));
