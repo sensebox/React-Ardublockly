@@ -51,6 +51,7 @@ class SaveProject extends Component {
       menuOpen: false,
       anchor: "",
       projectType: props.projectType,
+      dialogType: "description", // "description" or "saveAsOwn"
     };
   }
 
@@ -169,16 +170,21 @@ class SaveProject extends Component {
               (!this.props.project ||
                 this.props.user.email === this.props.project.creator)
                 ? (e) => this.toggleMenu(e)
-                : this.state.projectType === "project"
+                : this.props.project &&
+                    this.props.user.email === this.props.project.creator
                   ? () =>
                       this.props.updateProject(
                         this.state.projectType,
                         this.props.project._id,
                       )
                   : () => {
-                      this.setState({ projectType: "project" }, () =>
-                        this.saveProject(),
-                      );
+                      this.setState({
+                        open: true,
+                        dialogType: "saveAsOwn",
+                        title: "Projekt als eigenes Projekt speichern",
+                        content:
+                          "Du bist nicht der Ersteller dieses Projekts. Möchtest du es als dein eigenes Projekt speichern?",
+                      });
                     }
             }
             size="large"
@@ -236,6 +242,7 @@ class SaveProject extends Component {
                     this.toggleMenu(e);
                     this.setState({
                       open: true,
+                      dialogType: "description",
                       title: "Projekbeschreibung ergänzen",
                       content:
                         "Bitte gib eine Beschreibung für das Galerie-Projekt ein und bestätige deine Angabe mit einem Klick auf 'Eingabe'.",
@@ -269,29 +276,46 @@ class SaveProject extends Component {
           }}
           button={"Abbrechen"}
         >
-          <div style={{ marginTop: "10px" }}>
-            <TextField
-              variant="standard"
-              autoFocus
-              fullWidth
-              multiline
-              placeholder={"Projektbeschreibung"}
-              value={this.state.description}
-              onChange={this.setDescription}
-              style={{ marginBottom: "10px" }}
-            />
-            <Button
-              disabled={!this.state.description}
-              variant="contained"
-              color="primary"
-              onClick={() => {
-                this.workspaceDescription();
-                this.toggleDialog();
-              }}
-            >
-              Eingabe
-            </Button>
-          </div>
+          {this.state.dialogType === "description" ? (
+            <div style={{ marginTop: "10px" }}>
+              <TextField
+                variant="standard"
+                autoFocus
+                fullWidth
+                multiline
+                placeholder={"Projektbeschreibung"}
+                value={this.state.description}
+                onChange={this.setDescription}
+                style={{ marginBottom: "10px" }}
+              />
+              <Button
+                disabled={!this.state.description}
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                  this.workspaceDescription();
+                  this.toggleDialog();
+                }}
+              >
+                Eingabe
+              </Button>
+            </div>
+          ) : (
+            <div style={{ marginTop: "10px" }}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                  this.setState({ projectType: "project" }, () =>
+                    this.saveProject(),
+                  );
+                  this.toggleDialog();
+                }}
+              >
+                Als eigenes Projekt speichern
+              </Button>
+            </div>
+          )}
         </Dialog>
       </div>
     );
