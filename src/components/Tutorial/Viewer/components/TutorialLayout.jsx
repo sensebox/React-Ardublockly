@@ -36,10 +36,11 @@ const TutorialLayout = ({
       {/* Main */}
       <Box
         sx={{
-          flex: 1, // 🔥 nimmt Resthöhe
+          flex: 1,
           display: "flex",
           flexDirection: "row",
           gap: 4,
+          maxHeight: "calc(100vh - 180px)", // Navbar ~64px + Breadcrumbs ~45px + margins ~70px
         }}
       >
         {/* Sidebar */}
@@ -47,6 +48,7 @@ const TutorialLayout = ({
           sx={{
             flex: "0 0 20%",
             minHeight: 0,
+            maxHeight: "100%", // Prevent sidebar from growing beyond container
             display: "flex",
             flexDirection: "column",
           }}
@@ -62,8 +64,8 @@ const TutorialLayout = ({
             flexDirection: "column",
             borderRadius: 3,
             boxShadow: 3,
-            height: "80vh",
-            overflow: "scroll",
+            height: "calc(100vh - 180px)",
+            overflow: "auto",
           }}
         >
           {children}
