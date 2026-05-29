@@ -12,7 +12,7 @@ var selectedBox = "";
 
 Blockly.Blocks["sensebox_osem_connection"] = {
   init: function () {
-    var ssl = "TRUE";
+    var ssl = "FALSE";
     this.setTooltip(Blockly.Msg.senseBox_osem_connection_tip);
     this.setHelpUrl(Blockly.Msg.senseBox_osem_connection_helpurl);
     this.setColour(getColour().sensebox);
