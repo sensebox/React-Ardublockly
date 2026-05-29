@@ -31,7 +31,7 @@ const TrainingResultsSection = ({
   onOpenHelp,
   translations,
 }) => {
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(false);
   const theme = useTheme();
 
   const hasData = trainingMetrics && trainingMetrics.length > 0;
