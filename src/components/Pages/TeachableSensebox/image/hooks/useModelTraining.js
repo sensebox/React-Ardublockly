@@ -11,7 +11,7 @@ const VALIDATION_FRACTION = 0.15;
 export const DEFAULT_TRAINING_SETTINGS = {
   epochs: 70,
   learningRate: 0.0001,
-  earlyStopping: true,
+  earlyStopping: false,
 };
 
 const EARLY_STOPPING_PATIENCE = 5;
