@@ -338,7 +338,7 @@ const ModelTrainer = ({
   };
 
   const addClass = useCallback(() => {
-    if (newClassName.trim() && classes.length < 3) {
+    if (newClassName.trim() && classes.length < 4) {
       const trimmedName = newClassName.trim();
       const nameExists = classes.some(
         (cls) => cls.name.toLowerCase() === trimmedName.toLowerCase(),
@@ -970,7 +970,7 @@ const ModelTrainer = ({
               gap: 2,
             }}
           >
-            {classes.length < 3 && (
+            {classes.length < 4 && (
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                 <Button
                   variant="contained"
