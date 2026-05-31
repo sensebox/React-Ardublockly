@@ -8,6 +8,6 @@ Die Gesamtgenauigkeit gibt den Prozentsatz der korrekt klassifizierten Testbilde
 
 Die Konfusionsmatrix zeigt für jede Klasse, wie viele Bilder korrekt und wie viele falsch klassifiziert wurden.
 
-- die Zeile gibt die tatsächliche Klasse an, die Spalte die vorhergesagte.
-- Die **Diagonale** (in grün, von oben links nach unten rechts) zeigt korrekte Vorhersagen.
+- die Zeile gibt die tatsächliche Klasse an, die Spalte die klassifizierte.
+- Die **Diagonale** (in grün, von oben links nach unten rechts) zeigt korrekte Klassifizierungen.
 - **Außerhalb der Diagonale** (in rot) stehen falsch klassifizierte Bilder.
