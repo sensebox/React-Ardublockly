@@ -47,7 +47,7 @@ export const imageClassificationTranslations_de = {
     loss: "Loss",
     accuracy: "Genauigkeit",
     epoch: "Epoche",
-    predicted: "Vorhergesagt",
+    predicted: "Klassifiziert",
     actual: "Tatsächlich",
     noTestResultsData: "Keine Konfusionsmatrix-Daten",
     settings: {
