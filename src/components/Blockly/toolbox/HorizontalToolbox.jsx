@@ -5,6 +5,7 @@ import * as Blockly from "blockly/core";
 import { useSelector } from "react-redux";
 import { ToolboxMcu } from "./ToolboxMcu";
 import { ToolboxEsp } from "./ToolboxEsp";
+import { ToolboxEye } from "./ToolboxEye";
 import "./horizontal_toolbox_styles.css";
 import { registerBlocklyContextMenu } from "../helpers/blocklyContextMenu";
 import { ToolboxEye } from "./ToolboxEye";
@@ -86,7 +87,6 @@ const HorizontalToolbox = ({ workspace, toolbox }) => {
     ) : (
       <ToolboxEye />
     ),
-    y / toolbox / EmbeddedToolbox.jsx,
   );
 };
 

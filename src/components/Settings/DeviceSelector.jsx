@@ -87,9 +87,9 @@ export default function DeviceSelector() {
           value={selectedBoard}
           onChange={handleChange}
         >
-          <MenuItem value="mcu">senseBox MCU</MenuItem>
-          <MenuItem value="mini">senseBox MCU mini</MenuItem>
-          <MenuItem value="esp32">senseBox MCU-S2</MenuItem>
+          <MenuItem value="MCU">senseBox MCU</MenuItem>
+          <MenuItem value="MCU:mini">senseBox MCU mini</MenuItem>
+          <MenuItem value="MCU-S2">senseBox MCU-S2</MenuItem>
           <MenuItem value="eye">senseBox Eye</MenuItem>
         </Select>
       </FormControl>

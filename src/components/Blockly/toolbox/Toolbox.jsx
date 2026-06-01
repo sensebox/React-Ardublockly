@@ -6,6 +6,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { uploadAiModel } from "../../../actions/generalActions";
 import { ToolboxMcu } from "./ToolboxMcu";
 import { ToolboxEsp } from "./ToolboxEsp";
+
+import { ToolboxEye } from "./ToolboxEye";
 import { getColour } from "../helpers/colour";
 import { ToolboxEye } from "./ToolboxEye";
 import "./toolbox_styles.css";
