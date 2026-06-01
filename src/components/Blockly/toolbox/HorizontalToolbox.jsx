@@ -69,7 +69,7 @@ const HorizontalToolbox = ({ workspace, toolbox }) => {
       id: "blockly",
       style: { display: "none" },
       ref: toolbox,
-      className: "embedded-mode",
+      class: "embedded-mode",
     },
     selectedBoard === "MCU" || selectedBoard === "MCU:mini" ? (
       <ToolboxMcu />
