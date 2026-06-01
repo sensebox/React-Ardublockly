@@ -7,9 +7,6 @@ import { ToolboxMcu } from "./ToolboxMcu";
 import { ToolboxEsp } from "./ToolboxEsp";
 import { ToolboxEye } from "./ToolboxEye";
 import "./horizontal_toolbox_styles.css";
-import { registerBlocklyContextMenu } from "../helpers/blocklyContextMenu";
-import { ToolboxEye } from "./ToolboxEye";
-mbeddedToolbox.jsx;
 
 const HorizontalToolbox = ({ workspace, toolbox }) => {
   const selectedBoard = useSelector((state) => state.board.board);
