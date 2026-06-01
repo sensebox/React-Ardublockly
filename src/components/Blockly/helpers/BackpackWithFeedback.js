@@ -1,6 +1,11 @@
 import { Backpack } from "@blockly/workspace-backpack";
 
 /**
+ * Block types that should not be added to the backpack.
+ */
+const BACKPACK_BLOCKED_TYPES = ["arduino_functions"];
+
+/**
  * Custom Backpack that fires callbacks when blocks are added/removed.
  * Extends the @blockly/workspace-backpack Backpack class.
  */
@@ -27,11 +32,25 @@ export class BackpackWithFeedback extends Backpack {
   }
 
   /**
-   * Override onDrop to detect when blocks are added.
+   * Check if a block type is allowed in the backpack.
+   * @param {string} blockType - The block type to check.
+   * @returns {boolean} True if the block is allowed.
+   */
+  isBlockAllowed(blockType) {
+    return !BACKPACK_BLOCKED_TYPES.includes(blockType);
+  }
+
+  /**
+   * Override onDrop to detect when blocks are added and filter blocked types.
    * @param {!Blockly.IDraggable} dragElement - The dragged element.
    * @override
    */
   onDrop(dragElement) {
+    // Check if the dragged element is a block with a blocked type
+    if (dragElement?.type && !this.isBlockAllowed(dragElement.type)) {
+      return; // Don't add blocked blocks
+    }
+
     const countBefore = this.getCount();
     super.onDrop(dragElement);
     const countAfter = this.getCount();
@@ -47,6 +66,11 @@ export class BackpackWithFeedback extends Backpack {
    * @override
    */
   addBlock(block) {
+    // Don't add blocked block types
+    if (!this.isBlockAllowed(block.type)) {
+      return;
+    }
+
     const countBefore = this.getCount();
     super.addBlock(block);
     const countAfter = this.getCount();
