@@ -11,6 +11,11 @@
   outline: none; /* Fokus-Ring weg */
 }
 
+/* Constrain toolbox height to prevent overflow */
+.blocklyToolboxDiv {
+  max-height: calc(100vh - 200px) !important;
+}
+
 /* Höhere Kategorien für Continuous Toolbox */
 .blockly-continuous-toolbox
   .blocklyToolboxCategory:not(:has(input[type="search"])) {

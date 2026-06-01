@@ -86,6 +86,7 @@ export const UI = {
   messages_PROJECT_UPDATE_FAIL: "Error updating the project. Try again.",
   messages_GALLERY_UPDATE_FAIL:
     "Error updating the gallery project. Try again.",
+  messages_PROJECT_SAVE_SUCCESS: "The project was successfully saved.",
   messages_gallery_save_fail_1: "Error saving the ",
   messages_gallery_save_fail_2: "Project. Try again.",
   messages_SHARE_SUCCESS: "Share program",

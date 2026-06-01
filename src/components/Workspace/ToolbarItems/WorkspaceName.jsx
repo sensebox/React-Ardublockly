@@ -119,7 +119,11 @@ class WorkspaceName extends Component {
           style={{ height: "100%" }}
         >
           <div
-            className={this.props.isEmbedded ? `${this.props.classes.workspaceNameEmbedded} embedded-workspace-name` : this.props.classes.workspaceName}
+            className={
+              this.props.isEmbedded
+                ? `${this.props.classes.workspaceNameEmbedded} embedded-workspace-name`
+                : this.props.classes.workspaceName
+            }
             onClick={() => {
               if (this.props.multiple) {
                 this.props.workspaceName(this.props.project.title);
@@ -171,7 +175,7 @@ class WorkspaceName extends Component {
           open={this.state.snackbar}
           message={this.state.message}
           type={this.state.type}
-          key={this.state.key}
+          snackbarKey={this.state.key}
         />
         <Dialog
           open={this.state.open}

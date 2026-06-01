@@ -272,19 +272,19 @@ export const ToolboxEsp = () => {
       >
         {/* -------- WIFI -------- */}
         <Category name="WIFI" colour={getColour().sensebox}>
-          <Block type="sensebox_esp32s2_wifi" />
+          <Block type="sensebox_wifi" />
           <Block type="sensebox_esp32s2_wifi_enterprise" />
           <Block type="sensebox_wifi_status" />
           <Block type="sensebox_wifi_rssi" />
           <Block type="sensebox_get_ip" />
-          <Block type="sensebox_esp32s2_startap" />
+          <Block type="sensebox_startap" />
         </Category>
 
         {/* -------- openSenseMap -------- */}
         <Category name="openSenseMap" colour={getColour().sensebox}>
           <Block type="sensebox_interval_timer">
             <Value name="DO">
-              <Block type="sensebox_esp32s2_osem_connection" />
+              <Block type="sensebox_osem_connection" />
             </Value>
           </Block>
           <Block type="sensebox_send_to_osem" />

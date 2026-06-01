@@ -5,6 +5,7 @@ import { clearStats, workspaceName } from "../../../actions/workspaceActions";
 import { setBoard } from "../../../actions/boardAction";
 
 import * as Blockly from "blockly/core";
+import { ensureStartBlock } from "../../Blockly/helpers/ensureStartBlock";
 
 import Snackbar from "../../Snackbar";
 import Dialog from "../../ui/Dialog";
@@ -74,6 +75,9 @@ class OpenProject extends Component {
       } catch (e) {
         console.error("XML konnte nicht geladen werden:", e);
       }
+
+      // Ensure start block exists after loading project
+      ensureStartBlock(workspace);
 
       this.setState({
         open2: false,
@@ -224,7 +228,7 @@ class OpenProject extends Component {
           open={this.state.snackbar}
           message={this.state.message}
           type={this.state.type}
-          key={this.state.key}
+          snackbarKey={this.state.key}
         />
       </div>
     );

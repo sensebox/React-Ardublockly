@@ -1,6 +1,7 @@
 import "./generator";
 import "./loops";
 import "./sensebox-sensors";
+import "../custom-functions";
 import "./sensebox-telegram";
 import "./sensebox-osem";
 import "./sensebox-web";
