@@ -93,7 +93,14 @@ function Home({ project, projectType }) {
       </Box>
 
       {/* Blockly Workspace */}
-      <Grid style={{ height: "calc(100vh - 200px)" }} container spacing={2}>
+      {/* When viewing a project/gallery item, breadcrumbs add ~45px height */}
+      <Grid
+        style={{
+          height: project ? "calc(100vh - 245px)" : "calc(100vh - 200px)",
+        }}
+        container
+        spacing={2}
+      >
         <Grid item xs={12} md={codeOn ? 8 : 12} sx={{ position: "relative" }}>
           <Tooltip
             title={
@@ -128,7 +135,9 @@ function Home({ project, projectType }) {
 
           <Box className="blocklyWindow">
             <BlocklyWindow
-              blocklyCSS={{ height: "calc(100vh - 200px)" }}
+              blocklyCSS={{
+                height: project ? "calc(100vh - 245px)" : "calc(100vh - 200px)",
+              }}
               initialXml={project ? project.xml : initialXml}
             />
           </Box>

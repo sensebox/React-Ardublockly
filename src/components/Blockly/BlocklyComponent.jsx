@@ -19,13 +19,14 @@ import {
   ScrollBlockDragger,
   ScrollMetricsManager,
 } from "@blockly/plugin-scroll-options";
+import { ensureStartBlock } from "./helpers/ensureStartBlock";
 
 import { Card } from "@mui/material";
 
 // -------------------------------
 // BlocklyComponent (Hooks)
 // -------------------------------
-export function BlocklyComponent({ initialXml, style, ...rest }) {
+export function BlocklyComponent({ initialXml, style, maxInstances, ...rest }) {
   const blocklyDivRef = useRef(null);
   const toolboxRef = useRef(null);
   const [workspace, setWorkspace] = useState(undefined);
@@ -46,6 +47,7 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
         blockDragger: ScrollBlockDragger,
         metricsManager: ScrollMetricsManager,
       },
+      maxInstances,
       ...rest,
     };
 
@@ -133,8 +135,15 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
         try {
           const xmlDom = Blockly.utils.xml.textToDom(initialXml);
           Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, ws);
-        } catch (e) {}
+        } catch (e) {
+          console.warn("Failed to load initialXml in BlocklyComponent:", e);
+          ensureStartBlock(ws);
+        }
+        ensureStartBlock(ws);
       });
+    } else {
+      // No initialXml provided, ensure start block exists
+      Promise.resolve().then(() => ensureStartBlock(ws));
     }
 
     // Cleanup on unmount
@@ -145,6 +154,13 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isHorizontalToolbox]);
+
+  // Update maxInstances when board changes
+  useEffect(() => {
+    if (workspace && maxInstances) {
+      workspace.options.maxInstances = maxInstances;
+    }
+  }, [workspace, maxInstances]);
 
   const cardStyle = useMemo(() => {
     return isEmbedded
@@ -172,7 +188,7 @@ export function BlocklyComponent({ initialXml, style, ...rest }) {
         open={snackbar.open}
         message={snackbar.message}
         type={snackbar.type}
-        key={snackbar.key}
+        snackbarKey={snackbar.key}
         onClose={() => setSnackbar((s) => ({ ...s, open: false }))}
       />
     </>

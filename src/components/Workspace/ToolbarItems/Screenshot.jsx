@@ -31,12 +31,21 @@ const styles = (theme) => ({
 class Screenshot extends Component {
   getSvg = () => {
     const workspace = Blockly.getMainWorkspace();
+
+    // Check if there are any blocks to screenshot
+    const blocks = workspace.getTopBlocks(false);
+    if (blocks.length === 0) {
+      console.warn("No blocks in workspace to screenshot");
+      return;
+    }
+
+    // Clone the block canvas
     var canvas = workspace.svgBlockCanvas_.cloneNode(true);
 
     if (canvas.children[0] !== undefined) {
       canvas.removeAttribute("transform");
-      // does not work in  react
-      // var cssContent = Blockly.Css.CONTENT.join('');
+
+      // Collect CSS styles
       var cssContent = "";
       for (var i = 0; i < document.getElementsByTagName("style").length; i++) {
         if (/^blockly.*$/.test(document.getElementsByTagName("style")[i].id)) {
@@ -45,8 +54,6 @@ class Screenshot extends Component {
             [i].firstChild.data.replace(/\..* \./g, ".");
         }
       }
-      // ensure that fill-opacity is 1, because there cannot be a replacing
-      // https://github.com/google/blockly/pull/3431/files#diff-00254795773903d3c0430915a68c9521R328
       cssContent += `.blocklyPath {
         fill-opacity: 1;
       }
@@ -55,20 +62,38 @@ class Screenshot extends Component {
       }
       .blocklyPathLight {
         display: flex;
-      }  `;
+      }`;
+
       var css =
         '<defs><style type="text/css" xmlns="http://www.w3.org/1999/xhtml"><![CDATA[' +
         cssContent +
         "]]></style></defs>";
-      var bbox = document
-        .getElementsByClassName("blocklyBlockCanvas")[0]
-        .getBBox();
+
+      // Get the actual content bounds from the cloned canvas
+      // We need to temporarily add it to the DOM to get accurate measurements
+      const tempSvg = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "svg",
+      );
+      tempSvg.style.position = "absolute";
+      tempSvg.style.left = "-9999px";
+      tempSvg.appendChild(canvas.cloneNode(true));
+      document.body.appendChild(tempSvg);
+      const contentBBox = tempSvg.getBBox();
+      document.body.removeChild(tempSvg);
+
+      // Add padding to content bounds
+      const padding = 10;
+      const finalX = contentBBox.x - padding;
+      const finalY = contentBBox.y - padding;
+      const finalWidth = contentBBox.width + padding * 2;
+      const finalHeight = contentBBox.height + padding * 2;
+
       var content = new XMLSerializer().serializeToString(canvas);
       var xml = `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                  width="${bbox.width}" height="${bbox.height}" viewBox="${bbox.x} ${bbox.y} ${bbox.width} ${bbox.height}">
-                  ${css}">${content}</svg>`;
+                  width="${finalWidth}" height="${finalHeight}" viewBox="${finalX} ${finalY} ${finalWidth} ${finalHeight}">
+                  ${css}>${content}</svg>`;
       var fileName = detectWhitespacesAndReturnReadableResult(this.props.name);
-      // this.props.workspaceName(this.state.name);
       fileName = `${fileName}.svg`;
       var blob = new Blob([xml], { type: "image/svg+xml;base64" });
       saveAs(blob, fileName);

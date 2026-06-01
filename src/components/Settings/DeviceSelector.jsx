@@ -79,7 +79,7 @@ export default function DeviceSelector() {
         open={snackbarOpen}
         message={snackInfo.message}
         type={snackInfo.type}
-        key={snackInfo.key}
+        snackbarKey={snackInfo.key}
       />
     </div>
   );
