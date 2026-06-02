@@ -25,7 +25,7 @@ import { downloadCameraFirmware } from "./utils/firmwareDownload";
 /**
  * SerialErrorHandler
  *
- * Comprehensive error handling and status display component for senseBox Eye serial camera.
+ * Comprehensive error handling and status display component for senseBox MCU Eye serial camera.
  * Handles different error types with appropriate messages, actions, and visual feedback.
  */
 

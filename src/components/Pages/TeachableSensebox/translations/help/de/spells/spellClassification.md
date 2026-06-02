@@ -1,10 +1,10 @@
-Mit der **Zauberspruch Klassifizierung** kannst du deine senseBox Eye wie einen Zauberstab verwenden.
+Mit der **Zauberspruch Klassifizierung** kannst du deine senseBox MCU Eye wie einen Zauberstab verwenden.
 
 Befestige dafür die senseBox am Ende eines kleinen Stabes (z.B. ein Stift) und zeichne damit deine eigenen Zaubersprüche in die Luft.
 
 ![senseBox wand](/media/teachable/sensebox_wand.gif)
 
-Deine Bewegungen werden mit dem **Beschleunigungssensor** der senseBox Eye aufgezeichnet. Diese Aufzeichnungen werden anschließend in ein **Bild** umgewandelt, das deinen Zauberspruch darstellt.
+Deine Bewegungen werden mit dem **Beschleunigungssensor** der senseBox MCU Eye aufgezeichnet. Diese Aufzeichnungen werden anschließend in ein **Bild** umgewandelt, das deinen Zauberspruch darstellt.
 
 ![senseBox wand](/media/teachable/spell.gif)
 

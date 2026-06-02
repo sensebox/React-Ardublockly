@@ -2,13 +2,13 @@
 export const imageClassificationTranslations_de = {
   title: "Bildklassifizierung",
   description:
-    "Trainiere dein eigenes Modell zur Klassizierung von Bildern und lade es auf die senseBox Eye.",
+    "Trainiere dein eigenes Modell zur Klassizierung von Bildern und lade es auf die senseBox MCU Eye.",
   training: {
     title: "Modell Training",
     stopWebcam: "Webcam stoppen",
     startWebcam: "Webcam starten",
-    stopSenseBoxCamera: "senseBox Eye Kamera stoppen",
-    startSenseBoxCamera: "senseBox Eye Kamera starten",
+    stopSenseBoxCamera: "senseBox MCU Eye Kamera stoppen",
+    startSenseBoxCamera: "senseBox MCU Eye Kamera starten",
     loadingCamera: "Lade Kamera...",
     initializingCamera: "Initialisiere Kamera...",
     samples: "Bilder",
@@ -60,7 +60,7 @@ export const imageClassificationTranslations_de = {
     tooltip: {
       helpMain: "Was ist Teachable senseBox?",
       browserCompatible:
-        "Dieser Browser unterstützt die benötigten Funktionen für die Verbindung mit der SenseBox Eye nicht. Bitte verwenden Sie einen kompatiblen Browser wie Chrome oder Edge.",
+        "Dieser Browser unterstützt die benötigten Funktionen für die Verbindung mit der SenseBox MCU Eye nicht. Bitte verwenden Sie einen kompatiblen Browser wie Chrome oder Edge.",
       helpClasses: "Hilfe zu den Klassen",
       startCamera: "Starte die Kamera, um Bilder aufzunehmen",
       helpCamera: "Hilfe zur Kamera",
@@ -70,7 +70,7 @@ export const imageClassificationTranslations_de = {
       helpTraining: "Hilfe zum Modell-Training",
       helpTrainingProgress: "Hilfe zum Trainingsverlauf",
       helpTestResults: "Hilfe zum Testergebnis",
-      helpDeployModel: "Hilfe zum Ausführen auf der senseBox Eye",
+      helpDeployModel: "Hilfe zum Ausführen auf der senseBox MCU Eye",
       classNameExists: "Eine Klasse mit diesem Namen existiert bereits",
       trainingSettings: "Hilfe zu den Trainingseinstellungen",
       desirableNumberSamples: "Empfehlung: Mindestens 100 Bilder pro Klasse",
@@ -100,11 +100,11 @@ export const imageClassificationTranslations_de = {
       title: "Trainingseinstellungen",
     },
     deployModel: {
-      title: "Ausführen auf der senseBox Eye",
+      title: "Ausführen auf der senseBox MCU Eye",
     },
   },
   integration: {
-    title: "Ausführen auf der senseBox Eye",
+    title: "Ausführen auf der senseBox MCU Eye",
     converting: "Kompiliere & konvertiere...",
     convertModel: "Modell komprimieren & konvertieren",
     retry: "Erneut versuchen",
@@ -117,63 +117,63 @@ export const imageClassificationTranslations_de = {
     downloadCppFile: "Modell herunterladen",
     optionB: "Option B: Modell in vorgefertigten Sketch integrieren",
     optionBDescription:
-      "Integriere das Modell in einen vorgefertigten Sketch. Dieser zeigt dir das Kamerabild und die Vorhersage auf dem OLED-Display an. Das Kompilieren des Sketches wird einige Zeit in Anspruch nehmen. Sobald du ihn heruntergeladen hast, kannst du ihn direkt per Drag-and-Drop auf deine senseBox Eye hochladen.",
+      "Integriere das Modell in einen vorgefertigten Sketch. Dieser zeigt dir das Kamerabild und die Vorhersage auf dem OLED-Display an. Das Kompilieren des Sketches wird einige Zeit in Anspruch nehmen. Sobald du ihn heruntergeladen hast, kannst du ihn direkt per Drag-and-Drop auf deine senseBox MCU Eye hochladen.",
     compiling: "Kompiliere...",
     compileAndDownload: "Kompilieren & Herunterladen",
     downloadBinaryAgain: "Erneut herunterladen",
     reconvertModel: "Erneut konvertieren",
     successBinaryDownloaded: "Erfolgreich heruntergeladen!",
     successBinaryDescription:
-      "Dein Modell wurde kompiliert und heruntergeladen! Die Binärdatei ist bereit zum Hochladen auf deine senseBox Eye per Drag-and-Drop.",
+      "Dein Modell wurde kompiliert und heruntergeladen! Die Binärdatei ist bereit zum Hochladen auf deine senseBox MCU Eye per Drag-and-Drop.",
   },
   errors: {
     browserNotSupported: "Browser nicht unterstützt",
     browserNotSupportedMessage:
-      "Dein Browser unterstützt die Web Serial API nicht, die für die Verbindung zur senseBox Eye Kamera erforderlich ist.",
+      "Dein Browser unterstützt die Web Serial API nicht, die für die Verbindung zur senseBox MCU Eye Kamera erforderlich ist.",
     browserNotSupportedDetails:
       "Die Web Serial API wird derzeit in Chrome 89+, Edge 89+ und Opera 76+ auf Desktop-Plattformen unterstützt.",
     permissionDenied: "Berechtigung verweigert",
     permissionDeniedMessage:
-      "Der Zugriff auf den seriellen Port wurde verweigert. Bitte erteile die Berechtigung, um dich mit deiner senseBox Eye Kamera zu verbinden.",
+      "Der Zugriff auf den seriellen Port wurde verweigert. Bitte erteile die Berechtigung, um dich mit deiner senseBox MCU Eye Kamera zu verbinden.",
     permissionDeniedDetails:
       "Du musst möglicherweise deine Browser-Einstellungen überprüfen oder erneut versuchen, dich zu verbinden.",
     connectionFailed: "Verbindung fehlgeschlagen",
     connectionFailedMessage:
-      "Die Verbindung zur senseBox Eye konnte nicht hergestellt werden.",
+      "Die Verbindung zur senseBox MCU Eye konnte nicht hergestellt werden.",
     connectionFailedDetails:
-      "Bitte überprüfe, ob dein Gerät richtig angeschlossen ist und der richtige Port ausgewählt wurde. Du kannst den benötigten Sketch herunterladen und per Drag-and-Drop auf deine senseBox Eye kopieren.",
+      "Bitte überprüfe, ob dein Gerät richtig angeschlossen ist und der richtige Port ausgewählt wurde. Du kannst den benötigten Sketch herunterladen und per Drag-and-Drop auf deine senseBox MCU Eye kopieren.",
     deviceDisconnected: "Gerät getrennt",
-    deviceDisconnectedMessage: "Die senseBox Eye Kamera wurde getrennt.",
+    deviceDisconnectedMessage: "Die senseBox MCU Eye Kamera wurde getrennt.",
     deviceDisconnectedDetails:
       "Bitte verbinde dein Gerät erneut und versuche es noch einmal.",
     frameTimeout: "Frame-Timeout",
     frameTimeoutMessage:
-      "Innerhalb der erwarteten Zeit wurden keine Frames von der senseBox Eye Kamera empfangen.",
+      "Innerhalb der erwarteten Zeit wurden keine Frames von der senseBox MCU Eye Kamera empfangen.",
     frameTimeoutDetails:
       "Das Gerät ist möglicherweise beschäftigt oder hat Kommunikationsprobleme. Das System wartet weiter auf Frames.",
     frameCorrupted: "Beschädigter Frame",
     frameCorruptedMessage:
-      "Ein beschädigter Frame wurde von der senseBox Eye Kamera empfangen.",
+      "Ein beschädigter Frame wurde von der senseBox MCU Eye Kamera empfangen.",
     frameCorruptedDetails:
       "Dies kann aufgrund von Übertragungsfehlern auftreten. Das System verarbeitet weiterhin nachfolgende Frames.",
     frameDecodingError: "Frame-Dekodierungsfehler",
     frameDecodingErrorMessage:
-      "Fehler beim Dekodieren der Frame-Daten von der senseBox Eye Kamera.",
+      "Fehler beim Dekodieren der Frame-Daten von der senseBox MCU Eye Kamera.",
     frameDecodingErrorDetails:
       "Das Frame-Format ist möglicherweise ungültig oder beschädigt. Das System verarbeitet weiterhin nachfolgende Frames.",
     communicationError: "Kommunikationsfehler",
     communicationErrorMessage:
-      "Beim Lesen von Daten von der senseBox Eye Kamera ist ein Fehler aufgetreten.",
+      "Beim Lesen von Daten von der senseBox MCU Eye Kamera ist ein Fehler aufgetreten.",
     communicationErrorDetails:
       "Die Verbindung wurde möglicherweise unterbrochen. Bitte versuche, dich erneut zu verbinden.",
     reconnecting: "Verbinde erneut",
     reconnectingMessage:
-      "Versuche, erneut mit der senseBox Eye Kamera zu verbinden...",
+      "Versuche, erneut mit der senseBox MCU Eye Kamera zu verbinden...",
     reconnectingDetails:
       "Bitte warte oder klicke auf die Schaltfläche unten, um einen Port manuell auszuwählen.",
     unknownError: "Unbekannter Fehler",
     unknownErrorMessage:
-      "Ein unerwarteter Fehler ist mit der senseBox Eye Kamera aufgetreten.",
+      "Ein unerwarteter Fehler ist mit der senseBox MCU Eye Kamera aufgetreten.",
     unknownErrorDetails: "Keine weiteren Details verfügbar.",
     connected: "Verbunden",
     connecting: "Verbinde...",
@@ -183,11 +183,11 @@ export const imageClassificationTranslations_de = {
     hideDetails: "Details ausblenden",
     troubleshooting: "Fehlerbehebung:",
     troubleshootingUsb:
-      "Stelle sicher, dass die senseBox Eye per USB verbunden ist",
+      "Stelle sicher, dass die senseBox MCU Eye per USB verbunden ist",
     troubleshootingPort:
       "Überprüfe, ob der richtige serielle Port ausgewählt wurde",
     troubleshootingFirmware:
-      "Stelle sicher, dass auf der senseBox Eye der Sketch zum Streamen von Kamerabildern läuft. Du kannst ihn mit dem Button unten herunterladen.",
+      "Stelle sicher, dass auf der senseBox MCU Eye der Sketch zum Streamen von Kamerabildern läuft. Du kannst ihn mit dem Button unten herunterladen.",
     troubleshootingReconnect:
       "Versuche, das Gerät aus- und wieder einzustecken",
     supportedBrowsers: "Unterstützte Browser:",
@@ -205,6 +205,6 @@ export const imageClassificationTranslations_de = {
     reconnect: "Erneut verbinden",
     serialCameraStatus: "Serieller Kamera-Status:",
     waitingForFrames:
-      "Warte auf Frames von der senseBox Eye Kamera... Falls dies andauert, überprüfe die Geräteverbindung.",
+      "Warte auf Frames von der senseBox MCU Eye Kamera... Falls dies andauert, überprüfe die Geräteverbindung.",
   },
 };

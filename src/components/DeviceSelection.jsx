@@ -41,9 +41,9 @@ const DeviceSelection = () => {
       src: "/media/hardware/blockly_mini.png",
     },
     {
-      value: "eye",
+      value: "MCU-EYE",
       alt: "Sensebox ESP32S3",
-      label: "senseBox Eye",
+      label: "senseBox MCU Eye",
       src: "/media/hardware/blockly_eye.png",
     },
   ];

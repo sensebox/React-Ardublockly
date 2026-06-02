@@ -9,7 +9,7 @@ let sharedServiceUsers = 0;
 /**
  * useOrientationSource
  *
- * Provides a unified interface for connecting to the senseBox Eye
+ * Provides a unified interface for connecting to the senseBox MCU Eye
  * accelerometer via Web Serial and streaming X/Y/Z data.
  *
  * @returns {Object} Orientation source management interface

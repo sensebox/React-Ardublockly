@@ -1,14 +1,14 @@
-# How to connect the senseBox Eye
+# How to connect the senseBox MCU Eye
 
-This feature is not available in all browsers (e.g. not in Firefox). First download the necessary accelerometer sketch. Then connect the Eye via USB to your computer and drag-and-drop the sketch onto the device. Next, click "Connect senseBox Eye" and select the Eye's port in the browser. On Linux or macOS the ports are often called "ttyACM0", on Windows "COM3" or similar.
+This feature is not available in all browsers (e.g. not in Firefox). First download the necessary accelerometer sketch. Then connect the MCU Eye via USB to your computer and drag-and-drop the sketch onto the device. Next, click "Connect senseBox MCU Eye" and select the MCU Eye's port in the browser. On Linux or macOS the ports are often called "ttyACM0", on Windows "COM3" or similar.
 
-Sometimes it helps to restart your Eye if its not working.
+Sometimes it helps to restart your MCU Eye if its not working.
 
 # The Accelerometer
 
-On the senseBox Eye you can find an **acceleration sensor** located at the top next to the camera.
+On the senseBox MCU Eye you can find an **acceleration sensor** located at the top next to the camera.
 
-![eye acceleration sensor](/media/teachable/eye_acceleration_sensor_circle.png)
+![MCU Eye acceleration sensor](/media/teachable/eye_acceleration_sensor_circle.png)
 
 It can measure acceleration in three directions: along the **X, Y, and Z axes**.
 
@@ -16,7 +16,7 @@ You can imagine this as an invisible coordinate system inside the sensor. Each a
 
 ![coordinates](/media/teachable/coordinates.png)
 
-When the senseBox Eye is lying still on a table, it is not actually moving at all. Nonetheless, the sensor still measures something — **_gravity_**.
+When the senseBox MCU Eye is lying still on a table, it is not actually moving at all. Nonetheless, the sensor still measures something — **_gravity_**.
 
 # Using _gravity_ to determine orientation
 
@@ -24,10 +24,10 @@ The Earth pulls all things downward with its gravity. This force also acts on th
 
 Gravity acts with approximately **9,81 m/s²**.
 
-This allows us to determine how the senseBox Eye is currently oriented.
+This allows us to determine how the senseBox MCU Eye is currently oriented.
 
 For example:
 
-- If the senseBox Eye is lying flat on a table, the Z-axis measures approximately 9.81.
+- If the senseBox MCU Eye is lying flat on a table, the Z-axis measures approximately 9.81.
 - If you place the device on its side, the X- or Y-axis measures approximately 9.81 instead.
 - If you tilt the sensor diagonally, gravity is distributed across multiple axes.

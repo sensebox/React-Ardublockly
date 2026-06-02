@@ -1,7 +1,7 @@
 export const spellTranslations_de = {
   title: "Zauberspruch Klassifizierung",
   description:
-    "Trainiere ein Modell zur Erkennung von Zaubersprüchen mit Hilfe des Beschleunigungssensor. Zeichne mit deiner senseBox Eye Muster in die Luft, um Zaubersprüche zu erstellen.",
+    "Trainiere ein Modell zur Erkennung von Zaubersprüchen mit Hilfe des Beschleunigungssensor. Zeichne mit deiner senseBox MCU Eye Muster in die Luft, um Zaubersprüche zu erstellen.",
 
   training: {
     title: "Training",
@@ -14,9 +14,9 @@ export const spellTranslations_de = {
 
     // Connection
     connecting: "Verbinde...",
-    connectSenseBox: "senseBox Eye verbinden (USB)",
-    disconnectSenseBox: "senseBox Eye trennen",
-    connectBLE: "senseBox Eye verbinden (Bluetooth)",
+    connectSenseBox: "senseBox MCU Eye verbinden (USB)",
+    disconnectSenseBox: "senseBox MCU Eye trennen",
+    connectBLE: "senseBox MCU Eye verbinden (Bluetooth)",
     downloadFirmware: "Zauberspruch-Sketch herunterladen",
 
     // Recording
@@ -80,9 +80,9 @@ export const spellTranslations_de = {
     downloadFirmware: "Zauberspruch-Sketch herunterladen",
     connectionFailed: "Verbindung fehlgeschlagen",
     connectionFailedMessage:
-      "Die Verbindung zur senseBox Eye konnte nicht hergestellt werden.",
+      "Die Verbindung zur senseBox MCU Eye konnte nicht hergestellt werden.",
     troubleshootingFirmware:
-      "Überprüfe, ob die senseBox Eye den Sketch zum Streamen der Zaubersprüche ausführt.",
+      "Überprüfe, ob die senseBox MCU Eye den Sketch zum Streamen der Zaubersprüche ausführt.",
     deviceDisconnected: "senseBox unerwartet getrennt",
     dataTimeout: "Keinen Zauberspruch empfangen",
   },

@@ -10,6 +10,6 @@ A **class** represents one orientation you want to recognise — for example "fl
 
 Instead of defining classes and trainings data yourself, you can also load sample data sets. The following **example datasets** are available:
 
-- **Parcel**: Imagine you would stick the senseBox Eye to the side of a parcel. With this sample dataset, you can now check whether the parcel has been placed **straight** ("gerade") or **crooked/tilted** ("schief").
+- **Parcel**: Imagine you would stick the senseBox MCU Eye to the side of a parcel. With this sample dataset, you can now check whether the parcel has been placed **straight** ("gerade") or **crooked/tilted** ("schief").
 
 ![paket](/media/teachable/paket.png)

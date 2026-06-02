@@ -13,7 +13,7 @@ Blockly.Generator.Arduino.forBlock["sensebox_lora_initialize_otaa"] = function (
   Blockly.Generator.Arduino.libraries_["library_lmic"] =
     "#include <lmic.h> // http://librarymanager/All#IBM_LMIC_framework";
   Blockly.Generator.Arduino.libraries_["library_hal"] = "#include <hal/hal.h>";
-  const isEye = selectedBoard().title === "Eye";
+  const isEye = selectedBoard().title === "MCU-Eye";
   const loraCS = isEye ? "LORA_CS" : "PIN_XB1_CS";
   const loraInt = isEye ? "LORA_INT" : "PIN_XB1_INT";
   Blockly.Generator.Arduino.definitions_["define_LoRaVariablesOTAA"] = `
@@ -311,7 +311,7 @@ Blockly.Generator.Arduino.forBlock["sensebox_lora_initialize_abp"] = function (
   Blockly.Generator.Arduino.libraries_["library_spi"] = "#include <SPI.h>";
   Blockly.Generator.Arduino.libraries_["library_lmic"] = "#include <lmic.h>";
   Blockly.Generator.Arduino.libraries_["library_hal"] = "#include <hal/hal.h>";
-  const isEye = selectedBoard().title === "Eye";
+  const isEye = selectedBoard().title === "MCU-Eye";
   const loraCS = isEye ? "LORA_CS" : "PIN_XB1_CS";
   const loraInt = isEye ? "LORA_INT" : "PIN_XB1_INT";
   Blockly.Generator.Arduino.definitions_["define_LoRaVariablesABP"] = `

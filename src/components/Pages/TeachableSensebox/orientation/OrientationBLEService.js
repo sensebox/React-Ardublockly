@@ -1,7 +1,7 @@
 /**
  * OrientationBLEService
  *
- * Manages Bluetooth Low Energy communication with senseBox Eye for
+ * Manages Bluetooth Low Energy communication with senseBox MCU Eye for
  * accelerometer data using the Web Bluetooth API.
  * Receives X, Y, Z acceleration values via BLE notifications in
  * the same text format as the Serial service.
@@ -38,7 +38,7 @@ class OrientationBLEService {
   }
 
   /**
-   * Connect to the senseBox Eye via BLE and start receiving accelerometer data
+   * Connect to the senseBox MCU Eye via BLE and start receiving accelerometer data
    */
   async connect() {
     if (this.isConnected) return;

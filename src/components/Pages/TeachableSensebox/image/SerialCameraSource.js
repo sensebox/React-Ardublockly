@@ -1,5 +1,5 @@
 /**
- * SerialCameraSource - Camera source implementation for senseBox Eye serial camera
+ * SerialCameraSource - Camera source implementation for senseBox MCU Eye serial camera
  * Implements the CameraSource interface for serial camera access via SerialCameraService
  */
 class SerialCameraSource {

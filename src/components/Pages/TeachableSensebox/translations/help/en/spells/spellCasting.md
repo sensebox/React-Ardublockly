@@ -1,8 +1,8 @@
-# How to connect the senseBox Eye
+# How to connect the senseBox MCU Eye
 
-This feature is not available in all browsers (e.g. not in Firefox). First download the necessary spell sketch. Then connect the Eye via USB to your computer and drag-and-drop the sketch onto the device. Next, click "Connect senseBox Eye" and select the Eye's port in the browser. On Linux or macOS the ports are often called "ttyACM0", on Windows "COM3" or similar.
+This feature is not available in all browsers (e.g. not in Firefox). First download the necessary spell sketch. Then connect the MCU Eye via USB to your computer and drag-and-drop the sketch onto the device. Next, click "Connect senseBox MCU Eye" and select the MCU Eye's port in the browser. On Linux or macOS the ports are often called "ttyACM0", on Windows "COM3" or similar.
 
-Sometimes it helps to restart your Eye if its not working.
+Sometimes it helps to restart your MCU Eye if its not working.
 
 # How to cast a spell
 
@@ -10,7 +10,7 @@ Attach the senseBox to the end of a small stick (e.g. a pen) and use it to draw 
 
 ![senseBox wand](/media/teachable/sensebox_wand.gif)
 
-Your movements will be recorded with the **acceleration sensor** onboard the senseBox Eye. These recordings are then converted to an **image** which represents your spell.
+Your movements will be recorded with the **acceleration sensor** onboard the senseBox MCU Eye. These recordings are then converted to an **image** which represents your spell.
 
 ![senseBox wand](/media/teachable/spell.gif)
 

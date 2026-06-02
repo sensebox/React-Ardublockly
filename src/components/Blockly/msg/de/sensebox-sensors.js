@@ -272,7 +272,7 @@ Die Messwerte für Temperatur, Luftfeuchtigkeit und Luftdruck können direkt ver
    */
   sensebox_eye_camera: "Kamerabild",
   sensebox_eye_camera_tooltip:
-    "Nehme Bilder mit der Kamera der senseBox Eye auf. Die aufgenommenen Bilder sind schwarz-weiß mit einer Auflösung von 94x94 Pixeln.",
+    "Nehme Bilder mit der Kamera der senseBox MCU Eye auf. Die aufgenommenen Bilder sind schwarz-weiß mit einer Auflösung von 94x94 Pixeln.",
   sensebox_eye_camera_helpurl:
     "https://docs.sensebox.de/docs/hardware/sensors/camera", //TODO
 };

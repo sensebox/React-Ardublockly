@@ -842,7 +842,7 @@ Blockly.Blocks["sensebox_sensor_max17048"] = {
 };
 
 /**
- * senseBox Eye onboard camera
+ * senseBox MCU Eye onboard camera
  *
  */
 

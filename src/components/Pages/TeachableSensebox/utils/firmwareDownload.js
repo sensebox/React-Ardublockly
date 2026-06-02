@@ -1,5 +1,5 @@
 /**
- * Downloads capture firmware for senseBox Eye
+ * Downloads capture firmware for senseBox MCU Eye
  * Shared utility used by ModelTrainer and SerialErrorHandler
  */
 
@@ -51,7 +51,7 @@ export async function downloadCameraFirmware(
 export default downloadCameraFirmware;
 
 /**
- * Downloads accelerometer streaming firmware for senseBox Eye
+ * Downloads accelerometer streaming firmware for senseBox MCU Eye
  * @param {string} boardType - Board type (default: "sensebox_eye")
  * @param {string} filename - Name for downloaded file (default: "accelerometer.bin")
  * @returns {Promise<{success: boolean, error?: string}>}
@@ -93,7 +93,7 @@ export async function downloadAccelerometerFirmware(
 }
 
 /**
- * Downloads spell streaming firmware for senseBox Eye
+ * Downloads spell streaming firmware for senseBox MCU Eye
  * @param {string} boardType - Board type (default: "sensebox_eye")
  * @param {string} filename - Name for downloaded file (default: "spell_capture.bin")
  * @returns {Promise<{success: boolean, error?: string}>}

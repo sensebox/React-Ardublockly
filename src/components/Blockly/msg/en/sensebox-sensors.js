@@ -279,7 +279,7 @@ The measured values for temperature, humidity and air pressure can be used direc
    */
   sensebox_eye_camera: "Camera capture",
   sensebox_eye_camera_tooltip:
-    "Take pictures with the camera of the senseBox Eye. The taken pictures are black and white with a resolution of 94x94 pixels.",
+    "Take pictures with the camera of the senseBox MCU Eye. The taken pictures are black and white with a resolution of 94x94 pixels.",
   sensebox_eye_camera_helpurl:
     "https://docs.sensebox.de/docs/hardware/sensors/camera", //TODO
 };

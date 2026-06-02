@@ -18,12 +18,9 @@ export const setBoard = (board) => (dispatch) => {
       root.style.setProperty("--url", `url(${mini_opacity})`);
       break;
     case "MCU-S2":
-      root.style.setProperty("--url", `url(${eye_opacity})`);
+      root.style.setProperty("--url", `url(${esp_opacity})`);
       break;
-    case "EYE":
-      root.style.setProperty("--url", `url(${eye_opacity})`);
-      break;
-    case "EYE":
+    case "MCU-EYE":
       root.style.setProperty("--url", `url(${eye_opacity})`);
       break;
     default:

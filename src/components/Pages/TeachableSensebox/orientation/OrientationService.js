@@ -1,7 +1,7 @@
 /**
  * OrientationService
  *
- * Manages serial communication with senseBox Eye for accelerometer data
+ * Manages serial communication with senseBox MCU Eye for accelerometer data
  * using the Web Serial API. Reads X, Y, Z acceleration values streamed
  * from the device firmware.
  *

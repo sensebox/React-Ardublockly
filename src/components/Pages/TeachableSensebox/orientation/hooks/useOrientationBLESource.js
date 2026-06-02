@@ -11,7 +11,7 @@ const DATA_TIMEOUT_MS = 5000;
 /**
  * useOrientationBLESource
  *
- * Provides a unified interface for connecting to the senseBox Eye
+ * Provides a unified interface for connecting to the senseBox MCU Eye
  * accelerometer via Web Bluetooth and streaming X/Y/Z data.
  *
  * @returns {Object} Accelerometer BLE source management interface

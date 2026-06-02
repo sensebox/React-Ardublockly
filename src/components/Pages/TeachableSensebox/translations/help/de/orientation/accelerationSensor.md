@@ -1,14 +1,14 @@
-# Wie verbinde ich mich mit der senseBox Eye
+# Wie verbinde ich mich mit der senseBox MCU Eye
 
-Diese Funktion ist nicht in allen Browsern möglich (in Firefox z.B. nicht). Lade zuerst den Beschleunigungssensor-Sketch herunter. Schließe die Eye per USB an dein Notebook und lade den sketch per drag-und-drop auf die Eye. Klicke anschließend auf den Button zur Verbindung mit der senseBox Eye und wähle dann im Browser den Port der Eye. In Linux oder MAC heißen die Ports oft "ttyACM0" und in Windows z.B. "COM3".
+Diese Funktion ist nicht in allen Browsern möglich (in Firefox z.B. nicht). Lade zuerst den Beschleunigungssensor-Sketch herunter. Schließe die MCU Eye per USB an dein Notebook und lade den sketch per drag-und-drop auf die MCU Eye. Klicke anschließend auf den Button zur Verbindung mit der senseBox MCU Eye und wähle dann im Browser den Port der MCU Eye. In Linux oder MAC heißen die Ports oft "ttyACM0" und in Windows z.B. "COM3".
 
-Es kann manchmal helfen die Eye noch einmal neu zu starten wenn es nicht direkt funktioniert.
+Es kann manchmal helfen die MCU Eye noch einmal neu zu starten wenn es nicht direkt funktioniert.
 
 # Der Beschleunigungssensor
 
-Auf der senseBox Eye befindet sich oben neben der Kamera ein Beschleunigungssensor.
+Auf der senseBox MCU Eye befindet sich oben neben der Kamera ein Beschleunigungssensor.
 
-![eye acceleration sensor](/media/teachable/eye_acceleration_sensor_circle.png)
+![MCU Eye acceleration sensor](/media/teachable/eye_acceleration_sensor_circle.png)
 
 Dieser kann in drei Richtungen Beschleunigung messen: entlang der **X-, Y- und Z-Achse**.
 
@@ -16,7 +16,7 @@ Man kann sich das wie ein unsichtbares Koordinatensystem im Inneren des Sensors 
 
 ![coordinates](/media/teachable/coordinates.png)
 
-Wenn die senseBox Eye ruhig auf einem Tisch liegt, bewegt sie sich eigentlich gar nicht. Trotzdem misst der Sensor dann etwas — und zwar die **_Schwerkraft_**.
+Wenn die senseBox MCU Eye ruhig auf einem Tisch liegt, bewegt sie sich eigentlich gar nicht. Trotzdem misst der Sensor dann etwas — und zwar die **_Schwerkraft_**.
 
 # Orientierung mit der _Schwerkraft_ bestimmen
 
@@ -24,10 +24,10 @@ Die Erde zieht alle Dinge mit ihrer Schwerkraft nach unten. Diese Kraft wirkt au
 
 Die Schwerkraft wirkt mit ungefähr **9,81 m/s²**.
 
-Dadurch können wir herausfinden, wie die senseBox Eye gerade orientiert wird.
+Dadurch können wir herausfinden, wie die senseBox MCU Eye gerade orientiert wird.
 
 Am Beispiel:
 
-- Liegt die senseBox Eye flach auf dem Tisch, misst die Z-Achse ungefähr 9,81.
+- Liegt die senseBox MCU Eye flach auf dem Tisch, misst die Z-Achse ungefähr 9,81.
 - Stellt man das Gerät auf die Seite, messen stattdessen die X- oder Y-Achse ungefähr 9,81.
 - Kippt man den Sensor schräg, verteilt sich die Schwerkraft auf mehrere Achsen.

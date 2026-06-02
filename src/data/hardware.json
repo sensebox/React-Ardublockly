@@ -25,7 +25,7 @@
   },
   {
     "id": "senseboxeye",
-    "name": "senseBox Eye",
+    "name": "senseBox MCU Eye",
     "src": "senseboxeye.png",
     "url": "https://docs.sensebox.de/hardware/allgemein-sensebox-eye/",
     "category": "boards",

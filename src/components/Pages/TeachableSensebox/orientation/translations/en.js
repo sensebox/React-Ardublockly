@@ -4,12 +4,12 @@ import { help } from "@uiw/react-md-editor";
 export const orientationTranslations_en = {
   title: "Orientation Classification",
   description:
-    "Train your own orientation recognition model using the senseBox Eye accelerometer. Each sample is a single snapshot of x, y, z values.",
+    "Train your own orientation recognition model using the senseBox MCU Eye accelerometer. Each sample is a single snapshot of x, y, z values.",
   training: {
     title: "Training Data",
-    connectSenseBox: "Connect senseBox Eye (USB)",
-    disconnectSenseBox: "Disconnect senseBox Eye",
-    connectSenseBoxBLE: "Connect senseBox Eye (Bluetooth)",
+    connectSenseBox: "Connect senseBox MCU Eye (USB)",
+    disconnectSenseBox: "Disconnect senseBox MCU Eye",
+    connectSenseBoxBLE: "Connect senseBox MCU Eye (Bluetooth)",
     disconnectSenseBoxBLE: "Disconnect Bluetooth",
     connecting: "Connecting...",
     connected: "Connected",
@@ -22,7 +22,7 @@ export const orientationTranslations_en = {
     trainModel: "Train Model",
     trainingInProgress: "Training...",
     livePredictions: "Live Classification",
-    connectForPredictions: "Please connect the senseBox Eye.",
+    connectForPredictions: "Please connect the senseBox MCU Eye.",
     analyzing: "Analyzing...",
     addNewClass: "Add New Class",
     className: "Class Name",
@@ -35,7 +35,7 @@ export const orientationTranslations_en = {
     errorInsufficientData:
       "Insufficient data for training. Please add at least 2 classes with at least 2 samples each.",
     errorConnection:
-      "Error connecting to senseBox Eye: {message}. Please make sure your device is connected.",
+      "Error connecting to senseBox MCU Eye: {message}. Please make sure your device is connected.",
     errorTraining: "Training failed: {message}",
     testResultsTitle: "Test",
     finalAccuracy: "Accuracy",
@@ -48,11 +48,12 @@ export const orientationTranslations_en = {
     tooltip: {
       helpMain: "What is Orientation Classification?",
       browserCompatible:
-        "This browser does not support the required features for connecting to the senseBox Eye. Please use a compatible browser like Chrome or Edge.",
+        "This browser does not support the required features for connecting to the senseBox MCU Eye. Please use a compatible browser like Chrome or Edge.",
       bluetoothNotSupported:
         "This browser does not support Web Bluetooth. Please use Chrome or Edge.",
       helpClasses: "Help with classes",
-      startConnection: "Connect to the senseBox Eye to start recording samples",
+      startConnection:
+        "Connect to the senseBox MCU Eye to start recording samples",
       helpRecord: "Help with recording samples",
       moreClasses: "Add at least 2 classes to train",
       moreSamples: "Add at least 2 samples per class to train",
@@ -92,29 +93,29 @@ export const orientationTranslations_en = {
   errors: {
     browserNotSupported: "Browser Not Supported",
     browserNotSupportedMessage:
-      "Your browser does not support the Web Serial API required for senseBox Eye connection.",
+      "Your browser does not support the Web Serial API required for senseBox MCU Eye connection.",
     browserNotSupportedDetails:
       "The Web Serial API is currently supported in Chrome 89+, Edge 89+, and Opera 76+ on desktop platforms.",
     permissionDenied: "Permission Denied",
     permissionDeniedMessage:
-      "Serial port access was denied. Please grant permission to connect to your senseBox Eye.",
+      "Serial port access was denied. Please grant permission to connect to your senseBox MCU Eye.",
     connectionFailed: "Connection Failed",
     connectionFailedMessage:
-      "Connection to senseBox Eye could not be established.",
+      "Connection to senseBox MCU Eye could not be established.",
     connectionFailedDetails:
       "Please check that your device is properly connected and the correct port is selected.",
     deviceDisconnected: "Device Disconnected",
-    deviceDisconnectedMessage: "The senseBox Eye was disconnected.",
+    deviceDisconnectedMessage: "The senseBox MCU Eye was disconnected.",
     deviceDisconnectedDetails: "Please reconnect your device and try again.",
     downloadFirmware: "Download Accelerometer Sketch",
     tryAgain: "Try Again",
     reconnect: "Reconnect",
-    troubleshootingUsb: "Ensure the senseBox Eye is connected via USB",
+    troubleshootingUsb: "Ensure the senseBox MCU Eye is connected via USB",
     troubleshootingFirmware:
-      "Verify the senseBox Eye is running the sketch to stream accelerometer data.",
+      "Verify the senseBox MCU Eye is running the sketch to stream accelerometer data.",
     dataTimeout: "No Data Received",
     dataTimeoutMessage:
-      "The senseBox Eye appears to be connected but is not sending any data. Please verify that the correct sketch is running on the device.",
+      "The senseBox MCU Eye appears to be connected but is not sending any data. Please verify that the correct sketch is running on the device.",
   },
   help: {
     help: "Help",

@@ -3,7 +3,7 @@ import { help } from "@uiw/react-md-editor";
 export const spellTranslations_en = {
   title: "Spell Classification",
   description:
-    "Train a model to recognize spells using the acceleration sensor. Draw patterns in the air with your senseBox Eye to cast spells.",
+    "Train a model to recognize spells using the acceleration sensor. Draw patterns in the air with your senseBox MCU Eye to cast spells.",
 
   training: {
     title: "Training",
@@ -16,9 +16,9 @@ export const spellTranslations_en = {
 
     // Connection
     connecting: "Connecting...",
-    connectSenseBox: "connect senseBox Eye (USB)",
-    disconnectSenseBox: "disconnect senseBox Eye (USB)",
-    connectBLE: "connect senseBox Eye (Bluetooth)",
+    connectSenseBox: "connect senseBox MCU Eye (USB)",
+    disconnectSenseBox: "disconnect senseBox MCU Eye (USB)",
+    connectBLE: "connect senseBox MCU Eye (Bluetooth)",
     downloadFirmware: "Download Spell-Sketch",
 
     // Recording
@@ -80,9 +80,9 @@ export const spellTranslations_en = {
     downloadFirmware: "Download Spell-Sketch",
     connectionFailed: "Connection Failed",
     connectionFailedMessage:
-      "Connection to senseBox Eye could not be established.",
+      "Connection to senseBox MCU Eye could not be established.",
     troubleshootingFirmware:
-      "Check if the senseBox Eye is running the sketch for streaming spells.",
+      "Check if the senseBox MCU Eye is running the sketch for streaming spells.",
     deviceDisconnected: "senseBox disconnected unexpectedly",
     dataTimeout: "No spell data received",
   },

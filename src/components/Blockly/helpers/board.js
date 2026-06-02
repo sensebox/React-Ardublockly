@@ -410,10 +410,10 @@ const sensebox_esp32 = {
   parseKey: "_*_",
 };
 
-//senseBox Eye
+//senseBox MCU Eye
 const sensebox_eye = {
-  title: "Eye",
-  description: "senseBox Eye",
+  title: "MCU-Eye",
+  description: "senseBox MCU Eye",
   compilerFlag: "esp32:esp32:sensebox_eye",
   digitalPins: [
     ["IO14", "14"],
@@ -523,8 +523,7 @@ export const setBoardHelper = (selectedBoard) => {
     case "MCU-S2":
       board = sensebox_esp32;
       break;
-    case "eye":
-    case "EYE":
+    case "MCU-EYE":
       board = sensebox_eye;
       break;
     default:

@@ -1,7 +1,7 @@
 /**
  * SerialCameraService
  *
- * Manages serial communication with senseBox Eye camera devices using the Web Serial API.
+ * Manages serial communication with senseBox MCU Eye camera devices using the Web Serial API.
  * Handles connection lifecycle, frame requests, and error management.
  */
 
@@ -216,7 +216,8 @@ class SerialCameraService {
     if (hadTimeoutError) {
       this._emitError({
         type: "CONNECTION_FAILED",
-        message: "Connection to senseBox Eye camera could not be established",
+        message:
+          "Connection to senseBox MCU Eye camera could not be established",
         details: "No frames were received from the camera",
       });
     }
@@ -744,7 +745,8 @@ class SerialCameraService {
         // Emit CONNECTION_FAILED error (not FRAME_TIMEOUT)
         this._emitError({
           type: "CONNECTION_FAILED",
-          message: "Connection to senseBox Eye camera could not be established",
+          message:
+            "Connection to senseBox MCU Eye camera could not be established",
           details: `No frames received for ${timeSinceLastFrame}ms`,
           timeSinceLastFrame,
         });

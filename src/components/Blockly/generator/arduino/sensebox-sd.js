@@ -273,7 +273,7 @@ Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_sd_create_file"] =
     var extension = block.getFieldValue("extension");
 
     // Setup: SD initialisieren
-    const isEye = selectedBoard().title === "Eye";
+    const isEye = selectedBoard().title === "MCU-Eye";
     Blockly.Generator.Arduino.setupCode_["sensebox_esp32s2_sd"] =
       "// Init SD\n" +
       "pinMode(SD_ENABLE, OUTPUT);\n" +
@@ -330,7 +330,7 @@ Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_sd_open_file"] = function (
     `SPIClass sdspi = SPIClass();`;
 
   // SD-Init im Setup (nur einmal)
-  const isEye = selectedBoard().title === "Eye";
+  const isEye = selectedBoard().title === "MCU-Eye";
   Blockly.Generator.Arduino.setupCode_["sensebox_esp32s2_sd"] =
     "// Init SD\n" +
     "pinMode(SD_ENABLE, OUTPUT);\n" +

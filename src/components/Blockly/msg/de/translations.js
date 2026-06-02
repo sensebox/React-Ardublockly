@@ -269,7 +269,7 @@ export const TRANSLATIONS = {
   teachableSensebox: {
     title: "Teachable senseBox",
     description:
-      "Trainiere dein eigenes Bildklassifizierungsmodell und lade es auf deine senseBox Eye.",
+      "Trainiere dein eigenes Bildklassifizierungsmodell und lade es auf deine senseBox MCU Eye.",
     addClass: "Klasse hinzufügen",
     startCamera: "Kamera starten",
     stopCamera: "Kamera stoppen",
@@ -294,7 +294,7 @@ export const TRANSLATIONS = {
       noVideo: "Kein Video verfügbar",
     },
     integration: {
-      title: "Lade es auf deine senseBox Eye",
+      title: "Lade es auf deine senseBox MCU Eye",
       description:
         "Integriere dein trainiertes Modell in deine Blockly Projekte.",
       saveModel: "Modell speichern",
