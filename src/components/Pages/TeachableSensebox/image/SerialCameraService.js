@@ -21,6 +21,7 @@ class SerialCameraService {
     this.frameTimeout = 3000; // 3 seconds timeout for frame reception
     this.frameTimeoutCheckInterval = null;
     this.hasEmittedTimeoutError = false;
+    this.isFrameTimeoutPaused = false;
     this.consecutiveFailures = 0;
     this.maxConsecutiveFailures = 1000000;
     this.reconnectAttempts = 0;
@@ -728,7 +729,7 @@ class SerialCameraService {
 
     // Check for timeout every second
     this.frameTimeoutCheckInterval = setInterval(() => {
-      if (!this.isConnected || !this.lastFrameTime) {
+      if (!this.isConnected || !this.lastFrameTime || this.isFrameTimeoutPaused) {
         return;
       }
 
@@ -766,6 +767,15 @@ class SerialCameraService {
       clearInterval(this.frameTimeoutCheckInterval);
       this.frameTimeoutCheckInterval = null;
     }
+  }
+
+  pauseFrameTimeoutMonitor() {
+    this.isFrameTimeoutPaused = true;
+  }
+
+  resumeFrameTimeoutMonitor() {
+    this.lastFrameTime = Date.now();
+    this.isFrameTimeoutPaused = false;
   }
 
   /**

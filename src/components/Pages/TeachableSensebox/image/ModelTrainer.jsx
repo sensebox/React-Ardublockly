@@ -113,6 +113,8 @@ const ModelTrainer = ({
     switchCamera,
     isActive: isCameraActive,
     error: cameraError,
+    pauseFrameTimeoutMonitor,
+    resumeFrameTimeoutMonitor,
   } = useCameraSource();
 
   const {
@@ -468,14 +470,19 @@ const ModelTrainer = ({
     const hasEnoughSamples = classes.every((cls) => cls.samples.length >= 10);
     setTrainedWithEnoughSamples(hasEnoughSamples);
 
-    await executeTraining(
-      classes,
-      onTrainingStart,
-      onTrainingError,
-      onModelTrained,
-      trainingSettings,
-    );
-    trainedClassesSnapshotRef.current = getClassesSnapshot(classes);
+    pauseFrameTimeoutMonitor();
+    try {
+      await executeTraining(
+        classes,
+        onTrainingStart,
+        onTrainingError,
+        onModelTrained,
+        trainingSettings,
+      );
+      trainedClassesSnapshotRef.current = getClassesSnapshot(classes);
+    } finally {
+      resumeFrameTimeoutMonitor();
+    }
   }, [
     classes,
     onTrainingStart,
@@ -485,6 +492,8 @@ const ModelTrainer = ({
     trainingSettings,
     getClassesSnapshot,
     t,
+    pauseFrameTimeoutMonitor,
+    resumeFrameTimeoutMonitor,
   ]);
 
   const resetSettings = useCallback(() => {

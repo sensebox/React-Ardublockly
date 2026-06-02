@@ -270,6 +270,18 @@ function useCameraSource() {
     return source.getFacingMode();
   }, [cameraSource, sourceType]);
 
+  const pauseFrameTimeoutMonitor = useCallback(() => {
+    if (sourceType === "serial" && serialServiceRef.current) {
+      serialServiceRef.current.pauseFrameTimeoutMonitor();
+    }
+  }, [sourceType]);
+
+  const resumeFrameTimeoutMonitor = useCallback(() => {
+    if (sourceType === "serial" && serialServiceRef.current) {
+      serialServiceRef.current.resumeFrameTimeoutMonitor();
+    }
+  }, [sourceType]);
+
   return {
     sourceType,
     selectSource,
@@ -281,6 +293,8 @@ function useCameraSource() {
     getFacingMode,
     isActive,
     error,
+    pauseFrameTimeoutMonitor,
+    resumeFrameTimeoutMonitor,
   };
 }
 
