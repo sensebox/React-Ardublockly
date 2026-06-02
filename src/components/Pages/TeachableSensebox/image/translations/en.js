@@ -136,9 +136,9 @@ export const imageClassificationTranslations_en = {
       "An error occurred while reading data from the senseBox MCU Eye camera.",
     communicationErrorDetails:
       "The connection may have been interrupted. Please try reconnecting.",
-    reconnecting: "Reconnecting",
+    reconnecting: "Connection lost",
     reconnectingMessage:
-      "Attempting to reconnect to the senseBox MCU Eye camera...",
+      "The connection to the senseBox MCU Eye was lost. Try to reconnect.",
     reconnectingDetails:
       "Please wait, or click the button below to select a port manually.",
     unknownError: "Unknown Error",

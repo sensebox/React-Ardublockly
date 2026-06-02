@@ -166,9 +166,9 @@ export const imageClassificationTranslations_de = {
       "Beim Lesen von Daten von der senseBox MCU Eye Kamera ist ein Fehler aufgetreten.",
     communicationErrorDetails:
       "Die Verbindung wurde möglicherweise unterbrochen. Bitte versuche, dich erneut zu verbinden.",
-    reconnecting: "Verbinde erneut",
+    reconnecting: "Verbindung abgebrochen",
     reconnectingMessage:
-      "Versuche, erneut mit der senseBox MCU Eye Kamera zu verbinden...",
+      "Die Verbindung zur senseBox MCU Eye ist abgebrochen. Versuche dich erneut zu verbinden.",
     reconnectingDetails:
       "Bitte warte oder klicke auf die Schaltfläche unten, um einen Port manuell auszuwählen.",
     unknownError: "Unbekannter Fehler",

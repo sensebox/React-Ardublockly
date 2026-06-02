@@ -149,12 +149,12 @@ const getErrorDetails = (errorType) => {
 
     case ErrorTypes.RECONNECTING:
       return {
-        severity: "info",
+        severity: "error",
         title: t.errors.reconnecting,
         message: t.errors.reconnectingMessage,
         details: t.errors.reconnectingDetails,
-        action: "retry",
-        icon: <InfoIcon />,
+        action: "reconnect",
+        icon: <ErrorIcon />,
       };
 
     default:
