@@ -411,7 +411,7 @@ const sensebox_esp32 = {
 };
 
 //senseBox MCU Eye
-const sensebox_eye = {
+const sensebox_mcu_eye = {
   title: "MCU-Eye",
   description: "senseBox MCU Eye",
   compilerFlag: "esp32:esp32:sensebox_eye",
@@ -524,7 +524,7 @@ export const setBoardHelper = (selectedBoard) => {
       board = sensebox_esp32;
       break;
     case "MCU-EYE":
-      board = sensebox_eye;
+      board = sensebox_mcu_eye;
       break;
     default:
       board = sensebox_mcu;

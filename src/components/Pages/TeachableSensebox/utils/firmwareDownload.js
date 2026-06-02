@@ -8,12 +8,12 @@ const API_BASE_URL =
 
 /**
  * Downloads the camera capture firmware binary
- * @param {string} boardType - Board type (default: "sensebox_eye")
+ * @param {string} boardType - Board type (default: "sensebox_mcu_eye")
  * @param {string} filename - Name for downloaded file (default: "camera_capture.bin")
  * @returns {Promise<{success: boolean, error?: string}>}
  */
 export async function downloadCameraFirmware(
-  boardType = "sensebox_eye",
+  boardType = "sensebox_mcu_eye",
   filename = "camera_capture.bin",
 ) {
   try {
@@ -52,12 +52,12 @@ export default downloadCameraFirmware;
 
 /**
  * Downloads accelerometer streaming firmware for senseBox MCU Eye
- * @param {string} boardType - Board type (default: "sensebox_eye")
+ * @param {string} boardType - Board type (default: "sensebox_mcu_eye")
  * @param {string} filename - Name for downloaded file (default: "accelerometer.bin")
  * @returns {Promise<{success: boolean, error?: string}>}
  */
 export async function downloadAccelerometerFirmware(
-  boardType = "sensebox_eye",
+  boardType = "sensebox_mcu_eye",
   filename = "accelerometer_capture.bin",
 ) {
   try {
@@ -94,12 +94,12 @@ export async function downloadAccelerometerFirmware(
 
 /**
  * Downloads spell streaming firmware for senseBox MCU Eye
- * @param {string} boardType - Board type (default: "sensebox_eye")
+ * @param {string} boardType - Board type (default: "sensebox_mcu_eye")
  * @param {string} filename - Name for downloaded file (default: "spell_capture.bin")
  * @returns {Promise<{success: boolean, error?: string}>}
  */
 export async function downloadSpellFirmware(
-  boardType = "sensebox_eye",
+  boardType = "sensebox_mcu_eye",
   filename = "spell_capture.bin",
 ) {
   try {

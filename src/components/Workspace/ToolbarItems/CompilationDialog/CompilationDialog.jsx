@@ -110,7 +110,7 @@ function CompilationDialog({
           board = "sensebox-esp32s2";
           break;
         default:
-          board = "sensebox_eye";
+          board = "sensebox_mcu_eye";
       }
       const response = await fetch(`${compilerUrl}/compile`, {
         method: "POST",

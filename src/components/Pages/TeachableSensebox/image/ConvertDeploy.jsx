@@ -39,7 +39,7 @@ const ConvertDeploy = ({ model }) => {
     binarySize: null,
   });
 
-  const boardType = "sensebox_eye";
+  const boardType = "sensebox_mcu_eye";
 
   // Track the model that was converted to detect retraining
   const convertedModelRef = useRef(null);
