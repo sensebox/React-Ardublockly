@@ -26,9 +26,25 @@ const Content = () => {
   }, [language, board]);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", width: "100%", boxSizing: "border-box" }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "100vh",
+        width: "100%",
+        boxSizing: "border-box",
+      }}
+    >
       <Navbar />
-      <div style={{ flex: 1, width: "100%", boxSizing: "border-box", display: "flex", flexDirection: "column" }}>
+      <div
+        style={{
+          flex: 1,
+          width: "100%",
+          boxSizing: "border-box",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         <Routes />
       </div>
       <Cookies />
