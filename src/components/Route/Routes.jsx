@@ -52,7 +52,14 @@ function AppRoutes({ platform, visitPage, setPlatform }) {
   }, [location.pathname, visitPage]);
 
   return (
-    <div style={{ margin: "0 22px" }}>
+    <div
+      style={{
+        margin: "0 22px",
+        display: "flex",
+        flexDirection: "column",
+        boxSizing: "border-box",
+      }}
+    >
       <Routes>
         {/* Home */}
         <Route

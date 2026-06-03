@@ -114,6 +114,20 @@ export const UI = {
     "Invalid variable name, only letters, numbers and underscores are allowed.",
 
   /**
+   * Custom Functions Messages
+   */
+  custom_function_define_tooltip: "Define your own function with parameters",
+  custom_function_empty_name_warning: "Function name cannot be empty",
+  custom_function_invalid_name_warning:
+    "Function name must start with a letter and can only contain letters, numbers, and underscore",
+  custom_function_not_found_warning: "Function not found",
+  custom_function_call_tooltip: "Call a defined function",
+  custom_function_call_expression_tooltip: "Use the return value of a function",
+  custom_function_no_return_warning:
+    "has no return value! Use the normal function call block.",
+  custom_function_parameter_get_tooltip: "Use a function parameter",
+
+  /**
    * Tablet Dialog
    */
   tabletDialog_headline: "Tablet mode is enabled!",
@@ -294,6 +308,28 @@ export const UI = {
   builder_review_head: "Publish tutorial",
   builder_review_text:
     "You can share your tutorial with other people directly from the link. If you want to publish your tutorial for all users in the overview you can activate it here. An administrator will view your tutorial and then activate it.",
+
+  /**
+   * SaveStatusDialog / Tutorial Builder Dialog
+   */
+  save_status_saving: "Please wait, the tutorial is being saved...",
+  save_status_success: "Tutorial saved successfully!",
+  save_status_to_overview: "Back to overview",
+  save_status_to_tutorial: "To tutorial",
+  save_status_missing_fields: "The following required fields are missing:",
+  save_status_missing_title: "Title",
+  save_status_missing_subtitle: "Subtitle",
+  save_status_missing_understood: "Got it",
+  save_status_error: "An error occurred while saving.",
+  save_status_error_hint: "Possible reasons:",
+  save_status_error_network: "Check network connection",
+  save_status_error_validation: "Validate data and try again",
+  save_status_error_server: "Server issue - please try again later",
+  save_status_close: "Close",
+  save_status_dialog_loading: "Tutorial is being saved...",
+  save_status_dialog_success: "Saved!",
+  save_status_dialog_missing: "Information incomplete",
+  save_status_dialog_error: "Error saving",
 
   // Gallery
 

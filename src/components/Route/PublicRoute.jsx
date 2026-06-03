@@ -12,7 +12,7 @@ function PublicRoute({ children, progress }) {
 }
 
 PublicRoute.propTypes = {
-  progress: PropTypes.bool.isRequired,
+  progress: PropTypes.bool,
   children: PropTypes.node.isRequired,
 };
 

@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { updateProject, setDescription } from "../../../actions/projectActions";
 
 import axios from "axios";
-import {} from "react-router-dom";
+import { withRouterV6 } from "../../../helpers/withRouter";
 
 import Snackbar from "../../Snackbar";
 import Dialog from "../../ui/Dialog";
@@ -343,6 +343,7 @@ SaveProject.propTypes = {
   message: PropTypes.object.isRequired,
   user: PropTypes.object,
   project: PropTypes.object,
+  navigate: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -353,6 +354,8 @@ const mapStateToProps = (state) => ({
   user: state.auth.user,
 });
 
-export default connect(mapStateToProps, { updateProject, setDescription })(
-  withStyles(styles, { withTheme: true })(SaveProject),
+export default withRouterV6(
+  connect(mapStateToProps, { updateProject, setDescription })(
+    withStyles(styles, { withTheme: true })(SaveProject),
+  ),
 );
