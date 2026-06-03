@@ -313,6 +313,28 @@ export const UI = {
   builder_review_text:
     "Du kannst dein Tutorial direkt über den Link mit anderen Personen teilen. Wenn du dein Tutorial für alle Nutzer:innen in der Überischt veröffenltichen wollen kannst du es hier aktivieren. Ein Administrator wird dein Tutorial ansehen und anschließend freischalten.",
 
+  /**
+   * SaveStatusDialog / Tutorial Builder Dialog
+   */
+  save_status_saving: "Bitte warten, das Tutorial wird gespeichert...",
+  save_status_success: "Tutorial erfolgreich gespeichert!",
+  save_status_to_overview: "Zur Übersicht",
+  save_status_to_tutorial: "Zum Tutorial",
+  save_status_missing_fields: "Folgende Pflichtfelder fehlen noch:",
+  save_status_missing_title: "Titel",
+  save_status_missing_subtitle: "Untertitel",
+  save_status_missing_understood: "Verstanden",
+  save_status_error: "Beim Speichern ist ein Fehler aufgetreten.",
+  save_status_error_hint: "Mögliche Gründe:",
+  save_status_error_network: "Netzwerkverbindung überprüfen",
+  save_status_error_validation: "Daten validieren und erneut versuchen",
+  save_status_error_server: "Server-Problem - bitte später erneut versuchen",
+  save_status_close: "Schließen",
+  save_status_dialog_loading: "Tutorial wird gespeichert...",
+  save_status_dialog_success: "Gespeichert!",
+  save_status_dialog_missing: "Angaben unvollständig",
+  save_status_dialog_error: "Fehler beim Speichern",
+
   // Gallery
 
   gallery_home_head: "Galerie",

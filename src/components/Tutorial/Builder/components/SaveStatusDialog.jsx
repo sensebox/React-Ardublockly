@@ -9,6 +9,7 @@ import {
 import { useTheme } from "@mui/styles";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import * as Blockly from "blockly/core";
 
 // 🔲 Dialog-Komponente (extrahiert für Übersicht)
 const SaveStatusDialog = ({ savingState, onClose, savedTutorialId }) => {
@@ -21,7 +22,7 @@ const SaveStatusDialog = ({ savingState, onClose, savedTutorialId }) => {
           <>
             <CircularProgress color="primary" />
             <Typography variant="body2" color="text.secondary">
-              Bitte warten, das Tutorial wird gespeichert...
+              {Blockly.Msg.save_status_saving}
             </Typography>
           </>
         );
@@ -31,14 +32,14 @@ const SaveStatusDialog = ({ savingState, onClose, savedTutorialId }) => {
           <>
             <WarningAmber sx={{ fontSize: 64, color: "warning.main" }} />
             <Typography variant="body1" fontWeight={600}>
-              Folgende Pflichtfelder fehlen noch:
+              {Blockly.Msg.save_status_missing_fields}
             </Typography>
             <Box sx={{ mt: 1, textAlign: "left" }}>
-              <Typography color="error.main">• Titel</Typography>
-              <Typography color="error.main">• Untertitel</Typography>
+              <Typography color="error.main">• {Blockly.Msg.save_status_missing_title}</Typography>
+              <Typography color="error.main">• {Blockly.Msg.save_status_missing_subtitle}</Typography>
             </Box>
             <Button variant="contained" sx={{ mt: 2 }} onClick={onClose}>
-              Verstanden
+              {Blockly.Msg.save_status_missing_understood}
             </Button>
           </>
         );
@@ -56,18 +57,18 @@ const SaveStatusDialog = ({ savingState, onClose, savedTutorialId }) => {
               />
             </motion.div>
             <Typography variant="body1" fontWeight={600}>
-              Tutorial erfolgreich gespeichert!
+              {Blockly.Msg.save_status_success}
             </Typography>
             <Box sx={{ mt: 2, display: "flex", gap: 2 }}>
               <Button variant="outlined" onClick={() => navigate("/tutorial")}>
-                Zur Übersicht
+                {Blockly.Msg.save_status_to_overview}
               </Button>
               {savedTutorialId && (
                 <Button
                   variant="contained"
                   onClick={() => navigate(`/tutorial/${savedTutorialId}`)}
                 >
-                  Zum Tutorial
+                  {Blockly.Msg.save_status_to_tutorial}
                 </Button>
               )}
             </Box>
@@ -79,10 +80,18 @@ const SaveStatusDialog = ({ savingState, onClose, savedTutorialId }) => {
           <>
             <Error sx={{ fontSize: 64, color: "error.main" }} />
             <Typography variant="body1" fontWeight={600}>
-              Beim Speichern ist ein Fehler aufgetreten.
+              {Blockly.Msg.save_status_error}
             </Typography>
-            <Button variant="contained" color="error" onClick={onClose}>
-              Schließen
+            <Box sx={{ mt: 2, textAlign: "left", maxWidth: "100%" }}>
+              <Typography variant="body2" fontWeight={600} color="text.secondary">
+                {Blockly.Msg.save_status_error_hint}
+              </Typography>
+              <Typography variant="body2" sx={{ mt: 1 }}>• {Blockly.Msg.save_status_error_network}</Typography>
+              <Typography variant="body2">• {Blockly.Msg.save_status_error_validation}</Typography>
+              <Typography variant="body2">• {Blockly.Msg.save_status_error_server}</Typography>
+            </Box>
+            <Button variant="contained" color="error" onClick={onClose} sx={{ mt: 2 }}>
+              {Blockly.Msg.save_status_close}
             </Button>
           </>
         );
@@ -101,12 +110,12 @@ const SaveStatusDialog = ({ savingState, onClose, savedTutorialId }) => {
       maxWidth="xs"
       title={
         savingState === "loading"
-          ? "Tutorial wird gespeichert..."
+          ? Blockly.Msg.save_status_dialog_loading
           : savingState === "success"
-            ? "Gespeichert!"
+            ? Blockly.Msg.save_status_dialog_success
             : savingState === "missing"
-              ? "Angaben unvollständig"
-              : "Fehler beim Speichern"
+              ? Blockly.Msg.save_status_dialog_missing
+              : Blockly.Msg.save_status_dialog_error
       }
       onClose={onClose}
     >

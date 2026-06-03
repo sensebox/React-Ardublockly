@@ -304,6 +304,28 @@ export const UI = {
   builder_review_text:
     "You can share your tutorial with other people directly from the link. If you want to publish your tutorial for all users in the overview you can activate it here. An administrator will view your tutorial and then activate it.",
 
+  /**
+   * SaveStatusDialog / Tutorial Builder Dialog
+   */
+  save_status_saving: "Please wait, the tutorial is being saved...",
+  save_status_success: "Tutorial saved successfully!",
+  save_status_to_overview: "Back to overview",
+  save_status_to_tutorial: "To tutorial",
+  save_status_missing_fields: "The following required fields are missing:",
+  save_status_missing_title: "Title",
+  save_status_missing_subtitle: "Subtitle",
+  save_status_missing_understood: "Got it",
+  save_status_error: "An error occurred while saving.",
+  save_status_error_hint: "Possible reasons:",
+  save_status_error_network: "Check network connection",
+  save_status_error_validation: "Validate data and try again",
+  save_status_error_server: "Server issue - please try again later",
+  save_status_close: "Close",
+  save_status_dialog_loading: "Tutorial is being saved...",
+  save_status_dialog_success: "Saved!",
+  save_status_dialog_missing: "Information incomplete",
+  save_status_dialog_error: "Error saving",
+
   // Gallery
 
   gallery_home_head: "Gallery",
