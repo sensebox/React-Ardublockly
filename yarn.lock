@@ -5304,7 +5304,7 @@ react-is@^19.0.0:
 
 react-markdown-editor-lite@^1.4.2:
   version "1.4.2"
-  resolved "https://registry.npmjs.org/react-markdown-editor-lite/-/react-markdown-editor-lite-1.4.2.tgz"
+  resolved "https://registry.yarnpkg.com/react-markdown-editor-lite/-/react-markdown-editor-lite-1.4.2.tgz#0d05034c9f463c41e3456e7beb619c627f0dfc4f"
   integrity sha512-NHbsNP6s6IxUwZow4h1wZzusfhrgWC6ZeSFgtUgEMVFlHH4TsW4MHUBLDbbnvjOn++sqCuaBB9HJsFxoQpVEBQ==
   dependencies:
     classnames "^2.2.6"
