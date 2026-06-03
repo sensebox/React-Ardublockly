@@ -244,7 +244,7 @@ export const TRANSLATIONS = {
 
   // Teachable Machine translations
   teachableSensebox: {
-    title: "Teachable senseBox",
+    title: "Machine Learning",
     description:
       "Train your own image classification model and deploy it on your senseBox MCU Eye.",
     addClass: "Add Class",

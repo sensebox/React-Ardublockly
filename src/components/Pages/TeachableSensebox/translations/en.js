@@ -1,7 +1,7 @@
 // src/components/Pages/TeachableSensebox/translations/en.js
 export const teachableSenseboxTranslations_en = {
   landing: {
-    title: "Teachable senseBox",
+    title: "Machine Learning",
     imageCard: {
       title: "Image Classification",
       description:

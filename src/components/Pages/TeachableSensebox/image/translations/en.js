@@ -57,7 +57,7 @@ export const imageClassificationTranslations_en = {
       reset: "Reset to Defaults",
     },
     tooltip: {
-      helpMain: "What is Teachable senseBox?",
+      helpMain: "What is Image Classification?",
       browserCompatible:
         "This browser does not support the required features for connecting to the senseBox MCU Eye. Please use a compatible browser like Chrome or Edge.",
       helpClasses: "Help with classes",

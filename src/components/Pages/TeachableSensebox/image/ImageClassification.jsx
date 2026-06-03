@@ -120,7 +120,7 @@ const TeachableSensebox = () => {
             onClick={() => navigate("/teachable")}
             sx={{ mb: 2 }}
           >
-            {t.landing?.title || "Teachable senseBox"}
+            {t.landing?.title || "Machine Learning"}
           </Button>
           <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
             <Typography variant="h3" component="h1">
@@ -132,7 +132,9 @@ const TeachableSensebox = () => {
                 handleOpenHelp("image/imageClassification");
               }}
               isBlinking={imageClassBlinking}
-              tooltip={t.training?.helpMain || "Was ist Teachable senseBox?"}
+              tooltip={
+                t.training?.tooltip?.helpMain || "Was ist Bildklassifizierung?"
+              }
             />
           </Box>
           <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>

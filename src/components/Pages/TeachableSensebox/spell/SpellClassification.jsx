@@ -107,7 +107,7 @@ const SpellClassification = () => {
             onClick={() => navigate("/teachable")}
             sx={{ mb: 2 }}
           >
-            Teachable senseBox
+            Machine Learning
           </Button>
           <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
             <Typography variant="h3" component="h1">
