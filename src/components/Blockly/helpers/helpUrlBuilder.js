@@ -10,9 +10,8 @@
  *
  **/
 
-var board = window.sessionStorage.getItem("board");
-
 export const withBoardParam = (baseUrl) => {
+  const board = window.sessionStorage.getItem("board");
   const boardFlag = board === "esp32" ? "eduS2" : "edu";
   return `${baseUrl}?board=${boardFlag}`;
 };
