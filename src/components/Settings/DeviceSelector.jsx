@@ -35,11 +35,29 @@ export default function DeviceSelector() {
     const value = e.target.value;
     dispatch(setBoard(value));
 
+    let boardName;
+    switch (value) {
+      case "MCU":
+        boardName = "senseBox MCU";
+        break;
+      case "MCU:mini":
+        boardName = "senseBox MCU mini";
+        break;
+      case "MCU-S2":
+        boardName = "senseBox MCU-S2";
+        break;
+      case "MCU-EYE":
+        boardName = "senseBox MCU Eye";
+        break;
+      default:
+        boardName = value;
+    }
+
     setSnackInfo({
       type: "success",
       key: Date.now(),
       // you can replace this with a Blockly.Msg key if available
-      message: `${Blockly.Msg.settings_board} geändert: ${value === "MCU" ? "senseBox MCU" : value === "MCU:MINI" ? "senseBox MCU mini" : "senseBox MCU-S2"}`,
+      message: `${Blockly.Msg.settings_board} geändert: ${boardName}`,
     });
     setSnackbarOpen(true);
   };
@@ -72,6 +90,7 @@ export default function DeviceSelector() {
           <MenuItem value="MCU">senseBox MCU</MenuItem>
           <MenuItem value="MCU:mini">senseBox MCU mini</MenuItem>
           <MenuItem value="MCU-S2">senseBox MCU-S2</MenuItem>
+          <MenuItem value="MCU-EYE">senseBox MCU Eye</MenuItem>
         </Select>
       </FormControl>
 

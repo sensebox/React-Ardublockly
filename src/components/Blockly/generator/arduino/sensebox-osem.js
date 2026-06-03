@@ -14,7 +14,7 @@ function getSelectedBoard() {
  * @returns {boolean}
  */
 function isESP32Board() {
-  return getSelectedBoard() === "MCU-S2";
+  return getSelectedBoard() === "MCU-S2" || getSelectedBoard() === "MCU-EYE";
 }
 
 /**
@@ -33,7 +33,7 @@ Blockly.Generator.Arduino.forBlock["sensebox_send_to_osem"] = function (
       "Value",
       Blockly.Generator.Arduino.ORDER_ATOMIC,
     ) || '"Keine Eingabe"';
-  
+
   // ESP32 doesn't use PROGMEM
   if (isESP32Board()) {
     Blockly.Generator.Arduino.definitions_["SENSOR_ID" + id + ""] =
@@ -54,11 +54,13 @@ Blockly.Generator.Arduino.forBlock["sensebox_osem_connection"] = function (
   var workspace = Blockly.getMainWorkspace();
   var wifi = false;
   var ethernet = false;
-  
+
   // Check for WiFi blocks - different block types for ESP32 vs MCU
   if (isEsp32) {
-    if (workspace.getBlocksByType("sensebox_esp32s2_wifi").length > 0 ||
-        workspace.getBlocksByType("sensebox_esp32s2_wifi_enterprise").length > 0) {
+    if (
+      workspace.getBlocksByType("sensebox_esp32s2_wifi").length > 0 ||
+      workspace.getBlocksByType("sensebox_esp32s2_wifi_enterprise").length > 0
+    ) {
       wifi = true;
       ethernet = false;
     }
@@ -71,7 +73,7 @@ Blockly.Generator.Arduino.forBlock["sensebox_osem_connection"] = function (
       wifi = false;
     }
   }
-  
+
   var box_id = this.getFieldValue("BoxID");
   var branch = Blockly.Generator.Arduino.statementToCode(block, "DO");
   var access_token = this.getFieldValue("access_token");
@@ -79,7 +81,7 @@ Blockly.Generator.Arduino.forBlock["sensebox_osem_connection"] = function (
   var type = this.getFieldValue("type");
   var ssl = this.getFieldValue("SSL");
   // RESTART is only available for MCU boards
-  var restart = isEsp32 ? "FALSE" : (this.getFieldValue("RESTART") || "FALSE");
+  var restart = isEsp32 ? "FALSE" : this.getFieldValue("RESTART") || "FALSE";
   var port = 0;
   var count = 0;
   if (blocks !== undefined) {
@@ -92,7 +94,7 @@ Blockly.Generator.Arduino.forBlock["sensebox_osem_connection"] = function (
   var num_sensors = count;
   Blockly.Generator.Arduino.definitions_["num_sensors"] =
     "static const uint8_t NUM_SENSORS = " + num_sensors + ";";
-  
+
   // ESP32 doesn't use PROGMEM
   if (isEsp32) {
     Blockly.Generator.Arduino.definitions_["SenseBoxID"] =
@@ -105,7 +107,7 @@ Blockly.Generator.Arduino.forBlock["sensebox_osem_connection"] = function (
     Blockly.Generator.Arduino.definitions_["host"] =
       'const char server [] PROGMEM ="ingress.opensensemap.org";';
   }
-  
+
   // SSL/WiFi configuration differs between ESP32 and MCU
   if (isEsp32) {
     // ESP32 SSL configuration
@@ -214,7 +216,7 @@ unsigned long getTime() {
       }
     }
   }
-  
+
   Blockly.Generator.Arduino.definitions_["measurement"] =
     `typedef struct measurement {
       const char *sensorId;
@@ -232,7 +234,7 @@ unsigned long getTime() {
     measurements[num_measurements].value = value;
     num_measurements++;
     }`;
-    
+
   if (type === "Stationary") {
     // Different implementations for ESP32 vs MCU
     if (isEsp32) {
@@ -415,7 +417,7 @@ ${
       }`;
     Blockly.Generator.Arduino.variables_["latitude"] = "float latitude;";
     Blockly.Generator.Arduino.variables_["longitude"] = "float longitude;";
-    
+
     if (isEsp32) {
       // ESP32 Mobile implementation
       Blockly.Generator.Arduino.functionNames_["submitValues"] =

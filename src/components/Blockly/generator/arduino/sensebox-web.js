@@ -14,7 +14,7 @@ function getSelectedBoard() {
  * @returns {boolean}
  */
 function isESP32Board() {
-  return getSelectedBoard() === "MCU-S2";
+  return getSelectedBoard() === "MCU-S2" || getSelectedBoard() === "MCU-EYE";
 }
 
 /* Wifi connection and openSenseMap Blocks*/
@@ -24,10 +24,11 @@ Blockly.Generator.Arduino.forBlock["sensebox_wifi"] = function (
 ) {
   var pw = this.getFieldValue("Password");
   var ssid = this.getFieldValue("SSID");
-  
+
   if (isESP32Board()) {
     // ESP32 WiFi code
-    Blockly.Generator.Arduino.libraries_["library_ESPWiFi"] = "#include <WiFi.h>";
+    Blockly.Generator.Arduino.libraries_["library_ESPWiFi"] =
+      "#include <WiFi.h>";
     Blockly.Generator.Arduino.variables_["ssid"] = `char ssid[] = "${ssid}";`;
     Blockly.Generator.Arduino.variables_["pass"] = `char pass[] = "${pw}";`;
     Blockly.Generator.Arduino.setupCode_["wifi_begin"] = `
@@ -42,7 +43,8 @@ Blockly.Generator.Arduino.forBlock["sensebox_wifi"] = function (
   `;
   } else {
     // MCU WiFi code
-    Blockly.Generator.Arduino.libraries_["library_WiFi"] = "#include <WiFi101.h>";
+    Blockly.Generator.Arduino.libraries_["library_WiFi"] =
+      "#include <WiFi101.h>";
     Blockly.Generator.Arduino.variables_["ssid"] = `char ssid[] = "${ssid}";`;
     Blockly.Generator.Arduino.variables_["pass"] = `char pass[] = "${pw}";`;
     Blockly.Generator.Arduino.variables_["wifi_Status"] =
@@ -95,19 +97,22 @@ Blockly.Generator.Arduino.forBlock["sensebox_startap"] = function (
   generator,
 ) {
   var ssid = this.getFieldValue("SSID");
-  
+
   if (isESP32Board()) {
     // ESP32 AP code
-    Blockly.Generator.Arduino.libraries_["library_ESPWiFi"] = "#include <WiFi.h>";
+    Blockly.Generator.Arduino.libraries_["library_ESPWiFi"] =
+      "#include <WiFi.h>";
     Blockly.Generator.Arduino.libraries_["library_ESPWiFiClient"] =
       "#include <WiFiClient.h>";
     Blockly.Generator.Arduino.libraries_["WiFiAP"] = "#include <WiFiAP.h>";
     Blockly.Generator.Arduino.variables_["ssid"] =
       `const char ssid[] = "${ssid}";`;
-    Blockly.Generator.Arduino.setupCode_["wifi_startAP"] = `WiFi.softAP(ssid);\n`;
+    Blockly.Generator.Arduino.setupCode_["wifi_startAP"] =
+      `WiFi.softAP(ssid);\n`;
   } else {
     // MCU AP code
-    Blockly.Generator.Arduino.libraries_["library_WiFi"] = "#include <WiFi101.h>";
+    Blockly.Generator.Arduino.libraries_["library_WiFi"] =
+      "#include <WiFi101.h>";
     Blockly.Generator.Arduino.setupCode_["wifi_startAP"] =
       `WiFi.beginAP("${ssid}");`;
   }

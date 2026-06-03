@@ -10,6 +10,7 @@ import {
   faCog,
   faSignInAlt,
   faSignOutAlt,
+  faEye,
 } from "@fortawesome/free-solid-svg-icons";
 
 export default {
@@ -19,6 +20,7 @@ export default {
     { text: "Gallery", icon: faLightbulb, link: "/gallery" },
     { text: "Projects", icon: faLayerGroup, link: "/project", auth: true },
     { text: "Code Editor", icon: faCode, link: "/codeeditor" },
+    { text: "Teachable Machine", icon: faEye, link: "/teachable" },
     {
       text: "Builder",
       icon: faTools,
