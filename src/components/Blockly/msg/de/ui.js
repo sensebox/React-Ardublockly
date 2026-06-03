@@ -90,8 +90,7 @@ export const UI = {
     "Fehler beim Aktualisieren des Projektes. Versuche es noch einmal.",
   messages_GALLERY_UPDATE_FAIL:
     "Fehler beim Aktualisieren des Galerie-Projektes. Versuche es noch einmal.",
-  messages_PROJECT_SAVE_SUCCESS:
-    "Das Projekt wurde erfolgreich gespeichert.",
+  messages_PROJECT_SAVE_SUCCESS: "Das Projekt wurde erfolgreich gespeichert.",
   messages_gallery_save_fail_1: "Fehler beim Speichern des ",
   messages_gallery_save_fail_2: "Projektes. Versuche es noch einmal.",
   messages_SHARE_SUCCESS: "Programm teilen",
@@ -115,7 +114,8 @@ export const UI = {
   /**
    * Custom Functions Messages
    */
-  custom_function_define_tooltip: "Definiere eine eigene Funktion mit Parametern",
+  custom_function_define_tooltip:
+    "Definiere eine eigene Funktion mit Parametern",
   custom_function_empty_name_warning: "Funktionsname darf nicht leer sein",
   custom_function_invalid_name_warning:
     "Funktionsname muss mit Buchstaben beginnen und darf nur Buchstaben, Zahlen und _ enthalten",
