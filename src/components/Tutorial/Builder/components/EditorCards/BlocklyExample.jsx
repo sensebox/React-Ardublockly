@@ -349,7 +349,7 @@ const BlocklyExample = ({ index, task = false, value, updateStepFields }) => {
         open={snackbar.open}
         message={snackbar.message}
         type={snackbar.type}
-        key={snackbar.key}
+        snackbarKey={snackbar.key}
         onClose={() => setSnackbar((s) => ({ ...s, open: false }))}
       />
 

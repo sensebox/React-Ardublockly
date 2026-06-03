@@ -35,6 +35,11 @@ export const UI = {
   variables_set: "set",
   variables_to: "to",
   toolbox_internet_and_comms: "Data transmission",
+  toolbox_ai: "AI",
+  ai_upload_model: "Upload Trained Model",
+  ai_classify: "Classify",
+  ai_no_model_uploaded: "No model uploaded",
+  ai_model_uploaded: "Model loaded",
 
   /**
    * Tooltips
@@ -86,6 +91,7 @@ export const UI = {
   messages_PROJECT_UPDATE_FAIL: "Error updating the project. Try again.",
   messages_GALLERY_UPDATE_FAIL:
     "Error updating the gallery project. Try again.",
+  messages_PROJECT_SAVE_SUCCESS: "The project was successfully saved.",
   messages_gallery_save_fail_1: "Error saving the ",
   messages_gallery_save_fail_2: "Project. Try again.",
   messages_SHARE_SUCCESS: "Share program",
@@ -106,6 +112,20 @@ export const UI = {
     "is a reserved word and cannot be used as a variable name.",
   messages_invalid_variable_name:
     "Invalid variable name, only letters, numbers and underscores are allowed.",
+
+  /**
+   * Custom Functions Messages
+   */
+  custom_function_define_tooltip: "Define your own function with parameters",
+  custom_function_empty_name_warning: "Function name cannot be empty",
+  custom_function_invalid_name_warning:
+    "Function name must start with a letter and can only contain letters, numbers, and underscore",
+  custom_function_not_found_warning: "Function not found",
+  custom_function_call_tooltip: "Call a defined function",
+  custom_function_call_expression_tooltip: "Use the return value of a function",
+  custom_function_no_return_warning:
+    "has no return value! Use the normal function call block.",
+  custom_function_parameter_get_tooltip: "Use a function parameter",
 
   /**
    * Tablet Dialog
@@ -289,6 +309,28 @@ export const UI = {
   builder_review_text:
     "You can share your tutorial with other people directly from the link. If you want to publish your tutorial for all users in the overview you can activate it here. An administrator will view your tutorial and then activate it.",
 
+  /**
+   * SaveStatusDialog / Tutorial Builder Dialog
+   */
+  save_status_saving: "Please wait, the tutorial is being saved...",
+  save_status_success: "Tutorial saved successfully!",
+  save_status_to_overview: "Back to overview",
+  save_status_to_tutorial: "To tutorial",
+  save_status_missing_fields: "The following required fields are missing:",
+  save_status_missing_title: "Title",
+  save_status_missing_subtitle: "Subtitle",
+  save_status_missing_understood: "Got it",
+  save_status_error: "An error occurred while saving.",
+  save_status_error_hint: "Possible reasons:",
+  save_status_error_network: "Check network connection",
+  save_status_error_validation: "Validate data and try again",
+  save_status_error_server: "Server issue - please try again later",
+  save_status_close: "Close",
+  save_status_dialog_loading: "Tutorial is being saved...",
+  save_status_dialog_success: "Saved!",
+  save_status_dialog_missing: "Information incomplete",
+  save_status_dialog_error: "Error saving",
+
   // Gallery
 
   gallery_home_head: "Gallery",
@@ -323,6 +365,7 @@ export const UI = {
   navbar_tutorialbuilder: "Create tutorial",
   navbar_gallery: "Gallery",
   navbar_projects: "Projects",
+  navbar_teachablesensebox: "Machine Learning",
 
   navbar_menu: "Menu",
   navbar_login: "Login",

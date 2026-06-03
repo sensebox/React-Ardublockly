@@ -5,14 +5,16 @@ import * as Blockly from "blockly/core";
 import { useSelector } from "react-redux";
 import { ToolboxMcu } from "./ToolboxMcu";
 import { ToolboxEsp } from "./ToolboxEsp";
+import { ToolboxEye } from "./ToolboxEye";
 import "./horizontal_toolbox_styles.css";
-import { registerBlocklyContextMenu } from "../helpers/blocklyContextMenu";
 
 const HorizontalToolbox = ({ workspace, toolbox }) => {
   const selectedBoard = useSelector((state) => state.board.board);
   const language = useSelector((state) => state.general.language);
+  const aiModel = useSelector((state) => state.general.aiModel);
   const previousBoard = useRef(null);
   const previousLanguage = useRef(null);
+  const previousAiModelCode = useRef(undefined);
   const isInitialMount = useRef(true);
 
   // Register typed variable flyout on board change or mount
@@ -42,32 +44,46 @@ const HorizontalToolbox = ({ workspace, toolbox }) => {
     typedVarModal.init();
 
     // Update toolbox only when board or language actually changes, not on initial mount
-    const boardChanged = previousBoard.current !== null && previousBoard.current !== selectedBoard;
-    const languageChanged = previousLanguage.current !== null && previousLanguage.current !== language;
-    
-    if (!isInitialMount.current && (boardChanged || languageChanged) && workspace.toolbox) {
+    const boardChanged =
+      previousBoard.current !== null && previousBoard.current !== selectedBoard;
+    const languageChanged =
+      previousLanguage.current !== null &&
+      previousLanguage.current !== language;
+    const aiModelChanged =
+      previousAiModelCode.current !== undefined &&
+      previousAiModelCode.current !== aiModel?.code;
+
+    if (
+      !isInitialMount.current &&
+      (boardChanged || languageChanged || aiModelChanged) &&
+      workspace.toolbox
+    ) {
       workspace.updateToolbox(toolbox.current);
     }
-    
+
     previousBoard.current = selectedBoard;
     previousLanguage.current = language;
+    previousAiModelCode.current = aiModel?.code;
     isInitialMount.current = false;
-  }, [workspace, toolbox, selectedBoard, language]);
+  }, [workspace, toolbox, selectedBoard, language, aiModel?.code]);
 
-  return (
-    <xml
-      xmlns="https://developers.google.com/blockly/xml"
-      id="blockly"
-      style={{ display: "none" }}
-      ref={toolbox}
-      className="embedded-mode"
-    >
-      {selectedBoard === "MCU" || selectedBoard === "MCU:mini" ? (
-        <ToolboxMcu />
-      ) : (
-        <ToolboxEsp />
-      )}
-    </xml>
+  return React.createElement(
+    "xml",
+    {
+      is: "blockly",
+      xmlns: "https://developers.google.com/blockly/xml",
+      id: "blockly",
+      style: { display: "none" },
+      ref: toolbox,
+      class: "embedded-mode",
+    },
+    selectedBoard === "MCU" || selectedBoard === "MCU:mini" ? (
+      <ToolboxMcu />
+    ) : selectedBoard === "MCU-S2" ? (
+      <ToolboxEsp />
+    ) : (
+      <ToolboxEye />
+    ),
   );
 };
 

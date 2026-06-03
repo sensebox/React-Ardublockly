@@ -75,6 +75,7 @@ const TutorialBuilderProgressCard = ({
   setDuration,
   year,
   setYear,
+  children,
 }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
@@ -134,9 +135,17 @@ const TutorialBuilderProgressCard = ({
 
   return (
     <Card
-      sx={{ borderRadius: 3, boxShadow: 3, overflow: "scroll", height: "100%" }}
+      sx={{
+        borderRadius: 3,
+        boxShadow: 3,
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",
+      }}
     >
       <CardHeader
+        sx={{ flexShrink: 0 }}
         title={
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <TextField
@@ -192,6 +201,9 @@ const TutorialBuilderProgressCard = ({
           display: "flex",
           flexDirection: "column",
           gap: 1,
+          flex: 1,
+          overflow: "auto",
+          minHeight: 0,
         }}
       >
         <Accordion
@@ -583,6 +595,13 @@ const TutorialBuilderProgressCard = ({
             </IconButton>
           </Box>
         </Box>
+
+        {/* Action Buttons */}
+        {children && (
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 1, mt: 2 }}>
+            {children}
+          </Box>
+        )}
       </CardContent>
     </Card>
   );

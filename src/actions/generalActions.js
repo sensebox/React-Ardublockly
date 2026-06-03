@@ -7,6 +7,8 @@ import {
   PLATFORM,
   COMPILER,
   EMBEDDED_MODE,
+  AI_MODEL_UPLOAD,
+  AI_MODEL_CLEAR,
 } from "./types";
 
 export const visitPage = () => (dispatch) => {
@@ -64,5 +66,27 @@ export const setEmbeddedMode = (isEmbedded) => (dispatch) => {
   dispatch({
     type: EMBEDDED_MODE,
     payload: isEmbedded,
+  });
+};
+
+const parseCategoryLabels = (code) => {
+  const match = code.match(
+    /const\s+char\s*\*\s*kCategoryLabels\s*\[.*?\]\s*=\s*\{([^}]+)\}/,
+  );
+  if (!match) return [];
+  return [...match[1].matchAll(/"([^"]+)"/g)].map((m) => m[1]);
+};
+
+export const uploadAiModel = (code, filename) => (dispatch) => {
+  const labels = parseCategoryLabels(code);
+  dispatch({
+    type: AI_MODEL_UPLOAD,
+    payload: { code, filename, labels },
+  });
+};
+
+export const clearAiModel = () => (dispatch) => {
+  dispatch({
+    type: AI_MODEL_CLEAR,
   });
 };

@@ -49,9 +49,6 @@ export const onChangeCode = () => (dispatch, getState) => {
     }
     code.data = selectedBlock.data ?? null;
   } else {
-    code.helpurl = null;
-    code.tooltip = null;
-    code.data = null;
   }
 
   dispatch({

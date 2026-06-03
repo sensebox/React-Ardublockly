@@ -109,6 +109,17 @@ class WorkspaceName extends Component {
   };
 
   render() {
+    // Check if the current user owns this project (for gallery and saved projects)
+    const isOwnProject =
+      !this.props.project || // No project = creating new one
+      !this.props.projectType || // No project type = new project
+      (this.props.projectType === "project" && this.props.project) || // Own projects can always be edited
+      (this.props.projectType === "gallery" &&
+        this.props.user &&
+        this.props.user.email === this.props.project?.creator);
+
+    const canEdit = isOwnProject;
+
     return (
       <div style={this.props.style}>
         <Tooltip
@@ -119,8 +130,16 @@ class WorkspaceName extends Component {
           style={{ height: "100%" }}
         >
           <div
-            className={this.props.isEmbedded ? `${this.props.classes.workspaceNameEmbedded} embedded-workspace-name` : this.props.classes.workspaceName}
+            className={
+              this.props.isEmbedded
+                ? `${this.props.classes.workspaceNameEmbedded} embedded-workspace-name`
+                : this.props.classes.workspaceName
+            }
             onClick={() => {
+              // Only allow renaming if user owns the project
+              if (!canEdit) {
+                return;
+              }
               if (this.props.multiple) {
                 this.props.workspaceName(this.props.project.title);
                 if (this.props.projectType === "gallery") {
@@ -141,6 +160,7 @@ class WorkspaceName extends Component {
                     : "Bitte gib einen Namen für das Projekt ein und bestätige diesen mit einem Klick auf 'Eingabe'.",
               });
             }}
+            style={!canEdit ? { cursor: "default", opacity: 0.6 } : {}}
           >
             {this.props.name &&
             !isWidthDown(
@@ -154,16 +174,18 @@ class WorkspaceName extends Component {
                 {this.props.name}
               </Typography>
             ) : null}
-            <div style={{ width: "40px", display: "flex" }}>
-              <FontAwesomeIcon
-                icon={faPen}
-                style={{
-                  height: "18px",
-                  width: "18px",
-                  margin: "auto",
-                }}
-              />
-            </div>
+            {canEdit && (
+              <div style={{ width: "40px", display: "flex" }}>
+                <FontAwesomeIcon
+                  icon={faPen}
+                  style={{
+                    height: "18px",
+                    width: "18px",
+                    margin: "auto",
+                  }}
+                />
+              </div>
+            )}
           </div>
         </Tooltip>
 
@@ -171,7 +193,7 @@ class WorkspaceName extends Component {
           open={this.state.snackbar}
           message={this.state.message}
           type={this.state.type}
-          key={this.state.key}
+          snackbarKey={this.state.key}
         />
         <Dialog
           open={this.state.open}
@@ -253,6 +275,9 @@ WorkspaceName.propTypes = {
   description: PropTypes.string.isRequired,
   message: PropTypes.object.isRequired,
   isEmbedded: PropTypes.bool,
+  user: PropTypes.object,
+  project: PropTypes.object,
+  projectType: PropTypes.string,
 };
 
 const mapStateToProps = (state) => ({
@@ -260,6 +285,7 @@ const mapStateToProps = (state) => ({
   description: state.project.description,
   message: state.message,
   isEmbedded: state.general.embeddedMode,
+  user: state.auth.user,
 });
 
 export default connect(mapStateToProps, {

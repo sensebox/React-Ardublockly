@@ -36,6 +36,11 @@ export const UI = {
   variables_set: "Schreibe",
   variables_to: "",
   toolbox_internet_and_comms: "Datenübertragung",
+  toolbox_ai: "KI",
+  ai_upload_model: "Trainiertes Modell hochladen",
+  ai_classify: "Klassifiziere",
+  ai_no_model_uploaded: "Kein Modell hochgeladen",
+  ai_model_uploaded: "Modell geladen",
 
   /**
    * Tooltips
@@ -90,6 +95,7 @@ export const UI = {
     "Fehler beim Aktualisieren des Projektes. Versuche es noch einmal.",
   messages_GALLERY_UPDATE_FAIL:
     "Fehler beim Aktualisieren des Galerie-Projektes. Versuche es noch einmal.",
+  messages_PROJECT_SAVE_SUCCESS: "Das Projekt wurde erfolgreich gespeichert.",
   messages_gallery_save_fail_1: "Fehler beim Speichern des ",
   messages_gallery_save_fail_2: "Projektes. Versuche es noch einmal.",
   messages_SHARE_SUCCESS: "Programm teilen",
@@ -109,6 +115,23 @@ export const UI = {
     "ist ein reserviertes Wort und kann nicht als Variablenname verwendet werden",
   messages_invalid_variable_name:
     "Der Variablenname ist ungültig. Verwende nur Buchstaben, Zahlen und Unterstriche.",
+
+  /**
+   * Custom Functions Messages
+   */
+  custom_function_define_tooltip:
+    "Definiere eine eigene Funktion mit Parametern",
+  custom_function_empty_name_warning: "Funktionsname darf nicht leer sein",
+  custom_function_invalid_name_warning:
+    "Funktionsname muss mit Buchstaben beginnen und darf nur Buchstaben, Zahlen und _ enthalten",
+  custom_function_not_found_warning: "Funktion nicht gefunden",
+  custom_function_call_tooltip: "Rufe eine definierte Funktion auf",
+  custom_function_call_expression_tooltip:
+    "Verwende den Rückgabewert einer Funktion",
+  custom_function_no_return_warning:
+    "hat keinen Rückgabewert! Verwende den normalen Funktionsaufruf-Block.",
+  custom_function_parameter_get_tooltip: "Verwende einen Funktionsparameter",
+
   /**
    * Tablet Dialog
    */
@@ -295,6 +318,28 @@ export const UI = {
   builder_review_text:
     "Du kannst dein Tutorial direkt über den Link mit anderen Personen teilen. Wenn du dein Tutorial für alle Nutzer:innen in der Überischt veröffenltichen wollen kannst du es hier aktivieren. Ein Administrator wird dein Tutorial ansehen und anschließend freischalten.",
 
+  /**
+   * SaveStatusDialog / Tutorial Builder Dialog
+   */
+  save_status_saving: "Bitte warten, das Tutorial wird gespeichert...",
+  save_status_success: "Tutorial erfolgreich gespeichert!",
+  save_status_to_overview: "Zur Übersicht",
+  save_status_to_tutorial: "Zum Tutorial",
+  save_status_missing_fields: "Folgende Pflichtfelder fehlen noch:",
+  save_status_missing_title: "Titel",
+  save_status_missing_subtitle: "Untertitel",
+  save_status_missing_understood: "Verstanden",
+  save_status_error: "Beim Speichern ist ein Fehler aufgetreten.",
+  save_status_error_hint: "Mögliche Gründe:",
+  save_status_error_network: "Netzwerkverbindung überprüfen",
+  save_status_error_validation: "Daten validieren und erneut versuchen",
+  save_status_error_server: "Server-Problem - bitte später erneut versuchen",
+  save_status_close: "Schließen",
+  save_status_dialog_loading: "Tutorial wird gespeichert...",
+  save_status_dialog_success: "Gespeichert!",
+  save_status_dialog_missing: "Angaben unvollständig",
+  save_status_dialog_error: "Fehler beim Speichern",
+
   // Gallery
 
   gallery_home_head: "Galerie",
@@ -328,6 +373,7 @@ export const UI = {
   navbar_tutorialbuilder: "Tutorial erstellen",
   navbar_gallery: "Galerie",
   navbar_projects: "Projekte",
+  navbar_teachablesensebox: "Machine Learning",
 
   navbar_menu: "Menü",
   navbar_login: "Einloggen",

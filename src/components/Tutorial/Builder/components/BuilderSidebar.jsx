@@ -52,6 +52,8 @@ const BuilderSidebar = ({
         display: "flex",
         flexDirection: "column",
         gap: 2,
+        height: "100%",
+        minHeight: 0,
       }}
     >
       <TutorialBuilderProgressCard
@@ -77,10 +79,9 @@ const BuilderSidebar = ({
         setDuration={setDuration}
         year={year}
         setYear={setYear}
-      />
-
-      {/* Action Buttons */}
-      {children}
+      >
+        {children}
+      </TutorialBuilderProgressCard>
     </Box>
   );
 };
