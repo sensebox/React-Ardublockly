@@ -95,8 +95,7 @@ export const UI = {
     "Fehler beim Aktualisieren des Projektes. Versuche es noch einmal.",
   messages_GALLERY_UPDATE_FAIL:
     "Fehler beim Aktualisieren des Galerie-Projektes. Versuche es noch einmal.",
-  messages_PROJECT_SAVE_SUCCESS:
-    "Das Projekt wurde erfolgreich gespeichert.",
+  messages_PROJECT_SAVE_SUCCESS: "Das Projekt wurde erfolgreich gespeichert.",
   messages_gallery_save_fail_1: "Fehler beim Speichern des ",
   messages_gallery_save_fail_2: "Projektes. Versuche es noch einmal.",
   messages_SHARE_SUCCESS: "Programm teilen",
@@ -335,7 +334,7 @@ export const UI = {
   navbar_tutorialbuilder: "Tutorial erstellen",
   navbar_gallery: "Galerie",
   navbar_projects: "Projekte",
-  navbar_teachablesensebox: "Teachable senseBox",
+  navbar_teachablesensebox: "Machine Learning",
 
   navbar_menu: "Menü",
   navbar_login: "Einloggen",
