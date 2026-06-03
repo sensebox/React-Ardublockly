@@ -35,8 +35,12 @@ const SaveStatusDialog = ({ savingState, onClose, savedTutorialId }) => {
               {Blockly.Msg.save_status_missing_fields}
             </Typography>
             <Box sx={{ mt: 1, textAlign: "left" }}>
-              <Typography color="error.main">• {Blockly.Msg.save_status_missing_title}</Typography>
-              <Typography color="error.main">• {Blockly.Msg.save_status_missing_subtitle}</Typography>
+              <Typography color="error.main">
+                • {Blockly.Msg.save_status_missing_title}
+              </Typography>
+              <Typography color="error.main">
+                • {Blockly.Msg.save_status_missing_subtitle}
+              </Typography>
             </Box>
             <Button variant="contained" sx={{ mt: 2 }} onClick={onClose}>
               {Blockly.Msg.save_status_missing_understood}
@@ -83,14 +87,29 @@ const SaveStatusDialog = ({ savingState, onClose, savedTutorialId }) => {
               {Blockly.Msg.save_status_error}
             </Typography>
             <Box sx={{ mt: 2, textAlign: "left", maxWidth: "100%" }}>
-              <Typography variant="body2" fontWeight={600} color="text.secondary">
+              <Typography
+                variant="body2"
+                fontWeight={600}
+                color="text.secondary"
+              >
                 {Blockly.Msg.save_status_error_hint}
               </Typography>
-              <Typography variant="body2" sx={{ mt: 1 }}>• {Blockly.Msg.save_status_error_network}</Typography>
-              <Typography variant="body2">• {Blockly.Msg.save_status_error_validation}</Typography>
-              <Typography variant="body2">• {Blockly.Msg.save_status_error_server}</Typography>
+              <Typography variant="body2" sx={{ mt: 1 }}>
+                • {Blockly.Msg.save_status_error_network}
+              </Typography>
+              <Typography variant="body2">
+                • {Blockly.Msg.save_status_error_validation}
+              </Typography>
+              <Typography variant="body2">
+                • {Blockly.Msg.save_status_error_server}
+              </Typography>
             </Box>
-            <Button variant="contained" color="error" onClick={onClose} sx={{ mt: 2 }}>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={onClose}
+              sx={{ mt: 2 }}
+            >
               {Blockly.Msg.save_status_close}
             </Button>
           </>
