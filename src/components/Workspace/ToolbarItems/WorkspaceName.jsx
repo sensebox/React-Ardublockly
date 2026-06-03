@@ -110,13 +110,13 @@ class WorkspaceName extends Component {
 
   render() {
     // Check if the current user owns this project (for gallery and saved projects)
-    const isOwnProject = 
+    const isOwnProject =
       !this.props.project || // No project = creating new one
       !this.props.projectType || // No project type = new project
       (this.props.projectType === "project" && this.props.project) || // Own projects can always be edited
-      (this.props.projectType === "gallery" && 
-       this.props.user && 
-       this.props.user.email === this.props.project?.creator);
+      (this.props.projectType === "gallery" &&
+        this.props.user &&
+        this.props.user.email === this.props.project?.creator);
 
     const canEdit = isOwnProject;
 
@@ -160,9 +160,7 @@ class WorkspaceName extends Component {
                     : "Bitte gib einen Namen für das Projekt ein und bestätige diesen mit einem Klick auf 'Eingabe'.",
               });
             }}
-            style={
-              !canEdit ? { cursor: "default", opacity: 0.6 } : {}
-            }
+            style={!canEdit ? { cursor: "default", opacity: 0.6 } : {}}
           >
             {this.props.name &&
             !isWidthDown(
