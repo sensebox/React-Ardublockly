@@ -109,6 +109,20 @@ export const UI = {
     "Invalid variable name, only letters, numbers and underscores are allowed.",
 
   /**
+   * Custom Functions Messages
+   */
+  custom_function_define_tooltip: "Define your own function with parameters",
+  custom_function_empty_name_warning: "Function name cannot be empty",
+  custom_function_invalid_name_warning:
+    "Function name must start with a letter and can only contain letters, numbers, and underscore",
+  custom_function_not_found_warning: "Function not found",
+  custom_function_call_tooltip: "Call a defined function",
+  custom_function_call_expression_tooltip: "Use the return value of a function",
+  custom_function_no_return_warning:
+    "has no return value! Use the normal function call block.",
+  custom_function_parameter_get_tooltip: "Use a function parameter",
+
+  /**
    * Tablet Dialog
    */
   tabletDialog_headline: "Tablet mode is enabled!",

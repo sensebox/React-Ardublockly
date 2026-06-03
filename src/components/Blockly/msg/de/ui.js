@@ -111,6 +111,22 @@ export const UI = {
     "ist ein reserviertes Wort und kann nicht als Variablenname verwendet werden",
   messages_invalid_variable_name:
     "Der Variablenname ist ungültig. Verwende nur Buchstaben, Zahlen und Unterstriche.",
+
+  /**
+   * Custom Functions Messages
+   */
+  custom_function_define_tooltip: "Definiere eine eigene Funktion mit Parametern",
+  custom_function_empty_name_warning: "Funktionsname darf nicht leer sein",
+  custom_function_invalid_name_warning:
+    "Funktionsname muss mit Buchstaben beginnen und darf nur Buchstaben, Zahlen und _ enthalten",
+  custom_function_not_found_warning: "Funktion nicht gefunden",
+  custom_function_call_tooltip: "Rufe eine definierte Funktion auf",
+  custom_function_call_expression_tooltip:
+    "Verwende den Rückgabewert einer Funktion",
+  custom_function_no_return_warning:
+    "hat keinen Rückgabewert! Verwende den normalen Funktionsaufruf-Block.",
+  custom_function_parameter_get_tooltip: "Verwende einen Funktionsparameter",
+
   /**
    * Tablet Dialog
    */
