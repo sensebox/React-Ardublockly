@@ -18,6 +18,16 @@ function isESP32Board() {
 }
 
 /**
+ * Normalize checkbox field values from Blockly
+ * Converts boolean values to string equivalents ("TRUE"/"FALSE")
+ * @param {boolean|string} value - The value from Blockly checkbox field
+ * @returns {string} - Normalized value as "TRUE" or "FALSE"
+ */
+function normalizeCheckboxValue(value) {
+  return value === true || value === "TRUE" ? "TRUE" : "FALSE";
+}
+
+/**
  * block send Data to the openSenseMap
  */
 Blockly.Generator.Arduino.forBlock["sensebox_send_to_osem"] = function (
@@ -79,13 +89,9 @@ Blockly.Generator.Arduino.forBlock["sensebox_osem_connection"] = function (
   var access_token = this.getFieldValue("access_token");
   var blocks = this.getDescendants();
   var type = this.getFieldValue("type");
-  var ssl = this.getFieldValue("SSL");
-  // Normalize SSL value: convert boolean to string for compatibility
-  ssl = ssl === true || ssl === "TRUE" ? "TRUE" : "FALSE";
+  var ssl = normalizeCheckboxValue(this.getFieldValue("SSL"));
   // RESTART is only available for MCU boards
-  var restart = isEsp32 ? "FALSE" : this.getFieldValue("RESTART") || "FALSE";
-  // Normalize RESTART value: convert boolean to string for compatibility
-  restart = restart === true || restart === "TRUE" ? "TRUE" : "FALSE";
+  var restart = isEsp32 ? "FALSE" : normalizeCheckboxValue(this.getFieldValue("RESTART") || "FALSE");
   var port = 0;
   var count = 0;
   if (blocks !== undefined) {
