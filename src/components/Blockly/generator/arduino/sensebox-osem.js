@@ -55,23 +55,17 @@ Blockly.Generator.Arduino.forBlock["sensebox_osem_connection"] = function (
   var wifi = false;
   var ethernet = false;
 
-  // Check for WiFi blocks - different block types for ESP32 vs MCU
-  if (isEsp32) {
-    if (
-      workspace.getBlocksByType("sensebox_esp32s2_wifi").length > 0 ||
-      workspace.getBlocksByType("sensebox_esp32s2_wifi_enterprise").length > 0
-    ) {
-      wifi = true;
-      ethernet = false;
-    }
-  } else {
-    if (workspace.getBlocksByType("sensebox_wifi").length > 0) {
-      wifi = true;
-      ethernet = false;
-    } else if (workspace.getBlocksByType("sensebox_ethernet").length > 0) {
-      ethernet = true;
-      wifi = false;
-    }
+  // Check for WiFi blocks - check both unified and legacy block types
+  if (
+    workspace.getBlocksByType("sensebox_wifi").length > 0 ||
+    workspace.getBlocksByType("sensebox_esp32s2_wifi").length > 0 ||
+    workspace.getBlocksByType("sensebox_esp32s2_wifi_enterprise").length > 0
+  ) {
+    wifi = true;
+    ethernet = false;
+  } else if (workspace.getBlocksByType("sensebox_ethernet").length > 0) {
+    ethernet = true;
+    wifi = false;
   }
 
   var box_id = this.getFieldValue("BoxID");
