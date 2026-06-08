@@ -80,8 +80,12 @@ Blockly.Generator.Arduino.forBlock["sensebox_osem_connection"] = function (
   var blocks = this.getDescendants();
   var type = this.getFieldValue("type");
   var ssl = this.getFieldValue("SSL");
+  // Normalize SSL value: convert boolean to string for compatibility
+  ssl = ssl === true || ssl === "TRUE" ? "TRUE" : "FALSE";
   // RESTART is only available for MCU boards
   var restart = isEsp32 ? "FALSE" : this.getFieldValue("RESTART") || "FALSE";
+  // Normalize RESTART value: convert boolean to string for compatibility
+  restart = restart === true || restart === "TRUE" ? "TRUE" : "FALSE";
   var port = 0;
   var count = 0;
   if (blocks !== undefined) {
