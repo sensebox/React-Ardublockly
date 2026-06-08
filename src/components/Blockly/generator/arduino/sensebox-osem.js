@@ -91,7 +91,7 @@ Blockly.Generator.Arduino.forBlock["sensebox_osem_connection"] = function (
   var type = this.getFieldValue("type");
   var ssl = normalizeCheckboxValue(this.getFieldValue("SSL"));
   // RESTART is only available for MCU boards
-  var restart = isEsp32 ? "FALSE" : normalizeCheckboxValue(this.getFieldValue("RESTART") || "FALSE");
+  var restart = isEsp32 ? "FALSE" : normalizeCheckboxValue(this.getFieldValue("RESTART") ?? false);
   var port = 0;
   var count = 0;
   if (blocks !== undefined) {
