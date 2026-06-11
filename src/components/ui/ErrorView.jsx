@@ -17,6 +17,12 @@ export const ErrorView = ({ error }) => {
       Blockly.Msg.display_not_declared,
     "redefinition of": Blockly.Msg.variable_redeclared,
     "conflicting declaration": Blockly.Msg.variable_redeclared,
+    "'WiFiClient' does not name a type; did you mean 'DNSClient'?":
+      "Füge einen WiFi- oder Ethernet-Verbindungsblock hinzu, bevor du den openSenseMap-Block verwendest.",
+    "'SENSEBOX_ID' was not declared in this scope":
+      "Der openSenseMap-Block wurde nicht richtig konfiguriert. Stelle sicher, dass eine senseBox ID eingestellt ist.",
+    "'addMeasurement' was not declared in this scope":
+      "Der openSenseMap-Block ist nicht richtig eingebunden. Überprüfe, dass alle erforderlichen Blöcke vorhanden sind.",
   };
 
   const getSuggestion = (process) => {
