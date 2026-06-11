@@ -73,13 +73,7 @@ const ModelTrainer = ({
   // Camera state
   const previewContainerRef = useRef(null);
   const sampleScrollRefs = useRef({});
-
-  useEffect(() => {
-    classes.forEach((cls) => {
-      const el = sampleScrollRefs.current[cls.id];
-      if (el) el.scrollTop = el.scrollHeight;
-    });
-  }, [classes]);
+  
   const [videoLoading, setVideoLoading] = useState(false);
   const [serialError, setSerialError] = useState(null);
   const [connectionStatus, setConnectionStatus] = useState(
@@ -407,8 +401,8 @@ const ModelTrainer = ({
       try {
         const imageUrl = await captureFrame();
         if (imageUrl) {
-          setClasses((prev) =>
-            prev.map((cls) =>
+          setClasses((prev) => {
+            const newClasses = prev.map((cls) =>
               cls.id === classId
                 ? {
                     ...cls,
@@ -418,8 +412,13 @@ const ModelTrainer = ({
                     ],
                   }
                 : cls,
-            ),
-          );
+            );
+            requestAnimationFrame(() => {
+              const el = sampleScrollRefs.current[classId];
+              if (el) el.scrollTop = el.scrollHeight;
+            });
+            return newClasses;
+          });
         }
       } catch (error) {
         console.error("Error capturing image:", error);
