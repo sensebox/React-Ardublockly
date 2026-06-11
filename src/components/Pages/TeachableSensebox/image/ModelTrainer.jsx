@@ -428,19 +428,6 @@ const ModelTrainer = ({
     [isCameraActive, captureFrame],
   );
 
-  const startCapturing = useCallback(
-    (classId) => {
-      captureImage(classId);
-      const intervalId = setInterval(() => captureImage(classId), 100);
-      return intervalId;
-    },
-    [captureImage],
-  );
-
-  const stopCapturing = useCallback((intervalId) => {
-    if (intervalId) clearInterval(intervalId);
-  }, []);
-
   useEffect(() => {
     return () => {
       if (isCameraActive) stopCamera();
@@ -928,35 +915,8 @@ const ModelTrainer = ({
                         <Button
                           size="small"
                           startIcon={<CameraIcon />}
-                          onMouseDown={(e) => {
-                            e.preventDefault();
-                            const intervalId = startCapturing(cls.id);
-                            e.currentTarget.dataset.intervalId = intervalId;
-                          }}
-                          onMouseUp={(e) => {
-                            e.preventDefault();
-                            stopCapturing(
-                              parseInt(e.currentTarget.dataset.intervalId),
-                            );
-                          }}
-                          onMouseLeave={(e) => {
-                            e.preventDefault();
-                            if (e.currentTarget.dataset.intervalId) {
-                              stopCapturing(
-                                parseInt(e.currentTarget.dataset.intervalId),
-                              );
-                            }
-                          }}
-                          onTouchStart={(e) => {
-                            e.preventDefault();
-                            const intervalId = startCapturing(cls.id);
-                            e.currentTarget.dataset.intervalId = intervalId;
-                          }}
-                          onTouchEnd={(e) => {
-                            e.preventDefault();
-                            stopCapturing(
-                              parseInt(e.currentTarget.dataset.intervalId),
-                            );
+                          onClick={() => {
+                            captureImage(cls.id);
                           }}
                           disabled={!isCameraActive || disabled}
                         >

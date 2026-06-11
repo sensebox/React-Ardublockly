@@ -12,7 +12,7 @@ export const imageClassificationTranslations_de = {
     loadingCamera: "Lade Kamera...",
     initializingCamera: "Initialisiere Kamera...",
     samples: "Bilder",
-    holdToCapture: "Halten zum Aufnehmen",
+    holdToCapture: "Beispielbild aufnehmen",
     addClass: "Klasse hinzufügen",
     trainModel: "Modell trainieren",
     trainingEpoch: "Training: Epoche {epoch}/{totalEpochs}",
