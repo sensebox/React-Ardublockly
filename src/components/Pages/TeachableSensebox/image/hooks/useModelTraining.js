@@ -33,6 +33,52 @@ function useModelTraining() {
   const [testResults, setTestResults] = useState([]);
   const [finalAccuracy, setFinalAccuracy] = useState(null);
   const [trainedModel, setTrainedModel] = useState(null);
+  const [isPreliminaryModel, setIsPreliminaryModel] = useState(false);
+
+  const prepareDatasetTensors = (
+    trainDataset,
+    validationDataset,
+    numClasses,
+    featureDimension,
+  ) => {
+    // Shuffle once upfront
+    const shuffled = [...trainDataset].sort(() => Math.random() - 0.5);
+
+    const trainXs = tf.tensor2d(
+      shuffled.map((s) => Array.from(s.data)),
+      [shuffled.length, featureDimension],
+    );
+    const trainYs = tf.tensor2d(
+      shuffled.map((s) => s.label),
+      [shuffled.length, numClasses],
+    );
+    const valXs = tf.tensor2d(
+      validationDataset.map((s) => Array.from(s.data)),
+      [validationDataset.length, featureDimension],
+    );
+    const valYs = tf.tensor2d(
+      validationDataset.map((s) => s.label),
+      [validationDataset.length, numClasses],
+    );
+
+    return { trainXs, trainYs, valXs, valYs };
+  };
+
+  const cloneTrainingModel = (
+    sourceModel,
+    featureDimension,
+    numClasses,
+    weights,
+  ) => {
+    const cloned = createTrainingModel(featureDimension, numClasses);
+    cloned.compile({
+      optimizer: tf.train.adam(0.0001), // dummy optimizer, won't be trained
+      loss: "categoricalCrossentropy",
+      metrics: ["accuracy"],
+    });
+    cloned.setWeights(weights.map((w) => w.clone()));
+    return cloned;
+  };
 
   const resetTrainingState = useCallback(() => {
     setTrainingProgress({
@@ -44,6 +90,7 @@ function useModelTraining() {
     setTrainingMetrics([]);
     setTestResults([]);
     setFinalAccuracy(null);
+    setIsPreliminaryModel(false);
   }, []);
 
   const loadImage = (url) =>
@@ -209,6 +256,28 @@ function useModelTraining() {
     return { confMatrix, accuracy };
   };
 
+  const createModelData = useCallback(
+    (featureExtractor, trainingModel, classes) => {
+      const combinedModel = tf.sequential();
+      combinedModel.add(featureExtractor);
+      combinedModel.add(trainingModel);
+
+      return {
+        model: combinedModel,
+        featureExtractor,
+        trainingModel,
+        inputShape: [96, 96, 1],
+        classes: classes.map((cls) => ({ id: cls.id, name: cls.name })),
+        representativeSamples: classes.flatMap((cls) =>
+          cls.samples
+            .slice(0, Math.min(10, cls.samples.length))
+            .map((s) => s.url),
+        ),
+      };
+    },
+    [],
+  );
+
   const trainModel = useCallback(
     async (
       classes,
@@ -216,6 +285,7 @@ function useModelTraining() {
       onTrainingError,
       onModelTrained,
       trainingSettings = {},
+      onPreliminaryModelReady = null,
     ) => {
       if (classes.length < 2 || classes.some((cls) => cls.samples.length < 2)) {
         return false;
@@ -292,6 +362,7 @@ function useModelTraining() {
         let bestValAcc = -Infinity;
         let patienceCounter = 0;
         let bestWeights = null;
+        let preliminaryModelUsed = false;
 
         const totalBatches = Math.max(
           1,
@@ -304,10 +375,19 @@ function useModelTraining() {
           totalBatches,
         });
 
-        await trainingModel.fitDataset(trainDataBatched, {
+        const { trainXs, trainYs, valXs, valYs } = prepareDatasetTensors(
+          trainDataset,
+          validationDataset,
+          classes.length,
+          featureDimension,
+        );
+
+        await trainingModel.fit(trainXs, trainYs, {
           epochs: TOTAL_EPOCHS,
-          validationData: validationDataBatched,
+          batchSize,
+          validationData: [valXs, valYs],
           classWeight: classWeights,
+          shuffle: true,
           callbacks: {
             onBatchEnd: (batch) => {
               setTrainingProgress((prev) => ({ ...prev, batch: batch + 1 }));
@@ -359,16 +439,47 @@ function useModelTraining() {
                 }
 
                 if (
-                  useEarlyStopping &&
+                  !preliminaryModelUsed &&
                   patienceCounter >= EARLY_STOPPING_PATIENCE &&
                   epoch >= 10
                 ) {
-                  console.log(`Early stopping at epoch ${epoch + 1}`);
-                  trainingModel.stopTraining = true;
-                  if (bestWeights) {
-                    trainingModel.setWeights(bestWeights);
-                    bestWeights.forEach((w) => w.dispose());
-                    console.log(`Restored best model weights`);
+                  console.log(
+                    `Early stopping triggered at epoch ${epoch + 1}. Making preliminary model available for live classification.`,
+                  );
+                  preliminaryModelUsed = true;
+
+                  const snapshotWeights =
+                    bestWeights ??
+                    trainingModel.getWeights().map((w) => w.clone());
+
+                  const frozenTrainingModel = cloneTrainingModel(
+                    trainingModel,
+                    featureDimension,
+                    classes.length,
+                    snapshotWeights,
+                  );
+
+                  const preliminaryModelData = createModelData(
+                    featureExtractor,
+                    frozenTrainingModel,
+                    classes,
+                  );
+                  setTrainedModel(preliminaryModelData);
+                  setIsPreliminaryModel(true);
+
+                  if (onPreliminaryModelReady) {
+                    onPreliminaryModelReady(preliminaryModelData);
+                  }
+
+                  if (useEarlyStopping) {
+                    if (bestWeights)
+                      trainingModel.setWeights(
+                        bestWeights.map((w) => w.clone()),
+                      );
+                    console.log(
+                      "Early stopping enabled. Stopping training with best weights.",
+                    );
+                    trainingModel.stopTraining = true;
                   }
                 }
               }
@@ -393,18 +504,11 @@ function useModelTraining() {
           setFinalAccuracy(accuracy);
         }
 
-        const modelData = {
-          model: combinedModel,
+        const modelData = createModelData(
           featureExtractor,
           trainingModel,
-          inputShape: [96, 96, 1],
-          classes: classes.map((cls) => ({ id: cls.id, name: cls.name })),
-          representativeSamples: classes.flatMap((cls) =>
-            cls.samples
-              .slice(0, Math.min(10, cls.samples.length))
-              .map((s) => s.url),
-          ),
-        };
+          classes,
+        );
 
         optimizer.dispose();
         setTrainingProgress((prev) => ({
@@ -413,7 +517,9 @@ function useModelTraining() {
           batch: prev.totalBatches,
         }));
 
+        // Update with final model (either after early stopping completion or after all epochs)
         setTrainedModel(modelData);
+        setIsPreliminaryModel(false);
         onModelTrained(modelData);
         return true;
       } catch (error) {
@@ -422,7 +528,7 @@ function useModelTraining() {
         return false;
       }
     },
-    [resetTrainingState],
+    [resetTrainingState, createModelData],
   );
 
   return {
@@ -432,6 +538,7 @@ function useModelTraining() {
     testResults,
     finalAccuracy,
     trainedModel,
+    isPreliminaryModel,
     resetTrainingState,
   };
 }

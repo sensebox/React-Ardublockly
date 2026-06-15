@@ -22,6 +22,7 @@ export const imageClassificationTranslations_en = {
     analyzing: "Analyzing...",
     dataChangedWarning:
       "Training data has changed. Retrain the model to update predictions.",
+    preliminaryModelWarning: "Preliminary Model. Training is still ongoing...",
     addNewClass: "Add New Class",
     className: "Class Name",
     cancel: "Cancel",

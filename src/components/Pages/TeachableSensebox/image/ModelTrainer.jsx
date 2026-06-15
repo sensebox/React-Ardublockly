@@ -132,6 +132,7 @@ const ModelTrainer = ({
     testResults,
     finalAccuracy,
     trainedModel,
+    isPreliminaryModel,
   } = useModelTraining();
 
   const { predictions } = useModelPrediction(
@@ -581,6 +582,7 @@ const ModelTrainer = ({
         onTrainingError,
         onModelTrained,
         trainingSettings,
+        () => {}, // Preliminary model callback - updates hook state only
       );
       trainedClassesSnapshotRef.current = getClassesSnapshot(classes);
     } finally {
@@ -852,22 +854,41 @@ const ModelTrainer = ({
                       </Paper>
                     )}
 
-                    {isCameraActive && predictions.length === 0 && (
-                      <Paper
+                    {trainedModel &&
+                      isCameraActive &&
+                      predictions.length === 0 && (
+                        <Paper
+                          sx={{
+                            p: 2,
+                            textAlign: "center",
+                            border: "1px dashed #ccc",
+                            bgcolor: "grey.50",
+                          }}
+                        >
+                          <Typography variant="body2" color="text.secondary">
+                            {t.training.analyzing}
+                          </Typography>
+                        </Paper>
+                      )}
+
+                    {isPreliminaryModel && isTraining && (
+                      <Box
                         sx={{
-                          p: 2,
-                          textAlign: "center",
-                          border: "1px dashed #ccc",
-                          bgcolor: "grey.50",
+                          mt: 1,
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 1,
+                          color: "info.main",
                         }}
                       >
-                        <Typography variant="body2" color="text.secondary">
-                          {t.training.analyzing}
+                        <CircularProgress size={16} />
+                        <Typography variant="caption">
+                          {t.training.preliminaryModelWarning}
                         </Typography>
-                      </Paper>
+                      </Box>
                     )}
 
-                    {isDataStale && (
+                    {isDataStale && !isTraining && (
                       <Box
                         sx={{
                           mt: 1,
