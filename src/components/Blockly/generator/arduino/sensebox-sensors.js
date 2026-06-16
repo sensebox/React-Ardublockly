@@ -1311,3 +1311,105 @@ public:
 
   return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
 };
+
+Blockly.Generator.Arduino.forBlock["sensebox_sensor_sen066"] = function () {
+  var code = "";
+  var dropdown = this.getFieldValue("dropdown");
+  console.log("SEN066 dropdown value: " + dropdown);
+  Blockly.Generator.Arduino.libraries_["sen066_library"] =
+    `#include <SensirionI2cSen66.h> // http://librarymanager/All#SEN066`;
+  Blockly.Generator.Arduino.libraries_["library_wire"] = "#include <Wire.h>";
+  Blockly.Generator.Arduino.definitions_["define_sen066"] =
+    "SensirionI2cSen66 sen66;";
+  Blockly.Generator.Arduino.definitions_["sen066_noError"] = `
+  // macro definitions
+// make sure that we use the proper definition of NO_ERROR
+#ifdef NO_ERROR
+#undef NO_ERROR
+#endif
+#define NO_ERROR 0`;
+  Blockly.Generator.Arduino.variables_["sen066_error"] =
+    "int16_t sen066Error = 0;";
+  Blockly.Generator.Arduino.variables_["sen066_errorMessage"] =
+    "char sen066errorMessage[256];";
+  Blockly.Generator.Arduino.preSetupCode_["Wire.begin"] = "Wire.begin();";
+  Blockly.Generator.Arduino.setupCode_["sen066_begin"] =
+    "sen66.begin(Wire, SEN66_I2C_ADDR_6B);";
+  Blockly.Generator.Arduino.setupCode_["sen066_deviceReset"] = `
+    sen066Error = sen66.deviceReset();
+    if (sen066Error != NO_ERROR) {
+        Serial.print("Error trying to execute deviceReset(): ");
+        errorToString(sen066Error, sen066errorMessage, sizeof sen066errorMessage);
+        Serial.println(sen066errorMessage);
+        return;
+    }`;
+  Blockly.Generator.Arduino.setupCode_["sen066_startContinuousMeasurement"] = `
+    sen066Error = sen66.startContinuousMeasurement();
+    if (sen066Error != NO_ERROR) {
+        Serial.print("Error trying to execute startContinuousMeasurement(): ");
+        errorToString(sen066Error, sen066errorMessage, sizeof sen066errorMessage);
+        Serial.println(sen066errorMessage);
+        return;
+    }
+   `;
+  Blockly.Generator.Arduino.loopCodeOnce_["sen066_massConcentrationPm1p0"] =
+    "float massConcentrationPm1p0 = 0.0;";
+  Blockly.Generator.Arduino.loopCodeOnce_["sen066_massConcentrationPm2p5"] =
+    "float massConcentrationPm2p5 = 0.0;";
+  Blockly.Generator.Arduino.loopCodeOnce_["sen066_massConcentrationPm4p0"] =
+    "float massConcentrationPm4p0 = 0.0;";
+  Blockly.Generator.Arduino.loopCodeOnce_["sen066_massConcentrationPm10p0"] =
+    "float massConcentrationPm10p0 = 0.0;";
+  Blockly.Generator.Arduino.loopCodeOnce_["sen066_humidity"] =
+    "float sen066humidity = 0.0;";
+  Blockly.Generator.Arduino.loopCodeOnce_["sen066_temperature"] =
+    "float sen066temperature = 0.0;";
+  Blockly.Generator.Arduino.loopCodeOnce_["sen066_vocIndex"] =
+    "float vocIndex = 0.0;";
+  Blockly.Generator.Arduino.loopCodeOnce_["sen066_noxIndex"] =
+    "float noxIndex = 0.0;";
+  Blockly.Generator.Arduino.loopCodeOnce_["sen066_co2"] =
+    "uint16_t sen066co2 = 0;";
+  Blockly.Generator.Arduino.loopCodeOnce_["sen066_read"] = `
+    sen066Error = sen66.readMeasuredValues(
+        massConcentrationPm1p0, massConcentrationPm2p5, massConcentrationPm4p0,
+        massConcentrationPm10p0, sen066humidity, sen066temperature, vocIndex, noxIndex,
+        sen066co2);
+    if (sen066Error != NO_ERROR) {
+        errorToString(sen066Error, sen066errorMessage, sizeof sen066errorMessage);
+        return;
+    }`;
+
+  switch (dropdown) {
+    case "massConcentrationPm1p0":
+      code = "massConcentrationPm1p0";
+      break;
+    case "massConcentrationPm2p5":
+      code = "massConcentrationPm2p5";
+      break;
+    case "massConcentrationPm4p0":
+      code = "massConcentrationPm4p0";
+      break;
+    case "massConcentrationPm10p0":
+      code = "massConcentrationPm10p0";
+      break;
+    case "humidity":
+      code = "sen066humidity";
+      break;
+    case "temperature":
+      code = "sen066temperature";
+      break;
+    case "vocIndex":
+      code = "vocIndex";
+      break;
+    case "noxIndex":
+      code = "noxIndex";
+      break;
+    case "co2":
+      code = "sen066co2";
+      break;
+    default:
+      code = "";
+  }
+  return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
+};
