@@ -1223,7 +1223,7 @@ const ModelTrainer = ({
                     onChange={(e) => {
                       const value = Math.max(
                         0.000001,
-                        Math.min(0.1, parseFloat(e.target.value) || 0.0001),
+                        Math.min(0.1, parseFloat(e.target.value) || 0.001),
                       );
                       setTrainingSettings((prev) => ({
                         ...prev,
