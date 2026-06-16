@@ -94,11 +94,12 @@ const Sidebar = () => {
         boxShadow: 3,
         display: "flex",
         flexDirection: "column",
-        height: "80vh",
-        overflow: "scroll",
+        height: "calc(100vh - 180px)", // Navbar ~64px + Breadcrumbs ~45px + margins ~70px
+        overflow: "hidden",
       }}
     >
       <CardHeader
+        sx={{ flexShrink: 0 }} // Keep header fixed
         title={
           <Typography variant="h6" fontWeight={600}>
             {tutorial.title || ""}
@@ -130,6 +131,9 @@ const Sidebar = () => {
           display: "flex",
           flexDirection: "column",
           gap: 1,
+          flex: 1,
+          overflow: "auto", // Make steps scrollable
+          minHeight: 0, // Required for flex overflow to work
         }}
       >
         {stepsWithFinish.map((step, index) => {

@@ -141,9 +141,16 @@ basicGenerator.forBlock["display_print_basic"] = function (block, generator) {
   if (!raw || /^\s*$/.test(raw)) {
     return ""; // nichts generieren
   }
+  const fontSizeBlock = block.getInputTargetBlock("FONT_SIZE");
+  const size = fontSizeBlock ? fontSizeBlock.getFieldValue("SIZE") : "s";
+
   const clear = block.getFieldValue && block.getFieldValue("CLEAR") === "TRUE";
   const clearCode = clear ? "clearDisplay()\n" : "";
-  return `${clearCode}display(${raw})\n`;
+  return `${clearCode}display(${raw}, ${size})\n`;
+};
+
+basicGenerator.forBlock["basic_font_size"] = function (block) {
+  return [block.getFieldValue("SIZE"), basicGenerator.ORDER_ATOMIC];
 };
 
 basicGenerator.forBlock["display_show_measurement"] = function (
@@ -232,30 +239,31 @@ basicGenerator.forBlock["sensebox_start"] = function (block) {
 };
 basicGenerator.forBlock["basic_if_else"] = function (block, generator) {
   // If/elseif/else condition.
-  let n = 0;
-  let code = "",
-    branchCode,
-    conditionCode;
-  do {
-    conditionCode =
-      generator.valueToCode(block, "IF" + n, generator.ORDER_NONE) || "false";
-    branchCode = generator.statementToCode(block, "DO" + n);
-    code +=
-      (n > 0 ? "else " : "") +
-      "if (" +
-      conditionCode +
-      ") {\n" +
-      branchCode +
-      "}\n";
 
-    ++n;
-  } while (block.getInput("IF" + n));
+  const condition = block.getInputTargetBlock("IF");
+  const conditionCode = basicGenerator.statementToCode(block, "IF") || "FALSE";
 
-  if (block.getInput("ELSE")) {
-    branchCode = generator.statementToCode(block, "ELSE");
-    code += "else {\n" + branchCode + "}\n";
-  }
-  return code + "\n";
+  const doBranch = block.getInputTargetBlock("DO");
+  const doBranchCode = basicGenerator.statementToCode(block, "DO") || "";
+
+  const elseBranch = block.getInputTargetBlock("ELSE");
+  const elseBranchCode = basicGenerator.statementToCode(block, "ELSE") || "";
+
+  let fullCode = `if ( ${conditionCode.trim()}) {\n${doBranchCode}}\nelse {\n${elseBranchCode}}\n`;
+  return fullCode;
+};
+
+basicGenerator.forBlock["basic_if"] = function (block, generator) {
+  // If/elseif/else condition.
+
+  const condition = block.getInputTargetBlock("IF");
+  const conditionCode = basicGenerator.statementToCode(block, "IF") || "FALSE";
+
+  const doBranch = block.getInputTargetBlock("DO");
+  const doBranchCode = basicGenerator.statementToCode(block, "DO") || "";
+
+  let fullCode = `if ( ${conditionCode.trim()}) {\n${doBranchCode}}\n`;
+  return fullCode;
 };
 
 basicGenerator.forBlock["basic_repeat_times"] = function (block, generator) {
@@ -355,7 +363,7 @@ basicGenerator.forBlock["basic_math"] = function (block, generator) {
     generator.valueToCode(block, "RIGHT", generator.ORDER_NONE) || "0";
   const op = block.getFieldValue("OP");
 
-  return [`(${left} ${op} ${right})`, generator.ORDER_NONE];
+  return [`${left} ${op} ${right}a`, generator.ORDER_NONE];
 };
 
 basicGenerator.forBlock["basic_random"] = function (block, generator) {
@@ -363,19 +371,6 @@ basicGenerator.forBlock["basic_random"] = function (block, generator) {
     generator.valueToCode(block, "FROM", generator.ORDER_NONE) || "1";
   const toCode =
     generator.valueToCode(block, "TO", generator.ORDER_NONE) || "100";
-
-  // Try to parse the values as numbers to generate a random number at generation time
-  const fromNum = parseFloat(fromCode);
-  const toNum = parseFloat(toCode);
-
-  if (!isNaN(fromNum) && !isNaN(toNum)) {
-    // Generate random number between fromNum and toNum (inclusive)
-    const randomNum =
-      Math.floor(Math.random() * (toNum - fromNum + 1)) + fromNum;
-    return [String(randomNum), generator.ORDER_ATOMIC];
-  }
-
-  // Fallback if values are not numbers (variables, expressions, etc.)
   return [`random(${fromCode}, ${toCode})`, generator.ORDER_ATOMIC];
 };
 

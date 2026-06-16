@@ -108,7 +108,7 @@ const PasswordResetRequest = ({ onBackToLogin }) => {
         open={snackbar}
         message={snackInfo.message}
         type={snackInfo.type}
-        key={snackInfo.key}
+        snackbarKey={snackInfo.key}
         onClose={() => setSnackbar(false)}
       />
     </Box>

@@ -79,7 +79,7 @@ Blockly.Blocks["custom_function_define"] = {
     this.appendValueInput("RETURN_VALUE").appendField("Rückgabe:");
 
     this.setColour(getColour().procedures);
-    this.setTooltip("Definiere eine eigene Funktion mit Parametern");
+    this.setTooltip(Blockly.Msg.custom_function_define_tooltip);
     this.setPreviousStatement(false);
     this.setNextStatement(false);
     this.setDeletable(true);
@@ -96,13 +96,11 @@ Blockly.Blocks["custom_function_define"] = {
     // Validierung: Funktionsname prüfen
     const funcName = this.getFieldValue("FUNC_NAME");
     if (!funcName || funcName.trim() === "") {
-      this.setWarningText("Funktionsname darf nicht leer sein");
+      this.setWarningText(Blockly.Msg.custom_function_empty_name_warning);
       return;
     }
     if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(funcName)) {
-      this.setWarningText(
-        "Funktionsname muss mit Buchstaben beginnen und darf nur Buchstaben, Zahlen und _ enthalten",
-      );
+      this.setWarningText(Blockly.Msg.custom_function_invalid_name_warning);
       return;
     }
     this.setWarningText(null);
@@ -208,7 +206,7 @@ Blockly.Blocks["custom_function_call"] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(getColour().procedures);
-    this.setTooltip("Rufe eine definierte Funktion auf");
+    this.setTooltip(Blockly.Msg.custom_function_call_tooltip);
 
     // Alle Args initial verstecken
     this.getInput("ARG1").setVisible(false);
@@ -237,7 +235,9 @@ Blockly.Blocks["custom_function_call"] = {
     }
 
     if (!funcDef) {
-      this.setWarningText(`Funktion "${funcName}" nicht gefunden!`);
+      this.setWarningText(
+        `Funktion "${funcName}" ${Blockly.Msg.custom_function_not_found_warning}!`,
+      );
       this.getInput("ARG1").setVisible(false);
       this.getInput("ARG2").setVisible(false);
       this.getInput("ARG3").setVisible(false);
@@ -277,6 +277,102 @@ Blockly.Blocks["custom_function_call"] = {
 };
 
 /**
+ * FUNKTIONSAUFRUF ALS AUSDRUCK (EXPRESSION)
+ *
+ * Block zum Aufrufen einer Funktion, die einen Wert zurückgibt
+ * Kann als Eingabe für andere Blöcke verwendet werden (z.B. if/else Bedingung)
+ */
+Blockly.Blocks["custom_function_call_expression"] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField("Funktionswert:")
+      .appendField(new Blockly.FieldTextInput("meineFunktion"), "FUNC_NAME");
+
+    // Argument-Inputs (werden dynamisch angezeigt)
+    this.appendValueInput("ARG1").appendField("Arg1:");
+    this.appendValueInput("ARG2").appendField("Arg2:");
+    this.appendValueInput("ARG3").appendField("Arg3:");
+
+    this.setInputsInline(false);
+    this.setOutput(true, null); // Hat eine Ausgabe, kein Statement
+    this.setColour(getColour().procedures);
+    this.setTooltip(Blockly.Msg.custom_function_call_expression_tooltip);
+
+    // Alle Args initial verstecken
+    this.getInput("ARG1").setVisible(false);
+    this.getInput("ARG2").setVisible(false);
+    this.getInput("ARG3").setVisible(false);
+  },
+
+  onchange: function (event) {
+    if (!this.workspace || this.isInFlyout) {
+      return;
+    }
+
+    const funcName = this.getFieldValue("FUNC_NAME");
+    const allBlocks = this.workspace.getAllBlocks(false);
+
+    // Suche die Funktionsdefinition
+    let funcDef = null;
+    for (let block of allBlocks) {
+      if (
+        block.type === "custom_function_define" &&
+        block.getFieldValue("FUNC_NAME") === funcName
+      ) {
+        funcDef = block;
+        break;
+      }
+    }
+
+    if (!funcDef) {
+      this.setWarningText(
+        `Funktion "${funcName}" ${Blockly.Msg.custom_function_not_found_warning}!`,
+      );
+      this.getInput("ARG1").setVisible(false);
+      this.getInput("ARG2").setVisible(false);
+      this.getInput("ARG3").setVisible(false);
+      this.setOutput(true, null);
+      return;
+    }
+
+    // Prüfen ob Funktion einen Rückgabewert hat
+    const returnType = funcDef.getFieldValue("RETURN_TYPE");
+    if (returnType === "void") {
+      this.setWarningText(
+        `Funktion "${funcName}" ${Blockly.Msg.custom_function_no_return_warning}`,
+      );
+    } else {
+      this.setWarningText(null);
+      // Output-Typ entsprechend setzen
+      this.setOutput(true, returnType);
+    }
+
+    // Parameter dynamisch anzeigen
+    for (let i = 1; i <= 3; i++) {
+      const paramName = funcDef.getFieldValue(`PARAM${i}_NAME`);
+      const paramType = funcDef.getFieldValue(`PARAM${i}_TYPE`);
+      const argInput = this.getInput(`ARG${i}`);
+
+      if (
+        paramType &&
+        paramType !== "none" &&
+        paramName &&
+        paramName.trim() !== ""
+      ) {
+        argInput.setVisible(true);
+        argInput.fieldRow[0].setValue(`${paramName}:`);
+        argInput.connection.setCheck(paramType);
+      } else {
+        argInput.setVisible(false);
+        if (argInput.connection && argInput.connection.isConnected()) {
+          argInput.connection.disconnect();
+        }
+      }
+    }
+  },
+};
+
+/**
  * PARAMETER-VARIABLE BLOCK
  *
  * Ein spezieller Variablen-Getter für Funktionsparameter
@@ -289,7 +385,7 @@ Blockly.Blocks["custom_function_parameter_get"] = {
       .appendField("Parameter")
       .appendField(new Blockly.FieldVariable("param"), "VAR");
     this.setOutput(true);
-    this.setTooltip("Verwende einen Funktionsparameter");
+    this.setTooltip(Blockly.Msg.custom_function_parameter_get_tooltip);
   },
 
   onchange: function (e) {

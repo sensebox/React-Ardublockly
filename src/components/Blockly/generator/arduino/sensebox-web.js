@@ -1,11 +1,21 @@
 import * as Blockly from "blockly";
-//import store from "@/store";
+import store from "@/store";
 
-// preperations for the esp board
-// var selectedBoard = store.getState().board.board;
-// store.subscribe(() => {
-//   selectedBoard = store.getState().board.board;
-// });
+/**
+ * Helper function to get the currently selected board
+ * @returns {string|null} The board identifier (MCU, MCU:MINI, MCU-S2) or null
+ */
+function getSelectedBoard() {
+  return store.getState().board?.board || null;
+}
+
+/**
+ * Helper function to check if current board is ESP32 (MCU-S2)
+ * @returns {boolean}
+ */
+function isESP32Board() {
+  return getSelectedBoard() === "MCU-S2" || getSelectedBoard() === "MCU-EYE";
+}
 
 /* Wifi connection and openSenseMap Blocks*/
 Blockly.Generator.Arduino.forBlock["sensebox_wifi"] = function (
@@ -14,13 +24,33 @@ Blockly.Generator.Arduino.forBlock["sensebox_wifi"] = function (
 ) {
   var pw = this.getFieldValue("Password");
   var ssid = this.getFieldValue("SSID");
-  Blockly.Generator.Arduino.libraries_["library_WiFi"] = "#include <WiFi101.h>";
-  Blockly.Generator.Arduino.variables_["ssid"] = `char ssid[] = "${ssid}";`;
-  Blockly.Generator.Arduino.variables_["pass"] = `char pass[] = "${pw}";`;
-  Blockly.Generator.Arduino.variables_["wifi_Status"] =
-    "int status = WL_IDLE_STATUS;";
-  if (pw === "") {
+
+  if (isESP32Board()) {
+    // ESP32 WiFi code
+    Blockly.Generator.Arduino.libraries_["library_ESPWiFi"] =
+      "#include <WiFi.h>";
+    Blockly.Generator.Arduino.variables_["ssid"] = `char ssid[] = "${ssid}";`;
+    Blockly.Generator.Arduino.variables_["pass"] = `char pass[] = "${pw}";`;
     Blockly.Generator.Arduino.setupCode_["wifi_begin"] = `
+    WiFi.begin(ssid, pass);
+    if(WiFi.status() == WL_NO_SHIELD){
+      while(true);
+    }
+    if(WiFi.status() != WL_CONNECTED){
+      WiFi.begin(ssid, pass);
+      delay(5000);
+    }  
+  `;
+  } else {
+    // MCU WiFi code
+    Blockly.Generator.Arduino.libraries_["library_WiFi"] =
+      "#include <WiFi101.h>";
+    Blockly.Generator.Arduino.variables_["ssid"] = `char ssid[] = "${ssid}";`;
+    Blockly.Generator.Arduino.variables_["pass"] = `char pass[] = "${pw}";`;
+    Blockly.Generator.Arduino.variables_["wifi_Status"] =
+      "int status = WL_IDLE_STATUS;";
+    if (pw === "") {
+      Blockly.Generator.Arduino.setupCode_["wifi_begin"] = `
     if (WiFi.status() == WL_NO_SHIELD) {
         while (true);
     }
@@ -29,8 +59,8 @@ Blockly.Generator.Arduino.forBlock["sensebox_wifi"] = function (
         delay(5000);
     }
     `;
-  } else
-    Blockly.Generator.Arduino.setupCode_["wifi_begin"] = `
+    } else
+      Blockly.Generator.Arduino.setupCode_["wifi_begin"] = `
 if (WiFi.status() == WL_NO_SHIELD) {
     while (true);
 }
@@ -39,6 +69,7 @@ while (status != WL_CONNECTED) {
     delay(5000);
 }
 `;
+  }
   var code = "";
   return code;
 };
@@ -66,9 +97,25 @@ Blockly.Generator.Arduino.forBlock["sensebox_startap"] = function (
   generator,
 ) {
   var ssid = this.getFieldValue("SSID");
-  Blockly.Generator.Arduino.libraries_["library_WiFi"] = "#include <WiFi101.h>";
-  Blockly.Generator.Arduino.setupCode_["wifi_startAP"] =
-    `WiFi.beginAP("${ssid}");`;
+
+  if (isESP32Board()) {
+    // ESP32 AP code
+    Blockly.Generator.Arduino.libraries_["library_ESPWiFi"] =
+      "#include <WiFi.h>";
+    Blockly.Generator.Arduino.libraries_["library_ESPWiFiClient"] =
+      "#include <WiFiClient.h>";
+    Blockly.Generator.Arduino.libraries_["WiFiAP"] = "#include <WiFiAP.h>";
+    Blockly.Generator.Arduino.variables_["ssid"] =
+      `const char ssid[] = "${ssid}";`;
+    Blockly.Generator.Arduino.setupCode_["wifi_startAP"] =
+      `WiFi.softAP(ssid);\n`;
+  } else {
+    // MCU AP code
+    Blockly.Generator.Arduino.libraries_["library_WiFi"] =
+      "#include <WiFi101.h>";
+    Blockly.Generator.Arduino.setupCode_["wifi_startAP"] =
+      `WiFi.beginAP("${ssid}");`;
+  }
   var code = "";
   return code;
 };
@@ -169,40 +216,36 @@ Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_wifi_enterprise"] =
     return code;
   };
 
-Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_wifi"] = function () {
-  var pw = this.getFieldValue("Password");
-  var ssid = this.getFieldValue("SSID");
-  Blockly.Generator.Arduino.libraries_["library_ESPWiFi"] = "#include <WiFi.h>";
-  Blockly.Generator.Arduino.variables_["ssid"] = `char ssid[] = "${ssid}";`;
-  Blockly.Generator.Arduino.variables_["pass"] = `char pass[] = "${pw}";`;
-  Blockly.Generator.Arduino.setupCode_["wifi_begin"] = `
-    WiFi.begin(ssid, pass);
-    if(WiFi.status() == WL_NO_SHIELD){
-      while(true);
-    }
-    if(WiFi.status() != WL_CONNECTED){
-      WiFi.begin(ssid, pass);
-      delay(5000);
-    }  
-  `;
-  var code = "";
-  return code;
+/**
+ * Legacy alias for ESP32 WiFi block.
+ * For backwards compatibility with existing projects that use the old block type.
+ * Delegates to the unified sensebox_wifi generator.
+ */
+Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_wifi"] = function (
+  block,
+  generator,
+) {
+  return Blockly.Generator.Arduino.forBlock["sensebox_wifi"].call(
+    this,
+    block,
+    generator,
+  );
 };
 
+/**
+ * Legacy alias for ESP32 StartAP block.
+ * For backwards compatibility with existing projects that use the old block type.
+ * Delegates to the unified sensebox_startap generator.
+ */
 Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_startap"] = function (
   block,
   generator,
 ) {
-  var ssid = this.getFieldValue("SSID");
-  Blockly.Generator.Arduino.libraries_["library_ESPWiFi"] = "#include <WiFi.h>";
-  Blockly.Generator.Arduino.libraries_["library_ESPWiFiClient"] =
-    "#include <WiFiClient.h>";
-  Blockly.Generator.Arduino.libraries_["WiFiAP"] = "#include <WiFiAP.h>";
-  Blockly.Generator.Arduino.variables_["ssid"] =
-    `const char ssid[] = "${ssid}";`;
-  Blockly.Generator.Arduino.setupCode_["wifi_startAP"] = `WiFi.softAP(ssid);\n`;
-  var code = "";
-  return code;
+  return Blockly.Generator.Arduino.forBlock["sensebox_startap"].call(
+    this,
+    block,
+    generator,
+  );
 };
 
 // Blockly.Generator.Arduino.definitions_["certificate"] = `

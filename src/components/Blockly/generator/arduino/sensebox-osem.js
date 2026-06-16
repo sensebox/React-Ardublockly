@@ -1,4 +1,21 @@
 import * as Blockly from "blockly";
+import store from "@/store";
+
+/**
+ * Helper function to get the currently selected board
+ * @returns {string|null} The board identifier (MCU, MCU:MINI, MCU-S2) or null
+ */
+function getSelectedBoard() {
+  return store.getState().board?.board || null;
+}
+
+/**
+ * Helper function to check if current board is ESP32 (MCU-S2)
+ * @returns {boolean}
+ */
+function isESP32Board() {
+  return getSelectedBoard() === "MCU-S2" || getSelectedBoard() === "MCU-EYE";
+}
 
 /**
  * block send Data to the openSenseMap
@@ -16,8 +33,15 @@ Blockly.Generator.Arduino.forBlock["sensebox_send_to_osem"] = function (
       "Value",
       Blockly.Generator.Arduino.ORDER_ATOMIC,
     ) || '"Keine Eingabe"';
-  Blockly.Generator.Arduino.definitions_["SENSOR_ID" + id + ""] =
-    "const char SENSOR_ID" + id + '[] PROGMEM = "' + sensor_id + '";';
+
+  // ESP32 doesn't use PROGMEM
+  if (isESP32Board()) {
+    Blockly.Generator.Arduino.definitions_["SENSOR_ID" + id + ""] =
+      "const char* SENSOR_ID" + id + ' = "' + sensor_id + '";';
+  } else {
+    Blockly.Generator.Arduino.definitions_["SENSOR_ID" + id + ""] =
+      "const char SENSOR_ID" + id + '[] PROGMEM = "' + sensor_id + '";';
+  }
   code += "addMeasurement(SENSOR_ID" + id + "," + sensor_value + ");\n";
   return code;
 };
@@ -26,23 +50,32 @@ Blockly.Generator.Arduino.forBlock["sensebox_osem_connection"] = function (
   block,
   generator,
 ) {
+  var isEsp32 = isESP32Board();
   var workspace = Blockly.getMainWorkspace();
   var wifi = false;
   var ethernet = false;
-  if (workspace.getBlocksByType("sensebox_wifi").length > 0) {
+
+  // Check for WiFi blocks - check both unified and legacy block types
+  if (
+    workspace.getBlocksByType("sensebox_wifi").length > 0 ||
+    workspace.getBlocksByType("sensebox_esp32s2_wifi").length > 0 ||
+    workspace.getBlocksByType("sensebox_esp32s2_wifi_enterprise").length > 0
+  ) {
     wifi = true;
     ethernet = false;
   } else if (workspace.getBlocksByType("sensebox_ethernet").length > 0) {
     ethernet = true;
     wifi = false;
   }
+
   var box_id = this.getFieldValue("BoxID");
   var branch = Blockly.Generator.Arduino.statementToCode(block, "DO");
   var access_token = this.getFieldValue("access_token");
   var blocks = this.getDescendants();
   var type = this.getFieldValue("type");
   var ssl = this.getFieldValue("SSL");
-  var restart = this.getFieldValue("RESTART");
+  // RESTART is only available for MCU boards
+  var restart = isEsp32 ? "FALSE" : this.getFieldValue("RESTART") || "FALSE";
   var port = 0;
   var count = 0;
   if (blocks !== undefined) {
@@ -55,316 +88,23 @@ Blockly.Generator.Arduino.forBlock["sensebox_osem_connection"] = function (
   var num_sensors = count;
   Blockly.Generator.Arduino.definitions_["num_sensors"] =
     "static const uint8_t NUM_SENSORS = " + num_sensors + ";";
-  Blockly.Generator.Arduino.definitions_["SenseBoxID"] =
-    'const char SENSEBOX_ID [] PROGMEM = "' + box_id + '";';
-  Blockly.Generator.Arduino.definitions_["host"] =
-    'const char server [] PROGMEM ="ingress.opensensemap.org";';
-  if (wifi === true) {
-    if (ssl === "TRUE") {
-      Blockly.Generator.Arduino.libraries_["library_bearSSL"] =
-        "#include <ArduinoBearSSL.h>";
-      Blockly.Generator.Arduino.libraries_["library_arduinoECC08"] =
-        "#include <ArduinoECCX08.h>";
-      Blockly.Generator.Arduino.definitions_["WiFiClient"] =
-        "WiFiClient wifiClient;";
-      Blockly.Generator.Arduino.definitions_["BearSSLClient"] =
-        "BearSSLClient client(wifiClient);";
-      Blockly.Generator.Arduino.functionNames_["getTime"] =
-        `unsigned long getTime() {
-      return WiFi.getTime();
-    }`;
-      Blockly.Generator.Arduino.setupCode_["initBearSSL"] =
-        "ArduinoBearSSL.onGetTime(getTime);";
-      port = 443;
-    } else if (ssl === "FALSE") {
-      Blockly.Generator.Arduino.definitions_["WiFiClient"] =
-        "WiFiClient client;";
-      port = 80;
-    }
-  } else if (ethernet === true) {
-    if (ssl === "TRUE") {
-      Blockly.Generator.Arduino.libraries_["library_bearSSL"] =
-        "#include <ArduinoBearSSL.h>";
-      Blockly.Generator.Arduino.libraries_["library_arduinoECC08"] =
-        "#include <ArduinoECCX08.h>";
-      Blockly.Generator.Arduino.libraries_["library_ethernetUdp"] =
-        "#include <EthernetUdp.h>";
-      Blockly.Generator.Arduino.libraries_["library_NTPClient"] =
-        "#include <NTPClient.h>";
-      Blockly.Generator.Arduino.definitions_["EthernetClient"] =
-        "EthernetClient eclient;";
-      Blockly.Generator.Arduino.definitions_["BearSSLClient"] =
-        "BearSSLClient client(eclient);";
-      Blockly.Generator.Arduino.definitions_["EthernetUDP"] =
-        "EthernetUDP Udp;";
-      Blockly.Generator.Arduino.definitions_["NTPClient"] =
-        "NTPClient timeClient(Udp);";
-      Blockly.Generator.Arduino.functionNames_["getTime"] = `
-unsigned long getTime() {
-  timeClient.update();
-  return timeClient.getEpochTime();
-}`;
 
-      Blockly.Generator.Arduino.setupCode_["timeClient_begin"] =
-        "timeClient.begin();";
-      Blockly.Generator.Arduino.setupCode_["initBearSSL"] =
-        "ArduinoBearSSL.onGetTime(getTime);";
-      port = 443;
-    } else if (ssl === "FALSE") {
-      Blockly.Generator.Arduino.definitions_["EthernetClient"] =
-        "EthernetClient client;";
-      port = 80;
-    }
-  }
-  Blockly.Generator.Arduino.definitions_["measurement"] =
-    `typedef struct measurement {
-      const char *sensorId;
-      float value;
-    } measurement;`;
-  Blockly.Generator.Arduino.definitions_["buffer"] = "char buffer[750];";
-  Blockly.Generator.Arduino.definitions_["num_measurement"] =
-    `measurement measurements[NUM_SENSORS];
-    uint8_t num_measurements = 0;`;
-  Blockly.Generator.Arduino.definitions_["lengthMultiplikator"] =
-    "const int lengthMultiplikator = 35;";
-  Blockly.Generator.Arduino.functionNames_["addMeasurement"] = `
-    void addMeasurement(const char *sensorId, float value) {
-    measurements[num_measurements].sensorId = sensorId;
-    measurements[num_measurements].value = value;
-    num_measurements++;
-    }`;
-  if (type === "Stationary") {
-    Blockly.Generator.Arduino.functionNames_["writeMeasurementsToClient"] = `
-    void writeMeasurementsToClient() {
-    // iterate throug the measurements array
-    for (uint8_t i = 0; i < num_measurements; i++) {
-      sprintf_P(buffer, PSTR("%s,%9.2f\\n"), measurements[i].sensorId,
-                measurements[i].value);
-      // transmit buffer to client
-      client.print(buffer);
-    }
-    // reset num_measurements
-    num_measurements = 0;
-  }`;
-    Blockly.Generator.Arduino.functionNames_["submitValues"] =
-      `
-  void submitValues() {
-${
-  wifi === true
-    ? "if (WiFi.status() != WL_CONNECTED) {\nWiFi.disconnect();\ndelay(1000); // wait 1s\nWiFi.begin(ssid, pass);\ndelay(5000); // wait 5s\n}"
-    : ""
-}
-  if (client.connected()) {
-      client.stop();
-      delay(1000);
-    }
-  bool connected = false;
-  char _server[strlen_P(server)];
-  strcpy_P(_server, server);
-  for (uint8_t timeout = 2; timeout != 0; timeout--) {
-    Serial.println(F("connecting..."));
-    connected = client.connect(_server, ` +
-      port +
-      `);
-    if (connected == true) {
-      // construct the HTTP POST request:
-      sprintf_P(buffer,
-                PSTR("POST /boxes/%s/data HTTP/1.1\\nAuthorization: ${access_token}\\nHost: %s\\nContent-Type: "
-                     "text/csv\\nConnection: close\\nContent-Length: %i\\n\\n"),
-                SENSEBOX_ID, server, num_measurements * lengthMultiplikator);
-      // send the HTTP POST request:
-      client.print(buffer);
-      // send measurements
-      writeMeasurementsToClient();
-      // send empty line to end the request
-      client.println();
-      uint16_t timeout = 0;
-      // allow the response to be computed
-      while (timeout <= 5000) {
-        delay(10);
-        timeout = timeout + 10;
-        if (client.available()) {
-          break;
-        }
-      }
-
-      while (client.available()) {
-        char c = client.read();
-        // if the server's disconnected, stop the client:
-        if (!client.connected()) {
-          client.stop();
-          break;
-        }
-      }
-
-      num_measurements = 0;
-      break;
-    }
-    delay(1000);
-  }
-
-  ${
-    restart === "TRUE"
-      ? "if (connected == false) {\n  delay(5000);\n  noInterrupts();\n NVIC_SystemReset();\n while (1)\n ;\n }"
-      : ""
-  }
-  }`;
-
-    var code = "";
-    code += branch;
-    code += "submitValues();\n";
-  } else if (type === "Mobile") {
-    var lat = Blockly.Generator.Arduino.valueToCode(
-      block,
-      "lat",
-      Blockly.Generator.Arduino.ORDER_ATOMIC,
-    );
-    var lng = Blockly.Generator.Arduino.valueToCode(
-      block,
-      "lng",
-      Blockly.Generator.Arduino.ORDER_ATOMIC,
-    );
-    var timestamp = Blockly.Generator.Arduino.valueToCode(
-      block,
-      "timeStamp",
-      Blockly.Generator.Arduino.ORDER_ATOMIC,
-    );
-    var altitude = Blockly.Generator.Arduino.valueToCode(
-      block,
-      "altitude",
-      Blockly.Generator.Arduino.ORDER_ATOMIC,
-    );
-    Blockly.Generator.Arduino.definitions_["lengthMultiplikator"] =
-      "const int lengthMultiplikator = 77;";
-    Blockly.Generator.Arduino.functionNames_["writeMeasurementsToClient"] = `
-      void writeMeasurementsToClient(float lat, float lng, float altitude, char* timeStamp) {
-      // iterate throug the measurements array
-      for (uint8_t i = 0; i < num_measurements; i++) {
-      sprintf_P(buffer, PSTR("%s,%9.2f,%s,%3.6f,%3.6f,%5.2f\\n"), measurements[i].sensorId,
-                measurements[i].value, timeStamp, lng, lat, altitude);
-      // transmit buffer to client
-      client.print(buffer);
-      }
-      // reset num_measurements
-      num_measurements = 0;
-      }`;
-    Blockly.Generator.Arduino.variables_["latitude"] = "float latitude;";
-    Blockly.Generator.Arduino.variables_["longitude"] = "float longitude;";
-    Blockly.Generator.Arduino.functionNames_["submitValues"] =
-      `
-      void submitValues(float lat, float lng, float altitude, char* timeStamp) {
-    if (client.connected()) {
-      client.stop();
-      delay(10);
-    }
-    bool connected = false;
-    char _server[strlen_P(server)];
-    strcpy_P(_server, server);
-    for (uint8_t timeout = 2; timeout != 0; timeout--) {
-      Serial.println(F("connecting..."));
-      connected = client.connect(_server, ` +
-      port +
-      `);
-      if (connected == true) {
-        // construct the HTTP POST request:
-        sprintf_P(buffer,
-                  PSTR("POST /boxes/%s/data HTTP/1.1\\nHost: %s\\nContent-Type: "
-                       "text/csv\\nConnection: close\\nContent-Length: %i\\n\\n"),
-                  SENSEBOX_ID, server, num_measurements * lengthMultiplikator);
-
-        // send the HTTP POST request:
-        client.print(buffer);
-        // send measurements
-        writeMeasurementsToClient(lat, lng, altitude, timeStamp);
-        // send empty line to end the request
-        client.println();
-        uint16_t timeout = 0;
-        // allow the response to be computed
-        while (timeout <= 5000) {
-          delay(10);
-          timeout = timeout + 10;
-          if (client.available()) {
-            break;
-          }
-        }
-        while (client.available()) {
-          char c = client.read();
-          // if the server's disconnected, stop the client:
-          if (!client.connected()) {
-            client.stop();
-            break;
-          }
-          delay(1000);
-        }
-    
-        num_measurements = 0;
-        break;
-      }
-    }
-
-    ${
-      restart === "TRUE"
-        ? "if (connected == false) {\n  delay(5000);\n  noInterrupts();\n NVIC_SystemReset();\n while (1)\n ;\n }"
-        : ""
-    }
-
-  }`;
-    code = "";
-    code += branch;
-    code +=
-      "submitValues((" +
-      lat +
-      "/float(10000000)),(" +
-      lng +
-      "/float(10000000)),(" +
-      altitude +
-      "/float(100))," +
-      timestamp +
-      ");\n";
-  }
-  return code;
-};
-
-Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_osem_connection"] =
-  function (block, generator) {
-    var workspace = Blockly.getMainWorkspace();
-    var wifi = false;
-    var ethernet = false;
-    if (workspace.getBlocksByType("sensebox_wifi").length > 0) {
-      wifi = true;
-      ethernet = false;
-    } else if (workspace.getBlocksByType("sensebox_ethernet").length > 0) {
-      ethernet = true;
-      wifi = false;
-    }
-    var box_id = this.getFieldValue("BoxID");
-    var branch = Blockly.Generator.Arduino.statementToCode(block, "DO");
-    var access_token = this.getFieldValue("access_token");
-    var blocks = this.getDescendants();
-    var type = this.getFieldValue("type");
-    var ssl = this.getFieldValue("SSL");
-    var restart = this.getFieldValue("RESTART");
-    var port;
-    var count = 0;
-    if (blocks !== undefined) {
-      for (var i = 0; i < blocks.length; i++) {
-        if (blocks[i].type === "sensebox_send_to_osem") {
-          count++;
-        }
-      }
-    }
-    var num_sensors = count;
-    Blockly.Generator.Arduino.definitions_["num_sensors"] =
-      "static const uint8_t NUM_SENSORS = " + num_sensors + ";";
+  // ESP32 doesn't use PROGMEM
+  if (isEsp32) {
     Blockly.Generator.Arduino.definitions_["SenseBoxID"] =
       'const char* SENSEBOX_ID = "' + box_id + '";';
     Blockly.Generator.Arduino.definitions_["host"] =
-      'const char* server ="ingress.opensensemap.org";';
-    Blockly.Generator.Arduino.definitions_["measurement"] =
-      `typedef struct measurement {
-      const char *sensorId;
-      float value;
-    } measurement;`;
+      'const char* server = "ingress.opensensemap.org";';
+  } else {
+    Blockly.Generator.Arduino.definitions_["SenseBoxID"] =
+      'const char SENSEBOX_ID [] PROGMEM = "' + box_id + '";';
+    Blockly.Generator.Arduino.definitions_["host"] =
+      'const char server [] PROGMEM ="ingress.opensensemap.org";';
+  }
+
+  // SSL/WiFi configuration differs between ESP32 and MCU
+  if (isEsp32) {
+    // ESP32 SSL configuration
     if (ssl === "TRUE") {
       Blockly.Generator.Arduino.libraries_["library_wifiClientSecure"] =
         "#include <WiFiClientSecure.h>";
@@ -410,20 +150,88 @@ Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_osem_connection"] =
         "WiFiClient client;";
       port = 80;
     }
-    Blockly.Generator.Arduino.definitions_["buffer"] = "char buffer[750];";
-    Blockly.Generator.Arduino.definitions_["num_measurement"] =
-      `measurement measurements[NUM_SENSORS];
+  } else {
+    // MCU SSL configuration
+    if (wifi === true) {
+      if (ssl === "TRUE") {
+        Blockly.Generator.Arduino.libraries_["library_bearSSL"] =
+          "#include <ArduinoBearSSL.h>";
+        Blockly.Generator.Arduino.libraries_["library_arduinoECC08"] =
+          "#include <ArduinoECCX08.h>";
+        Blockly.Generator.Arduino.definitions_["WiFiClient"] =
+          "WiFiClient wifiClient;";
+        Blockly.Generator.Arduino.definitions_["BearSSLClient"] =
+          "BearSSLClient client(wifiClient);";
+        Blockly.Generator.Arduino.functionNames_["getTime"] =
+          `unsigned long getTime() {
+        return WiFi.getTime();
+      }`;
+        Blockly.Generator.Arduino.setupCode_["initBearSSL"] =
+          "ArduinoBearSSL.onGetTime(getTime);";
+        port = 443;
+      } else if (ssl === "FALSE") {
+        Blockly.Generator.Arduino.definitions_["WiFiClient"] =
+          "WiFiClient client;";
+        port = 80;
+      }
+    } else if (ethernet === true) {
+      if (ssl === "TRUE") {
+        Blockly.Generator.Arduino.libraries_["library_bearSSL"] =
+          "#include <ArduinoBearSSL.h>";
+        Blockly.Generator.Arduino.libraries_["library_arduinoECC08"] =
+          "#include <ArduinoECCX08.h>";
+        Blockly.Generator.Arduino.libraries_["library_ethernetUdp"] =
+          "#include <EthernetUdp.h>";
+        Blockly.Generator.Arduino.libraries_["library_NTPClient"] =
+          "#include <NTPClient.h>";
+        Blockly.Generator.Arduino.definitions_["EthernetClient"] =
+          "EthernetClient eclient;";
+        Blockly.Generator.Arduino.definitions_["BearSSLClient"] =
+          "BearSSLClient client(eclient);";
+        Blockly.Generator.Arduino.definitions_["EthernetUDP"] =
+          "EthernetUDP Udp;";
+        Blockly.Generator.Arduino.definitions_["NTPClient"] =
+          "NTPClient timeClient(Udp);";
+        Blockly.Generator.Arduino.functionNames_["getTime"] = `
+unsigned long getTime() {
+  timeClient.update();
+  return timeClient.getEpochTime();
+}`;
+
+        Blockly.Generator.Arduino.setupCode_["timeClient_begin"] =
+          "timeClient.begin();";
+        Blockly.Generator.Arduino.setupCode_["initBearSSL"] =
+          "ArduinoBearSSL.onGetTime(getTime);";
+        port = 443;
+      } else if (ssl === "FALSE") {
+        Blockly.Generator.Arduino.definitions_["EthernetClient"] =
+          "EthernetClient client;";
+        port = 80;
+      }
+    }
+  }
+
+  Blockly.Generator.Arduino.definitions_["measurement"] =
+    `typedef struct measurement {
+      const char *sensorId;
+      float value;
+    } measurement;`;
+  Blockly.Generator.Arduino.definitions_["buffer"] = "char buffer[750];";
+  Blockly.Generator.Arduino.definitions_["num_measurement"] =
+    `measurement measurements[NUM_SENSORS];
     uint8_t num_measurements = 0;`;
-    Blockly.Generator.Arduino.definitions_["lengthMultiplikator"] =
-      "const int lengthMultiplikator = 35;";
-    Blockly.Generator.Arduino.functionNames_["addMeasurement"] = `
+  Blockly.Generator.Arduino.definitions_["lengthMultiplikator"] =
+    "const int lengthMultiplikator = 35;";
+  Blockly.Generator.Arduino.functionNames_["addMeasurement"] = `
     void addMeasurement(const char *sensorId, float value) {
     measurements[num_measurements].sensorId = sensorId;
     measurements[num_measurements].value = value;
     num_measurements++;
     }`;
 
-    if (type === "Stationary") {
+  if (type === "Stationary") {
+    // Different implementations for ESP32 vs MCU
+    if (isEsp32) {
       Blockly.Generator.Arduino.functionNames_["writeMeasurementsToClient"] = `
     void writeMeasurementsToClient() {
     // iterate throug the measurements array
@@ -484,34 +292,112 @@ ${
   }
 
   }`;
-
-      var code = "";
-      code += branch;
-      code += "submitValues();\n";
-    } else if (type === "Mobile") {
-      var lat = Blockly.Generator.Arduino.valueToCode(
-        block,
-        "lat",
-        Blockly.Generator.Arduino.ORDER_ATOMIC,
-      );
-      var lng = Blockly.Generator.Arduino.valueToCode(
-        block,
-        "lng",
-        Blockly.Generator.Arduino.ORDER_ATOMIC,
-      );
-      var timestamp = Blockly.Generator.Arduino.valueToCode(
-        block,
-        "timeStamp",
-        Blockly.Generator.Arduino.ORDER_ATOMIC,
-      );
-      var altitude = Blockly.Generator.Arduino.valueToCode(
-        block,
-        "altitude",
-        Blockly.Generator.Arduino.ORDER_ATOMIC,
-      );
-      Blockly.Generator.Arduino.definitions_["lengthMultiplikator"] =
-        "const int lengthMultiplikator = 77;";
+    } else {
+      // MCU implementation
       Blockly.Generator.Arduino.functionNames_["writeMeasurementsToClient"] = `
+    void writeMeasurementsToClient() {
+    // iterate throug the measurements array
+    for (uint8_t i = 0; i < num_measurements; i++) {
+      sprintf_P(buffer, PSTR("%s,%9.2f\\n"), measurements[i].sensorId,
+                measurements[i].value);
+      // transmit buffer to client
+      client.print(buffer);
+    }
+    // reset num_measurements
+    num_measurements = 0;
+  }`;
+      Blockly.Generator.Arduino.functionNames_["submitValues"] =
+        `
+  void submitValues() {
+${
+  wifi === true
+    ? "if (WiFi.status() != WL_CONNECTED) {\nWiFi.disconnect();\ndelay(1000); // wait 1s\nWiFi.begin(ssid, pass);\ndelay(5000); // wait 5s\n}"
+    : ""
+}
+  if (client.connected()) {
+      client.stop();
+      delay(1000);
+    }
+  bool connected = false;
+  char _server[strlen_P(server)];
+  strcpy_P(_server, server);
+  for (uint8_t timeout = 2; timeout != 0; timeout--) {
+    Serial.println(F("connecting..."));
+    connected = client.connect(_server, ` +
+        port +
+        `);
+    if (connected == true) {
+      // construct the HTTP POST request:
+      sprintf_P(buffer,
+                PSTR("POST /boxes/%s/data HTTP/1.1\\nAuthorization: ${access_token}\\nHost: %s\\nContent-Type: "
+                     "text/csv\\nConnection: close\\nContent-Length: %i\\n\\n"),
+                SENSEBOX_ID, server, num_measurements * lengthMultiplikator);
+      // send the HTTP POST request:
+      client.print(buffer);
+      // send measurements
+      writeMeasurementsToClient();
+      // send empty line to end the request
+      client.println();
+      uint16_t timeout = 0;
+      // allow the response to be computed
+      while (timeout <= 5000) {
+        delay(10);
+        timeout = timeout + 10;
+        if (client.available()) {
+          break;
+        }
+      }
+
+      while (client.available()) {
+        char c = client.read();
+        // if the server's disconnected, stop the client:
+        if (!client.connected()) {
+          client.stop();
+          break;
+        }
+      }
+
+      num_measurements = 0;
+      break;
+    }
+    delay(1000);
+  }
+
+  ${
+    restart === "TRUE"
+      ? "if (connected == false) {\n  delay(5000);\n  noInterrupts();\n NVIC_SystemReset();\n while (1)\n ;\n }"
+      : ""
+  }
+  }`;
+    }
+
+    var code = "";
+    code += branch;
+    code += "submitValues();\n";
+  } else if (type === "Mobile") {
+    var lat = Blockly.Generator.Arduino.valueToCode(
+      block,
+      "lat",
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
+    );
+    var lng = Blockly.Generator.Arduino.valueToCode(
+      block,
+      "lng",
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
+    );
+    var timestamp = Blockly.Generator.Arduino.valueToCode(
+      block,
+      "timeStamp",
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
+    );
+    var altitude = Blockly.Generator.Arduino.valueToCode(
+      block,
+      "altitude",
+      Blockly.Generator.Arduino.ORDER_ATOMIC,
+    );
+    Blockly.Generator.Arduino.definitions_["lengthMultiplikator"] =
+      "const int lengthMultiplikator = 77;";
+    Blockly.Generator.Arduino.functionNames_["writeMeasurementsToClient"] = `
       void writeMeasurementsToClient(float lat, float lng, float altitude, char* timeStamp) {
       // iterate throug the measurements array
       for (uint8_t i = 0; i < num_measurements; i++) {
@@ -523,8 +409,11 @@ ${
       // reset num_measurements
       num_measurements = 0;
       }`;
-      Blockly.Generator.Arduino.variables_["latitude"] = "float latitude;";
-      Blockly.Generator.Arduino.variables_["longitude"] = "float longitude;";
+    Blockly.Generator.Arduino.variables_["latitude"] = "float latitude;";
+    Blockly.Generator.Arduino.variables_["longitude"] = "float longitude;";
+
+    if (isEsp32) {
+      // ESP32 Mobile implementation
       Blockly.Generator.Arduino.functionNames_["submitValues"] =
         `
       void submitValues(float lat, float lng, float altitude, char* timeStamp) {
@@ -574,6 +463,60 @@ ${
         break;
       }
     }
+  }`;
+    } else {
+      // MCU Mobile implementation
+      Blockly.Generator.Arduino.functionNames_["submitValues"] =
+        `
+      void submitValues(float lat, float lng, float altitude, char* timeStamp) {
+    if (client.connected()) {
+      client.stop();
+      delay(10);
+    }
+    bool connected = false;
+    char _server[strlen_P(server)];
+    strcpy_P(_server, server);
+    for (uint8_t timeout = 2; timeout != 0; timeout--) {
+      Serial.println(F("connecting..."));
+      connected = client.connect(_server, ` +
+        port +
+        `);
+      if (connected == true) {
+        // construct the HTTP POST request:
+        sprintf_P(buffer,
+                  PSTR("POST /boxes/%s/data HTTP/1.1\\nHost: %s\\nContent-Type: "
+                       "text/csv\\nConnection: close\\nContent-Length: %i\\n\\n"),
+                  SENSEBOX_ID, server, num_measurements * lengthMultiplikator);
+
+        // send the HTTP POST request:
+        client.print(buffer);
+        // send measurements
+        writeMeasurementsToClient(lat, lng, altitude, timeStamp);
+        // send empty line to end the request
+        client.println();
+        uint16_t timeout = 0;
+        // allow the response to be computed
+        while (timeout <= 5000) {
+          delay(10);
+          timeout = timeout + 10;
+          if (client.available()) {
+            break;
+          }
+        }
+        while (client.available()) {
+          char c = client.read();
+          // if the server's disconnected, stop the client:
+          if (!client.connected()) {
+            client.stop();
+            break;
+          }
+          delay(1000);
+        }
+    
+        num_measurements = 0;
+        break;
+      }
+    }
 
     ${
       restart === "TRUE"
@@ -582,18 +525,35 @@ ${
     }
 
   }`;
-      code = "";
-      code += branch;
-      code +=
-        "submitValues((" +
-        lat +
-        "/float(10000000)),(" +
-        lng +
-        "/float(10000000)),(" +
-        altitude +
-        "/float(100))," +
-        timestamp +
-        ");\n";
     }
-    return code;
+    code = "";
+    code += branch;
+    code +=
+      "submitValues((" +
+      lat +
+      "/float(10000000)),(" +
+      lng +
+      "/float(10000000)),(" +
+      altitude +
+      "/float(100))," +
+      timestamp +
+      ");\n";
+  }
+  return code;
+};
+
+/**
+ * Legacy alias for ESP32 OSEM connection block.
+ * For backwards compatibility with existing projects that use the old block type.
+ * Delegates to the unified sensebox_osem_connection generator which handles
+ * both MCU and ESP32 boards based on the selected board in the store.
+ */
+Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_osem_connection"] =
+  function (block, generator) {
+    // Delegate to the unified generator - it will detect the board and generate appropriate code
+    return Blockly.Generator.Arduino.forBlock["sensebox_osem_connection"].call(
+      this,
+      block,
+      generator,
+    );
   };

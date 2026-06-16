@@ -208,7 +208,7 @@ class ShareProject extends Component {
           open={this.state.snackbar}
           message={this.state.message}
           type={this.state.type}
-          key={this.state.key}
+          snackbarKey={this.state.key}
         />
         <Dialog
           open={this.state.open}
@@ -238,7 +238,15 @@ class ShareProject extends Component {
                   ? "Über den folgenden Link kannst du dein Programm in der senseBox Connect App öffnen:"
                   : "Über den folgenden Link kannst du dein Programm teilen:"}
               </Typography>
-              <div style={{ textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}>
+              <div
+                style={{
+                  textAlign: "center",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "8px",
+                }}
+              >
                 {this.props.isEmbedded ? (
                   <Typography
                     style={{
@@ -325,14 +333,18 @@ class ShareProject extends Component {
                 >
                   <FacebookShareButton
                     url={this.state.shortLink}
-                    quote={"I created this sketch for my senseBox. Have a look!"}
+                    quote={
+                      "I created this sketch for my senseBox. Have a look!"
+                    }
                     hashtag={"#senseBox"}
                   >
                     <FacebookIcon size={32} round />
                   </FacebookShareButton>
                   <TwitterShareButton
                     url={this.state.shortLink}
-                    title={"I created this sketch for my senseBox. Have a look!"}
+                    title={
+                      "I created this sketch for my senseBox. Have a look!"
+                    }
                     hashtags={["senseBox", "Blockly", "citizenScience"]}
                   >
                     <TwitterIcon size={32} round />
@@ -409,9 +421,10 @@ const mapStateToProps = (state) => ({
   message: state.message,
 });
 
-const ShareProjectWithStyles = connect(mapStateToProps, { shareProject, clearMessages })(
-  withStyles(styles, { withTheme: true })(ShareProject),
-);
+const ShareProjectWithStyles = connect(mapStateToProps, {
+  shareProject,
+  clearMessages,
+})(withStyles(styles, { withTheme: true })(ShareProject));
 
 // Wrapper component to get isEmbedded from hook
 const ShareProjectWrapper = (props) => {

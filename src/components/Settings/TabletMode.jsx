@@ -86,7 +86,7 @@ export default function TabletMode() {
         open={snackbarOpen}
         message={snackInfo.message}
         type={snackInfo.type}
-        key={snackInfo.key}
+        snackbarKey={snackInfo.key}
       />
     </div>
   );

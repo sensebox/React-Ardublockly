@@ -37,7 +37,7 @@ Blockly.defineBlocksWithJsonArray([
       },
     ],
     output: "String",
-    colour: getColour().sensebox,
+    colour: "#62A044  ",
   },
   {
     type: "bme_humi",
@@ -193,7 +193,7 @@ Blockly.defineBlocksWithJsonArray([
   },
   {
     type: "basic_off",
-    message0: "%1 \n %2",
+    message0: "%2 \n %1",
     args0: [
       {
         type: "field_image",
@@ -267,9 +267,9 @@ Blockly.defineBlocksWithJsonArray([
 
 // Font size configurations for display
 const FONT_SIZE_CONFIG = {
-  small: { size: 6, lineHeight: 8, maxLines: 6 },
-  medium: { size: 8, lineHeight: 10, maxLines: 5 },
-  large: { size: 12, lineHeight: 14, maxLines: 3 },
+  s: { size: 6, lineHeight: 8, maxLines: 6 },
+  m: { size: 8, lineHeight: 10, maxLines: 5 },
+  l: { size: 12, lineHeight: 14, maxLines: 3 },
 };
 
 // Helper: encode SVG (UTF-8) to data URI safely (handles umlauts / unicode)
@@ -278,8 +278,8 @@ function svgToDataUri(svg) {
 }
 
 // Helper function to generate font size toggle buttons SVG
-function generateFontSizeToggleSvg(selectedSize = "medium") {
-  const sizes = ["small", "medium", "large"];
+function generateFontSizeToggleSvg(selectedSize = "s") {
+  const sizes = ["s", "m", "l"];
   const labels = ["S", "M", "L"];
   const buttonWidth = 28;
   const buttonHeight = 22;
@@ -308,8 +308,8 @@ function generateFontSizeToggleSvg(selectedSize = "medium") {
 }
 
 // Helper function to generate dynamic display SVG with text
-function generateDisplaySvg(text = "", fontSize = "medium") {
-  const config = FONT_SIZE_CONFIG[fontSize] || FONT_SIZE_CONFIG.medium;
+function generateDisplaySvg(text = "", fontSize = "s") {
+  const config = FONT_SIZE_CONFIG[fontSize] || FONT_SIZE_CONFIG.s;
 
   // Split text by newlines and limit each line
   const lines = text.split("\n").map((line) => line.substring(0, 20));
@@ -328,22 +328,18 @@ function generateDisplaySvg(text = "", fontSize = "medium") {
     })
     .join("\n      ");
 
-  const svgTemplate = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   id="Ebene_2"
-   data-name="Ebene 2"
-   viewBox="0 0 127.56 70.87"
-   version="1.1"
-   xmlns="http://www.w3.org/2000/svg">
+  const svgTemplate = `<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Ebene_2" data-name="Ebene 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.56 70.87">
   <defs>
     <style>
       .cls-1 {
         fill: #063;
       }
+
       .cls-2 {
         fill: #1d1d1b;
       }
-      .display-text {
+              .display-text {
         fill: #ffffff;
         font-family: Arial, sans-serif;
         font-weight: bold;
@@ -351,17 +347,13 @@ function generateDisplaySvg(text = "", fontSize = "medium") {
     </style>
   </defs>
   <g id="Ebene_1-2" data-name="Ebene 1">
-    <g>
-      <path
-         class="cls-1"
-         d="M119.06,0H8.5C3.81,0,0,3.81,0,8.5v53.86c0,4.7,3.81,8.5,8.5,8.5h110.55c4.7,0,8.5-3.81,8.5-8.5V8.5c0-4.7-3.81-8.5-8.5-8.5ZM7.09,68.03c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25ZM7.09,11.34c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25ZM120.47,68.03c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25ZM120.47,11.34c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25Z" />
-      <polygon
-         class="cls-2"
-         points="41.1,65.2 49.61,65.2 49.61,70.87 77.95,70.87 77.95,65.2 86.46,65.2 99.21,56.69 99.21,14.17 28.35,14.17 28.35,56.69 "
-         transform="matrix(1.50884,0,0,1.0616933,-30.839346,-4.3722025)"
-         style="fill:#1d1d1b;fill-opacity:1" />
-      ${textElements}
+    <g id="OLED">
+      <path class="cls-1" d="M119.06,0H8.5C3.81,0,0,3.81,0,8.5v53.86c0,4.7,3.81,8.5,8.5,8.5h110.55c4.7,0,8.5-3.81,8.5-8.5V8.5c0-4.7-3.81-8.5-8.5-8.5ZM7.09,68.03c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25ZM7.09,11.34c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25ZM120.47,68.03c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25ZM120.47,11.34c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25Z"/>
+      <polygon class="cls-2" points="14.17 11.34 14.17 55.98 32.03 64.91 43.94 64.91 43.94 70.87 83.62 70.87 83.62 64.91 95.53 64.91 113.39 55.98 113.39 11.34 14.17 11.34"/>
+            ${textElements}
+
     </g>
+  
   </g>
 </svg>`;
 
@@ -417,14 +409,8 @@ function generateMeasurementDisplaySvg(value = "0", title = "", unit = "") {
   </defs>
   <g id="Ebene_1-2" data-name="Ebene 1">
     <g>
-      <path
-         class="cls-1"
-         d="M119.06,0H8.5C3.81,0,0,3.81,0,8.5v53.86c0,4.7,3.81,8.5,8.5,8.5h110.55c4.7,0,8.5-3.81,8.5-8.5V8.5c0-4.7-3.81-8.5-8.5-8.5ZM7.09,68.03c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25ZM7.09,11.34c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25ZM120.47,68.03c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25ZM120.47,11.34c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25Z" />
-      <polygon
-         class="cls-2"
-         points="41.1,65.2 49.61,65.2 49.61,70.87 77.95,70.87 77.95,65.2 86.46,65.2 99.21,56.69 99.21,14.17 28.35,14.17 28.35,56.69 "
-         transform="matrix(1.50884,0,0,1.0616933,-30.839346,-4.3722025)"
-         style="fill:#1d1d1b;fill-opacity:1" />
+      <path class="cls-1" d="M119.06,0H8.5C3.81,0,0,3.81,0,8.5v53.86c0,4.7,3.81,8.5,8.5,8.5h110.55c4.7,0,8.5-3.81,8.5-8.5V8.5c0-4.7-3.81-8.5-8.5-8.5ZM7.09,68.03c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25ZM7.09,11.34c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25ZM120.47,68.03c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25ZM120.47,11.34c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25Z"/>
+      <polygon class="cls-2" points="14.17 11.34 14.17 55.98 32.03 64.91 43.94 64.91 43.94 70.87 83.62 70.87 83.62 64.91 95.53 64.91 113.39 55.98 113.39 11.34 14.17 11.34"/>
       <text class="display-value" x="30" y="37">${displayValue}</text>
       <text class="display-unit" x="85" y="35">${displayUnit}</text>
       <text class="display-title" x="30" y="50">${displayTitle}</text>
@@ -438,10 +424,14 @@ function generateMeasurementDisplaySvg(value = "0", title = "", unit = "") {
 Blockly.Blocks["display_print_basic"] = {
   init: function () {
     // Store current font size
-    this.fontSize_ = "medium";
+    this.fontSize_ = "s";
 
-    this.appendDummyInput("DISPLAY_IMAGE").appendField(
-      new Blockly.FieldImage(generateDisplaySvg("", "medium"), 160, 90, "*"),
+    this.appendDummyInput("ZEIGE").appendField(
+      new Blockly.FieldLabel("Zeige :", undefined, { bold: true }),
+    );
+
+    this.appendValueInput("TEXT").appendField(
+      new Blockly.FieldImage(generateDisplaySvg("", "s"), 160, 90, "*"),
       "DISPLAY_ICON",
     );
 
@@ -455,19 +445,13 @@ Blockly.Blocks["display_print_basic"] = {
       .appendField("Größe:")
       .appendField(
         new Blockly.FieldImage(
-          generateFontSizeToggleSvg("medium"),
+          generateFontSizeToggleSvg("s"),
           96,
           22,
           "font size",
           this.handleFontSizeClick.bind(this),
         ),
         "FONT_SIZE_BUTTONS",
-      );
-
-    this.appendValueInput("TEXT")
-      .setCheck("String")
-      .appendField(
-        new Blockly.FieldLabel("Zeige :", undefined, { bold: true }),
       );
 
     this.setPreviousStatement(true, null);
@@ -490,11 +474,11 @@ Blockly.Blocks["display_print_basic"] = {
     // Determine which button was clicked based on X position
     let newSize;
     if (x < buttonWidth) {
-      newSize = "small";
+      newSize = "s";
     } else if (x < buttonWidth * 2) {
-      newSize = "medium";
+      newSize = "m";
     } else {
-      newSize = "large";
+      newSize = "l";
     }
 
     this.fontSize_ = newSize;
@@ -817,257 +801,42 @@ Blockly.defineBlocksWithJsonArray([
   },
 ]);
 
-Blockly.Blocks["basic_if_else"] = {
+Blockly.Blocks["basic_if"] = {
   /**
    * Block for if/elseif/else condition.
    * @this Blockly.Block
    */
   init: function () {
-    this.appendValueInput("IF0")
+    this.appendValueInput("IF")
       .setCheck(["String", "Boolean"])
       .appendField("wenn");
-    this.appendStatementInput("DO0").appendField("mache");
+    this.appendStatementInput("DO").appendField("mache");
 
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setColour("#5b67a5");
     this.setTooltip("Wenn / sonst Verzweigung");
     this.setInputsInline(false);
-
-    this.setMutator(
-      new Blockly.icons.MutatorIcon(["basic_if_elseif", "basic_else"], this),
-    );
-    this.elseifCount_ = 0;
-    this.elseCount_ = 0;
-  },
-  /**
-   * Create XML to represent the number of else-if and else inputs.
-   * @return {Element} XML storage element.
-   * @this Blockly.Block
-   */
-  mutationToDom: function () {
-    if (!this.elseifCount_ && !this.elseCount_) {
-      return null;
-    }
-    var container = document.createElement("mutation");
-    if (this.elseifCount_) {
-      container.setAttribute("elseif", this.elseifCount_);
-    }
-    if (this.elseCount_) {
-      container.setAttribute("else", 1);
-    }
-    return container;
-  },
-  /**
-   * Parse XML to restore the else-if and else inputs.
-   * @param {!Element} xmlElement XML storage element.
-   * @this Blockly.Block
-   */
-  domToMutation: function (xmlElement) {
-    this.elseifCount_ = parseInt(xmlElement.getAttribute("elseif"), 10) || 0;
-    this.elseCount_ = parseInt(xmlElement.getAttribute("else"), 10) || 0;
-    this.updateShape_();
-  },
-  /**
-   * Populate the mutator's dialog with this block's components.
-   * @param {!Blockly.Workspace} workspace Mutator's workspace.
-   * @return {!Blockly.Block} Root block in mutator.
-   * @this Blockly.Block
-   */
-  decompose: function (workspace) {
-    var containerBlock = workspace.newBlock("basic_if_if");
-    containerBlock.initSvg();
-    var connection = containerBlock.nextConnection;
-    for (var i = 1; i <= this.elseifCount_; i++) {
-      var elseifBlock = workspace.newBlock("basic_if_elseif");
-      elseifBlock.initSvg();
-      connection.connect(elseifBlock.previousConnection);
-      connection = elseifBlock.nextConnection;
-    }
-    if (this.elseCount_) {
-      var elseBlock = workspace.newBlock("basic_else");
-      elseBlock.initSvg();
-      connection.connect(elseBlock.previousConnection);
-    }
-    return containerBlock;
-  },
-  /**
-   * Reconfigure this block based on the mutator dialog's components.
-   * @param {!Blockly.Block} containerBlock Root block in mutator.
-   * @this Blockly.Block
-   */
-  compose: function (containerBlock) {
-    var clauseBlock = containerBlock.nextConnection.targetBlock();
-    // Count number of inputs.
-    this.elseifCount_ = 0;
-    this.elseCount_ = 0;
-    var valueConnections = [null];
-    var statementConnections = [null];
-    var elseStatementConnection = null;
-    while (clauseBlock) {
-      switch (clauseBlock.type) {
-        case "basic_if_elseif":
-          this.elseifCount_++;
-          valueConnections.push(clauseBlock.valueConnection_);
-          statementConnections.push(clauseBlock.statementConnection_);
-          break;
-        case "basic_else":
-          this.elseCount_++;
-          elseStatementConnection = clauseBlock.statementConnection_;
-          break;
-        default:
-          throw new Error("Unknown block type.");
-      }
-      clauseBlock =
-        clauseBlock.nextConnection && clauseBlock.nextConnection.targetBlock();
-    }
-    this.updateShape_();
-    // Reconnect any child blocks.
-    for (var i = 1; i <= this.elseifCount_; i++) {
-      if (valueConnections[i]) {
-        valueConnections[i].reconnect(this, "IF" + i);
-      }
-      if (statementConnections[i]) {
-        statementConnections[i].reconnect(this, "DO" + i);
-      }
-    }
-    if (elseStatementConnection) {
-      elseStatementConnection.reconnect(this, "ELSE");
-    }
-  },
-  /**
-   * Store pointers to any connected child blocks.
-   * @param {!Blockly.Block} containerBlock Root block in mutator.
-   * @this Blockly.Block
-   */
-  saveConnections: function (containerBlock) {
-    var clauseBlock = containerBlock.nextConnection.targetBlock();
-    var i = 1;
-    var inputDo;
-    while (clauseBlock) {
-      switch (clauseBlock.type) {
-        case "basic_if_elseif":
-          var inputIf = this.getInput("IF" + i);
-          inputDo = this.getInput("DO" + i);
-          clauseBlock.valueConnection_ =
-            inputIf && inputIf.connection.targetConnection;
-          clauseBlock.statementConnection_ =
-            inputDo && inputDo.connection.targetConnection;
-          i++;
-          break;
-        case "basic_else":
-          inputDo = this.getInput("ELSE");
-          clauseBlock.statementConnection_ =
-            inputDo && inputDo.connection.targetConnection;
-          break;
-        default:
-          throw new Error("Unknown block type.");
-      }
-      clauseBlock =
-        clauseBlock.nextConnection && clauseBlock.nextConnection.targetBlock();
-    }
-  },
-  /**
-   * Modify this block to have the correct number of inputs.
-   * @private
-   * @this Blockly.Block
-   */
-  updateShape_: function () {
-    // Delete everything.
-    if (this.getInput("ELSE")) {
-      this.removeInput("ELSE");
-    }
-    var j = 1;
-    while (this.getInput("IF" + j)) {
-      this.removeInput("IF" + j);
-      this.removeInput("DO" + j);
-      j++;
-    }
-    // Rebuild block.
-    for (var i = 1; i <= this.elseifCount_; i++) {
-      this.appendValueInput("IF" + i)
-        .setCheck(["String", "Boolean"])
-        .appendField("sonst wenn");
-      this.appendStatementInput("DO" + i).appendField("mache");
-    }
-    if (this.elseCount_) {
-      this.appendStatementInput("ELSE").appendField("sonst");
-    }
   },
 };
 
-Blockly.Blocks["basic_if_if"] = {
+Blockly.Blocks["basic_if_else"] = {
+  /**
+   * Block for if/elseif/else condition.
+   * @this Blockly.Block
+   */
   init: function () {
-    this.setColour("#5C81A6");
-    this.appendDummyInput().appendField("wenn");
-    this.setNextStatement(true);
-    this.setTooltip("Wenn-Block");
-    this.contextMenu = false;
-  },
-};
-
-Blockly.Blocks["basic_if_elseif"] = {
-  init: function () {
-    this.setColour("#5C81A6");
-    this.appendDummyInput().appendField("sonst wenn");
-    this.setPreviousStatement(true);
-    this.setNextStatement(true);
-    this.setTooltip("Sonst-wenn Bedingung");
-    this.contextMenu = false;
-  },
-};
-
-Blockly.Blocks["basic_else"] = {
-  init: function () {
-    this.setColour("#5C81A6");
-    this.appendDummyInput().appendField("sonst");
-    this.setPreviousStatement(true);
-    this.setTooltip("Sonst-Bedingung");
-    this.contextMenu = false;
-  },
-};
-
-Blockly.Blocks["basic_if_else2"] = {
-  init: function () {
-    this.appendValueInput("COND").setCheck("String").appendField("Wenn");
-
+    this.appendValueInput("IF")
+      .setCheck(["String", "Boolean"])
+      .appendField("wenn");
     this.appendStatementInput("DO").appendField("mache");
-
     this.appendStatementInput("ELSE").appendField("sonst");
 
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-    this.setColour("#5C81A6");
+    this.setColour("#5b67a5");
     this.setTooltip("Wenn / sonst Verzweigung");
     this.setInputsInline(false);
-
-    // ⚠️ NUR initial füllen, wenn COND noch leer ist
-    this.setOnChange(function () {
-      if (!this.workspace || this.isInFlyout) return;
-
-      const input = this.getInput("COND");
-      if (!input || input.connection.targetBlock()) return;
-
-      // Compare erzeugen
-      const compare = this.workspace.newBlock("basic_compare");
-      compare.initSvg();
-      compare.render();
-
-      const left = this.workspace.newBlock("basic_number");
-      left.setFieldValue(0, "NUM");
-      left.initSvg();
-      left.render();
-
-      const right = this.workspace.newBlock("basic_number");
-      right.setFieldValue(1, "NUM");
-      right.initSvg();
-      right.render();
-
-      compare.getInput("LEFT").connection.connect(left.outputConnection);
-      compare.getInput("RIGHT").connection.connect(right.outputConnection);
-
-      input.connection.connect(compare.outputConnection);
-    });
   },
 };
 
@@ -1357,12 +1126,12 @@ function generateLEDSvg(color) {
 
 Blockly.Blocks["basic_led_control"] = {
   init: function () {
+    this.appendDummyInput().appendField("LED einschalten");
+
     this.appendDummyInput("LED_IMAGE").appendField(
       new Blockly.FieldImage(generateLEDSvg("#ff0000"), 90, 90, "*"),
       "LED_ICON",
     );
-
-    this.appendDummyInput().appendField("LED einschalten");
 
     this.appendValueInput("COLOR").setCheck("Colour").appendField("Farbe:");
 
@@ -1437,11 +1206,11 @@ Blockly.Blocks["basic_led_control"] = {
 Blockly.defineBlocksWithJsonArray([
   {
     type: "basic_random_color",
-    message0: "%1 \n %2",
+    message0: "%2 \n %1",
     args0: [
       {
         type: "field_image",
-        src: "/media/hardware/icons/Icon_LED_OFF.svg",
+        src: "/media/hardware/icons/Icon_LED_zufaellig.svg",
         width: 90,
         height: 90,
         alt: "*",
@@ -1536,12 +1305,13 @@ Blockly.defineBlocksWithJsonArray([
 
 Blockly.Blocks["basic_rgb_color"] = {
   init: function () {
+    this.appendDummyInput().appendField("RGB Farbe");
+
     this.appendDummyInput("RGB_IMAGE").appendField(
       new Blockly.FieldImage(generateRGBSvg(255, 0, 0), 80, 80, "*"),
       "RGB_ICON",
     );
 
-    this.appendDummyInput().appendField("RGB Farbe");
     this.appendValueInput("R").setCheck("RGB_RED").appendField("Rot:");
 
     this.appendValueInput("G").setCheck("RGB_GREEN").appendField("Grün:");
@@ -1731,7 +1501,7 @@ Blockly.defineBlocksWithJsonArray([
       },
       {
         type: "field_label",
-        text: "Luftqualitaet",
+        text: "Luftqualität",
         bold: true,
       },
     ],
@@ -1771,24 +1541,23 @@ Blockly.defineBlocksWithJsonArray([
 
 Blockly.Blocks["display_show_measurement"] = {
   init: function () {
-    this.appendDummyInput("DISPLAY_IMAGE").appendField(
-      new Blockly.FieldImage(
-        generateMeasurementDisplaySvg("0", "", ""),
-        160,
-        90,
-        "*",
-      ),
-      "DISPLAY_ICON",
+    this.appendDummyInput().appendField(
+      new Blockly.FieldLabel("Zeige Messwert", undefined),
     );
-
-    // (No checkbox here — display_show_measurement always clears by generator)
 
     this.appendValueInput("VALUE")
       .setCheck(null)
       .appendField(
-        new Blockly.FieldLabel("Messwert anzeigen", undefined, { bold: true }),
-      )
-      .appendField("Wert:");
+        new Blockly.FieldImage(
+          generateMeasurementDisplaySvg("0", "", ""),
+          160,
+          90,
+          "*",
+        ),
+        "DISPLAY_ICON",
+      );
+
+    // (No checkbox here — display_show_measurement always clears by generator)
 
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -1855,12 +1624,12 @@ Blockly.Blocks["display_show_measurement"] = {
     if (valueInput) {
       // Sensor metadata lookup table with sample values for preview
       const sensorMetadata = {
-        hdc_tmp: { title: "Temperatur", unit: "°C", sample: "23.5" },
-        bme_tmp: { title: "Temperatur", unit: "°C", sample: "23.5" },
-        hdc_humi: { title: "Luftfeuchtigkeit", unit: "%", sample: "80" },
-        bme_humi: { title: "Luftfeuchtigkeit", unit: "%", sample: "80" },
-        bme_pressure: { title: "Luftdruck", unit: "hPa", sample: "1024" },
-        bme_air_quality: { title: "Luftqualitaet", unit: "", sample: "74" },
+        hdc_tmp: { title: "Temperatur", unit: "°C", sample: "??.?" },
+        bme_tmp: { title: "Temperatur", unit: "°C", sample: "??.?" },
+        hdc_humi: { title: "Luftfeuchtigkeit", unit: "%", sample: "??" },
+        bme_humi: { title: "Luftfeuchtigkeit", unit: "%", sample: "??" },
+        bme_pressure: { title: "Luftdruck", unit: "hPa", sample: "????" },
+        bme_air_quality: { title: "Luftqualitaet", unit: "", sample: "??" },
         basic_brightness: { title: "Helligkeit", unit: "lx", sample: "200" },
       };
 

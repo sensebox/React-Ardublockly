@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useCallback,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 
@@ -9,9 +15,11 @@ import "@/components/Blockly/generator/basic/index";
 
 import { onChangeWorkspace, clearStats } from "../../actions/workspaceActions";
 import { ZoomToFitControl } from "@blockly/zoom-to-fit";
-import { Backpack } from "@blockly/workspace-backpack";
+import { BackpackWithFeedback } from "./helpers/BackpackWithFeedback";
+import Snackbar from "../Snackbar";
 import { initialXml } from "./initialXml.js";
 import { getMaxInstances } from "./helpers/maxInstances";
+import { ensureStartBlock } from "./helpers/ensureStartBlock";
 import {
   EMBEDDED_BLOCKLY_CONFIG,
   DEFAULT_BLOCKLY_CONFIG,
@@ -25,6 +33,23 @@ import { BlocklyComponent } from "./BlocklyComponent";
 
 export default function BlocklyWindow(props) {
   const dispatch = useDispatch();
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    type: "success",
+    key: 0,
+  });
+
+  const showBackpackFeedback = useCallback(() => {
+    console.log("Block added to backpack, showing feedback");
+    setSnackbar({
+      open: true,
+      message:
+        Blockly.Msg.backpack_add_success || "Block im Rucksack gespeichert!",
+      type: "success",
+      key: Date.now(),
+    });
+  }, []);
   const renderer = useSelector((state) => state.general.renderer);
   const sounds = useSelector((state) => state.general.sounds);
   const language = useSelector((state) => state.general.language);
@@ -86,21 +111,37 @@ export default function BlocklyWindow(props) {
     // UI helpers
     Blockly.svgResize(ws);
 
-    if (!isEmbedded) {
-      const zoomToFit = new ZoomToFitControl(ws);
+    const componentManager = ws.getComponentManager();
+
+    let zoomToFit = null;
+    if (!isEmbedded && !componentManager.getComponent("zoomToFit")) {
+      zoomToFit = new ZoomToFitControl(ws);
       zoomToFit.init();
     }
-    const backpack = new Backpack(ws);
-    backpack.init();
 
-    // Cleanup: remove listeners
+    // Only initialize backpack if not already present
+    let backpack = null;
+    const existingBackpack = componentManager.getComponent("backpack");
+    if (!existingBackpack) {
+      backpack = new BackpackWithFeedback(ws, {
+        onAdd: () => {
+          showBackpackFeedback();
+        },
+      });
+      backpack.init();
+    }
+
+    // Cleanup: remove listeners and dispose plugins
     return () => {
       if (ws && onAnyChange) ws.removeChangeListener(onAnyChange);
       if (ws && orphanDisabler) ws.removeChangeListener(orphanDisabler);
-      // zoomToFit/backpack are tied to workspace; disposed with ws
+      if (ws && onWorkspaceChangedListener)
+        ws.removeChangeListener(onWorkspaceChangedListener);
+      if (zoomToFit) zoomToFit.dispose();
+      if (backpack) backpack.dispose();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isEmbedded]);
 
   // Handle board change → reload XML (from localStorage or fallback)
   useEffect(() => {
@@ -114,6 +155,7 @@ export default function BlocklyWindow(props) {
     } catch (e) {
       console.warn("Failed to load XML on board change:", e);
       ws.clear();
+      ensureStartBlock(ws);
     }
     Blockly.svgResize(ws);
   }, [selectedBoard]);
@@ -129,7 +171,9 @@ export default function BlocklyWindow(props) {
       Blockly.Xml.domToWorkspace(Blockly.utils.xml.textToDom(xml), ws);
     } catch (e) {
       console.warn("Failed to apply initialXml:", e);
+      ensureStartBlock(ws);
     }
+    ensureStartBlock(ws);
     Blockly.svgResize(ws);
   }, [initialXmlProp, svg]);
 
@@ -145,6 +189,7 @@ export default function BlocklyWindow(props) {
     } catch (e) {
       console.warn("Failed to reload on language change:", e);
       ws.clear();
+      ensureStartBlock(ws);
     }
     Blockly.svgResize(ws);
   }, [language]);
@@ -205,35 +250,44 @@ export default function BlocklyWindow(props) {
     : {};
 
   return (
-    <div
-      style={
-        tutorial
-          ? {
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              width: "100%",
-              height: "100%",
-            }
-          : { containerStyles }
-      }
-    >
-      <BlocklyComponent
-        style={svg ? { height: 0 } : blocklyCSS}
-        readOnly={readOnly !== undefined ? readOnly : false}
-        renderer={renderer}
-        sounds={sounds}
-        maxInstances={getMaxInstances()}
-        zoom={zoomConfig}
-        grid={gridConfig}
-        media={"/media/blockly/"}
-        move={moveConfig}
-        initialXml={initialXmlProp ? initialXmlProp : initialXml}
+    <>
+      <div
+        style={
+          tutorial
+            ? {
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                height: "100%",
+              }
+            : { containerStyles }
+        }
+      >
+        <BlocklyComponent
+          style={svg ? { height: 0 } : blocklyCSS}
+          readOnly={readOnly !== undefined ? readOnly : false}
+          renderer={renderer}
+          sounds={sounds}
+          maxInstances={getMaxInstances()}
+          zoom={zoomConfig}
+          grid={gridConfig}
+          media={"/media/blockly/"}
+          move={moveConfig}
+          initialXml={initialXmlProp ? initialXmlProp : initialXml}
+        />
+        {svg && initialXmlProp ? (
+          <BlocklySvg initialXml={initialXmlProp} />
+        ) : null}
+      </div>
+      <Snackbar
+        open={snackbar.open}
+        message={snackbar.message}
+        type={snackbar.type}
+        snackbarKey={snackbar.key}
+        onClose={() => setSnackbar((s) => ({ ...s, open: false }))}
       />
-      {svg && initialXmlProp ? (
-        <BlocklySvg initialXml={initialXmlProp} />
-      ) : null}
-    </div>
+    </>
   );
 }
 

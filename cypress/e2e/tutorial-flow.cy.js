@@ -71,9 +71,9 @@ describe("End-to-End Tutorial Flow", () => {
     cy.contains("button", "Tutorial speichern").click();
 
     // Warte auf Erfolgsmeldung
-    cy.contains("Tutorial erfolgreich gespeichert!").should("be.visible");
+    cy.contains("Tutorial saved successfully!").should("be.visible");
 
-    cy.get("button").contains("Zum Tutorial").click();
+    cy.get("button").contains("To tutorial").click();
 
     cy.url().then((url) => {
       const match = url.match(/\/tutorial\/([a-f0-9]{24})/);
@@ -115,9 +115,9 @@ describe("End-to-End Tutorial Flow", () => {
     cy.contains("button", "Tutorial speichern").click();
 
     // Warte auf Erfolgsmeldung
-    cy.contains("Tutorial erfolgreich gespeichert!").should("be.visible");
+    cy.contains("Tutorial saved successfully!").should("be.visible");
 
-    cy.get("button").contains("Zum Tutorial").click();
+    cy.get("button").contains("To tutorial").click();
 
     // Optional: Prüfe auch im UI
     cy.contains(updatedTitle).should("be.visible");

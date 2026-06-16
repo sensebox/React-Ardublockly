@@ -51,8 +51,6 @@ const GalleryItem = ({ project }) => {
   const displayTitle = optimisticTitle ?? project.title;
   const displayDesc = optimisticDesc ?? project.description;
 
-  const getProjectImage = (p) => p.imageUrl || "/placeholder-image.png";
-
   const handleDeleteProject = () => {
     dispatch(deleteProject("gallery", project._id));
   };
@@ -91,7 +89,11 @@ const GalleryItem = ({ project }) => {
           "&:hover": { boxShadow: 6 },
         }}
       >
-        <CardActionArea sx={{ textAlign: "left", cursor: "default" }}>
+        <CardActionArea
+          component={Link}
+          to={`/gallery/${project._id}`}
+          sx={{ textAlign: "left" }}
+        >
           <Box
             sx={{
               height: 160,
@@ -102,16 +104,30 @@ const GalleryItem = ({ project }) => {
               overflow: "hidden",
             }}
           >
-            <img
-              src={getProjectImage(project)}
-              alt={project.title}
-              style={{
-                maxHeight: "100%",
-                maxWidth: "100%",
-                objectFit: "contain",
-                padding: 15,
-              }}
-            />
+            {project.imageUrl ? (
+              <img
+                src={project.imageUrl}
+                alt={project.title}
+                style={{
+                  maxHeight: "100%",
+                  maxWidth: "100%",
+                  objectFit: "contain",
+                  padding: 15,
+                }}
+              />
+            ) : (
+              <Typography
+                variant="h6"
+                sx={{
+                  color: "#666",
+                  fontWeight: 600,
+                  textAlign: "center",
+                  padding: 2,
+                }}
+              >
+                {project.title}
+              </Typography>
+            )}
           </Box>
 
           <CardContent sx={{ flexGrow: 1 }}>
@@ -141,7 +157,10 @@ const GalleryItem = ({ project }) => {
 
               {user && user.email === project.creator && (
                 <IconButton
-                  onClick={handleOpenRename}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleOpenRename();
+                  }}
                   aria-label="Titel und Beschreibung bearbeiten"
                   sx={{
                     backgroundColor: "#f0f0f0",
@@ -207,7 +226,10 @@ const GalleryItem = ({ project }) => {
 
           {user && user.email === project.creator && (
             <Button
-              onClick={() => setOpenDelete(true)}
+              onClick={(e) => {
+                e.preventDefault();
+                setOpenDelete(true);
+              }}
               fullWidth
               color="error"
               startIcon={<FontAwesomeIcon icon={faTrash} />}

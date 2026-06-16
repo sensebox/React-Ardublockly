@@ -9,9 +9,8 @@ const Footer = () => {
     <Box
       component="footer"
       sx={{
-        position: "absolute",
-        bottom: 0,
         width: "100%",
+        marginTop: "auto",
       }}
     >
       <Box

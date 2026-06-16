@@ -3,8 +3,6 @@
  *
  */
 
-var board = window.sessionStorage.getItem("board");
-
 const maxInstances = {
   sensebox_wifi: 1,
   sensebox_startap: 1,
@@ -36,6 +34,7 @@ const maxInstancesEsp = {
 };
 
 export const getMaxInstances = () => {
+  const board = window.sessionStorage.getItem("board");
   if (board === "MCU-S2") {
     return maxInstancesEsp;
   } else if (board === "MCU" || board === "MCU:MINI") {

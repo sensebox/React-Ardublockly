@@ -31,6 +31,10 @@ import ArchiveGroup from "../Pages/Group/ArchiveGroup";
 import GroupDashboard from "../Pages/Group/GroupDashboard";
 import CreateStudent from "../Pages/GroupMember/CreateStudent";
 import TutorialHome from "../Tutorial/Overview/TutorialHome";
+import ImageClassification from "@/components/Pages/TeachableSensebox/image/ImageClassification";
+import TeachableSenseboxLanding from "@/components/Pages/TeachableSensebox/TeachableSenseboxLanding";
+import SpellClassification from "@/components/Pages/TeachableSensebox/spell/SpellClassification";
+import OrientationClassification from "@/components/Pages/TeachableSensebox/orientation/OrientationClassification";
 import BasicWithSerial from "../Pages/Basic/BasicWithSerial";
 import BasicProject from "../Pages/Basic/BasicProject";
 import GroupTutorials from "../Pages/Group/GroupTutorials";
@@ -59,7 +63,14 @@ function AppRoutes({ platform, visitPage, setPlatform }) {
   }, [location.pathname, visitPage]);
 
   return (
-    <div style={{ margin: "0 22px" }}>
+    <div
+      style={{
+        margin: "0 22px",
+        display: "flex",
+        flexDirection: "column",
+        boxSizing: "border-box",
+      }}
+    >
       <Routes>
         {/* Home */}
         <Route
@@ -120,6 +131,41 @@ function AppRoutes({ platform, visitPage, setPlatform }) {
 
         {/* Code Editor */}
         <Route path="/codeeditor" element={<CodeEditor />} />
+
+        {/* Teachable Machine */}
+        <Route
+          path="/teachable"
+          element={
+            <PublicRoute>
+              <TeachableSenseboxLanding />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/teachable/image"
+          element={
+            <PublicRoute>
+              <ImageClassification />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/teachable/spell"
+          element={
+            <PublicRoute>
+              <SpellClassification />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/teachable/orientation"
+          element={
+            <PublicRoute>
+              <OrientationClassification />
+            </PublicRoute>
+          }
+        />
+
         {/* Sharing */}
         <Route
           path="/share/:shareId"
