@@ -178,7 +178,7 @@ export default function GroupSolutions() {
                   (typeof solution.blocklyXml === "string" &&
                   solution.blocklyXml.startsWith("data:image")
                     ? solution.blocklyXml
-                    : fallbackThumbnail);
+                    : "/public/media/blockly/thumbnail.png"); // Updated fallback to use the specified public/media/blockly/thumbnail.png
                 const hasCustomThumbnail = Boolean(
                   solution.thumbnail ||
                   solution.screenshotUrl ||

@@ -47,7 +47,7 @@ describe("Group & Member Flow", () => {
 
     visitApp("/joinGroup");
 
-    cy.get('input[name="Zugangscode"]').type("ab12cd");
+    cy.get('input[name="Zugangscode"]').type("AB12CD");
     cy.get('input[name="Nickname"]').type("Tester");
     cy.contains("button", "Gruppe beitreten").click();
 

@@ -411,7 +411,7 @@ export default function MemberDashboard() {
                   (typeof solution.blocklyXml === "string" &&
                   solution.blocklyXml.startsWith("data:image")
                     ? solution.blocklyXml
-                    : fallbackThumbnail);
+                    : "/public/media/blockly/thumbnail.png");
                 const hasCustomThumbnail = Boolean(
                   solution.thumbnail ||
                   solution.screenshotUrl ||
