@@ -155,8 +155,7 @@ const Toolbox = ({ workspace, toolbox }) => {
     });
 
     // --- Toolbox aktualisieren (nur bei Änderungen, nicht beim initialen Mount) ---
-    const boardChanged =
-      previousBoard.current !== null && previousBoard.current !== selectedBoard;
+    const boardChanged = previousBoard.current !== selectedBoard;
     const languageChanged =
       previousLanguage.current !== null &&
       previousLanguage.current !== language;
