@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { logout } from "../actions/authActions";
 import senseboxLogo from "@/sensebox_logo.svg";
 
@@ -33,6 +33,8 @@ import {
   faBars,
   faChevronLeft,
   faLayerGroup,
+  faPoop,
+  faSchoolCircleExclamation,
   faSignInAlt,
   faSignOutAlt,
   faUserCircle,
@@ -49,6 +51,8 @@ import {
   faEarthAmericas,
   faCaretDown,
   faEye,
+  faUserGroup,
+  faUserPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -87,6 +91,7 @@ const Navbar = () => {
   const selectedBoard = useSelector((s) => s.board.board);
 
   // Local state
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [isTourOpen, setIsTourOpen] = useState(false);
   const langRef = useRef(null);
@@ -448,6 +453,31 @@ const Navbar = () => {
               link: "/project",
               restriction: isAuthenticated,
             },
+            {
+              text: "Group",
+              icon: faUserGroup,
+              link: "/group",
+              action: () => {
+                const lastGroupId = localStorage.getItem("lastGroupId");
+                navigate(lastGroupId ? `/group/${lastGroupId}` : "/group");
+                toggleDrawer();
+              },
+            },
+            {
+              text: "Join Group",
+              icon: faUserPlus,
+              link: "/joinGroup",
+              action: () => {
+                const lastGroupId = localStorage.getItem("lastGroupId");
+                const lastMemberId = localStorage.getItem("lastMemberId");
+                navigate(
+                  lastGroupId && lastMemberId
+                    ? `/group/${lastGroupId}/member/dashboard/${lastMemberId}`
+                    : "/joinGroup",
+                );
+                toggleDrawer();
+              },
+            },
             { text: "Code Editor", icon: faCode, link: "/codeeditor" },
             {
               text: Blockly.Msg.navbar_teachablesensebox,
@@ -456,18 +486,27 @@ const Navbar = () => {
             },
           ].map((item, i) =>
             item.restriction || !("restriction" in item) ? (
-              <Link
-                to={item.link}
-                key={i}
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
-                <ListItem button onClick={toggleDrawer}>
+              item.action ? (
+                <ListItem button key={i} onClick={item.action}>
                   <ListItemIcon>
                     <FontAwesomeIcon icon={item.icon} />
                   </ListItemIcon>
                   <ListItemText primary={item.text} />
                 </ListItem>
-              </Link>
+              ) : (
+                <Link
+                  to={item.link}
+                  key={i}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  <ListItem button onClick={toggleDrawer}>
+                    <ListItemIcon>
+                      <FontAwesomeIcon icon={item.icon} />
+                    </ListItemIcon>
+                    <ListItemText primary={item.text} />
+                  </ListItem>
+                </Link>
+              )
             ) : null,
           )}
         </List>

@@ -7,6 +7,7 @@ import {
   faCode,
   faTools,
   faQuestionCircle,
+  faPoop,
   faCog,
   faSignInAlt,
   faSignOutAlt,
