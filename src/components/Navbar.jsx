@@ -51,6 +51,7 @@ import {
   faEarthAmericas,
   faCaretDown,
   faEye,
+  faUserGroup,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
