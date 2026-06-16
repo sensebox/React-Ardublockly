@@ -36,7 +36,7 @@
     "@uiw/react-md-editor": "^4.1.1",
     "blockly": "^12.5.1",
     "file-saver": "^2.0.5",
-    "framer-motion": "^6.5.1",
+    "framer-motion": "^12.40.0",
     "markdown-it": "^14.2.0",
     "mnemonic-id": "^4.1.0",
     "moment": "^2.29.4",
