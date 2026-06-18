@@ -19,6 +19,8 @@ import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import DeviceSelection from "@/components/DeviceSelection";
 import { withRouterV6 } from "@/helpers/withRouter";
+import BlocklyPreviewGenerator from "@/components/Gallery/BlocklyPreviewGenerator";
+import { Box } from "@mui/material";
 
 const styles = (theme) => ({
   link: {
@@ -68,6 +70,7 @@ class ProjectHome extends Component {
         });
       }
     }
+    console.log(this.props.projects);
   }
 
   componentDidUpdate(props) {
@@ -145,11 +148,23 @@ class ProjectHome extends Component {
                               marginBottom: "10px",
                             }}
                           />
-                          {/* <BlocklyWindow
-                            svg
-                            blockDisabled
-                            initialXml={project.xml}
-                          />  */}
+                          <Box
+                            sx={{
+                              height: 160,
+                              backgroundColor: "#f5f5f5",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              overflow: "hidden",
+                            }}
+                          >
+                            <BlocklyPreviewGenerator
+                              xml={project.xml}
+                              title={project.title}
+                              maxWidth={400}
+                              maxHeight={160}
+                            />
+                          </Box>
                           <Typography
                             variant="body2"
                             style={{

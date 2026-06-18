@@ -635,10 +635,11 @@ export const ToolboxEye = () => {
         colour={getColour().variables}
         custom="CREATE_TYPED_VARIABLE"
       />
+
       <Category
-        name={Blockly.Msg.toolbox_functions}
+        name={Blockly.Msg.my_toolbox_functions}
         colour={getColour().procedures}
-        custom="PROCEDURE"
+        custom="CUSTOM_FUNCTIONS_DYNAMIC"
       />
 
       {/* ============================== QOOOL (CUSTOM) ============================== */}
