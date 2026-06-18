@@ -856,3 +856,39 @@ Blockly.Blocks["sensebox_eye_camera"] = {
     this.data = { name: "camera" };
   },
 };
+
+/**
+ * Sensirion SEN066
+ *
+ *
+ * */
+
+Blockly.Blocks["sensebox_sensor_sen066"] = {
+  init: function () {
+    this.appendDummyInput().appendField(Blockly.Msg.senseBox_sen066);
+    this.appendDummyInput()
+      .setAlign(Blockly.inputs.Align.LEFT)
+      .appendField(Blockly.Msg.senseBox_value);
+    this.appendDummyInput()
+      .appendField("Messgröße")
+      .appendField(
+        new Blockly.FieldDropdown([
+          ["PM1.0 [µg/m³]", "massConcentrationPm1p0"],
+          ["PM2.5 [µg/m³]", "massConcentrationPm2p5"],
+          ["PM4.0 [µg/m³]", "massConcentrationPm4p0"],
+          ["PM10 [µg/m³]", "massConcentrationPm10p0"],
+          ["Luftfeuchte [%]", "humidity"],
+          ["Temperatur [°C]", "temperature"],
+          ["VOC-Index", "vocIndex"],
+          ["NOx-Index", "noxIndex"],
+          ["CO₂ [ppm]", "co2"],
+        ]),
+        "dropdown",
+      );
+    this.setOutput(true, Types.DECIMAL.typeName);
+    this.setColour(getColour().sensebox);
+    this.setTooltip(Blockly.Msg.senseBox_sen066_tooltip);
+    this.setHelpUrl(withBoardParam(Blockly.Msg.senseBox_sen066_helpurl));
+    this.data = { name: "sen066" };
+  },
+};
