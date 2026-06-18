@@ -40,6 +40,9 @@ import {
   Download as DownloadIcon,
   MoreVert as MoreVertIcon,
   Warning as WarningIcon,
+  Close as CloseIcon,
+  ArrowBackIos as ArrowBackIcon,
+  ArrowForwardIos as ArrowForwardIcon,
 } from "@mui/icons-material";
 import useCameraSource from "./hooks/useCameraSource";
 import SerialErrorHandler, {
@@ -50,6 +53,8 @@ import SerialCameraService from "./SerialCameraService";
 import FloatingCameraPreview from "./FloatingCameraPreview";
 import TrainingResultsSection from "./TrainingResultsSection";
 import HelpButton, { useHelpBlink } from "../HelpButton";
+import Lightbox from "./Lightbox";
+import ExpandedClassDialog from "./ExpandedClassDialog";
 import useModelTraining from "./hooks/useModelTraining";
 import { DEFAULT_TRAINING_SETTINGS } from "./hooks/useModelTraining";
 import useModelPrediction from "./hooks/useModelPrediction";
@@ -70,16 +75,13 @@ const ModelTrainer = ({
   const [editingClassId, setEditingClassId] = useState(null);
   const [editingClassName, setEditingClassName] = useState("");
 
+  // Expanded class state
+  const [expandedClassId, setExpandedClassId] = useState(null);
+
   // Camera state
   const previewContainerRef = useRef(null);
   const sampleScrollRefs = useRef({});
 
-  useEffect(() => {
-    classes.forEach((cls) => {
-      const el = sampleScrollRefs.current[cls.id];
-      if (el) el.scrollTop = el.scrollHeight;
-    });
-  }, [classes]);
   const [videoLoading, setVideoLoading] = useState(false);
   const [serialError, setSerialError] = useState(null);
   const [connectionStatus, setConnectionStatus] = useState(
@@ -92,6 +94,11 @@ const ModelTrainer = ({
   const [trainedWithEnoughSamples, setTrainedWithEnoughSamples] =
     useState(false);
 
+  // Lightbox state for viewing images fullscreen
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxSrc, setLightboxSrc] = useState(null);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+
   // Training settings state
   const [showSettingsPanel, setShowSettingsPanel] = useState(false);
   const [trainingSettings, setTrainingSettings] = useState(
@@ -102,6 +109,7 @@ const ModelTrainer = ({
   const t = getImageTranslations();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const isWideScreen = useMediaQuery(theme.breakpoints.up("lg"));
 
   const {
     sourceType,
@@ -124,6 +132,7 @@ const ModelTrainer = ({
     testResults,
     finalAccuracy,
     trainedModel,
+    isPreliminaryModel,
   } = useModelTraining();
 
   const { predictions } = useModelPrediction(
@@ -407,8 +416,8 @@ const ModelTrainer = ({
       try {
         const imageUrl = await captureFrame();
         if (imageUrl) {
-          setClasses((prev) =>
-            prev.map((cls) =>
+          setClasses((prev) => {
+            const newClasses = prev.map((cls) =>
               cls.id === classId
                 ? {
                     ...cls,
@@ -418,8 +427,13 @@ const ModelTrainer = ({
                     ],
                   }
                 : cls,
-            ),
-          );
+            );
+            requestAnimationFrame(() => {
+              const el = sampleScrollRefs.current[classId];
+              if (el) el.scrollTop = el.scrollHeight;
+            });
+            return newClasses;
+          });
         }
       } catch (error) {
         console.error("Error capturing image:", error);
@@ -427,19 +441,6 @@ const ModelTrainer = ({
     },
     [isCameraActive, captureFrame],
   );
-
-  const startCapturing = useCallback(
-    (classId) => {
-      captureImage(classId);
-      const intervalId = setInterval(() => captureImage(classId), 100);
-      return intervalId;
-    },
-    [captureImage],
-  );
-
-  const stopCapturing = useCallback((intervalId) => {
-    if (intervalId) clearInterval(intervalId);
-  }, []);
 
   useEffect(() => {
     return () => {
@@ -460,6 +461,109 @@ const ModelTrainer = ({
     );
   }, []);
 
+  const openLightbox = useCallback(
+    (src, e) => {
+      // Only open lightbox on wide screens (like HelpButton behavior)
+      if (!isWideScreen) return;
+      if (e && e.stopPropagation) e.stopPropagation();
+      // determine index in flattened samples list
+      setLightboxOpen(true);
+      setLightboxSrc(src);
+      // index will be set in effect when flatSamples is available
+    },
+    [isWideScreen],
+  );
+
+  const closeLightbox = useCallback(() => {
+    setLightboxOpen(false);
+    setLightboxSrc(null);
+    setLightboxIndex(0);
+  }, []);
+
+  // flattened list of sample urls (stable order: classes then samples)
+  const flatSamples = useMemo(() => {
+    return classes.flatMap((c) => c.samples.map((s) => s.url));
+  }, [classes]);
+
+  // when opening lightbox set the index based on current src
+  useEffect(() => {
+    if (lightboxOpen && lightboxSrc) {
+      const idx = flatSamples.indexOf(lightboxSrc);
+      setLightboxIndex(idx >= 0 ? idx : 0);
+    }
+  }, [lightboxOpen, lightboxSrc, flatSamples]);
+
+  // update lightboxSrc when index changes
+  useEffect(() => {
+    if (lightboxOpen) {
+      if (flatSamples.length === 0) {
+        // nothing left, close
+        closeLightbox();
+        return;
+      }
+      const idx = Math.max(0, Math.min(lightboxIndex, flatSamples.length - 1));
+      setLightboxIndex(idx);
+      setLightboxSrc(flatSamples[idx]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lightboxIndex, flatSamples, lightboxOpen]);
+
+  const showPrev = useCallback(() => {
+    if (!flatSamples || flatSamples.length === 0) return;
+    setLightboxIndex(
+      (prev) => (prev - 1 + flatSamples.length) % flatSamples.length,
+    );
+  }, [flatSamples]);
+
+  const showNext = useCallback(() => {
+    if (!flatSamples || flatSamples.length === 0) return;
+    setLightboxIndex((prev) => (prev + 1) % flatSamples.length);
+  }, [flatSamples]);
+
+  // keyboard navigation
+  useEffect(() => {
+    if (!lightboxOpen) return undefined;
+    const onKey = (e) => {
+      if (e.key === "ArrowLeft") showPrev();
+      else if (e.key === "ArrowRight") showNext();
+      else if (e.key === "Escape") closeLightbox();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [lightboxOpen, showPrev, showNext, closeLightbox]);
+
+  const removeCurrentLightboxImage = useCallback(() => {
+    if (!lightboxSrc) return;
+    // find the class and sample id
+    let found = false;
+    let foundClassId = null;
+    let foundSampleId = null;
+    for (const c of classes) {
+      const s = c.samples.find((samp) => samp.url === lightboxSrc);
+      if (s) {
+        found = true;
+        foundClassId = c.id;
+        foundSampleId = s.id;
+        break;
+      }
+    }
+    if (!found) return;
+
+    const idx = flatSamples.indexOf(lightboxSrc);
+    // perform removal
+    removeSample(foundClassId, foundSampleId);
+
+    // decide what to show next
+    if (flatSamples.length <= 1) {
+      // last image -> close
+      closeLightbox();
+      return;
+    }
+    // if deleting last item, show previous one, else keep same index
+    const nextIndex = idx >= flatSamples.length - 1 ? idx - 1 : idx;
+    setLightboxIndex(Math.max(0, nextIndex));
+  }, [lightboxSrc, classes, flatSamples, removeSample, closeLightbox]);
+
   const trainModel = useCallback(async () => {
     if (classes.length < 2 || classes.some((cls) => cls.samples.length < 2)) {
       onTrainingError(t.training.errorInsufficientData);
@@ -478,6 +582,7 @@ const ModelTrainer = ({
         onTrainingError,
         onModelTrained,
         trainingSettings,
+        () => {}, // Preliminary model callback - updates hook state only
       );
       trainedClassesSnapshotRef.current = getClassesSnapshot(classes);
     } finally {
@@ -749,22 +854,41 @@ const ModelTrainer = ({
                       </Paper>
                     )}
 
-                    {isCameraActive && predictions.length === 0 && (
-                      <Paper
+                    {trainedModel &&
+                      isCameraActive &&
+                      predictions.length === 0 && (
+                        <Paper
+                          sx={{
+                            p: 2,
+                            textAlign: "center",
+                            border: "1px dashed #ccc",
+                            bgcolor: "grey.50",
+                          }}
+                        >
+                          <Typography variant="body2" color="text.secondary">
+                            {t.training.analyzing}
+                          </Typography>
+                        </Paper>
+                      )}
+
+                    {isPreliminaryModel && isTraining && (
+                      <Box
                         sx={{
-                          p: 2,
-                          textAlign: "center",
-                          border: "1px dashed #ccc",
-                          bgcolor: "grey.50",
+                          mt: 1,
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 1,
+                          color: "info.main",
                         }}
                       >
-                        <Typography variant="body2" color="text.secondary">
-                          {t.training.analyzing}
+                        <CircularProgress size={16} />
+                        <Typography variant="caption">
+                          {t.training.preliminaryModelWarning}
                         </Typography>
-                      </Paper>
+                      </Box>
                     )}
 
-                    {isDataStale && (
+                    {isDataStale && !isTraining && (
                       <Box
                         sx={{
                           mt: 1,
@@ -791,7 +915,20 @@ const ModelTrainer = ({
           <Grid container spacing={2} sx={{ mb: 3 }}>
             {classes.map((cls) => (
               <Grid item xs={12} key={cls.id}>
-                <Card>
+                <Card
+                  onClick={(e) => {
+                    if (!isWideScreen) return;
+                    if (
+                      !e.target.closest("button") &&
+                      !e.target.closest("input") &&
+                      !e.target.closest(".MuiTypography-root") &&
+                      !e.target.closest("img")
+                    ) {
+                      setExpandedClassId(cls.id);
+                    }
+                  }}
+                  sx={{ cursor: "pointer", "&:hover": { boxShadow: 4 } }}
+                >
                   <CardContent>
                     <Box
                       sx={{
@@ -801,7 +938,8 @@ const ModelTrainer = ({
                         mb: 2,
                       }}
                     >
-                      {editingClassId === cls.id ? (
+                      {editingClassId === cls.id &&
+                      expandedClassId !== cls.id ? (
                         <TextField
                           autoFocus
                           size="small"
@@ -877,6 +1015,7 @@ const ModelTrainer = ({
                         borderColor: "divider",
                         borderRadius: 1,
                         bgcolor: "grey.50",
+                        marginBottom: 0,
                       }}
                     >
                       {cls.samples.map((sample) => (
@@ -887,11 +1026,13 @@ const ModelTrainer = ({
                           <img
                             src={sample.url}
                             alt={`Sample for ${cls.name}`}
+                            onClick={(e) => openLightbox(sample.url, e)}
                             style={{
                               width: 60,
                               height: 60,
                               objectFit: "cover",
                               borderRadius: 4,
+                              cursor: "pointer",
                             }}
                           />
                           <IconButton
@@ -926,41 +1067,15 @@ const ModelTrainer = ({
                     >
                       <span>
                         <Button
-                          size="small"
+                          variant="contained"
+                          size="medium"
                           startIcon={<CameraIcon />}
-                          onMouseDown={(e) => {
-                            e.preventDefault();
-                            const intervalId = startCapturing(cls.id);
-                            e.currentTarget.dataset.intervalId = intervalId;
-                          }}
-                          onMouseUp={(e) => {
-                            e.preventDefault();
-                            stopCapturing(
-                              parseInt(e.currentTarget.dataset.intervalId),
-                            );
-                          }}
-                          onMouseLeave={(e) => {
-                            e.preventDefault();
-                            if (e.currentTarget.dataset.intervalId) {
-                              stopCapturing(
-                                parseInt(e.currentTarget.dataset.intervalId),
-                              );
-                            }
-                          }}
-                          onTouchStart={(e) => {
-                            e.preventDefault();
-                            const intervalId = startCapturing(cls.id);
-                            e.currentTarget.dataset.intervalId = intervalId;
-                          }}
-                          onTouchEnd={(e) => {
-                            e.preventDefault();
-                            stopCapturing(
-                              parseInt(e.currentTarget.dataset.intervalId),
-                            );
+                          onClick={() => {
+                            captureImage(cls.id);
                           }}
                           disabled={!isCameraActive || disabled}
                         >
-                          {t.training.holdToCapture}
+                          {t.training.captureImage}
                         </Button>
                       </span>
                     </Tooltip>
@@ -1071,7 +1186,7 @@ const ModelTrainer = ({
                       onOpenHelp && onOpenHelp("image/trainingSettings");
                     }}
                     isBlinking={settingsBlinking}
-                    tooltip={t.training.tooltip.trainingSettings}
+                    tooltip={t.training.tooltip.helpTrainingSettings}
                   />
                 </Box>
                 <Box
@@ -1108,7 +1223,7 @@ const ModelTrainer = ({
                     onChange={(e) => {
                       const value = Math.max(
                         0.000001,
-                        Math.min(0.1, parseFloat(e.target.value) || 0.0001),
+                        Math.min(0.1, parseFloat(e.target.value) || 0.001),
                       );
                       setTrainingSettings((prev) => ({
                         ...prev,
@@ -1219,6 +1334,22 @@ const ModelTrainer = ({
         />
       )}
 
+      <ExpandedClassDialog
+        open={expandedClassId !== null}
+        cls={classes.find((c) => c.id === expandedClassId)}
+        onClose={() => setExpandedClassId(null)}
+        editingClassId={editingClassId}
+        editingClassName={editingClassName}
+        onStartEditing={startEditingClass}
+        onSaveRename={saveClassRename}
+        onCancelEditing={cancelEditingClass}
+        sampleScrollRefs={sampleScrollRefs}
+        openLightbox={openLightbox}
+        removeSample={removeSample}
+        disabled={disabled}
+        t={t}
+      />
+
       <Dialog open={showAddDialog} onClose={() => setShowAddDialog(false)}>
         <DialogTitle>{t.training.addNewClass}</DialogTitle>
         <DialogContent>
@@ -1273,6 +1404,16 @@ const ModelTrainer = ({
           </Tooltip>
         </DialogActions>
       </Dialog>
+
+      <Lightbox
+        open={lightboxOpen}
+        src={lightboxSrc}
+        flatSamples={flatSamples}
+        onClose={closeLightbox}
+        onPrev={showPrev}
+        onNext={showNext}
+        onDelete={removeCurrentLightboxImage}
+      />
     </Box>
   );
 };

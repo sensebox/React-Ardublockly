@@ -12,7 +12,7 @@ export const imageClassificationTranslations_en = {
     loadingCamera: "Loading camera...",
     initializingCamera: "Initializing camera...",
     samples: "samples",
-    holdToCapture: "Hold to Capture",
+    captureImage: "Capture example image",
     addClass: "Add Class",
     trainModel: "Train Model",
     trainingEpoch: "Training: epoch {epoch}/{totalEpochs}",
@@ -22,6 +22,7 @@ export const imageClassificationTranslations_en = {
     analyzing: "Analyzing...",
     dataChangedWarning:
       "Training data has changed. Retrain the model to update predictions.",
+    preliminaryModelWarning: "Preliminary Model. Training is still ongoing...",
     addNewClass: "Add New Class",
     className: "Class Name",
     cancel: "Cancel",
