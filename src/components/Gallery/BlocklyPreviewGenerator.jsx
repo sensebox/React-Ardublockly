@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
+import DOMPurify from "dompurify";
 import * as Blockly from "blockly/core";
 import "@/components/Blockly/blocks/index";
 import "@/components/Blockly/generator/basic/index";
@@ -266,7 +267,7 @@ const BlocklyPreviewGenerator = ({
         maxHeight: `${maxHeight}px`,
         overflow: "hidden",
       }}
-      dangerouslySetInnerHTML={{ __html: svg }}
+      dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(svg) }}
     />
   );
 };
