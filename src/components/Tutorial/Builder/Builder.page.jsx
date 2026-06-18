@@ -10,13 +10,13 @@ import { useTutorialAutosave } from "./hooks/useTutorialAutosave";
 import { useExistingTutorial } from "./hooks/useExistingTutorial";
 import { buildTutorialPayload } from "./utils/tutorialPayload";
 import { validateRequiredFields } from "./utils/validation";
-import { saveTutorial as saveTutorialRequest } from "./services/tutorial.service";
+import { saveTutorial as saveTutorialRequest } from "../services/tutorial.service";
 import BuilderSidebar from "./components/BuilderSidebar";
 import BuilderMain from "./components/BuilderMain";
 import SaveStatusDialog from "./components/SaveStatusDialog";
 
 const BuilderPage = () => {
-  const history = useNavigate();
+  const navigate = useNavigate();
   const location = useLocation();
 
   const token = useSelector((state) => state.auth.token);
