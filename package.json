@@ -29,7 +29,7 @@
     "@mui/styles": "^5.10.16",
     "@tensorflow/tfjs": "^4.22.0",
     "@testing-library/jest-dom": "^5.16.1",
-    "@testing-library/react": "^14.0.0",
+    "@testing-library/react": "^15.0.5",
     "@testing-library/user-event": "^14.6.1",
     "@uiw/react-markdown-preview": "^5.2.1",
     "@uiw/react-md-editor": "^4.1.1",
