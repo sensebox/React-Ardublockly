@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import UsbIcon from "@mui/icons-material/Usb";
+import * as Blockly from "blockly/core";
 import { useFlash } from "../FlashContext";
 import {
   AnimatedCheck,
@@ -34,13 +35,18 @@ function DeviceSelectionStep({ goNext }) {
     return (
       <div className="cau-step">
         <AnimatedCross />
-        <h3 className="cau-step__title">Browser nicht unterstützt</h3>
+        <h3 className="cau-step__title">
+          {Blockly.Msg.compile_upload?.deviceBrowserNotSupported}
+        </h3>
         <p className="cau-error-text">
-          Die Web Serial API wird in diesem Browser nicht unterstützt. Bitte
-          verwende Google Chrome oder Microsoft Edge.
+          {Blockly.Msg.compile_upload?.deviceBrowserNotSupportedText}
         </p>
         {error && (
-          <DetailAccordion title="Fehlerdetails" content={error} isError />
+          <DetailAccordion
+            title={Blockly.Msg.compile_upload?.deviceErrorDetails}
+            content={error}
+            isError
+          />
         )}
       </div>
     );
@@ -51,7 +57,9 @@ function DeviceSelectionStep({ goNext }) {
       {port ? (
         <>
           <AnimatedCheck color="#3ab0e8" />
-          <h3 className="cau-step__title">Gerät verbunden</h3>
+          <h3 className="cau-step__title">
+            {Blockly.Msg.compile_upload?.deviceConnectedTitle}
+          </h3>
           <p className="cau-step__text">{deviceLabel}</p>
           <button
             type="button"
@@ -59,16 +67,17 @@ function DeviceSelectionStep({ goNext }) {
             onClick={resetDevice}
             style={{ marginTop: "20px" }}
           >
-            Gerät wechseln
+            {Blockly.Msg.compile_upload?.deviceChangeButton}
           </button>
         </>
       ) : (
         <>
           <UsbIcon style={{ fontSize: 64, color: "#3ab0e8" }} />
-          <h3 className="cau-step__title">Gerät auswählen</h3>
+          <h3 className="cau-step__title">
+            {Blockly.Msg.compile_upload?.deviceSelectTitle}
+          </h3>
           <p className="cau-step__text">
-            Verbinde die senseBox MCU-S2 (ESP32-S2) per USB und wähle sie im
-            folgenden Dialog aus.
+            {Blockly.Msg.compile_upload?.deviceSelectText}
           </p>
           {deviceLabel ? (
             <>
@@ -79,7 +88,7 @@ function DeviceSelectionStep({ goNext }) {
                   marginBottom: "15px",
                 }}
               >
-                Gespeichert: {deviceLabel}
+                {Blockly.Msg.compile_upload?.deviceSaved} {deviceLabel}
               </p>
               <button
                 type="button"
@@ -87,7 +96,7 @@ function DeviceSelectionStep({ goNext }) {
                 onClick={reconnectSavedDevice}
               >
                 <UsbIcon style={{ fontSize: 20 }} />
-                Verbinden
+                {Blockly.Msg.compile_upload?.deviceConnectButton}
               </button>
               <button
                 type="button"
@@ -95,7 +104,7 @@ function DeviceSelectionStep({ goNext }) {
                 onClick={selectDevice}
                 style={{ marginLeft: "10px" }}
               >
-                Neues Gerät wählen
+                {Blockly.Msg.compile_upload?.deviceSelectNewButton}
               </button>
             </>
           ) : (
@@ -105,11 +114,15 @@ function DeviceSelectionStep({ goNext }) {
               onClick={selectDevice}
             >
               <UsbIcon style={{ fontSize: 20 }} />
-              Gerät auswählen
+              {Blockly.Msg.compile_upload?.deviceSelectButton}
             </button>
           )}
           {error && (
-            <DetailAccordion title="🔍 Fehlerdetails" content={error} isError />
+            <DetailAccordion
+              title={Blockly.Msg.compile_upload?.deviceErrorDetails}
+              content={error}
+              isError
+            />
           )}
         </>
       )}

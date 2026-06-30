@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import MemoryIcon from "@mui/icons-material/Memory";
+import * as Blockly from "blockly/core";
 import { useFlash } from "../FlashContext";
 import {
   Spinner,
@@ -32,38 +33,39 @@ function CompileStep({ goNext }) {
     <div className="cau-step">
       {isCompiling && (
         <>
-          <Spinner icon={<MemoryIcon style={{ fontSize: 32 }} />} />
-          <h3 className="cau-step__title">Programm wird kompiliert</h3>
-          <p className="cau-step__text">
-            Dein Sketch wird an den Compiler geschickt – das dauert nur einen
-            Augenblick.
-          </p>
+          <Spinner icon={<MemoryIcon style{t.COMPILE_TITLE}</h3>
+          <p className="cau-step__text">{t.COMPILE_TEXT}</p>
         </>
       )}
 
       {isCompiled && (
         <>
           <AnimatedCheck />
-          <h3 className="cau-step__title">Kompiliert!</h3>
-          <p className="cau-step__text">Die Binärdatei ist bereit.</p>
+          <h3 className="cau-step__title">{t.COMPILE_SUCCESS_TITLE}</h3>
+          <p className="cau-step__text">{t.COMPILE_SUCCESS_TEXT}</p>
         </>
       )}
 
       {isError && (
         <>
           <AnimatedCross />
-          <h3 className="cau-step__title">Kompilieren fehlgeschlagen</h3>
+          <h3 className="cau-step__title">{t.COMPILE_ERROR_TITLE}</h3>
           <p className="cau-error-text">
-            {compileError || "Die Kompilierung ist fehlgeschlagen."}
+            {compileError || t.COMPILE_ERROR_TEXT}
           </p>
           <button
             type="button"
             className="cau-button"
             onClick={() => compile().catch(() => {})}
           >
-            Erneut versuchen
+            {t.COMPILE_RETRY_BUTTON}
           </button>
           {log && (
+            <DetailAccordion
+              title={t.COMPILE_ERROR_DETAILS}
+              content={log}
+              isError
+           
             <DetailAccordion title="Fehlerdetails" content={log} isError />
           )}
         </>

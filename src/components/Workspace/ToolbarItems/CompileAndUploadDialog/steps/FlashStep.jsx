@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import UploadIcon from "@mui/icons-material/Upload";
+import * as Blockly from "blockly/core";
 import { useFlash } from "../FlashContext";
 import {
   Spinner,
@@ -60,37 +61,45 @@ function FlashStep({ goNext, goBack }) {
 
   return (
     <div className="cau-step">
-      {isDone ? (
+      {isDone && (
         <>
           <AnimatedCheck />
-          <h3 className="cau-step__title">Hochgeladen!</h3>
+          <h3 className="cau-step__title">
+            {Blockly.Msg.compile_upload?.flashDoneTitle}
+          </h3>
         </>
-      ) : isError ? (
+      )}
+      {isError && (
         <>
           <AnimatedCross />
-          <h3 className="cau-step__title">Upload fehlgeschlagen</h3>
+          <h3 className="cau-step__title">
+            {Blockly.Msg.compile_upload?.flashErrorTitle}
+          </h3>
           <p className="cau-error-text">
-            {error || "Beim Upload ist ein Fehler aufgetreten."}
+            {error || Blockly.Msg.compile_upload?.flashErrorText}
           </p>
           <button type="button" className="cau-button" onClick={retry}>
-            Erneut versuchen
+            {Blockly.Msg.compile_upload?.flashRetryButton}
           </button>
           {log && (
             <DetailAccordion
-              title="Upload Protokoll"
+              title={Blockly.Msg.compile_upload?.flashLogDetails}
               content={log}
               isError={true}
             />
           )}
         </>
-      ) : (
+      )}
+      {!isDone && !isError && (
         <>
           <Spinner icon={<UploadIcon style={{ fontSize: 32 }} />} />
           <h3 className="cau-step__title">
-            {isFlashing ? "Wird hochgeladen" : "Upload wird vorbereitet"}
+            {isFlashing
+              ? Blockly.Msg.compile_upload?.flashTitleUploading
+              : Blockly.Msg.compile_upload?.flashTitlePreparing}
           </h3>
           <p className="cau-step__text">
-            Bitte trenne die senseBox jetzt nicht vom Computer.
+            {Blockly.Msg.compile_upload?.flashText}
           </p>
           {isFlashing && <CuteProgress value={progress} />}
         </>

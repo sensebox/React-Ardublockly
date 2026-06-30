@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import UsbIcon from "@mui/icons-material/Usb";
+import * as Blockly from "blockly/core";
 import { useFlash } from "../FlashContext";
 import { useSelector } from "react-redux";
 import {
@@ -111,11 +112,11 @@ function StreamlinedUploadStep({ goNext }) {
     return (
       <div className="cau-step">
         <UsbIcon style={{ fontSize: 64, color: "#3ab0e8" }} />
-        <h3 className="cau-step__title">Bootloader-Port auswählen</h3>
+        <h3 className="cau-step__title">
+          {Blockly.Msg.compile_upload?.uploadSelectBootloaderTitle}
+        </h3>
         <p className="cau-step__text">
-          Das Board ist jetzt im Download-Modus und meldet sich als neues
-          USB-Gerät. Bitte wähle es einmalig aus, damit der Browser die
-          Berechtigung erhält. Danach läuft der Upload automatisch.
+          {Blockly.Msg.compile_upload?.uploadSelectBootloaderText}
         </p>
         <button
           type="button"
@@ -125,11 +126,15 @@ function StreamlinedUploadStep({ goNext }) {
           style={{ marginTop: "20px" }}
         >
           {isGrantingPort
-            ? "Warte auf Auswahl..."
-            : "🔌 Bootloader-Port auswählen"}
+            ? Blockly.Msg.compile_upload?.uploadWaitingSelection
+            : Blockly.Msg.compile_upload?.uploadSelectBootloaderButton}
         </button>
         {error && (
-          <DetailAccordion title="🔍 Fehlerdetails" content={error} isError />
+          <DetailAccordion
+            title={Blockly.Msg.compile_upload?.deviceErrorDetails}
+            content={error}
+            isError
+          />
         )}
       </div>
     );
@@ -141,21 +146,29 @@ function StreamlinedUploadStep({ goNext }) {
       <div className="cau-step">
         <Spinner icon={<UsbIcon style={{ fontSize: 32 }} />} />
         <h3 className="cau-step__title">
-          {compileStatus === "compiling" ? "Kompiliere..." : "Lade hoch..."}
+          {compileStatus === "compiling"
+            ? Blockly.Msg.compile_upload?.uploadCompiling
+            : Blockly.Msg.compile_upload?.uploadUploading}
         </h3>
         {compileStatus === "compiling" && (
           <p className="cau-step__text">
-            Sketch wird zu Binärdatei kompiliert...
+            {Blockly.Msg.compile_upload?.uploadCompileText}
           </p>
         )}
         {status === "flashing" && (
           <>
-            <p className="cau-step__text">Lade auf Mikrocontroller hoch...</p>
+            <p className="cau-step__text">
+              {Blockly.Msg.compile_upload?.uploadFlashText}
+            </p>
             {progress > 0 && <CuteProgress value={progress} />}
           </>
         )}
         {log && (
-          <DetailAccordion title="📋 Log" content={log} isError={false} />
+          <DetailAccordion
+            title={Blockly.Msg.compile_upload?.uploadLog}
+            content={log}
+            isError={false}
+          />
         )}
       </div>
     );
@@ -184,25 +197,37 @@ function StreamlinedUploadStep({ goNext }) {
     return (
       <div className="cau-step">
         <AnimatedCross color="#e53935" />
-        <h3 className="cau-step__title">Upload fehlgeschlagen</h3>
+        <h3 className="cau-step__title">
+          {Blockly.Msg.compile_upload?.uploadErrorTitle}
+        </h3>
         {compileError && (
           <DetailAccordion
-            title="🔍 Kompilierungsfehler"
+            title={Blockly.Msg.compile_upload?.uploadCompileErrorDetails}
             content={compileError}
             isError
           />
         )}
         {error && (
-          <DetailAccordion title="🔍 Upload-Fehler" content={error} isError />
+          <DetailAccordion
+            title={Blockly.Msg.compile_upload?.uploadErrorDetails}
+            content={error}
+            isError
+          />
         )}
-        {log && <DetailAccordion title="📋 Upload-Log" content={log} isError />}
+        {log && (
+          <DetailAccordion
+            title={Blockly.Msg.compile_upload?.uploadErrorLog}
+            content={log}
+            isError
+          />
+        )}
         <div style={{ marginTop: "20px" }}>
           <button
             type="button"
             className="cau-button cau-button--secondary"
             onClick={handleManualUpload}
           >
-            Erneut versuchen
+            {Blockly.Msg.compile_upload?.compileRetryButton}
           </button>
           {port && (
             <button
@@ -211,7 +236,7 @@ function StreamlinedUploadStep({ goNext }) {
               onClick={handleSelectDevice}
               style={{ marginLeft: "10px" }}
             >
-              Anderes Gerät
+              {Blockly.Msg.compile_upload?.uploadSelectOtherDevice}
             </button>
           )}
         </div>
@@ -224,15 +249,23 @@ function StreamlinedUploadStep({ goNext }) {
     return (
       <div className="cau-step">
         <AnimatedCross color="#e53935" />
-        <h3 className="cau-step__title">Kompilierung fehlgeschlagen</h3>
+        <h3 className="cau-step__title">
+          {Blockly.Msg.compile_upload?.uploadCompileErrorTitle}
+        </h3>
         {compileError && (
           <DetailAccordion
-            title="🔍 Kompilierungsfehler"
+            title={Blockly.Msg.compile_upload?.uploadCompileErrorDetails}
             content={compileError}
             isError
           />
         )}
-        {log && <DetailAccordion title="📋 Log" content={log} isError />}
+        {log && (
+          <DetailAccordion
+            title={Blockly.Msg.compile_upload?.uploadLog}
+            content={log}
+            isError
+          />
+        )}
       </div>
     );
   }
@@ -242,9 +275,11 @@ function StreamlinedUploadStep({ goNext }) {
     return (
       <div className="cau-step">
         <UsbIcon style={{ fontSize: 64, color: "#3ab0e8" }} />
-        <h3 className="cau-step__title">Schritt 1: Gerät auswählen</h3>
+        <h3 className="cau-step__title">
+          {Blockly.Msg.compile_upload?.uploadStep1Title}
+        </h3>
         <p className="cau-step__text">
-          Verbinde die senseBox MCU-S2 (ESP32-S2) per USB und wähle sie aus.
+          {Blockly.Msg.compile_upload?.uploadStep1Text}
         </p>
         <button
           type="button"
@@ -254,16 +289,20 @@ function StreamlinedUploadStep({ goNext }) {
           style={{ marginTop: "20px" }}
         >
           {isSelectingDevice
-            ? "Auswahl wird hergestellt..."
-            : "🔌 Gerät auswählen"}
+            ? Blockly.Msg.compile_upload?.uploadDeviceSelectionDisabled
+            : "🔌 " + Blockly.Msg.compile_upload?.deviceSelectButton}
         </button>
         {compileStatus === "compiling" && (
           <p style={{ fontSize: "14px", color: "#666", marginTop: "15px" }}>
-            (Kompilierung läuft parallel)
+            {Blockly.Msg.compile_upload?.uploadCompileRunning}
           </p>
         )}
         {error && (
-          <DetailAccordion title="🔍 Fehlerdetails" content={error} isError />
+          <DetailAccordion
+            title={Blockly.Msg.compile_upload?.deviceErrorDetails}
+            content={error}
+            isError
+          />
         )}
       </div>
     );
@@ -274,11 +313,12 @@ function StreamlinedUploadStep({ goNext }) {
     return (
       <div className="cau-step">
         <UsbIcon style={{ fontSize: 64, color: "#3ab0e8" }} />
-        <h3 className="cau-step__title">Schritt 2: Bootloader vorbereiten</h3>
+        <h3 className="cau-step__title">
+          {Blockly.Msg.compile_upload?.uploadStep2Title}
+        </h3>
         <p className="cau-step__text">{deviceLabel}</p>
         <p style={{ fontSize: "14px", color: "#666", marginTop: "10px" }}>
-          Der Bootloader wird vorbereitet, um alle Berechtigungen zu erhalten.
-          Dies ist nur beim ersten Mal nötig.
+          {Blockly.Msg.compile_upload?.uploadStep2Text}
         </p>
         <button
           type="button"
@@ -288,8 +328,8 @@ function StreamlinedUploadStep({ goNext }) {
           style={{ marginTop: "20px" }}
         >
           {isPreparingBootloader
-            ? "Bootloader wird vorbereitet..."
-            : "⚙️ Bootloader vorbereiten"}
+            ? Blockly.Msg.compile_upload?.uploadBootloaderPreparingButton
+            : Blockly.Msg.compile_upload?.uploadBootloaderPrepareButton}
         </button>
         <button
           type="button"
@@ -297,15 +337,19 @@ function StreamlinedUploadStep({ goNext }) {
           onClick={handleSelectDevice}
           style={{ marginLeft: "10px", marginTop: "20px" }}
         >
-          Anderes Gerät
+          {Blockly.Msg.compile_upload?.uploadSelectOtherDevice}
         </button>
         {compileStatus === "compiling" && (
           <p style={{ fontSize: "14px", color: "#666", marginTop: "15px" }}>
-            (Kompilierung läuft parallel)
+            {Blockly.Msg.compile_upload?.uploadCompileRunning}
           </p>
         )}
         {error && (
-          <DetailAccordion title="🔍 Fehlerdetails" content={error} isError />
+          <DetailAccordion
+            title={Blockly.Msg.compile_upload?.deviceErrorDetails}
+            content={error}
+            isError
+          />
         )}
       </div>
     );

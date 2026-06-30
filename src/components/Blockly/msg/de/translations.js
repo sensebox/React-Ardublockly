@@ -337,4 +337,91 @@ export const TRANSLATIONS = {
     copy: "Kopieren",
     copied: "Kopiert!",
   },
+
+  // Compile and Upload Dialog
+  compile_upload: {
+    bootloaderPrepareTitle: "Board vorbereiten",
+    bootloaderPrepareText:
+      "Das Board wird in den Bootloader-Modus versetzt. Dies ist nötig für den Upload.",
+    bootloaderPrepareButton: "Vorbereiten",
+    bootloaderPreparing: "Board wird vorbereitet...",
+    bootloaderPreparingText:
+      "Versetze Board in den Download-Modus und genehmige Bootloader-Port...",
+    bootloaderPreparedTitle: "Bootloader-Port vorbereitet",
+    bootloaderPreparedText:
+      "Das Board wurde erfolgreich für den Upload-Modus vorbereitet.",
+
+    compileTitle: "Programm wird kompiliert",
+    compileText:
+      "Dein Sketch wird an den Compiler geschickt – das dauert nur einen Augenblick.",
+    compileSuccessTitle: "Kompiliert!",
+    compileSuccessText: "Die Binärdatei ist bereit.",
+    compileErrorTitle: "Kompilieren fehlgeschlagen",
+    compileErrorText: "Die Kompilierung ist fehlgeschlagen.",
+    compileRetryButton: "Erneut versuchen",
+    compileErrorDetails: "Fehlerdetails",
+
+    deviceSelectTitle: "Gerät auswählen",
+    deviceSelectText:
+      "Verbinde die senseBox MCU-S2 (ESP32-S2) per USB und wähle sie im folgenden Dialog aus.",
+    deviceSelectButton: "Gerät auswählen",
+    deviceChangeButton: "Gerät wechseln",
+    deviceSelectNewButton: "Neues Gerät wählen",
+    deviceConnectButton: "Verbinden",
+    deviceConnectedTitle: "Gerät verbunden",
+    deviceSaved: "Gespeichert:",
+    deviceBrowserNotSupported: "Browser nicht unterstützt",
+    deviceBrowserNotSupportedText:
+      "Die Web Serial API wird in diesem Browser nicht unterstützt. Bitte verwende Google Chrome oder Microsoft Edge.",
+    deviceErrorDetails: "🔍 Fehlerdetails",
+
+    flashTitleUploading: "Wird hochgeladen",
+    flashTitlePreparing: "Upload wird vorbereitet",
+    flashText: "Bitte trenne die senseBox jetzt nicht vom Computer.",
+    flashDoneTitle: "Hochgeladen!",
+    flashErrorTitle: "Upload fehlgeschlagen",
+    flashErrorText: "Beim Upload ist ein Fehler aufgetreten.",
+    flashRetryButton: "Erneut versuchen",
+    flashLogDetails: "Upload Protokoll",
+
+    uploadStep1Title: "Schritt 1: Gerät auswählen",
+    uploadStep1Text:
+      "Verbinde die senseBox MCU-S2 (ESP32-S2) per USB und wähle sie aus.",
+    uploadStep2Title: "Schritt 2: Bootloader vorbereiten",
+    uploadStep2Text:
+      "Der Bootloader wird vorbereitet, um alle Berechtigungen zu erhalten. Dies ist nur beim ersten Mal nötig.",
+    uploadBootloaderPrepareButton: "⚙️ Bootloader vorbereiten",
+    uploadBootloaderPreparingButton: "Bootloader wird vorbereitet...",
+    uploadSelectBootloaderTitle: "Bootloader-Port auswählen",
+    uploadSelectBootloaderText:
+      "Das Board ist jetzt im Download-Modus und meldet sich als neues USB-Gerät. Bitte wähle es einmalig aus, damit der Browser die Berechtigung erhält. Danach läuft der Upload automatisch.",
+    uploadSelectBootloaderButton: "🔌 Bootloader-Port auswählen",
+    uploadWaitingSelection: "Warte auf Auswahl...",
+    uploadCompileRunning: "(Kompilierung läuft parallel)",
+    uploadSelectOtherDevice: "Anderes Gerät",
+    uploadUploading: "Lade hoch...",
+    uploadCompiling: "Kompiliere...",
+    uploadCompileText: "Sketch wird zu Binärdatei kompiliert...",
+    uploadCompilingPrepareText: "Kompilation wird vorbereitet...",
+    uploadFlashText: "Lade auf Mikrocontroller hoch...",
+    uploadLog: "📋 Log",
+    uploadCompileErrorTitle: "Kompilierung fehlgeschlagen",
+    uploadCompileErrorDetails: "🔍 Kompilierungsfehler",
+    uploadErrorTitle: "Upload fehlgeschlagen",
+    uploadErrorDetails: "🔍 Upload-Fehler",
+    uploadErrorLog: "📋 Upload-Log",
+    uploadPreparing: "Bereite Upload vor...",
+    uploadPreparingText: "Upload wird gestartet...",
+    uploadDeviceInfo: "Gerät:",
+    uploadNextTimeInfo: "Beim nächsten Mal startet der Upload automatisch.",
+    uploadDeviceSelectionDisabled: "Auswahl wird hergestellt...",
+
+    summarySuccessTitle: "Erfolgreich hochgeladen!",
+    summarySuccessText:
+      "Dein Programm wurde erfolgreich auf die senseBox übertragen. Die senseBox startet jetzt automatisch neu und führt deinen Sketch aus. 🎉",
+    summaryCloseButton: "Fertig",
+    summaryErrorTitle: "Etwas ist schiefgelaufen",
+    summaryErrorText: "Beim Upload ist ein Fehler aufgetreten.",
+    summaryLogDetails: "Upload Protokoll",
+  },
 };

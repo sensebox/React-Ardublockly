@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import UsbIcon from "@mui/icons-material/Usb";
+import * as Blockly from "blockly/core";
 import { useFlash } from "../FlashContext";
 import { AnimatedCheck, Spinner, DetailAccordion } from "../StatusIndicators";
 
@@ -30,10 +31,8 @@ function BootloaderPreparationStep({ goNext }) {
     return (
       <div className="cau-step">
         <AnimatedCheck color="#3ab0e8" />
-        <h3 className="cau-step__title">Bootloader-Port vorbereitet</h3>
-        <p className="cau-step__text">
-          Das Board wurde erfolgreich für den Upload-Modus vorbereitet.
-        </p>
+        <h3 className="cau-step__title">{Blockly.Msg.compile_upload?.bootloaderPreparedTitle}</h3>
+        <p className="cau-step__text">{Blockly.Msg.compile_upload?.bootloaderPreparedText}</p>
       </div>
     );
   }
@@ -43,34 +42,40 @@ function BootloaderPreparationStep({ goNext }) {
       {isPreparing ? (
         <>
           <Spinner icon={<UsbIcon style={{ fontSize: 32 }} />} />
-          <h3 className="cau-step__title">Board wird vorbereitet...</h3>
-          <p className="cau-step__text">
-            Versetze Board in den Download-Modus und genehmige
-            Bootloader-Port...
-          </p>
+          <h3 className="cau-step__title">{Blockly.Msg.compile_upload?.bootloaderPreparing}</h3>
+          <p className="cau-step__text">{Blockly.Msg.compile_upload?.bootloaderPreparingText}</p>
         </>
       ) : (
         <>
           <UsbIcon style={{ fontSize: 64, color: "#3ab0e8" }} />
-          <h3 className="cau-step__title">Board vorbereiten</h3>
-          <p className="cau-step__text">
-            Das Board wird in den Bootloader-Modus versetzt. Dies ist nötig für
-            den Upload.
-          </p>
+          <h3 className="cau-step__title">{Blockly.Msg.compile_upload?.bootloaderPrepareTitle}</h3>
+          <p className="cau-step__text">{Blockly.Msg.compile_upload?.bootloaderPrepareText}</p>
           <button
             type="button"
             className="cau-button cau-button--secondary"
             onClick={handlePrepare}
             disabled={!port}
           >
-            Vorbereiten
+            {Blockly.Msg.compile_upload?.bootloaderPrepareButton}
           </button>
           {error && (
-            <DetailAccordion title="🔍 Fehlerdetails" content={error} isError />
+            <DetailAccordion
+              title={Blockly.Msg.compile_upload?.deviceErrorDetails}
+              content={error}
+              isError
+            />
           )}
         </>
       )}
     </div>
+  );
+}
+
+BootloaderPreparationStep.propTypes = {
+  goNext: PropTypes.func.isRequired,
+};
+
+export default BootloaderPreparationStep;
   );
 }
 

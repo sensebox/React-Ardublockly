@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import * as Blockly from "blockly/core";
 import { useFlash } from "../FlashContext";
 import {
   AnimatedCheck,
@@ -18,12 +19,14 @@ function SummaryStep({ onClose }) {
     return (
       <div className="cau-step">
         <AnimatedCross />
-        <h3 className="cau-step__title">Etwas ist schiefgelaufen</h3>
+        <h3 className="cau-step__title">
+          {Blockly.Msg.compile_upload?.summaryErrorTitle}
+        </h3>
         <p className="cau-error-text">
-          {error || "Beim Upload ist ein Fehler aufgetreten."}
+          {error || Blockly.Msg.compile_upload?.summaryErrorText}
         </p>
         <button type="button" className="cau-button" onClick={onClose}>
-          Schließen
+          {Blockly.Msg.compile_upload?.summaryCloseButton}
         </button>
       </div>
     );
@@ -32,15 +35,21 @@ function SummaryStep({ onClose }) {
   return (
     <div className="cau-step">
       <AnimatedCheck size={96} />
-      <h3 className="cau-step__title">Erfolgreich hochgeladen!</h3>
+      <h3 className="cau-step__title">
+        {Blockly.Msg.compile_upload?.summarySuccessTitle}
+      </h3>
       <p className="cau-step__text">
-        Dein Programm wurde erfolgreich auf die senseBox übertragen. Die
-        senseBox startet jetzt automatisch neu und führt deinen Sketch aus. 🎉
+        {Blockly.Msg.compile_upload?.summarySuccessText}
       </p>
       <button type="button" className="cau-button" onClick={onClose}>
-        Fertig
+        {Blockly.Msg.compile_upload?.summaryCloseButton}
       </button>
-      {log && <DetailAccordion title="Upload Protokoll" content={log} />}
+      {log && (
+        <DetailAccordion
+          title={Blockly.Msg.compile_upload?.summaryLogDetails}
+          content={log}
+        />
+      )}
     </div>
   );
 }
