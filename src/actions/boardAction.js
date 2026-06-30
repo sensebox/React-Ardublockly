@@ -1,4 +1,10 @@
-import { BOARD, SET_DEVICE_PORT, CLEAR_DEVICE_PORT, SET_BOOTLOADER_PORT, CLEAR_BOOTLOADER_PORT } from "./types";
+import {
+  BOARD,
+  SET_DEVICE_PORT,
+  CLEAR_DEVICE_PORT,
+  SET_BOOTLOADER_PORT,
+  CLEAR_BOOTLOADER_PORT,
+} from "./types";
 import mini_opacity from "../data/mini_opacity.png";
 import mcu_opacity from "../data/mcu_opacity.png";
 import eye_opacity from "../data/eye_opacity.png";

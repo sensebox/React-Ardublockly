@@ -16,8 +16,16 @@ import {
  * turns into a checkmark when finished, and then advances to the summary.
  */
 function FlashStep({ goNext, goBack }) {
-  const { port, status, progress, error, log, startFlash, compileStatus, resetDevice } =
-    useFlash();
+  const {
+    port,
+    status,
+    progress,
+    error,
+    log,
+    startFlash,
+    compileStatus,
+    resetDevice,
+  } = useFlash();
 
   const isFlashing = status === "flashing";
   const isDone = status === "done";
@@ -67,7 +75,13 @@ function FlashStep({ goNext, goBack }) {
           <button type="button" className="cau-button" onClick={retry}>
             Erneut versuchen
           </button>
-          {log && <DetailAccordion title="Upload Protokoll" content={log} isError={true} />}
+          {log && (
+            <DetailAccordion
+              title="Upload Protokoll"
+              content={log}
+              isError={true}
+            />
+          )}
         </>
       ) : (
         <>

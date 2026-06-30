@@ -2,11 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import UsbIcon from "@mui/icons-material/Usb";
 import { useFlash } from "../FlashContext";
-import {
-  AnimatedCheck,
-  Spinner,
-  DetailAccordion,
-} from "../StatusIndicators";
+import { AnimatedCheck, Spinner, DetailAccordion } from "../StatusIndicators";
 
 /**
  * Step: Prepare the device for bootloader mode by performing the 1200bps touch
@@ -49,7 +45,8 @@ function BootloaderPreparationStep({ goNext }) {
           <Spinner icon={<UsbIcon style={{ fontSize: 32 }} />} />
           <h3 className="cau-step__title">Board wird vorbereitet...</h3>
           <p className="cau-step__text">
-            Versetze Board in den Download-Modus und genehmige Bootloader-Port...
+            Versetze Board in den Download-Modus und genehmige
+            Bootloader-Port...
           </p>
         </>
       ) : (

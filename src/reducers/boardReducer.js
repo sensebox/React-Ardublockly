@@ -1,4 +1,10 @@
-import { BOARD, SET_DEVICE_PORT, CLEAR_DEVICE_PORT, SET_BOOTLOADER_PORT, CLEAR_BOOTLOADER_PORT } from "../actions/types";
+import {
+  BOARD,
+  SET_DEVICE_PORT,
+  CLEAR_DEVICE_PORT,
+  SET_BOOTLOADER_PORT,
+  CLEAR_BOOTLOADER_PORT,
+} from "../actions/types";
 import mini_opacity from "../data/mini_opacity.png";
 import mcu_opacity from "../data/mcu_opacity.png";
 import esp_opacity from "../data/esp_opacity.png";
@@ -36,7 +42,8 @@ const initialState = {
   board: initialValue(),
   devicePort: window.sessionStorage.getItem("devicePort") || null,
   deviceLabel: window.sessionStorage.getItem("deviceLabel") || "",
-  bootloaderPortPrepared: window.sessionStorage.getItem("bootloaderPortPrepared") === "true" || false,
+  bootloaderPortPrepared:
+    window.sessionStorage.getItem("bootloaderPortPrepared") === "true" || false,
 };
 
 export default function foo(state = initialState, action) {

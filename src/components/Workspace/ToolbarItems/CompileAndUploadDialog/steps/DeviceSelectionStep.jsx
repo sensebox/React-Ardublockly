@@ -72,7 +72,13 @@ function DeviceSelectionStep({ goNext }) {
           </p>
           {deviceLabel ? (
             <>
-              <p style={{ fontSize: "14px", color: "#666", marginBottom: "15px" }}>
+              <p
+                style={{
+                  fontSize: "14px",
+                  color: "#666",
+                  marginBottom: "15px",
+                }}
+              >
                 Gespeichert: {deviceLabel}
               </p>
               <button
