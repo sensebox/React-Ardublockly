@@ -1,7 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useFlash } from "../FlashContext";
-import { AnimatedCheck, AnimatedCross, DetailAccordion } from "../StatusIndicators";
+import {
+  AnimatedCheck,
+  AnimatedCross,
+  DetailAccordion,
+} from "../StatusIndicators";
 
 /**
  * Step: Friendly closing screen confirming the upload and telling the user that
@@ -30,8 +34,8 @@ function SummaryStep({ onClose }) {
       <AnimatedCheck size={96} />
       <h3 className="cau-step__title">Erfolgreich hochgeladen!</h3>
       <p className="cau-step__text">
-        Dein Programm wurde erfolgreich auf die senseBox übertragen. Die senseBox
-        startet jetzt automatisch neu und führt deinen Sketch aus. 🎉
+        Dein Programm wurde erfolgreich auf die senseBox übertragen. Die
+        senseBox startet jetzt automatisch neu und führt deinen Sketch aus. 🎉
       </p>
       <button type="button" className="cau-button" onClick={onClose}>
         Fertig

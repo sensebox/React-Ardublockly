@@ -2,7 +2,11 @@ import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import UsbIcon from "@mui/icons-material/Usb";
 import { useFlash } from "../FlashContext";
-import { AnimatedCheck, AnimatedCross, DetailAccordion } from "../StatusIndicators";
+import {
+  AnimatedCheck,
+  AnimatedCross,
+  DetailAccordion,
+} from "../StatusIndicators";
 
 /**
  * Step: Let the user select the senseBox MCU-S2 (ESP32-S2) via the Web Serial
@@ -28,11 +32,7 @@ function DeviceSelectionStep({ goNext }) {
           verwende Google Chrome oder Microsoft Edge.
         </p>
         {error && (
-          <DetailAccordion
-            title="Fehlerdetails"
-            content={error}
-            isError
-          />
+          <DetailAccordion title="Fehlerdetails" content={error} isError />
         )}
       </div>
     );
@@ -63,11 +63,7 @@ function DeviceSelectionStep({ goNext }) {
             Gerät auswählen
           </button>
           {error && (
-            <DetailAccordion
-              title="🔍 Fehlerdetails"
-              content={error}
-              isError
-            />
+            <DetailAccordion title="🔍 Fehlerdetails" content={error} isError />
           )}
         </>
       )}

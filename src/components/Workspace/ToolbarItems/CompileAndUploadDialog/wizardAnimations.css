@@ -269,7 +269,9 @@
   font-weight: 500;
   font-size: 0.8rem;
   color: rgba(0, 0, 0, 0.6);
-  transition: background 0.15s ease, color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
   width: 100%;
   text-decoration: underline;
   text-decoration-thickness: 1px;
