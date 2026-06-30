@@ -1,16 +1,12 @@
-import DeviceSelectionStep from "./DeviceSelectionStep";
-import CompileStep from "./CompileStep";
-import FlashStep from "./FlashStep";
+import StreamlinedUploadStep from "./StreamlinedUploadStep";
 import SummaryStep from "./SummaryStep";
 
 /**
- * Ordered list of steps for the "Compile and Upload" wizard.
- * Add, remove or reorder steps here to change the flow.
+ * Streamlined single-step wizard for compile and upload.
+ * User selects device and clicks upload once - everything happens automatically.
  */
 const compileAndUploadSteps = [
-  { label: "Kompilieren", Component: CompileStep },
-  { label: "Gerät", Component: DeviceSelectionStep },
-  { label: "Hochladen", Component: FlashStep },
+  { label: "Upload", Component: StreamlinedUploadStep },
   { label: "Fertig", Component: SummaryStep },
 ];
 

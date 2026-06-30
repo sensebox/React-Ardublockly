@@ -15,8 +15,8 @@ import {
  * automatically as soon as a device is available, shows a live progress bar that
  * turns into a checkmark when finished, and then advances to the summary.
  */
-function FlashStep({ goNext }) {
-  const { port, status, progress, error, log, startFlash, compileStatus } =
+function FlashStep({ goNext, goBack }) {
+  const { port, status, progress, error, log, startFlash, compileStatus, resetDevice } =
     useFlash();
 
   const isFlashing = status === "flashing";
@@ -46,8 +46,8 @@ function FlashStep({ goNext }) {
   }, [isDone, goNext]);
 
   const retry = () => {
-    flashStarted.current = true;
-    startFlash();
+    resetDevice();
+    goBack();
   };
 
   return (
@@ -67,6 +67,7 @@ function FlashStep({ goNext }) {
           <button type="button" className="cau-button" onClick={retry}>
             Erneut versuchen
           </button>
+          {log && <DetailAccordion title="Upload Protokoll" content={log} isError={true} />}
         </>
       ) : (
         <>
@@ -86,6 +87,7 @@ function FlashStep({ goNext }) {
 
 FlashStep.propTypes = {
   goNext: PropTypes.func.isRequired,
+  goBack: PropTypes.func.isRequired,
 };
 
 export default FlashStep;

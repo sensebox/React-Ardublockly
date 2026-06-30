@@ -13,7 +13,15 @@ import {
  * API. Once a device is picked, the wizard advances automatically.
  */
 function DeviceSelectionStep({ goNext }) {
-  const { supported, port, deviceLabel, selectDevice, error } = useFlash();
+  const {
+    supported,
+    port,
+    deviceLabel,
+    selectDevice,
+    reconnectSavedDevice,
+    error,
+    resetDevice,
+  } = useFlash();
 
   // Auto-advance shortly after a device has been selected.
   useEffect(() => {
@@ -45,6 +53,14 @@ function DeviceSelectionStep({ goNext }) {
           <AnimatedCheck color="#3ab0e8" />
           <h3 className="cau-step__title">Gerät verbunden</h3>
           <p className="cau-step__text">{deviceLabel}</p>
+          <button
+            type="button"
+            className="cau-button cau-button--secondary"
+            onClick={resetDevice}
+            style={{ marginTop: "20px" }}
+          >
+            Gerät wechseln
+          </button>
         </>
       ) : (
         <>
@@ -54,14 +70,38 @@ function DeviceSelectionStep({ goNext }) {
             Verbinde die senseBox MCU-S2 (ESP32-S2) per USB und wähle sie im
             folgenden Dialog aus.
           </p>
-          <button
-            type="button"
-            className="cau-button cau-button--secondary"
-            onClick={selectDevice}
-          >
-            <UsbIcon style={{ fontSize: 20 }} />
-            Gerät auswählen
-          </button>
+          {deviceLabel ? (
+            <>
+              <p style={{ fontSize: "14px", color: "#666", marginBottom: "15px" }}>
+                Gespeichert: {deviceLabel}
+              </p>
+              <button
+                type="button"
+                className="cau-button cau-button--secondary"
+                onClick={reconnectSavedDevice}
+              >
+                <UsbIcon style={{ fontSize: 20 }} />
+                Verbinden
+              </button>
+              <button
+                type="button"
+                className="cau-button cau-button--secondary"
+                onClick={selectDevice}
+                style={{ marginLeft: "10px" }}
+              >
+                Neues Gerät wählen
+              </button>
+            </>
+          ) : (
+            <button
+              type="button"
+              className="cau-button cau-button--secondary"
+              onClick={selectDevice}
+            >
+              <UsbIcon style={{ fontSize: 20 }} />
+              Gerät auswählen
+            </button>
+          )}
           {error && (
             <DetailAccordion title="🔍 Fehlerdetails" content={error} isError />
           )}

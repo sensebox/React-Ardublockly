@@ -85,27 +85,68 @@ async function softResetViaRegister(loader) {
  * @param {SerialPort} port The currently selected (application) serial port.
  */
 export async function touchTo1200bps(port) {
-  // Make sure the port is closed before re-opening it at 1200 baud.
+  // Make sure the port is fully closed before re-opening it at 1200 baud.
+  // This includes waiting for the OS to fully release the port.
   try {
     await port.close();
   } catch {
     // Port was not open – ignore.
   }
 
-  await port.open({ baudRate: 1200 });
-  try {
-    // Some stacks only trigger the reset once DTR is de-asserted.
-    await port.setSignals({ dataTerminalReady: false, requestToSend: false });
-  } catch {
-    // setSignals is optional – the 1200 baud open alone is usually enough.
-  }
-  await sleep(250);
+  // Wait for the OS to fully release the port
+  await sleep(300);
 
+  // Warm-up open at a standard baud rate. On a freshly enumerated native-USB
+  // CDC port (ESP32-S2/S3) the very first open at the unusual 1200 baud rate is
+  // frequently rejected by the OS driver ("Failed to open port"), whereas a
+  // standard rate opens fine. Opening and immediately closing at 115200 first
+  // initialises the CDC line coding so the following 1200-baud open – the rate
+  // the firmware watches for to enter download mode – succeeds on the very
+  // first try, instead of only after a failed attempt warmed the port up.
   try {
+    await port.open({ baudRate: 115200 });
     await port.close();
+    await sleep(200);
   } catch {
-    // Ignore – the device may already have disconnected.
+    // If the warm-up could not open the port, the retry loop below still tries.
   }
+
+  // Open at 1200 baud (with retries) to trigger the reset into the bootloader.
+  let lastError;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      await port.open({ baudRate: 1200 });
+
+      try {
+        // Some stacks only trigger the reset once DTR is de-asserted.
+        await port.setSignals({
+          dataTerminalReady: false,
+          requestToSend: false,
+        });
+      } catch {
+        // setSignals is optional – the 1200 baud open alone is usually enough.
+      }
+
+      await sleep(250);
+      return; // Success
+    } catch (err) {
+      lastError = err;
+      // Release a potentially half-open handle before the next attempt.
+      try {
+        await port.close();
+      } catch {
+        // Nothing to close – ignore.
+      }
+      if (attempt < 2) {
+        // Wait before retrying
+        await sleep(300);
+      }
+    }
+  }
+
+  throw new Error(
+    `Failed to open port at 1200bps after 3 attempts: ${lastError?.message}`,
+  );
 }
 
 /**

@@ -1,4 +1,4 @@
-import { BOARD } from "./types";
+import { BOARD, SET_DEVICE_PORT, CLEAR_DEVICE_PORT, SET_BOOTLOADER_PORT, CLEAR_BOOTLOADER_PORT } from "./types";
 import mini_opacity from "../data/mini_opacity.png";
 import mcu_opacity from "../data/mcu_opacity.png";
 import eye_opacity from "../data/eye_opacity.png";
@@ -30,5 +30,30 @@ export const setBoard = (board) => (dispatch) => {
   dispatch({
     type: BOARD,
     payload: boardTmp,
+  });
+};
+
+export const setDevicePort = (portInfo, label) => (dispatch) => {
+  dispatch({
+    type: SET_DEVICE_PORT,
+    payload: { portInfo, label },
+  });
+};
+
+export const clearDevicePort = () => (dispatch) => {
+  dispatch({
+    type: CLEAR_DEVICE_PORT,
+  });
+};
+
+export const setBootloaderPortPrepared = () => (dispatch) => {
+  dispatch({
+    type: SET_BOOTLOADER_PORT,
+  });
+};
+
+export const clearBootloaderPortPrepared = () => (dispatch) => {
+  dispatch({
+    type: CLEAR_BOOTLOADER_PORT,
   });
 };
