@@ -140,8 +140,96 @@ function StreamlinedUploadStep({ goNext }) {
     );
   }
 
+  // FIRST UPLOAD: Show device selection
+  if (!port) {
+    return (
+      <div className="cau-step">
+        <UsbIcon style={{ fontSize: 64, color: "#3ab0e8" }} />
+        <h3 className="cau-step__title">
+          {Blockly.Msg.compile_upload?.uploadStep1Title}
+        </h3>
+        <p className="cau-step__text">
+          {Blockly.Msg.compile_upload?.uploadStep1Text}
+        </p>
+        <button
+          type="button"
+          className="cau-button cau-button--secondary"
+          onClick={handleSelectDevice}
+          disabled={isSelectingDevice}
+          style={{ marginTop: "20px" }}
+        >
+          {isSelectingDevice
+            ? Blockly.Msg.compile_upload?.uploadDeviceSelectionDisabled
+            : Blockly.Msg.compile_upload?.deviceSelectButton}
+        </button>
+        {/* {compileStatus === "compiling" && (
+          <p style={{ fontSize: "14px", color: "#666", marginTop: "15px" }}>
+            {Blockly.Msg.compile_upload?.uploadCompileRunning}
+          </p>
+        )} */}
+        {error && (
+          <DetailAccordion
+            title={Blockly.Msg.compile_upload?.deviceErrorDetails}
+            content={error}
+            isError
+          />
+        )}
+      </div>
+    );
+  }
+
+  // FIRST UPLOAD: Show bootloader preparation
+  if (port && !bootloaderPortPrepared) {
+    return (
+      <div className="cau-step">
+        <UsbIcon style={{ fontSize: 64, color: "#3ab0e8" }} />
+        <h3 className="cau-step__title">
+          {Blockly.Msg.compile_upload?.uploadStep2Title}
+        </h3>
+        <p className="cau-step__text">{deviceLabel}</p>
+        <p style={{ fontSize: "14px", color: "#666", marginTop: "10px" }}>
+          {Blockly.Msg.compile_upload?.uploadStep2Text}
+        </p>
+        <button
+          type="button"
+          className="cau-button cau-button--primary"
+          onClick={handlePrepareBootloader}
+          disabled={isPreparingBootloader}
+          style={{ marginTop: "20px" }}
+        >
+          {isPreparingBootloader
+            ? Blockly.Msg.compile_upload?.uploadBootloaderPreparingButton
+            : Blockly.Msg.compile_upload?.uploadBootloaderPrepareButton}
+        </button>
+        <button
+          type="button"
+          className="cau-button cau-button--secondary"
+          onClick={handleSelectDevice}
+          style={{ marginLeft: "10px", marginTop: "20px" }}
+        >
+          {Blockly.Msg.compile_upload?.uploadSelectOtherDevice}
+        </button>
+        {compileStatus === "compiling" && (
+          <p style={{ fontSize: "14px", color: "#666", marginTop: "15px" }}>
+            {Blockly.Msg.compile_upload?.uploadCompileRunning}
+          </p>
+        )}
+        {error && (
+          <DetailAccordion
+            title={Blockly.Msg.compile_upload?.deviceErrorDetails}
+            content={error}
+            isError
+          />
+        )}
+      </div>
+    );
+  }
+
   // Show upload in progress
-  if (status === "flashing" || (compileStatus === "compiling" && port)) {
+  if (
+    (status === "flashing" || (compileStatus === "compiling" && port)) &&
+    bootloaderPortPrepared
+  ) {
     return (
       <div className="cau-step">
         <Spinner icon={<UsbIcon style={{ fontSize: 32 }} />} />
@@ -263,91 +351,6 @@ function StreamlinedUploadStep({ goNext }) {
           <DetailAccordion
             title={Blockly.Msg.compile_upload?.uploadLog}
             content={log}
-            isError
-          />
-        )}
-      </div>
-    );
-  }
-
-  // FIRST UPLOAD: Show device selection
-  if (!port) {
-    return (
-      <div className="cau-step">
-        <UsbIcon style={{ fontSize: 64, color: "#3ab0e8" }} />
-        <h3 className="cau-step__title">
-          {Blockly.Msg.compile_upload?.uploadStep1Title}
-        </h3>
-        <p className="cau-step__text">
-          {Blockly.Msg.compile_upload?.uploadStep1Text}
-        </p>
-        <button
-          type="button"
-          className="cau-button cau-button--secondary"
-          onClick={handleSelectDevice}
-          disabled={isSelectingDevice}
-          style={{ marginTop: "20px" }}
-        >
-          {isSelectingDevice
-            ? Blockly.Msg.compile_upload?.uploadDeviceSelectionDisabled
-            : "🔌 " + Blockly.Msg.compile_upload?.deviceSelectButton}
-        </button>
-        {compileStatus === "compiling" && (
-          <p style={{ fontSize: "14px", color: "#666", marginTop: "15px" }}>
-            {Blockly.Msg.compile_upload?.uploadCompileRunning}
-          </p>
-        )}
-        {error && (
-          <DetailAccordion
-            title={Blockly.Msg.compile_upload?.deviceErrorDetails}
-            content={error}
-            isError
-          />
-        )}
-      </div>
-    );
-  }
-
-  // FIRST UPLOAD: Show bootloader preparation
-  if (port && !bootloaderPortPrepared) {
-    return (
-      <div className="cau-step">
-        <UsbIcon style={{ fontSize: 64, color: "#3ab0e8" }} />
-        <h3 className="cau-step__title">
-          {Blockly.Msg.compile_upload?.uploadStep2Title}
-        </h3>
-        <p className="cau-step__text">{deviceLabel}</p>
-        <p style={{ fontSize: "14px", color: "#666", marginTop: "10px" }}>
-          {Blockly.Msg.compile_upload?.uploadStep2Text}
-        </p>
-        <button
-          type="button"
-          className="cau-button cau-button--primary"
-          onClick={handlePrepareBootloader}
-          disabled={isPreparingBootloader}
-          style={{ marginTop: "20px" }}
-        >
-          {isPreparingBootloader
-            ? Blockly.Msg.compile_upload?.uploadBootloaderPreparingButton
-            : Blockly.Msg.compile_upload?.uploadBootloaderPrepareButton}
-        </button>
-        <button
-          type="button"
-          className="cau-button cau-button--secondary"
-          onClick={handleSelectDevice}
-          style={{ marginLeft: "10px", marginTop: "20px" }}
-        >
-          {Blockly.Msg.compile_upload?.uploadSelectOtherDevice}
-        </button>
-        {compileStatus === "compiling" && (
-          <p style={{ fontSize: "14px", color: "#666", marginTop: "15px" }}>
-            {Blockly.Msg.compile_upload?.uploadCompileRunning}
-          </p>
-        )}
-        {error && (
-          <DetailAccordion
-            title={Blockly.Msg.compile_upload?.deviceErrorDetails}
-            content={error}
             isError
           />
         )}

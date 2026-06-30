@@ -8,6 +8,7 @@ import withStyles from "@mui/styles/withStyles";
 import CompileAndUploadDialog from "./CompileAndUploadDialog/CompileAndUploadDialog";
 import { FlashProvider } from "./CompileAndUploadDialog/FlashContext";
 import compileAndUploadSteps from "./CompileAndUploadDialog/steps";
+import * as Blockly from "blockly/core";
 
 const styles = (theme) => ({
   iconButton: {
@@ -26,8 +27,6 @@ const CompileAndUpload = (props) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const isEmbedded = useSelector((state) => state.general.embeddedMode);
 
-  const tooltipText = "Compile and Upload";
-
   return (
     <div>
       {isEmbedded ? (
@@ -36,12 +35,15 @@ const CompileAndUpload = (props) => {
           onClick={() => setDialogOpen(true)}
           variant="contained"
           startIcon={<FontAwesomeIcon icon={faUpload} size="sm" />}
-          aria-label="Compile and Upload"
         >
-          Compile and Upload
+          {Blockly.Msg.compile_upload?.tooltip_compile_and_upload_code}
         </Button>
       ) : (
-        <Tooltip title={tooltipText} arrow style={{ marginRight: "5px" }}>
+        <Tooltip
+          title={Blockly.Msg.compile_upload?.tooltip_compile_and_upload_code}
+          arrow
+          style={{ marginRight: "5px" }}
+        >
           <IconButton
             className={`compileAndUpload ${props.classes.iconButton}`}
             onClick={() => setDialogOpen(true)}
@@ -57,7 +59,7 @@ const CompileAndUpload = (props) => {
         <CompileAndUploadDialog
           open={dialogOpen}
           onClose={() => setDialogOpen(false)}
-          title={tooltipText}
+          title={Blockly.Msg.compile_upload?.tooltip_compile_and_upload_code}
           steps={compileAndUploadSteps}
         />
       </FlashProvider>

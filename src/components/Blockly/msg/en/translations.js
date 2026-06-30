@@ -390,7 +390,7 @@ export const TRANSLATIONS = {
     uploadNextTimeInfo:
       "The next time you upload, it will start automatically.",
     uploadDeviceSelectionDisabled: "Selection is being established...",
-
+    tooltip_compile_and_upload_code: "Compile and upload",
     summarySuccessTitle: "Successfully Uploaded!",
     summarySuccessText:
       "Your program has been successfully transferred to the senseBox. The senseBox will now restart automatically and run your sketch. 🎉",
