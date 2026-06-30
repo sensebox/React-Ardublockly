@@ -100,6 +100,41 @@ function StreamlinedUploadStep({ goNext }) {
     }
   }, [status, goNext]);
 
+  // The bootloader-permission prompt MUST take priority over every other
+  // "busy" view. After the 1200bps touch the parallel compilation is often
+  // still running (compileStatus === "compiling"), and in Chrome the USB
+  // re-enumeration finishes before the compile does. If the compiling spinner
+  // were rendered first it would mask the "Bootloader-Port auswählen" button,
+  // and the user would never get the chance to grant the second permission
+  // (which requires a fresh user gesture). So check this case up front.
+  if (port && needsBootloaderPermission) {
+    return (
+      <div className="cau-step">
+        <UsbIcon style={{ fontSize: 64, color: "#3ab0e8" }} />
+        <h3 className="cau-step__title">Bootloader-Port auswählen</h3>
+        <p className="cau-step__text">
+          Das Board ist jetzt im Download-Modus und meldet sich als neues
+          USB-Gerät. Bitte wähle es einmalig aus, damit der Browser die
+          Berechtigung erhält. Danach läuft der Upload automatisch.
+        </p>
+        <button
+          type="button"
+          className="cau-button cau-button--primary"
+          onClick={handleGrantBootloaderPort}
+          disabled={isGrantingPort}
+          style={{ marginTop: "20px" }}
+        >
+          {isGrantingPort
+            ? "Warte auf Auswahl..."
+            : "🔌 Bootloader-Port auswählen"}
+        </button>
+        {error && (
+          <DetailAccordion title="🔍 Fehlerdetails" content={error} isError />
+        )}
+      </div>
+    );
+  }
+
   // Show upload in progress
   if (status === "flashing" || (compileStatus === "compiling" && port)) {
     return (
@@ -227,39 +262,6 @@ function StreamlinedUploadStep({ goNext }) {
             (Kompilierung läuft parallel)
           </p>
         )}
-        {error && (
-          <DetailAccordion title="🔍 Fehlerdetails" content={error} isError />
-        )}
-      </div>
-    );
-  }
-
-  // After the 1200bps touch the board re-enumerated as a new USB device the
-  // browser has no permission for yet. Ask for one explicit click so the picker
-  // opens with fresh user activation. This can happen in the first-time flow as
-  // well as the automatic flow (where bootloaderPortPrepared is already true),
-  // so it is checked independently of that flag.
-  if (port && needsBootloaderPermission) {
-    return (
-      <div className="cau-step">
-        <UsbIcon style={{ fontSize: 64, color: "#3ab0e8" }} />
-        <h3 className="cau-step__title">Bootloader-Port auswählen</h3>
-        <p className="cau-step__text">
-          Das Board ist jetzt im Download-Modus und meldet sich als neues
-          USB-Gerät. Bitte wähle es einmalig aus, damit der Browser die
-          Berechtigung erhält. Danach läuft der Upload automatisch.
-        </p>
-        <button
-          type="button"
-          className="cau-button cau-button--primary"
-          onClick={handleGrantBootloaderPort}
-          disabled={isGrantingPort}
-          style={{ marginTop: "20px" }}
-        >
-          {isGrantingPort
-            ? "Warte auf Auswahl..."
-            : "🔌 Bootloader-Port auswählen"}
-        </button>
         {error && (
           <DetailAccordion title="🔍 Fehlerdetails" content={error} isError />
         )}

@@ -131,6 +131,20 @@ export async function touchTo1200bps(port) {
       return; // Success
     } catch (err) {
       lastError = err;
+
+      // Chrome-specific race: the 1200-baud open makes the firmware reset and
+      // the USB device re-enumerate as the ROM bootloader *during* the open()
+      // call, so Chrome rejects with "Failed to open serial port" even though
+      // the touch physically succeeded. When that happens the original port is
+      // no longer connected – detect that and treat it as success instead of
+      // retrying against the now-stale handle (which can only keep failing).
+      // The disconnect can land a moment after the open() rejection, so give it
+      // a brief grace period before deciding.
+      await sleep(150);
+      if (port.connected === false) {
+        return;
+      }
+
       // Release a potentially half-open handle before the next attempt.
       try {
         await port.close();
@@ -142,6 +156,12 @@ export async function touchTo1200bps(port) {
         await sleep(300);
       }
     }
+  }
+
+  // All open attempts failed but the port still vanished in the meantime: the
+  // board re-enumerated into the bootloader, so the touch effectively worked.
+  if (port.connected === false) {
+    return;
   }
 
   throw new Error(

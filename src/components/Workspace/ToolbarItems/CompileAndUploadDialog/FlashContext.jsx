@@ -68,34 +68,6 @@ const FLASH_SIZE = "4MB";
 // chip connection"). Staying at the ROM baud (115200) skips changeBaud entirely.
 const UPLOAD_BAUDRATE = 115200;
 
-/**
- * Detects Chromium-based browsers (Chrome, Edge, Opera, Brave, Samsung
- * Internet, …). After the 1200bps touch the senseBox MCU-S2 re-enumerates as
- * the ROM serial bootloader (PID 0x0002), and Chromium automatically re-grants
- * permission for that device, so it is reachable via
- * navigator.serial.getPorts()/the `connect` event without an explicit
- * requestPort() call. Web Serial is a Chromium-only API anyway, so this
- * effectively matches every browser that can flash at all.
- *
- * @returns {boolean} True for Chromium-based browsers.
- */
-function isChromiumBrowser() {
-  if (typeof navigator === "undefined") return false;
-  // navigator.userAgentData.brands is the most reliable signal on modern
-  // Chromium; fall back to the user-agent string otherwise.
-  const brands = navigator.userAgentData?.brands;
-  if (Array.isArray(brands)) {
-    return brands.some(({ brand }) => /Chromium/i.test(brand));
-  }
-  return /Chrome\/|Chromium\/|CriOS\//.test(navigator.userAgent);
-}
-
-// Chromium re-surfaces the re-enumerated bootloader port automatically, but the
-// re-enumeration can take a moment, so we wait noticeably longer there before
-// falling back to the manual grant prompt that non-Chromium browsers need.
-const BOOTLOADER_WAIT_MS_CHROMIUM = 10000;
-const BOOTLOADER_WAIT_MS_DEFAULT = 3000;
-
 const FlashContext = createContext(null);
 
 /**
@@ -348,16 +320,10 @@ export function FlashProvider({ open, children }) {
       appendLog("Warte auf USB-Neuaufzählung ...\n");
       await new Promise((resolve) => setTimeout(resolve, 500));
 
-      // Look for a bootloader port we already have permission for. In Chromium
-      // the re-enumerated ROM bootloader is re-granted automatically, so it shows
-      // up here without any extra user gesture – we just wait a bit longer for
-      // it. Non-Chromium browsers only surface it after an explicit grant (below).
-      const chromium = isChromiumBrowser();
+      // Look for a bootloader port we already have permission for (subsequent
+      // uploads, or a grant that survived from a previous session).
       appendLog("Suche nach bereits genehmigtem Bootloader-Port ...\n");
-      const newPort = await waitForBootloaderPort(
-        knownPorts,
-        chromium ? BOOTLOADER_WAIT_MS_CHROMIUM : BOOTLOADER_WAIT_MS_DEFAULT,
-      );
+      const newPort = await waitForBootloaderPort(knownPorts, 3000);
 
       if (newPort) {
         setBootloaderPort(newPort);
@@ -368,10 +334,7 @@ export function FlashProvider({ open, children }) {
       }
 
       // First-time case: permission for the re-enumerated device is missing and
-      // must be granted from a fresh user gesture (grantBootloaderPort). Chromium
-      // re-grants automatically, so the manual step is only needed elsewhere –
-      // if Chromium still found nothing it is genuinely unavailable, so we surface
-      // the grant prompt there too as a safety net.
+      // must be granted from a fresh user gesture (grantBootloaderPort).
       appendLog(
         "Bootloader-Port noch nicht genehmigt – bitte im nächsten Schritt auswählen.\n",
       );
@@ -496,12 +459,7 @@ export function FlashProvider({ open, children }) {
       appendLog("Versetze Board in den Download-Modus (1200bps touch) ...\n");
       await touchTo1200bps(port);
       appendLog("Warte auf den Bootloader-Port ...\n");
-      const newPort = await waitForBootloaderPort(
-        knownPorts,
-        isChromiumBrowser()
-          ? BOOTLOADER_WAIT_MS_CHROMIUM
-          : BOOTLOADER_WAIT_MS_DEFAULT,
-      );
+      const newPort = await waitForBootloaderPort(knownPorts, 3000);
 
       if (newPort) {
         setBootloaderPort(newPort);
