@@ -1,0 +1,86 @@
+export const compile_upload = {
+    bootloaderPrepareTitle: "Prepare Board",
+    bootloaderPrepareText:
+      "The board will be put into bootloader mode. This is necessary for uploading.",
+    bootloaderPrepareButton: "Prepare",
+    bootloaderPreparing: "Preparing board...",
+    bootloaderPreparingText:
+      "Putting board into download mode and authorizing bootloader port...",
+    bootloaderPreparedTitle: "Bootloader Port Ready",
+    bootloaderPreparedText:
+      "The board has been successfully prepared for upload mode.",
+
+    compileTitle: "Compiling Program",
+    compileText:
+      "Your sketch is being sent to the compiler – this will only take a moment.",
+    compileSuccessTitle: "Compiled!",
+    compileSuccessText: "The binary file is ready.",
+    compileErrorTitle: "Compilation Failed",
+    compileErrorText: "Compilation failed.",
+    compileRetryButton: "Try Again",
+    compileErrorDetails: "Error Details",
+
+    deviceSelectTitle: "Select Device",
+    deviceSelectText:
+      "Connect the senseBox MCU-S2 (ESP32-S2) via USB and select it from the following dialog.",
+    deviceSelectButton: "Select Device",
+    deviceChangeButton: "Change Device",
+    deviceSelectNewButton: "Select New Device",
+    deviceConnectButton: "Connect",
+    deviceConnectedTitle: "Device Connected",
+    deviceSaved: "Saved:",
+    deviceBrowserNotSupported: "Browser Not Supported",
+    deviceBrowserNotSupportedText:
+      "The Web Serial API is not supported in this browser. Please use Google Chrome or Microsoft Edge.",
+    deviceErrorDetails: "🔍 Error Details",
+
+    flashTitleUploading: "Uploading",
+    flashTitlePreparing: "Preparing Upload",
+    flashText: "Please do not disconnect the senseBox from the computer now.",
+    flashDoneTitle: "Uploaded!",
+    flashErrorTitle: "Upload Failed",
+    flashErrorText: "An error occurred during upload.",
+    flashRetryButton: "Try Again",
+    flashLogDetails: "Upload Log",
+
+    uploadStep1Title: "Step 1: Select Device",
+    uploadStep1Text:
+      "Connect the senseBox MCU-S2 (ESP32-S2) via USB and select it.",
+    uploadStep2Title: "Step 2: Prepare Bootloader",
+    uploadStep2Text:
+      "The bootloader will be prepared to obtain all permissions. This is only necessary the first time.",
+    uploadBootloaderPrepareButton: "⚙️ Prepare Bootloader",
+    uploadBootloaderPreparingButton: "Bootloader is being prepared...",
+    uploadSelectBootloaderTitle: "Select Bootloader Port",
+    uploadSelectBootloaderText:
+      "The board is now in download mode and appears as a new USB device. Please select it once so the browser gets permission. After that, the upload will run automatically.",
+    uploadSelectBootloaderButton: "🔌 Select Bootloader Port",
+    uploadWaitingSelection: "Waiting for selection...",
+    uploadCompileRunning: "(Compilation running in parallel)",
+    uploadSelectOtherDevice: "Other Device",
+    uploadUploading: "Uploading...",
+    uploadCompiling: "Compiling...",
+    uploadCompileText: "Sketch is being compiled to binary...",
+    uploadCompilingPrepareText: "Compilation is being prepared...",
+    uploadFlashText: "Uploading to microcontroller...",
+    uploadLog: "📋 Log",
+    uploadCompileErrorTitle: "Compilation Failed",
+    uploadCompileErrorDetails: "🔍 Compilation Error",
+    uploadErrorTitle: "Upload Failed",
+    uploadErrorDetails: "🔍 Upload Error",
+    uploadErrorLog: "📋 Upload Log",
+    uploadPreparing: "Preparing upload...",
+    uploadPreparingText: "Starting upload...",
+    uploadDeviceInfo: "Device:",
+    uploadNextTimeInfo:
+      "The next time you upload, it will start automatically.",
+    uploadDeviceSelectionDisabled: "Selection is being established...",
+    tooltip_compile_and_upload_code: "Compile and upload",
+    summarySuccessTitle: "Successfully Uploaded!",
+    summarySuccessText:
+      "Your program has been successfully transferred to the senseBox. The senseBox will now restart automatically and run your sketch. 🎉",
+    summaryCloseButton: "Done",
+    summaryErrorTitle: "Something Went Wrong",
+    summaryErrorText: "An error occurred during upload.",
+    summaryLogDetails: "Upload Log",
+  },
