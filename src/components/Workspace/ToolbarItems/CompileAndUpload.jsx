@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import withStyles from "@mui/styles/withStyles";
 import CompileAndUploadDialog from "./CompileAndUploadDialog/CompileAndUploadDialog";
-import { FlashProvider } from "./CompileAndUploadDialog/FlashContext";
+import { FlashProvider } from "./CompileAndUploadDialog/useFlash";
 import compileAndUploadSteps from "./CompileAndUploadDialog/steps";
 import * as Blockly from "blockly/core";
 

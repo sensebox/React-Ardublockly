@@ -1,4 +1,4 @@
-export const compile_upload = {
+export const COMPILE_DIALOG = {
   bootloaderPrepareTitle: "Board vorbereiten",
   bootloaderPrepareText:
     "Das Board wird in den Bootloader-Modus versetzt. Dies ist nötig für den Upload.",

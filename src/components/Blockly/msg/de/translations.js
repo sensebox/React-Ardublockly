@@ -337,6 +337,4 @@ export const TRANSLATIONS = {
     copy: "Kopieren",
     copied: "Kopiert!",
   },
-
-  // Compile and Upload Dialog
 };

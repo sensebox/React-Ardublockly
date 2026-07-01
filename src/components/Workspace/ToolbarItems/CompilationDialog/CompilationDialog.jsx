@@ -26,6 +26,7 @@ import FolderIcon from "@mui/icons-material/Folder";
 import UsbIcon from "@mui/icons-material/Usb";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import TransferStep from "./TransferStep";
+import { compileToSketchId } from "../CompileAndUploadDialog/compileBinary";
 
 const headerStyle = {
   fontSize: "1.5rem",
@@ -112,27 +113,25 @@ function CompilationDialog({
         default:
           board = "sensebox_mcu_eye";
       }
-      const response = await fetch(`${compilerUrl}/compile`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          sketch: codeToCompile,
-          board,
-          projectId: sessionId,
-        }),
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        setError(data.message);
+
+      if (!codeToCompile || !codeToCompile.trim()) {
+        setError(
+          "Der Sketch ist leer. Bitte füge zuerst Blöcke zum Programm hinzu.",
+        );
         return;
       }
-      if (data.data.id) {
-        setSketchId(data.data.id);
-        setActiveStep(1);
-      }
+
+      const sketchId = await compileToSketchId({
+        compilerUrl,
+        sketch: codeToCompile,
+        board,
+        projectId: sessionId,
+      });
+
+      setSketchId(sketchId);
+      setActiveStep(1);
     } catch (err) {
+      setError(err?.message || "Kompilierung fehlgeschlagen");
       console.error("Compilation failed", err);
     }
   };

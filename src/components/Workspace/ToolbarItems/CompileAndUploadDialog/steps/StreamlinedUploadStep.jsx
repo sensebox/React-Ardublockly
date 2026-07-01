@@ -2,10 +2,9 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import UsbIcon from "@mui/icons-material/Usb";
 import * as Blockly from "blockly/core";
-import { useFlash } from "../FlashContext";
+import { useFlash } from "../useFlash";
 import { useSelector } from "react-redux";
 import {
-  AnimatedCheck,
   AnimatedCross,
   CuteProgress,
   Spinner,

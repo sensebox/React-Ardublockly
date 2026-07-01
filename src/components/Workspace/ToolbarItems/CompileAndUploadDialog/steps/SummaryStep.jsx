@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import * as Blockly from "blockly/core";
-import { useFlash } from "../FlashContext";
+import { useFlash } from "../useFlash";
 import {
   AnimatedCheck,
   AnimatedCross,
