@@ -36,11 +36,11 @@ const CompileAndUpload = (props) => {
           variant="contained"
           startIcon={<FontAwesomeIcon icon={faUpload} size="sm" />}
         >
-          {Blockly.Msg.compile_upload?.tooltip_compile_and_upload_code}
+          {Blockly.Msg.tooltip_compile_and_upload_code}
         </Button>
       ) : (
         <Tooltip
-          title={Blockly.Msg.compile_upload?.tooltip_compile_and_upload_code}
+          title={Blockly.Msg.tooltip_compile_and_upload_code}
           arrow
           style={{ marginRight: "5px" }}
         >
@@ -59,7 +59,7 @@ const CompileAndUpload = (props) => {
         <CompileAndUploadDialog
           open={dialogOpen}
           onClose={() => setDialogOpen(false)}
-          title={Blockly.Msg.compile_upload?.tooltip_compile_and_upload_code}
+          title={Blockly.Msg.tooltip_compile_and_upload_code}
           steps={compileAndUploadSteps}
         />
       </FlashProvider>

@@ -19,14 +19,12 @@ function SummaryStep({ onClose }) {
     return (
       <div className="cau-step">
         <AnimatedCross />
-        <h3 className="cau-step__title">
-          {Blockly.Msg.compile_upload?.summaryErrorTitle}
-        </h3>
+        <h3 className="cau-step__title">{Blockly.Msg.summaryErrorTitle}</h3>
         <p className="cau-error-text">
-          {error || Blockly.Msg.compile_upload?.summaryErrorText}
+          {error || Blockly.Msg.summaryErrorText}
         </p>
         <button type="button" className="cau-button" onClick={onClose}>
-          {Blockly.Msg.compile_upload?.summaryCloseButton}
+          {Blockly.Msg.summaryCloseButton}
         </button>
       </div>
     );
@@ -35,20 +33,13 @@ function SummaryStep({ onClose }) {
   return (
     <div className="cau-step">
       <AnimatedCheck size={96} />
-      <h3 className="cau-step__title">
-        {Blockly.Msg.compile_upload?.summarySuccessTitle}
-      </h3>
-      <p className="cau-step__text">
-        {Blockly.Msg.compile_upload?.summarySuccessText}
-      </p>
+      <h3 className="cau-step__title">{Blockly.Msg.summarySuccessTitle}</h3>
+      <p className="cau-step__text">{Blockly.Msg.summarySuccessText}</p>
       <button type="button" className="cau-button" onClick={onClose}>
-        {Blockly.Msg.compile_upload?.summaryCloseButton}
+        {Blockly.Msg.summaryCloseButton}
       </button>
       {log && (
-        <DetailAccordion
-          title={Blockly.Msg.compile_upload?.summaryLogDetails}
-          content={log}
-        />
+        <DetailAccordion title={Blockly.Msg.summaryLogDetails} content={log} />
       )}
     </div>
   );

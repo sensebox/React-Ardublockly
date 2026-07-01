@@ -112,10 +112,10 @@ function StreamlinedUploadStep({ goNext }) {
       <div className="cau-step">
         <UsbIcon style={{ fontSize: 64, color: "#3ab0e8" }} />
         <h3 className="cau-step__title">
-          {Blockly.Msg.compile_upload?.uploadSelectBootloaderTitle}
+          {Blockly.Msg.uploadSelectBootloaderTitle}
         </h3>
         <p className="cau-step__text">
-          {Blockly.Msg.compile_upload?.uploadSelectBootloaderText}
+          {Blockly.Msg.uploadSelectBootloaderText}
         </p>
         <button
           type="button"
@@ -125,12 +125,12 @@ function StreamlinedUploadStep({ goNext }) {
           style={{ marginTop: "20px" }}
         >
           {isGrantingPort
-            ? Blockly.Msg.compile_upload?.uploadWaitingSelection
-            : Blockly.Msg.compile_upload?.uploadSelectBootloaderButton}
+            ? Blockly.Msg.uploadWaitingSelection
+            : Blockly.Msg.uploadSelectBootloaderButton}
         </button>
         {error && (
           <DetailAccordion
-            title={Blockly.Msg.compile_upload?.deviceErrorDetails}
+            title={Blockly.Msg.deviceErrorDetails}
             content={error}
             isError
           />
@@ -144,12 +144,8 @@ function StreamlinedUploadStep({ goNext }) {
     return (
       <div className="cau-step">
         <UsbIcon style={{ fontSize: 64, color: "#3ab0e8" }} />
-        <h3 className="cau-step__title">
-          {Blockly.Msg.compile_upload?.uploadStep1Title}
-        </h3>
-        <p className="cau-step__text">
-          {Blockly.Msg.compile_upload?.uploadStep1Text}
-        </p>
+        <h3 className="cau-step__title">{Blockly.Msg.uploadStep1Title}</h3>
+        <p className="cau-step__text">{Blockly.Msg.uploadStep1Text}</p>
         <button
           type="button"
           className="cau-button cau-button--secondary"
@@ -158,17 +154,17 @@ function StreamlinedUploadStep({ goNext }) {
           style={{ marginTop: "20px" }}
         >
           {isSelectingDevice
-            ? Blockly.Msg.compile_upload?.uploadDeviceSelectionDisabled
-            : Blockly.Msg.compile_upload?.deviceSelectButton}
+            ? Blockly.Msg.uploadDeviceSelectionDisabled
+            : Blockly.Msg.deviceSelectButton}
         </button>
         {/* {compileStatus === "compiling" && (
           <p style={{ fontSize: "14px", color: "#666", marginTop: "15px" }}>
-            {Blockly.Msg.compile_upload?.uploadCompileRunning}
+            {Blockly.Msg.uploadCompileRunning}
           </p>
         )} */}
         {error && (
           <DetailAccordion
-            title={Blockly.Msg.compile_upload?.deviceErrorDetails}
+            title={Blockly.Msg.deviceErrorDetails}
             content={error}
             isError
           />
@@ -182,12 +178,10 @@ function StreamlinedUploadStep({ goNext }) {
     return (
       <div className="cau-step">
         <UsbIcon style={{ fontSize: 64, color: "#3ab0e8" }} />
-        <h3 className="cau-step__title">
-          {Blockly.Msg.compile_upload?.uploadStep2Title}
-        </h3>
+        <h3 className="cau-step__title">{Blockly.Msg.uploadStep2Title}</h3>
         <p className="cau-step__text">{deviceLabel}</p>
         <p style={{ fontSize: "14px", color: "#666", marginTop: "10px" }}>
-          {Blockly.Msg.compile_upload?.uploadStep2Text}
+          {Blockly.Msg.uploadStep2Text}
         </p>
         <button
           type="button"
@@ -197,8 +191,8 @@ function StreamlinedUploadStep({ goNext }) {
           style={{ marginTop: "20px" }}
         >
           {isPreparingBootloader
-            ? Blockly.Msg.compile_upload?.uploadBootloaderPreparingButton
-            : Blockly.Msg.compile_upload?.uploadBootloaderPrepareButton}
+            ? Blockly.Msg.uploadBootloaderPreparingButton
+            : Blockly.Msg.uploadBootloaderPrepareButton}
         </button>
         <button
           type="button"
@@ -206,16 +200,16 @@ function StreamlinedUploadStep({ goNext }) {
           onClick={handleSelectDevice}
           style={{ marginLeft: "10px", marginTop: "20px" }}
         >
-          {Blockly.Msg.compile_upload?.uploadSelectOtherDevice}
+          {Blockly.Msg.uploadSelectOtherDevice}
         </button>
         {compileStatus === "compiling" && (
           <p style={{ fontSize: "14px", color: "#666", marginTop: "15px" }}>
-            {Blockly.Msg.compile_upload?.uploadCompileRunning}
+            {Blockly.Msg.uploadCompileRunning}
           </p>
         )}
         {error && (
           <DetailAccordion
-            title={Blockly.Msg.compile_upload?.deviceErrorDetails}
+            title={Blockly.Msg.deviceErrorDetails}
             content={error}
             isError
           />
@@ -234,25 +228,21 @@ function StreamlinedUploadStep({ goNext }) {
         <Spinner icon={<UsbIcon style={{ fontSize: 32 }} />} />
         <h3 className="cau-step__title">
           {compileStatus === "compiling"
-            ? Blockly.Msg.compile_upload?.uploadCompiling
-            : Blockly.Msg.compile_upload?.uploadUploading}
+            ? Blockly.Msg.uploadCompiling
+            : Blockly.Msg.uploadUploading}
         </h3>
         {compileStatus === "compiling" && (
-          <p className="cau-step__text">
-            {Blockly.Msg.compile_upload?.uploadCompileText}
-          </p>
+          <p className="cau-step__text">{Blockly.Msg.uploadCompileText}</p>
         )}
         {status === "flashing" && (
           <>
-            <p className="cau-step__text">
-              {Blockly.Msg.compile_upload?.uploadFlashText}
-            </p>
+            <p className="cau-step__text">{Blockly.Msg.uploadFlashText}</p>
             {progress > 0 && <CuteProgress value={progress} />}
           </>
         )}
         {log && (
           <DetailAccordion
-            title={Blockly.Msg.compile_upload?.uploadLog}
+            title={Blockly.Msg.uploadLog}
             content={log}
             isError={false}
           />
@@ -284,26 +274,24 @@ function StreamlinedUploadStep({ goNext }) {
     return (
       <div className="cau-step">
         <AnimatedCross color="#e53935" />
-        <h3 className="cau-step__title">
-          {Blockly.Msg.compile_upload?.uploadErrorTitle}
-        </h3>
+        <h3 className="cau-step__title">{Blockly.Msg.uploadErrorTitle}</h3>
         {compileError && (
           <DetailAccordion
-            title={Blockly.Msg.compile_upload?.uploadCompileErrorDetails}
+            title={Blockly.Msg.uploadCompileErrorDetails}
             content={compileError}
             isError
           />
         )}
         {error && (
           <DetailAccordion
-            title={Blockly.Msg.compile_upload?.uploadErrorDetails}
+            title={Blockly.Msg.uploadErrorDetails}
             content={error}
             isError
           />
         )}
         {log && (
           <DetailAccordion
-            title={Blockly.Msg.compile_upload?.uploadErrorLog}
+            title={Blockly.Msg.uploadErrorLog}
             content={log}
             isError
           />
@@ -314,7 +302,7 @@ function StreamlinedUploadStep({ goNext }) {
             className="cau-button cau-button--secondary"
             onClick={handleManualUpload}
           >
-            {Blockly.Msg.compile_upload?.compileRetryButton}
+            {Blockly.Msg.compileRetryButton}
           </button>
           {port && (
             <button
@@ -323,7 +311,7 @@ function StreamlinedUploadStep({ goNext }) {
               onClick={handleSelectDevice}
               style={{ marginLeft: "10px" }}
             >
-              {Blockly.Msg.compile_upload?.uploadSelectOtherDevice}
+              {Blockly.Msg.uploadSelectOtherDevice}
             </button>
           )}
         </div>
@@ -337,18 +325,18 @@ function StreamlinedUploadStep({ goNext }) {
       <div className="cau-step">
         <AnimatedCross color="#e53935" />
         <h3 className="cau-step__title">
-          {Blockly.Msg.compile_upload?.uploadCompileErrorTitle}
+          {Blockly.Msg.uploadCompileErrorTitle}
         </h3>
         {compileError && (
           <DetailAccordion
-            title={Blockly.Msg.compile_upload?.uploadCompileErrorDetails}
+            title={Blockly.Msg.uploadCompileErrorDetails}
             content={compileError}
             isError
           />
         )}
         {log && (
           <DetailAccordion
-            title={Blockly.Msg.compile_upload?.uploadLog}
+            title={Blockly.Msg.uploadLog}
             content={log}
             isError
           />
