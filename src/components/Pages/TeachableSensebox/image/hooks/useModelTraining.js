@@ -15,7 +15,7 @@ export const DEFAULT_TRAINING_SETTINGS = {
 };
 
 const EARLY_STOPPING_PATIENCE = 5;
-const LR_DECAY_FACTOR = 0.5;
+const LR_DECAY_FACTOR = 0.7;
 const LR_DECAY_PATIENCE = 3;
 
 /**
@@ -509,6 +509,11 @@ function useModelTraining() {
           trainingModel,
           classes,
         );
+
+        trainXs?.dispose();
+        trainYs?.dispose();
+        valXs?.dispose();
+        valYs?.dispose();
 
         optimizer.dispose();
         setTrainingProgress((prev) => ({
