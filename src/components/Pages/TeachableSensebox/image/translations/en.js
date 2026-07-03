@@ -71,6 +71,7 @@ export const imageClassificationTranslations_en = {
       helpTestResults: "Help for test results",
       helpDeployModel: "Help for deploying the model",
       classNameExists: "A class with this name already exists",
+      helpTrainingSettings: "Help for training settings",
       trainingSettings: "Help for training settings",
       desirableNumberSamples: "Recommendation: At least 100 images per class",
     },
