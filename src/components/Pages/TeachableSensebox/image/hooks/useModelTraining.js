@@ -9,7 +9,7 @@ const VALIDATION_FRACTION = 0.15;
 
 // Default training settings (exported for use in UI)
 export const DEFAULT_TRAINING_SETTINGS = {
-  epochs: 70,
+  epochs: 50,
   learningRate: 0.001,
   earlyStopping: false,
 };
