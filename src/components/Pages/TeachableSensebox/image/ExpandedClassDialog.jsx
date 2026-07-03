@@ -47,12 +47,9 @@ const ExpandedClassDialog = ({
             value={editingClassName}
             onChange={(e) => onStartEditing(cls.id, e.target.value)}
             onBlur={onSaveRename}
-            onKeyPress={(e) => {
+            onKeyDown={(e) => {
               if (e.key === "Enter") onSaveRename();
               else if (e.key === "Escape") onCancelEditing();
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Escape") onCancelEditing();
             }}
             sx={{ flex: 1 }}
           />
