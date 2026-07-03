@@ -45,6 +45,7 @@ import {
   ArrowForwardIos as ArrowForwardIcon,
 } from "@mui/icons-material";
 import useCameraSource from "./hooks/useCameraSource";
+import useLightbox, { LightboxComponent } from "./hooks/useLightbox";
 import SerialErrorHandler, {
   ConnectionStatus,
   ErrorTypes,
@@ -53,7 +54,6 @@ import SerialCameraService from "./SerialCameraService";
 import FloatingCameraPreview from "./FloatingCameraPreview";
 import TrainingResultsSection from "./TrainingResultsSection";
 import HelpButton, { useHelpBlink } from "../HelpButton";
-import Lightbox from "./Lightbox";
 import ExpandedClassDialog from "./ExpandedClassDialog";
 import useModelTraining from "./hooks/useModelTraining";
 import { DEFAULT_TRAINING_SETTINGS } from "./hooks/useModelTraining";
@@ -93,11 +93,6 @@ const ModelTrainer = ({
     useState(false);
   const [trainedWithEnoughSamples, setTrainedWithEnoughSamples] =
     useState(false);
-
-  // Lightbox state for viewing images fullscreen
-  const [lightboxOpen, setLightboxOpen] = useState(false);
-  const [lightboxSrc, setLightboxSrc] = useState(null);
-  const [lightboxIndex, setLightboxIndex] = useState(0);
 
   // Training settings state
   const [showSettingsPanel, setShowSettingsPanel] = useState(false);
@@ -461,108 +456,17 @@ const ModelTrainer = ({
     );
   }, []);
 
-  const openLightbox = useCallback(
-    (src, e) => {
-      // Only open lightbox on wide screens (like HelpButton behavior)
-      if (!isWideScreen) return;
-      if (e && e.stopPropagation) e.stopPropagation();
-      // determine index in flattened samples list
-      setLightboxOpen(true);
-      setLightboxSrc(src);
-      // index will be set in effect when flatSamples is available
-    },
-    [isWideScreen],
-  );
-
-  const closeLightbox = useCallback(() => {
-    setLightboxOpen(false);
-    setLightboxSrc(null);
-    setLightboxIndex(0);
-  }, []);
-
-  // flattened list of sample urls (stable order: classes then samples)
-  const flatSamples = useMemo(() => {
-    return classes.flatMap((c) => c.samples.map((s) => s.url));
-  }, [classes]);
-
-  // when opening lightbox set the index based on current src
-  useEffect(() => {
-    if (lightboxOpen && lightboxSrc) {
-      const idx = flatSamples.indexOf(lightboxSrc);
-      setLightboxIndex(idx >= 0 ? idx : 0);
-    }
-  }, [lightboxOpen, lightboxSrc, flatSamples]);
-
-  // update lightboxSrc when index changes
-  useEffect(() => {
-    if (lightboxOpen) {
-      if (flatSamples.length === 0) {
-        // nothing left, close
-        closeLightbox();
-        return;
-      }
-      const idx = Math.max(0, Math.min(lightboxIndex, flatSamples.length - 1));
-      setLightboxIndex(idx);
-      setLightboxSrc(flatSamples[idx]);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lightboxIndex, flatSamples, lightboxOpen]);
-
-  const showPrev = useCallback(() => {
-    if (!flatSamples || flatSamples.length === 0) return;
-    setLightboxIndex(
-      (prev) => (prev - 1 + flatSamples.length) % flatSamples.length,
-    );
-  }, [flatSamples]);
-
-  const showNext = useCallback(() => {
-    if (!flatSamples || flatSamples.length === 0) return;
-    setLightboxIndex((prev) => (prev + 1) % flatSamples.length);
-  }, [flatSamples]);
-
-  // keyboard navigation
-  useEffect(() => {
-    if (!lightboxOpen) return undefined;
-    const onKey = (e) => {
-      if (e.key === "ArrowLeft") showPrev();
-      else if (e.key === "ArrowRight") showNext();
-      else if (e.key === "Escape") closeLightbox();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [lightboxOpen, showPrev, showNext, closeLightbox]);
-
-  const removeCurrentLightboxImage = useCallback(() => {
-    if (!lightboxSrc) return;
-    // find the class and sample id
-    let found = false;
-    let foundClassId = null;
-    let foundSampleId = null;
-    for (const c of classes) {
-      const s = c.samples.find((samp) => samp.url === lightboxSrc);
-      if (s) {
-        found = true;
-        foundClassId = c.id;
-        foundSampleId = s.id;
-        break;
-      }
-    }
-    if (!found) return;
-
-    const idx = flatSamples.indexOf(lightboxSrc);
-    // perform removal
-    removeSample(foundClassId, foundSampleId);
-
-    // decide what to show next
-    if (flatSamples.length <= 1) {
-      // last image -> close
-      closeLightbox();
-      return;
-    }
-    // if deleting last item, show previous one, else keep same index
-    const nextIndex = idx >= flatSamples.length - 1 ? idx - 1 : idx;
-    setLightboxIndex(Math.max(0, nextIndex));
-  }, [lightboxSrc, classes, flatSamples, removeSample, closeLightbox]);
+  // Lightbox hook for image navigation
+  const {
+    lightboxOpen,
+    lightboxSrc,
+    currentClassSamples,
+    openLightbox,
+    closeLightbox,
+    showPrev,
+    showNext,
+    removeCurrentLightboxImage,
+  } = useLightbox(classes, isWideScreen, removeSample);
 
   const trainModel = useCallback(async () => {
     if (classes.length < 2 || classes.some((cls) => cls.samples.length < 2)) {
@@ -1405,10 +1309,10 @@ const ModelTrainer = ({
         </DialogActions>
       </Dialog>
 
-      <Lightbox
+      <LightboxComponent
         open={lightboxOpen}
         src={lightboxSrc}
-        flatSamples={flatSamples}
+        flatSamples={currentClassSamples}
         onClose={closeLightbox}
         onPrev={showPrev}
         onNext={showNext}
