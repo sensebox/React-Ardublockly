@@ -448,9 +448,9 @@ function useModelTraining() {
                   );
                   preliminaryModelUsed = true;
 
-                  const snapshotWeights =
-                    bestWeights ??
-                    trainingModel.getWeights().map((w) => w.clone());
+                  const snapshotWeights = bestWeights
+                    ? bestWeights.map((w) => w.clone())
+                    : trainingModel.getWeights().map((w) => w.clone());
 
                   const frozenTrainingModel = cloneTrainingModel(
                     trainingModel,
@@ -458,6 +458,7 @@ function useModelTraining() {
                     classes.length,
                     snapshotWeights,
                   );
+                  snapshotWeights.forEach((w) => w.dispose());
 
                   const preliminaryModelData = createModelData(
                     featureExtractor,
