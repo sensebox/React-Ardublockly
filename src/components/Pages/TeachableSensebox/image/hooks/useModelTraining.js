@@ -514,7 +514,7 @@ function useModelTraining() {
         trainYs?.dispose();
         valXs?.dispose();
         valYs?.dispose();
-
+        bestWeights?.forEach((w) => w.dispose());
         optimizer.dispose();
         setTrainingProgress((prev) => ({
           ...prev,
