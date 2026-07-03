@@ -375,13 +375,13 @@ function useModelTraining() {
           totalBatches,
         });
 
-        const { trainXs, trainYs, valXs, valYs } = prepareDatasetTensors(
+        let trainXs, trainYs, valXs, valYs;
+        ({ trainXs, trainYs, valXs, valYs } = prepareDatasetTensors(
           trainDataset,
           validationDataset,
           classes.length,
           featureDimension,
-        );
-
+        ));
         await trainingModel.fit(trainXs, trainYs, {
           epochs: TOTAL_EPOCHS,
           batchSize,
