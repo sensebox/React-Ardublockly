@@ -423,9 +423,6 @@ function generateMeasurementDisplaySvg(value = "0", title = "", unit = "") {
 
 Blockly.Blocks["display_print_basic"] = {
   init: function () {
-    // Store current font size
-    this.fontSize_ = "s";
-
     this.appendDummyInput("ZEIGE").appendField(
       new Blockly.FieldLabel("Zeige :", undefined, { bold: true }),
     );
@@ -440,18 +437,16 @@ Blockly.Blocks["display_print_basic"] = {
       .appendField(new Blockly.FieldCheckbox("FALSE"), "CLEAR")
       .appendField("Display vor Anzeige löschen");
 
-    // Add font size toggle buttons on a new line
+    // Add font size dropdown on a new line
     this.appendDummyInput("FONT_SIZE")
       .appendField("Größe:")
       .appendField(
-        new Blockly.FieldImage(
-          generateFontSizeToggleSvg("s"),
-          96,
-          22,
-          "font size",
-          this.handleFontSizeClick.bind(this),
-        ),
-        "FONT_SIZE_BUTTONS",
+        new Blockly.FieldDropdown([
+          ["Klein", "s"],
+          ["Mittel", "m"],
+          ["Groß", "l"],
+        ]),
+        "SIZE",
       );
 
     this.setPreviousStatement(true, null);
@@ -460,32 +455,10 @@ Blockly.Blocks["display_print_basic"] = {
     this.setTooltip("Zeigt einen Text auf dem Display an");
     this.setHelpUrl("");
 
-    this.setOnChange(this.onTextChange.bind(this));
+    this.setOnChange(this.onChange_.bind(this));
   },
 
-  handleFontSizeClick: function (field) {
-    const clickEvent = window.event;
-    if (!clickEvent) return;
-
-    const rect = clickEvent.target.getBoundingClientRect();
-    const x = clickEvent.clientX - rect.left;
-    const buttonWidth = rect.width / 3;
-
-    // Determine which button was clicked based on X position
-    let newSize;
-    if (x < buttonWidth) {
-      newSize = "s";
-    } else if (x < buttonWidth * 2) {
-      newSize = "m";
-    } else {
-      newSize = "l";
-    }
-
-    this.fontSize_ = newSize;
-    this.updateDisplay();
-  },
-
-  onTextChange: function (event) {
+  onChange_: function (event) {
     if (!this.workspace || this.isInFlyout) return;
 
     if (
@@ -498,11 +471,8 @@ Blockly.Blocks["display_print_basic"] = {
   },
 
   updateDisplay: function () {
-    // Update font size buttons
-    const fontSizeField = this.getField("FONT_SIZE_BUTTONS");
-    if (fontSizeField) {
-      fontSizeField.setValue(generateFontSizeToggleSvg(this.fontSize_));
-    }
+    // Get font size from dropdown
+    const fontSize = this.getFieldValue("SIZE") || "s";
 
     // Collect all text from previous display blocks in sequence
     const allTexts = [];
@@ -549,7 +519,7 @@ Blockly.Blocks["display_print_basic"] = {
     // Update display preview
     const displayField = this.getField("DISPLAY_ICON");
     if (displayField) {
-      displayField.setValue(generateDisplaySvg(combinedText, this.fontSize_));
+      displayField.setValue(generateDisplaySvg(combinedText, fontSize));
     }
 
     // Update all following display blocks too
