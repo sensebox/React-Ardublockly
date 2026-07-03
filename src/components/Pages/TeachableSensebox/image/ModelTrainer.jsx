@@ -40,9 +40,6 @@ import {
   Download as DownloadIcon,
   MoreVert as MoreVertIcon,
   Warning as WarningIcon,
-  Close as CloseIcon,
-  ArrowBackIos as ArrowBackIcon,
-  ArrowForwardIos as ArrowForwardIcon,
 } from "@mui/icons-material";
 import useCameraSource from "./hooks/useCameraSource";
 import useLightbox, { LightboxComponent } from "./hooks/useLightbox";
