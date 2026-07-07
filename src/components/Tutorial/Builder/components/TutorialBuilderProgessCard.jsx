@@ -34,6 +34,7 @@ const SUBJECTS = [
   "Chemie",
   "Technik",
   "Digitale Bildung",
+  "ADA",
   "Sonstiges",
 ];
 
