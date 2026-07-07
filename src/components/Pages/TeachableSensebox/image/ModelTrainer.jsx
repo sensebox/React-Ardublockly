@@ -42,6 +42,7 @@ import {
   Warning as WarningIcon,
 } from "@mui/icons-material";
 import useCameraSource from "./hooks/useCameraSource";
+import useLightbox, { LightboxComponent } from "./hooks/useLightbox";
 import SerialErrorHandler, {
   ConnectionStatus,
   ErrorTypes,
@@ -50,6 +51,7 @@ import SerialCameraService from "./SerialCameraService";
 import FloatingCameraPreview from "./FloatingCameraPreview";
 import TrainingResultsSection from "./TrainingResultsSection";
 import HelpButton, { useHelpBlink } from "../HelpButton";
+import ExpandedClassDialog from "./ExpandedClassDialog";
 import useModelTraining from "./hooks/useModelTraining";
 import { DEFAULT_TRAINING_SETTINGS } from "./hooks/useModelTraining";
 import useModelPrediction from "./hooks/useModelPrediction";
@@ -70,16 +72,13 @@ const ModelTrainer = ({
   const [editingClassId, setEditingClassId] = useState(null);
   const [editingClassName, setEditingClassName] = useState("");
 
+  // Expanded class state
+  const [expandedClassId, setExpandedClassId] = useState(null);
+
   // Camera state
   const previewContainerRef = useRef(null);
   const sampleScrollRefs = useRef({});
 
-  useEffect(() => {
-    classes.forEach((cls) => {
-      const el = sampleScrollRefs.current[cls.id];
-      if (el) el.scrollTop = el.scrollHeight;
-    });
-  }, [classes]);
   const [videoLoading, setVideoLoading] = useState(false);
   const [serialError, setSerialError] = useState(null);
   const [connectionStatus, setConnectionStatus] = useState(
@@ -102,6 +101,7 @@ const ModelTrainer = ({
   const t = getImageTranslations();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const isWideScreen = useMediaQuery(theme.breakpoints.up("lg"));
 
   const {
     sourceType,
@@ -124,6 +124,7 @@ const ModelTrainer = ({
     testResults,
     finalAccuracy,
     trainedModel,
+    isPreliminaryModel,
   } = useModelTraining();
 
   const { predictions } = useModelPrediction(
@@ -407,8 +408,8 @@ const ModelTrainer = ({
       try {
         const imageUrl = await captureFrame();
         if (imageUrl) {
-          setClasses((prev) =>
-            prev.map((cls) =>
+          setClasses((prev) => {
+            const newClasses = prev.map((cls) =>
               cls.id === classId
                 ? {
                     ...cls,
@@ -418,8 +419,13 @@ const ModelTrainer = ({
                     ],
                   }
                 : cls,
-            ),
-          );
+            );
+            requestAnimationFrame(() => {
+              const el = sampleScrollRefs.current[classId];
+              if (el) el.scrollTop = el.scrollHeight;
+            });
+            return newClasses;
+          });
         }
       } catch (error) {
         console.error("Error capturing image:", error);
@@ -427,19 +433,6 @@ const ModelTrainer = ({
     },
     [isCameraActive, captureFrame],
   );
-
-  const startCapturing = useCallback(
-    (classId) => {
-      captureImage(classId);
-      const intervalId = setInterval(() => captureImage(classId), 100);
-      return intervalId;
-    },
-    [captureImage],
-  );
-
-  const stopCapturing = useCallback((intervalId) => {
-    if (intervalId) clearInterval(intervalId);
-  }, []);
 
   useEffect(() => {
     return () => {
@@ -460,6 +453,18 @@ const ModelTrainer = ({
     );
   }, []);
 
+  // Lightbox hook for image navigation
+  const {
+    lightboxOpen,
+    lightboxSrc,
+    currentClassSamples,
+    openLightbox,
+    closeLightbox,
+    showPrev,
+    showNext,
+    removeCurrentLightboxImage,
+  } = useLightbox(classes, isWideScreen, removeSample);
+
   const trainModel = useCallback(async () => {
     if (classes.length < 2 || classes.some((cls) => cls.samples.length < 2)) {
       onTrainingError(t.training.errorInsufficientData);
@@ -478,6 +483,7 @@ const ModelTrainer = ({
         onTrainingError,
         onModelTrained,
         trainingSettings,
+        () => {}, // Preliminary model callback - updates hook state only
       );
       trainedClassesSnapshotRef.current = getClassesSnapshot(classes);
     } finally {
@@ -749,22 +755,41 @@ const ModelTrainer = ({
                       </Paper>
                     )}
 
-                    {isCameraActive && predictions.length === 0 && (
-                      <Paper
+                    {trainedModel &&
+                      isCameraActive &&
+                      predictions.length === 0 && (
+                        <Paper
+                          sx={{
+                            p: 2,
+                            textAlign: "center",
+                            border: "1px dashed #ccc",
+                            bgcolor: "grey.50",
+                          }}
+                        >
+                          <Typography variant="body2" color="text.secondary">
+                            {t.training.analyzing}
+                          </Typography>
+                        </Paper>
+                      )}
+
+                    {isPreliminaryModel && isTraining && (
+                      <Box
                         sx={{
-                          p: 2,
-                          textAlign: "center",
-                          border: "1px dashed #ccc",
-                          bgcolor: "grey.50",
+                          mt: 1,
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 1,
+                          color: "info.main",
                         }}
                       >
-                        <Typography variant="body2" color="text.secondary">
-                          {t.training.analyzing}
+                        <CircularProgress size={16} />
+                        <Typography variant="caption">
+                          {t.training.preliminaryModelWarning}
                         </Typography>
-                      </Paper>
+                      </Box>
                     )}
 
-                    {isDataStale && (
+                    {isDataStale && !isTraining && (
                       <Box
                         sx={{
                           mt: 1,
@@ -791,7 +816,20 @@ const ModelTrainer = ({
           <Grid container spacing={2} sx={{ mb: 3 }}>
             {classes.map((cls) => (
               <Grid item xs={12} key={cls.id}>
-                <Card>
+                <Card
+                  onClick={(e) => {
+                    if (!isWideScreen) return;
+                    if (
+                      !e.target.closest("button") &&
+                      !e.target.closest("input") &&
+                      !e.target.closest(".MuiTypography-root") &&
+                      !e.target.closest("img")
+                    ) {
+                      setExpandedClassId(cls.id);
+                    }
+                  }}
+                  sx={{ cursor: "pointer", "&:hover": { boxShadow: 4 } }}
+                >
                   <CardContent>
                     <Box
                       sx={{
@@ -801,7 +839,8 @@ const ModelTrainer = ({
                         mb: 2,
                       }}
                     >
-                      {editingClassId === cls.id ? (
+                      {editingClassId === cls.id &&
+                      expandedClassId !== cls.id ? (
                         <TextField
                           autoFocus
                           size="small"
@@ -877,6 +916,7 @@ const ModelTrainer = ({
                         borderColor: "divider",
                         borderRadius: 1,
                         bgcolor: "grey.50",
+                        marginBottom: 0,
                       }}
                     >
                       {cls.samples.map((sample) => (
@@ -887,11 +927,13 @@ const ModelTrainer = ({
                           <img
                             src={sample.url}
                             alt={`Sample for ${cls.name}`}
+                            onClick={(e) => openLightbox(sample.url, e)}
                             style={{
                               width: 60,
                               height: 60,
                               objectFit: "cover",
                               borderRadius: 4,
+                              cursor: "pointer",
                             }}
                           />
                           <IconButton
@@ -926,41 +968,15 @@ const ModelTrainer = ({
                     >
                       <span>
                         <Button
-                          size="small"
+                          variant="contained"
+                          size="medium"
                           startIcon={<CameraIcon />}
-                          onMouseDown={(e) => {
-                            e.preventDefault();
-                            const intervalId = startCapturing(cls.id);
-                            e.currentTarget.dataset.intervalId = intervalId;
-                          }}
-                          onMouseUp={(e) => {
-                            e.preventDefault();
-                            stopCapturing(
-                              parseInt(e.currentTarget.dataset.intervalId),
-                            );
-                          }}
-                          onMouseLeave={(e) => {
-                            e.preventDefault();
-                            if (e.currentTarget.dataset.intervalId) {
-                              stopCapturing(
-                                parseInt(e.currentTarget.dataset.intervalId),
-                              );
-                            }
-                          }}
-                          onTouchStart={(e) => {
-                            e.preventDefault();
-                            const intervalId = startCapturing(cls.id);
-                            e.currentTarget.dataset.intervalId = intervalId;
-                          }}
-                          onTouchEnd={(e) => {
-                            e.preventDefault();
-                            stopCapturing(
-                              parseInt(e.currentTarget.dataset.intervalId),
-                            );
+                          onClick={() => {
+                            captureImage(cls.id);
                           }}
                           disabled={!isCameraActive || disabled}
                         >
-                          {t.training.holdToCapture}
+                          {t.training.captureImage}
                         </Button>
                       </span>
                     </Tooltip>
@@ -1071,7 +1087,7 @@ const ModelTrainer = ({
                       onOpenHelp && onOpenHelp("image/trainingSettings");
                     }}
                     isBlinking={settingsBlinking}
-                    tooltip={t.training.tooltip.trainingSettings}
+                    tooltip={t.training.tooltip.helpTrainingSettings}
                   />
                 </Box>
                 <Box
@@ -1108,7 +1124,7 @@ const ModelTrainer = ({
                     onChange={(e) => {
                       const value = Math.max(
                         0.000001,
-                        Math.min(0.1, parseFloat(e.target.value) || 0.0001),
+                        Math.min(0.1, parseFloat(e.target.value) || 0.001),
                       );
                       setTrainingSettings((prev) => ({
                         ...prev,
@@ -1219,6 +1235,22 @@ const ModelTrainer = ({
         />
       )}
 
+      <ExpandedClassDialog
+        open={expandedClassId !== null}
+        cls={classes.find((c) => c.id === expandedClassId)}
+        onClose={() => setExpandedClassId(null)}
+        editingClassId={editingClassId}
+        editingClassName={editingClassName}
+        onStartEditing={startEditingClass}
+        onSaveRename={saveClassRename}
+        onCancelEditing={cancelEditingClass}
+        sampleScrollRefs={sampleScrollRefs}
+        openLightbox={openLightbox}
+        removeSample={removeSample}
+        disabled={disabled}
+        t={t}
+      />
+
       <Dialog open={showAddDialog} onClose={() => setShowAddDialog(false)}>
         <DialogTitle>{t.training.addNewClass}</DialogTitle>
         <DialogContent>
@@ -1273,6 +1305,16 @@ const ModelTrainer = ({
           </Tooltip>
         </DialogActions>
       </Dialog>
+
+      <LightboxComponent
+        open={lightboxOpen}
+        src={lightboxSrc}
+        flatSamples={currentClassSamples}
+        onClose={closeLightbox}
+        onPrev={showPrev}
+        onNext={showNext}
+        onDelete={removeCurrentLightboxImage}
+      />
     </Box>
   );
 };
