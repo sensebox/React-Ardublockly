@@ -41,7 +41,6 @@ export function useTutorialViewer(tutorialId) {
       });
     }
   };
-
   return {
     tutorial,
     activeStep,

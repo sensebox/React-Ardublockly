@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
 import { Box, Card, CardContent } from "@mui/material";
+import { useEffect } from "react";
+import { useTutorialViewer } from "../hooks/useTutorialViewer";
 
 const variants = {
   initial: { opacity: 0, x: 100 },
@@ -10,6 +12,7 @@ const variants = {
 const TutorialSlide = ({ children, title, stepNumber }) => {
   return (
     <motion.div
+      position="relative"
       variants={variants}
       initial="initial"
       animate="animate"
