@@ -13,7 +13,9 @@ import {
   Button,
   Typography,
   IconButton,
+  useMediaQuery,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import { CodeCompilationIcon } from "./CodeCompilationIcon";
 import DownloadAnimation from "./DownloadAnimation";
 import { DragDropIcon } from "./DragDropIcon";
@@ -27,13 +29,6 @@ import UsbIcon from "@mui/icons-material/Usb";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import TransferStep from "./TransferStep";
 
-const headerStyle = {
-  fontSize: "1.5rem",
-  color: "#4EAF47",
-  margin: "1rem",
-  fontWeight: "bold",
-};
-
 function CompilationDialog({
   open,
   code,
@@ -46,6 +41,14 @@ function CompilationDialog({
   const [sketchId, setSketchId] = useState(null);
   const [error, setError] = useState(null);
   const [counter, setCounter] = useState(0);
+  const theme = useTheme();
+  const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
+  const headerStyle = {
+    fontSize: isSmall ? "1.1rem" : "1.5rem",
+    color: "#4EAF47",
+    margin: isSmall ? "0.5rem" : "1rem",
+    fontWeight: "bold",
+  };
   const filename = useSelector((state) => state.workspace.name) || "sketch";
   const compilerUrl = useSelector((state) => state.general.compiler);
   const sessionId = useSelector((state) => state.general.sessionId);
@@ -182,7 +185,15 @@ function CompilationDialog({
       onClose={handleClose}
       disableEscapeKeyDown={activeStep !== 2 || !error}
       PaperProps={{
-        style: { width: "600px", minHeight: "60vh", maxHeight: "70vh" },
+        style: isSmall
+          ? {
+              width: "95vw",
+              maxWidth: "95vw",
+              margin: "8px",
+              minHeight: "auto",
+              maxHeight: "90vh",
+            }
+          : { width: "600px", minHeight: "60vh", maxHeight: "70vh" },
       }}
     >
       {isEmbedded && activeStep >= 1 && (

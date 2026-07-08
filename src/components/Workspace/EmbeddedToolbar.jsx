@@ -17,16 +17,8 @@ const EmbeddedToolbar = ({
   
   // Embedded-optimized toolbar layout for embedded mode
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        width: "100%",
-        flexWrap: "wrap",
-      }}
-    >
-      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+    <div className="embedded-toolbar-inner">
+      <div className="embedded-toolbar-group embedded-toolbar-left">
         {!assessment && !multiple && <AutoSave />}
         <WorkspaceName
           multiple={multiple}
@@ -35,16 +27,7 @@ const EmbeddedToolbar = ({
         />
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "16px",
-          flex: 1,
-          justifyContent: "flex-end",
-          flexWrap: "wrap",
-        }}
-      >
+      <div className="embedded-toolbar-group embedded-toolbar-right">
         {!multiple && selectedBoard && <Compile iconButton />}
 
         {projectType !== "gallery" && !assessment && (
