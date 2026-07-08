@@ -43,6 +43,7 @@ const BuilderPage = () => {
     steps,
     difficulty,
     selectedHardware,
+    customHardware,
     learnings,
     subjects,
     topics,
@@ -184,6 +185,7 @@ const BuilderPage = () => {
           setSteps={actions.setSteps}
           activeStep={activeStep}
           selectedHardware={selectedHardware}
+          customHardware={customHardware}
           learnings={learnings}
           setLearnings={actions.setLearnings}
         />

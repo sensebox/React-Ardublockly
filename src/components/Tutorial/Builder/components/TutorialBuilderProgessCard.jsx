@@ -64,6 +64,8 @@ const TutorialBuilderProgressCard = ({
   setDifficulty,
   selectedHardware,
   setSelectedHardware,
+  customHardware,
+  setCustomHardware,
   activeStep,
   setActiveStep,
   setAutosaveEnabled,
@@ -396,6 +398,8 @@ const TutorialBuilderProgressCard = ({
                   onClose={() => setModalOpen(false)}
                   selectedHardware={selectedHardware}
                   onHardwareSelect={setSelectedHardware}
+                  customHardware={customHardware}
+                  onCustomHardwareChange={setCustomHardware}
                 />
               </Box>
             </Box>

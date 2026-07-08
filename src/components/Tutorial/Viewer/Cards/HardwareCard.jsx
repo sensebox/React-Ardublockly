@@ -12,9 +12,10 @@ import {
 } from "@mui/material";
 import { MenuBook } from "@mui/icons-material";
 import COMPONENT_MAP from "../../Builder/utils/componentMap"; // Pfad ggf. anpassen
-const HardwareCard = ({ component }) => {
+const HardwareCard = ({ component, customHardware = {} }) => {
   const theme = useTheme();
-  const compData = COMPONENT_MAP[component] || {
+  const allHardware = { ...COMPONENT_MAP, ...customHardware };
+  const compData = allHardware[component] || {
     name: component,
     image: "/media/hardware/3dmodels/coming-soon.png", // Fallback
     docUrl: "#",
@@ -120,29 +121,32 @@ const HardwareCard = ({ component }) => {
           borderTop: `1px solid ${theme.palette.divider}`,
         }}
       >
-        <Tooltip title="Zur Dokumentation">
-          <IconButton
-            href={compData.docUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            sx={{
-              backgroundColor: theme.palette.primary.main,
-              color: "white",
-              "&:hover": {
-                backgroundColor: theme.palette.primary.dark,
-              },
-            }}
-          >
-            <MenuBook />
-          </IconButton>
-        </Tooltip>
+        {compData.docUrl && compData.docUrl !== "#" ? (
+          <Tooltip title="Zur Dokumentation">
+            <IconButton
+              href={compData.docUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{
+                backgroundColor: theme.palette.primary.main,
+                color: "white",
+                "&:hover": {
+                  backgroundColor: theme.palette.primary.dark,
+                },
+              }}
+            >
+              <MenuBook />
+            </IconButton>
+          </Tooltip>
+        ) : null}
       </Box>
     </Card>
   );
 };
 
 HardwareCard.propTypes = {
-  component: PropTypes.string.isRequired, // nur Name-String notwendig
+  component: PropTypes.string.isRequired,
+  customHardware: PropTypes.object,
 };
 
 export default HardwareCard;
