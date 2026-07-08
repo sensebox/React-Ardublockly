@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Card,
@@ -12,12 +12,45 @@ import {
 } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, Cancel, HelpOutline } from "@mui/icons-material";
+import { useDispatch } from "react-redux";
+import { tutorialCheck } from "../../../../actions/tutorialActions";
 
-const QuestionCard = ({ questionData, setNextStepDisabled }) => {
+const QuestionCard = ({
+  questionData,
+  setNextStepDisabled,
+  stepId,
+  questionIndex = 0,
+  tutorialId,
+}) => {
+  const dispatch = useDispatch();
   const theme = useTheme();
   const [selected, setSelected] = useState([]);
   const [submitted, setSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
+
+  const questionKey = `${stepId}_q${questionIndex}`;
+
+  useEffect(() => {
+    if (stepId && tutorialId) {
+      try {
+        const savedAnswers =
+          JSON.parse(
+            window.localStorage.getItem(`tutorial_answers_${tutorialId}`),
+          ) || [];
+        const savedAnswer = savedAnswers.find((a) => a._id === questionKey);
+        if (savedAnswer && savedAnswer.answers) {
+          setSelected(savedAnswer.answers);
+          setSubmitted(true);
+          setIsCorrect(savedAnswer.type === "success");
+          if (savedAnswer.type === "success") {
+            setNextStepDisabled(false);
+          }
+        }
+      } catch (e) {
+        console.warn("Failed to load saved answer", e);
+      }
+    }
+  }, [questionKey, tutorialId, setNextStepDisabled]);
 
   if (!questionData)
     return (
@@ -54,6 +87,38 @@ const QuestionCard = ({ questionData, setNextStepDisabled }) => {
     setIsCorrect(correct);
     if (correct) setNextStepDisabled(false);
     setSubmitted(true);
+
+    if (stepId && tutorialId) {
+      dispatch(
+        tutorialCheck(correct ? "success" : "error", {
+          _id: stepId,
+          answer: selected.join(", "),
+        }),
+      );
+      try {
+        const savedAnswers =
+          JSON.parse(
+            window.localStorage.getItem(`tutorial_answers_${tutorialId}`),
+          ) || [];
+        const taskIndex = savedAnswers.findIndex((t) => t._id === questionKey);
+        if (taskIndex >= 0) {
+          savedAnswers[taskIndex].answers = selected;
+          savedAnswers[taskIndex].type = correct ? "success" : "error";
+        } else {
+          savedAnswers.push({
+            _id: questionKey,
+            answers: selected,
+            type: correct ? "success" : "error",
+          });
+        }
+        window.localStorage.setItem(
+          `tutorial_answers_${tutorialId}`,
+          JSON.stringify(savedAnswers),
+        );
+      } catch (e) {
+        console.warn("Failed to save answer to localStorage", e);
+      }
+    }
   };
 
   const resetQuestion = () => {

@@ -62,6 +62,7 @@ md.renderer.rules.table_open = function (tokens, idx, options, env, self) {
 
 const TaskCard = ({ step, setNextStepDisabled }) => {
   const activeStep = useSelector((state) => state.tutorial.activeStep);
+  const tutorialId = useSelector((state) => state.tutorial.tutorials[0]?._id);
 
   const svgToDataUrl = (svgString) =>
     "data:image/svg+xml;base64," +
@@ -88,6 +89,9 @@ const TaskCard = ({ step, setNextStepDisabled }) => {
                 setNextStepDisabled={setNextStepDisabled}
                 key={idx}
                 questionData={q}
+                stepId={step._id}
+                questionIndex={idx}
+                tutorialId={tutorialId}
               />
             );
           })}

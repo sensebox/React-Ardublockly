@@ -11,6 +11,7 @@ import {
 
 import axios from "axios";
 import { returnErrors, returnSuccess } from "./messageActions";
+import { mergeAnswersIntoTasks } from "../components/Tutorial/Viewer/helpers/tutorialStorageUtils";
 
 export const tutorialProgress = () => (dispatch) => {
   dispatch({ type: TUTORIAL_PROGRESS });
@@ -343,14 +344,22 @@ const existingTutorial = (tutorial, status) =>
           (task) => existingTaskIds.indexOf(task._id) > -1,
         );
       }
+      // Merge saved answers from localStorage into task objects for Redux state visibility
+      status[statusIndex].tasks = mergeAnswersIntoTasks(
+        status[statusIndex].tasks,
+        tutorialsId,
+      );
     } else {
+      var newTaskList = tutorial.steps
+        .filter((step) => step.type === "task")
+        .map((task) => {
+          return { _id: task._id };
+        });
+      // Merge saved answers from localStorage into new tasks
+      newTaskList = mergeAnswersIntoTasks(newTaskList, tutorialsId);
       status.push({
         _id: tutorialsId,
-        tasks: tutorial.steps
-          .filter((step) => step.type === "task")
-          .map((task) => {
-            return { _id: task._id };
-          }),
+        tasks: newTaskList,
       });
     }
     resolve(status);

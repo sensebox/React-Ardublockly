@@ -63,6 +63,33 @@ export default function SolutionCheck({
     const result = checkXml(solutionXml, xml);
     setMsg(result);
     setOpen(true);
+
+    try {
+      const tutorialId = tutorial._id;
+      const stepId = tutorial.steps[activeStep]._id;
+      const savedAnswers =
+        JSON.parse(
+          window.localStorage.getItem(`tutorial_answers_${tutorialId}`),
+        ) || [];
+      const blocklyIndex = savedAnswers.findIndex(
+        (a) => a._id === `${stepId}_blockly`,
+      );
+      if (blocklyIndex >= 0) {
+        savedAnswers[blocklyIndex].xml = xml;
+      } else {
+        savedAnswers.push({
+          _id: `${stepId}_blockly`,
+          xml: xml,
+        });
+      }
+      window.localStorage.setItem(
+        `tutorial_answers_${tutorialId}`,
+        JSON.stringify(savedAnswers),
+      );
+      console.log("Blockly code saved to localStorage");
+    } catch (e) {
+      console.warn("Failed to save Blockly code to localStorage", e);
+    }
   };
 
   const changeStep = (step) => {
