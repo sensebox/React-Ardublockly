@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 
 import WorkspaceName from "./ToolbarItems/WorkspaceName";
 import Compile from "./ToolbarItems/Compile";
-import CompileAndUpload from "./ToolbarItems/CompileAndUpload";
 import SaveProject from "./ToolbarItems/SaveProject";
 import DownloadProject from "./ToolbarItems/DownloadProject";
 import OpenProject from "./ToolbarItems/OpenProject";
@@ -43,7 +42,6 @@ const WorkspaceToolbar = ({
       )}
 
       {assessment ? <SolutionCheck /> : !multiple && <Compile iconButton />}
-      {!assessment && !multiple && <CompileAndUpload />}
       {!multiple && <CopyCode iconButton />}
       {user && !multiple && (
         <SaveProject

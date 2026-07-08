@@ -70,15 +70,39 @@ const UPLOAD_BAUDRATE = 115200;
 
 const FlashContext = createContext(null);
 
+// Safe fallback returned when useFlash() is called outside a <FlashProvider>
+// (e.g. the embedded toolbar). "connected" stays false so the compile button
+// simply falls back to the classic download flow.
+const FALLBACK_FLASH = {
+  supported: false,
+  connected: false,
+  bootloaderReady: false,
+  port: null,
+  deviceLabel: "",
+  status: "idle",
+  progress: 0,
+  log: "",
+  error: null,
+  binary: null,
+  compileStatus: "idle",
+  compileError: null,
+  needsBootloaderPermission: false,
+  connect: async () => false,
+  selectDevice: async () => null,
+  reconnectSavedDevice: async () => {},
+  prepareBootloaderMode: async () => {},
+  grantBootloaderPort: async () => {},
+  compile: async () => null,
+  startFlash: async () => {},
+  resetDevice: () => {},
+  resetFlashState: () => {},
+};
+
 /**
  * Access the shared flashing state from within the wizard steps.
  */
 export function useFlash() {
-  const context = useContext(FlashContext);
-  if (!context) {
-    throw new Error("useFlash must be used within a <FlashProvider>.");
-  }
-  return context;
+  return useContext(FlashContext) ?? FALLBACK_FLASH;
 }
 
 /**
@@ -86,7 +110,7 @@ export function useFlash() {
  * Holds the selected serial port and exposes actions that the individual steps
  * trigger (select a device in step 1, start the upload in step 2).
  */
-export function FlashProvider({ open, children }) {
+export function FlashProvider({ children }) {
   const dispatch = useDispatch();
   const supported =
     typeof navigator !== "undefined" && navigator.serial !== undefined;
@@ -115,9 +139,6 @@ export function FlashProvider({ open, children }) {
   const sketch = useSelector((state) => state.workspace.code.arduino);
   const selectedBoard = useSelector((state) => state.board.board);
   const savedDeviceLabel = useSelector((state) => state.board.deviceLabel);
-  const bootloaderPortPrepared = useSelector(
-    (state) => state.board.bootloaderPortPrepared,
-  );
   const filename = useSelector((state) => state.workspace.name) || "sketch";
 
   const board = resolveCompilerBoard(selectedBoard);
@@ -199,29 +220,15 @@ export function FlashProvider({ open, children }) {
     return runCompile;
   }, [binary, compilerUrl, sketch, board, sessionId, filename]);
 
-  // Kick off compilation as soon as the dialog opens, so the cached binary is
-  // ready by the time the user reaches the upload step.
-  const compileStarted = useRef(false);
+  // Load a previously saved device label so the UI can show which device is
+  // remembered. The actual serial port is (re-)selected explicitly by the user
+  // through the "Gerät verbinden" button.
   useEffect(() => {
-    if (open && !compileStarted.current) {
-      compileStarted.current = true;
-      compile().catch(() => {
-        // Errors are surfaced via compileStatus/compileError.
-      });
-    }
-  }, [open, compile]);
-
-  // Load saved device label from Redux when dialog opens.
-  // Don't set the port yet - just show the user that a device is remembered.
-  useEffect(() => {
-    if (!open || !supported) return;
-
+    if (!supported) return;
     if (savedDeviceLabel) {
       setDeviceLabel(savedDeviceLabel);
-      // Don't set the port here - let the user confirm with a button click.
-      // This avoids timing issues where the port might not be fully initialized yet.
     }
-  }, [open, supported, savedDeviceLabel]);
+  }, [supported, savedDeviceLabel]);
 
   const selectDevice = useCallback(async () => {
     setError(null);
@@ -242,11 +249,13 @@ export function FlashProvider({ open, children }) {
       setDeviceLabel(label);
       // Save device info to Redux for persistence
       dispatch(setDevicePort("connected", label));
+      return selectedPort;
     } catch (err) {
       // The user simply cancelled the picker – not an error worth showing.
       if (err?.name !== "NotFoundError") {
         setError(err?.message || String(err));
       }
+      return null;
     }
   }, [dispatch]);
 
@@ -295,59 +304,82 @@ export function FlashProvider({ open, children }) {
   // and requestPort() would throw a SecurityError (which is exactly why the
   // first upload used to fail). Instead we flag that an explicit, fresh user
   // gesture is required and let grantBootloaderPort() open the picker.
-  const prepareBootloaderMode = useCallback(async () => {
-    if (flashLockRef.current) return;
-    flashLockRef.current = true;
-    setError(null);
-    setNeedsBootloaderPermission(false);
-    appendLog(""); // Clear previous logs
-    try {
-      appendLog("Vorbereitung des Bootloader-Modus ...\n");
-      const knownPorts = await navigator.serial.getPorts();
-      appendLog(`Bekannte Ports: ${knownPorts.length}\n`);
-
-      // Perform the 1200bps touch to trigger bootloader mode
-      appendLog("Versetze Board in den Download-Modus (1200bps touch) ...\n");
+  const prepareBootloaderMode = useCallback(
+    async (explicitPort) => {
+      const activePort = explicitPort || port;
+      if (flashLockRef.current) return;
+      flashLockRef.current = true;
+      setError(null);
+      setNeedsBootloaderPermission(false);
+      appendLog(""); // Clear previous logs
       try {
-        await touchTo1200bps(port);
-        appendLog("1200bps touch erfolgreich abgeschlossen.\n");
-      } catch (touchErr) {
-        appendLog(`Fehler beim 1200bps touch: ${touchErr?.message}\n`);
-        throw new Error(`1200bps touch fehlgeschlagen: ${touchErr?.message}`);
+        appendLog("Vorbereitung des Bootloader-Modus ...\n");
+        const knownPorts = await navigator.serial.getPorts();
+        appendLog(`Bekannte Ports: ${knownPorts.length}\n`);
+
+        // Perform the 1200bps touch to trigger bootloader mode
+        appendLog("Versetze Board in den Download-Modus (1200bps touch) ...\n");
+        try {
+          await touchTo1200bps(activePort);
+          appendLog("1200bps touch erfolgreich abgeschlossen.\n");
+        } catch (touchErr) {
+          appendLog(`Fehler beim 1200bps touch: ${touchErr?.message}\n`);
+          throw new Error(`1200bps touch fehlgeschlagen: ${touchErr?.message}`);
+        }
+
+        // Give the system time to fully close the old port and re-enumerate.
+        appendLog("Warte auf USB-Neuaufzählung ...\n");
+        await new Promise((resolve) => setTimeout(resolve, 500));
+
+        // Look for a bootloader port we already have permission for (subsequent
+        // uploads, or a grant that survived from a previous session).
+        appendLog("Suche nach bereits genehmigtem Bootloader-Port ...\n");
+        const newPort = await waitForBootloaderPort(knownPorts, 3000);
+
+        if (newPort) {
+          setBootloaderPort(newPort);
+          appendLog("✓ Bootloader-Port gefunden und genehmigt.\n");
+          appendLog("✓ Bootloader-Modus erfolgreich vorbereitet.\n");
+          dispatch(setBootloaderPortPrepared());
+          return;
+        }
+
+        // First-time case: permission for the re-enumerated device is missing and
+        // must be granted from a fresh user gesture (grantBootloaderPort).
+        appendLog(
+          "Bootloader-Port noch nicht genehmigt – bitte im nächsten Schritt auswählen.\n",
+        );
+        setNeedsBootloaderPermission(true);
+      } catch (err) {
+        const errorMsg = err?.message || String(err);
+        appendLog(`✗ Vorbereitung fehlgeschlagen: ${errorMsg}\n`);
+        setError(errorMsg);
+        throw err;
+      } finally {
+        flashLockRef.current = false;
       }
+    },
+    [port, dispatch, appendLog],
+  );
 
-      // Give the system time to fully close the old port and re-enumerate.
-      appendLog("Warte auf USB-Neuaufzählung ...\n");
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
-      // Look for a bootloader port we already have permission for (subsequent
-      // uploads, or a grant that survived from a previous session).
-      appendLog("Suche nach bereits genehmigtem Bootloader-Port ...\n");
-      const newPort = await waitForBootloaderPort(knownPorts, 3000);
-
-      if (newPort) {
-        setBootloaderPort(newPort);
-        appendLog("✓ Bootloader-Port gefunden und genehmigt.\n");
-        appendLog("✓ Bootloader-Modus erfolgreich vorbereitet.\n");
-        dispatch(setBootloaderPortPrepared());
-        return;
-      }
-
-      // First-time case: permission for the re-enumerated device is missing and
-      // must be granted from a fresh user gesture (grantBootloaderPort).
-      appendLog(
-        "Bootloader-Port noch nicht genehmigt – bitte im nächsten Schritt auswählen.\n",
-      );
-      setNeedsBootloaderPermission(true);
-    } catch (err) {
-      const errorMsg = err?.message || String(err);
-      appendLog(`✗ Vorbereitung fehlgeschlagen: ${errorMsg}\n`);
-      setError(errorMsg);
-      throw err;
-    } finally {
-      flashLockRef.current = false;
+  /**
+   * Convenience action for the "Gerät verbinden" button in the navbar: opens the
+   * serial-port picker and, once a device is chosen, immediately puts it into the
+   * download (bootloader) mode so that a later click on the normal compile button
+   * can upload straight away. On the very first connect the browser still needs a
+   * one-off permission for the re-enumerated bootloader port – this is surfaced
+   * via needsBootloaderPermission and granted through grantBootloaderPort().
+   */
+  const connect = useCallback(async () => {
+    const selectedPort = await selectDevice();
+    if (!selectedPort) return false; // user cancelled the picker
+    try {
+      await prepareBootloaderMode(selectedPort);
+    } catch {
+      // Errors are surfaced via the error state.
     }
-  }, [port, dispatch, appendLog]);
+    return true;
+  }, [selectDevice, prepareBootloaderMode]);
 
   // Compiles the sketch (if not already cached) and flashes it to the given ROM
   // bootloader port. Shared by every flashing entry point so the upload logic
@@ -383,6 +415,10 @@ export function FlashProvider({ open, children }) {
         setStatus("done");
         appendLog("\nUpload erfolgreich abgeschlossen.\n");
         appendLog("Mikrocontroller wurde neu gestartet.\n");
+        // After flashing the board resets back into application mode, so the ROM
+        // bootloader handle we just used is stale. Drop it (but keep the granted
+        // permission) so the next upload re-touches and re-discovers a live port.
+        setBootloaderPort(null);
       } catch (err) {
         setError(err?.message || String(err));
         setStatus("error");
@@ -397,36 +433,43 @@ export function FlashProvider({ open, children }) {
   // activation. At this point the bootloader device (VID 0x303a / PID 0x0002) is
   // already on the USB bus, so it appears in the picker. Once granted, the
   // permission is persisted and every following upload skips this step.
-  const grantBootloaderPort = useCallback(async () => {
-    if (flashLockRef.current) return;
-    flashLockRef.current = true;
-    setError(null);
-    try {
-      appendLog("Frage Genehmigung für den Bootloader-Port an ...\n");
-      const authorizedPort = await navigator.serial.requestPort({
-        filters: [{ usbVendorId: SENSEBOX_USB_VENDOR_ID }],
-      });
-      setBootloaderPort(authorizedPort);
-      setNeedsBootloaderPermission(false);
-      dispatch(setBootloaderPortPrepared());
-      appendLog("✓ Bootloader-Port genehmigt.\n");
-      // The board is already in download mode from the earlier 1200bps touch,
-      // so flash straight away with the just-granted port.
-      await runCompileAndFlash(authorizedPort);
-    } catch (err) {
-      if (err?.name === "NotFoundError") {
-        // The user simply cancelled the picker – keep the prompt visible.
-        appendLog("Auswahl abgebrochen.\n");
-        return;
+  const grantBootloaderPort = useCallback(
+    async (autoFlash = false) => {
+      if (flashLockRef.current) return;
+      flashLockRef.current = true;
+      setError(null);
+      try {
+        appendLog("Frage Genehmigung für den Bootloader-Port an ...\n");
+        const authorizedPort = await navigator.serial.requestPort({
+          filters: [{ usbVendorId: SENSEBOX_USB_VENDOR_ID }],
+        });
+        setBootloaderPort(authorizedPort);
+        setNeedsBootloaderPermission(false);
+        dispatch(setBootloaderPortPrepared());
+        appendLog("✓ Bootloader-Port genehmigt.\n");
+        // When invoked from the upload dialog we flash right away (the board is
+        // already in download mode from the earlier 1200bps touch). When invoked
+        // from the navbar "connect" flow we only secure the permission and leave
+        // the actual upload to the compile button.
+        if (autoFlash) {
+          await runCompileAndFlash(authorizedPort);
+        }
+      } catch (err) {
+        if (err?.name === "NotFoundError") {
+          // The user simply cancelled the picker – keep the prompt visible.
+          appendLog("Auswahl abgebrochen.\n");
+          return;
+        }
+        const errorMsg = err?.message || String(err);
+        appendLog(`✗ Genehmigung fehlgeschlagen: ${errorMsg}\n`);
+        setError(errorMsg);
+        setStatus("error");
+      } finally {
+        flashLockRef.current = false;
       }
-      const errorMsg = err?.message || String(err);
-      appendLog(`✗ Genehmigung fehlgeschlagen: ${errorMsg}\n`);
-      setError(errorMsg);
-      setStatus("error");
-    } finally {
-      flashLockRef.current = false;
-    }
-  }, [dispatch, appendLog, runCompileAndFlash]);
+    },
+    [dispatch, appendLog, runCompileAndFlash],
+  );
 
   const startFlash = useCallback(async () => {
     if (!port) {
@@ -456,8 +499,25 @@ export function FlashProvider({ open, children }) {
       // activation), so it must never call navigator.serial.requestPort().
       appendLog("Vorbereitung des Bootloader-Modus ...\n");
       const knownPorts = await navigator.serial.getPorts();
+      // After a previous upload the board reset and re-enumerated, which can make
+      // the stored port handle stale. Prefer a currently connected senseBox port.
+      let touchPort = port;
+      const livePort = knownPorts.find((p) => {
+        try {
+          return (
+            p.getInfo?.()?.usbVendorId === SENSEBOX_USB_VENDOR_ID &&
+            p.connected === true
+          );
+        } catch {
+          return false;
+        }
+      });
+      if (livePort) {
+        touchPort = livePort;
+        setPort(livePort);
+      }
       appendLog("Versetze Board in den Download-Modus (1200bps touch) ...\n");
-      await touchTo1200bps(port);
+      await touchTo1200bps(touchPort);
       appendLog("Warte auf den Bootloader-Port ...\n");
       const newPort = await waitForBootloaderPort(knownPorts, 3000);
 
@@ -497,58 +557,21 @@ export function FlashProvider({ open, children }) {
     dispatch(clearBootloaderPortPrepared());
   }, [dispatch]);
 
-  // Automatically reconnect to saved device if available (only on 2nd+ uploads when bootloader is prepared)
-  const reconnectStarted = useRef(false);
-  useEffect(() => {
-    if (
-      !open ||
-      !supported ||
-      reconnectStarted.current ||
-      port ||
-      !savedDeviceLabel ||
-      !bootloaderPortPrepared // Only auto-connect on subsequent uploads after first prep
-    ) {
-      return;
-    }
-    reconnectStarted.current = true;
-    reconnectSavedDevice().catch(() => {
-      // Errors are handled and displayed
-    });
-  }, [
-    open,
-    supported,
-    port,
-    savedDeviceLabel,
-    bootloaderPortPrepared,
-    reconnectSavedDevice,
-  ]);
-
-  // Automatically prepare + upload on subsequent uploads (bootloader already
-  // prepared once). The bootloader touch is started as soon as the saved device
-  // is reconnected and does NOT wait for the compilation to finish – both run in
-  // parallel, and runCompileAndFlash() awaits the (possibly still in-flight)
-  // binary right before flashing.
-  const uploadStarted = useRef(false);
-  useEffect(() => {
-    if (
-      !open ||
-      uploadStarted.current ||
-      !port ||
-      compileStatus === "error" ||
-      status !== "idle" ||
-      !bootloaderPortPrepared // Only auto-upload after bootloader has been prepared once
-    ) {
-      return;
-    }
-    uploadStarted.current = true;
-    startFlash().catch(() => {
-      // Errors are handled and displayed
-    });
-  }, [open, port, compileStatus, status, bootloaderPortPrepared, startFlash]);
+  // Clears the transient flashing state (status/progress/log/error) without
+  // touching the device connection. Used when the upload progress dialog closes.
+  const resetFlashState = useCallback(() => {
+    setStatus("idle");
+    setProgress(0);
+    setLog("");
+    setError(null);
+    setNeedsBootloaderPermission(false);
+  }, []);
 
   const value = useMemo(
     () => ({
       supported,
+      connected: Boolean(port),
+      bootloaderReady: Boolean(bootloaderPort),
       port,
       deviceLabel,
       status,
@@ -559,6 +582,7 @@ export function FlashProvider({ open, children }) {
       compileStatus,
       compileError,
       needsBootloaderPermission,
+      connect,
       selectDevice,
       reconnectSavedDevice,
       prepareBootloaderMode,
@@ -566,10 +590,12 @@ export function FlashProvider({ open, children }) {
       compile,
       startFlash,
       resetDevice,
+      resetFlashState,
     }),
     [
       supported,
       port,
+      bootloaderPort,
       deviceLabel,
       status,
       progress,
@@ -579,6 +605,7 @@ export function FlashProvider({ open, children }) {
       compileStatus,
       compileError,
       needsBootloaderPermission,
+      connect,
       selectDevice,
       reconnectSavedDevice,
       prepareBootloaderMode,
@@ -586,6 +613,7 @@ export function FlashProvider({ open, children }) {
       compile,
       startFlash,
       resetDevice,
+      resetFlashState,
     ],
   );
 
@@ -595,6 +623,5 @@ export function FlashProvider({ open, children }) {
 }
 
 FlashProvider.propTypes = {
-  open: PropTypes.bool,
   children: PropTypes.node,
 };
