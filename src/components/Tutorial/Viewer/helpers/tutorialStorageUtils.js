@@ -23,9 +23,17 @@ export const loadAnswers = (tutorialId) => {
     if (!stored) return [];
 
     const answers = JSON.parse(stored);
-    // Return only entries that have actual answers (not empty task objects)
+    // Keep any persisted entry that has an id and at least one known payload field
     return Array.isArray(answers)
-      ? answers.filter((a) => a.answer !== undefined)
+      ? answers.filter(
+          (a) =>
+            a &&
+            a._id &&
+            (a.answer !== undefined ||
+              a.answers !== undefined ||
+              a.freetextAnswer !== undefined ||
+              a.xml !== undefined),
+        )
       : [];
   } catch (e) {
     console.warn("Failed to load tutorial answers from localStorage", e);

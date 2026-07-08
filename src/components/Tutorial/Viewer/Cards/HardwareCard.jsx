@@ -121,7 +121,8 @@ const HardwareCard = ({ component, customHardware = {} }) => {
           borderTop: `1px solid ${theme.palette.divider}`,
         }}
       >
-        {compData.docUrl && compData.docUrl !== "#" ? (
+        {typeof compData.docUrl === "string" &&
+        /^https?:\/\//i.test(compData.docUrl) ? (
           <Tooltip title="Zur Dokumentation">
             <IconButton
               href={compData.docUrl}

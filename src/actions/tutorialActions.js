@@ -350,13 +350,15 @@ const existingTutorial = (tutorial, status) =>
         tutorialsId,
       );
     } else {
-      var newTaskList = tutorial.steps
-        .filter((step) => step.type === "task")
-        .map((task) => {
-          return { _id: task._id };
-        });
       // Merge saved answers from localStorage into new tasks
-      newTaskList = mergeAnswersIntoTasks(newTaskList, tutorialsId);
+      const newTaskList = mergeAnswersIntoTasks(
+        tutorial.steps
+          .filter((step) => step.type === "task")
+          .map((task) => {
+            return { _id: task._id };
+          }),
+        tutorialsId,
+      );
       status.push({
         _id: tutorialsId,
         tasks: newTaskList,

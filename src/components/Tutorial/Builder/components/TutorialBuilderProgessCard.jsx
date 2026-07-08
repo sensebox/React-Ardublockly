@@ -18,12 +18,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import HardwareSelectorModal from "./AddNewHardware";
-import {
-  SaveOutlined,
-  Save,
-  Expand,
-  ExpandCircleDown,
-} from "@mui/icons-material";
+import { SaveOutlined, Save, ExpandCircleDown } from "@mui/icons-material";
 import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import { Autocomplete } from "@mui/material";
 const SUBJECTS = [

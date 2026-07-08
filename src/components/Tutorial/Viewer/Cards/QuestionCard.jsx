@@ -13,8 +13,6 @@ import {
 } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, Cancel, HelpOutline } from "@mui/icons-material";
-import { useDispatch } from "react-redux";
-import { tutorialCheck } from "../../../../actions/tutorialActions";
 
 const QuestionCard = ({
   questionData,
@@ -23,7 +21,6 @@ const QuestionCard = ({
   questionIndex = 0,
   tutorialId,
 }) => {
-  const dispatch = useDispatch();
   const theme = useTheme();
   const [selected, setSelected] = useState([]);
   const [freetextValue, setFreetextValue] = useState("");
@@ -115,12 +112,6 @@ const QuestionCard = ({
       setSubmitted(true);
 
       if (stepId && tutorialId) {
-        dispatch(
-          tutorialCheck(correct ? "success" : "error", {
-            _id: stepId,
-            answer: freetextValue,
-          }),
-        );
         try {
           const savedAnswers =
             JSON.parse(
@@ -164,12 +155,6 @@ const QuestionCard = ({
       setSubmitted(true);
 
       if (stepId && tutorialId) {
-        dispatch(
-          tutorialCheck(correct ? "success" : "error", {
-            _id: stepId,
-            answer: selected.join(", "),
-          }),
-        );
         try {
           const savedAnswers =
             JSON.parse(

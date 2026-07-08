@@ -86,7 +86,6 @@ export default function SolutionCheck({
         `tutorial_answers_${tutorialId}`,
         JSON.stringify(savedAnswers),
       );
-      console.log("Blockly code saved to localStorage");
     } catch (e) {
       console.warn("Failed to save Blockly code to localStorage", e);
     }

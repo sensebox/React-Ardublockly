@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Box, IconButton, Tooltip, Typography } from "@mui/material";
-import { ChevronLeft, ChevronRight, QuestionMark } from "@mui/icons-material";
+import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { useTutorialViewer } from "../hooks/useTutorialViewer";
 
 const FloatingNavigation = ({ tutorialId }) => {
@@ -16,7 +16,6 @@ const FloatingNavigation = ({ tutorialId }) => {
   const currentStepIndex = tutorial.steps.findIndex(
     (step) => step._id === currentStep._id,
   );
-  console.log(currentStepIndex);
 
   const isFirstStep = currentStepIndex === 0;
   const isLastStep = currentStepIndex === tutorial.steps.length - 1;
@@ -118,11 +117,8 @@ const FloatingNavigation = ({ tutorialId }) => {
       >
         <span>
           <IconButton
-            onClick={
-              isLastStep && !allStepsFinished
-                ? () => console.log("Kein Fortschritt möglich")
-                : nextStep
-            }
+            onClick={nextStep}
+            disabled={isLastStep}
             aria-label="Nächster Schritt"
             sx={{
               width: 48,
@@ -132,28 +128,18 @@ const FloatingNavigation = ({ tutorialId }) => {
               alignItems: "center",
               justifyContent: "center",
               transition: "all 200ms ease-out",
-              bgcolor:
-                isLastStep && !allStepsFinished
-                  ? "feedback.warning"
-                  : "primary.main",
-              color: "white",
-              boxShadow: 2,
+              bgcolor: isLastStep ? "grey.300" : "primary.main",
+              color: isLastStep ? "grey.500" : "white",
+              boxShadow: isLastStep ? "none" : 2,
               "&:hover": {
-                boxShadow: 3,
-                transform: "scale(1.1)",
-                bgcolor:
-                  isLastStep && !allStepsFinished
-                    ? "feedback.warningDark"
-                    : "primary.dark",
+                boxShadow: isLastStep ? "none" : 3,
+                transform: isLastStep ? "none" : "scale(1.1)",
+                bgcolor: isLastStep ? "grey.300" : "primary.dark",
               },
-              cursor: "pointer",
+              cursor: isLastStep ? "not-allowed" : "pointer",
             }}
           >
-            {isLastStep && !allStepsFinished ? (
-              <QuestionMark sx={{ fontSize: 20 }} />
-            ) : (
-              <ChevronRight sx={{ fontSize: 20 }} />
-            )}
+            <ChevronRight sx={{ fontSize: 20 }} />
           </IconButton>
         </span>
       </Tooltip>
