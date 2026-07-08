@@ -16,7 +16,7 @@ import BuilderMain from "./components/BuilderMain";
 import SaveStatusDialog from "./components/SaveStatusDialog";
 
 const BuilderPage = () => {
-  const history = useNavigate();
+  const navigate = useNavigate();
   const location = useLocation();
 
   const token = useSelector((state) => state.auth.token);
@@ -196,7 +196,7 @@ const BuilderPage = () => {
         savingState={savingState}
         onClose={() => setSavingState("idle")}
         savedTutorialId={savedTutorialId}
-        history={history}
+        navigate={navigate}
       />
     </Box>
   );
