@@ -200,3 +200,55 @@
 }
 
 } /* end @media (orientation: portrait) */
+
+/* =============================================================================
+   MOBILE PHONE (PORTRAIT) - scale the whole toolbox down even further
+   ============================================================================= */
+@media (max-width: 600px) and (orientation: portrait) {
+  /* Smaller, more compact category buttons */
+  .embedded-mode .blocklyToolbox {
+    --cat-height: 24px;
+    --cat-padding-x: 4px;
+    --chevron-size: 5px;
+    --chevron-border: 1.5px;
+  }
+
+  .embedded-mode .blocklyToolbox .blocklyToolboxCategory {
+    padding: 4px 2px 4px 0 !important;
+  }
+
+  .embedded-mode .blocklyToolbox .blocklyTreeRowContentContainer {
+    padding: 0 18px 1px 0 !important;
+  }
+
+  /* Smaller category labels */
+  .embedded-mode .blocklyTreeLabel {
+    font-size: 11px !important;
+  }
+
+  /* Fit more categories per row */
+  .embedded-mode
+    .blocklyToolbox
+    .blocklyToolboxCategoryContainer[aria-level="1"] {
+    min-width: calc(33.33vw - 8px) !important;
+  }
+
+  .embedded-mode .blocklyToolboxCategory {
+    margin: 1px !important;
+  }
+
+  /* Limit toolbox height so it doesn't cover the whole screen */
+  .embedded-mode .blocklyToolboxDiv {
+    max-height: 60vh;
+  }
+
+  .embedded-mode .blocklyToolboxCategoryContainer[aria-expanded="true"] {
+    max-height: 150px;
+  }
+
+  /* Tighter spacing between blocks in the flyout preview */
+  .embedded-mode .blocklyFlyout .blocklyBlockCanvas > .blocklyDraggable {
+    margin: 4px 0 !important;
+  }
+}
+

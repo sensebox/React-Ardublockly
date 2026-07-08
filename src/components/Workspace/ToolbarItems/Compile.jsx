@@ -52,7 +52,7 @@ const Compile = (props) => {
           startIcon={<FontAwesomeIcon icon={faClipboardCheck} size="sm" />}
           aria-label="Compile code"
         >
-          Kompilieren
+          <span className="embedded-button-label">Kompilieren</span>
         </Button>
       ) : (
         <Tooltip title={tooltipText} arrow style={{ marginRight: "5px" }}>
