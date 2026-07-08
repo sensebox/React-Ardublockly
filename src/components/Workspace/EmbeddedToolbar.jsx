@@ -14,7 +14,7 @@ const EmbeddedToolbar = ({
   projectType,
 }) => {
   const selectedBoard = useSelector((state) => state.board.board);
-  
+
   // Embedded-optimized toolbar layout for embedded mode
   return (
     <div className="embedded-toolbar-inner">
