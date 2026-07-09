@@ -24,7 +24,7 @@ const TeachableSensebox = () => {
   const [trainingError, setTrainingError] = useState(null);
   const isMountedRef = useRef(true);
   const language = useSelector((s) => s.general.language);
-  const t = getImageTranslations();
+  const t = getImageTranslations(language);
 
   // Help sidebar state
   const [helpSidebarOpen, setHelpSidebarOpen] = useState(false);

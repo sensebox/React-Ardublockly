@@ -21,7 +21,7 @@ import { getTeachableSenseboxTranslations } from "./translations";
 const TeachableSenseboxLanding = () => {
   const navigate = useNavigate();
   const language = useSelector((s) => s.general.language);
-  const t = getTeachableSenseboxTranslations();
+  const t = getTeachableSenseboxTranslations(language);
   const theme = useTheme();
 
   return (

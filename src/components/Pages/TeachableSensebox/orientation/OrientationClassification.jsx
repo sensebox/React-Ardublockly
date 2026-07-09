@@ -36,7 +36,7 @@ const OrientationClassification = () => {
   const [trainedNNModel, setTrainedNNModel] = useState(null);
   const isMountedRef = useRef(true);
   const language = useSelector((s) => s.general.language);
-  const t = getOrientationTranslations();
+  const t = getOrientationTranslations(language);
 
   const {
     trainModel: trainNNModel,
