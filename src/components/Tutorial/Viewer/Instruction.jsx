@@ -4,7 +4,7 @@ import HardwareCard from "./Cards/HardwareCard";
 import TutorialSlide from "./components/TutorialSlide";
 import MarkdownIt from "markdown-it";
 
-const md = new MarkdownIt();
+const md = new MarkdownIt({ html: true, linkify: true, typographer: true });
 
 // Image-Renderer anpassen
 const defaultImageRenderer =
