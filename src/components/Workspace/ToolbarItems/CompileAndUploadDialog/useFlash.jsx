@@ -167,10 +167,6 @@ export function FlashProvider({ children }) {
    * compiled binary so callers (e.g. startFlash) can use it immediately.
    */
   const compile = useCallback(async () => {
-    // Reuse a finished or in-flight compilation. This is what lets the bootloader
-    // preparation run fully in parallel with the compile: whoever finishes first
-    // simply awaits the other instead of recompiling.
-    if (binary) return binary;
     if (compilePromiseRef.current) return compilePromiseRef.current;
 
     const runCompile = (async () => {
@@ -218,7 +214,7 @@ export function FlashProvider({ children }) {
 
     compilePromiseRef.current = runCompile;
     return runCompile;
-  }, [binary, compilerUrl, sketch, board, sessionId, filename]);
+  }, [compilerUrl, sketch, board, sessionId, filename]);
 
   // Load a previously saved device label so the UI can show which device is
   // remembered. The actual serial port is (re-)selected explicitly by the user
@@ -391,10 +387,7 @@ export function FlashProvider({ children }) {
       setError(null);
       try {
         appendLog("Kompiliere Sketch ...\n");
-        let firmware = binary;
-        if (!firmware) {
-          firmware = await compile();
-        }
+        const firmware = await compile();
         appendLog(`Binärdatei erhalten (${firmware.length} Bytes).\n`);
 
         appendLog("Starte Upload auf den Mikrocontroller ...\n");
@@ -424,7 +417,7 @@ export function FlashProvider({ children }) {
         setStatus("error");
       }
     },
-    [binary, compile, appendLog],
+    [compile, appendLog],
   );
 
   // Phase 2 of bootloader preparation: grant access to the re-enumerated ROM
