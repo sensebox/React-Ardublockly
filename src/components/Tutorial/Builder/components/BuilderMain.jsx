@@ -28,6 +28,7 @@ const BuilderMain = ({
   setSteps,
   activeStep,
   selectedHardware,
+  customHardware,
   learnings,
   setLearnings,
 }) => {
@@ -139,7 +140,10 @@ const BuilderMain = ({
                 >
                   {selectedHardware.map((sensor) => (
                     <Box key={sensor} sx={{ width: "100%", maxWidth: 180 }}>
-                      <HardwareCard component={sensor} />
+                      <HardwareCard
+                        component={sensor}
+                        customHardware={customHardware}
+                      />
                     </Box>
                   ))}
                 </Box>

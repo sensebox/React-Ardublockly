@@ -21,6 +21,7 @@ export function useTutorialBuilder({ initialData, creator }) {
   const [steps, setSteps] = useState(createInitialSteps());
   const [difficulty, setDifficulty] = useState(3);
   const [selectedHardware, setSelectedHardware] = useState([]);
+  const [customHardware, setCustomHardware] = useState({});
   const [subjects, setSubjects] = useState([]);
   const [topics, setTopics] = useState([]);
   const [duration, setDuration] = useState("");
@@ -40,6 +41,7 @@ export function useTutorialBuilder({ initialData, creator }) {
     );
     setDifficulty(initialData.difficulty ?? 3);
     setSelectedHardware(initialData.hardware || []);
+    setCustomHardware(initialData.customHardware || {});
     setSubjects(initialData.subjects || []);
     setTopics(initialData.topics || []);
     setDuration(initialData.duration || "");
@@ -58,6 +60,7 @@ export function useTutorialBuilder({ initialData, creator }) {
       steps,
       difficulty,
       selectedHardware,
+      customHardware,
       subjects,
       topics,
       duration,
@@ -73,6 +76,7 @@ export function useTutorialBuilder({ initialData, creator }) {
       setSteps,
       setDifficulty,
       setSelectedHardware,
+      setCustomHardware,
       setSubjects,
       setTopics,
       setDuration,

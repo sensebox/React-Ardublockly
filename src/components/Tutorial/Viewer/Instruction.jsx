@@ -71,7 +71,10 @@ const Instruction = ({ tutorial }) => {
                   justifyContent: "center",
                 }}
               >
-                <HardwareCard component={sensor} />
+                <HardwareCard
+                  component={sensor}
+                  customHardware={tutorial.customHardware || {}}
+                />
               </Box>
             </div>
           ))}

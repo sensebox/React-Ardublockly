@@ -17,11 +17,19 @@ import { useState } from "react";
 
 const QuestionEditor = ({ questionData, setQuestionData }) => {
   const theme = useTheme();
-  const [tab, setTab] = useState(questionData?.h5pLink ? "h5p" : "normal");
-
-  // ✅ Multiple Choice Toggle
+  const [tab, setTab] = useState(
+    questionData?.freetext
+      ? "freetext"
+      : questionData?.h5pLink
+        ? "h5p"
+        : "normal",
+  );
   const [isMultipleChoice, setIsMultipleChoice] = useState(
     questionData?.multipleChoice || false,
+  );
+
+  const [hasOptionalAnswer, setHasOptionalAnswer] = useState(
+    questionData?.answers && questionData?.answers.length > 0,
   );
 
   const handleAddAnswer = () => {
@@ -75,12 +83,40 @@ const QuestionEditor = ({ questionData, setQuestionData }) => {
     >
       <Tabs
         value={tab}
-        onChange={(e, val) => setTab(val)}
+        onChange={(e, val) => {
+          setTab(val);
+          // Update question type based on selected tab
+          if (val === "freetext") {
+            setQuestionData({
+              ...questionData,
+              freetext: true,
+              h5pLink: undefined,
+              multipleChoice: false,
+              answers: questionData.answers || [],
+            });
+          } else if (val === "h5p") {
+            setQuestionData({
+              ...questionData,
+              freetext: false,
+              multipleChoice: false,
+              h5pLink: questionData?.h5pLink || "",
+            });
+          } else {
+            // normal tab
+            setQuestionData({
+              ...questionData,
+              freetext: false,
+              h5pLink: undefined,
+              answers: questionData.answers || [],
+            });
+          }
+        }}
         textColor="primary"
         indicatorColor="primary"
         sx={{ mb: 2 }}
       >
         <Tab value="normal" label="Normale Frage" />
+        <Tab value="freetext" label="Freitext Frage" />
         <Tab value="h5p" label="H5P Quiz" />
       </Tabs>
 
@@ -189,6 +225,89 @@ const QuestionEditor = ({ questionData, setQuestionData }) => {
           >
             Antwort hinzufügen
           </Button>
+        </Box>
+      )}
+
+      {tab === "freetext" && (
+        <Box>
+          {/* Frage */}
+          <TextField
+            fullWidth
+            label="Frage"
+            value={questionData.question || ""}
+            onChange={(e) =>
+              setQuestionData({ ...questionData, question: e.target.value })
+            }
+            sx={{ mb: 2 }}
+          />
+
+          {/* Optional Answer Toggle */}
+          <FormControlLabel
+            control={
+              <Switch
+                checked={hasOptionalAnswer}
+                onChange={(e) => {
+                  const value = e.target.checked;
+                  setHasOptionalAnswer(value);
+                  if (!value) {
+                    setQuestionData({ ...questionData, answers: [] });
+                  } else {
+                    setQuestionData({
+                      ...questionData,
+                      answers: [{ text: "", feedback: "" }],
+                    });
+                  }
+                }}
+                color="primary"
+              />
+            }
+            label="Richtige Antwort vorgeben (optional)"
+            sx={{ mb: 2 }}
+          />
+
+          {hasOptionalAnswer && (
+            <Box>
+              {(questionData.answers || []).map((answer, index) => (
+                <Box
+                  key={index}
+                  sx={{
+                    mb: 2,
+                    p: 2,
+                    border: `1px solid ${theme.palette.divider}`,
+                    borderRadius: 2,
+                  }}
+                >
+                  <TextField
+                    fullWidth
+                    multiline
+                    minRows={3}
+                    label="Beispielantwort"
+                    value={answer.text || ""}
+                    onChange={(e) =>
+                      handleAnswerChange(index, "text", e.target.value)
+                    }
+                    placeholder="z. B. 'Der Sensor misst die Raumtemperatur.'"
+                  />
+                </Box>
+              ))}
+            </Box>
+          )}
+
+          {!hasOptionalAnswer && (
+            <Box
+              sx={{
+                p: 2,
+                bgcolor: theme.palette.action.hover,
+                borderRadius: 2,
+                border: `1px dashed ${theme.palette.divider}`,
+              }}
+            >
+              <Typography variant="body2" color="text.secondary">
+                ✓ Nutzer können freien Text eingeben, ohne dass eine bestimmte
+                Antwort erforderlich ist.
+              </Typography>
+            </Box>
+          )}
         </Box>
       )}
 

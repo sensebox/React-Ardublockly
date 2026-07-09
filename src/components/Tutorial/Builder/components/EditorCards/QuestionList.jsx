@@ -15,7 +15,14 @@ const QuestionList = ({ questions, setQuestions }) => {
   const addQuestion = () => {
     setQuestions([
       ...questions,
-      { question: "", answers: [], h5pLink: "", type: "normal" },
+      {
+        question: "",
+        answers: [],
+        h5pLink: "",
+        type: "normal",
+        freetext: false,
+        multipleChoice: false,
+      },
     ]);
   };
 

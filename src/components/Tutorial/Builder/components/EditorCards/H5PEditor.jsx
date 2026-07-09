@@ -1,6 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
 import {
-  Box,
   Card,
   CardContent,
   Typography,
