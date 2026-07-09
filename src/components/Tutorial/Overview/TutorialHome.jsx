@@ -11,17 +11,12 @@ import {
   Box,
   TextField,
   Typography,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   ToggleButtonGroup,
   ToggleButton,
   useTheme,
   Button,
-  IconButton,
 } from "@mui/material";
-import { faPencil, faPlus, faTools } from "@fortawesome/free-solid-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 

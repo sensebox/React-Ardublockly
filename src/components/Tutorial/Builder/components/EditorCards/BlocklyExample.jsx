@@ -7,7 +7,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import moment from "moment";
 import "moment/locale/de";
 import * as Blockly from "blockly/core";

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Card,
@@ -8,16 +8,57 @@ import {
   Checkbox,
   FormControlLabel,
   Button,
+  TextField,
   useTheme,
 } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, Cancel, HelpOutline } from "@mui/icons-material";
 
-const QuestionCard = ({ questionData, setNextStepDisabled }) => {
+const QuestionCard = ({
+  questionData,
+  setNextStepDisabled,
+  stepId,
+  questionIndex = 0,
+  tutorialId,
+}) => {
   const theme = useTheme();
   const [selected, setSelected] = useState([]);
+  const [freetextValue, setFreetextValue] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
+
+  const questionKey = `${stepId}_q${questionIndex}`;
+
+  useEffect(() => {
+    if (stepId && tutorialId) {
+      try {
+        const savedAnswers =
+          JSON.parse(
+            window.localStorage.getItem(`tutorial_answers_${tutorialId}`),
+          ) || [];
+        const savedAnswer = savedAnswers.find((a) => a._id === questionKey);
+        if (savedAnswer) {
+          if (savedAnswer.freetextAnswer) {
+            setFreetextValue(savedAnswer.freetextAnswer);
+            setSubmitted(true);
+            setIsCorrect(savedAnswer.type === "success");
+            if (savedAnswer.type === "success") {
+              setNextStepDisabled(false);
+            }
+          } else if (savedAnswer.answers) {
+            setSelected(savedAnswer.answers);
+            setSubmitted(true);
+            setIsCorrect(savedAnswer.type === "success");
+            if (savedAnswer.type === "success") {
+              setNextStepDisabled(false);
+            }
+          }
+        }
+      } catch (e) {
+        console.warn("Failed to load saved answer", e);
+      }
+    }
+  }, [questionKey, tutorialId, setNextStepDisabled]);
 
   if (!questionData)
     return (
@@ -26,7 +67,13 @@ const QuestionCard = ({ questionData, setNextStepDisabled }) => {
       </Typography>
     );
 
-  const { question, answers = [], multipleChoice } = questionData;
+  // Provide defaults for new properties if they're missing
+  const {
+    question,
+    answers = [],
+    multipleChoice = false,
+    freetext = false,
+  } = questionData;
 
   const handleSelect = (value) => {
     if (multipleChoice) {
@@ -41,31 +88,115 @@ const QuestionCard = ({ questionData, setNextStepDisabled }) => {
   };
 
   const handleSubmit = () => {
-    const correctAnswers = answers
-      .filter((a) => a.correct)
-      .map((a) => a.text)
-      .sort();
-    const selectedAnswers = [...selected].sort();
+    let correct = false;
 
-    const correct =
-      correctAnswers.length === selectedAnswers.length &&
-      correctAnswers.every((val, i) => val === selectedAnswers[i]);
+    if (freetext) {
+      // For freetext questions with reference answers, compare user input to reference
+      if (answers.length > 0 && answers[0]?.text) {
+        const referenceAnswer = answers[0].text
+          .trim()
+          .toLowerCase()
+          .replace(/\s+/g, " ");
+        const userAnswer = freetextValue
+          .trim()
+          .toLowerCase()
+          .replace(/\s+/g, " ");
+        correct = userAnswer === referenceAnswer;
+      } else {
+        // For freetext questions without reference answers, any non-empty content is accepted
+        correct = freetextValue.trim().length > 0;
+      }
 
-    setIsCorrect(correct);
-    if (correct) setNextStepDisabled(false);
-    setSubmitted(true);
+      setIsCorrect(correct);
+      if (correct) setNextStepDisabled(false);
+      setSubmitted(true);
+
+      if (stepId && tutorialId) {
+        try {
+          const savedAnswers =
+            JSON.parse(
+              window.localStorage.getItem(`tutorial_answers_${tutorialId}`),
+            ) || [];
+          const taskIndex = savedAnswers.findIndex(
+            (t) => t._id === questionKey,
+          );
+          if (taskIndex >= 0) {
+            savedAnswers[taskIndex].freetextAnswer = freetextValue;
+            savedAnswers[taskIndex].type = correct ? "success" : "error";
+          } else {
+            savedAnswers.push({
+              _id: questionKey,
+              freetextAnswer: freetextValue,
+              type: correct ? "success" : "error",
+            });
+          }
+          window.localStorage.setItem(
+            `tutorial_answers_${tutorialId}`,
+            JSON.stringify(savedAnswers),
+          );
+        } catch (e) {
+          console.warn("Failed to save answer to localStorage", e);
+        }
+      }
+    } else {
+      // Multiple choice logic
+      const correctAnswers = answers
+        .filter((a) => a.correct)
+        .map((a) => a.text)
+        .sort();
+      const selectedAnswers = [...selected].sort();
+
+      correct =
+        correctAnswers.length === selectedAnswers.length &&
+        correctAnswers.every((val, i) => val === selectedAnswers[i]);
+
+      setIsCorrect(correct);
+      if (correct) setNextStepDisabled(false);
+      setSubmitted(true);
+
+      if (stepId && tutorialId) {
+        try {
+          const savedAnswers =
+            JSON.parse(
+              window.localStorage.getItem(`tutorial_answers_${tutorialId}`),
+            ) || [];
+          const taskIndex = savedAnswers.findIndex(
+            (t) => t._id === questionKey,
+          );
+          if (taskIndex >= 0) {
+            savedAnswers[taskIndex].answers = selected;
+            savedAnswers[taskIndex].type = correct ? "success" : "error";
+          } else {
+            savedAnswers.push({
+              _id: questionKey,
+              answers: selected,
+              type: correct ? "success" : "error",
+            });
+          }
+          window.localStorage.setItem(
+            `tutorial_answers_${tutorialId}`,
+            JSON.stringify(savedAnswers),
+          );
+        } catch (e) {
+          console.warn("Failed to save answer to localStorage", e);
+        }
+      }
+    }
   };
 
   const resetQuestion = () => {
     setSelected([]);
+    setFreetextValue("");
     setSubmitted(false);
     setIsCorrect(false);
   };
 
-  // Sammle Feedbacks der ausgewählten Antworten (falls vorhanden)
-  const selectedFeedbacks = answers
-    .filter((a) => selected.includes(a.text) && a.feedback)
-    .map((a) => a.feedback);
+  // Sammle Feedbacks der ausgewählten Antworten (falls vorhanden) - nur für Multiple Choice
+  const selectedFeedbacks = !freetext
+    ? answers
+        .filter((a) => selected.includes(a.text) && a.feedback)
+        .map((a) => a.feedback)
+    : [];
 
   return (
     <Card
@@ -93,7 +224,7 @@ const QuestionCard = ({ questionData, setNextStepDisabled }) => {
           </Typography>
         </Box>
 
-        {multipleChoice && (
+        {multipleChoice && !freetext && (
           <Typography
             variant="body2"
             sx={{ mb: 2, color: theme.palette.text.secondary }}
@@ -102,141 +233,249 @@ const QuestionCard = ({ questionData, setNextStepDisabled }) => {
           </Typography>
         )}
 
-        {/* Antwortmöglichkeiten */}
-        <Box>
-          {answers.map((a, i) => {
-            const isAnswerCorrect = a.correct;
-            const isSelected = selected.includes(a.text);
+        {/* Freetext Input */}
+        {freetext && (
+          <Box sx={{ mb: 2 }}>
+            <TextField
+              fullWidth
+              multiline
+              minRows={4}
+              maxRows={8}
+              placeholder="Antwort..."
+              value={freetextValue}
+              onChange={(e) => setFreetextValue(e.target.value)}
+              disabled={submitted}
+              variant="outlined"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: 2,
+                },
+              }}
+            />
+            {submitted && (
+              <Typography
+                variant="caption"
+                sx={{
+                  display: "block",
+                  mt: 1,
+                  color: theme.palette.text.secondary,
+                }}
+              >
+                Deine Antwort wurde gespeichert.
+              </Typography>
+            )}
+          </Box>
+        )}
 
-            let bgColor = "transparent";
-            let borderColor = theme.palette.divider;
+        {/* Multiple Choice Answers */}
+        {!freetext && (
+          <Box>
+            {answers.map((a, i) => {
+              const isAnswerCorrect = a.correct;
+              const isSelected = selected.includes(a.text);
 
-            if (submitted) {
-              if (isAnswerCorrect && isSelected) {
-                bgColor = theme.palette.success.light;
-                borderColor = theme.palette.success.main;
-              } else if (!isAnswerCorrect && isSelected) {
-                bgColor = theme.palette.error.light;
-                borderColor = theme.palette.error.main;
-              } else if (isAnswerCorrect) {
-                bgColor = theme.palette.success.light;
-                borderColor = theme.palette.success.main;
+              let bgColor = "transparent";
+              let borderColor = theme.palette.divider;
+
+              if (submitted) {
+                if (isAnswerCorrect && isSelected) {
+                  bgColor = theme.palette.success.light;
+                  borderColor = theme.palette.success.main;
+                } else if (!isAnswerCorrect && isSelected) {
+                  bgColor = theme.palette.error.light;
+                  borderColor = theme.palette.error.main;
+                } else if (isAnswerCorrect) {
+                  bgColor = theme.palette.success.light;
+                  borderColor = theme.palette.success.main;
+                }
               }
-            }
 
-            return (
+              return (
+                <motion.div
+                  key={i}
+                  animate={{ scale: submitted && isSelected ? 1.03 : 1 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Box
+                    sx={{
+                      border: `2px solid ${borderColor}`,
+                      borderRadius: 2,
+                      mb: 1,
+                      p: 1.2,
+                      transition: "all 0.25s ease",
+                      backgroundColor: bgColor,
+                      "&:hover": {
+                        backgroundColor:
+                          !submitted && theme.palette.action.hover,
+                      },
+                    }}
+                  >
+                    <FormControlLabel
+                      control={
+                        multipleChoice ? (
+                          <Checkbox
+                            checked={isSelected}
+                            onChange={() => handleSelect(a.text)}
+                            disabled={submitted}
+                          />
+                        ) : (
+                          <Radio
+                            checked={isSelected}
+                            onChange={() => handleSelect(a.text)}
+                            disabled={submitted}
+                          />
+                        )
+                      }
+                      label={
+                        <Typography
+                          sx={{
+                            fontWeight: 500,
+                            color: theme.palette.text.primary,
+                          }}
+                        >
+                          {a.text}
+                        </Typography>
+                      }
+                    />
+                  </Box>
+                </motion.div>
+              );
+            })}
+          </Box>
+        )}
+
+        {/* Feedback */}
+        {!freetext && (
+          <AnimatePresence>
+            {submitted && (
               <motion.div
-                key={i}
-                animate={{ scale: submitted && isSelected ? 1.03 : 1 }}
-                transition={{ duration: 0.2 }}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
               >
                 <Box
                   sx={{
-                    border: `2px solid ${borderColor}`,
-                    borderRadius: 2,
-                    mb: 1,
-                    p: 1.2,
-                    transition: "all 0.25s ease",
-                    backgroundColor: bgColor,
-                    "&:hover": {
-                      backgroundColor: !submitted && theme.palette.action.hover,
-                    },
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                    mt: 2,
                   }}
                 >
-                  <FormControlLabel
-                    control={
-                      multipleChoice ? (
-                        <Checkbox
-                          checked={isSelected}
-                          onChange={() => handleSelect(a.text)}
-                          disabled={submitted}
-                        />
-                      ) : (
-                        <Radio
-                          checked={isSelected}
-                          onChange={() => handleSelect(a.text)}
-                          disabled={submitted}
-                        />
-                      )
-                    }
-                    label={
+                  {isCorrect ? (
+                    <>
+                      <CheckCircle
+                        sx={{ color: theme.palette.success.main, fontSize: 28 }}
+                      />
+                      <Typography color="success.main" fontWeight={600}>
+                        Richtig beantwortet!
+                      </Typography>
+                    </>
+                  ) : (
+                    <>
+                      <Cancel
+                        sx={{ color: theme.palette.error.main, fontSize: 28 }}
+                      />
+                      <Typography color="error.main" fontWeight={600}>
+                        Leider nicht ganz richtig.
+                      </Typography>
+                    </>
+                  )}
+                </Box>
+
+                {/* 🧠 Custom Feedback der gewählten Antworten */}
+                {selectedFeedbacks.length > 0 && (
+                  <Box sx={{ mt: 1.5, pl: 4 }}>
+                    {selectedFeedbacks.map((fb, idx) => (
                       <Typography
+                        key={idx}
+                        variant="body2"
                         sx={{
-                          fontWeight: 500,
-                          color: theme.palette.text.primary,
+                          color: isCorrect
+                            ? theme.palette.success.dark
+                            : theme.palette.error.dark,
+                          fontStyle: "italic",
+                          mb: 0.5,
                         }}
                       >
-                        {a.text}
+                        💡 {fb}
                       </Typography>
-                    }
-                  />
-                </Box>
-              </motion.div>
-            );
-          })}
-        </Box>
-
-        {/* Gesamtfeedback nach Abgabe */}
-        <AnimatePresence>
-          {submitted && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1,
-                  mt: 2,
-                }}
-              >
-                {isCorrect ? (
-                  <>
-                    <CheckCircle
-                      sx={{ color: theme.palette.success.main, fontSize: 28 }}
-                    />
-                    <Typography color="success.main" fontWeight={600}>
-                      Richtig beantwortet!
-                    </Typography>
-                  </>
-                ) : (
-                  <>
-                    <Cancel
-                      sx={{ color: theme.palette.error.main, fontSize: 28 }}
-                    />
-                    <Typography color="error.main" fontWeight={600}>
-                      Leider nicht ganz richtig.
-                    </Typography>
-                  </>
+                    ))}
+                  </Box>
                 )}
-              </Box>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        )}
 
-              {/* 🧠 Custom Feedback der gewählten Antworten */}
-              {selectedFeedbacks.length > 0 && (
-                <Box sx={{ mt: 1.5, pl: 4 }}>
-                  {selectedFeedbacks.map((fb, idx) => (
-                    <Typography
-                      key={idx}
-                      variant="body2"
-                      sx={{
-                        color: isCorrect
-                          ? theme.palette.success.dark
-                          : theme.palette.error.dark,
-                        fontStyle: "italic",
-                        mb: 0.5,
-                      }}
-                    >
-                      💡 {fb}
-                    </Typography>
-                  ))}
+        {/* Freetext Feedback */}
+        {freetext && submitted && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            {/* Only show detailed feedback if a reference answer is defined */}
+            {answers.length > 0 && answers[0]?.text ? (
+              <>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                    mt: 2,
+                  }}
+                >
+                  {isCorrect ? (
+                    <>
+                      <CheckCircle
+                        sx={{ color: theme.palette.success.main, fontSize: 28 }}
+                      />
+                      <Typography color="success.main" fontWeight={600}>
+                        {"Richtig beantwortet!"}
+                      </Typography>
+                    </>
+                  ) : (
+                    <>
+                      <Cancel
+                        sx={{ color: theme.palette.error.main, fontSize: 28 }}
+                      />
+                      <Typography color="error.main" fontWeight={600}>
+                        Leider nicht ganz richtig.
+                      </Typography>
+                    </>
+                  )}
                 </Box>
-              )}
-            </motion.div>
-          )}
-        </AnimatePresence>
+
+                {/* Show reference answer for comparison if answer was wrong */}
+                {!isCorrect && (
+                  <Box
+                    sx={{
+                      mt: 2,
+                      p: 2,
+                      bgcolor: theme.palette.action.hover,
+                      borderRadius: 2,
+                    }}
+                  >
+                    <Typography
+                      variant="subtitle2"
+                      fontWeight={600}
+                      gutterBottom
+                    >
+                      Richtig gewesen wäre:
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{ color: theme.palette.text.secondary }}
+                    >
+                      {answers[0].text}
+                    </Typography>
+                  </Box>
+                )}
+              </>
+            ) : null}
+          </motion.div>
+        )}
 
         {/* Buttons */}
         <Box
@@ -251,7 +490,11 @@ const QuestionCard = ({ questionData, setNextStepDisabled }) => {
             <Button
               variant="contained"
               onClick={handleSubmit}
-              disabled={selected.length === 0}
+              disabled={
+                freetext
+                  ? freetextValue.trim().length === 0
+                  : selected.length === 0
+              }
             >
               Antwort bestätigen
             </Button>
