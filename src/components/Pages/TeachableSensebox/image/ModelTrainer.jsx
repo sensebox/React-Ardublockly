@@ -98,7 +98,7 @@ const ModelTrainer = ({
   );
 
   const language = useSelector((s) => s.general.language);
-  const t = getImageTranslations();
+  const t = getImageTranslations(language);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const isWideScreen = useMediaQuery(theme.breakpoints.up("lg"));

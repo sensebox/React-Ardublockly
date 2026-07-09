@@ -24,7 +24,7 @@ const SpellClassification = () => {
   const [classes, setClasses] = useState([]);
   const isMountedRef = useRef(true);
   const language = useSelector((s) => s.general.language);
-  const t = getSpellTranslations();
+  const t = getSpellTranslations(language);
 
   // Help sidebar state
   const [helpSidebarOpen, setHelpSidebarOpen] = useState(false);

@@ -25,7 +25,7 @@ import ConversionService from "./utils/conversionService";
 
 const ConvertDeploy = ({ model }) => {
   const language = useSelector((s) => s.general.language);
-  const t = getImageTranslations();
+  const t = getImageTranslations(language);
 
   const [workflowState, setWorkflowState] = useState({
     // Current step: 'idle', 'converting', 'converted', 'compiling', 'complete'

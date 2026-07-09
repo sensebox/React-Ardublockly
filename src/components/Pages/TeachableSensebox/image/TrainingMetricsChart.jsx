@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import { useSelector } from "react-redux";
 import { Box, Typography, useTheme } from "@mui/material";
 import { getImageTranslations } from "./translations";
 
@@ -13,7 +14,8 @@ const TrainingMetricsChart = ({
   title,
 }) => {
   const theme = useTheme();
-  const t = getImageTranslations();
+  const language = useSelector((s) => s.general.language);
+  const t = getImageTranslations(language);
 
   // Fixed colors: greens for accuracy, reds for loss
   const colors = {
