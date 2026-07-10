@@ -460,7 +460,7 @@ const SpellModelTrainer = ({
   const [receptiveField, setReceptiveField] = useState(null);
 
   const language = useSelector((s) => s.general.language);
-  const t = getSpellTranslations();
+  const t = getSpellTranslations(language);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [isDownloading, setIsDownloading] = useState(false);

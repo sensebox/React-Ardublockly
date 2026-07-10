@@ -87,6 +87,8 @@ const QuestionCard = ({
     }
   };
 
+  const hasCorrectAnswerDefined = answers.some((a) => a.correct);
+
   const handleSubmit = () => {
     let correct = false;
 
@@ -140,15 +142,19 @@ const QuestionCard = ({
       }
     } else {
       // Multiple choice logic
-      const correctAnswers = answers
-        .filter((a) => a.correct)
-        .map((a) => a.text)
-        .sort();
-      const selectedAnswers = [...selected].sort();
+      if (hasCorrectAnswerDefined) {
+        const correctAnswers = answers
+          .filter((a) => a.correct)
+          .map((a) => a.text)
+          .sort();
+        const selectedAnswers = [...selected].sort();
 
-      correct =
-        correctAnswers.length === selectedAnswers.length &&
-        correctAnswers.every((val, i) => val === selectedAnswers[i]);
+        correct =
+          correctAnswers.length === selectedAnswers.length &&
+          correctAnswers.every((val, i) => val === selectedAnswers[i]);
+      } else {
+        correct = true;
+      }
 
       setIsCorrect(correct);
       if (correct) setNextStepDisabled(false);
@@ -278,15 +284,22 @@ const QuestionCard = ({
               let borderColor = theme.palette.divider;
 
               if (submitted) {
-                if (isAnswerCorrect && isSelected) {
-                  bgColor = theme.palette.success.light;
-                  borderColor = theme.palette.success.main;
-                } else if (!isAnswerCorrect && isSelected) {
-                  bgColor = theme.palette.error.light;
-                  borderColor = theme.palette.error.main;
-                } else if (isAnswerCorrect) {
-                  bgColor = theme.palette.success.light;
-                  borderColor = theme.palette.success.main;
+                if (hasCorrectAnswerDefined) {
+                  if (isAnswerCorrect && isSelected) {
+                    bgColor = theme.palette.success.light;
+                    borderColor = theme.palette.success.main;
+                  } else if (!isAnswerCorrect && isSelected) {
+                    bgColor = theme.palette.error.light;
+                    borderColor = theme.palette.error.main;
+                  } else if (isAnswerCorrect) {
+                    bgColor = theme.palette.success.light;
+                    borderColor = theme.palette.success.main;
+                  }
+                } else {
+                  if (isSelected) {
+                    bgColor = theme.palette.success.light;
+                    borderColor = theme.palette.success.main;
+                  }
                 }
               }
 
@@ -354,54 +367,84 @@ const QuestionCard = ({
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
               >
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 1,
-                    mt: 2,
-                  }}
-                >
-                  {isCorrect ? (
-                    <>
-                      <CheckCircle
-                        sx={{ color: theme.palette.success.main, fontSize: 28 }}
-                      />
-                      <Typography color="success.main" fontWeight={600}>
-                        Richtig beantwortet!
-                      </Typography>
-                    </>
-                  ) : (
-                    <>
+                {/* Show feedback only if there are correct answers defined OR if the answer is correct */}
+                {hasCorrectAnswerDefined && !isCorrect ? (
+                  <>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1,
+                        mt: 2,
+                      }}
+                    >
                       <Cancel
                         sx={{ color: theme.palette.error.main, fontSize: 28 }}
                       />
                       <Typography color="error.main" fontWeight={600}>
                         Leider nicht ganz richtig.
                       </Typography>
-                    </>
-                  )}
-                </Box>
+                    </Box>
 
-                {/* 🧠 Custom Feedback der gewählten Antworten */}
-                {selectedFeedbacks.length > 0 && (
-                  <Box sx={{ mt: 1.5, pl: 4 }}>
-                    {selectedFeedbacks.map((fb, idx) => (
-                      <Typography
-                        key={idx}
-                        variant="body2"
+                    {/* 🧠 Custom Feedback of the selected Answer */}
+                    {selectedFeedbacks.length > 0 && (
+                      <Box sx={{ mt: 1.5, pl: 4 }}>
+                        {selectedFeedbacks.map((fb, idx) => (
+                          <Typography
+                            key={idx}
+                            variant="body2"
+                            sx={{
+                              color: theme.palette.error.dark,
+                              fontStyle: "italic",
+                              mb: 0.5,
+                            }}
+                          >
+                            💡 {fb}
+                          </Typography>
+                        ))}
+                      </Box>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    {/* For no correct answer defined: show feedback if exists, otherwise show "Antwort gespeichert!" */}
+                    {selectedFeedbacks.length > 0 ? (
+                      <Box sx={{ mt: 2 }}>
+                        {selectedFeedbacks.map((fb, idx) => (
+                          <Typography
+                            key={idx}
+                            variant="body2"
+                            sx={{
+                              color: theme.palette.success.dark,
+                              fontWeight: 600,
+                              mb: 0.5,
+                            }}
+                          >
+                            {fb}
+                          </Typography>
+                        ))}
+                      </Box>
+                    ) : (
+                      <Box
                         sx={{
-                          color: isCorrect
-                            ? theme.palette.success.dark
-                            : theme.palette.error.dark,
-                          fontStyle: "italic",
-                          mb: 0.5,
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 1,
+                          mt: 2,
                         }}
                       >
-                        💡 {fb}
-                      </Typography>
-                    ))}
-                  </Box>
+                        <CheckCircle
+                          sx={{
+                            color: theme.palette.success.main,
+                            fontSize: 28,
+                          }}
+                        />
+                        <Typography color="success.main" fontWeight={600}>
+                          Antwort gespeichert!
+                        </Typography>
+                      </Box>
+                    )}
+                  </>
                 )}
               </motion.div>
             )}
@@ -473,7 +516,35 @@ const QuestionCard = ({
                   </Box>
                 )}
               </>
-            ) : null}
+            ) : (
+              <>
+                {/* No reference answer defined: show feedback if exists, otherwise show "Antwort gespeichert!" */}
+                {answers.length > 0 && answers[0]?.feedback ? (
+                  <Typography color="success.main" fontWeight={600}>
+                    {answers[0].feedback}
+                  </Typography>
+                ) : (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                      mt: 2,
+                    }}
+                  >
+                    <CheckCircle
+                      sx={{
+                        color: theme.palette.success.main,
+                        fontSize: 28,
+                      }}
+                    />
+                    <Typography color="success.main" fontWeight={600}>
+                      Antwort gespeichert!
+                    </Typography>
+                  </Box>
+                )}
+              </>
+            )}
           </motion.div>
         )}
 

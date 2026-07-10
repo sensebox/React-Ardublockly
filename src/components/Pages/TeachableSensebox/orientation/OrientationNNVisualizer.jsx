@@ -5,6 +5,7 @@ import React, {
   useCallback,
   useMemo,
 } from "react";
+import { useSelector } from "react-redux";
 import * as tf from "@tensorflow/tfjs";
 import {
   Box,
@@ -349,7 +350,8 @@ const OrientationNNVisualizer = ({
   latestSample = null,
   onOpenHelp,
 }) => {
-  const t = getOrientationTranslations();
+  const language = useSelector((s) => s.general.language);
+  const t = getOrientationTranslations(language);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const containerRef = useRef(null);

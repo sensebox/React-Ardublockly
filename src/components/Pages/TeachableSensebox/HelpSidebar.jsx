@@ -10,6 +10,7 @@ import {
 import { ChevronRight as ChevronRightIcon } from "@mui/icons-material";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { useSelector } from "react-redux";
 
 import { getImageTranslations } from "./image/translations";
 import { getOrientationTranslations } from "./orientation/translations";
@@ -33,6 +34,7 @@ const NAVBAR_HEIGHT = 64;
 const HelpSidebar = ({ open, onClose, helpTopic }) => {
   const theme = useTheme();
   const isWideScreen = useMediaQuery(theme.breakpoints.up("lg"));
+  const language = useSelector((s) => s.general.language);
   const [scrollOffset, setScrollOffset] = useState(0);
 
   // Track scroll position to adjust sidebar position
@@ -58,18 +60,19 @@ const HelpSidebar = ({ open, onClose, helpTopic }) => {
   const isSpellTopic = helpTopic?.startsWith("spells/");
   const isImageTopic = helpTopic?.startsWith("image/");
   const t = isOrientationTopic
-    ? getOrientationTranslations()
+    ? getOrientationTranslations(language)
     : isSpellTopic
-      ? getSpellTranslations()
-      : getImageTranslations();
+      ? getSpellTranslations(language)
+      : getImageTranslations(language);
   const helpTranslations = t.help || {};
 
-  // Determine language for markdown file lookup
-  const locale = window.localStorage.getItem("locale") || "de_DE";
-  const language = locale.split("_")[0];
+  // Determine language for markdown file lookup (already from Redux)
+  const mdLanguageCode = language.includes("_")
+    ? language.split("_")[0]
+    : language;
 
   // Resolve markdown content: prefer current language, fall back to "de"
-  const mdKey = `./translations/help/${language}/${helpTopic}.md`;
+  const mdKey = `./translations/help/${mdLanguageCode}/${helpTopic}.md`;
   const mdFallbackKey = `./translations/help/de/${helpTopic}.md`;
   const markdownContent =
     markdownFiles[mdKey] ?? markdownFiles[mdFallbackKey] ?? null;

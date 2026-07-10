@@ -1,4 +1,5 @@
 import React, { useMemo, useRef, useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { Box, Typography, useTheme, Tooltip } from "@mui/material";
 import { getImageTranslations } from "./translations";
 
@@ -8,7 +9,8 @@ import { getImageTranslations } from "./translations";
  */
 const ConfusionMatrix = ({ matrix, classNames, title }) => {
   const theme = useTheme();
-  const t = getImageTranslations();
+  const language = useSelector((s) => s.general.language);
+  const t = getImageTranslations(language);
   const containerRef = useRef(null);
   const [containerWidth, setContainerWidth] = useState(0);
 

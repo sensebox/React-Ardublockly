@@ -40,12 +40,12 @@ const DeviceSelection = () => {
       label: "senseBox MCU:mini",
       src: "/media/hardware/blockly_mini.png",
     },
-    // {
-    //   value: "MCU-EYE",
-    //   alt: "Sensebox ESP32S3",
-    //   label: "senseBox MCU Eye",
-    //   src: "/media/hardware/blockly_eye.png",
-    // },
+    {
+      value: "MCU-EYE",
+      alt: "Sensebox ESP32S3",
+      label: "senseBox MCU Eye",
+      src: "/media/hardware/blockly_eye.png",
+    },
   ];
 
   const handleBoardSelect = (value) => {
