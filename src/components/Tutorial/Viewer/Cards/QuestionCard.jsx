@@ -197,10 +197,14 @@ const QuestionCard = ({
     setIsCorrect(false);
   };
 
-  // Sammle Feedbacks der ausgewählten Antworten (falls vorhanden) - nur für Multiple Choice
-  const selectedFeedbacks = !freetext
+  const allFeedbacks = !freetext
     ? answers
-        .filter((a) => selected.includes(a.text) && a.feedback)
+        .filter(
+          (a) =>
+            (selected.includes(a.text) ||
+              (a.correct && !selected.includes(a.text))) &&
+            a.feedback,
+        )
         .map((a) => a.feedback)
     : [];
 
@@ -291,9 +295,9 @@ const QuestionCard = ({
                   } else if (!isAnswerCorrect && isSelected) {
                     bgColor = theme.palette.error.light;
                     borderColor = theme.palette.error.main;
-                  } else if (isAnswerCorrect) {
-                    bgColor = theme.palette.success.light;
-                    borderColor = theme.palette.success.main;
+                  } else if (isAnswerCorrect && !isSelected) {
+                    bgColor = theme.palette.error.light;
+                    borderColor = theme.palette.error.main;
                   }
                 } else {
                   if (isSelected) {
@@ -367,84 +371,66 @@ const QuestionCard = ({
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
               >
-                {/* Show feedback only if there are correct answers defined OR if the answer is correct */}
-                {hasCorrectAnswerDefined && !isCorrect ? (
-                  <>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 1,
-                        mt: 2,
-                      }}
-                    >
-                      <Cancel
-                        sx={{ color: theme.palette.error.main, fontSize: 28 }}
-                      />
-                      <Typography color="error.main" fontWeight={600}>
-                        Leider nicht ganz richtig.
-                      </Typography>
-                    </Box>
+                {/* Show error message if answer is incorrect */}
+                {hasCorrectAnswerDefined && !isCorrect && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                      mt: 2,
+                      mb: 1.5,
+                    }}
+                  >
+                    <Cancel
+                      sx={{ color: theme.palette.error.main, fontSize: 28 }}
+                    />
+                    <Typography color="error.main" fontWeight={600}>
+                      Leider nicht ganz richtig.
+                    </Typography>
+                  </Box>
+                )}
 
-                    {/* 🧠 Custom Feedback of the selected Answer */}
-                    {selectedFeedbacks.length > 0 && (
-                      <Box sx={{ mt: 1.5, pl: 4 }}>
-                        {selectedFeedbacks.map((fb, idx) => (
-                          <Typography
-                            key={idx}
-                            variant="body2"
-                            sx={{
-                              color: theme.palette.error.dark,
-                              fontStyle: "italic",
-                              mb: 0.5,
-                            }}
-                          >
-                            💡 {fb}
-                          </Typography>
-                        ))}
-                      </Box>
-                    )}
-                  </>
-                ) : (
-                  <>
-                    {/* For no correct answer defined: show feedback if exists, otherwise show "Antwort gespeichert!" */}
-                    {selectedFeedbacks.length > 0 ? (
-                      <Box sx={{ mt: 2 }}>
-                        {selectedFeedbacks.map((fb, idx) => (
-                          <Typography
-                            key={idx}
-                            variant="body2"
-                            sx={{
-                              color: theme.palette.success.dark,
-                              fontWeight: 600,
-                              mb: 0.5,
-                            }}
-                          >
-                            {fb}
-                          </Typography>
-                        ))}
-                      </Box>
-                    ) : (
-                      <Box
+                {/* Show feedbacks if they exist */}
+                {allFeedbacks.length > 0 ? (
+                  <Box sx={{ mt: 1.5, pl: 4 }}>
+                    {allFeedbacks.map((fb, idx) => (
+                      <Typography
+                        key={idx}
+                        variant="body2"
                         sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 1,
-                          mt: 2,
+                          color:
+                            hasCorrectAnswerDefined && !isCorrect
+                              ? theme.palette.error.dark
+                              : theme.palette.success.dark,
+                          fontStyle: "italic",
+                          mb: 0.5,
                         }}
                       >
-                        <CheckCircle
-                          sx={{
-                            color: theme.palette.success.main,
-                            fontSize: 28,
-                          }}
-                        />
-                        <Typography color="success.main" fontWeight={600}>
-                          Antwort gespeichert!
-                        </Typography>
-                      </Box>
-                    )}
-                  </>
+                        💡 {fb}
+                      </Typography>
+                    ))}
+                  </Box>
+                ) : (
+                  /* Show success message if no feedbacks */
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                      mt: 2,
+                    }}
+                  >
+                    <CheckCircle
+                      sx={{
+                        color: theme.palette.success.main,
+                        fontSize: 28,
+                      }}
+                    />
+                    <Typography color="success.main" fontWeight={600}>
+                      Antwort gespeichert!
+                    </Typography>
+                  </Box>
                 )}
               </motion.div>
             )}
