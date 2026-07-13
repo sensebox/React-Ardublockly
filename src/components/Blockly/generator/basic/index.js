@@ -224,6 +224,26 @@ basicGenerator.forBlock["time_delay_5s"] = function () {
   return "delay(5000)\n"; // nichts generieren
 };
 
+basicGenerator.forBlock["time_delay_1min"] = function () {
+  return "delay(60000)\n";
+};
+
+basicGenerator.forBlock["time_delay_5min"] = function () {
+  return "delay(300000)\n";
+};
+
+basicGenerator.forBlock["time_delay_10min"] = function () {
+  return "delay(600000)\n";
+};
+
+basicGenerator.forBlock["time_delay_1h"] = function () {
+  return "delay(3600000)\n";
+};
+
+basicGenerator.forBlock["time_delay_5h"] = function () {
+  return "delay(18000000)\n";
+};
+
 basicGenerator.forBlock["basic_delay"] = function (block, generator) {
   const seconds =
     generator.valueToCode(block, "SECONDS", generator.ORDER_NONE) || "1";
@@ -410,4 +430,17 @@ basicGenerator.forBlock["bme_air_quality"] = function (block) {
 basicGenerator.forBlock["basic_brightness"] = function (block) {
   // Der Block selbst liefert nur den Variablennamen zurück
   return ["sensor:board:light", basicGenerator.ORDER_ATOMIC];
+};
+
+basicGenerator.forBlock["text_join"] = function (block, generator) {
+  // Collect all the text inputs
+  const code = [];
+  for (let i = 0; i < block.itemCount_; i++) {
+    const argument =
+      generator.valueToCode(block, "ADD" + i, generator.ORDER_NONE) || '""';
+    code.push(argument);
+  }
+
+  const result = `"${code.join("").replaceAll('"', "")}"`;
+  return [result, generator.ORDER_ATOMIC];
 };

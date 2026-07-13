@@ -18,6 +18,11 @@ const allBlocks = [
   },
   {
     kind: "block",
+    type: "text_join_basic",
+    tooltip: "Vereinige mehrere Texte zusammen.",
+  },
+  {
+    kind: "block",
     type: "basic_led_control",
     inputs: {
       COLOR: {
@@ -254,6 +259,11 @@ export const toolboxBasicObject = {
           kind: "block",
           type: "text",
           tooltip: "Use this block to add text to your display.",
+        },
+        {
+          kind: "block",
+          type: "text_join",
+          tooltip: "Vereinige mehrere Texte zusammen.",
         },
       ],
     },

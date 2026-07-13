@@ -276,3 +276,10 @@ Blockly.Generator.Arduino.forBlock["variables_set"] = function (
 ) {
   return ""; // nichts generieren
 };
+
+Blockly.Generator.Arduino.forBlock["text_join_basic"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};
