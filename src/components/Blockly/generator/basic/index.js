@@ -330,6 +330,14 @@ basicGenerator.forBlock["basic_repeat_times"] = function (block, generator) {
   return `i=0\nfor(i=0; i<${times}; i=i+1){\n${body}}\n\n`;
 };
 
+basicGenerator.forBlock["basic_repeat_until"] = function (block, generator) {
+  const condition =
+    generator.valueToCode(block, "CONDITION", generator.ORDER_ATOMIC) || "TRUE";
+  const body = generator.statementToCode(block, "DO") || "";
+
+  return `while(${condition}){\n${body}}\n\n`;
+};
+
 basicGenerator.forBlock["basic_compare"] = function (block) {
   const left =
     basicGenerator.valueToCode(block, "LEFT", basicGenerator.ORDER_NONE) || "0";

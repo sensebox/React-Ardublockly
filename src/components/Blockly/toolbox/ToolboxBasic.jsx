@@ -198,6 +198,17 @@ const allBlocks = [
       },
     },
   },
+  {
+    kind: "block",
+    type: "basic_repeat_until",
+    inputs: {
+      CONDITION: {
+        block: {
+          type: "basic_compare",
+        },
+      },
+    },
+  },
   { kind: "block", type: "basic_compare" },
 ];
 
@@ -474,6 +485,17 @@ export const toolboxBasicObject = {
                 fields: {
                   NUM: 10,
                 },
+              },
+            },
+          },
+        },
+        {
+          kind: "block",
+          type: "basic_repeat_until",
+          inputs: {
+            CONDITION: {
+              block: {
+                type: "basic_compare",
               },
             },
           },

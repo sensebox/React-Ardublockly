@@ -850,7 +850,7 @@ Blockly.defineBlocksWithJsonArray([
         check: "String",
       },
     ],
-    output: "String",
+    output: "Boolean",
     colour: "#5b67a5",
     inputsInline: true,
     tooltip: "Vergleicht zwei Werte",
@@ -916,6 +916,26 @@ Blockly.defineBlocksWithJsonArray([
     nextStatement: null,
     colour: "#a5675b",
     tooltip: "Wiederholt die enthaltenen Blöcke eine bestimmte Anzahl an Malen",
+    helpUrl: "",
+  },
+  {
+    type: "basic_repeat_until",
+    message0: "Wiederhole bis %1 %2",
+    args0: [
+      {
+        type: "input_value",
+        name: "CONDITION",
+        check: "Boolean",
+      },
+      {
+        type: "input_statement",
+        name: "DO",
+      },
+    ],
+    previousStatement: null,
+    nextStatement: null,
+    colour: "#a5675b",
+    tooltip: "Wiederholt die enthaltenen Blöcke, bis die Bedingung erfüllt ist",
     helpUrl: "",
   },
 ]);
