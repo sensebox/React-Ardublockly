@@ -208,6 +208,18 @@ export const toolboxBasicObject = {
     // ...existing categories...
     {
       kind: "category",
+      name: "Vor dem Start",
+      colour: "#995ba5",
+      contents: [{ kind: "block", type: "basic_setup" }],
+    },
+    {
+      kind: "category",
+      name: "Variablen",
+      colour: "#a55b99",
+      custom: "VARIABLE",
+    },
+    {
+      kind: "category",
       name: "Sensoren",
       colour: "#5ba55b",
       contents: [

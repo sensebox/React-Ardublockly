@@ -56,6 +56,41 @@ Blockly.Generator.Arduino.forBlock["time_delay_5s"] = function (
   return ""; // nichts generieren
 };
 
+Blockly.Generator.Arduino.forBlock["time_delay_1min"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};
+
+Blockly.Generator.Arduino.forBlock["time_delay_5min"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};
+
+Blockly.Generator.Arduino.forBlock["time_delay_10min"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};
+
+Blockly.Generator.Arduino.forBlock["time_delay_1h"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};
+
+Blockly.Generator.Arduino.forBlock["time_delay_5h"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};
+
 Blockly.Generator.Arduino.forBlock["hdc_humi"] = function (_block, _generator) {
   return ""; // nichts generieren
 };
@@ -215,6 +250,27 @@ Blockly.Generator.Arduino.forBlock["basic_box_shaken"] = function (
 };
 
 Blockly.Generator.Arduino.forBlock["display_clear_basic"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};
+
+Blockly.Generator.Arduino.forBlock["basic_setup"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};
+
+Blockly.Generator.Arduino.forBlock["variables_get"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};
+
+Blockly.Generator.Arduino.forBlock["variables_set"] = function (
   _block,
   _generator,
 ) {

@@ -555,6 +555,23 @@ Blockly.defineBlocksWithJsonArray([
     tooltip: "Startpunkt deines Programms",
     helpUrl: "",
   },
+  {
+    type: "basic_setup",
+    message0: "Vor dem Starten ausführen %1 → einmalig %2",
+    args0: [
+      {
+        type: "input_dummy",
+      },
+      {
+        type: "input_statement",
+        name: "DO",
+      },
+    ],
+    colour: "#995ba5",
+    tooltip:
+      "Wird einmalig ausgeführt, bevor die Loop durchlaufen wird. Ziehe hier alle Anweisungen hinein, die vor dem Starten passieren sollen.",
+    helpUrl: "",
+  },
 ]);
 
 // Number block with configurable color via toolbox data attribute

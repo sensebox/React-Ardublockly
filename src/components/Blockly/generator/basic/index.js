@@ -93,22 +93,27 @@ basicGenerator.forBlock["controls_whileUntil"] = function (block, generator) {
 
 // Variablen (Standard-Var-Blöcke)
 basicGenerator.forBlock["variables_set"] = function (block, generator) {
-  const varName = generator.nameDB_.getName(
-    block.getFieldValue("VAR"),
-    Blockly.Variables.NAME_TYPE,
-  );
+  const variable = block.workspace.getVariableById(block.getFieldValue("VAR"));
+  const varName = variable ? variable.name : block.getFieldValue("VAR");
   const val =
     generator.valueToCode(block, "VALUE", generator.ORDER_ATOMIC) || "0";
-  const code = `LET ${varName} = ${val}\n`;
+  const code = `${varName}=${val}\n`;
   return generator.scrub_(block, code);
 };
 
 basicGenerator.forBlock["variables_get"] = function (block, generator) {
-  const varName = generator.nameDB_.getName(
-    block.getFieldValue("VAR"),
-    Blockly.Variables.NAME_TYPE,
-  );
+  const variable = block.workspace.getVariableById(block.getFieldValue("VAR"));
+  const varName = variable ? variable.name : block.getFieldValue("VAR");
   return [varName, generator.ORDER_ATOMIC];
+};
+
+basicGenerator.forBlock["math_change"] = function (block, generator) {
+  const variable = block.workspace.getVariableById(block.getFieldValue("VAR"));
+  const varName = variable ? variable.name : block.getFieldValue("VAR");
+  const delta =
+    generator.valueToCode(block, "DELTA", generator.ORDER_ATOMIC) || "0";
+  const code = `${varName}=${varName}+${delta}\n`;
+  return generator.scrub_(block, code);
 };
 basicGenerator.forBlock["sensebox_rgb_led"] = function (block, generator) {
   var color = block.getFieldValue("COLOR");
@@ -235,6 +240,18 @@ basicGenerator.forBlock["sensebox_start"] = function (block) {
 
   // Gib den kombinierten Code zurück
   return code;
+};
+
+// "Vor dem Starten ausführen"-Block: Anweisungen, die einmalig vor der Loop laufen.
+basicGenerator.forBlock["basic_setup"] = function (block) {
+  // Code aller Blöcke im Statement-Feld "DO" holen
+  const statements_do = basicGenerator.statementToCode(block, "DO");
+
+  // In den Setup-Bereich einfügen, damit er vor dem Loop-Code erscheint
+  basicGenerator.addSetup("basic_setup_block", statements_do);
+
+  // Der Block selbst erzeugt keinen Code an seiner Position
+  return "";
 };
 basicGenerator.forBlock["basic_if_else"] = function (block, generator) {
   // If/elseif/else condition.
