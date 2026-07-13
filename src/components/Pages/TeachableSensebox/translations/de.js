@@ -20,5 +20,9 @@ export const teachableSenseboxTranslations_de = {
         "Trainiere ein kleines Modell, um Geräteausrichtungen mit dem senseBox MCU Eye Beschleunigungssensor zu erkennen.",
       button: "Starten",
     },
+    tutorials: {
+      title: "Tutorials",
+      viewTutorial: "Tutorial anschauen",
+    },
   },
 };

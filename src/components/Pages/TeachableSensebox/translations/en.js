@@ -20,5 +20,9 @@ export const teachableSenseboxTranslations_en = {
         "Train a small model to detect device orientations using the senseBox MCU Eye accelerometer.",
       button: "Get Started",
     },
+    tutorials: {
+      title: "Tutorials",
+      viewTutorial: "View Tutorial",
+    },
   },
 };
