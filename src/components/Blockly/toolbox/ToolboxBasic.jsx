@@ -436,7 +436,34 @@ export const toolboxBasicObject = {
             },
           },
         },
-
+        {
+          kind: "block",
+          type: "basic_delay_minutes",
+          inputs: {
+            MINUTES: {
+              block: {
+                type: "basic_number",
+                fields: {
+                  NUM: 1,
+                },
+              },
+            },
+          },
+        },
+        {
+          kind: "block",
+          type: "basic_delay_hours",
+          inputs: {
+            HOURS: {
+              block: {
+                type: "basic_number",
+                fields: {
+                  NUM: 1,
+                },
+              },
+            },
+          },
+        },
         {
           kind: "block",
           type: "basic_repeat_times",

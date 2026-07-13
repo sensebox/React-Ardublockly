@@ -251,6 +251,20 @@ basicGenerator.forBlock["basic_delay"] = function (block, generator) {
   return `delay(${milliseconds})\n`;
 };
 
+basicGenerator.forBlock["basic_delay_minutes"] = function (block, generator) {
+  const minutes =
+    generator.valueToCode(block, "MINUTES", generator.ORDER_NONE) || "1";
+  const milliseconds = `${minutes} * 60 * 1000`;
+  return `delay(${milliseconds})\n`;
+};
+
+basicGenerator.forBlock["basic_delay_hours"] = function (block, generator) {
+  const hours =
+    generator.valueToCode(block, "HOURS", generator.ORDER_NONE) || "1";
+  const milliseconds = `${hours} * 60 * 60 * 1000`;
+  return `delay(${milliseconds})\n`;
+};
+
 basicGenerator.forBlock["sensebox_start"] = function (block) {
   // Hole den Code aller Blöcke im Statement-Feld "DO"
   const statements_do = basicGenerator.statementToCode(block, "DO");
