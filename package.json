@@ -36,11 +36,11 @@
     "@uiw/react-md-editor": "^4.1.1",
     "axios": "^1.18.1",
     "blockly": "^12.5.1",
-    "dompurify": "^3.4.11",
+    "dompurify": "^3.4.12",
     "file-saver": "^2.0.5",
     "framer-motion": "^6.5.1",
     "hast-util-to-parse5": "^8.0.1",
-    "markdown-it": "^14.2.0",
+    "markdown-it": "^14.3.0",
     "mnemonic-id": "^4.1.0",
     "moment": "^2.29.4",
     "prismjs": "^1.27.0",
@@ -84,12 +84,12 @@
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@vitejs/plugin-react": "^5.2.0",
-    "cypress": "^15.18.0",
+    "cypress": "^15.18.1",
     "cypress-ctrf-json-reporter": "^0.0.14",
     "eslint": "^9.20.1",
-    "eslint-plugin-cypress": "^6.4.1",
+    "eslint-plugin-cypress": "^6.4.2",
     "eslint-plugin-react": "^7.37.4",
-    "prettier": "^3.9.1",
+    "prettier": "^3.9.5",
     "vite": "^7.3.2"
   }
 }
