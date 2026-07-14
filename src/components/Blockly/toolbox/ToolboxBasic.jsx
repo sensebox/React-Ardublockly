@@ -425,7 +425,7 @@ export const toolboxBasicObject = {
         },
         { kind: "block", type: "basic_math" },
 
-        { kind: "block", type: "basic_number" },
+        { kind: "block", type: "math_number" },
       ],
     },
     {

@@ -611,7 +611,7 @@ Blockly.Blocks["display_print_basic"] = {
 Blockly.defineBlocksWithJsonArray([
   {
     type: "sensebox_start",
-    message0: "Füge hier deine Blöcke ein %1 → Aktionen %2",
+    message0: "Füge hier deine Blöcke ein %1 → Dauerschleife %2",
     args0: [
       {
         type: "input_dummy",
