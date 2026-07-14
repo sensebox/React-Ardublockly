@@ -23,7 +23,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { getTutorials } from "../../../actions/tutorialActions";
 import { getTeachableSenseboxTranslations } from "./translations";
-import TutorialItemSummary from "../../Tutorial/Overview/TutorialtemSummary";
+import TutorialItemSummary from "../../Tutorial/Overview/TutorialItemSummary";
 
 const TeachableSenseboxLanding = () => {
   const navigate = useNavigate();
@@ -75,7 +75,8 @@ const TeachableSenseboxLanding = () => {
       <Accordion sx={{ boxShadow: 1 }}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
-          aria-controls="tutorial-content"
+          id={`tutorial-accordion-${tutorialList[0]._id}-header`}
+          aria-controls={`tutorial-accordion-${tutorialList[0]._id}-content`}
           sx={{
             backgroundColor: theme.palette.background.default,
             "&:hover": {
@@ -87,7 +88,10 @@ const TeachableSenseboxLanding = () => {
             {title}
           </Typography>
         </AccordionSummary>
-        <AccordionDetails sx={{ display: "block", pt: 3 }}>
+        <AccordionDetails
+          id={`tutorial-accordion-${tutorialList[0]._id}-content`}
+          sx={{ display: "block", pt: 3 }}
+        >
           <Grid container spacing={3}>
             {tutorialList.map((tutorial) => (
               <Grid
@@ -189,11 +193,11 @@ const TeachableSenseboxLanding = () => {
               </Button>
             </CardActions>
           </Card>
-          <TutorialAccordion
-            title={t.landing.tutorials.title}
-            tutorialList={orientationTutorials}
-            viewTutorialText={t.landing.tutorials.viewTutorial}
-          />
+          {TutorialAccordion({
+            title: t.landing.tutorials.title,
+            tutorialList: orientationTutorials,
+            viewTutorialText: t.landing.tutorials.viewTutorial,
+          })}
         </Box>
 
         {/* Acceleration Classification Card */}
@@ -256,11 +260,11 @@ const TeachableSenseboxLanding = () => {
               </Button>
             </CardActions>
           </Card>
-          <TutorialAccordion
-            title={t.landing.tutorials.title}
-            tutorialList={imageTutorials}
-            viewTutorialText={t.landing.tutorials.viewTutorial}
-          />
+          {TutorialAccordion({
+            title: t.landing.tutorials.title,
+            tutorialList: imageTutorials,
+            viewTutorialText: t.landing.tutorials.viewTutorial,
+          })}
         </Box>
       </Box>
     </Container>
