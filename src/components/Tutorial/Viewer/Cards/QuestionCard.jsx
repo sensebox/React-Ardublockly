@@ -199,13 +199,8 @@ const QuestionCard = ({
 
   const allFeedbacks = !freetext
     ? answers
-        .filter(
-          (a) =>
-            (selected.includes(a.text) ||
-              (a.correct && !selected.includes(a.text))) &&
-            a.feedback,
-        )
-        .map((a) => a.feedback)
+        .filter((a) => selected.includes(a.text) && a.feedback)
+        .map((a) => ({ text: a.feedback, correct: a.correct }))
     : [];
 
   return (
@@ -399,15 +394,14 @@ const QuestionCard = ({
                         key={idx}
                         variant="body2"
                         sx={{
-                          color:
-                            hasCorrectAnswerDefined && !isCorrect
-                              ? theme.palette.error.dark
-                              : theme.palette.success.dark,
+                          color: fb.correct
+                            ? theme.palette.success.dark
+                            : theme.palette.error.dark,
                           fontStyle: "italic",
                           mb: 0.5,
                         }}
                       >
-                        💡 {fb}
+                        💡 {fb.text}
                       </Typography>
                     ))}
                   </Box>
