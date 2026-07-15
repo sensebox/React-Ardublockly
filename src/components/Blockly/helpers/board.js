@@ -430,7 +430,8 @@ const sensebox_mcu_eye = {
     ["A", "48"],
   ],
   digitalPinsButton: [
-    ["on Board", "21"],
+    ["on Board", "47"],
+    ["on Board v1.5", "21"],
     ["IO14", "14"],
     ["IO48", "48"],
   ],
