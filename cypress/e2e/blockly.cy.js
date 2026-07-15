@@ -147,7 +147,7 @@ describe("Blockly Editor Page Tests", () => {
 
     cy.visit("/settings");
     cy.get("#ota-selector").click();
-    cy.contains("li", "settings_ota_on").click();
+    cy.contains("li", "Aktiviert").click();
     cy.visit("/");
     cy.contains("button", "Schließen").click();
     cy.get('img[alt="Sensebox ESP"]').click();
@@ -182,7 +182,7 @@ describe("Blockly Editor Page Tests", () => {
 
     cy.visit("/settings");
     cy.get("#ota-selector").click();
-    cy.contains("li", "settings_ota_on").click();
+    cy.contains("li", "Aktiviert").click();
     cy.visit("/");
     cy.contains("button", "Schließen").click();
     cy.get('img[alt="Sensebox MCU"]').click();
