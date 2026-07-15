@@ -23,7 +23,7 @@ describe("Blockly Editor Page Tests", () => {
     cy.visit("/gallery");
 
     cy.get("h1, h2, h3, h4")
-      .contains(/gallery/i)
+      .contains(/Galerie/i)
       .should("be.visible");
   });
 
@@ -147,9 +147,9 @@ describe("Blockly Editor Page Tests", () => {
 
     cy.visit("/settings");
     cy.get("#ota-selector").click();
-    cy.contains("li", "Activated").click();
+    cy.contains("li", "settings_ota_on").click();
     cy.visit("/");
-    cy.contains("button", "Close").click();
+    cy.contains("button", "Schließen").click();
     cy.get('img[alt="Sensebox ESP"]').click();
     cy.get('button[aria-label="Compile code"]').click();
 
@@ -182,9 +182,9 @@ describe("Blockly Editor Page Tests", () => {
 
     cy.visit("/settings");
     cy.get("#ota-selector").click();
-    cy.contains("li", "Activated").click();
+    cy.contains("li", "settings_ota_on").click();
     cy.visit("/");
-    cy.contains("button", "Close").click();
+    cy.contains("button", "Schließen").click();
     cy.get('img[alt="Sensebox MCU"]').click();
     cy.get('button[aria-label="Compile code"]').click();
 
