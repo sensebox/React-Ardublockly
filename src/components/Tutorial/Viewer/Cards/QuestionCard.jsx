@@ -290,9 +290,6 @@ const QuestionCard = ({
                   } else if (!isAnswerCorrect && isSelected) {
                     bgColor = theme.palette.error.light;
                     borderColor = theme.palette.error.main;
-                  } else if (isAnswerCorrect && !isSelected) {
-                    bgColor = theme.palette.error.light;
-                    borderColor = theme.palette.error.main;
                   }
                 } else {
                   if (isSelected) {
