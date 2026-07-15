@@ -502,5 +502,14 @@ export const toolboxBasicObject = {
         },
       ],
     },
+    {
+      kind: "category",
+      name: "Daten senden",
+      colour: "#5ba55b",
+      contents: [
+        { kind: "block", type: "basic_ble_send" },
+        { kind: "block", type: "basic_serial_send" },
+      ],
+    },
   ],
 };

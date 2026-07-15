@@ -290,3 +290,17 @@ Blockly.Generator.Arduino.forBlock["text_join_basic"] = function (
 ) {
   return ""; // nichts generieren
 };
+
+Blockly.Generator.Arduino.forBlock["basic_ble_send"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};
+
+Blockly.Generator.Arduino.forBlock["basic_serial_send"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};

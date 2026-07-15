@@ -466,3 +466,16 @@ basicGenerator.forBlock["text_join"] = function (block, generator) {
   const result = `"${code.join("").replaceAll('"', "")}"`;
   return [result, generator.ORDER_ATOMIC];
 };
+
+// basic_ble_send
+basicGenerator.forBlock["basic_ble_send"] = function (block, generator) {
+  const value =
+    generator.valueToCode(block, "DATA", generator.ORDER_ATOMIC) || '""';
+  return `sendBle(${value})\n`;
+};
+
+basicGenerator.forBlock["basic_serial_send"] = function (block, generator) {
+  const value =
+    generator.valueToCode(block, "DATA", generator.ORDER_ATOMIC) || '""';
+  return `sendSerial(${value})\n`;
+};
