@@ -290,9 +290,6 @@ const QuestionCard = ({
                   } else if (!isAnswerCorrect && isSelected) {
                     bgColor = theme.palette.error.light;
                     borderColor = theme.palette.error.main;
-                  } else if (isAnswerCorrect && !isSelected) {
-                    bgColor = theme.palette.error.light;
-                    borderColor = theme.palette.error.main;
                   }
                 } else {
                   if (isSelected) {
@@ -387,7 +384,7 @@ const QuestionCard = ({
                 )}
 
                 {/* Show feedbacks if they exist */}
-                {allFeedbacks.length > 0 ? (
+                {allFeedbacks.length > 0 && (
                   <Box sx={{ mt: 1.5, pl: 4 }}>
                     {allFeedbacks.map((fb, idx) => (
                       <Typography
@@ -404,26 +401,6 @@ const QuestionCard = ({
                         💡 {fb.text}
                       </Typography>
                     ))}
-                  </Box>
-                ) : (
-                  /* Show success message if no feedbacks */
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 1,
-                      mt: 2,
-                    }}
-                  >
-                    <CheckCircle
-                      sx={{
-                        color: theme.palette.success.main,
-                        fontSize: 28,
-                      }}
-                    />
-                    <Typography color="success.main" fontWeight={600}>
-                      Antwort gespeichert!
-                    </Typography>
                   </Box>
                 )}
               </motion.div>
