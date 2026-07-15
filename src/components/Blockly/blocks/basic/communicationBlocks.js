@@ -2,39 +2,30 @@ import * as Blockly from "blockly/core";
 
 Blockly.defineBlocksWithJsonArray([
   {
-    type: "basic_ble_send",
-    message0: "Sende %1 über Bluetooth mit UUID %2",
-    args0: [
-      {
-        type: "input_value",
-        name: "DATA",
-        check: "String",
-      },
-      {
-        type: "input_value",
-        name: "UUID",
-        check: "String",
-      },
-    ],
+    type: "basic_send_temperature",
+    message0: "Sende Temperatur (ID 1)",
     previousStatement: null,
     nextStatement: null,
     colour: "#5ba574",
-    tooltip: "Sendet Daten über Bluetooth",
+    tooltip: "Sendet die Temperatur auf Kanal/ID 1",
     helpUrl: "",
   },
   {
-    type: "basic_serial_send",
-    message0: "Sende %1 über Serial",
-    args0: [
-      {
-        type: "input_value",
-        name: "DATA",
-      },
-    ],
+    type: "basic_send_humidity",
+    message0: "Sende Luftfeuchtigkeit (ID 2)",
     previousStatement: null,
     nextStatement: null,
     colour: "#5ba574",
-    tooltip: "Sendet Daten über Serial",
+    tooltip: "Sendet die Luftfeuchtigkeit auf Kanal/ID 2",
+    helpUrl: "",
+  },
+  {
+    type: "basic_send_air_quality",
+    message0: "Sende Luftqualität (ID 3)",
+    previousStatement: null,
+    nextStatement: null,
+    colour: "#5ba574",
+    tooltip: "Sendet die Luftqualität auf Kanal/ID 3",
     helpUrl: "",
   },
 ]);

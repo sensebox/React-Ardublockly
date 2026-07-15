@@ -288,8 +288,9 @@ const dataSendCategory = {
   name: "Daten senden",
   colour: "#5ba55b",
   contents: [
-    { kind: "block", type: "basic_ble_send" },
-    { kind: "block", type: "basic_serial_send" },
+    { kind: "block", type: "basic_send_temperature" },
+    { kind: "block", type: "basic_send_humidity" },
+    { kind: "block", type: "basic_send_air_quality" },
   ],
 };
 
