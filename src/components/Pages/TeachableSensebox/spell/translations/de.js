@@ -1,5 +1,5 @@
 export const spellTranslations_de = {
-  title: "Zauberspruch Klassifizierung",
+  title: "Zaubersprüche Erkennen",
   description:
     "Trainiere ein Modell zur Erkennung von Zaubersprüchen mit Hilfe des Beschleunigungssensor. Zeichne mit deiner senseBox MCU Eye Muster in die Luft, um Zaubersprüche zu erstellen.",
 
@@ -53,7 +53,7 @@ export const spellTranslations_de = {
     errorTooManyClasses: "Maximal 5 Zaubersprüche erlaubt.",
 
     tooltip: {
-      helpMain: "Was ist Zauberspruch-Klassifizierung?",
+      helpMain: "Was ist Zauberspruch-Erkennung?",
       helpConnection: "Wie verbinde ich meine senseBox?",
       helpClasses: "Über Zaubersprüche",
       helpTraining: "Wie funktioniert das Training?",
@@ -89,7 +89,7 @@ export const spellTranslations_de = {
   help: {
     help: "Hilfe",
     spellClassification: {
-      title: "Zauberspruch Klassifizierung",
+      title: "Zaubersprüche Erkennen",
     },
     addClass: {
       title: "Einen Zauberspruch definieren",
