@@ -1,7 +1,7 @@
 import { help } from "@uiw/react-md-editor";
 
 export const spellTranslations_en = {
-  title: "Spell Classification",
+  title: "Spell Recognition",
   description:
     "Train a model to recognize spells using the acceleration sensor. Draw patterns in the air with your senseBox MCU Eye to cast spells.",
 
@@ -52,10 +52,10 @@ export const spellTranslations_en = {
     errorInsufficientData:
       "Insufficient data for training. Please add at least 2 spells with at least 2 recordings each.",
     errorTraining: "Training failed: {message}",
-    errorTooManyClasses: "Maximum of 5 spell classes allowed.",
+    errorTooManyClasses: "Maximum of 5 spells allowed.",
 
     tooltip: {
-      helpMain: "What is spell classification?",
+      helpMain: "What is spell recognition?",
       helpConnection: "How to connect your senseBox",
       helpClasses: "How to define a spell",
       helpTraining: "How training works",
@@ -90,7 +90,7 @@ export const spellTranslations_en = {
   help: {
     help: "Help",
     spellClassification: {
-      title: "Spell Classification",
+      title: "Spell Recognition",
     },
     addClass: {
       title: "Defining a Spell",
