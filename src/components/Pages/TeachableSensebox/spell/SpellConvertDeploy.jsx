@@ -1,26 +1,26 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { getImageTranslations } from "./translations";
+import { getSpellTranslations } from "./translations";
 import ConvertDeployBase from "../utils/ConvertDeployBase";
 
 /**
- * Image Classification ConvertDeploy Component
+ * Spell Classification ConvertDeploy Component
  *
- * Wrapper component that provides image-specific conversion and deployment
+ * Wrapper component that provides spell-specific conversion and deployment
  * using the generic ConvertDeployBase component.
  */
-const ConvertDeploy = ({ model }) => {
+const SpellConvertDeploy = ({ model }) => {
   const language = useSelector((s) => s.general.language);
-  const t = getImageTranslations(language);
+  const t = getSpellTranslations(language);
 
   return (
     <ConvertDeployBase
       model={model}
       translations={t}
       boardType="sensebox_mcu_eye"
-      modelName="image_classification"
+      modelName="spell_classification"
     />
   );
 };
 
-export default ConvertDeploy;
+export default SpellConvertDeploy;

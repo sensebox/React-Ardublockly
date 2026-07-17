@@ -13,6 +13,7 @@ import { ArrowBack as ArrowBackIcon } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import { getSpellTranslations } from "./translations";
 import SpellModelTrainer from "./SpellModelTrainer";
+import SpellConvertDeploy from "./SpellConvertDeploy";
 import HelpSidebar, { SIDEBAR_WIDTH } from "../HelpSidebar";
 import HelpButton, { useHelpBlink } from "../HelpButton";
 
@@ -158,6 +159,16 @@ const SpellClassification = () => {
               trainedModel={trainedModel}
             />
           </Paper>
+
+          {/* Deployment Section */}
+          {trainedModel && (
+            <Paper elevation={2} sx={{ p: 3 }}>
+              <Typography variant="h5" gutterBottom>
+                {t.integration.title}
+              </Typography>
+              <SpellConvertDeploy model={trainedModel} />
+            </Paper>
+          )}
         </Box>
       </Container>
     </>
