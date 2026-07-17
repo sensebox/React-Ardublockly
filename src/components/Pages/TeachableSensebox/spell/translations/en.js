@@ -76,6 +76,30 @@ export const spellTranslations_en = {
     },
   },
 
+  integration: {
+    title: "Deploy on your senseBox MCU Eye",
+    converting: "Compressing & Converting...",
+    convertModel: "Compress & Convert Model",
+    retry: "Retry",
+    suggestions: "Suggestions:",
+    modelConvertedSuccess: "Model Successfully Converted",
+    chooseOptions: "Choose one of the following options:",
+    optionA: "Option A: Download Model",
+    optionADescription:
+      "Download the model as a single cpp file for use in Arduino IDE or to upload to Blockly UI later.",
+    downloadCppFile: "Download Model",
+    optionB: "Option B: Integrate Model into prebuilt sketch",
+    optionBDescription:
+      "Integrate the model into a prebuilt sketch. This sketch will display the gesture prediction and confidence on the OLED display. Compiling the sketch will take some time. Once downloaded, you can upload it directly to your senseBox MCU Eye via drag-and-drop.",
+    compiling: "Compiling...",
+    compileAndDownload: "Compile & Download",
+    downloadBinaryAgain: "Download Again",
+    reconvertModel: "Reconvert",
+    successBinaryDownloaded: "Successfully Downloaded!",
+    successBinaryDescription:
+      "Your model has been compiled and downloaded! The binary file is ready to upload to your senseBox MCU Eye via drag-and-drop.",
+  },
+
   errors: {
     downloadFirmware: "Download Spell-Sketch",
     connectionFailed: "Connection Failed",

@@ -76,6 +76,31 @@ export const spellTranslations_de = {
       helpCNN: "Was ist ein Convolutional Neural Network?",
     },
   },
+
+  integration: {
+    title: "Ausführen auf der senseBox MCU Eye",
+    converting: "Kompiliere & konvertiere...",
+    convertModel: "Modell komprimieren & konvertieren",
+    retry: "Erneut versuchen",
+    suggestions: "Vorschläge:",
+    modelConvertedSuccess: "Modell erfolgreich konvertiert",
+    chooseOptions: "Wähle eine der folgenden Optionen:",
+    optionA: "Option A: Modell herunterladen",
+    optionADescription:
+      "Lade das Modell als einzelne cpp-Datei herunter zur Verwendung in der Arduino IDE oder zum späteren Hochladen in die Blockly UI.",
+    downloadCppFile: "Modell herunterladen",
+    optionB: "Option B: Modell in vorgefertigten Sketch integrieren",
+    optionBDescription:
+      "Integriere das Modell in einen vorgefertigten Sketch. Dieser zeigt dir die Zauberspruch-Vorhersage und das Vertrauen auf dem OLED-Display an. Das Kompilieren des Sketches wird einige Zeit in Anspruch nehmen. Sobald du ihn heruntergeladen hast, kannst du ihn direkt per Drag-and-Drop auf deine senseBox MCU Eye hochladen.",
+    compiling: "Kompiliere...",
+    compileAndDownload: "Kompilieren & Herunterladen",
+    downloadBinaryAgain: "Erneut herunterladen",
+    reconvertModel: "Erneut konvertieren",
+    successBinaryDownloaded: "Erfolgreich heruntergeladen!",
+    successBinaryDescription:
+      "Dein Modell wurde kompiliert und heruntergeladen! Die Binärdatei ist bereit zum Hochladen auf deine senseBox MCU Eye per Drag-and-Drop.",
+  },
+
   errors: {
     downloadFirmware: "Zauberspruch-Sketch herunterladen",
     connectionFailed: "Verbindung fehlgeschlagen",
