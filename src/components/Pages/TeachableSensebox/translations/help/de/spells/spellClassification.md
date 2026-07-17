@@ -1,4 +1,4 @@
-Mit der **Zauberspruch Klassifizierung** kannst du deine senseBox MCU Eye wie einen Zauberstab verwenden.
+Mit der **Zauberspruch Erkennung** kannst du deine senseBox MCU Eye wie einen Zauberstab verwenden.
 
 Befestige dafür die senseBox am Ende eines kleinen Stabes (z.B. ein Stift) und zeichne damit deine eigenen Zaubersprüche in die Luft.
 
@@ -10,7 +10,7 @@ Deine Bewegungen werden mit dem **Beschleunigungssensor** der senseBox MCU Eye a
 
 # Mit welchem _Model_ wird dein Zauberspruch klassifiziert?
 
-Um die Zaubersprüche zu klassifizieren nutzen wir ein **Bildklassifizierungsmodell** – ein Modell, das ein Bild ansieht und entscheidet, zu welcher Klasse es gehört.
+Um die Zaubersprüche zu erkennen nutzen wir ein **Bildklassifizierungsmodell** – ein Modell, das ein Bild ansieht und entscheidet, zu welcher Klasse es gehört.
 
 Unter der Haube steckt ein sogenanntes **Neuronales Netz**, das grob vom menschlichen Gehirn inspiriert ist. Es besteht aus vielen Schichten, die das Bild schrittweise analysieren.
 

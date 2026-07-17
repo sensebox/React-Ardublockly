@@ -183,7 +183,7 @@ const OrientationClassification = () => {
               isBlinking={orientationClassBlinking}
               tooltip={
                 t.training?.tooltip?.helpMain ||
-                "Was ist Orientierungsklassifizierung?"
+                "Was ist Orientierungserkennung?"
               }
             />
           </Box>
