@@ -365,7 +365,7 @@ Blockly.Generator.Arduino.forBlock["sensebox_tof_imager"] = function () {
 
   Blockly.Generator.Arduino.setupCode_["setup_vl53l8cx"] = `
   Wire.setClock(1000000); // vl53l8cx can operate at 1MHz
-  sensor_vl53l8cx.begin();
+  sensor_vl53l8cx.begin(0x51);
   sensor_vl53l8cx.init();
   sensor_vl53l8cx.set_ranging_frequency_hz(30);
   sensor_vl53l8cx.set_resolution(VL53L8CX_RESOLUTION_8X8);
