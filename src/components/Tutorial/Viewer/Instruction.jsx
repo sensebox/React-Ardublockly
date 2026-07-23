@@ -41,7 +41,7 @@ const Instruction = ({ tutorial }) => {
   ) || { text: "", hardware: [] };
 
   return (
-    <TutorialSlide title="Einleitung">
+    <TutorialSlide>
       <Box sx={{ my: 2 }}>
         <div dangerouslySetInnerHTML={{ __html: md.render(step.text) }} />
       </Box>
