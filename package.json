@@ -73,6 +73,7 @@
     "dev": "set \"VITE_BLOCKLY_API=http://localhost:8080\" && npm start",
     "start": "vite",
     "build": "vite build",
+    "build:tutorial": "WIDGET=tutorial vite build --config vite.config.tutorial.js",
     "serve": "vite preview",
     "e2e": "cypress run"
   },
