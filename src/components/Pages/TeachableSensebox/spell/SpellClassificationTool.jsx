@@ -11,8 +11,9 @@ import { getSpellTranslations } from "./translations";
 import SpellModelTrainer from "./SpellModelTrainer";
 import HelpSidebar, { SIDEBAR_WIDTH } from "../HelpSidebar";
 import HelpButton, { useHelpBlink } from "../HelpButton";
+import { HelpProvider } from "../HelpContext";
 
-const SpellClassificationTool = () => {
+const SpellClassificationTool = ({ hideHelp = false }) => {
   const [trainedModel, setTrainedModel] = useState(null);
   const [isTraining, setIsTraining] = useState(false);
   const [trainingError, setTrainingError] = useState(null);
@@ -78,7 +79,8 @@ const SpellClassificationTool = () => {
   }, []);
 
   return (
-    <>
+    <HelpProvider hideHelp={hideHelp}>
+      <>
       {/* Help Sidebar */}
       <HelpSidebar
         open={helpSidebarOpen}
@@ -147,7 +149,8 @@ const SpellClassificationTool = () => {
           </Paper>
         </Box>
       </Box>
-    </>
+      </>
+    </HelpProvider>
   );
 };
 

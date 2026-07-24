@@ -14,9 +14,9 @@ import OrientationClassificationTool from "../orientation/OrientationClassificat
 import SpellClassificationTool from "../spell/SpellClassificationTool";
 
 function ClassificationPanel({ type }) {
-  if (type === "image") return <ImageClassificationTool />;
-  if (type === "orientation") return <OrientationClassificationTool />;
-  if (type === "spell") return <SpellClassificationTool />;
+  if (type === "image") return <ImageClassificationTool hideHelp />;
+  if (type === "orientation") return <OrientationClassificationTool hideHelp />;
+  if (type === "spell") return <SpellClassificationTool hideHelp />;
   return null;
 }
 

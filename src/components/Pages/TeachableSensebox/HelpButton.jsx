@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect, useRef } from "react";
 import { IconButton, Tooltip, useMediaQuery, useTheme } from "@mui/material";
 import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useHideHelp } from "./HelpContext";
 
 // ─── Help-blink hooks ──────────────────────────────────────────────────────────
 
@@ -129,9 +130,10 @@ const HelpButton = ({
 }) => {
   const theme = useTheme();
   const isWideScreen = useMediaQuery(theme.breakpoints.up("lg"));
+  const hideHelp = useHideHelp();
 
-  // Only render on wide screens
-  if (!isWideScreen) {
+  // Only render on wide screens and when not hidden
+  if (!isWideScreen || hideHelp) {
     return null;
   }
 

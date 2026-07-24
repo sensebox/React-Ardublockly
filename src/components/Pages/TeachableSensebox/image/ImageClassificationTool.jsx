@@ -12,8 +12,9 @@ import ModelTrainer from "./ModelTrainer";
 import ConvertDeploy from "./ConvertDeploy";
 import HelpSidebar, { SIDEBAR_WIDTH } from "../HelpSidebar";
 import HelpButton, { useHelpBlink, markHelpSeen } from "../HelpButton";
+import { HelpProvider } from "../HelpContext";
 
-const ImageClassificationTool = () => {
+const ImageClassificationTool = ({ hideHelp = false }) => {
   const [trainedModel, setTrainedModel] = useState(null);
   const [isTraining, setIsTraining] = useState(false);
   const [trainingError, setTrainingError] = useState(null);
@@ -91,7 +92,8 @@ const ImageClassificationTool = () => {
   }, []);
 
   return (
-    <>
+    <HelpProvider hideHelp={hideHelp}>
+      <>
       {/* Help Sidebar */}
       <HelpSidebar
         open={helpSidebarOpen}
@@ -167,7 +169,8 @@ const ImageClassificationTool = () => {
           )}
         </Box>
       </Box>
-    </>
+      </>
+    </HelpProvider>
   );
 };
 

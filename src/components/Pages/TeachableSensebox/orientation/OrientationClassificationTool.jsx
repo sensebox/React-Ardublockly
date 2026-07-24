@@ -19,8 +19,9 @@ import OrientationNNVisualizer, {
 import useOrientationNNTraining from "./hooks/useOrientationNNTraining";
 import HelpSidebar, { SIDEBAR_WIDTH } from "../HelpSidebar";
 import HelpButton, { useHelpBlink, useHelpBlinkCooldown } from "../HelpButton";
+import { HelpProvider } from "../HelpContext";
 
-const OrientationClassificationTool = () => {
+const OrientationClassificationTool = ({ hideHelp = false }) => {
   const [trainedModel, setTrainedModel] = useState(null);
   const [isTraining, setIsTraining] = useState(false);
   const [trainingError, setTrainingError] = useState(null);
@@ -141,7 +142,8 @@ const OrientationClassificationTool = () => {
   }, []);
 
   return (
-    <>
+    <HelpProvider hideHelp={hideHelp}>
+      <>
       <HelpSidebar
         open={helpSidebarOpen}
         onClose={handleCloseHelp}
@@ -317,7 +319,8 @@ const OrientationClassificationTool = () => {
           </Box>
         </Paper>
       </Box>
-    </>
+      </>
+    </HelpProvider>
   );
 };
 
