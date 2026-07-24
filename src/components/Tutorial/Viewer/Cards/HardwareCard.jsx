@@ -97,7 +97,17 @@ const HardwareCard = ({ component, customHardware = {} }) => {
         </Tooltip>
 
         {/* Titel */}
-        <Typography variant="subtitle1" fontWeight="600" noWrap>
+        <Typography
+          variant="subtitle1"
+          fontWeight="600"
+          sx={{
+            display: "-webkit-box",
+            WebkitLineClamp: 3,
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
+            maxWidth: "12ch"
+          }}
+        >
           {compData.name}
         </Typography>
 
