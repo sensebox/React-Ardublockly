@@ -36,7 +36,7 @@
     "@uiw/react-md-editor": "^4.1.1",
     "axios": "^1.18.1",
     "blockly": "^12.5.1",
-    "dompurify": "^3.4.11",
+    "dompurify": "^3.4.12",
     "file-saver": "^2.0.5",
     "framer-motion": "^6.5.1",
     "hast-util-to-parse5": "^8.0.1",
