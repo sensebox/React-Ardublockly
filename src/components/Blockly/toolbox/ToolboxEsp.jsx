@@ -658,6 +658,7 @@ export const ToolboxEsp = () => {
         <Category name={Blockly.Msg.toolbox_serial} colour={getColour().serial}>
           <Block type="init_serial_monitor" />
           <Block type="print_serial_monitor" />
+          <Block type="sensebox_sensor_sen066" />
         </Category>
 
         {/* -------- IO -------- */}
