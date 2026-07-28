@@ -20,12 +20,31 @@ export default function OverviewPage({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Normalize tutorials: flatten groups into a single array with group metadata
+  const normalizedConfigs = Array.isArray(tutorialConfigs)
+    ? tutorialConfigs.flatMap((item) =>
+        item.group && Array.isArray(item.tutorials)
+          ? item.tutorials.map((t) => ({ ...t, _group: item.group }))
+          : item,
+      )
+    : [];
+
+  // Group tutorials for display
+  const groupedTutorials = normalizedConfigs.reduce((groups, tutorial) => {
+    const group = tutorial._group || "default";
+    if (!groups[group]) {
+      groups[group] = [];
+    }
+    groups[group].push(tutorial);
+    return groups;
+  }, {});
+
   useEffect(() => {
     let cancelled = false;
     async function fetchAll() {
       try {
         const results = await Promise.all(
-          tutorialConfigs.map(({ id, type }) =>
+          normalizedConfigs.map(({ id, type }) =>
             axios
               .get(`${import.meta.env.VITE_BLOCKLY_API}/tutorial/${id}`)
               .then((res) => ({ ...res.data.tutorial, _widgetType: type })),
@@ -46,7 +65,7 @@ export default function OverviewPage({
     return () => {
       cancelled = true;
     };
-  }, [tutorialConfigs]);
+  }, [normalizedConfigs]);
 
   if (loading) {
     return (
@@ -73,54 +92,85 @@ export default function OverviewPage({
 
   return (
     <Box sx={{ p: 4 }}>
-      <Typography variant="h4" sx={{ mb: 1, fontWeight: 700 }}>
-        Tutorials
-      </Typography>
-      <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-        Wähle ein Tutorial aus, um zu starten.
-      </Typography>
-      <Grid container spacing={3}>
-        {tutorials.map((tutorial) => (
-          <Grid item sm={12} md={6} lg={3} key={tutorial._id}>
-            <Card
-              elevation={3}
+      {Object.entries(groupedTutorials).map(([groupName, tutorialsInGroup]) => (
+        <Box key={groupName} sx={{ mb: 4 }}>
+          {groupName !== "default" && (
+            <Typography
+              variant="h4"
               sx={{
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                transition: "transform 0.2s, box-shadow 0.2s",
-                "&:hover": { boxShadow: 6, transform: "translateY(-2px)" },
+                fontWeight: 600,
+                mb: 2,
+                borderBottom: "2px solid",
+                pb: 1,
               }}
             >
-              <CardActionArea
-                onClick={() =>
-                  onSelect({ id: tutorial._id, type: tutorial._widgetType })
-                }
-                sx={{
-                  flexGrow: 1,
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "stretch",
-                }}
-              >
-                <CardContent sx={{ flexGrow: 1, p: "8px" }}>
-                  <TutorialItemSummary tutorial={tutorial} />
-                </CardContent>
-              </CardActionArea>
-            </Card>
+              {groupName}
+            </Typography>
+          )}
+          <Grid container spacing={3}>
+            {tutorials
+              .filter((tutorial) => tutorialsInGroup.some((c) => c.id === tutorial._id))
+              .map((tutorial) => (
+                <Grid item sm={12} md={6} lg={3} key={tutorial._id}>
+                  <Card
+                    elevation={3}
+                    sx={{
+                      height: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      transition: "transform 0.2s, box-shadow 0.2s",
+                      "&:hover": {
+                        boxShadow: 6,
+                        transform: "translateY(-2px)",
+                      },
+                    }}
+                  >
+                    <CardActionArea
+                      onClick={() =>
+                        onSelect({
+                          id: tutorial._id,
+                          type: tutorial._widgetType,
+                          group: groupName !== "default" ? groupName : null,
+                        })
+                      }
+                      sx={{
+                        flexGrow: 1,
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "stretch",
+                      }}
+                    >
+                      <CardContent sx={{ flexGrow: 1, p: "8px" }}>
+                        <TutorialItemSummary tutorial={tutorial} />
+                      </CardContent>
+                    </CardActionArea>
+                  </Card>
+                </Grid>
+              ))}
           </Grid>
-        ))}
-      </Grid>
+        </Box>
+      ))}
     </Box>
   );
 }
 
 OverviewPage.propTypes = {
   tutorials: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      type: PropTypes.string.isRequired,
-    }),
+    PropTypes.oneOf([
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        type: PropTypes.string.isRequired,
+      }),
+      PropTypes.shape({
+        group: PropTypes.string.isRequired,
+        tutorials: PropTypes.arrayOf(
+          PropTypes.shape({
+            id: PropTypes.string.isRequired,
+            type: PropTypes.string.isRequired,
+          }),
+        ).isRequired,
+      }),
+    ]),
   ),
   onSelect: PropTypes.func.isRequired,
 };

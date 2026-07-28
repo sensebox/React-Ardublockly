@@ -23,6 +23,7 @@ function ClassificationPanel({ type }) {
 export default function TutorialViewerPanel({
   tutorialId,
   classificationType,
+  groupName,
   onBack,
 }) {
   const [nextStepDisabled, setNextStepDisabled] = useState(false);
@@ -119,7 +120,7 @@ export default function TutorialViewerPanel({
               fontWeight={600}
               sx={{ flexGrow: 1, textAlign: "right" }}
             >
-              {tutorial.title}
+              {groupName ? `${groupName} - ${tutorial.title}` : tutorial.title}
             </Typography>
           </Box>
           {/* Step card - scrollable */}
@@ -202,5 +203,6 @@ export default function TutorialViewerPanel({
 TutorialViewerPanel.propTypes = {
   tutorialId: PropTypes.string.isRequired,
   classificationType: PropTypes.oneOf(["image", "orientation"]).isRequired,
+  groupName: PropTypes.string,
   onBack: PropTypes.func.isRequired,
 };
