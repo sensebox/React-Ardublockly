@@ -53,6 +53,11 @@ export const spellTranslations_en = {
       "Insufficient data for training. Please add at least 2 spells with at least 2 recordings each.",
     errorTraining: "Training failed: {message}",
     errorTooManyClasses: "Maximum of 5 spells allowed.",
+    errorInvalidZip: "Invalid zip file format.",
+    errorUploadFailed: "Failed to upload spells.",
+    errorWrongFormat: "This zip file does not contain valid spells.",
+    downloadData: "Download",
+    uploadData: "Upload",
 
     tooltip: {
       helpMain: "What is spell recognition?",

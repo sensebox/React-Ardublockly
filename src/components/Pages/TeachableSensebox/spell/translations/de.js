@@ -51,6 +51,11 @@ export const spellTranslations_de = {
       "Unzureichende Daten für das Training. Bitte füge mindestens 2 Zaubersprüche mit jeweils mindestens 2 Aufnahmen hinzu.",
     errorTraining: "Training fehlgeschlagen: {message}",
     errorTooManyClasses: "Maximal 5 Zaubersprüche erlaubt.",
+    errorInvalidZip: "Ungültiges Zip-Dateiformat.",
+    errorUploadFailed: "Das Hochladen der Zaubersprüche ist fehlgeschlagen.",
+    errorWrongFormat: "Diese Zip-Datei enthält keine gültigen Zauberspüche.",
+    downloadData: "Herunterladen",
+    uploadData: "Hochladen",
 
     tooltip: {
       helpMain: "Was ist Zauberspruch-Erkennung?",
