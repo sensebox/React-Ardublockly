@@ -49,10 +49,17 @@ const OrientationClassification = () => {
   const theme = useTheme();
   const isWideScreen = useMediaQuery(theme.breakpoints.up("lg"));
 
-  const handleOpenHelp = useCallback((topic) => {
-    setCurrentHelpTopic("orientation/" + topic);
-    setHelpSidebarOpen(true);
-  }, []);
+  const handleOpenHelp = useCallback(
+    (topic) => {
+      if (currentHelpTopic === fullTopic && helpSidebarOpen) {
+        setHelpSidebarOpen(false);
+      } else {
+        setCurrentHelpTopic("orientation/" + topic);
+        setHelpSidebarOpen(true);
+      }
+    },
+    [currentHelpTopic, helpSidebarOpen],
+  );
 
   // ── Help blink hooks ──────────────────────────────────────────────────────
   const {
@@ -158,8 +165,6 @@ const OrientationClassification = () => {
         sx={{
           py: 4,
           pb: 10,
-          mr: isWideScreen && helpSidebarOpen ? `${SIDEBAR_WIDTH}px` : "auto",
-          transition: "margin-right 0.3s ease",
         }}
         key={language}
       >
