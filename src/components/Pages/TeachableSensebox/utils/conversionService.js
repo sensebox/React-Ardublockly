@@ -487,6 +487,7 @@ class ConversionService {
     const compilationOptions = {
       boardType: options.boardType || "arduino:avr:uno",
       optimization: options.optimization || "default",
+      classLabels: options.classLabels || [],
     };
 
     try {
