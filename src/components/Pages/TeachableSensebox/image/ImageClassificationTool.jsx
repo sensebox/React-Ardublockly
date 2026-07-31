@@ -1,11 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
-import {
-  Typography,
-  Box,
-  Paper,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { Typography, Box, Paper, useMediaQuery, useTheme } from "@mui/material";
 import { useSelector } from "react-redux";
 import { getImageTranslations } from "./translations";
 import ModelTrainer from "./ModelTrainer";
@@ -28,11 +22,18 @@ const ImageClassificationTool = ({ hideHelp = false }) => {
   const theme = useTheme();
   const isWideScreen = useMediaQuery(theme.breakpoints.up("lg"));
 
-  const handleOpenHelp = useCallback((topic) => {
-    markHelpSeen(topic);
-    setCurrentHelpTopic(topic);
-    setHelpSidebarOpen(true);
-  }, []);
+  const handleOpenHelp = useCallback(
+    (topic) => {
+      markHelpSeen(topic);
+      if (currentHelpTopic === topic && helpSidebarOpen) {
+        setHelpSidebarOpen(false);
+      } else {
+        setCurrentHelpTopic(topic);
+        setHelpSidebarOpen(true);
+      }
+    },
+    [currentHelpTopic, helpSidebarOpen],
+  );
 
   const {
     isBlinking: imageClassBlinking,
@@ -94,81 +95,80 @@ const ImageClassificationTool = ({ hideHelp = false }) => {
   return (
     <HelpProvider hideHelp={hideHelp}>
       <>
-      {/* Help Sidebar */}
-      <HelpSidebar
-        open={helpSidebarOpen}
-        onClose={handleCloseHelp}
-        helpTopic={currentHelpTopic}
-      />
+        {/* Help Sidebar */}
+        <HelpSidebar
+          open={helpSidebarOpen}
+          onClose={handleCloseHelp}
+          helpTopic={currentHelpTopic}
+        />
 
-      <Box
-        sx={{
-          py: 4,
-          pb: 10,
-          mr: isWideScreen && helpSidebarOpen ? `${SIDEBAR_WIDTH}px` : "auto",
-          transition: "margin-right 0.3s ease",
-        }}
-        key={language}
-      >
-        <Box sx={{ mb: 4 }}>
-          <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-            <Typography variant="h3" component="h1">
-              {t.title}
+        <Box
+          sx={{
+            py: 4,
+            pb: 10,
+          }}
+          key={language}
+        >
+          <Box sx={{ mb: 4 }}>
+            <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+              <Typography variant="h3" component="h1">
+                {t.title}
+              </Typography>
+              <HelpButton
+                onClick={() => {
+                  markImageClassSeen();
+                  handleOpenHelp("image/imageClassification");
+                }}
+                isBlinking={imageClassBlinking}
+                tooltip={
+                  t.training?.tooltip?.helpMain ||
+                  "Was ist Bildklassifizierung?"
+                }
+              />
+            </Box>
+            <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+              {t.description}
             </Typography>
-            <HelpButton
-              onClick={() => {
-                markImageClassSeen();
-                handleOpenHelp("image/imageClassification");
-              }}
-              isBlinking={imageClassBlinking}
-              tooltip={
-                t.training?.tooltip?.helpMain || "Was ist Bildklassifizierung?"
-              }
-            />
           </Box>
-          <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-            {t.description}
-          </Typography>
-        </Box>
 
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-          {/* Model Training Section */}
-          <Paper elevation={2} sx={{ p: 3 }}>
-            <Typography variant="h5" gutterBottom>
-              {t.training.title}
-            </Typography>
-            <ModelTrainer
-              onModelTrained={handleModelTrained}
-              onTrainingStart={handleTrainingStart}
-              onTrainingError={handleTrainingError}
-              isTraining={isTraining}
-              disabled={isTraining}
-              onOpenHelp={handleOpenHelp}
-            />
-          </Paper>
-
-          {/* Blockly Integration Section */}
-          {trainedModel && (
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+            {/* Model Training Section */}
             <Paper elevation={2} sx={{ p: 3 }}>
               <Typography variant="h5" gutterBottom>
-                {t.integration.title}
-                <HelpButton
-                  onClick={() => {
-                    markDeploySeen();
-                    handleOpenHelp("image/deployModel");
-                  }}
-                  isBlinking={deployBlinking}
-                  tooltip={
-                    t.training?.tooltip?.helpDeployModel ||
-                    "Help with deploying the model"
-                  }
-                />
+                {t.training.title}
               </Typography>
-              <ConvertDeploy model={trainedModel} />
+              <ModelTrainer
+                onModelTrained={handleModelTrained}
+                onTrainingStart={handleTrainingStart}
+                onTrainingError={handleTrainingError}
+                isTraining={isTraining}
+                disabled={isTraining}
+                onOpenHelp={handleOpenHelp}
+              />
             </Paper>
-          )}
+
+            {/* Blockly Integration Section */}
+            {trainedModel && (
+              <Paper elevation={2} sx={{ p: 3 }}>
+                <Typography variant="h5" gutterBottom>
+                  {t.integration.title}
+                  <HelpButton
+                    onClick={() => {
+                      markDeploySeen();
+                      handleOpenHelp("image/deployModel");
+                    }}
+                    isBlinking={deployBlinking}
+                    tooltip={
+                      t.training?.tooltip?.helpDeployModel ||
+                      "Help with deploying the model"
+                    }
+                  />
+                </Typography>
+                <ConvertDeploy model={trainedModel} />
+              </Paper>
+            )}
+          </Box>
         </Box>
-      </Box>
       </>
     </HelpProvider>
   );

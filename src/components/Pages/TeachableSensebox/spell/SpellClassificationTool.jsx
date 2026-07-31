@@ -1,14 +1,9 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
-import {
-  Typography,
-  Box,
-  Paper,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { Typography, Box, Paper, useMediaQuery, useTheme } from "@mui/material";
 import { useSelector } from "react-redux";
 import { getSpellTranslations } from "./translations";
 import SpellModelTrainer from "./SpellModelTrainer";
+import SpellConvertDeploy from "./SpellConvertDeploy";
 import HelpSidebar, { SIDEBAR_WIDTH } from "../HelpSidebar";
 import HelpButton, { useHelpBlink } from "../HelpButton";
 import { HelpProvider } from "../HelpContext";
@@ -28,10 +23,18 @@ const SpellClassificationTool = ({ hideHelp = false }) => {
   const theme = useTheme();
   const isWideScreen = useMediaQuery(theme.breakpoints.up("lg"));
 
-  const handleOpenHelp = useCallback((topic) => {
-    setCurrentHelpTopic("spells/" + topic);
-    setHelpSidebarOpen(true);
-  }, []);
+  const handleOpenHelp = useCallback(
+    (topic) => {
+      const fullTopic = "spells/" + topic;
+      if (currentHelpTopic === fullTopic && helpSidebarOpen) {
+        setHelpSidebarOpen(false);
+      } else {
+        setCurrentHelpTopic(fullTopic);
+        setHelpSidebarOpen(true);
+      }
+    },
+    [currentHelpTopic, helpSidebarOpen],
+  );
 
   // ── Help blink hooks ──────────────────────────────────────────────────────
   const {
@@ -81,74 +84,83 @@ const SpellClassificationTool = ({ hideHelp = false }) => {
   return (
     <HelpProvider hideHelp={hideHelp}>
       <>
-      {/* Help Sidebar */}
-      <HelpSidebar
-        open={helpSidebarOpen}
-        onClose={handleCloseHelp}
-        helpTopic={currentHelpTopic}
-      />
+        {/* Help Sidebar */}
+        <HelpSidebar
+          open={helpSidebarOpen}
+          onClose={handleCloseHelp}
+          helpTopic={currentHelpTopic}
+        />
 
-      <Box
-        sx={{
-          py: 4,
-          pb: 10,
-          mr: isWideScreen && helpSidebarOpen ? `${SIDEBAR_WIDTH}px` : "auto",
-          transition: "margin-right 0.3s ease",
-        }}
-        key={language}
-      >
-        <Box sx={{ mb: 4 }}>
-          <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-            <Typography variant="h3" component="h1">
-              {t.title}
+        <Box
+          sx={{
+            py: 4,
+            pb: 10,
+          }}
+          key={language}
+        >
+          <Box sx={{ mb: 4 }}>
+            <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+              <Typography variant="h3" component="h1">
+                {t.title}
+              </Typography>
+              <HelpButton
+                onClick={() => {
+                  markSpellClassSeen();
+                  handleOpenHelp("spellClassification");
+                }}
+                isBlinking={spellClassBlinking}
+                tooltip={
+                  t.training?.tooltip?.helpMain ||
+                  "What is spell classification?"
+                }
+              />
+            </Box>
+            <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+              {t.description}
             </Typography>
-            <HelpButton
-              onClick={() => {
-                markSpellClassSeen();
-                handleOpenHelp("spellClassification");
-              }}
-              isBlinking={spellClassBlinking}
-              tooltip={
-                t.training?.tooltip?.helpMain || "What is spell classification?"
-              }
-            />
           </Box>
-          <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-            {t.description}
-          </Typography>
-        </Box>
 
-        {/* Error display */}
-        {trainingError && (
-          <Paper
-            sx={{
-              p: 2,
-              mb: 3,
-              bgcolor: "error.light",
-              color: "error.contrastText",
-            }}
-          >
-            <Typography>{trainingError}</Typography>
-          </Paper>
-        )}
+          {/* Error display */}
+          {trainingError && (
+            <Paper
+              sx={{
+                p: 2,
+                mb: 3,
+                bgcolor: "error.light",
+                color: "error.contrastText",
+              }}
+            >
+              <Typography>{trainingError}</Typography>
+            </Paper>
+          )}
 
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-          {/* Model Training Section */}
-          <Paper elevation={2} sx={{ p: 3 }}>
-            <SpellModelTrainer
-              classes={classes}
-              onClassesChange={setClasses}
-              onModelTrained={handleModelTrained}
-              onTrainingStart={handleTrainingStart}
-              onTrainingError={handleTrainingError}
-              isTraining={isTraining}
-              disabled={isTraining}
-              onOpenHelp={handleOpenHelp}
-              trainedModel={trainedModel}
-            />
-          </Paper>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+            {/* Model Training Section */}
+            <Paper elevation={2} sx={{ p: 3 }}>
+              <SpellModelTrainer
+                classes={classes}
+                onClassesChange={setClasses}
+                onModelTrained={handleModelTrained}
+                onTrainingStart={handleTrainingStart}
+                onTrainingError={handleTrainingError}
+                isTraining={isTraining}
+                disabled={isTraining}
+                onOpenHelp={handleOpenHelp}
+                trainedModel={trainedModel}
+              />
+            </Paper>
+
+            {/* Deployment Section */}
+            {trainedModel && (
+              <Paper elevation={2} sx={{ p: 3 }}>
+                <Typography variant="h5" gutterBottom>
+                  {t.integration.title}
+                </Typography>
+                <SpellConvertDeploy model={trainedModel} />
+              </Paper>
+            )}
+          </Box>
         </Box>
-      </Box>
       </>
     </HelpProvider>
   );
