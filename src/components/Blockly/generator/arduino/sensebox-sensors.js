@@ -1024,8 +1024,10 @@ Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_accelerometer"] =
   function () {
     var code = "";
     var dropdown = this.getFieldValue("value");
-    const isEye = selectedBoard().title === "MCU-Eye";
-    const wire = isEye ? "Wire" : "Wire1";
+    const wire =
+      selectedBoard().title === "MCU-Eye" || selectedBoard().title === "MCU-S2"
+        ? "Wire"
+        : "Wire1";
     Blockly.Generator.Arduino.libraries_["esp32s2_mpu6050"] =
       `#include <Adafruit_MPU6050.h>`;
     Blockly.Generator.Arduino.libraries_["esp32s2_icm42670"] =
@@ -1043,7 +1045,7 @@ Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_accelerometer"] =
       "Adafruit_ICM20948 icm2;";
     Blockly.Generator.Arduino.definitions_["define_acceleration_switch"] =
       "int sensorActive = 0; // 0: none, 1: MPU6050, 2: ICM42670P, 3: ICM20948";
-    if (isEye) {
+    if (wire === "Wire") {
       Blockly.Generator.Arduino.preSetupCode_["Wire.begin"] = "Wire.begin();";
     } else {
       Blockly.Generator.Arduino.setupCode_["Wire1.begin()"] = "Wire1.begin();";

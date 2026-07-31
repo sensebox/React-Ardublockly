@@ -1,5 +1,5 @@
 export const spellTranslations_de = {
-  title: "Zauberspruch Klassifizierung",
+  title: "Zaubersprüche Erkennen",
   description:
     "Trainiere ein Modell zur Erkennung von Zaubersprüchen mit Hilfe des Beschleunigungssensor. Zeichne mit deiner senseBox MCU Eye Muster in die Luft, um Zaubersprüche zu erstellen.",
 
@@ -51,9 +51,14 @@ export const spellTranslations_de = {
       "Unzureichende Daten für das Training. Bitte füge mindestens 2 Zaubersprüche mit jeweils mindestens 2 Aufnahmen hinzu.",
     errorTraining: "Training fehlgeschlagen: {message}",
     errorTooManyClasses: "Maximal 5 Zaubersprüche erlaubt.",
+    errorInvalidZip: "Ungültiges Zip-Dateiformat.",
+    errorUploadFailed: "Das Hochladen der Zaubersprüche ist fehlgeschlagen.",
+    errorWrongFormat: "Diese Zip-Datei enthält keine gültigen Zauberspüche.",
+    downloadData: "Herunterladen",
+    uploadData: "Hochladen",
 
     tooltip: {
-      helpMain: "Was ist Zauberspruch-Klassifizierung?",
+      helpMain: "Was ist Zauberspruch-Erkennung?",
       helpConnection: "Wie verbinde ich meine senseBox?",
       helpClasses: "Über Zaubersprüche",
       helpTraining: "Wie funktioniert das Training?",
@@ -76,6 +81,31 @@ export const spellTranslations_de = {
       helpCNN: "Was ist ein Convolutional Neural Network?",
     },
   },
+
+  integration: {
+    title: "Ausführen auf der senseBox MCU Eye",
+    converting: "Kompiliere & konvertiere...",
+    convertModel: "Modell komprimieren & konvertieren",
+    retry: "Erneut versuchen",
+    suggestions: "Vorschläge:",
+    modelConvertedSuccess: "Modell erfolgreich konvertiert",
+    chooseOptions: "Wähle eine der folgenden Optionen:",
+    optionA: "Option A: Modell herunterladen",
+    optionADescription:
+      "Lade das Modell als einzelne cpp-Datei herunter zur Verwendung in der Arduino IDE oder zum späteren Hochladen in die Blockly UI.",
+    downloadCppFile: "Modell herunterladen",
+    optionB: "Option B: Modell in vorgefertigten Sketch integrieren",
+    optionBDescription:
+      "Integriere das Modell in einen vorgefertigten Sketch. Dieser zeigt dir die Zauberspruch-Vorhersage und das Vertrauen auf dem OLED-Display an. Das Kompilieren des Sketches wird einige Zeit in Anspruch nehmen. Sobald du ihn heruntergeladen hast, kannst du ihn direkt per Drag-and-Drop auf deine senseBox MCU Eye hochladen.",
+    compiling: "Kompiliere...",
+    compileAndDownload: "Kompilieren & Herunterladen",
+    downloadBinaryAgain: "Erneut herunterladen",
+    reconvertModel: "Erneut konvertieren",
+    successBinaryDownloaded: "Erfolgreich heruntergeladen!",
+    successBinaryDescription:
+      "Dein Modell wurde kompiliert und heruntergeladen! Die Binärdatei ist bereit zum Hochladen auf deine senseBox MCU Eye per Drag-and-Drop.",
+  },
+
   errors: {
     downloadFirmware: "Zauberspruch-Sketch herunterladen",
     connectionFailed: "Verbindung fehlgeschlagen",
@@ -89,7 +119,7 @@ export const spellTranslations_de = {
   help: {
     help: "Hilfe",
     spellClassification: {
-      title: "Zauberspruch Klassifizierung",
+      title: "Zaubersprüche Erkennen",
     },
     addClass: {
       title: "Einen Zauberspruch definieren",

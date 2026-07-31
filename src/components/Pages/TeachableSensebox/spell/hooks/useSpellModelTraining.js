@@ -422,7 +422,7 @@ function useSpellModelTraining() {
 
         const modelData = {
           model,
-          inputShape: [STROKE_IMAGE_SIZE, STROKE_IMAGE_SIZE, 1],
+          inputShape: [STROKE_IMAGE_SIZE, STROKE_IMAGE_SIZE, 3],
           classes: classes.map((cls) => ({ id: cls.id, name: cls.name })),
           // Store representative stroke data for potential export
           representativeSamples: classes.flatMap((cls) =>
