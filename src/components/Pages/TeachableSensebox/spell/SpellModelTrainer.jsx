@@ -566,6 +566,20 @@ const SpellModelTrainer = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [trainedModel]);
 
+  // Auto-close upload error on user interaction
+  useEffect(() => {
+    if (!uploadError) return;
+
+    const handleClick = () => {
+      setUploadError(null);
+    };
+
+    document.addEventListener("click", handleClick);
+    return () => {
+      document.removeEventListener("click", handleClick);
+    };
+  }, [uploadError]);
+
   // ─── Auto-capture completed spells ──────────────────────────────────────
   // When a stroke is completed, add it to the currently recording class
   const previousStrokeRef = useRef(null);

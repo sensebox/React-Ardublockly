@@ -227,6 +227,20 @@ const ModelTrainer = ({
     }
   }, [sourceType]);
 
+  // Auto-close upload error on user interaction
+  useEffect(() => {
+    if (!uploadError) return;
+
+    const handleClick = () => {
+      setUploadError(null);
+    };
+
+    document.addEventListener("click", handleClick);
+    return () => {
+      document.removeEventListener("click", handleClick);
+    };
+  }, [uploadError]);
+
   const startCamera = useCallback(async () => {
     try {
       setVideoLoading(true);
