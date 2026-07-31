@@ -43,7 +43,7 @@ const Instruction = ({ tutorial }) => {
   return (
     <TutorialSlide>
       <Box sx={{ my: 2 }}>
-        <div dangerouslySetInnerHTML={{ __html: md.render(step.text) }} />
+        <div className="tutorial-markdown" dangerouslySetInnerHTML={{ __html: md.render(step.text) }} />
       </Box>
       <Typography sx={{ fontWeight: "bold" }}>
         <Info sx={{ color: theme.palette.primary.main, mr: 1 }} />

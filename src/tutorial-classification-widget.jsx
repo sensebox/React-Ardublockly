@@ -12,6 +12,7 @@ import thunk from "redux-thunk";
 import rootReducer from "./reducers";
 import { setupInterceptors } from "./actions/authActions";
 import TutorialClassificationWidget from "./components/Pages/TeachableSensebox/tutorial/TutorialClassificationWidget";
+import "./tutorial-classification-widget.css";
 
 const theme = createTheme({
   palette: {
