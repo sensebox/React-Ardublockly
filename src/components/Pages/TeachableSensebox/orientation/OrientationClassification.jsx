@@ -51,10 +51,11 @@ const OrientationClassification = () => {
 
   const handleOpenHelp = useCallback(
     (topic) => {
+      const fullTopic = "orientation/" + topic;
       if (currentHelpTopic === fullTopic && helpSidebarOpen) {
         setHelpSidebarOpen(false);
       } else {
-        setCurrentHelpTopic("orientation/" + topic);
+        setCurrentHelpTopic(fullTopic);
         setHelpSidebarOpen(true);
       }
     },
