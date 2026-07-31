@@ -34,10 +34,11 @@ const SpellClassification = () => {
 
   const handleOpenHelp = useCallback(
     (topic) => {
+      const fullTopic = "spells/" + topic;
       if (currentHelpTopic === fullTopic && helpSidebarOpen) {
         setHelpSidebarOpen(false);
       } else {
-        setCurrentHelpTopic("spells/" + topic);
+        setCurrentHelpTopic(fullTopic);
         setHelpSidebarOpen(true);
       }
     },
