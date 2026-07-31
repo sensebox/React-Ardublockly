@@ -61,6 +61,7 @@ const ConvertDeployBase = ({
   translations,
   boardType = "sensebox_mcu_eye",
   modelName = "teachable_machine",
+  modelType = "image",
 }) => {
   const t = translations;
 
@@ -471,16 +472,23 @@ const ConvertDeployBase = ({
                   />
                 )}
               </Box>
-
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                {t.integration.chooseOptions}
-              </Typography>
+              {modelType !== "spell" && (
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mb: 3 }}
+                >
+                  {t.integration.chooseOptions}
+                </Typography>
+              )}
 
               {/* Option A: Download cpp file */}
               <Box sx={{ mb: 2 }}>
-                <Typography variant="subtitle2" sx={{ mb: 1 }}>
-                  {t.integration.optionA}
-                </Typography>
+                {modelType !== "spell" && (
+                  <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                    {t.integration.optionA}
+                  </Typography>
+                )}
                 <Typography
                   variant="body2"
                   color="text.secondary"
@@ -499,55 +507,57 @@ const ConvertDeployBase = ({
                 </Button>
               </Box>
 
-              <Divider sx={{ my: 2 }} />
+              {modelType !== "spell" && <Divider sx={{ my: 2 }} />}
 
               {/* Option B: Compile and download binary */}
-              <Box>
-                <Typography variant="subtitle2" sx={{ mb: 1 }}>
-                  {t.integration.optionB}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{ mb: 1 }}
-                >
-                  {t.integration.optionBDescription}
-                </Typography>
-                <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    startIcon={
-                      workflowState.currentStep === "compiling" ? (
-                        <CircularProgress size={20} color="inherit" />
-                      ) : (
-                        <BuildIcon />
-                      )
-                    }
-                    onClick={handleCompileAndDownload}
-                    disabled={workflowState.isProcessing}
+              {modelType !== "spell" && (
+                <Box>
+                  <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                    {t.integration.optionB}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{ mb: 1 }}
                   >
-                    {workflowState.currentStep === "compiling"
-                      ? t.integration.compiling
-                      : t.integration.compileAndDownload}
-                  </Button>
-                  {workflowState.binaryData && (
+                    {t.integration.optionBDescription}
+                  </Typography>
+                  <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
                     <Button
-                      variant="outlined"
+                      variant="contained"
                       color="primary"
-                      startIcon={<DownloadIcon />}
-                      onClick={() => {
-                        ConversionService.downloadBinary(
-                          workflowState.binaryData,
-                          `${modelName}_${boardType.replace(/:/g, "_")}_${Date.now()}.bin`,
-                        );
-                      }}
+                      startIcon={
+                        workflowState.currentStep === "compiling" ? (
+                          <CircularProgress size={20} color="inherit" />
+                        ) : (
+                          <BuildIcon />
+                        )
+                      }
+                      onClick={handleCompileAndDownload}
+                      disabled={workflowState.isProcessing}
                     >
-                      {t.integration.downloadBinaryAgain}
+                      {workflowState.currentStep === "compiling"
+                        ? t.integration.compiling
+                        : t.integration.compileAndDownload}
                     </Button>
-                  )}
+                    {workflowState.binaryData && (
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        startIcon={<DownloadIcon />}
+                        onClick={() => {
+                          ConversionService.downloadBinary(
+                            workflowState.binaryData,
+                            `${modelName}_${boardType.replace(/:/g, "_")}_${Date.now()}.bin`,
+                          );
+                        }}
+                      >
+                        {t.integration.downloadBinaryAgain}
+                      </Button>
+                    )}
+                  </Box>
                 </Box>
-              </Box>
+              )}
             </CardContent>
           </Card>
         )}

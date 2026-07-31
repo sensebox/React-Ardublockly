@@ -19,6 +19,7 @@ const ConvertDeploy = ({ model }) => {
       translations={t}
       boardType="sensebox_mcu_eye"
       modelName="image_classification"
+      modelType="image"
     />
   );
 };

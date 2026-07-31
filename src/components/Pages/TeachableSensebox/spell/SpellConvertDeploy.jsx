@@ -19,6 +19,7 @@ const SpellConvertDeploy = ({ model }) => {
       translations={t}
       boardType="sensebox_mcu_eye"
       modelName="spell_classification"
+      modelType="spell"
     />
   );
 };
