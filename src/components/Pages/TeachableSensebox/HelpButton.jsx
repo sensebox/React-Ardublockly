@@ -129,7 +129,7 @@ const HelpButton = ({
   isBlinking = false,
 }) => {
   const theme = useTheme();
-  const isWideScreen = useMediaQuery(theme.breakpoints.up("lg"));
+  const isWideScreen = useMediaQuery(theme.breakpoints.up("md"));
   const hideHelp = useHideHelp();
 
   // Only render on wide screens and when not hidden

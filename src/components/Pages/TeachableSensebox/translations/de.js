@@ -3,21 +3,21 @@ export const teachableSenseboxTranslations_de = {
   landing: {
     title: "Machine Learning",
     imageCard: {
-      title: "Bildklassifizierung",
+      title: "Bilder",
       description:
-        "Trainiere ein großes Modell, um Objekte oder Szenen mit der senseBox MCU Eye Kamera zu erkennen.",
+        "Trainiere ein großes KI Modell, um Objekte oder Szenen mit der senseBox MCU Eye Kamera zu erkennen.",
       button: "Starten",
     },
     accelerationCard: {
-      title: "Zauberspruch Klassifizierung",
+      title: "Zaubersprüche",
       description:
-        "Trainiere ein Modell zur Erkennung von Zaubersprüchen mit dem senseBox MCU Eye Beschleunigungssensor.",
+        "Trainiere ein KI Modell zur Erkennung von Zaubersprüchen mit dem senseBox MCU Eye Beschleunigungssensor.",
       button: "Starten",
     },
     orientationCard: {
-      title: "Orientierungsklassifizierung",
+      title: "Orientierungen",
       description:
-        "Trainiere ein kleines Modell, um Geräteausrichtungen mit dem senseBox MCU Eye Beschleunigungssensor zu erkennen.",
+        "Trainiere ein kleines KI Modell, um Geräteausrichtungen mit dem senseBox MCU Eye Beschleunigungssensor zu erkennen.",
       button: "Starten",
     },
     tutorials: {

@@ -1,7 +1,7 @@
 import { help } from "@uiw/react-md-editor";
 
 export const spellTranslations_en = {
-  title: "Spell Classification",
+  title: "Spell Recognition",
   description:
     "Train a model to recognize spells using the acceleration sensor. Draw patterns in the air with your senseBox MCU Eye to cast spells.",
 
@@ -52,10 +52,15 @@ export const spellTranslations_en = {
     errorInsufficientData:
       "Insufficient data for training. Please add at least 2 spells with at least 2 recordings each.",
     errorTraining: "Training failed: {message}",
-    errorTooManyClasses: "Maximum of 5 spell classes allowed.",
+    errorTooManyClasses: "Maximum of 5 spells allowed.",
+    errorInvalidZip: "Invalid zip file format.",
+    errorUploadFailed: "Failed to upload spells.",
+    errorWrongFormat: "This zip file does not contain valid spells.",
+    downloadData: "Download",
+    uploadData: "Upload",
 
     tooltip: {
-      helpMain: "What is spell classification?",
+      helpMain: "What is spell recognition?",
       helpConnection: "How to connect your senseBox",
       helpClasses: "How to define a spell",
       helpTraining: "How training works",
@@ -76,6 +81,30 @@ export const spellTranslations_en = {
     },
   },
 
+  integration: {
+    title: "Deploy on your senseBox MCU Eye",
+    converting: "Compressing & Converting...",
+    convertModel: "Compress & Convert Model",
+    retry: "Retry",
+    suggestions: "Suggestions:",
+    modelConvertedSuccess: "Model Successfully Converted",
+    chooseOptions: "Choose one of the following options:",
+    optionA: "Option A: Download Model",
+    optionADescription:
+      "Download the model as a single cpp file for use in Arduino IDE or to upload to Blockly UI later.",
+    downloadCppFile: "Download Model",
+    optionB: "Option B: Integrate Model into prebuilt sketch",
+    optionBDescription:
+      "Integrate the model into a prebuilt sketch. This sketch will display the gesture prediction and confidence on the OLED display. Compiling the sketch will take some time. Once downloaded, you can upload it directly to your senseBox MCU Eye via drag-and-drop.",
+    compiling: "Compiling...",
+    compileAndDownload: "Compile & Download",
+    downloadBinaryAgain: "Download Again",
+    reconvertModel: "Reconvert",
+    successBinaryDownloaded: "Successfully Downloaded!",
+    successBinaryDescription:
+      "Your model has been compiled and downloaded! The binary file is ready to upload to your senseBox MCU Eye via drag-and-drop.",
+  },
+
   errors: {
     downloadFirmware: "Download Spell-Sketch",
     connectionFailed: "Connection Failed",
@@ -90,7 +119,7 @@ export const spellTranslations_en = {
   help: {
     help: "Help",
     spellClassification: {
-      title: "Spell Classification",
+      title: "Spell Recognition",
     },
     addClass: {
       title: "Defining a Spell",

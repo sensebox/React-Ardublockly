@@ -32,12 +32,14 @@ import {
   Switch,
   FormControlLabel,
   Collapse,
+  Alert,
 } from "@mui/material";
 import {
   Add as AddIcon,
   Delete as DeleteIcon,
   PhotoCamera as CameraIcon,
   Download as DownloadIcon,
+  Upload as UploadIcon,
   MoreVert as MoreVertIcon,
   Warning as WarningIcon,
 } from "@mui/icons-material";
@@ -56,6 +58,10 @@ import useModelTraining from "./hooks/useModelTraining";
 import { DEFAULT_TRAINING_SETTINGS } from "./hooks/useModelTraining";
 import useModelPrediction from "./hooks/useModelPrediction";
 import { downloadCameraFirmware } from "../utils/firmwareDownload";
+import {
+  downloadTrainingData,
+  parseTrainingDataZip,
+} from "../utils/trainingDataExport";
 
 const ModelTrainer = ({
   onModelTrained,
@@ -96,6 +102,7 @@ const ModelTrainer = ({
   const [trainingSettings, setTrainingSettings] = useState(
     DEFAULT_TRAINING_SETTINGS,
   );
+  const [uploadError, setUploadError] = useState(null);
 
   const language = useSelector((s) => s.general.language);
   const t = getImageTranslations(language);
@@ -219,6 +226,20 @@ const ModelTrainer = ({
       });
     }
   }, [sourceType]);
+
+  // Auto-close upload error on user interaction
+  useEffect(() => {
+    if (!uploadError) return;
+
+    const handleClick = () => {
+      setUploadError(null);
+    };
+
+    document.addEventListener("click", handleClick);
+    return () => {
+      document.removeEventListener("click", handleClick);
+    };
+  }, [uploadError]);
 
   const startCamera = useCallback(async () => {
     try {
@@ -360,6 +381,7 @@ const ModelTrainer = ({
       setClasses((prev) => [...prev, newClass]);
       setNewClassName("");
       setShowAddDialog(false);
+      setUploadError(null);
     }
   }, [newClassName, classes, onTrainingError, t]);
 
@@ -505,6 +527,71 @@ const ModelTrainer = ({
   const resetSettings = useCallback(() => {
     setTrainingSettings(DEFAULT_TRAINING_SETTINGS);
   }, []);
+
+  // ─── Download/Upload Training Data ─────────────────────────────────────────
+  const handleDownloadTrainingData = useCallback(async () => {
+    await downloadTrainingData(classes, "image", async (sample, index) => {
+      const response = await fetch(sample.url);
+      const blob = await response.blob();
+      return {
+        filename: `sample_${index + 1}.jpg`,
+        data: blob,
+      };
+    });
+  }, [classes]);
+
+  const handleUploadTrainingData = useCallback(
+    async (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const { classes: newClasses, error } = await parseTrainingDataZip(
+        file,
+        async (zipEntry, className, fileName) => {
+          // Accept jpg, jpeg, png, gif, webp
+          if (!/\.(jpe?g|png|gif|webp)$/i.test(fileName)) return null;
+
+          const blob = await zipEntry.async("blob");
+          const imageUrl = URL.createObjectURL(blob);
+
+          return {
+            isValid: true,
+            sample: {
+              id: Date.now() + Math.random(),
+              url: imageUrl,
+            },
+          };
+        },
+      );
+
+      if (error === "NO_VALID_DATA") {
+        setUploadError(
+          t.training?.errorWrongFormat ||
+            "This zip file does not contain valid image training data. Please upload an image training zip file.",
+        );
+        return;
+      }
+
+      if (error === "INVALID_ZIP") {
+        setUploadError(
+          t.training?.errorInvalidZip ||
+            "Invalid zip file format. Please make sure to upload an image training zip file.",
+        );
+        return;
+      }
+
+      if (newClasses) {
+        setClasses(newClasses);
+        setUploadError(null);
+      }
+
+      // Reset input
+      event.target.value = "";
+    },
+    [setClasses, t],
+  );
+
+  const hasClassesWithSamples = classes.some((cls) => cls.samples.length > 0);
 
   return (
     <Box>
@@ -1015,6 +1102,52 @@ const ModelTrainer = ({
                 />
               </Box>
             )}
+
+            {/* Download/Upload Training Data Buttons */}
+            <Box sx={{ display: "flex", gap: 1 }}>
+              <Button
+                variant="outlined"
+                startIcon={<DownloadIcon />}
+                onClick={handleDownloadTrainingData}
+                disabled={disabled || !hasClassesWithSamples}
+                sx={{
+                  bgcolor: "white",
+                  "&:hover": { bgcolor: "grey.100" },
+                }}
+              >
+                {t.training?.downloadData || "Download"}
+              </Button>
+              <Button
+                variant="outlined"
+                component="label"
+                startIcon={<UploadIcon />}
+                disabled={disabled}
+                sx={{
+                  bgcolor: "white",
+                  "&:hover": { bgcolor: "grey.100" },
+                }}
+              >
+                {t.training?.uploadData || "Upload"}
+                <input
+                  type="file"
+                  accept=".zip"
+                  hidden
+                  onChange={handleUploadTrainingData}
+                />
+              </Button>
+            </Box>
+
+            {/* Upload Error Message */}
+            {uploadError && (
+              <Alert
+                severity="error"
+                onClose={() => setUploadError(null)}
+                sx={{ width: "100%", mb: 2 }}
+              >
+                {uploadError}
+              </Alert>
+            )}
+
             <Divider sx={{ width: "100%", my: 1 }} />
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               <Tooltip
