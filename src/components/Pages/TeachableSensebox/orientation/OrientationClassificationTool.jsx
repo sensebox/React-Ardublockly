@@ -17,7 +17,7 @@ import OrientationNNVisualizer, {
   DEFAULT_NN_CONFIG,
 } from "./OrientationNNVisualizer";
 import useOrientationNNTraining from "./hooks/useOrientationNNTraining";
-import HelpSidebar, { SIDEBAR_WIDTH } from "../HelpSidebar";
+import HelpSidebar from "../HelpSidebar";
 import HelpButton, { useHelpBlink, useHelpBlinkCooldown } from "../HelpButton";
 import { HelpProvider } from "../HelpContext";
 
@@ -42,8 +42,6 @@ const OrientationClassificationTool = ({ hideHelp = false }) => {
 
   const [helpSidebarOpen, setHelpSidebarOpen] = useState(false);
   const [currentHelpTopic, setCurrentHelpTopic] = useState(null);
-  const theme = useTheme();
-  const isWideScreen = useMediaQuery(theme.breakpoints.up("lg"));
 
   const handleOpenHelp = useCallback(
     (topic) => {

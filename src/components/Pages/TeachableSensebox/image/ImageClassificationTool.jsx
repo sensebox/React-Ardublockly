@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { getImageTranslations } from "./translations";
 import ModelTrainer from "./ModelTrainer";
 import ConvertDeploy from "./ConvertDeploy";
-import HelpSidebar, { SIDEBAR_WIDTH } from "../HelpSidebar";
+import HelpSidebar from "../HelpSidebar";
 import HelpButton, { useHelpBlink, markHelpSeen } from "../HelpButton";
 import { HelpProvider } from "../HelpContext";
 
@@ -19,8 +19,6 @@ const ImageClassificationTool = ({ hideHelp = false }) => {
   // Help sidebar state
   const [helpSidebarOpen, setHelpSidebarOpen] = useState(false);
   const [currentHelpTopic, setCurrentHelpTopic] = useState(null);
-  const theme = useTheme();
-  const isWideScreen = useMediaQuery(theme.breakpoints.up("lg"));
 
   const handleOpenHelp = useCallback(
     (topic) => {

@@ -202,7 +202,8 @@ export default function TutorialViewerPanel({
 
 TutorialViewerPanel.propTypes = {
   tutorialId: PropTypes.string.isRequired,
-  classificationType: PropTypes.oneOf(["image", "orientation"]).isRequired,
+  classificationType: PropTypes.oneOf(["image", "spell", "orientation"])
+    .isRequired,
   groupName: PropTypes.string,
   onBack: PropTypes.func.isRequired,
 };

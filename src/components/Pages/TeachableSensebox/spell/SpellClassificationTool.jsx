@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { getSpellTranslations } from "./translations";
 import SpellModelTrainer from "./SpellModelTrainer";
 import SpellConvertDeploy from "./SpellConvertDeploy";
-import HelpSidebar, { SIDEBAR_WIDTH } from "../HelpSidebar";
+import HelpSidebar from "../HelpSidebar";
 import HelpButton, { useHelpBlink } from "../HelpButton";
 import { HelpProvider } from "../HelpContext";
 
@@ -20,8 +20,6 @@ const SpellClassificationTool = ({ hideHelp = false }) => {
   // Help sidebar state
   const [helpSidebarOpen, setHelpSidebarOpen] = useState(false);
   const [currentHelpTopic, setCurrentHelpTopic] = useState(null);
-  const theme = useTheme();
-  const isWideScreen = useMediaQuery(theme.breakpoints.up("lg"));
 
   const handleOpenHelp = useCallback(
     (topic) => {

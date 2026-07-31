@@ -30,6 +30,8 @@ export default defineConfig({
     rollupOptions: {
       output: {
         inlineDynamicImports: true,
+        entryFileNames: "[name].js",
+        assetFileNames: "[name].[ext]",
       },
     },
   },
@@ -42,11 +44,5 @@ export default defineConfig({
   plugins: [react()],
   define: {
     "process.env.NODE_ENV": JSON.stringify("production"),
-  },
-  rollupOptions: {
-    output: {
-      entryFileNames: '[name].js',
-      assetFileNames: '[name].[ext]',
-    },
   },
 });

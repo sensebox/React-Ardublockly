@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
 import {
@@ -21,13 +21,17 @@ export default function OverviewPage({
   const [error, setError] = useState(null);
 
   // Normalize tutorials: flatten groups into a single array with group metadata
-  const normalizedConfigs = Array.isArray(tutorialConfigs)
-    ? tutorialConfigs.flatMap((item) =>
-        item.group && Array.isArray(item.tutorials)
-          ? item.tutorials.map((t) => ({ ...t, _group: item.group }))
-          : item,
-      )
-    : [];
+  const normalizedConfigs = useMemo(
+    () =>
+      Array.isArray(tutorialConfigs)
+        ? tutorialConfigs.flatMap((item) =>
+            item.group && Array.isArray(item.tutorials)
+              ? item.tutorials.map((t) => ({ ...t, _group: item.group }))
+              : item,
+          )
+        : [],
+    [tutorialConfigs],
+  );
 
   // Group tutorials for display
   const groupedTutorials = normalizedConfigs.reduce((groups, tutorial) => {
@@ -109,7 +113,9 @@ export default function OverviewPage({
           )}
           <Grid container spacing={3}>
             {tutorials
-              .filter((tutorial) => tutorialsInGroup.some((c) => c.id === tutorial._id))
+              .filter((tutorial) =>
+                tutorialsInGroup.some((c) => c.id === tutorial._id),
+              )
               .map((tutorial) => (
                 <Grid item sm={12} md={6} lg={3} key={tutorial._id}>
                   <Card
@@ -156,7 +162,7 @@ export default function OverviewPage({
 
 OverviewPage.propTypes = {
   tutorials: PropTypes.arrayOf(
-    PropTypes.oneOf([
+    PropTypes.oneOfType([
       PropTypes.shape({
         id: PropTypes.string.isRequired,
         type: PropTypes.string.isRequired,
