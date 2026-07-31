@@ -354,7 +354,7 @@ class ConversionService {
    * Prepares representative dataset for transmission to backend
    *
    * @private
-   * @param {Array} dataset - Array of tensors or image URLs
+   * @param {Array} dataset - Array of tensors, image URLs, or spell sample objects with pixelData
    * @returns {Promise<Array<string>>} Array of base64-encoded float32 arrays
    */
   async _prepareRepresentativeDataset(dataset) {
@@ -389,6 +389,31 @@ class ConversionService {
             .div(255.0) // Normalize to [0, 1]
             .expandDims(0); // Add batch dimension
         });
+      } else if (sample && sample.pixelData instanceof Uint8ClampedArray) {
+        // Handle spell sample objects with pixelData (RGBA format from canvas)
+        // Spell model expects [32, 32, 3] input (RGB channels with temporal encoding)
+        tensor = tf.tidy(() => {
+          // Create ImageData from pixelData (32x32 RGBA)
+          const STROKE_SIZE = 32;
+          const imageData = new ImageData(
+            sample.pixelData,
+            STROKE_SIZE,
+            STROKE_SIZE,
+          );
+          // Convert to 3-channel (RGB) - fromPixels extracts RGB from RGBA
+          const rgbTensor = tf.browser.fromPixels(imageData, 3);
+          // Normalize to [0, 1] - must match training preprocessing
+          return rgbTensor
+            .div(255.0) // Normalize to [0, 1]
+            .expandDims(0); // Add batch dimension for [1, 32, 32, 3]
+        });
+      } else if (sample && sample.strokePoints) {
+        // Handle spell sample objects with strokePoints but no pixelData
+        // This requires importing renderStrokeToImage, so we skip for now
+        console.warn(
+          "Spell sample has strokePoints but no pixelData. Skipping.",
+        );
+        continue;
       } else {
         console.warn("Unsupported sample type in representative dataset");
         continue;
@@ -462,6 +487,7 @@ class ConversionService {
     const compilationOptions = {
       boardType: options.boardType || "arduino:avr:uno",
       optimization: options.optimization || "default",
+      classLabels: options.classLabels || [],
     };
 
     try {
