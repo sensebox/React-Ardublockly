@@ -33,7 +33,7 @@ md.renderer.rules.image = function (tokens, idx, options, env, self) {
   `;
 };
 
-const Instruction = ({ tutorial }) => {
+const Instruction = ({ tutorial, mediaBasePath = "/media/hardware" }) => {
   const theme = useTheme();
   // find the instruction step
   const step = (tutorial?.steps || []).find(
@@ -74,6 +74,7 @@ const Instruction = ({ tutorial }) => {
                 <HardwareCard
                   component={sensor}
                   customHardware={tutorial.customHardware || {}}
+                  mediaBasePath={mediaBasePath}
                 />
               </Box>
             </div>

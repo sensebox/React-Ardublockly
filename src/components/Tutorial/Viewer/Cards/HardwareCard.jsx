@@ -12,14 +12,17 @@ import {
 } from "@mui/material";
 import { MenuBook } from "@mui/icons-material";
 import COMPONENT_MAP from "../../Builder/utils/componentMap"; // Pfad ggf. anpassen
-const HardwareCard = ({ component, customHardware = {} }) => {
+const HardwareCard = ({ component, customHardware = {}, mediaBasePath = "/media/hardware" }) => {
   const theme = useTheme();
   const allHardware = { ...COMPONENT_MAP, ...customHardware };
   const compData = allHardware[component] || {
     name: component,
-    image: "/media/hardware/3dmodels/coming-soon.png", // Fallback
+    image: "coming-soon.png", // Fallback - just filename
     docUrl: "#",
   };
+
+  const isCustom = component.includes("custom-") || compData.image.startsWith("http");
+  const imagePath = isCustom ? compData.image : `${mediaBasePath}/3dmodels/${compData.image}`;
 
   return (
     <Card
@@ -57,7 +60,7 @@ const HardwareCard = ({ component, customHardware = {} }) => {
               }}
             >
               <img
-                src={compData.image}
+                src={imagePath}
                 alt={compData.name}
                 style={{
                   width: "200px",
@@ -85,7 +88,7 @@ const HardwareCard = ({ component, customHardware = {} }) => {
             }}
           >
             <img
-              src={compData.image}
+              src={imagePath}
               alt={compData.name}
               style={{
                 width: "70%",
@@ -158,6 +161,7 @@ const HardwareCard = ({ component, customHardware = {} }) => {
 HardwareCard.propTypes = {
   component: PropTypes.string.isRequired,
   customHardware: PropTypes.object,
+  mediaBasePath: PropTypes.string,
 };
 
 export default HardwareCard;

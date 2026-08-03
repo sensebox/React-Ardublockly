@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import OverviewPage from "./OverviewPage";
 import TutorialViewerPanel from "./TutorialViewerPanel";
 
-export default function TutorialClassificationWidget({ tutorials = [] }) {
+export default function TutorialClassificationWidget({ tutorials = [], mediaBasePath = "/media/hardware/3dmodels/" }) {
   const [selected, setSelected] = useState(null);
 
   if (selected) {
@@ -13,11 +13,12 @@ export default function TutorialClassificationWidget({ tutorials = [] }) {
         classificationType={selected.type}
         groupName={selected.group}
         onBack={() => setSelected(null)}
+        mediaBasePath={mediaBasePath}
       />
     );
   }
 
-  return <OverviewPage tutorials={tutorials} onSelect={setSelected} />;
+  return <OverviewPage tutorials={tutorials} onSelect={setSelected} mediaBasePath={mediaBasePath} />;
 }
 
 TutorialClassificationWidget.propTypes = {
@@ -27,4 +28,5 @@ TutorialClassificationWidget.propTypes = {
       type: PropTypes.string.isRequired,
     }),
   ),
+  mediaBasePath: PropTypes.string,
 };

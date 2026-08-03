@@ -25,6 +25,7 @@ export default function TutorialViewerPanel({
   classificationType,
   groupName,
   onBack,
+  mediaBasePath = "/media/tutorial",
 }) {
   const [nextStepDisabled, setNextStepDisabled] = useState(false);
 
@@ -130,7 +131,11 @@ export default function TutorialViewerPanel({
                 <FinishedCard key="finished" tutorial={tutorial} />
               )}
               {type === "instruction" && (
-                <Instruction key={activeStep} tutorial={tutorial} />
+                <Instruction 
+                  key={activeStep} 
+                  tutorial={tutorial}
+                  mediaBasePath={mediaBasePath}
+                />
               )}
               {type !== "instruction" && type !== "finish" && (
                 <TaskCard

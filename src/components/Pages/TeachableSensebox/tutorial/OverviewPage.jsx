@@ -15,6 +15,7 @@ import TutorialItemSummary from "../../../Tutorial/Overview/TutorialItemSummary"
 export default function OverviewPage({
   tutorials: tutorialConfigs = [],
   onSelect,
+  mediaBasePath = "/media/tutorial/icons",
 }) {
   const [tutorials, setTutorials] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -147,7 +148,10 @@ export default function OverviewPage({
                       }}
                     >
                       <CardContent sx={{ flexGrow: 1, p: "8px" }}>
-                        <TutorialItemSummary tutorial={tutorial} />
+                        <TutorialItemSummary 
+                          tutorial={tutorial} 
+                          mediaBasePath={mediaBasePath}
+                        />
                       </CardContent>
                     </CardActionArea>
                   </Card>
@@ -179,4 +183,5 @@ OverviewPage.propTypes = {
     ]),
   ),
   onSelect: PropTypes.func.isRequired,
+  mediaBasePath: PropTypes.string,
 };

@@ -54,7 +54,6 @@ function createWidgetStore() {
 function mountWidget(targetElement, config = {}) {
   const store = createWidgetStore();
 
-  // Extract tutorials from data attribute or config
   let tutorials = config.tutorials;
   if (!tutorials && targetElement.dataset.tutorials) {
     try {
@@ -66,13 +65,20 @@ function mountWidget(targetElement, config = {}) {
   }
   tutorials = tutorials || [];
 
+  const mediaBasePath = config.mediaBasePath || 
+    targetElement.dataset.mediaBasePath || 
+    "/media/tutorial";
+
   const root = createRoot(targetElement);
   root.render(
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
         <Provider store={store}>
           <MemoryRouter>
-            <TutorialClassificationWidget tutorials={tutorials} />
+            <TutorialClassificationWidget 
+              tutorials={tutorials}
+              mediaBasePath={mediaBasePath}
+            />
           </MemoryRouter>
         </Provider>
       </ThemeProvider>
