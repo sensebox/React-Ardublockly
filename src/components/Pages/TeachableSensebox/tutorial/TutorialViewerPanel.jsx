@@ -84,15 +84,16 @@ export default function TutorialViewerPanel({
         {/* Left: tutorial step card + nav */}
         <Box
           sx={{
-            flex: "0 0 auto",
-            minWidth: "500px",
-            maxWidth: "20vw",
+            width: "30vw",
+            minWidth: "350px",
+            maxWidth: "50vw",
             display: "flex",
             flexDirection: "column",
             borderRight: "1px solid",
             borderColor: "divider",
             maxHeight: "87vh",
-            overflow: "hidden",
+            overflow: "auto",
+            resize: "horizontal",
           }}
         >
           {/* Top bar */}
@@ -131,8 +132,8 @@ export default function TutorialViewerPanel({
                 <FinishedCard key="finished" tutorial={tutorial} />
               )}
               {type === "instruction" && (
-                <Instruction 
-                  key={activeStep} 
+                <Instruction
+                  key={activeStep}
                   tutorial={tutorial}
                   mediaBasePath={mediaBasePath}
                 />
