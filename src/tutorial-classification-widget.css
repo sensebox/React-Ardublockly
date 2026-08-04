@@ -186,7 +186,7 @@
   background-color: #f5f5f5;
   padding: 0.2rem 0.4rem;
   border-radius: 3px;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
   font-size: 0.9em;
   color: #e53e3e;
 }
@@ -242,4 +242,59 @@
   border-radius: 6px;
   margin: 1rem auto;
   display: block;
+}
+
+.tutorial-task-wrapper {
+  background-color: #f7f7fb;
+  border: 2px solid #a056fb;
+  padding: 0;
+  margin: 18px 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.tutorial-task-header {
+  background-color: #a056fb;
+  color: #ffffff;
+  padding: 8px 12px;
+  font-weight: bold;
+}
+
+.tutorial-task-content {
+  padding: 14px;
+  color: black;
+}
+
+.tutorial-tipp-wrapper {
+  background-color: #f7f7fb;
+  border: 2px solid #f89833;
+  padding: 0;
+  margin: 18px 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.tutorial-tipp-header {
+  background-color: #f89833;
+  color: #ffffff;
+  padding: 8px 12px;
+  font-weight: bold;
+}
+
+.tutorial-tipp-content {
+  padding: 14px;
+  color: black;
+}
+
+.tutorial-image-wrapper {
+  display: block;
+  margin: auto;
+  background-color: #f5f5f5;
+  padding: 12px;
+  border-radius: 6px;
+}
+
+.tutorial-image-wrapper img {
+  display: block;
+  margin: auto;
 }

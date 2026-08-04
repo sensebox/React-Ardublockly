@@ -114,6 +114,7 @@ export default function TutorialViewerPanel({
               onClick={onBack}
               size="small"
               variant="outlined"
+              sx={{ minWidth: "auto" }}
             >
               Übersicht
             </Button>
