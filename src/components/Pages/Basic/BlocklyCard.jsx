@@ -75,6 +75,86 @@ const BlocklyCard = ({
     ws.addChangeListener((event) => {
       dispatch(onChangeWorkspace(event));
     });
+
+    // Wenn eine neue Variable erstellt wird, automatisch den
+    // "Vor dem Start"-Block anlegen (falls noch nicht vorhanden) und dort
+    // einen "setze Variable"-Block mit der neuen Variable einfügen.
+    ws.addChangeListener((event) => {
+      if (event.type !== Blockly.Events.VAR_CREATE) return;
+
+      // Nur reagieren, wenn die Variable im aktuellen Workspace angelegt wurde.
+      if (event.workspaceId && event.workspaceId !== ws.id) return;
+
+      // Beim Laden eines gespeicherten Projekts werden alle Variablen in einer
+      // Event-Gruppe erzeugt. Diese sollen NICHT automatisch Set-Blöcke
+      // bekommen – nur die tatsächlich vom Benutzer neu erstellte Variable.
+      if (Blockly.Events.getGroup()) return;
+
+      // Kein zweiter Set-Block, falls für die Variable bereits einer existiert.
+      const alreadyHasSetBlock = ws
+        .getBlocksByType("variables_set", false)
+        .some((b) => b.getFieldValue("VAR") === event.varId);
+      if (alreadyHasSetBlock) return;
+
+      Blockly.Events.setGroup(true);
+      try {
+        // Vorhandenen Setup-Block finden oder neuen erstellen
+        let setupBlock = ws.getBlocksByType("basic_setup", false)[0];
+        if (!setupBlock) {
+          setupBlock = ws.newBlock("basic_setup");
+          setupBlock.initSvg();
+          setupBlock.render();
+
+          // Setup-Block oberhalb des Startblocks platzieren
+          const startBlock = ws.getBlocksByType("sensebox_start", false)[0];
+          if (startBlock) {
+            const startXY = startBlock.getRelativeToSurfaceXY();
+            const setupXY = setupBlock.getRelativeToSurfaceXY();
+            const setupHeight = setupBlock.getHeightWidth().height;
+            setupBlock.moveBy(
+              startXY.x - setupXY.x,
+              startXY.y - setupXY.y - setupHeight - 40,
+            );
+          } else {
+            setupBlock.moveBy(50, 100);
+          }
+        }
+
+        // Set-Block mit XML erstellen, um die Variable korrekt zu setzen
+        // Wichtig: Variable abrufen um den Namen (nicht die ID) zu bekommen
+        const variable = ws.getVariableById(event.varId);
+        if (!variable) return; // Variable sollte existieren
+
+        const setBlockXml = Blockly.utils.xml.createElement("block");
+        setBlockXml.setAttribute("type", "variables_set");
+
+        // Field mit dem Variablennamen hinzufügen
+        const fieldXml = Blockly.utils.xml.createElement("field");
+        fieldXml.setAttribute("name", "VAR");
+        fieldXml.appendChild(Blockly.utils.xml.createTextNode(variable.name));
+        setBlockXml.appendChild(fieldXml);
+
+        // Block aus XML erstellen
+        const setBlock = Blockly.Xml.domToBlock(setBlockXml, ws);
+
+        // An das Ende des DO-Statements des Setup-Blocks anhängen
+        let lastConnection = setupBlock.getInput("DO").connection;
+        let nextBlock = lastConnection.targetBlock();
+        while (nextBlock) {
+          const nextConn = nextBlock.nextConnection;
+          if (!nextConn) break;
+          lastConnection = nextConn;
+          nextBlock = nextConn.targetBlock();
+        }
+        lastConnection.connect(setBlock.previousConnection);
+      } finally {
+        Blockly.Events.setGroup(false);
+      }
+
+      // Ansicht an alle Blöcke anpassen
+      // ws.zoomToFit();
+    });
+
     const ro = new ResizeObserver(() => Blockly.svgResize(ws));
     ro.observe(containerRef.current);
 

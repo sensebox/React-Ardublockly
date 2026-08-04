@@ -93,22 +93,27 @@ basicGenerator.forBlock["controls_whileUntil"] = function (block, generator) {
 
 // Variablen (Standard-Var-Blöcke)
 basicGenerator.forBlock["variables_set"] = function (block, generator) {
-  const varName = generator.nameDB_.getName(
-    block.getFieldValue("VAR"),
-    Blockly.Variables.NAME_TYPE,
-  );
+  const variable = block.workspace.getVariableById(block.getFieldValue("VAR"));
+  const varName = variable ? variable.name : block.getFieldValue("VAR");
   const val =
     generator.valueToCode(block, "VALUE", generator.ORDER_ATOMIC) || "0";
-  const code = `LET ${varName} = ${val}\n`;
+  const code = `${varName}=${val}\n`;
   return generator.scrub_(block, code);
 };
 
 basicGenerator.forBlock["variables_get"] = function (block, generator) {
-  const varName = generator.nameDB_.getName(
-    block.getFieldValue("VAR"),
-    Blockly.Variables.NAME_TYPE,
-  );
+  const variable = block.workspace.getVariableById(block.getFieldValue("VAR"));
+  const varName = variable ? variable.name : block.getFieldValue("VAR");
   return [varName, generator.ORDER_ATOMIC];
+};
+
+basicGenerator.forBlock["math_change"] = function (block, generator) {
+  const variable = block.workspace.getVariableById(block.getFieldValue("VAR"));
+  const varName = variable ? variable.name : block.getFieldValue("VAR");
+  const delta =
+    generator.valueToCode(block, "DELTA", generator.ORDER_ATOMIC) || "0";
+  const code = `${varName}=${varName}+${delta}\n`;
+  return generator.scrub_(block, code);
 };
 basicGenerator.forBlock["sensebox_rgb_led"] = function (block, generator) {
   var color = block.getFieldValue("COLOR");
@@ -219,10 +224,44 @@ basicGenerator.forBlock["time_delay_5s"] = function () {
   return "delay(5000)\n"; // nichts generieren
 };
 
+basicGenerator.forBlock["time_delay_1min"] = function () {
+  return "delay(60000)\n";
+};
+
+basicGenerator.forBlock["time_delay_5min"] = function () {
+  return "delay(300000)\n";
+};
+
+basicGenerator.forBlock["time_delay_10min"] = function () {
+  return "delay(600000)\n";
+};
+
+basicGenerator.forBlock["time_delay_1h"] = function () {
+  return "delay(3600000)\n";
+};
+
+basicGenerator.forBlock["time_delay_5h"] = function () {
+  return "delay(18000000)\n";
+};
+
 basicGenerator.forBlock["basic_delay"] = function (block, generator) {
   const seconds =
     generator.valueToCode(block, "SECONDS", generator.ORDER_NONE) || "1";
   const milliseconds = `${seconds} * 1000`;
+  return `delay(${milliseconds})\n`;
+};
+
+basicGenerator.forBlock["basic_delay_minutes"] = function (block, generator) {
+  const minutes =
+    generator.valueToCode(block, "MINUTES", generator.ORDER_NONE) || "1";
+  const milliseconds = `${minutes} * 60 * 1000`;
+  return `delay(${milliseconds})\n`;
+};
+
+basicGenerator.forBlock["basic_delay_hours"] = function (block, generator) {
+  const hours =
+    generator.valueToCode(block, "HOURS", generator.ORDER_NONE) || "1";
+  const milliseconds = `${hours} * 60 * 60 * 1000`;
   return `delay(${milliseconds})\n`;
 };
 
@@ -235,6 +274,18 @@ basicGenerator.forBlock["sensebox_start"] = function (block) {
 
   // Gib den kombinierten Code zurück
   return code;
+};
+
+// "Vor dem Starten ausführen"-Block: Anweisungen, die einmalig vor der Loop laufen.
+basicGenerator.forBlock["basic_setup"] = function (block) {
+  // Code aller Blöcke im Statement-Feld "DO" holen
+  const statements_do = basicGenerator.statementToCode(block, "DO");
+
+  // In den Setup-Bereich einfügen, damit er vor dem Loop-Code erscheint
+  basicGenerator.addSetup("basic_setup_block", statements_do);
+
+  // Der Block selbst erzeugt keinen Code an seiner Position
+  return "";
 };
 basicGenerator.forBlock["basic_if_else"] = function (block, generator) {
   // If/elseif/else condition.
@@ -277,6 +328,14 @@ basicGenerator.forBlock["basic_repeat_times"] = function (block, generator) {
   const body = generator.statementToCode(block, "DO") || "";
 
   return `i=0\nfor(i=0; i<${times}; i=i+1){\n${body}}\n\n`;
+};
+
+basicGenerator.forBlock["basic_repeat_until"] = function (block, generator) {
+  const condition =
+    generator.valueToCode(block, "CONDITION", generator.ORDER_ATOMIC) || "TRUE";
+  const body = generator.statementToCode(block, "DO") || "";
+
+  return `while(${condition}){\n${body}}\n\n`;
 };
 
 basicGenerator.forBlock["basic_compare"] = function (block) {
@@ -393,4 +452,29 @@ basicGenerator.forBlock["bme_air_quality"] = function (block) {
 basicGenerator.forBlock["basic_brightness"] = function (block) {
   // Der Block selbst liefert nur den Variablennamen zurück
   return ["sensor:board:light", basicGenerator.ORDER_ATOMIC];
+};
+
+basicGenerator.forBlock["text_join"] = function (block, generator) {
+  // Collect all the text inputs
+  const code = [];
+  for (let i = 0; i < block.itemCount_; i++) {
+    const argument =
+      generator.valueToCode(block, "ADD" + i, generator.ORDER_NONE) || '""';
+    code.push(argument);
+  }
+
+  const result = `"${code.join("").replaceAll('"', "")}"`;
+  return [result, generator.ORDER_ATOMIC];
+};
+
+basicGenerator.forBlock["basic_send_temperature"] = function () {
+  return "sendBle(sensor:bme680:temperature, 1)\n";
+};
+
+basicGenerator.forBlock["basic_send_humidity"] = function () {
+  return "sendBle(sensor:bme680:humidity, 2)\n";
+};
+
+basicGenerator.forBlock["basic_send_air_quality"] = function () {
+  return "sendBle(sensor:bme680:iaq, 3)\n";
 };

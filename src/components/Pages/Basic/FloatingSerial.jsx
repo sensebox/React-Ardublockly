@@ -55,7 +55,7 @@ const FloatingSerial = () => {
   const theme = useTheme();
   const [helpOpen, setHelpOpen] = useState(false);
   const [unsupportedOpen, setUnsupportedOpen] = useState(!supported);
-  const [loop, setLoop] = useState(true);
+  const [loop, setLoop] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [saveError, setSaveError] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
