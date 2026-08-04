@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -16,7 +16,7 @@ import BuilderMain from "./components/BuilderMain";
 import SaveStatusDialog from "./components/SaveStatusDialog";
 
 const BuilderPage = () => {
-  const history = useNavigate();
+  const navigate = useNavigate();
   const location = useLocation();
 
   const token = useSelector((state) => state.auth.token);
@@ -43,6 +43,7 @@ const BuilderPage = () => {
     steps,
     difficulty,
     selectedHardware,
+    customHardware,
     learnings,
     subjects,
     topics,
@@ -112,6 +113,18 @@ const BuilderPage = () => {
       setSaveButtonDisabled(false);
     }
   };
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "s") {
+        e.preventDefault();
+        saveTutorial();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [saveTutorial]);
 
   /**
    * ⏳ Loading State
@@ -184,6 +197,7 @@ const BuilderPage = () => {
           setSteps={actions.setSteps}
           activeStep={activeStep}
           selectedHardware={selectedHardware}
+          customHardware={customHardware}
           learnings={learnings}
           setLearnings={actions.setLearnings}
         />
@@ -194,7 +208,7 @@ const BuilderPage = () => {
         savingState={savingState}
         onClose={() => setSavingState("idle")}
         savedTutorialId={savedTutorialId}
-        history={history}
+        navigate={navigate}
       />
     </Box>
   );

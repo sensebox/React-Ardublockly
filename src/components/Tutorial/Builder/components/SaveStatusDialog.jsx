@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/styles";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import * as Blockly from "blockly/core";
 
@@ -63,18 +63,52 @@ const SaveStatusDialog = ({ savingState, onClose, savedTutorialId }) => {
             <Typography variant="body1" fontWeight={600}>
               {Blockly.Msg.save_status_success}
             </Typography>
-            <Box sx={{ mt: 2, display: "flex", gap: 2 }}>
-              <Button variant="outlined" onClick={() => navigate("/tutorial")}>
-                {Blockly.Msg.save_status_to_overview}
+            <Box
+              sx={{
+                mt: 2,
+                display: "flex",
+                flexDirection: "column",
+                gap: 2,
+                alignItems: "center",
+              }}
+            >
+              <Button
+                variant="contained"
+                color="success"
+                onClick={onClose}
+                autoFocus
+                fullWidth
+              >
+                {Blockly.Msg.save_status_keep_editing}
               </Button>
-              {savedTutorialId && (
+              <Box sx={{ display: "flex", gap: 2, width: "100%" }}>
                 <Button
-                  variant="contained"
-                  onClick={() => navigate(`/tutorial/${savedTutorialId}`)}
+                  variant="outlined"
+                  sx={{
+                    borderColor:
+                      theme.palette.mode === "dark" ? "#ccc" : "#999",
+                    color: theme.palette.text.primary,
+                    flex: 1,
+                  }}
+                  onClick={() => navigate("/tutorial")}
                 >
-                  {Blockly.Msg.save_status_to_tutorial}
+                  {Blockly.Msg.save_status_to_overview}
                 </Button>
-              )}
+                {savedTutorialId && (
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      borderColor:
+                        theme.palette.mode === "dark" ? "#ccc" : "#999",
+                      color: theme.palette.text.primary,
+                      flex: 1,
+                    }}
+                    onClick={() => navigate(`/tutorial/${savedTutorialId}`)}
+                  >
+                    {Blockly.Msg.save_status_to_tutorial}
+                  </Button>
+                )}
+              </Box>
             </Box>
           </>
         );

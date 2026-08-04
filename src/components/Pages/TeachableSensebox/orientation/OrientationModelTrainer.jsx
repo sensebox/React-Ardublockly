@@ -464,7 +464,7 @@ const OrientationModelTrainer = ({
   const [datasetMenuAnchor, setDatasetMenuAnchor] = useState(null);
 
   const language = useSelector((s) => s.general.language);
-  const t = getOrientationTranslations();
+  const t = getOrientationTranslations(language);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [isDownloading, setIsDownloading] = useState(false);

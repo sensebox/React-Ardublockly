@@ -62,6 +62,36 @@ body:has(.blockly-app-container) {
   align-items: center;
 }
 
+/* Inner toolbar layout */
+.embedded-toolbar-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 8px;
+  min-width: 0;
+  flex-wrap: nowrap;
+}
+
+.embedded-toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+  flex-wrap: nowrap;
+}
+
+.embedded-toolbar-left {
+  flex-shrink: 1;
+  overflow: hidden;
+}
+
+.embedded-toolbar-right {
+  flex: 1;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
 /* Embedded workspace styling */
 .embedded-workspace {
   flex: 1;
@@ -198,5 +228,51 @@ body:has(.blockly-app-container) {
 
 .blocklyDraggable:active {
   cursor: grabbing;
+}
+
+/* =============================================================================
+   SMALL SCREEN OPTIMIZATIONS
+   On small displays only the button icons are shown (no text labels) and
+   everything is compressed so the toolbar never overflows.
+   ============================================================================= */
+@media (max-width: 600px) {
+  .embedded-toolbar {
+    padding: 0 4px;
+  }
+
+  .embedded-toolbar-inner {
+    gap: 4px;
+  }
+
+  .embedded-toolbar-group {
+    gap: 6px;
+  }
+
+  /* Hide the text label, keep only the icon */
+  .embedded-button .embedded-button-label {
+    display: none !important;
+  }
+
+  /* Turn labelled buttons into compact square icon buttons */
+  .embedded-button {
+    margin: 0 !important;
+    padding: 0 !important;
+    min-width: var(--embedded-touch-min-width) !important;
+    width: var(--embedded-touch-min-width) !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Remove the start-icon spacing so the icon is centered */
+  .embedded-button .MuiButton-startIcon {
+    margin: 0 !important;
+  }
+
+  /* Shrink the workspace name so it can never push the toolbar to overflow */
+  .embedded-workspace-name {
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: 40vw !important;
+    padding: 0 10px !important;
+  }
 }
 

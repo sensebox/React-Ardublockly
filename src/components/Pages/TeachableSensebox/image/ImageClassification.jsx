@@ -24,7 +24,7 @@ const TeachableSensebox = () => {
   const [trainingError, setTrainingError] = useState(null);
   const isMountedRef = useRef(true);
   const language = useSelector((s) => s.general.language);
-  const t = getImageTranslations();
+  const t = getImageTranslations(language);
 
   // Help sidebar state
   const [helpSidebarOpen, setHelpSidebarOpen] = useState(false);
@@ -32,11 +32,18 @@ const TeachableSensebox = () => {
   const theme = useTheme();
   const isWideScreen = useMediaQuery(theme.breakpoints.up("lg"));
 
-  const handleOpenHelp = useCallback((topic) => {
-    markHelpSeen(topic);
-    setCurrentHelpTopic(topic);
-    setHelpSidebarOpen(true);
-  }, []);
+  const handleOpenHelp = useCallback(
+    (topic) => {
+      markHelpSeen(topic);
+      if (currentHelpTopic === topic && helpSidebarOpen) {
+        setHelpSidebarOpen(false);
+      } else {
+        setCurrentHelpTopic(topic);
+        setHelpSidebarOpen(true);
+      }
+    },
+    [currentHelpTopic, helpSidebarOpen],
+  );
 
   const {
     isBlinking: imageClassBlinking,
@@ -109,8 +116,6 @@ const TeachableSensebox = () => {
         sx={{
           py: 4,
           pb: 10,
-          mr: isWideScreen && helpSidebarOpen ? `${SIDEBAR_WIDTH}px` : "auto",
-          transition: "margin-right 0.3s ease",
         }}
         key={language}
       >

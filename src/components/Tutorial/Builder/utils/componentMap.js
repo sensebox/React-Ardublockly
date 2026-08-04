@@ -1,5 +1,11 @@
 // componentMap.js
 const COMPONENT_MAP = {
+  "mcu-eye": {
+    name: "MCU Eye",
+    image: "/media/hardware/3dmodels/eye.png",
+    docUrl: "https://docs.sensebox.de/docs/boards/eye/eye-overview?board=eye",
+    sensor: "Board",
+  },
   "mcu-s2": {
     name: "MCU-S2",
     image: "/media/hardware/3dmodels/mcus2.png",

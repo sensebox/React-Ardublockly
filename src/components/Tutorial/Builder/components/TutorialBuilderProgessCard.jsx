@@ -16,14 +16,9 @@ import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import HardwareSelectorModal from "./AddNewHardware";
-import {
-  SaveOutlined,
-  Save,
-  Expand,
-  ExpandCircleDown,
-} from "@mui/icons-material";
+import { SaveOutlined, Save, ExpandCircleDown } from "@mui/icons-material";
 import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import { Autocomplete } from "@mui/material";
 const SUBJECTS = [
@@ -34,6 +29,7 @@ const SUBJECTS = [
   "Chemie",
   "Technik",
   "Digitale Bildung",
+  "ADA",
   "Sonstiges",
 ];
 
@@ -63,6 +59,8 @@ const TutorialBuilderProgressCard = ({
   setDifficulty,
   selectedHardware,
   setSelectedHardware,
+  customHardware,
+  setCustomHardware,
   activeStep,
   setActiveStep,
   setAutosaveEnabled,
@@ -395,6 +393,8 @@ const TutorialBuilderProgressCard = ({
                   onClose={() => setModalOpen(false)}
                   selectedHardware={selectedHardware}
                   onHardwareSelect={setSelectedHardware}
+                  customHardware={customHardware}
+                  onCustomHardwareChange={setCustomHardware}
                 />
               </Box>
             </Box>

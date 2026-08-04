@@ -13,6 +13,7 @@ import { ArrowBack as ArrowBackIcon } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import { getSpellTranslations } from "./translations";
 import SpellModelTrainer from "./SpellModelTrainer";
+import SpellConvertDeploy from "./SpellConvertDeploy";
 import HelpSidebar, { SIDEBAR_WIDTH } from "../HelpSidebar";
 import HelpButton, { useHelpBlink } from "../HelpButton";
 
@@ -24,7 +25,7 @@ const SpellClassification = () => {
   const [classes, setClasses] = useState([]);
   const isMountedRef = useRef(true);
   const language = useSelector((s) => s.general.language);
-  const t = getSpellTranslations();
+  const t = getSpellTranslations(language);
 
   // Help sidebar state
   const [helpSidebarOpen, setHelpSidebarOpen] = useState(false);
@@ -32,10 +33,18 @@ const SpellClassification = () => {
   const theme = useTheme();
   const isWideScreen = useMediaQuery(theme.breakpoints.up("lg"));
 
-  const handleOpenHelp = useCallback((topic) => {
-    setCurrentHelpTopic("spells/" + topic);
-    setHelpSidebarOpen(true);
-  }, []);
+  const handleOpenHelp = useCallback(
+    (topic) => {
+      const fullTopic = "spells/" + topic;
+      if (currentHelpTopic === fullTopic && helpSidebarOpen) {
+        setHelpSidebarOpen(false);
+      } else {
+        setCurrentHelpTopic(fullTopic);
+        setHelpSidebarOpen(true);
+      }
+    },
+    [currentHelpTopic, helpSidebarOpen],
+  );
 
   // ── Help blink hooks ──────────────────────────────────────────────────────
   const {
@@ -96,8 +105,6 @@ const SpellClassification = () => {
         sx={{
           py: 4,
           pb: 10,
-          mr: isWideScreen && helpSidebarOpen ? `${SIDEBAR_WIDTH}px` : "auto",
-          transition: "margin-right 0.3s ease",
         }}
         key={language}
       >
@@ -158,6 +165,16 @@ const SpellClassification = () => {
               trainedModel={trainedModel}
             />
           </Paper>
+
+          {/* Deployment Section */}
+          {trainedModel && (
+            <Paper elevation={2} sx={{ p: 3 }}>
+              <Typography variant="h5" gutterBottom>
+                {t.integration.title}
+              </Typography>
+              <SpellConvertDeploy model={trainedModel} />
+            </Paper>
+          )}
         </Box>
       </Container>
     </>

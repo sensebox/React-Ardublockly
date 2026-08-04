@@ -9,7 +9,6 @@ import {
   Select,
 } from "@mui/material";
 import { useTheme } from "@mui/styles";
-import { useState } from "react";
 
 const variants = {
   initial: { opacity: 0, x: 100 },
@@ -27,6 +26,14 @@ const BuildSlide = ({
   setType,
 }) => {
   const theme = useTheme();
+
+  const hasIntro = steps.some(
+    (step, index) => step.type === "instruction" && index !== stepNumber - 1,
+  );
+  const hasAbschluss = steps.some(
+    (step, index) => step.type === "finish" && index !== stepNumber - 1,
+  );
+
   const updateStep = (index, key, value) => {
     setType(value);
     const updated = [...steps];
@@ -81,31 +88,35 @@ const BuildSlide = ({
                   {`Schritt ${stepNumber}`}
                 </Box>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  {!(type === "instruction" || type === "finish") && (
-                    <FormControl size="small" fullWidth>
-                      <InputLabel id="category-label">Kategorie</InputLabel>
-                      <Select
-                        labelId="category-label"
-                        label="Kategorie"
-                        value={type}
-                        sx={{
-                          borderColor: theme.palette.primary.main,
-                        }}
-                        onChange={(e) =>
-                          updateStep(stepNumber - 1, "type", e.target.value)
-                        }
-                      >
-                        <MenuItem value="task">Aufgabe</MenuItem>
-                        <MenuItem value="question">Fragestellung</MenuItem>
-                        <MenuItem value="blockly">Blockly-Aufgabe</MenuItem>
-                        <MenuItem value="blocklyExample">
-                          Blockly-Beispiel
-                        </MenuItem>
+                  <FormControl size="small" fullWidth>
+                    <InputLabel id="category-label">Kategorie</InputLabel>
+                    <Select
+                      labelId="category-label"
+                      label="Kategorie"
+                      value={type}
+                      sx={{
+                        borderColor: theme.palette.primary.main,
+                      }}
+                      onChange={(e) =>
+                        updateStep(stepNumber - 1, "type", e.target.value)
+                      }
+                    >
+                      <MenuItem value="instruction" disabled={hasIntro}>
+                        Einleitung
+                      </MenuItem>
+                      <MenuItem value="finish" disabled={hasAbschluss}>
+                        Abschluss
+                      </MenuItem>
+                      <MenuItem value="task">Aufgabe</MenuItem>
+                      <MenuItem value="question">Fragestellung</MenuItem>
+                      <MenuItem value="blockly">Blockly-Aufgabe</MenuItem>
+                      <MenuItem value="blocklyExample">
+                        Blockly-Beispiel
+                      </MenuItem>
 
-                        <MenuItem value="h5p">H5P-Embed</MenuItem>
-                      </Select>
-                    </FormControl>
-                  )}
+                      <MenuItem value="h5p">H5P-Embed</MenuItem>
+                    </Select>
+                  </FormControl>
                 </Box>
               </Box>
 

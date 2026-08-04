@@ -3,11 +3,28 @@
 import { Box } from "@mui/material";
 import { motion } from "framer-motion";
 import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 export function CodeCompilationIcon() {
   const theme = useTheme();
+  const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
+
+  // Smaller, compressed animation on small devices so it fits the dialog.
+  const maxWidth = isSmall ? 260 : 500;
+  const height = isSmall ? 150 : 250;
+  const fontSize = isSmall ? 12 : 24;
+  const scanTravel = Math.round(height * 0.64);
+
   return (
-    <Box sx={{ position: "relative", width: 500, height: 250 }}>
+    <Box
+      sx={{
+        position: "relative",
+        width: "100%",
+        maxWidth,
+        height,
+        mx: "auto",
+      }}
+    >
       <Box
         sx={{
           position: "absolute",
@@ -17,7 +34,7 @@ export function CodeCompilationIcon() {
           border: `1px solid ${theme.palette.senseboxColors.green}30`,
           overflow: "hidden",
           fontFamily: "monospace",
-          fontSize: 24,
+          fontSize,
         }}
       >
         {/* Code animation content */}
@@ -65,7 +82,7 @@ export function CodeCompilationIcon() {
             height: 2,
             background: `linear-gradient(90deg, transparent, ${theme.palette.senseboxColors.green}50, transparent)`,
           }}
-          animate={{ y: [0, 160, 0] }}
+          animate={{ y: [0, scanTravel, 0] }}
           transition={{
             duration: 2,
             repeat: Number.POSITIVE_INFINITY,
@@ -76,3 +93,4 @@ export function CodeCompilationIcon() {
     </Box>
   );
 }
+

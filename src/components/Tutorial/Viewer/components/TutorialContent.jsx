@@ -5,7 +5,6 @@ import { AnimatePresence } from "framer-motion";
 import Instruction from "../Instruction";
 
 import FinishedCard from "../Cards/FinishedCard";
-import FloatingNavigation from "./FloatingNavigation";
 import TaskCard from "../Cards/TaskCard";
 
 const TutorialContent = ({

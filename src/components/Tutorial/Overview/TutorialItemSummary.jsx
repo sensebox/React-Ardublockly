@@ -185,9 +185,9 @@ export const TutorialItemSummary = ({ tutorial }) => {
               const iconFile =
                 topic
                   .toLowerCase()
-                  .replace(/ /g, "_")
                   .replace(/\//g, "")
-                  .replace(/&/g, "und")
+                  .replace(/&/g, "")
+                  .replace(/ +/g, "_")
                   .replace(/ä/g, "ae")
                   .replace(/ö/g, "oe")
                   .replace(/ü/g, "ue")

@@ -27,6 +27,7 @@ const BuilderSidebar = ({
     steps,
     difficulty,
     selectedHardware,
+    customHardware,
     subjects,
     topics,
     duration,
@@ -39,6 +40,7 @@ const BuilderSidebar = ({
     setSteps,
     setDifficulty,
     setSelectedHardware,
+    setCustomHardware,
     setSubjects,
     setTopics,
     setDuration,
@@ -67,6 +69,8 @@ const BuilderSidebar = ({
         setDifficulty={setDifficulty}
         selectedHardware={selectedHardware}
         setSelectedHardware={setSelectedHardware}
+        customHardware={customHardware}
+        setCustomHardware={setCustomHardware}
         activeStep={activeStep}
         setActiveStep={setActiveStep}
         autosaveEnabled={autosaveEnabled}

@@ -1,12 +1,10 @@
-import { useEffect } from "react";
 import MarkdownIt from "markdown-it";
 import { useSelector } from "react-redux";
 import TutorialSlide from "../components/TutorialSlide";
-import QuestionBlock from "./QuestionCard";
 import QuestionCard from "./QuestionCard";
 import SolutionCheck from "./SolutionCheck";
 import BlocklyWindow from "@/components/Blockly/BlocklyWindow";
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import H5PCard from "./H5PCard";
 
 const md = new MarkdownIt({ html: true, linkify: true, typographer: true });
@@ -62,6 +60,7 @@ md.renderer.rules.table_open = function (tokens, idx, options, env, self) {
 
 const TaskCard = ({ step, setNextStepDisabled }) => {
   const activeStep = useSelector((state) => state.tutorial.activeStep);
+  const tutorialId = useSelector((state) => state.tutorial.tutorials[0]?._id);
 
   const svgToDataUrl = (svgString) =>
     "data:image/svg+xml;base64," +
@@ -88,6 +87,9 @@ const TaskCard = ({ step, setNextStepDisabled }) => {
                 setNextStepDisabled={setNextStepDisabled}
                 key={idx}
                 questionData={q}
+                stepId={step._id}
+                questionIndex={idx}
+                tutorialId={tutorialId}
               />
             );
           })}

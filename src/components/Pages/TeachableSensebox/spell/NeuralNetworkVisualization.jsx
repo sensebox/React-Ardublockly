@@ -6,6 +6,7 @@ import React, {
   useCallback,
   memo,
 } from "react";
+import { useSelector } from "react-redux";
 import * as tf from "@tensorflow/tfjs";
 import {
   Box,
@@ -756,7 +757,8 @@ const NeuralNetworkVisualization = ({
   useEffect(() => {
     onReceptiveFieldRef.current = onReceptiveField;
   }, [onReceptiveField]);
-  const t = getSpellTranslations();
+  const language = useSelector((s) => s.general.language);
+  const t = getSpellTranslations(language);
 
   // Get pixel data from selected sample, stroke points, or provided data
   const pixelData = useMemo(() => {

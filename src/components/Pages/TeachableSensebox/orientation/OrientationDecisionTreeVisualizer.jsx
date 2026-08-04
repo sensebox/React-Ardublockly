@@ -1,4 +1,5 @@
 import React, { useMemo, useRef, useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { Box, Typography, useTheme } from "@mui/material";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import { getOrientationTranslations } from "./translations";
@@ -155,7 +156,8 @@ const Edge = ({ source, target, theme, isOnPath }) => {
 
 const OrientationDecisionTreeVisualizer = ({ trainedModel, latestSample }) => {
   const theme = useTheme();
-  const t = getOrientationTranslations();
+  const language = useSelector((s) => s.general.language);
+  const t = getOrientationTranslations(language);
   const containerRef = useRef(null);
   const [containerWidth, setContainerWidth] = useState(600);
 

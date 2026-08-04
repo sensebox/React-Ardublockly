@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { getImageTranslations } from "./image/translations";
 import {
   Alert,
@@ -56,10 +57,11 @@ export const ConnectionStatus = {
 /**
  * Get error details based on error type
  * @param {string} errorType - Error type from ErrorTypes
+ * @param {string} language - Language code (e.g., "en_US", "de_DE")
  * @returns {Object} Error details with severity, title, message, and actions
  */
-const getErrorDetails = (errorType) => {
-  const t = getImageTranslations();
+const getErrorDetails = (errorType, language) => {
+  const t = getImageTranslations(language);
 
   switch (errorType) {
     case ErrorTypes.UNSUPPORTED_BROWSER:
@@ -172,10 +174,11 @@ const getErrorDetails = (errorType) => {
 /**
  * Get connection status display details
  * @param {string} status - Connection status from ConnectionStatus
+ * @param {string} language - Language code (e.g., "en_US", "de_DE")
  * @returns {Object} Status display details
  */
-const getStatusDetails = (status) => {
-  const t = getImageTranslations();
+const getStatusDetails = (status, language) => {
+  const t = getImageTranslations(language);
 
   switch (status) {
     case ConnectionStatus.CONNECTED:
@@ -235,12 +238,13 @@ const SerialErrorHandler = ({
 }) => {
   const [detailsExpanded, setDetailsExpanded] = React.useState(showDetails);
   const [isDownloading, setIsDownloading] = React.useState(false);
-  const t = getImageTranslations();
+  const language = useSelector((s) => s.general.language);
+  const t = getImageTranslations(language);
 
   const errorDetails = error
-    ? getErrorDetails(error.type || error.message)
+    ? getErrorDetails(error.type || error.message, language)
     : null;
-  const statusDetails = getStatusDetails(connectionStatus);
+  const statusDetails = getStatusDetails(connectionStatus, language);
 
   const handleDownloadFirmware = async () => {
     setIsDownloading(true);

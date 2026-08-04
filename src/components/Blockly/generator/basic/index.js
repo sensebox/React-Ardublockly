@@ -141,8 +141,7 @@ basicGenerator.forBlock["display_print_basic"] = function (block, generator) {
   if (!raw || /^\s*$/.test(raw)) {
     return ""; // nichts generieren
   }
-  const fontSizeBlock = block.getInputTargetBlock("FONT_SIZE");
-  const size = fontSizeBlock ? fontSizeBlock.getFieldValue("SIZE") : "s";
+  const size = block.getFieldValue("SIZE") || "s";
 
   const clear = block.getFieldValue && block.getFieldValue("CLEAR") === "TRUE";
   const clearCode = clear ? "clearDisplay()\n" : "";

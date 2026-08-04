@@ -316,6 +316,7 @@ export const UI = {
   save_status_success: "Tutorial saved successfully!",
   save_status_to_overview: "Back to overview",
   save_status_to_tutorial: "To tutorial",
+  save_status_keep_editing: "Keep editing",
   save_status_missing_fields: "The following required fields are missing:",
   save_status_missing_title: "Title",
   save_status_missing_subtitle: "Subtitle",
