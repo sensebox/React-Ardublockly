@@ -9,6 +9,7 @@ import Routes from "./Route/Routes";
 import Cookies from "./Cookies";
 import Footer from "./Footer";
 import { setBoardHelper } from "./Blockly/helpers/board";
+import { FlashProvider } from "./Workspace/ToolbarItems/CompileAndUploadDialog/useFlash";
 
 const Content = () => {
   const language = useSelector((state) => state.general.language);
@@ -35,18 +36,20 @@ const Content = () => {
         boxSizing: "border-box",
       }}
     >
-      <Navbar />
-      <div
-        style={{
-          flex: 1,
-          width: "100%",
-          boxSizing: "border-box",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        <Routes />
-      </div>
+      <FlashProvider>
+        <Navbar />
+        <div
+          style={{
+            flex: 1,
+            width: "100%",
+            boxSizing: "border-box",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <Routes />
+        </div>
+      </FlashProvider>
       <Cookies />
       <Footer />
     </div>
