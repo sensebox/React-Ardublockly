@@ -9,10 +9,10 @@ import {
 } from "@mui/material/styles";
 import { createStore, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
-import rootReducer from "./reducers";
-import { setupInterceptors } from "./actions/authActions";
-import TutorialClassificationWidget from "./components/Pages/TeachableSensebox/tutorial/TutorialClassificationWidget";
-import "./tutorial-classification-widget.css";
+import rootReducer from "../../reducers";
+import { setupInterceptors } from "../../actions/authActions";
+import TutorialClassificationWidget from "../../components/Pages/TeachableSensebox/tutorial/TutorialClassificationWidget";
+import "./styles.css";
 
 const theme = createTheme({
   palette: {
@@ -65,8 +65,9 @@ function mountWidget(targetElement, config = {}) {
   }
   tutorials = tutorials || [];
 
-  const mediaBasePath = config.mediaBasePath || 
-    targetElement.dataset.mediaBasePath || 
+  const mediaBasePath =
+    config.mediaBasePath ||
+    targetElement.dataset.mediaBasePath ||
     "/media/tutorial";
 
   const root = createRoot(targetElement);
@@ -75,7 +76,7 @@ function mountWidget(targetElement, config = {}) {
       <ThemeProvider theme={theme}>
         <Provider store={store}>
           <MemoryRouter>
-            <TutorialClassificationWidget 
+            <TutorialClassificationWidget
               tutorials={tutorials}
               mediaBasePath={mediaBasePath}
             />

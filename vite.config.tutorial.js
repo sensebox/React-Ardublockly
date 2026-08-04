@@ -8,7 +8,10 @@ export default defineConfig({
     outDir: "build",
     emptyOutDir: false,
     lib: {
-      entry: resolve(import.meta.dirname, "src/tutorial-classification-widget.jsx"),
+      entry: resolve(
+        import.meta.dirname,
+        "src/widgets/TutorialClassification/index.jsx",
+      ),
       name: "TutorialClassificationWidget",
       fileName: () => `tutorial-classification-widget.js`,
       formats: ["iife"],
