@@ -3,29 +3,14 @@ import react from "@vitejs/plugin-react";
 import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 import { resolve } from "path";
 
-const widgets = [
-  {
-    entry: "src/tutorial-classification-widget.jsx",
-    name: "TutorialClassificationWidget",
-    fileName: "tutorial-classification-widget",
-  },
-];
-
-const widgetKey = process.env.WIDGET;
-const selected = widgetKey
-  ? widgets.find((w) => w.fileName.startsWith(widgetKey))
-  : null;
-
-const target = selected ?? widgets[0];
-
 export default defineConfig({
   build: {
     outDir: "build",
     emptyOutDir: false,
     lib: {
-      entry: resolve(import.meta.dirname, target.entry),
-      name: target.name,
-      fileName: () => `${target.fileName}.js`,
+      entry: resolve(import.meta.dirname, "src/tutorial-classification-widget.jsx"),
+      name: "TutorialClassificationWidget",
+      fileName: () => `tutorial-classification-widget.js`,
       formats: ["iife"],
     },
     rollupOptions: {
