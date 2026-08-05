@@ -71,8 +71,8 @@ const TaskCard = ({ step, setNextStepDisabled }) => {
     );
 
   return (
-    <TutorialSlide stepNumber={activeStep}>
-      <div dangerouslySetInnerHTML={{ __html: md.render(step.text) }} />
+    <TutorialSlide>
+      <div className="tutorial-markdown" dangerouslySetInnerHTML={{ __html: md.render(step.text) }} />
       {step.type === "question" && step.questionData && (
         <Box
           sx={{

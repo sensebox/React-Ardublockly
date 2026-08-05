@@ -89,6 +89,7 @@ const FinishedCard = ({ tutorial }) => {
         </Box>
         <Box sx={{ my: 2 }}>
           <div
+            className="tutorial-markdown"
             dangerouslySetInnerHTML={{ __html: md.render(finishStep.text) }}
           />
         </Box>
