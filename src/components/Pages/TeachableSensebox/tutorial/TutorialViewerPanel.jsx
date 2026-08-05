@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import { AnimatePresence } from "framer-motion";
 import { Box, Button, Typography, CircularProgress } from "@mui/material";
@@ -28,9 +28,17 @@ export default function TutorialViewerPanel({
   mediaBasePath = "/media/tutorial",
 }) {
   const [nextStepDisabled, setNextStepDisabled] = useState(false);
+  const scrollContainerRef = useRef(null);
 
   const { tutorial, currentStep, activeStep, nextStep, previousStep, message } =
     useTutorialViewer(tutorialId);
+
+  // Scroll to top when step changes
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop = 0;
+    }
+  }, [activeStep]);
 
   if (!tutorial) {
     if (message?.id === "GET_TUTORIAL_FAIL") {
@@ -91,7 +99,7 @@ export default function TutorialViewerPanel({
             flexDirection: "column",
             borderRight: "1px solid",
             borderColor: "divider",
-            maxHeight: "87vh",
+            height: "87vh",
             overflow: "auto",
             resize: "horizontal",
           }}
@@ -127,7 +135,10 @@ export default function TutorialViewerPanel({
             </Typography>
           </Box>
           {/* Step card - scrollable */}
-          <Box sx={{ flexGrow: 1, overflow: "auto", minHeight: 0, p: 2 }}>
+          <Box
+            sx={{ flexGrow: 1, overflow: "auto", minHeight: 0, p: 2 }}
+            ref={scrollContainerRef}
+          >
             <AnimatePresence mode="wait">
               {type === "finish" && (
                 <FinishedCard key="finished" tutorial={tutorial} />
