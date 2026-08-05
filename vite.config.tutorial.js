@@ -19,7 +19,6 @@ export default defineConfig({
     rollupOptions: {
       output: {
         inlineDynamicImports: true,
-        entryFileNames: "[name].js",
         assetFileNames: "[name].[ext]",
       },
     },
