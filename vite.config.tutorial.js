@@ -13,7 +13,7 @@ export default defineConfig({
         "src/widgets/TutorialClassification/index.jsx",
       ),
       name: "TutorialClassificationWidget",
-      fileName: () => `tutorial-classification-widget.js`,
+      fileName: () => `tutorial.js`,
       formats: ["iife"],
     },
     rollupOptions: {
