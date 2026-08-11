@@ -49,6 +49,8 @@ import {
   faEarthAmericas,
   faCaretDown,
   faEye,
+  faPlug,
+  faCircleCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -56,6 +58,8 @@ import { setLanguage } from "../actions/generalActions";
 import { setBoard } from "../actions/boardAction";
 import { De } from "./Blockly/msg/de";
 import { En } from "./Blockly/msg/en";
+import { useFlash } from "./Workspace/ToolbarItems/CompileAndUploadDialog/useFlash";
+import ConnectDeviceDialog from "./Workspace/ToolbarItems/CompileAndUploadDialog/ConnectDeviceDialog";
 
 const useStyles = makeStyles((theme) => ({
   drawerWidth: {
@@ -94,6 +98,15 @@ const Navbar = () => {
   const [anchorElLang, setAnchorElLang] = useState(null);
   const [anchorElBoard, setAnchorElBoard] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
+
+  // Device connection (Web Serial) shared with the compile button. The actual
+  // connect + bootloader-preparation flow is guided by the ConnectDeviceDialog.
+  const {
+    supported: serialSupported,
+    connected: deviceConnected,
+    resetDevice,
+  } = useFlash();
+  const [connectDialogOpen, setConnectDialogOpen] = useState(false);
 
   // on mount: handle ?tour
   useEffect(() => {
@@ -143,6 +156,10 @@ const Navbar = () => {
 
   return (
     <div>
+      <ConnectDeviceDialog
+        open={connectDialogOpen}
+        onClose={() => setConnectDialogOpen(false)}
+      />
       <AppBar
         position="relative"
         classes={{ root: classes.appBarColor }}
@@ -287,6 +304,56 @@ const Navbar = () => {
                     English
                   </MenuItem>
                 </Menu>
+              </div>
+            )}
+
+            {isHome && serialSupported && (
+              <div style={{ padding: "12px" }}>
+                {deviceConnected ? (
+                  <Tooltip title={Blockly.Msg.navbar_disconnect_device} arrow>
+                    <Button
+                      id="navbar-device-connect"
+                      onClick={resetDevice}
+                      startIcon={<FontAwesomeIcon icon={faCircleCheck} />}
+                      sx={{
+                        display: { xs: "none", sm: "none", md: "flex" },
+                      }}
+                      style={{
+                        textTransform: "none",
+                        cursor: "pointer",
+                        alignItems: "center",
+                        background: "white",
+                        color: "#4EAF47",
+                        fontWeight: "bold",
+                        border: "2px solid white",
+                        borderRadius: "25px",
+                      }}
+                    >
+                      {Blockly.Msg.navbar_device_connected}
+                    </Button>
+                  </Tooltip>
+                ) : (
+                  <Button
+                    id="navbar-device-connect"
+                    onClick={() => setConnectDialogOpen(true)}
+                    startIcon={<FontAwesomeIcon icon={faPlug} />}
+                    sx={{
+                      display: { xs: "none", sm: "none", md: "flex" },
+                    }}
+                    style={{
+                      textTransform: "none",
+                      cursor: "pointer",
+                      alignItems: "center",
+                      background: "transparent",
+                      color: "inherit",
+                      fontWeight: "bold",
+                      border: "2px solid white",
+                      borderRadius: "25px",
+                    }}
+                  >
+                    {Blockly.Msg.navbar_connect_device}
+                  </Button>
+                )}
               </div>
             )}
 

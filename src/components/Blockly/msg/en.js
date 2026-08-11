@@ -30,6 +30,7 @@ import { VARIABLES } from "./en/variables";
 import { WEBSERVER } from "./en/webserver";
 import { FLUOROASM } from "./en/fluoroASM";
 import { CUSTOM_FUNCTIONS } from "./en/custom-functions";
+import { COMPILE_DIALOG } from "./en/compile-dialog";
 
 export const En = {
   ...AUDIO,
@@ -64,4 +65,5 @@ export const En = {
   ...WEBSERVER,
   ...FLUOROASM,
   ...CUSTOM_FUNCTIONS,
+  ...COMPILE_DIALOG,
 };
