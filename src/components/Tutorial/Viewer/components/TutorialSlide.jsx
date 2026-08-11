@@ -7,7 +7,7 @@ const variants = {
   exit: { opacity: 0, x: -100 },
 };
 
-const TutorialSlide = ({ children, title, stepNumber }) => {
+const TutorialSlide = ({ children }) => {
   return (
     <motion.div
       variants={variants}
@@ -17,7 +17,7 @@ const TutorialSlide = ({ children, title, stepNumber }) => {
       transition={{ duration: 0.4 }}
       style={{
         width: "100%",
-        height: "100%",
+        height: "auto",
         display: "flex",
         justifyContent: "center",
       }}
@@ -30,26 +30,9 @@ const TutorialSlide = ({ children, title, stepNumber }) => {
       >
         <CardContent
           sx={{
-            height: "100%",
             flexDirection: "column",
           }}
         >
-          {(title || stepNumber !== undefined) && (
-            <Box
-              sx={{
-                border: "1px solid #ddd",
-                borderRadius: "10%",
-                display: "inline-flex",
-                textAlign: "center",
-                fontWeight: "600",
-                fontSize: "0.9rem",
-                p: 0.5,
-                mb: 2,
-              }}
-            >
-              {title ? title : `Schritt ${stepNumber}`}
-            </Box>
-          )}
           <Box
             sx={{
               border: "1px solid #ddd",
