@@ -1,0 +1,366 @@
+/* Animations and styling for the Compile-and-Upload wizard. */
+
+/* ----- Step layout ----- */
+.cau-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+  text-align: center;
+  padding: 0.5rem 0;
+  animation: cau-fade-in-up 0.35s ease-out both;
+}
+
+.cau-step__title {
+  margin: 0;
+  font-weight: 600;
+}
+
+.cau-step__text {
+  margin: 0;
+  max-width: 360px;
+  color: rgba(0, 0, 0, 0.6);
+  line-height: 1.4;
+}
+
+@keyframes cau-fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ----- Spinner with centred icon ----- */
+.cau-spinner {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cau-spinner__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 4px solid rgba(78, 175, 71, 0.18);
+  border-top-color: #4eaf47;
+  animation: cau-spin 0.9s linear infinite;
+}
+
+.cau-spinner__icon {
+  color: #4eaf47;
+  animation: cau-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes cau-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes cau-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+}
+
+/* ----- Animated checkmark ----- */
+.cau-check {
+  animation: cau-pop 0.35s ease-out both;
+}
+
+.cau-check__circle {
+  stroke-dasharray: 151;
+  stroke-dashoffset: 151;
+  animation: cau-draw 0.5s ease-out forwards;
+}
+
+.cau-check__mark {
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: cau-draw 0.3s 0.45s ease-out forwards;
+}
+
+/* ----- Animated cross (error) ----- */
+.cau-cross {
+  animation: cau-pop 0.35s ease-out both;
+}
+
+.cau-cross__circle {
+  stroke-dasharray: 151;
+  stroke-dashoffset: 151;
+  animation: cau-draw 0.5s ease-out forwards;
+}
+
+.cau-cross__line {
+  stroke-dasharray: 26;
+  stroke-dashoffset: 26;
+  animation: cau-draw 0.25s 0.45s ease-out forwards;
+}
+
+.cau-cross__line--second {
+  animation-delay: 0.62s;
+}
+
+@keyframes cau-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes cau-pop {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ----- Progress bar that morphs into a check ----- */
+.cau-progress {
+  width: 100%;
+  max-width: 320px;
+}
+
+.cau-progress__track {
+  position: relative;
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(78, 175, 71, 0.15);
+  overflow: hidden;
+}
+
+.cau-progress__fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #4eaf47, #6fcf67);
+  transition: width 0.3s ease-out;
+}
+
+/* Soft shimmer travelling across the fill while uploading. */
+.cau-progress__fill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.45),
+    transparent
+  );
+  transform: translateX(-100%);
+  animation: cau-shimmer 1.2s ease-in-out infinite;
+}
+
+.cau-progress__value {
+  margin-top: 0.4rem;
+  font-size: 0.8rem;
+  color: rgba(0, 0, 0, 0.55);
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes cau-shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* ----- Friendly button ----- */
+.cau-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: none;
+  cursor: pointer;
+  padding: 0.6rem 1.4rem;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  background: #4eaf47;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease;
+  box-shadow: 0 2px 8px rgba(78, 175, 71, 0.35);
+}
+
+.cau-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(78, 175, 71, 0.45);
+}
+
+.cau-button:active {
+  transform: translateY(0);
+}
+
+.cau-button--secondary {
+  background: #3ab0e8;
+  box-shadow: 0 2px 8px rgba(58, 176, 232, 0.35);
+}
+
+.cau-button--secondary:hover {
+  box-shadow: 0 4px 12px rgba(58, 176, 232, 0.45);
+}
+
+.cau-button:disabled {
+  background: #c7c7c7;
+  box-shadow: none;
+  cursor: default;
+  transform: none;
+}
+
+/* ----- Inline error text ----- */
+.cau-error-text {
+  margin: 0;
+  max-width: 360px;
+  color: #c62828;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* ----- Detail Accordion ----- */
+.cau-accordion {
+  width: 100%;
+  max-width: 320px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fafafa;
+  opacity: 0.75;
+  transition: opacity 0.2s ease;
+}
+
+.cau-accordion:hover {
+  opacity: 0.95;
+}
+
+.cau-accordion__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  background: #f5f5f5;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.8rem;
+  color: rgba(0, 0, 0, 0.6);
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+  width: 100%;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.cau-accordion__header:hover {
+  background: #eeeeee;
+  color: rgba(0, 0, 0, 0.75);
+}
+
+.cau-accordion__header:active {
+  background: #e0e0e0;
+}
+
+.cau-accordion__icon {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin-left: 0.5rem;
+}
+
+.cau-accordion__icon--open {
+  transform: rotate(180deg);
+}
+
+.cau-accordion__content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cau-accordion__content--open {
+  max-height: 240px;
+}
+
+.cau-accordion__body {
+  padding: 0.75rem;
+  font-family: "Courier New", monospace;
+  font-size: 0.7rem;
+  line-height: 1.4;
+  color: rgba(0, 0, 0, 0.7);
+  background: #fff;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-y: auto;
+  max-height: 200px;
+  text-align: left;
+}
+
+.cau-accordion__body--error {
+  color: #b71c1c;
+  background: #ffebee;
+}
+
+.cau-accordion__body--log {
+  color: rgba(0, 0, 0, 0.65);
+  background: #f9f9f9;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cau-step,
+  .cau-check,
+  .cau-cross,
+  .cau-check__circle,
+  .cau-check__mark,
+  .cau-cross__circle,
+  .cau-cross__line,
+  .cau-spinner__ring,
+  .cau-spinner__icon,
+  .cau-progress__fill::after,
+  .cau-accordion__icon,
+  .cau-accordion__content {
+    animation: none;
+    transition: none;
+  }
+
+  .cau-check__circle,
+  .cau-check__mark,
+  .cau-cross__circle,
+  .cau-cross__line {
+    stroke-dashoffset: 0;
+  }
+
+  .cau-accordion__content--open {
+    max-height: 280px;
+  }
+}
