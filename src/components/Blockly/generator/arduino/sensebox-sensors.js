@@ -1024,10 +1024,7 @@ Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_accelerometer"] =
   function () {
     var code = "";
     var dropdown = this.getFieldValue("value");
-    const wire =
-      selectedBoard().title === "MCU-Eye" || selectedBoard().title === "MCU-S2"
-        ? "Wire1"
-        : "Wire";
+    const wire = selectedBoard().title === "MCU-Eye" ? "Wire" : "Wire1";
     Blockly.Generator.Arduino.libraries_["esp32s2_mpu6050"] =
       `#include <Adafruit_MPU6050.h>`;
     Blockly.Generator.Arduino.libraries_["esp32s2_icm42670"] =
