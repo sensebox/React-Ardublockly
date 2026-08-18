@@ -161,7 +161,6 @@ const OrientationClassificationTool = ({ hideHelp = false }) => {
             py: 4,
             pb: 10,
           }}
-          key={language}
         >
           <Box sx={{ mb: 4 }}>
             <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
