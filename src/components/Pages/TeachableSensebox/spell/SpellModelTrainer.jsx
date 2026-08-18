@@ -1110,16 +1110,28 @@ const SpellModelTrainer = ({
                   open={Boolean(dataMenuAnchor)}
                   onClose={() => setDataMenuAnchor(null)}
                 >
-                  <MenuItem
-                    onClick={() => {
-                      handleDownloadTrainingData();
-                      setDataMenuAnchor(null);
-                    }}
-                    disabled={!hasClassesWithSamples}
+                  <Tooltip
+                    title={
+                      !hasClassesWithSamples
+                        ? t.training.tooltip.captureRecordingsFirst
+                        : ""
+                    }
+                    arrow
+                    disableHoverListener={hasClassesWithSamples}
                   >
-                    <DownloadIcon fontSize="small" sx={{ mr: 1 }} />
-                    {t.training?.downloadData || "Download"}
-                  </MenuItem>
+                    <span>
+                      <MenuItem
+                        onClick={() => {
+                          handleDownloadTrainingData();
+                          setDataMenuAnchor(null);
+                        }}
+                        disabled={!hasClassesWithSamples}
+                      >
+                        <DownloadIcon fontSize="small" sx={{ mr: 1 }} />
+                        {t.training?.downloadData || "Download"}
+                      </MenuItem>
+                    </span>
+                  </Tooltip>
                   <MenuItem
                     onClick={() => {
                       setDataMenuAnchor(null);

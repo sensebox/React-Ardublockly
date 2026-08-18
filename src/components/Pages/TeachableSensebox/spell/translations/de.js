@@ -54,8 +54,8 @@ export const spellTranslations_de = {
     errorInvalidZip: "Ungültiges Zip-Dateiformat.",
     errorUploadFailed: "Das Hochladen der Zaubersprüche ist fehlgeschlagen.",
     errorWrongFormat: "Diese Zip-Datei enthält keine gültigen Zauberspüche.",
-    downloadData: "Herunterladen",
-    uploadData: "Hochladen",
+    downloadData: "Zaubersprüche herunterladen",
+    uploadData: "Zaubersprüche hochladen",
 
     tooltip: {
       helpMain: "Was ist Zauberspruch-Erkennung?",
@@ -72,6 +72,8 @@ export const spellTranslations_de = {
       classNameExists: "Ein Zauberspruch mit diesem Namen existiert bereits",
       desirableNumberSamples:
         "Empfehlung: Mindestens 8 Aufnahmen pro Zauberspruch",
+      captureRecordingsFirst: "Nimm erst ein paar Zaubersprüche auf",
+      minSpellsRequired: "Füge erst mindestens 2 Zaubersprüche hinzu",
     },
   },
 

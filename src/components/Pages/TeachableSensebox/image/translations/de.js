@@ -82,6 +82,8 @@ export const imageClassificationTranslations_de = {
       helpTrainingSettings: "Hilfe zu den Trainingseinstellungen",
       trainingSettings: "Trainingseinstellungen",
       desirableNumberSamples: "Empfehlung: Mindestens 100 Bilder pro Klasse",
+      minClassesRequired: "Füge erst mindestens 2 Klassen hinzu",
+      captureImagesFirst: "Nimm erst ein paar Bilder auf",
     },
   },
   help: {

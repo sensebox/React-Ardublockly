@@ -80,6 +80,8 @@ export const imageClassificationTranslations_en = {
       helpTrainingSettings: "Help for training settings",
       trainingSettings: "Help for training settings",
       desirableNumberSamples: "Recommendation: At least 100 images per class",
+      minClassesRequired: "Add at least 2 classes first",
+      captureImagesFirst: "Capture a few images first",
     },
   },
   integration: {

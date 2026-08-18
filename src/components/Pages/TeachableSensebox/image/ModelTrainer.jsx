@@ -1152,16 +1152,28 @@ const ModelTrainer = ({
                 open={Boolean(dataMenuAnchor)}
                 onClose={() => setDataMenuAnchor(null)}
               >
-                <MenuItem
-                  onClick={() => {
-                    handleDownloadTrainingData();
-                    setDataMenuAnchor(null);
-                  }}
-                  disabled={!hasClassesWithSamples}
+                <Tooltip
+                  title={
+                    !hasClassesWithSamples
+                      ? t.training.tooltip.captureImagesFirst
+                      : ""
+                  }
+                  arrow
+                  disableHoverListener={hasClassesWithSamples}
                 >
-                  <DownloadIcon fontSize="small" sx={{ mr: 1 }} />
-                  {t.training?.downloadData || "Download"}
-                </MenuItem>
+                  <span>
+                    <MenuItem
+                      onClick={() => {
+                        handleDownloadTrainingData();
+                        setDataMenuAnchor(null);
+                      }}
+                      disabled={!hasClassesWithSamples}
+                    >
+                      <DownloadIcon fontSize="small" sx={{ mr: 1 }} />
+                      {t.training?.downloadData || "Download"}
+                    </MenuItem>
+                  </span>
+                </Tooltip>
                 <MenuItem
                   onClick={() => {
                     setDataMenuAnchor(null);
@@ -1171,22 +1183,35 @@ const ModelTrainer = ({
                   <UploadIcon fontSize="small" sx={{ mr: 1 }} />
                   {t.training?.uploadData || "Upload"}
                 </MenuItem>
-                <MenuItem
-                  onClick={() => {
-                    handleDownloadCollectSketch();
-                    setDataMenuAnchor(null);
-                  }}
-                  disabled={
-                    classes.length <= 1 || disabled || isDownloadingCollect
+                <Tooltip
+                  title={
+                    classes.length <= 1
+                      ? t.training.tooltip.minClassesRequired
+                      : ""
                   }
+                  arrow
+                  disableHoverListener={!(classes.length <= 1)}
                 >
-                  {isDownloadingCollect ? (
-                    <CircularProgress size={16} sx={{ mr: 1 }} />
-                  ) : (
-                    <DownloadIcon fontSize="small" sx={{ mr: 1 }} />
-                  )}
-                  {t.training?.downloadTrainScript || "Download Collect-Sketch"}
-                </MenuItem>
+                  <span>
+                    <MenuItem
+                      onClick={() => {
+                        handleDownloadCollectSketch();
+                        setDataMenuAnchor(null);
+                      }}
+                      disabled={
+                        classes.length <= 1 || disabled || isDownloadingCollect
+                      }
+                    >
+                      {isDownloadingCollect ? (
+                        <CircularProgress size={16} sx={{ mr: 1 }} />
+                      ) : (
+                        <DownloadIcon fontSize="small" sx={{ mr: 1 }} />
+                      )}
+                      {t.training?.downloadTrainScript ||
+                        "Download Collect-Sketch"}
+                    </MenuItem>
+                  </span>
+                </Tooltip>
               </Menu>
               <HelpButton
                 onClick={() => {
