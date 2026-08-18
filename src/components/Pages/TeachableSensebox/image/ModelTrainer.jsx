@@ -33,6 +33,8 @@ import {
   FormControlLabel,
   Collapse,
   Alert,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import {
   Add as AddIcon,
@@ -57,7 +59,10 @@ import ExpandedClassDialog from "./ExpandedClassDialog";
 import useModelTraining from "./hooks/useModelTraining";
 import { DEFAULT_TRAINING_SETTINGS } from "./hooks/useModelTraining";
 import useModelPrediction from "./hooks/useModelPrediction";
-import { downloadCameraFirmware } from "../utils/firmwareDownload";
+import {
+  downloadCameraFirmware,
+  downloadCollectFirmware,
+} from "../utils/firmwareDownload";
 import {
   downloadTrainingData,
   parseTrainingDataZip,
@@ -92,6 +97,7 @@ const ModelTrainer = ({
   );
   const [browserCompatible, setBrowserCompatible] = useState(true);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [isDownloadingCollect, setIsDownloadingCollect] = useState(false);
   const [isFloatingPreviewCollapsed, setIsFloatingPreviewCollapsed] =
     useState(false);
   const [trainedWithEnoughSamples, setTrainedWithEnoughSamples] =
@@ -103,6 +109,8 @@ const ModelTrainer = ({
     DEFAULT_TRAINING_SETTINGS,
   );
   const [uploadError, setUploadError] = useState(null);
+  const [dataMenuAnchor, setDataMenuAnchor] = useState(null);
+  const uploadInputRef = useRef(null);
 
   const language = useSelector((s) => s.general.language);
   const t = getImageTranslations(language);
@@ -359,6 +367,18 @@ const ModelTrainer = ({
       alert(`Failed to download firmware: ${result.error}`);
     }
     setIsDownloading(false);
+  };
+
+  const handleDownloadCollectSketch = async () => {
+    setIsDownloadingCollect(true);
+    const result = await downloadCollectFirmware(
+      "sensebox_mcu_eye",
+      classes.map((cls) => cls.name),
+    );
+    if (!result.success) {
+      alert(`Failed to download collect sketch: ${result.error}`);
+    }
+    setIsDownloadingCollect(false);
   };
 
   const addClass = useCallback(() => {
@@ -1082,59 +1102,100 @@ const ModelTrainer = ({
               gap: 2,
             }}
           >
-            {classes.length < 4 && (
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                <Button
-                  variant="contained"
-                  startIcon={<AddIcon />}
-                  onClick={() => setShowAddDialog(true)}
-                  disabled={disabled}
-                >
-                  {t.training.addClass}
-                </Button>
-                <HelpButton
-                  onClick={() => {
-                    markAddClassSeen();
-                    onOpenHelp && onOpenHelp("image/addClass");
-                  }}
-                  isBlinking={addClassBlinking}
-                  tooltip={t.training.tooltip.helpClasses}
-                />
-              </Box>
-            )}
-
-            {/* Download/Upload Training Data Buttons */}
-            <Box sx={{ display: "flex", gap: 1 }}>
+            {/* Add Class Button with Data Menu Dropdown */}
+            <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
               <Button
-                variant="outlined"
-                startIcon={<DownloadIcon />}
-                onClick={handleDownloadTrainingData}
-                disabled={disabled || !hasClassesWithSamples}
+                variant="contained"
+                startIcon={<AddIcon />}
+                onClick={() => setShowAddDialog(true)}
+                disabled={classes.length >= 4 || disabled}
                 sx={{
-                  bgcolor: "white",
-                  "&:hover": { bgcolor: "grey.100" },
+                  borderRadius: "4px 0 0 4px",
+                  height: "42px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
-                {t.training?.downloadData || "Download"}
+                {t.training.addClass}
               </Button>
               <Button
-                variant="outlined"
-                component="label"
-                startIcon={<UploadIcon />}
+                variant="contained"
+                size="small"
+                onClick={(e) => setDataMenuAnchor(e.currentTarget)}
                 disabled={disabled}
                 sx={{
-                  bgcolor: "white",
-                  "&:hover": { bgcolor: "grey.100" },
+                  minWidth: "auto",
+                  marginLeft: "-2px",
+                  height: "42px",
+                  padding: "0 6px",
+                  borderRadius: "0 4px 4px 0",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  "&:hover": {
+                    backgroundColor: "success.dark",
+                  },
+                  "&:disabled": {
+                    backgroundColor: "action.disabled",
+                  },
                 }}
               >
-                {t.training?.uploadData || "Upload"}
-                <input
-                  type="file"
-                  accept=".zip"
-                  hidden
-                  onChange={handleUploadTrainingData}
-                />
+                {isDownloadingCollect ? (
+                  <CircularProgress size={16} sx={{ color: "white" }} />
+                ) : (
+                  <MoreVertIcon fontSize="small" />
+                )}
               </Button>
+              <Menu
+                anchorEl={dataMenuAnchor}
+                open={Boolean(dataMenuAnchor)}
+                onClose={() => setDataMenuAnchor(null)}
+              >
+                <MenuItem
+                  onClick={() => {
+                    handleDownloadTrainingData();
+                    setDataMenuAnchor(null);
+                  }}
+                  disabled={!hasClassesWithSamples}
+                >
+                  <DownloadIcon fontSize="small" sx={{ mr: 1 }} />
+                  {t.training?.downloadData || "Download"}
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    setDataMenuAnchor(null);
+                    uploadInputRef.current?.click();
+                  }}
+                >
+                  <UploadIcon fontSize="small" sx={{ mr: 1 }} />
+                  {t.training?.uploadData || "Upload"}
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    handleDownloadCollectSketch();
+                    setDataMenuAnchor(null);
+                  }}
+                  disabled={
+                    classes.length <= 1 || disabled || isDownloadingCollect
+                  }
+                >
+                  {isDownloadingCollect ? (
+                    <CircularProgress size={16} sx={{ mr: 1 }} />
+                  ) : (
+                    <DownloadIcon fontSize="small" sx={{ mr: 1 }} />
+                  )}
+                  {t.training?.downloadTrainScript || "Download Collect-Sketch"}
+                </MenuItem>
+              </Menu>
+              <HelpButton
+                onClick={() => {
+                  markAddClassSeen();
+                  onOpenHelp && onOpenHelp("image/addClass");
+                }}
+                isBlinking={addClassBlinking}
+                tooltip={t.training.tooltip.helpClasses}
+              />
             </Box>
 
             {/* Upload Error Message */}
@@ -1179,6 +1240,13 @@ const ModelTrainer = ({
                       classes.length < 2 ||
                       classes.some((cls) => cls.samples.length < 2)
                     }
+                    sx={{
+                      borderRadius: "4px 0 0 4px",
+                      height: "42px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
                   >
                     {t.training.trainModel}
                   </Button>
@@ -1186,14 +1254,30 @@ const ModelTrainer = ({
               </Tooltip>
 
               <Tooltip title={t.training.tooltip.trainingSettings} arrow>
-                <IconButton
+                <Button
+                  variant="contained"
+                  size="large"
                   onClick={() => setShowSettingsPanel((prev) => !prev)}
                   disabled={disabled || isTraining}
-                  size="small"
-                  color={showSettingsPanel ? "primary" : "default"}
+                  sx={{
+                    minWidth: "auto",
+                    marginLeft: "-6px",
+                    height: "42px",
+                    padding: "0 6px",
+                    borderRadius: "0 4px 4px 0",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    "&:hover": {
+                      backgroundColor: "success.dark",
+                    },
+                    "&:disabled": {
+                      backgroundColor: "action.disabled",
+                    },
+                  }}
                 >
-                  <MoreVertIcon />
-                </IconButton>
+                  <MoreVertIcon fontSize="small" />
+                </Button>
               </Tooltip>
 
               <HelpButton
@@ -1447,6 +1531,14 @@ const ModelTrainer = ({
         onPrev={showPrev}
         onNext={showNext}
         onDelete={removeCurrentLightboxImage}
+      />
+
+      <input
+        ref={uploadInputRef}
+        type="file"
+        accept=".zip"
+        hidden
+        onChange={handleUploadTrainingData}
       />
     </Box>
   );

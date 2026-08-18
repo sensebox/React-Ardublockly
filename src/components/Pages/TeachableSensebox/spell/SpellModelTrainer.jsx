@@ -24,6 +24,8 @@ import {
   Paper,
   Divider,
   Alert,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import {
   Add as AddIcon,
@@ -33,6 +35,7 @@ import {
   Download as DownloadIcon,
   Upload as UploadIcon,
   Bluetooth as BluetoothIcon,
+  MoreVert as MoreVertIcon,
 } from "@mui/icons-material";
 import useSpellSource from "./hooks/useSpellSource";
 import useSpellBLESource, { StrokeState } from "./hooks/useSpellBLESource";
@@ -464,6 +467,8 @@ const SpellModelTrainer = ({
   // Receptive field overlay for the live stroke canvas (set by NeuralNetworkVisualization hover)
   const [receptiveField, setReceptiveField] = useState(null);
   const [uploadError, setUploadError] = useState(null);
+  const [dataMenuAnchor, setDataMenuAnchor] = useState(null);
+  const uploadInputRef = useRef(null);
 
   const language = useSelector((s) => s.general.language);
   const t = getSpellTranslations(language);
@@ -1066,9 +1071,65 @@ const SpellModelTrainer = ({
                   startIcon={<AddIcon />}
                   onClick={() => setShowAddDialog(true)}
                   disabled={disabled}
+                  sx={{
+                    borderRadius: "4px 0 0 4px",
+                    height: "42px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
                 >
                   {t.training?.addClass || "Add Class"}
                 </Button>
+                <Button
+                  variant="contained"
+                  size="small"
+                  onClick={(e) => setDataMenuAnchor(e.currentTarget)}
+                  disabled={disabled}
+                  sx={{
+                    minWidth: "auto",
+                    height: "42px",
+                    padding: "0 6px",
+                    marginLeft: "-6px",
+                    display: "flex",
+                    borderRadius: "0 4px 4px 0",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    "&:hover": {
+                      backgroundColor: "success.dark",
+                    },
+                    "&:disabled": {
+                      backgroundColor: "action.disabled",
+                    },
+                  }}
+                >
+                  <MoreVertIcon fontSize="small" />
+                </Button>
+                <Menu
+                  anchorEl={dataMenuAnchor}
+                  open={Boolean(dataMenuAnchor)}
+                  onClose={() => setDataMenuAnchor(null)}
+                >
+                  <MenuItem
+                    onClick={() => {
+                      handleDownloadTrainingData();
+                      setDataMenuAnchor(null);
+                    }}
+                    disabled={!hasClassesWithSamples}
+                  >
+                    <DownloadIcon fontSize="small" sx={{ mr: 1 }} />
+                    {t.training?.downloadData || "Download"}
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      setDataMenuAnchor(null);
+                      uploadInputRef.current?.click();
+                    }}
+                  >
+                    <UploadIcon fontSize="small" sx={{ mr: 1 }} />
+                    {t.training?.uploadData || "Upload"}
+                  </MenuItem>
+                </Menu>
                 <HelpButton
                   onClick={() => {
                     markAddClassSeen();
@@ -1081,40 +1142,6 @@ const SpellModelTrainer = ({
                 />
               </Box>
             )}
-
-            {/* Download/Upload Training Data Buttons */}
-            <Box sx={{ display: "flex", gap: 1 }}>
-              <Button
-                variant="outlined"
-                startIcon={<DownloadIcon />}
-                onClick={handleDownloadTrainingData}
-                disabled={disabled || !hasClassesWithSamples}
-                sx={{
-                  bgcolor: "white",
-                  "&:hover": { bgcolor: "grey.100" },
-                }}
-              >
-                {t.training?.downloadData || "Download"}
-              </Button>
-              <Button
-                variant="outlined"
-                component="label"
-                startIcon={<UploadIcon />}
-                disabled={disabled}
-                sx={{
-                  bgcolor: "white",
-                  "&:hover": { bgcolor: "grey.100" },
-                }}
-              >
-                {t.training?.uploadData || "Upload"}
-                <input
-                  type="file"
-                  accept=".zip"
-                  hidden
-                  onChange={handleUploadTrainingData}
-                />
-              </Button>
-            </Box>
 
             {/* Upload Error Message */}
             {uploadError && (
@@ -1298,6 +1325,14 @@ const SpellModelTrainer = ({
           </Tooltip>
         </DialogActions>
       </Dialog>
+
+      <input
+        ref={uploadInputRef}
+        type="file"
+        accept=".zip"
+        hidden
+        onChange={handleUploadTrainingData}
+      />
     </Box>
   );
 };
