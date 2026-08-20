@@ -92,12 +92,12 @@ export default function TutorialViewerPanel({
         {/* Left: tutorial step card + nav */}
         <Box
           sx={{
-            width: "30vw",
+            width: classificationType ? "30vw" : "100%",
             minWidth: "350px",
-            maxWidth: "50vw",
+            maxWidth: classificationType ? "50vw" : "none",
             display: "flex",
             flexDirection: "column",
-            borderRight: "1px solid",
+            borderRight: classificationType ? "1px solid" : "none",
             borderColor: "divider",
             height: "87vh",
             overflow: "auto",
@@ -202,17 +202,19 @@ export default function TutorialViewerPanel({
         </Box>
 
         {/* Right: classification widget */}
-        <Box
-          sx={{
-            flex: 1,
-            overflow: "auto",
-            minHeight: 0,
-            height: "87vh",
-            padding: "32px",
-          }}
-        >
-          <ClassificationPanel type={classificationType} />
-        </Box>
+        {classificationType && (
+          <Box
+            sx={{
+              flex: 1,
+              overflow: "auto",
+              minHeight: 0,
+              height: "87vh",
+              padding: "32px",
+            }}
+          >
+            <ClassificationPanel type={classificationType} />
+          </Box>
+        )}
       </Box>
     </Box>
   );
@@ -220,7 +222,7 @@ export default function TutorialViewerPanel({
 
 TutorialViewerPanel.propTypes = {
   tutorialId: PropTypes.string.isRequired,
-  classificationType: PropTypes.oneOf(["image", "spell", "orientation"])
+  classificationType: PropTypes.oneOf(["image", "spell", "orientation", ""])
     .isRequired,
   groupName: PropTypes.string,
   onBack: PropTypes.func.isRequired,
