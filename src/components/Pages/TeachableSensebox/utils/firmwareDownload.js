@@ -49,7 +49,7 @@ export async function downloadCameraFirmware(
 }
 
 /**
- * Downloads the camera capture firmware binary
+ * Downloads the image collection ("collect") firmware binary
  * @param {string} boardType - Board type (default: "sensebox_mcu_eye")
  * @param {string[]} classNames - List of class names
  * @returns {Promise<{success: boolean, error?: string}>}
