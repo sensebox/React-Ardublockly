@@ -25,7 +25,7 @@ const TeachableSenseboxLanding = () => {
   const theme = useTheme();
 
   return (
-    <Container maxWidth="lg" sx={{ py: 6 }} key={language}>
+    <Container maxWidth="lg" sx={{ py: 6 }}>
       <Box sx={{ mb: 6, textAlign: "center" }}>
         <Typography variant="h3" component="h1" gutterBottom>
           {t.landing.title}

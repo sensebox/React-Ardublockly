@@ -56,8 +56,8 @@ export const spellTranslations_en = {
     errorInvalidZip: "Invalid zip file format.",
     errorUploadFailed: "Failed to upload spells.",
     errorWrongFormat: "This zip file does not contain valid spells.",
-    downloadData: "Download",
-    uploadData: "Upload",
+    downloadData: "Download Spells",
+    uploadData: "Upload Spells",
 
     tooltip: {
       helpMain: "What is spell recognition?",
@@ -71,6 +71,8 @@ export const spellTranslations_en = {
       startConnection: "Connect your senseBox first to record spells",
       classNameExists: "A spell with this name already exists",
       desirableNumberSamples: "Recommendation: At least 8 recordings per spell",
+      captureRecordingsFirst: "Capture a few spells first",
+      minSpellsRequired: "Add at least 2 spells first",
     },
   },
 

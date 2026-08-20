@@ -75,6 +75,7 @@ const ConvertDeployBase = ({
     conversionData: null,
     binaryData: null,
     binarySize: null,
+    showSuccess: true,
   });
 
   // Track the model that was converted to detect retraining
@@ -318,6 +319,7 @@ const ConvertDeployBase = ({
         error: null,
         binaryData: compilationResult.data.binaryData,
         binarySize: compilationResult.data.binarySize,
+        showSuccess: true,
       }));
     } catch (error) {
       setWorkflowState((prev) => ({
@@ -353,6 +355,7 @@ const ConvertDeployBase = ({
       conversionData: null,
       binaryData: null,
       binarySize: null,
+      showSuccess: true,
     });
     convertedModelRef.current = null;
     setModelWasRetrained(false);
@@ -563,16 +566,24 @@ const ConvertDeployBase = ({
         )}
 
       {/* Success Message after binary download */}
-      {workflowState.currentStep === "complete" && workflowState.binaryData && (
-        <Alert severity="success" sx={{ mb: 3 }}>
-          <Typography variant="subtitle2" gutterBottom>
-            {t.integration.successBinaryDownloaded}
-          </Typography>
-          <Typography variant="body2">
-            {t.integration.successBinaryDescription}
-          </Typography>
-        </Alert>
-      )}
+      {workflowState.currentStep === "complete" &&
+        workflowState.binaryData &&
+        workflowState.showSuccess && (
+          <Alert
+            severity="success"
+            sx={{ mb: 3 }}
+            onClose={() =>
+              setWorkflowState((prev) => ({ ...prev, showSuccess: false }))
+            }
+          >
+            <Typography variant="subtitle2" gutterBottom>
+              {t.integration.successBinaryDownloaded}
+            </Typography>
+            <Typography variant="body2">
+              {t.integration.successBinaryDescription}
+            </Typography>
+          </Alert>
+        )}
     </Box>
   );
 };
