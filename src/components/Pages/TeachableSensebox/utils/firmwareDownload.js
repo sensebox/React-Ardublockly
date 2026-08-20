@@ -93,10 +93,7 @@ export async function downloadCollectFirmware(
     } else if (Array.isArray(data.binaryData)) {
       // Already an array of bytes
       bytes = new Uint8Array(data.binaryData);
-    } else if (data.binaryData instanceof Uint8Array) {
-      bytes = data.binaryData;
     } else {
-      console.error(
         "Unexpected binaryData type:",
         typeof data.binaryData,
         "data:",
