@@ -1,4 +1,7 @@
 import * as Blockly from "blockly/core";
+import * as Types from "@/components/Blockly/helpers/types";
+import { getColour } from "../../helpers/colour";
+import "@/components/Blockly/fields/ToggleColourField";
 
 const FONT_SIZE_CONFIG = {
   s: { size: 6, lineHeight: 8, maxLines: 6 },
@@ -329,3 +332,298 @@ Blockly.Blocks["display_show_measurement"] = {
     }
   },
 };
+
+Blockly.defineBlocksWithJsonArray([
+  {
+    type: "display_draw_bitmap_basic",
+    message0:
+      "Paint a custom Bitmap %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12 %13 %14 %15 %16 %17 %18 %19 %20 %21 %22 %23 %24 %25 %26 %27 %28 %29 %30 %31 %32 %33 %34 %35 %36 %37 %38 %39 %40 %41 %42 %43 %44 %45 %46 %47 %48 %49 %50 %51 %52 %53 %54 %55 %56 %57 %58 %59 %60 %61 %62 %63 %64 %65 %66 %67 %68 %69 %70 %71 %72",
+    args0: [
+      {
+        type: "input_dummy",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "1,1",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "1,2",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "1,3",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "1,4",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "1,5",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "1,6",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "1,7",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "1,8",
+      },
+      {
+        type: "input_dummy",
+      },
+      {
+        name: "2,1",
+        type: "field_toggle_colour",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "2,2",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "2,3",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "2,4",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "2,5",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "2,6",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "2,7",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "2,8",
+      },
+      {
+        type: "input_dummy",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "3,1",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "3,2",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "3,3",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "3,4",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "3,5",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "3,6",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "3,7",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "3,8",
+      },
+      {
+        type: "input_dummy",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "4,1",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "4,2",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "4,3",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "4,4",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "4,5",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "4,6",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "4,7",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "4,8",
+      },
+      {
+        type: "input_dummy",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "5,1",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "5,2",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "5,3",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "5,4",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "5,5",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "5,6",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "5,7",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "5,8",
+      },
+      {
+        type: "input_dummy",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "6,1",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "6,2",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "6,3",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "6,4",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "6,5",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "6,6",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "6,7",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "6,8",
+      },
+      {
+        type: "input_dummy",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "7,1",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "7,2",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "7,3",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "7,4",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "7,5",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "7,6",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "7,7",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "7,8",
+      },
+      {
+        type: "input_dummy",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "8,1",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "8,2",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "8,3",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "8,4",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "8,5",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "8,6",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "8,7",
+      },
+      {
+        type: "field_toggle_colour",
+        name: "8,8",
+      },
+    ],
+    nextStatement: null,
+    previousStatement: null,
+    colour: getColour().sensebox,
+    tooltip: Blockly.Msg.senseBox_ws2812_rgb_matrix_draw_bitmap_tooltip,
+    helpUrl: Blockly.Msg.senseBox_ws2812_rgb_matrix_helpurl,
+  },
+]);

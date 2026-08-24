@@ -54,6 +54,11 @@ const displayCategory = {
       type: "text_join",
       tooltip: "Vereinige mehrere Texte zusammen.",
     },
+    {
+      kind: "block",
+      type: "display_draw_bitmap_basic",
+      tooltip: "Paint a custom Bitmap on the display.",
+    },
   ],
 };
 

@@ -478,3 +478,24 @@ basicGenerator.forBlock["basic_send_humidity"] = function () {
 basicGenerator.forBlock["basic_send_air_quality"] = function () {
   return "sendBle(sensor:bme680:iaq, 3)\n";
 };
+
+basicGenerator.forBlock["display_draw_bitmap_basic"] = function (
+  block,
+  generator,
+) {
+  // Create an 8x8 bitmap from the color fields
+  // Each cell is converted to 0 (black) or 1 (white)
+  let bitmapStr = "";
+
+  for (let row = 1; row <= 8; row++) {
+    for (let col = 1; col <= 8; col++) {
+      const fieldName = `${row},${col}`;
+      const color = block.getFieldValue(fieldName) || "#000000";
+      // 1 for white (#ffffff), 0 for black (#000000)
+      bitmapStr += color === "#ffffff" ? "1" : "0";
+    }
+  }
+
+  // Generate code to display the 8x8 bitmap
+  return `displayBitmap("${bitmapStr}")\n`;
+};

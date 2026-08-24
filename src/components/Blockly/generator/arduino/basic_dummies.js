@@ -311,3 +311,10 @@ Blockly.Generator.Arduino.forBlock["basic_send_air_quality"] = function (
 ) {
   return ""; // nichts generieren
 };
+
+Blockly.Generator.Arduino.forBlock["display_draw_bitmap_basic"] = function (
+  _block,
+  _generator,
+) {
+  return ""; // nichts generieren
+};
