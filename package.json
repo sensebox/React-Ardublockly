@@ -42,7 +42,7 @@
     "framer-motion": "^6.5.1",
     "hast-util-to-parse5": "^8.0.1",
     "jszip": "^3.10.1",
-    "markdown-it": "^14.2.0",
+    "markdown-it": "^15.0.0",
     "mnemonic-id": "^4.1.0",
     "moment": "^2.29.4",
     "prismjs": "^1.27.0",
