@@ -290,6 +290,7 @@ const QuestionCard = ({
                   transition={{ duration: 0.2 }}
                 >
                   <Box
+                    onClick={() => !submitted && handleSelect(a.text)}
                     sx={{
                       border: `2px solid ${borderColor}`,
                       borderRadius: 2,
@@ -297,6 +298,7 @@ const QuestionCard = ({
                       p: 1.2,
                       transition: "all 0.25s ease",
                       backgroundColor: bgColor,
+                      cursor: submitted ? "default" : "pointer",
                       "&:hover": {
                         backgroundColor:
                           !submitted && theme.palette.action.hover,
@@ -304,18 +306,22 @@ const QuestionCard = ({
                     }}
                   >
                     <FormControlLabel
+                      onClick={(e) => e.stopPropagation()}
+                      sx={{ width: "100%", pointerEvents: "none" }}
                       control={
                         multipleChoice ? (
                           <Checkbox
                             checked={isSelected}
                             onChange={() => handleSelect(a.text)}
                             disabled={submitted}
+                            sx={{ pointerEvents: "auto" }}
                           />
                         ) : (
                           <Radio
                             checked={isSelected}
                             onChange={() => handleSelect(a.text)}
                             disabled={submitted}
+                            sx={{ pointerEvents: "auto" }}
                           />
                         )
                       }
