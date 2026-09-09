@@ -33,11 +33,14 @@ const Sidebar = () => {
   const [answerVersion, setAnswerVersion] = useState(0);
 
   useEffect(() => {
-    const handleAnswersUpdated = () => setAnswerVersion((v) => v + 1);
+    const handleAnswersUpdated = (event) => {
+      if (event.detail?.tutorialId !== tutorial._id) return;
+      setAnswerVersion((v) => v + 1);
+    };
     window.addEventListener(ANSWERS_UPDATED_EVENT, handleAnswersUpdated);
     return () =>
       window.removeEventListener(ANSWERS_UPDATED_EVENT, handleAnswersUpdated);
-  }, []);
+  }, [tutorial._id]);
 
   const answersMap = useMemo(() => {
     const answers = loadAnswers(tutorial._id);
@@ -45,7 +48,6 @@ const Sidebar = () => {
       map[answer._id] = answer;
       return map;
     }, {});
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tutorial._id, answerVersion]);
 
   const isQuestionStepCompleted = (step) => {

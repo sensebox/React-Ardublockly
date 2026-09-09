@@ -13,7 +13,11 @@ import {
 } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, Cancel, HelpOutline } from "@mui/icons-material";
-import { notifyAnswersUpdated } from "../helpers/tutorialStorageUtils";
+import {
+  loadAnswers,
+  upsertAnswer,
+  removeAnswer,
+} from "../helpers/tutorialStorageUtils";
 
 const QuestionCard = ({
   questionData,
@@ -30,52 +34,20 @@ const QuestionCard = ({
 
   const questionKey = `${stepId}_q${questionIndex}`;
 
-  const readSavedAnswers = () => {
-    try {
-      return (
-        JSON.parse(
-          window.localStorage.getItem(`tutorial_answers_${tutorialId}`),
-        ) || []
-      );
-    } catch (e) {
-      console.warn("Failed to load saved answer", e);
-      return [];
-    }
-  };
-
-  const writeSavedAnswers = (savedAnswers) => {
-    try {
-      window.localStorage.setItem(
-        `tutorial_answers_${tutorialId}`,
-        JSON.stringify(savedAnswers),
-      );
-      notifyAnswersUpdated(tutorialId);
-    } catch (e) {
-      console.warn("Failed to save answer to localStorage", e);
-    }
-  };
-
   const saveAnswer = (payload, correct) => {
     if (!stepId || !tutorialId) return;
-    const savedAnswers = readSavedAnswers();
-    const taskIndex = savedAnswers.findIndex((t) => t._id === questionKey);
-    const entry = {
-      _id: questionKey,
+    upsertAnswer(tutorialId, questionKey, {
       ...payload,
       type: correct ? "success" : "error",
-    };
-    if (taskIndex >= 0) {
-      savedAnswers[taskIndex] = entry;
-    } else {
-      savedAnswers.push(entry);
-    }
-    writeSavedAnswers(savedAnswers);
+    });
   };
 
   useEffect(() => {
     if (!stepId || !tutorialId) return;
 
-    const savedAnswer = readSavedAnswers().find((a) => a._id === questionKey);
+    const savedAnswer = loadAnswers(tutorialId).find(
+      (a) => a._id === questionKey,
+    );
     if (!savedAnswer) return;
 
     if (savedAnswer.freetextAnswer) {
@@ -175,9 +147,7 @@ const QuestionCard = ({
     onStatusChange(questionIndex, false);
 
     if (stepId && tutorialId) {
-      writeSavedAnswers(
-        readSavedAnswers().filter((a) => a._id !== questionKey),
-      );
+      removeAnswer(tutorialId, questionKey);
     }
   };
 
