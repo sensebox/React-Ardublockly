@@ -282,7 +282,7 @@ const ClassCardItem = memo(
               border: "1px solid",
               borderColor: "divider",
               borderRadius: 1,
-              bgcolor: "grey.50",
+              bgcolor: "background.grey",
             }}
           >
             {cls.samples.map((sample) => (
@@ -1095,12 +1095,6 @@ const SpellModelTrainer = ({
                     borderRadius: "0 4px 4px 0",
                     alignItems: "center",
                     justifyContent: "center",
-                    "&:hover": {
-                      backgroundColor: "success.dark",
-                    },
-                    "&:disabled": {
-                      backgroundColor: "action.disabled",
-                    },
                   }}
                 >
                   <MoreVertIcon fontSize="small" />
