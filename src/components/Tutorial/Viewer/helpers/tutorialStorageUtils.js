@@ -5,6 +5,18 @@
 
 const STORAGE_PREFIX = "tutorial_answers_";
 
+export const ANSWERS_UPDATED_EVENT = "tutorial-answers-updated";
+
+/**
+ * Notify listeners that the saved answers for a tutorial have changed
+ * @param {string} tutorialId - The tutorial ID
+ */
+export const notifyAnswersUpdated = (tutorialId) => {
+  window.dispatchEvent(
+    new CustomEvent(ANSWERS_UPDATED_EVENT, { detail: { tutorialId } }),
+  );
+};
+
 /**
  * Get the storage key for a tutorial
  * @param {string} tutorialId - The tutorial ID

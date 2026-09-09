@@ -1,4 +1,5 @@
 import MarkdownIt from "markdown-it";
+import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import TutorialSlide from "../components/TutorialSlide";
 import QuestionCard from "./QuestionCard";
@@ -62,6 +63,30 @@ const TaskCard = ({ step, setNextStepDisabled }) => {
   const activeStep = useSelector((state) => state.tutorial.activeStep);
   const tutorialId = useSelector((state) => state.tutorial.tutorials[0]?._id);
 
+  const isQuestionStep =
+    step.type === "question" && step.questionData?.length > 0;
+
+  const [questionStatus, setQuestionStatus] = useState({});
+
+  const handleQuestionStatusChange = useCallback((questionIndex, correct) => {
+    setQuestionStatus((prev) =>
+      prev[questionIndex] === correct
+        ? prev
+        : { ...prev, [questionIndex]: correct },
+    );
+  }, []);
+
+  useEffect(() => {
+    if (!isQuestionStep) {
+      setNextStepDisabled(false);
+      return;
+    }
+    const allAnswered = step.questionData.every(
+      (_, idx) => questionStatus[idx],
+    );
+    setNextStepDisabled(!allAnswered);
+  }, [isQuestionStep, questionStatus, step.questionData, setNextStepDisabled]);
+
   const svgToDataUrl = (svgString) =>
     "data:image/svg+xml;base64," +
     window.btoa(
@@ -72,7 +97,10 @@ const TaskCard = ({ step, setNextStepDisabled }) => {
 
   return (
     <TutorialSlide>
-      <div className="tutorial-markdown" dangerouslySetInnerHTML={{ __html: md.render(step.text) }} />
+      <div
+        className="tutorial-markdown"
+        dangerouslySetInnerHTML={{ __html: md.render(step.text) }}
+      />
       {step.type === "question" && step.questionData && (
         <Box
           sx={{
@@ -84,7 +112,7 @@ const TaskCard = ({ step, setNextStepDisabled }) => {
           {step.questionData.map((q, idx) => {
             return (
               <QuestionCard
-                setNextStepDisabled={setNextStepDisabled}
+                onStatusChange={handleQuestionStatusChange}
                 key={idx}
                 questionData={q}
                 stepId={step._id}
