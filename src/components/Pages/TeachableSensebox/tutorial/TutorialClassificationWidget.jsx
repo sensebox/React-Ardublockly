@@ -47,7 +47,11 @@ export default function TutorialClassificationWidget({ tutorials = [], mediaBase
 
   const handleBack = useCallback(() => {
     setSelected(null);
-    window.history.pushState({}, "", getTutorialBasePath());
+    window.history.pushState(
+      {},
+      "",
+      `${getTutorialBasePath()}${window.location.search}${window.location.hash}`,
+    );
   }, []);
 
   if (selected) {

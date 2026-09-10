@@ -10,18 +10,26 @@ const TUTORIAL_PARAM_REGEX = new RegExp(`/${TUTORIAL_URL_PARAM}:([^/]+)/?$`);
 // a single array of { id, type, _group } entries.
 export function normalizeTutorialConfigs(tutorialConfigs) {
   return Array.isArray(tutorialConfigs)
-    ? tutorialConfigs.flatMap((item) =>
-        item.group && Array.isArray(item.tutorials)
-          ? item.tutorials.map((t) => ({ ...t, _group: item.group }))
-          : item,
-      )
+    ? tutorialConfigs.flatMap((item) => {
+        if (item.group) {
+          return Array.isArray(item.tutorials)
+            ? item.tutorials.map((t) => ({ ...t, _group: item.group }))
+            : [];
+        }
+        return item;
+      })
     : [];
 }
 
 // Returns the tutorial id encoded in the current URL, or null if none.
 export function getTutorialIdFromUrl() {
   const match = window.location.pathname.match(TUTORIAL_PARAM_REGEX);
-  return match ? decodeURIComponent(match[1]) : null;
+  if (!match) return null;
+  try {
+    return decodeURIComponent(match[1]);
+  } catch {
+    return match[1];
+  }
 }
 
 // Returns the current page path with any `/tutorial:<id>` segment removed.
