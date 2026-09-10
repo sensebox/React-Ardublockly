@@ -235,6 +235,20 @@ const ModelTrainer = ({
     }
   }, [sourceType]);
 
+  // Warn before leaving/reloading the page if there are unsaved samples
+  useEffect(() => {
+    const hasSamples = classes.some((cls) => cls.samples.length > 0);
+    if (!hasSamples) return;
+
+    const handleBeforeUnload = (e) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [classes]);
+
   // Auto-close upload error on user interaction
   useEffect(() => {
     if (!uploadError) return;
