@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import TutorialItemSummary from "../../../Tutorial/Overview/TutorialItemSummary";
+import { normalizeTutorialConfigs } from "@/helpers/tutorialUrl";
 
 export default function OverviewPage({
   tutorials: tutorialConfigs = [],
@@ -23,14 +24,7 @@ export default function OverviewPage({
 
   // Normalize tutorials: flatten groups into a single array with group metadata
   const normalizedConfigs = useMemo(
-    () =>
-      Array.isArray(tutorialConfigs)
-        ? tutorialConfigs.flatMap((item) =>
-            item.group && Array.isArray(item.tutorials)
-              ? item.tutorials.map((t) => ({ ...t, _group: item.group }))
-              : item,
-          )
-        : [],
+    () => normalizeTutorialConfigs(tutorialConfigs),
     [tutorialConfigs],
   );
 
@@ -47,24 +41,31 @@ export default function OverviewPage({
   useEffect(() => {
     let cancelled = false;
     async function fetchAll() {
-      try {
-        const results = await Promise.all(
-          normalizedConfigs.map(({ id, type }) =>
-            axios
-              .get(`${import.meta.env.VITE_BLOCKLY_API}/tutorial/${id}`)
-              .then((res) => ({ ...res.data.tutorial, _widgetType: type })),
-          ),
+      const settled = await Promise.allSettled(
+        normalizedConfigs.map(({ id, type }) =>
+          axios
+            .get(`${import.meta.env.VITE_BLOCKLY_API}/tutorial/${id}`)
+            .then((res) => ({ ...res.data.tutorial, _widgetType: type })),
+        ),
+      );
+      if (cancelled) return;
+
+      const results = settled
+        .filter((result) => result.status === "fulfilled")
+        .map((result) => result.value);
+
+      settled
+        .filter((result) => result.status === "rejected")
+        .forEach((result) =>
+          console.warn("Tutorial konnte nicht geladen werden:", result.reason),
         );
-        if (!cancelled) {
-          setTutorials(results);
-          setLoading(false);
-        }
-      } catch (err) {
-        if (!cancelled) {
-          setError("Tutorials konnten nicht geladen werden.");
-          setLoading(false);
-        }
+
+      if (results.length === 0 && normalizedConfigs.length > 0) {
+        setError("Tutorials konnten nicht geladen werden.");
+      } else {
+        setTutorials(results);
       }
+      setLoading(false);
     }
     fetchAll();
     return () => {
@@ -148,8 +149,8 @@ export default function OverviewPage({
                       }}
                     >
                       <CardContent sx={{ flexGrow: 1, p: "8px" }}>
-                        <TutorialItemSummary 
-                          tutorial={tutorial} 
+                        <TutorialItemSummary
+                          tutorial={tutorial}
                           mediaBasePath={mediaBasePath}
                         />
                       </CardContent>
