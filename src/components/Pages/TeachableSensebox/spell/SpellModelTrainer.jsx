@@ -546,6 +546,20 @@ const SpellModelTrainer = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showAddDialog]);
 
+  // Warn before leaving/reloading the page if there are unsaved samples
+  const hasSamples = classes.some((cls) => cls.samples.length > 0);
+  useEffect(() => {
+    if (!hasSamples) return;
+
+    const handleBeforeUnload = (e) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [hasSamples]);
+
   const firstEpochTriggeredRef = useRef(false);
   useEffect(() => {
     if (isTraining) {

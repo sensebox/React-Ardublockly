@@ -510,6 +510,20 @@ const OrientationModelTrainer = ({
     onLatestSample(isConnected ? latestSample : null);
   }, [latestSample, isConnected, onLatestSample]);
 
+  // Warn before leaving/reloading the page if there are unsaved samples
+  const hasSamples = classes.some((cls) => cls.samples.length > 0);
+  useEffect(() => {
+    if (!hasSamples) return;
+
+    const handleBeforeUnload = (e) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [hasSamples]);
+
   const handleDownloadFirmware = async () => {
     setIsDownloading(true);
     const result = await downloadAccelerometerFirmware();
