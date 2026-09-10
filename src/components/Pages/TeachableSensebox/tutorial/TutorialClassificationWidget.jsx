@@ -42,6 +42,7 @@ export default function TutorialClassificationWidget({ tutorials = [], mediaBase
   const handleSelect = useCallback((tutorial) => {
     setSelected(tutorial);
     window.history.pushState({ tutorialId: tutorial.id }, "", buildTutorialUrl(tutorial.id));
+    window.scrollTo(0, 0);
   }, []);
 
   const handleBack = useCallback(() => {
