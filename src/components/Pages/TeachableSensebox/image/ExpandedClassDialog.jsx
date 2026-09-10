@@ -116,7 +116,7 @@ const ExpandedClassDialog = ({
             border: "1px solid",
             borderColor: "divider",
             borderRadius: 1,
-            bgcolor: "grey.50",
+            bgcolor: "background.grey",
           }}
         >
           {cls.samples.length === 0 && (

@@ -794,7 +794,7 @@ const ModelTrainer = ({
                 {trainedModel && (
                   <Box sx={{ mt: 2, width: "100%", maxWidth: "400px" }}>
                     {predictions.length > 0 && (
-                      <Paper sx={{ p: 1.5, bgcolor: "grey.50" }}>
+                      <Paper sx={{ p: 1.5, bgcolor: "background.grey" }}>
                         <Box
                           sx={{
                             display: "flex",
@@ -870,7 +870,7 @@ const ModelTrainer = ({
                             p: 2,
                             textAlign: "center",
                             border: "1px dashed #ccc",
-                            bgcolor: "grey.50",
+                            bgcolor: "background.grey",
                           }}
                         >
                           <Typography variant="body2" color="text.secondary">
@@ -1022,7 +1022,7 @@ const ModelTrainer = ({
                         border: "1px solid",
                         borderColor: "divider",
                         borderRadius: 1,
-                        bgcolor: "grey.50",
+                        bgcolor: "background.grey",
                         marginBottom: 0,
                       }}
                     >
@@ -1133,12 +1133,6 @@ const ModelTrainer = ({
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  "&:hover": {
-                    backgroundColor: "success.dark",
-                  },
-                  "&:disabled": {
-                    backgroundColor: "action.disabled",
-                  },
                 }}
               >
                 {isDownloadingCollect ? (
@@ -1293,12 +1287,6 @@ const ModelTrainer = ({
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    "&:hover": {
-                      backgroundColor: "success.dark",
-                    },
-                    "&:disabled": {
-                      backgroundColor: "action.disabled",
-                    },
                   }}
                 >
                   <MoreVertIcon fontSize="small" />
