@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import TutorialItemSummary from "../../../Tutorial/Overview/TutorialItemSummary";
+import { normalizeTutorialConfigs } from "@/helpers/tutorialUrl";
 
 export default function OverviewPage({
   tutorials: tutorialConfigs = [],
@@ -23,14 +24,7 @@ export default function OverviewPage({
 
   // Normalize tutorials: flatten groups into a single array with group metadata
   const normalizedConfigs = useMemo(
-    () =>
-      Array.isArray(tutorialConfigs)
-        ? tutorialConfigs.flatMap((item) =>
-            item.group && Array.isArray(item.tutorials)
-              ? item.tutorials.map((t) => ({ ...t, _group: item.group }))
-              : item,
-          )
-        : [],
+    () => normalizeTutorialConfigs(tutorialConfigs),
     [tutorialConfigs],
   );
 
