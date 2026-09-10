@@ -511,8 +511,8 @@ const OrientationModelTrainer = ({
   }, [latestSample, isConnected, onLatestSample]);
 
   // Warn before leaving/reloading the page if there are unsaved samples
+  const hasSamples = classes.some((cls) => cls.samples.length > 0);
   useEffect(() => {
-    const hasSamples = classes.some((cls) => cls.samples.length > 0);
     if (!hasSamples) return;
 
     const handleBeforeUnload = (e) => {
@@ -522,7 +522,7 @@ const OrientationModelTrainer = ({
 
     window.addEventListener("beforeunload", handleBeforeUnload);
     return () => window.removeEventListener("beforeunload", handleBeforeUnload);
-  }, [classes]);
+  }, [hasSamples]);
 
   const handleDownloadFirmware = async () => {
     setIsDownloading(true);

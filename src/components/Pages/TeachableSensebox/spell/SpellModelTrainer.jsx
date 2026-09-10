@@ -547,8 +547,8 @@ const SpellModelTrainer = ({
   }, [showAddDialog]);
 
   // Warn before leaving/reloading the page if there are unsaved samples
+  const hasSamples = classes.some((cls) => cls.samples.length > 0);
   useEffect(() => {
-    const hasSamples = classes.some((cls) => cls.samples.length > 0);
     if (!hasSamples) return;
 
     const handleBeforeUnload = (e) => {
@@ -558,7 +558,7 @@ const SpellModelTrainer = ({
 
     window.addEventListener("beforeunload", handleBeforeUnload);
     return () => window.removeEventListener("beforeunload", handleBeforeUnload);
-  }, [classes]);
+  }, [hasSamples]);
 
   const firstEpochTriggeredRef = useRef(false);
   useEffect(() => {
