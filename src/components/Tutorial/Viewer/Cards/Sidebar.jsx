@@ -50,15 +50,20 @@ const Sidebar = () => {
     }, {});
   }, [tutorial._id, answerVersion]);
 
-  const isQuestionStepCompleted = (step) => {
-    if (step.type !== "question" || !step.questionData?.length) return true;
-    return step.questionData.every(
-      (_, idx) => answersMap[`${step._id}_q${idx}`]?.type === "success",
-    );
+  const isStepCompleted = (step) => {
+    if (step.type === "question" && step.questionData?.length) {
+      return step.questionData.every(
+        (_, idx) => answersMap[`${step._id}_q${idx}`]?.type === "success",
+      );
+    }
+    if (step.type === "blockly" && step.xml) {
+      return answersMap[`${step._id}_blockly`]?.type === "success";
+    }
+    return true;
   };
 
   const firstIncompleteIndex = stepsWithFinish.findIndex(
-    (step) => !isQuestionStepCompleted(step),
+    (step) => !isStepCompleted(step),
   );
   const lockedFromIndex =
     firstIncompleteIndex === -1 ? stepsWithFinish.length : firstIncompleteIndex;

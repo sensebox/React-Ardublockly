@@ -7,6 +7,7 @@ import SolutionCheck from "./SolutionCheck";
 import BlocklyWindow from "@/components/Blockly/BlocklyWindow";
 import { Box, Typography } from "@mui/material";
 import H5PCard from "./H5PCard";
+import { loadAnswers } from "../helpers/tutorialStorageUtils";
 
 const md = new MarkdownIt({ html: true, linkify: true, typographer: true });
 
@@ -65,8 +66,16 @@ const TaskCard = ({ step, setNextStepDisabled }) => {
 
   const isQuestionStep =
     step.type === "question" && step.questionData?.length > 0;
+  const isBlocklyStep = step.type === "blockly" && !!step.xml;
 
   const [questionStatus, setQuestionStatus] = useState({});
+  const [blocklyCorrect, setBlocklyCorrect] = useState(() => {
+    if (step.type !== "blockly" || !tutorialId) return false;
+    const savedAnswer = loadAnswers(tutorialId).find(
+      (a) => a._id === `${step._id}_blockly`,
+    );
+    return savedAnswer?.type === "success";
+  });
 
   const handleQuestionStatusChange = useCallback((questionIndex, correct) => {
     setQuestionStatus((prev) =>
@@ -77,15 +86,24 @@ const TaskCard = ({ step, setNextStepDisabled }) => {
   }, []);
 
   useEffect(() => {
-    if (!isQuestionStep) {
+    if (isQuestionStep) {
+      const allAnswered = step.questionData.every(
+        (_, idx) => questionStatus[idx],
+      );
+      setNextStepDisabled(!allAnswered);
+    } else if (isBlocklyStep) {
+      setNextStepDisabled(!blocklyCorrect);
+    } else {
       setNextStepDisabled(false);
-      return;
     }
-    const allAnswered = step.questionData.every(
-      (_, idx) => questionStatus[idx],
-    );
-    setNextStepDisabled(!allAnswered);
-  }, [isQuestionStep, questionStatus, step.questionData, setNextStepDisabled]);
+  }, [
+    isQuestionStep,
+    isBlocklyStep,
+    questionStatus,
+    blocklyCorrect,
+    step.questionData,
+    setNextStepDisabled,
+  ]);
 
   const svgToDataUrl = (svgString) =>
     "data:image/svg+xml;base64," +
@@ -183,7 +201,11 @@ const TaskCard = ({ step, setNextStepDisabled }) => {
           </Box>
 
           {/* Lösung prüfen */}
-          <SolutionCheck solutionXml={step.xml} activeStep={activeStep} />
+          <SolutionCheck
+            solutionXml={step.xml}
+            activeStep={activeStep}
+            onStatusChange={setBlocklyCorrect}
+          />
         </Box>
       )}
       {step.type === "blocklyExample" && step.svg && (
