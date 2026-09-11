@@ -1,4 +1,5 @@
 import MarkdownIt from "markdown-it";
+import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import TutorialSlide from "../components/TutorialSlide";
 import QuestionCard from "./QuestionCard";
@@ -6,6 +7,7 @@ import SolutionCheck from "./SolutionCheck";
 import BlocklyWindow from "@/components/Blockly/BlocklyWindow";
 import { Box, Typography } from "@mui/material";
 import H5PCard from "./H5PCard";
+import { loadAnswers } from "../helpers/tutorialStorageUtils";
 
 const md = new MarkdownIt({ html: true, linkify: true, typographer: true });
 
@@ -62,6 +64,47 @@ const TaskCard = ({ step, setNextStepDisabled }) => {
   const activeStep = useSelector((state) => state.tutorial.activeStep);
   const tutorialId = useSelector((state) => state.tutorial.tutorials[0]?._id);
 
+  const isQuestionStep =
+    step.type === "question" && step.questionData?.length > 0;
+  const isBlocklyStep = step.type === "blockly" && !!step.xml;
+
+  const [questionStatus, setQuestionStatus] = useState({});
+  const [blocklyCorrect, setBlocklyCorrect] = useState(() => {
+    if (step.type !== "blockly" || !tutorialId) return false;
+    const savedAnswer = loadAnswers(tutorialId).find(
+      (a) => a._id === `${step._id}_blockly`,
+    );
+    return savedAnswer?.type === "success";
+  });
+
+  const handleQuestionStatusChange = useCallback((questionIndex, correct) => {
+    setQuestionStatus((prev) =>
+      prev[questionIndex] === correct
+        ? prev
+        : { ...prev, [questionIndex]: correct },
+    );
+  }, []);
+
+  useEffect(() => {
+    if (isQuestionStep) {
+      const allAnswered = step.questionData.every(
+        (_, idx) => questionStatus[idx],
+      );
+      setNextStepDisabled(!allAnswered);
+    } else if (isBlocklyStep) {
+      setNextStepDisabled(!blocklyCorrect);
+    } else {
+      setNextStepDisabled(false);
+    }
+  }, [
+    isQuestionStep,
+    isBlocklyStep,
+    questionStatus,
+    blocklyCorrect,
+    step.questionData,
+    setNextStepDisabled,
+  ]);
+
   const svgToDataUrl = (svgString) =>
     "data:image/svg+xml;base64," +
     window.btoa(
@@ -72,7 +115,10 @@ const TaskCard = ({ step, setNextStepDisabled }) => {
 
   return (
     <TutorialSlide>
-      <div className="tutorial-markdown" dangerouslySetInnerHTML={{ __html: md.render(step.text) }} />
+      <div
+        className="tutorial-markdown"
+        dangerouslySetInnerHTML={{ __html: md.render(step.text) }}
+      />
       {step.type === "question" && step.questionData && (
         <Box
           sx={{
@@ -84,7 +130,7 @@ const TaskCard = ({ step, setNextStepDisabled }) => {
           {step.questionData.map((q, idx) => {
             return (
               <QuestionCard
-                setNextStepDisabled={setNextStepDisabled}
+                onStatusChange={handleQuestionStatusChange}
                 key={idx}
                 questionData={q}
                 stepId={step._id}
@@ -155,7 +201,11 @@ const TaskCard = ({ step, setNextStepDisabled }) => {
           </Box>
 
           {/* Lösung prüfen */}
-          <SolutionCheck solutionXml={step.xml} activeStep={activeStep} />
+          <SolutionCheck
+            solutionXml={step.xml}
+            activeStep={activeStep}
+            onStatusChange={setBlocklyCorrect}
+          />
         </Box>
       )}
       {step.type === "blocklyExample" && step.svg && (

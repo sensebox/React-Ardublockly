@@ -69,7 +69,10 @@ const TutorialLayout = ({
         >
           {children}
 
-          <FloatingNavigation tutorialId={tutorialId} />
+          <FloatingNavigation
+            tutorialId={tutorialId}
+            nextStepDisabled={nextStepDisabled}
+          />
         </Box>
       </Box>
 

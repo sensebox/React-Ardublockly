@@ -3,9 +3,7 @@ import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { useTutorialViewer } from "../hooks/useTutorialViewer";
 
-const FloatingNavigation = ({ tutorialId }) => {
-  const [allStepsFinished, setAllStepsFinished] = React.useState(true);
-
+const FloatingNavigation = ({ tutorialId, nextStepDisabled = false }) => {
   const { tutorial, currentStep, activeStep, nextStep, previousStep } =
     useTutorialViewer(tutorialId);
 
@@ -19,6 +17,7 @@ const FloatingNavigation = ({ tutorialId }) => {
 
   const isFirstStep = currentStepIndex === 0;
   const isLastStep = currentStepIndex === tutorial.steps.length - 1;
+  const isNextDisabled = isLastStep || nextStepDisabled;
 
   return (
     <Box
@@ -95,8 +94,8 @@ const FloatingNavigation = ({ tutorialId }) => {
       <Tooltip
         placement="top"
         title={
-          isLastStep && !allStepsFinished
-            ? "Bitte schließe alle Schritte ab, bevor du das Tutorial beendest."
+          !isLastStep && nextStepDisabled
+            ? "Bitte beantworte alle Fragen, bevor du fortfährst."
             : "Zum nächsten Schritt"
         }
         slotProps={{
@@ -118,7 +117,7 @@ const FloatingNavigation = ({ tutorialId }) => {
         <span>
           <IconButton
             onClick={nextStep}
-            disabled={isLastStep}
+            disabled={isNextDisabled}
             aria-label="Nächster Schritt"
             sx={{
               width: 48,
@@ -128,15 +127,15 @@ const FloatingNavigation = ({ tutorialId }) => {
               alignItems: "center",
               justifyContent: "center",
               transition: "all 200ms ease-out",
-              bgcolor: isLastStep ? "grey.300" : "primary.main",
-              color: isLastStep ? "grey.500" : "white",
-              boxShadow: isLastStep ? "none" : 2,
+              bgcolor: isNextDisabled ? "grey.300" : "primary.main",
+              color: isNextDisabled ? "grey.500" : "white",
+              boxShadow: isNextDisabled ? "none" : 2,
               "&:hover": {
-                boxShadow: isLastStep ? "none" : 3,
-                transform: isLastStep ? "none" : "scale(1.1)",
-                bgcolor: isLastStep ? "grey.300" : "primary.dark",
+                boxShadow: isNextDisabled ? "none" : 3,
+                transform: isNextDisabled ? "none" : "scale(1.1)",
+                bgcolor: isNextDisabled ? "grey.300" : "primary.dark",
               },
-              cursor: isLastStep ? "not-allowed" : "pointer",
+              cursor: isNextDisabled ? "not-allowed" : "pointer",
             }}
           >
             <ChevronRight sx={{ fontSize: 20 }} />
