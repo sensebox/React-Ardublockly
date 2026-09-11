@@ -1,7 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import { AnimatePresence } from "framer-motion";
-import { Box, Button, Typography, CircularProgress } from "@mui/material";
+import {
+  Box,
+  Button,
+  Typography,
+  CircularProgress,
+  Tooltip,
+} from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -190,14 +196,24 @@ export default function TutorialViewerPanel({
             >
               Schritt {activeStep + 1} / {tutorial.steps.length}
             </Typography>
-            <Button
-              endIcon={<ChevronRightIcon />}
-              onClick={nextStep}
-              disabled={isLast || nextStepDisabled}
-              variant="contained"
+            <Tooltip
+              title={
+                !isLast && nextStepDisabled
+                  ? "Bitte beantworte alle Fragen, bevor du fortfährst."
+                  : ""
+              }
             >
-              Weiter
-            </Button>
+              <span>
+                <Button
+                  endIcon={<ChevronRightIcon />}
+                  onClick={nextStep}
+                  disabled={isLast || nextStepDisabled}
+                  variant="contained"
+                >
+                  Weiter
+                </Button>
+              </span>
+            </Tooltip>
           </Box>
         </Box>
 
