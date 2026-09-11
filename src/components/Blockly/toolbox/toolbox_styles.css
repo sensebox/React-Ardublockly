@@ -16,6 +16,29 @@
   max-height: calc(100vh - 200px) !important;
 }
 
+/* The tutorial "Blockly mit Rahmen" box always keeps a fixed white/light
+   appearance, regardless of the host page's dark mode. Toolbox category
+   labels have no explicit color of their own, so on a dark host page they
+   inherit a near-white color and become unreadable on the white category
+   background. Force a fixed dark label color inside that frame. */
+.blockly-frame .blocklyTreeLabel,
+.blockly-frame .blocklyToolboxCategoryLabel {
+  color: #1a1a1a !important;
+}
+
+/* Blockly's plugin modals (e.g. "Create Typed Variable") are appended to
+   Blockly's WidgetDiv, which lives on document.body rather than inside the
+   Blockly injection container, so a .blockly-frame ancestor selector can't
+   reach them. Their container background is always a fixed white/gray
+   (see @blockly/plugin-modal default CSS), so it's safe to always force a
+   fixed dark text color here regardless of the host page's theme. */
+.blocklyModalHeaderTitle,
+.blocklyModalContent,
+.blocklyModalContent label,
+.blocklyModalContent input {
+  color: #1a1a1a !important;
+}
+
 /* Höhere Kategorien für Continuous Toolbox */
 .blockly-continuous-toolbox
   .blocklyToolboxCategory:not(:has(input[type="search"])) {
