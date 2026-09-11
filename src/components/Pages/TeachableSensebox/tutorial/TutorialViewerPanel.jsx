@@ -98,9 +98,10 @@ export default function TutorialViewerPanel({
         {/* Left: tutorial step card + nav */}
         <Box
           sx={{
-            width: classificationType ? "30vw" : "100%",
+            width: classificationType ? (type === "blockly" ? "70vw" : "30vw") : "100%",
             minWidth: "350px",
-            maxWidth: classificationType ? "50vw" : "none",
+            maxWidth: classificationType ? (type === "blockly" ? "80vw" : "50vw") : "none",
+            transition: "width 0.3s ease, max-width 0.3s ease",
             display: "flex",
             flexDirection: "column",
             borderRight: classificationType ? "1px solid" : "none",
