@@ -168,7 +168,21 @@ const Toolbox = ({ workspace, toolbox }) => {
       (boardChanged || languageChanged || aiModelChanged) &&
       workspace.toolbox
     ) {
+      // Remember which category (if any) is currently open, since
+      // updateToolbox() rebuilds the toolbox tree and would otherwise
+      // close the open flyout (e.g. after uploading an AI model).
+      const toolboxInstance = workspace.getToolbox();
+      const selectedId = toolboxInstance?.getSelectedItem?.()?.getId?.();
+
       workspace.updateToolbox(toolbox.current);
+
+      if (selectedId) {
+        const newToolbox = workspace.getToolbox();
+        const newItem = newToolbox?.getToolboxItemById?.(selectedId);
+        if (newItem) {
+          newToolbox.setSelectedItem(newItem);
+        }
+      }
     }
 
     previousBoard.current = selectedBoard;

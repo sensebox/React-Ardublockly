@@ -166,6 +166,7 @@ const TaskCard = ({ step, setNextStepDisabled }) => {
         >
           {/* Blockly mit Rahmen */}
           <Box
+            className="blockly-frame"
             sx={{
               width: "100%",
               borderRadius: 3,
@@ -173,6 +174,7 @@ const TaskCard = ({ step, setNextStepDisabled }) => {
               border: "1px solid rgba(0,0,0,0.1)",
               overflow: "hidden",
               backgroundColor: "#fff",
+              color: "#1a1a1a",
               p: 1,
             }}
           >
@@ -188,7 +190,7 @@ const TaskCard = ({ step, setNextStepDisabled }) => {
               variant="body2"
               sx={{
                 fontStyle: "italic",
-                color: "text.secondary",
+                color: "rgba(0, 0, 0, 0.6)",
                 textAlign: "center",
                 maxWidth: "50vw",
                 mt: 2,

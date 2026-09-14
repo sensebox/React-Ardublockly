@@ -7,12 +7,21 @@ import {
   StyledEngineProvider,
   createTheme,
 } from "@mui/material/styles";
-import { createStore, applyMiddleware, compose } from "redux";
-import thunk from "redux-thunk";
-import rootReducer from "../../reducers";
-import { setupInterceptors } from "../../actions/authActions";
+import * as Blockly from "blockly/core";
+import store from "../../store";
 import TutorialClassificationWidget from "../../components/Pages/TeachableSensebox/tutorial/TutorialClassificationWidget";
+import { De } from "../../components/Blockly/msg/de";
+import { En } from "../../components/Blockly/msg/en";
 import "./styles.css";
+
+function getHostLocaleMessages() {
+  const htmlLang = (document.documentElement.getAttribute("lang") || "").toLowerCase();
+  return htmlLang.startsWith("de") ? De : En;
+}
+
+// Set the Blockly locale before any Blockly component/toolbox renders.
+// Without this, Blockly.Msg.* is empty and toolbox category labels are blank.
+Blockly.setLocale(getHostLocaleMessages());
 
 function getHostThemeMode() {
   const attr = document.documentElement.getAttribute("data-theme");
@@ -56,14 +65,7 @@ function createWidgetTheme(mode) {
   });
 }
 
-function createWidgetStore() {
-  const store = createStore(rootReducer, {}, compose(applyMiddleware(thunk)));
-  setupInterceptors(store);
-  return store;
-}
-
 function WidgetRoot({ tutorials, mediaBasePath }) {
-  const [store] = useState(() => createWidgetStore());
   const [mode, setMode] = useState(getHostThemeMode);
 
   useEffect(() => {
