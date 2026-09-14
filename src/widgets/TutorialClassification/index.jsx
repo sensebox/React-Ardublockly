@@ -7,11 +7,8 @@ import {
   StyledEngineProvider,
   createTheme,
 } from "@mui/material/styles";
-import { createStore, applyMiddleware, compose } from "redux";
-import thunk from "redux-thunk";
 import * as Blockly from "blockly/core";
-import rootReducer from "../../reducers";
-import { setupInterceptors } from "../../actions/authActions";
+import store from "../../store";
 import TutorialClassificationWidget from "../../components/Pages/TeachableSensebox/tutorial/TutorialClassificationWidget";
 import { De } from "../../components/Blockly/msg/de";
 import { En } from "../../components/Blockly/msg/en";
@@ -68,14 +65,7 @@ function createWidgetTheme(mode) {
   });
 }
 
-function createWidgetStore() {
-  const store = createStore(rootReducer, {}, compose(applyMiddleware(thunk)));
-  setupInterceptors(store);
-  return store;
-}
-
 function WidgetRoot({ tutorials, mediaBasePath }) {
-  const [store] = useState(() => createWidgetStore());
   const [mode, setMode] = useState(getHostThemeMode);
 
   useEffect(() => {
