@@ -740,7 +740,7 @@ class ConversionService {
    */
   buildModelFileName(classLabels = []) {
     const sanitizedClasses = (classLabels || [])
-      .map((name) => String(name).trim().replace(/[^a-zA-Z0-9]+/g, "_"))
+.map((name) => String(name).trim().replace(/[\/\\?%*:|"<>\s]/g, "_"))
       .filter((name) => name.length > 0);
 
     const prefix =
