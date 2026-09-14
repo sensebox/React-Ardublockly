@@ -115,7 +115,7 @@ const HardwareCard = ({ component, customHardware = {}, mediaBasePath = "/media/
         </Typography>
 
         {/* Sensor (falls vorhanden) */}
-        {compData.sensor && (
+        {compData.sensor && !isCustom && (
           <Chip
             label={compData.sensor}
             color="primary"
@@ -126,6 +126,8 @@ const HardwareCard = ({ component, customHardware = {}, mediaBasePath = "/media/
       </CardContent>
 
       {/* Footer mit Doc-Link */}
+      {typeof compData.docUrl === "string" &&
+        /^https?:\/\//i.test(compData.docUrl) && (
       <Box
         sx={{
           p: 1,
@@ -134,8 +136,6 @@ const HardwareCard = ({ component, customHardware = {}, mediaBasePath = "/media/
           borderTop: `1px solid ${theme.palette.divider}`,
         }}
       >
-        {typeof compData.docUrl === "string" &&
-        /^https?:\/\//i.test(compData.docUrl) ? (
           <Tooltip title="Zur Dokumentation">
             <IconButton
               href={compData.docUrl}
@@ -152,8 +152,8 @@ const HardwareCard = ({ component, customHardware = {}, mediaBasePath = "/media/
               <MenuBook />
             </IconButton>
           </Tooltip>
-        ) : null}
       </Box>
+      )}
     </Card>
   );
 };

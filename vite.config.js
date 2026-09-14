@@ -11,6 +11,9 @@ export default defineConfig(() => {
         "@": "/src",
       },
     },
+    define: {
+      __BLOCKLY_MEDIA_PATH__: JSON.stringify("/media/blockly/"),
+    },
     plugins: [react()],
     server: {
       host: true,

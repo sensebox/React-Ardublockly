@@ -729,7 +729,7 @@ Blockly.Blocks["sensebox_sensor_sps30"] = {
 
 Blockly.Blocks["sensebox_esp32s2_light"] = {
   init: function () {
-    this.appendDummyInput().appendField("ESP32-S2 Phododiode");
+    this.appendDummyInput().appendField("ESP32-S2 Photodiode");
     this.appendDummyInput()
       .setAlign(Blockly.inputs.Align.RIGHT)
       .appendField(Blockly.Msg.senseBox_value)

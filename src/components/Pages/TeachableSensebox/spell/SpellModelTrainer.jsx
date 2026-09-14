@@ -282,7 +282,7 @@ const ClassCardItem = memo(
               border: "1px solid",
               borderColor: "divider",
               borderRadius: 1,
-              bgcolor: "grey.50",
+              bgcolor: "background.grey",
             }}
           >
             {cls.samples.map((sample) => (
@@ -545,6 +545,20 @@ const SpellModelTrainer = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showAddDialog]);
+
+  // Warn before leaving/reloading the page if there are unsaved samples
+  const hasSamples = classes.some((cls) => cls.samples.length > 0);
+  useEffect(() => {
+    if (!hasSamples) return;
+
+    const handleBeforeUnload = (e) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [hasSamples]);
 
   const firstEpochTriggeredRef = useRef(false);
   useEffect(() => {
@@ -1095,12 +1109,6 @@ const SpellModelTrainer = ({
                     borderRadius: "0 4px 4px 0",
                     alignItems: "center",
                     justifyContent: "center",
-                    "&:hover": {
-                      backgroundColor: "success.dark",
-                    },
-                    "&:disabled": {
-                      backgroundColor: "action.disabled",
-                    },
                   }}
                 >
                   <MoreVertIcon fontSize="small" />

@@ -13,10 +13,15 @@ import {
 } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, Cancel, HelpOutline } from "@mui/icons-material";
+import {
+  loadAnswers,
+  upsertAnswer,
+  removeAnswer,
+} from "../helpers/tutorialStorageUtils";
 
 const QuestionCard = ({
   questionData,
-  setNextStepDisabled,
+  onStatusChange,
   stepId,
   questionIndex = 0,
   tutorialId,
@@ -29,36 +34,36 @@ const QuestionCard = ({
 
   const questionKey = `${stepId}_q${questionIndex}`;
 
+  const saveAnswer = (payload, correct) => {
+    if (!stepId || !tutorialId) return;
+    upsertAnswer(tutorialId, questionKey, {
+      ...payload,
+      type: correct ? "success" : "error",
+    });
+  };
+
   useEffect(() => {
-    if (stepId && tutorialId) {
-      try {
-        const savedAnswers =
-          JSON.parse(
-            window.localStorage.getItem(`tutorial_answers_${tutorialId}`),
-          ) || [];
-        const savedAnswer = savedAnswers.find((a) => a._id === questionKey);
-        if (savedAnswer) {
-          if (savedAnswer.freetextAnswer) {
-            setFreetextValue(savedAnswer.freetextAnswer);
-            setSubmitted(true);
-            setIsCorrect(savedAnswer.type === "success");
-            if (savedAnswer.type === "success") {
-              setNextStepDisabled(false);
-            }
-          } else if (savedAnswer.answers) {
-            setSelected(savedAnswer.answers);
-            setSubmitted(true);
-            setIsCorrect(savedAnswer.type === "success");
-            if (savedAnswer.type === "success") {
-              setNextStepDisabled(false);
-            }
-          }
-        }
-      } catch (e) {
-        console.warn("Failed to load saved answer", e);
-      }
+    if (!stepId || !tutorialId) return;
+
+    const savedAnswer = loadAnswers(tutorialId).find(
+      (a) => a._id === questionKey,
+    );
+    if (!savedAnswer) return;
+
+    if (savedAnswer.freetextAnswer) {
+      setFreetextValue(savedAnswer.freetextAnswer);
+    } else if (savedAnswer.answers) {
+      setSelected(savedAnswer.answers);
+    } else {
+      return;
     }
-  }, [questionKey, tutorialId, setNextStepDisabled]);
+    setSubmitted(true);
+    setIsCorrect(savedAnswer.type === "success");
+    onStatusChange(questionIndex, savedAnswer.type === "success");
+    // Only (re)load the saved answer when the question itself changes, not
+    // when the parent re-renders and passes a new onStatusChange reference.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [questionKey, tutorialId, questionIndex]);
 
   if (!questionData)
     return (
@@ -90,7 +95,8 @@ const QuestionCard = ({
   const hasCorrectAnswerDefined = answers.some((a) => a.correct);
 
   const handleSubmit = () => {
-    let correct = false;
+    let correct;
+    let answerPayload;
 
     if (freetext) {
       // For freetext questions with reference answers, compare user input to reference
@@ -108,38 +114,7 @@ const QuestionCard = ({
         // For freetext questions without reference answers, any non-empty content is accepted
         correct = freetextValue.trim().length > 0;
       }
-
-      setIsCorrect(correct);
-      if (correct) setNextStepDisabled(false);
-      setSubmitted(true);
-
-      if (stepId && tutorialId) {
-        try {
-          const savedAnswers =
-            JSON.parse(
-              window.localStorage.getItem(`tutorial_answers_${tutorialId}`),
-            ) || [];
-          const taskIndex = savedAnswers.findIndex(
-            (t) => t._id === questionKey,
-          );
-          if (taskIndex >= 0) {
-            savedAnswers[taskIndex].freetextAnswer = freetextValue;
-            savedAnswers[taskIndex].type = correct ? "success" : "error";
-          } else {
-            savedAnswers.push({
-              _id: questionKey,
-              freetextAnswer: freetextValue,
-              type: correct ? "success" : "error",
-            });
-          }
-          window.localStorage.setItem(
-            `tutorial_answers_${tutorialId}`,
-            JSON.stringify(savedAnswers),
-          );
-        } catch (e) {
-          console.warn("Failed to save answer to localStorage", e);
-        }
-      }
+      answerPayload = { freetextAnswer: freetextValue };
     } else {
       // Multiple choice logic
       if (hasCorrectAnswerDefined) {
@@ -155,39 +130,13 @@ const QuestionCard = ({
       } else {
         correct = true;
       }
-
-      setIsCorrect(correct);
-      if (correct) setNextStepDisabled(false);
-      setSubmitted(true);
-
-      if (stepId && tutorialId) {
-        try {
-          const savedAnswers =
-            JSON.parse(
-              window.localStorage.getItem(`tutorial_answers_${tutorialId}`),
-            ) || [];
-          const taskIndex = savedAnswers.findIndex(
-            (t) => t._id === questionKey,
-          );
-          if (taskIndex >= 0) {
-            savedAnswers[taskIndex].answers = selected;
-            savedAnswers[taskIndex].type = correct ? "success" : "error";
-          } else {
-            savedAnswers.push({
-              _id: questionKey,
-              answers: selected,
-              type: correct ? "success" : "error",
-            });
-          }
-          window.localStorage.setItem(
-            `tutorial_answers_${tutorialId}`,
-            JSON.stringify(savedAnswers),
-          );
-        } catch (e) {
-          console.warn("Failed to save answer to localStorage", e);
-        }
-      }
+      answerPayload = { answers: selected };
     }
+
+    setIsCorrect(correct);
+    onStatusChange(questionIndex, correct);
+    setSubmitted(true);
+    saveAnswer(answerPayload, correct);
   };
 
   const resetQuestion = () => {
@@ -195,6 +144,11 @@ const QuestionCard = ({
     setFreetextValue("");
     setSubmitted(false);
     setIsCorrect(false);
+    onStatusChange(questionIndex, false);
+
+    if (stepId && tutorialId) {
+      removeAnswer(tutorialId, questionKey);
+    }
   };
 
   const allFeedbacks = !freetext
@@ -306,6 +260,7 @@ const QuestionCard = ({
                   transition={{ duration: 0.2 }}
                 >
                   <Box
+                    onClick={() => !submitted && handleSelect(a.text)}
                     sx={{
                       border: `2px solid ${borderColor}`,
                       borderRadius: 2,
@@ -313,6 +268,7 @@ const QuestionCard = ({
                       p: 1.2,
                       transition: "all 0.25s ease",
                       backgroundColor: bgColor,
+                      cursor: submitted ? "default" : "pointer",
                       "&:hover": {
                         backgroundColor:
                           !submitted && theme.palette.action.hover,
@@ -320,18 +276,22 @@ const QuestionCard = ({
                     }}
                   >
                     <FormControlLabel
+                      onClick={(e) => e.stopPropagation()}
+                      sx={{ width: "100%", pointerEvents: "none" }}
                       control={
                         multipleChoice ? (
                           <Checkbox
                             checked={isSelected}
                             onChange={() => handleSelect(a.text)}
                             disabled={submitted}
+                            sx={{ pointerEvents: "auto" }}
                           />
                         ) : (
                           <Radio
                             checked={isSelected}
                             onChange={() => handleSelect(a.text)}
                             disabled={submitted}
+                            sx={{ pointerEvents: "auto" }}
                           />
                         )
                       }
