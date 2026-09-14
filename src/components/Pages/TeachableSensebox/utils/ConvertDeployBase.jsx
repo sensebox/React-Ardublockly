@@ -291,7 +291,7 @@ const ConvertDeployBase = ({
 
       const downloadSuccess = ConversionService.downloadBinary(
         compilationResult.data.binaryData,
-        `${modelName}_${boardType.replace(/:/g, "_")}_${Date.now()}.bin`,
+        `${ConversionService.buildModelFileName(classLabels)}.bin`,
       );
 
       if (!downloadSuccess) {
@@ -549,9 +549,12 @@ const ConvertDeployBase = ({
                         color="primary"
                         startIcon={<DownloadIcon />}
                         onClick={() => {
+                          const classLabels = model.classes
+                            ? model.classes.map((cls) => cls.name)
+                            : [];
                           ConversionService.downloadBinary(
                             workflowState.binaryData,
-                            `${modelName}_${boardType.replace(/:/g, "_")}_${Date.now()}.bin`,
+                            `${ConversionService.buildModelFileName(classLabels)}.bin`,
                           );
                         }}
                       >
