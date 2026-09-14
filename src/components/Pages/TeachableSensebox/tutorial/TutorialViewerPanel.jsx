@@ -45,6 +45,13 @@ export default function TutorialViewerPanel({
       scrollContainerRef.current.scrollTop = 0;
     }
   }, [activeStep]);
+  
+  useEffect(() => {
+    const stepType = currentStep?.type;
+    if (stepType === "instruction" || stepType === "finish") {
+      setNextStepDisabled(false);
+    }
+  }, [currentStep]);
 
   if (!tutorial) {
     if (message?.id === "GET_TUTORIAL_FAIL") {
