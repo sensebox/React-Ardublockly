@@ -71,11 +71,9 @@ const HorizontalToolbox = ({ workspace, toolbox }) => {
       workspace.updateToolbox(toolbox.current);
 
       if (selectedId) {
-        setTimeout(() => {
-          const newToolbox = workspace.getToolbox();
-          const newItem = newToolbox?.getToolboxItemById?.(selectedId);
-          if (!newItem) return;
-
+        const newToolbox = workspace.getToolbox();
+        const newItem = newToolbox?.getToolboxItemById?.(selectedId);
+        if (newItem) {
           let parent = newItem.getParent?.();
           while (parent) {
             parent.setExpanded?.(true);
@@ -84,7 +82,7 @@ const HorizontalToolbox = ({ workspace, toolbox }) => {
 
           newToolbox.setSelectedItem(null);
           newToolbox.setSelectedItem(newItem);
-        }, 0);
+        }
       }
     }
 
