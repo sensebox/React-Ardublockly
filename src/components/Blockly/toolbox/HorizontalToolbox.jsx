@@ -58,7 +58,47 @@ const HorizontalToolbox = ({ workspace, toolbox }) => {
       (boardChanged || languageChanged || aiModelChanged) &&
       workspace.toolbox
     ) {
+      // Remember which category (if any) is currently open, since
+      // updateToolbox() rebuilds the toolbox tree and closes the open flyout.
+      const toolboxInstance = workspace.getToolbox();
+      let selectedId = toolboxInstance?.getSelectedItem?.()?.getId?.();
+
+      // After uploading an AI model select the AI category to reopen it
+      if (aiModelChanged && aiModel?.code) {
+        selectedId = "sensebox_ai";
+      }
+
       workspace.updateToolbox(toolbox.current);
+
+      if (selectedId) {
+        const reopenCategory = (attemptsLeft) => {
+          const newToolbox = workspace.getToolbox();
+          const newItem = newToolbox?.getToolboxItemById?.(selectedId);
+          if (!newItem) return;
+
+          const flyout = newToolbox.getFlyout?.();
+          const alreadyOpen =
+            newToolbox.getSelectedItem?.() === newItem && flyout?.isVisible?.();
+
+          if (!alreadyOpen) {
+            let parent = newItem.getParent?.();
+            while (parent) {
+              parent.setExpanded?.(true);
+              parent = parent.getParent?.();
+            }
+
+            // Force a fresh selection so the flyout is shown.
+            newToolbox.setSelectedItem(null);
+            newToolbox.setSelectedItem(newItem);
+          }
+
+          if (attemptsLeft > 0) {
+            setTimeout(() => reopenCategory(attemptsLeft - 1), 120);
+          }
+        };
+
+        setTimeout(() => reopenCategory(4), 0);
+      }
     }
 
     previousBoard.current = selectedBoard;
