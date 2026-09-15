@@ -181,33 +181,20 @@ const Toolbox = ({ workspace, toolbox }) => {
       workspace.updateToolbox(toolbox.current);
 
       if (selectedId) {
-        const reopenCategory = (attemptsLeft) => {
+        setTimeout(() => {
           const newToolbox = workspace.getToolbox();
           const newItem = newToolbox?.getToolboxItemById?.(selectedId);
           if (!newItem) return;
 
-          const flyout = newToolbox.getFlyout?.();
-          const alreadyOpen =
-            newToolbox.getSelectedItem?.() === newItem && flyout?.isVisible?.();
-
-          if (!alreadyOpen) {
-            let parent = newItem.getParent?.();
-            while (parent) {
-              parent.setExpanded?.(true);
-              parent = parent.getParent?.();
-            }
-
-            // Force a fresh selection so the flyout is shown.
-            newToolbox.setSelectedItem(null);
-            newToolbox.setSelectedItem(newItem);
+          let parent = newItem.getParent?.();
+          while (parent) {
+            parent.setExpanded?.(true);
+            parent = parent.getParent?.();
           }
 
-          if (attemptsLeft > 0) {
-            setTimeout(() => reopenCategory(attemptsLeft - 1), 120);
-          }
-        };
-
-        setTimeout(() => reopenCategory(4), 0);
+          newToolbox.setSelectedItem(null);
+          newToolbox.setSelectedItem(newItem);
+        }, 0);
       }
     }
 
