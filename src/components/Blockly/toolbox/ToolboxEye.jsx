@@ -703,6 +703,7 @@ export const ToolboxEye = () => {
         {/* ============================== AI ============================== */}
         <Category
           id="sensebox_ai"
+          toolboxitemid="sensebox_ai"
           name={Blockly.Msg.toolbox_ai || "AI"}
           colour={getColour().ai}
         >
