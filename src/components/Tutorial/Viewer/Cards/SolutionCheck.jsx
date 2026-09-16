@@ -26,11 +26,13 @@ import * as Blockly from "blockly";
 import { useDispatch, useSelector } from "react-redux";
 import { checkXml } from "@/helpers/compareXml";
 import CompilationDialog from "@/components/Workspace/ToolbarItems/CompilationDialog/CompilationDialog";
+import { notifyAnswersUpdated } from "../helpers/tutorialStorageUtils";
 
 export default function SolutionCheck({
   solutionXml,
   isLastStep = false,
   onFinish,
+  onStatusChange,
 }) {
   const xml = useSelector((s) => s.workspace.code.xml);
   const dispatch = useDispatch();
@@ -64,6 +66,9 @@ export default function SolutionCheck({
     setMsg(result);
     setOpen(true);
 
+    const correct = result.type === "success";
+    onStatusChange?.(correct);
+
     try {
       const tutorialId = tutorial._id;
       const stepId = tutorial.steps[activeStep]._id;
@@ -74,18 +79,21 @@ export default function SolutionCheck({
       const blocklyIndex = savedAnswers.findIndex(
         (a) => a._id === `${stepId}_blockly`,
       );
+      const entry = {
+        _id: `${stepId}_blockly`,
+        xml: xml,
+        type: correct ? "success" : "error",
+      };
       if (blocklyIndex >= 0) {
-        savedAnswers[blocklyIndex].xml = xml;
+        savedAnswers[blocklyIndex] = entry;
       } else {
-        savedAnswers.push({
-          _id: `${stepId}_blockly`,
-          xml: xml,
-        });
+        savedAnswers.push(entry);
       }
       window.localStorage.setItem(
         `tutorial_answers_${tutorialId}`,
         JSON.stringify(savedAnswers),
       );
+      notifyAnswersUpdated(tutorialId);
     } catch (e) {
       console.warn("Failed to save Blockly code to localStorage", e);
     }

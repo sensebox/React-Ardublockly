@@ -717,7 +717,7 @@ class ConversionService {
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `teachable_machine_model_${Date.now()}.cpp`;
+      link.download = `${this.buildModelFileName(metadata.classes)}.cpp`;
       document.body.appendChild(link);
       link.click();
 
@@ -730,6 +730,25 @@ class ConversionService {
       console.error("Failed to download cpp file:", error);
       return false;
     }
+  }
+
+  /**
+   * Builds a download filename (without extension) from class names and a timestamp
+   *
+   * @param {Array<string>} classLabels - Array of class label names
+   * @returns {string} Filename in the form "class1_class2_..._{timestamp}"
+   */
+  buildModelFileName(classLabels = []) {
+    const sanitizedClasses = (classLabels || [])
+.map((name) => String(name).trim().replace(/[\/\\?%*:|"<>\s]/g, "_"))
+      .filter((name) => name.length > 0);
+
+    const prefix =
+      sanitizedClasses.length > 0
+        ? sanitizedClasses.join("_")
+        : "teachable_machine";
+
+    return `${prefix}_${Date.now()}`;
   }
 }
 

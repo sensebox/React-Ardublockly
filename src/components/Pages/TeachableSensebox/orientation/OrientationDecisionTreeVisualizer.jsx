@@ -30,13 +30,14 @@ const truncate = (text, max = 20) =>
 
 const NodeBox = ({ node, classNames, x, y, activePathSet, t }) => {
   const theme = useTheme();
+  const isDark = theme.palette.mode === "dark";
   const [hovered, setHovered] = useState(false);
 
   const isOnPath = activePathSet != null && activePathSet.has(node.data);
 
   if (node.data.isLeaf) {
     let color;
-    color = isOnPath ? "#43a047" : "#686868";
+    color = isOnPath ? "#43a047" : isDark ? "#8a8a8a" : "#686868";
     const total = node.data.samplesCount;
 
     return (
@@ -92,11 +93,19 @@ const NodeBox = ({ node, classNames, x, y, activePathSet, t }) => {
         fill={
           isOnPath
             ? hovered
-              ? "#a5d6a7"
-              : "#c8e6c9"
+              ? isDark
+                ? "#2e5931"
+                : "#a5d6a7"
+              : isDark
+                ? "#1b3d1e"
+                : "#c8e6c9"
             : hovered
-              ? theme.palette.grey[300]
-              : theme.palette.grey[200]
+              ? isDark
+                ? theme.palette.grey[700]
+                : theme.palette.grey[300]
+              : isDark
+                ? theme.palette.grey[800]
+                : theme.palette.grey[200]
         }
         stroke={isOnPath ? "#43a047" : theme.palette.divider}
         strokeWidth={isOnPath ? 2 : 1.5}
@@ -293,14 +302,14 @@ const OrientationDecisionTreeVisualizer = ({ trainedModel, latestSample }) => {
           alignItems: "center",
           justifyContent: "center",
           p: 6,
-          bgcolor: "grey.50",
+          bgcolor: "background.grey",
           borderRadius: 2,
           border: "2px dashed",
-          borderColor: "grey.300",
+          borderColor: "divider",
           gap: 1,
         }}
       >
-        <AccountTreeIcon sx={{ fontSize: 48, color: "grey.400" }} />
+        <AccountTreeIcon sx={{ fontSize: 48, color: "text.disabled" }} />
         <Typography variant="body1" color="text.secondary" textAlign="center">
           {t.decisionTree.placeholder}
         </Typography>

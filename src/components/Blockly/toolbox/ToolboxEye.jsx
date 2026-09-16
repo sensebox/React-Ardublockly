@@ -138,6 +138,8 @@ export const ToolboxEye = () => {
         <Block type="sensebox_display_show" />
         <Block type="sensebox_display_clearDisplay" />
 
+        <Block type="sensebox_display_image" />
+
         <Block type="sensebox_display_printDisplay">
           <Value name="SIZE">
             <Block type="math_number">
@@ -265,8 +267,6 @@ export const ToolboxEye = () => {
             </Block>
           </Value>
         </Block>
-
-        <Block type="sensebox_display_image" />
       </Category>
 
       {/* ============================== INTERNET & COMMS ============================== */}
@@ -703,6 +703,7 @@ export const ToolboxEye = () => {
         {/* ============================== AI ============================== */}
         <Category
           id="sensebox_ai"
+          toolboxitemid="sensebox_ai"
           name={Blockly.Msg.toolbox_ai || "AI"}
           colour={getColour().ai}
         >
