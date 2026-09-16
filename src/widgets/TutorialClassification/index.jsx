@@ -15,8 +15,9 @@ import { En } from "../../components/Blockly/msg/en";
 import "./styles.css";
 
 function getHostLocaleMessages() {
-  const htmlLang = (document.documentElement.getAttribute("lang") || "").toLowerCase();
-  return htmlLang.startsWith("de") ? De : En;
+  // const htmlLang = (document.documentElement.getAttribute("lang") || "").toLowerCase();
+  // return htmlLang.startsWith("en") ? En : De;
+  return De; // default to German for now
 }
 
 // Set the Blockly locale before any Blockly component/toolbox renders.
