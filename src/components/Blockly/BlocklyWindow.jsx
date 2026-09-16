@@ -208,9 +208,7 @@ export default function BlocklyWindow(props) {
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
-  // Observe the container itself so Blockly resizes when its parent
-  // panel grows/shrinks (e.g. CSS width transitions), not just on
-  // window resize.
+  // resize alongside container
   useEffect(() => {
     const container = wrapperRef.current;
     if (!container || typeof ResizeObserver === "undefined") return;

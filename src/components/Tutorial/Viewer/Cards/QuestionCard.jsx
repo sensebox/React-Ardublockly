@@ -60,9 +60,6 @@ const QuestionCard = ({
     setSubmitted(true);
     setIsCorrect(savedAnswer.type === "success");
     onStatusChange(questionIndex, savedAnswer.type === "success");
-    // Only (re)load the saved answer when the question itself changes, not
-    // when the parent re-renders and passes a new onStatusChange reference.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questionKey, tutorialId, questionIndex]);
 
   if (!questionData)

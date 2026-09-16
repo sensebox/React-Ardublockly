@@ -1,7 +1,5 @@
 // Grav natively supports trailing URL params in the form `/key:value`
-// (see `param_sep` in system.yaml) and strips them before resolving the
-// page, so appending `/tutorial:<id>` to the current page path still
-// resolves to the same page while giving each tutorial its own URL.
+// `/tutorial:<id>`
 export const TUTORIAL_URL_PARAM = "tutorial";
 
 const TUTORIAL_PARAM_REGEX = new RegExp(`/${TUTORIAL_URL_PARAM}:([^/]+)/?$`);
