@@ -5,7 +5,7 @@ import { getColour } from "../helpers/colour";
 
 export default function QwiicButtonCategory() {
   return (
-    <Category name="Qwiic Button" colour={getColour().sensebox}>
+    <Category name="Qwiic Button" colour={getColour().sparkfun}>
       <Label text={Blockly.Msg.qwiic_setup_label} />
       <Block type="sensebox_qwiic_button_init" />
       <Label text={Blockly.Msg.qwiic_loop_label} />

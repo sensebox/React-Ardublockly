@@ -18,6 +18,7 @@ const colours = {
   motors: 190,
   solar: 0,
   ai: 280,
+  sparkfun: 8,
 };
 
 export const getColour = () => {

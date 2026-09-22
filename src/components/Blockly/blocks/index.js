@@ -34,4 +34,4 @@ import "./custom-functions";
 import "../helpers/types";
 import "@/components/Blockly/helpers/types";
 
-import "./sensebox-qwiic-button";
+import "./qwiic-button";
