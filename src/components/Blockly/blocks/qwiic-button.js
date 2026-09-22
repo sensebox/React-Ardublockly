@@ -9,7 +9,7 @@ import {
 } from "../helpers/qwiicButton.js";
 
 function base(block, tooltip) {
-  block.setColour(getColour().sensebox);
+  block.setColour(getColour().sparkfun);
   block.setHelpUrl(
     "https://github.com/sparkfun/SparkFun_Qwiic_Button_Arduino_Library",
   );

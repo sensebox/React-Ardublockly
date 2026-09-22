@@ -10,6 +10,39 @@ store.subscribe(() => {
 });
 var selectedBox = "";
 
+// Account box/sensor suggestions belong to production. Staging IDs are entered manually.
+function updateEnvironmentField(block, name, manual, options, placeholder) {
+  const field = block.getField(name);
+  if (
+    !field ||
+    (manual && field instanceof Blockly.FieldTextInput) ||
+    (!manual && field instanceof Blockly.FieldDropdown)
+  )
+    return;
+  const input = block.inputList.find((input) => input.fieldRow.includes(field));
+  input.removeField(name);
+  input.appendField(
+    manual
+      ? new Blockly.FieldTextInput(placeholder)
+      : new Blockly.FieldDropdown(options),
+    name,
+  );
+}
+function configureEnvironment(block) {
+  block.getField("ENVIRONMENT").setValidator(function (value) {
+    if (value === block.getFieldValue("ENVIRONMENT")) return value;
+    updateEnvironmentField(
+      block,
+      "BoxID",
+      value === "STAGING" || !boxes?.length,
+      boxes?.map((box) => [box.name, box._id]) || [],
+      "senseBox ID",
+    );
+    block.getField("access_token").setValue("access_token");
+    return value;
+  });
+}
+
 Blockly.Blocks["sensebox_osem_connection"] = {
   init: function () {
     var ssl = "TRUE";
@@ -18,6 +51,13 @@ Blockly.Blocks["sensebox_osem_connection"] = {
     this.setColour(getColour().sensebox);
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_osem_connection)
+      .appendField(
+        new Blockly.FieldDropdown([
+          [Blockly.Msg.senseBox_osem_host, "PRODUCTION"],
+          [Blockly.Msg.senseBox_osem_host_staging, "STAGING"],
+        ]),
+        "ENVIRONMENT",
+      )
       .appendField("SSL")
       .appendField(new Blockly.FieldCheckbox(ssl), "SSL");
     this.appendDummyInput()
@@ -65,6 +105,7 @@ Blockly.Blocks["sensebox_osem_connection"] = {
       .setCheck(null);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
+    configureEnvironment(this);
     this.getField("type").setValidator(
       function (val) {
         this.updateShape_(val === "Mobile");
@@ -94,10 +135,14 @@ Blockly.Blocks["sensebox_osem_connection"] = {
      * Blockly.Blocks['controls_flow_statements'].LOOP_TYPES.push('custom_loop');
      */
     selectedBox = this.getFieldValue("BoxID");
-    if (selectedBox !== "" && boxes) {
+    if (
+      this.getFieldValue("ENVIRONMENT") !== "STAGING" &&
+      selectedBox !== "" &&
+      boxes?.length
+    ) {
       var accessToken = boxes.find(
         (element) => element._id === selectedBox,
-      ).access_token;
+      )?.access_token;
       if (accessToken !== undefined) {
         this.getField("access_token").setValue(accessToken);
       } else {
@@ -160,6 +205,35 @@ Blockly.Blocks["sensebox_send_to_osem"] = {
     this.setNextStatement(true, null);
   },
 
+  saveExtraState() {
+    return {
+      manualSensorId:
+        this.getField("SensorID") instanceof Blockly.FieldTextInput,
+    };
+  },
+  loadExtraState(state) {
+    updateEnvironmentField(
+      this,
+      "SensorID",
+      !!state.manualSensorId,
+      this.generateOptions.bind(this),
+      "Sensor Id",
+    );
+  },
+  mutationToDom() {
+    const mutation = Blockly.utils.xml.createElement("mutation");
+    mutation.setAttribute(
+      "manual_sensor_id",
+      String(this.saveExtraState().manualSensorId),
+    );
+    return mutation;
+  },
+  domToMutation(mutation) {
+    this.loadExtraState({
+      manualSensorId: mutation.getAttribute("manual_sensor_id") === "true",
+    });
+  },
+
   generateOptions: function () {
     var dropdown = [];
     var boxID = selectedBox;
@@ -183,6 +257,16 @@ Blockly.Blocks["sensebox_send_to_osem"] = {
    * @this Blockly.Block
    */
   onchange: function () {
+    let connection = this.getSurroundParent();
+    while (connection && !this.LOOP_TYPES.includes(connection.type))
+      connection = connection.getSurroundParent();
+    updateEnvironmentField(
+      this,
+      "SensorID",
+      !boxes?.length || connection?.getFieldValue("ENVIRONMENT") === "STAGING",
+      this.generateOptions.bind(this),
+      "Sensor Id",
+    );
     var legal = false;
     // Is the block nested in a loop?
     var block = this;
@@ -215,6 +299,13 @@ Blockly.Blocks["sensebox_esp32s2_osem_connection"] = {
     this.setColour(getColour().sensebox);
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_osem_connection)
+      .appendField(
+        new Blockly.FieldDropdown([
+          [Blockly.Msg.senseBox_osem_host, "PRODUCTION"],
+          [Blockly.Msg.senseBox_osem_host_staging, "STAGING"],
+        ]),
+        "ENVIRONMENT",
+      )
       .appendField("SSL")
       .appendField(new Blockly.FieldCheckbox(ssl), "SSL");
     this.appendDummyInput()
@@ -240,7 +331,7 @@ Blockly.Blocks["sensebox_esp32s2_osem_connection"] = {
       this.appendDummyInput()
         .setAlign(Blockly.inputs.Align.LEFT)
         .appendField("senseBox ID")
-        .appendValueInput("BoxID");
+        .appendField(new Blockly.FieldDropdown(dropdown), "BoxID");
       // .appendField(new Blockly.FieldDropdown(dropdown), "BoxID");
     }
     this.appendDummyInput()
@@ -252,6 +343,7 @@ Blockly.Blocks["sensebox_esp32s2_osem_connection"] = {
       .setCheck(null);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
+    configureEnvironment(this);
     this.getField("type").setValidator(
       function (val) {
         this.updateShape_(val === "Mobile");
@@ -281,10 +373,14 @@ Blockly.Blocks["sensebox_esp32s2_osem_connection"] = {
      * Blockly.Blocks['controls_flow_statements'].LOOP_TYPES.push('custom_loop');
      */
     selectedBox = this.getFieldValue("BoxID");
-    if (selectedBox !== "" && boxes && boxes.length > 0) {
+    if (
+      this.getFieldValue("ENVIRONMENT") !== "STAGING" &&
+      selectedBox !== "" &&
+      boxes?.length
+    ) {
       var accessToken = boxes.find(
         (element) => element._id === selectedBox,
-      ).access_token;
+      )?.access_token;
       if (accessToken !== undefined) {
         this.getField("access_token").setValue(accessToken);
       } else {

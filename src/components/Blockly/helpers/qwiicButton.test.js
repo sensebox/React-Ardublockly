@@ -2,7 +2,7 @@ import { test, beforeEach, afterEach } from "node:test";
 import assert from "node:assert/strict";
 import { mkdirSync, writeFileSync, readFileSync } from "node:fs";
 import * as Blockly from "blockly";
-import "../blocks/sensebox-qwiic-button.js";
+import "../blocks/qwiic-button.js";
 import { QWIIC_STATUS, QWIIC_VALUES } from "./qwiicButton.js";
 import { QWIIC_BUTTON as en } from "../msg/en/sensebox-qwiic-button.js";
 import { QWIIC_BUTTON as de } from "../msg/de/sensebox-qwiic-button.js";
@@ -12,7 +12,7 @@ const generator = (Blockly.Generator.Arduino = new Blockly.Generator(
 generator.ORDER_NONE = 99;
 generator.ORDER_ATOMIC = 0;
 generator.ORDER_UNARY_POSTFIX = 1;
-await import("../generator/arduino/sensebox-qwiic-button.js");
+await import("../generator/arduino/qwiic-button.js");
 let workspace;
 beforeEach(() => {
   Blockly.setLocale(en);
