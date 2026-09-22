@@ -33,3 +33,5 @@ import "./watchdog";
 import "./webserver";
 import "./fluoroASM";
 import "./basic_dummies";
+
+import "./sensebox-qwiic-button";

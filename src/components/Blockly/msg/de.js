@@ -1,3 +1,4 @@
+import { QWIIC_BUTTON } from "./de/sensebox-qwiic-button";
 import { AUDIO } from "./de/audio";
 import { BLE } from "./de/sensebox-ble";
 import { FAQ } from "./de/faq";
@@ -49,6 +50,7 @@ export const De = {
   ...NTP,
   ...SD,
   ...SENSORS,
+  ...QWIIC_BUTTON,
   ...SOLAR,
   ...SENSEBOX,
   ...SENSEBOX_TEACHABLE,
