@@ -23,9 +23,9 @@ export const TutorialItemSummary = ({ tutorial, mediaBasePath = "/media/tutorial
       sx={{
         border: `2px solid ${theme.palette.primary.main}`,
         borderRadius: "5px",
-        backgroundColor: "#f5f5f5",
+        bgcolor: "background.paper",
+        color: "text.primary",
         p: 2,
-        bgcolor: "white",
         position: "relative", // 🔑 wichtig für das absolute Tag
         height: "100%",
       }}
@@ -240,7 +240,7 @@ export const TutorialItemSummary = ({ tutorial, mediaBasePath = "/media/tutorial
             sx={{
               mt: 1.5,
               p: 1.5,
-              bgcolor: "grey.100",
+              bgcolor: "background.grey",
               borderRadius: 1.5,
               borderLeft: `3px solid ${theme.palette.primary.main}`,
             }}

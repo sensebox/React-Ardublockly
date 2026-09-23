@@ -32,5 +32,8 @@ export default defineConfig({
   plugins: [react(), cssInjectedByJsPlugin()],
   define: {
     "process.env.NODE_ENV": JSON.stringify("production"),
+    __BLOCKLY_MEDIA_PATH__: JSON.stringify(
+      "/user/themes/ada-theme/images/tutorial/blockly/",
+    ),
   },
 });

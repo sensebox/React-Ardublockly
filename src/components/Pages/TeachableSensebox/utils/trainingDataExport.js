@@ -67,6 +67,10 @@ export const parseTrainingDataZip = async (file, processFile) => {
       const className = pathParts[0];
       const fileName = pathParts[pathParts.length - 1];
 
+      // Ignore macOS metadata folders
+      if (pathParts.some((part) => part === "__MACOSX" || part.startsWith(".")))
+        continue;
+
       try {
         const result = await processFile(zipEntry, className, fileName);
         if (!result) continue;

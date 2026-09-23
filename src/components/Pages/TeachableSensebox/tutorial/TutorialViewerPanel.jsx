@@ -1,7 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import { AnimatePresence } from "framer-motion";
-import { Box, Button, Typography, CircularProgress } from "@mui/material";
+import {
+  Box,
+  Button,
+  Typography,
+  CircularProgress,
+  Tooltip,
+} from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -39,6 +45,13 @@ export default function TutorialViewerPanel({
       scrollContainerRef.current.scrollTop = 0;
     }
   }, [activeStep]);
+  
+  useEffect(() => {
+    const stepType = currentStep?.type;
+    if (stepType === "instruction" || stepType === "finish") {
+      setNextStepDisabled(false);
+    }
+  }, [currentStep]);
 
   if (!tutorial) {
     if (message?.id === "GET_TUTORIAL_FAIL") {
@@ -92,9 +105,10 @@ export default function TutorialViewerPanel({
         {/* Left: tutorial step card + nav */}
         <Box
           sx={{
-            width: classificationType ? "30vw" : "100%",
+            width: classificationType ? (type === "blockly" ? "70vw" : "30vw") : "100%",
             minWidth: "350px",
-            maxWidth: classificationType ? "50vw" : "none",
+            maxWidth: classificationType ? (type === "blockly" ? "80vw" : "50vw") : "none",
+            transition: "width 0.3s ease, max-width 0.3s ease",
             display: "flex",
             flexDirection: "column",
             borderRight: classificationType ? "1px solid" : "none",
@@ -190,14 +204,24 @@ export default function TutorialViewerPanel({
             >
               Schritt {activeStep + 1} / {tutorial.steps.length}
             </Typography>
-            <Button
-              endIcon={<ChevronRightIcon />}
-              onClick={nextStep}
-              disabled={isLast || nextStepDisabled}
-              variant="contained"
+            <Tooltip
+              title={
+                !isLast && nextStepDisabled
+                  ? "Bitte beantworte alle Fragen, bevor du fortfährst."
+                  : ""
+              }
             >
-              Weiter
-            </Button>
+              <span>
+                <Button
+                  endIcon={<ChevronRightIcon />}
+                  onClick={nextStep}
+                  disabled={isLast || nextStepDisabled}
+                  variant="contained"
+                >
+                  Weiter
+                </Button>
+              </span>
+            </Tooltip>
           </Box>
         </Box>
 
