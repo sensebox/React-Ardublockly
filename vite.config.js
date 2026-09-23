@@ -18,6 +18,12 @@ export default defineConfig(() => {
           find: /^@mui\/icons-material\/(?!esm\/)(.+)$/,
           replacement: "@mui/icons-material/esm/$1",
         },
+        // Same issue for deep imports like "react-spinners/GridLoader" —
+        // redirect to its ESM build too.
+        {
+          find: /^react-spinners\/(?!esm\/)(.+)$/,
+          replacement: "react-spinners/esm/$1",
+        },
       ],
     },
     define: {
