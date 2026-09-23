@@ -68,6 +68,11 @@ Blockly.Generator.Arduino.forBlock["sensebox_osem_connection"] = function (
     wifi = false;
   }
 
+  // Missing fields in older workspaces continue to use production.
+  var host =
+    this.getFieldValue("ENVIRONMENT") === "STAGING"
+      ? "upload.staging.opensensemap.org"
+      : "ingress.opensensemap.org";
   var box_id = this.getFieldValue("BoxID");
   var branch = Blockly.Generator.Arduino.statementToCode(block, "DO");
   var access_token = this.getFieldValue("access_token");
@@ -94,12 +99,12 @@ Blockly.Generator.Arduino.forBlock["sensebox_osem_connection"] = function (
     Blockly.Generator.Arduino.definitions_["SenseBoxID"] =
       'const char* SENSEBOX_ID = "' + box_id + '";';
     Blockly.Generator.Arduino.definitions_["host"] =
-      'const char* server = "ingress.opensensemap.org";';
+      `const char* server = "${host}";`;
   } else {
     Blockly.Generator.Arduino.definitions_["SenseBoxID"] =
       'const char SENSEBOX_ID [] PROGMEM = "' + box_id + '";';
     Blockly.Generator.Arduino.definitions_["host"] =
-      'const char server [] PROGMEM ="ingress.opensensemap.org";';
+      `const char server [] PROGMEM = "${host}";`;
   }
 
   // SSL/WiFi configuration differs between ESP32 and MCU
@@ -257,7 +262,7 @@ ${
       delay(1000);
     }
   bool connected = false;
-  char _server[strlen_P(server)];
+  char _server[strlen_P(server) + 1];
   strcpy_P(_server, server);
   for (uint8_t timeout = 2; timeout != 0; timeout--) {
     connected = client.connect(_server, ` +
@@ -319,7 +324,7 @@ ${
       delay(1000);
     }
   bool connected = false;
-  char _server[strlen_P(server)];
+  char _server[strlen_P(server) + 1];
   strcpy_P(_server, server);
   for (uint8_t timeout = 2; timeout != 0; timeout--) {
     Serial.println(F("connecting..."));
@@ -422,7 +427,7 @@ ${
       delay(10);
     }
     bool connected = false;
-    char _server[strlen_P(server)];
+    char _server[strlen_P(server) + 1];
     strcpy_P(_server, server);
     for (uint8_t timeout = 2; timeout != 0; timeout--) {
       connected = client.connect(_server, ` +
@@ -474,7 +479,7 @@ ${
       delay(10);
     }
     bool connected = false;
-    char _server[strlen_P(server)];
+    char _server[strlen_P(server) + 1];
     strcpy_P(_server, server);
     for (uint8_t timeout = 2; timeout != 0; timeout--) {
       Serial.println(F("connecting..."));
