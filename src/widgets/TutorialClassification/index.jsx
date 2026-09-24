@@ -8,10 +8,13 @@ import {
   createTheme,
 } from "@mui/material/styles";
 import * as Blockly from "blockly/core";
-import store from "../../store";
+import { legacy_createStore as createStore, applyMiddleware, compose } from "redux";
+import { thunk } from "redux-thunk";
+import rootReducer from "../../reducers";
+import { setupInterceptors } from "../../actions/authActions";
 import TutorialClassificationWidget from "../../components/Pages/TeachableSensebox/tutorial/TutorialClassificationWidget";
 import { De } from "../../components/Blockly/msg/de";
-import { En } from "../../components/Blockly/msg/en";
+// import { En } from "../../components/Blockly/msg/en";
 import "./styles.css";
 
 function getHostLocaleMessages() {
@@ -66,7 +69,14 @@ function createWidgetTheme(mode) {
   });
 }
 
+function createWidgetStore() {
+  const store = createStore(rootReducer, {}, compose(applyMiddleware(thunk)));
+  setupInterceptors(store);
+  return store;
+}
+
 function WidgetRoot({ tutorials, mediaBasePath }) {
+  const [store] = useState(() => createWidgetStore());
   const [mode, setMode] = useState(getHostThemeMode);
 
   useEffect(() => {
