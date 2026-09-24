@@ -126,8 +126,19 @@ Blockly.Blocks["sensebox_sd_write_file"] = {
       this.setWarningText(Blockly.Msg.CONTROLS_FLOW_STATEMENTS_WARNING);
     }
   },
-  LOOP_TYPES: ["sensebox_sd_open_file"],
+  LOOP_TYPES: ["sensebox_sd_open_file", "sensebox_esp32s2_sd_open_file"],
 };
+
+/**
+ * Legacy aliases for the old board-specific SD block types.
+ * TODO: Remove these in a future release.
+ */
+Blockly.Blocks["sensebox_esp32s2_sd_create_file"] =
+  Blockly.Blocks["sensebox_sd_create_file"];
+Blockly.Blocks["sensebox_esp32s2_sd_open_file"] =
+  Blockly.Blocks["sensebox_sd_open_file"];
+Blockly.Blocks["sensebox_esp32s2_sd_write_file"] =
+  Blockly.Blocks["sensebox_sd_write_file"];
 
 Blockly.Blocks["sensebox_sd_osem"] = {
   init: function () {

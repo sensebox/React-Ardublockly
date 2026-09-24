@@ -128,6 +128,17 @@ Blockly.Generator.Arduino.forBlock["sensebox_sd_write_file"] = function (
   return code;
 };
 
+/**
+ * Legacy aliases for the old board-specific SD block types.
+ * TODO: Remove these in a future release.
+ */
+Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_sd_create_file"] =
+  Blockly.Generator.Arduino.forBlock["sensebox_sd_create_file"];
+Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_sd_open_file"] =
+  Blockly.Generator.Arduino.forBlock["sensebox_sd_open_file"];
+Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_sd_write_file"] =
+  Blockly.Generator.Arduino.forBlock["sensebox_sd_write_file"];
+
 Blockly.Generator.Arduino.forBlock["sensebox_sd_osem"] = function () {
   if (this.parentBlock_ != null) {
     var filename = this.getSurroundParent().getFieldValue("Filename");
