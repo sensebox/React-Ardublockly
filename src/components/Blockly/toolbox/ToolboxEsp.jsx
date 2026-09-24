@@ -345,6 +345,20 @@ export const ToolboxEsp = () => {
               </Value>
             </Block>
           </Category>
+          <Category
+            id="catSenseBoxOutput_LoRa_cayenne"
+            name="Cayenne LPP"
+            colour={getColour().sensebox}
+          >
+            <Block type="sensebox_lora_cayenne_send" />
+            <Block type="sensebox_lora_cayenne_temperature" />
+            <Block type="sensebox_lora_cayenne_humidity" />
+            <Block type="sensebox_lora_cayenne_pressure" />
+            <Block type="sensebox_lora_cayenne_luminosity" />
+            <Block type="sensebox_lora_cayenne_sensor" />
+            <Block type="sensebox_lora_cayenne_accelerometer" />
+            <Block type="sensebox_lora_cayenne_gps" />
+          </Category>
         </Category>
 
         {/* -------- BLUETOOTH / PHYPHOX -------- */}
