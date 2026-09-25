@@ -7,6 +7,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { workspaceName } from "../../../actions/workspaceActions";
 import CompilationDialog from "../ToolbarItems/CompilationDialog/CompilationDialog";
+import UploadProgressDialog from "./CompileAndUploadDialog/UploadProgressDialog";
+import { useFlash } from "./CompileAndUploadDialog/useFlash";
 import withStyles from "@mui/styles/withStyles";
 import * as Blockly from "blockly/core";
 const styles = (theme) => {
@@ -26,7 +28,9 @@ const styles = (theme) => {
 
 const Compile = (props) => {
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [uploadOpen, setUploadOpen] = useState(false);
   const isEmbedded = useSelector((state) => state.general.embeddedMode);
+  const { connected, startFlash, resetFlashState } = useFlash();
 
   const fallbackTexts = {
     de_DE: "Code kompilieren",
@@ -39,7 +43,22 @@ const Compile = (props) => {
     fallbackTexts[props.language] ||
     fallbackTexts.en_US; // Englisch als letzter Fallback
   const openDialog = () => {
-    setDialogOpen(true);
+    // A device was connected through the navbar "Gerät verbinden" button:
+    // compile and flash straight to the microcontroller. Otherwise fall back to
+    // the classic flow that downloads the binary for manual transfer.
+    if (connected) {
+      setUploadOpen(true);
+      startFlash().catch(() => {
+        // Errors are surfaced inside the upload progress dialog.
+      });
+    } else {
+      setDialogOpen(true);
+    }
+  };
+
+  const closeUpload = () => {
+    setUploadOpen(false);
+    resetFlashState();
   };
 
   return (
@@ -78,6 +97,7 @@ const Compile = (props) => {
         appLink={props.appLink || ""}
         isEmbedded={isEmbedded}
       />
+      <UploadProgressDialog open={uploadOpen} onClose={closeUpload} />
     </div>
   );
 };

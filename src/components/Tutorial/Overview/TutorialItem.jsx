@@ -21,7 +21,7 @@ import Dialog from "@/components/ui/Dialog";
 import { CheckCircle, Error as ErrorIcon } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 import Snackbar from "../../Snackbar";
-import TutorialItemSummary from "./TutorialtemSummary";
+import TutorialItemSummary from "./TutorialItemSummary";
 
 function getDifficultyLevel(value) {
   if (value <= 1) return 1;

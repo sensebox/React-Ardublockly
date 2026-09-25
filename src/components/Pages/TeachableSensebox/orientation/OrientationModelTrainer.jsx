@@ -268,7 +268,7 @@ const ClassCardItem = memo(
               border: "1px solid",
               borderColor: "divider",
               borderRadius: 1,
-              bgcolor: "grey.50",
+              bgcolor: "background.grey",
             }}
           >
             {cls.samples.map((sample) => (
@@ -509,6 +509,20 @@ const OrientationModelTrainer = ({
     if (!onLatestSample) return;
     onLatestSample(isConnected ? latestSample : null);
   }, [latestSample, isConnected, onLatestSample]);
+
+  // Warn before leaving/reloading the page if there are unsaved samples
+  const hasSamples = classes.some((cls) => cls.samples.length > 0);
+  useEffect(() => {
+    if (!hasSamples) return;
+
+    const handleBeforeUnload = (e) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [hasSamples]);
 
   const handleDownloadFirmware = async () => {
     setIsDownloading(true);

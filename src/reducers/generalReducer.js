@@ -18,7 +18,7 @@ const initialLanguage = () => {
   if (navigator.language === "de-DE") {
     return "de_DE";
   }
-  return "en_US";
+  return "de_DE";
 };
 
 const initialPlatform = () => {

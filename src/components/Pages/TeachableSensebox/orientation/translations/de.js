@@ -3,7 +3,7 @@ import OrientationClassification from "../OrientationClassification";
 
 // src/components/Pages/TeachableSensebox/orientation/translations/de.js
 export const orientationTranslations_de = {
-  title: "Orientierungsklassifizierung",
+  title: "Orientierungserkennung",
   description:
     "Trainiere dein eigenes Modell zur Erkennung von Orientierungen mit dem senseBox MCU Eye Beschleunigungssensor. Jede Aufnahme ist ein einzelner Messwert für x, y und z.",
   training: {
@@ -19,22 +19,23 @@ export const orientationTranslations_de = {
     record: "Aufnehmen",
     recordingCountdown: "Aufnahme in {seconds}s...",
     recorded: "Aufgenommen",
-    addClass: "Klasse hinzufügen",
+    addClass: "Orientierung hinzufügen",
     trainModel: "Modell trainieren",
     trainingInProgress: "Trainiere...",
-    livePredictions: "Live Klassifizierung",
+    livePredictions: "Live Erkennung",
     connectForPredictions: "Bitte verbinde die senseBox MCU Eye.",
     analyzing: "Analysiere...",
-    addNewClass: "Neue Klasse hinzufügen",
-    className: "Klassenname",
+    addNewClass: "Neue Orientierung hinzufügen",
+    className: "Name der Orientierung",
     cancel: "Abbrechen",
     add: "Hinzufügen",
     loadDataset: "Beispieldatensatz laden",
     errorTooManyClasses:
-      "Das Laden dieses Datensatzes würde das Limit von 5 Klassen überschreiten. Bitte entferne zuerst einige Klassen.",
-    errorClassExists: 'Eine Klasse mit dem Namen "{name}" existiert bereits.',
+      "Das Laden dieses Datensatzes würde das Limit von 5 Orientierungen überschreiten. Bitte entferne zuerst einige Orientierungen.",
+    errorClassExists:
+      'Eine Orientierung mit dem Namen "{name}" existiert bereits.',
     errorInsufficientData:
-      "Unzureichende Daten für das Training. Bitte füge mindestens 2 Klassen mit mindestens 2 Aufnahmen hinzu.",
+      "Unzureichende Daten für das Training. Bitte füge mindestens 2 Orientierungen mit mindestens 2 Aufnahmen hinzu.",
     errorConnection:
       "Fehler beim Verbinden mit der senseBox MCU Eye: {message}. Bitte stelle sicher, dass dein Gerät verbunden ist.",
     errorTraining: "Training fehlgeschlagen: {message}",
@@ -42,29 +43,29 @@ export const orientationTranslations_de = {
     finalAccuracy: "Genauigkeit",
     noDataYet: "Training abschließen um Ergebnisse zu sehen",
     needMoreSamples:
-      "Sammle mindestens 5 Aufnahmen pro Klasse für beste Ergebnisse.",
+      "Sammle mindestens 5 Aufnahmen pro Orientierung für beste Ergebnisse.",
     liveAccelerometer: "Live Beschleunigungssensor",
     axisX: "X",
     axisY: "Y",
     axisZ: "Z",
     tooltip: {
-      helpMain: "Was ist Orientierungsklassifizierung?",
+      helpMain: "Was ist Orientierungserkennung?",
       browserCompatible:
         "Dieser Browser unterstützt die benötigten Funktionen für die Verbindung mit der senseBox MCU Eye nicht. Bitte verwende einen kompatiblen Browser wie Chrome oder Edge.",
       bluetoothNotSupported:
         "Dieser Browser unterstützt kein Web Bluetooth. Bitte verwende Chrome oder Edge.",
-      helpClasses: "Hilfe zu Klassen",
+      helpClasses: "Hilfe zu Orientierungen",
       startConnection: "Verbinde die senseBox MCU Eye, um Aufnahmen zu starten",
       helpRecord: "Hilfe zur Aufnahme",
-      moreClasses: "Füge mindestens 2 Klassen hinzu, um zu trainieren",
+      moreClasses: "Füge mindestens 2 Orientierungen hinzu, um zu trainieren",
       moreSamples:
-        "Füge mindestens 2 Aufnahmen pro Klasse hinzu, um zu trainieren",
-      helpAddClass: "Hilfe zum Hinzufügen von Klassen",
+        "Füge mindestens 2 Aufnahmen pro Orientierung hinzu, um zu trainieren",
+      helpAddClass: "Hilfe zum Hinzufügen von Orientierungen",
       helpDecisionTree: "Was ist ein Entscheidungsbaum?",
       helpNeuralNetwork: "Was ist ein neuronales Netz?",
       helpModelDesign: "Wie sollte ein neuronales Netz aufgebaut sein?",
       helpAccelerationSensor: "Wie nehme ich eine Orientierung auf?",
-      classNameExists: "Eine Klasse mit diesem Namen existiert bereits",
+      classNameExists: "Eine Orientierung mit diesem Namen existiert bereits",
     },
   },
   neuralNetwork: {
@@ -77,13 +78,13 @@ export const orientationTranslations_de = {
     layers: "Schichten",
     neurons: "{count} Neuronen",
     placeholder:
-      "Definiere mindestens 2 Klassen und sammle mindestens eine Aufnahme für jede Klasse.",
+      "Definiere mindestens 2 Orientierungen und sammle mindestens eine Aufnahme für jede Orientierung.",
   },
   decisionTree: {
     tabLabel: "Entscheidungsbaum",
     title: "Entscheidungsbaum",
     placeholder:
-      "Definiere mindestens 2 Klassen und sammle mindestens eine Aufnahme für jede Klasse.",
+      "Definiere mindestens 2 Orientierungen und sammle mindestens eine Aufnahme für jede Orientierung.",
     internalNode: "{feature} ≤ {threshold}",
     leafNode: "{prediction}",
     samplesLabel: "{count} Aufnahmen",
@@ -124,10 +125,10 @@ export const orientationTranslations_de = {
   help: {
     help: "Hilfe",
     orientationClassification: {
-      title: "Orientierungsklassifizierung",
+      title: "Orientierungserkennung",
     },
     addClass: {
-      title: "Klasse hinzufügen",
+      title: "Orientierung hinzufügen",
     },
     neuralNetwork: {
       title: "Neuronales Netz",

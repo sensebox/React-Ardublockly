@@ -23,6 +23,9 @@ import {
   useMediaQuery,
   Paper,
   Divider,
+  Alert,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import {
   Add as AddIcon,
@@ -30,7 +33,9 @@ import {
   FiberManualRecord as RecordIcon,
   Speed as SensorIcon,
   Download as DownloadIcon,
+  Upload as UploadIcon,
   Bluetooth as BluetoothIcon,
+  MoreVert as MoreVertIcon,
 } from "@mui/icons-material";
 import useSpellSource from "./hooks/useSpellSource";
 import useSpellBLESource, { StrokeState } from "./hooks/useSpellBLESource";
@@ -44,8 +49,11 @@ import SerialErrorHandler, {
   ErrorTypes,
   ConnectionStatus,
 } from "../SerialErrorHandler";
-import TrainingResultsSection from "../image/TrainingResultsSection";
 import { downloadSpellFirmware } from "../utils/firmwareDownload";
+import {
+  downloadTrainingData,
+  parseTrainingDataZip,
+} from "../utils/trainingDataExport";
 
 // ─── Dimensions for stroke visualization ─────────────────────────────────────
 const STROKE_CANVAS_SIZE = 320;
@@ -274,7 +282,7 @@ const ClassCardItem = memo(
               border: "1px solid",
               borderColor: "divider",
               borderRadius: 1,
-              bgcolor: "grey.50",
+              bgcolor: "background.grey",
             }}
           >
             {cls.samples.map((sample) => (
@@ -458,6 +466,9 @@ const SpellModelTrainer = ({
   const [recordingClassId, setRecordingClassId] = useState(null);
   // Receptive field overlay for the live stroke canvas (set by NeuralNetworkVisualization hover)
   const [receptiveField, setReceptiveField] = useState(null);
+  const [uploadError, setUploadError] = useState(null);
+  const [dataMenuAnchor, setDataMenuAnchor] = useState(null);
+  const uploadInputRef = useRef(null);
 
   const language = useSelector((s) => s.general.language);
   const t = getSpellTranslations(language);
@@ -535,6 +546,20 @@ const SpellModelTrainer = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showAddDialog]);
 
+  // Warn before leaving/reloading the page if there are unsaved samples
+  const hasSamples = classes.some((cls) => cls.samples.length > 0);
+  useEffect(() => {
+    if (!hasSamples) return;
+
+    const handleBeforeUnload = (e) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [hasSamples]);
+
   const firstEpochTriggeredRef = useRef(false);
   useEffect(() => {
     if (isTraining) {
@@ -559,6 +584,20 @@ const SpellModelTrainer = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [trainedModel]);
+
+  // Auto-close upload error on user interaction
+  useEffect(() => {
+    if (!uploadError) return;
+
+    const handleClick = () => {
+      setUploadError(null);
+    };
+
+    document.addEventListener("click", handleClick);
+    return () => {
+      document.removeEventListener("click", handleClick);
+    };
+  }, [uploadError]);
 
   // ─── Auto-capture completed spells ──────────────────────────────────────
   // When a stroke is completed, add it to the currently recording class
@@ -620,6 +659,7 @@ const SpellModelTrainer = ({
       ]);
       setNewClassName("");
       setShowAddDialog(false);
+      setUploadError(null);
     }
   }, [newClassName, classes, onClassesChange, onTrainingError, t]);
 
@@ -722,8 +762,80 @@ const SpellModelTrainer = ({
     onModelTrained,
   ]);
 
+  // ─── Download/Upload Training Data ─────────────────────────────────────────
+  const handleDownloadTrainingData = useCallback(async () => {
+    await downloadTrainingData(classes, "spell", async (sample, index) => {
+      const data = {
+        strokePoints: sample.strokePoints,
+        timestamp: sample.timestamp,
+      };
+      return {
+        filename: `sample_${index + 1}.json`,
+        data: JSON.stringify(data, null, 2),
+      };
+    });
+  }, [classes]);
+
+  const handleUploadTrainingData = useCallback(
+    async (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const { classes: newClasses, error } = await parseTrainingDataZip(
+        file,
+        async (zipEntry, className, fileName) => {
+          if (!fileName.endsWith(".json")) return null;
+
+          const jsonData = await zipEntry.async("string");
+          const data = JSON.parse(jsonData);
+
+          // Validate that this is spell data (has strokePoints)
+          if (!data.strokePoints || !Array.isArray(data.strokePoints)) {
+            return null;
+          }
+
+          return {
+            isValid: true,
+            sample: {
+              id: Date.now() + Math.random(),
+              strokePoints: data.strokePoints,
+              pixelData: renderStrokeToImage(data.strokePoints),
+              timestamp: data.timestamp || Date.now(),
+            },
+          };
+        },
+      );
+
+      if (error === "NO_VALID_DATA") {
+        setUploadError(
+          t.training?.errorWrongFormat ||
+            "This zip file does not contain valid spell training data. Please upload a spell training zip file.",
+        );
+        return;
+      }
+
+      if (error === "INVALID_ZIP") {
+        setUploadError(
+          t.training?.errorInvalidZip ||
+            "Invalid zip file format. Please make sure to upload a spell training zip file.",
+        );
+        return;
+      }
+
+      if (newClasses) {
+        onClassesChange(() => newClasses);
+        setUploadError(null);
+      }
+
+      // Reset input
+      event.target.value = "";
+    },
+    [onClassesChange, onTrainingError, t],
+  );
+
   // ─── Render ────────────────────────────────────────────────────────────────
   const canAddClass = classes.length < 5;
+  const hasClassesWithSamples = classes.some((cls) => cls.samples.length > 0);
 
   return (
     <Box>
@@ -973,9 +1085,71 @@ const SpellModelTrainer = ({
                   startIcon={<AddIcon />}
                   onClick={() => setShowAddDialog(true)}
                   disabled={disabled}
+                  sx={{
+                    borderRadius: "4px 0 0 4px",
+                    height: "42px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
                 >
                   {t.training?.addClass || "Add Class"}
                 </Button>
+                <Button
+                  variant="contained"
+                  size="small"
+                  onClick={(e) => setDataMenuAnchor(e.currentTarget)}
+                  disabled={disabled}
+                  sx={{
+                    minWidth: "auto",
+                    height: "42px",
+                    padding: "0 6px",
+                    marginLeft: "-6px",
+                    display: "flex",
+                    borderRadius: "0 4px 4px 0",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <MoreVertIcon fontSize="small" />
+                </Button>
+                <Menu
+                  anchorEl={dataMenuAnchor}
+                  open={Boolean(dataMenuAnchor)}
+                  onClose={() => setDataMenuAnchor(null)}
+                >
+                  <Tooltip
+                    title={
+                      !hasClassesWithSamples
+                        ? t.training.tooltip.captureRecordingsFirst
+                        : ""
+                    }
+                    arrow
+                    disableHoverListener={hasClassesWithSamples}
+                  >
+                    <span>
+                      <MenuItem
+                        onClick={() => {
+                          handleDownloadTrainingData();
+                          setDataMenuAnchor(null);
+                        }}
+                        disabled={!hasClassesWithSamples}
+                      >
+                        <DownloadIcon fontSize="small" sx={{ mr: 1 }} />
+                        {t.training?.downloadData || "Download"}
+                      </MenuItem>
+                    </span>
+                  </Tooltip>
+                  <MenuItem
+                    onClick={() => {
+                      setDataMenuAnchor(null);
+                      uploadInputRef.current?.click();
+                    }}
+                  >
+                    <UploadIcon fontSize="small" sx={{ mr: 1 }} />
+                    {t.training?.uploadData || "Upload"}
+                  </MenuItem>
+                </Menu>
                 <HelpButton
                   onClick={() => {
                     markAddClassSeen();
@@ -988,6 +1162,18 @@ const SpellModelTrainer = ({
                 />
               </Box>
             )}
+
+            {/* Upload Error Message */}
+            {uploadError && (
+              <Alert
+                severity="error"
+                onClose={() => setUploadError(null)}
+                sx={{ width: "100%", mb: 2 }}
+              >
+                {uploadError}
+              </Alert>
+            )}
+
             <Divider sx={{ width: "100%", my: 1 }} />
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               <Tooltip
@@ -1159,6 +1345,14 @@ const SpellModelTrainer = ({
           </Tooltip>
         </DialogActions>
       </Dialog>
+
+      <input
+        ref={uploadInputRef}
+        type="file"
+        accept=".zip"
+        hidden
+        onChange={handleUploadTrainingData}
+      />
     </Box>
   );
 };

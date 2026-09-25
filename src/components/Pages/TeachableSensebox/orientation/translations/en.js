@@ -2,7 +2,7 @@ import { help } from "@uiw/react-md-editor";
 
 // src/components/Pages/TeachableSensebox/orientation/translations/en.js
 export const orientationTranslations_en = {
-  title: "Orientation Classification",
+  title: "Orientation Recognition",
   description:
     "Train your own orientation recognition model using the senseBox MCU Eye accelerometer. Each sample is a single snapshot of x, y, z values.",
   training: {
@@ -18,51 +18,52 @@ export const orientationTranslations_en = {
     record: "Record",
     recordingCountdown: "Recording in {seconds}s...",
     recorded: "Recorded",
-    addClass: "Add Class",
+    addClass: "Add Orientation",
     trainModel: "Train Model",
     trainingInProgress: "Training...",
-    livePredictions: "Live Classification",
+    livePredictions: "Live Recognition",
     connectForPredictions: "Please connect the senseBox MCU Eye.",
     analyzing: "Analyzing...",
-    addNewClass: "Add New Class",
-    className: "Class Name",
+    addNewClass: "Add New Orientation",
+    className: "Orientation Name",
     cancel: "Cancel",
     add: "Add",
     loadDataset: "Load Example Dataset",
     errorTooManyClasses:
-      "Loading this dataset would exceed the 5-class limit. Please remove some classes first.",
-    errorClassExists: 'A class with the name "{name}" already exists.',
+      "Loading this dataset would exceed the limit of 5 orientations. Please remove some orientations first.",
+    errorClassExists: 'An orientation with the name "{name}" already exists.',
     errorInsufficientData:
-      "Insufficient data for training. Please add at least 2 classes with at least 2 samples each.",
+      "Insufficient data for training. Please add at least 2 orientations with at least 2 samples each.",
     errorConnection:
       "Error connecting to senseBox MCU Eye: {message}. Please make sure your device is connected.",
     errorTraining: "Training failed: {message}",
     testResultsTitle: "Test",
     finalAccuracy: "Accuracy",
     noDataYet: "Complete training to see results",
-    needMoreSamples: "Collect at least 5 samples per class for best results.",
+    needMoreSamples:
+      "Collect at least 5 samples per orientation for best results.",
     liveAccelerometer: "Live Accelerometer",
     axisX: "X",
     axisY: "Y",
     axisZ: "Z",
     tooltip: {
-      helpMain: "What is Orientation Classification?",
+      helpMain: "What is Orientation Recognition?",
       browserCompatible:
         "This browser does not support the required features for connecting to the senseBox MCU Eye. Please use a compatible browser like Chrome or Edge.",
       bluetoothNotSupported:
         "This browser does not support Web Bluetooth. Please use Chrome or Edge.",
-      helpClasses: "Help with classes",
+      helpClasses: "Help with orientations",
       startConnection:
         "Connect to the senseBox MCU Eye to start recording samples",
       helpRecord: "Help with recording samples",
-      moreClasses: "Add at least 2 classes to train",
-      moreSamples: "Add at least 2 samples per class to train",
-      helpAddClass: "Help with adding classes",
+      moreClasses: "Add at least 2 orientations to train",
+      moreSamples: "Add at least 2 samples per orientation to train",
+      helpAddClass: "Help with adding orientations",
       helpDecisionTree: "What is a decision tree?",
       helpNeuralNetwork: "What is a neural network?",
       helpModelDesign: "How is a neural network structured?",
       helpAccelerationSensor: "How do I record an orientation?",
-      classNameExists: "A class with this name already exists",
+      classNameExists: "An orientation with this name already exists",
     },
   },
   neuralNetwork: {
@@ -75,13 +76,13 @@ export const orientationTranslations_en = {
     layers: "Layers",
     neurons: "{count} Neurons",
     placeholder:
-      "Define at least 2 classes and collect at least one sample for each class.",
+      "Define at least 2 orientations and collect at least one sample for each orientation.",
   },
   decisionTree: {
     tabLabel: "Decision Tree",
     title: "Decision Tree",
     placeholder:
-      "Define at least 2 classes and collect at least one sample for each class.",
+      "Define at least 2 orientations and collect at least one sample for each orientation.",
     internalNode: "{feature} ≤ {threshold}",
     leafNode: "{prediction}",
     samplesLabel: "{count} samples",
@@ -120,10 +121,10 @@ export const orientationTranslations_en = {
   help: {
     help: "Help",
     orientationClassification: {
-      title: "Orientation Classification",
+      title: "Orientation Recognition",
     },
     addClass: {
-      title: "Add Class",
+      title: "Add Orientation",
     },
     decisionTree: {
       title: "Decision Tree",

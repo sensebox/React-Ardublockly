@@ -32,12 +32,16 @@ import {
   Switch,
   FormControlLabel,
   Collapse,
+  Alert,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import {
   Add as AddIcon,
   Delete as DeleteIcon,
   PhotoCamera as CameraIcon,
   Download as DownloadIcon,
+  Upload as UploadIcon,
   MoreVert as MoreVertIcon,
   Warning as WarningIcon,
 } from "@mui/icons-material";
@@ -55,7 +59,14 @@ import ExpandedClassDialog from "./ExpandedClassDialog";
 import useModelTraining from "./hooks/useModelTraining";
 import { DEFAULT_TRAINING_SETTINGS } from "./hooks/useModelTraining";
 import useModelPrediction from "./hooks/useModelPrediction";
-import { downloadCameraFirmware } from "../utils/firmwareDownload";
+import {
+  downloadCameraFirmware,
+  downloadCollectFirmware,
+} from "../utils/firmwareDownload";
+import {
+  downloadTrainingData,
+  parseTrainingDataZip,
+} from "../utils/trainingDataExport";
 
 const ModelTrainer = ({
   onModelTrained,
@@ -86,6 +97,7 @@ const ModelTrainer = ({
   );
   const [browserCompatible, setBrowserCompatible] = useState(true);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [isDownloadingCollect, setIsDownloadingCollect] = useState(false);
   const [isFloatingPreviewCollapsed, setIsFloatingPreviewCollapsed] =
     useState(false);
   const [trainedWithEnoughSamples, setTrainedWithEnoughSamples] =
@@ -96,6 +108,9 @@ const ModelTrainer = ({
   const [trainingSettings, setTrainingSettings] = useState(
     DEFAULT_TRAINING_SETTINGS,
   );
+  const [uploadError, setUploadError] = useState(null);
+  const [dataMenuAnchor, setDataMenuAnchor] = useState(null);
+  const uploadInputRef = useRef(null);
 
   const language = useSelector((s) => s.general.language);
   const t = getImageTranslations(language);
@@ -220,6 +235,34 @@ const ModelTrainer = ({
     }
   }, [sourceType]);
 
+  // Warn before leaving/reloading the page if there are unsaved samples
+  const hasSamples = classes.some((cls) => cls.samples.length > 0);
+  useEffect(() => {
+    if (!hasSamples) return;
+
+    const handleBeforeUnload = (e) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [hasSamples]);
+
+  // Auto-close upload error on user interaction
+  useEffect(() => {
+    if (!uploadError) return;
+
+    const handleClick = () => {
+      setUploadError(null);
+    };
+
+    document.addEventListener("click", handleClick);
+    return () => {
+      document.removeEventListener("click", handleClick);
+    };
+  }, [uploadError]);
+
   const startCamera = useCallback(async () => {
     try {
       setVideoLoading(true);
@@ -340,6 +383,18 @@ const ModelTrainer = ({
     setIsDownloading(false);
   };
 
+  const handleDownloadCollectSketch = async () => {
+    setIsDownloadingCollect(true);
+    const result = await downloadCollectFirmware(
+      "sensebox_mcu_eye",
+      classes.map((cls) => cls.name),
+    );
+    if (!result.success) {
+      alert(`Failed to download collect sketch: ${result.error}`);
+    }
+    setIsDownloadingCollect(false);
+  };
+
   const addClass = useCallback(() => {
     if (newClassName.trim() && classes.length < 4) {
       const trimmedName = newClassName.trim();
@@ -360,6 +415,7 @@ const ModelTrainer = ({
       setClasses((prev) => [...prev, newClass]);
       setNewClassName("");
       setShowAddDialog(false);
+      setUploadError(null);
     }
   }, [newClassName, classes, onTrainingError, t]);
 
@@ -505,6 +561,71 @@ const ModelTrainer = ({
   const resetSettings = useCallback(() => {
     setTrainingSettings(DEFAULT_TRAINING_SETTINGS);
   }, []);
+
+  // ─── Download/Upload Training Data ─────────────────────────────────────────
+  const handleDownloadTrainingData = useCallback(async () => {
+    await downloadTrainingData(classes, "image", async (sample, index) => {
+      const response = await fetch(sample.url);
+      const blob = await response.blob();
+      return {
+        filename: `sample_${index + 1}.jpg`,
+        data: blob,
+      };
+    });
+  }, [classes]);
+
+  const handleUploadTrainingData = useCallback(
+    async (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const { classes: newClasses, error } = await parseTrainingDataZip(
+        file,
+        async (zipEntry, className, fileName) => {
+          // Accept jpg, jpeg, png, gif, webp
+          if (!/\.(jpe?g|png|gif|webp)$/i.test(fileName)) return null;
+
+          const blob = await zipEntry.async("blob");
+          const imageUrl = URL.createObjectURL(blob);
+
+          return {
+            isValid: true,
+            sample: {
+              id: Date.now() + Math.random(),
+              url: imageUrl,
+            },
+          };
+        },
+      );
+
+      if (error === "NO_VALID_DATA") {
+        setUploadError(
+          t.training?.errorWrongFormat ||
+            "This zip file does not contain valid image training data. Please upload an image training zip file.",
+        );
+        return;
+      }
+
+      if (error === "INVALID_ZIP") {
+        setUploadError(
+          t.training?.errorInvalidZip ||
+            "Invalid zip file format. Please make sure to upload an image training zip file.",
+        );
+        return;
+      }
+
+      if (newClasses) {
+        setClasses(newClasses);
+        setUploadError(null);
+      }
+
+      // Reset input
+      event.target.value = "";
+    },
+    [setClasses, t],
+  );
+
+  const hasClassesWithSamples = classes.some((cls) => cls.samples.length > 0);
 
   return (
     <Box>
@@ -687,7 +808,7 @@ const ModelTrainer = ({
                 {trainedModel && (
                   <Box sx={{ mt: 2, width: "100%", maxWidth: "400px" }}>
                     {predictions.length > 0 && (
-                      <Paper sx={{ p: 1.5, bgcolor: "grey.50" }}>
+                      <Paper sx={{ p: 1.5, bgcolor: "background.grey" }}>
                         <Box
                           sx={{
                             display: "flex",
@@ -763,7 +884,7 @@ const ModelTrainer = ({
                             p: 2,
                             textAlign: "center",
                             border: "1px dashed #ccc",
-                            bgcolor: "grey.50",
+                            bgcolor: "background.grey",
                           }}
                         >
                           <Typography variant="body2" color="text.secondary">
@@ -915,7 +1036,7 @@ const ModelTrainer = ({
                         border: "1px solid",
                         borderColor: "divider",
                         borderRadius: 1,
-                        bgcolor: "grey.50",
+                        bgcolor: "background.grey",
                         marginBottom: 0,
                       }}
                     >
@@ -995,26 +1116,132 @@ const ModelTrainer = ({
               gap: 2,
             }}
           >
-            {classes.length < 4 && (
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                <Button
-                  variant="contained"
-                  startIcon={<AddIcon />}
-                  onClick={() => setShowAddDialog(true)}
-                  disabled={disabled}
+            {/* Add Class Button with Data Menu Dropdown */}
+            <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+              <Button
+                variant="contained"
+                startIcon={<AddIcon />}
+                onClick={() => setShowAddDialog(true)}
+                disabled={classes.length >= 4 || disabled}
+                sx={{
+                  borderRadius: "4px 0 0 4px",
+                  height: "42px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                {t.training.addClass}
+              </Button>
+              <Button
+                variant="contained"
+                size="small"
+                onClick={(e) => setDataMenuAnchor(e.currentTarget)}
+                disabled={disabled}
+                sx={{
+                  minWidth: "auto",
+                  marginLeft: "-2px",
+                  height: "42px",
+                  padding: "0 6px",
+                  borderRadius: "0 4px 4px 0",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                {isDownloadingCollect ? (
+                  <CircularProgress size={16} sx={{ color: "white" }} />
+                ) : (
+                  <MoreVertIcon fontSize="small" />
+                )}
+              </Button>
+              <Menu
+                anchorEl={dataMenuAnchor}
+                open={Boolean(dataMenuAnchor)}
+                onClose={() => setDataMenuAnchor(null)}
+              >
+                <Tooltip
+                  title={
+                    !hasClassesWithSamples
+                      ? t.training.tooltip.captureImagesFirst
+                      : ""
+                  }
+                  arrow
+                  disableHoverListener={hasClassesWithSamples}
                 >
-                  {t.training.addClass}
-                </Button>
-                <HelpButton
+                  <span>
+                    <MenuItem
+                      onClick={() => {
+                        handleDownloadTrainingData();
+                        setDataMenuAnchor(null);
+                      }}
+                      disabled={!hasClassesWithSamples}
+                    >
+                      <DownloadIcon fontSize="small" sx={{ mr: 1 }} />
+                      {t.training?.downloadData || "Download"}
+                    </MenuItem>
+                  </span>
+                </Tooltip>
+                <MenuItem
                   onClick={() => {
-                    markAddClassSeen();
-                    onOpenHelp && onOpenHelp("image/addClass");
+                    setDataMenuAnchor(null);
+                    uploadInputRef.current?.click();
                   }}
-                  isBlinking={addClassBlinking}
-                  tooltip={t.training.tooltip.helpClasses}
-                />
-              </Box>
+                >
+                  <UploadIcon fontSize="small" sx={{ mr: 1 }} />
+                  {t.training?.uploadData || "Upload"}
+                </MenuItem>
+                <Tooltip
+                  title={
+                    classes.length <= 1
+                      ? t.training.tooltip.minClassesRequired
+                      : ""
+                  }
+                  arrow
+                  disableHoverListener={!(classes.length <= 1)}
+                >
+                  <span>
+                    <MenuItem
+                      onClick={() => {
+                        handleDownloadCollectSketch();
+                        setDataMenuAnchor(null);
+                      }}
+                      disabled={
+                        classes.length <= 1 || disabled || isDownloadingCollect
+                      }
+                    >
+                      {isDownloadingCollect ? (
+                        <CircularProgress size={16} sx={{ mr: 1 }} />
+                      ) : (
+                        <DownloadIcon fontSize="small" sx={{ mr: 1 }} />
+                      )}
+                      {t.training?.downloadTrainScript ||
+                        "Download Collect-Sketch"}
+                    </MenuItem>
+                  </span>
+                </Tooltip>
+              </Menu>
+              <HelpButton
+                onClick={() => {
+                  markAddClassSeen();
+                  onOpenHelp && onOpenHelp("image/addClass");
+                }}
+                isBlinking={addClassBlinking}
+                tooltip={t.training.tooltip.helpClasses}
+              />
+            </Box>
+
+            {/* Upload Error Message */}
+            {uploadError && (
+              <Alert
+                severity="error"
+                onClose={() => setUploadError(null)}
+                sx={{ width: "100%", mb: 2 }}
+              >
+                {uploadError}
+              </Alert>
             )}
+
             <Divider sx={{ width: "100%", my: 1 }} />
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               <Tooltip
@@ -1046,6 +1273,13 @@ const ModelTrainer = ({
                       classes.length < 2 ||
                       classes.some((cls) => cls.samples.length < 2)
                     }
+                    sx={{
+                      borderRadius: "4px 0 0 4px",
+                      height: "42px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
                   >
                     {t.training.trainModel}
                   </Button>
@@ -1053,14 +1287,24 @@ const ModelTrainer = ({
               </Tooltip>
 
               <Tooltip title={t.training.tooltip.trainingSettings} arrow>
-                <IconButton
+                <Button
+                  variant="contained"
+                  size="large"
                   onClick={() => setShowSettingsPanel((prev) => !prev)}
                   disabled={disabled || isTraining}
-                  size="small"
-                  color={showSettingsPanel ? "primary" : "default"}
+                  sx={{
+                    minWidth: "auto",
+                    marginLeft: "-6px",
+                    height: "42px",
+                    padding: "0 6px",
+                    borderRadius: "0 4px 4px 0",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
                 >
-                  <MoreVertIcon />
-                </IconButton>
+                  <MoreVertIcon fontSize="small" />
+                </Button>
               </Tooltip>
 
               <HelpButton
@@ -1314,6 +1558,14 @@ const ModelTrainer = ({
         onPrev={showPrev}
         onNext={showNext}
         onDelete={removeCurrentLightboxImage}
+      />
+
+      <input
+        ref={uploadInputRef}
+        type="file"
+        accept=".zip"
+        hidden
+        onChange={handleUploadTrainingData}
       />
     </Box>
   );

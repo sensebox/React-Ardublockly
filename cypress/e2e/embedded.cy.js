@@ -49,32 +49,31 @@ describe("Embedded Blockly Page Tests", () => {
 
   it("[Embedded] opens share dialog and generates short link", () => {
     cy.intercept({ method: "POST", pathname: "/share" }).as("share");
-    cy.intercept({ method: "POST", url: "https://www.snsbx.de/api/shorty" }).as("shorty");
+    cy.intercept({ method: "POST", url: "https://snsbx.de/api/shorty" }).as(
+      "shorty",
+    );
     cy.visit("/embedded");
     cy.get('img[alt="Sensebox ESP"]', { timeout: 8000 }).click();
-    
+
     // Click share button
-    cy.get(".embedded-toolbar svg.fa-share-nodes")
-      .parents("button")
-      .click();
-    
+    cy.get(".embedded-toolbar svg.fa-share-nodes").parents("button").click();
+
     // Wait for share API call (201 Created is valid for POST requests)
     cy.wait("@share", { responseTimeout: 10000 })
       .its("response.statusCode")
       .should("be.oneOf", [200, 201]);
-    
+
     // Wait for short link creation and verify response structure
-    cy.wait("@shorty", { responseTimeout: 10000 })
-      .then((interception) => {
-        expect(interception.response.statusCode).to.eq(200);
-        // Verify response is an array with at least one element containing a link
-        const responseBody = interception.response.body;
-        expect(responseBody).to.be.an("array");
-        expect(responseBody.length).to.be.greaterThan(0);
-        expect(responseBody[0]).to.have.property("link");
-        expect(responseBody[0].link).to.include("snsbx.de");
-      });
-    
+    cy.wait("@shorty", { responseTimeout: 10000 }).then((interception) => {
+      expect(interception.response.statusCode).to.eq(200);
+      // Verify response is an array with at least one element containing a link
+      const responseBody = interception.response.body;
+      expect(responseBody).to.be.an("array");
+      expect(responseBody.length).to.be.greaterThan(0);
+      expect(responseBody[0]).to.have.property("link");
+      expect(responseBody[0].link).to.include("snsbx.de");
+    });
+
     // Verify share dialog is visible
     cy.get('[role="dialog"]', { timeout: 5000 }).should("be.visible");
   });
@@ -99,19 +98,22 @@ describe("Embedded Blockly Page Tests", () => {
   it("[Embedded] displays Blockly workspace on large screens (landscape)", () => {
     cy.viewport(1920, 1080);
     cy.visit("/embedded");
-    
+
     cy.get('img[alt="Sensebox ESP"]', { timeout: 8000 }).click();
-    
+
     cy.get(".blocklySvg", { timeout: 10000 }).should("exist").and("be.visible");
     cy.get(".blocklyToolbox", { timeout: 10000 }).should("exist");
-    cy.get(".blocklyToolboxCategoryContainer", { timeout: 10000 }).should("exist");
+    cy.get(".blocklyToolboxCategoryContainer", { timeout: 10000 }).should(
+      "exist",
+    );
     cy.get(".blocklyToolboxCategory").should("have.length.greaterThan", 0);
     cy.get(".blocklyToolboxCategory").first().click();
     cy.get(".blocklyFlyout", { timeout: 5000 }).should("be.visible");
-    cy.get(".blocklyFlyout .blocklyBlockCanvas > .blocklyDraggable", { timeout: 5000 })
-      .should("have.length.greaterThan", 0);
+    cy.get(".blocklyFlyout .blocklyBlockCanvas > .blocklyDraggable", {
+      timeout: 5000,
+    }).should("have.length.greaterThan", 0);
     cy.get(".blocklyFlyout .blocklyPath").should("exist");
-    
+
     cy.viewport(1000, 660);
   });
 
@@ -136,7 +138,10 @@ describe("Embedded Blockly Page Tests", () => {
     cy.get('img[alt="Sensebox ESP"]', { timeout: 8000 }).click();
     cy.get(".embedded-toolbar svg.fa-share").parents("button").click();
     cy.get('[role="dialog"]', { timeout: 5000 }).should("exist");
-    cy.get('[role="dialog"]').find("button").contains(/cancel|abbrechen/i).click();
+    cy.get('[role="dialog"]')
+      .find("button")
+      .contains(/cancel|abbrechen/i)
+      .click();
     cy.get('[role="dialog"]').should("not.exist");
   });
 
@@ -183,4 +188,3 @@ describe("Embedded Blockly Page Tests", () => {
     });
   });
 });
-

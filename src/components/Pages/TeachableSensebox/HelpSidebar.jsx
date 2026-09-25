@@ -33,7 +33,7 @@ const NAVBAR_HEIGHT = 64;
 
 const HelpSidebar = ({ open, onClose, helpTopic }) => {
   const theme = useTheme();
-  const isWideScreen = useMediaQuery(theme.breakpoints.up("lg"));
+  const isWideScreen = useMediaQuery(theme.breakpoints.up("md"));
   const language = useSelector((s) => s.general.language);
   const [scrollOffset, setScrollOffset] = useState(0);
 

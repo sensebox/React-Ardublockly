@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
  * Note: this component dispatches a generic action type 'tutorial/loadRequest'.
  * Adjust the action type or import an action creator if your app uses a different convention.
  */
-export const TutorialItemSummary = ({ tutorial }) => {
+export const TutorialItemSummary = ({ tutorial, mediaBasePath = "/media/tutorial" }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth);
   // example of reading a global variable like theme from the store
@@ -23,9 +23,9 @@ export const TutorialItemSummary = ({ tutorial }) => {
       sx={{
         border: `2px solid ${theme.palette.primary.main}`,
         borderRadius: "5px",
-        backgroundColor: "#f5f5f5",
+        bgcolor: "background.paper",
+        color: "text.primary",
         p: 2,
-        bgcolor: "white",
         position: "relative", // 🔑 wichtig für das absolute Tag
         height: "100%",
       }}
@@ -121,7 +121,7 @@ export const TutorialItemSummary = ({ tutorial }) => {
                 <Tooltip key={i} title={subject} arrow>
                   <Box
                     component="img"
-                    src={`/media/tutorial/icons/${iconFile}`}
+                    src={`${mediaBasePath}/icons/${iconFile}`}
                     alt={subject}
                     sx={{
                       width: 40,
@@ -197,7 +197,7 @@ export const TutorialItemSummary = ({ tutorial }) => {
                 <Tooltip key={i} title={topic} arrow>
                   <Box
                     component="img"
-                    src={`/media/tutorial/icons/${iconFile}`}
+                    src={`${mediaBasePath}/icons/${iconFile}`}
                     alt={topic}
                     sx={{
                       width: 40,
@@ -240,7 +240,7 @@ export const TutorialItemSummary = ({ tutorial }) => {
             sx={{
               mt: 1.5,
               p: 1.5,
-              bgcolor: "grey.100",
+              bgcolor: "background.grey",
               borderRadius: 1.5,
               borderLeft: `3px solid ${theme.palette.primary.main}`,
             }}

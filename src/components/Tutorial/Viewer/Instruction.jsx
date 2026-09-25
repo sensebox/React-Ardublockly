@@ -33,7 +33,7 @@ md.renderer.rules.image = function (tokens, idx, options, env, self) {
   `;
 };
 
-const Instruction = ({ tutorial }) => {
+const Instruction = ({ tutorial, mediaBasePath = "/media/hardware" }) => {
   const theme = useTheme();
   // find the instruction step
   const step = (tutorial?.steps || []).find(
@@ -41,9 +41,9 @@ const Instruction = ({ tutorial }) => {
   ) || { text: "", hardware: [] };
 
   return (
-    <TutorialSlide title="Einleitung">
+    <TutorialSlide>
       <Box sx={{ my: 2 }}>
-        <div dangerouslySetInnerHTML={{ __html: md.render(step.text) }} />
+        <div className="tutorial-markdown" dangerouslySetInnerHTML={{ __html: md.render(step.text) }} />
       </Box>
       <Typography sx={{ fontWeight: "bold" }}>
         <Info sx={{ color: theme.palette.primary.main, mr: 1 }} />
@@ -74,6 +74,7 @@ const Instruction = ({ tutorial }) => {
                 <HardwareCard
                   component={sensor}
                   customHardware={tutorial.customHardware || {}}
+                  mediaBasePath={mediaBasePath}
                 />
               </Box>
             </div>
