@@ -114,6 +114,47 @@ function generateMeasurementDisplaySvg(value = "0", title = "", unit = "") {
   return svgToDataUri(svgTemplate);
 }
 
+// Draws an 8x8 bitmap ("0"/"1" per pixel, row by row) centred on the screen
+function generateBitmapDisplaySvg(bitmap = "") {
+  const cell = 6.4;
+  const startX = 63.78 - 4 * cell;
+  const startY = 12.5;
+
+  const pixels = [];
+  for (let i = 0; i < 64; i++) {
+    if (bitmap[i] !== "1") continue;
+    const x = startX + (i % 8) * cell;
+    const y = startY + Math.floor(i / 8) * cell;
+    pixels.push(
+      `<rect class="pixel" x="${x}" y="${y}" width="${cell}" height="${cell}"/>`,
+    );
+  }
+
+  const svgTemplate = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.56 70.87">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #063;
+      }
+      .cls-2 {
+        fill: #1d1d1b;
+      }
+      .pixel {
+        fill: #ffffff;
+      }
+    </style>
+  </defs>
+  <g>
+    <path class="cls-1" d="M119.06,0H8.5C3.81,0,0,3.81,0,8.5v53.86c0,4.7,3.81,8.5,8.5,8.5h110.55c4.7,0,8.5-3.81,8.5-8.5V8.5c0-4.7-3.81-8.5-8.5-8.5ZM7.09,68.03c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25ZM7.09,11.34c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25ZM120.47,68.03c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25ZM120.47,11.34c-2.35,0-4.25-1.9-4.25-4.25s1.9-4.25,4.25-4.25,4.25,1.9,4.25,4.25-1.9,4.25-4.25,4.25Z"/>
+    <polygon class="cls-2" points="14.17 11.34 14.17 55.98 32.03 64.91 43.94 64.91 43.94 70.87 83.62 70.87 83.62 64.91 95.53 64.91 113.39 55.98 113.39 11.34 14.17 11.34"/>
+    ${pixels.join("\n    ")}
+  </g>
+</svg>`;
+
+  return svgToDataUri(svgTemplate);
+}
+
 Blockly.defineBlocksWithJsonArray([
   {
     type: "display_clear_basic",
@@ -191,6 +232,14 @@ Blockly.Blocks["display_print_basic"] = {
   },
 
   updateDisplay: function () {
+    const bitmapBlock = this.getInputTargetBlock("TEXT");
+    if (bitmapBlock?.type === "display_draw_bitmap_basic") {
+      this.getField("DISPLAY_ICON")?.setValue(
+        generateBitmapDisplaySvg(bitmapBlock.getBitmapString()),
+      );
+      return;
+    }
+
     const fontSize = this.getFieldValue("SIZE") || "s";
     const allTexts = [];
     let currentBlock = this;
@@ -650,3 +699,14 @@ Blockly.defineBlocksWithJsonArray([
     helpUrl: Blockly.Msg.senseBox_ws2812_rgb_matrix_helpurl,
   },
 ]);
+
+// "0"/"1" per pixel, row by row; shared by the generator and the display preview
+Blockly.Blocks["display_draw_bitmap_basic"].getBitmapString = function () {
+  let bitmapStr = "";
+  for (let row = 1; row <= 8; row++) {
+    for (let col = 1; col <= 8; col++) {
+      bitmapStr += this.getFieldValue(`${row},${col}`) === "#ffffff" ? "1" : "0";
+    }
+  }
+  return bitmapStr;
+};
