@@ -1,6 +1,6 @@
 const beforeStartCategory = {
   kind: "category",
-  name: "Vor dem Start",
+  name: "Einmalig ausführen",
   colour: "#995ba5",
   contents: [{ kind: "block", type: "basic_setup" }],
 };
@@ -303,7 +303,6 @@ const showAllBlocksCategory = false;
 
 const toolboxCategories = [
   ...(showAllBlocksCategory ? [allBlocksCategory] : []),
-  beforeStartCategory,
   variablesCategory,
   sensorsCategory,
   displayCategory,
@@ -311,6 +310,7 @@ const toolboxCategories = [
   conditionsCategory,
   numbersCategory,
   timeAndRepeatCategory,
+  beforeStartCategory,
   dataSendCategory,
 ];
 
