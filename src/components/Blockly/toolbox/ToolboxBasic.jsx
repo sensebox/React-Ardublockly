@@ -57,7 +57,7 @@ const displayCategory = {
     {
       kind: "block",
       type: "display_draw_bitmap_basic",
-      tooltip: "Paint a custom Bitmap on the display.",
+      tooltip: "Zeichne ein Muster auf dem Display.",
     },
   ],
 };

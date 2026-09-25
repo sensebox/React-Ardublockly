@@ -150,6 +150,11 @@ basicGenerator.forBlock["display_print_basic"] = function (block, generator) {
 
   const clear = block.getFieldValue && block.getFieldValue("CLEAR") === "TRUE";
   const clearCode = clear ? "clearDisplay()\n" : "";
+
+  // A connected bitmap block already yields the full displayBitmap(...) call
+  if (block.getInputTargetBlock("TEXT")?.type === "display_draw_bitmap_basic") {
+    return `${clearCode}${raw}\n`;
+  }
   return `${clearCode}display(${raw}, ${size})\n`;
 };
 
@@ -497,5 +502,5 @@ basicGenerator.forBlock["display_draw_bitmap_basic"] = function (
   }
 
   // Generate code to display the 8x8 bitmap
-  return `displayBitmap("${bitmapStr}")\n`;
+  return [`displayBitmap("${bitmapStr}")`, generator.ORDER_ATOMIC];
 };

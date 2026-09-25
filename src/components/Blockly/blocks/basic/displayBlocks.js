@@ -1,6 +1,5 @@
 import * as Blockly from "blockly/core";
 import * as Types from "@/components/Blockly/helpers/types";
-import { getColour } from "../../helpers/colour";
 import "@/components/Blockly/fields/ToggleColourField";
 
 const FONT_SIZE_CONFIG = {
@@ -129,7 +128,7 @@ Blockly.defineBlocksWithJsonArray([
 
 Blockly.Blocks["display_print_basic"] = {
   init: function () {
-    this.appendDummyInput("ZEIGE").appendField(
+    this.appendEndRowInput("ZEIGE").appendField(
       new Blockly.FieldLabel("Zeige :", undefined, { bold: true }),
     );
 
@@ -137,6 +136,9 @@ Blockly.Blocks["display_print_basic"] = {
       new Blockly.FieldImage(generateDisplaySvg("", "s"), 160, 90, "*"),
       "DISPLAY_ICON",
     );
+
+    // Row break after TEXT, only needed (and visible) in inline mode
+    this.appendEndRowInput("TEXT_END").setVisible(false);
 
     this.appendDummyInput("CLEAR_OPTION")
       .appendField(new Blockly.FieldCheckbox("FALSE"), "CLEAR")
@@ -170,8 +172,22 @@ Blockly.Blocks["display_print_basic"] = {
       (event.type === Blockly.Events.BLOCK_CHANGE ||
         event.type === Blockly.Events.BLOCK_MOVE)
     ) {
+      this.updateBitmapLayout_();
       this.updateDisplay();
     }
+  },
+
+  // Render a connected bitmap inside the block instead of hanging off the side
+  updateBitmapLayout_: function () {
+    const hasBitmap =
+      this.getInputTargetBlock("TEXT")?.type === "display_draw_bitmap_basic";
+    if (this.bitmapLayout_ === hasBitmap) return;
+    this.bitmapLayout_ = hasBitmap;
+    this.getInput("TEXT_END").setVisible(hasBitmap);
+    // Font size has no effect on a bitmap
+    this.getInput("FONT_SIZE").setVisible(!hasBitmap);
+    this.setInputsInline(hasBitmap);
+    if (this.rendered) this.queueRender();
   },
 
   updateDisplay: function () {
@@ -332,6 +348,14 @@ Blockly.Blocks["display_show_measurement"] = {
     }
   },
 };
+
+// Thicker outline so the bitmap stays distinguishable inside "Zeige :"
+Blockly.Css.register(`
+  .display_draw_bitmap_basic > .blocklyPath {
+    stroke: #2f5520;
+    stroke-width: 3px;
+  }
+`);
 
 Blockly.defineBlocksWithJsonArray([
   {
@@ -620,9 +644,8 @@ Blockly.defineBlocksWithJsonArray([
         name: "8,8",
       },
     ],
-    nextStatement: null,
-    previousStatement: null,
-    colour: getColour().sensebox,
+    output: null,
+    colour: "#62A044",
     tooltip: Blockly.Msg.senseBox_ws2812_rgb_matrix_draw_bitmap_tooltip,
     helpUrl: Blockly.Msg.senseBox_ws2812_rgb_matrix_helpurl,
   },
