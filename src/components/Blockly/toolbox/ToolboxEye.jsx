@@ -139,6 +139,8 @@ export const ToolboxEye = () => {
         <Block type="sensebox_display_show" />
         <Block type="sensebox_display_clearDisplay" />
 
+        <Block type="sensebox_display_image" />
+
         <Block type="sensebox_display_printDisplay">
           <Value name="SIZE">
             <Block type="math_number">
@@ -266,8 +268,6 @@ export const ToolboxEye = () => {
             </Block>
           </Value>
         </Block>
-
-        <Block type="sensebox_display_image" />
       </Category>
 
       {/* ============================== INTERNET & COMMS ============================== */}
@@ -350,6 +350,20 @@ export const ToolboxEye = () => {
               </Value>
             </Block>
           </Category>
+          <Category
+            id="catSenseBoxOutput_LoRa_cayenne"
+            name="Cayenne LPP"
+            colour={getColour().sensebox}
+          >
+            <Block type="sensebox_lora_cayenne_send" />
+            <Block type="sensebox_lora_cayenne_temperature" />
+            <Block type="sensebox_lora_cayenne_humidity" />
+            <Block type="sensebox_lora_cayenne_pressure" />
+            <Block type="sensebox_lora_cayenne_luminosity" />
+            <Block type="sensebox_lora_cayenne_sensor" />
+            <Block type="sensebox_lora_cayenne_accelerometer" />
+            <Block type="sensebox_lora_cayenne_gps" />
+          </Category>
         </Category>
 
         {/* -------- BLUETOOTH / PHYPHOX -------- */}
@@ -392,25 +406,25 @@ export const ToolboxEye = () => {
 
       {/* ============================== SD CARD ============================== */}
       <Category name="SD" colour={getColour().sensebox}>
-        <Block type="sensebox_esp32s2_sd_create_file">
+        <Block type="sensebox_sd_create_file">
           <Value name="FILENAME">
             <Block type="text">
               <Field name="TEXT">Data</Field>
             </Block>
           </Value>
         </Block>
-        <Block type="sensebox_esp32s2_sd_open_file">
+        <Block type="sensebox_sd_open_file">
           <Value name="FILENAME">
             <Block type="text">
               <Field name="TEXT">Data</Field>
             </Block>
           </Value>
           <Value name="SD">
-            <Block type="sensebox_esp32s2_sd_write_file" />
+            <Block type="sensebox_sd_write_file" />
           </Value>
         </Block>
-        <Block type="sensebox_esp32s2_sd_write_file" />
-        <Block type="sensebox_esp32s2_sd_open_file">
+        <Block type="sensebox_sd_write_file" />
+        <Block type="sensebox_sd_open_file">
           <Value name="FILENAME">
             <Block type="text">
               <Field name="TEXT">Data</Field>
@@ -429,7 +443,7 @@ export const ToolboxEye = () => {
         <Block type="sensebox_sd_exists">
           <Value name="FILENAME">
             <Block type="text">
-              <Field name="TEXT">Dateiname</Field>
+              <Field name="TEXT">Data</Field>
             </Block>
           </Value>
         </Block>
@@ -705,6 +719,7 @@ export const ToolboxEye = () => {
         {/* ============================== AI ============================== */}
         <Category
           id="sensebox_ai"
+          toolboxitemid="sensebox_ai"
           name={Blockly.Msg.toolbox_ai || "AI"}
           colour={getColour().ai}
         >

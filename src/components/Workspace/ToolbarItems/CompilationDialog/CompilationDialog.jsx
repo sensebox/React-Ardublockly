@@ -32,10 +32,10 @@ import { compileToSketchId } from "../CompileAndUploadDialog/compileBinary";
 
 function CompilationDialog({
   open,
-  code,
+  code = "// Demo code",
   selectedBoard,
   onClose,
-  platform,
+  platform = false,
   isEmbedded = false,
 }) {
   const [activeStep, setActiveStep] = useState(0);
@@ -330,15 +330,6 @@ CompilationDialog.propTypes = {
   platform: PropTypes.bool.isRequired,
   appLink: PropTypes.string,
   isEmbedded: PropTypes.bool,
-};
-
-CompilationDialog.defaultProps = {
-  compiler: "demo",
-  code: "// Demo code",
-  filename: "sketch",
-  platform: false,
-  onCompileComplete: () => {},
-  isEmbedded: false,
 };
 
 export default CompilationDialog;
