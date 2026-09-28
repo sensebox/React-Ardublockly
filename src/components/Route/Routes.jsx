@@ -33,6 +33,7 @@ import SpellClassification from "@/components/Pages/TeachableSensebox/spell/Spel
 import OrientationClassification from "@/components/Pages/TeachableSensebox/orientation/OrientationClassification";
 import BasicWithSerial from "../Pages/Basic/BasicWithSerial";
 import BasicProject from "../Pages/Basic/BasicProject";
+const QooolLab = React.lazy(() => import("../Pages/QooolLab/QooolLab"));
 function AppRoutes({ platform, visitPage, setPlatform }) {
   const location = useLocation();
 
@@ -120,6 +121,17 @@ function AppRoutes({ platform, visitPage, setPlatform }) {
 
         {/* Code Editor */}
         <Route path="/codeeditor" element={<CodeEditor />} />
+
+        <Route
+          path="/qoool"
+          element={
+            <PublicRoute>
+              <React.Suspense fallback={<div>QOOOL Lab…</div>}>
+                <QooolLab />
+              </React.Suspense>
+            </PublicRoute>
+          }
+        />
 
         {/* Teachable Machine */}
         <Route
