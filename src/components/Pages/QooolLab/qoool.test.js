@@ -157,3 +157,85 @@ test("serial handshake, ordered writes and disconnect release locks and stop fir
     else delete globalThis.navigator;
   }
 });
+
+test("failed open reports recovery steps and does not close another owner’s port", async () => {
+  const errors = [],
+    states = [];
+  let closes = 0;
+  const port = {
+    readable: {},
+    async open() {
+      throw new Error(
+        "Failed to execute 'open' on 'SerialPort': Failed to open serial port.",
+      );
+    },
+    async close() {
+      closes++;
+    },
+  };
+  const original = Object.getOwnPropertyDescriptor(globalThis, "navigator");
+  Object.defineProperty(globalThis, "navigator", {
+    configurable: true,
+    value: { serial: { requestPort: async () => port } },
+  });
+  const service = new SerialConnection({
+    onTelegram() {},
+    onStatus: (s) => states.push(s),
+    onLog() {},
+    onError: (e) => errors.push(e),
+  });
+  try {
+    await service.connect();
+    assert.equal(closes, 0);
+    assert.match(errors[0].message, /Python QOOOL/);
+    assert.match(errors[0].message, /Failed to open serial port/);
+    assert.equal(states.at(-1), "disconnected");
+  } finally {
+    await service.disconnect();
+    if (original) Object.defineProperty(globalThis, "navigator", original);
+    else delete globalThis.navigator;
+  }
+});
+
+test("disconnect waits for an in-flight open and closes it before allowing a retry", async () => {
+  let completeOpen,
+    closes = 0;
+  const states = [];
+  const port = {
+    open() {
+      return new Promise((resolve) => {
+        completeOpen = resolve;
+      });
+    },
+    async close() {
+      closes++;
+    },
+  };
+  const original = Object.getOwnPropertyDescriptor(globalThis, "navigator");
+  Object.defineProperty(globalThis, "navigator", {
+    configurable: true,
+    value: { serial: { requestPort: async () => port } },
+  });
+  const service = new SerialConnection({
+    onTelegram() {},
+    onStatus: (s) => states.push(s),
+    onLog() {},
+    onError: (e) => {
+      throw e;
+    },
+  });
+  try {
+    const connecting = service.connect();
+    await Promise.resolve();
+    const closing = service.disconnect();
+    assert.equal(states.at(-1), "connecting");
+    completeOpen();
+    await Promise.all([connecting, closing]);
+    assert.equal(closes, 1);
+    assert.equal(states.at(-1), "disconnected");
+  } finally {
+    await service.disconnect();
+    if (original) Object.defineProperty(globalThis, "navigator", original);
+    else delete globalThis.navigator;
+  }
+});
