@@ -5,17 +5,31 @@ export default class SerialConnection {
     Object.assign(this, { onTelegram, onStatus, onLog, onError });
     this.queue = Promise.resolve();
     this.cancelled = false;
+    this.opened = false;
   }
   async connect() {
     try {
       this.onStatus("connecting");
       this.port = await navigator.serial.requestPort();
       if (this.cancelled) return;
-      await this.port.open({ baudRate: 115200 });
-      if (this.cancelled) {
-        await this.port.close();
-        return;
+      const info = this.port.getInfo?.() || {};
+      this.onLog(
+        `Opening USB serial at 115200 baud (VID: ${info.usbVendorId?.toString(16) || "unknown"}, PID: ${info.usbProductId?.toString(16) || "unknown"})`,
+      );
+      // Keep the pending open so disconnect cannot finish before it settles.
+      this.openTask = this.port.open({ baudRate: 115200 });
+      try {
+        await this.openTask;
+        this.opened = true;
+      } catch (cause) {
+        const error = new Error(
+          "Could not open the MCU-S2 serial port. Close the Python QOOOL program, Arduino Serial Monitor and other tabs using this device. Reconnect the USB cable, wait for the device to appear, then select it again. " +
+            cause.message,
+        );
+        error.cause = cause;
+        throw error;
       }
+      if (this.cancelled) return;
       this.writer = this.port.writable.getWriter();
       this.reader = this.port.readable.getReader();
       this.readTask = this.readLoop();
@@ -31,7 +45,8 @@ export default class SerialConnection {
         } else this.ping().catch((error) => this.fail(error));
       }, 3000);
     } catch (error) {
-      if (error.name !== "NotFoundError") this.onError(error);
+      if (!this.cancelled && error.name !== "NotFoundError")
+        this.onError(error);
       await this.disconnect();
     }
   }
@@ -84,6 +99,8 @@ export default class SerialConnection {
     clearInterval(this.timer);
     this.closing = (async () => {
       try {
+        // Do not race an in-flight open or close a port owned by another feature.
+        if (this.openTask) await this.openTask.catch(() => {});
         if (this.reader) {
           try {
             await this.reader.cancel();
@@ -102,7 +119,10 @@ export default class SerialConnection {
           this.writer.releaseLock();
           this.writer = null;
         }
-        if (this.port?.readable) await this.port.close();
+        if (this.opened) {
+          await this.port.close();
+          this.opened = false;
+        }
       } catch (error) {
         this.onLog(`Disconnect: ${error.message}`);
       } finally {
