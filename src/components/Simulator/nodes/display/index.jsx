@@ -1,4 +1,3 @@
-
 import React, { memo } from "react";
 import { Handle, Position } from "@xyflow/react";
 
@@ -7,7 +6,7 @@ const Display = ({ data }) => {
     <div
       style={{
         maxWidth: "350px",
-        zIndex:100
+        zIndex: 100,
       }}
     >
       <div

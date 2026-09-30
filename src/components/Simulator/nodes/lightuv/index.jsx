@@ -7,7 +7,6 @@ const sensorConfigLuxUv = [
   {
     id: "lux",
     emoji: "🔦",
-    label: "Lux",
     min: 0,
     max: 10000,
     step: 1,
@@ -17,7 +16,6 @@ const sensorConfigLuxUv = [
   {
     id: "uv",
     emoji: "☀️",
-    label: "UV",
     min: 0,
     max: 100,
     step: 1,

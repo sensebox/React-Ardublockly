@@ -17,6 +17,8 @@ import SimulatorFlow from "./flow";
 export default function Simulator() {
   const dispatch = useDispatch();
 
+  // Texts come from Blockly.Msg: re-render when the language changes.
+  useSelector((s) => s.general.language);
   const code = useSelector((state) => state.simulator.code);
   const modules = useSelector((state) => state.simulator.modules);
   const isSimulatorRunning = useSelector((state) => state.simulator.isRunning);
@@ -126,11 +128,19 @@ export default function Simulator() {
         >
           {/* Play/Stop Button */}
           {isSimulatorRunning ? (
-            <IconButton onClick={handleStop}>
+            <IconButton
+              onClick={handleStop}
+              aria-label={Blockly.Msg.simulator_stop}
+              title={Blockly.Msg.simulator_stop}
+            >
               <FontAwesomeIcon color="#e27136" icon={faStop} />
             </IconButton>
           ) : (
-            <IconButton onClick={handleStart}>
+            <IconButton
+              onClick={handleStart}
+              aria-label={Blockly.Msg.simulator_start}
+              title={Blockly.Msg.simulator_start}
+            >
               <FontAwesomeIcon color="#4eaf47" icon={faPlay} />
             </IconButton>
           )}
@@ -150,7 +160,11 @@ export default function Simulator() {
           </div>
 
           {/* Info Button */}
-          <IconButton onClick={handleInfoClick}>
+          <IconButton
+            onClick={handleInfoClick}
+            aria-label={Blockly.Msg.simulator_info_title}
+            title={Blockly.Msg.simulator_info_title}
+          >
             <FontAwesomeIcon color=" #45beed" icon={faInfoCircle} />
           </IconButton>
 
@@ -169,13 +183,18 @@ export default function Simulator() {
                 minWidth: "200px",
               }}
             >
-              <h4 style={{ marginTop: 0 }}>Simulation Info</h4>
+              <h4 style={{ marginTop: 0 }}>
+                {Blockly.Msg.simulator_info_title}
+              </h4>
               <p style={{ margin: 0 }}>
-                <strong>Status:</strong>{" "}
-                {isSimulatorRunning ? "Running" : "Stopped"}
+                <strong>{Blockly.Msg.simulator_info_status}</strong>{" "}
+                {isSimulatorRunning
+                  ? Blockly.Msg.simulator_status_running
+                  : Blockly.Msg.simulator_status_stopped}
               </p>
               <p style={{ margin: 0 }}>
-                <strong>Modules:</strong> {modules?.length ?? 0}
+                <strong>{Blockly.Msg.simulator_info_modules}</strong>{" "}
+                {modules?.length ?? 0}
               </p>
             </div>
           )}

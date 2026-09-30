@@ -7,7 +7,6 @@ const sensorConfigRG15 = [
   {
     id: "total-rainfall-rg15",
     emoji: "🌧️",
-    label: "Total Rainfall",
     min: 0,
     max: 1000,
     step: 0.1,
@@ -17,7 +16,6 @@ const sensorConfigRG15 = [
   {
     id: "rainfall-intensity-rg15",
     emoji: "💧",
-    label: "Rainfall Intensity",
     min: 0,
     max: 200,
     step: 0.1,

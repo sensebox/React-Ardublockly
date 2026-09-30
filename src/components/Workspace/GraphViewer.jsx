@@ -132,6 +132,8 @@ const MetricSlide = ({ title, series, theme }) => (
 );
 
 const GraphViewer = () => {
+  // Texts come from Blockly.Msg: re-render when the language changes.
+  useSelector((s) => s.general.language);
   const moduleValues = useSelector((s) => s.simulator.moduleValues);
   const isRunning = useSelector((s) => s.simulator.isRunning);
   const theme = useTheme();

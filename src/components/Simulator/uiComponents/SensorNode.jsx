@@ -1,11 +1,14 @@
 import React, { memo, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Handle, Position } from "@xyflow/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { setModuleValue, removeModuleValues } from "@/actions/simulatorActions";
+import { valueLabel } from "../values";
 
 const SensorNode = ({ title, sensors, imageSrc, width = "300px" }) => {
+  // Texts come from Blockly.Msg: re-render when the language changes.
+  useSelector((s) => s.general.language);
   const dispatch = useDispatch();
 
   // Initial values for all sensors
@@ -79,7 +82,7 @@ const SensorNode = ({ title, sensors, imageSrc, width = "300px" }) => {
       {/* Image that opens the overlay when clicked */}
       <img
         src={imageSrc}
-        alt="Sensor Graphic"
+        alt={title}
         style={{
           width: "100%",
           display: "block",
@@ -135,7 +138,7 @@ const SensorNode = ({ title, sensors, imageSrc, width = "300px" }) => {
                   color: "#ffcc33",
                 }}
               >
-                {sensor.label}
+                {valueLabel(sensor.type)}
               </div>
               <div style={{ display: "flex", alignItems: "center" }}>
                 <input

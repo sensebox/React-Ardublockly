@@ -7,7 +7,6 @@ const sensorConfigSPS30 = [
   {
     id: "pm1-sps30",
     emoji: "🌫️",
-    label: "PM1",
     min: 0,
     max: 500,
     step: 1,
@@ -17,7 +16,6 @@ const sensorConfigSPS30 = [
   {
     id: "pm25-sps30",
     emoji: "🌁",
-    label: "PM2.5",
     min: 0,
     max: 500,
     step: 1,
@@ -27,7 +25,6 @@ const sensorConfigSPS30 = [
   {
     id: "pm4-sps30",
     emoji: "🌫️",
-    label: "PM4",
     min: 0,
     max: 500,
     step: 1,
@@ -37,7 +34,6 @@ const sensorConfigSPS30 = [
   {
     id: "pm10-sps30",
     emoji: "🌫️",
-    label: "PM10",
     min: 0,
     max: 500,
     step: 1,

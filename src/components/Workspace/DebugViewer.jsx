@@ -20,6 +20,8 @@ const TYPE_CONFIG = {
  * Debug log of block and simulator events, newest first.
  */
 export default function DebugViewer() {
+  // Texts come from Blockly.Msg: re-render when the language changes.
+  useSelector((s) => s.general.language);
   const logs = useSelector(selectLogs);
 
   return (

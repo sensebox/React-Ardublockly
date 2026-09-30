@@ -8,7 +8,6 @@ const tofimager = ({ data }) => {
     {
       id: "dist",
       emoji: "📏",
-      label: "Distance (mm)",
       min: 0,
       max: 4000,
       step: 1,

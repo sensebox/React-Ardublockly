@@ -27,6 +27,8 @@ const TooltipViewer = () => {
   const tooltip = useSelector((s) => s.workspace.code.tooltip);
   const helpurl = useSelector((s) => s.workspace.code.helpurl);
   // Graph and debug log belong to the simulator (MCU-S2 only).
+  // Texts come from Blockly.Msg: re-render when the language changes.
+  useSelector((s) => s.general.language);
   const simulatorAvailable = useSelector(
     (s) => s.board.board === SIMULATOR_BOARD,
   );

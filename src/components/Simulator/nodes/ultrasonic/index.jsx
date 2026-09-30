@@ -8,7 +8,6 @@ const UltrasonicSensor = ({ data }) => {
     {
       id: "distance",
       emoji: "📏",
-      label: "Distance (cm)",
       min: 0,
       max: 250,
       step: 1,

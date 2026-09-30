@@ -7,7 +7,6 @@ const sensorConfigSCD30 = [
   {
     id: "co2-scd30",
     emoji: "🌱",
-    label: "CO2",
     min: 400,
     max: 2000,
     step: 1,
@@ -17,7 +16,6 @@ const sensorConfigSCD30 = [
   {
     id: "temp-scd30",
     emoji: "🌡️",
-    label: "Temperatur",
     min: 0,
     max: 50,
     step: 1,
@@ -27,7 +25,6 @@ const sensorConfigSCD30 = [
   {
     id: "humidity-scd30",
     emoji: "💧",
-    label: "Luftfeuchtigkeit",
     min: 0,
     max: 100,
     step: 1,
