@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch, shallowEqual } from "react-redux";
+import * as Blockly from "blockly/core";
 import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
 import {
@@ -21,6 +22,13 @@ export default function Simulator() {
   const isSimulatorRunning = useSelector((state) => state.simulator.isRunning);
   const simulationStartTimestamp = useSelector(
     (state) => state.simulator.simulationStartTimestamp,
+  );
+  const unsupportedBlocks = useSelector(
+    (state) => state.workspace.code.simulatorUnsupported ?? [],
+    shallowEqual,
+  );
+  const generationError = useSelector(
+    (state) => state.workspace.code.simulatorError,
   );
 
   const [elapsedTime, setElapsedTime] = useState(0);
@@ -65,87 +73,116 @@ export default function Simulator() {
   };
 
   return (
-    <div style={{ position: "relative", width: "100%", height: "100%" }}>
-      {/* HEADER TOOLBAR */}
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: "50%",
-          transform: "translate(-50%, 0)",
-          zIndex: 10,
-          background: "#fff",
-          boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
-          borderRadius: "1rem",
-          border: "1px solid #ddd",
-          padding: "0 1rem",
-          marginTop: "0.5rem",
-          display: "flex",
-          alignItems: "center",
-          gap: "0.5rem",
-        }}
-      >
-        {/* Play/Stop Button */}
-        {isSimulatorRunning ? (
-          <IconButton onClick={handleStop}>
-            <FontAwesomeIcon color="#e27136" icon={faStop} />
-          </IconButton>
-        ) : (
-          <IconButton onClick={handleStart}>
-            <FontAwesomeIcon color="#4eaf47" icon={faPlay} />
-          </IconButton>
-        )}
-
-        {/* Timer */}
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        width: "100%",
+        height: "100%",
+      }}
+    >
+      <div style={{ position: "relative", flex: 1, minHeight: 0 }}>
+        {/* HEADER TOOLBAR */}
         <div
           style={{
-            background: "lightgrey",
+            position: "absolute",
+            top: 0,
+            left: "50%",
+            transform: "translate(-50%, 0)",
+            zIndex: 10,
+            background: "#fff",
+            boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
             borderRadius: "1rem",
-            height: "fit-content",
-            padding: ".25rem 0.5rem",
+            border: "1px solid #ddd",
+            padding: "0 1rem",
+            marginTop: "0.5rem",
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5rem",
           }}
         >
-          <Box sx={{ fontFamily: "Monospace" }}>
-            <SimulationTimer elapsedTime={elapsedTime} />
-          </Box>
-        </div>
+          {/* Play/Stop Button */}
+          {isSimulatorRunning ? (
+            <IconButton onClick={handleStop}>
+              <FontAwesomeIcon color="#e27136" icon={faStop} />
+            </IconButton>
+          ) : (
+            <IconButton onClick={handleStart}>
+              <FontAwesomeIcon color="#4eaf47" icon={faPlay} />
+            </IconButton>
+          )}
 
-        {/* Info Button */}
-        <IconButton onClick={handleInfoClick}>
-          <FontAwesomeIcon color=" #45beed" icon={faInfoCircle} />
-        </IconButton>
-
-        {/* Info Panel (toggles with showInfo) */}
-        {showInfo && (
+          {/* Timer */}
           <div
             style={{
-              position: "absolute",
-              top: "3.5rem", // Just below the toolbar
-              right: "0.5rem",
-              background: "#fff",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
-              borderRadius: "0.5rem",
-              padding: "1rem",
-              zIndex: 999,
-              minWidth: "200px",
+              background: "lightgrey",
+              borderRadius: "1rem",
+              height: "fit-content",
+              padding: ".25rem 0.5rem",
             }}
           >
-            <h4 style={{ marginTop: 0 }}>Simulation Info</h4>
-            <p style={{ margin: 0 }}>
-              <strong>Status:</strong>{" "}
-              {isSimulatorRunning ? "Running" : "Stopped"}
-            </p>
-            <p style={{ margin: 0 }}>
-              <strong>Modules:</strong> {modules?.length ?? 0}
-            </p>
+            <Box sx={{ fontFamily: "Monospace" }}>
+              <SimulationTimer elapsedTime={elapsedTime} />
+            </Box>
           </div>
-        )}
+
+          {/* Info Button */}
+          <IconButton onClick={handleInfoClick}>
+            <FontAwesomeIcon color=" #45beed" icon={faInfoCircle} />
+          </IconButton>
+
+          {/* Info Panel (toggles with showInfo) */}
+          {showInfo && (
+            <div
+              style={{
+                position: "absolute",
+                top: "3.5rem", // Just below the toolbar
+                right: "0.5rem",
+                background: "#fff",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+                borderRadius: "0.5rem",
+                padding: "1rem",
+                zIndex: 999,
+                minWidth: "200px",
+              }}
+            >
+              <h4 style={{ marginTop: 0 }}>Simulation Info</h4>
+              <p style={{ margin: 0 }}>
+                <strong>Status:</strong>{" "}
+                {isSimulatorRunning ? "Running" : "Stopped"}
+              </p>
+              <p style={{ margin: 0 }}>
+                <strong>Modules:</strong> {modules?.length ?? 0}
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* MAIN SIMULATOR AREA */}
+        <ReactFlowProvider>
+          <SimulatorFlow />
+        </ReactFlowProvider>
       </div>
 
-      {/* MAIN SIMULATOR AREA */}
-      <ReactFlowProvider>
-        <SimulatorFlow />
-      </ReactFlowProvider>
+      {/* Blocks the simulator skips, or why no code could be generated */}
+      {(generationError || unsupportedBlocks.length > 0) && (
+        <div
+          id="simulator-hint"
+          style={{
+            flex: "0 0 auto",
+            maxHeight: "4.5em",
+            overflowY: "auto",
+            background: "#fff8e1",
+            borderTop: "1px solid #ffcc80",
+            padding: "0.25rem 0.75rem",
+            fontSize: "0.8rem",
+          }}
+        >
+          {generationError
+            ? `${Blockly.Msg.simulator_generation_error} ${generationError}`
+            : `${Blockly.Msg.simulator_unsupported_blocks} ${unsupportedBlocks.join(", ")}`}
+        </div>
+      )}
     </div>
   );
 }
