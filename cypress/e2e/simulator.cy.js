@@ -230,6 +230,92 @@ describe("Simulator", () => {
     cy.get("#codeviewer-simulator svg.fa-stop").parents("button").click();
   });
 
+  it("runs user functions", () => {
+    visitEditor(
+      "MCU-S2",
+      `<xml xmlns="https://developers.google.com/blockly/xml">
+        <block type="arduino_functions" deletable="false" id="start" x="27" y="16">
+          <statement name="SETUP_FUNC">
+            <block type="sensebox_display_beginDisplay"></block>
+          </statement>
+          <statement name="LOOP_FUNC">
+            <block type="sensebox_display_show">
+              <statement name="SHOW">
+                <block type="procedures_callnoreturn">
+                  <mutation name="showTemperature"></mutation>
+                </block>
+              </statement>
+            </block>
+          </statement>
+        </block>
+        <block type="procedures_defnoreturn" x="400" y="16">
+          <field name="NAME">showTemperature</field>
+          <statement name="STACK">
+            <block type="sensebox_display_printDisplay">
+              <field name="COLOR">WHITE,BLACK</field>
+              <field name="SIZE">2</field>
+              <field name="X">0</field>
+              <field name="Y">0</field>
+              <value name="printDisplay">
+                <block type="sensebox_sensor_temp_hum">
+                  <field name="NAME">Temperature</field>
+                </block>
+              </value>
+            </block>
+          </statement>
+        </block>
+      </xml>`,
+    );
+
+    // The sensor inside the function is found
+    cy.get(".react-flow__node-senseBox_hdc1080", { timeout: 20000 }).should(
+      "exist",
+    );
+    cy.get("#codeviewer-simulator svg.fa-play").parents("button").click();
+    cy.get("#oled-display", { timeout: 10000 }).should(($canvas) => {
+      const canvas = $canvas[0];
+      const { data } = canvas
+        .getContext("2d")
+        .getImageData(0, 0, canvas.width, canvas.height);
+      expect(data.some((value, i) => i % 4 === 0 && value > 200)).to.equal(
+        true,
+      );
+    });
+    cy.get("#codeviewer-simulator").then(($simulator) => {
+      expect($simulator.find("#simulator-error").text(), "error").to.equal("");
+    });
+    cy.get("#codeviewer-simulator svg.fa-stop").parents("button").click();
+  });
+
+  it("lights the RGB LED of the board and turns it off on stop", () => {
+    visitEditor(
+      "MCU-S2",
+      `<xml xmlns="https://developers.google.com/blockly/xml">
+        <block type="arduino_functions" deletable="false" id="start" x="27" y="16">
+          <statement name="LOOP_FUNC">
+            <block type="sensebox_ws2818_led">
+              <value name="COLOR">
+                <block type="colour_picker">
+                  <field name="COLOUR">#ff0000</field>
+                </block>
+              </value>
+            </block>
+          </statement>
+        </block>
+      </xml>`,
+    );
+
+    cy.get(".react-flow__node-board", { timeout: 20000 }).should("exist");
+    cy.get("#codeviewer-simulator svg.fa-play").parents("button").click();
+    cy.get("#board-complex_svg__circle270").should(($led) => {
+      expect($led[0].style.fill).to.equal("rgb(255, 0, 0)");
+    });
+    cy.get("#codeviewer-simulator svg.fa-stop").parents("button").click();
+    cy.get("#board-complex_svg__circle270").should(($led) => {
+      expect($led[0].style.fill).to.equal("");
+    });
+  });
+
   it("lights the LEDs of the QOOOL fluoro bee", () => {
     visitEditor(
       "MCU-S2",
