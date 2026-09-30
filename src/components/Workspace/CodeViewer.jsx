@@ -61,11 +61,11 @@ const CodeViewer = () => {
     setExpandedPanel(isExpanded ? panel : false);
   };
 
-  // The simulator gets a bit more room. With three panels the open one needs
-  // to leave space for two more headers.
+  // The simulator gets a bit more room. The open panel leaves space for the
+  // three 50px headers, so nothing is cut off.
   const maxHeight = simulatorAvailable ? "55vh" : "50vh";
   const detailsHeight = simulatorAvailable
-    ? "calc(55vh - 100px)"
+    ? "calc(55vh - 150px)"
     : "calc(50vh - 50px)";
 
   return (
@@ -146,6 +146,7 @@ const CodeViewer = () => {
         // sliders from the DOM and keeps running.
         <Accordion
           square
+          style={{ width: "100%" }}
           expanded={expandedPanel === "simulator"}
           onChange={handleChange("simulator")}
           sx={{ margin: 0 }}
