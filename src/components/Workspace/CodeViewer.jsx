@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { styled } from "@mui/material/styles";
 import {
@@ -10,6 +10,10 @@ import {
 } from "@mui/material";
 import MonacoEditor from "@monaco-editor/react";
 import * as Blockly from "blockly";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMicrochip } from "@fortawesome/free-solid-svg-icons";
+import Simulator from "@/components/Simulator";
+import { SIMULATOR_BOARD } from "@/components/Simulator/constants";
 
 const Accordion = styled(MuiAccordion)(({ theme }) => ({
   border: `1px solid ${theme.palette.secondary.main}`,
@@ -36,17 +40,39 @@ const AccordionDetails = styled(MuiAccordionDetails)(() => ({
 const CodeViewer = () => {
   const arduino = useSelector((s) => s.workspace.code.arduino);
   const xml = useSelector((s) => s.workspace.code.xml);
-  const [expandedPanel, setExpandedPanel] = useState("arduino");
+  const simulatorAvailable = useSelector(
+    (s) => s.board.board === SIMULATOR_BOARD,
+  );
+  const [expandedPanel, setExpandedPanel] = useState(
+    simulatorAvailable ? "simulator" : "arduino",
+  );
+
+  // Open the simulator when its board is selected, close it otherwise.
+  useEffect(() => {
+    setExpandedPanel((panel) => {
+      if (simulatorAvailable) {
+        return "simulator";
+      }
+      return panel === "simulator" ? "arduino" : panel;
+    });
+  }, [simulatorAvailable]);
 
   const handleChange = (panel) => (_, isExpanded) => {
     setExpandedPanel(isExpanded ? panel : false);
   };
 
+  // The simulator gets a bit more room. With three panels the open one needs
+  // to leave space for two more headers.
+  const maxHeight = simulatorAvailable ? "55vh" : "50vh";
+  const detailsHeight = simulatorAvailable
+    ? "calc(55vh - 100px)"
+    : "calc(50vh - 50px)";
+
   return (
     <Card
       sx={{
         height: "100%",
-        maxHeight: "50vh",
+        maxHeight,
         display: "flex",
         flexDirection: "column",
       }}
@@ -70,7 +96,7 @@ const CodeViewer = () => {
         </AccordionSummary>
         <AccordionDetails
           sx={{
-            height: "calc(50vh - 50px)",
+            height: detailsHeight,
             bgcolor: "background.paper",
           }}
         >
@@ -102,7 +128,7 @@ const CodeViewer = () => {
         </AccordionSummary>
         <AccordionDetails
           sx={{
-            height: "calc(50vh - 50px)",
+            height: detailsHeight,
             bgcolor: "background.paper",
           }}
         >
@@ -114,6 +140,38 @@ const CodeViewer = () => {
           />
         </AccordionDetails>
       </Accordion>
+
+      {simulatorAvailable && (
+        // Stays mounted while collapsed: the simulator reads the sensor
+        // sliders from the DOM and keeps running.
+        <Accordion
+          square
+          expanded={expandedPanel === "simulator"}
+          onChange={handleChange("simulator")}
+          sx={{ margin: 0 }}
+          id="codeviewer-simulator"
+        >
+          <AccordionSummary>
+            <Typography
+              component="span"
+              sx={{ fontSize: 20, fontWeight: "bold", mr: 1, width: 35 }}
+            >
+              <FontAwesomeIcon icon={faMicrochip} size="sm" />
+            </Typography>
+            <Typography sx={{ m: "auto 5px 2px 0" }}>
+              {Blockly.Msg.codeviewer_simulator}
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails
+            sx={{
+              height: detailsHeight,
+              bgcolor: "background.paper",
+            }}
+          >
+            <Simulator />
+          </AccordionDetails>
+        </Accordion>
+      )}
     </Card>
   );
 };

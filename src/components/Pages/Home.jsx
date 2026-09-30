@@ -13,6 +13,7 @@ import CodeViewer from "../Workspace/CodeViewer";
 import DeviceSelection from "../DeviceSelection";
 import TooltipViewer from "@/components/Workspace/TooltipViewer";
 import Dialog from "@/components/ui/Dialog";
+import { SIMULATOR_BOARD } from "@/components/Simulator/constants";
 
 import { Grid, IconButton, Tooltip, Box } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -27,6 +28,8 @@ function Home({ project, projectType }) {
 
   const [toolbox, setToolbox] = useState(null);
   const selectedBoard = useSelector((state) => state.board.board);
+  // The simulator in the code column needs more room.
+  const sideColumnWidth = selectedBoard === SIMULATOR_BOARD ? 5 : 4;
 
   const [codeOn, setCodeOn] = useState(true);
   const [open, setOpen] = useState(true);
@@ -101,7 +104,12 @@ function Home({ project, projectType }) {
         container
         spacing={2}
       >
-        <Grid item xs={12} md={codeOn ? 8 : 12} sx={{ position: "relative" }}>
+        <Grid
+          item
+          xs={12}
+          md={codeOn ? 12 - sideColumnWidth : 12}
+          sx={{ position: "relative" }}
+        >
           <Tooltip
             title={
               codeOn
@@ -144,7 +152,7 @@ function Home({ project, projectType }) {
         </Grid>
 
         {codeOn && (
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={sideColumnWidth}>
             <CodeViewer />
             <TooltipViewer />
           </Grid>

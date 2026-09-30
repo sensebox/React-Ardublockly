@@ -31,6 +31,7 @@ import { WEBSERVER } from "./de/webserver";
 import { FLUOROASM } from "./de/fluoroASM";
 import { CUSTOM_FUNCTIONS } from "./de/custom-functions";
 import { COMPILE_DIALOG } from "./de/compile-dialog";
+import { SIMULATOR } from "./de/simulator";
 export const De = {
   ...AUDIO,
   ...BLE,
@@ -65,4 +66,5 @@ export const De = {
   ...FLUOROASM,
   ...CUSTOM_FUNCTIONS,
   ...COMPILE_DIALOG,
+  ...SIMULATOR,
 };
