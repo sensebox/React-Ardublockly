@@ -1,6 +1,7 @@
 import {
   START_SIMULATOR,
   STOP_SIMULATOR,
+  SIMULATOR_ERROR,
   SET_MODULE_VALUE,
   REMOVE_MODULE_VALUES,
 } from "./types";
@@ -19,6 +20,7 @@ export const startSimulator = () => (dispatch, getState) => {
   startRuntime(code, {
     onFinish: () => dispatch(stopSimulator()),
     onError: (error) => {
+      dispatch({ type: SIMULATOR_ERROR, payload: error.message });
       dispatch(
         addLog({
           type: "simulator",

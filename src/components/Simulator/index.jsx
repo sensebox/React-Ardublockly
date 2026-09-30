@@ -30,6 +30,7 @@ export default function Simulator() {
   const generationError = useSelector(
     (state) => state.workspace.code.simulatorError,
   );
+  const runtimeError = useSelector((state) => state.simulator.error);
 
   const [elapsedTime, setElapsedTime] = useState(0);
   // Local state to show/hide the Info panel
@@ -71,6 +72,28 @@ export default function Simulator() {
   const handleInfoClick = () => {
     setShowInfo(!showInfo);
   };
+
+  const hints = [];
+  if (runtimeError) {
+    hints.push({
+      id: "simulator-error",
+      isError: true,
+      text: `${Blockly.Msg.simulator_runtime_error} ${runtimeError}`,
+    });
+  }
+  if (generationError) {
+    hints.push({
+      id: "simulator-generation-error",
+      isError: true,
+      text: `${Blockly.Msg.simulator_generation_error} ${generationError}`,
+    });
+  }
+  if (unsupportedBlocks.length > 0) {
+    hints.push({
+      id: "simulator-hint",
+      text: `${Blockly.Msg.simulator_unsupported_blocks} ${unsupportedBlocks.join(", ")}`,
+    });
+  }
 
   return (
     <div
@@ -164,10 +187,9 @@ export default function Simulator() {
         </ReactFlowProvider>
       </div>
 
-      {/* Blocks the simulator skips, or why no code could be generated */}
-      {(generationError || unsupportedBlocks.length > 0) && (
+      {/* Errors and blocks the simulator skips */}
+      {hints.length > 0 && (
         <div
-          id="simulator-hint"
           style={{
             flex: "0 0 auto",
             maxHeight: "4.5em",
@@ -178,9 +200,15 @@ export default function Simulator() {
             fontSize: "0.8rem",
           }}
         >
-          {generationError
-            ? `${Blockly.Msg.simulator_generation_error} ${generationError}`
-            : `${Blockly.Msg.simulator_unsupported_blocks} ${unsupportedBlocks.join(", ")}`}
+          {hints.map((hint) => (
+            <div
+              key={hint.id}
+              id={hint.id}
+              style={hint.isError ? { color: "#b71c1c" } : undefined}
+            >
+              {hint.text}
+            </div>
+          ))}
         </div>
       )}
     </div>
