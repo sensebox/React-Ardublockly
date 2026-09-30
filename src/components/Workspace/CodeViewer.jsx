@@ -61,18 +61,17 @@ const CodeViewer = () => {
     setExpandedPanel(isExpanded ? panel : false);
   };
 
-  // The simulator gets a bit more room. The open panel leaves space for the
-  // three 50px headers, so nothing is cut off.
-  const maxHeight = simulatorAvailable ? "55vh" : "50vh";
+  // With the simulator, the open panel leaves space for all three 50px
+  // headers, so nothing is cut off.
   const detailsHeight = simulatorAvailable
-    ? "calc(55vh - 150px)"
+    ? "calc(50vh - 150px)"
     : "calc(50vh - 50px)";
 
   return (
     <Card
       sx={{
         height: "100%",
-        maxHeight,
+        maxHeight: "50vh",
         display: "flex",
         flexDirection: "column",
       }}
