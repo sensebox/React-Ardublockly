@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import * as Blockly from "blockly/core";
 import { De } from "./Blockly/msg/de";
@@ -15,16 +15,21 @@ const Content = () => {
   const language = useSelector((state) => state.general.language);
   const board = useSelector((state) => state.board.board);
 
-  useEffect(() => {
-    // Blockly-Locale setzen
+  // Blockly-Locale setzen, bevor die Kinder rendern. In einem Effekt käme sie
+  // zu spät: Komponenten, die danach nicht neu rendern, zeigen sonst Texte in
+  // der vorherigen Sprache.
+  useMemo(() => {
     if (language === "de_DE") {
       Blockly.setLocale(De);
     } else if (language === "en_US") {
       Blockly.setLocale(En);
     }
+  }, [language]);
+
+  useEffect(() => {
     // Board initialisieren
     setBoardHelper(board);
-  }, [language, board]);
+  }, [board]);
 
   return (
     <div
