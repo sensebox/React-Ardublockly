@@ -5,6 +5,7 @@ import {
   SET_MODULE_VALUE,
   REMOVE_MODULE_VALUES,
 } from "./types";
+import * as Blockly from "blockly/core";
 import { addLog } from "./logActions";
 import { startRuntime, stopRuntime } from "@/components/Simulator/runtime";
 
@@ -15,7 +16,9 @@ export const startSimulator = () => (dispatch, getState) => {
   }
 
   dispatch({ type: START_SIMULATOR, payload: { timestamp: Date.now() } });
-  dispatch(addLog({ type: "simulator", title: "Simulator Started" }));
+  dispatch(
+    addLog({ type: "simulator", title: Blockly.Msg.simulator_log_started }),
+  );
 
   startRuntime(code, {
     onFinish: () => dispatch(stopSimulator()),
@@ -24,7 +27,7 @@ export const startSimulator = () => (dispatch, getState) => {
       dispatch(
         addLog({
           type: "simulator",
-          title: "Simulator Error",
+          title: Blockly.Msg.simulator_log_error,
           description: error.message,
         }),
       );
@@ -40,7 +43,9 @@ export const stopSimulator = () => (dispatch, getState) => {
   }
 
   dispatch({ type: STOP_SIMULATOR });
-  dispatch(addLog({ type: "simulator", title: "Simulator stopped" }));
+  dispatch(
+    addLog({ type: "simulator", title: Blockly.Msg.simulator_log_stopped }),
+  );
 };
 
 /**
