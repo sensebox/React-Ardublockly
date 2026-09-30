@@ -2,12 +2,15 @@ import Interpreter from "js-interpreter";
 import initSimulator from "./init";
 
 /**
- * Runs the simulator program in js-interpreter, one step per tick, so the
- * page stays responsive even for programs without delay.
+ * Runs the simulator program in js-interpreter. Each tick runs steps for a
+ * few milliseconds and then yields, so the page stays responsive even for
+ * programs without delay. While the program waits in delay(), no steps run.
  *
  * The interpreter lives here and not in the Redux store, because it is
  * neither serializable nor something a reducer should create or run.
  */
+
+const STEP_BUDGET_MS = 5;
 
 let current = null; // { interpreter, controller }
 
@@ -42,18 +45,22 @@ export function startRuntime(code, { onFinish, onError } = {}) {
     if (controller.signal.aborted) {
       return;
     }
-    let hasMoreSteps;
+    const start = performance.now();
     try {
-      hasMoreSteps = interpreter.step();
+      do {
+        if (!interpreter.step()) {
+          finish(() => onFinish?.());
+          return;
+        }
+      } while (
+        interpreter.getStatus() === Interpreter.Status.STEP &&
+        performance.now() - start < STEP_BUDGET_MS
+      );
     } catch (error) {
       finish(() => onError?.(error));
       return;
     }
-    if (hasMoreSteps) {
-      window.setTimeout(nextStep, 0);
-    } else {
-      finish(() => onFinish?.());
-    }
+    window.setTimeout(nextStep, 0);
   };
   nextStep();
 }

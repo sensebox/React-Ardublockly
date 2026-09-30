@@ -2,6 +2,7 @@ import {
   NEW_CODE,
   START_SIMULATOR,
   STOP_SIMULATOR,
+  SIMULATOR_ERROR,
   SET_MODULE_VALUE,
   REMOVE_MODULE_VALUES,
 } from "../actions/types";
@@ -15,6 +16,8 @@ const initialState = {
   moduleValues: {},
   isRunning: false,
   simulationStartTimestamp: null,
+  // Message of the error that stopped the last run
+  error: null,
 };
 
 const MODULES_COMMENT = /^\/\/\s*modules:\s*(.*?)\s*#$/m;
@@ -54,6 +57,7 @@ export default function simulatorReducer(state = initialState, action) {
       return {
         ...state,
         code,
+        error: null,
         // Keep the reference if nothing changed, so the board view is not
         // rebuilt on every code change.
         modules: sameModules(modules, state.modules) ? state.modules : modules,
@@ -64,7 +68,10 @@ export default function simulatorReducer(state = initialState, action) {
         ...state,
         isRunning: true,
         simulationStartTimestamp: action.payload.timestamp,
+        error: null,
       };
+    case SIMULATOR_ERROR:
+      return { ...state, error: action.payload };
     case STOP_SIMULATOR:
       return {
         ...state,
