@@ -1,4 +1,4 @@
-import { useCallback, useEffect, memo } from "react";
+import { useCallback, useEffect, useRef, memo } from "react";
 import {
   ReactFlow,
   Background,
@@ -8,9 +8,10 @@ import {
   addEdge,
   useReactFlow,
 } from "@xyflow/react";
+import { useSelector } from "react-redux";
+import "@xyflow/react/dist/style.css";
 import SenseBoxWireEdge from "./uiComponents/senseBoxWire";
 import SenseBoxMCUS2 from "./nodes/mcu-s2";
-import "@xyflow/react/dist/style.css";
 import HDC1080 from "./nodes/hdc1080";
 import Display from "./nodes/display";
 import lightuv from "./nodes/lightuv";
@@ -23,12 +24,12 @@ import bme680 from "./nodes/bme680";
 import scd30 from "./nodes/scd30";
 import dps310 from "./nodes/dps310";
 import fluoroASM from "./nodes/fluoroASM";
-import { useSelector } from "react-redux";
 import accelerometer from "./nodes/accelerometer";
 import sds011 from "./nodes/sds011";
 import sps30 from "./nodes/sps30";
 import rg15 from "./nodes/rg15";
 
+// Node type = module type from the simulator program
 const nodeTypes = {
   board: SenseBoxMCUS2,
   senseBox_hdc1080: HDC1080,
@@ -53,85 +54,153 @@ const edgeTypes = {
   multicolor: SenseBoxWireEdge,
 };
 
-const initialNodes = [
-  {
-    id: "b_0",
-    type: "board",
-    position: { x: 400, y: 100 },
-  },
-];
+const BOARD_NODE = {
+  id: "board",
+  type: "board",
+  position: { x: 400, y: 100 },
+  draggable: false,
+};
 
-const initialEdges = [
-  // { id: "e1-2", source: "1", target: "2" },
-  // { id: "e1-3", source: "1", target: "3" },
-  // { id: "e1-4", source: "1", target: "4" },
-  // { id: "e3-5", source: "3", target: "5" },
-  // { id: "e2-5", source: "2", target: "5" },
-  // { id: "e4-5", source: "4", target: "5" },
-];
+// The fluoro bee sits on the board, without a cable.
+const FLUORO_TYPE = "sensebox_fluoroASM_init";
+const FLUORO_POSITION = { x: 497.69717682803514, y: 47.304223387137014 };
 
-const SimulatorFlow = (props) => {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+// New sensors appear in a row below the board.
+const ROW_Y = 450;
+const FIRST_X = 50;
+const SLOT_WIDTH = 340;
+
+// Room at the top for the play/timer toolbar
+const FIT_VIEW_OPTIONS = {
+  padding: { top: "64px", bottom: "16px", x: "16px" },
+};
+
+// Modules without an own node, e.g. the button is part of the board.
+const hasNode = (module) => module.type in nodeTypes && module.type !== "board";
+
+function freePosition(nodes) {
+  const usedX = new Set(
+    nodes
+      .filter((node) => node.id !== BOARD_NODE.id && node.id !== FLUORO_TYPE)
+      .map((node) => Math.round(node.position.x)),
+  );
+  let x = FIRST_X;
+  while (usedX.has(x)) {
+    x += SLOT_WIDTH;
+  }
+  return { x, y: ROW_Y };
+}
+
+const SimulatorFlow = () => {
+  const [nodes, setNodes, onNodesChange] = useNodesState([BOARD_NODE]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const modules = useSelector((state) => state.simulator.modules);
-
   const reactFlow = useReactFlow();
+  const containerRef = useRef(null);
 
-  useEffect(() => {
-    reactFlow.fitView();
-  }, [modules]);
-  useEffect(() => {
-    // calculate new edges
-    const newEdges = [];
-    nodes.forEach((node) => {
-      if (node.type === "board") {
-        node.draggable = false;
-        modules.forEach((module, index) => {
-          // dont draw an edge with the fluoro bee
-          if (module.type === "sensebox_fluoroASM_init") {
-            return;
-          }
-          newEdges.push({
-            id: `e${node.id}-${index}`,
-            source: node.id,
-            target: `m_${index}`,
-            type: "multicolor",
-          });
-        });
-      }
-      if (node.type === "sensebox_fluoroASM_init") {
-        const beePosition = { x: 497.69717682803514, y: 47.304223387137014 };
-        node.draggable = false;
-        node.position = beePosition;
-        node.zIndex = 1000;
-      }
-    });
-    setEdges([...initialEdges, ...newEdges]);
-  }, [nodes]);
+  // Fit the view automatically until the user pans or zooms.
+  const autoFit = useRef(true);
+  const fitTimeout = useRef(null);
+  const scheduleFit = useCallback(() => {
+    if (!autoFit.current) {
+      return;
+    }
+    window.clearTimeout(fitTimeout.current);
+    fitTimeout.current = window.setTimeout(
+      () => reactFlow.fitView(FIT_VIEW_OPTIONS),
+      50,
+    );
+  }, [reactFlow]);
+  useEffect(() => () => window.clearTimeout(fitTimeout.current), []);
 
+  // Node sizes change when the sensor images have loaded.
+  const handleNodesChange = useCallback(
+    (changes) => {
+      onNodesChange(changes);
+      if (changes.some((change) => change.type === "dimensions")) {
+        scheduleFit();
+      }
+    },
+    [onNodesChange, scheduleFit],
+  );
+
+  // User interaction ends the automatic fitting (event is null otherwise).
+  const handleMoveStart = useCallback((event) => {
+    if (event) {
+      autoFit.current = false;
+    }
+  }, []);
+
+  // One node per module, wired to the board. Existing nodes keep their place.
   useEffect(() => {
-    const newNodes = modules
-      .map((module, index) => {
-        // skip the block for led - only use init block for node creation
-        if (
-          module.type === "sensebox_fluoroASM_setLED" ||
-          module.type === "sensebox_button"
-        ) {
+    const shownModules = modules.filter(hasNode);
+
+    setNodes((currentNodes) => {
+      const board =
+        currentNodes.find((node) => node.id === BOARD_NODE.id) ?? BOARD_NODE;
+      // Nodes of modules that are still used keep their place.
+      const keptNodes = currentNodes.filter((node) =>
+        shownModules.some((module) => module.type === node.id),
+      );
+      const nextNodes = [board, ...keptNodes];
+      shownModules.forEach((module) => {
+        if (nextNodes.some((node) => node.id === module.type)) {
           return;
         }
-        if (nodes.map((n) => n.type).includes(module.type)) {
-          return nodes.find((n) => n.type == module.type);
-        }
-        return {
-          id: `m_${index.toString()}`,
-          type: module.type,
-          position: { x: 200 + Math.random() * 200, y: 400 },
-        };
-      })
-      .filter((e) => e);
+        nextNodes.push(
+          module.type === FLUORO_TYPE
+            ? {
+                id: module.type,
+                type: module.type,
+                position: FLUORO_POSITION,
+                draggable: false,
+                zIndex: 1000,
+              }
+            : {
+                id: module.type,
+                type: module.type,
+                position: freePosition(nextNodes),
+              },
+        );
+      });
+      return nextNodes;
+    });
 
-    setNodes([initialNodes[0], ...newNodes]);
-  }, [modules]);
+    setEdges(
+      shownModules
+        .filter((module) => module.type !== FLUORO_TYPE)
+        .map((module) => ({
+          id: `board-${module.type}`,
+          source: BOARD_NODE.id,
+          target: module.type,
+          type: "multicolor",
+        })),
+    );
+  }, [modules, setNodes, setEdges]);
+
+  // New or removed sensors: fit the view again.
+  useEffect(() => {
+    autoFit.current = true;
+    scheduleFit();
+  }, [modules, scheduleFit]);
+
+  // Fit the view when the collapsed panel is opened again.
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container || typeof ResizeObserver === "undefined") {
+      return undefined;
+    }
+    let wasVisible = container.clientHeight > 0;
+    const observer = new ResizeObserver(() => {
+      const visible = container.clientHeight > 0;
+      if (visible && !wasVisible) {
+        reactFlow.fitView(FIT_VIEW_OPTIONS);
+      }
+      wasVisible = visible;
+    });
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, [reactFlow]);
 
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
@@ -140,6 +209,7 @@ const SimulatorFlow = (props) => {
 
   return (
     <div
+      ref={containerRef}
       style={{
         width: "100%",
         height: "100%",
@@ -148,22 +218,22 @@ const SimulatorFlow = (props) => {
       <ReactFlow
         nodes={nodes}
         edges={edges}
-        onNodesChange={onNodesChange}
+        onNodesChange={handleNodesChange}
         onEdgesChange={onEdgesChange}
+        onMoveStart={handleMoveStart}
         onConnect={onConnect}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         zoomOnDoubleClick={false}
         zoomOnPinch={false}
-        fitViewOptions={{
-          padding: 2,
-        }}
+        // The panel is small, so allow zooming out further than the default 0.5
+        minZoom={0.1}
         fitView
+        fitViewOptions={FIT_VIEW_OPTIONS}
         connectionMode="loose"
-        onInit={(e) => e.fitView()}
       >
         <Background />
-        <Controls />
+        <Controls fitViewOptions={FIT_VIEW_OPTIONS} />
       </ReactFlow>
     </div>
   );

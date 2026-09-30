@@ -150,6 +150,7 @@ const CodeViewer = () => {
         // sliders from the DOM and keeps running.
         <Accordion
           square
+          style={{ width: "100%" }}
           expanded={expandedPanel === "simulator"}
           onChange={handleChange("simulator")}
           sx={{ margin: 0 }}
