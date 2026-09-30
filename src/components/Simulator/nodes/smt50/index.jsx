@@ -8,7 +8,6 @@ const SMT50 = ({ data }) => {
     {
       id: "soiltemp",
       emoji: "🌡️",
-      label: "Soil Temperature (°C)",
       min: -20,
       max: 60,
       step: 0.5,
@@ -18,7 +17,6 @@ const SMT50 = ({ data }) => {
     {
       id: "soilmoisture",
       emoji: "💧",
-      label: "Soil Moisture (%)",
       min: 0,
       max: 100,
       step: 1,

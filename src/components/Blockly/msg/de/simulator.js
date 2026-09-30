@@ -2,6 +2,13 @@ export const SIMULATOR = {
   /**
    * Simulator panel
    */
+  simulator_start: "Simulation starten",
+  simulator_stop: "Simulation stoppen",
+  simulator_info_title: "Simulation",
+  simulator_info_status: "Status:",
+  simulator_status_running: "läuft",
+  simulator_status_stopped: "gestoppt",
+  simulator_info_modules: "Module:",
   simulator_unsupported_blocks:
     "Diese Blöcke unterstützt der Simulator nicht, er überspringt sie:",
   simulator_generation_error: "Der Simulator-Code konnte nicht erzeugt werden:",

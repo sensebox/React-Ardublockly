@@ -6,7 +6,6 @@ const sensorConfigDPS310 = [
   {
     id: "temp-dps",
     emoji: "🌡️",
-    label: "Temperature",
     min: -40,
     max: 85,
     step: 0.1,
@@ -16,7 +15,6 @@ const sensorConfigDPS310 = [
   {
     id: "pres",
     emoji: "🧭",
-    label: "Pressure",
     min: 260,
     max: 1260,
     step: 1,
@@ -26,7 +24,6 @@ const sensorConfigDPS310 = [
   {
     id: "alt",
     emoji: "🏔️",
-    label: "Altitude",
     min: -100,
     max: 10000,
     step: 1,

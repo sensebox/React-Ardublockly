@@ -4,12 +4,10 @@ import SensorGraphic from "./accelerometer.png";
 import SensorNode from "../../uiComponents/SensorNode";
 
 const Accelerometer = ({ data }) => {
-  // Für Temperatur und Luftfeuchte:
   const sensorConfigAccelerometer = [
     {
       id: "x",
       emoji: "↔️",
-      label: "X-Achse (g)",
       min: -2,
       max: 2,
       step: 0.01,
@@ -19,7 +17,6 @@ const Accelerometer = ({ data }) => {
     {
       id: "y",
       emoji: "↕️",
-      label: "Y-Achse (g)",
       min: -2,
       max: 2,
       step: 0.01,
@@ -29,7 +26,6 @@ const Accelerometer = ({ data }) => {
     {
       id: "z",
       emoji: "⬆️",
-      label: "Z-Achse (g)",
       min: -2,
       max: 2,
       step: 0.01,
@@ -39,7 +35,6 @@ const Accelerometer = ({ data }) => {
     {
       id: "temp-accel",
       emoji: "🌡️",
-      label: "Temperatur (°C)",
       min: -20,
       max: 50,
       step: 0.5,

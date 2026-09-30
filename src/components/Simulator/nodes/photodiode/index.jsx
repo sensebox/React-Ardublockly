@@ -7,7 +7,6 @@ const sensorConfigPhotodiode = [
   {
     id: "pd",
     emoji: "🔦",
-    label: "Beleuchtung",
     min: 0,
     max: 10000,
     step: 1,

@@ -7,7 +7,6 @@ const sensorConfigSDS011 = [
   {
     id: "pm10-sds011",
     emoji: "🌫️",
-    label: "PM10",
     min: 0,
     max: 500,
     step: 1,
@@ -17,7 +16,6 @@ const sensorConfigSDS011 = [
   {
     id: "pm25-sds011",
     emoji: "🌁",
-    label: "PM2.5",
     min: 0,
     max: 500,
     step: 1,

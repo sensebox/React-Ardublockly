@@ -1,4 +1,3 @@
-
 import React, { memo } from "react";
 import { Handle, Position } from "@xyflow/react";
 import SvgBoardComplex from "./svg";
@@ -23,7 +22,7 @@ const SenseBoxMCUS2 = ({ data }) => {
         }}
         id="i2c-left"
       />
-      <Handle 
+      <Handle
         type="source"
         position={Position.Left}
         style={{

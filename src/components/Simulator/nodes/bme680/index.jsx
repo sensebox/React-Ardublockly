@@ -6,7 +6,6 @@ const sensorConfigBME680 = [
   {
     id: "temp-bme680",
     emoji: "🌡️",
-    label: "Temperatur (°C)",
     min: -20,
     max: 50,
     step: 0.5,
@@ -16,7 +15,6 @@ const sensorConfigBME680 = [
   {
     id: "humidity-bme680",
     emoji: "💧",
-    label: "Luftfeuchte (%)",
     min: 0,
     max: 100,
     step: 1,
@@ -26,7 +24,6 @@ const sensorConfigBME680 = [
   {
     id: "pressure-bme680",
     emoji: "🌬️",
-    label: "Luftdruck (hPa)",
     min: 800,
     max: 1100,
     step: 1,
@@ -36,7 +33,6 @@ const sensorConfigBME680 = [
   {
     id: "iaq-bme680",
     emoji: "🏭",
-    label: "IAQ (0-500)",
     min: 0,
     max: 500,
     step: 1,
@@ -46,7 +42,6 @@ const sensorConfigBME680 = [
   {
     id: "iaqaccuracy-bme680",
     emoji: "🎯",
-    label: "IAQ-Genauigkeit (0-3)",
     min: 0,
     max: 3,
     step: 1,
@@ -56,7 +51,6 @@ const sensorConfigBME680 = [
   {
     id: "co2-bme680",
     emoji: "🏭",
-    label: "CO2-Äquivalent (ppm)",
     min: 0,
     max: 5000,
     step: 1,
@@ -66,7 +60,6 @@ const sensorConfigBME680 = [
   {
     id: "voc-bme680",
     emoji: "🫁",
-    label: "bVOC-Äquivalent (ppm)",
     min: 0,
     max: 100,
     step: 0.1,

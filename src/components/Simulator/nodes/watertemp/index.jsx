@@ -8,7 +8,6 @@ const WaterTemp = ({ data }) => {
     {
       id: "watertemp",
       emoji: "🌡️",
-      label: "Water Temperature (°C)",
       min: 0,
       max: 50,
       step: 0.5,
