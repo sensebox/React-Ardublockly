@@ -28,7 +28,7 @@ export const generateBlocklySvg = async (xml, width, height) => {
       try {
         // Injiziere Blockly
         const workspace = Blockly.inject(container, {
-          media: "/media/blockly/",
+          media: __BLOCKLY_MEDIA_PATH__,
           renderer: "geras",
         });
 

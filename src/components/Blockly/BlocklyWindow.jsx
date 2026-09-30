@@ -33,6 +33,7 @@ import { BlocklyComponent } from "./BlocklyComponent";
 
 export default function BlocklyWindow(props) {
   const dispatch = useDispatch();
+  const wrapperRef = useRef(null);
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -207,6 +208,25 @@ export default function BlocklyWindow(props) {
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
+  // resize alongside container
+  useEffect(() => {
+    const container = wrapperRef.current;
+    if (!container || typeof ResizeObserver === "undefined") return;
+    let t;
+    const ro = new ResizeObserver(() => {
+      clearTimeout(t);
+      t = setTimeout(() => {
+        const ws = Blockly.getMainWorkspace();
+        if (ws) Blockly.svgResize(ws);
+      }, 50);
+    });
+    ro.observe(container);
+    return () => {
+      clearTimeout(t);
+      ro.disconnect();
+    };
+  }, []);
+
   // Compute zoom/grid/move config with sensible defaults
   const zoomConfig = useMemo(() => {
     if (zoom !== undefined) return zoom;
@@ -252,6 +272,7 @@ export default function BlocklyWindow(props) {
   return (
     <>
       <div
+        ref={wrapperRef}
         style={
           tutorial
             ? {
@@ -272,7 +293,7 @@ export default function BlocklyWindow(props) {
           maxInstances={getMaxInstances()}
           zoom={zoomConfig}
           grid={gridConfig}
-          media={"/media/blockly/"}
+          media={__BLOCKLY_MEDIA_PATH__}
           move={moveConfig}
           initialXml={initialXmlProp ? initialXmlProp : initialXml}
         />

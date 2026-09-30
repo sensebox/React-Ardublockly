@@ -178,6 +178,7 @@ const ConvertDeployBase = ({
           modelSettingsCode: conversionResult.data.modelSettingsCode || null,
           modelSize: conversionResult.data.modelSize,
           modelByteArray: conversionResult.data.modelByteArray,
+          classLabels,
           timestamp:
             conversionResult.data.timestamp || new Date().toISOString(),
         },
@@ -209,9 +210,7 @@ const ConvertDeployBase = ({
       return;
     }
 
-    const classLabels = model.classes
-      ? model.classes.map((cls) => cls.name)
-      : [];
+    const classLabels = workflowState.conversionData.classLabels || [];
 
     const metadata = {
       timestamp: workflowState.conversionData.timestamp,
@@ -245,9 +244,7 @@ const ConvertDeployBase = ({
       return;
     }
 
-    const classLabels = model.classes
-      ? model.classes.map((cls) => cls.name)
-      : [];
+    const classLabels = workflowState.conversionData.classLabels || [];
 
     setWorkflowState((prev) => ({
       ...prev,
@@ -291,7 +288,7 @@ const ConvertDeployBase = ({
 
       const downloadSuccess = ConversionService.downloadBinary(
         compilationResult.data.binaryData,
-        `${modelName}_${boardType.replace(/:/g, "_")}_${Date.now()}.bin`,
+        `${ConversionService.buildModelFileName(classLabels)}.bin`,
       );
 
       if (!downloadSuccess) {
@@ -549,9 +546,11 @@ const ConvertDeployBase = ({
                         color="primary"
                         startIcon={<DownloadIcon />}
                         onClick={() => {
+                          const classLabels =
+                            workflowState.conversionData?.classLabels || [];
                           ConversionService.downloadBinary(
                             workflowState.binaryData,
-                            `${modelName}_${boardType.replace(/:/g, "_")}_${Date.now()}.bin`,
+                            `${ConversionService.buildModelFileName(classLabels)}.bin`,
                           );
                         }}
                       >

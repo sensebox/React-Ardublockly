@@ -169,6 +169,22 @@ const Toolbox = ({ workspace, toolbox }) => {
       workspace.toolbox
     ) {
       workspace.updateToolbox(toolbox.current);
+
+      // reopen ai toolbox specifically
+      if (aiModelChanged && aiModel?.code) {
+        const newToolbox = workspace.getToolbox();
+        const newItem = newToolbox?.getToolboxItemById?.("sensebox_ai");
+        if (newItem) {
+          let parent = newItem.getParent?.();
+          while (parent) {
+            parent.setExpanded?.(true);
+            parent = parent.getParent?.();
+          }
+
+          newToolbox.setSelectedItem(null);
+          newToolbox.setSelectedItem(newItem);
+        }
+      }
     }
 
     previousBoard.current = selectedBoard;

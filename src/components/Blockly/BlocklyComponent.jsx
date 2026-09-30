@@ -58,7 +58,7 @@ export function BlocklyComponent({ initialXml, style, maxInstances, ...rest }) {
       blocklyOptions.toolboxPosition = "end";
       // Ensure toolbox icon sprites and other assets load correctly in embedded view
       if (!blocklyOptions.media) {
-        blocklyOptions.media = "/media/blockly/";
+        blocklyOptions.media = __BLOCKLY_MEDIA_PATH__;
       }
     }
 

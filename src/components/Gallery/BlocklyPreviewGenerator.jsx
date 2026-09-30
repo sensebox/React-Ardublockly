@@ -52,7 +52,7 @@ const BlocklyPreviewGenerator = ({
     try {
       // Injiziere Blockly in den unsichtbaren Container
       const workspace = Blockly.inject(container, {
-        media: "/media/blockly/",
+        media: __BLOCKLY_MEDIA_PATH__,
         renderer: "geras",
       });
 

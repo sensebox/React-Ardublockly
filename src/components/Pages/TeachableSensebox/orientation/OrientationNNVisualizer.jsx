@@ -1052,7 +1052,7 @@ const OrientationNNVisualizer = ({
                     px: 1,
                     py: 0.75,
                     borderRadius: 1,
-                    bgcolor: isWinner ? OUTPUT_GREEN + "18" : "grey.100",
+                    bgcolor: isWinner ? OUTPUT_GREEN + "18" : "background.grey",
                     border: `1px solid ${
                       isWinner ? OUTPUT_GREEN + "55" : "transparent"
                     }`,

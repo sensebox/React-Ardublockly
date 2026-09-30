@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Box,
   Card,
@@ -14,6 +14,10 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import { Edit } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import {
+  ANSWERS_UPDATED_EVENT,
+  loadAnswers,
+} from "../helpers/tutorialStorageUtils";
 
 const Sidebar = () => {
   const theme = useTheme();
@@ -22,18 +26,48 @@ const Sidebar = () => {
   const activeStep = useSelector((state) => state.tutorial.activeStep);
   const tutorial = useSelector((state) => state.tutorial.tutorials[0]);
   const user = useSelector((state) => state.auth.user);
-  const [stepWithTask, setStepWithTaks] = useState(false);
   const stepsWithFinish = [...tutorial.steps];
 
   const progress = ((activeStep + 1) / stepsWithFinish.length) * 100;
+
+  const [answerVersion, setAnswerVersion] = useState(0);
+
   useEffect(() => {
-    const currentStep = tutorial.steps[activeStep];
-    if (
-      currentStep &&
-      (currentStep.type === "question" || currentStep.type === "blockly")
-    ) {
+    const handleAnswersUpdated = (event) => {
+      if (event.detail?.tutorialId !== tutorial._id) return;
+      setAnswerVersion((v) => v + 1);
+    };
+    window.addEventListener(ANSWERS_UPDATED_EVENT, handleAnswersUpdated);
+    return () =>
+      window.removeEventListener(ANSWERS_UPDATED_EVENT, handleAnswersUpdated);
+  }, [tutorial._id]);
+
+  const answersMap = useMemo(() => {
+    const answers = loadAnswers(tutorial._id);
+    return answers.reduce((map, answer) => {
+      map[answer._id] = answer;
+      return map;
+    }, {});
+  }, [tutorial._id, answerVersion]);
+
+  const isStepCompleted = (step) => {
+    if (step.type === "question" && step.questionData?.length) {
+      return step.questionData.every(
+        (_, idx) => answersMap[`${step._id}_q${idx}`]?.type === "success",
+      );
     }
-  }, [activeStep]);
+    if (step.type === "blockly" && step.xml) {
+      return answersMap[`${step._id}_blockly`]?.type === "success";
+    }
+    return true;
+  };
+
+  const firstIncompleteIndex = stepsWithFinish.findIndex(
+    (step) => !isStepCompleted(step),
+  );
+  const lockedFromIndex =
+    firstIncompleteIndex === -1 ? stepsWithFinish.length : firstIncompleteIndex;
+
   const changeStep = (step) => {
     dispatch({
       type: "TUTORIAL_STEP",
@@ -93,15 +127,19 @@ const Sidebar = () => {
         {stepsWithFinish.map((step, index) => {
           const isCurrent = index === activeStep;
           const isCompleted = index < activeStep;
+          const isLocked = index > lockedFromIndex;
 
           return (
             <Box
               key={step.id || index}
               component="button"
-              onClick={() => changeStep(index)}
+              disabled={isLocked}
+              onClick={() => !isLocked && changeStep(index)}
               sx={{
                 all: "unset",
-                cursor: "pointer",
+                cursor: isLocked ? "not-allowed" : "pointer",
+                pointerEvents: isLocked ? "none" : "auto",
+                opacity: isLocked ? 0.5 : 1,
                 display: "flex",
                 alignItems: "center",
                 gap: 2,
@@ -118,9 +156,11 @@ const Sidebar = () => {
                   ? theme.palette.primary.contrastText
                   : theme.palette.text.primary,
                 "&:hover": {
-                  bgcolor: isCurrent
-                    ? theme.palette.primary.dark
-                    : theme.palette.action.hover,
+                  bgcolor: isLocked
+                    ? "transparent"
+                    : isCurrent
+                      ? theme.palette.primary.dark
+                      : theme.palette.action.hover,
                 },
               }}
             >

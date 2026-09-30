@@ -140,7 +140,7 @@ const TrainingResultsSection = ({
             sx={{
               p: 4,
               textAlign: "center",
-              bgcolor: "grey.50",
+              bgcolor: "background.grey",
               borderRadius: 1,
             }}
           >
@@ -286,7 +286,7 @@ const TrainingResultsSection = ({
                   alignItems: "center",
                   justifyContent: "center",
                   p: 3,
-                  bgcolor: "grey.50",
+                  bgcolor: "background.grey",
                   borderRadius: 1,
                 }}
               >

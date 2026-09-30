@@ -109,23 +109,41 @@ basicGenerator.statementToCode = function (block, name) {
 
 /**
  * finish — wird ausgeführt, nachdem alle Blöcke generiert wurden.
- * Fügt Setup-Code oben an, dann normalen Code unten.
  *
- * @param {string} code – Der generierte Code der Blöcke
+ * Kapselt den generierten Code in die vom senseBoxOS-Interpreter erwartete
+ * Setup/Loop-Struktur (siehe code-gen-specs.md):
+ *
+ *   BEGIN_SETUP
+ *   [einmaliger Setup-Code]
+ *   END_SETUP
+ *   BEGIN_LOOP
+ *   [wiederkehrender Loop-Code]
+ *   END_LOOP
+ *
+ * @param {string} code – Der generierte Code der Blöcke (= Loop-Code)
  * @return {string} – finaler Output
  */
 basicGenerator.finish = function (code) {
+  // Setup-Code (aus dem "Vor dem Starten ausführen"-Block) einsammeln.
   const setup = Object.values(basicGenerator.setupCode_)
     .filter(Boolean)
-    .join("\n");
+    .join("\n")
+    .replace(/\n+$/, "");
 
-  let finalCode = "";
+  // Loop-Code (aus dem Startblock) von überflüssigen Leerzeilen befreien.
+  const loop = (code || "").replace(/\n+$/, "");
 
+  // Marker müssen laut Spezifikation jeweils auf einer eigenen Zeile stehen.
+  let finalCode = "BEGIN_SETUP\n";
   if (setup) {
     finalCode += setup + "\n";
   }
-
-  finalCode += code;
+  finalCode += "END_SETUP\n";
+  finalCode += "BEGIN_LOOP\n";
+  if (loop) {
+    finalCode += loop + "\n";
+  }
+  finalCode += "END_LOOP\n";
 
   return finalCode;
 };
