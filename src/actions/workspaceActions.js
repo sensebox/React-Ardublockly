@@ -11,6 +11,8 @@ import {
 
 import * as Blockly from "blockly/core";
 import { basicGenerator } from "@/components/Blockly/generator/basic/generator";
+import { simulatorGenerator } from "@/components/Blockly/generator/simulator";
+import { SIMULATOR_BOARD } from "@/components/Simulator/constants";
 import { storeTutorialXml } from "./tutorialActions";
 
 export const workspaceChange = () => (dispatch) => {
@@ -29,6 +31,21 @@ export const onChangeCode = () => (dispatch, getState) => {
     code.basic = basicGenerator.workspaceToCode(workspace);
   } catch (error) {
     code.basic = ""; // Leeren String setzen, wenn Generierung fehlschlägt
+  }
+
+  // Simulator-Code nur für das MCU-S2. Nicht unterstützte Blöcke überspringt
+  // der Generator, das Simulator-Panel listet sie auf. Ein Fehler hier darf
+  // die Arduino-Codeerzeugung nie beeinträchtigen.
+  code.simulator = "";
+  code.simulatorUnsupported = [];
+  code.simulatorError = null;
+  if (getState().board.board === SIMULATOR_BOARD) {
+    try {
+      code.simulator = simulatorGenerator.workspaceToCode(workspace);
+      code.simulatorUnsupported = simulatorGenerator.getUnsupportedBlockLabels();
+    } catch (error) {
+      code.simulatorError = error.message;
+    }
   }
 
   var xmlDom = Blockly.Xml.workspaceToDom(workspace);
