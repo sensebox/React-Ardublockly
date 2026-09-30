@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import {
   Card,
@@ -6,16 +6,32 @@ import {
   Typography,
   Button,
   Box,
+  Tabs,
+  Tab,
   useTheme,
 } from "@mui/material";
 import * as Blockly from "blockly";
 import ReactMarkdown from "react-markdown";
 import { withBoardParam } from "@/components/Blockly/helpers/helpUrlBuilder";
+import GraphViewer from "./GraphViewer";
+import DebugViewer from "./DebugViewer";
+import { SIMULATOR_BOARD } from "@/components/Simulator/constants";
+
+// Keeps a tab mounted while hidden, so the graph history survives tab changes.
+const TabContent = ({ active, children }) => (
+  <Box sx={{ display: active ? "block" : "none", pt: 1 }}>{children}</Box>
+);
 
 const TooltipViewer = () => {
   const theme = useTheme();
   const tooltip = useSelector((s) => s.workspace.code.tooltip);
   const helpurl = useSelector((s) => s.workspace.code.helpurl);
+  // Graph and debug log belong to the simulator (MCU-S2 only).
+  const simulatorAvailable = useSelector(
+    (s) => s.board.board === SIMULATOR_BOARD,
+  );
+  const [tab, setTab] = useState("help");
+  const activeTab = simulatorAvailable ? tab : "help";
 
   // Wrap the helpurl with board parameter if it exists
   const helpUrlWithBoard = helpurl ? withBoardParam(helpurl) : null;
@@ -33,7 +49,37 @@ const TooltipViewer = () => {
         boxShadow: 1,
       }}
     >
-      <CardContent>
+      {simulatorAvailable && (
+        <Tabs
+          value={activeTab}
+          onChange={(_, value) => setTab(value)}
+          variant="fullWidth"
+          sx={{
+            minHeight: 36,
+            borderBottom: 1,
+            borderColor: "divider",
+            "& .MuiTab-root": { minHeight: 36, textTransform: "none" },
+          }}
+        >
+          <Tab
+            id="tooltip-tab-help"
+            value="help"
+            label={Blockly.Msg.simulator_tab_help}
+          />
+          <Tab
+            id="tooltip-tab-graph"
+            value="graph"
+            label={Blockly.Msg.simulator_tab_graph}
+          />
+          <Tab
+            id="tooltip-tab-debug"
+            value="debug"
+            label={Blockly.Msg.simulator_tab_debug}
+          />
+        </Tabs>
+      )}
+
+      <CardContent sx={{ display: activeTab === "help" ? "block" : "none" }}>
         <Typography
           variant="h6"
           component="h2"
@@ -81,6 +127,17 @@ const TooltipViewer = () => {
           </Button>
         )}
       </CardContent>
+
+      {simulatorAvailable && (
+        <>
+          <TabContent active={activeTab === "graph"}>
+            <GraphViewer />
+          </TabContent>
+          <TabContent active={activeTab === "debug"}>
+            <DebugViewer />
+          </TabContent>
+        </>
+      )}
     </Card>
   );
 };
