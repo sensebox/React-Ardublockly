@@ -16,6 +16,10 @@ const SvgBoardComplex = (props) =>  {
   const [pressed, setPressed] = useState(false);
   // Track if the button was pressed (e.g. after mouseUp)
   const [wasPressedFlag, setWasPressedFlag] = useState(false);
+  // Start of the current press, for longPress()
+  const [pressedSince, setPressedSince] = useState(0);
+  // Switch state that flips with every press, for toggleButton()
+  const [toggleState, setToggleState] = useState(false);
 
   const highlightPhotodiode = () => {
     if (photodiodeRectangle.current) {
@@ -34,6 +38,7 @@ const SvgBoardComplex = (props) =>  {
   // Also resets the "wasPressed" flag for a new click cycle.
   const handleMouseDown = () => {
     setWasPressedFlag(false); // reset previous click status
+    setPressedSince(Date.now());
     setPressed(true);
   };
 
@@ -41,6 +46,7 @@ const SvgBoardComplex = (props) =>  {
   const handleMouseUp = () => {
     setPressed(false);
     setWasPressedFlag(true);
+    setToggleState((state) => !state);
   };
 
   const handleBtnClick = () => {
@@ -55,7 +61,7 @@ const SvgBoardComplex = (props) =>  {
   };
 
   useEffect(() => {
-    if (modules.includes("sensebox_esp32s2_light")) {
+    if (modules.some((module) => module.type === "sensebox_esp32s2_light")) {
       setPhotodiodeSelected(true);
 
       highlightPhotodiode();
@@ -63,7 +69,7 @@ const SvgBoardComplex = (props) =>  {
     else {
       deselectPhotodiode();
     }
-  }, [props]);
+  }, [modules]);
 
   
   return (
@@ -4009,6 +4015,8 @@ const SvgBoardComplex = (props) =>  {
             aria-pressed={pressed}
             // We add a custom attribute to indicate that the button was pressed.
             data-was-pressed={wasPressedFlag}
+            data-pressed-since={pressedSince}
+            data-toggle-state={toggleState}
             style={{ pointerEvents: "all"}}
             stroke="#2B2A29"
             strokeMiterlimit="22.926"

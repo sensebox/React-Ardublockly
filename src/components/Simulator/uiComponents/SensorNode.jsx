@@ -1,10 +1,13 @@
-import React, { memo, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Handle, Position } from "@xyflow/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
-import store from "@/store";
+import { setModuleValue, removeModuleValues } from "@/actions/simulatorActions";
 
 const SensorNode = ({ title, sensors, imageSrc, width = "300px" }) => {
+  const dispatch = useDispatch();
+
   // Initial values for all sensors
   const initialValues = sensors.reduce((acc, sensor) => {
     acc[sensor.id] = sensor.initial !== undefined ? sensor.initial : sensor.min;
@@ -15,18 +18,30 @@ const SensorNode = ({ title, sensors, imageSrc, width = "300px" }) => {
   const [showOverlay, setShowOverlay] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
+  // The graph view records the values of the sensors that are shown.
+  useEffect(() => {
+    sensors.forEach((sensor) => {
+      if (sensor.type) {
+        dispatch(setModuleValue(sensor.type, initialValues[sensor.id]));
+      }
+    });
+    return () => {
+      dispatch(
+        removeModuleValues(
+          sensors.map((sensor) => sensor.type).filter(Boolean),
+        ),
+      );
+    };
+    // Register once per mounted sensor node.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleChange = (id) => (e) => {
     const newValue = Number(e.target.value);
     setValues({ ...values, [id]: newValue });
     const sensor = sensors.find((s) => s.id === id);
     if (sensor?.type) {
-      store.dispatch({
-        type: "SET_MODULE_VALUE",
-        payload: {
-          type: sensor.type,
-          value: newValue,
-        },
-      });
+      dispatch(setModuleValue(sensor.type, newValue));
     }
   };
 

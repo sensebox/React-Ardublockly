@@ -2,6 +2,7 @@ import initDisplay from "./display";
 import initDom from "./dom";
 import initLogAndAlert from "./log";
 import initNeopixel from "./neopixel";
+import initRandom from "./random";
 import initBME680 from "./sensors/bme680";
 import initDPS310 from "./sensors/dps310";
 import initHDC1080 from "./sensors/hdc1080";
@@ -18,11 +19,13 @@ import initAccelerometer from "./sensors/accelerometer";
 import initSDS011 from "./sensors/sds011";
 import initSPS30 from "./sensors/sps30";
 import initRG15 from "./sensors/rg15";
+import initWaterTemp from "./sensors/waterTemp";
 
 export default function initSimulator(interpreter, globalObject) {
   initDom(interpreter, globalObject);
   initLogAndAlert(interpreter, globalObject);
   initTime(interpreter, globalObject);
+  initRandom(interpreter, globalObject);
   initDisplay(interpreter, globalObject);
   initHDC1080(interpreter, globalObject);
   initLightUv(interpreter, globalObject);
@@ -39,5 +42,6 @@ export default function initSimulator(interpreter, globalObject) {
   initSDS011(interpreter, globalObject);
   initSPS30(interpreter, globalObject);
   initRG15(interpreter, globalObject);
+  initWaterTemp(interpreter, globalObject);
   initButton(interpreter, globalObject);
 }

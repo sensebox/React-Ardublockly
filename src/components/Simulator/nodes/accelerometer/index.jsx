@@ -36,6 +36,16 @@ const Accelerometer = ({ data }) => {
       initial: 1,
       type: "accelerometer_z",
     },
+    {
+      id: "temp-accel",
+      emoji: "🌡️",
+      label: "Temperatur (°C)",
+      min: -20,
+      max: 50,
+      step: 0.5,
+      initial: 20,
+      type: "accelerometer_temp",
+    },
   ];
 
   return (

@@ -1,175 +1,230 @@
 import * as Blockly from "blockly";
 
 /**
- * HDC1080 Temperature and Humidity Sensor
- *
+ * Sensor blocks. Each block registers its module, so the simulator shows the
+ * sensor next to the board, and calls a read function provided by the
+ * simulator runtime (src/components/Simulator/init/sensors).
  */
 
-Blockly.Generator.Simulator.forBlock["sensebox_sensor_temp_hum"] = function () {
+/**
+ * Code for a sensor value, looked up by dropdown value.
+ * @param {!Blockly.Block} block
+ * @param {string} field Name of the dropdown field.
+ * @param {!Object<string, string>} functions Dropdown value -> function name.
+ * @return {!Array} Code and operator order.
+ */
+function readValue(block, field, functions) {
+  const functionName = functions[block.getFieldValue(field)];
+  if (!functionName) {
+    Blockly.Generator.Simulator.markUnsupported(
+      block,
+      block.getField(field)?.getText(),
+    );
+    return ["0", Blockly.Generator.Simulator.ORDER_ATOMIC];
+  }
+  return [`${functionName}()`, Blockly.Generator.Simulator.ORDER_ATOMIC];
+}
+
+/**
+ * HDC1080 Temperature and Humidity Sensor
+ */
+Blockly.Generator.Simulator.forBlock["sensebox_sensor_temp_hum"] = function (
+  block,
+) {
   Blockly.Generator.Simulator.modules_["senseBox_hdc1080"] = "senseBox_hdc1080";
-
-  var dropdown_name = this.getFieldValue("NAME");
-
-  var code = `read${dropdown_name}()`;
-  return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
+  return readValue(block, "NAME", {
+    Temperature: "readTemperature",
+    Humidity: "readHumidity",
+  });
 };
 
-Blockly.Generator.Simulator.forBlock["sensebox_sensor_uv_light"] = function () {
+/**
+ * TSL45315 illuminance and VEML6070 UV intensity
+ */
+Blockly.Generator.Simulator.forBlock["sensebox_sensor_uv_light"] = function (
+  block,
+) {
   Blockly.Generator.Simulator.modules_["senseBox_lightUv"] = "senseBox_lightUv";
-
-  var dropdown_name = this.getFieldValue("NAME");
-
-  var code = `read${dropdown_name}()`;
-  return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
+  return readValue(block, "NAME", {
+    Illuminance: "readIlluminance",
+    UvIntensity: "readUvIntensity",
+  });
 };
 
+/**
+ * DS18B20 water temperature
+ */
 Blockly.Generator.Simulator.forBlock["sensebox_sensor_watertemperature"] =
   function () {
     Blockly.Generator.Simulator.modules_["senseBox_waterTemp"] =
       "senseBox_waterTemp";
-
-    var code = "readWaterTemperature()";
-    return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
+    return ["readWaterTemperature()", Blockly.Generator.Simulator.ORDER_ATOMIC];
   };
 
+/**
+ * Photodiode on the MCU-S2
+ */
 Blockly.Generator.Simulator.forBlock["sensebox_esp32s2_light"] = function () {
   Blockly.Generator.Simulator.modules_["sensebox_esp32s2_light"] =
     "sensebox_esp32s2_light";
-
-  var dropdown_name = this.getFieldValue("NAME");
-
-  var code = `readPhotodiode()`;
-  return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
+  return ["readPhotodiode()", Blockly.Generator.Simulator.ORDER_ATOMIC];
 };
 
+/**
+ * HC-SR04 ultrasonic distance
+ */
 Blockly.Generator.Simulator.forBlock["sensebox_sensor_ultrasonic_ranger"] =
   function () {
     Blockly.Generator.Simulator.modules_["sensebox_sensor_ultrasonic_ranger"] =
       "sensebox_sensor_ultrasonic_ranger";
-    var code = "readUltrasonicDistance()";
-
-    return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
+    return [
+      "readUltrasonicDistance()",
+      Blockly.Generator.Simulator.ORDER_ATOMIC,
+    ];
   };
 
-Blockly.Generator.Simulator.forBlock["sensebox_tof_imager"] = function () {
+/**
+ * ToF imager. Only the distance is simulated, not the bitmap.
+ */
+Blockly.Generator.Simulator.forBlock["sensebox_tof_imager"] = function (block) {
   Blockly.Generator.Simulator.modules_["sensebox_tof_imager"] =
     "sensebox_tof_imager";
-
-  var dropdown_name = this.getFieldValue("dropdown");
-  var code =
-    dropdown_name === "DistanzCM" ? "readDistance()" : "getDistanceBitmap()";
-  return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
+  return readValue(block, "dropdown", {
+    DistanzCM: "readDistance",
+  });
 };
 
-Blockly.Generator.Simulator.forBlock["sensebox_sensor_bme680_bsec"] =
-  function () {
-    Blockly.Generator.Simulator.modules_["sensebox_sensor_bme680_bsec"] =
-      "sensebox_sensor_bme680_bsec";
+/**
+ * BME680 environmental sensor
+ */
+Blockly.Generator.Simulator.forBlock["sensebox_sensor_bme680_bsec"] = function (
+  block,
+) {
+  Blockly.Generator.Simulator.modules_["sensebox_sensor_bme680_bsec"] =
+    "sensebox_sensor_bme680_bsec";
+  return readValue(block, "dropdown", {
+    temperature: "readTemperatureBME680",
+    humidity: "readHumidityBME680",
+    pressure: "readPressureBME680",
+    IAQ: "readIAQBME680",
+    IAQAccuracy: "readIAQAccuracyBME680",
+    CO2: "readCO2EquivalentBME680",
+    breathVocEquivalent: "readBreathVOCEquivalentBME680",
+  });
+};
 
-    var dropdown_name = this.getFieldValue("dropdown");
-    var code = `read${dropdown_name}BME680()`;
-    return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
-  };
-
+/**
+ * SMT50 soil temperature and moisture
+ */
 Blockly.Generator.Simulator.forBlock["sensebox_sensor_truebner_smt50_esp32"] =
-  function () {
+  function (block) {
     Blockly.Generator.Simulator.modules_["senseBox_smt50"] = "senseBox_smt50";
-
-    var dropdown_value = this.getFieldValue("value");
-    var code =
-      dropdown_value === "temp"
-        ? "readSoilTemperature()"
-        : "readSoilMoisture()";
-    return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
+    return readValue(block, "value", {
+      temp: "readSoilTemperature",
+      soil: "readSoilMoisture",
+    });
   };
 
-Blockly.Generator.Simulator.forBlock["sensebox_scd30"] = function () {
+/**
+ * SCD30 CO2 sensor
+ */
+Blockly.Generator.Simulator.forBlock["sensebox_scd30"] = function (block) {
   Blockly.Generator.Simulator.modules_["sensebox_scd30"] = "sensebox_scd30";
-
-  var dropdown_name = this.getFieldValue("NAME");
-
-  var code = `read${dropdown_name}SCD30()`;
-  return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
+  return readValue(block, "dropdown", {
+    CO2: "readCO2SCD30",
+    temperature: "readTemperatureSCD30",
+    humidity: "readHumiditySCD30",
+  });
 };
 
-Blockly.Generator.Simulator.forBlock["sensebox_sensor_dps310"] = function () {
+/**
+ * DPS310 pressure sensor
+ */
+Blockly.Generator.Simulator.forBlock["sensebox_sensor_dps310"] = function (
+  block,
+) {
   Blockly.Generator.Simulator.modules_["sensebox_sensor_dps310"] =
     "sensebox_sensor_dps310";
-
-  var dropdown_name = this.getFieldValue("NAME");
-
-  var code = `read${dropdown_name}DPS310()`;
-  return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
+  return readValue(block, "NAME", {
+    Pressure: "readPressureDPS310",
+    Temperature: "readTemperatureDPS310",
+    Altitude: "readAltitudeDPS310",
+  });
 };
 
-Blockly.Generator.Simulator.forBlock["sensebox_button"] = function () {
+/**
+ * Button on the MCU-S2
+ */
+Blockly.Generator.Simulator.forBlock["sensebox_button"] = function (block) {
   Blockly.Generator.Simulator.modules_["sensebox_button"] = "sensebox_button";
-
-  var dropdown = this.getFieldValue("FUNCTION");
-
-  var code = `${dropdown}()`;
-
-  return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
+  if (block.getFieldValue("FUNCTION") === "longPress") {
+    const time = Number(block.getFieldValue("time")) || 0;
+    return [`longPress(${time})`, Blockly.Generator.Simulator.ORDER_ATOMIC];
+  }
+  return readValue(block, "FUNCTION", {
+    isPressed: "isPressed",
+    wasPressed: "wasPressed",
+    toggleButton: "toggleButton",
+  });
 };
 
+/**
+ * Accelerometer on the MCU-S2
+ */
 Blockly.Generator.Simulator.forBlock["sensebox_esp32s2_accelerometer"] =
-  function () {
+  function (block) {
     Blockly.Generator.Simulator.modules_["sensebox_esp32s2_accelerometer"] =
       "sensebox_esp32s2_accelerometer";
-
-    var dropdown = this.getFieldValue("value");
-
-    var code = `${dropdown}()`;
-
-    return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
+    return readValue(block, "value", {
+      accelerationX: "readAccelerationX",
+      accelerationY: "readAccelerationY",
+      accelerationZ: "readAccelerationZ",
+      temperature: "readTemperatureAccelerometer",
+    });
   };
 
-Blockly.Generator.Simulator.forBlock["sensebox_sensor_sds011"] = function () {
+/**
+ * SDS011 particulate matter
+ */
+Blockly.Generator.Simulator.forBlock["sensebox_sensor_sds011"] = function (
+  block,
+) {
   Blockly.Generator.Simulator.modules_["sensebox_sensor_sds011"] =
     "sensebox_sensor_sds011";
-
-  var dropdown = this.getFieldValue("value");
-
-  var code = `${dropdown}()`;
-
-  return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
+  return readValue(block, "NAME", {
+    25: "readPM25SDS011",
+    10: "readPM10SDS011",
+  });
 };
 
-Blockly.Generator.Simulator.forBlock["sensebox_sensor_sps30"] = function () {
+/**
+ * SPS30 particulate matter
+ */
+Blockly.Generator.Simulator.forBlock["sensebox_sensor_sps30"] = function (
+  block,
+) {
   Blockly.Generator.Simulator.modules_["sensebox_sensor_sps30"] =
     "sensebox_sensor_sps30";
-
-  var dropdown = this.getFieldValue("value");
-  switch (dropdown) {
-    case "1p0":
-      dropdown = "PM1";
-      break;
-    case "2p5":
-      dropdown = "PM25";
-      break;
-    case "4o0":
-      dropdown = "PM4";
-      break;
-    case "10p0":
-      dropdown = "PM10";
-      break;
-    default:
-  }
-  var code = `$read${dropdown}SPS30()`;
-
-  return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
+  return readValue(block, "value", {
+    "1p0": "readPM1SPS30",
+    "2p5": "readPM25SPS30",
+    "4p0": "readPM4SPS30",
+    "10p0": "readPM10SPS30",
+  });
 };
 
-Blockly.Generator.Simulator.forBlock["sensebox_rg15_rainsensor"] = function () {
+/**
+ * RG15 rain gauge. Accumulation values are simulated as total accumulation.
+ */
+Blockly.Generator.Simulator.forBlock["sensebox_rg15_rainsensor"] = function (
+  block,
+) {
   Blockly.Generator.Simulator.modules_["sensebox_rg15_rainsensor"] =
     "sensebox_rg15_rainsensor";
-
-  var dropdown = this.getFieldValue("VALUE");
-  if (dropdown === "getEventAccumulation" || dropdown === "getAccumulation") {
-    dropdown = "getTotalAccumulation";
-  }
-
-  var code = `${dropdown}()`;
-
-  return [code, Blockly.Generator.Simulator.ORDER_ATOMIC];
+  return readValue(block, "VALUE", {
+    getTotalAccumulation: "getTotalAccumulation",
+    getAccumulation: "getTotalAccumulation",
+    getEventAccumulation: "getTotalAccumulation",
+    getRainfallIntensity: "getRainfallIntensity",
+  });
 };

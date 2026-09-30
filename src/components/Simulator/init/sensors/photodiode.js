@@ -1,12 +1,8 @@
-export default function initPd(interpreter, globalObject) {
-    // Define getTemperature function
-    var wrapper = function getPd() {
-     return document.getElementById("pd-slider").value;
-    };
+import { defineSliderReaders } from "../slider";
 
-    interpreter.setProperty(
-      globalObject,
-      "readPhotodiode",
-      interpreter.createNativeFunction(wrapper),
-    );
-  }
+// Photodiode on the MCU-S2
+export default function initPd(interpreter, globalObject) {
+  defineSliderReaders(interpreter, globalObject, {
+    readPhotodiode: "pd",
+  });
+}
