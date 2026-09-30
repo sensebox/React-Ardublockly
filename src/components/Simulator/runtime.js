@@ -66,14 +66,14 @@ export function startRuntime(code, { onFinish, onError } = {}) {
 }
 
 /**
- * Stop the running program and reset the simulated outputs.
+ * Stop the running program and reset the simulated outputs. Also resets the
+ * outputs after a program stopped by itself, e.g. because of an error.
  */
 export function stopRuntime() {
-  if (!current) {
-    return;
+  if (current) {
+    current.controller.abort();
+    current = null;
   }
-  current.controller.abort();
-  current = null;
   resetOutputs();
 }
 
@@ -84,5 +84,10 @@ function resetOutputs() {
     if (element) {
       element.style.fill = "black";
     }
+  }
+  // RGB LED on the board: back to the colour of the graphic
+  const rgbLed = document.getElementById("board-complex_svg__circle270");
+  if (rgbLed) {
+    rgbLed.style.fill = "";
   }
 }
