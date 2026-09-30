@@ -1,17 +1,39 @@
 import * as Blockly from "blockly/core";
 
+/**
+ * OLED display. Like on the device, drawing happens in a buffer and
+ * "sensebox_display_show" puts it on the screen (showDisplay()).
+ */
+
+function useDisplay() {
+  Blockly.Generator.Simulator.modules_["senseBox_display"] = "senseBox_display";
+}
+
+Blockly.Generator.Simulator.forBlock["sensebox_display_beginDisplay"] =
+  function () {
+    useDisplay();
+    Blockly.Generator.Simulator.setupCode_["sensebox_display_begin"] =
+      "clearDisplay();\nshowDisplay();";
+    return "";
+  };
+
+Blockly.Generator.Simulator.forBlock["sensebox_display_show"] = function (
+  block,
+) {
+  useDisplay();
+  const show = Blockly.Generator.Simulator.statementToCode(block, "SHOW");
+  return show + "showDisplay();\n";
+};
+
 Blockly.Generator.Simulator.forBlock["sensebox_display_clearDisplay"] =
   function () {
-    Blockly.Generator.Simulator.modules_["senseBox_display"] =
-      "senseBox_display";
-    var code = "clearDisplay();\n";
-    return code;
+    useDisplay();
+    return "clearDisplay();\n";
   };
 
 Blockly.Generator.Simulator.forBlock["sensebox_display_printDisplay"] =
   function () {
-    Blockly.Generator.Simulator.modules_["senseBox_display"] =
-      "senseBox_display";
+    useDisplay();
     var x = this.getFieldValue("X");
     var y = this.getFieldValue("Y");
 

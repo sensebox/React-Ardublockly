@@ -36,6 +36,7 @@ simulatorGenerator.addReservedWords(
     "log",
     "drawText",
     "clearDisplay",
+    "showDisplay",
     "neopixel",
     "toggleLED",
     "isPressed",

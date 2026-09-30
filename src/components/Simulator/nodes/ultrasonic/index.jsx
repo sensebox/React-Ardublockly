@@ -13,6 +13,7 @@ const UltrasonicSensor = ({ data }) => {
       max: 250,
       step: 1,
       initial: 100,
+      type: "sensebox_ultrasonic_distance",
     },
   ];
 

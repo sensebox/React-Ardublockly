@@ -1,31 +1,45 @@
+// Button on the MCU-S2. The board graphic (nodes/mcu-s2/svg.jsx) keeps the
+// button state in data attributes of #mcu_switch_button.
+
+function getButton() {
+  return document.getElementById("mcu_switch_button");
+}
+
 export default function initButton(interpreter, globalObject) {
-    // Define getTemperature function
-    var wrapper = function isPressed() {
-        const button = document.getElementById("mcu_switch_button");
-        const isPressed = button.getAttribute("aria-pressed");
-        const isPressedBool = isPressed === "true";
-        return isPressedBool;
-    };
-
+  const define = (name, fn) =>
     interpreter.setProperty(
-        globalObject,
-        "isPressed",
-        interpreter.createNativeFunction(wrapper),
-      );
+      globalObject,
+      name,
+      interpreter.createNativeFunction(fn),
+    );
 
-    var wrapper = function wasPressed() {
-        const button = document.getElementById("mcu_switch_button");
-        const wasPressed = button.getAttribute("data-was-pressed");
-        const wasPressedBool = wasPressed === "true";   
-        button.setAttribute("data-was-pressed", "false");
-        return wasPressedBool;
-    };
+  // Button is held down right now.
+  define(
+    "isPressed",
+    () => getButton()?.getAttribute("aria-pressed") === "true",
+  );
 
-    interpreter.setProperty(
-        globalObject,
-        "wasPressed",
-        interpreter.createNativeFunction(wrapper),
-      );
-      
-    
-  }
+  // Button was pressed and released since the last call.
+  define("wasPressed", () => {
+    const button = getButton();
+    const wasPressed = button?.getAttribute("data-was-pressed") === "true";
+    button?.setAttribute("data-was-pressed", "false");
+    return wasPressed;
+  });
+
+  // Button is held down for at least `time` milliseconds (Arduino: pressedFor).
+  define("longPress", (time) => {
+    const button = getButton();
+    if (button?.getAttribute("aria-pressed") !== "true") {
+      return false;
+    }
+    const pressedSince = Number(button.getAttribute("data-pressed-since"));
+    return Date.now() - pressedSince >= Number(time);
+  });
+
+  // Switch state that flips with every press (Arduino: toggleState).
+  define(
+    "toggleButton",
+    () => getButton()?.getAttribute("data-toggle-state") === "true",
+  );
+}

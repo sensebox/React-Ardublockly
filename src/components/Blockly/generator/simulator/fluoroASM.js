@@ -16,11 +16,12 @@ Blockly.Generator.Simulator.forBlock["sensebox_fluoroASM_setLED"] = function (
     "sensebox_fluoroASM_setLED";
 
   const led = this.getFieldValue("LED_NUMBER");
-  const brightness = generator.valueToCode(
-    block,
-    "BRIGHTNESS",
-    generator.ORDER_ATOMIC,
-  );
+  // Like the Arduino generator: default brightness 50, "off" means 0.
+  const brightness =
+    block.getFieldValue("STAT") === "LOW"
+      ? "0"
+      : generator.valueToCode(block, "BRIGHTNESS", generator.ORDER_ATOMIC) ||
+        "50";
   const code = `toggleLED(${led}, ${brightness});\n`;
   return code;
 };

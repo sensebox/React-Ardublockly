@@ -1,21 +1,9 @@
-export default function initSDS011(interpreter, globalObject) {
-  // Define readPM10SDS011 function
-  var wrapper = function readPM10SDS011() {
-    return document.getElementById("pm10-sds011-slider").value;
-  };
-  interpreter.setProperty(
-    globalObject,
-    "readPM10SDS011",
-    interpreter.createNativeFunction(wrapper),
-  );
+import { defineSliderReaders } from "../slider";
 
-  // Define readPM25SDS011 function
-  var wrapper = function readPM25SDS011() {
-    return document.getElementById("pm25-sds011-slider").value;
-  };
-  interpreter.setProperty(
-    globalObject,
-    "readPM25SDS011",
-    interpreter.createNativeFunction(wrapper),
-  );
+// SDS011 particulate matter
+export default function initSDS011(interpreter, globalObject) {
+  defineSliderReaders(interpreter, globalObject, {
+    readPM10SDS011: "pm10-sds011",
+    readPM25SDS011: "pm25-sds011",
+  });
 }

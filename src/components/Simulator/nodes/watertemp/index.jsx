@@ -13,6 +13,7 @@ const WaterTemp = ({ data }) => {
       max: 50,
       step: 0.5,
       initial: 20,
+      type: "sensebox_watertemp_temp",
     },
   ];
 

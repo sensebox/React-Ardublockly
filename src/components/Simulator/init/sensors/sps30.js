@@ -1,41 +1,11 @@
+import { defineSliderReaders } from "../slider";
+
+// SPS30 particulate matter
 export default function initSPS30(interpreter, globalObject) {
-  // Define readPM1SPS30 function
-  var wrapper = function readPM1SPS30() {
-    return document.getElementById("pm1-sps30-slider").value;
-  };
-  interpreter.setProperty(
-    globalObject,
-    "readPM1SPS30",
-    interpreter.createNativeFunction(wrapper),
-  );
-
-  // Define readPM25SPS30 function
-  var wrapper = function readPM25SPS30() {
-    return document.getElementById("pm25-sps30-slider").value;
-  };
-  interpreter.setProperty(
-    globalObject,
-    "readPM25SPS30",
-    interpreter.createNativeFunction(wrapper),
-  );
-
-  // Define readPM4SPS30 function
-  var wrapper = function readPM4SPS30() {
-    return document.getElementById("pm4-sps30-slider").value;
-  };
-  interpreter.setProperty(
-    globalObject,
-    "readPM4SPS30",
-    interpreter.createNativeFunction(wrapper),
-  );
-
-  // Define readPM10SPS30 function
-  var wrapper = function readPM10SPS30() {
-    return document.getElementById("pm10-sps30-slider").value;
-  };
-  interpreter.setProperty(
-    globalObject,
-    "readPM10SPS30",
-    interpreter.createNativeFunction(wrapper),
-  );
+  defineSliderReaders(interpreter, globalObject, {
+    readPM1SPS30: "pm1-sps30",
+    readPM25SPS30: "pm25-sps30",
+    readPM4SPS30: "pm4-sps30",
+    readPM10SPS30: "pm10-sps30",
+  });
 }

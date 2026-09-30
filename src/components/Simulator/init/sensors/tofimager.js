@@ -1,11 +1,8 @@
+import { defineSliderReaders } from "../slider";
+
+// ToF imager distance. The bitmap mode is not simulated.
 export default function initTOFImager(interpreter, globalObject) {
-  // Define distance reading function
-  var wrapper = function readDistance() {
-    return document.getElementById("dist-slider").value;
-  };
-  interpreter.setProperty(
-    globalObject,
-    "readDistance",
-    interpreter.createNativeFunction(wrapper),
-  );
+  defineSliderReaders(interpreter, globalObject, {
+    readDistance: "dist",
+  });
 }
