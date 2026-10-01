@@ -5,12 +5,15 @@ import {
   Controls,
   useNodesState,
   useEdgesState,
-  addEdge,
   useReactFlow,
 } from "@xyflow/react";
 import { useSelector } from "react-redux";
 import "@xyflow/react/dist/style.css";
 import SenseBoxWireEdge from "./uiComponents/senseBoxWire";
+import OnboardEdge from "./uiComponents/onboardEdge";
+import withCableHandles from "./uiComponents/withCableHandles";
+import { busOf } from "./ports";
+import { BOARD_ID, canConnect, connect, wireModules } from "./wiring";
 import SenseBoxMCUS2 from "./nodes/mcu-s2";
 import HDC1080 from "./nodes/hdc1080";
 import Display from "./nodes/display";
@@ -30,8 +33,7 @@ import sps30 from "./nodes/sps30";
 import rg15 from "./nodes/rg15";
 
 // Node type = module type from the simulator program
-const nodeTypes = {
-  board: SenseBoxMCUS2,
+const moduleNodes = {
   senseBox_hdc1080: HDC1080,
   senseBox_lightUv: lightuv,
   senseBox_display: Display,
@@ -50,19 +52,33 @@ const nodeTypes = {
   sensebox_rg15_rainsensor: rg15,
 };
 
+// The fluoro bee sits on the board, without a cable.
+const FLUORO_TYPE = "sensebox_fluoroASM_init";
+
+const nodeTypes = {
+  board: SenseBoxMCUS2,
+  ...Object.fromEntries(
+    Object.entries(moduleNodes).map(([type, component]) => [
+      type,
+      type === FLUORO_TYPE
+        ? component
+        : withCableHandles(component, busOf(type)),
+    ]),
+  ),
+};
+
 const edgeTypes = {
   multicolor: SenseBoxWireEdge,
+  onboard: OnboardEdge,
 };
 
 const BOARD_NODE = {
-  id: "board",
+  id: BOARD_ID,
   type: "board",
   position: { x: 400, y: 100 },
   draggable: false,
+  deletable: false,
 };
-
-// The fluoro bee sits on the board, without a cable.
-const FLUORO_TYPE = "sensebox_fluoroASM_init";
 const FLUORO_POSITION = { x: 497.69717682803514, y: 47.304223387137014 };
 
 // New sensors appear in a row below the board.
@@ -76,7 +92,9 @@ const FIT_VIEW_OPTIONS = {
 };
 
 // Modules without an own node, e.g. the button is part of the board.
-const hasNode = (module) => module.type in nodeTypes && module.type !== "board";
+const hasNode = (module) => module.type in moduleNodes;
+
+const moduleKey = (module) => `${module.type}@${module.port ?? ""}`;
 
 function freePosition(nodes) {
   const usedX = new Set(
@@ -131,50 +149,61 @@ const SimulatorFlow = () => {
     }
   }, []);
 
-  // One node per module, wired to the board. Existing nodes keep their place.
+  // One node per module, wired to the board. Existing nodes keep their place,
+  // cables the user plugged stay.
+  const nodesRef = useRef(nodes);
+  nodesRef.current = nodes;
+  const knownModules = useRef(new Set());
   useEffect(() => {
     const shownModules = modules.filter(hasNode);
+    const currentNodes = nodesRef.current;
 
-    setNodes((currentNodes) => {
-      const board =
-        currentNodes.find((node) => node.id === BOARD_NODE.id) ?? BOARD_NODE;
-      // Nodes of modules that are still used keep their place.
-      const keptNodes = currentNodes.filter((node) =>
-        shownModules.some((module) => module.type === node.id),
+    const board =
+      currentNodes.find((node) => node.id === BOARD_NODE.id) ?? BOARD_NODE;
+    // Nodes of modules that are still used keep their place.
+    const keptNodes = currentNodes.filter((node) =>
+      shownModules.some((module) => module.type === node.id),
+    );
+    const nextNodes = [board, ...keptNodes];
+    shownModules.forEach((module) => {
+      if (nextNodes.some((node) => node.id === module.type)) {
+        return;
+      }
+      nextNodes.push(
+        module.type === FLUORO_TYPE
+          ? {
+              id: module.type,
+              type: module.type,
+              position: FLUORO_POSITION,
+              draggable: false,
+              deletable: false,
+              zIndex: 1000,
+            }
+          : {
+              id: module.type,
+              type: module.type,
+              position: freePosition(nextNodes),
+              deletable: false,
+            },
       );
-      const nextNodes = [board, ...keptNodes];
-      shownModules.forEach((module) => {
-        if (nextNodes.some((node) => node.id === module.type)) {
-          return;
-        }
-        nextNodes.push(
-          module.type === FLUORO_TYPE
-            ? {
-                id: module.type,
-                type: module.type,
-                position: FLUORO_POSITION,
-                draggable: false,
-                zIndex: 1000,
-              }
-            : {
-                id: module.type,
-                type: module.type,
-                position: freePosition(nextNodes),
-              },
-        );
-      });
-      return nextNodes;
     });
+    setNodes(nextNodes);
 
-    setEdges(
+    // Only new modules are plugged in, so unplugged cables stay unplugged.
+    // A GPIO sensor whose port was changed in the block counts as new.
+    const newModules = new Set(
       shownModules
-        .filter((module) => module.type !== FLUORO_TYPE)
-        .map((module) => ({
-          id: `board-${module.type}`,
-          source: BOARD_NODE.id,
-          target: module.type,
-          type: "multicolor",
-        })),
+        .filter((module) => !knownModules.current.has(moduleKey(module)))
+        .map((module) => module.type),
+    );
+    knownModules.current = new Set(shownModules.map(moduleKey));
+
+    // New modules join the I2C chain from left to right.
+    const x = (module) =>
+      nextNodes.find((node) => node.id === module.type)?.position.x ?? 0;
+    const leftToRight = [...shownModules].sort((a, b) => x(a) - x(b));
+    setEdges((currentEdges) =>
+      wireModules(currentEdges, leftToRight, newModules),
     );
   }, [modules, setNodes, setEdges]);
 
@@ -202,8 +231,43 @@ const SimulatorFlow = () => {
     return () => observer.disconnect();
   }, [reactFlow]);
 
+  // Cables are plugged by dragging from a connector to a module. While the
+  // end of a cable is dragged, the cable itself does not count.
+  const reconnecting = useRef(null);
+  const isValidConnection = useCallback(
+    (connection) =>
+      canConnect(
+        edges.filter((edge) => edge.id !== reconnecting.current?.edge.id),
+        connection,
+      ),
+    [edges],
+  );
   const onConnect = useCallback(
-    (params) => setEdges((eds) => addEdge(params, eds)),
+    (connection) => setEdges((eds) => connect(eds, connection)),
+    [setEdges],
+  );
+
+  // Drag the end of a cable to another connector, or away to unplug it.
+  const onReconnectStart = useCallback((_, edge) => {
+    reconnecting.current = { edge, plugged: false };
+  }, []);
+  const onReconnect = useCallback(
+    (oldEdge, connection) => {
+      reconnecting.current.plugged = true;
+      setEdges((eds) => {
+        const rest = eds.filter((edge) => edge.id !== oldEdge.id);
+        return canConnect(rest, connection) ? connect(rest, connection) : eds;
+      });
+    },
+    [setEdges],
+  );
+  const onReconnectEnd = useCallback(
+    (_, edge) => {
+      if (!reconnecting.current?.plugged) {
+        setEdges((eds) => eds.filter((e) => e.id !== edge.id));
+      }
+      reconnecting.current = null;
+    },
     [setEdges],
   );
 
@@ -222,6 +286,13 @@ const SimulatorFlow = () => {
         onEdgesChange={onEdgesChange}
         onMoveStart={handleMoveStart}
         onConnect={onConnect}
+        isValidConnection={isValidConnection}
+        onReconnectStart={onReconnectStart}
+        onReconnect={onReconnect}
+        onReconnectEnd={onReconnectEnd}
+        // Cables are unplugged with their button, not with the keyboard:
+        // the keys also delete blocks in the workspace.
+        deleteKeyCode={null}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         zoomOnDoubleClick={false}
@@ -230,7 +301,6 @@ const SimulatorFlow = () => {
         minZoom={0.1}
         fitView
         fitViewOptions={FIT_VIEW_OPTIONS}
-        connectionMode="loose"
       >
         <Background />
         <Controls fitViewOptions={FIT_VIEW_OPTIONS} />

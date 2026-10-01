@@ -7,12 +7,17 @@ import {
   faPlay,
   faStop,
   faInfoCircle,
+  faChartLine,
+  faBug,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ReactFlowProvider } from "@xyflow/react";
 import moment from "moment";
 import { startSimulator, stopSimulator } from "@/actions/simulatorActions";
 import SimulatorFlow from "./flow";
+import FloatingWindow from "./uiComponents/FloatingWindow";
+import GraphViewer from "@/components/Workspace/GraphViewer";
+import DebugViewer from "@/components/Workspace/DebugViewer";
 
 export default function Simulator() {
   const dispatch = useDispatch();
@@ -22,9 +27,6 @@ export default function Simulator() {
   const code = useSelector((state) => state.simulator.code);
   const modules = useSelector((state) => state.simulator.modules);
   const isSimulatorRunning = useSelector((state) => state.simulator.isRunning);
-  const simulationStartTimestamp = useSelector(
-    (state) => state.simulator.simulationStartTimestamp,
-  );
   const unsupportedBlocks = useSelector(
     (state) => state.workspace.code.simulatorUnsupported ?? [],
     shallowEqual,
@@ -34,22 +36,10 @@ export default function Simulator() {
   );
   const runtimeError = useSelector((state) => state.simulator.error);
 
-  const [elapsedTime, setElapsedTime] = useState(0);
   // Local state to show/hide the Info panel
   const [showInfo, setShowInfo] = useState(false);
-
-  useEffect(() => {
-    if (!isSimulatorRunning || !simulationStartTimestamp) {
-      setElapsedTime(0);
-      return;
-    }
-
-    const interval = setInterval(() => {
-      setElapsedTime(Date.now() - simulationStartTimestamp);
-    }, 100);
-
-    return () => clearInterval(interval);
-  }, [isSimulatorRunning, simulationStartTimestamp]);
+  const [showGraph, setShowGraph] = useState(false);
+  const [showDebug, setShowDebug] = useState(false);
 
   // A changed program invalidates the running simulation.
   const previousCode = useRef(code);
@@ -155,9 +145,33 @@ export default function Simulator() {
             }}
           >
             <Box sx={{ fontFamily: "Monospace" }}>
-              <SimulationTimer elapsedTime={elapsedTime} />
+              <SimulationTimer />
             </Box>
           </div>
+
+          {/* Graph and debug log open in floating windows */}
+          <IconButton
+            id="simulator-graph-button"
+            onClick={() => setShowGraph((open) => !open)}
+            aria-label={Blockly.Msg.simulator_tab_graph}
+            title={Blockly.Msg.simulator_tab_graph}
+          >
+            <FontAwesomeIcon
+              color={showGraph ? "#1976d2" : "#757575"}
+              icon={faChartLine}
+            />
+          </IconButton>
+          <IconButton
+            id="simulator-debug-button"
+            onClick={() => setShowDebug((open) => !open)}
+            aria-label={Blockly.Msg.simulator_tab_debug}
+            title={Blockly.Msg.simulator_tab_debug}
+          >
+            <FontAwesomeIcon
+              color={showDebug ? "#1976d2" : "#757575"}
+              icon={faBug}
+            />
+          </IconButton>
 
           {/* Info Button */}
           <IconButton
@@ -181,6 +195,7 @@ export default function Simulator() {
                 padding: "1rem",
                 zIndex: 999,
                 minWidth: "200px",
+                maxWidth: "280px",
               }}
             >
               <h4 style={{ marginTop: 0 }}>
@@ -196,6 +211,9 @@ export default function Simulator() {
                 <strong>{Blockly.Msg.simulator_info_modules}</strong>{" "}
                 {modules?.length ?? 0}
               </p>
+              <p style={{ margin: "0.5rem 0 0", fontSize: "0.85rem" }}>
+                {Blockly.Msg.simulator_info_cables}
+              </p>
             </div>
           )}
         </div>
@@ -205,6 +223,25 @@ export default function Simulator() {
           <SimulatorFlow />
         </ReactFlowProvider>
       </div>
+
+      <FloatingWindow
+        id="simulator-graph-window"
+        title={Blockly.Msg.simulator_tab_graph}
+        open={showGraph}
+        onClose={() => setShowGraph(false)}
+        initialPosition={{ x: 120, y: 140 }}
+      >
+        <GraphViewer />
+      </FloatingWindow>
+      <FloatingWindow
+        id="simulator-debug-window"
+        title={Blockly.Msg.simulator_tab_debug}
+        open={showDebug}
+        onClose={() => setShowDebug(false)}
+        initialPosition={{ x: 160, y: 200 }}
+      >
+        <DebugViewer />
+      </FloatingWindow>
 
       {/* Errors and blocks the simulator skips */}
       {hints.length > 0 && (
@@ -234,7 +271,26 @@ export default function Simulator() {
   );
 }
 
-const SimulationTimer = ({ elapsedTime }) => {
+// Ticks on its own, so the 100 ms updates do not re-render the whole simulator.
+const SimulationTimer = () => {
+  const simulationStartTimestamp = useSelector(
+    (state) => state.simulator.simulationStartTimestamp,
+  );
+  const [elapsedTime, setElapsedTime] = useState(0);
+
+  useEffect(() => {
+    if (!simulationStartTimestamp) {
+      setElapsedTime(0);
+      return undefined;
+    }
+
+    const interval = setInterval(() => {
+      setElapsedTime(Date.now() - simulationStartTimestamp);
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [simulationStartTimestamp]);
+
   // If elapsedTime is less than 60s, show seconds with decimals
   if (elapsedTime < 60000) {
     const formattedTime = (elapsedTime / 1000).toFixed(1) + "s";

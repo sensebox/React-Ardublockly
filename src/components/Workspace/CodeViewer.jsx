@@ -48,7 +48,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(() => ({
   padding: 0,
 }));
 
-const CodeViewer = () => {
+const CodeViewer = ({ onSimulatorOpenChange }) => {
   const arduino = useSelector((s) => s.workspace.code.arduino);
   const xml = useSelector((s) => s.workspace.code.xml);
   const simulatorAvailable = useSelector(
@@ -67,6 +67,11 @@ const CodeViewer = () => {
       return panel === "simulator" ? "arduino" : panel;
     });
   }, [simulatorAvailable]);
+
+  const simulatorOpen = simulatorAvailable && expandedPanel === "simulator";
+  useEffect(() => {
+    onSimulatorOpenChange?.(simulatorOpen);
+  }, [simulatorOpen, onSimulatorOpenChange]);
 
   const handleChange = (panel) => (_, isExpanded) => {
     setExpandedPanel(isExpanded ? panel : false);

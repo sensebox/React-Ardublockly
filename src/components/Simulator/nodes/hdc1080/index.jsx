@@ -1,5 +1,4 @@
 import React, { memo } from "react";
-import { Handle, Position } from "@xyflow/react";
 import SensorGraphic from "./senseBox-HDC1080_v4.png";
 import SensorNode from "../../uiComponents/SensorNode";
 
@@ -31,16 +30,6 @@ const HDC1080 = ({ data }) => {
         title="HDC1080"
         sensors={sensorConfigTempHumidity}
         imageSrc={SensorGraphic}
-      />
-      <Handle
-        type="target"
-        position={Position.Left}
-        style={{ background: "#ffcc33" }}
-      />
-      <Handle
-        type="source"
-        position={Position.Right}
-        style={{ background: "#ffcc33" }}
       />
     </div>
   );

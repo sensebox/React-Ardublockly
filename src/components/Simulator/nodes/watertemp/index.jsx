@@ -1,5 +1,4 @@
 import React, { memo } from "react";
-import { Handle, Position } from "@xyflow/react";
 import SensorGraphic from "./WassertemperaturSensor.png";
 import SensorNode from "../../uiComponents/SensorNode";
 
@@ -22,16 +21,6 @@ const WaterTemp = ({ data }) => {
         title="DS18B20"
         sensors={sensorConfigWaterTemp}
         imageSrc={SensorGraphic}
-      />
-      <Handle
-        type="target"
-        position={Position.Left}
-        style={{ background: "#ffcc33" }}
-      />
-      <Handle
-        type="source"
-        position={Position.Right}
-        style={{ background: "#ffcc33" }}
       />
     </div>
   );

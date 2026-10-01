@@ -3,14 +3,18 @@ import initSimulator from "./init";
 
 /**
  * Runs the simulator program in js-interpreter. Each tick runs steps for a
- * few milliseconds and then yields, so the page stays responsive even for
- * programs without delay. While the program waits in delay(), no steps run.
+ * few milliseconds and then pauses for a while, so the page stays responsive
+ * even for programs without delay. While the program waits in delay(), no
+ * ticks are scheduled at all: delay() wakes the runtime up again through
+ * interpreter.onResume.
  *
  * The interpreter lives here and not in the Redux store, because it is
  * neither serializable nor something a reducer should create or run.
  */
 
-const STEP_BUDGET_MS = 5;
+const STEP_BUDGET_MS = 4;
+// Pause after a full tick: leaves the main thread to rendering and input.
+const YIELD_MS = 100;
 
 let current = null; // { interpreter, controller }
 
@@ -41,7 +45,20 @@ export function startRuntime(code, { onFinish, onError } = {}) {
     callback();
   };
 
-  const nextStep = () => {
+  let timeout = null;
+  const schedule = (delay = 0) => {
+    if (controller.signal.aborted) {
+      return;
+    }
+    window.clearTimeout(timeout);
+    timeout = window.setTimeout(nextStep, delay);
+  };
+  controller.signal.addEventListener("abort", () =>
+    window.clearTimeout(timeout),
+  );
+  interpreter.onResume = () => schedule();
+
+  function nextStep() {
     if (controller.signal.aborted) {
       return;
     }
@@ -52,16 +69,17 @@ export function startRuntime(code, { onFinish, onError } = {}) {
           finish(() => onFinish?.());
           return;
         }
-      } while (
-        interpreter.getStatus() === Interpreter.Status.STEP &&
-        performance.now() - start < STEP_BUDGET_MS
-      );
+        if (interpreter.getStatus() !== Interpreter.Status.STEP) {
+          // Waiting in delay(): onResume continues the program.
+          return;
+        }
+      } while (performance.now() - start < STEP_BUDGET_MS);
     } catch (error) {
       finish(() => onError?.(error));
       return;
     }
-    window.setTimeout(nextStep, 0);
-  };
+    schedule(YIELD_MS);
+  }
   nextStep();
 }
 

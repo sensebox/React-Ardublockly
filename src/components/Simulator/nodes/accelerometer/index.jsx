@@ -1,5 +1,4 @@
 import React, { memo } from "react";
-import { Handle, Position } from "@xyflow/react";
 import SensorGraphic from "./accelerometer.png";
 import SensorNode from "../../uiComponents/SensorNode";
 
@@ -49,16 +48,6 @@ const Accelerometer = ({ data }) => {
         title="Accelerometer"
         sensors={sensorConfigAccelerometer}
         imageSrc={SensorGraphic}
-      />
-      <Handle
-        type="target"
-        position={Position.Left}
-        style={{ background: "#ffcc33" }}
-      />
-      <Handle
-        type="source"
-        position={Position.Right}
-        style={{ background: "#ffcc33" }}
       />
     </div>
   );

@@ -1,7 +1,6 @@
 import React, { memo } from "react";
 import SensorGraphic from "./sds011.png";
 import SensorNode from "../../uiComponents/SensorNode";
-import { Handle, Position } from "@xyflow/react";
 
 const sensorConfigSDS011 = [
   {
@@ -31,16 +30,6 @@ const SDS011 = ({ data }) => {
         title="SDS011"
         sensors={sensorConfigSDS011}
         imageSrc={SensorGraphic}
-      />
-      <Handle
-        type="target"
-        position={Position.Left}
-        style={{ background: "#ffcc33" }}
-      />
-      <Handle
-        type="source"
-        position={Position.Right}
-        style={{ background: "#ffcc33" }}
       />
     </div>
   );

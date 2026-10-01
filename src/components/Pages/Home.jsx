@@ -33,6 +33,7 @@ function Home({ project, projectType }) {
 
   const [codeOn, setCodeOn] = useState(true);
   const [open, setOpen] = useState(true);
+  const [simulatorOpen, setSimulatorOpen] = useState(false);
   const [initialXml, setInitialXml] = useState(
     localStorage.getItem("autoSaveXML"),
   );
@@ -158,8 +159,9 @@ function Home({ project, projectType }) {
                 gap: 2,
               }}
             >
-              <CodeViewer />
-              <TooltipViewer />
+              <CodeViewer onSimulatorOpenChange={setSimulatorOpen} />
+              {/* The open simulator needs the space */}
+              {!simulatorOpen && <TooltipViewer />}
             </Box>
           </Grid>
         )}

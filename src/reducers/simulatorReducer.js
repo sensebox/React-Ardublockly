@@ -10,7 +10,7 @@ import {
 const initialState = {
   // Simulator program generated from the workspace
   code: "",
-  // Modules (sensors, display, ...) used by the program: [{ id, type }]
+  // Modules (sensors, display, ...) used by the program: [{ id, type, port }]
   modules: [],
   // Current slider values of the sensor nodes, e.g. { senseBox_hdc1080_temp: 20 }
   moduleValues: {},
@@ -24,9 +24,10 @@ const MODULES_COMMENT = /^\/\/\s*modules:\s*(.*?)\s*#$/m;
 
 /**
  * Read the modules from the first line of the simulator program,
- * e.g. `// modules: senseBox_hdc1080, senseBox_display #`.
+ * e.g. `// modules: senseBox_hdc1080, senseBox_smt50@B #`. GPIO sensors
+ * name their port after the "@".
  * @param {string} code
- * @return {!Array<{id: string, type: string}>}
+ * @return {!Array<{id: string, type: string, port: ?string}>}
  */
 export function parseModules(code) {
   const match = code.match(MODULES_COMMENT);
@@ -37,12 +38,18 @@ export function parseModules(code) {
     .split(",")
     .map((module) => module.trim())
     .filter((module) => module.length > 0)
-    .map((type) => ({ id: type, type }));
+    .map((module) => {
+      const [type, port = null] = module.split("@");
+      return { id: type, type, port };
+    });
 }
 
 function sameModules(a, b) {
   return (
-    a.length === b.length && a.every((module, i) => module.type === b[i].type)
+    a.length === b.length &&
+    a.every(
+      (module, i) => module.type === b[i].type && module.port === b[i].port,
+    )
   );
 }
 
