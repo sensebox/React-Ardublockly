@@ -1,6 +1,9 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import PropTypes from "prop-types";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addLog } from "@/actions/logActions";
+import { describeBlockEvent } from "@/components/Simulator/blockEventLog";
+import { SIMULATOR_BOARD } from "@/components/Simulator/constants";
 
 import * as Blockly from "blockly/core";
 import "./blocks/index";
@@ -32,6 +35,11 @@ export function BlocklyComponent({ initialXml, style, maxInstances, ...rest }) {
   const [workspace, setWorkspace] = useState(undefined);
   const isEmbedded = useSelector((state) => state.general.embeddedMode);
   const { isHorizontalToolbox } = useHorizontalToolbox();
+  const dispatch = useDispatch();
+  // The debug log is part of the simulator (MCU-S2 only).
+  const board = useSelector((state) => state.board.board);
+  const boardRef = useRef(board);
+  boardRef.current = board;
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -126,6 +134,20 @@ export function BlocklyComponent({ initialXml, style, maxInstances, ...rest }) {
     };
     ws.addChangeListener(validateVar);
 
+    // Debug log of block changes for the simulator. Must never throw.
+    const logBlockEvent = (event) => {
+      if (boardRef.current !== SIMULATOR_BOARD) return;
+      try {
+        const entry = describeBlockEvent(event);
+        if (entry) {
+          dispatch(addLog({ type: "blockly", ...entry }));
+        }
+      } catch (e) {
+        // Ignore: logging is only a debugging aid.
+      }
+    };
+    ws.addChangeListener(logBlockEvent);
+
     // ScrollOptions plugin
     const scrollPlugin = new ScrollOptions(ws);
     scrollPlugin.init({ enableWheelScroll: true, enableEdgeScroll: false });
@@ -149,6 +171,7 @@ export function BlocklyComponent({ initialXml, style, maxInstances, ...rest }) {
     // Cleanup on unmount
     return () => {
       if (ws && validateVar) ws.removeChangeListener(validateVar);
+      if (ws) ws.removeChangeListener(logBlockEvent);
       // dispose workspace (plugins tied to workspace are disposed automatically)
       ws?.dispose();
     };

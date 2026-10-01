@@ -413,6 +413,7 @@ export const UI = {
 
   codeviewer_arduino: "Arduino Quellcode",
   codeviewer_xml: "XML Blöcke",
+  codeviewer_simulator: "Simulator",
 
   /**
    * Overlay

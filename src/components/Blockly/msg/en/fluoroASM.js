@@ -12,4 +12,12 @@ Thank you!`,
   fluoro_number: "Pin",
   fluoro_led: "Fluroro light",
   brightness: "Brightness",
+  // Settings for the fluoro bee in the simulator
+  senseBox_fluoroASM_filter_active: "Filter active",
+  senseBox_fluoroASM_filter_position: "Filter at:",
+  senseBox_fluoroASM_diamond_active: "Diamond active",
+  senseBox_fluoroASM_filter_colour: "Filter colour:",
+  senseBox_fluoroASM_colour_red: "Red",
+  senseBox_fluoroASM_colour_green: "Green",
+  senseBox_fluoroASM_colour_blue: "Blue",
 };
