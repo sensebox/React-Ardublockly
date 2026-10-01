@@ -15,11 +15,19 @@ export const SIMULATOR = {
   simulator_runtime_error: "The simulation stopped because of an error:",
 
   /**
-   * Tabs below the code viewer
+   * Graph and debug buttons of the simulator
    */
-  simulator_tab_help: "Help",
   simulator_tab_graph: "Graph",
   simulator_tab_debug: "Debug",
+
+  /**
+   * Cables between board and modules
+   */
+  simulator_unplug: "Unplug cable",
+  simulator_not_connected: "Not connected",
+  simulator_wrong_port: "Block uses port %1",
+  simulator_info_cables:
+    "Cables: drag from a connector on the board to a module. To unplug, drag the end of the cable away or click the cable and press ✕.",
 
   /**
    * Graph view

@@ -1,7 +1,6 @@
 import React, { memo } from "react";
 import SensorGraphic from "./dps310.png";
 import SensorNode from "../../uiComponents/SensorNode";
-import { Handle, Position } from "@xyflow/react";
 const sensorConfigDPS310 = [
   {
     id: "temp-dps",
@@ -39,16 +38,6 @@ const DPS310 = ({ data }) => {
         title="DPS310"
         sensors={sensorConfigDPS310}
         imageSrc={SensorGraphic}
-      />
-      <Handle
-        type="target"
-        position={Position.Left}
-        style={{ background: "#ffcc33" }}
-      />
-      <Handle
-        type="source"
-        position={Position.Right}
-        style={{ background: "#ffcc33" }}
       />
     </div>
   );

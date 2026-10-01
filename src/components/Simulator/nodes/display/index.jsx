@@ -1,5 +1,4 @@
 import React, { memo } from "react";
-import { Handle, Position } from "@xyflow/react";
 
 const Display = ({ data }) => {
   return (
@@ -31,22 +30,6 @@ const Display = ({ data }) => {
           }}
         ></canvas>
       </div>
-      <Handle
-        type="target"
-        position={Position.Left}
-        style={{
-          width: "1rem",
-          height: "1rem",
-        }}
-      />
-      <Handle
-        type="source"
-        position={Position.Right}
-        style={{
-          width: "1rem",
-          height: "1rem",
-        }}
-      />
     </div>
   );
 };

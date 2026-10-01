@@ -33,6 +33,10 @@ function Home({ project, projectType }) {
 
   const [codeOn, setCodeOn] = useState(true);
   const [open, setOpen] = useState(true);
+  const [simulatorOpen, setSimulatorOpen] = useState(false);
+  const availableHeight = project
+    ? "calc(100vh - 245px)"
+    : "calc(100vh - 200px)";
   const [initialXml, setInitialXml] = useState(
     localStorage.getItem("autoSaveXML"),
   );
@@ -97,13 +101,7 @@ function Home({ project, projectType }) {
 
       {/* Blockly Workspace */}
       {/* When viewing a project/gallery item, breadcrumbs add ~45px height */}
-      <Grid
-        style={{
-          height: project ? "calc(100vh - 245px)" : "calc(100vh - 200px)",
-        }}
-        container
-        spacing={2}
-      >
+      <Grid style={{ height: availableHeight }} container spacing={2}>
         <Grid
           item
           xs={12}
@@ -144,7 +142,7 @@ function Home({ project, projectType }) {
           <Box className="blocklyWindow">
             <BlocklyWindow
               blocklyCSS={{
-                height: project ? "calc(100vh - 245px)" : "calc(100vh - 200px)",
+                height: availableHeight,
               }}
               initialXml={project ? project.xml : initialXml}
             />
@@ -153,8 +151,12 @@ function Home({ project, projectType }) {
 
         {codeOn && (
           <Grid item xs={12} md={sideColumnWidth}>
-            <CodeViewer />
-            <TooltipViewer />
+            <CodeViewer
+              onSimulatorOpenChange={setSimulatorOpen}
+              availableHeight={availableHeight}
+            />
+            {/* The open simulator needs the space */}
+            {!simulatorOpen && <TooltipViewer />}
           </Grid>
         )}
       </Grid>

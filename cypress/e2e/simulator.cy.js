@@ -180,6 +180,32 @@ describe("Simulator", () => {
     cy.get("#simulator-hint").should("not.exist");
   });
 
+  it("chains the I2C modules on the I2C connector of the board", () => {
+    visitEditor("MCU-S2", displayTemperatureXml());
+
+    cy.get(".react-flow__node-senseBox_hdc1080", { timeout: 20000 }).should(
+      "exist",
+    );
+    // The first module is plugged into the board, the second into the first.
+    cy.get('[data-testid^="rf__edge-board:i2c-left->"]').should(
+      "have.length",
+      1,
+    );
+    cy.get('[data-testid*=":out->"]').should("have.length", 1);
+    cy.get(".simulator-port-label").should("have.text", "I2C");
+    cy.get(".simulator-cable-warning").should("not.exist");
+
+    // Unplug the cable at the board: the first module is not connected.
+    cy.get(
+      '[data-testid^="rf__edge-board:i2c-left->"] .react-flow__edge-interaction',
+    ).click({ force: true });
+    cy.get(".simulator-unplug").click();
+    cy.get('[data-testid^="rf__edge-board:i2c-left->"]').should("not.exist");
+    cy.get(".simulator-cable-warning")
+      .should("have.length", 1)
+      .and("contain", "Nicht angeschlossen");
+  });
+
   it("runs the program and draws the sensor value on the display", () => {
     visitEditor("MCU-S2", displayTemperatureXml());
 
@@ -375,20 +401,21 @@ describe("Simulator", () => {
     cy.get("#codeviewer-simulator svg.fa-play").parents("button").click();
 
     // Graph of the HDC1080 temperature
-    cy.get("#tooltip-tab-graph").click();
+    cy.get("#simulator-graph-button").click();
     cy.contains("Temperatur (°C) – HDC1080", { timeout: 10000 }).should(
       "be.visible",
     );
-    cy.get(".helpSection .MuiChartsSurface-root").should("exist");
+    cy.get("#simulator-graph-window .MuiChartsSurface-root").should("exist");
 
-    // The graph keeps its history when switching tabs
-    cy.get("#tooltip-tab-help").click();
-    cy.get("#tooltip-tab-graph").click();
-    cy.get(".helpSection .MuiChartsSurface-root").should("exist");
+    // The graph keeps its history while its window is closed
+    cy.get("#simulator-graph-button").click();
+    cy.get("#simulator-graph-window").should("not.be.visible");
+    cy.get("#simulator-graph-button").click();
+    cy.get("#simulator-graph-window .MuiChartsSurface-root").should("exist");
 
     cy.get("#codeviewer-simulator svg.fa-stop").parents("button").click();
 
-    cy.get("#tooltip-tab-debug").click();
+    cy.get("#simulator-debug-button").click();
     cy.contains("Simulation gestartet").should("be.visible");
     cy.contains("Simulation gestoppt").should("be.visible");
   });
@@ -400,7 +427,7 @@ describe("Simulator", () => {
       "contain",
       "does not support these blocks",
     );
-    cy.get("#tooltip-tab-help").should("contain", "Help");
+    cy.get("#simulator-graph-button").should("have.attr", "title", "Graph");
     // Slider label of the HDC1080
     cy.get(".react-flow__node-senseBox_hdc1080").should(
       "contain",
@@ -413,6 +440,6 @@ describe("Simulator", () => {
 
     cy.get("#codeviewer-headline", { timeout: 20000 }).should("be.visible");
     cy.get("#codeviewer-simulator").should("not.exist");
-    cy.get("#tooltip-tab-graph").should("not.exist");
+    cy.get("#simulator-graph-button").should("not.exist");
   });
 });

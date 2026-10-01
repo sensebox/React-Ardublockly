@@ -26,6 +26,19 @@ function readValue(block, field, functions) {
 }
 
 /**
+ * Module entry with the GPIO port the sensor is plugged into, e.g.
+ * "senseBox_smt50@B". The simulator draws the cable to this port.
+ * @param {string} type Module type
+ * @param {!Blockly.Block} block
+ * @param {string} field Name of the port dropdown, showing "A", "B" or "C".
+ * @return {string}
+ */
+function withPort(type, block, field) {
+  const port = block.getField(field)?.getText();
+  return port ? `${type}@${port}` : type;
+}
+
+/**
  * HDC1080 Temperature and Humidity Sensor
  */
 Blockly.Generator.Simulator.forBlock["sensebox_sensor_temp_hum"] = function (
@@ -55,9 +68,12 @@ Blockly.Generator.Simulator.forBlock["sensebox_sensor_uv_light"] = function (
  * DS18B20 water temperature
  */
 Blockly.Generator.Simulator.forBlock["sensebox_sensor_watertemperature"] =
-  function () {
-    Blockly.Generator.Simulator.modules_["senseBox_waterTemp"] =
-      "senseBox_waterTemp";
+  function (block) {
+    Blockly.Generator.Simulator.modules_["senseBox_waterTemp"] = withPort(
+      "senseBox_waterTemp",
+      block,
+      "Port",
+    );
     return ["readWaterTemperature()", Blockly.Generator.Simulator.ORDER_ATOMIC];
   };
 
@@ -74,9 +90,9 @@ Blockly.Generator.Simulator.forBlock["sensebox_esp32s2_light"] = function () {
  * HC-SR04 ultrasonic distance
  */
 Blockly.Generator.Simulator.forBlock["sensebox_sensor_ultrasonic_ranger"] =
-  function () {
+  function (block) {
     Blockly.Generator.Simulator.modules_["sensebox_sensor_ultrasonic_ranger"] =
-      "sensebox_sensor_ultrasonic_ranger";
+      withPort("sensebox_sensor_ultrasonic_ranger", block, "port");
     return [
       "readUltrasonicDistance()",
       Blockly.Generator.Simulator.ORDER_ATOMIC,
@@ -118,7 +134,11 @@ Blockly.Generator.Simulator.forBlock["sensebox_sensor_bme680_bsec"] = function (
  */
 Blockly.Generator.Simulator.forBlock["sensebox_sensor_truebner_smt50_esp32"] =
   function (block) {
-    Blockly.Generator.Simulator.modules_["senseBox_smt50"] = "senseBox_smt50";
+    Blockly.Generator.Simulator.modules_["senseBox_smt50"] = withPort(
+      "senseBox_smt50",
+      block,
+      "Port",
+    );
     return readValue(block, "value", {
       temp: "readSoilTemperature",
       soil: "readSoilMoisture",

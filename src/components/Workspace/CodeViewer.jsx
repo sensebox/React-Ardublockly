@@ -37,7 +37,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(() => ({
   padding: 0,
 }));
 
-const CodeViewer = () => {
+const CodeViewer = ({ onSimulatorOpenChange, availableHeight }) => {
   const arduino = useSelector((s) => s.workspace.code.arduino);
   const xml = useSelector((s) => s.workspace.code.xml);
   const simulatorAvailable = useSelector(
@@ -57,21 +57,28 @@ const CodeViewer = () => {
     });
   }, [simulatorAvailable]);
 
+  const simulatorOpen = simulatorAvailable && expandedPanel === "simulator";
+  useEffect(() => {
+    onSimulatorOpenChange?.(simulatorOpen);
+  }, [simulatorOpen, onSimulatorOpenChange]);
+
   const handleChange = (panel) => (_, isExpanded) => {
     setExpandedPanel(isExpanded ? panel : false);
   };
 
   // With the simulator, the open panel leaves space for all three 50px
-  // headers, so nothing is cut off.
+  // headers, so nothing is cut off. An open simulator takes the whole column.
+  const columnHeight =
+    simulatorOpen && availableHeight ? availableHeight : "50vh";
   const detailsHeight = simulatorAvailable
-    ? "calc(50vh - 150px)"
-    : "calc(50vh - 50px)";
+    ? `calc(${columnHeight} - 150px)`
+    : `calc(${columnHeight} - 50px)`;
 
   return (
     <Card
       sx={{
         height: "100%",
-        maxHeight: "50vh",
+        maxHeight: columnHeight,
         display: "flex",
         flexDirection: "column",
       }}

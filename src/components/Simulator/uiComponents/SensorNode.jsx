@@ -1,6 +1,5 @@
 import React, { memo, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Handle, Position } from "@xyflow/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { setModuleValue, removeModuleValues } from "@/actions/simulatorActions";
@@ -169,16 +168,6 @@ const SensorNode = ({ title, sensors, imageSrc, width = "300px" }) => {
           </div>
         ))}
       </div>
-
-      <Handle
-        type="source"
-        position={Position.Right}
-        style={{
-          width: "1.5rem",
-          height: "1.5rem",
-          backgroundColor: "#ffcc33",
-        }}
-      />
     </div>
   );
 };

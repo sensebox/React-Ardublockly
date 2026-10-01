@@ -1,5 +1,4 @@
 import React, { memo, useState } from "react";
-import { Handle, Position } from "@xyflow/react";
 import SensorGraphic from "./photodiode.png";
 import SensorNode from "../../uiComponents/SensorNode";
 
@@ -23,16 +22,6 @@ const Photodiode = ({ data }) => {
         sensors={sensorConfigPhotodiode}
         imageSrc={SensorGraphic}
         edgeId="photodiode"
-      />
-      <Handle
-        type="target"
-        position={Position.Left}
-        style={{ background: "#ffcc33" }}
-      />
-      <Handle
-        type="source"
-        position={Position.Right}
-        style={{ background: "#ffcc33" }}
       />
     </div>
   );

@@ -1,5 +1,4 @@
 import React, { memo, useState } from "react";
-import { Handle, Position } from "@xyflow/react";
 import SensorGraphic from "./lightuv.png";
 import SensorNode from "../../uiComponents/SensorNode";
 
@@ -31,16 +30,6 @@ const LightUv = ({ data }) => {
         title="TSL/VEML"
         sensors={sensorConfigLuxUv}
         imageSrc={SensorGraphic}
-      />
-      <Handle
-        type="target"
-        position={Position.Left}
-        style={{ background: "#ffcc33" }}
-      />
-      <Handle
-        type="source"
-        position={Position.Right}
-        style={{ background: "#ffcc33" }}
       />
     </div>
   );

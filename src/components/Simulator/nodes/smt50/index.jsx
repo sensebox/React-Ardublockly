@@ -1,5 +1,4 @@
 import React, { memo } from "react";
-import { Handle, Position } from "@xyflow/react";
 import SensorGraphic from "./SMT50_v2.png";
 import SensorNode from "../../uiComponents/SensorNode";
 
@@ -31,16 +30,6 @@ const SMT50 = ({ data }) => {
         title="SMT50"
         sensors={sensorConfigSMT50}
         imageSrc={SensorGraphic}
-      />
-      <Handle
-        type="target"
-        position={Position.Left}
-        style={{ background: "#ffcc33" }}
-      />
-      <Handle
-        type="source"
-        position={Position.Right}
-        style={{ background: "#ffcc33" }}
       />
     </div>
   );
