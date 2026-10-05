@@ -44,7 +44,9 @@ export const loadAnswers = (tutorialId) => {
             (a.answer !== undefined ||
               a.answers !== undefined ||
               a.freetextAnswer !== undefined ||
-              a.xml !== undefined),
+              a.xml !== undefined ||
+              a.criteria !== undefined ||
+              a.evaluations !== undefined),
         )
       : [];
   } catch (e) {
