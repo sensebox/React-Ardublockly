@@ -16,6 +16,7 @@ import {
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
+  DEFAULT_EVALUATION_TITLE,
   getEvaluationConfig,
   getStepKey,
   newId,
@@ -63,9 +64,8 @@ const EvaluationConfigEditor = ({
 
       {preparationSteps.length === 0 ? (
         <Alert severity="warning">
-          Vor diesem Schritt gibt es keinen Schritt vom Typ
-          „Bewertungskriterien festlegen“. Die Lernenden haben sonst keine
-          Kriterien zum Bewerten.
+          Vor diesem Schritt gibt es keinen Schritt vom Typ „Bewertungskriterien
+          festlegen“. Die Lernenden haben sonst keine Kriterien zum Bewerten.
         </Alert>
       ) : (
         <FormControl size="small" fullWidth>
@@ -97,7 +97,6 @@ const EvaluationConfigEditor = ({
             fullWidth
             size="small"
             label={`Titel der Bewertung ${index + 1}`}
-            placeholder="z. B. Objekt A"
             value={evaluation.title}
             onChange={(e) => updateTitle(evaluation.id, e.target.value)}
           />

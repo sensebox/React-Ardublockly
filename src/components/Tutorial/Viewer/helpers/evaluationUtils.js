@@ -10,6 +10,8 @@ export const DEFAULT_CRITERIA_CONFIG = {
   subtitle: "",
 };
 
+export const DEFAULT_EVALUATION_TITLE = "Bewertung";
+
 export const DEFAULT_CRITERIA_TITLE = "Deine Bewertungskriterien";
 
 export const DEFAULT_EVALUATION_CONFIG = {
@@ -78,9 +80,13 @@ export const buildEvaluationList = (step, storedEvaluations = []) => {
   const storedById = Object.fromEntries(
     storedEvaluations.map((e) => [e.id, e]),
   );
-  const creatorEvaluations = config.evaluations.map((e) => ({
+  const creatorEvaluations = config.evaluations.map((e, index) => ({
     id: e.id,
-    title: e.title,
+    title:
+      e.title?.trim() ||
+      (config.evaluations.length > 1
+        ? `${DEFAULT_EVALUATION_TITLE} ${index + 1}`
+        : DEFAULT_EVALUATION_TITLE),
     learnerAdded: false,
     answers: storedById[e.id]?.answers || {},
   }));
