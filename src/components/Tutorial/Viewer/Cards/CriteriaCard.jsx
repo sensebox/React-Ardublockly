@@ -99,7 +99,7 @@ const CriteriaCard = ({ step, tutorialId, onStatusChange }) => {
                 onChange={(e) => updateCriterion(c.id, e.target.value)}
               />
               {criteria.length > minCriteria && (
-                <IconButton
+<IconButton aria-label="Kriterium löschen"
                   onClick={() => removeCriterion(c.id)}
                   sx={{ color: theme.palette.error.main }}
                 >
