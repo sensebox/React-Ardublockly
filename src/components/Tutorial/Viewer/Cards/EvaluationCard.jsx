@@ -145,7 +145,7 @@ const EvaluationCard = ({ step, tutorialId, onStatusChange }) => {
                       })
                     }
                   />
-                  <IconButton
+<IconButton aria-label="Bewertung löschen"
                     onClick={() => removeEvaluation(evaluation.id)}
                     sx={{ color: theme.palette.error.main }}
                   >
