@@ -22,6 +22,10 @@ import {
   newId,
 } from "../../../Viewer/helpers/evaluationUtils";
 
+// Select sentinel for "no explicit source" (stored as "" in the config).
+// An empty-string value would leave the select looking unselected.
+const AUTO_SOURCE = "auto";
+
 const EvaluationConfigEditor = ({
   step,
   steps,
@@ -73,10 +77,15 @@ const EvaluationConfigEditor = ({
           <Select
             labelId="criteria-source-label"
             label="Kriterien aus"
-            value={sourceIsValid ? sourceStepId : ""}
-            onChange={(e) => update({ sourceStepId: e.target.value })}
+            value={sourceIsValid && sourceStepId ? sourceStepId : AUTO_SOURCE}
+            onChange={(e) =>
+              update({
+                sourceStepId:
+                  e.target.value === AUTO_SOURCE ? "" : e.target.value,
+              })
+            }
           >
-            <MenuItem value="">
+            <MenuItem value={AUTO_SOURCE}>
               Automatisch (letzter Kriterien-Schritt davor)
             </MenuItem>
             {preparationSteps.map(({ step: s, index }) => (
