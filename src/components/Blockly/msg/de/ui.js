@@ -330,6 +330,8 @@ export const UI = {
   save_status_missing_title: "Titel",
   save_status_missing_subtitle: "Untertitel",
   save_status_missing_understood: "Verstanden",
+  save_status_invalid_evaluation:
+    "Schritt %1 (Bewertung) braucht davor einen Schritt „Bewertungskriterien festlegen“.",
   save_status_error: "Beim Speichern ist ein Fehler aufgetreten.",
   save_status_error_hint: "Mögliche Gründe:",
   save_status_error_network: "Netzwerkverbindung überprüfen",
