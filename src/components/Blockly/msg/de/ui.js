@@ -400,6 +400,12 @@ export const UI = {
   connect_dialog_grant_text:
     "Das Board befindet sich jetzt im Download-Modus und meldet sich als neues USB-Gerät. Bitte wähle einmalig „ESP32-S2“ aus, um die Berechtigung zu erteilen.",
   connect_dialog_grant_button: "ESP32-S2 auswählen",
+  connect_dialog_pick_device_eye: "Wähle im Auswahlfenster „MCU_Eye“ aus.",
+  connect_dialog_pick_bootloader_eye:
+    "Beim Bootloader-Schritt wähle anschließend „USB-JTAG_serial…“ aus.",
+  connect_dialog_grant_text_eye:
+    "Das Board befindet sich jetzt im Download-Modus und meldet sich als neues USB-Gerät. Bitte wähle einmalig „USB-JTAG_serial…“ aus, um die Berechtigung zu erteilen.",
+  connect_dialog_grant_button_eye: "USB-JTAG_serial auswählen",
   connect_dialog_done_title: "Gerät verbunden!",
   connect_dialog_done_text:
     "Drücke jetzt einfach den Kompilieren-Button, um direkt aus Blockly hochzuladen.",
