@@ -14,6 +14,15 @@ const ESP32_ROM_BOOTLOADER_PRODUCT_ID = 0x0002;
 const RTC_CNTL_OPTIONS0_REG = 0x3f408000; // DR_REG_RTCCNTL_BASE + 0x0
 const RTC_CNTL_SW_SYS_RST = 0x80000000; // BIT(31)
 
+// ESP32-S3 RTC watchdog registers, used to reset the senseBox Eye. Its USB-Serial/
+// JTAG peripheral has no usable RTS->EN circuit, and the S2 register reset below
+// targets the wrong address on an S3, so (like `esptool --after watchdog-reset`)
+// we arm the RTC watchdog to perform a system reset instead.
+const S3_RTC_CNTL_WDTCONFIG0_REG = 0x60008098;
+const S3_RTC_CNTL_WDTCONFIG1_REG = 0x6000809c;
+const S3_RTC_CNTL_WDTWPROTECT_REG = 0x600080b0;
+const RTC_CNTL_WDT_WKEY = 0x50d83aa1;
+
 /**
  * Checks whether a serial port is the ESP32 ROM serial bootloader.
  * @param {SerialPort} port
@@ -72,6 +81,24 @@ async function softResetViaRegister(loader) {
 
   // waitResponse = false: the chip reboots immediately and cannot ACK.
   await loader.command(loader.ESP_WRITE_REG, pkt, undefined, false);
+}
+
+/**
+ * Resets an ESP32-S3 (senseBox Eye) into the freshly flashed application by
+ * arming the RTC watchdog for a system reset (same as esptool's
+ * `watchdog-reset`).
+ *
+ * @param {ESPLoader} loader A connected esptool-js loader.
+ */
+async function watchdogResetS3(loader) {
+  await loader.writeReg(S3_RTC_CNTL_WDTWPROTECT_REG, RTC_CNTL_WDT_WKEY);
+  await loader.writeReg(S3_RTC_CNTL_WDTCONFIG1_REG, 2000);
+  await loader.writeReg(
+    S3_RTC_CNTL_WDTCONFIG0_REG,
+    (1 << 31) | (5 << 28) | (1 << 8) | 2,
+  );
+  await loader.writeReg(S3_RTC_CNTL_WDTWPROTECT_REG, 0);
+  await sleep(500);
 }
 
 /**
@@ -249,6 +276,7 @@ export function waitForBootloaderPort(knownPorts, timeoutMs = 8000) {
  * @param {string}   [params.flashFreq]   SPI flash frequency (e.g. "80m").
  * @param {string}   [params.flashSize]   Flash size (e.g. "4MB").
  * @param {boolean}  [params.eraseAll]    Erase the whole flash before writing.
+ * @param {boolean}  [params.useWatchdogReset] Reset via the RTC watchdog (ESP32-S3 / senseBox Eye).
  * @param {boolean}  [params.usingUsbOtg] Reset via the USB-OTG sequence (ESP32-S2/S3).
  * @param {(msg: string) => void} [params.onLog]      Receives console output.
  * @param {(percent: number) => void} [params.onProgress] 0–100 progress.
@@ -263,6 +291,7 @@ export async function flashBinary({
   flashSize = "keep",
   eraseAll = false,
   usingUsbOtg = false,
+  useWatchdogReset = false,
   onLog,
   onProgress,
 }) {
@@ -297,7 +326,13 @@ export async function flashBinary({
     // has the classic auto-reset circuit, so pulsing EN via the RTS line resets
     // it just like the Arduino IDE does. (esptool-js' own "hard_reset" only
     // releases RTS and never asserts it, which is why it never reset the board.)
-    if (usingUsbOtg) {
+    if (useWatchdogReset) {
+      try {
+        await watchdogResetS3(loader);
+      } catch {
+        // The chip resets mid-command, so a failed trailing write is expected.
+      }
+    } else if (usingUsbOtg) {
       try {
         await hardResetViaRts(transport);
       } catch {
