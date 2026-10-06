@@ -45,7 +45,7 @@ export default function TutorialViewerPanel({
       scrollContainerRef.current.scrollTop = 0;
     }
   }, [activeStep]);
-  
+
   useEffect(() => {
     const stepType = currentStep?.type;
     if (stepType === "instruction" || stepType === "finish") {
@@ -105,9 +105,19 @@ export default function TutorialViewerPanel({
         {/* Left: tutorial step card + nav */}
         <Box
           sx={{
-            width: classificationType ? (type === "blockly" ? "70vw" : "30vw") : "100%",
+            width: classificationType
+              ? type === "blockly"
+                ? "70vw"
+                : "30vw"
+              : "100%",
             minWidth: "350px",
-            maxWidth: classificationType ? (type === "blockly" ? "80vw" : "50vw") : "none",
+            maxWidth: classificationType
+              ? type === "blockly"
+                ? "80vw"
+                : "50vw"
+              : "1344px",
+            marginLeft: classificationType ? 0 : "auto",
+            marginRight: classificationType ? 0 : "auto",
             transition: "width 0.3s ease, max-width 0.3s ease",
             display: "flex",
             flexDirection: "column",
@@ -115,7 +125,7 @@ export default function TutorialViewerPanel({
             borderColor: "divider",
             height: "87vh",
             overflow: "auto",
-            resize: "horizontal",
+            resize: classificationType ? "horizontal" : "none",
           }}
         >
           {/* Top bar */}
