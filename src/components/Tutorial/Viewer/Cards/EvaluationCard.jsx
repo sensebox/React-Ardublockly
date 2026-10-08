@@ -168,6 +168,7 @@ const EvaluationCard = ({ step, tutorialId, onStatusChange }) => {
                   minRows={2}
                   maxRows={6}
                   label={criterion.text}
+                  className="evaluation-criterion-field"
                   value={evaluation.answers?.[criterion.id] || ""}
                   onChange={(e) =>
                     updateAnswer(evaluation, criterion.id, e.target.value)
