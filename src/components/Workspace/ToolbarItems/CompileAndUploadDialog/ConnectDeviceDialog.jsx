@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
 import {
   Dialog,
   DialogTitle,
@@ -46,6 +47,7 @@ function ConnectDeviceDialog({ open, onClose }) {
     log,
   } = useFlash();
 
+  const isEye = useSelector((state) => state.board.board) === "MCU-EYE";
   const [phase, setPhase] = useState("intro");
 
   // Reset back to the intro screen whenever the dialog is (re)opened.
