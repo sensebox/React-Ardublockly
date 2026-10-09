@@ -41,3 +41,29 @@ export function buildTutorialUrl(tutorialId) {
   const basePath = getTutorialBasePath().replace(/\/$/, "");
   return `${basePath}/${TUTORIAL_URL_PARAM}:${encodeURIComponent(tutorialId)}${window.location.search}${window.location.hash}`;
 }
+
+// Parses a 1-based step selection like "1-3, 5, 8-*" (or [1, 2, 3]) into a
+// predicate over 0-based step indices. "N-*" means from step N to the end.
+// Returns null when empty, meaning "all steps".
+export function parseStepSelection(selection) {
+  if (selection === undefined || selection === null || selection === "") {
+    return null;
+  }
+  const parts = Array.isArray(selection)
+    ? selection.map(String)
+    : String(selection).split(",");
+  const ranges = [];
+  for (const part of parts) {
+    const match = part.trim().match(/^(\d+)(?:\s*-\s*(\d+|\*))?$/);
+    if (!match) continue;
+    const start = Number(match[1]);
+    const end =
+      match[2] === "*" ? Infinity : match[2] ? Number(match[2]) : start;
+    const from = Math.max(Math.min(start, end), 1);
+    const to = Math.max(start, end);
+    if (to >= 1) ranges.push([from - 1, to - 1]);
+  }
+  if (ranges.length === 0) return null;
+  return (stepIndex) =>
+    ranges.some(([from, to]) => stepIndex >= from && stepIndex <= to);
+}

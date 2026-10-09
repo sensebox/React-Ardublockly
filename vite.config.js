@@ -28,6 +28,7 @@ export default defineConfig(() => {
     },
     define: {
       __BLOCKLY_MEDIA_PATH__: JSON.stringify("/media/blockly/"),
+      __TEACHABLE_MEDIA_PATH__: JSON.stringify("/media/teachable/"),
     },
     plugins: [react()],
     server: {

@@ -8,7 +8,7 @@ import HelpSidebar from "../HelpSidebar";
 import HelpButton, { useHelpBlink } from "../HelpButton";
 import { HelpProvider } from "../HelpContext";
 
-const SpellClassificationTool = ({ hideHelp = false }) => {
+const SpellClassificationTool = ({ hideHelp = false, hideHeader = false }) => {
   const [trainedModel, setTrainedModel] = useState(null);
   const [isTraining, setIsTraining] = useState(false);
   const [trainingError, setTrainingError] = useState(null);
@@ -95,27 +95,29 @@ const SpellClassificationTool = ({ hideHelp = false }) => {
             pb: 10,
           }}
         >
-          <Box sx={{ mb: 4 }}>
-            <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-              <Typography variant="h3" component="h1">
-                {t.title}
+          {!hideHeader && (
+            <Box sx={{ mb: 4 }}>
+              <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+                <Typography variant="h3" component="h1">
+                  {t.title}
+                </Typography>
+                <HelpButton
+                  onClick={() => {
+                    markSpellClassSeen();
+                    handleOpenHelp("spellClassification");
+                  }}
+                  isBlinking={spellClassBlinking}
+                  tooltip={
+                    t.training?.tooltip?.helpMain ||
+                    "What is spell classification?"
+                  }
+                />
+              </Box>
+              <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+                {t.description}
               </Typography>
-              <HelpButton
-                onClick={() => {
-                  markSpellClassSeen();
-                  handleOpenHelp("spellClassification");
-                }}
-                isBlinking={spellClassBlinking}
-                tooltip={
-                  t.training?.tooltip?.helpMain ||
-                  "What is spell classification?"
-                }
-              />
             </Box>
-            <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-              {t.description}
-            </Typography>
-          </Box>
+          )}
 
           {/* Error display */}
           {trainingError && (

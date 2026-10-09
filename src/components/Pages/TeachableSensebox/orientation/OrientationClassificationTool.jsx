@@ -21,7 +21,7 @@ import HelpSidebar from "../HelpSidebar";
 import HelpButton, { useHelpBlink, useHelpBlinkCooldown } from "../HelpButton";
 import { HelpProvider } from "../HelpContext";
 
-const OrientationClassificationTool = ({ hideHelp = false }) => {
+const OrientationClassificationTool = ({ hideHelp = false, hideHeader = false }) => {
   const [trainedModel, setTrainedModel] = useState(null);
   const [isTraining, setIsTraining] = useState(false);
   const [trainingError, setTrainingError] = useState(null);
@@ -162,27 +162,29 @@ const OrientationClassificationTool = ({ hideHelp = false }) => {
             pb: 10,
           }}
         >
-          <Box sx={{ mb: 4 }}>
-            <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-              <Typography variant="h3" component="h1">
-                {t.title}
+          {!hideHeader && (
+            <Box sx={{ mb: 4 }}>
+              <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+                <Typography variant="h3" component="h1">
+                  {t.title}
+                </Typography>
+                <HelpButton
+                  onClick={() => {
+                    markOrientationClassSeen();
+                    handleOpenHelp("orientationClassification");
+                  }}
+                  isBlinking={orientationClassBlinking}
+                  tooltip={
+                    t.training?.tooltip?.helpMain ||
+                    "Was ist Orientierungserkennung?"
+                  }
+                />
+              </Box>
+              <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+                {t.description}
               </Typography>
-              <HelpButton
-                onClick={() => {
-                  markOrientationClassSeen();
-                  handleOpenHelp("orientationClassification");
-                }}
-                isBlinking={orientationClassBlinking}
-                tooltip={
-                  t.training?.tooltip?.helpMain ||
-                  "Was ist Orientierungserkennung?"
-                }
-              />
             </Box>
-            <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-              {t.description}
-            </Typography>
-          </Box>
+          )}
 
           {trainingError && (
             <Box sx={{ mb: 2, p: 2, bgcolor: "error.light", borderRadius: 1 }}>

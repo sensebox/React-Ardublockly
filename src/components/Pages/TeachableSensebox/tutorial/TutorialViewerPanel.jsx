@@ -20,9 +20,9 @@ import OrientationClassificationTool from "../orientation/OrientationClassificat
 import SpellClassificationTool from "../spell/SpellClassificationTool";
 
 function ClassificationPanel({ type }) {
-  if (type === "image") return <ImageClassificationTool hideHelp />;
-  if (type === "orientation") return <OrientationClassificationTool hideHelp />;
-  if (type === "spell") return <SpellClassificationTool hideHelp />;
+  if (type === "image") return <ImageClassificationTool hideHeader />;
+  if (type === "orientation") return <OrientationClassificationTool hideHeader />;
+  if (type === "spell") return <SpellClassificationTool hideHeader />;
   return null;
 }
 
@@ -30,11 +30,13 @@ export default function TutorialViewerPanel({
   tutorialId,
   classificationType,
   groupName,
+  classificationSteps = null,
   onBack,
   mediaBasePath = "/media/tutorial",
 }) {
   const [nextStepDisabled, setNextStepDisabled] = useState(false);
   const scrollContainerRef = useRef(null);
+  const leftPanelRef = useRef(null);
 
   const { tutorial, currentStep, activeStep, nextStep, previousStep, message } =
     useTutorialViewer(tutorialId);
@@ -45,6 +47,20 @@ export default function TutorialViewerPanel({
       scrollContainerRef.current.scrollTop = 0;
     }
   }, [activeStep]);
+
+  const showClassification =
+    !!classificationType &&
+    (!classificationSteps || classificationSteps(activeStep));
+
+  useEffect(() => {
+    if (!showClassification) {
+      // Drop any width set via the resize handle so the tutorial can widen.
+      if (leftPanelRef.current) leftPanelRef.current.style.width = "";
+    } else {
+      // Let charts etc. re-measure after the panel was hidden.
+      window.dispatchEvent(new Event("resize"));
+    }
+  }, [showClassification]);
 
   useEffect(() => {
     const stepType = currentStep?.type;
@@ -104,28 +120,29 @@ export default function TutorialViewerPanel({
       >
         {/* Left: tutorial step card + nav */}
         <Box
+          ref={leftPanelRef}
           sx={{
-            width: classificationType
+            width: showClassification
               ? type === "blockly"
                 ? "70vw"
                 : "30vw"
               : "100%",
             minWidth: "350px",
-            maxWidth: classificationType
+            maxWidth: showClassification
               ? type === "blockly"
                 ? "80vw"
                 : "50vw"
               : "1344px",
-            marginLeft: classificationType ? 0 : "auto",
-            marginRight: classificationType ? 0 : "auto",
+            marginLeft: showClassification ? 0 : "auto",
+            marginRight: showClassification ? 0 : "auto",
             transition: "width 0.3s ease, max-width 0.3s ease",
             display: "flex",
             flexDirection: "column",
-            borderRight: classificationType ? "1px solid" : "none",
+            borderRight: showClassification ? "1px solid" : "none",
             borderColor: "divider",
             height: "87vh",
             overflow: "auto",
-            resize: classificationType ? "horizontal" : "none",
+            resize: showClassification ? "horizontal" : "none",
           }}
         >
           {/* Top bar */}
@@ -239,14 +256,22 @@ export default function TutorialViewerPanel({
         {classificationType && (
           <Box
             sx={{
+              display: showClassification ? "block" : "none",
               flex: 1,
-              overflow: "auto",
+              position: "relative",
               minHeight: 0,
               height: "87vh",
-              padding: "32px",
+              overflow: "hidden",
+              "& .MuiDrawer-docked .MuiDrawer-paper": {
+                position: "absolute",
+                top: 0,
+                height: "100%",
+              },
             }}
           >
-            <ClassificationPanel type={classificationType} />
+            <Box sx={{ height: "100%", overflow: "auto", padding: "32px" }}>
+              <ClassificationPanel type={classificationType} />
+            </Box>
           </Box>
         )}
       </Box>
@@ -259,5 +284,6 @@ TutorialViewerPanel.propTypes = {
   classificationType: PropTypes.oneOf(["image", "spell", "orientation", ""])
     .isRequired,
   groupName: PropTypes.string,
+  classificationSteps: PropTypes.func,
   onBack: PropTypes.func.isRequired,
 };
