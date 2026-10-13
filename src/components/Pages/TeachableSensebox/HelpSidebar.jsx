@@ -34,6 +34,7 @@ const NAVBAR_HEIGHT = 64;
 const HelpSidebar = ({ open, onClose, helpTopic }) => {
   const theme = useTheme();
   const isWideScreen = useMediaQuery(theme.breakpoints.up("md"));
+  const isDark = theme.palette.mode === "dark";
   const language = useSelector((s) => s.general.language);
   const [scrollOffset, setScrollOffset] = useState(0);
 
@@ -110,7 +111,7 @@ const HelpSidebar = ({ open, onClose, helpTopic }) => {
           height: sidebarHeight,
           borderLeft: "1px solid",
           borderColor: "divider",
-          backgroundColor: "grey.50",
+          backgroundColor: isDark ? "background.default" : "grey.50",
           transition: "top 0.1s ease-out, height 0.1s ease-out",
         },
       }}
@@ -173,7 +174,7 @@ const HelpSidebar = ({ open, onClose, helpTopic }) => {
             fontStyle: "italic",
           },
           "& code": {
-            backgroundColor: "grey.100",
+            backgroundColor: isDark ? "grey.800" : "grey.100",
             px: 0.5,
             borderRadius: 0.5,
             fontSize: "0.8rem",
