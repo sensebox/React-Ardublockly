@@ -38,30 +38,14 @@ function resolveCompilerBoard(selectedBoard) {
       return "sensebox-mcu";
     case "MCU-S2":
       return "sensebox-esp32s2";
+    case "MCU-EYE":
+      return "sensebox_mcu_eye";
     default:
       return "sensebox-esp32s2";
   }
 }
 
-/**
- * Flash parameters for the senseBox MCU-S2 (ESP32-S2), chosen to match the
- * Arduino IDE board definition (sensebox_mcu_esp32s2):
- *
- *   build.flash_mode = dio
- *   build.flash_freq = 80m
- *   build.flash_size = 4MB
- *
- * The senseBox compiler returns ONLY the compiled application image (not a
- * merged binary), so it is written to the application partition offset 0x10000
- * (app0 in the default/tinyuf2 partition scheme) – exactly where the Arduino
- * IDE uploads the sketch. The bootloader (0x1000), partition table (0x8000) and
- * boot_app0 (0xe000) already live on the device and are left untouched.
- */
-const FLASH_ADDRESS = 0x10000;
-const FLASH_MODE = "dio";
-const FLASH_FREQ = "80m";
-const FLASH_SIZE = "4MB";
-// The MCU-S2 uses Espressif's native USB-CDC (VID 0x303A). On such a connection
+// The MCU-S2 and MCU-EYE use Espressif's native USB-CDC (VID 0x303A). On such a connection
 // the baud rate is irrelevant for throughput, and requesting a higher rate makes
 // esptool-js call changeBaud(), which re-initialises the USB-CDC stream and
 // corrupts the connection ("Serial data stream stopped / Unable to verify flash
@@ -393,13 +377,14 @@ export function FlashProvider({ children }) {
         appendLog("Starte Upload auf den Mikrocontroller ...\n");
         await flashBinary({
           port: flashPort,
-          fileArray: [{ data: firmware, address: FLASH_ADDRESS }],
+          fileArray: [{ data: firmware, address: 0x10000 }],
           baudrate: UPLOAD_BAUDRATE,
-          flashMode: FLASH_MODE,
-          flashFreq: FLASH_FREQ,
-          flashSize: FLASH_SIZE,
+          flashMode: "dio",
+          flashFreq: "80m",
+          flashSize: selectedBoard === "MCU-EYE" ? "16MB" : "4MB",
           eraseAll: false,
           usingUsbOtg: true,
+          useWatchdogReset: selectedBoard === "MCU-EYE",
           onLog: appendLog,
           onProgress: setProgress,
         });
@@ -417,7 +402,7 @@ export function FlashProvider({ children }) {
         setStatus("error");
       }
     },
-    [compile, appendLog],
+    [compile, appendLog, selectedBoard],
   );
 
   // Phase 2 of bootloader preparation: grant access to the re-enumerated ROM

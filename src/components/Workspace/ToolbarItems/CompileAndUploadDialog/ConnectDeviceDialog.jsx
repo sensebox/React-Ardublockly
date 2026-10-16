@@ -127,7 +127,13 @@ function ConnectDeviceDialog({ open, onClose }) {
           {Blockly.Msg.connect_dialog_grant_title}
         </h3>
         <p className="cau-step__text">
-          {Blockly.Msg.connect_dialog_grant_text}
+          {
+            Blockly.Msg[
+              isEye
+                ? "connect_dialog_grant_text_eye"
+                : "connect_dialog_grant_text"
+            ]
+          }
         </p>
         <button
           type="button"
@@ -135,7 +141,13 @@ function ConnectDeviceDialog({ open, onClose }) {
           style={{ marginTop: "20px" }}
           onClick={handleGrant}
         >
-          {Blockly.Msg.connect_dialog_grant_button}
+          {
+            Blockly.Msg[
+              isEye
+                ? "connect_dialog_grant_button_eye"
+                : "connect_dialog_grant_button"
+            ]
+          }
         </button>
       </div>
     );
@@ -163,8 +175,24 @@ function ConnectDeviceDialog({ open, onClose }) {
             lineHeight: 1.6,
           }}
         >
-          <li>{Blockly.Msg.connect_dialog_pick_device}</li>
-          <li>{Blockly.Msg.connect_dialog_pick_bootloader}</li>
+          <li>
+            {
+              Blockly.Msg[
+                isEye
+                  ? "connect_dialog_pick_device_eye"
+                  : "connect_dialog_pick_device"
+              ]
+            }
+          </li>
+          <li>
+            {
+              Blockly.Msg[
+                isEye
+                  ? "connect_dialog_pick_bootloader_eye"
+                  : "connect_dialog_pick_bootloader"
+              ]
+            }
+          </li>
         </ul>
         <button
           type="button"
