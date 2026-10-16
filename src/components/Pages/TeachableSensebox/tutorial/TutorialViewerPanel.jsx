@@ -135,7 +135,7 @@ export default function TutorialViewerPanel({
               : "1344px",
             marginLeft: showClassification ? 0 : "auto",
             marginRight: showClassification ? 0 : "auto",
-            transition: "width 0.3s ease, max-width 0.3s ease",
+            transition: "width 1.0s ease, max-width 1.0s ease",
             display: "flex",
             flexDirection: "column",
             borderRight: showClassification ? "1px solid" : "none",
