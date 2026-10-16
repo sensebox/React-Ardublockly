@@ -7,6 +7,8 @@ import SolutionCheck from "./SolutionCheck";
 import BlocklyWindow from "@/components/Blockly/BlocklyWindow";
 import { Box, Typography } from "@mui/material";
 import H5PCard from "./H5PCard";
+import CriteriaCard from "./CriteriaCard";
+import EvaluationCard from "./EvaluationCard";
 import { loadAnswers } from "../helpers/tutorialStorageUtils";
 
 const md = new MarkdownIt({ html: true, linkify: true, typographer: true });
@@ -67,6 +69,8 @@ const TaskCard = ({ step, setNextStepDisabled }) => {
   const isQuestionStep =
     step.type === "question" && step.questionData?.length > 0;
   const isBlocklyStep = step.type === "blockly" && !!step.xml;
+  const isEvaluationStep =
+    step.type === "evaluationPreparation" || step.type === "evaluation";
 
   const [questionStatus, setQuestionStatus] = useState({});
   const [blocklyCorrect, setBlocklyCorrect] = useState(() => {
@@ -76,6 +80,7 @@ const TaskCard = ({ step, setNextStepDisabled }) => {
     );
     return savedAnswer?.type === "success";
   });
+  const [evaluationComplete, setEvaluationComplete] = useState(false);
 
   const handleQuestionStatusChange = useCallback((questionIndex, correct) => {
     setQuestionStatus((prev) =>
@@ -93,14 +98,18 @@ const TaskCard = ({ step, setNextStepDisabled }) => {
       setNextStepDisabled(!allAnswered);
     } else if (isBlocklyStep) {
       setNextStepDisabled(!blocklyCorrect);
+    } else if (isEvaluationStep) {
+      setNextStepDisabled(!evaluationComplete);
     } else {
       setNextStepDisabled(false);
     }
   }, [
     isQuestionStep,
     isBlocklyStep,
+    isEvaluationStep,
     questionStatus,
     blocklyCorrect,
+    evaluationComplete,
     step.questionData,
     setNextStepDisabled,
   ]);
@@ -140,6 +149,20 @@ const TaskCard = ({ step, setNextStepDisabled }) => {
             );
           })}
         </Box>
+      )}
+      {step.type === "evaluationPreparation" && (
+        <CriteriaCard
+          step={step}
+          tutorialId={tutorialId}
+          onStatusChange={setEvaluationComplete}
+        />
+      )}
+      {step.type === "evaluation" && (
+        <EvaluationCard
+          step={step}
+          tutorialId={tutorialId}
+          onStatusChange={setEvaluationComplete}
+        />
       )}
       {step.type === "h5p" && step.h5psrc && (
         <Box

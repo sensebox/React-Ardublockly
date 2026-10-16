@@ -321,6 +321,8 @@ export const UI = {
   save_status_missing_title: "Title",
   save_status_missing_subtitle: "Subtitle",
   save_status_missing_understood: "Got it",
+  save_status_invalid_evaluation:
+    'Step %1 (evaluation) needs a "define evaluation criteria" step before it.',
   save_status_error: "An error occurred while saving.",
   save_status_error_hint: "Possible reasons:",
   save_status_error_network: "Check network connection",

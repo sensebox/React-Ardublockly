@@ -131,6 +131,10 @@ const HelpButton = ({
   const theme = useTheme();
   const isWideScreen = useMediaQuery(theme.breakpoints.up("md"));
   const hideHelp = useHideHelp();
+  // Colors are inverted in dark mode
+  const isDark = theme.palette.mode === "dark";
+  const fg = isDark ? theme.palette.common.white : theme.palette.grey[600];
+  const bg = isDark ? theme.palette.grey[600] : theme.palette.common.white;
 
   // Only render on wide screens and when not hidden
   if (!isWideScreen || hideHelp) {
@@ -144,11 +148,11 @@ const HelpButton = ({
         size={size}
         aria-label={tooltip}
         sx={{
-          color: "grey.600",
-          backgroundColor: "white",
+          color: fg,
+          backgroundColor: bg,
           "&:hover": {
-            backgroundColor: "grey.600",
-            color: "white",
+            backgroundColor: fg,
+            color: bg,
           },
           ml: 1,
           width: size === "small" ? 28 : 36,
@@ -156,8 +160,8 @@ const HelpButton = ({
           ...(isBlinking && {
             "@keyframes helpButtonBlink": {
               "0%, 50%, 100%": {
-                backgroundColor: "white",
-                color: theme.palette.grey[600],
+                backgroundColor: bg,
+                color: fg,
                 transform: "scale(1)",
               },
               "25%, 75%": {
