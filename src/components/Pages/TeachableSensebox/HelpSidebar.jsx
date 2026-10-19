@@ -8,7 +8,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { ChevronRight as ChevronRightIcon } from "@mui/icons-material";
-import ReactMarkdown from "react-markdown";
+import ReactMarkdown, { defaultUrlTransform } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { useSelector } from "react-redux";
 
@@ -27,6 +27,16 @@ const markdownFiles = import.meta.glob("./translations/help/**/*.md", {
 const SIDEBAR_WIDTH = 320;
 const NAVBAR_HEIGHT = 64;
 
+// Help markdown references images as "/media/teachable/...". Rewrite that
+// prefix so the images also resolve when the widget is embedded elsewhere.
+const MARKDOWN_MEDIA_PREFIX = "/media/teachable/";
+const transformMarkdownUrl = (url) =>
+  defaultUrlTransform(
+    url.startsWith(MARKDOWN_MEDIA_PREFIX)
+      ? __TEACHABLE_MEDIA_PATH__ + url.slice(MARKDOWN_MEDIA_PREFIX.length)
+      : url,
+  );
+
 /**
  * HelpSidebar - A collapsible sidebar that shows help content for different topics
  */
@@ -34,6 +44,7 @@ const NAVBAR_HEIGHT = 64;
 const HelpSidebar = ({ open, onClose, helpTopic }) => {
   const theme = useTheme();
   const isWideScreen = useMediaQuery(theme.breakpoints.up("md"));
+  const isDark = theme.palette.mode === "dark";
   const language = useSelector((s) => s.general.language);
   const [scrollOffset, setScrollOffset] = useState(0);
 
@@ -110,7 +121,7 @@ const HelpSidebar = ({ open, onClose, helpTopic }) => {
           height: sidebarHeight,
           borderLeft: "1px solid",
           borderColor: "divider",
-          backgroundColor: "grey.50",
+          backgroundColor: isDark ? "background.default" : "grey.50",
           transition: "top 0.1s ease-out, height 0.1s ease-out",
         },
       }}
@@ -173,7 +184,7 @@ const HelpSidebar = ({ open, onClose, helpTopic }) => {
             fontStyle: "italic",
           },
           "& code": {
-            backgroundColor: "grey.100",
+            backgroundColor: isDark ? "grey.800" : "grey.100",
             px: 0.5,
             borderRadius: 0.5,
             fontSize: "0.8rem",
@@ -189,7 +200,10 @@ const HelpSidebar = ({ open, onClose, helpTopic }) => {
         }}
       >
         {markdownContent ? (
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            urlTransform={transformMarkdownUrl}
+          >
             {markdownContent}
           </ReactMarkdown>
         ) : (

@@ -18,6 +18,7 @@ import {
   ANSWERS_UPDATED_EVENT,
   loadAnswers,
 } from "../helpers/tutorialStorageUtils";
+import { isEvaluationStepCompleted } from "../helpers/evaluationUtils";
 
 const Sidebar = () => {
   const theme = useTheme();
@@ -58,6 +59,9 @@ const Sidebar = () => {
     }
     if (step.type === "blockly" && step.xml) {
       return answersMap[`${step._id}_blockly`]?.type === "success";
+    }
+    if (step.type === "evaluationPreparation" || step.type === "evaluation") {
+      return isEvaluationStepCompleted(step, tutorial.steps, answersMap);
     }
     return true;
   };

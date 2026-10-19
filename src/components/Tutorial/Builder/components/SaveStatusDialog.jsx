@@ -12,7 +12,12 @@ import { useNavigate } from "react-router-dom";
 import * as Blockly from "blockly/core";
 
 // 🔲 Dialog-Komponente (extrahiert für Übersicht)
-const SaveStatusDialog = ({ savingState, onClose, savedTutorialId }) => {
+const SaveStatusDialog = ({
+  savingState,
+  onClose,
+  savedTutorialId,
+  validationErrors = { missingFields: [], invalidEvaluationSteps: [] },
+}) => {
   const theme = useTheme();
   const navigate = useNavigate();
   const renderContent = () => {
@@ -31,16 +36,33 @@ const SaveStatusDialog = ({ savingState, onClose, savedTutorialId }) => {
         return (
           <>
             <WarningAmber sx={{ fontSize: 64, color: "warning.main" }} />
-            <Typography variant="body1" fontWeight={600}>
-              {Blockly.Msg.save_status_missing_fields}
-            </Typography>
             <Box sx={{ mt: 1, textAlign: "left" }}>
-              <Typography color="error.main">
-                • {Blockly.Msg.save_status_missing_title}
-              </Typography>
-              <Typography color="error.main">
-                • {Blockly.Msg.save_status_missing_subtitle}
-              </Typography>
+              {validationErrors.missingFields.length > 0 && (
+                <>
+                  <Typography variant="body1" fontWeight={600}>
+                    {Blockly.Msg.save_status_missing_fields}
+                  </Typography>
+                  {validationErrors.missingFields.includes("title") && (
+                    <Typography color="error.main">
+                      • {Blockly.Msg.save_status_missing_title}
+                    </Typography>
+                  )}
+                  {validationErrors.missingFields.includes("subtitle") && (
+                    <Typography color="error.main">
+                      • {Blockly.Msg.save_status_missing_subtitle}
+                    </Typography>
+                  )}
+                </>
+              )}
+              {validationErrors.invalidEvaluationSteps.map((stepNumber) => (
+                <Typography key={stepNumber} color="error.main" sx={{ mt: 1 }}>
+                  •{" "}
+                  {Blockly.Msg.save_status_invalid_evaluation.replace(
+                    "%1",
+                    stepNumber,
+                  )}
+                </Typography>
+              ))}
             </Box>
             <Button variant="contained" sx={{ mt: 2 }} onClick={onClose}>
               {Blockly.Msg.save_status_missing_understood}
@@ -176,6 +198,7 @@ const SaveStatusDialog = ({ savingState, onClose, savedTutorialId }) => {
         sx={{
           textAlign: "center",
           py: 3,
+          px: 3,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",

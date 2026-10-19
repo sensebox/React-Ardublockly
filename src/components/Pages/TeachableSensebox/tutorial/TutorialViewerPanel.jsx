@@ -20,9 +20,9 @@ import OrientationClassificationTool from "../orientation/OrientationClassificat
 import SpellClassificationTool from "../spell/SpellClassificationTool";
 
 function ClassificationPanel({ type }) {
-  if (type === "image") return <ImageClassificationTool hideHelp />;
-  if (type === "orientation") return <OrientationClassificationTool hideHelp />;
-  if (type === "spell") return <SpellClassificationTool hideHelp />;
+  if (type === "image") return <ImageClassificationTool hideHeader />;
+  if (type === "orientation") return <OrientationClassificationTool hideHeader />;
+  if (type === "spell") return <SpellClassificationTool hideHeader />;
   return null;
 }
 
@@ -30,22 +30,64 @@ export default function TutorialViewerPanel({
   tutorialId,
   classificationType,
   groupName,
+  classificationSteps = null,
   onBack,
   mediaBasePath = "/media/tutorial",
 }) {
   const [nextStepDisabled, setNextStepDisabled] = useState(false);
-  const scrollContainerRef = useRef(null);
+  const rootRef = useRef(null);
+  const leftPanelRef = useRef(null);
 
   const { tutorial, currentStep, activeStep, nextStep, previousStep, message } =
     useTutorialViewer(tutorialId);
 
-  // Scroll to top when step changes
+  // Scroll back to the top of the tutorial when the step changes
   useEffect(() => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollTop = 0;
+    const top = rootRef.current?.getBoundingClientRect().top;
+    if (top !== undefined && top < 0) {
+      window.scrollBy({ top });
     }
   }, [activeStep]);
-  
+
+  // Drag handle to resize the tutorial panel next to the classification widget
+  const startResize = (e) => {
+    const panel = leftPanelRef.current;
+    if (!panel) return;
+    e.preventDefault();
+    const startX = e.clientX;
+    const startWidth = panel.getBoundingClientRect().width;
+    const prevTransition = panel.style.transition;
+    panel.style.transition = "none";
+    document.body.style.userSelect = "none";
+
+    const onMove = (ev) => {
+      panel.style.width = `${startWidth + ev.clientX - startX}px`;
+    };
+    const onUp = () => {
+      panel.style.transition = prevTransition;
+      document.body.style.userSelect = "";
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      window.dispatchEvent(new Event("resize"));
+    };
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+  };
+
+  const showClassification =
+    !!classificationType &&
+    (!classificationSteps || classificationSteps(activeStep));
+
+  useEffect(() => {
+    if (!showClassification) {
+      // Drop any width set via the resize handle so the tutorial can widen.
+      if (leftPanelRef.current) leftPanelRef.current.style.width = "";
+    } else {
+      // Let charts etc. re-measure after the panel was hidden.
+      window.dispatchEvent(new Event("resize"));
+    }
+  }, [showClassification]);
+
   useEffect(() => {
     const stepType = currentStep?.type;
     if (stepType === "instruction" || stepType === "finish") {
@@ -85,37 +127,29 @@ export default function TutorialViewerPanel({
   const isLast = activeStep === tutorial.steps.length - 1;
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        height: "100vh",
-        overflow: "hidden",
-      }}
-    >
+    <Box ref={rootRef} sx={{ display: "flex", flexDirection: "column" }}>
       {/* Main content */}
-      <Box
-        sx={{
-          display: "flex",
-          flexGrow: 1,
-          minHeight: 0,
-          alignItems: "flex-start",
-        }}
-      >
+      <Box sx={{ display: "flex", flexGrow: 1 }}>
         {/* Left: tutorial step card + nav */}
         <Box
+          ref={leftPanelRef}
           sx={{
-            width: classificationType ? (type === "blockly" ? "70vw" : "30vw") : "100%",
+            width: showClassification
+              ? type === "blockly"
+                ? "70vw"
+                : "30vw"
+              : "100%",
             minWidth: "350px",
-            maxWidth: classificationType ? (type === "blockly" ? "80vw" : "50vw") : "none",
-            transition: "width 0.3s ease, max-width 0.3s ease",
+            maxWidth: showClassification
+              ? type === "blockly"
+                ? "80vw"
+                : "50vw"
+              : "1344px",
+            marginLeft: showClassification ? 0 : "auto",
+            marginRight: showClassification ? 0 : "auto",
+            transition: "width 1.0s ease, max-width 1.0s ease",
             display: "flex",
             flexDirection: "column",
-            borderRight: classificationType ? "1px solid" : "none",
-            borderColor: "divider",
-            height: "87vh",
-            overflow: "auto",
-            resize: "horizontal",
           }}
         >
           {/* Top bar */}
@@ -148,11 +182,8 @@ export default function TutorialViewerPanel({
               {groupName ? `${groupName} - ${tutorial.title}` : tutorial.title}
             </Typography>
           </Box>
-          {/* Step card - scrollable */}
-          <Box
-            sx={{ flexGrow: 1, overflow: "auto", minHeight: 0, p: 2 }}
-            ref={scrollContainerRef}
-          >
+          {/* Step card */}
+          <Box sx={{ flexGrow: 1, p: 2 }}>
             <AnimatePresence mode="wait">
               {type === "finish" && (
                 <FinishedCard key="finished" tutorial={tutorial} />
@@ -174,9 +205,12 @@ export default function TutorialViewerPanel({
             </AnimatePresence>
           </Box>
 
-          {/* Navigation buttons */}
+          {/* Navigation buttons - stick to the viewport bottom while scrolling */}
           <Box
             sx={{
+              position: "sticky",
+              bottom: 0,
+              zIndex: 2,
               flexShrink: 0,
               display: "flex",
               justifyContent: "space-between",
@@ -225,18 +259,44 @@ export default function TutorialViewerPanel({
           </Box>
         </Box>
 
-        {/* Right: classification widget */}
+        {/* Resize handle */}
+        {showClassification && (
+          <Box
+            onPointerDown={startResize}
+            sx={{
+              flexShrink: 0,
+              width: "6px",
+              cursor: "col-resize",
+              borderLeft: "1px solid",
+              borderColor: "divider",
+              touchAction: "none",
+              "&:hover": { bgcolor: "action.hover" },
+            }}
+          />
+        )}
+
+        {/* Right: classification widget - stays in view while scrolling */}
         {classificationType && (
           <Box
             sx={{
+              display: showClassification ? "block" : "none",
               flex: 1,
-              overflow: "auto",
-              minHeight: 0,
-              height: "87vh",
-              padding: "32px",
+              minWidth: 0,
+              position: "sticky",
+              top: 0,
+              alignSelf: "flex-start",
+              height: "100vh",
+              overflow: "hidden",
+              "& .MuiDrawer-docked .MuiDrawer-paper": {
+                position: "absolute",
+                top: 0,
+                height: "100%",
+              },
             }}
           >
-            <ClassificationPanel type={classificationType} />
+            <Box sx={{ height: "100%", overflow: "auto", padding: "32px" }}>
+              <ClassificationPanel type={classificationType} />
+            </Box>
           </Box>
         )}
       </Box>
@@ -249,5 +309,6 @@ TutorialViewerPanel.propTypes = {
   classificationType: PropTypes.oneOf(["image", "spell", "orientation", ""])
     .isRequired,
   groupName: PropTypes.string,
+  classificationSteps: PropTypes.func,
   onBack: PropTypes.func.isRequired,
 };
