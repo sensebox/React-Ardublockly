@@ -35,18 +35,44 @@ export default function TutorialViewerPanel({
   mediaBasePath = "/media/tutorial",
 }) {
   const [nextStepDisabled, setNextStepDisabled] = useState(false);
-  const scrollContainerRef = useRef(null);
+  const rootRef = useRef(null);
   const leftPanelRef = useRef(null);
 
   const { tutorial, currentStep, activeStep, nextStep, previousStep, message } =
     useTutorialViewer(tutorialId);
 
-  // Scroll to top when step changes
+  // Scroll back to the top of the tutorial when the step changes
   useEffect(() => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollTop = 0;
+    const top = rootRef.current?.getBoundingClientRect().top;
+    if (top !== undefined && top < 0) {
+      window.scrollBy({ top });
     }
   }, [activeStep]);
+
+  // Drag handle to resize the tutorial panel next to the classification widget
+  const startResize = (e) => {
+    const panel = leftPanelRef.current;
+    if (!panel) return;
+    e.preventDefault();
+    const startX = e.clientX;
+    const startWidth = panel.getBoundingClientRect().width;
+    const prevTransition = panel.style.transition;
+    panel.style.transition = "none";
+    document.body.style.userSelect = "none";
+
+    const onMove = (ev) => {
+      panel.style.width = `${startWidth + ev.clientX - startX}px`;
+    };
+    const onUp = () => {
+      panel.style.transition = prevTransition;
+      document.body.style.userSelect = "";
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      window.dispatchEvent(new Event("resize"));
+    };
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+  };
 
   const showClassification =
     !!classificationType &&
@@ -101,23 +127,9 @@ export default function TutorialViewerPanel({
   const isLast = activeStep === tutorial.steps.length - 1;
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        height: "100vh",
-        overflow: "hidden",
-      }}
-    >
+    <Box ref={rootRef} sx={{ display: "flex", flexDirection: "column" }}>
       {/* Main content */}
-      <Box
-        sx={{
-          display: "flex",
-          flexGrow: 1,
-          minHeight: 0,
-          alignItems: "flex-start",
-        }}
-      >
+      <Box sx={{ display: "flex", flexGrow: 1 }}>
         {/* Left: tutorial step card + nav */}
         <Box
           ref={leftPanelRef}
@@ -138,11 +150,6 @@ export default function TutorialViewerPanel({
             transition: "width 1.0s ease, max-width 1.0s ease",
             display: "flex",
             flexDirection: "column",
-            borderRight: showClassification ? "1px solid" : "none",
-            borderColor: "divider",
-            height: "87vh",
-            overflow: "auto",
-            resize: showClassification ? "horizontal" : "none",
           }}
         >
           {/* Top bar */}
@@ -175,11 +182,8 @@ export default function TutorialViewerPanel({
               {groupName ? `${groupName} - ${tutorial.title}` : tutorial.title}
             </Typography>
           </Box>
-          {/* Step card - scrollable */}
-          <Box
-            sx={{ flexGrow: 1, overflow: "auto", minHeight: 0, p: 2 }}
-            ref={scrollContainerRef}
-          >
+          {/* Step card */}
+          <Box sx={{ flexGrow: 1, p: 2 }}>
             <AnimatePresence mode="wait">
               {type === "finish" && (
                 <FinishedCard key="finished" tutorial={tutorial} />
@@ -201,9 +205,12 @@ export default function TutorialViewerPanel({
             </AnimatePresence>
           </Box>
 
-          {/* Navigation buttons */}
+          {/* Navigation buttons - stick to the viewport bottom while scrolling */}
           <Box
             sx={{
+              position: "sticky",
+              bottom: 0,
+              zIndex: 2,
               flexShrink: 0,
               display: "flex",
               justifyContent: "space-between",
@@ -252,15 +259,33 @@ export default function TutorialViewerPanel({
           </Box>
         </Box>
 
-        {/* Right: classification widget */}
+        {/* Resize handle */}
+        {showClassification && (
+          <Box
+            onPointerDown={startResize}
+            sx={{
+              flexShrink: 0,
+              width: "6px",
+              cursor: "col-resize",
+              borderLeft: "1px solid",
+              borderColor: "divider",
+              touchAction: "none",
+              "&:hover": { bgcolor: "action.hover" },
+            }}
+          />
+        )}
+
+        {/* Right: classification widget - stays in view while scrolling */}
         {classificationType && (
           <Box
             sx={{
               display: showClassification ? "block" : "none",
               flex: 1,
-              position: "relative",
-              minHeight: 0,
-              height: "87vh",
+              minWidth: 0,
+              position: "sticky",
+              top: 0,
+              alignSelf: "flex-start",
+              height: "100vh",
               overflow: "hidden",
               "& .MuiDrawer-docked .MuiDrawer-paper": {
                 position: "absolute",
