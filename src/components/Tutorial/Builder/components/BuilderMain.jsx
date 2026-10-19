@@ -87,6 +87,7 @@ const BuilderMain = ({
             <BlocklyExample
               index={activeStep}
               value={currentStep.xml || ""}
+              board={currentStep.board}
               updateStepFields={updateStepFields}
             />
           )}
@@ -95,6 +96,7 @@ const BuilderMain = ({
             <BlocklyExample
               index={activeStep}
               value={currentStep.xml || ""}
+              board={currentStep.board}
               updateStepFields={updateStepFields}
             />
           )}

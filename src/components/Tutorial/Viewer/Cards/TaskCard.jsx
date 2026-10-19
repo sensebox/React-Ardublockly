@@ -1,15 +1,17 @@
 import MarkdownIt from "markdown-it";
 import { useCallback, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import TutorialSlide from "../components/TutorialSlide";
 import QuestionCard from "./QuestionCard";
 import SolutionCheck from "./SolutionCheck";
 import BlocklyWindow from "@/components/Blockly/BlocklyWindow";
-import { Box, Typography } from "@mui/material";
+import { Box, Chip, Typography } from "@mui/material";
 import H5PCard from "./H5PCard";
 import CriteriaCard from "./CriteriaCard";
 import EvaluationCard from "./EvaluationCard";
 import { loadAnswers } from "../helpers/tutorialStorageUtils";
+import { setBoard } from "@/actions/boardAction";
+import { getBoardLabel } from "@/components/Blockly/helpers/boardOptions";
 
 const md = new MarkdownIt({ html: true, linkify: true, typographer: true });
 
@@ -63,7 +65,9 @@ md.renderer.rules.table_open = function (tokens, idx, options, env, self) {
 };
 
 const TaskCard = ({ step, setNextStepDisabled }) => {
+  const dispatch = useDispatch();
   const activeStep = useSelector((state) => state.tutorial.activeStep);
+  const currentBoard = useSelector((state) => state.board.board);
   const tutorialId = useSelector((state) => state.tutorial.tutorials[0]?._id);
 
   const isQuestionStep =
@@ -81,6 +85,26 @@ const TaskCard = ({ step, setNextStepDisabled }) => {
     return savedAnswer?.type === "success";
   });
   const [evaluationComplete, setEvaluationComplete] = useState(false);
+
+  const isBoardStep = step.type === "blockly" || step.type === "blocklyExample";
+
+  // Auf das im Builder konfigurierte Ziel-Board umschalten
+  useEffect(() => {
+    if (isBoardStep && step.board && step.board !== currentBoard) {
+      dispatch(setBoard(step.board));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isBoardStep, step.board]);
+
+  const boardChip =
+    isBoardStep && step.board ? (
+      <Chip
+        size="small"
+        variant="outlined"
+        color="primary"
+        label={`Board: ${getBoardLabel(step.board)}`}
+      />
+    ) : null;
 
   const handleQuestionStatusChange = useCallback((questionIndex, correct) => {
     setQuestionStatus((prev) =>
@@ -187,6 +211,7 @@ const TaskCard = ({ step, setNextStepDisabled }) => {
             gap: 2,
           }}
         >
+          {boardChip}
           {/* Blockly mit Rahmen */}
           <Box
             className="blockly-frame"
@@ -234,7 +259,15 @@ const TaskCard = ({ step, setNextStepDisabled }) => {
         </Box>
       )}
       {step.type === "blocklyExample" && step.svg && (
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 2,
+          }}
+        >
+          {boardChip}
           <img src={svgToDataUrl(step.svg)} alt="Blockly block" />
         </Box>
       )}
