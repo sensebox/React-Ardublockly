@@ -16,6 +16,7 @@ import {
 import { thunk } from "redux-thunk";
 import rootReducer from "../../reducers";
 import { setupInterceptors } from "../../actions/authActions";
+import { LANGUAGE } from "../../actions/types";
 import TutorialClassificationWidget from "../../components/Pages/TeachableSensebox/tutorial/TutorialClassificationWidget";
 import { De } from "../../components/Blockly/msg/de";
 // import { En } from "../../components/Blockly/msg/en";
@@ -110,6 +111,7 @@ function withTextFieldOverrides(theme) {
 
 function createWidgetStore() {
   const store = createStore(rootReducer, {}, compose(applyMiddleware(thunk)));
+  store.dispatch({ type: LANGUAGE, payload: "de_DE" });
   setupInterceptors(store);
   return store;
 }
