@@ -31,18 +31,18 @@
     "@tensorflow/tfjs": "^4.22.0",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^15.0.5",
-    "@testing-library/user-event": "^14.6.7",
+    "@testing-library/user-event": "^14.6.8",
     "@uiw/react-markdown-preview": "^5.2.1",
     "@uiw/react-md-editor": "^4.1.2",
     "axios": "^1.20.0",
     "blockly": "^12.5.1",
-    "dompurify": "^3.4.16",
+    "dompurify": "^3.4.17",
     "esptool-js": "^0.7.0",
     "file-saver": "^2.0.5",
     "framer-motion": "^13.4.4",
     "hast-util-to-parse5": "^8.0.1",
     "jszip": "^3.10.2",
-    "markdown-it": "^15.0.2",
+    "markdown-it": "^15.0.3",
     "mnemonic-id": "^4.1.0",
     "moment": "^2.31.0",
     "prismjs": "^1.27.0",
@@ -65,7 +65,7 @@
     "remark-gemoji": "^8.0.0",
     "remark-gfm": "^4.0.1",
     "styled-components": "^4.4.1",
-    "watchpack": "^2.5.2"
+    "watchpack": "^2.6.1"
   },
   "resolutions": {
     "//": "See https://github.com/facebook/create-react-app/issues/11773",
@@ -86,14 +86,14 @@
   ],
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@vitejs/plugin-react": "^6.1.1",
-    "cypress": "^16.1.0",
-    "cypress-ctrf-json-reporter": "^0.0.14",
+    "@vitejs/plugin-react": "^6.1.2",
+    "cypress": "^16.2.0",
+    "cypress-ctrf-json-reporter": "^0.2.0",
     "eslint": "^9.20.1",
     "eslint-plugin-cypress": "^6.4.3",
     "eslint-plugin-react": "^7.37.4",
-    "prettier": "^3.9.8",
+    "prettier": "^3.9.10",
     "vite-plugin-css-injected-by-js": "^5.0.2",
-    "vite": "^8.3.1"
+    "vite": "^8.3.4"
   }
 }
