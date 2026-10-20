@@ -88,13 +88,17 @@ const TaskCard = ({ step, setNextStepDisabled }) => {
 
   const isBoardStep = step.type === "blockly" || step.type === "blocklyExample";
 
-  // Auf das im Builder konfigurierte Ziel-Board umschalten
+  // Auf das im Builder konfigurierte Ziel-Board umschalten (auch wenn das
+  // Board global gewechselt wird).
   useEffect(() => {
-    if (isBoardStep && step.board && step.board !== currentBoard) {
+    if (
+      isBoardStep &&
+      step.board &&
+      step.board.toUpperCase() !== currentBoard
+    ) {
       dispatch(setBoard(step.board));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isBoardStep, step.board]);
+  }, [isBoardStep, step.board, currentBoard, dispatch]);
 
   const boardChip =
     isBoardStep && step.board ? (

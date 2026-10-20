@@ -62,13 +62,13 @@ const BlocklyExample = ({
     validateXML();
   }, [value]);
 
-  // Workspace auf das Ziel-Board des Schritts umstellen
+  // Workspace auf das Ziel-Board des Schritts umstellen (auch wenn das Board
+  // global, z.B. über Navbar, gewechselt wird, oder noch keins gewählt ist)
   useEffect(() => {
-    if (board && board !== currentBoard) {
-      dispatch(setBoard(board));
+    if (targetBoard.toUpperCase() !== currentBoard) {
+      dispatch(setBoard(targetBoard));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [board]);
+  }, [targetBoard, currentBoard, dispatch]);
 
   const handleBoardChange = (e) => {
     const newBoard = e.target.value;
