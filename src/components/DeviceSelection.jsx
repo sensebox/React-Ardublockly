@@ -12,6 +12,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { setBoard } from "../actions/boardAction";
+import { BOARD_OPTIONS } from "./Blockly/helpers/boardOptions";
 
 const DeviceSelection = () => {
   const theme = useTheme();
@@ -23,32 +24,7 @@ const DeviceSelection = () => {
   const [open, setOpen] = useState(!currentBoard);
   const [selectedBoard, setSelectedBoard] = useState(currentBoard || "");
 
-  const boards = [
-    {
-      value: "MCU",
-      alt: "Sensebox MCU",
-      label: "senseBox MCU",
-      src: "/media/hardware/blockly_mcu.png",
-    },
-    {
-      value: "MCU-S2",
-      alt: "Sensebox ESP",
-      label: "senseBox MCU-S2",
-      src: "/media/hardware/blockly_esp.png",
-    },
-    {
-      value: "MCU:MINI",
-      alt: "Sensebox Mini",
-      label: "senseBox MCU:mini",
-      src: "/media/hardware/blockly_mini.png",
-    },
-    {
-      value: "MCU-EYE",
-      alt: "Sensebox ESP32S3",
-      label: "senseBox MCU Eye",
-      src: "/media/hardware/blockly_eye.png",
-    },
-  ];
+  const boards = BOARD_OPTIONS;
 
   const handleBoardSelect = (value) => {
     setSelectedBoard(value);
