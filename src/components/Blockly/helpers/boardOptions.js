@@ -16,12 +16,6 @@ export const BOARD_OPTIONS = [
     src: "/media/hardware/blockly_esp.png",
   },
   {
-    value: "MCU:MINI",
-    alt: "Sensebox Mini",
-    label: "senseBox MCU:mini",
-    src: "/media/hardware/blockly_mini.png",
-  },
-  {
     value: "MCU-EYE",
     alt: "Sensebox ESP32S3",
     label: "senseBox MCU Eye",
