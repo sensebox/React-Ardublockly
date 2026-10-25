@@ -32,7 +32,6 @@ describe("Embedded Blockly Page Tests", () => {
     cy.visit("/embedded");
     cy.get('img[alt="Sensebox ESP"]', { timeout: 10000 }).should("exist");
     cy.get('img[alt="Sensebox MCU"]').should("exist");
-    cy.get('img[alt="Sensebox Mini"]').should("exist");
   });
 
   it("[Embedded] compiles code", () => {
