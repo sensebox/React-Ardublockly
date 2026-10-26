@@ -39,7 +39,7 @@
     "dompurify": "^3.4.17",
     "esptool-js": "^0.7.0",
     "file-saver": "^2.0.5",
-    "framer-motion": "^13.4.4",
+    "framer-motion": "^14.6.0",
     "hast-util-to-parse5": "^8.0.1",
     "jszip": "^3.10.2",
     "markdown-it": "^15.0.3",
