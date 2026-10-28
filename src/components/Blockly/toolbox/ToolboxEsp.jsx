@@ -388,6 +388,20 @@ export const ToolboxEsp = () => {
             <Block type="sensebox_phyphox_channel" />
             <Block type="sensebox_phyphox_sendchannel" />
           </Category>
+          <Category
+            id="senseboxBikeBle"
+            name="senseBox:bike"
+            colour={getColour().senseboxble}
+          >
+            <Block type="sensebox_bike_ble_init" />
+            <Block type="sensebox_bike_ble_send" />
+            <Block type="sensebox_bike_ble_send">
+              <Field name="phenomenon">humidity</Field>
+            </Block>
+            <Block type="sensebox_bike_ble_send">
+              <Field name="phenomenon">finedust</Field>
+            </Block>
+          </Category>
         </Category>
 
         {/* -------- ESPNOW -------- */}

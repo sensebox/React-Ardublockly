@@ -1,4 +1,10 @@
 import * as Blockly from "blockly/core";
+import {
+  SENSEBOX_BIKE_PHENOMENA,
+  SENSEBOX_BIKE_SERVICE_UUID,
+  getSenseboxBikeCharacteristicVar,
+  getSenseboxBikePhenomenon,
+} from "@/components/Blockly/helpers/senseboxBikeBle";
 
 Blockly.Generator.Arduino.forBlock["sensebox_phyphox_init"] = function () {
   var name = this.getFieldValue("devicename");
@@ -144,5 +150,76 @@ Blockly.Generator.Arduino.forBlock["sensebox_phyphox_experiment_send"] =
 
 Blockly.Generator.Arduino.forBlock["sensebox_ble_init"] = function () {
   var code = "";
+  return code;
+};
+
+/**
+ * senseBox:bike BLE
+ *
+ *
+ */
+
+Blockly.Generator.Arduino.forBlock["sensebox_bike_ble_init"] = function () {
+  const deviceName = (this.getFieldValue("devicename") || "senseBox:bike")
+    .replace(/\\/g, "")
+    .replace(/"/g, "");
+
+  // Register one characteristic per phenomenon that is sent somewhere in the
+  // workspace. Characteristics must be added right after the service.
+  const usedPhenomena = [];
+  this.workspace
+    .getBlocksByType("sensebox_bike_ble_send", false)
+    .filter((block) => block.isEnabled())
+    .forEach((block) => {
+      const key = block.getFieldValue("phenomenon");
+      if (SENSEBOX_BIKE_PHENOMENA[key] && !usedPhenomena.includes(key)) {
+        usedPhenomena.push(key);
+      }
+    });
+
+  Blockly.Generator.Arduino.libraries_["library_senseBoxBLE"] =
+    "#include <SenseBoxBLE.h>";
+
+  let setup = `SenseBoxBLE::start("senseBox-BLE");\n`;
+  setup += `SenseBoxBLE::setName(String("${deviceName} [") + SenseBoxBLE::getMCUId() + "]");\n`;
+  setup += `SenseBoxBLE::addService("${SENSEBOX_BIKE_SERVICE_UUID}");`;
+  usedPhenomena.forEach((key) => {
+    const characteristicVar = getSenseboxBikeCharacteristicVar(key);
+    Blockly.Generator.Arduino.variables_[characteristicVar] =
+      `int ${characteristicVar} = 0;`;
+    setup += `\n${characteristicVar} = SenseBoxBLE::addCharacteristic("${SENSEBOX_BIKE_PHENOMENA[key].uuid}");`;
+  });
+  Blockly.Generator.Arduino.setupCode_["sensebox_bike_ble_init"] = setup;
+  Blockly.Generator.Arduino.loopCodeOnce_["sensebox_bike_ble_poll"] =
+    "SenseBoxBLE::poll();";
+  return "";
+};
+
+Blockly.Generator.Arduino.forBlock["sensebox_bike_ble_send"] = function () {
+  const key = this.getFieldValue("phenomenon");
+  const phenomenon = getSenseboxBikePhenomenon(key);
+  const characteristicVar = getSenseboxBikeCharacteristicVar(key);
+
+  Blockly.Generator.Arduino.libraries_["library_senseBoxBLE"] =
+    "#include <SenseBoxBLE.h>";
+  Blockly.Generator.Arduino.variables_[characteristicVar] =
+    `int ${characteristicVar} = 0;`;
+
+  // SenseBoxBLE::write() takes float references, so store the values first.
+  const valueNames = [];
+  let code = "{\n";
+  phenomenon.values.forEach((_, i) => {
+    const value =
+      Blockly.Generator.Arduino.valueToCode(
+        this,
+        "VALUE" + i,
+        Blockly.Generator.Arduino.ORDER_ATOMIC,
+      ) || "0";
+    const valueName = `bikeValue${i}`;
+    valueNames.push(valueName);
+    code += `  float ${valueName} = ${value};\n`;
+  });
+  code += `  SenseBoxBLE::write(${characteristicVar}, ${valueNames.join(", ")});\n`;
+  code += "}\n";
   return code;
 };
