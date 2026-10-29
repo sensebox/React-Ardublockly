@@ -44,6 +44,10 @@ export function buildTutorialPayload(state) {
       questionData: step.questionData || null,
       xml: step.xml || null,
       svg: step.svg || null,
+      board:
+        step.type === "blockly" || step.type === "blocklyExample"
+          ? step.board || null
+          : null,
       h5psrc: step.h5psrc || null,
       criteriaConfig:
         step.type === "evaluationPreparation"
