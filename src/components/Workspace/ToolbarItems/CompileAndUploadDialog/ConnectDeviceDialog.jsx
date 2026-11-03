@@ -26,13 +26,13 @@ import "./wizardAnimations.css";
  * It briefly explains that connecting obtains the required Web Serial
  * permissions and prepares the board (1200bps touch → bootloader mode) so the
  * user can upload straight from Blockly afterwards. The user only has to pick
- * "senseBox MCU-S2 ESP32-S2" in the first browser picker and "ESP32-S2" in the
+ * the selected board in the first browser picker and its bootloader in the
  * one-off bootloader picker.
  *
  * Phases:
  *  - intro:   explanation + connect button
  *  - working: connecting / preparing bootloader (spinner)
- *  - grant:   first-time only, pick the re-enumerated "ESP32-S2" bootloader port
+ *  - grant:   first-time only, pick the re-enumerated bootloader port
  *  - done:    board connected and prepared
  *  - error:   something went wrong (retry / close)
  */
@@ -45,6 +45,8 @@ function ConnectDeviceDialog({ open, onClose }) {
     error,
     log,
   } = useFlash();
+
+  const { profile } = useFlash();
 
   const [phase, setPhase] = useState("intro");
 
@@ -127,7 +129,10 @@ function ConnectDeviceDialog({ open, onClose }) {
           {Blockly.Msg.connect_dialog_grant_title}
         </h3>
         <p className="cau-step__text">
-          {Blockly.Msg.connect_dialog_grant_text}
+          {Blockly.Msg.connect_dialog_grant_text?.replace(
+            "%1",
+            profile?.bootloaderName ?? "senseBox",
+          )}
         </p>
         <button
           type="button"
@@ -135,7 +140,10 @@ function ConnectDeviceDialog({ open, onClose }) {
           style={{ marginTop: "20px" }}
           onClick={handleGrant}
         >
-          {Blockly.Msg.connect_dialog_grant_button}
+          {Blockly.Msg.connect_dialog_grant_button?.replace(
+            "%1",
+            profile?.bootloaderName ?? "senseBox",
+          )}
         </button>
       </div>
     );
@@ -163,8 +171,18 @@ function ConnectDeviceDialog({ open, onClose }) {
             lineHeight: 1.6,
           }}
         >
-          <li>{Blockly.Msg.connect_dialog_pick_device}</li>
-          <li>{Blockly.Msg.connect_dialog_pick_bootloader}</li>
+          <li>
+            {Blockly.Msg.connect_dialog_pick_device?.replace(
+              "%1",
+              profile?.deviceName ?? "senseBox",
+            )}
+          </li>
+          <li>
+            {Blockly.Msg.connect_dialog_pick_bootloader?.replace(
+              "%1",
+              profile?.bootloaderName ?? "senseBox",
+            )}
+          </li>
         </ul>
         <button
           type="button"

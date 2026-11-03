@@ -1,5 +1,3 @@
-import { ESPLoader, Transport } from "esptool-js";
-
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // senseBox MCU-S2 (ESP32-S2) USB identifiers. After the 1200bps touch the board
@@ -75,6 +73,25 @@ async function softResetViaRegister(loader) {
 }
 
 /**
+ * Leave USB download mode on the MCU Eye and boot the uploaded application.
+ * Register addresses and watchdog sequence follow Espressif's ESP32S3ROM
+ * hard_reset/watchdog_reset in esptool/targets/esp32s3.py. A watchdog reset
+ * also works when the native USB connection cannot pulse the physical EN pin.
+ */
+export async function resetEsp32S3(loader) {
+  if (loader.chip.CHIP_NAME !== "ESP32-S3") {
+    throw new Error("ESP32-S3 reset requested for a different chip.");
+  }
+  // Clear only FORCE_DOWNLOAD_BOOT, preserving the other RTC option bits.
+  await loader.writeReg(0x6000812c, 0, 1);
+  await loader.writeReg(0x600080b0, 0x50d83aa1); // unlock RTC watchdog
+  await loader.writeReg(0x6000809c, 2000); // allow commands to finish before reset
+  await loader.writeReg(0x60008098, 0xd0000102); // enable RTC system reset
+  await loader.writeReg(0x600080b0, 0); // lock watchdog configuration
+  await sleep(500);
+}
+
+/**
  * Puts an ESP32-S2 with native USB into the ROM download mode without the user
  * having to press BOOT + RESET, mirroring the Arduino IDE behaviour
  * (`use_1200bps_touch=true`). Opening the port at 1200 baud is detected by the
@@ -128,6 +145,11 @@ export async function touchTo1200bps(port) {
       }
 
       await sleep(250);
+      try {
+        await port.close();
+      } catch {
+        // The device may have disconnected during the reset.
+      }
       return; // Success
     } catch (err) {
       lastError = err;
@@ -187,7 +209,11 @@ export async function touchTo1200bps(port) {
  * @param {number} [timeoutMs] How long to wait for the new port.
  * @returns {Promise<SerialPort|null>}
  */
-export function waitForBootloaderPort(knownPorts, timeoutMs = 8000) {
+export function waitForBootloaderPort(
+  knownPorts,
+  timeoutMs = 8000,
+  matchesBootloader = isRomBootloaderPort,
+) {
   return new Promise((resolve) => {
     const known = new Set(knownPorts);
     let settled = false;
@@ -208,7 +234,7 @@ export function waitForBootloaderPort(knownPorts, timeoutMs = 8000) {
     // matching bootloader port here is guaranteed to be live, not a stale entry.
     const onConnect = (event) => {
       const candidate = event.target;
-      if (isRomBootloaderPort(candidate) || !known.has(candidate)) {
+      if (matchesBootloader(candidate)) {
         finish(candidate);
       }
     };
@@ -221,14 +247,17 @@ export function waitForBootloaderPort(knownPorts, timeoutMs = 8000) {
       const ports = await navigator.serial.getPorts();
       const bootloader = ports.find(
         (candidate) =>
-          isRomBootloaderPort(candidate) && candidate.connected === true,
+          matchesBootloader(candidate) && candidate.connected === true,
       );
       if (bootloader) {
         finish(bootloader);
         return;
       }
       const fresh = ports.find(
-        (candidate) => !known.has(candidate) && candidate.connected !== false,
+        (candidate) =>
+          matchesBootloader(candidate) &&
+          !known.has(candidate) &&
+          candidate.connected !== false,
       );
       if (fresh) finish(fresh);
     }, 400);
@@ -263,9 +292,11 @@ export async function flashBinary({
   flashSize = "keep",
   eraseAll = false,
   usingUsbOtg = false,
+  expectedChip,
   onLog,
   onProgress,
 }) {
+  const { ESPLoader, Transport } = await import("esptool-js");
   const terminal = {
     clean: () => {},
     write: (data) => onLog?.(data),
@@ -278,6 +309,11 @@ export async function flashBinary({
   try {
     // Connects, syncs and detects the chip.
     const chip = await loader.main();
+    if (expectedChip && loader.chip.CHIP_NAME !== expectedChip) {
+      throw new Error(
+        `Expected ${expectedChip}, connected to ${loader.chip.CHIP_NAME}.`,
+      );
+    }
 
     await loader.writeFlash({
       fileArray,
@@ -297,7 +333,10 @@ export async function flashBinary({
     // has the classic auto-reset circuit, so pulsing EN via the RTS line resets
     // it just like the Arduino IDE does. (esptool-js' own "hard_reset" only
     // releases RTS and never asserts it, which is why it never reset the board.)
-    if (usingUsbOtg) {
+    if (usingUsbOtg && loader.chip.CHIP_NAME === "ESP32-S3") {
+      onLog?.("Restarting MCU Eye into the uploaded program...\n");
+      await resetEsp32S3(loader);
+    } else if (usingUsbOtg) {
       try {
         await hardResetViaRts(transport);
       } catch {
@@ -307,7 +346,11 @@ export async function flashBinary({
       // Fallback for boards without an RTS->EN circuit: ask the chip to reset
       // itself in software. Harmless if the pulse above already restarted it.
       try {
-        await softResetViaRegister(loader);
+        if (loader.chip.CHIP_NAME === "ESP32-S2") {
+          await softResetViaRegister(loader);
+        } else {
+          await loader.after("hard_reset", true);
+        }
       } catch {
         // Ignore – the chip is already rebooting.
       }
