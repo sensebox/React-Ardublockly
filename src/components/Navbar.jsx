@@ -211,7 +211,7 @@ const Navbar = () => {
               justifyContent: "center",
             }}
           >
-            {isHome && (
+            {(isHome || location.pathname === "/qoool") && (
               <div style={{ padding: "12px" }}>
                 <Button
                   id="navbar-selected-board" // 👈 eindeutig für Cypress
@@ -253,7 +253,7 @@ const Navbar = () => {
               </div>
             )}
 
-            {(isHome || isTeachable) && (
+            {(isHome || isTeachable || location.pathname === "/qoool") && (
               <div style={{ padding: "12px" }}>
                 <Button
                   ref={langRef}
@@ -516,6 +516,12 @@ const Navbar = () => {
               restriction: isAuthenticated,
             },
             { text: "Code Editor", icon: faCode, link: "/codeeditor" },
+            {
+              text: "QOOOL Lab",
+              icon: faLightbulb,
+              link: "/qoool",
+              restriction: selectedBoard === "MCU-S2",
+            },
             {
               text: Blockly.Msg.navbar_teachablesensebox,
               icon: faEye,
