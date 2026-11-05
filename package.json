@@ -28,6 +28,7 @@
     "@mui/lab": "^5.0.0-alpha.110",
     "@mui/material": "^5.10.16",
     "@mui/styles": "^5.10.16",
+    "@sensebox/flash-tool": "^1.1.1",
     "@tensorflow/tfjs": "^4.22.0",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^15.0.5",
