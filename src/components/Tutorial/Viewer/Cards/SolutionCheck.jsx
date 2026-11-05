@@ -264,7 +264,7 @@ export default function SolutionCheck({
               onClick={() => setDialogOpen(true)}
               startIcon={<FontAwesomeIcon icon={faClipboardCheck} />}
             >
-              Compile
+              Kompilieren
             </Button>
 
             <CompilationDialog

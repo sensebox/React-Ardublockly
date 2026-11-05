@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { buildTutorialPayload } from "../utils/tutorialPayload";
 import { saveTutorial } from "../services/tutorial.service";
+import { findEvaluationStepsWithoutPreparation } from "../utils/validation";
 
 const deepEqual = (obj1, obj2) => JSON.stringify(obj1) === JSON.stringify(obj2);
 
@@ -17,6 +18,7 @@ export function useTutorialAutosave({
   useEffect(() => {
     if (!enabled || isSaving.current) return;
     if (deepEqual(state, lastSaved.current)) return;
+    if (findEvaluationStepsWithoutPreparation(state.steps).length > 0) return;
 
     const run = async () => {
       isSaving.current = true;
