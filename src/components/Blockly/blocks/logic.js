@@ -29,6 +29,11 @@ const onIfButtonClick = function (field, add) {
     const mutation = block.mutationToDom();
     return mutation ? Blockly.Xml.domToText(mutation) : "";
   };
+  // An open gear bubble would overwrite the change on its next edit.
+  const mutatorIcon = block.getIcon(Blockly.icons.MutatorIcon.TYPE);
+  if (mutatorIcon && mutatorIcon.bubbleIsVisible()) {
+    mutatorIcon.setBubbleVisible(false);
+  }
   Blockly.Events.setGroup(true);
   const oldMutation = mutationText();
   if (add) {
@@ -68,6 +73,12 @@ Blockly.Blocks["controls_if"] = {
     );
     this.setPreviousStatement(true);
     this.setNextStatement(true);
+    this.setMutator(
+      new Blockly.icons.MutatorIcon(
+        ["controls_if_elseif", "controls_if_else"],
+        this,
+      ),
+    );
     this.setTooltip(Blockly.Msg.CONTROLS_IF_TOOLTIP_1);
     this.elseifCount_ = 0;
     this.elseCount_ = 0;
@@ -100,6 +111,113 @@ Blockly.Blocks["controls_if"] = {
     this.elseifCount_ = parseInt(xmlElement.getAttribute("elseif"), 10) || 0;
     this.elseCount_ = parseInt(xmlElement.getAttribute("else"), 10) ? 1 : 0;
     this.updateShape_();
+  },
+  /**
+   * Populate the mutator's dialog with this block's components.
+   * @param {!Blockly.Workspace} workspace Mutator's workspace.
+   * @return {!Blockly.Block} Root block in mutator.
+   * @this Blockly.Block
+   */
+  decompose: function (workspace) {
+    var containerBlock = workspace.newBlock("controls_if_if");
+    containerBlock.initSvg();
+    var connection = containerBlock.nextConnection;
+    for (var i = 1; i <= this.elseifCount_; i++) {
+      var elseifBlock = workspace.newBlock("controls_if_elseif");
+      elseifBlock.initSvg();
+      connection.connect(elseifBlock.previousConnection);
+      connection = elseifBlock.nextConnection;
+    }
+    if (this.elseCount_) {
+      var elseBlock = workspace.newBlock("controls_if_else");
+      elseBlock.initSvg();
+      connection.connect(elseBlock.previousConnection);
+    }
+    return containerBlock;
+  },
+  /**
+   * Reconfigure this block based on the mutator dialog's components.
+   * @param {!Blockly.Block} containerBlock Root block in mutator.
+   * @this Blockly.Block
+   */
+  compose: function (containerBlock) {
+    var clauseBlock = containerBlock.nextConnection.targetBlock();
+    // Count number of inputs.
+    this.elseifCount_ = 0;
+    this.elseCount_ = 0;
+    var valueConnections = [null];
+    var statementConnections = [null];
+    var elseStatementConnection = null;
+    while (clauseBlock) {
+      switch (clauseBlock.type) {
+        case "controls_if_elseif":
+          this.elseifCount_++;
+          valueConnections.push(clauseBlock.valueConnection_);
+          statementConnections.push(clauseBlock.statementConnection_);
+          break;
+        case "controls_if_else":
+          this.elseCount_++;
+          elseStatementConnection = clauseBlock.statementConnection_;
+          break;
+        default:
+          throw new Error("Unknown block type.");
+      }
+      clauseBlock =
+        clauseBlock.nextConnection && clauseBlock.nextConnection.targetBlock();
+    }
+    // Rebuild all branches, the mutator may have reordered them.
+    if (this.getInput("ELSE")) {
+      this.removeInput("ELSE");
+    }
+    for (var j = 1; this.getInput("IF" + j); j++) {
+      this.removeInput("IF" + j);
+      this.removeInput("DO" + j);
+    }
+    this.updateShape_();
+    // Reconnect any child blocks.
+    for (var i = 1; i <= this.elseifCount_; i++) {
+      if (valueConnections[i]) {
+        valueConnections[i].reconnect(this, "IF" + i);
+      }
+      if (statementConnections[i]) {
+        statementConnections[i].reconnect(this, "DO" + i);
+      }
+    }
+    if (elseStatementConnection) {
+      elseStatementConnection.reconnect(this, "ELSE");
+    }
+  },
+  /**
+   * Store pointers to any connected child blocks.
+   * @param {!Blockly.Block} containerBlock Root block in mutator.
+   * @this Blockly.Block
+   */
+  saveConnections: function (containerBlock) {
+    var clauseBlock = containerBlock.nextConnection.targetBlock();
+    var i = 1;
+    var inputDo;
+    while (clauseBlock) {
+      switch (clauseBlock.type) {
+        case "controls_if_elseif":
+          var inputIf = this.getInput("IF" + i);
+          inputDo = this.getInput("DO" + i);
+          clauseBlock.valueConnection_ =
+            inputIf && inputIf.connection.targetConnection;
+          clauseBlock.statementConnection_ =
+            inputDo && inputDo.connection.targetConnection;
+          i++;
+          break;
+        case "controls_if_else":
+          inputDo = this.getInput("ELSE");
+          clauseBlock.statementConnection_ =
+            inputDo && inputDo.connection.targetConnection;
+          break;
+        default:
+          throw new Error("Unknown block type.");
+      }
+      clauseBlock =
+        clauseBlock.nextConnection && clauseBlock.nextConnection.targetBlock();
+    }
   },
   /**
    * Plus button: the first click adds the "else" branch, every further click
