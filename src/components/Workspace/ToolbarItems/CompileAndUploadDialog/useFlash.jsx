@@ -15,7 +15,6 @@ import {
   flashBinary,
   touchTo1200bps,
   waitForBootloaderPort,
-  SENSEBOX_USB_VENDOR_ID,
 } from "./esptoolService";
 import {
   setDevicePort,
@@ -24,49 +23,8 @@ import {
   clearBootloaderPortPrepared,
 } from "../../../../actions/boardAction";
 
-/**
- * Maps the board selected in the workspace to the identifier expected by the
- * senseBox compiler service – mirrors the mapping used in CompilationDialog.
- *
- * @param {string} selectedBoard Board identifier from the Redux store.
- * @returns {string} Compiler board identifier.
- */
-function resolveCompilerBoard(selectedBoard) {
-  switch (selectedBoard) {
-    case "MCU":
-    case "MCU:MINI":
-      return "sensebox-mcu";
-    case "MCU-S2":
-      return "sensebox-esp32s2";
-    default:
-      return "sensebox-esp32s2";
-  }
-}
-
-/**
- * Flash parameters for the senseBox MCU-S2 (ESP32-S2), chosen to match the
- * Arduino IDE board definition (sensebox_mcu_esp32s2):
- *
- *   build.flash_mode = dio
- *   build.flash_freq = 80m
- *   build.flash_size = 4MB
- *
- * The senseBox compiler returns ONLY the compiled application image (not a
- * merged binary), so it is written to the application partition offset 0x10000
- * (app0 in the default/tinyuf2 partition scheme) – exactly where the Arduino
- * IDE uploads the sketch. The bootloader (0x1000), partition table (0x8000) and
- * boot_app0 (0xe000) already live on the device and are left untouched.
- */
-const FLASH_ADDRESS = 0x10000;
-const FLASH_MODE = "dio";
-const FLASH_FREQ = "80m";
-const FLASH_SIZE = "4MB";
-// The MCU-S2 uses Espressif's native USB-CDC (VID 0x303A). On such a connection
-// the baud rate is irrelevant for throughput, and requesting a higher rate makes
-// esptool-js call changeBaud(), which re-initialises the USB-CDC stream and
-// corrupts the connection ("Serial data stream stopped / Unable to verify flash
-// chip connection"). Staying at the ROM baud (115200) skips changeBaud entirely.
-const UPLOAD_BAUDRATE = 115200;
+import { getBoardProfile, portFilters, matchesPort } from "./boardProfiles";
+import { flashSamdBinary } from "./samdService";
 
 const FlashContext = createContext(null);
 
@@ -112,7 +70,7 @@ export function useFlash() {
  */
 export function FlashProvider({ children }) {
   const dispatch = useDispatch();
-  const supported =
+  const serialSupported =
     typeof navigator !== "undefined" && navigator.serial !== undefined;
 
   const [port, setPort] = useState(null);
@@ -141,7 +99,11 @@ export function FlashProvider({ children }) {
   const savedDeviceLabel = useSelector((state) => state.board.deviceLabel);
   const filename = useSelector((state) => state.workspace.name) || "sketch";
 
-  const board = resolveCompilerBoard(selectedBoard);
+  const selectedBoardRef = useRef(selectedBoard);
+  selectedBoardRef.current = selectedBoard;
+  const profile = getBoardProfile(selectedBoard);
+  const supported = serialSupported && Boolean(profile);
+  const board = profile?.compilerBoard;
 
   // Synchronous re-entrancy lock for the whole "touch + flash" critical
   // section. Without it, two overlapping invocations (e.g. an auto-upload effect
@@ -230,8 +192,11 @@ export function FlashProvider({ children }) {
     setError(null);
     try {
       const selectedPort = await navigator.serial.requestPort({
-        filters: [{ usbVendorId: SENSEBOX_USB_VENDOR_ID }],
+        filters: portFilters(profile),
       });
+      if (selectedBoardRef.current !== selectedBoard) return null;
+      setBootloaderPort(null);
+      setNeedsBootloaderPermission(false);
       setPort(selectedPort);
 
       const info = selectedPort.getInfo?.() ?? {};
@@ -253,7 +218,7 @@ export function FlashProvider({ children }) {
       }
       return null;
     }
-  }, [dispatch]);
+  }, [dispatch, profile, selectedBoard]);
 
   // Try to reconnect to a previously saved device
   const reconnectSavedDevice = useCallback(async () => {
@@ -262,7 +227,7 @@ export function FlashProvider({ children }) {
       const ports = await navigator.serial.getPorts();
       const sensboxPorts = ports.filter((p) => {
         try {
-          return p.getInfo?.()?.usbVendorId === SENSEBOX_USB_VENDOR_ID;
+          return matchesPort(p, profile);
         } catch {
           return false;
         }
@@ -285,7 +250,7 @@ export function FlashProvider({ children }) {
     } catch (err) {
       setError(err?.message || String(err));
     }
-  }, [selectDevice]);
+  }, [selectDevice, profile]);
 
   // Phase 1 of bootloader preparation: perform the 1200bps touch and try to
   // pick up an ALREADY-PERMITTED ROM bootloader port.
@@ -309,6 +274,11 @@ export function FlashProvider({ children }) {
       setNeedsBootloaderPermission(false);
       appendLog(""); // Clear previous logs
       try {
+        if (matchesPort(activePort, profile, true)) {
+          setBootloaderPort(activePort);
+          dispatch(setBootloaderPortPrepared());
+          return;
+        }
         appendLog("Vorbereitung des Bootloader-Modus ...\n");
         const knownPorts = await navigator.serial.getPorts();
         appendLog(`Bekannte Ports: ${knownPorts.length}\n`);
@@ -330,7 +300,11 @@ export function FlashProvider({ children }) {
         // Look for a bootloader port we already have permission for (subsequent
         // uploads, or a grant that survived from a previous session).
         appendLog("Suche nach bereits genehmigtem Bootloader-Port ...\n");
-        const newPort = await waitForBootloaderPort(knownPorts, 3000);
+        const newPort = await waitForBootloaderPort(
+          knownPorts,
+          3000,
+          (candidate) => matchesPort(candidate, profile, true),
+        );
 
         if (newPort) {
           setBootloaderPort(newPort);
@@ -355,7 +329,7 @@ export function FlashProvider({ children }) {
         flashLockRef.current = false;
       }
     },
-    [port, dispatch, appendLog],
+    [port, dispatch, appendLog, profile],
   );
 
   /**
@@ -387,22 +361,42 @@ export function FlashProvider({ children }) {
       setError(null);
       try {
         appendLog("Kompiliere Sketch ...\n");
+        if (selectedBoardRef.current !== selectedBoard) {
+          throw new Error(
+            "Board changed. Please connect the selected board again.",
+          );
+        }
         const firmware = await compile();
+        if (selectedBoardRef.current !== selectedBoard) {
+          throw new Error(
+            "Board changed during compilation. Please reconnect.",
+          );
+        }
         appendLog(`Binärdatei erhalten (${firmware.length} Bytes).\n`);
 
         appendLog("Starte Upload auf den Mikrocontroller ...\n");
-        await flashBinary({
-          port: flashPort,
-          fileArray: [{ data: firmware, address: FLASH_ADDRESS }],
-          baudrate: UPLOAD_BAUDRATE,
-          flashMode: FLASH_MODE,
-          flashFreq: FLASH_FREQ,
-          flashSize: FLASH_SIZE,
-          eraseAll: false,
-          usingUsbOtg: true,
-          onLog: appendLog,
-          onProgress: setProgress,
-        });
+        if (profile.backend === "samd") {
+          await flashSamdBinary({
+            port: flashPort,
+            firmware,
+            onLog: appendLog,
+            onProgress: setProgress,
+          });
+        } else {
+          await flashBinary({
+            port: flashPort,
+            fileArray: [{ data: firmware, address: profile.address }],
+            baudrate: 115200,
+            flashMode: profile.flashMode,
+            flashFreq: profile.flashFreq,
+            flashSize: profile.flashSize,
+            expectedChip: profile.chip,
+            eraseAll: false,
+            usingUsbOtg: true,
+            onLog: appendLog,
+            onProgress: setProgress,
+          });
+        }
 
         setProgress(100);
         setStatus("done");
@@ -417,7 +411,7 @@ export function FlashProvider({ children }) {
         setStatus("error");
       }
     },
-    [compile, appendLog],
+    [compile, appendLog, profile, selectedBoard],
   );
 
   // Phase 2 of bootloader preparation: grant access to the re-enumerated ROM
@@ -434,7 +428,7 @@ export function FlashProvider({ children }) {
       try {
         appendLog("Frage Genehmigung für den Bootloader-Port an ...\n");
         const authorizedPort = await navigator.serial.requestPort({
-          filters: [{ usbVendorId: SENSEBOX_USB_VENDOR_ID }],
+          filters: portFilters(profile, true),
         });
         setBootloaderPort(authorizedPort);
         setNeedsBootloaderPermission(false);
@@ -461,7 +455,7 @@ export function FlashProvider({ children }) {
         flashLockRef.current = false;
       }
     },
-    [dispatch, appendLog, runCompileAndFlash],
+    [dispatch, appendLog, runCompileAndFlash, profile],
   );
 
   const startFlash = useCallback(async () => {
@@ -497,10 +491,7 @@ export function FlashProvider({ children }) {
       let touchPort = port;
       const livePort = knownPorts.find((p) => {
         try {
-          return (
-            p.getInfo?.()?.usbVendorId === SENSEBOX_USB_VENDOR_ID &&
-            p.connected === true
-          );
+          return matchesPort(p, profile) && p.connected === true;
         } catch {
           return false;
         }
@@ -509,10 +500,18 @@ export function FlashProvider({ children }) {
         touchPort = livePort;
         setPort(livePort);
       }
+      if (matchesPort(touchPort, profile, true)) {
+        await runCompileAndFlash(touchPort);
+        return;
+      }
       appendLog("Versetze Board in den Download-Modus (1200bps touch) ...\n");
       await touchTo1200bps(touchPort);
       appendLog("Warte auf den Bootloader-Port ...\n");
-      const newPort = await waitForBootloaderPort(knownPorts, 3000);
+      const newPort = await waitForBootloaderPort(
+        knownPorts,
+        3000,
+        (candidate) => matchesPort(candidate, profile, true),
+      );
 
       if (newPort) {
         setBootloaderPort(newPort);
@@ -537,7 +536,7 @@ export function FlashProvider({ children }) {
     } finally {
       flashLockRef.current = false;
     }
-  }, [port, bootloaderPort, runCompileAndFlash, appendLog, dispatch]);
+  }, [port, bootloaderPort, runCompileAndFlash, appendLog, dispatch, profile]);
 
   const resetDevice = useCallback(() => {
     setPort(null);
@@ -549,6 +548,14 @@ export function FlashProvider({ children }) {
     dispatch(clearDevicePort());
     dispatch(clearBootloaderPortPrepared());
   }, [dispatch]);
+
+  // A port selected for another board must never receive this board's firmware.
+  useEffect(() => {
+    resetDevice();
+    setBinary(null);
+    setCompileStatus("idle");
+    setCompileError(null);
+  }, [selectedBoard, resetDevice]);
 
   // Clears the transient flashing state (status/progress/log/error) without
   // touching the device connection. Used when the upload progress dialog closes.
@@ -563,6 +570,7 @@ export function FlashProvider({ children }) {
   const value = useMemo(
     () => ({
       supported,
+      profile,
       connected: Boolean(port),
       bootloaderReady: Boolean(bootloaderPort),
       port,
@@ -587,6 +595,7 @@ export function FlashProvider({ children }) {
     }),
     [
       supported,
+      profile,
       port,
       bootloaderPort,
       deviceLabel,

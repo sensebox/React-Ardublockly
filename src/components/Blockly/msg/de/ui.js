@@ -391,15 +391,15 @@ export const UI = {
   connect_dialog_title: "senseBox verbinden",
   connect_dialog_intro:
     "Mit „senseBox verbinden“ holt der Browser die nötigen Berechtigungen ein und bereitet dein Board vor, damit du anschließend direkt aus Blockly hochladen kannst.",
-  connect_dialog_pick_device: "Wähle im Auswahlfenster „MCU-S2 ESP32-S2“ aus.",
+  connect_dialog_pick_device: "Wähle im Auswahlfenster „%1“ aus.",
   connect_dialog_pick_bootloader:
-    "Beim Bootloader-Schritt wähle anschließend „ESP32-S2“ aus.",
+    "Beim Bootloader-Schritt wähle anschließend „%1“ aus.",
   connect_dialog_button: "Verbinden",
   connect_dialog_working: "Verbinde und bereite Board vor …",
   connect_dialog_grant_title: "Bootloader-Berechtigung",
   connect_dialog_grant_text:
-    "Das Board befindet sich jetzt im Download-Modus und meldet sich als neues USB-Gerät. Bitte wähle einmalig „ESP32-S2“ aus, um die Berechtigung zu erteilen.",
-  connect_dialog_grant_button: "ESP32-S2 auswählen",
+    "Das Board befindet sich jetzt im Download-Modus und meldet sich als neues USB-Gerät. Bitte wähle einmalig „%1“ aus, um die Berechtigung zu erteilen.",
+  connect_dialog_grant_button: "%1 auswählen",
   connect_dialog_done_title: "Gerät verbunden!",
   connect_dialog_done_text:
     "Drücke jetzt einfach den Kompilieren-Button, um direkt aus Blockly hochzuladen.",
