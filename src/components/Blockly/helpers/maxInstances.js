@@ -15,6 +15,7 @@ const maxInstances = {
   sensebox_phyphox_init: 1,
   sensebox_phyphox_experiment: 1,
   sensebox_phyphox_experiment_send: 1,
+  sensebox_bike_ble_init: 1,
   sensebox_ethernet: 1,
 };
 
@@ -30,6 +31,7 @@ const maxInstancesEsp = {
   sensebox_phyphox_init: 1,
   sensebox_phyphox_experiment: 1,
   sensebox_phyphox_experiment_send: 1,
+  sensebox_bike_ble_init: 1,
   sensebox_ethernet: 0,
 };
 

@@ -41,4 +41,48 @@ export const BLE = {
     "Sends a reading to the selected channel",
   sensebox_phyphox_experiment_send_tooltip:
     "Sends the measured values to the Phyphox App",
+
+  /**
+   * senseBox:bike BLE
+   */
+  sensebox_bike_ble_init: "Start senseBox:bike Bluetooth",
+  sensebox_bike_ble_devicename: "Device name",
+  sensebox_bike_ble_init_tooltip:
+    "Starts Bluetooth so the senseBox:bike app can connect to your senseBox MCU-S2. The app lists the device by its name and the ID of your MCU, e.g. *senseBox:bike [1A2B3C]*. Place this block in *Setup()*.",
+  sensebox_bike_ble_send: "Send to senseBox:bike app:",
+  sensebox_bike_ble_send_tooltip:
+    "Sends readings of your own sensors to the senseBox:bike app as the selected phenomenon. Some phenomena consist of several values (e.g. fine dust: PM1, PM2.5, PM4 and PM10) that are always sent together. Requires the block *Start senseBox:bike Bluetooth*.",
+  sensebox_bike_ble_missing_init:
+    "Add the block *Start senseBox:bike Bluetooth* to Setup() so the values are sent.",
+  sensebox_bike_ble_helpurl:
+    "https://github.com/sensebox/senseBox-bike-Arduino",
+  sensebox_bike_ble_temperature: "Temperature",
+  sensebox_bike_ble_humidity: "Rel. humidity",
+  sensebox_bike_ble_finedust: "Fine dust",
+  sensebox_bike_ble_acceleration: "Acceleration",
+  sensebox_bike_ble_distance: "Distance left",
+  sensebox_bike_ble_distance_right: "Distance right",
+  sensebox_bike_ble_overtaking: "Overtaking",
+  sensebox_bike_ble_surface: "Surface classification",
+  sensebox_bike_ble_anomaly: "Surface anomaly",
+  sensebox_bike_ble_battery: "Battery level",
+  sensebox_bike_ble_value_temperature: "Temperature in °C",
+  sensebox_bike_ble_value_humidity: "Rel. humidity in %",
+  sensebox_bike_ble_value_pm1: "PM1 in µg/m³",
+  sensebox_bike_ble_value_pm25: "PM2.5 in µg/m³",
+  sensebox_bike_ble_value_pm4: "PM4 in µg/m³",
+  sensebox_bike_ble_value_pm10: "PM10 in µg/m³",
+  sensebox_bike_ble_value_x: "X",
+  sensebox_bike_ble_value_y: "Y",
+  sensebox_bike_ble_value_z: "Z",
+  sensebox_bike_ble_value_distance: "Distance in cm",
+  sensebox_bike_ble_value_overtaking_car: "Probability car",
+  sensebox_bike_ble_value_overtaking_bike: "Probability bike",
+  sensebox_bike_ble_value_asphalt: "Asphalt",
+  sensebox_bike_ble_value_compacted: "Compacted",
+  sensebox_bike_ble_value_paving: "Paving",
+  sensebox_bike_ble_value_sett: "Sett",
+  sensebox_bike_ble_value_standing: "Standing",
+  sensebox_bike_ble_value_anomaly: "Anomaly",
+  sensebox_bike_ble_value_battery: "Battery level in %",
 };
