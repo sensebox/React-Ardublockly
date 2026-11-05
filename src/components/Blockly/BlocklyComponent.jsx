@@ -20,6 +20,7 @@ import {
   ScrollMetricsManager,
 } from "@blockly/plugin-scroll-options";
 import { ensureStartBlock } from "./helpers/ensureStartBlock";
+import { expandCollapsedBlocks } from "./helpers/expandCollapsedBlocks";
 
 import { Card } from "@mui/material";
 
@@ -49,6 +50,7 @@ export function BlocklyComponent({ initialXml, style, maxInstances, ...rest }) {
       },
       maxInstances,
       ...rest,
+      collapse: false,
     };
 
     // Only apply mobile layout options when in embedded mode
@@ -125,6 +127,7 @@ export function BlocklyComponent({ initialXml, style, maxInstances, ...rest }) {
       }
     };
     ws.addChangeListener(validateVar);
+    const expandListener = expandCollapsedBlocks(ws);
 
     // ScrollOptions plugin
     const scrollPlugin = new ScrollOptions(ws);
@@ -149,6 +152,7 @@ export function BlocklyComponent({ initialXml, style, maxInstances, ...rest }) {
     // Cleanup on unmount
     return () => {
       if (ws && validateVar) ws.removeChangeListener(validateVar);
+      if (ws && expandListener) ws.removeChangeListener(expandListener);
       // dispose workspace (plugins tied to workspace are disposed automatically)
       ws?.dispose();
     };
