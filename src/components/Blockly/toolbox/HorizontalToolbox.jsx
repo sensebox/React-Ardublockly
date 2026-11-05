@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import "@blockly/block-plus-minus";
-import { TypedVariableModal } from "@blockly/plugin-typed-variable-modal";
+import TypedVariableDialog from "../TypedVariableDialog";
 import * as Blockly from "blockly/core";
 import { useSelector } from "react-redux";
 import { ToolboxMcu } from "./ToolboxMcu";
@@ -30,18 +30,6 @@ const HorizontalToolbox = ({ workspace, toolbox }) => {
       "CREATE_TYPED_VARIABLE",
       createFlyout,
     );
-
-    // Init modal
-    const typedVarModal = new TypedVariableModal(workspace, "callbackName", [
-      [Blockly.Msg.variable_NUMBER, "int"],
-      [Blockly.Msg.variable_LONG, "long"],
-      [Blockly.Msg.variable_DECIMAL, "float"],
-      [Blockly.Msg.variables_TEXT, "String"],
-      [Blockly.Msg.variables_CHARACTER, "char"],
-      [Blockly.Msg.variables_BOOLEAN, "boolean"],
-      [Blockly.Msg.variable_BITMAP, "bitmap"],
-    ]);
-    typedVarModal.init();
 
     // Update toolbox only when board or language actually changes, not on initial mount
     const boardChanged =
@@ -84,21 +72,26 @@ const HorizontalToolbox = ({ workspace, toolbox }) => {
   }, [workspace, toolbox, selectedBoard, language, aiModel?.code]);
 
   return React.createElement(
-    "xml",
-    {
-      is: "blockly",
-      xmlns: "https://developers.google.com/blockly/xml",
-      id: "blockly",
-      style: { display: "none" },
-      ref: toolbox,
-      class: "embedded-mode",
-    },
-    selectedBoard === "MCU" || selectedBoard === "MCU:mini" ? (
-      <ToolboxMcu />
-    ) : selectedBoard === "MCU-S2" ? (
-      <ToolboxEsp />
-    ) : (
-      <ToolboxEye />
+    React.Fragment,
+    null,
+    React.createElement(TypedVariableDialog, { workspace }),
+    React.createElement(
+      "xml",
+      {
+        is: "blockly",
+        xmlns: "https://developers.google.com/blockly/xml",
+        id: "blockly",
+        style: { display: "none" },
+        ref: toolbox,
+        class: "embedded-mode",
+      },
+      selectedBoard === "MCU" || selectedBoard === "MCU:mini" ? (
+        <ToolboxMcu />
+      ) : selectedBoard === "MCU-S2" ? (
+        <ToolboxEsp />
+      ) : (
+        <ToolboxEye />
+      ),
     ),
   );
 };
