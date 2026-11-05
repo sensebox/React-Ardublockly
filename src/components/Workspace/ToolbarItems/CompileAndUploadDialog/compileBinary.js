@@ -7,6 +7,7 @@
  * @param {string} params.sketch      Arduino source code to compile.
  * @param {string} params.board       Compiler board identifier (e.g. "sensebox-esp32s2").
  * @param {string} [params.projectId] Optional session/project id.
+ * @param {AbortSignal} [params.signal] Optional signal to cancel the request.
  * @returns {Promise<string>} The sketch ID from the compiler.
  */
 export async function compileToSketchId({
@@ -14,11 +15,13 @@ export async function compileToSketchId({
   sketch,
   board,
   projectId,
+  signal,
 }) {
   const compileResponse = await fetch(`${compilerUrl}/compile`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ sketch, board, projectId }),
+    signal,
   });
 
   const compileData = await compileResponse.json();
@@ -44,6 +47,7 @@ export async function compileToSketchId({
  * @param {string} params.board       Compiler board identifier (e.g. "sensebox-esp32s2").
  * @param {string} [params.projectId] Optional session/project id.
  * @param {string} [params.filename]  Name used for the downloaded binary.
+ * @param {AbortSignal} [params.signal] Optional signal to cancel the requests.
  * @returns {Promise<Uint8Array>} The compiled firmware binary.
  */
 export async function compileToBinary({
@@ -52,18 +56,21 @@ export async function compileToBinary({
   board,
   projectId,
   filename = "sketch",
+  signal,
 }) {
   const sketchId = await compileToSketchId({
     compilerUrl,
     sketch,
     board,
     projectId,
+    signal,
   });
 
   const downloadResponse = await fetch(
     `${compilerUrl}/download?id=${sketchId}&board=${board}&filename=${encodeURIComponent(
       filename,
     )}`,
+    { signal },
   );
   if (!downloadResponse.ok) {
     throw new Error("Die Binärdatei konnte nicht heruntergeladen werden.");

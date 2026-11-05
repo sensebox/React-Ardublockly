@@ -51,6 +51,7 @@ const FALLBACK_FLASH = {
   prepareBootloaderMode: async () => {},
   grantBootloaderPort: async () => {},
   compile: async () => null,
+  cancelCompile: () => {},
   startFlash: async () => {},
   resetDevice: () => {},
   resetFlashState: () => {},
@@ -118,6 +119,8 @@ export function FlashProvider({ children }) {
   // or after the sketch) all await the SAME compilation instead of kicking off a
   // second, redundant compile run.
   const compilePromiseRef = useRef(null);
+  // AbortController of the running compile() so the user can cancel it.
+  const compileAbortRef = useRef(null);
 
   const appendLog = useCallback((message) => {
     setLog((previous) => previous + message);
@@ -130,6 +133,9 @@ export function FlashProvider({ children }) {
    */
   const compile = useCallback(async () => {
     if (compilePromiseRef.current) return compilePromiseRef.current;
+
+    const abortController = new AbortController();
+    compileAbortRef.current = abortController;
 
     const runCompile = (async () => {
       setCompileStatus("compiling");
@@ -161,22 +167,37 @@ export function FlashProvider({ children }) {
           board,
           projectId: sessionId,
           filename,
+          signal: abortController.signal,
         });
         setBinary(compiled);
         setCompileStatus("compiled");
         return compiled;
       } catch (err) {
+        if (abortController.signal.aborted) {
+          // Cancelled by the user – not an error worth showing.
+          setCompileStatus("idle");
+          throw err;
+        }
         setCompileError(err?.message || String(err));
         setCompileStatus("error");
         throw err;
       } finally {
         compilePromiseRef.current = null;
+        compileAbortRef.current = null;
       }
     })();
 
     compilePromiseRef.current = runCompile;
     return runCompile;
   }, [compilerUrl, sketch, board, sessionId, filename]);
+
+  /**
+   * Cancels a running compilation. Only the compiler request is aborted, an
+   * upload that is already writing to the board is never interrupted.
+   */
+  const cancelCompile = useCallback(() => {
+    compileAbortRef.current?.abort();
+  }, []);
 
   // Load a previously saved device label so the UI can show which device is
   // remembered. The actual serial port is (re-)selected explicitly by the user
@@ -407,6 +428,11 @@ export function FlashProvider({ children }) {
         // permission) so the next upload re-touches and re-discovers a live port.
         setBootloaderPort(null);
       } catch (err) {
+        if (err?.name === "AbortError") {
+          appendLog("Kompilieren abgebrochen.\n");
+          setStatus("idle");
+          return;
+        }
         setError(err?.message || String(err));
         setStatus("error");
       }
@@ -589,6 +615,7 @@ export function FlashProvider({ children }) {
       prepareBootloaderMode,
       grantBootloaderPort,
       compile,
+      cancelCompile,
       startFlash,
       resetDevice,
       resetFlashState,
@@ -613,6 +640,7 @@ export function FlashProvider({ children }) {
       prepareBootloaderMode,
       grantBootloaderPort,
       compile,
+      cancelCompile,
       startFlash,
       resetDevice,
       resetFlashState,

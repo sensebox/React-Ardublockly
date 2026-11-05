@@ -39,6 +39,7 @@ function UploadProgressDialog({ open, onClose }) {
     compileError,
     needsBootloaderPermission,
     grantBootloaderPort,
+    cancelCompile,
   } = useFlash();
 
   // Close automatically a moment after a successful upload.
@@ -50,7 +51,17 @@ function UploadProgressDialog({ open, onClose }) {
   }, [open, status, onClose]);
 
   const isError = status === "error" || compileStatus === "error";
-  const canClose = isError || status === "done" || needsBootloaderPermission;
+  // Compiling may be cancelled, a running upload to the board may not.
+  const canCancel = compileStatus === "compiling" && !isError;
+  const canClose =
+    isError || status === "done" || needsBootloaderPermission || canCancel;
+
+  const handleClose = (event, reason) => {
+    // Don't cancel a compilation by an accidental click next to the dialog
+    if (canCancel && reason === "backdropClick") return;
+    if (canCancel) cancelCompile();
+    onClose();
+  };
 
   let body;
   if (needsBootloaderPermission && !isError) {
@@ -132,7 +143,7 @@ function UploadProgressDialog({ open, onClose }) {
   return (
     <Dialog
       open={open}
-      onClose={canClose ? onClose : undefined}
+      onClose={canClose ? handleClose : undefined}
       PaperProps={{
         style: {
           width: "600px",
@@ -151,7 +162,21 @@ function UploadProgressDialog({ open, onClose }) {
       >
         {Blockly.Msg.upload_dialog_title}
         {canClose && (
-          <IconButton onClick={onClose} size="small" aria-label="Close">
+          <IconButton
+            id="upload-dialog-close"
+            onClick={handleClose}
+            size="small"
+            aria-label={
+              canCancel
+                ? Blockly.Msg.compile_overlay_cancel
+                : Blockly.Msg.compile_overlay_close
+            }
+            title={
+              canCancel
+                ? Blockly.Msg.compile_overlay_cancel
+                : Blockly.Msg.compile_overlay_close
+            }
+          >
             <FontAwesomeIcon icon={faXmark} />
           </IconButton>
         )}
