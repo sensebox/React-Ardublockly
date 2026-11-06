@@ -3,9 +3,63 @@ import { getColour } from "@/components/Blockly/helpers/colour";
 import * as Types from "@/components/Blockly/helpers/types";
 import { getCompatibleTypes } from "@/components/Blockly/helpers/types";
 
+const IF_PLUS_IMAGE =
+  "data:image/svg+xml," +
+  encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M18 10h-4v-4c0-1.104-.896-2-2-2s-2 .896-2 2l.071 4h-4.071c-1.104 0-2 .896-2 2s.896 2 2 2l4.071-.071-.071 4.071c0 1.104.896 2 2 2s2-.896 2-2v-4.071l4 .071c1.104 0 2-.896 2-2s-.896-2-2-2z" fill="white"/></svg>',
+  );
+const IF_MINUS_IMAGE =
+  "data:image/svg+xml," +
+  encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M18 11h-12c-1.104 0-2 .896-2 2s.896 2 2 2h12c1.104 0 2-.896 2-2s-.896-2-2-2z" fill="white"/></svg>',
+  );
+
+/**
+ * Click handler for the +/- fields of the if block. Changes the shape of the
+ * block and fires a mutation event so undo and code generation pick it up.
+ * @param {!Blockly.FieldImage} field The clicked field.
+ * @param {boolean} add Whether a branch should be added or removed.
+ */
+const onIfButtonClick = function (field, add) {
+  const block = field.getSourceBlock();
+  if (!block || block.isInFlyout) {
+    return;
+  }
+  const mutationText = () => {
+    const mutation = block.mutationToDom();
+    return mutation ? Blockly.Xml.domToText(mutation) : "";
+  };
+  // An open gear bubble would overwrite the change on its next edit.
+  const mutatorIcon = block.getIcon(Blockly.icons.MutatorIcon.TYPE);
+  if (mutatorIcon && mutatorIcon.bubbleIsVisible()) {
+    mutatorIcon.setBubbleVisible(false);
+  }
+  Blockly.Events.setGroup(true);
+  const oldMutation = mutationText();
+  if (add) {
+    block.addBranch_();
+  } else {
+    block.removeBranch_();
+  }
+  const newMutation = mutationText();
+  if (oldMutation !== newMutation) {
+    Blockly.Events.fire(
+      new (Blockly.Events.get(Blockly.Events.BLOCK_CHANGE))(
+        block,
+        "mutation",
+        null,
+        oldMutation,
+        newMutation,
+      ),
+    );
+  }
+  Blockly.Events.setGroup(false);
+};
+
 Blockly.Blocks["controls_if"] = {
   /**
    * Block for if/elseif/else condition.
+   * Branches are added and removed with the +/- buttons at the bottom.
    * @this Blockly.Block
    */
   init: function () {
@@ -28,6 +82,7 @@ Blockly.Blocks["controls_if"] = {
     this.setTooltip(Blockly.Msg.CONTROLS_IF_TOOLTIP_1);
     this.elseifCount_ = 0;
     this.elseCount_ = 0;
+    this.updateShape_();
   },
   /**
    * Create XML to represent the number of else-if and else inputs.
@@ -54,7 +109,7 @@ Blockly.Blocks["controls_if"] = {
    */
   domToMutation: function (xmlElement) {
     this.elseifCount_ = parseInt(xmlElement.getAttribute("elseif"), 10) || 0;
-    this.elseCount_ = parseInt(xmlElement.getAttribute("else"), 10) || 0;
+    this.elseCount_ = parseInt(xmlElement.getAttribute("else"), 10) ? 1 : 0;
     this.updateShape_();
   },
   /**
@@ -110,6 +165,14 @@ Blockly.Blocks["controls_if"] = {
       clauseBlock =
         clauseBlock.nextConnection && clauseBlock.nextConnection.targetBlock();
     }
+    // Rebuild all branches, the mutator may have reordered them.
+    if (this.getInput("ELSE")) {
+      this.removeInput("ELSE");
+    }
+    for (var j = 1; this.getInput("IF" + j); j++) {
+      this.removeInput("IF" + j);
+      this.removeInput("DO" + j);
+    }
     this.updateShape_();
     // Reconnect any child blocks.
     for (var i = 1; i <= this.elseifCount_; i++) {
@@ -157,35 +220,84 @@ Blockly.Blocks["controls_if"] = {
     }
   },
   /**
-   * Modify this block to have the correct number of inputs.
+   * Plus button: the first click adds the "else" branch, every further click
+   * adds an "else if" branch above it.
+   * @private
+   * @this Blockly.Block
+   */
+  addBranch_: function () {
+    if (!this.elseCount_) {
+      this.elseCount_ = 1;
+    } else {
+      this.elseifCount_++;
+    }
+    this.updateShape_();
+  },
+  /**
+   * Minus button: removes the last "else if" branch, or the "else" branch
+   * once no "else if" is left. Attached blocks are unplugged, not deleted.
+   * @private
+   * @this Blockly.Block
+   */
+  removeBranch_: function () {
+    if (this.elseifCount_) {
+      this.elseifCount_--;
+    } else if (this.elseCount_) {
+      this.elseCount_ = 0;
+    }
+    this.updateShape_();
+  },
+  /**
+   * Modify this block to have the correct number of inputs. Existing inputs
+   * are kept so that connected blocks stay attached.
    * @private
    * @this Blockly.Block
    */
   updateShape_: function () {
-    // Delete everything.
-    if (this.getInput("ELSE")) {
-      this.removeInput("ELSE");
-    }
-    var j = 1;
+    // Remove surplus else-if inputs.
+    var j = this.elseifCount_ + 1;
     while (this.getInput("IF" + j)) {
       this.removeInput("IF" + j);
       this.removeInput("DO" + j);
       j++;
     }
-    // Rebuild block.
+    // Add missing else-if inputs.
     for (var i = 1; i <= this.elseifCount_; i++) {
-      this.appendValueInput("IF" + i)
-        .setCheck(Types.getCompatibleTypes("boolean"))
-        .appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSEIF);
-      this.appendStatementInput("DO" + i).appendField(
-        Blockly.Msg.CONTROLS_IF_MSG_THEN,
-      );
+      if (!this.getInput("IF" + i)) {
+        this.appendValueInput("IF" + i)
+          .setCheck(Types.getCompatibleTypes("boolean"))
+          .appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSEIF);
+        this.appendStatementInput("DO" + i).appendField(
+          Blockly.Msg.CONTROLS_IF_MSG_THEN,
+        );
+      }
     }
-    if (this.elseCount_) {
+    if (this.elseCount_ && !this.getInput("ELSE")) {
       this.appendStatementInput("ELSE").appendField(
         Blockly.Msg.CONTROLS_IF_MSG_ELSE,
       );
+    } else if (!this.elseCount_ && this.getInput("ELSE")) {
+      this.removeInput("ELSE");
     }
+    if (!this.getInput("BUTTONS")) {
+      var plus = new Blockly.FieldImage(IF_PLUS_IMAGE, 15, 15, "+", (field) =>
+        onIfButtonClick(field, true),
+      );
+      plus.setTooltip(Blockly.Msg.CONTROLS_IF_ADD_BRANCH_TOOLTIP);
+      var minus = new Blockly.FieldImage(IF_MINUS_IMAGE, 15, 15, "-", (field) =>
+        onIfButtonClick(field, false),
+      );
+      minus.setTooltip(Blockly.Msg.CONTROLS_IF_REMOVE_BRANCH_TOOLTIP);
+      this.appendDummyInput("BUTTONS")
+        .appendField(plus, "PLUS")
+        .appendField(minus, "MINUS");
+    }
+    // Keep the order: if/do, else-if/do..., else, buttons.
+    if (this.getInput("ELSE")) {
+      this.moveInputBefore("ELSE", null);
+    }
+    this.moveInputBefore("BUTTONS", null);
+    this.getField("MINUS").setVisible(!!(this.elseifCount_ || this.elseCount_));
   },
 };
 

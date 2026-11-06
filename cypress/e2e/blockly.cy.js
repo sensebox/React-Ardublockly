@@ -218,4 +218,34 @@ describe("Blockly Editor Page Tests", () => {
       expect(interception.response.body.data.id).to.be.a("string");
     });
   });
+
+  it("[Blockly] cancels compilation via close button", () => {
+    cy.intercept(
+      { method: "POST", pathname: "/compile" },
+      { delay: 10000, body: { data: { id: "cancelled" } } },
+    ).as("compile");
+
+    cy.visit("/");
+    cy.get('img[alt="Sensebox ESP"]').click();
+    cy.get('button[aria-label="Compile code"]').click();
+
+    cy.get('[role="dialog"]').should("be.visible");
+    cy.get("#compilation-dialog-close").click();
+    cy.get('[role="dialog"]').should("not.exist");
+  });
+
+  it("[Blockly] cancels compilation via escape key", () => {
+    cy.intercept(
+      { method: "POST", pathname: "/compile" },
+      { delay: 10000, body: { data: { id: "cancelled" } } },
+    ).as("compile");
+
+    cy.visit("/");
+    cy.get('img[alt="Sensebox ESP"]').click();
+    cy.get('button[aria-label="Compile code"]').click();
+
+    cy.get('[role="dialog"]').should("be.visible");
+    cy.get("body").type("{esc}");
+    cy.get('[role="dialog"]').should("not.exist");
+  });
 });

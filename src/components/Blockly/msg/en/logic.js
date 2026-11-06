@@ -1,4 +1,8 @@
 export const LOGIC = {
+  CONTROLS_IF_ADD_BRANCH_TOOLTIP:
+    'Add a branch: first "else", then more "else if".',
+  CONTROLS_IF_REMOVE_BRANCH_TOOLTIP:
+    'Remove the last branch ("else if", then "else").',
   CONTROLS_IF_ELSEIF_TOOLTIP: "Add a condition to the if block.",
   CONTROLS_IF_ELSE_TOOLTIP: "Add a final, catch-all condition to the if block.",
   CONTROLS_IF_HELPURL: "https://github.com/google/blockly/wiki/IfElse",

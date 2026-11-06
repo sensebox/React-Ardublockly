@@ -24,9 +24,9 @@ const TooltipViewer = () => {
     <Card
       className="helpSection"
       sx={{
+        flex: "0 0 auto",
         overflowY: "auto",
-        maxHeight: "23vh",
-        mt: 2,
+        maxHeight: "35%",
         p: 2,
         borderRadius: 1,
         border: `1px solid ${theme.palette.divider}`,

@@ -5,6 +5,7 @@ import "blockly/blocks";
 import { onChangeWorkspace } from "@/actions/workspaceActions";
 import { useDispatch } from "react-redux";
 import { toolboxBasicObject } from "@/components/Blockly/toolbox/ToolboxBasic";
+import { expandCollapsedBlocks } from "@/components/Blockly/helpers/expandCollapsedBlocks";
 
 const BlocklyCard = ({
   toolboxXml,
@@ -33,7 +34,7 @@ const BlocklyCard = ({
       renderer: "Thrasos",
       theme: "light",
       trashcan: true,
-      collapse: true,
+      collapse: false,
       zoom: {
         controls: true,
         wheel: false,
@@ -46,6 +47,7 @@ const BlocklyCard = ({
       move: { scrollbars: true, drag: true, wheel: true },
       sounds: false,
     });
+    expandCollapsedBlocks(ws);
 
     // Startblock erzeugen
     const startBlock = ws.newBlock("sensebox_start"); // <-- dein Blocktyp

@@ -15,7 +15,17 @@ const Accordion = styled(MuiAccordion)(({ theme }) => ({
   border: `1px solid ${theme.palette.secondary.main}`,
   boxShadow: "none",
   "&:before": { display: "none" },
-  "&.Mui-expanded": { margin: "auto" },
+  "&.Mui-expanded": {
+    margin: "auto",
+    // Expanded panel fills the remaining height of the card
+    flex: "1 1 0",
+    minHeight: 0,
+    display: "flex",
+    flexDirection: "column",
+  },
+  "&.Mui-expanded > .MuiCollapse-root": { flex: "1 1 0", minHeight: 0 },
+  "& .MuiCollapse-wrapper, & .MuiCollapse-wrapperInner, & .MuiAccordion-region":
+    { height: "100%" },
 }));
 
 const AccordionSummary = styled(MuiAccordionSummary)(({ theme }) => ({
@@ -23,6 +33,7 @@ const AccordionSummary = styled(MuiAccordionSummary)(({ theme }) => ({
   borderBottom: "1px solid white",
   marginBottom: "-1px",
   minHeight: 50,
+  flexShrink: 0,
   "&.Mui-expanded": { minHeight: 50 },
   "& .MuiAccordionSummary-content.Mui-expanded": {
     margin: "12px 0",
@@ -45,8 +56,8 @@ const CodeViewer = () => {
   return (
     <Card
       sx={{
-        height: "100%",
-        maxHeight: "50vh",
+        flex: "1 1 0",
+        minHeight: 0,
         display: "flex",
         flexDirection: "column",
       }}
@@ -70,7 +81,7 @@ const CodeViewer = () => {
         </AccordionSummary>
         <AccordionDetails
           sx={{
-            height: "calc(50vh - 50px)",
+            height: "100%",
             bgcolor: "background.paper",
           }}
         >
@@ -102,7 +113,7 @@ const CodeViewer = () => {
         </AccordionSummary>
         <AccordionDetails
           sx={{
-            height: "calc(50vh - 50px)",
+            height: "100%",
             bgcolor: "background.paper",
           }}
         >

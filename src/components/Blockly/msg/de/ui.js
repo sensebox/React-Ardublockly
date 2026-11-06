@@ -1,5 +1,37 @@
 // src/components/Blockly/msg/de/ui.js
 export const UI = {
+  // Variable creation dialog
+  typed_variable_title: "Variable erstellen",
+  typed_variable_intro:
+    "Eine Variable speichert einen Wert, den du in deinem Programm verwenden und verändern kannst.",
+  typed_variable_name: "Name der Variable",
+  typed_variable_placeholder: "z. B. temperatur",
+  typed_variable_hint:
+    "Wähle einen Namen, der beschreibt, was du speichern möchtest.",
+  typed_variable_type: "Was möchtest du speichern?",
+  typed_variable_typeHint:
+    "Wähle den passenden Datentyp. Für einen Zähler eignet sich eine ganze Zahl.",
+  typed_variable_create: "Variable erstellen",
+  typed_variable_cancel: "Abbrechen",
+  typed_variable_close: "Schließen",
+  typed_variable_invalid: "Bitte gib einen gültigen Namen ein.",
+  typed_variable_duplicate:
+    "Eine Variable mit diesem Namen existiert bereits. Wähle einen anderen Namen.",
+  typed_variable_int_label: "Ganze Zahl",
+  typed_variable_int_example: "Zum Zählen, z. B. 0, 1, 42",
+  typed_variable_long_label: "Große ganze Zahl",
+  typed_variable_long_example: "Für große Werte, z. B. 1000000",
+  typed_variable_float_label: "Kommazahl",
+  typed_variable_float_example: "Für Messwerte, z. B. 21,5",
+  typed_variable_String_label: "Text",
+  typed_variable_String_example: "Für Wörter und Sätze, z. B. Hallo",
+  typed_variable_char_label: "Einzelnes Zeichen",
+  typed_variable_char_example: "Ein Buchstabe oder Symbol, z. B. A",
+  typed_variable_boolean_label: "Wahr oder falsch",
+  typed_variable_boolean_example: "Für Zustände, z. B. Licht an oder aus",
+  typed_variable_bitmap_label: "Bild",
+  typed_variable_bitmap_example: "Für ein Pixelbild auf dem Display",
+
   /**
    * Toolbox
    */
@@ -222,7 +254,7 @@ export const UI = {
   button_next: "nächster Schritt",
   button_tutorial_overview: "Tutorial Übersicht",
   button_login: "Anmelden",
-  button_createVariable: "Typisierte Variable erstellen",
+  button_createVariable: "Variable erstellen",
 
   /**
    *
@@ -393,15 +425,15 @@ export const UI = {
   connect_dialog_title: "senseBox verbinden",
   connect_dialog_intro:
     "Mit „senseBox verbinden“ holt der Browser die nötigen Berechtigungen ein und bereitet dein Board vor, damit du anschließend direkt aus Blockly hochladen kannst.",
-  connect_dialog_pick_device: "Wähle im Auswahlfenster „MCU-S2 ESP32-S2“ aus.",
+  connect_dialog_pick_device: "Wähle im Auswahlfenster „%1“ aus.",
   connect_dialog_pick_bootloader:
-    "Beim Bootloader-Schritt wähle anschließend „ESP32-S2“ aus.",
+    "Beim Bootloader-Schritt wähle anschließend „%1“ aus.",
   connect_dialog_button: "Verbinden",
   connect_dialog_working: "Verbinde und bereite Board vor …",
   connect_dialog_grant_title: "Bootloader-Berechtigung",
   connect_dialog_grant_text:
-    "Das Board befindet sich jetzt im Download-Modus und meldet sich als neues USB-Gerät. Bitte wähle einmalig „ESP32-S2“ aus, um die Berechtigung zu erteilen.",
-  connect_dialog_grant_button: "ESP32-S2 auswählen",
+    "Das Board befindet sich jetzt im Download-Modus und meldet sich als neues USB-Gerät. Bitte wähle einmalig „%1“ aus, um die Berechtigung zu erteilen.",
+  connect_dialog_grant_button: "%1 auswählen",
   connect_dialog_done_title: "Gerät verbunden!",
   connect_dialog_done_text:
     "Drücke jetzt einfach den Kompilieren-Button, um direkt aus Blockly hochzuladen.",
@@ -497,6 +529,7 @@ export const UI = {
   compile_overlay_code_compiled: "Code wurde kompiliert!",
   compile_overlay_start_transfer: "Starte die Übertragung",
   compile_overlay_close: "Schließen",
+  compile_overlay_cancel: "Kompilieren abbrechen",
   compile_overlay_head: "Dein Programm wird nun kompiliert und heruntergeladen",
   compile_overlay_text: "Kopiere es anschließend auf deine senseBox ",
   compile_overlay_help: " Benötigst du Hilfe? ",
