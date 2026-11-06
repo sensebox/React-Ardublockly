@@ -1,4 +1,35 @@
 export const UI = {
+  // Variable creation dialog
+  typed_variable_title: "Create a variable",
+  typed_variable_intro:
+    "A variable stores a value that you can use and change in your program.",
+  typed_variable_name: "Variable name",
+  typed_variable_placeholder: "e.g. temperature",
+  typed_variable_hint: "Choose a name that describes what you want to store.",
+  typed_variable_type: "What would you like to store?",
+  typed_variable_typeHint:
+    "Choose a data type. A whole number is a good choice for a counter.",
+  typed_variable_create: "Create variable",
+  typed_variable_cancel: "Cancel",
+  typed_variable_close: "Close",
+  typed_variable_invalid: "Please enter a valid name.",
+  typed_variable_duplicate:
+    "A variable with this name already exists. Choose another name.",
+  typed_variable_int_label: "Whole number",
+  typed_variable_int_example: "For counting, e.g. 0, 1, 42",
+  typed_variable_long_label: "Large whole number",
+  typed_variable_long_example: "For large values, e.g. 1000000",
+  typed_variable_float_label: "Decimal number",
+  typed_variable_float_example: "For measurements, e.g. 21.5",
+  typed_variable_String_label: "Text",
+  typed_variable_String_example: "For words and sentences, e.g. Hello",
+  typed_variable_char_label: "Single character",
+  typed_variable_char_example: "One letter or symbol, e.g. A",
+  typed_variable_boolean_label: "True or false",
+  typed_variable_boolean_example: "For states, e.g. light on or off",
+  typed_variable_bitmap_label: "Image",
+  typed_variable_bitmap_example: "For a pixel image on the display",
+
   /**
    * Toolbox
    */
@@ -216,7 +247,7 @@ export const UI = {
   button_next: "Next step",
   button_tutorial_overview: "Tutorial overview",
   button_login: "Login",
-  button_createVariable: "Create Typed Variable",
+  button_createVariable: "Create variable",
 
   /**
    *

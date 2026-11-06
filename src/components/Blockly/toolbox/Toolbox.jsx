@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import "@blockly/block-plus-minus";
-import { TypedVariableModal } from "@blockly/plugin-typed-variable-modal";
+import TypedVariableDialog from "../TypedVariableDialog";
 import * as Blockly from "blockly/core";
 import { useSelector, useDispatch } from "react-redux";
 import { uploadAiModel } from "../../../actions/generalActions";
@@ -25,7 +25,7 @@ const Toolbox = ({ workspace, toolbox }) => {
   useEffect(() => {
     if (!workspace || !toolbox?.current) return;
 
-    // --- Typed Variable Modal Setup ---
+    // --- Dynamic variable flyout ---
     workspace.registerToolboxCategoryCallback(
       "CREATE_TYPED_VARIABLE",
       createFlyout,
@@ -135,17 +135,6 @@ const Toolbox = ({ workspace, toolbox }) => {
         return xmlList;
       },
     );
-
-    const typedVarModal = new TypedVariableModal(workspace, "callbackName", [
-      [Blockly.Msg.variable_NUMBER, "int"],
-      [Blockly.Msg.variable_LONG, "long"],
-      [Blockly.Msg.variable_DECIMAL, "float"],
-      [Blockly.Msg.variables_TEXT, "String"],
-      [Blockly.Msg.variables_CHARACTER, "char"],
-      [Blockly.Msg.variables_BOOLEAN, "boolean"],
-      [Blockly.Msg.variable_BITMAP, "bitmap"],
-    ]);
-    typedVarModal.init();
 
     // --- AI Model Upload Callback ---
     workspace.registerButtonCallback("uploadAiModel", () => {
@@ -305,6 +294,7 @@ const Toolbox = ({ workspace, toolbox }) => {
   return React.createElement(
     React.Fragment,
     null,
+    React.createElement(TypedVariableDialog, { workspace }),
     // file input for AI model upload
     React.createElement("input", {
       type: "file",
