@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import {
   Dialog,
   DialogContent,
-  DialogTitle,
   Box,
   Stepper,
   Step,
@@ -42,6 +41,7 @@ function CompilationDialog({
   const [sketchId, setSketchId] = useState(null);
   const [error, setError] = useState(null);
   const [counter, setCounter] = useState(0);
+  const abortControllerRef = useRef(null);
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
   const headerStyle = {
@@ -58,11 +58,15 @@ function CompilationDialog({
       handleCompile();
     }
     if (!open) {
+      abortControllerRef.current?.abort();
       setActiveStep(0);
       setSketchId(null);
       setError(null);
     }
   }, [open]);
+
+  // Cancel a running compilation when the dialog unmounts
+  useEffect(() => () => abortControllerRef.current?.abort(), []);
 
   useEffect(() => {
     let timeoutId;
@@ -83,6 +87,9 @@ function CompilationDialog({
   }, [activeStep, isEmbedded, onClose]);
 
   const handleCompile = async () => {
+    abortControllerRef.current?.abort();
+    const abortController = new AbortController();
+    abortControllerRef.current = abortController;
     try {
       // In embedded mode, generate fresh code from workspace instead of using stale prop
       // This ensures we always have the latest code in embedded mode where CodeViewer
@@ -129,11 +136,14 @@ function CompilationDialog({
         sketch: codeToCompile,
         board,
         projectId: sessionId,
+        signal: abortController.signal,
       });
 
+      if (abortController.signal.aborted) return;
       setSketchId(sketchId);
       setActiveStep(1);
     } catch (err) {
+      if (abortController.signal.aborted) return;
       setError(err?.message || "Kompilierung fehlgeschlagen");
       console.error("Compilation failed", err);
     }
@@ -150,6 +160,16 @@ function CompilationDialog({
   };
 
   const handleClose = (event, reason) => {
+    // ESC and the close button always close the dialog and cancel a running compilation
+    if (reason === "escapeKeyDown" || reason === "closeButton") {
+      abortControllerRef.current?.abort();
+      onClose();
+      setActiveStep(0);
+      setSketchId(null);
+      setError(null);
+      return;
+    }
+
     // In embedded mode, allow closing on all steps except during compilation
     if (isEmbedded) {
       if (activeStep === 0 && !error) {
@@ -168,7 +188,7 @@ function CompilationDialog({
       error ||
       activeStep === 2 ||
       (activeStep === 1 && platform && !error) ||
-      (reason !== "backdropClick" && reason !== "escapeKeyDown");
+      reason !== "backdropClick";
 
     if (!shouldClose) return;
 
@@ -182,7 +202,6 @@ function CompilationDialog({
     <Dialog
       open={open}
       onClose={handleClose}
-      disableEscapeKeyDown={activeStep !== 2 || !error}
       PaperProps={{
         style: isSmall
           ? {
@@ -195,25 +214,32 @@ function CompilationDialog({
           : { width: "600px", minHeight: "60vh", maxHeight: "70vh" },
       }}
     >
-      {isEmbedded && activeStep >= 1 && (
-        <DialogTitle style={{ padding: "8px 16px" }}>
-          <IconButton
-            onClick={() => handleClose(null, "backdropClick")}
-            style={{
-              position: "absolute",
-              right: 8,
-              top: 8,
-              color: "#666",
-            }}
-          >
-            <FontAwesomeIcon icon={faXmark} />
-          </IconButton>
-        </DialogTitle>
-      )}
+      <IconButton
+        id="compilation-dialog-close"
+        aria-label={
+          activeStep === 0 && !error
+            ? Blockly.Msg.compile_overlay_cancel
+            : Blockly.Msg.compile_overlay_close
+        }
+        title={
+          activeStep === 0 && !error
+            ? Blockly.Msg.compile_overlay_cancel
+            : Blockly.Msg.compile_overlay_close
+        }
+        onClick={(event) => handleClose(event, "closeButton")}
+        style={{
+          position: "absolute",
+          right: 8,
+          top: 8,
+          color: "#666",
+          zIndex: 1,
+        }}
+      >
+        <FontAwesomeIcon icon={faXmark} />
+      </IconButton>
       <DialogContent
         style={{
-          padding:
-            isEmbedded && activeStep >= 1 ? "1rem 2rem 2rem 2rem" : "2rem",
+          padding: "2rem",
           display: "flex",
           flexDirection: "column",
           height: "100%",

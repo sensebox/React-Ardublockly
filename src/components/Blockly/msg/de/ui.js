@@ -527,6 +527,7 @@ export const UI = {
   compile_overlay_code_compiled: "Code wurde kompiliert!",
   compile_overlay_start_transfer: "Starte die Übertragung",
   compile_overlay_close: "Schließen",
+  compile_overlay_cancel: "Kompilieren abbrechen",
   compile_overlay_head: "Dein Programm wird nun kompiliert und heruntergeladen",
   compile_overlay_text: "Kopiere es anschließend auf deine senseBox ",
   compile_overlay_help: " Benötigst du Hilfe? ",

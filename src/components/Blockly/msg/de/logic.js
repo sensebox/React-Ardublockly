@@ -1,4 +1,8 @@
 export const LOGIC = {
+  CONTROLS_IF_ADD_BRANCH_TOOLTIP:
+    "Zweig hinzufügen: zuerst „sonst“, danach weitere „sonst wenn“.",
+  CONTROLS_IF_REMOVE_BRANCH_TOOLTIP:
+    "Letzten Zweig entfernen („sonst wenn“, danach „sonst“).",
   CONTROLS_IF_ELSEIF_TOOLTIP: "Eine weitere Bedingung hinzufügen.",
   CONTROLS_IF_ELSE_TOOLTIP:
     "Eine sonst-Bedingung hinzufügen, führt eine Anweisung aus, falls keine Bedingung zutrifft.",
