@@ -7,6 +7,7 @@ import {
   getTutorialBasePath,
   getTutorialIdFromUrl,
   normalizeTutorialConfigs,
+  parseStepSelection,
 } from "@/helpers/tutorialUrl";
 
 export default function TutorialClassificationWidget({ tutorials = [], mediaBasePath = "/media/hardware/3dmodels/" }) {
@@ -20,7 +21,14 @@ export default function TutorialClassificationWidget({ tutorials = [], mediaBase
       if (!tutorialId) return null;
       const config = normalizedConfigs.find((c) => c.id === tutorialId);
       return config
-        ? { id: config.id, type: config.type, group: config._group || null }
+        ? {
+            id: config.id,
+            type: config.type,
+            group: config._group || null,
+            classificationSteps: parseStepSelection(
+              config.classification_steps,
+            ),
+          }
         : null;
     },
     [normalizedConfigs],
@@ -40,10 +48,10 @@ export default function TutorialClassificationWidget({ tutorials = [], mediaBase
   }, [resolveSelection]);
 
   const handleSelect = useCallback((tutorial) => {
-    setSelected(tutorial);
+    setSelected(resolveSelection(tutorial.id) ?? tutorial);
     window.history.pushState({ tutorialId: tutorial.id }, "", buildTutorialUrl(tutorial.id));
     window.scrollTo(0, 0);
-  }, []);
+  }, [resolveSelection]);
 
   const handleBack = useCallback(() => {
     setSelected(null);
@@ -60,6 +68,7 @@ export default function TutorialClassificationWidget({ tutorials = [], mediaBase
         tutorialId={selected.id}
         classificationType={selected.type}
         groupName={selected.group}
+        classificationSteps={selected.classificationSteps}
         onBack={handleBack}
         mediaBasePath={mediaBasePath}
       />
@@ -74,6 +83,10 @@ TutorialClassificationWidget.propTypes = {
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       type: PropTypes.string.isRequired,
+      classification_steps: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.arrayOf(PropTypes.number),
+      ]),
     }),
   ),
   mediaBasePath: PropTypes.string,

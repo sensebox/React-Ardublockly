@@ -50,5 +50,8 @@ export default defineConfig({
     __BLOCKLY_MEDIA_PATH__: JSON.stringify(
       "/user/themes/ada-theme/images/tutorial/blockly/",
     ),
+    __TEACHABLE_MEDIA_PATH__: JSON.stringify(
+      "/user/themes/ada-theme/images/tutorial/teachable/",
+    ),
   },
 });

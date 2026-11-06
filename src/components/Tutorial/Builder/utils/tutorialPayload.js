@@ -1,3 +1,8 @@
+import {
+  getCriteriaConfig,
+  getEvaluationConfig,
+} from "../../Viewer/helpers/evaluationUtils";
+
 export function buildTutorialPayload(state) {
   const {
     title,
@@ -31,7 +36,7 @@ export function buildTutorialPayload(state) {
     duration,
     year,
     steps: steps.map((step) => ({
-      id: step.id,
+      id: step.id || step._id,
       title: step.title,
       subtitle: step.subtitle || "",
       text: step.text || "",
@@ -39,7 +44,17 @@ export function buildTutorialPayload(state) {
       questionData: step.questionData || null,
       xml: step.xml || null,
       svg: step.svg || null,
+      board:
+        step.type === "blockly" || step.type === "blocklyExample"
+          ? step.board || null
+          : null,
       h5psrc: step.h5psrc || null,
+      criteriaConfig:
+        step.type === "evaluationPreparation"
+          ? getCriteriaConfig(step)
+          : null,
+      evaluationConfig:
+        step.type === "evaluation" ? getEvaluationConfig(step) : null,
     })),
   };
 }

@@ -2,12 +2,16 @@ import React, { useEffect, useState, useRef } from "react";
 import {
   Box,
   Button,
+  FormControl,
   FormHelperText,
   Grid,
+  InputLabel,
+  MenuItem,
+  Select,
   Typography,
   useTheme,
 } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 import "moment/locale/de";
 import * as Blockly from "blockly/core";
@@ -17,13 +21,24 @@ import { motion, AnimatePresence } from "framer-motion";
 import BlocklyWindow from "@/components/Blockly/BlocklyWindow.jsx";
 import { initialXml } from "@/components/Blockly/initialXml";
 import { setError, deleteError } from "@/actions/tutorialBuilderActions";
+import { setBoard } from "@/actions/boardAction";
+import { BOARD_OPTIONS } from "@/components/Blockly/helpers/boardOptions";
 // 🔥 Importiere Dialog und Snackbar, falls nicht bereits in BlocklyExample vorhanden
 import Dialog from "@/components/ui/Dialog";
 import Snackbar from "@/components/Snackbar";
 
-const BlocklyExample = ({ index, task = false, value, updateStepFields }) => {
+const BlocklyExample = ({
+  index,
+  task = false,
+  value,
+  board,
+  updateStepFields,
+}) => {
   const theme = useTheme();
   const dispatch = useDispatch();
+  const currentBoard = useSelector((state) => state.board.board);
+  // Ziel-Board des Schritts; ohne Angabe gilt das aktuell gewählte Board
+  const targetBoard = board || currentBoard || "MCU";
   const [xmlState, setXmlState] = useState(null);
   const [input, setInput] = useState(null);
   const [disabled, setDisabled] = useState(false);
@@ -47,11 +62,25 @@ const BlocklyExample = ({ index, task = false, value, updateStepFields }) => {
     validateXML();
   }, [value]);
 
+  // Workspace auf das Ziel-Board des Schritts umstellen (auch wenn das Board
+  // global, z.B. über Navbar, gewechselt wird, oder noch keins gewählt ist)
+  useEffect(() => {
+    if (targetBoard.toUpperCase() !== currentBoard) {
+      dispatch(setBoard(targetBoard));
+    }
+  }, [targetBoard, currentBoard, dispatch]);
+
+  const handleBoardChange = (e) => {
+    const newBoard = e.target.value;
+    updateStepFields({ board: newBoard });
+    dispatch(setBoard(newBoard));
+  };
+
   const handleSubmit = () => {
     const xml = saveCurrentXml();
     const svg = saveCurrentSvg();
     console.log("Submitting Blockly Example:", { xml, svg });
-    updateStepFields({ xml, svg });
+    updateStepFields({ xml, svg, board: targetBoard });
 
     setSubmitted(true);
   };
@@ -242,6 +271,22 @@ const BlocklyExample = ({ index, task = false, value, updateStepFields }) => {
         Blockly Beispiel
       </Typography>
 
+      <FormControl size="small" sx={{ mt: 1, mb: 1, minWidth: 220 }}>
+        <InputLabel id={`target-board-label-${index}`}>Ziel-Board</InputLabel>
+        <Select
+          labelId={`target-board-label-${index}`}
+          label="Ziel-Board"
+          value={targetBoard}
+          onChange={handleBoardChange}
+        >
+          {BOARD_OPTIONS.map(({ value: boardValue, label }) => (
+            <MenuItem key={boardValue} value={boardValue}>
+              {label}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
       {/* Hinweise */}
       {!value ? (
         <FormHelperText sx={{ color: theme.palette.text.secondary }}>
@@ -310,6 +355,7 @@ const BlocklyExample = ({ index, task = false, value, updateStepFields }) => {
               <BlocklyWindow
                 scroll
                 blockDisabled={task}
+                preserveWorkspaceOnBoardChange
                 trashcan={false}
                 initialXml={value}
                 blocklyCSS={{ height: "40vh", width: "100%" }}

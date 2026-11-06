@@ -9,7 +9,10 @@ import { useTutorialBuilder } from "./hooks/useTutorialBuilder";
 import { useTutorialAutosave } from "./hooks/useTutorialAutosave";
 import { useExistingTutorial } from "./hooks/useExistingTutorial";
 import { buildTutorialPayload } from "./utils/tutorialPayload";
-import { validateRequiredFields } from "./utils/validation";
+import {
+  findEvaluationStepsWithoutPreparation,
+  validateRequiredFields,
+} from "./utils/validation";
 import { saveTutorial as saveTutorialRequest } from "./services/tutorial.service";
 import BuilderSidebar from "./components/BuilderSidebar";
 import BuilderMain from "./components/BuilderMain";
@@ -63,6 +66,10 @@ const BuilderPage = () => {
   const [savingState, setSavingState] = useState("idle");
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
   const [savedTutorialId, setSavedTutorialId] = useState(null);
+  const [validationErrors, setValidationErrors] = useState({
+    missingFields: [],
+    invalidEvaluationSteps: [],
+  });
 
   /**
    * 🔥 Autosave Hook
@@ -83,9 +90,11 @@ const BuilderPage = () => {
    * 📤 Manuelles Speichern
    */
   const saveTutorial = async () => {
-    const missing = validateRequiredFields({ title, subtitle });
+    const missingFields = validateRequiredFields({ title, subtitle });
+    const invalidEvaluationSteps = findEvaluationStepsWithoutPreparation(steps);
 
-    if (missing.length > 0) {
+    if (missingFields.length > 0 || invalidEvaluationSteps.length > 0) {
+      setValidationErrors({ missingFields, invalidEvaluationSteps });
       setSavingState("missing");
       return;
     }
@@ -206,6 +215,7 @@ const BuilderPage = () => {
       {/* 💾 Save Dialog */}
       <SaveStatusDialog
         savingState={savingState}
+        validationErrors={validationErrors}
         onClose={() => setSavingState("idle")}
         savedTutorialId={savedTutorialId}
         navigate={navigate}

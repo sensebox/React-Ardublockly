@@ -115,6 +115,10 @@ const BuildSlide = ({
                       </MenuItem>
 
                       <MenuItem value="h5p">H5P-Embed</MenuItem>
+                      <MenuItem value="evaluationPreparation">
+                        Bewertungskriterien festlegen
+                      </MenuItem>
+                      <MenuItem value="evaluation">Bewertung</MenuItem>
                     </Select>
                   </FormControl>
                 </Box>
