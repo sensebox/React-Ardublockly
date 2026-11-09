@@ -7,7 +7,7 @@ export const SD = {
   senseBox_sd_write_file: "Schreibe Daten auf SD-Karte",
   senseBox_sd_open_file: "Öffne eine Datei auf der SD-Karte",
   senseBox_sd_create_file_tooltip:
-    "Erstellt eine Datei auf der Karte. Stecke das SD-Bee auf den Steckplatz **XBEE2**. Die **maximale** Länge des Dateinamen sind **8 Zeichen**. Die Datei sollte zuerst im *Setup()* erstellt werden",
+    "Erstellt eine Datei auf der Karte. Stecke das SD-Bee auf den Steckplatz **XBEE2**. Die **maximale** Länge des Dateinamen sind **8 Zeichen**. Die Datei sollte zuerst im *Setup()* erstellt werden Benenne hier die Datei-Instanz und wähle sie in den Blöcken zum Öffnen und Prüfen der Datei aus.",
   senseBox_sd_write_file_tooptip:
     "Schreibe Daten auf die SD-Karte. Beachte, dass die Datei zuerst geöffnet werden muss.",
   senseBox_sd_open_file_tooltip:
@@ -27,4 +27,9 @@ export const SD = {
     "SD.exists() in Arduino überprüft, ob eine Datei oder ein Verzeichnis auf der SD-Karte vorhanden ist.",
   sd_max_chars:
     "Maximal 8 Zeichen sind erlaubt! Der Rest wird im Programmcode abgeschnitten.",
+  senseBox_instance_select: "Instanz auswählen…",
+  senseBox_instance_missing: "Fehlende Instanz",
+  senseBox_instance_warning:
+    "Definiere eine Instanz im Setup und wähle sie hier aus.",
+  senseBox_instance_name: "Instanz",
 };

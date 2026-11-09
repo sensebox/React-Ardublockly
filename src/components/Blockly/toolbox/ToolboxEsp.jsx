@@ -410,22 +410,12 @@ export const ToolboxEsp = () => {
           </Value>
         </Block>
         <Block type="sensebox_sd_open_file">
-          <Value name="FILENAME">
-            <Block type="text">
-              <Field name="TEXT">Data</Field>
-            </Block>
-          </Value>
           <Value name="SD">
             <Block type="sensebox_sd_write_file" />
           </Value>
         </Block>
         <Block type="sensebox_sd_write_file" />
         <Block type="sensebox_sd_open_file">
-          <Value name="FILENAME">
-            <Block type="text">
-              <Field name="TEXT">Data</Field>
-            </Block>
-          </Value>
           <Value name="SD">
             <Block type="sensebox_sd_osem">
               <Value name="DO">
@@ -436,13 +426,7 @@ export const ToolboxEsp = () => {
         </Block>
         <Block type="sensebox_sd_osem" />
         <Block type="sensebox_sd_save_for_osem" />
-        <Block type="sensebox_sd_exists">
-          <Value name="FILENAME">
-            <Block type="text">
-              <Field name="TEXT">Dateiname</Field>
-            </Block>
-          </Value>
-        </Block>
+        <Block type="sensebox_sd_exists" />
       </Category>
 
       {/* ============================== TEXT ============================== */}

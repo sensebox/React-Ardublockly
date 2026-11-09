@@ -42,7 +42,7 @@ export const LED = {
   senseBox_ws2812_rgb_matrix_init: `LED-Matrix initialisieren`,
   senseBox_ws2812_rgb_matrix_print: `Zeige Text/Zahl`,
   senseBox_ws2812_rgb_matrix_text: `Input`,
-  senseBox_ws2812_rgb_matrix_init_tooltip: `Schließe die LED-Matrix an einen der **digital/analog Ports** an. Dieser Block muss im Setup() verwendet werden.`,
+  senseBox_ws2812_rgb_matrix_init_tooltip: `Schließe die LED-Matrix an einen der **digital/analog Ports** an. Dieser Block muss im Setup() verwendet werden. Benenne hier die Matrix-Instanz und wähle sie in den anderen Matrix-Blöcken aus.`,
   senseBox_ws2812_rgb_matrix_brightness: `Helligkeit: `,
   senseBox_ws2812_rgb_matrix_print_tooltip: `Zeigt eine Zahl/Text auf dem Display an. 
     Wenn ein Häkchen am 'Auto-Scroll' gesetzt  wurde, wandert der anzuzeigende Input von rechts nach links über die Matrix. Dies ist hilfreich um langen Input anzuzeigen. Nachfolgender Code wird erst ausgeführt, wenn der gesamte Input über die Matrix gewandert ist.

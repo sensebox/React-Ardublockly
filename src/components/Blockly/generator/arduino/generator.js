@@ -97,6 +97,7 @@ Blockly.Generator.Arduino.ORDER_NONE = 99; // (...)
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
 Blockly.Generator.Arduino.init = function (workspace) {
+  this.instanceNames_ = new Map();
   // Create a dictionary of definitions to be printed before the code.
   Blockly.Generator.Arduino.libraries_ = Object.create(null);
 

@@ -77,7 +77,8 @@
     "build": "vite build",
     "build:tutorial": "WIDGET=tutorial vite build --config vite.config.tutorial.js",
     "serve": "vite preview",
-    "e2e": "cypress run"
+    "e2e": "cypress run",
+    "test:instances": "node scripts/test-blockly-instances.mjs"
   },
   "browserslist": [
     ">0.2%",

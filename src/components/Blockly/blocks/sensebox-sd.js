@@ -1,3 +1,5 @@
+import FieldInstance from "../fields/FieldInstance";
+import { instanceNameField, selectedInstance } from "../helpers/instances";
 import * as Blockly from "blockly/core";
 import { getColour } from "@/components/Blockly/helpers/colour";
 
@@ -14,6 +16,7 @@ Blockly.Blocks["sensebox_sd_open_file"] = {
   init: function () {
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_sd_open_file)
+      .appendField(new FieldInstance("sd_file"), "INSTANCE")
       .setAlign(Blockly.inputs.Align.LEFT);
 
     // String-Variable für Dateiname
@@ -23,7 +26,7 @@ Blockly.Blocks["sensebox_sd_open_file"] = {
       .appendField(Blockly.Msg.senseBox_output_filename);
 
     // Dropdown für Endung
-    this.appendDummyInput()
+    this.appendDummyInput("EXTENSION")
       .appendField(".")
       .appendField(
         new Blockly.FieldDropdown([
@@ -38,18 +41,21 @@ Blockly.Blocks["sensebox_sd_open_file"] = {
 
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
+    this.getInput("FILENAME").setVisible(false);
+    this.getInput("EXTENSION").setVisible(false);
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_sd_open_file_tooltip);
     this.setHelpUrl(Blockly.Msg.sensebox_sd_helpurl);
   },
   onchange: function () {
-    var targetBlock = this.getInputTargetBlock("FILENAME");
+    const source = selectedInstance(this, "sd_file") || this;
+    var targetBlock = source.getInputTargetBlock("FILENAME");
     if (targetBlock && targetBlock.type === "text") {
       var txt = targetBlock.getFieldValue("TEXT") || "";
       if (txt.length > 8) {
-        this.setWarningText(Blockly.Msg.sd_max_chars);
+        this.setWarningText(Blockly.Msg.sd_max_chars, "filename");
       } else {
-        this.setWarningText(null);
+        this.setWarningText(null, "filename");
       }
     }
   },
@@ -60,6 +66,8 @@ Blockly.Blocks["sensebox_sd_create_file"] = {
   init: function () {
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_sd_create_file)
+      .appendField(Blockly.Msg.senseBox_instance_name)
+      .appendField(instanceNameField(this, "sd_file", "file"), "INSTANCE_NAME")
       .setAlign(Blockly.inputs.Align.LEFT);
 
     // Variablen-Input für den Basis-Dateinamen
@@ -212,12 +220,14 @@ Blockly.Blocks["sensebox_sd_save_for_osem"] = {
 
 Blockly.Blocks["sensebox_sd_exists"] = {
   init: function () {
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.sensebox_sd_exists)
+      .appendField(new FieldInstance("sd_file"), "INSTANCE");
     this.appendValueInput("FILENAME")
       .setCheck("String")
-      .appendField(Blockly.Msg.sensebox_sd_exists)
       .appendField(Blockly.Msg.filename);
 
-    this.appendDummyInput()
+    this.appendDummyInput("EXTENSION")
       .appendField(".")
       .appendField(
         new Blockly.FieldDropdown([
@@ -229,6 +239,8 @@ Blockly.Blocks["sensebox_sd_exists"] = {
 
     this.setOutput(true);
 
+    this.getInput("FILENAME").setVisible(false);
+    this.getInput("EXTENSION").setVisible(false);
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.senseBox_sd_exists_tooltip);
     this.setHelpUrl(Blockly.Msg.senseBox_sd_exists_tooltip);

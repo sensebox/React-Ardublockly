@@ -1,3 +1,5 @@
+import FieldInstance from "../fields/FieldInstance";
+import { instanceNameField } from "../helpers/instances";
 import * as Blockly from "blockly";
 import { getColour } from "@/components/Blockly/helpers/colour";
 import { selectedBoard } from "@/components/Blockly/helpers/board";
@@ -243,6 +245,8 @@ Blockly.Blocks["sensebox_ws2812_matrix_init"] = {
     this.setColour(getColour().sensebox);
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_init)
+      .appendField(Blockly.Msg.senseBox_instance_name)
+      .appendField(instanceNameField(this, "matrix", "matrix"), "INSTANCE_NAME")
       .appendField("Port:")
       .appendField(
         new Blockly.FieldDropdown(selectedBoard().digitalPinsRGBMatrix),
@@ -263,11 +267,11 @@ Blockly.Blocks["sensebox_ws2812_matrix_text"] = {
     this.setColour(getColour().sensebox);
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_print)
-      .appendField("Port:")
-      .appendField(
-        new Blockly.FieldDropdown(selectedBoard().digitalPinsRGBMatrix),
-        "Port",
-      );
+      .appendField(new FieldInstance("matrix"), "INSTANCE");
+    // Retained only to load projects made before instance references.
+    this.appendDummyInput("LEGACY_PORT")
+      .appendField(new Blockly.FieldTextInput(""), "Port")
+      .setVisible(false);
     this.appendDummyInput("scroll")
       .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_autoscroll)
       .appendField(new Blockly.FieldCheckbox("TRUE"), "AUTOSCROLL");
@@ -294,11 +298,11 @@ Blockly.Blocks["sensebox_ws2812_matrix_drawPixel"] = {
     this.setColour(getColour().sensebox);
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_draw_pixel)
-      .appendField("Port:")
-      .appendField(
-        new Blockly.FieldDropdown(selectedBoard().digitalPinsRGBMatrix),
-        "Port",
-      );
+      .appendField(new FieldInstance("matrix"), "INSTANCE");
+    // Retained only to load projects made before instance references.
+    this.appendDummyInput("LEGACY_PORT")
+      .appendField(new Blockly.FieldTextInput(""), "Port")
+      .setVisible(false);
     this.appendDummyInput("show")
       .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_show)
       .appendField(new Blockly.FieldCheckbox("TRUE"), "SHOW");
@@ -323,11 +327,11 @@ Blockly.Blocks["sensebox_ws2812_matrix_clear"] = {
     this.setColour(getColour().sensebox);
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_clear)
-      .appendField("Port:")
-      .appendField(
-        new Blockly.FieldDropdown(selectedBoard().digitalPinsRGBMatrix),
-        "Port",
-      );
+      .appendField(new FieldInstance("matrix"), "INSTANCE");
+    // Retained only to load projects made before instance references.
+    this.appendDummyInput("LEGACY_PORT")
+      .appendField(new Blockly.FieldTextInput(""), "Port")
+      .setVisible(false);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setTooltip(Blockly.Msg.senseBox_ws2812_rgb_matrix_clear_tooltip);
@@ -340,11 +344,11 @@ Blockly.Blocks["sensebox_ws2812_matrix_showBitmap"] = {
     this.setColour(getColour().sensebox);
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_show_bitmap)
-      .appendField("Port:")
-      .appendField(
-        new Blockly.FieldDropdown(selectedBoard().digitalPinsRGBMatrix),
-        "Port",
-      );
+      .appendField(new FieldInstance("matrix"), "INSTANCE");
+    // Retained only to load projects made before instance references.
+    this.appendDummyInput("LEGACY_PORT")
+      .appendField(new Blockly.FieldTextInput(""), "Port")
+      .setVisible(false);
     this.appendValueInput("input")
       .setCheck(Types.BITMAP.typeName)
       .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_bitmap);
@@ -928,11 +932,11 @@ Blockly.Blocks["sensebox_ws2812_matrix_fullcolor"] = {
     this.setColour(getColour().sensebox);
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_fullcolor)
-      .appendField("Port:")
-      .appendField(
-        new Blockly.FieldDropdown(selectedBoard().digitalPinsRGBMatrix),
-        "Port",
-      );
+      .appendField(new FieldInstance("matrix"), "INSTANCE");
+    // Retained only to load projects made before instance references.
+    this.appendDummyInput("LEGACY_PORT")
+      .appendField(new Blockly.FieldTextInput(""), "Port")
+      .setVisible(false);
     this.appendValueInput("COLOR", "Number")
       .appendField(Blockly.Msg.senseBox_ws2812_rgb_matrix_color)
       .setCheck("Colour");
