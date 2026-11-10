@@ -10,7 +10,10 @@ import {
   parseStepSelection,
 } from "@/helpers/tutorialUrl";
 
-export default function TutorialClassificationWidget({ tutorials = [], mediaBasePath = "/media/hardware/3dmodels/" }) {
+export default function TutorialClassificationWidget({
+  tutorials = [],
+  mediaBasePath = "/media/hardware/3dmodels/",
+}) {
   const normalizedConfigs = useMemo(
     () => normalizeTutorialConfigs(tutorials),
     [tutorials],
@@ -47,11 +50,18 @@ export default function TutorialClassificationWidget({ tutorials = [], mediaBase
     return () => window.removeEventListener("popstate", handlePopState);
   }, [resolveSelection]);
 
-  const handleSelect = useCallback((tutorial) => {
-    setSelected(resolveSelection(tutorial.id) ?? tutorial);
-    window.history.pushState({ tutorialId: tutorial.id }, "", buildTutorialUrl(tutorial.id));
-    window.scrollTo(0, 0);
-  }, [resolveSelection]);
+  const handleSelect = useCallback(
+    (tutorial) => {
+      setSelected(resolveSelection(tutorial.id) ?? tutorial);
+      window.history.pushState(
+        { tutorialId: tutorial.id },
+        "",
+        buildTutorialUrl(tutorial.id),
+      );
+      window.scrollTo(0, 0);
+    },
+    [resolveSelection],
+  );
 
   const handleBack = useCallback(() => {
     setSelected(null);
@@ -75,7 +85,13 @@ export default function TutorialClassificationWidget({ tutorials = [], mediaBase
     );
   }
 
-  return <OverviewPage tutorials={tutorials} onSelect={handleSelect} mediaBasePath={mediaBasePath} />;
+  return (
+    <OverviewPage
+      tutorials={tutorials}
+      onSelect={handleSelect}
+      mediaBasePath={mediaBasePath}
+    />
+  );
 }
 
 TutorialClassificationWidget.propTypes = {

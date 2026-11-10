@@ -50,9 +50,7 @@ export function buildTutorialPayload(state) {
           : null,
       h5psrc: step.h5psrc || null,
       criteriaConfig:
-        step.type === "evaluationPreparation"
-          ? getCriteriaConfig(step)
-          : null,
+        step.type === "evaluationPreparation" ? getCriteriaConfig(step) : null,
       evaluationConfig:
         step.type === "evaluation" ? getEvaluationConfig(step) : null,
     })),

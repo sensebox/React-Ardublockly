@@ -87,8 +87,7 @@ const EvaluationCard = ({ step, tutorialId, onStatusChange }) => {
       { id: newId(), title: "", learnerAdded: true, answers: {} },
     ]);
 
-  const removeEvaluation = (id) =>
-    save(evaluations.filter((e) => e.id !== id));
+  const removeEvaluation = (id) => save(evaluations.filter((e) => e.id !== id));
 
   const goToSourceStep = () =>
     dispatch({ type: "TUTORIAL_STEP", payload: steps.indexOf(sourceStep) });
@@ -96,8 +95,7 @@ const EvaluationCard = ({ step, tutorialId, onStatusChange }) => {
   if (!sourceStep) {
     return (
       <Alert severity="warning">
-        Für diese Bewertung wurde kein Schritt mit Bewertungskriterien
-        gefunden.
+        Für diese Bewertung wurde kein Schritt mit Bewertungskriterien gefunden.
       </Alert>
     );
   }
@@ -145,7 +143,8 @@ const EvaluationCard = ({ step, tutorialId, onStatusChange }) => {
                       })
                     }
                   />
-<IconButton aria-label="Bewertung löschen"
+                  <IconButton
+                    aria-label="Bewertung löschen"
                     onClick={() => removeEvaluation(evaluation.id)}
                     sx={{ color: theme.palette.error.main }}
                   >

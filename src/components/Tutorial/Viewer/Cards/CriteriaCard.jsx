@@ -28,15 +28,16 @@ const emptyCriteria = (count) =>
  */
 const CriteriaCard = ({ step, tutorialId, onStatusChange }) => {
   const theme = useTheme();
-  const { minCriteria, maxCriteria, title, subtitle } =
-    getCriteriaConfig(step);
+  const { minCriteria, maxCriteria, title, subtitle } = getCriteriaConfig(step);
   const answerId = criteriaAnswerId(step);
 
   const [criteria, setCriteria] = useState(() => {
     const saved = tutorialId
       ? loadAnswers(tutorialId).find((a) => a._id === answerId)
       : null;
-    return saved?.criteria?.length ? saved.criteria : emptyCriteria(minCriteria);
+    return saved?.criteria?.length
+      ? saved.criteria
+      : emptyCriteria(minCriteria);
   });
 
   const complete = isCriteriaComplete(criteria, step);
@@ -99,7 +100,8 @@ const CriteriaCard = ({ step, tutorialId, onStatusChange }) => {
                 onChange={(e) => updateCriterion(c.id, e.target.value)}
               />
               {criteria.length > minCriteria && (
-<IconButton aria-label="Kriterium löschen"
+                <IconButton
+                  aria-label="Kriterium löschen"
                   onClick={() => removeCriterion(c.id)}
                   sx={{ color: theme.palette.error.main }}
                 >
