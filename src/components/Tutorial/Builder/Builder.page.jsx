@@ -74,7 +74,7 @@ const BuilderPage = () => {
   /**
    * 🔥 Autosave Hook
    */
-  useTutorialAutosave({
+  const autosaveStatus = useTutorialAutosave({
     enabled: autosaveEnabled,
     state,
     token,
@@ -176,6 +176,7 @@ const BuilderPage = () => {
           setActiveStep={setActiveStep}
           autosaveEnabled={autosaveEnabled}
           setAutosaveEnabled={setAutosaveEnabled}
+          autosaveStatus={autosaveStatus}
         >
           <Button
             variant="contained"

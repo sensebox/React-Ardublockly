@@ -365,6 +365,8 @@ export const UI = {
   save_status_invalid_evaluation:
     "Schritt %1 (Bewertung) braucht davor einen Schritt „Bewertungskriterien festlegen“.",
   save_status_error: "Beim Speichern ist ein Fehler aufgetreten.",
+  builder_autosave_paused_hint:
+    "Änderungen werden gerade nicht gespeichert. Bewertungsschritte brauchen davor einen Schritt „Bewertungskriterien festlegen“ (betroffene Schritte: %1).",
   save_status_error_hint: "Mögliche Gründe:",
   save_status_error_network: "Netzwerkverbindung überprüfen",
   save_status_error_validation: "Daten validieren und erneut versuchen",

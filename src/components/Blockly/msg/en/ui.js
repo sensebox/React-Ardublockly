@@ -355,6 +355,8 @@ export const UI = {
   save_status_invalid_evaluation:
     'Step %1 (evaluation) needs a "define evaluation criteria" step before it.',
   save_status_error: "An error occurred while saving.",
+  builder_autosave_paused_hint:
+    'Changes are currently not being saved. Evaluation steps need a "define evaluation criteria" step before them (affected steps: %1).',
   save_status_error_hint: "Possible reasons:",
   save_status_error_network: "Check network connection",
   save_status_error_validation: "Validate data and try again",
