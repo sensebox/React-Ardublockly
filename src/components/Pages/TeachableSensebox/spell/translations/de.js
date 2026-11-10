@@ -117,6 +117,17 @@ export const spellTranslations_de = {
       "Überprüfe, ob die senseBox MCU Eye den Sketch zum Streamen der Zaubersprüche ausführt.",
     deviceDisconnected: "senseBox unerwartet getrennt",
     dataTimeout: "Keinen Zauberspruch empfangen",
+    waitingForData: "Warte auf Zauberspruch-Daten...",
+    flashConnecting: "Bereite senseBox für den Upload vor...",
+    flashGrantBootloader: "Zauberspruch-Sketch hochladen",
+    flashGrantBootloaderHint:
+      'Es wurden keine Zauberspruch-Daten empfangen, daher wird der Zauberspruch-Sketch auf die senseBox hochgeladen. Klicke dafür auf den Button und wähle im Browser-Dialog den Port "{name}" aus.',
+    flashUploading: "Zauberspruch-Sketch wird hochgeladen...",
+    flashRestarting: "Verbinde senseBox...",
+    flashDone:
+      'Der Zauberspruch-Sketch wurde hochgeladen. Klicke auf "senseBox MCU Eye verbinden (USB)" und wähle die senseBox MCU Eye erneut aus.',
+    flashFailedMessage:
+      "Das Hochladen des Zauberspruch-Sketches ist fehlgeschlagen.",
   },
   help: {
     help: "Hilfe",

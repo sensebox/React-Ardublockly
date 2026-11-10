@@ -36,6 +36,7 @@ import {
   Upload as UploadIcon,
   Bluetooth as BluetoothIcon,
   MoreVert as MoreVertIcon,
+  Usb as UsbIcon,
 } from "@mui/icons-material";
 import useSpellSource from "./hooks/useSpellSource";
 import useSpellBLESource, { StrokeState } from "./hooks/useSpellBLESource";
@@ -49,7 +50,8 @@ import SerialErrorHandler, {
   ErrorTypes,
   ConnectionStatus,
 } from "../SerialErrorHandler";
-import { downloadSpellFirmware } from "../utils/firmwareDownload";
+import useSketchFlash from "../utils/useSketchFlash";
+import spellFirmwareUrl from "./sketch/spell_capture.bin?url";
 import {
   downloadTrainingData,
   parseTrainingDataZip,
@@ -474,7 +476,8 @@ const SpellModelTrainer = ({
   const t = getSpellTranslations(language);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const [isDownloading, setIsDownloading] = useState(false);
+  // Errors of the serial start / spell sketch upload flow.
+  const [spellSerialError, setSpellSerialError] = useState(null);
 
   const serialSource = useSpellSource();
   const bleSource = useSpellBLESource();
@@ -487,14 +490,112 @@ const SpellModelTrainer = ({
   const dataTimeoutError = activeSource.dataTimeoutError;
   const sensorError = activeSource.error;
 
-  const handleDownloadFirmware = async () => {
-    setIsDownloading(true);
-    const result = await downloadSpellFirmware();
-    if (!result.success) {
-      alert(`Failed to download firmware: ${result.error}`);
+  // ─── Serial start incl. spell sketch upload ──────────────────────────────
+  // "Connect senseBox (USB)" opens the port picker and waits for spell data.
+  // If none arrives, the spell sketch is flashed to the same port with
+  // @sensebox/flash-tool (useSketchFlash) and the board is connected again.
+  const {
+    phase: senseBoxPhase,
+    setPhase: setSenseBoxPhase,
+    isBusy: isSenseBoxBusy,
+    isGrantingPort,
+    progress: flashProgress,
+    bootloaderName: flashBootloaderName,
+    flashSketch: flashSpellSketch,
+    grantBootloader,
+    isBoardPort,
+    waitForAppPort,
+  } = useSketchFlash({
+    firmwareUrl: spellFirmwareUrl,
+    onFlashed: () => reconnectAfterFlash(),
+    onFlashFailed: (message) =>
+      setSpellSerialError({ type: ErrorTypes.FLASH_FAILED, message }),
+    // Bootloader port not selected: keep the "Upload spell sketch" button
+    // and additionally show "Connection Failed".
+    onGrantFailed: (message) =>
+      setSpellSerialError({ type: ErrorTypes.CONNECTION_FAILED, message }),
+  });
+
+  /**
+   * Connects the spell sensor via USB and waits for the first data line.
+   * @param {Object} [options]
+   * @param {SerialPort} [options.port] Open this port instead of the picker.
+   * @param {boolean} [options.allowFlash] Upload the spell sketch if no data
+   *   arrives (disabled right after an upload to avoid a loop).
+   */
+  const startSerialSpell = async ({ port, allowFlash = true } = {}) => {
+    setSpellSerialError(null);
+    setSenseBoxPhase("waitingForData");
+
+    const { connected, error } = await serialSource.connect({ port });
+    if (!connected) {
+      setSenseBoxPhase("idle");
+      if (error) {
+        setSpellSerialError({
+          type: error.type || ErrorTypes.CONNECTION_FAILED,
+          message: error.message,
+        });
+      }
+      return;
     }
-    setIsDownloading(false);
+
+    const gotData = await serialSource.waitForData(port ? 8000 : 4000);
+    if (gotData) {
+      setSenseBoxPhase("idle");
+      triggerSpellCasting();
+      return;
+    }
+
+    // No data: release the port so the flash tool can use it.
+    const spellPort = await serialSource.releasePort();
+    if (!allowFlash || !isBoardPort(spellPort)) {
+      // Still no data right after an upload, or not a senseBox MCU Eye:
+      // don't flash (again), report as a regular connection error.
+      setSenseBoxPhase("idle");
+      setSpellSerialError({
+        type: ErrorTypes.CONNECTION_FAILED,
+        message: "No spell data received from the senseBox MCU Eye",
+      });
+      return;
+    }
+    await flashSpellSketch(spellPort);
   };
+
+  // After the upload the board reboots into the spell sketch. If the browser
+  // already has permission for its port, it is connected automatically;
+  // otherwise the user has to click "Connect senseBox (USB)" once more.
+  const reconnectAfterFlash = async () => {
+    const port = await waitForAppPort();
+    if (!port) {
+      setSenseBoxPhase("done");
+      return;
+    }
+    // Give the freshly enumerated USB device a moment before opening it.
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await startSerialSpell({ port, allowFlash: false });
+  };
+
+  const handleGrantBootloader = async () => {
+    setSpellSerialError(null);
+    await grantBootloader();
+  };
+
+  // "Try again" in the error box: while waiting for the bootloader port, ask
+  // for it again; otherwise run the whole serial start flow again.
+  const handleSpellSerialRetry = async () => {
+    if (senseBoxPhase === "grant") {
+      await handleGrantBootloader();
+      return;
+    }
+    await startSerialSpell();
+  };
+
+  const senseBoxBusyLabel = {
+    waitingForData: t.errors.waitingForData,
+    connecting: t.errors.flashConnecting,
+    flashing: t.errors.flashUploading,
+    restarting: t.errors.flashRestarting,
+  }[senseBoxPhase];
 
   const {
     trainModel: executeTraining,
@@ -872,39 +973,55 @@ const SpellModelTrainer = ({
                   disableHoverListener={serialSource.isSupported}
                 >
                   <span>
-                    <Button
-                      variant="contained"
-                      startIcon={
-                        serialSource.isConnecting ? (
-                          <CircularProgress size={16} color="inherit" />
-                        ) : (
-                          <SensorIcon />
-                        )
-                      }
-                      onClick={
-                        serialSource.isConnected
-                          ? serialSource.disconnect
-                          : async () => {
-                              await serialSource.connect();
-                              triggerSpellCasting();
-                            }
-                      }
-                      disabled={
-                        disabled ||
-                        serialSource.isConnecting ||
-                        !serialSource.isSupported ||
-                        bleSource.isConnected ||
-                        bleSource.isConnecting
-                      }
-                      color={serialSource.isConnected ? "secondary" : "primary"}
-                    >
-                      {serialSource.isConnecting
-                        ? t.training?.connecting || "Connecting..."
-                        : serialSource.isConnected
-                          ? t.training?.disconnectSenseBox ||
-                            "Disconnect Serial"
-                          : t.training?.connectSenseBox || "Connect Serial"}
-                    </Button>
+                    {senseBoxPhase === "grant" ? (
+                      <Button
+                        variant="contained"
+                        color="warning"
+                        startIcon={<UsbIcon />}
+                        onClick={handleGrantBootloader}
+                        disabled={disabled || isGrantingPort}
+                      >
+                        {t.errors.flashGrantBootloader}
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="contained"
+                        startIcon={
+                          isSenseBoxBusy || serialSource.isConnecting ? (
+                            <CircularProgress size={16} color="inherit" />
+                          ) : (
+                            <SensorIcon />
+                          )
+                        }
+                        onClick={
+                          serialSource.isConnected
+                            ? serialSource.disconnect
+                            : () => startSerialSpell()
+                        }
+                        disabled={
+                          disabled ||
+                          isSenseBoxBusy ||
+                          serialSource.isConnecting ||
+                          !serialSource.isSupported ||
+                          bleSource.isConnected ||
+                          bleSource.isConnecting
+                        }
+                        color={
+                          serialSource.isConnected && !isSenseBoxBusy
+                            ? "secondary"
+                            : "primary"
+                        }
+                      >
+                        {isSenseBoxBusy
+                          ? senseBoxBusyLabel
+                          : serialSource.isConnecting
+                            ? t.training?.connecting || "Connecting..."
+                            : serialSource.isConnected
+                              ? t.training?.disconnectSenseBox ||
+                                "Disconnect Serial"
+                              : t.training?.connectSenseBox || "Connect Serial"}
+                      </Button>
+                    )}
                   </span>
                 </Tooltip>
               )}
@@ -944,7 +1061,9 @@ const SpellModelTrainer = ({
                         bleSource.isConnecting ||
                         !bleSource.isSupported ||
                         serialSource.isConnected ||
-                        serialSource.isConnecting
+                        serialSource.isConnecting ||
+                        isSenseBoxBusy ||
+                        senseBoxPhase === "grant"
                       }
                       color={bleSource.isConnected ? "secondary" : "primary"}
                     >
@@ -970,66 +1089,100 @@ const SpellModelTrainer = ({
                   }
                 />
               )}
-
-              {!bleSource.isConnected &&
-                !bleSource.isConnecting &&
-                !serialSource.isConnected &&
-                !serialSource.isConnecting && (
-                  <Button
-                    variant="outlined"
-                    startIcon={
-                      isDownloading ? (
-                        <CircularProgress size={16} />
-                      ) : (
-                        <DownloadIcon />
-                      )
-                    }
-                    onClick={handleDownloadFirmware}
-                    disabled={
-                      isDownloading ||
-                      disabled ||
-                      (!serialSource.isSupported && !bleSource.isSupported)
-                    }
-                  >
-                    {t.training?.downloadFirmware}
-                  </Button>
-                )}
             </Box>
 
-            {/* Error display */}
-            {((isConnected && dataTimeoutError) ||
-              (!isConnected && sensorError)) && (
+            {/* Spell sketch upload status */}
+            {senseBoxPhase === "grant" && !spellSerialError && (
+              <Alert severity="info" sx={{ mb: 2 }}>
+                {t.errors.flashGrantBootloaderHint.replace(
+                  "{name}",
+                  flashBootloaderName,
+                )}
+              </Alert>
+            )}
+
+            {senseBoxPhase === "flashing" && (
+              <Box sx={{ mb: 2 }}>
+                <LinearProgress
+                  variant={flashProgress > 0 ? "determinate" : "indeterminate"}
+                  value={flashProgress}
+                />
+                {flashProgress > 0 && (
+                  <Typography variant="caption" color="text.secondary">
+                    {flashProgress}%
+                  </Typography>
+                )}
+              </Box>
+            )}
+
+            {senseBoxPhase === "done" && (
+              <Alert
+                severity="success"
+                onClose={() => setSenseBoxPhase("idle")}
+                sx={{ mb: 2 }}
+              >
+                {t.errors.flashDone}
+              </Alert>
+            )}
+
+            {/* Errors of the serial start / spell sketch upload */}
+            {spellSerialError && (
               <Box sx={{ mb: 3 }}>
                 <SerialErrorHandler
-                  error={
-                    !isConnected && sensorError
-                      ? {
-                          type:
-                            sensorError.type || ErrorTypes.CONNECTION_FAILED,
-                          message: sensorError.message,
-                        }
+                  error={spellSerialError}
+                  connectionStatus={ConnectionStatus.ERROR}
+                  onRetry={handleSpellSerialRetry}
+                  onReconnect={handleSpellSerialRetry}
+                  onDismiss={() => setSpellSerialError(null)}
+                  showStatus={false}
+                  overrides={
+                    spellSerialError.type === ErrorTypes.FLASH_FAILED
+                      ? { errorMessage: t.errors.flashFailedMessage }
                       : {
-                          type: ErrorTypes.CONNECTION_FAILED,
-                          message: t.errors.dataTimeoutMessage,
+                          errorTitle: t.errors.connectionFailed,
+                          errorMessage: t.errors.connectionFailedMessage,
+                          troubleshootingFirmware:
+                            t.errors.troubleshootingFirmware,
                         }
                   }
-                  connectionStatus={ConnectionStatus.CONNECTED}
-                  onRetry={async () => {
-                    await activeSource.disconnect();
-                    await activeSource.connect();
-                  }}
-                  onDismiss={() => activeSource.disconnect()}
-                  showStatus={false}
-                  overrides={{
-                    errorTitle: t.errors.connectionFailed,
-                    errorMessage: t.errors.connectionFailedMessage,
-                    troubleshootingFirmware: t.errors.troubleshootingFirmware,
-                    downloadFirmwareLabel: t.errors.downloadFirmware,
-                    downloadFirmwareFn: downloadSpellFirmware,
-                  }}
                 />
               </Box>
             )}
+
+            {/* Error display */}
+            {!spellSerialError &&
+              senseBoxPhase !== "waitingForData" &&
+              ((isConnected && dataTimeoutError) ||
+                (!isConnected && sensorError)) && (
+                <Box sx={{ mb: 3 }}>
+                  <SerialErrorHandler
+                    error={
+                      !isConnected && sensorError
+                        ? {
+                            type:
+                              sensorError.type || ErrorTypes.CONNECTION_FAILED,
+                            message: sensorError.message,
+                          }
+                        : {
+                            type: ErrorTypes.CONNECTION_FAILED,
+                            message: t.errors.dataTimeoutMessage,
+                          }
+                    }
+                    connectionStatus={ConnectionStatus.CONNECTED}
+                    onRetry={async () => {
+                      await activeSource.disconnect();
+                      await activeSource.connect();
+                    }}
+                    onDismiss={() => activeSource.disconnect()}
+                    showStatus={false}
+                    overrides={{
+                      errorTitle: t.errors.connectionFailed,
+                      errorMessage: t.errors.connectionFailedMessage,
+                      troubleshootingFirmware: t.errors.troubleshootingFirmware,
+                    }}
+                  />
+                </Box>
+              )}
             {/* Live stroke visualization */}
             {isConnected && !dataTimeoutError && (
               <Box sx={{ mb: 3 }}>
