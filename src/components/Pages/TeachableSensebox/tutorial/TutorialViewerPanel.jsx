@@ -21,7 +21,8 @@ import SpellClassificationTool from "../spell/SpellClassificationTool";
 
 function ClassificationPanel({ type }) {
   if (type === "image") return <ImageClassificationTool hideHeader />;
-  if (type === "orientation") return <OrientationClassificationTool hideHeader />;
+  if (type === "orientation")
+    return <OrientationClassificationTool hideHeader />;
   if (type === "spell") return <SpellClassificationTool hideHeader />;
   return null;
 }

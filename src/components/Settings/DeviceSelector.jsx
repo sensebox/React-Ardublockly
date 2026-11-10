@@ -40,9 +40,6 @@ export default function DeviceSelector() {
       case "MCU":
         boardName = "senseBox MCU";
         break;
-      case "MCU:mini":
-        boardName = "senseBox MCU mini";
-        break;
       case "MCU-S2":
         boardName = "senseBox MCU-S2";
         break;
@@ -88,7 +85,6 @@ export default function DeviceSelector() {
           onChange={handleChange}
         >
           <MenuItem value="MCU">senseBox MCU</MenuItem>
-          <MenuItem value="MCU:mini">senseBox MCU mini</MenuItem>
           <MenuItem value="MCU-S2">senseBox MCU-S2</MenuItem>
           <MenuItem value="MCU-EYE">senseBox MCU Eye</MenuItem>
         </Select>

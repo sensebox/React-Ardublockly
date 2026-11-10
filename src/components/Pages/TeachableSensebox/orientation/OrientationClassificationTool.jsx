@@ -21,7 +21,10 @@ import HelpSidebar from "../HelpSidebar";
 import HelpButton, { useHelpBlink, useHelpBlinkCooldown } from "../HelpButton";
 import { HelpProvider } from "../HelpContext";
 
-const OrientationClassificationTool = ({ hideHelp = false, hideHeader = false }) => {
+const OrientationClassificationTool = ({
+  hideHelp = false,
+  hideHeader = false,
+}) => {
   const [trainedModel, setTrainedModel] = useState(null);
   const [isTraining, setIsTraining] = useState(false);
   const [trainingError, setTrainingError] = useState(null);
