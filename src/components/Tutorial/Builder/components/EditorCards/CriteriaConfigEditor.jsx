@@ -1,6 +1,6 @@
 import { Box, TextField, Typography } from "@mui/material";
 import {
-  DEFAULT_CRITERIA_TITLE,
+  getDefaultCriteriaTitle,
   getCriteriaConfig,
 } from "../../../Viewer/helpers/evaluationUtils";
 
@@ -41,7 +41,7 @@ const CriteriaConfigEditor = ({ step, setCriteriaConfig }) => {
           fullWidth
           size="small"
           label="Titel"
-          placeholder={DEFAULT_CRITERIA_TITLE}
+          placeholder={getDefaultCriteriaTitle()}
           value={title}
           onChange={(e) => updateText("title", e.target.value)}
         />

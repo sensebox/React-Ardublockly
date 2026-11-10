@@ -10,6 +10,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
+import * as Blockly from "blockly";
 import { AddCircleOutline, Delete, RateReview } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { loadAnswers, upsertAnswer } from "../helpers/tutorialStorageUtils";
@@ -95,7 +96,7 @@ const EvaluationCard = ({ step, tutorialId, onStatusChange }) => {
   if (!sourceStep) {
     return (
       <Alert severity="warning">
-        Für diese Bewertung wurde kein Schritt mit Bewertungskriterien gefunden.
+        {Blockly.Msg.tutorials_evaluation_no_source}
       </Alert>
     );
   }
@@ -106,11 +107,11 @@ const EvaluationCard = ({ step, tutorialId, onStatusChange }) => {
         severity="info"
         action={
           <Button color="inherit" size="small" onClick={goToSourceStep}>
-            Zu den Kriterien
+            {Blockly.Msg.tutorials_evaluation_to_criteria}
           </Button>
         }
       >
-        Lege zuerst deine Bewertungskriterien fest.
+        {Blockly.Msg.tutorials_evaluation_criteria_first}
       </Alert>
     );
   }
@@ -135,7 +136,7 @@ const EvaluationCard = ({ step, tutorialId, onStatusChange }) => {
                   <TextField
                     fullWidth
                     size="small"
-                    label="Titel der Bewertung"
+                    label={Blockly.Msg.tutorials_evaluation_title_label}
                     value={evaluation.title}
                     onChange={(e) =>
                       updateEvaluation(evaluation.id, {
@@ -144,7 +145,7 @@ const EvaluationCard = ({ step, tutorialId, onStatusChange }) => {
                     }
                   />
                   <IconButton
-                    aria-label="Bewertung löschen"
+                    aria-label={Blockly.Msg.tutorials_evaluation_delete}
                     onClick={() => removeEvaluation(evaluation.id)}
                     sx={{ color: theme.palette.error.main }}
                   >
@@ -187,7 +188,7 @@ const EvaluationCard = ({ step, tutorialId, onStatusChange }) => {
             startIcon={<AddCircleOutline />}
             onClick={addEvaluation}
           >
-            Bewertung hinzufügen
+            {Blockly.Msg.tutorials_evaluation_add}
           </Button>
         </Box>
       )}

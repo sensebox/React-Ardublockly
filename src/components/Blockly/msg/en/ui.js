@@ -316,6 +316,28 @@ export const UI = {
   tutorials_hardware_here: "here",
   tutorials_requirements:
     "Before continuing with this tutorial, you should have successfully completed the following tutorials:",
+  tutorials_solution_submit: "Submit solution",
+  tutorials_solution_no_code: "No Blockly code could be loaded.",
+  tutorials_solution_success_title: "Well done!",
+  tutorials_solution_error_title: "Something is still missing…",
+  tutorials_solution_show_help: "Show help",
+  tutorials_solution_analysis: "Analysis:",
+  tutorials_solution_compile_hint:
+    "You can now compile the program code and test it live on your senseBox!",
+  tutorials_criteria_default_title: "Your evaluation criteria",
+  tutorials_criteria_subtitle_exact: "Define %1 criteria.",
+  tutorials_criteria_subtitle_range: "Define between %1 and %2 criteria.",
+  tutorials_criteria_label: "Criterion %1",
+  tutorials_criteria_delete: "Delete criterion",
+  tutorials_criteria_add: "Add criterion",
+  tutorials_evaluation_default_title: "Evaluation",
+  tutorials_evaluation_no_source:
+    "No step with evaluation criteria was found for this evaluation.",
+  tutorials_evaluation_criteria_first: "Define your evaluation criteria first.",
+  tutorials_evaluation_to_criteria: "Go to criteria",
+  tutorials_evaluation_title_label: "Evaluation title",
+  tutorials_evaluation_delete: "Delete evaluation",
+  tutorials_evaluation_add: "Add evaluation",
 
   /**
    * Tutorial Builder

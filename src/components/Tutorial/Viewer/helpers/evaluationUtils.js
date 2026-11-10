@@ -2,6 +2,7 @@
  * Helpers for the "evaluationPreparation" (learner defines criteria) and
  * "evaluation" (learner writes a free text per criterion) step types.
  */
+import * as Blockly from "blockly";
 
 export const DEFAULT_CRITERIA_CONFIG = {
   minCriteria: 2,
@@ -10,9 +11,12 @@ export const DEFAULT_CRITERIA_CONFIG = {
   subtitle: "",
 };
 
-export const DEFAULT_EVALUATION_TITLE = "Bewertung";
+// functions, so the title follows a language switch at runtime
+export const getDefaultEvaluationTitle = () =>
+  Blockly.Msg.tutorials_evaluation_default_title;
 
-export const DEFAULT_CRITERIA_TITLE = "Deine Bewertungskriterien";
+export const getDefaultCriteriaTitle = () =>
+  Blockly.Msg.tutorials_criteria_default_title;
 
 export const DEFAULT_EVALUATION_CONFIG = {
   sourceStepId: "",
@@ -85,8 +89,8 @@ export const buildEvaluationList = (step, storedEvaluations = []) => {
     title:
       e.title?.trim() ||
       (config.evaluations.length > 1
-        ? `${DEFAULT_EVALUATION_TITLE} ${index + 1}`
-        : DEFAULT_EVALUATION_TITLE),
+        ? `${getDefaultEvaluationTitle()} ${index + 1}`
+        : getDefaultEvaluationTitle()),
     learnerAdded: false,
     answers: storedById[e.id]?.answers || {},
   }));

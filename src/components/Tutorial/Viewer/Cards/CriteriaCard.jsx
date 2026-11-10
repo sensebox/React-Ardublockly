@@ -9,12 +9,13 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
+import * as Blockly from "blockly";
 import { AddCircleOutline, Delete, Checklist } from "@mui/icons-material";
 import { loadAnswers, upsertAnswer } from "../helpers/tutorialStorageUtils";
 import {
   criteriaAnswerId,
-  DEFAULT_CRITERIA_TITLE,
   getCriteriaConfig,
+  getDefaultCriteriaTitle,
   isCriteriaComplete,
   newId,
 } from "../helpers/evaluationUtils";
@@ -76,7 +77,7 @@ const CriteriaCard = ({ step, tutorialId, onStatusChange }) => {
         <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
           <Checklist sx={{ mr: 1, color: theme.palette.primary.main }} />
           <Typography variant="h6" fontWeight={600}>
-            {title?.trim() || DEFAULT_CRITERIA_TITLE}
+            {title?.trim() || getDefaultCriteriaTitle()}
           </Typography>
         </Box>
         <Typography
@@ -85,8 +86,13 @@ const CriteriaCard = ({ step, tutorialId, onStatusChange }) => {
         >
           {subtitle?.trim() ||
             (minCriteria === maxCriteria
-              ? `Lege ${minCriteria} Kriterien fest.`
-              : `Lege zwischen ${minCriteria} und ${maxCriteria} Kriterien fest.`)}
+              ? Blockly.Msg.tutorials_criteria_subtitle_exact.replace(
+                  "%1",
+                  minCriteria,
+                )
+              : Blockly.Msg.tutorials_criteria_subtitle_range
+                  .replace("%1", minCriteria)
+                  .replace("%2", maxCriteria))}
         </Typography>
 
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
@@ -95,13 +101,16 @@ const CriteriaCard = ({ step, tutorialId, onStatusChange }) => {
               <TextField
                 fullWidth
                 size="small"
-                label={`Kriterium ${index + 1}`}
+                label={Blockly.Msg.tutorials_criteria_label.replace(
+                  "%1",
+                  index + 1,
+                )}
                 value={c.text}
                 onChange={(e) => updateCriterion(c.id, e.target.value)}
               />
               {criteria.length > minCriteria && (
                 <IconButton
-                  aria-label="Kriterium löschen"
+                  aria-label={Blockly.Msg.tutorials_criteria_delete}
                   onClick={() => removeCriterion(c.id)}
                   sx={{ color: theme.palette.error.main }}
                 >
@@ -119,7 +128,7 @@ const CriteriaCard = ({ step, tutorialId, onStatusChange }) => {
             onClick={addCriterion}
             sx={{ mt: 2 }}
           >
-            Kriterium hinzufügen
+            {Blockly.Msg.tutorials_criteria_add}
           </Button>
         )}
       </CardContent>

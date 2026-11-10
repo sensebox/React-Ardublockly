@@ -16,7 +16,6 @@ import {
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
-  DEFAULT_EVALUATION_TITLE,
   getEvaluationConfig,
   getStepKey,
   newId,
