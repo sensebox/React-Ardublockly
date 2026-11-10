@@ -44,6 +44,7 @@ import {
   Upload as UploadIcon,
   MoreVert as MoreVertIcon,
   Warning as WarningIcon,
+  Usb as UsbIcon,
 } from "@mui/icons-material";
 import useCameraSource from "./hooks/useCameraSource";
 import useLightbox, { LightboxComponent } from "./hooks/useLightbox";
@@ -59,10 +60,9 @@ import ExpandedClassDialog from "./ExpandedClassDialog";
 import useModelTraining from "./hooks/useModelTraining";
 import { DEFAULT_TRAINING_SETTINGS } from "./hooks/useModelTraining";
 import useModelPrediction from "./hooks/useModelPrediction";
-import {
-  downloadCameraFirmware,
-  downloadCollectFirmware,
-} from "../utils/firmwareDownload";
+import { downloadCollectFirmware } from "../utils/firmwareDownload";
+import { matchesPort, useFlashDevice } from "@sensebox/flash-tool";
+import cameraFirmwareUrl from "./sketch/camera_capture.bin?url";
 import {
   downloadTrainingData,
   parseTrainingDataZip,
@@ -96,7 +96,14 @@ const ModelTrainer = ({
     ConnectionStatus.DISCONNECTED,
   );
   const [browserCompatible, setBrowserCompatible] = useState(true);
-  const [isDownloading, setIsDownloading] = useState(false);
+  // senseBox camera start / camera sketch upload:
+  // idle | waitingForImage | connecting | grant | flashing | restarting | done | error
+  const [senseBoxPhase, setSenseBoxPhase] = useState("idle");
+  // True while the bootloader port picker is open.
+  const [isGrantingPort, setIsGrantingPort] = useState(false);
+  // True while startSenseBoxCamera waits for the first image.
+  const waitingForImageRef = useRef(false);
+  const cameraFirmwareRef = useRef(null);
   const [isDownloadingCollect, setIsDownloadingCollect] = useState(false);
   const [isFloatingPreviewCollapsed, setIsFloatingPreviewCollapsed] =
     useState(false);
@@ -130,6 +137,8 @@ const ModelTrainer = ({
     error: cameraError,
     pauseFrameTimeoutMonitor,
     resumeFrameTimeoutMonitor,
+    waitForSerialFrame,
+    releaseSerialPort,
   } = useCameraSource();
 
   const {
@@ -340,6 +349,20 @@ const ModelTrainer = ({
           return;
         }
 
+        if (cameraError.type === ErrorTypes.CAPTURE_FAILED) {
+          // While waiting for the first image, startSenseBoxCamera handles it.
+          if (waitingForImageRef.current) return;
+          // The camera stopped delivering images while running: release the
+          // port so "Flash the camera capture sketch" can use it.
+          releaseSerialPort();
+          if (previewContainerRef.current) {
+            previewContainerRef.current.innerHTML = "";
+          }
+          setConnectionStatus(ConnectionStatus.ERROR);
+          setSerialError({ type: ErrorTypes.CAPTURE_FAILED });
+          return;
+        }
+
         const warningTypes = [
           ErrorTypes.FRAME_TIMEOUT,
           ErrorTypes.FRAME_CORRUPTED,
@@ -360,12 +383,8 @@ const ModelTrainer = ({
         onTrainingError(`Camera error: ${cameraError.message}`);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cameraError, onTrainingError, sourceType]);
-
-  const handleReconnect = useCallback(async () => {
-    setSerialError(null);
-    await startCamera();
-  }, [startCamera]);
 
   const handleDismissError = useCallback(() => {
     setSerialError(null);
@@ -374,14 +393,276 @@ const ModelTrainer = ({
     }
   }, [connectionStatus]);
 
-  const handleDownloadFirmware = async () => {
-    setIsDownloading(true);
-    const result = await downloadCameraFirmware();
-    if (!result.success) {
-      alert(`Failed to download firmware: ${result.error}`);
-    }
-    setIsDownloading(false);
+  // ─── senseBox camera start incl. camera sketch upload ──────────────────────
+  // Clicking "Start senseBox camera" opens the port picker and waits for an
+  // image. If none arrives, the camera sketch is flashed to the same port with
+  // @sensebox/flash-tool and the camera is started again afterwards.
+  const {
+    profile: flashProfile,
+    selectDevice: selectFlashDevice,
+    reconnect: reconnectFlashDevice,
+    prepareBootloader,
+    grantBootloaderPort,
+    flash,
+    resetFlashState,
+    status: flashStatus,
+    progress: flashProgress,
+    error: flashDeviceError,
+  } = useFlashDevice({ board: "MCU-EYE" });
+
+  const loadCameraFirmware = async () => {
+    if (cameraFirmwareRef.current) return cameraFirmwareRef.current;
+    const response = await fetch(cameraFirmwareUrl);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    cameraFirmwareRef.current = new Uint8Array(await response.arrayBuffer());
+    return cameraFirmwareRef.current;
   };
+
+  // Shown by SerialErrorHandler ("Upload failed" + details + troubleshooting).
+  const failFlash = (message) => {
+    setSenseBoxPhase("idle");
+    setConnectionStatus(ConnectionStatus.ERROR);
+    setSerialError({ type: ErrorTypes.FLASH_FAILED, message });
+  };
+
+  const attachPreview = () => {
+    const previewElement = getPreviewElement();
+    if (previewElement && previewContainerRef.current) {
+      previewContainerRef.current.innerHTML = "";
+      previewContainerRef.current.appendChild(previewElement);
+    }
+  };
+
+  // Polls for the camera's (non-bootloader) port after the board rebooted
+  // into the new sketch. Only finds it if the browser already has permission.
+  const waitForCameraPort = async (timeoutMs = 10000) => {
+    const bootloaderIds = flashProfile.bootloaderProductIds ?? [];
+    const deadline = Date.now() + timeoutMs;
+    while (Date.now() < deadline) {
+      const ports = await navigator.serial.getPorts();
+      const port = ports.find((candidate) => {
+        const info = candidate.getInfo?.() ?? {};
+        return (
+          candidate.connected !== false &&
+          matchesPort(candidate, flashProfile) &&
+          !bootloaderIds.includes(info.usbProductId)
+        );
+      });
+      if (port) return port;
+      await new Promise((resolve) => setTimeout(resolve, 500));
+    }
+    return null;
+  };
+
+  const runFlash = async () => {
+    setSenseBoxPhase("flashing");
+    await flash(cameraFirmwareRef.current);
+    // Success/failure is picked up from flashStatus in the effect below.
+  };
+
+  // Puts the board behind `cameraPort` into bootloader mode and uploads the
+  // camera sketch. If the browser has no permission for the bootloader port
+  // yet, switches to "grant" (needs a fresh click).
+  const flashCameraSketch = async (cameraPort) => {
+    resetFlashState();
+    setSenseBoxPhase("connecting");
+    try {
+      await loadCameraFirmware();
+    } catch (err) {
+      failFlash(err.message);
+      return;
+    }
+
+    let bootloaderPort;
+    try {
+      bootloaderPort = matchesPort(cameraPort, flashProfile, true)
+        ? // Already in the bootloader – no reset needed.
+          await reconnectFlashDevice()
+        : await prepareBootloader(cameraPort);
+    } catch (err) {
+      failFlash(err?.message || String(err));
+      return;
+    }
+    if (!bootloaderPort) {
+      setSenseBoxPhase("grant");
+      return;
+    }
+    await runFlash();
+  };
+
+  /**
+   * Starts the senseBox camera and waits for the first image.
+   * @param {Object} [options]
+   * @param {SerialPort} [options.port] Open this port instead of the picker.
+   * @param {boolean} [options.allowFlash] Upload the camera sketch if no image
+   *   arrives (disabled right after an upload to avoid a loop).
+   */
+  const startSenseBoxCamera = async ({ port, allowFlash = true } = {}) => {
+    setSenseBoxPhase("waitingForImage");
+    setSerialError(null);
+    setVideoLoading(true);
+    setConnectionStatus(ConnectionStatus.CONNECTING);
+
+    try {
+      await startCameraSource(port ? { port } : undefined);
+    } catch (error) {
+      console.error("Camera error:", error);
+      setVideoLoading(false);
+      setSenseBoxPhase("idle");
+      setConnectionStatus(ConnectionStatus.ERROR);
+      setSerialError({
+        type: error.type || ErrorTypes.CONNECTION_FAILED,
+        message: error.message,
+      });
+      return;
+    }
+    attachPreview();
+
+    waitingForImageRef.current = true;
+    const result = await waitForSerialFrame(port ? 8000 : 4000);
+    waitingForImageRef.current = false;
+    if (result === "frame") {
+      setVideoLoading(false);
+      setConnectionStatus(ConnectionStatus.CONNECTED);
+      setSenseBoxPhase("idle");
+      return;
+    }
+
+    // No image: release the port (for the flash tool or a later retry).
+    const cameraPort = await releaseSerialPort();
+    setVideoLoading(false);
+    setConnectionStatus(ConnectionStatus.DISCONNECTED);
+    if (previewContainerRef.current) previewContainerRef.current.innerHTML = "";
+
+    if (result === "captureFailed") {
+      // The camera sketch is running but the camera can't take pictures –
+      // uploading the sketch again is offered as an option, not done.
+      setSenseBoxPhase("idle");
+      setConnectionStatus(ConnectionStatus.ERROR);
+      setSerialError({ type: ErrorTypes.CAPTURE_FAILED });
+      return;
+    }
+
+    if (!allowFlash || !cameraPort || !matchesPort(cameraPort, flashProfile)) {
+      // Still no image right after an upload, or not a senseBox MCU Eye:
+      // don't flash (again), report as a regular connection error.
+      setSenseBoxPhase("idle");
+      setConnectionStatus(ConnectionStatus.ERROR);
+      setSerialError({
+        type: ErrorTypes.CONNECTION_FAILED,
+        message:
+          "Connection to senseBox MCU Eye camera could not be established",
+      });
+      return;
+    }
+    await flashCameraSketch(cameraPort);
+  };
+
+  // After the upload the board reboots into the camera sketch. If the browser
+  // already has permission for its port, the camera starts automatically;
+  // otherwise the user has to click "Start senseBox camera" once more.
+  const restartCameraAfterFlash = async () => {
+    setSenseBoxPhase("restarting");
+    const port = await waitForCameraPort();
+    if (!port) {
+      setSenseBoxPhase("done");
+      return;
+    }
+    // Give the freshly enumerated USB device a moment before opening it.
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await startSenseBoxCamera({ port, allowFlash: false });
+  };
+
+  // First upload only: grant access to the re-enumerated bootloader port.
+  // Must run directly from a click so requestPort() has user activation.
+  const handleGrantBootloader = async () => {
+    let granted = null;
+    let failureMessage = "No bootloader port selected";
+    setSerialError(null);
+    setIsGrantingPort(true);
+    try {
+      granted = await grantBootloaderPort();
+    } catch (err) {
+      failureMessage = err?.message || String(err);
+    } finally {
+      setIsGrantingPort(false);
+    }
+    if (!granted) {
+      // Picker cancelled or port not accessible: keep the "Upload camera
+      // sketch" button and additionally show "Connection Failed".
+      setConnectionStatus(ConnectionStatus.ERROR);
+      setSerialError({
+        type: ErrorTypes.CONNECTION_FAILED,
+        message: failureMessage,
+      });
+      return;
+    }
+    await runFlash();
+  };
+
+  const handleSenseBoxCameraClick = async () => {
+    if (sourceType === "serial" && isCameraActive) {
+      stopCamera();
+      return;
+    }
+    if (isCameraActive) await stopCamera();
+    await selectSource("serial");
+    await startSenseBoxCamera();
+    triggerWebcam();
+  };
+
+  // "Try again" / "Reconnect" in the SerialErrorHandler: while waiting for the
+  // bootloader port, ask for it again; otherwise run the whole start flow
+  // again (incl. uploading the camera sketch if no image arrives).
+  const handleSerialRetry = async () => {
+    if (senseBoxPhase === "grant") {
+      await handleGrantBootloader();
+      return;
+    }
+    setSerialError(null);
+    if (isCameraActive) await stopCamera();
+    await startSenseBoxCamera();
+  };
+
+  // "Flash the camera capture sketch" in the Capture Failed error: start the
+  // flash cycle. Uses the already permitted MCU Eye port if there is one,
+  // otherwise asks for it (this runs from a click, so the picker may open).
+  const handleFlashCaptureSketch = async () => {
+    setSerialError(null);
+    setConnectionStatus(ConnectionStatus.CONNECTING);
+    setSenseBoxPhase("connecting");
+    let port = await reconnectFlashDevice();
+    if (!port) port = await selectFlashDevice();
+    if (!port) {
+      setSenseBoxPhase("idle");
+      setConnectionStatus(ConnectionStatus.ERROR);
+      setSerialError({
+        type: ErrorTypes.CONNECTION_FAILED,
+        message: "No serial port selected",
+      });
+      return;
+    }
+    await flashCameraSketch(port);
+  };
+
+  useEffect(() => {
+    if (senseBoxPhase !== "flashing") return;
+    if (flashStatus === "done") {
+      restartCameraAfterFlash();
+    } else if (flashStatus === "error") {
+      failFlash(flashDeviceError || "Unknown error");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [senseBoxPhase, flashStatus, flashDeviceError]);
+
+  const flashBootloaderName = flashProfile?.bootloaderName ?? "USB_JTAG_...";
+  const senseBoxBusyLabel = {
+    waitingForImage: t.errors.waitingForImage,
+    connecting: t.errors.flashConnecting,
+    flashing: t.errors.flashUploading,
+    restarting: t.errors.flashRestarting,
+  }[senseBoxPhase];
+  const isSenseBoxBusy = Boolean(senseBoxBusyLabel);
 
   const handleDownloadCollectSketch = async () => {
     setIsDownloadingCollect(true);
@@ -660,7 +941,7 @@ const ModelTrainer = ({
                     triggerWebcam();
                   }
                 }}
-                disabled={disabled}
+                disabled={disabled || isSenseBoxBusy || isGrantingPort}
                 color={
                   sourceType === "webcam" && isCameraActive
                     ? "secondary"
@@ -689,58 +970,78 @@ const ModelTrainer = ({
                 disableHoverListener={!(disabled || !browserCompatible)}
               >
                 <span>
-                  <Button
-                    variant="contained"
-                    startIcon={<CameraIcon />}
-                    onClick={async () => {
-                      if (sourceType === "serial" && isCameraActive) {
-                        stopCamera();
-                      } else {
-                        if (isCameraActive) stopCamera();
-                        await selectSource("serial");
-                        await startCamera();
-                        triggerWebcam();
+                  {senseBoxPhase === "grant" ? (
+                    <Button
+                      variant="contained"
+                      color="warning"
+                      startIcon={<UsbIcon />}
+                      onClick={handleGrantBootloader}
+                      disabled={disabled || isGrantingPort}
+                    >
+                      {t.errors.flashGrantBootloader}
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      startIcon={
+                        isSenseBoxBusy ? (
+                          <CircularProgress size={16} color="inherit" />
+                        ) : (
+                          <CameraIcon />
+                        )
                       }
-                    }}
-                    disabled={disabled || !browserCompatible}
-                    color={
-                      sourceType === "serial" && isCameraActive
-                        ? "secondary"
-                        : "primary"
-                    }
-                  >
-                    {sourceType === "serial" && isCameraActive
-                      ? t.training.stopSenseBoxCamera
-                      : t.training.startSenseBoxCamera}
-                  </Button>
+                      onClick={handleSenseBoxCameraClick}
+                      disabled={
+                        disabled || !browserCompatible || isSenseBoxBusy
+                      }
+                      color={
+                        sourceType === "serial" && isCameraActive
+                          ? "secondary"
+                          : "primary"
+                      }
+                    >
+                      {isSenseBoxBusy
+                        ? senseBoxBusyLabel
+                        : sourceType === "serial" && isCameraActive
+                          ? t.training.stopSenseBoxCamera
+                          : t.training.startSenseBoxCamera}
+                    </Button>
+                  )}
                 </span>
               </Tooltip>
-
-              {!isCameraActive && !serialError && browserCompatible && (
-                <Button
-                  variant="outlined"
-                  startIcon={
-                    isDownloading ? (
-                      <CircularProgress size={16} />
-                    ) : (
-                      <DownloadIcon />
-                    )
-                  }
-                  onClick={handleDownloadFirmware}
-                  disabled={isDownloading || disabled || !browserCompatible}
-                >
-                  {t.errors.downloadFirmware}
-                </Button>
-              )}
             </Box>
+
+            {senseBoxPhase === "grant" && !serialError && (
+              <Alert severity="info" sx={{ mb: 2 }}>
+                {t.errors.flashGrantBootloaderHint.replace(
+                  "{name}",
+                  flashBootloaderName,
+                )}
+              </Alert>
+            )}
+
+            {senseBoxPhase === "flashing" && (
+              <Box sx={{ mb: 2 }}>
+                <LinearProgress
+                  variant={flashProgress > 0 ? "determinate" : "indeterminate"}
+                  value={flashProgress}
+                />
+                {flashProgress > 0 && (
+                  <Typography variant="caption" color="text.secondary">
+                    {flashProgress}%
+                  </Typography>
+                )}
+              </Box>
+            )}
 
             {sourceType === "serial" && serialError && (
               <Box sx={{ mb: 3 }}>
                 <SerialErrorHandler
                   error={serialError}
                   connectionStatus={connectionStatus}
-                  onRetry={handleReconnect}
-                  onReconnect={handleReconnect}
+                  onRetry={handleSerialRetry}
+                  onReconnect={handleSerialRetry}
+                  onFlashFirmware={handleFlashCaptureSketch}
                   onDismiss={handleDismissError}
                   showStatus={false}
                 />
@@ -757,11 +1058,6 @@ const ModelTrainer = ({
                   alignItems: "center",
                 }}
               >
-                {videoLoading && (
-                  <Typography variant="body2" sx={{ mb: 2 }}>
-                    {t.training.loadingCamera}
-                  </Typography>
-                )}
                 <Box
                   sx={{
                     position: "relative",

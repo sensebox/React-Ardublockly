@@ -20,6 +20,7 @@ import {
   CheckCircle as CheckCircleIcon,
   Cancel as CancelIcon,
   Download as DownloadIcon,
+  Upload as UploadIcon,
 } from "@mui/icons-material";
 import { downloadCameraFirmware } from "./utils/firmwareDownload";
 
@@ -44,6 +45,8 @@ export const ErrorTypes = {
   READ_LOOP_ERROR: "READ_LOOP_ERROR",
   CONNECTION_RESTORED: "CONNECTION_RESTORED",
   RECONNECTING: "RECONNECTING",
+  FLASH_FAILED: "FLASH_FAILED",
+  CAPTURE_FAILED: "CAPTURE_FAILED",
 };
 
 // Connection status constants
@@ -90,7 +93,25 @@ const getErrorDetails = (errorType, language) => {
         title: t.errors.connectionFailed,
         message: t.errors.connectionFailedMessage,
         details: t.errors.connectionFailedDetails,
-        action: "retry-with-download",
+        action: "retry",
+        icon: <ErrorIcon />,
+      };
+
+    case ErrorTypes.FLASH_FAILED:
+      return {
+        severity: "error",
+        title: t.errors.flashFailed,
+        message: t.errors.flashFailedMessage,
+        action: "retry",
+        icon: <ErrorIcon />,
+      };
+
+    case ErrorTypes.CAPTURE_FAILED:
+      return {
+        severity: "error",
+        title: t.errors.captureFailed,
+        message: t.errors.captureFailedMessage,
+        action: "retry-with-flash",
         icon: <ErrorIcon />,
       };
 
@@ -217,6 +238,7 @@ const getStatusDetails = (status, language) => {
  * @param {Function} onRetry            - Called on "Try Again"
  * @param {Function} onReconnect        - Called on "Reconnect"
  * @param {Function} onDismiss          - Called when the alert is closed
+ * @param {Function} onFlashFirmware    - Called on "Flash camera capture sketch" (CAPTURE_FAILED)
  * @param {boolean}  showStatus         - Whether to show the status chip above the alert
  * @param {boolean}  showDetails        - Whether the detail panel starts expanded
  * @param {Object}   overrides          - Optional text / behaviour overrides
@@ -232,6 +254,7 @@ const SerialErrorHandler = ({
   onRetry,
   onReconnect,
   onDismiss,
+  onFlashFirmware,
   showStatus = true,
   showDetails = false,
   overrides = {},
@@ -261,9 +284,7 @@ const SerialErrorHandler = ({
 
     switch (errorDetails.action) {
       case "retry":
-      case "retry-with-download":
-        if (onRetry) onRetry();
-        break;
+      case "retry-with-flash":
       case "reconnect":
         if (onReconnect) onReconnect();
         break;
@@ -304,7 +325,7 @@ const SerialErrorHandler = ({
           </Typography>
 
           {/* Error Details (Expandable) - shows actual error message */}
-          {error.message && (
+          {error.message && error.type !== ErrorTypes.CAPTURE_FAILED && (
             <>
               <Button
                 size="small"
@@ -359,7 +380,8 @@ const SerialErrorHandler = ({
 
           {/* Troubleshooting for Connection Errors */}
           {(error.type === ErrorTypes.CONNECTION_FAILED ||
-            error.type === ErrorTypes.DEVICE_DISCONNECTED) && (
+            error.type === ErrorTypes.DEVICE_DISCONNECTED ||
+            error.type === ErrorTypes.FLASH_FAILED) && (
             <Box sx={{ mt: 2 }}>
               <Typography variant="body2" fontWeight="bold" gutterBottom>
                 {t.errors.troubleshooting}
@@ -376,53 +398,105 @@ const SerialErrorHandler = ({
             </Box>
           )}
 
-          {/* Action Buttons */}
-          {errorDetails.action !== "none" && (
-            <Box sx={{ mt: 2, display: "flex", gap: 1, flexWrap: "wrap" }}>
-              {errorDetails.action === "retry-with-download" && (
+          {/* Troubleshooting for camera capture errors */}
+          {error.type === ErrorTypes.CAPTURE_FAILED && (
+            <Box sx={{ mt: 2 }}>
+              <Typography variant="body2" fontWeight="bold" gutterBottom>
+                {t.errors.troubleshooting}
+              </Typography>
+              <Typography variant="body2" component="ul" sx={{ pl: 2 }}>
+                <li>{t.errors.troubleshootingCamera}</li>
+                <li>{t.errors.troubleshootingReconnect}</li>
+                <li>{t.errors.troubleshootingOtherDevice}</li>
+                <li>{t.errors.troubleshootingFlashAgain}</li>
+              </Typography>
+            </Box>
+          )}
+
+          {/* Try again + flash the camera sketch (stacked) */}
+          {errorDetails.action === "retry-with-flash" && (
+            <Box
+              sx={{
+                mt: 2,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
+                gap: 1,
+              }}
+            >
+              {onRetry && (
                 <Button
                   size="small"
                   variant="contained"
-                  startIcon={
-                    isDownloading ? (
-                      <CircularProgress size={16} />
-                    ) : (
-                      <DownloadIcon />
-                    )
-                  }
-                  onClick={handleDownloadFirmware}
-                  disabled={isDownloading}
-                >
-                  {isDownloading
-                    ? t.errors.compilingFirmware
-                    : overrides.downloadFirmwareLabel ||
-                      t.errors.downloadFirmware}
-                </Button>
-              )}
-              {(errorDetails.action === "retry" ||
-                errorDetails.action === "retry-with-download") &&
-                onRetry && (
-                  <Button
-                    size="small"
-                    variant="outlined"
-                    startIcon={<RefreshIcon />}
-                    onClick={handleAction}
-                  >
-                    {t.errors.tryAgain}
-                  </Button>
-                )}
-              {errorDetails.action === "reconnect" && onReconnect && (
-                <Button
-                  size="small"
-                  variant="contained"
+                  color="primary"
                   startIcon={<RefreshIcon />}
                   onClick={handleAction}
                 >
-                  {t.errors.reconnect}
+                  {t.errors.tryAgain}
+                </Button>
+              )}
+              {onFlashFirmware && (
+                <Button
+                  size="small"
+                  variant="outlined"
+                  startIcon={<UploadIcon />}
+                  onClick={onFlashFirmware}
+                >
+                  {t.errors.flashCaptureSketch}
                 </Button>
               )}
             </Box>
           )}
+
+          {/* Action Buttons */}
+          {errorDetails.action !== "none" &&
+            errorDetails.action !== "retry-with-flash" && (
+              <Box sx={{ mt: 2, display: "flex", gap: 1, flexWrap: "wrap" }}>
+                {errorDetails.action === "retry-with-download" && (
+                  <Button
+                    size="small"
+                    variant="contained"
+                    startIcon={
+                      isDownloading ? (
+                        <CircularProgress size={16} />
+                      ) : (
+                        <DownloadIcon />
+                      )
+                    }
+                    onClick={handleDownloadFirmware}
+                    disabled={isDownloading}
+                  >
+                    {isDownloading
+                      ? t.errors.compilingFirmware
+                      : overrides.downloadFirmwareLabel ||
+                        t.errors.downloadFirmware}
+                  </Button>
+                )}
+                {(errorDetails.action === "retry" ||
+                  errorDetails.action === "retry-with-download") &&
+                  onRetry && (
+                    <Button
+                      size="small"
+                      variant="contained"
+                      color="primary"
+                      startIcon={<RefreshIcon />}
+                      onClick={handleAction}
+                    >
+                      {t.errors.tryAgain}
+                    </Button>
+                  )}
+                {errorDetails.action === "reconnect" && onReconnect && (
+                  <Button
+                    size="small"
+                    variant="contained"
+                    startIcon={<RefreshIcon />}
+                    onClick={handleAction}
+                  >
+                    {t.errors.reconnect}
+                  </Button>
+                )}
+              </Box>
+            )}
         </Alert>
       )}
 
