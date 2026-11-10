@@ -69,6 +69,7 @@ export default function BlocklyWindow(props) {
     readOnly,
     tutorial,
     onWorkspaceChanged,
+    preserveWorkspaceOnBoardChange,
   } = props;
 
   // One-time workspace setup
@@ -144,11 +145,17 @@ export default function BlocklyWindow(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEmbedded]);
 
-  // Handle board change → reload XML (from localStorage or fallback)
+  // Handle board change → reload XML (from localStorage or fallback).
+  // With preserveWorkspaceOnBoardChange the current blocks are re-created
+  // instead, so board-dependent dropdowns update without losing the content.
   useEffect(() => {
     const ws = Blockly.getMainWorkspace();
     if (!ws) return;
-    let xml = localStorage.getItem("autoSaveXML");
+    let xml = null;
+    if (preserveWorkspaceOnBoardChange) {
+      xml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(ws));
+    }
+    if (!xml) xml = localStorage.getItem("autoSaveXML");
     if (!xml) xml = initialXml;
     try {
       const xmlDom = Blockly.utils.xml.textToDom(xml);
@@ -322,4 +329,5 @@ BlocklyWindow.propTypes = {
   grid: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
   move: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
   readOnly: PropTypes.bool,
+  preserveWorkspaceOnBoardChange: PropTypes.bool,
 };

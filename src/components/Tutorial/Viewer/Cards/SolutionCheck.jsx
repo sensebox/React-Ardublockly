@@ -56,7 +56,7 @@ export default function SolutionCheck({
     if (!xml || !solutionXml) {
       setMsg({
         type: "error",
-        text: "Es konnte kein Blockly-Code geladen werden.",
+        text: Blockly.Msg.tutorials_solution_no_code,
       });
       setOpen(true);
       return;
@@ -133,7 +133,7 @@ export default function SolutionCheck({
             fontSize: "1rem",
           }}
         >
-          Lösung einreichen
+          {Blockly.Msg.tutorials_solution_submit}
         </Button>
       </Box>
 
@@ -155,7 +155,9 @@ export default function SolutionCheck({
               }}
             />
             <Typography variant="h6">
-              {isSuccess ? "Sehr gut!" : "Da fehlt noch was…"}
+              {isSuccess
+                ? Blockly.Msg.tutorials_solution_success_title
+                : Blockly.Msg.tutorials_solution_error_title}
             </Typography>
           </Box>
         }
@@ -199,7 +201,7 @@ export default function SolutionCheck({
                     variant="subtitle2"
                     sx={{ fontWeight: 600, color: "text.primary" }}
                   >
-                    Hilfe anzeigen
+                    {Blockly.Msg.tutorials_solution_show_help}
                   </Typography>
                 </AccordionSummary>
 
@@ -209,7 +211,7 @@ export default function SolutionCheck({
                     variant="subtitle2"
                     sx={{ mb: 1, fontWeight: 500 }}
                   >
-                    Analyse:
+                    {Blockly.Msg.tutorials_solution_analysis}
                   </Typography>
                   <List dense>
                     {msg.details.map((detail, i) => (
@@ -241,8 +243,7 @@ export default function SolutionCheck({
             )}
 
             <Box sx={{ mt: 1, color: "text.secondary" }}>
-              Du kannst den Programmcode jetzt kompilieren und live auf deiner
-              senseBox testen!
+              {Blockly.Msg.tutorials_solution_compile_hint}
             </Box>
           </Box>
         }
@@ -264,7 +265,7 @@ export default function SolutionCheck({
               onClick={() => setDialogOpen(true)}
               startIcon={<FontAwesomeIcon icon={faClipboardCheck} />}
             >
-              Compile
+              {Blockly.Msg.button_compile}
             </Button>
 
             <CompilationDialog

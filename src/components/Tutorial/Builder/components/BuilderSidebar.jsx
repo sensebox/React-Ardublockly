@@ -19,6 +19,7 @@ const BuilderSidebar = ({
   setActiveStep,
   autosaveEnabled,
   setAutosaveEnabled,
+  autosaveStatus,
   children,
 }) => {
   const {
@@ -75,6 +76,7 @@ const BuilderSidebar = ({
         setActiveStep={setActiveStep}
         autosaveEnabled={autosaveEnabled}
         setAutosaveEnabled={setAutosaveEnabled}
+        autosaveStatus={autosaveStatus}
         subjects={subjects}
         setSubjects={setSubjects}
         topics={topics}
@@ -97,6 +99,10 @@ BuilderSidebar.propTypes = {
   setActiveStep: PropTypes.func.isRequired,
   autosaveEnabled: PropTypes.bool.isRequired,
   setAutosaveEnabled: PropTypes.func.isRequired,
+  autosaveStatus: PropTypes.shape({
+    paused: PropTypes.bool,
+    blockingEvaluationSteps: PropTypes.arrayOf(PropTypes.number),
+  }),
   children: PropTypes.node,
 };
 

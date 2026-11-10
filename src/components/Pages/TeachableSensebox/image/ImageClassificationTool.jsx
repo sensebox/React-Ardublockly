@@ -8,7 +8,7 @@ import HelpSidebar from "../HelpSidebar";
 import HelpButton, { useHelpBlink, markHelpSeen } from "../HelpButton";
 import { HelpProvider } from "../HelpContext";
 
-const ImageClassificationTool = ({ hideHelp = false }) => {
+const ImageClassificationTool = ({ hideHelp = false, hideHeader = false }) => {
   const [trainedModel, setTrainedModel] = useState(null);
   const [isTraining, setIsTraining] = useState(false);
   const [trainingError, setTrainingError] = useState(null);
@@ -106,27 +106,29 @@ const ImageClassificationTool = ({ hideHelp = false }) => {
             pb: 10,
           }}
         >
-          <Box sx={{ mb: 4 }}>
-            <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-              <Typography variant="h3" component="h1">
-                {t.title}
+          {!hideHeader && (
+            <Box sx={{ mb: 4 }}>
+              <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+                <Typography variant="h3" component="h1">
+                  {t.title}
+                </Typography>
+                <HelpButton
+                  onClick={() => {
+                    markImageClassSeen();
+                    handleOpenHelp("image/imageClassification");
+                  }}
+                  isBlinking={imageClassBlinking}
+                  tooltip={
+                    t.training?.tooltip?.helpMain ||
+                    "Was ist Bildklassifizierung?"
+                  }
+                />
+              </Box>
+              <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+                {t.description}
               </Typography>
-              <HelpButton
-                onClick={() => {
-                  markImageClassSeen();
-                  handleOpenHelp("image/imageClassification");
-                }}
-                isBlinking={imageClassBlinking}
-                tooltip={
-                  t.training?.tooltip?.helpMain ||
-                  "Was ist Bildklassifizierung?"
-                }
-              />
             </Box>
-            <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-              {t.description}
-            </Typography>
-          </Box>
+          )}
 
           <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
             {/* Model Training Section */}

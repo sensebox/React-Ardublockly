@@ -325,6 +325,29 @@ export const UI = {
   tutorials_hardware_here: "hier",
   tutorials_requirements:
     "Bevor du mit diesem Tutorial fortfährst solltest du folgende Tutorials erfolgreich abgeschlossen haben:",
+  tutorials_solution_submit: "Lösung einreichen",
+  tutorials_solution_no_code: "Es konnte kein Blockly-Code geladen werden.",
+  tutorials_solution_success_title: "Sehr gut!",
+  tutorials_solution_error_title: "Da fehlt noch was…",
+  tutorials_solution_show_help: "Hilfe anzeigen",
+  tutorials_solution_analysis: "Analyse:",
+  tutorials_solution_compile_hint:
+    "Du kannst den Programmcode jetzt kompilieren und live auf deiner senseBox testen!",
+  tutorials_criteria_default_title: "Deine Bewertungskriterien",
+  tutorials_criteria_subtitle_exact: "Lege %1 Kriterien fest.",
+  tutorials_criteria_subtitle_range: "Lege zwischen %1 und %2 Kriterien fest.",
+  tutorials_criteria_label: "Kriterium %1",
+  tutorials_criteria_delete: "Kriterium löschen",
+  tutorials_criteria_add: "Kriterium hinzufügen",
+  tutorials_evaluation_default_title: "Bewertung",
+  tutorials_evaluation_no_source:
+    "Für diese Bewertung wurde kein Schritt mit Bewertungskriterien gefunden.",
+  tutorials_evaluation_criteria_first:
+    "Lege zuerst deine Bewertungskriterien fest.",
+  tutorials_evaluation_to_criteria: "Zu den Kriterien",
+  tutorials_evaluation_title_label: "Titel der Bewertung",
+  tutorials_evaluation_delete: "Bewertung löschen",
+  tutorials_evaluation_add: "Bewertung hinzufügen",
 
   /**
    * Tutorial Builder
@@ -362,7 +385,11 @@ export const UI = {
   save_status_missing_title: "Titel",
   save_status_missing_subtitle: "Untertitel",
   save_status_missing_understood: "Verstanden",
+  save_status_invalid_evaluation:
+    "Schritt %1 (Bewertung) braucht davor einen Schritt „Bewertungskriterien festlegen“.",
   save_status_error: "Beim Speichern ist ein Fehler aufgetreten.",
+  builder_autosave_paused_hint:
+    "Änderungen werden gerade nicht gespeichert. Bewertungsschritte brauchen davor einen Schritt „Bewertungskriterien festlegen“ (betroffene Schritte: %1).",
   save_status_error_hint: "Mögliche Gründe:",
   save_status_error_network: "Netzwerkverbindung überprüfen",
   save_status_error_validation: "Daten validieren und erneut versuchen",

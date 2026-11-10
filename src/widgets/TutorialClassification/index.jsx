@@ -8,10 +8,15 @@ import {
   createTheme,
 } from "@mui/material/styles";
 import * as Blockly from "blockly/core";
-import { legacy_createStore as createStore, applyMiddleware, compose } from "redux";
+import {
+  legacy_createStore as createStore,
+  applyMiddleware,
+  compose,
+} from "redux";
 import { thunk } from "redux-thunk";
 import rootReducer from "../../reducers";
 import { setupInterceptors } from "../../actions/authActions";
+import { LANGUAGE } from "../../actions/types";
 import TutorialClassificationWidget from "../../components/Pages/TeachableSensebox/tutorial/TutorialClassificationWidget";
 import { De } from "../../components/Blockly/msg/de";
 // import { En } from "../../components/Blockly/msg/en";
@@ -69,8 +74,44 @@ function createWidgetTheme(mode) {
   });
 }
 
+// Text field labels are larger and always shrunk into the top border,
+// even when the field is empty. The border gap (legend) is sized to match.
+function withTextFieldOverrides(theme) {
+  return createTheme(theme, {
+    components: {
+      MuiInputLabel: {
+        defaultProps: { shrink: true },
+        styleOverrides: {
+          root: {
+            fontSize: "1.1rem",
+            fontWeight: 600,
+            ".evaluation-criterion-field > &": { fontSize: "1.25rem" },
+          },
+          // center the bigger label on the border line
+          outlined: {
+            "&.MuiInputLabel-shrink": {
+              transform: "translate(14px, -0.54em) scale(0.75)",
+            },
+          },
+        },
+      },
+      MuiOutlinedInput: {
+        defaultProps: { notched: true },
+        styleOverrides: {
+          notchedOutline: {
+            // legend width must equal the shrunk label (font size * 0.75)
+            "& legend": { fontSize: "0.825rem", fontWeight: 600 },
+            ".evaluation-criterion-field & legend": { fontSize: "0.9375rem" },
+          },
+        },
+      },
+    },
+  });
+}
+
 function createWidgetStore() {
   const store = createStore(rootReducer, {}, compose(applyMiddleware(thunk)));
+  store.dispatch({ type: LANGUAGE, payload: "de_DE" });
   setupInterceptors(store);
   return store;
 }
@@ -91,7 +132,10 @@ function WidgetRoot({ tutorials, mediaBasePath }) {
     return () => observer.disconnect();
   }, []);
 
-  const theme = useMemo(() => createWidgetTheme(mode), [mode]);
+  const theme = useMemo(
+    () => withTextFieldOverrides(createWidgetTheme(mode)),
+    [mode],
+  );
 
   return (
     <StyledEngineProvider injectFirst>

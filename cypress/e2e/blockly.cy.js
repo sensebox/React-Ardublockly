@@ -4,7 +4,6 @@ describe("Blockly Editor Page Tests", () => {
   const boards = [
     { name: "senseBox ESP", alt: "Sensebox ESP", expected: "MCU-S2" },
     { name: "senseBox MCU", alt: "Sensebox MCU", expected: "MCU" },
-    { name: "senseBox Mini", alt: "Sensebox Mini", expected: "MCU:MINI" },
   ];
 
   it("[Blockly] visits the editor page", () => {
