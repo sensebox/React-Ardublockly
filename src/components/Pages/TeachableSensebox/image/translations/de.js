@@ -115,7 +115,7 @@ export const imageClassificationTranslations_de = {
   },
   integration: {
     title: "Ausführen auf der senseBox MCU Eye",
-    converting: "Komprimieren & konvertiere...",
+    converting: "Komprimiere & konvertiere...",
     convertModel: "Modell komprimieren & konvertieren",
     retry: "Erneut versuchen",
     suggestions: "Vorschläge:",
