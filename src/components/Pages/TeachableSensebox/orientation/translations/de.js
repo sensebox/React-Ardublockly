@@ -112,6 +112,17 @@ export const orientationTranslations_de = {
     deviceDisconnectedDetails:
       "Bitte verbinde dein Gerät erneut und versuche es nochmals.",
     downloadFirmware: "Beschleunigungssensor-Sketch herunterladen",
+    waitingForData: "Warte auf Sensordaten...",
+    flashConnecting: "Bereite senseBox für den Upload vor...",
+    flashGrantBootloader: "Beschleunigungssensor-Sketch hochladen",
+    flashGrantBootloaderHint:
+      'Es wurden keine Sensordaten empfangen, daher wird der Beschleunigungssensor-Sketch auf die senseBox hochgeladen. Klicke dafür auf den Button und wähle im Browser-Dialog den Port "{name}" aus.',
+    flashUploading: "Beschleunigungssensor-Sketch wird hochgeladen...",
+    flashRestarting: "Verbinde senseBox...",
+    flashDone:
+      'Der Beschleunigungssensor-Sketch wurde hochgeladen. Klicke auf "senseBox MCU Eye verbinden (USB)" und wähle die senseBox MCU Eye erneut aus.',
+    flashFailedMessage:
+      "Das Hochladen des Beschleunigungssensor-Sketches ist fehlgeschlagen.",
     tryAgain: "Erneut versuchen",
     reconnect: "Erneut verbinden",
     troubleshootingUsb:
