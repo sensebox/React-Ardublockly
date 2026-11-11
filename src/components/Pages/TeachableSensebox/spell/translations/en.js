@@ -123,8 +123,6 @@ export const spellTranslations_en = {
       'No spell data was received, so the spell sketch will be uploaded to the senseBox. Click the button and select the "{name}" port in the browser dialog.',
     flashUploading: "Uploading spell sketch...",
     flashRestarting: "Connecting senseBox...",
-    flashDone:
-      'The spell sketch was uploaded. Click "connect senseBox MCU Eye (USB)" and select the senseBox MCU Eye again.',
     flashFailedMessage: "Uploading the spell sketch failed.",
   },
 

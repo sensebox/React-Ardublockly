@@ -116,8 +116,6 @@ export const orientationTranslations_en = {
       'No sensor data was received, so the accelerometer sketch will be uploaded to the senseBox. Click the button and select the "{name}" port in the browser dialog.',
     flashUploading: "Uploading accelerometer sketch...",
     flashRestarting: "Connecting senseBox...",
-    flashDone:
-      'The accelerometer sketch was uploaded. Click "Connect senseBox MCU Eye (USB)" and select the senseBox MCU Eye again.',
     flashFailedMessage: "Uploading the accelerometer sketch failed.",
     tryAgain: "Try Again",
     reconnect: "Reconnect",

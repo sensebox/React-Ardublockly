@@ -124,8 +124,6 @@ export const spellTranslations_de = {
       'Es wurden keine Zauberspruch-Daten empfangen, daher wird der Zauberspruch-Sketch auf die senseBox hochgeladen. Klicke dafür auf den Button und wähle im Browser-Dialog den Port "{name}" aus.',
     flashUploading: "Zauberspruch-Sketch wird hochgeladen...",
     flashRestarting: "Verbinde senseBox...",
-    flashDone:
-      'Der Zauberspruch-Sketch wurde hochgeladen. Klicke auf "senseBox MCU Eye verbinden (USB)" und wähle die senseBox MCU Eye erneut aus.',
     flashFailedMessage:
       "Das Hochladen des Zauberspruch-Sketches ist fehlgeschlagen.",
   },

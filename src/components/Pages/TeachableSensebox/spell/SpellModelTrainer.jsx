@@ -1115,16 +1115,6 @@ const SpellModelTrainer = ({
               </Box>
             )}
 
-            {senseBoxPhase === "done" && (
-              <Alert
-                severity="success"
-                onClose={() => setSenseBoxPhase("idle")}
-                sx={{ mb: 2 }}
-              >
-                {t.errors.flashDone}
-              </Alert>
-            )}
-
             {/* Errors of the serial start / spell sketch upload */}
             {spellSerialError && (
               <Box sx={{ mb: 3 }}>

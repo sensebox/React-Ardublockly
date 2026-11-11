@@ -1011,16 +1011,6 @@ const OrientationModelTrainer = ({
               </Box>
             )}
 
-            {senseBoxPhase === "done" && (
-              <Alert
-                severity="success"
-                onClose={() => setSenseBoxPhase("idle")}
-                sx={{ mb: 2 }}
-              >
-                {t.errors.flashDone}
-              </Alert>
-            )}
-
             {/* Errors of the serial start / accelerometer sketch upload */}
             {orientationSerialError && (
               <Box sx={{ mb: 3 }}>

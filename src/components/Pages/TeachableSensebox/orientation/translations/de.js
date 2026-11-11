@@ -119,8 +119,6 @@ export const orientationTranslations_de = {
       'Es wurden keine Sensordaten empfangen, daher wird der Beschleunigungssensor-Sketch auf die senseBox hochgeladen. Klicke dafür auf den Button und wähle im Browser-Dialog den Port "{name}" aus.',
     flashUploading: "Beschleunigungssensor-Sketch wird hochgeladen...",
     flashRestarting: "Verbinde senseBox...",
-    flashDone:
-      'Der Beschleunigungssensor-Sketch wurde hochgeladen. Klicke auf "senseBox MCU Eye verbinden (USB)" und wähle die senseBox MCU Eye erneut aus.',
     flashFailedMessage:
       "Das Hochladen des Beschleunigungssensor-Sketches ist fehlgeschlagen.",
     tryAgain: "Erneut versuchen",
