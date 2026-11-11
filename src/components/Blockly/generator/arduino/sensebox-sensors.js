@@ -1113,9 +1113,384 @@ Blockly.Generator.Arduino.forBlock["sensebox_esp32s2_accelerometer"] =
       "return 0.0;\n" +
       "}\n" +
       "}\n";
+    if (dropdown === "spell") {
+      addSpellRecognition();
+      return ["getSpellImage()", Blockly.Generator.Arduino.ORDER_ATOMIC];
+    }
     var code = 'getAcceleration("' + dropdown + '")';
     return [code, Blockly.Generator.Arduino.ORDER_ATOMIC];
   };
+
+/**
+ * Spell (gesture drawing) recognition for the senseBox MCU-Eye (ICM-20948).
+ * Based on the TensorFlow magic wand example (spell_collection.ino):
+ * a background task samples the IMU at 100 Hz, detects strokes from the
+ * integrated gyroscope orientation and renders the last completed stroke
+ * into a 32x32 grayscale image (SpellImage*, same fields as camera_fb_t),
+ * so it can be drawn with the display image block.
+ * Requires the definitions/setup of sensebox_esp32s2_accelerometer (icm2).
+ */
+const addSpellRecognition = () => {
+  Blockly.Generator.Arduino.definitions_["define_spell_recognition"] = `
+// ===== Spell recognition (magic wand) =====
+// Grayscale image with the same fields as camera_fb_t (buf, len, width, height).
+// Own type, so spell images work without the camera library (esp_camera.h).
+struct SpellImage {
+  uint8_t* buf;
+  size_t len;
+  size_t width;
+  size_t height;
+};
+
+namespace spell {
+constexpr int kImageSize = 32;
+constexpr int kImageBytes = kImageSize * kImageSize;
+constexpr int kStride = 2;
+constexpr int kMaxPoints = 160;
+constexpr int kMaxStrokeLength = kMaxPoints * kStride;
+constexpr int kMovingSampleCount = 50;
+constexpr int kDataLength = 600 * 3;
+constexpr float kSampleRate = 100.0f;
+
+enum { eWaiting = 0, eDrawing = 1, eDone = 2 };
+
+float acceleration_data[kDataLength] = {};
+int acceleration_data_index = 0;
+float gyroscope_data[kDataLength] = {};
+float orientation_data[kDataLength] = {};
+int gyroscope_data_index = 0;
+
+float current_velocity[3] = {0.0f, 0.0f, 0.0f};
+float current_gravity[3] = {0.0f, 0.0f, 0.0f};
+float current_gyroscope_drift[3] = {0.0f, 0.0f, 0.0f};
+
+int32_t stroke_state = eWaiting;
+int32_t stroke_length = 0;
+int32_t point_count = 0;
+int8_t points[kMaxPoints * 2] = {};
+
+uint8_t image[kImageBytes] = {};        // last completed spell (task side)
+uint8_t image_copy[kImageBytes] = {};   // copy handed to the user program
+SpellImage frame;
+SemaphoreHandle_t image_mutex = nullptr;
+
+bool readImu() {
+  sensors_event_t a, g, m, t;
+  if (!icm2.getEvent(&a, &g, &m, &t)) {
+    return false;
+  }
+  // ICM-20948 returns rad/s and m/s^2; the algorithm expects deg/s and g
+  constexpr float kRadToDeg = 180.0f / M_PI;
+  constexpr float kMsToG = 1.0f / 9.80665f;
+  const int gi = gyroscope_data_index % kDataLength;
+  gyroscope_data_index += 3;
+  gyroscope_data[gi] = g.gyro.x * kRadToDeg;
+  gyroscope_data[gi + 1] = g.gyro.y * kRadToDeg;
+  gyroscope_data[gi + 2] = g.gyro.z * kRadToDeg;
+  const int ai = acceleration_data_index % kDataLength;
+  acceleration_data_index += 3;
+  acceleration_data[ai] = a.acceleration.x * kMsToG;
+  acceleration_data[ai + 1] = a.acceleration.y * kMsToG;
+  acceleration_data[ai + 2] = a.acceleration.z * kMsToG;
+  return true;
+}
+
+float vectorMagnitude(const float* v) {
+  return sqrtf((v[0] * v[0]) + (v[1] * v[1]) + (v[2] * v[2]));
+}
+
+void estimateGravityDirection(float* gravity) {
+  int n = 100;
+  if (n >= acceleration_data_index) n = acceleration_data_index;
+  if (n <= 0) return;
+  const int start = (acceleration_data_index + (kDataLength - (3 * (n + 1)))) % kDataLength;
+  float x = 0.0f, y = 0.0f, z = 0.0f;
+  for (int i = 0; i < n; ++i) {
+    const float* e = &acceleration_data[(start + (i * 3)) % kDataLength];
+    x += e[0];
+    y += e[1];
+    z += e[2];
+  }
+  gravity[0] = x / n;
+  gravity[1] = y / n;
+  gravity[2] = z / n;
+}
+
+void updateVelocity(int new_samples, const float* gravity) {
+  const int start = (acceleration_data_index + (kDataLength - (3 * (new_samples + 1)))) % kDataLength;
+  constexpr float friction_fudge = 0.98f;
+  for (int i = 0; i < new_samples; ++i) {
+    const float* e = &acceleration_data[(start + (i * 3)) % kDataLength];
+    for (int k = 0; k < 3; ++k) {
+      current_velocity[k] += e[k] - gravity[k];
+      current_velocity[k] *= friction_fudge;
+    }
+  }
+}
+
+void estimateGyroscopeDrift(float* drift) {
+  if (vectorMagnitude(current_velocity) > 0.1f) return;
+  int n = 20;
+  if (n >= gyroscope_data_index) n = gyroscope_data_index;
+  if (n <= 0) return;
+  const int start = (gyroscope_data_index + (kDataLength - (3 * (n + 1)))) % kDataLength;
+  float x = 0.0f, y = 0.0f, z = 0.0f;
+  for (int i = 0; i < n; ++i) {
+    const float* e = &gyroscope_data[(start + (i * 3)) % kDataLength];
+    x += e[0];
+    y += e[1];
+    z += e[2];
+  }
+  drift[0] = x / n;
+  drift[1] = y / n;
+  drift[2] = z / n;
+}
+
+// dt: time in seconds since the previous sample. The display shares the I2C
+// bus with the IMU, so samples can be delayed; integrating with the real
+// elapsed time keeps the drawn spell at the correct size.
+void updateOrientation(int new_samples, const float* drift, float dt) {
+  const int start = (gyroscope_data_index + (kDataLength - (3 * new_samples))) % kDataLength;
+  const float recip_sample_rate = dt;
+  for (int i = 0; i < new_samples; ++i) {
+    const int index = (start + (i * 3)) % kDataLength;
+    const float* e = &gyroscope_data[index];
+    float* current = &orientation_data[index];
+    const float* previous = &orientation_data[(index + (kDataLength - 3)) % kDataLength];
+    for (int k = 0; k < 3; ++k) {
+      current[k] = previous[k] + ((e[k] - drift[k]) * recip_sample_rate);
+    }
+  }
+}
+
+bool isMoving(int samples_before) {
+  constexpr float moving_threshold = 9.0f;
+  if ((gyroscope_data_index - samples_before) < kMovingSampleCount) return false;
+  const int start = (gyroscope_data_index + (kDataLength - (3 * (kMovingSampleCount + samples_before)))) % kDataLength;
+  float total = 0.0f;
+  for (int i = 0; i < kMovingSampleCount; ++i) {
+    const int index = (start + (i * 3)) % kDataLength;
+    const float* current = &orientation_data[index];
+    const float* previous = &orientation_data[(index + (kDataLength - 3)) % kDataLength];
+    const float dx = current[0] - previous[0];
+    const float dy = current[1] - previous[1];
+    const float dz = current[2] - previous[2];
+    total += (dx * dx) + (dy * dy) + (dz * dz);
+  }
+  return total > moving_threshold;
+}
+
+int8_t clampToInt8(float value) {
+  const int32_t v = static_cast<int32_t>(roundf(value * 128.0f));
+  if (v > 127) return 127;
+  if (v < -128) return -128;
+  return static_cast<int8_t>(v);
+}
+
+// Converts the orientation history of the current stroke into 2D points
+void computeStrokePoints(int current_head) {
+  const int start = (gyroscope_data_index + (kDataLength - (3 * (stroke_length + current_head)))) % kDataLength;
+  float x_total = 0.0f, z_total = 0.0f;
+  for (int j = 0; j < stroke_length; ++j) {
+    const float* e = &orientation_data[(start + (j * 3)) % kDataLength];
+    x_total += e[0];
+    z_total += e[2];
+  }
+  const float x_mean = x_total / stroke_length;
+  const float z_mean = z_total / stroke_length;
+  constexpr float range = 45.0f;
+
+  // Orientation of the MCU-Eye: project onto the plane given by gravity (x/z)
+  const float gx = current_gravity[0];
+  const float gz = current_gravity[2];
+  float gmag = sqrtf((gx * gx) + (gz * gz));
+  if (gmag < 0.0001f) gmag = 0.0001f;
+  const float ngx = gx / gmag;
+  const float ngz = gz / gmag;
+  const float xaxisz = -ngz;
+  const float xaxisx = -ngx;
+  const float yaxisz = -ngx;
+  const float yaxisx = ngz;
+
+  point_count = stroke_length / kStride;
+  for (int j = 0; j < point_count; ++j) {
+    const float* e = &orientation_data[(start + ((j * kStride) * 3)) % kDataLength];
+    const float nx = (e[0] - x_mean) / range;
+    const float nz = (e[2] - z_mean) / range;
+    points[j * 2] = clampToInt8((xaxisz * nz) + (xaxisx * nx));
+    points[j * 2 + 1] = clampToInt8((yaxisz * nz) + (yaxisx * nx));
+  }
+}
+
+enum StrokeUpdate { eNoChange = 0, eLive = 1, eCompleted = 2, eDiscarded = 3 };
+
+// Updates the stroke state. Returns eLive while drawing (points updated),
+// eCompleted when a stroke has just been finished and eDiscarded when a
+// started stroke was too short.
+StrokeUpdate updateStroke(int new_samples) {
+  constexpr int minimum_stroke_length = kMovingSampleCount + 10;
+  // After a finished stroke, wait until the movement window has rolled past
+  // the gesture, so the state does not oscillate between drawing and done.
+  static int done_cooldown = 0;
+  StrokeUpdate result = eNoChange;
+  for (int i = 0; i < new_samples; ++i) {
+    if (done_cooldown > 0) --done_cooldown;
+    const int current_head = new_samples - (i + 1);
+    const bool moving = isMoving(current_head);
+    const int32_t old_state = stroke_state;
+    if ((old_state == eWaiting) || (old_state == eDone)) {
+      if (moving && (done_cooldown == 0)) {
+        stroke_length = kMovingSampleCount;
+        stroke_state = eDrawing;
+      }
+    } else if (old_state == eDrawing) {
+      if (!moving) {
+        if (stroke_length > minimum_stroke_length) {
+          stroke_state = eDone;
+          done_cooldown = kMovingSampleCount;
+        } else {
+          stroke_length = 0;
+          stroke_state = eWaiting;
+          result = eDiscarded;
+        }
+      }
+    }
+    if (stroke_state == eWaiting) continue;
+    stroke_length += 1;
+    if (stroke_length > kMaxStrokeLength) stroke_length = kMaxStrokeLength;
+    if ((old_state != eDone) && (stroke_state == eDone)) {
+      computeStrokePoints(current_head);
+      result = eCompleted;
+    } else if ((i == new_samples - 1) && (stroke_state == eDrawing)) {
+      // recompute the stroke so far, to show it while drawing
+      computeStrokePoints(current_head);
+      result = eLive;
+    }
+  }
+  return result;
+}
+
+void drawLine(uint8_t* img, int x0, int y0, int x1, int y1) {
+  const int dx = abs(x1 - x0);
+  const int dy = abs(y1 - y0);
+  const int sx = (x0 < x1) ? 1 : -1;
+  const int sy = (y0 < y1) ? 1 : -1;
+  int err = dx - dy;
+  while (true) {
+    if (x0 >= 0 && x0 < kImageSize && y0 >= 0 && y0 < kImageSize) {
+      img[y0 * kImageSize + x0] = 255;
+      if (x0 + 1 < kImageSize) img[y0 * kImageSize + (x0 + 1)] = 255;
+      if (y0 + 1 < kImageSize) img[(y0 + 1) * kImageSize + x0] = 255;
+    }
+    if (x0 == x1 && y0 == y1) break;
+    const int e2 = 2 * err;
+    if (e2 > -dy) {
+      err -= dy;
+      x0 += sx;
+    }
+    if (e2 < dx) {
+      err += dx;
+      y0 += sy;
+    }
+  }
+}
+
+// Renders the stroke points (white on black) like the Teachable Machine
+void renderStroke(uint8_t* img) {
+  memset(img, 0, kImageBytes);
+  const int half = kImageSize / 2;
+  int prev_x = 0, prev_y = 0;
+  for (int i = 0; i < point_count; ++i) {
+    const int x = static_cast<int>(half + (points[i * 2] / 128.0f) * half);
+    const int y = static_cast<int>(half - (points[i * 2 + 1] / 128.0f) * half);
+    if (i > 0) drawLine(img, prev_x, prev_y, x, y);
+    if (i == point_count - 1) {
+      // endpoint marker
+      for (int dy = -2; dy <= 2; ++dy) {
+        for (int dx = -2; dx <= 2; ++dx) {
+          const int px = x + dx;
+          const int py = y + dy;
+          if ((dx * dx + dy * dy <= 4) && px >= 0 && px < kImageSize && py >= 0 && py < kImageSize) {
+            img[py * kImageSize + px] = 255;
+          }
+        }
+      }
+    }
+    prev_x = x;
+    prev_y = y;
+  }
+}
+
+void publishImage(const uint8_t* img) {
+  xSemaphoreTake(image_mutex, portMAX_DELAY);
+  memcpy(image, img, kImageBytes);
+  xSemaphoreGive(image_mutex);
+}
+
+void task(void* parameter) {
+  static uint8_t rendered[kImageBytes];
+  static uint8_t last_completed[kImageBytes] = {};  // last finished spell
+  int live_counter = 0;
+  unsigned long last_sample_us = 0;
+  TickType_t last_wake = xTaskGetTickCount();
+  for (;;) {
+    if (readImu()) {
+      const unsigned long now_us = micros();
+      float dt = 1.0f / kSampleRate;
+      if (last_sample_us != 0) {
+        dt = (now_us - last_sample_us) / 1000000.0f;
+        if (dt > 0.1f) dt = 0.1f;  // ignore very long pauses
+      }
+      last_sample_us = now_us;
+      estimateGyroscopeDrift(current_gyroscope_drift);
+      updateOrientation(1, current_gyroscope_drift, dt);
+      const StrokeUpdate update = updateStroke(1);
+      if (update == eCompleted) {
+        renderStroke(last_completed);
+        publishImage(last_completed);
+        live_counter = 0;
+      } else if (update == eLive) {
+        // show the spell while it is being drawn (updated every 50 ms)
+        if (++live_counter >= 5) {
+          live_counter = 0;
+          renderStroke(rendered);
+          publishImage(rendered);
+        }
+      } else if (update == eDiscarded) {
+        // stroke was too short: show the last finished spell again
+        publishImage(last_completed);
+        live_counter = 0;
+      }
+      estimateGravityDirection(current_gravity);
+      updateVelocity(1, current_gravity);
+    }
+    vTaskDelayUntil(&last_wake, pdMS_TO_TICKS(10));  // ~100 Hz
+  }
+}
+}  // namespace spell
+
+// Returns the spell currently being drawn, or the most recently
+// finished spell, as 32x32 grayscale image
+SpellImage* getSpellImage() {
+  if (spell::image_mutex) {
+    xSemaphoreTake(spell::image_mutex, portMAX_DELAY);
+    memcpy(spell::image_copy, spell::image, spell::kImageBytes);
+    xSemaphoreGive(spell::image_mutex);
+  }
+  spell::frame.buf = spell::image_copy;
+  spell::frame.len = spell::kImageBytes;
+  spell::frame.width = spell::kImageSize;
+  spell::frame.height = spell::kImageSize;
+  return &spell::frame;
+}`;
+  Blockly.Generator.Arduino.setupCode_["begin_spell_recognition"] =
+    "if (sensorActive == 3) {\n" +
+    "    spell::image_mutex = xSemaphoreCreateMutex();\n" +
+    '    xTaskCreate(spell::task, "spell", 4096, NULL, 1, NULL);\n' +
+    "  } else {\n" +
+    '    Serial.println("Spell recognition needs the ICM-20948 (senseBox MCU-Eye)");\n' +
+    "  }";
+};
 
 /**
  * Block for Truebner STM50 on MCUS2
@@ -1259,7 +1634,12 @@ Blockly.Generator.Arduino.forBlock["sensebox_eye_camera"] = function () {
   var code = "";
 
   Blockly.Generator.Arduino.libraries_["esp_camera"] =
-    `#include "esp_camera.h"`;
+    // esp_camera.h (sensor.h) and Adafruit_Sensor.h both define sensor_t.
+    // Rename the camera one, so the camera can be used together with
+    // Adafruit sensor libraries (e.g. the accelerometer block).
+    "#define sensor_t esp_camera_sensor_t\n" +
+    `#include "esp_camera.h"\n` +
+    "#undef sensor_t";
   Blockly.Generator.Arduino.setupCode_["camera_config"] =
     "camera_config_t config;\n" +
     "config.ledc_channel = LEDC_CHANNEL_0;\n" +

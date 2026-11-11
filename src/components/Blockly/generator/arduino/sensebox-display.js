@@ -329,26 +329,30 @@ Blockly.Generator.Arduino.forBlock["sensebox_display_image"] = function () {
       "drawImage",
       Blockly.Generator.Arduino.ORDER_ATOMIC,
     ) || '"Keine Eingabe"';
+  // Own scope, so the block can be used several times in the same loop
   let code =
-    "const int srcWidth = 96;\n" +
-    "const int srcHeight = 96;\n" +
-    "const int targetHeight = 64;\n" +
-    "const int targetWidth = 64;\n" +
-    "const int xOffset = (SCREEN_WIDTH - targetWidth) / 2;  // 32\n" +
-    "camera_fb_t *fb = " +
+    "{\n" +
+    "  // camera image (camera_fb_t*, 96x96) or spell image (SpellImage*, 32x32)\n" +
+    "  auto fb = " +
     cameraImage +
     ";\n" +
-    "// Simple nearest-neighbor downscaling from 96x96 -> 64x64\n" +
-    "for (int y = 0; y < targetHeight; y++) {\n" +
-    "  for (int x = 0; x < targetWidth; x++) {\n" +
-    "    // Map target (x, y) to source (sx, sy)\n" +
-    "    int sx = x * srcWidth / targetWidth;\n" +
-    "    int sy = y * srcHeight / targetHeight;\n" +
-    "    uint8_t pixel = fb->buf[sy * srcWidth + sx];\n\n" +
-    "    if (pixel > 128) {\n" +
-    "      display.drawPixel(x + xOffset, y, WHITE);\n" +
-    "    } else {\n" +
-    "      display.drawPixel(x + xOffset, y, BLACK);\n" +
+    "  const int srcWidth = fb->width;\n" +
+    "  const int srcHeight = fb->height;\n" +
+    "  const int targetHeight = 64;\n" +
+    "  const int targetWidth = 64;\n" +
+    "  const int xOffset = (SCREEN_WIDTH - targetWidth) / 2;  // 32\n" +
+    "  // Simple nearest-neighbor scaling from srcWidth x srcHeight -> 64x64\n" +
+    "  for (int y = 0; y < targetHeight; y++) {\n" +
+    "    for (int x = 0; x < targetWidth; x++) {\n" +
+    "      // Map target (x, y) to source (sx, sy)\n" +
+    "      int sx = x * srcWidth / targetWidth;\n" +
+    "      int sy = y * srcHeight / targetHeight;\n" +
+    "      uint8_t pixel = fb->buf[sy * srcWidth + sx];\n\n" +
+    "      if (pixel > 128) {\n" +
+    "        display.drawPixel(x + xOffset, y, WHITE);\n" +
+    "      } else {\n" +
+    "        display.drawPixel(x + xOffset, y, BLACK);\n" +
+    "      }\n" +
     "    }\n" +
     "  }\n" +
     "}\n";

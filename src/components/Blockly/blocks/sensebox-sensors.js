@@ -755,24 +755,67 @@ Blockly.Blocks["sensebox_esp32s2_light"] = {
 
 Blockly.Blocks["sensebox_esp32s2_accelerometer"] = {
   init: function () {
+    const options = [
+      ["X", "accelerationX"],
+      ["Y", "accelerationY"],
+      ["Z", "accelerationZ"],
+      [Blockly.Msg.senseBox_temp, "temperature"],
+    ];
+    // The spell (gesture drawing) option is only supported on the MCU-Eye
+    if (selectedBoard().title === "MCU-Eye") {
+      options.push([Blockly.Msg.senseBox_accelerometer_spell, "spell"]);
+    }
     this.appendDummyInput().appendField(Blockly.Msg.senseBox_accelerometer);
     this.appendDummyInput()
       .setAlign(Blockly.inputs.Align.RIGHT)
       .appendField(Blockly.Msg.senseBox_value)
       .appendField(
-        new Blockly.FieldDropdown([
-          ["X", "accelerationX"],
-          ["Y", "accelerationY"],
-          ["Z", "accelerationZ"],
-          [Blockly.Msg.senseBox_temp, "temperature"],
-        ]),
+        new Blockly.FieldDropdown(options, (value) => {
+          this.updateOutputType_(value);
+          return value;
+        }),
         "value",
       );
     this.setOutput(true, Types.DECIMAL.typeName);
     this.setColour(getColour().sensebox);
-    this.setTooltip(Blockly.Msg.senseBox_accelerometer_tooltip);
+    this.setTooltip(() =>
+      this.getFieldValue("value") === "spell"
+        ? Blockly.Msg.senseBox_accelerometer_spell_tooltip
+        : Blockly.Msg.senseBox_accelerometer_tooltip,
+    );
     this.setHelpUrl(withBoardParam(Blockly.Msg.senseBox_accelerometer_helpurl));
     this.data = { name: "acceleration" };
+  },
+  /**
+   * Store the image output type, so it is restored before the block gets
+   * connected when loading XML (fields are applied after connecting).
+   * Only added for the spell option, other XML stays unchanged.
+   * @return {?Element} XML mutation element or null
+   */
+  mutationToDom: function () {
+    if (this.getFieldValue("value") !== "spell") return null;
+    const container = Blockly.utils.xml.createElement("mutation");
+    container.setAttribute("output", "image");
+    return container;
+  },
+  domToMutation: function (xmlElement) {
+    if (
+      xmlElement.getAttribute("output") === "image" &&
+      selectedBoard().title === "MCU-Eye"
+    ) {
+      this.updateOutputType_("spell");
+    }
+  },
+  /**
+   * The spell option returns an image (for the display image block),
+   * all other options return a number.
+   * @param {string} value selected dropdown value
+   */
+  updateOutputType_: function (value) {
+    if (!this.outputConnection) return;
+    this.outputConnection.setCheck(
+      value === "spell" ? Types.IMAGE.typeName : Types.DECIMAL.typeName,
+    );
   },
 };
 

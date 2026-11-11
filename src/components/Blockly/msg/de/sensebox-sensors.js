@@ -247,6 +247,9 @@ Die Messwerte für Temperatur, Luftfeuchtigkeit und Luftdruck können direkt ver
   senseBox_accelerometer: "ESP32-S2 Beschleunigungssensor",
   senseBox_accelerometer_tooltip:
     "Die senseBox MCU S2 hat einen der folgenden Beschleunigungssensoren an Bord: MPU6050, ICM-42670-P oder ICM-20948. Diese Sensoren geben dir die Beschleunigung in m/s² zurück.",
+  senseBox_accelerometer_spell: "Zauberspruch",
+  senseBox_accelerometer_spell_tooltip:
+    "Gibt den zuletzt gezeichneten Zauberspruch zurück. Bewege die senseBox wie einen Zauberstab um einen Zauberspruch zu zeichnen.",
   senseBox_accelerometer_helpurl:
     "https://docs.sensebox.de/docs/hardware/sensors/mpu6050", // TODO: mpu6050 is just one of the supported acceleration sensors of this block
 
