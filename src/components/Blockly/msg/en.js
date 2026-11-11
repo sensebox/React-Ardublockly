@@ -32,6 +32,7 @@ import { WEBSERVER } from "./en/webserver";
 import { FLUOROASM } from "./en/fluoroASM";
 import { CUSTOM_FUNCTIONS } from "./en/custom-functions";
 import { COMPILE_DIALOG } from "./en/compile-dialog";
+import { SIMULATOR } from "./en/simulator";
 
 export const En = {
   ...AUDIO,
@@ -68,4 +69,5 @@ export const En = {
   ...FLUOROASM,
   ...CUSTOM_FUNCTIONS,
   ...COMPILE_DIALOG,
+  ...SIMULATOR,
 };

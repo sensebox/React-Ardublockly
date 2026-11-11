@@ -1,0 +1,30 @@
+import React, { memo, useState } from "react";
+import SensorGraphic from "./photodiode.png";
+import SensorNode from "../../uiComponents/SensorNode";
+
+const sensorConfigPhotodiode = [
+  {
+    id: "pd",
+    emoji: "🔦",
+    min: 0,
+    max: 10000,
+    step: 1,
+    initial: 2500,
+    type: "sensebox_esp32s2_light",
+  },
+];
+
+const Photodiode = ({ data }) => {
+  return (
+    <div style={{ position: "relative" }}>
+      <SensorNode
+        title="Photodiode"
+        sensors={sensorConfigPhotodiode}
+        imageSrc={SensorGraphic}
+        edgeId="photodiode"
+      />
+    </div>
+  );
+};
+
+export default memo(Photodiode);

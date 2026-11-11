@@ -1,0 +1,38 @@
+import React, { memo, useState } from "react";
+import SensorGraphic from "./lightuv.png";
+import SensorNode from "../../uiComponents/SensorNode";
+
+const sensorConfigLuxUv = [
+  {
+    id: "lux",
+    emoji: "🔦",
+    min: 0,
+    max: 10000,
+    step: 1,
+    initial: 2500,
+    type: "sensebox_light_lux",
+  },
+  {
+    id: "uv",
+    emoji: "☀️",
+    min: 0,
+    max: 100,
+    step: 1,
+    initial: 55,
+    type: "sensebox_light_uv",
+  },
+];
+
+const LightUv = ({ data }) => {
+  return (
+    <div style={{ position: "relative" }}>
+      <SensorNode
+        title="TSL/VEML"
+        sensors={sensorConfigLuxUv}
+        imageSrc={SensorGraphic}
+      />
+    </div>
+  );
+};
+
+export default memo(LightUv);

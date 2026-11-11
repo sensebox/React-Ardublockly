@@ -1,0 +1,38 @@
+import React, { memo } from "react";
+import SensorGraphic from "./rg15.png"; // Update to RG15 sensor image
+import SensorNode from "../../uiComponents/SensorNode";
+
+const sensorConfigRG15 = [
+  {
+    id: "total-rainfall-rg15",
+    emoji: "🌧️",
+    min: 0,
+    max: 1000,
+    step: 0.1,
+    initial: 0,
+    type: "sensebox_rg15_total_rainfall",
+  },
+  {
+    id: "rainfall-intensity-rg15",
+    emoji: "💧",
+    min: 0,
+    max: 200,
+    step: 0.1,
+    initial: 0,
+    type: "sensebox_rg15_rainfall_intensity",
+  },
+];
+
+const RG15 = ({ data }) => {
+  return (
+    <div style={{ position: "relative" }}>
+      <SensorNode
+        title="RG15"
+        sensors={sensorConfigRG15}
+        imageSrc={SensorGraphic}
+      />
+    </div>
+  );
+};
+
+export default memo(RG15);

@@ -13,6 +13,7 @@ import CodeViewer from "../Workspace/CodeViewer";
 import DeviceSelection from "../DeviceSelection";
 import TooltipViewer from "@/components/Workspace/TooltipViewer";
 import Dialog from "@/components/ui/Dialog";
+import { SIMULATOR_BOARD } from "@/components/Simulator/constants";
 
 import { Grid, IconButton, Tooltip, Box } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -27,9 +28,12 @@ function Home({ project, projectType }) {
 
   const [toolbox, setToolbox] = useState(null);
   const selectedBoard = useSelector((state) => state.board.board);
+  // The simulator in the code column needs more room.
+  const sideColumnWidth = selectedBoard === SIMULATOR_BOARD ? 5 : 4;
 
   const [codeOn, setCodeOn] = useState(true);
   const [open, setOpen] = useState(true);
+  const [simulatorOpen, setSimulatorOpen] = useState(false);
   const [initialXml, setInitialXml] = useState(
     localStorage.getItem("autoSaveXML"),
   );
@@ -99,7 +103,12 @@ function Home({ project, projectType }) {
 
       {/* Blockly Workspace */}
       <Grid style={{ height: workspaceHeight }} container spacing={2}>
-        <Grid item xs={12} md={codeOn ? 8 : 12} sx={{ position: "relative" }}>
+        <Grid
+          item
+          xs={12}
+          md={codeOn ? 12 - sideColumnWidth : 12}
+          sx={{ position: "relative" }}
+        >
           <Tooltip
             title={
               codeOn
@@ -140,7 +149,7 @@ function Home({ project, projectType }) {
         </Grid>
 
         {codeOn && (
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={sideColumnWidth}>
             {/* Same height as the Blockly workspace so both columns line up */}
             <Box
               sx={{
@@ -150,8 +159,9 @@ function Home({ project, projectType }) {
                 gap: 2,
               }}
             >
-              <CodeViewer />
-              <TooltipViewer />
+              <CodeViewer onSimulatorOpenChange={setSimulatorOpen} />
+              {/* The open simulator needs the space */}
+              {!simulatorOpen && <TooltipViewer />}
             </Box>
           </Grid>
         )}

@@ -1,13 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
-import {
-  Card,
-  CardContent,
-  Typography,
-  Button,
-  Box,
-  useTheme,
-} from "@mui/material";
+import { Card, CardContent, Typography, Button, useTheme } from "@mui/material";
 import * as Blockly from "blockly";
 import ReactMarkdown from "react-markdown";
 import { withBoardParam } from "@/components/Blockly/helpers/helpUrlBuilder";
@@ -16,7 +9,6 @@ const TooltipViewer = () => {
   const theme = useTheme();
   const tooltip = useSelector((s) => s.workspace.code.tooltip);
   const helpurl = useSelector((s) => s.workspace.code.helpurl);
-
   // Wrap the helpurl with board parameter if it exists
   const helpUrlWithBoard = helpurl ? withBoardParam(helpurl) : null;
 
