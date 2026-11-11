@@ -179,7 +179,7 @@ export const imageClassificationTranslations_en = {
     flashConnecting: "Preparing senseBox for upload...",
     flashGrantBootloader: "Upload Camera Sketch",
     flashGrantBootloaderHint:
-      'No camera image was received, so the camera sketch will be uploaded to the senseBox. Click on "Upload Camera Sketch" and thenselect the "{name}" port.',
+      'No camera image was received, so the camera sketch will be uploaded to the senseBox. Click on "Upload Camera Sketch" and then select the "{name}" port.',
     flashUploading: "Uploading camera sketch...",
     flashRestarting: "Starting camera...",
     flashFailed: "Upload failed",
