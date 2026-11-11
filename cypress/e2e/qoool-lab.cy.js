@@ -53,10 +53,52 @@ describe("QOOOL Lab", () => {
     });
     return sent;
   }
-  it("guards direct access for other boards", () => {
+  const fittedFrequency = () =>
+    cy.get("tbody tr").first().find("td").eq(1).invoke("text").then(Number);
+  it("keeps the real device for the MCU-S2 but offers the simulator on other boards", () => {
     visit("MCU");
-    cy.contains("available for senseBox MCU-S2 only").should("be.visible");
-    cy.get('canvas[aria-label="sweep measurement plot"]').should("not.exist");
+    cy.contains("requires the MCU-S2").should("be.visible");
+    cy.contains("button", "Connect MCU-S2").should("be.disabled");
+    cy.contains("button", "Start simulator").should("be.enabled");
+    cy.get('canvas[aria-label="sweep measurement plot"]').should("be.visible");
+  });
+  it("simulates the magnetometer without Web Serial and follows the magnet", () => {
+    visit("MCU", false);
+    cy.get("#magnetometer-scene").should("not.exist");
+    cy.contains("button", "Start simulator").click();
+    cy.contains("Simulator running").should("be.visible");
+    cy.get("#magnetometer-magnet").should("have.attr", "aria-valuenow", "100");
+    cy.contains('[role="tab"]', "Waterfall").click();
+    cy.contains("button", /Start.*WATERFALL/).should("be.disabled");
+    cy.contains("supports sweep mode only").should("be.visible");
+    cy.contains('[role="tab"]', "Sweep").click();
+
+    // Magnet far away: both resonances overlap at 2870 MHz.
+    cy.contains("button", /Start.*SWEEP/).click();
+    cy.get('[role="status"]').should("contain", "SWEEP");
+    cy.contains("button", /^Stop$/).click();
+    cy.get('[role="status"]').should("not.exist");
+    cy.contains("button", "Download data").should("be.enabled");
+    cy.contains("button", "Automatic fit").click();
+    fittedFrequency().should("be.closeTo", 2870, 2);
+
+    // Magnet halfway to the sensor: the lower resonance moves to 2835 MHz.
+    cy.contains("button", /Start.*SWEEP/).click();
+    cy.get('[role="status"]').should("contain", "SWEEP");
+    cy.get("#magnetometer-magnet").focus();
+    cy.get("#magnetometer-magnet").type("{leftarrow}".repeat(10));
+    cy.get("#magnetometer-magnet").should("have.attr", "aria-valuenow", "50");
+    // Let the next simulated sweep and plot refresh arrive.
+    cy.wait(500);
+    cy.contains("button", /^Stop$/).click();
+    cy.get('[role="status"]').should("not.exist");
+    cy.contains("button", "Automatic fit").click();
+    fittedFrequency().should("be.closeTo", 2835, 2);
+
+    cy.contains("button", "Disconnect").should("be.disabled");
+    cy.contains("button", "Stop simulator").click();
+    cy.get("#magnetometer-scene").should("not.exist");
+    cy.contains("button", "Start simulator").should("be.enabled");
   });
   it("explains unavailable Web Serial", () => {
     visit("MCU-S2", false);

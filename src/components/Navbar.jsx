@@ -520,7 +520,6 @@ const Navbar = () => {
               text: "QOOOL Lab",
               icon: faLightbulb,
               link: "/qoool",
-              restriction: selectedBoard === "MCU-S2",
             },
             {
               text: Blockly.Msg.navbar_teachablesensebox,

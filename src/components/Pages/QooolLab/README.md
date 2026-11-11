@@ -1,13 +1,34 @@
 # QOOOL Lab
 
-Open **QOOOL Lab** in the navigation menu after selecting **MCU-S2**, or visit
-`/qoool`. Direct access with another board shows a board-selection notice.
+Open **QOOOL Lab** in the navigation menu, or visit `/qoool`. Measuring with a
+real magnetometer requires **MCU-S2** as the selected board; the simulator works
+with every board and browser.
 
 Connect the MCU-S2 over USB, with the special QOOOL XBee module and magnetometer
 attached and the existing QOOOL firmware installed. The browser port picker
 replaces the Python application's serial device path. Web Serial requires a
 supported desktop browser and HTTPS (or localhost). This page does not flash
 firmware or generate a replacement device sketch.
+
+## Simulator
+
+**Start simulator** connects a simulated magnetometer instead of the USB device; the same button then reads **Stop simulator** and ends it.
+It shows the sensor and a magnet that can be dragged (or moved with the arrow
+keys) towards the sensor. While a sweep runs, the plot follows the magnet: a
+single NV centre gives one dip at 2870 MHz that splits into two as the magnet
+approaches. The splitting is linear in the magnet distance; this illustrates the
+effect and is not a field calculation.
+
+- `SimulatedConnection.js` has the interface of `SerialConnection.js` and sends
+  the same telegrams, so plot, fit and CSV export work unchanged. It repeats the
+  sweep about ten times per second (`<clf>` followed by one `<batch>`); the CSV
+  holds the latest sweep. Only Sweep mode is simulated.
+- The model and the scene live in `src/components/Simulator/magnetometer/`
+  (`model.js`, `MagnetScene.jsx`) so the Blockly simulator can reuse them. Curve
+  constants (centre, maximum splitting, depth, width, voltage, noise) are at the
+  top of `model.js` and are estimates. The images in `assets/` are placeholders.
+- The simulator plot is labelled in GHz and volts. Data stay in MHz and
+  first-sample normalized, as for the real device.
 
 ## Features and reference behavior
 
@@ -49,6 +70,6 @@ npm run build
 npx cypress run --spec cypress/e2e/qoool-lab.cy.js
 ```
 
-The automated tests use a simulated serial device. Validate all five modes,
+The automated tests use a fake serial port and the simulator. Validate all five modes,
 waterfall continuation, unplug/reconnect, and numerical fits against recorded
 Python output on the physical MCU-S2 before classroom deployment.

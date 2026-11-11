@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 100" width="120" height="100">
+  <!-- Placeholder until the real magnetometer artwork is supplied. -->
+  <rect x="4" y="10" width="112" height="80" rx="8" fill="#1f6f4a" stroke="#14492f" stroke-width="2"/>
+  <circle cx="16" cy="22" r="3" fill="#d9c27a"/>
+  <circle cx="16" cy="78" r="3" fill="#d9c27a"/>
+  <circle cx="104" cy="22" r="3" fill="#d9c27a"/>
+  <circle cx="104" cy="78" r="3" fill="#d9c27a"/>
+  <circle cx="78" cy="50" r="24" fill="#4eaf46" opacity="0.35"/>
+  <path d="M78 30 L98 50 L78 70 L58 50 Z" fill="#f4b6c2" stroke="#c2185b" stroke-width="2"/>
+  <path d="M78 30 L78 70 M58 50 L98 50" stroke="#c2185b" stroke-width="1" opacity="0.6"/>
+  <rect x="14" y="36" width="30" height="28" rx="2" fill="#2b2b2b"/>
+</svg>

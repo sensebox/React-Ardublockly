@@ -3,6 +3,14 @@ import assert from "node:assert/strict";
 import { TelegramDecoder, parseTelegram, commandsFor } from "./protocol.js";
 import { fitLorentzians, lorentzian } from "./fit.js";
 import SerialConnection from "./SerialConnection.js";
+import SimulatedConnection from "./SimulatedConnection.js";
+import {
+  BASE_VOLTAGE,
+  CENTER,
+  MAX_SPLIT,
+  peaksFor,
+  spectrum,
+} from "../../Simulator/magnetometer/model.js";
 
 test("split UTF-8 transport frames, noise and consecutive telegrams", () => {
   const decoder = new TelegramDecoder();
@@ -237,5 +245,99 @@ test("disconnect waits for an in-flight open and closes it before allowing a ret
     await service.disconnect();
     if (original) Object.defineProperty(globalThis, "navigator", original);
     else delete globalThis.navigator;
+  }
+});
+
+test("magnet distance splits the resonance linearly around the centre", () => {
+  assert.deepEqual(
+    peaksFor(1).map((p) => p.freq),
+    [CENTER, CENTER],
+  );
+  assert.deepEqual(
+    peaksFor(0).map((p) => p.freq),
+    [CENTER - MAX_SPLIT, CENTER + MAX_SPLIT],
+  );
+  assert.deepEqual(
+    peaksFor(0.5).map((p) => p.freq),
+    [CENTER - MAX_SPLIT / 2, CENTER + MAX_SPLIT / 2],
+  );
+  // Positions outside the track are clamped.
+  assert.deepEqual(peaksFor(-3), peaksFor(0));
+  assert.deepEqual(peaksFor(7), peaksFor(1));
+});
+
+test("noise-free spectrum has its minima at the two resonances", () => {
+  const points = spectrum({ distance: 0.5, noise: 0 });
+  assert.equal(points.length, 201);
+  assert.equal(points[0][0], 2770);
+  assert.equal(points.at(-1)[0], 2970);
+  const minimum = (from, to) =>
+    points
+      .filter(([x]) => x >= from && x < to)
+      .reduce((low, p) => (p[1] < low[1] ? p : low))[0];
+  assert.equal(minimum(2770, CENTER), CENTER - MAX_SPLIT / 2);
+  assert.equal(minimum(CENTER, 2971), CENTER + MAX_SPLIT / 2);
+  assert.ok(points[0][1] > BASE_VOLTAGE * 0.99);
+  assert.ok(points[0][1] <= BASE_VOLTAGE);
+});
+
+test("simulated magnetometer speaks the sweep protocol and follows the magnet", async () => {
+  const telegrams = [],
+    states = [];
+  const device = new SimulatedConnection({
+    onTelegram: (t) => telegrams.push(t),
+    onStatus: (s) => states.push(s),
+    onLog() {},
+    onError: (e) => {
+      throw e;
+    },
+    interval: 5,
+  });
+  const lastSweep = () => {
+    const rows = parseTelegram(
+      telegrams.findLast((t) => t.startsWith("<batch")),
+    ).rows;
+    return rows.map((row) => [row[0], row[1] / rows[0][1]]);
+  };
+  const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  try {
+    await device.connect();
+    assert.deepEqual(states, ["connected"]);
+    await device.send("<f1,2770>");
+    await device.send("<f2,2970>");
+    await device.send("<start,sweep>");
+    assert.deepEqual(telegrams.slice(0, 2), ["<start,sweep>", "<clf>"]);
+    assert.equal(lastSweep().length, 201);
+    const far = fitLorentzians(lastSweep(), [
+      { freq: 2860, depth: 0.05, width: 5 },
+    ]);
+    assert.ok(Math.abs(far.peaks[0].freq - CENTER) < 1);
+
+    device.setDistance(0);
+    const before = telegrams.length;
+    await wait(30);
+    assert.ok(telegrams.length > before, "sweeps repeat while running");
+    const near = fitLorentzians(lastSweep(), [
+      { freq: 2805, depth: 0.05, width: 5 },
+      { freq: 2935, depth: 0.05, width: 5 },
+    ]);
+    assert.ok(Math.abs(near.peaks[0].freq - (CENTER - MAX_SPLIT)) < 1);
+    assert.ok(Math.abs(near.peaks[1].freq - (CENTER + MAX_SPLIT)) < 1);
+
+    await device.send("<end>");
+    assert.equal(telegrams.at(-1), "<end>");
+    const stopped = telegrams.length;
+    await wait(30);
+    assert.equal(telegrams.length, stopped, "no sweeps after <end>");
+
+    await device.send("<start,roll>");
+    assert.match(telegrams.at(-2), /^<text,.*sweep/);
+    assert.equal(telegrams.at(-1), "<end>");
+
+    await device.disconnect();
+    assert.equal(states.at(-1), "disconnected");
+    await assert.rejects(device.send("<start,sweep>"));
+  } finally {
+    await device.disconnect();
   }
 });

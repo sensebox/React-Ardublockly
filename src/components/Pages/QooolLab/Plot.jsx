@@ -3,6 +3,7 @@ import { useTheme } from "@mui/material";
 import { lorentzian } from "./fit";
 export const COLORS = ["#1976d2", "#ed6c02", "#2e7d32", "#9c27b0"];
 
+// axis (optional) only relabels the ticks: {xFactor, xDigits, yFactor, yRange, xLabel, yLabel}.
 export default function Plot({
   data,
   mode,
@@ -11,6 +12,7 @@ export default function Plot({
   channel,
   peaks,
   labels,
+  axis,
 }) {
   const canvas = useRef(null);
   const theme = useTheme();
@@ -59,7 +61,7 @@ export default function Plot({
           : data.xscale || extent(0, [settings.f1, settings.f2]);
       const yr = waterfall
         ? [settings.history, 0]
-        : data.yscale || extent(1, [0, 1.1]);
+        : data.yscale || axis?.yRange || extent(1, [0, 1.1]);
       const px = (x) => left + ((x - xr[0]) / (xr[1] - xr[0])) * w;
       const py = (y) => top + h - ((y - yr[0]) / (yr[1] - yr[0])) * h;
       ctx.font = "12px sans-serif";
@@ -77,13 +79,18 @@ export default function Plot({
         ctx.stroke();
         ctx.textAlign = "center";
         ctx.fillText(
-          (xr[0] + ((xr[1] - xr[0]) * i) / 5).toFixed(1),
+          ((xr[0] + ((xr[1] - xr[0]) * i) / 5) * (axis?.xFactor ?? 1)).toFixed(
+            axis?.xDigits ?? 1,
+          ),
           x,
           top + h + 22,
         );
         ctx.textAlign = "right";
         ctx.fillText(
-          (yr[1] - ((yr[1] - yr[0]) * i) / 5).toPrecision(4),
+          (
+            (yr[1] - ((yr[1] - yr[0]) * i) / 5) *
+            (axis?.yFactor ?? 1)
+          ).toPrecision(4),
           left - 8,
           y + 4,
         );
@@ -91,6 +98,7 @@ export default function Plot({
       ctx.textAlign = "center";
       ctx.fillText(
         data.xlabel ||
+          axis?.xLabel ||
           (rolling ? labels.time : mode === "xy" ? "x" : labels.frequency),
         left + w / 2,
         height - 10,
@@ -100,6 +108,7 @@ export default function Plot({
       ctx.rotate(-Math.PI / 2);
       ctx.fillText(
         data.ylabel ||
+          axis?.yLabel ||
           (waterfall ? labels.newest : mode === "xy" ? "y" : labels.intensity),
         0,
         0,
@@ -193,7 +202,7 @@ export default function Plot({
       observer.disconnect();
       clearInterval(timer);
     };
-  }, [data, mode, settings, visible, channel, peaks, labels, theme]);
+  }, [data, mode, settings, visible, channel, peaks, labels, axis, theme]);
   return (
     <canvas
       ref={canvas}

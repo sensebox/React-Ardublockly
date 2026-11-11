@@ -18,6 +18,13 @@ import {
 } from "@mui/material";
 import { saveAs } from "file-saver";
 import SerialConnection from "./SerialConnection";
+import SimulatedConnection from "./SimulatedConnection";
+import MagnetScene from "@/components/Simulator/magnetometer/MagnetScene";
+import {
+  BASE_VOLTAGE,
+  DIP_DEPTH,
+  RANGE,
+} from "@/components/Simulator/magnetometer/model";
 import { commandsFor, MODES, parseTelegram } from "./protocol";
 import { fitLorentzians, rmse } from "./fit";
 import Plot, { COLORS } from "./Plot";
@@ -45,17 +52,10 @@ const initialPeaks = () =>
 
 export default function QooolLab() {
   const board = useSelector((s) => s.board.board);
-  return board === "MCU-S2" ? (
-    <Lab />
-  ) : (
-    <Alert severity="info" sx={{ my: 4 }}>
-      QOOOL Lab is available for senseBox MCU-S2 only. Select MCU-S2 in the
-      board menu.
-    </Alert>
-  );
+  return <Lab board={board} />;
 }
 
-function Lab() {
+function Lab({ board }) {
   const language = useSelector((s) => s.general.language);
   const de = language === "de_DE";
   const t = (en, german) => (de ? german : en);
@@ -81,6 +81,9 @@ function Lab() {
     Object.fromEntries(MODES.map((m) => [m, blank()])),
   );
   const [log, setLog] = useState([]);
+  const [simulated, setSimulated] = useState(false);
+  const [distance, setDistance] = useState(1);
+  const simulatedRef = useRef(false);
   const connection = useRef(null),
     active = useRef(null),
     stopping = useRef(false);
@@ -198,9 +201,11 @@ function Lab() {
         active.current = null;
         setRunning(null);
         setBusy(false);
-      } else if (event.type === "clf" && current !== "waterfall")
+      } else if (event.type === "clf" && current !== "waterfall") {
         data.current[current] = blank();
-      else if (
+        // Simulated sweeps repeat; keep only the latest one for export.
+        if (simulatedRef.current) rawRows.current = [];
+      } else if (
         (event.type === "xscale" || event.type === "xlabel") &&
         current === "xy"
       )
@@ -215,30 +220,62 @@ function Lab() {
     }
   }
 
+  const handlers = () => ({
+    onTelegram: (telegram) => {
+      if (mounted.current) void receive(telegram);
+    },
+    onLog: addLog,
+    onError: reportError,
+    onStatus: (value, ping) => {
+      if (!mounted.current) return;
+      setStatus(value);
+      setLatency(ping ?? null);
+      if (value === "disconnected") {
+        operation.current++;
+        active.current = null;
+        setRunning(null);
+        setBusy(false);
+        simulatedRef.current = false;
+        setSimulated(false);
+      }
+    },
+  });
   async function connect() {
     setError("");
     setStatus("connecting");
-    const service = new SerialConnection({
-      onTelegram: (telegram) => {
-        if (mounted.current) void receive(telegram);
-      },
-      onLog: addLog,
-      onError: reportError,
-      onStatus: (value, ping) => {
-        if (!mounted.current) return;
-        setStatus(value);
-        setLatency(ping ?? null);
-        if (value === "disconnected") {
-          operation.current++;
-          active.current = null;
-          setRunning(null);
-          setBusy(false);
-        }
-      },
+    const service = new SerialConnection(handlers());
+    connection.current = service;
+    await service.connect();
+  }
+  async function startSimulator() {
+    setError("");
+    simulatedRef.current = true;
+    setSimulated(true);
+    setDistance(1);
+    setMode("sweep");
+    setSettings((old) => ({
+      ...old,
+      sweep: { ...old.sweep, f1: RANGE[0], f2: RANGE[1] },
+    }));
+    const service = new SimulatedConnection({
+      ...handlers(),
+      unsupportedText: t(
+        "The simulator supports sweep mode only.",
+        "Der Simulator unterstützt nur den Sweep-Modus.",
+      ),
     });
     connection.current = service;
     await service.connect();
   }
+  const moveMagnet = (value) => {
+    setDistance(value);
+    connection.current?.setDistance?.(value);
+  };
+  // The real device needs the MCU-S2; the simulator keeps running on any board.
+  useEffect(() => {
+    if (board !== "MCU-S2" && !simulatedRef.current)
+      void connection.current?.disconnect();
+  }, [board]);
   async function start() {
     try {
       const commands = commandsFor(mode, settings[mode], message);
@@ -327,11 +364,30 @@ function Lab() {
     time: t("Time (s)", "Zeit (s)"),
     intensity: t("Intensity", "Intensität"),
     newest: t("Sweep (newest at top)", "Sweep (neueste oben)"),
-    empty: t(
-      "Connect the MCU-S2 and start a measurement.",
-      "MCU-S2 verbinden und Messung starten.",
-    ),
+    empty: simulated
+      ? t(
+          "Start the sweep, then drag the magnet.",
+          "Sweep starten und dann den Magneten ziehen.",
+        )
+      : t(
+          "Connect the MCU-S2 or start the simulator, then start a measurement.",
+          "MCU-S2 verbinden oder Simulator starten, dann Messung starten.",
+        ),
   };
+  // The simulator shows GHz and volts like the reference display; data stay in MHz and normalized.
+  const axis =
+    simulated && mode === "sweep"
+      ? {
+          xFactor: 0.001,
+          xDigits: 2,
+          xLabel: t("Frequency (GHz)", "Frequenz (GHz)"),
+          yFactor: currentData.points.length
+            ? currentData.normalizers[0]
+            : BASE_VOLTAGE,
+          yRange: [1 - 2.5 * DIP_DEPTH, 1 + 0.5 * DIP_DEPTH],
+          yLabel: t("Response (V)", "Signal (V)"),
+        }
+      : null;
   return (
     <Container maxWidth="xl" sx={{ py: 4 }}>
       <Stack spacing={3}>
@@ -348,10 +404,18 @@ function Lab() {
         </Box>
         <Alert severity="info">
           {t(
-            "Connect your MCU-S2 with the QOOOL XBee module and magnetometer via USB. The board must already run the firmware used by the Python lab.",
-            "Verbinde deine MCU-S2 mit dem QOOOL-XBee-Modul und Magnetometer über USB. Auf dem Board muss bereits die Firmware des Python-Labs installiert sein.",
+            "Connect your MCU-S2 with the QOOOL XBee module and magnetometer via USB. The board must already run the firmware used by the Python lab. Without hardware, start the simulator.",
+            "Verbinde deine MCU-S2 mit dem QOOOL-XBee-Modul und Magnetometer über USB. Auf dem Board muss bereits die Firmware des Python-Labs installiert sein. Ohne Hardware kannst du den Simulator starten.",
           )}
         </Alert>
+        {board !== "MCU-S2" && (
+          <Alert severity="info">
+            {t(
+              "Measuring with a real magnetometer requires the MCU-S2. Select it in the board menu. The simulator works with every board.",
+              "Die Messung mit einem echten Magnetometer benötigt die MCU-S2. Wähle sie im Board-Menü aus. Der Simulator funktioniert mit jedem Board.",
+            )}
+          </Alert>
+        )}
         {!navigator.serial && (
           <Alert severity="warning">
             {t(
@@ -377,7 +441,9 @@ function Lab() {
               color={status === "connected" ? "success" : "default"}
               label={
                 status === "connected"
-                  ? t("Connected", "Verbunden")
+                  ? simulated
+                    ? t("Simulator running", "Simulator aktiv")
+                    : t("Connected", "Verbunden")
                   : status === "connecting"
                     ? t("Connecting…", "Verbinde…")
                     : t("Disconnected", "Nicht verbunden")
@@ -388,13 +454,31 @@ function Lab() {
             )}
             <Button
               variant="contained"
-              disabled={!navigator.serial || status !== "disconnected"}
+              disabled={
+                !navigator.serial ||
+                board !== "MCU-S2" ||
+                status !== "disconnected"
+              }
               onClick={connect}
             >
               {t("Connect MCU-S2", "MCU-S2 verbinden")}
             </Button>
             <Button
-              disabled={status === "disconnected"}
+              variant="outlined"
+              color={simulated ? "error" : "primary"}
+              disabled={!simulated && status !== "disconnected"}
+              onClick={() => {
+                if (!simulated) return void startSimulator();
+                operation.current++;
+                void connection.current?.disconnect();
+              }}
+            >
+              {simulated
+                ? t("Stop simulator", "Simulator stoppen")
+                : t("Start simulator", "Simulator starten")}
+            </Button>
+            <Button
+              disabled={status === "disconnected" || simulated}
               onClick={() => {
                 operation.current++;
                 void connection.current?.disconnect();
@@ -449,6 +533,23 @@ function Lab() {
             }}
           >
             <Box sx={{ minWidth: 0 }}>
+              {simulated && (
+                <MagnetScene
+                  distance={distance}
+                  onChange={moveMagnet}
+                  labels={{
+                    sensor: t("Magnetometer", "Magnetometer"),
+                    magnet: t(
+                      "Magnet, distance to the sensor",
+                      "Magnet, Abstand zum Sensor",
+                    ),
+                    hint: t(
+                      "Drag the magnet towards the sensor or away from it. Arrow keys work too.",
+                      "Ziehe den Magneten zum Sensor hin oder von ihm weg. Die Pfeiltasten funktionieren auch.",
+                    ),
+                  }}
+                />
+              )}
               <Plot
                 data={currentData}
                 mode={mode}
@@ -457,6 +558,7 @@ function Lab() {
                 channel={channel}
                 peaks={plotPeaks}
                 labels={labels}
+                axis={axis}
               />
               {mode !== "waterfall" && (
                 <Stack direction="row" useFlexGap flexWrap="wrap">
@@ -495,10 +597,15 @@ function Lab() {
                         "Raw intensity in a rolling time window",
                         "Rohintensität im rollenden Zeitfenster",
                       )
-                    : t(
-                        "Each channel is normalized to its first sample, matching the Python lab.",
-                        "Jeder Kanal wird wie im Python-Lab auf seinen ersten Messwert normiert.",
-                      )}
+                    : axis
+                      ? t(
+                          "Simulated photo sensor signal of a single NV centre",
+                          "Simuliertes Signal des Fotosensors für ein einzelnes NV-Zentrum",
+                        )
+                      : t(
+                          "Each channel is normalized to its first sample, matching the Python lab.",
+                          "Jeder Kanal wird wie im Python-Lab auf seinen ersten Messwert normiert.",
+                        )}
               </Typography>
             </Box>
             <Stack spacing={2}>
@@ -590,11 +697,24 @@ function Lab() {
               />
               <Button
                 variant="contained"
-                disabled={status !== "connected" || !!running || busy}
+                disabled={
+                  status !== "connected" ||
+                  !!running ||
+                  busy ||
+                  (simulated && mode !== "sweep")
+                }
                 onClick={start}
               >
                 {t("Start", "Starten")} {mode.toUpperCase()}
               </Button>
+              {simulated && mode !== "sweep" && (
+                <Typography variant="body2" color="text.secondary">
+                  {t(
+                    "The simulator supports sweep mode only.",
+                    "Der Simulator unterstützt nur den Sweep-Modus.",
+                  )}
+                </Typography>
+              )}
               <Button
                 color="error"
                 variant="outlined"
