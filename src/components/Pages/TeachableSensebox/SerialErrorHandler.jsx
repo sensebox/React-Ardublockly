@@ -285,8 +285,10 @@ const SerialErrorHandler = ({
     switch (errorDetails.action) {
       case "retry":
       case "retry-with-flash":
+        (onRetry ?? onReconnect)?.();
+        break;
       case "reconnect":
-        if (onReconnect) onReconnect();
+        (onReconnect ?? onRetry)?.();
         break;
       default:
         break;
