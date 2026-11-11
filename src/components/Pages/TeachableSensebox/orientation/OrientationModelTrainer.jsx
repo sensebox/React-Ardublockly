@@ -1033,7 +1033,11 @@ const OrientationModelTrainer = ({
                   showStatus={false}
                   overrides={
                     orientationSerialError.type === ErrorTypes.FLASH_FAILED
-                      ? { errorMessage: t.errors.flashFailedMessage }
+                      ? {
+                          errorMessage: t.errors.flashFailedMessage,
+                          troubleshootingFirmware:
+                            t.errors.troubleshootingFirmware,
+                        }
                       : {
                           errorTitle: t.errors.connectionFailed,
                           errorMessage: t.errors.connectionFailedMessage,
