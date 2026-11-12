@@ -116,6 +116,14 @@ export const spellTranslations_en = {
       "Check if the senseBox MCU Eye is running the sketch for streaming spells.",
     deviceDisconnected: "senseBox disconnected unexpectedly",
     dataTimeout: "No spell data received",
+    waitingForData: "Waiting for spell data...",
+    flashConnecting: "Preparing senseBox for upload...",
+    flashGrantBootloader: "Upload Spell Sketch",
+    flashGrantBootloaderHint:
+      'No spell data was received, so the spell sketch will be uploaded to the senseBox. Click the button and select the "{name}" port in the browser dialog.',
+    flashUploading: "Uploading spell sketch...",
+    flashRestarting: "Connecting senseBox...",
+    flashFailedMessage: "Uploading the spell sketch failed.",
   },
 
   help: {
