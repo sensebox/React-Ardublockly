@@ -33,6 +33,8 @@ class SpellSerialService {
     this.errorCallbacks = [];
     this.lineBuffer = "";
     this._previousStrokeState = StrokeState.WAITING;
+    // Resolvers of pending waitForData() calls.
+    this._dataWaiters = [];
   }
 
   /**
@@ -76,11 +78,15 @@ class SpellSerialService {
   /**
    * Connect to the serial port and start reading spell data
    * @param {number} baudRate - default 115200
+   * @param {SerialPort} [explicitPort] - Already permitted port to open
+   *   instead of showing the browser's port picker (e.g. after flashing).
    */
-  async connect(baudRate = 115200) {
+  async connect(baudRate = 115200, explicitPort = null) {
     if (this.isConnected) return;
 
-    if (!this.port) {
+    if (explicitPort) {
+      this.port = explicitPort;
+    } else if (!this.port) {
       this.port = await this.requestPort();
       if (!this.port) return; // User cancelled
     }
@@ -110,7 +116,15 @@ class SpellSerialService {
 
     try {
       if (this.reader) {
-        await this.reader.cancel();
+        const reader = this.reader;
+        await reader.cancel();
+        // Release the lock here as well, otherwise port.close() fails and
+        // the port stays open (e.g. for the flash tool).
+        try {
+          reader.releaseLock();
+        } catch (_) {
+          // already released by the read loop
+        }
         this.reader = null;
       }
       if (this.port && this.port.readable) {
@@ -123,6 +137,26 @@ class SpellSerialService {
     this.port = null;
     this.lineBuffer = "";
     this._previousStrokeState = StrokeState.WAITING;
+    this._resolveDataWaiters(false);
+  }
+
+  /**
+   * Wait until the first valid spell data line arrives.
+   * @param {number} timeoutMs
+   * @returns {Promise<boolean>} true if data arrived in time
+   */
+  waitForData(timeoutMs = 4000) {
+    return new Promise((resolve) => {
+      const waiter = (gotData) => {
+        clearTimeout(timer);
+        resolve(gotData);
+      };
+      const timer = setTimeout(() => {
+        this._dataWaiters = this._dataWaiters.filter((w) => w !== waiter);
+        resolve(false);
+      }, timeoutMs);
+      this._dataWaiters.push(waiter);
+    });
   }
 
   /**
@@ -152,6 +186,12 @@ class SpellSerialService {
   }
 
   // ─── Private ──────────────────────────────────────────────────────────────
+
+  _resolveDataWaiters(gotData) {
+    const waiters = this._dataWaiters;
+    this._dataWaiters = [];
+    for (const waiter of waiters) waiter(gotData);
+  }
 
   _emitStroke(strokeData) {
     for (const cb of this.strokeCallbacks) {
@@ -228,6 +268,9 @@ class SpellSerialService {
       const length = values[1];
 
       if (isNaN(state) || isNaN(length)) return;
+
+      // A valid spell line: the spell sketch is running.
+      if (this._dataWaiters.length > 0) this._resolveDataWaiters(true);
 
       const strokePoints = [];
       for (let i = 2; i + 1 < values.length; i += 2) {

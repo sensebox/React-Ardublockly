@@ -63,11 +63,15 @@ class OrientationService {
   /**
    * Connect to the serial port and start reading accelerometer data
    * @param {number} baudRate - default 115200
+   * @param {SerialPort} [explicitPort] - Already permitted port to open
+   *   instead of showing the browser's port picker (e.g. after flashing).
    */
-  async connect(baudRate = 115200) {
+  async connect(baudRate = 115200, explicitPort = null) {
     if (this.isConnected) return;
 
-    if (!this.port) {
+    if (explicitPort) {
+      this.port = explicitPort;
+    } else if (!this.port) {
       this.port = await this.requestPort();
       if (!this.port) return; // User cancelled
     }
@@ -97,7 +101,15 @@ class OrientationService {
 
     try {
       if (this.reader) {
-        await this.reader.cancel();
+        const reader = this.reader;
+        await reader.cancel();
+        // Release the lock here as well, otherwise port.close() fails and
+        // the port stays open (e.g. for the flash tool).
+        try {
+          reader.releaseLock();
+        } catch (_) {
+          // already released by the read loop
+        }
         this.reader = null;
       }
       if (this.port && this.port.readable) {
