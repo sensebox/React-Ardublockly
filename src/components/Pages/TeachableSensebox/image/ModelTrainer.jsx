@@ -986,102 +986,97 @@ const ModelTrainer = ({
                   tooltip={t.training.tooltip.helpCamera}
                 />
 
-              <Tooltip
-                title={
-                  !browserCompatible ? t.training.tooltip.browserCompatible : ""
-                }
-                arrow
-                disableHoverListener={!(disabled || !browserCompatible)}
-              >
-                <span>
-                  {senseBoxPhase === "grant" ? (
-                    <Button
-                      variant="contained"
-                      color="warning"
-                      startIcon={<UsbIcon />}
-                      onClick={handleGrantBootloader}
-                      disabled={disabled || isGrantingPort}
-                    >
-                      {t.errors.flashGrantBootloader}
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="contained"
-                      startIcon={
-                        isSenseBoxBusy ? (
-                          <CircularProgress size={16} color="inherit" />
-                        ) : (
-                          <CameraIcon />
-                        )
-                      }
-                      onClick={handleSenseBoxCameraClick}
-                      disabled={
-                        disabled || !browserCompatible || isSenseBoxBusy
-                      }
-                      color={
-                        sourceType === "serial" && isCameraActive
-                          ? "secondary"
-                          : "primary"
-                      }
-                    >
-                      {isSenseBoxBusy
-                        ? senseBoxBusyLabel
-                        : sourceType === "serial" && isCameraActive
-                          ? t.training.stopSenseBoxCamera
-                          : t.training.startSenseBoxCamera}
-                    </Button>
+                <Tooltip
+                  title={
+                    !browserCompatible
+                      ? t.training.tooltip.browserCompatible
+                      : ""
+                  }
+                  arrow
+                  disableHoverListener={!(disabled || !browserCompatible)}
+                >
+                  <span>
+                    {senseBoxPhase === "grant" ? (
+                      <Button
+                        variant="contained"
+                        color="warning"
+                        startIcon={<UsbIcon />}
+                        onClick={handleGrantBootloader}
+                        disabled={disabled || isGrantingPort}
+                      >
+                        {t.errors.flashGrantBootloader}
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="contained"
+                        startIcon={
+                          isSenseBoxBusy ? (
+                            <CircularProgress size={16} color="inherit" />
+                          ) : (
+                            <CameraIcon />
+                          )
+                        }
+                        onClick={handleSenseBoxCameraClick}
+                        disabled={
+                          disabled || !browserCompatible || isSenseBoxBusy
+                        }
+                        color={
+                          sourceType === "serial" && isCameraActive
+                            ? "secondary"
+                            : "primary"
+                        }
+                      >
+                        {isSenseBoxBusy
+                          ? senseBoxBusyLabel
+                          : sourceType === "serial" && isCameraActive
+                            ? t.training.stopSenseBoxCamera
+                            : t.training.startSenseBoxCamera}
+                      </Button>
+                    )}
+                  </span>
+                </Tooltip>
+              </Box>
+
+              {senseBoxPhase === "grant" && !serialError && (
+                <Alert severity="info" sx={{ mb: 2 }}>
+                  {t.errors.flashGrantBootloaderHint.replace(
+                    "{name}",
+                    flashBootloaderName,
                   )}
-                </span>
-              </Tooltip>
-            </Box>
+                </Alert>
+              )}
 
-            {senseBoxPhase === "grant" && !serialError && (
-              <Alert severity="info" sx={{ mb: 2 }}>
-                {t.errors.flashGrantBootloaderHint.replace(
-                  "{name}",
-                  flashBootloaderName,
-                )}
-              </Alert>
-            )}
+              {senseBoxPhase === "flashing" && (
+                <Box sx={{ mb: 2 }}>
+                  <LinearProgress
+                    variant={
+                      flashProgress > 0 ? "determinate" : "indeterminate"
+                    }
+                    value={flashProgress}
+                  />
+                  {flashProgress > 0 && (
+                    <Typography variant="caption" color="text.secondary">
+                      {flashProgress}%
+                    </Typography>
+                  )}
+                </Box>
+              )}
 
-            {senseBoxPhase === "flashing" && (
-              <Box sx={{ mb: 2 }}>
-                <LinearProgress
-                  variant={flashProgress > 0 ? "determinate" : "indeterminate"}
-                  value={flashProgress}
-                />
-                {flashProgress > 0 && (
-                  <Typography variant="caption" color="text.secondary">
-                    {flashProgress}%
-                  </Typography>
-                )}
-              </Box>
-            )}
+              {sourceType === "serial" && serialError && (
+                <Box sx={{ mb: 3 }}>
+                  <SerialErrorHandler
+                    error={serialError}
+                    connectionStatus={connectionStatus}
+                    onRetry={handleSerialRetry}
+                    onReconnect={handleSerialRetry}
+                    onFlashFirmware={handleFlashCaptureSketch}
+                    onDismiss={handleDismissError}
+                    showStatus={false}
+                  />
+                </Box>
+              )}
 
-            {sourceType === "serial" && serialError && (
-              <Box sx={{ mb: 3 }}>
-                <SerialErrorHandler
-                  error={serialError}
-                  connectionStatus={connectionStatus}
-                  onRetry={handleSerialRetry}
-                  onReconnect={handleSerialRetry}
-                  onFlashFirmware={handleFlashCaptureSketch}
-                  onDismiss={handleDismissError}
-                  showStatus={false}
-                />
-              </Box>
-            )}
-
-            {(isCameraActive || videoLoading) && !isMobile && (
-              <Box
-                sx={{
-                  mb: 3,
-                  display: "flex",
-                  justifyContent: "center",
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}
-              >
+              {(isCameraActive || videoLoading) && !isMobile && (
                 <Box
                   sx={{
                     mb: 3,
