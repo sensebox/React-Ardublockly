@@ -1,9 +1,10 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
-import { Typography, Box, Paper, useMediaQuery, useTheme } from "@mui/material";
+import { Typography, Box, useMediaQuery, useTheme } from "@mui/material";
 import { useSelector } from "react-redux";
 import { getImageTranslations } from "./translations";
 import ModelTrainer from "./ModelTrainer";
 import ConvertDeploy from "./ConvertDeploy";
+import CollapsibleSection from "./CollapsibleSection";
 import HelpSidebar from "../HelpSidebar";
 import HelpButton, { useHelpBlink, markHelpSeen } from "../HelpButton";
 import { HelpProvider } from "../HelpContext";
@@ -130,43 +131,39 @@ const ImageClassificationTool = ({ hideHelp = false, hideHeader = false }) => {
             </Box>
           )}
 
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-            {/* Model Training Section */}
-            <Paper elevation={2} sx={{ p: 3 }}>
-              <Typography variant="h5" gutterBottom>
-                {t.training.title}
-              </Typography>
-              <ModelTrainer
-                onModelTrained={handleModelTrained}
-                onTrainingStart={handleTrainingStart}
-                onTrainingError={handleTrainingError}
-                isTraining={isTraining}
-                disabled={isTraining}
-                onOpenHelp={handleOpenHelp}
-              />
-            </Paper>
-
-            {/* Blockly Integration Section */}
-            {trainedModel && (
-              <Paper elevation={2} sx={{ p: 3 }}>
-                <Typography variant="h5" gutterBottom>
-                  {t.integration.title}
-                  <HelpButton
-                    onClick={() => {
-                      markDeploySeen();
-                      handleOpenHelp("image/deployModel");
-                    }}
-                    isBlinking={deployBlinking}
-                    tooltip={
-                      t.training?.tooltip?.helpDeployModel ||
-                      "Help with deploying the model"
-                    }
-                  />
-                </Typography>
-                <ConvertDeploy model={trainedModel} />
-              </Paper>
-            )}
-          </Box>
+          {/* Live classification (left), training + deployment (right) */}
+          <ModelTrainer
+            onModelTrained={handleModelTrained}
+            onTrainingStart={handleTrainingStart}
+            onTrainingError={handleTrainingError}
+            isTraining={isTraining}
+            disabled={isTraining}
+            onOpenHelp={handleOpenHelp}
+            deploySection={
+              trainedModel && (
+                <CollapsibleSection
+                  title={
+                    <Typography variant="h5" gutterBottom>
+                      {t.integration.title}
+                      <HelpButton
+                        onClick={() => {
+                          markDeploySeen();
+                          handleOpenHelp("image/deployModel");
+                        }}
+                        isBlinking={deployBlinking}
+                        tooltip={
+                          t.training?.tooltip?.helpDeployModel ||
+                          "Help with deploying the model"
+                        }
+                      />
+                    </Typography>
+                  }
+                >
+                  <ConvertDeploy model={trainedModel} />
+                </CollapsibleSection>
+              )
+            }
+          />
         </Box>
       </>
     </HelpProvider>

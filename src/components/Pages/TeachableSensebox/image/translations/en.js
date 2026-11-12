@@ -22,6 +22,8 @@ export const imageClassificationTranslations_en = {
     analyzing: "Analyzing...",
     dataChangedWarning:
       "Training data has changed. Retrain the model to update predictions.",
+    dataChangedTestWarning:
+      "Training data has changed. Retrain the model before testing again.",
     preliminaryModelWarning: "Preliminary Model. Training is still ongoing...",
     addNewClass: "Add New Class",
     className: "Class Name",
@@ -40,7 +42,7 @@ export const imageClassificationTranslations_en = {
     downloadData: "Download Images",
     uploadData: "Upload Images",
     downloadTrainScript: "Download Collect-Sketch",
-    resultsTitle: "Training Details",
+    resultsTitle: "Training Progress",
     metricsChart: "Training Progress",
     testResultsTitle: "Test",
     finalAccuracy: "Accuracy",
@@ -62,6 +64,7 @@ export const imageClassificationTranslations_en = {
       learningRate: "Learning Rate",
       earlyStopping: "Early Stopping",
       reset: "Reset to Defaults",
+      testSplit: "Share of training images used for testing: {value}%",
     },
     tooltip: {
       helpMain: "What is Image Classification?",
@@ -82,6 +85,28 @@ export const imageClassificationTranslations_en = {
       desirableNumberSamples: "Recommendation: At least 100 images per class",
       minClassesRequired: "Add at least 2 classes first",
       captureImagesFirst: "Capture a few images first",
+    },
+  },
+  section: {
+    collapse: "Collapse",
+    expand: "Expand",
+  },
+  testing: {
+    title: "Model Testing",
+    description:
+      "Capture test images that the model has not seen during training. This lets you check how well your model recognizes new images.",
+    testModel: "Test model",
+    testingInProgress: "Testing model...",
+    errorTesting: "Testing failed: {message}",
+    cellDescriptionCorrect:
+      "These images show {actual} and were correctly recognized by the model as {predicted}.",
+    cellDescriptionIncorrect:
+      "These images were incorrectly classified as {predicted}. The correct class would have been {actual}.",
+    cellEmpty: "There are no images in this cell.",
+    tooltip: {
+      needModel: "Train a model first",
+      trainingRunning: "Wait until training has finished",
+      needTestImages: "Capture at least one test image per class",
     },
   },
   integration: {

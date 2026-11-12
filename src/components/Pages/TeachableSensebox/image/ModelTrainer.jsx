@@ -12,9 +12,6 @@ import {
   Button,
   Typography,
   Grid,
-  Card,
-  CardContent,
-  CardActions,
   LinearProgress,
   Chip,
   IconButton,
@@ -35,6 +32,7 @@ import {
   Alert,
   Menu,
   MenuItem,
+  Slider,
 } from "@mui/material";
 import {
   Add as AddIcon,
@@ -54,6 +52,7 @@ import SerialErrorHandler, {
 import SerialCameraService from "./SerialCameraService";
 import FloatingCameraPreview from "./FloatingCameraPreview";
 import TrainingResultsSection from "./TrainingResultsSection";
+import ModelTestingSection from "./ModelTestingSection";
 import HelpButton, { useHelpBlink } from "../HelpButton";
 import ExpandedClassDialog from "./ExpandedClassDialog";
 import useModelTraining from "./hooks/useModelTraining";
@@ -67,6 +66,31 @@ import {
   downloadTrainingData,
   parseTrainingDataZip,
 } from "../utils/trainingDataExport";
+import ClassSampleCard from "./ClassSampleCard";
+import CollapsibleSection from "./CollapsibleSection";
+
+// Stable pseudo-random rank for a sample, so the same training images are
+// moved to the test set for a given percentage (and move back when lowered).
+const sampleRank = (sampleId) => {
+  const str = String(sampleId);
+  let hash = 2166136261;
+  for (let i = 0; i < str.length; i++) {
+    hash ^= str.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+};
+
+const getMovedSampleIds = (samples, percent) => {
+  const count = Math.round((percent / 100) * samples.length);
+  if (count <= 0) return new Set();
+  return new Set(
+    [...samples]
+      .sort((a, b) => sampleRank(a.id) - sampleRank(b.id))
+      .slice(0, count)
+      .map((s) => s.id),
+  );
+};
 
 const ModelTrainer = ({
   onModelTrained,
@@ -75,6 +99,7 @@ const ModelTrainer = ({
   isTraining,
   disabled,
   onOpenHelp,
+  deploySection,
 }) => {
   // Class management state
   const [classes, setClasses] = useState([]);
@@ -99,8 +124,6 @@ const ModelTrainer = ({
   const [isDownloading, setIsDownloading] = useState(false);
   const [isDownloadingCollect, setIsDownloadingCollect] = useState(false);
   const [isFloatingPreviewCollapsed, setIsFloatingPreviewCollapsed] =
-    useState(false);
-  const [trainedWithEnoughSamples, setTrainedWithEnoughSamples] =
     useState(false);
 
   // Training settings state
@@ -134,13 +157,53 @@ const ModelTrainer = ({
 
   const {
     trainModel: executeTraining,
+    testModel: executeTest,
+    clearTestResults,
     trainingProgress,
     trainingMetrics,
-    testResults,
+    testSampleMatrix,
     finalAccuracy,
     trainedModel,
     isPreliminaryModel,
   } = useModelTraining();
+
+  const [hasCompletedTraining, setHasCompletedTraining] = useState(false);
+  const [isTesting, setIsTesting] = useState(false);
+
+  // Split each class into the images used for training and the images shown
+  // in the test section (recorded test images + moved training images).
+  const testSplit = trainingSettings.testSplit || 0;
+  const { trainingClasses, testClasses } = useMemo(() => {
+    const train = [];
+    const test = [];
+    classes.forEach((cls) => {
+      const moved = getMovedSampleIds(cls.samples, testSplit);
+      train.push({
+        ...cls,
+        samples: cls.samples.filter((s) => !moved.has(s.id)),
+      });
+      test.push({
+        ...cls,
+        samples: [
+          ...cls.samples.filter((s) => moved.has(s.id)),
+          ...(cls.testSamples || []),
+        ],
+      });
+    });
+    return { trainingClasses: train, testClasses: test };
+  }, [classes, testSplit]);
+
+  // Discard test results whenever the test images or the model change
+  const testDataSignature = useMemo(
+    () =>
+      JSON.stringify(
+        testClasses.map((c) => [c.id, c.samples.map((s) => s.id)]),
+      ),
+    [testClasses],
+  );
+  useEffect(() => {
+    clearTestResults();
+  }, [testDataSignature, trainedModel, clearTestResults]);
 
   const { predictions } = useModelPrediction(
     trainedModel,
@@ -161,8 +224,10 @@ const ModelTrainer = ({
   const isDataStale = useMemo(() => {
     if (!trainedModel || trainedClassesSnapshotRef.current === null)
       return false;
-    return getClassesSnapshot(classes) !== trainedClassesSnapshotRef.current;
-  }, [classes, trainedModel, getClassesSnapshot]);
+    return (
+      getClassesSnapshot(trainingClasses) !== trainedClassesSnapshotRef.current
+    );
+  }, [trainingClasses, trainedModel, getClassesSnapshot]);
 
   const {
     isBlinking: webcamBlinking,
@@ -236,7 +301,9 @@ const ModelTrainer = ({
   }, [sourceType]);
 
   // Warn before leaving/reloading the page if there are unsaved samples
-  const hasSamples = classes.some((cls) => cls.samples.length > 0);
+  const hasSamples = classes.some(
+    (cls) => cls.samples.length > 0 || (cls.testSamples || []).length > 0,
+  );
   useEffect(() => {
     if (!hasSamples) return;
 
@@ -411,6 +478,7 @@ const ModelTrainer = ({
         id: Date.now(),
         name: trimmedName,
         samples: [],
+        testSamples: [],
       };
       setClasses((prev) => [...prev, newClass]);
       setNewClassName("");
@@ -458,8 +526,11 @@ const ModelTrainer = ({
   }, []);
 
   const captureImage = useCallback(
-    async (classId) => {
+    async (classId, target = "train") => {
       if (!isCameraActive) return;
+
+      const sampleKey = target === "test" ? "testSamples" : "samples";
+      const scrollKey = target === "test" ? `test-${classId}` : classId;
 
       try {
         const imageUrl = await captureFrame();
@@ -469,15 +540,15 @@ const ModelTrainer = ({
               cls.id === classId
                 ? {
                     ...cls,
-                    samples: [
-                      ...cls.samples,
+                    [sampleKey]: [
+                      ...(cls[sampleKey] || []),
                       { id: Date.now() + Math.random(), url: imageUrl },
                     ],
                   }
                 : cls,
             );
             requestAnimationFrame(() => {
-              const el = sampleScrollRefs.current[classId];
+              const el = sampleScrollRefs.current[scrollKey];
               if (el) el.scrollTop = el.scrollHeight;
             });
             return newClasses;
@@ -503,6 +574,9 @@ const ModelTrainer = ({
           ? {
               ...cls,
               samples: cls.samples.filter((sample) => sample.id !== sampleId),
+              testSamples: (cls.testSamples || []).filter(
+                (sample) => sample.id !== sampleId,
+              ),
             }
           : cls,
       ),
@@ -519,34 +593,37 @@ const ModelTrainer = ({
     showPrev,
     showNext,
     removeCurrentLightboxImage,
-  } = useLightbox(classes, isWideScreen, removeSample);
+  } = useLightbox(trainingClasses, isWideScreen, removeSample);
+
+  // Separate lightbox for the test section
+  const testLightbox = useLightbox(testClasses, isWideScreen, removeSample);
 
   const trainModel = useCallback(async () => {
-    if (classes.length < 2 || classes.some((cls) => cls.samples.length < 2)) {
+    if (
+      trainingClasses.length < 2 ||
+      trainingClasses.some((cls) => cls.samples.length < 2)
+    ) {
       onTrainingError(t.training.errorInsufficientData);
       return;
     }
 
-    // Track if this training has enough samples for test results
-    const hasEnoughSamples = classes.every((cls) => cls.samples.length >= 10);
-    setTrainedWithEnoughSamples(hasEnoughSamples);
-
     pauseFrameTimeoutMonitor();
     try {
-      await executeTraining(
-        classes,
+      const success = await executeTraining(
+        trainingClasses,
         onTrainingStart,
         onTrainingError,
         onModelTrained,
         trainingSettings,
         () => {}, // Preliminary model callback - updates hook state only
       );
-      trainedClassesSnapshotRef.current = getClassesSnapshot(classes);
+      trainedClassesSnapshotRef.current = getClassesSnapshot(trainingClasses);
+      if (success) setHasCompletedTraining(true);
     } finally {
       resumeFrameTimeoutMonitor();
     }
   }, [
-    classes,
+    trainingClasses,
     onTrainingStart,
     onTrainingError,
     onModelTrained,
@@ -615,7 +692,7 @@ const ModelTrainer = ({
       }
 
       if (newClasses) {
-        setClasses(newClasses);
+        setClasses(newClasses.map((cls) => ({ ...cls, testSamples: [] })));
         setUploadError(null);
       }
 
@@ -626,341 +703,382 @@ const ModelTrainer = ({
   );
 
   const hasClassesWithSamples = classes.some((cls) => cls.samples.length > 0);
+  // Show the test section once a training has finished, or as soon as there
+  // are test images (e.g. moved there by the test split slider)
+  const showTesting =
+    hasCompletedTraining || testClasses.some((cls) => cls.samples.length > 0);
+
+  const testDisabledReason = !trainedModel
+    ? t.testing.tooltip.needModel
+    : isTraining || isPreliminaryModel
+      ? t.testing.tooltip.trainingRunning
+      : testClasses.length === 0 ||
+          testClasses.some((cls) => cls.samples.length < 1)
+        ? t.testing.tooltip.needTestImages
+        : null;
+
+  const handleTestModel = async () => {
+    if (testDisabledReason || !trainedModel) return;
+    setIsTesting(true);
+    pauseFrameTimeoutMonitor();
+    try {
+      // Evaluate in the class order the model was trained with
+      const orderedTestClasses = trainedModel.classes.map(
+        (modelClass) =>
+          testClasses.find((cls) => cls.id === modelClass.id) || {
+            samples: [],
+          },
+      );
+      await executeTest(trainedModel, orderedTestClasses);
+    } catch (error) {
+      console.error("Testing error:", error);
+      onTrainingError(
+        t.testing.errorTesting.replace("{message}", error.message),
+      );
+    } finally {
+      resumeFrameTimeoutMonitor();
+      setIsTesting(false);
+    }
+  };
 
   return (
     <Box>
       <Grid container spacing={3}>
-        <Grid item xs={12} md={5}>
-          <Box
-            sx={{
-              position: { md: "sticky" },
-              top: { md: 16 },
-              alignSelf: "flex-start",
-            }}
-          >
+        <Grid item xs={12} md={4} sx={{ display: "flex" }}>
+          <Paper elevation={2} sx={{ p: 3, flexGrow: 1, minWidth: 0 }}>
             <Box
               sx={{
-                mb: 2,
-                display: "flex",
-                gap: 1,
-                alignItems: "center",
-                flexWrap: "wrap",
+                position: { md: "sticky" },
+                top: { md: 16 },
               }}
             >
-              <Button
-                variant="contained"
-                startIcon={<CameraIcon />}
-                onClick={async () => {
-                  if (sourceType === "webcam" && isCameraActive) {
-                    stopCamera();
-                  } else {
-                    if (isCameraActive) stopCamera();
-                    await selectSource("webcam");
-                    await startCamera();
-                    triggerWebcam();
-                  }
-                }}
-                disabled={disabled}
-                color={
-                  sourceType === "webcam" && isCameraActive
-                    ? "secondary"
-                    : "primary"
-                }
-              >
-                {sourceType === "webcam" && isCameraActive
-                  ? t.training.stopWebcam
-                  : t.training.startWebcam}
-              </Button>
-
-              <HelpButton
-                onClick={() => {
-                  markWebcamSeen();
-                  onOpenHelp && onOpenHelp("image/webcam");
-                }}
-                isBlinking={webcamBlinking}
-                tooltip={t.training.tooltip.helpCamera}
-              />
-
-              <Tooltip
-                title={
-                  !browserCompatible ? t.training.tooltip.browserCompatible : ""
-                }
-                arrow
-                disableHoverListener={!(disabled || !browserCompatible)}
-              >
-                <span>
-                  <Button
-                    variant="contained"
-                    startIcon={<CameraIcon />}
-                    onClick={async () => {
-                      if (sourceType === "serial" && isCameraActive) {
-                        stopCamera();
-                      } else {
-                        if (isCameraActive) stopCamera();
-                        await selectSource("serial");
-                        await startCamera();
-                        triggerWebcam();
-                      }
-                    }}
-                    disabled={disabled || !browserCompatible}
-                    color={
-                      sourceType === "serial" && isCameraActive
-                        ? "secondary"
-                        : "primary"
-                    }
-                  >
-                    {sourceType === "serial" && isCameraActive
-                      ? t.training.stopSenseBoxCamera
-                      : t.training.startSenseBoxCamera}
-                  </Button>
-                </span>
-              </Tooltip>
-
-              {!isCameraActive && !serialError && browserCompatible && (
-                <Button
-                  variant="outlined"
-                  startIcon={
-                    isDownloading ? (
-                      <CircularProgress size={16} />
-                    ) : (
-                      <DownloadIcon />
-                    )
-                  }
-                  onClick={handleDownloadFirmware}
-                  disabled={isDownloading || disabled || !browserCompatible}
-                >
-                  {t.errors.downloadFirmware}
-                </Button>
-              )}
-            </Box>
-
-            {sourceType === "serial" && serialError && (
-              <Box sx={{ mb: 3 }}>
-                <SerialErrorHandler
-                  error={serialError}
-                  connectionStatus={connectionStatus}
-                  onRetry={handleReconnect}
-                  onReconnect={handleReconnect}
-                  onDismiss={handleDismissError}
-                  showStatus={false}
-                />
-              </Box>
-            )}
-
-            {(isCameraActive || videoLoading) && !isMobile && (
+              <Typography variant="h5" gutterBottom>
+                {t.training.livePredictions}
+              </Typography>
               <Box
                 sx={{
-                  mb: 3,
+                  mb: 2,
                   display: "flex",
-                  justifyContent: "center",
-                  flexDirection: "column",
+                  gap: 1,
                   alignItems: "center",
+                  flexWrap: "wrap",
                 }}
               >
-                {videoLoading && (
-                  <Typography variant="body2" sx={{ mb: 2 }}>
-                    {t.training.loadingCamera}
-                  </Typography>
+                <Button
+                  variant="contained"
+                  startIcon={<CameraIcon />}
+                  onClick={async () => {
+                    if (sourceType === "webcam" && isCameraActive) {
+                      stopCamera();
+                    } else {
+                      if (isCameraActive) stopCamera();
+                      await selectSource("webcam");
+                      await startCamera();
+                      triggerWebcam();
+                    }
+                  }}
+                  disabled={disabled}
+                  color={
+                    sourceType === "webcam" && isCameraActive
+                      ? "secondary"
+                      : "primary"
+                  }
+                >
+                  {sourceType === "webcam" && isCameraActive
+                    ? t.training.stopWebcam
+                    : t.training.startWebcam}
+                </Button>
+
+                <HelpButton
+                  onClick={() => {
+                    markWebcamSeen();
+                    onOpenHelp && onOpenHelp("image/webcam");
+                  }}
+                  isBlinking={webcamBlinking}
+                  tooltip={t.training.tooltip.helpCamera}
+                />
+
+                <Tooltip
+                  title={
+                    !browserCompatible
+                      ? t.training.tooltip.browserCompatible
+                      : ""
+                  }
+                  arrow
+                  disableHoverListener={!(disabled || !browserCompatible)}
+                >
+                  <span>
+                    <Button
+                      variant="contained"
+                      startIcon={<CameraIcon />}
+                      onClick={async () => {
+                        if (sourceType === "serial" && isCameraActive) {
+                          stopCamera();
+                        } else {
+                          if (isCameraActive) stopCamera();
+                          await selectSource("serial");
+                          await startCamera();
+                          triggerWebcam();
+                        }
+                      }}
+                      disabled={disabled || !browserCompatible}
+                      color={
+                        sourceType === "serial" && isCameraActive
+                          ? "secondary"
+                          : "primary"
+                      }
+                    >
+                      {sourceType === "serial" && isCameraActive
+                        ? t.training.stopSenseBoxCamera
+                        : t.training.startSenseBoxCamera}
+                    </Button>
+                  </span>
+                </Tooltip>
+
+                {!isCameraActive && !serialError && browserCompatible && (
+                  <Button
+                    variant="outlined"
+                    startIcon={
+                      isDownloading ? (
+                        <CircularProgress size={16} />
+                      ) : (
+                        <DownloadIcon />
+                      )
+                    }
+                    onClick={handleDownloadFirmware}
+                    disabled={isDownloading || disabled || !browserCompatible}
+                  >
+                    {t.errors.downloadFirmware}
+                  </Button>
                 )}
+              </Box>
+
+              {sourceType === "serial" && serialError && (
+                <Box sx={{ mb: 3 }}>
+                  <SerialErrorHandler
+                    error={serialError}
+                    connectionStatus={connectionStatus}
+                    onRetry={handleReconnect}
+                    onReconnect={handleReconnect}
+                    onDismiss={handleDismissError}
+                    showStatus={false}
+                  />
+                </Box>
+              )}
+
+              {(isCameraActive || videoLoading) && !isMobile && (
                 <Box
                   sx={{
-                    position: "relative",
-                    width: "100%",
-                    maxWidth: "400px",
-                    aspectRatio: "1 / 1",
+                    mb: 3,
+                    display: "flex",
+                    justifyContent: "center",
+                    flexDirection: "column",
+                    alignItems: "center",
                   }}
                 >
-                  <Box
-                    ref={previewContainerRef}
-                    sx={{
-                      width: "100%",
-                      height: "100%",
-                      border: "2px solid #ccc",
-                      borderRadius: "8px",
-                      backgroundColor: "#000",
-                      overflow: "hidden",
-                      "& video, & img, & canvas": {
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        imageRendering: "pixelated",
-                      },
-                    }}
-                  />
                   {videoLoading && (
-                    <Typography
-                      color="text.secondary"
-                      sx={{
-                        position: "absolute",
-                        inset: 0,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        color: "white",
-                        pointerEvents: "none",
-                      }}
-                    >
-                      {t.training.initializingCamera}
+                    <Typography variant="body2" sx={{ mb: 2 }}>
+                      {t.training.loadingCamera}
                     </Typography>
                   )}
-                </Box>
+                  <Box
+                    sx={{
+                      position: "relative",
+                      width: "100%",
+                      maxWidth: "400px",
+                      aspectRatio: "1 / 1",
+                    }}
+                  >
+                    <Box
+                      ref={previewContainerRef}
+                      sx={{
+                        width: "100%",
+                        height: "100%",
+                        border: "2px solid #ccc",
+                        borderRadius: "8px",
+                        backgroundColor: "#000",
+                        overflow: "hidden",
+                        "& video, & img, & canvas": {
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          imageRendering: "pixelated",
+                        },
+                      }}
+                    />
+                    {videoLoading && (
+                      <Typography
+                        color="text.secondary"
+                        sx={{
+                          position: "absolute",
+                          inset: 0,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          color: "white",
+                          pointerEvents: "none",
+                        }}
+                      >
+                        {t.training.initializingCamera}
+                      </Typography>
+                    )}
+                  </Box>
 
-                {trainedModel && (
-                  <Box sx={{ mt: 2, width: "100%", maxWidth: "400px" }}>
-                    {predictions.length > 0 && (
-                      <Paper sx={{ p: 1.5, bgcolor: "background.grey" }}>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: 1,
-                          }}
-                        >
-                          {predictions.map((pred, index) => (
-                            <Box
-                              key={index}
-                              sx={{
-                                p: 1,
-                                borderRadius: 1,
-                                bgcolor: pred.isTopPrediction
-                                  ? "primary.light"
-                                  : "background.paper",
-                                color: pred.isTopPrediction
-                                  ? "primary.contrastText"
-                                  : "text.primary",
-                                border: pred.isTopPrediction
-                                  ? "none"
-                                  : "1px solid",
-                                borderColor: "divider",
-                              }}
-                            >
+                  {trainedModel && (
+                    <Box sx={{ mt: 2, width: "100%", maxWidth: "400px" }}>
+                      {predictions.length > 0 && (
+                        <Paper sx={{ p: 1.5, bgcolor: "background.grey" }}>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: 1,
+                            }}
+                          >
+                            {predictions.map((pred, index) => (
                               <Box
+                                key={index}
                                 sx={{
-                                  display: "flex",
-                                  justifyContent: "space-between",
-                                  alignItems: "center",
-                                  mb: 0.5,
+                                  p: 1,
+                                  borderRadius: 1,
+                                  bgcolor: pred.isTopPrediction
+                                    ? "primary.light"
+                                    : "background.paper",
+                                  color: pred.isTopPrediction
+                                    ? "primary.contrastText"
+                                    : "text.primary",
+                                  border: pred.isTopPrediction
+                                    ? "none"
+                                    : "1px solid",
+                                  borderColor: "divider",
                                 }}
                               >
-                                <Typography
-                                  variant="subtitle1"
-                                  fontWeight={
-                                    pred.isTopPrediction ? "bold" : "normal"
-                                  }
+                                <Box
+                                  sx={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
+                                    mb: 0.5,
+                                  }}
                                 >
-                                  {pred.className}
-                                </Typography>
-                                <Typography variant="body2">
-                                  {(pred.confidence * 100).toFixed(1)}%
-                                </Typography>
-                              </Box>
-                              <LinearProgress
-                                variant="determinate"
-                                value={pred.confidence * 100}
-                                sx={{
-                                  height: 4,
-                                  borderRadius: 2,
-                                  bgcolor: pred.isTopPrediction
-                                    ? "rgba(255,255,255,0.3)"
-                                    : "grey.300",
-                                  "& .MuiLinearProgress-bar": {
+                                  <Typography
+                                    variant="subtitle1"
+                                    fontWeight={
+                                      pred.isTopPrediction ? "bold" : "normal"
+                                    }
+                                  >
+                                    {pred.className}
+                                  </Typography>
+                                  <Typography variant="body2">
+                                    {(pred.confidence * 100).toFixed(1)}%
+                                  </Typography>
+                                </Box>
+                                <LinearProgress
+                                  variant="determinate"
+                                  value={pred.confidence * 100}
+                                  sx={{
+                                    height: 4,
+                                    borderRadius: 2,
                                     bgcolor: pred.isTopPrediction
-                                      ? "white"
-                                      : "primary.main",
-                                  },
-                                }}
-                              />
-                            </Box>
-                          ))}
-                        </Box>
-                      </Paper>
-                    )}
-
-                    {trainedModel &&
-                      isCameraActive &&
-                      predictions.length === 0 && (
-                        <Paper
-                          sx={{
-                            p: 2,
-                            textAlign: "center",
-                            border: "1px dashed #ccc",
-                            bgcolor: "background.grey",
-                          }}
-                        >
-                          <Typography variant="body2" color="text.secondary">
-                            {t.training.analyzing}
-                          </Typography>
+                                      ? "rgba(255,255,255,0.3)"
+                                      : "grey.300",
+                                    "& .MuiLinearProgress-bar": {
+                                      bgcolor: pred.isTopPrediction
+                                        ? "white"
+                                        : "primary.main",
+                                    },
+                                  }}
+                                />
+                              </Box>
+                            ))}
+                          </Box>
                         </Paper>
                       )}
 
-                    {isPreliminaryModel && isTraining && (
-                      <Box
-                        sx={{
-                          mt: 1,
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 1,
-                          color: "info.main",
-                        }}
-                      >
-                        <CircularProgress size={16} />
-                        <Typography variant="caption">
-                          {t.training.preliminaryModelWarning}
-                        </Typography>
-                      </Box>
-                    )}
+                      {trainedModel &&
+                        isCameraActive &&
+                        predictions.length === 0 && (
+                          <Paper
+                            sx={{
+                              p: 2,
+                              textAlign: "center",
+                              border: "1px dashed #ccc",
+                              bgcolor: "background.grey",
+                            }}
+                          >
+                            <Typography variant="body2" color="text.secondary">
+                              {t.training.analyzing}
+                            </Typography>
+                          </Paper>
+                        )}
 
-                    {isDataStale && !isTraining && (
-                      <Box
-                        sx={{
-                          mt: 1,
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 1,
-                          color: "warning.main",
-                        }}
-                      >
-                        <WarningIcon fontSize="small" />
-                        <Typography variant="caption">
-                          {t.training.dataChangedWarning}
-                        </Typography>
-                      </Box>
-                    )}
-                  </Box>
-                )}
-              </Box>
-            )}
-          </Box>
+                      {isPreliminaryModel && isTraining && (
+                        <Box
+                          sx={{
+                            mt: 1,
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 1,
+                            color: "info.main",
+                          }}
+                        >
+                          <CircularProgress size={16} />
+                          <Typography variant="caption">
+                            {t.training.preliminaryModelWarning}
+                          </Typography>
+                        </Box>
+                      )}
+
+                      {isDataStale && !isTraining && (
+                        <Box
+                          sx={{
+                            mt: 1,
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 1,
+                            color: "warning.main",
+                          }}
+                        >
+                          <WarningIcon fontSize="small" />
+                          <Typography variant="caption">
+                            {t.training.dataChangedWarning}
+                          </Typography>
+                        </Box>
+                      )}
+                    </Box>
+                  )}
+                </Box>
+              )}
+            </Box>
+          </Paper>
         </Grid>
 
-        <Grid item xs={12} md={7}>
-          <Grid container spacing={2} sx={{ mb: 3 }}>
-            {classes.map((cls) => (
-              <Grid item xs={12} key={cls.id}>
-                <Card
-                  onClick={(e) => {
-                    if (!isWideScreen) return;
-                    if (
-                      !e.target.closest("button") &&
-                      !e.target.closest("input") &&
-                      !e.target.closest(".MuiTypography-root") &&
-                      !e.target.closest("img")
-                    ) {
-                      setExpandedClassId(cls.id);
+        <Grid
+          item
+          xs={12}
+          md={8}
+          sx={{ display: "flex", flexDirection: "column", gap: 3 }}
+        >
+          <CollapsibleSection
+            title={
+              <Typography variant="h5" gutterBottom>
+                {t.training.title}
+              </Typography>
+            }
+          >
+            <Grid container spacing={2} sx={{ mb: 3 }}>
+              {trainingClasses.map((cls) => (
+                <Grid item xs={12} key={cls.id}>
+                  <ClassSampleCard
+                    className={cls.name}
+                    samples={cls.samples}
+                    onCardClick={
+                      isWideScreen
+                        ? () => setExpandedClassId(cls.id)
+                        : undefined
                     }
-                  }}
-                  sx={{ cursor: "pointer", "&:hover": { boxShadow: 4 } }}
-                >
-                  <CardContent>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        mb: 2,
-                      }}
-                    >
-                      {editingClassId === cls.id &&
+                    title={
+                      editingClassId === cls.id &&
                       expandedClassId !== cls.id ? (
                         <TextField
                           autoFocus
@@ -990,8 +1108,10 @@ const ModelTrainer = ({
                         >
                           {cls.name}
                         </Typography>
-                      )}
-                      <Box>
+                      )
+                    }
+                    headerActions={
+                      <>
                         <Tooltip
                           title={t.training.tooltip.desirableNumberSamples}
                           arrow
@@ -1017,284 +1137,63 @@ const ModelTrainer = ({
                         >
                           <DeleteIcon />
                         </IconButton>
-                      </Box>
-                    </Box>
-
-                    <Box
-                      ref={(el) => {
-                        sampleScrollRefs.current[cls.id] = el;
-                      }}
-                      sx={{
-                        display: "flex",
-                        flexWrap: "wrap",
-                        gap: 1,
-                        mb: 2,
-                        height: 100,
-                        minHeight: 100,
-                        overflowY: "auto",
-                        p: 1,
-                        border: "1px solid",
-                        borderColor: "divider",
-                        borderRadius: 1,
-                        bgcolor: "background.grey",
-                        marginBottom: 0,
-                      }}
-                    >
-                      {cls.samples.map((sample) => (
-                        <Box
-                          key={sample.id}
-                          sx={{ position: "relative", height: "fit-content" }}
-                        >
-                          <img
-                            src={sample.url}
-                            alt={`Sample for ${cls.name}`}
-                            onClick={(e) => openLightbox(sample.url, e)}
-                            style={{
-                              width: 60,
-                              height: 60,
-                              objectFit: "cover",
-                              borderRadius: 4,
-                              cursor: "pointer",
-                            }}
-                          />
-                          <IconButton
-                            size="small"
-                            sx={{
-                              position: "absolute",
-                              top: -8,
-                              right: -8,
-                              bgcolor: "background.paper",
-                              "&:hover": {
-                                bgcolor: "error.light",
-                                color: "white",
-                              },
-                            }}
-                            onClick={() => removeSample(cls.id, sample.id)}
-                            disabled={disabled}
-                          >
-                            <DeleteIcon fontSize="small" />
-                          </IconButton>
-                        </Box>
-                      ))}
-                    </Box>
-                  </CardContent>
-
-                  <CardActions>
-                    <Tooltip
-                      title={
-                        !isCameraActive ? t.training.tooltip.startCamera : ""
-                      }
-                      arrow
-                      disableHoverListener={!(disabled || !isCameraActive)}
-                    >
-                      <span>
-                        <Button
-                          variant="contained"
-                          size="medium"
-                          startIcon={<CameraIcon />}
-                          onClick={() => {
-                            captureImage(cls.id);
-                          }}
-                          disabled={!isCameraActive || disabled}
-                        >
-                          {t.training.captureImage}
-                        </Button>
-                      </span>
-                    </Tooltip>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-
-          <Box
-            sx={{
-              mb: 3,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: 2,
-            }}
-          >
-            {/* Add Class Button with Data Menu Dropdown */}
-            <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-              <Button
-                variant="contained"
-                startIcon={<AddIcon />}
-                onClick={() => setShowAddDialog(true)}
-                disabled={classes.length >= 4 || disabled}
-                sx={{
-                  borderRadius: "4px 0 0 4px",
-                  height: "42px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                {t.training.addClass}
-              </Button>
-              <Button
-                variant="contained"
-                size="small"
-                onClick={(e) => setDataMenuAnchor(e.currentTarget)}
-                disabled={disabled}
-                sx={{
-                  minWidth: "auto",
-                  marginLeft: "-2px",
-                  height: "42px",
-                  padding: "0 6px",
-                  borderRadius: "0 4px 4px 0",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                {isDownloadingCollect ? (
-                  <CircularProgress size={16} sx={{ color: "white" }} />
-                ) : (
-                  <MoreVertIcon fontSize="small" />
-                )}
-              </Button>
-              <Menu
-                anchorEl={dataMenuAnchor}
-                open={Boolean(dataMenuAnchor)}
-                onClose={() => setDataMenuAnchor(null)}
-              >
-                <Tooltip
-                  title={
-                    !hasClassesWithSamples
-                      ? t.training.tooltip.captureImagesFirst
-                      : ""
-                  }
-                  arrow
-                  disableHoverListener={hasClassesWithSamples}
-                >
-                  <span>
-                    <MenuItem
-                      onClick={() => {
-                        handleDownloadTrainingData();
-                        setDataMenuAnchor(null);
-                      }}
-                      disabled={!hasClassesWithSamples}
-                    >
-                      <DownloadIcon fontSize="small" sx={{ mr: 1 }} />
-                      {t.training?.downloadData || "Download"}
-                    </MenuItem>
-                  </span>
-                </Tooltip>
-                <MenuItem
-                  onClick={() => {
-                    setDataMenuAnchor(null);
-                    uploadInputRef.current?.click();
-                  }}
-                >
-                  <UploadIcon fontSize="small" sx={{ mr: 1 }} />
-                  {t.training?.uploadData || "Upload"}
-                </MenuItem>
-                <Tooltip
-                  title={
-                    classes.length <= 1
-                      ? t.training.tooltip.minClassesRequired
-                      : ""
-                  }
-                  arrow
-                  disableHoverListener={!(classes.length <= 1)}
-                >
-                  <span>
-                    <MenuItem
-                      onClick={() => {
-                        handleDownloadCollectSketch();
-                        setDataMenuAnchor(null);
-                      }}
-                      disabled={
-                        classes.length <= 1 || disabled || isDownloadingCollect
-                      }
-                    >
-                      {isDownloadingCollect ? (
-                        <CircularProgress size={16} sx={{ mr: 1 }} />
-                      ) : (
-                        <DownloadIcon fontSize="small" sx={{ mr: 1 }} />
-                      )}
-                      {t.training?.downloadTrainScript ||
-                        "Download Collect-Sketch"}
-                    </MenuItem>
-                  </span>
-                </Tooltip>
-              </Menu>
-              <HelpButton
-                onClick={() => {
-                  markAddClassSeen();
-                  onOpenHelp && onOpenHelp("image/addClass");
-                }}
-                isBlinking={addClassBlinking}
-                tooltip={t.training.tooltip.helpClasses}
-              />
-            </Box>
-
-            {/* Upload Error Message */}
-            {uploadError && (
-              <Alert
-                severity="error"
-                onClose={() => setUploadError(null)}
-                sx={{ width: "100%", mb: 2 }}
-              >
-                {uploadError}
-              </Alert>
-            )}
-
-            <Divider sx={{ width: "100%", my: 1 }} />
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <Tooltip
-                title={
-                  classes.length < 2
-                    ? t.training.tooltip.moreClasses
-                    : classes.some((cls) => cls.samples.length < 2)
-                      ? t.training.tooltip.moreSamples
-                      : ""
-                }
-                arrow
-                disableHoverListener={
-                  !(
-                    disabled ||
-                    classes.length < 2 ||
-                    classes.some((cls) => cls.samples.length < 2)
-                  )
-                }
-              >
-                <span>
-                  <Button
-                    variant="contained"
-                    size="large"
-                    onClick={() => {
-                      trainModel();
-                    }}
-                    disabled={
-                      disabled ||
-                      classes.length < 2 ||
-                      classes.some((cls) => cls.samples.length < 2)
+                      </>
                     }
-                    sx={{
-                      borderRadius: "4px 0 0 4px",
-                      height: "42px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
+                    scrollRef={(el) => {
+                      sampleScrollRefs.current[cls.id] = el;
                     }}
-                  >
-                    {t.training.trainModel}
-                  </Button>
-                </span>
-              </Tooltip>
+                    onImageClick={openLightbox}
+                    onRemoveSample={(sampleId) =>
+                      removeSample(cls.id, sampleId)
+                    }
+                    disabled={disabled}
+                    onCapture={() => captureImage(cls.id)}
+                    captureDisabled={!isCameraActive || disabled}
+                    captureTooltip={
+                      !isCameraActive
+                        ? t.training.tooltip.startCamera
+                        : undefined
+                    }
+                    captureLabel={t.training.captureImage}
+                  />
+                </Grid>
+              ))}
+            </Grid>
 
-              <Tooltip title={t.training.tooltip.trainingSettings} arrow>
+            <Box
+              sx={{
+                mb: 3,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 2,
+              }}
+            >
+              {/* Add Class Button with Data Menu Dropdown */}
+              <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
                 <Button
                   variant="contained"
-                  size="large"
-                  onClick={() => setShowSettingsPanel((prev) => !prev)}
-                  disabled={disabled || isTraining}
+                  startIcon={<AddIcon />}
+                  onClick={() => setShowAddDialog(true)}
+                  disabled={classes.length >= 4 || disabled}
+                  sx={{
+                    borderRadius: "4px 0 0 4px",
+                    height: "42px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {t.training.addClass}
+                </Button>
+                <Button
+                  variant="contained"
+                  size="small"
+                  onClick={(e) => setDataMenuAnchor(e.currentTarget)}
+                  disabled={disabled}
                   sx={{
                     minWidth: "auto",
-                    marginLeft: "-6px",
+                    marginLeft: "-2px",
                     height: "42px",
                     padding: "0 6px",
                     borderRadius: "0 4px 4px 0",
@@ -1303,163 +1202,385 @@ const ModelTrainer = ({
                     justifyContent: "center",
                   }}
                 >
-                  <MoreVertIcon fontSize="small" />
+                  {isDownloadingCollect ? (
+                    <CircularProgress size={16} sx={{ color: "white" }} />
+                  ) : (
+                    <MoreVertIcon fontSize="small" />
+                  )}
                 </Button>
-              </Tooltip>
-
-              <HelpButton
-                onClick={() => {
-                  markTrainModelSeen();
-                  onOpenHelp && onOpenHelp("image/trainModel");
-                }}
-                isBlinking={trainModelBlinking}
-                tooltip={t.training.tooltip.helpTraining}
-              />
-            </Box>
-
-            <Collapse in={showSettingsPanel} sx={{ width: "100%" }}>
-              <Paper variant="outlined" sx={{ p: 2, mt: 1 }}>
-                <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}
+                <Menu
+                  anchorEl={dataMenuAnchor}
+                  open={Boolean(dataMenuAnchor)}
+                  onClose={() => setDataMenuAnchor(null)}
                 >
-                  <Typography variant="subtitle1" fontWeight="bold">
-                    {t.training.settings?.title || "Training Settings"}
-                  </Typography>
-                  <HelpButton
-                    onClick={() => {
-                      markSettingsSeen();
-                      onOpenHelp && onOpenHelp("image/trainingSettings");
-                    }}
-                    isBlinking={settingsBlinking}
-                    tooltip={t.training.tooltip.helpTrainingSettings}
-                  />
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    gap: 2,
-                    alignItems: "center",
-                  }}
-                >
-                  <TextField
-                    label={t.training.settings?.epochs || "Max Epochs"}
-                    type="number"
-                    size="small"
-                    value={trainingSettings.epochs}
-                    onChange={(e) => {
-                      const value = Math.max(
-                        1,
-                        Math.min(200, parseInt(e.target.value) || 1),
-                      );
-                      setTrainingSettings((prev) => ({
-                        ...prev,
-                        epochs: value,
-                      }));
-                    }}
-                    inputProps={{ min: 1, max: 200 }}
-                    sx={{ flex: 1, minWidth: 100 }}
-                  />
-                  <TextField
-                    label={t.training.settings?.learningRate || "Learning Rate"}
-                    type="number"
-                    size="small"
-                    value={trainingSettings.learningRate}
-                    onChange={(e) => {
-                      const value = Math.max(
-                        0.000001,
-                        Math.min(0.1, parseFloat(e.target.value) || 0.001),
-                      );
-                      setTrainingSettings((prev) => ({
-                        ...prev,
-                        learningRate: value,
-                      }));
-                    }}
-                    inputProps={{ min: 0.000001, max: 0.1, step: 0.0001 }}
-                    sx={{ flex: 1, minWidth: 120 }}
-                  />
-                  <FormControlLabel
-                    control={
-                      <Switch
-                        checked={trainingSettings.earlyStopping}
-                        onChange={(e) =>
-                          setTrainingSettings((prev) => ({
-                            ...prev,
-                            earlyStopping: e.target.checked,
-                          }))
-                        }
-                        size="small"
-                      />
+                  <Tooltip
+                    title={
+                      !hasClassesWithSamples
+                        ? t.training.tooltip.captureImagesFirst
+                        : ""
                     }
-                    label={
-                      t.training.settings?.earlyStopping || "Early Stopping"
-                    }
-                    sx={{ flex: "none" }}
-                  />
-                  <Button
-                    size="small"
-                    onClick={resetSettings}
-                    color="secondary"
-                    sx={{ flex: "none" }}
+                    arrow
+                    disableHoverListener={hasClassesWithSamples}
                   >
-                    {t.training.settings?.reset || "Reset"}
-                  </Button>
-                </Box>
-              </Paper>
-            </Collapse>
-          </Box>
+                    <span>
+                      <MenuItem
+                        onClick={() => {
+                          handleDownloadTrainingData();
+                          setDataMenuAnchor(null);
+                        }}
+                        disabled={!hasClassesWithSamples}
+                      >
+                        <DownloadIcon fontSize="small" sx={{ mr: 1 }} />
+                        {t.training?.downloadData || "Download"}
+                      </MenuItem>
+                    </span>
+                  </Tooltip>
+                  <MenuItem
+                    onClick={() => {
+                      setDataMenuAnchor(null);
+                      uploadInputRef.current?.click();
+                    }}
+                  >
+                    <UploadIcon fontSize="small" sx={{ mr: 1 }} />
+                    {t.training?.uploadData || "Upload"}
+                  </MenuItem>
+                  <Tooltip
+                    title={
+                      classes.length <= 1
+                        ? t.training.tooltip.minClassesRequired
+                        : ""
+                    }
+                    arrow
+                    disableHoverListener={!(classes.length <= 1)}
+                  >
+                    <span>
+                      <MenuItem
+                        onClick={() => {
+                          handleDownloadCollectSketch();
+                          setDataMenuAnchor(null);
+                        }}
+                        disabled={
+                          classes.length <= 1 ||
+                          disabled ||
+                          isDownloadingCollect
+                        }
+                      >
+                        {isDownloadingCollect ? (
+                          <CircularProgress size={16} sx={{ mr: 1 }} />
+                        ) : (
+                          <DownloadIcon fontSize="small" sx={{ mr: 1 }} />
+                        )}
+                        {t.training?.downloadTrainScript ||
+                          "Download Collect-Sketch"}
+                      </MenuItem>
+                    </span>
+                  </Tooltip>
+                </Menu>
+                <HelpButton
+                  onClick={() => {
+                    markAddClassSeen();
+                    onOpenHelp && onOpenHelp("image/addClass");
+                  }}
+                  isBlinking={addClassBlinking}
+                  tooltip={t.training.tooltip.helpClasses}
+                />
+              </Box>
 
-          {isTraining && (
-            <Box sx={{ my: 4 }}>
-              <Typography variant="body2" gutterBottom>
-                {trainingProgress.totalEpochs > 0
-                  ? t.training.trainingEpoch
-                      .replace("{epoch}", trainingProgress.epoch)
-                      .replace("{totalEpochs}", trainingProgress.totalEpochs)
-                  : t.training.trainingInProgress}
-              </Typography>
-              <LinearProgress
-                variant={
-                  trainingProgress.totalEpochs > 0
-                    ? "determinate"
-                    : "indeterminate"
-                }
-                value={
-                  trainingProgress.totalEpochs > 0
-                    ? Math.min(
-                        100,
-                        ((trainingProgress.epoch - 1) /
-                          trainingProgress.totalEpochs) *
-                          100 +
-                          (trainingProgress.batch /
-                            Math.max(1, trainingProgress.totalBatches)) *
-                            (100 / trainingProgress.totalEpochs),
-                      )
-                    : 0
-                }
-              />
+              {/* Upload Error Message */}
+              {uploadError && (
+                <Alert
+                  severity="error"
+                  onClose={() => setUploadError(null)}
+                  sx={{ width: "100%", mb: 2 }}
+                >
+                  {uploadError}
+                </Alert>
+              )}
+
+              <Divider sx={{ width: "100%", my: 1 }} />
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <Tooltip
+                  title={
+                    trainingClasses.length < 2
+                      ? t.training.tooltip.moreClasses
+                      : trainingClasses.some((cls) => cls.samples.length < 2)
+                        ? t.training.tooltip.moreSamples
+                        : ""
+                  }
+                  arrow
+                  disableHoverListener={
+                    !(
+                      disabled ||
+                      trainingClasses.length < 2 ||
+                      trainingClasses.some((cls) => cls.samples.length < 2)
+                    )
+                  }
+                >
+                  <span>
+                    <Button
+                      variant="contained"
+                      size="large"
+                      onClick={() => {
+                        trainModel();
+                      }}
+                      disabled={
+                        disabled ||
+                        trainingClasses.length < 2 ||
+                        trainingClasses.some((cls) => cls.samples.length < 2)
+                      }
+                      sx={{
+                        borderRadius: "4px 0 0 4px",
+                        height: "42px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      {t.training.trainModel}
+                    </Button>
+                  </span>
+                </Tooltip>
+
+                <Tooltip title={t.training.tooltip.trainingSettings} arrow>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    onClick={() => setShowSettingsPanel((prev) => !prev)}
+                    disabled={disabled || isTraining}
+                    sx={{
+                      minWidth: "auto",
+                      marginLeft: "-6px",
+                      height: "42px",
+                      padding: "0 6px",
+                      borderRadius: "0 4px 4px 0",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <MoreVertIcon fontSize="small" />
+                  </Button>
+                </Tooltip>
+
+                <HelpButton
+                  onClick={() => {
+                    markTrainModelSeen();
+                    onOpenHelp && onOpenHelp("image/trainModel");
+                  }}
+                  isBlinking={trainModelBlinking}
+                  tooltip={t.training.tooltip.helpTraining}
+                />
+              </Box>
+
+              <Collapse in={showSettingsPanel} sx={{ width: "100%" }}>
+                <Paper variant="outlined" sx={{ p: 2, mt: 1 }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                      mb: 2,
+                    }}
+                  >
+                    <Typography variant="subtitle1" fontWeight="bold">
+                      {t.training.settings?.title || "Training Settings"}
+                    </Typography>
+                    <HelpButton
+                      onClick={() => {
+                        markSettingsSeen();
+                        onOpenHelp && onOpenHelp("image/trainingSettings");
+                      }}
+                      isBlinking={settingsBlinking}
+                      tooltip={t.training.tooltip.helpTrainingSettings}
+                    />
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: { xs: "column", sm: "row" },
+                      gap: 2,
+                    }}
+                  >
+                    {/* Settings: fields + test split slider */}
+                    <Box sx={{ flex: 1, minWidth: 0 }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexWrap: "wrap",
+                          gap: 2,
+                          alignItems: "center",
+                        }}
+                      >
+                        <TextField
+                          label={t.training.settings?.epochs || "Max Epochs"}
+                          type="number"
+                          size="small"
+                          value={trainingSettings.epochs}
+                          onChange={(e) => {
+                            const value = Math.max(
+                              1,
+                              Math.min(200, parseInt(e.target.value) || 1),
+                            );
+                            setTrainingSettings((prev) => ({
+                              ...prev,
+                              epochs: value,
+                            }));
+                          }}
+                          inputProps={{ min: 1, max: 200 }}
+                          sx={{ flex: 1, minWidth: 100 }}
+                        />
+                        <TextField
+                          label={
+                            t.training.settings?.learningRate || "Learning Rate"
+                          }
+                          type="number"
+                          size="small"
+                          value={trainingSettings.learningRate}
+                          onChange={(e) => {
+                            const value = Math.max(
+                              0.000001,
+                              Math.min(
+                                0.1,
+                                parseFloat(e.target.value) || 0.001,
+                              ),
+                            );
+                            setTrainingSettings((prev) => ({
+                              ...prev,
+                              learningRate: value,
+                            }));
+                          }}
+                          inputProps={{ min: 0.000001, max: 0.1, step: 0.0001 }}
+                          sx={{ flex: 1, minWidth: 120 }}
+                        />
+                        <FormControlLabel
+                          control={
+                            <Switch
+                              checked={trainingSettings.earlyStopping}
+                              onChange={(e) =>
+                                setTrainingSettings((prev) => ({
+                                  ...prev,
+                                  earlyStopping: e.target.checked,
+                                }))
+                              }
+                              size="small"
+                            />
+                          }
+                          label={
+                            t.training.settings?.earlyStopping ||
+                            "Early Stopping"
+                          }
+                          sx={{ flex: "none" }}
+                        />
+                      </Box>
+                      <Box sx={{ mt: 2, px: 1 }}>
+                        <Typography variant="body2" gutterBottom>
+                          {t.training.settings.testSplit.replace(
+                            "{value}",
+                            testSplit,
+                          )}
+                        </Typography>
+                        <Slider
+                          value={testSplit}
+                          min={0}
+                          max={50}
+                          step={5}
+                          marks
+                          valueLabelDisplay="auto"
+                          valueLabelFormat={(value) => `${value}%`}
+                          onChange={(_, value) =>
+                            setTrainingSettings((prev) => ({
+                              ...prev,
+                              testSplit: value,
+                            }))
+                          }
+                          disabled={disabled || isTraining}
+                        />
+                      </Box>
+                    </Box>
+                    <Button
+                      size="small"
+                      onClick={resetSettings}
+                      color="secondary"
+                      sx={{
+                        flex: "none",
+                        alignSelf: { xs: "flex-end", sm: "center" },
+                      }}
+                    >
+                      {t.training.settings?.reset || "Reset"}
+                    </Button>
+                  </Box>
+                </Paper>
+              </Collapse>
             </Box>
+
+            {isTraining && (
+              <Box sx={{ my: 4 }}>
+                <Typography variant="body2" gutterBottom>
+                  {trainingProgress.totalEpochs > 0
+                    ? t.training.trainingEpoch
+                        .replace("{epoch}", trainingProgress.epoch)
+                        .replace("{totalEpochs}", trainingProgress.totalEpochs)
+                    : t.training.trainingInProgress}
+                </Typography>
+                <LinearProgress
+                  variant={
+                    trainingProgress.totalEpochs > 0
+                      ? "determinate"
+                      : "indeterminate"
+                  }
+                  value={
+                    trainingProgress.totalEpochs > 0
+                      ? Math.min(
+                          100,
+                          ((trainingProgress.epoch - 1) /
+                            trainingProgress.totalEpochs) *
+                            100 +
+                            (trainingProgress.batch /
+                              Math.max(1, trainingProgress.totalBatches)) *
+                              (100 / trainingProgress.totalEpochs),
+                        )
+                      : 0
+                  }
+                />
+              </Box>
+            )}
+
+            <TrainingResultsSection
+              trainingMetrics={trainingMetrics}
+              isTraining={isTraining}
+              onOpenHelp={onOpenHelp}
+              translations={{
+                title: t.training.resultsTitle || "Training Progress",
+                trainingInProgress: t.training.trainingInProgress,
+                helpTooltip: t.training.tooltip.helpTrainingProgress,
+              }}
+            />
+          </CollapsibleSection>
+
+          {showTesting && (
+            <ModelTestingSection
+              testClasses={testClasses}
+              sampleScrollRefs={sampleScrollRefs}
+              onImageClick={testLightbox.openLightbox}
+              onRemoveSample={removeSample}
+              onCapture={(classId) => captureImage(classId, "test")}
+              isCameraActive={isCameraActive}
+              disabled={disabled || isTesting}
+              testDisabledReason={testDisabledReason}
+              isDataStale={isDataStale && !isTraining}
+              onTestModel={handleTestModel}
+              isTesting={isTesting}
+              testSampleMatrix={testSampleMatrix}
+              finalAccuracy={finalAccuracy}
+              resultClassNames={(trainedModel?.classes || []).map(
+                (cls) => cls.name,
+              )}
+              onOpenHelp={onOpenHelp}
+              t={t}
+            />
           )}
 
-          <TrainingResultsSection
-            trainingMetrics={trainingMetrics}
-            testResults={testResults}
-            classNames={classes.map((cls) => cls.name)}
-            finalAccuracy={finalAccuracy}
-            isTraining={isTraining}
-            hasEnoughSamples={trainedWithEnoughSamples}
-            onOpenHelp={onOpenHelp}
-            translations={{
-              title: t.training.resultsTitle || "Training Results",
-              metricsChart: t.training.metricsChart || "Training Progress",
-              testResults: t.training.testResultsTitle || "Confusion Matrix",
-              finalAccuracy: t.training.finalAccuracy || "Final Accuracy",
-              trainingInProgress: t.training.trainingInProgress,
-              noDataYet:
-                t.training.noDataYet || "Complete training to see results",
-              needMoreImages: t.training.needMoreImages,
-            }}
-          />
+          {deploySection}
         </Grid>
       </Grid>
 
@@ -1481,7 +1602,7 @@ const ModelTrainer = ({
 
       <ExpandedClassDialog
         open={expandedClassId !== null}
-        cls={classes.find((c) => c.id === expandedClassId)}
+        cls={trainingClasses.find((c) => c.id === expandedClassId)}
         onClose={() => setExpandedClassId(null)}
         editingClassId={editingClassId}
         editingClassName={editingClassName}
@@ -1558,6 +1679,16 @@ const ModelTrainer = ({
         onPrev={showPrev}
         onNext={showNext}
         onDelete={removeCurrentLightboxImage}
+      />
+
+      <LightboxComponent
+        open={testLightbox.lightboxOpen}
+        src={testLightbox.lightboxSrc}
+        flatSamples={testLightbox.currentClassSamples}
+        onClose={testLightbox.closeLightbox}
+        onPrev={testLightbox.showPrev}
+        onNext={testLightbox.showNext}
+        onDelete={testLightbox.removeCurrentLightboxImage}
       />
 
       <input
