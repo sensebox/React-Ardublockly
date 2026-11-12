@@ -68,10 +68,6 @@ const ModelTestingSection = ({
         </Typography>
       }
     >
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-        {t.testing.description}
-      </Typography>
-
       <Grid container spacing={2} sx={{ mb: 3 }}>
         {testClasses.map((cls) => (
           <Grid item xs={12} key={cls.id}>

@@ -121,8 +121,6 @@ export const imageClassificationTranslations_de = {
   },
   testing: {
     title: "Modell Testen",
-    description:
-      "Nimm Testbilder auf, die das Modell beim Training nicht gesehen hat. So kannst du prüfen, wie gut dein Modell neue Bilder erkennt.",
     testModel: "Modell testen",
     testingInProgress: "Modell wird getestet...",
     errorTesting: "Testen fehlgeschlagen: {message}",
