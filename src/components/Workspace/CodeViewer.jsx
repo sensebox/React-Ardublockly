@@ -11,11 +11,7 @@ import {
 } from "@mui/material";
 import MonacoEditor from "@monaco-editor/react";
 import * as Blockly from "blockly";
-import { diffLines, toLineRanges } from "./codeDiff";
-
-// Bigger changes (e.g. loading a project) are not highlighted
-const MAX_SIGNAL_LINES = 50;
-const MAX_SIGNAL_RATIO = 0.6;
+import { toLineRanges, updateSignal } from "./codeDiff";
 
 const signalStyles = (
   <GlobalStyles
@@ -73,9 +69,24 @@ const CodeViewer = () => {
   // The highlight stays until the next edit that adds or changes code.
   const editorRef = useRef(null);
   const decorationsRef = useRef(null);
-  const prevCodeRef = useRef(arduino);
+  const signalRef = useRef({ baseCode: arduino, baseHighlight: [] });
   const highlightRef = useRef([]);
   const revealRef = useRef(false);
+  // Set when Blockly finished loading XML (page reload, opening a project,
+  // board/language change): that code must not be highlighted
+  const resetRef = useRef(false);
+
+  useEffect(() => {
+    const workspace = Blockly.getMainWorkspace();
+    if (!workspace) return undefined;
+    const onLoaded = (event) => {
+      if (event.type === Blockly.Events.FINISHED_LOADING) {
+        resetRef.current = true;
+      }
+    };
+    workspace.addChangeListener(onLoaded);
+    return () => workspace.removeChangeListener(onLoaded);
+  }, []);
 
   const applyHighlight = () => {
     if (!decorationsRef.current) return;
@@ -104,28 +115,19 @@ const CodeViewer = () => {
   };
 
   useEffect(() => {
-    const prev = prevCodeRef.current;
-    prevCodeRef.current = arduino;
-    if (!prev || !arduino || prev === arduino) return;
-
-    const { changed, lineMap } = diffLines(prev, arduino);
-    const total = arduino.split("\n").filter((l) => l.trim() !== "").length;
-    if (
-      changed.length > MAX_SIGNAL_LINES &&
-      changed.length / total > MAX_SIGNAL_RATIO
-    ) {
-      // e.g. a project was loaded
-      highlightRef.current = [];
-    } else if (changed.length > 0) {
-      highlightRef.current = changed;
-      revealRef.current = true;
-    } else {
-      // Nothing new (only deletions or a regenerated timestamp):
-      // keep the previous highlight and follow its lines
-      highlightRef.current = highlightRef.current
-        .map((line) => lineMap.get(line))
-        .filter(Boolean);
-    }
+    const workspace = Blockly.getMainWorkspace();
+    const { state, highlight, reveal } = updateSignal(
+      signalRef.current,
+      arduino,
+      {
+        dragging: Boolean(workspace?.isDragging?.()),
+        reset: resetRef.current,
+      },
+    );
+    resetRef.current = false;
+    signalRef.current = state;
+    highlightRef.current = highlight;
+    if (reveal) revealRef.current = true;
 
     // Monaco replaces its model content in its own effect, which drops the
     // decorations, so (re)apply them afterwards

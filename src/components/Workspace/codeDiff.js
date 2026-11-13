@@ -94,3 +94,64 @@ export const toLineRanges = (lines) => {
   });
   return ranges;
 };
+
+// Bigger changes (e.g. loading a project) are not highlighted
+const MAX_SIGNAL_LINES = 50;
+const MAX_SIGNAL_RATIO = 0.6;
+
+/**
+ * Computes the code signaling highlight for a new version of the code.
+ *
+ * `state` is `{ baseCode, baseHighlight }`: the last stable code and the lines
+ * highlighted in it. While a block is being dragged, the generator already
+ * emits the floating block's code at the end of loop(). That intermediate
+ * code must not become the new base, otherwise dropping the block only
+ * "moves" lines and the wrong line gets highlighted.
+ *
+ * With `reset` (e.g. after a workspace was loaded) the new code becomes the
+ * base without any highlight.
+ *
+ * Returns `{ state, highlight, reveal }`.
+ */
+export const updateSignal = (
+  state,
+  newCode,
+  { dragging = false, reset = false } = {},
+) => {
+  const { baseCode, baseHighlight } = state;
+  if (reset || !baseCode || !newCode) {
+    return {
+      state: { baseCode: newCode || baseCode, baseHighlight: [] },
+      highlight: [],
+      reveal: false,
+    };
+  }
+
+  const { changed, lineMap } = diffLines(baseCode, newCode);
+  // Previous highlight, following its lines to their new position
+  const kept = baseHighlight.map((line) => lineMap.get(line)).filter(Boolean);
+
+  if (dragging) {
+    return { state, highlight: kept, reveal: false };
+  }
+
+  const total = newCode.split("\n").filter((l) => l.trim() !== "").length;
+  if (
+    changed.length > MAX_SIGNAL_LINES &&
+    changed.length / total > MAX_SIGNAL_RATIO
+  ) {
+    return {
+      state: { baseCode: newCode, baseHighlight: [] },
+      highlight: [],
+      reveal: false,
+    };
+  }
+
+  // Only new/changed lines replace the highlight; deletions keep it
+  const highlight = changed.length > 0 ? changed : kept;
+  return {
+    state: { baseCode: newCode, baseHighlight: highlight },
+    highlight,
+    reveal: changed.length > 0,
+  };
+};
