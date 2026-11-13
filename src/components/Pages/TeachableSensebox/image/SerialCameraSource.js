@@ -16,9 +16,13 @@ class SerialCameraSource {
 
   /**
    * Start the serial camera stream
+   * @param {Object} [options]
+   * @param {SerialPort} [options.port] An already permitted port to open
+   *   instead of showing the port picker (e.g. after uploading the camera
+   *   sketch, where requestPort() is not allowed without a user click).
    * @returns {Promise<void>}
    */
-  async start() {
+  async start({ port: preferredPort } = {}) {
     try {
       // Clean up any existing resources from previous session
       if (this.currentBlobUrl) {
@@ -95,7 +99,7 @@ class SerialCameraSource {
           await this.serialService.disconnect();
         }
 
-        const port = await this.serialService.requestPort();
+        const port = preferredPort ?? (await this.serialService.requestPort());
         if (!port) {
           throw new Error("No serial port selected");
         }

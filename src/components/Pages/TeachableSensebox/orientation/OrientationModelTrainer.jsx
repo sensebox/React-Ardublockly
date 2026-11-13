@@ -32,13 +32,14 @@ import {
   Speed as SensorIcon,
   ArrowDropDown as ArrowDropDownIcon,
   Bluetooth as BluetoothIcon,
-  Usb as UsbIcon,
 } from "@mui/icons-material";
 import { ORIENTATION_DATASETS } from "../../../../data/teachableSensebox/orientationDatasets";
 import useOrientationSource from "./hooks/useOrientationSource";
 import useOrientationBLESource from "./hooks/useOrientationBLESource";
 import useOrientationModelTraining from "./hooks/useOrientationModelTraining";
 import HelpButton, { useHelpBlink } from "../HelpButton";
+import GrantBootloaderButton from "../GrantBootloaderButton";
+import BlinkingButton from "../BlinkingButton";
 import SerialErrorHandler, {
   ErrorTypes,
   ConnectionStatus,
@@ -556,14 +557,20 @@ const OrientationModelTrainer = ({
       }),
   });
 
+  // True if the board could not be connected automatically after the sketch
+  // upload – the connect button then blinks so the user clicks it.
+  const [reconnectNeeded, setReconnectNeeded] = useState(false);
+
   /**
    * Connects the accelerometer via USB and waits for the first sample.
    * @param {Object} [options]
    * @param {SerialPort} [options.port] Open this port instead of the picker.
    * @param {boolean} [options.allowFlash] Upload the sketch if no data
    *   arrives (disabled right after an upload to avoid a loop).
+   * @returns {Promise<boolean>} true if accelerometer data arrives
    */
   const startSerialOrientation = async ({ port, allowFlash = true } = {}) => {
+    setReconnectNeeded(false);
     setOrientationSerialError(null);
     setSenseBoxPhase("waitingForData");
 
@@ -583,7 +590,7 @@ const OrientationModelTrainer = ({
     if (gotData) {
       setSenseBoxPhase("idle");
       triggerAccelerationSensor();
-      return;
+      return true;
     }
 
     // No data: release the port so the flash tool can use it.
@@ -599,20 +606,29 @@ const OrientationModelTrainer = ({
       return;
     }
     await flashOrientationSketch(orientationPort);
+    return false;
   };
 
   // After the upload the board reboots into the sketch. If the browser
-  // already has permission for its port, it is connected automatically;
-  // otherwise the user has to click "Connect senseBox (USB)" once more.
+  // already has permission for its port, it is connected automatically.
+  // Otherwise the port picker can't be opened automatically (requestPort()
+  // needs a recent user click), so the permission error is shown. If the
+  // connection fails, "Connect senseBox (USB)" blinks.
   const reconnectAfterFlash = async () => {
     const port = await waitForAppPort();
     if (!port) {
       setSenseBoxPhase("done");
+      setOrientationSerialError({
+        type: ErrorTypes.PERMISSION_DENIED,
+        message: "Serial port access was denied",
+      });
+      setReconnectNeeded(true);
       return;
     }
     // Give the freshly enumerated USB device a moment before opening it.
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    await startSerialOrientation({ port, allowFlash: false });
+    const connected = await startSerialOrientation({ port, allowFlash: false });
+    if (!connected) setReconnectNeeded(true);
   };
 
   const handleGrantBootloader = async () => {
@@ -620,13 +636,10 @@ const OrientationModelTrainer = ({
     await grantBootloader();
   };
 
-  // "Try again" in the error box: while waiting for the bootloader port, ask
-  // for it again; otherwise run the whole serial start flow again.
+  // "Try again" in the error box: always run the whole serial start flow again
+  // with the normal board picker (also after a failed bootloader grant) – it
+  // uploads the orientation sketch again if no data arrives.
   const handleOrientationSerialRetry = async () => {
-    if (senseBoxPhase === "grant") {
-      await handleGrantBootloader();
-      return;
-    }
     await startSerialOrientation();
   };
 
@@ -876,18 +889,15 @@ const OrientationModelTrainer = ({
                 >
                   <span>
                     {senseBoxPhase === "grant" ? (
-                      <Button
-                        variant="contained"
-                        color="warning"
-                        startIcon={<UsbIcon />}
+                      <GrantBootloaderButton
                         onClick={handleGrantBootloader}
                         disabled={disabled || isGrantingPort}
                       >
                         {t.errors.flashGrantBootloader}
-                      </Button>
+                      </GrantBootloaderButton>
                     ) : (
-                      <Button
-                        variant="contained"
+                      <BlinkingButton
+                        blink={reconnectNeeded}
                         startIcon={
                           isSenseBoxBusy || serialSource.isConnecting ? (
                             <CircularProgress size={16} color="inherit" />
@@ -921,7 +931,7 @@ const OrientationModelTrainer = ({
                             : serialSource.isConnected
                               ? t.training.disconnectSenseBox
                               : t.training.connectSenseBox}
-                      </Button>
+                      </BlinkingButton>
                     )}
                   </span>
                 </Tooltip>
