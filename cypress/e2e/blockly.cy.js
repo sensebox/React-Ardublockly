@@ -278,4 +278,17 @@ describe("Blockly Editor Page Tests", () => {
         block().should("have.attr", "transform", initialTransform);
       });
   });
+  it("[Blockly] undo after page reload keeps the workspace", () => {
+    cy.visit("/");
+    cy.get('img[alt="Sensebox ESP"]', { timeout: 8000 }).click();
+    cy.get(".blocklyBlockCanvas > .blocklyDraggable").should("exist");
+
+    cy.reload();
+    cy.get(".blocklyBlockCanvas > .blocklyDraggable").should("exist");
+
+    cy.get(".undoWorkspace").click();
+
+    // setup/loop block must still be there – nothing to undo after a reload
+    cy.get(".blocklyBlockCanvas > .blocklyDraggable").should("exist");
+  });
 });
