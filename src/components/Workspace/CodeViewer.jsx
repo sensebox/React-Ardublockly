@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { styled } from "@mui/material/styles";
 import {
@@ -7,9 +7,29 @@ import {
   AccordionSummary as MuiAccordionSummary,
   AccordionDetails as MuiAccordionDetails,
   Typography,
+  GlobalStyles,
 } from "@mui/material";
 import MonacoEditor from "@monaco-editor/react";
 import * as Blockly from "blockly";
+import { diffLines, toLineRanges } from "./codeDiff";
+
+// Bigger changes (e.g. loading a project) are not highlighted
+const MAX_SIGNAL_LINES = 50;
+const MAX_SIGNAL_RATIO = 0.6;
+
+const signalStyles = (
+  <GlobalStyles
+    styles={{
+      ".code-signal-line": {
+        backgroundColor: "rgba(76, 175, 80, 0.25)",
+      },
+      ".code-signal-gutter": {
+        borderLeft: "4px solid #4caf50",
+        marginLeft: 3,
+      },
+    }}
+  />
+);
 
 const Accordion = styled(MuiAccordion)(({ theme }) => ({
   border: `1px solid ${theme.palette.secondary.main}`,
@@ -49,6 +69,80 @@ const CodeViewer = () => {
   const xml = useSelector((s) => s.workspace.code.xml);
   const [expandedPanel, setExpandedPanel] = useState("arduino");
 
+  // Code signaling: highlight the lines added/changed by the last edit.
+  // The highlight stays until the next edit that adds or changes code.
+  const editorRef = useRef(null);
+  const decorationsRef = useRef(null);
+  const prevCodeRef = useRef(arduino);
+  const highlightRef = useRef([]);
+  const revealRef = useRef(false);
+
+  const applyHighlight = () => {
+    if (!decorationsRef.current) return;
+    decorationsRef.current.set(
+      toLineRanges(highlightRef.current).map(({ start, end }) => ({
+        range: {
+          startLineNumber: start,
+          startColumn: 1,
+          endLineNumber: end,
+          endColumn: 1,
+        },
+        options: {
+          isWholeLine: true,
+          className: "code-signal-line",
+          linesDecorationsClassName: "code-signal-gutter",
+          overviewRuler: { color: "#4caf50", position: 4 },
+        },
+      })),
+    );
+  };
+
+  const handleEditorMount = (editor) => {
+    editorRef.current = editor;
+    decorationsRef.current = editor.createDecorationsCollection();
+    applyHighlight();
+  };
+
+  useEffect(() => {
+    const prev = prevCodeRef.current;
+    prevCodeRef.current = arduino;
+    if (!prev || !arduino || prev === arduino) return;
+
+    const { changed, lineMap } = diffLines(prev, arduino);
+    const total = arduino.split("\n").filter((l) => l.trim() !== "").length;
+    if (
+      changed.length > MAX_SIGNAL_LINES &&
+      changed.length / total > MAX_SIGNAL_RATIO
+    ) {
+      // e.g. a project was loaded
+      highlightRef.current = [];
+    } else if (changed.length > 0) {
+      highlightRef.current = changed;
+      revealRef.current = true;
+    } else {
+      // Nothing new (only deletions or a regenerated timestamp):
+      // keep the previous highlight and follow its lines
+      highlightRef.current = highlightRef.current
+        .map((line) => lineMap.get(line))
+        .filter(Boolean);
+    }
+
+    // Monaco replaces its model content in its own effect, which drops the
+    // decorations, so (re)apply them afterwards
+    const frame = requestAnimationFrame(() => {
+      applyHighlight();
+      const lines = highlightRef.current;
+      if (revealRef.current && editorRef.current && lines.length > 0) {
+        revealRef.current = false;
+        editorRef.current.revealLinesInCenterIfOutsideViewport(
+          lines[0],
+          lines[lines.length - 1],
+        );
+      }
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [arduino]);
+
   const handleChange = (panel) => (_, isExpanded) => {
     setExpandedPanel(isExpanded ? panel : false);
   };
@@ -62,6 +156,7 @@ const CodeViewer = () => {
         flexDirection: "column",
       }}
     >
+      {signalStyles}
       <Accordion
         style={{ width: "100%" }}
         expanded={expandedPanel === "arduino"}
@@ -89,6 +184,7 @@ const CodeViewer = () => {
             height="100%"
             defaultLanguage="cpp"
             value={arduino}
+            onMount={handleEditorMount}
             options={{ readOnly: true, fontSize: 16 }}
           />
         </AccordionDetails>
