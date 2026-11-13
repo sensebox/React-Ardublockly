@@ -19,12 +19,27 @@ single NV centre gives one dip at 2870 MHz that splits into two as the magnet
 approaches. The splitting is linear in the magnet distance; this illustrates the
 effect and is not a field calculation.
 
+Below the scene:
+
+- **NV centres** switches between a single NV centre and ensembles with 2, 3 or
+  4 NV orientations. Each orientation adds one pair of dips; its splitting
+  follows the field component along that NV axis. Dips are shallower in larger
+  ensembles so the overlapping centre dip stays in view.
+- **Magnet direction** turns the magnet by 0°, 35° or 90°. The field at the
+  sensor is taken to point along the magnet. With all four orientations this
+  gives two pairs (along one NV axis), four separate pairs (tilted), or one
+  unsplit dip plus three pairs (across).
+- **Show field lines** draws schematic field lines around the magnet. They are
+  decorative and do not enter the model.
+
+The Lorentzian fit still covers at most four of the up to eight dips.
+
 - `SimulatedConnection.js` has the interface of `SerialConnection.js` and sends
   the same telegrams, so plot, fit and CSV export work unchanged. It repeats the
   sweep about ten times per second (`<clf>` followed by one `<batch>`); the CSV
   holds the latest sweep. Only Sweep mode is simulated.
 - The model and the scene live in `src/components/Simulator/magnetometer/`
-  (`model.js`, `MagnetScene.jsx`) so the Blockly simulator can reuse them. Curve
+  (`model.js`, `MagnetScene.jsx`, `MagnetControls.jsx`) so the Blockly simulator can reuse them. Curve
   constants (centre, maximum splitting, depth, width, voltage, noise) are at the
   top of `model.js` and are estimates. The images in `assets/` are placeholders.
 - The simulator plot is labelled in GHz and volts. Data stay in MHz and

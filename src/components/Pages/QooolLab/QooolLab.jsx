@@ -20,10 +20,11 @@ import { saveAs } from "file-saver";
 import SerialConnection from "./SerialConnection";
 import SimulatedConnection from "./SimulatedConnection";
 import MagnetScene from "@/components/Simulator/magnetometer/MagnetScene";
+import MagnetControls from "@/components/Simulator/magnetometer/MagnetControls";
 import {
   BASE_VOLTAGE,
-  DIP_DEPTH,
   RANGE,
+  yRange,
 } from "@/components/Simulator/magnetometer/model";
 import { commandsFor, MODES, parseTelegram } from "./protocol";
 import { fitLorentzians, rmse } from "./fit";
@@ -83,6 +84,11 @@ function Lab({ board }) {
   const [log, setLog] = useState([]);
   const [simulated, setSimulated] = useState(false);
   const [distance, setDistance] = useState(1);
+  const [magnet, setMagnet] = useState({
+    orientations: 1,
+    angle: 0,
+    fieldLines: false,
+  });
   const simulatedRef = useRef(false);
   const connection = useRef(null),
     active = useRef(null),
@@ -252,6 +258,7 @@ function Lab({ board }) {
     simulatedRef.current = true;
     setSimulated(true);
     setDistance(1);
+    setMagnet({ orientations: 1, angle: 0, fieldLines: false });
     setMode("sweep");
     setSettings((old) => ({
       ...old,
@@ -270,6 +277,12 @@ function Lab({ board }) {
   const moveMagnet = (value) => {
     setDistance(value);
     connection.current?.setDistance?.(value);
+  };
+  const changeMagnet = (patch) => {
+    setMagnet((old) => ({ ...old, ...patch }));
+    if ("orientations" in patch)
+      connection.current?.setOrientations?.(patch.orientations);
+    if ("angle" in patch) connection.current?.setAngle?.(patch.angle);
   };
   // The real device needs the MCU-S2; the simulator keeps running on any board.
   useEffect(() => {
@@ -384,7 +397,7 @@ function Lab({ board }) {
           yFactor: currentData.points.length
             ? currentData.normalizers[0]
             : BASE_VOLTAGE,
-          yRange: [1 - 2.5 * DIP_DEPTH, 1 + 0.5 * DIP_DEPTH],
+          yRange: yRange(magnet.orientations),
           yLabel: t("Response (V)", "Signal (V)"),
         }
       : null;
@@ -537,6 +550,8 @@ function Lab({ board }) {
                 <MagnetScene
                   distance={distance}
                   onChange={moveMagnet}
+                  angle={magnet.angle}
+                  showFieldLines={magnet.fieldLines}
                   labels={{
                     sensor: t("Magnetometer", "Magnetometer"),
                     magnet: t(
@@ -547,6 +562,28 @@ function Lab({ board }) {
                       "Drag the magnet towards the sensor or away from it. Arrow keys work too.",
                       "Ziehe den Magneten zum Sensor hin oder von ihm weg. Die Pfeiltasten funktionieren auch.",
                     ),
+                  }}
+                />
+              )}
+              {simulated && (
+                <MagnetControls
+                  {...magnet}
+                  onChange={changeMagnet}
+                  labels={{
+                    centres: t("NV centres", "NV-Zentren"),
+                    orientations: [
+                      "Single-NV",
+                      ...[2, 3, 4].map(
+                        (n) => `${n} ${t("orientations", "Ausrichtungen")}`,
+                      ),
+                    ],
+                    direction: t("Magnet direction", "Magnetausrichtung"),
+                    angles: [
+                      t("along (0°)", "längs (0°)"),
+                      t("tilted (35°)", "schräg (35°)"),
+                      t("across (90°)", "quer (90°)"),
+                    ],
+                    fieldLines: t("Show field lines", "Feldlinien anzeigen"),
                   }}
                 />
               )}
@@ -598,10 +635,15 @@ function Lab({ board }) {
                         "Rohintensität im rollenden Zeitfenster",
                       )
                     : axis
-                      ? t(
-                          "Simulated photo sensor signal of a single NV centre",
-                          "Simuliertes Signal des Fotosensors für ein einzelnes NV-Zentrum",
-                        )
+                      ? magnet.orientations === 1
+                        ? t(
+                            "Simulated photo sensor signal of a single NV centre",
+                            "Simuliertes Signal des Fotosensors für ein einzelnes NV-Zentrum",
+                          )
+                        : t(
+                            `Simulated photo sensor signal of an ensemble with ${magnet.orientations} NV orientations`,
+                            `Simuliertes Signal des Fotosensors für ein Ensemble mit ${magnet.orientations} NV-Ausrichtungen`,
+                          )
                       : t(
                           "Each channel is normalized to its first sample, matching the Python lab.",
                           "Jeder Kanal wird wie im Python-Lab auf seinen ersten Messwert normiert.",

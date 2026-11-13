@@ -1,5 +1,6 @@
 import {
   clampDistance,
+  clampOrientations,
   RANGE,
   spectrum,
 } from "../../Simulator/magnetometer/model.js";
@@ -25,6 +26,8 @@ export default class SimulatedConnection {
       random,
     });
     this.distance = 1;
+    this.orientations = 1;
+    this.angle = 0;
     [this.f1, this.f2] = RANGE;
     this.connected = false;
   }
@@ -35,6 +38,12 @@ export default class SimulatedConnection {
   }
   setDistance(distance) {
     this.distance = clampDistance(distance);
+  }
+  setOrientations(orientations) {
+    this.orientations = clampOrientations(orientations);
+  }
+  setAngle(angle) {
+    this.angle = Number(angle) || 0;
   }
   async send(command) {
     if (!this.connected) throw new Error("Device disconnected.");
@@ -59,6 +68,8 @@ export default class SimulatedConnection {
   sweep() {
     const rows = spectrum({
       distance: this.distance,
+      orientations: this.orientations,
+      angle: this.angle,
       f1: this.f1,
       f2: this.f2,
       random: this.random,

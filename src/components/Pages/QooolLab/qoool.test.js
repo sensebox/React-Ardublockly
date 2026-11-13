@@ -5,6 +5,7 @@ import { fitLorentzians, lorentzian } from "./fit.js";
 import SerialConnection from "./SerialConnection.js";
 import SimulatedConnection from "./SimulatedConnection.js";
 import {
+  ANGLES,
   BASE_VOLTAGE,
   CENTER,
   MAX_SPLIT,
@@ -324,6 +325,22 @@ test("simulated magnetometer speaks the sweep protocol and follows the magnet", 
     assert.ok(Math.abs(near.peaks[0].freq - (CENTER - MAX_SPLIT)) < 1);
     assert.ok(Math.abs(near.peaks[1].freq - (CENTER + MAX_SPLIT)) < 1);
 
+    // A full ensemble with the field along one NV axis: that axis splits fully,
+    // the other three share a third of it.
+    device.setOrientations(4);
+    device.setAngle(0);
+    await wait(30);
+    const ensemble = fitLorentzians(lastSweep(), [
+      { freq: 2802, depth: 0.02, width: 5 },
+      { freq: 2845, depth: 0.05, width: 5 },
+      { freq: 2895, depth: 0.05, width: 5 },
+      { freq: 2938, depth: 0.02, width: 5 },
+    ]);
+    [-MAX_SPLIT, -MAX_SPLIT / 3, MAX_SPLIT / 3, MAX_SPLIT].forEach((shift, i) =>
+      assert.ok(Math.abs(ensemble.peaks[i].freq - (CENTER + shift)) < 1),
+    );
+    assert.ok(ensemble.peaks[1].depth > 2 * ensemble.peaks[0].depth);
+
     await device.send("<end>");
     assert.equal(telegrams.at(-1), "<end>");
     const stopped = telegrams.length;
@@ -340,4 +357,43 @@ test("simulated magnetometer speaks the sweep protocol and follows the magnet", 
   } finally {
     await device.disconnect();
   }
+});
+
+test("ensembles add one resonance pair per NV axis, set by the field direction", () => {
+  const splits = (options) => [
+    ...new Set(
+      peaksFor(0, options).map((p) =>
+        Number(Math.abs(p.freq - CENTER).toFixed(3)),
+      ),
+    ),
+  ];
+  const [along, tilted, across] = ANGLES;
+  // A single NV centre does not respond to a field across its axis.
+  assert.deepEqual(splits({ orientations: 1, angle: across }), [0]);
+  for (const orientations of [1, 2, 3, 4]) {
+    const peaks = peaksFor(0.3, { orientations, angle: tilted });
+    assert.equal(peaks.length, 2 * orientations);
+    // Every pair is symmetric around the centre.
+    for (let i = 0; i < peaks.length; i += 2)
+      assert.ok(
+        Math.abs(peaks[i].freq + peaks[i + 1].freq - 2 * CENTER) < 1e-9,
+      );
+  }
+  assert.deepEqual(splits({ orientations: 4, angle: along }), [
+    MAX_SPLIT,
+    Number((MAX_SPLIT / 3).toFixed(3)),
+  ]);
+  const separated = splits({ orientations: 4, angle: tilted }).sort(
+    (a, b) => a - b,
+  );
+  assert.equal(separated.length, 4);
+  [0, ...separated].forEach((value, i, all) => {
+    if (i) assert.ok(value - all[i - 1] >= 10, "dips at least 10 MHz apart");
+  });
+  const crossed = splits({ orientations: 4, angle: across });
+  assert.equal(crossed.length, 4);
+  assert.ok(crossed.includes(0));
+  // Out-of-range ensemble sizes are clamped.
+  assert.equal(peaksFor(0, { orientations: 9 }).length, 8);
+  assert.equal(peaksFor(0, { orientations: 0 }).length, 2);
 });

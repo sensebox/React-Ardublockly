@@ -95,6 +95,35 @@ describe("QOOOL Lab", () => {
     cy.contains("button", "Automatic fit").click();
     fittedFrequency().should("be.closeTo", 2835, 2);
 
+    // Ensemble, magnet direction and field lines can change while a sweep runs.
+    cy.contains("button", /Start.*SWEEP/).click();
+    cy.get('[role="status"]').should("contain", "SWEEP");
+    cy.get("#magnetometer-orientations-1").should(
+      "have.attr",
+      "aria-pressed",
+      "true",
+    );
+    cy.get("#magnetometer-orientations-4").click();
+    cy.get("#magnetometer-orientations-4").should(
+      "have.attr",
+      "aria-pressed",
+      "true",
+    );
+    cy.contains("ensemble with 4 NV orientations").should("be.visible");
+    cy.get("#magnetometer-magnet").should("have.attr", "data-angle", "0");
+    cy.get("#magnetometer-angle-90").click();
+    cy.get("#magnetometer-magnet").should("have.attr", "data-angle", "90");
+    cy.get("#magnetometer-fieldlines").should("not.exist");
+    cy.get("#magnetometer-fieldlines-switch").check();
+    cy.get("#magnetometer-fieldlines path").should("have.length.above", 4);
+    cy.get("#magnetometer-fieldlines-switch").uncheck();
+    cy.get("#magnetometer-fieldlines").should("not.exist");
+    cy.wait(500);
+    cy.get('[role="status"]').should("contain", "SWEEP");
+    cy.get(".MuiAlert-standardError").should("not.exist");
+    cy.contains("button", /^Stop$/).click();
+    cy.get('[role="status"]').should("not.exist");
+
     cy.contains("button", "Disconnect").should("be.disabled");
     cy.contains("button", "Stop simulator").click();
     cy.get("#magnetometer-scene").should("not.exist");
