@@ -146,8 +146,6 @@ const ConfusionMatrix = ({ sampleMatrix, classNames }) => {
           gap: "1px",
           bgcolor: lineColor,
           border: `1px solid ${lineColor}`,
-          borderRadius: 2,
-          overflow: "hidden",
         }}
       >
         {/* Empty top-left corner */}
