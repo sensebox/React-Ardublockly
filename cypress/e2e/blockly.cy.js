@@ -258,18 +258,50 @@ describe("Blockly Editor Page Tests", () => {
     block()
       .invoke("attr", "transform")
       .then((initialTransform) => {
-        // drag the initial setup/loop block to create an undoable move event
+        // drag the initial setup/loop block to create an undoable move event.
+        // Blockly needs real PointerEvents with coordinates on pointerdown,
+        // otherwise the drag distance can't be computed and nothing moves.
         block()
           .find(".blocklyPath")
           .first()
-          .trigger("pointerdown", { button: 0, pointerId: 1, force: true })
-          .trigger("pointermove", {
-            clientX: 500,
-            clientY: 400,
-            pointerId: 1,
-            force: true,
-          })
-          .trigger("pointerup", { pointerId: 1, force: true });
+          .then(($path) => {
+            const rect = $path[0].getBoundingClientRect();
+            const x = rect.left + 20;
+            const y = rect.top + 20;
+            const pointer = {
+              eventConstructor: "PointerEvent",
+              pointerId: 1,
+              isPrimary: true,
+              pointerType: "mouse",
+              button: 0,
+              buttons: 1,
+              bubbles: true,
+              force: true,
+            };
+
+            cy.wrap($path).trigger("pointerdown", {
+              ...pointer,
+              clientX: x,
+              clientY: y,
+            });
+            cy.document()
+              .trigger("pointermove", {
+                ...pointer,
+                clientX: x + 30,
+                clientY: y + 30,
+              })
+              .trigger("pointermove", {
+                ...pointer,
+                clientX: x + 150,
+                clientY: y + 120,
+              })
+              .trigger("pointerup", {
+                ...pointer,
+                buttons: 0,
+                clientX: x + 150,
+                clientY: y + 120,
+              });
+          });
 
         block().should("not.have.attr", "transform", initialTransform);
 
@@ -278,6 +310,7 @@ describe("Blockly Editor Page Tests", () => {
         block().should("have.attr", "transform", initialTransform);
       });
   });
+
   it("[Blockly] undo after page reload keeps the workspace", () => {
     cy.visit("/");
     cy.get('img[alt="Sensebox ESP"]', { timeout: 8000 }).click();
