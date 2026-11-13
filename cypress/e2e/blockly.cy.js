@@ -248,4 +248,34 @@ describe("Blockly Editor Page Tests", () => {
     cy.get("body").type("{esc}");
     cy.get('[role="dialog"]').should("not.exist");
   });
+  it("[Blockly] undoes the last workspace change via toolbar button", () => {
+    cy.visit("/");
+    cy.get('img[alt="Sensebox ESP"]', { timeout: 8000 }).click();
+
+    const block = () =>
+      cy.get(".blocklyBlockCanvas > .blocklyDraggable").first();
+
+    block()
+      .invoke("attr", "transform")
+      .then((initialTransform) => {
+        // drag the initial setup/loop block to create an undoable move event
+        block()
+          .find(".blocklyPath")
+          .first()
+          .trigger("pointerdown", { button: 0, pointerId: 1, force: true })
+          .trigger("pointermove", {
+            clientX: 500,
+            clientY: 400,
+            pointerId: 1,
+            force: true,
+          })
+          .trigger("pointerup", { pointerId: 1, force: true });
+
+        block().should("not.have.attr", "transform", initialTransform);
+
+        cy.get(".undoWorkspace").click();
+
+        block().should("have.attr", "transform", initialTransform);
+      });
+  });
 });
