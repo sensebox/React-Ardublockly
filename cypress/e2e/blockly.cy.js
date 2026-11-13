@@ -248,4 +248,80 @@ describe("Blockly Editor Page Tests", () => {
     cy.get("body").type("{esc}");
     cy.get('[role="dialog"]').should("not.exist");
   });
+  it("[Blockly] undoes the last workspace change via toolbar button", () => {
+    cy.visit("/");
+    cy.get('img[alt="Sensebox ESP"]', { timeout: 8000 }).click();
+
+    const block = () =>
+      cy.get(".blocklyBlockCanvas > .blocklyDraggable").first();
+
+    block()
+      .invoke("attr", "transform")
+      .then((initialTransform) => {
+        // drag the initial setup/loop block to create an undoable move event.
+        // Blockly needs real PointerEvents with coordinates on pointerdown,
+        // otherwise the drag distance can't be computed and nothing moves.
+        block()
+          .find(".blocklyPath")
+          .first()
+          .then(($path) => {
+            const rect = $path[0].getBoundingClientRect();
+            const x = rect.left + 20;
+            const y = rect.top + 20;
+            const pointer = {
+              eventConstructor: "PointerEvent",
+              pointerId: 1,
+              isPrimary: true,
+              pointerType: "mouse",
+              button: 0,
+              buttons: 1,
+              bubbles: true,
+              force: true,
+            };
+
+            cy.wrap($path).trigger("pointerdown", {
+              ...pointer,
+              clientX: x,
+              clientY: y,
+            });
+            cy.document()
+              .trigger("pointermove", {
+                ...pointer,
+                clientX: x + 30,
+                clientY: y + 30,
+              })
+              .trigger("pointermove", {
+                ...pointer,
+                clientX: x + 150,
+                clientY: y + 120,
+              })
+              .trigger("pointerup", {
+                ...pointer,
+                buttons: 0,
+                clientX: x + 150,
+                clientY: y + 120,
+              });
+          });
+
+        block().should("not.have.attr", "transform", initialTransform);
+
+        cy.get(".undoWorkspace").click();
+
+        block().should("have.attr", "transform", initialTransform);
+      });
+  });
+
+  it("[Blockly] undo after page reload keeps the workspace", () => {
+    cy.visit("/");
+    cy.get('img[alt="Sensebox ESP"]', { timeout: 8000 }).click();
+    cy.get(".blocklyBlockCanvas > .blocklyDraggable").should("exist");
+
+    cy.reload();
+    cy.get(".blocklyBlockCanvas > .blocklyDraggable").should("exist");
+
+    cy.get(".undoWorkspace").click();
+
+    // setup/loop block must still be there – nothing to undo after a reload
+    cy.get(".blocklyBlockCanvas > .blocklyDraggable").should("exist");
+  });
 });

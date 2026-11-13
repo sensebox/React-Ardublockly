@@ -12,6 +12,7 @@ import ShareProject from "./ToolbarItems/ShareProject";
 import ResetWorkspace from "./ToolbarItems/ResetWorkspace";
 import DeleteProject from "./ToolbarItems/DeleteProject";
 import CopyCode from "./ToolbarItems/CopyCode";
+import UndoWorkspace from "./ToolbarItems/UndoWorkspace";
 import AutoSave from "./ToolbarItems/AutoSave";
 import SolutionCheck from "../Tutorial/Viewer/Cards/SolutionCheck";
 
@@ -42,6 +43,8 @@ const WorkspaceToolbar = ({
       )}
 
       {assessment ? <SolutionCheck /> : !multiple && <Compile iconButton />}
+      {!multiple && <UndoWorkspace style={{ marginRight: "5px" }} />}
+
       {!multiple && <CopyCode iconButton />}
       {user && !multiple && (
         <SaveProject
