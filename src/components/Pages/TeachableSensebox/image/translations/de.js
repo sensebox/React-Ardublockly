@@ -21,6 +21,8 @@ export const imageClassificationTranslations_de = {
     analyzing: "Analysiere...",
     dataChangedWarning:
       "Trainingsdaten wurden verändert. Trainiere das Modell neu, um die Vorhersagen zu aktualisieren.",
+    dataChangedTestWarning:
+      "Trainingsdaten wurden verändert. Trainiere das Modell neu, bevor du erneut testest.",
     preliminaryModelWarning: "Vorläufiges Modell. Training läuft noch...",
     addNewClass: "Neue Klasse hinzufügen",
     className: "Klassenname",
@@ -39,7 +41,7 @@ export const imageClassificationTranslations_de = {
     downloadData: "Bilder herunterladen",
     uploadData: "Bilder hochladen",
     downloadTrainScript: "Sammel-Sketch herunterladen",
-    resultsTitle: "Trainingsdetails",
+    resultsTitle: "Trainingsverlauf",
     metricsChart: "Trainingsverlauf",
     testResultsTitle: "Testergebnis",
     finalAccuracy: "Genauigkeit",
@@ -62,6 +64,7 @@ export const imageClassificationTranslations_de = {
       learningRate: "Lernrate",
       earlyStopping: "Early Stopping",
       reset: "Auf Default zurücksetzen",
+      testSplit: "Anteil der Trainingsbilder für Tests: {value}%",
     },
     tooltip: {
       helpMain: "Was ist Bildklassifizierung?",
@@ -110,6 +113,26 @@ export const imageClassificationTranslations_de = {
     },
     deployModel: {
       title: "Ausführen auf der senseBox MCU Eye",
+    },
+  },
+  section: {
+    collapse: "Einklappen",
+    expand: "Ausklappen",
+  },
+  testing: {
+    title: "Modell Testen",
+    testModel: "Modell testen",
+    testingInProgress: "Modell wird getestet...",
+    errorTesting: "Testen fehlgeschlagen: {message}",
+    cellDescriptionCorrect:
+      "Diese Bilder zeigen {actual} und wurden vom Modell richtig als {predicted} erkannt.",
+    cellDescriptionIncorrect:
+      "Diese Bilder zeigen {actual}, wurden vom Modell aber fälschlicherweise als {predicted} klassifiziert.",
+    cellEmpty: "In diesem Feld sind keine Bilder.",
+    tooltip: {
+      needModel: "Trainiere zuerst ein Modell",
+      trainingRunning: "Warte, bis das Training abgeschlossen ist",
+      needTestImages: "Nimm mindestens ein Testbild pro Klasse auf",
     },
   },
   integration: {

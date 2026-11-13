@@ -1,4 +1,8 @@
-Wenn du mindestens 10 Bilder pro Klasse gesammelt hast, wird ein Teil deiner gesammelten Bilder zu Testzwecken genutzt. Das trainierte Modell hat diese Bilder nicht während dem Training gesehen. Damit können wir evaluieren wie gut das Modell letztendlich abschneidet.
+Im Abschnitt **Modell Testing** kannst du für jede Klasse eigene Testbilder aufnehmen. Das trainierte Modell hat diese Bilder während des Trainings nicht gesehen. Damit können wir evaluieren, wie gut das Modell letztendlich abschneidet.
+
+Sobald du mindestens ein Testbild pro Klasse hast, klicke auf **Modell testen**. Danach siehst du die Genauigkeit und die Konfusionsmatrix.
+
+In den Trainingseinstellungen kannst du außerdem einen Anteil deiner Trainingsbilder in die Testbilder verschieben. Diese Bilder werden zufällig ausgewählt und dann nicht mehr für das Training verwendet.
 
 # Genauigkeit
 
@@ -8,6 +12,6 @@ Die Gesamtgenauigkeit gibt den Prozentsatz der korrekt klassifizierten Testbilde
 
 Die Konfusionsmatrix zeigt für jede Klasse, wie viele Bilder korrekt und wie viele falsch klassifiziert wurden.
 
-- die Zeile gibt die tatsächliche Klasse an, die Spalte die klassifizierte.
+- die Zeile gibt die tatsächliche Klasse an, die Spalte die klassifizierte. In jeder Zelle siehst du die Testbilder dieser Kombination.
 - Die **Diagonale** (in grün, von oben links nach unten rechts) zeigt korrekte Klassifizierungen.
-- **Außerhalb der Diagonale** (in rot) stehen falsch klassifizierte Bilder.
+- **Außerhalb der Diagonale** (in orange) stehen falsch klassifizierte Bilder.

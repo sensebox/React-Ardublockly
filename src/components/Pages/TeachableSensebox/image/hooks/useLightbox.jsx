@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useMemo } from "react";
 import React from "react";
-import { Dialog, IconButton } from "@mui/material";
+import { Dialog, IconButton, Typography } from "@mui/material";
 import {
   Close as CloseIcon,
   Delete as DeleteIcon,
@@ -51,7 +51,9 @@ function useLightbox(classes, isWideScreen, removeSample) {
       if (e && e.stopPropagation) e.stopPropagation();
       const found = getClassAndSampleByImageUrl(src);
       if (found) {
+        const idx = found.cls.samples.findIndex((s) => s.url === src);
         setLightboxClassId(found.classId);
+        setLightboxIndex(Math.max(0, idx));
         setLightboxOpen(true);
         setLightboxSrc(src);
       }
@@ -65,14 +67,6 @@ function useLightbox(classes, isWideScreen, removeSample) {
     setLightboxIndex(0);
     setLightboxClassId(null);
   }, []);
-
-  // when opening lightbox set the index based on current src (within the current class)
-  useEffect(() => {
-    if (lightboxOpen && lightboxSrc) {
-      const idx = currentClassSamples.indexOf(lightboxSrc);
-      setLightboxIndex(idx >= 0 ? idx : 0);
-    }
-  }, [lightboxOpen, lightboxSrc, currentClassSamples]);
 
   // update lightboxSrc when index changes (within current class)
   useEffect(() => {
@@ -167,6 +161,7 @@ const LightboxComponent = ({
   onPrev,
   onNext,
   onDelete,
+  title,
 }) => {
   return (
     <Dialog
@@ -181,6 +176,7 @@ const LightboxComponent = ({
           alignItems: "center",
           justifyContent: "center",
           p: 2,
+          pt: title ? 7 : 2,
           position: "relative",
         },
       }}
@@ -194,29 +190,46 @@ const LightboxComponent = ({
       >
         <CloseIcon />
       </IconButton>
-      <IconButton
-        onClick={(e) => {
-          e.stopPropagation();
-          onDelete && onDelete();
-        }}
-        sx={{
-          position: "absolute",
-          bottom: 24,
-          left: "50%",
-          transform: "translateX(-50%)",
-          color: "white",
-          bgcolor: "error.main",
-          width: 64,
-          height: 64,
-          zIndex: 1400,
-          "&:hover": { bgcolor: "error.dark" },
-          boxShadow: 3,
-        }}
-        aria-label="delete"
-        size="large"
-      >
-        <DeleteIcon sx={{ fontSize: 22 }} />
-      </IconButton>
+      {title && (
+        <Typography
+          variant="h6"
+          sx={{
+            position: "absolute",
+            top: 16,
+            left: 64,
+            right: 64,
+            textAlign: "center",
+            color: "white",
+          }}
+        >
+          {title}
+        </Typography>
+      )}
+      {onDelete && (
+        <IconButton
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete();
+          }}
+          sx={{
+            position: "absolute",
+            bottom: 24,
+            left: "50%",
+            transform: "translateX(-50%)",
+            color: "white",
+            bgcolor: "error.main",
+            width: 64,
+            height: 64,
+            zIndex: 1400,
+            "&:hover": { bgcolor: "error.dark" },
+            boxShadow: 3,
+          }}
+          aria-label="delete"
+          size="large"
+        >
+          <DeleteIcon sx={{ fontSize: 22 }} />
+        </IconButton>
+      )}
 
       {src && (
         <>

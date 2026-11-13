@@ -1,4 +1,8 @@
-Once you have collected at least 10 images per class, a portion of your collected images will be used for testing. The trained model has not seen these images during training. This allows us to evaluate how well the model ultimately performs.
+In the **Model Testing** section you can capture your own test images for each class. The trained model has not seen these images during training. This allows us to evaluate how well the model ultimately performs.
+
+Once you have at least one test image per class, click **Test model**. You will then see the accuracy and the confusion matrix.
+
+In the training settings you can also move a share of your training images to the test images. These images are chosen at random and are no longer used for training.
 
 # Accuracy
 
@@ -8,6 +12,6 @@ The overall accuracy indicates the percentage of correctly classified test image
 
 The confusion matrix shows for each class how many images were classified correctly and how many were misclassified.
 
-- The row indicates the actual class, the column the predicted class.
+- The row indicates the actual class, the column the predicted class. Each cell shows the test images of that combination.
 - The **diagonal** (in green, from top left to bottom right) shows correct predictions.
-- **Outside the diagonal** (in red) are incorrectly classified images.
+- **Outside the diagonal** (in orange) are incorrectly classified images.
