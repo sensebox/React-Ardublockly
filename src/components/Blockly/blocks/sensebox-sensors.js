@@ -807,14 +807,16 @@ Blockly.Blocks["sensebox_esp32s2_accelerometer"] = {
     }
   },
   /**
-   * The spell option returns an image (for the display image block),
-   * all other options return a number.
+   * The spell option returns an image (for the display image block and the
+   * spell classification block), all other options return a number.
    * @param {string} value selected dropdown value
    */
   updateOutputType_: function (value) {
     if (!this.outputConnection) return;
     this.outputConnection.setCheck(
-      value === "spell" ? Types.IMAGE.typeName : Types.DECIMAL.typeName,
+      value === "spell"
+        ? [Types.IMAGE.typeName, Types.SPELL_IMAGE.typeName]
+        : Types.DECIMAL.typeName,
     );
   },
 };
@@ -892,7 +894,7 @@ Blockly.Blocks["sensebox_sensor_max17048"] = {
 Blockly.Blocks["sensebox_eye_camera"] = {
   init: function () {
     this.appendDummyInput().appendField(Blockly.Msg.sensebox_eye_camera);
-    this.setOutput(true, Types.IMAGE.typeName);
+    this.setOutput(true, [Types.IMAGE.typeName, Types.CAMERA_IMAGE.typeName]);
     this.setColour(getColour().sensebox);
     this.setTooltip(Blockly.Msg.sensebox_eye_camera_tooltip);
     this.setHelpUrl(withBoardParam(Blockly.Msg.sensebox_eye_camera_helpurl));

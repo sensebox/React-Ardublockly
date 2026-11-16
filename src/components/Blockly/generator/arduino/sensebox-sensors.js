@@ -1140,6 +1140,10 @@ struct SpellImage {
   size_t len;
   size_t width;
   size_t height;
+  // Last finished spell, used for AI classification (not the live preview)
+  const int8_t* points;    // x/y pairs, -128..127
+  int point_count;
+  uint32_t spell_count;    // increases with every finished spell
 };
 
 namespace spell {
@@ -1171,6 +1175,10 @@ int8_t points[kMaxPoints * 2] = {};
 
 uint8_t image[kImageBytes] = {};        // last completed spell (task side)
 uint8_t image_copy[kImageBytes] = {};   // copy handed to the user program
+int8_t done_points[kMaxPoints * 2] = {};       // last finished spell (task side)
+int32_t done_point_count = 0;
+uint32_t done_count = 0;
+int8_t done_points_copy[kMaxPoints * 2] = {};  // copy handed to the user program
 SpellImage frame;
 SemaphoreHandle_t image_mutex = nullptr;
 
@@ -1447,6 +1455,11 @@ void task(void* parameter) {
       const StrokeUpdate update = updateStroke(1);
       if (update == eCompleted) {
         renderStroke(last_completed);
+        xSemaphoreTake(image_mutex, portMAX_DELAY);
+        memcpy(done_points, points, sizeof(points));
+        done_point_count = point_count;
+        done_count++;
+        xSemaphoreGive(image_mutex);
         publishImage(last_completed);
         live_counter = 0;
       } else if (update == eLive) {
@@ -1475,12 +1488,16 @@ SpellImage* getSpellImage() {
   if (spell::image_mutex) {
     xSemaphoreTake(spell::image_mutex, portMAX_DELAY);
     memcpy(spell::image_copy, spell::image, spell::kImageBytes);
+    memcpy(spell::done_points_copy, spell::done_points, sizeof(spell::done_points));
+    spell::frame.point_count = spell::done_point_count;
+    spell::frame.spell_count = spell::done_count;
     xSemaphoreGive(spell::image_mutex);
   }
   spell::frame.buf = spell::image_copy;
   spell::frame.len = spell::kImageBytes;
   spell::frame.width = spell::kImageSize;
   spell::frame.height = spell::kImageSize;
+  spell::frame.points = spell::done_points_copy;
   return &spell::frame;
 }`;
   Blockly.Generator.Arduino.setupCode_["begin_spell_recognition"] =

@@ -27,6 +27,20 @@ export const IMAGE = {
   typeMsgName: "ARD_TYPE_IMAGE",
 };
 
+/** Image from the MCU-Eye camera (camera_fb_t*), also an IMAGE. */
+export const CAMERA_IMAGE = {
+  typeId: "CameraImage",
+  typeName: "camera_image",
+  typeMsgName: "ARD_TYPE_IMAGE",
+};
+
+/** Spell drawn with the MCU-Eye accelerometer (SpellImage*), also an IMAGE. */
+export const SPELL_IMAGE = {
+  typeId: "SpellImage",
+  typeName: "spell_image",
+  typeMsgName: "ARD_TYPE_IMAGE",
+};
+
 export const BOOLEAN = {
   typeId: "Boolean",
   typeName: "boolean",
