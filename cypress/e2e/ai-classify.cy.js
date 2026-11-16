@@ -27,24 +27,23 @@ describe("AI classification blocks", () => {
   it("[Blockly] shows the spell block for a spell model", () => {
     uploadModel(32);
     cy.get(".blocklyFlyout .blocklyText").contains("kreis").should("exist");
-    // tag of the classification block + spell option of the
-    // accelerometer block that is already plugged in
+    // tag of the classification block (icon with alt text)
+    cy.get('.blocklyFlyout image[alt="Zauberspruch"]').should("exist");
+    // spell option of the accelerometer block that is already plugged in
     cy.get(".blocklyFlyout .blocklyText")
       .filter((i, el) => /^\s*Zauberspruch[\s▾]*$/.test(el.textContent))
-      .should("have.length", 2);
-    cy.get(".blocklyFlyout .blocklyText")
-      .contains(/^Kamera$/)
-      .should("not.exist");
+      .should("have.length", 1);
+    cy.get('.blocklyFlyout image[alt="Kamera"]').should("not.exist");
   });
 
   it("[Blockly] shows the camera block for a camera model", () => {
     uploadModel(96);
-    cy.get(".blocklyFlyout .blocklyText")
-      .contains(/^Kamera$/)
-      .should("exist");
+    // tag of the classification block (icon with alt text)
+    cy.get('.blocklyFlyout image[alt="Kamera"]').should("exist");
     cy.get(".blocklyFlyout .blocklyText").contains("kreis").should("exist");
+    cy.get('.blocklyFlyout image[alt="Zauberspruch"]').should("not.exist");
     cy.get(".blocklyFlyout .blocklyText")
-      .contains(/^Zauberspruch$/)
+      .contains(/Zauberspruch/)
       .should("not.exist");
   });
 });
