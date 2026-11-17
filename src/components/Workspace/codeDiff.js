@@ -95,9 +95,10 @@ export const toLineRanges = (lines) => {
   return ranges;
 };
 
-// Bigger changes (e.g. loading a project) are not highlighted
-const MAX_SIGNAL_LINES = 50;
-const MAX_SIGNAL_RATIO = 0.6;
+// Bigger changes (e.g. loading a project) are not highlighted.
+// Deactivated for now, see the commented out check in updateSignal.
+// const MAX_SIGNAL_LINES = 50;
+// const MAX_SIGNAL_RATIO = 0.6;
 
 /**
  * Computes the code signaling highlight for a new version of the code.
@@ -135,17 +136,18 @@ export const updateSignal = (
     return { state, highlight: kept, reveal: false };
   }
 
-  const total = newCode.split("\n").filter((l) => l.trim() !== "").length;
-  if (
-    changed.length > MAX_SIGNAL_LINES &&
-    changed.length / total > MAX_SIGNAL_RATIO
-  ) {
-    return {
-      state: { baseCode: newCode, baseHighlight: [] },
-      highlight: [],
-      reveal: false,
-    };
-  }
+  // Deactivated for now: skip highlighting for big changes
+  // const total = newCode.split("\n").filter((l) => l.trim() !== "").length;
+  // if (
+  //   changed.length > MAX_SIGNAL_LINES &&
+  //   changed.length / total > MAX_SIGNAL_RATIO
+  // ) {
+  //   return {
+  //     state: { baseCode: newCode, baseHighlight: [] },
+  //     highlight: [],
+  //     reveal: false,
+  //   };
+  // }
 
   // Only new/changed lines replace the highlight; deletions keep it
   const highlight = changed.length > 0 ? changed : kept;
