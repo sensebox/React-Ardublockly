@@ -150,6 +150,8 @@ describe("Code signaling", () => {
       .first()
       .click(5, 5, { force: true });
     cy.get(".code-selected-line").should("have.length", 1);
+    // Only one kind of highlight is shown at a time
+    cy.get(".code-signal-line").should("not.exist");
 
     // Clicking the empty workspace deselects the block
     cy.get(".blocklyMainBackground").click("bottomRight", { force: true });

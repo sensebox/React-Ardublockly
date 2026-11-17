@@ -84,9 +84,13 @@ const CodeViewer = () => {
   // board/language change): that code must not be highlighted
   const resetRef = useRef(false);
 
-  // Highlight the code of the block selected in the workspace
+  // Highlight the code of the block the user clicked in the workspace
   const selectionDecorationsRef = useRef(null);
   const selectedLinesRef = useRef([]);
+  const clickedBlockIdRef = useRef(null);
+  // Only one highlight is shown, the one of the last action:
+  // "signal" (code was added/changed), "selection" (block clicked) or null
+  const activeRef = useRef("signal");
 
   useEffect(() => {
     const workspace = Blockly.getMainWorkspace();
@@ -103,7 +107,9 @@ const CodeViewer = () => {
   const applyHighlight = () => {
     if (!decorationsRef.current) return;
     decorationsRef.current.set(
-      toLineRanges(highlightRef.current).map(({ start, end }) => ({
+      toLineRanges(
+        activeRef.current === "signal" ? highlightRef.current : [],
+      ).map(({ start, end }) => ({
         range: {
           startLineNumber: start,
           startColumn: 1,
@@ -123,7 +129,9 @@ const CodeViewer = () => {
   const applySelection = () => {
     if (!selectionDecorationsRef.current) return;
     selectionDecorationsRef.current.set(
-      toLineRanges(selectedLinesRef.current).map(({ start, end }) => ({
+      toLineRanges(
+        activeRef.current === "selection" ? selectedLinesRef.current : [],
+      ).map(({ start, end }) => ({
         range: {
           startLineNumber: start,
           startColumn: 1,
@@ -140,10 +148,11 @@ const CodeViewer = () => {
     );
   };
 
-  // Recomputes the lines of the currently selected block
+  // Recomputes the lines of the clicked block
   const updateSelection = (code, reveal) => {
-    const selected = Blockly.getSelected();
-    const block = selected instanceof Blockly.BlockSvg ? selected : null;
+    const block = clickedBlockIdRef.current
+      ? Blockly.getMainWorkspace()?.getBlockById(clickedBlockIdRef.current)
+      : null;
     selectedLinesRef.current = block ? getBlockLines(block, code) : [];
     applySelection();
     const lines = selectedLinesRef.current;
@@ -161,13 +170,31 @@ const CodeViewer = () => {
   useEffect(() => {
     const workspace = Blockly.getMainWorkspace();
     if (!workspace) return undefined;
-    const onSelected = (event) => {
-      if (event.type === Blockly.Events.SELECTED) {
+    const onSelection = (event) => {
+      // CLICK is only fired for a real click on a block, not when a block is
+      // dropped or created from the flyout (those only fire SELECTED)
+      if (
+        event.type === Blockly.Events.CLICK &&
+        event.targetType === "block" &&
+        event.blockId
+      ) {
+        clickedBlockIdRef.current = event.blockId;
+        activeRef.current = "selection";
+        applyHighlight();
         updateSelection(arduinoRef.current, true);
+      } else if (
+        event.type === Blockly.Events.SELECTED &&
+        event.newElementId !== clickedBlockIdRef.current
+      ) {
+        // Deselected or another block got selected without a click
+        clickedBlockIdRef.current = null;
+        selectedLinesRef.current = [];
+        if (activeRef.current === "selection") activeRef.current = null;
+        applySelection();
       }
     };
-    workspace.addChangeListener(onSelected);
-    return () => workspace.removeChangeListener(onSelected);
+    workspace.addChangeListener(onSelection);
+    return () => workspace.removeChangeListener(onSelection);
   }, []);
 
   const handleEditorMount = (editor) => {
@@ -188,6 +215,12 @@ const CodeViewer = () => {
         reset: resetRef.current,
       },
     );
+    // New or changed code replaces the highlight of a clicked block
+    if (reveal || resetRef.current) {
+      activeRef.current = "signal";
+      clickedBlockIdRef.current = null;
+      selectedLinesRef.current = [];
+    }
     resetRef.current = false;
     signalRef.current = state;
     highlightRef.current = highlight;
@@ -197,10 +230,20 @@ const CodeViewer = () => {
     // decorations, so (re)apply them afterwards
     const frame = requestAnimationFrame(() => {
       applyHighlight();
-      // Skip while dragging; the drop triggers a new update anyway
-      if (!workspace?.isDragging?.()) updateSelection(arduino, false);
+      // Lines of the clicked block may have moved; skip while dragging, the
+      // drop triggers a new update anyway
+      if (activeRef.current === "selection" && !workspace?.isDragging?.()) {
+        updateSelection(arduino, false);
+      } else {
+        applySelection();
+      }
       const lines = highlightRef.current;
-      if (revealRef.current && editorRef.current && lines.length > 0) {
+      if (
+        activeRef.current === "signal" &&
+        revealRef.current &&
+        editorRef.current &&
+        lines.length > 0
+      ) {
         revealRef.current = false;
         editorRef.current.revealLinesInCenterIfOutsideViewport(
           lines[0],
