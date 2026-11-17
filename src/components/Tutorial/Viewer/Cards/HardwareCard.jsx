@@ -12,13 +12,17 @@ import {
 } from "@mui/material";
 import { MenuBook } from "@mui/icons-material";
 import COMPONENT_MAP from "../../Builder/utils/componentMap"; // Pfad ggf. anpassen
-const HardwareCard = ({ component }) => {
+const HardwareCard = ({ component, customHardware = {}, mediaBasePath = "/media/hardware" }) => {
   const theme = useTheme();
-  const compData = COMPONENT_MAP[component] || {
+  const allHardware = { ...COMPONENT_MAP, ...customHardware };
+  const compData = allHardware[component] || {
     name: component,
-    image: "/media/hardware/3dmodels/coming-soon.png", // Fallback
+    image: "coming-soon.png", // Fallback - just filename
     docUrl: "#",
   };
+
+  const isCustom = component.includes("custom-") || compData.image.startsWith("http");
+  const imagePath = isCustom ? compData.image : `${mediaBasePath}/3dmodels/${compData.image}`;
 
   return (
     <Card
@@ -56,7 +60,7 @@ const HardwareCard = ({ component }) => {
               }}
             >
               <img
-                src={compData.image}
+                src={imagePath}
                 alt={compData.name}
                 style={{
                   width: "200px",
@@ -84,7 +88,7 @@ const HardwareCard = ({ component }) => {
             }}
           >
             <img
-              src={compData.image}
+              src={imagePath}
               alt={compData.name}
               style={{
                 width: "70%",
@@ -96,12 +100,22 @@ const HardwareCard = ({ component }) => {
         </Tooltip>
 
         {/* Titel */}
-        <Typography variant="subtitle1" fontWeight="600" noWrap>
+        <Typography
+          variant="subtitle1"
+          fontWeight="600"
+          sx={{
+            display: "-webkit-box",
+            WebkitLineClamp: 3,
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
+            maxWidth: "12ch"
+          }}
+        >
           {compData.name}
         </Typography>
 
         {/* Sensor (falls vorhanden) */}
-        {compData.sensor && (
+        {compData.sensor && !isCustom && (
           <Chip
             label={compData.sensor}
             color="primary"
@@ -112,6 +126,8 @@ const HardwareCard = ({ component }) => {
       </CardContent>
 
       {/* Footer mit Doc-Link */}
+      {typeof compData.docUrl === "string" &&
+        /^https?:\/\//i.test(compData.docUrl) && (
       <Box
         sx={{
           p: 1,
@@ -120,29 +136,32 @@ const HardwareCard = ({ component }) => {
           borderTop: `1px solid ${theme.palette.divider}`,
         }}
       >
-        <Tooltip title="Zur Dokumentation">
-          <IconButton
-            href={compData.docUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            sx={{
-              backgroundColor: theme.palette.primary.main,
-              color: "white",
-              "&:hover": {
-                backgroundColor: theme.palette.primary.dark,
-              },
-            }}
-          >
-            <MenuBook />
-          </IconButton>
-        </Tooltip>
+          <Tooltip title="Zur Dokumentation">
+            <IconButton
+              href={compData.docUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{
+                backgroundColor: theme.palette.primary.main,
+                color: "white",
+                "&:hover": {
+                  backgroundColor: theme.palette.primary.dark,
+                },
+              }}
+            >
+              <MenuBook />
+            </IconButton>
+          </Tooltip>
       </Box>
+      )}
     </Card>
   );
 };
 
 HardwareCard.propTypes = {
-  component: PropTypes.string.isRequired, // nur Name-String notwendig
+  component: PropTypes.string.isRequired,
+  customHardware: PropTypes.object,
+  mediaBasePath: PropTypes.string,
 };
 
 export default HardwareCard;

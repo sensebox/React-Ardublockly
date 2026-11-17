@@ -1,4 +1,35 @@
 export const UI = {
+  // Variable creation dialog
+  typed_variable_title: "Create a variable",
+  typed_variable_intro:
+    "A variable stores a value that you can use and change in your program.",
+  typed_variable_name: "Variable name",
+  typed_variable_placeholder: "e.g. temperature",
+  typed_variable_hint: "Choose a name that describes what you want to store.",
+  typed_variable_type: "What would you like to store?",
+  typed_variable_typeHint:
+    "Choose a data type. A whole number is a good choice for a counter.",
+  typed_variable_create: "Create variable",
+  typed_variable_cancel: "Cancel",
+  typed_variable_close: "Close",
+  typed_variable_invalid: "Please enter a valid name.",
+  typed_variable_duplicate:
+    "A variable with this name already exists. Choose another name.",
+  typed_variable_int_label: "Whole number",
+  typed_variable_int_example: "For counting, e.g. 0, 1, 42",
+  typed_variable_long_label: "Large whole number",
+  typed_variable_long_example: "For large values, e.g. 1000000",
+  typed_variable_float_label: "Decimal number",
+  typed_variable_float_example: "For measurements, e.g. 21.5",
+  typed_variable_String_label: "Text",
+  typed_variable_String_example: "For words and sentences, e.g. Hello",
+  typed_variable_char_label: "Single character",
+  typed_variable_char_example: "One letter or symbol, e.g. A",
+  typed_variable_boolean_label: "True or false",
+  typed_variable_boolean_example: "For states, e.g. light on or off",
+  typed_variable_bitmap_label: "Image",
+  typed_variable_bitmap_example: "For a pixel image on the display",
+
   /**
    * Toolbox
    */
@@ -215,8 +246,9 @@ export const UI = {
   button_back: "Back",
   button_next: "Next step",
   button_tutorial_overview: "Tutorial overview",
+  tutorial_reset_answers: "Reset tutorial progress",
   button_login: "Login",
-  button_createVariable: "Create Typed Variable",
+  button_createVariable: "Create variable",
 
   /**
    *
@@ -285,6 +317,28 @@ export const UI = {
   tutorials_hardware_here: "here",
   tutorials_requirements:
     "Before continuing with this tutorial, you should have successfully completed the following tutorials:",
+  tutorials_solution_submit: "Submit solution",
+  tutorials_solution_no_code: "No Blockly code could be loaded.",
+  tutorials_solution_success_title: "Well done!",
+  tutorials_solution_error_title: "Something is still missing…",
+  tutorials_solution_show_help: "Show help",
+  tutorials_solution_analysis: "Analysis:",
+  tutorials_solution_compile_hint:
+    "You can now compile the program code and test it live on your senseBox!",
+  tutorials_criteria_default_title: "Your evaluation criteria",
+  tutorials_criteria_subtitle_exact: "Define %1 criteria.",
+  tutorials_criteria_subtitle_range: "Define between %1 and %2 criteria.",
+  tutorials_criteria_label: "Criterion %1",
+  tutorials_criteria_delete: "Delete criterion",
+  tutorials_criteria_add: "Add criterion",
+  tutorials_evaluation_default_title: "Evaluation",
+  tutorials_evaluation_no_source:
+    "No step with evaluation criteria was found for this evaluation.",
+  tutorials_evaluation_criteria_first: "Define your evaluation criteria first.",
+  tutorials_evaluation_to_criteria: "Go to criteria",
+  tutorials_evaluation_title_label: "Evaluation title",
+  tutorials_evaluation_delete: "Delete evaluation",
+  tutorials_evaluation_add: "Add evaluation",
 
   /**
    * Tutorial Builder
@@ -316,11 +370,16 @@ export const UI = {
   save_status_success: "Tutorial saved successfully!",
   save_status_to_overview: "Back to overview",
   save_status_to_tutorial: "To tutorial",
+  save_status_keep_editing: "Keep editing",
   save_status_missing_fields: "The following required fields are missing:",
   save_status_missing_title: "Title",
   save_status_missing_subtitle: "Subtitle",
   save_status_missing_understood: "Got it",
+  save_status_invalid_evaluation:
+    'Step %1 (evaluation) needs a "define evaluation criteria" step before it.',
   save_status_error: "An error occurred while saving.",
+  builder_autosave_paused_hint:
+    'Changes are currently not being saved. Evaluation steps need a "define evaluation criteria" step before them (affected steps: %1).',
   save_status_error_hint: "Possible reasons:",
   save_status_error_network: "Check network connection",
   save_status_error_validation: "Validate data and try again",
@@ -372,6 +431,30 @@ export const UI = {
   navbar_account: "Account",
   navbar_logout: "Logout",
   navbar_settings: "Settings",
+
+  navbar_connect_device: "Connect device",
+  navbar_connecting_device: "Connecting …",
+  navbar_device_connected: "Device connected",
+  navbar_select_bootloader: "Select bootloader port",
+  navbar_disconnect_device: "Disconnect device",
+  upload_dialog_title: "Upload to senseBox",
+  connect_dialog_title: "Connect device",
+  connect_dialog_intro:
+    "“Connect device” lets the browser obtain the required permissions and prepares your board so you can upload directly from Blockly afterwards.",
+  connect_dialog_pick_device: "In the picker, select “%1”.",
+  connect_dialog_pick_bootloader: "At the bootloader step, then select “%1”.",
+  connect_dialog_button: "Connect",
+  connect_dialog_working: "Connecting and preparing board …",
+  connect_dialog_grant_title: "Bootloader permission",
+  connect_dialog_grant_text:
+    "The board is now in download mode and appears as a new USB device. Please select “%1” once to grant the permission.",
+  connect_dialog_grant_button: "Select %1",
+  connect_dialog_done_title: "Device connected!",
+  connect_dialog_done_text:
+    "Just press the compile button now to upload directly from Blockly.",
+  connect_dialog_error_title: "Connection failed",
+  connect_dialog_retry: "Try again",
+  connect_dialog_close: "Close",
 
   /**
    * Codeviewer
@@ -461,6 +544,7 @@ export const UI = {
   compile_overlay_code_compiled: "Code successfully compiled!",
   compile_overlay_start_transfer: "Start transfer",
   compile_overlay_close: "Close",
+  compile_overlay_cancel: "Cancel compilation",
   compile_overlay_head: "Your program is now compiled and downloaded",
   compile_overlay_text: "Then copy it to your senseBox MCU",
   compile_overlay_help: "You need help? Have a look here: ",

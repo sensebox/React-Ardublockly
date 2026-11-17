@@ -7,12 +7,17 @@ import {
   Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/styles";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import * as Blockly from "blockly/core";
 
 // 🔲 Dialog-Komponente (extrahiert für Übersicht)
-const SaveStatusDialog = ({ savingState, onClose, savedTutorialId }) => {
+const SaveStatusDialog = ({
+  savingState,
+  onClose,
+  savedTutorialId,
+  validationErrors = { missingFields: [], invalidEvaluationSteps: [] },
+}) => {
   const theme = useTheme();
   const navigate = useNavigate();
   const renderContent = () => {
@@ -31,16 +36,33 @@ const SaveStatusDialog = ({ savingState, onClose, savedTutorialId }) => {
         return (
           <>
             <WarningAmber sx={{ fontSize: 64, color: "warning.main" }} />
-            <Typography variant="body1" fontWeight={600}>
-              {Blockly.Msg.save_status_missing_fields}
-            </Typography>
             <Box sx={{ mt: 1, textAlign: "left" }}>
-              <Typography color="error.main">
-                • {Blockly.Msg.save_status_missing_title}
-              </Typography>
-              <Typography color="error.main">
-                • {Blockly.Msg.save_status_missing_subtitle}
-              </Typography>
+              {validationErrors.missingFields.length > 0 && (
+                <>
+                  <Typography variant="body1" fontWeight={600}>
+                    {Blockly.Msg.save_status_missing_fields}
+                  </Typography>
+                  {validationErrors.missingFields.includes("title") && (
+                    <Typography color="error.main">
+                      • {Blockly.Msg.save_status_missing_title}
+                    </Typography>
+                  )}
+                  {validationErrors.missingFields.includes("subtitle") && (
+                    <Typography color="error.main">
+                      • {Blockly.Msg.save_status_missing_subtitle}
+                    </Typography>
+                  )}
+                </>
+              )}
+              {validationErrors.invalidEvaluationSteps.map((stepNumber) => (
+                <Typography key={stepNumber} color="error.main" sx={{ mt: 1 }}>
+                  •{" "}
+                  {Blockly.Msg.save_status_invalid_evaluation.replace(
+                    "%1",
+                    stepNumber,
+                  )}
+                </Typography>
+              ))}
             </Box>
             <Button variant="contained" sx={{ mt: 2 }} onClick={onClose}>
               {Blockly.Msg.save_status_missing_understood}
@@ -63,18 +85,52 @@ const SaveStatusDialog = ({ savingState, onClose, savedTutorialId }) => {
             <Typography variant="body1" fontWeight={600}>
               {Blockly.Msg.save_status_success}
             </Typography>
-            <Box sx={{ mt: 2, display: "flex", gap: 2 }}>
-              <Button variant="outlined" onClick={() => navigate("/tutorial")}>
-                {Blockly.Msg.save_status_to_overview}
+            <Box
+              sx={{
+                mt: 2,
+                display: "flex",
+                flexDirection: "column",
+                gap: 2,
+                alignItems: "center",
+              }}
+            >
+              <Button
+                variant="contained"
+                color="success"
+                onClick={onClose}
+                autoFocus
+                fullWidth
+              >
+                {Blockly.Msg.save_status_keep_editing}
               </Button>
-              {savedTutorialId && (
+              <Box sx={{ display: "flex", gap: 2, width: "100%" }}>
                 <Button
-                  variant="contained"
-                  onClick={() => navigate(`/tutorial/${savedTutorialId}`)}
+                  variant="outlined"
+                  sx={{
+                    borderColor:
+                      theme.palette.mode === "dark" ? "#ccc" : "#999",
+                    color: theme.palette.text.primary,
+                    flex: 1,
+                  }}
+                  onClick={() => navigate("/tutorial")}
                 >
-                  {Blockly.Msg.save_status_to_tutorial}
+                  {Blockly.Msg.save_status_to_overview}
                 </Button>
-              )}
+                {savedTutorialId && (
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      borderColor:
+                        theme.palette.mode === "dark" ? "#ccc" : "#999",
+                      color: theme.palette.text.primary,
+                      flex: 1,
+                    }}
+                    onClick={() => navigate(`/tutorial/${savedTutorialId}`)}
+                  >
+                    {Blockly.Msg.save_status_to_tutorial}
+                  </Button>
+                )}
+              </Box>
             </Box>
           </>
         );
@@ -142,6 +198,7 @@ const SaveStatusDialog = ({ savingState, onClose, savedTutorialId }) => {
         sx={{
           textAlign: "center",
           py: 3,
+          px: 3,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",

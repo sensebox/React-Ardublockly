@@ -1,3 +1,4 @@
+import { QWIIC_BUTTON } from "./de/sensebox-qwiic-button";
 import { AUDIO } from "./de/audio";
 import { BLE } from "./de/sensebox-ble";
 import { FAQ } from "./de/faq";
@@ -30,7 +31,7 @@ import { VARIABLES } from "./de/variables";
 import { WEBSERVER } from "./de/webserver";
 import { FLUOROASM } from "./de/fluoroASM";
 import { CUSTOM_FUNCTIONS } from "./de/custom-functions";
-
+import { COMPILE_DIALOG } from "./de/compile-dialog";
 export const De = {
   ...AUDIO,
   ...BLE,
@@ -49,6 +50,7 @@ export const De = {
   ...NTP,
   ...SD,
   ...SENSORS,
+  ...QWIIC_BUTTON,
   ...SOLAR,
   ...SENSEBOX,
   ...SENSEBOX_TEACHABLE,
@@ -64,4 +66,5 @@ export const De = {
   ...WEBSERVER,
   ...FLUOROASM,
   ...CUSTOM_FUNCTIONS,
+  ...COMPILE_DIALOG,
 };

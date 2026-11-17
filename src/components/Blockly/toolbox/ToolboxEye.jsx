@@ -1,4 +1,5 @@
 import React from "react";
+import QwiicButtonCategory from "./QwiicButtonCategory";
 import { useSelector } from "react-redux";
 import { Block, Value, Field, Shadow, Category, Label, Button } from "..";
 import { getColour } from "../helpers/colour";
@@ -138,6 +139,8 @@ export const ToolboxEye = () => {
         <Block type="sensebox_display_show" />
         <Block type="sensebox_display_clearDisplay" />
 
+        <Block type="sensebox_display_image" />
+
         <Block type="sensebox_display_printDisplay">
           <Value name="SIZE">
             <Block type="math_number">
@@ -265,8 +268,6 @@ export const ToolboxEye = () => {
             </Block>
           </Value>
         </Block>
-
-        <Block type="sensebox_display_image" />
       </Category>
 
       {/* ============================== INTERNET & COMMS ============================== */}
@@ -349,6 +350,20 @@ export const ToolboxEye = () => {
               </Value>
             </Block>
           </Category>
+          <Category
+            id="catSenseBoxOutput_LoRa_cayenne"
+            name="Cayenne LPP"
+            colour={getColour().sensebox}
+          >
+            <Block type="sensebox_lora_cayenne_send" />
+            <Block type="sensebox_lora_cayenne_temperature" />
+            <Block type="sensebox_lora_cayenne_humidity" />
+            <Block type="sensebox_lora_cayenne_pressure" />
+            <Block type="sensebox_lora_cayenne_luminosity" />
+            <Block type="sensebox_lora_cayenne_sensor" />
+            <Block type="sensebox_lora_cayenne_accelerometer" />
+            <Block type="sensebox_lora_cayenne_gps" />
+          </Category>
         </Category>
 
         {/* -------- BLUETOOTH / PHYPHOX -------- */}
@@ -391,25 +406,25 @@ export const ToolboxEye = () => {
 
       {/* ============================== SD CARD ============================== */}
       <Category name="SD" colour={getColour().sensebox}>
-        <Block type="sensebox_esp32s2_sd_create_file">
+        <Block type="sensebox_sd_create_file">
           <Value name="FILENAME">
             <Block type="text">
               <Field name="TEXT">Data</Field>
             </Block>
           </Value>
         </Block>
-        <Block type="sensebox_esp32s2_sd_open_file">
+        <Block type="sensebox_sd_open_file">
           <Value name="FILENAME">
             <Block type="text">
               <Field name="TEXT">Data</Field>
             </Block>
           </Value>
           <Value name="SD">
-            <Block type="sensebox_esp32s2_sd_write_file" />
+            <Block type="sensebox_sd_write_file" />
           </Value>
         </Block>
-        <Block type="sensebox_esp32s2_sd_write_file" />
-        <Block type="sensebox_esp32s2_sd_open_file">
+        <Block type="sensebox_sd_write_file" />
+        <Block type="sensebox_sd_open_file">
           <Value name="FILENAME">
             <Block type="text">
               <Field name="TEXT">Data</Field>
@@ -428,7 +443,7 @@ export const ToolboxEye = () => {
         <Block type="sensebox_sd_exists">
           <Value name="FILENAME">
             <Block type="text">
-              <Field name="TEXT">Dateiname</Field>
+              <Field name="TEXT">Data</Field>
             </Block>
           </Value>
         </Block>
@@ -490,6 +505,20 @@ export const ToolboxEye = () => {
           </Value>
         </Block>
         <Block type="controls_flow_statements" />
+      </Category>
+
+      {/* ============================== AI ============================== */}
+      <Category
+        id="sensebox_ai"
+        toolboxitemid="sensebox_ai"
+        name={Blockly.Msg.toolbox_ai || "AI"}
+        colour={getColour().ai}
+      >
+        <Button
+          text={Blockly.Msg.ai_upload_model || "Upload Trained Model"}
+          callbackKey="uploadAiModel"
+        />
+        {aiModel?.code && <Block type="sensebox_teachable_classify" />}
       </Category>
 
       {/* ============================== TIME ============================== */}
@@ -635,10 +664,11 @@ export const ToolboxEye = () => {
         colour={getColour().variables}
         custom="CREATE_TYPED_VARIABLE"
       />
+
       <Category
-        name={Blockly.Msg.toolbox_functions}
+        name={Blockly.Msg.my_toolbox_functions}
         colour={getColour().procedures}
-        custom="PROCEDURE"
+        custom="CUSTOM_FUNCTIONS_DYNAMIC"
       />
 
       {/* ============================== QOOOL (CUSTOM) ============================== */}
@@ -655,6 +685,7 @@ export const ToolboxEye = () => {
 
       {/* ============================== ADVANCED ============================== */}
       <Category name={Blockly.Msg.toolbox_advanced} colour={getColour().io}>
+        <QwiicButtonCategory />
         {/* -------- SERIAL -------- */}
         <Category name={Blockly.Msg.toolbox_serial} colour={getColour().serial}>
           <Block type="init_serial_monitor" />
@@ -697,19 +728,6 @@ export const ToolboxEye = () => {
               </Block>
             </Value>
           </Block>
-        </Category>
-
-        {/* ============================== AI ============================== */}
-        <Category
-          id="sensebox_ai"
-          name={Blockly.Msg.toolbox_ai || "AI"}
-          colour={getColour().ai}
-        >
-          <Button
-            text={Blockly.Msg.ai_upload_model || "Upload Trained Model"}
-            callbackKey="uploadAiModel"
-          />
-          {aiModel?.code && <Block type="sensebox_teachable_classify" />}
         </Category>
 
         {/* -------- WATCHDOG -------- */}

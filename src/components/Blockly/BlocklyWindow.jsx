@@ -33,6 +33,7 @@ import { BlocklyComponent } from "./BlocklyComponent";
 
 export default function BlocklyWindow(props) {
   const dispatch = useDispatch();
+  const wrapperRef = useRef(null);
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -68,6 +69,7 @@ export default function BlocklyWindow(props) {
     readOnly,
     tutorial,
     onWorkspaceChanged,
+    preserveWorkspaceOnBoardChange,
   } = props;
 
   // One-time workspace setup
@@ -143,11 +145,17 @@ export default function BlocklyWindow(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEmbedded]);
 
-  // Handle board change → reload XML (from localStorage or fallback)
+  // Handle board change → reload XML (from localStorage or fallback).
+  // With preserveWorkspaceOnBoardChange the current blocks are re-created
+  // instead, so board-dependent dropdowns update without losing the content.
   useEffect(() => {
     const ws = Blockly.getMainWorkspace();
     if (!ws) return;
-    let xml = localStorage.getItem("autoSaveXML");
+    let xml = null;
+    if (preserveWorkspaceOnBoardChange) {
+      xml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(ws));
+    }
+    if (!xml) xml = localStorage.getItem("autoSaveXML");
     if (!xml) xml = initialXml;
     try {
       const xmlDom = Blockly.utils.xml.textToDom(xml);
@@ -207,6 +215,25 @@ export default function BlocklyWindow(props) {
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
+  // resize alongside container
+  useEffect(() => {
+    const container = wrapperRef.current;
+    if (!container || typeof ResizeObserver === "undefined") return;
+    let t;
+    const ro = new ResizeObserver(() => {
+      clearTimeout(t);
+      t = setTimeout(() => {
+        const ws = Blockly.getMainWorkspace();
+        if (ws) Blockly.svgResize(ws);
+      }, 50);
+    });
+    ro.observe(container);
+    return () => {
+      clearTimeout(t);
+      ro.disconnect();
+    };
+  }, []);
+
   // Compute zoom/grid/move config with sensible defaults
   const zoomConfig = useMemo(() => {
     if (zoom !== undefined) return zoom;
@@ -252,6 +279,7 @@ export default function BlocklyWindow(props) {
   return (
     <>
       <div
+        ref={wrapperRef}
         style={
           tutorial
             ? {
@@ -272,7 +300,7 @@ export default function BlocklyWindow(props) {
           maxInstances={getMaxInstances()}
           zoom={zoomConfig}
           grid={gridConfig}
-          media={"/media/blockly/"}
+          media={__BLOCKLY_MEDIA_PATH__}
           move={moveConfig}
           initialXml={initialXmlProp ? initialXmlProp : initialXml}
         />
@@ -301,4 +329,5 @@ BlocklyWindow.propTypes = {
   grid: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
   move: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
   readOnly: PropTypes.bool,
+  preserveWorkspaceOnBoardChange: PropTypes.bool,
 };

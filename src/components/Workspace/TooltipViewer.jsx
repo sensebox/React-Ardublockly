@@ -10,19 +10,23 @@ import {
 } from "@mui/material";
 import * as Blockly from "blockly";
 import ReactMarkdown from "react-markdown";
+import { withBoardParam } from "@/components/Blockly/helpers/helpUrlBuilder";
 
 const TooltipViewer = () => {
   const theme = useTheme();
   const tooltip = useSelector((s) => s.workspace.code.tooltip);
   const helpurl = useSelector((s) => s.workspace.code.helpurl);
 
+  // Wrap the helpurl with board parameter if it exists
+  const helpUrlWithBoard = helpurl ? withBoardParam(helpurl) : null;
+
   return (
     <Card
       className="helpSection"
       sx={{
+        flex: "0 0 auto",
         overflowY: "auto",
-        maxHeight: "23vh",
-        mt: 2,
+        maxHeight: "35%",
         p: 2,
         borderRadius: 1,
         border: `1px solid ${theme.palette.divider}`,
@@ -59,11 +63,11 @@ const TooltipViewer = () => {
 
         <ReactMarkdown>{tooltip || ""}</ReactMarkdown>
 
-        {helpurl && (
+        {helpUrlWithBoard && (
           <Button
             variant="contained"
             color="primary"
-            href={helpurl}
+            href={helpUrlWithBoard}
             target="_blank"
             sx={{
               mt: 2,

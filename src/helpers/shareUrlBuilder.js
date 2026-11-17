@@ -3,7 +3,7 @@ import { createId } from "mnemonic-id";
 
 export const isEmbeddedPath = (pathname) => {
   return EMBEDDED_CONFIG.ROUTE.some(
-    (route) => pathname === route || pathname.startsWith(`${route}/`)
+    (route) => pathname === route || pathname.startsWith(`${route}/`),
   );
 };
 
@@ -29,10 +29,7 @@ export const createShareShortLink = async (shareId, isEmbedded = false) => {
   };
 
   try {
-    const response = await fetch(
-      "https://www.snsbx.de/api/shorty",
-      requestOptions,
-    );
+    const response = await fetch("https://snsbx.de/api/shorty", requestOptions);
     const data = await response.json();
 
     // Validate response structure

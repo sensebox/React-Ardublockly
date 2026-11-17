@@ -84,6 +84,17 @@ export const LED = {
   senseBox_ws2812_rgb_matrix_fullcolor: "Set all pixels to one color",
   senseBox_ws2812_rgb_matrix_fullcolor_tooltip:
     "Set all pixels to one color. Select a color from the palette",
-    senseBox_ws2812_rgb_matrix_helpurl: 'https://docs.sensebox.de/en/docs/hardware/accessoires/led-matrix',
+  senseBox_ws2812_rgb_matrix_helpurl:
+    "https://docs.sensebox.de/en/docs/hardware/accessoires/led-matrix",
 
+  senseBox_matrix_editor_open: "Edit bitmap",
+  senseBox_matrix_editor_title: "Pixel editor",
+  senseBox_matrix_editor_hint:
+    "Choose a color, then click or drag across the pixels.",
+  senseBox_matrix_editor_color: "Color",
+  senseBox_matrix_editor_eraser: "Eraser",
+  senseBox_matrix_editor_clear: "Clear all",
+  senseBox_matrix_editor_black: "Black pixels are off.",
+  senseBox_matrix_editor_cancel: "Cancel",
+  senseBox_matrix_editor_save: "Save",
 };

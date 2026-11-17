@@ -93,7 +93,7 @@ class ResetWorkspace extends Component {
               <FontAwesomeIcon icon={faShare} size="sm" flip="horizontal" />
             }
           >
-            Zurücksetzen
+            <span className="embedded-button-label">Zurücksetzen</span>
           </Button>
         ) : (
           <Tooltip title={tooltipText} arrow>

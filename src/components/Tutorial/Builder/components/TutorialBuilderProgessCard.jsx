@@ -11,18 +11,19 @@ import {
   ToggleButtonGroup,
   ToggleButton,
 } from "@mui/material";
+import * as Blockly from "blockly/core";
 import { useDispatch, useSelector } from "react-redux";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import HardwareSelectorModal from "./AddNewHardware";
 import {
   SaveOutlined,
   Save,
-  Expand,
   ExpandCircleDown,
+  SyncProblem,
 } from "@mui/icons-material";
 import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import { Autocomplete } from "@mui/material";
@@ -34,6 +35,7 @@ const SUBJECTS = [
   "Chemie",
   "Technik",
   "Digitale Bildung",
+  "ADA",
   "Sonstiges",
 ];
 
@@ -63,10 +65,13 @@ const TutorialBuilderProgressCard = ({
   setDifficulty,
   selectedHardware,
   setSelectedHardware,
+  customHardware,
+  setCustomHardware,
   activeStep,
   setActiveStep,
   setAutosaveEnabled,
   autosaveEnabled,
+  autosaveStatus,
   subjects,
   topics,
   setSubjects,
@@ -82,6 +87,7 @@ const TutorialBuilderProgressCard = ({
   const tutorialFromStore = useSelector((state) => state.tutorial.tutorials[0]);
 
   const [modalOpen, setModalOpen] = useState(false);
+  const autosavePaused = Boolean(autosaveStatus?.paused);
   const progress = ((activeStep + 1) / steps.length) * 100;
 
   const changeStep = (stepIndex) => {
@@ -163,16 +169,34 @@ const TutorialBuilderProgressCard = ({
               placeholder="Tutorial Titel"
             />
             <IconButton
+              id="tutorial-autosave-toggle"
               onClick={() => setAutosaveEnabled(!autosaveEnabled)}
               size="small"
-              color={autosaveEnabled ? "primary" : "default"}
+              color={
+                autosavePaused
+                  ? "warning"
+                  : autosaveEnabled
+                    ? "primary"
+                    : "default"
+              }
               title={
-                autosaveEnabled
-                  ? "Zwischenspeichern aktiviert"
-                  : "Zwischenspeichern deaktiviert"
+                autosavePaused
+                  ? Blockly.Msg.builder_autosave_paused_hint.replace(
+                      "%1",
+                      autosaveStatus.blockingEvaluationSteps.join(", "),
+                    )
+                  : autosaveEnabled
+                    ? "Zwischenspeichern aktiviert"
+                    : "Zwischenspeichern deaktiviert"
               }
             >
-              {autosaveEnabled ? <Save /> : <SaveOutlined />}
+              {autosavePaused ? (
+                <SyncProblem />
+              ) : autosaveEnabled ? (
+                <Save />
+              ) : (
+                <SaveOutlined />
+              )}
             </IconButton>
           </Box>
         }
@@ -395,6 +419,8 @@ const TutorialBuilderProgressCard = ({
                   onClose={() => setModalOpen(false)}
                   selectedHardware={selectedHardware}
                   onHardwareSelect={setSelectedHardware}
+                  customHardware={customHardware}
+                  onCustomHardwareChange={setCustomHardware}
                 />
               </Box>
             </Box>

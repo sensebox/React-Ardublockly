@@ -4,7 +4,6 @@ describe("Blockly Editor Page Tests", () => {
   const boards = [
     { name: "senseBox ESP", alt: "Sensebox ESP", expected: "MCU-S2" },
     { name: "senseBox MCU", alt: "Sensebox MCU", expected: "MCU" },
-    { name: "senseBox Mini", alt: "Sensebox Mini", expected: "MCU:MINI" },
   ];
 
   it("[Blockly] visits the editor page", () => {
@@ -23,7 +22,7 @@ describe("Blockly Editor Page Tests", () => {
     cy.visit("/gallery");
 
     cy.get("h1, h2, h3, h4")
-      .contains(/gallery/i)
+      .contains(/Galerie/i)
       .should("be.visible");
   });
 
@@ -147,9 +146,9 @@ describe("Blockly Editor Page Tests", () => {
 
     cy.visit("/settings");
     cy.get("#ota-selector").click();
-    cy.contains("li", "Activated").click();
+    cy.contains("li", "Aktiviert").click();
     cy.visit("/");
-    cy.contains("button", "Close").click();
+    cy.contains("button", "Schließen").click();
     cy.get('img[alt="Sensebox ESP"]').click();
     cy.get('button[aria-label="Compile code"]').click();
 
@@ -182,9 +181,9 @@ describe("Blockly Editor Page Tests", () => {
 
     cy.visit("/settings");
     cy.get("#ota-selector").click();
-    cy.contains("li", "Activated").click();
+    cy.contains("li", "Aktiviert").click();
     cy.visit("/");
-    cy.contains("button", "Close").click();
+    cy.contains("button", "Schließen").click();
     cy.get('img[alt="Sensebox MCU"]').click();
     cy.get('button[aria-label="Compile code"]').click();
 
@@ -218,5 +217,35 @@ describe("Blockly Editor Page Tests", () => {
       expect(interception.response.body.data).to.have.property("id");
       expect(interception.response.body.data.id).to.be.a("string");
     });
+  });
+
+  it("[Blockly] cancels compilation via close button", () => {
+    cy.intercept(
+      { method: "POST", pathname: "/compile" },
+      { delay: 10000, body: { data: { id: "cancelled" } } },
+    ).as("compile");
+
+    cy.visit("/");
+    cy.get('img[alt="Sensebox ESP"]').click();
+    cy.get('button[aria-label="Compile code"]').click();
+
+    cy.get('[role="dialog"]').should("be.visible");
+    cy.get("#compilation-dialog-close").click();
+    cy.get('[role="dialog"]').should("not.exist");
+  });
+
+  it("[Blockly] cancels compilation via escape key", () => {
+    cy.intercept(
+      { method: "POST", pathname: "/compile" },
+      { delay: 10000, body: { data: { id: "cancelled" } } },
+    ).as("compile");
+
+    cy.visit("/");
+    cy.get('img[alt="Sensebox ESP"]').click();
+    cy.get('button[aria-label="Compile code"]').click();
+
+    cy.get('[role="dialog"]').should("be.visible");
+    cy.get("body").type("{esc}");
+    cy.get('[role="dialog"]').should("not.exist");
   });
 });

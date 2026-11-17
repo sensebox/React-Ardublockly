@@ -62,6 +62,11 @@ function Home({ project, projectType }) {
     Blockly.svgResize(workspace);
   });
 
+  // When viewing a project/gallery item, breadcrumbs add ~45px height
+  const workspaceHeight = project
+    ? "calc(100vh - 245px)"
+    : "calc(100vh - 200px)";
+
   const handleToggleDialog = () => {
     setOpen((prev) => !prev);
   };
@@ -93,14 +98,7 @@ function Home({ project, projectType }) {
       </Box>
 
       {/* Blockly Workspace */}
-      {/* When viewing a project/gallery item, breadcrumbs add ~45px height */}
-      <Grid
-        style={{
-          height: project ? "calc(100vh - 245px)" : "calc(100vh - 200px)",
-        }}
-        container
-        spacing={2}
-      >
+      <Grid style={{ height: workspaceHeight }} container spacing={2}>
         <Grid item xs={12} md={codeOn ? 8 : 12} sx={{ position: "relative" }}>
           <Tooltip
             title={
@@ -135,9 +133,7 @@ function Home({ project, projectType }) {
 
           <Box className="blocklyWindow">
             <BlocklyWindow
-              blocklyCSS={{
-                height: project ? "calc(100vh - 245px)" : "calc(100vh - 200px)",
-              }}
+              blocklyCSS={{ height: workspaceHeight }}
               initialXml={project ? project.xml : initialXml}
             />
           </Box>
@@ -145,8 +141,18 @@ function Home({ project, projectType }) {
 
         {codeOn && (
           <Grid item xs={12} md={4}>
-            <CodeViewer />
-            <TooltipViewer />
+            {/* Same height as the Blockly workspace so both columns line up */}
+            <Box
+              sx={{
+                height: workspaceHeight,
+                display: "flex",
+                flexDirection: "column",
+                gap: 2,
+              }}
+            >
+              <CodeViewer />
+              <TooltipViewer />
+            </Box>
           </Grid>
         )}
       </Grid>

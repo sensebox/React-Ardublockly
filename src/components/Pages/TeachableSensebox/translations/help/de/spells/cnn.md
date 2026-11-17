@@ -20,7 +20,7 @@ Letztendlich erkennen die jeweiligen Convolutional Layer im Neuronalen Netz jewe
 
 ---
 
-# Der Covolutional Layer als Metapher
+# Der Convolutional Layer als Metapher
 
 Stell dir vor die Neuronen des Convolutional Layers als Besucher in einem Kino vor. Wir können den Neuronen nun bestimmte "Brillen" geben (sogenannte **Filter**), die beeinflussen, wie die Neuronen den Film warnehmen. Mit einer Lesebrille sehen die Neuronen alles unscharf, mit einer Lupe sieht der Film ganz klein oder mit einem Fernglas ganz groß aus.
 

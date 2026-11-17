@@ -190,7 +190,7 @@ class ShareProject extends Component {
             variant="contained"
             startIcon={<FontAwesomeIcon icon={faShareAlt} size="sm" />}
           >
-            {tooltipText}
+            <span className="embedded-button-label">{tooltipText}</span>
           </Button>
         ) : (
           <Tooltip title={tooltipText} arrow>

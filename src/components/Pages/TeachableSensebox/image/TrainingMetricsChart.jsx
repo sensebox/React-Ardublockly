@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import { useSelector } from "react-redux";
 import { Box, Typography, useTheme } from "@mui/material";
 import { getImageTranslations } from "./translations";
 
@@ -13,7 +14,8 @@ const TrainingMetricsChart = ({
   title,
 }) => {
   const theme = useTheme();
-  const t = getImageTranslations();
+  const language = useSelector((s) => s.general.language);
+  const t = getImageTranslations(language);
 
   // Fixed colors: greens for accuracy, reds for loss
   const colors = {
@@ -164,8 +166,8 @@ const TrainingMetricsChart = ({
           y={chartData.padding.top}
           width={chartData.chartWidth}
           height={chartData.chartHeight}
-          fill={theme.palette.grey[50]}
-          stroke={theme.palette.grey[300]}
+          fill={theme.palette.background.grey}
+          stroke={theme.palette.divider}
           strokeWidth={1}
         />
 
@@ -182,7 +184,7 @@ const TrainingMetricsChart = ({
                 y1={y}
                 x2={chartData.padding.left + chartData.chartWidth}
                 y2={y}
-                stroke={theme.palette.grey[200]}
+                stroke={theme.palette.divider}
                 strokeDasharray="4,4"
               />
               {/* Left Y-axis: Loss (red) */}

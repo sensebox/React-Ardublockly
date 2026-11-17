@@ -1,4 +1,5 @@
 import React from "react";
+import QwiicButtonCategory from "./QwiicButtonCategory";
 import { Block, Value, Field, Shadow, Category, Sep, Label, Button } from "..";
 import { getColour } from "../helpers/colour";
 import * as Blockly from "blockly/core";
@@ -666,6 +667,7 @@ export const ToolboxMcu = () => {
 
       {/* ============================== ADVANCED ============================== */}
       <Category name={Blockly.Msg.toolbox_advanced} colour={getColour().io}>
+        <QwiicButtonCategory />
         {/* -------- SERIAL -------- */}
         <Category name={Blockly.Msg.toolbox_serial} colour={getColour().serial}>
           <Block type="init_serial_monitor" />

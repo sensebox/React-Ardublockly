@@ -32,16 +32,22 @@ import {
   Switch,
   FormControlLabel,
   Collapse,
+  Alert,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import {
   Add as AddIcon,
   Delete as DeleteIcon,
   PhotoCamera as CameraIcon,
   Download as DownloadIcon,
+  Upload as UploadIcon,
   MoreVert as MoreVertIcon,
   Warning as WarningIcon,
+  Usb as UsbIcon,
 } from "@mui/icons-material";
 import useCameraSource from "./hooks/useCameraSource";
+import useLightbox, { LightboxComponent } from "./hooks/useLightbox";
 import SerialErrorHandler, {
   ConnectionStatus,
   ErrorTypes,
@@ -50,10 +56,17 @@ import SerialCameraService from "./SerialCameraService";
 import FloatingCameraPreview from "./FloatingCameraPreview";
 import TrainingResultsSection from "./TrainingResultsSection";
 import HelpButton, { useHelpBlink } from "../HelpButton";
+import ExpandedClassDialog from "./ExpandedClassDialog";
 import useModelTraining from "./hooks/useModelTraining";
 import { DEFAULT_TRAINING_SETTINGS } from "./hooks/useModelTraining";
 import useModelPrediction from "./hooks/useModelPrediction";
-import { downloadCameraFirmware } from "../utils/firmwareDownload";
+import { downloadCollectFirmware } from "../utils/firmwareDownload";
+import useSketchFlash from "../utils/useSketchFlash";
+import cameraFirmwareUrl from "./sketch/camera_capture.bin?url";
+import {
+  downloadTrainingData,
+  parseTrainingDataZip,
+} from "../utils/trainingDataExport";
 
 const ModelTrainer = ({
   onModelTrained,
@@ -70,23 +83,22 @@ const ModelTrainer = ({
   const [editingClassId, setEditingClassId] = useState(null);
   const [editingClassName, setEditingClassName] = useState("");
 
+  // Expanded class state
+  const [expandedClassId, setExpandedClassId] = useState(null);
+
   // Camera state
   const previewContainerRef = useRef(null);
   const sampleScrollRefs = useRef({});
 
-  useEffect(() => {
-    classes.forEach((cls) => {
-      const el = sampleScrollRefs.current[cls.id];
-      if (el) el.scrollTop = el.scrollHeight;
-    });
-  }, [classes]);
   const [videoLoading, setVideoLoading] = useState(false);
   const [serialError, setSerialError] = useState(null);
   const [connectionStatus, setConnectionStatus] = useState(
     ConnectionStatus.DISCONNECTED,
   );
   const [browserCompatible, setBrowserCompatible] = useState(true);
-  const [isDownloading, setIsDownloading] = useState(false);
+  // True while startSenseBoxCamera waits for the first image.
+  const waitingForImageRef = useRef(false);
+  const [isDownloadingCollect, setIsDownloadingCollect] = useState(false);
   const [isFloatingPreviewCollapsed, setIsFloatingPreviewCollapsed] =
     useState(false);
   const [trainedWithEnoughSamples, setTrainedWithEnoughSamples] =
@@ -97,11 +109,15 @@ const ModelTrainer = ({
   const [trainingSettings, setTrainingSettings] = useState(
     DEFAULT_TRAINING_SETTINGS,
   );
+  const [uploadError, setUploadError] = useState(null);
+  const [dataMenuAnchor, setDataMenuAnchor] = useState(null);
+  const uploadInputRef = useRef(null);
 
   const language = useSelector((s) => s.general.language);
-  const t = getImageTranslations();
+  const t = getImageTranslations(language);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const isWideScreen = useMediaQuery(theme.breakpoints.up("lg"));
 
   const {
     sourceType,
@@ -115,6 +131,8 @@ const ModelTrainer = ({
     error: cameraError,
     pauseFrameTimeoutMonitor,
     resumeFrameTimeoutMonitor,
+    waitForSerialFrame,
+    releaseSerialPort,
   } = useCameraSource();
 
   const {
@@ -124,6 +142,7 @@ const ModelTrainer = ({
     testResults,
     finalAccuracy,
     trainedModel,
+    isPreliminaryModel,
   } = useModelTraining();
 
   const { predictions } = useModelPrediction(
@@ -219,6 +238,34 @@ const ModelTrainer = ({
     }
   }, [sourceType]);
 
+  // Warn before leaving/reloading the page if there are unsaved samples
+  const hasSamples = classes.some((cls) => cls.samples.length > 0);
+  useEffect(() => {
+    if (!hasSamples) return;
+
+    const handleBeforeUnload = (e) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [hasSamples]);
+
+  // Auto-close upload error on user interaction
+  useEffect(() => {
+    if (!uploadError) return;
+
+    const handleClick = () => {
+      setUploadError(null);
+    };
+
+    document.addEventListener("click", handleClick);
+    return () => {
+      document.removeEventListener("click", handleClick);
+    };
+  }, [uploadError]);
+
   const startCamera = useCallback(async () => {
     try {
       setVideoLoading(true);
@@ -296,6 +343,20 @@ const ModelTrainer = ({
           return;
         }
 
+        if (cameraError.type === ErrorTypes.CAPTURE_FAILED) {
+          // While waiting for the first image, startSenseBoxCamera handles it.
+          if (waitingForImageRef.current) return;
+          // The camera stopped delivering images while running: release the
+          // port so "Flash the camera capture sketch" can use it.
+          releaseSerialPort();
+          if (previewContainerRef.current) {
+            previewContainerRef.current.innerHTML = "";
+          }
+          setConnectionStatus(ConnectionStatus.ERROR);
+          setSerialError({ type: ErrorTypes.CAPTURE_FAILED });
+          return;
+        }
+
         const warningTypes = [
           ErrorTypes.FRAME_TIMEOUT,
           ErrorTypes.FRAME_CORRUPTED,
@@ -316,12 +377,8 @@ const ModelTrainer = ({
         onTrainingError(`Camera error: ${cameraError.message}`);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cameraError, onTrainingError, sourceType]);
-
-  const handleReconnect = useCallback(async () => {
-    setSerialError(null);
-    await startCamera();
-  }, [startCamera]);
 
   const handleDismissError = useCallback(() => {
     setSerialError(null);
@@ -330,13 +387,194 @@ const ModelTrainer = ({
     }
   }, [connectionStatus]);
 
-  const handleDownloadFirmware = async () => {
-    setIsDownloading(true);
-    const result = await downloadCameraFirmware();
-    if (!result.success) {
-      alert(`Failed to download firmware: ${result.error}`);
+  // ─── senseBox camera start incl. camera sketch upload ──────────────────────
+  // Clicking "Start senseBox camera" opens the port picker and waits for an
+  // image. If none arrives, the camera sketch is flashed to the same port with
+  // @sensebox/flash-tool (useSketchFlash) and the camera is started again.
+
+  // Shown by SerialErrorHandler ("Upload failed" + details + troubleshooting).
+  const failFlash = (message) => {
+    setConnectionStatus(ConnectionStatus.ERROR);
+    setSerialError({ type: ErrorTypes.FLASH_FAILED, message });
+  };
+
+  const {
+    phase: senseBoxPhase,
+    setPhase: setSenseBoxPhase,
+    isBusy: isSenseBoxBusy,
+    isGrantingPort,
+    progress: flashProgress,
+    bootloaderName: flashBootloaderName,
+    flashSketch: flashCameraSketch,
+    flashPermittedDevice,
+    grantBootloader,
+    isBoardPort,
+    waitForAppPort: waitForCameraPort,
+  } = useSketchFlash({
+    firmwareUrl: cameraFirmwareUrl,
+    onFlashed: () => restartCameraAfterFlash(),
+    onFlashFailed: failFlash,
+    // Bootloader port not selected: keep the "Upload camera sketch" button
+    // and additionally show "Connection Failed".
+    onGrantFailed: (message) => {
+      setConnectionStatus(ConnectionStatus.ERROR);
+      setSerialError({ type: ErrorTypes.CONNECTION_FAILED, message });
+    },
+  });
+
+  const attachPreview = () => {
+    const previewElement = getPreviewElement();
+    if (previewElement && previewContainerRef.current) {
+      previewContainerRef.current.innerHTML = "";
+      previewContainerRef.current.appendChild(previewElement);
     }
-    setIsDownloading(false);
+  };
+
+  /**
+   * Starts the senseBox camera and waits for the first image.
+   * @param {Object} [options]
+   * @param {SerialPort} [options.port] Open this port instead of the picker.
+   * @param {boolean} [options.allowFlash] Upload the camera sketch if no image
+   *   arrives (disabled right after an upload to avoid a loop).
+   */
+  const startSenseBoxCamera = async ({ port, allowFlash = true } = {}) => {
+    setSenseBoxPhase("waitingForData");
+    setSerialError(null);
+    setVideoLoading(true);
+    setConnectionStatus(ConnectionStatus.CONNECTING);
+
+    try {
+      await startCameraSource(port ? { port } : undefined);
+    } catch (error) {
+      console.error("Camera error:", error);
+      setVideoLoading(false);
+      setSenseBoxPhase("idle");
+      setConnectionStatus(ConnectionStatus.ERROR);
+      setSerialError({
+        type: error.type || ErrorTypes.CONNECTION_FAILED,
+        message: error.message,
+      });
+      return;
+    }
+    attachPreview();
+
+    waitingForImageRef.current = true;
+    const result = await waitForSerialFrame(port ? 8000 : 4000);
+    waitingForImageRef.current = false;
+    if (result === "frame") {
+      setVideoLoading(false);
+      setConnectionStatus(ConnectionStatus.CONNECTED);
+      setSenseBoxPhase("idle");
+      return;
+    }
+
+    // No image: release the port (for the flash tool or a later retry).
+    const cameraPort = await releaseSerialPort();
+    setVideoLoading(false);
+    setConnectionStatus(ConnectionStatus.DISCONNECTED);
+    if (previewContainerRef.current) previewContainerRef.current.innerHTML = "";
+
+    if (result === "captureFailed") {
+      // The camera sketch is running but the camera can't take pictures –
+      // uploading the sketch again is offered as an option, not done.
+      setSenseBoxPhase("idle");
+      setConnectionStatus(ConnectionStatus.ERROR);
+      setSerialError({ type: ErrorTypes.CAPTURE_FAILED });
+      return;
+    }
+
+    if (!allowFlash || !isBoardPort(cameraPort)) {
+      // Still no image right after an upload, or not a senseBox MCU Eye:
+      // don't flash (again), report as a regular connection error.
+      setSenseBoxPhase("idle");
+      setConnectionStatus(ConnectionStatus.ERROR);
+      setSerialError({
+        type: ErrorTypes.CONNECTION_FAILED,
+        message:
+          "Connection to senseBox MCU Eye camera could not be established",
+      });
+      return;
+    }
+    await flashCameraSketch(cameraPort);
+  };
+
+  // After the upload the board reboots into the camera sketch. If the browser
+  // already has permission for its port, the camera starts automatically;
+  // otherwise the user has to click "Start senseBox camera" once more.
+  const restartCameraAfterFlash = async () => {
+    setSenseBoxPhase("restarting");
+    const port = await waitForCameraPort();
+    if (!port) {
+      setSenseBoxPhase("done");
+      return;
+    }
+    // Give the freshly enumerated USB device a moment before opening it.
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await startSenseBoxCamera({ port, allowFlash: false });
+  };
+
+  // First upload only: grant access to the re-enumerated bootloader port.
+  const handleGrantBootloader = async () => {
+    setSerialError(null);
+    await grantBootloader();
+  };
+
+  const handleSenseBoxCameraClick = async () => {
+    if (sourceType === "serial" && isCameraActive) {
+      stopCamera();
+      return;
+    }
+    if (isCameraActive) await stopCamera();
+    await selectSource("serial");
+    await startSenseBoxCamera();
+    triggerWebcam();
+  };
+
+  // "Try again" / "Reconnect" in the SerialErrorHandler: while waiting for the
+  // bootloader port, ask for it again; otherwise run the whole start flow
+  // again (incl. uploading the camera sketch if no image arrives).
+  const handleSerialRetry = async () => {
+    if (senseBoxPhase === "grant") {
+      await handleGrantBootloader();
+      return;
+    }
+    setSerialError(null);
+    if (isCameraActive) await stopCamera();
+    await startSenseBoxCamera();
+  };
+
+  // "Flash the camera capture sketch" in the Capture Failed error: start the
+  // flash cycle on the already permitted MCU Eye port (or ask for it).
+  const handleFlashCaptureSketch = async () => {
+    setSerialError(null);
+    setConnectionStatus(ConnectionStatus.CONNECTING);
+    const started = await flashPermittedDevice();
+    if (!started) {
+      setConnectionStatus(ConnectionStatus.ERROR);
+      setSerialError({
+        type: ErrorTypes.CONNECTION_FAILED,
+        message: "No serial port selected",
+      });
+    }
+  };
+
+  const senseBoxBusyLabel = {
+    waitingForData: t.errors.waitingForImage,
+    connecting: t.errors.flashConnecting,
+    flashing: t.errors.flashUploading,
+    restarting: t.errors.flashRestarting,
+  }[senseBoxPhase];
+
+  const handleDownloadCollectSketch = async () => {
+    setIsDownloadingCollect(true);
+    const result = await downloadCollectFirmware(
+      "sensebox_mcu_eye",
+      classes.map((cls) => cls.name),
+    );
+    if (!result.success) {
+      alert(`Failed to download collect sketch: ${result.error}`);
+    }
+    setIsDownloadingCollect(false);
   };
 
   const addClass = useCallback(() => {
@@ -359,6 +597,7 @@ const ModelTrainer = ({
       setClasses((prev) => [...prev, newClass]);
       setNewClassName("");
       setShowAddDialog(false);
+      setUploadError(null);
     }
   }, [newClassName, classes, onTrainingError, t]);
 
@@ -407,8 +646,8 @@ const ModelTrainer = ({
       try {
         const imageUrl = await captureFrame();
         if (imageUrl) {
-          setClasses((prev) =>
-            prev.map((cls) =>
+          setClasses((prev) => {
+            const newClasses = prev.map((cls) =>
               cls.id === classId
                 ? {
                     ...cls,
@@ -418,8 +657,13 @@ const ModelTrainer = ({
                     ],
                   }
                 : cls,
-            ),
-          );
+            );
+            requestAnimationFrame(() => {
+              const el = sampleScrollRefs.current[classId];
+              if (el) el.scrollTop = el.scrollHeight;
+            });
+            return newClasses;
+          });
         }
       } catch (error) {
         console.error("Error capturing image:", error);
@@ -427,19 +671,6 @@ const ModelTrainer = ({
     },
     [isCameraActive, captureFrame],
   );
-
-  const startCapturing = useCallback(
-    (classId) => {
-      captureImage(classId);
-      const intervalId = setInterval(() => captureImage(classId), 100);
-      return intervalId;
-    },
-    [captureImage],
-  );
-
-  const stopCapturing = useCallback((intervalId) => {
-    if (intervalId) clearInterval(intervalId);
-  }, []);
 
   useEffect(() => {
     return () => {
@@ -460,6 +691,18 @@ const ModelTrainer = ({
     );
   }, []);
 
+  // Lightbox hook for image navigation
+  const {
+    lightboxOpen,
+    lightboxSrc,
+    currentClassSamples,
+    openLightbox,
+    closeLightbox,
+    showPrev,
+    showNext,
+    removeCurrentLightboxImage,
+  } = useLightbox(classes, isWideScreen, removeSample);
+
   const trainModel = useCallback(async () => {
     if (classes.length < 2 || classes.some((cls) => cls.samples.length < 2)) {
       onTrainingError(t.training.errorInsufficientData);
@@ -478,6 +721,7 @@ const ModelTrainer = ({
         onTrainingError,
         onModelTrained,
         trainingSettings,
+        () => {}, // Preliminary model callback - updates hook state only
       );
       trainedClassesSnapshotRef.current = getClassesSnapshot(classes);
     } finally {
@@ -499,6 +743,71 @@ const ModelTrainer = ({
   const resetSettings = useCallback(() => {
     setTrainingSettings(DEFAULT_TRAINING_SETTINGS);
   }, []);
+
+  // ─── Download/Upload Training Data ─────────────────────────────────────────
+  const handleDownloadTrainingData = useCallback(async () => {
+    await downloadTrainingData(classes, "image", async (sample, index) => {
+      const response = await fetch(sample.url);
+      const blob = await response.blob();
+      return {
+        filename: `sample_${index + 1}.jpg`,
+        data: blob,
+      };
+    });
+  }, [classes]);
+
+  const handleUploadTrainingData = useCallback(
+    async (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const { classes: newClasses, error } = await parseTrainingDataZip(
+        file,
+        async (zipEntry, className, fileName) => {
+          // Accept jpg, jpeg, png, gif, webp
+          if (!/\.(jpe?g|png|gif|webp)$/i.test(fileName)) return null;
+
+          const blob = await zipEntry.async("blob");
+          const imageUrl = URL.createObjectURL(blob);
+
+          return {
+            isValid: true,
+            sample: {
+              id: Date.now() + Math.random(),
+              url: imageUrl,
+            },
+          };
+        },
+      );
+
+      if (error === "NO_VALID_DATA") {
+        setUploadError(
+          t.training?.errorWrongFormat ||
+            "This zip file does not contain valid image training data. Please upload an image training zip file.",
+        );
+        return;
+      }
+
+      if (error === "INVALID_ZIP") {
+        setUploadError(
+          t.training?.errorInvalidZip ||
+            "Invalid zip file format. Please make sure to upload an image training zip file.",
+        );
+        return;
+      }
+
+      if (newClasses) {
+        setClasses(newClasses);
+        setUploadError(null);
+      }
+
+      // Reset input
+      event.target.value = "";
+    },
+    [setClasses, t],
+  );
+
+  const hasClassesWithSamples = classes.some((cls) => cls.samples.length > 0);
 
   return (
     <Box>
@@ -533,7 +842,7 @@ const ModelTrainer = ({
                     triggerWebcam();
                   }
                 }}
-                disabled={disabled}
+                disabled={disabled || isSenseBoxBusy || isGrantingPort}
                 color={
                   sourceType === "webcam" && isCameraActive
                     ? "secondary"
@@ -562,58 +871,78 @@ const ModelTrainer = ({
                 disableHoverListener={!(disabled || !browserCompatible)}
               >
                 <span>
-                  <Button
-                    variant="contained"
-                    startIcon={<CameraIcon />}
-                    onClick={async () => {
-                      if (sourceType === "serial" && isCameraActive) {
-                        stopCamera();
-                      } else {
-                        if (isCameraActive) stopCamera();
-                        await selectSource("serial");
-                        await startCamera();
-                        triggerWebcam();
+                  {senseBoxPhase === "grant" ? (
+                    <Button
+                      variant="contained"
+                      color="warning"
+                      startIcon={<UsbIcon />}
+                      onClick={handleGrantBootloader}
+                      disabled={disabled || isGrantingPort}
+                    >
+                      {t.errors.flashGrantBootloader}
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      startIcon={
+                        isSenseBoxBusy ? (
+                          <CircularProgress size={16} color="inherit" />
+                        ) : (
+                          <CameraIcon />
+                        )
                       }
-                    }}
-                    disabled={disabled || !browserCompatible}
-                    color={
-                      sourceType === "serial" && isCameraActive
-                        ? "secondary"
-                        : "primary"
-                    }
-                  >
-                    {sourceType === "serial" && isCameraActive
-                      ? t.training.stopSenseBoxCamera
-                      : t.training.startSenseBoxCamera}
-                  </Button>
+                      onClick={handleSenseBoxCameraClick}
+                      disabled={
+                        disabled || !browserCompatible || isSenseBoxBusy
+                      }
+                      color={
+                        sourceType === "serial" && isCameraActive
+                          ? "secondary"
+                          : "primary"
+                      }
+                    >
+                      {isSenseBoxBusy
+                        ? senseBoxBusyLabel
+                        : sourceType === "serial" && isCameraActive
+                          ? t.training.stopSenseBoxCamera
+                          : t.training.startSenseBoxCamera}
+                    </Button>
+                  )}
                 </span>
               </Tooltip>
-
-              {!isCameraActive && !serialError && browserCompatible && (
-                <Button
-                  variant="outlined"
-                  startIcon={
-                    isDownloading ? (
-                      <CircularProgress size={16} />
-                    ) : (
-                      <DownloadIcon />
-                    )
-                  }
-                  onClick={handleDownloadFirmware}
-                  disabled={isDownloading || disabled || !browserCompatible}
-                >
-                  {t.errors.downloadFirmware}
-                </Button>
-              )}
             </Box>
+
+            {senseBoxPhase === "grant" && !serialError && (
+              <Alert severity="info" sx={{ mb: 2 }}>
+                {t.errors.flashGrantBootloaderHint.replace(
+                  "{name}",
+                  flashBootloaderName,
+                )}
+              </Alert>
+            )}
+
+            {senseBoxPhase === "flashing" && (
+              <Box sx={{ mb: 2 }}>
+                <LinearProgress
+                  variant={flashProgress > 0 ? "determinate" : "indeterminate"}
+                  value={flashProgress}
+                />
+                {flashProgress > 0 && (
+                  <Typography variant="caption" color="text.secondary">
+                    {flashProgress}%
+                  </Typography>
+                )}
+              </Box>
+            )}
 
             {sourceType === "serial" && serialError && (
               <Box sx={{ mb: 3 }}>
                 <SerialErrorHandler
                   error={serialError}
                   connectionStatus={connectionStatus}
-                  onRetry={handleReconnect}
-                  onReconnect={handleReconnect}
+                  onRetry={handleSerialRetry}
+                  onReconnect={handleSerialRetry}
+                  onFlashFirmware={handleFlashCaptureSketch}
                   onDismiss={handleDismissError}
                   showStatus={false}
                 />
@@ -630,11 +959,6 @@ const ModelTrainer = ({
                   alignItems: "center",
                 }}
               >
-                {videoLoading && (
-                  <Typography variant="body2" sx={{ mb: 2 }}>
-                    {t.training.loadingCamera}
-                  </Typography>
-                )}
                 <Box
                   sx={{
                     position: "relative",
@@ -681,7 +1005,7 @@ const ModelTrainer = ({
                 {trainedModel && (
                   <Box sx={{ mt: 2, width: "100%", maxWidth: "400px" }}>
                     {predictions.length > 0 && (
-                      <Paper sx={{ p: 1.5, bgcolor: "grey.50" }}>
+                      <Paper sx={{ p: 1.5, bgcolor: "background.grey" }}>
                         <Box
                           sx={{
                             display: "flex",
@@ -749,22 +1073,41 @@ const ModelTrainer = ({
                       </Paper>
                     )}
 
-                    {isCameraActive && predictions.length === 0 && (
-                      <Paper
+                    {trainedModel &&
+                      isCameraActive &&
+                      predictions.length === 0 && (
+                        <Paper
+                          sx={{
+                            p: 2,
+                            textAlign: "center",
+                            border: "1px dashed #ccc",
+                            bgcolor: "background.grey",
+                          }}
+                        >
+                          <Typography variant="body2" color="text.secondary">
+                            {t.training.analyzing}
+                          </Typography>
+                        </Paper>
+                      )}
+
+                    {isPreliminaryModel && isTraining && (
+                      <Box
                         sx={{
-                          p: 2,
-                          textAlign: "center",
-                          border: "1px dashed #ccc",
-                          bgcolor: "grey.50",
+                          mt: 1,
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 1,
+                          color: "info.main",
                         }}
                       >
-                        <Typography variant="body2" color="text.secondary">
-                          {t.training.analyzing}
+                        <CircularProgress size={16} />
+                        <Typography variant="caption">
+                          {t.training.preliminaryModelWarning}
                         </Typography>
-                      </Paper>
+                      </Box>
                     )}
 
-                    {isDataStale && (
+                    {isDataStale && !isTraining && (
                       <Box
                         sx={{
                           mt: 1,
@@ -791,7 +1134,20 @@ const ModelTrainer = ({
           <Grid container spacing={2} sx={{ mb: 3 }}>
             {classes.map((cls) => (
               <Grid item xs={12} key={cls.id}>
-                <Card>
+                <Card
+                  onClick={(e) => {
+                    if (!isWideScreen) return;
+                    if (
+                      !e.target.closest("button") &&
+                      !e.target.closest("input") &&
+                      !e.target.closest(".MuiTypography-root") &&
+                      !e.target.closest("img")
+                    ) {
+                      setExpandedClassId(cls.id);
+                    }
+                  }}
+                  sx={{ cursor: "pointer", "&:hover": { boxShadow: 4 } }}
+                >
                   <CardContent>
                     <Box
                       sx={{
@@ -801,7 +1157,8 @@ const ModelTrainer = ({
                         mb: 2,
                       }}
                     >
-                      {editingClassId === cls.id ? (
+                      {editingClassId === cls.id &&
+                      expandedClassId !== cls.id ? (
                         <TextField
                           autoFocus
                           size="small"
@@ -876,7 +1233,8 @@ const ModelTrainer = ({
                         border: "1px solid",
                         borderColor: "divider",
                         borderRadius: 1,
-                        bgcolor: "grey.50",
+                        bgcolor: "background.grey",
+                        marginBottom: 0,
                       }}
                     >
                       {cls.samples.map((sample) => (
@@ -887,11 +1245,13 @@ const ModelTrainer = ({
                           <img
                             src={sample.url}
                             alt={`Sample for ${cls.name}`}
+                            onClick={(e) => openLightbox(sample.url, e)}
                             style={{
                               width: 60,
                               height: 60,
                               objectFit: "cover",
                               borderRadius: 4,
+                              cursor: "pointer",
                             }}
                           />
                           <IconButton
@@ -926,41 +1286,15 @@ const ModelTrainer = ({
                     >
                       <span>
                         <Button
-                          size="small"
+                          variant="contained"
+                          size="medium"
                           startIcon={<CameraIcon />}
-                          onMouseDown={(e) => {
-                            e.preventDefault();
-                            const intervalId = startCapturing(cls.id);
-                            e.currentTarget.dataset.intervalId = intervalId;
-                          }}
-                          onMouseUp={(e) => {
-                            e.preventDefault();
-                            stopCapturing(
-                              parseInt(e.currentTarget.dataset.intervalId),
-                            );
-                          }}
-                          onMouseLeave={(e) => {
-                            e.preventDefault();
-                            if (e.currentTarget.dataset.intervalId) {
-                              stopCapturing(
-                                parseInt(e.currentTarget.dataset.intervalId),
-                              );
-                            }
-                          }}
-                          onTouchStart={(e) => {
-                            e.preventDefault();
-                            const intervalId = startCapturing(cls.id);
-                            e.currentTarget.dataset.intervalId = intervalId;
-                          }}
-                          onTouchEnd={(e) => {
-                            e.preventDefault();
-                            stopCapturing(
-                              parseInt(e.currentTarget.dataset.intervalId),
-                            );
+                          onClick={() => {
+                            captureImage(cls.id);
                           }}
                           disabled={!isCameraActive || disabled}
                         >
-                          {t.training.holdToCapture}
+                          {t.training.captureImage}
                         </Button>
                       </span>
                     </Tooltip>
@@ -979,26 +1313,132 @@ const ModelTrainer = ({
               gap: 2,
             }}
           >
-            {classes.length < 4 && (
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                <Button
-                  variant="contained"
-                  startIcon={<AddIcon />}
-                  onClick={() => setShowAddDialog(true)}
-                  disabled={disabled}
+            {/* Add Class Button with Data Menu Dropdown */}
+            <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+              <Button
+                variant="contained"
+                startIcon={<AddIcon />}
+                onClick={() => setShowAddDialog(true)}
+                disabled={classes.length >= 4 || disabled}
+                sx={{
+                  borderRadius: "4px 0 0 4px",
+                  height: "42px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                {t.training.addClass}
+              </Button>
+              <Button
+                variant="contained"
+                size="small"
+                onClick={(e) => setDataMenuAnchor(e.currentTarget)}
+                disabled={disabled}
+                sx={{
+                  minWidth: "auto",
+                  marginLeft: "-2px",
+                  height: "42px",
+                  padding: "0 6px",
+                  borderRadius: "0 4px 4px 0",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                {isDownloadingCollect ? (
+                  <CircularProgress size={16} sx={{ color: "white" }} />
+                ) : (
+                  <MoreVertIcon fontSize="small" />
+                )}
+              </Button>
+              <Menu
+                anchorEl={dataMenuAnchor}
+                open={Boolean(dataMenuAnchor)}
+                onClose={() => setDataMenuAnchor(null)}
+              >
+                <Tooltip
+                  title={
+                    !hasClassesWithSamples
+                      ? t.training.tooltip.captureImagesFirst
+                      : ""
+                  }
+                  arrow
+                  disableHoverListener={hasClassesWithSamples}
                 >
-                  {t.training.addClass}
-                </Button>
-                <HelpButton
+                  <span>
+                    <MenuItem
+                      onClick={() => {
+                        handleDownloadTrainingData();
+                        setDataMenuAnchor(null);
+                      }}
+                      disabled={!hasClassesWithSamples}
+                    >
+                      <DownloadIcon fontSize="small" sx={{ mr: 1 }} />
+                      {t.training?.downloadData || "Download"}
+                    </MenuItem>
+                  </span>
+                </Tooltip>
+                <MenuItem
                   onClick={() => {
-                    markAddClassSeen();
-                    onOpenHelp && onOpenHelp("image/addClass");
+                    setDataMenuAnchor(null);
+                    uploadInputRef.current?.click();
                   }}
-                  isBlinking={addClassBlinking}
-                  tooltip={t.training.tooltip.helpClasses}
-                />
-              </Box>
+                >
+                  <UploadIcon fontSize="small" sx={{ mr: 1 }} />
+                  {t.training?.uploadData || "Upload"}
+                </MenuItem>
+                <Tooltip
+                  title={
+                    classes.length <= 1
+                      ? t.training.tooltip.minClassesRequired
+                      : ""
+                  }
+                  arrow
+                  disableHoverListener={!(classes.length <= 1)}
+                >
+                  <span>
+                    <MenuItem
+                      onClick={() => {
+                        handleDownloadCollectSketch();
+                        setDataMenuAnchor(null);
+                      }}
+                      disabled={
+                        classes.length <= 1 || disabled || isDownloadingCollect
+                      }
+                    >
+                      {isDownloadingCollect ? (
+                        <CircularProgress size={16} sx={{ mr: 1 }} />
+                      ) : (
+                        <DownloadIcon fontSize="small" sx={{ mr: 1 }} />
+                      )}
+                      {t.training?.downloadTrainScript ||
+                        "Download Collect-Sketch"}
+                    </MenuItem>
+                  </span>
+                </Tooltip>
+              </Menu>
+              <HelpButton
+                onClick={() => {
+                  markAddClassSeen();
+                  onOpenHelp && onOpenHelp("image/addClass");
+                }}
+                isBlinking={addClassBlinking}
+                tooltip={t.training.tooltip.helpClasses}
+              />
+            </Box>
+
+            {/* Upload Error Message */}
+            {uploadError && (
+              <Alert
+                severity="error"
+                onClose={() => setUploadError(null)}
+                sx={{ width: "100%", mb: 2 }}
+              >
+                {uploadError}
+              </Alert>
             )}
+
             <Divider sx={{ width: "100%", my: 1 }} />
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               <Tooltip
@@ -1030,6 +1470,13 @@ const ModelTrainer = ({
                       classes.length < 2 ||
                       classes.some((cls) => cls.samples.length < 2)
                     }
+                    sx={{
+                      borderRadius: "4px 0 0 4px",
+                      height: "42px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
                   >
                     {t.training.trainModel}
                   </Button>
@@ -1037,14 +1484,24 @@ const ModelTrainer = ({
               </Tooltip>
 
               <Tooltip title={t.training.tooltip.trainingSettings} arrow>
-                <IconButton
+                <Button
+                  variant="contained"
+                  size="large"
                   onClick={() => setShowSettingsPanel((prev) => !prev)}
                   disabled={disabled || isTraining}
-                  size="small"
-                  color={showSettingsPanel ? "primary" : "default"}
+                  sx={{
+                    minWidth: "auto",
+                    marginLeft: "-6px",
+                    height: "42px",
+                    padding: "0 6px",
+                    borderRadius: "0 4px 4px 0",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
                 >
-                  <MoreVertIcon />
-                </IconButton>
+                  <MoreVertIcon fontSize="small" />
+                </Button>
               </Tooltip>
 
               <HelpButton
@@ -1071,7 +1528,7 @@ const ModelTrainer = ({
                       onOpenHelp && onOpenHelp("image/trainingSettings");
                     }}
                     isBlinking={settingsBlinking}
-                    tooltip={t.training.tooltip.trainingSettings}
+                    tooltip={t.training.tooltip.helpTrainingSettings}
                   />
                 </Box>
                 <Box
@@ -1108,7 +1565,7 @@ const ModelTrainer = ({
                     onChange={(e) => {
                       const value = Math.max(
                         0.000001,
-                        Math.min(0.1, parseFloat(e.target.value) || 0.0001),
+                        Math.min(0.1, parseFloat(e.target.value) || 0.001),
                       );
                       setTrainingSettings((prev) => ({
                         ...prev,
@@ -1219,6 +1676,22 @@ const ModelTrainer = ({
         />
       )}
 
+      <ExpandedClassDialog
+        open={expandedClassId !== null}
+        cls={classes.find((c) => c.id === expandedClassId)}
+        onClose={() => setExpandedClassId(null)}
+        editingClassId={editingClassId}
+        editingClassName={editingClassName}
+        onStartEditing={startEditingClass}
+        onSaveRename={saveClassRename}
+        onCancelEditing={cancelEditingClass}
+        sampleScrollRefs={sampleScrollRefs}
+        openLightbox={openLightbox}
+        removeSample={removeSample}
+        disabled={disabled}
+        t={t}
+      />
+
       <Dialog open={showAddDialog} onClose={() => setShowAddDialog(false)}>
         <DialogTitle>{t.training.addNewClass}</DialogTitle>
         <DialogContent>
@@ -1273,6 +1746,24 @@ const ModelTrainer = ({
           </Tooltip>
         </DialogActions>
       </Dialog>
+
+      <LightboxComponent
+        open={lightboxOpen}
+        src={lightboxSrc}
+        flatSamples={currentClassSamples}
+        onClose={closeLightbox}
+        onPrev={showPrev}
+        onNext={showNext}
+        onDelete={removeCurrentLightboxImage}
+      />
+
+      <input
+        ref={uploadInputRef}
+        type="file"
+        accept=".zip"
+        hidden
+        onChange={handleUploadTrainingData}
+      />
     </Box>
   );
 };

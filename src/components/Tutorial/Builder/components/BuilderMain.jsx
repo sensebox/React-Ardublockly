@@ -11,6 +11,8 @@ import WhatNext from "./EditorCards/WhatNext";
 import QuestionList from "./EditorCards/QuestionList";
 import BlocklyExample from "./EditorCards/BlocklyExample";
 import H5PEditor from "./EditorCards/H5PEditor";
+import CriteriaConfigEditor from "./EditorCards/CriteriaConfigEditor";
+import EvaluationConfigEditor from "./EditorCards/EvaluationConfigEditor";
 
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
@@ -28,6 +30,7 @@ const BuilderMain = ({
   setSteps,
   activeStep,
   selectedHardware,
+  customHardware,
   learnings,
   setLearnings,
 }) => {
@@ -84,6 +87,7 @@ const BuilderMain = ({
             <BlocklyExample
               index={activeStep}
               value={currentStep.xml || ""}
+              board={currentStep.board}
               updateStepFields={updateStepFields}
             />
           )}
@@ -92,6 +96,7 @@ const BuilderMain = ({
             <BlocklyExample
               index={activeStep}
               value={currentStep.xml || ""}
+              board={currentStep.board}
               updateStepFields={updateStepFields}
             />
           )}
@@ -109,6 +114,27 @@ const BuilderMain = ({
             <QuestionList
               questions={currentStep.questionData || []}
               setQuestions={(value) => updateStepField("questionData", value)}
+            />
+          )}
+
+          {/* Evaluation */}
+          {currentStep.type === "evaluationPreparation" && (
+            <CriteriaConfigEditor
+              step={currentStep}
+              setCriteriaConfig={(value) =>
+                updateStepField("criteriaConfig", value)
+              }
+            />
+          )}
+
+          {currentStep.type === "evaluation" && (
+            <EvaluationConfigEditor
+              step={currentStep}
+              steps={steps}
+              activeStep={activeStep}
+              setEvaluationConfig={(value) =>
+                updateStepField("evaluationConfig", value)
+              }
             />
           )}
 
@@ -139,7 +165,10 @@ const BuilderMain = ({
                 >
                   {selectedHardware.map((sensor) => (
                     <Box key={sensor} sx={{ width: "100%", maxWidth: 180 }}>
-                      <HardwareCard component={sensor} />
+                      <HardwareCard
+                        component={sensor}
+                        customHardware={customHardware}
+                      />
                     </Box>
                   ))}
                 </Box>

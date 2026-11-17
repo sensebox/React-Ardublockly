@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -9,14 +9,17 @@ import { useTutorialBuilder } from "./hooks/useTutorialBuilder";
 import { useTutorialAutosave } from "./hooks/useTutorialAutosave";
 import { useExistingTutorial } from "./hooks/useExistingTutorial";
 import { buildTutorialPayload } from "./utils/tutorialPayload";
-import { validateRequiredFields } from "./utils/validation";
+import {
+  findEvaluationStepsWithoutPreparation,
+  validateRequiredFields,
+} from "./utils/validation";
 import { saveTutorial as saveTutorialRequest } from "./services/tutorial.service";
 import BuilderSidebar from "./components/BuilderSidebar";
 import BuilderMain from "./components/BuilderMain";
 import SaveStatusDialog from "./components/SaveStatusDialog";
 
 const BuilderPage = () => {
-  const history = useNavigate();
+  const navigate = useNavigate();
   const location = useLocation();
 
   const token = useSelector((state) => state.auth.token);
@@ -43,6 +46,7 @@ const BuilderPage = () => {
     steps,
     difficulty,
     selectedHardware,
+    customHardware,
     learnings,
     subjects,
     topics,
@@ -62,11 +66,15 @@ const BuilderPage = () => {
   const [savingState, setSavingState] = useState("idle");
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
   const [savedTutorialId, setSavedTutorialId] = useState(null);
+  const [validationErrors, setValidationErrors] = useState({
+    missingFields: [],
+    invalidEvaluationSteps: [],
+  });
 
   /**
    * 🔥 Autosave Hook
    */
-  useTutorialAutosave({
+  const autosaveStatus = useTutorialAutosave({
     enabled: autosaveEnabled,
     state,
     token,
@@ -82,9 +90,11 @@ const BuilderPage = () => {
    * 📤 Manuelles Speichern
    */
   const saveTutorial = async () => {
-    const missing = validateRequiredFields({ title, subtitle });
+    const missingFields = validateRequiredFields({ title, subtitle });
+    const invalidEvaluationSteps = findEvaluationStepsWithoutPreparation(steps);
 
-    if (missing.length > 0) {
+    if (missingFields.length > 0 || invalidEvaluationSteps.length > 0) {
+      setValidationErrors({ missingFields, invalidEvaluationSteps });
       setSavingState("missing");
       return;
     }
@@ -112,6 +122,18 @@ const BuilderPage = () => {
       setSaveButtonDisabled(false);
     }
   };
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "s") {
+        e.preventDefault();
+        saveTutorial();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [saveTutorial]);
 
   /**
    * ⏳ Loading State
@@ -154,6 +176,7 @@ const BuilderPage = () => {
           setActiveStep={setActiveStep}
           autosaveEnabled={autosaveEnabled}
           setAutosaveEnabled={setAutosaveEnabled}
+          autosaveStatus={autosaveStatus}
         >
           <Button
             variant="contained"
@@ -184,6 +207,7 @@ const BuilderPage = () => {
           setSteps={actions.setSteps}
           activeStep={activeStep}
           selectedHardware={selectedHardware}
+          customHardware={customHardware}
           learnings={learnings}
           setLearnings={actions.setLearnings}
         />
@@ -192,9 +216,10 @@ const BuilderPage = () => {
       {/* 💾 Save Dialog */}
       <SaveStatusDialog
         savingState={savingState}
+        validationErrors={validationErrors}
         onClose={() => setSavingState("idle")}
         savedTutorialId={savedTutorialId}
-        history={history}
+        navigate={navigate}
       />
     </Box>
   );

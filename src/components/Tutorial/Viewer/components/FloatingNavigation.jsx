@@ -1,20 +1,23 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Box, IconButton, Tooltip, Typography } from "@mui/material";
-import { ChevronLeft, ChevronRight, QuestionMark } from "@mui/icons-material";
+import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { useTutorialViewer } from "../hooks/useTutorialViewer";
 
-const FloatingNavigation = ({ tutorialId }) => {
-  const [allStepsFinished, setAllStepsFinished] = React.useState(true);
-
+const FloatingNavigation = ({ tutorialId, nextStepDisabled = false }) => {
   const { tutorial, currentStep, activeStep, nextStep, previousStep } =
     useTutorialViewer(tutorialId);
+
+  if (!currentStep || !tutorial?.steps) {
+    return null;
+  }
+
   const currentStepIndex = tutorial.steps.findIndex(
     (step) => step._id === currentStep._id,
   );
-  console.log(currentStepIndex);
 
-  const isFirstStep = currentStep === 0;
-  const isLastStep = currentStep === tutorial.steps.length - 2;
+  const isFirstStep = currentStepIndex === 0;
+  const isLastStep = currentStepIndex === tutorial.steps.length - 1;
+  const isNextDisabled = isLastStep || nextStepDisabled;
 
   return (
     <Box
@@ -47,30 +50,32 @@ const FloatingNavigation = ({ tutorialId }) => {
           },
         }}
       >
-        <IconButton
-          onClick={previousStep}
-          disabled={isFirstStep}
-          aria-label="Vorheriger Schritt"
-          sx={{
-            width: 48,
-            height: 48,
-            borderRadius: "50%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            transition: "all 200ms ease-out",
-            bgcolor: isFirstStep ? "grey.300" : "common.white",
-            color: isFirstStep ? "grey.500" : "text.primary",
-            boxShadow: isFirstStep ? "none" : 2,
-            "&:hover": {
-              boxShadow: isFirstStep ? "none" : 3,
-              transform: isFirstStep ? "none" : "scale(1.1)",
-            },
-            cursor: isFirstStep ? "not-allowed" : "pointer",
-          }}
-        >
-          <ChevronLeft sx={{ fontSize: 20 }} />
-        </IconButton>
+        <span>
+          <IconButton
+            onClick={previousStep}
+            disabled={isFirstStep}
+            aria-label="Vorheriger Schritt"
+            sx={{
+              width: 48,
+              height: 48,
+              borderRadius: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              transition: "all 200ms ease-out",
+              bgcolor: isFirstStep ? "grey.300" : "common.white",
+              color: isFirstStep ? "grey.500" : "text.primary",
+              boxShadow: isFirstStep ? "none" : 2,
+              "&:hover": {
+                boxShadow: isFirstStep ? "none" : 3,
+                transform: isFirstStep ? "none" : "scale(1.1)",
+              },
+              cursor: isFirstStep ? "not-allowed" : "pointer",
+            }}
+          >
+            <ChevronLeft sx={{ fontSize: 20 }} />
+          </IconButton>
+        </span>
       </Tooltip>
 
       {/* Schrittzähler */}
@@ -89,8 +94,8 @@ const FloatingNavigation = ({ tutorialId }) => {
       <Tooltip
         placement="top"
         title={
-          isLastStep && !allStepsFinished
-            ? "Bitte schließe alle Schritte ab, bevor du das Tutorial beendest."
+          !isLastStep && nextStepDisabled
+            ? "Bitte beantworte alle Fragen, bevor du fortfährst."
             : "Zum nächsten Schritt"
         }
         slotProps={{
@@ -109,44 +114,33 @@ const FloatingNavigation = ({ tutorialId }) => {
           },
         }}
       >
-        <IconButton
-          onClick={
-            isLastStep && !allStepsFinished
-              ? () => console.log("Kein Fortschritt möglich")
-              : nextStep
-          }
-          aria-label="Nächster Schritt"
-          sx={{
-            width: 48,
-            height: 48,
-            borderRadius: "50%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            transition: "all 200ms ease-out",
-            bgcolor:
-              isLastStep && !allStepsFinished
-                ? "feedback.warning"
-                : "primary.main",
-            color: "white",
-            boxShadow: 2,
-            "&:hover": {
-              boxShadow: 3,
-              transform: "scale(1.1)",
-              bgcolor:
-                isLastStep && !allStepsFinished
-                  ? "feedback.warningDark"
-                  : "primary.dark",
-            },
-            cursor: "pointer",
-          }}
-        >
-          {isLastStep && !allStepsFinished ? (
-            <QuestionMark sx={{ fontSize: 20 }} />
-          ) : (
+        <span>
+          <IconButton
+            onClick={nextStep}
+            disabled={isNextDisabled}
+            aria-label="Nächster Schritt"
+            sx={{
+              width: 48,
+              height: 48,
+              borderRadius: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              transition: "all 200ms ease-out",
+              bgcolor: isNextDisabled ? "grey.300" : "primary.main",
+              color: isNextDisabled ? "grey.500" : "white",
+              boxShadow: isNextDisabled ? "none" : 2,
+              "&:hover": {
+                boxShadow: isNextDisabled ? "none" : 3,
+                transform: isNextDisabled ? "none" : "scale(1.1)",
+                bgcolor: isNextDisabled ? "grey.300" : "primary.dark",
+              },
+              cursor: isNextDisabled ? "not-allowed" : "pointer",
+            }}
+          >
             <ChevronRight sx={{ fontSize: 20 }} />
-          )}
-        </IconButton>
+          </IconButton>
+        </span>
       </Tooltip>
     </Box>
   );

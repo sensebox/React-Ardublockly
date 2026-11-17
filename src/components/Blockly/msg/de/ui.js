@@ -1,5 +1,37 @@
 // src/components/Blockly/msg/de/ui.js
 export const UI = {
+  // Variable creation dialog
+  typed_variable_title: "Variable erstellen",
+  typed_variable_intro:
+    "Eine Variable speichert einen Wert, den du in deinem Programm verwenden und verändern kannst.",
+  typed_variable_name: "Name der Variable",
+  typed_variable_placeholder: "z. B. temperatur",
+  typed_variable_hint:
+    "Wähle einen Namen, der beschreibt, was du speichern möchtest.",
+  typed_variable_type: "Was möchtest du speichern?",
+  typed_variable_typeHint:
+    "Wähle den passenden Datentyp. Für einen Zähler eignet sich eine ganze Zahl.",
+  typed_variable_create: "Variable erstellen",
+  typed_variable_cancel: "Abbrechen",
+  typed_variable_close: "Schließen",
+  typed_variable_invalid: "Bitte gib einen gültigen Namen ein.",
+  typed_variable_duplicate:
+    "Eine Variable mit diesem Namen existiert bereits. Wähle einen anderen Namen.",
+  typed_variable_int_label: "Ganze Zahl",
+  typed_variable_int_example: "Zum Zählen, z. B. 0, 1, 42",
+  typed_variable_long_label: "Große ganze Zahl",
+  typed_variable_long_example: "Für große Werte, z. B. 1000000",
+  typed_variable_float_label: "Kommazahl",
+  typed_variable_float_example: "Für Messwerte, z. B. 21,5",
+  typed_variable_String_label: "Text",
+  typed_variable_String_example: "Für Wörter und Sätze, z. B. Hallo",
+  typed_variable_char_label: "Einzelnes Zeichen",
+  typed_variable_char_example: "Ein Buchstabe oder Symbol, z. B. A",
+  typed_variable_boolean_label: "Wahr oder falsch",
+  typed_variable_boolean_example: "Für Zustände, z. B. Licht an oder aus",
+  typed_variable_bitmap_label: "Bild",
+  typed_variable_bitmap_example: "Für ein Pixelbild auf dem Display",
+
   /**
    * Toolbox
    */
@@ -13,7 +45,7 @@ export const UI = {
   toolbox_rtc: "RTC",
   toolbox_ntp: "NTP",
   toolbox_functions: "Funktionen",
-  my_toolbox_functions: "Meine Funktionen",
+  my_toolbox_functions: "Eigene Funktionen",
   toolbox_variables: "Variablen",
   toolbox_serial: "Seriell",
   toolbox_advanced: "Erweitert",
@@ -221,8 +253,9 @@ export const UI = {
   button_back: "Zurück",
   button_next: "nächster Schritt",
   button_tutorial_overview: "Tutorial Übersicht",
+  tutorial_reset_answers: "Tutorialfortschritt zurücksetzen",
   button_login: "Anmelden",
-  button_createVariable: "Typisierte Variable erstellen",
+  button_createVariable: "Variable erstellen",
 
   /**
    *
@@ -293,6 +326,29 @@ export const UI = {
   tutorials_hardware_here: "hier",
   tutorials_requirements:
     "Bevor du mit diesem Tutorial fortfährst solltest du folgende Tutorials erfolgreich abgeschlossen haben:",
+  tutorials_solution_submit: "Lösung einreichen",
+  tutorials_solution_no_code: "Es konnte kein Blockly-Code geladen werden.",
+  tutorials_solution_success_title: "Sehr gut!",
+  tutorials_solution_error_title: "Da fehlt noch was…",
+  tutorials_solution_show_help: "Hilfe anzeigen",
+  tutorials_solution_analysis: "Analyse:",
+  tutorials_solution_compile_hint:
+    "Du kannst den Programmcode jetzt kompilieren und live auf deiner senseBox testen!",
+  tutorials_criteria_default_title: "Deine Bewertungskriterien",
+  tutorials_criteria_subtitle_exact: "Lege %1 Kriterien fest.",
+  tutorials_criteria_subtitle_range: "Lege zwischen %1 und %2 Kriterien fest.",
+  tutorials_criteria_label: "Kriterium %1",
+  tutorials_criteria_delete: "Kriterium löschen",
+  tutorials_criteria_add: "Kriterium hinzufügen",
+  tutorials_evaluation_default_title: "Bewertung",
+  tutorials_evaluation_no_source:
+    "Für diese Bewertung wurde kein Schritt mit Bewertungskriterien gefunden.",
+  tutorials_evaluation_criteria_first:
+    "Lege zuerst deine Bewertungskriterien fest.",
+  tutorials_evaluation_to_criteria: "Zu den Kriterien",
+  tutorials_evaluation_title_label: "Titel der Bewertung",
+  tutorials_evaluation_delete: "Bewertung löschen",
+  tutorials_evaluation_add: "Bewertung hinzufügen",
 
   /**
    * Tutorial Builder
@@ -325,11 +381,16 @@ export const UI = {
   save_status_success: "Tutorial erfolgreich gespeichert!",
   save_status_to_overview: "Zur Übersicht",
   save_status_to_tutorial: "Zum Tutorial",
+  save_status_keep_editing: "Weiter bearbeiten",
   save_status_missing_fields: "Folgende Pflichtfelder fehlen noch:",
   save_status_missing_title: "Titel",
   save_status_missing_subtitle: "Untertitel",
   save_status_missing_understood: "Verstanden",
+  save_status_invalid_evaluation:
+    "Schritt %1 (Bewertung) braucht davor einen Schritt „Bewertungskriterien festlegen“.",
   save_status_error: "Beim Speichern ist ein Fehler aufgetreten.",
+  builder_autosave_paused_hint:
+    "Änderungen werden gerade nicht gespeichert. Bewertungsschritte brauchen davor einen Schritt „Bewertungskriterien festlegen“ (betroffene Schritte: %1).",
   save_status_error_hint: "Mögliche Gründe:",
   save_status_error_network: "Netzwerkverbindung überprüfen",
   save_status_error_validation: "Daten validieren und erneut versuchen",
@@ -380,6 +441,31 @@ export const UI = {
   navbar_account: "Konto",
   navbar_logout: "Abmelden",
   navbar_settings: "Einstellungen",
+
+  navbar_connect_device: "senseBox verbinden",
+  navbar_connecting_device: "Verbinde …",
+  navbar_device_connected: "senseBox verbunden",
+  navbar_select_bootloader: "Bootloader-Port wählen",
+  navbar_disconnect_device: "senseBox trennen",
+  upload_dialog_title: "Auf senseBox hochladen",
+  connect_dialog_title: "senseBox verbinden",
+  connect_dialog_intro:
+    "Mit „senseBox verbinden“ holt der Browser die nötigen Berechtigungen ein und bereitet dein Board vor, damit du anschließend direkt aus Blockly hochladen kannst.",
+  connect_dialog_pick_device: "Wähle im Auswahlfenster „%1“ aus.",
+  connect_dialog_pick_bootloader:
+    "Beim Bootloader-Schritt wähle anschließend „%1“ aus.",
+  connect_dialog_button: "Verbinden",
+  connect_dialog_working: "Verbinde und bereite Board vor …",
+  connect_dialog_grant_title: "Bootloader-Berechtigung",
+  connect_dialog_grant_text:
+    "Das Board befindet sich jetzt im Download-Modus und meldet sich als neues USB-Gerät. Bitte wähle einmalig „%1“ aus, um die Berechtigung zu erteilen.",
+  connect_dialog_grant_button: "%1 auswählen",
+  connect_dialog_done_title: "Gerät verbunden!",
+  connect_dialog_done_text:
+    "Drücke jetzt einfach den Kompilieren-Button, um direkt aus Blockly hochzuladen.",
+  connect_dialog_error_title: "Verbindung fehlgeschlagen",
+  connect_dialog_retry: "Erneut versuchen",
+  connect_dialog_close: "Schließen",
 
   /**
    * Codeviewer
@@ -469,6 +555,7 @@ export const UI = {
   compile_overlay_code_compiled: "Code wurde kompiliert!",
   compile_overlay_start_transfer: "Starte die Übertragung",
   compile_overlay_close: "Schließen",
+  compile_overlay_cancel: "Kompilieren abbrechen",
   compile_overlay_head: "Dein Programm wird nun kompiliert und heruntergeladen",
   compile_overlay_text: "Kopiere es anschließend auf deine senseBox ",
   compile_overlay_help: " Benötigst du Hilfe? ",

@@ -28,6 +28,14 @@ class SerialCameraService {
     this.maxReconnectAttempts = 3;
     this.reconnectDelay = 2000; // Start with 2 seconds
     this.reconnectTimeoutId = null;
+
+    // "Capture failed" text lines sent by the sketch when the camera can't
+    // take a picture (e.g. camera not connected).
+    this.captureFailures = 0;
+    this.captureFailureThreshold = 3;
+    this.hasEmittedCaptureError = false;
+    this.textTail = "";
+    this.textDecoder = new TextDecoder("iso-8859-1");
   }
 
   /**
@@ -94,6 +102,9 @@ class SerialCameraService {
     this.reconnectAttempts = 0;
     this.frameBuffer = new Uint8Array(0); // Clear any stale data
     this.lastFrameTime = null;
+    this.captureFailures = 0;
+    this.hasEmittedCaptureError = false;
+    this.textTail = "";
 
     try {
       // Only open the port if it's not already open
@@ -303,6 +314,7 @@ class SerialCameraService {
 
         // Accumulate data into frame buffer
         if (value && value.length > 0) {
+          this._checkCaptureFailed(value);
           this._appendToBuffer(value);
           // Try to parse frames from the buffer
           this._tryParseFrames();
@@ -325,6 +337,37 @@ class SerialCameraService {
         }
         break;
       }
+    }
+  }
+
+  /**
+   * Look for "Capture failed" lines in the incoming data. After a few of them
+   * without a frame in between, emit a CAPTURE_FAILED error (once).
+   * @private
+   * @param {Uint8Array} data - New data from the serial port
+   */
+  _checkCaptureFailed(data) {
+    const MARKER = "Capture failed";
+    const text = this.textTail + this.textDecoder.decode(data);
+    let index = text.indexOf(MARKER);
+    while (index !== -1) {
+      this.captureFailures++;
+      index = text.indexOf(MARKER, index + MARKER.length);
+    }
+    // Keep the end so a marker split across two chunks is still found.
+    this.textTail = text.slice(-(MARKER.length - 1));
+
+    if (
+      this.captureFailures >= this.captureFailureThreshold &&
+      !this.hasEmittedCaptureError
+    ) {
+      this.hasEmittedCaptureError = true;
+      // The sketch is running, so this is not a connection problem.
+      this._stopFrameTimeoutMonitor();
+      this._emitError({
+        type: "CAPTURE_FAILED",
+        message: "The senseBox MCU Eye could not capture an image",
+      });
     }
   }
 
@@ -564,6 +607,8 @@ class SerialCameraService {
     this.consecutiveFailures = 0;
     this.reconnectAttempts = 0;
     this.hasEmittedTimeoutError = false;
+    this.captureFailures = 0;
+    this.hasEmittedCaptureError = false;
 
     // Emit a special "CONNECTION_RESTORED" event if we had a timeout error before
     // This helps the UI clear error messages when frames start flowing again
@@ -729,7 +774,11 @@ class SerialCameraService {
 
     // Check for timeout every second
     this.frameTimeoutCheckInterval = setInterval(() => {
-      if (!this.isConnected || !this.lastFrameTime || this.isFrameTimeoutPaused) {
+      if (
+        !this.isConnected ||
+        !this.lastFrameTime ||
+        this.isFrameTimeoutPaused
+      ) {
         return;
       }
 

@@ -10,8 +10,10 @@ export const LED = {
   senseBox_ws2818_rgb_led_init_tooltip: `Schließe die RGB-LED an einen der **digital/analog Ports** an. Wenn mehrere RGB-LEDs miteinander verkettet werden kannst du über die Position bestimmen welche LED angesteuert wird. `,
   senseBox_ws2818_rgb_led_color: `Farbe`,
   senseBox_ws2818_rgb_led_number: `Anzahl`,
-  senseBox_ws2818_rgb_led_helpurl: 'https://docs.sensebox.de/docs/hardware/accessoires/rgb-led-esp32',
-  senseBox_ws2818_rgb_led_helpurl_2: 'https://docs.sensebox.de/docs/hardware/accessoires/rgb-led',
+  senseBox_ws2818_rgb_led_helpurl:
+    "https://docs.sensebox.de/docs/hardware/accessoires/rgb-led-esp32",
+  senseBox_ws2818_rgb_led_helpurl_2:
+    "https://docs.sensebox.de/docs/hardware/accessoires/rgb-led",
 
   /**
    * Color
@@ -81,5 +83,16 @@ export const LED = {
   senseBox_ws2812_rgb_matrix_fullcolor: "Setze alle Pixel auf eine Farbe",
   senseBox_ws2812_rgb_matrix_fullcolor_tooltip:
     "Setze alle Pixel auf eine Farbe. Wähle eine Farbe aus der Palette.",
-  senseBox_ws2812_rgb_matrix_helpurl: 'https://docs.sensebox.de/docs/hardware/accessoires/led-matrix',
+  senseBox_ws2812_rgb_matrix_helpurl:
+    "https://docs.sensebox.de/docs/hardware/accessoires/led-matrix",
+  senseBox_matrix_editor_open: "Bitmap bearbeiten…",
+  senseBox_matrix_editor_title: "Pixel-Editor",
+  senseBox_matrix_editor_hint:
+    "Wähle eine Farbe und klicke oder ziehe über die Pixel.",
+  senseBox_matrix_editor_color: "Farbe",
+  senseBox_matrix_editor_eraser: "Radierer",
+  senseBox_matrix_editor_clear: "Alles löschen",
+  senseBox_matrix_editor_black: "Schwarze Pixel sind ausgeschaltet.",
+  senseBox_matrix_editor_cancel: "Abbrechen",
+  senseBox_matrix_editor_save: "Speichern",
 };

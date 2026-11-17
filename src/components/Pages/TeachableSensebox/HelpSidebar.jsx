@@ -8,8 +8,9 @@ import {
   useTheme,
 } from "@mui/material";
 import { ChevronRight as ChevronRightIcon } from "@mui/icons-material";
-import ReactMarkdown from "react-markdown";
+import ReactMarkdown, { defaultUrlTransform } from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { useSelector } from "react-redux";
 
 import { getImageTranslations } from "./image/translations";
 import { getOrientationTranslations } from "./orientation/translations";
@@ -26,13 +27,25 @@ const markdownFiles = import.meta.glob("./translations/help/**/*.md", {
 const SIDEBAR_WIDTH = 320;
 const NAVBAR_HEIGHT = 64;
 
+// Help markdown references images as "/media/teachable/...". Rewrite that
+// prefix so the images also resolve when the widget is embedded elsewhere.
+const MARKDOWN_MEDIA_PREFIX = "/media/teachable/";
+const transformMarkdownUrl = (url) =>
+  defaultUrlTransform(
+    url.startsWith(MARKDOWN_MEDIA_PREFIX)
+      ? __TEACHABLE_MEDIA_PATH__ + url.slice(MARKDOWN_MEDIA_PREFIX.length)
+      : url,
+  );
+
 /**
  * HelpSidebar - A collapsible sidebar that shows help content for different topics
  */
 
 const HelpSidebar = ({ open, onClose, helpTopic }) => {
   const theme = useTheme();
-  const isWideScreen = useMediaQuery(theme.breakpoints.up("lg"));
+  const isWideScreen = useMediaQuery(theme.breakpoints.up("md"));
+  const isDark = theme.palette.mode === "dark";
+  const language = useSelector((s) => s.general.language);
   const [scrollOffset, setScrollOffset] = useState(0);
 
   // Track scroll position to adjust sidebar position
@@ -58,18 +71,19 @@ const HelpSidebar = ({ open, onClose, helpTopic }) => {
   const isSpellTopic = helpTopic?.startsWith("spells/");
   const isImageTopic = helpTopic?.startsWith("image/");
   const t = isOrientationTopic
-    ? getOrientationTranslations()
+    ? getOrientationTranslations(language)
     : isSpellTopic
-      ? getSpellTranslations()
-      : getImageTranslations();
+      ? getSpellTranslations(language)
+      : getImageTranslations(language);
   const helpTranslations = t.help || {};
 
-  // Determine language for markdown file lookup
-  const locale = window.localStorage.getItem("locale") || "de_DE";
-  const language = locale.split("_")[0];
+  // Determine language for markdown file lookup (already from Redux)
+  const mdLanguageCode = language.includes("_")
+    ? language.split("_")[0]
+    : language;
 
   // Resolve markdown content: prefer current language, fall back to "de"
-  const mdKey = `./translations/help/${language}/${helpTopic}.md`;
+  const mdKey = `./translations/help/${mdLanguageCode}/${helpTopic}.md`;
   const mdFallbackKey = `./translations/help/de/${helpTopic}.md`;
   const markdownContent =
     markdownFiles[mdKey] ?? markdownFiles[mdFallbackKey] ?? null;
@@ -107,7 +121,7 @@ const HelpSidebar = ({ open, onClose, helpTopic }) => {
           height: sidebarHeight,
           borderLeft: "1px solid",
           borderColor: "divider",
-          backgroundColor: "grey.50",
+          backgroundColor: isDark ? "background.default" : "grey.50",
           transition: "top 0.1s ease-out, height 0.1s ease-out",
         },
       }}
@@ -170,7 +184,7 @@ const HelpSidebar = ({ open, onClose, helpTopic }) => {
             fontStyle: "italic",
           },
           "& code": {
-            backgroundColor: "grey.100",
+            backgroundColor: isDark ? "grey.800" : "grey.100",
             px: 0.5,
             borderRadius: 0.5,
             fontSize: "0.8rem",
@@ -186,7 +200,10 @@ const HelpSidebar = ({ open, onClose, helpTopic }) => {
         }}
       >
         {markdownContent ? (
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            urlTransform={transformMarkdownUrl}
+          >
             {markdownContent}
           </ReactMarkdown>
         ) : (

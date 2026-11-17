@@ -2,7 +2,6 @@ import React from "react";
 import { Box } from "@mui/material";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import TutorialFooter from "./TutorialFooter";
-import TutorialProgressCard from "../Cards/Sidebar";
 import Sidebar from "../Cards/Sidebar";
 import FloatingNavigation from "./FloatingNavigation";
 
@@ -70,7 +69,10 @@ const TutorialLayout = ({
         >
           {children}
 
-          <FloatingNavigation tutorialId={tutorialId} />
+          <FloatingNavigation
+            tutorialId={tutorialId}
+            nextStepDisabled={nextStepDisabled}
+          />
         </Box>
       </Box>
 

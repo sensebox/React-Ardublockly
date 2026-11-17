@@ -1,13 +1,17 @@
-import { useEffect } from "react";
 import MarkdownIt from "markdown-it";
-import { useSelector } from "react-redux";
+import { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import TutorialSlide from "../components/TutorialSlide";
-import QuestionBlock from "./QuestionCard";
 import QuestionCard from "./QuestionCard";
 import SolutionCheck from "./SolutionCheck";
 import BlocklyWindow from "@/components/Blockly/BlocklyWindow";
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Chip, Typography } from "@mui/material";
 import H5PCard from "./H5PCard";
+import CriteriaCard from "./CriteriaCard";
+import EvaluationCard from "./EvaluationCard";
+import { loadAnswers } from "../helpers/tutorialStorageUtils";
+import { setBoard } from "@/actions/boardAction";
+import { getBoardLabel } from "@/components/Blockly/helpers/boardOptions";
 
 const md = new MarkdownIt({ html: true, linkify: true, typographer: true });
 
@@ -61,7 +65,82 @@ md.renderer.rules.table_open = function (tokens, idx, options, env, self) {
 };
 
 const TaskCard = ({ step, setNextStepDisabled }) => {
+  const dispatch = useDispatch();
   const activeStep = useSelector((state) => state.tutorial.activeStep);
+  const currentBoard = useSelector((state) => state.board.board);
+  const tutorialId = useSelector((state) => state.tutorial.tutorials[0]?._id);
+
+  const isQuestionStep =
+    step.type === "question" && step.questionData?.length > 0;
+  const isBlocklyStep = step.type === "blockly" && !!step.xml;
+  const isEvaluationStep =
+    step.type === "evaluationPreparation" || step.type === "evaluation";
+
+  const [questionStatus, setQuestionStatus] = useState({});
+  const [blocklyCorrect, setBlocklyCorrect] = useState(() => {
+    if (step.type !== "blockly" || !tutorialId) return false;
+    const savedAnswer = loadAnswers(tutorialId).find(
+      (a) => a._id === `${step._id}_blockly`,
+    );
+    return savedAnswer?.type === "success";
+  });
+  const [evaluationComplete, setEvaluationComplete] = useState(false);
+
+  const isBoardStep = step.type === "blockly" || step.type === "blocklyExample";
+
+  // Auf das im Builder konfigurierte Ziel-Board umschalten (auch wenn das
+  // Board global gewechselt wird).
+  useEffect(() => {
+    if (
+      isBoardStep &&
+      step.board &&
+      step.board.toUpperCase() !== currentBoard
+    ) {
+      dispatch(setBoard(step.board));
+    }
+  }, [isBoardStep, step.board, currentBoard, dispatch]);
+
+  const boardChip =
+    isBoardStep && step.board ? (
+      <Chip
+        size="small"
+        variant="outlined"
+        color="primary"
+        label={`Board: ${getBoardLabel(step.board)}`}
+      />
+    ) : null;
+
+  const handleQuestionStatusChange = useCallback((questionIndex, correct) => {
+    setQuestionStatus((prev) =>
+      prev[questionIndex] === correct
+        ? prev
+        : { ...prev, [questionIndex]: correct },
+    );
+  }, []);
+
+  useEffect(() => {
+    if (isQuestionStep) {
+      const allAnswered = step.questionData.every(
+        (_, idx) => questionStatus[idx],
+      );
+      setNextStepDisabled(!allAnswered);
+    } else if (isBlocklyStep) {
+      setNextStepDisabled(!blocklyCorrect);
+    } else if (isEvaluationStep) {
+      setNextStepDisabled(!evaluationComplete);
+    } else {
+      setNextStepDisabled(false);
+    }
+  }, [
+    isQuestionStep,
+    isBlocklyStep,
+    isEvaluationStep,
+    questionStatus,
+    blocklyCorrect,
+    evaluationComplete,
+    step.questionData,
+    setNextStepDisabled,
+  ]);
 
   const svgToDataUrl = (svgString) =>
     "data:image/svg+xml;base64," +
@@ -72,8 +151,11 @@ const TaskCard = ({ step, setNextStepDisabled }) => {
     );
 
   return (
-    <TutorialSlide stepNumber={activeStep}>
-      <div dangerouslySetInnerHTML={{ __html: md.render(step.text) }} />
+    <TutorialSlide>
+      <div
+        className="tutorial-markdown"
+        dangerouslySetInnerHTML={{ __html: md.render(step.text) }}
+      />
       {step.type === "question" && step.questionData && (
         <Box
           sx={{
@@ -85,13 +167,30 @@ const TaskCard = ({ step, setNextStepDisabled }) => {
           {step.questionData.map((q, idx) => {
             return (
               <QuestionCard
-                setNextStepDisabled={setNextStepDisabled}
+                onStatusChange={handleQuestionStatusChange}
                 key={idx}
                 questionData={q}
+                stepId={step._id}
+                questionIndex={idx}
+                tutorialId={tutorialId}
               />
             );
           })}
         </Box>
+      )}
+      {step.type === "evaluationPreparation" && (
+        <CriteriaCard
+          step={step}
+          tutorialId={tutorialId}
+          onStatusChange={setEvaluationComplete}
+        />
+      )}
+      {step.type === "evaluation" && (
+        <EvaluationCard
+          step={step}
+          tutorialId={tutorialId}
+          onStatusChange={setEvaluationComplete}
+        />
       )}
       {step.type === "h5p" && step.h5psrc && (
         <Box
@@ -116,8 +215,10 @@ const TaskCard = ({ step, setNextStepDisabled }) => {
             gap: 2,
           }}
         >
+          {boardChip}
           {/* Blockly mit Rahmen */}
           <Box
+            className="blockly-frame"
             sx={{
               width: "100%",
               borderRadius: 3,
@@ -125,6 +226,7 @@ const TaskCard = ({ step, setNextStepDisabled }) => {
               border: "1px solid rgba(0,0,0,0.1)",
               overflow: "hidden",
               backgroundColor: "#fff",
+              color: "#1a1a1a",
               p: 1,
             }}
           >
@@ -140,7 +242,7 @@ const TaskCard = ({ step, setNextStepDisabled }) => {
               variant="body2"
               sx={{
                 fontStyle: "italic",
-                color: "text.secondary",
+                color: "rgba(0, 0, 0, 0.6)",
                 textAlign: "center",
                 maxWidth: "50vw",
                 mt: 2,
@@ -153,11 +255,23 @@ const TaskCard = ({ step, setNextStepDisabled }) => {
           </Box>
 
           {/* Lösung prüfen */}
-          <SolutionCheck solutionXml={step.xml} activeStep={activeStep} />
+          <SolutionCheck
+            solutionXml={step.xml}
+            activeStep={activeStep}
+            onStatusChange={setBlocklyCorrect}
+          />
         </Box>
       )}
       {step.type === "blocklyExample" && step.svg && (
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 2,
+          }}
+        >
+          {boardChip}
           <img src={svgToDataUrl(step.svg)} alt="Blockly block" />
         </Box>
       )}

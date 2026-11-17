@@ -7,7 +7,8 @@ const SaveIcon = ({ loading }) => (
   <Tooltip title={"Auto save enabled"} arrow placement="right">
     <div
       style={{
-        position: "relative",
+        display: "grid",
+        placeItems: "center",
         width: "2rem",
         height: "2rem",
         margin: "1rem",
@@ -15,7 +16,7 @@ const SaveIcon = ({ loading }) => (
     >
       {loading && (
         <FontAwesomeIcon
-          style={{ position: "absolute" }}
+          style={{ gridArea: "1 / 1", width: "2rem", height: "2rem" }}
           icon={faCircleNotch}
           spin={true}
           size="2x"
@@ -24,10 +25,7 @@ const SaveIcon = ({ loading }) => (
       )}
       <FontAwesomeIcon
         style={{
-          position: "absolute",
-          left: "50%",
-          top: "50%",
-          transform: "translate(-50%,-50%)",
+          gridArea: "1 / 1",
         }}
         icon={faSave}
         color={loading ? "grey" : "green"}

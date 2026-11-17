@@ -6,7 +6,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import { ArrowForward, Celebration } from "@mui/icons-material";
 import TutorialSlide from "../components/TutorialSlide";
 import MarkdownIt from "markdown-it";
-const md = new MarkdownIt();
+const md = new MarkdownIt({ html: true, linkify: true, typographer: true });
 
 // Image-Renderer anpassen
 const defaultImageRenderer =
@@ -89,6 +89,7 @@ const FinishedCard = ({ tutorial }) => {
         </Box>
         <Box sx={{ my: 2 }}>
           <div
+            className="tutorial-markdown"
             dangerouslySetInnerHTML={{ __html: md.render(finishStep.text) }}
           />
         </Box>

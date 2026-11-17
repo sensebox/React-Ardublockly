@@ -7,11 +7,21 @@ import { useEmbeddedMode } from "@/hooks/useEmbeddedMode";
 
 // Utility to set container size in px after orientation change
 function setEmbeddedContainerSize() {
-  const container = document.querySelector('.blockly-app-container');
+  const container = document.querySelector(".blockly-app-container");
   if (container) {
-    container.style.height = window.innerHeight + 'px';
-    container.style.width = window.innerWidth + 'px';
+    container.style.height = window.innerHeight + "px";
+    container.style.width = window.innerWidth + "px";
   }
+}
+
+// On phones in portrait mode the blocks should be a bit smaller to save space
+const MOBILE_PORTRAIT_SCALE = 0.3;
+
+function isMobilePortrait() {
+  return (
+    typeof window !== "undefined" &&
+    window.matchMedia("(max-width: 600px) and (orientation: portrait)").matches
+  );
 }
 
 import { clearStats, workspaceName } from "@/actions/workspaceActions";
@@ -25,7 +35,10 @@ import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import "./EmbeddedBlockly.css";
 
-const EmbeddedBlockly = ({ project: propProject = null, projectType: propProjectType = null }) => {
+const EmbeddedBlockly = ({
+  project: propProject = null,
+  projectType: propProjectType = null,
+}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { shareId } = useParams();
@@ -33,7 +46,7 @@ const EmbeddedBlockly = ({ project: propProject = null, projectType: propProject
   const progress = useSelector((state) => state.project.progress);
   const message = useSelector((state) => state.message);
   const workspaceNameFromState = useSelector((state) => state.workspace.name);
-  
+
   const project = useMemo(() => {
     const actualProject = propProject || reduxProject;
     if (actualProject) {
@@ -47,13 +60,24 @@ const EmbeddedBlockly = ({ project: propProject = null, projectType: propProject
       xml: localStorage.getItem("autoSaveXML") || undefined,
     };
   }, [propProject, reduxProject, workspaceNameFromState]);
-  
+
   const projectType = propProjectType || (shareId ? "share" : null);
-  
+
   const [initialXml, setInitialXml] = useState(() => {
     return project.xml || localStorage.getItem("autoSaveXML");
   });
   useEmbeddedMode();
+
+  // Use a smaller start scale on phones in portrait mode
+  const zoomConfig = useMemo(() => {
+    if (isMobilePortrait()) {
+      return {
+        ...EMBEDDED_BLOCKLY_CONFIG.zoom,
+        startScale: MOBILE_PORTRAIT_SCALE,
+      };
+    }
+    return EMBEDDED_BLOCKLY_CONFIG.zoom;
+  }, []);
 
   useEffect(() => {
     if (shareId) {
@@ -69,7 +93,10 @@ const EmbeddedBlockly = ({ project: propProject = null, projectType: propProject
 
   // Handle share loading errors
   useEffect(() => {
-    if (shareId && (message.id === "PROJECT_EMPTY" || message.id === "GET_PROJECT_FAIL")) {
+    if (
+      shareId &&
+      (message.id === "PROJECT_EMPTY" || message.id === "GET_PROJECT_FAIL")
+    ) {
       navigate("/embedded", { replace: true });
       dispatch(returnErrors("", 404, "GET_SHARE_FAIL"));
     }
@@ -82,7 +109,7 @@ const EmbeddedBlockly = ({ project: propProject = null, projectType: propProject
       const name = project.title || createNameId();
       dispatch(workspaceName(name));
     }
-    
+
     return () => {
       dispatch(clearStats());
       dispatch(workspaceName(null));
@@ -103,23 +130,30 @@ const EmbeddedBlockly = ({ project: propProject = null, projectType: propProject
     }
   });
 
-    // Handle iPad orientation change for /embedded path
-    useEffect(() => {
-      function handleOrientationChange() {
-        // Wait for viewport to settle
-        setTimeout(() => {
-          setEmbeddedContainerSize();
-          const ws = Blockly.getMainWorkspace();
-          if (ws) Blockly.svgResize(ws);
-        }, 10);
-      }
-      window.addEventListener('orientationchange', handleOrientationChange);
-      // Initial set on mount (for iPad Safari quirks)
-      setEmbeddedContainerSize();
-      return () => {
-        window.removeEventListener('orientationchange', handleOrientationChange);
-      };
-    }, []);
+  // Handle iPad orientation change for /embedded path
+  useEffect(() => {
+    function handleOrientationChange() {
+      // Wait for viewport to settle
+      setTimeout(() => {
+        setEmbeddedContainerSize();
+        const ws = Blockly.getMainWorkspace();
+        if (ws) {
+          ws.setScale(
+            isMobilePortrait()
+              ? MOBILE_PORTRAIT_SCALE
+              : EMBEDDED_BLOCKLY_CONFIG.zoom.startScale,
+          );
+          Blockly.svgResize(ws);
+        }
+      }, 10);
+    }
+    window.addEventListener("orientationchange", handleOrientationChange);
+    // Initial set on mount (for iPad Safari quirks)
+    setEmbeddedContainerSize();
+    return () => {
+      window.removeEventListener("orientationchange", handleOrientationChange);
+    };
+  }, []);
 
   // Show loading spinner if loading shared project
   if (shareId && progress) {
@@ -140,16 +174,16 @@ const EmbeddedBlockly = ({ project: propProject = null, projectType: propProject
       <div className="embedded-toolbar">
         <EmbeddedToolbar project={project} projectType={projectType} />
       </div>
-      
+
       <div className="embedded-workspace">
         <BlocklyWindow
           initialXml={initialXml}
-          zoom={EMBEDDED_BLOCKLY_CONFIG.zoom}
+          zoom={zoomConfig}
           move={EMBEDDED_BLOCKLY_CONFIG.move}
           grid={EMBEDDED_BLOCKLY_CONFIG.grid}
         />
       </div>
-      
+
       <DeviceSelection />
     </div>
   );

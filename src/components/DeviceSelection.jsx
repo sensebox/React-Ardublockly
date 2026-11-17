@@ -9,11 +9,14 @@ import {
   Typography,
   Link,
   useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import { setBoard } from "../actions/boardAction";
+import { BOARD_OPTIONS } from "./Blockly/helpers/boardOptions";
 
 const DeviceSelection = () => {
   const theme = useTheme();
+  const isLargeScreen = useMediaQuery(theme.breakpoints.up("xl"));
   const dispatch = useDispatch();
   const currentBoard = useSelector((state) => state.board.board);
 
@@ -21,32 +24,7 @@ const DeviceSelection = () => {
   const [open, setOpen] = useState(!currentBoard);
   const [selectedBoard, setSelectedBoard] = useState(currentBoard || "");
 
-  const boards = [
-    {
-      value: "MCU",
-      alt: "Sensebox MCU",
-      label: "senseBox MCU",
-      src: "/media/hardware/blockly_mcu.png",
-    },
-    {
-      value: "MCU-S2",
-      alt: "Sensebox ESP",
-      label: "senseBox MCU-S2",
-      src: "/media/hardware/blockly_esp.png",
-    },
-    {
-      value: "MCU:MINI",
-      alt: "Sensebox Mini",
-      label: "senseBox MCU:mini",
-      src: "/media/hardware/blockly_mini.png",
-    },
-    // {
-    //   value: "MCU-EYE",
-    //   alt: "Sensebox ESP32S3",
-    //   label: "senseBox MCU Eye",
-    //   src: "/media/hardware/blockly_eye.png",
-    // },
-  ];
+  const boards = BOARD_OPTIONS;
 
   const handleBoardSelect = (value) => {
     setSelectedBoard(value);
@@ -58,7 +36,7 @@ const DeviceSelection = () => {
     <Dialog
       open={open}
       fullWidth
-      maxWidth="sm"
+      maxWidth={isLargeScreen ? "md" : "xs"}
       title={Blockly.Msg.deviceselection_head}
       onClick={() => dispatch(setBoard(selectedBoard))}
       disabled={!selectedBoard}
