@@ -125,4 +125,34 @@ describe("Code signaling", () => {
     );
     cy.get(".code-signal-line").should("not.exist");
   });
+
+  it("[CodeSignaling] highlights the code of a clicked block", () => {
+    const xml =
+      '<xml xmlns="https://developers.google.com/blockly/xml">' +
+      '<block type="arduino_functions" id="start" deletable="false" x="27" y="16">' +
+      '<statement name="LOOP_FUNC"><block type="time_delay" id="delay1">' +
+      '<value name="DELAY_TIME_MILI"><shadow type="math_number">' +
+      '<field name="NUM">1000</field></shadow></value></block></statement>' +
+      "</block></xml>";
+    cy.visit("/", {
+      onBeforeLoad(win) {
+        win.localStorage.setItem("autoSaveXML", xml);
+      },
+    });
+    cy.get('img[alt="Sensebox ESP"]', { timeout: 8000 }).click();
+    cy.get(".monaco-editor .view-lines", { timeout: 10000 }).should(
+      "contain.text",
+      "delay(1000)",
+    );
+    cy.get(".code-selected-line").should("not.exist");
+
+    cy.get('.blocklyWorkspace g[data-id="delay1"] > .blocklyPath')
+      .first()
+      .click(5, 5, { force: true });
+    cy.get(".code-selected-line").should("have.length", 1);
+
+    // Clicking the empty workspace deselects the block
+    cy.get(".blocklyMainBackground").click("bottomRight", { force: true });
+    cy.get(".code-selected-line").should("not.exist");
+  });
 });

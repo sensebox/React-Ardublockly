@@ -12,6 +12,7 @@ import {
 import MonacoEditor from "@monaco-editor/react";
 import * as Blockly from "blockly";
 import { toLineRanges, updateSignal } from "./codeDiff";
+import { getBlockLines } from "./blockCode";
 
 const signalStyles = (
   <GlobalStyles
@@ -21,6 +22,13 @@ const signalStyles = (
       },
       ".code-signal-gutter": {
         borderLeft: "4px solid #4caf50",
+        marginLeft: 3,
+      },
+      ".code-selected-line": {
+        backgroundColor: "rgba(33, 150, 243, 0.25)",
+      },
+      ".code-selected-gutter": {
+        borderLeft: "4px solid #2196f3",
         marginLeft: 3,
       },
     }}
@@ -76,6 +84,10 @@ const CodeViewer = () => {
   // board/language change): that code must not be highlighted
   const resetRef = useRef(false);
 
+  // Highlight the code of the block selected in the workspace
+  const selectionDecorationsRef = useRef(null);
+  const selectedLinesRef = useRef([]);
+
   useEffect(() => {
     const workspace = Blockly.getMainWorkspace();
     if (!workspace) return undefined;
@@ -108,10 +120,62 @@ const CodeViewer = () => {
     );
   };
 
+  const applySelection = () => {
+    if (!selectionDecorationsRef.current) return;
+    selectionDecorationsRef.current.set(
+      toLineRanges(selectedLinesRef.current).map(({ start, end }) => ({
+        range: {
+          startLineNumber: start,
+          startColumn: 1,
+          endLineNumber: end,
+          endColumn: 1,
+        },
+        options: {
+          isWholeLine: true,
+          className: "code-selected-line",
+          linesDecorationsClassName: "code-selected-gutter",
+          overviewRuler: { color: "#2196f3", position: 4 },
+        },
+      })),
+    );
+  };
+
+  // Recomputes the lines of the currently selected block
+  const updateSelection = (code, reveal) => {
+    const selected = Blockly.getSelected();
+    const block = selected instanceof Blockly.BlockSvg ? selected : null;
+    selectedLinesRef.current = block ? getBlockLines(block, code) : [];
+    applySelection();
+    const lines = selectedLinesRef.current;
+    if (reveal && editorRef.current && lines.length > 0) {
+      editorRef.current.revealLinesInCenterIfOutsideViewport(
+        lines[0],
+        lines[lines.length - 1],
+      );
+    }
+  };
+
+  const arduinoRef = useRef(arduino);
+  arduinoRef.current = arduino;
+
+  useEffect(() => {
+    const workspace = Blockly.getMainWorkspace();
+    if (!workspace) return undefined;
+    const onSelected = (event) => {
+      if (event.type === Blockly.Events.SELECTED) {
+        updateSelection(arduinoRef.current, true);
+      }
+    };
+    workspace.addChangeListener(onSelected);
+    return () => workspace.removeChangeListener(onSelected);
+  }, []);
+
   const handleEditorMount = (editor) => {
     editorRef.current = editor;
     decorationsRef.current = editor.createDecorationsCollection();
+    selectionDecorationsRef.current = editor.createDecorationsCollection();
     applyHighlight();
+    applySelection();
   };
 
   useEffect(() => {
@@ -133,6 +197,8 @@ const CodeViewer = () => {
     // decorations, so (re)apply them afterwards
     const frame = requestAnimationFrame(() => {
       applyHighlight();
+      // Skip while dragging; the drop triggers a new update anyway
+      if (!workspace?.isDragging?.()) updateSelection(arduino, false);
       const lines = highlightRef.current;
       if (revealRef.current && editorRef.current && lines.length > 0) {
         revealRef.current = false;
