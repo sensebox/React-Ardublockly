@@ -16,6 +16,7 @@ import {
   CameraOutputGuard,
   parseStrictNumber,
 } from "../utils/serialInputGuard";
+import { MCU_EYE_PORT_FILTERS } from "../utils/serialPortFilters";
 
 // Plausibility limit for one axis in m/s² (the sensor's max. range is ±16 g).
 const MAX_ACCELERATION = 160;
@@ -58,7 +59,9 @@ class OrientationService {
     }
 
     try {
-      const port = await navigator.serial.requestPort();
+      const port = await navigator.serial.requestPort({
+        filters: MCU_EYE_PORT_FILTERS,
+      });
       return port;
     } catch (error) {
       if (error.name === "NotFoundError") {

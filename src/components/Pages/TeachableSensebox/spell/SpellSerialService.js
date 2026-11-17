@@ -20,6 +20,7 @@ import {
   CameraOutputGuard,
   parseStrictNumber,
 } from "../utils/serialInputGuard";
+import { MCU_EYE_PORT_FILTERS } from "../utils/serialPortFilters";
 
 // Stroke states
 export const StrokeState = {
@@ -67,7 +68,9 @@ class SpellSerialService {
     }
 
     try {
-      const port = await navigator.serial.requestPort();
+      const port = await navigator.serial.requestPort({
+        filters: MCU_EYE_PORT_FILTERS,
+      });
       return port;
     } catch (error) {
       if (error.name === "NotFoundError") {
