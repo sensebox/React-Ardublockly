@@ -517,9 +517,9 @@ const ModelTrainer = ({
     const port = await waitForCameraPort();
     if (!port) {
       setSenseBoxPhase("done");
-      setConnectionStatus(ConnectionStatus.ERROR);
+      setConnectionStatus(ConnectionStatus.DISCONNECTED);
       setSerialError({
-        type: ErrorTypes.PERMISSION_DENIED,
+        type: ErrorTypes.CONNECTION_FAILED,
         message: "Serial port access was denied",
       });
       setReconnectNeeded(true);

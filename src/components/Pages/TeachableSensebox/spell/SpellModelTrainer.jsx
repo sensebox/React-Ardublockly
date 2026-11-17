@@ -579,7 +579,7 @@ const SpellModelTrainer = ({
     if (!port) {
       setSenseBoxPhase("done");
       setSpellSerialError({
-        type: ErrorTypes.PERMISSION_DENIED,
+        type: ErrorTypes.CONNECTION_FAILED,
         message: "Serial port access was denied",
       });
       setReconnectNeeded(true);

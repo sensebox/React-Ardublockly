@@ -619,7 +619,7 @@ const OrientationModelTrainer = ({
     if (!port) {
       setSenseBoxPhase("done");
       setOrientationSerialError({
-        type: ErrorTypes.PERMISSION_DENIED,
+        type: ErrorTypes.CONNECTION_FAILED,
         message: "Serial port access was denied",
       });
       setReconnectNeeded(true);
