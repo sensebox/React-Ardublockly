@@ -11,15 +11,12 @@ import { faRotateLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const styles = (theme) => ({
+  // plain icon in the style of the AutoSave icon (SaveIcon)
   button: {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.primary.contrastText,
-    width: "40px",
-    height: "40px",
-    "&:hover": {
-      backgroundColor: theme.palette.primary.main,
-      color: theme.palette.primary.contrastText,
-    },
+    width: "2rem",
+    height: "2rem",
+    padding: 0,
+    color: theme.palette.primary.main,
   },
 });
 
@@ -40,9 +37,9 @@ class UndoWorkspace extends Component {
             className={`undoWorkspace ${this.props.classes.button}`}
             onClick={this.undo}
             aria-label={Blockly.Msg.tooltip_undo}
-            size="large"
+            size="small"
           >
-            <FontAwesomeIcon icon={faRotateLeft} size="xs" />
+            <FontAwesomeIcon icon={faRotateLeft} size="lg" />
           </IconButton>
         </Tooltip>
       </div>

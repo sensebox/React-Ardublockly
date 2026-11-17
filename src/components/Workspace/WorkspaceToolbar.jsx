@@ -33,6 +33,7 @@ const WorkspaceToolbar = ({
   return (
     <div style={containerStyle}>
       {!assessment && !multiple && <AutoSave />}
+      {!multiple && <UndoWorkspace style={{ marginRight: "5px" }} />}
       {!assessment && (
         <WorkspaceName
           style={{ marginRight: "5px" }}
@@ -43,7 +44,6 @@ const WorkspaceToolbar = ({
       )}
 
       {assessment ? <SolutionCheck /> : !multiple && <Compile iconButton />}
-      {!multiple && <UndoWorkspace style={{ marginRight: "5px" }} />}
 
       {!multiple && <CopyCode iconButton />}
       {user && !multiple && (
