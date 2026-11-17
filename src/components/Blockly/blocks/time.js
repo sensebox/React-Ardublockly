@@ -142,7 +142,7 @@ Blockly.Blocks["sensebox_interval_timer"] = {
       .appendField(new Blockly.FieldTextInput(defaultName), "name");
     this.appendDummyInput()
       .appendField(Blockly.Msg.senseBox_interval_time)
-      .setAlign(Blockly.ALIGN_LEFT)
+      .setAlign(Blockly.inputs.Align.LEFT)
       .appendField(new Blockly.FieldTextInput("10000"), "interval")
       .appendField(Blockly.Msg.senseBox_interval);
     this.appendStatementInput("DO").setCheck(null);

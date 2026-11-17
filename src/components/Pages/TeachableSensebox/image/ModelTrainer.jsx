@@ -42,7 +42,6 @@ import {
   Upload as UploadIcon,
   MoreVert as MoreVertIcon,
   Warning as WarningIcon,
-  Usb as UsbIcon,
 } from "@mui/icons-material";
 import useCameraSource from "./hooks/useCameraSource";
 import useLightbox, { LightboxComponent } from "./hooks/useLightbox";
@@ -55,6 +54,8 @@ import FloatingCameraPreview from "./FloatingCameraPreview";
 import TrainingResultsSection from "./TrainingResultsSection";
 import ModelTestingSection from "./ModelTestingSection";
 import HelpButton, { useHelpBlink } from "../HelpButton";
+import GrantBootloaderButton from "../GrantBootloaderButton";
+import BlinkingButton from "../BlinkingButton";
 import ExpandedClassDialog from "./ExpandedClassDialog";
 import useModelTraining from "./hooks/useModelTraining";
 import { DEFAULT_TRAINING_SETTINGS } from "./hooks/useModelTraining";
@@ -489,6 +490,10 @@ const ModelTrainer = ({
     },
   });
 
+  // True if the camera could not be started automatically after the camera
+  // sketch upload – the start button then blinks so the user clicks it.
+  const [reconnectNeeded, setReconnectNeeded] = useState(false);
+
   const attachPreview = () => {
     const previewElement = getPreviewElement();
     if (previewElement && previewContainerRef.current) {
@@ -503,8 +508,10 @@ const ModelTrainer = ({
    * @param {SerialPort} [options.port] Open this port instead of the picker.
    * @param {boolean} [options.allowFlash] Upload the camera sketch if no image
    *   arrives (disabled right after an upload to avoid a loop).
+   * @returns {Promise<boolean>} true if the camera delivers images
    */
   const startSenseBoxCamera = async ({ port, allowFlash = true } = {}) => {
+    setReconnectNeeded(false);
     setSenseBoxPhase("waitingForData");
     setSerialError(null);
     setVideoLoading(true);
@@ -532,7 +539,7 @@ const ModelTrainer = ({
       setVideoLoading(false);
       setConnectionStatus(ConnectionStatus.CONNECTED);
       setSenseBoxPhase("idle");
-      return;
+      return true;
     }
 
     // No image: release the port (for the flash tool or a later retry).
@@ -563,21 +570,32 @@ const ModelTrainer = ({
       return;
     }
     await flashCameraSketch(cameraPort);
+    return false;
   };
 
   // After the upload the board reboots into the camera sketch. If the browser
-  // already has permission for its port, the camera starts automatically;
-  // otherwise the user has to click "Start senseBox camera" once more.
+  // still has permission for its port (the one granted before the bootloader
+  // reset), the camera starts on it automatically. Otherwise the port picker
+  // can't be opened automatically (requestPort() needs a recent user click),
+  // so the permission error is shown – its retry button opens the picker.
+  // If the camera doesn't start, the start button blinks.
   const restartCameraAfterFlash = async () => {
     setSenseBoxPhase("restarting");
     const port = await waitForCameraPort();
     if (!port) {
       setSenseBoxPhase("done");
+      setConnectionStatus(ConnectionStatus.DISCONNECTED);
+      setSerialError({
+        type: ErrorTypes.CONNECTION_FAILED,
+        message: "Serial port access was denied",
+      });
+      setReconnectNeeded(true);
       return;
     }
     // Give the freshly enumerated USB device a moment before opening it.
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    await startSenseBoxCamera({ port, allowFlash: false });
+    const started = await startSenseBoxCamera({ port, allowFlash: false });
+    if (!started) setReconnectNeeded(true);
   };
 
   // First upload only: grant access to the re-enumerated bootloader port.
@@ -597,14 +615,10 @@ const ModelTrainer = ({
     triggerWebcam();
   };
 
-  // "Try again" / "Reconnect" in the SerialErrorHandler: while waiting for the
-  // bootloader port, ask for it again; otherwise run the whole start flow
-  // again (incl. uploading the camera sketch if no image arrives).
+  // "Try again" / "Reconnect" in the SerialErrorHandler: always run the whole
+  // start flow again with the normal board picker (also after a failed
+  // bootloader grant) – it uploads the camera sketch again if no image arrives.
   const handleSerialRetry = async () => {
-    if (senseBoxPhase === "grant") {
-      await handleGrantBootloader();
-      return;
-    }
     setSerialError(null);
     if (isCameraActive) await stopCamera();
     await startSenseBoxCamera();
@@ -972,11 +986,10 @@ const ModelTrainer = ({
                       : "primary"
                   }
                 >
-                  {sourceType === "webcam" && isCameraActive
-                    ? t.training.stopWebcam
-                    : t.training.startWebcam}
-                </Button>
-
+                {sourceType === "webcam" && isCameraActive
+                  ? t.training.stopWebcam
+                  : t.training.startWebcam}
+              </Button>
                 <HelpButton
                   onClick={() => {
                     markWebcamSeen();

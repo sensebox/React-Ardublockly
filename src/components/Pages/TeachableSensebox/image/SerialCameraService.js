@@ -5,6 +5,8 @@
  * Handles connection lifecycle, frame requests, and error management.
  */
 
+import { MCU_EYE_PORT_FILTERS } from "../utils/serialPortFilters";
+
 class SerialCameraService {
   constructor() {
     this.port = null;
@@ -48,11 +50,11 @@ class SerialCameraService {
 
   /**
    * Request serial port access from the user
-   * @param {Array} filters - Optional USB vendor/product ID filters
+   * @param {Array} [filters] - USB vendor/product ID filters (default: MCU Eye)
    * @returns {Promise<SerialPort|null>} Selected serial port or null if cancelled
    * @throws {Error} If Web Serial API is not supported or permission denied
    */
-  async requestPort(filters = []) {
+  async requestPort(filters = MCU_EYE_PORT_FILTERS) {
     if (!SerialCameraService.isSupported()) {
       const error = new Error(
         "Web Serial API is not supported in this browser",

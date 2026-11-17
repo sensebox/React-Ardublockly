@@ -246,6 +246,7 @@ export const UI = {
   button_back: "Back",
   button_next: "Next step",
   button_tutorial_overview: "Tutorial overview",
+  tutorial_reset_answers: "Reset tutorial progress",
   button_login: "Login",
   button_createVariable: "Create variable",
 
