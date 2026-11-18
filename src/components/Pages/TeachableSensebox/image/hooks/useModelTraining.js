@@ -1,8 +1,9 @@
 import { useState, useCallback } from "react";
 import * as tf from "@tensorflow/tfjs";
 
-const BASE_MODEL_URL =
-  "https://raw.githubusercontent.com/AI-Data-Academy-ADA/teachable_machine_base_model/refs/heads/main/image_classification/model.json";
+// Served from public/models/. Source:
+// https://github.com/AI-Data-Academy-ADA/teachable_machine_base_model/tree/main/image_classification
+const BASE_MODEL_URL = `${import.meta.env.BASE_URL}models/image_classification/model.json`;
 const FEATURE_EXTRACTION_BATCH_SIZE = 16;
 const VALIDATION_FRACTION = 0.15;
 
