@@ -116,11 +116,13 @@ export const imageClassificationTranslations_de = {
     },
   },
   section: {
-    collapse: "Einklappen",
-    expand: "Ausklappen",
+    switchView: "Zwischen Training und Test wechseln",
+    viewTraining: "Trainieren",
+    viewTest: "Testen",
   },
   testing: {
     title: "Modell Testen",
+    captureImage: "Testbilder aufnehmen",
     testModel: "Modell testen",
     testingInProgress: "Modell wird getestet...",
     errorTesting: "Testen fehlgeschlagen: {message}",

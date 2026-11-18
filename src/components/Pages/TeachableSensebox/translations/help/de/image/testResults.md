@@ -1,8 +1,4 @@
-Im Abschnitt **Modell Testing** kannst du für jede Klasse eigene Testbilder aufnehmen. Das trainierte Modell hat diese Bilder während des Trainings nicht gesehen. Damit können wir evaluieren, wie gut das Modell letztendlich abschneidet.
-
-Sobald du mindestens ein Testbild pro Klasse hast, klicke auf **Modell testen**. Danach siehst du die Genauigkeit und die Konfusionsmatrix.
-
-In den Trainingseinstellungen kannst du außerdem einen Anteil deiner Trainingsbilder in die Testbilder verschieben. Diese Bilder werden zufällig ausgewählt und dann nicht mehr für das Training verwendet.
+Sobald du ein Modell trainiert hast, sollten wir es mit neuen Bildern testen, die das Modell noch nicht gesehen hat.
 
 # Genauigkeit
 
@@ -15,3 +11,9 @@ Die Konfusionsmatrix zeigt für jede Klasse, wie viele Bilder korrekt und wie vi
 - die Zeile gibt die tatsächliche Klasse an, die Spalte die klassifizierte. In jeder Zelle siehst du die Testbilder dieser Kombination.
 - Die **Diagonale** (in grün, von oben links nach unten rechts) zeigt korrekte Klassifizierungen.
 - **Außerhalb der Diagonale** (in orange) stehen falsch klassifizierte Bilder.
+
+---
+
+# Hinweis
+
+Anstatt manuell neue Testbilder aufzunehmen, kannst du in den Trainingseinstellungen auch auswählen, dass ein Teil der aufgenommenen Beispielbilder automatisch zu den Testbildern verschoben werden soll. Diese Bilder werden zufällig ausgewählt. Du solltest das Modell noch einmal neu trainieren, nachdem du den Anteil geändert hast, damit die Testbilder nicht mehr im Training verwendet werden.

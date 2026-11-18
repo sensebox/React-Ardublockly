@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { getImageTranslations } from "./translations";
 import ModelTrainer from "./ModelTrainer";
 import ConvertDeploy from "./ConvertDeploy";
-import CollapsibleSection from "./CollapsibleSection";
+import Section from "./Section";
 import HelpSidebar from "../HelpSidebar";
 import HelpButton, { useHelpBlink, markHelpSeen } from "../HelpButton";
 import { HelpProvider } from "../HelpContext";
@@ -141,7 +141,7 @@ const ImageClassificationTool = ({ hideHelp = false, hideHeader = false }) => {
             onOpenHelp={handleOpenHelp}
             deploySection={
               trainedModel && (
-                <CollapsibleSection
+                <Section
                   title={
                     <Typography variant="h5" gutterBottom>
                       {t.integration.title}
@@ -160,7 +160,7 @@ const ImageClassificationTool = ({ hideHelp = false, hideHeader = false }) => {
                   }
                 >
                   <ConvertDeploy model={trainedModel} />
-                </CollapsibleSection>
+                </Section>
               )
             }
           />

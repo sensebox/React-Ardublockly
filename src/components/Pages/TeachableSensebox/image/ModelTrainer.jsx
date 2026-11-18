@@ -68,7 +68,8 @@ import {
   parseTrainingDataZip,
 } from "../utils/trainingDataExport";
 import ClassSampleCard from "./ClassSampleCard";
-import CollapsibleSection from "./CollapsibleSection";
+import Section from "./Section";
+import TrainTestSwitch from "./TrainTestSwitch";
 
 // Stable pseudo-random rank for a sample, so the same training images are
 // moved to the test set for a given percentage (and move back when lowered).
@@ -904,6 +905,22 @@ const ModelTrainer = ({
   const showTesting =
     hasCompletedTraining || testClasses.some((cls) => cls.samples.length > 0);
 
+  // Training and test share one section; once testing is available the
+  // section title offers a switch between both views.
+  const [activeView, setActiveView] = useState("train");
+  const currentView = showTesting ? activeView : "train";
+  useEffect(() => {
+    // Training progress is shown in the training view
+    if (isTraining) setActiveView("train");
+  }, [isTraining]);
+  // The switch replaces the section title; before testing is available the
+  // plain training title is shown.
+  const sectionTitle = showTesting ? (
+    <TrainTestSwitch value={currentView} onChange={setActiveView} t={t} />
+  ) : (
+    <Typography variant="h5">{t.section.viewTraining}</Typography>
+  );
+
   const testDisabledReason = !trainedModel
     ? t.testing.tooltip.needModel
     : isTraining || isPreliminaryModel
@@ -986,10 +1003,10 @@ const ModelTrainer = ({
                       : "primary"
                   }
                 >
-                {sourceType === "webcam" && isCameraActive
-                  ? t.training.stopWebcam
-                  : t.training.startWebcam}
-              </Button>
+                  {sourceType === "webcam" && isCameraActive
+                    ? t.training.stopWebcam
+                    : t.training.startWebcam}
+                </Button>
                 <HelpButton
                   onClick={() => {
                     markWebcamSeen();
@@ -1282,297 +1299,138 @@ const ModelTrainer = ({
           md={8}
           sx={{ display: "flex", flexDirection: "column", gap: 3 }}
         >
-          <CollapsibleSection
-            title={
-              <Typography variant="h5" gutterBottom>
-                {t.training.title}
-              </Typography>
-            }
-          >
-            <Grid container spacing={2} sx={{ mb: 3 }}>
-              {trainingClasses.map((cls) => (
-                <Grid item xs={12} key={cls.id}>
-                  <ClassSampleCard
-                    className={cls.name}
-                    samples={cls.samples}
-                    onCardClick={
-                      isWideScreen
-                        ? () => setExpandedClassId(cls.id)
-                        : undefined
-                    }
-                    title={
-                      editingClassId === cls.id &&
-                      expandedClassId !== cls.id ? (
-                        <TextField
-                          autoFocus
-                          size="small"
-                          value={editingClassName}
-                          onChange={(e) => setEditingClassName(e.target.value)}
-                          onBlur={saveClassRename}
-                          onKeyPress={(e) => {
-                            if (e.key === "Enter") saveClassRename();
-                            else if (e.key === "Escape") cancelEditingClass();
-                          }}
-                          onKeyDown={(e) => {
-                            if (e.key === "Escape") cancelEditingClass();
-                          }}
-                          sx={{ flex: 1, mr: 1 }}
-                        />
-                      ) : (
-                        <Typography
-                          variant="h6"
-                          onClick={() => startEditingClass(cls.id, cls.name)}
-                          sx={{
-                            cursor: "pointer",
-                            padding: "4px 8px",
-                            borderRadius: "4px",
-                            "&:hover": { backgroundColor: "action.hover" },
-                          }}
-                        >
-                          {cls.name}
-                        </Typography>
-                      )
-                    }
-                    headerActions={
-                      <>
-                        <Tooltip
-                          title={t.training.tooltip.desirableNumberSamples}
-                          arrow
-                        >
-                          <Chip
-                            label={`${cls.samples.length} ${t.training.samples}`}
-                            size="small"
-                            color={
-                              cls.samples.length >= 100
-                                ? "success"
-                                : cls.samples.length >= 10
-                                  ? "warning"
-                                  : cls.samples.length > 0
-                                    ? "error"
-                                    : "default"
-                            }
-                          />
-                        </Tooltip>
-                        <IconButton
-                          size="small"
-                          onClick={() => deleteClass(cls.id)}
-                          disabled={disabled}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </>
-                    }
-                    scrollRef={(el) => {
-                      sampleScrollRefs.current[cls.id] = el;
-                    }}
-                    onImageClick={openLightbox}
-                    onRemoveSample={(sampleId) =>
-                      removeSample(cls.id, sampleId)
-                    }
-                    disabled={disabled}
-                    onCapture={() => captureImage(cls.id)}
-                    captureDisabled={!isCameraActive || disabled}
-                    captureTooltip={
-                      !isCameraActive
-                        ? t.training.tooltip.startCamera
-                        : undefined
-                    }
-                    captureLabel={t.training.captureImage}
-                  />
-                </Grid>
-              ))}
-            </Grid>
-
-            <Box
-              sx={{
-                mb: 3,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: 2,
-              }}
-            >
-              {/* Add Class Button with Data Menu Dropdown */}
-              <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-                <Button
-                  variant="contained"
-                  startIcon={<AddIcon />}
-                  onClick={() => setShowAddDialog(true)}
-                  disabled={classes.length >= 4 || disabled}
-                  sx={{
-                    borderRadius: "4px 0 0 4px",
-                    height: "42px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  {t.training.addClass}
-                </Button>
-                <Button
-                  variant="contained"
-                  size="small"
-                  onClick={(e) => setDataMenuAnchor(e.currentTarget)}
-                  disabled={disabled}
-                  sx={{
-                    minWidth: "auto",
-                    marginLeft: "-2px",
-                    height: "42px",
-                    padding: "0 6px",
-                    borderRadius: "0 4px 4px 0",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  {isDownloadingCollect ? (
-                    <CircularProgress size={16} sx={{ color: "white" }} />
-                  ) : (
-                    <MoreVertIcon fontSize="small" />
-                  )}
-                </Button>
-                <Menu
-                  anchorEl={dataMenuAnchor}
-                  open={Boolean(dataMenuAnchor)}
-                  onClose={() => setDataMenuAnchor(null)}
-                >
-                  <Tooltip
-                    title={
-                      !hasClassesWithSamples
-                        ? t.training.tooltip.captureImagesFirst
-                        : ""
-                    }
-                    arrow
-                    disableHoverListener={hasClassesWithSamples}
-                  >
-                    <span>
-                      <MenuItem
-                        onClick={() => {
-                          handleDownloadTrainingData();
-                          setDataMenuAnchor(null);
-                        }}
-                        disabled={!hasClassesWithSamples}
-                      >
-                        <DownloadIcon fontSize="small" sx={{ mr: 1 }} />
-                        {t.training?.downloadData || "Download"}
-                      </MenuItem>
-                    </span>
-                  </Tooltip>
-                  <MenuItem
-                    onClick={() => {
-                      setDataMenuAnchor(null);
-                      uploadInputRef.current?.click();
-                    }}
-                  >
-                    <UploadIcon fontSize="small" sx={{ mr: 1 }} />
-                    {t.training?.uploadData || "Upload"}
-                  </MenuItem>
-                  <Tooltip
-                    title={
-                      classes.length <= 1
-                        ? t.training.tooltip.minClassesRequired
-                        : ""
-                    }
-                    arrow
-                    disableHoverListener={!(classes.length <= 1)}
-                  >
-                    <span>
-                      <MenuItem
-                        onClick={() => {
-                          handleDownloadCollectSketch();
-                          setDataMenuAnchor(null);
-                        }}
-                        disabled={
-                          classes.length <= 1 ||
-                          disabled ||
-                          isDownloadingCollect
-                        }
-                      >
-                        {isDownloadingCollect ? (
-                          <CircularProgress size={16} sx={{ mr: 1 }} />
-                        ) : (
-                          <DownloadIcon fontSize="small" sx={{ mr: 1 }} />
-                        )}
-                        {t.training?.downloadTrainScript ||
-                          "Download Collect-Sketch"}
-                      </MenuItem>
-                    </span>
-                  </Tooltip>
-                </Menu>
-                <HelpButton
-                  onClick={() => {
-                    markAddClassSeen();
-                    onOpenHelp && onOpenHelp("image/addClass");
-                  }}
-                  isBlinking={addClassBlinking}
-                  tooltip={t.training.tooltip.helpClasses}
-                />
-              </Box>
-
-              {/* Upload Error Message */}
-              {uploadError && (
-                <Alert
-                  severity="error"
-                  onClose={() => setUploadError(null)}
-                  sx={{ width: "100%", mb: 2 }}
-                >
-                  {uploadError}
-                </Alert>
-              )}
-
-              <Divider sx={{ width: "100%", my: 1 }} />
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                <Tooltip
-                  title={
-                    trainingClasses.length < 2
-                      ? t.training.tooltip.moreClasses
-                      : trainingClasses.some((cls) => cls.samples.length < 2)
-                        ? t.training.tooltip.moreSamples
-                        : ""
-                  }
-                  arrow
-                  disableHoverListener={
-                    !(
-                      disabled ||
-                      trainingClasses.length < 2 ||
-                      trainingClasses.some((cls) => cls.samples.length < 2)
-                    )
-                  }
-                >
-                  <span>
-                    <Button
-                      variant="contained"
-                      size="large"
-                      onClick={() => {
-                        trainModel();
-                      }}
-                      disabled={
-                        disabled ||
-                        trainingClasses.length < 2 ||
-                        trainingClasses.some((cls) => cls.samples.length < 2)
+          {currentView === "train" ? (
+            <Section stickyTitle title={sectionTitle}>
+              <Grid container spacing={2} sx={{ mb: 3 }}>
+                {trainingClasses.map((cls) => (
+                  <Grid item xs={12} key={cls.id}>
+                    <ClassSampleCard
+                      className={cls.name}
+                      samples={cls.samples}
+                      onCardClick={
+                        isWideScreen
+                          ? () => setExpandedClassId(cls.id)
+                          : undefined
                       }
-                      sx={{
-                        borderRadius: "4px 0 0 4px",
-                        height: "42px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
+                      title={
+                        editingClassId === cls.id &&
+                        expandedClassId !== cls.id ? (
+                          <TextField
+                            autoFocus
+                            size="small"
+                            value={editingClassName}
+                            onChange={(e) =>
+                              setEditingClassName(e.target.value)
+                            }
+                            onBlur={saveClassRename}
+                            onKeyPress={(e) => {
+                              if (e.key === "Enter") saveClassRename();
+                              else if (e.key === "Escape") cancelEditingClass();
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === "Escape") cancelEditingClass();
+                            }}
+                            sx={{ flex: 1, mr: 1 }}
+                          />
+                        ) : (
+                          <Typography
+                            variant="h6"
+                            onClick={() => startEditingClass(cls.id, cls.name)}
+                            sx={{
+                              cursor: "pointer",
+                              padding: "4px 8px",
+                              borderRadius: "4px",
+                              "&:hover": { backgroundColor: "action.hover" },
+                            }}
+                          >
+                            {cls.name}
+                          </Typography>
+                        )
+                      }
+                      headerActions={
+                        <>
+                          <Tooltip
+                            title={t.training.tooltip.desirableNumberSamples}
+                            arrow
+                          >
+                            <Chip
+                              label={`${cls.samples.length} ${t.training.samples}`}
+                              size="small"
+                              color={
+                                cls.samples.length >= 100
+                                  ? "success"
+                                  : cls.samples.length >= 10
+                                    ? "warning"
+                                    : cls.samples.length > 0
+                                      ? "error"
+                                      : "default"
+                              }
+                            />
+                          </Tooltip>
+                          <IconButton
+                            size="small"
+                            onClick={() => deleteClass(cls.id)}
+                            disabled={disabled}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </>
+                      }
+                      scrollRef={(el) => {
+                        sampleScrollRefs.current[cls.id] = el;
                       }}
-                    >
-                      {t.training.trainModel}
-                    </Button>
-                  </span>
-                </Tooltip>
+                      onImageClick={openLightbox}
+                      onRemoveSample={(sampleId) =>
+                        removeSample(cls.id, sampleId)
+                      }
+                      disabled={disabled}
+                      onCapture={() => captureImage(cls.id)}
+                      captureDisabled={!isCameraActive || disabled}
+                      captureTooltip={
+                        !isCameraActive
+                          ? t.training.tooltip.startCamera
+                          : undefined
+                      }
+                      captureLabel={t.training.captureImage}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
 
-                <Tooltip title={t.training.tooltip.trainingSettings} arrow>
+              <Box
+                sx={{
+                  mb: 3,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: 2,
+                }}
+              >
+                {/* Add Class Button with Data Menu Dropdown */}
+                <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
                   <Button
                     variant="contained"
-                    size="large"
-                    onClick={() => setShowSettingsPanel((prev) => !prev)}
-                    disabled={disabled || isTraining}
+                    startIcon={<AddIcon />}
+                    onClick={() => setShowAddDialog(true)}
+                    disabled={classes.length >= 4 || disabled}
+                    sx={{
+                      borderRadius: "4px 0 0 4px",
+                      height: "42px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {t.training.addClass}
+                  </Button>
+                  <Button
+                    variant="contained"
+                    size="small"
+                    onClick={(e) => setDataMenuAnchor(e.currentTarget)}
+                    disabled={disabled}
                     sx={{
                       minWidth: "auto",
-                      marginLeft: "-6px",
+                      marginLeft: "-2px",
                       height: "42px",
                       padding: "0 6px",
                       borderRadius: "0 4px 4px 0",
@@ -1581,207 +1439,371 @@ const ModelTrainer = ({
                       justifyContent: "center",
                     }}
                   >
-                    <MoreVertIcon fontSize="small" />
+                    {isDownloadingCollect ? (
+                      <CircularProgress size={16} sx={{ color: "white" }} />
+                    ) : (
+                      <MoreVertIcon fontSize="small" />
+                    )}
                   </Button>
-                </Tooltip>
-
-                <HelpButton
-                  onClick={() => {
-                    markTrainModelSeen();
-                    onOpenHelp && onOpenHelp("image/trainModel");
-                  }}
-                  isBlinking={trainModelBlinking}
-                  tooltip={t.training.tooltip.helpTraining}
-                />
-              </Box>
-
-              <Collapse in={showSettingsPanel} sx={{ width: "100%" }}>
-                <Paper variant="outlined" sx={{ p: 2, mt: 1 }}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 1,
-                      mb: 2,
-                    }}
+                  <Menu
+                    anchorEl={dataMenuAnchor}
+                    open={Boolean(dataMenuAnchor)}
+                    onClose={() => setDataMenuAnchor(null)}
                   >
-                    <Typography variant="subtitle1" fontWeight="bold">
-                      {t.training.settings?.title || "Training Settings"}
-                    </Typography>
-                    <HelpButton
+                    <Tooltip
+                      title={
+                        !hasClassesWithSamples
+                          ? t.training.tooltip.captureImagesFirst
+                          : ""
+                      }
+                      arrow
+                      disableHoverListener={hasClassesWithSamples}
+                    >
+                      <span>
+                        <MenuItem
+                          onClick={() => {
+                            handleDownloadTrainingData();
+                            setDataMenuAnchor(null);
+                          }}
+                          disabled={!hasClassesWithSamples}
+                        >
+                          <DownloadIcon fontSize="small" sx={{ mr: 1 }} />
+                          {t.training?.downloadData || "Download"}
+                        </MenuItem>
+                      </span>
+                    </Tooltip>
+                    <MenuItem
                       onClick={() => {
-                        markSettingsSeen();
-                        onOpenHelp && onOpenHelp("image/trainingSettings");
-                      }}
-                      isBlinking={settingsBlinking}
-                      tooltip={t.training.tooltip.helpTrainingSettings}
-                    />
-                  </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: { xs: "column", sm: "row" },
-                      gap: 2,
-                    }}
-                  >
-                    {/* Settings: fields + test split slider */}
-                    <Box sx={{ flex: 1, minWidth: 0 }}>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexWrap: "wrap",
-                          gap: 2,
-                          alignItems: "center",
-                        }}
-                      >
-                        <TextField
-                          label={t.training.settings?.epochs || "Max Epochs"}
-                          type="number"
-                          size="small"
-                          value={trainingSettings.epochs}
-                          onChange={(e) => {
-                            const value = Math.max(
-                              1,
-                              Math.min(200, parseInt(e.target.value) || 1),
-                            );
-                            setTrainingSettings((prev) => ({
-                              ...prev,
-                              epochs: value,
-                            }));
-                          }}
-                          inputProps={{ min: 1, max: 200 }}
-                          sx={{ flex: 1, minWidth: 100 }}
-                        />
-                        <TextField
-                          label={
-                            t.training.settings?.learningRate || "Learning Rate"
-                          }
-                          type="number"
-                          size="small"
-                          value={trainingSettings.learningRate}
-                          onChange={(e) => {
-                            const value = Math.max(
-                              0.000001,
-                              Math.min(
-                                0.1,
-                                parseFloat(e.target.value) || 0.001,
-                              ),
-                            );
-                            setTrainingSettings((prev) => ({
-                              ...prev,
-                              learningRate: value,
-                            }));
-                          }}
-                          inputProps={{ min: 0.000001, max: 0.1, step: 0.0001 }}
-                          sx={{ flex: 1, minWidth: 120 }}
-                        />
-                        <FormControlLabel
-                          control={
-                            <Switch
-                              checked={trainingSettings.earlyStopping}
-                              onChange={(e) =>
-                                setTrainingSettings((prev) => ({
-                                  ...prev,
-                                  earlyStopping: e.target.checked,
-                                }))
-                              }
-                              size="small"
-                            />
-                          }
-                          label={
-                            t.training.settings?.earlyStopping ||
-                            "Early Stopping"
-                          }
-                          sx={{ flex: "none" }}
-                        />
-                      </Box>
-                      <Box sx={{ mt: 2, px: 1 }}>
-                        <Typography variant="body2" gutterBottom>
-                          {t.training.settings.testSplit.replace(
-                            "{value}",
-                            testSplit,
-                          )}
-                        </Typography>
-                        <Slider
-                          value={testSplit}
-                          min={0}
-                          max={50}
-                          step={5}
-                          marks
-                          valueLabelDisplay="auto"
-                          valueLabelFormat={(value) => `${value}%`}
-                          onChange={(_, value) =>
-                            setTrainingSettings((prev) => ({
-                              ...prev,
-                              testSplit: value,
-                            }))
-                          }
-                          disabled={disabled || isTraining}
-                        />
-                      </Box>
-                    </Box>
-                    <Button
-                      size="small"
-                      onClick={resetSettings}
-                      color="secondary"
-                      sx={{
-                        flex: "none",
-                        alignSelf: { xs: "flex-end", sm: "center" },
+                        setDataMenuAnchor(null);
+                        uploadInputRef.current?.click();
                       }}
                     >
-                      {t.training.settings?.reset || "Reset"}
+                      <UploadIcon fontSize="small" sx={{ mr: 1 }} />
+                      {t.training?.uploadData || "Upload"}
+                    </MenuItem>
+                    <Tooltip
+                      title={
+                        classes.length <= 1
+                          ? t.training.tooltip.minClassesRequired
+                          : ""
+                      }
+                      arrow
+                      disableHoverListener={!(classes.length <= 1)}
+                    >
+                      <span>
+                        <MenuItem
+                          onClick={() => {
+                            handleDownloadCollectSketch();
+                            setDataMenuAnchor(null);
+                          }}
+                          disabled={
+                            classes.length <= 1 ||
+                            disabled ||
+                            isDownloadingCollect
+                          }
+                        >
+                          {isDownloadingCollect ? (
+                            <CircularProgress size={16} sx={{ mr: 1 }} />
+                          ) : (
+                            <DownloadIcon fontSize="small" sx={{ mr: 1 }} />
+                          )}
+                          {t.training?.downloadTrainScript ||
+                            "Download Collect-Sketch"}
+                        </MenuItem>
+                      </span>
+                    </Tooltip>
+                  </Menu>
+                  <HelpButton
+                    onClick={() => {
+                      markAddClassSeen();
+                      onOpenHelp && onOpenHelp("image/addClass");
+                    }}
+                    isBlinking={addClassBlinking}
+                    tooltip={t.training.tooltip.helpClasses}
+                  />
+                </Box>
+
+                {/* Upload Error Message */}
+                {uploadError && (
+                  <Alert
+                    severity="error"
+                    onClose={() => setUploadError(null)}
+                    sx={{ width: "100%", mb: 2 }}
+                  >
+                    {uploadError}
+                  </Alert>
+                )}
+
+                <Divider sx={{ width: "100%", my: 1 }} />
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <Tooltip
+                    title={
+                      trainingClasses.length < 2
+                        ? t.training.tooltip.moreClasses
+                        : trainingClasses.some((cls) => cls.samples.length < 2)
+                          ? t.training.tooltip.moreSamples
+                          : ""
+                    }
+                    arrow
+                    disableHoverListener={
+                      !(
+                        disabled ||
+                        trainingClasses.length < 2 ||
+                        trainingClasses.some((cls) => cls.samples.length < 2)
+                      )
+                    }
+                  >
+                    <span>
+                      <Button
+                        variant="contained"
+                        size="large"
+                        onClick={() => {
+                          trainModel();
+                        }}
+                        disabled={
+                          disabled ||
+                          trainingClasses.length < 2 ||
+                          trainingClasses.some((cls) => cls.samples.length < 2)
+                        }
+                        sx={{
+                          borderRadius: "4px 0 0 4px",
+                          height: "42px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        {t.training.trainModel}
+                      </Button>
+                    </span>
+                  </Tooltip>
+
+                  <Tooltip title={t.training.tooltip.trainingSettings} arrow>
+                    <Button
+                      variant="contained"
+                      size="large"
+                      onClick={() => setShowSettingsPanel((prev) => !prev)}
+                      disabled={disabled || isTraining}
+                      sx={{
+                        minWidth: "auto",
+                        marginLeft: "-6px",
+                        height: "42px",
+                        padding: "0 6px",
+                        borderRadius: "0 4px 4px 0",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <MoreVertIcon fontSize="small" />
                     </Button>
-                  </Box>
-                </Paper>
-              </Collapse>
-            </Box>
+                  </Tooltip>
 
-            {isTraining && (
-              <Box sx={{ my: 4 }}>
-                <Typography variant="body2" gutterBottom>
-                  {trainingProgress.totalEpochs > 0
-                    ? t.training.trainingEpoch
-                        .replace("{epoch}", trainingProgress.epoch)
-                        .replace("{totalEpochs}", trainingProgress.totalEpochs)
-                    : t.training.trainingInProgress}
-                </Typography>
-                <LinearProgress
-                  variant={
-                    trainingProgress.totalEpochs > 0
-                      ? "determinate"
-                      : "indeterminate"
-                  }
-                  value={
-                    trainingProgress.totalEpochs > 0
-                      ? Math.min(
-                          100,
-                          ((trainingProgress.epoch - 1) /
-                            trainingProgress.totalEpochs) *
-                            100 +
-                            (trainingProgress.batch /
-                              Math.max(1, trainingProgress.totalBatches)) *
-                              (100 / trainingProgress.totalEpochs),
-                        )
-                      : 0
-                  }
-                />
+                  <HelpButton
+                    onClick={() => {
+                      markTrainModelSeen();
+                      onOpenHelp && onOpenHelp("image/trainModel");
+                    }}
+                    isBlinking={trainModelBlinking}
+                    tooltip={t.training.tooltip.helpTraining}
+                  />
+                </Box>
+
+                <Collapse in={showSettingsPanel} sx={{ width: "100%" }}>
+                  <Paper variant="outlined" sx={{ p: 2, mt: 1 }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1,
+                        mb: 2,
+                      }}
+                    >
+                      <Typography variant="subtitle1" fontWeight="bold">
+                        {t.training.settings?.title || "Training Settings"}
+                      </Typography>
+                      <HelpButton
+                        onClick={() => {
+                          markSettingsSeen();
+                          onOpenHelp && onOpenHelp("image/trainingSettings");
+                        }}
+                        isBlinking={settingsBlinking}
+                        tooltip={t.training.tooltip.helpTrainingSettings}
+                      />
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: { xs: "column", sm: "row" },
+                        gap: 2,
+                      }}
+                    >
+                      {/* Settings: fields + test split slider */}
+                      <Box sx={{ flex: 1, minWidth: 0 }}>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexWrap: "wrap",
+                            gap: 2,
+                            alignItems: "center",
+                          }}
+                        >
+                          <TextField
+                            label={t.training.settings?.epochs || "Max Epochs"}
+                            type="number"
+                            size="small"
+                            value={trainingSettings.epochs}
+                            onChange={(e) => {
+                              const value = Math.max(
+                                1,
+                                Math.min(200, parseInt(e.target.value) || 1),
+                              );
+                              setTrainingSettings((prev) => ({
+                                ...prev,
+                                epochs: value,
+                              }));
+                            }}
+                            inputProps={{ min: 1, max: 200 }}
+                            sx={{ flex: 1, minWidth: 100 }}
+                          />
+                          <TextField
+                            label={
+                              t.training.settings?.learningRate ||
+                              "Learning Rate"
+                            }
+                            type="number"
+                            size="small"
+                            value={trainingSettings.learningRate}
+                            onChange={(e) => {
+                              const value = Math.max(
+                                0.000001,
+                                Math.min(
+                                  0.1,
+                                  parseFloat(e.target.value) || 0.001,
+                                ),
+                              );
+                              setTrainingSettings((prev) => ({
+                                ...prev,
+                                learningRate: value,
+                              }));
+                            }}
+                            inputProps={{
+                              min: 0.000001,
+                              max: 0.1,
+                              step: 0.0001,
+                            }}
+                            sx={{ flex: 1, minWidth: 120 }}
+                          />
+                          <FormControlLabel
+                            control={
+                              <Switch
+                                checked={trainingSettings.earlyStopping}
+                                onChange={(e) =>
+                                  setTrainingSettings((prev) => ({
+                                    ...prev,
+                                    earlyStopping: e.target.checked,
+                                  }))
+                                }
+                                size="small"
+                              />
+                            }
+                            label={
+                              t.training.settings?.earlyStopping ||
+                              "Early Stopping"
+                            }
+                            sx={{ flex: "none" }}
+                          />
+                        </Box>
+                        <Box sx={{ mt: 2, px: 1 }}>
+                          <Typography variant="body2" gutterBottom>
+                            {t.training.settings.testSplit.replace(
+                              "{value}",
+                              testSplit,
+                            )}
+                          </Typography>
+                          <Slider
+                            value={testSplit}
+                            min={0}
+                            max={50}
+                            step={5}
+                            marks
+                            valueLabelDisplay="auto"
+                            valueLabelFormat={(value) => `${value}%`}
+                            onChange={(_, value) =>
+                              setTrainingSettings((prev) => ({
+                                ...prev,
+                                testSplit: value,
+                              }))
+                            }
+                            disabled={disabled || isTraining}
+                          />
+                        </Box>
+                      </Box>
+                      <Button
+                        size="small"
+                        onClick={resetSettings}
+                        color="secondary"
+                        sx={{
+                          flex: "none",
+                          alignSelf: { xs: "flex-end", sm: "center" },
+                        }}
+                      >
+                        {t.training.settings?.reset || "Reset"}
+                      </Button>
+                    </Box>
+                  </Paper>
+                </Collapse>
               </Box>
-            )}
 
-            <TrainingResultsSection
-              trainingMetrics={trainingMetrics}
-              isTraining={isTraining}
-              onOpenHelp={onOpenHelp}
-              translations={{
-                title: t.training.resultsTitle || "Training Progress",
-                trainingInProgress: t.training.trainingInProgress,
-                helpTooltip: t.training.tooltip.helpTrainingProgress,
-              }}
-            />
-          </CollapsibleSection>
+              {isTraining && (
+                <Box sx={{ my: 4 }}>
+                  <Typography variant="body2" gutterBottom>
+                    {trainingProgress.totalEpochs > 0
+                      ? t.training.trainingEpoch
+                          .replace("{epoch}", trainingProgress.epoch)
+                          .replace(
+                            "{totalEpochs}",
+                            trainingProgress.totalEpochs,
+                          )
+                      : t.training.trainingInProgress}
+                  </Typography>
+                  <LinearProgress
+                    variant={
+                      trainingProgress.totalEpochs > 0
+                        ? "determinate"
+                        : "indeterminate"
+                    }
+                    value={
+                      trainingProgress.totalEpochs > 0
+                        ? Math.min(
+                            100,
+                            ((trainingProgress.epoch - 1) /
+                              trainingProgress.totalEpochs) *
+                              100 +
+                              (trainingProgress.batch /
+                                Math.max(1, trainingProgress.totalBatches)) *
+                                (100 / trainingProgress.totalEpochs),
+                          )
+                        : 0
+                    }
+                  />
+                </Box>
+              )}
 
-          {showTesting && (
+              <TrainingResultsSection
+                trainingMetrics={trainingMetrics}
+                isTraining={isTraining}
+                onOpenHelp={onOpenHelp}
+                translations={{
+                  title: t.training.resultsTitle || "Training Progress",
+                  trainingInProgress: t.training.trainingInProgress,
+                  helpTooltip: t.training.tooltip.helpTrainingProgress,
+                }}
+              />
+            </Section>
+          ) : (
             <ModelTestingSection
+              title={sectionTitle}
               testClasses={testClasses}
               sampleScrollRefs={sampleScrollRefs}
               onImageClick={testLightbox.openLightbox}

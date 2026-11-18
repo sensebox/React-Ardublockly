@@ -87,11 +87,13 @@ export const imageClassificationTranslations_en = {
     },
   },
   section: {
-    collapse: "Collapse",
-    expand: "Expand",
+    switchView: "Switch between training and test",
+    viewTraining: "Training",
+    viewTest: "Testing",
   },
   testing: {
     title: "Model Testing",
+    captureImage: "Capture test images",
     testModel: "Test model",
     testingInProgress: "Testing model...",
     errorTesting: "Testing failed: {message}",

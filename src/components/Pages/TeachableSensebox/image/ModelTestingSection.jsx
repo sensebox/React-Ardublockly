@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { Warning as WarningIcon } from "@mui/icons-material";
 import ConfusionMatrix from "./ConfusionMatrix";
-import CollapsibleSection from "./CollapsibleSection";
+import Section from "./Section";
 import ClassSampleCard from "./ClassSampleCard";
 import HelpButton, { useHelpBlink } from "../HelpButton";
 
@@ -36,6 +36,7 @@ const ModelTestingSection = ({
   resultClassNames,
   onOpenHelp,
   t,
+  title,
   sx,
 }) => {
   const {
@@ -52,22 +53,7 @@ const ModelTestingSection = ({
   const hasResults = testSampleMatrix && testSampleMatrix.length > 0;
 
   return (
-    <CollapsibleSection
-      sx={sx}
-      title={
-        <Typography variant="h5" gutterBottom>
-          {t.testing.title}
-          <HelpButton
-            onClick={() => {
-              markTestResultsSeen();
-              onOpenHelp && onOpenHelp("image/testResults");
-            }}
-            isBlinking={testResultsBlinking}
-            tooltip={t.training.tooltip.helpTestResults}
-          />
-        </Typography>
-      }
-    >
+    <Section sx={sx} stickyTitle title={title}>
       <Grid container spacing={2} sx={{ mb: 3 }}>
         {testClasses.map((cls) => (
           <Grid item xs={12} key={cls.id}>
@@ -93,7 +79,7 @@ const ModelTestingSection = ({
               captureTooltip={
                 !isCameraActive ? t.training.tooltip.startCamera : undefined
               }
-              captureLabel={t.training.captureImage}
+              captureLabel={t.testing.captureImage}
             />
           </Grid>
         ))}
@@ -119,7 +105,15 @@ const ModelTestingSection = ({
         </Box>
       )}
 
-      <Box sx={{ display: "flex", justifyContent: "center", mb: 3 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 1,
+          mb: 3,
+        }}
+      >
         <Tooltip
           title={testDisabledReason || ""}
           arrow
@@ -141,6 +135,14 @@ const ModelTestingSection = ({
             </Button>
           </span>
         </Tooltip>
+        <HelpButton
+          onClick={() => {
+            markTestResultsSeen();
+            onOpenHelp && onOpenHelp("image/testResults");
+          }}
+          isBlinking={testResultsBlinking}
+          tooltip={t.training.tooltip.helpTestResults}
+        />
       </Box>
 
       {hasResults && !isTesting && (
@@ -170,7 +172,7 @@ const ModelTestingSection = ({
           />
         </Box>
       )}
-    </CollapsibleSection>
+    </Section>
   );
 };
 
