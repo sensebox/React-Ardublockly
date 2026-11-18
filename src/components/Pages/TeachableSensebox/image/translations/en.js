@@ -91,6 +91,17 @@ export const imageClassificationTranslations_en = {
     viewTraining: "Training",
     viewTest: "Testing",
   },
+  exampleDataset: {
+    load: "Load example dataset",
+    unload: "Unload example dataset",
+    loading: "Loading example dataset...",
+    confirmTitle: "Load example dataset?",
+    confirmMessage:
+      "Your classes and images will be deleted. A model you have already trained will also be discarded.",
+    confirm: "Delete and load",
+    errorLoad: "The example dataset could not be loaded.",
+    imageAlt: "Example image",
+  },
   testing: {
     title: "Model Testing",
     captureImage: "Capture test images",

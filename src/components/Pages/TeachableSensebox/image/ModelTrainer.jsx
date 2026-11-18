@@ -19,6 +19,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  DialogContentText,
   TextField,
   Paper,
   useTheme,
@@ -42,6 +43,10 @@ import {
   Upload as UploadIcon,
   MoreVert as MoreVertIcon,
   Warning as WarningIcon,
+  Usb as UsbIcon,
+  PhotoLibrary as DatasetIcon,
+  ArrowDropDown as ArrowDropDownIcon,
+  Close as CloseIcon,
 } from "@mui/icons-material";
 import useCameraSource from "./hooks/useCameraSource";
 import useLightbox, { LightboxComponent } from "./hooks/useLightbox";
@@ -66,10 +71,26 @@ import cameraFirmwareUrl from "./sketch/camera_capture.bin?url";
 import {
   downloadTrainingData,
   parseTrainingDataZip,
+  parseTrainTestZip,
 } from "../utils/trainingDataExport";
 import ClassSampleCard from "./ClassSampleCard";
 import Section from "./Section";
 import TrainTestSwitch from "./TrainTestSwitch";
+import { IMAGE_DATASETS } from "../../../../data/teachableSensebox/imageDatasets";
+
+// The example dataset slideshow in the live classification shows one image
+// every 2 seconds (0.5 FPS).
+const EXAMPLE_SLIDESHOW_INTERVAL_MS = 2000;
+
+// Free the object URLs of uploaded or example images (captured images are
+// data URLs and need no cleanup).
+const revokeSampleUrls = (classes) => {
+  classes.forEach((cls) =>
+    [...cls.samples, ...(cls.testSamples || [])].forEach((sample) => {
+      if (sample.url?.startsWith("blob:")) URL.revokeObjectURL(sample.url);
+    }),
+  );
+};
 
 // Stable pseudo-random rank for a sample, so the same training images are
 // moved to the test set for a given percentage (and move back when lowered).
@@ -138,6 +159,17 @@ const ModelTrainer = ({
   const [dataMenuAnchor, setDataMenuAnchor] = useState(null);
   const uploadInputRef = useRef(null);
 
+  // Example dataset state: while one is loaded, the classes are read-only and
+  // the live classification shows a slideshow of its images.
+  const [exampleDataset, setExampleDataset] = useState(null);
+  const [exampleMenuAnchor, setExampleMenuAnchor] = useState(null);
+  const [pendingExampleDataset, setPendingExampleDataset] = useState(null);
+  const [isLoadingExample, setIsLoadingExample] = useState(false);
+  const [exampleError, setExampleError] = useState(null);
+  const [slideshowIndex, setSlideshowIndex] = useState(0);
+  const exampleImageRef = useRef(null);
+  const isExampleMode = exampleDataset !== null;
+
   const language = useSelector((s) => s.general.language);
   const t = getImageTranslations(language);
   const theme = useTheme();
@@ -170,6 +202,7 @@ const ModelTrainer = ({
     finalAccuracy,
     trainedModel,
     isPreliminaryModel,
+    discardModel,
   } = useModelTraining();
 
   const [hasCompletedTraining, setHasCompletedTraining] = useState(false);
@@ -210,10 +243,48 @@ const ModelTrainer = ({
     clearTestResults();
   }, [testDataSignature, trainedModel, clearTestResults]);
 
-  const { predictions } = useModelPrediction(
+  // The example slideshow only runs once a model has been trained on it
+  const showSlideshow = isExampleMode && hasCompletedTraining;
+
+  // All example images (training + test), alternating between the classes
+  const slideshowSamples = useMemo(() => {
+    if (!showSlideshow) return [];
+    const perClass = classes.map((cls) => [
+      ...cls.samples,
+      ...(cls.testSamples || []),
+    ]);
+    const maxLength = Math.max(0, ...perClass.map((s) => s.length));
+    const result = [];
+    for (let i = 0; i < maxLength; i++) {
+      perClass.forEach((samples) => {
+        if (samples[i]) result.push(samples[i]);
+      });
+    }
+    return result;
+  }, [showSlideshow, classes]);
+  const currentSlide =
+    slideshowSamples.length > 0
+      ? slideshowSamples[slideshowIndex % slideshowSamples.length]
+      : null;
+
+  useEffect(() => {
+    if (slideshowSamples.length === 0) return;
+    const interval = setInterval(
+      () => setSlideshowIndex((i) => (i + 1) % slideshowSamples.length),
+      EXAMPLE_SLIDESHOW_INTERVAL_MS,
+    );
+    return () => clearInterval(interval);
+  }, [slideshowSamples.length]);
+
+  const getExamplePreviewElement = useCallback(
+    () => exampleImageRef.current,
+    [],
+  );
+
+  const { predictions, predictNow } = useModelPrediction(
     trainedModel,
-    getPreviewElement,
-    isCameraActive,
+    isExampleMode ? getExamplePreviewElement : getPreviewElement,
+    isCameraActive || showSlideshow,
   );
 
   const trainedClassesSnapshotRef = useRef(null);
@@ -306,9 +377,12 @@ const ModelTrainer = ({
   }, [sourceType]);
 
   // Warn before leaving/reloading the page if there are unsaved samples
-  const hasSamples = classes.some(
-    (cls) => cls.samples.length > 0 || (cls.testSamples || []).length > 0,
-  );
+  // (not for the example dataset, it can simply be loaded again)
+  const hasSamples =
+    !isExampleMode &&
+    classes.some(
+      (cls) => cls.samples.length > 0 || (cls.testSamples || []).length > 0,
+    );
   useEffect(() => {
     if (!hasSamples) return;
 
@@ -901,9 +975,11 @@ const ModelTrainer = ({
 
   const hasClassesWithSamples = classes.some((cls) => cls.samples.length > 0);
   // Show the test section once a training has finished, or as soon as there
-  // are test images (e.g. moved there by the test split slider)
+  // are test images (e.g. moved there by the test split slider). The example
+  // dataset brings its own test images, so there it waits for the training.
   const showTesting =
-    hasCompletedTraining || testClasses.some((cls) => cls.samples.length > 0);
+    hasCompletedTraining ||
+    (!isExampleMode && testClasses.some((cls) => cls.samples.length > 0));
 
   // Training and test share one section; once testing is available the
   // section title offers a switch between both views.
@@ -920,6 +996,89 @@ const ModelTrainer = ({
   ) : (
     <Typography variant="h5">{t.section.viewTraining}</Typography>
   );
+
+  // ─── Example datasets ──────────────────────────────────────────────────────
+  // Removes all classes and images (incl. their object URLs) and discards the
+  // trained model, its results and the deploy section in the parent.
+  const clearDataAndModel = useCallback(() => {
+    revokeSampleUrls(classes);
+    setClasses([]);
+    discardModel();
+    onModelTrained(null);
+    trainedClassesSnapshotRef.current = null;
+    setHasCompletedTraining(false);
+    setActiveView("train");
+    setExpandedClassId(null);
+    cancelEditingClass();
+    setSlideshowIndex(0);
+  }, [classes, discardModel, onModelTrained, cancelEditingClass]);
+
+  const loadExampleDataset = useCallback(
+    async (dataset) => {
+      setIsLoadingExample(true);
+      setExampleError(null);
+      try {
+        const response = await fetch(dataset.url);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const zipBlob = await response.blob();
+        const { classes: exampleClasses, error } = await parseTrainTestZip(
+          zipBlob,
+          async (zipEntry, className, fileName) => {
+            if (!/\.(jpe?g|png|gif|webp)$/i.test(fileName)) return null;
+            const blob = await zipEntry.async("blob");
+            return {
+              isValid: true,
+              sample: {
+                id: Date.now() + Math.random(),
+                url: URL.createObjectURL(blob),
+              },
+            };
+          },
+        );
+        if (error) throw new Error(error);
+
+        // Only discard the current data once the example is ready
+        if (isCameraActive) await stopCamera();
+        setSerialError(null);
+        clearDataAndModel();
+
+        const isEnglish = language.split("_")[0] === "en";
+        setClasses(
+          exampleClasses.map((cls) => ({
+            ...cls,
+            name: (isEnglish && dataset.classNamesEn?.[cls.name]) || cls.name,
+          })),
+        );
+        setExampleDataset(dataset);
+      } catch (error) {
+        console.error("Error loading example dataset:", error);
+        setExampleError(t.exampleDataset.errorLoad);
+      } finally {
+        setIsLoadingExample(false);
+      }
+    },
+    [isCameraActive, stopCamera, clearDataAndModel, language, t],
+  );
+
+  const unloadExampleDataset = useCallback(() => {
+    clearDataAndModel();
+    setExampleDataset(null);
+  }, [clearDataAndModel]);
+
+  // Existing classes/images get deleted, so ask first
+  const handleSelectExampleDataset = (dataset) => {
+    setExampleMenuAnchor(null);
+    if (classes.length > 0) {
+      setPendingExampleDataset(dataset);
+    } else {
+      loadExampleDataset(dataset);
+    }
+  };
+
+  // Free the object URLs of the images when leaving the page
+  const classesRef = useRef(classes);
+  classesRef.current = classes;
+  useEffect(() => () => revokeSampleUrls(classesRef.current), []);
 
   const testDisabledReason = !trainedModel
     ? t.testing.tooltip.needModel
@@ -983,89 +1142,166 @@ const ModelTrainer = ({
                     : "primary"
                 }
               >
-                <Button
-                  variant="contained"
-                  startIcon={<CameraIcon />}
-                  onClick={async () => {
-                    if (sourceType === "webcam" && isCameraActive) {
-                      stopCamera();
-                    } else {
-                      if (isCameraActive) stopCamera();
-                      await selectSource("webcam");
-                      await startCamera();
-                      triggerWebcam();
-                    }
-                  }}
-                  disabled={disabled}
-                  color={
-                    sourceType === "webcam" && isCameraActive
-                      ? "secondary"
-                      : "primary"
-                  }
-                >
-                  {sourceType === "webcam" && isCameraActive
-                    ? t.training.stopWebcam
-                    : t.training.startWebcam}
-                </Button>
-                <HelpButton
-                  onClick={() => {
-                    markWebcamSeen();
-                    onOpenHelp && onOpenHelp("image/webcam");
-                  }}
-                  isBlinking={webcamBlinking}
-                  tooltip={t.training.tooltip.helpCamera}
-                />
+                {isExampleMode ? (
+                  <Button
+                    variant="contained"
+                    color="inherit"
+                    startIcon={<CloseIcon />}
+                    onClick={unloadExampleDataset}
+                    data-testid="example-dataset-unload"
+                    disabled={disabled}
+                  >
+                    {t.exampleDataset.unload}
+                  </Button>
+                ) : (
+                  <>
+                    <Button
+                      variant="contained"
+                      startIcon={<CameraIcon />}
+                      data-testid="start-webcam-button"
+                      onClick={async () => {
+                        if (sourceType === "webcam" && isCameraActive) {
+                          stopCamera();
+                        } else {
+                          if (isCameraActive) stopCamera();
+                          await selectSource("webcam");
+                          await startCamera();
+                          triggerWebcam();
+                        }
+                      }}
+                      disabled={disabled}
+                      color={
+                        sourceType === "webcam" && isCameraActive
+                          ? "secondary"
+                          : "primary"
+                      }
+                    >
+                      {sourceType === "webcam" && isCameraActive
+                        ? t.training.stopWebcam
+                        : t.training.startWebcam}
+                    </Button>
+                    <HelpButton
+                      onClick={() => {
+                        markWebcamSeen();
+                        onOpenHelp && onOpenHelp("image/webcam");
+                      }}
+                      isBlinking={webcamBlinking}
+                      tooltip={t.training.tooltip.helpCamera}
+                    />
 
-                <Tooltip
-                  title={
-                    !browserCompatible
-                      ? t.training.tooltip.browserCompatible
-                      : ""
-                  }
-                  arrow
-                  disableHoverListener={!(disabled || !browserCompatible)}
-                >
-                  <span>
-                    {senseBoxPhase === "grant" ? (
-                      <Button
-                        variant="contained"
-                        color="warning"
-                        startIcon={<UsbIcon />}
-                        onClick={handleGrantBootloader}
-                        disabled={disabled || isGrantingPort}
-                      >
-                        {t.errors.flashGrantBootloader}
-                      </Button>
-                    ) : (
-                      <Button
-                        variant="contained"
-                        startIcon={
-                          isSenseBoxBusy ? (
-                            <CircularProgress size={16} color="inherit" />
-                          ) : (
-                            <CameraIcon />
-                          )
-                        }
-                        onClick={handleSenseBoxCameraClick}
-                        disabled={
-                          disabled || !browserCompatible || isSenseBoxBusy
-                        }
-                        color={
-                          sourceType === "serial" && isCameraActive
-                            ? "secondary"
-                            : "primary"
-                        }
-                      >
-                        {isSenseBoxBusy
-                          ? senseBoxBusyLabel
-                          : sourceType === "serial" && isCameraActive
-                            ? t.training.stopSenseBoxCamera
-                            : t.training.startSenseBoxCamera}
-                      </Button>
+                    <Tooltip
+                      title={
+                        !browserCompatible
+                          ? t.training.tooltip.browserCompatible
+                          : ""
+                      }
+                      arrow
+                      disableHoverListener={!(disabled || !browserCompatible)}
+                    >
+                      <span>
+                        {senseBoxPhase === "grant" ? (
+                          <Button
+                            variant="contained"
+                            color="warning"
+                            startIcon={<UsbIcon />}
+                            onClick={handleGrantBootloader}
+                            disabled={disabled || isGrantingPort}
+                          >
+                            {t.errors.flashGrantBootloader}
+                          </Button>
+                        ) : (
+                          <Button
+                            variant="contained"
+                            startIcon={
+                              isSenseBoxBusy ? (
+                                <CircularProgress size={16} color="inherit" />
+                              ) : (
+                                <CameraIcon />
+                              )
+                            }
+                            onClick={handleSenseBoxCameraClick}
+                            disabled={
+                              disabled || !browserCompatible || isSenseBoxBusy
+                            }
+                            color={
+                              sourceType === "serial" && isCameraActive
+                                ? "secondary"
+                                : "primary"
+                            }
+                          >
+                            {isSenseBoxBusy
+                              ? senseBoxBusyLabel
+                              : sourceType === "serial" && isCameraActive
+                                ? t.training.stopSenseBoxCamera
+                                : t.training.startSenseBoxCamera}
+                          </Button>
+                        )}
+                      </span>
+                    </Tooltip>
+
+                    {IMAGE_DATASETS.length > 0 && (
+                      <>
+                        <Button
+                          variant="outlined"
+                          sx={{
+                            bgcolor: "common.white",
+                            "&:hover": { bgcolor: "action.hover" },
+                          }}
+                          startIcon={
+                            isLoadingExample ? (
+                              <CircularProgress size={16} color="inherit" />
+                            ) : (
+                              <DatasetIcon />
+                            )
+                          }
+                          endIcon={<ArrowDropDownIcon />}
+                          data-testid="example-dataset-button"
+                          onClick={(e) => setExampleMenuAnchor(e.currentTarget)}
+                          disabled={
+                            disabled ||
+                            isSenseBoxBusy ||
+                            isGrantingPort ||
+                            isLoadingExample
+                          }
+                        >
+                          {isLoadingExample
+                            ? t.exampleDataset.loading
+                            : t.exampleDataset.load}
+                        </Button>
+                        <Menu
+                          anchorEl={exampleMenuAnchor}
+                          open={Boolean(exampleMenuAnchor)}
+                          onClose={() => setExampleMenuAnchor(null)}
+                        >
+                          {IMAGE_DATASETS.map((dataset) => (
+                            <MenuItem
+                              key={dataset.id}
+                              data-testid={`example-dataset-option-${dataset.id}`}
+                              onClick={() =>
+                                handleSelectExampleDataset(dataset)
+                              }
+                            >
+                              {language.split("_")[0] === "en"
+                                ? dataset.labelEn
+                                : dataset.labelDe}
+                            </MenuItem>
+                          ))}
+                        </Menu>
+                      </>
                     )}
-                  </span>
-                </Tooltip>
+                  </>
+                )}
               </Box>
+
+              {exampleError && (
+                <Alert
+                  severity="error"
+                  onClose={() => setExampleError(null)}
+                  sx={{ mb: 2 }}
+                >
+                  {exampleError}
+                </Alert>
+              )}
 
               {senseBoxPhase === "grant" && !serialError && (
                 <Alert severity="info" sx={{ mb: 2 }}>
@@ -1106,7 +1342,8 @@ const ModelTrainer = ({
                 </Box>
               )}
 
-              {(isCameraActive || videoLoading) && !isMobile && (
+              {(showSlideshow ||
+                ((isCameraActive || videoLoading) && !isMobile)) && (
                 <Box
                   sx={{
                     mb: 3,
@@ -1130,7 +1367,7 @@ const ModelTrainer = ({
                     }}
                   >
                     <Box
-                      ref={previewContainerRef}
+                      ref={isExampleMode ? undefined : previewContainerRef}
                       sx={{
                         width: "100%",
                         height: "100%",
@@ -1145,7 +1382,17 @@ const ModelTrainer = ({
                           imageRendering: "pixelated",
                         },
                       }}
-                    />
+                    >
+                      {isExampleMode && currentSlide && (
+                        <img
+                          ref={exampleImageRef}
+                          src={currentSlide.url}
+                          alt={t.exampleDataset.imageAlt}
+                          onLoad={predictNow}
+                          data-testid="example-slideshow-image"
+                        />
+                      )}
+                    </Box>
                     {videoLoading && (
                       <Typography
                         color="text.secondary"
@@ -1236,7 +1483,7 @@ const ModelTrainer = ({
                       )}
 
                       {trainedModel &&
-                        isCameraActive &&
+                        (isCameraActive || showSlideshow) &&
                         predictions.length === 0 && (
                           <Paper
                             sx={{
@@ -1332,6 +1579,10 @@ const ModelTrainer = ({
                             }}
                             sx={{ flex: 1, mr: 1 }}
                           />
+                        ) : isExampleMode ? (
+                          <Typography variant="h6" sx={{ px: 1 }}>
+                            {cls.name}
+                          </Typography>
                         ) : (
                           <Typography
                             variant="h6"
@@ -1367,13 +1618,15 @@ const ModelTrainer = ({
                               }
                             />
                           </Tooltip>
-                          <IconButton
-                            size="small"
-                            onClick={() => deleteClass(cls.id)}
-                            disabled={disabled}
-                          >
-                            <DeleteIcon />
-                          </IconButton>
+                          {!isExampleMode && (
+                            <IconButton
+                              size="small"
+                              onClick={() => deleteClass(cls.id)}
+                              disabled={disabled}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          )}
                         </>
                       }
                       scrollRef={(el) => {
@@ -1392,6 +1645,7 @@ const ModelTrainer = ({
                           : undefined
                       }
                       captureLabel={t.training.captureImage}
+                      readOnly={isExampleMode}
                     />
                   </Grid>
                 ))}
@@ -1406,122 +1660,126 @@ const ModelTrainer = ({
                   gap: 2,
                 }}
               >
-                {/* Add Class Button with Data Menu Dropdown */}
-                <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-                  <Button
-                    variant="contained"
-                    startIcon={<AddIcon />}
-                    onClick={() => setShowAddDialog(true)}
-                    disabled={classes.length >= 4 || disabled}
-                    sx={{
-                      borderRadius: "4px 0 0 4px",
-                      height: "42px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    {t.training.addClass}
-                  </Button>
-                  <Button
-                    variant="contained"
-                    size="small"
-                    onClick={(e) => setDataMenuAnchor(e.currentTarget)}
-                    disabled={disabled}
-                    sx={{
-                      minWidth: "auto",
-                      marginLeft: "-2px",
-                      height: "42px",
-                      padding: "0 6px",
-                      borderRadius: "0 4px 4px 0",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    {isDownloadingCollect ? (
-                      <CircularProgress size={16} sx={{ color: "white" }} />
-                    ) : (
-                      <MoreVertIcon fontSize="small" />
-                    )}
-                  </Button>
-                  <Menu
-                    anchorEl={dataMenuAnchor}
-                    open={Boolean(dataMenuAnchor)}
-                    onClose={() => setDataMenuAnchor(null)}
-                  >
-                    <Tooltip
-                      title={
-                        !hasClassesWithSamples
-                          ? t.training.tooltip.captureImagesFirst
-                          : ""
-                      }
-                      arrow
-                      disableHoverListener={hasClassesWithSamples}
-                    >
-                      <span>
-                        <MenuItem
-                          onClick={() => {
-                            handleDownloadTrainingData();
-                            setDataMenuAnchor(null);
-                          }}
-                          disabled={!hasClassesWithSamples}
-                        >
-                          <DownloadIcon fontSize="small" sx={{ mr: 1 }} />
-                          {t.training?.downloadData || "Download"}
-                        </MenuItem>
-                      </span>
-                    </Tooltip>
-                    <MenuItem
-                      onClick={() => {
-                        setDataMenuAnchor(null);
-                        uploadInputRef.current?.click();
+                {/* Add Class Button with Data Menu Dropdown (not for the
+                    read-only example dataset) */}
+                {!isExampleMode && (
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+                    <Button
+                      variant="contained"
+                      startIcon={<AddIcon />}
+                      onClick={() => setShowAddDialog(true)}
+                      data-testid="add-class-button"
+                      disabled={classes.length >= 4 || disabled}
+                      sx={{
+                        borderRadius: "4px 0 0 4px",
+                        height: "42px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
                       }}
                     >
-                      <UploadIcon fontSize="small" sx={{ mr: 1 }} />
-                      {t.training?.uploadData || "Upload"}
-                    </MenuItem>
-                    <Tooltip
-                      title={
-                        classes.length <= 1
-                          ? t.training.tooltip.minClassesRequired
-                          : ""
-                      }
-                      arrow
-                      disableHoverListener={!(classes.length <= 1)}
+                      {t.training.addClass}
+                    </Button>
+                    <Button
+                      variant="contained"
+                      size="small"
+                      onClick={(e) => setDataMenuAnchor(e.currentTarget)}
+                      disabled={disabled}
+                      sx={{
+                        minWidth: "auto",
+                        marginLeft: "-2px",
+                        height: "42px",
+                        padding: "0 6px",
+                        borderRadius: "0 4px 4px 0",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
                     >
-                      <span>
-                        <MenuItem
-                          onClick={() => {
-                            handleDownloadCollectSketch();
-                            setDataMenuAnchor(null);
-                          }}
-                          disabled={
-                            classes.length <= 1 ||
-                            disabled ||
-                            isDownloadingCollect
-                          }
-                        >
-                          {isDownloadingCollect ? (
-                            <CircularProgress size={16} sx={{ mr: 1 }} />
-                          ) : (
+                      {isDownloadingCollect ? (
+                        <CircularProgress size={16} sx={{ color: "white" }} />
+                      ) : (
+                        <MoreVertIcon fontSize="small" />
+                      )}
+                    </Button>
+                    <Menu
+                      anchorEl={dataMenuAnchor}
+                      open={Boolean(dataMenuAnchor)}
+                      onClose={() => setDataMenuAnchor(null)}
+                    >
+                      <Tooltip
+                        title={
+                          !hasClassesWithSamples
+                            ? t.training.tooltip.captureImagesFirst
+                            : ""
+                        }
+                        arrow
+                        disableHoverListener={hasClassesWithSamples}
+                      >
+                        <span>
+                          <MenuItem
+                            onClick={() => {
+                              handleDownloadTrainingData();
+                              setDataMenuAnchor(null);
+                            }}
+                            disabled={!hasClassesWithSamples}
+                          >
                             <DownloadIcon fontSize="small" sx={{ mr: 1 }} />
-                          )}
-                          {t.training?.downloadTrainScript ||
-                            "Download Collect-Sketch"}
-                        </MenuItem>
-                      </span>
-                    </Tooltip>
-                  </Menu>
-                  <HelpButton
-                    onClick={() => {
-                      markAddClassSeen();
-                      onOpenHelp && onOpenHelp("image/addClass");
-                    }}
-                    isBlinking={addClassBlinking}
-                    tooltip={t.training.tooltip.helpClasses}
-                  />
-                </Box>
+                            {t.training?.downloadData || "Download"}
+                          </MenuItem>
+                        </span>
+                      </Tooltip>
+                      <MenuItem
+                        onClick={() => {
+                          setDataMenuAnchor(null);
+                          uploadInputRef.current?.click();
+                        }}
+                      >
+                        <UploadIcon fontSize="small" sx={{ mr: 1 }} />
+                        {t.training?.uploadData || "Upload"}
+                      </MenuItem>
+                      <Tooltip
+                        title={
+                          classes.length <= 1
+                            ? t.training.tooltip.minClassesRequired
+                            : ""
+                        }
+                        arrow
+                        disableHoverListener={!(classes.length <= 1)}
+                      >
+                        <span>
+                          <MenuItem
+                            onClick={() => {
+                              handleDownloadCollectSketch();
+                              setDataMenuAnchor(null);
+                            }}
+                            disabled={
+                              classes.length <= 1 ||
+                              disabled ||
+                              isDownloadingCollect
+                            }
+                          >
+                            {isDownloadingCollect ? (
+                              <CircularProgress size={16} sx={{ mr: 1 }} />
+                            ) : (
+                              <DownloadIcon fontSize="small" sx={{ mr: 1 }} />
+                            )}
+                            {t.training?.downloadTrainScript ||
+                              "Download Collect-Sketch"}
+                          </MenuItem>
+                        </span>
+                      </Tooltip>
+                    </Menu>
+                    <HelpButton
+                      onClick={() => {
+                        markAddClassSeen();
+                        onOpenHelp && onOpenHelp("image/addClass");
+                      }}
+                      isBlinking={addClassBlinking}
+                      tooltip={t.training.tooltip.helpClasses}
+                    />
+                  </Box>
+                )}
 
                 {/* Upload Error Message */}
                 {uploadError && (
@@ -1557,6 +1815,7 @@ const ModelTrainer = ({
                       <Button
                         variant="contained"
                         size="large"
+                        data-testid="train-model-button"
                         onClick={() => {
                           trainModel();
                         }}
@@ -1822,10 +2081,12 @@ const ModelTrainer = ({
               )}
               onOpenHelp={onOpenHelp}
               t={t}
+              readOnly={isExampleMode}
             />
           )}
 
-          {deploySection}
+          {/* No deployment for models trained on the example dataset */}
+          {!isExampleMode && deploySection}
         </Grid>
       </Grid>
 
@@ -1858,8 +2119,38 @@ const ModelTrainer = ({
         openLightbox={openLightbox}
         removeSample={removeSample}
         disabled={disabled}
+        readOnly={isExampleMode}
         t={t}
       />
+
+      <Dialog
+        open={pendingExampleDataset !== null}
+        onClose={() => setPendingExampleDataset(null)}
+      >
+        <DialogTitle>{t.exampleDataset.confirmTitle}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {t.exampleDataset.confirmMessage}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setPendingExampleDataset(null)}>
+            {t.training.cancel}
+          </Button>
+          <Button
+            variant="contained"
+            color="warning"
+            data-testid="example-dataset-confirm"
+            onClick={() => {
+              const dataset = pendingExampleDataset;
+              setPendingExampleDataset(null);
+              loadExampleDataset(dataset);
+            }}
+          >
+            {t.exampleDataset.confirm}
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <Dialog open={showAddDialog} onClose={() => setShowAddDialog(false)}>
         <DialogTitle>{t.training.addNewClass}</DialogTitle>
@@ -1923,7 +2214,7 @@ const ModelTrainer = ({
         onClose={closeLightbox}
         onPrev={showPrev}
         onNext={showNext}
-        onDelete={removeCurrentLightboxImage}
+        onDelete={isExampleMode ? undefined : removeCurrentLightboxImage}
       />
 
       <LightboxComponent
@@ -1933,7 +2224,9 @@ const ModelTrainer = ({
         onClose={testLightbox.closeLightbox}
         onPrev={testLightbox.showPrev}
         onNext={testLightbox.showNext}
-        onDelete={testLightbox.removeCurrentLightboxImage}
+        onDelete={
+          isExampleMode ? undefined : testLightbox.removeCurrentLightboxImage
+        }
       />
 
       <input

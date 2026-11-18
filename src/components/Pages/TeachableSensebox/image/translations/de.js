@@ -120,6 +120,17 @@ export const imageClassificationTranslations_de = {
     viewTraining: "Trainieren",
     viewTest: "Testen",
   },
+  exampleDataset: {
+    load: "Beispieldatensatz laden",
+    unload: "Beispieldatensatz entfernen",
+    loading: "Lade Beispieldatensatz...",
+    confirmTitle: "Beispieldatensatz laden?",
+    confirmMessage:
+      "Deine Klassen und Bilder werden gelöscht. Ein bereits trainiertes Modell wird ebenfalls verworfen.",
+    confirm: "Löschen und laden",
+    errorLoad: "Der Beispieldatensatz konnte nicht geladen werden.",
+    imageAlt: "Beispielbild",
+  },
   testing: {
     title: "Modell Testen",
     captureImage: "Testbilder aufnehmen",

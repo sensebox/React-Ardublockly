@@ -15,7 +15,8 @@ import {
 
 /**
  * Card showing the samples of one class with a capture button.
- * Used for both training and test images.
+ * Used for both training and test images. With `readOnly` (example dataset)
+ * images can't be removed or captured.
  */
 const ClassSampleCard = ({
   className,
@@ -31,8 +32,10 @@ const ClassSampleCard = ({
   captureDisabled,
   captureTooltip,
   captureLabel,
+  readOnly = false,
 }) => (
   <Card
+    data-testid="class-sample-card"
     onClick={(e) => {
       if (!onCardClick) return;
       if (
@@ -99,47 +102,52 @@ const ClassSampleCard = ({
                 display: "block",
               }}
             />
-            <IconButton
-              size="small"
-              sx={{
-                position: "absolute",
-                top: -8,
-                right: -8,
-                bgcolor: "background.paper",
-                "&:hover": {
-                  bgcolor: "error.light",
-                  color: "white",
-                },
-              }}
-              onClick={() => onRemoveSample(sample.id)}
-              disabled={disabled}
-            >
-              <DeleteIcon fontSize="small" />
-            </IconButton>
+            {!readOnly && (
+              <IconButton
+                size="small"
+                sx={{
+                  position: "absolute",
+                  top: -8,
+                  right: -8,
+                  bgcolor: "background.paper",
+                  "&:hover": {
+                    bgcolor: "error.light",
+                    color: "white",
+                  },
+                }}
+                onClick={() => onRemoveSample(sample.id)}
+                data-testid="remove-sample-button"
+                disabled={disabled}
+              >
+                <DeleteIcon fontSize="small" />
+              </IconButton>
+            )}
           </Box>
         ))}
       </Box>
     </CardContent>
 
-    <CardActions>
-      <Tooltip
-        title={captureTooltip || ""}
-        arrow
-        disableHoverListener={!captureTooltip}
-      >
-        <span>
-          <Button
-            variant="contained"
-            size="medium"
-            startIcon={<CameraIcon />}
-            onClick={onCapture}
-            disabled={captureDisabled}
-          >
-            {captureLabel}
-          </Button>
-        </span>
-      </Tooltip>
-    </CardActions>
+    {!readOnly && (
+      <CardActions>
+        <Tooltip
+          title={captureTooltip || ""}
+          arrow
+          disableHoverListener={!captureTooltip}
+        >
+          <span>
+            <Button
+              variant="contained"
+              size="medium"
+              startIcon={<CameraIcon />}
+              onClick={onCapture}
+              disabled={captureDisabled}
+            >
+              {captureLabel}
+            </Button>
+          </span>
+        </Tooltip>
+      </CardActions>
+    )}
   </Card>
 );
 

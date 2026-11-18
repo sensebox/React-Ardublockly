@@ -38,6 +38,7 @@ const ModelTestingSection = ({
   t,
   title,
   sx,
+  readOnly = false,
 }) => {
   const {
     isBlinking: testResultsBlinking,
@@ -80,6 +81,7 @@ const ModelTestingSection = ({
                 !isCameraActive ? t.training.tooltip.startCamera : undefined
               }
               captureLabel={t.testing.captureImage}
+              readOnly={readOnly}
             />
           </Grid>
         ))}

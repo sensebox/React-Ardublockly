@@ -97,6 +97,20 @@ function useModelTraining() {
     setIsPreliminaryModel(false);
   }, []);
 
+  // Drop the trained model, free its TensorFlow memory and reset all
+  // training and test results.
+  const discardModel = useCallback(() => {
+    if (trainedModel) {
+      try {
+        trainedModel.model?.dispose();
+      } catch (error) {
+        console.warn("Could not dispose trained model:", error);
+      }
+    }
+    setTrainedModel(null);
+    resetTrainingState();
+  }, [trainedModel, resetTrainingState]);
+
   const clearTestResults = useCallback(() => {
     setTestResults([]);
     setTestSampleMatrix([]);
@@ -562,6 +576,7 @@ function useModelTraining() {
     trainedModel,
     isPreliminaryModel,
     resetTrainingState,
+    discardModel,
   };
 }
 
