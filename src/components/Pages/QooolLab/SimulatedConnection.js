@@ -1,6 +1,7 @@
 import {
   clampDistance,
   clampOrientations,
+  normalizeDirection,
   RANGE,
   spectrum,
 } from "../../Simulator/magnetometer/model.js";
@@ -12,7 +13,7 @@ export default class SimulatedConnection {
     onStatus,
     onLog,
     onError,
-    unsupportedText = "The simulator supports sweep mode only.",
+    unsupportedText = "The simulator supports sweep and waterfall mode only.",
     interval = 100,
     random = Math.random,
   }) {
@@ -27,7 +28,7 @@ export default class SimulatedConnection {
     });
     this.distance = 1;
     this.orientations = 1;
-    this.angle = 0;
+    this.direction = [1, 0, 0];
     [this.f1, this.f2] = RANGE;
     this.connected = false;
   }
@@ -42,19 +43,21 @@ export default class SimulatedConnection {
   setOrientations(orientations) {
     this.orientations = clampOrientations(orientations);
   }
-  setAngle(angle) {
-    this.angle = Number(angle) || 0;
+  // Where the magnet sits, seen from the sensor (3D vector).
+  setDirection(direction) {
+    this.direction = normalizeDirection(direction);
   }
   async send(command) {
     if (!this.connected) throw new Error("Device disconnected.");
     this.onLog(`TX: ${command}`);
     const [type, value] = command.slice(1, -1).split(",");
     if (type === "f1" || type === "f2") this[type] = Number(value);
-    else if (type === "start" && value === "sweep") {
+    else if (type === "start" && (value === "sweep" || value === "waterfall")) {
       this.halt();
-      this.emit("<start,sweep>");
-      this.sweep();
-      this.timer = setInterval(() => this.sweep(), this.interval);
+      this.emit(`<start,${value}>`);
+      const tick = () => this.sweep(value === "waterfall");
+      tick();
+      this.timer = setInterval(tick, this.interval);
     } else if (type === "start") {
       this.halt();
       this.emit(`<text,${this.unsupportedText}>`);
@@ -64,12 +67,19 @@ export default class SimulatedConnection {
       this.emit("<end>");
     }
   }
-  // The magnet can move at any time, so every tick replaces the whole sweep.
-  sweep() {
+  // The magnet can move at any time, so every tick sends a whole sweep: it
+  // replaces the plot (<clf>) or, in waterfall mode, ends one row (<end>).
+  sweep(waterfall = false) {
+    // What the latest sweep was measured with, so markers match the plot.
+    this.measured = {
+      distance: this.distance,
+      orientations: this.orientations,
+      direction: this.direction,
+    };
     const rows = spectrum({
       distance: this.distance,
       orientations: this.orientations,
-      angle: this.angle,
+      direction: this.direction,
       f1: this.f1,
       f2: this.f2,
       random: this.random,
@@ -77,8 +87,9 @@ export default class SimulatedConnection {
       const x = Number(freq.toFixed(1));
       return [x, Number(volt.toFixed(5)), x, 0, x, 0, x, 0];
     });
-    this.onTelegram("<clf>");
+    if (!waterfall) this.onTelegram("<clf>");
     this.onTelegram(`<batch,${JSON.stringify(rows)}>`);
+    if (waterfall) this.onTelegram("<end>");
   }
   emit(telegram) {
     this.onLog(`RX: ${telegram}`);

@@ -79,7 +79,11 @@ export function commandsFor(mode, settings, text = "") {
           ? [1, 50]
           : [0, 1024];
     if (!Number.isFinite(value) || value < min || value > max)
-      throw new Error(`Invalid ${key}: ${min}–${max}.`);
+      throw new Error(
+        key.startsWith("f")
+          ? `Invalid ${key}: ${min / 1000}–${max / 1000} GHz.`
+          : `Invalid ${key}: ${min}–${max}.`,
+      );
   });
   if (mode !== "roll" && mode !== "hopp" && settings.f1 >= settings.f2)
     throw new Error(

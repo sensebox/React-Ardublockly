@@ -1,6 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Alert,
   Box,
   Button,
@@ -14,22 +17,69 @@ import {
   Tab,
   Tabs,
   TextField,
+  ToggleButton,
+  ToggleButtonGroup,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { saveAs } from "file-saver";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faChevronDown,
+  faDownload,
+  faPause,
+  faPlay,
+} from "@fortawesome/free-solid-svg-icons";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import SerialConnection from "./SerialConnection";
 import SimulatedConnection from "./SimulatedConnection";
 import MagnetScene from "@/components/Simulator/magnetometer/MagnetScene";
-import MagnetControls from "@/components/Simulator/magnetometer/MagnetControls";
 import {
-  BASE_VOLTAGE,
+  FieldLinesSwitch,
+  ViewSwitch,
+  OrientationToggle,
+} from "@/components/Simulator/magnetometer/MagnetControls";
+import FieldCalculation, {
+  readoutColour,
+} from "@/components/Simulator/magnetometer/FieldCalculation";
+import {
+  CENTER,
+  dipPairs,
+  flattenDirection,
+  readDips,
   RANGE,
-  yRange,
+  subscript,
 } from "@/components/Simulator/magnetometer/model";
 import { commandsFor, MODES, parseTelegram } from "./protocol";
-import { fitLorentzians, rmse } from "./fit";
-import Plot, { COLORS } from "./Plot";
+import Plot from "./Plot";
 
+// Hopp, Roll and X–Y stay in the protocol but are not offered in the tab bar.
+// "both" is a view, not a device mode: it measures a waterfall and also plots
+// the newest of its sweeps as a curve.
+const TABS = ["sweep", "waterfall", "both"];
+const modeOf = (tab) => (tab === "both" ? "waterfall" : tab);
+
+// Joins PNG blobs side by side into one PNG, like the tiles on the page.
+async function joinPngs(blobs) {
+  const images = await Promise.all(
+    blobs.map((blob) => createImageBitmap(blob)),
+  );
+  const canvas = document.createElement("canvas");
+  canvas.width = images.reduce((sum, image) => sum + image.width, 0);
+  canvas.height = Math.max(...images.map((image) => image.height));
+  const ctx = canvas.getContext("2d");
+  let x = 0;
+  for (const image of images) {
+    ctx.drawImage(image, x, 0);
+    x += image.width;
+  }
+  return new Promise((resolve, reject) =>
+    canvas.toBlob(
+      (blob) => (blob ? resolve(blob) : reject(new Error("PNG export failed"))),
+      "image/png",
+    ),
+  );
+}
 const blank = () => ({ points: [], sweeps: [], normalizers: [1, 1, 1, 1] });
 const defaults = (mode) => ({
   f1: mode === "roll" ? 2850 : 2700,
@@ -43,24 +93,59 @@ const defaults = (mode) => ({
   window: 3,
   history: 50,
 });
-const initialPeaks = () =>
-  Array.from({ length: 4 }, (_, i) => ({
-    enabled: i === 0,
-    freq: 2840 + i * 20,
-    depth: 0.05,
-    width: 5,
-  }));
+
+// Shows value / scale (e.g. MHz as GHz) and keeps the typed text while editing,
+// so "2.80" does not collapse to "2.8" before the next digit.
+function ScaledField({ value, scale = 1, onValue, ...props }) {
+  const format = (v) =>
+    v === "" ? "" : String(Number((v / scale).toFixed(6)));
+  const [text, setText] = useState(() => format(value));
+  // Only outside changes (or a new scale) replace the typed text.
+  useEffect(() => {
+    const typed = text === "" ? "" : Number(text) * scale;
+    if (
+      typed === "" || value === ""
+        ? typed !== value
+        : Math.abs(typed - value) > 1e-6
+    )
+      setText(format(value));
+  }, [value, scale]);
+  return (
+    <TextField
+      {...props}
+      type="number"
+      size="small"
+      value={text}
+      onChange={(e) => {
+        setText(e.target.value);
+        onValue(e.target.value === "" ? "" : Number(e.target.value) * scale);
+      }}
+    />
+  );
+}
 
 export default function QooolLab() {
   const board = useSelector((s) => s.board.board);
   return <Lab board={board} />;
 }
 
+// With the simulator, the magnet scene and the plot share the window height so
+// both fit on one screen; 510px is roughly everything else (incl. the help bar).
+const SCENE_HEIGHT = "clamp(220px, calc((100vh - 510px) * 0.45), 420px)";
+const PLOT_HEIGHT = "clamp(240px, calc((100vh - 510px) * 0.55), 440px)";
+
 function Lab({ board }) {
   const language = useSelector((s) => s.general.language);
   const de = language === "de_DE";
+  const theme = useTheme();
   const t = (en, german) => (de ? german : en);
-  const [mode, setMode] = useState("sweep");
+  // NV-centre choices, offered on the sensor and as a toggle in the scene.
+  const nvChoices = [
+    t("Single NV", "Einzelnes NV"),
+    t("4 orientations", "4 Ausrichtungen"),
+  ];
+  const [tab, setTab] = useState("sweep");
+  const mode = modeOf(tab);
   const [settings, setSettings] = useState(
     Object.fromEntries(MODES.map((m) => [m, defaults(m)])),
   );
@@ -72,12 +157,12 @@ function Lab({ board }) {
   const [message, setMessage] = useState("");
   const [deviceText, setDeviceText] = useState("");
   const [rawCommand, setRawCommand] = useState("");
-  const [visible, setVisible] = useState([true, false, false, false]);
+  // One channel for plot and waterfall; the simulator only fills CH 1.
   const [channel, setChannel] = useState(0);
-  const [fitChannel, setFitChannel] = useState(0);
-  const [peaks, setPeaks] = useState(initialPeaks);
-  const [showFit, setShowFit] = useState(false);
-  const [autoResult, setAutoResult] = useState(null);
+  const visible = useMemo(
+    () => [0, 1, 2, 3].map((i) => i === channel),
+    [channel],
+  );
   const [snapshot, setSnapshot] = useState(
     Object.fromEntries(MODES.map((m) => [m, blank()])),
   );
@@ -86,9 +171,15 @@ function Lab({ board }) {
   const [distance, setDistance] = useState(1);
   const [magnet, setMagnet] = useState({
     orientations: 1,
-    angle: 0,
+    direction: [1, 0, 0],
     fieldLines: false,
+    threeD: false, // the simulator starts in the 2D top view
   });
+  const [measured, setMeasured] = useState(null);
+  // A paused plot keeps showing this copy while the measurement goes on.
+  const [frozen, setFrozen] = useState(null);
+  const plotRef = useRef(null),
+    waterfallRef = useRef(null);
   const simulatedRef = useRef(false);
   const connection = useRef(null),
     active = useRef(null),
@@ -127,6 +218,7 @@ function Lab({ board }) {
         ),
       );
       setLog(logs.current.slice(-200));
+      setMeasured(connection.current?.measured ?? null);
     }, 200);
     return () => {
       mounted.current = false;
@@ -258,51 +350,83 @@ function Lab({ board }) {
     simulatedRef.current = true;
     setSimulated(true);
     setDistance(1);
-    setMagnet({ orientations: 1, angle: 0, fieldLines: false });
-    setMode("sweep");
+    setMagnet({
+      orientations: 1,
+      direction: [1, 0, 0],
+      fieldLines: false,
+      threeD: false,
+    });
+    setChannel(0);
+    setTab("sweep");
+    setFrozen(null);
     setSettings((old) => ({
       ...old,
       sweep: { ...old.sweep, f1: RANGE[0], f2: RANGE[1] },
+      waterfall: { ...old.waterfall, f1: RANGE[0], f2: RANGE[1] },
     }));
     const service = new SimulatedConnection({
       ...handlers(),
       unsupportedText: t(
-        "The simulator supports sweep mode only.",
-        "Der Simulator unterstützt nur den Sweep-Modus.",
+        "The simulator supports sweep and waterfall mode only.",
+        "Der Simulator unterstützt nur den Sweep- und Wasserfall-Modus.",
       ),
     });
     connection.current = service;
     await service.connect();
   }
-  const moveMagnet = (value) => {
+  // The toggle picks the data source: the real MCU-S2 (connected with its own
+  // button, since the port picker needs a deliberate click) or the simulator.
+  async function switchSource(next) {
+    if ((next === "simulator") === simulated) return;
+    operation.current++;
+    await connection.current?.disconnect();
+    if (next === "simulator") await startSimulator();
+  }
+  const moveMagnet = (value, direction) => {
     setDistance(value);
     connection.current?.setDistance?.(value);
+    changeMagnet({ direction });
   };
   const changeMagnet = (patch) => {
     setMagnet((old) => ({ ...old, ...patch }));
     if ("orientations" in patch)
       connection.current?.setOrientations?.(patch.orientations);
-    if ("angle" in patch) connection.current?.setAngle?.(patch.angle);
+    if ("direction" in patch)
+      connection.current?.setDirection?.(patch.direction);
+  };
+  // The 2D view shows the table from above, so the magnet moves onto it.
+  const switchView = (threeD) => {
+    changeMagnet({ threeD });
+    if (!threeD) moveMagnet(distance, flattenDirection(magnet.direction));
   };
   // The real device needs the MCU-S2; the simulator keeps running on any board.
   useEffect(() => {
     if (board !== "MCU-S2" && !simulatedRef.current)
       void connection.current?.disconnect();
   }, [board]);
-  async function start() {
+  // The simulator is the default source: it starts when the page opens, so
+  // the lab works right away without hardware.
+  useEffect(() => {
+    void startSimulator();
+  }, []);
+  async function start(target = mode) {
     try {
-      const commands = commandsFor(mode, settings[mode], message);
+      const commands = commandsFor(target, settings[target], message);
+      // Switching modes while measuring: end the old mode first, so none of
+      // its telegrams (e.g. a waterfall <end>) land in the new one.
+      if (active.current && active.current !== target) {
+        stopping.current = true;
+        await connection.current.send("<end>");
+      }
       setError("");
       setBusy(true);
       stopping.current = false;
       const token = ++operation.current;
-      data.current[mode] = blank();
+      data.current[target] = blank();
       rawRows.current = [];
-      recordingMode.current = mode;
-      active.current = mode;
-      setRunning(mode);
-      setShowFit(false);
-      setAutoResult(null);
+      recordingMode.current = target;
+      active.current = target;
+      setRunning(target);
       for (const command of commands) {
         if (token !== operation.current || !mounted.current) return;
         await connection.current.send(command);
@@ -347,10 +471,41 @@ function Lab({ board }) {
       }),
       `qoool-${recordingMode.current}-${new Date().toISOString().replace(/[:.]/g, "-")}.${extension}`,
     );
+  async function downloadPlot() {
+    try {
+      const blob =
+        tab === "both"
+          ? await joinPngs([
+              await plotRef.current.toPng(),
+              await waterfallRef.current.toPng(),
+            ])
+          : await plotRef.current.toPng();
+      saveAs(
+        blob,
+        `qoool-${tab}-${new Date().toISOString().replace(/[:.]/g, "-")}.png`,
+      );
+    } catch (e) {
+      reportError(e);
+    }
+  }
   const selected = settings[mode],
     currentData = snapshot[mode];
   const update = (key, value) =>
     setSettings((old) => ({ ...old, [mode]: { ...old[mode], [key]: value } }));
+  // Every frequency is shown in GHz; settings, commands and data stay in MHz
+  // as the firmware expects.
+  const frequencyField = (key, label) => (
+    <ScaledField
+      key={key}
+      label={label}
+      scale={1000}
+      value={selected[key]}
+      disabled={!!running || busy}
+      inputProps={{ min: 2.7, max: 3, step: 0.001 }}
+      sx={{ width: 105 }}
+      onValue={(value) => update(key, value)}
+    />
+  );
   const field = (key, label, min, max, step = 1) => (
     <TextField
       key={key}
@@ -365,17 +520,10 @@ function Lab({ board }) {
       }
     />
   );
-  const fitPoints = snapshot.sweep.points.map((p) => [
-    p.row[fitChannel * 2],
-    p.row[fitChannel * 2 + 1] / snapshot.sweep.normalizers[fitChannel],
-  ]);
-  const fitReady = !running && !busy && fitPoints.length > 1;
-  const plotPeaks =
-    mode === "sweep" && showFit && fitReady ? autoResult?.peaks || peaks : null;
   const labels = {
-    frequency: t("Frequency (MHz)", "Frequenz (MHz)"),
+    frequency: t("Frequency (GHz)", "Frequenz (GHz)"),
     time: t("Time (s)", "Zeit (s)"),
-    intensity: t("Intensity", "Intensität"),
+    intensity: t("Fluorescence intensity", "Fluoreszenzintensität"),
     newest: t("Sweep (newest at top)", "Sweep (neueste oben)"),
     empty: simulated
       ? t(
@@ -387,71 +535,174 @@ function Lab({ board }) {
           "MCU-S2 verbinden oder Simulator starten, dann Messung starten.",
         ),
   };
-  // The simulator shows GHz and volts like the reference display; data stay in MHz and normalized.
+  // Split dips of the latest simulated sweep, named f₁, f₂, … Before the first
+  // sweep (or without the simulator) the worked example follows the magnet.
+  const paused = frozen?.mode === mode;
+  const shownData = paused ? frozen.data : currentData;
+  // "both": the newest complete waterfall row (or the one still coming in)
+  // as a sweep, first-sample normalized like a sweep measurement.
+  const latestSweep = (d) => {
+    const points = d.sweeps[0] ?? d.points;
+    return {
+      points,
+      sweeps: [],
+      normalizers: points.length
+        ? [1, 3, 5, 7].map((i) => points[0].row[i] || 0.5)
+        : [1, 1, 1, 1],
+    };
+  };
+  const fieldSource = measured ?? { distance, ...magnet };
+  const modelPairs = dipPairs(fieldSource.distance, fieldSource);
+  // Paused: the dips as read off the frozen curve (see togglePause), so the
+  // markers, Δf and the worked example match what the plot shows.
+  const pairs = (paused && frozen.pairs) || modelPairs;
+  // Frequency axes read in GHz. The simulator also scales each curve to 0–1
+  // for display; data stay in MHz and first-sample normalized.
+  const ghzAxis = { xFactor: 0.001, xDigits: 3, xLabel: labels.frequency };
+  const sweepAxis = simulated
+    ? {
+        ...ghzAxis,
+        normalize: true,
+        yRange: [0, 1],
+        yDigits: 1,
+        yLabel: t("Fluorescence intensity", "Fluoreszenzintensität"),
+        markers: pairs.flatMap(({ low, high }) => [low, high]),
+        markerColour: readoutColour(theme),
+        // Δf per pair, numbered like B₁, B₂, … in the worked example.
+        spans: pairs.map(({ low, high }, i) => ({
+          name: pairs.length > 1 ? `Δf${subscript(i + 1)}` : "Δf",
+          low: low.freq,
+          high: high.freq,
+        })),
+        markerChannel: channel,
+        markerCentre: CENTER,
+      }
+    : ghzAxis;
   const axis =
-    simulated && mode === "sweep"
-      ? {
-          xFactor: 0.001,
-          xDigits: 2,
-          xLabel: t("Frequency (GHz)", "Frequenz (GHz)"),
-          yFactor: currentData.points.length
-            ? currentData.normalizers[0]
-            : BASE_VOLTAGE,
-          yRange: yRange(magnet.orientations),
-          yLabel: t("Response (V)", "Signal (V)"),
-        }
-      : null;
+    mode === "sweep"
+      ? sweepAxis
+      : mode === "waterfall"
+        ? simulated
+          ? { ...ghzAxis, normalize: true }
+          : ghzAxis
+        : simulated || mode === "roll" || mode === "xy"
+          ? null
+          : ghzAxis;
+  const hasPlotData =
+    currentData.points.length > 0 || currentData.sweeps.length > 0;
+  // The worked example highlights values only while the plot shows the dips
+  // to read them from.
+  const readable =
+    simulated &&
+    pairs.length > 0 &&
+    (tab === "both"
+      ? latestSweep(shownData).points.length > 0
+      : tab === "sweep" && shownData.points.length > 0);
+  const togglePause = () => {
+    if (paused) return setFrozen(null);
+    // The sweep the plot shows: the sweep itself, or the newest waterfall row.
+    const sweep =
+      mode === "sweep" ? currentData.points : latestSweep(currentData).points;
+    setFrozen({
+      mode,
+      data: currentData,
+      axis,
+      at: Date.now(),
+      pairs: simulated
+        ? readDips(
+            sweep.map((p) => [p.row[channel * 2], p.row[channel * 2 + 1]]),
+            modelPairs,
+          )
+        : null,
+    });
+  };
+  const modeName = (m) =>
+    m === "both"
+      ? t("Sweep + Waterfall", "Sweep + Wasserfall")
+      : m === "waterfall"
+        ? t("Waterfall", "Wasserfall")
+        : m === "sweep"
+          ? "Sweep"
+          : m.toUpperCase();
+  const fieldLabels = {
+    title: t(
+      "Calculating the magnetic field B",
+      "Berechnung der Magnetfeldstärke B",
+    ),
+    intro: t(
+      "The magnetic field shifts the two dips apart (Zeeman splitting). Their distance gives the field strength B.",
+      "Das Magnetfeld schiebt die beiden Dips auseinander (Zeeman-Aufspaltung). Aus ihrem Abstand folgt die Feldstärke B.",
+    ),
+    noSplit: t(
+      "Only one dip: without a magnetic field there is no splitting.",
+      "Nur ein Dip: Ohne Magnetfeld gibt es keine Aufspaltung.",
+    ),
+    given: t("Given", "Gegeben"),
+    approach: t("Approach", "Ansatz"),
+    solve: t("Solve for B", "Nach B umstellen"),
+    insert: t("Insert values", "Einsetzen"),
+    result: t("Result", "Ergebnis"),
+    centre: t("resonance without a magnetic field", "Resonanz ohne Magnetfeld"),
+    gamma: t(
+      "gyromagnetic ratio of the electron",
+      "gyromagnetisches Verhältnis des Elektrons",
+    ),
+    decimal: t(".", ","),
+    readout: t(
+      "Green values can be read from the plot.",
+      "Grüne Werte kannst du im Diagramm ablesen.",
+    ),
+    splitting: t(
+      "Distance between the dips, shown as Δf in the plot",
+      "Abstand der Dips, im Diagramm als Δf eingezeichnet",
+    ),
+    along:
+      fieldSource.orientations === 1
+        ? t(
+            "A pair only measures the part of B along its NV axis. Move the magnet around the sensor to see it shrink.",
+            "Ein Dip-Paar misst nur den Anteil von B entlang seiner NV-Achse. Bewege den Magneten um den Sensor herum, dann wird er kleiner.",
+          )
+        : t(
+            "Each pair belongs to one NV orientation and measures the part of B along its axis. Pairs with the same splitting overlap and are listed once.",
+            "Jedes Paar gehört zu einer NV-Ausrichtung und misst den Anteil von B entlang ihrer Achse. Paare mit gleicher Aufspaltung liegen übereinander und sind nur einmal aufgeführt.",
+          ),
+  };
   return (
-    <Container maxWidth="xl" sx={{ py: 4 }}>
-      <Stack spacing={3}>
-        <Box>
-          <Typography variant="h3" component="h1">
+    <Container maxWidth="xl" sx={{ py: 2 }}>
+      <Breadcrumbs content={[{ link: "/qoool", title: "QOOOL Lab" }]} />
+      <Stack spacing={2}>
+        <>
+          {/* <Typography variant="h4" component="h1">
             QOOOL Lab
-          </Typography>
-          <Typography color="text.secondary">
+          </Typography> */}
+          {/* <Typography color="text.secondary" sx={{ maxWidth: 820, mt: 1 }}>
             {t(
-              "NV-center magnetometry · senseBox MCU-S2",
-              "NV-Zentren-Magnetometrie · senseBox MCU-S2",
+              "Measure magnetic fields with NV centres in diamond. Connect your MCU-S2 with the QOOOL XBee module and magnetometer via USB. The board must already run the firmware used by the Python lab. Without hardware, switch to the simulator at the top right.",
+              "Miss Magnetfelder mit NV-Zentren im Diamanten. Verbinde deine MCU-S2 mit dem QOOOL-XBee-Modul und Magnetometer über USB. Auf dem Board muss bereits die Firmware des Python-Labs installiert sein. Ohne Hardware kannst du oben rechts auf den Simulator umschalten.",
             )}
-          </Typography>
-        </Box>
-        <Alert severity="info">
-          {t(
-            "Connect your MCU-S2 with the QOOOL XBee module and magnetometer via USB. The board must already run the firmware used by the Python lab. Without hardware, start the simulator.",
-            "Verbinde deine MCU-S2 mit dem QOOOL-XBee-Modul und Magnetometer über USB. Auf dem Board muss bereits die Firmware des Python-Labs installiert sein. Ohne Hardware kannst du den Simulator starten.",
-          )}
-        </Alert>
-        {board !== "MCU-S2" && (
-          <Alert severity="info">
-            {t(
-              "Measuring with a real magnetometer requires the MCU-S2. Select it in the board menu. The simulator works with every board.",
-              "Die Messung mit einem echten Magnetometer benötigt die MCU-S2. Wähle sie im Board-Menü aus. Der Simulator funktioniert mit jedem Board.",
-            )}
-          </Alert>
-        )}
-        {!navigator.serial && (
-          <Alert severity="warning">
-            {t(
-              "USB serial requires a supported desktop browser, such as Chrome or Edge, on HTTPS or localhost.",
-              "USB-Serial benötigt einen unterstützten Desktop-Browser, z. B. Chrome oder Edge, über HTTPS oder localhost.",
-            )}
-          </Alert>
-        )}
-        {error && (
-          <Alert severity="error" onClose={() => setError("")}>
-            {error}
-          </Alert>
-        )}
-        <Paper variant="outlined" sx={{ p: 2 }}>
+          </Typography> */}
+        </>
+        <Paper
+          variant="outlined"
+          id="qoool-lab"
+          sx={{ borderRadius: 3, overflow: "hidden" }}
+        >
           <Stack
             direction="row"
-            spacing={2}
+            spacing={1.5}
             useFlexGap
             flexWrap="wrap"
             alignItems="center"
+            sx={{
+              px: { xs: 2, sm: 3 },
+              py: 2,
+              borderBottom: 1,
+              borderColor: "divider",
+            }}
           >
             <Chip
-              color={status === "connected" ? "success" : "default"}
+              color={status === "connected" ? "primary" : "default"}
+              variant={status === "connected" ? "filled" : "outlined"}
               label={
                 status === "connected"
                   ? simulated
@@ -463,42 +714,35 @@ function Lab({ board }) {
               }
             />
             {latency != null && (
-              <Typography variant="body2">Ping: {latency} ms</Typography>
+              <Typography variant="body2" color="text.secondary">
+                Ping: {latency} ms
+              </Typography>
             )}
-            <Button
-              variant="contained"
-              disabled={
-                !navigator.serial ||
-                board !== "MCU-S2" ||
-                status !== "disconnected"
-              }
-              onClick={connect}
-            >
-              {t("Connect MCU-S2", "MCU-S2 verbinden")}
-            </Button>
-            <Button
-              variant="outlined"
-              color={simulated ? "error" : "primary"}
-              disabled={!simulated && status !== "disconnected"}
-              onClick={() => {
-                if (!simulated) return void startSimulator();
-                operation.current++;
-                void connection.current?.disconnect();
-              }}
-            >
-              {simulated
-                ? t("Stop simulator", "Simulator stoppen")
-                : t("Start simulator", "Simulator starten")}
-            </Button>
-            <Button
-              disabled={status === "disconnected" || simulated}
-              onClick={() => {
-                operation.current++;
-                void connection.current?.disconnect();
-              }}
-            >
-              {t("Disconnect", "Trennen")}
-            </Button>
+            {!simulated && (
+              <Button
+                variant="contained"
+                disableElevation
+                disabled={
+                  !navigator.serial ||
+                  board !== "MCU-S2" ||
+                  status !== "disconnected"
+                }
+                onClick={connect}
+              >
+                {t("Connect MCU-S2", "MCU-S2 verbinden")}
+              </Button>
+            )}
+            {!simulated && (
+              <Button
+                disabled={status === "disconnected"}
+                onClick={() => {
+                  operation.current++;
+                  void connection.current?.disconnect();
+                }}
+              >
+                {t("Disconnect", "Trennen")}
+              </Button>
+            )}
             <Button
               disabled={!rawRows.current.length}
               onClick={() =>
@@ -513,484 +757,618 @@ function Lab({ board }) {
             <Button onClick={() => download(logs.current.join("\n"), "txt")}>
               {t("Download log", "Log herunterladen")}
             </Button>
+            <Box sx={{ flex: 1 }} />
+            <ToggleButtonGroup
+              exclusive
+              size="small"
+              color="primary"
+              id="qoool-source"
+              aria-label={t("Data source", "Datenquelle")}
+              value={simulated ? "simulator" : "device"}
+              disabled={status === "connecting" || busy}
+              onChange={(_, next) => next && void switchSource(next)}
+            >
+              <ToggleButton
+                value="device"
+                sx={{ textTransform: "none", px: 2 }}
+              >
+                MCU-S2
+              </ToggleButton>
+              <ToggleButton
+                value="simulator"
+                sx={{ textTransform: "none", px: 2 }}
+              >
+                {t("Simulator", "Simulator")}
+              </ToggleButton>
+            </ToggleButtonGroup>
           </Stack>
-        </Paper>
-        <Paper variant="outlined">
-          <Tabs
-            value={mode}
-            onChange={(_, value) => setMode(value)}
-            variant="scrollable"
-            scrollButtons="auto"
-            aria-label="Measurement modes"
-          >
-            {MODES.map((m) => (
-              <Tab
-                key={m}
-                value={m}
-                label={
-                  m === "xy"
-                    ? "X–Y"
-                    : m === "hopp"
-                      ? "Hopp"
-                      : m[0].toUpperCase() + m.slice(1)
-                }
-              />
-            ))}
-          </Tabs>
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: { xs: "1fr", md: "minmax(0, 1fr) 290px" },
-              gap: 2,
-              p: 2,
-            }}
-          >
-            <Box sx={{ minWidth: 0 }}>
-              {simulated && (
-                <MagnetScene
-                  distance={distance}
-                  onChange={moveMagnet}
-                  angle={magnet.angle}
-                  showFieldLines={magnet.fieldLines}
-                  labels={{
-                    sensor: t("Magnetometer", "Magnetometer"),
-                    magnet: t(
-                      "Magnet, distance to the sensor",
-                      "Magnet, Abstand zum Sensor",
-                    ),
-                    hint: t(
-                      "Drag the magnet towards the sensor or away from it. Arrow keys work too.",
-                      "Ziehe den Magneten zum Sensor hin oder von ihm weg. Die Pfeiltasten funktionieren auch.",
-                    ),
-                  }}
-                />
-              )}
-              {simulated && (
-                <MagnetControls
-                  {...magnet}
-                  onChange={changeMagnet}
-                  labels={{
-                    centres: t("NV centres", "NV-Zentren"),
-                    orientations: [
-                      "Single-NV",
-                      ...[2, 3, 4].map(
-                        (n) => `${n} ${t("orientations", "Ausrichtungen")}`,
-                      ),
-                    ],
-                    direction: t("Magnet direction", "Magnetausrichtung"),
-                    angles: [
-                      t("along (0°)", "längs (0°)"),
-                      t("tilted (35°)", "schräg (35°)"),
-                      t("across (90°)", "quer (90°)"),
-                    ],
-                    fieldLines: t("Show field lines", "Feldlinien anzeigen"),
-                  }}
-                />
-              )}
-              <Plot
-                data={currentData}
-                mode={mode}
-                settings={selected}
-                visible={visible}
-                channel={channel}
-                peaks={plotPeaks}
-                labels={labels}
-                axis={axis}
-              />
-              {mode !== "waterfall" && (
-                <Stack direction="row" useFlexGap flexWrap="wrap">
-                  {visible.map((value, i) => (
-                    <FormControlLabel
-                      key={i}
-                      label={`CH ${i + 1}`}
-                      control={
-                        <Checkbox
-                          checked={value}
-                          sx={{
-                            color: COLORS[i],
-                            "&.Mui-checked": { color: COLORS[i] },
-                          }}
-                          onChange={(e) =>
-                            setVisible((v) =>
-                              v.map((old, j) =>
-                                i === j ? e.target.checked : old,
-                              ),
-                            )
-                          }
-                        />
-                      }
-                    />
-                  ))}
-                </Stack>
-              )}
-              <Typography variant="caption" color="text.secondary">
-                {mode === "waterfall"
-                  ? t(
-                      "Raw intensity · newest sweep at the top",
-                      "Rohintensität · neuester Sweep oben",
-                    )
-                  : mode === "roll"
-                    ? t(
-                        "Raw intensity in a rolling time window",
-                        "Rohintensität im rollenden Zeitfenster",
-                      )
-                    : axis
-                      ? magnet.orientations === 1
-                        ? t(
-                            "Simulated photo sensor signal of a single NV centre",
-                            "Simuliertes Signal des Fotosensors für ein einzelnes NV-Zentrum",
-                          )
-                        : t(
-                            `Simulated photo sensor signal of an ensemble with ${magnet.orientations} NV orientations`,
-                            `Simuliertes Signal des Fotosensors für ein Ensemble mit ${magnet.orientations} NV-Ausrichtungen`,
-                          )
-                      : t(
-                          "Each channel is normalized to its first sample, matching the Python lab.",
-                          "Jeder Kanal wird wie im Python-Lab auf seinen ersten Messwert normiert.",
-                        )}
-              </Typography>
-            </Box>
-            <Stack spacing={2}>
-              <Typography variant="h6">
-                {t("Measurement controls", "Messparameter")}
-              </Typography>
-              {field(
-                "f1",
-                mode === "roll" ? labels.frequency : "f1 (MHz)",
-                2700,
-                3000,
-              )}
-              {mode !== "roll" && field("f2", "f2 (MHz)", 2700, 3000)}
-              {mode === "hopp" &&
-                field(
-                  "blink",
-                  t("Blink frequency (Hz)", "Blinkfrequenz (Hz)"),
-                  1,
-                  50,
-                )}
-              {(mode === "roll" || mode === "xy") && (
-                <>
-                  {["s1", "s2", "s3"].map((key, i) =>
-                    field(key, `Slider ${i + 1}`, 0, 1024),
-                  )}
-                  {["option1", "option2"].map((key, i) => (
-                    <FormControlLabel
-                      key={key}
-                      label={`Option ${i + 1}`}
-                      control={
-                        <Checkbox
-                          disabled={!!running || busy}
-                          checked={selected[key]}
-                          onChange={(e) => update(key, e.target.checked)}
-                        />
-                      }
-                    />
-                  ))}
-                </>
-              )}
-              {mode === "roll" && (
-                <TextField
-                  label={t("Time window (s)", "Zeitfenster (s)")}
-                  type="number"
-                  size="small"
-                  value={selected.window}
-                  inputProps={{ min: 1, max: 30, step: 0.1 }}
-                  onChange={(e) => {
-                    const n = Number(e.target.value);
-                    if (n >= 1 && n <= 30) update("window", n);
-                  }}
-                />
-              )}
-              {mode === "waterfall" && (
-                <>
-                  <TextField
-                    select
-                    size="small"
-                    label={t("Channel", "Kanal")}
-                    value={channel}
-                    onChange={(e) => setChannel(Number(e.target.value))}
-                  >
-                    {[0, 1, 2, 3].map((ch) => (
-                      <MenuItem key={ch} value={ch}>
-                        CH {ch + 1}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                  <TextField
-                    label={t("Sweeps shown", "Angezeigte Sweeps")}
-                    type="number"
-                    size="small"
-                    value={selected.history}
-                    inputProps={{ min: 10, max: 100, step: 5 }}
-                    onChange={(e) => {
-                      const n = Number(e.target.value);
-                      if (Number.isInteger(n) && n >= 10 && n <= 100)
-                        update("history", n);
-                    }}
-                  />
-                </>
-              )}
-              <TextField
-                label={t("Measurement text", "Messtext")}
-                value={message}
-                disabled={!!running}
-                onChange={(e) => setMessage(e.target.value)}
-                size="small"
-              />
-              <Button
-                variant="contained"
-                disabled={
-                  status !== "connected" ||
-                  !!running ||
-                  busy ||
-                  (simulated && mode !== "sweep")
-                }
-                onClick={start}
-              >
-                {t("Start", "Starten")} {mode.toUpperCase()}
-              </Button>
-              {simulated && mode !== "sweep" && (
-                <Typography variant="body2" color="text.secondary">
-                  {t(
-                    "The simulator supports sweep mode only.",
-                    "Der Simulator unterstützt nur den Sweep-Modus.",
-                  )}
-                </Typography>
-              )}
-              <Button
-                color="error"
-                variant="outlined"
-                disabled={!running || status !== "connected"}
-                onClick={stop}
-              >
-                {t("Stop", "Stoppen")}
-              </Button>
-              {running && (
-                <Typography role="status">
-                  {t("Running", "Aktiv")}: {running.toUpperCase()}
-                </Typography>
-              )}
-            </Stack>
-          </Box>
-        </Paper>
-        {mode === "sweep" && (
-          <Paper variant="outlined" sx={{ p: 2 }}>
-            <Stack spacing={2}>
-              <Typography variant="h6">
-                {t("Lorentzian fit", "Lorentz-Fit")}
-              </Typography>
-              <Typography variant="body2">
+          <Stack spacing={2} sx={{ p: 2 }}>
+            {board !== "MCU-S2" && !simulated && (
+              <Alert severity="info">
                 {t(
-                  "After a sweep, enable up to four dips and set their initial frequencies. Adjust parameters manually or run the automatic fit.",
-                  "Nach einem Sweep bis zu vier Minima aktivieren und Startfrequenzen setzen. Parameter manuell anpassen oder automatisch fitten.",
+                  "Measuring with a real magnetometer requires the MCU-S2. Select it in the board menu. The simulator works with every board.",
+                  "Die Messung mit einem echten Magnetometer benötigt die MCU-S2. Wähle sie im Board-Menü aus. Der Simulator funktioniert mit jedem Board.",
                 )}
-              </Typography>
-              <Stack
-                direction="row"
-                spacing={2}
-                useFlexGap
-                flexWrap="wrap"
-                alignItems="center"
-              >
-                <TextField
-                  select
-                  label={t("Fit channel", "Fit-Kanal")}
-                  value={fitChannel}
-                  size="small"
-                  onChange={(e) => {
-                    setFitChannel(Number(e.target.value));
-                    setAutoResult(null);
-                  }}
-                >
-                  {[0, 1, 2, 3].map((ch) => (
-                    <MenuItem key={ch} value={ch}>
-                      CH {ch + 1}
-                    </MenuItem>
-                  ))}
-                </TextField>
-                <FormControlLabel
-                  label={t("Show fit", "Fit anzeigen")}
-                  control={
-                    <Checkbox
-                      checked={showFit}
-                      disabled={!fitReady}
-                      onChange={(e) => setShowFit(e.target.checked)}
-                    />
-                  }
-                />
-                <Button
-                  disabled={!fitReady}
-                  onClick={() => {
-                    try {
-                      setAutoResult(fitLorentzians(fitPoints, peaks));
-                      setShowFit(true);
-                      setError("");
-                    } catch (e) {
-                      reportError(e);
-                    }
-                  }}
-                >
-                  {t("Automatic fit", "Automatisch fitten")}
-                </Button>
-                <Button
-                  onClick={() => {
-                    setPeaks(initialPeaks());
-                    setAutoResult(null);
-                    setShowFit(false);
-                  }}
-                >
-                  {t("Reset fit", "Fit zurücksetzen")}
-                </Button>
-                {showFit && fitReady && (
-                  <Typography>
-                    RMSE:{" "}
-                    {(autoResult?.rmse ?? rmse(fitPoints, peaks)).toFixed(6)}
-                  </Typography>
+              </Alert>
+            )}
+            {!navigator.serial && !simulated && (
+              <Alert severity="warning">
+                {t(
+                  "USB serial requires a supported desktop browser, such as Chrome or Edge, on HTTPS or localhost.",
+                  "USB-Serial benötigt einen unterstützten Desktop-Browser, z. B. Chrome oder Edge, über HTTPS oder localhost.",
                 )}
-              </Stack>
-              {peaks.map((peak, i) => (
-                <Stack
-                  key={i}
-                  direction={{ xs: "column", sm: "row" }}
-                  spacing={2}
-                  alignItems={{ sm: "center" }}
-                >
-                  <FormControlLabel
-                    label={`${t("Dip", "Minimum")} ${i + 1}`}
-                    control={
-                      <Checkbox
-                        disabled={!fitReady}
-                        checked={peak.enabled}
-                        onChange={(e) => {
-                          setAutoResult(null);
-                          setPeaks((old) =>
-                            old.map((p, j) =>
-                              i === j ? { ...p, enabled: e.target.checked } : p,
-                            ),
-                          );
-                        }}
-                      />
-                    }
-                  />
-                  {[
-                    [
-                      "freq",
-                      t("Frequency (MHz)", "Frequenz (MHz)"),
-                      2700,
-                      3000,
-                      0.1,
-                    ],
-                    ["depth", t("Depth", "Tiefe"), 0, 1, 0.001],
-                    ["width", t("Width (MHz)", "Breite (MHz)"), 0.1, 50, 0.1],
-                  ].map(([key, label, min, max, step]) => (
-                    <TextField
-                      key={key}
-                      label={label}
-                      type="number"
-                      size="small"
-                      value={peak[key]}
-                      disabled={!fitReady || !peak.enabled}
-                      inputProps={{ min, max, step }}
-                      onChange={(e) => {
-                        const n = Number(e.target.value);
-                        if (Number.isFinite(n) && n >= min && n <= max) {
-                          setAutoResult(null);
-                          setPeaks((old) =>
-                            old.map((p, j) =>
-                              i === j ? { ...p, [key]: n } : p,
-                            ),
-                          );
-                        }
-                      }}
-                    />
-                  ))}
-                </Stack>
-              ))}
-              {autoResult && (
-                <Box sx={{ overflowX: "auto" }}>
-                  <table style={{ width: "100%", textAlign: "left" }}>
-                    <thead>
-                      <tr>
-                        {[
-                          t("Dip", "Minimum"),
-                          "f (MHz)",
-                          t("Depth", "Tiefe"),
-                          t("Width (MHz)", "Breite (MHz)"),
-                          "σf (MHz)",
-                        ].map((label) => (
-                          <th key={label}>{label}</th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {autoResult.peaks.map((p, i) => (
-                        <tr key={i}>
-                          <td>{i + 1}</td>
-                          <td>{p.freq.toFixed(3)}</td>
-                          <td>{p.depth.toFixed(5)}</td>
-                          <td>{p.width.toFixed(3)}</td>
-                          <td>
-                            {p.uncertainty == null
-                              ? "—"
-                              : p.uncertainty.toFixed(4)}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </Box>
-              )}
-            </Stack>
-          </Paper>
-        )}
-        <Paper variant="outlined" sx={{ p: 2 }}>
-          <Stack spacing={2}>
-            <Typography variant="h6">
-              {t("Serial terminal", "Serielles Terminal")}
-            </Typography>
-            {deviceText && <Alert severity="info">{deviceText}</Alert>}
-            <Stack direction="row" spacing={2}>
-              <TextField
-                fullWidth
-                size="small"
-                label={t("Raw command or text", "Rohbefehl oder Text")}
-                value={rawCommand}
-                onChange={(e) => setRawCommand(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && status === "connected" && rawCommand)
-                    void sendRaw();
-                }}
-              />
-              <Button
-                disabled={status !== "connected" || !rawCommand}
-                onClick={sendRaw}
-              >
-                {t("Send", "Senden")}
-              </Button>
-            </Stack>
+              </Alert>
+            )}
+            {error && (
+              <Alert severity="error" onClose={() => setError("")}>
+                {error}
+              </Alert>
+            )}
+            {/* Desktop: scene and measurement on the left, the worked example
+                as a full-height column on the right. */}
             <Box
-              component="pre"
-              aria-label="Serial log"
               sx={{
-                m: 0,
-                p: 2,
-                bgcolor: "action.hover",
-                maxHeight: 240,
-                overflow: "auto",
-                fontSize: 12,
-                whiteSpace: "pre-wrap",
-                overflowWrap: "anywhere",
+                display: "grid",
+                gap: 2,
+                gridTemplateColumns: { xs: "1fr", lg: "minmax(0, 1fr) 360px" },
               }}
             >
-              {log.join("\n") ||
-                t("No messages yet.", "Noch keine Nachrichten.")}
+              <Stack spacing={2} sx={{ minWidth: 0 }}>
+                {simulated && (
+                  <Paper
+                    variant="outlined"
+                    id="magnetometer-simulator"
+                    sx={{ overflow: "hidden" }}
+                  >
+                    <Box sx={{ p: 1.5 }}>
+                      <MagnetScene
+                        height={SCENE_HEIGHT}
+                        onOrientationsChange={(orientations) =>
+                          changeMagnet({ orientations })
+                        }
+                        controls={
+                          <Stack
+                            direction="row"
+                            spacing={2}
+                            useFlexGap
+                            flexWrap="wrap"
+                            alignItems="center"
+                            sx={{ py: 0.5 }}
+                          >
+                            <OrientationToggle
+                              orientations={magnet.orientations}
+                              onChange={(orientations) =>
+                                changeMagnet({ orientations })
+                              }
+                              labels={{
+                                centres: t("NV centres", "NV-Zentren"),
+                                orientations: nvChoices,
+                              }}
+                            />
+                            <ViewSwitch
+                              threeD={magnet.threeD}
+                              onChange={switchView}
+                              label={t("3D view", "3D-Ansicht")}
+                            />
+                            <FieldLinesSwitch
+                              checked={magnet.fieldLines}
+                              onChange={(fieldLines) =>
+                                changeMagnet({ fieldLines })
+                              }
+                              label={t("Field lines", "Feldlinien")}
+                            />
+                          </Stack>
+                        }
+                        distance={distance}
+                        direction={magnet.direction}
+                        onChange={moveMagnet}
+                        orientations={magnet.orientations}
+                        showFieldLines={magnet.fieldLines}
+                        threeD={magnet.threeD}
+                        labels={{
+                          scene: magnet.threeD
+                            ? t(
+                                "3D view of the sensor and the magnet",
+                                "3D-Ansicht von Sensor und Magnet",
+                              )
+                            : t(
+                                "Top view of the sensor and the magnet",
+                                "Draufsicht auf Sensor und Magnet",
+                              ),
+                          sensor: t(
+                            "Magnetometer with NV diamonds",
+                            "Magnetometer mit NV-Diamanten",
+                          ),
+                          magnet: t(
+                            "Magnet, distance to the sensor",
+                            "Magnet, Abstand zum Sensor",
+                          ),
+                          distance: t("Distance", "Abstand"),
+                          angle: t(
+                            "Angle to NV axis 1",
+                            "Winkel zu NV-Achse 1",
+                          ),
+                          alongAxis: t(
+                            "Drag to move the magnet along axis",
+                            "Ziehen, um den Magneten entlang der Achse zu bewegen:",
+                          ),
+                          moveFreely: t(
+                            "Drag to move the magnet freely",
+                            "Ziehen, um den Magneten frei zu bewegen",
+                          ),
+                          zoomIn: t("Zoom in", "Hineinzoomen"),
+                          zoomOut: t("Zoom out", "Herauszoomen"),
+                          resetView: t("Reset view", "Ansicht zurücksetzen"),
+                          sensorMenu: {
+                            title: t("NV centres", "NV-Zentren"),
+                            open: t(
+                              "Sensor: choose the NV centres",
+                              "Sensor: NV-Zentren wählen",
+                            ),
+                            choices: nvChoices,
+                          },
+                          help: {
+                            show: t("How to use", "So geht's"),
+                            title: t("How to use:", "So geht's:"),
+                            hide: t("Hide help", "Hilfe ausblenden"),
+                            magnet: t("Magnet", "Magnet"),
+                            arrow: t("x/y arrow", "x/y-Pfeil"),
+                            background: t("Background", "Hintergrund"),
+                            or: t("or", "oder"),
+                            move: t("move", "bewegen"),
+                            axis: t("along one axis", "entlang einer Achse"),
+                            distance: t("distance", "Abstand"),
+                            slide: t("up / down", "nach oben / unten"),
+                            turn: t("around the sensor", "um den Sensor"),
+                            orbit: t("turn the view", "Ansicht drehen"),
+                            pan: t("move the view", "Ansicht verschieben"),
+                            zoom: t("zoom", "zoomen"),
+                            sensor: t("Sensor", "Sensor"),
+                            centres: t(
+                              "choose NV centres",
+                              "NV-Zentren wählen",
+                            ),
+                          },
+                        }}
+                      />
+                    </Box>
+                  </Paper>
+                )}
+                <Paper variant="outlined" sx={{ overflow: "hidden" }}>
+                  <Stack
+                    direction="row"
+                    useFlexGap
+                    flexWrap="wrap"
+                    alignItems="center"
+                    spacing={1.5}
+                    sx={{ pr: 2, borderBottom: 1, borderColor: "divider" }}
+                  >
+                    <Tabs
+                      value={tab}
+                      onChange={(_, value) => {
+                        setTab(value);
+                        setFrozen(null);
+                        // The simulator keeps measuring in the newly selected mode.
+                        if (simulated && running && running !== modeOf(value))
+                          void start(modeOf(value));
+                      }}
+                      variant="scrollable"
+                      scrollButtons="auto"
+                      aria-label="Measurement modes"
+                      sx={{ flex: 1, minWidth: 200 }}
+                    >
+                      {TABS.map((m) => (
+                        <Tab
+                          key={m}
+                          value={m}
+                          label={modeName(m)}
+                          sx={{ textTransform: "none", fontSize: "1rem" }}
+                        />
+                      ))}
+                    </Tabs>
+                    {running && (
+                      <Stack
+                        direction="row"
+                        spacing={1}
+                        alignItems="center"
+                        role="status"
+                      >
+                        <Box
+                          sx={{
+                            width: 8,
+                            height: 8,
+                            borderRadius: "50%",
+                            bgcolor: "primary.main",
+                          }}
+                        />
+                        <Typography variant="body2">
+                          {t("Measuring", "Messung läuft")}:{" "}
+                          {modeName(running === mode ? tab : running)}
+                        </Typography>
+                      </Stack>
+                    )}
+                    <Button
+                      variant="contained"
+                      disableElevation
+                      disabled={status !== "connected" || !!running || busy}
+                      onClick={() => start()}
+                      sx={{ my: 1 }}
+                    >
+                      {t(`Start ${modeName(tab)}`, `${modeName(tab)} starten`)}
+                    </Button>
+                    <Button
+                      color="error"
+                      variant="outlined"
+                      disabled={!running || status !== "connected"}
+                      onClick={stop}
+                      sx={{ my: 1 }}
+                    >
+                      {t("Stop", "Stoppen")}
+                    </Button>
+                  </Stack>
+                  <Box sx={{ p: 2, minWidth: 0 }}>
+                    <Box
+                      sx={{
+                        border: 1,
+                        borderColor: "divider",
+                        borderRadius: 1,
+                      }}
+                    >
+                      <Stack
+                        id="qoool-parameters"
+                        role="group"
+                        aria-label={t("Measurement settings", "Messparameter")}
+                        direction="row"
+                        spacing={1.5}
+                        useFlexGap
+                        flexWrap="wrap"
+                        alignItems="center"
+                        sx={{
+                          px: 2,
+                          py: 1.25,
+                          borderBottom: 1,
+                          borderColor: "divider",
+                          bgcolor: "background.grey",
+                        }}
+                      >
+                        {frequencyField(
+                          "f1",
+                          mode === "roll"
+                            ? labels.frequency
+                            : simulated
+                              ? t("Start (GHz)", "Start (GHz)")
+                              : "f1 (GHz)",
+                        )}
+                        {mode !== "roll" &&
+                          frequencyField(
+                            "f2",
+                            simulated
+                              ? t("End (GHz)", "Ende (GHz)")
+                              : "f2 (GHz)",
+                          )}
+                        {mode === "hopp" &&
+                          field(
+                            "blink",
+                            t("Blink frequency (Hz)", "Blinkfrequenz (Hz)"),
+                            1,
+                            50,
+                          )}
+                        {(mode === "roll" || mode === "xy") && (
+                          <>
+                            {["s1", "s2", "s3"].map((key, i) =>
+                              field(key, `Slider ${i + 1}`, 0, 1024),
+                            )}
+                            {["option1", "option2"].map((key, i) => (
+                              <FormControlLabel
+                                key={key}
+                                label={`Option ${i + 1}`}
+                                control={
+                                  <Checkbox
+                                    disabled={!!running || busy}
+                                    checked={selected[key]}
+                                    onChange={(e) =>
+                                      update(key, e.target.checked)
+                                    }
+                                  />
+                                }
+                              />
+                            ))}
+                          </>
+                        )}
+                        {mode === "roll" && (
+                          <TextField
+                            label={t("Time window (s)", "Zeitfenster (s)")}
+                            type="number"
+                            size="small"
+                            value={selected.window}
+                            inputProps={{ min: 1, max: 30, step: 0.1 }}
+                            onChange={(e) => {
+                              const n = Number(e.target.value);
+                              if (n >= 1 && n <= 30) update("window", n);
+                            }}
+                          />
+                        )}
+                        {!simulated && (
+                          <TextField
+                            select
+                            size="small"
+                            label={t("Channel", "Kanal")}
+                            sx={{ width: 110 }}
+                            value={channel}
+                            onChange={(e) => {
+                              setChannel(Number(e.target.value));
+                              setAutoResult(null);
+                            }}
+                          >
+                            {[0, 1, 2, 3].map((ch) => (
+                              <MenuItem key={ch} value={ch}>
+                                CH {ch + 1}
+                              </MenuItem>
+                            ))}
+                          </TextField>
+                        )}
+                        {mode === "waterfall" && (
+                          <TextField
+                            label={t("Sweeps", "Sweeps")}
+                            sx={{ width: 100 }}
+                            type="number"
+                            size="small"
+                            value={selected.history}
+                            inputProps={{ min: 10, max: 100, step: 5 }}
+                            onChange={(e) => {
+                              const n = Number(e.target.value);
+                              if (Number.isInteger(n) && n >= 10 && n <= 100)
+                                update("history", n);
+                            }}
+                          />
+                        )}
+                        {!simulated && (
+                          <TextField
+                            label={t("Measurement text", "Messtext")}
+                            sx={{ width: 160 }}
+                            value={message}
+                            disabled={!!running}
+                            onChange={(e) => setMessage(e.target.value)}
+                            size="small"
+                          />
+                        )}
+                        <Stack direction="row" spacing={1} sx={{ ml: "auto" }}>
+                          <Button
+                            id="qoool-plot-pause"
+                            variant={paused ? "contained" : "outlined"}
+                            disableElevation
+                            size="small"
+                            aria-pressed={paused}
+                            disabled={!paused && !hasPlotData}
+                            onClick={togglePause}
+                            startIcon={
+                              <FontAwesomeIcon
+                                icon={paused ? faPlay : faPause}
+                              />
+                            }
+                            title={
+                              paused
+                                ? t("Resume plot", "Graph fortsetzen")
+                                : t("Pause plot", "Graph pausieren")
+                            }
+                          >
+                            {paused
+                              ? t("Resume", "Weiter")
+                              : t("Pause", "Pause")}
+                          </Button>
+                          <Button
+                            id="qoool-plot-png"
+                            variant="outlined"
+                            size="small"
+                            disabled={!paused && !hasPlotData}
+                            onClick={downloadPlot}
+                            startIcon={<FontAwesomeIcon icon={faDownload} />}
+                            title={t(
+                              "Download plot as PNG",
+                              "Graph als PNG herunterladen",
+                            )}
+                          >
+                            PNG
+                          </Button>
+                        </Stack>
+                      </Stack>
+                      {tab === "both" ? (
+                        <Box
+                          id="qoool-both"
+                          sx={{
+                            display: "grid",
+                            gap: 1.5,
+                            gridTemplateColumns: {
+                              xs: "1fr",
+                              md: "repeat(2, minmax(0, 1fr))",
+                            },
+                          }}
+                        >
+                          {[
+                            {
+                              key: "sweep",
+                              title: t("Newest sweep", "Neuester Sweep"),
+                              ref: plotRef,
+                              data: latestSweep(shownData),
+                              plotAxis: sweepAxis,
+                            },
+                            {
+                              key: "waterfall",
+                              title: t(
+                                "Waterfall · newest sweep at the top",
+                                "Wasserfall · neuester Sweep oben",
+                              ),
+                              ref: waterfallRef,
+                              data: shownData,
+                              plotAxis: paused ? frozen.axis : axis,
+                            },
+                          ].map(({ key, title, ref, data, plotAxis }) => (
+                            <Paper
+                              key={key}
+                              variant="outlined"
+                              data-tile={key}
+                              sx={{ p: 1, minWidth: 0 }}
+                            >
+                              <Typography
+                                variant="subtitle2"
+                                component="h3"
+                                sx={{ px: 0.5, pb: 0.5 }}
+                              >
+                                {title}
+                              </Typography>
+                              <Plot
+                                ref={ref}
+                                data={data}
+                                pausedAt={paused ? frozen.at : null}
+                                mode={key}
+                                settings={selected}
+                                visible={visible}
+                                channel={channel}
+                                labels={labels}
+                                axis={plotAxis}
+                                height={simulated ? PLOT_HEIGHT : 400}
+                              />
+                            </Paper>
+                          ))}
+                        </Box>
+                      ) : (
+                        <Plot
+                          ref={plotRef}
+                          data={shownData}
+                          pausedAt={paused ? frozen.at : null}
+                          mode={mode}
+                          settings={selected}
+                          visible={visible}
+                          channel={channel}
+                          labels={labels}
+                          // The sweep axis follows the paused dips; others stay frozen.
+                          axis={paused && mode !== "sweep" ? frozen.axis : axis}
+                          height={simulated ? PLOT_HEIGHT : 400}
+                        />
+                      )}
+                    </Box>
+                    <Typography variant="caption" color="text.secondary">
+                      {tab === "both"
+                        ? null
+                        : mode === "waterfall"
+                          ? t(
+                              "Raw intensity · newest sweep at the top",
+                              "Rohintensität · neuester Sweep oben",
+                            )
+                          : mode === "roll"
+                            ? t(
+                                "Raw intensity in a rolling time window",
+                                "Rohintensität im rollenden Zeitfenster",
+                              )
+                            : simulated && axis
+                              ? magnet.orientations === 1
+                                ? t(
+                                    "Simulated photo sensor signal of a single NV centre, scaled to 0–1",
+                                    "Simuliertes Signal des Fotosensors für ein einzelnes NV-Zentrum, auf 0–1 normiert",
+                                  )
+                                : t(
+                                    `Simulated photo sensor signal of an ensemble with ${magnet.orientations} NV orientations, scaled to 0–1`,
+                                    `Simuliertes Signal des Fotosensors für ein Ensemble mit ${magnet.orientations} NV-Ausrichtungen, auf 0–1 normiert`,
+                                  )
+                              : null}
+                    </Typography>
+                  </Box>
+                </Paper>
+              </Stack>
+              {/* On desktop the row height follows the left column; the worked
+                example scrolls inside its column instead of adding white space. */}
+              <Paper
+                variant="outlined"
+                component="aside"
+                sx={{
+                  position: "relative",
+                  minWidth: 0,
+                  bgcolor: "background.grey",
+                }}
+              >
+                <Box
+                  sx={{
+                    p: 2.5,
+                    position: { lg: "absolute" },
+                    inset: { lg: 0 },
+                    overflowY: { lg: "auto" },
+                  }}
+                >
+                  <FieldCalculation
+                    pairs={pairs}
+                    labels={fieldLabels}
+                    highlight={readable}
+                  />
+                </Box>
+              </Paper>
             </Box>
-            <Typography variant="caption">
-              {t(
-                "Terminal: latest 200 messages. Log download: latest 20,000 messages. Data recording stops at 500,000 samples; live plots show up to 30,000 points.",
-                "Terminal: letzte 200 Nachrichten. Log-Download: letzte 20.000 Nachrichten. Datenaufnahme bis 500.000 Messpunkte; Live-Diagramme zeigen bis zu 30.000 Punkte.",
-              )}
-            </Typography>
+            <Accordion variant="outlined" disableGutters>
+              <AccordionSummary
+                expandIcon={<FontAwesomeIcon icon={faChevronDown} />}
+              >
+                <Typography variant="h6" component="h2">
+                  {t("Serial terminal", "Serielles Terminal")}
+                </Typography>
+                <Typography
+                  color="text.secondary"
+                  sx={{ ml: 2, alignSelf: "center" }}
+                  variant="body2"
+                >
+                  {t("for advanced users", "für Fortgeschrittene")}
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Stack spacing={2}>
+                  {deviceText && <Alert severity="info">{deviceText}</Alert>}
+                  <Stack direction="row" spacing={2}>
+                    <TextField
+                      fullWidth
+                      size="small"
+                      label={t("Raw command or text", "Rohbefehl oder Text")}
+                      value={rawCommand}
+                      onChange={(e) => setRawCommand(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (
+                          e.key === "Enter" &&
+                          status === "connected" &&
+                          rawCommand
+                        )
+                          void sendRaw();
+                      }}
+                    />
+                    <Button
+                      disabled={status !== "connected" || !rawCommand}
+                      onClick={sendRaw}
+                    >
+                      {t("Send", "Senden")}
+                    </Button>
+                  </Stack>
+                  <Box
+                    component="pre"
+                    aria-label="Serial log"
+                    sx={{
+                      m: 0,
+                      p: 2,
+                      bgcolor: "action.hover",
+                      maxHeight: 240,
+                      overflow: "auto",
+                      fontSize: 12,
+                      whiteSpace: "pre-wrap",
+                      overflowWrap: "anywhere",
+                    }}
+                  >
+                    {log.join("\n") ||
+                      t("No messages yet.", "Noch keine Nachrichten.")}
+                  </Box>
+                  <Typography variant="caption">
+                    {t(
+                      "Terminal: latest 200 messages. Log download: latest 20,000 messages. Data recording stops at 500,000 samples; live plots show up to 30,000 points.",
+                      "Terminal: letzte 200 Nachrichten. Log-Download: letzte 20.000 Nachrichten. Datenaufnahme bis 500.000 Messpunkte; Live-Diagramme zeigen bis zu 30.000 Punkte.",
+                    )}
+                  </Typography>
+                </Stack>
+              </AccordionDetails>
+            </Accordion>
           </Stack>
         </Paper>
       </Stack>

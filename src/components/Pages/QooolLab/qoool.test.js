@@ -6,10 +6,19 @@ import SerialConnection from "./SerialConnection.js";
 import SimulatedConnection from "./SimulatedConnection.js";
 import {
   ANGLES,
+  angleToAxis,
   BASE_VOLTAGE,
   CENTER,
+  dipPairs,
+  directionFromAngle,
+  flattenDirection,
+  fieldFromPair,
+  GAMMA,
   MAX_SPLIT,
+  normalizeDirection,
+  NV_AXES,
   peaksFor,
+  readDips,
   spectrum,
 } from "../../Simulator/magnetometer/model.js";
 
@@ -293,6 +302,11 @@ test("simulated magnetometer speaks the sweep protocol and follows the magnet", 
       throw e;
     },
     interval: 5,
+    // Seeded noise: with Math.random the fits below fail now and then.
+    random: (() => {
+      let seed = 42;
+      return () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    })(),
   });
   const lastSweep = () => {
     const rows = parseTelegram(
@@ -328,7 +342,7 @@ test("simulated magnetometer speaks the sweep protocol and follows the magnet", 
     // A full ensemble with the field along one NV axis: that axis splits fully,
     // the other three share a third of it.
     device.setOrientations(4);
-    device.setAngle(0);
+    device.setDirection([1, 0, 0]);
     await wait(30);
     const ensemble = fitLorentzians(lastSweep(), [
       { freq: 2802, depth: 0.02, width: 5 },
@@ -396,4 +410,119 @@ test("ensembles add one resonance pair per NV axis, set by the field direction",
   // Out-of-range ensemble sizes are clamped.
   assert.equal(peaksFor(0, { orientations: 9 }).length, 8);
   assert.equal(peaksFor(0, { orientations: 0 }).length, 2);
+});
+
+test("the field direction is 3D: the magnet can approach from any side", () => {
+  const splits = (direction, orientations = 1) =>
+    peaksFor(0, { orientations, direction }).map((p) =>
+      Number((p.freq - CENTER).toFixed(6)),
+    );
+  // Along NV axis 1 from either side: full splitting.
+  assert.deepEqual(splits([1, 0, 0]), [-MAX_SPLIT, MAX_SPLIT]);
+  assert.deepEqual(splits([-3, 0, 0]), [-MAX_SPLIT, MAX_SPLIT]);
+  // From above or from the front: across axis 1, no splitting.
+  assert.deepEqual(splits([0, 1, 0]), [0, 0]);
+  assert.deepEqual(splits([0, 0, 2]), [0, 0]);
+  // A direction in the table plane matches the angle shortcut.
+  for (const angle of ANGLES)
+    assert.deepEqual(
+      peaksFor(0.3, { orientations: 4, direction: directionFromAngle(angle) }),
+      peaksFor(0.3, { orientations: 4, angle }),
+    );
+  // Along another NV axis, that axis gets the full splitting.
+  const [, second] = NV_AXES;
+  const pairs = splits(second, 4);
+  assert.ok(Math.abs(pairs[3] - MAX_SPLIT) < 1e-9);
+  assert.equal(angleToAxis([0, 1, 0]), 90);
+  assert.equal(angleToAxis([-1, 0, 0]), 180);
+  assert.deepEqual(normalizeDirection([0, 0, 0]), [1, 0, 0]);
+  // The 2D top view keeps the part in the table plane.
+  assert.deepEqual(
+    flattenDirection([3, 7, 4]).map((v) => Number(v.toFixed(9))),
+    [0.6, 0, 0.8],
+  );
+  assert.deepEqual(flattenDirection([0, -1, 0]), [1, 0, 0]);
+});
+
+test("dip pairs are named outermost first and give the field from their distance", () => {
+  // No splitting: one dip, nothing to mark.
+  assert.deepEqual(dipPairs(1), []);
+  assert.deepEqual(dipPairs(0, { orientations: 1, angle: 90 }), []);
+  const [pair] = dipPairs(0);
+  assert.deepEqual(pair, {
+    low: { name: "f₁", freq: CENTER - MAX_SPLIT },
+    high: { name: "f₂", freq: CENTER + MAX_SPLIT },
+  });
+  // f₂ − f₁ = 2 · γ · B
+  assert.equal(fieldFromPair(pair.low.freq, pair.high.freq), MAX_SPLIT / GAMMA);
+  assert.equal(fieldFromPair(2800, 2940), 2.5);
+  // Along one NV axis: the three other axes share one splitting and are listed once.
+  const along = dipPairs(0, { orientations: 4, angle: 0 });
+  assert.deepEqual(
+    along.flatMap(({ low, high }) => [low.name, high.name]),
+    ["f₁", "f₂", "f₃", "f₄"],
+  );
+  assert.ok(Math.abs(along[1].high.freq - (CENTER + MAX_SPLIT / 3)) < 1e-9);
+  // Tilted: four separate pairs, sorted from the widest splitting inwards.
+  const tilted = dipPairs(0.2, { orientations: 4, angle: 35 });
+  assert.equal(tilted.length, 4);
+  tilted.forEach(({ low }, i) => {
+    if (i) assert.ok(low.freq > tilted[i - 1].low.freq);
+  });
+  // Across: the unsplit centre dip gets no marker.
+  assert.equal(dipPairs(0, { orientations: 4, angle: 90 }).length, 3);
+});
+
+test("simulated waterfall ends every sweep and keeps the measured magnet state", async () => {
+  const telegrams = [];
+  const device = new SimulatedConnection({
+    onTelegram: (t) => telegrams.push(t),
+    onStatus() {},
+    onLog() {},
+    onError: (e) => {
+      throw e;
+    },
+    interval: 5,
+  });
+  try {
+    await device.connect();
+    assert.equal(device.measured, undefined);
+    device.setDistance(0.5);
+    await device.send("<start,waterfall>");
+    assert.deepEqual(
+      telegrams.slice(0, 3).map((t) => t.slice(0, 6)),
+      ["<start", "<batch", "<end>"],
+    );
+    assert.equal(telegrams[0], "<start,waterfall>");
+    assert.ok(!telegrams.includes("<clf>"), "waterfall rows are kept");
+    assert.deepEqual(device.measured, {
+      distance: 0.5,
+      orientations: 1,
+      direction: [1, 0, 0],
+    });
+    await new Promise((resolve) => setTimeout(resolve, 30));
+    assert.ok(telegrams.filter((t) => t === "<end>").length > 2);
+    await device.send("<end>");
+    const stopped = telegrams.length;
+    await new Promise((resolve) => setTimeout(resolve, 30));
+    assert.equal(telegrams.length, stopped, "no sweeps after <end>");
+  } finally {
+    await device.disconnect();
+  }
+});
+
+test("dips read off a measured sweep sit at its minima", () => {
+  const pairs = dipPairs(0.5);
+  const points = spectrum({ distance: 0.5, noise: 0 });
+  const [read] = readDips(points, pairs);
+  // Noise-free: the minima are the model's resonances (to the sample step).
+  assert.ok(Math.abs(read.low.freq - pairs[0].low.freq) <= 1);
+  assert.ok(Math.abs(read.high.freq - pairs[0].high.freq) <= 1);
+  assert.equal(read.low.name, "f₁");
+  // A dip shifted in the data is found where the data has it.
+  const shifted = points.map(([freq, value]) => [freq + 3, value]);
+  const [moved] = readDips(shifted, pairs);
+  assert.ok(Math.abs(moved.low.freq - (pairs[0].low.freq + 3)) <= 1);
+  // Without data near a dip, the expected frequency stays.
+  assert.deepEqual(readDips([], pairs), pairs);
 });
