@@ -24,6 +24,7 @@ const ExpandedClassDialog = ({
   openLightbox,
   removeSample,
   disabled,
+  readOnly = false,
   t,
   onClose,
 }) => {
@@ -40,7 +41,11 @@ const ExpandedClassDialog = ({
       <DialogTitle
         sx={{ display: "flex", alignItems: "center", gap: 1, pb: 1 }}
       >
-        {editingClassId === cls.id ? (
+        {readOnly ? (
+          <Typography variant="h6" component="span" sx={{ flex: 1, px: 1 }}>
+            {cls.name}
+          </Typography>
+        ) : editingClassId === cls.id ? (
           <TextField
             autoFocus
             size="small"
@@ -151,20 +156,22 @@ const ExpandedClassDialog = ({
                   cursor: "pointer",
                 }}
               />
-              <IconButton
-                size="small"
-                sx={{
-                  position: "absolute",
-                  top: -8,
-                  right: -8,
-                  bgcolor: "background.paper",
-                  "&:hover": { bgcolor: "error.light", color: "white" },
-                }}
-                onClick={() => removeSample(cls.id, sample.id)}
-                disabled={disabled}
-              >
-                <DeleteIcon fontSize="small" />
-              </IconButton>
+              {!readOnly && (
+                <IconButton
+                  size="small"
+                  sx={{
+                    position: "absolute",
+                    top: -8,
+                    right: -8,
+                    bgcolor: "background.paper",
+                    "&:hover": { bgcolor: "error.light", color: "white" },
+                  }}
+                  onClick={() => removeSample(cls.id, sample.id)}
+                  disabled={disabled}
+                >
+                  <DeleteIcon fontSize="small" />
+                </IconButton>
+              )}
             </Box>
           ))}
         </Box>

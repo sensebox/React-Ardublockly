@@ -9,3 +9,7 @@ Die Learning Rate steuert, wie stark das Modell seine unbekannten Parameter in j
 # Early Stopping
 
 Early Stopping ist eine Methode, die das Training automatisch beendet, wenn sich das Modell nicht mehr ausreichend verbessert. Das spart Zeit und verhindert **_Overfitting_**.
+
+# Anteil der Trainingsbilder für Tests
+
+Mit diesem Regler verschiebst du einen Teil deiner Trainingsbilder in den Abschnitt **Modell Testing**. Diese Bilder werden dann nicht mehr für das Training verwendet, sondern nur zum Testen. Schiebst du den Regler wieder zurück, wandern die Bilder zurück ins Training. Bilder, die du direkt im Testbereich aufgenommen hast, bleiben dort.

@@ -1,286 +1,353 @@
-import React, { useMemo, useRef, useState, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Box, Typography, useTheme, Tooltip } from "@mui/material";
+import {
+  Box,
+  Chip,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Typography,
+  lighten,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
+import { Close as CloseIcon } from "@mui/icons-material";
+import { LightboxComponent } from "./hooks/useLightbox";
 import { getImageTranslations } from "./translations";
 
 /**
- * Confusion Matrix visualization component
- * Shows the performance of the classification model
+ * Confusion Matrix visualization component.
+ * Rendered as a table: axis titles and class names are header cells, each
+ * matrix cell shows the test images of that actual/classified class pair.
+ * Images are framed green (correct) or red (incorrect).
+ *
+ * @param {Array} sampleMatrix - sampleMatrix[actual][classified] = [{id, url}]
+ * @param {Array} classNames - class names in matrix order
+ *
+ * Clicking a cell opens an expanded view of that cell; clicking an image opens
+ * a viewer that only steps through the images of that cell.
  */
-const ConfusionMatrix = ({ matrix, classNames, title }) => {
+const ConfusionMatrix = ({ sampleMatrix, classNames }) => {
   const theme = useTheme();
+  const isWideScreen = useMediaQuery(theme.breakpoints.up("lg"));
   const language = useSelector((s) => s.general.language);
   const t = getImageTranslations(language);
-  const containerRef = useRef(null);
-  const [containerWidth, setContainerWidth] = useState(0);
 
-  // Measure container width
+  // Expanded view of a single cell: { row, col }
+  const [expandedCell, setExpandedCell] = useState(null);
+  // Image viewer scoped to a single cell: { row, col, index }
+  const [viewer, setViewer] = useState(null);
+
+  const viewerUrls = viewer
+    ? (sampleMatrix?.[viewer.row]?.[viewer.col] || []).map((s) => s.url)
+    : [];
+
+  const closeViewer = useCallback(() => setViewer(null), []);
+  const stepViewer = useCallback(
+    (step) =>
+      setViewer((v) => {
+        if (!v) return v;
+        const count = sampleMatrix?.[v.row]?.[v.col]?.length || 1;
+        return { ...v, index: (v.index + step + count) % count };
+      }),
+    [sampleMatrix],
+  );
+  const showPrev = useCallback(() => stepViewer(-1), [stepViewer]);
+  const showNext = useCallback(() => stepViewer(1), [stepViewer]);
+
   useEffect(() => {
-    if (!containerRef.current) return;
-
-    const observer = new ResizeObserver((entries) => {
-      if (entries[0]) {
-        setContainerWidth(entries[0].contentRect.width);
-      }
-    });
-
-    observer.observe(containerRef.current);
-    return () => observer.disconnect();
-  }, []);
-
-  const stats = useMemo(() => {
-    if (!matrix || matrix.length === 0) return null;
-
-    // Calculate totals and accuracy per class
-    // Use matrix dimensions as the source of truth (handles case where classes changed after training)
-    const numClasses = matrix.length;
-
-    // Only use class names that match the matrix dimensions
-    const validClassNames = classNames.slice(0, numClasses);
-
-    const classStats = validClassNames.map((name, i) => {
-      const truePositives = matrix[i][i];
-      const rowSum = matrix[i].reduce((a, b) => a + b, 0);
-      const colSum = matrix.reduce((sum, row) => sum + row[i], 0);
-      const precision = colSum > 0 ? truePositives / colSum : 0;
-      const recall = rowSum > 0 ? truePositives / rowSum : 0;
-      const f1 =
-        precision + recall > 0
-          ? (2 * precision * recall) / (precision + recall)
-          : 0;
-      return { name, precision, recall, f1, truePositives, rowSum, colSum };
-    });
-
-    // Overall accuracy
-    const totalCorrect = matrix.reduce((sum, row, i) => sum + row[i], 0);
-    const totalSamples = matrix.reduce(
-      (sum, row) => sum + row.reduce((a, b) => a + b, 0),
-      0,
-    );
-    const accuracy = totalSamples > 0 ? totalCorrect / totalSamples : 0;
-
-    // Find max value for color scaling
-    const maxValue = Math.max(...matrix.flat());
-
-    return {
-      classStats,
-      accuracy,
-      totalCorrect,
-      totalSamples,
-      maxValue,
-      numClasses,
-      validClassNames,
+    if (!viewer) return undefined;
+    const onKey = (e) => {
+      if (e.key === "ArrowLeft") showPrev();
+      else if (e.key === "ArrowRight") showNext();
     };
-  }, [matrix, classNames]);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [viewer, showPrev, showNext]);
 
-  if (!stats) {
-    return (
-      <Box
-        sx={{
-          p: 3,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          bgcolor: "grey.100",
-          borderRadius: 1,
-        }}
-      >
-        <Typography color="text.secondary">
-          {t.training.noConfusionMatrixData}
-        </Typography>
-      </Box>
-    );
-  }
+  // Close dialogs when the results change (e.g. re-test)
+  useEffect(() => {
+    setViewer(null);
+    setExpandedCell(null);
+  }, [sampleMatrix]);
 
-  const getCellColor = (value, isCorrect) => {
-    const intensity = stats.maxValue > 0 ? value / stats.maxValue : 0;
-    if (isCorrect) {
-      // Green for correct predictions
-      return `rgba(76, 175, 80, ${0.2 + intensity * 0.6})`;
-    } else if (value > 0) {
-      // Red for incorrect predictions
-      return `rgba(244, 67, 54, ${0.1 + intensity * 0.4})`;
-    }
-    return theme.palette.grey[50];
+  if (!sampleMatrix || sampleMatrix.length === 0) return null;
+
+  const numClasses = sampleMatrix.length;
+  const names = classNames.slice(0, numClasses);
+
+  // Opaque colours, since the grid lines are the container showing through
+  const lineColor = theme.palette.grey[400];
+  const axisBg = theme.palette.grey[300];
+  const headerBg = theme.palette.grey[200];
+  const correctBg = lighten(theme.palette.success.main, 0.88);
+  const incorrectBg = lighten(theme.palette.warning.main, 0.88);
+
+  const headerCellSx = {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
+    p: 1,
+  };
+  const labelSx = {
+    fontWeight: 600,
+    fontSize: { xs: "0.875rem", sm: "1rem" },
+    lineHeight: 1.2,
+    wordBreak: "break-word",
+  };
+  const axisSx = {
+    fontWeight: 700,
+    fontSize: { xs: "0.9rem", sm: "1.05rem" },
+  };
+  const verticalSx = {
+    writingMode: "vertical-rl",
+    transform: "rotate(180deg)",
   };
 
-  // Calculate cell size based on available width
-  // Reserve space for labels (14px for "Actual" + 28px for row labels + 42px margin)
-  const reservedSpace = 14 + 28 + 42;
-  const availableWidth =
-    containerWidth > 0 ? containerWidth - reservedSpace : 400;
-  const maxCellSize = 80; // Maximum cell size for readability
-  const minCellSize = 30; // Minimum cell size
-  const cellSize = Math.min(
-    maxCellSize,
-    Math.max(minCellSize, availableWidth / stats.numClasses),
-  );
+  const cellTitle = (row, col) =>
+    `${t.training.actual}: ${names[row]} · ${t.training.predicted}: ${names[col]}`;
+  const cellDescription = (row, col) =>
+    (row === col
+      ? t.testing.cellDescriptionCorrect
+      : t.testing.cellDescriptionIncorrect
+    )
+      .replace("{actual}", names[row])
+      .replace("{predicted}", names[col]);
+
+  const imageSx = (isCorrect, size) => ({
+    width: size,
+    height: size,
+    objectFit: "cover",
+    borderRadius: 1,
+    border: "3px solid",
+    borderColor: isCorrect ? "success.main" : "error.main",
+    cursor: isWideScreen ? "pointer" : "default",
+    display: "block",
+  });
+
+  const openViewer = (row, col, index) => (e) => {
+    e.stopPropagation();
+    if (isWideScreen) setViewer({ row, col, index });
+  };
+
+  const expandedSamples = expandedCell
+    ? sampleMatrix[expandedCell.row]?.[expandedCell.col] || []
+    : [];
 
   return (
-    <Box ref={containerRef} sx={{ width: "100%" }}>
-      {title && (
-        <Typography
-          variant="subtitle1"
-          fontWeight="medium"
+    <>
+      <Box
+        sx={{
+          width: "100%",
+          display: "grid",
+          gridTemplateColumns: `auto auto repeat(${numClasses}, minmax(0, 1fr))`,
+          gap: "1px",
+          bgcolor: lineColor,
+          border: `1px solid ${lineColor}`,
+        }}
+      >
+        {/* Empty top-left corner */}
+        <Box
           sx={{
-            mb: 1,
-            fontSize: { xs: "0.875rem", sm: "1rem" },
+            gridRow: "1 / span 2",
+            gridColumn: "1 / span 2",
+            bgcolor: "background.paper",
+          }}
+        />
+
+        {/* "Classified" axis title */}
+        <Box
+          sx={{
+            ...headerCellSx,
+            gridRow: 1,
+            gridColumn: `3 / span ${numClasses}`,
+            bgcolor: axisBg,
           }}
         >
-          {title}
-        </Typography>
-      )}
+          <Typography sx={axisSx}>{t.training.predicted}</Typography>
+        </Box>
 
-      {/* Matrix Grid */}
-      <Box sx={{ display: "flex", justifyContent: "center" }}>
-        <Box sx={{ display: "inline-flex", flexDirection: "column" }}>
-          {/* Header row with predicted labels */}
-          <Box sx={{ display: "flex", ml: "42px", mb: 0.5 }}>
-            <Typography
-              variant="caption"
-              fontWeight="medium"
-              sx={{
-                width: cellSize * stats.numClasses,
-                textAlign: "center",
-                fontSize: { xs: "0.6rem", sm: "0.65rem", md: "0.7rem" },
-              }}
-            >
-              {t.training.predicted}
-            </Typography>
+        {/* Column class labels */}
+        {names.map((name, i) => (
+          <Box
+            key={`col-${i}`}
+            sx={{
+              ...headerCellSx,
+              gridRow: 2,
+              gridColumn: i + 3,
+              bgcolor: headerBg,
+            }}
+          >
+            <Typography sx={labelSx}>{name}</Typography>
           </Box>
-          <Box sx={{ display: "flex", ml: "42px" }}>
-            {stats.validClassNames.map((name, i) => (
-              <Tooltip key={i} title={name}>
-                <Box
-                  sx={{
-                    width: cellSize,
-                    textAlign: "center",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      fontSize: { xs: "0.55rem", sm: "0.6rem", md: "0.65rem" },
-                    }}
-                  >
-                    {name.length > 6 ? `${name.slice(0, 5)}..` : name}
-                  </Typography>
-                </Box>
-              </Tooltip>
-            ))}
-          </Box>
+        ))}
 
-          {/* Matrix rows */}
-          <Box sx={{ display: "flex", gap: 0 }}>
-            {/* Actual label column header */}
+        {/* "Actual" axis title spanning all rows */}
+        <Box
+          sx={{
+            ...headerCellSx,
+            gridRow: `3 / span ${numClasses}`,
+            gridColumn: 1,
+            bgcolor: axisBg,
+          }}
+        >
+          <Typography sx={{ ...axisSx, ...verticalSx }}>
+            {t.training.actual}
+          </Typography>
+        </Box>
+
+        {sampleMatrix.map((row, rowIndex) => (
+          <React.Fragment key={`row-${rowIndex}`}>
+            {/* Row class label */}
             <Box
               sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                width: 14,
+                ...headerCellSx,
+                gridRow: rowIndex + 3,
+                gridColumn: 2,
+                bgcolor: headerBg,
               }}
             >
-              <Typography
-                variant="caption"
-                fontWeight="medium"
-                sx={{
-                  writingMode: "vertical-rl",
-                  transform: "rotate(180deg)",
-                  height: cellSize * stats.numClasses,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: { xs: "0.6rem", sm: "0.65rem", md: "0.7rem" },
-                }}
-              >
-                {t.training.actual}
+              <Typography sx={{ ...labelSx, ...verticalSx, maxHeight: 260 }}>
+                {names[rowIndex]}
               </Typography>
             </Box>
 
-            {/* Row labels and matrix cells */}
-            <Box>
-              {matrix.map((row, rowIndex) => (
-                <Box key={rowIndex} sx={{ display: "flex" }}>
-                  <Tooltip title={stats.validClassNames[rowIndex]}>
+            {row.map((samples, colIndex) => {
+              const isCorrect = rowIndex === colIndex;
+              return (
+                <Box
+                  key={`cell-${rowIndex}-${colIndex}`}
+                  onClick={
+                    isWideScreen
+                      ? () => setExpandedCell({ row: rowIndex, col: colIndex })
+                      : undefined
+                  }
+                  sx={{
+                    gridRow: rowIndex + 3,
+                    gridColumn: colIndex + 3,
+                    bgcolor: isCorrect ? correctBg : incorrectBg,
+                    cursor: isWideScreen ? "pointer" : "default",
+                    "&:hover": isWideScreen
+                      ? { boxShadow: `inset 0 0 0 2px ${lineColor}` }
+                      : undefined,
+                    p: 1,
+                    minHeight: 96,
+                    maxHeight: 260,
+                    overflowY: "auto",
+                    display: "flex",
+                    flexWrap: "wrap",
+                    alignContent: "flex-start",
+                    gap: 1,
+                  }}
+                >
+                  {samples.map((sample, index) => (
                     <Box
-                      sx={{
-                        width: 28,
-                        height: cellSize,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        overflow: "hidden",
-                      }}
-                    >
-                      <Typography
-                        variant="caption"
-                        sx={{
-                          fontSize: {
-                            xs: "0.5rem",
-                            sm: "0.52rem",
-                            md: "0.55rem",
-                          },
-                          writingMode: "vertical-rl",
-                          transform: "rotate(180deg)",
-                          textAlign: "center",
-                          lineHeight: 1.1,
-                          maxHeight: cellSize - 2,
-                          maxWidth: 24,
-                          overflow: "hidden",
-                          wordBreak: "break-all",
-                        }}
-                      >
-                        {stats.validClassNames[rowIndex]}
-                      </Typography>
-                    </Box>
-                  </Tooltip>
-                  {row.map((value, colIndex) => {
-                    const isCorrect = rowIndex === colIndex;
-                    return (
-                      <Tooltip
-                        key={colIndex}
-                        title={`${t.training.actual}: ${stats.validClassNames[rowIndex]}, ${t.training.predicted}: ${stats.validClassNames[colIndex]}, ${t.training.count}: ${value}`}
-                      >
-                        <Box
-                          sx={{
-                            width: cellSize,
-                            height: cellSize,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            bgcolor: getCellColor(value, isCorrect),
-                            border: `1px solid ${theme.palette.grey[300]}`,
-                            fontWeight: isCorrect ? "bold" : "normal",
-                          }}
-                        >
-                          <Typography
-                            variant="body2"
-                            fontWeight={isCorrect ? "bold" : "normal"}
-                            sx={{
-                              fontSize: {
-                                xs: "0.65rem",
-                                sm: "0.7rem",
-                                md: "0.75rem",
-                              },
-                            }}
-                          >
-                            {value}
-                          </Typography>
-                        </Box>
-                      </Tooltip>
-                    );
-                  })}
+                      key={sample.id}
+                      component="img"
+                      src={sample.url}
+                      alt={cellTitle(rowIndex, colIndex)}
+                      onClick={openViewer(rowIndex, colIndex, index)}
+                      sx={imageSx(isCorrect, 60)}
+                    />
+                  ))}
                 </Box>
-              ))}
-            </Box>
-          </Box>
-        </Box>
+              );
+            })}
+          </React.Fragment>
+        ))}
       </Box>
-    </Box>
+
+      {/* Expanded view of a single cell */}
+      <Dialog
+        open={Boolean(expandedCell)}
+        onClose={() => setExpandedCell(null)}
+        maxWidth="md"
+        fullWidth
+        PaperProps={{ sx: { borderRadius: 2 } }}
+      >
+        {expandedCell && (
+          <>
+            <DialogTitle
+              sx={{ display: "flex", alignItems: "center", gap: 1, pb: 1 }}
+            >
+              <Typography variant="h6" component="span" sx={{ flex: 1 }}>
+                {cellTitle(expandedCell.row, expandedCell.col)}
+              </Typography>
+              <Chip
+                label={`${expandedSamples.length} ${t.training.samples}`}
+                size="small"
+              />
+              <IconButton
+                edge="start"
+                onClick={() => setExpandedCell(null)}
+                size="small"
+                aria-label="close"
+              >
+                <CloseIcon />
+              </IconButton>
+            </DialogTitle>
+            <DialogContent dividers>
+              <Typography variant="body1" sx={{ mb: 2 }}>
+                {cellDescription(expandedCell.row, expandedCell.col)}
+              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  alignContent: "flex-start",
+                  gap: 1.5,
+                  minHeight: 200,
+                  maxHeight: 400,
+                  overflowY: "auto",
+                  p: 1,
+                  borderRadius: 1,
+                  bgcolor:
+                    expandedCell.row === expandedCell.col
+                      ? correctBg
+                      : incorrectBg,
+                }}
+              >
+                {expandedSamples.length === 0 && (
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{ m: "auto", textAlign: "center" }}
+                  >
+                    {t.testing.cellEmpty}
+                  </Typography>
+                )}
+                {expandedSamples.map((sample, index) => (
+                  <Box
+                    key={sample.id}
+                    component="img"
+                    src={sample.url}
+                    alt={cellTitle(expandedCell.row, expandedCell.col)}
+                    onClick={openViewer(
+                      expandedCell.row,
+                      expandedCell.col,
+                      index,
+                    )}
+                    sx={imageSx(expandedCell.row === expandedCell.col, 90)}
+                  />
+                ))}
+              </Box>
+            </DialogContent>
+          </>
+        )}
+      </Dialog>
+
+      <LightboxComponent
+        open={Boolean(viewer)}
+        src={viewer ? viewerUrls[viewer.index] : null}
+        flatSamples={viewerUrls}
+        onClose={closeViewer}
+        onPrev={showPrev}
+        onNext={showNext}
+        title={viewer ? cellTitle(viewer.row, viewer.col) : undefined}
+      />
+    </>
   );
 };
 

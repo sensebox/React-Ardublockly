@@ -9,3 +9,7 @@ The Learning Rate controls how strongly the model changes its unknown parameters
 # Early Stopping
 
 Early Stopping is a method that stops training automatically when the model is no longer improving enough. It helps save time and can reduce **_overfitting_** on the training data.
+
+# Share of training images used for testing
+
+This slider moves a share of your training images to the **Model Testing** section. These images are then no longer used for training, only for testing. If you move the slider back, the images return to training. Images you captured directly in the test section stay there.
