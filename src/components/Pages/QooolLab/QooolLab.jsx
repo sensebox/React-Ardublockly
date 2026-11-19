@@ -29,8 +29,8 @@ import {
   faDownload,
   faPause,
   faPlay,
+  faStop,
 } from "@fortawesome/free-solid-svg-icons";
-import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import SerialConnection from "./SerialConnection";
 import SimulatedConnection from "./SimulatedConnection";
 import MagnetScene from "@/components/Simulator/magnetometer/MagnetScene";
@@ -130,15 +130,78 @@ export default function QooolLab() {
 }
 
 // With the simulator, the magnet scene and the plot share the window height so
-// both fit on one screen; 510px is roughly everything else (incl. the help bar).
-const SCENE_HEIGHT = "clamp(220px, calc((100vh - 510px) * 0.45), 420px)";
-const PLOT_HEIGHT = "clamp(240px, calc((100vh - 510px) * 0.55), 440px)";
+// the lab and the footer fit on one screen (see useFitToWindow). These CSS
+// estimates only apply until the first measurement. The page has no
+// breadcrumbs, to leave the room to the lab.
+const SCENE_HEIGHT = "clamp(220px, calc((100vh - 460px) * 0.45), 440px)";
+const PLOT_HEIGHT = "clamp(240px, calc((100vh - 460px) * 0.55), 460px)";
+const SCENE_SHARE = 0.45,
+  FIT_LIMITS = { scene: [200, 520], plot: [200, 560] };
+
+// Measures the page and returns pixel heights for the magnet scene and the
+// plot so that the page ends with the footer at the bottom of the window.
+// The rest of the page (app bar, lab header, tabs, help bar, …) is measured,
+// not guessed, and re-measured whenever the page or the window changes size.
+function useFitToWindow(page, active) {
+  const [fit, setFit] = useState(null);
+  useEffect(() => {
+    if (!active) {
+      setFit(null);
+      return undefined;
+    }
+    const measure = () => {
+      const root = page.current;
+      const scene = root?.querySelector("#magnetometer-scene svg");
+      const plots = [
+        ...(root?.querySelectorAll('canvas[aria-label$="measurement plot"]') ??
+          []),
+      ];
+      if (!scene || !plots.length) return;
+      // Plots side by side count once, stacked (narrow screens) twice.
+      const rows = new Set(
+        plots.map((plot) => Math.round(plot.getBoundingClientRect().top)),
+      ).size;
+      const sceneHeight = scene.getBoundingClientRect().height,
+        plotHeight = plots[0].getBoundingClientRect().height;
+      const footer =
+        document.querySelector("footer")?.getBoundingClientRect().height ?? 0;
+      const bottom = root.getBoundingClientRect().bottom + window.scrollY;
+      // Everything that is neither scene nor plot.
+      const rest = bottom + footer - sceneHeight - rows * plotHeight;
+      const room = window.innerHeight - rest;
+      const unit = room / (SCENE_SHARE + rows * (1 - SCENE_SHARE));
+      const limit = (value, [low, high]) =>
+        Math.round(Math.min(high, Math.max(low, value)));
+      const next = {
+        scene: limit(unit * SCENE_SHARE, FIT_LIMITS.scene),
+        plot: limit(unit * (1 - SCENE_SHARE), FIT_LIMITS.plot),
+      };
+      setFit((old) =>
+        old &&
+        Math.abs(old.scene - next.scene) < 2 &&
+        Math.abs(old.plot - next.plot) < 2
+          ? old
+          : next,
+      );
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(page.current);
+    window.addEventListener("resize", measure);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, [active, page]);
+  return fit;
+}
 
 function Lab({ board }) {
   const language = useSelector((s) => s.general.language);
   const de = language === "de_DE";
   const theme = useTheme();
   const t = (en, german) => (de ? german : en);
+  const pageRef = useRef(null);
   // NV-centre choices, offered on the sensor and as a toggle in the scene.
   const nvChoices = [
     t("Single NV", "Einzelnes NV"),
@@ -168,6 +231,8 @@ function Lab({ board }) {
   );
   const [log, setLog] = useState([]);
   const [simulated, setSimulated] = useState(false);
+  // Scene and plot heights that fit the page to the window (simulator only).
+  const fit = useFitToWindow(pageRef, simulated);
   const [distance, setDistance] = useState(1);
   const [magnet, setMagnet] = useState({
     orientations: 1,
@@ -656,20 +721,19 @@ function Lab({ board }) {
       "Distance between the dips, shown as Δf in the plot",
       "Abstand der Dips, im Diagramm als Δf eingezeichnet",
     ),
-    along:
-      fieldSource.orientations === 1
-        ? t(
-            "A pair only measures the part of B along its NV axis. Move the magnet around the sensor to see it shrink.",
-            "Ein Dip-Paar misst nur den Anteil von B entlang seiner NV-Achse. Bewege den Magneten um den Sensor herum, dann wird er kleiner.",
-          )
-        : t(
-            "Each pair belongs to one NV orientation and measures the part of B along its axis. Pairs with the same splitting overlap and are listed once.",
-            "Jedes Paar gehört zu einer NV-Ausrichtung und misst den Anteil von B entlang ihrer Achse. Paare mit gleicher Aufspaltung liegen übereinander und sind nur einmal aufgeführt.",
-          ),
+    // along:
+    //   fieldSource.orientations === 1
+    //     ? t(
+    //         "A pair only measures the part of B along its NV axis. Move the magnet around the sensor to see it shrink.",
+    //         "Ein Dip-Paar misst nur den Anteil von B entlang seiner NV-Achse. Bewege den Magneten um den Sensor herum, dann wird er kleiner.",
+    //       )
+    //     : t(
+    //         "Each pair belongs to one NV orientation and measures the part of B along its axis. Pairs with the same splitting overlap and are listed once.",
+    //         "Jedes Paar gehört zu einer NV-Ausrichtung und misst den Anteil von B entlang ihrer Achse. Paare mit gleicher Aufspaltung liegen übereinander und sind nur einmal aufgeführt.",
+    //       ),
   };
   return (
-    <Container maxWidth="xl" sx={{ py: 2 }}>
-      <Breadcrumbs content={[{ link: "/qoool", title: "QOOOL Lab" }]} />
+    <Container ref={pageRef} maxWidth="xl" sx={{ py: 2 }}>
       <Stack spacing={2}>
         <>
           {/* <Typography variant="h4" component="h1">
@@ -700,7 +764,43 @@ function Lab({ board }) {
               borderColor: "divider",
             }}
           >
-            <Chip
+            {/* The main action of the lab: big, coloured and first in the bar.
+                It starts the selected tab's measurement and becomes Stop. */}
+            {running ? (
+              <Button
+                id="qoool-run"
+                size="large"
+                variant="contained"
+                color="error"
+                disableElevation
+                disabled={status !== "connected"}
+                onClick={stop}
+                startIcon={<FontAwesomeIcon icon={faStop} />}
+                sx={{ px: 3, fontWeight: 700 }}
+              >
+                {t("Stop", "Stoppen")}
+              </Button>
+            ) : (
+              <Button
+                id="qoool-run"
+                size="large"
+                variant="contained"
+                disableElevation
+                disabled={status !== "connected" || busy}
+                onClick={() => start()}
+                startIcon={<FontAwesomeIcon icon={faPlay} />}
+                sx={{
+                  px: 3,
+                  fontWeight: 700,
+                  color: "#fff",
+                  bgcolor: readoutColour(theme),
+                  "&:hover": { bgcolor: "#3d8e37" },
+                }}
+              >
+                {t(`Start ${modeName(tab)}`, `${modeName(tab)} starten`)}
+              </Button>
+            )}
+            {/* <Chip
               color={status === "connected" ? "primary" : "default"}
               variant={status === "connected" ? "filled" : "outlined"}
               label={
@@ -712,7 +812,7 @@ function Lab({ board }) {
                     ? t("Connecting…", "Verbinde…")
                     : t("Disconnected", "Nicht verbunden")
               }
-            />
+            /> */}
             {latency != null && (
               <Typography variant="body2" color="text.secondary">
                 Ping: {latency} ms
@@ -743,17 +843,20 @@ function Lab({ board }) {
                 {t("Disconnect", "Trennen")}
               </Button>
             )}
-            <Button
-              disabled={!rawRows.current.length}
-              onClick={() =>
-                download(
-                  `x1,y1,x2,y2,x3,y3,x4,y4\n${rawRows.current.join("\n")}\n`,
-                  "csv",
-                )
-              }
-            >
-              {t("Download data", "Daten herunterladen")}
-            </Button>
+            {/* Measured data only exist with the real device. */}
+            {!simulated && (
+              <Button
+                disabled={!rawRows.current.length}
+                onClick={() =>
+                  download(
+                    `x1,y1,x2,y2,x3,y3,x4,y4\n${rawRows.current.join("\n")}\n`,
+                    "csv",
+                  )
+                }
+              >
+                {t("Download data", "Daten herunterladen")}
+              </Button>
+            )}
             <Button onClick={() => download(logs.current.join("\n"), "txt")}>
               {t("Download log", "Log herunterladen")}
             </Button>
@@ -822,7 +925,7 @@ function Lab({ board }) {
                   >
                     <Box sx={{ p: 1.5 }}>
                       <MagnetScene
-                        height={SCENE_HEIGHT}
+                        height={fit ? fit.scene : SCENE_HEIGHT}
                         onOrientationsChange={(orientations) =>
                           changeMagnet({ orientations })
                         }
@@ -987,24 +1090,6 @@ function Lab({ board }) {
                         </Typography>
                       </Stack>
                     )}
-                    <Button
-                      variant="contained"
-                      disableElevation
-                      disabled={status !== "connected" || !!running || busy}
-                      onClick={() => start()}
-                      sx={{ my: 1 }}
-                    >
-                      {t(`Start ${modeName(tab)}`, `${modeName(tab)} starten`)}
-                    </Button>
-                    <Button
-                      color="error"
-                      variant="outlined"
-                      disabled={!running || status !== "connected"}
-                      onClick={stop}
-                      sx={{ my: 1 }}
-                    >
-                      {t("Stop", "Stoppen")}
-                    </Button>
                   </Stack>
                   <Box sx={{ p: 2, minWidth: 0 }}>
                     <Box
@@ -1226,7 +1311,13 @@ function Lab({ board }) {
                                 channel={channel}
                                 labels={labels}
                                 axis={plotAxis}
-                                height={simulated ? PLOT_HEIGHT : 400}
+                                height={
+                                  simulated
+                                    ? fit
+                                      ? fit.plot
+                                      : PLOT_HEIGHT
+                                    : 400
+                                }
                               />
                             </Paper>
                           ))}
@@ -1243,7 +1334,9 @@ function Lab({ board }) {
                           labels={labels}
                           // The sweep axis follows the paused dips; others stay frozen.
                           axis={paused && mode !== "sweep" ? frozen.axis : axis}
-                          height={simulated ? PLOT_HEIGHT : 400}
+                          height={
+                            simulated ? (fit ? fit.plot : PLOT_HEIGHT) : 400
+                          }
                         />
                       )}
                     </Box>

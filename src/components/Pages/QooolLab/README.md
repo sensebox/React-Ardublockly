@@ -77,9 +77,9 @@ measurement text) sit in a bar on top of the plot. One channel setting drives
 plot and waterfall; the simulator only fills CH 1.
 
 - `SimulatedConnection.js` has the interface of `SerialConnection.js` and sends
-  the same telegrams, so plot and CSV export work unchanged. It repeats the
-  sweep about ten times per second (`<clf>` followed by one `<batch>`); the CSV
-  holds the latest sweep. Waterfall sends one `<batch>` and `<end>` per sweep,
+  the same telegrams, so the plot works unchanged. It repeats the sweep about
+  ten times per second (`<clf>` followed by one `<batch>`). The **Download
+  data** button is hidden in the simulator; it is for real measurements. Waterfall sends one `<batch>` and `<end>` per sweep,
   so each sweep becomes one row. Other modes are not simulated.
 - The model and the scene live in `src/components/Simulator/magnetometer/`
   (`model.js`, `MagnetScene.jsx`, `MagnetControls.jsx`) so the Blockly simulator can reuse them. Curve

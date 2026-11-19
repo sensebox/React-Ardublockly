@@ -101,15 +101,15 @@ describe("QOOOL Lab", () => {
       cy.get('[role="tab"]').should("not.exist");
       cy.get("#magnetometer-orientations-1").should("exist");
     });
-    // On a laptop screen the magnet scene and the plot fit on one screen.
+    // On a laptop screen the whole page fits on one screen without scrolling:
+    // the footer ends at the bottom of the window.
     cy.viewport(1440, 900);
-    cy.get("#magnetometer-scene").then(([scene]) => {
-      const plot = scene.ownerDocument
-        .querySelector('canvas[aria-label$="measurement plot"]')
-        .getBoundingClientRect();
-      expect(plot.bottom - scene.getBoundingClientRect().top).to.be.at.most(
-        900,
-      );
+    cy.scrollTo(0, 0);
+    cy.get("footer").should(([footer]) => {
+      const bottom = footer.getBoundingClientRect().bottom;
+      const height = footer.ownerDocument.defaultView.innerHeight;
+      expect(bottom).to.be.at.most(height + 1);
+      expect(bottom).to.be.at.least(height - 40);
     });
     // The help bar under the scene shows keys and gestures; in 2D without the
     // view controls. It can be closed and brought back with the info button.
@@ -126,14 +126,18 @@ describe("QOOOL Lab", () => {
 
     // Without a plot to read from, the worked example highlights nothing.
     cy.get("#magnetometer-readout-legend").should("not.exist");
+    // One big start button at the top of the lab; it turns into Stop.
+    cy.get("#qoool-run").should("contain", "Start Sweep");
     // Magnet far away: both resonances overlap at 2870 MHz.
     cy.contains("button", /^Start Sweep$/).click();
+    cy.get("#qoool-run").should("contain", "Stop");
     cy.get('[role="status"]').should("contain", "Sweep");
     // Wait for the first simulated sweep before stopping.
     cy.get('[aria-label="Serial log"]').should("contain", "RX: <start,sweep>");
     cy.contains("button", /^Stop$/).click();
     cy.get('[role="status"]').should("not.exist");
-    cy.contains("button", "Download data").should("be.enabled");
+    // The simulator offers no data download; that is for real measurements.
+    cy.contains("button", "Download data").should("not.exist");
     cy.get("#magnetometer-field-calculation")
       .should("contain", "Only one dip")
       .find("[data-field]")
