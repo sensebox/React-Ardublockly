@@ -33,6 +33,7 @@ const BlocklyCard = ({
       toolbox: toolboxBasicObject,
       renderer: "Thrasos",
       theme: "light",
+      media: __BLOCKLY_MEDIA_PATH__,
       trashcan: true,
       collapse: false,
       zoom: {
