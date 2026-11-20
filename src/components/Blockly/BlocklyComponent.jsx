@@ -20,6 +20,7 @@ import {
   ScrollMetricsManager,
 } from "@blockly/plugin-scroll-options";
 import { ensureStartBlock } from "./helpers/ensureStartBlock";
+import { withoutUndo } from "./helpers/withoutUndo";
 import { expandCollapsedBlocks } from "./helpers/expandCollapsedBlocks";
 
 import { Card } from "@mui/material";
@@ -134,19 +135,21 @@ export function BlocklyComponent({ initialXml, style, maxInstances, ...rest }) {
     scrollPlugin.init({ enableWheelScroll: true, enableEdgeScroll: false });
     // 🔥 SAUBERE LÖSUNG: Nutze Promise.resolve().then, um nach der Initialisierung zu laden
     if (initialXml) {
-      Promise.resolve().then(() => {
-        try {
-          const xmlDom = Blockly.utils.xml.textToDom(initialXml);
-          Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, ws);
-        } catch (e) {
-          console.warn("Failed to load initialXml in BlocklyComponent:", e);
+      Promise.resolve().then(() =>
+        withoutUndo(ws, () => {
+          try {
+            const xmlDom = Blockly.utils.xml.textToDom(initialXml);
+            Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, ws);
+          } catch (e) {
+            console.warn("Failed to load initialXml in BlocklyComponent:", e);
+            ensureStartBlock(ws);
+          }
           ensureStartBlock(ws);
-        }
-        ensureStartBlock(ws);
-      });
+        }),
+      );
     } else {
       // No initialXml provided, ensure start block exists
-      Promise.resolve().then(() => ensureStartBlock(ws));
+      Promise.resolve().then(() => withoutUndo(ws, () => ensureStartBlock(ws)));
     }
 
     // Cleanup on unmount

@@ -23,13 +23,13 @@ import {
   Chip,
   useTheme,
   useMediaQuery,
+  Alert,
 } from "@mui/material";
 import {
   Add as AddIcon,
   Delete as DeleteIcon,
   FiberManualRecord as RecordIcon,
   Speed as SensorIcon,
-  Download as DownloadIcon,
   ArrowDropDown as ArrowDropDownIcon,
   Bluetooth as BluetoothIcon,
 } from "@mui/icons-material";
@@ -38,11 +38,14 @@ import useOrientationSource from "./hooks/useOrientationSource";
 import useOrientationBLESource from "./hooks/useOrientationBLESource";
 import useOrientationModelTraining from "./hooks/useOrientationModelTraining";
 import HelpButton, { useHelpBlink } from "../HelpButton";
+import GrantBootloaderButton from "../GrantBootloaderButton";
+import BlinkingButton from "../BlinkingButton";
 import SerialErrorHandler, {
   ErrorTypes,
   ConnectionStatus,
 } from "../SerialErrorHandler";
-import { downloadAccelerometerFirmware } from "../utils/firmwareDownload";
+import useSketchFlash from "../utils/useSketchFlash";
+import orientationFirmwareUrl from "./sketch/orientation_capture.bin?url";
 
 // ─── Axis colours (shared with the graph) ─────────────────────────────────────
 
@@ -467,7 +470,8 @@ const OrientationModelTrainer = ({
   const t = getOrientationTranslations(language);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const [isDownloading, setIsDownloading] = useState(false);
+  // Errors of the serial start / accelerometer sketch upload flow.
+  const [orientationSerialError, setOrientationSerialError] = useState(null);
 
   const serialSource = useOrientationSource();
   const bleSource = useOrientationBLESource();
@@ -524,14 +528,127 @@ const OrientationModelTrainer = ({
     return () => window.removeEventListener("beforeunload", handleBeforeUnload);
   }, [hasSamples]);
 
-  const handleDownloadFirmware = async () => {
-    setIsDownloading(true);
-    const result = await downloadAccelerometerFirmware();
-    if (!result.success) {
-      alert(`Failed to download firmware: ${result.error}`);
+  // ─── Serial start incl. accelerometer sketch upload ──────────────────────
+  // "Connect senseBox (USB)" opens the port picker and waits for sensor data.
+  // If none arrives, the accelerometer sketch is flashed to the same port
+  // with @sensebox/flash-tool (useSketchFlash) and the board is reconnected.
+  const {
+    phase: senseBoxPhase,
+    setPhase: setSenseBoxPhase,
+    isBusy: isSenseBoxBusy,
+    isGrantingPort,
+    progress: flashProgress,
+    bootloaderName: flashBootloaderName,
+    flashSketch: flashOrientationSketch,
+    grantBootloader,
+    isBoardPort,
+    waitForAppPort,
+  } = useSketchFlash({
+    firmwareUrl: orientationFirmwareUrl,
+    onFlashed: () => reconnectAfterFlash(),
+    onFlashFailed: (message) =>
+      setOrientationSerialError({ type: ErrorTypes.FLASH_FAILED, message }),
+    // Bootloader port not selected: keep the "Upload sketch" button and
+    // additionally show "Connection Failed".
+    onGrantFailed: (message) =>
+      setOrientationSerialError({
+        type: ErrorTypes.CONNECTION_FAILED,
+        message,
+      }),
+  });
+
+  // True if the board could not be connected automatically after the sketch
+  // upload – the connect button then blinks so the user clicks it.
+  const [reconnectNeeded, setReconnectNeeded] = useState(false);
+
+  /**
+   * Connects the accelerometer via USB and waits for the first sample.
+   * @param {Object} [options]
+   * @param {SerialPort} [options.port] Open this port instead of the picker.
+   * @param {boolean} [options.allowFlash] Upload the sketch if no data
+   *   arrives (disabled right after an upload to avoid a loop).
+   * @returns {Promise<boolean>} true if accelerometer data arrives
+   */
+  const startSerialOrientation = async ({ port, allowFlash = true } = {}) => {
+    setReconnectNeeded(false);
+    setOrientationSerialError(null);
+    setSenseBoxPhase("waitingForData");
+
+    const { connected, error } = await serialSource.connect({ port });
+    if (!connected) {
+      setSenseBoxPhase("idle");
+      if (error) {
+        setOrientationSerialError({
+          type: error.type || ErrorTypes.CONNECTION_FAILED,
+          message: error.message,
+        });
+      }
+      return;
     }
-    setIsDownloading(false);
+
+    const gotData = await serialSource.waitForData(port ? 8000 : 4000);
+    if (gotData) {
+      setSenseBoxPhase("idle");
+      triggerAccelerationSensor();
+      return true;
+    }
+
+    // No data: release the port so the flash tool can use it.
+    const orientationPort = await serialSource.releasePort();
+    if (!allowFlash || !isBoardPort(orientationPort)) {
+      // Still no data right after an upload, or not a senseBox MCU Eye:
+      // don't flash (again), report as a regular connection error.
+      setSenseBoxPhase("idle");
+      setOrientationSerialError({
+        type: ErrorTypes.CONNECTION_FAILED,
+        message: "No accelerometer data received from the senseBox MCU Eye",
+      });
+      return;
+    }
+    await flashOrientationSketch(orientationPort);
+    return false;
   };
+
+  // After the upload the board reboots into the sketch. If the browser
+  // already has permission for its port, it is connected automatically.
+  // Otherwise the port picker can't be opened automatically (requestPort()
+  // needs a recent user click), so the permission error is shown. If the
+  // connection fails, "Connect senseBox (USB)" blinks.
+  const reconnectAfterFlash = async () => {
+    const port = await waitForAppPort();
+    if (!port) {
+      setSenseBoxPhase("done");
+      setOrientationSerialError({
+        type: ErrorTypes.CONNECTION_FAILED,
+        message: "Serial port access was denied",
+      });
+      setReconnectNeeded(true);
+      return;
+    }
+    // Give the freshly enumerated USB device a moment before opening it.
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const connected = await startSerialOrientation({ port, allowFlash: false });
+    if (!connected) setReconnectNeeded(true);
+  };
+
+  const handleGrantBootloader = async () => {
+    setOrientationSerialError(null);
+    await grantBootloader();
+  };
+
+  // "Try again" in the error box: always run the whole serial start flow again
+  // with the normal board picker (also after a failed bootloader grant) – it
+  // uploads the orientation sketch again if no data arrives.
+  const handleOrientationSerialRetry = async () => {
+    await startSerialOrientation();
+  };
+
+  const senseBoxBusyLabel = {
+    waitingForData: t.errors.waitingForData,
+    connecting: t.errors.flashConnecting,
+    flashing: t.errors.flashUploading,
+    restarting: t.errors.flashRestarting,
+  }[senseBoxPhase];
 
   // ─── Class management ──────────────────────────────────────────────────────
 
@@ -771,38 +888,51 @@ const OrientationModelTrainer = ({
                   disableHoverListener={serialSource.isSupported}
                 >
                   <span>
-                    <Button
-                      variant="contained"
-                      startIcon={
-                        serialSource.isConnecting ? (
-                          <CircularProgress size={16} color="inherit" />
-                        ) : (
-                          <SensorIcon />
-                        )
-                      }
-                      onClick={
-                        serialSource.isConnected
-                          ? serialSource.disconnect
-                          : async () => {
-                              await serialSource.connect();
-                              triggerAccelerationSensor();
-                            }
-                      }
-                      disabled={
-                        disabled ||
-                        serialSource.isConnecting ||
-                        !serialSource.isSupported ||
-                        bleSource.isConnected ||
-                        bleSource.isConnecting
-                      }
-                      color={serialSource.isConnected ? "secondary" : "primary"}
-                    >
-                      {serialSource.isConnecting
-                        ? t.training.connecting
-                        : serialSource.isConnected
-                          ? t.training.disconnectSenseBox
-                          : t.training.connectSenseBox}
-                    </Button>
+                    {senseBoxPhase === "grant" ? (
+                      <GrantBootloaderButton
+                        onClick={handleGrantBootloader}
+                        disabled={disabled || isGrantingPort}
+                      >
+                        {t.errors.flashGrantBootloader}
+                      </GrantBootloaderButton>
+                    ) : (
+                      <BlinkingButton
+                        blink={reconnectNeeded}
+                        startIcon={
+                          isSenseBoxBusy || serialSource.isConnecting ? (
+                            <CircularProgress size={16} color="inherit" />
+                          ) : (
+                            <SensorIcon />
+                          )
+                        }
+                        onClick={
+                          serialSource.isConnected
+                            ? serialSource.disconnect
+                            : () => startSerialOrientation()
+                        }
+                        disabled={
+                          disabled ||
+                          isSenseBoxBusy ||
+                          serialSource.isConnecting ||
+                          !serialSource.isSupported ||
+                          bleSource.isConnected ||
+                          bleSource.isConnecting
+                        }
+                        color={
+                          serialSource.isConnected && !isSenseBoxBusy
+                            ? "secondary"
+                            : "primary"
+                        }
+                      >
+                        {isSenseBoxBusy
+                          ? senseBoxBusyLabel
+                          : serialSource.isConnecting
+                            ? t.training.connecting
+                            : serialSource.isConnected
+                              ? t.training.disconnectSenseBox
+                              : t.training.connectSenseBox}
+                      </BlinkingButton>
+                    )}
                   </span>
                 </Tooltip>
               )}
@@ -841,7 +971,9 @@ const OrientationModelTrainer = ({
                         bleSource.isConnecting ||
                         !bleSource.isSupported ||
                         serialSource.isConnected ||
-                        serialSource.isConnecting
+                        serialSource.isConnecting ||
+                        isSenseBoxBusy ||
+                        senseBoxPhase === "grant"
                       }
                       color={bleSource.isConnected ? "secondary" : "primary"}
                     >
@@ -863,66 +995,94 @@ const OrientationModelTrainer = ({
                 isBlinking={accelerationSensorBlinking}
                 tooltip={t.training?.tooltip?.helpAccelerationSensor}
               />
-
-              {!bleSource.isConnected &&
-                !bleSource.isConnecting &&
-                !serialSource.isConnected &&
-                !serialSource.isConnecting && (
-                  <Button
-                    variant="outlined"
-                    startIcon={
-                      isDownloading ? (
-                        <CircularProgress size={16} />
-                      ) : (
-                        <DownloadIcon />
-                      )
-                    }
-                    onClick={handleDownloadFirmware}
-                    disabled={
-                      isDownloading ||
-                      disabled ||
-                      (!serialSource.isSupported && !bleSource.isSupported)
-                    }
-                  >
-                    {t.errors.downloadFirmware}
-                  </Button>
-                )}
             </Box>
 
-            {/* Serial connection error */}
-            {((isConnected && dataTimeoutError) ||
-              (!isConnected && sensorError)) && (
+            {/* Accelerometer sketch upload status */}
+            {senseBoxPhase === "grant" && !orientationSerialError && (
+              <Alert severity="info" sx={{ mb: 2 }}>
+                {t.errors.flashGrantBootloaderHint.replace(
+                  "{name}",
+                  flashBootloaderName,
+                )}
+              </Alert>
+            )}
+
+            {senseBoxPhase === "flashing" && (
+              <Box sx={{ mb: 2 }}>
+                <LinearProgress
+                  variant={flashProgress > 0 ? "determinate" : "indeterminate"}
+                  value={flashProgress}
+                />
+                {flashProgress > 0 && (
+                  <Typography variant="caption" color="text.secondary">
+                    {flashProgress}%
+                  </Typography>
+                )}
+              </Box>
+            )}
+
+            {/* Errors of the serial start / accelerometer sketch upload */}
+            {orientationSerialError && (
               <Box sx={{ mb: 3 }}>
                 <SerialErrorHandler
-                  error={
-                    !isConnected && sensorError
+                  error={orientationSerialError}
+                  connectionStatus={ConnectionStatus.ERROR}
+                  onRetry={handleOrientationSerialRetry}
+                  onReconnect={handleOrientationSerialRetry}
+                  onDismiss={() => setOrientationSerialError(null)}
+                  showStatus={false}
+                  overrides={
+                    orientationSerialError.type === ErrorTypes.FLASH_FAILED
                       ? {
-                          type:
-                            sensorError.type || ErrorTypes.CONNECTION_FAILED,
-                          message: sensorError.message,
+                          errorMessage: t.errors.flashFailedMessage,
+                          troubleshootingFirmware:
+                            t.errors.troubleshootingFirmware,
                         }
                       : {
-                          type: ErrorTypes.CONNECTION_FAILED,
-                          message: t.errors.dataTimeoutMessage,
+                          errorTitle: t.errors.connectionFailed,
+                          errorMessage: t.errors.connectionFailedMessage,
+                          troubleshootingFirmware:
+                            t.errors.troubleshootingFirmware,
                         }
                   }
-                  connectionStatus={ConnectionStatus.CONNECTED}
-                  onRetry={async () => {
-                    await activeSource.disconnect();
-                    await activeSource.connect();
-                  }}
-                  onDismiss={() => activeSource.disconnect()}
-                  showStatus={false}
-                  overrides={{
-                    errorTitle: t.errors.connectionFailed,
-                    errorMessage: t.errors.connectionFailedMessage,
-                    troubleshootingFirmware: t.errors.troubleshootingFirmware,
-                    downloadFirmwareLabel: t.errors.downloadFirmware,
-                    downloadFirmwareFn: downloadAccelerometerFirmware,
-                  }}
                 />
               </Box>
             )}
+
+            {/* Serial connection error */}
+            {!orientationSerialError &&
+              senseBoxPhase !== "waitingForData" &&
+              ((isConnected && dataTimeoutError) ||
+                (!isConnected && sensorError)) && (
+                <Box sx={{ mb: 3 }}>
+                  <SerialErrorHandler
+                    error={
+                      !isConnected && sensorError
+                        ? {
+                            type:
+                              sensorError.type || ErrorTypes.CONNECTION_FAILED,
+                            message: sensorError.message,
+                          }
+                        : {
+                            type: ErrorTypes.CONNECTION_FAILED,
+                            message: t.errors.dataTimeoutMessage,
+                          }
+                    }
+                    connectionStatus={ConnectionStatus.CONNECTED}
+                    onRetry={async () => {
+                      await activeSource.disconnect();
+                      await activeSource.connect();
+                    }}
+                    onDismiss={() => activeSource.disconnect()}
+                    showStatus={false}
+                    overrides={{
+                      errorTitle: t.errors.connectionFailed,
+                      errorMessage: t.errors.connectionFailedMessage,
+                      troubleshootingFirmware: t.errors.troubleshootingFirmware,
+                    }}
+                  />
+                </Box>
+              )}
 
             {/* Live sensor graph (desktop only, when connected) */}
             {isConnected && !dataTimeoutError && !isMobile && (

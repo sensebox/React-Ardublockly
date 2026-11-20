@@ -20,6 +20,7 @@ import Snackbar from "../Snackbar";
 import { initialXml } from "./initialXml.js";
 import { getMaxInstances } from "./helpers/maxInstances";
 import { ensureStartBlock } from "./helpers/ensureStartBlock";
+import { withoutUndo } from "./helpers/withoutUndo";
 import {
   EMBEDDED_BLOCKLY_CONFIG,
   DEFAULT_BLOCKLY_CONFIG,
@@ -157,14 +158,16 @@ export default function BlocklyWindow(props) {
     }
     if (!xml) xml = localStorage.getItem("autoSaveXML");
     if (!xml) xml = initialXml;
-    try {
-      const xmlDom = Blockly.utils.xml.textToDom(xml);
-      Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, ws);
-    } catch (e) {
-      console.warn("Failed to load XML on board change:", e);
-      ws.clear();
-      ensureStartBlock(ws);
-    }
+    withoutUndo(ws, () => {
+      try {
+        const xmlDom = Blockly.utils.xml.textToDom(xml);
+        Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, ws);
+      } catch (e) {
+        console.warn("Failed to load XML on board change:", e);
+        ws.clear();
+        ensureStartBlock(ws);
+      }
+    });
     Blockly.svgResize(ws);
   }, [selectedBoard]);
 
@@ -174,14 +177,16 @@ export default function BlocklyWindow(props) {
     const ws = Blockly.getMainWorkspace();
     if (!ws) return;
     const xml = initialXmlProp || initialXml;
-    try {
-      ws.clear();
-      Blockly.Xml.domToWorkspace(Blockly.utils.xml.textToDom(xml), ws);
-    } catch (e) {
-      console.warn("Failed to apply initialXml:", e);
+    withoutUndo(ws, () => {
+      try {
+        ws.clear();
+        Blockly.Xml.domToWorkspace(Blockly.utils.xml.textToDom(xml), ws);
+      } catch (e) {
+        console.warn("Failed to apply initialXml:", e);
+        ensureStartBlock(ws);
+      }
       ensureStartBlock(ws);
-    }
-    ensureStartBlock(ws);
+    });
     Blockly.svgResize(ws);
   }, [initialXmlProp, svg]);
 
@@ -191,14 +196,16 @@ export default function BlocklyWindow(props) {
     if (!ws) return;
     let xml = localStorage.getItem("autoSaveXML");
     if (!xml) xml = initialXml;
-    try {
-      const xmlDom = Blockly.utils.xml.textToDom(xml);
-      Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, ws);
-    } catch (e) {
-      console.warn("Failed to reload on language change:", e);
-      ws.clear();
-      ensureStartBlock(ws);
-    }
+    withoutUndo(ws, () => {
+      try {
+        const xmlDom = Blockly.utils.xml.textToDom(xml);
+        Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, ws);
+      } catch (e) {
+        console.warn("Failed to reload on language change:", e);
+        ws.clear();
+        ensureStartBlock(ws);
+      }
+    });
     Blockly.svgResize(ws);
   }, [language]);
 

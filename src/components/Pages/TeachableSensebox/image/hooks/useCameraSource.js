@@ -29,6 +29,9 @@ function useCameraSource() {
   // Use ref to maintain singleton SerialCameraService instance
   const serialServiceRef = useRef(null);
 
+  // Running releaseSerialPort() call, if any.
+  const releasePromiseRef = useRef(null);
+
   // Initialize serial service once on mount
   useEffect(() => {
     // Acquire shared service and track usage to prevent multiple readers
@@ -86,6 +89,8 @@ function useCameraSource() {
         ErrorTypes.FRAME_CORRUPTED,
         ErrorTypes.INVALID_FORMAT,
         ErrorTypes.DECODING_ERROR,
+        // Handled by the caller (releases the port and shows the error).
+        ErrorTypes.CAPTURE_FAILED,
       ];
 
       const isCritical = !err?.type || !nonFatalTypes.includes(err.type);
@@ -139,32 +144,44 @@ function useCameraSource() {
    * @returns {Promise<void>}
    * @throws {Error} If no source is selected or start fails
    */
-  const startCamera = useCallback(async () => {
-    // Lazily create the current source if none exists
-    let source = cameraSourceRef.current || cameraSource;
-    if (!source) {
+  const startCamera = useCallback(
+    async (options) => {
+      // Lazily create the current source if none exists
+      let source = cameraSourceRef.current || cameraSource;
+      // After a remount (e.g. Fast Refresh) the shared serial service is
+      // recreated while the source still points to the old one. Frames would
+      // then reach the preview but not waitForSerialFrame – recreate it.
+      if (
+        source instanceof SerialCameraSource &&
+        source.serialService !== serialServiceRef.current
+      ) {
+        source = null;
+      }
+      if (!source) {
+        try {
+          source = createSource(sourceType);
+          attachErrorHandler(source);
+          cameraSourceRef.current = source;
+          setCameraSource(source);
+        } catch (err) {
+          setError(err);
+          throw err;
+        }
+      }
+
       try {
-        source = createSource(sourceType);
-        attachErrorHandler(source);
-        cameraSourceRef.current = source;
-        setCameraSource(source);
+        setError(null);
+        await source.start(options);
+        setIsActive(true);
       } catch (err) {
+        console.error("[useCameraSource] Error starting camera:", err);
         setError(err);
+        setIsActive(false);
         throw err;
       }
-    }
-
-    try {
-      setError(null);
-      await source.start();
-      setIsActive(true);
-    } catch (err) {
-      console.error("[useCameraSource] Error starting camera:", err);
-      setError(err);
-      setIsActive(false);
-      throw err;
-    }
-  }, [cameraSource, sourceType, createSource, attachErrorHandler, isActive]);
+    },
+    [cameraSource, sourceType, createSource, attachErrorHandler, isActive],
+  );
 
   /**
    * Stop the current camera source
@@ -282,11 +299,79 @@ function useCameraSource() {
     }
   }, [sourceType]);
 
+  /**
+   * Wait until the serial camera delivers its first frame. The frame timeout
+   * monitor is paused meanwhile, so a missing image does not surface as a
+   * connection error (the caller decides what to do, e.g. flash the sketch).
+   *
+   * @param {number} timeoutMs
+   * @returns {Promise<"frame"|"captureFailed"|"timeout">} "frame" if a frame
+   *   arrived in time, "captureFailed" if the sketch reports that the camera
+   *   can't capture images, otherwise "timeout".
+   */
+  const waitForSerialFrame = useCallback(async (timeoutMs = 4000) => {
+    const service = serialServiceRef.current;
+    if (!service) return "timeout";
+
+    service.pauseFrameTimeoutMonitor();
+    const result = await new Promise((resolve) => {
+      let timer = null;
+      const finish = (value) => {
+        clearTimeout(timer);
+        service.offFrame(handleFrame);
+        service.offError(handleError);
+        resolve(value);
+      };
+      const handleFrame = () => finish("frame");
+      const handleError = (err) => {
+        if (err?.type === ErrorTypes.CAPTURE_FAILED) finish("captureFailed");
+      };
+      timer = setTimeout(() => finish("timeout"), timeoutMs);
+      service.onFrame(handleFrame);
+      service.onError(handleError);
+    });
+    if (result === "frame") service.resumeFrameTimeoutMonitor();
+    return result;
+  }, []);
+
+  /**
+   * Stop the serial camera and release its port so another tool (the flash
+   * tool) can open it.
+   *
+   * @returns {Promise<SerialPort|null>} The port the camera was using
+   */
+  const releaseSerialPort = useCallback(() => {
+    // Concurrent callers share one release instead of closing the port twice.
+    if (releasePromiseRef.current) return releasePromiseRef.current;
+
+    const release = (async () => {
+      const service = serialServiceRef.current;
+      const port = service?.port ?? null;
+      const source = cameraSourceRef.current;
+      try {
+        if (source) await source.stop();
+      } catch (err) {
+        console.error("Error releasing serial port:", err);
+      }
+      service?.resumeFrameTimeoutMonitor();
+      setIsActive(false);
+      setError(null);
+      return port;
+    })();
+    releasePromiseRef.current = release;
+    release.finally(() => {
+      releasePromiseRef.current = null;
+    });
+    return release;
+  }, []);
+
   return {
     sourceType,
     selectSource,
     startCamera,
     stopCamera,
+    waitForSerialFrame,
+    releaseSerialPort,
     captureFrame,
     getPreviewElement,
     switchCamera,

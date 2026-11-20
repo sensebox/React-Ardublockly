@@ -99,6 +99,7 @@ export const UI = {
   tooltip_trashcan_delete: "empty trashcan",
   tooltip_project_title: "Project title",
   tooltip_check_solution: "Check solution",
+  tooltip_undo: "Undo (Ctrl+Z)",
   tooltip_copy_code: "Copy Code to clipboard",
   tooltip_statistics_current: "Number of current blocks",
   tooltip_statistics_new: "Number of new blocks",
@@ -246,6 +247,7 @@ export const UI = {
   button_back: "Back",
   button_next: "Next step",
   button_tutorial_overview: "Tutorial overview",
+  tutorial_reset_answers: "Reset tutorial progress",
   button_login: "Login",
   button_createVariable: "Create variable",
 

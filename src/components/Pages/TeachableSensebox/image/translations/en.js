@@ -9,7 +9,6 @@ export const imageClassificationTranslations_en = {
     startWebcam: "Start Webcam",
     stopSenseBoxCamera: "Stop senseBox MCU Eye Camera",
     startSenseBoxCamera: "Start senseBox MCU Eye Camera",
-    loadingCamera: "Loading camera...",
     initializingCamera: "Initializing camera...",
     samples: "samples",
     captureImage: "Capture example image",
@@ -176,6 +175,24 @@ export const imageClassificationTranslations_en = {
     permissionStep3: 'Change the setting to "Allow"',
     permissionStep4: "Refresh the page and try connecting again",
     downloadFirmware: "Download Camera Sketch",
+    waitingForImage: "Waiting for camera image...",
+    flashConnecting: "Preparing senseBox for upload...",
+    flashGrantBootloader: "Upload Camera Sketch",
+    flashGrantBootloaderHint:
+      'No camera image was received, so the camera sketch will be uploaded to the senseBox. Click on "Upload Camera Sketch" and then select the "{name}" port.',
+    flashUploading: "Uploading camera sketch...",
+    flashRestarting: "Starting camera...",
+    flashFailed: "Upload failed",
+    flashFailedMessage: "Uploading the camera sketch failed.",
+    captureFailed: "Capture Failed",
+    captureFailedMessage: "The senseBox MCU Eye could not capture an image.",
+    troubleshootingCamera:
+      "Ensure that the camera is properly connected to the senseBox MCU Eye",
+    troubleshootingOtherDevice:
+      "Try a different senseBox MCU Eye or a different camera",
+    troubleshootingFlashAgain:
+      "Try flashing the sketch again (with the button below)",
+    flashCaptureSketch: "Flash the camera capture sketch",
     tryAgain: "Try Again",
     reconnect: "Reconnect",
     serialCameraStatus: "Serial Camera Status:",

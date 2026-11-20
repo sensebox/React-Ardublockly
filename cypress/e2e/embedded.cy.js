@@ -16,7 +16,7 @@ describe("Embedded Blockly Page Tests", () => {
     cy.get(".embedded-toolbar", { timeout: 10000 }).should("exist");
     // Share, Reset icons exist
     cy.get(".embedded-toolbar svg.fa-share-nodes").should("exist");
-    cy.get(".embedded-toolbar svg.fa-share").should("exist");
+    cy.get(".embedded-toolbar svg.fa-broom").should("exist");
 
     // Select a board so Compile button becomes available
     cy.get('img[alt="Sensebox ESP"]', { timeout: 10000 }).click();
@@ -135,7 +135,7 @@ describe("Embedded Blockly Page Tests", () => {
   it("[Embedded] closes dialog on cancel", () => {
     cy.visit("/embedded");
     cy.get('img[alt="Sensebox ESP"]', { timeout: 8000 }).click();
-    cy.get(".embedded-toolbar svg.fa-share").parents("button").click();
+    cy.get(".embedded-toolbar svg.fa-broom").parents("button").click();
     cy.get('[role="dialog"]', { timeout: 5000 }).should("exist");
     cy.get('[role="dialog"]')
       .find("button")

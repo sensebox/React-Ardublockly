@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { styled } from "@mui/material/styles";
 import {
@@ -7,9 +7,33 @@ import {
   AccordionSummary as MuiAccordionSummary,
   AccordionDetails as MuiAccordionDetails,
   Typography,
+  GlobalStyles,
 } from "@mui/material";
 import MonacoEditor from "@monaco-editor/react";
 import * as Blockly from "blockly";
+import { toLineRanges, updateSignal } from "./codeDiff";
+import { getBlockLines } from "./blockCode";
+
+const signalStyles = (
+  <GlobalStyles
+    styles={{
+      ".code-signal-line": {
+        backgroundColor: "rgba(76, 175, 80, 0.25)",
+      },
+      ".code-signal-gutter": {
+        borderLeft: "4px solid #4caf50",
+        marginLeft: 3,
+      },
+      ".code-selected-line": {
+        backgroundColor: "rgba(33, 150, 243, 0.25)",
+      },
+      ".code-selected-gutter": {
+        borderLeft: "4px solid #2196f3",
+        marginLeft: 3,
+      },
+    }}
+  />
+);
 
 const Accordion = styled(MuiAccordion)(({ theme }) => ({
   border: `1px solid ${theme.palette.secondary.main}`,
@@ -49,6 +73,187 @@ const CodeViewer = () => {
   const xml = useSelector((s) => s.workspace.code.xml);
   const [expandedPanel, setExpandedPanel] = useState("arduino");
 
+  // Code signaling: highlight the lines added/changed by the last edit.
+  // The highlight stays until the next edit that adds or changes code.
+  const editorRef = useRef(null);
+  const decorationsRef = useRef(null);
+  const signalRef = useRef({ baseCode: arduino, baseHighlight: [] });
+  const highlightRef = useRef([]);
+  const revealRef = useRef(false);
+  // Set when Blockly finished loading XML (page reload, opening a project,
+  // board/language change): that code must not be highlighted
+  const resetRef = useRef(false);
+
+  // Highlight the code of the block the user clicked in the workspace
+  const selectionDecorationsRef = useRef(null);
+  const selectedLinesRef = useRef([]);
+  const clickedBlockIdRef = useRef(null);
+  // Only one highlight is shown, the one of the last action:
+  // "signal" (code was added/changed), "selection" (block clicked) or null
+  const activeRef = useRef("signal");
+
+  useEffect(() => {
+    const workspace = Blockly.getMainWorkspace();
+    if (!workspace) return undefined;
+    const onLoaded = (event) => {
+      if (event.type === Blockly.Events.FINISHED_LOADING) {
+        resetRef.current = true;
+      }
+    };
+    workspace.addChangeListener(onLoaded);
+    return () => workspace.removeChangeListener(onLoaded);
+  }, []);
+
+  const applyHighlight = () => {
+    if (!decorationsRef.current) return;
+    decorationsRef.current.set(
+      toLineRanges(
+        activeRef.current === "signal" ? highlightRef.current : [],
+      ).map(({ start, end }) => ({
+        range: {
+          startLineNumber: start,
+          startColumn: 1,
+          endLineNumber: end,
+          endColumn: 1,
+        },
+        options: {
+          isWholeLine: true,
+          className: "code-signal-line",
+          linesDecorationsClassName: "code-signal-gutter",
+          overviewRuler: { color: "#4caf50", position: 4 },
+        },
+      })),
+    );
+  };
+
+  const applySelection = () => {
+    if (!selectionDecorationsRef.current) return;
+    selectionDecorationsRef.current.set(
+      toLineRanges(
+        activeRef.current === "selection" ? selectedLinesRef.current : [],
+      ).map(({ start, end }) => ({
+        range: {
+          startLineNumber: start,
+          startColumn: 1,
+          endLineNumber: end,
+          endColumn: 1,
+        },
+        options: {
+          isWholeLine: true,
+          className: "code-selected-line",
+          linesDecorationsClassName: "code-selected-gutter",
+          overviewRuler: { color: "#2196f3", position: 4 },
+        },
+      })),
+    );
+  };
+
+  // Recomputes the lines of the clicked block
+  const updateSelection = (code, reveal) => {
+    const block = clickedBlockIdRef.current
+      ? Blockly.getMainWorkspace()?.getBlockById(clickedBlockIdRef.current)
+      : null;
+    selectedLinesRef.current = block ? getBlockLines(block, code) : [];
+    applySelection();
+    const lines = selectedLinesRef.current;
+    if (reveal && editorRef.current && lines.length > 0) {
+      editorRef.current.revealLinesInCenterIfOutsideViewport(
+        lines[0],
+        lines[lines.length - 1],
+      );
+    }
+  };
+
+  const arduinoRef = useRef(arduino);
+  arduinoRef.current = arduino;
+
+  useEffect(() => {
+    const workspace = Blockly.getMainWorkspace();
+    if (!workspace) return undefined;
+    const onSelection = (event) => {
+      // CLICK is only fired for a real click on a block, not when a block is
+      // dropped or created from the flyout (those only fire SELECTED)
+      if (
+        event.type === Blockly.Events.CLICK &&
+        event.targetType === "block" &&
+        event.blockId
+      ) {
+        clickedBlockIdRef.current = event.blockId;
+        activeRef.current = "selection";
+        applyHighlight();
+        updateSelection(arduinoRef.current, true);
+      } else if (
+        event.type === Blockly.Events.SELECTED &&
+        event.newElementId !== clickedBlockIdRef.current
+      ) {
+        // Deselected or another block got selected without a click
+        clickedBlockIdRef.current = null;
+        selectedLinesRef.current = [];
+        if (activeRef.current === "selection") activeRef.current = null;
+        applySelection();
+      }
+    };
+    workspace.addChangeListener(onSelection);
+    return () => workspace.removeChangeListener(onSelection);
+  }, []);
+
+  const handleEditorMount = (editor) => {
+    editorRef.current = editor;
+    decorationsRef.current = editor.createDecorationsCollection();
+    selectionDecorationsRef.current = editor.createDecorationsCollection();
+    applyHighlight();
+    applySelection();
+  };
+
+  useEffect(() => {
+    const workspace = Blockly.getMainWorkspace();
+    const { state, highlight, reveal } = updateSignal(
+      signalRef.current,
+      arduino,
+      {
+        dragging: Boolean(workspace?.isDragging?.()),
+        reset: resetRef.current,
+      },
+    );
+    // New or changed code replaces the highlight of a clicked block
+    if (reveal || resetRef.current) {
+      activeRef.current = "signal";
+      clickedBlockIdRef.current = null;
+      selectedLinesRef.current = [];
+    }
+    resetRef.current = false;
+    signalRef.current = state;
+    highlightRef.current = highlight;
+    if (reveal) revealRef.current = true;
+
+    // Monaco replaces its model content in its own effect, which drops the
+    // decorations, so (re)apply them afterwards
+    const frame = requestAnimationFrame(() => {
+      applyHighlight();
+      // Lines of the clicked block may have moved; skip while dragging, the
+      // drop triggers a new update anyway
+      if (activeRef.current === "selection" && !workspace?.isDragging?.()) {
+        updateSelection(arduino, false);
+      } else {
+        applySelection();
+      }
+      const lines = highlightRef.current;
+      if (
+        activeRef.current === "signal" &&
+        revealRef.current &&
+        editorRef.current &&
+        lines.length > 0
+      ) {
+        revealRef.current = false;
+        editorRef.current.revealLinesInCenterIfOutsideViewport(
+          lines[0],
+          lines[lines.length - 1],
+        );
+      }
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [arduino]);
+
   const handleChange = (panel) => (_, isExpanded) => {
     setExpandedPanel(isExpanded ? panel : false);
   };
@@ -62,6 +267,7 @@ const CodeViewer = () => {
         flexDirection: "column",
       }}
     >
+      {signalStyles}
       <Accordion
         style={{ width: "100%" }}
         expanded={expandedPanel === "arduino"}
@@ -89,6 +295,7 @@ const CodeViewer = () => {
             height="100%"
             defaultLanguage="cpp"
             value={arduino}
+            onMount={handleEditorMount}
             options={{ readOnly: true, fontSize: 16 }}
           />
         </AccordionDetails>

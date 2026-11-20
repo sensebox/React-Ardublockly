@@ -19,7 +19,7 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Button from "@mui/material/Button";
 
-import { faShare } from "@fortawesome/free-solid-svg-icons";
+import { faBroom } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Dialog from "../../ui/Dialog.jsx";
 
@@ -89,9 +89,7 @@ class ResetWorkspace extends Component {
             className={`embedded-button embedded-button-primary`}
             onClick={() => this.openDialog()}
             variant="contained"
-            startIcon={
-              <FontAwesomeIcon icon={faShare} size="sm" flip="horizontal" />
-            }
+            startIcon={<FontAwesomeIcon icon={faBroom} size="sm" />}
           >
             <span className="embedded-button-label">Zurücksetzen</span>
           </Button>
@@ -102,7 +100,7 @@ class ResetWorkspace extends Component {
               onClick={() => this.openDialog()}
               size="large"
             >
-              <FontAwesomeIcon icon={faShare} size="xs" flip="horizontal" />
+              <FontAwesomeIcon icon={faBroom} size="xs" />
             </IconButton>
           </Tooltip>
         )}

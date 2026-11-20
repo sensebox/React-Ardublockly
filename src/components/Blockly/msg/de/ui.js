@@ -101,6 +101,7 @@ export const UI = {
   tooltip_trashcan_delete: "Blöcke endgültig löschen",
   tooltip_project_title: "Titel des Projektes",
   tooltip_check_solution: "Lösung kontrollieren",
+  tooltip_undo: "Rückgängig machen (Strg+Z)",
   tooltip_copy_code: "Code in die Zwischenablage kopieren",
   tooltip_statistics_current: "Anzahl aktueller Blöcke",
   tooltip_statistics_new: "Anzahl neuer Blöcke",
@@ -253,6 +254,7 @@ export const UI = {
   button_back: "Zurück",
   button_next: "nächster Schritt",
   button_tutorial_overview: "Tutorial Übersicht",
+  tutorial_reset_answers: "Tutorialfortschritt zurücksetzen",
   button_login: "Anmelden",
   button_createVariable: "Variable erstellen",
 

@@ -68,18 +68,25 @@ function useSpellSource() {
     completedStrokeCallbackRef.current = callback;
   }, []);
 
-  const connect = useCallback(async () => {
-    if (!serviceRef.current) return;
+  /**
+   * Connect to the spell sensor.
+   * @param {Object} [options]
+   * @param {SerialPort} [options.port] - Open this already permitted port
+   *   instead of showing the browser's port picker.
+   * @returns {Promise<{connected: boolean, error: Error|null}>}
+   */
+  const connect = useCallback(async ({ port } = {}) => {
+    if (!serviceRef.current) return { connected: false, error: null };
     setIsConnecting(true);
     setError(null);
 
     try {
-      await serviceRef.current.connect();
+      await serviceRef.current.connect(undefined, port);
 
       // User may have cancelled — service won't be connected
       if (!serviceRef.current.isConnected) {
         setIsConnecting(false);
-        return;
+        return { connected: false, error: null };
       }
 
       lastDataTimeRef.current = Date.now();
@@ -104,12 +111,23 @@ function useSpellSource() {
       });
 
       setIsConnected(true);
+      return { connected: true, error: null };
     } catch (err) {
       setError(err);
       setIsConnected(false);
+      return { connected: false, error: err };
     } finally {
       setIsConnecting(false);
     }
+  }, []);
+
+  /**
+   * Wait until the spell sketch sends its first data line.
+   * @returns {Promise<boolean>} true if data arrived in time
+   */
+  const waitForData = useCallback(async (timeoutMs = 4000) => {
+    if (!serviceRef.current) return false;
+    return serviceRef.current.waitForData(timeoutMs);
   }, []);
 
   const disconnect = useCallback(async () => {
@@ -136,6 +154,17 @@ function useSpellSource() {
     setDataTimeoutError(false);
     lastDataTimeRef.current = null;
   }, []);
+
+  /**
+   * Disconnect and hand out the port that was used, so another tool (the
+   * flash tool) can open it.
+   * @returns {Promise<SerialPort|null>}
+   */
+  const releasePort = useCallback(async () => {
+    const port = serviceRef.current?.port ?? null;
+    await disconnect();
+    return port;
+  }, [disconnect]);
 
   // ─── Data-timeout watchdog ────────────────────────────────────────────────
   useEffect(() => {
@@ -164,6 +193,8 @@ function useSpellSource() {
     dataTimeoutError,
     connect,
     disconnect,
+    waitForData,
+    releasePort,
     setOnCompletedStroke,
     isSupported: SpellSerialService.isSupported(),
     StrokeState,
