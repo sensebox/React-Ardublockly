@@ -62,13 +62,6 @@ const ModelTestingSection = ({
               className={cls.name}
               samples={cls.samples}
               title={<Typography variant="h6">{cls.name}</Typography>}
-              headerActions={
-                <Chip
-                  label={`${cls.samples.length} ${t.training.samples}`}
-                  size="small"
-                  color={cls.samples.length > 0 ? "primary" : "default"}
-                />
-              }
               scrollRef={(el) => {
                 sampleScrollRefs.current[`test-${cls.id}`] = el;
               }}
@@ -152,7 +145,17 @@ const ModelTestingSection = ({
           {finalAccuracy !== null && finalAccuracy !== undefined && (
             <Box sx={{ mb: 2, textAlign: "center", width: "100%" }}>
               <Chip
-                label={`${t.training.finalAccuracy}: ${(finalAccuracy * 100).toFixed(1)}%`}
+                label={
+                  <>
+                    <span>{`${t.training.finalAccuracy}:`}</span>
+                    <Box
+                      component="span"
+                      sx={{ fontSize: "2em", lineHeight: 1 }}
+                    >
+                      {`${(finalAccuracy * 100).toFixed(1)}%`}
+                    </Box>
+                  </>
+                }
                 sx={{
                   color: "primary.text",
                   fontWeight: "bold",
@@ -161,6 +164,11 @@ const ModelTestingSection = ({
                   px: { xs: 0.75, sm: 1 },
                   height: "auto",
                   "& .MuiChip-label": {
+                    display: "flex",
+                    flexWrap: "wrap",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    columnGap: 1,
                     whiteSpace: "normal",
                     wordBreak: "break-word",
                   },
