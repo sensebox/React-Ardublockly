@@ -8,6 +8,7 @@ import {
   DialogTitle,
   IconButton,
   Typography,
+  darken,
   lighten,
   useMediaQuery,
   useTheme,
@@ -78,11 +79,13 @@ const ConfusionMatrix = ({ sampleMatrix, classNames }) => {
   const names = classNames.slice(0, numClasses);
 
   // Opaque colours, since the grid lines are the container showing through
-  const lineColor = theme.palette.grey[400];
-  const axisBg = theme.palette.grey[300];
-  const headerBg = theme.palette.grey[200];
-  const correctBg = lighten(theme.palette.success.main, 0.88);
-  const incorrectBg = lighten(theme.palette.warning.main, 0.88);
+  const isDark = theme.palette.mode === "dark";
+  const lineColor = isDark ? theme.palette.grey[600] : theme.palette.grey[400];
+  const axisBg = isDark ? theme.palette.grey[800] : theme.palette.grey[300];
+  const headerBg = isDark ? theme.palette.grey[900] : theme.palette.grey[200];
+  const tint = (color) => (isDark ? darken(color, 0.75) : lighten(color, 0.88));
+  const correctBg = tint(theme.palette.success.main);
+  const incorrectBg = tint(theme.palette.warning.main);
 
   const headerCellSx = {
     display: "flex",
