@@ -246,13 +246,11 @@ const ModelTrainer = ({
   // The example slideshow only runs once a model has been trained on it
   const showSlideshow = isExampleMode && hasCompletedTraining;
 
-  // All example images (training + test), alternating between the classes
+  // Only the test images (not used for training), alternating between the
+  // classes
   const slideshowSamples = useMemo(() => {
     if (!showSlideshow) return [];
-    const perClass = classes.map((cls) => [
-      ...cls.samples,
-      ...(cls.testSamples || []),
-    ]);
+    const perClass = testClasses.map((cls) => cls.samples);
     const maxLength = Math.max(0, ...perClass.map((s) => s.length));
     const result = [];
     for (let i = 0; i < maxLength; i++) {
@@ -261,7 +259,7 @@ const ModelTrainer = ({
       });
     }
     return result;
-  }, [showSlideshow, classes]);
+  }, [showSlideshow, testClasses]);
   const currentSlide =
     slideshowSamples.length > 0
       ? slideshowSamples[slideshowIndex % slideshowSamples.length]
