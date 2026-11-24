@@ -3,15 +3,10 @@ import QwiicButtonCategory from "./QwiicButtonCategory";
 import { Block, Value, Field, Shadow, Category, Sep, Label, Button } from "..";
 import { getColour } from "../helpers/colour";
 import * as Blockly from "blockly/core";
-import "@blockly/toolbox-search";
-import "./search-category.css";
 
 export const ToolboxMcu = () => {
   return (
     <>
-      {/* ============================== SEARCH ============================== */}
-      {/* <Category name="Suche" kind="search" /> */}
-
       {/* ============================== SENSORS ============================== */}
       <Category
         name={Blockly.Msg.toolbox_sensors}

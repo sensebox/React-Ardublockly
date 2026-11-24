@@ -1,28 +1,76 @@
-.blocklyToolboxContents:first-child {
-  padding: 1px;
+/* Toolbox search – styled like the category cards in toolbox_styles.css */
+
+.blocklyToolboxCategoryContainer:has(input[type="search"]) {
+  margin-bottom: 6px;
 }
-input[type="search"] {
-  background-color: #f9f9f9;
-  border: 1px solid #ccc !important;
-  padding: 8px;
-  border-radius: 4px;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' height='16' width='16' viewBox='0 0 24 24'%3E%3Cpath fill='%23aaa' d='M15.5 14h-.79l-.28-.27a6.471 6.471 0 001.48-5.34C15.03 5.01 12.02 2 8.5 2S2 5.01 2 8.5 5.01 15 8.5 15a6.5 6.5 0 005.34-1.48l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-7 0C6.01 14 4 11.99 4 9.5S6.01 5 8.5 5 13 7.01 13 9.5 10.99 14 8.5 14z'%3E%3C/path%3E%3C/svg%3E");
+
+/* Row: white card with border, shadow and colour stripe like a category */
+.blocklyToolboxCategory:has(input[type="search"]) {
+  position: relative;
+  display: flex;
+  align-items: center;
+  box-sizing: content-box;
+  height: 30px;
+  margin: 2px;
+  padding: 2px;
+  border: 1px solid rgba(0, 128, 0, 0.4);
+  border-left: 8px solid #5ba55b;
+  border-radius: 5px;
+  background: #fff !important; /* overrides Blockly's selected colour */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  cursor: text;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.blocklyToolboxCategory:has(input[type="search"]):hover {
+  border-color: rgba(0, 128, 0, 0.6);
+  border-left-color: #5ba55b;
+}
+
+.blocklyToolboxCategory:has(input[type="search"]:focus) {
+  border-color: #5ba55b;
+  box-shadow: 0 0 0 3px rgba(91, 165, 91, 0.25) !important;
+}
+
+.blocklyToolboxCategory:has(input[type="search"])
+  .blocklyTreeRowContentContainer {
+  display: flex;
+  flex: 1;
+  height: 100%;
+  min-width: 0;
+}
+
+/* Input fills the card, magnifier icon on the left */
+.blocklyToolboxDiv input[type="search"] {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  margin: 0 !important; /* plugin sets an inline margin */
+  padding: 0 6px 0 26px;
+  border: none !important;
+  outline: none;
+  background-color: transparent;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23999' d='M15.5 14h-.79l-.28-.27a6.47 6.47 0 0 0 1.57-4.23 6.5 6.5 0 1 0-6.5 6.5c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-size: 16px;
-  background-position: right 8px center;
-  outline: none;
+  background-position: 5px center;
+  font-family: inherit;
+  font-size: inherit;
+  color: #1a1a1a;
 }
 
-#blockly-y {
-  margin-bottom: 5px;
+.blocklyToolboxDiv input[type="search"]:focus {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%235ba55b' d='M15.5 14h-.79l-.28-.27a6.47 6.47 0 0 0 1.57-4.23 6.5 6.5 0 1 0-6.5 6.5c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14'/%3E%3C/svg%3E");
 }
 
-/* Alle Kategorien außer die, die ein Search-Input enthalten */
-.blocklyToolboxCategory:has(input[type="search"]) {
-  border-radius: 5px;
-  outline: none;
-  padding: 8px;
-  margin: 2px;
-  align-content: center;
-  outline: none;
+.blocklyToolboxDiv input[type="search"]::placeholder {
+  color: #8a8a8a;
+  opacity: 1;
+}
+
+.blocklyToolboxDiv input[type="search"]::-webkit-search-cancel-button {
+  cursor: pointer;
 }

@@ -34,6 +34,10 @@ export const UI = {
    * Toolbox
    */
   toolbox_sensors: "Sensors",
+  toolbox_search: "Search",
+  toolbox_search_placeholder: "Search blocks",
+  toolbox_search_hint: "Type at least 3 characters to search for blocks",
+  toolbox_search_no_results: "No matching blocks found",
   toolbox_logic: "Logic",
   toolbox_loops: "Loops",
   toolbox_math: "Math",

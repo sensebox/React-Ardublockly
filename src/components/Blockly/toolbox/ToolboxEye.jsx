@@ -4,15 +4,11 @@ import { useSelector } from "react-redux";
 import { Block, Value, Field, Shadow, Category, Label, Button } from "..";
 import { getColour } from "../helpers/colour";
 import * as Blockly from "blockly/core";
-import "@blockly/toolbox-search";
-import "./search-category.css";
 
 export const ToolboxEye = () => {
   const aiModel = useSelector((state) => state.general.aiModel);
   return (
     <>
-      {/* ============================== SEARCH ============================== */}
-
       {/* ============================== SENSORS ============================== */}
       <Category
         name={Blockly.Msg.toolbox_sensors}
