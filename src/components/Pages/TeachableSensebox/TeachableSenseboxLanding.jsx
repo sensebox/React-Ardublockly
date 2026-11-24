@@ -6,23 +6,61 @@ import {
   Box,
   Card,
   CardContent,
-  CardActions,
   Button,
+  Divider,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
   useTheme,
 } from "@mui/material";
 import {
   PhotoCamera as CameraIcon,
   Gesture as GestureIcon,
   Explore as OrientationIcon,
+  ExpandMore as ExpandMoreIcon,
 } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import { getTeachableSenseboxTranslations } from "./translations";
+
+const CardSection = ({ label, children }) => (
+  <Box sx={{ px: 3, py: 2 }}>
+    <Typography
+      variant="overline"
+      color="primary"
+      sx={{ display: "block", lineHeight: 1.5, mb: 0.5 }}
+    >
+      {label}
+    </Typography>
+    <Typography variant="body2">{children}</Typography>
+  </Box>
+);
 
 const TeachableSenseboxLanding = () => {
   const navigate = useNavigate();
   const language = useSelector((s) => s.general.language);
   const t = getTeachableSenseboxTranslations(language);
   const theme = useTheme();
+
+  const cards = [
+    {
+      key: "orientation",
+      Icon: OrientationIcon,
+      texts: t.landing.orientationCard,
+      path: "/teachable/orientation",
+    },
+    {
+      key: "spell",
+      Icon: GestureIcon,
+      texts: t.landing.accelerationCard,
+      path: "/teachable/spell",
+    },
+    {
+      key: "image",
+      Icon: CameraIcon,
+      texts: t.landing.imageCard,
+      path: "/teachable/image",
+    },
+  ];
 
   return (
     <Container maxWidth="lg" sx={{ py: 6 }}>
@@ -44,9 +82,9 @@ const TeachableSenseboxLanding = () => {
           alignItems: "start",
         }}
       >
-        {/* Orientation Classification Card */}
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        {cards.map(({ key, Icon, texts, path }) => (
           <Card
+            key={key}
             elevation={3}
             sx={{
               display: "flex",
@@ -55,90 +93,55 @@ const TeachableSenseboxLanding = () => {
               "&:hover": { boxShadow: theme.shadows[8] },
             }}
           >
-            <CardContent sx={{ flexGrow: 1, textAlign: "center", pt: 4 }}>
-              <OrientationIcon
-                sx={{ fontSize: 64, color: "primary.main", mb: 2 }}
-              />
+            <CardContent sx={{ textAlign: "center", pt: 4, pb: 3 }}>
+              <Icon sx={{ fontSize: 64, color: "primary.main", mb: 2 }} />
               <Typography variant="h5" gutterBottom>
-                {t.landing.orientationCard.title}
+                {texts.title}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {t.landing.orientationCard.description}
-              </Typography>
-            </CardContent>
-            <CardActions sx={{ justifyContent: "center", pb: 3 }}>
               <Button
                 variant="contained"
                 size="large"
-                onClick={() => navigate("/teachable/orientation")}
+                onClick={() => navigate(path)}
+                sx={{ mt: 1 }}
               >
-                {t.landing.orientationCard.button}
+                {texts.button}
               </Button>
-            </CardActions>
-          </Card>
-        </Box>
+            </CardContent>
 
-        {/* Acceleration Classification Card */}
-        <Card
-          elevation={3}
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            transition: "box-shadow 0.2s",
-            "&:hover": { boxShadow: theme.shadows[8] },
-          }}
-        >
-          <CardContent sx={{ flexGrow: 1, textAlign: "center", pt: 4 }}>
-            <GestureIcon sx={{ fontSize: 64, color: "primary.main", mb: 2 }} />
-            <Typography variant="h5" gutterBottom>
-              {t.landing.accelerationCard.title}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {t.landing.accelerationCard.description}
-            </Typography>
-          </CardContent>
-          <CardActions sx={{ justifyContent: "center", pb: 3 }}>
-            <Button
-              variant="contained"
-              size="large"
-              onClick={() => navigate("/teachable/spell")}
+            <Divider />
+            <CardSection label={t.landing.sections.topic}>
+              {texts.topic}
+            </CardSection>
+
+            <Divider />
+            <CardSection label={t.landing.sections.hardware}>
+              {texts.hardware}
+            </CardSection>
+
+            <Divider />
+            <Accordion
+              disableGutters
+              elevation={0}
+              square
+              sx={{ "&::before": { display: "none" } }}
             >
-              {t.landing.accelerationCard.button}
-            </Button>
-          </CardActions>
-        </Card>
-
-        {/* Image Classification Card */}
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-          <Card
-            elevation={3}
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              transition: "box-shadow 0.2s",
-              "&:hover": { boxShadow: theme.shadows[8] },
-            }}
-          >
-            <CardContent sx={{ flexGrow: 1, textAlign: "center", pt: 4 }}>
-              <CameraIcon sx={{ fontSize: 64, color: "primary.main", mb: 2 }} />
-              <Typography variant="h5" gutterBottom>
-                {t.landing.imageCard.title}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {t.landing.imageCard.description}
-              </Typography>
-            </CardContent>
-            <CardActions sx={{ justifyContent: "center", pb: 3 }}>
-              <Button
-                variant="contained"
-                size="large"
-                onClick={() => navigate("/teachable/image")}
-              >
-                {t.landing.imageCard.button}
-              </Button>
-            </CardActions>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ px: 3 }}>
+                <Typography
+                  variant="overline"
+                  color="primary"
+                  sx={{ lineHeight: 1.5 }}
+                >
+                  {t.landing.sections.context}
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails sx={{ px: 3, pt: 0 }}>
+                {texts.context && (
+                  <Typography variant="body2">{texts.context}</Typography>
+                )}
+              </AccordionDetails>
+            </Accordion>
           </Card>
-        </Box>
+        ))}
       </Box>
     </Container>
   );

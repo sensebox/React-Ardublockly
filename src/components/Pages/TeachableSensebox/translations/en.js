@@ -2,22 +2,31 @@
 export const teachableSenseboxTranslations_en = {
   landing: {
     title: "Machine Learning",
+    sections: {
+      topic: "Topic",
+      hardware: "Hardware",
+      context: "Context",
+    },
     imageCard: {
       title: "Images",
-      description:
-        "Train a big model to recognize objects or scenes using the senseBox MCU Eye camera.",
+      topic:
+        "Supervised learning (training, testing), compression and deployment",
+      hardware: "Camera of the senseBox MCU Eye or your own Webcam",
+      context: "",
       button: "Get Started",
     },
     accelerationCard: {
       title: "Spells",
-      description:
-        "Train a model to recognize magic wand spells using the senseBox MCU Eye accelerometer.",
+      topic: "Convolutional Neural Networks",
+      hardware: "Acceleration sensor of the senseBox MCU Eye",
+      context: "",
       button: "Get Started",
     },
     orientationCard: {
       title: "Orientations",
-      description:
-        "Train a small model to detect device orientations using the senseBox MCU Eye accelerometer.",
+      topic: "Decision trees and neural networks",
+      hardware: "Acceleration sensor of the senseBox MCU Eye",
+      context: "",
       button: "Get Started",
     },
     tutorials: {
