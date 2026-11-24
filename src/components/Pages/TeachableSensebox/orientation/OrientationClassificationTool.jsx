@@ -6,6 +6,8 @@ import {
   Tabs,
   Tab,
   LinearProgress,
+  ToggleButton,
+  ToggleButtonGroup,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
@@ -13,6 +15,9 @@ import { useSelector } from "react-redux";
 import { getOrientationTranslations } from "./translations";
 import OrientationModelTrainer from "./OrientationModelTrainer";
 import OrientationDecisionTreeVisualizer from "./OrientationDecisionTreeVisualizer";
+import OrientationCustomTreeBuilder, {
+  createInitialCustomTree,
+} from "./OrientationCustomTreeBuilder";
 import OrientationNNVisualizer, {
   DEFAULT_NN_CONFIG,
 } from "./OrientationNNVisualizer";
@@ -31,6 +36,8 @@ const OrientationClassificationTool = ({
   const [classes, setClasses] = useState([]);
   const [latestSample, setLatestSample] = useState(null);
   const [vizTab, setVizTab] = useState(0); // 0 = Decision Tree, 1 = Neural Network
+  const [treeMode, setTreeMode] = useState("custom"); // "custom" | "generated"
+  const [customTree, setCustomTree] = useState(createInitialCustomTree);
   const [nnConfig, setNNConfig] = useState(DEFAULT_NN_CONFIG);
   const [trainedNNModel, setTrainedNNModel] = useState(null);
   const isMountedRef = useRef(true);
@@ -245,7 +252,15 @@ const OrientationClassificationTool = ({
             >
               {vizTab === 0 && (
                 <>
-                  <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      flexWrap: "wrap",
+                      gap: 1,
+                      mb: 1,
+                    }}
+                  >
                     <Typography variant="h5">{t.decisionTree.title}</Typography>
                     <HelpButton
                       onClick={() => {
@@ -255,11 +270,42 @@ const OrientationClassificationTool = ({
                       isBlinking={decisionTreeBlinking}
                       tooltip={t.training.tooltip.helpDecisionTree}
                     />
+                    <ToggleButtonGroup
+                      value={treeMode}
+                      exclusive
+                      size="small"
+                      color="primary"
+                      onChange={(_, v) => v && setTreeMode(v)}
+                      aria-label={t.decisionTree.modeLabel}
+                      sx={{ ml: "auto" }}
+                    >
+                      <ToggleButton
+                        value="custom"
+                        data-testid="tree-mode-custom"
+                      >
+                        {t.decisionTree.modeCustom}
+                      </ToggleButton>
+                      <ToggleButton
+                        value="generated"
+                        data-testid="tree-mode-generated"
+                      >
+                        {t.decisionTree.modeGenerated}
+                      </ToggleButton>
+                    </ToggleButtonGroup>
                   </Box>
-                  <OrientationDecisionTreeVisualizer
-                    trainedModel={trainedModel}
-                    latestSample={latestSample}
-                  />
+                  {treeMode === "generated" ? (
+                    <OrientationDecisionTreeVisualizer
+                      trainedModel={trainedModel}
+                      latestSample={latestSample}
+                    />
+                  ) : (
+                    <OrientationCustomTreeBuilder
+                      tree={customTree}
+                      onTreeChange={setCustomTree}
+                      classes={classes}
+                      latestSample={latestSample}
+                    />
+                  )}
                 </>
               )}
             </Box>

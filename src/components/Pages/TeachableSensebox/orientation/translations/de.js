@@ -92,6 +92,16 @@ export const orientationTranslations_de = {
     yes: "Ja",
     no: "Nein",
     samplesLabel: "{count} Aufnahmen",
+    modeLabel: "Entscheidungsbaum-Modus",
+    modeGenerated: "Generieren",
+    modeCustom: "Selbst bauen",
+    custom: {
+      threshold: "Schwellenwert",
+      addDecision: "Knoten",
+      addLeaf: "Blatt",
+      remove: "Entfernen",
+      noClasses: "Füge zuerst Orientierungen hinzu",
+    },
   },
   errors: {
     browserNotSupported: "Browser nicht unterstützt",

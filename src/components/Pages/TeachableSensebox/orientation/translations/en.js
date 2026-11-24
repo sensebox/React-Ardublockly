@@ -90,6 +90,16 @@ export const orientationTranslations_en = {
     yes: "Yes",
     no: "No",
     samplesLabel: "{count} samples",
+    modeLabel: "Decision tree mode",
+    modeGenerated: "Generate",
+    modeCustom: "Build my own",
+    custom: {
+      threshold: "Threshold",
+      addDecision: "node",
+      addLeaf: "Leaf",
+      remove: "Remove",
+      noClasses: "Add orientations first",
+    },
   },
   errors: {
     browserNotSupported: "Browser Not Supported",
