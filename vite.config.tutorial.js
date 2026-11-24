@@ -5,6 +5,9 @@ import { resolve } from "path";
 
 export default defineConfig({
   build: {
+    // Keep the bundle parseable on older iOS (Safari 15.6 / iOS 15.8).
+    // Vite's default target ("baseline-widely-available") is Safari 16+.
+    target: ["es2020", "chrome87", "edge88", "firefox78", "safari15", "ios15"],
     outDir: "build",
     emptyOutDir: false,
     lib: {
