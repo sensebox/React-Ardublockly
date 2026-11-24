@@ -240,6 +240,23 @@ export const UI = {
    */
 
   button_cancel: "Cancel",
+
+  /**
+   * Workspace Tabs
+   */
+  tabs_label: "Workspaces",
+  tabs_new: "New workspace",
+  tabs_close: "Close workspace",
+  tabs_close_headline: "Close workspace?",
+  tabs_close_confirm:
+    "The workspace will be closed and its program deleted. Save or download it first if you want to keep it.",
+  tabs_close_button: "Close",
+  tabs_rename: "Double-click or press F2 to rename, drag to move",
+  tabs_rename_button: "Rename",
+  tabs_rename_input: "Workspace name",
+  tabs_duplicate: "Duplicate",
+  tabs_copy_suffix: "(copy)",
+  tabs_limit_reached: "You can open at most 10 workspaces at the same time.",
   button_close: "Close",
   button_accept: "Ok",
   button_compile: "Compile",

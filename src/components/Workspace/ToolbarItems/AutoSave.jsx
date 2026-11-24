@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { workspaceName } from "../../../actions/workspaceActions";
+import { updateActiveTabXml } from "../../../actions/tabActions";
 import SaveIcon from "@/components/Pages/CodeEditor/SaveIcon";
 
 const resetTimeout = (id, newID) => {
@@ -33,6 +34,7 @@ class AutoSave extends Component {
   saveValue = () => {
     this.setState({ ...this.state, saved: true });
     localStorage.setItem("autoSaveXML", this.props.xml);
+    this.props.updateActiveTabXml(this.props.xml);
     setTimeout(() => this.setState({ ...this.state, saved: false }), 1000);
   };
 
@@ -57,6 +59,7 @@ AutoSave.propTypes = {
   xml: PropTypes.string.isRequired,
   name: PropTypes.string,
   workspaceName: PropTypes.func.isRequired,
+  updateActiveTabXml: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -64,4 +67,6 @@ const mapStateToProps = (state) => ({
   name: state.workspace.name,
 });
 
-export default connect(mapStateToProps, { workspaceName })(AutoSave);
+export default connect(mapStateToProps, { workspaceName, updateActiveTabXml })(
+  AutoSave,
+);

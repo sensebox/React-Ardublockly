@@ -27,6 +27,7 @@ const WorkspaceToolbar = ({
   multiple = false,
   project,
   projectType,
+  hideName = false,
 }) => {
   const user = useSelector((state) => state.auth.user);
 
@@ -34,7 +35,7 @@ const WorkspaceToolbar = ({
     <div style={containerStyle}>
       {!assessment && !multiple && <AutoSave />}
       {!multiple && <UndoWorkspace style={{ marginRight: "5px" }} />}
-      {!assessment && (
+      {!assessment && !hideName && (
         <WorkspaceName
           style={{ marginRight: "5px" }}
           multiple={multiple}
@@ -94,6 +95,8 @@ WorkspaceToolbar.propTypes = {
   multiple: PropTypes.bool,
   project: PropTypes.object,
   projectType: PropTypes.string,
+  // the name is edited in the workspace tab instead
+  hideName: PropTypes.bool,
 };
 
 export default memo(WorkspaceToolbar);
