@@ -6,6 +6,7 @@ import {
   SET_TABS_ENABLED,
   RENAME_TAB,
   REORDER_TABS,
+  CLOSE_ALL_TABS,
   NAME,
   BOARD,
 } from "../actions/types";
@@ -91,6 +92,13 @@ export default function tabsReducer(state = initialState(), action) {
         activeId: action.payload.nextActiveId || state.activeId,
       });
     }
+    case CLOSE_ALL_TABS:
+      // payload is the fresh tab that replaces all others
+      return persist({
+        ...state,
+        tabs: [action.payload],
+        activeId: action.payload.id,
+      });
     case SWITCH_TAB:
       return persist({ ...state, activeId: action.payload });
     case RENAME_TAB:

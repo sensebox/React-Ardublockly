@@ -262,6 +262,10 @@ export const UI = {
   tabs_rename_input: "Name des Workspaces",
   tabs_duplicate: "Duplizieren",
   tabs_copy_suffix: "(Kopie)",
+  tabs_close_all: "Alle schließen",
+  tabs_close_all_headline: "Alle Workspaces schließen?",
+  tabs_close_all_confirm:
+    "Alle Workspaces werden geschlossen und die Programme darin gelöscht. Danach ist ein neuer, leerer Workspace geöffnet. Speichere oder lade Programme vorher herunter, wenn du sie behalten möchtest.",
   tabs_limit_reached: "Du kannst höchstens 10 Workspaces gleichzeitig öffnen.",
   button_close: "Schließen",
   button_save: "Speichern",

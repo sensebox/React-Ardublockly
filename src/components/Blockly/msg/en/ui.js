@@ -256,6 +256,10 @@ export const UI = {
   tabs_rename_input: "Workspace name",
   tabs_duplicate: "Duplicate",
   tabs_copy_suffix: "(copy)",
+  tabs_close_all: "Close all",
+  tabs_close_all_headline: "Close all workspaces?",
+  tabs_close_all_confirm:
+    "All workspaces will be closed and their programs deleted. A new, empty workspace will be opened. Save or download programs first if you want to keep them.",
   tabs_limit_reached: "You can open at most 10 workspaces at the same time.",
   button_close: "Close",
   button_accept: "Ok",

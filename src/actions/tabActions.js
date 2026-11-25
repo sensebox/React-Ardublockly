@@ -9,6 +9,7 @@ import {
   SET_TABS_ENABLED,
   RENAME_TAB,
   REORDER_TABS,
+  CLOSE_ALL_TABS,
 } from "./types";
 import { setBoard } from "./boardAction";
 import { clearStats, workspaceName } from "./workspaceActions";
@@ -99,15 +100,17 @@ export const switchTab = (id) => (dispatch, getState) => {
   dispatch(activateTab(tab));
 };
 
+const createEmptyTab = (board) => ({
+  id: createTabId(),
+  name: createNameId(),
+  board,
+  xml: initialXml,
+});
+
 export const addTab = () => (dispatch, getState) => {
   if (getState().tabs.tabs.length >= MAX_TABS) return;
   dispatch(saveCurrentWorkspace());
-  const tab = {
-    id: createTabId(),
-    name: createNameId(),
-    board: getState().board.board,
-    xml: initialXml,
-  };
+  const tab = createEmptyTab(getState().board.board);
   dispatch({ type: ADD_TAB, payload: { tab } });
   dispatch(activateTab(tab));
 };
@@ -155,4 +158,12 @@ export const closeTab = (id) => (dispatch, getState) => {
   const next = tabs[index + 1] || tabs[index - 1];
   dispatch({ type: CLOSE_TAB, payload: { id, nextActiveId: next.id } });
   dispatch(activateTab(next));
+};
+
+// Closes every tab. One workspace must always stay open, so a fresh, empty
+// tab with the current board replaces them.
+export const closeAllTabs = () => (dispatch, getState) => {
+  const tab = createEmptyTab(getState().board.board);
+  dispatch({ type: CLOSE_ALL_TABS, payload: tab });
+  dispatch(activateTab(tab));
 };

@@ -22,6 +22,7 @@ import {
 import Dialog from "@/components/ui/Dialog";
 import {
   addTab,
+  closeAllTabs,
   closeTab,
   duplicateTab,
   MAX_TAB_NAME_LENGTH,
@@ -30,6 +31,8 @@ import {
   switchTab,
 } from "@/actions/tabActions";
 import { MAX_TABS } from "@/reducers/tabsReducer";
+
+const CLOSE_ALL = "__all__";
 
 // names are shown in full up to this length, longer ones get an ellipsis
 const NAME_DISPLAY_LENGTH = 24;
@@ -90,7 +93,9 @@ function WorkspaceTabs() {
   // re-render on language change so Blockly.Msg texts update
   useSelector((state) => state.general.language);
 
+  // id of the tab to close, or CLOSE_ALL for "close all tabs"
   const [tabToClose, setTabToClose] = useState(null);
+  const closingAll = tabToClose === CLOSE_ALL;
   const [editingId, setEditingId] = useState(null);
   const [draggingId, setDraggingId] = useState(null);
   const [dropTargetId, setDropTargetId] = useState(null);
@@ -148,7 +153,7 @@ function WorkspaceTabs() {
   });
 
   const confirmClose = () => {
-    dispatch(closeTab(tabToClose));
+    dispatch(closingAll ? closeAllTabs() : closeTab(tabToClose));
     setTabToClose(null);
   };
 
@@ -370,10 +375,37 @@ function WorkspaceTabs() {
         </span>
       </Tooltip>
 
+      {tabs.length > 1 && (
+        <Button
+          size="small"
+          data-testid="workspace-tab-close-all"
+          onClick={() => setTabToClose(CLOSE_ALL)}
+          startIcon={<FontAwesomeIcon icon={faXmark} size="xs" />}
+          sx={{
+            ml: "auto",
+            flexShrink: 0,
+            textTransform: "none",
+            borderRadius: 2,
+            color: "text.secondary",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {Blockly.Msg.tabs_close_all}
+        </Button>
+      )}
+
       <Dialog
         open={tabToClose !== null}
-        title={Blockly.Msg.tabs_close_headline}
-        content={Blockly.Msg.tabs_close_confirm}
+        title={
+          closingAll
+            ? Blockly.Msg.tabs_close_all_headline
+            : Blockly.Msg.tabs_close_headline
+        }
+        content={
+          closingAll
+            ? Blockly.Msg.tabs_close_all_confirm
+            : Blockly.Msg.tabs_close_confirm
+        }
         onClose={() => setTabToClose(null)}
         actions={
           <>
@@ -386,7 +418,9 @@ function WorkspaceTabs() {
               data-testid="workspace-tab-close-confirm"
               onClick={confirmClose}
             >
-              {Blockly.Msg.tabs_close_button}
+              {closingAll
+                ? Blockly.Msg.tabs_close_all
+                : Blockly.Msg.tabs_close_button}
             </Button>
           </>
         }

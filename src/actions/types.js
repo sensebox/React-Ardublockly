@@ -91,3 +91,4 @@ export const UPDATE_ACTIVE_TAB = "UPDATE_ACTIVE_TAB";
 export const SET_TABS_ENABLED = "SET_TABS_ENABLED";
 export const RENAME_TAB = "RENAME_TAB";
 export const REORDER_TABS = "REORDER_TABS";
+export const CLOSE_ALL_TABS = "CLOSE_ALL_TABS";

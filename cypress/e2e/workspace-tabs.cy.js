@@ -148,6 +148,31 @@ describe("Workspace Tabs", () => {
     // the last tab can't be closed
     cy.get('[data-testid="workspace-tab-close"]').should("not.exist");
   });
+  it("[Tabs] closes all tabs and keeps one empty tab", () => {
+    // not offered with a single tab
+    cy.get('[data-testid="workspace-tab-close-all"]').should("not.exist");
+
+    cy.get('[data-testid="workspace-tab-add"]').click();
+    cy.get('[data-testid="workspace-tab-add"]').click();
+    tabs().should("have.length", 3);
+
+    storedTabs().then(({ tabs: before }) => {
+      cy.get('[data-testid="workspace-tab-close-all"]').click();
+      cy.get('[data-testid="workspace-tab-close-confirm"]').click();
+
+      tabs().should("have.length", 1);
+      tabs().eq(0).should("have.attr", "aria-selected", "true");
+      storedTabs()
+        .its("tabs")
+        .then((after) => {
+          expect(after).to.have.length(1);
+          // a fresh tab, none of the closed ones
+          expect(before.map((t) => t.id)).not.to.include(after[0].id);
+        });
+      cy.get('[data-testid="workspace-tab-close-all"]').should("not.exist");
+    });
+  });
+
   it("[Tabs] renames a tab inline via double-click", () => {
     cy.get('[data-testid="workspace-tab-name"]').first().dblclick();
     cy.get('[data-testid="workspace-tab-name-input"]')
