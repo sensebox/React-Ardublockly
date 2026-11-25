@@ -205,7 +205,7 @@ function Lab({ board }) {
   // NV-centre choices, offered on the sensor and as a toggle in the scene.
   const nvChoices = [
     t("Single NV", "Einzelnes NV"),
-    t("4 orientations", "4 Ausrichtungen"),
+    t("Ensemble diamond", "Ensemble Diamant"),
   ];
   const [tab, setTab] = useState("sweep");
   const mode = modeOf(tab);
@@ -592,8 +592,8 @@ function Lab({ board }) {
     newest: t("Sweep (newest at top)", "Sweep (neueste oben)"),
     empty: simulated
       ? t(
-          "Start the sweep, then drag the magnet.",
-          "Sweep starten und dann den Magneten ziehen.",
+          "Start the simulation, then drag the magnet.",
+          "Simulation starten und dann den Magneten ziehen.",
         )
       : t(
           "Connect the MCU-S2 or start the simulator, then start a measurement.",
@@ -702,11 +702,14 @@ function Lab({ board }) {
       "Only one dip: without a magnetic field there is no splitting.",
       "Nur ein Dip: Ohne Magnetfeld gibt es keine Aufspaltung.",
     ),
+    read: t("Read from the plot", "Aus dem Diagramm abgelesen"),
     given: t("Given", "Gegeben"),
     approach: t("Approach", "Ansatz"),
     solve: t("Solve for B", "Nach B umstellen"),
     insert: t("Insert values", "Einsetzen"),
     result: t("Result", "Ergebnis"),
+    showSteps: t("Show calculation", "Rechenweg anzeigen"),
+    hideSteps: t("Hide calculation", "Rechenweg ausblenden"),
     centre: t("resonance without a magnetic field", "Resonanz ohne Magnetfeld"),
     gamma: t(
       "gyromagnetic ratio of the electron",
@@ -797,7 +800,9 @@ function Lab({ board }) {
                   "&:hover": { bgcolor: "#3d8e37" },
                 }}
               >
-                {t(`Start ${modeName(tab)}`, `${modeName(tab)} starten`)}
+                {simulated
+                  ? t("Start simulation", "Simulation starten")
+                  : t(`Start ${modeName(tab)}`, `${modeName(tab)} starten`)}
               </Button>
             )}
             {/* <Chip

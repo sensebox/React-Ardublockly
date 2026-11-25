@@ -127,9 +127,9 @@ describe("QOOOL Lab", () => {
     // Without a plot to read from, the worked example highlights nothing.
     cy.get("#magnetometer-readout-legend").should("not.exist");
     // One big start button at the top of the lab; it turns into Stop.
-    cy.get("#qoool-run").should("contain", "Start Sweep");
+    cy.get("#qoool-run").should("contain", "Start simulation");
     // Magnet far away: both resonances overlap at 2870 MHz.
-    cy.contains("button", /^Start Sweep$/).click();
+    cy.contains("button", /^Start simulation$/).click();
     cy.get("#qoool-run").should("contain", "Stop");
     cy.get('[role="status"]').should("contain", "Sweep");
     // Wait for the first simulated sweep before stopping.
@@ -145,7 +145,7 @@ describe("QOOOL Lab", () => {
     cy.contains("Lorentzian fit").should("not.exist");
 
     // Magnet halfway to the sensor: the lower resonance moves to 2835 MHz.
-    cy.contains("button", /^Start Sweep$/).click();
+    cy.contains("button", /^Start simulation$/).click();
     cy.get('[role="status"]').should("contain", "Sweep");
     cy.get("#magnetometer-magnet").focus();
     cy.get("#magnetometer-magnet").type("{leftarrow}".repeat(10));
@@ -159,10 +159,23 @@ describe("QOOOL Lab", () => {
       .should("have.attr", "data-low", "2.835")
       .and("have.attr", "data-high", "2.905")
       .and("have.attr", "data-field", "1.25");
+    // At first only the readings and the result are shown; the full worked
+    // example opens on request.
+    cy.get("#magnetometer-calculation-steps").should("not.be.visible");
+    cy.get("#magnetometer-calculation-toggle")
+      .should("contain", "Show calculation")
+      .click();
+    cy.get("#magnetometer-calculation-steps")
+      .should("be.visible")
+      .and("contain", "Solve for B");
     cy.get("#magnetometer-field-calculation math").should(
       "have.length.above",
       4,
     );
+    cy.get("#magnetometer-calculation-toggle")
+      .should("contain", "Hide calculation")
+      .click();
+    cy.get("#magnetometer-calculation-steps").should("not.be.visible");
     // With the dips in the plot, the values read from it are highlighted in
     // senseBox green, with a legend explaining it.
     cy.get("#magnetometer-field-calculation [data-field]").should(
@@ -177,7 +190,7 @@ describe("QOOOL Lab", () => {
     cy.get("#magnetometer-field-calculation").should("contain", "Δ");
 
     // Ensemble, magnet direction and field lines can change while a sweep runs.
-    cy.contains("button", /^Start Sweep$/).click();
+    cy.contains("button", /^Start simulation$/).click();
     cy.get('[role="status"]').should("contain", "Sweep");
     // Only a single NV or all four orientations are offered.
     cy.get("#magnetometer-orientations-1").should(
@@ -363,7 +376,7 @@ describe("QOOOL Lab", () => {
 
     // The waterfall collects one row per simulated sweep. Switching tabs while
     // measuring carries on in the other mode without a restart.
-    cy.contains("button", /^Start Sweep$/).click();
+    cy.contains("button", /^Start simulation$/).click();
     cy.get('[role="status"]').should("contain", "Sweep");
     cy.contains('[role="tab"]', /^Waterfall$/).click();
     cy.get('[role="status"]').should("contain", "Waterfall");
@@ -427,7 +440,7 @@ describe("QOOOL Lab", () => {
     cy.get("#qoool-plot-pause").should("be.disabled");
     cy.get("#qoool-plot-png").should("be.disabled");
     cy.contains("Simulator running").should("be.visible");
-    cy.contains("button", /^Start Sweep$/).click();
+    cy.contains("button", /^Start simulation$/).click();
     cy.get('[aria-label="Serial log"]').should("contain", "RX: <start,sweep>");
     cy.get("#qoool-plot-pause").click();
     cy.get("#qoool-plot-pause").should("have.attr", "aria-pressed", "true");

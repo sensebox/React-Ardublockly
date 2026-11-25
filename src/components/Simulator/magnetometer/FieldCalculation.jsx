@@ -1,5 +1,7 @@
-import React, { createContext, useContext } from "react";
-import { Box, Typography, useTheme } from "@mui/material";
+import React, { createContext, useContext, useState } from "react";
+import { Box, Button, Collapse, Typography, useTheme } from "@mui/material";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { CENTER, fieldFromPair, GAMMA } from "./model.js";
 
 // Typeset with MathML, which current browsers render natively (no library).
@@ -66,10 +68,14 @@ const DeltaF = ({ index }) => (
 );
 
 // pairs: from dipPairs(); highlight: the plot shows the dips, so values read
-// from it are coloured; labels: {title, intro, readout, splitting, given,
-// approach, solve, insert, result, centre, gamma, noSplit, along, decimal}
+// from it are coloured; labels: {title, intro, readout, read, splitting, given,
+// approach, solve, insert, result, showSteps, hideSteps, centre, gamma,
+// noSplit, along, decimal}
+// At first only the values read from the plot and the result are shown; the
+// full worked example opens on request.
 export default function FieldCalculation({ pairs, labels, highlight = false }) {
   const theme = useTheme();
+  const [showSteps, setShowSteps] = useState(false);
   const colour = highlight ? readoutColour(theme) : null;
   const number = (value, digits) =>
     value.toFixed(digits).replace(".", labels.decimal ?? ".");
@@ -181,27 +187,7 @@ export default function FieldCalculation({ pairs, labels, highlight = false }) {
           </Typography>
         )}
 
-        {step(labels.given)}
-        {line(
-          <Formula>
-            <mi>D</mi>
-            <Op>=</Op>
-            <Num value={ghz(CENTER)} digits={3} />
-            <Unit>GHz</Unit>
-          </Formula>,
-          labels.centre,
-          "centre",
-        )}
-        {line(
-          <Formula>
-            <mi>γ</mi>
-            <Op>=</Op>
-            <mn>{GAMMA}</mn>
-            <Unit>GHz/T</Unit>
-          </Formula>,
-          labels.gamma,
-          "gamma",
-        )}
+        {step(labels.read)}
         {rows.map((row) => (
           <React.Fragment key={`given-${row.lowIndex}`}>
             {line(
@@ -228,117 +214,13 @@ export default function FieldCalculation({ pairs, labels, highlight = false }) {
             )}
           </React.Fragment>
         ))}
-
-        {step(labels.approach)}
-        <Formula>
-          <F index={1} />
-          <Op>=</Op>
-          <mi>D</mi>
-          <Op>−</Op>
-          <mi>γ</mi>
-          <mi>B</mi>
-          <mo separator="true">,</mo>
-          <mspace width="0.8em" />
-          <F index={2} />
-          <Op>=</Op>
-          <mi>D</mi>
-          <Op>+</Op>
-          <mi>γ</mi>
-          <mi>B</mi>
-        </Formula>
-        <Box sx={{ mt: 0.5 }}>
-          <Formula>
-            <Op>⇒</Op>
-            <mspace width="0.5em" />
-            <DeltaF />
-            <Op>=</Op>
-            {difference({ lowIndex: 1, highIndex: 2 })}
-            <Op>=</Op>
-            {twoGamma}
-            <mi>B</mi>
-          </Formula>
-        </Box>
-
-        {step(labels.solve)}
-        <Box
-          sx={{
-            display: "inline-block",
-            px: 2,
-            py: 1,
-            borderLeft: 3,
-            borderColor: "primary.main",
-            bgcolor: "action.hover",
-          }}
-        >
-          <Formula>
-            <mi>B</mi>
-            <Op>=</Op>
-            <mfrac>
-              <DeltaF />
-              <mrow>{twoGamma}</mrow>
-            </mfrac>
-            <Op>=</Op>
-            <mfrac>
-              <mrow>{difference({ lowIndex: 1, highIndex: 2 })}</mrow>
-              <mrow>{twoGamma}</mrow>
-            </mfrac>
-          </Formula>
-        </Box>
-
-        {rows.map((row) => {
-          const delta = Number((row.high - row.low).toFixed(3));
-          const millitesla = fieldFromPair(row.low * 1000, row.high * 1000);
-          return (
-            <React.Fragment key={row.lowIndex}>
-              {step(labels.insert)}
-              <Formula>
-                <Sub symbol="B" index={row.field} />
-                <Op>=</Op>
-                <mfrac>
-                  <mrow>
-                    <ReadNum value={row.high} />
-                    <Op>−</Op>
-                    <ReadNum value={row.low} />
-                  </mrow>
-                  <mrow>
-                    <mn>2</mn>
-                    <Op>·</Op>
-                    <mn>{GAMMA}</mn>
-                    <Unit>GHz/T</Unit>
-                  </mrow>
-                </mfrac>
-              </Formula>
-              {next(
-                <mfrac>
-                  <ReadNum value={delta} />
-                  <mrow>
-                    <mn>{2 * GAMMA}</mn>
-                    <Unit>GHz/T</Unit>
-                  </mrow>
-                </mfrac>,
-              )}
-              {next(
-                <>
-                  {millitesla ? (
-                    <>
-                      <Num value={millitesla} digits={2} />
-                      <Op>·</Op>
-                      <msup>
-                        <mn>10</mn>
-                        <mrow>
-                          <mo>−</mo>
-                          <mn>3</mn>
-                        </mrow>
-                      </msup>
-                    </>
-                  ) : (
-                    <mn>0</mn>
-                  )}
-                  <Unit>T</Unit>
-                </>,
-              )}
-              {step(labels.result)}
+        {step(labels.result)}
+        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+          {rows.map((row) => {
+            const millitesla = fieldFromPair(row.low * 1000, row.high * 1000);
+            return (
               <Box
+                key={row.lowIndex}
                 data-highlight={colour ? "on" : "off"}
                 data-low={row.low.toFixed(3)}
                 data-high={row.high.toFixed(3)}
@@ -359,9 +241,166 @@ export default function FieldCalculation({ pairs, labels, highlight = false }) {
                   <Unit>mT</Unit>
                 </Formula>
               </Box>
-            </React.Fragment>
-          );
-        })}
+            );
+          })}
+        </Box>
+        <Box sx={{ mt: 1.5 }}>
+          <Button
+            id="magnetometer-calculation-toggle"
+            size="small"
+            onClick={() => setShowSteps((open) => !open)}
+            aria-expanded={showSteps}
+            aria-controls="magnetometer-calculation-steps"
+            endIcon={
+              <FontAwesomeIcon
+                icon={faChevronDown}
+                style={{
+                  transform: showSteps ? "rotate(180deg)" : "none",
+                  transition: "transform 150ms",
+                }}
+              />
+            }
+          >
+            {showSteps ? labels.hideSteps : labels.showSteps}
+          </Button>
+        </Box>
+        <Collapse in={showSteps}>
+          <Box id="magnetometer-calculation-steps">
+            {step(labels.given)}
+            {line(
+              <Formula>
+                <mi>D</mi>
+                <Op>=</Op>
+                <Num value={ghz(CENTER)} digits={3} />
+                <Unit>GHz</Unit>
+              </Formula>,
+              labels.centre,
+              "centre",
+            )}
+            {line(
+              <Formula>
+                <mi>γ</mi>
+                <Op>=</Op>
+                <mn>{GAMMA}</mn>
+                <Unit>GHz/T</Unit>
+              </Formula>,
+              labels.gamma,
+              "gamma",
+            )}
+
+            {step(labels.approach)}
+            <Formula>
+              <F index={1} />
+              <Op>=</Op>
+              <mi>D</mi>
+              <Op>−</Op>
+              <mi>γ</mi>
+              <mi>B</mi>
+              <mo separator="true">,</mo>
+              <mspace width="0.8em" />
+              <F index={2} />
+              <Op>=</Op>
+              <mi>D</mi>
+              <Op>+</Op>
+              <mi>γ</mi>
+              <mi>B</mi>
+            </Formula>
+            <Box sx={{ mt: 0.5 }}>
+              <Formula>
+                <Op>⇒</Op>
+                <mspace width="0.5em" />
+                <DeltaF />
+                <Op>=</Op>
+                {difference({ lowIndex: 1, highIndex: 2 })}
+                <Op>=</Op>
+                {twoGamma}
+                <mi>B</mi>
+              </Formula>
+            </Box>
+
+            {step(labels.solve)}
+            <Box
+              sx={{
+                display: "inline-block",
+                px: 2,
+                py: 1,
+                borderLeft: 3,
+                borderColor: "primary.main",
+                bgcolor: "action.hover",
+              }}
+            >
+              <Formula>
+                <mi>B</mi>
+                <Op>=</Op>
+                <mfrac>
+                  <DeltaF />
+                  <mrow>{twoGamma}</mrow>
+                </mfrac>
+                <Op>=</Op>
+                <mfrac>
+                  <mrow>{difference({ lowIndex: 1, highIndex: 2 })}</mrow>
+                  <mrow>{twoGamma}</mrow>
+                </mfrac>
+              </Formula>
+            </Box>
+
+            {rows.map((row) => {
+              const delta = Number((row.high - row.low).toFixed(3));
+              const millitesla = fieldFromPair(row.low * 1000, row.high * 1000);
+              return (
+                <React.Fragment key={row.lowIndex}>
+                  {step(labels.insert)}
+                  <Formula>
+                    <Sub symbol="B" index={row.field} />
+                    <Op>=</Op>
+                    <mfrac>
+                      <mrow>
+                        <ReadNum value={row.high} />
+                        <Op>−</Op>
+                        <ReadNum value={row.low} />
+                      </mrow>
+                      <mrow>
+                        <mn>2</mn>
+                        <Op>·</Op>
+                        <mn>{GAMMA}</mn>
+                        <Unit>GHz/T</Unit>
+                      </mrow>
+                    </mfrac>
+                  </Formula>
+                  {next(
+                    <mfrac>
+                      <ReadNum value={delta} />
+                      <mrow>
+                        <mn>{2 * GAMMA}</mn>
+                        <Unit>GHz/T</Unit>
+                      </mrow>
+                    </mfrac>,
+                  )}
+                  {next(
+                    <>
+                      {millitesla ? (
+                        <>
+                          <Num value={millitesla} digits={2} />
+                          <Op>·</Op>
+                          <msup>
+                            <mn>10</mn>
+                            <mrow>
+                              <mo>−</mo>
+                              <mn>3</mn>
+                            </mrow>
+                          </msup>
+                        </>
+                      ) : (
+                        <mn>0</mn>
+                      )}
+                      <Unit>T</Unit>
+                    </>,
+                  )}
+                </React.Fragment>
+              );
+            })}
+          </Box>
+        </Collapse>
         <Typography
           variant="body2"
           color="text.secondary"
