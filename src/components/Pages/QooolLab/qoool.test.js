@@ -9,6 +9,7 @@ import {
   angleToAxis,
   BASE_VOLTAGE,
   CENTER,
+  DIP_DEPTH,
   dipPairs,
   directionFromAngle,
   flattenDirection,
@@ -20,6 +21,7 @@ import {
   peaksFor,
   readDips,
   spectrum,
+  yRange,
 } from "../../Simulator/magnetometer/model.js";
 
 test("split UTF-8 transport frames, noise and consecutive telegrams", () => {
@@ -274,6 +276,27 @@ test("magnet distance splits the resonance linearly around the centre", () => {
   // Positions outside the track are clamped.
   assert.deepEqual(peaksFor(-3), peaksFor(0));
   assert.deepEqual(peaksFor(7), peaksFor(1));
+});
+
+test("a split pair's dips are each half as deep as the unsplit dip and fit the y range", () => {
+  for (const orientations of [1, 2, 3, 4]) {
+    const depth = (distance) => {
+      const ys = spectrum({ distance, orientations, noise: 0 }).map(
+        ([, v]) => v / BASE_VOLTAGE,
+      );
+      return { min: Math.min(...ys), max: Math.max(...ys) };
+    };
+    const total = (distance) =>
+      peaksFor(distance, { orientations }).reduce((sum, p) => sum + p.depth, 0);
+    assert.equal(total(0), total(1));
+    const [low, high] = yRange();
+    const unsplit = depth(1);
+    assert.ok(unsplit.min > low && unsplit.max < high);
+    // The contrast is shared: every ensemble has the same unsplit dip.
+    assert.ok(Math.abs(unsplit.min - (1 - 2 * DIP_DEPTH)) < 0.001);
+    if (orientations === 1)
+      assert.ok(Math.abs(1 - depth(0).min - (1 - unsplit.min) / 2) < 0.002);
+  }
 });
 
 test("noise-free spectrum has its minima at the two resonances", () => {

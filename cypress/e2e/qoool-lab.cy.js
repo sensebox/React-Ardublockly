@@ -111,7 +111,7 @@ describe("QOOOL Lab", () => {
       expect(bottom).to.be.at.most(height + 1);
       expect(bottom).to.be.at.least(height - 40);
     });
-    // The help bar under the scene shows keys and gestures; in 2D without the
+    // The help bar above the scene shows keys and gestures; in 2D without the
     // view controls. It can be closed and brought back with the info button.
     cy.get("#magnetometer-help").should("be.visible");
     cy.get("#magnetometer-help kbd").should("contain", "⇧");
@@ -177,7 +177,7 @@ describe("QOOOL Lab", () => {
       .click();
     cy.get("#magnetometer-calculation-steps").should("not.be.visible");
     // With the dips in the plot, the values read from it are highlighted in
-    // senseBox green, with a legend explaining it.
+    // the readout colour, with a legend explaining it.
     cy.get("#magnetometer-field-calculation [data-field]").should(
       "have.attr",
       "data-highlight",
@@ -463,6 +463,73 @@ describe("QOOOL Lab", () => {
     cy.get("#qoool-plot-pause").click();
     cy.get("#qoool-plot-pause").should("have.attr", "aria-pressed", "false");
   });
+  // Starts the simulator, moves the magnet so a split pair shows, and pauses.
+  function pausedSplitSweep() {
+    visit("MCU", false);
+    cy.contains("button", /^Start simulation$/).click();
+    cy.get("#magnetometer-magnet").focus();
+    cy.get("#magnetometer-magnet").type("{leftarrow}".repeat(10));
+    cy.wait(500);
+    cy.get("#qoool-plot-pause").click();
+  }
+  const plot = () => cy.get('canvas[aria-label="sweep measurement plot"]');
+  // Waits until the plot's picture differs from (or equals) an earlier one,
+  // then yields the new picture.
+  const plotImage = (relation, earlier) =>
+    plot()
+      .should(([canvas]) => {
+        const now = canvas.toDataURL();
+        if (relation === "equal") expect(now).to.equal(earlier);
+        else expect(now).not.to.equal(earlier);
+      })
+      .then(([canvas]) => canvas.toDataURL());
+
+  it("switches the dip points and Δf lines on and off separately", () => {
+    const highlight = (state) =>
+      cy
+        .get("#magnetometer-field-calculation [data-field]")
+        .should("have.attr", "data-highlight", state);
+    const toggle = (key) => cy.get(`#qoool-${key}-switch input`).click();
+    pausedSplitSweep();
+    cy.get("#qoool-points-switch input").should("be.checked");
+    cy.get("#qoool-lines-switch input").should("be.checked");
+    highlight("on");
+    plot().then(([canvas]) => {
+      const both = canvas.toDataURL();
+      toggle("lines");
+      highlight("on");
+      plotImage("differ", both).then((pointsOnly) => {
+        toggle("points");
+        // Nothing marked, so the worked example points at nothing.
+        highlight("off");
+        plotImage("differ", pointsOnly).then((none) => {
+          toggle("lines");
+          highlight("on");
+          plotImage("differ", none).then((linesOnly) => {
+            expect(linesOnly).not.to.equal(both);
+            toggle("points");
+            plotImage("equal", both);
+          });
+        });
+      });
+    });
+  });
+
+  it("points at a pair in the plot while its row in the worked example is hovered", () => {
+    pausedSplitSweep();
+    plot().then(([canvas]) => {
+      const plain = canvas.toDataURL();
+      cy.get("#magnetometer-field-calculation [data-field]")
+        .first()
+        .trigger("mouseover");
+      plotImage("differ", plain);
+      cy.get("#magnetometer-field-calculation [data-field]")
+        .first()
+        .trigger("mouseout");
+      plotImage("equal", plain);
+    });
+  });
+
   it("explains unavailable Web Serial", () => {
     visit("MCU-S2", false);
     source("MCU-S2").click();

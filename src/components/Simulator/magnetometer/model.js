@@ -32,13 +32,17 @@ export const clampDistance = (distance) =>
 export const clampOrientations = (orientations) =>
   Math.min(NV_AXES.length, Math.max(1, Math.round(Number(orientations)) || 1));
 
-// Shallower dips for larger ensembles keep the overlapping centre dip in view.
-const dipDepth = (orientations) => (DIP_DEPTH * 2) / (orientations + 1);
+// The contrast is shared between the NV orientations: without a field all
+// dips sit on top of each other and give the same unsplit dip (2 · DIP_DEPTH)
+// for every ensemble, and every pair splits off its share of it.
+const dipDepth = (orientations) => DIP_DEPTH / orientations;
 
-// Fixed plot range (baseline 1) that fits every magnet position of one ensemble.
-export function yRange(orientations) {
-  const count = clampOrientations(orientations);
-  return [1 - 2.5 * count * dipDepth(count), 1 + 0.5 * DIP_DEPTH];
+// Fixed plot range (baseline 1), the same for every ensemble, kept tight so
+// the dips fill the plot: from just below the unsplit dip (rounded down to
+// 0.01) to just above the baseline noise.
+export function yRange() {
+  const deepest = 1 - 2 * DIP_DEPTH - 2.5 * NOISE;
+  return [Math.floor(deepest * 100) / 100, 1 + 5 * NOISE];
 }
 
 // Unit vector in the table plane, `degrees` from the x axis towards z

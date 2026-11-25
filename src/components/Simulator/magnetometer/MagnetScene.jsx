@@ -973,6 +973,14 @@ export default function MagnetScene({
 
   return (
     <Box>
+      {/* The help sits above the scene, so it is read before using it. */}
+      {helpOpen && (
+        <ControlsHelp
+          threeD={threeD}
+          labels={labels.help}
+          onClose={() => setHelpOpen(false)}
+        />
+      )}
       <Box
         ref={frame}
         id="magnetometer-scene"
@@ -1250,13 +1258,6 @@ export default function MagnetScene({
           </Box>
         )}
       </Box>
-      {helpOpen && (
-        <ControlsHelp
-          threeD={threeD}
-          labels={labels.help}
-          onClose={() => setHelpOpen(false)}
-        />
-      )}
     </Box>
   );
 }

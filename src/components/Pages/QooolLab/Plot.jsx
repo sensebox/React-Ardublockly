@@ -9,10 +9,18 @@ import { lorentzian } from "./fit";
 export const COLORS = ["#1976d2", "#ed6c02", "#2e7d32", "#9c27b0"];
 
 // axis (optional) relabels the ticks: {xFactor, xDigits, yFactor, yDigits, yRange, xLabel, yLabel}.
-// axis.normalize scales each curve (and the fit) to 0–1 for display only.
+// axis.xTickAnchor (data units, e.g. 2870 MHz) puts the x ticks on round steps
+// through that value, as many as fit the width; xDigits then follows the step.
+// axis.roundYTicks puts the y ticks on round values (1, 2, 2.5 or 5 steps
+// after yFactor) instead of five equal divisions of the range.
+// axis.colourRange ([low, high], relative to each row's first sample) fixes the
+// waterfall colour scale; without it the colours span the data's own range.
 // axis.markers ([{name, freq}]) labels dips on axis.markerChannel (default 0),
 // in axis.markerColour. axis.spans ([{name, low, high}]) draws a double arrow
 // between two marked dips, e.g. the splitting Δf = f₂ − f₁.
+// axis.focus ({markers: [names], spans: [names]}) emphasises those markers and
+// spans in axis.focusColour (default: the marker colour) with a halo, and
+// mutes the others, e.g. while the worked example is hovered.
 // pausedAt (ms timestamp) freezes the rolling time window at that moment.
 // height: CSS height of the plot (number in px or a CSS length); drawing follows it.
 // The ref exposes toPng(), which resolves to a PNG blob on an opaque background.
@@ -75,22 +83,11 @@ const Plot = forwardRef(function Plot(
       const rows = rolling
         ? data.points.filter((p) => p.time >= now - settings.window)
         : data.points;
-      const raw = [0, 1, 2, 3].map((ch) =>
+      const series = [0, 1, 2, 3].map((ch) =>
         rows.map((p) => [
           rolling ? p.time - now : p.row[ch * 2],
           p.row[ch * 2 + 1] / (rolling ? 1 : data.normalizers[ch]),
         ]),
-      );
-      // Min–max scaling per curve; identity without axis.normalize.
-      const scales = raw.map((points) => {
-        if (!axis?.normalize || !points.length) return (y) => y;
-        const ys = points.map((p) => p[1]);
-        const low = Math.min(...ys),
-          span = Math.max(...ys) - low || 1;
-        return (y) => (y - low) / span;
-      });
-      const series = raw.map((points, ch) =>
-        points.map(([x, y]) => [x, scales[ch](y)]),
       );
       const values = series.filter((_, i) => visible[i]).flat();
       const extent = (index, fallback) => {
@@ -119,24 +116,32 @@ const Plot = forwardRef(function Plot(
       ctx.fillStyle = theme.palette.text.secondary;
       ctx.strokeStyle = theme.palette.divider;
       ctx.lineWidth = 1;
-      for (let i = 0; i <= 5; i++) {
-        const x = left + (w * i) / 5,
-          y = top + (h * i) / 5;
+      const yFactor = axis?.yFactor ?? 1;
+      let yTicks = [0, 1, 2, 3, 4, 5].map(
+        (i) => yr[1] - ((yr[1] - yr[0]) * i) / 5,
+      );
+      if (axis?.roundYTicks && !waterfall) {
+        const span = Math.abs(yr[1] - yr[0]) * yFactor;
+        const magnitude = 10 ** Math.floor(Math.log10(span / 5));
+        const step =
+          ([1, 2, 2.5, 5, 10]
+            .map((s) => s * magnitude)
+            .find((s) => span / s <= 6) ?? 10 * magnitude) / yFactor;
+        yTicks = [];
+        for (
+          let tick = Math.floor(Math.max(...yr) / step) * step;
+          tick >= Math.min(...yr) - 1e-9;
+          tick -= step
+        )
+          yTicks.push(tick);
+      }
+      yTicks.forEach((value) => {
+        const y = top + h - ((value - yr[0]) / (yr[1] - yr[0])) * h;
         ctx.beginPath();
-        ctx.moveTo(x, top);
-        ctx.lineTo(x, top + h);
         ctx.moveTo(left, y);
         ctx.lineTo(left + w, y);
         ctx.stroke();
-        ctx.textAlign = "center";
-        ctx.fillText(
-          ((xr[0] + ((xr[1] - xr[0]) * i) / 5) * (axis?.xFactor ?? 1)).toFixed(
-            axis?.xDigits ?? 1,
-          ),
-          x,
-          top + h + 22,
-        );
-        const tick = (yr[1] - ((yr[1] - yr[0]) * i) / 5) * (axis?.yFactor ?? 1);
+        const tick = value * yFactor;
         ctx.textAlign = "right";
         ctx.fillText(
           axis?.yDigits == null
@@ -145,7 +150,40 @@ const Plot = forwardRef(function Plot(
           left - 8,
           y + 4,
         );
+      });
+      const xFactor = axis?.xFactor ?? 1;
+      let xTicks = [0, 1, 2, 3, 4, 5].map(
+        (i) => xr[0] + ((xr[1] - xr[0]) * i) / 5,
+      );
+      let xDigits = axis?.xDigits ?? 1;
+      const anchor = axis?.xTickAnchor;
+      if (anchor != null && !rolling) {
+        // Smallest 1-2-5 step that leaves room for each label.
+        const span = Math.abs(xr[1] - xr[0]);
+        const minGap = (span * 60) / w;
+        const magnitude = 10 ** Math.floor(Math.log10(minGap));
+        const step = [1, 2, 5, 10]
+          .map((s) => s * magnitude)
+          .find((s) => s >= minGap);
+        const [low, high] = [Math.min(...xr), Math.max(...xr)];
+        xTicks = [];
+        for (
+          let tick = anchor + Math.ceil((low - anchor) / step) * step;
+          tick <= high + 1e-9;
+          tick += step
+        )
+          xTicks.push(tick);
+        xDigits = Math.max(0, -Math.floor(Math.log10(step * xFactor) + 1e-9));
       }
+      xTicks.forEach((value) => {
+        const x = left + ((value - xr[0]) / (xr[1] - xr[0])) * w;
+        ctx.beginPath();
+        ctx.moveTo(x, top);
+        ctx.lineTo(x, top + h);
+        ctx.stroke();
+        ctx.textAlign = "center";
+        ctx.fillText((value * xFactor).toFixed(xDigits), x, top + h + 22);
+      });
       ctx.textAlign = "center";
       ctx.fillText(
         data.xlabel ||
@@ -172,14 +210,22 @@ const Plot = forwardRef(function Plot(
       ctx.clip();
       if (waterfall) {
         const sweeps = data.sweeps.slice(0, settings.history);
+        // With axis.colourRange each row is read relative to its first sample
+        // (like a sweep), so the colours keep the dips' true depths.
+        const fixed = axis?.colourRange;
+        const value = (sweep, p) =>
+          p.row[channel * 2 + 1] /
+          (fixed ? sweep[0]?.row[channel * 2 + 1] || 1 : 1);
         let low = Infinity,
           high = -Infinity;
-        sweeps.forEach((s) =>
-          s.forEach((p) => {
-            low = Math.min(low, p.row[channel * 2 + 1]);
-            high = Math.max(high, p.row[channel * 2 + 1]);
-          }),
-        );
+        if (fixed) [low, high] = fixed;
+        else
+          sweeps.forEach((s) =>
+            s.forEach((p) => {
+              low = Math.min(low, value(s, p));
+              high = Math.max(high, value(s, p));
+            }),
+          );
         sweeps.forEach((sweep, row) => {
           const sorted = [...sweep].sort(
             (a, b) => a.row[channel * 2] - b.row[channel * 2],
@@ -190,7 +236,10 @@ const Plot = forwardRef(function Plot(
               next = sorted[i + 1]?.row[channel * 2];
             const a = previous == null ? x : (previous + x) / 2,
               b = next == null ? x : (next + x) / 2;
-            const strength = (p.row[channel * 2 + 1] - low) / (high - low || 1);
+            const strength = Math.min(
+              1,
+              Math.max(0, (value(sweep, p) - low) / (high - low || 1)),
+            );
             ctx.fillStyle = `hsl(${270 - strength * 215}, 75%, ${25 + strength * 40}%)`;
             ctx.fillRect(
               px(a),
@@ -206,8 +255,8 @@ const Plot = forwardRef(function Plot(
         ctx.fillText(
           !Number.isFinite(low)
             ? ""
-            : axis?.normalize
-              ? "0 → 1"
+            : fixed
+              ? `${low.toFixed(2)} → ${high.toFixed(2)}`
               : `${low.toPrecision(4)} → ${high.toPrecision(4)}`,
           left + w,
           15,
@@ -229,7 +278,7 @@ const Plot = forwardRef(function Plot(
           }
         });
         if (peaks?.length && rows.length) {
-          const fit = (x) => py(scales[markerChannel](lorentzian(x, peaks)));
+          const fit = (x) => py(lorentzian(x, peaks));
           ctx.strokeStyle = theme.palette.text.primary;
           ctx.setLineDash([5, 4]);
           ctx.beginPath();
@@ -248,6 +297,15 @@ const Plot = forwardRef(function Plot(
         // Labels of close dips (a freely turned magnet) step down instead of overlapping.
         const placed = [];
         const markerColour = axis?.markerColour ?? theme.palette.text.primary;
+        // With a focus, the focused markers and spans grow, take the focus
+        // colour and get a halo; the rest fade.
+        const focus = axis?.focus;
+        const focusColour = axis?.focusColour ?? markerColour;
+        const focused = (kind, name) => !!focus?.[kind]?.includes(name);
+        const alphaFor = (kind, name) =>
+          !focus || focused(kind, name) ? 1 : 0.15;
+        const colourFor = (kind, name) =>
+          focused(kind, name) ? focusColour : markerColour;
         // Screen position of the sample nearest to freq, or null off the plot.
         const dip = (freq) => {
           if (freq < xr[0] || freq > xr[1] || !points.length) return null;
@@ -263,14 +321,29 @@ const Plot = forwardRef(function Plot(
             const a = dip(low),
               b = dip(high);
             if (!a || !b) return;
+            ctx.globalAlpha = alphaFor("spans", name);
             const length = Math.hypot(b[0] - a[0], b[1] - a[1]);
             if (length < 24) return;
             const [ux, uy] = [(b[0] - a[0]) / length, (b[1] - a[1]) / length];
             const tip1 = [a[0] + ux * 5, a[1] + uy * 5],
               tip2 = [b[0] - ux * 5, b[1] - uy * 5];
-            ctx.strokeStyle = markerColour;
-            ctx.fillStyle = markerColour;
-            ctx.lineWidth = 1.5;
+            const spanColour = colourFor("spans", name);
+            if (focused("spans", name)) {
+              // Soft wide stroke under the arrow as a halo.
+              ctx.strokeStyle = spanColour;
+              ctx.globalAlpha = 0.2;
+              ctx.lineWidth = 10;
+              ctx.lineCap = "round";
+              ctx.beginPath();
+              ctx.moveTo(...tip1);
+              ctx.lineTo(...tip2);
+              ctx.stroke();
+              ctx.lineCap = "butt";
+              ctx.globalAlpha = 1;
+            }
+            ctx.strokeStyle = spanColour;
+            ctx.fillStyle = spanColour;
+            ctx.lineWidth = focused("spans", name) ? 3 : 1.5;
             ctx.beginPath();
             ctx.moveTo(...tip1);
             ctx.lineTo(...tip2);
@@ -294,7 +367,7 @@ const Plot = forwardRef(function Plot(
               y = (a[1] + b[1]) / 2 - 8;
             ctx.fillStyle = theme.palette.background.paper;
             ctx.fillRect(cx - width / 2 - 3, y - 13, width + 6, 16);
-            ctx.fillStyle = markerColour;
+            ctx.fillStyle = spanColour;
             ctx.textAlign = "center";
             ctx.fillText(name, cx, y);
             ctx.font = `12px ${font}`;
@@ -305,11 +378,22 @@ const Plot = forwardRef(function Plot(
             const position = dip(freq);
             if (!position) return;
             const [mx, my] = position;
-            ctx.fillStyle = theme.palette.background.paper;
-            ctx.strokeStyle = markerColour;
+            const big = focused("markers", name);
+            const dotColour = colourFor("markers", name);
+            if (big) {
+              // Halo around the focused dip.
+              ctx.globalAlpha = 0.22;
+              ctx.fillStyle = dotColour;
+              ctx.beginPath();
+              ctx.arc(mx, my, 13, 0, 2 * Math.PI);
+              ctx.fill();
+            }
+            ctx.globalAlpha = alphaFor("markers", name);
+            ctx.fillStyle = big ? dotColour : theme.palette.background.paper;
+            ctx.strokeStyle = dotColour;
             ctx.lineWidth = 2;
             ctx.beginPath();
-            ctx.arc(mx, my, 4, 0, 2 * Math.PI);
+            ctx.arc(mx, my, big ? 6 : 4, 0, 2 * Math.PI);
             ctx.fill();
             ctx.stroke();
             const leftSide = freq < (axis?.markerCentre ?? centre);
@@ -328,10 +412,11 @@ const Plot = forwardRef(function Plot(
               ly += 15;
             placed.push({ x: lx, y: ly, width: labelWidth });
             ctx.textAlign = "left";
-            ctx.fillStyle = markerColour;
+            ctx.fillStyle = dotColour;
             ctx.fillText(name, lx, ly);
             ctx.font = `12px ${font}`;
           });
+        ctx.globalAlpha = 1;
       }
       if (!rows.length && !data.sweeps.length) {
         ctx.fillStyle = theme.palette.text.secondary;

@@ -80,7 +80,7 @@ export default function ControlsHelp({ threeD, labels, onClose }) {
       role="note"
       aria-label={labels.title}
       sx={{
-        mt: 1,
+        mb: 1,
         pl: 1.5,
         pr: 0.5,
         py: 0.75,
