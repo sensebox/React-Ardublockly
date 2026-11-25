@@ -41,6 +41,32 @@ const loadXmlIntoWorkspace = (xml) => {
   Blockly.svgResize(ws);
 };
 
+// Undo/redo history per tab. Kept in memory only (Blockly events can't be
+// serialized), so it survives tab switches but not a page reload.
+// Blockly keeps block and variable ids when the tab XML is reloaded, so the
+// stored events still apply. getUndoStack/getRedoStack return the live arrays
+// (marked @internal in Blockly, check on Blockly upgrades).
+const undoHistory = new Map();
+
+const storeUndoHistory = (tabId) => {
+  const ws = Blockly.getMainWorkspace();
+  if (!ws || !tabId) return;
+  undoHistory.set(tabId, {
+    undo: [...ws.getUndoStack()],
+    redo: [...ws.getRedoStack()],
+  });
+};
+
+const restoreUndoHistory = (tabId) => {
+  const ws = Blockly.getMainWorkspace();
+  const history = undoHistory.get(tabId);
+  if (!ws || !history) return;
+  const undo = ws.getUndoStack();
+  const redo = ws.getRedoStack();
+  undo.splice(0, undo.length, ...history.undo);
+  redo.splice(0, redo.length, ...history.redo);
+};
+
 // Reads the XML synchronously from the workspace (Redux/autosave may lag
 // behind because of the autosave debounce) and stores it in the active tab.
 const saveCurrentWorkspace = () => (dispatch, getState) => {
@@ -53,6 +79,7 @@ const saveCurrentWorkspace = () => (dispatch, getState) => {
     type: UPDATE_ACTIVE_TAB,
     payload: { xml: Blockly.Xml.domToPrettyText(xmlDom) },
   });
+  storeUndoHistory(getState().tabs.activeId);
 };
 
 // Loads the (already active) tab into the workspace.
@@ -65,13 +92,17 @@ const activateTab = (tab) => (dispatch, getState) => {
 
   const currentBoard = getState().board.board;
   if (tab.board && tab.board !== currentBoard) {
-    // BlocklyWindow reloads autoSaveXML and the toolbox on board change
+    // BlocklyWindow reloads autoSaveXML and the toolbox on board change.
+    // That reload clears the undo stack later, so the history can't be
+    // restored here (rare: tabs usually share one board).
+    undoHistory.delete(tab.id);
     dispatch(setBoard(tab.board));
   } else {
     if (!tab.board && currentBoard) {
       dispatch({ type: UPDATE_ACTIVE_TAB, payload: { board: currentBoard } });
     }
     loadXmlIntoWorkspace(xml);
+    restoreUndoHistory(tab.id);
   }
   dispatch(clearStats());
 };
@@ -153,10 +184,12 @@ export const closeTab = (id) => (dispatch, getState) => {
   if (index === -1) return;
   if (id !== activeId) {
     dispatch({ type: CLOSE_TAB, payload: { id } });
+    undoHistory.delete(id);
     return;
   }
   const next = tabs[index + 1] || tabs[index - 1];
   dispatch({ type: CLOSE_TAB, payload: { id, nextActiveId: next.id } });
+  undoHistory.delete(id);
   dispatch(activateTab(next));
 };
 
@@ -165,5 +198,6 @@ export const closeTab = (id) => (dispatch, getState) => {
 export const closeAllTabs = () => (dispatch, getState) => {
   const tab = createEmptyTab(getState().board.board);
   dispatch({ type: CLOSE_ALL_TABS, payload: tab });
+  undoHistory.clear();
   dispatch(activateTab(tab));
 };

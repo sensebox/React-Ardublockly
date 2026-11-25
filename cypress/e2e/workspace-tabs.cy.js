@@ -93,6 +93,23 @@ describe("Workspace Tabs", () => {
       });
   });
 
+  it("[Tabs] keeps the undo history of a tab when switching", () => {
+    block()
+      .invoke("attr", "transform")
+      .then((initialTransform) => {
+        dragStartBlock();
+        block().should("not.have.attr", "transform", initialTransform);
+
+        cy.get('[data-testid="workspace-tab-add"]').click();
+        tabs().should("have.length", 2);
+        tabs().eq(0).click();
+        block().should("not.have.attr", "transform", initialTransform);
+
+        cy.get(".undoWorkspace").click();
+        block().should("have.attr", "transform", initialTransform);
+      });
+  });
+
   it("[Tabs] keeps a separate board per tab", () => {
     cy.get('[data-testid="workspace-tab-add"]').click();
     tabs().should("have.length", 2);
