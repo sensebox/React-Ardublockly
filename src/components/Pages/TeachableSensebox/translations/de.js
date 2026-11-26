@@ -5,28 +5,24 @@ export const teachableSenseboxTranslations_de = {
     sections: {
       topic: "Thema",
       hardware: "Hardware",
-      context: "Kontext",
     },
     imageCard: {
       title: "Bilder",
       topic:
         "Überwachtes Lernen (Training, Test), Komprimierung und Deployment",
-      hardware: "Kamera der senseBox MCU Eye oder eigene Webcam",
-      context: "",
+      hardware: "Kamera auf der senseBox MCU Eye oder eigene Webcam",
       button: "Starten",
     },
     accelerationCard: {
       title: "Zaubersprüche",
       topic: "Convolutional Neural Networks",
-      hardware: "Beschleunigungssensor der senseBox MCU Eye",
-      context: "",
+      hardware: "Beschleunigungssensor auf der senseBox MCU Eye",
       button: "Starten",
     },
     orientationCard: {
       title: "Orientierungen",
       topic: "Entscheidungsbäume und Neuronale Netze",
-      hardware: "Beschleunigungssensor der senseBox MCU Eye",
-      context: "",
+      hardware: "Beschleunigungssensor auf der senseBox MCU Eye",
       button: "Starten",
     },
     tutorials: {
