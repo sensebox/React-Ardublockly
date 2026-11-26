@@ -1,10 +1,11 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   Container,
   Typography,
   Box,
   Card,
+  CardActionArea,
   CardContent,
   Button,
   Accordion,
@@ -32,8 +33,8 @@ const CardSection = ({ label, children, image, divider = false }) => (
   >
     <Typography
       variant="overline"
-      color="primary"
-      sx={{ display: "block", lineHeight: 1.5, mb: 0.5 }}
+      color="primary.dark"
+      sx={{ display: "block", lineHeight: 1.5, mb: 0.5, fontWeight: "bold" }}
     >
       {label}
     </Typography>
@@ -52,10 +53,11 @@ const CardSection = ({ label, children, image, divider = false }) => (
 );
 
 const TeachableSenseboxLanding = () => {
-  const navigate = useNavigate();
   const language = useSelector((s) => s.general.language);
   const t = getTeachableSenseboxTranslations(language);
   const theme = useTheme();
+  // Set on card and accordion directly so both animate their shadow equally
+  const shadowTransition = theme.transitions.create("box-shadow");
 
   const cards = [
     {
@@ -141,54 +143,73 @@ const TeachableSenseboxLanding = () => {
                 gridRow: "span 4",
                 gridTemplateRows: "subgrid",
                 rowGap: 0,
-                "& > *": { transition: "box-shadow 0.2s" },
                 "&:hover > *": { boxShadow: theme.shadows[8] },
               }}
             >
               <Card
                 elevation={3}
-                onClick={() => navigate(path)}
                 sx={{
                   gridRow: "1 / span 3",
                   display: "grid",
                   gridTemplateRows: "subgrid",
                   rowGap: 0,
-                  cursor: "pointer",
                   borderBottomLeftRadius: 0,
                   borderBottomRightRadius: 0,
                   // Hide the bottom shadow so card and accordion look like one
                   clipPath: "inset(-24px -24px 0 -24px)",
+                  transition: shadowTransition,
                 }}
               >
-                <CardContent
+                <CardActionArea
+                  component={Link}
+                  to={path}
                   sx={{
-                    textAlign: "center",
-                    pt: 4,
-                    pb: 3,
-                    bgcolor: alpha(theme.palette.primary.main, 0.08),
+                    gridRow: "1 / span 3",
+                    display: "grid",
+                    gridTemplateRows: "subgrid",
+                    rowGap: 0,
+                    alignItems: "stretch",
+                    // No darkening on hover (the shadow already signals it),
+                    // but keep the highlight for keyboard focus
+                    "&:hover:not(.Mui-focusVisible) .MuiCardActionArea-focusHighlight":
+                      { opacity: 0 },
                   }}
                 >
-                  <Icon sx={{ fontSize: 64, color: "primary.main", mb: 2 }} />
-                  <Typography variant="h5" gutterBottom>
-                    {texts.title}
-                  </Typography>
-                  {/* Click bubbles up to the card's onClick */}
-                  <Button variant="contained" size="large" sx={{ mt: 1 }}>
-                    {texts.button}
-                  </Button>
-                </CardContent>
+                  <CardContent
+                    sx={{
+                      textAlign: "center",
+                      pt: 4,
+                      pb: 3,
+                      bgcolor: alpha(theme.palette.primary.main, 0.08),
+                    }}
+                  >
+                    <Icon sx={{ fontSize: 64, color: "primary.main", mb: 2 }} />
+                    <Typography variant="h5" gutterBottom>
+                      {texts.title}
+                    </Typography>
+                    {/* Rendered as span: the whole card is already the link */}
+                    <Button
+                      component="span"
+                      variant="contained"
+                      size="large"
+                      sx={{ mt: 1 }}
+                    >
+                      {texts.button}
+                    </Button>
+                  </CardContent>
 
-                <CardSection label={t.landing.sections.topic}>
-                  {texts.topic}
-                </CardSection>
+                  <CardSection label={t.landing.sections.topic}>
+                    {texts.topic}
+                  </CardSection>
 
-                <CardSection
-                  label={t.landing.sections.hardware}
-                  image={hardwareImage}
-                  divider
-                >
-                  {texts.hardware}
-                </CardSection>
+                  <CardSection
+                    label={t.landing.sections.hardware}
+                    image={hardwareImage}
+                    divider
+                  >
+                    {texts.hardware}
+                  </CardSection>
+                </CardActionArea>
               </Card>
 
               <Accordion
@@ -206,6 +227,8 @@ const TeachableSenseboxLanding = () => {
                   borderBottomRightRadius: `${theme.shape.borderRadius}px`,
                   // Hide the top shadow so card and accordion look like one
                   clipPath: "inset(0 -24px -24px -24px)",
+                  // Overrides the Accordion's own margin-only transition
+                  transition: shadowTransition,
                   "&::before": { display: "none" },
                 }}
               >
@@ -215,8 +238,8 @@ const TeachableSenseboxLanding = () => {
                 >
                   <Typography
                     variant="overline"
-                    color="primary"
-                    sx={{ lineHeight: 1.5 }}
+                    color="primary.dark"
+                    sx={{ lineHeight: 1.5, fontWeight: "bold" }}
                   >
                     {t.landing.sections.context}
                   </Typography>
