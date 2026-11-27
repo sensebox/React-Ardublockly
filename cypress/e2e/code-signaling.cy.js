@@ -118,6 +118,9 @@ describe("Code signaling", () => {
   it("[CodeSignaling] does not highlight code on initial load", () => {
     cy.visit("/");
     cy.get('img[alt="Sensebox ESP"]', { timeout: 8000 }).click();
+    // Wait for the board dialog to close: MUI moves the focus back when it
+    // closes, and Blockly 12 deselects a block that loses focus
+    cy.get('img[alt="Sensebox ESP"]').should("not.exist");
     cy.get("#codeviewer-headline").should("be.visible");
     cy.get(".monaco-editor .view-lines", { timeout: 10000 }).should(
       "contain.text",
@@ -140,6 +143,9 @@ describe("Code signaling", () => {
       },
     });
     cy.get('img[alt="Sensebox ESP"]', { timeout: 8000 }).click();
+    // Wait for the board dialog to close: MUI moves the focus back when it
+    // closes, and Blockly 12 deselects a block that loses focus
+    cy.get('img[alt="Sensebox ESP"]').should("not.exist");
     cy.get(".monaco-editor .view-lines", { timeout: 10000 }).should(
       "contain.text",
       "delay(1000)",
