@@ -29,7 +29,6 @@ import {
 import BlocklySvg from "./BlocklySvg";
 
 import "blockly/blocks";
-import "@blockly/toolbox-search"; // auto-registers
 import { BlocklyComponent } from "./BlocklyComponent";
 
 export default function BlocklyWindow(props) {

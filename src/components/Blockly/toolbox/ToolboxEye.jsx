@@ -9,16 +9,12 @@ import {
   AI_MODEL_TYPE_SPELL,
 } from "../helpers/aiModel";
 import * as Blockly from "blockly/core";
-import "@blockly/toolbox-search";
-import "./search-category.css";
 
 export const ToolboxEye = () => {
   const aiModel = useSelector((state) => state.general.aiModel);
   const aiModelType = getAiModelType(aiModel?.code);
   return (
     <>
-      {/* ============================== SEARCH ============================== */}
-
       {/* ============================== SENSORS ============================== */}
       <Category
         name={Blockly.Msg.toolbox_sensors}

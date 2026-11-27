@@ -106,7 +106,11 @@ describe("Embedded Blockly Page Tests", () => {
       "exist",
     );
     cy.get(".blocklyToolboxCategory").should("have.length.greaterThan", 0);
-    cy.get(".blocklyToolboxCategory").first().click();
+    // Skip the search category, its flyout only shows a hint when empty
+    cy.get(".blocklyToolboxCategory")
+      .not(':has(input[type="search"])')
+      .first()
+      .click();
     cy.get(".blocklyFlyout", { timeout: 5000 }).should("be.visible");
     cy.get(".blocklyFlyout .blocklyBlockCanvas > .blocklyDraggable", {
       timeout: 5000,

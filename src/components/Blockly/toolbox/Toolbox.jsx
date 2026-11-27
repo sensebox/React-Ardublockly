@@ -8,6 +8,8 @@ import { ToolboxMcu } from "./ToolboxMcu";
 import { ToolboxEsp } from "./ToolboxEsp";
 import { ToolboxEye } from "./ToolboxEye";
 import { getColour } from "../helpers/colour";
+import { Search } from "..";
+import "./ToolboxSearchCategory";
 import "./toolbox_styles.css";
 
 const Toolbox = ({ workspace, toolbox }) => {
@@ -235,25 +237,6 @@ const Toolbox = ({ workspace, toolbox }) => {
       }, 100);
     }
 
-    // --- Dynamisch das toolbox-search-Plugin laden, sobald alles bereit ist ---
-    let tries = 0;
-    const waitForToolbox = setInterval(async () => {
-      const tb = workspace.toolbox_;
-      if (tb && tb.getToolboxItems && tb.getToolboxItems().length > 0) {
-        clearInterval(waitForToolbox);
-        try {
-          // Lazy Import -> wird erst hier geladen
-          await import("@blockly/toolbox-search");
-          tb.refreshSelection(); // "nudge" das Plugin
-        } catch (err) {
-          console.warn("⚠️ toolbox-search konnte nicht geladen werden:", err);
-        }
-      } else if (++tries > 50) {
-        clearInterval(waitForToolbox);
-        console.warn("⌛ toolbox-search Init Timeout (Toolbox nie bereit)");
-      }
-    }, 1000);
-
     // --- Cleanup ---
     return () => {
       // Clear intervals only if they're still active
@@ -261,7 +244,6 @@ const Toolbox = ({ workspace, toolbox }) => {
         clearInterval(setupIntervalRef.current);
         setupIntervalRef.current = null;
       }
-      clearInterval(waitForToolbox);
       workspace.removeChangeListener(variableCreationListener);
       // Restore original flyout hide method if override was applied
       const flyout = workspace.toolbox_?.flyout_;
@@ -311,6 +293,7 @@ const Toolbox = ({ workspace, toolbox }) => {
         style: { display: "none" },
         ref: toolbox,
       },
+      <Search name={Blockly.Msg.toolbox_search} />,
       selectedBoard === "MCU" || selectedBoard === "MCU:MINI" ? (
         <ToolboxMcu />
       ) : selectedBoard === "MCU-S2" ? (

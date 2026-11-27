@@ -36,6 +36,10 @@ export const UI = {
    * Toolbox
    */
   toolbox_sensors: "Sensoren",
+  toolbox_search: "Suche",
+  toolbox_search_placeholder: "Blöcke suchen",
+  toolbox_search_hint: "Gib mindestens 3 Zeichen ein, um Blöcke zu suchen",
+  toolbox_search_no_results: "Keine passenden Blöcke gefunden",
   toolbox_logic: "Logik",
   toolbox_loops: "Schleifen",
   toolbox_math: "Mathematik",
