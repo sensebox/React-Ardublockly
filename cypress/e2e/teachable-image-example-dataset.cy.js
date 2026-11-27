@@ -50,6 +50,8 @@ describe("Teachable image classification – example dataset", () => {
       "aria-disabled",
       "true",
     );
+    // The tooltip must describe the tab, not replace its accessible name
+    cy.get('[data-testid="test-tab"]').should("not.have.attr", "aria-label");
 
     // Clicking the locked tab keeps the training view
     cy.get('[data-testid="test-tab"]').click();

@@ -64,6 +64,7 @@ const TrainTestSwitch = ({ value, onChange, disabled, testDisabled, t }) => (
     {/* Tabs reads `value` from its direct child; Tooltip passes it and the
         other props from Tabs on to the Tab */}
     <Tooltip
+      describeChild
       value="test"
       title={testDisabled ? t.section.testRequiresModel : ""}
       arrow
