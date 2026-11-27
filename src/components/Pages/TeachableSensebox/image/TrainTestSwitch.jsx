@@ -56,6 +56,7 @@ const TrainTestSwitch = ({ value, onChange, disabled, testDisabled, t }) => (
   >
     <Tab
       value="train"
+      data-testid="train-tab"
       label={t.section.viewTraining}
       disabled={disabled}
       sx={tabSx}
@@ -69,6 +70,7 @@ const TrainTestSwitch = ({ value, onChange, disabled, testDisabled, t }) => (
     >
       <Tab
         value="test"
+        data-testid="test-tab"
         label={t.section.viewTest}
         disabled={disabled && !testDisabled}
         aria-disabled={testDisabled || undefined}

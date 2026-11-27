@@ -37,7 +37,7 @@ describe("Teachable image classification – example dataset", () => {
     cy.get('[data-testid="example-dataset-unload"]').should("be.visible");
   });
 
-  it("[Teachable] hides slideshow and test section until trained", () => {
+  it("[Teachable] hides slideshow and locks test tab until trained", () => {
     loadExampleDataset();
     cy.get('[data-testid="class-sample-card"]', { timeout: 15000 }).should(
       "have.length",
@@ -45,7 +45,22 @@ describe("Teachable image classification – example dataset", () => {
     );
 
     cy.get('[data-testid="example-slideshow-image"]').should("not.exist");
-    cy.get('button[value="test"]').should("not.exist");
+    cy.get('[data-testid="test-tab"]').should(
+      "have.attr",
+      "aria-disabled",
+      "true",
+    );
+
+    // Clicking the locked tab keeps the training view
+    cy.get('[data-testid="test-tab"]').click();
+    cy.get('[data-testid="train-tab"]').should(
+      "have.attr",
+      "aria-selected",
+      "true",
+    );
+    cy.get('[data-testid="class-sample-card"]').each(($card) => {
+      cy.wrap($card).find("img").should("have.length", 19);
+    });
   });
 
   // Downloads the base model from GitHub, like the app itself
@@ -67,7 +82,13 @@ describe("Teachable image classification – example dataset", () => {
     cy.contains(/^\d+\.\d%$/).should("be.visible");
 
     // Test section with the 10 test images per class, still read-only
-    cy.get('button[value="test"]').click();
+    cy.get('[data-testid="test-tab"]').should("not.have.attr", "aria-disabled");
+    cy.get('[data-testid="test-tab"]').click();
+    cy.get('[data-testid="test-tab"]').should(
+      "have.attr",
+      "aria-selected",
+      "true",
+    );
     cy.get('[data-testid="class-sample-card"]').each(($card) => {
       cy.wrap($card).find("img").should("have.length", 10);
     });
@@ -76,7 +97,16 @@ describe("Teachable image classification – example dataset", () => {
     // Unloading discards the model and stops the slideshow
     cy.get('[data-testid="example-dataset-unload"]').click();
     cy.get('[data-testid="example-slideshow-image"]').should("not.exist");
-    cy.get('button[value="test"]').should("not.exist");
+    cy.get('[data-testid="test-tab"]').should(
+      "have.attr",
+      "aria-disabled",
+      "true",
+    );
+    cy.get('[data-testid="train-tab"]').should(
+      "have.attr",
+      "aria-selected",
+      "true",
+    );
     cy.contains(/^\d+\.\d%$/).should("not.exist");
   });
 
