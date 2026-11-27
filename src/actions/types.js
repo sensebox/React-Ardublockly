@@ -82,3 +82,13 @@ export const SET_DEVICE_PORT = "SET_DEVICE_PORT";
 export const CLEAR_DEVICE_PORT = "CLEAR_DEVICE_PORT";
 export const SET_BOOTLOADER_PORT = "SET_BOOTLOADER_PORT";
 export const CLEAR_BOOTLOADER_PORT = "CLEAR_BOOTLOADER_PORT";
+
+//workspace tabs
+export const ADD_TAB = "ADD_TAB";
+export const CLOSE_TAB = "CLOSE_TAB";
+export const SWITCH_TAB = "SWITCH_TAB";
+export const UPDATE_ACTIVE_TAB = "UPDATE_ACTIVE_TAB";
+export const SET_TABS_ENABLED = "SET_TABS_ENABLED";
+export const RENAME_TAB = "RENAME_TAB";
+export const REORDER_TABS = "REORDER_TABS";
+export const CLOSE_ALL_TABS = "CLOSE_ALL_TABS";
