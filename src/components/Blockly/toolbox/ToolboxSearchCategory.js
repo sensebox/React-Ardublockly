@@ -51,46 +51,121 @@ class SenseboxToolboxSearchCategory extends BaseSearchCategory {
   }
 
   /**
-   * Remembers the (lower-case) name of every static category together with
-   * all blocks it contains, including those of nested sub-categories, so
-   * searching for a category name ("mathe") lists its blocks.
+   * Remembers the (lower-case) name of every category together with the
+   * blocks and buttons it contains, including those of nested sub-categories,
+   * so searching for a category name ("mathe") lists its contents. Dynamic
+   * categories (custom="...") only store their callback key, their contents
+   * are generated on every search.
    */
   initCategoryIndex() {
     this.categoryIndex_ = [];
+    this.staticButtons_ = [];
+    this.customKeys_ = new Set();
     const visit = (item) => {
-      if (!Array.isArray(item.contents)) return [];
-      const blocks = item.contents.flatMap((child) =>
-        child.kind?.toLowerCase() === "block" && child.type
-          ? [child]
-          : visit(child),
-      );
-      if (item.kind?.toLowerCase() === "category" && item.name) {
-        this.categoryIndex_.push({ name: item.name.toLowerCase(), blocks });
+      const kind = item.kind?.toLowerCase();
+      if (kind === "block") {
+        return { items: item.type ? [item] : [], customs: [] };
       }
-      return blocks;
+      if (kind === "button") {
+        this.staticButtons_.push(item);
+        return { items: [item], customs: [] };
+      }
+      const result = { items: [], customs: [] };
+      if (kind !== "category") return result;
+      if (item.custom) {
+        result.customs.push(item.custom);
+        this.customKeys_.add(item.custom);
+      }
+      (Array.isArray(item.contents) ? item.contents : []).forEach((child) => {
+        const childResult = visit(child);
+        result.items.push(...childResult.items);
+        result.customs.push(...childResult.customs);
+      });
+      if (item.name) {
+        this.categoryIndex_.push({ name: item.name.toLowerCase(), ...result });
+      }
+      return result;
     };
     this.workspace_.options.languageTree?.contents?.forEach(visit);
   }
 
+  /**
+   * Returns the current flyout contents of a dynamic category (e.g. the
+   * "create variable" button and the existing variables) as JSON items.
+   */
+  getDynamicItems(customKey) {
+    const callback = this.workspace_.getToolboxCategoryCallback(customKey);
+    if (!callback) return [];
+    try {
+      return Blockly.utils.toolbox.convertFlyoutDefToJsonArray(
+        callback(this.workspace_),
+      );
+    } catch (err) {
+      console.warn(
+        `Toolbox search: could not load category "${customKey}"`,
+        err,
+      );
+      return [];
+    }
+  }
+
   matchBlocks() {
     const query = this.searchField?.value.trim() || "";
-    const seenTypes = new Set();
     const lowerQuery = query.toLowerCase();
-    const categoryMatches = (this.categoryIndex_ || [])
-      .filter((category) => category.name.includes(lowerQuery))
-      .flatMap((category) => category.blocks);
-    const matches =
-      query.length >= MIN_QUERY_LENGTH
-        ? [
-            ...categoryMatches,
-            ...this.blockSearcher.blockTypesMatching(query),
-          ].filter((blockInfo) => {
-            // The same block can be listed in several categories
-            if (seenTypes.has(blockInfo.type)) return false;
-            seenTypes.add(blockInfo.type);
-            return true;
-          })
-        : [];
+    const isLongEnough = query.length >= MIN_QUERY_LENGTH;
+
+    // Short queries only match a category name exactly (e.g. "KI")
+    const categoryMatches = query
+      ? (this.categoryIndex_ || [])
+          .filter((category) =>
+            isLongEnough
+              ? category.name.includes(lowerQuery)
+              : category.name === lowerQuery,
+          )
+          .flatMap((category) => [
+            ...category.items,
+            ...category.customs.flatMap((key) => this.getDynamicItems(key)),
+          ])
+      : [];
+
+    const buttonMatches = isLongEnough
+      ? [
+          ...(this.staticButtons_ || []),
+          ...[...(this.customKeys_ || [])].flatMap((key) =>
+            this.getDynamicItems(key),
+          ),
+        ].filter(
+          (item) =>
+            item.kind?.toLowerCase() === "button" &&
+            item.text?.toLowerCase().includes(lowerQuery),
+        )
+      : [];
+
+    const blockMatches = isLongEnough
+      ? this.blockSearcher.blockTypesMatching(query)
+      : [];
+
+    const seenKeys = new Set();
+    const matches = [
+      ...categoryMatches,
+      ...buttonMatches,
+      ...blockMatches,
+    ].filter((item) => {
+      // The same block or button can be listed in several categories.
+      // Dynamic blocks (blockxml, e.g. one getter per variable) share a type
+      // and are therefore never de-duplicated.
+      const kind = item.kind?.toLowerCase();
+      const key =
+        kind === "block" && !item.blockxml
+          ? `block:${item.type}`
+          : kind === "button"
+            ? `button:${item.text}`
+            : null;
+      if (!key) return true;
+      if (seenKeys.has(key)) return false;
+      seenKeys.add(key);
+      return true;
+    });
 
     this.flyoutItems_ = matches.length
       ? matches

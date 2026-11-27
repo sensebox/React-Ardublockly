@@ -43,6 +43,43 @@ describe("Toolbox search", () => {
       });
   });
 
+  it("[Toolbox] finds the create variable button of the dynamic variables category", () => {
+    openEditor("Sensebox ESP");
+
+    cy.get('.blocklyToolbox input[type="search"]').click().type("variable");
+    cy.contains(
+      ".blocklyToolboxFlyout .blocklyFlyoutButton",
+      /Variable erstellen|Create variable/,
+      { timeout: 5000 },
+    ).should("be.visible");
+  });
+
+  it("[Toolbox] finds toolbox buttons by their text and short category names", () => {
+    openEditor("Sensebox ESP32S3");
+
+    // "model" matches "Modell" (German) and "Model" (English)
+    cy.get('.blocklyToolbox input[type="search"]').click().type("model");
+    cy.contains(
+      ".blocklyToolboxFlyout .blocklyFlyoutButton",
+      /Trainiertes Modell hochladen|Upload Trained Model/,
+      { timeout: 5000 },
+    ).should("be.visible");
+
+    // "KI" / "AI" is shorter than 3 characters but matches the category name
+    cy.contains(".blocklyToolboxCategory", /^(KI|AI)$/)
+      .invoke("text")
+      .then((categoryName) => {
+        cy.get('.blocklyToolbox input[type="search"]')
+          .clear()
+          .type(categoryName);
+      });
+    cy.contains(
+      ".blocklyToolboxFlyout .blocklyFlyoutButton",
+      /Trainiertes Modell hochladen|Upload Trained Model/,
+      { timeout: 5000 },
+    ).should("be.visible");
+  });
+
   it("[Toolbox] shows a hint for short queries and a message for no results", () => {
     openEditor("Sensebox ESP");
 
