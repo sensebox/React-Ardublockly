@@ -972,27 +972,24 @@ const ModelTrainer = ({
   );
 
   const hasClassesWithSamples = classes.some((cls) => cls.samples.length > 0);
-  // Show the test section once a training has finished, or as soon as there
-  // are test images (e.g. moved there by the test split slider). The example
-  // dataset brings its own test images, so there it waits for the training.
-  const showTesting =
-    hasCompletedTraining ||
-    (!isExampleMode && testClasses.some((cls) => cls.samples.length > 0));
+  // The test view is available once a model has been trained
+  const showTesting = hasCompletedTraining;
 
-  // Training and test share one section; once testing is available the
-  // section title offers a switch between both views.
+  // Training and test share one section; its title is a switch between both
+  // views. The test tab stays disabled until a model has been trained.
   const [activeView, setActiveView] = useState("train");
   const currentView = showTesting ? activeView : "train";
   useEffect(() => {
     // Training progress is shown in the training view
     if (isTraining) setActiveView("train");
   }, [isTraining]);
-  // The switch replaces the section title; before testing is available the
-  // plain training title is shown.
-  const sectionTitle = showTesting ? (
-    <TrainTestSwitch value={currentView} onChange={setActiveView} t={t} />
-  ) : (
-    <Typography variant="h5">{t.section.viewTraining}</Typography>
+  const sectionTitle = (
+    <TrainTestSwitch
+      value={currentView}
+      onChange={setActiveView}
+      testDisabled={!showTesting}
+      t={t}
+    />
   );
 
   // ─── Example datasets ──────────────────────────────────────────────────────
@@ -1545,7 +1542,7 @@ const ModelTrainer = ({
           sx={{ display: "flex", flexDirection: "column", gap: 3 }}
         >
           {currentView === "train" ? (
-            <Section stickyTitle title={sectionTitle}>
+            <Section stickyTitle fullWidthTitle title={sectionTitle}>
               <Grid container spacing={2} sx={{ mb: 3 }}>
                 {trainingClasses.map((cls) => (
                   <Grid item xs={12} key={cls.id}>

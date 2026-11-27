@@ -90,6 +90,7 @@ export const imageClassificationTranslations_en = {
     switchView: "Switch between training and test",
     viewTraining: "Training",
     viewTest: "Testing",
+    testRequiresModel: "Train a model first",
   },
   exampleDataset: {
     load: "Load example dataset",

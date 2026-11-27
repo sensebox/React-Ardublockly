@@ -54,7 +54,7 @@ const ModelTestingSection = ({
   const hasResults = testSampleMatrix && testSampleMatrix.length > 0;
 
   return (
-    <Section sx={sx} stickyTitle title={title}>
+    <Section sx={sx} stickyTitle fullWidthTitle title={title}>
       <Grid container spacing={2} sx={{ mb: 3 }}>
         {testClasses.map((cls) => (
           <Grid item xs={12} key={cls.id}>
