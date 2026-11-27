@@ -40,6 +40,9 @@
   flex: 1;
   height: 100%;
   min-width: 0;
+  /* Blockly sets an inline pointer-events: none on this container, which
+     would make the search input (and its cancel button) unclickable */
+  pointer-events: auto !important;
 }
 
 /* Input fills the card, magnifier icon on the left */
