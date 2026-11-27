@@ -12,4 +12,4 @@ Early Stopping is a method that stops training automatically when the model is n
 
 # Share of training images used for testing
 
-This slider moves a share of your training images to the **Model Testing** section. These images are then no longer used for training, only for testing. If you move the slider back, the images return to training. Images you captured directly in the test section stay there.
+This slider moves a share of your training images to the "**Testing**" section. These images are then no longer used for training, only for testing. If you move the slider back, the images return to training. Images you captured directly in the test section stay there.

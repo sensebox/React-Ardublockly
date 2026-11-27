@@ -12,4 +12,4 @@ Early Stopping ist eine Methode, die das Training automatisch beendet, wenn sich
 
 # Anteil der Trainingsbilder für Tests
 
-Mit diesem Regler verschiebst du einen Teil deiner Trainingsbilder in den Abschnitt **Modell Testing**. Diese Bilder werden dann nicht mehr für das Training verwendet, sondern nur zum Testen. Schiebst du den Regler wieder zurück, wandern die Bilder zurück ins Training. Bilder, die du direkt im Testbereich aufgenommen hast, bleiben dort.
+Mit diesem Regler verschiebst du einen Teil deiner Trainingsbilder in den Abschnitt "**Testen**". Diese Bilder werden dann nicht mehr für das Training verwendet, sondern nur zum Testen. Schiebst du den Regler wieder zurück, wandern die Bilder zurück ins Training. Bilder, die du direkt im Testbereich aufgenommen hast, bleiben dort.
