@@ -71,7 +71,8 @@
   },
   "resolutions": {
     "//": "See https://github.com/facebook/create-react-app/issues/11773",
-    "react-error-overlay": "6.0.9"
+    "react-error-overlay": "6.0.9",
+    "mdast-util-gfm-autolink-literal": "2.0.0"
   },
   "scripts": {
     "dev": "set \"VITE_BLOCKLY_API=http://localhost:8080\" && npm start",
