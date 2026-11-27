@@ -69,7 +69,8 @@ import { downloadCollectFirmware } from "../utils/firmwareDownload";
 import useSketchFlash from "../utils/useSketchFlash";
 import cameraFirmwareUrl from "./sketch/camera_capture.bin?url";
 import {
-  downloadTrainingData,
+  downloadTrainTestData,
+  isTrainTestZip,
   parseTrainingDataZip,
   parseTrainTestZip,
 } from "../utils/trainingDataExport";
@@ -910,7 +911,7 @@ const ModelTrainer = ({
 
   // ─── Download/Upload Training Data ─────────────────────────────────────────
   const handleDownloadTrainingData = useCallback(async () => {
-    await downloadTrainingData(classes, "image", async (sample, index) => {
+    await downloadTrainTestData(classes, "image", async (sample, index) => {
       const response = await fetch(sample.url);
       const blob = await response.blob();
       return {
@@ -925,7 +926,11 @@ const ModelTrainer = ({
       const file = event.target.files[0];
       if (!file) return;
 
-      const { classes: newClasses, error } = await parseTrainingDataZip(
+      // Zips downloaded from here contain `train/` and `test/` folders, older
+      // ones contain only the class folders (all used for training)
+      const isTrainTest = await isTrainTestZip(file);
+      const parseZip = isTrainTest ? parseTrainTestZip : parseTrainingDataZip;
+      const { classes: newClasses, error } = await parseZip(
         file,
         async (zipEntry, className, fileName) => {
           // Accept jpg, jpeg, png, gif, webp
@@ -961,7 +966,11 @@ const ModelTrainer = ({
       }
 
       if (newClasses) {
-        setClasses(newClasses.map((cls) => ({ ...cls, testSamples: [] })));
+        setClasses(
+          isTrainTest
+            ? newClasses
+            : newClasses.map((cls) => ({ ...cls, testSamples: [] })),
+        );
         setUploadError(null);
       }
 

@@ -44,6 +44,60 @@ export const downloadTrainingData = async (classes, type, getSampleData) => {
 };
 
 /**
+ * Create a zip with separate training and test samples for download,
+ * structured as `train/<class>/<file>` and `test/<class>/<file>` (the format
+ * read by parseTrainTestZip)
+ * @param {Array} classes - Array of class objects with `samples` and `testSamples`
+ * @param {string} type - The type identifier for filename (e.g. "image")
+ * @param {Function} getSampleData - Same callback as for downloadTrainingData
+ * @returns {Promise<void>}
+ */
+export const downloadTrainTestData = async (classes, type, getSampleData) => {
+  const zip = new JSZip();
+  const splits = [
+    ["train", "samples"],
+    ["test", "testSamples"],
+  ];
+
+  for (const [split, key] of splits) {
+    const splitFolder = zip.folder(split);
+    for (const cls of classes) {
+      const folder = splitFolder.folder(sanitizeClassName(cls.name));
+      const samples = cls[key] || [];
+      for (let i = 0; i < samples.length; i++) {
+        const { filename, data } = await getSampleData(samples[i], i);
+        folder.file(filename, data);
+      }
+    }
+  }
+
+  const classNames = classes
+    .map((cls) => sanitizeClassName(cls.name))
+    .join("_");
+  const timestamp = Date.now();
+  const filename = `${type}-${classNames}-${timestamp}.zip`;
+
+  const blob = await zip.generateAsync({ type: "blob" });
+  saveAs(blob, filename);
+};
+
+/**
+ * Check whether a zip file uses the `train/` + `test/` layout
+ * @param {Blob} file - The zip file to check
+ * @returns {Promise<boolean>}
+ */
+export const isTrainTestZip = async (file) => {
+  try {
+    const contents = await new JSZip().loadAsync(file);
+    return Object.keys(contents.files).some(
+      (path) => path.startsWith("train/") || path.startsWith("test/"),
+    );
+  } catch {
+    return false;
+  }
+};
+
+/**
  * Parse a training data zip file for upload
  * @param {File} file - The zip file to parse
  * @param {Function} processFile - Callback to process each file in the zip
