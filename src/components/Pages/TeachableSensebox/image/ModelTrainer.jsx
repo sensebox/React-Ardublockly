@@ -1248,7 +1248,7 @@ const ModelTrainer = ({
                         <Button
                           variant="outlined"
                           sx={{
-                            bgcolor: "common.white",
+                            bgcolor: "background.paper",
                             "&:hover": { bgcolor: "action.hover" },
                           }}
                           startIcon={
