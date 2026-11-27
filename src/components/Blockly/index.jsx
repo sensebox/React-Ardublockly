@@ -35,6 +35,12 @@ const Category = (p) => {
   return React.createElement("category", props, children);
 };
 
+const Search = (p) => {
+  const { children, ...props } = p;
+  props.is = "blockly";
+  return React.createElement("search", props, children);
+};
+
 const Value = (p) => {
   const { children, ...props } = p;
   props.is = "blockly";
@@ -77,4 +83,15 @@ const Button = (p) => {
   return React.createElement("button", props, children);
 };
 
-export { Block, Category, Value, Statement, Field, Shadow, Sep, Label, Button };
+export {
+  Block,
+  Category,
+  Search,
+  Value,
+  Statement,
+  Field,
+  Shadow,
+  Sep,
+  Label,
+  Button,
+};

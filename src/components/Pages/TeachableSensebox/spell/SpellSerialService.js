@@ -12,7 +12,15 @@
  *   x,y: normalized coordinates as floats (-1.0 to 1.0)
  *
  * Each line represents one complete stroke.
+ *
+ * Lines of any other sketch (e.g. the camera sketch) are ignored.
  */
+
+import {
+  CameraOutputGuard,
+  parseStrictNumber,
+} from "../utils/serialInputGuard";
+import { MCU_EYE_PORT_FILTERS } from "../utils/serialPortFilters";
 
 // Stroke states
 export const StrokeState = {
@@ -33,6 +41,9 @@ class SpellSerialService {
     this.errorCallbacks = [];
     this.lineBuffer = "";
     this._previousStrokeState = StrokeState.WAITING;
+    // Resolvers of pending waitForData() calls.
+    this._dataWaiters = [];
+    this.cameraGuard = new CameraOutputGuard();
   }
 
   /**
@@ -57,7 +68,9 @@ class SpellSerialService {
     }
 
     try {
-      const port = await navigator.serial.requestPort();
+      const port = await navigator.serial.requestPort({
+        filters: MCU_EYE_PORT_FILTERS,
+      });
       return port;
     } catch (error) {
       if (error.name === "NotFoundError") {
@@ -76,11 +89,15 @@ class SpellSerialService {
   /**
    * Connect to the serial port and start reading spell data
    * @param {number} baudRate - default 115200
+   * @param {SerialPort} [explicitPort] - Already permitted port to open
+   *   instead of showing the browser's port picker (e.g. after flashing).
    */
-  async connect(baudRate = 115200) {
+  async connect(baudRate = 115200, explicitPort = null) {
     if (this.isConnected) return;
 
-    if (!this.port) {
+    if (explicitPort) {
+      this.port = explicitPort;
+    } else if (!this.port) {
       this.port = await this.requestPort();
       if (!this.port) return; // User cancelled
     }
@@ -110,7 +127,15 @@ class SpellSerialService {
 
     try {
       if (this.reader) {
-        await this.reader.cancel();
+        const reader = this.reader;
+        await reader.cancel();
+        // Release the lock here as well, otherwise port.close() fails and
+        // the port stays open (e.g. for the flash tool).
+        try {
+          reader.releaseLock();
+        } catch (_) {
+          // already released by the read loop
+        }
         this.reader = null;
       }
       if (this.port && this.port.readable) {
@@ -123,6 +148,27 @@ class SpellSerialService {
     this.port = null;
     this.lineBuffer = "";
     this._previousStrokeState = StrokeState.WAITING;
+    this.cameraGuard.reset();
+    this._resolveDataWaiters(false);
+  }
+
+  /**
+   * Wait until the first valid spell data line arrives.
+   * @param {number} timeoutMs
+   * @returns {Promise<boolean>} true if data arrived in time
+   */
+  waitForData(timeoutMs = 4000) {
+    return new Promise((resolve) => {
+      const waiter = (gotData) => {
+        clearTimeout(timer);
+        resolve(gotData);
+      };
+      const timer = setTimeout(() => {
+        this._dataWaiters = this._dataWaiters.filter((w) => w !== waiter);
+        resolve(false);
+      }, timeoutMs);
+      this._dataWaiters.push(waiter);
+    });
   }
 
   /**
@@ -152,6 +198,12 @@ class SpellSerialService {
   }
 
   // ─── Private ──────────────────────────────────────────────────────────────
+
+  _resolveDataWaiters(gotData) {
+    const waiters = this._dataWaiters;
+    this._dataWaiters = [];
+    for (const waiter of waiters) waiter(gotData);
+  }
 
   _emitStroke(strokeData) {
     for (const cb of this.strokeCallbacks) {
@@ -183,7 +235,14 @@ class SpellSerialService {
         const { value, done } = await this.reader.read();
         if (done) break;
 
-        this.lineBuffer += decoder.decode(value, { stream: true });
+        const text = decoder.decode(value, { stream: true });
+        this.cameraGuard.update(text);
+        if (this.cameraGuard.isBlocking) {
+          // The camera sketch is running – its image bytes are no strokes.
+          this.lineBuffer = "";
+          continue;
+        }
+        this.lineBuffer += text;
 
         // Process complete lines
         const lines = this.lineBuffer.split("\n");
@@ -221,19 +280,33 @@ class SpellSerialService {
     // x,y: normalized coordinates as floats (-1.0 to 1.0)
 
     try {
-      const values = line.split(",").map((s) => parseFloat(s.trim()));
-      if (values.length < 4) return;
+      const tokens = line.split(",");
+      // Tolerate a trailing comma.
+      if (tokens[tokens.length - 1].trim() === "") tokens.pop();
+      if (tokens.length < 4) return;
+
+      // Every value must be a plain number – otherwise the line is not from
+      // the spell sketch (other sketches, boot messages, binary data).
+      const values = tokens.map(parseStrictNumber);
+      if (values.some(isNaN)) return;
 
       const state = values[0];
       const length = values[1];
+      if (!Object.values(StrokeState).includes(state)) return;
+      if (
+        !Number.isInteger(length) ||
+        length < 0 ||
+        length > STROKE_POINT_COUNT
+      ) {
+        return;
+      }
 
-      if (isNaN(state) || isNaN(length)) return;
+      // A valid spell line: the spell sketch is running.
+      if (this._dataWaiters.length > 0) this._resolveDataWaiters(true);
 
       const strokePoints = [];
       for (let i = 2; i + 1 < values.length; i += 2) {
-        if (!isNaN(values[i]) && !isNaN(values[i + 1])) {
-          strokePoints.push({ x: values[i], y: values[i + 1] });
-        }
+        strokePoints.push({ x: values[i], y: values[i + 1] });
       }
 
       if (strokePoints.length === 0) return;

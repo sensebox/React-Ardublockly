@@ -59,13 +59,25 @@ function useOrientationSource() {
     };
   }, []);
 
-  const connect = useCallback(async () => {
-    if (!serviceRef.current) return;
+  /**
+   * Connect to the accelerometer.
+   * @param {Object} [options]
+   * @param {SerialPort} [options.port] - Open this already permitted port
+   *   instead of showing the browser's port picker.
+   * @returns {Promise<{connected: boolean, error: Error|null}>}
+   */
+  const connect = useCallback(async ({ port } = {}) => {
+    if (!serviceRef.current) return { connected: false, error: null };
     setIsConnecting(true);
     setError(null);
 
     try {
-      await serviceRef.current.connect();
+      await serviceRef.current.connect(undefined, port);
+
+      // User may have cancelled — service won't be connected
+      if (!serviceRef.current.isConnected) {
+        return { connected: false, error: null };
+      }
 
       lastDataTimeRef.current = Date.now();
       setDataTimeoutError(false);
@@ -82,12 +94,35 @@ function useOrientationSource() {
       });
 
       setIsConnected(true);
+      return { connected: true, error: null };
     } catch (err) {
       setError(err);
       setIsConnected(false);
+      return { connected: false, error: err };
     } finally {
       setIsConnecting(false);
     }
+  }, []);
+
+  /**
+   * Wait until the accelerometer sketch sends its first sample.
+   * @returns {Promise<boolean>} true if data arrived in time
+   */
+  const waitForData = useCallback((timeoutMs = 4000) => {
+    const service = serviceRef.current;
+    if (!service) return Promise.resolve(false);
+    return new Promise((resolve) => {
+      let unsubscribe = null;
+      const timer = setTimeout(() => {
+        unsubscribe?.();
+        resolve(false);
+      }, timeoutMs);
+      unsubscribe = service.onData(() => {
+        clearTimeout(timer);
+        unsubscribe();
+        resolve(true);
+      });
+    });
   }, []);
 
   const disconnect = useCallback(async () => {
@@ -114,6 +149,17 @@ function useOrientationSource() {
     setDataTimeoutError(false);
     lastDataTimeRef.current = null;
   }, []);
+
+  /**
+   * Disconnect and hand out the port that was used, so another tool (the
+   * flash tool) can open it.
+   * @returns {Promise<SerialPort|null>}
+   */
+  const releasePort = useCallback(async () => {
+    const port = serviceRef.current?.port ?? null;
+    await disconnect();
+    return port;
+  }, [disconnect]);
 
   /**
    * Record a gesture for a fixed duration.
@@ -172,6 +218,8 @@ function useOrientationSource() {
     dataTimeoutError,
     connect,
     disconnect,
+    waitForData,
+    releasePort,
     recordGesture,
     isSupported: OrientationService.isSupported(),
   };

@@ -1,8 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
+import * as Blockly from "blockly/core";
 import {
   Box,
+  Button,
   Card,
   CardActionArea,
   CardContent,
@@ -10,8 +12,13 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import TutorialItemSummary from "../../../Tutorial/Overview/TutorialItemSummary";
 import { normalizeTutorialConfigs } from "@/helpers/tutorialUrl";
+import {
+  clearAnswers,
+  loadAnswers,
+} from "../../../Tutorial/Viewer/helpers/tutorialStorageUtils";
 
 export default function OverviewPage({
   tutorials: tutorialConfigs = [],
@@ -27,6 +34,15 @@ export default function OverviewPage({
     () => normalizeTutorialConfigs(tutorialConfigs),
     [tutorialConfigs],
   );
+
+  const [hasSavedAnswers, setHasSavedAnswers] = useState(() =>
+    normalizedConfigs.some(({ id }) => loadAnswers(id).length > 0),
+  );
+
+  const handleResetAnswers = () => {
+    normalizedConfigs.forEach(({ id }) => clearAnswers(id));
+    setHasSavedAnswers(false);
+  };
 
   // Group tutorials for display
   const groupedTutorials = normalizedConfigs.reduce((groups, tutorial) => {
@@ -161,6 +177,19 @@ export default function OverviewPage({
           </Grid>
         </Box>
       ))}
+
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+        <Button
+          variant="outlined"
+          color="error"
+          startIcon={<RestartAltIcon />}
+          disabled={!hasSavedAnswers}
+          onClick={handleResetAnswers}
+          data-testid="tutorial-reset-answers"
+        >
+          {Blockly.Msg.tutorial_reset_answers}
+        </Button>
+      </Box>
     </Box>
   );
 }

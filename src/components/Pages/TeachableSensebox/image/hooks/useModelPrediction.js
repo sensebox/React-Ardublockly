@@ -5,7 +5,8 @@ const PREDICTION_INTERVAL_MS = 500;
 
 /**
  * Custom hook for model prediction logic
- * Handles live predictions from camera preview
+ * Handles live predictions from camera preview (or another preview element,
+ * e.g. the example dataset slideshow)
  */
 function useModelPrediction(trainedModel, getPreviewElement, isCameraActive) {
   const [predictions, setPredictions] = useState([]);
@@ -94,7 +95,9 @@ function useModelPrediction(trainedModel, getPreviewElement, isCameraActive) {
     };
   }, [trainedModel, isCameraActive, makePrediction]);
 
-  return { predictions };
+  // predictNow: classify the current preview element immediately, e.g. when a
+  // new still image has loaded
+  return { predictions, predictNow: makePrediction };
 }
 
 export default useModelPrediction;

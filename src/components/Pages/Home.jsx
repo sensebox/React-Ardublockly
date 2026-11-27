@@ -1,13 +1,14 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector, useStore } from "react-redux";
 import * as Blockly from "blockly/core";
-import { createNameId } from "mnemonic-id";
 
 import { clearStats, workspaceName } from "@/actions/workspaceActions";
+import { getActiveTab, setTabsEnabled } from "@/actions/tabActions";
 import WorkspaceStats from "../Workspace/WorkspaceStats";
 import WorkspaceToolbar from "../Workspace/WorkspaceToolbar";
+import WorkspaceTabs from "../Workspace/WorkspaceTabs";
 import BlocklyWindow from "../Blockly/BlocklyWindow";
 import CodeViewer from "../Workspace/CodeViewer";
 import DeviceSelection from "../DeviceSelection";
@@ -20,6 +21,9 @@ import { faCode } from "@fortawesome/free-solid-svg-icons";
 
 function Home({ project, projectType }) {
   const dispatch = useDispatch();
+  const store = useStore();
+  // Tabs are only available on the plain editor, not for loaded projects
+  const showTabs = !project;
 
   const message = useSelector((state) => state.message);
   const statistics = useSelector((state) => state.general.statistics);
@@ -30,16 +34,25 @@ function Home({ project, projectType }) {
 
   const [codeOn, setCodeOn] = useState(true);
   const [open, setOpen] = useState(true);
-  const [initialXml, setInitialXml] = useState(
-    localStorage.getItem("autoSaveXML"),
-  );
+  const [initialXml] = useState(() => {
+    if (showTabs) {
+      // the active tab is the source of truth; autoSaveXML mirrors it
+      const activeTab = getActiveTab(store.getState());
+      if (activeTab?.xml) {
+        localStorage.setItem("autoSaveXML", activeTab.xml);
+        return activeTab.xml;
+      }
+    }
+    return localStorage.getItem("autoSaveXML");
+  });
 
   useEffect(() => {
     if (platform) setCodeOn(false);
 
     const stats = window.localStorage.getItem("stats");
     if (!project) {
-      dispatch(workspaceName(createNameId()));
+      dispatch(workspaceName(getActiveTab(store.getState())?.name));
+      dispatch(setTabsEnabled(true));
     }
 
     if (message && message.id === "GET_SHARE_FAIL") {
@@ -49,6 +62,7 @@ function Home({ project, projectType }) {
     }
 
     return () => {
+      dispatch(setTabsEnabled(false));
       dispatch(clearStats());
       dispatch(workspaceName(null));
     };
@@ -63,9 +77,10 @@ function Home({ project, projectType }) {
   });
 
   // When viewing a project/gallery item, breadcrumbs add ~45px height
+  // and the tab bar on the plain editor ~44px
   const workspaceHeight = project
     ? "calc(100vh - 245px)"
-    : "calc(100vh - 200px)";
+    : "calc(100vh - 244px)";
 
   const handleToggleDialog = () => {
     setOpen((prev) => !prev);
@@ -94,8 +109,18 @@ function Home({ project, projectType }) {
         className="workspaceFunc"
         sx={{ float: "right", height: "40px", mb: 2 }}
       >
-        <WorkspaceToolbar project={project} projectType={projectType} />
+        <WorkspaceToolbar
+          project={project}
+          projectType={projectType}
+          hideName={showTabs}
+        />
       </Box>
+
+      {showTabs && (
+        <Box sx={{ clear: "both", mb: 1 }}>
+          <WorkspaceTabs />
+        </Box>
+      )}
 
       {/* Blockly Workspace */}
       <Grid style={{ height: workspaceHeight }} container spacing={2}>

@@ -8,7 +8,21 @@
  * Expected firmware output format: comma-separated values per line:
  *   "<x>,<y>,<z>\n"
  * where x, y, z are floating-point acceleration values in m/s².
+ *
+ * Lines of any other sketch (e.g. the camera sketch) are ignored.
  */
+
+import {
+  CameraOutputGuard,
+  parseStrictNumber,
+} from "../utils/serialInputGuard";
+import { MCU_EYE_PORT_FILTERS } from "../utils/serialPortFilters";
+
+// Plausibility limit for one axis in m/s² (the sensor's max. range is ±16 g).
+const MAX_ACCELERATION = 160;
+
+const isValidAcceleration = (value) =>
+  !isNaN(value) && Math.abs(value) <= MAX_ACCELERATION;
 
 class OrientationService {
   constructor() {
@@ -20,6 +34,7 @@ class OrientationService {
     this.dataCallbacks = [];
     this.errorCallbacks = [];
     this.lineBuffer = "";
+    this.cameraGuard = new CameraOutputGuard();
   }
 
   /**
@@ -44,7 +59,9 @@ class OrientationService {
     }
 
     try {
-      const port = await navigator.serial.requestPort();
+      const port = await navigator.serial.requestPort({
+        filters: MCU_EYE_PORT_FILTERS,
+      });
       return port;
     } catch (error) {
       if (error.name === "NotFoundError") {
@@ -63,11 +80,15 @@ class OrientationService {
   /**
    * Connect to the serial port and start reading accelerometer data
    * @param {number} baudRate - default 115200
+   * @param {SerialPort} [explicitPort] - Already permitted port to open
+   *   instead of showing the browser's port picker (e.g. after flashing).
    */
-  async connect(baudRate = 115200) {
+  async connect(baudRate = 115200, explicitPort = null) {
     if (this.isConnected) return;
 
-    if (!this.port) {
+    if (explicitPort) {
+      this.port = explicitPort;
+    } else if (!this.port) {
       this.port = await this.requestPort();
       if (!this.port) return; // User cancelled
     }
@@ -97,7 +118,15 @@ class OrientationService {
 
     try {
       if (this.reader) {
-        await this.reader.cancel();
+        const reader = this.reader;
+        await reader.cancel();
+        // Release the lock here as well, otherwise port.close() fails and
+        // the port stays open (e.g. for the flash tool).
+        try {
+          reader.releaseLock();
+        } catch (_) {
+          // already released by the read loop
+        }
         this.reader = null;
       }
       if (this.port && this.port.readable) {
@@ -109,6 +138,7 @@ class OrientationService {
 
     this.port = null;
     this.lineBuffer = "";
+    this.cameraGuard.reset();
   }
 
   /**
@@ -165,7 +195,14 @@ class OrientationService {
         const { value, done } = await this.reader.read();
         if (done) break;
 
-        this.lineBuffer += decoder.decode(value, { stream: true });
+        const text = decoder.decode(value, { stream: true });
+        this.cameraGuard.update(text);
+        if (this.cameraGuard.isBlocking) {
+          // The camera sketch is running – its image bytes are no samples.
+          this.lineBuffer = "";
+          continue;
+        }
+        this.lineBuffer += text;
 
         // Process complete lines
         const lines = this.lineBuffer.split("\n");
@@ -197,27 +234,23 @@ class OrientationService {
   _parseLine(line) {
     if (!line) return;
 
+    // The whole line must match one of the formats exactly – anything else
+    // (other sketches, boot messages, binary data) is ignored.
+
     // Labeled format: "x:-4.27,y:7.43,z:2.93"
     const labeled = line.match(
-      /x:\s*([-\d.]+)[,\s]+y:\s*([-\d.]+)[,\s]+z:\s*([-\d.]+)/i,
+      /^x:\s*(\S+?)\s*[,\s]\s*y:\s*(\S+?)\s*[,\s]\s*z:\s*(\S+)$/i,
     );
-    if (labeled) {
-      const x = parseFloat(labeled[1]);
-      const y = parseFloat(labeled[2]);
-      const z = parseFloat(labeled[3]);
-      if (!isNaN(x) && !isNaN(y) && !isNaN(z)) {
-        this._emitData({ x, y, z, timestamp: Date.now() });
-      }
-      return;
-    }
-
-    // Fallback: plain "x,y,z" — e.g. "0.12,-9.81,0.34"
-    const parts = line.split(",");
+    // Plain format: "x,y,z" — e.g. "0.12,-9.81,0.34"
+    const parts = labeled ? labeled.slice(1) : line.split(",");
     if (parts.length !== 3) return;
-    const x = parseFloat(parts[0]);
-    const y = parseFloat(parts[1]);
-    const z = parseFloat(parts[2]);
-    if (!isNaN(x) && !isNaN(y) && !isNaN(z)) {
+
+    const [x, y, z] = parts.map(parseStrictNumber);
+    if (
+      isValidAcceleration(x) &&
+      isValidAcceleration(y) &&
+      isValidAcceleration(z)
+    ) {
       this._emitData({ x, y, z, timestamp: Date.now() });
     }
   }

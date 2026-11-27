@@ -3,16 +3,18 @@ import QwiicButtonCategory from "./QwiicButtonCategory";
 import { useSelector } from "react-redux";
 import { Block, Value, Field, Shadow, Category, Label, Button } from "..";
 import { getColour } from "../helpers/colour";
+import {
+  getAiModelType,
+  AI_MODEL_TYPE_CAMERA,
+  AI_MODEL_TYPE_SPELL,
+} from "../helpers/aiModel";
 import * as Blockly from "blockly/core";
-import "@blockly/toolbox-search";
-import "./search-category.css";
 
 export const ToolboxEye = () => {
   const aiModel = useSelector((state) => state.general.aiModel);
+  const aiModelType = getAiModelType(aiModel?.code);
   return (
     <>
-      {/* ============================== SEARCH ============================== */}
-
       {/* ============================== SENSORS ============================== */}
       <Category
         name={Blockly.Msg.toolbox_sensors}
@@ -518,7 +520,23 @@ export const ToolboxEye = () => {
           text={Blockly.Msg.ai_upload_model || "Upload Trained Model"}
           callbackKey="uploadAiModel"
         />
-        {aiModel?.code && <Block type="sensebox_teachable_classify" />}
+        {aiModelType === AI_MODEL_TYPE_CAMERA && (
+          <Block type="sensebox_teachable_classify">
+            <Value name="image">
+              <Block type="sensebox_eye_camera" />
+            </Value>
+          </Block>
+        )}
+        {aiModelType === AI_MODEL_TYPE_SPELL && (
+          <Block type="sensebox_teachable_classify_spell">
+            <Value name="spell">
+              <Block type="sensebox_esp32s2_accelerometer">
+                <mutation output="image" />
+                <Field name="value">spell</Field>
+              </Block>
+            </Value>
+          </Block>
+        )}
       </Category>
 
       {/* ============================== TIME ============================== */}

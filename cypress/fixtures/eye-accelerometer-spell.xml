@@ -1,0 +1,21 @@
+<xml xmlns="https://developers.google.com/blockly/xml" board="MCU-EYE">
+  <block type="arduino_functions" id="start" x="27" y="16">
+    <statement name="SETUP_FUNC">
+      <block type="sensebox_display_beginDisplay" id="begin"></block>
+    </statement>
+    <statement name="LOOP_FUNC">
+      <block type="sensebox_display_show" id="show">
+        <statement name="SHOW">
+          <block type="sensebox_display_image" id="image">
+            <value name="drawImage">
+              <block type="sensebox_esp32s2_accelerometer" id="spell">
+                <mutation output="image"></mutation>
+                <field name="value">spell</field>
+              </block>
+            </value>
+          </block>
+        </statement>
+      </block>
+    </statement>
+  </block>
+</xml>

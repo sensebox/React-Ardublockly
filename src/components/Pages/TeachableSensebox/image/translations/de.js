@@ -9,7 +9,6 @@ export const imageClassificationTranslations_de = {
     startWebcam: "Webcam starten",
     stopSenseBoxCamera: "senseBox MCU Eye Kamera stoppen",
     startSenseBoxCamera: "senseBox MCU Eye Kamera starten",
-    loadingCamera: "Lade Kamera...",
     initializingCamera: "Initialisiere Kamera...",
     samples: "Bilder",
     captureImage: "Beispielbild aufnehmen",
@@ -22,6 +21,8 @@ export const imageClassificationTranslations_de = {
     analyzing: "Analysiere...",
     dataChangedWarning:
       "Trainingsdaten wurden verändert. Trainiere das Modell neu, um die Vorhersagen zu aktualisieren.",
+    dataChangedTestWarning:
+      "Trainingsdaten wurden verändert. Trainiere das Modell neu, bevor du erneut testest.",
     preliminaryModelWarning: "Vorläufiges Modell. Training läuft noch...",
     addNewClass: "Neue Klasse hinzufügen",
     className: "Klassenname",
@@ -40,7 +41,7 @@ export const imageClassificationTranslations_de = {
     downloadData: "Bilder herunterladen",
     uploadData: "Bilder hochladen",
     downloadTrainScript: "Sammel-Sketch herunterladen",
-    resultsTitle: "Trainingsdetails",
+    resultsTitle: "Trainingsverlauf",
     metricsChart: "Trainingsverlauf",
     testResultsTitle: "Testergebnis",
     finalAccuracy: "Genauigkeit",
@@ -63,6 +64,7 @@ export const imageClassificationTranslations_de = {
       learningRate: "Lernrate",
       earlyStopping: "Early Stopping",
       reset: "Auf Default zurücksetzen",
+      testSplit: "Anteil der Trainingsbilder für Tests: {value}%",
     },
     tooltip: {
       helpMain: "Was ist Bildklassifizierung?",
@@ -111,6 +113,40 @@ export const imageClassificationTranslations_de = {
     },
     deployModel: {
       title: "Ausführen auf der senseBox MCU Eye",
+    },
+  },
+  section: {
+    switchView: "Zwischen Training und Test wechseln",
+    viewTraining: "Trainieren",
+    viewTest: "Testen",
+    testRequiresModel: "Trainiere zuerst ein Modell",
+  },
+  exampleDataset: {
+    load: "Beispieldatensatz laden",
+    unload: "Beispieldatensatz entfernen",
+    loading: "Lade Beispieldatensatz...",
+    confirmTitle: "Beispieldatensatz laden?",
+    confirmMessage:
+      "Deine Klassen und Bilder werden gelöscht. Ein bereits trainiertes Modell wird ebenfalls verworfen.",
+    confirm: "Löschen und laden",
+    errorLoad: "Der Beispieldatensatz konnte nicht geladen werden.",
+    imageAlt: "Beispielbild",
+  },
+  testing: {
+    title: "Modell Testen",
+    captureImage: "Testbilder aufnehmen",
+    testModel: "Modell testen",
+    testingInProgress: "Modell wird getestet...",
+    errorTesting: "Testen fehlgeschlagen: {message}",
+    cellDescriptionCorrect:
+      "Diese Bilder zeigen {actual} und wurden vom Modell richtig als {predicted} erkannt.",
+    cellDescriptionIncorrect:
+      "Diese Bilder zeigen {actual}, wurden vom Modell aber fälschlicherweise als {predicted} klassifiziert.",
+    cellEmpty: "In diesem Feld sind keine Bilder.",
+    tooltip: {
+      needModel: "Trainiere zuerst ein Modell",
+      trainingRunning: "Warte, bis das Training abgeschlossen ist",
+      needTestImages: "Nimm mindestens ein Testbild pro Klasse auf",
     },
   },
   integration: {
@@ -211,6 +247,24 @@ export const imageClassificationTranslations_de = {
     permissionStep4:
       "Aktualisiere die Seite und versuche erneut, dich zu verbinden",
     downloadFirmware: "Kamera Sketch herunterladen",
+    waitingForImage: "Warte auf Kamerabild...",
+    flashConnecting: "Bereite senseBox für den Upload vor...",
+    flashGrantBootloader: "Kamera Sketch hochladen",
+    flashGrantBootloaderHint:
+      'Es wurde kein Kamerabild empfangen, daher wird der Kamera Sketch auf die senseBox hochgeladen. Klicke dafür auf "Kamera Sketch hochladen" und wähle dann "{name}" aus.',
+    flashUploading: "Kamera Sketch wird hochgeladen...",
+    flashRestarting: "Kamera wird gestartet...",
+    flashFailed: "Upload fehlgeschlagen",
+    flashFailedMessage: "Das Hochladen des Kamera Sketches ist fehlgeschlagen.",
+    captureFailed: "Aufnahme fehlgeschlagen",
+    captureFailedMessage: "Die senseBox MCU Eye konnte kein Bild aufnehmen.",
+    troubleshootingCamera:
+      "Stelle sicher, dass die Kamera richtig mit der senseBox MCU Eye verbunden ist",
+    troubleshootingOtherDevice:
+      "Versuche es mit einer anderen senseBox MCU Eye oder einer anderen Kamera",
+    troubleshootingFlashAgain:
+      "Versuche, den Sketch erneut hochzuladen (mit dem Button unten)",
+    flashCaptureSketch: "Kamera Sketch erneut hochladen",
     tryAgain: "Erneut versuchen",
     reconnect: "Erneut verbinden",
     serialCameraStatus: "Serieller Kamera-Status:",

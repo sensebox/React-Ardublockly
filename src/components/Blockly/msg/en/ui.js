@@ -34,6 +34,10 @@ export const UI = {
    * Toolbox
    */
   toolbox_sensors: "Sensors",
+  toolbox_search: "Search",
+  toolbox_search_placeholder: "Search blocks",
+  toolbox_search_hint: "Type at least 3 characters to search for blocks",
+  toolbox_search_no_results: "No matching blocks found",
   toolbox_logic: "Logic",
   toolbox_loops: "Loops",
   toolbox_math: "Math",
@@ -99,6 +103,7 @@ export const UI = {
   tooltip_trashcan_delete: "empty trashcan",
   tooltip_project_title: "Project title",
   tooltip_check_solution: "Check solution",
+  tooltip_undo: "Undo (Ctrl+Z)",
   tooltip_copy_code: "Copy Code to clipboard",
   tooltip_statistics_current: "Number of current blocks",
   tooltip_statistics_new: "Number of new blocks",
@@ -239,6 +244,27 @@ export const UI = {
    */
 
   button_cancel: "Cancel",
+
+  /**
+   * Workspace Tabs
+   */
+  tabs_label: "Workspaces",
+  tabs_new: "New workspace",
+  tabs_close: "Close workspace",
+  tabs_close_headline: "Close workspace?",
+  tabs_close_confirm:
+    "The workspace will be closed and its program deleted. Save or download it first if you want to keep it.",
+  tabs_close_button: "Close",
+  tabs_rename: "Double-click or press F2 to rename, drag to move",
+  tabs_rename_button: "Rename",
+  tabs_rename_input: "Workspace name",
+  tabs_duplicate: "Duplicate",
+  tabs_copy_suffix: "(copy)",
+  tabs_close_all: "Close all",
+  tabs_close_all_headline: "Close all workspaces?",
+  tabs_close_all_confirm:
+    "All workspaces will be closed and their programs deleted. A new, empty workspace will be opened. Save or download programs first if you want to keep them.",
+  tabs_limit_reached: "You can open at most 10 workspaces at the same time.",
   button_close: "Close",
   button_accept: "Ok",
   button_compile: "Compile",
@@ -246,6 +272,7 @@ export const UI = {
   button_back: "Back",
   button_next: "Next step",
   button_tutorial_overview: "Tutorial overview",
+  tutorial_reset_answers: "Reset tutorial progress",
   button_login: "Login",
   button_createVariable: "Create variable",
 
