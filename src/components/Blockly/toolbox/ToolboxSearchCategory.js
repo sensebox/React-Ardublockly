@@ -47,14 +47,44 @@ class SenseboxToolboxSearchCategory extends BaseSearchCategory {
         );
       }
     });
+    this.initCategoryIndex();
+  }
+
+  /**
+   * Remembers the (lower-case) name of every static category together with
+   * all blocks it contains, including those of nested sub-categories, so
+   * searching for a category name ("mathe") lists its blocks.
+   */
+  initCategoryIndex() {
+    this.categoryIndex_ = [];
+    const visit = (item) => {
+      if (!Array.isArray(item.contents)) return [];
+      const blocks = item.contents.flatMap((child) =>
+        child.kind?.toLowerCase() === "block" && child.type
+          ? [child]
+          : visit(child),
+      );
+      if (item.kind?.toLowerCase() === "category" && item.name) {
+        this.categoryIndex_.push({ name: item.name.toLowerCase(), blocks });
+      }
+      return blocks;
+    };
+    this.workspace_.options.languageTree?.contents?.forEach(visit);
   }
 
   matchBlocks() {
     const query = this.searchField?.value.trim() || "";
     const seenTypes = new Set();
+    const lowerQuery = query.toLowerCase();
+    const categoryMatches = (this.categoryIndex_ || [])
+      .filter((category) => category.name.includes(lowerQuery))
+      .flatMap((category) => category.blocks);
     const matches =
       query.length >= MIN_QUERY_LENGTH
-        ? this.blockSearcher.blockTypesMatching(query).filter((blockInfo) => {
+        ? [
+            ...categoryMatches,
+            ...this.blockSearcher.blockTypesMatching(query),
+          ].filter((blockInfo) => {
             // The same block can be listed in several categories
             if (seenTypes.has(blockInfo.type)) return false;
             seenTypes.add(blockInfo.type);
